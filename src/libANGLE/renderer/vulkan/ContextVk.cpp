@@ -6643,15 +6643,21 @@ void ContextVk::handleError(VkResult errorCode,
     errorStream << "Internal Vulkan error (" << errorCode << "): " << VulkanResultString(errorCode)
                 << ".";
 
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     getRenderer()->logMemoryStatsOnError();
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
 
     if (errorCode == VK_ERROR_DEVICE_LOST)
     {
         WARN() << errorStream.str();
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
         handleDeviceLost();
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     }
 
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     mErrors->handleError(glErrorCode, errorStream.str().c_str(), file, function, line);
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
 }
 
 angle::Result ContextVk::updateActiveTextures(const gl::Context *context, gl::Command command)

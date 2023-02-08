@@ -1067,8 +1067,10 @@ void checkForCurrentMemoryAllocations(RendererVk *renderer)
 {
     if (kTrackMemoryAllocationDebug)
     {
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
         for (uint32_t i = 0; i < vk::kMemoryAllocationTypeCount; i++)
         {
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
             if (renderer->getMemoryAllocationTracker()->getActiveMemoryAllocationsSize(i) == 0)
             {
                 continue;
@@ -1076,6 +1078,7 @@ void checkForCurrentMemoryAllocations(RendererVk *renderer)
 
             std::stringstream outStream;
 
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
             outStream << "Currently allocated size for memory allocation type ("
                       << vk::kMemoryAllocationTypeMessage[i] << "): "
                       << renderer->getMemoryAllocationTracker()->getActiveMemoryAllocationsSize(i)
@@ -1083,6 +1086,7 @@ void checkForCurrentMemoryAllocations(RendererVk *renderer)
                       << renderer->getMemoryAllocationTracker()->getActiveMemoryAllocationsCount(i)
                       << std::endl;
 
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
             for (uint32_t heapIndex = 0;
                  heapIndex < renderer->getMemoryProperties().getMemoryHeapCount(); heapIndex++)
             {
@@ -1095,12 +1099,14 @@ void checkForCurrentMemoryAllocations(RendererVk *renderer)
                            i, heapIndex)
                     << std::endl;
             }
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
 
             INFO() << outStream.str();
         }
     }
     else if (kTrackMemoryAllocationSizes)
     {
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
         for (uint32_t i = 0; i < vk::kMemoryAllocationTypeCount; i++)
         {
             if (renderer->getMemoryAllocationTracker()->getActiveMemoryAllocationsSize(i) == 0)
@@ -1110,10 +1116,12 @@ void checkForCurrentMemoryAllocations(RendererVk *renderer)
 
             std::stringstream outStream;
 
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
             outStream << "Currently allocated size for memory allocation type ("
                       << vk::kMemoryAllocationTypeMessage[i] << "): "
                       << renderer->getMemoryAllocationTracker()->getActiveMemoryAllocationsSize(i)
                       << std::endl;
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
 
             for (uint32_t heapIndex = 0;
                  heapIndex < renderer->getMemoryProperties().getMemoryHeapCount(); heapIndex++)
@@ -1123,6 +1131,7 @@ void checkForCurrentMemoryAllocations(RendererVk *renderer)
                                  ->getActiveHeapMemoryAllocationsSize(i, heapIndex)
                           << std::endl;
             }
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
 
             INFO() << outStream.str();
         }
@@ -5381,9 +5390,13 @@ void RendererVk::logCacheStats() const
 
 void RendererVk::logMemoryStatsOnError()
 {
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     checkForCurrentMemoryAllocations(this);
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     logPendingMemoryAllocation(this);
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     logMemoryHeapStats(this, vk::MemoryLogSeverity::WARN);
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
 }
 
 angle::Result RendererVk::getFormatDescriptorCountForVkFormat(ContextVk *contextVk,
@@ -5643,6 +5656,7 @@ VkDeviceSize MemoryAllocationTracker::getActiveHeapMemoryAllocationsSize(uint32_
         return 0;
     }
 
+    fprintf(stderr, "%s:%d\n", __FILE__, __LINE__);
     return mActivePerHeapMemoryAllocationsSize[allocTypeIndex][heapIndex];
 }
 
