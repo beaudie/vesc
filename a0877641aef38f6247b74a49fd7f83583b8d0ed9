@@ -16,6 +16,23 @@
       "message": "Would this be acceptable way to manage the defaults?\nVariation of the pattern was suggested in another review..",
       "revId": "a0877641aef38f6247b74a49fd7f83583b8d0ed9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "596573dd_4e4b5cfd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-08T17:39:20Z",
+      "side": 1,
+      "message": "Fine by me, but why isn\u0027t `EGL_ANGLE_feature_control` sufficient?",
+      "revId": "a0877641aef38f6247b74a49fd7f83583b8d0ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
