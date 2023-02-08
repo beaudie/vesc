@@ -33,41 +33,23 @@ class LibraryCache
         AutoObjCPtr<NSError *> *errorOut);
 
   private:
-    struct LibraryKey
+    using Key = std::tuple<std::string, std::map<std::string, std::string>, bool>;
+
+    struct KeyCompare
     {
-        std::string source;
-        std::map<std::string, std::string> macros;
-        bool enableFastMath;
-
-        using LValueTuple = decltype(std::tie(std::as_const(source),
-                                              std::as_const(macros),
-                                              std::as_const(enableFastMath)));
-
-        LibraryKey() = default;
-        explicit LibraryKey(const LValueTuple &fromTuple);
-
-        LValueTuple tie() const;
-    };
-
-    struct LibraryKeyCompare
-    {
-        // Mark this comparator as transparent. This allows types that are not LibraryKey to be used
-        // as a key for unordered_map::find. We can avoid the construction of a LibraryKey (which
+        // Mark this comparator as transparent. This allows types that are not Key to be used
+        // as a key for unordered_map::find. We can avoid the construction of a Key (which
         // copies std::strings) when searching the cache.
         using is_transparent = void;
 
-        // Hash functions for keys and lvalue tuples of keys
-        size_t operator()(const LibraryKey::LValueTuple &k) const;
-        size_t operator()(const LibraryKey &k) const;
+        template <typename K>
+        size_t operator()(K &&k) const;
 
-        // Comparison operators for all key/lvalue combinations need by a map
-        bool operator()(const LibraryKey &a, const LibraryKey &b) const;
-        bool operator()(const LibraryKey &a, const LibraryKey::LValueTuple &b) const;
-        bool operator()(const LibraryKey::LValueTuple &a, const LibraryKey &b) const;
+        template <typename K1, typename K2>
+        bool operator()(K1 &&a, K2 &&b) const;
     };
 
-    angle::HashMap<LibraryKey, AutoObjCPtr<id<MTLLibrary>>, LibraryKeyCompare, LibraryKeyCompare>
-        mCache;
+    angle::HashMap<Key, AutoObjCPtr<id<MTLLibrary>>, KeyCompare, KeyCompare> mCache;
 };
 
 }  // namespace mtl
