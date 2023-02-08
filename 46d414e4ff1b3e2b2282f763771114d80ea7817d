@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8465bc7e_37dc89ec",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2320,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-08T17:35:35Z",
+      "side": 1,
+      "message": "OK. Will know.",
+      "parentUuid": "be8e28b0_cb756a33",
+      "revId": "46d414e4ff1b3e2b2282f763771114d80ea7817d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c51c678a_50e57fc5",
         "filename": "src/libANGLE/renderer/vulkan/vk_command_buffer_utils.h",
         "patchSetId": 1
@@ -48,6 +66,30 @@
       "writtenOn": "2023-02-08T17:22:00Z",
       "side": 1,
       "message": "Just `hasProtectedContent ? CommandContent::Protected : CommandContent::Unprotected` should be fine ;)",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 60
+      },
+      "revId": "46d414e4ff1b3e2b2282f763771114d80ea7817d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2acfef64_6f018b0a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_command_buffer_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-08T17:35:35Z",
+      "side": 1,
+      "message": "Ok.",
+      "parentUuid": "c51c678a_50e57fc5",
       "range": {
         "startLine": 31,
         "startChar": 0,
@@ -71,6 +113,24 @@
       "writtenOn": "2023-02-08T17:22:00Z",
       "side": 1,
       "message": "Are these also bugs? Shouldn\u0027t it reflect the priority of the context owning the resource?",
+      "revId": "46d414e4ff1b3e2b2282f763771114d80ea7817d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55700227_578d9ed2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4713,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-08T17:35:35Z",
+      "side": 1,
+      "message": "Probably. I\u0027m almost 100% sure that protected content feature has bugs. The whole implementation need to be revised.\n\nAnd since protected/unprotected use different primary command buffers, maybe even need to add forced flushes somewhere (protected context may read unprotected context\u0027s resources).",
+      "parentUuid": "c930598c_b6f768fc",
       "revId": "46d414e4ff1b3e2b2282f763771114d80ea7817d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
