@@ -190,6 +190,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae6c3b02_43c10e3f",
+        "filename": "src/commit_id.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-02-08T22:19:40Z",
+      "side": 1,
+      "message": "Discussed with Geoff and Roman offline.\n\n`ANGLE_DISABLE_PROGRAM_BINARY_LOAD` can be removed.\n\nWe will also remove the unused file https://cs.android.com/android/platform/superproject/+/master:external/angle/src/commit.h on aosp. That file got pulled into the \"upstream-mirror\" cl (\"merge list\" in https://r.android.com/1248366)\nGeoff says this was merging from the old master branch; archaeology at this point",
+      "parentUuid": "25b62e1e_fc8fe03e",
+      "range": {
+        "startLine": 135,
+        "startChar": 25,
+        "endLine": 135,
+        "endChar": 58
+      },
+      "revId": "949993ba27a1af11d1721a0e77abf92ed5dbfa43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f66e4c49_9a40729e",
