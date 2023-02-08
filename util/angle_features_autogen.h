@@ -112,6 +112,7 @@ enum class Feature
     EnableCaptureLimits,
     EnableInMemoryMtlLibraryCache,
     EnableMultisampledRenderToTexture,
+    EnableParallelMtlLibraryCompilation,
     EnablePrecisionQualifiers,
     EnablePreRotateSurfaces,
     EnableProgramBinaryForCapture,
