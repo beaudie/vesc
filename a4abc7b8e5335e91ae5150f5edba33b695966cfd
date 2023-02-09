@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4542139f_c2e55508",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-09T18:14:00Z",
+      "side": 1,
+      "message": "lgtm+2, CQ+2\n\nWe might need to revert this entire patch stack as an emergency measure, but it\u0027s best to get the code into the desired state for a reland.",
+      "revId": "a4abc7b8e5335e91ae5150f5edba33b695966cfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
