@@ -558,7 +558,10 @@ void CommandProcessor::handleError(VkResult errorCode,
 }
 
 CommandProcessor::CommandProcessor(RendererVk *renderer, CommandQueue *commandQueue)
-    : Context(renderer), mCommandQueue(commandQueue), mTaskThreadShouldExit(false)
+    : Context(renderer),
+      mCommandQueue(commandQueue),
+      mTaskThreadShouldExit(false),
+      mCheckCompletedCommands(false)
 {
     std::lock_guard<std::mutex> queueLock(mErrorMutex);
     while (!mErrors.empty())
@@ -608,6 +611,13 @@ angle::Result CommandProcessor::queueCommand(CommandProcessorTask &&task)
     return angle::Result::Continue;
 }
 
+void CommandProcessor::requestPostSubmitCheck(Context *context)
+{
+    std::unique_lock<std::mutex> enqueueLock(mWorkerMutex);
+    mCheckCompletedCommands = true;
+    mWorkAvailableCondition.notify_one();
+}
+
 void CommandProcessor::processTasks()
 {
     while (true)
@@ -638,14 +648,21 @@ angle::Result CommandProcessor::processTasksImpl(bool *exitThread)
         if (mTasks.empty())
         {
             // Only wake if notified and command queue is not empty
-            mWorkAvailableCondition.wait(
-                enqueueLock, [this] { return !mTasks.empty() || mTaskThreadShouldExit; });
+            mWorkAvailableCondition.wait(enqueueLock, [this] {
+                return !mTasks.empty() || mTaskThreadShouldExit || mCheckCompletedCommands;
+            });
         }
 
         if (mTaskThreadShouldExit)
         {
             break;
         }
+        if (mCheckCompletedCommands)
+        {
+            ANGLE_TRY(mCommandQueue->postSubmitCheck(this));
+            mCheckCompletedCommands = false;
+        }
+
         // Do submission with mWorkerMutex unlocked so that we still allow enqueue while we
         // process work.
         enqueueLock.unlock();
@@ -1292,7 +1309,7 @@ angle::Result CommandQueue::submitCommands(Context *context,
     ANGLE_TRY(submitCommandsImpl(context, protectionType, priority, signalSemaphore,
                                  std::move(commandBuffersToReset), commandPools,
                                  submitQueueSerial));
-    return postSubmitCheck(context);
+    return angle::Result::Continue;
 }
 
 angle::Result CommandQueue::submitCommandsImpl(Context *context,
