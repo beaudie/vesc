@@ -407,6 +407,8 @@ class CommandQueue : angle::NonCopyable
     const angle::VulkanPerfCounters getPerfCounters() const;
     void resetPerFramePerfCounters();
 
+    angle::Result postSubmitCheck(Context *context);
+
   private:
     // All these private APIs are called with mutex locked, so we must not take lock again.
     angle::Result checkCompletedCommandCount(Context *context, int *finishedCountOut);
@@ -426,7 +428,6 @@ class CommandQueue : angle::NonCopyable
                               const Fence *fence,
                               DeviceScoped<CommandBatch> &commandBatch,
                               const QueueSerial &submitQueueSerial);
-    angle::Result postSubmitCheck(Context *context);
 
     angle::Result retireFinishedCommands(Context *context, size_t finishedCount);
     angle::Result retireFinishedCommandsAndCleanupGarbage(Context *context, size_t finishedCount);
@@ -501,6 +502,8 @@ class CommandProcessor : public Context
     void destroy(Context *context);
 
     void handleDeviceLost(RendererVk *renderer);
+
+    void requestPostSubmitCheck(Context *context);
 
     angle::Result submitCommands(Context *context,
                                  ProtectionType protectionType,
@@ -603,6 +606,7 @@ class CommandProcessor : public Context
     // Command queue worker thread.
     std::thread mTaskThread;
     bool mTaskThreadShouldExit;
+    bool mCheckCompletedCommands;
 };
 }  // namespace vk
 
