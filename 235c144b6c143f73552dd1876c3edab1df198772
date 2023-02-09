@@ -16,6 +16,24 @@
       "message": "Suggest `\u0026\u0026` here and `std::move`. Not as a minor optimization, but to make it clear the caller should no longer be referencing the semaphores after handing them off",
       "revId": "235c144b6c143f73552dd1876c3edab1df198772",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ea0ca28_cbba6d20",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-09T12:55:50Z",
+      "side": 1,
+      "message": "There was `\u0026\u0026` but I decided to return `const \u0026` as it was before, when semaphores were passed to the `submitCommands()`. `RendererVk` still uses `\u0026\u0026`.\n\nWith `\u0026\u0026`, arrays must be cleared explicitly in 2 places: in the `CommandQueue` and `CommandProcessor`. Clearing in the `CommandProcessor` may be avoided if `std::move` into the `CommandProcessorTask` (as you suggesting), but it will happen before `queueCommand()`. If `queueCommand()` fails, semaphores will be already lost. But I guess, if such failure occurs - semaphore is not a biggest problem.\n\nAnother reason. When `CommandQueue::flushWaitSemaphores()` called from `CommandProcessor` - there is no need to clear the arrays, because they will be destroyed anyway with the `CommandProcessorTask`.\n\nSo because of these 3 factors I returned `const \u0026`.\n\nIt is not a big deal and I will revert to `\u0026\u0026` as it was in the previous commit.",
+      "parentUuid": "fad72e5b_9e5e9ca7",
+      "revId": "235c144b6c143f73552dd1876c3edab1df198772",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
