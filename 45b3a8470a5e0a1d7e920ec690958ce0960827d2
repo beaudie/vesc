@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa94d55a_59cd07f5",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2935,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-02-09T15:30:48Z",
+      "side": 1,
+      "message": "nit: can you move this up with the other defaultAttrib checks?",
+      "range": {
+        "startLine": 2935,
+        "startChar": 0,
+        "endLine": 2935,
+        "endChar": 64
+      },
+      "revId": "45b3a8470a5e0a1d7e920ec690958ce0960827d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
