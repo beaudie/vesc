@@ -402,6 +402,10 @@ class RendererVk : angle::NonCopyable
                                     const VkFormatFeatureFlags featureBits) const;
 
     bool isAsyncCommandQueueEnabled() const { return mFeatures.asyncCommandQueue.enabled; }
+    bool isAsyncCommandBufferResetEnabled() const
+    {
+        return mFeatures.asyncCommandBufferReset.enabled;
+    }
 
     ANGLE_INLINE egl::ContextPriority getDriverPriority(egl::ContextPriority priority)
     {
@@ -811,6 +815,8 @@ class RendererVk : angle::NonCopyable
 
     MemoryAllocationTracker *getMemoryAllocationTracker() { return &mMemoryAllocationTracker; }
 
+    angle::Result requestCommandsAndGarbageCleanup(vk::Context *context);
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;
@@ -1172,6 +1178,19 @@ ANGLE_INLINE angle::Result RendererVk::waitForPresentToBeSubmitted(
         return mCommandProcessor.waitForPresentToBeSubmitted(swapchainStatus);
     }
     ASSERT(!swapchainStatus->isPending);
+    return angle::Result::Continue;
+}
+
+ANGLE_INLINE angle::Result RendererVk::requestCommandsAndGarbageCleanup(vk::Context *context)
+{
+    if (!isAsyncCommandBufferResetEnabled())
+    {
+        ANGLE_TRY(mCommandQueue.retireFinishedCommandsAndCleanupGarbage(context));
+    }
+    else
+    {
+        mCommandProcessor.requestCommandsAndGarbageCleanup();
+    }
     return angle::Result::Continue;
 }
 }  // namespace rx
