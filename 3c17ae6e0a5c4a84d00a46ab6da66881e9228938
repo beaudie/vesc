@@ -39,6 +39,30 @@
       },
       "revId": "3c17ae6e0a5c4a84d00a46ab6da66881e9228938",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "148256a7_038a57c6",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-09T15:32:33Z",
+      "side": 1,
+      "message": "Methods already return `\u0026\u0026` as well as `flushWaitSemaphores()` takes `\u0026\u0026`, so `std::move` is not required.\n\nIf add `std::move` then `getWaitSemaphores()` must return `\u0026`. Otherwise thee will be double move.\n\nI wanted to rename method into `releaseWaitSemaphores()`. But then looked at `getCommandBuffersToReset()` that also returns `\u0026\u0026`. However there is additional use of `std::move` (double move) - that I did not notice.\n\nCorrect solution either rename both to `\u0026\u0026release*()` (without external `std::move`) or make all `\u0026get*()` (with `std::move`).\n\nSorry. Original code used different styles, and it is not clear what is the *correct* way.",
+      "parentUuid": "2f0d66e2_482d9c8b",
+      "range": {
+        "startLine": 698,
+        "startChar": 74,
+        "endLine": 698,
+        "endChar": 75
+      },
+      "revId": "3c17ae6e0a5c4a84d00a46ab6da66881e9228938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
