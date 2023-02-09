@@ -126,6 +126,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b2a0df6d_f02282b5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 4065,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-09T03:01:02Z",
+      "side": 1,
+      "message": "Just to be sure, can you try the capture/replay test without SwiftShader _before_ this change? Just to rule out some existing problem.\n\nAssuming that doesn\u0027t fail, there\u0027s a real regression with this change then.\n\n\u003e I tried capturing the tests in RenderDoc. The images look the same.\n\nDid you try capturing the _replay_ with RenderDoc?",
+      "parentUuid": "db096546_bc35881b",
+      "revId": "65cf5417a01ab0419dba1ac1e85b4205a5c68a1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5fd77ce8_a3457dde",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 33
