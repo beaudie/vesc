@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53c0ec8a_55f791e1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-09T14:39:19Z",
+      "side": 1,
+      "message": "Re-LGTM",
+      "revId": "3c17ae6e0a5c4a84d00a46ab6da66881e9228938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f0d66e2_482d9c8b",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-09T14:39:19Z",
+      "side": 1,
+      "message": "nit: missing std::move",
+      "range": {
+        "startLine": 698,
+        "startChar": 74,
+        "endLine": 698,
+        "endChar": 75
+      },
+      "revId": "3c17ae6e0a5c4a84d00a46ab6da66881e9228938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
