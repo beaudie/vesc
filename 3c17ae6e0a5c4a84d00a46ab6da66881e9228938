@@ -63,6 +63,30 @@
       },
       "revId": "3c17ae6e0a5c4a84d00a46ab6da66881e9228938",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfff6162_84583279",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 698,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-09T16:23:06Z",
+      "side": 1,
+      "message": "Ugh you\u0027re right, I was burned before by lack of std::move silently reverting to copy. I\u0027d put it anyway just to make it clear something\u0027s being moved.\n\nFWIW, we typically have the method return `\u0026` and use `std::move` at call site (so your second suggestion)",
+      "parentUuid": "148256a7_038a57c6",
+      "range": {
+        "startLine": 698,
+        "startChar": 74,
+        "endLine": 698,
+        "endChar": 75
+      },
+      "revId": "3c17ae6e0a5c4a84d00a46ab6da66881e9228938",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
