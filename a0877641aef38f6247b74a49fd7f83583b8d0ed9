@@ -50,6 +50,23 @@
       "message": "lgtm\n\nAdding Geoff as I think Shabi is OOO today. Geoff, for context, Shabi reviewed a related but orthogonal change, https://chromium-review.googlesource.com/c/angle/angle/+/4205891 .",
       "revId": "a0877641aef38f6247b74a49fd7f83583b8d0ed9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e82d7145_11b318bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-09T00:24:20Z",
+      "side": 1,
+      "message": "It looks like Geoff was swamped today. Kimmo, I\u0027m +2\u0027ing this and you should be able to CQ it yourself. Shabi\u0027s suggestion of using https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/extensions/EGL_ANGLE_feature_control.txt looks like it would work, but if it\u0027s easier to write the feature overriding code you need inside your downstream ANGLE checkout, we don\u0027t want to block you.",
+      "revId": "a0877641aef38f6247b74a49fd7f83583b8d0ed9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
