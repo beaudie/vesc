@@ -19,6 +19,7 @@ libangle_common_headers = [
   "src/common/PackedGLEnums_autogen.h",
   "src/common/PoolAlloc.h",
   "src/common/RingBufferAllocator.h",
+  "src/common/ScopedUnlock.h",
   "src/common/Spinlock.h",
   "src/common/SynchronizedValue.h",
   "src/common/WorkerThread.h",

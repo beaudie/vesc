@@ -8,6 +8,7 @@
 //
 
 #include "libANGLE/renderer/vulkan/CommandProcessor.h"
+#include "common/ScopedUnlock.h"
 #include "common/system_utils.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 
@@ -1131,12 +1132,11 @@ angle::Result CommandQueue::finishResourceUse(Context *context,
     else
     {
         const SharedFence localSharedFenceToWaitOn = sharedFence;
-        lock.unlock();
+        angle::ScopedUnlock<std::mutex> unlock(&mMutex);
         ANGLE_TRACE_EVENT0("gpu.angle", "CommandQueue::finishResourceUse");
         // You can only use the local copy of the sharedFence without lock;
         VkResult status = localSharedFenceToWaitOn.wait(context->getDevice(), timeout);
         ANGLE_VK_TRY(context, status);
-        lock.lock();
     }
 
     // Clean up finished batches. After we unlocked, finishCount may have changed, recheck the
@@ -1210,11 +1210,12 @@ angle::Result CommandQueue::waitForResourceUseToFinishWithUserTimeout(Context *c
 
     // Make a local copy of SharedFence with lock being held. Since SharedFence is refCounted, this
     // local copy of SharedFence will ensure underline VkFence will not go away.
-    SharedFence localSharedFenceToWaitOn = sharedFence;
-    lock.unlock();
-    // You can only use the local copy of the sharedFence without lock;
-    *result = localSharedFenceToWaitOn.wait(context->getDevice(), timeout);
-    lock.lock();
+    {
+        SharedFence localSharedFenceToWaitOn = sharedFence;
+        angle::ScopedUnlock<std::mutex> unlock(&mMutex);
+        // You can only use the local copy of the sharedFence without lock;
+        *result = localSharedFenceToWaitOn.wait(context->getDevice(), timeout);
+    }
     // Don't trigger an error on timeout.
     if (*result != VK_TIMEOUT)
     {
