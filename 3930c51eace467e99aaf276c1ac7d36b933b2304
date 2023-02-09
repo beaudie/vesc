@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3f8d39c_783a0081",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-02-09T20:06:14Z",
+      "side": 1,
+      "message": "Looks like this change must go together with the roll.\nI have it almost ready and it compiles locally.",
+      "revId": "3930c51eace467e99aaf276c1ac7d36b933b2304",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ba2a1e9_a4a8234d",
+        "filename": "third_party/kotlin_stdlib/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-02-09T20:06:14Z",
+      "side": 1,
+      "message": "I don\u0027t think we need the other files in this folder.",
+      "revId": "3930c51eace467e99aaf276c1ac7d36b933b2304",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "587adfe7_3501babb",
+        "filename": "DEPS",
+        "patchSetId": 2
+      },
+      "lineNbr": 4309,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-02-09T20:06:14Z",
+      "side": 0,
+      "message": "The roller deletes these automatically, I\u0027m not sure what\u0027ll happen if you do it manually.",
+      "range": {
+        "startLine": 4309,
+        "startChar": 0,
+        "endLine": 4309,
+        "endChar": 71
+      },
+      "revId": "5d97cbd12da4b9ed738c41f444293787629e4e7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
