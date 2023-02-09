@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8967847b_3cce8562",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1228974
+      },
+      "writtenOn": "2023-02-09T11:43:53Z",
+      "side": 1,
+      "message": "Kenneth, this CL is a fixup for https://chromium-review.googlesource.com/c/angle/angle/+/4184943 .",
+      "revId": "3ecf75ecddbc769f072ee64cf758ebd67c794c99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
