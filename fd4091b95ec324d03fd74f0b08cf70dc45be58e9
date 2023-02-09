@@ -88,6 +88,24 @@
       "parentUuid": "ff662132_63d8bf21",
       "revId": "fd4091b95ec324d03fd74f0b08cf70dc45be58e9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4092162a_3eabcfbc",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 1369,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-09T03:07:58Z",
+      "side": 1,
+      "message": "\u003e If we have one primary per context, then the order does not matter.\n\n- Context 1 transitions image from layout A to B, signals semaphore\n- Context 2 transitions image from layout B to C, waits on semaphore",
+      "parentUuid": "330c84eb_fe27f07d",
+      "revId": "fd4091b95ec324d03fd74f0b08cf70dc45be58e9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
