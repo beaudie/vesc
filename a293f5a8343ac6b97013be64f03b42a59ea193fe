@@ -33,6 +33,24 @@
       "message": "Thanks for the fixes. Please add a few basic tests to cover these (or perhaps deqp has some you could unskip)",
       "revId": "a293f5a8343ac6b97013be64f03b42a59ea193fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5eac2aff_d2deaa8c",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1603,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-02-09T07:06:36Z",
+      "side": 1,
+      "message": "The relevant dEQP tests require the EXT extension name so this CL enables all of them implicitly. There would be a few failures without the `lumaWorkaround` check.\n\nRemoved the `emulatedAlphaChannel` check as it has no observable effect - ANGLE sets swizzle state for the affected formats anyway.",
+      "parentUuid": "ff1534f5_a8c4c099",
+      "revId": "a293f5a8343ac6b97013be64f03b42a59ea193fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
