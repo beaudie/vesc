@@ -502,6 +502,8 @@ class CommandProcessor : public Context
 
     void handleDeviceLost(RendererVk *renderer);
 
+    void requestCheckCompletedCommands(Context *context);
+
     angle::Result submitCommands(Context *context,
                                  ProtectionType protectionType,
                                  egl::ContextPriority priority,
@@ -603,6 +605,7 @@ class CommandProcessor : public Context
     // Command queue worker thread.
     std::thread mTaskThread;
     bool mTaskThreadShouldExit;
+    bool mCheckCompletedCommands;
 };
 }  // namespace vk
 
