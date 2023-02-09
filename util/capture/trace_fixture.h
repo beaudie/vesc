@@ -189,6 +189,8 @@ void UpdateTextureID(GLuint id, GLsizei readBufferOffset);
 void UpdateTransformFeedbackID(GLuint id, GLsizei readBufferOffset);
 void UpdateVertexArrayID(GLuint id, GLsizei readBufferOffset);
 
+void SetContextIDToCurrent(GLuint id);
+
 void SetFramebufferID(GLuint id);
 void SetBufferID(GLuint id);
 void SetRenderbufferID(GLuint id);
