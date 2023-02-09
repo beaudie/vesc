@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee6c5e5d_bbe2d79c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1125,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-09T20:08:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d84d2c06_9c77d0ed",
+      "range": {
+        "startLine": 1125,
+        "startChar": 6,
+        "endLine": 1125,
+        "endChar": 17
+      },
+      "revId": "431fa59e27bb562ae2453df1039152c9fa07a8d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "282f8d24_10fa1ead",
@@ -96,6 +120,24 @@
       "side": 1,
       "message": "Agree. This is old code. I more recent code try to write like that, but from now will always write like that.",
       "parentUuid": "282f8d24_10fa1ead",
+      "revId": "431fa59e27bb562ae2453df1039152c9fa07a8d6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f3fddff_f3869e67",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1134,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-09T20:08:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd4dd47c_413a76d9",
       "revId": "431fa59e27bb562ae2453df1039152c9fa07a8d6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
