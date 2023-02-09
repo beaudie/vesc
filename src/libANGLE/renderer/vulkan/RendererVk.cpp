@@ -1384,11 +1384,7 @@ void RendererVk::onDestroy(vk::Context *context)
     }
     mOrphanedBufferBlocks.clear();
 
-    if (isAsyncCommandQueueEnabled())
-    {
-        mCommandProcessor.destroy(context);
-    }
-
+    mCommandProcessor.destroy(context);
     mCommandQueue.destroy(context);
 
     // mCommandQueue.destroy should already set "last completed" serials to infinite.
@@ -3020,11 +3016,7 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
         queueFamily.initializeQueueMap(mDevice, enableProtectedContent, 0, queueCount);
 
     ANGLE_TRY(mCommandQueue.init(displayVk, graphicsQueueMap));
-
-    if (isAsyncCommandQueueEnabled())
-    {
-        ANGLE_TRY(mCommandProcessor.init());
-    }
+    ANGLE_TRY(mCommandProcessor.init());
 
 #if defined(ANGLE_SHARED_LIBVULKAN)
     // Avoid compiler warnings on unused-but-set variables.
@@ -4893,6 +4885,7 @@ angle::Result RendererVk::submitCommands(vk::Context *context,
         ANGLE_TRY(mCommandQueue.submitCommands(context, protectionType, contextPriority,
                                                signalVkSemaphore, std::move(commandBuffersToReset),
                                                commandPools, submitQueueSerial));
+        mCommandProcessor.requestCheckCompletedCommands(context);
     }
 
     return angle::Result::Continue;

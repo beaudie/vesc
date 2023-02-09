@@ -571,7 +571,10 @@ void CommandProcessor::handleError(VkResult errorCode,
 }
 
 CommandProcessor::CommandProcessor(RendererVk *renderer, CommandQueue *commandQueue)
-    : Context(renderer), mCommandQueue(commandQueue), mTaskThreadShouldExit(false)
+    : Context(renderer),
+      mCommandQueue(commandQueue),
+      mTaskThreadShouldExit(false),
+      mCheckCompletedCommands(false)
 {
     std::lock_guard<std::mutex> queueLock(mErrorMutex);
     while (!mErrors.empty())
@@ -621,6 +624,13 @@ angle::Result CommandProcessor::queueCommand(CommandProcessorTask &&task)
     return angle::Result::Continue;
 }
 
+void CommandProcessor::requestCheckCompletedCommands(Context *context)
+{
+    std::unique_lock<std::mutex> enqueueLock(mWorkerMutex);
+    mCheckCompletedCommands = true;
+    mWorkAvailableCondition.notify_one();
+}
+
 void CommandProcessor::processTasks()
 {
     while (true)
@@ -651,14 +661,22 @@ angle::Result CommandProcessor::processTasksImpl(bool *exitThread)
         if (mTasks.empty())
         {
             // Only wake if notified and command queue is not empty
-            mWorkAvailableCondition.wait(
-                enqueueLock, [this] { return !mTasks.empty() || mTaskThreadShouldExit; });
+            mWorkAvailableCondition.wait(enqueueLock, [this] {
+                return !mTasks.empty() || mTaskThreadShouldExit || mCheckCompletedCommands;
+            });
+        }
+
+        if (mCheckCompletedCommands)
+        {
+            ANGLE_TRY(mCommandQueue->checkCompletedCommands(this));
+            mCheckCompletedCommands = false;
         }
 
         if (mTaskThreadShouldExit)
         {
             break;
         }
+
         // Do submission with mWorkerMutex unlocked so that we still allow enqueue while we
         // process work.
         enqueueLock.unlock();
@@ -710,6 +728,7 @@ angle::Result CommandProcessor::processTask(CommandProcessorTask *task)
                 this, task->getProtectionType(), task->getPriority(), task->getSemaphore(),
                 std::move(task->getCommandBuffersToReset()), task->getCommandPools(),
                 task->getSubmitQueueSerial()));
+            ANGLE_TRY(mCommandQueue->checkCompletedCommands(this));
             break;
         }
         case CustomTask::OneOffQueueSubmit:
@@ -1112,38 +1131,6 @@ void CommandQueue::handleDeviceLost(RendererVk *renderer)
     mInFlightCommands.clear();
 }
 
-angle::Result CommandQueue::postSubmitCheck(Context *context)
-{
-    std::unique_lock<std::mutex> lock(mMutex);
-    RendererVk *renderer = context->getRenderer();
-
-    int finishedCount;
-    ANGLE_TRY(checkCompletedCommandCount(context, &finishedCount));
-    if (finishedCount > 0)
-    {
-        ANGLE_TRY(retireFinishedCommandsAndCleanupGarbage(context, finishedCount));
-    }
-
-    // CPU should be throttled to avoid accumulating too much memory garbage waiting to be
-    // destroyed. This is important to keep peak memory usage at check when game launched and a lot
-    // of staging buffers used for textures upload and then gets released. But if there is only one
-    // command buffer in flight, we do not wait here to ensure we keep GPU busy.
-    VkDeviceSize suballocationGarbageSize = renderer->getSuballocationGarbageSize();
-    while (suballocationGarbageSize > kMaxBufferSuballocationGarbageSize &&
-           !mInFlightCommands.empty())
-    {
-        ANGLE_TRY(finishOneCommandBatch(context, renderer->getMaxFenceWaitTimeNs()));
-        suballocationGarbageSize = renderer->getSuballocationGarbageSize();
-    }
-
-    if (kOutputVmaStatsString)
-    {
-        renderer->outputVmaStatString();
-    }
-
-    return angle::Result::Continue;
-}
-
 angle::Result CommandQueue::finishResourceUse(Context *context,
                                               const ResourceUse &use,
                                               uint64_t timeout)
@@ -1159,7 +1146,7 @@ angle::Result CommandQueue::finishResourceUse(Context *context,
     // Wait for it finish.
     if (!sharedFence)
     {
-        return angle::Result::Continue;
+        return retireFinishedCommandsAndCleanupGarbage(context, finishCount);
     }
     else
     {
@@ -1322,20 +1309,6 @@ angle::Result CommandQueue::submitCommands(Context *context,
                                            SecondaryCommandPools *commandPools,
                                            const QueueSerial &submitQueueSerial)
 {
-    ANGLE_TRY(submitCommandsImpl(context, protectionType, priority, signalSemaphore,
-                                 std::move(commandBuffersToReset), commandPools,
-                                 submitQueueSerial));
-    return postSubmitCheck(context);
-}
-
-angle::Result CommandQueue::submitCommandsImpl(Context *context,
-                                               ProtectionType protectionType,
-                                               egl::ContextPriority priority,
-                                               const VkSemaphore signalSemaphore,
-                                               SecondaryCommandBufferList &&commandBuffersToReset,
-                                               SecondaryCommandPools *commandPools,
-                                               const QueueSerial &submitQueueSerial)
-{
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandQueue::submitCommands");
     std::unique_lock<std::mutex> lock(mMutex);
     RendererVk *renderer = context->getRenderer();
@@ -1400,6 +1373,11 @@ angle::Result CommandQueue::submitCommandsImpl(Context *context,
     // Clear local vector without lock.
     waitSemaphores.clear();
     waitSemaphoreStageMasks.clear();
+
+    if (kOutputVmaStatsString)
+    {
+        renderer->outputVmaStatString();
+    }
 
     return angle::Result::Continue;
 }
@@ -1485,6 +1463,19 @@ angle::Result CommandQueue::queueSubmit(Context *context,
     {
         ANGLE_TRY(finishOneCommandBatch(context, renderer->getMaxFenceWaitTimeNs()));
     }
+
+    // CPU should be throttled to avoid accumulating too much memory garbage waiting to be
+    // destroyed. This is important to keep peak memory usage at check when game launched and a lot
+    // of staging buffers used for textures upload and then gets released. But if there is only one
+    // command buffer in flight, we do not wait here to ensure we keep GPU busy.
+    VkDeviceSize suballocationGarbageSize = renderer->getSuballocationGarbageSize();
+    while (suballocationGarbageSize > kMaxBufferSuballocationGarbageSize &&
+           !mInFlightCommands.empty())
+    {
+        ANGLE_TRY(finishOneCommandBatch(context, renderer->getMaxFenceWaitTimeNs()));
+        suballocationGarbageSize = renderer->getSuballocationGarbageSize();
+    }
+
     // Release the dequeue lock while doing potentially lengthy vkQueueSubmit call.
     // Note: after this point, you can not reference anything that required mMutex lock.
     dequeueLock.unlock();
