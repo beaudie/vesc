@@ -16,6 +16,24 @@
       "message": "Could you please surround this new block with:\n\n#if TARGET_OS_SIMULATOR\n...\n#endif\n\nto limit its effects? Will that work?",
       "revId": "2e2277d5449feea9d966f8be3dad60219ba2f031",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff258528_84d169a7",
+        "filename": "src/libANGLE/renderer/metal/mtl_resources.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1123071
+      },
+      "writtenOn": "2023-02-09T16:45:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c9c32a8_df49776b",
+      "revId": "2e2277d5449feea9d966f8be3dad60219ba2f031",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
