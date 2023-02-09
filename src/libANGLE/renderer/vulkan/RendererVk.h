@@ -387,6 +387,10 @@ class RendererVk : angle::NonCopyable
                                     const VkFormatFeatureFlags featureBits) const;
 
     bool isAsyncCommandQueueEnabled() const { return mFeatures.asyncCommandQueue.enabled; }
+    bool isAsyncCommandBufferResetEnabled() const
+    {
+        return mFeatures.asyncCommandBufferReset.enabled;
+    }
 
     ANGLE_INLINE egl::ContextPriority getDriverPriority(egl::ContextPriority priority)
     {
