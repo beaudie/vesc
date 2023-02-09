@@ -118,6 +118,30 @@
       },
       "revId": "cc8095862d2dfb01c5de6201c061a44a9f0eef34",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5b5cb56_b062a591",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1135,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-09T21:45:42Z",
+      "side": 1,
+      "message": "Right, but the bug that if ANGLE_VK_TRY fail does not exit.\n\nActually there is another problem here with ScopedUnlock. localSharedFenceToWaitOn must be destroyed with lock held. Right now it is. With the ScopedUnlock, it becomes a bit tricky. If you switch lines 1134 and 1135, you have a bug. It becomes a bit tricky and risky.\n\nIf you really want to make it safe, maybe solution here is to make a helper function that does the unlock/fenceWait/lock.",
+      "parentUuid": "f1537d5a_d78065d1",
+      "range": {
+        "startLine": 1135,
+        "startChar": 8,
+        "endLine": 1135,
+        "endChar": 40
+      },
+      "revId": "cc8095862d2dfb01c5de6201c061a44a9f0eef34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
