@@ -41,6 +41,7 @@ enum class Feature
     AlwaysUseManagedStorageModeForBuffers,
     AlwaysUseSharedStorageModeForBuffers,
     AlwaysUseStagedBufferUpdates,
+    AsyncCommandBufferReset,
     AsyncCommandQueue,
     Avoid1BitAlphaTextureFormats,
     BindTransformFeedbackBufferBeforeBindBufferRange,

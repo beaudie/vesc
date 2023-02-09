@@ -30,6 +30,7 @@ namespace vk
 {
 constexpr size_t kMaxCommandProcessorTasksLimit = 16u;
 constexpr size_t kInFlightCommandsLimit         = 50u;
+constexpr size_t kMaxFinishedCommandsLimit      = 64u;
 
 enum class SubmitPolicy
 {
@@ -391,7 +392,11 @@ class CommandQueue : angle::NonCopyable
     // Check to see which batches have finished completion (forward progress for
     // the last completed serial, for example for when the application busy waits on a query
     // result). It would be nice if we didn't have to expose this for QueryVk::getResult.
-    angle::Result checkCompletedCommands(Context *context);
+    angle::Result checkCompletedCommands(Context *context, bool *anyCommandFinished)
+    {
+        std::lock_guard<std::mutex> lock(mMutex);
+        return checkCompletedCommandsLocked(context, anyCommandFinished);
+    }
 
     void flushWaitSemaphores(ProtectionType protectionType,
                              std::vector<VkSemaphore> &&waitSemaphores,
@@ -407,10 +412,18 @@ class CommandQueue : angle::NonCopyable
     const angle::VulkanPerfCounters getPerfCounters() const;
     void resetPerFramePerfCounters();
 
-  private:
+    angle::Result retireFinishedCommandsAndCleanupGarbage(Context *context);
+
     // All these private APIs are called with mutex locked, so we must not take lock again.
-    angle::Result checkCompletedCommandCount(Context *context, int *finishedCountOut);
+  private:
+    // Check the first command buffer in mInFlightCommands and update mLastCompletedSerials if
+    // finished
+    angle::Result checkOneCommandBatch(Context *context, bool *finished);
+    // Similar to checkOneCommandBatch, except we will wait for it to finish
     angle::Result finishOneCommandBatch(Context *context, uint64_t timeout);
+    // Walk mInFlightCommands, check and update mLastCompletedSerials for all commands that are
+    // finished
+    angle::Result checkCompletedCommandsLocked(Context *context, bool *anyCommandFinished);
 
     angle::Result submitCommandsImpl(Context *context,
                                      ProtectionType protectionType,
@@ -428,8 +441,7 @@ class CommandQueue : angle::NonCopyable
                               const QueueSerial &submitQueueSerial);
     angle::Result postSubmitCheck(Context *context);
 
-    angle::Result retireFinishedCommands(Context *context, size_t finishedCount);
-    angle::Result retireFinishedCommandsAndCleanupGarbage(Context *context, size_t finishedCount);
+    angle::Result retireFinishedCommands(Context *context);
     angle::Result ensurePrimaryCommandBufferValid(Context *context, ProtectionType protectionType);
     // Returns number of CommandBatchs that are smaller than serials
     size_t getBatchCountUpToSerials(RendererVk *renderer, const Serials &serials);
@@ -461,6 +473,8 @@ class CommandQueue : angle::NonCopyable
     // call.
     std::mutex mQueueSubmitMutex;
     CommandBatchQueue mInFlightCommands;
+    // Temporary storage for finished command batches that should be reset.
+    angle::FixedQueue<CommandBatch, kMaxFinishedCommandsLimit> mFinishedCommandBatches;
 
     angle::PackedEnumMap<ProtectionType, CommandsState> mCommandsStateMap;
 
@@ -501,6 +515,8 @@ class CommandProcessor : public Context
     void destroy(Context *context);
 
     void handleDeviceLost(RendererVk *renderer);
+
+    void requestCommandsAndGarbageCleanup();
 
     angle::Result submitCommands(Context *context,
                                  ProtectionType protectionType,
@@ -603,6 +619,7 @@ class CommandProcessor : public Context
     // Command queue worker thread.
     std::thread mTaskThread;
     bool mTaskThreadShouldExit;
+    std::atomic<bool> mNeedCommandsAndGarbageCleanup;
 };
 }  // namespace vk
 

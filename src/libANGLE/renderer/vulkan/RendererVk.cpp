@@ -1384,23 +1384,13 @@ void RendererVk::onDestroy(vk::Context *context)
         handleDeviceLost();
     }
 
-    for (std::unique_ptr<vk::BufferBlock> &block : mOrphanedBufferBlocks)
-    {
-        ASSERT(block->isEmpty());
-        block->destroy(this);
-    }
-    mOrphanedBufferBlocks.clear();
-
-    if (isAsyncCommandQueueEnabled())
-    {
-        mCommandProcessor.destroy(context);
-    }
-
+    mCommandProcessor.destroy(context);
     mCommandQueue.destroy(context);
 
     // mCommandQueue.destroy should already set "last completed" serials to infinite.
     cleanupGarbage();
     ASSERT(!hasSharedGarbage());
+    ASSERT(mOrphanedBufferBlocks.empty());
 
     for (OneOffCommandPool &oneOffCommandPool : mOneOffCommandPoolMap)
     {
@@ -3313,11 +3303,7 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
         queueFamily.initializeQueueMap(mDevice, enableProtectedContent, 0, queueCount);
 
     ANGLE_TRY(mCommandQueue.init(displayVk, graphicsQueueMap));
-
-    if (isAsyncCommandQueueEnabled())
-    {
-        ANGLE_TRY(mCommandProcessor.init());
-    }
+    ANGLE_TRY(mCommandProcessor.init());
 
     if (mFeatures.forceMaxUniformBufferSize16KB.enabled)
     {
@@ -4115,6 +4101,8 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // Currently disabled by default: http://anglebug.com/4324
     ANGLE_FEATURE_CONDITION(&mFeatures, asyncCommandQueue, false);
 
+    ANGLE_FEATURE_CONDITION(&mFeatures, asyncCommandBufferReset, true);
+
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsYUVSamplerConversion,
                             mSamplerYcbcrConversionFeatures.samplerYcbcrConversion != VK_FALSE);
 
@@ -4544,7 +4532,8 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     if (!vk::OutsideRenderPassCommandBuffer::ExecutesInline() ||
         !vk::RenderPassCommandBuffer::ExecutesInline())
     {
-        mFeatures.asyncCommandQueue.enabled = false;
+        mFeatures.asyncCommandQueue.enabled       = false;
+        mFeatures.asyncCommandBufferReset.enabled = false;
     }
 
     // Disable memory report feature overrides if extension is not supported.
@@ -5261,7 +5250,14 @@ angle::Result RendererVk::finish(vk::Context *context)
 
 angle::Result RendererVk::checkCompletedCommands(vk::Context *context)
 {
-    return mCommandQueue.checkCompletedCommands(context);
+    bool anyCommandFinished;
+    ANGLE_TRY(mCommandQueue.checkCompletedCommands(context, &anyCommandFinished));
+
+    if (anyCommandFinished)
+    {
+        mCommandProcessor.requestCommandsAndGarbageCleanup();
+    }
+    return angle::Result::Continue;
 }
 
 angle::Result RendererVk::flushWaitSemaphores(
