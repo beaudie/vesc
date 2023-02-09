@@ -435,6 +435,10 @@ class CommandQueue : angle::NonCopyable
     size_t getBatchCountUpToSerials(RendererVk *renderer, const Serials &serials);
     // Returns the last valid SharedFence of the first "count" CommandBatchs in mInflightCommands.
     const SharedFence &getSharedFenceToWait(size_t count);
+    VkResult waitSharedFenceUnlocked(VkDevice device,
+                                     const SharedFence &fence,
+                                     uint64_t timeout,
+                                     std::unique_lock<std::mutex> &dequeueLock);
 
     // For validation only. Should only be called with ASSERT macro.
     bool allInFlightCommandsAreAfterSerials(const Serials &serials);
