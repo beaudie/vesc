@@ -412,13 +412,6 @@ class CommandQueue : angle::NonCopyable
     angle::Result checkCompletedCommandCount(Context *context, int *finishedCountOut);
     angle::Result finishOneCommandBatch(Context *context, uint64_t timeout);
 
-    angle::Result submitCommandsImpl(Context *context,
-                                     ProtectionType protectionType,
-                                     egl::ContextPriority priority,
-                                     const VkSemaphore signalSemaphore,
-                                     SecondaryCommandBufferList &&commandBuffersToReset,
-                                     SecondaryCommandPools *commandPools,
-                                     const QueueSerial &submitQueueSerial);
     angle::Result queueSubmit(Context *context,
                               std::unique_lock<std::mutex> &&dequeueLock,
                               egl::ContextPriority contextPriority,
@@ -426,7 +419,6 @@ class CommandQueue : angle::NonCopyable
                               const Fence *fence,
                               DeviceScoped<CommandBatch> &commandBatch,
                               const QueueSerial &submitQueueSerial);
-    angle::Result postSubmitCheck(Context *context);
 
     angle::Result retireFinishedCommands(Context *context, size_t finishedCount);
     angle::Result retireFinishedCommandsAndCleanupGarbage(Context *context, size_t finishedCount);
@@ -501,6 +493,8 @@ class CommandProcessor : public Context
     void destroy(Context *context);
 
     void handleDeviceLost(RendererVk *renderer);
+
+    void requestCheckCompletedCommands(Context *context);
 
     angle::Result submitCommands(Context *context,
                                  ProtectionType protectionType,
@@ -603,6 +597,7 @@ class CommandProcessor : public Context
     // Command queue worker thread.
     std::thread mTaskThread;
     bool mTaskThreadShouldExit;
+    bool mCheckCompletedCommands;
 };
 }  // namespace vk
 
