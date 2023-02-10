@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3097cb31_16922d39",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-02-10T20:39:55Z",
+      "side": 1,
+      "message": "Something odd going on here as `AddToPNextChain` called below asserts pNext \u003d\u003d nullptr and that isn\u0027t new:\n\n```\nASSERT(ptr-\u003epNext \u003d\u003d nullptr);   // Blame layer: #77 2020-01-16 \n```\nhttps://crsrc.org/c/third_party/angle/src/libANGLE/renderer/vulkan/vk_utils.h;drc\u003d0c4306fc554c80506eb0f9b833a5d2a5fdd452d5;l\u003d161",
+      "range": {
+        "startLine": 756,
+        "startChar": 4,
+        "endLine": 756,
+        "endChar": 35
+      },
+      "revId": "b7ec9d030f14ed9634567c261e5ff583a30a5ab3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
