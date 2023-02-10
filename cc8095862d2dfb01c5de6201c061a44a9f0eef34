@@ -166,6 +166,30 @@
       },
       "revId": "cc8095862d2dfb01c5de6201c061a44a9f0eef34",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12db3aca_4801f350",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1135,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-10T13:41:48Z",
+      "side": 1,
+      "message": "\u003e This will mess up with std::unique_lock tracking though. Now you are doing lock/unlock directly on mMutex and std::unique_lock has its own tracking of if it owns the lock or not, and this makes unique_lock\u0027s tracking inaccurate.\n\nOriginally I passed `lock` into the `unlock`, but then decided to optimize. My logic was that if `lock` is not accessed during `unlock` there is nothing wrong. That is why class name is not a `MutexUnlock` as was before.\n\n\u003e if you switch lines 1134 and 1135, you have a bug. It becomes a bit tricky and risky.\n\nIf you do that there is already a problem making a copy of `sharedFence` without a lock. But agree, it is not as clear as with a separate scope/method.\n\n\u003e  I am not fan of this CL.\n\nMe too. Original class was used in `CommandQueue2` and also my other changes. `CommandQueue2` unlocked `mCommandQueueMutex`, so it was critical to lock back if `ANGLE_VK_TRY` returns. In the current code of `CommandQueue` this is not strictly necessary.",
+      "parentUuid": "82c39e3d_963d6a9f",
+      "range": {
+        "startLine": 1135,
+        "startChar": 8,
+        "endLine": 1135,
+        "endChar": 40
+      },
+      "revId": "cc8095862d2dfb01c5de6201c061a44a9f0eef34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
