@@ -22,6 +22,30 @@
       },
       "revId": "af602ee262c5350c49bb66fcf538aa68082abb8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed0e775a_12d8f68d",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1171,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-10T17:37:51Z",
+      "side": 1,
+      "message": "I added `ScopedUnlock` for code reuse. One of my changes uses it to unlock Global mutex when do `vkAcquireNextImageKHR()`. With the Global mutex you do not have access to the `std::unique_lock\u003c\u003e` instance.\n\nSorry, but I do not see a problem with unlock. For me it is the same as lock, but opposite...\n\nI also have questions. Why add `if (mRefCountedFence !\u003d nullptr)` and why `SharedFence::wait()` also have check for `nullptr` but everywhere the is explicit check before calling this function? I would rather add `ASSERT()`.",
+      "parentUuid": "1eae8e63_dde1c134",
+      "range": {
+        "startLine": 1170,
+        "startChar": 8,
+        "endLine": 1171,
+        "endChar": 99
+      },
+      "revId": "af602ee262c5350c49bb66fcf538aa68082abb8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
