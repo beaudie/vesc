@@ -51,6 +51,24 @@
       "parentUuid": "fb630cfb_b18341b1",
       "revId": "d483b6c12e309b151961910b55ecf1711b74fcb2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "615e9a52_ae86c300",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-02-10T20:07:35Z",
+      "side": 1,
+      "message": "\u003e signed and unsigned RGB are also missing;\n\nAdded. For some reason my webkit webgl test passed for all, including RGBs on Metal, failed on OpenGL for the missing RGBs and I assumed some other OpenGL issue.\n\n\u003e all signed unsized norm16 entries should have NeverSupported in their caps.\n\nYou mean the TextureAttachment section? added",
+      "parentUuid": "d7919f74_05cabde5",
+      "revId": "d483b6c12e309b151961910b55ecf1711b74fcb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
