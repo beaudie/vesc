@@ -20,6 +20,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "537ce109_9cb20d52",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2023-02-10T15:25:29Z",
+      "side": 1,
+      "message": "Question",
+      "revId": "0d0e8c375a07ee14a56bcd9b0c47810f67b8ce45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "383469a0_c6757997",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 6
@@ -67,6 +84,24 @@
       "side": 1,
       "message": "Presumably `CommandBatch`?",
       "parentUuid": "4811f767_979941ed",
+      "revId": "0d0e8c375a07ee14a56bcd9b0c47810f67b8ce45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecac654b_938505db",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2335,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2023-02-10T15:25:29Z",
+      "side": 1,
+      "message": "Sorry, if its a one off, and just just a transition, then is this needed? Better question, did it cause an issue when it needed to be protected \u003d true?",
+      "parentUuid": "84ddc9e1_eca95308",
       "revId": "0d0e8c375a07ee14a56bcd9b0c47810f67b8ce45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
