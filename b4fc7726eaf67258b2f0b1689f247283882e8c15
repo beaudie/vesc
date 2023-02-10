@@ -213,6 +213,24 @@
       "parentUuid": "50a05bb4_e776b8db",
       "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33d8dc5d_0f24562d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-10T18:53:53Z",
+      "side": 1,
+      "message": "My proposal is to make primary command buffer per context, and ensure all contexts within same share group have the same priority (which means same VkQueue). Then you do not need semaphores to sync between VkQueues. And it also gives us other benefit, that you can directly encode outsideRenderPassCommands into primary command buffer without need of ANGLE\u0027s secondary command buffer, a potential CPU overhead save as well.\n\nAnd I believe you also want to make CommandQueue::mInflightCommands per VkQueue so that if one VkQueue has slow job, it will not stop it from progressing.\n\nThis will make vkQueue completely independent from each other. Am I miss anything here?",
+      "parentUuid": "2e56710f_6b067dd1",
+      "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
