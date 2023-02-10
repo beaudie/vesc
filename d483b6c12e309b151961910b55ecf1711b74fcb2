@@ -33,6 +33,24 @@
       "message": "Thank you for tracking this down! This was filed separately under crbug.com/1408247 but I hadn\u0027t debugged it yet.\n\nlgtm with Alexey\u0027s comments addressed - all of the formats in https://registry.khronos.org/webgl/extensions/EXT_texture_norm16/ should be included in the format table. From my standpoint the other packed formats should be done in a separate CL.",
       "revId": "d483b6c12e309b151961910b55ecf1711b74fcb2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a4521d5_3cea241d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-02-10T19:16:20Z",
+      "side": 1,
+      "message": "The packed formats have been added there as unsized likely for the same reason. I mentioned them as a precedent, no action needed.",
+      "parentUuid": "fb630cfb_b18341b1",
+      "revId": "d483b6c12e309b151961910b55ecf1711b74fcb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
