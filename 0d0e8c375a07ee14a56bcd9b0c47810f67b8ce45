@@ -104,6 +104,24 @@
       "parentUuid": "84ddc9e1_eca95308",
       "revId": "0d0e8c375a07ee14a56bcd9b0c47810f67b8ce45",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c930379a_1bff7d40",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2335,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-10T16:03:03Z",
+      "side": 1,
+      "message": "\u003e Better question, did it cause an issue when it needed to be protected \u003d true?\n\nFrom the spec:\n\n```\nImage layout transitions may perform read and write accesses on all memory bound to the image subresource range\n```\n\nBecause `image.image` is *protected* we *must* use *protected* command buffer (allocated from a *protected* pool). Spec demands, that batch submission **must** be *protected* if command buffers in the batch are *protected*.\n\nHowever, I did not find in the spec that *protected* buffer must be used for layout transition.\n\n\u003e Better question, did it cause an issue when it needed to be protected \u003d true?\n\nIn my testing it works OK \"protected \u003d true/false\". But this is spec violation. Other devices may behave differently.\n\nI just was doing refactoring and noticed this bug. That is all.",
+      "parentUuid": "ecac654b_938505db",
+      "revId": "0d0e8c375a07ee14a56bcd9b0c47810f67b8ce45",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
