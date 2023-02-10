@@ -249,6 +249,24 @@
       "parentUuid": "33d8dc5d_0f24562d",
       "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1ad4561_6efb7c21",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-10T19:37:52Z",
+      "side": 1,
+      "message": "\u003e One place when semaphores still needed is via EGLImage. Other maybe when read from surface that was rendered by other context.\n\nread\u003c-\u003ewrite requires explicit sync, so it\u0027s probably easy. Simultaneous read is likely our worst case. I opened https://gitlab.khronos.org/opengl/API/-/issues/176 to make sure we are not trying so hard to support something that was an app mistake",
+      "parentUuid": "846d2e2f_28b9ea47",
+      "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
