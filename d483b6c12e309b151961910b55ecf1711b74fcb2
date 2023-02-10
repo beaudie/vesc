@@ -69,6 +69,24 @@
       "parentUuid": "d7919f74_05cabde5",
       "revId": "d483b6c12e309b151961910b55ecf1711b74fcb2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1029c74_a652d567",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-02-10T20:19:26Z",
+      "side": 1,
+      "message": "All caps starting from \"Texture supported\" should be disabled because norm16 formats should not be accepted as unsized for initial texture creation with `texImage*`.",
+      "parentUuid": "615e9a52_ae86c300",
+      "revId": "d483b6c12e309b151961910b55ecf1711b74fcb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
