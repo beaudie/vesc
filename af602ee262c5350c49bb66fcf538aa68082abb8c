@@ -70,6 +70,30 @@
       },
       "revId": "af602ee262c5350c49bb66fcf538aa68082abb8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a500e30_9dcfe760",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1171,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-10T18:39:09Z",
+      "side": 1,
+      "message": "I understand now.\nFor me the word \"unlock\"\u003d\u003d\"danger\", so it is not wise to apply same patterns as for the \"lock\".\n\nBut I also understand now, that unlocking should be used for small part of the code, and automatic locking is not that necessary.\n\nSo it is 1 vs 1.\n`ScopedUnlock` on the other hand, ensures that lock will be acquired again no matter what (this is my primary argument), but on the other hand - habit placing scoped object at the beginning of the scope.\n\nI\u0027m not insisting. Will abandon this CL.",
+      "parentUuid": "daf1e464_f4815647",
+      "range": {
+        "startLine": 1170,
+        "startChar": 8,
+        "endLine": 1171,
+        "endChar": 99
+      },
+      "revId": "af602ee262c5350c49bb66fcf538aa68082abb8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
