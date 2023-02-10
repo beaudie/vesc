@@ -162,6 +162,16 @@ Optional<gl::Version> DisplayGL::getMaxSupportedDesktopVersion() const
     return Optional<gl::Version>::Invalid();
 }
 
+void DisplayGL::initializeFrontendFeatures(angle::FrontendFeatures *features) const
+{
+    nativegl_gl::InitializeFrontendFeatures(getRenderer()->getFunctions(), features);
+}
+
+void DisplayGL::populateFeatureList(angle::FeatureList *features)
+{
+    getRenderer()->getFeatures().populateFeatureList(features);
+}
+
 void DisplayGL::generateExtensions(egl::DisplayExtensions *outExtensions) const
 {
     // Advertise robust resource initialization on all OpenGL backends for testing even though it is

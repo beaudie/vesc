@@ -93,10 +93,6 @@ class DisplayGLX : public DisplayGL
 
     WorkerContext *createWorkerContext(std::string *infoLog);
 
-    void initializeFrontendFeatures(angle::FrontendFeatures *features) const override;
-
-    void populateFeatureList(angle::FeatureList *features) override;
-
     RendererGL *getRenderer() const override;
 
     bool isX11() const override;

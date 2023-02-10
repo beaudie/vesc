@@ -1065,16 +1065,6 @@ WorkerContext *DisplayGLX::createWorkerContext(std::string *infoLog)
     return new WorkerContextGLX(context, &mGLX, workerPbuffer);
 }
 
-void DisplayGLX::initializeFrontendFeatures(angle::FrontendFeatures *features) const
-{
-    mRenderer->initializeFrontendFeatures(features);
-}
-
-void DisplayGLX::populateFeatureList(angle::FeatureList *features)
-{
-    mRenderer->getFeatures().populateFeatureList(features);
-}
-
 RendererGL *DisplayGLX::getRenderer() const
 {
     return mRenderer.get();

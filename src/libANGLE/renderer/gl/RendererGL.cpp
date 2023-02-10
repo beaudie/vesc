@@ -353,12 +353,6 @@ MultiviewImplementationTypeGL RendererGL::getMultiviewImplementationType() const
     return mMultiviewImplementationType;
 }
 
-void RendererGL::initializeFrontendFeatures(angle::FrontendFeatures *features) const
-{
-    ensureCapsInitialized();
-    nativegl_gl::InitializeFrontendFeatures(mFunctions.get(), features);
-}
-
 angle::Result RendererGL::dispatchCompute(const gl::Context *context,
                                           GLuint numGroupsX,
                                           GLuint numGroupsY,

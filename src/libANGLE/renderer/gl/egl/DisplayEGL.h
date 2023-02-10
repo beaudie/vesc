@@ -88,10 +88,6 @@ class DisplayEGL : public DisplayGL
 
     gl::Version getMaxSupportedESVersion() const override;
 
-    void initializeFrontendFeatures(angle::FrontendFeatures *features) const override;
-
-    void populateFeatureList(angle::FeatureList *features) override;
-
     RendererGL *getRenderer() const override;
 
     egl::Error validateImageClientBuffer(const gl::Context *context,

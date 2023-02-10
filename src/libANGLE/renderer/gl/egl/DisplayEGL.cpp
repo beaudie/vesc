@@ -989,11 +989,6 @@ WorkerContext *DisplayEGL::createWorkerContext(std::string *infoLog,
     return new WorkerContextEGL(context, mEGL, EGL_NO_SURFACE);
 }
 
-void DisplayEGL::initializeFrontendFeatures(angle::FrontendFeatures *features) const
-{
-    mRenderer->initializeFrontendFeatures(features);
-}
-
 void DisplayEGL::populateFeatureList(angle::FeatureList *features)
 {
     mRenderer->getFeatures().populateFeatureList(features);

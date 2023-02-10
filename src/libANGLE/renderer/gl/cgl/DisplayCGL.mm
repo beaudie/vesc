@@ -599,16 +599,6 @@ WorkerContext *DisplayCGL::createWorkerContext(std::string *infoLog)
     return new WorkerContextCGL(context);
 }
 
-void DisplayCGL::initializeFrontendFeatures(angle::FrontendFeatures *features) const
-{
-    mRenderer->initializeFrontendFeatures(features);
-}
-
-void DisplayCGL::populateFeatureList(angle::FeatureList *features)
-{
-    mRenderer->getFeatures().populateFeatureList(features);
-}
-
 RendererGL *DisplayCGL::getRenderer() const
 {
     return mRenderer.get();

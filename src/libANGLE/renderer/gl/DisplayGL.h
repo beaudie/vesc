@@ -12,6 +12,11 @@
 #include "libANGLE/renderer/DisplayImpl.h"
 #include "libANGLE/renderer/gl/FunctionsGL.h"
 
+namespace angle
+{
+struct FrontendFeatures;
+}  // namespace angle
+
 namespace egl
 {
 class Surface;
@@ -56,6 +61,9 @@ class DisplayGL : public DisplayImpl
 
     gl::Version getMaxConformantESVersion() const override;
     Optional<gl::Version> getMaxSupportedDesktopVersion() const override;
+
+    void initializeFrontendFeatures(angle::FrontendFeatures *features) const override;
+    void populateFeatureList(angle::FeatureList *features) override;
 
     virtual RendererGL *getRenderer() const = 0;
 

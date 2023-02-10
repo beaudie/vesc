@@ -114,7 +114,6 @@ class RendererGL : angle::NonCopyable
     const gl::Extensions &getNativeExtensions() const;
     const gl::Limitations &getNativeLimitations() const;
     const ShPixelLocalStorageOptions &getNativePixelLocalStorageOptions() const;
-    void initializeFrontendFeatures(angle::FrontendFeatures *features) const;
 
     angle::Result dispatchCompute(const gl::Context *context,
                                   GLuint numGroupsX,
