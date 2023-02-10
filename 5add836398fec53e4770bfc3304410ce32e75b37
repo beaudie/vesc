@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97618ef7_cdb76462",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-02-10T21:57:00Z",
+      "side": 1,
+      "message": "Worked with Mo on this today. The Watchdog was not being properly triggered when we were using SwiftShader.\n\nThe current timeout of 2 minutes is not enough though, some of our bots have long hangs. I think this is the right approach now, the timeout has to be longer than Chrome\u0027s so Chrome kills the whole process.",
+      "revId": "5add836398fec53e4770bfc3304410ce32e75b37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
