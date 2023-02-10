@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1eae8e63_dde1c134",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1171,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-10T17:24:50Z",
+      "side": 1,
+      "message": "Why not just add this:\n```\nVkResult SharedFence::waitUnlocked(VkDevice device, std::unique_lock\u003cstd::mutex\u003e *lock, uint64_t timeout) const\n{\n    if (mRefCountedFence !\u003d nullptr)\n    {\n        ASSERT(lock-\u003eowns_lock());\n        lock-\u003eunlock();\n        VkResult result \u003d mRefCountedFence-\u003eget().wait(device, timeout);\n        lock-\u003elock();\n        return result;\n    }\n    return VK_SUCCESS;\n}\n```\nThe ScopedUnlock is inherently risky. For ScopedLock, people tend to declare it at the entry of the block. ScopedUnlock is opposite, you want to declare as close to where you want to unlock as possible, why is counter intuitive, and that is why I am worried here.",
+      "range": {
+        "startLine": 1170,
+        "startChar": 8,
+        "endLine": 1171,
+        "endChar": 99
+      },
+      "revId": "af602ee262c5350c49bb66fcf538aa68082abb8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
