@@ -1621,10 +1621,8 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
 
     if (ExtensionFound(VK_GOOGLE_SURFACELESS_QUERY_EXTENSION_NAME, instanceExtensionNames))
     {
-        // TODO: Validation layer has a bug when vkGetPhysicalDeviceSurfaceFormats2KHR is called
-        // on Mock ICD with surface handle set as VK_NULL_HANDLE. http://anglebug.com/7631
         mEnabledInstanceExtensions.push_back(VK_GOOGLE_SURFACELESS_QUERY_EXTENSION_NAME);
-        ANGLE_FEATURE_CONDITION(&mFeatures, supportsSurfacelessQueryExtension, !isMockICDEnabled());
+        ANGLE_FEATURE_CONDITION(&mFeatures, supportsSurfacelessQueryExtension, true);
     }
 
     // Enable VK_KHR_get_physical_device_properties_2 if available.
@@ -4274,6 +4272,11 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // In that case we force into CPU wait for submission to complete. http://anglebug.com/6692
     ANGLE_FEATURE_CONDITION(&mFeatures, forceWaitForSubmissionToCompleteForQueryResult,
                             isARM || (isNvidia && nvidiaVersion.major < 470u));
+
+    // TODO: Validation layer has a bug when vkGetPhysicalDeviceSurfaceFormats2KHR is called
+    // on Mock ICD with surface handle set as VK_NULL_HANDLE. http://anglebug.com/7631
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsSurfacelessQueryExtension,
+                            !isMockICDEnabled() && !isSamsung);
 
     ApplyFeatureOverrides(&mFeatures, displayVk->getState());
 
