@@ -16,6 +16,23 @@
       "message": "This looks like an internal issue with the format table assumptions. Another example: `GL_UNSIGNED_INT_10F_11F_11F_REV` added there as an unsized float format, although it is always sized.\n\nFor the norm16 case:\n- signed and unsigned RGB are also missing;\n- probably, all signed unsized norm16 entries should have NeverSupported in their caps.",
       "revId": "d483b6c12e309b151961910b55ecf1711b74fcb2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb630cfb_b18341b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-10T19:02:46Z",
+      "side": 1,
+      "message": "Thank you for tracking this down! This was filed separately under crbug.com/1408247 but I hadn\u0027t debugged it yet.\n\nlgtm with Alexey\u0027s comments addressed - all of the formats in https://registry.khronos.org/webgl/extensions/EXT_texture_norm16/ should be included in the format table. From my standpoint the other packed formats should be done in a separate CL.",
+      "revId": "d483b6c12e309b151961910b55ecf1711b74fcb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
