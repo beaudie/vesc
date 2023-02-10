@@ -195,6 +195,24 @@
       "parentUuid": "328d5556_99e28fb2",
       "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e56710f_6b067dd1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-10T18:28:26Z",
+      "side": 1,
+      "message": "\u003e Sounds good. We currently have the problem of missing semaphores, which this change can exacerbate, but that can be fixed separately.\n\nUnfortunately it is hard to implement.\nEnforced submission may be on 2 levels: `RendererVk` or `CommandQueue`.\nIn the first case we need `QueueSerial` which we do not have.\nIn the second case - need to track forcefully submitted `VkCommandBuffer`s. Currently it can be only done in the `CommandBatch` that also relying on `QueueSerial`.\nSo need to made modifications in the `CommandQueue` to allow tracking such enforce submissions.\n\nBut is it really much different that having separate primary command buffers per priority?\nThe only difference - with separate buffers there will be no enforced submission.\nIn both cases - Semaphore synchronization is still required.\n\nI think @cclao@google.com should also comment on this matter.",
+      "parentUuid": "50a05bb4_e776b8db",
+      "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
