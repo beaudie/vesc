@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7919f74_05cabde5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-02-10T12:41:38Z",
+      "side": 1,
+      "message": "This looks like an internal issue with the format table assumptions. Another example: `GL_UNSIGNED_INT_10F_11F_11F_REV` added there as an unsized float format, although it is always sized.\n\nFor the norm16 case:\n- signed and unsigned RGB are also missing;\n- probably, all signed unsized norm16 entries should have NeverSupported in their caps.",
+      "revId": "d483b6c12e309b151961910b55ecf1711b74fcb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
