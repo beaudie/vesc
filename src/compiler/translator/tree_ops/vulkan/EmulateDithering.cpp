@@ -333,6 +333,7 @@ TIntermNode *EmitDitheringBlock(TCompiler *compiler,
 
     TIntermBlock *ditherBlock = new TIntermBlock;
 
+    // FIXME: update comments: 4x4 matrix
     // The dithering (Bayer) matrix.  A 2x2 matrix is used which has acceptable results with minimal
     // impact on performance.  The 2x2 Bayer matrix is defined as:
     //
@@ -368,13 +369,25 @@ TIntermNode *EmitDitheringBlock(TCompiler *compiler,
     // cases.
     TType *bayerType = new TType(*StaticType::GetBasic<EbtFloat, EbpMedium>());
     bayerType->setQualifier(EvqConst);
-    bayerType->makeArray(4);
+    bayerType->makeArray(16);
 
     TIntermSequence bayerElements = {
-        CreateFloatNode(-1.5f * 0.25f / 32.0f, EbpMedium),
-        CreateFloatNode(0.5f * 0.25f / 32.0f, EbpMedium),
-        CreateFloatNode(1.5f * 0.25f / 32.0f, EbpMedium),
-        CreateFloatNode(-0.5f * 0.25f / 32.0f, EbpMedium),
+        CreateFloatNode(((0 - 7.5f) / 16.0f) / 32.0f, EbpMedium),
+        CreateFloatNode(((8 - 7.5f) / 16.0f) / 32.0f, EbpMedium),
+        CreateFloatNode(((2 - 7.5f) / 16.0f) / 32.0f, EbpMedium),
+        CreateFloatNode(((10 - 7.5f) / 16.0f) / 32.0f, EbpMedium),
+        CreateFloatNode(((12 - 7.5f) / 16.0f) / 32.0f, EbpMedium),
+        CreateFloatNode(((4 - 7.5f) / 16.0f) / 32.0f, EbpMedium),
+        CreateFloatNode(((14 - 7.5f) / 16.0f) / 32.0f, EbpMedium),
+        CreateFloatNode(((6 - 7.5f) / 16.0f) / 32.0f, EbpMedium),
+        CreateFloatNode(((3 - 7.5f) / 16.0f) / 32.0f, EbpMedium),
+        CreateFloatNode(((11 - 7.5f) / 16.0f) / 32.0f, EbpMedium),
+        CreateFloatNode(((1 - 7.5f) / 16.0f) / 32.0f, EbpMedium),
+        CreateFloatNode(((9 - 7.5f) / 16.0f) / 32.0f, EbpMedium),
+        CreateFloatNode(((15 - 7.5f) / 16.0f) / 32.0f, EbpMedium),
+        CreateFloatNode(((7 - 7.5f) / 16.0f) / 32.0f, EbpMedium),
+        CreateFloatNode(((13 - 7.5f) / 16.0f) / 32.0f, EbpMedium),
+        CreateFloatNode(((5 - 7.5f) / 16.0f) / 32.0f, EbpMedium),
     };
     TIntermAggregate *bayerValue = TIntermAggregate::CreateConstructor(*bayerType, &bayerElements);
 
@@ -386,35 +399,37 @@ TIntermNode *EmitDitheringBlock(TCompiler *compiler,
     // Take the coordinates of the pixel and determine which element of the bayer matrix should be
     // used:
     //
-    //     (uint(gl_FragCoord.x) & 1) << 1 | (uint(gl_FragCoord.y) & 1)
+    //     (uint(gl_FragCoord.y) & 3) << 2 | (uint(gl_FragCoord.x) & 3)
     const TVariable *fragCoord = static_cast<const TVariable *>(
         symbolTable->findBuiltIn(ImmutableString("gl_FragCoord"), compiler->getShaderVersion()));
 
-    TIntermTyped *fragCoordX          = new TIntermSwizzle(new TIntermSymbol(fragCoord), {0});
+    // FIXME: X and Y are swapped because results seem somewhat closer to the native driver
+    // FIXME: update var names and comments above
+    TIntermTyped *fragCoordX          = new TIntermSwizzle(new TIntermSymbol(fragCoord), {1});
     TIntermSequence fragCoordXIntArgs = {
         fragCoordX,
     };
     TIntermTyped *fragCoordXInt = TIntermAggregate::CreateConstructor(
         *StaticType::GetBasic<EbtUInt, EbpMedium>(), &fragCoordXIntArgs);
     TIntermTyped *fragCoordXBit0 =
-        new TIntermBinary(EOpBitwiseAnd, fragCoordXInt, CreateUIntNode(1));
+        new TIntermBinary(EOpBitwiseAnd, fragCoordXInt, CreateUIntNode(3));
     TIntermTyped *fragCoordXBit0Shifted =
-        new TIntermBinary(EOpBitShiftLeft, fragCoordXBit0, CreateUIntNode(1));
+        new TIntermBinary(EOpBitShiftLeft, fragCoordXBit0, CreateUIntNode(2));
 
-    TIntermTyped *fragCoordY          = new TIntermSwizzle(new TIntermSymbol(fragCoord), {1});
+    TIntermTyped *fragCoordY          = new TIntermSwizzle(new TIntermSymbol(fragCoord), {0});
     TIntermSequence fragCoordYIntArgs = {
         fragCoordY,
     };
     TIntermTyped *fragCoordYInt = TIntermAggregate::CreateConstructor(
         *StaticType::GetBasic<EbtUInt, EbpMedium>(), &fragCoordYIntArgs);
     TIntermTyped *fragCoordYBit0 =
-        new TIntermBinary(EOpBitwiseAnd, fragCoordYInt, CreateUIntNode(1));
+        new TIntermBinary(EOpBitwiseAnd, fragCoordYInt, CreateUIntNode(3));
 
     TIntermTyped *bayerIndex =
         new TIntermBinary(EOpBitwiseOr, fragCoordXBit0Shifted, fragCoordYBit0);
 
-    // const mediump float b = bayer[(uint(gl_FragCoord.x) & 1) << 1 |
-    //                               (uint(gl_FragCoord.y) & 1)];
+    // const mediump float b = bayer[(uint(gl_FragCoord.y) & 3) << 2 |
+    //                               (uint(gl_FragCoord.x) & 3)];
     TIntermSymbol *ditherParam = new TIntermSymbol(
         CreateTempVariable(symbolTable, StaticType::GetBasic<EbtFloat, EbpMedium>()));
     TIntermDeclaration *ditherParamDecl = CreateTempInitDeclarationNode(
