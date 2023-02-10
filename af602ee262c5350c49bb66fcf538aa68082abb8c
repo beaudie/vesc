@@ -46,6 +46,30 @@
       },
       "revId": "af602ee262c5350c49bb66fcf538aa68082abb8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "daf1e464_f4815647",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1171,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-10T18:15:45Z",
+      "side": 1,
+      "message": "`if (mRefCountedFence !\u003d nullptr)` check probably carried from old code. You can double check and turn to ASSERT if needed.\n\n\u003eFor me it is the same as lock, but opposite. \n\nMy point is that if you lock too early, usually it will still work. If you unlock too early, other local variables will construct/destruct without lock. ScopedLock is popular and people form the habit of do it at entry of block. In this example, if it is a scoped lock, typical code will look like this:\n```\n{\n    ScopedLock lock(mMutex);\n    const SharedFence localSharedFenceToWaitOn \u003d sharedFence;\n    ....\n}    \n```\n```\nBut with ScopedUnlock, you actually have to do the opposite\n{\n    const SharedFence localSharedFenceToWaitOn \u003d sharedFence;\n    ScopedUnlock unlock(mMutex);\n    ....\n}    \n```\nThis is why I am not feel comfortable here. But since you moved to a helper function now, the danger is reduced for now. It is more for other people use it in other places may want to watch for the tripping hazard. If you insist, use ScopedUnlock in SharedFence::waitUnlocked(), I will be okay with it.",
+      "parentUuid": "ed0e775a_12d8f68d",
+      "range": {
+        "startLine": 1170,
+        "startChar": 8,
+        "endLine": 1171,
+        "endChar": 99
+      },
+      "revId": "af602ee262c5350c49bb66fcf538aa68082abb8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
