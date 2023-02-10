@@ -231,6 +231,24 @@
       "parentUuid": "2e56710f_6b067dd1",
       "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "846d2e2f_28b9ea47",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-10T19:22:37Z",
+      "side": 1,
+      "message": "These are the big changes.\n\nPer context command buffers adds complexity. Need add code to implicitly submit other command buffers in the share group. Can\u0027t directly record into primary if use asyncCommandQueue. Anyway, this may be separate change.\n\nMaking context in the same group have same priority - easy. Independent change from this CL. May be as temp solution (or not) until semaphores implemented.\n\nSeparate inflight queue is also separate optimization, and not related to the fix.\n\nOne place when semaphores still needed is via EGLImage. Other maybe when read from surface that was rendered by other context.",
+      "parentUuid": "33d8dc5d_0f24562d",
+      "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
