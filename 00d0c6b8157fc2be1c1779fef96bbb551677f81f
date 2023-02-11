@@ -1,0 +1,248 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb8e7ce2_010632fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-02-11T00:24:30Z",
+      "side": 1,
+      "message": "LGTM but I have some questions related to go/angle-vulkan-requirements.\n\nThanks for doing this CL!",
+      "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a692f91_ce7917f0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2009,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-02-11T00:24:30Z",
+      "side": 1,
+      "message": "This extension isn\u0027t listed in go/angle-vulkan-requirements. How would you rate this (Must, High, Medium, Low)?  I listed it as \"High\" for go/android-vulkan-vsr-profile-v, since it is used.  Is that good, or is it a Must?",
+      "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2972176_2a8414b7",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2010,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-02-11T00:24:30Z",
+      "side": 1,
+      "message": "This extension isn\u0027t listed in go/angle-vulkan-requirements. How would you rate this (Must, High, Medium, Low)?  I listed it as \"High\" for go/android-vulkan-vsr-profile-v, since it is used.  Is that good, or is it a Must?",
+      "range": {
+        "startLine": 2010,
+        "startChar": 5,
+        "endLine": 2010,
+        "endChar": 32
+      },
+      "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffedf6a7_b46bf6c2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2013,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-02-11T00:24:30Z",
+      "side": 1,
+      "message": "Ditto?",
+      "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8b7b7e1_1e90b0e8",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2018,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-02-11T00:24:30Z",
+      "side": 1,
+      "message": "I sense these two \"depth_clip\" extensions aren\u0027t important for Android.  True?",
+      "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bc7c943_7c19d2e2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2025,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-02-11T00:24:30Z",
+      "side": 1,
+      "message": "Ditto?",
+      "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba6c30dc_466debd1",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2026,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-02-11T00:24:30Z",
+      "side": 1,
+      "message": "Ditto?",
+      "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "931de2e8_fd824159",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2029,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-02-11T00:24:30Z",
+      "side": 1,
+      "message": "Ditto?",
+      "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a730892_4d3287ab",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2033,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-02-11T00:24:30Z",
+      "side": 1,
+      "message": "Seems like this is for Linux, not Android.  True?",
+      "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26d020db_2460a88b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2210,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-02-11T00:24:30Z",
+      "side": 1,
+      "message": "This extension isn\u0027t listed in go/angle-vulkan-requirements. How would you rate this (Must, High, Medium, Low)? I listed it as \"High\" for go/android-vulkan-vsr-profile-v, since it is used. Is that good, or is it a Must?",
+      "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06cc31a5_b1543eb3",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2211,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-02-11T00:24:30Z",
+      "side": 1,
+      "message": "Ditto?",
+      "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3872369c_2265c8cb",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2212,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-02-11T00:24:30Z",
+      "side": 1,
+      "message": "I suspect this is for Linux, and not Android.  True?",
+      "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "936c5b49_d7ad7243",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2259,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-02-11T00:24:30Z",
+      "side": 1,
+      "message": "Seems like these are high priority, and we want them to be Musts.  True?\n\nIf so, I need to add them to go/android-vulkan-vsr-profile-v",
+      "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c6366e4_831f90fb",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2520,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-02-11T00:24:30Z",
+      "side": 1,
+      "message": "This extension isn\u0027t listed in go/angle-vulkan-requirements. How would you rate this (Must, High, Medium, Low)? I listed it as \"High\" for go/android-vulkan-vsr-profile-v, since it is used. Is that good, or is it a Must?",
+      "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
