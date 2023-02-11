@@ -4944,11 +4944,6 @@ angle::Result RendererVk::finish(vk::Context *context)
     return mCommandQueue.waitIdle(context, getMaxFenceWaitTimeNs());
 }
 
-angle::Result RendererVk::checkCompletedCommands(vk::Context *context)
-{
-    return mCommandQueue.checkCompletedCommands(context);
-}
-
 angle::Result RendererVk::flushWaitSemaphores(
     vk::ProtectionType protectionType,
     std::vector<VkSemaphore> &&waitSemaphores,

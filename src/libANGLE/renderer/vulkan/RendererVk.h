@@ -591,7 +591,6 @@ class RendererVk : angle::NonCopyable
                                                             uint64_t timeout,
                                                             VkResult *result);
     angle::Result finish(vk::Context *context);
-    angle::Result checkCompletedCommands(vk::Context *context);
 
     angle::Result flushWaitSemaphores(vk::ProtectionType protectionType,
                                       std::vector<VkSemaphore> &&waitSemaphores,
@@ -736,7 +735,7 @@ class RendererVk : angle::NonCopyable
                              RangedSerialFactory *rangedSerialFactory);
 
     // The ResourceUse still have unfinished queue serial by vulkan.
-    bool hasUnfinishedUse(const vk::ResourceUse &use) const;
+    bool hasUnfinishedUse(const vk::ResourceUse &use);
     // The ResourceUse still have queue serial not yet submitted to vulkan.
     bool hasUnsubmittedUse(const vk::ResourceUse &use) const;
 
@@ -1034,9 +1033,17 @@ ANGLE_INLINE void RendererVk::reserveQueueSerials(SerialIndex index,
     mQueueSerialFactory[index].reserve(rangedSerialFactory, count);
 }
 
-ANGLE_INLINE bool RendererVk::hasUnfinishedUse(const vk::ResourceUse &use) const
+ANGLE_INLINE bool RendererVk::hasUnfinishedUse(const vk::ResourceUse &use)
 {
-    return mCommandQueue.hasUnfinishedUse(use);
+    if (mCommandQueue.hasUnfinishedUse(use))
+    {
+        if (mCommandQueue.updateCompletedQueueSerials(mDevice))
+        {
+            return mCommandQueue.hasUnfinishedUse(use);
+        }
+        return true;
+    }
+    return false;
 }
 
 ANGLE_INLINE bool RendererVk::hasUnsubmittedUse(const vk::ResourceUse &use) const

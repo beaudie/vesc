@@ -64,11 +64,14 @@ class SharedFence final
         ASSERT(mRefCountedFence != nullptr && mRefCountedFence->isReferenced());
         return mRefCountedFence->get();
     }
+    VkResult wait(VkDevice device, uint64_t timeout) const;
 
     // The following three APIs can call without lock. Since fence is refcounted and this object has
     // a refcount to VkFence, No one is able to come in and destroy the VkFence.
     VkResult getStatus(VkDevice device) const;
-    VkResult wait(VkDevice device, uint64_t timeout) const;
+    VkResult waitUnlocked(VkDevice device,
+                          std::unique_lock<std::mutex> *lock,
+                          uint64_t timeout) const;
 
   private:
     RefCounted<Fence> *mRefCountedFence;
@@ -392,6 +395,9 @@ class CommandQueue : angle::NonCopyable
     // the last completed serial, for example for when the application busy waits on a query
     // result). It would be nice if we didn't have to expose this for QueryVk::getResult.
     angle::Result checkCompletedCommands(Context *context);
+    // Update mLastCompletedSerials and returns true if there is any command batch finished
+    bool updateCompletedQueueSerials(VkDevice device);
+    angle::Result retireFinishedCommands(Context *context);
 
     void flushWaitSemaphores(ProtectionType protectionType,
                              std::vector<VkSemaphore> &&waitSemaphores,
@@ -409,8 +415,9 @@ class CommandQueue : angle::NonCopyable
 
   private:
     // All these private APIs are called with mutex locked, so we must not take lock again.
-    angle::Result checkCompletedCommandCount(Context *context, int *finishedCountOut);
     angle::Result finishOneCommandBatch(Context *context, uint64_t timeout);
+    bool updateCompletedQueueSerialsLocked(VkDevice device);
+    angle::Result retireFinishedCommandsLocked(Context *context);
 
     angle::Result queueSubmit(Context *context,
                               std::unique_lock<std::mutex> &&dequeueLock,
@@ -420,8 +427,6 @@ class CommandQueue : angle::NonCopyable
                               DeviceScoped<CommandBatch> &commandBatch,
                               const QueueSerial &submitQueueSerial);
 
-    angle::Result retireFinishedCommands(Context *context, size_t finishedCount);
-    angle::Result retireFinishedCommandsAndCleanupGarbage(Context *context, size_t finishedCount);
     angle::Result ensurePrimaryCommandBufferValid(Context *context, ProtectionType protectionType);
     // Returns number of CommandBatchs that are smaller than serials
     size_t getBatchCountUpToSerials(RendererVk *renderer, const Serials &serials);
@@ -453,6 +458,9 @@ class CommandQueue : angle::NonCopyable
     // call.
     std::mutex mQueueSubmitMutex;
     CommandBatchQueue mInFlightCommands;
+
+    // Temporary storage for finished command batches.
+    angle::FixedVector<CommandBatch, kInFlightCommandsLimit * 2> mFinishedCommandBatches;
 
     angle::PackedEnumMap<ProtectionType, CommandsState> mCommandsStateMap;
 
