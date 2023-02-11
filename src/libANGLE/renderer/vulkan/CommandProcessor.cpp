@@ -252,13 +252,20 @@ VkResult SharedFence::getStatus(VkDevice device) const
 
 VkResult SharedFence::wait(VkDevice device, uint64_t timeout) const
 {
-    if (mRefCountedFence != nullptr)
-    {
-        return mRefCountedFence->get().wait(device, timeout);
-    }
-    return VK_SUCCESS;
+    ASSERT(mRefCountedFence != nullptr);
+    return mRefCountedFence->get().wait(device, timeout);
 }
 
+VkResult SharedFence::waitUnlocked(VkDevice device,
+                                   std::unique_lock<std::mutex> *lock,
+                                   uint64_t timeout) const
+{
+    ASSERT(mRefCountedFence != nullptr);
+    lock->unlock();
+    VkResult result = mRefCountedFence->get().wait(device, timeout);
+    lock->lock();
+    return result;
+}
 // FenceRecycler implementation
 void FenceRecycler::destroy(Context *context)
 {
@@ -676,7 +683,6 @@ angle::Result CommandProcessor::processTasksImpl(bool *exitThread)
         {
             break;
         }
-
         // Do submission with mWorkerMutex unlocked so that we still allow enqueue while we
         // process work.
         enqueueLock.unlock();
@@ -728,7 +734,7 @@ angle::Result CommandProcessor::processTask(CommandProcessorTask *task)
                 this, task->getProtectionType(), task->getPriority(), task->getSemaphore(),
                 std::move(task->getCommandBuffersToReset()), task->getCommandPools(),
                 task->getSubmitQueueSerial()));
-            ANGLE_TRY(mCommandQueue->checkCompletedCommands(this));
+            mCheckCompletedCommands = true;
             break;
         }
         case CustomTask::OneOffQueueSubmit:
@@ -740,7 +746,7 @@ angle::Result CommandProcessor::processTask(CommandProcessorTask *task)
                 task->getOneOffCommandBufferVk(), task->getOneOffWaitSemaphore(),
                 task->getOneOffWaitSemaphoreStageMask(), task->getOneOffFence(),
                 SubmitPolicy::EnsureSubmitted, task->getSubmitQueueSerial()));
-            ANGLE_TRY(mCommandQueue->checkCompletedCommands(this));
+            mCheckCompletedCommands = true;
             break;
         }
         case CustomTask::Present:
@@ -1060,6 +1066,8 @@ void CommandQueue::destroy(Context *context)
         }
     }
 
+    (void)retireFinishedCommandsLocked(context);
+
     RendererVk *renderer = context->getRenderer();
 
     // Assigns an infinite "last completed" serial to force garbage to delete.
@@ -1136,36 +1144,33 @@ angle::Result CommandQueue::finishResourceUse(Context *context,
                                               uint64_t timeout)
 {
     std::unique_lock<std::mutex> lock(mMutex);
-    size_t finishCount = getBatchCountUpToSerials(context->getRenderer(), use.getSerials());
-    if (finishCount == 0)
-    {
-        return angle::Result::Continue;
-    }
+    VkDevice device = context->getDevice();
 
-    const SharedFence &sharedFence = getSharedFenceToWait(finishCount);
-    // Wait for it finish.
-    if (!sharedFence)
+    while (!mInFlightCommands.empty() && hasUnfinishedUse(use))
     {
-        return retireFinishedCommandsAndCleanupGarbage(context, finishCount);
-    }
-    else
-    {
-        const SharedFence localSharedFenceToWaitOn = sharedFence;
-        lock.unlock();
-        ANGLE_TRACE_EVENT0("gpu.angle", "CommandQueue::finishResourceUse");
-        // You can only use the local copy of the sharedFence without lock;
-        VkResult status = localSharedFenceToWaitOn.wait(context->getDevice(), timeout);
-        ANGLE_VK_TRY(context, status);
-        lock.lock();
-    }
+        if (mInFlightCommands.front().fence &&
+            mInFlightCommands.front().fence.getStatus(device) == VK_NOT_READY)
+        {
+            // You can only use the local copy of the sharedFence without lock;
+            const SharedFence localSharedFenceToWaitOn = mInFlightCommands.front().fence;
+            VkResult status = localSharedFenceToWaitOn.waitUnlocked(device, &lock, timeout);
+            ANGLE_VK_TRY(context, status);
+        }
 
-    // Clean up finished batches. After we unlocked, finishCount may have changed, recheck the
-    // mInFlightCommands for all finished commands.
-    int finishedCount;
-    ANGLE_TRY(checkCompletedCommandCount(context, &finishedCount));
-    if (finishedCount > 0)
-    {
-        ANGLE_TRY(retireFinishedCommandsAndCleanupGarbage(context, finishedCount));
+        // Note: waitUnlocked will unlock. After exit form waitUnlocked, mInFlightCommands.front()
+        // may have changed. Always check mInFlightCommands.front() again after exit from
+        // waitUnlocked.
+        if (!mInFlightCommands.empty())
+        {
+            CommandBatch &batch = mInFlightCommands.front();
+            if (!batch.fence || batch.fence.getStatus(device) == VK_SUCCESS)
+            {
+                mLastCompletedSerials.setQueueSerial(batch.queueSerial);
+                // Move command batch to mFinishedCommandBatches.
+                mFinishedCommandBatches.push_back(std::move(batch));
+                mInFlightCommands.pop();
+            }
+        }
     }
     ASSERT(allInFlightCommandsAreAfterSerials(use.getSerials()));
     ASSERT(!hasUnfinishedUse(use));
@@ -1476,6 +1481,11 @@ angle::Result CommandQueue::queueSubmit(Context *context,
         suballocationGarbageSize = renderer->getSuballocationGarbageSize();
     }
 
+    if (mFinishedCommandBatches.size() > kInFlightCommandsLimit)
+    {
+        ANGLE_TRY(retireFinishedCommandsLocked(context));
+    }
+
     // Release the dequeue lock while doing potentially lengthy vkQueueSubmit call.
     // Note: after this point, you can not reference anything that required mMutex lock.
     dequeueLock.unlock();
@@ -1529,83 +1539,40 @@ void CommandQueue::resetPerFramePerfCounters()
 
 angle::Result CommandQueue::checkCompletedCommands(Context *context)
 {
-    ANGLE_TRACE_EVENT0("gpu.angle", "CommandQueue::checkCompletedCommands");
-    std::lock_guard<std::mutex> lock(mMutex);
-    int finishedCount;
-    ANGLE_TRY(checkCompletedCommandCount(context, &finishedCount));
-    if (finishedCount > 0)
-    {
-        ANGLE_TRY(retireFinishedCommandsAndCleanupGarbage(context, finishedCount));
-    }
+    updateCompletedQueueSerials(context->getDevice());
+    ANGLE_TRY(retireFinishedCommands(context));
+    context->getRenderer()->cleanupGarbage();
     return angle::Result::Continue;
+}
+
+bool CommandQueue::updateCompletedQueueSerials(VkDevice device)
+{
+    std::lock_guard<std::mutex> lock(mMutex);
+    return updateCompletedQueueSerialsLocked(device);
+}
+
+angle::Result CommandQueue::retireFinishedCommands(Context *context)
+{
+    std::lock_guard<std::mutex> lock(mMutex);
+    return retireFinishedCommandsLocked(context);
 }
 
 // CommandQueue private API implementation. These are called by public API, so lock already held.
-angle::Result CommandQueue::finishOneCommandBatch(Context *context, uint64_t timeout)
-{
-    ASSERT(!mInFlightCommands.empty());
-    int finishedCount = 0;
-    for (const CommandBatch &batch : mInFlightCommands)
-    {
-        finishedCount++;
-        if (batch.fence)
-        {
-            VkResult status = batch.fence.wait(context->getDevice(), timeout);
-            ANGLE_VK_TRY(context, status);
-            break;
-        }
-    }
-
-    if (finishedCount > 0)
-    {
-        // Clean up finished batches.
-        ANGLE_TRY(retireFinishedCommandsAndCleanupGarbage(context, finishedCount));
-    }
-    return angle::Result::Continue;
-}
-
-angle::Result CommandQueue::checkCompletedCommandCount(Context *context, int *finishedCountOut)
-{
-    VkDevice device = context->getDevice();
-
-    *finishedCountOut = 0;
-    for (CommandBatch &batch : mInFlightCommands)
-    {
-        // For empty submissions, fence is not set but there may be garbage to be collected.  In
-        // such a case, the empty submission is "completed" at the same time as the last submission
-        // that actually happened.
-        if (batch.fence)
-        {
-            VkResult result = batch.fence.getStatus(device);
-            if (result == VK_NOT_READY)
-            {
-                break;
-            }
-            ANGLE_VK_TRY(context, result);
-        }
-        ++(*finishedCountOut);
-    }
-    return angle::Result::Continue;
-}
-
-angle::Result CommandQueue::retireFinishedCommands(Context *context, size_t finishedCount)
+angle::Result CommandQueue::retireFinishedCommandsLocked(Context *context)
 {
     RendererVk *renderer = context->getRenderer();
     VkDevice device      = renderer->getDevice();
 
-    // First store the last completed queue serial value into a local variable and then update
-    // mLastCompletedQueueSerial once in the end.
-    angle::FastMap<Serial, kMaxFastQueueSerials> lastCompletedQueueSerials;
-    for (size_t commandIndex = 0; commandIndex < finishedCount; ++commandIndex)
+    while (!mFinishedCommandBatches.empty())
     {
-        CommandBatch &batch = mInFlightCommands.front();
-
-        lastCompletedQueueSerials[batch.queueSerial.getIndex()] = batch.queueSerial.getSerial();
+        CommandBatch &batch = mFinishedCommandBatches.back();
+        ASSERT(batch.queueSerial <= mLastCompletedSerials);
 
         if (batch.fence)
         {
             batch.fence.release();
         }
+
         if (batch.primaryCommands.valid())
         {
             ANGLE_TRACE_EVENT0("gpu.angle", "Primary command buffer recycling");
@@ -1619,32 +1586,48 @@ angle::Result CommandQueue::retireFinishedCommands(Context *context, size_t fini
             ANGLE_TRACE_EVENT0("gpu.angle", "Secondary command buffer recycling");
             batch.resetSecondaryCommandBuffers(device);
         }
-        mInFlightCommands.pop();
+
+        mFinishedCommandBatches.pop_back();
     }
 
-    for (SerialIndex index = 0; index < lastCompletedQueueSerials.size(); index++)
-    {
-        // Set mLastCompletedSerials only if there is a lastCompletedQueueSerials in the index.
-        if (lastCompletedQueueSerials[index] != kZeroSerial)
-        {
-            mLastCompletedSerials.setQueueSerial(index, lastCompletedQueueSerials[index]);
-        }
-    }
     return angle::Result::Continue;
 }
 
-angle::Result CommandQueue::retireFinishedCommandsAndCleanupGarbage(Context *context,
-                                                                    size_t finishedCount)
+angle::Result CommandQueue::finishOneCommandBatch(Context *context, uint64_t timeout)
 {
-    ASSERT(finishedCount > 0);
-    RendererVk *renderer = context->getRenderer();
-
-    ANGLE_TRY(retireFinishedCommands(context, finishedCount));
-
-    // Now clean up RendererVk garbage
-    renderer->cleanupGarbage();
+    ASSERT(!mInFlightCommands.empty());
+    for (const CommandBatch &batch : mInFlightCommands)
+    {
+        if (batch.fence)
+        {
+            VkResult status = batch.fence.wait(context->getDevice(), timeout);
+            ANGLE_VK_TRY(context, status);
+            break;
+        }
+    }
+    updateCompletedQueueSerialsLocked(context->getDevice());
 
     return angle::Result::Continue;
+}
+
+bool CommandQueue::updateCompletedQueueSerialsLocked(VkDevice device)
+{
+    size_t finishedCount = 0;
+    while (!mInFlightCommands.empty())
+    {
+        CommandBatch &batch = mInFlightCommands.front();
+        if (batch.fence && batch.fence.getStatus(device) != VK_SUCCESS)
+        {
+            break;
+        }
+
+        mLastCompletedSerials.setQueueSerial(batch.queueSerial);
+        // Move command batch to mFinishedCommandBatches.
+        mFinishedCommandBatches.push_back(std::move(batch));
+        mInFlightCommands.pop();
+        finishedCount++;
+    }
+    return finishedCount > 0;
 }
 
 bool CommandQueue::allInFlightCommandsAreAfterSerials(const Serials &serials)

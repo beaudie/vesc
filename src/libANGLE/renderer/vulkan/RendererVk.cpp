@@ -4769,6 +4769,11 @@ void RendererVk::cleanupPendingSubmissionGarbage()
     }
 }
 
+angle::Result RendererVk::retireFinishedCommands(vk::Context *context)
+{
+    return mCommandQueue.retireFinishedCommands(context);
+}
+
 void RendererVk::onNewValidationMessage(const std::string &message)
 {
     mLastValidationMessage = message;
@@ -4942,11 +4947,6 @@ angle::Result RendererVk::finish(vk::Context *context)
         ANGLE_TRY(mCommandProcessor.waitForAllWorkToBeSubmitted(context));
     }
     return mCommandQueue.waitIdle(context, getMaxFenceWaitTimeNs());
-}
-
-angle::Result RendererVk::checkCompletedCommands(vk::Context *context)
-{
-    return mCommandQueue.checkCompletedCommands(context);
 }
 
 angle::Result RendererVk::flushWaitSemaphores(

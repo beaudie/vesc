@@ -522,25 +522,16 @@ angle::Result QueryVk::getResult(const gl::Context *context, bool wait)
          renderer->getFeatures().forceWaitForSubmissionToCompleteForQueryResult.enabled ||
          renderer->isAsyncCommandQueueEnabled()))
     {
-        // The query might appear busy because there was no check for completed commands
-        // recently. Do that now and see if the query is still busy.  If the application is
-        // looping until the query results become available, there wouldn't be any forward
-        // progress without this.
-        ANGLE_TRY(renderer->checkCompletedCommands(contextVk));
-
-        if (isCurrentlyInUse(renderer))
+        if (!wait)
         {
-            if (!wait)
-            {
-                return angle::Result::Continue;
-            }
-            ANGLE_VK_PERF_WARNING(contextVk, GL_DEBUG_SEVERITY_HIGH,
-                                  "GPU stall due to waiting on uncompleted query");
-
-            // Assert that the work has been sent to the GPU
-            ASSERT(!contextVk->hasUnsubmittedUse(mQueryHelper.get()));
-            ANGLE_TRY(finishRunningCommands(contextVk));
+            return angle::Result::Continue;
         }
+        ANGLE_VK_PERF_WARNING(contextVk, GL_DEBUG_SEVERITY_HIGH,
+                              "GPU stall due to waiting on uncompleted query");
+
+        // Assert that the work has been sent to the GPU
+        ASSERT(!contextVk->hasUnsubmittedUse(mQueryHelper.get()));
+        ANGLE_TRY(finishRunningCommands(contextVk));
     }
 
     // If its a render pass query, the current query helper must have commands recorded (i.e. it's
