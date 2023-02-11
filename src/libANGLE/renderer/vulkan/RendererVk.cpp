@@ -1375,15 +1375,15 @@ void RendererVk::onDestroy(vk::Context *context)
         handleDeviceLost();
     }
 
+    mCommandProcessor.destroy(context);
+    mCommandQueue.destroy(context);
+
     for (std::unique_ptr<vk::BufferBlock> &block : mOrphanedBufferBlocks)
     {
         ASSERT(block->isEmpty());
         block->destroy(this);
     }
     mOrphanedBufferBlocks.clear();
-
-    mCommandProcessor.destroy(context);
-    mCommandQueue.destroy(context);
 
     // mCommandQueue.destroy should already set "last completed" serials to infinite.
     cleanupGarbage();
@@ -4767,6 +4767,11 @@ void RendererVk::cleanupPendingSubmissionGarbage()
     }
 }
 
+angle::Result RendererVk::retireFinishedCommands(vk::Context *context)
+{
+    return mCommandQueue.retireFinishedCommands(context);
+}
+
 void RendererVk::onNewValidationMessage(const std::string &message)
 {
     mLastValidationMessage = message;
@@ -4940,11 +4945,6 @@ angle::Result RendererVk::finish(vk::Context *context)
         ANGLE_TRY(mCommandProcessor.waitForAllWorkToBeSubmitted(context));
     }
     return mCommandQueue.waitIdle(context, getMaxFenceWaitTimeNs());
-}
-
-angle::Result RendererVk::checkCompletedCommands(vk::Context *context)
-{
-    return mCommandQueue.checkCompletedCommands(context);
 }
 
 angle::Result RendererVk::flushWaitSemaphores(
