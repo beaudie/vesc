@@ -16,6 +16,57 @@
       "message": "I moved it to a different section where vendor checks were being made.",
       "revId": "9ae341753355aec757cc38f71e9c9be0f73823bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40e3bc7f_6439e73f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-12T02:34:07Z",
+      "side": 1,
+      "message": "Mohan said this was a bug in AOSP, so instead of disabling on Samsung, shouldn\u0027t we be instead disabling it based on Android version?",
+      "revId": "9ae341753355aec757cc38f71e9c9be0f73823bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c148a4f_bb07485a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1625,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-12T02:34:07Z",
+      "side": 1,
+      "message": "Please remove this, the other one is overriding it unconditionally (which also means that the other one is wrong because it\u0027s enabling it on non-Android GPUs too)",
+      "revId": "9ae341753355aec757cc38f71e9c9be0f73823bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "651ad385_e9a95696",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4279,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-12T02:34:07Z",
+      "side": 1,
+      "message": "Instead, add `ExtensionFound(VK_GOOGLE_SURFACELESS_QUERY_EXTENSION_NAME, ...) \u0026\u0026` here",
+      "revId": "9ae341753355aec757cc38f71e9c9be0f73823bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
