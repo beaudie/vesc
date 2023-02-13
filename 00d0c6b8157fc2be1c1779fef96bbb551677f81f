@@ -327,6 +327,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd3244e1_11ee875a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2210,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-13T15:22:13Z",
+      "side": 1,
+      "message": "It\u0027s used to generate mipmaps in compute more efficiently. We specifically don\u0027t enable that path on Android, so I wouldn\u0027t mention it.",
+      "parentUuid": "26d020db_2460a88b",
+      "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "06cc31a5_b1543eb3",
@@ -340,6 +358,24 @@
       "writtenOn": "2023-02-11T00:24:30Z",
       "side": 1,
       "message": "Ditto?",
+      "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "991be8a0_b7bf071d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2211,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-13T15:22:13Z",
+      "side": 1,
+      "message": "I\u0027d _Must_ it if possible, _High_ otherwise",
+      "parentUuid": "06cc31a5_b1543eb3",
       "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -361,6 +397,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "484e206d_bea576b3",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2212,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-13T15:22:13Z",
+      "side": 1,
+      "message": "No, this is particularly useful for Android (in combination with another change that further defers ANI, which we haven\u0027t done yet).\n\nCall it _Must_, it\u0027s already universally supported.",
+      "parentUuid": "3872369c_2265c8cb",
+      "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "936c5b49_d7ad7243",
@@ -374,6 +428,24 @@
       "writtenOn": "2023-02-11T00:24:30Z",
       "side": 1,
       "message": "Seems like these are high priority, and we want them to be Musts.  True?\n\nIf so, I need to add them to go/android-vulkan-vsr-profile-v",
+      "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "454fbf8e_af036b9c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2259,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-13T15:22:13Z",
+      "side": 1,
+      "message": "They are already a part of Vulkan 1.3, I\u0027d say priority(EDS) \u003d\u003d priority(Vulkan1.3) which I\u0027m assuming is either _Must_ or _High_",
+      "parentUuid": "936c5b49_d7ad7243",
       "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
