@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5602cbd0_3592e3d6",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1029,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-13T20:36:06Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be locked too?",
+      "revId": "b898bf03b6e70cf272eb2e1da9a0d522b98e5859",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
