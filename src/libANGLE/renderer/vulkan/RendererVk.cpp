@@ -4883,7 +4883,7 @@ angle::Result RendererVk::submitCommands(vk::Context *context,
         ANGLE_TRY(mCommandQueue.submitCommands(context, protectionType, contextPriority,
                                                signalVkSemaphore, std::move(commandBuffersToReset),
                                                commandPools, submitQueueSerial));
-        mCommandProcessor.requestCheckCompletedCommands(context);
+        mCommandProcessor.requestCommandsAndGarbageCleanup(context);
     }
 
     return angle::Result::Continue;
@@ -4944,7 +4944,13 @@ angle::Result RendererVk::finish(vk::Context *context)
 
 angle::Result RendererVk::checkCompletedCommands(vk::Context *context)
 {
-    return mCommandQueue.checkCompletedCommands(context);
+    bool anyCommandFinished;
+    ANGLE_TRY(mCommandQueue.checkCompletedCommands(context, &anyCommandFinished));
+    if (anyCommandFinished)
+    {
+        mCommandProcessor.requestCommandsAndGarbageCleanup(context);
+    }
+    return angle::Result::Continue;
 }
 
 angle::Result RendererVk::flushWaitSemaphores(
