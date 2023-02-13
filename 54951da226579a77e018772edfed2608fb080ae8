@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60faa747_951f215c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-02-13T18:23:06Z",
+      "side": 1,
+      "message": "Looks like this breaks Pixel 4 and Pixel 6 perf bots:\nhttps://ci.chromium.org/ui/p/angle/builders/ci/android-pixel4-perf/3699/overview\nhttps://ci.chromium.org/ui/p/angle/builders/ci/android-pixel6-perf/218/overview\n\nFix or revert?",
+      "revId": "54951da226579a77e018772edfed2608fb080ae8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
