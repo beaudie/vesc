@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "919f81ce_b8eb2067",
+        "filename": "src/common/FixedQueue.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-13T20:32:21Z",
+      "side": 1,
+      "message": "The real bug here is that CommandQueue::handleDeviceLost() should also take mQueueSubmitMutex to ensure no one is adding more work while we handle device lost. Caller has to ensure no one is adding or removing anything from the FixedQueue while calling clear. So I don\u0027t think the clear implementation itself has a bug here.",
+      "range": {
+        "startLine": 231,
+        "startChar": 30,
+        "endLine": 231,
+        "endChar": 39
+      },
+      "revId": "a0e52570058df3ed7ed6b7224a69fb027e6b4c6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
