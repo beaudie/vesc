@@ -333,7 +333,7 @@ def _run_tests(args, tests, extra_flags, env, screenshot_dir, results, test_resu
                 gtest_filter = _get_gtest_filter_for_batch(args, batch)
                 cmd_args = [
                     gtest_filter,
-                    '--one-frame-only',
+                    '--run-to-key-frame',
                     '--verbose-logging',
                     '--render-test-output-dir=%s' % screenshot_dir,
                     '--save-screenshots',
