@@ -1532,10 +1532,11 @@ angle::Result RendererVk::enableInstanceExtensions(
 
     // TODO: Validation layer has a bug when vkGetPhysicalDeviceSurfaceFormats2KHR is called
     // on Mock ICD with surface handle set as VK_NULL_HANDLE. http://anglebug.com/7631
+    // This is also affecting Samsung (http://anglebug.com/??)
     ANGLE_FEATURE_CONDITION(
         &mFeatures, supportsSurfacelessQueryExtension,
         ExtensionFound(VK_GOOGLE_SURFACELESS_QUERY_EXTENSION_NAME, instanceExtensionNames) &&
-            !isMockICDEnabled());
+            !isMockICDEnabled() && !IsSamsung(mPhysicalDeviceProperties.vendorID));
 
     // VK_KHR_external_fence_capabilities and VK_KHR_extenral_semaphore_capabilities are promoted to
     // core in Vulkan 1.1
