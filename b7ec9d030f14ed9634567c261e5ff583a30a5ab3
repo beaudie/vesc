@@ -22,6 +22,30 @@
       },
       "revId": "b7ec9d030f14ed9634567c261e5ff583a30a5ab3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f1c579a_854c76ca",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-13T14:47:41Z",
+      "side": 1,
+      "message": "Ah, this is basically not tested until very recent drivers are available (or since a bit back, Fuchsia). And `AddToPNextChain` dropping this `pNext` has only the effect of losing depth/stencil (which is typically never needed anyway). That\u0027s why it hasn\u0027t been causing issues.\n\nCould you please fix it by using `AppendToPNextChain` for `msrtss` below?",
+      "parentUuid": "3097cb31_16922d39",
+      "range": {
+        "startLine": 756,
+        "startChar": 4,
+        "endLine": 756,
+        "endChar": 35
+      },
+      "revId": "b7ec9d030f14ed9634567c261e5ff583a30a5ab3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
