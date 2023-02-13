@@ -1384,19 +1384,13 @@ void RendererVk::onDestroy(vk::Context *context)
         handleDeviceLost();
     }
 
-    for (std::unique_ptr<vk::BufferBlock> &block : mOrphanedBufferBlocks)
-    {
-        ASSERT(block->isEmpty());
-        block->destroy(this);
-    }
-    mOrphanedBufferBlocks.clear();
-
     mCommandProcessor.destroy(context);
     mCommandQueue.destroy(context);
 
     // mCommandQueue.destroy should already set "last completed" serials to infinite.
     cleanupGarbage();
     ASSERT(!hasSharedGarbage());
+    ASSERT(mOrphanedBufferBlocks.empty());
 
     for (OneOffCommandPool &oneOffCommandPool : mOneOffCommandPoolMap)
     {
@@ -4107,6 +4101,8 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // Currently disabled by default: http://anglebug.com/4324
     ANGLE_FEATURE_CONDITION(&mFeatures, asyncCommandQueue, false);
 
+    ANGLE_FEATURE_CONDITION(&mFeatures, asyncCommandBufferReset, true);
+
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsYUVSamplerConversion,
                             mSamplerYcbcrConversionFeatures.samplerYcbcrConversion != VK_FALSE);
 
@@ -4536,7 +4532,8 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     if (!vk::OutsideRenderPassCommandBuffer::ExecutesInline() ||
         !vk::RenderPassCommandBuffer::ExecutesInline())
     {
-        mFeatures.asyncCommandQueue.enabled = false;
+        mFeatures.asyncCommandQueue.enabled       = false;
+        mFeatures.asyncCommandBufferReset.enabled = false;
     }
 
     // Disable memory report feature overrides if extension is not supported.
@@ -5193,7 +5190,6 @@ angle::Result RendererVk::submitCommands(vk::Context *context,
         ANGLE_TRY(mCommandQueue.submitCommands(context, protectionType, contextPriority,
                                                signalVkSemaphore, std::move(commandBuffersToReset),
                                                commandPools, submitQueueSerial));
-        mCommandProcessor.requestCheckCompletedCommands(context);
     }
 
     return angle::Result::Continue;
