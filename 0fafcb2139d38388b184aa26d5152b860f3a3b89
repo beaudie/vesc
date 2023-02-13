@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d200bbdd_c22fc8f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-13T20:43:27Z",
+      "side": 1,
+      "message": "Not a fan of this TBH, \"actually\" is implied IMO. My own preference is something similar to what we had before: `ensureNoPendingSubmission` (previous name `ensureNoPendingWork` was indeed not accurate)\n\nWe could also call `submitCommands` like `scheduleCommandSubmission` but that\u0027s overkill IMO",
+      "revId": "0fafcb2139d38388b184aa26d5152b860f3a3b89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
