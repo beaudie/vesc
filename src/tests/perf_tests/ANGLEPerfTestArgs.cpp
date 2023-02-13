@@ -23,13 +23,13 @@ constexpr int kDefaultTestTrials       = 3;
 
 bool gCalibration                  = false;
 int gStepsPerTrial                 = kDefaultStepsPerTrial;
-int gMaxStepsPerformed             = 0;
+int gMaxStepsPerformed             = kDefaultMaxStepsPerformed;
 bool gEnableTrace                  = false;
 const char *gTraceFile             = "ANGLETrace.json";
 const char *gScreenshotDir         = nullptr;
 const char *gRenderTestOutputDir   = nullptr;
 bool gSaveScreenshots              = false;
-int gScreenshotFrame               = 1;
+int gScreenshotFrame               = kDefaultScreenshotFrame;
 bool gVerboseLogging               = false;
 int gCalibrationTimeSeconds        = 1;
 int gTrialTimeSeconds              = kDefaultTrialTimeSeconds;
@@ -44,6 +44,7 @@ const char *gUseGL                 = nullptr;
 bool gOffscreen                    = false;
 bool gVsync                        = false;
 bool gOneFrameOnly                 = false;
+bool gRunToKeyFrame                = false;
 bool gNoWarmup                     = false;
 int gFixedTestTime                 = 0;
 int gFixedTestTimeWithWarmup       = 0;
@@ -64,6 +65,7 @@ namespace
 bool PerfTestArg(int *argc, char **argv, int argIndex)
 {
     return ParseFlag("--one-frame-only", argc, argv, argIndex, &gOneFrameOnly) ||
+           ParseFlag("--run-to-key-frame", argc, argv, argIndex, &gRunToKeyFrame) ||
            ParseFlag("--enable-trace", argc, argv, argIndex, &gEnableTrace) ||
            ParseFlag("--calibration", argc, argv, argIndex, &gCalibration) ||
            ParseFlag("-v", argc, argv, argIndex, &gVerboseLogging) ||
@@ -128,6 +130,13 @@ void ANGLEProcessPerfTestArgs(int *argc, char **argv)
 
         gStepsPerTrial = 1;
         gWarmupTrials  = 0;
+    }
+
+    if (gRunToKeyFrame)
+    {
+        ASSERT(gWarmupTrials == kDefaultWarmupTrials && gTestTrials == kDefaultTestTrials);
+        gWarmupTrials = 0;
+        gTestTrials   = 1;
     }
 
     if (gCalibration)
