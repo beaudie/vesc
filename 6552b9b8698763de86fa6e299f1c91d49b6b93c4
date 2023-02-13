@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "735e948c_ef97ad1f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5680,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-13T19:04:57Z",
+      "side": 1,
+      "message": "I\u0027d just make this unconditional just like the WindowSurfaceVk case. The surface could have commands recorded in it other than draw commands.\n\nFor example, instead of drawing to the offscreen surface, call `glCopyTexSubImage2D`, then the image likely doesn\u0027t have the RenderTargetAttachment flag. That could be done with a transfer or draw job.\n\nAnother example is if the surface is being read back with a PBO, in which case it could also be a transfer job.\n\nYou could always duplicate and tweak your test to do these other things to verify that this if is too restrictive.",
+      "range": {
+        "startLine": 5679,
+        "startChar": 8,
+        "endLine": 5680,
+        "endChar": 90
+      },
+      "revId": "6552b9b8698763de86fa6e299f1c91d49b6b93c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45e222b4_a67b2e51",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2276,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-13T19:04:57Z",
+      "side": 1,
+      "message": "super nit: _may_. We may change behavior here in the future.",
+      "range": {
+        "startLine": 2276,
+        "startChar": 16,
+        "endLine": 2276,
+        "endChar": 20
+      },
+      "revId": "6552b9b8698763de86fa6e299f1c91d49b6b93c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
