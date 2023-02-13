@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ab5066a_f9340b0a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-02-13T18:32:57Z",
+      "side": 1,
+      "message": "PTAL\n\nAlexey: I haven\u0027t had a chance to port the webgl parallel link test to angle yet but I plan to.",
+      "revId": "d2690c36f9eff22a16d299b15cbad82c59df7b72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
