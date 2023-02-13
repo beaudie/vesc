@@ -5232,7 +5232,7 @@ angle::Result RendererVk::finishResourceUse(vk::Context *context, const vk::Reso
 {
     if (isAsyncCommandQueueEnabled())
     {
-        ANGLE_TRY(mCommandProcessor.waitForResourceUseToBeSubmitted(context, use));
+        ANGLE_TRY(mCommandProcessor.waitForResourceUseToBeSubmittedToDevice(context, use));
     }
     return mCommandQueue.finishResourceUse(context, use, getMaxFenceWaitTimeNs());
 }
@@ -5242,7 +5242,7 @@ angle::Result RendererVk::finishQueueSerial(vk::Context *context, const QueueSer
     ASSERT(queueSerial.valid());
     if (isAsyncCommandQueueEnabled())
     {
-        ANGLE_TRY(mCommandProcessor.waitForQueueSerialToBeSubmitted(context, queueSerial));
+        ANGLE_TRY(mCommandProcessor.waitForQueueSerialToBeSubmittedToDevice(context, queueSerial));
     }
     return mCommandQueue.finishQueueSerial(context, queueSerial, getMaxFenceWaitTimeNs());
 }
@@ -5255,7 +5255,7 @@ angle::Result RendererVk::waitForResourceUseToFinishWithUserTimeout(vk::Context 
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::waitForResourceUseToFinishWithUserTimeout");
     if (isAsyncCommandQueueEnabled())
     {
-        ANGLE_TRY(mCommandProcessor.waitForResourceUseToBeSubmitted(context, use));
+        ANGLE_TRY(mCommandProcessor.waitForResourceUseToBeSubmittedToDevice(context, use));
     }
     return mCommandQueue.waitForResourceUseToFinishWithUserTimeout(context, use, timeout, result);
 }
@@ -5264,7 +5264,7 @@ angle::Result RendererVk::finish(vk::Context *context)
 {
     if (isAsyncCommandQueueEnabled())
     {
-        ANGLE_TRY(mCommandProcessor.waitForAllWorkToBeSubmitted(context));
+        ANGLE_TRY(mCommandProcessor.waitForAllWorkToBeSubmittedToDevice(context));
     }
     return mCommandQueue.waitIdle(context, getMaxFenceWaitTimeNs());
 }

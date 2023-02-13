@@ -522,27 +522,28 @@ class RendererVk : angle::NonCopyable
         }
     }
 
-    angle::Result waitForResourceUseToBeSubmitted(vk::Context *context, const vk::ResourceUse &use)
+    angle::Result waitForResourceUseToBeSubmittedToDevice(vk::Context *context,
+                                                          const vk::ResourceUse &use)
     {
         // This is only needed for async submission code path. For immediate submission, it is a nop
         // since everything is submitted immediately.
         if (isAsyncCommandQueueEnabled())
         {
-            return mCommandProcessor.waitForResourceUseToBeSubmitted(context, use);
+            return mCommandProcessor.waitForResourceUseToBeSubmittedToDevice(context, use);
         }
         // This ResourceUse must have been submitted.
         ASSERT(!mCommandQueue.hasUnsubmittedUse(use));
         return angle::Result::Continue;
     }
 
-    angle::Result waitForQueueSerialToBeSubmitted(vk::Context *context,
-                                                  const QueueSerial &queueSerial)
+    angle::Result waitForQueueSerialToBeSubmittedToDevice(vk::Context *context,
+                                                          const QueueSerial &queueSerial)
     {
         // This is only needed for async submission code path. For immediate submission, it is a nop
         // since everything is submitted immediately.
         if (isAsyncCommandQueueEnabled())
         {
-            return mCommandProcessor.waitForQueueSerialToBeSubmitted(context, queueSerial);
+            return mCommandProcessor.waitForQueueSerialToBeSubmittedToDevice(context, queueSerial);
         }
         // This queueSerial must have been submitted.
         ASSERT(!mCommandQueue.hasUnsubmittedUse(vk::ResourceUse(queueSerial)));
