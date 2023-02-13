@@ -16,6 +16,23 @@
       "message": "Gregg, Kimmo: this revert applies cleanly to top-of-tree and I\u0027ve verified manually that pages like the WebGL Aquarium, Maps, Meet, and the test case from Kyle\u0027s anglebug.com/7137 continue to work.\n\nGregg, please take this over from me (git cl patch into your repo, git cl issue 0, and git cl upload to a new CL you own) if the CL requires revision. I\u0027ll be out of the office until next Wednesday the earliest, and possibly all next week due to work meetings. Thanks.",
       "revId": "0d92785ea4027c5cc60fb7b4b5a9d15dcde7d777",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc1c757f_fdd0ddd2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-02-13T10:01:43Z",
+      "side": 1,
+      "message": "Thank you for doing this, it is a lot of work",
+      "revId": "0d92785ea4027c5cc60fb7b4b5a9d15dcde7d777",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
