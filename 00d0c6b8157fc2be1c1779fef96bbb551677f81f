@@ -465,6 +465,24 @@
       "message": "This extension isn\u0027t listed in go/angle-vulkan-requirements. How would you rate this (Must, High, Medium, Low)? I listed it as \"High\" for go/android-vulkan-vsr-profile-v, since it is used. Is that good, or is it a Must?",
       "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8acdb746_bec55969",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2520,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-13T15:26:07Z",
+      "side": 1,
+      "message": "It supports GL_EXT_external_objects, I _think_ Chrome/Vulkan has hacked things so they don\u0027t go through this path with ANGLE; not sure who the users of this be at this point. I\u0027d lean on _Medium_, but check with other Vulkan users",
+      "parentUuid": "0c6366e4_831f90fb",
+      "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
