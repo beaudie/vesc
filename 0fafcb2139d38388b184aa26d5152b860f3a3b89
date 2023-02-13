@@ -16,6 +16,23 @@
       "message": "Not a fan of this TBH, \"actually\" is implied IMO. My own preference is something similar to what we had before: `ensureNoPendingSubmission` (previous name `ensureNoPendingWork` was indeed not accurate)\n\nWe could also call `submitCommands` like `scheduleCommandSubmission` but that\u0027s overkill IMO",
       "revId": "0fafcb2139d38388b184aa26d5152b860f3a3b89",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4228f556_20afb0bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-13T21:04:50Z",
+      "side": 1,
+      "message": "Also agree with Shabi that \"Actually\" is implied.\n\nWe do have a terminology issue here that \"submit\" has different meaning with CommandProcessor versus CommandQueue. I was thinking to rename CommandProcessor:: submitCommands to CommandProcessor::enqueueCommands (and other CommandProcessor\u0027s public APIs will be similarly renamed). Then this waitForQueueSerialToBeSubmitted  actually makes sense.",
+      "revId": "0fafcb2139d38388b184aa26d5152b860f3a3b89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
