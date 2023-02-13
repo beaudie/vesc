@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "59cb0f3a_b93f543e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5680,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-13T19:20:23Z",
+      "side": 1,
+      "message": "I wouldn\u0027t worry about the perf implications until proven otherwise, just make both cases unconditional. We already unconditionally flush when the context is made/unmade current.\n\nThat leaves less room for bugs.",
+      "parentUuid": "d5701ec2_3fce8f32",
+      "range": {
+        "startLine": 5679,
+        "startChar": 8,
+        "endLine": 5680,
+        "endChar": 90
+      },
+      "revId": "6552b9b8698763de86fa6e299f1c91d49b6b93c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "45e222b4_a67b2e51",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 4
