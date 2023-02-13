@@ -559,12 +559,14 @@ class RendererVk : angle::NonCopyable
         }
     }
 
-    angle::Result waitForResourceUseToBeSubmitted(vk::Context *context, const vk::ResourceUse &use)
+    angle::Result waitForResourceUseToBeSubmittedToDevice(vk::Context *context,
+                                                          const vk::ResourceUse &use)
     {
         // This is only needed for async submission code path. For immediate submission, it is a nop
         // since everything is submitted immediately.
         if (isAsyncCommandQueueEnabled())
         {
+            ASSERT(mCommandProcessor.hasResourceUseEnqueued(use));
             return mCommandProcessor.waitForResourceUseToBeSubmitted(context, use);
         }
         // This ResourceUse must have been submitted.
@@ -572,17 +574,18 @@ class RendererVk : angle::NonCopyable
         return angle::Result::Continue;
     }
 
-    angle::Result waitForQueueSerialToBeSubmitted(vk::Context *context,
-                                                  const QueueSerial &queueSerial)
+    angle::Result waitForQueueSerialToBeSubmittedToDevice(vk::Context *context,
+                                                          const QueueSerial &queueSerial)
     {
         // This is only needed for async submission code path. For immediate submission, it is a nop
         // since everything is submitted immediately.
         if (isAsyncCommandQueueEnabled())
         {
+            ASSERT(mCommandProcessor.hasQueueSerialEnqueued(queueSerial));
             return mCommandProcessor.waitForQueueSerialToBeSubmitted(context, queueSerial);
         }
         // This queueSerial must have been submitted.
-        ASSERT(mCommandQueue.hasResourceUseSubmitted(vk::ResourceUse(queueSerial)));
+        ASSERT(mCommandQueue.hasQueueSerialSubmitted(queueSerial));
         return angle::Result::Continue;
     }
 
@@ -621,7 +624,7 @@ class RendererVk : angle::NonCopyable
                                  egl::ContextPriority contextPriority,
                                  const vk::Semaphore *signalSemaphore,
                                  vk::SecondaryCommandPools *commandPools,
-                                 const QueueSerial &submitSerialOut);
+                                 const QueueSerial &submitQueueSerial);
 
     void handleDeviceLost();
     angle::Result finishResourceUse(vk::Context *context, const vk::ResourceUse &use);
