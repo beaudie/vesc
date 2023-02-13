@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7df7fc1c_ccccd71e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2009,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-13T15:16:40Z",
+      "side": 1,
+      "message": "This is used _purely_ for debugging. ANGLE doesn\u0027t require it in any way. So, not a Must. I\u0027d say drive the priority from other users.",
+      "parentUuid": "7a692f91_ce7917f0",
+      "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f2972176_2a8414b7",
@@ -48,6 +66,30 @@
       "writtenOn": "2023-02-11T00:24:30Z",
       "side": 1,
       "message": "This extension isn\u0027t listed in go/angle-vulkan-requirements. How would you rate this (Must, High, Medium, Low)?  I listed it as \"High\" for go/android-vulkan-vsr-profile-v, since it is used.  Is that good, or is it a Must?",
+      "range": {
+        "startLine": 2010,
+        "startChar": 5,
+        "endLine": 2010,
+        "endChar": 32
+      },
+      "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86c3359d_834129d7",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2010,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-13T15:16:40Z",
+      "side": 1,
+      "message": "I\u0027d remove this. It looks like it\u0027s not used actually, I\u0027ll remove it.\n\nFor context, it seems like this was the only user https://chromium-review.googlesource.com/c/angle/angle/+/3169472 and things have changed such that the extension is no longer used.",
+      "parentUuid": "f2972176_2a8414b7",
       "range": {
         "startLine": 2010,
         "startChar": 5,
@@ -75,6 +117,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "426a4301_cc4e7474",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2013,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-13T15:16:40Z",
+      "side": 1,
+      "message": "Must. Otherwise GLES3.1 is _technically_ not possible.",
+      "parentUuid": "ffedf6a7_b46bf6c2",
+      "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b8b7b7e1_1e90b0e8",
@@ -88,6 +148,24 @@
       "writtenOn": "2023-02-11T00:24:30Z",
       "side": 1,
       "message": "I sense these two \"depth_clip\" extensions aren\u0027t important for Android.  True?",
+      "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8428348c_13da018e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2018,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-13T15:16:40Z",
+      "side": 1,
+      "message": "VK_EXT_depth_clip_enable: Not needed. Only used as an old Nvidia driver workaround\n\nVK_EXT_depth_clip_control: Slight perf improvement, but with a lack of dynamic state it may be even detrimental on applications that switch to [0, 1] NDC depth. It does solve the \"geometry varying output components\" being the same in GL and VK and us needing to reserve 4 components for position. I\u0027d rate it _Low_.",
+      "parentUuid": "b8b7b7e1_1e90b0e8",
       "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -109,6 +187,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b7929ec_0c17544f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2025,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-13T15:16:40Z",
+      "side": 1,
+      "message": "Not _required_ by ANGLE. It\u0027s used to provide functionality similar to GL_QCOM_shading_rate (and I imagine GL_EXT_fragment_shading_rate, but we don\u0027t have that hooked up).\n\n_Low_? Does Android have a preference for GL_QCOM_shading_rate? If so, derive from that.",
+      "parentUuid": "5bc7c943_7c19d2e2",
+      "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ba6c30dc_466debd1",
@@ -122,6 +218,24 @@
       "writtenOn": "2023-02-11T00:24:30Z",
       "side": 1,
       "message": "Ditto?",
+      "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3fdbac0_a44b9d79",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2026,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-13T15:16:40Z",
+      "side": 1,
+      "message": "Don\u0027t-care for Android. It\u0027s used to emulate an ANGLE pixel-local-storage extension (for WebGL) on desktop where coherent framebuffer fetch is not available.",
+      "parentUuid": "ba6c30dc_466debd1",
       "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -143,6 +257,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdeb373d_ea7f01c7",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2029,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-13T15:16:40Z",
+      "side": 1,
+      "message": "I probably wouldn\u0027t even mention it. If the driver has it, they\u0027ll get coherent framebuffer fetch. Otherwise it\u0027s non-coherent. If Android has a preference for coherent framebuffer fetch for GL, then I\u0027d derive priority from that.",
+      "parentUuid": "931de2e8_fd824159",
+      "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4a730892_4d3287ab",
@@ -156,6 +288,24 @@
       "writtenOn": "2023-02-11T00:24:30Z",
       "side": 1,
       "message": "Seems like this is for Linux, not Android.  True?",
+      "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e148bff9_c3e3eb15",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 2033,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-13T15:16:40Z",
+      "side": 1,
+      "message": "Right, I don\u0027t believe Android supports drm (yet)",
+      "parentUuid": "4a730892_4d3287ab",
       "revId": "00d0c6b8157fc2be1c1779fef96bbb551677f81f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
