@@ -535,15 +535,16 @@ class CommandProcessor : public Context
                                           RenderPassCommandBufferHelper **renderPassCommands);
 
     // Wait until the desired serial has been submitted.
-    angle::Result waitForQueueSerialToBeSubmitted(vk::Context *context,
-                                                  const QueueSerial &queueSerial)
+    angle::Result waitForQueueSerialToBeActuallySubmitted(vk::Context *context,
+                                                          const QueueSerial &queueSerial)
     {
         const ResourceUse use(queueSerial);
-        return waitForResourceUseToBeSubmitted(context, use);
+        return waitForResourceUseToBeActuallySubmitted(context, use);
     }
-    angle::Result waitForResourceUseToBeSubmitted(vk::Context *context, const ResourceUse &use);
+    angle::Result waitForResourceUseToBeActuallySubmitted(vk::Context *context,
+                                                          const ResourceUse &use);
     // Wait for worker thread to submit all outstanding work.
-    angle::Result waitForAllWorkToBeSubmitted(Context *context);
+    angle::Result waitForAllWorkToBeActuallySubmitted(Context *context);
 
     bool isBusy(RendererVk *renderer) const
     {

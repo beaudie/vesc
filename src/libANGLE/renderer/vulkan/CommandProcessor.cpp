@@ -775,9 +775,9 @@ angle::Result CommandProcessor::processTask(CommandProcessorTask *task)
     return angle::Result::Continue;
 }
 
-angle::Result CommandProcessor::waitForAllWorkToBeSubmitted(Context *context)
+angle::Result CommandProcessor::waitForAllWorkToBeActuallySubmitted(Context *context)
 {
-    ANGLE_TRACE_EVENT0("gpu.angle", "CommandProcessor::waitForAllWorkToBeSubmitted");
+    ANGLE_TRACE_EVENT0("gpu.angle", "CommandProcessor::waitForAllWorkToBeActuallySubmitted");
     std::lock_guard<std::mutex> dequeueLock(mSubmissionMutex);
 
     // Sync any errors to the context
@@ -810,7 +810,7 @@ void CommandProcessor::destroy(Context *context)
         mWorkAvailableCondition.notify_one();
     }
 
-    (void)waitForAllWorkToBeSubmitted(context);
+    (void)waitForAllWorkToBeActuallySubmitted(context);
     if (mTaskThread.joinable())
     {
         mTaskThread.join();
@@ -823,7 +823,7 @@ void CommandProcessor::handleDeviceLost(RendererVk *renderer)
     // Take mWorkerMutex lock so that no one is able to add more work to the queue while we drain it
     // and handle device lost.
     std::lock_guard<std::mutex> enqueueLock(mWorkerMutex);
-    (void)waitForAllWorkToBeSubmitted(this);
+    (void)waitForAllWorkToBeActuallySubmitted(this);
     // Worker thread is idle and command queue is empty so good to continue
     mCommandQueue->handleDeviceLost(renderer);
 }
@@ -903,7 +903,7 @@ angle::Result CommandProcessor::queueSubmitOneOff(Context *context,
     {
         // Caller has synchronization requirement to have work in GPU pipe when returning from this
         // function.
-        ANGLE_TRY(waitForQueueSerialToBeSubmitted(context, submitQueueSerial));
+        ANGLE_TRY(waitForQueueSerialToBeActuallySubmitted(context, submitQueueSerial));
     }
 
     return angle::Result::Continue;
@@ -1002,8 +1002,8 @@ bool CommandProcessor::hasUnsubmittedUse(const vk::ResourceUse &use) const
     return false;
 }
 
-angle::Result CommandProcessor::waitForResourceUseToBeSubmitted(vk::Context *context,
-                                                                const ResourceUse &use)
+angle::Result CommandProcessor::waitForResourceUseToBeActuallySubmitted(vk::Context *context,
+                                                                        const ResourceUse &use)
 {
     if (mCommandQueue->hasUnsubmittedUse(use))
     {
