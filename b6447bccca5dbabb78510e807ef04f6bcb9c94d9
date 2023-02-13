@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bd02481_cf7a4cc9",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/EmitMetal.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1124,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-02-13T19:36:30Z",
+      "side": 1,
+      "message": "nit: Maybe assert that it\u0027s 0 or 1 or just write the index directly instead of hard coding the 1 case.",
+      "range": {
+        "startLine": 1124,
+        "startChar": 44,
+        "endLine": 1124,
+        "endChar": 54
+      },
+      "revId": "b6447bccca5dbabb78510e807ef04f6bcb9c94d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
