@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2943fba6_397f8988",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-02-13T17:12:06Z",
+      "side": 1,
+      "message": "I added a note about possible Android bug. I\u0027ll update it if Mohan has any other pointers?",
+      "parentUuid": "40e3bc7f_6439e73f",
+      "revId": "9ae341753355aec757cc38f71e9c9be0f73823bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0c148a4f_bb07485a",
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2907f421_addd2479",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1625,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-02-13T17:12:06Z",
+      "side": 1,
+      "message": "Whoops, thanks.",
+      "parentUuid": "0c148a4f_bb07485a",
+      "revId": "9ae341753355aec757cc38f71e9c9be0f73823bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "651ad385_e9a95696",
@@ -65,6 +101,24 @@
       "writtenOn": "2023-02-12T02:34:07Z",
       "side": 1,
       "message": "Instead, add `ExtensionFound(VK_GOOGLE_SURFACELESS_QUERY_EXTENSION_NAME, ...) \u0026\u0026` here",
+      "revId": "9ae341753355aec757cc38f71e9c9be0f73823bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "118f6e4d_e7a31b2f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4279,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-02-13T17:12:06Z",
+      "side": 1,
+      "message": "This opened a can of worms, much of which you might have just addressed in a significant refactor that I\u0027ll rebase to:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/4224582",
+      "parentUuid": "651ad385_e9a95696",
       "revId": "9ae341753355aec757cc38f71e9c9be0f73823bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
