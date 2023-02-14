@@ -69,6 +69,24 @@
       "parentUuid": "3123cec2_c9182de5",
       "revId": "b898bf03b6e70cf272eb2e1da9a0d522b98e5859",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1cfd20d6_be6ba5fc",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1029,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-14T18:35:02Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "ebcd8da7_61433ca5",
+      "revId": "b898bf03b6e70cf272eb2e1da9a0d522b98e5859",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
