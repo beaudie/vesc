@@ -51,6 +51,24 @@
       "parentUuid": "5602cbd0_3592e3d6",
       "revId": "b898bf03b6e70cf272eb2e1da9a0d522b98e5859",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebcd8da7_61433ca5",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1029,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-14T12:32:48Z",
+      "side": 1,
+      "message": "\u003e I think its okay to not lock, since the new errors added into must be caused by submission after this ResourceUse that we are waiting for.\n\nThis was my point. Otherwise may as well wait all submissions. We process what we have and move on.",
+      "parentUuid": "3123cec2_c9182de5",
+      "revId": "b898bf03b6e70cf272eb2e1da9a0d522b98e5859",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
