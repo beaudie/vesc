@@ -113,6 +113,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcb2c370_42733100",
+        "filename": "src/common/FixedQueue.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-14T17:17:01Z",
+      "side": 1,
+      "message": "I think we should grab mQueueSubmitMutex, just in case there are other thread in the middle of calling vkQueueSubmit. That way we will wait for that call to finish and then clean up everything.\n\nBut lets leave that alone for now and just land this CL. I will fix that in my CL. (otherwise it might trigger merge conflict). I initially missed the bug in clear().",
+      "parentUuid": "2160accc_ac1ae14f",
+      "range": {
+        "startLine": 231,
+        "startChar": 30,
+        "endLine": 231,
+        "endChar": 39
+      },
+      "revId": "a0e52570058df3ed7ed6b7224a69fb027e6b4c6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1ef43ae5_d682287c",
