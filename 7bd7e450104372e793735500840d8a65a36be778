@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55fe9d1e_9c1db36d",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-14T19:08:43Z",
+      "side": 1,
+      "message": "Nit: recommend `path/to/`. Also, prefer `/`; this would be a mess in `git bash` probably.",
+      "range": {
+        "startLine": 121,
+        "startChar": 67,
+        "endLine": 121,
+        "endChar": 73
+      },
+      "revId": "7bd7e450104372e793735500840d8a65a36be778",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
