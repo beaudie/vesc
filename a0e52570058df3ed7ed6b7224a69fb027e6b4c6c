@@ -158,6 +158,30 @@
       },
       "revId": "a0e52570058df3ed7ed6b7224a69fb027e6b4c6c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79b6ddd8_d0948fa8",
+        "filename": "src/common/FixedQueue.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-14T17:07:12Z",
+      "side": 1,
+      "message": ":shrug: no real difference in safety IMO. If unsafe threaded access is done here, you could just as easily pop() non-existing items because another thread did a pop.",
+      "parentUuid": "f6dd5fed_682020ad",
+      "range": {
+        "startLine": 229,
+        "startChar": 0,
+        "endLine": 234,
+        "endChar": 5
+      },
+      "revId": "a0e52570058df3ed7ed6b7224a69fb027e6b4c6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
