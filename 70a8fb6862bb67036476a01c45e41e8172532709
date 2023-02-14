@@ -22,6 +22,30 @@
       },
       "revId": "70a8fb6862bb67036476a01c45e41e8172532709",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc3493f4_66750ffc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-14T19:05:38Z",
+      "side": 1,
+      "message": "It performs the appropriate _memory_ barriers. But this is about the _execution_ barrier. The stages were wrong all along and this fixes it.",
+      "parentUuid": "5e0918df_b2da0df7",
+      "range": {
+        "startLine": 375,
+        "startChar": 12,
+        "endLine": 375,
+        "endChar": 48
+      },
+      "revId": "70a8fb6862bb67036476a01c45e41e8172532709",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
