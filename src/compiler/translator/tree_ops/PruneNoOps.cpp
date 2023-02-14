@@ -25,17 +25,13 @@ namespace
 
 bool IsNoOp(TIntermNode *node)
 {
-    if (node->getAsConstantUnion() != nullptr)
-    {
-        return true;
-    }
     bool isEmptyDeclaration = node->getAsDeclarationNode() != nullptr &&
                               node->getAsDeclarationNode()->getSequence()->empty();
     if (isEmptyDeclaration)
     {
         return true;
     }
-    return false;
+    return node->getAsTyped() != nullptr && !node->getAsTyped()->hasSideEffects();
 }
 
 class PruneNoOpsTraverser : private TIntermTraverser
