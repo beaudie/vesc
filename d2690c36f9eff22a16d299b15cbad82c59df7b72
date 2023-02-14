@@ -198,6 +198,24 @@
       "parentUuid": "1ef33510_544caf3d",
       "revId": "d2690c36f9eff22a16d299b15cbad82c59df7b72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d36015f0_5bae1e46",
+        "filename": "src/libANGLE/renderer/metal/mtl_library_cache.mm",
+        "patchSetId": 7
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-14T19:16:16Z",
+      "side": 1,
+      "message": "\u003e E.g. theoretically you might read a broken pointer\n\u003e Otherwise atomic\u003cint\u003e wouldn\u0027t exist, if this type code was valid?\n\nFWIW, there is more to atomics and locks than atomicity itself. There are implicit barriers for execution (with locks) and the compiler\u0027s code generation (both locks and atomics). Like load/stores would not be reordered around atomic operations (depending on std::memory_order)",
+      "parentUuid": "2ad76d8d_bb92c323",
+      "revId": "d2690c36f9eff22a16d299b15cbad82c59df7b72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
