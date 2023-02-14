@@ -96,6 +96,24 @@
       "message": "but since entry.library is not atomic, reading it without lock while other thread is writing to it is still a race?\nE.g. theoretically you might read a broken pointer\nOtherwise atomic\u003cint\u003e wouldn\u0027t exist, if this type code was valid?\n\nMoreover, you don\u0027t need to block while the other thread is compiling?\nYou only need to reacquire the entry lock after the compilation is done and write the result, possibly discarding previous result that also compiled and wrote?",
       "revId": "d2690c36f9eff22a16d299b15cbad82c59df7b72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ef33510_544caf3d",
+        "filename": "src/libANGLE/renderer/metal/mtl_library_cache.mm",
+        "patchSetId": 7
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-02-14T12:06:02Z",
+      "side": 1,
+      "message": "So in practice you maybe lock per map is sufficient, as the get operation is just a read.",
+      "parentUuid": "c80eddaa_098be8ee",
+      "revId": "d2690c36f9eff22a16d299b15cbad82c59df7b72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
