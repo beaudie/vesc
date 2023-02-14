@@ -22,6 +22,30 @@
       },
       "revId": "8735dc49fa954f2f61d891ed71d3bbbe64b75b64",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdb349a2_ed02454d",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 966,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-14T18:07:31Z",
+      "side": 1,
+      "message": "\u003eIf you look at the call stack., this gets called from Context::unsetDefaultFramebuffer(), and now we calling back into ContextVk here, which is a bit odd.\n\nTechnically it is not a call back:\n```\nContext -\u003e Surface -\u003e SurfaceVk -\u003e ContextVk\n```\n\n\u003eThe cleaner way might be fix in Context::unsetDefaultFramebuffer() to ensure backend context state is consistent.\n\nNot sure that I understand. What state is not consistent in this fix?\nHow else we can flush commands/submit?\n\nThis should be\n```\nContext -\u003e ContextVk -\u003e flushImpl/flushCommandsAndEndRenderPass\n```\nBut we are lucking a virtual function.\n\nAlso this (a true call back):\n```\negl::Error IOSurfaceSurfaceEAGL::unMakeCurrent(const gl::Context *context)\n{\n    GetFunctionsGL(context)-\u003eflush();\n    return egl::NoError();\n}\n```\n\n\u003eIf you look at Context::setDefaultFramebuffer(), it calls bindDrawFramebuffer() and bindReadFramebuffer. Maybe we are missing similar calls in unsetDefaultFramebuffer()?\n\n`unsetDefaultFramebuffer()` directly accesses variables\n```\nmState.setReadFramebufferBinding(nullptr);\nmReadFramebufferObserverBinding.bind(nullptr);\n```\nMay refactor and add `bindReadFramebufferImpl(Framebuffer *framebuffer)` for example.",
+      "parentUuid": "641e283f_f6f0eea4",
+      "range": {
+        "startLine": 966,
+        "startChar": 27,
+        "endLine": 966,
+        "endChar": 67
+      },
+      "revId": "8735dc49fa954f2f61d891ed71d3bbbe64b75b64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
