@@ -22,6 +22,30 @@
       },
       "revId": "7bd7e450104372e793735500840d8a65a36be778",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "338ddc93_e775acf1",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-02-14T20:46:47Z",
+      "side": 1,
+      "message": "I put the path in double quotes so it works in `git bash` or command prompt.\n\nKeeping the concrete example because:\n1. Having a real path here is better than an example. It is copy/pasteable.\n2. Chromium had a follow up CL doing the same thing: https://chromium-review.googlesource.com/c/chromium/src/+/4210771\n\nLet me know if you feel super strongly about it, but I\u0027d prefer to keep the simple version here.",
+      "parentUuid": "55fe9d1e_9c1db36d",
+      "range": {
+        "startLine": 121,
+        "startChar": 67,
+        "endLine": 121,
+        "endChar": 73
+      },
+      "revId": "7bd7e450104372e793735500840d8a65a36be778",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
