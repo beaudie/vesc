@@ -33,6 +33,59 @@
       "message": "Also agree with Shabi that \"Actually\" is implied.\n\nWe do have a terminology issue here that \"submit\" has different meaning with CommandProcessor versus CommandQueue. I was thinking to rename CommandProcessor:: submitCommands to CommandProcessor::enqueueCommands (and other CommandProcessor\u0027s public APIs will be similarly renamed). Then this waitForQueueSerialToBeSubmitted  actually makes sense.",
       "revId": "0fafcb2139d38388b184aa26d5152b860f3a3b89",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec80c08d_ff8b1c30",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-14T13:01:34Z",
+      "side": 1,
+      "message": "Problem is that `CommandProcessor` and `CommandQueue` exposed via common interface in the `RendererVk`.\n\nAnd `RendererVk` have methods:\n- `hasUnsubmittedUse()`\n- `waitForResourceUseToBeSubmitted()`\n\nLogically, if `hasUnsubmittedUse() \u003d\u003d false` - **no need to wait**.\n\nThere is no difference between *submitted* status in both methods.\nAdding *\"Actually\"* - adds distinct operation.\n\n\u003e  I was thinking to rename CommandProcessor:: submitCommands to CommandProcessor::enqueueCommands (and other CommandProcessor\u0027s public APIs will be similarly renamed).\n\nThen need to also rename `RendererVk` methods:\n- `hasUnenqueuedUse()` - sounds even worse...\n- `waitForResourceUseToBeSubmitted()`\n\nOther alternatives:\n- `waitForResourceUseToBeSubmittedToCommandQueue()` - more correct\n- `waitForResourceUseToBeSubmittedToVulkan()`\n- `waitForResourceUseToBeSubmittedToGPU()`\nor\n- `ensureResourceUseSubmittedToCommandQueue()`",
+      "parentUuid": "4228f556_20afb0bb",
+      "revId": "0fafcb2139d38388b184aa26d5152b860f3a3b89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cae76dcf_cc01e75b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-14T13:01:34Z",
+      "side": 1,
+      "message": "I just what to point the problem. It is up for you to decide.",
+      "revId": "0fafcb2139d38388b184aa26d5152b860f3a3b89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa5f30a0_753e3848",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-14T13:01:34Z",
+      "side": 1,
+      "message": "For me `ensureNoPendingSubmission` is almost same as `waitForAllWorkToBeSubmitted`.\nDifference is only that *ensure* will not wait if not required.\n\nThe problem is that `hasUnsubmittedUse()` may return `false` while we have `PendingSubmissions` - this is not intuitive.\n\nHaving word *\"Actually\"* makes that the regular submissions is not actual. At least it rises a question: \"why this is \"Actual\" and other is not\"?\n\nWord *\"Pending\"* does not rise questions. It may be just not yet submitted.\n\nThis is from the old comment for `ensureNoPendingWork`:\n```\n// The external has asked for the semaphore to be signaled.  It will wait on this semaphore and\n// so we must ensure that the above flush (resulting in vkQueueSubmit) has actually been\n// submitted (as opposed to simply being scheduled as a task for another thread).\n```\n\nIt has *\"actually been submitted\"*. So this is where this *\"actually\"* comes from.",
+      "parentUuid": "d200bbdd_c22fc8f0",
+      "revId": "0fafcb2139d38388b184aa26d5152b860f3a3b89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
