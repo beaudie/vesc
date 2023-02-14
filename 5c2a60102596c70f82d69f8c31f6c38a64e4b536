@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d15a38ae_2ea09ab8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-02-14T14:32:15Z",
+      "side": 1,
+      "message": "Thanks for the fix, Shabi!\nLooking good:\nhttps://ci.chromium.org/ui/p/angle/builders/ci/android-pixel4-perf/3704/overview\nhttps://ci.chromium.org/ui/p/angle/builders/ci/android-pixel6-perf/223/overview",
+      "revId": "5c2a60102596c70f82d69f8c31f6c38a64e4b536",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
