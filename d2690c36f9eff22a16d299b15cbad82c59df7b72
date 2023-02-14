@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e7aaadb_eac4cb8c",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 7
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-02-14T18:06:45Z",
+      "side": 1,
+      "message": "No it doesn\u0027t do any parallelization. It\u0027s just an ANGLE_TRY macro that can be used in functions that need to return a LinkEvent.",
+      "parentUuid": "64605086_22bf358c",
+      "range": {
+        "startLine": 35,
+        "startChar": 8,
+        "endLine": 35,
+        "endChar": 31
+      },
+      "revId": "d2690c36f9eff22a16d299b15cbad82c59df7b72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e90fb6c9_891bd340",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ed43612_d11f746e",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 7
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-02-14T18:06:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e90fb6c9_891bd340",
+      "range": {
+        "startLine": 372,
+        "startChar": 14,
+        "endLine": 372,
+        "endChar": 32
+      },
+      "revId": "d2690c36f9eff22a16d299b15cbad82c59df7b72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1c5cea23_d7c10c7a",
@@ -77,6 +125,24 @@
       "writtenOn": "2023-02-14T06:18:37Z",
       "side": 1,
       "message": "out of date comment?",
+      "revId": "d2690c36f9eff22a16d299b15cbad82c59df7b72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cd45602_161c4b98",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 7
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-02-14T18:06:45Z",
+      "side": 1,
+      "message": "I hope so but I\u0027m not sure if we have test coverage of transform feedback + program binaries.",
+      "parentUuid": "1c5cea23_d7c10c7a",
       "revId": "d2690c36f9eff22a16d299b15cbad82c59df7b72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -112,6 +178,24 @@
       "side": 1,
       "message": "So in practice you maybe lock per map is sufficient, as the get operation is just a read.",
       "parentUuid": "c80eddaa_098be8ee",
+      "revId": "d2690c36f9eff22a16d299b15cbad82c59df7b72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ad76d8d_bb92c323",
+        "filename": "src/libANGLE/renderer/metal/mtl_library_cache.mm",
+        "patchSetId": 7
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-02-14T18:06:45Z",
+      "side": 1,
+      "message": "Point taken on the atomics, pointer read/writes are atomic on all the architectures we care about but it was not generically safe.\n\nI rewrote it to try_lock on the entry mutex. We want the behaviour in this function to be non-blocking because it\u0027s checked on the main thread during program linking. This also avoids duplicate compiles of the same shader.",
+      "parentUuid": "1ef33510_544caf3d",
       "revId": "d2690c36f9eff22a16d299b15cbad82c59df7b72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
