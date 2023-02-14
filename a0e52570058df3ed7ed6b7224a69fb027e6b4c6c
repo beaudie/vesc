@@ -161,6 +161,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc943866_83913c2c",
+        "filename": "src/common/FixedQueue.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-14T17:25:06Z",
+      "side": 1,
+      "message": "\u003e I think we should grab mQueueSubmitMutex.\n\nI also think maybe add `bool mIsDeviceLost` to skip adding new items into `mInFlightCommands` just in case.\n\n\u003e BTW, thanks for catching the bug and fixing it!\n\nWelcome.",
+      "parentUuid": "675eb6ce_97f75182",
+      "range": {
+        "startLine": 231,
+        "startChar": 30,
+        "endLine": 231,
+        "endChar": 39
+      },
+      "revId": "a0e52570058df3ed7ed6b7224a69fb027e6b4c6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1ef43ae5_d682287c",
@@ -222,6 +246,30 @@
       "side": 1,
       "message": ":shrug: no real difference in safety IMO. If unsafe threaded access is done here, you could just as easily pop() non-existing items because another thread did a pop.",
       "parentUuid": "f6dd5fed_682020ad",
+      "range": {
+        "startLine": 229,
+        "startChar": 0,
+        "endLine": 234,
+        "endChar": 5
+      },
+      "revId": "a0e52570058df3ed7ed6b7224a69fb027e6b4c6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b96e9919_921d6a0d",
+        "filename": "src/common/FixedQueue.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-14T17:25:06Z",
+      "side": 1,
+      "message": "`pop` from multiple thread is a race anyway. Checking `empty` will make it a little bit safer.\n\nAnyway. Lets go from another angle.\nChecking atomic `mSize` on each iteration is not best for performance.",
+      "parentUuid": "79b6ddd8_d0948fa8",
       "range": {
         "startLine": 229,
         "startChar": 0,
