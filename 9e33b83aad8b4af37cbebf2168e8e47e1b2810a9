@@ -142,6 +142,30 @@
       },
       "revId": "9e33b83aad8b4af37cbebf2168e8e47e1b2810a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c059752f_0c4591b4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-02-14T22:29:42Z",
+      "side": 1,
+      "message": "Ack. Cant remember who but at someone\u0027s suggestion the thread cleanup logic was confined to just the Android platform",
+      "parentUuid": "d45f0548_d483da07",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 57
+      },
+      "revId": "9e33b83aad8b4af37cbebf2168e8e47e1b2810a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
