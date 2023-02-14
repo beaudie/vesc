@@ -16,6 +16,69 @@
       "message": "PTAL\n\nAlexey: I haven\u0027t had a chance to port the webgl parallel link test to angle yet but I plan to.",
       "revId": "d2690c36f9eff22a16d299b15cbad82c59df7b72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64605086_22bf358c",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 7
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-02-14T06:18:37Z",
+      "side": 1,
+      "message": "Correct me if I\u0027m wrong. This macro doesn\u0027t do any parallelization. It just executes expr immediately, doesn\u0027t it?",
+      "range": {
+        "startLine": 35,
+        "startChar": 8,
+        "endLine": 35,
+        "endChar": 31
+      },
+      "revId": "d2690c36f9eff22a16d299b15cbad82c59df7b72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e90fb6c9_891bd340",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 7
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-02-14T06:18:37Z",
+      "side": 1,
+      "message": "not: Shouldn\u0027t we start with capital C? `CreateMslShaderLib`",
+      "range": {
+        "startLine": 372,
+        "startChar": 14,
+        "endLine": 372,
+        "endChar": 32
+      },
+      "revId": "d2690c36f9eff22a16d299b15cbad82c59df7b72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c5cea23_d7c10c7a",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 7
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-02-14T06:18:37Z",
+      "side": 1,
+      "message": "out of date comment?",
+      "revId": "d2690c36f9eff22a16d299b15cbad82c59df7b72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
