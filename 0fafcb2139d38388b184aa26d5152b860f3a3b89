@@ -86,6 +86,24 @@
       "parentUuid": "d200bbdd_c22fc8f0",
       "revId": "0fafcb2139d38388b184aa26d5152b860f3a3b89",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6944498f_b57b5a53",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-14T19:34:30Z",
+      "side": 1,
+      "message": "I\u0027d avoid calling out `CommandQueue` directly, it\u0027s supposed to be an \"implementation detail\" inside RendererVk.\n\nI also agree `hasUnenqueuedUse` is terrible.\n\n`waitForResourceUseToBeSubmittedToDevice()` sounds good actually (FWIW, not all \"devices\" are \"GPUs\")\n\n---\n\nThe real problem is that `submit` is overloaded here. FYI, `hasUnsubmittedUse` was until recently called `isUsedInRecordedCommands` which was unambiguous, we could revert to that.",
+      "parentUuid": "ec80c08d_ff8b1c30",
+      "revId": "0fafcb2139d38388b184aa26d5152b860f3a3b89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
