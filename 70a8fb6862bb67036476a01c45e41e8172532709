@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e0918df_b2da0df7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-14T17:56:04Z",
+      "side": 1,
+      "message": "Is this needed? The comment in next line says \"vkQueuePresentKHR automatically performs the appropriate memory barriers\". I am a bit worried that this line of change may have negative perf impact? @syoussefi@chromium.org",
+      "range": {
+        "startLine": 375,
+        "startChar": 12,
+        "endLine": 375,
+        "endChar": 48
+      },
+      "revId": "70a8fb6862bb67036476a01c45e41e8172532709",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
