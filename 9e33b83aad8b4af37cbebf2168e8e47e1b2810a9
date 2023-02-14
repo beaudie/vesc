@@ -22,6 +22,30 @@
       },
       "revId": "9e33b83aad8b4af37cbebf2168e8e47e1b2810a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cf48029_9984eee8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-14T21:21:27Z",
+      "side": 1,
+      "message": "You can set breakpoint on CommandQueue::init and CommandQueue::destroy, they are not equal. If you follow through eglTerminate, it bails out early because the context still have a reference count. So the bug for sure does exist.\n\nBut you have a good point. It might be that Display::threadCleanup(Thread *thread) has a bug here that it does not actually destroys the current context. If you could follow up with a better fix, that would be great.",
+      "parentUuid": "4ff11ab6_8c4cccc6",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 57
+      },
+      "revId": "9e33b83aad8b4af37cbebf2168e8e47e1b2810a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
