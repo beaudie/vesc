@@ -94,6 +94,30 @@
       },
       "revId": "9e33b83aad8b4af37cbebf2168e8e47e1b2810a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa770c08_6e8195a2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-02-14T21:36:33Z",
+      "side": 1,
+      "message": "\u003e If you follow through eglTerminate, it bails out early because the context still have a reference count\n\nare you doing the breakpoint lookup on Android? if so, that is not expected behavior. Since threadB is the last active thread on that display `terminate` will be called with `TerminateReason::NoActiveThreads` here -\u003e \nhttps://cs.android.com/android/platform/superproject/+/master:external/angle/src/libANGLE/Display.cpp;l\u003d1267\n\nin which case `Display::terminate` will force `unMakeCurrent` the context here -\u003e https://cs.android.com/android/platform/superproject/+/master:external/angle/src/libANGLE/Display.cpp;l\u003d1172",
+      "parentUuid": "cd329473_8669883d",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 57
+      },
+      "revId": "9e33b83aad8b4af37cbebf2168e8e47e1b2810a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
