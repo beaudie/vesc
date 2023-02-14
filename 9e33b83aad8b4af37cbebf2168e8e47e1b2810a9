@@ -46,6 +46,30 @@
       },
       "revId": "9e33b83aad8b4af37cbebf2168e8e47e1b2810a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bf103d1_e8b3dbb5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-14T21:28:40Z",
+      "side": 1,
+      "message": "FWIW, the spec seems to say that the context stays current and doesn\u0027t get destroyed after eglTerminate. eglMakeCurrent is still necessary.",
+      "parentUuid": "3cf48029_9984eee8",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 57
+      },
+      "revId": "9e33b83aad8b4af37cbebf2168e8e47e1b2810a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
