@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99182ec8_42d0be89",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2023-02-15T20:28:14Z",
+      "side": 1,
+      "message": "I seem to have stolen your \"Uploader\" credits. Looking for a way to fix this",
+      "revId": "f5f4a0af2b0fefa823698b55dce4eda5acc96085",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
