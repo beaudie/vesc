@@ -768,14 +768,14 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     angle::ImageLoadContext getImageLoadContext() const;
 
-    bool hasUnsubmittedUse(const vk::ResourceUse &use) const;
-    bool hasUnsubmittedUse(const vk::Resource &resource) const
+    bool hasResourceUseSubmitted(const vk::ResourceUse &use) const;
+    bool hasResourceUseSubmitted(const vk::Resource &resource) const
     {
-        return hasUnsubmittedUse(resource.getResourceUse());
+        return hasResourceUseSubmitted(resource.getResourceUse());
     }
-    bool hasUnsubmittedUse(const vk::ReadWriteResource &resource) const
+    bool hasResourceUseSubmitted(const vk::ReadWriteResource &resource) const
     {
-        return hasUnsubmittedUse(resource.getResourceUse());
+        return hasResourceUseSubmitted(resource.getResourceUse());
     }
 
     const QueueSerial &getLastSubmittedQueueSerial() const { return mLastSubmittedQueueSerial; }
@@ -1634,9 +1634,9 @@ ANGLE_INLINE angle::Result ContextVk::onVertexAttributeChange(size_t attribIndex
     return onVertexBufferChange(vertexBuffer);
 }
 
-ANGLE_INLINE bool ContextVk::hasUnsubmittedUse(const vk::ResourceUse &use) const
+ANGLE_INLINE bool ContextVk::hasResourceUseSubmitted(const vk::ResourceUse &use) const
 {
-    return mCurrentQueueSerialIndex != kInvalidQueueSerialIndex && use > mLastSubmittedQueueSerial;
+    return mCurrentQueueSerialIndex != kInvalidQueueSerialIndex || use <= mLastSubmittedQueueSerial;
 }
 
 ANGLE_INLINE bool UseLineRaster(const ContextVk *contextVk, gl::PrimitiveMode mode)
