@@ -88,6 +88,24 @@
       "parentUuid": "2f4dd7f7_f8b8b314",
       "revId": "b2d72cf584ac7279dc65cee4a575e004acbf953b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f534d4e4_98b5b2a9",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-15T03:33:18Z",
+      "side": 1,
+      "message": "\u003e I am currently trying to implement this.\n\nMaybe hold off for a moment, let\u0027s see what Charlie thinks too. As you said, it\u0027s rare to need this, and even then the default constructor of our objects are likely not to be heavy anyway.\n\nSo I\u0027d say just go with this change and call it a day.",
+      "parentUuid": "3cd00701_2ea69573",
+      "revId": "b2d72cf584ac7279dc65cee4a575e004acbf953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
