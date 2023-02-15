@@ -4862,7 +4862,7 @@ angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
 
     if (isAsyncCommandQueueEnabled())
     {
-        ANGLE_TRY(mCommandProcessor.queueSubmitOneOff(
+        ANGLE_TRY(mCommandProcessor.enqueueSubmitOneOffCommands(
             context, protectionType, priority, primary.getHandle(), waitSemaphore,
             waitSemaphoreStageMasks, fence, submitPolicy, submitQueueSerial));
     }
@@ -5202,7 +5202,7 @@ angle::Result RendererVk::submitCommands(vk::Context *context,
 
     if (isAsyncCommandQueueEnabled())
     {
-        ANGLE_TRY(mCommandProcessor.submitCommands(
+        ANGLE_TRY(mCommandProcessor.enqueueSubmitCommands(
             context, protectionType, contextPriority, signalVkSemaphore,
             std::move(commandBuffersToReset), commandPools, submitQueueSerial));
     }
@@ -5282,8 +5282,8 @@ angle::Result RendererVk::flushWaitSemaphores(
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::flushWaitSemaphores");
     if (isAsyncCommandQueueEnabled())
     {
-        ANGLE_TRY(mCommandProcessor.flushWaitSemaphores(protectionType, std::move(waitSemaphores),
-                                                        std::move(waitSemaphoreStageMasks)));
+        ANGLE_TRY(mCommandProcessor.enqueueFlushWaitSemaphores(
+            protectionType, std::move(waitSemaphores), std::move(waitSemaphoreStageMasks)));
     }
     else
     {
@@ -5303,8 +5303,8 @@ angle::Result RendererVk::flushRenderPassCommands(
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::flushRenderPassCommands");
     if (isAsyncCommandQueueEnabled())
     {
-        ANGLE_TRY(mCommandProcessor.flushRenderPassCommands(context, protectionType, renderPass,
-                                                            renderPassCommands));
+        ANGLE_TRY(mCommandProcessor.enqueueFlushRenderPassCommands(context, protectionType,
+                                                                   renderPass, renderPassCommands));
     }
     else
     {
@@ -5323,8 +5323,8 @@ angle::Result RendererVk::flushOutsideRPCommands(
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::flushOutsideRPCommands");
     if (isAsyncCommandQueueEnabled())
     {
-        ANGLE_TRY(
-            mCommandProcessor.flushOutsideRPCommands(context, protectionType, outsideRPCommands));
+        ANGLE_TRY(mCommandProcessor.enqueueFlushOutsideRPCommands(context, protectionType,
+                                                                  outsideRPCommands));
     }
     else
     {
@@ -5342,7 +5342,7 @@ VkResult RendererVk::queuePresent(vk::Context *context,
     VkResult result = VK_SUCCESS;
     if (isAsyncCommandQueueEnabled())
     {
-        result = mCommandProcessor.queuePresent(priority, presentInfo, swapchainStatus);
+        result = mCommandProcessor.enqueuePresent(priority, presentInfo, swapchainStatus);
     }
     else
     {
@@ -5512,7 +5512,7 @@ angle::Result RendererVk::allocateQueueSerialIndex(QueueSerial *queueSerialOut)
     {
         return angle::Result::Stop;
     }
-    Serial serial   = isAsyncCommandQueueEnabled() ? mCommandProcessor.getLastSubmittedSerial(index)
+    Serial serial   = isAsyncCommandQueueEnabled() ? mCommandProcessor.getLastEnqueuedSerial(index)
                                                    : mCommandQueue.getLastSubmittedSerial(index);
     *queueSerialOut = QueueSerial(index, serial);
     return angle::Result::Continue;
