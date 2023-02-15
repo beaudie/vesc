@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "15c7c519_a1c152d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-15T17:54:32Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "8735dc49fa954f2f61d891ed71d3bbbe64b75b64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "641e283f_f6f0eea4",
@@ -110,6 +127,30 @@
       "side": 1,
       "message": "\u003e From your fix, it looks like just missing a flush, would Context::unsetDefaultFramebuffer() make the flush call fix it?\nANGLE_CONTEXT_TRY(mImplementation-\u003eflush(this));\n\nIt may be skipped...\n\n```\n    if (mRenderer-\u003egetFeatures().deferFlushUntilEndRenderPass.enabled \u0026\u0026 hasActiveRenderPass() \u0026\u0026\n        !frontBufferRenderingEnabled)\n    {\n        mHasDeferredFlush \u003d true;\n        return angle::Result::Continue;\n    }\n```",
       "parentUuid": "9bc0da28_8c72fcc6",
+      "range": {
+        "startLine": 966,
+        "startChar": 27,
+        "endLine": 966,
+        "endChar": 67
+      },
+      "revId": "8735dc49fa954f2f61d891ed71d3bbbe64b75b64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f74b8289_3cf87881",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 966,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-15T17:54:32Z",
+      "side": 1,
+      "message": "True. The deferred flush is a bit annoying sometime. We probably need a version that will always honor it.",
+      "parentUuid": "d9846cc0_96a0e309",
       "range": {
         "startLine": 966,
         "startChar": 27,
