@@ -5669,7 +5669,9 @@ angle::Result ImageHelper::initMemory(Context *context,
     mMemoryAllocationType = allocationType;
 
     // To allocate memory here, if possible, we use the image memory suballocator which uses VMA.
-    RendererVk *renderer = context->getRenderer();
+    RendererVk *renderer      = context->getRenderer();
+    static int timesAllocated = 0;
+    timesAllocated++;
     if (renderer->getFeatures().useVmaForImageSuballocation.enabled)
     {
         ANGLE_VK_TRY(context, renderer->getImageMemorySuballocator().allocateAndBindMemory(
@@ -5686,6 +5688,8 @@ angle::Result ImageHelper::initMemory(Context *context,
                                       &mImage, &mMemoryTypeIndex, &mDeviceMemory,
                                       &mAllocationSize));
     }
+    WARN() << "Times allocated: " << timesAllocated
+           << " this thread: " << std::this_thread::get_id();
     mCurrentQueueFamilyIndex = renderer->getQueueFamilyIndex();
 
     if (renderer->getFeatures().allocateNonZeroMemory.enabled)

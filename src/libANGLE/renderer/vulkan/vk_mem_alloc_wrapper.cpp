@@ -150,8 +150,9 @@ VkResult AllocateAndBindMemoryForImage(VmaAllocator allocator,
     VmaAllocationCreateInfo allocationCreateInfo = {};
     allocationCreateInfo.requiredFlags           = requiredFlags;
     allocationCreateInfo.preferredFlags          = preferredFlags;
-    allocationCreateInfo.flags                   = 0;
-    VmaAllocationInfo allocationInfo             = {};
+    // allocationCreateInfo.flags                   = VMA_ALLOCATION_CREATE_MAPPED_BIT;
+    allocationCreateInfo.flags       = 0;
+    VmaAllocationInfo allocationInfo = {};
 
     result = vmaAllocateMemoryForImage(allocator, *pImage, &allocationCreateInfo, pAllocationOut,
                                        &allocationInfo);
