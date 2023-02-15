@@ -106,6 +106,24 @@
       "parentUuid": "3cd00701_2ea69573",
       "revId": "b2d72cf584ac7279dc65cee4a575e004acbf953b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca1613fc_a84373ef",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-15T03:34:41Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "f534d4e4_98b5b2a9",
+      "revId": "b2d72cf584ac7279dc65cee4a575e004acbf953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
