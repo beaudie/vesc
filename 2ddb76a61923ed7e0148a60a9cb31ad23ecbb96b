@@ -16,6 +16,23 @@
       "message": "This is a prereq for this CL in Chrome: https://chromium-review.googlesource.com/c/chromium/src/+/3928160",
       "revId": "2ddb76a61923ed7e0148a60a9cb31ad23ecbb96b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbe5ab87_7f3dc9a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-02-15T20:31:51Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "2ddb76a61923ed7e0148a60a9cb31ad23ecbb96b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
