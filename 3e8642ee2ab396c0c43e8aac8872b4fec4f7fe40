@@ -16,6 +16,23 @@
       "message": "LGTM, thanks!",
       "revId": "3e8642ee2ab396c0c43e8aac8872b4fec4f7fe40",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2554cdb5_a7161ef5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1567582
+      },
+      "writtenOn": "2023-02-15T08:47:31Z",
+      "side": 1,
+      "message": "I don\u0027t think the trybot failures are due to this patch. For instance, the Intel GPU failures are identical to the failures in this run that was done for a RendererVK change:\nhttps://ci.chromium.org/ui/p/angle/builders/try/linux-test/11799/overview\n\nThere are different CopyTexImage failures on NVIDIA GPU reported in some other runs, none of them being exactly the failure reported here. An example:\nhttps://ci.chromium.org/ui/p/angle/builders/try/linux-test/11698/overview",
+      "revId": "3e8642ee2ab396c0c43e8aac8872b4fec4f7fe40",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
