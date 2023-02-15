@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c6d78f9_86fbef8e",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1376,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-15T15:51:41Z",
+      "side": 1,
+      "message": "`mFragmentShaderFramebufferFetchMRT` cannot be enabled, it\u0027s just a query. GL Validation should ban this instead (it probably already does with `queryOnly`)",
+      "revId": "012e2f6dc2eef568c29716312ba39afc0e876889",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95e643c2_ac34bcd6",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1535,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-15T15:51:41Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "012e2f6dc2eef568c29716312ba39afc0e876889",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
