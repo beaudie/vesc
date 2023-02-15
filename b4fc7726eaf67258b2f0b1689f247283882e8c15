@@ -267,6 +267,24 @@
       "parentUuid": "846d2e2f_28b9ea47",
       "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "349c3b1c_0313296c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-15T01:24:52Z",
+      "side": 1,
+      "message": "\u003e We *currently* have the problem of missing semaphores, which this change can exacerbate, but that can be fixed separately.\n\nPatchset is updated and passed all tests.\nI want to know what I need to do with these patch. Is it going to be submitted or I should abandon the CL?\n\n\u003e But is it really much different that having separate primary command buffers per priority?\nThe only difference - with separate buffers there will be no enforced submission.\nIn both cases - Semaphore synchronization is still required.\n\nI was thinking. Even with separate buffers we need to do enforced submissions once/if we add Semaphore tracking.\n\nI still do not understand from the GLES point of view what **\"command\"** *Context A* must execute so that results appear visible to the *Context B*. We need to at least flush commands to the primary command buffer when this **\"command\"** is executed by *Context A* so `CommandQueue` could submit commands/add semaphore. If there is no specific **\"command\"** - then *Context B* must flush and submit commands of *Context A*. But it may be **multiple** contexts such as *Context A* and we need to flush/submit all of them.\n\nIn any case. Enforced submission is necessary. Only question at what level it should be implemented:\n1. Contexts must flush commands to the `CommandQueue` in order for other Contexts to see results. `CommandQueue` will performs enforced submission - need to add such support into `CommandQueue`.\n2. Contexts will flush/submit commands of *other* Contexts that use same resources in order to see results (must be protected by Global mutex). - need to somehow track this *other* Contexts.",
+      "parentUuid": "b1ad4561_6efb7c21",
+      "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
