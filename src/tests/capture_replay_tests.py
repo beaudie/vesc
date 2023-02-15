@@ -215,6 +215,8 @@ class ChildProcessesManager():
         gn_args = [('angle_with_capture_by_default', 'true')] + extra_gn_args
         if self._use_goma:
             gn_args.append(('use_goma', 'true'))
+            # Temporarily added for testing purposes
+            gn_args.append(('angle_enable_memory_alloc_logging', 'true'))
             if self._args.goma_dir:
                 gn_args.append(('goma_dir', '"%s"' % self._args.goma_dir))
         if not self._args.debug:

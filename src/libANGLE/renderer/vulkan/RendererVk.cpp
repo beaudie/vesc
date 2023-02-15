@@ -5228,7 +5228,7 @@ void MemoryAllocationTracker::onMemoryAllocImpl(vk::MemoryAllocationType allocTy
         mMemoryAllocationRecord[angle::getBacktraceInfo()].insert(
             std::make_pair(memoryAllocInfoMapKey, memAllocLogInfo));
 
-        INFO() << "Memory allocation: (id " << memAllocLogInfo.id << ") for object "
+        WARN() << "Memory allocation: (id " << memAllocLogInfo.id << ") for object "
                << memAllocLogInfo.handle << " | Size: " << memAllocLogInfo.size
                << " | Type: " << vk::kMemoryAllocationTypeMessage[allocTypeIndex]
                << " | Heap index: " << memAllocLogInfo.memoryHeapIndex;
@@ -5290,7 +5290,7 @@ void MemoryAllocationTracker::onMemoryDeallocImpl(vk::MemoryAllocationType alloc
                 mActivePerHeapMemoryAllocationsCount[allocTypeIndex][memoryHeapIndex]--;
                 mActivePerHeapMemoryAllocationsSize[allocTypeIndex][memoryHeapIndex] -= size;
 
-                INFO() << "Memory deallocation: (id " << memInfoEntry->id << ") for object "
+                WARN() << "Memory deallocation: (id " << memInfoEntry->id << ") for object "
                        << memInfoEntry->handle << " | Size: " << memInfoEntry->size
                        << " | Type: " << vk::kMemoryAllocationTypeMessage[allocTypeIndex]
                        << " | Heap index: " << memInfoEntry->memoryHeapIndex;

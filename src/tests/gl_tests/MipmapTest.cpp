@@ -724,6 +724,67 @@ TEST_P(MipmapTest, GenerateMipmapAfterSingleLevelDraw)
     EXPECT_PIXEL_COLOR_EQ(getWindowWidth() / 4, getWindowHeight() / 4, kInitData[0]);
 }
 
+// Temporary test 1; based on the beginning of GenerateMipmapAfterModifyingBaseLevel
+TEST_P(MipmapTest, TempTest1PassesCaptureReplay)
+{
+    uint32_t width  = getWindowWidth();
+    uint32_t height = getWindowHeight();
+
+    const std::vector<GLColor> kInitData(width * height, GLColor::blue);
+
+    // Pass in initial data so the texture is blue.
+
+    // Using mTexture2D, when this test is run with another test, makes the capture/replay of that
+    // test fail. (e.g., With TempTest3)
+    // glBindTexture(GL_TEXTURE_2D, mTexture2D);
+
+    GLTexture testTex;
+    glBindTexture(GL_TEXTURE_2D, testTex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 kInitData.data());
+
+    ASSERT_GL_NO_ERROR();
+}
+
+// Temporary test 2; added glGenerateMipmap() in test 1
+TEST_P(MipmapTest, TempTest2FailsCaptureReplay)
+{
+    uint32_t width  = getWindowWidth();
+    uint32_t height = getWindowHeight();
+
+    const std::vector<GLColor> kInitData(width * height, GLColor::blue);
+
+    // Pass in initial data so the texture is blue.
+    GLTexture testTex;
+    glBindTexture(GL_TEXTURE_2D, testTex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 kInitData.data());
+
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    ASSERT_GL_NO_ERROR();
+}
+
+// Temporary test 3; added draw in test 2
+TEST_P(MipmapTest, TempTest3PassesCaptureReplay)
+{
+    uint32_t width  = getWindowWidth();
+    uint32_t height = getWindowHeight();
+
+    const std::vector<GLColor> kInitData(width * height, GLColor::blue);
+
+    // Pass in initial data so the texture is blue.
+    GLTexture testTex;
+    glBindTexture(GL_TEXTURE_2D, testTex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 kInitData.data());
+
+    glGenerateMipmap(GL_TEXTURE_2D);
+    clearAndDrawQuad(m2DProgram, getWindowWidth() / 2, getWindowHeight() / 2);
+
+    ASSERT_GL_NO_ERROR();
+}
+
 // Test that generating mipmaps, then modifying the base level and generating mipmaps again works.
 TEST_P(MipmapTest, GenerateMipmapAfterModifyingBaseLevel)
 {
