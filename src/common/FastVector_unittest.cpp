@@ -296,11 +296,14 @@ TEST(FastVector, DestroyOldItems)
 {
     int counter = 0;
 
-    struct s : angle::NonCopyable
+    struct s
     {
         int *counter = nullptr;
 
+        s() = default;
         ~s() { reset(); }
+        s(const s &other) { *this = other; }
+        s(s &&other) { *this = std::move(other); }
         s &operator=(const s &other)
         {
             reset();
