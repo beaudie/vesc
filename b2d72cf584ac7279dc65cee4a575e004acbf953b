@@ -70,6 +70,24 @@
       "parentUuid": "d2302476_142e01c9",
       "revId": "b2d72cf584ac7279dc65cee4a575e004acbf953b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cd00701_2ea69573",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-15T03:28:40Z",
+      "side": 1,
+      "message": "\u003e So I guess first question is, is this a theoretical fix or are we getting hurt anywhere without the destructor calls? If there is no evidence of this mattering anywhere, I\u0027d say just leave the class be.\n\nI once made code using `FastVector` and was getting UBs (crashing). That is how I found the bug. Spend some time to figure why I getting crashes... So I want this fixed.\n\nIn the current code `ResourceUse` class may be affected (uses `clear` and `resize`). Not sure if old `Serial` values will cause any harm tho.\n\n\u003e Otherwise, the current CL is probably a good compromise as-is.\n\nIt should work. Most places use trivial types. Others only add elements. It is rare to reuse capacity with non trivial types.\n\n\u003e It\u0027ll be a lot of error-prone work to switch to using raw memory and placement new/delete.\n\nI am currently trying to implement this. Yes, need to be very careful and probably add more tests.",
+      "parentUuid": "2f4dd7f7_f8b8b314",
+      "revId": "b2d72cf584ac7279dc65cee4a575e004acbf953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
