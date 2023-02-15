@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b21e135_0103b77b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2023-02-15T20:02:14Z",
+      "side": 1,
+      "message": "This is a prereq for this CL in Chrome: https://chromium-review.googlesource.com/c/chromium/src/+/3928160",
+      "revId": "2ddb76a61923ed7e0148a60a9cb31ad23ecbb96b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
