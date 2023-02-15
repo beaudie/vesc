@@ -79,37 +79,40 @@ class WrapIter
 
     reference operator*() const { return *mIter; }
 
+    pointer ptr() const { return mIter; }
+
   private:
     iterator_type mIter;
 };
 
-template <class T, size_t N, class Storage = std::array<T, N>>
+template <class T, size_t N>
 class FastVector final
 {
   public:
-    using value_type      = typename Storage::value_type;
-    using size_type       = typename Storage::size_type;
-    using reference       = typename Storage::reference;
-    using const_reference = typename Storage::const_reference;
-    using pointer         = typename Storage::pointer;
-    using const_pointer   = typename Storage::const_pointer;
-    using iterator        = WrapIter<T *>;
-    using const_iterator  = WrapIter<const T *>;
+    using value_type      = T;
+    using size_type       = size_t;
+    using reference       = value_type &;
+    using const_reference = const value_type &;
+    using pointer         = value_type *;
+    using const_pointer   = const value_type *;
+    using iterator        = WrapIter<pointer>;
+    using const_iterator  = WrapIter<const_pointer>;
 
     FastVector();
-    FastVector(size_type count, const value_type &value);
+    FastVector(size_type count, const_reference value);
     FastVector(size_type count);
 
-    FastVector(const FastVector<T, N, Storage> &other);
-    FastVector(FastVector<T, N, Storage> &&other);
+    FastVector(const FastVector &other);
+    FastVector(FastVector &&other);
     FastVector(std::initializer_list<value_type> init);
 
-    template <class InputIt, std::enable_if_t<!std::is_integral<InputIt>::value, bool> = true>
-    FastVector(InputIt first, InputIt last);
+    template <class PointerT>
+    FastVector(WrapIter<PointerT> first, WrapIter<PointerT> last);
+    FastVector(const_pointer first, const_pointer last);
 
-    FastVector<T, N, Storage> &operator=(const FastVector<T, N, Storage> &other);
-    FastVector<T, N, Storage> &operator=(FastVector<T, N, Storage> &&other);
-    FastVector<T, N, Storage> &operator=(std::initializer_list<value_type> init);
+    FastVector &operator=(const FastVector &other);
+    FastVector &operator=(FastVector &&other);
+    FastVector &operator=(std::initializer_list<value_type> init);
 
     ~FastVector();
 
@@ -133,7 +136,7 @@ class FastVector final
 
     void clear();
 
-    void push_back(const value_type &value);
+    void push_back(const_reference value);
     void push_back(value_type &&value);
 
     template <typename... Args>
@@ -147,382 +150,514 @@ class FastVector final
     reference back();
     const_reference back() const;
 
-    void swap(FastVector<T, N, Storage> &other);
+    void swap(FastVector &other);
 
     void resize(size_type count);
-    void resize(size_type count, const value_type &value);
+    void resize(size_type count, const_reference value);
 
     void reserve(size_type count);
 
     // Specialty function that removes a known element and might shuffle the list.
-    void remove_and_permute(const value_type &element);
+    void remove_and_permute(const_reference element);
     void remove_and_permute(iterator pos);
 
   private:
-    void assign_from_initializer_list(std::initializer_list<value_type> init);
+    // This will be No-op for trivially constructible types
+    static void construct_items(pointer first, pointer last);
+    template <typename... Args>
+    static void construct_items(pointer first, pointer last, Args &&...args);
+    // This will be No-op for trivially destructible types
+    static void destruct_items(pointer first, pointer last);
+    // Uses copy assignment
+    static void copy_items(pointer first, pointer last, const_pointer source);
+    // Uses copy constructor
+    static void copy_construct_items(pointer first, pointer last, const_pointer source);
+
+    // Generic version
+    template <class T2,
+              std::enable_if_t<!std::is_trivially_move_constructible_v<T2> ||
+                                   !std::is_trivially_destructible_v<T2>,
+                               bool> = true>
+    static void move_construct_destruct_items(T2 *first, T2 *last, T2 *source);
+    // Specialized version that uses memcpy()
+    template <class T2,
+              std::enable_if_t<std::is_trivially_move_constructible_v<T2> &&
+                                   std::is_trivially_destructible_v<T2>,
+                               bool> = true>
+    static void move_construct_destruct_items(T2 *first, T2 *last, T2 *source);
+
+    // Generic version
+    template <class T2,
+              std::enable_if_t<!std::is_trivially_copy_assignable_v<T2> ||
+                                   !std::is_trivially_copy_constructible_v<T2> ||
+                                   !std::is_trivially_destructible_v<T2>,
+                               bool> = true>
+    void assign_from_pointers(const T2 *first, const T2 *last);
+    // Specialized version that uses memcpy()
+    template <class T2,
+              std::enable_if_t<std::is_trivially_copy_assignable_v<T2> &&
+                                   std::is_trivially_copy_constructible_v<T2> &&
+                                   std::is_trivially_destructible_v<T2>,
+                               bool> = true>
+    void assign_from_pointers(const T2 *first, const T2 *last);
+
+    void reset();
+    template <typename... Args>
+    void resizeImpl(size_type count, Args &&...args);
     void ensure_capacity(size_t capacity);
     bool uses_fixed_storage() const;
+    pointer fixed_data();
 
-    // Not "trivially_constructible" must be reset to default state before reuse.
-    // (Assuming, that the original intent for the "FastVector" was to have uninitialized values.
-    // Otherwise, it is a bug and "trivially_constructible" must be also explicitly initialized.)
-    // Not "trivially_destructible" must be reset to free resources.
-    template <class T2,
-              std::enable_if_t<!std::is_trivially_constructible<T2>::value ||
-                                   !std::is_trivially_destructible<T2>::value,
-                               bool> = true>
-    void reset_items(T2 *first, T2 *last);
-    template <class T2,
-              std::enable_if_t<std::is_trivially_constructible<T2>::value &&
-                                   std::is_trivially_destructible<T2>::value,
-                               bool> = true>
-    void reset_items(T2 *first, T2 *last)
-    {}
+    struct alignas(value_type) ItemStorage
+    {
+        char storage[sizeof(value_type)];
 
-    Storage mFixedStorage;
-    pointer mData           = mFixedStorage.data();
+        pointer ptr() { return reinterpret_cast<pointer>(storage); }
+        const_pointer ptr() const { return reinterpret_cast<const_pointer>(storage); }
+    };
+
+    std::array<ItemStorage, N> mFixedStorage;
+    pointer mData           = fixed_data();
     size_type mSize         = 0;
     size_type mReservedSize = N;
 };
 
-template <class T, size_t N, class StorageN, size_t M, class StorageM>
-bool operator==(const FastVector<T, N, StorageN> &a, const FastVector<T, M, StorageM> &b)
+template <class T, size_t N, size_t M>
+bool operator==(const FastVector<T, N> &a, const FastVector<T, M> &b)
 {
     return a.size() == b.size() && std::equal(a.begin(), a.end(), b.begin());
 }
 
-template <class T, size_t N, class StorageN, size_t M, class StorageM>
-bool operator!=(const FastVector<T, N, StorageN> &a, const FastVector<T, M, StorageM> &b)
+template <class T, size_t N, size_t M>
+bool operator!=(const FastVector<T, N> &a, const FastVector<T, M> &b)
 {
     return !(a == b);
 }
 
-template <class T, size_t N, class Storage>
-ANGLE_INLINE bool FastVector<T, N, Storage>::uses_fixed_storage() const
+template <class T, size_t N>
+ANGLE_INLINE void FastVector<T, N>::construct_items(pointer first, pointer last)
 {
-    return mData == mFixedStorage.data();
+    while (first != last)
+    {
+        new (first++) value_type;  // Do not calling constructor explicitly (default initialization)
+    }
 }
 
-template <class T, size_t N, class Storage>
+template <class T, size_t N>
+template <typename... Args>
+ANGLE_INLINE void FastVector<T, N>::construct_items(pointer first, pointer last, Args &&...args)
+{
+    while (first != last)
+    {
+        new (first++) value_type(std::forward<Args>(args)...);
+    }
+}
+
+template <class T, size_t N>
+ANGLE_INLINE void FastVector<T, N>::destruct_items(pointer first, pointer last)
+{
+    while (first != last)
+    {
+        (first++)->~value_type();
+    }
+}
+
+template <class T, size_t N>
+ANGLE_INLINE void FastVector<T, N>::copy_items(pointer first, pointer last, const_pointer source)
+{
+    while (first != last)
+    {
+        *(first++) = *(source++);
+    }
+}
+
+template <class T, size_t N>
+ANGLE_INLINE void FastVector<T, N>::copy_construct_items(pointer first,
+                                                         pointer last,
+                                                         const_pointer source)
+{
+    while (first != last)
+    {
+        new (first++) value_type(*(source++));
+    }
+}
+
+template <class T, size_t N>
 template <class T2,
-          std::enable_if_t<!std::is_trivially_constructible<T2>::value ||
-                               !std::is_trivially_destructible<T2>::value,
+          std::enable_if_t<!std::is_trivially_move_constructible_v<T2> ||
+                               !std::is_trivially_destructible_v<T2>,
                            bool>>
-ANGLE_INLINE void FastVector<T, N, Storage>::reset_items(T2 *first, T2 *last)
+ANGLE_INLINE void FastVector<T, N>::move_construct_destruct_items(T2 *first, T2 *last, T2 *source)
 {
-    for (; first != last; ++first)
+    while (first != last)
     {
-        first->~value_type();
-        new (first) value_type();
+        new (first++) value_type(std::move(*source));
+        (source++)->~value_type();
     }
 }
 
-template <class T, size_t N, class Storage>
-FastVector<T, N, Storage>::FastVector()
-{}
+template <class T, size_t N>
+template <class T2,
+          std::enable_if_t<std::is_trivially_move_constructible_v<T2> &&
+                               std::is_trivially_destructible_v<T2>,
+                           bool>>
+ANGLE_INLINE void FastVector<T, N>::move_construct_destruct_items(T2 *first, T2 *last, T2 *source)
+{
+    std::memcpy(first, source, (last - first) * sizeof(T2));
+}
 
-template <class T, size_t N, class Storage>
-FastVector<T, N, Storage>::FastVector(size_type count, const value_type &value)
+template <class T, size_t N>
+ANGLE_INLINE bool FastVector<T, N>::uses_fixed_storage() const
+{
+    return mData == mFixedStorage.data()->ptr();
+}
+
+template <class T, size_t N>
+ANGLE_INLINE typename FastVector<T, N>::pointer FastVector<T, N>::fixed_data()
+{
+    return mFixedStorage.data()->ptr();
+}
+
+template <class T, size_t N>
+FastVector<T, N>::FastVector() = default;
+
+template <class T, size_t N>
+FastVector<T, N>::FastVector(size_type count, const_reference value)
 {
     ensure_capacity(count);
+    construct_items(mData, mData + count, value);
     mSize = count;
-    std::fill(begin(), end(), value);
 }
 
-template <class T, size_t N, class Storage>
-FastVector<T, N, Storage>::FastVector(size_type count)
+template <class T, size_t N>
+FastVector<T, N>::FastVector(size_type count)
 {
     ensure_capacity(count);
+    construct_items(mData, mData + count);
     mSize = count;
 }
 
-template <class T, size_t N, class Storage>
-FastVector<T, N, Storage>::FastVector(const FastVector<T, N, Storage> &other)
-    : FastVector(other.begin(), other.end())
+template <class T, size_t N>
+FastVector<T, N>::FastVector(const FastVector &other) : FastVector(other.begin(), other.end())
 {}
 
-template <class T, size_t N, class Storage>
-FastVector<T, N, Storage>::FastVector(FastVector<T, N, Storage> &&other) : FastVector()
+template <class T, size_t N>
+FastVector<T, N>::FastVector(FastVector &&other)
 {
-    swap(other);
+    *this = std::move(other);
 }
 
-template <class T, size_t N, class Storage>
-FastVector<T, N, Storage>::FastVector(std::initializer_list<value_type> init)
+template <class T, size_t N>
+FastVector<T, N>::FastVector(std::initializer_list<value_type> init)
+    : FastVector(init.begin(), init.end())
+{}
+
+template <class T, size_t N>
+template <class PointerT>
+FastVector<T, N>::FastVector(WrapIter<PointerT> first, WrapIter<PointerT> last)
+    : FastVector(first.ptr(), last.ptr())
+{}
+
+template <class T, size_t N>
+FastVector<T, N>::FastVector(const_pointer first, const_pointer last)
 {
-    assign_from_initializer_list(init);
+    assign_from_pointers(first, last);
 }
 
-template <class T, size_t N, class Storage>
-template <class InputIt, std::enable_if_t<!std::is_integral<InputIt>::value, bool>>
-FastVector<T, N, Storage>::FastVector(InputIt first, InputIt last)
+template <class T, size_t N>
+FastVector<T, N> &FastVector<T, N>::operator=(const FastVector &other)
 {
-    size_t newSize = last - first;
-    ensure_capacity(newSize);
+    assign_from_pointers(other.begin().ptr(), other.end().ptr());
+    return *this;
+}
+
+template <class T, size_t N>
+template <class T2,
+          std::enable_if_t<!std::is_trivially_copy_assignable_v<T2> ||
+                               !std::is_trivially_copy_constructible_v<T2> ||
+                               !std::is_trivially_destructible_v<T2>,
+                           bool>>
+ANGLE_INLINE void FastVector<T, N>::assign_from_pointers(const T2 *first, const T2 *last)
+{
+    const size_t newSize = last - first;
+    if (newSize > mSize)
+    {
+        if (newSize > mReservedSize)
+        {
+            clear();  // Clear to avoid moving items that will be overwritten.
+            ensure_capacity(newSize);
+        }
+        else if (mSize > 0)
+        {
+            copy_items(mData, mData + mSize, first);
+        }
+        copy_construct_items(mData + mSize, mData + newSize, first + mSize);
+    }
+    else
+    {
+        if (newSize < mSize)
+        {
+            destruct_items(mData + newSize, mData + mSize);
+        }
+        if (newSize > 0)
+        {
+            copy_items(mData, mData + newSize, first);
+        }
+    }
     mSize = newSize;
-    std::copy(first, last, begin());
 }
 
-template <class T, size_t N, class Storage>
-FastVector<T, N, Storage> &FastVector<T, N, Storage>::operator=(
-    const FastVector<T, N, Storage> &other)
+template <class T, size_t N>
+template <class T2,
+          std::enable_if_t<std::is_trivially_copy_assignable_v<T2> &&
+                               std::is_trivially_copy_constructible_v<T2> &&
+                               std::is_trivially_destructible_v<T2>,
+                           bool>>
+ANGLE_INLINE void FastVector<T, N>::assign_from_pointers(const T2 *first, const T2 *last)
 {
-    ensure_capacity(other.mSize);
-    if (other.mSize < mSize)
+    const size_t newSize = last - first;
+    if (newSize > mReservedSize)
     {
-        reset_items(mData + other.mSize, mData + mSize);
+        clear();  // Clear to avoid moving items that will be overwritten.
+        ensure_capacity(newSize);
     }
-    mSize = other.mSize;
-    std::copy(other.begin(), other.end(), begin());
+    if (newSize > 0)
+    {
+        std::memcpy(mData, first, newSize * sizeof(T2));
+    }
+    mSize = newSize;
+}
+
+template <class T, size_t N>
+FastVector<T, N> &FastVector<T, N>::operator=(FastVector &&other)
+{
+    reset();
+    if (other.uses_fixed_storage())
+    {
+        if (other.mSize > 0)
+        {
+            move_construct_destruct_items(mData, mData + other.mSize, other.mData);
+        }
+    }
+    else
+    {
+        mData               = other.mData;
+        mReservedSize       = other.mReservedSize;
+        other.mData         = other.fixed_data();
+        other.mReservedSize = N;
+    }
+    mSize       = other.mSize;
+    other.mSize = 0;
     return *this;
 }
 
-template <class T, size_t N, class Storage>
-FastVector<T, N, Storage> &FastVector<T, N, Storage>::operator=(FastVector<T, N, Storage> &&other)
+template <class T, size_t N>
+FastVector<T, N> &FastVector<T, N>::operator=(std::initializer_list<value_type> init)
 {
-    swap(other);
+    assign_from_pointers(init.begin(), init.end());
     return *this;
 }
 
-template <class T, size_t N, class Storage>
-FastVector<T, N, Storage> &FastVector<T, N, Storage>::operator=(
-    std::initializer_list<value_type> init)
+template <class T, size_t N>
+FastVector<T, N>::~FastVector()
 {
-    assign_from_initializer_list(init);
-    return *this;
+    reset();
 }
 
-template <class T, size_t N, class Storage>
-FastVector<T, N, Storage>::~FastVector()
+template <class T, size_t N>
+void FastVector<T, N>::reset()
 {
+    clear();
     if (!uses_fixed_storage())
     {
-        delete[] mData;
+        delete[] reinterpret_cast<ItemStorage *>(mData);
+        mData         = fixed_data();
+        mReservedSize = N;
     }
 }
 
-template <class T, size_t N, class Storage>
-typename FastVector<T, N, Storage>::reference FastVector<T, N, Storage>::at(size_type pos)
+template <class T, size_t N>
+typename FastVector<T, N>::reference FastVector<T, N>::at(size_type pos)
 {
     ASSERT(pos < mSize);
     return mData[pos];
 }
 
-template <class T, size_t N, class Storage>
-typename FastVector<T, N, Storage>::const_reference FastVector<T, N, Storage>::at(
+template <class T, size_t N>
+typename FastVector<T, N>::const_reference FastVector<T, N>::at(size_type pos) const
+{
+    ASSERT(pos < mSize);
+    return mData[pos];
+}
+
+template <class T, size_t N>
+ANGLE_INLINE typename FastVector<T, N>::reference FastVector<T, N>::operator[](size_type pos)
+{
+    ASSERT(pos < mSize);
+    return mData[pos];
+}
+
+template <class T, size_t N>
+ANGLE_INLINE typename FastVector<T, N>::const_reference FastVector<T, N>::operator[](
     size_type pos) const
 {
     ASSERT(pos < mSize);
     return mData[pos];
 }
 
-template <class T, size_t N, class Storage>
-ANGLE_INLINE typename FastVector<T, N, Storage>::reference FastVector<T, N, Storage>::operator[](
-    size_type pos)
-{
-    ASSERT(pos < mSize);
-    return mData[pos];
-}
-
-template <class T, size_t N, class Storage>
-ANGLE_INLINE typename FastVector<T, N, Storage>::const_reference
-FastVector<T, N, Storage>::operator[](size_type pos) const
-{
-    ASSERT(pos < mSize);
-    return mData[pos];
-}
-
-template <class T, size_t N, class Storage>
-ANGLE_INLINE typename FastVector<T, N, Storage>::const_pointer
-angle::FastVector<T, N, Storage>::data() const
+template <class T, size_t N>
+ANGLE_INLINE typename FastVector<T, N>::const_pointer angle::FastVector<T, N>::data() const
 {
     return mData;
 }
 
-template <class T, size_t N, class Storage>
-ANGLE_INLINE typename FastVector<T, N, Storage>::pointer angle::FastVector<T, N, Storage>::data()
+template <class T, size_t N>
+ANGLE_INLINE typename FastVector<T, N>::pointer angle::FastVector<T, N>::data()
 {
     return mData;
 }
 
-template <class T, size_t N, class Storage>
-ANGLE_INLINE typename FastVector<T, N, Storage>::iterator FastVector<T, N, Storage>::begin()
+template <class T, size_t N>
+ANGLE_INLINE typename FastVector<T, N>::iterator FastVector<T, N>::begin()
 {
     return mData;
 }
 
-template <class T, size_t N, class Storage>
-ANGLE_INLINE typename FastVector<T, N, Storage>::const_iterator FastVector<T, N, Storage>::begin()
-    const
+template <class T, size_t N>
+ANGLE_INLINE typename FastVector<T, N>::const_iterator FastVector<T, N>::begin() const
 {
     return mData;
 }
 
-template <class T, size_t N, class Storage>
-ANGLE_INLINE typename FastVector<T, N, Storage>::iterator FastVector<T, N, Storage>::end()
+template <class T, size_t N>
+ANGLE_INLINE typename FastVector<T, N>::iterator FastVector<T, N>::end()
 {
     return mData + mSize;
 }
 
-template <class T, size_t N, class Storage>
-ANGLE_INLINE typename FastVector<T, N, Storage>::const_iterator FastVector<T, N, Storage>::end()
-    const
+template <class T, size_t N>
+ANGLE_INLINE typename FastVector<T, N>::const_iterator FastVector<T, N>::end() const
 {
     return mData + mSize;
 }
 
-template <class T, size_t N, class Storage>
-ANGLE_INLINE bool FastVector<T, N, Storage>::empty() const
+template <class T, size_t N>
+ANGLE_INLINE bool FastVector<T, N>::empty() const
 {
     return mSize == 0;
 }
 
-template <class T, size_t N, class Storage>
-ANGLE_INLINE typename FastVector<T, N, Storage>::size_type FastVector<T, N, Storage>::size() const
+template <class T, size_t N>
+ANGLE_INLINE typename FastVector<T, N>::size_type FastVector<T, N>::size() const
 {
     return mSize;
 }
 
-template <class T, size_t N, class Storage>
-void FastVector<T, N, Storage>::clear()
+template <class T, size_t N>
+void FastVector<T, N>::clear()
 {
     resize(0);
 }
 
-template <class T, size_t N, class Storage>
-ANGLE_INLINE void FastVector<T, N, Storage>::push_back(const value_type &value)
+template <class T, size_t N>
+ANGLE_INLINE void FastVector<T, N>::push_back(const_reference value)
 {
-    if (mSize == mReservedSize)
-        ensure_capacity(mSize + 1);
-    mData[mSize++] = value;
+    emplace_back(value);
 }
 
-template <class T, size_t N, class Storage>
-ANGLE_INLINE void FastVector<T, N, Storage>::push_back(value_type &&value)
+template <class T, size_t N>
+ANGLE_INLINE void FastVector<T, N>::push_back(value_type &&value)
 {
     emplace_back(std::move(value));
 }
 
-template <class T, size_t N, class Storage>
+template <class T, size_t N>
 template <typename... Args>
-ANGLE_INLINE void FastVector<T, N, Storage>::emplace_back(Args &&...args)
+ANGLE_INLINE void FastVector<T, N>::emplace_back(Args &&...args)
 {
     if (mSize == mReservedSize)
         ensure_capacity(mSize + 1);
-    mData[mSize++] = std::move(T(std::forward<Args>(args)...));
+    new (&mData[mSize++]) value_type(std::forward<Args>(args)...);
 }
 
-template <class T, size_t N, class Storage>
-ANGLE_INLINE void FastVector<T, N, Storage>::pop_back()
+template <class T, size_t N>
+ANGLE_INLINE void FastVector<T, N>::pop_back()
 {
     ASSERT(mSize > 0);
-    reset_items(mData + mSize - 1, mData + mSize);
-    mSize--;
+    mData[--mSize].~value_type();
 }
 
-template <class T, size_t N, class Storage>
-ANGLE_INLINE typename FastVector<T, N, Storage>::reference FastVector<T, N, Storage>::front()
-{
-    ASSERT(mSize > 0);
-    return mData[0];
-}
-
-template <class T, size_t N, class Storage>
-ANGLE_INLINE typename FastVector<T, N, Storage>::const_reference FastVector<T, N, Storage>::front()
-    const
+template <class T, size_t N>
+ANGLE_INLINE typename FastVector<T, N>::reference FastVector<T, N>::front()
 {
     ASSERT(mSize > 0);
     return mData[0];
 }
 
-template <class T, size_t N, class Storage>
-ANGLE_INLINE typename FastVector<T, N, Storage>::reference FastVector<T, N, Storage>::back()
+template <class T, size_t N>
+ANGLE_INLINE typename FastVector<T, N>::const_reference FastVector<T, N>::front() const
+{
+    ASSERT(mSize > 0);
+    return mData[0];
+}
+
+template <class T, size_t N>
+ANGLE_INLINE typename FastVector<T, N>::reference FastVector<T, N>::back()
 {
     ASSERT(mSize > 0);
     return mData[mSize - 1];
 }
 
-template <class T, size_t N, class Storage>
-ANGLE_INLINE typename FastVector<T, N, Storage>::const_reference FastVector<T, N, Storage>::back()
-    const
+template <class T, size_t N>
+ANGLE_INLINE typename FastVector<T, N>::const_reference FastVector<T, N>::back() const
 {
     ASSERT(mSize > 0);
     return mData[mSize - 1];
 }
 
-template <class T, size_t N, class Storage>
-void FastVector<T, N, Storage>::swap(FastVector<T, N, Storage> &other)
+template <class T, size_t N>
+void FastVector<T, N>::swap(FastVector &other)
 {
-    std::swap(mSize, other.mSize);
-
-    pointer tempData = other.mData;
-    if (uses_fixed_storage())
-        other.mData = other.mFixedStorage.data();
-    else
-        other.mData = mData;
-    if (tempData == other.mFixedStorage.data())
-        mData = mFixedStorage.data();
-    else
-        mData = tempData;
-    std::swap(mReservedSize, other.mReservedSize);
-
-    if (uses_fixed_storage() || other.uses_fixed_storage())
-        std::swap(mFixedStorage, other.mFixedStorage);
+    std::swap(*this, other);
 }
 
-template <class T, size_t N, class Storage>
-void FastVector<T, N, Storage>::resize(size_type count)
+template <class T, size_t N>
+void FastVector<T, N>::resize(size_type count)
 {
-    if (count > mSize)
-    {
-        ensure_capacity(count);
-    }
-    else if (count < mSize)
-    {
-        reset_items(mData + count, mData + mSize);
-    }
-    mSize = count;
+    resizeImpl(count);
 }
 
-template <class T, size_t N, class Storage>
-void FastVector<T, N, Storage>::resize(size_type count, const value_type &value)
+template <class T, size_t N>
+void FastVector<T, N>::resize(size_type count, const_reference value)
+{
+    resizeImpl(count, value);
+}
+
+template <class T, size_t N>
+template <typename... Args>
+ANGLE_INLINE void FastVector<T, N>::resizeImpl(size_type count, Args &&...args)
 {
     if (count > mSize)
     {
         ensure_capacity(count);
-        std::fill(mData + mSize, mData + count, value);
+        construct_items(mData + mSize, mData + count, std::forward<Args>(args)...);
+        mSize = count;
     }
     else if (count < mSize)
     {
-        reset_items(mData + count, mData + mSize);
+        destruct_items(mData + count, mData + mSize);
+        mSize = count;
     }
-    mSize = count;
 }
 
-template <class T, size_t N, class Storage>
-void FastVector<T, N, Storage>::reserve(size_type count)
+template <class T, size_t N>
+void FastVector<T, N>::reserve(size_type count)
 {
     ensure_capacity(count);
 }
 
-template <class T, size_t N, class Storage>
-void FastVector<T, N, Storage>::assign_from_initializer_list(std::initializer_list<value_type> init)
-{
-    ensure_capacity(init.size());
-    if (init.size() < mSize)
-    {
-        reset_items(mData + init.size(), mData + mSize);
-    }
-    mSize        = init.size();
-    size_t index = 0;
-    for (auto &value : init)
-    {
-        mData[index++] = value;
-    }
-}
-
-template <class T, size_t N, class Storage>
-ANGLE_INLINE void FastVector<T, N, Storage>::remove_and_permute(const value_type &element)
+template <class T, size_t N>
+ANGLE_INLINE void FastVector<T, N>::remove_and_permute(const_reference element)
 {
     size_t len = mSize - 1;
     for (size_t index = 0; index < len; ++index)
@@ -536,8 +671,8 @@ ANGLE_INLINE void FastVector<T, N, Storage>::remove_and_permute(const value_type
     pop_back();
 }
 
-template <class T, size_t N, class Storage>
-ANGLE_INLINE void FastVector<T, N, Storage>::remove_and_permute(iterator pos)
+template <class T, size_t N>
+ANGLE_INLINE void FastVector<T, N>::remove_and_permute(iterator pos)
 {
     ASSERT(pos >= begin());
     ASSERT(pos < end());
@@ -546,8 +681,8 @@ ANGLE_INLINE void FastVector<T, N, Storage>::remove_and_permute(iterator pos)
     pop_back();
 }
 
-template <class T, size_t N, class Storage>
-void FastVector<T, N, Storage>::ensure_capacity(size_t capacity)
+template <class T, size_t N>
+void FastVector<T, N>::ensure_capacity(size_t capacity)
 {
     // We have a minimum capacity of N.
     if (mReservedSize < capacity)
@@ -559,16 +694,16 @@ void FastVector<T, N, Storage>::ensure_capacity(size_t capacity)
             newSize *= 2;
         }
 
-        pointer newData = new value_type[newSize];
+        pointer newData = (new ItemStorage[newSize])->ptr();
 
         if (mSize > 0)
         {
-            std::move(begin(), end(), newData);
+            move_construct_destruct_items(newData, newData + mSize, mData);
         }
 
         if (!uses_fixed_storage())
         {
-            delete[] mData;
+            delete[] reinterpret_cast<ItemStorage *>(mData);
         }
 
         mData         = newData;

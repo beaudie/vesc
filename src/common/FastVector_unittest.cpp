@@ -296,11 +296,14 @@ TEST(FastVector, DestroyOldItems)
 {
     int counter = 0;
 
-    struct s : angle::NonCopyable
+    struct s
     {
         int *counter = nullptr;
 
+        s() = default;
         ~s() { reset(); }
+        s(const s &other) { *this = other; }
+        s(s &&other) { *this = std::move(other); }
         s &operator=(const s &other)
         {
             reset();
@@ -374,6 +377,221 @@ TEST(FastVector, DestroyOldItems)
 
     vec[0].init(&counter);
     EXPECT_EQ(1, counter);
+}
+
+// Tests copy and move operations
+TEST(FastVector, CopyAndMove)
+{
+    static int totalCount = 0;
+    int validCount        = 0;
+
+    struct s
+    {
+        int *validCount = nullptr;
+
+        s() { ++totalCount; }
+        ~s()
+        {
+            reset();
+            --totalCount;
+        }
+        s(const s &other) : s() { *this = other; }
+        s(s &&other) : s() { *this = std::move(other); }
+
+        s &operator=(const s &other)
+        {
+            reset();
+            init(other.validCount);
+            return *this;
+        }
+        s &operator=(s &&other)
+        {
+            std::swap(validCount, other.validCount);
+            return *this;
+        }
+
+        void init(int *c)
+        {
+            validCount = c;
+            if (validCount != nullptr)
+            {
+                ++(*validCount);
+            }
+        }
+        void reset()
+        {
+            if (validCount != nullptr)
+            {
+                --(*validCount);
+                validCount = nullptr;
+            }
+        }
+    };
+
+    FastVector<s, 2> vec1;
+    // vec1: {}
+    EXPECT_EQ(0, totalCount);
+    EXPECT_EQ(0, validCount);
+
+    vec1.resize(2);
+    // vec1: {-, -}
+    EXPECT_EQ(2, totalCount);
+    EXPECT_EQ(0, validCount);
+
+    vec1[0].init(&validCount);
+    vec1[1].init(&validCount);
+    // vec1: {*, *}
+    EXPECT_EQ(2, totalCount);
+    EXPECT_EQ(2, validCount);
+
+    FastVector<s, 2> vec2(std::move(vec1));
+    // vec1: {}; vec2: {*, *}
+    EXPECT_EQ(2, totalCount);
+    EXPECT_EQ(2, validCount);
+
+    vec2.resize(4);
+    // vec1: {}; vec2: {*, *, -, -}
+    EXPECT_EQ(4, totalCount);
+    EXPECT_EQ(2, validCount);
+
+    vec1 = std::move(vec2);
+    // vec1: {*, *, -, -}; vec2: {}
+    EXPECT_EQ(4, totalCount);
+    EXPECT_EQ(2, validCount);
+
+    vec2 = vec1;
+    // vec1: {*, *, -, -}; vec2: {*, *, -, -}
+    EXPECT_EQ(8, totalCount);
+    EXPECT_EQ(4, validCount);
+
+    vec2[2].init(&validCount);
+    vec2[3].init(&validCount);
+    // vec1: {*, *, -, -}; vec2: {*, *, *, *}
+    EXPECT_EQ(8, totalCount);
+    EXPECT_EQ(6, validCount);
+
+    vec1.pop_back();
+    // vec1: {*, *, -}; vec2: {*, *, *, *}
+    EXPECT_EQ(7, totalCount);
+    EXPECT_EQ(6, validCount);
+
+    vec2 = vec1;
+    // vec1: {*, *, -}; vec2: {*, *, -}
+    EXPECT_EQ(6, totalCount);
+    EXPECT_EQ(4, validCount);
+
+    vec2.clear();
+    // vec1: {*, *, -}; vec2: {}
+    EXPECT_EQ(3, totalCount);
+    EXPECT_EQ(2, validCount);
+
+    vec2 = FastVector<s, 2>(vec1.begin() + 1, vec1.end());
+    // vec1: {*, *, -}; vec2: {*, -}
+    EXPECT_EQ(5, totalCount);
+    EXPECT_EQ(3, validCount);
+
+    vec2 = FastVector<s, 2>(vec1.data(), vec1.data() + vec1.size());
+    // vec1: {*, *, -}; vec2: {*, *, -}
+    EXPECT_EQ(6, totalCount);
+    EXPECT_EQ(4, validCount);
+
+    vec2 = {vec1[2], vec1[0], s(), vec1[1]};
+    // vec1: {*, *, -}; vec2: {-, *, -, *}
+    EXPECT_EQ(7, totalCount);
+    EXPECT_EQ(4, validCount);
+
+    vec2.resize(2);
+    // vec1: {*, *, -}; vec2: {-, *}
+    EXPECT_EQ(5, totalCount);
+    EXPECT_EQ(3, validCount);
+
+    vec1 = FastVector<s, 2>{s()};
+    // vec1: {-}; vec2: {-, *}
+    EXPECT_EQ(3, totalCount);
+    EXPECT_EQ(1, validCount);
+
+    vec1 = vec2 = {};
+    // vec1: {}; vec2: {}
+    EXPECT_EQ(0, totalCount);
+    EXPECT_EQ(0, validCount);
+}
+
+// Tests copy and move operations for trivial type
+TEST(FastVector, CopyAndMoveTrivial)
+{
+    FastVector<int, 2> vec1;
+    // vec1: {}
+
+    vec1.resize(2);
+    // vec1: {?, ?}
+    EXPECT_EQ(2u, vec1.size());
+
+    vec1[0] = 1;
+    vec1[1] = 2;
+    // vec1: {1, 2}
+    EXPECT_EQ((FastVector<int, 2>{1, 2}), vec1);
+
+    FastVector<int, 2> vec2(std::move(vec1));
+    // vec1: {}; vec2: {1, 2}
+    EXPECT_EQ(true, vec1.empty());
+    EXPECT_EQ((FastVector<int, 2>{1, 2}), vec2);
+
+    vec2.resize(4);
+    const int i1 = vec2[2];
+    const int i2 = vec2[3];
+    // vec1: {}; vec2: {1, 2, i1, i2}
+    EXPECT_EQ((FastVector<int, 2>{1, 2, i1, i2}), vec2);
+
+    vec1 = std::move(vec2);
+    // vec1: {1, 2, i1, i2}; vec2: {}
+    EXPECT_EQ((FastVector<int, 2>{1, 2, i1, i2}), vec1);
+    EXPECT_EQ(true, vec2.empty());
+
+    vec2 = vec1;
+    // vec1: {1, 2, i1, i2}; vec2: {1, 2, i1, i2}
+    EXPECT_EQ((FastVector<int, 2>{1, 2, i1, i2}), vec2);
+
+    vec2[2] = 3;
+    vec2[3] = 4;
+    // vec1: {1, 2, i1, i2}; vec2: {1, 2, 3, 4}
+    EXPECT_EQ((FastVector<int, 2>{1, 2, 3, 4}), vec2);
+
+    vec1.pop_back();
+    // vec1: {1, 2, i1}; vec2: {1, 2, 3, 4}
+    EXPECT_EQ((FastVector<int, 2>{1, 2, i1}), vec1);
+
+    vec2 = vec1;
+    // vec1: {1, 2, i1}; vec2: {1, 2, i1}
+    EXPECT_EQ((FastVector<int, 2>{1, 2, i1}), vec2);
+
+    vec2.clear();
+    // vec1: {1, 2, i1}; vec2: {}
+    EXPECT_EQ(true, vec2.empty());
+
+    vec2 = FastVector<int, 2>(vec1.begin() + 1, vec1.end());
+    // vec1: {1, 2, i1}; vec2: {2, i1}
+    EXPECT_EQ((FastVector<int, 2>{2, i1}), vec2);
+
+    vec2 = FastVector<int, 2>(vec1.data(), vec1.data() + vec1.size());
+    // vec1: {1, 2, i1}; vec2: {1, 2, i1}
+    EXPECT_EQ((FastVector<int, 2>{1, 2, i1}), vec2);
+
+    vec2 = {vec1[2], vec1[0], 42, vec1[1]};
+    // vec1: {1, 2, i1}; vec2: {i1, 1, 42, 2}
+    EXPECT_EQ((FastVector<int, 2>{i1, 1, 42, 2}), vec2);
+
+    vec2.resize(2);
+    // vec1: {1, 2, i1}; vec2: {i1, 1}
+    EXPECT_EQ((FastVector<int, 2>{i1, 1}), vec2);
+
+    vec1 = FastVector<int, 2>{13};
+    // vec1: {13}; vec2: {i1, 1}
+    EXPECT_EQ((FastVector<int, 2>{13}), vec1);
+
+    vec1 = vec2 = {};
+    // vec1: {}; vec2: {}
+    EXPECT_EQ(true, vec1.empty());
+    EXPECT_EQ(true, vec2.empty());
 }
 
 // Basic functionality for FlatUnorderedMap
