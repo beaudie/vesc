@@ -1241,6 +1241,10 @@ class State : angle::NonCopyable
     // QCOM_shading_rate
     bool mShadingRatePreserveAspectRatio;
     ShadingRate mShadingRate;
+
+    // GL_ARM_shader_framebuffer_fetch
+    bool mFetchPerSample;
+    bool mFragmentShaderFramebufferFetchMRT;
 };
 
 ANGLE_INLINE angle::Result State::syncDirtyObjects(const Context *context,
