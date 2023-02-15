@@ -16,6 +16,24 @@
       "message": "This is functional, but has to go a bit further and drop the word \"context\" as well. Otherwise you get filenames like:\n```\nappname_context_001.cpp\nappname_context_002.cpp\nappname_context_003.cpp\n```\nand function names like:\n```\nvoid ReplayContextFrame1(void)\n{\n    ReplayContextFrame1Part1();\n    ReplayContextFrame1Part2();\n    ReplayContextFrame1Part3();\n}\n```\n\nActually, there are several files that might need to be renamed so it is easier to find them.  I\u0027ll share a new trace with you that uses ~6 contexts.",
       "revId": "112a743fc01a7786da92769d64f3665c65cbe662",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63133378_ee406f49",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2023-02-15T17:15:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "58a18c83_e5e89598",
+      "revId": "112a743fc01a7786da92769d64f3665c65cbe662",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
