@@ -33,6 +33,24 @@
       "message": "Can be removed if I\u0027m not mistaken",
       "revId": "535b0d46e4de20a7ee54a6a546d2e0e946333c9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72b1ca4a_dc05a6e8",
+        "filename": "src/libANGLE/renderer/d3d/HLSLCompiler.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2023-02-15T18:09:30Z",
+      "side": 1,
+      "message": "I think you\u0027re right. I was thinking that the enums were used for UMA but it\u0027s just used for histograms and they are allowed to change.",
+      "parentUuid": "1f15174b_ab2b1123",
+      "revId": "535b0d46e4de20a7ee54a6a546d2e0e946333c9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
