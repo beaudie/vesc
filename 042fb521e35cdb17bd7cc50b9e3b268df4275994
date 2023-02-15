@@ -16,6 +16,23 @@
       "message": "Like Cody suggested I\u0027ve squashed https://chromium-review.googlesource.com/c/angle/angle/+/4225391/2 into this commit in case you want to take another look.",
       "revId": "042fb521e35cdb17bd7cc50b9e3b268df4275994",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "032947ca_014d980a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-02-15T17:12:16Z",
+      "side": 1,
+      "message": "re-LGTM",
+      "revId": "042fb521e35cdb17bd7cc50b9e3b268df4275994",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
