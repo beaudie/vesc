@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "535b0d46e4de20a7ee54a6a546d2e0e946333c9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f15174b_ab2b1123",
+        "filename": "src/libANGLE/renderer/d3d/HLSLCompiler.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-15T02:58:34Z",
+      "side": 1,
+      "message": "Can be removed if I\u0027m not mistaken",
+      "revId": "535b0d46e4de20a7ee54a6a546d2e0e946333c9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
