@@ -34,6 +34,24 @@
       "parentUuid": "962c13a7_59c7b8ab",
       "revId": "b2d72cf584ac7279dc65cee4a575e004acbf953b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2302476_142e01c9",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-15T01:29:08Z",
+      "side": 1,
+      "message": "\u003e Need to rewrite entire class to explicit construction/destruction. This should not be hard. \n\nNeed to remove `class Storage \u003d std::array\u003cT, N\u003e` parameter for such rewrite.",
+      "parentUuid": "31199546_df634a24",
+      "revId": "b2d72cf584ac7279dc65cee4a575e004acbf953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
