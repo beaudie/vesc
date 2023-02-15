@@ -70,6 +70,30 @@
       },
       "revId": "8735dc49fa954f2f61d891ed71d3bbbe64b75b64",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bc0da28_8c72fcc6",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 966,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-15T17:37:32Z",
+      "side": 1,
+      "message": "From your fix, it looks like just missing a flush, would Context::unsetDefaultFramebuffer() make the flush call fix it? \n    ANGLE_CONTEXT_TRY(mImplementation-\u003eflush(this));\n\nYour fix is okay, I just wondering there is a simpler fix here.",
+      "parentUuid": "9ba4ae1d_2ad0bd6c",
+      "range": {
+        "startLine": 966,
+        "startChar": 27,
+        "endLine": 966,
+        "endChar": 67
+      },
+      "revId": "8735dc49fa954f2f61d891ed71d3bbbe64b75b64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
