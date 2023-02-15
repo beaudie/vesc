@@ -22,6 +22,30 @@
       },
       "revId": "2ba897529c338e1d2004eb8ce1a9c5676e7be7ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8acdc6f5_b3b3d122",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-15T00:55:01Z",
+      "side": 1,
+      "message": "Just was preserving original code. Will remove and submit.",
+      "parentUuid": "21ac374e_eb290e74",
+      "range": {
+        "startLine": 681,
+        "startChar": 40,
+        "endLine": 681,
+        "endChar": 74
+      },
+      "revId": "2ba897529c338e1d2004eb8ce1a9c5676e7be7ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
