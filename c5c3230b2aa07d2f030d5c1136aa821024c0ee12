@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "273d18d2_454ea377",
+        "filename": "src/tests/gl_tests/FramebufferFetchTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2783,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-02-15T16:22:21Z",
+      "side": 1,
+      "message": "ref",
+      "range": {
+        "startLine": 2783,
+        "startChar": 0,
+        "endLine": 2783,
+        "endChar": 65
+      },
+      "revId": "c5c3230b2aa07d2f030d5c1136aa821024c0ee12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

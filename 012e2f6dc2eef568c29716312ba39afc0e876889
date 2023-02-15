@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3372762_52307870",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1376,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-02-15T16:22:21Z",
+      "side": 1,
+      "message": "Thanks - I added a test to catch that too.",
+      "parentUuid": "7c6d78f9_86fbef8e",
+      "revId": "012e2f6dc2eef568c29716312ba39afc0e876889",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "95e643c2_ac34bcd6",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-02-15T15:51:41Z",
       "side": 1,
       "message": "ditto",
+      "revId": "012e2f6dc2eef568c29716312ba39afc0e876889",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fbac586_91eedc00",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1535,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-02-15T16:22:21Z",
+      "side": 1,
+      "message": "You\u0027re right, according to the spec:\n\n```\nState which is controlled with Enable and Disable is queried with the command \n\n    boolean IsEnabled( enum cap );\n\nTRUE or FALSE is returned if cap is currently enabled or disabled, respectively.\n\nErrors\n\n    An INVALID_ENUM error is generated if cap is not enable state queriable with IsEnabled.\n```\n\nI tried updating this, but it appears ANGLE doesn\u0027t have a distinction between whether I can query the value with `glIsEnabled` or `glGetBooleanv`.  `ValidateIsEnabled` only checks whether the value can be queried.  See ref for where I tried this, we end up asserting in `getEnableFeature`.",
+      "parentUuid": "95e643c2_ac34bcd6",
       "revId": "012e2f6dc2eef568c29716312ba39afc0e876889",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
