@@ -52,6 +52,24 @@
       "parentUuid": "31199546_df634a24",
       "revId": "b2d72cf584ac7279dc65cee4a575e004acbf953b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f4dd7f7_f8b8b314",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-15T03:17:09Z",
+      "side": 1,
+      "message": "Ah right I see your point. Let me think it over. It\u0027ll be a lot of error-prone work to switch to using raw memory and placement new/delete.\n\nSo I guess first question is, is this a theoretical fix or are we getting hurt anywhere without the destructor calls? If there is no evidence of this mattering anywhere, I\u0027d say just leave the class be.\n\nOtherwise, the current CL is probably a good compromise as-is.",
+      "parentUuid": "d2302476_142e01c9",
+      "revId": "b2d72cf584ac7279dc65cee4a575e004acbf953b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
