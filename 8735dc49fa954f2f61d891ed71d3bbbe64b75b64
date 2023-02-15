@@ -94,6 +94,30 @@
       },
       "revId": "8735dc49fa954f2f61d891ed71d3bbbe64b75b64",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9846cc0_96a0e309",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 966,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-15T17:44:14Z",
+      "side": 1,
+      "message": "\u003e From your fix, it looks like just missing a flush, would Context::unsetDefaultFramebuffer() make the flush call fix it?\nANGLE_CONTEXT_TRY(mImplementation-\u003eflush(this));\n\nIt may be skipped...\n\n```\n    if (mRenderer-\u003egetFeatures().deferFlushUntilEndRenderPass.enabled \u0026\u0026 hasActiveRenderPass() \u0026\u0026\n        !frontBufferRenderingEnabled)\n    {\n        mHasDeferredFlush \u003d true;\n        return angle::Result::Continue;\n    }\n```",
+      "parentUuid": "9bc0da28_8c72fcc6",
+      "range": {
+        "startLine": 966,
+        "startChar": 27,
+        "endLine": 966,
+        "endChar": 67
+      },
+      "revId": "8735dc49fa954f2f61d891ed71d3bbbe64b75b64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
