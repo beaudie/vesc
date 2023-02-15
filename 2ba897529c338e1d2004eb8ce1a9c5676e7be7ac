@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21ac374e_eb290e74",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-15T00:39:45Z",
+      "side": 1,
+      "message": "nit: unnecessary comment is unnecessary",
+      "range": {
+        "startLine": 681,
+        "startChar": 40,
+        "endLine": 681,
+        "endChar": 74
+      },
+      "revId": "2ba897529c338e1d2004eb8ce1a9c5676e7be7ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
