@@ -16,6 +16,24 @@
       "message": "I also had similar concern, but was thinking we may never run into this. Is there real usage case hit by this?",
       "revId": "258a92c04974ca106ed4900e8ece4d66f35084bb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4e4edb5_f149a2ad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-16T18:47:55Z",
+      "side": 1,
+      "message": "Almost every new texture usage will transfer from UNDEFINED. Without this revert there will be unnecessary execution dependency with all previously submitted commands. Hard to tell how it may impact real-World performance.\n\nIn any case. If I reverted real fix it should be applied separately and not with an actual bug fix.",
+      "parentUuid": "97ce22fb_582ad480",
+      "revId": "258a92c04974ca106ed4900e8ece4d66f35084bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
