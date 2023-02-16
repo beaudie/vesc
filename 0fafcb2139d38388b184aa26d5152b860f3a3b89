@@ -176,6 +176,24 @@
       "parentUuid": "62bff124_f59efd8e",
       "revId": "0fafcb2139d38388b184aa26d5152b860f3a3b89",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc5a9472_14023294",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-16T14:49:14Z",
+      "side": 1,
+      "message": "\u003e The second suggestion I like more.\n\nThought again...\nWe also have states in `ContextVk`: `mLastSubmittedQueueSerial` `mSubmittedResourceUse` that will conflict with the naming.\nNeed also rename to something: `mLastEnqueuedQueueSerial` and `mEnqueuedResourceUse`.\n\nBasically, rename **everything** `submitted` to `enqueued` - a lot of changes.\n\nThis way `RendereVk` will act like it is performing everything async.\nBut in case of using `CommandQueue` it will be actually synchronous - implementation details.",
+      "parentUuid": "df8968b6_f988e161",
+      "revId": "0fafcb2139d38388b184aa26d5152b860f3a3b89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
