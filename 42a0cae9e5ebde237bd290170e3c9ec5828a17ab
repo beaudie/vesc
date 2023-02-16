@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3f9da38f_d2940c1a",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-16T21:43:04Z",
+      "side": 1,
+      "message": "Can be slightly optimized here to do nothing if mNeedCommandsAndGarbageCleanup is already true. if(!mNeedCommandsAndGarbageCleanup){...}",
+      "range": {
+        "startLine": 573,
+        "startChar": 0,
+        "endLine": 575,
+        "endChar": 41
+      },
+      "revId": "42a0cae9e5ebde237bd290170e3c9ec5828a17ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "275f08fb_dd8cad4c",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
         "patchSetId": 13
