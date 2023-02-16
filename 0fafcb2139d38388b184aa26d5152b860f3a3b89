@@ -212,6 +212,24 @@
       "parentUuid": "fc5a9472_14023294",
       "revId": "0fafcb2139d38388b184aa26d5152b860f3a3b89",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b90a2ea2_86f85bd4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-16T18:13:09Z",
+      "side": 1,
+      "message": "\u003e I don\u0027t think ContextVk has any confusion. From ContextVk\u0027s point of view it has been submitted once it calls rendererVk-\u003esubmitCommands. What rendererVk does is irrelavent here. The class API should only reflect its own state, in this case contextVk should only care about ContextVk itself.\n\nThis in case if rename:\n\n\u003e Or rename RendererVk::hasQueueSerialSubmitted to hasQueueSerialEnqueued (as well as others). So even if NOT using CommandProcessor status will still be enqueued (but also submitted as an implementation details).\n\nConfusion in the `RendererVk` API.\nIt has `submit` in all methods, but also has `waitFor(*)ToBeSubmitted`. It is not clear why we need to wait if not look inside the `RendererVk` implementation details.\n\nThat is why need to add `ToDevice` (1) **or** rename in the `RendererVk` word `submit` to `enqueue` (2) to match `CommandProcessor` API.\n\nIf choose (2) than states in `ContextVk` would not longer reflect truth.\nBecause it will call `rendererVk-\u003eenqueueSubmitCommands`.",
+      "parentUuid": "2a2a4e2a_b5d6d85b",
+      "revId": "0fafcb2139d38388b184aa26d5152b860f3a3b89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
