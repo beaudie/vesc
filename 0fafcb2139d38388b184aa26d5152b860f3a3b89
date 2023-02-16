@@ -194,6 +194,24 @@
       "parentUuid": "df8968b6_f988e161",
       "revId": "0fafcb2139d38388b184aa26d5152b860f3a3b89",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a2a4e2a_b5d6d85b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-16T18:01:53Z",
+      "side": 1,
+      "message": "I don\u0027t think ContextVk has any confusion. From ContextVk\u0027s point of view it has been submitted once it calls rendererVk-\u003esubmitCommands. What rendererVk does is irrelavent here. The class API should only reflect its own state, in this case contextVk should only care about ContextVk itself.",
+      "parentUuid": "fc5a9472_14023294",
+      "revId": "0fafcb2139d38388b184aa26d5152b860f3a3b89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
