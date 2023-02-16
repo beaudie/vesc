@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "275f08fb_dd8cad4c",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-02-16T18:48:06Z",
+      "side": 1,
+      "message": "nit: Extra space?",
+      "revId": "42a0cae9e5ebde237bd290170e3c9ec5828a17ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73d9abf4_fc322953",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-02-16T18:48:06Z",
+      "side": 1,
+      "message": "nit: `false`",
+      "range": {
+        "startLine": 759,
+        "startChar": 37,
+        "endLine": 759,
+        "endChar": 38
+      },
+      "revId": "42a0cae9e5ebde237bd290170e3c9ec5828a17ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "118db22f_18fb52c4",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1585,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-02-16T18:48:06Z",
+      "side": 1,
+      "message": "nit: `finishedCount \u003e 0`?",
+      "range": {
+        "startLine": 1585,
+        "startChar": 26,
+        "endLine": 1585,
+        "endChar": 58
+      },
+      "revId": "42a0cae9e5ebde237bd290170e3c9ec5828a17ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
