@@ -837,13 +837,9 @@ void CommandProcessor::present(egl::ContextPriority priority,
     ASSERT(presentInfo.pResults == nullptr);
 
     mCommandQueue->queuePresent(priority, presentInfo, swapchainStatus);
-
-    {
-        std::unique_lock<std::mutex> lock(swapchainStatus->mutex);
-        ASSERT(swapchainStatus->isPending);
-        swapchainStatus->isPending = false;
-    }
-    swapchainStatus->condVar.notify_all();
+    ASSERT(swapchainStatus->isPending);
+    // Always make sure update isPending after status has been updated.
+    swapchainStatus->isPending = false;
 }
 
 angle::Result CommandProcessor::submitCommands(Context *context,
@@ -900,15 +896,12 @@ void CommandProcessor::queuePresent(egl::ContextPriority contextPriority,
                                     const VkPresentInfoKHR &presentInfo,
                                     SwapchainStatus *swapchainStatus)
 {
-    {
-        std::lock_guard<std::mutex> lock(swapchainStatus->mutex);
-        ASSERT(!swapchainStatus->isPending);
-        swapchainStatus->isPending = true;
-        // Always return with VK_SUCCESS initially. When we call acquireNextImage we'll check the
-        // return code again. This allows the app to continue working until we really need to know
-        // the return code from present.
-        swapchainStatus->lastPresentResult = VK_SUCCESS;
-    }
+    ASSERT(!swapchainStatus->isPending);
+    swapchainStatus->isPending = true;
+    // Always return with VK_SUCCESS initially. When we call acquireNextImage we'll check the
+    // return code again. This allows the app to continue working until we really need to know
+    // the return code from present.
+    swapchainStatus->lastPresentResult = VK_SUCCESS;
 
     CommandProcessorTask task;
     task.initPresent(contextPriority, presentInfo, swapchainStatus);
@@ -986,7 +979,7 @@ bool CommandProcessor::hasUnsubmittedUse(const vk::ResourceUse &use) const
     return false;
 }
 
-angle::Result CommandProcessor::waitForResourceUseToBeSubmitted(vk::Context *context,
+angle::Result CommandProcessor::waitForResourceUseToBeSubmitted(Context *context,
                                                                 const ResourceUse &use)
 {
     if (mCommandQueue->hasUnsubmittedUse(use))
@@ -1012,6 +1005,27 @@ angle::Result CommandProcessor::waitForResourceUseToBeSubmitted(vk::Context *con
     {
         ANGLE_TRY(checkAndPopPendingError(context));
     }
+    return angle::Result::Continue;
+}
+
+angle::Result CommandProcessor::waitForPresentToBeSubmitted(SwapchainStatus *swapchainStatus)
+{
+    std::lock_guard<std::mutex> dequeueLock(mTaskDequeueMutex);
+    if (!swapchainStatus->isPending)
+    {
+        return angle::Result::Continue;
+    }
+
+    size_t maxTaskCount = mTaskQueue.size();
+    size_t taskCount    = 0;
+    while (taskCount < maxTaskCount && swapchainStatus->isPending)
+    {
+        CommandProcessorTask task(std::move(mTaskQueue.front()));
+        mTaskQueue.pop();
+        ANGLE_TRY(processTask(&task));
+        taskCount++;
+    }
+    ASSERT(!swapchainStatus->isPending);
     return angle::Result::Continue;
 }
 
