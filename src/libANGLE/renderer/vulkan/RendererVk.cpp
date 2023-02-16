@@ -5346,6 +5346,7 @@ void RendererVk::queuePresent(vk::Context *context,
     else
     {
         mCommandQueue.queuePresent(priority, presentInfo, swapchainStatus);
+        ASSERT(!swapchainStatus->isPending);
     }
 
     if (getFeatures().logMemoryReportStats.enabled)
