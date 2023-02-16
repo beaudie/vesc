@@ -52,6 +52,57 @@
       "parentUuid": "a4e4edb5_f149a2ad",
       "revId": "258a92c04974ca106ed4900e8ece4d66f35084bb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba3f1acd_35f51955",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-16T21:07:55Z",
+      "side": 1,
+      "message": "Ack, sorry I gave a bad recommendation about this :-S",
+      "revId": "258a92c04974ca106ed4900e8ece4d66f35084bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6466db3b_68f39b98",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-16T21:07:55Z",
+      "side": 1,
+      "message": "I\u0027m not sure this is correct. The layout transition itself is a write operation (e.g. it could decompress the image) which needs to synchronize with the previous operations. Does this synchronize correctly?\n\n- Color write\n- Barrier Color-\u003eBottom, transition Color-\u003ePresent: decompress the image\n- Present\n\nThe present itself is synchronized with semaphore right, and memory barrier is automatic. But it seems to me that the layout transition barrier should be Color-\u003eTop, so decompression happens after Color (-\u003eBottom doesn\u0027t synchronize it)",
+      "revId": "258a92c04974ca106ed4900e8ece4d66f35084bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e08dd1ee_b6025877",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-16T21:07:55Z",
+      "side": 1,
+      "message": "nit: You might as well set this 0. We never transition _to_ this layout.",
+      "revId": "258a92c04974ca106ed4900e8ece4d66f35084bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
