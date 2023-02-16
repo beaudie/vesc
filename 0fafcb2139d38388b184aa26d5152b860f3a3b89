@@ -158,6 +158,24 @@
       "parentUuid": "d35098f6_1e5dd54b",
       "revId": "0fafcb2139d38388b184aa26d5152b860f3a3b89",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df8968b6_f988e161",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-16T11:04:20Z",
+      "side": 1,
+      "message": "My point was confusing naming not only in `CommandProcessor`, but also in the `RendererVk`.\n\n```\nangle::Result RendererVk::waitForResourceUseToBeSubmitted(\n    vk::Context *context, const vk::ResourceUse \u0026use)\n\nbool RendererVk::hasQueueSerialSubmitted(const QueueSerial \u0026queueSerial) const\n{\n    if (isAsyncCommandQueueEnabled())\n    {\n        return mCommandProcessor.hasQueueSerialEnqueued(queueSerial);\n    }\n    else\n    {\n        return mCommandQueue.hasQueueSerialSubmitted(queueSerial);\n    }\n}\n```\n\nCorrect name in the `CommandProcessor` is an implementation details.\n\nMaybe rename only `RendererVk::waitFor(*)ToBeSubmitted` methods by adding `ToDevice`?\nThis way there will be at least some difference in `hasQueueSerialSubmitted` (not necessarily to Device...) and `waitForResourceUseToBeSubmittedToDevice`.\n\nOr rename `RendererVk::hasQueueSerialSubmitted` to `hasQueueSerialEnqueued` (as well as others). So even if NOT using `CommandProcessor` status will still be *enqueued* (but also *submitted* as an implementation details).\n\nThe second suggestion I like more.",
+      "parentUuid": "62bff124_f59efd8e",
+      "revId": "0fafcb2139d38388b184aa26d5152b860f3a3b89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
