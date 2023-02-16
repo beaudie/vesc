@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65847dfd_6a67a690",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1098,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-16T15:06:22Z",
+      "side": 1,
+      "message": "This doesn\u0027t read correct. `hasUnsubmittedUse` means that the resource is used in a command buffer that hasn\u0027t been submitted yet (to either command queue or command processor).\n\n`!hasResourceUseEnqueued` means that it hasn\u0027t been enqueued. That doesn\u0027t mean that it has otherwise been used in any command buffers. An unused resource also doesn\u0027t have an \"enqueued resource use\".\n\nDoesn\u0027t `hasRecordedUse` disambiguate it everywhere?",
+      "revId": "d95ae51c923cfaa373a0177becbb78616ab740fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
