@@ -2935,9 +2935,12 @@ def main():
         header_includes = TEMPLATE_HEADER_INCLUDES.format(
             major=major_if_not_one, minor=minor_if_not_zero)
 
-        # We include the platform.h header since it undefines the conflicting MemoryBarrier macro.
         if major_version == 3 and minor_version == 1:
-            header_includes += "\n#include \"common/platform.h\"\n"
+            header_includes += """
+// The MemoryBarrier function name collides with a macro under Windows
+// We will undef the macro so that the function name does not get replaced
+#undef MemoryBarrier
+"""
 
         version_annotation = "%s%s" % (major_version, minor_if_not_zero)
         source_includes = TEMPLATE_SOURCES_INCLUDES.format(

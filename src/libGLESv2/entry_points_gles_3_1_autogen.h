@@ -13,7 +13,9 @@
 
 #include <GLES3/gl31.h>
 #include <export.h>
-#include "common/platform.h"
+// The MemoryBarrier function name collides with a macro under Windows
+// We will undef the macro so that the function name does not get replaced
+#undef MemoryBarrier
 
 extern "C" {
 ANGLE_EXPORT void GL_APIENTRY GL_ActiveShaderProgram(GLuint pipeline, GLuint program);
