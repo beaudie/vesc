@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e224c2fc_9dac5202",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-16T15:08:49Z",
+      "side": 1,
+      "message": "Same comment as the other change.\n\n```\nUnsubmitted use \u003d is_used \u0026\u0026 !submitted\nSubmitted use \u003d is_used \u0026\u0026 submitted\n```\n\nThey are not complements.",
+      "revId": "b47807de0fa06212a0bdba2fafcd80c11c01115b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
