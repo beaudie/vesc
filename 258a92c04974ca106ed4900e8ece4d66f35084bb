@@ -34,6 +34,24 @@
       "parentUuid": "97ce22fb_582ad480",
       "revId": "258a92c04974ca106ed4900e8ece4d66f35084bb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f292759c_a48dff6d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-16T19:27:55Z",
+      "side": 1,
+      "message": "Actually, I think that `ImageLayout::Present` needs extra execution dependency for the layout transition operation itself:\n\nhttps://github.com/KhronosGroup/Vulkan-Docs/wiki/Synchronization-Examples#combined-graphicspresent-queue\nhttps://vulkan-tutorial.com/Drawing_a_triangle/Drawing/Rendering_and_presentation\n\nAs I understand this, we need to have a dependency chain from acquire semaphore. For this chain to happen, *source stage* in the barrier should match stages in the `pWaitSemaphores` which are stages where image may be accessed.\n\nCurrently we use only `VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT` stage.\nHowever swapchain image is also accessed by `VK_PIPELINE_STAGE_TRANSFER_BIT`.\nThe G996B has tearing because of the wrong barrier if only do full screen clears with random color. I plan to push the fix.\n\nSo after the above fix need to add:\n`VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_TRANSFER_BIT`\nto the *source stages* for `ImageLayout::Present` barrier.",
+      "parentUuid": "a4e4edb5_f149a2ad",
+      "revId": "258a92c04974ca106ed4900e8ece4d66f35084bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
