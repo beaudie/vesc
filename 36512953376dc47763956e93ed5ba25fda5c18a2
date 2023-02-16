@@ -16,6 +16,24 @@
       "message": "+Brian FYI because I think this has caused issues on ChromeOS in the past.",
       "revId": "36512953376dc47763956e93ed5ba25fda5c18a2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35d4490e_12c9fcb2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1567582
+      },
+      "writtenOn": "2023-02-16T15:56:46Z",
+      "side": 1,
+      "message": "For reference, described here: https://chromium-review.googlesource.com/c/angle/angle/+/4152531/comments/afeee8ac_5502e407",
+      "parentUuid": "a0764883_5c953938",
+      "revId": "36512953376dc47763956e93ed5ba25fda5c18a2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
