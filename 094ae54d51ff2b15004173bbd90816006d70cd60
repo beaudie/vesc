@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a91ceafd_a548505a",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1247,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-02-16T15:55:01Z",
+      "side": 1,
+      "message": "Since this one is query-only and should be initialized by the backend, it should live in the Caps struct.",
+      "range": {
+        "startLine": 1247,
+        "startChar": 4,
+        "endLine": 1247,
+        "endChar": 44
+      },
+      "revId": "094ae54d51ff2b15004173bbd90816006d70cd60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
