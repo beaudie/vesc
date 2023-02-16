@@ -33,6 +33,24 @@
       "message": "Shabi, does this look OK to you?",
       "revId": "75c3aa67feae7d10dcf6e1afa8cce06f72e6c66f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "57c18c9a_f6799cbd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-16T16:53:09Z",
+      "side": 1,
+      "message": "Yeap! Thanks",
+      "parentUuid": "11c0bebc_67503f04",
+      "revId": "75c3aa67feae7d10dcf6e1afa8cce06f72e6c66f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
