@@ -93,6 +93,30 @@
       },
       "revId": "428e4d0ef72fd53dc7b03a4d10b6dee5683be8a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33e6e90a_f4f86caf",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-16T00:49:00Z",
+      "side": 1,
+      "message": "https://chromium-review.googlesource.com/c/angle/angle/+/4257927",
+      "parentUuid": "937dedc9_462cf6b0",
+      "range": {
+        "startLine": 879,
+        "startChar": 0,
+        "endLine": 882,
+        "endChar": 22
+      },
+      "revId": "428e4d0ef72fd53dc7b03a4d10b6dee5683be8a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
