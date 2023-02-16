@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a897f8b_424ce48a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-16T17:41:31Z",
+      "side": 1,
+      "message": "Low priority. Finished implementation because was already half way there and did not want that time to be wasted.",
+      "revId": "495cd33a4c68a9c0ffa5d48bd3337af8a0878185",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
