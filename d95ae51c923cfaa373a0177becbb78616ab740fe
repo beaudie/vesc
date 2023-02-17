@@ -26,6 +26,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fb1b8686_a028ffb4",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-17T04:33:59Z",
+      "side": 1,
+      "message": "Suggest `use \u003c\u003d ...` or `!(use \u003e ...)`. `? false : true` is just `!`",
+      "revId": "d95ae51c923cfaa373a0177becbb78616ab740fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "65847dfd_6a67a690",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 2
@@ -55,6 +72,24 @@
       "side": 1,
       "message": "An unused resource will have serial 0 which will appears as submitted and finished. Everybody born with submitted and finished. This is different from the time we were using ResourceList.\n\nhasRecordedUse says it has been recorded. A recorded and submitted resource also has been recorded. The answer here we are looking for is if it has been submitted or not, not really if it has been recorded or not. So IMO, recorded is a poor word here.\n\nYes, in this CL, it does not read nicely here because you are returning \"!\". That will be fixed in the next CL. \n\nWe can discuss more off line.",
       "parentUuid": "65847dfd_6a67a690",
+      "revId": "d95ae51c923cfaa373a0177becbb78616ab740fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db19f969_351bca7b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1098,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-17T04:33:59Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "85b3068c_cbef058a",
       "revId": "d95ae51c923cfaa373a0177becbb78616ab740fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
