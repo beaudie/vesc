@@ -16,6 +16,24 @@
       "message": "This is never called!",
       "revId": "dc4145c819b4d75296d7efc3c65085980703140a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "776dc382_83951488",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1013,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-17T17:36:34Z",
+      "side": 1,
+      "message": "It is called from RendererVk.cpp line 1114",
+      "parentUuid": "9eb9b337_98e42422",
+      "revId": "dc4145c819b4d75296d7efc3c65085980703140a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
