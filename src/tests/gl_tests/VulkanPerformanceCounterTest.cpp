@@ -5,7 +5,7 @@
 //
 // VulkanPerformanceCounterTest:
 //   Validates specific GL call patterns with ANGLE performance counters.
-//   For example we can verify a certain call set doesn't break the RenderPass.
+//   For example we can verify a certain call set doesn't break the render pass.
 
 #include "test_utils/ANGLETest.h"
 #include "test_utils/angle_test_instantiate.h"
@@ -6991,6 +6991,70 @@ TEST_P(VulkanPerformanceCounterTest, EndXfbAfterRenderPassClosed)
     EXPECT_EQ(getPerfCounters().renderPasses, expectedRenderPassCount);
 }
 
+<<<<<<< HEAD   (ceec65 M108: Vulkan: Disable logicOp dynamic state on Intel/Mesa)
+=======
+// Verify that monolithic pipeline handles correctly replace the linked pipelines, if
+// VK_EXT_graphics_pipeline_library is supported.
+TEST_P(VulkanPerformanceCounterTest, AsyncMonolithicPipelineCreation)
+{
+    const bool hasAsyncMonolithicPipelineCreation =
+        isFeatureEnabled(Feature::SupportsGraphicsPipelineLibrary) &&
+        isFeatureEnabled(Feature::PreferMonolithicPipelinesOverLibraries);
+    ANGLE_SKIP_TEST_IF(!hasAsyncMonolithicPipelineCreation);
+
+    uint64_t expectedMonolithicPipelineCreationCount =
+        getPerfCounters().monolithicPipelineCreation + 2;
+
+    // Create two programs:
+    ANGLE_GL_PROGRAM(drawRed, essl3_shaders::vs::Simple(), essl3_shaders::fs::Red());
+    ANGLE_GL_PROGRAM(drawGreen, essl3_shaders::vs::Simple(), essl3_shaders::fs::Green());
+
+    // Ping pong between the programs, letting async monolithic pipeline creation happen.
+    uint32_t drawCount                 = 0;
+    constexpr uint32_t kDrawCountLimit = 200;
+
+    while (getPerfCounters().monolithicPipelineCreation < expectedMonolithicPipelineCreationCount)
+    {
+        drawQuad(drawGreen, essl3_shaders::PositionAttrib(), 0.0f);
+        drawQuad(drawRed, essl3_shaders::PositionAttrib(), 0.0f);
+
+        ++drawCount;
+        if (drawCount > kDrawCountLimit)
+        {
+            drawCount = 0;
+            EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+        }
+    }
+
+    // Make sure the monolithic pipelines are replaced correctly
+    drawQuad(drawGreen, essl3_shaders::PositionAttrib(), 0.0f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+
+    drawQuad(drawRed, essl3_shaders::PositionAttrib(), 0.0f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+}
+
+// Verify that changing framebuffer and back doesn't break the render pass.
+TEST_P(VulkanPerformanceCounterTest, FBOChangeAndBackDoesNotBreakRenderPass)
+{
+    uint64_t expectedRenderPassCount = getPerfCounters().renderPasses + 1;
+
+    ANGLE_GL_PROGRAM(drawRed, essl3_shaders::vs::Simple(), essl3_shaders::fs::Red());
+    drawQuad(drawRed, essl1_shaders::PositionAttrib(), 0);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    drawQuad(drawRed, essl1_shaders::PositionAttrib(), 0);
+
+    // Verify render pass count.
+    EXPECT_EQ(getPerfCounters().renderPasses, expectedRenderPassCount);
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+}
+
+>>>>>>> CHANGE (05e62f Vulkan: Don't close render pass if rebind to same fbo)
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(VulkanPerformanceCounterTest);
 ANGLE_INSTANTIATE_TEST(VulkanPerformanceCounterTest, ES3_VULKAN(), ES3_VULKAN_SWIFTSHADER());
 
