@@ -1629,16 +1629,13 @@ angle::Result CommandQueue::ensurePrimaryCommandBufferValid(Context *context,
 angle::Result CommandQueue::retireFinishedCommandsAndCleanupGarbage(Context *context)
 {
     RendererVk *renderer = context->getRenderer();
-    if (renderer->isAsyncCommandBufferResetEnabled())
+    if (!renderer->isAsyncCommandBufferResetEnabled())
     {
-        renderer->requestAsyncCommandsAndGarbageCleanup(context);
-    }
-    else
-    {
-        // Do immediate clean up
+        // Do immediate command buffer reset
         ANGLE_TRY(retireFinishedCommandsLocked(context));
-        renderer->cleanupGarbage();
     }
+
+    renderer->requestAsyncCommandsAndGarbageCleanup(context);
 
     return angle::Result::Continue;
 }
