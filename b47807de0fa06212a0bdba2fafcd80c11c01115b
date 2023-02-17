@@ -34,6 +34,24 @@
       "parentUuid": "e224c2fc_9dac5202",
       "revId": "b47807de0fa06212a0bdba2fafcd80c11c01115b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36fff020_962c654f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-17T04:31:43Z",
+      "side": 1,
+      "message": "I\u0027m ok with that convention.",
+      "parentUuid": "cb677efa_9ba77011",
+      "revId": "b47807de0fa06212a0bdba2fafcd80c11c01115b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
