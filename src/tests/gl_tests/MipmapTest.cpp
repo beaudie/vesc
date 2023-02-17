@@ -59,8 +59,8 @@ class MipmapTest : public BaseMipmapTest
           mTexture2D(0),
           mTextureCube(0),
           m3DProgram(0),
+          mLevelZeroBlackInitData(),
           mLevelZeroBlueInitData(),
-          mLevelZeroWhiteInitData(),
           mLevelOneGreenInitData(),
           mLevelTwoRedInitData(),
           mOffscreenFramebuffer(0)
@@ -183,10 +183,10 @@ void main()
 
         setUp3DProgram();
 
+        mLevelZeroBlackInitData =
+            createRGBInitData(getWindowWidth(), getWindowHeight(), 0, 0, 0);  // Black
         mLevelZeroBlueInitData =
             createRGBInitData(getWindowWidth(), getWindowHeight(), 0, 0, 255);  // Blue
-        mLevelZeroWhiteInitData =
-            createRGBInitData(getWindowWidth(), getWindowHeight(), 255, 255, 255);  // White
         mLevelOneGreenInitData =
             createRGBInitData((getWindowWidth() / 2), (getWindowHeight() / 2), 0, 255, 0);  // Green
         mLevelTwoRedInitData =
@@ -205,11 +205,23 @@ void main()
         ASSERT_EQ(getWindowWidth(), getWindowHeight());
 
         // Create a non-mipped texture cube. Set the negative-Y face to be blue.
+        // The other sides of the cube map have been set to black.
         glGenTextures(1, &mTextureCube);
         glBindTexture(GL_TEXTURE_CUBE_MAP, mTextureCube);
         TexImageCubeMapFaces(0, GL_RGB, getWindowWidth(), GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGB, getWindowWidth(), getWindowWidth(),
+                     0, GL_RGB, GL_UNSIGNED_BYTE, mLevelZeroBlackInitData.data());
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGB, getWindowWidth(), getWindowWidth(),
+                     0, GL_RGB, GL_UNSIGNED_BYTE, mLevelZeroBlackInitData.data());
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGB, getWindowWidth(), getWindowWidth(),
+                     0, GL_RGB, GL_UNSIGNED_BYTE, mLevelZeroBlackInitData.data());
         glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGB, getWindowWidth(), getWindowWidth(),
                      0, GL_RGB, GL_UNSIGNED_BYTE, mLevelZeroBlueInitData.data());
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGB, getWindowWidth(), getWindowWidth(),
+                     0, GL_RGB, GL_UNSIGNED_BYTE, mLevelZeroBlackInitData.data());
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGB, getWindowWidth(), getWindowWidth(),
+                     0, GL_RGB, GL_UNSIGNED_BYTE, mLevelZeroBlackInitData.data());
 
         // Complete the texture cube without mipmaps to start with.
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -266,8 +278,8 @@ void main()
     GLint mTexture3DSliceUniformLocation;
     GLint mTexture3DLODUniformLocation;
 
+    std::vector<GLubyte> mLevelZeroBlackInitData;
     std::vector<GLubyte> mLevelZeroBlueInitData;
-    std::vector<GLubyte> mLevelZeroWhiteInitData;
     std::vector<GLubyte> mLevelOneGreenInitData;
     std::vector<GLubyte> mLevelTwoRedInitData;
 
