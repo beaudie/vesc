@@ -471,6 +471,8 @@ angle::Result UploadTextureContentsWithStagingBuffer(ContextMtl *contextMtl,
                                                      size_t bytesPer2DImage,
                                                      const mtl::TextureRef &texture)
 {
+
+    (void)CopyCompressedTextureContentsToStagingBuffer;
     ASSERT(texture && texture->valid());
 
     angle::FormatID stagingBufferFormatID   = textureAngleFormat.id;
@@ -480,33 +482,11 @@ angle::Result UploadTextureContentsWithStagingBuffer(ContextMtl *contextMtl,
     size_t stagingBuffer2DImageSize;
     mtl::BufferRef stagingBuffer;
 
-    // Block-compressed formats need a bit of massaging for copy.
-    if (textureAngleFormat.isBlock)
-    {
-        GLenum internalFormat         = textureAngleFormat.glInternalFormat;
-        const gl::InternalFormat &fmt = gl::GetSizedInternalFormatInfo(internalFormat);
-        MTLRegion newRegion           = region;
-        bytesPerRow =
-            (region.size.width + fmt.compressedBlockWidth - 1) / fmt.compressedBlockWidth * 16;
-        bytesPer2DImage = (region.size.height + fmt.compressedBlockHeight - 1) /
-                          fmt.compressedBlockHeight * bytesPerRow;
-        newRegion.size.width =
-            (region.size.width + fmt.compressedBlockWidth - 1) / fmt.compressedBlockWidth;
-        newRegion.size.height =
-            (region.size.height + fmt.compressedBlockHeight - 1) / fmt.compressedBlockHeight;
-        ANGLE_TRY(CopyCompressedTextureContentsToStagingBuffer(
-            contextMtl, angleStagingFormat, newRegion.size, data, bytesPerRow, bytesPer2DImage,
-            &stagingBufferRowPitch, &stagingBuffer2DImageSize, &stagingBuffer));
-    }
-    // Copy to staging buffer before uploading to texture.
-    else
-    {
-        ANGLE_TRY(CopyTextureContentsToStagingBuffer(
-            contextMtl, angleStagingFormat, region.size, data, bytesPerRow, bytesPer2DImage,
-            &stagingBufferRowPitch, &stagingBuffer2DImageSize, &stagingBuffer));
-    }
-    mtl::BlitCommandEncoder *encoder = contextMtl->getBlitCommandEncoder();
+    ANGLE_TRY(CopyTextureContentsToStagingBuffer(
+        contextMtl, angleStagingFormat, region.size, data, bytesPerRow, bytesPer2DImage,
+        &stagingBufferRowPitch, &stagingBuffer2DImageSize, &stagingBuffer));
 
+    mtl::BlitCommandEncoder *encoder = contextMtl->getBlitCommandEncoder();
     encoder->copyBufferToTexture(stagingBuffer, 0, stagingBufferRowPitch, stagingBuffer2DImageSize,
                                  region.size, texture, slice, mipmapLevel, region.origin, 0);
 
@@ -530,7 +510,8 @@ angle::Result UploadTextureContents(const gl::Context *context,
     const angle::FeaturesMtl &features = contextMtl->getDisplay()->getFeatures();
 
     bool forceStagedUpload =
-        texture->hasIOSurface() && features.uploadDataToIosurfacesWithStagingBuffers.enabled;
+        (texture->hasIOSurface() && features.uploadDataToIosurfacesWithStagingBuffers.enabled) ||
+        features.alwaysPreferStagedTextureUploads.enabled;
     if (texture->isCPUAccessible() && !forceStagedUpload)
     {
         // If texture is CPU accessible, just call replaceRegion() directly.
