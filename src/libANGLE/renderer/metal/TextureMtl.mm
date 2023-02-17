@@ -529,8 +529,12 @@ angle::Result UploadTextureContents(const gl::Context *context,
 #if !TARGET_OS_SIMULATOR
     const angle::FeaturesMtl &features = contextMtl->getDisplay()->getFeatures();
 
+    const mtl::Format &mtlFormat = contextMtl->getPixelFormat(textureAngleFormat.id);
+    bool compressedMtlFormat     = mtlFormat.actualAngleFormat().isBlock;
     bool forceStagedUpload =
-        texture->hasIOSurface() && features.uploadDataToIosurfacesWithStagingBuffers.enabled;
+        ((texture->hasIOSurface() && features.uploadDataToIosurfacesWithStagingBuffers.enabled) ||
+         features.alwaysPreferStagedTextureUploads.enabled) &&
+        !compressedMtlFormat;
     if (texture->isCPUAccessible() && !forceStagedUpload)
     {
         // If texture is CPU accessible, just call replaceRegion() directly.
