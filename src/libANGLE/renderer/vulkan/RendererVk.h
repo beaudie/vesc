@@ -1186,7 +1186,6 @@ ANGLE_INLINE angle::Result RendererVk::waitForPresentToBeSubmitted(
 
 ANGLE_INLINE void RendererVk::requestAsyncCommandsAndGarbageCleanup(vk::Context *context)
 {
-    ASSERT(isAsyncCommandBufferResetEnabled());
     mCommandProcessor.requestCommandsAndGarbageCleanup();
 }
 
