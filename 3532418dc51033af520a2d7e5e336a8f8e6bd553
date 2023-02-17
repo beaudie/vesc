@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f42d71e_59478f86",
+        "filename": "src/libANGLE/renderer/serial_utils.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-17T03:29:06Z",
+      "side": 1,
+      "message": "nit: unrelated comment",
+      "revId": "3532418dc51033af520a2d7e5e336a8f8e6bd553",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
