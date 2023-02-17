@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "00c48480_9d3376e9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2023-02-17T19:58:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54bbc26e_e2407d47",
+      "revId": "e049f2beb97e6d72d95f4e8f3998e4943aa6dcee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "853a5386_d2eed4c7",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-02-17T19:49:24Z",
       "side": 1,
       "message": "Should link `b/269606195` as the Bug link.",
+      "revId": "e049f2beb97e6d72d95f4e8f3998e4943aa6dcee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc764dd4_70eec2e0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2023-02-17T19:58:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "853a5386_d2eed4c7",
       "revId": "e049f2beb97e6d72d95f4e8f3998e4943aa6dcee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
