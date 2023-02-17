@@ -90,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ac68526e_4e080efb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-17T12:34:04Z",
+      "side": 1,
+      "message": "\u003e Does this synchronize correctly?\n\nFrom my understanding - yes.\n\n*(all stages shown on a single thread for simplicity)*\n```\nTOP, ..., COLOR, ..., transition color-\u003epresent, ..., BOTTOM, signal semaphore\n                                                              ^\n                                  Presentation Engine waits --|\n```\nLayout transitions happens between source and destination stages, and will finish before BOTTOM stage. `VkSemaphore` signals at/after the BOTTOM stage. Presentation Engine waits `VkSemaphore` that signals after layout transition finished.\n\n**Problem** may be present when transitioning `present-\u003ecolor`:\n```\nTOP, ..., transition present-\u003ecolor, ..., COLOR, ..., BOTTOM\n                                          ^\n                                          |-- Wait Acquire Semaphore\n```\nLayout transition may happen before semaphore is signaled.\n\n**May be fixed** by using TOP stage in the wait semaphore stage mask:\n```\nTOP, ..., transition present-\u003ecolor, ..., COLOR, ..., BOTTOM\n^\n|-- Wait Acquire Semaphore\n```\n\nUsing BOTTOM as source in the layout transition will **NOT work**:\n```\nTOP, BOTTOM, TOP, ..., transition present-\u003ecolor, ..., COLOR, ..., BOTTOM\n                                                       ^\n                              Wait Acquire Semaphore --|\n```\n\n**Alternative fix**:\n```\nTOP, ..., COLOR, transition present-\u003ecolor, COLOR, ..., BOTTOM\n          ^\n          |-- Wait Acquire Semaphore\n```\nUse COLOR as source in the layout transition and in the wait semaphore stage mask.\nVulkan will insert wait semaphore operation to the COLOR stage at the beginning of the command buffer. This wait operation will be the first execution scope for the layout transition. Second execution scope is a RenderPass COLOR output operation.\nReference: https://github.com/KhronosGroup/Vulkan-Docs/wiki/Synchronization-Examples#combined-graphicspresent-queue\n\nIn other words, acquire semaphore wait stages must include all source stages from the barrier.\n\nI think problem with `present-\u003ecolor` and acquire semaphore should be fixed in a separate CL (as well as any other changes), and leave this commit as revert only.",
+      "parentUuid": "6466db3b_68f39b98",
+      "revId": "258a92c04974ca106ed4900e8ece4d66f35084bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e08dd1ee_b6025877",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 4
@@ -101,6 +119,24 @@
       "writtenOn": "2023-02-16T21:07:55Z",
       "side": 1,
       "message": "nit: You might as well set this 0. We never transition _to_ this layout.",
+      "revId": "258a92c04974ca106ed4900e8ece4d66f35084bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e7af8c2_c8b2f686",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-17T12:34:04Z",
+      "side": 1,
+      "message": "Yes. As well as 42 or 13).\nIf we really need this change, better make separate commit and also add ASSERT that checks for `0` stage in case such transition really happens.",
+      "parentUuid": "e08dd1ee_b6025877",
       "revId": "258a92c04974ca106ed4900e8ece4d66f35084bb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
