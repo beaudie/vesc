@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b384600_017be95e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-17T21:40:16Z",
+      "side": 1,
+      "message": "Shabi, feel free to comment here if any, I will address in the follow up CL.",
+      "revId": "d0c37d1c32b1bd8cf4f3c4f5829f8a0e5658eb21",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
