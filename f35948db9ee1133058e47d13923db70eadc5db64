@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cca824e4_f9077034",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2023-02-17T23:04:29Z",
+      "side": 1,
+      "message": "See bug for example of how wl_display was code gen\u0027d to gl::wl_display",
+      "revId": "f35948db9ee1133058e47d13923db70eadc5db64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
