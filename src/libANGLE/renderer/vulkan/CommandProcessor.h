@@ -426,6 +426,11 @@ class CommandQueue : angle::NonCopyable
     void resetPerFramePerfCounters();
 
     angle::Result retireFinishedCommandsAndCleanupGarbage(Context *context);
+    angle::Result retireFinishedCommands(Context *context)
+    {
+        std::lock_guard<std::mutex> lock(mMutex);
+        return retireFinishedCommandsLocked(context);
+    }
     angle::Result postSubmitCheck(Context *context);
 
     // All these private APIs are called with mutex locked, so we must not take lock again.
@@ -438,7 +443,8 @@ class CommandQueue : angle::NonCopyable
     // Walk mInFlightCommands, check and update mLastCompletedSerials for all commands that are
     // finished
     angle::Result checkCompletedCommandsLocked(Context *context);
-    angle::Result retireFinishedCommandsAndCleanupGarbageLocked(Context *context);
+    // Walk mFinishedCommands, reset and recycle all command buffers.
+    angle::Result retireFinishedCommandsLocked(Context *context);
 
     angle::Result queueSubmit(Context *context,
                               std::unique_lock<std::mutex> &&dequeueLock,
@@ -448,7 +454,6 @@ class CommandQueue : angle::NonCopyable
                               DeviceScoped<CommandBatch> &commandBatch,
                               const QueueSerial &submitQueueSerial);
 
-    angle::Result retireFinishedCommands(Context *context);
     angle::Result ensurePrimaryCommandBufferValid(Context *context, ProtectionType protectionType);
 
     // For validation only. Should only be called with ASSERT macro.
@@ -611,6 +616,8 @@ class CommandProcessor : public Context
     void present(egl::ContextPriority priority,
                  const VkPresentInfoKHR &presentInfo,
                  SwapchainStatus *swapchainStatus);
+
+    angle::Result retireFinishedCommandsAndCleanupGarbage(Context *context);
 
     // The mutex lock that serializes dequeue from mTask and submit to mCommandQueue so that only
     // one mTaskQueue consumer at a time

@@ -609,7 +609,7 @@ angle::Result CommandProcessor::processTasksImpl(bool *exitThread)
         {
             if (mNeedCommandsAndGarbageCleanup.exchange(false))
             {
-                ANGLE_TRY(mCommandQueue->retireFinishedCommandsAndCleanupGarbage(this));
+                ANGLE_TRY(retireFinishedCommandsAndCleanupGarbage(this));
             }
 
             if (mTaskThreadShouldExit)
@@ -757,7 +757,7 @@ angle::Result CommandProcessor::waitForAllWorkToBeSubmitted(Context *context)
         ANGLE_TRY(processTask(&task));
     }
 
-    ANGLE_TRY(mCommandQueue->retireFinishedCommandsAndCleanupGarbage(context));
+    ANGLE_TRY(retireFinishedCommandsAndCleanupGarbage(context));
     mNeedCommandsAndGarbageCleanup = false;
 
     return angle::Result::Continue;
@@ -988,6 +988,17 @@ angle::Result CommandProcessor::waitForPresentToBeSubmitted(SwapchainStatus *swa
     return angle::Result::Continue;
 }
 
+angle::Result CommandProcessor::retireFinishedCommandsAndCleanupGarbage(Context *context)
+{
+    ANGLE_TRY(mCommandQueue->retireFinishedCommands(context));
+
+    // Now immediate clean up RendererVk garbage
+    RendererVk *renderer = context->getRenderer();
+    renderer->cleanupGarbage();
+
+    return angle::Result::Continue;
+}
+
 // CommandQueue public API implementation. These must be thread safe and never called from
 // CommandQueue class itself.
 CommandQueue::CommandQueue() : mPerfCounters{} {}
@@ -1100,7 +1111,7 @@ angle::Result CommandQueue::postSubmitCheck(Context *context)
     {
         ANGLE_TRY(finishOneCommandBatch(context, renderer->getMaxFenceWaitTimeNs()));
         // Immediately clean up finished batches.
-        ANGLE_TRY(retireFinishedCommands(context));
+        ANGLE_TRY(retireFinishedCommandsLocked(context));
         renderer->cleanupGarbage();
         suballocationGarbageSize = renderer->getSuballocationGarbageSize();
     }
@@ -1477,21 +1488,6 @@ void CommandQueue::resetPerFramePerfCounters()
     mPerfCounters.vkQueueSubmitCallsPerFrame      = 0;
 }
 
-angle::Result CommandQueue::retireFinishedCommandsAndCleanupGarbage(Context *context)
-{
-    RendererVk *renderer = context->getRenderer();
-
-    {
-        std::lock_guard<std::mutex> lock(mMutex);
-        ANGLE_TRY(retireFinishedCommands(context));
-    }
-
-    // Now clean up RendererVk garbage
-    renderer->cleanupGarbage();
-
-    return angle::Result::Continue;
-}
-
 // CommandQueue private API implementation. These are called by public API, so lock already held.
 angle::Result CommandQueue::checkOneCommandBatch(Context *context, bool *finished)
 {
@@ -1516,7 +1512,7 @@ angle::Result CommandQueue::checkOneCommandBatch(Context *context, bool *finishe
     // Move command batch to mFinishedCommandBatches.
     if (mFinishedCommandBatches.full())
     {
-        ANGLE_TRY(retireFinishedCommands(context));
+        ANGLE_TRY(retireFinishedCommandsLocked(context));
     }
     mFinishedCommandBatches.push(std::move(batch));
     mInFlightCommands.pop();
@@ -1539,7 +1535,7 @@ angle::Result CommandQueue::finishOneCommandBatch(Context *context, uint64_t tim
     // Move command batch to mFinishedCommandBatches.
     if (mFinishedCommandBatches.full())
     {
-        ANGLE_TRY(retireFinishedCommands(context));
+        ANGLE_TRY(retireFinishedCommandsLocked(context));
     }
     mFinishedCommandBatches.push(std::move(batch));
     mInFlightCommands.pop();
@@ -1572,9 +1568,9 @@ angle::Result CommandQueue::checkCompletedCommandsLocked(Context *context)
     return angle::Result::Continue;
 }
 
-angle::Result CommandQueue::retireFinishedCommands(Context *context)
+angle::Result CommandQueue::retireFinishedCommandsLocked(Context *context)
 {
-    ANGLE_TRACE_EVENT0("gpu.angle", "retireFinishedCommands");
+    ANGLE_TRACE_EVENT0("gpu.angle", "retireFinishedCommandsLocked");
     RendererVk *renderer = context->getRenderer();
     VkDevice device      = renderer->getDevice();
 
