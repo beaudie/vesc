@@ -303,6 +303,24 @@
       "parentUuid": "349c3b1c_0313296c",
       "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2daedcf1_1bedf1d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-17T13:07:07Z",
+      "side": 1,
+      "message": "\u003e Definitely don\u0027t abandon. Didn\u0027t you say it fixes an issue with Samsung Notes? But it may need some time:\n\nYes. Old version. Newer version seems work fine. Did non investigate in details how exactly working old and new versions. We applied this patch in our devices and I not heard about regressions.\n\n\u003e Second, I want to have someone contact that developer of the affected app and get them to properly synchronize. We can\u0027t just break that app\n\nThis app uses different priorities?\n\n\u003e If we require timeline semaphores for that, I suspect it wouldn\u0027t be too hard.\n\nTimeline semaphore is the Vulkan 1.2 or extension. What if the driver does not support this feature?\n\n\u003e Let\u0027s just assume sync objects are necessary, and use that to know when semaphores should be used. \n\nThe `SyncHelperNativeFence::serverWait` already uses semaphore, so it may work across different `VkQueue`s even if have separate command buffers per queue.",
+      "parentUuid": "ec864478_54f9724a",
+      "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
