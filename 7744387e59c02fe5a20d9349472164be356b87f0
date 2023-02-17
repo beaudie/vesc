@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee1c7ab3_e9343f08",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-02-17T19:59:42Z",
+      "side": 1,
+      "message": "supportsSwapchainMaintenance1",
+      "range": {
+        "startLine": 9,
+        "startChar": 20,
+        "endLine": 9,
+        "endChar": 48
+      },
+      "revId": "7744387e59c02fe5a20d9349472164be356b87f0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
