@@ -148,6 +148,7 @@ bool IsAssignment(TOperator op)
         case EOpPreIncrement:
         case EOpPreDecrement:
         case EOpAssign:
+        case EOpInitialize:
         case EOpAddAssign:
         case EOpSubAssign:
         case EOpMulAssign:
