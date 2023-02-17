@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "54bbc26e_e2407d47",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-02-17T19:52:24Z",
+      "side": 1,
+      "message": "Can we add more details to the CL description?\n\ne.g.:\n\nTemporarily disable supportsSwapchainMaintenance1 feature on Android devices\n\nTemporarily disable upportsSwapchainMaintenance1 feature on Android devices\nto unblock the ANGLE-To-Android roller, while the auto-roller failure investigation is taking place.",
+      "revId": "e049f2beb97e6d72d95f4e8f3998e4943aa6dcee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "853a5386_d2eed4c7",
         "filename": "/COMMIT_MSG",
         "patchSetId": 5
