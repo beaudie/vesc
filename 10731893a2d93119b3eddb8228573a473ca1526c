@@ -22,6 +22,30 @@
       },
       "revId": "10731893a2d93119b3eddb8228573a473ca1526c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b40b4b3_ca0e8117",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-17T20:04:19Z",
+      "side": 1,
+      "message": "1) WindowSurfaceVk::doDeferredAcquireNextImage()\nIt is using it after calling waitForPresentToBeSubmitted(), so it is ensured isPending is false.\n\n2) The second place is from WindowSurfaceVk::present(). In async code path, we are always set the lastPresentResult to VK_SUCCESS initially which will cause presentOutOfDate to be false, and get into deferredAcquire code path, which goes back to 1).\n\nSo I think it works correctly, but you are right, we do access it while isPending is false and in that case if it is async submission, it should always VK_SUCCess.\n\nI will update comment and add another assertion in surfaceVK code",
+      "parentUuid": "e82a2042_da9d2c6f",
+      "range": {
+        "startLine": 841,
+        "startChar": 0,
+        "endLine": 843,
+        "endChar": 39
+      },
+      "revId": "10731893a2d93119b3eddb8228573a473ca1526c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
