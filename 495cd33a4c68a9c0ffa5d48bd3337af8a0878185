@@ -33,6 +33,24 @@
       "message": "Thanks for the change. In my opinion:\n\n- Split the tests in a CL, and we can land them right away\n- Unless this is demonstrably improving performance, I don\u0027t think it\u0027s worth the extra complexity / fragility",
       "revId": "495cd33a4c68a9c0ffa5d48bd3337af8a0878185",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "952b1eb6_f7673f4e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-17T12:46:28Z",
+      "side": 1,
+      "message": "\u003e Split the tests in a CL, and we can land them right away\n\nNot all tests will pass in the old version.\nOld version creates default objects for all *capacity*. Test assumes that only *size* elements will be created (`totalCount`).\n\n\u003e Unless this is demonstrably improving performance\n\nSynthetic tests will be enough?\nAnd what will happen if replace `FastVector` with `std::vector`? Maybe you already have tests that show how `FastVector` is better, so I can use same tests.\n\n\u003e  I don\u0027t think it\u0027s worth the extra complexity / fragility\n\nSad to hear. Original implementation was simple, but had bugs. Simplicity does not always means robustness.",
+      "parentUuid": "d97be689_220b3874",
+      "revId": "495cd33a4c68a9c0ffa5d48bd3337af8a0878185",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
