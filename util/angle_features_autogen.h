@@ -37,6 +37,7 @@ enum class Feature
     AllowSeparateDepthStencilBuffers,
     AllowTranslateUniformBlockToStructuredBuffer,
     AlwaysCallUseProgramAfterLink,
+    AlwaysPreferStagedTextureUploads,
     AlwaysUnbindFramebufferTexture2D,
     AsyncCommandQueue,
     Avoid1BitAlphaTextureFormats,

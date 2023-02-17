@@ -1255,6 +1255,10 @@ void DisplayMtl::initializeFeatures()
     ANGLE_FEATURE_CONDITION((&mFeatures), enableInMemoryMtlLibraryCache, true);
     ANGLE_FEATURE_CONDITION((&mFeatures), enableParallelMtlLibraryCompilation, true);
 
+    // Appears to improve performance on all tested systems. If this is ever set to a more complex
+    // condition, ensure that it is always true for isSimulator.
+    ANGLE_FEATURE_CONDITION((&mFeatures), alwaysPreferStagedTextureUploads, true);
+
     ApplyFeatureOverrides(&mFeatures, getState());
 }
 
