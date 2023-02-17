@@ -285,6 +285,24 @@
       "parentUuid": "b1ad4561_6efb7c21",
       "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec864478_54f9724a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-17T03:15:06Z",
+      "side": 1,
+      "message": "I don\u0027t remember if I ever pointed this out, but the spec has this:\n\n\u003e Rule 4 If the contents of an object T are changed in a context other than the current context, T must be attached or re-attached to at least one binding point in the current context, or at least one attachment point of a currently bound container object C, in order to guarantee that the new contents of T are visible in the current context.\n\n\u003e Note: “Attached or re-attached” means either attaching an object to a binding point it wasn’t already attached to, or attaching an object again to a binding point it was already attached to.\n\n\u003e Example: If a texture image is bound to multiple texture bind points and the texture is changed in another context, re-binding the texture at any one of the texture bind points is sufficient to cause the changes to be visible at all texture bind points.\n\nSo sync objects are needed, but _also_ a rebind is necessary. Right now we don\u0027t do anything on rebind, but if necessary it\u0027s something we could take advantage of.\n\nBy the way, there was a recent GL meeting and there was no conclusive answer to the issue of parallel reads (yet). I _think_ the answer is going to be that it\u0027s illegal, or I hope we can make that so. Our support for parallel unsynchronized reads is shaky at the moment, and outside of a single app, there are no known users. That leads me to the answer for:\n\n\u003e I want to know what I need to do with these patch. Is it going to be submitted or I should abandon the CL?\n\nDefinitely don\u0027t abandon. Didn\u0027t you say it fixes an issue with Samsung Notes? But it may need some time:\n\n- First, I\u0027d like to get https://gitlab.khronos.org/opengl/API/-/issues/176 resolved, and unfortunately GL workgroup meetings are once every 2 weeks so it\u0027ll be slow\n- Second, I want to have someone contact that developer of the affected app and get them to properly synchronize. We can\u0027t just break that app\n- Third, in the meantime, it\u0027d be good to have a solution for adding semaphores between submissions. Let\u0027s just assume sync objects are necessary, and use that to know when semaphores should be used. If we require timeline semaphores for that, I suspect it wouldn\u0027t be too hard.",
+      "parentUuid": "349c3b1c_0313296c",
+      "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
