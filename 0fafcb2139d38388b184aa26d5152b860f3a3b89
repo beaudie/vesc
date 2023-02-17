@@ -230,6 +230,24 @@
       "parentUuid": "2a2a4e2a_b5d6d85b",
       "revId": "0fafcb2139d38388b184aa26d5152b860f3a3b89",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a03c9a76_f0911e24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-17T05:41:29Z",
+      "side": 1,
+      "message": "I\u0027d say let\u0027s just add `ToDevice` (option 1) to this function and keep `submit` as it is. We\u0027re already accustomed to what `submit` implies.",
+      "parentUuid": "fc5a9472_14023294",
+      "revId": "0fafcb2139d38388b184aa26d5152b860f3a3b89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
