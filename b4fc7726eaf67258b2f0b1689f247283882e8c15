@@ -321,6 +321,24 @@
       "parentUuid": "ec864478_54f9724a",
       "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a0c09bf_880a471b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-17T18:44:20Z",
+      "side": 1,
+      "message": "Another problem: wait semaphores may be submitted into different `VkQueue` without corresponding commands.\n- Context LoPrio flushes wait semaphores.\n- Context HiPrio submits commands with flushed semaphores of Context LoPrio.\n- Context LoPrio submits commands without semaphores.\n\nProblem appeared after my recent CL: *\"Vulkan: Fixed Wait Semaphores problems.\"*.\nOnly it fixes opposite problem - commands may be submitted without semaphores.\n\nMy opinion, is that this CL will fix more problems that may potentially cause.\n\nAs I understand, we do not apply this CL because relying that commands from different priorities will be in a single buffer? But this is already shaky. If some Context perform Submit - commands will be in different buffers and queues.\n\nMaybe make simple temp WA fix (before this CL) that forces all Context in the same group to the highest priority? Separate CL may do the same with Contexts that share resources via EGLImage.\n\nAfter the above WA this CL will not break anything. It will allow to work unrelated Contexts with different priorities without harming each other.\n\nLate we can optimize the WA when have more info.",
+      "parentUuid": "2daedcf1_1bedf1d9",
+      "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
