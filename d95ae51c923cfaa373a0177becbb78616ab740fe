@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecb17c6a_80fdb33f",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-17T18:00:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c37c325_b07b8333",
+      "range": {
+        "startLine": 513,
+        "startChar": 18,
+        "endLine": 513,
+        "endChar": 37
+      },
+      "revId": "d95ae51c923cfaa373a0177becbb78616ab740fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb1b8686_a028ffb4",
@@ -37,6 +61,24 @@
       "writtenOn": "2023-02-17T04:33:59Z",
       "side": 1,
       "message": "Suggest `use \u003c\u003d ...` or `!(use \u003e ...)`. `? false : true` is just `!`",
+      "revId": "d95ae51c923cfaa373a0177becbb78616ab740fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e88594ee_4d061aad",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-17T18:00:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb1b8686_a028ffb4",
       "revId": "d95ae51c923cfaa373a0177becbb78616ab740fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
