@@ -354,14 +354,12 @@ angle::Result InitializeTextureContents(const gl::Context *context,
     ASSERT(texture && texture->valid());
     // Only one slice can be initialized at a time.
     ASSERT(!index.isLayered() || index.getType() == gl::TextureType::_3D);
-    ContextMtl *contextMtl = mtl::GetImpl(context);
+    ContextMtl *contextMtl             = mtl::GetImpl(context);
+    const angle::FeaturesMtl &features = contextMtl->getDisplay()->getFeatures();
 
     const gl::InternalFormat &intendedInternalFormat = textureObjFormat.intendedInternalFormat();
 
-    bool forceGPUInitialization = false;
-#if TARGET_OS_SIMULATOR
-    forceGPUInitialization = true;
-#endif  // TARGET_OS_SIMULATOR
+    bool forceGPUInitialization = features.alwaysPreferStagedTextureUploads.enabled;
 
     // This function is called in many places to initialize the content of a texture.
     // So it's better we do the initial check here instead of let the callers do it themselves:

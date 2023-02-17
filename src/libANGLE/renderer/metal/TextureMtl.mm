@@ -530,7 +530,9 @@ angle::Result UploadTextureContents(const gl::Context *context,
     const angle::FeaturesMtl &features = contextMtl->getDisplay()->getFeatures();
 
     bool forceStagedUpload =
-        texture->hasIOSurface() && features.uploadDataToIosurfacesWithStagingBuffers.enabled;
+        ((texture->hasIOSurface() && features.uploadDataToIosurfacesWithStagingBuffers.enabled) ||
+         features.alwaysPreferStagedTextureUploads.enabled) &&
+        !textureAngleFormat.isBlock;
     if (texture->isCPUAccessible() && !forceStagedUpload)
     {
         // If texture is CPU accessible, just call replaceRegion() directly.
