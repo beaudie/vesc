@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78a9dbca_6daa2d1a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-17T21:45:42Z",
+      "side": 1,
+      "message": "Per offline discussion, split the feature enablement to separate CL. When this feature is disabled, both commandBuffer reset and garbage clean will be still done in rendering thread, with this feature enabled, it is done in CommandProcessor.",
+      "revId": "8762b365e932d80b7d1816ab1b06764b9d40270e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
