@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b09914a_377ac4f5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4282,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-02-17T18:19:20Z",
+      "side": 1,
+      "message": "Should be `IsAndroid()` (first letter should be capital)",
+      "revId": "468a751a448c01208572a418c91e50b4ef0979af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
