@@ -1185,12 +1185,9 @@ ANGLE_INLINE angle::Result RendererVk::requestCommandsAndGarbageCleanup(vk::Cont
 {
     if (!isAsyncCommandBufferResetEnabled())
     {
-        ANGLE_TRY(mCommandQueue.retireFinishedCommandsAndCleanupGarbage(context));
+        ANGLE_TRY(mCommandQueue.retireFinishedCommands(context));
     }
-    else
-    {
-        mCommandProcessor.requestCommandsAndGarbageCleanup();
-    }
+    mCommandProcessor.requestCommandsAndGarbageCleanup();
     return angle::Result::Continue;
 }
 }  // namespace rx
