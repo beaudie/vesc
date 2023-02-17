@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2065a119_73952f9a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-17T21:48:26Z",
+      "side": 1,
+      "message": "The feature is now disabled in this CL, so expecting no main functionality change except the refactoring and minor difference on how mInFlightCommands being processed. With feature disabled, both command buffer reset and garbage clean up are still done in rendering thread.",
+      "revId": "569818532da06f011e7469761b6fc77693b728e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

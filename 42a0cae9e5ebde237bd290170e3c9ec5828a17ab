@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "919fea51_27c7530e",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-17T21:48:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f9da38f_d2940c1a",
+      "range": {
+        "startLine": 573,
+        "startChar": 0,
+        "endLine": 575,
+        "endChar": 41
+      },
+      "revId": "42a0cae9e5ebde237bd290170e3c9ec5828a17ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "275f08fb_dd8cad4c",
@@ -37,6 +61,24 @@
       "writtenOn": "2023-02-16T18:48:06Z",
       "side": 1,
       "message": "nit: Extra space?",
+      "revId": "42a0cae9e5ebde237bd290170e3c9ec5828a17ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "371e0990_77404835",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-17T21:48:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "275f08fb_dd8cad4c",
       "revId": "42a0cae9e5ebde237bd290170e3c9ec5828a17ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -64,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b59ce158_08300539",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 759,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-17T21:48:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73d9abf4_fc322953",
+      "range": {
+        "startLine": 759,
+        "startChar": 37,
+        "endLine": 759,
+        "endChar": 38
+      },
+      "revId": "42a0cae9e5ebde237bd290170e3c9ec5828a17ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "118db22f_18fb52c4",
@@ -77,6 +143,30 @@
       "writtenOn": "2023-02-16T18:48:06Z",
       "side": 1,
       "message": "nit: `finishedCount \u003e 0`?",
+      "range": {
+        "startLine": 1585,
+        "startChar": 26,
+        "endLine": 1585,
+        "endChar": 58
+      },
+      "revId": "42a0cae9e5ebde237bd290170e3c9ec5828a17ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4898722c_daefd5b9",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1585,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-17T21:48:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "118db22f_18fb52c4",
       "range": {
         "startLine": 1585,
         "startChar": 26,
