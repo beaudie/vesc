@@ -16,6 +16,23 @@
       "message": "Low priority. Finished implementation because was already half way there and did not want that time to be wasted.",
       "revId": "495cd33a4c68a9c0ffa5d48bd3337af8a0878185",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d97be689_220b3874",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-17T03:52:35Z",
+      "side": 1,
+      "message": "Thanks for the change. In my opinion:\n\n- Split the tests in a CL, and we can land them right away\n- Unless this is demonstrably improving performance, I don\u0027t think it\u0027s worth the extra complexity / fragility",
+      "revId": "495cd33a4c68a9c0ffa5d48bd3337af8a0878185",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
