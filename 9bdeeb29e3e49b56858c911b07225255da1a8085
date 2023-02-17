@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "666c1203_c501c0a4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1001168
+      },
+      "writtenOn": "2023-02-17T20:05:40Z",
+      "side": 1,
+      "message": "Also, do you mind helping craft the text for the justification reason here?",
+      "revId": "9bdeeb29e3e49b56858c911b07225255da1a8085",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
