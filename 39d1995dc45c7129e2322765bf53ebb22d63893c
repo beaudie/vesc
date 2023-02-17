@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69eafbe1_adbab9e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001168
+      },
+      "writtenOn": "2023-02-17T18:51:14Z",
+      "side": 1,
+      "message": "Note: this isn\u0027t landable yet. This needs to wait to land with rolling  https://chromium-review.googlesource.com/c/chromium/src/+/4036347 into ANGLE unfortunately.\n\nThe main question here is: would you prefer this to be a GN arg? In Chrome, it is intentionally not a GN arg so it\u0027s not configurable, but I\u0027m not sure what the best choice for ANGLE is (since, unlike other places, it is defaulting to false)",
+      "revId": "39d1995dc45c7129e2322765bf53ebb22d63893c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
