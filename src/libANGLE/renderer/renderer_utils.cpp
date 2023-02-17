@@ -1580,4 +1580,136 @@ bool IsOverridableLinearFormat(angle::FormatID formatID)
 {
     return ConvertToSRGB(formatID) != angle::FormatID::NONE;
 }
+
+template <bool swizzledLuma>
+const gl::ColorGeneric AdjustBorderColor(const angle::ColorGeneric &borderColorGeneric,
+                                         const angle::Format &format,
+                                         bool stencilMode)
+{
+    gl::ColorGeneric adjustedBorderColor = borderColorGeneric;
+
+    // Handle depth formats
+    if (format.hasDepthOrStencilBits())
+    {
+        if (stencilMode)
+        {
+            // Stencil component
+            adjustedBorderColor.colorUI.red = gl::clampForBitCount<unsigned int>(
+                borderColorGeneric.colorUI.red, format.stencilBits);
+            // Unused components need to be reset because some backends simulate integer samplers
+            adjustedBorderColor.colorUI.green = 0u;
+            adjustedBorderColor.colorUI.blue  = 0u;
+            adjustedBorderColor.colorUI.alpha = 1u;
+        }
+        else
+        {
+            // Depth component
+            if (format.isUnorm())
+            {
+                adjustedBorderColor.colorF.red = gl::clamp01(borderColorGeneric.colorF.red);
+            }
+        }
+
+        return adjustedBorderColor;
+    }
+
+    // Handle LUMA formats
+    if (format.isLUMA())
+    {
+        // Luma formats are either unpacked to RGBA or emulated with component swizzling
+        if (swizzledLuma)
+        {
+            // L is R (no-op); A is R; LA is RG
+            if (format.alphaBits > 0)
+            {
+                if (format.luminanceBits > 0)
+                {
+                    adjustedBorderColor.colorF.green = borderColorGeneric.colorF.alpha;
+                }
+                else
+                {
+                    adjustedBorderColor.colorF.red = borderColorGeneric.colorF.alpha;
+                }
+            }
+        }
+        else
+        {
+            // L is RGBX; A is A or RGBA; LA is RGBA
+            if (format.alphaBits == 0)
+            {
+                adjustedBorderColor.colorF.alpha = 1.0f;
+            }
+            else if (format.luminanceBits == 0)
+            {
+                adjustedBorderColor.colorF.red = 0.0f;
+            }
+            adjustedBorderColor.colorF.green = borderColorGeneric.colorF.red;
+            adjustedBorderColor.colorF.blue  = borderColorGeneric.colorF.red;
+        }
+
+        return adjustedBorderColor;
+    }
+
+    // Handle all other formats. Clamp border color to the ranges of color components.
+    // On some platforms, RGB formats may be emulated with RGBA, enforce opaque border color there.
+    if (format.isSint())
+    {
+        adjustedBorderColor.colorI.red =
+            gl::clampForBitCount<int>(borderColorGeneric.colorI.red, format.redBits);
+        adjustedBorderColor.colorI.green =
+            gl::clampForBitCount<int>(borderColorGeneric.colorI.green, format.greenBits);
+        adjustedBorderColor.colorI.blue =
+            gl::clampForBitCount<int>(borderColorGeneric.colorI.blue, format.blueBits);
+        adjustedBorderColor.colorI.alpha =
+            format.alphaBits > 0
+                ? gl::clampForBitCount<int>(borderColorGeneric.colorI.alpha, format.alphaBits)
+                : 1;
+    }
+    else if (format.isUint())
+    {
+        adjustedBorderColor.colorUI.red =
+            gl::clampForBitCount<unsigned int>(borderColorGeneric.colorUI.red, format.redBits);
+        adjustedBorderColor.colorUI.green =
+            gl::clampForBitCount<unsigned int>(borderColorGeneric.colorUI.green, format.greenBits);
+        adjustedBorderColor.colorUI.blue =
+            gl::clampForBitCount<unsigned int>(borderColorGeneric.colorUI.blue, format.blueBits);
+        adjustedBorderColor.colorUI.alpha =
+            format.alphaBits > 0 ? gl::clampForBitCount<unsigned int>(
+                                       borderColorGeneric.colorUI.alpha, format.alphaBits)
+                                 : 1;
+    }
+    else if (format.isSnorm())
+    {
+        // clamp between -1.0f and 1.0f
+        adjustedBorderColor.colorF.red   = gl::clamp(borderColorGeneric.colorF.red, -1.0f, 1.0f);
+        adjustedBorderColor.colorF.green = gl::clamp(borderColorGeneric.colorF.green, -1.0f, 1.0f);
+        adjustedBorderColor.colorF.blue  = gl::clamp(borderColorGeneric.colorF.blue, -1.0f, 1.0f);
+        adjustedBorderColor.colorF.alpha =
+            format.alphaBits > 0 ? gl::clamp(borderColorGeneric.colorF.alpha, -1.0f, 1.0f) : 1.0f;
+    }
+    else if (format.isUnorm())
+    {
+        // clamp between 0.0f and 1.0f
+        adjustedBorderColor.colorF.red   = gl::clamp01(borderColorGeneric.colorF.red);
+        adjustedBorderColor.colorF.green = gl::clamp01(borderColorGeneric.colorF.green);
+        adjustedBorderColor.colorF.blue  = gl::clamp01(borderColorGeneric.colorF.blue);
+        adjustedBorderColor.colorF.alpha =
+            format.alphaBits > 0 ? gl::clamp01(borderColorGeneric.colorF.alpha) : 1.0f;
+    }
+    else if (format.isFloat() && format.alphaBits == 0)
+    {
+        adjustedBorderColor.colorF.alpha = 1.0;
+    }
+
+    return adjustedBorderColor;
+}
+template const gl::ColorGeneric AdjustBorderColor<true>(
+    const angle::ColorGeneric &borderColorGeneric,
+    const angle::Format &format,
+    bool stencilMode);
+template const gl::ColorGeneric AdjustBorderColor<false>(
+    const angle::ColorGeneric &borderColorGeneric,
+    const angle::Format &format,
+    bool stencilMode);
+
 }  // namespace rx
