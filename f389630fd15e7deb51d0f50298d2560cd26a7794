@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "87ff28e8_97566f20",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-02-18T13:53:13Z",
+      "side": 1,
+      "message": "Consider mentioning that all 32-bit floating-point formats are not filterable on Apple GPUs, not just RGBA32F.",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 11
+      },
+      "revId": "f389630fd15e7deb51d0f50298d2560cd26a7794",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c28054ca_b9748e48",
         "filename": "src/libANGLE/renderer/metal/mtl_format_map.json",
         "patchSetId": 1
