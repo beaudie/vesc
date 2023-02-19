@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bde2cbb_cc25f1aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-02-19T22:24:32Z",
+      "side": 1,
+      "message": "apologies for the delayed response.\n\nThis i believe was the change to introduce surfaceless query to AOSP -\u003e https://android-review.googlesource.com/c/platform/frameworks/native/+/2020281 and what i saw during the crash was that there is a nullptr dereference that happens when surface handle is null.\n\nNow, this may be a bug in just our internal AOSP tree (maybe due to partial cherry-pick of features or something to do with incorrect cherry-picks of upstream AOSP commits) but nevertheless the image currently present on devices have this bug",
+      "parentUuid": "2943fba6_397f8988",
+      "revId": "9ae341753355aec757cc38f71e9c9be0f73823bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0c148a4f_bb07485a",
