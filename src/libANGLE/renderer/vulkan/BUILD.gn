@@ -31,6 +31,9 @@ declare_args() {
 
   # Enable shared ring buffer command buffer allocator
   angle_enable_vulkan_shared_ring_buffer_cmd_alloc = false
+
+  # Enable use "VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT" as Swapchain Acquire Image wait stage flags
+  angle_enable_vulkan_swapchain_acquire_image_wait_stage_top_of_pipe = false
 }
 
 angle_source_set("angle_vk_mem_alloc_wrapper") {
@@ -69,6 +72,11 @@ config("angle_vulkan_backend_config") {
 
   defines += [ "ANGLE_ENABLE_VULKAN_SHARED_RING_BUFFER_CMD_ALLOC=" +
                "${angle_enable_vulkan_shared_ring_buffer_cmd_alloc}" ]
+
+  defines += [
+    "ANGLE_ENABLE_VULKAN_SWAPCHAIN_ACQUIRE_IMAGE_WAIT_STAGE_TOP_OF_PIPE=" +
+        "${angle_enable_vulkan_swapchain_acquire_image_wait_stage_top_of_pipe}",
+  ]
 
   # Ensures that the memory allocation logging can only be enabled with debug layers.
   assert(angle_debug_layers_enabled || !angle_enable_memory_alloc_logging)

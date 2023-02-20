@@ -43,6 +43,13 @@ constexpr VkImageCreateFlags kVkImageCreateFlagsNone = 0;
 
 constexpr VkFilter kDefaultYCbCrChromaFilter = VK_FILTER_NEAREST;
 
+#if ANGLE_ENABLE_VULKAN_SWAPCHAIN_ACQUIRE_IMAGE_WAIT_STAGE_TOP_OF_PIPE
+// Experimental. Using TOP OF PIPE as source mask, may relax pipeline barrier when transition from
+// VK_IMAGE_LAYOUT_PRESENT_SRC_KHR by increasing latency from Swapchain Acquire Image Semaphore
+// signal operation and commands execution on Device.
+constexpr VkPipelineStageFlags kSwapchainAcquireImageWaitStageFlags =
+    VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+#else
 // Included in the flags:
 //   VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT - First use is a draw command.
 //   VK_PIPELINE_STAGE_TRANSFER_BIT                - First use is a clear without scissor.
@@ -51,6 +58,7 @@ constexpr VkFilter kDefaultYCbCrChromaFilter = VK_FILTER_NEAREST;
 //                                                   unrealistic and results are undefined anyway.
 constexpr VkPipelineStageFlags kSwapchainAcquireImageWaitStageFlags =
     VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_TRANSFER_BIT;
+#endif
 
 using StagingBufferOffsetArray = std::array<VkDeviceSize, 2>;
 
