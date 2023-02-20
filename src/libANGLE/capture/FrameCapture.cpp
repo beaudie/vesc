@@ -8696,7 +8696,7 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
                 out << "    " << FmtSetupFunction(kNoPartId, kSharedContextId, FuncUsage::Call)
                     << ";\n";
                 // Make sure that the current context is mapped correctly
-                out << "    SetContextIDToCurrent(" << context->id() << ");\n";
+                out << "    SetCurrentContextID(" << context->id() << ");\n";
             }
 
             // Setup each of the auxiliary contexts.
@@ -8704,8 +8704,6 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
             const egl::ContextSet &shareContextSet = shareGroup->getContexts();
             for (gl::Context *shareContext : shareContextSet)
             {
-                // Skip the presentation context, since that context was created by the test
-                // framework.
                 if (shareContext->id() == context->id())
                 {
                     if (usesMidExecutionCapture())
