@@ -7015,6 +7015,35 @@ class TextureBorderClampTest : public Texture2DTest
                      texDataRed.data());
         EXPECT_GL_NO_ERROR();
     }
+
+    angle::GLColor testFormat(GLenum format, GLenum type, GLColor32F borderColor)
+    {
+        glBindTexture(GL_TEXTURE_2D, mTexture2D);
+        glActiveTexture(GL_TEXTURE0);
+        glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, &borderColor.R);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexImage2D(GL_TEXTURE_2D, 0, format, 2, 2, 0, format, type, nullptr);
+        drawQuad(mProgram, "position", 0.5f);
+        return angle::ReadColor(0, 0);
+    }
+
+    angle::GLColor testCompressedFormat(GLenum format, GLsizei size, GLColor32F borderColor)
+    {
+        setUpProgram();
+        glBindTexture(GL_TEXTURE_2D, mTexture2D);
+        glActiveTexture(GL_TEXTURE0);
+        glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, &borderColor.R);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glCompressedTexImage2D(GL_TEXTURE_2D, 0, format, 4, 4, 0, size, nullptr);
+        drawQuad(mProgram, "position", 0.5f);
+        return angle::ReadColor(0, 0);
+    }
 };
 
 // Test if the color set as GL_TEXTURE_BORDER_COLOR is used when sampling outside of the texture in
@@ -7117,6 +7146,182 @@ TEST_P(TextureBorderClampTest, TextureBorderClampValidation)
         glGetSamplerParameterIuivOES(sampler, GL_TEXTURE_BORDER_COLOR, colorUInt);
         EXPECT_GL_ERROR(GL_INVALID_OPERATION);
     }
+}
+
+// Test GL_TEXTURE_BORDER_COLOR parameter with unorm formats.
+TEST_P(TextureBorderClampTest, TextureBorderClampUnorm8)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_texture_border_clamp"));
+
+    GLColor32F kBorder = {0.5f, 0.25f, 0.125f, 0.0625f};
+
+    setUpProgram();
+    angle::GLColor resultColor;
+
+    resultColor = testFormat(GL_ALPHA, GL_UNSIGNED_BYTE, kBorder);
+    EXPECT_COLOR_NEAR(resultColor, GLColor(0, 0, 0, 16), 1);
+
+    resultColor = testFormat(GL_RGB, GL_UNSIGNED_BYTE, kBorder);
+    EXPECT_COLOR_NEAR(resultColor, GLColor(128, 64, 32, 255), 1);
+
+    resultColor = testFormat(GL_RGBA, GL_UNSIGNED_BYTE, kBorder);
+    EXPECT_COLOR_NEAR(resultColor, GLColor(128, 64, 32, 16), 1);
+
+    resultColor = testFormat(GL_LUMINANCE, GL_UNSIGNED_BYTE, kBorder);
+    EXPECT_COLOR_NEAR(resultColor, GLColor(128, 128, 128, 255), 1);
+
+    resultColor = testFormat(GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, kBorder);
+    EXPECT_COLOR_NEAR(resultColor, GLColor(128, 128, 128, 16), 1);
+}
+
+// Test GL_TEXTURE_BORDER_COLOR parameter with sRGB formats.
+TEST_P(TextureBorderClampTest, TextureBorderClampSrgb)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_texture_border_clamp"));
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_sRGB"));
+
+    // AMD D3D9 drivers always sample sRGB formats with (0, 0, 0, 0) border color, won't fix.
+    ANGLE_SKIP_TEST_IF(IsAMD() && IsD3D9());
+
+    GLColor32F kBorder = {0.5f, 0.25f, 0.125f, 0.0625f};
+
+    setUpProgram();
+    angle::GLColor resultColor;
+
+    resultColor = testFormat(GL_SRGB_EXT, GL_UNSIGNED_BYTE, kBorder);
+    EXPECT_COLOR_NEAR(resultColor, GLColor(128, 64, 32, 255), 1);
+
+    resultColor = testFormat(GL_SRGB_ALPHA_EXT, GL_UNSIGNED_BYTE, kBorder);
+    EXPECT_COLOR_NEAR(resultColor, GLColor(128, 64, 32, 16), 1);
+}
+
+// Test GL_TEXTURE_BORDER_COLOR parameter with half-float formats.
+TEST_P(TextureBorderClampTest, TextureBorderClampFloat16)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_texture_border_clamp"));
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_texture_half_float"));
+
+    GLColor32F kBorder = {0.5f, 0.25f, 0.125f, 0.0625f};
+
+    setUpProgram();
+    angle::GLColor resultColor;
+
+    resultColor = testFormat(GL_ALPHA, GL_HALF_FLOAT_OES, kBorder);
+    EXPECT_COLOR_NEAR(resultColor, GLColor(0, 0, 0, 16), 1);
+
+    resultColor = testFormat(GL_RGB, GL_HALF_FLOAT_OES, kBorder);
+    EXPECT_COLOR_NEAR(resultColor, GLColor(128, 64, 32, 255), 1);
+
+    resultColor = testFormat(GL_RGBA, GL_HALF_FLOAT_OES, kBorder);
+    EXPECT_COLOR_NEAR(resultColor, GLColor(128, 64, 32, 16), 1);
+
+    resultColor = testFormat(GL_LUMINANCE, GL_HALF_FLOAT_OES, kBorder);
+    EXPECT_COLOR_NEAR(resultColor, GLColor(128, 128, 128, 255), 1);
+
+    resultColor = testFormat(GL_LUMINANCE_ALPHA, GL_HALF_FLOAT_OES, kBorder);
+    EXPECT_COLOR_NEAR(resultColor, GLColor(128, 128, 128, 16), 1);
+}
+
+// Test GL_TEXTURE_BORDER_COLOR parameter with float formats.
+TEST_P(TextureBorderClampTest, TextureBorderClampFloat32)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_texture_border_clamp"));
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_texture_float"));
+
+    GLColor32F kBorder = {0.5f, 0.25f, 0.125f, 0.0625f};
+
+    setUpProgram();
+    angle::GLColor resultColor;
+
+    resultColor = testFormat(GL_ALPHA, GL_FLOAT, kBorder);
+    EXPECT_COLOR_NEAR(resultColor, GLColor(0, 0, 0, 16), 1);
+
+    resultColor = testFormat(GL_RGB, GL_FLOAT, kBorder);
+    EXPECT_COLOR_NEAR(resultColor, GLColor(128, 64, 32, 255), 1);
+
+    resultColor = testFormat(GL_RGBA, GL_FLOAT, kBorder);
+    EXPECT_COLOR_NEAR(resultColor, GLColor(128, 64, 32, 16), 1);
+
+    resultColor = testFormat(GL_LUMINANCE, GL_FLOAT, kBorder);
+    EXPECT_COLOR_NEAR(resultColor, GLColor(128, 128, 128, 255), 1);
+
+    resultColor = testFormat(GL_LUMINANCE_ALPHA, GL_FLOAT, kBorder);
+    EXPECT_COLOR_NEAR(resultColor, GLColor(128, 128, 128, 16), 1);
+}
+
+// Test GL_TEXTURE_BORDER_COLOR parameter with red and red-green formats.
+TEST_P(TextureBorderClampTest, TextureBorderClampRG)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_texture_border_clamp"));
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_rg"));
+
+    GLColor32F kBorder = {0.5f, 0.25f, 0.125f, 0.0625f};
+
+    setUpProgram();
+    angle::GLColor resultColor;
+
+    resultColor = testFormat(GL_RED_EXT, GL_UNSIGNED_BYTE, kBorder);
+    EXPECT_COLOR_NEAR(resultColor, GLColor(128, 0, 0, 255), 1);
+
+    resultColor = testFormat(GL_RG_EXT, GL_UNSIGNED_BYTE, kBorder);
+    EXPECT_COLOR_NEAR(resultColor, GLColor(128, 64, 0, 255), 1);
+
+    if (IsGLExtensionEnabled("GL_OES_texture_half_float"))
+    {
+        resultColor = testFormat(GL_RED_EXT, GL_HALF_FLOAT_OES, kBorder);
+        EXPECT_COLOR_NEAR(resultColor, GLColor(128, 0, 0, 255), 1);
+
+        resultColor = testFormat(GL_RG_EXT, GL_HALF_FLOAT_OES, kBorder);
+        EXPECT_COLOR_NEAR(resultColor, GLColor(128, 64, 0, 255), 1);
+    }
+
+    if (IsGLExtensionEnabled("GL_OES_texture_float"))
+    {
+        resultColor = testFormat(GL_RED_EXT, GL_FLOAT, kBorder);
+        EXPECT_COLOR_NEAR(resultColor, GLColor(128, 0, 0, 255), 1);
+
+        resultColor = testFormat(GL_RG_EXT, GL_FLOAT, kBorder);
+        EXPECT_COLOR_NEAR(resultColor, GLColor(128, 64, 0, 255), 1);
+    }
+}
+
+// Test GL_TEXTURE_BORDER_COLOR parameter with DXT1 formats.
+TEST_P(TextureBorderClampTest, TextureBorderClampDXT1)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_texture_border_clamp"));
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_compression_dxt1"));
+
+    GLColor32F kBorder = {0.5f, 0.25f, 0.125f, 0.0625f};
+
+    setUpProgram();
+    angle::GLColor resultColor;
+
+    resultColor = testCompressedFormat(GL_COMPRESSED_RGB_S3TC_DXT1_EXT, 8, kBorder);
+    EXPECT_COLOR_NEAR(resultColor, GLColor(128, 64, 32, 255), 1);
+
+    resultColor = testCompressedFormat(GL_COMPRESSED_RGBA_S3TC_DXT1_EXT, 8, kBorder);
+    EXPECT_COLOR_NEAR(resultColor, GLColor(128, 64, 32, 16), 1);
+}
+
+// Test GL_TEXTURE_BORDER_COLOR parameter with DXT1 sRGB formats.
+TEST_P(TextureBorderClampTest, TextureBorderClampDXT1Srgb)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_texture_border_clamp"));
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_compression_s3tc_srgb"));
+
+    // AMD D3D9 drivers always sample sRGB formats with (0, 0, 0, 0) border color, won't fix.
+    ANGLE_SKIP_TEST_IF(IsAMD() && IsD3D9());
+
+    GLColor32F kBorder = {0.5f, 0.25f, 0.125f, 0.0625f};
+
+    setUpProgram();
+    angle::GLColor resultColor;
+
+    resultColor = testCompressedFormat(GL_COMPRESSED_SRGB_S3TC_DXT1_EXT, 8, kBorder);
+    EXPECT_COLOR_NEAR(resultColor, GLColor(128, 64, 32, 255), 1);
+
+    resultColor = testCompressedFormat(GL_COMPRESSED_SRGB_ALPHA_S3TC_DXT1_EXT, 8, kBorder);
+    EXPECT_COLOR_NEAR(resultColor, GLColor(128, 64, 32, 16), 1);
 }
 
 class TextureBorderClampTestES3 : public TextureBorderClampTest

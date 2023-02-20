@@ -1598,6 +1598,20 @@ angle::Result TextureGL::syncState(const gl::Context *context,
                         borderColor.colorF.green = borderColor.colorF.alpha;
                     }
                 }
+                else
+                {
+                    if (levelInfo.sourceFormat == GL_ALPHA)
+                    {
+                        // Some ES drivers treat ALPHA as swizzled RG
+                        borderColor.colorF.red   = 0.0f;
+                        borderColor.colorF.green = borderColor.colorF.alpha;
+                    }
+                    else if (levelInfo.sourceFormat == GL_LUMINANCE_ALPHA)
+                    {
+                        // Some ES drivers treat LUMINANCE_ALPHA as swizzled RG
+                        borderColor.colorF.green = borderColor.colorF.alpha;
+                    }
+                }
 
                 mAppliedSampler.setBorderColor(borderColor);
                 switch (borderColor.type)
