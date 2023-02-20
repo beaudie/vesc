@@ -8696,7 +8696,7 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
                 out << "    " << FmtSetupFunction(kNoPartId, kSharedContextId, FuncUsage::Call)
                     << ";\n";
                 // Make sure that the current context is mapped correctly
-                out << "    SetContextIDToCurrent(" << context->id() << ");\n";
+                out << "    SetCurrentContextID(" << context->id() << ");\n";
             }
 
             // Setup each of the auxiliary contexts.
