@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b9e75dd_ea796b8e",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 15
+      },
+      "lineNbr": 1156,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-20T11:17:21Z",
+      "side": 1,
+      "message": "This also moves garbage cleanup into the async thread.\nMaybe rename the feature to reflect this behavior?\n\nFor example: async_commands_reset_and_gc",
+      "revId": "db5e6fd16a300444046fa4e84fc3ae6651f9ade4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "186aebd3_a4c8e339",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-20T11:17:21Z",
+      "side": 1,
+      "message": "`postSubmitCheck` is never called when `asyncCommandQueue` is enabled.",
+      "revId": "db5e6fd16a300444046fa4e84fc3ae6651f9ade4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de3bd47e_8b534f2b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 5289,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-20T11:17:21Z",
+      "side": 1,
+      "message": "Maybe add similar logic into `finish(ResourceUse/QueueSerial)` methods?\nCurrently in case of `asyncCommandQueue` these methods will not trigger command buffer/garbage cleanup.",
+      "revId": "db5e6fd16a300444046fa4e84fc3ae6651f9ade4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
