@@ -93,6 +93,30 @@
       },
       "revId": "f389630fd15e7deb51d0f50298d2560cd26a7794",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9159f3a0_f041f323",
+        "filename": "src/libANGLE/renderer/metal/mtl_format_map.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-02-20T18:50:20Z",
+      "side": 1,
+      "message": "\u003eThis seems undocumented as feature tables do not contain any footnotes about this format being writable on MTLGPUFamilyMac1 at all.\n\nI think it was documented in the old feature tables.",
+      "parentUuid": "6220db40_bbc9fb0c",
+      "range": {
+        "startLine": 421,
+        "startChar": 61,
+        "endLine": 421,
+        "endChar": 67
+      },
+      "revId": "f389630fd15e7deb51d0f50298d2560cd26a7794",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
