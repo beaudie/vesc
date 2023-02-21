@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ea01d387_1256bef4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-21T16:39:37Z",
+      "side": 1,
+      "message": "\u003e When buffer age is queried, we fall back to EGL_BUFFER_PRESERVED basically (due to CTS expectations). \n\nAs I understand, we first need to restore contents of the back buffer after swap. This would be transfer or RenderPass. So the first use is still not fragment shader. Or I missing something?",
+      "parentUuid": "518d9dab_e420edbc",
+      "revId": "3cd11a6849ea71ab5c22b56c9df22241a700b7e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "22815a6c_66a4fcd5",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 1
