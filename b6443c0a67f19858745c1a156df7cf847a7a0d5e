@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a1a5595_dab937de",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-21T16:51:32Z",
+      "side": 1,
+      "message": "No exactly.\n\nI\u0027m talking about barrier and not a wait semaphore.\n\nBarrier will have TOP_OF_PIPE as a source stage - first scope. So barrier will be relaxed within the command buffer.\n\nBut wait semaphores will be added to the TOP_OF_PIPE. So that command buffer will not start execution until semaphore is signaled. But this only adds latency. Imagine we just delay submission after semaphore already signaled, for example. The global end result is slightly shifted execution on GPU compared to CPU. Depending on the Application, such shift may affect performance.",
+      "parentUuid": "d7e1baba_5e07f28c",
+      "range": {
+        "startLine": 14,
+        "startChar": 2,
+        "endLine": 14,
+        "endChar": 26
+      },
+      "revId": "b6443c0a67f19858745c1a156df7cf847a7a0d5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "530fcaf6_a88e0b1c",
