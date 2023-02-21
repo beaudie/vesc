@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f3554bf_e02d0c3d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-02-21T19:03:47Z",
+      "side": 1,
+      "message": "We\u0027re serializing ANGLE state, not GL state, right?  You could argue many of the things we\u0027re serializing aren\u0027t part of GL state.",
+      "range": {
+        "startLine": 11,
+        "startChar": 11,
+        "endLine": 11,
+        "endChar": 51
+      },
+      "revId": "901785b38717101261a3763daa88e731fb83c177",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0bef0a6_8e2cbaa7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-02-21T19:03:47Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it be better to run validation after all the contexts have been set up?  Then the refcounts would match.",
+      "range": {
+        "startLine": 25,
+        "startChar": 27,
+        "endLine": 28,
+        "endChar": 33
+      },
+      "revId": "901785b38717101261a3763daa88e731fb83c177",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ff931fc_f8ed56a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-02-21T19:03:47Z",
+      "side": 1,
+      "message": "Hey Gert - not a strong opinion here, but I\u0027d like to explore the idea of validation after all contexts have been set up, as opposed to one context at a time.",
+      "revId": "901785b38717101261a3763daa88e731fb83c177",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
