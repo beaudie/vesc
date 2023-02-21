@@ -16,6 +16,24 @@
       "message": "just a random question: If iPad Pro uses an M1 or M2 does it report Mac1 or Mac2 or is the filtering that M1/M2 supports turn off there?",
       "revId": "d0dc37b700f2f8bc814fd36e9bdb90c334d8962f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7a8b14b_a72bf135",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-02-21T19:36:13Z",
+      "side": 1,
+      "message": "iPad Pro M1 reports Apple7, iPad Pro M2 reports Apple8. No 32-bit float filtering on these.",
+      "parentUuid": "9458fc49_cdec7497",
+      "revId": "d0dc37b700f2f8bc814fd36e9bdb90c334d8962f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
