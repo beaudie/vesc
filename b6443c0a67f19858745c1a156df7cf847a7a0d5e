@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7e1baba_5e07f28c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-21T16:44:04Z",
+      "side": 1,
+      "message": "The wait stages is the \"second scope\" of synchronization. TOP_OF_PIPE in the second scope \u003d\u003d ALL_COMMANDS, so it seems to me that this is actually making the barriers worse.",
+      "range": {
+        "startLine": 14,
+        "startChar": 2,
+        "endLine": 14,
+        "endChar": 26
+      },
+      "revId": "b6443c0a67f19858745c1a156df7cf847a7a0d5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "530fcaf6_a88e0b1c",
