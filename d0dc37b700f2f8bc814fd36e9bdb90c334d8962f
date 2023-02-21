@@ -52,6 +52,24 @@
       "parentUuid": "e7a8b14b_a72bf135",
       "revId": "d0dc37b700f2f8bc814fd36e9bdb90c334d8962f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d539dee_30364706",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-02-21T19:45:47Z",
+      "side": 1,
+      "message": "Yes, only Apple7/Apple8.",
+      "parentUuid": "5ad861af_e761a85d",
+      "revId": "d0dc37b700f2f8bc814fd36e9bdb90c334d8962f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
