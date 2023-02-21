@@ -144,6 +144,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "687a8d52_70875546",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 33
+      },
+      "lineNbr": 4065,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-02-21T21:13:08Z",
+      "side": 1,
+      "message": "It looks like the replay context is similar to what we see in the baseline. However, the captured context after this CL has changed. It looks like a capture issue. ([More details](http://b/267811497#comment5))",
+      "parentUuid": "b2a0df6d_f02282b5",
+      "revId": "65cf5417a01ab0419dba1ac1e85b4205a5c68a1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5fd77ce8_a3457dde",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 33
