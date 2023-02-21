@@ -43,6 +43,13 @@ class StateChangeTest : public ANGLETest<>
         glGenTextures(2, mTextures.data());
         glGenRenderbuffers(1, &mRenderbuffer);
 
+        // http://b/267811497
+        // Clear color and depth/stencil buffers before the test.
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClearDepthf(0.0f);
+        glClearStencil(0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
         ASSERT_GL_NO_ERROR();
     }
 
