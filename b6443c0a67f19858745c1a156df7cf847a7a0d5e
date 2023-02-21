@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "280f9017_3c253182",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-21T17:25:40Z",
+      "side": 1,
+      "message": "\u003e I don\u0027t understand how this helps CPU though?\n\nUsage of TOP_OF_PIPE?\n\nIf yes - it does not help. It may be opposite. It is hard to predict how exactly.\n\nUsage TOP_OF_PIPE may help GPU by relaxing barrier inside the command buffer. This is good.\n\nHowever, wait semaphore with TOP_OF_PIPE may delay execution on GPU. This delay may affect CPU waits for the GPU. Because of that - we may become CPU bound. This is bad.\n\nProblem is that we must use same stages for the barrier source stages and the wait semaphore - otherwise layout transition may happen before semaphore is signaled.\n\nThere is no clear winner.",
+      "parentUuid": "d228402a_22eca070",
+      "range": {
+        "startLine": 14,
+        "startChar": 2,
+        "endLine": 14,
+        "endChar": 26
+      },
+      "revId": "b6443c0a67f19858745c1a156df7cf847a7a0d5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "530fcaf6_a88e0b1c",
