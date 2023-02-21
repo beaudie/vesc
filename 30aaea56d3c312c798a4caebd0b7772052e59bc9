@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6044d9ae_48680e3f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-21T21:17:58Z",
+      "side": 1,
+      "message": "Yikes. Thanks for catching and fixing this. Maybe worth a comment so over-eager contributors don\u0027t accidentally undo this in the future, but let\u0027s get this in ASAP. lgtm+2",
+      "revId": "30aaea56d3c312c798a4caebd0b7772052e59bc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
