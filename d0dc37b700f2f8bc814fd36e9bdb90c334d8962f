@@ -87,6 +87,23 @@
       "message": "The Vulkan failure is clearly an unfortunate unrelated flake, so CQ\u0027ing this again.",
       "revId": "d0dc37b700f2f8bc814fd36e9bdb90c334d8962f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35d9d1e8_92977efb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-21T23:51:16Z",
+      "side": 1,
+      "message": "There have been problems with the Nexus 5X bots today. Retrying.",
+      "revId": "d0dc37b700f2f8bc814fd36e9bdb90c334d8962f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
