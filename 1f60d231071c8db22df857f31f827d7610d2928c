@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1cbc8b2_9a141c9e",
+        "filename": "src/libANGLE/Image.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-02-21T15:20:23Z",
+      "side": 1,
+      "message": "I think we can safely initialize this to true now. The source could not have been crated otherwise.",
+      "range": {
+        "startLine": 534,
+        "startChar": 8,
+        "endLine": 535,
+        "endChar": 85
+      },
+      "revId": "1f60d231071c8db22df857f31f827d7610d2928c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
