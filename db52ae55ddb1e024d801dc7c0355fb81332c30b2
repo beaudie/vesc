@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fdc6ff9_72a3fe04",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-21T21:25:16Z",
+      "side": 1,
+      "message": "Unfortunately this can change the test semantics. Especially relevant to clear tests because now clears in tests are \"reclears\", which don\u0027t have the same behavior.\n\nMy preference is to disable the tests for capture/replay until readback of uninitialized memory can be systematically fixed.",
+      "revId": "db52ae55ddb1e024d801dc7c0355fb81332c30b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
