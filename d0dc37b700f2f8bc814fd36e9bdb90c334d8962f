@@ -70,6 +70,23 @@
       "parentUuid": "5ad861af_e761a85d",
       "revId": "d0dc37b700f2f8bc814fd36e9bdb90c334d8962f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ab2ef2f_7ee28937",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-21T21:09:38Z",
+      "side": 1,
+      "message": "The Vulkan failure is clearly an unfortunate unrelated flake, so CQ\u0027ing this again.",
+      "revId": "d0dc37b700f2f8bc814fd36e9bdb90c334d8962f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
