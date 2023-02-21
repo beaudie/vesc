@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8462b860_f8bd4115",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-21T18:57:31Z",
+      "side": 1,
+      "message": "\u003e As I understand, we first need to restore contents of the back buffer after swap.\n\nNo, we simply don\u0027t invalidate the contents before swap, so on next acquire the content is still there, untouched.",
+      "parentUuid": "ea01d387_1256bef4",
+      "revId": "3cd11a6849ea71ab5c22b56c9df22241a700b7e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "22815a6c_66a4fcd5",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 1
