@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "432bea65_5733575e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-21T16:33:50Z",
+      "side": 1,
+      "message": "I\u0027d add FRAGMENT_SHADER too. This is not necessarily true:\n\n\u003e Reading right after swap is unrealistic and results are undefined anyway\n\nUnrealistic, maybe, but not necessarily undefined. When buffer age is queried, we fall back to EGL_BUFFER_PRESERVED basically (due to CTS expectations). The application may very well check the buffer age, blit to another surface and do something on top of it.",
+      "revId": "3cd11a6849ea71ab5c22b56c9df22241a700b7e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22815a6c_66a4fcd5",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2487,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-21T16:33:50Z",
+      "side": 1,
+      "message": "Since the test needs visual inspection (and otherwise doesn\u0027t fail), please prefix the name with `DISABLED_`. Then it won\u0027t run on the bots for no reason. Especially because it\u0027s going to take multiple seconds.\n\nYou can still run disabled tests by specifying a gtest flag in the command line.",
+      "range": {
+        "startLine": 2487,
+        "startChar": 23,
+        "endLine": 2487,
+        "endChar": 41
+      },
+      "revId": "3cd11a6849ea71ab5c22b56c9df22241a700b7e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
