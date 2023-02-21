@@ -16,6 +16,23 @@
       "message": "Jamie, PTAL.",
       "revId": "773055d766b31de2519d67131a7cf5b2a08ccc23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6929353_cc9337ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-21T18:58:56Z",
+      "side": 1,
+      "message": "Thanks for the change",
+      "revId": "773055d766b31de2519d67131a7cf5b2a08ccc23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
