@@ -33,6 +33,24 @@
       "message": "Need any help getting this landed?",
       "revId": "9cc8769099555fc637b32b902a1b588925872af1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87f12c69_cf918f46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-02-21T12:30:11Z",
+      "side": 1,
+      "message": "Yes, I would appreciate it.\nThis depends on fixing tests so that they don\u0027t require Vulkan.\n\nThe way to do it is to add the backend compiler output language to the PlatformParameters / EGLPlatformParameters, and make the TEST_P use those instead of hardcoding to SH_SPIRV_VULKAN_OUTPUT.",
+      "parentUuid": "203bb3da_5ccacd99",
+      "revId": "9cc8769099555fc637b32b902a1b588925872af1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
