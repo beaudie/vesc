@@ -1257,7 +1257,6 @@ enum class RenderPassClosureReason
     BufferUseThenReleaseToExternal,
     ImageUseThenReleaseToExternal,
     BufferInUseWhenSynchronizedMap,
-    ImageOrphan,
     GLMemoryBarrierThenStorageResource,
     StorageResourceUseThenGLMemoryBarrier,
     ExternalSemaphoreSignal,
