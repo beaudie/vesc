@@ -171,6 +171,30 @@
       },
       "revId": "3cd11a6849ea71ab5c22b56c9df22241a700b7e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98c6ef41_ad338c7e",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2487,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-21T23:28:36Z",
+      "side": 1,
+      "message": "Can\u0027t run test if add `DISABLED_` even if use `--gtest_also_run_disabled_tests` flag.\nI guess there is a bug somewhere.\n\nI need to update commit message to update information about test. But I\u0027m not sure how disabled test should be written in the `--gtest_filter`:  with `DISABLED_` or without?",
+      "parentUuid": "c7501309_7e53877d",
+      "range": {
+        "startLine": 2487,
+        "startChar": 23,
+        "endLine": 2487,
+        "endChar": 41
+      },
+      "revId": "3cd11a6849ea71ab5c22b56c9df22241a700b7e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
