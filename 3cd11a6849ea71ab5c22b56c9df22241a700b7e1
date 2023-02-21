@@ -110,6 +110,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2f7583fd_2d5047a0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-21T19:16:09Z",
+      "side": 1,
+      "message": "Thanks for clearing things up)",
+      "parentUuid": "bce5a2ae_b836c195",
+      "revId": "3cd11a6849ea71ab5c22b56c9df22241a700b7e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "22815a6c_66a4fcd5",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 1
