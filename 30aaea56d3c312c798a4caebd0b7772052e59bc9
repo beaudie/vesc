@@ -33,6 +33,24 @@
       "message": "I\u0027m not sure why Gerrit thinks there\u0027s an unresolved comment thread, but CQ\u0027ing manually.",
       "revId": "30aaea56d3c312c798a4caebd0b7772052e59bc9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ce3ba7f_ee6c7143",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-21T21:27:42Z",
+      "side": 1,
+      "message": "Contradictory-ly, gerrit automarks the \"Reply\" comment as resolved, but removes CQ+2 due to Auto-Submit+1 because of unresolved comments!",
+      "parentUuid": "89ec6925_df24a78d",
+      "revId": "30aaea56d3c312c798a4caebd0b7772052e59bc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
