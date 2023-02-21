@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "bfd1f0b3_edd2293d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-02-21T19:24:16Z",
+      "side": 1,
+      "message": "amended.\nEXT_blend_func_extended.",
+      "parentUuid": "a02b9901_5796c32c",
+      "range": {
+        "startLine": 7,
+        "startChar": 22,
+        "endLine": 7,
+        "endChar": 31
+      },
+      "revId": "6d9516fd45d8545086c00d6b83f1c5c4203def32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "748d8bd0_c88f991c",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -54,6 +78,24 @@
       "writtenOn": "2023-02-21T18:54:55Z",
       "side": 1,
       "message": "nit: Suggest `const char *` instead of `static const char []`. That lets the compiler do more magic.",
+      "revId": "6d9516fd45d8545086c00d6b83f1c5c4203def32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9512fa69_4ca55538",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-02-21T19:24:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "45a53656_7e8e9e95",
       "revId": "6d9516fd45d8545086c00d6b83f1c5c4203def32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
