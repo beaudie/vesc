@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9458fc49_cdec7497",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2023-02-21T18:21:10Z",
+      "side": 1,
+      "message": "just a random question: If iPad Pro uses an M1 or M2 does it report Mac1 or Mac2 or is the filtering that M1/M2 supports turn off there?",
+      "revId": "d0dc37b700f2f8bc814fd36e9bdb90c334d8962f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
