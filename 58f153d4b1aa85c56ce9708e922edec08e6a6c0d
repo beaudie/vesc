@@ -16,6 +16,23 @@
       "message": "Hi Geoff, PTAL. Thanks",
       "revId": "58f153d4b1aa85c56ce9708e922edec08e6a6c0d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3a0be27_34644484",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-02-21T18:22:37Z",
+      "side": 1,
+      "message": "Is this out of date now that we fixed it through EGLImage caching texture/renderability?",
+      "revId": "58f153d4b1aa85c56ce9708e922edec08e6a6c0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
