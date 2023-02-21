@@ -98,6 +98,24 @@
       "parentUuid": "45a53656_7e8e9e95",
       "revId": "6d9516fd45d8545086c00d6b83f1c5c4203def32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0eb64af7_2fd0e785",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-21T19:27:13Z",
+      "side": 1,
+      "message": "Reopening, the suggestion was to use `const char *` instead of `const char []` (i.e. let the compiler place \"gl_FragData\" where it wants, rather than forcing it in the stack (or with this change, in the DATA segment))",
+      "parentUuid": "9512fa69_4ca55538",
+      "revId": "6d9516fd45d8545086c00d6b83f1c5c4203def32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
