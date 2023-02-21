@@ -16,6 +16,23 @@
       "message": "Yikes. Thanks for catching and fixing this. Maybe worth a comment so over-eager contributors don\u0027t accidentally undo this in the future, but let\u0027s get this in ASAP. lgtm+2",
       "revId": "30aaea56d3c312c798a4caebd0b7772052e59bc9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89ec6925_df24a78d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-02-21T21:19:07Z",
+      "side": 1,
+      "message": "I\u0027m not sure why Gerrit thinks there\u0027s an unresolved comment thread, but CQ\u0027ing manually.",
+      "revId": "30aaea56d3c312c798a4caebd0b7772052e59bc9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
