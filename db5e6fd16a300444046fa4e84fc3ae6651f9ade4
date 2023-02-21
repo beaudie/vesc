@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "12e86187_cd830495",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-21T14:43:45Z",
+      "side": 1,
+      "message": "Can FixedQueue be simplified yet?",
+      "revId": "db5e6fd16a300444046fa4e84fc3ae6651f9ade4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b9e75dd_ea796b8e",
@@ -31,6 +48,29 @@
       "writtenOn": "2023-02-20T11:17:21Z",
       "side": 1,
       "message": "`postSubmitCheck` is never called when `asyncCommandQueue` is enabled.",
+      "revId": "db5e6fd16a300444046fa4e84fc3ae6651f9ade4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "526218ab_f86f91cb",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 5217,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-21T14:43:45Z",
+      "side": 1,
+      "message": "Nit: refactor with the duplicate below",
+      "range": {
+        "startLine": 5205,
+        "startChar": 0,
+        "endLine": 5217,
+        "endChar": 9
+      },
       "revId": "db5e6fd16a300444046fa4e84fc3ae6651f9ade4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
