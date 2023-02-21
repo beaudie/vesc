@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "028a116b_aa4e8e51",
+        "filename": "src/tests/gl_tests/MipmapTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-21T21:23:09Z",
+      "side": 1,
+      "message": "Not a useful link as it\u0027s not public. Either use a public component with a public link (issuetracker.google.com/...), or just drop this, the next line is enough.",
+      "range": {
+        "startLine": 208,
+        "startChar": 7,
+        "endLine": 208,
+        "endChar": 29
+      },
+      "revId": "1930eafc631974dc5fb46622f0007e07de71aa64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
