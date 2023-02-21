@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7521b4b4_10d11ecf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-02-21T18:28:07Z",
+      "side": 1,
+      "message": "Geoff, PTAL.\nDoesn\u0027t seem like we need to undefine this.\nI\u0027ve used dumpbin on libGLESv2.dll and glMemoryBarrier appears correctly in the exported symbols after this change.\nAlso, all our bots pass - I\u0027ve also verified this can roll into Chromium in crrev.com/c/4272251.\nBut maybe there would be non-Chromium users affected?\nWe can go with PS1 if you expect this - undefine only in entry_points_gles_3_1_autogen.h.\nOr we can land and wait till someone complains.",
+      "revId": "bf3ec8902b7176adb928a929d3cc3240d953ab80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
