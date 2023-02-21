@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "d228402a_22eca070",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-21T17:15:18Z",
+      "side": 1,
+      "message": "I don\u0027t understand how this helps CPU though?",
+      "parentUuid": "2a1a5595_dab937de",
+      "range": {
+        "startLine": 14,
+        "startChar": 2,
+        "endLine": 14,
+        "endChar": 26
+      },
+      "revId": "b6443c0a67f19858745c1a156df7cf847a7a0d5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "530fcaf6_a88e0b1c",
@@ -61,6 +85,24 @@
       "writtenOn": "2023-02-20T16:43:42Z",
       "side": 1,
       "message": "Shabi, WDYT about this Gold diff here:\nhttps://angle-gold.skia.org/detail?grouping\u003dname%3Dsolar_smash%26source_type%3Dangle\u0026digest\u003dd271efff08939d94145e8e691d2bb039\u0026changelist_id\u003d4272186\u0026crs\u003dgerrit\n\nIt\u0027s more than 1 that we\u0027ve agreed upon in anglebug.com/7985.\nIt\u0027s actually 10, which I wanted to have originally.",
+      "revId": "b6443c0a67f19858745c1a156df7cf847a7a0d5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23c2f1fc_7c1e520e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-21T17:15:18Z",
+      "side": 1,
+      "message": "It doesn\u0027t look normal TBH. _Could_ be noise in vertex shader output (but still looks too big for that), but in that case it\u0027s just lucky that the foreground and background colors are similar enough for the diff to be low (i.e. 10).",
+      "parentUuid": "530fcaf6_a88e0b1c",
       "revId": "b6443c0a67f19858745c1a156df7cf847a7a0d5e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
