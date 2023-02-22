@@ -1502,6 +1502,11 @@ void GenerateCaps(const FunctionsGL *functions,
          functions->hasGLESExtension("GL_NV_texture_border_clamp"));
     extensions->textureBorderClampOES = extensions->textureBorderClampEXT;
 
+    extensions->textureMirrorClampToEdgeEXT =
+        functions->isAtLeastGL(gl::Version(4, 4)) ||
+        functions->hasGLExtension("GL_ARB_texture_mirror_clamp_to_edge") ||
+        functions->hasGLESExtension("GL_EXT_texture_mirror_clamp_to_edge");
+
     extensions->multiDrawIndirectEXT = true;
     extensions->instancedArraysANGLE = functions->isAtLeastGL(gl::Version(3, 1)) ||
                                        (functions->hasGLExtension("GL_ARB_instanced_arrays") &&
