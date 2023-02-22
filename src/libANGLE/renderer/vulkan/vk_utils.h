@@ -24,6 +24,7 @@
 #include "libANGLE/Observer.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/serial_utils.h"
+#include "libANGLE/renderer/vulkan/MemoryTracking.h"
 #include "libANGLE/renderer/vulkan/SecondaryCommandBuffer.h"
 #include "libANGLE/renderer/vulkan/VulkanSecondaryCommandBuffer.h"
 #include "libANGLE/renderer/vulkan/vk_wrapper.h"
@@ -1030,34 +1031,6 @@ angle::Result SetDebugUtilsObjectName(ContextVk *contextVk,
                                       VkObjectType objectType,
                                       uint64_t handle,
                                       const std::string &label);
-
-// Used to store memory allocation information for tracking purposes.
-struct MemoryAllocationInfo
-{
-    MemoryAllocationInfo() = default;
-    uint64_t id;
-    MemoryAllocationType allocType;
-    uint32_t memoryHeapIndex;
-    void *handle;
-    VkDeviceSize size;
-};
-
-class MemoryAllocInfoMapKey
-{
-  public:
-    MemoryAllocInfoMapKey() : handle(nullptr) {}
-    MemoryAllocInfoMapKey(void *handle) : handle(handle) {}
-
-    bool operator==(const MemoryAllocInfoMapKey &rhs) const
-    {
-        return reinterpret_cast<uint64_t>(handle) == reinterpret_cast<uint64_t>(rhs.handle);
-    }
-
-    size_t hash() const;
-
-  private:
-    void *handle;
-};
 
 }  // namespace vk
 
