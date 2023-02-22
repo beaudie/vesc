@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d245c941_5b3f5178",
+        "filename": "src/libANGLE/renderer/vulkan/RenderbufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-22T15:26:54Z",
+      "side": 1,
+      "message": "So we faced this problem in the past, and that\u0027s how `releaseImageFromShareContexts` was implemented.\n\nIsn\u0027t the bug here that the render pass image finalization code is referencing the released image? Then something similar (or likely identical) to `releaseImageFromShareContexts` would solve it.\n\nWhat that function does is to finalize the image early and remove its reference from the render pass.",
+      "range": {
+        "startLine": 325,
+        "startChar": 12,
+        "endLine": 325,
+        "endChar": 18
+      },
+      "revId": "720eb058f2e2f04b7cfa69810eb6f7cbcee18f05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
