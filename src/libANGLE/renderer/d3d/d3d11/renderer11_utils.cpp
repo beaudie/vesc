@@ -1673,6 +1673,7 @@ void GenerateCaps(ID3D11Device *device,
     extensions->copyTextureCHROMIUM                 = true;
     extensions->copyCompressedTextureCHROMIUM       = true;
     extensions->textureStorageMultisample2dArrayOES = true;
+    extensions->textureMirrorClampToEdgeEXT         = true;
     extensions->multiviewMultisampleANGLE =
         ((extensions->multiviewOVR || extensions->multiview2OVR) &&
          extensions->textureStorageMultisample2dArrayOES);
@@ -2093,12 +2094,14 @@ D3D11_TEXTURE_ADDRESS_MODE ConvertTextureWrap(GLenum wrap)
     {
         case GL_REPEAT:
             return D3D11_TEXTURE_ADDRESS_WRAP;
+        case GL_MIRRORED_REPEAT:
+            return D3D11_TEXTURE_ADDRESS_MIRROR;
         case GL_CLAMP_TO_EDGE:
             return D3D11_TEXTURE_ADDRESS_CLAMP;
         case GL_CLAMP_TO_BORDER:
             return D3D11_TEXTURE_ADDRESS_BORDER;
-        case GL_MIRRORED_REPEAT:
-            return D3D11_TEXTURE_ADDRESS_MIRROR;
+        case GL_MIRROR_CLAMP_TO_EDGE_EXT:
+            return D3D11_TEXTURE_ADDRESS_MIRROR_ONCE;
         default:
             UNREACHABLE();
     }

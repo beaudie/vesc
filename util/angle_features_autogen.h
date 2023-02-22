@@ -283,6 +283,7 @@ enum class Feature
     SupportsRenderpass2,
     SupportsRenderPassLoadStoreOpNone,
     SupportsRenderPassStoreOpNone,
+    SupportsSamplerMirrorClampToEdge,
     SupportsShaderFloat16,
     SupportsShaderFramebufferFetch,
     SupportsShaderFramebufferFetchEXT,
