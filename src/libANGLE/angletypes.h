@@ -24,6 +24,8 @@
 #include <bitset>
 #include <map>
 #include <memory>
+#include <optional>
+#include <thread>
 #include <unordered_map>
 
 namespace gl
@@ -1182,6 +1184,100 @@ class DestroyThenDelete
 
 template <typename ObjT, typename ContextT>
 using UniqueObjectPointer = std::unique_ptr<ObjT, DestroyThenDelete<ObjT, ContextT>>;
+
+// Mutex class that implements the stl Mutex requirements:
+// https://en.cppreference.com/w/cpp/named_req/Mutex
+// Supports using a std::mutex or std::recursive_mutex as MutexType.
+template <typename MutexType>
+class ThreadTrackingMutex : public NonCopyable
+{
+  public:
+    ThreadTrackingMutex()  = default;
+    ~ThreadTrackingMutex() = default;
+
+    void lock()
+    {
+        mMutex.lock();
+        on_lock();
+    }
+
+    bool try_lock()
+    {
+        if (!mMutex.try_lock())
+        {
+            return false;
+        }
+
+        on_lock();
+        return true;
+    }
+
+    void unlock()
+    {
+        // unlock only has defined behaviour if the mutex is locked by the current thread
+        ASSERT(mLockingThreadId.has_value());
+        ASSERT(mLockingThreadId.value() == std::this_thread::get_id());
+        ASSERT(mLockCount > 0);
+        mLockCount--;
+        if (mLockCount == 0)
+        {
+            mLockingThreadId.reset();
+        }
+        mMutex.unlock();
+    }
+
+    uint64_t lock_count_on_current_thread() const
+    {
+        return mLockingThreadId == std::this_thread::get_id() ? mLockCount : 0u;
+    }
+
+  private:
+    void on_lock()
+    {
+        if (mLockingThreadId.has_value())
+        {
+            ASSERT(mLockingThreadId.value() == std::this_thread::get_id());
+            mLockCount++;
+        }
+        else
+        {
+            mLockingThreadId = std::this_thread::get_id();
+            mLockCount       = 1;
+        }
+    }
+
+    uint64_t mLockCount = 0;
+    std::optional<std::thread::id> mLockingThreadId;
+
+    MutexType mMutex;
+};
+
+template <typename MutexType>
+class ScopedUnlock : public NonCopyable
+{
+  public:
+    ScopedUnlock(MutexType &mutex, uint64_t unlockCount) : mMutex(mutex), mUnlockCount(unlockCount)
+    {
+        for (uint64_t i = 0; i < mUnlockCount; i++)
+        {
+            mMutex.unlock();
+        }
+    }
+
+    ~ScopedUnlock()
+    {
+        for (uint64_t i = 0; i < mUnlockCount; i++)
+        {
+            mMutex.lock();
+        }
+    }
+
+  private:
+    MutexType &mMutex;
+    uint64_t mUnlockCount;
+};
+
+using GlobalMutex = ThreadTrackingMutex<std::recursive_mutex>;
 
 }  // namespace angle
 

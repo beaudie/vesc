@@ -847,6 +847,12 @@ struct FeaturesVk : FeatureSetBase
         "forceWaitForSubmissionToCompleteForQueryResult", FeatureCategory::VulkanWorkarounds,
         "Force wait for submission to complete before calling getQueryResult(wait).", &members,
         "https://issuetracker.google.com/253522366"};
+
+    FeatureInfo unlockGlobalMutexOnAquireNextImage = {
+        "unlockGlobalMutexOnAquireNextImage", FeatureCategory::VulkanWorkarounds,
+        "When ANGLE is the Android system driver, vkAcquireNextImageKHR can be "
+        "reentrant and cause deadlocks",
+        &members, "http://anglebug.com/6851"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

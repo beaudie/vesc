@@ -1151,6 +1151,15 @@
             "category": "Workarounds",
             "description":["Force wait for submission to complete before calling getQueryResult(wait)."],
             "issue": "https://issuetracker.google.com/253522366"
+        },
+        {
+            "name": "unlock_global_mutex_on_aquire_next_image",
+            "category": "Workarounds",
+            "description": [
+                "When ANGLE is the Android system driver, vkAcquireNextImageKHR can be ",
+                "reentrant and cause deadlocks"
+            ],
+            "issue": "http://anglebug.com/6851"
         }
     ]
 }

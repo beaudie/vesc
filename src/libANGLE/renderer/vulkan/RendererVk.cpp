@@ -4540,6 +4540,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     ANGLE_FEATURE_CONDITION(&mFeatures, forceWaitForSubmissionToCompleteForQueryResult,
                             isARM || (isNvidia && nvidiaVersion.major < 470u));
 
+    // Only Android has potential reentrancy when calling vkAcquireNextImageKHR.
+    ANGLE_FEATURE_CONDITION(&mFeatures, unlockGlobalMutexOnAquireNextImage, IsAndroid());
+
     ApplyFeatureOverrides(&mFeatures, displayVk->getState());
 
     // Disable async command queue when using Vulkan secondary command buffers temporarily to avoid

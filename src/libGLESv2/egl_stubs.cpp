@@ -391,7 +391,7 @@ EGLSurface GetCurrentSurface(Thread *thread, EGLint readdraw)
 EGLDisplay GetDisplay(Thread *thread, EGLNativeDisplayType display_id)
 {
     return Display::GetDisplayFromNativeDisplay(EGL_PLATFORM_ANGLE_ANGLE, display_id,
-                                                AttributeMap());
+                                                AttributeMap(), GetGlobalMutex());
 }
 
 EGLint GetError(Thread *thread)
@@ -413,12 +413,13 @@ EGLDisplay GetPlatformDisplay(Thread *thread,
         case EGL_PLATFORM_WAYLAND_EXT:
         {
             return Display::GetDisplayFromNativeDisplay(
-                platform, gl::bitCast<EGLNativeDisplayType>(native_display), attribMap);
+                platform, gl::bitCast<EGLNativeDisplayType>(native_display), attribMap,
+                GetGlobalMutex());
         }
         case EGL_PLATFORM_DEVICE_EXT:
         {
             Device *eglDevice = static_cast<Device *>(native_display);
-            return Display::GetDisplayFromDevice(eglDevice, attribMap);
+            return Display::GetDisplayFromDevice(eglDevice, attribMap, GetGlobalMutex());
         }
         default:
         {

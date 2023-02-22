@@ -22,7 +22,6 @@
 
 namespace angle
 {
-using GlobalMutex = std::recursive_mutex;
 
 //  - TLS_SLOT_OPENGL and TLS_SLOT_OPENGL_API: These two aren't used by bionic
 //    itself, but allow the graphics code to access TLS directly rather than

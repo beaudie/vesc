@@ -378,10 +378,12 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
             const EGLenum clientType,
             const egl::AttributeMap &attribs,
             const egl::DisplayExtensions &displayExtensions,
-            const egl::ClientExtensions &clientExtensions);
+            const egl::ClientExtensions &clientExtensions,
+            angle::GlobalMutex &mutex);
 
     // Use for debugging.
     ContextID id() const { return mState.getContextID(); }
+    angle::GlobalMutex &getMutex() const { return *mMutex; }
 
     egl::Error initialize();
 
@@ -866,6 +868,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     bool mIsDestroyed;
 
     std::unique_ptr<Framebuffer> mDefaultFramebuffer;
+
+    angle::GlobalMutex *mMutex;
 };
 
 class [[nodiscard]] ScopedContextRef

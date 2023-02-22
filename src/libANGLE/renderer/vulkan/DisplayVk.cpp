@@ -261,6 +261,11 @@ ShareGroupImpl *DisplayVk::createShareGroup()
     return new ShareGroupVk();
 }
 
+angle::GlobalMutex &DisplayVk::getMutex() const
+{
+    return *mState.mutex;
+}
+
 bool DisplayVk::isConfigFormatSupported(VkFormat format) const
 {
     // Requires VK_GOOGLE_surfaceless_query extension to be supported.

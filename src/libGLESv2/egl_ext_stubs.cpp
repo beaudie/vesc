@@ -214,12 +214,13 @@ EGLDisplay GetPlatformDisplayEXT(Thread *thread,
         case EGL_PLATFORM_WAYLAND_EXT:
         {
             return egl::Display::GetDisplayFromNativeDisplay(
-                platform, gl::bitCast<EGLNativeDisplayType>(native_display), attribMap);
+                platform, gl::bitCast<EGLNativeDisplayType>(native_display), attribMap,
+                GetGlobalMutex());
         }
         case EGL_PLATFORM_DEVICE_EXT:
         {
             Device *eglDevice = static_cast<Device *>(native_display);
-            return egl::Display::GetDisplayFromDevice(eglDevice, attribMap);
+            return egl::Display::GetDisplayFromDevice(eglDevice, attribMap, GetGlobalMutex());
         }
         default:
         {
