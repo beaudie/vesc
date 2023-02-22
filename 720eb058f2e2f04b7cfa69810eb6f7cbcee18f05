@@ -22,6 +22,30 @@
       },
       "revId": "720eb058f2e2f04b7cfa69810eb6f7cbcee18f05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d04c670e_cd54c631",
+        "filename": "src/libANGLE/renderer/vulkan/RenderbufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-22T17:03:21Z",
+      "side": 1,
+      "message": "\u003e Isn\u0027t the bug here that the render pass image finalization code is referencing the released image? \n\nYes.\n\n\u003e Then something similar (or likely identical) to releaseImageFromShareContexts would solve it.\n\nMy old fix was add `finalizeImageLayoutInShareContexts()` and rewrite:\n```\nvoid ImageHelper::releaseImageFromShareContexts(RendererVk *renderer, ContextVk *contextVk)\n{\n    finalizeImageLayoutInShareContexts(renderer, contextVk);\n    releaseImage(renderer);\n}\n```\nThe `finalizeImageLayoutInShareContexts()` called when `mOwnsImage \u003d\u003d false` image is released.\n\nHowever, this fix also has bug.\nThe `finalizeImageLayoutInShareContexts()` may be called on a `source` texture that was not used in a RenderPass. Because `source` image uses same `ImageHelper` this will successfully finalize the RenderPass attachment. However, `target` texture will still be bound to the framebuffer. If continue to render into RenderPass with attachment finalized - different unexpected results may happen. From what I found, clearing the surface will optimize clear as loadOp, because nothing was rendered (attachment is finalized), but this is incorrect - previous draw commands will appear after clear.\n\nOne possibility to prevent above bug is change `finalizeImageLayoutInShareContexts()` to accept not `ImageHelper` but texture/renderbuffer. And add tracking texture/renderbuffer into RenderPass attachments. Or something similar. I do not know this code as much in order to make such changes.\n\n`releaseImageFromShareContexts()` works for `mOwnsImage \u003d\u003d true` because `ImageHelper` will be also released (framebuffer attachment previously was detached) and it is not possible to continue RenderPass (as far as I know).\n\nWith `mOwnsImage \u003d\u003d false`, `ImageHelper` may be destroyed any time after it is released from texture/renderbuffer. I did not find a better way, rather than flush RenderPass with that image attached. Side effect: will also flush if `source` texture released, but this should not happen in normal programs.",
+      "parentUuid": "d245c941_5b3f5178",
+      "range": {
+        "startLine": 325,
+        "startChar": 12,
+        "endLine": 325,
+        "endChar": 18
+      },
+      "revId": "720eb058f2e2f04b7cfa69810eb6f7cbcee18f05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
