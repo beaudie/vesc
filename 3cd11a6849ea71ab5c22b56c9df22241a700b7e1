@@ -261,6 +261,30 @@
       },
       "revId": "3cd11a6849ea71ab5c22b56c9df22241a700b7e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a2e4496_041172a2",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2487,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-22T14:41:31Z",
+      "side": 1,
+      "message": "Yes, like this:\n```\nangle_end2end_tests --gtest_also_run_disabled_tests --gtest_filter\u003dEGLSurfaceTest.DISABLED_RandomClearTearing*\n```\n\nI checked on Android.\n\nToday checked on Windows and it works. But I need to run tests on Android.\n\nFound another flag that worked on Android: `--fast-local-dev`/`--extract-test-list-from-filter`\nThis flags skips `list_tests` on device which ignores `--gtest_also_run_disabled_tests` option.\n```\n      flags \u003d [\n          f for f in self._test_instance.flags if f not in [\n              \u0027--wait-for-debugger\u0027, \u0027--wait-for-java-debugger\u0027,\n              \u0027--gtest_also_run_disabled_tests\u0027\n          ]\n      ]\n```\n\nBut even with `--extract-test-list-from-filter` behavior is strange.\n\nUsing filter `EGLSurfaceTest.DISABLED_RandomClearTearing*` runs all tests however in results they are listed without `DISBLED_` part.\n\nUsing exact name in the filter `EGLSurfaceTest.DISABLED_RandomClearTearing/ES2_Vulkan_NoFixture` tries to run 2 tests (one with `DISBLED_` part and another without). The disabled test name failed to run, but not disabled test name runs OK by actually running DISABLED_ test...\n```\nEGLSurfaceTest.RandomClearTearing/ES2_Vulkan_NoFixture              SUCCESS\nEGLSurfaceTest.DISABLED_RandomClearTearing/ES2_Vulkan_NoFixture     NOTRUN\n```",
+      "parentUuid": "11eeb9a4_5c305948",
+      "range": {
+        "startLine": 2487,
+        "startChar": 23,
+        "endLine": 2487,
+        "endChar": 41
+      },
+      "revId": "3cd11a6849ea71ab5c22b56c9df22241a700b7e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
