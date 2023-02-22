@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1552d7cf_b203b8bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-22T19:02:18Z",
+      "side": 1,
+      "message": "Please double check that CPU perf is not adversely affected. Checking a few of the more complicated traces should do",
+      "revId": "d1f2896ad5ffbd5093807b64eafd2468af7b02b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
