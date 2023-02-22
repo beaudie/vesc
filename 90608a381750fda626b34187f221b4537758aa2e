@@ -16,6 +16,23 @@
       "message": "OK so I investigated the build failures... libc++ hardening appears to affect ABI somehow (though I thought it wasn\u0027t supposed to).\n\nNonetheless, even if we don\u0027t solve this now, we\u0027re going to have to solve it in the future since there may be hardening changes that intentionally break ABI.\n\nThe problem is that the angle tree currently just reuses third_party/abseil-cpp from Chromium. Chromium builds with libc++ hardening, so the symbol names don\u0027t match exactly.\n\nI\u0027m not entirely sure what angle\u0027s strategy for importing things from Chromium is. It would /possibly/ be easier to just manually up-rev absl in angle and separately maintain .defs... but then someone would have to be on the hook for actually doing that periodically (and any other gardening that would entail).",
       "revId": "90608a381750fda626b34187f221b4537758aa2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0723473_5523576c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001168
+      },
+      "writtenOn": "2023-02-22T23:49:38Z",
+      "side": 1,
+      "message": "I have confirmed that if I rebuild the .def files locally it works. But there remain questions about how to sustainably manage this in the future; unfortunately (I don\u0027t know the reason) absl either will not or cannot annotate their exports, so we need to try to extract them manually using this script.\n\nI do not think Chrome itself should have to check in two versions of the .def files; in particular, Chrome itself does not need or want the enable_safe_libcxx switch to be configurable.\n\nMaybe there\u0027s some relatively easy way to layer additional things on top of the third_party/abseil-cpp checked out from Chrome in angle?",
+      "revId": "90608a381750fda626b34187f221b4537758aa2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
