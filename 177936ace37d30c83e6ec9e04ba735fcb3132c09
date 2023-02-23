@@ -70,6 +70,30 @@
       },
       "revId": "177936ace37d30c83e6ec9e04ba735fcb3132c09",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5da79785_c6acc740",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-02-23T20:20:05Z",
+      "side": 0,
+      "message": "I removed the flag and added a mention in the documentation.",
+      "parentUuid": "911a7520_6ba0b9de",
+      "range": {
+        "startLine": 336,
+        "startChar": 21,
+        "endLine": 336,
+        "endChar": 37
+      },
+      "revId": "177936ace37d30c83e6ec9e04ba735fcb3132c09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
