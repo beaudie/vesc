@@ -16,6 +16,24 @@
       "message": "Nice! Thanks for the test, I\u0027m assuming you verified that it fails without the fix?\n\nAlso very timely, another app was shown to be corrupted just yesterday due this exact same bug.",
       "revId": "247e11af08c871793b7c6a619d6ae55eb7398864",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbd1b770_04710210",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-02-23T21:41:10Z",
+      "side": 1,
+      "message": "yeah, tested on my local machine. without this change, it will fail the test",
+      "parentUuid": "f286c8f3_72db2f3b",
+      "revId": "247e11af08c871793b7c6a619d6ae55eb7398864",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
