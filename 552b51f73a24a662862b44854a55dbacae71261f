@@ -16,6 +16,24 @@
       "message": "@Geoff, do you know if there is a reason why we\u0027d want a flush every time an image is orphaned?",
       "revId": "552b51f73a24a662862b44854a55dbacae71261f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffb6f718_55f41078",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-02-23T17:01:36Z",
+      "side": 1,
+      "message": "Looks like the code has changed significantly since I added the flush in https://chromium-review.googlesource.com/c/angle/angle/+/1562522. Back then we stored kept fences for each context the image was used in to make sure we knew the image was no longer referenced on destruction.\n\nLooks fine to remove the flush now.",
+      "parentUuid": "7060f72d_d27b0199",
+      "revId": "552b51f73a24a662862b44854a55dbacae71261f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
