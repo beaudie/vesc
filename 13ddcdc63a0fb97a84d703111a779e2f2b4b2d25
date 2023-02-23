@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9784c243_d141fbd7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1128439
+      },
+      "writtenOn": "2023-02-23T03:07:48Z",
+      "side": 1,
+      "message": "Apparently we should ship this on ARM64 Windows, per Microsoft. PTAL",
+      "revId": "13ddcdc63a0fb97a84d703111a779e2f2b4b2d25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
