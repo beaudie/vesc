@@ -70,6 +70,30 @@
       },
       "revId": "720eb058f2e2f04b7cfa69810eb6f7cbcee18f05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ddf4bab_1f8df06e",
+        "filename": "src/libANGLE/renderer/vulkan/RenderbufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-23T14:18:54Z",
+      "side": 1,
+      "message": "\u003e If we really have to close the render pass, either these functions should be made to return angle::Result, or something should be called at the call site of these functions to deal with this. Usually in the form of onFooHappened()\n\nDid not understand what \"these functions\" are...\n\n\u003e The release of the ImageHelper always happens through ImageVk. TextureVk and RenderbufferVk only drop references\n\nIt is more complicated. Owner of the `ImageHelper` changes:\n- Initially owner is *source* texture/buffer.\n- If *source* destroyed - ownership transfers to `ImageVk` - `releaseOwnershipOfImage()`\n- Target texture/buffer never owns `ImageHelper`.\n- Target texture/buffer holds reference to `egl::Image`.\n- `egl::Image` can\u0027t be destroyed while there are targets.\n\n\u003e Dropping a reference to the shared ImageHelper from TextureVk and RenderbufferVk doesn\u0027t need to do anything; the image will still stay alive\n\nYes, but may be dead any time later.\n\n\u003e Releasing the ImageHelper is only necessary from ImageVk\n\nWe may have either: owner *source* texture/buffer or, owner `EGLImage`.\nSo need also finalize across all contexts when owner *source* texture/buffer releases the image.\n\n\u003e at which point no other context should be holding a reference to it, so might as well finalize it in all contexts\n\nHow we can finalize in all contexts? For that we need a mutex for all contexts that connected by `EGLImage`.\nCurrently GlobalMutex is used only for Shared Contexts.\nI have CL that replaces GlobaMutex by separate mutexes for each Share Group. These mutexes will merge when `EGLImage` is used across groups.\nIn any case, we need to track all Contexts that are protected by the same mutex.\n\n---\n\n\u003e Is that finding covered by one of the tests you\u0027ve added here? If you add a test for every scenario you think could be problematic, we can be sure whatever solution we devise actually works 😊\n\nI guess no) But I was thinking about that. Will update/add more tests.",
+      "parentUuid": "e6463fe1_12e22b33",
+      "range": {
+        "startLine": 325,
+        "startChar": 12,
+        "endLine": 325,
+        "endChar": 18
+      },
+      "revId": "720eb058f2e2f04b7cfa69810eb6f7cbcee18f05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
