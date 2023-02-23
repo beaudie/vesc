@@ -4238,6 +4238,30 @@
       }
     ]
   },
+  "win-msvc-compile": {
+    "additional_compile_targets": [
+      "angle",
+      "angle_static"
+    ]
+  },
+  "win-msvc-dbg-compile": {
+    "additional_compile_targets": [
+      "angle",
+      "angle_static"
+    ]
+  },
+  "win-msvc-x86-compile": {
+    "additional_compile_targets": [
+      "angle",
+      "angle_static"
+    ]
+  },
+  "win-msvc-x86-dbg-compile": {
+    "additional_compile_targets": [
+      "angle",
+      "angle_static"
+    ]
+  },
   "win10-x64-exp-intel": {},
   "win10-x64-intel": {
     "gtest_tests": [
