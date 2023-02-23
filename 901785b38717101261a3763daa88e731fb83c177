@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cc53a753_ef09e28c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2023-02-23T07:41:30Z",
+      "side": 1,
+      "message": "Maybe the working is not perfect, what I mean is that this value is not just dependent on the context that is serialized, but also on other contexts that share data with this. The value is also a duplicate in the sense that somewhere else in the context state it is recorded that this program ID is bound. \nCurrently we don\u0027t use this context serialization to re-create a context state, but if one would do so, this refcount would also be ignored, because binding the program should already update the value.",
+      "parentUuid": "8f3554bf_e02d0c3d",
+      "range": {
+        "startLine": 11,
+        "startChar": 11,
+        "endLine": 11,
+        "endChar": 51
+      },
+      "revId": "901785b38717101261a3763daa88e731fb83c177",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e0bef0a6_8e2cbaa7",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
@@ -37,6 +61,30 @@
       "writtenOn": "2023-02-21T19:03:47Z",
       "side": 1,
       "message": "Wouldn\u0027t it be better to run validation after all the contexts have been set up?  Then the refcounts would match.",
+      "range": {
+        "startLine": 25,
+        "startChar": 27,
+        "endLine": 28,
+        "endChar": 33
+      },
+      "revId": "901785b38717101261a3763daa88e731fb83c177",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "417a7162_aa77ffc5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1491823
+      },
+      "writtenOn": "2023-02-23T07:41:30Z",
+      "side": 1,
+      "message": "I was considering this at the beginning, but then I realized all of the above, and the other reason I decided against it, is that then the code change is more intrusive, because one has to take another round through all contexts to emit the validation code snipped.\n\nI can have another look at this though.",
+      "parentUuid": "e0bef0a6_8e2cbaa7",
       "range": {
         "startLine": 25,
         "startChar": 27,
