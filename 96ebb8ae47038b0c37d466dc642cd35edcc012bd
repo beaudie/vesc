@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3639bd38_f9d5feeb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001168
+      },
+      "writtenOn": "2023-02-23T19:05:26Z",
+      "side": 1,
+      "message": "PTAL.\n\nThe TSAN error is:\n\n```\n[ RUN      ] ProgramBinaryES3Test.TestArrayOfStructUniform/ES3_Vulkan_SwiftShader\n\u003d\u003d561\u003d\u003dERROR: ThreadSanitizer failed to allocate 0xf70800003000 (271613731811328) bytes at address 81a00001000 (errno: 12)\n```\n\nThis doesn\u0027t look related to this CL; at the same time, this seems to be a semi-common failure mode on https://ci.chromium.org/p/angle/builders/try/linux-tsan-test?limit\u003d200. Assuming you\u0027re OK with the latest version, should I commit this directly or just keep CQ+2ing until it goes through?",
+      "revId": "96ebb8ae47038b0c37d466dc642cd35edcc012bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
