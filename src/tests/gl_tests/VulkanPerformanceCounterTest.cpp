@@ -1944,6 +1944,59 @@ TEST_P(VulkanPerformanceCounterTest, DepthStencilMaskedDrawThenClear)
                                      getPerfCounters().depthClearAttachments);
 }
 
+// Tests that depth compare function change, get correct loadop for depth buffer
+//
+// - Scenario: depth test enabled, depth write mask = 0,
+//   clear depth, draw red quad with compare function always,
+//   and then  draw green quad with compare function less equal
+TEST_P(VulkanPerformanceCounterTest, DepthFunctionDynamicChangeLoadOp)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled(kPerfMonitorExtensionName));
+
+    // This optimization is not implemented when this workaround is in effect.
+    ANGLE_SKIP_TEST_IF(hasPreferDrawOverClearAttachments());
+
+    angle::VulkanPerfCounters expected;
+
+    // Expect rpCount+1, depth(Clears+1, Loads+0, LoadNones+0, Stores+0, StoreNones+0),
+    setExpectedCountersForDepthOps(getPerfCounters(), 1, 1, 0, 0, 0, 0, &expected);
+
+    // No vkCmdClearAttachments should be issued.
+    expected.depthLoadOpClears = getPerfCounters().depthLoadOpClears;
+
+    GLFramebuffer framebuffer;
+    GLTexture texture;
+    GLRenderbuffer renderbuffer;
+    setupForColorDepthOpsTest(&framebuffer, &texture, &renderbuffer);
+
+    // Clear color and depth.
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // No depth write
+    glDepthMask(GL_FALSE);
+    // Depth function always
+    glDepthFunc(GL_ALWAYS);
+
+    // Draw read quad.
+    ANGLE_GL_PROGRAM(redprogram, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+    drawQuad(redprogram, essl1_shaders::PositionAttrib(), 0.5f);
+
+    // Depth function switch to less equal
+    glDepthFunc(GL_LEQUAL);
+
+    // Draw green quad.
+    ANGLE_GL_PROGRAM(greenprogram, essl1_shaders::vs::Simple(), essl1_shaders::fs::Green());
+    drawQuad(greenprogram, essl1_shaders::PositionAttrib(), 0.7f);
+
+    EXPECT_EQ(expected.renderPasses, getPerfCounters().renderPasses);
+
+    // Break the render pass and check how many clears were actually done
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+    EXPECT_DEPTH_OP_COUNTERS(getPerfCounters(), expected);
+    EXPECT_CLEAR_ATTACHMENTS_COUNTER(expected.depthLoadOpClears,
+                                     getPerfCounters().depthLoadOpClears);
+}
+
 // Tests that common PUBG MOBILE case does not break render pass, and that counts are correct:
 //
 // - Scenario: invalidate, disable, draw
