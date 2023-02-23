@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1a9841f_cf877b0a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-02-23T18:02:40Z",
+      "side": 1,
+      "message": "I would recommend keeping them init to white.  Black should be avoided if possible, as it can mask other bugs that fail to init.",
+      "range": {
+        "startLine": 15,
+        "startChar": 56,
+        "endLine": 16,
+        "endChar": 8
+      },
+      "revId": "4f1f1ecd7715a35a935f153631d4313cbac4af73",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
