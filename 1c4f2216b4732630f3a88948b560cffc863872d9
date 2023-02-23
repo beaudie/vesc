@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd8bdecb_b27421a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-02-23T19:23:25Z",
+      "side": 1,
+      "message": "Shabi, PTAL.\nPassed 1 run so far https://ci.chromium.org/ui/p/angle/builders/try/win-test/11742/overview, I\u0027ll monitor how it behaves on CI.",
+      "revId": "1c4f2216b4732630f3a88948b560cffc863872d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
