@@ -46,6 +46,30 @@
       },
       "revId": "177936ace37d30c83e6ec9e04ba735fcb3132c09",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "911a7520_6ba0b9de",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-02-23T18:13:56Z",
+      "side": 0,
+      "message": "I thought we\u0027re using `--one-frame-only` on the CQ, but seems like it\u0027s only `--smoke-test-mode` https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/infra/specs/test_suites.pyl;l\u003d727;drc\u003de960355a9a22876559e251953080349a755bb497\nIt makes sense to use `--max-steps-performed 1` if `--smoke-test-mode` doesn\u0027t imply it already.",
+      "parentUuid": "0f9fae70_7787a73f",
+      "range": {
+        "startLine": 336,
+        "startChar": 21,
+        "endLine": 336,
+        "endChar": 37
+      },
+      "revId": "177936ace37d30c83e6ec9e04ba735fcb3132c09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
