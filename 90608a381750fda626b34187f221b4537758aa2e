@@ -69,6 +69,24 @@
       "parentUuid": "e7521f0e_b17109c8",
       "revId": "90608a381750fda626b34187f221b4537758aa2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6d2bb5e_c1ab38b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-02-23T16:00:47Z",
+      "side": 1,
+      "message": "absl is special on windows because (afaik) it doesn\u0027t explicitly export functions and requires a hand generated .def file to link properly. Now that we build with a different config in standalone ANGLE we need different .def files.\n\nWe are continuing to use hardening when building with Chrome, the failing bots are the ones that build standalone ANGLE.\n\nIn the meantime, if we can add this as a gn arg for local builds, that will be enough tell our partners and update our roll-into-android scripts.",
+      "parentUuid": "70811ee9_198c6ccb",
+      "revId": "90608a381750fda626b34187f221b4537758aa2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
