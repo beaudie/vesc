@@ -16,6 +16,23 @@
       "message": "Apparently we should ship this on ARM64 Windows, per Microsoft. PTAL",
       "revId": "13ddcdc63a0fb97a84d703111a779e2f2b4b2d25",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ff32406_a4dcbb12",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-23T14:31:29Z",
+      "side": 1,
+      "message": "I\u0027ll take your word for it",
+      "revId": "13ddcdc63a0fb97a84d703111a779e2f2b4b2d25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
