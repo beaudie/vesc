@@ -33,6 +33,24 @@
       "message": "I have confirmed that if I rebuild the .def files locally it works. But there remain questions about how to sustainably manage this in the future; unfortunately (I don\u0027t know the reason) absl either will not or cannot annotate their exports, so we need to try to extract them manually using this script.\n\nI do not think Chrome itself should have to check in two versions of the .def files; in particular, Chrome itself does not need or want the enable_safe_libcxx switch to be configurable.\n\nMaybe there\u0027s some relatively easy way to layer additional things on top of the third_party/abseil-cpp checked out from Chrome in angle?",
       "revId": "90608a381750fda626b34187f221b4537758aa2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7521f0e_b17109c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1178490
+      },
+      "writtenOn": "2023-02-23T07:47:07Z",
+      "side": 1,
+      "message": "Argh.\n\nYes, doing ABSL_EXPORT is the way to go here. We have multiple reasons to do that and absl folks were open to that last time I talked with them.\n\nThe main issue here is time/priority from my side (absl in Chrome maintainer).\n\nIf there are no workarounds I can try a push (I did twice in the past but that got reprioritized).\n\nI would like to hear from Angle if the option to maintain .def files for Angle on Angle side would be viable (looks quicker than ABSL_EXPORT to me).",
+      "parentUuid": "d0723473_5523576c",
+      "revId": "90608a381750fda626b34187f221b4537758aa2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
