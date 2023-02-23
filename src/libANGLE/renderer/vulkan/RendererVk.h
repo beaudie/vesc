@@ -770,7 +770,7 @@ class RendererVk : angle::NonCopyable
         return getFeatures().preferLinearFilterForYUV.enabled ? VK_FILTER_LINEAR : defaultFilter;
     }
 
-    angle::Result allocateQueueSerialIndex(QueueSerial *queueSerialOut);
+    angle::Result allocateQueueSerialIndex(SerialIndex *indexOut);
     size_t getLargestQueueSerialIndexEverAllocated() const
     {
         return mQueueSerialIndexAllocator.getLargestIndexEverAllocated();
@@ -781,6 +781,7 @@ class RendererVk : angle::NonCopyable
                              size_t count,
                              RangedSerialFactory *rangedSerialFactory);
 
+    Serial getLastSubmittedSerial(SerialIndex index) const;
     // Return true if all serials in ResourceUse have been submitted.
     bool hasResourceUseSubmitted(const vk::ResourceUse &use) const;
     bool hasQueueSerialSubmitted(const QueueSerial &queueSerial) const;
@@ -1131,6 +1132,12 @@ ANGLE_INLINE void RendererVk::reserveQueueSerials(SerialIndex index,
                                                   RangedSerialFactory *rangedSerialFactory)
 {
     mQueueSerialFactory[index].reserve(rangedSerialFactory, count);
+}
+
+ANGLE_INLINE Serial RendererVk::getLastSubmittedSerial(SerialIndex index) const
+{
+    return isAsyncCommandQueueEnabled() ? mCommandProcessor.getLastEnqueuedSerial(index)
+                                        : mCommandQueue.getLastSubmittedSerial(index);
 }
 
 ANGLE_INLINE bool RendererVk::hasResourceUseSubmitted(const vk::ResourceUse &use) const

@@ -8135,8 +8135,9 @@ ANGLE_INLINE angle::Result ContextVk::allocateQueueSerialIndex()
 {
     ASSERT(mCurrentQueueSerialIndex == kInvalidQueueSerialIndex);
     // Make everything appears to be flushed and submitted
-    ANGLE_TRY(mRenderer->allocateQueueSerialIndex(&mLastFlushedQueueSerial));
-    mCurrentQueueSerialIndex  = mLastFlushedQueueSerial.getIndex();
+    ANGLE_TRY(mRenderer->allocateQueueSerialIndex(&mCurrentQueueSerialIndex));
+    const Serial lastSerial   = mRenderer->getLastSubmittedSerial(mCurrentQueueSerialIndex);
+    mLastFlushedQueueSerial   = QueueSerial(mCurrentQueueSerialIndex, lastSerial);
     mLastSubmittedQueueSerial = mLastFlushedQueueSerial;
     // Note queueSerial for render pass is deferred until begin time.
     generateOutsideRenderPassCommandsQueueSerial();
