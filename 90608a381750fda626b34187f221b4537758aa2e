@@ -51,6 +51,24 @@
       "parentUuid": "d0723473_5523576c",
       "revId": "90608a381750fda626b34187f221b4537758aa2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70811ee9_198c6ccb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-23T14:34:55Z",
+      "side": 1,
+      "message": "\u003e The problem is that the angle tree currently just reuses third_party/abseil-cpp from Chromium. Chromium builds with libc++ hardening, so the symbol names don\u0027t match exactly.\n\nSorry I don\u0027t quite understand. We have a ton of libraries we share with Chromium, how is abseil special?\n\nAlso, when ANGLE is built with Chromium, it\u0027s perfectly fine for it to use libc++ hardening. It\u0027s just _standalone_ ANGLE that we want to build without hardening.",
+      "parentUuid": "e7521f0e_b17109c8",
+      "revId": "90608a381750fda626b34187f221b4537758aa2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
