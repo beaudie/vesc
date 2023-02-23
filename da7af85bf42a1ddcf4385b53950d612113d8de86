@@ -16,6 +16,47 @@
       "message": "Hey Yuly - are you comfortable reviewing these changes?  I can wait for Roman to get back next week, if you prefer.",
       "revId": "da7af85bf42a1ddcf4385b53950d612113d8de86",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c8b9c44_f5b0987d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-02-23T17:04:49Z",
+      "side": 1,
+      "message": "I\u0027m OK with reviewing stuff.\nBut maybe Roman should take another look when he\u0027s back.",
+      "parentUuid": "9a0be67c_3eb5db48",
+      "revId": "da7af85bf42a1ddcf4385b53950d612113d8de86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de223bb9_1c8cefaf",
+        "filename": "src/tests/perf_tests/ANGLEPerfTestArgs.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-02-23T17:04:49Z",
+      "side": 1,
+      "message": "Per my understanging, you\u0027re adding this mode for Gold image comparison.\nBut I wonder why not use it for performance as well, it sounds to me like the interesting stuff happens when rendering the key frame - the frames after it might be less interesting performance-wise.\nSo, I\u0027d measure performance rendering from beginning to key frame in a loop. Not sure what do we measure now, actually.",
+      "range": {
+        "startLine": 135,
+        "startChar": 0,
+        "endLine": 140,
+        "endChar": 5
+      },
+      "revId": "da7af85bf42a1ddcf4385b53950d612113d8de86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

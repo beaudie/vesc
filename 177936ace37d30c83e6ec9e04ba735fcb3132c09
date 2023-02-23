@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca09d05e_08a27399",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-02-23T17:04:49Z",
+      "side": 0,
+      "message": "Maybe we can drop this option along will all mentions of it, like gOneFrameOnly?\nIn general, having multiple runtime modes adds complexity which I think isn\u0027t necessary, e.g. what if user specifies screenshot-frame \u003e key-frame?\n\nI wish we could drop all the little tweaks that can be done on command line e.g. max-steps-performed and have just the args for the scenario we want to run, e.g.:\n1. measure perf\n2. check golden image",
+      "range": {
+        "startLine": 336,
+        "startChar": 21,
+        "endLine": 336,
+        "endChar": 37
+      },
+      "revId": "177936ace37d30c83e6ec9e04ba735fcb3132c09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
