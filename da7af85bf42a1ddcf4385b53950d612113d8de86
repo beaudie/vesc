@@ -57,6 +57,53 @@
       },
       "revId": "da7af85bf42a1ddcf4385b53950d612113d8de86",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f53ca431_49d2a2a1",
+        "filename": "src/tests/perf_tests/ANGLEPerfTestArgs.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-02-23T17:52:08Z",
+      "side": 1,
+      "message": "Yes, `--run-to-key-frame` is mostly to inform the bots they can stop.  I could leave it out, but running all the frames on SwiftShader would definitely consume more resources.  There would be a benefit to running them all the way through, including Reset (I don\u0027t know if we already do that on the bots anywhere).\n\nIt would be difficult to incorporate a key frame into performance measurements, mostly because looping requires Reset, which is complicated.  We don\u0027t support looping on arbitrary frames or frame ranges.  You can do it by trimming the trace to just the frames you care about, but we\u0027re still in the process of hardening our capture/replay to ensure robust trimming.",
+      "parentUuid": "de223bb9_1c8cefaf",
+      "range": {
+        "startLine": 135,
+        "startChar": 0,
+        "endLine": 140,
+        "endChar": 5
+      },
+      "revId": "da7af85bf42a1ddcf4385b53950d612113d8de86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8127541_46f558ab",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 892,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-02-23T17:52:08Z",
+      "side": 1,
+      "message": "ref",
+      "range": {
+        "startLine": 884,
+        "startChar": 0,
+        "endLine": 892,
+        "endChar": 9
+      },
+      "revId": "da7af85bf42a1ddcf4385b53950d612113d8de86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -22,6 +22,30 @@
       },
       "revId": "177936ace37d30c83e6ec9e04ba735fcb3132c09",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f9fae70_7787a73f",
+        "filename": "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-02-23T17:52:08Z",
+      "side": 0,
+      "message": "\u003e Maybe we can drop this option along will all mentions of it, like gOneFrameOnly?\n\nI don\u0027t know who uses `--one-frame-only`, but it can be done with `--max-steps-performed 1` with the fixes in this CL.  I\u0027ll go ahead and drop it, and add a mention to the documentation.\n\n\u003e In general, having multiple runtime modes adds complexity which I think isn\u0027t necessary, e.g. what if user specifies screenshot-frame \u003e key-frame?\n\nI agree, but we do want this tool to be flexible and powerful.  I know Roman and I would like to see this code overhauled at some point to have more formal parameter parsing.\n\nI think I\u0027ve covered the `screenshot-frame \u003e key-frame` case by ignoring keyframe if it is specified (see ref).\n\n\u003e I wish we could drop all the little tweaks that can be done on command line e.g. max-steps-performed and have just the args for the scenario we want to run, e.g.:\n\u003e \n\u003e measure perf\n\u003e check golden image\n\nWell, the extra parameters were added for other use cases, specifically downstream users who run the traces on simulators for new GPUs.  We also use them when developing the tracer itself (specifically `max-steps-performed `) as it allows easier debugging.",
+      "parentUuid": "ca09d05e_08a27399",
+      "range": {
+        "startLine": 336,
+        "startChar": 21,
+        "endLine": 336,
+        "endChar": 37
+      },
+      "revId": "177936ace37d30c83e6ec9e04ba735fcb3132c09",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
