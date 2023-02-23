@@ -87,6 +87,24 @@
       "parentUuid": "70811ee9_198c6ccb",
       "revId": "90608a381750fda626b34187f221b4537758aa2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cab5052_d9ff6cec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001168
+      },
+      "writtenOn": "2023-02-23T16:53:02Z",
+      "side": 1,
+      "message": "I think someone from angle will have to comment on the practicality of rolling abseil themselves.\n\nIn the meantime, to unblock this landing, my proposal is default this option to false on non-Windows platforms and true on Windows. Is that sufficient to unblock things to move forward?\n\nI can file a followup for Windows+absl, but I\u0027m not sure I\u0027ll have time to work on that.",
+      "parentUuid": "f6d2bb5e_c1ab38b0",
+      "revId": "90608a381750fda626b34187f221b4537758aa2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
