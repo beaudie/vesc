@@ -46,6 +46,30 @@
       },
       "revId": "720eb058f2e2f04b7cfa69810eb6f7cbcee18f05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6463fe1_12e22b33",
+        "filename": "src/libANGLE/renderer/vulkan/RenderbufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-23T12:21:22Z",
+      "side": 1,
+      "message": "Hmm... let\u0027s see if we can find the right way to deal with this. A couple of points before that:\n\n- Think of `namespace vk` as a separate layer underneath the Vulkan backend. Passing TextureVk/RenderbufferVk (which are \"GL objects\" in Vulkan context) would be a layering violation\n- If we really have to close the render pass, either these functions should be made to return `angle::Result`, or something should be called at the call site of these functions to deal with this. Usually in the form of `onFooHappened()`\n\nBut we can likely do better here. I read the EGL spec a bit and the code, and here are some observations:\n\n- The ImageHelper isn\u0027t released until all references to it are removed from all contexts\n- The release of the ImageHelper always happens through ImageVk. TextureVk and RenderbufferVk only drop references\n- TextureVk and RenderbufferVk create _views_ of the image separately. These views are local to the context.\n\nAnything I missed in the above? If not, it seems to me that:\n\n- Dropping a reference to the shared ImageHelper from TextureVk and RenderbufferVk doesn\u0027t need to do anything; the image will still stay alive\n- Releasing the ImageHelper is only necessary from ImageVk, at which point no other context should be holding a reference to it, so might as well finalize it in all contexts. Note that EGL images can cross share group boundaries, so this is really all contexts, not just contexts of some share group.\n  * There can only be one context in the end that is currently rendering to the ImageHelper, so there\u0027s no double-finalizing of the image\n\nWhat do you think?\n\n---\n\nAlso:\n\n\u003e From what I found, ...\n\nIs that finding covered by one of the tests you\u0027ve added here? If you add a test for every scenario you think could be problematic, we can be sure whatever solution we devise actually works 😊",
+      "parentUuid": "d04c670e_cd54c631",
+      "range": {
+        "startLine": 325,
+        "startChar": 12,
+        "endLine": 325,
+        "endChar": 18
+      },
+      "revId": "720eb058f2e2f04b7cfa69810eb6f7cbcee18f05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
