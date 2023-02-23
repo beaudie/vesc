@@ -1310,7 +1310,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     angle::Result createGraphicsPipeline();
 
-    angle::Result allocateQueueSerialIndex();
+    angle::Result allocateQueueSerialIndexAndGenerateSerials();
     void releaseQueueSerialIndex();
 
     void generateOutsideRenderPassCommandsQueueSerial();

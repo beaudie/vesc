@@ -1368,7 +1368,7 @@ angle::Result ContextVk::initialize()
     mShareGroupVk->addContext(this);
 
     // Allocate queueSerial index and generate queue serial for commands.
-    ANGLE_TRY(allocateQueueSerialIndex());
+    ANGLE_TRY(allocateQueueSerialIndexAndGenerateSerials());
 
     return angle::Result::Continue;
 }
@@ -5601,7 +5601,7 @@ angle::Result ContextVk::onMakeCurrent(const gl::Context *context)
 
     if (mCurrentQueueSerialIndex == kInvalidQueueSerialIndex)
     {
-        ANGLE_TRY(allocateQueueSerialIndex());
+        ANGLE_TRY(allocateQueueSerialIndexAndGenerateSerials());
     }
 
     // Flip viewports if the user did not request that the surface is flipped.
@@ -8130,11 +8130,12 @@ angle::Result ContextVk::switchToFramebufferFetchMode(bool hasFramebufferFetch)
     return angle::Result::Continue;
 }
 
-ANGLE_INLINE angle::Result ContextVk::allocateQueueSerialIndex()
+ANGLE_INLINE angle::Result ContextVk::allocateQueueSerialIndexAndGenerateSerials()
 {
     ASSERT(mCurrentQueueSerialIndex == kInvalidQueueSerialIndex);
     // Make everything appears to be flushed and submitted
-    ANGLE_TRY(mRenderer->allocateQueueSerialIndex(&mLastFlushedQueueSerial));
+    ANGLE_TRY(
+        mRenderer->allocateQueueSerialIndexAndGetLastSubmittedSerial(&mLastFlushedQueueSerial));
     mCurrentQueueSerialIndex  = mLastFlushedQueueSerial.getIndex();
     mLastSubmittedQueueSerial = mLastFlushedQueueSerial;
     // Note queueSerial for render pass is deferred until begin time.

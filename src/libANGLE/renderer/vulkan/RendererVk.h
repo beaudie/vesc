@@ -767,7 +767,8 @@ class RendererVk : angle::NonCopyable
         return getFeatures().preferLinearFilterForYUV.enabled ? VK_FILTER_LINEAR : defaultFilter;
     }
 
-    angle::Result allocateQueueSerialIndex(QueueSerial *queueSerialOut);
+    angle::Result allocateQueueSerialIndex(SerialIndex *indexOut);
+    angle::Result allocateQueueSerialIndexAndGetLastSubmittedSerial(QueueSerial *queueSerialOut);
     size_t getLargestQueueSerialIndexEverAllocated() const
     {
         return mQueueSerialIndexAllocator.getLargestIndexEverAllocated();
