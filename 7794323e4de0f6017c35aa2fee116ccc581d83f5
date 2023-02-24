@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c87960f_8f14a56a",
+        "filename": "src/compiler/translator/tree_ops/PruneNoOps.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-24T03:02:09Z",
+      "side": 1,
+      "message": "Added to CL description.",
+      "parentUuid": "351f41aa_3252007b",
+      "revId": "7794323e4de0f6017c35aa2fee116ccc581d83f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c27bd1e5_faecc332",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-02-16T19:13:58Z",
       "side": 1,
       "message": "Same here. If there is an example it would be easier to understand what this change does. If it is too messy to add in source code, can we add the example in the CL description? Thank you!",
+      "revId": "7794323e4de0f6017c35aa2fee116ccc581d83f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcac2251_8f7429ef",
+        "filename": "src/compiler/translator/tree_ops/RewriteStructSamplers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-24T03:02:09Z",
+      "side": 1,
+      "message": "This one is just a bugfix, the code doesn\u0027t allow calling `name()` on \"empty\" symbols so we\u0027d have to use the special `\"\"` string (kEmptyImmutableString) directly.",
+      "parentUuid": "c27bd1e5_faecc332",
       "revId": "7794323e4de0f6017c35aa2fee116ccc581d83f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
