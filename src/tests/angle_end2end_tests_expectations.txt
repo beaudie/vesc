@@ -11,6 +11,8 @@
 6804 TSAN : MultithreadingTest.MultiContextDrawWithSwapBuffers/* = SKIP
 7159 TSAN : InstancingTestES3.LargeDivisor/* = SKIP
 8002 TSAN : MultithreadingTest.CreateMultiSharedContextAndDraw/* = SKIP
+8040 TSAN : EGLSurfaceTest.TimestampSurfaceAttribute/* = SKIP
+8040 TSAN : EGLSurfaceTest.WaitSemaphoreAddedAfterCommands/* = SKIP
 
 // Generic
 // Fails in the flush thread when calling eglMakeCurrent.
