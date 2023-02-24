@@ -142,6 +142,30 @@
       },
       "revId": "720eb058f2e2f04b7cfa69810eb6f7cbcee18f05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb94056f_9f2cb3c8",
+        "filename": "src/libANGLE/renderer/vulkan/RenderbufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-24T16:53:42Z",
+      "side": 1,
+      "message": "\u003e So if we have a case when texture/renderbuffer is owner - then it is as if there was no EGLImage at all - no problem). I did no think of that before.\n\nThis is wrong. I was right the first time.\n\n\u003e is as if there was no EGLImage at all - no problem\n\nWrong, because `ImageHelper` is already in the RenderPass. When other non Shared Context destroy owner texture/renderbuffer - `ImageHelper` will be destroyed while pointer will be in the first Context\u0027s RenderPass attachment.\n\nI\u0027m modifying tests so they cover all discussed cases.",
+      "parentUuid": "15fee44c_90d7cee0",
+      "range": {
+        "startLine": 325,
+        "startChar": 12,
+        "endLine": 325,
+        "endChar": 18
+      },
+      "revId": "720eb058f2e2f04b7cfa69810eb6f7cbcee18f05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
