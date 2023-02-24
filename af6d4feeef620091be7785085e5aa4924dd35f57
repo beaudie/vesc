@@ -16,6 +16,23 @@
       "message": "hi Shabhaz,\nplease help to review the changes.\n\nthanks\n\nhailin",
       "revId": "af6d4feeef620091be7785085e5aa4924dd35f57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74cbe585_932c320c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-24T03:02:27Z",
+      "side": 1,
+      "message": "LGTM!",
+      "revId": "af6d4feeef620091be7785085e5aa4924dd35f57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

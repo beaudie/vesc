@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6b1538f_033034fb",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 1
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-24T03:02:27Z",
+      "side": 0,
+      "message": "nit: this would probably be the same and slightly more efficient (if that matters at all):\n\n```\nreturn ((color.r + 4u)\u003e\u003e3)\u003c\u003c11 | ((color.g + 2u)\u003e\u003e2)\u003c\u003c5 | (color.b + 4u)\u003e\u003e3;\n```",
+      "revId": "414ed59cc8ec41dbe353028720da082fd5fa0538",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
