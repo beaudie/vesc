@@ -34,6 +34,24 @@
       "parentUuid": "d6b1538f_033034fb",
       "revId": "414ed59cc8ec41dbe353028720da082fd5fa0538",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c742e13_8bf2c622",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 1
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-02-24T14:15:04Z",
+      "side": 0,
+      "message": "Ack, it\u0027s a `/255`, sorry I misread the multiplier.",
+      "parentUuid": "026c180b_8a73fed4",
+      "revId": "414ed59cc8ec41dbe353028720da082fd5fa0538",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
