@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b15dbfe6_07cb09ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-02-24T16:18:08Z",
+      "side": 1,
+      "message": "Geoff, would it be OK if we stop building tests with MSVC?\nWe don\u0027t run them in this config anyway.\nThis would allow us to stop using C++17 features in ANGLE.\nOtherwise, we\u0027ll need to fix abseil, glmark2 and VK-GL-CTS.",
+      "revId": "286fd805bc61146cd74cbaf37c62fe8708393e52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
