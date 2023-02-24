@@ -50,6 +50,24 @@
       "message": "Would you mind adding more explanations in the CL description on why this improves the precision?\n\nAn example would be helpful:\ne.g. if we have a color that is vec3(some number)\nbefore this change: it would be translated to this RGB 565 value: \u003cold RGB 565 result\u003e\nafter this change: it would be translated to this RGB 565 value: \u003cnew RGB 565 result\u003e\n\nThank you!",
       "revId": "af6d4feeef620091be7785085e5aa4924dd35f57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90deb5d9_25b6dcd9",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 1
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-02-24T18:49:17Z",
+      "side": 1,
+      "message": "the max delta before the change could cause 7 pixel difference. \nafter the change the max delta less than 4 difference.\n\ntake a example R8 \u003d 7, the old result for R5 is 0. \nthe new will R5 will be 8",
+      "parentUuid": "56d2f63c_0d71aad9",
+      "revId": "af6d4feeef620091be7785085e5aa4924dd35f57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
