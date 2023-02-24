@@ -86,6 +86,24 @@
       "parentUuid": "90deb5d9_25b6dcd9",
       "revId": "af6d4feeef620091be7785085e5aa4924dd35f57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68132a30_568f6e96",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 1
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-02-24T23:41:28Z",
+      "side": 1,
+      "message": "sorry, I only take about one channel Red channel. R8 \u003d red 8 bit value",
+      "parentUuid": "9435ba9e_6101f054",
+      "revId": "af6d4feeef620091be7785085e5aa4924dd35f57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
