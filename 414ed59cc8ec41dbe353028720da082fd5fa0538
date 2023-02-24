@@ -16,6 +16,24 @@
       "message": "nit: this would probably be the same and slightly more efficient (if that matters at all):\n\n```\nreturn ((color.r + 4u)\u003e\u003e3)\u003c\u003c11 | ((color.g + 2u)\u003e\u003e2)\u003c\u003c5 | (color.b + 4u)\u003e\u003e3;\n```",
       "revId": "414ed59cc8ec41dbe353028720da082fd5fa0538",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "026c180b_8a73fed4",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 1
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-02-24T05:14:51Z",
+      "side": 0,
+      "message": "for this case. it should works since the rgb \u003d (7,7,7), \nthe result value will be (1, 2, 1)\nbut for some value like R8 value \u003d 4, R5 value\u003d1,\nthe float point calculation is R5  value \u003d 0.\nyeah, usually float and integer interleave may not effecient, but some hw may have instruction combine. the result may not too bad.",
+      "parentUuid": "d6b1538f_033034fb",
+      "revId": "414ed59cc8ec41dbe353028720da082fd5fa0538",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
