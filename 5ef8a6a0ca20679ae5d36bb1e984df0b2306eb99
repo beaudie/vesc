@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "74622cf2_eca8d48f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-02-24T02:41:00Z",
+      "side": 1,
+      "message": "`gScreenshotFrame` is a global variable set when we parse args (see ref).\n\nSo now in TracePerfTest.cpp, I assign that to mScreenshotFrame so it can vary per trace.  I should not have been modifying the argument after parsing.",
+      "parentUuid": "9aae66b0_b6d548c1",
+      "revId": "5ef8a6a0ca20679ae5d36bb1e984df0b2306eb99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "1be6018d_2341df84",
@@ -31,6 +49,29 @@
       "writtenOn": "2023-02-24T01:02:28Z",
       "side": 1,
       "message": "Follow up to https://chromium-review.googlesource.com/c/angle/angle/+/4284637\nNeeded before we can land a trace that uses keyframes.",
+      "revId": "5ef8a6a0ca20679ae5d36bb1e984df0b2306eb99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6cc9c758_0237c862",
+        "filename": "src/tests/perf_tests/ANGLEPerfTestArgs.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-02-24T02:41:00Z",
+      "side": 1,
+      "message": "ref",
+      "range": {
+        "startLine": 99,
+        "startChar": 68,
+        "endLine": 99,
+        "endChar": 84
+      },
       "revId": "5ef8a6a0ca20679ae5d36bb1e984df0b2306eb99",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
