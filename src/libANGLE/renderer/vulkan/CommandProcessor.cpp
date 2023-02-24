@@ -1088,7 +1088,10 @@ void CommandQueue::handleDeviceLost(RendererVk *renderer)
             batch.primaryCommands.destroy(device);
         }
 
-        batch.resetSecondaryCommandBuffers(device);
+        if (batch.commandPools != nullptr)
+        {
+            batch.resetSecondaryCommandBuffers(device);
+        }
 
         mLastCompletedSerials.setQueueSerial(batch.queueSerial);
         mInFlightCommands.pop();
@@ -1597,7 +1600,7 @@ angle::Result CommandQueue::retireFinishedCommandsLocked(Context *context)
             ANGLE_TRY(commandPool.collect(context, std::move(batch.primaryCommands)));
         }
 
-        if (batch.commandPools)
+        if (batch.commandPools != nullptr)
         {
             batch.resetSecondaryCommandBuffers(device);
         }
