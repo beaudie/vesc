@@ -68,6 +68,24 @@
       "parentUuid": "56d2f63c_0d71aad9",
       "revId": "af6d4feeef620091be7785085e5aa4924dd35f57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9435ba9e_6101f054",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 1
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-02-24T22:19:49Z",
+      "side": 1,
+      "message": "Thank you.\n\nOne follow-up question:\n\nIn your example, R8 \u003d 7, do you mean the input uvec3 color is (0, 0, 7)?\n\nIf the answer to above question is yes, then I understand why old R5 value is 0.\n\nBut for the new R5 value: \n```\nquant \u003d uvec3(0, 0, 1);\n(quant.r \u003c\u003c 11) | (quant.g \u003c\u003c 5) | (quant.b) \u003d 1\n```\n\nshouldn\u0027t the new R5 value be 1? Am I missing anything here?",
+      "parentUuid": "90deb5d9_25b6dcd9",
+      "revId": "af6d4feeef620091be7785085e5aa4924dd35f57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
