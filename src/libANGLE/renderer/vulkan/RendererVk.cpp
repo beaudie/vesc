@@ -4851,6 +4851,28 @@ angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
     return angle::Result::Continue;
 }
 
+angle::Result RendererVk::queueSubmitWaitSemaphore(vk::Context *context,
+                                                   egl::ContextPriority priority,
+                                                   const vk::Semaphore *waitSemaphore,
+                                                   VkPipelineStageFlags waitSemaphoreStageMasks,
+                                                   QueueSerial submitQueueSerial)
+{
+    if (isAsyncCommandQueueEnabled())
+    {
+        ANGLE_TRY(mCommandProcessor.enqueueSubmitOneOffCommands(
+            context, vk::ProtectionType::Unprotected, priority, VK_NULL_HANDLE, waitSemaphore,
+            waitSemaphoreStageMasks, nullptr, vk::SubmitPolicy::AllowDeferred, submitQueueSerial));
+    }
+    else
+    {
+        ANGLE_TRY(mCommandQueue.queueSubmitOneOff(
+            context, vk::ProtectionType::Unprotected, priority, VK_NULL_HANDLE, waitSemaphore,
+            waitSemaphoreStageMasks, nullptr, vk::SubmitPolicy::AllowDeferred, submitQueueSerial));
+    }
+
+    return angle::Result::Continue;
+}
+
 template <VkFormatFeatureFlags VkFormatProperties::*features>
 VkFormatFeatureFlags RendererVk::getFormatFeatureBits(angle::FormatID formatID,
                                                       const VkFormatFeatureFlags featureBits) const
@@ -5178,6 +5200,47 @@ angle::Result RendererVk::submitCommands(vk::Context *context,
     }
 
     ANGLE_TRY(mCommandQueue.postSubmitCheck(context));
+
+    return angle::Result::Continue;
+}
+
+angle::Result RendererVk::submitPriorityDependency(vk::Context *context,
+                                                   vk::ProtectionType protectionType1,
+                                                   vk::ProtectionType protectionType2,
+                                                   egl::ContextPriority srcContextPriority,
+                                                   egl::ContextPriority dstContextPriority,
+                                                   SerialIndex index)
+{
+    vk::DeviceScoped<vk::Semaphore> semaphore(mDevice);
+    ANGLE_VK_TRY(context, semaphore.get().init(mDevice));
+
+    // First, submit already flushed commands / wait semaphores into the source Priority VkQueue.
+    // Commands that are in the Secondary Command Buffers will be flushed into the new VkQueue.
+
+    if (protectionType1 != protectionType2)
+    {
+        // Additionally submit commands with different protection type.
+        // No semaphore needed, because next submit will be into the same VkQueue.
+        QueueSerial queueSerial1(index, generateQueueSerial(index));
+        ANGLE_TRY(
+            submitCommands(context, protectionType1, srcContextPriority, nullptr, queueSerial1));
+    }
+
+    // Submit commands and attach Signal Semaphore.
+    QueueSerial queueSerial2(index, generateQueueSerial(index));
+    ANGLE_TRY(submitCommands(context, protectionType2, srcContextPriority, &semaphore.get(),
+                             queueSerial2));
+
+    // Submit only Wait Semaphore into the destination Priority (VkQueue).
+    QueueSerial queueSerial3(index, generateQueueSerial(index));
+    angle::Result result =
+        queueSubmitWaitSemaphore(context, dstContextPriority, &semaphore.get(),
+                                 VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, queueSerial3);
+
+    vk::ResourceUse semaphoreUse(queueSerial3);
+    collectGarbage(semaphoreUse, &semaphore.get());
+    // Handle result later to be able to collect semaphore.
+    ANGLE_TRY(result);
 
     return angle::Result::Continue;
 }
