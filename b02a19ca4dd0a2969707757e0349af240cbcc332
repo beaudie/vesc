@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "363fb6fd_f43c9d3b",
+        "filename": "src/tests/gl_tests/DXT1CompressedTextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-02-24T15:32:23Z",
+      "side": 1,
+      "message": "Can you also throw the `extName` on this line too so the failure indicates which case is being tested?",
+      "range": {
+        "startLine": 152,
+        "startChar": 98,
+        "endLine": 152,
+        "endChar": 99
+      },
+      "revId": "b02a19ca4dd0a2969707757e0349af240cbcc332",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
