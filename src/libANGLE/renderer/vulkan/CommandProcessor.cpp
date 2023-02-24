@@ -1100,7 +1100,10 @@ void CommandQueue::handleDeviceLost(RendererVk *renderer)
             batch.primaryCommands.destroy(device);
         }
 
-        batch.resetSecondaryCommandBuffers(device);
+        if (batch.commandPools != nullptr)
+        {
+            batch.resetSecondaryCommandBuffers(device);
+        }
 
         mLastCompletedSerials.setQueueSerial(batch.queueSerial);
     }
@@ -1608,7 +1611,7 @@ angle::Result CommandQueue::retireFinishedCommands(Context *context, size_t fini
             ANGLE_TRY(commandPool.collect(context, std::move(batch.primaryCommands)));
         }
 
-        if (batch.commandPools)
+        if (batch.commandPools != nullptr)
         {
             ANGLE_TRACE_EVENT0("gpu.angle", "Secondary command buffer recycling");
             batch.resetSecondaryCommandBuffers(device);
