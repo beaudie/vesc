@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ff884fd_0e36e059",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-02-26T09:54:23Z",
+      "side": 1,
+      "message": "D3D11 support will be added later as it requires shader translator updates.",
+      "revId": "110e7ffa1c96d8e94ac3ced959cbc18830a7da64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
