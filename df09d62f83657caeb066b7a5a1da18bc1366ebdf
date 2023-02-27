@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf502205_0e19737c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-27T19:29:22Z",
+      "side": 1,
+      "message": "Overall looks reasonable to me.",
+      "revId": "df09d62f83657caeb066b7a5a1da18bc1366ebdf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fbd5030_72fa02ca",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-27T19:29:22Z",
+      "side": 1,
+      "message": "@syoussefi@chromium.org We normally dont use InOut argument, do we prefer split it into two argumements here?",
+      "range": {
+        "startLine": 654,
+        "startChar": 75,
+        "endLine": 654,
+        "endChar": 98
+      },
+      "revId": "df09d62f83657caeb066b7a5a1da18bc1366ebdf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01bf303b_d97a8568",
+        "filename": "src/libANGLE/renderer/vulkan/ImageVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-27T19:29:22Z",
+      "side": 1,
+      "message": "Do we not have access to all contexts that uses ImageVK and apply similar trick like shared group?",
+      "range": {
+        "startLine": 63,
+        "startChar": 58,
+        "endLine": 63,
+        "endChar": 85
+      },
+      "revId": "df09d62f83657caeb066b7a5a1da18bc1366ebdf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04b47884_a1702940",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5249,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-27T19:29:22Z",
+      "side": 1,
+      "message": "Use of angle::Result is unconventional here. Can\u0027t we just do ANGLE_TRY at line 5246, since we are not expecting it to fail anyway?",
+      "range": {
+        "startLine": 5249,
+        "startChar": 34,
+        "endLine": 5249,
+        "endChar": 66
+      },
+      "revId": "df09d62f83657caeb066b7a5a1da18bc1366ebdf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
