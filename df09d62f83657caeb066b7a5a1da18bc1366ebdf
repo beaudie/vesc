@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "072fe6e9_fc7813f9",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-27T20:19:13Z",
+      "side": 1,
+      "message": "I will update the method. This will produce clearer code at the call side:\n```\nANGLE_TRY(mShareGroupVk-\u003eoptimizeContextsPriority(this, mInitialContextPriority, \u0026mContextPriority));\n```",
+      "parentUuid": "0fbd5030_72fa02ca",
+      "range": {
+        "startLine": 654,
+        "startChar": 75,
+        "endLine": 654,
+        "endChar": 98
+      },
+      "revId": "df09d62f83657caeb066b7a5a1da18bc1366ebdf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "01bf303b_d97a8568",
         "filename": "src/libANGLE/renderer/vulkan/ImageVk.cpp",
         "patchSetId": 2
