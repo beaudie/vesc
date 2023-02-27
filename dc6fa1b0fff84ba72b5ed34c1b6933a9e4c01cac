@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5383491_2746c214",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 8133,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-27T21:06:14Z",
+      "side": 1,
+      "message": "Its not generating serials, it is updating serial. Overall I feel that these new names are a bit verbose. My preference is still using the old name (minor issue).",
+      "range": {
+        "startLine": 8133,
+        "startChar": 65,
+        "endLine": 8133,
+        "endChar": 80
+      },
+      "revId": "dc6fa1b0fff84ba72b5ed34c1b6933a9e4c01cac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b12f33a_08c64a2d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4848,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-27T21:06:14Z",
+      "side": 1,
+      "message": "Move comment to the top of this line.",
+      "range": {
+        "startLine": 4848,
+        "startChar": 24,
+        "endLine": 4848,
+        "endChar": 49
+      },
+      "revId": "dc6fa1b0fff84ba72b5ed34c1b6933a9e4c01cac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
