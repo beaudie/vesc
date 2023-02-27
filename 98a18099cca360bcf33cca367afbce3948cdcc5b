@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a13f0fe3_262f6893",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-02-27T22:13:34Z",
+      "side": 1,
+      "message": "Ahhh ok, thanks for pointing it out.",
+      "parentUuid": "bd0460af_a78a22f5",
+      "range": {
+        "startLine": 394,
+        "startChar": 24,
+        "endLine": 394,
+        "endChar": 36
+      },
+      "revId": "98a18099cca360bcf33cca367afbce3948cdcc5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "715891ab_de27af52",
@@ -143,6 +167,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "15bb6a1f_47665c13",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1607,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-02-27T22:13:34Z",
+      "side": 1,
+      "message": "Yeesh, ok! Can you write that down in a comment?",
+      "parentUuid": "1306894f_8e4a418a",
+      "range": {
+        "startLine": 1606,
+        "startChar": 24,
+        "endLine": 1607,
+        "endChar": 76
+      },
+      "revId": "98a18099cca360bcf33cca367afbce3948cdcc5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "aeb2af39_d33967d0",
         "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
         "patchSetId": 3
@@ -178,6 +226,30 @@
       "side": 1,
       "message": "Like this?\n```\nif (levelInfo.sourceFormat \u003d\u003d GL_ALPHA || levelInfo.sourceFormat \u003d\u003d GL_LUMINANCE_ALPHA)\n{\n    // Some ES drivers treat ALPHA and LUMINANCE_ALPHA as swizzled RG\n    if (levelInfo.sourceFormat \u003d\u003d GL_ALPHA)\n    {\n        borderColor.colorF.red \u003d 0.0f;\n    }\n    borderColor.colorF.green \u003d borderColor.colorF.alpha;\n}\n```",
       "parentUuid": "aeb2af39_d33967d0",
+      "range": {
+        "startLine": 1588,
+        "startChar": 16,
+        "endLine": 1614,
+        "endChar": 17
+      },
+      "revId": "98a18099cca360bcf33cca367afbce3948cdcc5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f23774df_9364d2f0",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1614,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-02-27T22:13:34Z",
+      "side": 1,
+      "message": "Sorry, I meant the higher-level `if (levelInfo.lumaWorkaround.enabled)` and else are almost the same but that merging can also work.",
+      "parentUuid": "22a3cd54_c47f8ff2",
       "range": {
         "startLine": 1588,
         "startChar": 16,
