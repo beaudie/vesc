@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bd0460af_a78a22f5",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-02-27T20:51:41Z",
+      "side": 1,
+      "message": "If a texture is not integer, the execution exits on L371.\n\nIf a texture is integer and it does not use clamp-to-border, the execution exits on L390.\n\nIf a texture is integer, it uses clamp-to-border, and the current border color is float, it is undefined behavior per the specs. To account for non-existing channels in emulated formats, like `GL_RGB8I`, the border color value still needs to be adjusted and therefore updated. Adding an assertion seems reasonable.",
+      "parentUuid": "fccc93cc_570a62d4",
+      "range": {
+        "startLine": 394,
+        "startChar": 24,
+        "endLine": 394,
+        "endChar": 36
+      },
+      "revId": "98a18099cca360bcf33cca367afbce3948cdcc5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "715891ab_de27af52",
         "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
         "patchSetId": 3
@@ -95,6 +119,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1306894f_8e4a418a",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1607,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-02-27T20:51:41Z",
+      "side": 1,
+      "message": "For float and half-float `GL_ALPHA`, Adreno triplicates border\u0027s red channel to RGB and uses border\u0027s green as alpha.",
+      "parentUuid": "97b69162_5446337c",
+      "range": {
+        "startLine": 1606,
+        "startChar": 24,
+        "endLine": 1607,
+        "endChar": 76
+      },
+      "revId": "98a18099cca360bcf33cca367afbce3948cdcc5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "aeb2af39_d33967d0",
         "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
         "patchSetId": 3
@@ -106,6 +154,30 @@
       "writtenOn": "2023-02-27T20:15:42Z",
       "side": 1,
       "message": "The if and else are almost the same now, can we just merge them?",
+      "range": {
+        "startLine": 1588,
+        "startChar": 16,
+        "endLine": 1614,
+        "endChar": 17
+      },
+      "revId": "98a18099cca360bcf33cca367afbce3948cdcc5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22a3cd54_c47f8ff2",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1614,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-02-27T20:51:41Z",
+      "side": 1,
+      "message": "Like this?\n```\nif (levelInfo.sourceFormat \u003d\u003d GL_ALPHA || levelInfo.sourceFormat \u003d\u003d GL_LUMINANCE_ALPHA)\n{\n    // Some ES drivers treat ALPHA and LUMINANCE_ALPHA as swizzled RG\n    if (levelInfo.sourceFormat \u003d\u003d GL_ALPHA)\n    {\n        borderColor.colorF.red \u003d 0.0f;\n    }\n    borderColor.colorF.green \u003d borderColor.colorF.alpha;\n}\n```",
+      "parentUuid": "aeb2af39_d33967d0",
       "range": {
         "startLine": 1588,
         "startChar": 16,
