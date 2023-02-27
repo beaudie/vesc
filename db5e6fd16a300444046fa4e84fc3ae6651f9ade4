@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "be22a09e_5b962809",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-27T22:43:48Z",
+      "side": 1,
+      "message": "Lets do it in separate CL.",
+      "parentUuid": "12e86187_cd830495",
+      "revId": "db5e6fd16a300444046fa4e84fc3ae6651f9ade4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b9e75dd_ea796b8e",
@@ -35,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bc6f742_1d197533",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 15
+      },
+      "lineNbr": 1156,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-27T22:43:48Z",
+      "side": 1,
+      "message": "This really is try to only control command buffer reset. I moved garbage clean up here from shabi\u0027s request to split the enable of feature into separate CL. In next CL, this feature will be revert back to only control the command buffer reset.",
+      "parentUuid": "1b9e75dd_ea796b8e",
+      "revId": "db5e6fd16a300444046fa4e84fc3ae6651f9ade4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "186aebd3_a4c8e339",
@@ -48,6 +84,24 @@
       "writtenOn": "2023-02-20T11:17:21Z",
       "side": 1,
       "message": "`postSubmitCheck` is never called when `asyncCommandQueue` is enabled.",
+      "revId": "db5e6fd16a300444046fa4e84fc3ae6651f9ade4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01ffdaad_c47dce1f",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-27T22:43:48Z",
+      "side": 1,
+      "message": "This should be a separate CL, not directly related to this change. \nSee  https://chromium-review.googlesource.com/c/angle/angle/+/4295366",
+      "parentUuid": "186aebd3_a4c8e339",
       "revId": "db5e6fd16a300444046fa4e84fc3ae6651f9ade4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -75,6 +129,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb27ee78_164f711e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 5217,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-27T22:43:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "526218ab_f86f91cb",
+      "range": {
+        "startLine": 5205,
+        "startChar": 0,
+        "endLine": 5217,
+        "endChar": 9
+      },
+      "revId": "db5e6fd16a300444046fa4e84fc3ae6651f9ade4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "de3bd47e_8b534f2b",
@@ -88,6 +166,24 @@
       "writtenOn": "2023-02-20T11:17:21Z",
       "side": 1,
       "message": "Maybe add similar logic into `finish(ResourceUse/QueueSerial)` methods?\nCurrently in case of `asyncCommandQueue` these methods will not trigger command buffer/garbage cleanup.",
+      "revId": "db5e6fd16a300444046fa4e84fc3ae6651f9ade4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31c7d39f_afc456e9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 5289,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-27T22:43:48Z",
+      "side": 1,
+      "message": "This is done in CommandQueue::finishResourceUse()",
+      "parentUuid": "de3bd47e_8b534f2b",
       "revId": "db5e6fd16a300444046fa4e84fc3ae6651f9ade4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
