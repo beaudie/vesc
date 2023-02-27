@@ -5175,13 +5175,13 @@ angle::Result RendererVk::submitCommands(vk::Context *context,
         ANGLE_TRY(mCommandQueue.submitCommands(context, protectionType, contextPriority,
                                                signalVkSemaphore, std::move(commandBuffersToReset),
                                                commandPools, submitQueueSerial));
+    }
 
-        bool anyCommandFinished;
-        ANGLE_TRY(mCommandQueue.postSubmitCheck(context, &anyCommandFinished));
-        if (anyCommandFinished)
-        {
-            ANGLE_TRY(requestCommandsAndGarbageCleanup(context));
-        }
+    bool anyCommandFinished;
+    ANGLE_TRY(mCommandQueue.postSubmitCheck(context, &anyCommandFinished));
+    if (anyCommandFinished)
+    {
+        ANGLE_TRY(requestCommandsAndGarbageCleanup(context));
     }
 
     return angle::Result::Continue;
