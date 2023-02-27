@@ -22,6 +22,30 @@
       },
       "revId": "4761c508efd58ff3e95421ddbdf9b1a18280b1cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c54bdcfa_f007f428",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-27T19:15:13Z",
+      "side": 1,
+      "message": "\u003e The reason that I did it this way is try not expose getLastSubmittedSerial for general use.\n\nWas thinking about that.\n\n\u003e One suggestion is add another version of RendererVk::allocateQueueSerialIndex that only returns index\n\nAnd also about that. But was not sure regarding naming of the functions. Because original function not only gets `SerialIndex ` but also gets the last submitted serial.\n\nMaybe also rename existing function to something like:\n```\nangle::Result allocateQueueSerialIndexAndGetLastSubmittedSerial(QueueSerial *queueSerialOut);\n```\nName is long, but at least it is clear what it is doing...\n\nAlso this method:\n```\n    // Allocate queueSerial index and generate queue serial for commands.\n    ANGLE_TRY(allocateQueueSerialIndex());\n```\nRename to\n```\nangle::Result allocateQueueSerialIndexAndGenerateSerials();\n```",
+      "parentUuid": "b05a581b_a639f415",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 27
+      },
+      "revId": "4761c508efd58ff3e95421ddbdf9b1a18280b1cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
