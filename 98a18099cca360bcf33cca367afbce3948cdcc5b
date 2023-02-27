@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fccc93cc_570a62d4",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-02-27T20:15:42Z",
+      "side": 1,
+      "message": "For the float case, we\u0027re counting on the default initializer of GenericColor being a float(0,0,0,0) color. If that\u0027s fine, let\u0027s at least assert.\n\nIf the data-\u003eintBorderColor just isn\u0027t used at all in the float case, let\u0027s avoid writing it and potentially dirtying the metadata.",
+      "range": {
+        "startLine": 394,
+        "startChar": 24,
+        "endLine": 394,
+        "endChar": 36
+      },
+      "revId": "98a18099cca360bcf33cca367afbce3948cdcc5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "715891ab_de27af52",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2668,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-02-27T20:15:42Z",
+      "side": 1,
+      "message": "I see this pattern used in a few backends. Can you add a method to SamplerState to test for it?",
+      "range": {
+        "startLine": 2666,
+        "startChar": 31,
+        "endLine": 2668,
+        "endChar": 76
+      },
+      "revId": "98a18099cca360bcf33cca367afbce3948cdcc5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d1c2adb_755403ed",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/StateManager11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2688,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-02-27T20:15:42Z",
+      "side": 1,
+      "message": "nit: TextureTypeToTarget(texture-\u003egetType(), 0)",
+      "range": {
+        "startLine": 2685,
+        "startChar": 44,
+        "endLine": 2688,
+        "endChar": 73
+      },
+      "revId": "98a18099cca360bcf33cca367afbce3948cdcc5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97b69162_5446337c",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1607,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-02-27T20:15:42Z",
+      "side": 1,
+      "message": "I don\u0027t understand why this one is red\u003d0 and green\u003dalpha. The driver is using an RG texture but only putting data in the G channel?",
+      "range": {
+        "startLine": 1606,
+        "startChar": 24,
+        "endLine": 1607,
+        "endChar": 76
+      },
+      "revId": "98a18099cca360bcf33cca367afbce3948cdcc5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aeb2af39_d33967d0",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1614,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-02-27T20:15:42Z",
+      "side": 1,
+      "message": "The if and else are almost the same now, can we just merge them?",
+      "range": {
+        "startLine": 1588,
+        "startChar": 16,
+        "endLine": 1614,
+        "endChar": 17
+      },
+      "revId": "98a18099cca360bcf33cca367afbce3948cdcc5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
