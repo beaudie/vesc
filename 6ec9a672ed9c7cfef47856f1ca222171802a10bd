@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb5e9dae_fb473b8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-27T18:36:47Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "6ec9a672ed9c7cfef47856f1ca222171802a10bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b14433d_a7875604",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 5638,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-27T18:36:47Z",
+      "side": 1,
+      "message": "You can use mActiveMemoryAllocationsCount[allocTypeIndex].fetch_add(-1, memory_order_relaxed) here so that still allow compiler to reorder instructions if needed. Nothing here require a strict ordering. Same thing for line 5643 and 5644",
+      "range": {
+        "startLine": 5637,
+        "startChar": 8,
+        "endLine": 5638,
+        "endChar": 61
+      },
+      "revId": "6ec9a672ed9c7cfef47856f1ca222171802a10bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
