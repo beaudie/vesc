@@ -66,6 +66,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2806ff57_4d4334ae",
+        "filename": "src/libANGLE/renderer/vulkan/ImageVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-27T19:55:53Z",
+      "side": 1,
+      "message": "Unfortunately no at this moment.\nI have local CL that might make this possible.",
+      "parentUuid": "01bf303b_d97a8568",
+      "range": {
+        "startLine": 63,
+        "startChar": 58,
+        "endLine": 63,
+        "endChar": 85
+      },
+      "revId": "df09d62f83657caeb066b7a5a1da18bc1366ebdf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "04b47884_a1702940",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
@@ -77,6 +101,30 @@
       "writtenOn": "2023-02-27T19:29:22Z",
       "side": 1,
       "message": "Use of angle::Result is unconventional here. Can\u0027t we just do ANGLE_TRY at line 5246, since we are not expecting it to fail anyway?",
+      "range": {
+        "startLine": 5249,
+        "startChar": 34,
+        "endLine": 5249,
+        "endChar": 66
+      },
+      "revId": "df09d62f83657caeb066b7a5a1da18bc1366ebdf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfd3aa55_6224a774",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5249,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-27T19:55:53Z",
+      "side": 1,
+      "message": "I concerned regarding these ANGLE_TRY...\n\nIf I add \"ANGLE_TRY at line 5246\" and it fails, then `vk::DeviceScoped` will destroy the `vk::Semaphore` that is already submitted in `queueSerial2`. This will likely to cause driver crash or even worse.\n\nActually, `submitCommands` may internally fail after `VkQueueSubmit` and cause the same problem...\nIdeally, I wan that in case of `ANGLE_TRY` program will still run and can shutdown gracefully. Or at least let the application to decide abort or not.\n\n\u003e since we are not expecting it to fail anyway?\n\nThan why use `vk::DeviceScoped`? The only purpose is to avoid resource leak which is not as critical, as crashing.\n\nI originally wanted to `collectGarbage` right after generating `queueSerial3`, but `queueSubmitOneOff` requires pointer to `vk::Semaphore` object. If change that to `VkSemaphore` handle than this would be possible.\n\nAnother way is to write some Scoped object that would `collectGarbage` in destructor. Or maybe there is already such class in the ANGLE, but I did not notice it.\n\nOr just use ANGLE_TRY pattern and do not care about actual error handling...",
+      "parentUuid": "04b47884_a1702940",
       "range": {
         "startLine": 5249,
         "startChar": 34,
