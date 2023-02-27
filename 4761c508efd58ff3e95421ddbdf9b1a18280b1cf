@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b05a581b_a639f415",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-27T18:54:50Z",
+      "side": 1,
+      "message": "The reason that I did it this way is try not expose getLastSubmittedSerial for general use. (Because it is atomic, getLastSubmittedSerial will make a copy of value and miss the latest value of mLastSubmittedSerial if another thread is updating it). The only place actual needs this value is allocateQueueSerialIndex, that is why it is done this way.\n\nOne suggestion is add another version of RendererVk::allocateQueueSerialIndex that only returns index, and you can use this version when you don\u0027t need lastSubmittedSerial.\n\n    angle::Result allocateQueueSerialIndex(SerialIndex *indexOut);",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 27
+      },
+      "revId": "4761c508efd58ff3e95421ddbdf9b1a18280b1cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
