@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "12e50211_f4905dd0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-02-28T20:28:14Z",
+      "side": 1,
+      "message": "Thanks, updated",
+      "parentUuid": "25dec74f_e3c8c5db",
+      "range": {
+        "startLine": 11,
+        "startChar": 23,
+        "endLine": 11,
+        "endChar": 44
+      },
+      "revId": "b4b61e24c48cb19ea13dae8bbf137a57ec2f1401",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4451c29e_3cce8e58",
@@ -61,6 +85,30 @@
       "side": 1,
       "message": "Yeah afaict other than headers our actual only dependency on zlib is this:\nhttps://crsrc.org/c/third_party/angle/BUILD.gn;drc\u003dc303758fbc8d23266be578fae246e5687656b4c6;l\u003d1191",
       "parentUuid": "4451c29e_3cce8e58",
+      "range": {
+        "startLine": 13,
+        "startChar": 1,
+        "endLine": 15,
+        "endChar": 10
+      },
+      "revId": "b4b61e24c48cb19ea13dae8bbf137a57ec2f1401",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "490c7fc2_b79d29af",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-02-28T20:28:14Z",
+      "side": 1,
+      "message": "Resolving",
+      "parentUuid": "15d5d97e_55863581",
       "range": {
         "startLine": 13,
         "startChar": 1,
