@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a820e7f_3e6f3f61",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 8133,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-28T11:38:30Z",
+      "side": 1,
+      "message": "By \"Serials\" I meant:\n- mLastFlushedQueueSerial\n- mLastSubmittedQueueSerial\n- OutsideRenderPassCommandsQueueSerial\n\nNot the same kind of \"generation\". Maybe \"Init\" is more appropriate.\n\n\u003e My preference is still using the old name (minor issue).\n\nI understand. You pointed this out a few times. Maybe it is not a minor issue) I will keep the old name.",
+      "parentUuid": "f5383491_2746c214",
+      "range": {
+        "startLine": 8133,
+        "startChar": 65,
+        "endLine": 8133,
+        "endChar": 80
+      },
+      "revId": "dc6fa1b0fff84ba72b5ed34c1b6933a9e4c01cac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8b12f33a_08c64a2d",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-02-27T21:06:14Z",
       "side": 1,
       "message": "Move comment to the top of this line.",
+      "range": {
+        "startLine": 4848,
+        "startChar": 24,
+        "endLine": 4848,
+        "endChar": 49
+      },
+      "revId": "dc6fa1b0fff84ba72b5ed34c1b6933a9e4c01cac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfe52a6e_9b5e2156",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4848,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-28T11:38:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b12f33a_08c64a2d",
       "range": {
         "startLine": 4848,
         "startChar": 24,
