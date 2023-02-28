@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73a75c34_26c1d7fd",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 691,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-28T22:50:06Z",
+      "side": 1,
+      "message": "This logic is a bit confusing. Can\u0027t we just pick the highest priority of all contexts?\n\nI am thinking even simpler model here, that we only upgrade, never downgrade:\n\nmHighesContextsPriority will initialize to Low.\n\nThis function becomes:\n```\nnewPriority\u003dstd::max(mHighesContextsPriority,newContextPriority);\nif(newPriority !\u003d mHighesContextsPriority)\n{ \n   mHighesContextsPriority \u003d newPriority;\n}\n```\n   \nThen from TextureVk::setEGLImageTarget() you also do similar things, that ImageVk will keep mHighesContextsPriority, and setEGLImageTarget will upgrade mHighesContextsPriority if needed and propagate it to ShareGroupVk::mHighesContextsPriority.\n\nThen in submitCommands it will check if mHighesContextsPriority has changed and if yes, it will insert semaphore that you are doing in submitPriorityDependency(). The priority hange is deferred until next submission as opposed to immediate.\n\nThat way, it handles both shareGroup and EGLImage. Logic is simple, there is no walk of context list. The downside is that it only upgrade, never downgrade. I expect people never really use it in a way that needs us have to downgrade priority. It is okay to be slightly heavy handed during switch, since you are not expecting to see switch constantly. The target usage is that you will see context create/destroy only once.",
+      "range": {
+        "startLine": 677,
+        "startChar": 4,
+        "endLine": 691,
+        "endChar": 5
+      },
+      "revId": "f6c8449c65e132db196f762b81621d5cc9e46a71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
