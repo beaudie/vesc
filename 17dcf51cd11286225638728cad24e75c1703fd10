@@ -16,6 +16,23 @@
       "message": "Roman could you PTAL?\nAmirali FYI, this is to unblock vulkan-deps -\u003e Chromium roll.\nLooks like also affects vulkan-deps -\u003e ANGLE on linux-test.",
       "revId": "17dcf51cd11286225638728cad24e75c1703fd10",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4c59938_417f7650",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-02-28T15:20:14Z",
+      "side": 1,
+      "message": "Should there be an ANGLE bug open for this?",
+      "revId": "17dcf51cd11286225638728cad24e75c1703fd10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
