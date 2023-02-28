@@ -16,6 +16,24 @@
       "message": "Per offline discussion, split the feature enablement to separate CL. When this feature is disabled, both commandBuffer reset and garbage clean will be still done in rendering thread, with this feature enabled, it is done in CommandProcessor.",
       "revId": "8762b365e932d80b7d1816ab1b06764b9d40270e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97185a19_17dd7774",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-28T13:37:17Z",
+      "side": 1,
+      "message": "\u003e When this feature is disabled, both commandBuffer reset and garbage clean will be still done in rendering thread,\n\nThis is not true for the latest patchset. Garbage cleanup is always done in CommandProcessor.\n\nIt would be helpful to update commit description, that this CL not only enables `asyncCommandBufferReset` feature, but also always makes Garbage Cleanup asynchronous.",
+      "parentUuid": "78a9dbca_6daa2d1a",
+      "revId": "8762b365e932d80b7d1816ab1b06764b9d40270e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
