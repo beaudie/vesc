@@ -16,6 +16,23 @@
       "message": "Please take a look.",
       "revId": "c30888ec7de00b48fba693230bebe1ac55f48abb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88e77ce8_64f9b958",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1297197
+      },
+      "writtenOn": "2023-02-28T18:00:41Z",
+      "side": 1,
+      "message": "Moving myself to CC in case I can help with any questions, since I\u0027m no longer on the ANGLE team.",
+      "revId": "c30888ec7de00b48fba693230bebe1ac55f48abb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
