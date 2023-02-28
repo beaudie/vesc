@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "72ab6cd0_18948986",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 678,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-28T17:59:48Z",
+      "side": 1,
+      "message": "postSubmitCheck may end up calling CommandProcessor::requestCommandsAndGarbageCleanup() and will end up try to take mTaskEnqueueMutex that calling thread is already took. This line of code is essentially calling requestCommandsAndGarbageCleanup. You also do not require this line of code, but I am trying to to be consistent with line 690 where we always try to check completed commands when we do one off submission.",
+      "parentUuid": "f007be70_c9d8fab2",
+      "revId": "e19be6e6afbdaa0ab9b8643fbc9f97e86a43adef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a6580341_60431342",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-02-28T13:35:49Z",
       "side": 1,
       "message": "Is it possible to add \n```\nif (suballocationGarbageSize \u003e kMaxBufferSuballocationGarbageSize)\n```\nbefore this block to avoid extra mutex lock?\n\nOne concern is the `renderer-\u003eoutputVmaStatString()`. If required it is better to add separate mutex for that.",
+      "revId": "e19be6e6afbdaa0ab9b8643fbc9f97e86a43adef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5ac4162_da3db7a5",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-28T17:59:48Z",
+      "side": 1,
+      "message": "Good point. Added if check before mutex.\noutputVmaStatString is only for debug, I think VMA has its own lock?",
+      "parentUuid": "a6580341_60431342",
       "revId": "e19be6e6afbdaa0ab9b8643fbc9f97e86a43adef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -52,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "76cf5677_f4fb0698",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1107,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-28T17:59:48Z",
+      "side": 1,
+      "message": "Lets keep finishOneCommandBatch a unit function and consistent with checkOneCommandBatch.",
+      "parentUuid": "e504eb12_a617a8f5",
+      "revId": "e19be6e6afbdaa0ab9b8643fbc9f97e86a43adef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d87e1019_54e8816a",
@@ -69,6 +123,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f199c8b_4b90a0a0",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1127,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-28T17:59:48Z",
+      "side": 1,
+      "message": "The main difference between the two is error handling. I am not against refactoring to avoid code duplication, but lets not do it in this CL.",
+      "parentUuid": "d87e1019_54e8816a",
+      "revId": "e19be6e6afbdaa0ab9b8643fbc9f97e86a43adef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4b0e8082_232504b5",
@@ -82,6 +154,24 @@
       "writtenOn": "2023-02-28T13:35:49Z",
       "side": 1,
       "message": "This is not true for the `retireFinishedCommandsAndCleanupGarbage` method.\nIt does not require lock and will implicitly lock in the `retireFinishedCommands`.",
+      "revId": "e19be6e6afbdaa0ab9b8643fbc9f97e86a43adef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af8e9755_4b9b2699",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-28T17:59:48Z",
+      "side": 1,
+      "message": "Moved retireFinishedCommandsAndCleanupGarbage to public API to avoid confusion.",
+      "parentUuid": "4b0e8082_232504b5",
       "revId": "e19be6e6afbdaa0ab9b8643fbc9f97e86a43adef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
