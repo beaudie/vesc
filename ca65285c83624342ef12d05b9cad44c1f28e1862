@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13b6f9b9_ede5adae",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 8323,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-28T18:11:13Z",
+      "side": 1,
+      "message": "Nice fix!\n\nCan you pass in commandBuffer to onCopyUpdate() and make onCopyUpdate() to call getOutsideRenderPassCommandBuffer directly if needed?",
+      "range": {
+        "startLine": 8323,
+        "startChar": 37,
+        "endLine": 8323,
+        "endChar": 70
+      },
+      "revId": "ca65285c83624342ef12d05b9cad44c1f28e1862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
