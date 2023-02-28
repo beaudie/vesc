@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f007be70_c9d8fab2",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 678,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-28T13:35:49Z",
+      "side": 1,
+      "message": "I think this assignment has a little sense.\n`mLastCompletedSerials` will not be updated after `CommandQueue::submitCommands()` (except when throttled).\n\nAll other places in the code will assign `mNeedCommandsAndGarbageCleanup` every time `mLastCompletedSerials` is updated.\n\nEither rely on `postSubmitCheck()` call from a render thread (added in the next CL) and remove this assignment or call `checkCompletedCommands()` version that does not do cleanup.\n\nAdditional, this assignment will cause async cleanup even when `asyncCommandBufferReset()` is disabled. So there will be multiple threads that will fight for who should do `retireFinishedCommandsLocked()`.",
+      "revId": "e19be6e6afbdaa0ab9b8643fbc9f97e86a43adef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6580341_60431342",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-28T13:35:49Z",
+      "side": 1,
+      "message": "Is it possible to add \n```\nif (suballocationGarbageSize \u003e kMaxBufferSuballocationGarbageSize)\n```\nbefore this block to avoid extra mutex lock?\n\nOne concern is the `renderer-\u003eoutputVmaStatString()`. If required it is better to add separate mutex for that.",
+      "revId": "e19be6e6afbdaa0ab9b8643fbc9f97e86a43adef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e504eb12_a617a8f5",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1107,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-28T13:35:49Z",
+      "side": 1,
+      "message": "Suggest moving this cleanup inside `finishOneCommandBatch` (possible with method rename) so it is also performed when `CommandQueue::queueSubmit()` is throttled (the only place that does not do/request the cleanup).",
+      "revId": "e19be6e6afbdaa0ab9b8643fbc9f97e86a43adef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d87e1019_54e8816a",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1127,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-28T13:35:49Z",
+      "side": 1,
+      "message": "Maybe refactor into `finishResourceUseLocked` similar to `checkCompletedCommandsLocked`?\nSame for `waitForResourceUseToFinishWithUserTimeout`.\n\nAlso, these methods will be almost identical. I suggest make single method and handle differences outside.",
+      "revId": "e19be6e6afbdaa0ab9b8643fbc9f97e86a43adef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b0e8082_232504b5",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-02-28T13:35:49Z",
+      "side": 1,
+      "message": "This is not true for the `retireFinishedCommandsAndCleanupGarbage` method.\nIt does not require lock and will implicitly lock in the `retireFinishedCommands`.",
+      "revId": "e19be6e6afbdaa0ab9b8643fbc9f97e86a43adef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
