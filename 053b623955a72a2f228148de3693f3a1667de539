@@ -22,6 +22,30 @@
       },
       "revId": "053b623955a72a2f228148de3693f3a1667de539",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7258ab9d_c8541885",
+        "filename": "src/compiler/translator/TextureFunctionHLSL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-02-28T17:11:51Z",
+      "side": 1,
+      "message": "Looks like the shader translator sources do not include `common/platform.h`. Adding such an include and referring to the real D3D11 symbols may potentially break some non-Windows builds.",
+      "parentUuid": "cb77b8bb_574e6ee1",
+      "range": {
+        "startLine": 38,
+        "startChar": 38,
+        "endLine": 38,
+        "endChar": 39
+      },
+      "revId": "053b623955a72a2f228148de3693f3a1667de539",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
