@@ -46,6 +46,30 @@
       },
       "revId": "b7ec9d030f14ed9634567c261e5ff583a30a5ab3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c870d26e_fb0d6156",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-02-28T16:24:43Z",
+      "side": 1,
+      "message": "Sure, https://crrev.com/c/4296801",
+      "parentUuid": "9f1c579a_854c76ca",
+      "range": {
+        "startLine": 756,
+        "startChar": 4,
+        "endLine": 756,
+        "endChar": 35
+      },
+      "revId": "b7ec9d030f14ed9634567c261e5ff583a30a5ab3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
