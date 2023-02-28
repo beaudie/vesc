@@ -16,6 +16,24 @@
       "message": "Might not be enough to check current index only. In the very least, this interacts badly with `EGL_ANGLE_prepare_swap_buffers`, even if no one other than ANGLE itself uses it (currently). This could be a loop over all images.\n\nAs an aside, not sure if this is worth it. The only place where it might be helpful is with `waitIdleBeforeSwapchainRecreation`, but isn\u0027t that fixed now? Can we just limit that workaround to older Android? Context: anglebug.com/5061",
       "revId": "2b3c2d9f4b4284d4a5d9604c6976be7fced12301",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b24ddc58_2ddb6dad",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1642,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-02-28T22:04:02Z",
+      "side": 1,
+      "message": "Changed it to merge ResourceUse of all mSwapchainImages. I think that should be enough, otherwise we have bugs that not updating ResourceUse of mSwapchainImages.\n\nThe value of this is not just waitIdleBeforeSwapchainRecreation, but for app shutdown as well (it will shutdown faster when there are other GPU works queued up by other apps). And app shutdown faster helps active apps when shutdown is caused by low memory kill.\n\nWithout this, the change in ContextVk::onDestroy that we now only wait for this context\u0027s work to complete will not be too useful, since SurfaceVk shutdown still end up waiting for entire queue to drain. This CL completes the change.",
+      "parentUuid": "31cbccde_fa593ce6",
+      "revId": "2b3c2d9f4b4284d4a5d9604c6976be7fced12301",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
