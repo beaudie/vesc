@@ -52,6 +52,24 @@
       "parentUuid": "a2d6dfc8_b1fa520b",
       "revId": "6f34eca071db53deae9f20ade5378fc64f437cec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d78c8d4b_86db71e2",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 612,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-01T11:36:32Z",
+      "side": 1,
+      "message": "\u003e I don\u0027t think multi-threads fight for retireFinishedCommandsLocked will be an issue though. One thread will find nothing to do and bail out.\n\nThe problem is that before \"One thread will find nothing\" it takes a mutex lock first (may be optimized...). I do not know if this will cause real world blocking or not.\n\n\u003e I guess from the feature flag\u0027s point of view it is true that we should avoid calling retireFinishedCommands from async thread when feature is diabled. Ypur feadback is absorbed here.\n\nI wrote about this in the previous CL:\n\n\u003e Additional, this assignment will cause async cleanup even when asyncCommandBufferReset() is disabled.",
+      "parentUuid": "d1545a84_171d6b6c",
+      "revId": "6f34eca071db53deae9f20ade5378fc64f437cec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
