@@ -610,19 +610,6 @@ TEST_F(OVRMultiviewFragmentShaderTest, ViewIDDeclaredAsFlatInput)
     VariableOccursNTimes(mASTRoot, ImmutableString("ViewID_OVR"), EvqFlatIn, 1u);
 }
 
-// Test that ViewID_OVR is declared as a flat output variable in an ESSL 1.00 vertex shader.
-TEST_F(OVRMultiviewVertexShaderTest, ViewIDDeclaredAsFlatOutput)
-{
-    const std::string &shaderString =
-        "#extension GL_OVR_multiview : require\n"
-        "void main()\n"
-        "{\n"
-        "}\n";
-    mCompileOptions.initializeBuiltinsForInstancedMultiview = true;
-    compileAssumeSuccess(shaderString);
-    VariableOccursNTimes(mASTRoot, ImmutableString("ViewID_OVR"), EvqFlatOut, 2u);
-}
-
 // The test checks that the GL_NV_viewport_array2 extension is emitted in a vertex shader if the
 // selectViewInNvGLSLVertexShader option is set.
 TEST_F(OVRMultiviewVertexShaderOutputCodeTest, ViewportArray2IsEmitted)

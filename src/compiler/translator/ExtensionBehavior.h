@@ -80,7 +80,14 @@ enum TBehavior : uint8_t
     EBhUndefined
 };
 
+struct TVersionRange
+{
+    int min;
+    int max;
+};
+
 const char *GetExtensionNameString(TExtension extension);
+TVersionRange GetExtensionVersionRange(TExtension extension);
 TExtension GetExtensionByName(const char *extension);
 
 const char *GetBehaviorString(TBehavior b);
