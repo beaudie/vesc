@@ -1115,7 +1115,7 @@ angle::Result CommandQueue::postSubmitCheck(Context *context)
         while (suballocationGarbageSize > kMaxBufferSuballocationGarbageSize &&
                mInFlightCommands.size() > 1)
         {
-            ANGLE_TRY(finishOneCommandBatch(context, renderer->getMaxFenceWaitTimeNs()));
+            ANGLE_TRY(finishOneCommandBatchAndCleanup(context, renderer->getMaxFenceWaitTimeNs()));
             // Immediately clean up finished batches.
             ANGLE_TRY(retireFinishedCommandsLocked(context));
             renderer->cleanupGarbage();
@@ -1154,8 +1154,8 @@ angle::Result CommandQueue::finishResourceUse(Context *context,
 
                 ANGLE_VK_TRY(context, status);
             }
-            finishedCount++;
         }
+        finishedCount = mFinishedCommandBatches.size();
         ASSERT(allInFlightCommandsAreAfterSerials(use.getSerials()));
         ASSERT(hasResourceUseFinished(use));
     }
@@ -1456,7 +1456,7 @@ angle::Result CommandQueue::queueSubmit(Context *context,
     // off-screen scenarios.
     if (mInFlightCommands.full())
     {
-        ANGLE_TRY(finishOneCommandBatch(context, renderer->getMaxFenceWaitTimeNs()));
+        ANGLE_TRY(finishOneCommandBatchAndCleanup(context, renderer->getMaxFenceWaitTimeNs()));
     }
     // Release the dequeue lock while doing potentially lengthy vkQueueSubmit call.
     // Note: after this point, you can not reference anything that required mMutex lock.
@@ -1568,7 +1568,7 @@ angle::Result CommandQueue::checkOneCommandBatch(Context *context, bool *finishe
     return angle::Result::Continue;
 }
 
-angle::Result CommandQueue::finishOneCommandBatch(Context *context, uint64_t timeout)
+angle::Result CommandQueue::finishOneCommandBatchAndCleanup(Context *context, uint64_t timeout)
 {
     ASSERT(!mInFlightCommands.empty());
     CommandBatch &batch = mInFlightCommands.front();
@@ -1586,6 +1586,10 @@ angle::Result CommandQueue::finishOneCommandBatch(Context *context, uint64_t tim
     }
     mFinishedCommandBatches.push(std::move(batch));
     mInFlightCommands.pop();
+
+    // Immediately clean up finished batches.
+    ANGLE_TRY(retireFinishedCommandsLocked(context));
+    context->getRenderer()->cleanupGarbage();
 
     return angle::Result::Continue;
 }
