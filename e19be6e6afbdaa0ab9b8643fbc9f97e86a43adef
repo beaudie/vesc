@@ -90,6 +90,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "90669ad9_856f7ff8",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 678,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-01T19:27:34Z",
+      "side": 1,
+      "message": "Point taken.  https://chromium-review.googlesource.com/c/angle/angle/+/4300098",
+      "parentUuid": "d5702b8f_ddedefb4",
+      "revId": "e19be6e6afbdaa0ab9b8643fbc9f97e86a43adef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a6580341_60431342",
@@ -228,6 +246,24 @@
       "side": 1,
       "message": "\u003e The problem doing cleanup request inside finishOneCommandBatch is potential of deadlock \n\nI did not suggested adding request inside `finishOneCommandBatch`. I suggested immediate cleanup like in the `postSubmitCheck` case.\n\n\u003e But in the CommandQueue::queueSubmit() we just add new item to the mFinishedCommandBatches without cleanup or request for cleanup.\n\nThis I was just stating facts.\n\n\u003e  If you hit that you either running some kind test, or your GPU is hang. \n\nMaybe. But why do not be consistent?\nIf this should not happen in a normal case, why not do immediate cleanup?\n\nAlso this check is concerning:\n```\nangle::Result CommandQueue::finishResourceUse(Context *context,\n                                              const ResourceUse \u0026use,\n                                              uint64_t timeout)\n{\n    VkDevice device \u003d context-\u003egetDevice();\n\n    int finishedCount \u003d 0;\n    \n    ...\n    \n    if (finishedCount \u003e 0)\n    {\n        ANGLE_TRY(retireFinishedCommandsAndCleanupGarbage(context));\n    }\n```\nWhat if before calling `finishResourceUse` there already was some items in the `mFinishedCommandBatches`? (for example from the `finishOneCommandBatch`...)\nThan this will skip cleanup and may potentially cause crash, because secondary command buffers were not reset, but pool destroyed.\n\nI would check `mFinishedCommandBatches.empty()` before unlocking the mutex, rather than counting `finishedCount`.",
       "parentUuid": "aa30ef2c_2b925e85",
+      "revId": "e19be6e6afbdaa0ab9b8643fbc9f97e86a43adef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5f0356d_9db925df",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1107,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-01T19:27:34Z",
+      "side": 1,
+      "message": "Thanks, now I understood your point. \n https://chromium-review.googlesource.com/c/angle/angle/+/4300098",
+      "parentUuid": "e97f4b65_3b41deda",
       "revId": "e19be6e6afbdaa0ab9b8643fbc9f97e86a43adef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
