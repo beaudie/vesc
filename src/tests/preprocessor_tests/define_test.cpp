@@ -39,8 +39,6 @@ TEST_F(DefineTest, RedefinePredefined)
         "__LINE__\n"
         "#define __FILE__ 20\n"
         "__FILE__\n"
-        "#define __VERSION__ 200\n"
-        "__VERSION__\n"
         "#define GL_ES 0\n"
         "GL_ES\n";
     const char *expected =
@@ -49,8 +47,6 @@ TEST_F(DefineTest, RedefinePredefined)
         "\n"
         "0\n"
         "\n"
-        "100\n"
-        "\n"
         "1\n";
 
     EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_MACRO_PREDEFINED_REDEFINED,
@@ -58,9 +54,7 @@ TEST_F(DefineTest, RedefinePredefined)
     EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_MACRO_PREDEFINED_REDEFINED,
                                     pp::SourceLocation(0, 3), "__FILE__"));
     EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_MACRO_PREDEFINED_REDEFINED,
-                                    pp::SourceLocation(0, 5), "__VERSION__"));
-    EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_MACRO_PREDEFINED_REDEFINED,
-                                    pp::SourceLocation(0, 7), "GL_ES"));
+                                    pp::SourceLocation(0, 5), "GL_ES"));
 
     preprocess(input, expected);
 }
@@ -825,8 +819,6 @@ TEST_F(DefineTest, UndefPredefined)
         "__LINE__\n"
         "#undef __FILE__\n"
         "__FILE__\n"
-        "#undef __VERSION__\n"
-        "__VERSION__\n"
         "#undef GL_ES\n"
         "GL_ES\n";
     const char *expected =
@@ -835,8 +827,6 @@ TEST_F(DefineTest, UndefPredefined)
         "\n"
         "0\n"
         "\n"
-        "100\n"
-        "\n"
         "1\n";
 
     EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_MACRO_PREDEFINED_UNDEFINED,
@@ -844,9 +834,7 @@ TEST_F(DefineTest, UndefPredefined)
     EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_MACRO_PREDEFINED_UNDEFINED,
                                     pp::SourceLocation(0, 3), "__FILE__"));
     EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_MACRO_PREDEFINED_UNDEFINED,
-                                    pp::SourceLocation(0, 5), "__VERSION__"));
-    EXPECT_CALL(mDiagnostics, print(pp::Diagnostics::PP_MACRO_PREDEFINED_UNDEFINED,
-                                    pp::SourceLocation(0, 7), "GL_ES"));
+                                    pp::SourceLocation(0, 5), "GL_ES"));
 
     preprocess(input, expected);
 }
@@ -918,14 +906,6 @@ TEST_F(DefineTest, Predefined_GL_ES)
 {
     const char *input    = "GL_ES\n";
     const char *expected = "1\n";
-
-    preprocess(input, expected);
-}
-
-TEST_F(DefineTest, Predefined_VERSION)
-{
-    const char *input    = "__VERSION__\n";
-    const char *expected = "100\n";
 
     preprocess(input, expected);
 }
