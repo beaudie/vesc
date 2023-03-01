@@ -611,19 +611,6 @@ TEST_F(OVRMultiview2FragmentShaderTest, PreprocessorOutput)
     compileAssumeSuccess(shaderString);
 }
 
-// Test that ViewID_OVR is declared as a flat output variable in an ESSL 1.00 vertex shader.
-TEST_F(OVRMultiview2VertexShaderTest, ViewIDDeclaredAsFlatOutput)
-{
-    const std::string &shaderString =
-        "#extension GL_OVR_multiview2 : require\n"
-        "void main()\n"
-        "{\n"
-        "}\n";
-    mCompileOptions.initializeBuiltinsForInstancedMultiview = true;
-    compileAssumeSuccess(shaderString);
-    VariableOccursNTimes(mASTRoot, ImmutableString("ViewID_OVR"), EvqFlatOut, 2u);
-}
-
 // Test that GL_OVR_multiview is not defined by the preprocessor for WebGL spec shader;
 // Test that GL_OVR_multiview2 is defined by the preprocessor for WebGL spec shader.
 TEST_F(OVRMultiview2VertexShaderTest, PreprocessorOutput)

@@ -147,7 +147,8 @@ DirectiveParser::DirectiveParser(Tokenizer *tokenizer,
                                  Diagnostics *diagnostics,
                                  DirectiveHandler *directiveHandler,
                                  const PreprocessorSettings &settings)
-    : mPastFirstStatement(false),
+    : mHandledVersion(false),
+      mPastFirstStatement(false),
       mSeenNonPreprocessorToken(false),
       mTokenizer(tokenizer),
       mMacroSet(macroSet),
@@ -173,6 +174,14 @@ void DirectiveParser::lex(Token *token)
         else if (!isEOD(token) && !skipping())
         {
             mSeenNonPreprocessorToken = true;
+            if (!mHandledVersion)
+            {
+                // If #version does not appear before first token, then this is
+                // an ESSL1 shader without a version directive
+                mDirectiveHandler->handleVersion(token->location, mShaderVersion,
+                                                 mSettings.shaderSpec, mMacroSet);
+                mHandledVersion = true;
+            }
         }
 
         if (token->type == Token::LAST)
@@ -203,6 +212,15 @@ void DirectiveParser::parseDirective(Token *token)
     }
 
     DirectiveType directive = getDirective(token);
+
+    if (!mHandledVersion && directive != DIRECTIVE_VERSION)
+    {
+        // If first directive is not #version, then this is an ESSL1 shader
+        // without a version directive
+        mDirectiveHandler->handleVersion(token->location, mShaderVersion, mSettings.shaderSpec,
+                                         mMacroSet);
+        mHandledVersion = true;
+    }
 
     // While in an excluded conditional block/group,
     // we only parse conditional directives.
@@ -806,9 +824,10 @@ void DirectiveParser::parseVersion(Token *token)
 
     if (valid)
     {
-        mDirectiveHandler->handleVersion(token->location, version, mSettings.shaderSpec);
         mShaderVersion = version;
-        PredefineMacro(mMacroSet, "__VERSION__", version);
+        mDirectiveHandler->handleVersion(token->location, mShaderVersion, mSettings.shaderSpec,
+                                         mMacroSet);
+        mHandledVersion = true;
     }
 }
 
