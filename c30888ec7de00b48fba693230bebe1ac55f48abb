@@ -50,6 +50,23 @@
       "message": "cnorthrop: Ping? This blocks updating libc++ in Chromium.\n\n(I think Shahbaz is currently out.)",
       "revId": "c30888ec7de00b48fba693230bebe1ac55f48abb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0152c3bc_32899d06",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-01T14:40:54Z",
+      "side": 1,
+      "message": "LGTM. +Charlie and Amirali as FYI.",
+      "revId": "c30888ec7de00b48fba693230bebe1ac55f48abb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
