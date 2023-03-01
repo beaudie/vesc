@@ -22,6 +22,30 @@
       },
       "revId": "ca65285c83624342ef12d05b9cad44c1f28e1862",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cacd54c_c994e27e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 8323,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-01T11:49:20Z",
+      "side": 1,
+      "message": "This will be not clear. Additionally, maybe in the future we will handle this situation differently (use `CommandBufferAccess` or defer refresh).\n\nI will add `bool *commandBufferWasFlushedOut` argument.",
+      "parentUuid": "13b6f9b9_ede5adae",
+      "range": {
+        "startLine": 8323,
+        "startChar": 37,
+        "endLine": 8323,
+        "endChar": 70
+      },
+      "revId": "ca65285c83624342ef12d05b9cad44c1f28e1862",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
