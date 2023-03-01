@@ -934,6 +934,7 @@ void DisplayMtl::initializeExtensions() const
     mNativeExtensions.framebufferBlitNV             = true;
     mNativeExtensions.framebufferMultisampleANGLE   = true;
     mNativeExtensions.polygonOffsetClampEXT         = true;
+    mNativeExtensions.stencilTexturingANGLE         = true;
     mNativeExtensions.copyTextureCHROMIUM           = true;
     mNativeExtensions.copyCompressedTextureCHROMIUM = false;
 
@@ -1209,6 +1210,8 @@ void DisplayMtl::initializeFeatures()
 
     ANGLE_FEATURE_CONDITION((&mFeatures), hasTextureSwizzle,
                             isMetal2_2 && supportsEitherGPUFamily(3, 2) && !isSimulator);
+
+    ANGLE_FEATURE_CONDITION((&mFeatures), avoidStencilTextureSwizzle, isIntel());
 
     // http://crbug.com/1136673
     // Fence sync is flaky on Nvidia
