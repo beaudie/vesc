@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4702e20b_f9849772",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 678,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-01T18:05:12Z",
+      "side": 1,
+      "message": "I added checkCompletedCommands call in the follow up CL (this is intended, but I missed in this CL). I believe the follow up CL already did what you said: after each submission, it will do the check, and then clean up.",
+      "parentUuid": "fc714ecc_87daa708",
+      "revId": "e19be6e6afbdaa0ab9b8643fbc9f97e86a43adef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a6580341_60431342",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
         "patchSetId": 21
@@ -156,6 +174,24 @@
       "side": 1,
       "message": "\u003e Lets keep finishOneCommandBatch a unit function and consistent with checkOneCommandBatch.\n\nAgree. This was just a suggestion.\n\nMy main point was `finishOneCommandBatch()` call inside `CommandQueue::queueSubmit()` method.\nThere is no cleanup after `finishOneCommandBatch()` like in this case.\nAnd I think we should add such cleanup here.\n\nReason.\nNormally, after adding new items into `mFinishedCommandBatches` we request cleanup.\nIn this case (`postSubmitCheck()`) we do immediate cleanup instead.\n\nBut in the `CommandQueue::queueSubmit()` we just add new item to the `mFinishedCommandBatches` without cleanup or request for cleanup.\nYes, currently we always request cleanup by assigning `mNeedCommandsAndGarbageCleanup \u003d true` after `CommandQueue::submitCommands()`, but I do not think that was intended (since throttling is an exceptional case).\n\nTherefore I suggested for consistency perform immediate cleanup when throttling. `finishOneCommandBatch()` is only used when throttling.\n\nAnd to avoid copy-paste:\n```\nANGLE_TRY(finishOneCommandBatch(context, renderer-\u003egetMaxFenceWaitTimeNs()));\n// Immediately clean up finished batches.\nANGLE_TRY(retireFinishedCommandsLocked(context));\nrenderer-\u003ecleanupGarbage();\n```\nI suggested to move cleanup inside `finishOneCommandBatch()`.\nAlso suggested renaming. Maybe like this:\n`finishOneCommandBatchAndCleanup()`\n`AndCleanup` - means everything.\n\nBut if copy-paste is preferable, then it is OK.",
       "parentUuid": "76cf5677_f4fb0698",
+      "revId": "e19be6e6afbdaa0ab9b8643fbc9f97e86a43adef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa30ef2c_2b925e85",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1107,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-01T18:05:12Z",
+      "side": 1,
+      "message": "\u003e But in the CommandQueue::queueSubmit() we just add new item to the mFinishedCommandBatches without cleanup or request for cleanup.\n\nThe problem doing cleanup request inside finishOneCommandBatch is potential of deadlock (requestCommandsAndGarbageCleanup may take mTaskEnqueueMutex, and finishOneCommandBatch may get called from call stack while mTaskEnqueueMutex is taken, and mTaskEnqueueMutex is not recursive). That is why I intentionally move the cleanup code up in higher code to avoid potential deadlock. In reality, the  finishOneCommandBatch() call inside queueSubmit is not expected to hit. It is there for extreme cases. If you hit that you either running some kind test, or your GPU is hang. \n\nBut I do agree without deadlock concern, form consistency POV,it is cleaner to make request right after we add item to mFinishedCommandBatches. In future, once we all moved to C++20, I think we can do more clean up here by using atomic::wait/atomic::notify, these deadlock problem will no longer relevant and we can make request as we add item to mFinishedCommandBatches.",
+      "parentUuid": "7e073b7c_9fbb4ef1",
       "revId": "e19be6e6afbdaa0ab9b8643fbc9f97e86a43adef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
