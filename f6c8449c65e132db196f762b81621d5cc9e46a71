@@ -22,6 +22,30 @@
       },
       "revId": "f6c8449c65e132db196f762b81621d5cc9e46a71",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c8cda85_9934d5a5",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 691,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-01T12:42:12Z",
+      "side": 1,
+      "message": "\u003e This logic is a bit confusing.\n\nAgree. I wanted to avoid comparing `enum class` with relation operators. And was lazy to write separate comparison function)\n\nWill use `std::max()` with static asserts for simplicity.\n\n\u003e Can\u0027t we just pick the highest priority of all contexts?\n\nThis complex logic does this at the end. Or at least it supposed to)\n\n\u003e  I am thinking even simpler model here, that we only upgrade, never downgrade:\n\nThis was my original solution. But then decided why not to go down? And there were 2 options: do only when new Contexts is created; do when created/destroyed.\nI chose only change priority on create to avoid unnecessary submissions during app cleanup.\n\nFor me decision was 50/50. So I will simplify the logic. No need to iterate over contexts.\n\n\u003e Then from TextureVk::setEGLImageTarget() you also do similar things, that ImageVk will keep mHighesContextsPriority, and setEGLImageTarget will upgrade mHighesContextsPriority if needed and propagate it to ShareGroupVk::mHighesContextsPriority.\n\nYou mentioned `setEGLImageTarget` two times. I do not understand.\nAnyway, I thought a lot regarding EGLImage and current solution is not the first that comes to my mind...\n\n- Context A1 (Medium) creates EGLImage - as I understand, EGLImage should inherit \"Medium\" priority.\n- Context B1 (Low) uses EGLImage - we upgrade priority from Low-\u003eMedium.\n\nBut then:\n- Context A2 (High) created in the Group A - A1 upgraded Medium-\u003eHigh\nWe will end up with Context A1 and Context B1 have different priorities. For me it is a problem.\n\n\u003e Then in submitCommands it will check if mHighesContextsPriority has changed and if yes, it will insert semaphore that you are doing in submitPriorityDependency(). The priority hange is deferred until next submission as opposed to immediate.\n\nAlso thought about that (and almost implemented). But then found a problems:\n- Create Context A1 (Low)\n- Create Context A2 (Medium) - A1 upgrade Low-\u003eMedium\n- Context A2 submits commands - no priority change for Context A2, no submitPriorityDependency()\n\nBut if you suggested checking `ShareGroupVk::mContextsPriority` against `ShareGroupVk::mHighesContextsPriority` every time some context `submitCommands()`, then this should work, I guess. Only need to do this in flush commands/wait semaphores - or simply, every place that uses a priority that might be outdated. Also Context A2 shout be added into the `ShareGroupVk` with **Low** priority, otherwise there will be a mixture of priorities, that I want to avoid.\n\nBut what is the point of deferring?\nFlush will happen inevitably. And we do not have 100\u0027s of priorities, so there will be not too many `submitPriorityDependency()` calls when contexts are created.\n\nAdditionally, there are also one off submits that use priority.\nSo I decided to make immediate `submitPriorityDependency()` call because of the above reasons and possibly other yet unknown...",
+      "parentUuid": "73a75c34_26c1d7fd",
+      "range": {
+        "startLine": 677,
+        "startChar": 4,
+        "endLine": 691,
+        "endChar": 5
+      },
+      "revId": "f6c8449c65e132db196f762b81621d5cc9e46a71",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
