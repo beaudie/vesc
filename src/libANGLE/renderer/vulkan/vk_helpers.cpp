@@ -5043,49 +5043,6 @@ ImageHelper::ImageHelper()
     resetCachedProperties();
 }
 
-ImageHelper::ImageHelper(ImageHelper &&other)
-    : Resource(std::move(other)),
-      mImage(std::move(other.mImage)),
-      mDeviceMemory(std::move(other.mDeviceMemory)),
-      mVmaAllocation(std::move(other.mVmaAllocation)),
-      mVkImageCreateInfo(other.mVkImageCreateInfo),
-      mImageType(other.mImageType),
-      mTilingMode(other.mTilingMode),
-      mCreateFlags(other.mCreateFlags),
-      mUsage(other.mUsage),
-      mExtents(other.mExtents),
-      mRotatedAspectRatio(other.mRotatedAspectRatio),
-      mIntendedFormatID(other.mIntendedFormatID),
-      mActualFormatID(other.mActualFormatID),
-      mSamples(other.mSamples),
-      mImageSerial(other.mImageSerial),
-      mCurrentLayout(other.mCurrentLayout),
-      mCurrentQueueFamilyIndex(other.mCurrentQueueFamilyIndex),
-      mLastNonShaderReadOnlyLayout(other.mLastNonShaderReadOnlyLayout),
-      mCurrentShaderReadStageMask(other.mCurrentShaderReadStageMask),
-      mRenderPassUsageFlags(other.mRenderPassUsageFlags),
-      mBarrierQueueSerial(other.mBarrierQueueSerial),
-      mYcbcrConversionDesc(other.mYcbcrConversionDesc),
-      mFirstAllocatedLevel(other.mFirstAllocatedLevel),
-      mLayerCount(other.mLayerCount),
-      mLevelCount(other.mLevelCount),
-      mViewFormats(other.mViewFormats),
-      mSubresourceUpdates(std::move(other.mSubresourceUpdates)),
-      mTotalStagedBufferUpdateSize(other.mTotalStagedBufferUpdateSize),
-      mCurrentSingleClearValue(std::move(other.mCurrentSingleClearValue)),
-      mContentDefined(std::move(other.mContentDefined)),
-      mStencilContentDefined(std::move(other.mStencilContentDefined)),
-      mAllocationSize(std::move(other.mAllocationSize)),
-      mMemoryAllocationType(std::move(other.mMemoryAllocationType)),
-      mMemoryTypeIndex(std::move(other.mMemoryTypeIndex))
-{
-    ASSERT(this != &other);
-    // angle::Subject doesn't support move or copy. Ensure "other" Subject does not have observers
-    // attached. Otherwise, observers will point to the invalid "other" object.
-    ASSERT(!other.hasObservers());
-    other.resetCachedProperties();
-}
-
 ImageHelper::~ImageHelper()
 {
     ASSERT(!valid());
