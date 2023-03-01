@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d61cfe09_a79d7d27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-03-01T19:15:26Z",
+      "side": 1,
+      "message": "Roman, could you PTAL?\nThis is ANGLE-side of the recipe-side https://chromium-review.googlesource.com/c/chromium/tools/build/+/4300372",
+      "revId": "b3375cae4d6114dfc393a3d04993d6d751e49520",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
