@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fc714ecc_87daa708",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 678,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-01T11:32:05Z",
+      "side": 1,
+      "message": "Not regarding `mNeedCommandsAndGarbageCleanup` assignment (fixed in the follow up)  but about `queueSubmitOneOff()`.\n\nWhy with `asyncCommandQueue` **disabled** we do not check completed commands and do/request a cleanup, but when **enabled** we do?\n\n---\nBelow comments does not take into account the *\"Vulkan: Follow up fix and enable asyncCommandBufferReset flag\"*\n\n\u003e postSubmitCheck may end up calling CommandProcessor::requestCommandsAndGarbageCleanup() and will end up try to take mTaskEnqueueMutex that calling thread is already took.\n\nI was not telling to call `postSubmitCheck()` here, rather remove the assignment here and only rely on `postSubmitCheck()` that will be always performed by the `RendererVk`. This not ideal, but will work.\n\n\u003e  This line of code is essentially calling requestCommandsAndGarbageCleanup.\n\nYes. But my problem is that there is no point requesting this here - nothing will be reset. Normally, we request cleanup only when check/finish pushed new items into `mFinishedCommandBatches`. But in this case, `submitCommands()` will not do anything (except when `mInFlightCommands.full()`).\n\n\u003e You also do not require this line of code, but I am trying to to be consistent with line 690\n\nThe assignment also not required in case of `queueSubmitOneOff()`.\n\n\u003e where we always try to check completed commands when we do one off submission.\n\nThere are no such checks, as far as I can see. I missed this point.\nAs well as there is no such checks in/after the `submitCommands()`.\n\n\u003e or call checkCompletedCommands() version that does not do cleanup.\n\nTherefore, I suggested making additional version of `checkCompletedCommands()` method that need to be called from the `CommandProcessor` after submissions. This method will call `checkCompletedCommandsLocked()` with the mutex and then assign `mNeedCommandsAndGarbageCleanup \u003d true` if `anyCommandFinished`.",
+      "parentUuid": "72ab6cd0_18948986",
+      "revId": "e19be6e6afbdaa0ab9b8643fbc9f97e86a43adef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a6580341_60431342",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
         "patchSetId": 21
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "Good point. Added if check before mutex.\noutputVmaStatString is only for debug, I think VMA has its own lock?",
       "parentUuid": "a6580341_60431342",
+      "revId": "e19be6e6afbdaa0ab9b8643fbc9f97e86a43adef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61c31e54_ff4e5143",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1099,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-01T11:32:05Z",
+      "side": 1,
+      "message": "\u003e I think VMA has its own lock?\n\nIt uses mutexes internally. But maybe they are for thread safety with allocate/deallocate functions, and not for concurrent calls to `vmaBuildStatsString()`.",
+      "parentUuid": "a5ac4162_da3db7a5",
       "revId": "e19be6e6afbdaa0ab9b8643fbc9f97e86a43adef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -108,6 +144,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7e073b7c_9fbb4ef1",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1107,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-01T11:32:05Z",
+      "side": 1,
+      "message": "\u003e Lets keep finishOneCommandBatch a unit function and consistent with checkOneCommandBatch.\n\nAgree. This was just a suggestion.\n\nMy main point was `finishOneCommandBatch()` call inside `CommandQueue::queueSubmit()` method.\nThere is no cleanup after `finishOneCommandBatch()` like in this case.\nAnd I think we should add such cleanup here.\n\nReason.\nNormally, after adding new items into `mFinishedCommandBatches` we request cleanup.\nIn this case (`postSubmitCheck()`) we do immediate cleanup instead.\n\nBut in the `CommandQueue::queueSubmit()` we just add new item to the `mFinishedCommandBatches` without cleanup or request for cleanup.\nYes, currently we always request cleanup by assigning `mNeedCommandsAndGarbageCleanup \u003d true` after `CommandQueue::submitCommands()`, but I do not think that was intended (since throttling is an exceptional case).\n\nTherefore I suggested for consistency perform immediate cleanup when throttling. `finishOneCommandBatch()` is only used when throttling.\n\nAnd to avoid copy-paste:\n```\nANGLE_TRY(finishOneCommandBatch(context, renderer-\u003egetMaxFenceWaitTimeNs()));\n// Immediately clean up finished batches.\nANGLE_TRY(retireFinishedCommandsLocked(context));\nrenderer-\u003ecleanupGarbage();\n```\nI suggested to move cleanup inside `finishOneCommandBatch()`.\nAlso suggested renaming. Maybe like this:\n`finishOneCommandBatchAndCleanup()`\n`AndCleanup` - means everything.\n\nBut if copy-paste is preferable, then it is OK.",
+      "parentUuid": "76cf5677_f4fb0698",
+      "revId": "e19be6e6afbdaa0ab9b8643fbc9f97e86a43adef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d87e1019_54e8816a",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
         "patchSetId": 21
@@ -137,6 +191,24 @@
       "side": 1,
       "message": "The main difference between the two is error handling. I am not against refactoring to avoid code duplication, but lets not do it in this CL.",
       "parentUuid": "d87e1019_54e8816a",
+      "revId": "e19be6e6afbdaa0ab9b8643fbc9f97e86a43adef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d8a5d5f_f4feebc9",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1127,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-01T11:32:05Z",
+      "side": 1,
+      "message": "`checkCompletedCommandsLocked()` was removed in the follow up CL and now code is consistent.\n\n---\nBelow comments does not take into account the *\"Vulkan: Follow up fix and enable asyncCommandBufferReset flag\"*\n\nI wrote this because `checkCompletedCommandsLocked()` is a new method in this CL.\nCurrently it only used in `checkCompletedCommands()`.\n\nWhy `checkCompletedCommandsLocked()` was required for `checkCompletedCommands()`?\nBut `finishResourceUseLocked()` is not required for `finishResourceUse()`?\n\nSimilar question for `waitForResourceUseToFinishWithUserTimeoutLocked()`.\n\n\u003e  I am not against refactoring to avoid code duplication, but lets not do it in this CL.\n\nRefactoring into single method was additional point. Main point is consistency of this CL changes.",
+      "parentUuid": "8f199c8b_4b90a0a0",
       "revId": "e19be6e6afbdaa0ab9b8643fbc9f97e86a43adef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
