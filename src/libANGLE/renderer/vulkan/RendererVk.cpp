@@ -4821,6 +4821,8 @@ angle::Result RendererVk::queueSubmitOneOff(vk::Context *context,
                                                                    std::move(primary));
     }
 
+    ANGLE_TRY(mCommandQueue.postSubmitCheck(context));
+
     return angle::Result::Continue;
 }
 
