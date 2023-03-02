@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "729fba71_d5c0228e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-02T01:04:53Z",
+      "side": 1,
+      "message": "Not sure who is the right person to review this CL. Somehow sometimes I am seeing tsan complain on data race (see bug for detail). I have seen this same data race a few weeks ago as well. I do not have exact root cause, but this is specific to do with volt and running tests on bots. This CL try to avoid reload function pointers if it is already loaded, just like reloadVoltInstance*) is doing. SO far appears to fix the bug.",
+      "revId": "1134f2209b3317efed4f909481931be55b89d547",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
