@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ca6c528_e13c395a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-02T10:22:00Z",
+      "side": 1,
+      "message": "LGTM. Not sure if I may \"+2\" this CL.",
+      "revId": "1886d5ec7fc4e4eb28effd24c309e61df80d996b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bc4a4cc_00f0a801",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1534,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-02T10:22:00Z",
+      "side": 1,
+      "message": "Not critical. For consistency suggest replace with:\n```\n*anyCommandFinished \u003d !mFinishedCommandBatches.empty()\n```\nLike in the finish/wait methods.",
+      "revId": "1886d5ec7fc4e4eb28effd24c309e61df80d996b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
