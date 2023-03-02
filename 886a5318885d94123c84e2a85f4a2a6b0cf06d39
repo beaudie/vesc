@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df9db8f0_65d253af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-02T19:56:58Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "886a5318885d94123c84e2a85f4a2a6b0cf06d39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f37e965_4f4ca6d7",
+        "filename": "src/libANGLE/renderer/vulkan/VulkanSecondaryCommandBuffer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-02T19:56:58Z",
+      "side": 1,
+      "message": "This deserves a feature flag.",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 78
+      },
+      "revId": "886a5318885d94123c84e2a85f4a2a6b0cf06d39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
