@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18027e8b_386e1054",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1516057
+      },
+      "writtenOn": "2023-03-02T12:41:36Z",
+      "side": 1,
+      "message": "Tests passing locally (end2end tests), with the same tests failing with/without the patch.\n\nWithout patch:\n\n6 tests failed:\n    VulkanPerformanceCounterTest.PipelineCacheIsRestoredWithProgramBinary/ES3_Vulkan (../../src/tests/gl_tests/VulkanPerformanceCounterTest.cpp:6574) (FAIL)\n    VulkanPerformanceCounterTest.PipelineCacheIsRestoredWithProgramBinaryTwice/ES3_Vulkan (../../src/tests/gl_tests/VulkanPerformanceCounterTest.cpp:6589) (FAIL)\n    VulkanPerformanceCounterTest.PipelineCacheIsWarmedUpAtLinkTime/ES3_Vulkan (../../src/tests/gl_tests/VulkanPerformanceCounterTest.cpp:6561) (FAIL)\n    VulkanPerformanceCounterTest.RenderToTextureDepthStencilRenderbufferShouldNotLoad/ES3_Vulkan (../../src/tests/gl_tests/VulkanPerformanceCounterTest.cpp:3771) (FAIL)\n    VulkanPerformanceCounterTest.RenderToTextureDepthStencilTextureShouldNotLoad/ES3_Vulkan (../../src/tests/gl_tests/VulkanPerformanceCounterTest.cpp:3652) (FAIL)\n    VulkanPerformanceCounterTest.RenderToTextureUninitializedAndUnusedDepthStencil/ES3_Vulkan (../../src/tests/gl_tests/VulkanPerformanceCounterTest.cpp:4031) (FAIL)\n10 tests skipped.\n\n\nWith the patch:\n\n6 tests failed:\n    VulkanPerformanceCounterTest.PipelineCacheIsRestoredWithProgramBinary/ES3_Vulkan (../../src/tests/gl_tests/VulkanPerformanceCounterTest.cpp:6574) (FAIL)\n    VulkanPerformanceCounterTest.PipelineCacheIsRestoredWithProgramBinaryTwice/ES3_Vulkan (../../src/tests/gl_tests/VulkanPerformanceCounterTest.cpp:6589) (FAIL)\n    VulkanPerformanceCounterTest.PipelineCacheIsWarmedUpAtLinkTime/ES3_Vulkan (../../src/tests/gl_tests/VulkanPerformanceCounterTest.cpp:6561) (FAIL)\n    VulkanPerformanceCounterTest.RenderToTextureDepthStencilRenderbufferShouldNotLoad/ES3_Vulkan (../../src/tests/gl_tests/VulkanPerformanceCounterTest.cpp:3771) (FAIL)\n    VulkanPerformanceCounterTest.RenderToTextureDepthStencilTextureShouldNotLoad/ES3_Vulkan (../../src/tests/gl_tests/VulkanPerformanceCounterTest.cpp:3652) (FAIL)\n    VulkanPerformanceCounterTest.RenderToTextureUninitializedAndUnusedDepthStencil/ES3_Vulkan (../../src/tests/gl_tests/VulkanPerformanceCounterTest.cpp:4031) (FAIL)\n10 tests skipped.",
+      "revId": "421265dcb97b1cccabf2c67e8f909b02d10a1e7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
