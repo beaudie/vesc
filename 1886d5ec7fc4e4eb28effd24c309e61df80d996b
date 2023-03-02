@@ -33,6 +33,24 @@
       "message": "Not critical. For consistency suggest replace with:\n```\n*anyCommandFinished \u003d !mFinishedCommandBatches.empty()\n```\nLike in the finish/wait methods.",
       "revId": "1886d5ec7fc4e4eb28effd24c309e61df80d996b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0707ed09_4801bfc6",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1534,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-02T17:17:16Z",
+      "side": 1,
+      "message": "Good point.",
+      "parentUuid": "9bc4a4cc_00f0a801",
+      "revId": "1886d5ec7fc4e4eb28effd24c309e61df80d996b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
