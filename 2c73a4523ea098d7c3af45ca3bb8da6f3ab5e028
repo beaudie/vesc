@@ -33,6 +33,24 @@
       "message": "Just curious: how is this conversion done?\n\ne.g. \n\n```\nsamperMetadata[samplerIndex].wrapModes \u003d ???\nint wrapS \u003d ???\n```",
       "revId": "2c73a4523ea098d7c3af45ca3bb8da6f3ab5e028",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95acb496_a481aa95",
+        "filename": "src/compiler/translator/TextureFunctionHLSL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-03-02T19:07:34Z",
+      "side": 1,
+      "message": "`wrapModes` value is integer and this line only extracts bits relevant to `wrapS`, similar happens on L94 and L113.\n\nThe comment above refers to the whole function converting floating-point normalized texture coordinates to integers.\n\nDoes it answer your question?",
+      "parentUuid": "7230888f_8a8a6531",
+      "revId": "2c73a4523ea098d7c3af45ca3bb8da6f3ab5e028",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
