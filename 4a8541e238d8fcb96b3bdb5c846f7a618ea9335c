@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9471a116_135ed743",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-02T20:11:40Z",
+      "side": 1,
+      "message": "I think the cleaner way is to create a ScopedOneOffSerialIndex class that releases the index on destruction. Then you can apply it back to https://chromium-review.googlesource.com/c/angle/angle/+/4289749 as well.",
+      "range": {
+        "startLine": 724,
+        "startChar": 4,
+        "endLine": 725,
+        "endChar": 22
+      },
+      "revId": "4a8541e238d8fcb96b3bdb5c846f7a618ea9335c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
