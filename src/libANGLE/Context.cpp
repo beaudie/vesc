@@ -3554,6 +3554,26 @@ void Context::setExtensionEnabled(const char *name, bool enabled)
     {
         setExtensionEnabled("GL_OVR_multiview", enabled);
     }
+    if (enabled && strcmp(name, "GL_ANGLE_shader_pixel_local_storage") == 0)
+    {
+        // Enable the various dependency extensions of ANGLE_shader_pixel_local_storage.
+        if (mSupportedExtensions.drawBuffersIndexedOES)
+        {
+            setExtensionEnabled("GL_OES_draw_buffers_indexed", true);
+        }
+        if (mSupportedExtensions.drawBuffersIndexedEXT)
+        {
+            setExtensionEnabled("GL_EXT_draw_buffers_indexed", true);
+        }
+        if (mSupportedExtensions.colorBufferFloatEXT)
+        {
+            setExtensionEnabled("GL_EXT_color_buffer_float", true);
+        }
+        if (mSupportedExtensions.colorBufferHalfFloatEXT)
+        {
+            setExtensionEnabled("GL_EXT_color_buffer_half_float", true);
+        }
+    }
     const ExtensionInfoMap &extensionInfos = GetExtensionInfoMap();
     ASSERT(extensionInfos.find(name) != extensionInfos.end());
     const auto &extension = extensionInfos.at(name);
