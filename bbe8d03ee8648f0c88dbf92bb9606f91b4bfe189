@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e635f4f7_c6760137",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-03T19:06:47Z",
+      "side": 1,
+      "message": "Chris, instead of removing the frontend feature, would you consider changing it to disablePixelLocalStorage, false by default?\n\nBefore you make this change - let\u0027s get Geoff\u0027s feedback. I\u0027m not sure whether it\u0027s worth the code, or whether we should just go with your change as-is, removing it.",
+      "revId": "bbe8d03ee8648f0c88dbf92bb9606f91b4bfe189",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
