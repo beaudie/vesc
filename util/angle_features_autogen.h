@@ -101,7 +101,6 @@ enum class Feature
     EmulateIsnanFloat,
     EmulateMaxVertexAttribStride,
     EmulatePackSkipRowsAndPackSkipPixels,
-    EmulatePixelLocalStorage,
     EmulatePrimitiveRestartFixedIndex,
     EmulateR32fImageAtomicExchange,
     EmulateRGB10,

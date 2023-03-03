@@ -3781,12 +3781,6 @@ Extensions Context::generateSupportedExtensions() const
         supportedExtensions.textureFilterAnisotropicEXT = false;
     }
 
-    if (!getFrontendFeatures().emulatePixelLocalStorage.enabled)
-    {
-        supportedExtensions.shaderPixelLocalStorageANGLE         = false;
-        supportedExtensions.shaderPixelLocalStorageCoherentANGLE = false;
-    }
-
     // Some extensions are always available because they are implemented in the GL layer.
     supportedExtensions.bindUniformLocationCHROMIUM   = true;
     supportedExtensions.vertexArrayObjectOES          = true;

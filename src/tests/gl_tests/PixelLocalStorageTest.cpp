@@ -2459,49 +2459,36 @@ GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(PixelLocalStorageTest);
 #define PLATFORM(API, BACKEND) API##_##BACKEND()
 #define PLS_INSTANTIATE_RENDERING_TEST_AND(TEST, API, ...)                                \
     ANGLE_INSTANTIATE_TEST(                                                               \
-        TEST,                                                                             \
-        PLATFORM(API, D3D11) /* D3D coherent. */                                          \
-            .enable(Feature::EmulatePixelLocalStorage),                                   \
-        PLATFORM(API, D3D11) /* D3D noncoherent. */                                       \
-            .enable(Feature::DisableRasterizerOrderViews)                                 \
-            .enable(Feature::EmulatePixelLocalStorage),                                   \
-        PLATFORM(API, OPENGL) /* OpenGL coherent. */                                      \
-            .enable(Feature::EmulatePixelLocalStorage),                                   \
-        PLATFORM(API, OPENGL) /* OpenGL noncoherent. */                                   \
-            .enable(Feature::EmulatePixelLocalStorage)                                    \
+        TEST, PLATFORM(API, D3D11), /* D3D coherent. */                                   \
+        PLATFORM(API, D3D11)        /* D3D noncoherent. */                                \
+            .enable(Feature::DisableRasterizerOrderViews),                                \
+        PLATFORM(API, OPENGL), /* OpenGL coherent. */                                     \
+        PLATFORM(API, OPENGL)  /* OpenGL noncoherent. */                                  \
             .disable(Feature::SupportsFragmentShaderInterlockNV)                          \
             .disable(Feature::SupportsFragmentShaderOrderingINTEL)                        \
             .disable(Feature::SupportsFragmentShaderInterlockARB),                        \
-        PLATFORM(API, OPENGLES) /* OpenGL ES coherent */                                  \
-            .enable(Feature::EmulatePixelLocalStorage),                                   \
-        PLATFORM(API, OPENGLES) /* OpenGL ES noncoherent                                  \
-                                   (EXT_shader_framebuffer_fetch_non_coherent). */        \
-            .enable(Feature::EmulatePixelLocalStorage)                                    \
+        PLATFORM(API, OPENGLES), /* OpenGL ES coherent */                                 \
+        PLATFORM(API, OPENGLES)  /* OpenGL ES noncoherent                                 \
+                                    (EXT_shader_framebuffer_fetch_non_coherent). */       \
             .disable(Feature::SupportsShaderFramebufferFetchEXT)                          \
             .disable(Feature::SupportsShaderPixelLocalStorageEXT),                        \
         PLATFORM(API, OPENGLES) /* OpenGL ES noncoherent (shader images). */              \
-            .enable(Feature::EmulatePixelLocalStorage)                                    \
             .disable(Feature::SupportsShaderFramebufferFetchEXT)                          \
             .disable(Feature::SupportsShaderFramebufferFetchNonCoherentEXT)               \
             .disable(Feature::SupportsShaderPixelLocalStorageEXT),                        \
         PLATFORM(API, VULKAN) /* Vulkan coherent. */                                      \
-            .enable(Feature::AsyncCommandQueue)                                           \
-            .enable(Feature::EmulatePixelLocalStorage),                                   \
+            .enable(Feature::AsyncCommandQueue),                                          \
         PLATFORM(API, VULKAN) /* Vulkan noncoherent. */                                   \
             .disable(Feature::SupportsShaderFramebufferFetch)                             \
-            .disable(Feature::SupportsFragmentShaderPixelInterlock)                       \
-            .enable(Feature::EmulatePixelLocalStorage),                                   \
+            .disable(Feature::SupportsFragmentShaderPixelInterlock),                      \
         PLATFORM(API, VULKAN_SWIFTSHADER) /* Swiftshader coherent (framebuffer fetch). */ \
-            .enable(Feature::AsyncCommandQueue)                                           \
-            .enable(Feature::EmulatePixelLocalStorage),                                   \
+            .enable(Feature::AsyncCommandQueue),                                          \
         PLATFORM(API, VULKAN_SWIFTSHADER) /* Swiftshader noncoherent. */                  \
             .disable(Feature::SupportsShaderFramebufferFetch)                             \
             .disable(Feature::SupportsFragmentShaderPixelInterlock)                       \
-            .enable(Feature::AsyncCommandQueue)                                           \
-            .enable(Feature::EmulatePixelLocalStorage),                                   \
+            .enable(Feature::AsyncCommandQueue),                                          \
         PLATFORM(API, VULKAN_SWIFTSHADER) /* Test PLS not having access to                \
                                              glEnablei/glDisablei/glColorMaski. */        \
-            .enable(Feature::EmulatePixelLocalStorage)                                    \
             .enable(Feature::DisableDrawBuffersIndexed),                                  \
         __VA_ARGS__)
 
@@ -2511,21 +2498,16 @@ PLS_INSTANTIATE_RENDERING_TEST_AND(
     PixelLocalStorageTest,
     ES3,
     // Metal, coherent (in tiled memory on Apple Silicon).
-    ES3_METAL().enable(Feature::EmulatePixelLocalStorage),
+    ES3_METAL(),
     // Metal, coherent via raster order groups + read_write textures.
-    ES3_METAL()
-        .enable(Feature::EmulatePixelLocalStorage)
-        .enable(Feature::DisableProgrammableBlending),
+    ES3_METAL().enable(Feature::DisableProgrammableBlending),
     // Metal, coherent, r32 packed read_write texture formats.
     ES3_METAL()
-        .enable(Feature::EmulatePixelLocalStorage)
         .enable(Feature::DisableProgrammableBlending)
         .enable(Feature::DisableRWTextureTier2Support),
     // Metal, noncoherent if not on Apple Silicon.
     // (Apple GPUs don't support fragment-to-fragment memory barriers.)
-    ES3_METAL()
-        .enable(Feature::EmulatePixelLocalStorage)
-        .enable(Feature::DisableRasterOrderGroups));
+    ES3_METAL().enable(Feature::DisableRasterOrderGroups));
 
 class PixelLocalStorageTestES31 : public PixelLocalStorageTest
 {};
@@ -4040,10 +4022,8 @@ TEST_P(PixelLocalStorageValidationTest, LoseContext)
 }
 
 ANGLE_INSTANTIATE_TEST(PixelLocalStorageValidationTest,
-                       WithRobustness(ES31_NULL()).enable(Feature::EmulatePixelLocalStorage),
-                       WithRobustness(ES31_NULL())
-                           .enable(Feature::EmulatePixelLocalStorage)
-                           .enable(Feature::DisableDrawBuffersIndexed));
+                       WithRobustness(ES31_NULL()),
+                       WithRobustness(ES31_NULL()).enable(Feature::DisableDrawBuffersIndexed));
 
 class PixelLocalStorageCompilerTest : public ANGLETest<>
 {
@@ -4773,10 +4753,8 @@ TEST_P(PixelLocalStorageCompilerTest, FunctionArguments)
 }
 
 ANGLE_INSTANTIATE_TEST(PixelLocalStorageCompilerTest,
-                       ES31_NULL().enable(Feature::EmulatePixelLocalStorage),
-                       ES31_NULL()
-                           .enable(Feature::EmulatePixelLocalStorage)
-                           .enable(Feature::DisableDrawBuffersIndexed));
+                       ES31_NULL(),
+                       ES31_NULL().enable(Feature::DisableDrawBuffersIndexed));
 
 class PixelLocalStorageTestPreES3 : public ANGLETest<>
 {};
@@ -4804,6 +4782,4 @@ TEST_P(PixelLocalStorageTestPreES3, UnsupportedClientVersion)
     ASSERT_GL_NO_ERROR();
 }
 
-ANGLE_INSTANTIATE_TEST(PixelLocalStorageTestPreES3,
-                       ES1_NULL().enable(Feature::EmulatePixelLocalStorage),
-                       ES2_NULL().enable(Feature::EmulatePixelLocalStorage));
+ANGLE_INSTANTIATE_TEST(PixelLocalStorageTestPreES3, ES1_NULL(), ES2_NULL());
