@@ -24,6 +24,7 @@
 #include <cstdarg>
 #include <cstddef>
 #include <fstream>
+#include <functional>
 #include <mutex>
 #include <set>
 #include <sstream>
@@ -103,6 +104,38 @@ struct SaveFileHelper
 
     std::ofstream mOfs;
     std::string mFilePath;
+};
+
+// Helper class to handle RAII patterns for initialization. Uses provided function that takes T *
+// and returns void to handle finalization.
+template <typename T>
+class [[nodiscard]] FunctionScoped final : NonCopyable
+{
+  public:
+    FunctionScoped() = default;
+    template <class FunctionT>
+    explicit FunctionScoped(FunctionT &&function) : mFunction(std::forward<FunctionT>(function))
+    {}
+    ~FunctionScoped()
+    {
+        if (mFunction)
+        {
+            mFunction(&mVar);
+        }
+    }
+
+    template <class FunctionT>
+    void setFunction(FunctionT &&function)
+    {
+        mFunction = std::forward<FunctionT>(function);
+    }
+
+    const T &get() const { return mVar; }
+    T &get() { return mVar; }
+
+  private:
+    std::function<void(T *)> mFunction;
+    T mVar;
 };
 
 // AMD_performance_monitor helpers.
