@@ -51,6 +51,24 @@
       "parentUuid": "aa27e2b6_6aa3bfa0",
       "revId": "bbe8d03ee8648f0c88dbf92bb9606f91b4bfe189",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f49ef1dc_0bdba3af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-03-03T23:34:48Z",
+      "side": 1,
+      "message": "I suppose that creates a potential hiccup with the ANGLE roller when we do enable the extension.\n\nMaybe the easiest path forward is to just switch the default to true. Easy to turn back off if there are issues.",
+      "parentUuid": "ef32aa69_16d22864",
+      "revId": "bbe8d03ee8648f0c88dbf92bb9606f91b4bfe189",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
