@@ -39,6 +39,30 @@
       },
       "revId": "886a5318885d94123c84e2a85f4a2a6b0cf06d39",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bba002fc_e7613c20",
+        "filename": "src/libANGLE/renderer/vulkan/VulkanSecondaryCommandBuffer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-03T10:28:20Z",
+      "side": 1,
+      "message": "Will move to a separate CL.",
+      "parentUuid": "4f37e965_4f4ca6d7",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 78
+      },
+      "revId": "886a5318885d94123c84e2a85f4a2a6b0cf06d39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
