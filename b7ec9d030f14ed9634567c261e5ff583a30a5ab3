@@ -70,6 +70,30 @@
       },
       "revId": "b7ec9d030f14ed9634567c261e5ff583a30a5ab3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb8606dc_ba2d5a38",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-03-03T23:47:56Z",
+      "side": 1,
+      "message": "Hey Shabi, we had to revert the CL above as it was crashing on pixel 7 (crash in mali on pipeline creation, red presubmit in https://r.android.com/2466997). Any idea why add-\u003eappend isn\u0027t the right thing to do? Or maybe something wrong with the other code in this CL that this activates?",
+      "parentUuid": "c870d26e_fb0d6156",
+      "range": {
+        "startLine": 756,
+        "startChar": 4,
+        "endLine": 756,
+        "endChar": 35
+      },
+      "revId": "b7ec9d030f14ed9634567c261e5ff583a30a5ab3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
