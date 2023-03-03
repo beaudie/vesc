@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35fe5aea_b529488e",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-03-03T10:32:22Z",
+      "side": 1,
+      "message": "This feels iffy. Is there a reason mSupportedExtensions wasn\u0027t exposed already?",
+      "revId": "f93cbe5241876d3bd5bc5332f9dfd021c18999f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
