@@ -51,6 +51,24 @@
       "parentUuid": "7230888f_8a8a6531",
       "revId": "2c73a4523ea098d7c3af45ca3bb8da6f3ab5e028",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0039b42_494395bb",
+        "filename": "src/compiler/translator/TextureFunctionHLSL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-03-03T01:04:43Z",
+      "side": 1,
+      "message": "Yes, I wrongly thought the comment above is describing what `int wrapS \u003d samplerMetadata[samplerIndex].wrapModes \u0026 0x7` does. Thank you!",
+      "parentUuid": "95acb496_a481aa95",
+      "revId": "2c73a4523ea098d7c3af45ca3bb8da6f3ab5e028",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
