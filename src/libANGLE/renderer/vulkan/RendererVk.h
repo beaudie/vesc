@@ -1143,6 +1143,34 @@ class RendererVk : angle::NonCopyable
     MemoryAllocationTracker mMemoryAllocationTracker;
 };
 
+// Adds "void release(RendererVk *)" method for collecting garbage.
+// Enables RendererScoped<> for classes that support DeviceScoped<>.
+template <class T>
+class RendererReleasable final : angle::NonCopyable
+{
+  public:
+    void setQueueSerial(const QueueSerial &queueSerial) { mUse.setQueueSerial(queueSerial); }
+
+    void release(RendererVk *renderer)
+    {
+        if (mUse.valid())
+        {
+            renderer->collectGarbage(mUse, &mObject);
+        }
+        else
+        {
+            mObject.destroy(renderer->getDevice());
+        }
+    }
+
+    const T &get() const { return mObject; }
+    T &get() { return mObject; }
+
+  private:
+    T mObject;
+    vk::ResourceUse mUse;
+};
+
 ANGLE_INLINE Serial RendererVk::generateQueueSerial(SerialIndex index)
 {
     return mQueueSerialFactory[index].generate();
