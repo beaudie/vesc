@@ -88,7 +88,7 @@ class ScopedEnableColorMask : angle::NonCopyable
         : mContext(context), mNumDrawBuffers(numDrawBuffers)
     {
         const State &state = mContext->getState();
-        if (!mContext->getExtensions().drawBuffersIndexedAny())
+        if (!mContext->getExtensions().drawBuffersIndexedOES)
         {
             std::array<bool, 4> &mask = mSavedColorMasks[0];
             state.getBlendStateExt().getColorMaskIndexed(0, &mask[0], &mask[1], &mask[2], &mask[3]);
@@ -108,7 +108,7 @@ class ScopedEnableColorMask : angle::NonCopyable
 
     ~ScopedEnableColorMask()
     {
-        if (!mContext->getExtensions().drawBuffersIndexedAny())
+        if (!mContext->getExtensions().drawBuffersIndexedOES)
         {
             const std::array<bool, 4> &mask = mSavedColorMasks[0];
             mContext->colorMask(mask[0], mask[1], mask[2], mask[3]);
@@ -806,7 +806,7 @@ class PixelLocalStorageFramebufferFetch : public PixelLocalStorage
         mColorMasksToRestore.reset();
         bool needsClear = false;
 
-        bool hasIndexedBlendAndColorMask = context->getExtensions().drawBuffersIndexedAny();
+        bool hasIndexedBlendAndColorMask = context->getExtensions().drawBuffersIndexedOES;
         if (!hasIndexedBlendAndColorMask)
         {
             // We don't have indexed blend and color mask control. Disable them globally. (This also
@@ -921,7 +921,7 @@ class PixelLocalStorageFramebufferFetch : public PixelLocalStorage
                                            invalidateList.data());
         }
 
-        bool hasIndexedBlendAndColorMask = context->getExtensions().drawBuffersIndexedAny();
+        bool hasIndexedBlendAndColorMask = context->getExtensions().drawBuffersIndexedOES;
         if (!hasIndexedBlendAndColorMask)
         {
             // Restore global blend and color mask. Validation should have ensured these didn't

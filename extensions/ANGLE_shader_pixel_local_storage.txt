@@ -995,6 +995,15 @@ Interactions with GLSL ES 3.10
     image uniforms and pixel local storage uniforms.
 
 
+Additions to the ANGLE_request_extension Specification
+
+    If OES_draw_buffers_indexed is requestable, it is implicitly enabled when
+    ANGLE_shader_pixel_local_storage is enabled.
+
+    If ANGLE_shader_pixel_local_storage is enabled, it is implicitly disabled
+    when OES_draw_buffers_indexed is disabled.
+
+
 Issues
 
     (1) EXT_shader_pixel_local_storage has a clause that PLS contents become

@@ -2643,6 +2643,55 @@ TEST_P(PixelLocalStorageTestES31, DrawStateReset)
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(PixelLocalStorageTestES31);
 PLS_INSTANTIATE_RENDERING_TEST(PixelLocalStorageTestES31, ES31);
 
+class PixelLocalStorageExtensionRequestTest : public ANGLETest<>
+{
+  protected:
+    PixelLocalStorageExtensionRequestTest() { setExtensionsEnabled(false); }
+};
+
+// Check that dependent extensions are implicitly enabled and disabled together.
+TEST_P(PixelLocalStorageExtensionRequestTest, ImplicitEnableDisable)
+{
+    EXPECT_TRUE(IsEGLDisplayExtensionEnabled(getEGLWindow()->getDisplay(),
+                                             "EGL_ANGLE_create_context_extensions_enabled"));
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionRequestable("GL_ANGLE_shader_pixel_local_storage"));
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionRequestable("GL_OES_draw_buffers_indexed"));
+
+    EXPECT_TRUE(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    EXPECT_TRUE(!IsGLExtensionEnabled("GL_OES_draw_buffers_indexed"));
+
+    // If OES_draw_buffers_indexed is requestable, it is implicitly enabled when
+    // ANGLE_shader_pixel_local_storage is enabled.
+    glRequestExtensionANGLE("GL_ANGLE_shader_pixel_local_storage");
+    EXPECT_TRUE(IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    EXPECT_TRUE(IsGLExtensionEnabled("GL_OES_draw_buffers_indexed"));
+
+    // If ANGLE_shader_pixel_local_storage is enabled, it is implicitly disabled when
+    // OES_draw_buffers_indexed is disabled.
+    glDisableExtensionANGLE("GL_OES_draw_buffers_indexed");
+    EXPECT_TRUE(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    EXPECT_TRUE(!IsGLExtensionEnabled("GL_OES_draw_buffers_indexed"));
+
+    glRequestExtensionANGLE("GL_OES_draw_buffers_indexed");
+    EXPECT_TRUE(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    EXPECT_TRUE(IsGLExtensionEnabled("GL_OES_draw_buffers_indexed"));
+
+    glRequestExtensionANGLE("GL_ANGLE_shader_pixel_local_storage");
+    EXPECT_TRUE(IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    EXPECT_TRUE(IsGLExtensionEnabled("GL_OES_draw_buffers_indexed"));
+
+    glDisableExtensionANGLE("GL_ANGLE_shader_pixel_local_storage");
+    EXPECT_TRUE(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    EXPECT_TRUE(IsGLExtensionEnabled("GL_OES_draw_buffers_indexed"));
+
+    glDisableExtensionANGLE("GL_OES_draw_buffers_indexed");
+    EXPECT_TRUE(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    EXPECT_TRUE(!IsGLExtensionEnabled("GL_OES_draw_buffers_indexed"));
+}
+
+ANGLE_INSTANTIATE_TEST(PixelLocalStorageExtensionRequestTest,
+                       WithRobustness(ES31_NULL()).enable(Feature::EmulatePixelLocalStorage));
+
 class PixelLocalStorageValidationTest : public ANGLETest<>
 {
   protected:

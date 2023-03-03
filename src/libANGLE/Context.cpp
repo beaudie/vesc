@@ -3562,6 +3562,20 @@ void Context::setExtensionEnabled(const char *name, bool enabled)
     {
         setExtensionEnabled("GL_OVR_multiview", enabled);
     }
+    // If OES_draw_buffers_indexed is requestable, it is implicitly enabled when
+    // ANGLE_shader_pixel_local_storage is enabled.
+    if (enabled && mSupportedExtensions.drawBuffersIndexedOES &&
+        strcmp(name, "GL_ANGLE_shader_pixel_local_storage") == 0)
+    {
+        setExtensionEnabled("GL_OES_draw_buffers_indexed", true);
+    }
+    // If ANGLE_shader_pixel_local_storage is enabled, it is implicitly disabled when
+    // OES_draw_buffers_indexed is disabled.
+    if (!enabled && mState.mExtensions.shaderPixelLocalStorageANGLE &&
+        strcmp(name, "GL_OES_draw_buffers_indexed") == 0)
+    {
+        setExtensionEnabled("GL_ANGLE_shader_pixel_local_storage", false);
+    }
     const ExtensionInfoMap &extensionInfos = GetExtensionInfoMap();
     ASSERT(extensionInfos.find(name) != extensionInfos.end());
     const auto &extension = extensionInfos.at(name);
@@ -4276,7 +4290,12 @@ void Context::initCaps()
                 mState.mCaps.maxPixelLocalStoragePlanes = maxDrawableAttachments;
                 ANGLE_LIMIT_CAP(mState.mCaps.maxPixelLocalStoragePlanes,
                                 IMPLEMENTATION_MAX_PIXEL_LOCAL_STORAGE_PLANES);
-                if (!mSupportedExtensions.drawBuffersIndexedAny())
+                if (mSupportedExtensions.drawBuffersIndexedOES)
+                {
+                    mState.mCaps.maxColorAttachmentsWithActivePixelLocalStorage =
+                        maxDrawableAttachments - 1;
+                }
+                else
                 {
                     // When pixel local storage is implemented as framebuffer attachments, we need
                     // to disable color masks and blending to its attachments. If the backend
@@ -4284,11 +4303,6 @@ void Context::initCaps()
                     // have to disable them globally. This also means the application can't have its
                     // own draw buffers while PLS is active.
                     mState.mCaps.maxColorAttachmentsWithActivePixelLocalStorage = 0;
-                }
-                else
-                {
-                    mState.mCaps.maxColorAttachmentsWithActivePixelLocalStorage =
-                        maxDrawableAttachments - 1;
                 }
                 mState.mCaps.maxCombinedDrawBuffersAndPixelLocalStoragePlanes =
                     maxDrawableAttachments;
