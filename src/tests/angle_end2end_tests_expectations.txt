@@ -1097,5 +1097,12 @@
 5076 : GLSLTest.VerifyMaxVertexUniformVectors* = TIMEOUT
 5076 : GLSLTest.VerifyMaxFragmentUniformVectors* = TIMEOUT
 6261 : MultithreadingTest* = TIMEOUT
+
+// Failures related to Transform Feedback after VVL roll (2023-02-28)
+8054 : MemoryBarrierBufferTest.TransformFeedbackBitWriteThenCapture/* = SKIP
+8054 : TransformFeedbackTest.BufferRebinding/ES3_Vulkan_EmulateTransformFeedback_NoSupportsTransformFeedbackExtension_NoSupportsGeometryStreamsCapability = SKIP
+8054 : TransformFeedbackTest.DrawWithoutTransformFeedbackThenWith/ES3_Vulkan_EmulateTransformFeedback_NoSupportsTransformFeedbackExtension_NoSupportsGeometryStreamsCapability = SKIP
+8054 : TransformFeedbackTest.Overrun*/ES3_Vulkan_EmulateTransformFeedback_NoSupportsTransformFeedbackExtension_NoSupportsGeometryStreamsCapability = SKIP
+
 // Please do not add expectations below this line,
 // so that TIMEOUT expectations above don't override more precise SKIP expectations
