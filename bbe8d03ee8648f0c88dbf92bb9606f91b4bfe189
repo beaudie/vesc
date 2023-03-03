@@ -33,6 +33,24 @@
       "message": "Geoff also mentioned that the feature could be changed to default to true in the frontend.\n\nGiven the to-do items for the extension, I\u0027m in favor of leaving in some kind of kill switch for the time being.",
       "revId": "bbe8d03ee8648f0c88dbf92bb9606f91b4bfe189",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef32aa69_16d22864",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-03-03T23:19:47Z",
+      "side": 1,
+      "message": "I\u0027m also totally happy launching Chrome with `--enable-angle-features\u003demulatePixelLocalStorage` for now.\n\nMaybe we just don\u0027t need to run the pixel local storage tests on the Chrome waterfall yet?\n\nWhat if we just leave the extension off, and use `--enable-angle-features\u003demulatePixelLocalStorage` locally for the time being?",
+      "parentUuid": "aa27e2b6_6aa3bfa0",
+      "revId": "bbe8d03ee8648f0c88dbf92bb9606f91b4bfe189",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
