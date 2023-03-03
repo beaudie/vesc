@@ -5203,7 +5203,8 @@ angle::Result RendererVk::submitPriorityDependency(vk::Context *context,
                                                    egl::ContextPriority dstContextPriority,
                                                    SerialIndex index)
 {
-    vk::DeviceScoped<vk::Semaphore> semaphore(mDevice);
+    angle::FunctionScoped<vk::Semaphore> semaphore(
+        [this](vk::Semaphore *s) { s->destroy(mDevice); });
     ANGLE_VK_TRY(context, semaphore.get().init(mDevice));
 
     // First, submit already flushed commands / wait semaphores into the source Priority VkQueue.
@@ -5213,26 +5214,29 @@ angle::Result RendererVk::submitPriorityDependency(vk::Context *context,
     {
         // Additionally submit commands with different protection type.
         // No semaphore needed, because next submit will be into the same VkQueue.
-        QueueSerial queueSerial1(index, generateQueueSerial(index));
+        QueueSerial queueSerial(index, generateQueueSerial(index));
         ANGLE_TRY(submitCommands(context, protectionType1, srcContextPriority, nullptr, nullptr,
-                                 queueSerial1));
+                                 queueSerial));
     }
 
+    QueueSerial queueSerial;
+
+    // Can't simply destroy semaphore because it may be already submitted when of the below method
+    // fails. Change function to collect semaphore using the latest possible queueSerial.
+    semaphore.setFunction([this, &queueSerial](vk::Semaphore *s) {
+        vk::ResourceUse semaphoreUse(queueSerial);
+        collectGarbage(semaphoreUse, s);
+    });
+
     // Submit commands and attach Signal Semaphore.
-    QueueSerial queueSerial2(index, generateQueueSerial(index));
+    queueSerial = QueueSerial(index, generateQueueSerial(index));
     ANGLE_TRY(submitCommands(context, protectionType2, srcContextPriority, &semaphore.get(),
-                             nullptr, queueSerial2));
+                             nullptr, queueSerial));
 
     // Submit only Wait Semaphore into the destination Priority (VkQueue).
-    QueueSerial queueSerial3(index, generateQueueSerial(index));
-    angle::Result result =
-        queueSubmitWaitSemaphore(context, dstContextPriority, &semaphore.get(),
-                                 VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, queueSerial3);
-
-    vk::ResourceUse semaphoreUse(queueSerial3);
-    collectGarbage(semaphoreUse, &semaphore.get());
-    // Handle result later to be able to collect semaphore.
-    ANGLE_TRY(result);
+    queueSerial = QueueSerial(index, generateQueueSerial(index));
+    ANGLE_TRY(queueSubmitWaitSemaphore(context, dstContextPriority, &semaphore.get(),
+                                       VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, queueSerial));
 
     return angle::Result::Continue;
 }
