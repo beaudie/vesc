@@ -354,6 +354,7 @@ class PixelLocalStorageTest : public ANGLETest<>
         setConfigGreenBits(8);
         setConfigBlueBits(8);
         setConfigAlphaBits(8);
+        setExtensionsEnabled(false);
     }
 
     void testTearDown() override
@@ -368,7 +369,7 @@ class PixelLocalStorageTest : public ANGLETest<>
 
     void testSetUp() override
     {
-        if (IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"))
+        if (EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"))
         {
             glGetIntegerv(GL_MAX_PIXEL_LOCAL_STORAGE_PLANES_ANGLE, &MAX_PIXEL_LOCAL_STORAGE_PLANES);
             glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS_WITH_ACTIVE_PIXEL_LOCAL_STORAGE_ANGLE,
@@ -467,7 +468,7 @@ class PixelLocalStorageTest : public ANGLETest<>
 // Verify conformant implementation-dependent PLS limits.
 TEST_P(PixelLocalStorageTest, ImplementationDependentLimits)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
 
     // Table 6.X: Impementation Dependent Pixel Local Storage Limits.
     EXPECT_TRUE(MAX_PIXEL_LOCAL_STORAGE_PLANES >= 4);
@@ -488,7 +489,7 @@ TEST_P(PixelLocalStorageTest, ImplementationDependentLimits)
 // Verify that rgba8, rgba8i, and rgba8ui pixel local storage behaves as specified.
 TEST_P(PixelLocalStorageTest, RGBA8)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
 
     mProgram.compile(R"(
         layout(binding=0, rgba8) uniform lowp pixelLocalANGLE plane1;
@@ -541,7 +542,7 @@ TEST_P(PixelLocalStorageTest, RGBA8)
 // Verify that r32f and r32ui pixel local storage behaves as specified.
 TEST_P(PixelLocalStorageTest, R32)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
 
     mProgram.compile(R"(
         layout(r32f, binding=0) uniform highp pixelLocalANGLE plane1;
@@ -630,7 +631,7 @@ TEST_P(PixelLocalStorageTest, R32)
 // Check proper functioning of the clear value state.
 TEST_P(PixelLocalStorageTest, ClearValues_rgba8)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
 
     PLSTestTexture tex8f(GL_RGBA8, 1, 1);
     PLSTestTexture tex8i(GL_RGBA8I, 1, 1);
@@ -799,7 +800,7 @@ TEST_P(PixelLocalStorageTest, ClearValues_rgba8)
 // Check clear values for r32f and r32ui PLS format.
 TEST_P(PixelLocalStorageTest, ClearValues_r32)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
 
     GLFramebuffer fbo;
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
@@ -828,7 +829,7 @@ TEST_P(PixelLocalStorageTest, ClearValues_r32)
 // GL_MAX_LOCAL_STORAGE_PLANES_ANGLE planes.
 TEST_P(PixelLocalStorageTest, LoadOps)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
 
     std::stringstream fs;
     for (int i = 0; i < MAX_PIXEL_LOCAL_STORAGE_PLANES; ++i)
@@ -974,7 +975,7 @@ constexpr static Box FRAG_REJECT_TEST_BOX(FULLSCREEN,
 // Check that the stencil test prevents stores to PLS.
 TEST_P(PixelLocalStorageTest, FragmentReject_stencil)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
 
     PLSTestTexture tex(GL_RGBA8);
     FragmentRejectTestFBO fbo(tex);
@@ -1028,7 +1029,7 @@ TEST_P(PixelLocalStorageTest, FragmentReject_stencil)
 // Check that the depth test prevents stores to PLS.
 TEST_P(PixelLocalStorageTest, FragmentReject_depth)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
 
     PLSTestTexture tex(GL_RGBA8);
     FragmentRejectTestFBO fbo(tex);
@@ -1070,7 +1071,7 @@ TEST_P(PixelLocalStorageTest, FragmentReject_depth)
 // Check that restricting the viewport also restricts stores to PLS.
 TEST_P(PixelLocalStorageTest, FragmentReject_viewport)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
 
     PLSTestTexture tex(GL_RGBA8);
     FragmentRejectTestFBO fbo(tex);
@@ -1101,7 +1102,7 @@ TEST_P(PixelLocalStorageTest, FragmentReject_viewport)
 // random or leaked from other contexts when we forget to insert a barrier.
 TEST_P(PixelLocalStorageTest, ForgetBarrier)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
 
     mProgram.compile(R"(
     layout(binding=0, r32f) uniform highp pixelLocalANGLE framebuffer;
@@ -1210,7 +1211,7 @@ TEST_P(PixelLocalStorageTest, ForgetBarrier)
 // Check loading and storing from memoryless local storage planes.
 TEST_P(PixelLocalStorageTest, MemorylessStorage)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
 
     // Bind the texture, but don't call glTexStorage until after creating the memoryless plane.
     GLTexture tex;
@@ -1281,7 +1282,7 @@ TEST_P(PixelLocalStorageTest, MemorylessStorage)
 //
 TEST_P(PixelLocalStorageTest, MaxCombinedDrawBuffersAndPLSPlanes)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
 
     for (int numDrawBuffers : {0, 1, MAX_COMBINED_DRAW_BUFFERS_AND_PIXEL_LOCAL_STORAGE_PLANES - 1})
     {
@@ -1375,7 +1376,7 @@ TEST_P(PixelLocalStorageTest, MaxCombinedDrawBuffersAndPLSPlanes)
 // Verifies that program caching works for programs that use pixel local storage.
 TEST_P(PixelLocalStorageTest, ProgramCache)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
 
     GLFramebuffer fbo;
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
@@ -1442,7 +1443,7 @@ TEST_P(PixelLocalStorageTest, ProgramCache)
 // Also check that a pixelLocalLoadANGLE() of an r32f texture returns (r, 0, 0, 1).
 TEST_P(PixelLocalStorageTest, LoadOnly)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
 
     PLSTestTexture tex(GL_RGBA8);
 
@@ -1580,7 +1581,7 @@ TEST_P(PixelLocalStorageTest, LoadOnly)
 // Check that stores and loads in a single shader invocation are coherent.
 TEST_P(PixelLocalStorageTest, LoadAfterStore)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
 
     // Run a fibonacci loop that stores and loads the same PLS multiple times.
     mProgram.compile(R"(
@@ -1690,7 +1691,7 @@ TEST_P(PixelLocalStorageTest, LoadAfterStore)
 // Check that PLS handles can be passed as function arguments.
 TEST_P(PixelLocalStorageTest, FunctionArguments)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
 
     mProgram.compile(R"(
     layout(binding=0, rgba8) uniform lowp pixelLocalANGLE dst;
@@ -1755,7 +1756,7 @@ TEST_P(PixelLocalStorageTest, FunctionArguments)
 // Check that if the "_coherent" extension is advertised, PLS operations are ordered and coherent.
 TEST_P(PixelLocalStorageTest, Coherency)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
 
     mProgram.compile(R"(
     layout(binding=0, rgba8ui) uniform lowp upixelLocalANGLE framebuffer;
@@ -1863,7 +1864,7 @@ TEST_P(PixelLocalStorageTest, Coherency)
 // Check that binding mipmap levels to PLS is supported.
 TEST_P(PixelLocalStorageTest, MipMapLevels)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
 
     mProgram.compile(R"(
         layout(binding=0, rgba8) uniform lowp pixelLocalANGLE pls;
@@ -1924,7 +1925,7 @@ TEST_P(PixelLocalStorageTest, MipMapLevels)
 
 void PixelLocalStorageTest::doStateRestorationTest()
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
 
     // Setup state.
     PLSTestTexture plsTex(GL_RGBA8UI, 32, 33);
@@ -1935,7 +1936,7 @@ void PixelLocalStorageTest::doStateRestorationTest()
     glScissor(2, 2, 4, 4);
     glEnable(GL_SCISSOR_TEST);
 
-    bool hasDrawBuffersIndexedOES = IsGLExtensionEnabled("GL_OES_draw_buffers_indexed");
+    bool hasDrawBuffersIndexedOES = EnsureGLExtensionEnabled("GL_OES_draw_buffers_indexed");
     if (hasDrawBuffersIndexedOES)
     {
         for (int i = 0; i < MAX_DRAW_BUFFERS; ++i)
@@ -2092,14 +2093,14 @@ void PixelLocalStorageTest::doStateRestorationTest()
 // Check that application-facing ES3 state is not perturbed by pixel local storage.
 TEST_P(PixelLocalStorageTest, StateRestoration)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
 
     doStateRestorationTest();
 }
 
 void PixelLocalStorageTest::doDrawStateTest()
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_ZERO, GL_ONE);
@@ -2176,7 +2177,7 @@ void PixelLocalStorageTest::doDrawStateTest()
 // EXT_shader_pixel_local_storage, where they are implemented as fullscreen draws.
 TEST_P(PixelLocalStorageTest, DrawStateReset)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
 
     doDrawStateTest();
 }
@@ -2185,7 +2186,7 @@ TEST_P(PixelLocalStorageTest, DrawStateReset)
 // affect blend or color mask on the application's draw buffers.
 TEST_P(PixelLocalStorageTest, BlendAndColorMask)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
 
     PLSTestTexture tex1(GL_RGBA8);
     PLSTestTexture tex2(GL_RGBA8);
@@ -2196,7 +2197,7 @@ TEST_P(PixelLocalStorageTest, BlendAndColorMask)
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
     glViewport(0, 0, W, H);
 
-    if (!IsGLExtensionEnabled("GL_OES_draw_buffers_indexed") ||
+    if (!EnsureGLExtensionEnabled("GL_OES_draw_buffers_indexed") ||
         MAX_COLOR_ATTACHMENTS_WITH_ACTIVE_PIXEL_LOCAL_STORAGE < 2)
     {
         // Blend should not affect pixel local storage.
@@ -2302,8 +2303,8 @@ TEST_P(PixelLocalStorageTest, BlendAndColorMask)
 // Check that PLS and EXT_shader_framebuffer_fetch can be used together.
 TEST_P(PixelLocalStorageTest, ParallelFramebufferFetch)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_shader_framebuffer_fetch"));
     ANGLE_SKIP_TEST_IF(MAX_COLOR_ATTACHMENTS_WITH_ACTIVE_PIXEL_LOCAL_STORAGE == 0);
 
     mProgram.compile("#extension GL_EXT_shader_framebuffer_fetch : require", R"(
@@ -2344,7 +2345,7 @@ TEST_P(PixelLocalStorageTest, ParallelFramebufferFetch)
 // Check that PLS gets properly cleaned up when its framebuffer and textures are never deleted.
 TEST_P(PixelLocalStorageTest, LeakFramebufferAndTexture)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
 
     GLuint fbo;
     glGenFramebuffers(1, &fbo);
@@ -2372,7 +2373,7 @@ TEST_P(PixelLocalStorageTest, LeakFramebufferAndTexture)
 // Check that sampler, texture, and PLS bindings all work when they are used in the same shader.
 TEST_P(PixelLocalStorageTest, PLSWithSamplers)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
 
     GLFramebuffer fbo;
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
@@ -2533,7 +2534,7 @@ class PixelLocalStorageTestES31 : public PixelLocalStorageTest
 // Check that early_fragment_tests are not triggered when PLS uniforms are not declared.
 TEST_P(PixelLocalStorageTestES31, EarlyFragmentTests)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
 
     PLSTestTexture tex(GL_RGBA8);
     GLFramebuffer fbo;
@@ -2626,7 +2627,7 @@ TEST_P(PixelLocalStorageTestES31, EarlyFragmentTests)
 // Check that application-facing ES31 state is not perturbed by pixel local storage.
 TEST_P(PixelLocalStorageTestES31, StateRestoration)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
 
     doStateRestorationTest();
 }
@@ -2635,7 +2636,7 @@ TEST_P(PixelLocalStorageTestES31, StateRestoration)
 // EXT_shader_pixel_local_storage, where they are implemented as fullscreen draws.
 TEST_P(PixelLocalStorageTestES31, DrawStateReset)
 {
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
 
     doDrawStateTest();
 }
@@ -2643,12 +2644,157 @@ TEST_P(PixelLocalStorageTestES31, DrawStateReset)
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(PixelLocalStorageTestES31);
 PLS_INSTANTIATE_RENDERING_TEST(PixelLocalStorageTestES31, ES31);
 
+class PixelLocalStorageRequestableExtensionTest : public ANGLETest<>
+{
+  protected:
+    PixelLocalStorageRequestableExtensionTest() { setExtensionsEnabled(false); }
+};
+
+// Check that ANGLE_shader_pixel_local_storage implicitly enables its dependency extensions.
+TEST_P(PixelLocalStorageRequestableExtensionTest, ImplicitlyEnabledExtensions)
+{
+    EXPECT_TRUE(IsEGLDisplayExtensionEnabled(getEGLWindow()->getDisplay(),
+                                             "EGL_ANGLE_create_context_extensions_enabled"));
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionRequestable("GL_ANGLE_shader_pixel_local_storage"));
+
+    bool hasDrawBuffersIndexedOES = IsGLExtensionRequestable("GL_OES_draw_buffers_indexed");
+    bool hasDrawBuffersIndexedEXT = IsGLExtensionRequestable("GL_EXT_draw_buffers_indexed");
+    bool hasColorBufferFloat      = IsGLExtensionRequestable("GL_EXT_color_buffer_float");
+    bool hasColorBufferHalfFloat  = IsGLExtensionRequestable("GL_EXT_color_buffer_half_float");
+
+    EXPECT_TRUE(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    EXPECT_TRUE(!IsGLExtensionEnabled("GL_OES_draw_buffers_indexed"));
+    EXPECT_TRUE(!IsGLExtensionEnabled("GL_EXT_draw_buffers_indexed"));
+    EXPECT_TRUE(!IsGLExtensionEnabled("GL_EXT_color_buffer_float"));
+    EXPECT_TRUE(!IsGLExtensionEnabled("GL_EXT_color_buffer_half_float"));
+
+    glRequestExtensionANGLE("GL_ANGLE_shader_pixel_local_storage");
+    EXPECT_GL_NO_ERROR();
+    EXPECT_TRUE(IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+
+    if (hasDrawBuffersIndexedOES)
+    {
+        // If OES_draw_buffers_indexed is requestable, it is implicitly enabled at the time
+        // ANGLE_shader_pixel_local_storage is enabled.
+        EXPECT_TRUE(IsGLExtensionEnabled("GL_OES_draw_buffers_indexed"));
+    }
+
+    if (hasDrawBuffersIndexedEXT)
+    {
+        // If EXT_draw_buffers_indexed is requestable, it is implicitly enabled at the time
+        // ANGLE_shader_pixel_local_storage is enabled.
+        EXPECT_TRUE(IsGLExtensionEnabled("GL_EXT_draw_buffers_indexed"));
+    }
+
+    if (hasColorBufferFloat)
+    {
+        // If EXT_color_buffer_float is requestable, it is implicitly enabled at the time
+        // ANGLE_shader_pixel_local_storage is enabled.
+        EXPECT_TRUE(IsGLExtensionEnabled("GL_EXT_color_buffer_float"));
+    }
+
+    if (hasColorBufferHalfFloat)
+    {
+        // If EXT_color_buffer_half_float is requestable, it is implicitly enabled at the time
+        // ANGLE_shader_pixel_local_storage is enabled.
+        EXPECT_TRUE(IsGLExtensionEnabled("GL_EXT_color_buffer_half_float"));
+    }
+
+    if (hasDrawBuffersIndexedOES)
+    {
+        // If OES_draw_buffers_indexed ever becomes disablable, it will have to implicitly disable
+        // ANGLE_shader_pixel_local_storage.
+        glDisableExtensionANGLE("GL_OES_draw_buffers_indexed");
+        EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+        EXPECT_TRUE(IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+        EXPECT_TRUE(IsGLExtensionEnabled("GL_OES_draw_buffers_indexed"));
+    }
+
+    if (hasDrawBuffersIndexedEXT)
+    {
+        // If EXT_draw_buffers_indexed ever becomes disablable, it will have to implicitly disable
+        // ANGLE_shader_pixel_local_storage.
+        glDisableExtensionANGLE("GL_EXT_draw_buffers_indexed");
+        EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+        EXPECT_TRUE(IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+        EXPECT_TRUE(IsGLExtensionEnabled("GL_EXT_draw_buffers_indexed"));
+    }
+
+    if (hasColorBufferFloat)
+    {
+        // If EXT_color_buffer_float ever becomes disablable, it will have to implicitly disable
+        // ANGLE_shader_pixel_local_storage.
+        glDisableExtensionANGLE("GL_EXT_color_buffer_float");
+        EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+        EXPECT_TRUE(IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+        EXPECT_TRUE(IsGLExtensionEnabled("GL_EXT_color_buffer_float"));
+    }
+
+    if (hasColorBufferHalfFloat)
+    {
+        // If EXT_color_buffer_half_float ever becomes disablable, it will have to implicitly
+        // disable ANGLE_shader_pixel_local_storage.
+        glDisableExtensionANGLE("GL_EXT_color_buffer_half_float");
+        EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+        EXPECT_TRUE(IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+        EXPECT_TRUE(IsGLExtensionEnabled("GL_EXT_color_buffer_half_float"));
+    }
+
+    // ANGLE_shader_pixel_local_storage is not disablable.
+    glDisableExtensionANGLE("GL_ANGLE_shader_pixel_local_storage");
+    EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+    EXPECT_TRUE(IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+}
+
+// Check that the dependency extensions of ANGLE_shader_pixel_local_storage do not enable it.
+TEST_P(PixelLocalStorageRequestableExtensionTest, ANGLEShaderPixelLocalStorageNotImplicitlyEnabled)
+{
+    EXPECT_TRUE(IsEGLDisplayExtensionEnabled(getEGLWindow()->getDisplay(),
+                                             "EGL_ANGLE_create_context_extensions_enabled"));
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionRequestable("GL_ANGLE_shader_pixel_local_storage"));
+
+    EnsureGLExtensionEnabled("GL_OES_draw_buffers_indexed");
+    EnsureGLExtensionEnabled("GL_EXT_draw_buffers_indexed");
+    EnsureGLExtensionEnabled("GL_EXT_color_buffer_float");
+    EnsureGLExtensionEnabled("GL_EXT_color_buffer_half_float");
+    EXPECT_TRUE(!IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+
+    glRequestExtensionANGLE("GL_ANGLE_shader_pixel_local_storage");
+    EXPECT_GL_NO_ERROR();
+    EXPECT_TRUE(EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+}
+
+ANGLE_INSTANTIATE_TEST(PixelLocalStorageRequestableExtensionTest,
+                       ES3_D3D11().enable(Feature::EmulatePixelLocalStorage),
+                       ES3_METAL().enable(Feature::EmulatePixelLocalStorage),
+                       ES3_OPENGL().enable(Feature::EmulatePixelLocalStorage),
+                       ES3_VULKAN().enable(Feature::EmulatePixelLocalStorage),
+                       ES31_NULL().enable(Feature::EmulatePixelLocalStorage),
+                       ES3_D3D11()
+                           .enable(Feature::EmulatePixelLocalStorage)
+                           .enable(Feature::DisableDrawBuffersIndexed),
+                       ES3_METAL()
+                           .enable(Feature::EmulatePixelLocalStorage)
+                           .enable(Feature::DisableDrawBuffersIndexed),
+                       ES3_OPENGL()
+                           .enable(Feature::EmulatePixelLocalStorage)
+                           .enable(Feature::DisableDrawBuffersIndexed),
+                       ES3_VULKAN()
+                           .enable(Feature::EmulatePixelLocalStorage)
+                           .enable(Feature::DisableDrawBuffersIndexed),
+                       ES31_NULL()
+                           .enable(Feature::EmulatePixelLocalStorage)
+                           .enable(Feature::DisableDrawBuffersIndexed));
+
 class PixelLocalStorageValidationTest : public ANGLETest<>
 {
+  public:
+    PixelLocalStorageValidationTest() { setExtensionsEnabled(false); }
+
   protected:
     void testSetUp() override
     {
-        ASSERT(IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+        ASSERT(EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
         glGetIntegerv(GL_MAX_PIXEL_LOCAL_STORAGE_PLANES_ANGLE, &MAX_PIXEL_LOCAL_STORAGE_PLANES);
         glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS_WITH_ACTIVE_PIXEL_LOCAL_STORAGE_ANGLE,
                       &MAX_COLOR_ATTACHMENTS_WITH_ACTIVE_PIXEL_LOCAL_STORAGE);
@@ -3791,25 +3937,25 @@ TEST_P(PixelLocalStorageValidationTest, BannedCommands)
     {
         EXPECT_BANNED_CAP(GL_SAMPLE_MASK);
     }
-    if (IsGLExtensionEnabled("GL_EXT_multisample_compatibility"))
+    if (EnsureGLExtensionEnabled("GL_EXT_multisample_compatibility"))
     {
         EXPECT_BANNED_CAP(GL_MULTISAMPLE_EXT);
         EXPECT_BANNED_CAP(GL_SAMPLE_ALPHA_TO_ONE_EXT);
     }
-    if (IsGLExtensionEnabled("GL_KHR_debug"))
+    if (EnsureGLExtensionEnabled("GL_KHR_debug"))
     {
         EXPECT_BANNED_CAP(GL_DEBUG_OUTPUT_SYNCHRONOUS);
         EXPECT_BANNED_CAP(GL_DEBUG_OUTPUT);
     }
-    if (IsGLExtensionEnabled("GL_OES_sample_shading"))
+    if (EnsureGLExtensionEnabled("GL_OES_sample_shading"))
     {
         EXPECT_BANNED_CAP(GL_SAMPLE_SHADING);
     }
-    if (IsGLExtensionEnabled("GL_QCOM_shading_rate"))
+    if (EnsureGLExtensionEnabled("GL_QCOM_shading_rate"))
     {
         EXPECT_BANNED_CAP(GL_SHADING_RATE_PRESERVE_ASPECT_RATIO_QCOM);
     }
-    if (IsGLExtensionEnabled("GL_ANGLE_logic_op"))
+    if (EnsureGLExtensionEnabled("GL_ANGLE_logic_op"))
     {
         EXPECT_BANNED_CAP(GL_COLOR_LOGIC_OP);
     }
@@ -3860,7 +4006,7 @@ TEST_P(PixelLocalStorageValidationTest, BannedCommands)
     glClearBufferiv(GL_STENCIL, 0, cleari);
     EXPECT_GL_NO_ERROR();
 
-    if (IsGLExtensionEnabled("GL_OES_draw_buffers_indexed"))
+    if (EnsureGLExtensionEnabled("GL_OES_draw_buffers_indexed"))
     {
         // INVALID_OPERATION is generated by Enablei*(), Disablei*() if:
         //
@@ -4047,10 +4193,13 @@ ANGLE_INSTANTIATE_TEST(PixelLocalStorageValidationTest,
 
 class PixelLocalStorageCompilerTest : public ANGLETest<>
 {
+  public:
+    PixelLocalStorageCompilerTest() { setExtensionsEnabled(false); }
+
   protected:
     void testSetUp() override
     {
-        ASSERT(IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+        ASSERT(EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
 
         // INVALID_OPERATION is generated if DITHER is enabled.
         glDisable(GL_DITHER);
@@ -4651,7 +4800,7 @@ TEST_P(PixelLocalStorageCompilerTest, FragmentTestVariables)
     })";
     EXPECT_TRUE(log.compileFragmentShader(kReadFragDepth));
 
-    if (IsGLExtensionEnabled("GL_OES_sample_variables"))
+    if (EnsureGLExtensionEnabled("GL_OES_sample_variables"))
     {
         // gl_SampleMask is not assignable when pixel local storage has been declared. The shader
         // image polyfill requires early_fragment_tests, which causes gl_SampleMask to be ignored.
@@ -4779,7 +4928,10 @@ ANGLE_INSTANTIATE_TEST(PixelLocalStorageCompilerTest,
                            .enable(Feature::DisableDrawBuffersIndexed));
 
 class PixelLocalStorageTestPreES3 : public ANGLETest<>
-{};
+{
+  public:
+    PixelLocalStorageTestPreES3() { setExtensionsEnabled(false); }
+};
 
 // Check that GL_ANGLE_shader_pixel_local_storage is not advertised before ES 3.1.
 //
@@ -4787,7 +4939,7 @@ class PixelLocalStorageTestPreES3 : public ANGLETest<>
 // are inside ANGLE.
 TEST_P(PixelLocalStorageTestPreES3, UnsupportedClientVersion)
 {
-    EXPECT_FALSE(IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
+    EXPECT_FALSE(EnsureGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage"));
     EXPECT_FALSE(IsGLExtensionEnabled("GL_ANGLE_shader_pixel_local_storage_coherent"));
 
     ShaderInfoLog log;
