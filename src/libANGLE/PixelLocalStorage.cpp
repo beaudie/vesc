@@ -88,7 +88,7 @@ class ScopedEnableColorMask : angle::NonCopyable
         : mContext(context), mNumDrawBuffers(numDrawBuffers)
     {
         const State &state = mContext->getState();
-        if (!mContext->getExtensions().drawBuffersIndexedAny())
+        if (!mContext->getSupportedExtensions().drawBuffersIndexedAny())
         {
             std::array<bool, 4> &mask = mSavedColorMasks[0];
             state.getBlendStateExt().getColorMaskIndexed(0, &mask[0], &mask[1], &mask[2], &mask[3]);
@@ -108,7 +108,7 @@ class ScopedEnableColorMask : angle::NonCopyable
 
     ~ScopedEnableColorMask()
     {
-        if (!mContext->getExtensions().drawBuffersIndexedAny())
+        if (!mContext->getSupportedExtensions().drawBuffersIndexedAny())
         {
             const std::array<bool, 4> &mask = mSavedColorMasks[0];
             mContext->colorMask(mask[0], mask[1], mask[2], mask[3]);
@@ -524,7 +524,7 @@ void PixelLocalStorage::end(Context *context, const GLenum storeops[])
 
 void PixelLocalStorage::barrier(Context *context)
 {
-    ASSERT(!context->getExtensions().shaderPixelLocalStorageCoherentANGLE);
+    ASSERT(!context->getSupportedExtensions().shaderPixelLocalStorageCoherentANGLE);
     onBarrier(context);
 }
 
@@ -806,7 +806,8 @@ class PixelLocalStorageFramebufferFetch : public PixelLocalStorage
         mColorMasksToRestore.reset();
         bool needsClear = false;
 
-        bool hasIndexedBlendAndColorMask = context->getExtensions().drawBuffersIndexedAny();
+        bool hasIndexedBlendAndColorMask =
+            context->getSupportedExtensions().drawBuffersIndexedAny();
         if (!hasIndexedBlendAndColorMask)
         {
             // We don't have indexed blend and color mask control. Disable them globally. (This also
@@ -887,7 +888,7 @@ class PixelLocalStorageFramebufferFetch : public PixelLocalStorage
             }
         }
 
-        if (!context->getExtensions().shaderPixelLocalStorageCoherentANGLE)
+        if (!context->getSupportedExtensions().shaderPixelLocalStorageCoherentANGLE)
         {
             // Insert a barrier if we aren't coherent, since the textures may have been rendered to
             // previously.
@@ -921,7 +922,8 @@ class PixelLocalStorageFramebufferFetch : public PixelLocalStorage
                                            invalidateList.data());
         }
 
-        bool hasIndexedBlendAndColorMask = context->getExtensions().drawBuffersIndexedAny();
+        bool hasIndexedBlendAndColorMask =
+            context->getSupportedExtensions().drawBuffersIndexedAny();
         if (!hasIndexedBlendAndColorMask)
         {
             // Restore global blend and color mask. Validation should have ensured these didn't

@@ -556,6 +556,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     const Caps &getCaps() const { return mState.getCaps(); }
     const TextureCapsMap &getTextureCaps() const { return mState.getTextureCaps(); }
     const Extensions &getExtensions() const { return mState.getExtensions(); }
+    const Extensions &getSupportedExtensions() const { return mSupportedExtensions; }
     const Limitations &getLimitations() const { return mState.getLimitations(); }
     bool isGLES1() const;
 
