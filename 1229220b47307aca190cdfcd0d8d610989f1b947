@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56bf21a8_05c1627b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-04T18:17:35Z",
+      "side": 1,
+      "message": "Please attribute this to _some_ bug. It\u0027s ok to use the same bug as whatever other thing you are working on that prompted this change.",
+      "revId": "1229220b47307aca190cdfcd0d8d610989f1b947",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
