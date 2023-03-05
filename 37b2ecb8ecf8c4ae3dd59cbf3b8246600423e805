@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f1ec5ee_35cb97ae",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-05T20:34:26Z",
+      "side": 1,
+      "message": "Can you please add a test for this? I imagine this can only work when the two texture objects use different layers of the image (otherwise it\u0027s either a WaW hazard (if same subresource) or the attachments don\u0027t match in size (if different mips). I don\u0027t know if we handle that case correctly (regardless of EGL images, like with two FBO attachments each of a different layer of an image). If we do handle that correctly, how does that being part of EGL images  make it different?\n\nThe solution with `ImageHelperSource` is a bit dodgy. We should be able to use some sort of serial instead if we have to, or avoid it altogether if we can.",
+      "range": {
+        "startLine": 20,
+        "startChar": 26,
+        "endLine": 23,
+        "endChar": 19
+      },
+      "revId": "37b2ecb8ecf8c4ae3dd59cbf3b8246600423e805",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb268fbe_c060d7e7",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3267,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-05T20:34:26Z",
+      "side": 1,
+      "message": "Is this single-line change not enough to pass the tests you\u0027ve added?",
+      "revId": "37b2ecb8ecf8c4ae3dd59cbf3b8246600423e805",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
