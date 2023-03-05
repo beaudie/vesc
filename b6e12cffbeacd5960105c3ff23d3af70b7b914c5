@@ -1,0 +1,124 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0955b90c_372a3b58",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-05T20:10:49Z",
+      "side": 1,
+      "message": "nit: not really `optimize`. Maybe `unify`? Or even better, something like `onContextAdded` (which also raises the question of why `ShareGroupVk::addContext` is not calling this?",
+      "range": {
+        "startLine": 653,
+        "startChar": 28,
+        "endLine": 653,
+        "endChar": 36
+      },
+      "revId": "b6e12cffbeacd5960105c3ff23d3af70b7b914c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99651093_e4ba1e8d",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-05T20:10:49Z",
+      "side": 1,
+      "message": "nit: no need for `, \"\"` since C++17",
+      "range": {
+        "startLine": 667,
+        "startChar": 74,
+        "endLine": 667,
+        "endChar": 78
+      },
+      "revId": "b6e12cffbeacd5960105c3ff23d3af70b7b914c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6981002_d2d0a789",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-05T20:10:49Z",
+      "side": 1,
+      "message": "If there aren\u0027t any, please add a test that requires ordered submissions between protected and unprotected contexts.",
+      "revId": "b6e12cffbeacd5960105c3ff23d3af70b7b914c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c3bc774_02e007a9",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-05T20:10:49Z",
+      "side": 1,
+      "message": "Please add a comment that these are temporary and a workaround.",
+      "revId": "b6e12cffbeacd5960105c3ff23d3af70b7b914c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f12eb48_6937d110",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5226,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-05T20:10:49Z",
+      "side": 1,
+      "message": "Is it worth a follow up where the wait semaphore is made pending and submitted with whatever the context submits naturally?",
+      "revId": "b6e12cffbeacd5960105c3ff23d3af70b7b914c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e68276b0_3e5fa062",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-05T20:10:49Z",
+      "side": 1,
+      "message": "Shouldn\u0027t these also be called src and dst? What does 1 and 2 mean otherwise?",
+      "range": {
+        "startLine": 640,
+        "startChar": 62,
+        "endLine": 640,
+        "endChar": 77
+      },
+      "revId": "b6e12cffbeacd5960105c3ff23d3af70b7b914c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
