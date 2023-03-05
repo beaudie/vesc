@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2add44a_d44ed0d2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5229,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-05T20:17:51Z",
+      "side": 1,
+      "message": "Not a fan of `FunctionScoped`, I feel like it\u0027s complicating things more than it helps.\n\nHow about instead having a scoped class that garbage collects (and we can probably easily use it elsewhere too), and use it here by moving the semaphore out of `DeviceScoped` and put it in the new object?\n\nAnother option, if possible, is to have `DeviceScoped` choose to destroy or garbage collect based on whether a queue serial pointer is set or not. Then here you\u0027d just pass the queue serial so `DeviceScoped` would do the right thing.",
+      "revId": "a8d87135885de5a63dd559a0935c50202c09f657",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
