@@ -396,13 +396,13 @@ class CommandQueue : angle::NonCopyable
                       const VkPresentInfoKHR &presentInfo,
                       SwapchainStatus *swapchainStatus);
 
-    angle::Result checkCompletedCommands(Context *context, bool *anyCommandFinished)
+    angle::Result checkCompletedCommands(Context *context)
     {
         std::lock_guard<std::mutex> lock(mMutex);
-        ANGLE_TRY(checkCompletedCommandsLocked(context));
-        *anyCommandFinished = !mFinishedCommandBatches.empty();
-        return angle::Result::Continue;
+        return checkCompletedCommandsLocked(context);
     }
+    bool hasFinishedCommands() const { return !mFinishedCommandBatches.empty(); }
+    angle::Result checkAndCleanupCompletedCommands(Context *context);
 
     void flushWaitSemaphores(ProtectionType protectionType,
                              std::vector<VkSemaphore> &&waitSemaphores,
