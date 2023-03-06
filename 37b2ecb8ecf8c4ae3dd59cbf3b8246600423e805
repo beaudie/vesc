@@ -120,6 +120,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d59ac1a_11fd16cf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-06T19:23:11Z",
+      "side": 1,
+      "message": "\u003e But will not work for EGLSurface (`eglBindTexImage()`).\n\nI was wrong. This should work.\n\n`eglBindTexImage()` only allowed to bind to a single texture.\n\"sibling serial\" will be -1 and `mOwnsImage \u003d\u003d false`.\n\nI will try and make this changes and think more in the process...",
+      "parentUuid": "02182f91_547f349d",
+      "range": {
+        "startLine": 20,
+        "startChar": 26,
+        "endLine": 23,
+        "endChar": 19
+      },
+      "revId": "37b2ecb8ecf8c4ae3dd59cbf3b8246600423e805",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb268fbe_c060d7e7",
