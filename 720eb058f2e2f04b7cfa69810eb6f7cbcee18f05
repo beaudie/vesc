@@ -190,6 +190,30 @@
       },
       "revId": "720eb058f2e2f04b7cfa69810eb6f7cbcee18f05",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5401c2aa_c7860a25",
+        "filename": "src/libANGLE/renderer/vulkan/RenderbufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-06T17:46:49Z",
+      "side": 1,
+      "message": "Ok I\u0027m warming up to your change in the other CL. But I\u0027d like to see a different indicator for source, keeping the pointer of the TextureVk/RenderbufferVk object in the render pass is not great.\n\nHow about tracking the \"sibling serial\" of the image in the render pass instead? Like `egl::ImageState` could have a serial generator, then `TextureVk::setEGLImageTarget` and `RenderbufferVk::setStorageEGLImageTarget` could take a new serial out of the image. The new serial would:\n\n- Replace `mOwnsImage`, which can be -1 when not an egl image target\n- Be set in the render pass the same way you are storing the pointer now",
+      "parentUuid": "2a988066_27ae91ab",
+      "range": {
+        "startLine": 325,
+        "startChar": 12,
+        "endLine": 325,
+        "endChar": 18
+      },
+      "revId": "720eb058f2e2f04b7cfa69810eb6f7cbcee18f05",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
