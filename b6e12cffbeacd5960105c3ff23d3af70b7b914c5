@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbca2793_14b7d165",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-06T14:51:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "78afebeb_805594f0",
+      "range": {
+        "startLine": 653,
+        "startChar": 28,
+        "endLine": 653,
+        "endChar": 36
+      },
+      "revId": "b6e12cffbeacd5960105c3ff23d3af70b7b914c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "99651093_e4ba1e8d",
@@ -61,6 +85,30 @@
       "writtenOn": "2023-03-05T20:10:49Z",
       "side": 1,
       "message": "nit: no need for `, \"\"` since C++17",
+      "range": {
+        "startLine": 667,
+        "startChar": 74,
+        "endLine": 667,
+        "endChar": 78
+      },
+      "revId": "b6e12cffbeacd5960105c3ff23d3af70b7b914c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11d2b17a_8a47b70b",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-06T14:51:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99651093_e4ba1e8d",
       "range": {
         "startLine": 667,
         "startChar": 74,
@@ -119,6 +167,24 @@
       "writtenOn": "2023-03-05T20:10:49Z",
       "side": 1,
       "message": "Please add a comment that these are temporary and a workaround.",
+      "revId": "b6e12cffbeacd5960105c3ff23d3af70b7b914c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c119b31_49e035a5",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-06T14:51:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9c3bc774_02e007a9",
       "revId": "b6e12cffbeacd5960105c3ff23d3af70b7b914c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
