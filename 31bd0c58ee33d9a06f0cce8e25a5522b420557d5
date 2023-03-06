@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35bf1763_99894413",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1158,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-06T15:01:50Z",
+      "side": 1,
+      "message": "Just noticed how odd this is. Can we remove `mFinishedCommandBatches` and instead pass a local vector to the `check*` calls?",
+      "range": {
+        "startLine": 1158,
+        "startChar": 24,
+        "endLine": 1158,
+        "endChar": 47
+      },
+      "revId": "31bd0c58ee33d9a06f0cce8e25a5522b420557d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
