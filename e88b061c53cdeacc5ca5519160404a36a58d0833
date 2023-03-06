@@ -118,6 +118,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c088871_4f83438c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 4058,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-06T21:10:30Z",
+      "side": 1,
+      "message": "We don\u0027t actually test with Vulkan SCBs though FYI (we never got around to set it up IIRC).",
+      "parentUuid": "8089282e_6e121a07",
+      "revId": "e88b061c53cdeacc5ca5519160404a36a58d0833",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9918245f_3ab88587",
