@@ -96,6 +96,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "02182f91_547f349d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-06T18:59:46Z",
+      "side": 1,
+      "message": "\u003e I understand your point that deleting texture 2 shouldn\u0027t finalize the image.\n\nCorrect. This may cause problems if continue with texture 1 in the RenderPass.\n\n\u003e My question is, if deleting texture 1 doesn\u0027t finalize the image (and assuming texture 2 is alive), does that cause any problems?\n\nYes.\nBecause deleting texture 2 will also *doesn\u0027t* finalize the image.\n\nThen EGLImage will be deleted leaving pointer to the deleted image in the RenderPass.\n\n\u003e What I\u0027m trying to understand is whether conceptually it\u0027s ok for the last owner of the image to finalize the layout. In other words, whether we can punt that responsibility to whoever is holding the last reference to the image.\n\nThis is possible. But the last owner may be texture (from other context group) or EGLImage. To finalize RenderPass in other context group we need to lock relevant contexts with a mutex.\n\n\u003e If deleting texture 1 must finalize the layout, then something like your solution would be necessary. If it doesn\u0027t, then we can probably make things simpler.\n\nI have 2 different solutions (this and the old one). I can\u0027t think anything simpler in the current code. Even if assume we will be able to lock mutex for all contexts so the last owner finalize layout, I do not think that it is simpler or better solution.\n\n\u003e Just saw the old thread where we were discussing this (and your new replies), let\u0027s continue discussion there. I had forgot about the EGL images mess.\n\nOK\n\n---\n\n\u003e  But I\u0027d like to see a different indicator for source, keeping the pointer of the TextureVk/RenderbufferVk object in the render pass is not great.\n\nWhy not? Technically it is an abstract pointer. May as well be some data member of `TextureVk`. This pointer is removed in finalize. The `SurfaceVk` is also `ImageHelperSource`.\n\n\u003e How about tracking the \"sibling serial\" of the image in the render pass instead?\n\nThis will work for EGLImages. But will not work for EGLSurface (`eglBindTexImage()`).\nAnd I think it is a lot more complicated. This solution is universal.\n\nI wanted to reuse `gl::RefCountObject::mSerial` instead of a pointer, but then noticed, that this member is not used anywhere and decided to remove it instead (in local CL).\n\n\u003e Like egl::ImageState could have a serial generator, then TextureVk::setEGLImageTarget and RenderbufferVk::setStorageEGLImageTarget could take a new serial out of the image. The new serial would:\n\nAlso need to generate serial for the source sibling. But may also keep -1, only need a different name for a serial.\n\n\u003e Replace mOwnsImage, which can be -1 when not an egl image target\n\n`mOwnsImage` used not only for EGLImages. Better to not touch this state.\nAlso source sibling is `mOwnsImage \u003d\u003d true` while will have sibling serial.",
+      "parentUuid": "53038095_343c91ea",
+      "range": {
+        "startLine": 20,
+        "startChar": 26,
+        "endLine": 23,
+        "endChar": 19
+      },
+      "revId": "37b2ecb8ecf8c4ae3dd59cbf3b8246600423e805",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb268fbe_c060d7e7",
@@ -145,6 +169,24 @@
       "side": 1,
       "message": "No I want to see if we can simplify this change, My bad though, see other comment.",
       "parentUuid": "54bbabad_f79387b8",
+      "revId": "37b2ecb8ecf8c4ae3dd59cbf3b8246600423e805",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0fbdcac_2fc28f93",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3267,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-06T18:59:46Z",
+      "side": 1,
+      "message": "Unfortunately can\u0027t think of anything simpler...",
+      "parentUuid": "ad2a1ba9_519d655f",
       "revId": "37b2ecb8ecf8c4ae3dd59cbf3b8246600423e805",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
