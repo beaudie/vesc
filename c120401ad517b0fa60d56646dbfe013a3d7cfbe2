@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cf7aed4_96c6f60e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-06T17:13:04Z",
+      "side": 1,
+      "message": "@syoussefi@chromium.org I made changes in this patch-set based non this comments: https://chromium-review.googlesource.com/c/angle/angle/+/4289749\n\nIs new naming OK and \"+2\" still relevant?",
+      "revId": "c120401ad517b0fa60d56646dbfe013a3d7cfbe2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
