@@ -1124,7 +1124,6 @@ angle::Result CommandQueue::finishResourceUse(Context *context,
 {
     VkDevice device = context->getDevice();
 
-    size_t finishedCount = 0;
     {
         std::unique_lock<std::mutex> lock(mMutex);
         while (!mInFlightCommands.empty() && !hasResourceUseFinished(use))
@@ -1142,13 +1141,12 @@ angle::Result CommandQueue::finishResourceUse(Context *context,
                 ANGLE_VK_TRY(context, status);
             }
         }
-        // Do one more check in case more commands also finished.
+        // Check the rest of the commands in case they are also finished.
         ANGLE_TRY(checkCompletedCommandsLocked(context));
-        finishedCount = mFinishedCommandBatches.size();
     }
     ASSERT(hasResourceUseFinished(use));
 
-    if (finishedCount > 0)
+    if (!mFinishedCommandBatches.empty())
     {
         ANGLE_TRY(retireFinishedCommandsAndCleanupGarbage(context));
     }
