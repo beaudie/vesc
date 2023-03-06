@@ -1,0 +1,249 @@
+Additional test environment:
+    CHROME_HEADLESS=1
+    LANG=en_US.UTF-8
+Command: /usr/local/google/home/yuxinhu/.vpython-root/d6ecc4/bin/python build/android/test_runner.py gtest --output-directory out/AndroidDebug --wrapper-script-args out/AndroidDebug/bin/run_angle_end2end_tests --gtest_filter=ComputeShaderTest.SSBOAliasOverWrite/ES3_1_Vulkan --verbose --local-output --num-retries0 --runtime-deps-path out/AndroidDebug/gen.runtime/src/tests/angle_end2end_tests__test_runner_script.runtime_deps --suite angle_end2end_tests --gtest_filter=ComputeShaderTest.SSBOAliasOverWrite/ES3_1_Vulkan --verbose --local-output --num-retries0
+
+I 18:14:53.116    0.000s Main  command: build/android/test_runner.py gtest --output-directory out/AndroidDebug --wrapper-script-args out/AndroidDebug/bin/run_angle_end2end_tests --gtest_filter=ComputeShaderTest.SSBOAliasOverWrite/ES3_1_Vulkan --verbose --local-output --num-retries0 --runtime-deps-path out/AndroidDebug/gen.runtime/src/tests/angle_end2end_tests__test_runner_script.runtime_deps --suite angle_end2end_tests --gtest_filter=ComputeShaderTest.SSBOAliasOverWrite/ES3_1_Vulkan --verbose --local-output --num-retries0
+I 18:14:53.149    0.032s Main  condition '<lambda>' met
+I 18:14:53.153    0.036s anonymous  condition '<lambda>' met
+I 18:14:53.165    0.049s Main  condition '<lambda>' met
+I 18:14:53.330    0.214s TimeoutThread-1-for-prepare_device(92KBA03413)  condition 'is_boot_completed' met (0.0s)
+I 18:14:53.360    0.244s TimeoutThread-1-for-prepare_device(92KBA03413)  condition 'is_device_connection_ready' met (0.1s)
+I 18:14:53.390    0.274s TimeoutThread-1-for-prepare_device(92KBA03413)  condition 'is_sd_card_ready' met (0.1s)
+I 18:14:53.430    0.313s TimeoutThread-1-for-prepare_device(92KBA03413)  condition 'is_pm_ready' met (0.1s)
+I 18:14:53.839    0.723s TimeoutThread-1-for-individual_device_set_up(92KBA03413)  Skipping installation of package com.android.angle.test
+I 18:14:54.149    1.033s TimeoutThread-1-for-individual_device_set_up(92KBA03413)  Setting permissions for com.android.angle.test.
+I 18:14:54.512    1.396s TimeoutThread-1-for-individual_device_set_up(92KBA03413)  condition '<lambda>' met (0.2s)
+I 18:14:54.574    1.458s list_tests(92KBA03413)  flags:
+I 18:14:54.575    1.458s list_tests(92KBA03413)    --num-retries0
+I 18:14:54.575    1.459s list_tests(92KBA03413)    --gtest_list_tests
+C 18:14:56.055    2.939s list_tests(92KBA03413)  Logcat saved to file:///usr/local/google/home/yuxinhu/angle/out/AndroidDebug/TEST_RESULTS_2023_03_24T18_14_53/logcat/logcat_list_tests_shard0_20230325T011454-UTC_92KBA03413
+I 18:14:56.161    3.045s Main  Using external sharding settings. This is shard 0/1
+I 18:14:56.162    3.046s Main  STARTING TRY #1/3
+I 18:14:56.162    3.046s Main  Will run 1 tests on 1 devices: 92KBA03413
+I 18:14:56.255    3.139s run_tests_on_device(92KBA03413)  flags:
+I 18:14:56.255    3.139s run_tests_on_device(92KBA03413)    --num-retries0
+C 18:14:57.931    4.814s run_tests_on_device(92KBA03413)  Logcat saved to file:///usr/local/google/home/yuxinhu/angle/out/AndroidDebug/TEST_RESULTS_2023_03_24T18_14_53/logcat/logcat_-4119038915020951705_shard0_20230325T011456-UTC_92KBA03413
+I 18:14:58.013    4.897s TimeoutThread-1-for-run_tests_on_device(92KBA03413)  Setting permissions for com.android.angle.test.
+I 18:14:58.145    5.029s run_tests_on_device(92KBA03413)  >>ScopedMainEntryLogger
+I 18:14:58.145    5.029s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES2_OpenGL_NoFixture because it is not available.
+I 18:14:58.145    5.029s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES2_OpenGL because it is not available.
+I 18:14:58.145    5.029s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES2_Vulkan_SwiftShader because it is not available.
+I 18:14:58.145    5.029s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES2_Vulkan_SwiftShader_AsyncCommandQueue because it is not available.
+I 18:14:58.146    5.030s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_OpenGL because it is not available.
+I 18:14:58.146    5.030s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_Vulkan_SwiftShader because it is not available.
+I 18:14:58.147    5.030s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_Vulkan_SwiftShader_AsyncCommandQueue because it is not available.
+I 18:14:58.150    5.033s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_OpenGL_NoFixture because it is not available.
+I 18:14:58.150    5.034s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_1_OpenGL because it is not available.
+I 18:14:58.150    5.034s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_1_Vulkan_SwiftShader because it is not available.
+I 18:14:58.150    5.034s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_1_Vulkan_SwiftShader_AsyncCommandQueue because it is not available.
+I 18:14:58.150    5.034s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_Vulkan_SwiftShader_NoFixture because it is not available.
+I 18:14:58.150    5.034s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES1_Vulkan_SwiftShader because it is not available.
+I 18:14:58.150    5.034s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES2_Vulkan_SwiftShader_NoFixture because it is not available.
+I 18:14:58.150    5.034s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_1_Vulkan_SwiftShader_NoFixture because it is not available.
+I 18:14:58.151    5.034s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES2_Vulkan_SwiftShader_ForceFallbackFormat because it is not available.
+I 18:14:58.151    5.034s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_Vulkan_SwiftShader_ForceFallbackFormat because it is not available.
+I 18:14:58.151    5.035s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES2_OpenGL_EmulateCopyTexImage2D because it is not available.
+I 18:14:58.151    5.035s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES2_OpenGL_EmulateCopyTexImage2DFromRenderbuffers because it is not available.
+I 18:14:58.151    5.035s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_OpenGL_EmulateCopyTexImage2D because it is not available.
+I 18:14:58.151    5.035s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_OpenGL_EmulateCopyTexImage2DFromRenderbuffers because it is not available.
+I 18:14:58.151    5.035s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES1_OpenGL because it is not available.
+I 18:14:58.151    5.035s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES1_Vulkan_SwiftShader_AsyncCommandQueue because it is not available.
+I 18:14:58.151    5.035s run_tests_on_device(92KBA03413)  Skipping tests using configuration GL3_2_Core_Vulkan because it is not available.
+I 18:14:58.151    5.035s run_tests_on_device(92KBA03413)  Skipping tests using configuration GL3_2_Core_Vulkan_SwiftShader because it is not available.
+I 18:14:58.151    5.035s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_2_Vulkan_SwiftShader because it is not available.
+I 18:14:58.151    5.035s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_Vulkan_SwiftShader_AsyncCommandQueue_SlowAsyncCommandQueueForTesting because it is not available.
+I 18:14:58.151    5.035s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_Vulkan_SwiftShader_NoPreferMonolithicPipelinesOverLibraries because it is not available.
+I 18:14:58.152    5.035s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_Vulkan_SwiftShader_PreferMonolithicPipelinesOverLibraries because it is not available.
+I 18:14:58.152    5.035s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_Vulkan_SwiftShader_PreferMonolithicPipelinesOverLibraries_SlowDownMonolithicPipelineCreationForTesting because it is not available.
+I 18:14:58.152    5.036s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_Vulkan_SwiftShader_PreferMonolithicPipelinesOverLibraries_NoMergeProgramPipelineCachesToGlobalCache because it is not available.
+I 18:14:58.152    5.036s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_Vulkan_SwiftShader_PermanentlySwitchToFramebufferFetchMode because it is not available.
+I 18:14:58.152    5.036s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_Vulkan_SwiftShader_PermanentlySwitchToFramebufferFetchMode_PreferMonolithicPipelinesOverLibraries because it is not available.
+I 18:14:58.152    5.036s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_Vulkan_SwiftShader_PermanentlySwitchToFramebufferFetchMode_PreferMonolithicPipelinesOverLibraries_SlowDownMonolithicPipelineCreationForTesting because it is not available.
+I 18:14:58.152    5.036s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_OpenGL_EmulatePixelLocalStorage because it is not available.
+I 18:14:58.152    5.036s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_OpenGL_EmulatePixelLocalStorage_NoSupportsFragmentShaderInterlockNV_NoSupportsFragmentShaderOrderingINTEL_NoSupportsFragmentShaderInterlockARB because it is not available.
+I 18:14:58.152    5.036s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_Vulkan_SwiftShader_AsyncCommandQueue_EmulatePixelLocalStorage because it is not available.
+I 18:14:58.152    5.036s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_Vulkan_SwiftShader_AsyncCommandQueue_EmulatePixelLocalStorage_NoSupportsShaderFramebufferFetch_NoSupportsFragmentShaderPixelInterlock because it is not available.
+I 18:14:58.152    5.036s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_Vulkan_SwiftShader_EmulatePixelLocalStorage_DisableDrawBuffersIndexed because it is not available.
+I 18:14:58.152    5.036s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_1_OpenGL_EmulatePixelLocalStorage because it is not available.
+I 18:14:58.153    5.036s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_1_OpenGL_EmulatePixelLocalStorage_NoSupportsFragmentShaderInterlockNV_NoSupportsFragmentShaderOrderingINTEL_NoSupportsFragmentShaderInterlockARB because it is not available.
+I 18:14:58.153    5.036s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_1_Vulkan_SwiftShader_AsyncCommandQueue_EmulatePixelLocalStorage because it is not available.
+I 18:14:58.153    5.037s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_1_Vulkan_SwiftShader_AsyncCommandQueue_EmulatePixelLocalStorage_NoSupportsShaderFramebufferFetch_NoSupportsFragmentShaderPixelInterlock because it is not available.
+I 18:14:58.153    5.037s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_1_Vulkan_SwiftShader_EmulatePixelLocalStorage_DisableDrawBuffersIndexed because it is not available.
+I 18:14:58.153    5.037s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES2_Vulkan_NoSupportsNegativeViewport because it is not available.
+I 18:14:58.153    5.037s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_ANGLE_Vulkan_Secondaries_SwiftShader because it is not available.
+I 18:14:58.153    5.037s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES2_OpenGL_SyncVertexArraysToDefault because it is not available.
+I 18:14:58.153    5.037s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_OpenGL_SyncVertexArraysToDefault because it is not available.
+I 18:14:58.153    5.037s run_tests_on_device(92KBA03413)  Skipping tests using configuration ES3_1_Vulkan_SwiftShader_ForceFallbackFormat because it is not available.
+I 18:14:58.153    5.037s run_tests_on_device(92KBA03413)  Note: Google Test filter = ComputeShaderTest.SSBOAliasOverWrite/ES3_1_Vulkan
+I 18:14:58.153    5.037s run_tests_on_device(92KBA03413)  [==========] Running 1 test from 1 test suite.
+I 18:14:58.153    5.037s run_tests_on_device(92KBA03413)  [----------] Global test environment set-up.
+I 18:14:58.153    5.037s run_tests_on_device(92KBA03413)  [----------] 1 test from ComputeShaderTest
+I 18:14:58.154    5.037s run_tests_on_device(92KBA03413)  [ RUN      ] ComputeShaderTest.SSBOAliasOverWrite/ES3_1_Vulkan
+I 18:14:58.154    5.037s run_tests_on_device(92KBA03413)  ../../src/tests/gl_tests/ComputeShaderTest.cpp:5335: Failure
+I 18:14:58.154    5.038s run_tests_on_device(92KBA03413)  Expected equality of these values:
+I 18:14:58.154    5.038s run_tests_on_device(92KBA03413)    false
+I 18:14:58.154    5.038s run_tests_on_device(92KBA03413)    error
+I 18:14:58.154    5.038s run_tests_on_device(92KBA03413)      Which is: true
+I 18:14:58.154    5.038s run_tests_on_device(92KBA03413)  [  FAILED  ] ComputeShaderTest.SSBOAliasOverWrite/ES3_1_Vulkan, where GetParam() = ES3_1_Vulkan (293 ms)
+I 18:14:58.154    5.038s run_tests_on_device(92KBA03413)  [----------] 1 test from ComputeShaderTest (293 ms total)
+I 18:14:58.154    5.038s run_tests_on_device(92KBA03413)  
+I 18:14:58.154    5.038s run_tests_on_device(92KBA03413)  [----------] Global test environment tear-down
+I 18:14:58.154    5.038s run_tests_on_device(92KBA03413)  [==========] 1 test from 1 test suite ran. (294 ms total)
+I 18:14:58.154    5.038s run_tests_on_device(92KBA03413)  [  PASSED  ] 0 tests.
+I 18:14:58.154    5.038s run_tests_on_device(92KBA03413)  [  FAILED  ] 1 test, listed below:
+I 18:14:58.155    5.039s run_tests_on_device(92KBA03413)  [  FAILED  ] ComputeShaderTest.SSBOAliasOverWrite/ES3_1_Vulkan, where GetParam() = ES3_1_Vulkan
+I 18:14:58.155    5.039s run_tests_on_device(92KBA03413)  
+I 18:14:58.155    5.039s run_tests_on_device(92KBA03413)   1 FAILED TEST
+I 18:14:58.155    5.039s run_tests_on_device(92KBA03413)  <<ScopedMainEntryLogger
+I 18:14:58.157    5.041s run_tests_on_device(92KBA03413)  Finished running tests on this device.
+I 18:14:58.158    5.042s Main  FINISHED TRY #1/3
+I 18:14:58.158    5.042s Main  1 failed tests remain.
+I 18:14:58.159    5.043s Main  STARTING TRY #2/3
+I 18:14:58.159    5.043s Main  Will run 1 tests on 1 devices: 92KBA03413
+I 18:14:58.242    5.126s run_tests_on_device(92KBA03413)  flags:
+I 18:14:58.243    5.126s run_tests_on_device(92KBA03413)    --num-retries0
+C 18:14:59.813    6.697s run_tests_on_device(92KBA03413)  ********************************************************************************
+C 18:14:59.813    6.697s run_tests_on_device(92KBA03413)  Dumping parent thread stack for TimeoutThread-1-for-run_tests_on_device(92KBA03413):
+C 18:14:59.814    6.698s run_tests_on_device(92KBA03413)  ********************************************************************************
+C 18:14:59.814    6.698s run_tests_on_device(92KBA03413)  Stack dump for thread 'run_tests_on_device(92KBA03413)'
+C 18:14:59.814    6.698s run_tests_on_device(92KBA03413)  ********************************************************************************
+C 18:14:59.815    6.699s run_tests_on_device(92KBA03413)  File: "/usr/local/google/home/yuxinhu/Projects/depot_tools/.cipd_bin/3.8/lib/python3.8/threading.py", line 890, in _bootstrap
+C 18:14:59.815    6.699s run_tests_on_device(92KBA03413)    self._bootstrap_inner()
+C 18:14:59.817    6.701s run_tests_on_device(92KBA03413)  File: "/usr/local/google/home/yuxinhu/Projects/depot_tools/.cipd_bin/3.8/lib/python3.8/threading.py", line 932, in _bootstrap_inner
+C 18:14:59.827    6.711s run_tests_on_device(92KBA03413)    self.run()
+C 18:14:59.828    6.712s run_tests_on_device(92KBA03413)  File: "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/utils/reraiser_thread.py", line 123, in run
+C 18:14:59.829    6.713s run_tests_on_device(92KBA03413)    self._ret = self._func(*self._args, **self._kwargs)
+C 18:14:59.829    6.713s run_tests_on_device(92KBA03413)  File: "/usr/local/google/home/yuxinhu/angle/build/android/pylib/local/device/local_device_environment.py", line 70, in wrapper
+C 18:14:59.829    6.713s run_tests_on_device(92KBA03413)    return f(dev, *args, **kwargs)
+I 18:14:59.830    6.714s tear_down_device(92KBA03413)  Wrote device cache: /usr/local/google/home/yuxinhu/angle/out/AndroidDebug/device_cache_92KBA03413.json
+C 18:14:59.831    6.715s run_tests_on_device(92KBA03413)  File: "/usr/local/google/home/yuxinhu/angle/build/android/pylib/local/device/local_device_test_run.py", line 86, in run_tests_on_device
+C 18:14:59.831    6.715s run_tests_on_device(92KBA03413)    result, rerun = crash_handler.RetryOnSystemCrash(
+C 18:14:59.832    6.716s run_tests_on_device(92KBA03413)  File: "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/android/crash_handler.py", line 31, in RetryOnSystemCrash
+C 18:14:59.832    6.716s run_tests_on_device(92KBA03413)    return f(device)
+I 18:14:59.834    6.718s Main  Generated json results file at /tmp/tmpecgufoeu
+C 18:14:59.834    6.718s run_tests_on_device(92KBA03413)  File: "/usr/local/google/home/yuxinhu/angle/build/android/pylib/local/device/local_device_test_run.py", line 87, in <lambda>
+C 18:14:59.835    6.719s run_tests_on_device(92KBA03413)    lambda d, t=test: self._RunTest(d, t),
+C 18:14:59.835    6.719s run_tests_on_device(92KBA03413)  File: "/usr/local/google/home/yuxinhu/angle/build/android/pylib/local/device/local_device_gtest_run.py", line 849, in _RunTest
+C 18:14:59.835    6.719s run_tests_on_device(92KBA03413)    output = self._delegate.Run(test,
+C 18:14:59.835    6.719s run_tests_on_device(92KBA03413)  File: "/usr/local/google/home/yuxinhu/angle/build/android/pylib/local/device/local_device_gtest_run.py", line 342, in Run
+C 18:14:59.836    6.719s run_tests_on_device(92KBA03413)    device.StartInstrumentation(
+C 18:14:59.836    6.720s run_tests_on_device(92KBA03413)  File: "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/android/decorators.py", line 80, in timeout_retry_wrapper
+C 18:14:59.836    6.720s run_tests_on_device(92KBA03413)    return timeout_retry.Run(impl,
+C 18:14:59.836    6.720s run_tests_on_device(92KBA03413)  File: "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/utils/timeout_retry.py", line 155, in Run
+C 18:14:59.836    6.720s run_tests_on_device(92KBA03413)    child_thread = reraiser_thread.ReraiserThread(
+C 18:14:59.836    6.720s run_tests_on_device(92KBA03413)  File: "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/utils/reraiser_thread.py", line 84, in __init__
+C 18:14:59.836    6.720s run_tests_on_device(92KBA03413)    LogThreadStack(threading.current_thread(), stack_logger.log)
+C 18:14:59.837    6.721s run_tests_on_device(92KBA03413)  File: "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/utils/reraiser_thread.py", line 36, in LogThreadStack
+C 18:14:59.837    6.721s run_tests_on_device(92KBA03413)    for filename, lineno, name, line in traceback.extract_stack(stack):
+C 18:14:59.837    6.721s run_tests_on_device(92KBA03413)  ********************************************************************************
+E 18:14:59.837    6.721s run_tests_on_device(92KBA03413)  gtest shard failed.
+Traceback (most recent call last):
+  File "/usr/local/google/home/yuxinhu/angle/build/android/pylib/local/device/local_device_gtest_run.py", line 342, in Run
+    device.StartInstrumentation(
+  File "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/android/decorators.py", line 80, in timeout_retry_wrapper
+    return timeout_retry.Run(impl,
+  File "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/utils/timeout_retry.py", line 161, in Run
+    thread_group.JoinAll(
+  File "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/utils/reraiser_thread.py", line 234, in JoinAll
+    self._JoinAll(watcher, timeout)
+  File "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/utils/reraiser_thread.py", line 206, in _JoinAll
+    thread.ReraiseIfException()
+  File "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/utils/reraiser_thread.py", line 112, in ReraiseIfException
+    raise self._exc_info[1]
+  File "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/utils/reraiser_thread.py", line 123, in run
+    self._ret = self._func(*self._args, **self._kwargs)
+  File "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/utils/timeout_retry.py", line 156, in <lambda>
+    lambda: func(*args, **kwargs), name=thread_name)
+  File "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/android/decorators.py", line 66, in impl
+    return f(*args, **kwargs)
+  File "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/android/device_utils.py", line 1948, in StartInstrumentation
+    return self.RunShellCommand(
+  File "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/android/decorators.py", line 71, in timeout_retry_wrapper
+    return impl()
+  File "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/android/decorators.py", line 66, in impl
+    return f(*args, **kwargs)
+  File "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/android/device_utils.py", line 1756, in RunShellCommand
+    output = handle_large_output(cmd, large_output)
+  File "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/android/device_utils.py", line 1713, in handle_large_output
+    handle_large_command(large_output_cmd)
+  File "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/android/device_utils.py", line 1704, in handle_large_command
+    return handle_check_return('sh %s' % script.name_quoted)
+  File "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/android/device_utils.py", line 1691, in handle_check_return
+    return run(cmd)
+  File "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/android/device_utils.py", line 1687, in run
+    return self.adb.Shell(cmd)
+  File "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/android/sdk/adb_wrapper.py", line 1010, in Shell
+    output, status = self._Shell(command, expect_status, timeout, retries)
+  File "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/android/sdk/adb_wrapper.py", line 718, in _Shell
+    output = self._RunDeviceAdbCmd(args, timeout, retries)
+  File "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/android/sdk/adb_wrapper.py", line 667, in _RunDeviceAdbCmd
+    return self._RunAdbCmd(
+  File "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/android/decorators.py", line 71, in timeout_retry_wrapper
+    return impl()
+  File "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/android/decorators.py", line 66, in impl
+    return f(*args, **kwargs)
+  File "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/android/sdk/adb_wrapper.py", line 646, in _RunAdbCmd
+    raise device_errors.AdbCommandFailedError(args, output, status,
+devil.android.device_errors.AdbCommandFailedError: (device: 92KBA03413) adb shell '( sh /data/local/tmp/temp_file-efd43364da348.sh ) 2>&1;echo %$?': failed with exit status -2 and no output.
+I 18:14:59.840    6.723s Main  Finishing archiving output.
+E 18:14:59.841    6.724s Main  Unrecognized error occurred.
+Traceback (most recent call last):
+  File "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/utils/signal_handler.py", line 46, in AddSignalHandler
+    yield
+  File "/usr/local/google/home/yuxinhu/angle/build/android/pylib/local/device/local_device_test_run.py", line 190, in RunTests
+    self._env.parallel_devices.pMap(
+  File "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/utils/parallelizer.py", line 265, in pMap
+    r.pFinish(None)
+  File "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/utils/parallelizer.py", line 134, in pFinish
+    self._objs.JoinAll()
+  File "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/utils/reraiser_thread.py", line 234, in JoinAll
+    self._JoinAll(watcher, timeout)
+  File "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/utils/reraiser_thread.py", line 201, in _JoinAll
+    thread.join(0.1)
+  File "/usr/local/google/home/yuxinhu/Projects/depot_tools/.cipd_bin/3.8/lib/python3.8/threading.py", line 1015, in join
+    self._wait_for_tstate_lock(timeout=max(timeout, 0))
+  File "/usr/local/google/home/yuxinhu/Projects/depot_tools/.cipd_bin/3.8/lib/python3.8/threading.py", line 1027, in _wait_for_tstate_lock
+    elif lock.acquire(block, timeout):
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "build/android/test_runner.py", line 1120, in RunTestsInPlatformMode
+    test_run.RunTests(raw_results, raw_logs_fh=raw_logs_fh)
+  File "/usr/local/google/home/yuxinhu/angle/build/android/pylib/local/device/local_device_test_run.py", line 212, in RunTests
+    logging.info('All tests completed.')
+  File "/usr/local/google/home/yuxinhu/Projects/depot_tools/.cipd_bin/3.8/lib/python3.8/contextlib.py", line 131, in __exit__
+    self.gen.throw(type, value, traceback)
+  File "/usr/local/google/home/yuxinhu/angle/third_party/catapult/devil/devil/utils/signal_handler.py", line 48, in AddSignalHandler
+    signal.signal(signalnum, existing_handler)
+  File "/usr/local/google/home/yuxinhu/Projects/depot_tools/.cipd_bin/3.8/lib/python3.8/signal.py", line 47, in signal
+    handler = _signal.signal(_enum_to_int(signalnum), _enum_to_int(handler))
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "build/android/test_runner.py", line 1375, in main
+    return RunTestsCommand(args, result_sink_client)
+  File "build/android/test_runner.py", line 895, in RunTestsCommand
+    return RunTestsInPlatformMode(args, result_sink_client)
+  File "build/android/test_runner.py", line 1170, in RunTestsInPlatformMode
+    logging.critical('%s of %s tests passed in all %s runs',
+  File "/usr/local/google/home/yuxinhu/angle/build/android/pylib/base/test_run.py", line 52, in __exit__
+    self.TearDown()
+  File "/usr/local/google/home/yuxinhu/angle/build/android/pylib/local/device/local_device_gtest_run.py", line 963, in TearDown
+    def individual_device_tear_down(dev):
+  File "/usr/local/google/home/yuxinhu/angle/third_party/catapult/common/py_trace_event/py_trace_event/trace_event.py", line 116, in traced
+    return trace_event_impl.traced(fn)
+  File "/usr/local/google/home/yuxinhu/angle/third_party/catapult/common/py_trace_event/py_trace_event/trace_event_impl/decorators.py", line 87, in traced
+    return get_wrapper(args[0])
+  File "/usr/local/google/home/yuxinhu/angle/third_party/catapult/common/py_trace_event/py_trace_event/trace_event_impl/decorators.py", line 30, in get_wrapper
+    if inspect.isgeneratorfunction(func):
+KeyboardInterrupt
+Forwarding signal(2) to process 669081
+Forwarding signal(2) to process 669081
+Forwarding signal(2) to process 669080
+Forwarding signal(2) to process 669080
+Forwarding signal(2) to process 669025
