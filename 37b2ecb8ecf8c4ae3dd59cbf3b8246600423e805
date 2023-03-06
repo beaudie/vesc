@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "53038095_343c91ea",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-06T17:31:42Z",
+      "side": 1,
+      "message": "Just saw the old thread where we were discussing this (and your new replies), let\u0027s continue discussion there. I had forgot about the EGL images mess.",
+      "parentUuid": "76a90da6_b44579bb",
+      "range": {
+        "startLine": 20,
+        "startChar": 26,
+        "endLine": 23,
+        "endChar": 19
+      },
+      "revId": "37b2ecb8ecf8c4ae3dd59cbf3b8246600423e805",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb268fbe_c060d7e7",
