@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d07c001_4db9d57d",
+        "filename": "util/capture/trace_fixture.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-06T03:41:24Z",
+      "side": 1,
+      "message": "I think this would be easier to understand as SetCurrentContextID",
+      "range": {
+        "startLine": 216,
+        "startChar": 5,
+        "endLine": 216,
+        "endChar": 26
+      },
+      "revId": "b5e4ed53afec5500cc950f92dd1d3fd993a4a9b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
