@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ff2406a_92e3c20f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-06T15:32:53Z",
+      "side": 1,
+      "message": "Sorry, does this mean that we are leaking memory? We should never be holding a `std::vector` in the allocated pool memory.\n\nOr do you mean that the memory is being reused in other vectors like what the translator\u0027s `TVector` class is doing (and yes, we don\u0027t run its destructor).\n\nISTM like this is an ASAN bug, it\u0027s trying to verify something that it can\u0027t (and per this change, its internals are leaking to the application). If anyone\u0027s up for suggestions, would be nice to have some sort of clang annotation or something marking custom allocations and deallocations so ASAN can hook into that.",
+      "range": {
+        "startLine": 14,
+        "startChar": 20,
+        "endLine": 16,
+        "endChar": 28
+      },
+      "revId": "35c44b40190d4c4e83cf30f106052aafe606aefc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
