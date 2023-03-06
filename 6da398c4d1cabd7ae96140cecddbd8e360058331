@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a413a54_0a28bf39",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-06T22:16:14Z",
+      "side": 1,
+      "message": "Nice work overall Dan - a few comments before approving.",
+      "revId": "6da398c4d1cabd7ae96140cecddbd8e360058331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5daad223_cb8b7733",
@@ -77,6 +94,108 @@
         "endLine": 106,
         "endChar": 21
       },
+      "revId": "6da398c4d1cabd7ae96140cecddbd8e360058331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96e722e1_cbcc322f",
+        "filename": "src/libANGLE/renderer/metal/SyncMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-06T22:16:14Z",
+      "side": 1,
+      "message": "Is EGL_SYNC_PRIOR_COMMANDS_COMPLETE_KHR converted to GL_SYNC_GPU_COMMANDS_COMPLETE somewhere higher up? The EGL validation now only allows EGL_SYNC_PRIOR_COMMANDS_COMPLETE_KHR and EGL_SYNC_METAL_SHARED_EVENT_SIGNALED_ANGLE through. See below.",
+      "revId": "6da398c4d1cabd7ae96140cecddbd8e360058331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2dc2eb9f_ffa8e21d",
+        "filename": "src/libANGLE/renderer/metal/SyncMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-06T22:16:14Z",
+      "side": 1,
+      "message": "If the condition is EGL_SYNC_PRIOR_COMMANDS_COMPLETE_KHR it looks like this is skipped.",
+      "revId": "6da398c4d1cabd7ae96140cecddbd8e360058331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84c3caaf_8bc872db",
+        "filename": "src/libANGLE/renderer/metal/SyncMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-06T22:16:14Z",
+      "side": 1,
+      "message": "It looks like there\u0027s a bug here - the EGL validation allows only EGL_SYNC_PRIOR_COMMANDS_COMPLETE_KHR and EGL_SYNC_METAL_SHARED_EVENT_SIGNALED_ANGLE through, but here the default value is set to GL_SYNC_GPU_COMMANDS_COMPLETE. See above.",
+      "revId": "6da398c4d1cabd7ae96140cecddbd8e360058331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65e26fc9_744153b2",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-06T22:16:14Z",
+      "side": 1,
+      "message": "Could you use:\n  TODO(djg):\nrather than\n  FIXME:\n?",
+      "revId": "6da398c4d1cabd7ae96140cecddbd8e360058331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a7ae395_e387f8c2",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-06T22:16:14Z",
+      "side": 1,
+      "message": "That\u0027s strange - since this derives from ANGLETest there\u0027s a current context, correct?",
+      "revId": "6da398c4d1cabd7ae96140cecddbd8e360058331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1273f65c_e6ae6b62",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-06T22:16:14Z",
+      "side": 1,
+      "message": "Should this comment be associated with the block of code above instead? This block tests that the event\u0027s signaled now.",
       "revId": "6da398c4d1cabd7ae96140cecddbd8e360058331",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
