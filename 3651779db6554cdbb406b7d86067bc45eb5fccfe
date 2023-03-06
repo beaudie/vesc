@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f975d64_d484d1bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-06T17:56:43Z",
+      "side": 1,
+      "message": "Abandon in favor of https://chromium-review.googlesource.com/c/angle/angle/+/4306772",
+      "revId": "3651779db6554cdbb406b7d86067bc45eb5fccfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
