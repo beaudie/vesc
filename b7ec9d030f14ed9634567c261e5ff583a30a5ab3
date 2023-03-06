@@ -94,6 +94,30 @@
       },
       "revId": "b7ec9d030f14ed9634567c261e5ff583a30a5ab3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9890b39c_c1548b7b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-06T16:39:59Z",
+      "side": 1,
+      "message": "\u003e Or maybe something wrong with the other code in this CL that this activates?\n\nYes `msrtssResolve` is already a pointer, so this code should be `msrtss-\u003epNext \u003d msrtssResolve;`. Your fix made `\u0026msrtssResolve` appear in the pNext chain, but that points to the pointer, not the object.",
+      "parentUuid": "fb8606dc_ba2d5a38",
+      "range": {
+        "startLine": 756,
+        "startChar": 4,
+        "endLine": 756,
+        "endChar": 35
+      },
+      "revId": "b7ec9d030f14ed9634567c261e5ff583a30a5ab3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
