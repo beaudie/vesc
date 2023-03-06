@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c0b7a35_a12e2912",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 647,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-06T15:14:57Z",
+      "side": 1,
+      "message": "I verified this worked before, but I\u0027m not sure it still does after this change. Previously, it was impossible to set `mNeedCommandsAndGarbageCleanup` after `mTaskThreadShouldExit`, so on wake up the thread would clean up first then exit.\n\nNow it may wake up and exit without clean up. Is that possible?",
+      "revId": "e88b061c53cdeacc5ca5519160404a36a58d0833",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffe71eca_526b64a8",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-06T15:14:57Z",
+      "side": 1,
+      "message": "naming nit: `fooOut` for output parameters",
+      "range": {
+        "startLine": 407,
+        "startChar": 65,
+        "endLine": 407,
+        "endChar": 83
+      },
+      "revId": "e88b061c53cdeacc5ca5519160404a36a58d0833",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "716b4007_f4a282c8",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 4058,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-06T15:14:57Z",
+      "side": 1,
+      "message": "Please add a few `ES3_Vulkan().disable(Feature::AsyncCommandBufferReset)` configs to some test suites (like the multithreading one, maybe also state change tests).",
+      "revId": "e88b061c53cdeacc5ca5519160404a36a58d0833",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9918245f_3ab88587",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 1195,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-06T15:14:57Z",
+      "side": 1,
+      "message": "Instead of `anyCommandFinished`, could you please add a `checkAndCleanupCompletedCommands` that would automatically call `retireFinishedCommandsAndCleanupGarbage`?",
+      "revId": "e88b061c53cdeacc5ca5519160404a36a58d0833",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
