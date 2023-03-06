@@ -5974,10 +5974,6 @@ bool OutputSPIRVTraverser::visitDeclaration(Visit visit, TIntermDeclaration *nod
     {
         decorations.push_back(spv::DecorationVolatile);
     }
-    if (memoryQualifier.restrictQualifier)
-    {
-        decorations.push_back(spv::DecorationRestrict);
-    }
     if (memoryQualifier.readonly)
     {
         decorations.push_back(spv::DecorationNonWritable);
@@ -5985,6 +5981,16 @@ bool OutputSPIRVTraverser::visitDeclaration(Visit visit, TIntermDeclaration *nod
     if (memoryQualifier.writeonly)
     {
         decorations.push_back(spv::DecorationNonReadable);
+    }
+
+    // If GLSL does not specify memory is restrict, assume the memory is aliased
+    if (memoryQualifier.restrictQualifier)
+    {
+        decorations.push_back(spv::DecorationRestrict);
+    }
+    else
+    {
+        decorations.push_back(spv::DecorationAliased);
     }
 
     const spirv::IdRef variableId = mBuilder.declareVariable(
