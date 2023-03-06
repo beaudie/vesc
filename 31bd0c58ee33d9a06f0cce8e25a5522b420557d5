@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63f4fd9a_00798cde",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1626,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-06T15:05:30Z",
+      "side": 0,
+      "message": "nit: if you want to keep this assert, you can pop from `mInFlightCommands` and push into a temporary, then std::move it over `mInFlightCommands`. Or just take the size and pop/push N times.",
+      "revId": "31bd0c58ee33d9a06f0cce8e25a5522b420557d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
