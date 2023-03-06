@@ -33,6 +33,23 @@
       "message": "non-owners lgtm, thanks.",
       "revId": "0e3b9b4fb8ab93b573dd0142e285dcebe3698e85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9dee0bdb_08c67e11",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-03-06T16:34:04Z",
+      "side": 1,
+      "message": "LGTM!",
+      "revId": "0e3b9b4fb8ab93b573dd0142e285dcebe3698e85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
