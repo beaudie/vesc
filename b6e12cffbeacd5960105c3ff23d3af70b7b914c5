@@ -174,6 +174,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8dafa48c_0565018b",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-06T18:19:31Z",
+      "side": 1,
+      "message": "\u003e - Context A: submit work A, insert fence\n- Context B: wait on fence, submit work B\n\nThere is no submit in GLES. Even glFlush() may be optimized. That was my point that app can\u0027t control submissions directly, and ANGLE must ensure proper ordering based on the EGL/GLES APIs (like `glFenceSync/glWaitSync`).\n\n\u003e Aaaaaand I just realized I probably mixed up protected vs priority again, this change is only about priority right?\n\nYes) This is about priority (VkQueue) and not protected/unprotected.\n\n\u003e  The request still stands though, please add tests (if there aren\u0027t any) that make sure ordering of commands between high and low priority contexts is preserved (in the presence of fence).\n\nOK, I will try. Hope my test will fail without a fix and passes with the fix.",
+      "parentUuid": "f6fffda8_0fed828b",
+      "revId": "b6e12cffbeacd5960105c3ff23d3af70b7b914c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9c3bc774_02e007a9",
         "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
         "patchSetId": 6
@@ -262,6 +280,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "43fe4f2e_51e2acd9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5226,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-06T18:19:31Z",
+      "side": 1,
+      "message": "\u003e Can we try to treat priority and protection identically?\n\nIf so, enforce priority should also enforce protection type which is not possible.\nSo treat \"identically\" is not an option.\n\nProtection type is a `VkCommndBuffer`.\nPriority is a `VkQueue` (later also `VkCommndBuffer`).\nIt is logically different things: queue vs content.\n\nWe can try to synchronize not `VkQueue`s but `VkCommndBuffer`s (after the last CL).\nTo address a command buffer need pair: protection type and priority.\nDependency will be between such pairs instead of just between priorities.\n\n\u003e why should protected/unprotected be submitted at the same time, but not different priorities?\n\nFor simplicity of the implementation. Need only pair `srcPriority/dstPriority` for dependency and single `VkSemaphore` (like in this CL).\n\nprotected/unprotected is software a queue that just requires proper submission ordering. Dependency between protected/unprotected should be implemented already (same priority). But I\u0027m not sure about that. Submitting all at the same time will fix these bugs.\n\nAlso because of my mistake. I wanted to submit both protected/unprotected with the same `vkQueueSubmit` call because `VkQueue` is the same.\n\nSo my motivation was to make fixes with priority simpler and also fix possible bug with protected/unprotected. Then, if needed, can optimize and remove simultaneous protected/unprotected submission.",
+      "parentUuid": "2749e667_dac8e431",
+      "revId": "b6e12cffbeacd5960105c3ff23d3af70b7b914c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e68276b0_3e5fa062",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 6
@@ -321,6 +357,30 @@
       "side": 1,
       "message": "Got it, please use `angle::PackedEnumBitSet`. You can call it `srcProtectionTypes` it looks like both are used with `srcContextPriority`",
       "parentUuid": "779d54ed_0167a93c",
+      "range": {
+        "startLine": 640,
+        "startChar": 62,
+        "endLine": 640,
+        "endChar": 77
+      },
+      "revId": "b6e12cffbeacd5960105c3ff23d3af70b7b914c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "880a2d03_09dee774",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-06T18:19:31Z",
+      "side": 1,
+      "message": "Protection types is for the whole operation based on contexts that change priority from `src` to `dst`. Correct name is just `protectionTypes`.\n\nFull dependency:\n```\nsrcContextPriority/unprotected -\u003e dstContextPriority/unprotected\nsrcContextPriority/unprotected -\u003e dstContextPriority/protected\nsrcContextPriority/protected   -\u003e dstContextPriority/protected\n```",
+      "parentUuid": "3527f9b9_17d71264",
       "range": {
         "startLine": 640,
         "startChar": 62,
