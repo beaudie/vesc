@@ -22,6 +22,30 @@
       },
       "revId": "35c44b40190d4c4e83cf30f106052aafe606aefc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3ad36c9_d502f6a4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1002927
+      },
+      "writtenOn": "2023-03-06T18:10:17Z",
+      "side": 1,
+      "message": "\u003e Sorry, does this mean that we are leaking memory?\n\nNo.\n\n\u003e We should never be holding a std::vector in the allocated pool memory.\n\nI don\u0027t think tha\u0027ts true. For example TTypeQualifierBuilder::mQualifiers is such a std::vector.\n\n\u003e Or do you mean that the memory is being reused in other vectors like what the translator\u0027s TVector class is doing (and yes, we don\u0027t run its destructor).\n\nYes, the memory that belonged to one TVector is being reused. It doesn\u0027t matter if it\u0027s reused in vectors or other types of objects. The problem is that since we didn\u0027t run the TVector destructor, the memory is still marked as belonging to that TVector.\n\n\u003e ISTM like this is an ASAN bug, it\u0027s trying to verify something that it can\u0027t\n\nYes, it\u0027s certainly an ASan false positive. I think there\u0027s an argument that the signal-to-noise ratio for annotating vectors with custom allocators is low. I\u0027m making that argument here upstream: https://reviews.llvm.org/D136765#4171295\n\nIf upstream backs this out or adds some kind of opt-out, I\u0027ll update this code.",
+      "parentUuid": "5ff2406a_92e3c20f",
+      "range": {
+        "startLine": 14,
+        "startChar": 20,
+        "endLine": 16,
+        "endChar": 28
+      },
+      "revId": "35c44b40190d4c4e83cf30f106052aafe606aefc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
