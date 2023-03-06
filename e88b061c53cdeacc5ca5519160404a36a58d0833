@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef341692_072f901e",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 647,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-06T18:51:26Z",
+      "side": 1,
+      "message": "Not possible. It always has to go through clean up before exit.",
+      "parentUuid": "9c0b7a35_a12e2912",
+      "revId": "e88b061c53cdeacc5ca5519160404a36a58d0833",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ffe71eca_526b64a8",
@@ -31,6 +49,30 @@
       "writtenOn": "2023-03-06T15:14:57Z",
       "side": 1,
       "message": "naming nit: `fooOut` for output parameters",
+      "range": {
+        "startLine": 407,
+        "startChar": 65,
+        "endLine": 407,
+        "endChar": 83
+      },
+      "revId": "e88b061c53cdeacc5ca5519160404a36a58d0833",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2dcfc386_11cf650c",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-06T18:51:26Z",
+      "side": 1,
+      "message": "https://chromium-review.googlesource.com/c/angle/angle/+/4311756",
+      "parentUuid": "ffe71eca_526b64a8",
       "range": {
         "startLine": 407,
         "startChar": 65,
@@ -58,6 +100,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8089282e_6e121a07",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 4058,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-06T18:51:26Z",
+      "side": 1,
+      "message": "The VulkanSecondaryCommandBuffer is testing this feature flag disabled.",
+      "parentUuid": "716b4007_f4a282c8",
+      "revId": "e88b061c53cdeacc5ca5519160404a36a58d0833",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9918245f_3ab88587",
@@ -71,6 +131,24 @@
       "writtenOn": "2023-03-06T15:14:57Z",
       "side": 1,
       "message": "Instead of `anyCommandFinished`, could you please add a `checkAndCleanupCompletedCommands` that would automatically call `retireFinishedCommandsAndCleanupGarbage`?",
+      "revId": "e88b061c53cdeacc5ca5519160404a36a58d0833",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dae88a29_e122de0e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 1195,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-06T18:51:26Z",
+      "side": 1,
+      "message": "https://chromium-review.googlesource.com/c/angle/angle/+/4311756",
+      "parentUuid": "9918245f_3ab88587",
       "revId": "e88b061c53cdeacc5ca5519160404a36a58d0833",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
