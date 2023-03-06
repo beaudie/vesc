@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19c9a43c_a6d9d074",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4804,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-06T15:21:37Z",
+      "side": 1,
+      "message": "nit: In this case, the `if/else` read better IMO",
+      "revId": "eb0475c05425d94a4516b708c1c9075e3bc423a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f84706b2_347ab2d7",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 777,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-06T15:21:37Z",
+      "side": 1,
+      "message": "Please avoid overloading when unnecessary. Could we call this `allocateSerialIndex`? Or call the other one `allocateQueueSerial`?",
+      "range": {
+        "startLine": 777,
+        "startChar": 18,
+        "endLine": 777,
+        "endChar": 42
+      },
+      "revId": "eb0475c05425d94a4516b708c1c9075e3bc423a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
