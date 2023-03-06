@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cdaac29_77fb1862",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1740,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-06T16:07:36Z",
+      "side": 1,
+      "message": "A bug with VkSwapchainKHR is that it\u0027s unknown when it\u0027s safe to destroy the swapchain. The workgroup settled on \"it\u0027s fine after vkDeviceWaitIdle because there\u0027s no other choice\". This is partly because `vkQueuePresentKHR` is a queue operation which may be adding work.\n\nThis change makes the destruction wait on _application\u0027s_ use of the images, but not the present\u0027s (queue) use of images. It _may_ work fine due to PE\u0027s internal ref counting etc, but just letting you know there is no guarantee of this working per spec.\n\nWith `VK_EXT_swapchain_maintenance1` this bug is fixed. We could either let this be and cross fingers, or you could check for `supportsSwapchainMaintenance1` and if not supported, `vkDeviceWaitIdle` as before.",
+      "revId": "8b72e5d3769360cc7567c423f89036168005ead8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
