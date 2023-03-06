@@ -74,10 +74,15 @@ angle::Result Sync::set(ContextMtl *contextMtl,
     {
         ANGLE_TRY(initialize(contextMtl, sharedEvent, signalValue));
     }
-    ASSERT(condition == GL_SYNC_GPU_COMMANDS_COMPLETE);
+    ASSERT(condition == GL_SYNC_GPU_COMMANDS_COMPLETE ||
+           condition == EGL_SYNC_METAL_SHARED_EVENT_SIGNALED_ANGLE);
     ASSERT(flags == 0);
 
-    contextMtl->queueEventSignal(mMetalSharedEvent, mSignalValue);
+    if (condition == GL_SYNC_GPU_COMMANDS_COMPLETE)
+    {
+        contextMtl->queueEventSignal(mMetalSharedEvent, mSignalValue);
+    }
+
     return angle::Result::Continue;
 }
 
@@ -254,6 +259,9 @@ EGLSyncMtl::EGLSyncMtl(const egl::AttributeMap &attribs) : EGLSyncImpl()
             mtl::makeSignalValue(attribs.get(EGL_SYNC_METAL_SHARED_EVENT_SIGNAL_VALUE_HI_ANGLE, 0),
                                  attribs.get(EGL_SYNC_METAL_SHARED_EVENT_SIGNAL_VALUE_LO_ANGLE, 0));
     }
+
+    mCondition =
+        static_cast<GLenum>(attribs.get(EGL_SYNC_CONDITION, GL_SYNC_GPU_COMMANDS_COMPLETE));
 }
 
 EGLSyncMtl::~EGLSyncMtl() {}
@@ -284,8 +292,7 @@ egl::Error EGLSyncMtl::initialize(const egl::Display *display,
             return egl::Error(EGL_BAD_ALLOC);
     }
 
-    if (IsError(
-            mSync.set(contextMtl, GL_SYNC_GPU_COMMANDS_COMPLETE, 0, mSharedEvent, mSignalValue)))
+    if (IsError(mSync.set(contextMtl, mCondition, 0, mSharedEvent, mSignalValue)))
     {
         return egl::Error(EGL_BAD_ALLOC, "eglCreateSyncKHR failed to create sync object");
     }
