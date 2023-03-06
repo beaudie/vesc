@@ -302,6 +302,24 @@
       "parentUuid": "316e3223_cb3441d3",
       "revId": "0fafcb2139d38388b184aa26d5152b860f3a3b89",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e7456cf_aaff8e2a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-06T11:11:45Z",
+      "side": 1,
+      "message": "\u003e I thought after I renamed CommandProcessor method to enqueue*, submit is reserved to CommandQueue now and it is no longer confusing?\n\nIf look at `CommandQueue` and `CommandProcessor` then there is no confusion.\n\nConfusion when look at the `RendererVk`. The `CommandQueue` and `CommandProcessor` are the implementation details and can\u0027t remove confusion.\n\n`RendererVk` replaces `CommandProcessor::hasResourceUseEnqueued()` with `RendererVk::hasResourceUseSubmitted()`. This method returns status of the `RendererVk::submitCommands()`. `RendererVk::submitCommands()` internally will do `CommandProcessor::enqueueSubmitCommands()`.\n\nSo `RendererVk` converts `Enqueued -\u003e Submitted` in the above cases.\n\nBut `RendererVk::waitForResourceUseToBeSubmitted()` directly calls `CommandProcessor::waitForResourceUseToBeSubmitted()`,\nSo there is no conversion: `Submitted \u003d\u003d Submitted`.\n\nAs the result, `RenderevVk` has two **different** `Submitted` states.\n- submitted to the `RendererVk` (`Enqueued` in case of a `CommandProcessor`).\n- submitted to the Device.",
+      "parentUuid": "b5c42c7a_49976aee",
+      "revId": "0fafcb2139d38388b184aa26d5152b860f3a3b89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
