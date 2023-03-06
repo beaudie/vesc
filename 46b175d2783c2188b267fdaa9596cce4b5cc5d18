@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "8207609c_a53fd72e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-06T16:15:21Z",
+      "side": 1,
+      "message": "A long time ago I had success. But only one device was affected. I do not have access to this device now. And I spend many days trying to write test app that had issue. Writing such tests is discouraging...\nI can try and write test, but once I have more free time.\n\nAlso there are maybe many errors like this in the code (just need to look). Also such errors may be fixed by anyone. But in order to understand how this simple error may affect real world behavior need a lot of time to understand how everything works.",
+      "parentUuid": "06211a26_6fbf081e",
+      "range": {
+        "startLine": 9,
+        "startChar": 59,
+        "endLine": 9,
+        "endChar": 72
+      },
+      "revId": "46b175d2783c2188b267fdaa9596cce4b5cc5d18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "51a48f34_a2e5181d",
