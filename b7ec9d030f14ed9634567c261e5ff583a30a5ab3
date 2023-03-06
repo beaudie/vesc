@@ -118,6 +118,30 @@
       },
       "revId": "b7ec9d030f14ed9634567c261e5ff583a30a5ab3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "793746f2_0b1399b2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-03-06T17:07:37Z",
+      "side": 1,
+      "message": "Ahh yikes!\nIs it possible that https://crbug.com/1417485 is related to this CL? MSRTT was disabled as a workaround and that workaround seems to have caused another issue (test failure on nexus 5x https://anglebug.com/8067#c2)",
+      "parentUuid": "9890b39c_c1548b7b",
+      "range": {
+        "startLine": 756,
+        "startChar": 4,
+        "endLine": 756,
+        "endChar": 35
+      },
+      "revId": "b7ec9d030f14ed9634567c261e5ff583a30a5ab3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
