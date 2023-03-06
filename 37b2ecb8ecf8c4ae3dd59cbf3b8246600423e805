@@ -144,6 +144,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb40a1f2_8586f263",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-06T21:35:40Z",
+      "side": 1,
+      "message": "\u003e I will try and make this changes and think more in the process...\n\nThanks.\n\n\u003e Why not? Technically it is an abstract pointer. May as well be some data member of `TextureVk`.\n\nBecause once that pointer finds its way to `namespace vk`, it\u0027ll be a matter of time before someone decides to add a virtual function and start calling back into `namespace rx` because that\u0027d be the path of least resistance 😊",
+      "parentUuid": "1d59ac1a_11fd16cf",
+      "range": {
+        "startLine": 20,
+        "startChar": 26,
+        "endLine": 23,
+        "endChar": 19
+      },
+      "revId": "37b2ecb8ecf8c4ae3dd59cbf3b8246600423e805",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb268fbe_c060d7e7",
