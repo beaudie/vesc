@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7ddc7208_405bd88d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-06T13:34:58Z",
+      "side": 1,
+      "message": "\u003e Can you please add a test for this?\n\nTests in this CL already covers this.\n\n\u003e I imagine this can only work when the two texture objects use different layers of the image (otherwise it\u0027s either a WaW hazard (if same subresource) or the attachments don\u0027t match in size (if different mips). I don\u0027t know if we handle that case correctly (regardless of EGL images, like with two FBO attachments each of a different layer of an image).\n\nIt is simpler. I just created additional target and did not use it:\n```\n        // Create additional target texture\n        GLTexture targetTexture2;\n        createEGLImageTargetTexture2D(image, targetTexture2);\n```\nIf destroying `targetTexture2` calls `finalizeImageLayout` successfully (same `ImageHelper` as in `targetTexture`), it will corrupt RenderPass state that uses the `targetTexture` (my original CL will break RenderPass here...). That is why also need to pass the `ImageHelperSource *`.\n\nThis test is unrealistic but possible. I guess also possible your description. I wanted a fix that always works no matter what.\n\n\u003e If we do handle that correctly, how does that being part of EGL images make it different?\n\nWhen texture *target* is a part of `EGLImage` it has `mOwnsImage \u003d\u003d false` and possible other resources with the same `ImageHelper` (like `targetTexture`).",
+      "parentUuid": "1f1ec5ee_35cb97ae",
+      "range": {
+        "startLine": 20,
+        "startChar": 26,
+        "endLine": 23,
+        "endChar": 19
+      },
+      "revId": "37b2ecb8ecf8c4ae3dd59cbf3b8246600423e805",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fb268fbe_c060d7e7",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 2
@@ -37,6 +61,24 @@
       "writtenOn": "2023-03-05T20:34:26Z",
       "side": 1,
       "message": "Is this single-line change not enough to pass the tests you\u0027ve added?",
+      "revId": "37b2ecb8ecf8c4ae3dd59cbf3b8246600423e805",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54bbabad_f79387b8",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3267,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-06T13:34:58Z",
+      "side": 1,
+      "message": "All new tests passes in this CL. So this CL is enough.\n\nOr am I missing something?\n\n---\n\nI was thinking to allow `nullptr` for `ImageHelperSource` for classes that always own `ImageHelper` like `SurfaceVk`. But decided to be explicit. I\u0027m 50/50 on this decision.",
+      "parentUuid": "fb268fbe_c060d7e7",
       "revId": "37b2ecb8ecf8c4ae3dd59cbf3b8246600423e805",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
