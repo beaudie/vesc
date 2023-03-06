@@ -452,6 +452,9 @@ def _CheckShaderVersionInShaderLangHeader(input_api, output_api):
     diffs = '\n'.join(f.GenerateScmDiff() for f in headers_changed)
     versions = dict(re.findall(r'^([-+])#define ANGLE_SH_VERSION\s+(\d+)', diffs, re.M))
 
+    for version in versions:
+        print('Yuxin Debug ' + version)
+
     if len(versions) != 2 or int(versions['+']) <= int(versions['-']):
         return [
             output_api.PresubmitError(
