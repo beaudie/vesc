@@ -16,6 +16,24 @@
       "message": "This feels iffy. Is there a reason mSupportedExtensions wasn\u0027t exposed already?",
       "revId": "f93cbe5241876d3bd5bc5332f9dfd021c18999f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7912ff73_31390fee",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-06T16:35:51Z",
+      "side": 1,
+      "message": "Some relevant context I could find: anglebug.com/6010\n\nYou\u0027re right, you\u0027re not supposed to be looking at `mSupportedExtensions`. I don\u0027t know why it exists though, really.\n\n`mExtensions()` should have the extensions you need enabled. If it doesn\u0027t, then we should look into why that\u0027s not the case!",
+      "parentUuid": "35fe5aea_b529488e",
+      "revId": "f93cbe5241876d3bd5bc5332f9dfd021c18999f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
