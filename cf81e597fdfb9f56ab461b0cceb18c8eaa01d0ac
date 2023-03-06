@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e70233a6_623f7f9c",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 8708,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-06T04:04:08Z",
+      "side": 1,
+      "message": "This comment no longer makes sense",
+      "range": {
+        "startLine": 8707,
+        "startChar": 0,
+        "endLine": 8708,
+        "endChar": 29
+      },
+      "revId": "cf81e597fdfb9f56ab461b0cceb18c8eaa01d0ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
