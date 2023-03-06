@@ -22,6 +22,30 @@
       },
       "revId": "31bd0c58ee33d9a06f0cce8e25a5522b420557d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63266e7c_f966c9e4",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1158,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-06T17:56:52Z",
+      "side": 1,
+      "message": "You can\u0027t remove mFinishedCommandBatches. You need it when it is reset by async thread.\n\nOne way to make it look less odd is get rid of finishedCount all together. at line 1163, you do this:\n\nif(!mFinishedCommandBatches.empty())\n\nSince size is atomic, the empty check should still work outside mMutex lock.",
+      "parentUuid": "35bf1763_99894413",
+      "range": {
+        "startLine": 1158,
+        "startChar": 24,
+        "endLine": 1158,
+        "endChar": 47
+      },
+      "revId": "31bd0c58ee33d9a06f0cce8e25a5522b420557d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
