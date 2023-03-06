@@ -34,6 +34,24 @@
       "parentUuid": "f2add44a_d44ed0d2",
       "revId": "a8d87135885de5a63dd559a0935c50202c09f657",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79a2eada_d6443c33",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5229,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-06T14:02:45Z",
+      "side": 1,
+      "message": "Can\u0027t add to `RendererScoped`, because other \"T\" have no `destroy(VkDevice)` method.\n\nAlso can\u0027t call `collectGarbage`, because `RendererVk` is incomplete.\nCan\u0027t use `RendererVk` in \"vk_wrapper.h\" either.\n\nThe only other way I can think of is not use `vk::Semaphore` and replace with some wrapper class and then use `RendererScoped`.",
+      "parentUuid": "8af60207_d2497264",
+      "revId": "a8d87135885de5a63dd559a0935c50202c09f657",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
