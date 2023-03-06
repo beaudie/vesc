@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06dec147_c16af80e",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-06T14:25:21Z",
+      "side": 1,
+      "message": "nit: feel free to move up and remove nesting.",
+      "revId": "f3d44b7cbc876e5c7d3d60b167ccf811402c05b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
