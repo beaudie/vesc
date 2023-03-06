@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cb5b1d61_0438be94",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4804,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-06T15:44:27Z",
+      "side": 1,
+      "message": "Addressed in this: https://chromium-review.googlesource.com/c/angle/angle/+/4306720",
+      "parentUuid": "19c9a43c_a6d9d074",
+      "revId": "eb0475c05425d94a4516b708c1c9075e3bc423a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f84706b2_347ab2d7",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 6
@@ -31,6 +49,30 @@
       "writtenOn": "2023-03-06T15:21:37Z",
       "side": 1,
       "message": "Please avoid overloading when unnecessary. Could we call this `allocateSerialIndex`? Or call the other one `allocateQueueSerial`?",
+      "range": {
+        "startLine": 777,
+        "startChar": 18,
+        "endLine": 777,
+        "endChar": 42
+      },
+      "revId": "eb0475c05425d94a4516b708c1c9075e3bc423a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac7319a5_b0ab0fdc",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 777,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-06T15:44:27Z",
+      "side": 1,
+      "message": "There was no overloading before Patchset 4.\n\nI added `getLastSubmittedSerial` method: https://chromium-review.googlesource.com/c/angle/angle/+/4289749/2..3/src/libANGLE/renderer/vulkan/RendererVk.h\n\n\nThen specialized method: https://chromium-review.googlesource.com/c/angle/angle/+/4289749/3..4/src/libANGLE/renderer/vulkan/RendererVk.h\n```\nangle::Result allocateQueueSerialIndex(SerialIndex *indexOut);\nangle::Result allocateQueueSerialIndexAndGetLastSubmittedSerial(QueueSerial *queueSerialOut);\n```\nCharlie liked overloaded version better.\n\n\u003e Could we call this `allocateSerialIndex`?\n\nNeed to also rename other places for consistency (example: `getLargestQueueSerialIndexEverAllocated`).\nAnd allocation is done by `vk::QueueSerialIndexAllocator` not just `vk::SerialIndexAllocator`.\n\nSo turns out `QueueSerialIndex` is important.\n\nNow we also have...:\n```\nangle::Result allocateQueueSerialIndex(vk::ScopedQueueSerialIndex *indexOut);\n```\n\nThis can be easily renamed to `allocateScopedQueueSerialIndex`.\n\n\u003e Or call the other one `allocateQueueSerial`?\n\nThe verb `alllocate` refers to `Index`. This name drops the important part.",
+      "parentUuid": "f84706b2_347ab2d7",
       "range": {
         "startLine": 777,
         "startChar": 18,
