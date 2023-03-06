@@ -16,6 +16,69 @@
       "message": "+sunnyps - can you help confirm this adds the semantics you need?",
       "revId": "6da398c4d1cabd7ae96140cecddbd8e360058331",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ca3da38_e2917f90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1128437
+      },
+      "writtenOn": "2023-03-06T20:41:20Z",
+      "side": 1,
+      "message": "non-owner lgtm",
+      "revId": "6da398c4d1cabd7ae96140cecddbd8e360058331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5daad223_cb8b7733",
+        "filename": "extensions/EGL_ANGLE_metal_shared_event_sync.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1128437
+      },
+      "writtenOn": "2023-03-06T20:41:20Z",
+      "side": 1,
+      "message": "nit: typo?",
+      "range": {
+        "startLine": 102,
+        "startChar": 4,
+        "endLine": 102,
+        "endChar": 31
+      },
+      "revId": "6da398c4d1cabd7ae96140cecddbd8e360058331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "feb246f0_4f7fd64f",
+        "filename": "extensions/EGL_ANGLE_metal_shared_event_sync.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1128437
+      },
+      "writtenOn": "2023-03-06T20:41:20Z",
+      "side": 1,
+      "message": "nit: this also applies to eglWaitSync on the GPU timeline, right?",
+      "range": {
+        "startLine": 106,
+        "startChar": 4,
+        "endLine": 106,
+        "endChar": 21
+      },
+      "revId": "6da398c4d1cabd7ae96140cecddbd8e360058331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
