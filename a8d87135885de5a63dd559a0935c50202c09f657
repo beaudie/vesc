@@ -52,6 +52,24 @@
       "parentUuid": "8af60207_d2497264",
       "revId": "a8d87135885de5a63dd559a0935c50202c09f657",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c81e519a_19cf7814",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5229,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-06T20:12:38Z",
+      "side": 1,
+      "message": "\u003e struggled with the name\n\n`GarbageCollectScoped` maybe\n\n\u003e Also can\u0027t call collectGarbage, because RendererVk is incomplete.\n\nI think you can forward declare the destructor out of the class with the `vk::Semaphore` specialization, then add the implementation in cpp.\n\n\u003e The only other way I can think of is not use vk::Semaphore and replace with some wrapper class\n\nThat could work too",
+      "parentUuid": "79a2eada_d6443c33",
+      "revId": "a8d87135885de5a63dd559a0935c50202c09f657",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
