@@ -192,6 +192,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2d36a285_ac4fa95d",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-06T21:27:05Z",
+      "side": 1,
+      "message": "\u003e Hope my test will fail without a fix and passes with the fix.\n\nIt may still pass by luck, but at least there\u0027d be something breaking accidental breakage 😊\n\n\u003e That was my point that app can\u0027t control submissions directly, and ANGLE must ensure proper ordering based on the EGL/GLES APIs (like glFenceSync/glWaitSync).\n\nFYI, the spec actually calls this out, there\u0027s a footnote that says \"if you want to enforce submission, use a fence\".",
+      "parentUuid": "8dafa48c_0565018b",
+      "revId": "b6e12cffbeacd5960105c3ff23d3af70b7b914c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9c3bc774_02e007a9",
         "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
         "patchSetId": 6
@@ -298,6 +316,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c736c17b_28c8fe85",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5226,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-06T21:27:05Z",
+      "side": 1,
+      "message": "Huh, sorry I thought protected submissions go through a different queue. Give me some time to wrap my head around this",
+      "parentUuid": "43fe4f2e_51e2acd9",
+      "revId": "b6e12cffbeacd5960105c3ff23d3af70b7b914c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e68276b0_3e5fa062",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 6
@@ -381,6 +417,30 @@
       "side": 1,
       "message": "Protection types is for the whole operation based on contexts that change priority from `src` to `dst`. Correct name is just `protectionTypes`.\n\nFull dependency:\n```\nsrcContextPriority/unprotected -\u003e dstContextPriority/unprotected\nsrcContextPriority/unprotected -\u003e dstContextPriority/protected\nsrcContextPriority/protected   -\u003e dstContextPriority/protected\n```",
       "parentUuid": "3527f9b9_17d71264",
+      "range": {
+        "startLine": 640,
+        "startChar": 62,
+        "endLine": 640,
+        "endChar": 77
+      },
+      "revId": "b6e12cffbeacd5960105c3ff23d3af70b7b914c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12f7c62c_7a2de0f1",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-06T21:27:05Z",
+      "side": 1,
+      "message": "Why is `src/protected -\u003e dst/unprotected` not necessary?",
+      "parentUuid": "880a2d03_09dee774",
       "range": {
         "startLine": 640,
         "startChar": 62,
