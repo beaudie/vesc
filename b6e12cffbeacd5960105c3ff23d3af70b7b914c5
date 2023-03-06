@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "78afebeb_805594f0",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 653,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-06T14:03:11Z",
+      "side": 1,
+      "message": "\u003e which also raises the question of why ShareGroupVk::addContext is not calling this?\n\nBecause of the separation of concerns. Did not want to overload the `addContext` with other logic.\nAnd the other reasons below...\n\n\u003e not really optimize. Or even better, something like onContextAdded\n\nIn the initial implementation priority could go down and this method could be called after `removeContext`, for example. And going down with priority for me is like an optimization. I decided to keep the name after changing logic to never go down.\n\n\u003e Maybe unify?\n\nI guess `unify` is OK.\n\n\u003e Or even better, something like onContextAdded\n\n`onContextAdded` is not good. This method is called at the beginning of initialization, while `addContext` at the end. This is done so that new `ContextVk` have correct priority from the start.",
+      "parentUuid": "0955b90c_372a3b58",
+      "range": {
+        "startLine": 653,
+        "startChar": 28,
+        "endLine": 653,
+        "endChar": 36
+      },
+      "revId": "b6e12cffbeacd5960105c3ff23d3af70b7b914c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "99651093_e4ba1e8d",
         "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
         "patchSetId": 6
@@ -66,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c2ad7019_4766361b",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-06T14:03:11Z",
+      "side": 1,
+      "message": "There are no ordering requirements between protected and unprotected contexts in this CL.\n\nThis logic is for optimization to avoid extra submission.\n\n- Protected and unprotected commands recorded into different primary command buffers.\n- All command buffers of Contexts need to be submitted to the old `VkQueue` before submitting the `VkSemaphore`.\n- Order of submission is not considered.\n\nMay replace with `angle::PackedEnumBitSet()` or highest protection type (read below).\nOr just do not optimize and always submit all buffers (prefer this - read other comment).\n\n---\n\nRegarding ordering. This is a separate issue.\nI think it is safer to first submit unprotected and then protected. Because unprotected may write and protected then read. This should be checked.\n\nHowever, apps can\u0027t reliably control when submissions are made. So ANGLE should explicitly track unprotected-\u003eprotected resource use, or just always submit Unprotected when submitting Protected (just like OutsideRP and RenderPass command buffers).\n\nThis made me thinking.\nMaybe just pass into the `submitPriorityDependency` single highest protection type.\nAnd the `RendererVk` will submit all protection types up to the highest type.\nOr just always submit all buffers (read other comment).",
+      "parentUuid": "b6981002_d2d0a789",
+      "revId": "b6e12cffbeacd5960105c3ff23d3af70b7b914c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9c3bc774_02e007a9",
         "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
         "patchSetId": 6
@@ -100,6 +142,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "34540b9f_fd92a8e7",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5226,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-06T14:03:11Z",
+      "side": 1,
+      "message": "I do not think so. It is a temp solution.\n\ninstead, I was thinking to make this functionality part of the `CommandQueue` rather than `RendererVk`. Add some kind of dependency information between priorities. The `CommandQueue` will automatically submit other priorities and manage `VkSemaphores`.\n\nThis functionality may be reused for the future fix. In that fix we will only need to decide what dependencies to add.\n\nThere is one problem - protection type.\nIt makes everything complicated. Because now it is basically splits `VkQueue` in two.\nAnd I\u0027m not sure if we should track dependencies on a primary command buffer level.\n\nI suggest for simplicity just submit all primary command buffers **in a single batch** (unprotected first and then protected). This way need to only track dependacy between `VkQueue`s.\nI will try prepare this CL before this one. This will also remove `protectionType1/protectionType2` problem.",
+      "parentUuid": "2f12eb48_6937d110",
+      "revId": "b6e12cffbeacd5960105c3ff23d3af70b7b914c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e68276b0_3e5fa062",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 6
@@ -111,6 +171,30 @@
       "writtenOn": "2023-03-05T20:10:49Z",
       "side": 1,
       "message": "Shouldn\u0027t these also be called src and dst? What does 1 and 2 mean otherwise?",
+      "range": {
+        "startLine": 640,
+        "startChar": 62,
+        "endLine": 640,
+        "endChar": 77
+      },
+      "revId": "b6e12cffbeacd5960105c3ff23d3af70b7b914c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "779d54ed_0167a93c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-06T14:03:11Z",
+      "side": 1,
+      "message": "\u003e Shouldn\u0027t these also be called src and dst?\n\nNo.\n\n\u003e What does 1 and 2 mean otherwise?\n\nFor what protection types need to submit dependency.\n\nIt is a \"dirty\" array with only 1 or 2 elements.\nIf both values same - then only single element.",
+      "parentUuid": "e68276b0_3e5fa062",
       "range": {
         "startLine": 640,
         "startChar": 62,
