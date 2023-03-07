@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2350dd24_c2ae079f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-07T00:56:19Z",
+      "side": 1,
+      "message": "Nice work, Mike!\n\nStarting review on this to get Shabi\u0027s initial feedback.\n\nThe `win-trace` test failure is unrelated.",
+      "revId": "597f41cb1bc962b09025de3547ea3652b523c453",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96b7cad8_bde75f45",
+        "filename": "src/compiler/preprocessor/DirectiveParser.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-07T00:56:19Z",
+      "side": 1,
+      "message": "Can this be done in `handleVersion`?",
+      "range": {
+        "startLine": 183,
+        "startChar": 0,
+        "endLine": 183,
+        "endChar": 39
+      },
+      "revId": "597f41cb1bc962b09025de3547ea3652b523c453",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6a49511_af4525dd",
+        "filename": "src/compiler/preprocessor/DirectiveParser.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-07T00:56:19Z",
+      "side": 1,
+      "message": "The ordering change here is good.  `handleVersion` will set `mShaderVersion` on success.",
+      "range": {
+        "startLine": 827,
+        "startChar": 0,
+        "endLine": 827,
+        "endChar": 33
+      },
+      "revId": "597f41cb1bc962b09025de3547ea3652b523c453",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "335e23c6_786f82eb",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 17601,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-07T00:56:19Z",
+      "side": 1,
+      "message": "I see we don\u0027t have any tests for `GL_EXT_shadow_samplers`, but if you see a quick/easy way to add one, mirroring what the app was doing, it would be great to have a practical example of what this is fixing.",
+      "revId": "597f41cb1bc962b09025de3547ea3652b523c453",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fc43299_2de399f6",
+        "filename": "src/compiler/preprocessor/Preprocessor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-07T00:56:19Z",
+      "side": 0,
+      "message": "Can you explain a bit why this is going away?  It looks like it is always handled by `TDirectiveHandler::handleVersion` now.",
+      "range": {
+        "startLine": 60,
+        "startChar": 20,
+        "endLine": 60,
+        "endChar": 31
+      },
+      "revId": "044612ec1cbd00201304747ae17f13805b341541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a014be77_5f45307f",
+        "filename": "src/compiler/translator/DirectiveHandler.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-07T00:56:19Z",
+      "side": 0,
+      "message": "Do you know if this is covered by a test?",
+      "range": {
+        "startLine": 257,
+        "startChar": 0,
+        "endLine": 258,
+        "endChar": 49
+      },
+      "revId": "044612ec1cbd00201304747ae17f13805b341541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f34c5dd_6fd35c6c",
+        "filename": "src/tests/compiler_tests/FragDepth_test.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-07T00:56:19Z",
+      "side": 0,
+      "message": "Nice!  Knocking out untracked TODOs.",
+      "range": {
+        "startLine": 106,
+        "startChar": 0,
+        "endLine": 106,
+        "endChar": 94
+      },
+      "revId": "044612ec1cbd00201304747ae17f13805b341541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7b74158_32a3727c",
+        "filename": "src/tests/compiler_tests/OVR_multiview_test.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-07T00:56:19Z",
+      "side": 0,
+      "message": "Is there a reason you are removing these?  Do they become redundant with `ESSL1ExtensionMacros`?",
+      "range": {
+        "startLine": 614,
+        "startChar": 37,
+        "endLine": 614,
+        "endChar": 63
+      },
+      "revId": "044612ec1cbd00201304747ae17f13805b341541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
