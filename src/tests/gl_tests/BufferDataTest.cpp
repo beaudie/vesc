@@ -1270,6 +1270,32 @@ TEST_P(BufferDataTestES3, bufferReadFromRenderPassAndOutsideRenderPassWithFenceS
     EXPECT_PIXEL_COLOR_EQ(getWindowWidth() - 1, getWindowHeight() - 1, GLColor::red);
 }
 
+// This is test for optimization in vulkan backend. efootball_pes_2021 usage shows this usage
+// pattern and we expect implementation to reuse the storage for performance.
+TEST_P(BufferDataTestES3, bufferDataWithSizeFollowedByZeroAndThenSizeAgainShouldReuseStorage)
+{
+    ANGLE_SKIP_TEST_IF(!IsVulkan());
+
+    GLBuffer buffer;
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    constexpr size_t count = 288;
+    std::array<uint32_t, count> data;
+    constexpr size_t bufferSize = data.size() * sizeof(uint32_t);
+    data.fill(0x12345);
+
+    glBufferData(GL_ARRAY_BUFFER, bufferSize, data.data(), GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, bufferSize, nullptr, GL_DYNAMIC_DRAW);
+
+    uint32_t *mapPtr = reinterpret_cast<uint32_t *>(
+        glMapBufferRange(GL_ARRAY_BUFFER, 0, bufferSize, GL_MAP_READ_BIT));
+    ASSERT_NE(nullptr, mapPtr);
+    EXPECT_EQ(0x12345u, mapPtr[0]);
+    EXPECT_EQ(0x12345u, mapPtr[count - 1]);
+    glUnmapBuffer(GL_ARRAY_BUFFER);
+    ASSERT_GL_NO_ERROR();
+}
+
 class BufferStorageTestES3 : public BufferDataTest
 {};
 

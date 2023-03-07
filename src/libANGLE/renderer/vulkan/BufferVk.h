@@ -159,7 +159,6 @@ class BufferVk : public BufferImpl
                                         const void *data,
                                         size_t size,
                                         VkMemoryPropertyFlags memoryPropertyFlags,
-                                        bool persistentMapRequired,
                                         gl::BufferUsage usage);
     angle::Result handleDeviceLocalBufferMap(ContextVk *contextVk,
                                              VkDeviceSize offset,

@@ -368,8 +368,7 @@ angle::Result BufferVk::setDataWithUsageFlags(const gl::Context *context,
 
         return angle::Result::Continue;
     }
-    return setDataWithMemoryType(context, target, data, size, memoryPropertyFlags,
-                                 persistentMapRequired, usage);
+    return setDataWithMemoryType(context, target, data, size, memoryPropertyFlags, usage);
 }
 
 angle::Result BufferVk::setData(const gl::Context *context,
@@ -382,7 +381,7 @@ angle::Result BufferVk::setData(const gl::Context *context,
     // Assume host visible/coherent memory available.
     VkMemoryPropertyFlags memoryPropertyFlags =
         GetPreferredMemoryType(contextVk->getRenderer(), target, usage);
-    return setDataWithMemoryType(context, target, data, size, memoryPropertyFlags, false, usage);
+    return setDataWithMemoryType(context, target, data, size, memoryPropertyFlags, usage);
 }
 
 angle::Result BufferVk::setDataWithMemoryType(const gl::Context *context,
@@ -390,12 +389,11 @@ angle::Result BufferVk::setDataWithMemoryType(const gl::Context *context,
                                               const void *data,
                                               size_t size,
                                               VkMemoryPropertyFlags memoryPropertyFlags,
-                                              bool persistentMapRequired,
                                               gl::BufferUsage usage)
 {
     ContextVk *contextVk = vk::GetImpl(context);
+    BufferUpdateType updateType;
 
-    mIsDynamicUsage = IsUsageDynamic(usage);
     // Reset the flag since the buffer contents are being reinitialized. If the caller passed in
     // data to fill the buffer, the flag will be updated when the data is copied to the buffer.
     mHasValidData = false;
@@ -406,29 +404,45 @@ angle::Result BufferVk::setDataWithMemoryType(const gl::Context *context,
         return angle::Result::Continue;
     }
 
-    const bool bufferSizeChanged = size != static_cast<size_t>(mState.getSize());
-    const bool inUseAndRespecifiedWithoutData =
-        (data == nullptr && isCurrentlyInUse(contextVk->getRenderer()));
-
-    // The entire buffer is being respecified, possibly with null data.
-    // Release and init a new mBuffer with requested size.
-    if (bufferSizeChanged || inUseAndRespecifiedWithoutData)
+    if (!mBuffer.valid())
     {
-        // Release and re-create the memory and buffer.
-        release(contextVk);
-
+        mIsDynamicUsage      = IsUsageDynamic(usage);
         mMemoryPropertyFlags = memoryPropertyFlags;
         ANGLE_TRY(GetMemoryTypeIndex(contextVk, size, memoryPropertyFlags, &mMemoryTypeIndex));
-
         ANGLE_TRY(acquireBufferHelper(contextVk, size));
+        updateType = BufferUpdateType::StorageRedefined;
+    }
+    else
+    {
+        const bool bufferSizeChanged     = size > mBuffer.getSize();
+        const bool bufferUsageChanged    = mIsDynamicUsage != IsUsageDynamic(usage);
+        const bool memoryPropertyChanged = mMemoryPropertyFlags != memoryPropertyFlags;
+        const bool inUseAndRespecifiedWithoutData =
+            (data == nullptr && isCurrentlyInUse(contextVk->getRenderer()));
+
+        mIsDynamicUsage      = IsUsageDynamic(usage);
+        mMemoryPropertyFlags = memoryPropertyFlags;
+
+        // The entire buffer is being respecified, possibly with null data.
+        // Release and init a new mBuffer with requested size.
+        if (bufferUsageChanged || bufferSizeChanged || memoryPropertyChanged ||
+            inUseAndRespecifiedWithoutData)
+        {
+            // Release and re-create the memory and buffer.
+            release(contextVk);
+            ANGLE_TRY(GetMemoryTypeIndex(contextVk, size, memoryPropertyFlags, &mMemoryTypeIndex));
+            ANGLE_TRY(acquireBufferHelper(contextVk, size));
+            updateType = BufferUpdateType::StorageRedefined;
+        }
+        else
+        {
+            updateType = BufferUpdateType::ContentsUpdate;
+        }
     }
 
     if (data)
     {
         // Treat full-buffer updates as SubData calls.
-        BufferUpdateType updateType = bufferSizeChanged ? BufferUpdateType::StorageRedefined
-                                                        : BufferUpdateType::ContentsUpdate;
-
         ANGLE_TRY(setDataImpl(contextVk, static_cast<const uint8_t *>(data), size, 0, updateType));
     }
 
