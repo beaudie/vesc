@@ -242,6 +242,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c11684fd_07b3191c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-07T19:22:51Z",
+      "side": 1,
+      "message": "NO!\n```\n    constexpr bool operator\u003d\u003d(const UniqueSerial \u0026other) const\n    {\n        return mValue !\u003d kInvalid \u0026\u0026 mValue \u003d\u003d other.mValue;\n    }\n```\nWhat should I do?\n\nJust compare `getValue()` or write over complicated comparison function that checks for `valid()`?",
+      "parentUuid": "78a862d6_c27f5be9",
+      "range": {
+        "startLine": 20,
+        "startChar": 26,
+        "endLine": 23,
+        "endChar": 19
+      },
+      "revId": "37b2ecb8ecf8c4ae3dd59cbf3b8246600423e805",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fb268fbe_c060d7e7",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 2
