@@ -218,6 +218,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "78a862d6_c27f5be9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-07T16:41:59Z",
+      "side": 1,
+      "message": "Pushed ImageSiblingSerial version.\nFixed unrealistic(?) Pbuffer case by also generating serial from throw-away generator (always 1).",
+      "parentUuid": "b5d8c815_f6f5f22e",
+      "range": {
+        "startLine": 20,
+        "startChar": 26,
+        "endLine": 23,
+        "endChar": 19
+      },
+      "revId": "37b2ecb8ecf8c4ae3dd59cbf3b8246600423e805",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fb268fbe_c060d7e7",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 2
