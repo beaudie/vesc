@@ -88,6 +88,24 @@
       "parentUuid": "c81e519a_19cf7814",
       "revId": "a8d87135885de5a63dd559a0935c50202c09f657",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e56cdfa_a06afa35",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5229,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-07T17:59:41Z",
+      "side": 1,
+      "message": "FWIW, I meant for GarbageCollectScoped to do either destroy or release, so you won\u0027t have two scoped objects.\n\nBut ok, ReleasableResource is fine.",
+      "parentUuid": "d52a6827_68478aec",
+      "revId": "a8d87135885de5a63dd559a0935c50202c09f657",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
