@@ -210,6 +210,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3b869d9f_a6c5838d",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-07T16:49:16Z",
+      "side": 1,
+      "message": "\u003e FYI, the spec actually calls this out, there\u0027s a footnote that says \"if you want to enforce submission, use a fence\".\n\nBut ANGLE defers submission anyway)\nAnd any context from other thread may cause submission.\nSo at the end - app can\u0027t control submission order.",
+      "parentUuid": "2d36a285_ac4fa95d",
+      "revId": "b6e12cffbeacd5960105c3ff23d3af70b7b914c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9c3bc774_02e007a9",
         "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
         "patchSetId": 6
@@ -334,6 +352,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "30d1849e_718bf69f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5226,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-07T16:49:16Z",
+      "side": 1,
+      "message": "OK. I suggest concentrate on priority and leave protected/unprotected problem for late...\n\n\u003e I will try prepare this CL before this one. This will also remove protectionType1/protectionType2 problem.\n\nWill not do it right now...\n\nBecause first need to implement enforced submission on flush (from withing the `CommandQueue`). This functionality will be used for inserting `VkSemaphore` dependency as well as ensure correct ordering of protected/unprotected submissions.\n\nBut let\u0027s not focus on this right now. This is a problem for a later time.\nAfter these CLs my plans are:\n- ensure correct submission order (according to flush commands order) protected/inprotected. This will simplify next steps.\n- add `VkSemaphore` dependency functionality into the `CommandQueue`. Who and how will add dependency is TBD. May start replacing this CLs `submitPriorityDependency`.\n- Maybe later add timeline semaphores (I guess even replace VkFence).\n- Then maybe remove code that submits protected/unprotected simultaneously.",
+      "parentUuid": "c736c17b_28c8fe85",
+      "revId": "b6e12cffbeacd5960105c3ff23d3af70b7b914c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e68276b0_3e5fa062",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 6
@@ -441,6 +477,30 @@
       "side": 1,
       "message": "Why is `src/protected -\u003e dst/unprotected` not necessary?",
       "parentUuid": "880a2d03_09dee774",
+      "range": {
+        "startLine": 640,
+        "startChar": 62,
+        "endLine": 640,
+        "endChar": 77
+      },
+      "revId": "b6e12cffbeacd5960105c3ff23d3af70b7b914c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8db60a99_e62a1f85",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-07T16:49:16Z",
+      "side": 1,
+      "message": "I may be wrong.\n\nProtected submission can:\n- read/write protected content\n- only read unprotected content\n\nUnprotected submission can:\n- read/write only unprotected content\n\nLayout transition may write AFAIK.\n\nScenario 1: protected content.\nSimple. Only protected -\u003e protected possible.\n\nScenario 2: unprotected content write then protected content read\n- unprotected submission changes layout to write\n- unprotected submission writes unprotected content\n- unprotected submission changes layout to read only\n- protected submission reads unprotected content\n\nNote that in the above case protected context may need to do unprotected submissions...\n\nScenario 3: protected content read then protected content write\n- protected submission reads unprotected content\n- unprotected submission changes layout to write\n- unprotected submission writes unprotected content\n\nI guess I was wrong)\n\nThis comes from my suggestion submit protected before unprotected (like OutsideRP and RenderPass commands). Also need submit protected primary buffer when new unprotected commands flushed to the buffer (to fix scenario 3).\n\nAlternative universal rule: submit all primary command buffers on commands flush to primary if target buffer is not empty and there is non empty buffer with different protection type. Also need add primary command buffer submission list. This way we will ensure submission order same as flush to primary order. Or we could keep multiple primary command buffers, but this may result in a long submission list.\n\nAnyway. My wrong \"full dependency\" changes nothing for this CL.\n\nCurrent state with protected/unprotected. If we have both buffers in the `CommandQueue` with commands - then these commands must be unrelated, because any context may submit one of the buffer at any time. Therefore, it is not important for this CL in what order submit buffers when there a multiple bits in the `protectionTypes`.",
+      "parentUuid": "12f7c62c_7a2de0f1",
       "range": {
         "startLine": 640,
         "startChar": 62,
