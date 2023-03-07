@@ -33,6 +33,24 @@
       "message": "Is the bug you try to fix hitting any real usage?\n\nMy understanding is that EGLImage currently also have another bug (https://issuetracker.google.com/169868803). There are effort to make all contexts references EGLImage to be shared but then reverted, then individual locks added, but not sure if this is completely fixed. If not, we have a bigger problem to deal with as well.\n\nThe way I am thinking is to let EGLImage have multiple ImageHelper objects, one per shared group. They will share the same VkDeviceMemory. Then We will sync the layout at higher level code, where egl API is called. This way, the vulkan backend is thread safe, EGLImage will behave just like normal texture. You do not have bugs like this. I believe one context write and another context read case there is a clear egl API boundary you have to call. I am not 100% sure on two contexts both read EGLImage case, is it required to have egl API call. As long as there is egl API call requirment, we can do necessary sync at that egl call stack. Just want to throw this idea here, if this bug is not blocking us form shipping, we could wait a bit until we resolve this ImageHelper for EGLImage thread safety issue.",
       "revId": "af1ca4da0316ada41a04e372b34b7e2d897affef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b8d8b9b_3754ae38",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-07T19:01:57Z",
+      "side": 1,
+      "message": "This is the old fix version. New version: https://chromium-review.googlesource.com/c/angle/angle/+/4296014\n\n\u003e Is the bug you try to fix hitting any real usage?\n\nYes. Very long time ago there was crash in some app. My colleague fixed by simply finalizing layout. This fix was enough. I do not remember what app it was. We simply fix bugs without much bureaucracy.\n\nThen I ported his fix to a new ANGLE version and also added finalize for render buffer.\n\nNow prepared this CL. During this process I found that simply finalizing may corrupt RenderPass state if texture that finalizes not the one that used in the RenderPass.\n\n\u003e My understanding is that EGLImage currently also have another bug (https://issuetracker.google.com/169868803). There are effort to make all contexts references EGLImage to be shared but then reverted, then individual locks added, but not sure if this is completely fixed. If not, we have a bigger problem to deal with as well.\n\nYes. I already mentioned that I have solution with mutexes. Just do not have time to prepare CL for review...\nThis CL not only to fix EGLImage problem but also decouple independent share groups with separate mutex.\n\n\u003e The way I am thinking is to let EGLImage have multiple ImageHelper objects, one per shared group. They will share the same VkDeviceMemory. Then We will sync the layout at higher level code, where egl API is called. This way, the vulkan backend is thread safe, EGLImage will behave just like normal texture. You do not have bugs like this. I believe one context write and another context read case there is a clear egl API boundary you have to call. I am not 100% sure on two contexts both read EGLImage case, is it required to have egl API call. As long as there is egl API call requirment, we can do necessary sync at that egl call stack. Just want to throw this idea here, if this bug is not blocking us form shipping, we could wait a bit until we resolve this ImageHelper for EGLImage thread safety issue.\n\nSounds complicated. I do no know how to implement this or what other problems may appear. Maybe try solution with mutexes first and then optimize if needed?",
+      "parentUuid": "34783991_438164e7",
+      "revId": "af1ca4da0316ada41a04e372b34b7e2d897affef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
