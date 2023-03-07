@@ -70,6 +70,24 @@
       "parentUuid": "79a2eada_d6443c33",
       "revId": "a8d87135885de5a63dd559a0935c50202c09f657",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d52a6827_68478aec",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5229,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-07T16:48:58Z",
+      "side": 1,
+      "message": "\u003e and use it here by moving the semaphore out of DeviceScoped and put it in the new object?\n\nThis way you will have 2 local scoped semaphore variables: `DeviceScoped` and `GarbageCollectScoped`. I do not like this.\n\n\u003e I think you can forward declare the destructor out of the class with the vk::Semaphore specialization, then add the implementation in cpp.\n\nThis will work.\n\nAlso can put destructor implementation in CPP and add explicit template instantiation.\n\nWanted a solution without specializations or instantiations...\n\n\u003e That could work too\n\nI like this better than 2 scoped variables.\n\nCurrently I added `rx::RendererReleasable` in the `RendererVk.h` to avoid explicit instantiation.\n\nBut now replacing with:\n```\ntemplate \u003cclass T\u003e\nclass ReleasableResource final : public Resource\n```\nin the `ResourceVk.h`\nimplementation in the CPP with explicit instantiation.",
+      "parentUuid": "c81e519a_19cf7814",
+      "revId": "a8d87135885de5a63dd559a0935c50202c09f657",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
