@@ -85,6 +85,24 @@
       "message": "Thanks for reviewing it",
       "revId": "421265dcb97b1cccabf2c67e8f909b02d10a1e7f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d35c92c_e2f59f8b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-07T14:53:21Z",
+      "side": 1,
+      "message": "That\u0027s good. If you are able to, you could also run the POC in the bug on Chrome with ASAN flags: crbug.com/1411210#c5",
+      "parentUuid": "647a92b0_fdefd285",
+      "revId": "421265dcb97b1cccabf2c67e8f909b02d10a1e7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
