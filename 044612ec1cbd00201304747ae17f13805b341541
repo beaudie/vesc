@@ -91,6 +91,23 @@
       },
       "revId": "044612ec1cbd00201304747ae17f13805b341541",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0c6e0f8_7bf9a7ed",
+        "filename": "src/tests/preprocessor_tests/define_test.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-07T01:18:52Z",
+      "side": 0,
+      "message": "All these removals of `__VERSION__` seem incorrect",
+      "revId": "044612ec1cbd00201304747ae17f13805b341541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

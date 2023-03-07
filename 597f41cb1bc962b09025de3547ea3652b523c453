@@ -43,6 +43,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5d36d1a8_eae491db",
+        "filename": "src/compiler/preprocessor/DirectiveParser.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-07T01:18:52Z",
+      "side": 1,
+      "message": "nit: Suggest adding a `handleVersion` function to `DirectiveParser` to dedup the code. Only `token-\u003elocation` would need to be passed in.",
+      "range": {
+        "startLine": 218,
+        "startChar": 0,
+        "endLine": 222,
+        "endChar": 31
+      },
+      "revId": "597f41cb1bc962b09025de3547ea3652b523c453",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d6a49511_af4525dd",
         "filename": "src/compiler/preprocessor/DirectiveParser.cpp",
         "patchSetId": 2
