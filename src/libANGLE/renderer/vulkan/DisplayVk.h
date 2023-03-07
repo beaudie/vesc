@@ -93,7 +93,8 @@ class ShareGroupVk : public ShareGroupImpl
 
     vk::BufferPool *getDefaultBufferPool(RendererVk *renderer,
                                          VkDeviceSize size,
-                                         uint32_t memoryTypeIndex);
+                                         uint32_t memoryTypeIndex,
+                                         bool isDynamicUsage);
     void pruneDefaultBufferPools(RendererVk *renderer);
     bool isDueForBufferPoolPrune(RendererVk *renderer);
 
@@ -141,7 +142,8 @@ class ShareGroupVk : public ShareGroupImpl
 
     // The pool dedicated for small allocations that uses faster buddy algorithm
     std::unique_ptr<vk::BufferPool> mSmallBufferPool;
-    static constexpr VkDeviceSize kMaxSizeToUseSmallBufferPool = 256;
+    static constexpr VkDeviceSize kMaxStaticBufferSizeToUseSmallBufferPool  = 256;
+    static constexpr VkDeviceSize kMaxDynamicBufferSizeToUseSmallBufferPool = 1024;
 
     // The system time when last pruneEmptyBuffer gets called.
     double mLastPruneTime;

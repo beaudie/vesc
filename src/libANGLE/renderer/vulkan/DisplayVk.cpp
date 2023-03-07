@@ -868,11 +868,13 @@ uint32_t UpdateDescriptorSetsBuilder::flushDescriptorSetUpdates(VkDevice device)
 
 vk::BufferPool *ShareGroupVk::getDefaultBufferPool(RendererVk *renderer,
                                                    VkDeviceSize size,
-                                                   uint32_t memoryTypeIndex)
+                                                   uint32_t memoryTypeIndex,
+                                                   bool isDynamicUsage)
 {
-    if (size <= kMaxSizeToUseSmallBufferPool &&
-        memoryTypeIndex ==
-            renderer->getVertexConversionBufferMemoryTypeIndex(vk::MemoryHostVisibility::Visible))
+    if ((isDynamicUsage && size <= kMaxDynamicBufferSizeToUseSmallBufferPool) ||
+        (!isDynamicUsage && size <= kMaxStaticBufferSizeToUseSmallBufferPool &&
+         memoryTypeIndex ==
+             renderer->getVertexConversionBufferMemoryTypeIndex(vk::MemoryHostVisibility::Visible)))
     {
         if (!mSmallBufferPool)
         {
