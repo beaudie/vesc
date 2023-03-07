@@ -75,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5931cb17_70381da7",
+        "filename": "extensions/EGL_ANGLE_metal_shared_event_sync.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-03-07T03:27:42Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "5daad223_cb8b7733",
+      "range": {
+        "startLine": 102,
+        "startChar": 4,
+        "endLine": 102,
+        "endChar": 31
+      },
+      "revId": "6da398c4d1cabd7ae96140cecddbd8e360058331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "feb246f0_4f7fd64f",
@@ -88,6 +112,30 @@
       "writtenOn": "2023-03-06T20:41:20Z",
       "side": 1,
       "message": "nit: this also applies to eglWaitSync on the GPU timeline, right?",
+      "range": {
+        "startLine": 106,
+        "startChar": 4,
+        "endLine": 106,
+        "endChar": 21
+      },
+      "revId": "6da398c4d1cabd7ae96140cecddbd8e360058331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c806b4a_52d6f046",
+        "filename": "extensions/EGL_ANGLE_metal_shared_event_sync.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-03-07T03:27:42Z",
+      "side": 1,
+      "message": "Yes.\n\nI interpreted \"any eglClientWaitSync commands blocking\" as meaning \"CPU side commands that are blocking waiting on the fence to be signalled\". eglWaitSync doesn\u0027t block the CPU but introduces a wait in the command queue. (This is the same language that EGL_ANDROID_native_fence_sync uses)",
+      "parentUuid": "feb246f0_4f7fd64f",
       "range": {
         "startLine": 106,
         "startChar": 4,
