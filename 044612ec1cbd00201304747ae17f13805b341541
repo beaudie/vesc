@@ -97,6 +97,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "01c5ffe7_7747e307",
+        "filename": "src/compiler/translator/DirectiveHandler.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2023-03-07T19:59:43Z",
+      "side": 0,
+      "message": "I simplified the `IncorrectESSL100Shaders` test in `EXT_clip_cull_distance_test.cpp` to make it more clear what is being tested",
+      "parentUuid": "3d000d5a_4693b647",
+      "range": {
+        "startLine": 257,
+        "startChar": 0,
+        "endLine": 258,
+        "endChar": 49
+      },
+      "revId": "044612ec1cbd00201304747ae17f13805b341541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9f34c5dd_6fd35c6c",
         "filename": "src/tests/compiler_tests/FragDepth_test.cpp",
         "patchSetId": 2
@@ -179,6 +203,30 @@
       "side": 0,
       "message": "These test use GL_OVR_multiview from ESSL 1.00 and expect a successful compile. I could change them expect failure instead?",
       "parentUuid": "d7b74158_32a3727c",
+      "range": {
+        "startLine": 614,
+        "startChar": 37,
+        "endLine": 614,
+        "endChar": 63
+      },
+      "revId": "044612ec1cbd00201304747ae17f13805b341541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3870c9e_ac00aa1f",
+        "filename": "src/tests/compiler_tests/OVR_multiview_test.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2023-03-07T19:59:43Z",
+      "side": 0,
+      "message": "I went ahead and put these back in as `OVRMultiviewVertexShaderTest.InvalidShaderVersion` / `OVRMultiview2VertexShaderTest.InvalidShaderVersion` and made them expect failure",
+      "parentUuid": "488f40a0_c840aa6b",
       "range": {
         "startLine": 614,
         "startChar": 37,
