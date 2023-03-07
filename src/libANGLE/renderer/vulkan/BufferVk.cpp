@@ -267,6 +267,7 @@ BufferVk::BufferVk(const gl::BufferState &state)
       mIsStagingBufferMapped(false),
       mHasValidData(false),
       mIsMappedForWrite(false),
+      mIsDynamicUsage(false),
       mMappedOffset(0),
       mMappedLength(0)
 {}
@@ -394,6 +395,7 @@ angle::Result BufferVk::setDataWithMemoryType(const gl::Context *context,
 {
     ContextVk *contextVk = vk::GetImpl(context);
 
+    mIsDynamicUsage = IsUsageDynamic(usage);
     // Reset the flag since the buffer contents are being reinitialized. If the caller passed in
     // data to fill the buffer, the flag will be updated when the data is copied to the buffer.
     mHasValidData = false;
@@ -1077,7 +1079,8 @@ angle::Result BufferVk::acquireBufferHelper(ContextVk *contextVk, size_t sizeInB
     }
 
     // Allocate the buffer directly
-    ANGLE_TRY(mBuffer.initSuballocation(contextVk, mMemoryTypeIndex, size, alignment));
+    ANGLE_TRY(
+        mBuffer.initSuballocation(contextVk, mMemoryTypeIndex, size, alignment, mIsDynamicUsage));
 
     // Tell the observers (front end) that a new buffer was created, so the necessary
     // dirty bits can be set. This allows the buffer views pointing to the old buffer to

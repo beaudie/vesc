@@ -709,9 +709,12 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     void flushDescriptorSetUpdates();
 
-    vk::BufferPool *getDefaultBufferPool(VkDeviceSize size, uint32_t memoryTypeIndex)
+    vk::BufferPool *getDefaultBufferPool(VkDeviceSize size,
+                                         uint32_t memoryTypeIndex,
+                                         bool isDynamicUsage)
     {
-        return mShareGroupVk->getDefaultBufferPool(mRenderer, size, memoryTypeIndex);
+        return mShareGroupVk->getDefaultBufferPool(mRenderer, size, memoryTypeIndex,
+                                                   isDynamicUsage);
     }
 
     angle::Result allocateStreamedVertexBuffer(size_t attribIndex,
