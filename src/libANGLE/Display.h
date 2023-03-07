@@ -65,7 +65,7 @@ using ThreadSet  = angle::HashSet<Thread *>;
 
 struct DisplayState final : private angle::NonCopyable
 {
-    DisplayState(EGLNativeDisplayType nativeDisplayId);
+    DisplayState(EGLNativeDisplayType nativeDisplayId, angle::GlobalMutex &mutexIn);
     ~DisplayState();
 
     EGLLabelKHR label;
@@ -75,6 +75,7 @@ struct DisplayState final : private angle::NonCopyable
     std::vector<std::string> featureOverridesDisabled;
     bool featuresAllDisabled;
     EGLNativeDisplayType displayId;
+    angle::GlobalMutex *mutex;
 };
 
 class ShareGroup final : angle::NonCopyable
@@ -155,10 +156,13 @@ class Display final : public LabeledObject,
     void addActiveThread(Thread *thread);
     void threadCleanup(Thread *thread);
 
-    static Display *GetDisplayFromDevice(Device *device, const AttributeMap &attribMap);
+    static Display *GetDisplayFromDevice(Device *device,
+                                         const AttributeMap &attribMap,
+                                         angle::GlobalMutex &mutex);
     static Display *GetDisplayFromNativeDisplay(EGLenum platform,
                                                 EGLNativeDisplayType nativeDisplay,
-                                                const AttributeMap &attribMap);
+                                                const AttributeMap &attribMap,
+                                                angle::GlobalMutex &mutex);
     static Display *GetExistingDisplayFromNativeDisplay(EGLNativeDisplayType nativeDisplay);
 
     using EglDisplaySet = angle::HashSet<Display *>;
@@ -350,7 +354,10 @@ class Display final : public LabeledObject,
     egl::Sync *getSync(egl::SyncID syncID);
 
   private:
-    Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDevice);
+    Display(EGLenum platform,
+            EGLNativeDisplayType displayId,
+            Device *eglDevice,
+            angle::GlobalMutex &mutex);
 
     void setAttributes(const AttributeMap &attribMap) { mAttributeMap = attribMap; }
     void setupDisplayPlatform(rx::DisplayImpl *impl);

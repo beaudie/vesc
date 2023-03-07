@@ -353,6 +353,11 @@ void DisplayVk::initSupportedSurfaceFormatColorspaces()
     }
 }
 
+angle::GlobalMutex &DisplayVk::getMutex() const
+{
+    return *mState.mutex;
+}
+
 ContextImpl *DisplayVk::createContext(const gl::State &state,
                                       gl::ErrorSet *errorSet,
                                       const egl::Config *configuration,

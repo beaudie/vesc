@@ -874,6 +874,12 @@ struct FeaturesVk : FeatureSetBase
         "SecondaryCommandPools when using VulkanSecondaryCommandBuffer. ",
         &members,
     };
+
+    FeatureInfo unlockGlobalMutexOnAquireNextImage = {
+        "unlockGlobalMutexOnAquireNextImage", FeatureCategory::VulkanWorkarounds,
+        "When ANGLE is the Android system driver, vkAcquireNextImageKHR can be "
+        "reentrant and cause deadlocks",
+        &members, "http://anglebug.com/6851"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

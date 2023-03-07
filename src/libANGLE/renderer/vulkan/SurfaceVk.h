@@ -354,7 +354,7 @@ class WindowSurfaceVk : public SurfaceVk
     // This method calls vkAcquireNextImageKHR() to acquire the next swapchain image.  It is called
     // when the swapchain is initially created and when present() finds the swapchain out of date.
     // Otherwise, it is scheduled to be called later by deferAcquireNextImage().
-    VkResult acquireNextSwapchainImage(vk::Context *context);
+    VkResult acquireNextSwapchainImage(vk::Context *context, angle::GlobalMutex &unlockMutex);
     // This method is called when a swapchain image is presented.  It schedules
     // acquireNextSwapchainImage() to be called later.
     void deferAcquireNextImage();

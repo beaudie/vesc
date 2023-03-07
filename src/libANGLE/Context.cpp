@@ -456,7 +456,8 @@ Context::Context(egl::Display *display,
                  const EGLenum clientType,
                  const egl::AttributeMap &attribs,
                  const egl::DisplayExtensions &displayExtensions,
-                 const egl::ClientExtensions &clientExtensions)
+                 const egl::ClientExtensions &clientExtensions,
+                 angle::GlobalMutex &mutex)
     : mState(shareContext ? &shareContext->mState : nullptr,
              AllocateOrGetShareGroup(display, shareContext),
              shareTextures,
@@ -506,7 +507,8 @@ Context::Context(egl::Display *display,
       mOverlay(mImplementation.get()),
       mIsExternal(GetIsExternal(attribs)),
       mSaveAndRestoreState(GetSaveAndRestoreState(attribs)),
-      mIsDestroyed(false)
+      mIsDestroyed(false),
+      mMutex(&mutex)
 {
     for (angle::SubjectIndex uboIndex = kUniformBuffer0SubjectIndex;
          uboIndex < kUniformBufferMaxSubjectIndex; ++uboIndex)
