@@ -4505,6 +4505,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT flag.
     ANGLE_FEATURE_CONDITION(&mFeatures, useResetCommandBufferBitForSecondaryPools, isARM);
 
+    // Only Android has potential reentrancy when calling vkAcquireNextImageKHR.
+    ANGLE_FEATURE_CONDITION(&mFeatures, unlockGlobalMutexOnAquireNextImage, IsAndroid());
+
     ApplyFeatureOverrides(&mFeatures, displayVk->getState());
 
     // Disable async command queue when using Vulkan secondary command buffers temporarily to avoid

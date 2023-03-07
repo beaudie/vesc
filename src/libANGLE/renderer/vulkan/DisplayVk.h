@@ -260,6 +260,9 @@ class DisplayVk : public DisplayImpl, public vk::Context
                                                 VkFormat format,
                                                 VkColorSpaceKHR colorspace) const;
 
+    angle::GlobalMutex &getMutex() const;
+    angle::GlobalMutex &getSurfaceMutex() const;
+
   protected:
     void generateExtensions(egl::DisplayExtensions *outExtensions) const override;
 

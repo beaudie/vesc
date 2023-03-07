@@ -133,8 +133,9 @@ HGLRC GL_APIENTRY wglCreateContext(HDC hDc)
     const auto &attribMapDisplay = AttributeMap::CreateFromAttribArray(displayAttributes.data());
     attribMapDisplay.initializeWithoutValidation();
 
-    egl::Display *display =
-        egl::Display::GetDisplayFromNativeDisplay(EGL_PLATFORM_ANGLE_ANGLE, hDc, attribMapDisplay);
+    egl::Display *display = egl::Display::GetDisplayFromNativeDisplay(
+        EGL_PLATFORM_ANGLE_ANGLE, hDc, attribMapDisplay, egl::GetGlobalMutex(),
+        egl::GetGlobalSurfaceMutex());
 
     ANGLE_EGL_TRY_RETURN(thread, display->initialize(), "wglCreateContext", display, nullptr);
 

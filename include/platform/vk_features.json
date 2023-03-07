@@ -1179,6 +1179,15 @@
                 "Use VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT for initializing ",
                 "SecondaryCommandPools when using VulkanSecondaryCommandBuffer. "
             ]
+        },
+        {
+            "name": "unlock_global_mutex_on_aquire_next_image",
+            "category": "Workarounds",
+            "description": [
+                "When ANGLE is the Android system driver, vkAcquireNextImageKHR can be ",
+                "reentrant and cause deadlocks"
+            ],
+            "issue": "http://anglebug.com/6851"
         }
     ]
 }
