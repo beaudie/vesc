@@ -1,0 +1,174 @@
+[submodule "build"]
+	path = build
+	url = https://chromium.googlesource.com/chromium/src/build.git
+[submodule "buildtools"]
+	path = buildtools
+	url = https://chromium.googlesource.com/chromium/src/buildtools.git
+[submodule "buildtools/clang_format/script"]
+	path = buildtools/clang_format/script
+	url = https://chromium.googlesource.com/external/github.com/llvm/llvm-project/clang/tools/clang-format.git
+[submodule "buildtools/third_party/libc++/trunk"]
+	path = buildtools/third_party/libc++/trunk
+	url = https://chromium.googlesource.com/external/github.com/llvm/llvm-project/libcxx.git
+[submodule "buildtools/third_party/libc++abi/trunk"]
+	path = buildtools/third_party/libc++abi/trunk
+	url = https://chromium.googlesource.com/external/github.com/llvm/llvm-project/libcxxabi.git
+[submodule "buildtools/third_party/libunwind/trunk"]
+	path = buildtools/third_party/libunwind/trunk
+	url = https://chromium.googlesource.com/external/github.com/llvm/llvm-project/libunwind.git
+[submodule "testing"]
+	path = testing
+	url = https://chromium.googlesource.com/chromium/src/testing
+[submodule "third_party/abseil-cpp"]
+	path = third_party/abseil-cpp
+	url = https://chromium.googlesource.com/chromium/src/third_party/abseil-cpp
+[submodule "third_party/android_build_tools"]
+	path = third_party/android_build_tools
+	url = https://chromium.googlesource.com/chromium/src/third_party/android_build_tools
+[submodule "third_party/android_deps"]
+	path = third_party/android_deps
+	url = https://chromium.googlesource.com/chromium/src/third_party/android_deps
+[submodule "third_party/android_ndk"]
+	path = third_party/android_ndk
+	url = https://chromium.googlesource.com/android_ndk.git
+[submodule "third_party/android_platform"]
+	path = third_party/android_platform
+	url = https://chromium.googlesource.com/chromium/src/third_party/android_platform
+[submodule "third_party/android_sdk"]
+	path = third_party/android_sdk
+	url = https://chromium.googlesource.com/chromium/src/third_party/android_sdk
+[submodule "third_party/android_sdk/androidx_browser/src"]
+	path = third_party/android_sdk/androidx_browser/src
+	url = https://chromium.googlesource.com/external/gob/android/platform/frameworks/support/browser.git
+[submodule "third_party/astc-encoder/src"]
+	path = third_party/astc-encoder/src
+	url = https://chromium.googlesource.com/external/github.com/ARM-software/astc-encoder
+[submodule "third_party/catapult"]
+	path = third_party/catapult
+	url = https://chromium.googlesource.com/catapult.git
+[submodule "third_party/cherry"]
+	path = third_party/cherry
+	url = https://android.googlesource.com/platform/external/cherry
+[submodule "third_party/colorama/src"]
+	path = third_party/colorama/src
+	url = https://chromium.googlesource.com/external/colorama.git
+[submodule "third_party/depot_tools"]
+	path = third_party/depot_tools
+	url = https://chromium.googlesource.com/chromium/tools/depot_tools.git
+[submodule "third_party/dummy_chromium"]
+	path = third_party/dummy_chromium
+	url = https://chromium.googlesource.com/chromium/src.git
+[submodule "third_party/EGL-Registry/src"]
+	path = third_party/EGL-Registry/src
+	url = https://chromium.googlesource.com/external/github.com/KhronosGroup/EGL-Registry
+[submodule "third_party/flatbuffers/src"]
+	path = third_party/flatbuffers/src
+	url = https://chromium.googlesource.com/external/github.com/google/flatbuffers.git
+[submodule "third_party/gles1_conform"]
+	path = third_party/gles1_conform
+	url = https://chrome-internal.googlesource.com/angle/es-cts.git
+[submodule "third_party/glmark2/src"]
+	path = third_party/glmark2/src
+	url = https://chromium.googlesource.com/external/github.com/glmark2/glmark2
+[submodule "third_party/googletest"]
+	path = third_party/googletest
+	url = https://chromium.googlesource.com/chromium/src/third_party/googletest
+[submodule "third_party/ijar"]
+	path = third_party/ijar
+	url = https://chromium.googlesource.com/chromium/src/third_party/ijar
+[submodule "third_party/libdrm"]
+	path = third_party/libdrm
+	url = https://chromium.googlesource.com/chromiumos/third_party/libdrm
+[submodule "third_party/libjpeg_turbo"]
+	path = third_party/libjpeg_turbo
+	url = https://chromium.googlesource.com/chromium/deps/libjpeg_turbo.git
+[submodule "third_party/libpng/src"]
+	path = third_party/libpng/src
+	url = https://android.googlesource.com/platform/external/libpng
+[submodule "third_party/jinja2"]
+	path = third_party/jinja2
+	url = https://chromium.googlesource.com/chromium/src/third_party/jinja2
+[submodule "third_party/jsoncpp"]
+	path = third_party/jsoncpp
+	url = https://chromium.googlesource.com/chromium/src/third_party/jsoncpp
+[submodule "third_party/markupsafe"]
+	path = third_party/markupsafe
+	url = https://chromium.googlesource.com/chromium/src/third_party/markupsafe
+[submodule "third_party/mesa/src"]
+	path = third_party/mesa/src
+	url = https://chromium.googlesource.com/external/github.com/Mesa3D/mesa
+[submodule "third_party/meson"]
+	path = third_party/meson
+	url = https://chromium.googlesource.com/external/github.com/mesonbuild/meson
+[submodule "third_party/nasm"]
+	path = third_party/nasm
+	url = https://chromium.googlesource.com/chromium/deps/nasm.git
+[submodule "third_party/OpenCL-Docs/src"]
+	path = third_party/OpenCL-Docs/src
+	url = https://chromium.googlesource.com/external/github.com/KhronosGroup/OpenCL-Docs
+[submodule "third_party/OpenCL-ICD-Loader/src"]
+	path = third_party/OpenCL-ICD-Loader/src
+	url = https://chromium.googlesource.com/external/github.com/KhronosGroup/OpenCL-ICD-Loader
+[submodule "third_party/OpenGL-Registry/src"]
+	path = third_party/OpenGL-Registry/src
+	url = https://chromium.googlesource.com/external/github.com/KhronosGroup/OpenGL-Registry
+[submodule "third_party/protobuf"]
+	path = third_party/protobuf
+	url = https://chromium.googlesource.com/chromium/src/third_party/protobuf
+[submodule "third_party/Python-Markdown"]
+	path = third_party/Python-Markdown
+	url = https://chromium.googlesource.com/chromium/src/third_party/Python-Markdown
+[submodule "third_party/rapidjson/src"]
+	path = third_party/rapidjson/src
+	url = https://chromium.googlesource.com/external/github.com/Tencent/rapidjson
+[submodule "third_party/requests/src"]
+	path = third_party/requests/src
+	url = https://chromium.googlesource.com/external/github.com/kennethreitz/requests.git
+[submodule "third_party/six"]
+	path = third_party/six
+	url = https://chromium.googlesource.com/chromium/src/third_party/six
+[submodule "third_party/SwiftShader"]
+	path = third_party/SwiftShader
+	url = https://swiftshader.googlesource.com/SwiftShader
+[submodule "third_party/VK-GL-CTS/src"]
+	path = third_party/VK-GL-CTS/src
+	url = https://chromium.googlesource.com/external/github.com/KhronosGroup/VK-GL-CTS
+[submodule "third_party/vulkan-deps"]
+	path = third_party/vulkan-deps
+	url = https://chromium.googlesource.com/vulkan-deps
+[submodule "third_party/vulkan_memory_allocator"]
+	path = third_party/vulkan_memory_allocator
+	url = https://chromium.googlesource.com/external/github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator
+[submodule "third_party/wayland"]
+	path = third_party/wayland
+	url = https://chromium.googlesource.com/external/anongit.freedesktop.org/git/wayland/wayland
+[submodule "third_party/zlib"]
+	path = third_party/zlib
+	url = https://chromium.googlesource.com/chromium/src/third_party/zlib
+[submodule "tools/android/errorprone_plugin"]
+	path = tools/android/errorprone_plugin
+	url = https://chromium.googlesource.com/chromium/src/tools/android/errorprone_plugin
+[submodule "tools/clang"]
+	path = tools/clang
+	url = https://chromium.googlesource.com/chromium/src/tools/clang.git
+[submodule "tools/mb"]
+	path = tools/mb
+	url = https://chromium.googlesource.com/chromium/src/tools/mb
+[submodule "tools/md_browser"]
+	path = tools/md_browser
+	url = https://chromium.googlesource.com/chromium/src/tools/md_browser
+[submodule "tools/memory"]
+	path = tools/memory
+	url = https://chromium.googlesource.com/chromium/src/tools/memory
+[submodule "tools/perf"]
+	path = tools/perf
+	url = https://chromium.googlesource.com/chromium/src/tools/perf
+[submodule "tools/protoc_wrapper"]
+	path = tools/protoc_wrapper
+	url = https://chromium.googlesource.com/chromium/src/tools/protoc_wrapper
+[submodule "tools/python"]
+	path = tools/python
+	url = https://chromium.googlesource.com/chromium/src/tools/python
+[submodule "tools/valgrind"]
+	path = tools/valgrind
+	url = https://chromium.googlesource.com/chromium/src/tools/valgrind
