@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f747ffc2_e3a0954e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-07T00:55:38Z",
+      "side": 1,
+      "message": "lgtm\n\nGreat work making the tests of these formats comprehensive.",
+      "revId": "b3f4a7d1d09f845f86bb7f875cd4f6110bd67c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c9e37c3_aeb60ad2",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1556,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-07T00:55:38Z",
+      "side": 1,
+      "message": "I was going to ask what happens on iOS but see that it supports only the MTLPixelFormatDepth32Float_Stencil8 format.",
+      "revId": "b3f4a7d1d09f845f86bb7f875cd4f6110bd67c7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
