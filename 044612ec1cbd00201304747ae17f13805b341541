@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "29a8fdf0_5d6395a1",
+        "filename": "src/compiler/preprocessor/Preprocessor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2023-03-07T18:39:22Z",
+      "side": 0,
+      "message": "Yes, I didn\u0027t want to set that variable in 2 places since `TDirectiveHandler::handleVersion` will always be called now.",
+      "parentUuid": "9fc43299_2de399f6",
+      "range": {
+        "startLine": 60,
+        "startChar": 20,
+        "endLine": 60,
+        "endChar": 31
+      },
+      "revId": "044612ec1cbd00201304747ae17f13805b341541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a014be77_5f45307f",
         "filename": "src/compiler/translator/DirectiveHandler.cpp",
         "patchSetId": 2
@@ -49,6 +73,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3d000d5a_4693b647",
+        "filename": "src/compiler/translator/DirectiveHandler.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2023-03-07T18:39:22Z",
+      "side": 0,
+      "message": "I just confirmed this is covered by `angle_unittests --gtest_filter\u003dIncorrectESSL100Shaders/EXTClipCullDistanceForVertexShaderCompileFailureTest.CompileFail*` but it could be more explicit",
+      "parentUuid": "a014be77_5f45307f",
+      "range": {
+        "startLine": 257,
+        "startChar": 0,
+        "endLine": 258,
+        "endChar": 49
+      },
+      "revId": "044612ec1cbd00201304747ae17f13805b341541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9f34c5dd_6fd35c6c",
         "filename": "src/tests/compiler_tests/FragDepth_test.cpp",
         "patchSetId": 2
@@ -60,6 +108,30 @@
       "writtenOn": "2023-03-07T00:56:19Z",
       "side": 0,
       "message": "Nice!  Knocking out untracked TODOs.",
+      "range": {
+        "startLine": 106,
+        "startChar": 0,
+        "endLine": 106,
+        "endChar": 94
+      },
+      "revId": "044612ec1cbd00201304747ae17f13805b341541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f73b384_fbae5c27",
+        "filename": "src/tests/compiler_tests/FragDepth_test.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2023-03-07T18:39:22Z",
+      "side": 0,
+      "message": "Acknowledged",
+      "parentUuid": "9f34c5dd_6fd35c6c",
       "range": {
         "startLine": 106,
         "startChar": 0,
@@ -95,6 +167,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "488f40a0_c840aa6b",
+        "filename": "src/tests/compiler_tests/OVR_multiview_test.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2023-03-07T18:39:22Z",
+      "side": 0,
+      "message": "These test use GL_OVR_multiview from ESSL 1.00 and expect a successful compile. I could change them expect failure instead?",
+      "parentUuid": "d7b74158_32a3727c",
+      "range": {
+        "startLine": 614,
+        "startChar": 37,
+        "endLine": 614,
+        "endChar": 63
+      },
+      "revId": "044612ec1cbd00201304747ae17f13805b341541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b0c6e0f8_7bf9a7ed",
         "filename": "src/tests/preprocessor_tests/define_test.cpp",
         "patchSetId": 2
@@ -106,6 +202,24 @@
       "writtenOn": "2023-03-07T01:18:52Z",
       "side": 0,
       "message": "All these removals of `__VERSION__` seem incorrect",
+      "revId": "044612ec1cbd00201304747ae17f13805b341541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b213791_cc450ccf",
+        "filename": "src/tests/preprocessor_tests/define_test.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2023-03-07T18:39:22Z",
+      "side": 0,
+      "message": "The `DirectiveHandler` is a mock in these unit tests so `__VERSION__` doesn\u0027t get set. I did add tests to ensure that `DirectiveHandler::handleVersion` always gets called, but I\u0027m probably missing a test case in the end2end tests to make sure that it gets properly turned into a `__VERSION__` macro.",
+      "parentUuid": "b0c6e0f8_7bf9a7ed",
       "revId": "044612ec1cbd00201304747ae17f13805b341541",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

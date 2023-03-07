@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3ef9d8fc_eefc9a12",
+        "filename": "src/compiler/preprocessor/DirectiveParser.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2023-03-07T18:39:22Z",
+      "side": 1,
+      "message": "I don\u0027t think so. I\u0027m tracking whether or not I need to call `DirectiveHandler::HandleVersion`. I could pull the bool inside `DirectiveHandler` and treat it as a noop if it is already handled, but that would result in a lot of extra function calls.",
+      "parentUuid": "96b7cad8_bde75f45",
+      "range": {
+        "startLine": 183,
+        "startChar": 0,
+        "endLine": 183,
+        "endChar": 39
+      },
+      "revId": "597f41cb1bc962b09025de3547ea3652b523c453",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5d36d1a8_eae491db",
         "filename": "src/compiler/preprocessor/DirectiveParser.cpp",
         "patchSetId": 2
@@ -54,6 +78,30 @@
       "writtenOn": "2023-03-07T01:18:52Z",
       "side": 1,
       "message": "nit: Suggest adding a `handleVersion` function to `DirectiveParser` to dedup the code. Only `token-\u003elocation` would need to be passed in.",
+      "range": {
+        "startLine": 218,
+        "startChar": 0,
+        "endLine": 222,
+        "endChar": 31
+      },
+      "revId": "597f41cb1bc962b09025de3547ea3652b523c453",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca334db8_9dd0121b",
+        "filename": "src/compiler/preprocessor/DirectiveParser.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2023-03-07T18:39:22Z",
+      "side": 1,
+      "message": "Good idea",
+      "parentUuid": "5d36d1a8_eae491db",
       "range": {
         "startLine": 218,
         "startChar": 0,
@@ -100,6 +148,24 @@
       "writtenOn": "2023-03-07T00:56:19Z",
       "side": 1,
       "message": "I see we don\u0027t have any tests for `GL_EXT_shadow_samplers`, but if you see a quick/easy way to add one, mirroring what the app was doing, it would be great to have a practical example of what this is fixing.",
+      "revId": "597f41cb1bc962b09025de3547ea3652b523c453",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5167730_410716b7",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 17601,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2023-03-07T18:39:22Z",
+      "side": 1,
+      "message": "I think that would be pretty similar to the test I wrote, because it was a compile error instead of something like a graphical problem:\n\nApp behaviour:\n```\n#version 300 es\n\n#ifdef GL_EXT_shadow_samplers\nshadow2DEXT(ShadowMap, coord) // \u003c-- unresolved symbol shadow2DEXT\n#endif\n\n```\nvs the current test\n```\n#version 300 es\n\n#ifdef GL_EXT_shadow_samplers\n#error defined(GL_EXT_shadow_samplers)\n#endif\n\n```",
+      "parentUuid": "335e23c6_786f82eb",
       "revId": "597f41cb1bc962b09025de3547ea3652b523c453",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
