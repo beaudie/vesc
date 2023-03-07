@@ -106,6 +106,24 @@
       "parentUuid": "d52a6827_68478aec",
       "revId": "a8d87135885de5a63dd559a0935c50202c09f657",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d171814_df7af25b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5229,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-07T18:35:28Z",
+      "side": 1,
+      "message": "\u003e FWIW, I meant for GarbageCollectScoped to do either destroy or release, so you won\u0027t have two scoped objects.\n\nSorry...\nI was replying to the original message:\n\n\u003e How about instead having **a scoped class** that garbage collects (and we can probably easily use it elsewhere too), and use it here **by moving the semaphore out of DeviceScoped and put it in the new object?**\n\nHere I replaced \"a scoped class\" with you suggested name - `GarbageCollectScoped`.\n\n\u003e But ok, ReleasableResource is fine.\n\nThis way is more code reuse. Will keep it.",
+      "parentUuid": "1e56cdfa_a06afa35",
+      "revId": "a8d87135885de5a63dd559a0935c50202c09f657",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

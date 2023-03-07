@@ -16,6 +16,24 @@
       "message": "`collectGarbage` already has this if, so you should be able to just call that unconditionally:\n\n```\n        if (hasResourceUseFinished(use))\n        {\n            DestroyGarbage(mDevice, garbageIn...);\n        }\n        else\n        {\n```",
       "revId": "03c16754b18fea445497c8850183ceb416e25a39",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d08d265_9323f487",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-07T18:35:28Z",
+      "side": 1,
+      "message": "Thanks. Was looking at that code but somehow decided to add extra condition.",
+      "parentUuid": "8ba4ee1e_04ce95e5",
+      "revId": "03c16754b18fea445497c8850183ceb416e25a39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
