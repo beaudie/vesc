@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b76b1317_a93676d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-07T05:42:22Z",
+      "side": 1,
+      "message": "Some changes requested, but +2\u0027ing for time zone friendly review.",
+      "revId": "75ddf19388ba86de85031921f0d0b77fb9a95874",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

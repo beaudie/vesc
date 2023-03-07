@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "541380ea_3ca37c9a",
+        "filename": "src/libANGLE/capture/serialize.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 961,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-07T05:42:22Z",
+      "side": 0,
+      "message": "Gert, as we discussed, can you update this with a comment in each, saying why we are skipping RefCount, and point to a bug that describes a way to validate state after all the contexts have been set up?",
+      "range": {
+        "startLine": 961,
+        "startChar": 0,
+        "endLine": 961,
+        "endChar": 55
+      },
+      "revId": "3105ca09daeeaa79d6fe58c5ed4d3b77f04c84de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
