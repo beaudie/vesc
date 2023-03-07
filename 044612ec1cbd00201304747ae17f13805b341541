@@ -145,6 +145,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3f69c867_ae296ff4",
+        "filename": "src/compiler/translator/DirectiveHandler.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2023-03-07T22:05:46Z",
+      "side": 0,
+      "message": "No because we expect it to error-out at `#extension GL_EXT_clip_cull_distance : require`",
+      "parentUuid": "e3c26d81_983fc06d",
+      "range": {
+        "startLine": 257,
+        "startChar": 0,
+        "endLine": 258,
+        "endChar": 49
+      },
+      "revId": "044612ec1cbd00201304747ae17f13805b341541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9f34c5dd_6fd35c6c",
         "filename": "src/tests/compiler_tests/FragDepth_test.cpp",
         "patchSetId": 2
