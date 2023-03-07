@@ -121,6 +121,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e3c26d81_983fc06d",
+        "filename": "src/compiler/translator/DirectiveHandler.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-07T21:57:26Z",
+      "side": 0,
+      "message": "Doesn\u0027t the simplified shader still need to use `gl_CullDistance`?",
+      "parentUuid": "01c5ffe7_7747e307",
+      "range": {
+        "startLine": 257,
+        "startChar": 0,
+        "endLine": 258,
+        "endChar": 49
+      },
+      "revId": "044612ec1cbd00201304747ae17f13805b341541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9f34c5dd_6fd35c6c",
         "filename": "src/tests/compiler_tests/FragDepth_test.cpp",
         "patchSetId": 2
@@ -227,6 +251,30 @@
       "side": 0,
       "message": "I went ahead and put these back in as `OVRMultiviewVertexShaderTest.InvalidShaderVersion` / `OVRMultiview2VertexShaderTest.InvalidShaderVersion` and made them expect failure",
       "parentUuid": "488f40a0_c840aa6b",
+      "range": {
+        "startLine": 614,
+        "startChar": 37,
+        "endLine": 614,
+        "endChar": 63
+      },
+      "revId": "044612ec1cbd00201304747ae17f13805b341541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51c531b9_cfd29462",
+        "filename": "src/tests/compiler_tests/OVR_multiview_test.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-07T21:57:26Z",
+      "side": 0,
+      "message": "LGTM",
+      "parentUuid": "b3870c9e_ac00aa1f",
       "range": {
         "startLine": 614,
         "startChar": 37,
