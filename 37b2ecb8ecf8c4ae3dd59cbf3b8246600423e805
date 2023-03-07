@@ -194,6 +194,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b5d8c815_f6f5f22e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-07T15:31:48Z",
+      "side": 1,
+      "message": "\u003e I was wrong. This should work.\n\nOr maybe I was right)\n\nUnrealistic but fails:\n```\nmake Pbuffer current\ndraw something\n\ncreate some texture\ncall eglBindTexImage()\ndelete that texture -\u003e finalizeImageLayout().\n\nclear color (Pbuffer)\nread pixels -\u003e may read previous draw.\n```\n\nES2_OpenGLES generates `EGL_BAD_ACCESS` in the above test in `eglBindTexImage()`. It should not do that.\n\nThe problem will not happen if use ImageHelperSource(ID).\nAlternatively, we may flush the RenderPass in the `eglBindTexImage()`.",
+      "parentUuid": "68c9e6a8_2d70e37c",
+      "range": {
+        "startLine": 20,
+        "startChar": 26,
+        "endLine": 23,
+        "endChar": 19
+      },
+      "revId": "37b2ecb8ecf8c4ae3dd59cbf3b8246600423e805",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fb268fbe_c060d7e7",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 2
