@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "415b8f78_e643eb72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-03-07T20:02:36Z",
+      "side": 1,
+      "message": "Also included default clip origin state in `ScopedGLState` to not break `BlitGL` workarounds.",
+      "revId": "c7d13bcc5621d8d64b5705405d22cf4169617504",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
