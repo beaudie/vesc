@@ -16,6 +16,24 @@
       "message": "hey there, this CL is crashing win-trace\nhttps://ci.chromium.org/ui/p/angle/builders/ci/win-trace/3527/overview\n\n(unfortunately we don\u0027t run trace on try bots so we only catch this post-submit)\n\nAlso reproducible on Linux:\n\n```\n% src/tests/capture_replay_tests.py --gtest_filter\u003d\"Texture2DNorm16TestES3.TextureNorm16R16RenderTest/ES3_Vulkan_SwiftShader\"\n```\n\nand I noticed this in the logs:\n\n```\nAPI, Error, High: Offset overflows texture dimensions.\nOffset overflows texture dimensions.\nAPI, Error, High: Framebuffer is incomplete: Attachment has zero size.\nfree(): invalid next size (normal)\n```\n\nwhich isn\u0027t there when syncing right before this change",
       "revId": "71f6d54c8d3662693283281651e57c994a10cf08",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "897ce871_048e5203",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1511477
+      },
+      "writtenOn": "2023-03-07T16:03:15Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "844459ce_bf3be666",
+      "revId": "71f6d54c8d3662693283281651e57c994a10cf08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
