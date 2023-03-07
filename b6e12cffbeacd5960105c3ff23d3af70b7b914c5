@@ -509,6 +509,30 @@
       },
       "revId": "b6e12cffbeacd5960105c3ff23d3af70b7b914c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f377809e_a265277f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-07T18:36:16Z",
+      "side": 1,
+      "message": "Replaced with `protectionTypes`.\n\nAlso simplified `ShareGroupVk::unifyContextsPriority()`.",
+      "parentUuid": "8db60a99_e62a1f85",
+      "range": {
+        "startLine": 640,
+        "startChar": 62,
+        "endLine": 640,
+        "endChar": 77
+      },
+      "revId": "b6e12cffbeacd5960105c3ff23d3af70b7b914c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
