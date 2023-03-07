@@ -203,6 +203,7 @@ struct PerfMonitorTriplet
     FN(buffersGhosted)                             \
     FN(vertexArraySyncStateCalls)                  \
     FN(allocateNewBufferBlockCalls)                \
+    FN(suballocationCalls)                         \
     FN(dynamicBufferAllocations)                   \
     FN(framebufferCacheSize)
 
