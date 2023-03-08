@@ -22,6 +22,30 @@
       },
       "revId": "e9b4683699776ad6f808319d02979139d8cc961d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6de202e_ccdbe050",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-03-08T16:38:46Z",
+      "side": 1,
+      "message": "For the most part, coherency is just a property of the hardware, and not a feature that can be enabled. So what does it mean to request the main extension but not the coherent extension?\n\nIf we want to support turning on coherency separately, should we also support turning it off?\n\nHow does the `isCoherent()` method map to emscripten?\n\nIs there a reason to not instead do `glGetBooleanv(GL_PIXEL_LOCAL_STORAGE_COHERENT_ANGLE, \u0026coherent)`?",
+      "parentUuid": "4634477c_e872ccd7",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 23
+      },
+      "revId": "e9b4683699776ad6f808319d02979139d8cc961d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
