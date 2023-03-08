@@ -226,6 +226,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "556a9ed3_d51f3d7f",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-08T17:24:14Z",
+      "side": 1,
+      "message": "Added test. Running bots now with commented fix.\n\nLocal tests on G996B fails with commented fix and works with the fix.\n\nInterestingly, test fails only when *low priority renders and high priority waits fence then samples* (priority inversion). I guess when high priority renders, low priority implicitly waits until work is done in the queue. So maybe this problem not as critical in the real world.\n\nTests on laptop NVIDIA/Intel - works fine without fix.",
+      "parentUuid": "3b869d9f_a6c5838d",
+      "revId": "b6e12cffbeacd5960105c3ff23d3af70b7b914c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9c3bc774_02e007a9",
