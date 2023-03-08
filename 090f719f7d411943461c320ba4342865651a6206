@@ -16,6 +16,23 @@
       "message": "also removing \nthird_party/android_sdk/androidx_browser/src\n\nhttps://chromium-review.googlesource.com/c/chromium/src/+/4316345",
       "revId": "090f719f7d411943461c320ba4342865651a6206",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a7712f6_dec83c66",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-08T17:02:18Z",
+      "side": 1,
+      "message": "FYI regarding Android change",
+      "revId": "090f719f7d411943461c320ba4342865651a6206",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
