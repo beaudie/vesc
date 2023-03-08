@@ -70,6 +70,30 @@
       },
       "revId": "e9b4683699776ad6f808319d02979139d8cc961d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fb9aa32_a704bd19",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-03-08T23:08:35Z",
+      "side": 1,
+      "message": "Let\u0027s go fully in on Option 1 since it\u0027s the path of least resistance, and also matches the ASTC extension, as well as KHR_blend_equation_advanced(_coherent) and EXT_shader_framebuffer_fetch(_noncoherent).\n\n(BTW, `isCoherent()` does not have a WEBGL suffix like the other commands in the WebGL extension. Does that seem correct to you? I could see an argument for either way.)",
+      "parentUuid": "05b88c12_bb956b50",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 23
+      },
+      "revId": "e9b4683699776ad6f808319d02979139d8cc961d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
