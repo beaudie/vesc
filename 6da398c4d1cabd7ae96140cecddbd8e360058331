@@ -163,6 +163,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2146c8f5_2bb28c87",
+        "filename": "src/libANGLE/renderer/metal/SyncMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-03-08T03:21:47Z",
+      "side": 1,
+      "message": "The intension is to translated between the EGLSync and EGLSyncMtl layer.",
+      "parentUuid": "96e722e1_cbcc322f",
+      "revId": "6da398c4d1cabd7ae96140cecddbd8e360058331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2dc2eb9f_ffa8e21d",
@@ -176,6 +194,24 @@
       "writtenOn": "2023-03-06T22:16:14Z",
       "side": 1,
       "message": "If the condition is EGL_SYNC_PRIOR_COMMANDS_COMPLETE_KHR it looks like this is skipped.",
+      "revId": "6da398c4d1cabd7ae96140cecddbd8e360058331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "caa66c17_3cb7ea06",
+        "filename": "src/libANGLE/renderer/metal/SyncMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-03-08T03:21:47Z",
+      "side": 1,
+      "message": "I\u0027ve added tests of for explicitly setting EGL_SYNC_CONDITION attribute at creation time and tightened up the translation go EGL_SYNC_PRIOR_COMMANDS_COMPLETE to GL_SYNC_GPU_COMMANDS_COMPLETE.",
+      "parentUuid": "2dc2eb9f_ffa8e21d",
       "revId": "6da398c4d1cabd7ae96140cecddbd8e360058331",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -197,6 +233,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe21ea36_ff9078e7",
+        "filename": "src/libANGLE/renderer/metal/SyncMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-03-08T03:21:47Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "84c3caaf_8bc872db",
+      "revId": "6da398c4d1cabd7ae96140cecddbd8e360058331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "65e26fc9_744153b2",
@@ -210,6 +264,24 @@
       "writtenOn": "2023-03-06T22:16:14Z",
       "side": 1,
       "message": "Could you use:\n  TODO(djg):\nrather than\n  FIXME:\n?",
+      "revId": "6da398c4d1cabd7ae96140cecddbd8e360058331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1c5f38e_793d79df",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-03-08T03:21:47Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "65e26fc9_744153b2",
       "revId": "6da398c4d1cabd7ae96140cecddbd8e360058331",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -231,6 +303,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "32904c7f_a743a7d0",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-03-08T03:21:47Z",
+      "side": 1,
+      "message": "About the FIXME? It is strange and I think it\u0027s related to changes made in https://chromium-review.googlesource.com/c/angle/angle/+/4000941 but I haven\u0027t had time to investigate yet.",
+      "parentUuid": "5a7ae395_e387f8c2",
+      "revId": "6da398c4d1cabd7ae96140cecddbd8e360058331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1273f65c_e6ae6b62",
@@ -244,6 +334,24 @@
       "writtenOn": "2023-03-06T22:16:14Z",
       "side": 1,
       "message": "Should this comment be associated with the block of code above instead? This block tests that the event\u0027s signaled now.",
+      "revId": "6da398c4d1cabd7ae96140cecddbd8e360058331",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7302bfba_ac29802a",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-03-08T03:21:47Z",
+      "side": 1,
+      "message": "Cut-n-pastitis.",
+      "parentUuid": "1273f65c_e6ae6b62",
       "revId": "6da398c4d1cabd7ae96140cecddbd8e360058331",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
