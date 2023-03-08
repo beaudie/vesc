@@ -67,6 +67,8 @@ class ThreadSynchronization
             {
                 return false;
             }
+            // Expect increasing order to reduce risk of race conditions.
+            ASSERT(*mCurrentStep <= waitStep);
             mCondVar->wait(lock);
         }
 
