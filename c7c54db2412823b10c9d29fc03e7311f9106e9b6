@@ -16,6 +16,24 @@
       "message": "Leaving it as `Any()` and trying to enable both `OES_` and `EXT_` strings would be more in line with the way GL extensions handle dependencies.",
       "revId": "c7c54db2412823b10c9d29fc03e7311f9106e9b6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5906182_8fee8327",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4293,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-03-08T08:32:35Z",
+      "side": 1,
+      "message": "Duh. That\u0027s much cleaner. Thanks Alexey!",
+      "parentUuid": "4822d71c_2b8a7960",
+      "revId": "c7c54db2412823b10c9d29fc03e7311f9106e9b6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
