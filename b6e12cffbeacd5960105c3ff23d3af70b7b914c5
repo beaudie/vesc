@@ -244,6 +244,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b23a652_b4b99833",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-08T18:08:43Z",
+      "side": 1,
+      "message": "\u003e Running bots now with commented fix.\n\nBots run just fine without fix)",
+      "parentUuid": "556a9ed3_d51f3d7f",
+      "revId": "b6e12cffbeacd5960105c3ff23d3af70b7b914c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9c3bc774_02e007a9",
