@@ -46,6 +46,30 @@
       },
       "revId": "e9b4683699776ad6f808319d02979139d8cc961d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05b88c12_bb956b50",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-03-08T17:18:32Z",
+      "side": 1,
+      "message": "\u003e So what does it mean to request the main extension but not the coherent extension?\n\nSince the concept of \"requestable ES extensions\" exists only in ANGLE, it can enforce that enabling certain extensions implicitly enables others.\n\n\u003e How does the `isCoherent()` method map to emscripten?\n\nIt should probably check the returned value and put one or two `GL_ANGLE_` extension strings into its list of ES extensions, assuming that an app relies on ES names.\n\n\u003e Is there a reason to not instead do...\n\nThat\u0027s a high-level extension design question.\n\nOption 1.\nDefine two extension strings in ES (as happened in ES with other extensions) and hide this implementation detail from WebGL via a WebGL-specific API, like `getSupportedProfiles()` in the ASTC extension.\n\nOption 2.\nDefine only one ES extension string and define an implementation-dependent boolean cap (plenty of ES examples as well). Passthrough everything to WebGL as-is.\n\nThe first would be aligned with the existing ASTC example, the second would be much cleaner but may require more work. Mixing both seems  _incoherent_.",
+      "parentUuid": "c6de202e_ccdbe050",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 23
+      },
+      "revId": "e9b4683699776ad6f808319d02979139d8cc961d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
