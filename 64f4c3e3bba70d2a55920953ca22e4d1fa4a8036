@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6bb9ec6_0febb23a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-08T06:46:57Z",
+      "side": 1,
+      "message": "lgtm\n\nIt looks like you aren\u0027t in the committers list so please tell me if you\u0027re ready to CQ this.\n\nThanks for implementing this.",
+      "revId": "64f4c3e3bba70d2a55920953ca22e4d1fa4a8036",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14a63589_3cf92a14",
+        "filename": "src/tests/egl_tests/EGLSyncTestMetalSharedEvent.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 465,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-08T06:46:57Z",
+      "side": 1,
+      "message": "This comment still looks stale to me.",
+      "revId": "64f4c3e3bba70d2a55920953ca22e4d1fa4a8036",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
