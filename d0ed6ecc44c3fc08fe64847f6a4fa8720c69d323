@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c86f96a1_f931c7a0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-08T00:53:46Z",
+      "side": 1,
+      "message": "Mark, can you describe what is different in the CL message?",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 59
+      },
+      "revId": "d0ed6ecc44c3fc08fe64847f6a4fa8720c69d323",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cfabfb9_123f9ae7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-08T00:53:46Z",
+      "side": 1,
+      "message": "Goeff and Mohan - Mark figured out we also needed to pipe down the new surface lock in Geoff\u0027s original CL.\n\nI tested this with Fishdom (the new problem app) and Gardenscapes and Homescapes.  Played about a dozen mini-games in each and they all ran well.",
+      "revId": "d0ed6ecc44c3fc08fe64847f6a4fa8720c69d323",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61e93c3c_e8ee8d73",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-08T00:53:46Z",
+      "side": 1,
+      "message": "Might be clearer to add `global` to the name and helpers, to more clearly differentiate the mutexes.",
+      "range": {
+        "startLine": 382,
+        "startChar": 32,
+        "endLine": 382,
+        "endChar": 37
+      },
+      "revId": "d0ed6ecc44c3fc08fe64847f6a4fa8720c69d323",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
