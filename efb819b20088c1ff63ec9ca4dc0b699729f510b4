@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "169b6f8a_563c1d52",
+        "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1901,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-08T22:03:28Z",
+      "side": 1,
+      "message": "Should this one go away now?",
+      "range": {
+        "startLine": 1900,
+        "startChar": 0,
+        "endLine": 1901,
+        "endChar": 84
+      },
+      "revId": "efb819b20088c1ff63ec9ca4dc0b699729f510b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
