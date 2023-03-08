@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4634477c_e872ccd7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-03-08T12:46:19Z",
+      "side": 1,
+      "message": "I\u0027d suggest another approach.\n\nANGLE:\n- both extensions are requestable;\n- enabling the coherent extension implicitly enables its non-coherent variant.\n\nWebGL:\n- support for the WebGL extension string requires only the non-coherent ANGLE extension name;\n- user-agent requests both ANGLE extensions;\n- `isCoherent()` query result is cached on the user-agent side based on the list of supported extensions.\n\nSimilar case:\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/modules/webgl/webgl_compressed_texture_astc.cc",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 23
+      },
+      "revId": "e9b4683699776ad6f808319d02979139d8cc961d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
