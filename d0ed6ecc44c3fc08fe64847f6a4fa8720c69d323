@@ -58,6 +58,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "10035bf7_6af4ecbe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-03-08T17:36:15Z",
+      "side": 1,
+      "message": "LGTM too. Agree with Mohan\u0027s comments.",
+      "revId": "d0ed6ecc44c3fc08fe64847f6a4fa8720c69d323",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "61e93c3c_e8ee8d73",
@@ -146,6 +163,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "115fc59c_020bede5",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1282,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-03-08T17:36:15Z",
+      "side": 1,
+      "message": "Mostly to match how std::lock_guard looks. It can also be generic for any mutex type.\n\nIdeally ThreadTrackingMutex would just be std::recursive_mutex but std::recursive_mutex offers no method to get the lock count.",
+      "parentUuid": "783dc64f_b6626f60",
+      "range": {
+        "startLine": 1282,
+        "startChar": 4,
+        "endLine": 1282,
+        "endChar": 14
+      },
+      "revId": "d0ed6ecc44c3fc08fe64847f6a4fa8720c69d323",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7b55e6f8_8dbeb247",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 2
@@ -208,6 +249,30 @@
         "startChar": 13,
         "endLine": 2347,
         "endChar": 33
+      },
+      "revId": "d0ed6ecc44c3fc08fe64847f6a4fa8720c69d323",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43843bee_3926fd74",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2347,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-03-08T17:36:15Z",
+      "side": 1,
+      "message": "auto is fine, afaik.",
+      "parentUuid": "8b9d582e_0b457ac3",
+      "range": {
+        "startLine": 2347,
+        "startChar": 8,
+        "endLine": 2347,
+        "endChar": 13
       },
       "revId": "d0ed6ecc44c3fc08fe64847f6a4fa8720c69d323",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
