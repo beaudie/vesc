@@ -212,7 +212,7 @@ bool ValidReadPixelsFormatType(const Context *context,
                     return false;
             }
         case GL_SIGNED_NORMALIZED:
-            return format == GL_RGBA &&
+            return context->getExtensions().renderSnormEXT && format == GL_RGBA &&
                    (type == GL_BYTE || (context->getExtensions().textureNorm16EXT &&
                                         type == GL_SHORT && info->type == GL_SHORT));
 
