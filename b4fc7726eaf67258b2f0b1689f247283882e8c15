@@ -429,6 +429,24 @@
       "parentUuid": "35b5bfac_418f896c",
       "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49a2c203_e996c75a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-09T17:57:59Z",
+      "side": 1,
+      "message": "Added test. Fails on G966B without this CL.\nMaybe later when have time try to write test that will fail on other devices.",
+      "parentUuid": "c4ec65af_6a18373e",
+      "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
