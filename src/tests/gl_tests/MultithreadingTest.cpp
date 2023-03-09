@@ -1052,6 +1052,7 @@ void MultithreadingTestES3::testFenceWithOpenRenderPass(FenceTest test, FlushMet
         Start,
         Thread0CreateFence,
         Thread1WaitFence,
+        Thread0Finish,
         Finish,
         Abort,
     };
@@ -1104,7 +1105,8 @@ void MultithreadingTestES3::testFenceWithOpenRenderPass(FenceTest test, FlushMet
         // Clean up
         EXPECT_EGL_TRUE(eglMakeCurrent(dpy, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
 
-        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Finish));
+        threadSynchronization.nextStep(Step::Thread0Finish);
+        threadSynchronization.waitForStep(Step::Finish);
     };
 
     auto thread1 = [&](EGLDisplay dpy, EGLSurface surface, EGLContext context) {
@@ -1153,6 +1155,7 @@ void MultithreadingTestES3::testFenceWithOpenRenderPass(FenceTest test, FlushMet
         // Clean up
         EXPECT_EGL_TRUE(eglMakeCurrent(dpy, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
 
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Thread0Finish));
         threadSynchronization.nextStep(Step::Finish);
     };
 
@@ -1266,8 +1269,6 @@ TEST_P(MultithreadingTestES3, ThreadCWaitBeforeThreadBSyncFinish)
 
     auto thread1 = [&](EGLDisplay dpy, EGLSurface surface, EGLContext context) {
         ThreadSynchronization<Step> threadSynchronization(&currentStep, &mutex, &condVar);
-
-        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Start));
 
         EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, context));
 
@@ -1420,8 +1421,6 @@ TEST_P(MultithreadingTestES3, UnsynchronizedTextureReads)
     auto thread1 = [&](EGLDisplay dpy, EGLSurface surface, EGLContext context) {
         ThreadSynchronization<Step> threadSynchronization(&currentStep, &mutex, &condVar);
 
-        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Start));
-
         EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, context));
 
         // Wait for thread 0 to set up
@@ -1529,8 +1528,6 @@ TEST_P(MultithreadingTestES3, UnsynchronizedTextureReads2)
 
     auto thread1 = [&](EGLDisplay dpy, EGLSurface surface, EGLContext context) {
         ThreadSynchronization<Step> threadSynchronization(&currentStep, &mutex, &condVar);
-
-        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Start));
 
         EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, context));
 
@@ -1657,8 +1654,6 @@ void main()
     auto thread1 = [&](EGLDisplay dpy, EGLSurface surface, EGLContext context) {
         ThreadSynchronization<Step> threadSynchronization(&currentStep, &mutex, &condVar);
 
-        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Start));
-
         EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, context));
 
         // Wait for thread 0 to set up
@@ -1769,8 +1764,6 @@ void main (void)
 
     auto thread1 = [&](EGLDisplay dpy, EGLSurface surface, EGLContext context) {
         ThreadSynchronization<Step> threadSynchronization(&currentStep, &mutex, &condVar);
-
-        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Start));
 
         EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, context));
 
