@@ -903,12 +903,15 @@ angle::Result BufferVk::stagedUpdate(ContextVk *contextVk,
     // Otherwise, do a GPU copy directly from the given buffer.
     if (dataSource.data != nullptr)
     {
-        uint8_t *mapPointer = nullptr;
+        // Acquire a "new" staging buffer
+        vk::BufferHelper *stagingBuffer;
         ANGLE_TRY(
-            allocStagingBuffer(contextVk, vk::MemoryCoherency::NonCoherent, size, &mapPointer));
+            contextVk->getStagingBuffer()->allocate(contextVk, size, &stagingBuffer, nullptr));
+        uint8_t *mapPointer = stagingBuffer->getMappedMemory();
         memcpy(mapPointer, dataSource.data, size);
-        ANGLE_TRY(flushStagingBuffer(contextVk, offset, size));
-        mIsStagingBufferMapped = false;
+        ANGLE_TRY(stagingBuffer->flush(contextVk->getRenderer()));
+        VkBufferCopy copyRegion = {stagingBuffer->getOffset(), mBuffer.getOffset() + offset, size};
+        ANGLE_TRY(mBuffer.copyFromBuffer(contextVk, stagingBuffer, 1, &copyRegion));
     }
     else
     {

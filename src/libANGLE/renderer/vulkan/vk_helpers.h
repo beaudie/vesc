@@ -2163,6 +2163,7 @@ class ImageHelper final : public Resource, public angle::Subject
                                              const gl::Offset &offset,
                                              const gl::InternalFormat &formatInfo,
                                              const gl::PixelUnpackState &unpack,
+                                             DynamicBuffer *stagingDynamicBuffer,
                                              GLenum type,
                                              const uint8_t *pixels,
                                              const Format &vkFormat,
@@ -2177,6 +2178,7 @@ class ImageHelper final : public Resource, public angle::Subject
                                          const gl::Offset &offset,
                                          const gl::InternalFormat &formatInfo,
                                          const gl::PixelUnpackState &unpack,
+                                         DynamicBuffer *stagingDynamicBuffer,
                                          GLenum type,
                                          const uint8_t *pixels,
                                          const Format &vkFormat,
@@ -2736,6 +2738,7 @@ class ImageHelper final : public Resource, public angle::Subject
     bool canCopyWithComputeForReadPixels(const PackPixelsParams &packPixelsParams,
                                          const angle::Format *readFormat,
                                          ptrdiff_t pixelsOffset);
+    bool canEtcToBcTransCoding(ContextVk *contextVk) const;
 
     // Returns true if source data and actual image format matches except color space differences.
     bool isDataFormatMatchForCopy(angle::FormatID srcDataFormatID) const

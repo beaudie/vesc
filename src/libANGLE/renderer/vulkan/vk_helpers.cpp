@@ -2970,10 +2970,12 @@ void DynamicBuffer::init(RendererVk *renderer,
                          size_t initialSize,
                          bool hostVisible)
 {
-    mUsage       = usage;
-    mHostVisible = hostVisible;
-    mMemoryPropertyFlags =
-        (hostVisible) ? VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT : VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+    mUsage               = usage;
+    mHostVisible         = hostVisible;
+    mMemoryPropertyFlags = (hostVisible) ? VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+                                               VK_MEMORY_PROPERTY_HOST_CACHED_BIT |
+                                               VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
+                                         : VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
 
     // Check that we haven't overridden the initial size of the buffer in setMinimumSizeForTesting.
     if (mInitialSize == 0)
@@ -7249,6 +7251,7 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
                                                       const gl::Offset &offset,
                                                       const gl::InternalFormat &formatInfo,
                                                       const gl::PixelUnpackState &unpack,
+                                                      DynamicBuffer *stagingDynamicBuffer,
                                                       GLenum type,
                                                       const uint8_t *pixels,
                                                       const Format &vkFormat,
@@ -7368,15 +7371,36 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
         }
     }
 
-    std::unique_ptr<RefCounted<BufferHelper>> stagingBuffer =
-        std::make_unique<RefCounted<BufferHelper>>();
-    BufferHelper *currentBuffer = &stagingBuffer->get();
-
+    RefCounted<BufferHelper> *refCountedBuffer = nullptr;
+    BufferHelper *currentBuffer                = nullptr;
     uint8_t *stagingPointer;
     VkDeviceSize stagingOffset;
-    ANGLE_TRY(currentBuffer->allocateForCopyImage(contextVk, allocationSize,
-                                                  MemoryCoherency::NonCoherent, storageFormat.id,
-                                                  &stagingOffset, &stagingPointer));
+
+    // If this could use compute to do transcoding then use its own VkBuffer since DynamicBuffer
+    // does not have required buffer usage bits.
+    if (stagingDynamicBuffer != nullptr && !canEtcToBcTransCoding(contextVk))
+    {
+        size_t imageCopyAlignment = GetImageCopyBufferAlignment(storageFormat.id);
+        // When a buffer is used in copyImage, the offset must be multiple of pixel bytes. This may
+        // result in non-power of two alignment. We have to adjust offset manually.
+        allocationSize = roundUp(allocationSize + imageCopyAlignment, imageCopyAlignment);
+        ANGLE_TRY(
+            stagingDynamicBuffer->allocate(contextVk, allocationSize, &currentBuffer, nullptr));
+        stagingOffset =
+            roundUp(currentBuffer->getOffset(), static_cast<VkDeviceSize>(imageCopyAlignment));
+        stagingPointer =
+            currentBuffer->getMappedMemory() + stagingOffset - currentBuffer->getOffset();
+    }
+    else
+    {
+        std::unique_ptr<RefCounted<BufferHelper>> stagingBuffer =
+            std::make_unique<RefCounted<BufferHelper>>();
+        currentBuffer = &stagingBuffer->get();
+        ANGLE_TRY(currentBuffer->allocateForCopyImage(
+            contextVk, allocationSize, MemoryCoherency::NonCoherent, storageFormat.id,
+            &stagingOffset, &stagingPointer));
+        refCountedBuffer = stagingBuffer.release();
+    }
 
     const uint8_t *source = pixels + static_cast<ptrdiff_t>(inputSkipBytes);
 
@@ -7410,10 +7434,9 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
             copy.imageSubresource.aspectMask     = kPlaneAspectFlags[plane];
             appendSubresourceUpdate(
                 gl::LevelIndex(0),
-                SubresourceUpdate(stagingBuffer.get(), currentBuffer, copy, storageFormat.id));
+                SubresourceUpdate(refCountedBuffer, currentBuffer, copy, storageFormat.id));
         }
 
-        stagingBuffer.release();
         return angle::Result::Continue;
     }
 
@@ -7471,7 +7494,7 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
         stencilCopy.imageOffset                     = copy.imageOffset;
         stencilCopy.imageExtent                     = copy.imageExtent;
         stencilCopy.imageSubresource.aspectMask     = VK_IMAGE_ASPECT_STENCIL_BIT;
-        appendSubresourceUpdate(updateLevelGL, SubresourceUpdate(stagingBuffer.get(), currentBuffer,
+        appendSubresourceUpdate(updateLevelGL, SubresourceUpdate(refCountedBuffer, currentBuffer,
                                                                  stencilCopy, storageFormat.id));
 
         aspectFlags &= ~VK_IMAGE_ASPECT_STENCIL_BIT;
@@ -7495,12 +7518,11 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
     if (aspectFlags)
     {
         copy.imageSubresource.aspectMask = aspectFlags;
-        appendSubresourceUpdate(updateLevelGL, SubresourceUpdate(stagingBuffer.get(), currentBuffer,
+        appendSubresourceUpdate(updateLevelGL, SubresourceUpdate(refCountedBuffer, currentBuffer,
                                                                  copy, storageFormat.id));
         pruneSupersededUpdatesForLevel(contextVk, updateLevelGL, PruneReason::MemoryOptimization);
     }
 
-    stagingBuffer.release();
     return angle::Result::Continue;
 }
 
@@ -7858,6 +7880,7 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
                                                   const gl::Offset &offset,
                                                   const gl::InternalFormat &formatInfo,
                                                   const gl::PixelUnpackState &unpack,
+                                                  DynamicBuffer *stagingDynamicBuffer,
                                                   GLenum type,
                                                   const uint8_t *pixels,
                                                   const Format &vkFormat,
@@ -7870,8 +7893,8 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
                                   &inputRowPitch, &inputDepthPitch, &inputSkipBytes));
 
     ANGLE_TRY(stageSubresourceUpdateImpl(contextVk, index, glExtents, offset, formatInfo, unpack,
-                                         type, pixels, vkFormat, access, inputRowPitch,
-                                         inputDepthPitch, inputSkipBytes));
+                                         stagingDynamicBuffer, type, pixels, vkFormat, access,
+                                         inputRowPitch, inputDepthPitch, inputSkipBytes));
 
     return angle::Result::Continue;
 }
@@ -8456,11 +8479,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
     }
 
     ASSERT(validateSubresourceUpdateRefCountsConsistent());
-    const angle::FormatID &actualformat   = getActualFormatID();
-    const angle::FormatID &intendedFormat = getIntendedFormatID();
-    bool transCoding =
-        contextVk->getRenderer()->getFeatures().supportsComputeTranscodeEtcToBc.enabled &&
-        IsETCFormat(intendedFormat) && IsBCFormat(actualformat);
+    const bool transCoding = canEtcToBcTransCoding(contextVk);
 
     const VkImageAspectFlags aspectFlags = GetFormatAspectFlags(getActualFormat());
 
@@ -8781,6 +8800,16 @@ bool ImageHelper::removeStagedClearUpdatesAndReturnColor(gl::LevelIndex levelGL,
     }
 
     return result;
+}
+
+bool ImageHelper::canEtcToBcTransCoding(ContextVk *contextVk) const
+{
+    const angle::FormatID &actualformat   = getActualFormatID();
+    const angle::FormatID &intendedFormat = getIntendedFormatID();
+    bool transCoding =
+        contextVk->getRenderer()->getFeatures().supportsComputeTranscodeEtcToBc.enabled &&
+        IsETCFormat(intendedFormat) && IsBCFormat(actualformat);
+    return transCoding;
 }
 
 gl::LevelIndex ImageHelper::getLastAllocatedLevel() const
