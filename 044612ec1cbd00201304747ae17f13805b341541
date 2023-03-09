@@ -169,6 +169,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "94a464e2_fc85f87a",
+        "filename": "src/compiler/translator/DirectiveHandler.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-09T16:22:07Z",
+      "side": 0,
+      "message": "That test is confusing... I think I follow though.",
+      "parentUuid": "3f69c867_ae296ff4",
+      "range": {
+        "startLine": 257,
+        "startChar": 0,
+        "endLine": 258,
+        "endChar": 49
+      },
+      "revId": "044612ec1cbd00201304747ae17f13805b341541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9f34c5dd_6fd35c6c",
         "filename": "src/tests/compiler_tests/FragDepth_test.cpp",
         "patchSetId": 2
