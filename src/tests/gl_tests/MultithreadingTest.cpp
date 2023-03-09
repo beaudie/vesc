@@ -1934,6 +1934,175 @@ TEST_P(MultithreadingTestES3, ProgramUseAndDestroyInTwoContexts)
     ASSERT_NE(currentStep, Step::Abort);
 }
 
+// Test that one thread can just call swap buffers while the other thread renders
+TEST_P(MultithreadingTestES3, MultiContextSeparateSwapBuffers)
+{
+    ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading());
+
+    GLProgram programs[6];
+
+    EGLSync sync = 0;
+    EGLint fd;
+
+    std::mutex mutex;
+    std::condition_variable condVar;
+
+    enum class Step
+    {
+        Start,
+        Thread2Render,
+        Thread2Stop,
+        Finish,
+        Abort,
+    };
+    Step currentStep = Step::Start;
+
+    auto thread0 = [&](EGLDisplay dpy, EGLSurface surface, EGLContext context) {
+        ThreadSynchronization<Step> threadSynchronization(&currentStep, &mutex, &condVar);
+
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Start));
+
+        EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, context));
+
+        // Create the programs
+        programs[0].makeRaster(essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());
+        programs[1].makeRaster(essl1_shaders::vs::Simple(), essl1_shaders::fs::Green());
+        programs[2].makeRaster(essl1_shaders::vs::Simple(), essl1_shaders::fs::Blue());
+        programs[3].makeRaster(essl1_shaders::vs::Passthrough(), essl1_shaders::fs::Checkered());
+        programs[4].makeRaster(essl1_shaders::vs::Simple(), essl1_shaders::fs::UniformColor());
+        programs[5].makeRaster(essl1_shaders::vs::Texture2D(), essl1_shaders::fs::Texture2D());
+
+        EXPECT_TRUE(programs[0].valid());
+        EXPECT_TRUE(programs[1].valid());
+        EXPECT_TRUE(programs[2].valid());
+        EXPECT_TRUE(programs[3].valid());
+        EXPECT_TRUE(programs[4].valid());
+        EXPECT_TRUE(programs[5].valid());
+
+        // Render for a bit like you are a normal app
+        // Use them a few times.
+        drawQuad(programs[0], essl1_shaders::PositionAttrib(), 0.0f);
+        EXPECT_EGL_TRUE(eglSwapBuffers(dpy, surface));
+        drawQuad(programs[1], essl1_shaders::PositionAttrib(), 0.0f);
+        EXPECT_EGL_TRUE(eglSwapBuffers(dpy, surface));
+        drawQuad(programs[2], essl1_shaders::PositionAttrib(), 0.0f);
+        EXPECT_EGL_TRUE(eglSwapBuffers(dpy, surface));
+        drawQuad(programs[3], essl1_shaders::PositionAttrib(), 0.0f);
+        EXPECT_EGL_TRUE(eglSwapBuffers(dpy, surface));
+        drawQuad(programs[4], essl1_shaders::PositionAttrib(), 0.0f);
+        EXPECT_EGL_TRUE(eglSwapBuffers(dpy, surface));
+        drawQuad(programs[5], essl1_shaders::PositionAttrib(), 0.0f);
+        EXPECT_EGL_TRUE(eglSwapBuffers(dpy, surface));
+
+        // Draw with red last
+        drawQuad(programs[0], essl1_shaders::PositionAttrib(), 0.0f);
+        EXPECT_EGL_TRUE(eglSwapBuffers(dpy, surface));
+
+        EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+
+        // Now tell the other thread to render
+        threadSynchronization.nextStep(Step::Thread2Render);
+
+        // Now start calling SwapBuffers at a regular period
+        int frameCount = 300;
+        while (frameCount-- > 0)
+        {
+            // Draw at 60Hz
+            if (sync == 0)
+            {
+                INFO() << "CLN: Nothing has rendered, skip swap";
+                angle::Sleep(16);
+                continue;
+            }
+
+            eglClientWaitSync(dpy, sync, 0, EGL_FOREVER);
+            {
+                std::lock_guard<decltype(mMutex)> lock(mMutex);
+                fd = eglDupNativeFenceFDANDROID(dpy, sync);
+                INFO() << "CLN fd=" << fd;
+                eglDestroySyncKHR(dpy, sync);
+                sync = 0;
+            }
+            eglSwapBuffers(dpy, surface);
+            angle::Sleep(16);
+        }
+
+        threadSynchronization.nextStep(Step::Thread2Stop);
+
+        threadSynchronization.waitForStep(Step::Finish);
+
+        // Destroy them
+        eglClientWaitSync(dpy, sync, 0, EGL_FOREVER);
+        programs[0].reset();
+        programs[1].reset();
+        programs[2].reset();
+        programs[3].reset();
+        programs[4].reset();
+        programs[5].reset();
+    };
+
+    auto thread1 = [&](EGLDisplay dpy, EGLSurface surface, EGLContext context) {
+        ThreadSynchronization<Step> threadSynchronization(&currentStep, &mutex, &condVar);
+
+        // Wait for thread 0 to create the programs
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Thread2Render));
+
+        // Issue one make current for rendering
+        EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, context));
+
+        // Now loop and draw for a while
+        int loopCount = 1000;
+        while (loopCount-- > 0)
+        {
+            // Use them a few times.
+            int kLoops = 5;
+            for (int i = 1; i <= kLoops; ++i)
+            {
+                drawQuad(programs[0], essl1_shaders::PositionAttrib(), 0.0f);
+                drawQuad(programs[1], essl1_shaders::PositionAttrib(), 0.0f);
+                drawQuad(programs[2], essl1_shaders::PositionAttrib(), 0.0f);
+                drawQuad(programs[3], essl1_shaders::PositionAttrib(), 0.0f);
+                drawQuad(programs[4], essl1_shaders::PositionAttrib(), 0.0f);
+                drawQuad(programs[5], essl1_shaders::PositionAttrib(), 0.0f);
+                glFlush();
+            }
+
+            {
+                std::lock_guard<decltype(mMutex)> lock(mMutex);
+                sync = eglCreateSyncKHR(dpy, EGL_SYNC_NATIVE_FENCE_ANDROID, nullptr);
+            }
+
+            glFlush();
+        }
+
+        // Draw with red last
+        drawQuad(programs[0], essl1_shaders::PositionAttrib(), 0.0f);
+
+        {
+            std::lock_guard<decltype(mMutex)> lock(mMutex);
+            sync = eglCreateSyncKHR(dpy, EGL_SYNC_NATIVE_FENCE_ANDROID, nullptr);
+        }
+
+        glFlush();
+
+        threadSynchronization.waitForStep(Step::Thread2Stop);
+
+        EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+        EXPECT_EGL_TRUE(eglMakeCurrent(dpy, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
+
+        threadSynchronization.nextStep(Step::Finish);
+    };
+
+    std::array<LockStepThreadFunc, 2> threadFuncs = {
+        std::move(thread0),
+        std::move(thread1),
+    };
+
+    RunLockStepThreads(getEGLWindow(), threadFuncs.size(), threadFuncs.data());
+
+    ASSERT_NE(currentStep, Step::Abort);
+}
+
 ANGLE_INSTANTIATE_TEST(
     MultithreadingTest,
     ES2_OPENGL(),
