@@ -258,6 +258,18 @@ struct FeaturesMtl : FeatureSetBase
     FeatureInfo enableParallelMtlLibraryCompilation = {
         "enableParallelMtlLibraryCompilation", FeatureCategory::MetalFeatures,
         "Compile MTLLibrary in multiple threads.", &members, "http://crbug.com/1385510"};
+
+    FeatureInfo compileMetalShaders = {
+        "compileMetalShaders", FeatureCategory::MetalFeatures,
+        "Compiles metal shaders using command line tools. Requires using --no-sandbox and "
+        "disabling enableParallelMtlLibraryCompilation.",
+        &members, "http://crbug.com/1423136"};
+
+    FeatureInfo loadMetalShadersFromBlobCache = {
+        "loadMetalShadersFromBlobCache", FeatureCategory::MetalFeatures,
+        "Loads metal shaders from blob cache. Useful if compile_metal_shaders was used to generate "
+        "shaders.",
+        &members, "http://crbug.com/1423136"};
 };
 
 inline FeaturesMtl::FeaturesMtl()  = default;
