@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4be91d43_83ab302a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-09T16:04:53Z",
+      "side": 1,
+      "message": "Looks like a couple more spots to tweak:\n```\n$ git grep capture_context\ndoc/CaptureAndReplay.md:`angle_capture_context{id}_frame{n}.cpp`. Each GL Context currently has its own replay sources.\ndoc/CaptureAndReplay.md:`angle_capture_context{id}_frame{n}.angledata`. Replay programs must be able to load data from the\nsamples/capture_replay/.gitignore:angle_capture_context*\n```",
+      "revId": "5ada7d6e34114097dfb4560ee416ca55a385382b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
