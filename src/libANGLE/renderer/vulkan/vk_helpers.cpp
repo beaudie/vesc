@@ -2938,10 +2938,12 @@ void DynamicBuffer::init(RendererVk *renderer,
                          size_t initialSize,
                          bool hostVisible)
 {
-    mUsage       = usage;
-    mHostVisible = hostVisible;
-    mMemoryPropertyFlags =
-        (hostVisible) ? VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT : VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+    mUsage               = usage;
+    mHostVisible         = hostVisible;
+    mMemoryPropertyFlags = (hostVisible) ? VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+                                               VK_MEMORY_PROPERTY_HOST_CACHED_BIT |
+                                               VK_MEMORY_PROPERTY_HOST_COHERENT_BIT
+                                         : VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
 
     // Check that we haven't overridden the initial size of the buffer in setMinimumSizeForTesting.
     if (mInitialSize == 0)

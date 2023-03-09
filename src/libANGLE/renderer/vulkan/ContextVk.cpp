@@ -1283,6 +1283,7 @@ void ContextVk::onDestroy(const gl::Context *context)
     {
         defaultBuffer.destroy(mRenderer);
     }
+    mStagingBuffer.destroy(mRenderer);
 
     for (vk::DynamicQueryPool &queryPool : mQueryPools)
     {
@@ -1415,6 +1416,12 @@ angle::Result ContextVk::initialize()
     {
         buffer.init(mRenderer, kVertexBufferUsage, 1, kDynamicVertexDataSize, true);
     }
+
+    constexpr VkImageUsageFlags kStagingBufferUsageFlags =
+        VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT;
+    constexpr size_t kStagingBufferSize = 1024u * 1024u;  // 1M
+    mStagingBuffer.init(mRenderer, kStagingBufferUsageFlags, mRenderer->getStagingBufferAlignment(),
+                        kStagingBufferSize, true);
 
 #if ANGLE_ENABLE_VULKAN_GPU_TRACE_EVENTS
     angle::PlatformMethods *platform = ANGLEPlatformCurrent();
@@ -7238,6 +7245,8 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore,
         }
         mHasInFlightStreamedVertexBuffers.reset();
     }
+
+    mStagingBuffer.updateQueueSerialAndReleaseInFlightBuffers(this, mLastFlushedQueueSerial);
 
     ASSERT(mWaitSemaphores.empty());
     ASSERT(mWaitSemaphoreStageMasks.empty());
