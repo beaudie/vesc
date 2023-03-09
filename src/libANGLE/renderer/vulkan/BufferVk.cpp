@@ -883,11 +883,15 @@ angle::Result BufferVk::stagedUpdate(ContextVk *contextVk,
                                      size_t offset)
 {
     // Acquire a "new" staging buffer
-    uint8_t *mapPointer = nullptr;
-    ANGLE_TRY(allocStagingBuffer(contextVk, vk::MemoryCoherency::NonCoherent, size, &mapPointer));
+    bool newBufferOut;
+    vk::BufferHelper *stagingBuffer;
+    ANGLE_TRY(
+        contextVk->getStagingBuffer()->allocate(contextVk, size, &stagingBuffer, &newBufferOut));
+
+    uint8_t *mapPointer = stagingBuffer->getMappedMemory();
     memcpy(mapPointer, data, size);
-    ANGLE_TRY(flushStagingBuffer(contextVk, offset, size));
-    mIsStagingBufferMapped = false;
+    VkBufferCopy copyRegion = {stagingBuffer->getOffset(), mBuffer.getOffset() + offset, size};
+    ANGLE_TRY(mBuffer.copyFromBuffer(contextVk, stagingBuffer, 1, &copyRegion));
 
     return angle::Result::Continue;
 }
