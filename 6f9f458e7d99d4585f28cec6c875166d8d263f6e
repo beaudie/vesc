@@ -16,6 +16,23 @@
       "message": "Nice! Were these caught by the fail message you added?",
       "revId": "6f9f458e7d99d4585f28cec6c875166d8d263f6e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30e44e8c_a3808cbf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-03-09T16:00:42Z",
+      "side": 1,
+      "message": "Ahhh yisss, cq caught this:\n\n```\n[ RUN      ] MultithreadingTestES3.ThreadCWaitBeforeThreadBSyncFinish/ES3_Vulkan_SwiftShader_PermanentlySwitchToFramebufferFetchMode_PreferMonolithicPipelinesOverLibraries\nFATAL: MultiThreadSteps.h:73 (waitForStep): waitForStep requires increasing order. mCurrentStep\u003d4, waitStep\u003d3\nangle::PrintStackBacktrace() at crash_handler_posix.cpp:495\n```",
+      "revId": "6f9f458e7d99d4585f28cec6c875166d8d263f6e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
