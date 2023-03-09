@@ -39,7 +39,7 @@ Image11::Image11(Renderer11 *renderer)
 
 Image11::~Image11()
 {
-    disassociateStorage();
+    disassociateStorage(mAssociatedStorage);
     releaseStagingTexture();
 }
 
@@ -200,7 +200,7 @@ angle::Result Image11::recoverFromAssociatedStorage(const gl::Context *context)
         mRecoveredFromStorageCount += 1;
 
         // Reset all the recovery parameters, even if the texture storage association is broken.
-        disassociateStorage();
+        disassociateStorage(mAssociatedStorage);
 
         markDirty();
     }
@@ -208,10 +208,12 @@ angle::Result Image11::recoverFromAssociatedStorage(const gl::Context *context)
     return angle::Result::Continue;
 }
 
-void Image11::disassociateStorage()
+void Image11::disassociateStorage(TextureStorage *storage)
 {
-    if (mRecoverFromStorage)
+    if (mRecoverFromStorage && mAssociatedStorage == storage)
     {
+        ASSERT(mAssociatedStorage);
+
         // Make the texturestorage release the Image11 too
         mAssociatedStorage->disassociateImage(mAssociatedImageIndex, this);
 
@@ -231,7 +233,7 @@ bool Image11::redefine(gl::TextureType type,
     {
         // End the association with the TextureStorage, since that data will be out of date.
         // Also reset mRecoveredFromStorageCount since this Image is getting completely redefined.
-        disassociateStorage();
+        disassociateStorage(mAssociatedStorage);
         mRecoveredFromStorageCount = 0;
 
         mWidth          = size.width;

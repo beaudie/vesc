@@ -88,7 +88,7 @@ class Image11 : public ImageD3D
 
     angle::Result recoverFromAssociatedStorage(const gl::Context *context);
     void verifyAssociatedStorageValid(TextureStorage11 *textureStorageEXT) const;
-    void disassociateStorage();
+    void disassociateStorage(TextureStorage *storage) override;
 
     angle::Result getStagingTexture(const gl::Context *context,
                                     const TextureHelper11 **outStagingTexture,

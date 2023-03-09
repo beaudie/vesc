@@ -90,6 +90,8 @@ class ImageD3D : angle::NonCopyable
                                               const gl::Rectangle &sourceArea,
                                               const gl::Framebuffer *source) = 0;
 
+    virtual void disassociateStorage(TextureStorage *storage) = 0;
+
   protected:
     GLsizei mWidth;
     GLsizei mHeight;

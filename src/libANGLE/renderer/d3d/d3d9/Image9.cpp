@@ -906,4 +906,9 @@ angle::Result Image9::copyFromFramebuffer(const gl::Context *context,
     return copyFromRTInternal(GetImplAs<Context9>(context), destOffset, sourceArea, renderTarget);
 }
 
+void Image9::disassociateStorage(TextureStorage *storage)
+{
+    // D3D9 does not do storage/image association
+}
+
 }  // namespace rx

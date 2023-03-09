@@ -754,26 +754,29 @@ angle::Result TextureD3D::releaseTexStorage(const gl::Context *context,
         return angle::Result::Continue;
     }
 
-    if (mTexStorage->isRenderTarget())
-    {
-        const GLenum storageFormat = getBaseLevelInternalFormat();
-        const size_t storageLevels = mTexStorage->getLevelCount();
+    const GLenum storageFormat = getBaseLevelInternalFormat();
+    const size_t storageLevels = mTexStorage->getLevelCount();
 
-        gl::ImageIndexIterator iterator = imageIterator();
-        while (iterator.hasNext())
+    gl::ImageIndexIterator iterator = imageIterator();
+    while (iterator.hasNext())
+    {
+        const gl::ImageIndex index = iterator.next();
+        ImageD3D *image            = getImage(index);
+        if (image)
         {
-            const gl::ImageIndex index = iterator.next();
-            ImageD3D *image            = getImage(index);
-            const int storageWidth     = std::max(1, getLevelZeroWidth() >> index.getLevelIndex());
-            const int storageHeight    = std::max(1, getLevelZeroHeight() >> index.getLevelIndex());
-            if (image && isImageComplete(index) && image->getWidth() == storageWidth &&
-                image->getHeight() == storageHeight &&
+            const int storageWidth  = std::max(1, getLevelZeroWidth() >> index.getLevelIndex());
+            const int storageHeight = std::max(1, getLevelZeroHeight() >> index.getLevelIndex());
+            if (mTexStorage->isRenderTarget() && isImageComplete(index) &&
+                image->getWidth() == storageWidth && image->getHeight() == storageHeight &&
                 image->getInternalFormat() == storageFormat &&
                 index.getLevelIndex() < static_cast<int>(storageLevels) &&
                 copyStorageToImagesMask[index.getLevelIndex()])
             {
                 ANGLE_TRY(image->copyFromTexStorage(context, index, mTexStorage));
             }
+
+            // Tell the image that the storage is about to be deleted
+            image->disassociateStorage(mTexStorage);
         }
     }
 

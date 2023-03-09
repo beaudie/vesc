@@ -84,6 +84,8 @@ class Image9 : public ImageD3D
                                       const gl::Rectangle &sourceArea,
                                       const gl::Framebuffer *source) override;
 
+    void disassociateStorage(TextureStorage *storage) override;
+
   private:
     angle::Result getSurface(Context9 *context9, IDirect3DSurface9 **outSurface);
 
