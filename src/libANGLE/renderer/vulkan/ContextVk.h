@@ -695,6 +695,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void setDefaultUniformBlocksMinSizeForTesting(size_t minSize);
 
     vk::BufferHelper &getEmptyBuffer() { return mEmptyBuffer; }
+    vk::DynamicBuffer *getStagingBuffer() { return &mStagingBuffer; }
 
     // Keeping track of the buffer copy size. Used to determine when to submit the outside command
     // buffer.
@@ -1602,6 +1603,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     // Storage for default uniforms of ProgramVks and ProgramPipelineVks.
     vk::DynamicBuffer mDefaultUniformStorage;
+
+    // Linearly allocated staging buffer.
+    vk::DynamicBuffer mStagingBuffer;
 
     std::vector<std::string> mCommandBufferDiagnostics;
 

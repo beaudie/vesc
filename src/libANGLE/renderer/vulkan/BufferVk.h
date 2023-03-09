@@ -157,10 +157,6 @@ class BufferVk : public BufferImpl
                                const BufferDataSource &dataSource,
                                size_t size,
                                size_t offset);
-    angle::Result allocStagingBuffer(ContextVk *contextVk,
-                                     vk::MemoryCoherency coherency,
-                                     VkDeviceSize size,
-                                     uint8_t **mapPtr);
     angle::Result flushStagingBuffer(ContextVk *contextVk, VkDeviceSize offset, VkDeviceSize size);
     angle::Result acquireAndUpdate(ContextVk *contextVk,
                                    size_t bufferSize,
@@ -231,13 +227,10 @@ class BufferVk : public BufferImpl
 
     // The staging buffer to aid map operations. This is used when buffers are not host visible or
     // for performance optimization when only a smaller range of buffer is mapped.
-    vk::BufferHelper mStagingBuffer;
+    vk::BufferHelper *mStagingBuffer;
 
     // A cache of converted vertex data.
     std::vector<VertexConversionBuffer> mVertexConversionBuffers;
-
-    // Tracks whether mStagingBuffer has been mapped to user or not
-    bool mIsStagingBufferMapped;
 
     // Tracks if BufferVk object has valid data or not.
     bool mHasValidData;

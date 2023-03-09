@@ -283,7 +283,7 @@ BufferVk::BufferVk(const gl::BufferState &state)
       mClientBuffer(nullptr),
       mMemoryTypeIndex(0),
       mMemoryPropertyFlags(0),
-      mIsStagingBufferMapped(false),
+      mStagingBuffer(nullptr),
       mHasValidData(false),
       mIsMappedForWrite(false),
       mUsageType(BufferUsageType::Static),
@@ -307,10 +307,7 @@ void BufferVk::release(ContextVk *contextVk)
     {
         mBuffer.releaseBufferAndDescriptorSetCache(contextVk);
     }
-    if (mStagingBuffer.valid())
-    {
-        mStagingBuffer.release(renderer);
-    }
+    mStagingBuffer = nullptr;
 
     for (ConversionBuffer &buffer : mVertexConversionBuffers)
     {
@@ -485,52 +482,19 @@ angle::Result BufferVk::copySubData(const gl::Context *context,
                        destOffset, BufferUpdateType::ContentsUpdate);
 }
 
-angle::Result BufferVk::allocStagingBuffer(ContextVk *contextVk,
-                                           vk::MemoryCoherency coherency,
-                                           VkDeviceSize size,
-                                           uint8_t **mapPtr)
-{
-    ASSERT(!mIsStagingBufferMapped);
-
-    if (mStagingBuffer.valid())
-    {
-        if (size <= mStagingBuffer.getSize() &&
-            (coherency == vk::MemoryCoherency::Coherent) == mStagingBuffer.isCoherent() &&
-            contextVk->getRenderer()->hasResourceUseFinished(mStagingBuffer.getResourceUse()))
-        {
-            // If size is big enough and it is idle, then just reuse the existing staging buffer
-            *mapPtr                = mStagingBuffer.getMappedMemory();
-            mIsStagingBufferMapped = true;
-            return angle::Result::Continue;
-        }
-        mStagingBuffer.release(contextVk->getRenderer());
-    }
-
-    ANGLE_TRY(
-        mStagingBuffer.allocateForCopyBuffer(contextVk, static_cast<size_t>(size), coherency));
-    *mapPtr                = mStagingBuffer.getMappedMemory();
-    mIsStagingBufferMapped = true;
-
-    return angle::Result::Continue;
-}
-
 angle::Result BufferVk::flushStagingBuffer(ContextVk *contextVk,
                                            VkDeviceSize offset,
                                            VkDeviceSize size)
 {
     RendererVk *renderer = contextVk->getRenderer();
 
-    ASSERT(mIsStagingBufferMapped);
-    ASSERT(mStagingBuffer.valid());
-
-    if (!mStagingBuffer.isCoherent())
-    {
-        ANGLE_TRY(mStagingBuffer.flush(renderer));
-    }
+    ASSERT(mStagingBuffer != nullptr);
+    ASSERT(mStagingBuffer->valid());
+    ANGLE_TRY(mStagingBuffer->flush(renderer));
 
     // Enqueue a copy command on the GPU.
-    VkBufferCopy copyRegion = {mStagingBuffer.getOffset(), mBuffer.getOffset() + offset, size};
-    ANGLE_TRY(mBuffer.copyFromBuffer(contextVk, &mStagingBuffer, 1, &copyRegion));
+    VkBufferCopy copyRegion = {mStagingBuffer->getOffset(), mBuffer.getOffset() + offset, size};
+    ANGLE_TRY(mBuffer.copyFromBuffer(contextVk, mStagingBuffer, 1, &copyRegion));
 
     return angle::Result::Continue;
 }
@@ -540,15 +504,15 @@ angle::Result BufferVk::handleDeviceLocalBufferMap(ContextVk *contextVk,
                                                    VkDeviceSize size,
                                                    uint8_t **mapPtr)
 {
-    ANGLE_TRY(allocStagingBuffer(contextVk, vk::MemoryCoherency::Coherent, size, mapPtr));
-
+    ANGLE_TRY(contextVk->getStagingBuffer()->allocate(contextVk, static_cast<size_t>(size),
+                                                      &mStagingBuffer, nullptr));
     // Copy data from device local buffer to host visible staging buffer.
-    VkBufferCopy copyRegion = {mBuffer.getOffset() + offset, mStagingBuffer.getOffset(), size};
-    ANGLE_TRY(mStagingBuffer.copyFromBuffer(contextVk, &mBuffer, 1, &copyRegion));
-    ANGLE_TRY(mStagingBuffer.waitForIdle(contextVk, "GPU stall due to mapping device local buffer",
-                                         RenderPassClosureReason::DeviceLocalBufferMap));
-    // Because the buffer is coherent, no need to call invalidate here.
-
+    VkBufferCopy copyRegion = {mBuffer.getOffset() + offset, mStagingBuffer->getOffset(), size};
+    ANGLE_TRY(mStagingBuffer->copyFromBuffer(contextVk, &mBuffer, 1, &copyRegion));
+    ANGLE_TRY(mStagingBuffer->waitForIdle(contextVk, "GPU stall due to mapping device local buffer",
+                                          RenderPassClosureReason::DeviceLocalBufferMap));
+    ANGLE_TRY(mStagingBuffer->invalidate(contextVk->getRenderer()));
+    *mapPtr = mStagingBuffer->getMappedMemory();
     return angle::Result::Continue;
 }
 
@@ -716,8 +680,10 @@ angle::Result BufferVk::mapRangeImpl(ContextVk *contextVk,
 
     if (smallMapRange && rangeInvalidate)
     {
-        ANGLE_TRY(allocStagingBuffer(contextVk, vk::MemoryCoherency::NonCoherent,
-                                     static_cast<size_t>(length), mapPtrBytes));
+        vk::BufferHelper *stagingBuffer;
+        ANGLE_TRY(contextVk->getStagingBuffer()->allocate(contextVk, static_cast<size_t>(length),
+                                                          &stagingBuffer, nullptr));
+        *mapPtrBytes = stagingBuffer->getMappedMemory();
         return angle::Result::Continue;
     }
 
@@ -748,16 +714,14 @@ angle::Result BufferVk::unmapImpl(ContextVk *contextVk)
 {
     ASSERT(mBuffer.valid());
 
-    if (mIsStagingBufferMapped)
+    if (mStagingBuffer != nullptr)
     {
-        ASSERT(mStagingBuffer.valid());
         // The buffer is device local or optimization of small range map.
         if (mIsMappedForWrite)
         {
             ANGLE_TRY(flushStagingBuffer(contextVk, mMappedOffset, mMappedLength));
         }
-
-        mIsStagingBufferMapped = false;
+        mStagingBuffer = nullptr;
     }
     else
     {
@@ -903,12 +867,15 @@ angle::Result BufferVk::stagedUpdate(ContextVk *contextVk,
     // Otherwise, do a GPU copy directly from the given buffer.
     if (dataSource.data != nullptr)
     {
-        uint8_t *mapPointer = nullptr;
+        // Acquire a "new" staging buffer
+        vk::BufferHelper *stagingBuffer;
         ANGLE_TRY(
-            allocStagingBuffer(contextVk, vk::MemoryCoherency::NonCoherent, size, &mapPointer));
+            contextVk->getStagingBuffer()->allocate(contextVk, size, &stagingBuffer, nullptr));
+        uint8_t *mapPointer = stagingBuffer->getMappedMemory();
         memcpy(mapPointer, dataSource.data, size);
-        ANGLE_TRY(flushStagingBuffer(contextVk, offset, size));
-        mIsStagingBufferMapped = false;
+        ANGLE_TRY(stagingBuffer->flush(contextVk->getRenderer()));
+        VkBufferCopy copyRegion = {stagingBuffer->getOffset(), mBuffer.getOffset() + offset, size};
+        ANGLE_TRY(mBuffer.copyFromBuffer(contextVk, stagingBuffer, 1, &copyRegion));
     }
     else
     {
