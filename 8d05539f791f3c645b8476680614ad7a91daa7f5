@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afebf5f3_f216e1a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-09T02:29:52Z",
+      "side": 1,
+      "message": "Good point, thanks for this log",
+      "revId": "8d05539f791f3c645b8476680614ad7a91daa7f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1c4f807_e54d998e",
+        "filename": "src/tests/test_utils/MultiThreadSteps.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-09T02:29:52Z",
+      "side": 1,
+      "message": "... and deadlock",
+      "revId": "8d05539f791f3c645b8476680614ad7a91daa7f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
