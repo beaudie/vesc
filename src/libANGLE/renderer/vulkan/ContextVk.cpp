@@ -889,7 +889,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mInitialContextPriority(renderer->getDriverPriority(GetContextPriority(state))),
       mContextPriority(mInitialContextPriority),
       mProtectionType(vk::ConvertProtectionBoolToType(state.hasProtectedContent())),
-      mShareGroupVk(vk::GetImpl(state.getShareGroup()))
+      mShareGroupVk(vk::GetImpl(state.getShareGroup())),
+      mIsMutableTextureFlushPending(false)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::ContextVk");
     memset(&mClearColorValue, 0, sizeof(mClearColorValue));
@@ -6961,6 +6962,20 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore,
     // semaphores.
     ANGLE_TRY(flushOutsideRenderPassCommands());
 
+    // If another context has pending mutable texture updates, its outside RP command buffer will be
+    // flushed as well.
+    if (isEligibleForMutableTextureFlush())
+    {
+        for (ContextVk *ctx : getShareGroup()->getContexts())
+        {
+            if (ctx == this || !ctx->mIsMutableTextureFlushPending)
+            {
+                continue;
+            }
+            ANGLE_TRY(ctx->flushOutsideRenderPassCommands());
+        }
+    }
+
     if (mLastFlushedQueueSerial == mLastSubmittedQueueSerial)
     {
         // We have to do empty submission...
@@ -7559,6 +7574,7 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
 
     ANGLE_TRY(mRenderer->flushOutsideRPCommands(this, getProtectionType(), mContextPriority,
                                                 &mOutsideRenderPassCommands));
+    mIsMutableTextureFlushPending = false;
 
     if (mRenderPassCommands->started() && mOutsideRenderPassSerialFactory.empty())
     {
