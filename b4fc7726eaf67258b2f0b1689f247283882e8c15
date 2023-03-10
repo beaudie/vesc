@@ -555,6 +555,24 @@
       "parentUuid": "d7b0cf2f_3f00d6cf",
       "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eef23706_cf24622c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-10T18:51:21Z",
+      "side": 1,
+      "message": "Thanks for checking. G996B also runs fine all tests.\n\nProblem was with `GL_TIMESTAMP_EXT` (no additional details):\n```\n// This should force \"flushToPrimary()\"\nGLuint query;\nglGenQueries(1, \u0026query);\nglQueryCounterEXT(query, GL_TIMESTAMP_EXT);\nglDeleteQueries(1, \u0026query);\n```\n\nReplacing with `GL_TIME_ELAPSED_EXT` for the same purpose has no problem.\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/4328278/3..4/src/tests/gl_tests/MultithreadingTest.cpp",
+      "parentUuid": "271bd5a0_ded7a580",
+      "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
