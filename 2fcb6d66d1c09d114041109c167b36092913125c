@@ -16,6 +16,23 @@
       "message": "👍 I think this is quite reasonable at this point",
       "revId": "2fcb6d66d1c09d114041109c167b36092913125c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e0665d7_40d0cb2d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-10T17:49:30Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "2fcb6d66d1c09d114041109c167b36092913125c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
