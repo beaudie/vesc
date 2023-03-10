@@ -16,6 +16,142 @@
       "message": "Adding Ken as well, who might have some opinions about this change.\n\nI think all the concerns are resolved now. If so, can we land?",
       "revId": "497caf87ee1bb6996e41ece29de5d660559f2b95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a96f61cf_d07d3603",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-10T00:58:15Z",
+      "side": 1,
+      "message": "lgtm+2 with a few minor comments.",
+      "revId": "497caf87ee1bb6996e41ece29de5d660559f2b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6a16593_b0fe802c",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 845,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-10T00:58:15Z",
+      "side": 1,
+      "message": "Note that you\u0027ll need to replicate this extension enabling behavior at the WebGL extension level in Blink, too, if you want to avoid unexpected surprises at the WebGL level. Also please document, in the WebGL extension draft, which extensions are implicitly enabled.",
+      "revId": "497caf87ee1bb6996e41ece29de5d660559f2b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30f82c01_52b95d8f",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3566,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-10T00:58:15Z",
+      "side": 1,
+      "message": "Is the new code in the right place here? Just reading this and not delving too deeply, it looks like reinitializeAfterExtensionsChanged should be called last.",
+      "revId": "497caf87ee1bb6996e41ece29de5d660559f2b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f73337a5_759dd97b",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-10T00:58:15Z",
+      "side": 1,
+      "message": "Is this change correct / needed? Since this extension\u0027s supposed to be enabled implicitly along with GL_ANGLE_shader_pixel_local_storage, it seems to me that quering it via IsGLExtensionEnabled is more correct.",
+      "revId": "497caf87ee1bb6996e41ece29de5d660559f2b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdaff505_30a9a22b",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1167,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-10T00:58:15Z",
+      "side": 1,
+      "message": "Same question here.",
+      "revId": "497caf87ee1bb6996e41ece29de5d660559f2b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09c59297_eb13be4b",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1799,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-10T00:58:15Z",
+      "side": 1,
+      "message": "Same question here.",
+      "revId": "497caf87ee1bb6996e41ece29de5d660559f2b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecceeb7b_452dfc8c",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1939,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-10T00:58:15Z",
+      "side": 1,
+      "message": "Same question.",
+      "revId": "497caf87ee1bb6996e41ece29de5d660559f2b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d828c25_33f005a3",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2200,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-10T00:58:15Z",
+      "side": 1,
+      "message": "Same question here.",
+      "revId": "497caf87ee1bb6996e41ece29de5d660559f2b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
