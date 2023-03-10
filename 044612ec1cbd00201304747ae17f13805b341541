@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8491161f_13b2df33",
+        "filename": "src/compiler/preprocessor/Preprocessor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2023-03-10T17:29:03Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "29a8fdf0_5d6395a1",
+      "range": {
+        "startLine": 60,
+        "startChar": 20,
+        "endLine": 60,
+        "endChar": 31
+      },
+      "revId": "044612ec1cbd00201304747ae17f13805b341541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a014be77_5f45307f",
@@ -181,6 +205,30 @@
       "side": 0,
       "message": "That test is confusing... I think I follow though.",
       "parentUuid": "3f69c867_ae296ff4",
+      "range": {
+        "startLine": 257,
+        "startChar": 0,
+        "endLine": 258,
+        "endChar": 49
+      },
+      "revId": "044612ec1cbd00201304747ae17f13805b341541",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8021d3ee_17e4cda8",
+        "filename": "src/compiler/translator/DirectiveHandler.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2023-03-10T17:29:03Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "94a464e2_fc85f87a",
       "range": {
         "startLine": 257,
         "startChar": 0,
