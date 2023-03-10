@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16952739_196e8cb8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-10T15:11:16Z",
+      "side": 1,
+      "message": "The test you fixed is good to know exists for `glMapBufferRange`, can you please make sure there\u0027s also one for `glBufferSubData`? It\u0027s a very specific pattern",
+      "range": {
+        "startLine": 15,
+        "startChar": 24,
+        "endLine": 16,
+        "endChar": 26
+      },
+      "revId": "da55c2bea5dd72b128e4434389703d67ed634d1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
