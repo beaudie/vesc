@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07718f8d_0ef22f49",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 449,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-10T15:08:17Z",
+      "side": 1,
+      "message": "Do we want to allow smaller size updates to continue without releasing the buffer? Then when the buffer is resized back up we could continue reusing the storage.",
+      "revId": "b0194b95607392da2a5882169ba2897fa09bf8b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f72412f9_a7e79091",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-10T15:08:17Z",
+      "side": 1,
+      "message": "nit: move to helper function so it can return true right away and avoid the rest of the checks.",
+      "range": {
+        "startLine": 420,
+        "startChar": 0,
+        "endLine": 453,
+        "endChar": 9
+      },
+      "revId": "b0194b95607392da2a5882169ba2897fa09bf8b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c6b0ab0_72cfa513",
+        "filename": "src/tests/gl_tests/BufferDataTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1288,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-10T15:08:17Z",
+      "side": 1,
+      "message": "This is not a correct GL test, so this is the wrong place for it (hence the awkward suppression in capture/replay expectations).\n\nYou can make it a proper test by doing this:\n\n- Move it to VulkanPerformanceCounterTests\n- Add/use a counter that counts allocations\n- Verify counter hasn\u0027t changed after the above sequence\n- Verify contents now, knowing that indeed there were no counter changes\n\nCapture/replay hopefully knows to disable the perf counters extension and not run these tests because otherwise it\u0027s very easy for it to break those tests.",
+      "revId": "b0194b95607392da2a5882169ba2897fa09bf8b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
