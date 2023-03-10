@@ -266,6 +266,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d44cb325_2b7e2b6d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-10T14:50:29Z",
+      "side": 1,
+      "message": "Comparing values in `hasImage()` SGTM",
+      "parentUuid": "c11684fd_07b3191c",
+      "range": {
+        "startLine": 20,
+        "startChar": 26,
+        "endLine": 23,
+        "endChar": 19
+      },
+      "revId": "37b2ecb8ecf8c4ae3dd59cbf3b8246600423e805",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fb268fbe_c060d7e7",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 2
