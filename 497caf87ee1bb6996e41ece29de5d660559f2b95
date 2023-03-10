@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da6bc044_2dbdec16",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 845,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-03-10T08:31:17Z",
+      "side": 1,
+      "message": "Ack. Made a note in my current branch on the Khronos repo",
+      "parentUuid": "f6a16593_b0fe802c",
+      "revId": "497caf87ee1bb6996e41ece29de5d660559f2b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "30f82c01_52b95d8f",
@@ -65,6 +83,24 @@
       "writtenOn": "2023-03-10T00:58:15Z",
       "side": 1,
       "message": "Is the new code in the right place here? Just reading this and not delving too deeply, it looks like reinitializeAfterExtensionsChanged should be called last.",
+      "revId": "497caf87ee1bb6996e41ece29de5d660559f2b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d768cbd_6774723b",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3566,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-03-10T08:31:17Z",
+      "side": 1,
+      "message": "I think this was technically safe because the following `requestExtension` calls would also call `reinitializeAfterExtensionsChanged`. But I agree it feels cleaner to have it at the end of the function. I was worried about infinite recursion if we didn\u0027t update the extension strings first, but the above early return halts it.",
+      "parentUuid": "30f82c01_52b95d8f",
       "revId": "497caf87ee1bb6996e41ece29de5d660559f2b95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -86,6 +122,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "92e60830_967bc9e0",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-03-10T08:31:17Z",
+      "side": 1,
+      "message": "Good catch. Updated.",
+      "parentUuid": "f73337a5_759dd97b",
+      "revId": "497caf87ee1bb6996e41ece29de5d660559f2b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fdaff505_30a9a22b",
@@ -99,6 +153,24 @@
       "writtenOn": "2023-03-10T00:58:15Z",
       "side": 1,
       "message": "Same question here.",
+      "revId": "497caf87ee1bb6996e41ece29de5d660559f2b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "236b49e4_158f9dc0",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1167,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-03-10T08:31:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fdaff505_30a9a22b",
       "revId": "497caf87ee1bb6996e41ece29de5d660559f2b95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -120,6 +192,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b3fd265_c90dec5d",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1799,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-03-10T08:31:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09c59297_eb13be4b",
+      "revId": "497caf87ee1bb6996e41ece29de5d660559f2b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ecceeb7b_452dfc8c",
@@ -137,6 +227,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f9211c4_0a11cd65",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1939,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-03-10T08:31:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ecceeb7b_452dfc8c",
+      "revId": "497caf87ee1bb6996e41ece29de5d660559f2b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d828c25_33f005a3",
@@ -150,6 +258,24 @@
       "writtenOn": "2023-03-10T00:58:15Z",
       "side": 1,
       "message": "Same question here.",
+      "revId": "497caf87ee1bb6996e41ece29de5d660559f2b95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "744da9f0_4133e1a7",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2200,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-03-10T08:31:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d828c25_33f005a3",
       "revId": "497caf87ee1bb6996e41ece29de5d660559f2b95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
