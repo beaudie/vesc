@@ -640,13 +640,12 @@ EGLBoolean SwapBuffersWithDamageKHR(Thread *thread,
 
 EGLBoolean PrepareSwapBuffersANGLE(EGLDisplay dpy, EGLSurface surface)
 {
-    ANGLE_SCOPED_GLOBAL_SURFACE_LOCK();
-
     egl::Display *dpyPacked = PackParam<egl::Display *>(dpy);
     SurfaceID surfacePacked = PackParam<SurfaceID>(surface);
     Thread *thread          = egl::GetCurrentThread();
     Surface *surfacePtr     = nullptr;
     {
+        ANGLE_SCOPED_GLOBAL_SURFACE_LOCK();
         ANGLE_SCOPED_GLOBAL_LOCK();
 
         EGL_EVENT(PrepareSwapBuffersANGLE, "dpy = 0x%016" PRIxPTR ", surface = 0x%016" PRIxPTR "",
