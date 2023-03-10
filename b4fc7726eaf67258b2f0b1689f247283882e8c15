@@ -537,6 +537,24 @@
       "parentUuid": "5cb6bfff_b96581cd",
       "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "271bd5a0_ded7a580",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-10T16:08:03Z",
+      "side": 1,
+      "message": "Your best bet would be to either use a Pixel 4 locally, or `printf` all over the place and see what you get out of the bot run (you can use the temp CL for experiments).\n\nHowever, I just checked and your tests seem to pass on Pixel 6 just fine. It really looks like a Qualcomm driver bug TBH, not even a GL backend bug.",
+      "parentUuid": "d7b0cf2f_3f00d6cf",
+      "revId": "b4fc7726eaf67258b2f0b1689f247283882e8c15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
