@@ -753,6 +753,7 @@ angle::Result TextureUpload::onMutableTextureUpload(ContextVk *contextVk, Textur
         ANGLE_TRY(mPrevUploadedMutableTexture->ensureImageInitialized(
             contextVk, ImageMipLevels::FullMipChain));
         contextVk->getPerfCounters().mutableTexturesUploaded++;
+        contextVk->setMutableTextureFlushPending();
     }
 
     // Update the mutable texture pointer with the new pointer for the next potential flush.
