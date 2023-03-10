@@ -2239,6 +2239,12 @@ TEST_P(MultithreadingTestES3, RenderThenSampleInNewContextWithDifferentPriority)
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE);
 
+        // This should force "flushToPrimary()" in "glEndQuery()"
+        GLuint query;
+        glGenQueries(1, &query);
+        glBeginQuery(GL_TIME_ELAPSED_EXT, query);
+        ASSERT_GL_NO_ERROR();
+
         // Simulate heavy work...
         glUseProgram(redProgram);
         for (int j = 0; j < 1000; ++j)
@@ -2251,10 +2257,7 @@ TEST_P(MultithreadingTestES3, RenderThenSampleInNewContextWithDifferentPriority)
         glUseProgram(greenProgram);
         drawQuad(greenProgram, essl1_shaders::PositionAttrib(), 0.5f);
 
-        // This should force "flushToPrimary()"
-        GLuint query;
-        glGenQueries(1, &query);
-        glQueryCounterEXT(query, GL_TIMESTAMP_EXT);
+        glEndQuery(GL_TIME_ELAPSED_EXT);
         glDeleteQueries(1, &query);
         ASSERT_GL_NO_ERROR();
 
