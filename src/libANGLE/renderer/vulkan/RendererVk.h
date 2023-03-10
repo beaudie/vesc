@@ -382,16 +382,17 @@ class RendererVk : angle::NonCopyable
         }
         else
         {
-            std::unique_lock<std::mutex> lock(mGarbageMutex);
+            std::unique_lock<std::mutex> lock(mGarbageEnqueueMutex);
+            vk::SharedBufferSuballocationGarbage garbage(use, std::move(suballocation),
+                                                         std::move(buffer));
             if (hasResourceUseSubmitted(use))
             {
                 mSuballocationGarbageSizeInBytes += suballocation.getSize();
-                mSuballocationGarbage.emplace(use, std::move(suballocation), std::move(buffer));
+                mSuballocationGarbage.push(std::move(garbage));
             }
             else
             {
-                mPendingSubmissionSuballocationGarbage.emplace(use, std::move(suballocation),
-                                                               std::move(buffer));
+                mPendingSubmissionSuballocationGarbage.push(std::move(garbage));
             }
         }
     }
@@ -870,10 +871,11 @@ class RendererVk : angle::NonCopyable
     // own dedicated garbage list for performance optimization since they tend to be the most
     // common garbage objects. All these four groups of garbage share the same mutex lock.
     std::mutex mGarbageMutex;
-    vk::SharedGarbageList mSharedGarbage;
-    vk::SharedGarbageList mPendingSubmissionGarbage;
-    vk::SharedBufferSuballocationGarbageList mSuballocationGarbage;
-    vk::SharedBufferSuballocationGarbageList mPendingSubmissionSuballocationGarbage;
+    angle::FixedQueue<vk::SharedGarbage, 4096> mSharedGarbage;
+    angle::FixedQueue<vk::SharedBufferSuballocationGarbage, 4096> mSuballocationGarbage;
+    std::mutex mGarbageEnqueueMutex;
+    std::queue<vk::SharedGarbage> mPendingSubmissionGarbage;
+    std::queue<vk::SharedBufferSuballocationGarbage> mPendingSubmissionSuballocationGarbage;
     // Total suballocation garbage size in bytes.
     VkDeviceSize mSuballocationGarbageSizeInBytes;
 

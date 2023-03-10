@@ -10,6 +10,7 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_SUBALLOCATION_H_
 #define LIBANGLE_RENDERER_VULKAN_SUBALLOCATION_H_
 
+#include "common/FixedQueue.h"
 #include "common/debug.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/serial_utils.h"
@@ -172,7 +173,7 @@ class BufferSuballocation final : angle::NonCopyable
     VkDeviceSize mSize;
 };
 
-class SharedBufferSuballocationGarbage
+class SharedBufferSuballocationGarbage final : angle::NonCopyable
 {
   public:
     SharedBufferSuballocationGarbage() = default;
@@ -187,6 +188,13 @@ class SharedBufferSuballocationGarbage
         : mLifetime(use), mSuballocation(std::move(suballocation)), mBuffer(std::move(buffer))
     {}
     ~SharedBufferSuballocationGarbage() = default;
+    SharedBufferSuballocationGarbage &operator=(SharedBufferSuballocationGarbage &&other)
+    {
+        std::swap(mLifetime, other.mLifetime);
+        std::swap(mSuballocation, other.mSuballocation);
+        std::swap(mBuffer, other.mBuffer);
+        return *this;
+    }
 
     bool destroyIfComplete(RendererVk *renderer);
     bool hasResourceUseSubmitted(RendererVk *renderer) const;
@@ -198,7 +206,6 @@ class SharedBufferSuballocationGarbage
     BufferSuballocation mSuballocation;
     Buffer mBuffer;
 };
-using SharedBufferSuballocationGarbageList = std::queue<SharedBufferSuballocationGarbage>;
 
 // BufferBlock implementation.
 ANGLE_INLINE VkMemoryPropertyFlags BufferBlock::getMemoryPropertyFlags() const

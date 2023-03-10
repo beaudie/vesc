@@ -4788,8 +4788,11 @@ void RendererVk::pruneOrphanedBufferBlocks()
 
 void RendererVk::cleanupGarbage()
 {
-    std::unique_lock<std::mutex> lock(mGarbageMutex);
+    // Now that we have submitted commands, some of pending garbage may no longer pending
+    // and should be moved to garbage list.
+    cleanupPendingSubmissionGarbage();
 
+    std::unique_lock<std::mutex> lock(mGarbageMutex);
     // Clean up general garbages
     while (!mSharedGarbage.empty())
     {
@@ -4832,7 +4835,7 @@ void RendererVk::cleanupGarbage()
 
 void RendererVk::cleanupPendingSubmissionGarbage()
 {
-    std::unique_lock<std::mutex> lock(mGarbageMutex);
+    std::unique_lock<std::mutex> lock(mGarbageEnqueueMutex);
 
     // Check if pending garbage is still pending. If not, move them to the garbage list.
     vk::SharedGarbageList pendingGarbage;
@@ -4854,7 +4857,7 @@ void RendererVk::cleanupPendingSubmissionGarbage()
         mPendingSubmissionGarbage = std::move(pendingGarbage);
     }
 
-    vk::SharedBufferSuballocationGarbageList pendingSuballocationGarbage;
+    std::queue<vk::SharedBufferSuballocationGarbage> pendingSuballocationGarbage;
     while (!mPendingSubmissionSuballocationGarbage.empty())
     {
         vk::SharedBufferSuballocationGarbage &suballocationGarbage =
