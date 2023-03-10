@@ -792,12 +792,11 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     const QueueSerial &getLastSubmittedQueueSerial() const { return mLastSubmittedQueueSerial; }
 
-    // Uploading mutable mipmap textures is currently restricted to single-context applications.
     bool isEligibleForMutableTextureFlush() const
     {
-        return getFeatures().mutableMipmapTextureUpload.enabled && !hasDisplayTextureShareGroup() &&
-               mShareGroupVk->hasOneContext();
+        return getFeatures().mutableMipmapTextureUpload.enabled && !hasDisplayTextureShareGroup();
     }
+    void setMutableTextureFlushPending() { mIsMutableTextureFlushPending = true; }
 
   private:
     // Dirty bits.
@@ -1604,6 +1603,10 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     std::ostringstream mPipelineCacheGraph;
 
     RangedSerialFactory mOutsideRenderPassSerialFactory;
+
+    // Used for when there are mutable texture updates pending to be flushed. Some contexts in
+    // multi-context applications may not flush their outside RP command buffer otherwise.
+    bool mIsMutableTextureFlushPending;
 };
 
 ANGLE_INLINE angle::Result ContextVk::endRenderPassIfTransformFeedbackBuffer(
