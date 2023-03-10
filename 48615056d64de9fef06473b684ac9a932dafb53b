@@ -16,6 +16,23 @@
       "message": "The trace failure is reproducible on the main branch with\n```\ncapture_replay_tests.py --gtest_filter\u003dDifferentStencilMasksTest.DrawWithSameEffectiveMask/ES2_Vulkan_SwiftShader:DiscardFramebufferEXTTest.ClearDepthThenDrawWithoutDepthTestThenDiscard/ES2_Vulkan_SwiftShader\n```",
       "revId": "48615056d64de9fef06473b684ac9a932dafb53b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7746ba31_c06108d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-03-10T14:55:46Z",
+      "side": 1,
+      "message": "LGTM but I\u0027m not sure if the trace test failure are related. Ping me if you need help debugging them and I\u0027ll cc some people who are more familiar.",
+      "revId": "48615056d64de9fef06473b684ac9a932dafb53b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
