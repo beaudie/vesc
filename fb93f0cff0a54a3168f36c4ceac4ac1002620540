@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "28b5eaf4_4b3190ca",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 714,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-11T00:28:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5d03a322_3436495a",
+      "range": {
+        "startLine": 714,
+        "startChar": 41,
+        "endLine": 714,
+        "endChar": 45
+      },
+      "revId": "fb93f0cff0a54a3168f36c4ceac4ac1002620540",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b01aa657_beaa9db9",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-03-10T14:56:04Z",
       "side": 1,
       "message": "nit: with `isDynamicUsage` an `enum class`, the size can turn into a constexpr lookup table",
+      "range": {
+        "startLine": 880,
+        "startChar": 8,
+        "endLine": 881,
+        "endChar": 75
+      },
+      "revId": "fb93f0cff0a54a3168f36c4ceac4ac1002620540",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01649350_3b9fe740",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 881,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-11T00:28:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b01aa657_beaa9db9",
       "range": {
         "startLine": 880,
         "startChar": 8,
