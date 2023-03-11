@@ -22,6 +22,30 @@
       },
       "revId": "da55c2bea5dd72b128e4434389703d67ed634d1b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a72dd200_92fd55f4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-11T01:12:10Z",
+      "side": 1,
+      "message": "calling glBufferSubData while buffer is busy is the main reason that subdata API exist. Almost all app traces use this call pattern as well as many end2end tests.",
+      "parentUuid": "16952739_196e8cb8",
+      "range": {
+        "startLine": 15,
+        "startChar": 24,
+        "endLine": 16,
+        "endChar": 26
+      },
+      "revId": "da55c2bea5dd72b128e4434389703d67ed634d1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
