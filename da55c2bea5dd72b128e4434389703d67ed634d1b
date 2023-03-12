@@ -46,6 +46,30 @@
       },
       "revId": "da55c2bea5dd72b128e4434389703d67ed634d1b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4be168dc_0cb6add4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-12T19:07:37Z",
+      "side": 1,
+      "message": "It\u0027s a bit more complicated than that, isn\u0027t it?\n\nHave to create a buffer first and use it, then recreate it with zero size, then back to initial size with no data, then `glBufferSubData`.",
+      "parentUuid": "a72dd200_92fd55f4",
+      "range": {
+        "startLine": 15,
+        "startChar": 24,
+        "endLine": 16,
+        "endChar": 26
+      },
+      "revId": "da55c2bea5dd72b128e4434389703d67ed634d1b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
