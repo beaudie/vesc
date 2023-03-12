@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72e43419_8c834342",
+        "filename": "src/common/angleutils.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-12T19:04:18Z",
+      "side": 1,
+      "message": "nit: `bufferSuballocationCount`. We have `image` suballocation too now!",
+      "range": {
+        "startLine": 206,
+        "startChar": 7,
+        "endLine": 206,
+        "endChar": 25
+      },
+      "revId": "6b71a425f21ba43de19471c8c8040974b50ba685",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
