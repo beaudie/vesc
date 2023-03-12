@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e5a93bd_122c805d",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-12T19:28:41Z",
+      "side": 1,
+      "message": "Thanks, these functions make sense here, but kind of hard to understand their logic where used.\n\nWhat if we made them more verbose, like this?\n\n```\nresize_up_maybe_construct()\nresize_down_no_destruct()\n```",
+      "revId": "b9a2ecb8d52d0669b129d61380ce3260e82e7da7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
