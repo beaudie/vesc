@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3d841d8_29b4cc7a",
+        "filename": "src/libANGLE/validationES.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-03-13T21:00:14Z",
+      "side": 1,
+      "message": "Is this a bug fix? It would change the validation when the extension isn\u0027t present.",
+      "range": {
+        "startLine": 215,
+        "startChar": 19,
+        "endLine": 215,
+        "endChar": 61
+      },
+      "revId": "4c49dac84134247573eb156f826f006609321bae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
