@@ -659,7 +659,7 @@ class RendererVk : angle::NonCopyable
                              size_t count,
                              RangedSerialFactory *rangedSerialFactory);
 
-    // Return true if all serials in ResourceUse have been submitted.
+    // Return true if all serials in ResourceUse have been submitted to RendererVk.
     bool hasResourceUseSubmitted(const vk::ResourceUse &use) const;
     bool hasQueueSerialSubmitted(const QueueSerial &queueSerial) const;
     // Return true if all serials in ResourceUse have been finished.
