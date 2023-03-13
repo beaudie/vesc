@@ -1,5 +1,23 @@
 {
-  "comments": [],
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1aa56014_0de9d4d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-03-13T18:03:45Z",
+      "side": 1,
+      "message": "This change in vulkan-headers: https://chromium.googlesource.com/vulkan-deps.git/+log/47ccaa754cba..ff4adce43531 have renamed/removed some structs/classes that are referenced by vulkan-validation-layers code.",
+      "revId": "2aea8c7144877d155e8410926390dd454aee37fc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ],
   "submitRequirementResults": [
     {
       "submitRequirement": {
