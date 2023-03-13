@@ -1198,7 +1198,7 @@ RendererVk::~RendererVk()
 
 bool RendererVk::hasSharedGarbage()
 {
-    std::unique_lock<std::mutex> lock(mGarbageMutex);
+    std::unique_lock<std::mutex> lock(mGarbageCleanupMutex);
     return !mSharedGarbage.empty() || !mPendingSubmissionGarbage.empty() ||
            !mSuballocationGarbage.empty() || !mPendingSubmissionSuballocationGarbage.empty();
 }
@@ -4768,7 +4768,7 @@ bool RendererVk::haveSameFormatFeatureBits(angle::FormatID formatID1,
 
 void RendererVk::addBufferBlockToOrphanList(vk::BufferBlock *block)
 {
-    std::unique_lock<std::mutex> lock(mGarbageMutex);
+    std::unique_lock<std::mutex> lock(mGarbageCleanupMutex);
     mOrphanedBufferBlocks.emplace_back(block);
 }
 
@@ -4788,17 +4788,16 @@ void RendererVk::pruneOrphanedBufferBlocks()
 
 void RendererVk::cleanupGarbage()
 {
-    std::unique_lock<std::mutex> lock(mGarbageMutex);
-
     // Now that we have submitted commands, some of pending garbage may no longer pending
     // and should be moved to garbage list.
     cleanupPendingSubmissionGarbage();
 
+    std::unique_lock<std::mutex> lock(mGarbageCleanupMutex);
     // Clean up general garbages
     while (!mSharedGarbage.empty())
     {
-        vk::SharedGarbage &garbage = mSharedGarbage.front();
-        if (!garbage.destroyIfComplete(this))
+        vk::SharedGarbagePtr &garbage = mSharedGarbage.front();
+        if (!garbage->destroyIfComplete(this))
         {
             break;
         }
@@ -4809,9 +4808,9 @@ void RendererVk::cleanupGarbage()
     VkDeviceSize suballocationBytesDestroyed = 0;
     while (!mSuballocationGarbage.empty())
     {
-        vk::SharedBufferSuballocationGarbage &garbage = mSuballocationGarbage.front();
-        VkDeviceSize garbageSize                      = garbage.getSize();
-        if (!garbage.destroyIfComplete(this))
+        vk::SharedBufferSuballocationGarbagePtr &garbage = mSuballocationGarbage.front();
+        VkDeviceSize garbageSize                         = garbage->getSize();
+        if (!garbage->destroyIfComplete(this))
         {
             break;
         }
@@ -4836,12 +4835,14 @@ void RendererVk::cleanupGarbage()
 
 void RendererVk::cleanupPendingSubmissionGarbage()
 {
+    std::unique_lock<std::mutex> lock(mGarbageEnqueueMutex);
+
     // Check if pending garbage is still pending. If not, move them to the garbage list.
     vk::SharedGarbageList pendingGarbage;
-    while (!mPendingSubmissionGarbage.empty())
+    while (!mPendingSubmissionGarbage.empty() && !mSharedGarbage.full())
     {
-        vk::SharedGarbage &garbage = mPendingSubmissionGarbage.front();
-        if (garbage.hasResourceUseSubmitted(this))
+        vk::SharedGarbagePtr &garbage = mPendingSubmissionGarbage.front();
+        if (garbage->hasResourceUseSubmitted(this) && !mSharedGarbage.full())
         {
             mSharedGarbage.push(std::move(garbage));
         }
@@ -4857,13 +4858,13 @@ void RendererVk::cleanupPendingSubmissionGarbage()
     }
 
     vk::SharedBufferSuballocationGarbageList pendingSuballocationGarbage;
-    while (!mPendingSubmissionSuballocationGarbage.empty())
+    while (!mPendingSubmissionSuballocationGarbage.empty() && !mSuballocationGarbage.full())
     {
-        vk::SharedBufferSuballocationGarbage &suballocationGarbage =
+        vk::SharedBufferSuballocationGarbagePtr &suballocationGarbage =
             mPendingSubmissionSuballocationGarbage.front();
-        if (suballocationGarbage.hasResourceUseSubmitted(this))
+        if (suballocationGarbage->hasResourceUseSubmitted(this))
         {
-            mSuballocationGarbageSizeInBytes += suballocationGarbage.getSize();
+            mSuballocationGarbageSizeInBytes += suballocationGarbage->getSize();
             mSuballocationGarbage.push(std::move(suballocationGarbage));
         }
         else

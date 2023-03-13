@@ -59,6 +59,13 @@ class Format;
 static constexpr size_t kMaxExtensionNames = 400;
 using ExtensionNameList                    = angle::FixedVector<const char *, kMaxExtensionNames>;
 
+// The max size of garabge fixed queue
+static constexpr size_t kMaxGarbageFixedQueueSize = 512;
+using SharedGarbageFixedQueue =
+    angle::FixedQueue<std::unique_ptr<SharedGarbage>, kMaxGarbageFixedQueueSize>;
+using SharedBufferSuballocationGarbageFixedQueue =
+    angle::FixedQueue<std::unique_ptr<SharedBufferSuballocationGarbage>, kMaxGarbageFixedQueueSize>;
+
 // Information used to accurately skip known synchronization issues in ANGLE.
 struct SkippedSyncvalMessage
 {
@@ -355,16 +362,20 @@ class RendererVk : angle::NonCopyable
     void collectGarbage(const vk::ResourceUse &use, vk::GarbageList &&sharedGarbage)
     {
         ASSERT(!sharedGarbage.empty());
-        vk::SharedGarbage garbage(use, std::move(sharedGarbage));
-        if (!hasResourceUseSubmitted(use))
+        std::unique_ptr<vk::SharedGarbage> garbage =
+            std::make_unique<vk::SharedGarbage>(use, std::move(sharedGarbage));
+        if (!garbage->destroyIfComplete(this))
         {
-            std::unique_lock<std::mutex> lock(mGarbageMutex);
-            mPendingSubmissionGarbage.push(std::move(garbage));
-        }
-        else if (!garbage.destroyIfComplete(this))
-        {
-            std::unique_lock<std::mutex> lock(mGarbageMutex);
-            mSharedGarbage.push(std::move(garbage));
+            if (hasResourceUseSubmitted(use) && !mSharedGarbage.full())
+            {
+                std::unique_lock<std::mutex> lock(mGarbageEnqueueMutex);
+                mSharedGarbage.push(std::move(garbage));
+            }
+            else
+            {
+                std::unique_lock<std::mutex> lock(mGarbageEnqueueMutex);
+                mPendingSubmissionGarbage.push(std::move(garbage));
+            }
         }
     }
 
@@ -382,16 +393,19 @@ class RendererVk : angle::NonCopyable
         }
         else
         {
-            std::unique_lock<std::mutex> lock(mGarbageMutex);
-            if (hasResourceUseSubmitted(use))
+            std::unique_ptr<vk::SharedBufferSuballocationGarbage> garbage =
+                std::make_unique<vk::SharedBufferSuballocationGarbage>(
+                    use, std::move(suballocation), std::move(buffer));
+            if (hasResourceUseSubmitted(use) && !mSuballocationGarbage.full())
             {
+                std::unique_lock<std::mutex> lock(mGarbageEnqueueMutex);
                 mSuballocationGarbageSizeInBytes += suballocation.getSize();
-                mSuballocationGarbage.emplace(use, std::move(suballocation), std::move(buffer));
+                mSuballocationGarbage.push(std::move(garbage));
             }
             else
             {
-                mPendingSubmissionSuballocationGarbage.emplace(use, std::move(suballocation),
-                                                               std::move(buffer));
+                std::unique_lock<std::mutex> lock(mGarbageEnqueueMutex);
+                mPendingSubmissionSuballocationGarbage.push(std::move(garbage));
             }
         }
     }
@@ -868,20 +882,26 @@ class RendererVk : angle::NonCopyable
     // submitted to vulkan, we expect them to finish in finite time. mPendingSubmissionGarbage
     // is the garbage that is still referenced in the recorded commands. suballocations have its
     // own dedicated garbage list for performance optimization since they tend to be the most
-    // common garbage objects. All these four groups of garbage share the same mutex lock.
-    std::mutex mGarbageMutex;
-    vk::SharedGarbageList mSharedGarbage;
+    // common garbage objects. Further, to reduce the lock contention, we have two mutex locks.
+    // mGarbageCleanupMutex should be held while garbage is removed from mSharedGarbage or
+    // mSuballocationGarbage. mGarbageEnqueueMutex should be held while garbage is added to
+    // mSharedGarbage or mSuballocationGarbage.
+    std::mutex mGarbageCleanupMutex;
+    vk::SharedGarbageFixedQueue mSharedGarbage;
+    vk::SharedBufferSuballocationGarbageFixedQueue mSuballocationGarbage;
+    // mGarbageEnqueueMutex protect single threaded enqueue into mSharedGarbage and
+    // mSuballocationGarbage, as well as access to all pendingSubmission garbage.
+    std::mutex mGarbageEnqueueMutex;
     vk::SharedGarbageList mPendingSubmissionGarbage;
-    vk::SharedBufferSuballocationGarbageList mSuballocationGarbage;
     vk::SharedBufferSuballocationGarbageList mPendingSubmissionSuballocationGarbage;
     // Total suballocation garbage size in bytes.
     VkDeviceSize mSuballocationGarbageSizeInBytes;
 
     // Total bytes of suballocation that been destroyed since last prune call. This can be
-    // accessed without mGarbageMutex, thus needs to be atomic to avoid tsan complain.
+    // accessed without mGarbageCleanupMutex, thus needs to be atomic to avoid tsan complain.
     std::atomic<VkDeviceSize> mSuballocationGarbageDestroyed;
     // This is the cached value of mSuballocationGarbageSizeInBytes but is accessed with atomic
-    // operation. This can be accessed from different threads without mGarbageMutex, so that
+    // operation. This can be accessed from different threads without mGarbageCleanupMutex, so that
     // thread sanitizer won't complain.
     std::atomic<VkDeviceSize> mSuballocationGarbageSizeInBytesCachedAtomic;
 
