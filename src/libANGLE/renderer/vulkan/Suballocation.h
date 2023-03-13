@@ -198,7 +198,8 @@ class SharedBufferSuballocationGarbage
     BufferSuballocation mSuballocation;
     Buffer mBuffer;
 };
-using SharedBufferSuballocationGarbageList = std::queue<SharedBufferSuballocationGarbage>;
+using SharedBufferSuballocationGarbagePtr  = std::unique_ptr<SharedBufferSuballocationGarbage>;
+using SharedBufferSuballocationGarbageList = std::queue<SharedBufferSuballocationGarbagePtr>;
 
 // BufferBlock implementation.
 ANGLE_INLINE VkMemoryPropertyFlags BufferBlock::getMemoryPropertyFlags() const
