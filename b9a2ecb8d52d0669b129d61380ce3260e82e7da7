@@ -16,6 +16,58 @@
       "message": "Thanks, these functions make sense here, but kind of hard to understand their logic where used.\n\nWhat if we made them more verbose, like this?\n\n```\nresize_up_maybe_construct()\nresize_down_no_destruct()\n```",
       "revId": "b9a2ecb8d52d0669b129d61380ce3260e82e7da7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2799fd0b_f430205e",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-13T12:23:43Z",
+      "side": 1,
+      "message": "Logic is that: use `resize_down()` when 100% sure that resize is down, because this is a safe operation. No previous values reuse possible. This is for self check and self documentation.\nUse `resize_unitialized()` in all other cases, but need to consider initializing new elements when resizing up. The term `uninitialized` I borrowed from the Unreal Engine.\n\nThe name `resize_unitialized(count)` is in contrast to the `resize(count, value)` where new elements are initialized with `value`.\n\nI wanted to make `resize_up_unitialized()`, but then decided make function that can resize up or down without limitations. Otherwise, in cases if logic need to do a resize regardless of the old size they need to use `if (newSize \u003e v.size())` and call the appropriate method.\n\nRegarding naming.\n`resize_up_maybe_construct()` - I do not like this. Because `maybe_construct` is a good thing (initialized). I think we should focus on the problem: new elements reusing previous values without `construct` (`uninitialized`).\nMaybe rename `resize_up_maybe_reuse()`. With such resizes need to be careful and initialize reused values (if it is possible).\nOr even `resize_maybe_reuse()` because I do not see a point why limit resizing down.\nHowever, I like current naming better.\n\n`resize_down_no_destruct()` - construction/destruction is not the problem. Also, `FastVector` does not support destructors at all. Problem is reusing old values. When resizing down there is no way to have problem of reusing previous values.\nChanging name to `resize_down_no_reuse()` - is obvious and unnecessary.",
+      "parentUuid": "5e5a93bd_122c805d",
+      "revId": "b9a2ecb8d52d0669b129d61380ce3260e82e7da7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55a11ad1_434ae7b2",
+        "filename": "src/libANGLE/renderer/vulkan/spv_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2218,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-13T12:23:43Z",
+      "side": 1,
+      "message": "@syoussefi@chromium.org\n\nI think I was wrong in this comment. Resize down may happen if call `SpirvTransformFeedbackCodeGenerator::writePendingDeclarations` again.\n\nBut code is OK, because new value is assigned later in this method. I just need to change the comment.",
+      "revId": "b9a2ecb8d52d0669b129d61380ce3260e82e7da7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b871db3_55478891",
+        "filename": "src/libANGLE/renderer/vulkan/spv_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2280,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-13T12:23:43Z",
+      "side": 1,
+      "message": "@syoussefi@chromium.org\nThis resize may be down or up. But it is not important here.",
+      "revId": "b9a2ecb8d52d0669b129d61380ce3260e82e7da7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
