@@ -4790,6 +4790,10 @@ void RendererVk::cleanupGarbage()
 {
     std::unique_lock<std::mutex> lock(mGarbageMutex);
 
+    // Now that we have submitted commands, some of pending garbage may no longer pending
+    // and should be moved to garbage list.
+    cleanupPendingSubmissionGarbage();
+
     // Clean up general garbages
     while (!mSharedGarbage.empty())
     {
@@ -4832,8 +4836,6 @@ void RendererVk::cleanupGarbage()
 
 void RendererVk::cleanupPendingSubmissionGarbage()
 {
-    std::unique_lock<std::mutex> lock(mGarbageMutex);
-
     // Check if pending garbage is still pending. If not, move them to the garbage list.
     vk::SharedGarbageList pendingGarbage;
     while (!mPendingSubmissionGarbage.empty())

@@ -3392,10 +3392,6 @@ angle::Result ContextVk::submitCommands(const vk::Semaphore *signalSemaphore, Su
     mLastSubmittedQueueSerial = mLastFlushedQueueSerial;
     mSubmittedResourceUse.setQueueSerial(mLastSubmittedQueueSerial);
 
-    // Now that we have submitted commands, some of pending garbage may no longer pending
-    // and should be moved to garbage list.
-    mRenderer->cleanupPendingSubmissionGarbage();
-
     mComputeDirtyBits |= mNewComputeCommandBufferDirtyBits;
 
     if (mGpuEventsEnabled)
