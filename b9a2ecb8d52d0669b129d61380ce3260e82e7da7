@@ -55,6 +55,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "b04077c1_1207ce98",
+        "filename": "src/libANGLE/renderer/vulkan/spv_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2218,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-13T12:45:31Z",
+      "side": 1,
+      "message": "Wrong again... There may be bug if `writePendingDeclarations()` called again with `mIntNIds.size() \u003e\u003d 6`. Then, this resize may resize to `6` and skip initialization of element `[4]`.\n\nHowever, I checked current code and found that `writePendingDeclarations()` is not called more than once. So my original comment was correct.",
+      "parentUuid": "55a11ad1_434ae7b2",
+      "revId": "b9a2ecb8d52d0669b129d61380ce3260e82e7da7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "9b871db3_55478891",
         "filename": "src/libANGLE/renderer/vulkan/spv_utils.cpp",
         "patchSetId": 1
@@ -66,6 +84,24 @@
       "writtenOn": "2023-03-13T12:23:43Z",
       "side": 1,
       "message": "@syoussefi@chromium.org\nThis resize may be down or up. But it is not important here.",
+      "revId": "b9a2ecb8d52d0669b129d61380ce3260e82e7da7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0dcfc4a9_ba1cdab9",
+        "filename": "src/libANGLE/renderer/vulkan/spv_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2280,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-13T12:45:31Z",
+      "side": 1,
+      "message": "`writePendingDeclarations()` is not called more than once, so `mIntNIds` must be empty before this resize (and always was). I will add `ASSERT`.",
+      "parentUuid": "9b871db3_55478891",
       "revId": "b9a2ecb8d52d0669b129d61380ce3260e82e7da7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
