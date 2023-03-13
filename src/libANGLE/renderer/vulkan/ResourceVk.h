@@ -164,8 +164,8 @@ class SharedGarbage
     ResourceUse mLifetime;
     GarbageList mGarbage;
 };
-
-using SharedGarbageList = std::queue<SharedGarbage>;
+using SharedGarbagePtr  = std::unique_ptr<SharedGarbage>;
+using SharedGarbageList = std::queue<SharedGarbagePtr>;
 
 // This is a helper class for back-end objects used in Vk command buffers. They keep a record
 // of their use in ANGLE and VkQueues via ResourceUse.
