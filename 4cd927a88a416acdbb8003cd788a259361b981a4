@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b11ec33f_6cf2964c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-13T23:28:31Z",
+      "side": 1,
+      "message": "This should be GL_LOAD_OP_DISABLE_ANGLE, correct?",
+      "revId": "4cd927a88a416acdbb8003cd788a259361b981a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4be7ab02_560b06d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-13T23:28:31Z",
+      "side": 1,
+      "message": "lgtm once this passes tests. Small but significant issue with the CL description.",
+      "revId": "4cd927a88a416acdbb8003cd788a259361b981a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
