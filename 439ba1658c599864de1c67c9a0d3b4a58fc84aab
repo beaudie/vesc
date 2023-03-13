@@ -16,6 +16,47 @@
       "message": "Peng: PTAL. We\u0027re lacking D3D11 owners right now so don\u0027t worry if you don\u0027t understand the architecture fully",
       "revId": "439ba1658c599864de1c67c9a0d3b4a58fc84aab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbcf6b75_6774c1af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2023-03-13T21:25:45Z",
+      "side": 1,
+      "message": "Yeah. I am not very confident of reviewing it.",
+      "parentUuid": "cb359bfc_ce96f0d5",
+      "revId": "439ba1658c599864de1c67c9a0d3b4a58fc84aab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06940840_8bd2716b",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/TextureStorage11.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1920,
+      "author": {
+        "id": 1000050
+      },
+      "writtenOn": "2023-03-13T21:25:45Z",
+      "side": 1,
+      "message": "The function name is confusing. Seems it doesn\u0027t only recover from the storage, but also disassociates the storage.",
+      "range": {
+        "startLine": 1920,
+        "startChar": 36,
+        "endLine": 1920,
+        "endChar": 64
+      },
+      "revId": "439ba1658c599864de1c67c9a0d3b4a58fc84aab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
