@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0c77080_a38ca476",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-03-14T22:09:01Z",
+      "side": 1,
+      "message": "Went in a different direction with an objectively more effective solution.",
+      "revId": "0a2f380d128660c6ad7bad49fc9f0f57dccc2565",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

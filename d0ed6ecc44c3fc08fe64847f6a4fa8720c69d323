@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "38638039_590a8d87",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-03-14T22:09:01Z",
+      "side": 1,
+      "message": "The original CL only dealt with the global mutex, and it was found to be also necessary to unlock the global surface mutex as well, so that mutex was also plumbed down to into the Vulkan renderer so that they could both be unlocked during the vkAcquireNextImage() call.  I\u0027ll update the commit message as well.",
+      "parentUuid": "c86f96a1_f931c7a0",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 59
+      },
+      "revId": "d0ed6ecc44c3fc08fe64847f6a4fa8720c69d323",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "6cfabfb9_123f9ae7",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -75,6 +99,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cee7e94c_41d7bb9d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-03-14T22:09:01Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "2654788a_f28fd59b",
+      "revId": "d0ed6ecc44c3fc08fe64847f6a4fa8720c69d323",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "61e93c3c_e8ee8d73",
@@ -88,6 +130,30 @@
       "writtenOn": "2023-03-08T00:53:46Z",
       "side": 1,
       "message": "Might be clearer to add `global` to the name and helpers, to more clearly differentiate the mutexes.",
+      "range": {
+        "startLine": 382,
+        "startChar": 32,
+        "endLine": 382,
+        "endChar": 37
+      },
+      "revId": "d0ed6ecc44c3fc08fe64847f6a4fa8720c69d323",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e375ee02_5e9064e6",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-03-14T22:09:01Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "61e93c3c_e8ee8d73",
       "range": {
         "startLine": 382,
         "startChar": 32,
@@ -121,6 +187,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c14f89d7_bc9f19d3",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 874,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-03-14T22:09:01Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "8fb21217_cbff1ea3",
+      "range": {
+        "startLine": 873,
+        "startChar": 4,
+        "endLine": 874,
+        "endChar": 38
+      },
+      "revId": "d0ed6ecc44c3fc08fe64847f6a4fa8720c69d323",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4439738b_bbaac11e",
@@ -134,6 +224,24 @@
       "writtenOn": "2023-03-08T17:02:34Z",
       "side": 1,
       "message": "is it possible to add a unit test for both `ThreadTrackingMutex` and `ScopedUnlock`?",
+      "revId": "d0ed6ecc44c3fc08fe64847f6a4fa8720c69d323",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d1c7a1d_a448963d",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1193,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-03-14T22:09:01Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "4439738b_bbaac11e",
       "revId": "d0ed6ecc44c3fc08fe64847f6a4fa8720c69d323",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -185,6 +293,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b05fa9d2_a7697214",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1282,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-03-14T22:09:01Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "115fc59c_020bede5",
+      "range": {
+        "startLine": 1282,
+        "startChar": 4,
+        "endLine": 1282,
+        "endChar": 14
+      },
+      "revId": "d0ed6ecc44c3fc08fe64847f6a4fa8720c69d323",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7b55e6f8_8dbeb247",
@@ -198,6 +330,30 @@
       "writtenOn": "2023-03-08T17:02:34Z",
       "side": 1,
       "message": "naming here is confusing, the mutex itself is not specifically an \"unlockMutex\".\nIt is just `globalMutex` and `globalSurfaceMutex`",
+      "range": {
+        "startLine": 2310,
+        "startChar": 72,
+        "endLine": 2310,
+        "endChar": 83
+      },
+      "revId": "d0ed6ecc44c3fc08fe64847f6a4fa8720c69d323",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7d48050_27179310",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2310,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-03-14T22:09:01Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "7b55e6f8_8dbeb247",
       "range": {
         "startLine": 2310,
         "startChar": 72,
@@ -278,6 +434,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e53ab57b_25a24b0d",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2347,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-03-14T22:09:01Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "11fe043b_388c4921",
+      "range": {
+        "startLine": 2347,
+        "startChar": 13,
+        "endLine": 2347,
+        "endChar": 33
+      },
+      "revId": "d0ed6ecc44c3fc08fe64847f6a4fa8720c69d323",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa716b7d_f4f72718",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2347,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-03-14T22:09:01Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "43843bee_3926fd74",
+      "range": {
+        "startLine": 2347,
+        "startChar": 8,
+        "endLine": 2347,
+        "endChar": 13
+      },
+      "revId": "d0ed6ecc44c3fc08fe64847f6a4fa8720c69d323",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "55d44d9a_b2e87553",
@@ -301,6 +505,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "50d6487b_c578f36c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2348,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-03-14T22:09:01Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "55d44d9a_b2e87553",
+      "range": {
+        "startLine": 2348,
+        "startChar": 32,
+        "endLine": 2348,
+        "endChar": 69
+      },
+      "revId": "d0ed6ecc44c3fc08fe64847f6a4fa8720c69d323",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "96972e61_768738b0",
@@ -314,6 +542,30 @@
       "writtenOn": "2023-03-08T17:02:34Z",
       "side": 1,
       "message": "explicit for clarity - `scopedUnlockGlobalMutex`",
+      "range": {
+        "startLine": 2349,
+        "startChar": 13,
+        "endLine": 2349,
+        "endChar": 26
+      },
+      "revId": "d0ed6ecc44c3fc08fe64847f6a4fa8720c69d323",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "831dad19_7ae8812f",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2349,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-03-14T22:09:01Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "96972e61_768738b0",
       "range": {
         "startLine": 2349,
         "startChar": 13,
