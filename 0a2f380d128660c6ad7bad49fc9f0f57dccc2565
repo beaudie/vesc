@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "5a6086f6_ad250706",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-03-14T23:58:55Z",
+      "side": 1,
+      "message": "Thanks, fixed.",
+      "parentUuid": "c2ca3260_a4f89a75",
+      "range": {
+        "startLine": 12,
+        "startChar": 18,
+        "endLine": 12,
+        "endChar": 22
+      },
+      "revId": "0a2f380d128660c6ad7bad49fc9f0f57dccc2565",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "b0c77080_a38ca476",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
