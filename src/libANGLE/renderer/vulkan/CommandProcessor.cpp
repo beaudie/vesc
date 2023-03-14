@@ -60,7 +60,7 @@ template <>
     // entire command pool.  https://issuetracker.google.com/issues/166793850
     for (VulkanSecondaryCommandBuffer &secondary : *commandBuffers)
     {
-        secondary.free(device);
+        secondary.destroy();
     }
     commandBuffers->clear();
 }
@@ -718,8 +718,7 @@ angle::Result CommandProcessor::processTask(CommandProcessorTask *task)
 
             OutsideRenderPassCommandBufferHelper *originalCommandBuffer =
                 task->getOutsideRenderPassCommandBuffer();
-            mRenderer->recycleOutsideRenderPassCommandBufferHelper(mRenderer->getDevice(),
-                                                                   &originalCommandBuffer);
+            mRenderer->recycleOutsideRenderPassCommandBufferHelper(&originalCommandBuffer);
             break;
         }
         case CustomTask::ProcessRenderPassCommands:
@@ -731,8 +730,7 @@ angle::Result CommandProcessor::processTask(CommandProcessorTask *task)
 
             RenderPassCommandBufferHelper *originalCommandBuffer =
                 task->getRenderPassCommandBuffer();
-            mRenderer->recycleRenderPassCommandBufferHelper(mRenderer->getDevice(),
-                                                            &originalCommandBuffer);
+            mRenderer->recycleRenderPassCommandBufferHelper(&originalCommandBuffer);
             break;
         }
         default:
