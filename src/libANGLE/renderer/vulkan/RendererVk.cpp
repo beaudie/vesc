@@ -5229,7 +5229,7 @@ void RendererVk::queuePresent(vk::Context *context,
 template <typename CommandBufferHelperT, typename RecyclerT>
 angle::Result RendererVk::getCommandBufferImpl(
     vk::Context *context,
-    vk::CommandPool *commandPool,
+    vk::SecondaryCommandPool *commandPool,
     vk::SecondaryCommandMemoryAllocator *commandsAllocator,
     RecyclerT *recycler,
     CommandBufferHelperT **commandBufferHelperOut)
@@ -5240,7 +5240,7 @@ angle::Result RendererVk::getCommandBufferImpl(
 
 angle::Result RendererVk::getOutsideRenderPassCommandBufferHelper(
     vk::Context *context,
-    vk::CommandPool *commandPool,
+    vk::SecondaryCommandPool *commandPool,
     vk::SecondaryCommandMemoryAllocator *commandsAllocator,
     vk::OutsideRenderPassCommandBufferHelper **commandBufferHelperOut)
 {
@@ -5251,7 +5251,7 @@ angle::Result RendererVk::getOutsideRenderPassCommandBufferHelper(
 
 angle::Result RendererVk::getRenderPassCommandBufferHelper(
     vk::Context *context,
-    vk::CommandPool *commandPool,
+    vk::SecondaryCommandPool *commandPool,
     vk::SecondaryCommandMemoryAllocator *commandsAllocator,
     vk::RenderPassCommandBufferHelper **commandBufferHelperOut)
 {
@@ -5261,19 +5261,17 @@ angle::Result RendererVk::getRenderPassCommandBufferHelper(
 }
 
 void RendererVk::recycleOutsideRenderPassCommandBufferHelper(
-    VkDevice device,
     vk::OutsideRenderPassCommandBufferHelper **commandBuffer)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::recycleOutsideRenderPassCommandBufferHelper");
-    mOutsideRenderPassCommandBufferRecycler.recycleCommandBufferHelper(device, commandBuffer);
+    mOutsideRenderPassCommandBufferRecycler.recycleCommandBufferHelper(commandBuffer);
 }
 
 void RendererVk::recycleRenderPassCommandBufferHelper(
-    VkDevice device,
     vk::RenderPassCommandBufferHelper **commandBuffer)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::recycleRenderPassCommandBufferHelper");
-    mRenderPassCommandBufferRecycler.recycleCommandBufferHelper(device, commandBuffer);
+    mRenderPassCommandBufferRecycler.recycleCommandBufferHelper(commandBuffer);
 }
 
 void RendererVk::logCacheStats() const
