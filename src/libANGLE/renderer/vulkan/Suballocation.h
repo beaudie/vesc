@@ -172,21 +172,21 @@ class BufferSuballocation final : angle::NonCopyable
     VkDeviceSize mSize;
 };
 
-class SharedBufferSuballocationGarbage
+class BufferSuballocationGarbage final : angle::NonCopyable
 {
   public:
-    SharedBufferSuballocationGarbage() = default;
-    SharedBufferSuballocationGarbage(SharedBufferSuballocationGarbage &&other)
+    BufferSuballocationGarbage() = default;
+    BufferSuballocationGarbage(BufferSuballocationGarbage &&other)
         : mLifetime(other.mLifetime),
           mSuballocation(std::move(other.mSuballocation)),
           mBuffer(std::move(other.mBuffer))
     {}
-    SharedBufferSuballocationGarbage(const ResourceUse &use,
-                                     BufferSuballocation &&suballocation,
-                                     Buffer &&buffer)
+    BufferSuballocationGarbage(const ResourceUse &use,
+                               BufferSuballocation &&suballocation,
+                               Buffer &&buffer)
         : mLifetime(use), mSuballocation(std::move(suballocation)), mBuffer(std::move(buffer))
     {}
-    ~SharedBufferSuballocationGarbage() = default;
+    ~BufferSuballocationGarbage() = default;
 
     bool destroyIfComplete(RendererVk *renderer);
     bool hasResourceUseSubmitted(RendererVk *renderer) const;
@@ -198,7 +198,8 @@ class SharedBufferSuballocationGarbage
     BufferSuballocation mSuballocation;
     Buffer mBuffer;
 };
-using SharedBufferSuballocationGarbageList = std::queue<SharedBufferSuballocationGarbage>;
+using BufferSuballocationGarbagePtr  = std::unique_ptr<BufferSuballocationGarbage>;
+using BufferSuballocationGarbageList = std::queue<BufferSuballocationGarbagePtr>;
 
 // BufferBlock implementation.
 ANGLE_INLINE VkMemoryPropertyFlags BufferBlock::getMemoryPropertyFlags() const

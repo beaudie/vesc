@@ -160,12 +160,15 @@ class SharedGarbage
     bool destroyIfComplete(RendererVk *renderer);
     bool hasResourceUseSubmitted(RendererVk *renderer) const;
 
+    // Have a dummy getSize function so that we can use template function
+    VkDeviceSize getSize() const { return 0; }
+
   private:
     ResourceUse mLifetime;
     GarbageList mGarbage;
 };
-
-using SharedGarbageList = std::queue<SharedGarbage>;
+using SharedGarbagePtr  = std::unique_ptr<SharedGarbage>;
+using SharedGarbageList = std::queue<SharedGarbagePtr>;
 
 // This is a helper class for back-end objects used in Vk command buffers. They keep a record
 // of their use in ANGLE and VkQueues via ResourceUse.

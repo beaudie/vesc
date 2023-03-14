@@ -355,13 +355,14 @@ class RendererVk : angle::NonCopyable
     void collectGarbage(const vk::ResourceUse &use, vk::GarbageList &&sharedGarbage)
     {
         ASSERT(!sharedGarbage.empty());
-        vk::SharedGarbage garbage(use, std::move(sharedGarbage));
+        vk::SharedGarbagePtr garbage =
+            std::make_unique<vk::SharedGarbage>(use, std::move(sharedGarbage));
         if (!hasResourceUseSubmitted(use))
         {
             std::unique_lock<std::mutex> lock(mGarbageMutex);
             mPendingSubmissionGarbage.push(std::move(garbage));
         }
-        else if (!garbage.destroyIfComplete(this))
+        else if (!garbage->destroyIfComplete(this))
         {
             std::unique_lock<std::mutex> lock(mGarbageMutex);
             mSharedGarbage.push(std::move(garbage));
@@ -383,15 +384,17 @@ class RendererVk : angle::NonCopyable
         else
         {
             std::unique_lock<std::mutex> lock(mGarbageMutex);
+            vk::BufferSuballocationGarbagePtr garbage =
+                std::make_unique<vk::BufferSuballocationGarbage>(use, std::move(suballocation),
+                                                                 std::move(buffer));
             if (hasResourceUseSubmitted(use))
             {
                 mSuballocationGarbageSizeInBytes += suballocation.getSize();
-                mSuballocationGarbage.emplace(use, std::move(suballocation), std::move(buffer));
+                mSuballocationGarbage.push(std::move(garbage));
             }
             else
             {
-                mPendingSubmissionSuballocationGarbage.emplace(use, std::move(suballocation),
-                                                               std::move(buffer));
+                mPendingSubmissionSuballocationGarbage.push(std::move(garbage));
             }
         }
     }
@@ -486,7 +489,6 @@ class RendererVk : angle::NonCopyable
     bool haveSameFormatFeatureBits(angle::FormatID formatID1, angle::FormatID formatID2) const;
 
     void cleanupGarbage();
-    void cleanupPendingSubmissionGarbage();
 
     angle::Result submitCommands(vk::Context *context,
                                  vk::ProtectionType protectionType,
@@ -625,7 +627,6 @@ class RendererVk : angle::NonCopyable
     }
 
     void addBufferBlockToOrphanList(vk::BufferBlock *block);
-    void pruneOrphanedBufferBlocks();
 
     bool isShadingRateSupported(gl::ShadingRate shadingRate) const
     {
@@ -639,7 +640,7 @@ class RendererVk : angle::NonCopyable
     void onBufferPoolPrune() { mSuballocationGarbageDestroyed = 0; }
     VkDeviceSize getSuballocationGarbageSize() const
     {
-        return mSuballocationGarbageSizeInBytesCachedAtomic.load(std::memory_order_consume);
+        return mSuballocationGarbageSizeInBytes.load(std::memory_order_consume);
     }
 
     ANGLE_INLINE VkFilter getPreferredFilterForYUV(VkFilter defaultFilter)
@@ -872,18 +873,13 @@ class RendererVk : angle::NonCopyable
     std::mutex mGarbageMutex;
     vk::SharedGarbageList mSharedGarbage;
     vk::SharedGarbageList mPendingSubmissionGarbage;
-    vk::SharedBufferSuballocationGarbageList mSuballocationGarbage;
-    vk::SharedBufferSuballocationGarbageList mPendingSubmissionSuballocationGarbage;
+    vk::BufferSuballocationGarbageList mSuballocationGarbage;
+    vk::BufferSuballocationGarbageList mPendingSubmissionSuballocationGarbage;
     // Total suballocation garbage size in bytes.
-    VkDeviceSize mSuballocationGarbageSizeInBytes;
-
+    std::atomic<VkDeviceSize> mSuballocationGarbageSizeInBytes;
     // Total bytes of suballocation that been destroyed since last prune call. This can be
     // accessed without mGarbageMutex, thus needs to be atomic to avoid tsan complain.
     std::atomic<VkDeviceSize> mSuballocationGarbageDestroyed;
-    // This is the cached value of mSuballocationGarbageSizeInBytes but is accessed with atomic
-    // operation. This can be accessed from different threads without mGarbageMutex, so that
-    // thread sanitizer won't complain.
-    std::atomic<VkDeviceSize> mSuballocationGarbageSizeInBytesCachedAtomic;
 
     vk::FormatTable mFormatTable;
     // A cache of VkFormatProperties as queried from the device over time.
