@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27b98138_9c317504",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-15T17:59:08Z",
+      "side": 1,
+      "message": "CL passes custom build dEQP tests (EGL/GLES2/3/3.1) with asyncCommandQueue enabled with Vulkan Secondary Command buffers. Tests was run on S906B that uses ANGLE as system GLES driver.",
+      "revId": "751a4801a7b1f2414a796d0497a594c7c35bdebb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
