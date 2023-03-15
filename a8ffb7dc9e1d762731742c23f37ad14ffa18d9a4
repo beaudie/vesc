@@ -46,6 +46,30 @@
       },
       "revId": "a8ffb7dc9e1d762731742c23f37ad14ffa18d9a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a6c4df6_fa634809",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-15T20:31:08Z",
+      "side": 1,
+      "message": "I see. The spec says \"That includes use via recording commands on any command buffers allocated from the pool\".",
+      "parentUuid": "4f51e359_538c29ac",
+      "range": {
+        "startLine": 21,
+        "startChar": 2,
+        "endLine": 25,
+        "endChar": 19
+      },
+      "revId": "a8ffb7dc9e1d762731742c23f37ad14ffa18d9a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
