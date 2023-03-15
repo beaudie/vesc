@@ -39,6 +39,30 @@
       },
       "revId": "2f050c28d04524e643bfb73fa37a4400888a6bc5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "015d9112_2d60db8f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1582,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-15T17:53:41Z",
+      "side": 1,
+      "message": "Can\u0027t say nothing against right now. Will try to consolidate maybe something come up.",
+      "parentUuid": "0404840a_cd78a9a5",
+      "range": {
+        "startLine": 1582,
+        "startChar": 6,
+        "endLine": 1582,
+        "endChar": 28
+      },
+      "revId": "2f050c28d04524e643bfb73fa37a4400888a6bc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
