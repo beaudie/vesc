@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0432aa6_ca934017",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-15T17:18:45Z",
+      "side": 1,
+      "message": "Isn\u0027t that VkCommandPool is supposedly doing exact this, that when we call vkFreeCommandBuffer, it may not actually free the memory but keep it and vkAllocateCommandBuffer it will just reuse it? Are you seeing big difference here with our own pool on top of VkCommandPool? If not for the reason that you want to recycle command buffers here, the problem could just solved by a mutex lock, right?",
+      "range": {
+        "startLine": 21,
+        "startChar": 2,
+        "endLine": 25,
+        "endChar": 19
+      },
+      "revId": "a8ffb7dc9e1d762731742c23f37ad14ffa18d9a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
