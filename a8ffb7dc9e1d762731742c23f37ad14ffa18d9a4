@@ -22,6 +22,30 @@
       },
       "revId": "a8ffb7dc9e1d762731742c23f37ad14ffa18d9a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f51e359_538c29ac",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-15T17:50:34Z",
+      "side": 1,
+      "message": "\u003e If not for the reason that you want to recycle command buffers here, the problem could just solved by a mutex lock, right?\n\nMutex lock needed for **every** `vkCmd*()` call. It will be very slow.\nMutex is not the best way. I\u0027m already see some contention in the `CommandQueue`, for example.\n\n\u003e Isn\u0027t that VkCommandPool is supposedly doing exact this, that when we call vkFreeCommandBuffer, it may not actually free the memory but keep it and vkAllocateCommandBuffer it will just reuse it?\n\nIt may depend on the driver.\n\n\u003e Are you seeing big difference here with our own pool on top of VkCommandPool?\n\nThis is a bug fix. I did not performed performance tests. I know that game engines recycle/reset command buffers. I guess it is faster that way. But with this pool we could group all buffers in a VkPool per primary command buffer for example and free/reset in the async thread. But again - this is all possibilities for the future. Now I\u0027m just fixing bug.",
+      "parentUuid": "a0432aa6_ca934017",
+      "range": {
+        "startLine": 21,
+        "startChar": 2,
+        "endLine": 25,
+        "endChar": 19
+      },
+      "revId": "a8ffb7dc9e1d762731742c23f37ad14ffa18d9a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
