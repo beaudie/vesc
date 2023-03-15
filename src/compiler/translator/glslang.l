@@ -300,10 +300,6 @@ O           [0-7]
 "image1DArray"      |
 "iimage1DArray"     |
 "uimage1DArray"     |
-"image1DShadow"     |
-"image2DShadow"     |
-"image1DArrayShadow" |
-"image2DArrayShadow" |
 
 "sampler1DArray"    |
 "sampler1DArrayShadow" |
