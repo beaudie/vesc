@@ -300,10 +300,6 @@ O           [0-7]
 "image1DArray"      |
 "iimage1DArray"     |
 "uimage1DArray"     |
-"image1DShadow"     |
-"image2DShadow"     |
-"image1DArrayShadow" |
-"image2DArrayShadow" |
 
 "sampler1DArray"    |
 "sampler1DArrayShadow" |
@@ -323,6 +319,20 @@ O           [0-7]
     /* Reserved keywords in GLSL ES 1.00 that are not reserved in GLSL ES 3.00 */
 "packed"  {
     if (context->getShaderVersion() >= 300)
+    {
+        yylval->lex.string = AllocatePoolCharArray(yytext, yyleng);
+        return check_type(yyscanner);
+    }
+
+    return reserved_word(yyscanner);
+}
+
+   /* Reserved keywords in WebGL that not reserved in GLES */
+"image1DShadow"      |
+"image2DShadow"      |
+"image1DArrayShadow" |
+"image2DArrayShadow" {
+    if(isGLESShaderSpec(context->getShaderSpec())
     {
         yylval->lex.string = AllocatePoolCharArray(yytext, yyleng);
         return check_type(yyscanner);
@@ -935,4 +945,18 @@ int glslang_scan(size_t count, const char* const string[], const int length[],
     preprocessor->setMaxTokenSize(sh::GetGlobalMaxTokenSize(context->getShaderSpec()));
 
     return 0;
+}
+
+bool isGLESShaderSpec(ShShaderSpec spec)
+{
+    if shaderSpec == ShShaderSpec::SH_GLES2_SPEC
+    || shaderSpec == ShShaderSpec::SH_GLES3_SPEC
+    || shaderSpec == ShShaderSpec::SH_GLES3_1_SPEC
+    || shaderSpec == ShShaderSpec::SH_GLES3_2_SPEC
+    || shaderSpec == ShShaderSpec::SH_GL_CORE_SPEC
+    || shaderSpec == ShShaderSpec::SH_GL_COMPATIBILITY_SPEC)
+    {
+        return true;
+    }
+    return false;
 }

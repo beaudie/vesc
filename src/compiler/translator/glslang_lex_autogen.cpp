@@ -459,7 +459,7 @@ static const flex_int16_t yy_accept[982] = {
     133, 196, 196, 196, 173, 168, 136, 196, 196, 196, 196, 196, 196, 164, 196, 196, 196,
     196, 196, 196, 97,  42,  45,  47,  46,  43,  49,  48,  50,  44,  196, 196,
 
-    196, 196, 179, 155, 196, 196, 196, 166, 196, 196, 196, 38,  126, 29,  192, 23,  167,
+    196, 196, 179, 151, 196, 196, 196, 166, 196, 196, 196, 38,  126, 29,  192, 23,  167,
     96,  196, 177, 18,  196, 196, 196, 196, 196, 196, 196, 196, 196, 196, 196, 196, 196,
     196, 196, 196, 196, 20,  37,  196, 196, 196, 196, 196, 196, 137, 102, 108, 196, 196,
     196, 196, 196, 196, 99,  101, 3,   196, 196, 196, 196, 196, 127, 196, 196, 196, 196,
@@ -471,27 +471,27 @@ static const flex_int16_t yy_accept[982] = {
     124, 196, 196, 196, 196, 6,   196, 196, 196, 196, 196, 196, 196, 196, 196, 113, 170,
     1,   196, 196, 196, 196, 196, 196, 196, 194, 196, 134, 196, 5,   189, 63,  66,  196,
     196, 196, 196, 196, 196, 196, 196, 196, 196, 196, 196, 196, 196, 196, 121, 196, 196,
-    196, 196, 196, 196, 111, 196, 196, 196, 196, 196, 196, 196, 149, 71,  72,
+    196, 196, 196, 196, 111, 196, 196, 196, 196, 196, 196, 196, 145, 71,  72,
 
     196, 196, 196, 196, 196, 196, 196, 196, 196, 196, 196, 196, 196, 196, 196, 196, 132,
-    196, 196, 196, 112, 196, 151, 76,  77,  196, 196, 196, 196, 125, 196, 196, 196, 196,
+    196, 196, 196, 112, 196, 147, 76,  77,  196, 196, 196, 196, 125, 196, 196, 196, 196,
     196, 196, 196, 196, 117, 196, 196, 196, 196, 196, 196, 196, 196, 196, 196, 196, 196,
     196, 196, 70,  196, 196, 196, 196, 64,  196, 196, 196, 196, 196, 196, 196, 196, 196,
     196, 196, 196, 196, 196, 196, 196, 196, 118, 196, 140, 196, 105, 196, 196, 196, 196,
     196, 75,  196, 196, 73,  196, 196, 196, 196, 196, 196, 196, 196, 196, 196,
 
     196, 196, 196, 196, 196, 196, 196, 119, 196, 196, 196, 196, 80,  196, 196, 78,  196,
-    196, 141, 106, 196, 196, 143, 196, 144, 196, 196, 196, 196, 196, 196, 196, 196, 196,
+    196, 141, 106, 196, 196, 152, 196, 153, 196, 196, 196, 196, 196, 196, 196, 196, 196,
     24,  196, 196, 196, 196, 196, 68,  196, 67,  89,  196, 196, 196, 196, 142, 107, 196,
     196, 196, 196, 196, 196, 196, 196, 196, 196, 196, 196, 196, 114, 196, 196, 196, 196,
-    153, 92,  196, 196, 196, 147, 196, 69,  196, 196, 196, 196, 196, 196, 196, 196, 196,
-    196, 196, 196, 154, 94,  196, 196, 196, 115, 196, 196, 196, 150, 74,  196,
+    149, 92,  196, 196, 196, 143, 196, 69,  196, 196, 196, 196, 196, 196, 196, 196, 196,
+    196, 196, 196, 150, 94,  196, 196, 196, 115, 196, 196, 196, 146, 74,  196,
 
-    196, 196, 128, 196, 190, 196, 196, 196, 81,  196, 196, 196, 196, 116, 196, 152, 79,
+    196, 196, 128, 196, 190, 196, 196, 196, 81,  196, 196, 196, 196, 116, 196, 148, 79,
     196, 196, 196, 196, 196, 196, 129, 196, 196, 196, 196, 196, 85,  196, 88,  196, 196,
     196, 130, 196, 196, 196, 196, 196, 196, 86,  91,  196, 196, 196, 196, 196, 82,  196,
-    95,  87,  93,  98,  196, 145, 146, 100, 196, 196, 196, 196, 65,  196, 196, 196, 191,
-    196, 196, 148, 83,  196, 196, 196, 196, 90,  196, 196, 84,  0};
+    95,  87,  93,  98,  196, 154, 155, 100, 196, 196, 196, 196, 65,  196, 196, 196, 191,
+    196, 196, 144, 83,  196, 196, 196, 196, 90,  196, 196, 84,  0};
 
 static const YY_CHAR yy_ec[256] = {
     0,  1,  1,  1,  1,  1,  1,  1,  1,  2,  3,  2,  2,  2,  1,  1,  1,  1,  1,  1,  1,
@@ -2180,10 +2180,6 @@ YY_DECL
                 case 148:
                 case 149:
                 case 150:
-                case 151:
-                case 152:
-                case 153:
-                case 154:
                     YY_RULE_SETUP
                     {
                         if (context->getShaderVersion() < 300)
@@ -2195,7 +2191,7 @@ YY_DECL
                     }
                     YY_BREAK
                 /* Reserved keywords in GLSL ES 1.00 that are not reserved in GLSL ES 3.00 */
-                case 155:
+                case 151:
                     YY_RULE_SETUP
                     {
                         if (context->getShaderVersion() >= 300)
@@ -2205,6 +2201,22 @@ YY_DECL
                         }
 
                         return reserved_word(yyscanner);
+                    }
+                    YY_BREAK
+                /* Reserved keywords in WebGL that not reserved in GLES */
+                case 152:
+                case 153:
+                case 154:
+                case 155:
+                    YY_RULE_SETUP
+                    {
+    if(isGLESShaderSpec(context->getShaderSpec())
+    {
+                            yylval->lex.string = AllocatePoolCharArray(yytext, yyleng);
+                            return check_type(yyscanner);
+    }
+
+    return reserved_word(yyscanner);
                     }
                     YY_BREAK
                 /* Reserved keywords */
@@ -2250,365 +2262,365 @@ YY_DECL
                 case 195:
                     YY_RULE_SETUP
                     {
-                        return reserved_word(yyscanner);
+    return reserved_word(yyscanner);
                     }
                     YY_BREAK
                 case 196:
                     YY_RULE_SETUP
                     {
-                        yylval->lex.string = AllocatePoolCharArray(yytext, yyleng);
-                        return check_type(yyscanner);
+    yylval->lex.string = AllocatePoolCharArray(yytext, yyleng);
+    return check_type(yyscanner);
                     }
                     YY_BREAK
                 case 197:
                     YY_RULE_SETUP
                     {
-                        return int_constant(context);
+    return int_constant(context);
                     }
                     YY_BREAK
                 case 198:
                     YY_RULE_SETUP
                     {
-                        return int_constant(context);
+    return int_constant(context);
                     }
                     YY_BREAK
                 case 199:
                     YY_RULE_SETUP
                     {
-                        return int_constant(context);
+    return int_constant(context);
                     }
                     YY_BREAK
                 case 200:
                     YY_RULE_SETUP
                     {
-                        return uint_constant(context);
+    return uint_constant(context);
                     }
                     YY_BREAK
                 case 201:
                     YY_RULE_SETUP
                     {
-                        return uint_constant(context);
+    return uint_constant(context);
                     }
                     YY_BREAK
                 case 202:
                     YY_RULE_SETUP
                     {
-                        return uint_constant(context);
+    return uint_constant(context);
                     }
                     YY_BREAK
                 case 203:
                     YY_RULE_SETUP
                     {
-                        return float_constant(yyscanner);
+    return float_constant(yyscanner);
                     }
                     YY_BREAK
                 case 204:
                     YY_RULE_SETUP
                     {
-                        return float_constant(yyscanner);
+    return float_constant(yyscanner);
                     }
                     YY_BREAK
                 case 205:
                     YY_RULE_SETUP
                     {
-                        return float_constant(yyscanner);
+    return float_constant(yyscanner);
                     }
                     YY_BREAK
                 case 206:
                     YY_RULE_SETUP
                     {
-                        return floatsuffix_check(context);
+    return floatsuffix_check(context);
                     }
                     YY_BREAK
                 case 207:
                     YY_RULE_SETUP
                     {
-                        return floatsuffix_check(context);
+    return floatsuffix_check(context);
                     }
                     YY_BREAK
                 case 208:
                     YY_RULE_SETUP
                     {
-                        return floatsuffix_check(context);
+    return floatsuffix_check(context);
                     }
                     YY_BREAK
                 case 209:
                     YY_RULE_SETUP
                     {
-                        return ADD_ASSIGN;
+    return ADD_ASSIGN;
                     }
                     YY_BREAK
                 case 210:
                     YY_RULE_SETUP
                     {
-                        return SUB_ASSIGN;
+    return SUB_ASSIGN;
                     }
                     YY_BREAK
                 case 211:
                     YY_RULE_SETUP
                     {
-                        return MUL_ASSIGN;
+    return MUL_ASSIGN;
                     }
                     YY_BREAK
                 case 212:
                     YY_RULE_SETUP
                     {
-                        return DIV_ASSIGN;
+    return DIV_ASSIGN;
                     }
                     YY_BREAK
                 case 213:
                     YY_RULE_SETUP
                     {
-                        return MOD_ASSIGN;
+    return MOD_ASSIGN;
                     }
                     YY_BREAK
                 case 214:
                     YY_RULE_SETUP
                     {
-                        return LEFT_ASSIGN;
+    return LEFT_ASSIGN;
                     }
                     YY_BREAK
                 case 215:
                     YY_RULE_SETUP
                     {
-                        return RIGHT_ASSIGN;
+    return RIGHT_ASSIGN;
                     }
                     YY_BREAK
                 case 216:
                     YY_RULE_SETUP
                     {
-                        return AND_ASSIGN;
+    return AND_ASSIGN;
                     }
                     YY_BREAK
                 case 217:
                     YY_RULE_SETUP
                     {
-                        return XOR_ASSIGN;
+    return XOR_ASSIGN;
                     }
                     YY_BREAK
                 case 218:
                     YY_RULE_SETUP
                     {
-                        return OR_ASSIGN;
+    return OR_ASSIGN;
                     }
                     YY_BREAK
                 case 219:
                     YY_RULE_SETUP
                     {
-                        return INC_OP;
+    return INC_OP;
                     }
                     YY_BREAK
                 case 220:
                     YY_RULE_SETUP
                     {
-                        return DEC_OP;
+    return DEC_OP;
                     }
                     YY_BREAK
                 case 221:
                     YY_RULE_SETUP
                     {
-                        return AND_OP;
+    return AND_OP;
                     }
                     YY_BREAK
                 case 222:
                     YY_RULE_SETUP
                     {
-                        return OR_OP;
+    return OR_OP;
                     }
                     YY_BREAK
                 case 223:
                     YY_RULE_SETUP
                     {
-                        return XOR_OP;
+    return XOR_OP;
                     }
                     YY_BREAK
                 case 224:
                     YY_RULE_SETUP
                     {
-                        return LE_OP;
+    return LE_OP;
                     }
                     YY_BREAK
                 case 225:
                     YY_RULE_SETUP
                     {
-                        return GE_OP;
+    return GE_OP;
                     }
                     YY_BREAK
                 case 226:
                     YY_RULE_SETUP
                     {
-                        return EQ_OP;
+    return EQ_OP;
                     }
                     YY_BREAK
                 case 227:
                     YY_RULE_SETUP
                     {
-                        return NE_OP;
+    return NE_OP;
                     }
                     YY_BREAK
                 case 228:
                     YY_RULE_SETUP
                     {
-                        return LEFT_OP;
+    return LEFT_OP;
                     }
                     YY_BREAK
                 case 229:
                     YY_RULE_SETUP
                     {
-                        return RIGHT_OP;
+    return RIGHT_OP;
                     }
                     YY_BREAK
                 case 230:
                     YY_RULE_SETUP
                     {
-                        return SEMICOLON;
+    return SEMICOLON;
                     }
                     YY_BREAK
                 case 231:
                     YY_RULE_SETUP
                     {
-                        return LEFT_BRACE;
+    return LEFT_BRACE;
                     }
                     YY_BREAK
                 case 232:
                     YY_RULE_SETUP
                     {
-                        return RIGHT_BRACE;
+    return RIGHT_BRACE;
                     }
                     YY_BREAK
                 case 233:
                     YY_RULE_SETUP
                     {
-                        return COMMA;
+    return COMMA;
                     }
                     YY_BREAK
                 case 234:
                     YY_RULE_SETUP
                     {
-                        return COLON;
+    return COLON;
                     }
                     YY_BREAK
                 case 235:
                     YY_RULE_SETUP
                     {
-                        return EQUAL;
+    return EQUAL;
                     }
                     YY_BREAK
                 case 236:
                     YY_RULE_SETUP
                     {
-                        return LEFT_PAREN;
+    return LEFT_PAREN;
                     }
                     YY_BREAK
                 case 237:
                     YY_RULE_SETUP
                     {
-                        return RIGHT_PAREN;
+    return RIGHT_PAREN;
                     }
                     YY_BREAK
                 case 238:
                     YY_RULE_SETUP
                     {
-                        return LEFT_BRACKET;
+    return LEFT_BRACKET;
                     }
                     YY_BREAK
                 case 239:
                     YY_RULE_SETUP
                     {
-                        return RIGHT_BRACKET;
+    return RIGHT_BRACKET;
                     }
                     YY_BREAK
                 case 240:
                     YY_RULE_SETUP
                     {
-                        BEGIN(FIELDS);
-                        return DOT;
+    BEGIN(FIELDS);
+    return DOT;
                     }
                     YY_BREAK
                 case 241:
                     YY_RULE_SETUP
                     {
-                        return BANG;
+    return BANG;
                     }
                     YY_BREAK
                 case 242:
                     YY_RULE_SETUP
                     {
-                        return DASH;
+    return DASH;
                     }
                     YY_BREAK
                 case 243:
                     YY_RULE_SETUP
                     {
-                        return TILDE;
+    return TILDE;
                     }
                     YY_BREAK
                 case 244:
                     YY_RULE_SETUP
                     {
-                        return PLUS;
+    return PLUS;
                     }
                     YY_BREAK
                 case 245:
                     YY_RULE_SETUP
                     {
-                        return STAR;
+    return STAR;
                     }
                     YY_BREAK
                 case 246:
                     YY_RULE_SETUP
                     {
-                        return SLASH;
+    return SLASH;
                     }
                     YY_BREAK
                 case 247:
                     YY_RULE_SETUP
                     {
-                        return PERCENT;
+    return PERCENT;
                     }
                     YY_BREAK
                 case 248:
                     YY_RULE_SETUP
                     {
-                        return LEFT_ANGLE;
+    return LEFT_ANGLE;
                     }
                     YY_BREAK
                 case 249:
                     YY_RULE_SETUP
                     {
-                        return RIGHT_ANGLE;
+    return RIGHT_ANGLE;
                     }
                     YY_BREAK
                 case 250:
                     YY_RULE_SETUP
                     {
-                        return VERTICAL_BAR;
+    return VERTICAL_BAR;
                     }
                     YY_BREAK
                 case 251:
                     YY_RULE_SETUP
                     {
-                        return CARET;
+    return CARET;
                     }
                     YY_BREAK
                 case 252:
                     YY_RULE_SETUP
                     {
-                        return AMPERSAND;
+    return AMPERSAND;
                     }
                     YY_BREAK
                 case 253:
                     YY_RULE_SETUP
                     {
-                        return QUESTION;
+    return QUESTION;
                     }
                     YY_BREAK
                 case 254:
                     YY_RULE_SETUP
                     {
-                        BEGIN(INITIAL);
-                        yylval->lex.string = AllocatePoolCharArray(yytext, yyleng);
-                        return FIELD_SELECTION;
+    BEGIN(INITIAL);
+    yylval->lex.string = AllocatePoolCharArray(yytext, yyleng);
+    return FIELD_SELECTION;
                     }
                     YY_BREAK
                 case 255:
@@ -2617,8 +2629,8 @@ YY_DECL
                 case 256:
                     YY_RULE_SETUP
                     {
-                        yyextra->error(*yylloc, "Illegal character at fieldname start", yytext);
-                        return 0;
+    yyextra->error(*yylloc, "Illegal character at fieldname start", yytext);
+    return 0;
                     }
                     YY_BREAK
                 case 257:
@@ -2634,8 +2646,8 @@ YY_DECL
                 case 258:
                     YY_RULE_SETUP
                     {
-                        assert(false);
-                        return 0;
+    assert(false);
+    return 0;
                     }
                     YY_BREAK
                 case 259:
@@ -2654,18 +2666,18 @@ YY_DECL
 
                     if (YY_CURRENT_BUFFER_LVALUE->yy_buffer_status == YY_BUFFER_NEW)
                     {
-                        /* We're scanning a new file or input source.  It's
-                         * possible that this happened because the user
-                         * just pointed yyin at a new source and called
-                         * yylex().  If so, then we have to assure
-                         * consistency between YY_CURRENT_BUFFER and our
-                         * globals.  Here is the right place to do so, because
-                         * this is the first action (other than possibly a
-                         * back-up) that will match for the new input source.
-                         */
-                        yyg->yy_n_chars = YY_CURRENT_BUFFER_LVALUE->yy_n_chars;
-                        YY_CURRENT_BUFFER_LVALUE->yy_input_file    = yyin;
-                        YY_CURRENT_BUFFER_LVALUE->yy_buffer_status = YY_BUFFER_NORMAL;
+    /* We're scanning a new file or input source.  It's
+     * possible that this happened because the user
+     * just pointed yyin at a new source and called
+     * yylex().  If so, then we have to assure
+     * consistency between YY_CURRENT_BUFFER and our
+     * globals.  Here is the right place to do so, because
+     * this is the first action (other than possibly a
+     * back-up) that will match for the new input source.
+     */
+    yyg->yy_n_chars                            = YY_CURRENT_BUFFER_LVALUE->yy_n_chars;
+    YY_CURRENT_BUFFER_LVALUE->yy_input_file    = yyin;
+    YY_CURRENT_BUFFER_LVALUE->yy_buffer_status = YY_BUFFER_NORMAL;
                     }
 
                     /* Note that here we test for yy_c_buf_p "<=" to the position
@@ -2677,92 +2689,91 @@ YY_DECL
                      */
                     if (yyg->yy_c_buf_p <= &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[yyg->yy_n_chars])
                     { /* This was really a NUL. */
-                        yy_state_type yy_next_state;
+    yy_state_type yy_next_state;
 
-                        yyg->yy_c_buf_p = yyg->yytext_ptr + yy_amount_of_matched_text;
+    yyg->yy_c_buf_p = yyg->yytext_ptr + yy_amount_of_matched_text;
 
-                        yy_current_state = yy_get_previous_state(yyscanner);
+    yy_current_state = yy_get_previous_state(yyscanner);
 
-                        /* Okay, we're now positioned to make the NUL
-                         * transition.  We couldn't have
-                         * yy_get_previous_state() go ahead and do it
-                         * for us because it doesn't know how to deal
-                         * with the possibility of jamming (and we don't
-                         * want to build jamming into it because then it
-                         * will run more slowly).
-                         */
+    /* Okay, we're now positioned to make the NUL
+     * transition.  We couldn't have
+     * yy_get_previous_state() go ahead and do it
+     * for us because it doesn't know how to deal
+     * with the possibility of jamming (and we don't
+     * want to build jamming into it because then it
+     * will run more slowly).
+     */
 
-                        yy_next_state = yy_try_NUL_trans(yy_current_state, yyscanner);
+    yy_next_state = yy_try_NUL_trans(yy_current_state, yyscanner);
 
-                        yy_bp = yyg->yytext_ptr + YY_MORE_ADJ;
+    yy_bp = yyg->yytext_ptr + YY_MORE_ADJ;
 
-                        if (yy_next_state)
-                        {
-                            /* Consume the NUL. */
-                            yy_cp            = ++yyg->yy_c_buf_p;
-                            yy_current_state = yy_next_state;
-                            goto yy_match;
-                        }
+    if (yy_next_state)
+    {
+        /* Consume the NUL. */
+        yy_cp            = ++yyg->yy_c_buf_p;
+        yy_current_state = yy_next_state;
+        goto yy_match;
+    }
 
-                        else
-                        {
-                            yy_cp            = yyg->yy_last_accepting_cpos;
-                            yy_current_state = yyg->yy_last_accepting_state;
-                            goto yy_find_action;
-                        }
+    else
+    {
+        yy_cp            = yyg->yy_last_accepting_cpos;
+        yy_current_state = yyg->yy_last_accepting_state;
+        goto yy_find_action;
+    }
                     }
 
                     else
-                        switch (yy_get_next_buffer(yyscanner))
-                        {
-                            case EOB_ACT_END_OF_FILE:
-                            {
-                                yyg->yy_did_buffer_switch_on_eof = 0;
+    switch (yy_get_next_buffer(yyscanner))
+    {
+        case EOB_ACT_END_OF_FILE:
+        {
+            yyg->yy_did_buffer_switch_on_eof = 0;
 
-                                if (yywrap(yyscanner))
-                                {
-                                    /* Note: because we've taken care in
-                                     * yy_get_next_buffer() to have set up
-                                     * yytext, we can now set up
-                                     * yy_c_buf_p so that if some total
-                                     * hoser (like flex itself) wants to
-                                     * call the scanner after we return the
-                                     * YY_NULL, it'll still work - another
-                                     * YY_NULL will get returned.
-                                     */
-                                    yyg->yy_c_buf_p = yyg->yytext_ptr + YY_MORE_ADJ;
+            if (yywrap(yyscanner))
+            {
+                /* Note: because we've taken care in
+                 * yy_get_next_buffer() to have set up
+                 * yytext, we can now set up
+                 * yy_c_buf_p so that if some total
+                 * hoser (like flex itself) wants to
+                 * call the scanner after we return the
+                 * YY_NULL, it'll still work - another
+                 * YY_NULL will get returned.
+                 */
+                yyg->yy_c_buf_p = yyg->yytext_ptr + YY_MORE_ADJ;
 
-                                    yy_act = YY_STATE_EOF(YY_START);
-                                    goto do_action;
-                                }
+                yy_act = YY_STATE_EOF(YY_START);
+                goto do_action;
+            }
 
-                                else
-                                {
-                                    if (!yyg->yy_did_buffer_switch_on_eof)
-                                        YY_NEW_FILE;
-                                }
-                                break;
-                            }
+            else
+            {
+                if (!yyg->yy_did_buffer_switch_on_eof)
+                    YY_NEW_FILE;
+            }
+            break;
+        }
 
-                            case EOB_ACT_CONTINUE_SCAN:
-                                yyg->yy_c_buf_p = yyg->yytext_ptr + yy_amount_of_matched_text;
+        case EOB_ACT_CONTINUE_SCAN:
+            yyg->yy_c_buf_p = yyg->yytext_ptr + yy_amount_of_matched_text;
 
-                                yy_current_state = yy_get_previous_state(yyscanner);
+            yy_current_state = yy_get_previous_state(yyscanner);
 
-                                yy_cp = yyg->yy_c_buf_p;
-                                yy_bp = yyg->yytext_ptr + YY_MORE_ADJ;
-                                goto yy_match;
+            yy_cp = yyg->yy_c_buf_p;
+            yy_bp = yyg->yytext_ptr + YY_MORE_ADJ;
+            goto yy_match;
 
-                            case EOB_ACT_LAST_MATCH:
-                                yyg->yy_c_buf_p =
-                                    &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[yyg->yy_n_chars];
+        case EOB_ACT_LAST_MATCH:
+            yyg->yy_c_buf_p = &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[yyg->yy_n_chars];
 
-                                yy_current_state = yy_get_previous_state(yyscanner);
+            yy_current_state = yy_get_previous_state(yyscanner);
 
-                                yy_cp = yyg->yy_c_buf_p;
-                                yy_bp = yyg->yytext_ptr + YY_MORE_ADJ;
-                                goto yy_find_action;
-                        }
+            yy_cp = yyg->yy_c_buf_p;
+            yy_bp = yyg->yytext_ptr + YY_MORE_ADJ;
+            goto yy_find_action;
+    }
                     break;
                 }
 
@@ -3025,10 +3036,10 @@ static int input(yyscan_t yyscanner)
                 case EOB_ACT_END_OF_FILE:
                 {
                     if (yywrap(yyscanner))
-                        return 0;
+    return 0;
 
                     if (!yyg->yy_did_buffer_switch_on_eof)
-                        YY_NEW_FILE;
+    YY_NEW_FILE;
 #    ifdef __cplusplus
                     return yyinput(yyscanner);
 #    else
@@ -4311,4 +4322,18 @@ int glslang_scan(size_t count,
     preprocessor->setMaxTokenSize(sh::GetGlobalMaxTokenSize(context->getShaderSpec()));
 
     return 0;
+}
+
+bool isGLESShaderSpec(ShShaderSpec spec)
+{
+    if shaderSpec == ShShaderSpec::SH_GLES2_SPEC
+    || shaderSpec == ShShaderSpec::SH_GLES3_SPEC
+    || shaderSpec == ShShaderSpec::SH_GLES3_1_SPEC
+    || shaderSpec == ShShaderSpec::SH_GLES3_2_SPEC
+    || shaderSpec == ShShaderSpec::SH_GL_CORE_SPEC
+    || shaderSpec == ShShaderSpec::SH_GL_COMPATIBILITY_SPEC)
+        {
+            return true;
+        }
+    return false;
 }
