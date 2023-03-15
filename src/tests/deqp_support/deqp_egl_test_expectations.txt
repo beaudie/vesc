@@ -252,6 +252,9 @@
 // Crashes
 6485 MAC METAL : dEQP-EGL.functional.sharing.gles2.multithread.* = SKIP
 
+// New failure on MacBook Pro 2019 macOS 13.2.1
+8091 MAC METAL AMD : dEQP-EGL.functional.native_color_mapping.native_window.rgba8888_depth_no_stencil_render = SKIP
+
 6528 PIXEL4ORXL GLES : dEQP-EGL.functional.image.render_multiple_contexts.gles2_android_native_s8_stencil_buffer = SKIP
 6528 PIXEL4ORXL GLES : dEQP-EGL.functional.image.modify.android_native_s8_renderbuffer_clear_stencil = SKIP
 6528 PIXEL4ORXL GLES : dEQP-EGL.functional.get_frame_timestamps.* = FAIL
