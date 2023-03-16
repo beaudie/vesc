@@ -2596,8 +2596,17 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
         SetStencilStateForWrite(&pipelineDesc);
     }
 
+    // Initialize RenderPass info.
+    vk::AttachmentOpsArray renderPassAttachmentOps;
+    vk::PackedClearValuesArray packedClearValues;
+    gl::AttachmentsMask unresolveAttachmentMask;
+    framebuffer->initRenderPassAttachmentOps(contextVk, &renderPassAttachmentOps,
+                                             &packedClearValues, &unresolveAttachmentMask);
+
     vk::RenderPassCommandBuffer *commandBuffer;
-    ANGLE_TRY(framebuffer->startNewRenderPass(contextVk, params.blitArea, &commandBuffer, nullptr));
+    ANGLE_TRY(framebuffer->startNewRenderPass(contextVk, params.blitArea, renderPassAttachmentOps,
+                                              packedClearValues, unresolveAttachmentMask,
+                                              &commandBuffer, nullptr));
 
     VkDescriptorSet descriptorSet;
     ANGLE_TRY(allocateDescriptorSet(contextVk, &contextVk->getStartedRenderPassCommands(),
