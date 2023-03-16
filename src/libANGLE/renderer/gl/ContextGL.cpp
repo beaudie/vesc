@@ -1057,7 +1057,8 @@ angle::Result ContextGL::drawPixelLocalStorageEXTEnable(gl::Context *context,
         const gl::PixelLocalStoragePlane &plane = planes[i];
         GLenum loadop                           = loadops[i];
         bool preserved                          = loadop == GL_LOAD_OP_LOAD_ANGLE;
-        b.prependPlane(plane.getInternalformat(), preserved);
+        b.prependPlane(loadop != GL_LOAD_OP_DISABLE_ANGLE ? plane.getInternalformat() : GL_NONE,
+                       preserved);
         if (preserved)
         {
             const gl::ImageIndex &idx = plane.getTextureImageIndex();

@@ -755,8 +755,7 @@ class BufferHelper : public ReadWriteResource
     angle::Result initSuballocation(ContextVk *contextVk,
                                     uint32_t memoryTypeIndex,
                                     size_t size,
-                                    size_t alignment,
-                                    BufferUsageType usageType);
+                                    size_t alignment);
 
     // Helper functions to initialize a buffer for a specific usage
     // Suballocate a buffer with alignment good for shader storage or copyBuffer .
