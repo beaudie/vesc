@@ -52,6 +52,24 @@
       "parentUuid": "468194de_e66ef431",
       "revId": "52c1564921033b39f9c3008786ac116091a74115",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a7eaa6a_aab3f289",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-16T14:57:43Z",
+      "side": 1,
+      "message": "I don\u0027t disagree with any of that. I realize now I misread the message; the crash is on `S906B`, not something being tested at Google (you linked to this from a google-infra issue for an unrelated reason, which tricked my brain 😄)",
+      "parentUuid": "f538273d_5642b319",
+      "revId": "52c1564921033b39f9c3008786ac116091a74115",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
