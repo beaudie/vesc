@@ -306,12 +306,6 @@ class RendererVk : angle::NonCopyable
                                     vk::SubmitPolicy submitPolicy,
                                     QueueSerial *queueSerialOut);
 
-    angle::Result queueSubmitWaitSemaphore(vk::Context *context,
-                                           egl::ContextPriority priority,
-                                           const vk::Semaphore &waitSemaphore,
-                                           VkPipelineStageFlags waitSemaphoreStageMasks,
-                                           QueueSerial submitQueueSerial);
-
     template <typename... ArgsT>
     void collectGarbage(const vk::ResourceUse &use, ArgsT... garbageIn)
     {
@@ -494,12 +488,6 @@ class RendererVk : angle::NonCopyable
                                  const vk::Semaphore *signalSemaphore,
                                  const QueueSerial &submitQueueSerial);
 
-    angle::Result submitPriorityDependency(vk::Context *context,
-                                           vk::ProtectionTypes protectionTypes,
-                                           egl::ContextPriority srcContextPriority,
-                                           egl::ContextPriority dstContextPriority,
-                                           SerialIndex index);
-
     void handleDeviceLost();
     angle::Result finishResourceUse(vk::Context *context, const vk::ResourceUse &use);
     angle::Result finishQueueSerial(vk::Context *context, const QueueSerial &queueSerial);
@@ -511,18 +499,15 @@ class RendererVk : angle::NonCopyable
     angle::Result checkCompletedCommands(vk::Context *context);
 
     angle::Result flushWaitSemaphores(vk::ProtectionType protectionType,
-                                      egl::ContextPriority priority,
                                       std::vector<VkSemaphore> &&waitSemaphores,
                                       std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks);
     angle::Result flushRenderPassCommands(vk::Context *context,
                                           vk::ProtectionType protectionType,
-                                          egl::ContextPriority priority,
                                           const vk::RenderPass &renderPass,
                                           vk::RenderPassCommandBufferHelper **renderPassCommands);
     angle::Result flushOutsideRPCommands(
         vk::Context *context,
         vk::ProtectionType protectionType,
-        egl::ContextPriority priority,
         vk::OutsideRenderPassCommandBufferHelper **outsideRPCommands);
 
     void queuePresent(vk::Context *context,

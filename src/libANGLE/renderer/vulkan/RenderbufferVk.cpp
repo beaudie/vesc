@@ -181,8 +181,6 @@ angle::Result RenderbufferVk::setStorageEGLImageTarget(const gl::Context *contex
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
 
-    ANGLE_TRY(contextVk->getShareGroup()->lockDefaultContextsPriority(contextVk));
-
     releaseAndDeleteImage(contextVk);
 
     ImageVk *imageVk    = vk::GetImpl(image);
