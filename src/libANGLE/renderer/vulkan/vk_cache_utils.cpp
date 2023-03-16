@@ -2766,6 +2766,11 @@ void RenderPassDesc::removeColorUnresolveAttachment(size_t colorIndexGL)
     mColorUnresolveAttachmentMask.reset(colorIndexGL);
 }
 
+void RenderPassDesc::setColorUnresolveAttachmentMask(const gl::DrawBufferMask &colorUnresolveMask)
+{
+    mColorUnresolveAttachmentMask = colorUnresolveMask;
+}
+
 void RenderPassDesc::packDepthStencilResolveAttachment()
 {
     ASSERT(hasDepthStencilAttachment());
@@ -4375,6 +4380,24 @@ void AttachmentOpsArray::setClearStencilOp(PackedAttachmentIndex index)
 {
     PackedAttachmentOpsDesc &ops = mOps[index.get()];
     SetBitField(ops.stencilLoadOp, RenderPassLoadOp::Clear);
+}
+
+void AttachmentOpsArray::skipLoad(PackedAttachmentIndex index)
+{
+    PackedAttachmentOpsDesc &ops = mOps[index.get()];
+    if (ops.loadOp == ToUnderlying(RenderPassLoadOp::Load))
+    {
+        SetBitField(ops.loadOp, RenderPassLoadOp::DontCare);
+    }
+}
+
+void AttachmentOpsArray::skipStencilLoad(PackedAttachmentIndex index)
+{
+    PackedAttachmentOpsDesc &ops = mOps[index.get()];
+    if (ops.loadOp == ToUnderlying(RenderPassLoadOp::Load))
+    {
+        SetBitField(ops.stencilLoadOp, RenderPassLoadOp::DontCare);
+    }
 }
 
 size_t AttachmentOpsArray::hash() const

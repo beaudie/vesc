@@ -2596,15 +2596,28 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
         SetStencilStateForWrite(&pipelineDesc);
     }
 
+    // Initialize RenderPass info.
+    vk::AttachmentOpsArray renderPassAttachmentOps;
+    vk::PackedClearValuesArray packedClearValues;
+    gl::AttachmentsMask unresolveAttachmentMask;
+    gl::Rectangle renderArea = params.blitArea;
+    framebuffer->initRenderPassAttachmentOps(contextVk, &renderArea, &renderPassAttachmentOps,
+                                             &packedClearValues, &unresolveAttachmentMask);
+
     vk::RenderPassCommandBuffer *commandBuffer;
-    ANGLE_TRY(framebuffer->startNewRenderPass(contextVk, params.blitArea, &commandBuffer, nullptr));
+    ANGLE_TRY(framebuffer->startNewRenderPass(contextVk, renderArea, &renderPassAttachmentOps,
+                                              packedClearValues, unresolveAttachmentMask,
+                                              &commandBuffer, nullptr));
 
     VkDescriptorSet descriptorSet;
     ANGLE_TRY(allocateDescriptorSet(contextVk, &contextVk->getStartedRenderPassCommands(),
                                     Function::BlitResolve, &descriptorSet));
 
-    contextVk->onImageRenderPassRead(src->getAspectFlags(), vk::ImageLayout::FragmentShaderReadOnly,
-                                     src);
+    // Pick layout consistent with GetImageReadLayout() to avoid unnecessary layout change.
+    vk::ImageLayout srcImagelayout = src->isDepthOrStencil()
+                                         ? vk::ImageLayout::DepthReadStencilReadFragmentShaderRead
+                                         : vk::ImageLayout::FragmentShaderReadOnly;
+    contextVk->onImageRenderPassRead(src->getAspectFlags(), srcImagelayout, src);
 
     UpdateColorAccess(contextVk, framebuffer->getState().getColorAttachmentsMask(),
                       framebuffer->getState().getEnabledDrawBuffers());

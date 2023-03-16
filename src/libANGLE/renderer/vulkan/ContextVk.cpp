@@ -2242,7 +2242,9 @@ angle::Result ContextVk::handleDirtyAnySamplePassedQueryEnd(DirtyBits::Iterator 
         // getQueryResult gets unblocked sooner.
         dirtyBitsIterator->setLaterBit(DIRTY_BIT_RENDER_PASS);
 
-        mHasDeferredFlush = true;
+        // Don't let next render pass end up being reactivated which defeats the purpose of it.
+        mIsReactivateRenderPassAllowed = false;
+        mHasDeferredFlush              = true;
     }
     return angle::Result::Continue;
 }
@@ -2250,6 +2252,33 @@ angle::Result ContextVk::handleDirtyAnySamplePassedQueryEnd(DirtyBits::Iterator 
 angle::Result ContextVk::handleDirtyGraphicsRenderPass(DirtyBits::Iterator *dirtyBitsIterator,
                                                        DirtyBits dirtyBitMask)
 {
+    FramebufferVk *drawFramebufferVk = getDrawFramebuffer();
+
+    // Initialize RenderPass info.
+    vk::AttachmentOpsArray renderPassAttachmentOps;
+    vk::PackedClearValuesArray packedClearValues;
+    gl::AttachmentsMask unresolveAttachmentMask;
+    gl::Rectangle renderArea = drawFramebufferVk->getRotatedScissoredRenderArea(this);
+
+    drawFramebufferVk->initRenderPassAttachmentOps(this, &renderArea, &renderPassAttachmentOps,
+                                                   &packedClearValues, &unresolveAttachmentMask);
+
+    // Check to see if we can reactivate the current renderPass, if all arguments that we use to
+    // start the render pass is the same. We don't need to check clear values since mid render pass
+    // clear are handled differently.
+    if (hasStartedRenderPassWithQueueSerial(drawFramebufferVk->getLastRenderPassQueueSerial()) &&
+        mIsReactivateRenderPassAllowed && mRenderPassCommands->getRenderArea() == renderArea &&
+        /*mRenderPassCommands->getAttachmentOps() == renderPassAttachmentOps &&*/
+        drawFramebufferVk->getUnresolveAttachmentMask() == unresolveAttachmentMask)
+    {
+        WARN() << "Reactivate already started render pass";
+        mRenderPassCommandBuffer = &mRenderPassCommands->getCommandBuffer();
+        ASSERT(hasActiveRenderPass());
+        ASSERT(drawFramebufferVk->getRenderPassDesc() == mRenderPassCommands->getRenderPassDesc());
+
+        return angle::Result::Continue;
+    }
+
     // If the render pass needs to be recreated, close it using the special mid-dirty-bit-handling
     // function, so later dirty bits can be set.
     if (mRenderPassCommands->started())
@@ -2259,11 +2288,10 @@ angle::Result ContextVk::handleDirtyGraphicsRenderPass(DirtyBits::Iterator *dirt
                                                RenderPassClosureReason::AlreadySpecifiedElsewhere));
     }
 
-    FramebufferVk *drawFramebufferVk  = getDrawFramebuffer();
-    gl::Rectangle scissoredRenderArea = drawFramebufferVk->getRotatedScissoredRenderArea(this);
-    bool renderPassDescChanged        = false;
-
-    ANGLE_TRY(startRenderPass(scissoredRenderArea, nullptr, &renderPassDescChanged));
+    bool renderPassDescChanged = false;
+    ANGLE_TRY(startRenderPassWithAttachmentOps(renderArea, &renderPassAttachmentOps,
+                                               packedClearValues, unresolveAttachmentMask, nullptr,
+                                               &renderPassDescChanged));
 
     // The render pass desc can change when starting the render pass, for example due to
     // multisampled-render-to-texture needs based on loadOps.  In that case, recreate the graphics
@@ -7221,14 +7249,40 @@ angle::Result ContextVk::startRenderPass(gl::Rectangle renderArea,
                                          bool *renderPassDescChangedOut)
 {
     FramebufferVk *drawFramebufferVk = getDrawFramebuffer();
+
+    // Initialize RenderPass info.
+    vk::AttachmentOpsArray renderPassAttachmentOps;
+    vk::PackedClearValuesArray packedClearValues;
+    gl::AttachmentsMask unresolveAttachmentMask;
+    drawFramebufferVk->initRenderPassAttachmentOps(this, &renderArea, &renderPassAttachmentOps,
+                                                   &packedClearValues, &unresolveAttachmentMask);
+
+    return startRenderPassWithAttachmentOps(renderArea, &renderPassAttachmentOps, packedClearValues,
+                                            unresolveAttachmentMask, commandBufferOut,
+                                            renderPassDescChangedOut);
+}
+
+angle::Result ContextVk::startRenderPassWithAttachmentOps(
+    const gl::Rectangle &scissoredRenderArea,
+    vk::AttachmentOpsArray *renderPassAttachmentOps,
+    const vk::PackedClearValuesArray &packedClearValues,
+    const gl::AttachmentsMask &unresolveAttachmentMask,
+    vk::RenderPassCommandBuffer **commandBufferOut,
+    bool *renderPassDescChangedOut)
+{
+    FramebufferVk *drawFramebufferVk = getDrawFramebuffer();
     ASSERT(drawFramebufferVk == vk::GetImpl(mState.getDrawFramebuffer()));
 
-    ANGLE_TRY(drawFramebufferVk->startNewRenderPass(this, renderArea, &mRenderPassCommandBuffer,
-                                                    renderPassDescChangedOut));
+    ANGLE_TRY(drawFramebufferVk->startNewRenderPass(
+        this, scissoredRenderArea, renderPassAttachmentOps, packedClearValues,
+        unresolveAttachmentMask, &mRenderPassCommandBuffer, renderPassDescChangedOut));
 
     // Make sure the render pass is not restarted if it is started by UtilsVk (as opposed to
     // setupDraw(), which clears this bit automatically).
     mGraphicsDirtyBits.reset(DIRTY_BIT_RENDER_PASS);
+
+    // By default, render pass is allowed to be reactivated.
+    mIsReactivateRenderPassAllowed = true;
 
     ANGLE_TRY(resumeRenderPassQueriesIfActive());
 
