@@ -16,6 +16,8 @@
 #    include <vulkan/vulkan.h>
 #endif
 
+#define FORCE_RECOMPILE_GUID "81BE7675-7621-4765-961E-EFC44B1BEB0F"
+
 // For the unreleased VK_GOOGLEX_multisampled_render_to_single_sampled
 #if !defined(VK_GOOGLEX_multisampled_render_to_single_sampled)
 #    define VK_GOOGLEX_multisampled_render_to_single_sampled 1
