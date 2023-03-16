@@ -34,6 +34,24 @@
       "parentUuid": "a0b28472_ce2fb9ef",
       "revId": "75522675d7c32986e3815895739473232127e7aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6475f32_7e7fdb2e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4036,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2023-03-16T20:56:37Z",
+      "side": 1,
+      "message": "but good to avoid the trouble of scrubing those from the Android.bp. Resolve per offline chat.",
+      "parentUuid": "0d1446b5_d631ed87",
+      "revId": "75522675d7c32986e3815895739473232127e7aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
