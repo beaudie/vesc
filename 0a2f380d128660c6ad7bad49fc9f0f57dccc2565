@@ -134,6 +134,24 @@
       "parentUuid": "1302a903_6cb2afc2",
       "revId": "0a2f380d128660c6ad7bad49fc9f0f57dccc2565",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "581bc5a2_dd21f526",
+        "filename": "src/libGLESv2/egl_ext_stubs.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-16T21:00:50Z",
+      "side": 1,
+      "message": "Not quite; it needs to move to end of the `{}` block with the lock (just after `surfacePtr \u003d ...`. The point is to get it right before this call, but while the lock is still held.",
+      "parentUuid": "67e4e20d_8c89f880",
+      "revId": "0a2f380d128660c6ad7bad49fc9f0f57dccc2565",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
