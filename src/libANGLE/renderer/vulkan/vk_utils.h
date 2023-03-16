@@ -905,6 +905,8 @@ void MakeDebugUtilsLabel(GLenum source, const char *marker, VkDebugUtilsLabelEXT
 
 constexpr size_t kUnpackedDepthIndex   = gl::IMPLEMENTATION_MAX_DRAW_BUFFERS;
 constexpr size_t kUnpackedStencilIndex = gl::IMPLEMENTATION_MAX_DRAW_BUFFERS + 1;
+constexpr uint32_t kUnpackedColorBuffersMask =
+    angle::BitMask<uint32_t>(gl::IMPLEMENTATION_MAX_DRAW_BUFFERS);
 
 class ClearValuesArray final
 {
@@ -922,6 +924,14 @@ class ClearValuesArray final
     {
         mValues[index] = {};
         mEnabled.reset(index);
+    }
+    void reset()
+    {
+        for (size_t index : mEnabled)
+        {
+            mValues[index] = {};
+        }
+        mEnabled.reset();
     }
 
     bool test(size_t index) const { return mEnabled.test(index); }

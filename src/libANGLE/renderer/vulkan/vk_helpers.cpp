@@ -1248,11 +1248,18 @@ void RenderPassAttachment::onRenderAreaGrowth(ContextVk *contextVk,
 
 void RenderPassAttachment::finalizeLoadStore(Context *context,
                                              uint32_t currentCmdCount,
+                                             bool initialContentDefined,
                                              bool hasUnresolveAttachment,
                                              RenderPassLoadOp *loadOp,
                                              RenderPassStoreOp *storeOp,
                                              bool *isInvalidatedOut)
 {
+    // Dont load if initial content is undefined.
+    if ((*loadOp) == RenderPassLoadOp::Load && !initialContentDefined)
+    {
+        *loadOp = RenderPassLoadOp::DontCare;
+    }
+
     if (mAspect != VK_IMAGE_ASPECT_COLOR_BIT)
     {
         const RenderPassUsage readOnlyAttachmentUsage =
@@ -1963,9 +1970,9 @@ void RenderPassCommandBufferHelper::finalizeColorImageLoadStore(
     bool isInvalidated       = false;
 
     RenderPassAttachment &colorAttachment = mColorAttachments[packedAttachmentIndex];
-    colorAttachment.finalizeLoadStore(context, currentCmdCount,
-                                      mRenderPassDesc.getColorUnresolveAttachmentMask().any(),
-                                      &loadOp, &storeOp, &isInvalidated);
+    colorAttachment.finalizeLoadStore(
+        context, currentCmdCount, mInitialContentDefinedBits.color(packedAttachmentIndex),
+        mRenderPassDesc.getColorUnresolveAttachmentMask().any(), &loadOp, &storeOp, &isInvalidated);
 
     if (isInvalidated)
     {
@@ -2150,10 +2157,11 @@ void RenderPassCommandBufferHelper::finalizeDepthStencilLoadStore(Context *conte
     bool isDepthInvalidated   = false;
     bool isStencilInvalidated = false;
 
-    mDepthAttachment.finalizeLoadStore(context, currentCmdCount,
+    mDepthAttachment.finalizeLoadStore(context, currentCmdCount, mInitialContentDefinedBits.depth(),
                                        mRenderPassDesc.hasDepthUnresolveAttachment(), &depthLoadOp,
                                        &depthStoreOp, &isDepthInvalidated);
     mStencilAttachment.finalizeLoadStore(context, currentCmdCount,
+                                         mInitialContentDefinedBits.stencil(),
                                          mRenderPassDesc.hasStencilUnresolveAttachment(),
                                          &stencilLoadOp, &stencilStoreOp, &isStencilInvalidated);
 
@@ -2236,6 +2244,7 @@ angle::Result RenderPassCommandBufferHelper::beginRenderPass(
     const PackedAttachmentCount colorAttachmentCount,
     const PackedAttachmentIndex depthStencilAttachmentIndex,
     const PackedClearValuesArray &clearValues,
+    const PackedAttachmentMask &initialContentDefinedBits,
     const QueueSerial &queueSerial,
     RenderPassCommandBuffer **commandBufferOut)
 {
@@ -2248,6 +2257,7 @@ angle::Result RenderPassCommandBufferHelper::beginRenderPass(
     mFramebuffer                 = std::move(framebuffer);
     mRenderArea                  = renderArea;
     mClearValues                 = clearValues;
+    mInitialContentDefinedBits   = initialContentDefinedBits;
     mQueueSerial                 = queueSerial;
     *commandBufferOut            = &getCommandBuffer();
 

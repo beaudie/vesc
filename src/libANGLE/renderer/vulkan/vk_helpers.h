@@ -998,6 +998,7 @@ class RenderPassAttachment final
     void onRenderAreaGrowth(ContextVk *contextVk, const gl::Rectangle &newRenderArea);
     void finalizeLoadStore(Context *context,
                            uint32_t currentCmdCount,
+                           bool isInitailContentDefined,
                            bool hasUnresolveAttachment,
                            RenderPassLoadOp *loadOp,
                            RenderPassStoreOp *storeOp,
@@ -1378,6 +1379,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
                                   const PackedAttachmentCount colorAttachmentCount,
                                   const PackedAttachmentIndex depthStencilAttachmentIndex,
                                   const PackedClearValuesArray &clearValues,
+                                  const PackedAttachmentMask &initialContentDefinedBits,
                                   const QueueSerial &queueSerial,
                                   RenderPassCommandBuffer **commandBufferOut);
 
@@ -1542,6 +1544,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     // Attached render target images. Color and depth resolve images always come last.
     PackedRenderPassAttachmentArray mColorAttachments;
     PackedRenderPassAttachmentArray mColorResolveAttachments;
+    PackedAttachmentMask mInitialContentDefinedBits;
 
     RenderPassAttachment mDepthAttachment;
     RenderPassAttachment mDepthResolveAttachment;

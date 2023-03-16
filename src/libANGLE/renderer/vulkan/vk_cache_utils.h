@@ -124,6 +124,25 @@ template <typename T>
 using FramebufferAttachmentsVector = angle::FixedVector<T, kMaxFramebufferAttachments>;
 using FramebufferAttachmentMask    = angle::BitSet<kMaxFramebufferAttachments>;
 
+class PackedAttachmentMask final
+{
+  public:
+    PackedAttachmentMask() = default;
+    void setColor(PackedAttachmentIndex index, bool value) { mBitMask.set(index.get(), value); }
+    void setDepth(bool value) { mBitMask.set(kDepthIndex.get(), value); }
+    void setStencil(bool value) { mBitMask.set(kStencilIndex.get(), value); }
+    bool color(PackedAttachmentIndex index) { return mBitMask.test(index.get()); }
+    bool depth() { return mBitMask.test(kDepthIndex.get()); }
+    bool stencil() { return mBitMask.test(kStencilIndex.get()); }
+
+  private:
+    constexpr static PackedAttachmentIndex kDepthIndex =
+        PackedAttachmentIndex(gl::IMPLEMENTATION_MAX_DRAW_BUFFERS);
+    constexpr static PackedAttachmentIndex kStencilIndex =
+        PackedAttachmentIndex(gl::IMPLEMENTATION_MAX_DRAW_BUFFERS + 1);
+    FramebufferAttachmentMask mBitMask;
+};
+
 constexpr size_t kMaxFramebufferNonResolveAttachments = gl::IMPLEMENTATION_MAX_DRAW_BUFFERS + 1;
 template <typename T>
 using FramebufferNonResolveAttachmentArray = std::array<T, kMaxFramebufferNonResolveAttachments>;
@@ -153,6 +172,7 @@ class alignas(4) RenderPassDesc final
     // Indicate that a color attachment should take its data from the resolve attachment initially.
     void packColorUnresolveAttachment(size_t colorIndexGL);
     void removeColorUnresolveAttachment(size_t colorIndexGL);
+    void setColorUnresolveAttachmentMask(const gl::DrawBufferMask &colorUnresolveMask);
     // Indicate that a depth/stencil attachment should have a corresponding resolve attachment.
     void packDepthStencilResolveAttachment();
     // Indicate that a depth/stencil attachment should take its data from the resolve attachment
