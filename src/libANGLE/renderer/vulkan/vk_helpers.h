@@ -755,8 +755,7 @@ class BufferHelper : public ReadWriteResource
     angle::Result initSuballocation(ContextVk *contextVk,
                                     uint32_t memoryTypeIndex,
                                     size_t size,
-                                    size_t alignment,
-                                    BufferUsageType usageType);
+                                    size_t alignment);
 
     // Helper functions to initialize a buffer for a specific usage
     // Suballocate a buffer with alignment good for shader storage or copyBuffer .
@@ -971,8 +970,6 @@ class PackedClearValuesArray final
     gl::AttachmentArray<VkClearValue> mValues;
 };
 
-class ImageHelper;
-
 // Reference to a render pass attachment (color or depth/stencil) alongside render-pass-related
 // tracking such as when the attachment is last written to or invalidated.  This is used to
 // determine loadOp and storeOp of the attachment, and enables optimizations that need to know
@@ -984,7 +981,6 @@ class RenderPassAttachment final
     ~RenderPassAttachment() = default;
 
     void init(ImageHelper *image,
-              UniqueSerial imageSiblingSerial,
               gl::LevelIndex levelIndex,
               uint32_t layerIndex,
               uint32_t layerCount,
@@ -1008,12 +1004,6 @@ class RenderPassAttachment final
 
     ImageHelper *getImage() { return mImage; }
 
-    bool hasImage(const ImageHelper *image, UniqueSerial imageSiblingSerial) const
-    {
-        // Compare values because we do want that invalid serials compare equal.
-        return mImage == image && mImageSiblingSerial.getValue() == imageSiblingSerial.getValue();
-    }
-
   private:
     bool hasWriteAfterInvalidate(uint32_t currentCmdCount) const;
     bool isInvalidated(uint32_t currentCmdCount) const;
@@ -1021,8 +1011,6 @@ class RenderPassAttachment final
 
     // The attachment image itself
     ImageHelper *mImage;
-    // Invalid or serial of EGLImage/Surface sibling target.
-    UniqueSerial mImageSiblingSerial;
     // The subresource used in the render pass
     gl::LevelIndex mLevelIndex;
     uint32_t mLayerIndex;
@@ -1342,14 +1330,12 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
                          uint32_t layerCount,
                          ImageHelper *image,
                          ImageHelper *resolveImage,
-                         UniqueSerial imageSiblingSerial,
                          PackedAttachmentIndex packedAttachmentIndex);
     void depthStencilImagesDraw(gl::LevelIndex level,
                                 uint32_t layerStart,
                                 uint32_t layerCount,
                                 ImageHelper *image,
-                                ImageHelper *resolveImage,
-                                UniqueSerial imageSiblingSerial);
+                                ImageHelper *resolveImage);
 
     bool usesImage(const ImageHelper &image) const;
     bool startedAndUsesImageWithBarrier(const ImageHelper &image) const;
@@ -1361,9 +1347,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     bool started() const { return mRenderPassStarted; }
 
     // Finalize the layout if image has any deferred layout transition.
-    void finalizeImageLayout(Context *context,
-                             const ImageHelper *image,
-                             UniqueSerial imageSiblingSerial);
+    void finalizeImageLayout(Context *context, const ImageHelper *image);
 
     angle::Result beginRenderPass(ContextVk *contextVk,
                                   MaybeImagelessFramebuffer &framebuffer,
@@ -1872,12 +1856,7 @@ class ImageHelper final : public Resource, public angle::Subject
     void releaseImage(RendererVk *renderer);
     // Similar to releaseImage, but also notify all contexts in the same share group to stop
     // accessing to it.
-    void releaseImageFromShareContexts(RendererVk *renderer,
-                                       ContextVk *contextVk,
-                                       UniqueSerial imageSiblingSerial);
-    void finalizeImageLayoutInShareContexts(RendererVk *renderer,
-                                            ContextVk *contextVk,
-                                            UniqueSerial imageSiblingSerial);
+    void releaseImageFromShareContexts(RendererVk *renderer, ContextVk *contextVk);
     void releaseStagedUpdates(RendererVk *renderer);
 
     bool valid() const { return mImage.valid(); }

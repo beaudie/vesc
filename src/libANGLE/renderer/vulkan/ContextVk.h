@@ -366,11 +366,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result releaseTextures(const gl::Context *context,
                                   gl::TextureBarrierVector *textureBarriers) override;
 
-    // Sets effective Context Priority. Changed by ShareGroupVk.
-    void setPriority(egl::ContextPriority newPriority) { mContextPriority = newPriority; }
-
     VkDevice getDevice() const;
-    // Effective Context Priority
     egl::ContextPriority getPriority() const { return mContextPriority; }
     vk::ProtectionType getProtectionType() const { return mProtectionType; }
 
@@ -526,30 +522,28 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                      uint32_t layerCount,
                      vk::ImageHelper *image,
                      vk::ImageHelper *resolveImage,
-                     UniqueSerial imageSiblingSerial,
                      vk::PackedAttachmentIndex packedAttachmentIndex)
     {
         ASSERT(mRenderPassCommands->started());
         mRenderPassCommands->colorImagesDraw(level, layerStart, layerCount, image, resolveImage,
-                                             imageSiblingSerial, packedAttachmentIndex);
+                                             packedAttachmentIndex);
     }
     void onDepthStencilDraw(gl::LevelIndex level,
                             uint32_t layerStart,
                             uint32_t layerCount,
                             vk::ImageHelper *image,
-                            vk::ImageHelper *resolveImage,
-                            UniqueSerial imageSiblingSerial)
+                            vk::ImageHelper *resolveImage)
     {
         ASSERT(mRenderPassCommands->started());
         mRenderPassCommands->depthStencilImagesDraw(level, layerStart, layerCount, image,
-                                                    resolveImage, imageSiblingSerial);
+                                                    resolveImage);
     }
 
-    void finalizeImageLayout(const vk::ImageHelper *image, UniqueSerial imageSiblingSerial)
+    void finalizeImageLayout(const vk::ImageHelper *image)
     {
         if (mRenderPassCommands->started())
         {
-            mRenderPassCommands->finalizeImageLayout(this, image, imageSiblingSerial);
+            mRenderPassCommands->finalizeImageLayout(this, image);
         }
     }
 
@@ -640,8 +634,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     uint32_t getCurrentSubpassIndex() const;
     uint32_t getCurrentViewCount() const;
 
-    // Initial Context Priority. Used for EGL_CONTEXT_PRIORITY_LEVEL_IMG attribute.
-    egl::ContextPriority getContextPriority() const override { return mInitialContextPriority; }
+    egl::ContextPriority getContextPriority() const override { return mContextPriority; }
     angle::Result startRenderPass(gl::Rectangle renderArea,
                                   vk::RenderPassCommandBuffer **commandBufferOut,
                                   bool *renderPassDescChangedOut);
@@ -716,11 +709,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     void flushDescriptorSetUpdates();
 
-    vk::BufferPool *getDefaultBufferPool(VkDeviceSize size,
-                                         uint32_t memoryTypeIndex,
-                                         BufferUsageType usageType)
+    vk::BufferPool *getDefaultBufferPool(VkDeviceSize size, uint32_t memoryTypeIndex)
     {
-        return mShareGroupVk->getDefaultBufferPool(mRenderer, size, memoryTypeIndex, usageType);
+        return mShareGroupVk->getDefaultBufferPool(mRenderer, size, memoryTypeIndex);
     }
 
     angle::Result allocateStreamedVertexBuffer(size_t attribIndex,
@@ -1567,7 +1558,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     gl::State::DirtyBits mPipelineDirtyBitsMask;
 
-    egl::ContextPriority mInitialContextPriority;
     egl::ContextPriority mContextPriority;
     vk::ProtectionType mProtectionType;
 

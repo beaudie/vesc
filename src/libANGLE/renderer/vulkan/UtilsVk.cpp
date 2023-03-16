@@ -2731,8 +2731,7 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
 
     ANGLE_TRY(blitBuffer.get().initSuballocation(
         contextVk, contextVk->getRenderer()->getDeviceLocalMemoryTypeIndex(),
-        static_cast<size_t>(bufferSize), contextVk->getRenderer()->getDefaultBufferAlignment(),
-        BufferUsageType::Static));
+        static_cast<size_t>(bufferSize), contextVk->getRenderer()->getDefaultBufferAlignment()));
 
     BlitResolveStencilNoExportShaderParams shaderParams;
     // Note: adjustments made for pre-rotatation in FramebufferVk::blit() affect these
@@ -3960,9 +3959,9 @@ angle::Result UtilsVk::drawOverlay(ContextVk *contextVk,
 
     // Overlay is always drawn as the last render pass before present.  Automatically move the
     // layout to PresentSrc.
-    contextVk->onColorDraw(gl::LevelIndex(0), 0, 1, dst, nullptr, {}, vk::PackedAttachmentIndex(0));
+    contextVk->onColorDraw(gl::LevelIndex(0), 0, 1, dst, nullptr, vk::PackedAttachmentIndex(0));
     contextVk->getStartedRenderPassCommands().setImageOptimizeForPresent(dst);
-    contextVk->finalizeImageLayout(dst, {});
+    contextVk->finalizeImageLayout(dst);
 
     // Close the render pass for this temporary framebuffer.
     return contextVk->flushCommandsAndEndRenderPass(
