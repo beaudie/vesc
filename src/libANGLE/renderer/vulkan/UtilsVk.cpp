@@ -2731,8 +2731,7 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
 
     ANGLE_TRY(blitBuffer.get().initSuballocation(
         contextVk, contextVk->getRenderer()->getDeviceLocalMemoryTypeIndex(),
-        static_cast<size_t>(bufferSize), contextVk->getRenderer()->getDefaultBufferAlignment(),
-        BufferUsageType::Static));
+        static_cast<size_t>(bufferSize), contextVk->getRenderer()->getDefaultBufferAlignment()));
 
     BlitResolveStencilNoExportShaderParams shaderParams;
     // Note: adjustments made for pre-rotatation in FramebufferVk::blit() affect these
