@@ -93,8 +93,7 @@ class ShareGroupVk : public ShareGroupImpl
 
     vk::BufferPool *getDefaultBufferPool(RendererVk *renderer,
                                          VkDeviceSize size,
-                                         uint32_t memoryTypeIndex,
-                                         BufferUsageType usageType);
+                                         uint32_t memoryTypeIndex);
     void pruneDefaultBufferPools(RendererVk *renderer);
     bool isDueForBufferPoolPrune(RendererVk *renderer);
 
@@ -103,11 +102,6 @@ class ShareGroupVk : public ShareGroupImpl
 
     void addContext(ContextVk *contextVk);
     void removeContext(ContextVk *contextVk);
-
-    // Temporary workaround until VkSemaphore(s) will be used between different priorities.
-    angle::Result unifyContextsPriority(ContextVk *newContextVk);
-    // Temporary workaround until VkSemaphore(s) will be used between different priorities.
-    angle::Result lockDefaultContextsPriority(ContextVk *contextVk);
 
     UpdateDescriptorSetsBuilder *getUpdateDescriptorSetsBuilder()
     {
@@ -122,8 +116,6 @@ class ShareGroupVk : public ShareGroupImpl
     void waitForCurrentMonolithicPipelineCreationTask();
 
   private:
-    angle::Result updateContextsPriority(ContextVk *contextVk, egl::ContextPriority newPriority);
-
     // VkFramebuffer caches
     FramebufferCache mFramebufferCache;
 
@@ -141,23 +133,15 @@ class ShareGroupVk : public ShareGroupImpl
     // The list of contexts within the share group
     ContextVkSet mContexts;
 
-    // Priority of all Contexts in the mContexts
-    egl::ContextPriority mContextsPriority;
-    bool mIsContextsPriorityLocked;
-
     // Storage for vkUpdateDescriptorSets
     UpdateDescriptorSetsBuilder mUpdateDescriptorSetsBuilder;
 
     // The per shared group buffer pools that all buffers should sub-allocate from.
-    enum class SuballocationAlgorithm : uint8_t
-    {
-        Buddy       = 0,
-        General     = 1,
-        InvalidEnum = 2,
-        EnumCount   = InvalidEnum,
-    };
-    angle::PackedEnumMap<SuballocationAlgorithm, vk::BufferPoolPointerArray> mDefaultBufferPools;
-    angle::PackedEnumMap<BufferUsageType, size_t> mSizeLimitForBuddyAlgorithm;
+    vk::BufferPoolPointerArray mDefaultBufferPools;
+
+    // The pool dedicated for small allocations that uses faster buddy algorithm
+    std::unique_ptr<vk::BufferPool> mSmallBufferPool;
+    static constexpr VkDeviceSize kMaxSizeToUseSmallBufferPool = 256;
 
     // The system time when last pruneEmptyBuffer gets called.
     double mLastPruneTime;

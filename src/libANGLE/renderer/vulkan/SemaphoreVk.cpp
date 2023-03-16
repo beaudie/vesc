@@ -203,8 +203,8 @@ angle::Result SemaphoreVk::signal(gl::Context *context,
     // > - A binary semaphore must be signaled, or have an associated semaphore signal operation
     // >   that is pending execution.
     //
-    return renderer->waitForQueueSerialToBeSubmittedToDevice(
-        contextVk, contextVk->getLastSubmittedQueueSerial());
+    return renderer->waitForQueueSerialToBeSubmitted(contextVk,
+                                                     contextVk->getLastSubmittedQueueSerial());
 }
 
 angle::Result SemaphoreVk::importOpaqueFd(ContextVk *contextVk, GLint fd)

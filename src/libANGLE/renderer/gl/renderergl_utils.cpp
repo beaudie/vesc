@@ -521,12 +521,7 @@ static gl::TextureCaps GenerateTextureFormatCaps(const FunctionsGL *functions,
 
     // We require GL_RGBA16F is renderable to expose EXT_color_buffer_half_float but we can't know
     // if the format is supported unless we try to create a framebuffer.
-    // Renderability of signed normalized formats is optional on desktop GL.
-    if (internalFormat == GL_RGBA16F ||
-        (functions->standard == STANDARD_GL_DESKTOP &&
-         (internalFormat == GL_R8_SNORM || internalFormat == GL_R16_SNORM ||
-          internalFormat == GL_RG8_SNORM || internalFormat == GL_RG16_SNORM ||
-          internalFormat == GL_RGBA8_SNORM || internalFormat == GL_RGBA16_SNORM)))
+    if (internalFormat == GL_RGBA16F)
     {
         if (textureCaps.textureAttachment)
         {
