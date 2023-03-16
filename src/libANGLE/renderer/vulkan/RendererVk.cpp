@@ -1182,6 +1182,8 @@ RendererVk::RendererVk()
     // a number of places in the Vulkan backend that make this assumption.  This assertion is made
     // early to fail immediately on big-endian platforms.
     ASSERT(IsLittleEndian());
+
+    WARN() << "CL GUID: 877A2B67-CBB0-41ED-88CD-C3E9F2D303D9";
 }
 
 RendererVk::~RendererVk()

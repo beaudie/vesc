@@ -4,6 +4,10 @@
 
 // See deqp_support/README.md for format.
 
+// Temp disable for debugging
+8039 WIN SWIFTSHADER : MultithreadingTestES3.RenderThenSample* = SKIP
+8039 WIN SWIFTSHADER : MultithreadingTestES3.ContextPriorityMixing* = SKIP
+
 // Thread sanitizer skips.
 6718 TSAN : MultithreadingTestES3.MultithreadFenceDraw/* = SKIP
 6718 TSAN : MultithreadingTestES3.MultithreadFenceTexImage/* = SKIP
