@@ -2001,8 +2001,10 @@ bool Texture::isRenderable(const Context *context,
                            GLenum binding,
                            const ImageIndex &imageIndex) const
 {
+    WARN() << "Inside Texture::isRenderable";
     if (isEGLImageTarget())
     {
+        WARN() << "isEGLImageTarget =  true";
         return ImageSibling::isRenderable(context, binding, imageIndex);
     }
 
@@ -2013,8 +2015,23 @@ bool Texture::isRenderable(const Context *context,
         return true;
     }
 
-    return getAttachmentFormat(binding, imageIndex)
-        .info->textureAttachmentSupport(context->getClientVersion(), context->getExtensions());
+    Format tex_format = getAttachmentFormat(binding, imageIndex);
+    WARN() << "=====================DEtails of format, version and "
+              "renderable==================================================";
+    WARN() << "texture attachment printable format = " << tex_format;
+    WARN() << "texture attachment internal format = " << tex_format.info->internalFormat;
+    WARN() << "texture attachment is format sized  = " << tex_format.info->sized;
+    WARN() << "texture attachment internal format sized = " << tex_format.info->sizedInternalFormat;
+    WARN() << "texture attachment format = " << tex_format.info->format;
+    WARN() << "client version = " << context->getClientVersion().major << ", "
+           << context->getClientVersion().minor;
+    bool val =
+        getAttachmentFormat(binding, imageIndex)
+            .info->textureAttachmentSupport(context->getClientVersion(), context->getExtensions());
+    WARN() << "Texture::isRenderable = " << val;
+    WARN() << "===================================================================================="
+              "====";
+    return val;
 }
 
 bool Texture::getAttachmentFixedSampleLocations(const ImageIndex &imageIndex) const

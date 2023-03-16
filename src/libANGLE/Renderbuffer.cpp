@@ -357,9 +357,13 @@ bool Renderbuffer::isRenderable(const Context *context,
                                 GLenum binding,
                                 const ImageIndex &imageIndex) const
 {
+    WARN() << "Renderbuffer::isRenderable";
     if (isEGLImageTarget())
     {
-        return ImageSibling::isRenderable(context, binding, imageIndex);
+        WARN() << "isEGLImageTarget = true";
+        bool val = ImageSibling::isRenderable(context, binding, imageIndex);
+        WARN() << "is renderable = " << val;
+        return val;
     }
     return getFormat().info->renderbufferSupport(context->getClientVersion(),
                                                  context->getExtensions());

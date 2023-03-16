@@ -405,6 +405,7 @@ const gl::Format &Image::getFormat() const
 
 bool Image::isRenderable(const gl::Context *context) const
 {
+    WARN() << " Image::isRenderable = " << mIsRenderable;
     return mIsRenderable;
 }
 
@@ -534,12 +535,18 @@ Error Image::initialize(const Display *display, const gl::Context *context)
         mIsTexturable = true;
         mIsRenderable = mState.format.info->textureAttachmentSupport(context->getClientVersion(),
                                                                      context->getExtensions());
+        WARN() << "IsTextureTarget: Image format " << mState.format
+               << " is renderable = " << mIsRenderable;
+        WARN() << " Context version = " << context->getClientVersion().major << " , "
+               << context->getClientVersion().minor;
     }
     else if (IsRenderbufferTarget(mState.target))
     {
         mIsTexturable = true;
         mIsRenderable = mState.format.info->renderbufferSupport(context->getClientVersion(),
                                                                 context->getExtensions());
+        WARN() << "IsRenderBufferTarget: Image format " << mState.format
+               << " is renderable = " << mIsRenderable;
     }
     else if (IsExternalImageTarget(mState.target))
     {
@@ -547,6 +554,8 @@ Error Image::initialize(const Display *display, const gl::Context *context)
         mIsTexturable = rx::GetAs<ExternalImageSibling>(mState.source)->isTextureable(context);
         mIsRenderable = rx::GetAs<ExternalImageSibling>(mState.source)
                             ->isRenderable(context, GL_NONE, gl::ImageIndex());
+        WARN() << "IsExternalImageTarget: Image format " << mState.format
+               << " is renderable = " << mIsRenderable;
     }
     else
     {

@@ -458,7 +458,9 @@ gl::Format HardwareBufferImageSiblingVkAndroid::getFormat() const
 
 bool HardwareBufferImageSiblingVkAndroid::isRenderable(const gl::Context *context) const
 {
-    return mRenderable;
+    bool val = mRenderable;
+    WARN() << "HardwareBufferImageSiblingVkAndroid::isRenderable = " << val;
+    return val;
 }
 
 bool HardwareBufferImageSiblingVkAndroid::isTexturable(const gl::Context *context) const
