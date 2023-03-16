@@ -534,6 +534,9 @@ Error Image::initialize(const Display *display, const gl::Context *context)
         mIsTexturable = true;
         mIsRenderable = mState.format.info->textureAttachmentSupport(context->getClientVersion(),
                                                                      context->getExtensions());
+        WARN() << " Image format " << mState.format << " is renderable = " << mIsRenderable;
+        WARN() << " Context version = " << context->getClientVersion().major << " , "
+               << context->getClientVersion().minor;
     }
     else if (IsRenderbufferTarget(mState.target))
     {
