@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efcde9ce_1f25d31a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-03-16T23:12:04Z",
+      "side": 1,
+      "message": "i might have missed the discussion but was it the conclusion that calling \"GetSurfaceIfValid\" outside of the surface lock was the root-cause of the deadlock issue?",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 24
+      },
+      "revId": "de63f4491f97ff6e1abdbca26a18e18a84a35739",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
