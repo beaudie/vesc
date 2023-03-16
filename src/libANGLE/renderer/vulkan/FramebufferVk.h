@@ -108,8 +108,16 @@ class FramebufferVk : public FramebufferImpl
     RenderTargetVk *getColorDrawRenderTarget(size_t colorIndex) const;
     RenderTargetVk *getColorReadRenderTarget() const;
 
+    void initRenderPassAttachmentOps(ContextVk *contextVk,
+                                     gl::Rectangle *renderArea,
+                                     vk::AttachmentOpsArray *renderPassAttachmentOps,
+                                     vk::PackedClearValuesArray *packedClearValues,
+                                     gl::AttachmentsMask *unresolveAttachmentMask) const;
     angle::Result startNewRenderPass(ContextVk *contextVk,
-                                     const gl::Rectangle &scissoredRenderArea,
+                                     const gl::Rectangle &renderArea,
+                                     const vk::AttachmentOpsArray &renderPassAttachmentOps,
+                                     const vk::PackedClearValuesArray &packedClearValues,
+                                     const gl::AttachmentsMask &unresolveAttachmentMask,
                                      vk::RenderPassCommandBuffer **commandBufferOut,
                                      bool *renderPassDescChangedOut);
 
@@ -127,7 +135,6 @@ class FramebufferVk : public FramebufferImpl
                                  const vk::ImageView *resolveImageViewIn,
                                  const SwapchainResolveMode swapchainResolveMode);
 
-    bool hasDeferredClears() const { return !mDeferredClears.empty(); }
     angle::Result flushDeferredClears(ContextVk *contextVk);
     void setReadOnlyDepthFeedbackLoopMode(bool readOnlyDepthFeedbackModeEnabled)
     {
@@ -186,6 +193,8 @@ class FramebufferVk : public FramebufferImpl
         RenderTargetVk *resolveRenderTargetIn,
         vk::FramebufferAttachmentsVector<VkImageView> *attachments,
         vk::FramebufferAttachmentsVector<RenderTargetInfo> *renderTargetsInfoOut);
+
+    gl::AttachmentsMask getUnresolveAttachmentMask() const { return mUnresolveAttachmentMask; }
 
   private:
     enum class ClearWithCommand
@@ -317,6 +326,10 @@ class FramebufferVk : public FramebufferImpl
 
     // Serial of the render pass this framebuffer has opened, if any.
     QueueSerial mLastRenderPassQueueSerial;
+
+    vk::PackedAttachmentCount mColorAttachmentCount;
+    vk::PackedAttachmentCount mDepthStencilAttachmentIndex;
+    gl::AttachmentsMask mUnresolveAttachmentMask;
 };
 }  // namespace rx
 

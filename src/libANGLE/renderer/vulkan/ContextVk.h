@@ -1249,6 +1249,13 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     ProgramVk *getProgram() const;
     ProgramPipelineVk *getProgramPipeline() const;
 
+    angle::Result startRenderPassWithAttachmentOps(
+        const gl::Rectangle &scissoredRenderArea,
+        const vk::AttachmentOpsArray &renderPassAttachmentOps,
+        const vk::PackedClearValuesArray &packedClearValues,
+        const gl::AttachmentsMask &unresolveAttachmentMask,
+        vk::RenderPassCommandBuffer **commandBufferOut,
+        bool *renderPassDescChangedOut);
     // Read-after-write hazards are generally handled with |glMemoryBarrier| when the source of
     // write is storage output.  When the write is outside render pass, the natural placement of the
     // render pass after the current outside render pass commands ensures that the memory barriers
@@ -1542,6 +1549,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // of the GENERAL layout instead of COLOR_ATTACHMENT_OPTIMAL, but has definite benefits of
     // avoiding render pass breaks when a framebuffer fetch program is used mid render pass.
     bool mIsInFramebufferFetchMode;
+
+    // Whether we can reactivate the current started render pass.
+    bool mIsReactivateRenderPassAllowed;
 
     // The size of copy commands issued between buffers and images. Used to submit the command
     // buffer for the outside render pass.
