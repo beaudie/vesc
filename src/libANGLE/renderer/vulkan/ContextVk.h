@@ -1249,6 +1249,13 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     ProgramVk *getProgram() const;
     ProgramPipelineVk *getProgramPipeline() const;
 
+    angle::Result startRenderPassWithAttachmentOps(
+        const gl::Rectangle &scissoredRenderArea,
+        vk::AttachmentOpsArray *renderPassAttachmentOps,
+        const vk::PackedClearValuesArray &packedClearValues,
+        const gl::AttachmentsMask &unresolveAttachmentMask,
+        vk::RenderPassCommandBuffer **commandBufferOut,
+        bool *renderPassDescChangedOut);
     // Read-after-write hazards are generally handled with |glMemoryBarrier| when the source of
     // write is storage output.  When the write is outside render pass, the natural placement of the
     // render pass after the current outside render pass commands ensures that the memory barriers
