@@ -63,6 +63,30 @@
       },
       "revId": "2f050c28d04524e643bfb73fa37a4400888a6bc5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4a6b791_32a52489",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1582,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-16T11:45:17Z",
+      "side": 1,
+      "message": "Can\u0027t name it `VulkanSecondaryCommandBufferList`. It has:\n```\nvoid CommandBufferCollector::collectCommandBuffer(priv::SecondaryCommandBuffer \u0026\u0026commandBuffer)\n{\n    commandBuffer.reset();\n}\n```\nWill rename to `SecondaryCommandBufferCollector` and make it movable.",
+      "parentUuid": "015d9112_2d60db8f",
+      "range": {
+        "startLine": 1582,
+        "startChar": 6,
+        "endLine": 1582,
+        "endChar": 28
+      },
+      "revId": "2f050c28d04524e643bfb73fa37a4400888a6bc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
