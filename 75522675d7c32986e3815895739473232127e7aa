@@ -16,6 +16,24 @@
       "message": "Was setting the build option too big a trouble?",
       "revId": "75522675d7c32986e3815895739473232127e7aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d1446b5_d631ed87",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4036,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2023-03-16T20:36:11Z",
+      "side": 1,
+      "message": "Not really ; )\n\nSo if you prefer we don\u0027t touch this feature, I can move it to per board device makefile instead.",
+      "parentUuid": "a0b28472_ce2fb9ef",
+      "revId": "75522675d7c32986e3815895739473232127e7aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
