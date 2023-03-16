@@ -96,14 +96,5 @@ bool SharedGarbage::hasResourceUseSubmitted(RendererVk *renderer) const
 {
     return renderer->hasResourceUseSubmitted(mLifetime);
 }
-
-// ReleasableResource implementation.
-template <class T>
-void ReleasableResource<T>::release(RendererVk *renderer)
-{
-    renderer->collectGarbage(mUse, &mObject);
-}
-
-template class ReleasableResource<Semaphore>;
 }  // namespace vk
 }  // namespace rx
