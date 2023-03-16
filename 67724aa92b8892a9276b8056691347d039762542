@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f13ad39_9bd388b1",
+        "filename": "src/compiler/translator/glslang.l",
+        "patchSetId": 2
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-16T07:31:38Z",
+      "side": 1,
+      "message": "You can always add a similar section to this just for image*Shadow variables and check `context-\u003egetShaderSpec()` for webgl.",
+      "range": {
+        "startLine": 289,
+        "startChar": 0,
+        "endLine": 317,
+        "endChar": 1
+      },
+      "revId": "67724aa92b8892a9276b8056691347d039762542",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
