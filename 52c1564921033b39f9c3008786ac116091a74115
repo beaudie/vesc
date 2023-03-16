@@ -34,6 +34,24 @@
       "parentUuid": "55c8ffaa_226f8b28",
       "revId": "52c1564921033b39f9c3008786ac116091a74115",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f538273d_5642b319",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-16T12:48:00Z",
+      "side": 1,
+      "message": "Updated the commit message.",
+      "parentUuid": "468194de_e66ef431",
+      "revId": "52c1564921033b39f9c3008786ac116091a74115",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
