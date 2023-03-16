@@ -80,6 +80,8 @@ FramebufferStatus CheckAttachmentCompleteness(const Context *context,
 
     if (!attachment.isRenderable(context))
     {
+        WARN() << "attachment type is " << attachment.type() << " and format is "
+               << attachment.getFormat();
         return FramebufferStatus::Incomplete(GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT,
                                              err::kFramebufferIncompleteAttachmentNotRenderable);
     }

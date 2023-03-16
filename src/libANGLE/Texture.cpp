@@ -2001,8 +2001,10 @@ bool Texture::isRenderable(const Context *context,
                            GLenum binding,
                            const ImageIndex &imageIndex) const
 {
+    WARN() << "Texture::isRenderable";
     if (isEGLImageTarget())
     {
+        WARN() << "isEGLImageTarget =  true";
         return ImageSibling::isRenderable(context, binding, imageIndex);
     }
 
