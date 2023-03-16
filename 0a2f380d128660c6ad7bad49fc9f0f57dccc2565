@@ -80,6 +80,24 @@
       "message": "Just noticed this existing bug: anglebug.com/7995#c11 (this change is not making it worse, so not a blocker)\n\n@geofflang@chromium.org do you think without the surface lock there can be a race with make current or something? Do we want to call `GetSurfaceIfValid` while the lock is still held?",
       "revId": "0a2f380d128660c6ad7bad49fc9f0f57dccc2565",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82232659_44ad448f",
+        "filename": "src/libGLESv2/egl_ext_stubs.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-03-16T16:39:02Z",
+      "side": 1,
+      "message": "Yea, GetSurfaceIfValid not being in the global lock is a race condition with other entry points that may add/remove surfaces.",
+      "parentUuid": "3de3d68b_d082d9cc",
+      "revId": "0a2f380d128660c6ad7bad49fc9f0f57dccc2565",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
