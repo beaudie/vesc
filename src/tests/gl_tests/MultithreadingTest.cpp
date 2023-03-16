@@ -1939,7 +1939,7 @@ TEST_P(MultithreadingTestES3, ProgramUseAndDestroyInTwoContexts)
 // with Low Priority.
 TEST_P(MultithreadingTestES3, RenderThenSampleDifferentContextPriority)
 {
-    ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading());
+    ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading() || isSwiftshader());
 
     // Initialize contexts
     EGLWindow *window = getEGLWindow();
@@ -2137,7 +2137,7 @@ TEST_P(MultithreadingTestES3, RenderThenSampleDifferentContextPriority)
 // rendered by Share Context with Low Priority.
 TEST_P(MultithreadingTestES3, RenderThenSampleInNewContextWithDifferentPriority)
 {
-    ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading());
+    ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading() || isSwiftshader());
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_disjoint_timer_query"));
 
     // Initialize contexts
@@ -2337,7 +2337,7 @@ TEST_P(MultithreadingTestES3, RenderThenSampleInNewContextWithDifferentPriority)
 // other Context with Low Priority into EGLImage source texture.
 TEST_P(MultithreadingTestES3, RenderThenSampleDifferentContextPriorityUsingEGLImage)
 {
-    ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading());
+    ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading() || isSwiftshader());
     ANGLE_SKIP_TEST_IF(!hasWaitSyncExtension() || !hasGLSyncExtension());
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_EGL_image"));
 
@@ -2531,7 +2531,7 @@ TEST_P(MultithreadingTestES3, RenderThenSampleDifferentContextPriorityUsingEGLIm
 // Tests mixing commands of Contexts with different Priorities in a single Command Buffers (Vulkan).
 TEST_P(MultithreadingTestES3, ContextPriorityMixing)
 {
-    ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading());
+    ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading() || isSwiftshader());
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_disjoint_timer_query"));
 
     // Initialize contexts
