@@ -1473,6 +1473,8 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
         }
     }
     void addCommandDiagnostics(ContextVk *contextVk);
+    bool isAllowedToReactivate() const { return mIsAllowedToReactivate; }
+    void disableReactivation() { mIsAllowedToReactivate = false; }
 
   private:
     uint32_t getSubpassCommandBufferCount() const { return mCurrentSubpassCommandBufferIndex + 1; }
@@ -1530,6 +1532,8 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     uint32_t mValidTransformFeedbackBufferCount;
     bool mRebindTransformFeedbackBuffers;
     bool mIsTransformFeedbackActiveUnpaused;
+    // Whether we can reactivate the render pass.
+    bool mIsAllowedToReactivate;
 
     // State tracking for whether to optimize the storeOp to DONT_CARE
     uint32_t mPreviousSubpassesCmdCount;

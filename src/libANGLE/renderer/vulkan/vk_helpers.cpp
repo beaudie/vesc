@@ -1679,6 +1679,7 @@ RenderPassCommandBufferHelper::RenderPassCommandBufferHelper()
       mValidTransformFeedbackBufferCount(0),
       mRebindTransformFeedbackBuffers(false),
       mIsTransformFeedbackActiveUnpaused(false),
+      mIsAllowedToReactivate(true),
       mPreviousSubpassesCmdCount(0),
       mDepthStencilAttachmentIndex(kAttachmentIndexInvalid),
       mColorAttachmentsCount(0),
@@ -1729,6 +1730,7 @@ angle::Result RenderPassCommandBufferHelper::reset(
     mColorAttachmentsCount             = PackedAttachmentCount(0);
     mDepthStencilAttachmentIndex       = kAttachmentIndexInvalid;
     mImageOptimizeForPresent           = nullptr;
+    mIsAllowedToReactivate             = true;
 
     ASSERT(CheckSubpassCommandBufferCount(getSubpassCommandBufferCount()));
 
