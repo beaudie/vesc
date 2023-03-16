@@ -2250,6 +2250,16 @@ angle::Result ContextVk::handleDirtyAnySamplePassedQueryEnd(DirtyBits::Iterator 
 angle::Result ContextVk::handleDirtyGraphicsRenderPass(DirtyBits::Iterator *dirtyBitsIterator,
                                                        DirtyBits dirtyBitMask)
 {
+    FramebufferVk *drawFramebufferVk = getDrawFramebuffer();
+    if (hasStartedRenderPassWithQueueSerial(drawFramebufferVk->getLastRenderPassQueueSerial()))
+    {
+        WARN() << "reusing started renderpass";
+        mRenderPassCommandBuffer = &mRenderPassCommands->getCommandBuffer();
+        ASSERT(hasActiveRenderPass());
+        ASSERT(drawFramebufferVk->getRenderPassDesc() == mRenderPassCommands->getRenderPassDesc());
+        return angle::Result::Continue;
+    }
+
     // If the render pass needs to be recreated, close it using the special mid-dirty-bit-handling
     // function, so later dirty bits can be set.
     if (mRenderPassCommands->started())
@@ -2259,7 +2269,6 @@ angle::Result ContextVk::handleDirtyGraphicsRenderPass(DirtyBits::Iterator *dirt
                                                RenderPassClosureReason::AlreadySpecifiedElsewhere));
     }
 
-    FramebufferVk *drawFramebufferVk  = getDrawFramebuffer();
     gl::Rectangle scissoredRenderArea = drawFramebufferVk->getRotatedScissoredRenderArea(this);
     bool renderPassDescChanged        = false;
 
