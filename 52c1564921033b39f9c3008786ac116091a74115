@@ -16,6 +16,24 @@
       "message": "Fix LGTM, but asyncCommandQueue is disabled by default, so this can\u0027t be the fix for com.sec.android.app.launcher (unless this isn\u0027t just about asyncCommandQueue)",
       "revId": "52c1564921033b39f9c3008786ac116091a74115",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "468194de_e66ef431",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-16T11:25:31Z",
+      "side": 1,
+      "message": "This is a general fix and not for the specific application.\n\nI mentioned the app that crashed as the example that the issue reproduces in the real world. We might as well enable \"asyncCommandQueue\" in the future by default. My understanding is if there is a feature - we can enable it and expect no crashing, regardless of the application.\n\nThe S906B does not have native GLES driver - only Vulkan. I test ANGLE by replacing the system ANGLE driver, so entire system will use replaced angle.\n\nFor testing I enabled the \"asyncCommandQueue\" and instantly get crashing in all kinds of system applications. I enabled the feature because was specifically testing fix for Secondary Command Buffers.\n\nIgnoring the application.\nMy new tests:\n```\nMultithreadingTestES3.RenderThenSampleDifferentContextPriority\nMultithreadingTestES3.RenderThenSampleInNewContextWithDifferentPriority\nMultithreadingTestES3.RenderThenSampleDifferentContextPriorityUsingEGLImage\nMultithreadingTestES3.ContextPriorityMixing\n```\nWill use problematic `submitPriorityDependency()` and will be tested with \"asyncCommandQueue\" enabled. This may cause flaky test failures.",
+      "parentUuid": "55c8ffaa_226f8b28",
+      "revId": "52c1564921033b39f9c3008786ac116091a74115",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
