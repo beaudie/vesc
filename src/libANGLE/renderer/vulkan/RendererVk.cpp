@@ -1182,6 +1182,8 @@ RendererVk::RendererVk()
     // a number of places in the Vulkan backend that make this assumption.  This assertion is made
     // early to fail immediately on big-endian platforms.
     ASSERT(IsLittleEndian());
+
+    WARN() << "CL GUID: 3119E8A5-9511-4BEF-A754-E9303F8F37F3";
 }
 
 RendererVk::~RendererVk()
@@ -5042,8 +5044,8 @@ angle::Result RendererVk::submitPriorityDependency(vk::Context *context,
                                                    egl::ContextPriority dstContextPriority,
                                                    SerialIndex index)
 {
-    vk::RendererScoped<vk::ReleasableResource<vk::Semaphore>> semaphore(this);
-    ANGLE_VK_TRY(context, semaphore.get().get().init(mDevice));
+    vk::DeviceScoped<vk::Semaphore> semaphore(mDevice);
+    ANGLE_VK_TRY(context, semaphore.get().init(mDevice));
 
     // First, submit already flushed commands / wait semaphores into the source Priority VkQueue.
     // Commands that are in the Secondary Command Buffers will be flushed into the new VkQueue.
@@ -5060,9 +5062,7 @@ angle::Result RendererVk::submitPriorityDependency(vk::Context *context,
         const vk::Semaphore *signalSemaphore = nullptr;
         if (protectionTypes.none())
         {
-            // Update QueueSerial to collect semaphore using the latest possible queueSerial.
-            semaphore.get().setQueueSerial(queueSerial);
-            signalSemaphore = &semaphore.get().get();
+            signalSemaphore = &semaphore.get();
         }
         ANGLE_TRY(submitCommands(context, protectionType, srcContextPriority, signalSemaphore,
                                  queueSerial));
@@ -5070,9 +5070,14 @@ angle::Result RendererVk::submitPriorityDependency(vk::Context *context,
 
     // Submit only Wait Semaphore into the destination Priority (VkQueue).
     QueueSerial queueSerial(index, generateQueueSerial(index));
-    semaphore.get().setQueueSerial(queueSerial);
-    ANGLE_TRY(queueSubmitWaitSemaphore(context, dstContextPriority, &semaphore.get().get(),
-                                       VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, queueSerial));
+    angle::Result result =
+        queueSubmitWaitSemaphore(context, dstContextPriority, &semaphore.get(),
+                                 VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, queueSerial);
+
+    vk::ResourceUse semaphoreUse(queueSerial);
+    collectGarbage(semaphoreUse, &semaphore.get());
+    // Handle result later to be able to collect semaphore.
+    ANGLE_TRY(result);
 
     return angle::Result::Continue;
 }
@@ -5132,20 +5137,18 @@ angle::Result RendererVk::finish(vk::Context *context)
 
 angle::Result RendererVk::flushWaitSemaphores(
     vk::ProtectionType protectionType,
-    egl::ContextPriority priority,
     std::vector<VkSemaphore> &&waitSemaphores,
     std::vector<VkPipelineStageFlags> &&waitSemaphoreStageMasks)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::flushWaitSemaphores");
     if (isAsyncCommandQueueEnabled())
     {
-        ANGLE_TRY(mCommandProcessor.enqueueFlushWaitSemaphores(protectionType, priority,
-                                                               std::move(waitSemaphores),
-                                                               std::move(waitSemaphoreStageMasks)));
+        ANGLE_TRY(mCommandProcessor.enqueueFlushWaitSemaphores(
+            protectionType, std::move(waitSemaphores), std::move(waitSemaphoreStageMasks)));
     }
     else
     {
-        mCommandQueue.flushWaitSemaphores(protectionType, priority, std::move(waitSemaphores),
+        mCommandQueue.flushWaitSemaphores(protectionType, std::move(waitSemaphores),
                                           std::move(waitSemaphoreStageMasks));
     }
 
@@ -5155,20 +5158,19 @@ angle::Result RendererVk::flushWaitSemaphores(
 angle::Result RendererVk::flushRenderPassCommands(
     vk::Context *context,
     vk::ProtectionType protectionType,
-    egl::ContextPriority priority,
     const vk::RenderPass &renderPass,
     vk::RenderPassCommandBufferHelper **renderPassCommands)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::flushRenderPassCommands");
     if (isAsyncCommandQueueEnabled())
     {
-        ANGLE_TRY(mCommandProcessor.enqueueFlushRenderPassCommands(
-            context, protectionType, priority, renderPass, renderPassCommands));
+        ANGLE_TRY(mCommandProcessor.enqueueFlushRenderPassCommands(context, protectionType,
+                                                                   renderPass, renderPassCommands));
     }
     else
     {
-        ANGLE_TRY(mCommandQueue.flushRenderPassCommands(context, protectionType, priority,
-                                                        renderPass, renderPassCommands));
+        ANGLE_TRY(mCommandQueue.flushRenderPassCommands(context, protectionType, renderPass,
+                                                        renderPassCommands));
     }
 
     return angle::Result::Continue;
@@ -5177,19 +5179,17 @@ angle::Result RendererVk::flushRenderPassCommands(
 angle::Result RendererVk::flushOutsideRPCommands(
     vk::Context *context,
     vk::ProtectionType protectionType,
-    egl::ContextPriority priority,
     vk::OutsideRenderPassCommandBufferHelper **outsideRPCommands)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RendererVk::flushOutsideRPCommands");
     if (isAsyncCommandQueueEnabled())
     {
-        ANGLE_TRY(mCommandProcessor.enqueueFlushOutsideRPCommands(context, protectionType, priority,
+        ANGLE_TRY(mCommandProcessor.enqueueFlushOutsideRPCommands(context, protectionType,
                                                                   outsideRPCommands));
     }
     else
     {
-        ANGLE_TRY(mCommandQueue.flushOutsideRPCommands(context, protectionType, priority,
-                                                       outsideRPCommands));
+        ANGLE_TRY(mCommandQueue.flushOutsideRPCommands(context, protectionType, outsideRPCommands));
     }
 
     return angle::Result::Continue;
