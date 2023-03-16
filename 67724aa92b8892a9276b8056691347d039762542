@@ -22,6 +22,30 @@
       },
       "revId": "67724aa92b8892a9276b8056691347d039762542",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e804635d_1450d571",
+        "filename": "src/compiler/translator/glslang.l",
+        "patchSetId": 2
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-03-16T22:09:03Z",
+      "side": 1,
+      "message": "Thank you Shabi.\n\nI didn\u0027t find any tests that are checking `image*Shadow` are reserved keywords for webGL GLSL: https://registry.khronos.org/webgl/sdk/tests/conformance/glsl/misc/shader-with-reserved-words.html?webglVersion\u003d2\u0026quiet\u003d0\u0026quick\u003d1. I created a ticket https://monorail-prod.appspot.com/p/angleproject/issues/detail?id\u003d8087 to resolve later and keep them as reserved keywords for WebGL GLSL now.",
+      "parentUuid": "4f13ad39_9bd388b1",
+      "range": {
+        "startLine": 289,
+        "startChar": 0,
+        "endLine": 317,
+        "endChar": 1
+      },
+      "revId": "67724aa92b8892a9276b8056691347d039762542",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
