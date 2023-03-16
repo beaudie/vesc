@@ -334,7 +334,9 @@ FramebufferVk::FramebufferVk(RendererVk *renderer, const gl::FramebufferState &s
       mBackbuffer(nullptr),
       mActiveColorComponentMasksForClear(0),
       mReadOnlyDepthFeedbackLoopMode(false),
-      mReadOnlyStencilFeedbackLoopMode(false)
+      mReadOnlyStencilFeedbackLoopMode(false),
+      mColorAttachmentCount(0),
+      mDepthStencilAttachmentIndex(vk::kAttachmentIndexInvalid)
 {
     if (mState.isDefault())
     {
@@ -2155,6 +2157,7 @@ void FramebufferVk::updateRenderPassDesc(ContextVk *contextVk)
     // Color attachments.
     const auto &colorRenderTargets               = mRenderTargetCache.getColors();
     const gl::DrawBufferMask colorAttachmentMask = mState.getColorAttachmentsMask();
+    mColorAttachmentCount                        = vk::PackedAttachmentIndex(0);
     for (size_t colorIndexGL = 0; colorIndexGL < colorAttachmentMask.size(); ++colorIndexGL)
     {
         if (colorAttachmentMask[colorIndexGL])
@@ -2169,6 +2172,7 @@ void FramebufferVk::updateRenderPassDesc(ContextVk *contextVk)
             {
                 mRenderPassDesc.packColorResolveAttachment(colorIndexGL);
             }
+            ++mColorAttachmentCount;
         }
         else
         {
@@ -2178,6 +2182,7 @@ void FramebufferVk::updateRenderPassDesc(ContextVk *contextVk)
 
     // Depth/stencil attachment.
     RenderTargetVk *depthStencilRenderTarget = getDepthStencilRenderTarget();
+    mDepthStencilAttachmentIndex             = vk::kAttachmentIndexInvalid;
     if (depthStencilRenderTarget)
     {
         mRenderPassDesc.packDepthStencilAttachment(
@@ -2188,6 +2193,7 @@ void FramebufferVk::updateRenderPassDesc(ContextVk *contextVk)
         {
             mRenderPassDesc.packDepthStencilResolveAttachment();
         }
+        mDepthStencilAttachmentIndex = mColorAttachmentCount;
     }
 
     if (contextVk->isInFramebufferFetchMode())
@@ -2828,26 +2834,12 @@ angle::Result FramebufferVk::getSamplePosition(const gl::Context *context,
     return angle::Result::Continue;
 }
 
-angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
-                                                const gl::Rectangle &scissoredRenderArea,
-                                                vk::RenderPassCommandBuffer **commandBufferOut,
-                                                bool *renderPassDescChangedOut)
+void FramebufferVk::initRenderPassAttachmentOps(ContextVk *contextVk,
+                                                gl::Rectangle *renderArea,
+                                                vk::AttachmentOpsArray *renderPassAttachmentOps,
+                                                vk::PackedClearValuesArray *packedClearValues,
+                                                gl::AttachmentsMask *unresolveAttachmentMask) const
 {
-    ANGLE_TRY(contextVk->flushCommandsAndEndRenderPass(RenderPassClosureReason::NewRenderPass));
-
-    // Initialize RenderPass info.
-    vk::AttachmentOpsArray renderPassAttachmentOps;
-    vk::PackedClearValuesArray packedClearValues;
-    gl::DrawBufferMask previousUnresolveColorMask =
-        mRenderPassDesc.getColorUnresolveAttachmentMask();
-    const bool hasDeferredClears        = mDeferredClears.any();
-    const bool previousUnresolveDepth   = mRenderPassDesc.hasDepthUnresolveAttachment();
-    const bool previousUnresolveStencil = mRenderPassDesc.hasStencilUnresolveAttachment();
-
-    // Make sure render pass and framebuffer are in agreement w.r.t unresolve attachments.
-    ASSERT(mCurrentFramebufferDesc.getUnresolveAttachmentMask() ==
-           MakeUnresolveAttachmentMask(mRenderPassDesc));
-
     // Color attachments.
     const auto &colorRenderTargets = mRenderTargetCache.getColors();
     vk::PackedAttachmentIndex colorIndexVk(0);
@@ -2865,10 +2857,9 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
 
         if (mDeferredClears.test(colorIndexGL))
         {
-            renderPassAttachmentOps.setOps(colorIndexVk, vk::RenderPassLoadOp::Clear, storeOp);
-            packedClearValues.store(colorIndexVk, VK_IMAGE_ASPECT_COLOR_BIT,
-                                    mDeferredClears[colorIndexGL]);
-            mDeferredClears.reset(colorIndexGL);
+            renderPassAttachmentOps->setOps(colorIndexVk, vk::RenderPassLoadOp::Clear, storeOp);
+            packedClearValues->store(colorIndexVk, VK_IMAGE_ASPECT_COLOR_BIT,
+                                     mDeferredClears[colorIndexGL]);
         }
         else
         {
@@ -2876,12 +2867,12 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
                                                     ? vk::RenderPassLoadOp::Load
                                                     : vk::RenderPassLoadOp::DontCare;
 
-            renderPassAttachmentOps.setOps(colorIndexVk, loadOp, storeOp);
-            packedClearValues.store(colorIndexVk, VK_IMAGE_ASPECT_COLOR_BIT,
-                                    kUninitializedClearValue);
+            renderPassAttachmentOps->setOps(colorIndexVk, loadOp, storeOp);
+            packedClearValues->store(colorIndexVk, VK_IMAGE_ASPECT_COLOR_BIT,
+                                     kUninitializedClearValue);
         }
-        renderPassAttachmentOps.setStencilOps(colorIndexVk, vk::RenderPassLoadOp::DontCare,
-                                              vk::RenderPassStoreOp::DontCare);
+        renderPassAttachmentOps->setStencilOps(colorIndexVk, vk::RenderPassLoadOp::DontCare,
+                                               vk::RenderPassStoreOp::DontCare);
 
         // If there's a resolve attachment, and loadOp needs to be LOAD, the multisampled attachment
         // needs to take its value from the resolve attachment.  In this case, an initial subpass is
@@ -2892,23 +2883,16 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         // come from the same source.  isImageTransient() indicates whether this should happen.
         if (colorRenderTarget->hasResolveAttachment() && colorRenderTarget->isImageTransient())
         {
-            if (renderPassAttachmentOps[colorIndexVk].loadOp == VK_ATTACHMENT_LOAD_OP_LOAD)
+            if ((*renderPassAttachmentOps)[colorIndexVk].loadOp == VK_ATTACHMENT_LOAD_OP_LOAD)
             {
-                renderPassAttachmentOps[colorIndexVk].loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
-
-                // Update the render pass desc to specify that this attachment should be unresolved.
-                mRenderPassDesc.packColorUnresolveAttachment(colorIndexGL);
+                (*renderPassAttachmentOps)[colorIndexVk].loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+                unresolveAttachmentMask->set(colorIndexGL);
             }
             else
             {
-                mRenderPassDesc.removeColorUnresolveAttachment(colorIndexGL);
+                unresolveAttachmentMask->reset(colorIndexGL);
             }
         }
-        else
-        {
-            ASSERT(!mRenderPassDesc.getColorUnresolveAttachmentMask().test(colorIndexGL));
-        }
-
         ++colorIndexVk;
     }
 
@@ -2956,25 +2940,23 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
             {
                 depthLoadOp                   = vk::RenderPassLoadOp::Clear;
                 clearValue.depthStencil.depth = mDeferredClears.getDepthValue();
-                mDeferredClears.reset(vk::kUnpackedDepthIndex);
             }
 
             if (mDeferredClears.testStencil())
             {
                 stencilLoadOp                   = vk::RenderPassLoadOp::Clear;
                 clearValue.depthStencil.stencil = mDeferredClears.getStencilValue();
-                mDeferredClears.reset(vk::kUnpackedStencilIndex);
             }
 
             // Note the aspect is only depth here. That's intentional.
-            packedClearValues.store(depthStencilAttachmentIndex, VK_IMAGE_ASPECT_DEPTH_BIT,
-                                    clearValue);
+            packedClearValues->store(depthStencilAttachmentIndex, VK_IMAGE_ASPECT_DEPTH_BIT,
+                                     clearValue);
         }
         else
         {
             // Note the aspect is only depth here. That's intentional.
-            packedClearValues.store(depthStencilAttachmentIndex, VK_IMAGE_ASPECT_DEPTH_BIT,
-                                    kUninitializedClearValue);
+            packedClearValues->store(depthStencilAttachmentIndex, VK_IMAGE_ASPECT_DEPTH_BIT,
+                                     kUninitializedClearValue);
         }
 
         const angle::Format &format = depthStencilRenderTarget->getImageIntendedFormat();
@@ -3002,6 +2984,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
             if (unresolveDepth)
             {
                 depthLoadOp = vk::RenderPassLoadOp::DontCare;
+                unresolveAttachmentMask->set(vk::kUnpackedDepthIndex);
             }
 
             if (unresolveStencil)
@@ -3015,28 +2998,42 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
                     stencilLoadOp = vk::RenderPassLoadOp::Clear;
 
                     // Note the aspect is only depth here. That's intentional.
-                    VkClearValue clearValue = packedClearValues[depthStencilAttachmentIndex];
+                    VkClearValue clearValue = (*packedClearValues)[depthStencilAttachmentIndex];
                     clearValue.depthStencil.stencil = 0;
-                    packedClearValues.store(depthStencilAttachmentIndex, VK_IMAGE_ASPECT_DEPTH_BIT,
-                                            clearValue);
+                    packedClearValues->store(depthStencilAttachmentIndex, VK_IMAGE_ASPECT_DEPTH_BIT,
+                                             clearValue);
                 }
-            }
-
-            if (unresolveDepth || unresolveStencil)
-            {
-                mRenderPassDesc.packDepthStencilUnresolveAttachment(unresolveDepth,
-                                                                    unresolveStencil);
-            }
-            else
-            {
-                mRenderPassDesc.removeDepthStencilUnresolveAttachment();
+                unresolveAttachmentMask->set(vk::kUnpackedStencilIndex);
             }
         }
 
-        renderPassAttachmentOps.setOps(depthStencilAttachmentIndex, depthLoadOp, depthStoreOp);
-        renderPassAttachmentOps.setStencilOps(depthStencilAttachmentIndex, stencilLoadOp,
-                                              stencilStoreOp);
+        renderPassAttachmentOps->setOps(depthStencilAttachmentIndex, depthLoadOp, depthStoreOp);
+        renderPassAttachmentOps->setStencilOps(depthStencilAttachmentIndex, stencilLoadOp,
+                                               stencilStoreOp);
     }
+
+    // If deferred clears were used in the render pass, expand the render area to the whole
+    // framebuffer.
+    if (mDeferredClears.any())
+    {
+        *renderArea = getRotatedCompleteRenderArea(contextVk);
+    }
+}
+
+angle::Result FramebufferVk::startNewRenderPass(
+    ContextVk *contextVk,
+    const gl::Rectangle &renderArea,
+    const vk::AttachmentOpsArray &renderPassAttachmentOps,
+    const vk::PackedClearValuesArray &packedClearValues,
+    const gl::AttachmentsMask &unresolveAttachmentMask,
+    vk::RenderPassCommandBuffer **commandBufferOut,
+    bool *renderPassDescChangedOut)
+{
+    ANGLE_TRY(contextVk->flushCommandsAndEndRenderPass(RenderPassClosureReason::NewRenderPass));
+
+    // Make sure render pass and framebuffer are in agreement w.r.t unresolve attachments.
+    ASSERT(mCurrentFramebufferDesc.getUnresolveAttachmentMask() ==
+           MakeUnresolveAttachmentMask(mRenderPassDesc));
 
     // If render pass description is changed, the previous render pass desc is no longer compatible.
     // Tell the context so that the graphics pipelines can be recreated.
@@ -3044,39 +3041,44 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     // Note that render passes are compatible only if the differences are in loadOp/storeOp values,
     // or the existence of resolve attachments in single subpass render passes.  The modification
     // here can add/remove a subpass, or modify its input attachments.
-    gl::DrawBufferMask unresolveColorMask = mRenderPassDesc.getColorUnresolveAttachmentMask();
-    const bool unresolveDepth             = mRenderPassDesc.hasDepthUnresolveAttachment();
-    const bool unresolveStencil           = mRenderPassDesc.hasStencilUnresolveAttachment();
-    const bool unresolveChanged           = previousUnresolveColorMask != unresolveColorMask ||
-                                  previousUnresolveDepth != unresolveDepth ||
-                                  previousUnresolveStencil != unresolveStencil;
+    const gl::DrawBufferMask unresolveColorMask(unresolveAttachmentMask.bits() &
+                                                vk::kUnpackedColorBuffersMask);
+    bool unresolveDepth         = unresolveAttachmentMask[vk::kUnpackedDepthIndex];
+    bool unresolveStencil       = unresolveAttachmentMask[vk::kUnpackedStencilIndex];
+    const bool unresolveChanged = mUnresolveAttachmentMask != unresolveAttachmentMask;
     if (unresolveChanged)
     {
+        mRenderPassDesc.setColorUnresolveAttachmentMask(unresolveColorMask);
+
+        if (unresolveDepth || unresolveStencil)
+        {
+            mRenderPassDesc.packDepthStencilUnresolveAttachment(unresolveDepth, unresolveStencil);
+        }
+        else
+        {
+            mRenderPassDesc.removeDepthStencilUnresolveAttachment();
+        }
+
         // Make sure framebuffer is recreated.
         releaseCurrentFramebuffer(contextVk);
-
         mCurrentFramebufferDesc.updateUnresolveMask(MakeUnresolveAttachmentMask(mRenderPassDesc));
+        mUnresolveAttachmentMask = unresolveAttachmentMask;
     }
 
     vk::MaybeImagelessFramebuffer framebuffer = {};
     ANGLE_TRY(
         getFramebuffer(contextVk, &framebuffer, nullptr, nullptr, SwapchainResolveMode::Disabled));
 
-    // If deferred clears were used in the render pass, expand the render area to the whole
-    // framebuffer.
-    gl::Rectangle renderArea = scissoredRenderArea;
-    if (hasDeferredClears)
-    {
-        renderArea = getRotatedCompleteRenderArea(contextVk);
-    }
-
     ANGLE_TRY(contextVk->beginNewRenderPass(
-        framebuffer, renderArea, mRenderPassDesc, renderPassAttachmentOps, colorIndexVk,
-        depthStencilAttachmentIndex, packedClearValues, commandBufferOut));
+        framebuffer, renderArea, mRenderPassDesc, renderPassAttachmentOps, mColorAttachmentCount,
+        mDepthStencilAttachmentIndex, packedClearValues, commandBufferOut));
+
+    mDeferredClears.reset();
     mLastRenderPassQueueSerial = contextVk->getStartedRenderPassCommands().getQueueSerial();
 
     // Add the images to the renderpass tracking list (through onColorDraw).
     vk::PackedAttachmentIndex colorAttachmentIndex(0);
+    const auto &colorRenderTargets = mRenderTargetCache.getColors();
     for (size_t colorIndexGL : mState.getColorAttachmentsMask())
     {
         RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
@@ -3085,6 +3087,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         ++colorAttachmentIndex;
     }
 
+    RenderTargetVk *depthStencilRenderTarget = getDepthStencilRenderTarget();
     if (depthStencilRenderTarget)
     {
         // This must be called after hasDefined*Content() since it will set content to valid.  If
@@ -3094,8 +3097,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
                                                      mCurrentFramebufferDesc.getLayerCount());
     }
 
-    const bool anyUnresolve = unresolveColorMask.any() || unresolveDepth || unresolveStencil;
-    if (anyUnresolve)
+    if (unresolveAttachmentMask.any())
     {
         // Unresolve attachments if any.
         UtilsVk::UnresolveParameters params;
@@ -3109,7 +3111,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         ANGLE_TRY(contextVk->startNextSubpass());
     }
 
-    if (unresolveChanged || anyUnresolve)
+    if (unresolveChanged || unresolveAttachmentMask.any())
     {
         contextVk->onDrawFramebufferRenderPassDescChange(this, renderPassDescChangedOut);
     }
