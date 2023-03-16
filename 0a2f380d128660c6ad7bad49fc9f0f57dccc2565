@@ -170,6 +170,24 @@
       "parentUuid": "581bc5a2_dd21f526",
       "revId": "0a2f380d128660c6ad7bad49fc9f0f57dccc2565",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8957adc1_2ccd4bd1",
+        "filename": "src/libGLESv2/egl_ext_stubs.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-16T21:29:18Z",
+      "side": 1,
+      "message": "👍 Going to rely a bit on TSAN/VVL on this one!",
+      "parentUuid": "0a50b9f2_b18155d0",
+      "revId": "0a2f380d128660c6ad7bad49fc9f0f57dccc2565",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
