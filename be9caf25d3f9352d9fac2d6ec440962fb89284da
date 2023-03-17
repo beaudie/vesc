@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "317bbf93_7d25d8dc",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandPool.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-17T17:02:03Z",
+      "side": 1,
+      "message": "I know. But these two approaches has slightly different effect. In this case it does not matter.\n\nBut if `buffers` was not a local variable, but a class member - this will avoid reallocating memory. But I decided to use local variable, because overflow should not be used frequently.\n\nUsed swap as a habit. Will replace with `std::move` to remove questions.",
+      "parentUuid": "d25cf93d_673ef5a5",
+      "revId": "be9caf25d3f9352d9fac2d6ec440962fb89284da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b1b2190e_aa41e385",
         "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandPool.h",
         "patchSetId": 7
@@ -43,6 +61,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3f964903_4a0cedca",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandPool.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-17T17:02:03Z",
+      "side": 1,
+      "message": "No. Just a render thread of some application, a thread that calls GL APIs.\n\nI will remove this to avoid confusion.",
+      "parentUuid": "b1b2190e_aa41e385",
+      "range": {
+        "startLine": 38,
+        "startChar": 38,
+        "endLine": 38,
+        "endChar": 44
+      },
+      "revId": "be9caf25d3f9352d9fac2d6ec440962fb89284da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "35abf815_132fa19a",
         "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandPool.h",
         "patchSetId": 7
@@ -54,6 +96,30 @@
       "writtenOn": "2023-03-17T15:58:32Z",
       "side": 1,
       "message": "What does `other single thread` refer to?",
+      "range": {
+        "startLine": 41,
+        "startChar": 21,
+        "endLine": 41,
+        "endChar": 41
+      },
+      "revId": "be9caf25d3f9352d9fac2d6ec440962fb89284da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d049c497_e0987abb",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandPool.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-17T17:02:03Z",
+      "side": 1,
+      "message": "In general - any thread that is not current Context thread.\nIt may be:\n- thread of some other Context.\n- asyncCommandQueue thread.\n\nBut it is not allowed to access from multiple Context threads at a time. Currently this is achieved by the `CommandQueue::mMutex` lock.\n\nWill add examples in description.",
+      "parentUuid": "35abf815_132fa19a",
       "range": {
         "startLine": 41,
         "startChar": 21,
