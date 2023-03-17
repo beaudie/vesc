@@ -1014,6 +1014,7 @@ bool CheckSubpassCommandBufferCount(uint32_t count)
     // subpasses, therefore we do not need multiple buffers.
     return (count == 1 || !RenderPassCommandBuffer::ExecutesInline());
 }
+
 }  // anonymous namespace
 
 // This is an arbitrary max. We can change this later if necessary.
@@ -5292,8 +5293,14 @@ angle::Result ImageHelper::initExternal(Context *context,
 
     mYcbcrConversionDesc.reset();
 
-    const angle::Format &actualFormat = angle::Format::Get(actualFormatID);
-    VkFormat actualVkFormat           = GetVkFormatFromFormatID(actualFormatID);
+    const angle::Format &actualFormat   = angle::Format::Get(actualFormatID);
+    const angle::Format &intendedFormat = angle::Format::Get(intendedFormatID);
+    VkFormat actualVkFormat             = GetVkFormatFromFormatID(actualFormatID);
+
+    ANGLE_TRACE_EVENT_INSTANT("gpu.angle.texture_metrics", "ImageHelper::initExternal",
+                              "intended_format", intendedFormat.glInternalFormat, "actual_format",
+                              actualFormat.glInternalFormat, "width", extents.width, "height",
+                              extents.height);
 
     if (actualFormat.isYUV)
     {
