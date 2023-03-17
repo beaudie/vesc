@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bc2e865_16b9e187",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandPool.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-17T18:22:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "317bbf93_7d25d8dc",
+      "revId": "be9caf25d3f9352d9fac2d6ec440962fb89284da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b1b2190e_aa41e385",
@@ -83,6 +101,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bffdf90b_1a9de235",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandPool.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-17T18:22:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3f964903_4a0cedca",
+      "range": {
+        "startLine": 38,
+        "startChar": 38,
+        "endLine": 38,
+        "endChar": 44
+      },
+      "revId": "be9caf25d3f9352d9fac2d6ec440962fb89284da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "35abf815_132fa19a",
@@ -120,6 +162,30 @@
       "side": 1,
       "message": "In general - any thread that is not current Context thread.\nIt may be:\n- thread of some other Context.\n- asyncCommandQueue thread.\n\nBut it is not allowed to access from multiple Context threads at a time. Currently this is achieved by the `CommandQueue::mMutex` lock.\n\nWill add examples in description.",
       "parentUuid": "35abf815_132fa19a",
+      "range": {
+        "startLine": 41,
+        "startChar": 21,
+        "endLine": 41,
+        "endChar": 41
+      },
+      "revId": "be9caf25d3f9352d9fac2d6ec440962fb89284da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cafb4e85_03c7f1ca",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandPool.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-17T18:22:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d049c497_e0987abb",
       "range": {
         "startLine": 41,
         "startChar": 21,
