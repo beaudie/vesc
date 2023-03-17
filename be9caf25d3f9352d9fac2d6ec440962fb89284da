@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d25cf93d_673ef5a5",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandPool.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-17T15:58:32Z",
+      "side": 1,
+      "message": "nit: `buffers \u003d std::move(mCollectedBuffersOverflow)` as the more modern way of doing this. `swap` was the workaround before `std::move`",
+      "revId": "be9caf25d3f9352d9fac2d6ec440962fb89284da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1b2190e_aa41e385",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandPool.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-17T15:58:32Z",
+      "side": 1,
+      "message": "Is this referring to RendererVk?",
+      "range": {
+        "startLine": 38,
+        "startChar": 38,
+        "endLine": 38,
+        "endChar": 44
+      },
+      "revId": "be9caf25d3f9352d9fac2d6ec440962fb89284da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35abf815_132fa19a",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandPool.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-17T15:58:32Z",
+      "side": 1,
+      "message": "What does `other single thread` refer to?",
+      "range": {
+        "startLine": 41,
+        "startChar": 21,
+        "endLine": 41,
+        "endChar": 41
+      },
+      "revId": "be9caf25d3f9352d9fac2d6ec440962fb89284da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
