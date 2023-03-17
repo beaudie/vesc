@@ -446,6 +446,71 @@ angle::Result FramebufferVk::invalidateSub(const gl::Context *context,
     return angle::Result::Continue;
 }
 
+GLbitfield FramebufferVk::fastDeferredClear(const gl::Context *context, GLbitfield mask)
+{
+    ANGLE_TRACE_EVENT0("gpu.angle", "FramebufferVk::fastDeferredClear");
+    const gl::State &glState = context->getState();
+
+    // Bail out if this is scissored clear
+    if (glState.isScissorTestEnabled())
+    {
+        return mask;
+    }
+
+    // We only do fast clear for color buffers. Depth/stencil are more complicated due to
+    // possibility of read only feedback loop.
+    if (!IsMaskFlagSet(mask, static_cast<GLbitfield>(GL_COLOR_BUFFER_BIT)))
+    {
+        return mask;
+    }
+
+    // Bail out if it is masked clear.
+    gl::BlendStateExt::ColorMaskStorage::Type colorMasks =
+        context->getState().getBlendStateExt().getColorMaskBits();
+    const bool maskedClearColor =
+        (mActiveColorComponentMasksForClear & colorMasks) != mActiveColorComponentMasksForClear;
+    if (maskedClearColor)
+    {
+        return mask;
+    }
+
+    // Bail out if there is any possibility of being a midRenderPass clear.
+    ContextVk *contextVk = vk::GetImpl(context);
+    if (contextVk->hasStartedRenderPassWithQueueSerial(mLastRenderPassQueueSerial))
+    {
+        return mask;
+    }
+
+    VkClearColorValue clearColorValue;
+    clearColorValue.float32[0] = glState.getColorClearValue().red;
+    clearColorValue.float32[1] = glState.getColorClearValue().green;
+    clearColorValue.float32[2] = glState.getColorClearValue().blue;
+    clearColorValue.float32[3] = glState.getColorClearValue().alpha;
+
+    gl::DrawBufferMask clearColorDrawBuffersMask = mState.getEnabledDrawBuffers();
+    for (size_t colorIndexGL : clearColorDrawBuffersMask)
+    {
+        ASSERT(mState.getEnabledDrawBuffers().test(colorIndexGL));
+        VkClearValue clearValue = getCorrectedColorClearValue(colorIndexGL, clearColorValue);
+        mDeferredClears.store(static_cast<uint32_t>(colorIndexGL), VK_IMAGE_ASPECT_COLOR_BIT,
+                              clearValue);
+    }
+
+    // Go through deferred clears and stage the clears for future.
+    for (size_t colorIndexGL : mDeferredClears.getColorMask())
+    {
+        RenderTargetVk *renderTarget = getColorDrawRenderTarget(colorIndexGL);
+        gl::ImageIndex imageIndex =
+            renderTarget->getImageIndexForClear(mCurrentFramebufferDesc.getLayerCount());
+        renderTarget->getImageForWrite().stageClear(imageIndex, VK_IMAGE_ASPECT_COLOR_BIT,
+                                                    mDeferredClears[colorIndexGL]);
+        mDeferredClears.reset(colorIndexGL);
+    }
+
+    mask &= ~GL_COLOR_BUFFER_BIT;
+    return mask;
+}
+
 angle::Result FramebufferVk::clear(const gl::Context *context, GLbitfield mask)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "FramebufferVk::clear");

@@ -46,24 +46,25 @@ class FramebufferImpl : angle::NonCopyable
                                         const GLenum *attachments,
                                         const gl::Rectangle &area) = 0;
 
-    virtual angle::Result clear(const gl::Context *context, GLbitfield mask) = 0;
+    virtual GLbitfield fastDeferredClear(const gl::Context *context, GLbitfield mask) = 0;
+    virtual angle::Result clear(const gl::Context *context, GLbitfield mask)          = 0;
     virtual angle::Result clearBufferfv(const gl::Context *context,
                                         GLenum buffer,
                                         GLint drawbuffer,
-                                        const GLfloat *values)               = 0;
+                                        const GLfloat *values)                        = 0;
     virtual angle::Result clearBufferuiv(const gl::Context *context,
                                          GLenum buffer,
                                          GLint drawbuffer,
-                                         const GLuint *values)               = 0;
+                                         const GLuint *values)                        = 0;
     virtual angle::Result clearBufferiv(const gl::Context *context,
                                         GLenum buffer,
                                         GLint drawbuffer,
-                                        const GLint *values)                 = 0;
+                                        const GLint *values)                          = 0;
     virtual angle::Result clearBufferfi(const gl::Context *context,
                                         GLenum buffer,
                                         GLint drawbuffer,
                                         GLfloat depth,
-                                        GLint stencil)                       = 0;
+                                        GLint stencil)                                = 0;
 
     virtual const gl::InternalFormat &getImplementationColorReadFormat(
         const gl::Context *context) const;

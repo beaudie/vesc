@@ -4507,10 +4507,15 @@ bool Context::noopDrawInstanced(PrimitiveMode mode, GLsizei count, GLsizei insta
     return (instanceCount == 0) || noopDraw(mode, count);
 }
 
-angle::Result Context::prepareForClear(GLbitfield mask)
+angle::Result Context::prepareForFastDeferredClear(GLbitfield mask)
 {
     // Sync the draw framebuffer manually after the clear attachments.
     ANGLE_TRY(mState.getDrawFramebuffer()->ensureClearAttachmentsInitialized(this, mask));
+    return syncStateForFastDeferredClear();
+}
+
+angle::Result Context::prepareForClear(GLbitfield mask)
+{
     return syncStateForClear();
 }
 
@@ -4519,6 +4524,7 @@ angle::Result Context::prepareForClearBuffer(GLenum buffer, GLint drawbuffer)
     // Sync the draw framebuffer manually after the clear attachments.
     ANGLE_TRY(mState.getDrawFramebuffer()->ensureClearBufferAttachmentsInitialized(this, buffer,
                                                                                    drawbuffer));
+    ANGLE_TRY(syncStateForFastDeferredClear());
     return syncStateForClear();
 }
 
@@ -4692,8 +4698,16 @@ void Context::clear(GLbitfield mask)
         return;
     }
 
-    ANGLE_CONTEXT_TRY(prepareForClear(mask));
-    ANGLE_CONTEXT_TRY(mState.getDrawFramebuffer()->clear(this, mask));
+    // First give backend opportunity to do a fast clear without sync context's state. This could
+    // avoid breaking render passes for a simple clear that could otherwise just deferred.
+    ANGLE_CONTEXT_TRY(prepareForFastDeferredClear(mask));
+    mask = mState.getDrawFramebuffer()->fastDeferredClear(this, mask);
+
+    if (mask != 0)
+    {
+        ANGLE_CONTEXT_TRY(prepareForClear(mask));
+        ANGLE_CONTEXT_TRY(mState.getDrawFramebuffer()->clear(this, mask));
+    }
 }
 
 bool Context::isClearBufferMaskedOut(GLenum buffer, GLint drawbuffer) const
@@ -5795,9 +5809,16 @@ angle::Result Context::syncStateForBlit(GLbitfield mask)
     return syncState(mBlitDirtyBits, mBlitDirtyObjects, command);
 }
 
+angle::Result Context::syncStateForFastDeferredClear()
+{
+    ANGLE_TRY(syncDirtyObjects(mClearDirtyObjects, Command::Clear));
+    return angle::Result::Continue;
+}
+
 angle::Result Context::syncStateForClear()
 {
-    return syncState(mClearDirtyBits, mClearDirtyObjects, Command::Clear);
+    ANGLE_TRY(syncDirtyBits(mClearDirtyBits, Command::Clear));
+    return angle::Result::Continue;
 }
 
 angle::Result Context::syncTextureForCopy(Texture *texture)

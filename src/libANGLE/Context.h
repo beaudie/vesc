@@ -694,6 +694,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     void initializeDefaultResources();
 
     angle::Result prepareForDraw(PrimitiveMode mode);
+    angle::Result prepareForFastDeferredClear(GLbitfield mask);
     angle::Result prepareForClear(GLbitfield mask);
     angle::Result prepareForClearBuffer(GLenum buffer, GLint drawbuffer);
     angle::Result syncState(const State::DirtyBits &bitMask,
@@ -705,6 +706,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     angle::Result syncStateForReadPixels();
     angle::Result syncStateForTexImage();
     angle::Result syncStateForBlit(GLbitfield mask);
+    angle::Result syncStateForFastDeferredClear();
     angle::Result syncStateForClear();
     angle::Result syncTextureForCopy(Texture *texture);
 

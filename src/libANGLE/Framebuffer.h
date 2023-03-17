@@ -342,6 +342,9 @@ class Framebuffer final : public angle::ObserverInterface,
                                 const GLenum *attachments,
                                 const Rectangle &area);
 
+    // Fast clear is for backend to do a staged (i.e., deferred) clear without context state sync.
+    // The mask bitfield remains to be cleared is returned.
+    GLbitfield fastDeferredClear(const Context *context, GLbitfield mask);
     angle::Result clear(const Context *context, GLbitfield mask);
     angle::Result clearBufferfv(const Context *context,
                                 GLenum buffer,

@@ -28,6 +28,10 @@ class MockFramebufferImpl : public rx::FramebufferImpl
     MOCK_METHOD4(invalidateSub,
                  angle::Result(const gl::Context *, size_t, const GLenum *, const gl::Rectangle &));
 
+    GLbitfield fastDeferredClear(const gl::Context *context, GLbitfield mask) override
+    {
+        return mask;
+    }
     MOCK_METHOD2(clear, angle::Result(const gl::Context *, GLbitfield));
     MOCK_METHOD4(clearBufferfv, angle::Result(const gl::Context *, GLenum, GLint, const GLfloat *));
     MOCK_METHOD4(clearBufferuiv, angle::Result(const gl::Context *, GLenum, GLint, const GLuint *));
