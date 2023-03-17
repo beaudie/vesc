@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2250a22_5883d051",
+        "filename": "src/compiler/translator/glslang.l",
+        "patchSetId": 7
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-17T02:00:10Z",
+      "side": 1,
+      "message": "super nit: please instruct your editor to make sure text files end in newline.\n\nhttps://unix.stackexchange.com/q/18743",
+      "range": {
+        "startLine": 948,
+        "startChar": 0,
+        "endLine": 948,
+        "endChar": 1
+      },
+      "revId": "0689d960fea25599da29c63d2af3fd046f0fa41d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
