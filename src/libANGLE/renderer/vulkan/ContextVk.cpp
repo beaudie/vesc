@@ -1179,6 +1179,20 @@ void ContextVk::onDestroy(const gl::Context *context)
     // Everything must be finished
     ASSERT(mRenderer->hasResourceUseFinished(mSubmittedResourceUse));
 
+    // Must retire all VulkanSecondaryCommandBuffer(s) before destroying the pools.
+    if ((!vk::OutsideRenderPassCommandBuffer::ExecutesInline() ||
+         !vk::RenderPassCommandBuffer::ExecutesInline()) &&
+        mRenderer->isAsyncCommandBufferResetEnabled())
+    {
+        // On some Vulkan drivers, vkResetCommandBuffer() may cause undefined behaviour, when
+        // resetting Primary Command Buffer that has recorded Secondary Command Buffers with its
+        // Pools destroyed. In order to circumvents this issue, such Primary Command buffers must be
+        // reset before destroying Secondary Command Pools (before ContextVk destruction).
+        // So the retireFinishedCommands() will not only retire Secondary Buffers, but also reset
+        // Primary Buffers and circumvent possible driver bug.
+        (void)mRenderer->retireFinishedCommands(this);
+    }
+
     VkDevice device = getDevice();
 
     mDefaultUniformStorage.release(mRenderer);
