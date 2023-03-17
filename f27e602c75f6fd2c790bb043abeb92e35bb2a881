@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfcbfe1f_5c1347b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-17T01:56:12Z",
+      "side": 1,
+      "message": "Please skip using `angle_end2end_tests_expectations.txt`\n\nThe only downside I see with this change is losing good TSAN coverage, but ok they are too heavy for SwiftShader. Perhaps a compromise could be to lower the thread count / reduce workload when SwiftShader?",
+      "revId": "f27e602c75f6fd2c790bb043abeb92e35bb2a881",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
