@@ -899,6 +899,27 @@ TEST_P(MultithreadingTestES3, MultithreadFenceDraw)
     mainThreadDraw(true);
 }
 
+// Test that it is possible to upload textures in one thread and use them in another with
+// synchronization.
+TEST_P(MultithreadingTestES3, Untitled1)
+{
+    ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading());
+}
+
+// Test that it is possible to create a new context after uploading mutable mipmap textures in the
+// previous context, and use them in the new context.
+TEST_P(MultithreadingTestES3, Untitled2)
+{
+    ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading());
+}
+
+// Test that it is possible to create a new context after uploading mutable mipmap textures in the
+// main thread, and use them in the new context.
+TEST_P(MultithreadingTestES3, Untitled3)
+{
+    ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading());
+}
+
 // Same as MultithreadFenceDraw, but with the secondary thread using glTexImage2D rather than
 // glDrawArrays.
 TEST_P(MultithreadingTestES3, MultithreadFenceTexImage)
