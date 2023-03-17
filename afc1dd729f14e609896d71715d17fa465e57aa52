@@ -22,6 +22,30 @@
       },
       "revId": "afc1dd729f14e609896d71715d17fa465e57aa52",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1c1acf8_541e25c4",
+        "filename": "src/compiler/translator/glslang.l",
+        "patchSetId": 4
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-03-17T00:43:20Z",
+      "side": 1,
+      "message": "Thank you!",
+      "parentUuid": "2bb7dfd9_996ae2f9",
+      "range": {
+        "startLine": 957,
+        "startChar": 29,
+        "endLine": 957,
+        "endChar": 44
+      },
+      "revId": "afc1dd729f14e609896d71715d17fa465e57aa52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
