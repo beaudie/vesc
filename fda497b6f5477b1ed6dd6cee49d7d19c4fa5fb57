@@ -16,6 +16,24 @@
       "message": "https://ci.chromium.org/ui/p/angle/builders/try/win-test/12247/overview\nLooks like these tests ran twice.",
       "revId": "fda497b6f5477b1ed6dd6cee49d7d19c4fa5fb57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c76bb45a_c3e31fa3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-03-17T16:24:52Z",
+      "side": 1,
+      "message": "Sheesh, looks like broken sharding. Possibly due to subset selection using randomFloat. Reducing the scope of this CL, not attempting to make these tests work now.",
+      "parentUuid": "8b10f112_2c568730",
+      "revId": "fda497b6f5477b1ed6dd6cee49d7d19c4fa5fb57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
