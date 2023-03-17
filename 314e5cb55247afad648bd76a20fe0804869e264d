@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bb1d047_612bc40d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-17T17:03:19Z",
+      "side": 1,
+      "message": "Thanks. Will correct right away.",
+      "parentUuid": "7794e856_8fafa225",
+      "range": {
+        "startLine": 10,
+        "startChar": 28,
+        "endLine": 10,
+        "endChar": 32
+      },
+      "revId": "314e5cb55247afad648bd76a20fe0804869e264d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "bdeface3_b913b648",
