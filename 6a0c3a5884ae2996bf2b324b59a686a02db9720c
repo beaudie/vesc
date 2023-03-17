@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd7ecea6_343ff4c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-03-17T14:26:59Z",
+      "side": 1,
+      "message": "Great stuff!",
+      "revId": "6a0c3a5884ae2996bf2b324b59a686a02db9720c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb156ded_c48f4000",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5543,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-03-17T14:26:59Z",
+      "side": 1,
+      "message": "I\u0027d add an UNREACHABLE here, it\u0027s probably not possible to implement this on VK without adding some logic here.",
+      "range": {
+        "startLine": 5543,
+        "startChar": 28,
+        "endLine": 5543,
+        "endChar": 33
+      },
+      "revId": "6a0c3a5884ae2996bf2b324b59a686a02db9720c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
