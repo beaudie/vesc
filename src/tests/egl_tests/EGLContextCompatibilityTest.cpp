@@ -473,11 +473,11 @@ void RegisterContextCompatibilityTests()
 {
     // Linux failures: http://anglebug.com/4990
     // Also wrong drivers loaded under xvfb due to egl* calls: https://anglebug.com/8083
-    if (IsLinux())
-    {
-        std::cerr << "EGLContextCompatibilityTest: skipped on Linux\n";
-        return;
-    }
+    // if (IsLinux())
+    // {
+    //     std::cerr << "EGLContextCompatibilityTest: skipped on Linux\n";
+    //     return;
+    // }
 
     std::vector<EGLint> renderers = {{
         EGL_PLATFORM_ANGLE_TYPE_D3D9_ANGLE,
@@ -522,7 +522,9 @@ void RegisterContextCompatibilityTests()
 
         for (EGLConfig config : configs)
         {
-            configNames.push_back(EGLConfigName(display, config));
+            auto configName = EGLConfigName(display, config);
+            configNames.push_back(configName);
+            std::cerr << "ECCT config rendererName=" << rendererName << " configName=" << configName << "\n";
         }
 
         for (size_t configIndex = 0; configIndex < configs.size(); ++configIndex)
@@ -578,7 +580,9 @@ void RegisterContextCompatibilityTests()
                 if (ShouldSkipConfig(display, configs[configIndexB], true))
                     continue;
 
-                if (rng.randomFloat() < kSkipP)
+                auto f = rng.randomFloat();
+                std::cerr << "ECCT WindowDifferentConfig configIndexA=" << configIndexA << " configIndexB=" << configIndexB << " randomFloat=" << f << " kSkipP=" << kSkipP << "\n";
+                if (f < kSkipP)
                     continue;
 
                 std::string configNameB = configNames[configIndexB];
@@ -610,7 +614,9 @@ void RegisterContextCompatibilityTests()
                 if (ShouldSkipConfig(display, configs[configIndexB], false))
                     continue;
 
-                if (rng.randomFloat() < kSkipP)
+                auto f = rng.randomFloat();
+                std::cerr << "ECCT PbufferDifferentConfig configIndexA=" << configIndexA << " configIndexB=" << configIndexB << " randomFloat=" << f << " kSkipP=" << kSkipP << "\n";
+                if (f < kSkipP)
                     continue;
 
                 std::string configNameB = configNames[configIndexB];
