@@ -1692,6 +1692,13 @@ angle::Result Framebuffer::invalidateSub(const Context *context,
     return mImpl->invalidateSub(context, count, attachments, area);
 }
 
+GLbitfield Framebuffer::fastStageClear(const Context *context, GLbitfield mask)
+{
+    ASSERT(mask && !context->getState().isRasterizerDiscardEnabled());
+
+    return mImpl->fastStageClear(context, mask);
+}
+
 angle::Result Framebuffer::clear(const Context *context, GLbitfield mask)
 {
     ASSERT(mask && !context->getState().isRasterizerDiscardEnabled());

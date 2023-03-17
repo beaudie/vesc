@@ -694,6 +694,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     void initializeDefaultResources();
 
     angle::Result prepareForDraw(PrimitiveMode mode);
+    angle::Result prepareForFastStageClear(GLbitfield mask);
     angle::Result prepareForClear(GLbitfield mask);
     angle::Result prepareForClearBuffer(GLenum buffer, GLint drawbuffer);
     angle::Result syncState(const State::DirtyBits &bitMask,

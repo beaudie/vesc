@@ -39,6 +39,7 @@ class FramebufferGL : public FramebufferImpl
                                 const GLenum *attachments,
                                 const gl::Rectangle &area) override;
 
+    GLbitfield fastStageClear(const gl::Context *context, GLbitfield mask) override { return mask; }
     angle::Result clear(const gl::Context *context, GLbitfield mask) override;
     angle::Result clearBufferfv(const gl::Context *context,
                                 GLenum buffer,

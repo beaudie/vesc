@@ -59,6 +59,7 @@ class FramebufferD3D : public FramebufferImpl
     FramebufferD3D(const gl::FramebufferState &data, RendererD3D *renderer);
     ~FramebufferD3D() override;
 
+    GLbitfield fastStageClear(const gl::Context *context, GLbitfield mask) override { return mask; }
     angle::Result clear(const gl::Context *context, GLbitfield mask) override;
     angle::Result clearBufferfv(const gl::Context *context,
                                 GLenum buffer,
