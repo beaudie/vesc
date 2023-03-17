@@ -16,6 +16,24 @@
       "message": "Please skip using `angle_end2end_tests_expectations.txt`\n\nThe only downside I see with this change is losing good TSAN coverage, but ok they are too heavy for SwiftShader. Perhaps a compromise could be to lower the thread count / reduce workload when SwiftShader?",
       "revId": "f27e602c75f6fd2c790bb043abeb92e35bb2a881",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbd14fd7_20e2b9d6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-17T11:36:21Z",
+      "side": 1,
+      "message": "\u003e Perhaps a compromise could be to lower the thread count / reduce workload when SwiftShader?\n\nThere are 2 threads and they not running in parallel. It is Swiftshader itself uses many threads for rendering. Test uses 1024x1024 texture and draws 1000 quads.\n\nEven with such heavy tests Swiftshader did not detected bugs with priorities. I can try lower the number of draw calls to 100. If this will result in worse error detection on G996B (device that detects priority bugs) then I will keep tests as is and disabled for the Swiftshader.",
+      "parentUuid": "bfcbfe1f_5c1347b0",
+      "revId": "f27e602c75f6fd2c790bb043abeb92e35bb2a881",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
