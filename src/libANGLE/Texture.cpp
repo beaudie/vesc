@@ -2013,8 +2013,9 @@ bool Texture::isRenderable(const Context *context,
         return true;
     }
 
-    return getAttachmentFormat(binding, imageIndex)
-        .info->textureAttachmentSupport(context->getClientVersion(), context->getExtensions());
+    return true;
+    // return getAttachmentFormat(binding, imageIndex)
+    //   .info->textureAttachmentSupport(context->getClientVersion(), context->getExtensions());
 }
 
 bool Texture::getAttachmentFixedSampleLocations(const ImageIndex &imageIndex) const
