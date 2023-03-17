@@ -4507,10 +4507,15 @@ bool Context::noopDrawInstanced(PrimitiveMode mode, GLsizei count, GLsizei insta
     return (instanceCount == 0) || noopDraw(mode, count);
 }
 
-angle::Result Context::prepareForClear(GLbitfield mask)
+angle::Result Context::prepareForFastStageClear(GLbitfield mask)
 {
     // Sync the draw framebuffer manually after the clear attachments.
     ANGLE_TRY(mState.getDrawFramebuffer()->ensureClearAttachmentsInitialized(this, mask));
+    return angle::Result::Continue;
+}
+
+angle::Result Context::prepareForClear(GLbitfield mask)
+{
     return syncStateForClear();
 }
 
@@ -4692,8 +4697,16 @@ void Context::clear(GLbitfield mask)
         return;
     }
 
-    ANGLE_CONTEXT_TRY(prepareForClear(mask));
-    ANGLE_CONTEXT_TRY(mState.getDrawFramebuffer()->clear(this, mask));
+    // First give backend opportunity to do a fast clear without sync state. This could
+    // avoid breaking render passes for a simple clear that could otherwise just deferred.
+    ANGLE_CONTEXT_TRY(prepareForFastStageClear(mask));
+    mask = mState.getDrawFramebuffer()->fastStageClear(this, mask);
+
+    if (mask != 0)
+    {
+        ANGLE_CONTEXT_TRY(prepareForClear(mask));
+        ANGLE_CONTEXT_TRY(mState.getDrawFramebuffer()->clear(this, mask));
+    }
 }
 
 bool Context::isClearBufferMaskedOut(GLenum buffer, GLint drawbuffer) const

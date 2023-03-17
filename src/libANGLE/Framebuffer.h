@@ -342,6 +342,9 @@ class Framebuffer final : public angle::ObserverInterface,
                                 const GLenum *attachments,
                                 const Rectangle &area);
 
+    // Fast staged clear is for backend to do a staged clear without state sync. The mask bitfield
+    // remains to be cleared is returned.
+    GLbitfield fastStageClear(const Context *context, GLbitfield mask);
     angle::Result clear(const Context *context, GLbitfield mask);
     angle::Result clearBufferfv(const Context *context,
                                 GLenum buffer,
