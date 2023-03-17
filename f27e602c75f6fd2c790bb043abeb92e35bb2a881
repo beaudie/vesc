@@ -34,6 +34,24 @@
       "parentUuid": "bfcbfe1f_5c1347b0",
       "revId": "f27e602c75f6fd2c790bb043abeb92e35bb2a881",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc54667a_d469dda2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-17T14:32:38Z",
+      "side": 1,
+      "message": "Reduced workload to 75 quads from 1000 and G996B still reliably fails without fixes. Decided to keep high workload for HW devices and use reduced workload for Swiftshader.",
+      "parentUuid": "bbd14fd7_20e2b9d6",
+      "revId": "f27e602c75f6fd2c790bb043abeb92e35bb2a881",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
