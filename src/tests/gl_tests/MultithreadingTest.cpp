@@ -676,6 +676,107 @@ TEST_P(MultithreadingTest, CreateMultiSharedContextAndDraw)
     EXPECT_EGL_SUCCESS();
 }
 
+// Test that it is possible to upload textures in one thread and use them in another with
+// synchronization.
+TEST_P(MultithreadingTest, MultithreadedTextureUploadAndDraw)
+{
+    ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading());
+
+    constexpr size_t kTexSize = 4;
+    GLTexture texture1;
+    GLTexture texture2;
+    std::vector<GLColor> textureColors1(kTexSize * kTexSize, GLColor::red);
+    std::vector<GLColor> textureColors2(kTexSize * kTexSize, GLColor::green);
+
+    // Sync primitives
+    GLsync sync = nullptr;
+    std::mutex mutex;
+    std::condition_variable condVar;
+
+    enum class Step
+    {
+        Start,
+        UploadFinish,
+        Finish,
+        Abort,
+    };
+    Step currentStep = Step::Start;
+
+    // Threads to upload and draw with textures.
+    auto threadUpload = [&](EGLDisplay dpy, EGLSurface surface, EGLContext context) {
+        ThreadSynchronization<Step> threadSynchronization(&currentStep, &mutex, &condVar);
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Start));
+
+        EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, context));
+
+        // Two mipmap textures are defined here. They are used for drawing in the other thread.
+        glBindTexture(GL_TEXTURE_2D, texture1);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, kTexSize, kTexSize, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                     textureColors1.data());
+        glTexImage2D(GL_TEXTURE_2D, 1, GL_RGBA8, kTexSize / 2, kTexSize / 2, 0, GL_RGBA,
+                     GL_UNSIGNED_BYTE, textureColors1.data());
+        glTexImage2D(GL_TEXTURE_2D, 2, GL_RGBA8, kTexSize / 4, kTexSize / 4, 0, GL_RGBA,
+                     GL_UNSIGNED_BYTE, textureColors1.data());
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        ASSERT_GL_NO_ERROR();
+
+        glBindTexture(GL_TEXTURE_2D, texture2);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, kTexSize, kTexSize, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                     textureColors2.data());
+        glTexImage2D(GL_TEXTURE_2D, 1, GL_RGBA8, kTexSize / 2, kTexSize / 2, 0, GL_RGBA,
+                     GL_UNSIGNED_BYTE, textureColors2.data());
+        glTexImage2D(GL_TEXTURE_2D, 2, GL_RGBA8, kTexSize / 4, kTexSize / 4, 0, GL_RGBA,
+                     GL_UNSIGNED_BYTE, textureColors2.data());
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        ASSERT_GL_NO_ERROR();
+
+        // Create a sync object to be used for the draw thread.
+        sync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+        ASSERT_NE(sync, nullptr);
+
+        threadSynchronization.nextStep(Step::UploadFinish);
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Finish));
+    };
+
+    auto threadDraw = [&](EGLDisplay dpy, EGLSurface surface, EGLContext context) {
+        ThreadSynchronization<Step> threadSynchronization(&currentStep, &mutex, &condVar);
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::UploadFinish));
+
+        EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, context));
+
+        // Wait for the sync object to be signaled.
+        glWaitSync(sync, 0, GL_TIMEOUT_IGNORED);
+
+        // Draw using the textures from the texture upload thread.
+        ANGLE_GL_PROGRAM(textureProgram, essl1_shaders::vs::Texture2D(),
+                         essl1_shaders::fs::Texture2D());
+        glUseProgram(textureProgram);
+
+        glBindTexture(GL_TEXTURE_2D, texture1);
+        drawQuad(textureProgram, essl1_shaders::PositionAttrib(), 0.5f);
+        glFlush();
+        ASSERT_GL_NO_ERROR();
+        EXPECT_PIXEL_RECT_EQ(0, 0, kTexSize, kTexSize, GLColor::red);
+
+        glBindTexture(GL_TEXTURE_2D, texture2);
+        drawQuad(textureProgram, essl1_shaders::PositionAttrib(), 0.5f);
+        glFlush();
+        ASSERT_GL_NO_ERROR();
+        EXPECT_PIXEL_RECT_EQ(0, 0, kTexSize, kTexSize, GLColor::green);
+
+        threadSynchronization.nextStep(Step::Finish);
+    };
+
+    std::array<LockStepThreadFunc, 2> threadFuncs = {
+        std::move(threadUpload),
+        std::move(threadDraw),
+    };
+
+    RunLockStepThreads(getEGLWindow(), threadFuncs.size(), threadFuncs.data());
+}
+
 void MultithreadingTestES3::textureThreadFunction(bool useDraw)
 {
     EGLWindow *window  = getEGLWindow();
