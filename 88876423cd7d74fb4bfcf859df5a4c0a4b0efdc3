@@ -16,6 +16,24 @@
       "message": "Nice! Do you think you could split this CL for easier review? It looks like you should be able to pull the attach/detach/collect part into one, retire in another, and optimizations in yet another?",
       "revId": "88876423cd7d74fb4bfcf859df5a4c0a4b0efdc3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a138aebb_9afd6c01",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-17T17:11:49Z",
+      "side": 1,
+      "message": "I can:\n1. Make separate \"attach/detach/collect\". But will not allow asyncCommandQueue yet.\n2. Add retire and allow asyncCommandQueue.\n\nOptimization is not a separate change but as a result of (1).\nConcrete places in the code. Adding:\n```\n    // Skip initialization in the Pool-detached state.\n    if (!OutsideRenderPassCommandBuffer::ExecutesInline() \u0026\u0026 mCommandPool \u003d\u003d nullptr)\n    {\n        return angle::Result::Continue;\n    }\n```\nand removing:\n```\n    SecondaryCommandPool *pool \u003d (*commandBufferHelper)-\u003egetCommandPool();\n    pool-\u003ecollect(commandBuffer);\n    SafeDelete(*commandBufferHelper);\n```\nBefore, after the flush in `CommandProcessor` a new empty buffer was allocated and then immediately destroyed. Helper was also destroyed. Now there is no need to destroy helper, since it has no pool attached.",
+      "parentUuid": "7bc4be47_1981636a",
+      "revId": "88876423cd7d74fb4bfcf859df5a4c0a4b0efdc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
