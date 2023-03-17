@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2bb7dfd9_996ae2f9",
+        "filename": "src/compiler/translator/glslang.l",
+        "patchSetId": 4
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-17T00:08:13Z",
+      "side": 1,
+      "message": "As you\u0027ve found out, this is not just GLES (but also desktop GL).\n\nHow about reverting the check? FYI the function `IsWebGLBasedSpec()` already exists!",
+      "range": {
+        "startLine": 957,
+        "startChar": 29,
+        "endLine": 957,
+        "endChar": 44
+      },
+      "revId": "afc1dd729f14e609896d71715d17fa465e57aa52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
