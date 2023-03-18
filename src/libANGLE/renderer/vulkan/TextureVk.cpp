@@ -679,6 +679,10 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
     {
         // Check if we should flush any mutable textures from before.
         ANGLE_TRY(contextVk->getShareGroup()->onMutableTextureUpload(contextVk, this));
+        if (contextVk->getMutableTextureFlushPending())
+        {
+            ANGLE_TRY(contextVk->flush(context));
+        }
     }
 
     return angle::Result::Continue;

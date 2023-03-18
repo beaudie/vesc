@@ -6962,20 +6962,6 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore,
     // semaphores.
     ANGLE_TRY(flushOutsideRenderPassCommands());
 
-    // If another context has pending mutable texture updates, its outside RP command buffer will be
-    // flushed as well.
-    if (isEligibleForMutableTextureFlush())
-    {
-        for (ContextVk *ctx : getShareGroup()->getContexts())
-        {
-            if (ctx == this || !ctx->mIsMutableTextureFlushPending)
-            {
-                continue;
-            }
-            ANGLE_TRY(ctx->flushOutsideRenderPassCommands());
-        }
-    }
-
     if (mLastFlushedQueueSerial == mLastSubmittedQueueSerial)
     {
         // We have to do empty submission...
@@ -7030,7 +7016,8 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore,
     }
 
     // Since we just flushed, deferred flush is no longer deferred.
-    mHasDeferredFlush = false;
+    mHasDeferredFlush             = false;
+    mIsMutableTextureFlushPending = false;
     return angle::Result::Continue;
 }
 
@@ -7574,7 +7561,6 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
 
     ANGLE_TRY(mRenderer->flushOutsideRPCommands(this, getProtectionType(), mContextPriority,
                                                 &mOutsideRenderPassCommands));
-    mIsMutableTextureFlushPending = false;
 
     if (mRenderPassCommands->started() && mOutsideRenderPassSerialFactory.empty())
     {

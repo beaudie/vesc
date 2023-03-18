@@ -797,6 +797,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         return getFeatures().mutableMipmapTextureUpload.enabled && !hasDisplayTextureShareGroup();
     }
     void setMutableTextureFlushPending() { mIsMutableTextureFlushPending = true; }
+    bool getMutableTextureFlushPending() { return mIsMutableTextureFlushPending; }
 
   private:
     // Dirty bits.
