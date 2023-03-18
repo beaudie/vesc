@@ -258,6 +258,97 @@ TEST_P(MultithreadingTest, MultiContextClear)
         getEGLWindow()->isFeatureEnabled(Feature::SlowAsyncCommandQueueForTesting) ? 4 : 72);
 }
 
+// Test that it is possible to upload textures in one thread and use them in another with
+// synchronization.
+TEST_P(MultithreadingTest, MultiContextTextureUploadDraw)
+{
+    ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading());
+    constexpr size_t kTexSize = 4;
+
+    GLTexture texture1;
+    GLTexture texture2;
+
+    std::vector<GLColor> textureColors1(kTexSize * kTexSize, GLColor::red);
+    std::vector<GLColor> textureColors2(kTexSize * kTexSize, GLColor::green);
+
+    // Sync primitives
+    std::mutex mutex;
+    std::condition_variable condVar;
+
+    enum class Step
+    {
+        Start,
+        Thread2Finish,
+        Finish,
+        Abort,
+    };
+    Step currentStep = Step::Start;
+
+    // Threads to upload and draw with textures.
+    auto t1 = [&](EGLDisplay dpy, EGLSurface surface, EGLContext context) {
+        ThreadSynchronization<Step> threadSynchronization(&currentStep, &mutex, &condVar);
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Thread2Finish));
+
+        EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, context));
+
+        // Draw using the textures from the other thread.
+        ANGLE_GL_PROGRAM(textureProgram, essl1_shaders::vs::Texture2D(),
+                         essl1_shaders::fs::Texture2D());
+        glUseProgram(textureProgram);
+
+        glBindTexture(GL_TEXTURE_2D, texture1);
+        drawQuad(textureProgram, essl1_shaders::PositionAttrib(), 0.5f);
+        glFlush();
+        ASSERT_GL_NO_ERROR();
+        EXPECT_PIXEL_RECT_EQ(0, 0, kTexSize, kTexSize, GLColor::red);
+
+        glBindTexture(GL_TEXTURE_2D, texture2);
+        drawQuad(textureProgram, essl1_shaders::PositionAttrib(), 0.5f);
+        glFlush();
+        ASSERT_GL_NO_ERROR();
+        EXPECT_PIXEL_RECT_EQ(0, 0, kTexSize, kTexSize, GLColor::green);
+
+        threadSynchronization.nextStep(Step::Finish);
+    };
+
+    auto t2 = [&](EGLDisplay dpy, EGLSurface surface, EGLContext context) {
+        ThreadSynchronization<Step> threadSynchronization(&currentStep, &mutex, &condVar);
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Start));
+
+        EXPECT_EGL_TRUE(eglMakeCurrent(dpy, surface, surface, context));
+
+        // Two mipmap textures are defined here. They are used for drawing in the other thread.
+        glBindTexture(GL_TEXTURE_2D, texture1);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, kTexSize, kTexSize, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                     textureColors1.data());
+        glTexImage2D(GL_TEXTURE_2D, 1, GL_RGBA8, kTexSize / 2, kTexSize / 2, 0, GL_RGBA,
+                     GL_UNSIGNED_BYTE, textureColors1.data());
+        glTexImage2D(GL_TEXTURE_2D, 2, GL_RGBA8, kTexSize / 4, kTexSize / 4, 0, GL_RGBA,
+                     GL_UNSIGNED_BYTE, textureColors1.data());
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glBindTexture(GL_TEXTURE_2D, texture2);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, kTexSize, kTexSize, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                     textureColors2.data());
+        glTexImage2D(GL_TEXTURE_2D, 1, GL_RGBA8, kTexSize / 2, kTexSize / 2, 0, GL_RGBA,
+                     GL_UNSIGNED_BYTE, textureColors2.data());
+        glTexImage2D(GL_TEXTURE_2D, 2, GL_RGBA8, kTexSize / 4, kTexSize / 4, 0, GL_RGBA,
+                     GL_UNSIGNED_BYTE, textureColors2.data());
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+        threadSynchronization.nextStep(Step::Thread2Finish);
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Finish));
+    };
+
+    std::array<LockStepThreadFunc, 2> threadFuncs = {
+        std::move(t1),
+        std::move(t2),
+    };
+
+    RunLockStepThreads(getEGLWindow(), threadFuncs.size(), threadFuncs.data());
+}
+
 // Verify that threads can interleave eglDestroyContext and draw calls without
 // any crashes.
 TEST_P(MultithreadingTest, MultiContextDeleteDraw)
