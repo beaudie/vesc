@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44fd175d_327591d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-03-18T00:23:15Z",
+      "side": 1,
+      "message": "Hi Alexey, this CL broke the test on metal backend: https://ci.chromium.org/ui/p/chromium/builders/ci/ios-angle-intel/26035/overview. We reverted it at https://chromium-review.googlesource.com/c/angle/angle/+/4350876.\n\nWould you please take a look? Thank you",
+      "revId": "f8c1418319ac2aef4b3101e322005b1d0f73120f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
