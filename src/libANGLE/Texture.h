@@ -61,12 +61,16 @@ GLenum ConvertToNearestMipFilterMode(GLenum filterMode);
 struct ImageDesc final
 {
     ImageDesc();
-    ImageDesc(const Extents &size, const Format &format, const InitState initState);
+    ImageDesc(const Extents &size,
+              const Format &format,
+              const InitState initState,
+              const bool isRenderable = false);
     ImageDesc(const Extents &size,
               const Format &format,
               const GLsizei samples,
               const bool fixedSampleLocations,
-              const InitState initState);
+              const InitState initState,
+              const bool isRenderable = false);
 
     ImageDesc(const ImageDesc &other)            = default;
     ImageDesc &operator=(const ImageDesc &other) = default;
@@ -80,6 +84,13 @@ struct ImageDesc final
 
     // Needed for robust resource initialization.
     InitState initState;
+
+    // Whether the |format| is renderable or not. Note that we are calculating
+    // the renderability and caching it here on the context on which this
+    // ImageDesc is created. This is to avoid issues where a texture created in
+    // gles3 context(eg raster context) with RGBA8 format is later shared with a
+    // gles2 context(eg webgl1) which doesnt support that format.
+    bool isRenderable = false;
 };
 
 struct SwizzleState final
@@ -727,6 +738,7 @@ class Texture final : public RefCountObject<TextureID>,
     };
 
     mutable SamplerCompletenessCache mCompletenessCache;
+    bool mIsRenderable = false;
 };
 
 inline bool operator==(const TextureState &a, const TextureState &b)
