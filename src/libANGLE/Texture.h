@@ -61,12 +61,16 @@ GLenum ConvertToNearestMipFilterMode(GLenum filterMode);
 struct ImageDesc final
 {
     ImageDesc();
-    ImageDesc(const Extents &size, const Format &format, const InitState initState);
+    ImageDesc(const Extents &size,
+              const Format &format,
+              const InitState initState,
+              const bool isRenderable);
     ImageDesc(const Extents &size,
               const Format &format,
               const GLsizei samples,
               const bool fixedSampleLocations,
-              const InitState initState);
+              const InitState initState,
+              const bool isRenderable);
 
     ImageDesc(const ImageDesc &other)            = default;
     ImageDesc &operator=(const ImageDesc &other) = default;
@@ -80,6 +84,13 @@ struct ImageDesc final
 
     // Needed for robust resource initialization.
     InitState initState;
+
+    // Whether the |format| is renderable or not. Note that we are calculating
+    // the renderability and caching it here on the context on which this
+    // ImageDesc is created. This is to avoid issues where a texture created in
+    // gles3 context(eg raster context) with RGBA8 format is later shared with a
+    // gles2 context(eg webgl1) which doesnt support that format.
+    bool isRenderable = false;
 };
 
 struct SwizzleState final
@@ -203,12 +214,14 @@ class TextureState final : private angle::NonCopyable
     TextureTarget getBaseImageTarget() const;
 
     void setImageDesc(TextureTarget target, size_t level, const ImageDesc &desc);
-    void setImageDescChain(GLuint baselevel,
+    void setImageDescChain(Context *context,
+                           GLuint baselevel,
                            GLuint maxLevel,
                            Extents baseSize,
                            const Format &format,
                            InitState initState);
-    void setImageDescChainMultisample(Extents baseSize,
+    void setImageDescChainMultisample(Context *context,
+                                      Extents baseSize,
                                       const Format &format,
                                       GLsizei samples,
                                       bool fixedSampleLocations,
@@ -391,6 +404,15 @@ class Texture final : public RefCountObject<TextureID>,
                            GLenum format,
                            GLenum type,
                            const uint8_t *pixels);
+    angle::Result setImageForTesting(const PixelUnpackState &unpackState,
+                                     Buffer *unpackBuffer,
+                                     TextureTarget target,
+                                     GLint level,
+                                     GLenum internalFormat,
+                                     const Extents &size,
+                                     GLenum format,
+                                     GLenum type,
+                                     const uint8_t *pixels);
     angle::Result setSubImage(Context *context,
                               const PixelUnpackState &unpackState,
                               Buffer *unpackBuffer,
