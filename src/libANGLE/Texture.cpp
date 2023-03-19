@@ -614,23 +614,33 @@ GLuint TextureState::getEnabledLevelCount() const
 }
 
 ImageDesc::ImageDesc()
-    : ImageDesc(Extents(0, 0, 0), Format::Invalid(), 0, GL_TRUE, InitState::Initialized)
+    : ImageDesc(Extents(0, 0, 0), Format::Invalid(), 0, GL_TRUE, InitState::Initialized, false)
 {}
 
-ImageDesc::ImageDesc(const Extents &size, const Format &format, const InitState initState)
-    : size(size), format(format), samples(0), fixedSampleLocations(GL_TRUE), initState(initState)
+ImageDesc::ImageDesc(const Extents &size,
+                     const Format &format,
+                     const InitState initState,
+                     const bool isRenderable)
+    : size(size),
+      format(format),
+      samples(0),
+      fixedSampleLocations(GL_TRUE),
+      initState(initState),
+      isRenderable(isRenderable)
 {}
 
 ImageDesc::ImageDesc(const Extents &size,
                      const Format &format,
                      const GLsizei samples,
                      const bool fixedSampleLocations,
-                     const InitState initState)
+                     const InitState initState,
+                     const bool isRenderable)
     : size(size),
       format(format),
       samples(samples),
       fixedSampleLocations(fixedSampleLocations),
-      initState(initState)
+      initState(initState),
+      isRenderable(isRenderable)
 {}
 
 GLint ImageDesc::getMemorySize() const
@@ -699,7 +709,8 @@ const ImageDesc &TextureState::getImageDesc(const ImageIndex &imageIndex) const
     return getImageDesc(imageIndex.getTarget(), imageIndex.getLevelIndex());
 }
 
-void TextureState::setImageDescChain(GLuint baseLevel,
+void TextureState::setImageDescChain(Context *context,
+                                     GLuint baseLevel,
                                      GLuint maxLevel,
                                      Extents baseSize,
                                      const Format &format,
@@ -713,7 +724,9 @@ void TextureState::setImageDescChain(GLuint baseLevel,
                           (IsArrayTextureType(mType))
                               ? baseSize.depth
                               : std::max<int>(baseSize.depth >> relativeLevel, 1));
-        ImageDesc levelInfo(levelSize, format, initState);
+        ImageDesc levelInfo(levelSize, format, initState,
+                            format.info->textureAttachmentSupport(context->getClientVersion(),
+                                                                  context->getExtensions()));
 
         if (mType == TextureType::CubeMap)
         {
@@ -729,14 +742,17 @@ void TextureState::setImageDescChain(GLuint baseLevel,
     }
 }
 
-void TextureState::setImageDescChainMultisample(Extents baseSize,
+void TextureState::setImageDescChainMultisample(Context *context,
+                                                Extents baseSize,
                                                 const Format &format,
                                                 GLsizei samples,
                                                 bool fixedSampleLocations,
                                                 InitState initState)
 {
     ASSERT(mType == TextureType::_2DMultisample || mType == TextureType::_2DMultisampleArray);
-    ImageDesc levelInfo(baseSize, format, samples, fixedSampleLocations, initState);
+    ImageDesc levelInfo(baseSize, format, samples, fixedSampleLocations, initState,
+                        format.info->textureAttachmentSupport(context->getClientVersion(),
+                                                              context->getExtensions()));
     setImageDesc(NonCubeTextureTypeToTarget(mType), 0, levelInfo);
 }
 
@@ -1245,8 +1261,12 @@ angle::Result Texture::setImage(Context *context,
     ANGLE_TRY(mTexture->setImage(context, index, internalFormat, size, format, type, unpackState,
                                  unpackBuffer, pixels));
 
-    InitState initState = DetermineInitState(context, unpackBuffer, pixels);
-    mState.setImageDesc(target, level, ImageDesc(size, Format(internalFormat, type), initState));
+    InitState initState    = DetermineInitState(context, unpackBuffer, pixels);
+    const auto imageFormat = Format(internalFormat, type);
+    mState.setImageDesc(target, level,
+                        ImageDesc(size, imageFormat, initState,
+                                  imageFormat.info->textureAttachmentSupport(
+                                      context->getClientVersion(), context->getExtensions())));
 
     ANGLE_TRY(handleMipmapGenerationHint(context, level));
 
@@ -1304,8 +1324,12 @@ angle::Result Texture::setCompressedImage(Context *context,
 
     Buffer *unpackBuffer = context->getState().getTargetBuffer(BufferBinding::PixelUnpack);
 
-    InitState initState = DetermineInitState(context, unpackBuffer, pixels);
-    mState.setImageDesc(target, level, ImageDesc(size, Format(internalFormat), initState));
+    InitState initState    = DetermineInitState(context, unpackBuffer, pixels);
+    const auto imageFormat = Format(internalFormat);
+    mState.setImageDesc(target, level,
+                        ImageDesc(size, imageFormat, initState,
+                                  imageFormat.info->textureAttachmentSupport(
+                                      context->getClientVersion(), context->getExtensions())));
     signalDirtyStorage(initState);
 
     return angle::Result::Continue;
@@ -1391,7 +1415,10 @@ angle::Result Texture::copyImage(Context *context,
         ANGLE_TRY(mTexture->setImage(context, index, internalFormat, size,
                                      internalFormatInfo.format, internalFormatInfo.type,
                                      PixelUnpackState(), nullptr, nullptr));
-        mState.setImageDesc(target, level, ImageDesc(size, Format(internalFormatInfo), initState));
+        mState.setImageDesc(target, level,
+                            ImageDesc(size, Format(internalFormatInfo), initState,
+                                      internalFormatInfo.textureAttachmentSupport(
+                                          context->getClientVersion(), context->getExtensions())));
         ANGLE_TRY(ensureSubImageInitialized(context, index, destBox));
         ANGLE_TRY(mTexture->copySubImage(context, index, Offset(), sourceArea, source));
     }
@@ -1401,7 +1428,9 @@ angle::Result Texture::copyImage(Context *context,
     }
 
     mState.setImageDesc(target, level,
-                        ImageDesc(size, Format(internalFormatInfo), InitState::Initialized));
+                        ImageDesc(size, Format(internalFormatInfo), InitState::Initialized,
+                                  internalFormatInfo.textureAttachmentSupport(
+                                      context->getClientVersion(), context->getExtensions())));
 
     ANGLE_TRY(handleMipmapGenerationHint(context, level));
 
@@ -1530,7 +1559,9 @@ angle::Result Texture::copyTexture(Context *context,
     const InternalFormat &internalFormatInfo = GetInternalFormatInfo(internalFormat, type);
     mState.setImageDesc(
         target, level,
-        ImageDesc(sourceDesc.size, Format(internalFormatInfo), InitState::Initialized));
+        ImageDesc(sourceDesc.size, Format(internalFormatInfo), InitState::Initialized,
+                  internalFormatInfo.textureAttachmentSupport(context->getClientVersion(),
+                                                              context->getExtensions())));
 
     signalDirtyStorage(InitState::Initialized);
 
@@ -1603,8 +1634,8 @@ angle::Result Texture::setStorage(Context *context,
     mState.mImmutableLevels = static_cast<GLuint>(levels);
     mState.clearImageDescs();
     InitState initState = DetermineInitState(context, nullptr, nullptr);
-    mState.setImageDescChain(0, static_cast<GLuint>(levels - 1), size, Format(internalFormat),
-                             initState);
+    mState.setImageDescChain(context, 0, static_cast<GLuint>(levels - 1), size,
+                             Format(internalFormat), initState);
 
     ANGLE_TRY(mTexture->setStorage(context, type, levels, internalFormat, size));
 
@@ -1640,8 +1671,12 @@ angle::Result Texture::setImageExternal(Context *context,
 
     ANGLE_TRY(mTexture->setImageExternal(context, index, internalFormat, size, format, type));
 
-    InitState initState = InitState::Initialized;
-    mState.setImageDesc(target, level, ImageDesc(size, Format(internalFormat, type), initState));
+    InitState initState    = InitState::Initialized;
+    const auto imageFormat = Format(internalFormat, type);
+    mState.setImageDesc(target, level,
+                        ImageDesc(size, imageFormat, initState,
+                                  imageFormat.info->textureAttachmentSupport(
+                                      context->getClientVersion(), context->getExtensions())));
 
     ANGLE_TRY(handleMipmapGenerationHint(context, level));
 
@@ -1673,8 +1708,8 @@ angle::Result Texture::setStorageMultisample(Context *context,
     mState.mImmutableLevels = static_cast<GLuint>(1);
     mState.clearImageDescs();
     InitState initState = DetermineInitState(context, nullptr, nullptr);
-    mState.setImageDescChainMultisample(size, Format(internalFormat), samples, fixedSampleLocations,
-                                        initState);
+    mState.setImageDescChainMultisample(context, size, Format(internalFormat), samples,
+                                        fixedSampleLocations, initState);
 
     ANGLE_TRY(mTexture->setStorageMultisample(context, type, samples, internalFormat, size,
                                               fixedSampleLocations));
@@ -1709,8 +1744,8 @@ angle::Result Texture::setStorageExternalMemory(Context *context,
     mState.mImmutableFormat = true;
     mState.mImmutableLevels = static_cast<GLuint>(levels);
     mState.clearImageDescs();
-    mState.setImageDescChain(0, static_cast<GLuint>(levels - 1), size, Format(internalFormat),
-                             InitState::Initialized);
+    mState.setImageDescChain(context, 0, static_cast<GLuint>(levels - 1), size,
+                             Format(internalFormat), InitState::Initialized);
 
     // Changing the texture to immutable can trigger a change in the base and max levels:
     // GLES 3.0.4 section 3.8.10 pg 158:
@@ -1778,7 +1813,7 @@ angle::Result Texture::generateMipmap(Context *context)
 
     // Propagate the format and size of the base mip to the smaller ones. Cube maps are guaranteed
     // to have faces of the same size and format so any faces can be picked.
-    mState.setImageDescChain(baseLevel, maxLevel, baseImageInfo.size, baseImageInfo.format,
+    mState.setImageDescChain(context, baseLevel, maxLevel, baseImageInfo.size, baseImageInfo.format,
                              InitState::Initialized);
 
     signalDirtyStorage(InitState::Initialized);
@@ -1800,7 +1835,10 @@ angle::Result Texture::bindTexImageFromSurface(Context *context, egl::Surface *s
     // Set the image info to the size and format of the surface
     ASSERT(mState.mType == TextureType::_2D || mState.mType == TextureType::Rectangle);
     Extents size(surface->getWidth(), surface->getHeight(), 1);
-    ImageDesc desc(size, surface->getBindTexImageFormat(), InitState::Initialized);
+    const auto imageFormat = surface->getBindTexImageFormat();
+    ImageDesc desc(size, surface->getBindTexImageFormat(), InitState::Initialized,
+                   imageFormat.info->textureAttachmentSupport(context->getClientVersion(),
+                                                              context->getExtensions()));
     mState.setImageDesc(NonCubeTextureTypeToTarget(mState.mType), 0, desc);
     mState.mHasProtectedContent = surface->hasProtectedContent();
 
@@ -1849,8 +1887,11 @@ angle::Result Texture::acquireImageFromStream(const Context *context,
     ANGLE_TRY(mTexture->setImageExternal(context, mState.mType, mBoundStream, desc));
 
     Extents size(desc.width, desc.height, 1);
+    const auto imageFormat = Format(desc.internalFormat);
     mState.setImageDesc(NonCubeTextureTypeToTarget(mState.mType), 0,
-                        ImageDesc(size, Format(desc.internalFormat), InitState::Initialized));
+                        ImageDesc(size, imageFormat, InitState::Initialized,
+                                  imageFormat.info->textureAttachmentSupport(
+                                      context->getClientVersion(), context->getExtensions())));
     signalDirtyStorage(InitState::Initialized);
     return angle::Result::Continue;
 }
@@ -1904,8 +1945,8 @@ angle::Result Texture::setEGLImageTargetImpl(Context *context,
     auto initState = imageTarget->sourceInitState();
 
     mState.clearImageDescs();
-    mState.setImageDescChain(0, levels - 1, imageTarget->getExtents(), imageTarget->getFormat(),
-                             initState);
+    mState.setImageDescChain(context, 0, levels - 1, imageTarget->getExtents(),
+                             imageTarget->getFormat(), initState);
     mState.mHasProtectedContent = imageTarget->hasProtectedContent();
 
     ANGLE_TRY(mTexture->setEGLImageTarget(context, type, imageTarget));
@@ -2013,8 +2054,19 @@ bool Texture::isRenderable(const Context *context,
         return true;
     }
 
-    return getAttachmentFormat(binding, imageIndex)
-        .info->textureAttachmentSupport(context->getClientVersion(), context->getExtensions());
+    // As an ImageIndex that represents an entire level of a cube map corresponds to 6 ImageDescs,
+    // we only allow querying ImageDesc on a complete cube map, and this ImageDesc is exactly the
+    // one that belongs to the first face of the cube map.
+    if (imageIndex.isEntireLevelCubeMap())
+    {
+        // A cube map texture is cube complete if the following conditions all hold true:
+        // - The levelbase arrays were each specified with the same effective internal format.
+        if (!mState.isCubeComplete())
+        {
+            return false;
+        }
+    }
+    return mState.getImageDesc(imageIndex).isRenderable;
 }
 
 bool Texture::getAttachmentFixedSampleLocations(const ImageIndex &imageIndex) const
@@ -2108,7 +2160,10 @@ angle::Result Texture::setBufferRange(const gl::Context *context,
     Format format(internalFormat);
     Extents extents(static_cast<GLuint>(size / internalFormatInfo.pixelBytes), 1, 1);
     InitState initState = buffer->initState();
-    mState.setImageDesc(TextureTarget::Buffer, 0, ImageDesc(extents, format, initState));
+    mState.setImageDesc(TextureTarget::Buffer, 0,
+                        ImageDesc(extents, format, initState,
+                                  format.info->textureAttachmentSupport(context->getClientVersion(),
+                                                                        context->getExtensions())));
 
     signalDirtyStorage(initState);
 
