@@ -51,6 +51,24 @@
       "parentUuid": "dd6d774a_16349602",
       "revId": "a3666c8a6dd05f3be749221e595730fd4aec1d72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e42588ac_939ca08a",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-03-20T16:29:20Z",
+      "side": 1,
+      "message": "Nits:\n- `OES_rgb8_rgba8` and/or `OES_required_internalformat` may affect renderability of `GL_RGBA8` in GLES2.\n- Unsized `GL_RGBA` is renderable in WebGL 1.0.",
+      "parentUuid": "03606052_361cf190",
+      "revId": "a3666c8a6dd05f3be749221e595730fd4aec1d72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
