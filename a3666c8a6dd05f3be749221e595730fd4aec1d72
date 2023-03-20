@@ -159,6 +159,24 @@
       "parentUuid": "66d527e3_3c08a6b6",
       "revId": "a3666c8a6dd05f3be749221e595730fd4aec1d72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eeacd45b_3d818cc7",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-03-20T19:51:53Z",
+      "side": 1,
+      "message": "Taking a step back a bit: Ideally we solve this in Chrome by using EGL images. Is it not possible to create an EGL image with a texture source and a texture target? That would make a nice boundary between the WebGL texture and raster/composite textures. I think currently in Chrome these textures are coming from legacy mailboxes or GL texture backed SharedImages. Can we find out which it is try using an EGL image backing?\n\nThe approach used currently in EGL images works because they have an opaque format to GL, we can decide that they are renderable outside of the limitations of extensions.\n\nWe can\u0027t really solve this in the ways mentioned. Caching renderability will break WebGL, extensions are enabled dynamically and textures often go from un-renderable to renderable. Adding a new extension also won\u0027t work because all textures in this format will become renderable in WebGL which isn\u0027t the intention.",
+      "parentUuid": "f336e88e_1ab367cc",
+      "revId": "a3666c8a6dd05f3be749221e595730fd4aec1d72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
