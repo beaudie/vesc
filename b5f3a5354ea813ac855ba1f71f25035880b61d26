@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "05935d20_d0807ebe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-03-20T19:21:58Z",
+      "side": 1,
+      "message": "Unfortunately, that query would belong on `glGetFramebufferParameteriv`, which we don\u0027t have until ES 3.1. Can we get away with just not exposing it?",
+      "parentUuid": "36c22c9e_09174252",
+      "revId": "b5f3a5354ea813ac855ba1f71f25035880b61d26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e6f07978_7f8f4ed4",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 1
@@ -65,6 +83,24 @@
       "writtenOn": "2023-03-20T19:20:01Z",
       "side": 1,
       "message": "This is a good observation. At the moment for this reason memoryless planes already aren\u0027t exposed at the WebGL level; see https://registry.khronos.org/webgl/extensions/WEBGL_shader_pixel_local_storage/ . We are hoping/thinking that if we can provide stronger guarantees at the browser level about leaving user-level PLS code uninterrupted, then in the future memoryless planes might be able to be exposed.",
+      "parentUuid": "e6f07978_7f8f4ed4",
+      "revId": "b5f3a5354ea813ac855ba1f71f25035880b61d26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd10b5d3_aff37afe",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-03-20T19:21:58Z",
+      "side": 1,
+      "message": "Thanks for the drive by 😊\n\nYeah, we just won\u0027t be able to expose memoryless planes in WebGL, unfortunately. They are excluded from the spec: https://registry.khronos.org/webgl/extensions/WEBGL_shader_pixel_local_storage/\n\nThis is largely remediated by the ability to use a store operation of `GL_DONT_CARE`.",
       "parentUuid": "e6f07978_7f8f4ed4",
       "revId": "b5f3a5354ea813ac855ba1f71f25035880b61d26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
