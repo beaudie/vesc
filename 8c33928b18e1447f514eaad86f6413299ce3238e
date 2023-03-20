@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88e3631b_7ff4d1c6",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-20T22:20:13Z",
+      "side": 1,
+      "message": "Here when second context gets added, you should also flush out any mutable texture uploads on the first context as well. You should add a test for this as well.",
+      "range": {
+        "startLine": 106,
+        "startChar": 9,
+        "endLine": 106,
+        "endChar": 19
+      },
+      "revId": "8c33928b18e1447f514eaad86f6413299ce3238e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
