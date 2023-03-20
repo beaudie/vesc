@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d45ff86d_a63c4a38",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-03-20T15:10:43Z",
+      "side": 1,
+      "message": "nit: suppressing the new tests on iOS would have been enough.",
+      "revId": "4a77b0f5237515960673b9bd1bc5a229f0eeaa95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
