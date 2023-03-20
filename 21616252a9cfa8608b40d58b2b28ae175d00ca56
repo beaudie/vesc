@@ -22,6 +22,30 @@
       },
       "revId": "21616252a9cfa8608b40d58b2b28ae175d00ca56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1b97a3d_caaf6ef0",
+        "filename": "src/libANGLE/renderer/vulkan/AllocatorHelperRing.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-20T19:28:48Z",
+      "side": 1,
+      "message": "There\u0027s another allocator with identical interface",
+      "parentUuid": "779b98b4_b967ebc0",
+      "range": {
+        "startLine": 88,
+        "startChar": 9,
+        "endLine": 88,
+        "endChar": 14
+      },
+      "revId": "21616252a9cfa8608b40d58b2b28ae175d00ca56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
