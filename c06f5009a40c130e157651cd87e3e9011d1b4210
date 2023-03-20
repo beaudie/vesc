@@ -81,6 +81,24 @@
       "parentUuid": "9a90526a_6890145d",
       "revId": "c06f5009a40c130e157651cd87e3e9011d1b4210",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b79e0cea_cf0f4d4f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1704,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-20T14:53:33Z",
+      "side": 1,
+      "message": "Regarding the bug.\nThis means the original code also has bug. It executes `vkCmdPipelineBarrier` from the async thread.",
+      "parentUuid": "7ed76108_6b5feb47",
+      "revId": "c06f5009a40c130e157651cd87e3e9011d1b4210",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
