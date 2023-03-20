@@ -34,6 +34,24 @@
       "parentUuid": "7ecff1b5_d1b285d3",
       "revId": "7d1a401b47b4e77e262303b71ae2f57f1266570b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40bc2650_52961fb2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2678,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-20T17:53:11Z",
+      "side": 0,
+      "message": "Removed `RecycleCommandBufferHelper` and moved all asserts into a single place.\n\nCan\u0027t call `empty()` if buffer is `!valid()`, because `VulkanSecondaryCommandBuffer::mAnyCommand` is only reset inside `initialize()` (that will be skipped in Pool detached state).",
+      "parentUuid": "09e2478c_0d80ab23",
+      "revId": "7d1a401b47b4e77e262303b71ae2f57f1266570b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
