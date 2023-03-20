@@ -16,6 +16,24 @@
       "message": "What happened here?",
       "revId": "7d1a401b47b4e77e262303b71ae2f57f1266570b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09e2478c_0d80ab23",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2678,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-20T14:38:06Z",
+      "side": 0,
+      "message": "Moved to the `RecycleCommandBufferHelper`\nBecause in case of the `VulkanSecondaryCommandBuffer` version the `commandBuffer` must be `!valid()`.",
+      "parentUuid": "7ecff1b5_d1b285d3",
+      "revId": "7d1a401b47b4e77e262303b71ae2f57f1266570b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

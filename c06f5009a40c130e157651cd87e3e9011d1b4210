@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3f56a949_1b7abcdc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1441,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-20T14:38:06Z",
+      "side": 1,
+      "message": "I wanted to avoid copy-paste logic in the derived classes.\n\nI do not understand how suggested should work. Line:\n```\nif constexpr (CommandBufferType::ExecutesInline())\n```\nCan only be in the derived class - no `CommandBufferType` in `CommandBufferHelperCommon`. But Let\u0027s assume we have.\n\nYou suggest create abstract `attachCommandPoolImpl()` and implement each in the derived classes. This will result in almost identical implementation (that I wanted to avoid).\n\nAlso there will be compilation bugs in the `attachCommandPoolImpl()`. For example, `mCommandPool-\u003ecollect()` can\u0027t accept `SecondaryCommandBuffer`. I did not want to add dummy `collect()` just so the compilation work.",
+      "parentUuid": "6e53c13c_95c84068",
+      "range": {
+        "startLine": 1435,
+        "startChar": 0,
+        "endLine": 1441,
+        "endChar": 58
+      },
+      "revId": "c06f5009a40c130e157651cd87e3e9011d1b4210",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9a90526a_6890145d",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 7
@@ -37,6 +61,24 @@
       "writtenOn": "2023-03-20T14:03:57Z",
       "side": 1,
       "message": "How can we reach here with the command buffer already ended? There\u0027s the `executeBarrier` stuff to take care of, so if the command buffer is already ended, isn\u0027t that a bug?\n\nIt\u0027s also odd that OutsideRP has this logic but not RP.",
+      "revId": "c06f5009a40c130e157651cd87e3e9011d1b4210",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ed76108_6b5feb47",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1704,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-20T14:38:06Z",
+      "side": 1,
+      "message": "Command buffer will be ended in the `detachCommandPoolImpl()`. This in the commit message. Detach happens in the `CommandProcessor` - no new commands possible\n\n\u003e There\u0027s the executeBarrier stuff to take care of, so if the command buffer is already ended, isn\u0027t that a bug?\n\nYes, thanks. it is a bug. Need also add `executeBarriers()` to the `endCommandBuffer()`.\n\n\u003e It\u0027s also odd that OutsideRP has this logic but not RP.\n\nBecause RP command buffer ends when RP ends. There is already inherent difference when we allocate a command buffer for RP and OutsideRP.\nBut there is a bug with barriers, so need to handle barriers and possible other stuff.\n\nSo need to add universal method - `finalizeCommandBuffer()`?\nIt will execute barriers and end if needed.",
+      "parentUuid": "9a90526a_6890145d",
       "revId": "c06f5009a40c130e157651cd87e3e9011d1b4210",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
