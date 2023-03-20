@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e53c13c_95c84068",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1441,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-20T14:03:57Z",
+      "side": 1,
+      "message": "We have a less hacky pattern for this. Put this in the header:\n\n```\nangle::Result attachCommandPool(...)\n{\n    if constexpr (CommandBufferType::ExecutesInline())\n    {\n        return angle::Result::Continue;\n    }\n    return attachCommandPoolImpl(...);\n}\n\nvirtual angle::Result attachCommandPoolImpl(...) \u003d 0;\n```\n\nAnd implement the virtual function in the derived classes. No need for `friend` either.",
+      "range": {
+        "startLine": 1435,
+        "startChar": 0,
+        "endLine": 1441,
+        "endChar": 58
+      },
+      "revId": "c06f5009a40c130e157651cd87e3e9011d1b4210",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a90526a_6890145d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1704,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-20T14:03:57Z",
+      "side": 1,
+      "message": "How can we reach here with the command buffer already ended? There\u0027s the `executeBarrier` stuff to take care of, so if the command buffer is already ended, isn\u0027t that a bug?\n\nIt\u0027s also odd that OutsideRP has this logic but not RP.",
+      "revId": "c06f5009a40c130e157651cd87e3e9011d1b4210",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
