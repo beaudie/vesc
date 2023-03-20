@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a42d8c17_d098b2ac",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1185,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-20T14:07:47Z",
+      "side": 1,
+      "message": "`|| isAsyncCommandQueueEnabled()`?",
+      "revId": "2d9811edefce0b6ec766a9b508349689a9f522e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "004a7ae3_0c861d1c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1192,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-20T14:07:47Z",
+      "side": 1,
+      "message": "nit: Can this comment be localized to where the reset happens? As far as `onDestroy` is concerned, it\u0027s just retiring secondary buffers.",
+      "range": {
+        "startLine": 1187,
+        "startChar": 0,
+        "endLine": 1192,
+        "endChar": 62
+      },
+      "revId": "2d9811edefce0b6ec766a9b508349689a9f522e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
