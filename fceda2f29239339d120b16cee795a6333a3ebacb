@@ -52,6 +52,23 @@
       "parentUuid": "4fd29bb7_561f8239",
       "revId": "fceda2f29239339d120b16cee795a6333a3ebacb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7bb2446_2f11ee69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-20T16:53:51Z",
+      "side": 1,
+      "message": "Looks good to me. Please make sure existing trace still working (as brought up in shabi\u0027s comment) before landing.",
+      "revId": "fceda2f29239339d120b16cee795a6333a3ebacb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
