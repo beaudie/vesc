@@ -99,6 +99,24 @@
       "parentUuid": "7ed76108_6b5feb47",
       "revId": "c06f5009a40c130e157651cd87e3e9011d1b4210",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4533dd76_464baaa9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1704,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-20T14:59:19Z",
+      "side": 1,
+      "message": "\u003e Yes, thanks. it is a bug. Need also add executeBarriers() to the endCommandBuffer().\n\nNo the is no bug)\n\n`executeBarriers()` writes to the `primary` before flushing secondary.\nSo after detaching command pool (in the `CommandProcessor`) no new command may be possible written to the secondary command buffer. Only execution and retire is possible.",
+      "parentUuid": "b79e0cea_cf0f4d4f",
+      "revId": "c06f5009a40c130e157651cd87e3e9011d1b4210",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
