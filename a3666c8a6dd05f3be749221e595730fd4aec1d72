@@ -105,6 +105,24 @@
       "parentUuid": "ae2868f9_3bb3aaf3",
       "revId": "a3666c8a6dd05f3be749221e595730fd4aec1d72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3adb8bfc_81d6d403",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-03-20T16:54:05Z",
+      "side": 1,
+      "message": "\u003e Looks like `OES_rgb8_rgba8` is for GLES1\n\nIt requires GLES1 but can be applied to GLES2 as well because unextended GLES2 does not support `GL_RGBA8` for renderbuffer storage (e.g., mentioned in `EXT_sRGB` deps). There\u0027s also `ARM_rgba8` that requires GLES2.",
+      "parentUuid": "fee61124_a16e9d85",
+      "revId": "a3666c8a6dd05f3be749221e595730fd4aec1d72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
