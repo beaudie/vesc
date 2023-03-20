@@ -50,6 +50,24 @@
       "message": "Driving by: Unfortunate, but I\u0027m sure you\u0027ve already thought this through. It sounds to me like memoryless places cannot realistically be exposed to WebGL unless they have a no-data-retained-between-draw-calls warning (which kind of kills it?). Otherwise developers may use it, see that \"it works\", and then get reports of flickering.",
       "revId": "b5f3a5354ea813ac855ba1f71f25035880b61d26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bff21dd_3337def6",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 576,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-20T19:20:01Z",
+      "side": 1,
+      "message": "This is a good observation. At the moment for this reason memoryless planes already aren\u0027t exposed at the WebGL level; see https://registry.khronos.org/webgl/extensions/WEBGL_shader_pixel_local_storage/ . We are hoping/thinking that if we can provide stronger guarantees at the browser level about leaving user-level PLS code uninterrupted, then in the future memoryless planes might be able to be exposed.",
+      "parentUuid": "e6f07978_7f8f4ed4",
+      "revId": "b5f3a5354ea813ac855ba1f71f25035880b61d26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
