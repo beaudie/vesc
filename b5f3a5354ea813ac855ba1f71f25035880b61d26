@@ -107,6 +107,41 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c1ad163_db53fce4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-20T21:29:33Z",
+      "side": 1,
+      "message": "lgtm overall to move forward with this. One more small issue.",
+      "revId": "b5f3a5354ea813ac855ba1f71f25035880b61d26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87978049_ae4877d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-20T21:29:33Z",
+      "side": 1,
+      "message": "These new interrupt/restore methods wouldn\u0027t be exposed at the WebGL level regardless - they\u0027re browser-internal details. Chris, I\u0027ll consider this comment thread resolved (not necessary to add a new querying entry point) but do think about it more since right now the application has no way to debug if it uses these entry points incorrectly, in an unbalanced manner.",
+      "parentUuid": "ebdbb92e_e62723ca",
+      "revId": "b5f3a5354ea813ac855ba1f71f25035880b61d26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "37e64432_2e7e6a03",
@@ -198,6 +233,23 @@
         "endLine": 149,
         "endChar": 51
       },
+      "revId": "b5f3a5354ea813ac855ba1f71f25035880b61d26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68aee09d_dd29d5a1",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-20T21:29:33Z",
+      "side": 1,
+      "message": "\"Viewport\" was lost from the original list - was that intentional? Suggest fully alphabetizing this list.",
       "revId": "b5f3a5354ea813ac855ba1f71f25035880b61d26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
