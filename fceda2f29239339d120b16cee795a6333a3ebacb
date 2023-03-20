@@ -34,6 +34,24 @@
       "parentUuid": "e137bbc6_1cf755e5",
       "revId": "fceda2f29239339d120b16cee795a6333a3ebacb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3abbffcf_3a50220f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-20T16:41:32Z",
+      "side": 1,
+      "message": "One way is to test it with Chrome. Install Chrome Dev (Linux) or Canary (Windows), then use `update_chrome_angle.py` (on a non-component build, i.e. everything statically linked, also enable events: `angle_enable_trace \u003d true`) to replace the ANGLE libs inside the Chrome installation. If you encounter issues with the script, it\u0027s really just `libGLESv2.so` and `libEGL.so` that are being copied to the installation dir.\n\nThen run chrome and use chrome://tracing/ to capture a trace of something (like https://webglsamples.org/aquarium/aquarium.html), use the \"Rendering\" category. The trace should have ANGLE events in it (see the GPU process).",
+      "parentUuid": "4fd29bb7_561f8239",
+      "revId": "fceda2f29239339d120b16cee795a6333a3ebacb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
