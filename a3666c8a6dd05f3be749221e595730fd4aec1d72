@@ -123,6 +123,24 @@
       "parentUuid": "fee61124_a16e9d85",
       "revId": "a3666c8a6dd05f3be749221e595730fd4aec1d72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66d527e3_3c08a6b6",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1267026
+      },
+      "writtenOn": "2023-03-20T19:03:50Z",
+      "side": 1,
+      "message": "Thanks Shahbaz and Alexey.\nYes by \u0027RGBA8\u0027 i was referring to the sized format.\nFor webgl1 tests, chrome currently creates a texture for raster on gles3 context with RGBA8 and then that texture is later shared with webgl1 context(gles2).\nBut the current validation checks in angle does not allows RGBA8 to be supported in gles2.\nso requirement here is to mark the texture attachment with that sized internal format as supported on GLES2 if that texture was originally created on GLES3. Note that in this scenario RGBA8 will always be supported by this gles2 context.\n\nI am not very clear on how we should use OES_required_internalformat or other extensions in this scenario. can u explain more clearly.\nThis siliar caching logic has been already implemented in angle for egl images - https://chromium-review.googlesource.com/c/angle/angle/+/4265252",
+      "parentUuid": "3adb8bfc_81d6d403",
+      "revId": "a3666c8a6dd05f3be749221e595730fd4aec1d72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
