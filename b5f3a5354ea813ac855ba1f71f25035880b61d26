@@ -78,6 +78,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a98e2ea6_e91dffcd",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-20T19:30:35Z",
+      "side": 1,
+      "message": "I wanted to make the same suggestion initially, but since this can be \"nested\", I think it may be better _not_ to conflate it with pause/resume.",
+      "parentUuid": "37e64432_2e7e6a03",
+      "range": {
+        "startLine": 147,
+        "startChar": 0,
+        "endLine": 149,
+        "endChar": 51
+      },
+      "revId": "b5f3a5354ea813ac855ba1f71f25035880b61d26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e6f07978_7f8f4ed4",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 1
