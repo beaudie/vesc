@@ -33,6 +33,24 @@
       "message": "RGBA8 is not renderable in GLES2?!\n\nThis change is a bit odd; it\u0027s telling the context that the format is renderable even if it thinks that it isn\u0027t. Why not instead make the format renderable in GLES2?\n\nAlso, regardless of the solution, could you please add a test for this scenario to make sure we don\u0027t break this in the future?",
       "revId": "a3666c8a6dd05f3be749221e595730fd4aec1d72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03606052_361cf190",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1267026
+      },
+      "writtenOn": "2023-03-20T16:02:23Z",
+      "side": 1,
+      "message": "RGBA8 is not renderable in GLES2. So we can not make that format renderable.\n\nNote that if a driver is capable of GLES3 and we request a GLES2 context from it, then only it can still render RGBA8 format since it has GLES3 capability. That is the case we are handling here.\n\nThere are good amount of webgl tests already which are testing this case.",
+      "parentUuid": "dd6d774a_16349602",
+      "revId": "a3666c8a6dd05f3be749221e595730fd4aec1d72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
