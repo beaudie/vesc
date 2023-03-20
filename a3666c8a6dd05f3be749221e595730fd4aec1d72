@@ -141,6 +141,24 @@
       "parentUuid": "3adb8bfc_81d6d403",
       "revId": "a3666c8a6dd05f3be749221e595730fd4aec1d72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f336e88e_1ab367cc",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-20T19:27:14Z",
+      "side": 1,
+      "message": "\u003e I am not very clear on how we should use OES_required_internalformat or other extensions in this scenario.\n\nThat\u0027s easy! Step 1 is to get the code in to expose the extension. For example this code already does this for `OES_rgb8_rgba8`, which looks like ANGLE already supports!\n\n```\n    rgb8Rgba8OES             \u003d DetermineRGB8AndRGBA8TextureSupport(textureCaps);\n```\n\nStep 2 is to fix validation so it allows GL_RGB8 and GL_RGBA8 when `rgb8Rgba8OES` is supported.\n\n\u003e This siliar caching logic has been already implemented in angle for egl images\n\nUgh, hopefully we can revert that hack after the proper fix.",
+      "parentUuid": "66d527e3_3c08a6b6",
+      "revId": "a3666c8a6dd05f3be749221e595730fd4aec1d72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
