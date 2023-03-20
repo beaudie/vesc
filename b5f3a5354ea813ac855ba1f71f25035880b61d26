@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "36c22c9e_09174252",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-20T19:17:56Z",
+      "side": 1,
+      "message": "This seems like a good simplification from the browser\u0027s standpoint. Should a new query be added like glIsFramebufferPixelLocalStorageInterruptedANGLE? It could be a simple boolean rather than needing to add a new integer \"interrupt count\" query enum.",
+      "revId": "b5f3a5354ea813ac855ba1f71f25035880b61d26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e6f07978_7f8f4ed4",
