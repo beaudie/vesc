@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d154dd9_bdcddaeb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-03-20T19:00:11Z",
+      "side": 1,
+      "message": "If the spec changes look good, I can go ahead and implement these methods.\n\nThis will enable us to properly clear after compositing when the app leaves pixel local storage enabled (thanks for the test idea Alexey!), and interrupt pixel local storage on the command buffer without having to make any queries.",
+      "revId": "b5f3a5354ea813ac855ba1f71f25035880b61d26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
