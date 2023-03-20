@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e895f218_eb1c56bc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-20T13:51:30Z",
+      "side": 1,
+      "message": "`logf` and `powf` are part of C++17 and later. Is this CL due to this bug? https://gcc.gnu.org/bugzilla/show_bug.cgi?id\u003d79700\n\nCould `::logf` be used instead of `std::logf`?",
+      "revId": "b475b7525146dc216f57a062e60096a694b74060",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
