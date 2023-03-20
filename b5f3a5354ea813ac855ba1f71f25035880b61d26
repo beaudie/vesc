@@ -55,6 +55,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "37e64432_2e7e6a03",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-03-20T19:27:05Z",
+      "side": 1,
+      "message": "Consider if renaming to Pause/Resume would make sense here. In such a case, it would be aligned with similar transfer feedback functionality.",
+      "range": {
+        "startLine": 147,
+        "startChar": 0,
+        "endLine": 149,
+        "endChar": 51
+      },
+      "revId": "b5f3a5354ea813ac855ba1f71f25035880b61d26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e6f07978_7f8f4ed4",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 1
@@ -102,6 +125,23 @@
       "side": 1,
       "message": "Thanks for the drive by 😊\n\nYeah, we just won\u0027t be able to expose memoryless planes in WebGL, unfortunately. They are excluded from the spec: https://registry.khronos.org/webgl/extensions/WEBGL_shader_pixel_local_storage/\n\nThis is largely remediated by the ability to use a store operation of `GL_DONT_CARE`.",
       "parentUuid": "e6f07978_7f8f4ed4",
+      "revId": "b5f3a5354ea813ac855ba1f71f25035880b61d26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "833c72e1_c03b26a7",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 968,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-03-20T19:27:05Z",
+      "side": 1,
+      "message": "This table should be extended to hold the added state.",
       "revId": "b5f3a5354ea813ac855ba1f71f25035880b61d26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
