@@ -69,6 +69,24 @@
       "parentUuid": "03606052_361cf190",
       "revId": "a3666c8a6dd05f3be749221e595730fd4aec1d72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae2868f9_3bb3aaf3",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-20T16:29:39Z",
+      "side": 1,
+      "message": "Well the format itself (32-bit 8-bit-per-channel RGBA) is most definitely renderable in GLES2. Is this an issue of sized format (RGBA8) vs unsized format (RGBA + GL_UNSIGNED_BYTE)?\n\nThe way we typically handle this is to add an ANGLE extension that exposes the format in the version we want. In this case, you can add something similar to `ANGLE_rgbx_internal_format.txt` but for rgba8 and have it apply to GLES2. Then a GLES2 context in ANGLE that supports the RGBA8 sized format (one that can be GLES3+) can expose the extension which automatically means applications (including Chrome) can use this format for rendering from GLES2 contexts.",
+      "parentUuid": "03606052_361cf190",
+      "revId": "a3666c8a6dd05f3be749221e595730fd4aec1d72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
