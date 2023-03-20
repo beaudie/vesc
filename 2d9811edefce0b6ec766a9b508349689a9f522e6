@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cc9f63da_70f276cc",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1185,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-20T14:50:14Z",
+      "side": 1,
+      "message": "No. Even if \"asyncCommandQueue\" enabled command buffers will be reset in the Contexts thread if the \"asyncCommandBufferReset\" disabled.\nSo these feature totally independent,however use same async thread.",
+      "parentUuid": "a42d8c17_d098b2ac",
+      "revId": "2d9811edefce0b6ec766a9b508349689a9f522e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "004a7ae3_0c861d1c",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 3
@@ -31,6 +49,30 @@
       "writtenOn": "2023-03-20T14:07:47Z",
       "side": 1,
       "message": "nit: Can this comment be localized to where the reset happens? As far as `onDestroy` is concerned, it\u0027s just retiring secondary buffers.",
+      "range": {
+        "startLine": 1187,
+        "startChar": 0,
+        "endLine": 1192,
+        "endChar": 62
+      },
+      "revId": "2d9811edefce0b6ec766a9b508349689a9f522e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2adcc522_ea10f938",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1192,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-20T14:50:14Z",
+      "side": 1,
+      "message": "`retireFinishedCommands()` resets all primary and secondary.\n\nFor `onDestroy` it is critical (on some drivers) to reset primary command buffers here, before destroying the secondary pools (retiring secondaries is obvious).\n\nLogic of the comment.\nIf we do not reset primary command buffers here and now - they will be reset later, after secondary pools already destroyed. Where exactly - not important. Resetting such primary buffers later may access structures from already destroyed secondary pools, because these primary buffers has secondary buffers inside them.\n\nI guess I already wrote al lof the above in the comment.",
+      "parentUuid": "004a7ae3_0c861d1c",
       "range": {
         "startLine": 1187,
         "startChar": 0,
