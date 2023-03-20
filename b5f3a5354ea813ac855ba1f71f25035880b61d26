@@ -91,6 +91,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ebdbb92e_e62723ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-03-20T19:52:02Z",
+      "side": 1,
+      "message": "Yes, both extensions have diverged enough to have different names.",
+      "parentUuid": "14901a03_be3c4a8e",
+      "revId": "b5f3a5354ea813ac855ba1f71f25035880b61d26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "37e64432_2e7e6a03",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 1
