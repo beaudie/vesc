@@ -103,6 +103,24 @@
       "parentUuid": "647a92b0_fdefd285",
       "revId": "421265dcb97b1cccabf2c67e8f909b02d10a1e7f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1979e0ae_6aacf457",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1516057
+      },
+      "writtenOn": "2023-03-20T08:22:20Z",
+      "side": 1,
+      "message": "Hello, could you submit the CL? The merge is approved, but I don\u0027t have permissons to submit it",
+      "parentUuid": "0d35c92c_e2f59f8b",
+      "revId": "421265dcb97b1cccabf2c67e8f909b02d10a1e7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
