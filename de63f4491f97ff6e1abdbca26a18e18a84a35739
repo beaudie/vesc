@@ -87,6 +87,24 @@
       "message": "can you add a test tag mentioning the app name which triggered this fix?",
       "revId": "de63f4491f97ff6e1abdbca26a18e18a84a35739",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e07c4c23_c74dd74a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-03-20T18:37:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "579df869_37558a48",
+      "revId": "de63f4491f97ff6e1abdbca26a18e18a84a35739",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
