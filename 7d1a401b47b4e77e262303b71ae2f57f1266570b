@@ -52,6 +52,24 @@
       "parentUuid": "09e2478c_0d80ab23",
       "revId": "7d1a401b47b4e77e262303b71ae2f57f1266570b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5f76737_836c07fe",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2678,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-20T18:16:08Z",
+      "side": 0,
+      "message": "Made update.\n\nAllowed `VulkanSecondaryCommandBuffer::initialize` with `pool \u003d nullptr` in order to reset `mAnyCommand`. This way `empty()` will return initialized correct value despite the invalid buffer itself.\n\nThis update also avoids checking for the `mCommandPool` in every class before the call.",
+      "parentUuid": "40bc2650_52961fb2",
+      "revId": "7d1a401b47b4e77e262303b71ae2f57f1266570b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
