@@ -177,6 +177,24 @@
       "parentUuid": "f336e88e_1ab367cc",
       "revId": "a3666c8a6dd05f3be749221e595730fd4aec1d72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e511ed4_f3ecb351",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1267026
+      },
+      "writtenOn": "2023-03-20T20:11:02Z",
+      "side": 1,
+      "message": "right now we use egl backed shared images for android 9+ which has DrDc feature enabled(and no other way to share textures directly). My initial thought was also to simply use eglimage backing everywhere instead of gl texture backing. Afaik, that should work but might cause slight regressions in perf in low end devices due to egl image creation sometime being slightly costly.\nThat said i can try enabling it and check perf bots.\ni was under impression that extensions will not work well for reasons you mentioned.\n\nBut not sure why this caching will not work. we determine renderability based on the format set in imagedesc for the texture. anytime the imagedesc is changed, the renderability will be updated accordingly.",
+      "parentUuid": "eeacd45b_3d818cc7",
+      "revId": "a3666c8a6dd05f3be749221e595730fd4aec1d72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
