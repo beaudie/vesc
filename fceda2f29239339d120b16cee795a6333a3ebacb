@@ -141,6 +141,24 @@
       "parentUuid": "3520123e_79f398f0",
       "revId": "fceda2f29239339d120b16cee795a6333a3ebacb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d99ead1_8ff9a53a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2023-03-21T19:17:52Z",
+      "side": 1,
+      "message": "Ok, same thing on Linux, I can\u0027t see any ANGLE events. Is there any other flag or step I have to take in order to get ANGLE events in the trace?",
+      "parentUuid": "173df09a_4832aa37",
+      "revId": "fceda2f29239339d120b16cee795a6333a3ebacb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
