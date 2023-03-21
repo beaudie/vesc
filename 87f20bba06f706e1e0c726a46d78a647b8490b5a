@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2660f9e0_b076265c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-21T21:44:16Z",
+      "side": 1,
+      "message": "lgtm+2 at this point to get this landed! CQ\u0027ing.",
+      "revId": "87f20bba06f706e1e0c726a46d78a647b8490b5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcf51fbe_5a9f5251",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4030,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-21T21:44:16Z",
+      "side": 1,
+      "message": "Follow-on: please consider splitting this test up into a few simpler, targeted ones with clear names. \"RestoreBeforeInterruptGeneratesError\", \"TooManyInterruptsGeneratesError\", etc.",
+      "revId": "87f20bba06f706e1e0c726a46d78a647b8490b5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
