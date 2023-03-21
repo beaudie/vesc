@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "08e9a57a_16137298",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1377,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-03-21T21:23:16Z",
+      "side": 1,
+      "message": "Changed the name to `context`. Since `getContexts()` returns a set, using an index is not possible.",
+      "parentUuid": "53c5cd38_f41b65c9",
+      "range": {
+        "startLine": 1374,
+        "startChar": 0,
+        "endLine": 1377,
+        "endChar": 9
+      },
+      "revId": "8e1c831f0766fbeeb2e6c0e3be53c087eccdbb65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "17d8908f_4644ca19",
@@ -54,6 +78,24 @@
       "writtenOn": "2023-03-21T02:12:42Z",
       "side": 1,
       "message": "Could you please make a test that\u0027s a mixture of these two? Use the main thread to upload the textures, then create a new thread for a new context that uses the texture. The point is to avoid `eglMakeCurrent` which causes a flush.",
+      "revId": "8e1c831f0766fbeeb2e6c0e3be53c087eccdbb65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccba4eb0_3479d8eb",
+        "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1042,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-03-21T21:23:16Z",
+      "side": 1,
+      "message": "Thanks. Test added: `CreateNewContextAfterTextureUploadOnMainThread`.",
+      "parentUuid": "17d8908f_4644ca19",
       "revId": "8e1c831f0766fbeeb2e6c0e3be53c087eccdbb65",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
