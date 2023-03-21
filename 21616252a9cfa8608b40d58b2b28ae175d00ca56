@@ -46,6 +46,30 @@
       },
       "revId": "21616252a9cfa8608b40d58b2b28ae175d00ca56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de55ed5f_f14843ee",
+        "filename": "src/libANGLE/renderer/vulkan/AllocatorHelperRing.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-21T11:57:30Z",
+      "side": 1,
+      "message": "\u003e There\u0027s another allocator with identical interface\n\nThe `DedicatedCommandBlockPool`.\n\n```\n// Used in SecondaryCommandBuffer\nclass DedicatedCommandBlockPool final\n{\n...\n    // Initialize the SecondaryCommandBuffer by setting the allocator it will use\n    angle::Result initialize(DedicatedCommandMemoryAllocator *allocator);\n\n    bool valid() const { return mAllocator !\u003d nullptr; }\n```",
+      "parentUuid": "c1b97a3d_caaf6ef0",
+      "range": {
+        "startLine": 88,
+        "startChar": 9,
+        "endLine": 88,
+        "endChar": 14
+      },
+      "revId": "21616252a9cfa8608b40d58b2b28ae175d00ca56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
