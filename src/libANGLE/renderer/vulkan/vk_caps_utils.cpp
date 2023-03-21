@@ -899,6 +899,9 @@ void RendererVk::ensureCapsInitialized() const
     //
     // Note that this exception for gl_Position does not apply to MAX_VERTEX_OUTPUT_COMPONENTS and
     // similar limits.
+    //
+    // Note also that the reserved components are for transform feedback capture only, so they don't
+    // apply to the _input_ component limit.
     const GLint reservedVaryingVectorCount = reservedVaryingComponentCount / 4 + 1;
 
     const GLint maxVaryingCount =
@@ -907,8 +910,7 @@ void RendererVk::ensureCapsInitialized() const
         LimitToInt((maxVaryingCount / kComponentsPerVector) - reservedVaryingVectorCount);
     mNativeCaps.maxVertexOutputComponents =
         LimitToInt(limitsVk.maxVertexOutputComponents) - reservedVaryingComponentCount;
-    mNativeCaps.maxFragmentInputComponents =
-        LimitToInt(limitsVk.maxFragmentInputComponents) - reservedVaryingComponentCount;
+    mNativeCaps.maxFragmentInputComponents = LimitToInt(limitsVk.maxFragmentInputComponents);
 
     mNativeCaps.maxTransformFeedbackInterleavedComponents =
         gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS;
@@ -1007,8 +1009,7 @@ void RendererVk::ensureCapsInitialized() const
         // Use "undefined" which means APP would have to set gl_Layer identically.
         mNativeCaps.layerProvokingVertex = GL_UNDEFINED_VERTEX_EXT;
 
-        mNativeCaps.maxGeometryInputComponents =
-            LimitToInt(limitsVk.maxGeometryInputComponents) - reservedVaryingComponentCount;
+        mNativeCaps.maxGeometryInputComponents = LimitToInt(limitsVk.maxGeometryInputComponents);
         mNativeCaps.maxGeometryOutputComponents =
             LimitToInt(limitsVk.maxGeometryOutputComponents) - reservedVaryingComponentCount;
         mNativeCaps.maxGeometryOutputVertices = LimitToInt(limitsVk.maxGeometryOutputVertices);
@@ -1055,7 +1056,8 @@ void RendererVk::ensureCapsInitialized() const
         mNativeCaps.maxTessEvaluationInputComponents =
             LimitToInt(limitsVk.maxTessellationEvaluationInputComponents);
         mNativeCaps.maxTessEvaluationOutputComponents =
-            LimitToInt(limitsVk.maxTessellationEvaluationOutputComponents);
+            LimitToInt(limitsVk.maxTessellationEvaluationOutputComponents) -
+            reservedVaryingComponentCount;
 
         // There is 1 default uniform binding used per tessellation stages.
         mNativeCaps.maxCombinedUniformBlocks = LimitToInt(
