@@ -159,6 +159,24 @@
       "parentUuid": "173df09a_4832aa37",
       "revId": "fceda2f29239339d120b16cee795a6333a3ebacb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e141d9a_7152044c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-21T19:56:58Z",
+      "side": 1,
+      "message": "I just ran this, I can see events (thanks for figuring out the `gpu.angle` category that needs to be enabled):\n\n```\n$ google-chrome-unstable --use-angle\u003dvulkan --enable-logging --disable-gpu-watchdog --enable-features\u003dVizDisplayCompositor,UseSkiaRenderer,UiGpuRasterization,Vulkan --enable-oop-rasterization --enable-gpu-rasterization --force-gpu-rasterization --show-fps-counter-no --disable-gpu-sandbox --vulkan\u003dnative\n```",
+      "parentUuid": "5d99ead1_8ff9a53a",
+      "revId": "fceda2f29239339d120b16cee795a6333a3ebacb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
