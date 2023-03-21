@@ -41,6 +41,11 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
     {Feature::AlwaysUnbindFramebufferTexture2D, "alwaysUnbindFramebufferTexture2D"},
     {Feature::AsyncCommandQueue, "asyncCommandQueue"},
     {Feature::Avoid1BitAlphaTextureFormats, "avoid1BitAlphaTextureFormats"},
+<<<<<<< HEAD   (1d56a8 M112: D3D11: Add logic to disassociate EGL image storages.)
+=======
+    {Feature::AvoidStencilTextureSwizzle, "avoidStencilTextureSwizzle"},
+    {Feature::BindFramebufferForTimerQueries, "bindFramebufferForTimerQueries"},
+>>>>>>> CHANGE (888ca8 Bind FBO before timer query on Mali GL driver.)
     {Feature::BindTransformFeedbackBufferBeforeBindBufferRange,
      "bindTransformFeedbackBufferBeforeBindBufferRange"},
     {Feature::BottomLeftOriginPresentRegionRectangles, "bottomLeftOriginPresentRegionRectangles"},

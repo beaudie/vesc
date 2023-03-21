@@ -40,6 +40,11 @@ enum class Feature
     AlwaysUnbindFramebufferTexture2D,
     AsyncCommandQueue,
     Avoid1BitAlphaTextureFormats,
+<<<<<<< HEAD   (1d56a8 M112: D3D11: Add logic to disassociate EGL image storages.)
+=======
+    AvoidStencilTextureSwizzle,
+    BindFramebufferForTimerQueries,
+>>>>>>> CHANGE (888ca8 Bind FBO before timer query on Mali GL driver.)
     BindTransformFeedbackBufferBeforeBindBufferRange,
     BottomLeftOriginPresentRegionRectangles,
     BresenhamLineRasterization,
