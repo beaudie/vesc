@@ -123,6 +123,24 @@
       "parentUuid": "babd565b_a100cf15",
       "revId": "fceda2f29239339d120b16cee795a6333a3ebacb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "173df09a_4832aa37",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2023-03-21T17:46:01Z",
+      "side": 1,
+      "message": "I\u0027m going to try on Linux but it\u0027s going to take a while since I need to download the angle repo and build from scratch.\n\nIn the meantime I made some progress on Windows: `about:gpu` showed that angle was calling `UNREACHABLE` [here](http://cs/sc-dev/external/angle/src/common/utilities.cpp;l\u003d1393;rcl\u003dd417ff2385758a44d8ad29be9b6a7dbfb88ffb37).\n\nAdding a log line there showed that the path was an empty string.\n\nI tried attaching a debugger but it didn\u0027t work. I made the hypothesis that it wasn\u0027t working due Chrome\u0027s sandboxing, so I tried running with `--no-sandbox` flag and that solved ANGLE\u0027s issue! Now I was able to view the aquarium demo properly (although at only 5 FPS, which I assume is due to this being a debug build).\n\nAnyway, tried capturing a trace with `chrome://tracing/`, but couldn\u0027t get any ANGLE events. (This is on the main branch, without the changes from this CL). \n\nClicking around a bit more, it seems that the `gpu.angle` category is disabled by default, even when selecting the Rendering category. I had to click on Edit categories and manually add `gpu.angle`.\n\nHowever, even after this, I still couldn\u0027t get any ANGLE events (again, on the main branch, without these changes).\n\nI\u0027ll try on Linux when it\u0027s done building, but I\u0027d appreciate any insights.",
+      "parentUuid": "3520123e_79f398f0",
+      "revId": "fceda2f29239339d120b16cee795a6333a3ebacb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
