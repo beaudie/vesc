@@ -22,6 +22,30 @@
       },
       "revId": "8c33928b18e1447f514eaad86f6413299ce3238e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca3d8fc6_70b83154",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-03-21T01:55:10Z",
+      "side": 1,
+      "message": "Thanks.\n* Updated the code to flush the outside command buffer for the original context when the second context is being added.\n* Added a new test, `CreateNewContextAfterTextureUpload`.",
+      "parentUuid": "88e3631b_7ff4d1c6",
+      "range": {
+        "startLine": 106,
+        "startChar": 9,
+        "endLine": 106,
+        "endChar": 19
+      },
+      "revId": "8c33928b18e1447f514eaad86f6413299ce3238e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
