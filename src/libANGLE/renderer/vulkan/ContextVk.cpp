@@ -889,7 +889,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mInitialContextPriority(renderer->getDriverPriority(GetContextPriority(state))),
       mContextPriority(mInitialContextPriority),
       mProtectionType(vk::ConvertProtectionBoolToType(state.hasProtectedContent())),
-      mShareGroupVk(vk::GetImpl(state.getShareGroup()))
+      mShareGroupVk(vk::GetImpl(state.getShareGroup())),
+      mIsMutableTextureFlushPending(false)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::ContextVk");
     memset(&mClearColorValue, 0, sizeof(mClearColorValue));
@@ -1365,17 +1366,6 @@ angle::Result ContextVk::initialize()
     emptyBufferInfo.pQueueFamilyIndices         = nullptr;
     constexpr VkMemoryPropertyFlags kMemoryType = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
     ANGLE_TRY(mEmptyBuffer.init(this, emptyBufferInfo, kMemoryType));
-
-    // If the share group has one context and is about to add the second one, the first context's
-    // mutable textures should be flushed.
-    if (isEligibleForMutableTextureFlush())
-    {
-        ASSERT(mShareGroupVk->hasOneContext());
-        for (auto context : mShareGroupVk->getContexts())
-        {
-            ANGLE_TRY(context->flushOutsideRenderPassCommands());
-        }
-    }
 
     // Add context into the share group
     mShareGroupVk->addContext(this);
@@ -7567,6 +7557,21 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
     // mRenderPassCommands
     ASSERT(mLastFlushedQueueSerial <= mOutsideRenderPassCommands->getQueueSerial());
     mLastFlushedQueueSerial = mOutsideRenderPassCommands->getQueueSerial();
+
+    // If another context has pending mutable texture updates, its outside RP command buffer will be
+    // flushed as well.
+    mIsMutableTextureFlushPending = false;
+    if (isEligibleForMutableTextureFlush())
+    {
+        for (ContextVk *ctx : getShareGroup()->getContexts())
+        {
+            if (ctx == this || !ctx->mIsMutableTextureFlushPending)
+            {
+                continue;
+            }
+            ANGLE_TRY(ctx->flushOutsideRenderPassCommands());
+        }
+    }
 
     ANGLE_TRY(mRenderer->flushOutsideRPCommands(this, getProtectionType(), mContextPriority,
                                                 &mOutsideRenderPassCommands));
