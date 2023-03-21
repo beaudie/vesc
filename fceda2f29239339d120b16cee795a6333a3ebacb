@@ -87,6 +87,24 @@
       "parentUuid": "3abbffcf_3a50220f",
       "revId": "fceda2f29239339d120b16cee795a6333a3ebacb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "babd565b_a100cf15",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-03-21T15:12:48Z",
+      "side": 1,
+      "message": "The flags you added all look normal to me. I\u0027ve seen issues in the past with x86 vs x64 dlls but I don\u0027t think we ship x86 anymore.\n\nTake a look at about:gpu for the GL_RENDERER and error log at the bottom to verify Chrome\u0027s loading the ANGLE DLL at all. \n\n\nIf you want to proceed with this path, I\u0027d recommend building Chrome from scratch, it\u0027s fairly similar to building ANGLE. Otherwise you\u0027ll have to attach a debugger to figure out what\u0027s going wrong with the dropped DLLs.",
+      "parentUuid": "ff17692c_9ec4c9f2",
+      "revId": "fceda2f29239339d120b16cee795a6333a3ebacb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
