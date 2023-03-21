@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a892175_3881688a",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-03-21T06:44:45Z",
+      "side": 1,
+      "message": "This function should generate an error on too many nested interruptions to prevent counter overflow.\n\nThe limit could be:\n- implementation-specific and requestable via `GetIntegerv`;\n- fixed to an arbitrary value defined in the spec or based on the counter variable type, e.g., 255.",
+      "revId": "fcfa2b7bcebf8b39497dd5aaa119a6c940989543",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
