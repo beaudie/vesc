@@ -195,6 +195,24 @@
       "parentUuid": "3e141d9a_7152044c",
       "revId": "fceda2f29239339d120b16cee795a6333a3ebacb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5937fcb_e21ab266",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2023-03-21T20:50:13Z",
+      "side": 1,
+      "message": "Thanks for verifying for me. My mistake was to search for events by doing ctrl+f on \"angle\". I didn\u0027t realize the events don\u0027t have angle in the name, only in the category name, and that there\u0027s a separate search function in the tool that one can access with `/`.\n\nUsing that, I was able to find angle events in both Windows and Linux.",
+      "parentUuid": "fbdc9d53_6bab33f1",
+      "revId": "fceda2f29239339d120b16cee795a6333a3ebacb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
