@@ -69,6 +69,24 @@
       "message": "Looks good to me. Please make sure existing trace still working (as brought up in shabi\u0027s comment) before landing.",
       "revId": "fceda2f29239339d120b16cee795a6333a3ebacb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff17692c_9ec4c9f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2023-03-21T00:04:17Z",
+      "side": 1,
+      "message": "So I tried following these steps but I\u0027m not able to build angle in a way that works.\n\n1. Install Chrome Canary\n2. `cd c:\\src\\angle`\n3. `gn args out/Debug`\n4. Set my args as follows:\n```\nuse_goma \u003d true\nis_component_build \u003d false \nangle_enable_trace \u003d true\nbuild_angle_trace_perf_tests \u003d false\n```\n5. `autoninja -C out/Debug`\n6. (build fails for capture_replay_tests.exe because platform methods aren\u0027t found (`lld-link: error: undefined symbol: __declspec(dllimport) public: __cdecl angle::PlatformMethods::PlatformMethods(void)`) - however `libGLESv2.dll` and `libEGL.dll` appear correctly rebuilt.\n7. python scripts/update_chrome_angle.py\n```\nCopying binaries from out\\Debug to C:\\Users\\gregschlom\\AppData\\Local\\Google\\Chrome SxS\\Application\\113.0.5665.2.\n - out\\Debug\\libGLESv2.dll   --\u003e   C:\\Users\\gregschlom\\AppData\\Local\\Google\\Chrome SxS\\Application\\113.0.5665.2\\libGLESv2.dll\n - out\\Debug\\libGLESv2.dll.pdb   --\u003e   C:\\Users\\gregschlom\\AppData\\Local\\Google\\Chrome SxS\\Application\\113.0.5665.2\\libGLESv2.dll.pdb\n - out\\Debug\\libEGL.dll   --\u003e   C:\\Users\\gregschlom\\AppData\\Local\\Google\\Chrome SxS\\Application\\113.0.5665.2\\libEGL.dll\n - out\\Debug\\libEGL.dll.pdb   --\u003e   C:\\Users\\gregschlom\\AppData\\Local\\Google\\Chrome SxS\\Application\\113.0.5665.2\\libEGL.dll.pdb\n```\n\nHowever when I open Chrome Canary and visit https://webglsamples.org/aquarium/aquarium.html, the page fails with this error:\n\n```\n\nStatus: Could not create a WebGL context, VENDOR \u003d 0x10de, DEVICE \u003d 0x1fb9, GL_VENDOR \u003d Google Inc. (NVIDIA), GL_RENDERER \u003d ANGLE (NVIDIA, NVIDIA Quadro T1000 with Max-Q Design Direct3D11 vs_5_0 ps_5_0, D3D11-31.0.15.1713), GL_VERSION \u003d 31.0.15.1713, Sandboxed \u003d yes, Optimus \u003d no, AMD switchable \u003d no, Reset notification strategy \u003d 0x8252, ErrorMessage \u003d BindToCurrentSequence failed: .\n\nIt does not appear your computer supports WebGL.\nClick here for more information.\n\nStatus: Could not create a WebGL context, VENDOR \u003d 0x10de, DEVICE \u003d 0x1fb9, GL_VENDOR \u003d Google Inc. (NVIDIA), GL_RENDERER \u003d ANGLE (NVIDIA, NVIDIA Quadro T1000 with Max-Q Design Direct3D11 vs_5_0 ps_5_0, D3D11-31.0.15.1713), GL_VERSION \u003d 31.0.15.1713, Sandboxed \u003d yes, Optimus \u003d no, AMD switchable \u003d no, Reset notification strategy \u003d 0x8252, ErrorMessage \u003d BindToCurrentSequence failed: .\n```\n\nBut if I copy the original DLLs from my prod Chrome, then the page renders correctly.\n\nNote: **I get the same error when I build the master branch (without the changes in this CL**, so this is definitely not related to this particular CL, but with the way I build ANGLE.",
+      "parentUuid": "3abbffcf_3a50220f",
+      "revId": "fceda2f29239339d120b16cee795a6333a3ebacb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
