@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83c26667_eb70ada7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-03-21T15:25:16Z",
+      "side": 1,
+      "message": "LGTM!",
+      "revId": "ee50afb2e3ea372832a6bf747209b3067a8857db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a41f3616_08fa03f8",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-03-21T15:25:16Z",
+      "side": 1,
+      "message": "nit: update the comment?",
+      "range": {
+        "startLine": 629,
+        "startChar": 0,
+        "endLine": 635,
+        "endChar": 90
+      },
+      "revId": "ee50afb2e3ea372832a6bf747209b3067a8857db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6aef383_f6ea06d4",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 2750,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-03-21T15:25:16Z",
+      "side": 1,
+      "message": "tiny nit: add parens around the or\u0027d blocks for readability.",
+      "range": {
+        "startLine": 2750,
+        "startChar": 27,
+        "endLine": 2750,
+        "endChar": 92
+      },
+      "revId": "ee50afb2e3ea372832a6bf747209b3067a8857db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
