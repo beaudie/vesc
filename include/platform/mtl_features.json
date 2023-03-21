@@ -289,6 +289,30 @@
                 "Compile MTLLibrary in multiple threads."
             ],
             "issue": "http://crbug.com/1385510"
+        },
+        {
+            "name": "compile_metal_shaders",
+            "category": "Features",
+            "description": [
+                "Compiles metal shaders using command line tools. Requires using --no-sandbox and disabling enableParallelMtlLibraryCompilation."
+            ],
+            "issue": "http://crbug.com/1423136"
+        },
+        {
+            "name": "generate_metal_shaders_file",
+            "category": "Features",
+            "description": [
+                "X"
+            ],
+            "issue": "http://crbug.com/1423136"
+        },
+        {
+            "name": "load_metal_shaders_from_blob_cache",
+            "category": "Features",
+            "description": [
+                "Loads metal shaders from blob cache. Useful if compile_metal_shaders was used to generate shaders."
+            ],
+            "issue": "http://crbug.com/1423136"
         }
     ]
 }
