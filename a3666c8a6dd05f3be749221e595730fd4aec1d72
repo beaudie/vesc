@@ -195,6 +195,24 @@
       "parentUuid": "eeacd45b_3d818cc7",
       "revId": "a3666c8a6dd05f3be749221e595730fd4aec1d72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c90e9bdd_b016f875",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-03-21T19:41:11Z",
+      "side": 1,
+      "message": "I think we should take that small hit unless we can\u0027t rely on EGL images always being present.\n\nFor why caching won\u0027t work: ANGLE supports dynamically enabling extensions for WebGL. This could mean making a texture becoming renderable somewhere in the middle of its lifetime. We would have to invalidate the cached state when extensions are enabled.\n\nI\u0027d also like to avoid it because it\u0027s a spec violation to be able to render to a texture like this. I\u0027d prefer to use a mechanism that\u0027s scoped (not all textures) and for this purpose.",
+      "parentUuid": "4e511ed4_f3ecb351",
+      "revId": "a3666c8a6dd05f3be749221e595730fd4aec1d72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
