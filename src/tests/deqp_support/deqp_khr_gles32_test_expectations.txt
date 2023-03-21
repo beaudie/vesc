@@ -23,6 +23,8 @@
 5557 VULKAN WIN NVIDIA : KHR-GLES32.core.tessellation_shader.tessellation_shader_tessellation.gl_InvocationID_PatchVerticesIn_PrimitiveID = FAIL
 // Expects separable program to fail but doesn't
 5557 VULKAN WIN : KHR-GLES32.core.tessellation_shader.single.xfb_captures_data_from_correct_stage = SKIP
+// Test doesn't account for the fact that gl_TessLevelOuter needs to spread over 4 varying registers
+8107 VULKAN WIN : KHR-GLES32.core.tessellation_shader.tessellation_shader_tessellation.max_in_out_attributes = FAIL
 
 // Slow test
 5557 VULKAN WIN : KHR-GLES32.core.tessellation_shader.vertex.vertex_ordering = SKIP
