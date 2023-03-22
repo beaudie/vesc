@@ -140,6 +140,30 @@
       },
       "revId": "2d9811edefce0b6ec766a9b508349689a9f522e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36001448_a0cfb17f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1192,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-22T16:09:34Z",
+      "side": 1,
+      "message": "\u003e How about simplifying it to something like this?\n\nSuggested comment is obvious and already repeats the comment before the `if`.\n\nBut the problem is that we also need to *Reset **Primary** Command Buffers*.\nMay simplify:\n```\n// This will also reset Primary Command Buffers which is REQUIRED on some\n// buggy Vulkan implementations.\n```\n\nI added this comment so in the future some one do not optimize this and keep only retiring Secondaries for example. I do not know, maybe add special `retireFinishedSecondaryCommands()` method.\n\n\u003e It would help to move it a few lines down to just before detachAllocator/releaseCommandPool happens.\n\nWas thinking about this, but decided to leave it close to the `finishImpl()` as a logical continuation.",
+      "parentUuid": "d76930f2_970e3c81",
+      "range": {
+        "startLine": 1187,
+        "startChar": 0,
+        "endLine": 1192,
+        "endChar": 62
+      },
+      "revId": "2d9811edefce0b6ec766a9b508349689a9f522e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
