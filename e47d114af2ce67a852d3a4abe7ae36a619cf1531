@@ -34,6 +34,47 @@
       "parentUuid": "aecf0d1d_cf5f4688",
       "revId": "e47d114af2ce67a852d3a4abe7ae36a619cf1531",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96adf9f3_f3ef2b1f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-03-22T15:03:20Z",
+      "side": 1,
+      "message": "I usually find it easiest to generate the cherry-pick in the gerrit UI because it validates and autocompletes the branch names.\n\nFor chrome release branches, the branch names are called chromium/NNNN and match the refs/branch-heads/NNNN chrome uses.",
+      "parentUuid": "2c99dd54_0bcdb7d2",
+      "revId": "e47d114af2ce67a852d3a4abe7ae36a619cf1531",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4c91084_8677a777",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 773,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-03-22T15:03:20Z",
+      "side": 1,
+      "message": "This framebuffer isn\u0027t complete without something attached to it. If that\u0027s enough to fix the issue, can you update the comments to state that any non-zero framebuffer works around the issue?",
+      "range": {
+        "startLine": 773,
+        "startChar": 12,
+        "endLine": 773,
+        "endChar": 61
+      },
+      "revId": "e47d114af2ce67a852d3a4abe7ae36a619cf1531",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
