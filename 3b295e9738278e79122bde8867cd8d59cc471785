@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "564df86c_47aa21e4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-22T22:10:39Z",
+      "side": 1,
+      "message": "Is crbug.com/1380790 a good bug to link to for this as well? I think it\u0027s a better fit and potentially should go first in the bug list.",
+      "revId": "3b295e9738278e79122bde8867cd8d59cc471785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "fec409bd_b5f9d7cc",
@@ -49,6 +66,57 @@
       "side": 1,
       "message": "Looks like a flake. It passed the dry run several times before.",
       "parentUuid": "6bbc95fd_4dd0a612",
+      "revId": "3b295e9738278e79122bde8867cd8d59cc471785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36fc78b8_5398a29c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-22T22:10:39Z",
+      "side": 1,
+      "message": "lgtm with a couple of questions / suggestions.",
+      "revId": "3b295e9738278e79122bde8867cd8d59cc471785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ab46ddb_e77aab11",
+        "filename": "include/platform/mtl_features.json",
+        "patchSetId": 11
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-22T22:10:39Z",
+      "side": 1,
+      "message": "Please link to a bug - at least crbug.com/1380790 and also consider blocking the other two angleproject bugs on that one.",
+      "revId": "3b295e9738278e79122bde8867cd8d59cc471785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b062f005_674484d9",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 11
+      },
+      "lineNbr": 1274,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-22T22:10:39Z",
+      "side": 1,
+      "message": "Intel GPUs will be the majority of GPUs on Intel CPU-based Macs. Could we add a second workaround to skip the staging textures on Intel GPUs, only for the known broken formats?",
       "revId": "3b295e9738278e79122bde8867cd8d59cc471785",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
