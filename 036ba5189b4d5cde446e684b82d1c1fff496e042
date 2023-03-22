@@ -46,6 +46,30 @@
       },
       "revId": "036ba5189b4d5cde446e684b82d1c1fff496e042",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c97bcd0_f91828b2",
+        "filename": "src/libANGLE/renderer/vulkan/VulkanSecondaryCommandBuffer.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-22T16:48:48Z",
+      "side": 1,
+      "message": "\u003e I can choose anything and still do it wrong (unnecessary, complex or weird).\n\nIt\u0027s not really wrong, you\u0027re doing amazing work! I know I\u0027m nitpicking a lot, it\u0027ll go down over time as you get more intimate with the code base 😊\n\nThat said, the template solution sounds like a good idea. Resetting the state in std move is perfectly fine, too. The one with additional methods sounds like it would check more stuff for correctness, so +1 from me there as well.",
+      "parentUuid": "ab20609d_571f7070",
+      "range": {
+        "startLine": 53,
+        "startChar": 58,
+        "endLine": 53,
+        "endChar": 59
+      },
+      "revId": "036ba5189b4d5cde446e684b82d1c1fff496e042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
