@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b72d0f59_2cc2a470",
+        "filename": "src/libANGLE/renderer/vulkan/VulkanSecondaryCommandBuffer.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-22T14:38:23Z",
+      "side": 1,
+      "message": "nit: `pool`\n\nIt\u0027s a bit weird to have `initialize` be called, but then _not_ initialize. I preferred when `initialize()` was not called at all if unnecessary.\n\nTo fix the `empty()` case, why not set `mAnyCommand \u003d false` when the command buffer is closed?",
+      "range": {
+        "startLine": 53,
+        "startChar": 58,
+        "endLine": 53,
+        "endChar": 59
+      },
+      "revId": "036ba5189b4d5cde446e684b82d1c1fff496e042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
