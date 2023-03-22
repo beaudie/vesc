@@ -22,6 +22,30 @@
       },
       "revId": "036ba5189b4d5cde446e684b82d1c1fff496e042",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab20609d_571f7070",
+        "filename": "src/libANGLE/renderer/vulkan/VulkanSecondaryCommandBuffer.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-22T16:00:39Z",
+      "side": 1,
+      "message": "\u003e nit: pool\n\nBuffer is correct (the above `!valid()`).\n\nMy logic is that when `VulkanSecondaryCommandBuffer::valid()` returns `false` - we still allow to call `empty()` (use object in invalid state).\n\n\u003e it\u0027s a bit weird to have initialize be called, but then not initialize. I preferred when initialize() was not called at all if unnecessary.\n\nAgree.\n\n\u003e To fix the empty() case, why not set mAnyCommand \u003d false when the command buffer is closed?\n\nCurrently `VulkanSecondaryCommandBuffer::close()` called only if enabled assertions. Also this will cause other asserts. Logic of close is to avoid writing but not making it empty. I do not like this.\n\n---\n\nCurrently `VulkanSecondaryCommandBuffer` does not have custom move constructor/assignment. Everything is left as is after `std::move()`. My assumption is that because after `std::move()` object is `!valid()` and other state does not matter (like `empty()`) and resetting state skipped for performance reasons.\n\nThere was no problem before this CL, since `OutsideRenderPassCommandBufferHelper::mCommandBuffer` always initialized after `reset()`. In this CL initialization is not possible if Pool detached.\n\nThere are many options how to fix this. Unfortunately, I do not know what will be accepted, because many cases are subjective.\n\nThe cleanest way is:\n1. implement move logic and reset necessary state (for safety).\n2. and even then, do not call `empty()` if `!valid()`.\n\nOriginally I decided to implement only (2) - just check `!valid()` and skip `empty()`.\nHowever, `RenderPassCommandBufferHelper::empty()` only checking `mRenderPassStarted`. This check will be skipped if buffer is `!valid()`. I think skipping is OK, because it is already a problem if buffer is `!valid()` but `mRenderPassStarted \u003d\u003d true`. In case such heppens - we will catch the error in `ASSERT(!mRenderPassStarted)` later in the `beginRenderPass()`.\n\nI also was thinking to implement additional method inside `RenderPassCommandBufferHelper` and `OutsideRenderPassCommandBufferHelper` instead of using `empty()`.\nThe `OutsideRenderPassCommandBufferHelper` will check `!mCommandBuffer.valid() || mCommandBuffer.empty()`.\nThe `RenderPassCommandBufferHelper` will check `!started()` or even `!started() \u0026\u0026 (!mCommandBuffer.valid() || mCommandBuffer.empty())`.\nBut how to name this method?\n\nAlso methods `isCommandPoolAttached()` and `hasAllocatorLinks()` only used for assertions. So decided to encapsulate all checks in a single method `checkCanBeRecycled()`. But this will cause a copy-paste logic (like in attach/detach). This copy-paste can be solved with template similarly to attach/detach. But you do not like my templates with attach/detach...\n\nI think I will go with the templated `checkCanBeRecycled`. IMO this is a least of all evils. Without template need to refactor the whole structure and I do not want to do that (or repeating code).\n\nSorry for a lot of text. But I\u0027m really struggling. I can choose anything and still do it wrong (unnecessary, complex or weird).",
+      "parentUuid": "b72d0f59_2cc2a470",
+      "range": {
+        "startLine": 53,
+        "startChar": 58,
+        "endLine": 53,
+        "endChar": 59
+      },
+      "revId": "036ba5189b4d5cde446e684b82d1c1fff496e042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
