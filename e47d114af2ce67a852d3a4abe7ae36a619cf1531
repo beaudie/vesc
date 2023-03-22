@@ -75,6 +75,30 @@
       },
       "revId": "e47d114af2ce67a852d3a4abe7ae36a619cf1531",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7784588_f69bd8ff",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 773,
+      "author": {
+        "id": 1379689
+      },
+      "writtenOn": "2023-03-22T15:12:59Z",
+      "side": 1,
+      "message": "Thanks. I\u0027ve also removed `complete` from the workaround naming.",
+      "parentUuid": "a4c91084_8677a777",
+      "range": {
+        "startLine": 773,
+        "startChar": 12,
+        "endLine": 773,
+        "endChar": 61
+      },
+      "revId": "e47d114af2ce67a852d3a4abe7ae36a619cf1531",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
