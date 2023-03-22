@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aecf0d1d_cf5f4688",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1379689
+      },
+      "writtenOn": "2023-03-22T14:35:40Z",
+      "side": 1,
+      "message": "Can ANGLE CLs be merged into release channels?",
+      "revId": "e47d114af2ce67a852d3a4abe7ae36a619cf1531",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
