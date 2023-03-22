@@ -346,6 +346,42 @@ static angle::Result InitializeCompressedTextureContents(const gl::Context *cont
 
 }  // namespace
 
+bool PreferStagedTextureUploads(const gl::Context *context,
+                                const TextureRef &texture,
+                                const Format &textureObjFormat)
+{
+    // The simulator MUST upload all textures as staged.
+    if (TARGET_OS_SIMULATOR)
+    {
+        return true;
+    }
+
+    ContextMtl *contextMtl             = mtl::GetImpl(context);
+    const angle::FeaturesMtl &features = contextMtl->getDisplay()->getFeatures();
+
+    const gl::InternalFormat &intendedInternalFormat = textureObjFormat.intendedInternalFormat();
+    if (intendedInternalFormat.compressed && textureObjFormat.actualAngleFormat().isBlock)
+    {
+        return false;
+    }
+
+    if (intendedInternalFormat.isLUMA())
+    {
+        return false;
+    }
+
+    if (features.disableStagedInitializationOfPackedTextureFormats.enabled)
+    {
+        if (intendedInternalFormat.sizedInternalFormat == GL_RGB9_E5)
+        {
+            return false;
+        }
+    }
+
+    return (texture->hasIOSurface() && features.uploadDataToIosurfacesWithStagingBuffers.enabled) ||
+           features.alwaysPreferStagedTextureUploads.enabled;
+}
+
 angle::Result InitializeTextureContents(const gl::Context *context,
                                         const TextureRef &texture,
                                         const Format &textureObjFormat,
@@ -358,10 +394,7 @@ angle::Result InitializeTextureContents(const gl::Context *context,
 
     const gl::InternalFormat &intendedInternalFormat = textureObjFormat.intendedInternalFormat();
 
-    bool forceGPUInitialization = false;
-#if TARGET_OS_SIMULATOR
-    forceGPUInitialization = true;
-#endif  // TARGET_OS_SIMULATOR
+    bool preferGPUInitialization = PreferStagedTextureUploads(context, texture, textureObjFormat);
 
     // This function is called in many places to initialize the content of a texture.
     // So it's better we do the initial check here instead of let the callers do it themselves:
@@ -385,7 +418,7 @@ angle::Result InitializeTextureContents(const gl::Context *context,
                                                    startDepth);
     }
     else if (texture->isCPUAccessible() && index.getType() != gl::TextureType::_2DMultisample &&
-             index.getType() != gl::TextureType::_2DMultisampleArray && !forceGPUInitialization)
+             index.getType() != gl::TextureType::_2DMultisampleArray && !preferGPUInitialization)
     {
         const angle::Format &dstFormat = angle::Format::Get(textureObjFormat.actualFormatId);
         const size_t dstRowPitch       = dstFormat.pixelBytes * size.width;
