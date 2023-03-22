@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0b42b48_ffff0ec0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-22T14:14:45Z",
+      "side": 1,
+      "message": "Awesome",
+      "revId": "d1ad947bfafb19e3a2effd55a67a275bd57bf876",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b71ead94_c7dfef8a",
+        "filename": "src/tests/gl_tests/FragDepthTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-22T14:14:45Z",
+      "side": 1,
+      "message": "Could you please add a test to make sure `gl_FragDepth` cannot be declared in the vertex shader now?\n\nAlso, are there deqp tests to cover functionality?",
+      "revId": "d1ad947bfafb19e3a2effd55a67a275bd57bf876",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
