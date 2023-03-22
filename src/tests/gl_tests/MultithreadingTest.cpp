@@ -899,6 +899,24 @@ TEST_P(MultithreadingTestES3, MultithreadFenceDraw)
     mainThreadDraw(true);
 }
 
+// This test does nothing.
+TEST_P(MultithreadingTestES3, NewTest1)
+{
+    ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading());
+}
+
+// This test does nothing.
+TEST_P(MultithreadingTestES3, NewTest2)
+{
+    ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading());
+}
+
+// This test does nothing.
+TEST_P(MultithreadingTestES3, NewTest3)
+{
+    ANGLE_SKIP_TEST_IF(!platformSupportsMultithreading());
+}
+
 // Same as MultithreadFenceDraw, but with the secondary thread using glTexImage2D rather than
 // glDrawArrays.
 TEST_P(MultithreadingTestES3, MultithreadFenceTexImage)
