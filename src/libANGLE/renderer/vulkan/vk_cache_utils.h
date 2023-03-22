@@ -276,7 +276,9 @@ class alignas(4) RenderPassDesc final
     // The resolve attachments are packed after the non-resolve attachments.  They use the same
     // formats, so they are not specified in this array.
     FramebufferNonResolveAttachmentArray<uint8_t> mAttachmentFormats;
+    friend std::ostream &operator<<(std::ostream &os, const RenderPassDesc &desc);
 };
+std::ostream &operator<<(std::ostream &os, const RenderPassDesc &desc);
 
 bool operator==(const RenderPassDesc &lhs, const RenderPassDesc &rhs);
 
@@ -326,7 +328,9 @@ struct PackedAttachmentOpsDesc final
     uint16_t initialLayout : 5;
     uint16_t finalLayout : 5;
     uint16_t padding2 : 6;
+    friend std::ostream &operator<<(std::ostream &os, const PackedAttachmentOpsDesc &op);
 };
+std::ostream &operator<<(std::ostream &os, const PackedAttachmentOpsDesc &op);
 
 static_assert(sizeof(PackedAttachmentOpsDesc) == 4, "Size check failed");
 
@@ -363,7 +367,9 @@ class AttachmentOpsArray final
 
   private:
     gl::AttachmentArray<PackedAttachmentOpsDesc> mOps;
+    friend std::ostream &operator<<(std::ostream &os, const AttachmentOpsArray &attachmentOpsArray);
 };
+std::ostream &operator<<(std::ostream &os, const AttachmentOpsArray &attachmentOpsArray);
 
 bool operator==(const AttachmentOpsArray &lhs, const AttachmentOpsArray &rhs);
 

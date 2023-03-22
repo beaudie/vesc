@@ -10627,6 +10627,5 @@ PresentMode ConvertVkPresentModeToPresentMode(VkPresentModeKHR vkPresentMode)
 {
     return static_cast<PresentMode>(vkPresentMode);
 }
-
 }  // namespace vk
 }  // namespace rx
