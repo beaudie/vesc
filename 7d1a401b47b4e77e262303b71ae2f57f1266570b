@@ -70,6 +70,24 @@
       "parentUuid": "40bc2650_52961fb2",
       "revId": "7d1a401b47b4e77e262303b71ae2f57f1266570b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91a00d9f_ddce3d55",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2678,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-22T19:03:16Z",
+      "side": 0,
+      "message": "Implemented `assertCanBeRecycled()`.",
+      "parentUuid": "e5f76737_836c07fe",
+      "revId": "7d1a401b47b4e77e262303b71ae2f57f1266570b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -70,6 +70,30 @@
       },
       "revId": "036ba5189b4d5cde446e684b82d1c1fff496e042",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9816497_fb55288c",
+        "filename": "src/libANGLE/renderer/vulkan/VulkanSecondaryCommandBuffer.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-22T19:03:16Z",
+      "side": 1,
+      "message": "Decided to implement `assertCanBeRecycled()` methods using template `assertCanBeRecycledImpl\u003c\u003e()`.\n\nAdded `ASSERT(valid())` to `VulkanSecondaryCommandBuffer::empty()` and `getRenderPassWriteCommandCount()` methods. Then received the assert in the `empty()` when called from `detachAllocator()` method. However code that asserts will result in no-op. Decided to also add templates for `attach/detachAllocatorImpl\u003c\u003e()`.\n\nCurrently if enable `angle_enable_vulkan_shared_ring_buffer_cmd_alloc` it will force `ANGLE_USE_CUSTOM_VULKAN_*_CMD_BUFFERS`. With this change I think it will be possible to remove the enforcement (it will be possible to switch allocator type but still use Vulkan secondaries).",
+      "parentUuid": "7c97bcd0_f91828b2",
+      "range": {
+        "startLine": 53,
+        "startChar": 58,
+        "endLine": 53,
+        "endChar": 59
+      },
+      "revId": "036ba5189b4d5cde446e684b82d1c1fff496e042",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
