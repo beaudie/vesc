@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38368a42_304ea0ad",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-22T04:23:38Z",
+      "side": 1,
+      "message": "nit: suggest `mPlaceholderFbo` or something along those lines; \"default FBO\" refers to the one created for the window surface.",
+      "range": {
+        "startLine": 457,
+        "startChar": 11,
+        "endLine": 457,
+        "endChar": 22
+      },
+      "revId": "024ebec122f4d639b3200280d49e553233ac078e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
