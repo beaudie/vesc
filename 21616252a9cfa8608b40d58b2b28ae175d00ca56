@@ -70,6 +70,30 @@
       },
       "revId": "21616252a9cfa8608b40d58b2b28ae175d00ca56",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8615bd10_9238c30a",
+        "filename": "src/libANGLE/renderer/vulkan/AllocatorHelperRing.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-03-22T18:38:22Z",
+      "side": 1,
+      "message": "I guess this is resolved.",
+      "parentUuid": "de55ed5f_f14843ee",
+      "range": {
+        "startLine": 88,
+        "startChar": 9,
+        "endLine": 88,
+        "endChar": 14
+      },
+      "revId": "21616252a9cfa8608b40d58b2b28ae175d00ca56",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
