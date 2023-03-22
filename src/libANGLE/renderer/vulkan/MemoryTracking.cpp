@@ -11,6 +11,8 @@
 
 #include "common/debug.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
+#include "libANGLE/renderer/vulkan/vk_cache_utils.h"
+#include "libANGLE/renderer/vulkan/vk_helpers.h"
 
 // Consts
 namespace
@@ -578,6 +580,123 @@ void MemoryReport::logMemoryReportStats() const
                << allocatedMemoryMax << ");  Imported=" << std::setw(10) << importedMemory
                << " (max=" << std::setw(10) << importedMemoryMax << ")";
     }
+}
+
+// For debugging only
+std::ostream &operator<<(std::ostream &os, const RenderPassCommandBufferHelper &renderPassCommands)
+{
+    os << '{' << '\n';
+    os << " mCurrentSubpassCommandBufferIndex:"
+       << renderPassCommands.mCurrentSubpassCommandBufferIndex << '\n';
+    os << " mRenderPassDesc:" << renderPassCommands.mRenderPassDesc << '\n';
+    os << " mAttachmentOps:" << renderPassCommands.mAttachmentOps << '\n';
+    os << " mFramebuffer:" << renderPassCommands.mFramebuffer << '\n';
+    os << " mRenderArea:{" << renderPassCommands.mRenderArea.x << ','
+       << renderPassCommands.mRenderArea.y << ',' << renderPassCommands.mRenderArea.width << ','
+       << renderPassCommands.mRenderArea.height << "}\n";
+    os << " mClearValues:" << renderPassCommands.mClearValues << '\n';
+    os << " mDepthStencilAttachmentIndex:" << renderPassCommands.mDepthStencilAttachmentIndex.get()
+       << '\n';
+    os << " mColorAttachmentsCount:" << renderPassCommands.mColorAttachmentsCount.get() << '\n';
+    os << " mColorAttachments:" << renderPassCommands.mColorAttachments << '\n';
+    os << " mColorResolveAttachments:" << renderPassCommands.mColorResolveAttachments << '\n';
+    os << " mDepthAttachment:" << renderPassCommands.mDepthAttachment << '\n';
+    os << " mStencilAttachment:" << renderPassCommands.mStencilAttachment << '\n';
+    //    os << " mImageViews:" <<renderPassCommands.mImageViews <<'\n';
+    os << '}';
+
+    return os;
+}
+
+std::ostream &operator<<(std::ostream &os, const RenderPassDesc &renderPassDesc)
+{
+    os << '{';
+    os << "\t mSamples:" << static_cast<int>(renderPassDesc.mSamples) << '\n';
+    os << "\t mColorAttachmentRange:" << static_cast<int>(renderPassDesc.mColorAttachmentRange)
+       << '\n';
+    os << "\t mViewCount:" << static_cast<int>(renderPassDesc.mViewCount) << '\n';
+    os << "\t mSrgbWriteControl:" << static_cast<int>(renderPassDesc.mSrgbWriteControl) << '\n';
+    os << "\t mHasFramebufferFetch:" << static_cast<int>(renderPassDesc.mHasFramebufferFetch)
+       << '\n';
+    os << "\t mIsRenderToTexture:" << static_cast<int>(renderPassDesc.mIsRenderToTexture) << '\n';
+    os << "\t mResolveDepthStencil:" << static_cast<int>(renderPassDesc.mResolveDepthStencil)
+       << '\n';
+    os << "\t mUnresolveDepth:" << static_cast<int>(renderPassDesc.mUnresolveDepth) << '\n';
+    os << "\t mUnresolveStencil:" << static_cast<int>(renderPassDesc.mUnresolveStencil) << '\n';
+    os << "\t mColorResolveAttachmentMask:0x" << std::hex
+       << static_cast<uint64_t>(renderPassDesc.mColorResolveAttachmentMask.bits()) << '\n';
+    os << "\t mColorUnresolveAttachmentMask:0x" << std::hex
+       << static_cast<uint64_t>(renderPassDesc.mColorUnresolveAttachmentMask.bits()) << std::dec
+       << '\n';
+    // os<<" mAttachmentFormats:" <<renderPassDesc.mAttachmentFormats <<'\n';
+    os << '}';
+
+    return os;
+}
+
+std::ostream &operator<<(std::ostream &os, const MaybeImagelessFramebuffer &fb)
+{
+    os << '{' << '\n';
+    os << "\t mFramebuffer:" << fb.mFramebuffer.getHandle() << '\n';
+    os << "\t mImageless:" << ToUnderlying(fb.mImageless) << '\n';
+    os << '}';
+
+    return os;
+}
+
+std::ostream &operator<<(std::ostream &os, const PackedClearValuesArray &array)
+{
+    os << '{';
+    for (const VkClearValue &v : array.mValues)
+    {
+        os << "\t{" << v.color.float32[0] << ',' << v.color.float32[1] << ',' << v.color.float32[2]
+           << ',' << v.color.float32[3] << "}, ";
+    }
+    os << '}';
+
+    return os;
+}
+
+std::ostream &operator<<(std::ostream &os, const AttachmentOpsArray &attachmentOpsArray)
+{
+    os << '{';
+    for (const PackedAttachmentOpsDesc &desc : attachmentOpsArray.mOps)
+    {
+        os << *(reinterpret_cast<const uint16_t *>(&desc)) << ", ";
+    }
+    os << '}';
+
+    return os;
+}
+
+std::ostream &operator<<(std::ostream &os, const PackedRenderPassAttachmentArray &array)
+{
+    for (const RenderPassAttachment &attachment : array.mAttachments)
+    {
+        os << '\t' << attachment << ",\n";
+    }
+
+    return os;
+}
+
+std::ostream &operator<<(std::ostream &os, const RenderPassAttachment &attachment)
+{
+    os << '{';
+    os << " mImage:" << attachment.mImage;
+    os << " mImageSiblingSerial:" << attachment.mImageSiblingSerial.getValue();
+    os << " mLevelIndex:" << attachment.mLevelIndex.get();
+    os << " mLayerIndex:" << attachment.mLayerIndex;
+    os << " mLayerCount:" << attachment.mLayerCount;
+    os << " mAspect:" << attachment.mAspect;
+    os << " mAccess:" << ToUnderlying(attachment.mAccess);
+    os << " mInvalidatedCmdCount:" << attachment.mInvalidatedCmdCount;
+    os << " mDisabledCmdCount:" << attachment.mDisabledCmdCount;
+    os << " mInvalidateArea:{" << attachment.mInvalidateArea.x << ','
+       << attachment.mInvalidateArea.y << ',' << attachment.mInvalidateArea.width << ','
+       << attachment.mInvalidateArea.height << "}";
+    os << '}';
+
+    return os;
 }
 }  // namespace vk
 }  // namespace rx

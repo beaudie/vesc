@@ -969,7 +969,9 @@ class PackedClearValuesArray final
 
   private:
     gl::AttachmentArray<VkClearValue> mValues;
+    friend std::ostream &operator<<(std::ostream &os, const PackedClearValuesArray &array);
 };
+std::ostream &operator<<(std::ostream &os, const PackedClearValuesArray &array);
 
 class ImageHelper;
 
@@ -1039,6 +1041,7 @@ class RenderPassAttachment final
     uint32_t mDisabledCmdCount;
     // The area that has been invalidated
     gl::Rectangle mInvalidateArea;
+    friend std::ostream &operator<<(std::ostream &os, const RenderPassAttachment &attachment);
 };
 
 // Stores RenderPassAttachment In packed attachment index
@@ -1061,6 +1064,7 @@ class PackedRenderPassAttachmentArray final
 
   private:
     gl::AttachmentArray<RenderPassAttachment> mAttachments;
+    friend std::ostream &operator<<(std::ostream &os, const PackedRenderPassAttachmentArray &array);
 };
 
 // How the ImageHelper object is being used by the renderpass
@@ -1297,7 +1301,9 @@ class MaybeImagelessFramebuffer : angle::NonCopyable
     Framebuffer mFramebuffer;
     FramebufferAttachmentsVector<VkImageView> mImageViews;
     ImagelessStatus mImageless;
+    friend std::ostream &operator<<(std::ostream &os, const MaybeImagelessFramebuffer &fb);
 };
+std::ostream &operator<<(std::ostream &os, const MaybeImagelessFramebuffer &fb);
 
 class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
 {
@@ -1554,7 +1560,11 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     // This is last renderpass before present and this is the image will be presented. We can use
     // final layout of the renderpass to transition it to the presentable layout
     ImageHelper *mImageOptimizeForPresent;
+
+    friend std::ostream &operator<<(std::ostream &os,
+                                    const RenderPassCommandBufferHelper &renderPassCommands);
 };
+std::ostream &operator<<(std::ostream &os, const RenderPassCommandBufferHelper &renderPassCommands);
 
 // The following class helps support both Vulkan and ANGLE secondary command buffers by
 // encapsulating their differences.
