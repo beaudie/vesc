@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a141b71d_a8e27840",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-22T13:59:41Z",
+      "side": 1,
+      "message": "LGTM!",
+      "revId": "bd1c36f357e44b63b14b6a6d779a008b1f833120",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5140b1a_ad9cc116",
+        "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1112,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-22T13:59:41Z",
+      "side": 1,
+      "message": "nit: `glWaitSync`, there\u0027s no reason to make the thread wait (on the CPU) about this.",
+      "revId": "bd1c36f357e44b63b14b6a6d779a008b1f833120",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
