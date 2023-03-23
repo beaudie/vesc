@@ -249,6 +249,8 @@ class TType
     bool isScalarFloat() const { return isScalar() && type == EbtFloat; }
     bool isScalarInt() const { return isScalar() && (type == EbtInt || type == EbtUInt); }
 
+    bool isScalarVector() const { return isVector() && !isVectorArray() && type == EbtFloat; }
+
     bool canBeConstructed() const;
 
     const TStructure *getStruct() const { return mStructure; }
