@@ -921,6 +921,16 @@ spirv::IdRef OutputSPIRVTraverser::accessChainLoad(NodeData *data,
 {
     const SpirvDecorations &decorations = mBuilder.getDecorations(valueType);
 
+    bool isRelaxedPrecision = false;
+
+    for (auto decoration : decorations)
+    {
+        if (decoration == spv::DecorationRelaxedPrecision)
+        {
+            isRelaxedPrecision = true;
+        }
+    }
+
     // Loading through the access chain can generate different instructions based on whether it's an
     // rvalue, the indices are literal, there's a swizzle etc.
     //
@@ -944,6 +954,7 @@ spirv::IdRef OutputSPIRVTraverser::accessChainLoad(NodeData *data,
     }
 
     spirv::IdRef loadResult = data->baseId;
+    spirv::IdRef loadResultTypeId;
 
     if (IsAccessChainRValue(accessChain))
     {
@@ -959,7 +970,8 @@ spirv::IdRef OutputSPIRVTraverser::accessChainLoad(NodeData *data,
                 spirv::WriteCompositeExtract(mBuilder.getSpirvCurrentFunctionBlock(),
                                              accessChain.preSwizzleTypeId, result, loadResult,
                                              indexList);
-                loadResult = result;
+                loadResult       = result;
+                loadResultTypeId = accessChain.preSwizzleTypeId;
             }
             else
             {
@@ -981,16 +993,20 @@ spirv::IdRef OutputSPIRVTraverser::accessChainLoad(NodeData *data,
                 loadResult                       = mBuilder.getNewId(decorations);
                 spirv::WriteLoad(mBuilder.getSpirvCurrentFunctionBlock(),
                                  accessChain.preSwizzleTypeId, loadResult, accessChainId, nullptr);
+                loadResultTypeId = accessChain.preSwizzleTypeId;
             }
         }
     }
     else
     {
-        // Load from the access chain.
+        // INFO() << "Yuxin Debug directly load from access chain";
+        //  Load from the access chain.
         const spirv::IdRef accessChainId = accessChainCollapse(data);
-        loadResult                       = mBuilder.getNewId(decorations);
+
+        loadResult = mBuilder.getNewId(decorations);
         spirv::WriteLoad(mBuilder.getSpirvCurrentFunctionBlock(), accessChain.preSwizzleTypeId,
                          loadResult, accessChainId, nullptr);
+        loadResultTypeId = accessChain.preSwizzleTypeId;
     }
 
     if (!accessChain.swizzles.empty())
@@ -1009,7 +1025,8 @@ spirv::IdRef OutputSPIRVTraverser::accessChainLoad(NodeData *data,
         spirv::WriteVectorShuffle(mBuilder.getSpirvCurrentFunctionBlock(),
                                   accessChain.postSwizzleTypeId, result, loadResult, loadResult,
                                   swizzleList);
-        loadResult = result;
+        loadResult       = result;
+        loadResultTypeId = accessChain.postSwizzleTypeId;
     }
 
     if (accessChain.dynamicComponent.valid())
@@ -1022,14 +1039,29 @@ spirv::IdRef OutputSPIRVTraverser::accessChainLoad(NodeData *data,
         spirv::WriteVectorExtractDynamic(mBuilder.getSpirvCurrentFunctionBlock(),
                                          accessChain.postDynamicComponentTypeId, result, loadResult,
                                          accessChain.dynamicComponent);
-        loadResult = result;
+        loadResult       = result;
+        loadResultTypeId = accessChain.postDynamicComponentTypeId;
     }
 
     // Upon loading values, cast them to the default SPIR-V variant.
-    const spirv::IdRef castResult =
-        cast(loadResult, valueType, accessChain.typeSpec, {}, resultTypeIdOut);
-
-    return castResult;
+    // if (isLoadResultFloat)
+    if (loadResultTypeId.valid() && isRelaxedPrecision &&
+        (valueType.getBasicType() == TBasicType::EbtFloat &&
+         (valueType.isScalar() /*|| valueType.isVector()*/)))
+    {
+        const spirv::IdRef quantizeToF16Result = mBuilder.getNewId({});
+        spirv::WriteQuantizeToF16(mBuilder.getSpirvCurrentFunctionBlock(), loadResultTypeId,
+                                  quantizeToF16Result, loadResult);
+        const spirv::IdRef castResult =
+            cast(quantizeToF16Result, valueType, accessChain.typeSpec, {}, resultTypeIdOut);
+        return castResult;
+    }
+    else
+    {
+        const spirv::IdRef castResult =
+            cast(loadResult, valueType, accessChain.typeSpec, {}, resultTypeIdOut);
+        return castResult;
+    }
 }
 
 void OutputSPIRVTraverser::accessChainStore(NodeData *data,
@@ -5950,6 +5982,8 @@ bool OutputSPIRVTraverser::visitDeclaration(Visit visit, TIntermDeclaration *nod
         else
         {
             // Otherwise generate code to load from right hand side expression.
+            INFO() << "Yuxin Debug left hand side expression precision: "
+                   << static_cast<int>(symbol->getType().getPrecision());
             initializerId = accessChainLoad(&mNodeData.back(), symbol->getType(), nullptr);
         }
 
@@ -6008,7 +6042,25 @@ bool OutputSPIRVTraverser::visitDeclaration(Visit visit, TIntermDeclaration *nod
 
     if (!initializeWithDeclaration && initializerId.valid())
     {
-        // If not initializing at the same time as the declaration, issue a store instruction.
+        //        // If not initializing at the same time as the declaration, issue a store
+        //        instruction.
+        //        // TODO
+        //        // if
+        //        // 1) variableId is decorated with RelaxedPrecision
+        //        // and
+        //        // 2) initializerId is loaded with type float or vector of floats
+        //        // Issue an OpQuantizeToF16 instruction
+        //
+        //        bool isVariableMediumpOrLowp = false;
+        //        for (auto decoration: decorations)
+        //        {
+        //            if (decoration == spv::DecorationRelaxedPrecision)
+        //            {
+        //                isVariableMediumpOrLowp = true;
+        //                break;
+        //            }
+        //        }
+
         spirv::WriteStore(mBuilder.getSpirvCurrentFunctionBlock(), variableId, initializerId,
                           nullptr);
     }
