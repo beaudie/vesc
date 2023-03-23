@@ -986,7 +986,7 @@ spirv::IdRef OutputSPIRVTraverser::accessChainLoad(NodeData *data,
     }
     else
     {
-        // Load from the access chain.
+        //  Load from the access chain.
         const spirv::IdRef accessChainId = accessChainCollapse(data);
         loadResult                       = mBuilder.getNewId(decorations);
         spirv::WriteLoad(mBuilder.getSpirvCurrentFunctionBlock(), accessChain.preSwizzleTypeId,
@@ -5903,6 +5903,7 @@ bool OutputSPIRVTraverser::visitDeclaration(Visit visit, TIntermDeclaration *nod
     TIntermSymbol *symbol = sequence.front()->getAsSymbolNode();
     spirv::IdRef initializerId;
     bool initializeWithDeclaration = false;
+    bool needsQuantizeTo16         = false;
 
     // Handle declarations with initializer.
     if (symbol == nullptr)
@@ -5929,13 +5930,13 @@ bool OutputSPIRVTraverser::visitDeclaration(Visit visit, TIntermDeclaration *nod
         //         }
         //     }
         //
-        // So the initializer is only used when declarating a variable when it's a constant
+        // So the initializer is only used when declaring a variable when it's a constant
         // expression.  Note that if the variable being declared is itself global (and the
         // initializer is not constant), a previous AST transformation (DeferGlobalInitializers)
         // makes sure their initialization is deferred to the beginning of main.
         //
         // Additionally, if the variable is being defined inside a loop, the initializer is not used
-        // as that would prevent it from being reintialized in the next iteration of the loop.
+        // as that would prevent it from being reinitialized in the next iteration of the loop.
 
         TIntermTyped *initializer = assign->getRight();
         initializeWithDeclaration =
@@ -5951,6 +5952,33 @@ bool OutputSPIRVTraverser::visitDeclaration(Visit visit, TIntermDeclaration *nod
         {
             // Otherwise generate code to load from right hand side expression.
             initializerId = accessChainLoad(&mNodeData.back(), symbol->getType(), nullptr);
+
+            // Workaround for issuetracker.google.com/274859104
+            // ARM SpirV compiler may utilize the RelaxedPrecision of mediump float,
+            // and chooses to not cast mediump float to 16 bit. This causes deqp test
+            // dEQP-GLES2.functional.shaders.algorithm.rgb_to_hsl_vertex failed.
+            // The reason is that GLSL shader code expects below condition to be true:
+            // mediump float a == mediump float b;
+            // However, the condition is false after translating to SpirV
+            // due to one of them is 32 bit, and the other is 16 bit.
+            // To resolve the deqp test failure, we will add an additional OpQuantizeToF16
+            // SpirV instruction to explicity cast mediump float scalar or mediump float
+            // vector to 16 bit, if the right-hand-side is a highp float.
+            if (mCompileOptions.castMediumpFloatTo16Bit)
+            {
+                const TType leftType            = assign->getLeft()->getType();
+                const TType rightType           = assign->getRight()->getType();
+                const TPrecision leftPrecision  = leftType.getPrecision();
+                const TPrecision rightPrecision = rightType.getPrecision();
+                const bool isFloatScalarOrFloatVector =
+                    leftType.isScalarFloat() || leftType.isScalarVector();
+
+                if (leftPrecision == TPrecision::EbpMedium &&
+                    rightPrecision == TPrecision::EbpHigh && isFloatScalarOrFloatVector)
+                {
+                    needsQuantizeTo16 = true;
+                }
+            }
         }
 
         // Clean up the initializer data.
@@ -6008,9 +6036,22 @@ bool OutputSPIRVTraverser::visitDeclaration(Visit visit, TIntermDeclaration *nod
 
     if (!initializeWithDeclaration && initializerId.valid())
     {
-        // If not initializing at the same time as the declaration, issue a store instruction.
-        spirv::WriteStore(mBuilder.getSpirvCurrentFunctionBlock(), variableId, initializerId,
-                          nullptr);
+        // If not initializing at the same time as the declaration, issue a store
+        if (needsQuantizeTo16)
+        {
+            // Insert OpQuantizeToF16 instruction to explicity cast mediump float to 16 bit before
+            // issuing an OpStore instruction.
+            const spirv::IdRef quantizeToF16Result = mBuilder.getNewId({});
+            spirv::WriteQuantizeToF16(mBuilder.getSpirvCurrentFunctionBlock(), typeId,
+                                      quantizeToF16Result, initializerId);
+            spirv::WriteStore(mBuilder.getSpirvCurrentFunctionBlock(), variableId,
+                              quantizeToF16Result, nullptr);
+        }
+        else
+        {
+            spirv::WriteStore(mBuilder.getSpirvCurrentFunctionBlock(), variableId, initializerId,
+                              nullptr);
+        }
     }
 
     const bool isShaderInOut = IsShaderIn(type.getQualifier()) || IsShaderOut(type.getQualifier());

@@ -26,7 +26,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 325
+#define ANGLE_SH_VERSION 326
 
 enum ShShaderSpec
 {
@@ -420,6 +420,14 @@ struct ShCompileOptions
     // issuetracker.google.com/266235549 add aliased memory decoration to ssbo if the variable is
     // not declared with "restrict" memory qualifier in GLSL
     uint64_t aliasedSSBOUnlessRestrict : 1;
+
+    // issuetracker.google.com/274859104 add OpQuantizeToF16 instruction to cast
+    // mediump floating-point values to 16 bit. ARM compiler utilized RelaxedPrecision
+    // to minimize type case and keep a mediump float as 32 bit when assigning it with
+    // a highp floating-point value. It is possible that GLSL shader code is comparing
+    // two meiump values, but ARM compiler is comparing a 32 bit value with a 16 bit value,
+    // causing the comparison to fail.
+    uint64_t castMediumpFloatTo16Bit : 1;
 
     ShCompileOptionsMetal metal;
     ShPixelLocalStorageOptions pls;
