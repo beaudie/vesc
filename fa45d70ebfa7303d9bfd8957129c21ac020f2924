@@ -16,6 +16,24 @@
       "message": "Surprised we haven\u0027t had issues with double declared frag-depth in the past. Does that fix another bug?\nDo we have tests that verify this feature is working? Did we test all 3 comparison modes?",
       "revId": "fa45d70ebfa7303d9bfd8957129c21ac020f2924",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "216034f1_1bc6577b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-03-23T04:29:44Z",
+      "side": 1,
+      "message": "Redeclaring `gl_FragDepth` is allowed only when the extension is enabled. The feature is mostly a performance hint.",
+      "parentUuid": "cf27f4dd_64f04e40",
+      "revId": "fa45d70ebfa7303d9bfd8957129c21ac020f2924",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
