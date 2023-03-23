@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6a78618_23aa6e55",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-23T17:00:51Z",
+      "side": 1,
+      "message": "LGTM with one minor comment",
+      "revId": "44875edc8525cd264650e74e529dded1b00a31c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb6d17b3_67ec36bf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1721,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-23T17:00:51Z",
+      "side": 1,
+      "message": "What I read is that it always end in detachCOmmandPool. So `!mIsCommandBufferEnded` check in line 1725 really is async enabled or not, correct? If yes, I think check mFeatures.asyncCommandQueue.enabled (and add assertion if needed) is better here, IMO.",
+      "range": {
+        "startLine": 1721,
+        "startChar": 47,
+        "endLine": 1721,
+        "endChar": 52
+      },
+      "revId": "44875edc8525cd264650e74e529dded1b00a31c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
