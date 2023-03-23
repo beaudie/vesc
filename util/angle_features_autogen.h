@@ -124,6 +124,7 @@ enum class Feature
     EnableShaderSubstitution,
     EnableTimestampQueries,
     ExpandIntegerPowExpressions,
+    ExplicitlyCastMediumpFloatTo16Bit,
     ExplicitlyEnablePerSampleShading,
     ExposeNonConformantExtensionsAndVersions,
     FinishDoesNotCauseQueriesToBeAvailable,
