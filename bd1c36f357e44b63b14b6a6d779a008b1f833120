@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c130255_ba0cffe8",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-03-23T00:10:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "08b53157_2c52ba2a",
+      "range": {
+        "startLine": 91,
+        "startChar": 9,
+        "endLine": 91,
+        "endChar": 22
+      },
+      "revId": "bd1c36f357e44b63b14b6a6d779a008b1f833120",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d5140b1a_ad9cc116",
@@ -71,6 +95,24 @@
       "writtenOn": "2023-03-22T13:59:41Z",
       "side": 1,
       "message": "nit: `glWaitSync`, there\u0027s no reason to make the thread wait (on the CPU) about this.",
+      "revId": "bd1c36f357e44b63b14b6a6d779a008b1f833120",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed0df2e0_c7a57872",
+        "filename": "src/tests/gl_tests/MultithreadingTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1112,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-03-23T00:10:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5140b1a_ad9cc116",
       "revId": "bd1c36f357e44b63b14b6a6d779a008b1f833120",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
