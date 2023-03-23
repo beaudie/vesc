@@ -838,6 +838,23 @@ gl::Version LimitVersionTo(const gl::Version &current, const gl::Version &lower)
     return true;
 }
 
+// CRC16-CCITT is used for header before the pipeline cache key data.
+uint16_t ComputeCRC16(const uint8_t *data, const size_t size)
+{
+    constexpr uint16_t kPolynomialCRC16 = 0x8408;
+    uint16_t rem                        = 0;
+
+    for (size_t i = 0; i < size; i++)
+    {
+        rem ^= data[i];
+        for (int j = 0; j < 8; j++)
+        {
+            rem = (rem & 1) ? kPolynomialCRC16 ^ (rem >> 1) : rem >> 1;
+        }
+    }
+    return rem;
+}
+
 void ComputePipelineCacheVkChunkKey(VkPhysicalDeviceProperties physicalDeviceProperties,
                                     const uint8_t chunkIndex,
                                     egl::BlobCache::Key *hashOut)
@@ -895,16 +912,18 @@ void CompressAndStorePipelineCacheVk(VkPhysicalDeviceProperties physicalDevicePr
     // query the limit size in android.
     constexpr size_t kMaxBlobCacheSize = 64 * 1024;
 
-    // Store {numChunks, chunkCompressedData} in keyData, numChunks is used to validate the data.
-    // For example, if the compressed size is 68841 bytes(67k), divide into {2,34421 bytes} and
-    // {2,34420 bytes}.
-    constexpr size_t kBlobHeaderSize = sizeof(uint8_t);
+    // Store {originalCacheSize, compressedDataCRC, numChunks, chunkIndex; chunkCompressedData} in
+    // keyData. The header values are used to validate the data. For example, if the original and
+    // compressed sizes are 70000 bytes (68k) and 68841 bytes (67k), the compressed data will be
+    // divided into two chunks: {70000,crc0,2,0;34421 bytes} and {70000,crc1,2,1;34420 bytes}.
+    constexpr size_t kBlobHeaderSize = 8 * sizeof(uint8_t);
     size_t compressedOffset          = 0;
 
     const size_t numChunks = UnsignedCeilDivide(static_cast<unsigned int>(compressedData.size()),
                                                 kMaxBlobCacheSize - kBlobHeaderSize);
     size_t chunkSize       = UnsignedCeilDivide(static_cast<unsigned int>(compressedData.size()),
                                                 static_cast<unsigned int>(numChunks));
+    uint16_t compressedDataCRC = ComputeCRC16(compressedData.data(), chunkSize);
 
     for (size_t chunkIndex = 0; chunkIndex < numChunks; ++chunkIndex)
     {
@@ -921,8 +940,13 @@ void CompressAndStorePipelineCacheVk(VkPhysicalDeviceProperties physicalDevicePr
             return;
         }
 
-        ASSERT(numChunks <= UINT8_MAX);
-        keyData.data()[0] = static_cast<uint8_t>(numChunks);
+        // Add header data, followed by the compressed data.
+        ASSERT(numChunks <= UINT8_MAX && chunkIndex <= UINT8_MAX);
+        *reinterpret_cast<size_t *>(keyData.data())                         = cacheData.size();
+        *reinterpret_cast<uint16_t *>(keyData.data() + 4 * sizeof(uint8_t)) = compressedDataCRC;
+        *(keyData.data() + 6 * sizeof(uint8_t)) = static_cast<uint8_t>(numChunks);
+        *(keyData.data() + 7 * sizeof(uint8_t)) = static_cast<uint8_t>(chunkIndex);
+
         memcpy(keyData.data() + kBlobHeaderSize, compressedData.data() + compressedOffset,
                chunkSize);
         compressedOffset += chunkSize;
