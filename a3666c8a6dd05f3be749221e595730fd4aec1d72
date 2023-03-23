@@ -213,6 +213,24 @@
       "parentUuid": "4e511ed4_f3ecb351",
       "revId": "a3666c8a6dd05f3be749221e595730fd4aec1d72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aacf59ac_190d9004",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1357502
+      },
+      "writtenOn": "2023-03-23T17:41:14Z",
+      "side": 1,
+      "message": "I think this leads us to a global decision here, should chrome ever rely on a global shared group or should we always share texture using egl images. For all platforms.\n\nHow does it work on Windows/Linux right now?\n\nIf we use display share group, I\u0027d rather chrome not using glTexStorage for webgl1 backbuffers than using egl images here. Would it solve the problem? Are there any cases when texture created on gles3 context won\u0027t be sample-able in webgl1 context?",
+      "parentUuid": "c90e9bdd_b016f875",
+      "revId": "a3666c8a6dd05f3be749221e595730fd4aec1d72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
