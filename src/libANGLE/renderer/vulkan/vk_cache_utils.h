@@ -153,7 +153,6 @@ class alignas(4) RenderPassDesc final
     // Indicate that a color attachment should take its data from the resolve attachment initially.
     void packColorUnresolveAttachment(size_t colorIndexGL);
     void removeColorUnresolveAttachment(size_t colorIndexGL);
-    void setColorUnresolveAttachmentMask(const gl::DrawBufferMask &colorUnresolveMask);
     // Indicate that a depth/stencil attachment should have a corresponding resolve attachment.
     void packDepthStencilResolveAttachment();
     // Indicate that a depth/stencil attachment should take its data from the resolve attachment

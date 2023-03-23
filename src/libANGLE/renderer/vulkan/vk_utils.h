@@ -925,14 +925,6 @@ class ClearValuesArray final
         mValues[index] = {};
         mEnabled.reset(index);
     }
-    void reset()
-    {
-        for (size_t index : mEnabled)
-        {
-            mValues[index] = {};
-        }
-        mEnabled.reset();
-    }
 
     bool test(size_t index) const { return mEnabled.test(index); }
     bool testDepth() const { return mEnabled.test(kUnpackedDepthIndex); }

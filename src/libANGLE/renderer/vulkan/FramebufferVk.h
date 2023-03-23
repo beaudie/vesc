@@ -108,17 +108,8 @@ class FramebufferVk : public FramebufferImpl
     RenderTargetVk *getColorDrawRenderTarget(size_t colorIndex) const;
     RenderTargetVk *getColorReadRenderTarget() const;
 
-    void initRenderPassAttachmentOps(ContextVk *contextVk,
-                                     gl::Rectangle *renderArea,
-                                     vk::AttachmentOpsArray *renderPassAttachmentOps,
-                                     vk::PackedClearValuesArray *packedClearValues,
-                                     gl::AttachmentsMask *unresolveAttachmentMask) const;
-    void optimizeLoadOpForUndefinedContent(vk::AttachmentOpsArray *renderPassAttachmentOps) const;
     angle::Result startNewRenderPass(ContextVk *contextVk,
-                                     const gl::Rectangle &renderArea,
-                                     vk::AttachmentOpsArray *renderPassAttachmentOps,
-                                     const vk::PackedClearValuesArray &packedClearValues,
-                                     const gl::AttachmentsMask &unresolveAttachmentMask,
+                                     const gl::Rectangle &scissoredRenderArea,
                                      vk::RenderPassCommandBuffer **commandBufferOut,
                                      bool *renderPassDescChangedOut);
 
@@ -136,6 +127,7 @@ class FramebufferVk : public FramebufferImpl
                                  const vk::ImageView *resolveImageViewIn,
                                  const SwapchainResolveMode swapchainResolveMode);
 
+    bool hasDeferredClears() const { return !mDeferredClears.empty(); }
     angle::Result flushDeferredClears(ContextVk *contextVk);
     void setReadOnlyDepthFeedbackLoopMode(bool readOnlyDepthFeedbackModeEnabled)
     {

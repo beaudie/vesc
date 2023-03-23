@@ -2766,11 +2766,6 @@ void RenderPassDesc::removeColorUnresolveAttachment(size_t colorIndexGL)
     mColorUnresolveAttachmentMask.reset(colorIndexGL);
 }
 
-void RenderPassDesc::setColorUnresolveAttachmentMask(const gl::DrawBufferMask &colorUnresolveMask)
-{
-    mColorUnresolveAttachmentMask = colorUnresolveMask;
-}
-
 void RenderPassDesc::packDepthStencilResolveAttachment()
 {
     ASSERT(hasDepthStencilAttachment());
