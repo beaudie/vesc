@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "acbf557e_64eda6a6",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-03-23T13:38:26Z",
+      "side": 1,
+      "message": "I think this should be deleting settings. Otherwise:\n1) run with --renderer\u003dvulkan\n2) run with --renderer\u003ddefault -\u003e get forced vulkan",
+      "range": {
+        "startLine": 714,
+        "startChar": 2,
+        "endLine": 715,
+        "endChar": 63
+      },
+      "revId": "ec9595f1aa49bc5f632ffa7658e5a9a451eead6a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
