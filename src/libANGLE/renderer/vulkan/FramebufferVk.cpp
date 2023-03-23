@@ -3117,6 +3117,18 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+gl::Rectangle FramebufferVk::getRenderArea(ContextVk *contextVk) const
+{
+    if (hasDeferredClears())
+    {
+        return getRotatedCompleteRenderArea(contextVk);
+    }
+    else
+    {
+        return getRotatedScissoredRenderArea(contextVk);
+    }
+}
+
 void FramebufferVk::updateActiveColorMasks(size_t colorIndexGL, bool r, bool g, bool b, bool a)
 {
     gl::BlendStateExt::ColorMaskStorage::SetValueIndexed(

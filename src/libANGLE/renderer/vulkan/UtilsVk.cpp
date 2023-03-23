@@ -2598,9 +2598,6 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
 
     vk::RenderPassCommandBuffer *commandBuffer;
     ANGLE_TRY(framebuffer->startNewRenderPass(contextVk, params.blitArea, &commandBuffer, nullptr));
-    // This render pass does special setups which causes test failures if it ends up gets reused by
-    // application's draw calls. Don't allow this render pass to be reactivated for now.
-    contextVk->getStartedRenderPassCommands().disableReactivation();
 
     VkDescriptorSet descriptorSet;
     ANGLE_TRY(allocateDescriptorSet(contextVk, &contextVk->getStartedRenderPassCommands(),
