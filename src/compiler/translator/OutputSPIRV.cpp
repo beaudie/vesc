@@ -986,7 +986,7 @@ spirv::IdRef OutputSPIRVTraverser::accessChainLoad(NodeData *data,
     }
     else
     {
-        // Load from the access chain.
+        //  Load from the access chain.
         const spirv::IdRef accessChainId = accessChainCollapse(data);
         loadResult                       = mBuilder.getNewId(decorations);
         spirv::WriteLoad(mBuilder.getSpirvCurrentFunctionBlock(), accessChain.preSwizzleTypeId,
@@ -5903,6 +5903,7 @@ bool OutputSPIRVTraverser::visitDeclaration(Visit visit, TIntermDeclaration *nod
     TIntermSymbol *symbol = sequence.front()->getAsSymbolNode();
     spirv::IdRef initializerId;
     bool initializeWithDeclaration = false;
+    bool needsQuantizeTo16         = false;
 
     // Handle declarations with initializer.
     if (symbol == nullptr)
@@ -5929,13 +5930,13 @@ bool OutputSPIRVTraverser::visitDeclaration(Visit visit, TIntermDeclaration *nod
         //         }
         //     }
         //
-        // So the initializer is only used when declarating a variable when it's a constant
+        // So the initializer is only used when declaring a variable when it's a constant
         // expression.  Note that if the variable being declared is itself global (and the
         // initializer is not constant), a previous AST transformation (DeferGlobalInitializers)
         // makes sure their initialization is deferred to the beginning of main.
         //
         // Additionally, if the variable is being defined inside a loop, the initializer is not used
-        // as that would prevent it from being reintialized in the next iteration of the loop.
+        // as that would prevent it from being reinitialized in the next iteration of the loop.
 
         TIntermTyped *initializer = assign->getRight();
         initializeWithDeclaration =
@@ -5951,6 +5952,47 @@ bool OutputSPIRVTraverser::visitDeclaration(Visit visit, TIntermDeclaration *nod
         {
             // Otherwise generate code to load from right hand side expression.
             initializerId = accessChainLoad(&mNodeData.back(), symbol->getType(), nullptr);
+
+            //************Begin: Below change make the test
+            // ShaderAlgorithmTest.rgb_to_hsl_vertex_shader pass on Pixel 7, but fail on Linux
+            //            const TType leftType = assign->getLeft()->getType();
+            //            const TType rightType = assign->getRight()->getType();
+            //            TPrecision leftPrecision = leftType.getPrecision();
+            //            TPrecision rightPrecision = rightType.getPrecision();
+            //            const bool isFloatScalarOrFloatVector = (leftType.getBasicType() ==
+            //            TBasicType::EbtFloat) && (leftType.isScalar() || leftType.isVector());
+            //
+            //
+            //            if (leftPrecision != TPrecision::EbpHigh && rightPrecision ==
+            //            TPrecision::EbpHigh && isFloatScalarOrFloatVector)
+            //            {
+            //                needsQuantizeTo16 = true;
+            //            }
+            //************End
+
+            //**************Begin: Below change make the test
+            // ShaderAlgorithmTest.rgb_to_hsl_vertex_shader pass on Pixel 7, but fail on Linux
+            //              const TType leftType = assign->getLeft()->getType();
+            //              const TPrecision leftPrecision = leftType.getPrecision();
+            //              const bool isFloatScalarOrFloatVector = (leftType.getBasicType() ==
+            //              TBasicType::EbtFloat) && (leftType.isScalar() || leftType.isVector());
+            //              if (leftPrecision != TPrecision::EbpHigh && isFloatScalarOrFloatVector)
+            //              {
+            //                  needsQuantizeTo16 = true;
+            //              }
+            //**************End
+
+            //**************Begin: Below change make the test
+            // ShaderAlgorithmTest.rgb_to_hsl_vertex_shader pass on Pixel 7, pass on Linux
+            const TType leftType           = assign->getLeft()->getType();
+            const TPrecision leftPrecision = leftType.getPrecision();
+            const bool isFloatScalar =
+                (leftType.getBasicType() == TBasicType::EbtFloat) && leftType.isScalar();
+            if (leftPrecision != TPrecision::EbpHigh && isFloatScalar)
+            {
+                needsQuantizeTo16 = true;
+            }
+            //**************End
         }
 
         // Clean up the initializer data.
@@ -6008,9 +6050,38 @@ bool OutputSPIRVTraverser::visitDeclaration(Visit visit, TIntermDeclaration *nod
 
     if (!initializeWithDeclaration && initializerId.valid())
     {
-        // If not initializing at the same time as the declaration, issue a store instruction.
-        spirv::WriteStore(mBuilder.getSpirvCurrentFunctionBlock(), variableId, initializerId,
-                          nullptr);
+        //        // If not initializing at the same time as the declaration, issue a store
+        //        instruction.
+        //        // TODO
+        //        // if
+        //        // 1) variableId is decorated with RelaxedPrecision
+        //        // and
+        //        // 2) initializerId is loaded with type float or vector of floats
+        //        // Issue an OpQuantizeToF16 instruction
+        //
+        //        bool isVariableMediumpOrLowp = false;
+        //        for (auto decoration: decorations)
+        //        {
+        //            if (decoration == spv::DecorationRelaxedPrecision)
+        //            {
+        //                isVariableMediumpOrLowp = true;
+        //                break;
+        //            }
+        //        }
+
+        if (needsQuantizeTo16)
+        {
+            const spirv::IdRef quantizeToF16Result = mBuilder.getNewId({});
+            spirv::WriteQuantizeToF16(mBuilder.getSpirvCurrentFunctionBlock(), typeId,
+                                      quantizeToF16Result, initializerId);
+            spirv::WriteStore(mBuilder.getSpirvCurrentFunctionBlock(), variableId,
+                              quantizeToF16Result, nullptr);
+        }
+        else
+        {
+            spirv::WriteStore(mBuilder.getSpirvCurrentFunctionBlock(), variableId, initializerId,
+                              nullptr);
+        }
     }
 
     const bool isShaderInOut = IsShaderIn(type.getQualifier()) || IsShaderOut(type.getQualifier());
