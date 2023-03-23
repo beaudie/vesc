@@ -945,8 +945,14 @@ spirv::IdRef OutputSPIRVTraverser::accessChainLoad(NodeData *data,
 
     spirv::IdRef loadResult = data->baseId;
 
+    bool isLoadResultFloat = false;
+    SpirvType typeFloat;
+    typeFloat.type                 = EbtFloat;
+    const spirv::IdRef typeFloatId = mBuilder.getSpirvTypeData(typeFloat, nullptr).id;
+
     if (IsAccessChainRValue(accessChain))
     {
+        // INFO() << "Yuxin Debug IsAccessChainRValue() returns true";
         if (data->idList.size() > 0)
         {
             if (accessChain.areAllIndicesLiteral)
@@ -960,6 +966,10 @@ spirv::IdRef OutputSPIRVTraverser::accessChainLoad(NodeData *data,
                                              accessChain.preSwizzleTypeId, result, loadResult,
                                              indexList);
                 loadResult = result;
+                if (accessChain.preSwizzleTypeId == typeFloatId)
+                {
+                    isLoadResultFloat = true;
+                }
             }
             else
             {
@@ -981,16 +991,26 @@ spirv::IdRef OutputSPIRVTraverser::accessChainLoad(NodeData *data,
                 loadResult                       = mBuilder.getNewId(decorations);
                 spirv::WriteLoad(mBuilder.getSpirvCurrentFunctionBlock(),
                                  accessChain.preSwizzleTypeId, loadResult, accessChainId, nullptr);
+                if (accessChain.preSwizzleTypeId == typeFloatId)
+                {
+                    isLoadResultFloat = true;
+                }
             }
         }
     }
     else
     {
-        // Load from the access chain.
+        // INFO() << "Yuxin Debug directly load from access chain";
+        //  Load from the access chain.
         const spirv::IdRef accessChainId = accessChainCollapse(data);
-        loadResult                       = mBuilder.getNewId(decorations);
+
+        loadResult = mBuilder.getNewId(decorations);
         spirv::WriteLoad(mBuilder.getSpirvCurrentFunctionBlock(), accessChain.preSwizzleTypeId,
                          loadResult, accessChainId, nullptr);
+        if (accessChain.preSwizzleTypeId == typeFloatId)
+        {
+            isLoadResultFloat = true;
+        }
     }
 
     if (!accessChain.swizzles.empty())
@@ -1023,13 +1043,33 @@ spirv::IdRef OutputSPIRVTraverser::accessChainLoad(NodeData *data,
                                          accessChain.postDynamicComponentTypeId, result, loadResult,
                                          accessChain.dynamicComponent);
         loadResult = result;
+        if (accessChain.postDynamicComponentTypeId == typeFloatId)
+        {
+            isLoadResultFloat = true;
+        }
     }
 
+    // Yuxin TODO Add some code to insert OpQuantizeToF16 instruction
+    // e.g. %newId = OpQuantizeToF16 %resultType accessChainId
     // Upon loading values, cast them to the default SPIR-V variant.
-    const spirv::IdRef castResult =
-        cast(loadResult, valueType, accessChain.typeSpec, {}, resultTypeIdOut);
+    if (isLoadResultFloat)
+    {
+        spirv::IdRef quantizeToF16Result = mBuilder.getNewId({});
+        spirv::WriteQuantizeToF16(mBuilder.getSpirvCurrentFunctionBlock(), typeFloatId,
+                                  quantizeToF16Result, loadResult);
 
-    return castResult;
+        const spirv::IdRef castResult =
+            cast(quantizeToF16Result, valueType, accessChain.typeSpec, {}, resultTypeIdOut);
+
+        return castResult;
+    }
+    else
+    {
+        const spirv::IdRef castResult =
+            cast(loadResult, valueType, accessChain.typeSpec, {}, resultTypeIdOut);
+
+        return castResult;
+    }
 }
 
 void OutputSPIRVTraverser::accessChainStore(NodeData *data,
@@ -5950,6 +5990,8 @@ bool OutputSPIRVTraverser::visitDeclaration(Visit visit, TIntermDeclaration *nod
         else
         {
             // Otherwise generate code to load from right hand side expression.
+            INFO() << "Yuxin Debug right had side expression precision: "
+                   << static_cast<int>(symbol->getType().getPrecision());
             initializerId = accessChainLoad(&mNodeData.back(), symbol->getType(), nullptr);
         }
 
