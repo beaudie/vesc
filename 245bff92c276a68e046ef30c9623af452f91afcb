@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f102ef7_776f8fdc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-24T18:57:13Z",
+      "side": 1,
+      "message": "Some editorial changes if you are willing to take:\n\n\u003e ETC has gradient modes. Two endpoints in BC are RGB565; the color depth is lower than ETC. Two endpoints in RGB888 space may be quite different, but after conversion to RGB565 they may be projected to the same point. This conversion loses quite a lot of details.\n\n\u003e This change tries to change one endpoint to an adjacent one (not optimal) in RGB565, so that all the colors are interpolated between these two endpoints. With this change, the arknight image in b/259327729 improved PSNR from 39 to 49.\n\n\u003e This change includes some of work by @greg\n\n\u003e 1) Use look up table instead of bit operation.\n\u003e 2) Use more vector operations. This may not improve the performance but makes the code short and neat.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 0
+      },
+      "revId": "245bff92c276a68e046ef30c9623af452f91afcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "ab76085a_f5f26595",
