@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "798fe907_3b824a95",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-03-24T18:44:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c87d4f18_809928e4",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 7
+      },
+      "revId": "f666d3784cc2a45f6328a3b0d3c9e2dc2155d31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b18eaadc_994da199",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb00396f_b3c3ccb7",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-03-24T18:44:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b18eaadc_994da199",
+      "range": {
+        "startLine": 150,
+        "startChar": 0,
+        "endLine": 150,
+        "endChar": 1
+      },
+      "revId": "f666d3784cc2a45f6328a3b0d3c9e2dc2155d31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "09a60d3c_d2699beb",
@@ -60,6 +108,24 @@
       "writtenOn": "2023-03-24T14:08:15Z",
       "side": 1,
       "message": "nit: Suggest moving this line to last (index 7), so the right-hand-side matches the value in `bitfieldExtract`.",
+      "revId": "f666d3784cc2a45f6328a3b0d3c9e2dc2155d31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "703908af_e16a84f9",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-03-24T18:44:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09a60d3c_d2699beb",
       "revId": "f666d3784cc2a45f6328a3b0d3c9e2dc2155d31b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -100,6 +166,30 @@
       "writtenOn": "2023-03-24T14:08:15Z",
       "side": 1,
       "message": "nit: tabs here too",
+      "range": {
+        "startLine": 230,
+        "startChar": 0,
+        "endLine": 258,
+        "endChar": 1
+      },
+      "revId": "f666d3784cc2a45f6328a3b0d3c9e2dc2155d31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4335dde4_54d7e1de",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 1
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-03-24T18:44:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ddc6c50_ada85b77",
       "range": {
         "startLine": 230,
         "startChar": 0,
