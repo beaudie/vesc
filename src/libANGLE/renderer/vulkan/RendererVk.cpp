@@ -705,6 +705,74 @@ const char *GetVkObjectTypeName(VkObjectType type)
     }
 }
 
+std::string AnnotateDebugMessage(const char *msg)
+{
+    const char *defaultColor = "\e[0m";
+    const char *keywordColor = "\e[1;94m";
+    const char *operatorColor = "\e[1;94m";
+    const char *numberColor = "\e[1;94m";
+    const char *builtinColor = "\e[93m";
+    const char *valueColor = "\e[3;37m";    // TODO or 3 italic?
+    const char *failColor = "\e[31m";
+
+    std::string result;
+
+    while (*msg)
+    {
+        const char c = *msg++;
+        // Parse ${vu-...} and replace with a color.  ${} resets to default
+        if (c != '$')
+        {
+            result += c;
+            continue;
+        }
+
+        size_t len = 1;
+        if (strncmp(msg, "{vu-keyword}", strlen("{vu-keyword}")) == 0)
+        {
+            len = strlen("{vu-keyword}");
+            result += keywordColor;
+        }
+        else if (strncmp(msg, "{vu-builtin}", strlen("{vu-builtin}")) == 0)
+        {
+            len = strlen("{vu-builtin}");
+            result += builtinColor;
+        }
+        else if (strncmp(msg, "{vu-operator}", strlen("{vu-operator}")) == 0)
+        {
+            len = strlen("{vu-operator}");
+            result += operatorColor;
+        }
+        else if (strncmp(msg, "{vu-number}", strlen("{vu-number}")) == 0)
+        {
+            len = strlen("{vu-number}");
+            result += numberColor;
+        }
+        else if (strncmp(msg, "{vu-value}", strlen("{vu-value}")) == 0)
+        {
+            len = strlen("{vu-value}");
+            result += valueColor;
+        }
+        else if (strncmp(msg, "{vu-fail}", strlen("{vu-fail}")) == 0)
+        {
+            len = strlen("{vu-fail}");
+            result += failColor;
+        }
+        else if (strncmp(msg, "{}", strlen("{}")) == 0)
+        {
+            len = strlen("{}");
+            result += defaultColor;
+        }
+        else
+        {
+            UNREACHABLE();
+        }
+        msg += len;
+    }
+
+    return result;
+}
+
 VKAPI_ATTR VkBool32 VKAPI_CALL
 DebugUtilsMessenger(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
                     VkDebugUtilsMessageTypeFlagsEXT messageTypes,
@@ -712,6 +780,8 @@ DebugUtilsMessenger(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
                     void *userData)
 {
     RendererVk *rendererVk = static_cast<RendererVk *>(userData);
+
+    std::string annotated = AnnotateDebugMessage(callbackData->pMessage);
 
     // See if it's an issue we are aware of and don't want to be spammed about.
     if (ShouldReportDebugMessage(rendererVk, callbackData->pMessageIdName,
@@ -725,7 +795,7 @@ DebugUtilsMessenger(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
     {
         log << "[ " << callbackData->pMessageIdName << " ] ";
     }
-    log << callbackData->pMessage << std::endl;
+    log << annotated << std::endl;
 
     // Aesthetic value based on length of the function name, line number, etc.
     constexpr size_t kStartIndent = 28;
@@ -750,36 +820,11 @@ DebugUtilsMessenger(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
                 << std::endl;
         }
     }
-    // Output the objects involved in this error message.
-    if (callbackData->objectCount > 0)
-    {
-        for (uint32_t i = 0; i < callbackData->objectCount; ++i)
-        {
-            const char *objectName = callbackData->pObjects[i].pObjectName;
-            const char *objectType = GetVkObjectTypeName(callbackData->pObjects[i].objectType);
-            uint64_t objectHandle  = callbackData->pObjects[i].objectHandle;
-            log << std::string(indent, ' ') << "Object: ";
-            if (objectHandle == 0)
-            {
-                log << "VK_NULL_HANDLE";
-            }
-            else
-            {
-                log << "0x" << std::hex << objectHandle << std::dec;
-            }
-            log << " (type = " << objectType << "(" << callbackData->pObjects[i].objectType << "))";
-            if (objectName)
-            {
-                log << " [" << objectName << "]";
-            }
-            log << std::endl;
-        }
-    }
 
     bool isError    = (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT) != 0;
     std::string msg = log.str();
 
-    rendererVk->onNewValidationMessage(msg);
+    rendererVk->onNewValidationMessage(callbackData->pMessageIdName);
 
     if (isError)
     {
@@ -1863,6 +1908,7 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
             VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
 
         messengerInfo.sType           = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+        messengerInfo.flags = 1;    // TODO
         messengerInfo.messageSeverity = kSeveritiesToLog;
         messengerInfo.messageType     = kMessagesToLog;
         messengerInfo.pfnUserCallback = &DebugUtilsMessenger;

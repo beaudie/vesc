@@ -6867,7 +6867,7 @@ void ImageHelper::clearColor(Context *context,
 
     VkImageSubresourceRange range = {};
     range.aspectMask              = VK_IMAGE_ASPECT_COLOR_BIT;
-    range.baseMipLevel            = baseMipLevelVk.get();
+    range.baseMipLevel            = baseMipLevelVk.get() + 10;
     range.levelCount              = levelCount;
     range.baseArrayLayer          = baseArrayLayer;
     range.layerCount              = layerCount;
