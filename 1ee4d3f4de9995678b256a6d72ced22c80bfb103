@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3dd3ad72_8d0b3594",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2271,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-24T17:06:58Z",
+      "side": 1,
+      "message": "Is framebuffer change the only way this can happen? My suggested message was trying to be helpful when this happens for other reasons. But now that I think about it, maybe it\u0027s best to limit this to framebuffer changes.\n\nWhat do you think of setting `mAllowRenderPassToReactivate` to false in `onRenderPassFinished()`, and only set it to true when handling `DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING`? Then you can also remove the bit you added in `handleDirtyAnySamplePassedQueryEnd`.\n\nThat way we could be selective about the conditions we let the RP revive.",
+      "revId": "1ee4d3f4de9995678b256a6d72ced22c80bfb103",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
