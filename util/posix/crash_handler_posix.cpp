@@ -142,7 +142,7 @@ static void Handler(int sig)
 #    elif defined(ANGLE_PLATFORM_POSIX)
 
 // Can control this at a higher level if required.
-#        define ANGLE_HAS_ADDR2LINE
+//#        define ANGLE_HAS_ADDR2LINE
 
 #        if defined(ANGLE_HAS_ADDR2LINE)
 namespace
