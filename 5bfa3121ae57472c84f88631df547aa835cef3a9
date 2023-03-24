@@ -16,6 +16,24 @@
       "message": "In this case, I\u0027d just drop `IsAndroid()`. Maybe replace it with `!isMesa` if mesa is known not to be affected.",
       "revId": "5bfa3121ae57472c84f88631df547aa835cef3a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b58c2649_e8d8c4d8",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2354,
+      "author": {
+        "id": 1379689
+      },
+      "writtenOn": "2023-03-24T18:46:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9da118e_6568284e",
+      "revId": "5bfa3121ae57472c84f88631df547aa835cef3a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
