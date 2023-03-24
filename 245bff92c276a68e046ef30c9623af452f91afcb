@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "f1eafb95_a4c7a03c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-03-24T23:58:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f102ef7_776f8fdc",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 0
+      },
+      "revId": "245bff92c276a68e046ef30c9623af452f91afcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "ab76085a_f5f26595",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 7
@@ -58,6 +82,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d506873_d9545e6a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-03-24T23:58:39Z",
+      "side": 1,
+      "message": "maybe added at next changes.",
+      "parentUuid": "1dfd1614_3383810e",
+      "revId": "245bff92c276a68e046ef30c9623af452f91afcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "289a25bf_5a56e02a",
@@ -71,6 +113,24 @@
       "writtenOn": "2023-03-24T19:08:10Z",
       "side": 1,
       "message": "you should also add my comments to explain the magic values here (https://source.corp.google.com/h/play-internal/codesearch/+/master:battlestar/aosp/device/generic/vulkan-cereal/stream-servers/vulkan/emulated_textures/shaders/AstcToBc3.comp;l\u003d112-118;drc\u003d958a78a35e2593175fc8102c6753335f5d0bf3d0)",
+      "revId": "245bff92c276a68e046ef30c9623af452f91afcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3672ac76_847457c3",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 7
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-03-24T23:58:39Z",
+      "side": 1,
+      "message": "alreay have comments above.",
+      "parentUuid": "289a25bf_5a56e02a",
       "revId": "245bff92c276a68e046ef30c9623af452f91afcb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -109,6 +169,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "965c8acd_05aead00",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 7
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-03-24T23:58:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ba0a8a5_b67881a2",
+      "revId": "245bff92c276a68e046ef30c9623af452f91afcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "418e03b3_fd56167c",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 7
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-03-24T23:58:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6bac2e45_69fb7582",
+      "revId": "245bff92c276a68e046ef30c9623af452f91afcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "66148267_c777bcdf",
@@ -143,6 +239,42 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a761afb_0f3c6335",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 7
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-03-24T23:58:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62677915_d88367ec",
+      "revId": "245bff92c276a68e046ef30c9623af452f91afcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea8a39a1_0d52664b",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 7
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-03-24T23:58:39Z",
+      "side": 1,
+      "message": "1)tested on local a few other textures. all have some improvements.\n2)local run it. but always have some variations. the added instruction are limitted. I\u0027d expect around 5% cost. we proberbly split the shader from\nRGB_BC1, RGBA_BC1, and RGBA_BC3, that cost about 20%.",
+      "parentUuid": "66148267_c777bcdf",
+      "revId": "245bff92c276a68e046ef30c9623af452f91afcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dc2a9730_2ac5934e",
@@ -166,6 +298,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef3f5e20_e8c0359e",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 7
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-03-24T23:58:39Z",
+      "side": 1,
+      "message": "seems not help to reduce the instrction count.",
+      "parentUuid": "dc2a9730_2ac5934e",
+      "range": {
+        "startLine": 246,
+        "startChar": 2,
+        "endLine": 248,
+        "endChar": 60
+      },
+      "revId": "245bff92c276a68e046ef30c9623af452f91afcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "95bebb08_efaed353",
@@ -179,6 +335,30 @@
       "writtenOn": "2023-03-24T19:08:10Z",
       "side": 1,
       "message": "I believe this can be rewritten as \n\n`   maxColor565 +\u003d mix(ivec3(0,0,0), ivec3(1,1,1), needCorrect \u0026\u0026 positive);`\n   \n(and same below)",
+      "range": {
+        "startLine": 249,
+        "startChar": 5,
+        "endLine": 251,
+        "endChar": 61
+      },
+      "revId": "245bff92c276a68e046ef30c9623af452f91afcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f7069b4_4d71620c",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 7
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-03-24T23:58:39Z",
+      "side": 1,
+      "message": "seems needCorrect \u0026\u0026 positive not work for some compilers. it is not the spec of es version\n\nhttps://registry.khronos.org/OpenGL-Refpages/es3/html/mix.xhtml.\ncan not compile when generate spv",
+      "parentUuid": "95bebb08_efaed353",
       "range": {
         "startLine": 249,
         "startChar": 5,

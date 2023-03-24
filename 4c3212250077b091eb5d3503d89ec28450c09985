@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d36a0473_fb2ec8f5",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 8
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-03-24T23:58:39Z",
+      "side": 1,
+      "message": "this seems not help reduce the instruction. but anyway added it.",
+      "range": {
+        "startLine": 248,
+        "startChar": 25,
+        "endLine": 248,
+        "endChar": 36
+      },
+      "revId": "4c3212250077b091eb5d3503d89ec28450c09985",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
