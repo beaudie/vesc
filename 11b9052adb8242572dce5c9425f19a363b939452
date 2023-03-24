@@ -34,6 +34,24 @@
       "parentUuid": "fef79052_a4197306",
       "revId": "11b9052adb8242572dce5c9425f19a363b939452",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fb6d324_3021c855",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-24T21:31:07Z",
+      "side": 1,
+      "message": "Hey Charlie - no warmup would still iterate through the loop multiple times.  `--single-pass` is explictly saying \"Only play through the frame sequence once\".  It could arguably be `--warmup-only`.",
+      "parentUuid": "53b0a3bd_ef6d5886",
+      "revId": "11b9052adb8242572dce5c9425f19a363b939452",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
