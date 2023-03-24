@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3df8daa7_1da21239",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2499,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-03-24T14:38:29Z",
+      "side": 1,
+      "message": "I think the check for (0,0,0,255) was intentional and after this CL this test no longer tests what it was designed for.",
+      "range": {
+        "startLine": 2498,
+        "startChar": 64,
+        "endLine": 2499,
+        "endChar": 46
+      },
+      "revId": "dae99340c9cc725ff0fef604d9e0d872edf4d4be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a9a1baa_19b8ae05",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2535,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-03-24T14:38:29Z",
+      "side": 1,
+      "message": "Also see here.\nLooks like this is the part that doesn\u0027t work as expected.",
+      "range": {
+        "startLine": 2534,
+        "startChar": 17,
+        "endLine": 2535,
+        "endChar": 18
+      },
+      "revId": "dae99340c9cc725ff0fef604d9e0d872edf4d4be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
