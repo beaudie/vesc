@@ -3855,8 +3855,8 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
                             mPhysicalDeviceFeatures.multiDrawIndirect == VK_TRUE);
 
     ANGLE_FEATURE_CONDITION(&mFeatures, perFrameWindowSizeQuery,
-                            IsAndroid() || isIntel || (IsWindows() && isAMD) || IsFuchsia() ||
-                                isSamsung || displayVk->isWayland());
+                            IsAndroid() || (IsWindows() && isAMD) || IsFuchsia() || isSamsung ||
+                                displayVk->isWayland());
 
     ANGLE_FEATURE_CONDITION(&mFeatures, padBuffersToMaxVertexAttribStride, isAMD || isSamsung);
     mMaxVertexAttribStride = std::min(static_cast<uint32_t>(gl::limits::kMaxVertexAttribStride),

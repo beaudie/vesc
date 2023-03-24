@@ -616,10 +616,6 @@ TEST_P(EGLSurfaceTest, SurfaceUseAfterFreeBug)
 // Test that the window surface is correctly resized after calling swapBuffers
 TEST_P(EGLSurfaceTest, ResizeWindow)
 {
-    // http://anglebug.com/4453
-    ANGLE_SKIP_TEST_IF(isVulkanRenderer() && IsLinux() && IsIntel());
-    // Flaky on Linux SwANGLE http://anglebug.com/4453
-    ANGLE_SKIP_TEST_IF(IsLinux() && isSwiftshader());
     // http://anglebug.com/5485
     ANGLE_SKIP_TEST_IF(IsIOS());
     ANGLE_SKIP_TEST_IF(IsLinux() && IsARM());
@@ -674,8 +670,6 @@ TEST_P(EGLSurfaceTest, ResizeWindow)
 // Test that the backbuffer is correctly resized after calling swapBuffers
 TEST_P(EGLSurfaceTest, ResizeWindowWithDraw)
 {
-    // http://anglebug.com/4453
-    ANGLE_SKIP_TEST_IF(IsLinux());
     // http://anglebug.com/5485
     ANGLE_SKIP_TEST_IF(IsIOS());
 
