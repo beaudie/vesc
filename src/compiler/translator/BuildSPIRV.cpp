@@ -2038,7 +2038,17 @@ void SPIRVBuilder::writeInterpolationDecoration(TQualifier qualifier,
                                                 spirv::IdRef id,
                                                 uint32_t fieldIndex)
 {
-    spv::Decoration decoration = spv::DecorationMax;
+    auto write = [&](spv::Decoration decoration) {
+        if (fieldIndex != std::numeric_limits<uint32_t>::max())
+        {
+            spirv::WriteMemberDecorate(&mSpirvDecorations, id, spirv::LiteralInteger(fieldIndex),
+                                       decoration, {});
+        }
+        else
+        {
+            spirv::WriteDecorate(&mSpirvDecorations, id, decoration, {});
+        }
+    };
 
     switch (qualifier)
     {
@@ -2051,40 +2061,45 @@ void SPIRVBuilder::writeInterpolationDecoration(TQualifier qualifier,
         case EvqFlat:
         case EvqFlatOut:
         case EvqFlatIn:
-            decoration = spv::DecorationFlat;
-            break;
+            write(spv::DecorationFlat);
+            return;
 
         case EvqNoPerspective:
         case EvqNoPerspectiveOut:
         case EvqNoPerspectiveIn:
-            decoration = spv::DecorationNoPerspective;
-            break;
+            write(spv::DecorationNoPerspective);
+            return;
 
         case EvqCentroid:
         case EvqCentroidOut:
         case EvqCentroidIn:
-            decoration = spv::DecorationCentroid;
-            break;
+            write(spv::DecorationCentroid);
+            return;
 
         case EvqSample:
         case EvqSampleOut:
         case EvqSampleIn:
-            decoration = spv::DecorationSample;
+            write(spv::DecorationSample);
             addCapability(spv::CapabilitySampleRateShading);
-            break;
+            return;
+
+        case EvqNoPerspectiveCentroid:
+        case EvqNoPerspectiveCentroidOut:
+        case EvqNoPerspectiveCentroidIn:
+            write(spv::DecorationNoPerspective);
+            write(spv::DecorationCentroid);
+            return;
+
+        case EvqNoPerspectiveSample:
+        case EvqNoPerspectiveSampleOut:
+        case EvqNoPerspectiveSampleIn:
+            write(spv::DecorationNoPerspective);
+            write(spv::DecorationSample);
+            addCapability(spv::CapabilitySampleRateShading);
+            return;
 
         default:
             return;
-    }
-
-    if (fieldIndex != std::numeric_limits<uint32_t>::max())
-    {
-        spirv::WriteMemberDecorate(&mSpirvDecorations, id, spirv::LiteralInteger(fieldIndex),
-                                   decoration, {});
-    }
-    else
-    {
-        spirv::WriteDecorate(&mSpirvDecorations, id, decoration, {});
     }
 }
 
