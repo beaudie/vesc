@@ -39,6 +39,30 @@
       },
       "revId": "eec0089a9e58b9012aa20d7a0d9077edee929e7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb49f60e_8d10385e",
+        "filename": "src/compiler/translator/OutputSPIRV.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5991,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-03-24T23:17:09Z",
+      "side": 1,
+      "message": "Thank you. I have added the condition to only apply the `spv::DecorationAliased` to SSBO and if the corresponding feature is enabled.",
+      "parentUuid": "7586591a_10317433",
+      "range": {
+        "startLine": 5991,
+        "startChar": 4,
+        "endLine": 5991,
+        "endChar": 8
+      },
+      "revId": "eec0089a9e58b9012aa20d7a0d9077edee929e7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
