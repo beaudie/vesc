@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "62127cba_b7a08b9b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2263,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-24T02:52:30Z",
+      "side": 1,
+      "message": "Can this happen? ISTM it\u0027s better for FramebufferVk to revive the RP and turn these into vkCmdClearAttachments.",
+      "range": {
+        "startLine": 2263,
+        "startChar": 56,
+        "endLine": 2263,
+        "endChar": 95
+      },
+      "revId": "3b979236fe66c3eebded3bfcd94a4316e307c7d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a5d94554_8c636cc8",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 11
