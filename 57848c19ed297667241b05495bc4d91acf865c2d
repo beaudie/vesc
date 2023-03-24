@@ -16,6 +16,52 @@
       "message": "Further test iterations found that ARM Mali-T860 fails for a different reason.",
       "revId": "57848c19ed297667241b05495bc4d91acf865c2d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb5c7535_ed958da7",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2259,
+      "author": {
+        "id": 1379689
+      },
+      "writtenOn": "2023-03-24T06:35:18Z",
+      "side": 1,
+      "message": "There are chromeos devices using Qualcomm drivers, lacros is running on ANGLE. I think we might need to expand these to include ChromeOS as well, WDYT?",
+      "range": {
+        "startLine": 2259,
+        "startChar": 28,
+        "endLine": 2259,
+        "endChar": 53
+      },
+      "revId": "57848c19ed297667241b05495bc4d91acf865c2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e14b2e3c_fe0d8885",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2355,
+      "author": {
+        "id": 1379689
+      },
+      "writtenOn": "2023-03-24T06:35:18Z",
+      "side": 1,
+      "message": "I didn\u0027t expand this b/c the oldest board with Mali-G is Mali-G57",
+      "range": {
+        "startLine": 2355,
+        "startChar": 13,
+        "endLine": 2355,
+        "endChar": 24
+      },
+      "revId": "57848c19ed297667241b05495bc4d91acf865c2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
