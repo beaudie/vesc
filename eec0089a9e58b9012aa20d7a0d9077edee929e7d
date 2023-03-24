@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "31b5954d_96169ac9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2023-03-24T18:36:49Z",
+      "side": 1,
+      "message": "Have my +2 for confirming issue against mali-g57 + r40p0 has been worked around. The same is not seen on g72 or g52, just fyi.",
+      "revId": "eec0089a9e58b9012aa20d7a0d9077edee929e7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7586591a_10317433",
