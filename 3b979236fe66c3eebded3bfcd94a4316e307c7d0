@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2068f28a_c704707e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2263,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-24T16:58:16Z",
+      "side": 1,
+      "message": "Yes, one of the end2end test does this (blit followed by clear and then draw). Since no app trace hitting this, it is lower priority to optimize it (I can have a quick try in a separate CL to see if I can fix it).",
+      "parentUuid": "62127cba_b7a08b9b",
+      "range": {
+        "startLine": 2263,
+        "startChar": 56,
+        "endLine": 2263,
+        "endChar": 95
+      },
+      "revId": "3b979236fe66c3eebded3bfcd94a4316e307c7d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a5d94554_8c636cc8",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 11
@@ -37,6 +61,30 @@
       "writtenOn": "2023-03-24T00:37:21Z",
       "side": 1,
       "message": "Suggestion: Move to a `bool` above the `if`?",
+      "range": {
+        "startLine": 2262,
+        "startChar": 8,
+        "endLine": 2264,
+        "endChar": 58
+      },
+      "revId": "3b979236fe66c3eebded3bfcd94a4316e307c7d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14ef9780_349e2e82",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2264,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-24T16:58:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a5d94554_8c636cc8",
       "range": {
         "startLine": 2262,
         "startChar": 8,
@@ -64,6 +112,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a290d97_e6f3f19d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2266,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-24T16:58:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "369c3555_f2526a4a",
+      "revId": "3b979236fe66c3eebded3bfcd94a4316e307c7d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4ab30c6c_9f168bdc",
@@ -77,6 +143,30 @@
       "writtenOn": "2023-03-24T00:37:21Z",
       "side": 1,
       "message": "nit: Extra?",
+      "range": {
+        "startLine": 106,
+        "startChar": 27,
+        "endLine": 106,
+        "endChar": 31
+      },
+      "revId": "3b979236fe66c3eebded3bfcd94a4316e307c7d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f5c09cf_dc612db2",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-24T16:58:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ab30c6c_9f168bdc",
       "range": {
         "startLine": 106,
         "startChar": 27,
