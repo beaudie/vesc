@@ -49,6 +49,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "369c3555_f2526a4a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2266,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-24T14:42:05Z",
+      "side": 1,
+      "message": "Could change this to a perf warning? Something like \"Recovering closed render pass on draw. Avoid unnecessarily changing the framebuffer and other render-pass-closing operations (see operation before this draw)\".",
+      "revId": "3b979236fe66c3eebded3bfcd94a4316e307c7d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4ab30c6c_9f168bdc",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
         "patchSetId": 11
