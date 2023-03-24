@@ -231,6 +231,24 @@
       "parentUuid": "c90e9bdd_b016f875",
       "revId": "a3666c8a6dd05f3be749221e595730fd4aec1d72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a179473_c19949c7",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-03-24T21:22:15Z",
+      "side": 1,
+      "message": "It\u0027s possible that a texture would created by an ES3 context is not renderable or sampleable from an ES2 context.\n\nMoving away from the global share group is a really good goal to have. It makes ANGLE\u0027s architecture more complex and sharing via a GL texture has some context version interactions like this one.\n\nI think we hit the issue here in particular (Nexus 5X) because it doesn\u0027t ever attempt to use EGL image backing for SharedImage. Windows does by default AFIAK. Linux I\u0027m not sure.",
+      "parentUuid": "aacf59ac_190d9004",
+      "revId": "a3666c8a6dd05f3be749221e595730fd4aec1d72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
