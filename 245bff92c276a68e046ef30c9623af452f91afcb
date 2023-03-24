@@ -39,6 +39,154 @@
       "message": "hi all,\nplease help to review the changes.\n\nthanks\n\nhailin",
       "revId": "245bff92c276a68e046ef30c9623af452f91afcb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1dfd1614_3383810e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2023-03-24T19:08:10Z",
+      "side": 1,
+      "message": "Thanks for implementing some of my changes from https://source.corp.google.com/h/play-internal/codesearch/+/master:battlestar/aosp/device/generic/vulkan-cereal/stream-servers/vulkan/emulated_textures/shaders/AstcToBc3.comp.\n\nI added some comments about that already, but it would be really nice if you could copy not just the code, but also the comments, as they really help understanding the code :)",
+      "revId": "245bff92c276a68e046ef30c9623af452f91afcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "289a25bf_5a56e02a",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 7
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2023-03-24T19:08:10Z",
+      "side": 1,
+      "message": "you should also add my comments to explain the magic values here (https://source.corp.google.com/h/play-internal/codesearch/+/master:battlestar/aosp/device/generic/vulkan-cereal/stream-servers/vulkan/emulated_textures/shaders/AstcToBc3.comp;l\u003d112-118;drc\u003d958a78a35e2593175fc8102c6753335f5d0bf3d0)",
+      "revId": "245bff92c276a68e046ef30c9623af452f91afcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ba0a8a5_b67881a2",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 7
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2023-03-24T19:08:10Z",
+      "side": 1,
+      "message": "nit: `covMat`, not `coffMat`",
+      "revId": "245bff92c276a68e046ef30c9623af452f91afcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bac2e45_69fb7582",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 7
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2023-03-24T19:08:10Z",
+      "side": 1,
+      "message": "also, it would be helpful to add my comments and format the code the same way as https://source.corp.google.com/h/play-internal/codesearch/+/master:battlestar/aosp/device/generic/vulkan-cereal/stream-servers/vulkan/emulated_textures/shaders/AstcToBc3.comp;l\u003d159-163;drc\u003d958a78a35e2593175fc8102c6753335f5d0bf3d0  - it helps visualize that this is indeed the covariance matrix",
+      "revId": "245bff92c276a68e046ef30c9623af452f91afcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66148267_c777bcdf",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 7
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2023-03-24T19:08:10Z",
+      "side": 1,
+      "message": "Before submitting this change, it would be nice to do 2 things:\n\n1) calculate the PSNR change on more than just one texture.\n2) do a before / after speed benchmark. I have code for that that that I can share with you",
+      "revId": "245bff92c276a68e046ef30c9623af452f91afcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62677915_d88367ec",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 7
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2023-03-24T19:08:10Z",
+      "side": 1,
+      "message": "Also, you should add a comment to explain how/why this works (basically what you explain in the CL description",
+      "revId": "245bff92c276a68e046ef30c9623af452f91afcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc2a9730_2ac5934e",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 7
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2023-03-24T19:08:10Z",
+      "side": 1,
+      "message": "can you maybe use the sign() function here? https://registry.khronos.org/OpenGL-Refpages/gl4/html/sign.xhtml",
+      "range": {
+        "startLine": 246,
+        "startChar": 2,
+        "endLine": 248,
+        "endChar": 60
+      },
+      "revId": "245bff92c276a68e046ef30c9623af452f91afcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95bebb08_efaed353",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 7
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2023-03-24T19:08:10Z",
+      "side": 1,
+      "message": "I believe this can be rewritten as \n\n`   maxColor565 +\u003d mix(ivec3(0,0,0), ivec3(1,1,1), needCorrect \u0026\u0026 positive);`\n   \n(and same below)",
+      "range": {
+        "startLine": 249,
+        "startChar": 5,
+        "endLine": 251,
+        "endChar": 61
+      },
+      "revId": "245bff92c276a68e046ef30c9623af452f91afcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
