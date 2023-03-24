@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c87d4f18_809928e4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-24T14:08:15Z",
+      "side": 1,
+      "message": "nit: Please prefix with `Vulkan: `",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 7
+      },
+      "revId": "f666d3784cc2a45f6328a3b0d3c9e2dc2155d31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b18eaadc_994da199",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-24T14:08:15Z",
+      "side": 1,
+      "message": "nit: convert to spaces. Some downstream project is picky about tabs",
+      "range": {
+        "startLine": 150,
+        "startChar": 0,
+        "endLine": 150,
+        "endChar": 1
+      },
+      "revId": "f666d3784cc2a45f6328a3b0d3c9e2dc2155d31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09a60d3c_d2699beb",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-24T14:08:15Z",
+      "side": 1,
+      "message": "nit: Suggest moving this line to last (index 7), so the right-hand-side matches the value in `bitfieldExtract`.",
+      "revId": "f666d3784cc2a45f6328a3b0d3c9e2dc2155d31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b757747_5e8d8094",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 1
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-24T14:08:15Z",
+      "side": 1,
+      "message": "Clever!",
+      "range": {
+        "startLine": 230,
+        "startChar": 14,
+        "endLine": 230,
+        "endChar": 43
+      },
+      "revId": "f666d3784cc2a45f6328a3b0d3c9e2dc2155d31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ddc6c50_ada85b77",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 1
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-24T14:08:15Z",
+      "side": 1,
+      "message": "nit: tabs here too",
+      "range": {
+        "startLine": 230,
+        "startChar": 0,
+        "endLine": 258,
+        "endChar": 1
+      },
+      "revId": "f666d3784cc2a45f6328a3b0d3c9e2dc2155d31b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
