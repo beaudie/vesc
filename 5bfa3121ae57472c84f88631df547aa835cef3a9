@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9da118e_6568284e",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2354,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-24T14:13:50Z",
+      "side": 1,
+      "message": "In this case, I\u0027d just drop `IsAndroid()`. Maybe replace it with `!isMesa` if mesa is known not to be affected.",
+      "revId": "5bfa3121ae57472c84f88631df547aa835cef3a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

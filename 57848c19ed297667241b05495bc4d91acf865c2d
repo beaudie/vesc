@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd04e578_ca971714",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2259,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-24T14:13:50Z",
+      "side": 1,
+      "message": "IMO, we should stop doing `platform \u0026\u0026 device` checks, and instead do `device \u0026\u0026 driver \u0026\u0026 version` check unless there\u0027s really something platform specific. Like `Intel \u0026\u0026 Mesa \u0026\u0026 \u003c22` instead of `Linux \u0026\u0026 Intel`, or in this case `QC \u0026\u0026 proprietary \u0026\u0026 \u003c1.2.3` instead of `Android \u0026\u0026 QC`.\n\nThat\u0027s a big clean up though (especially because we generally didn\u0027t record the version information), so feel free to `|| CrOS`.",
+      "parentUuid": "bb5c7535_ed958da7",
+      "range": {
+        "startLine": 2259,
+        "startChar": 28,
+        "endLine": 2259,
+        "endChar": 53
+      },
+      "revId": "57848c19ed297667241b05495bc4d91acf865c2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "e14b2e3c_fe0d8885",
