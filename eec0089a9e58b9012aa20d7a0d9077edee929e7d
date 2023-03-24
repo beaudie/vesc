@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7586591a_10317433",
+        "filename": "src/compiler/translator/OutputSPIRV.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5991,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-24T18:09:03Z",
+      "side": 1,
+      "message": "Please add `if (is ssbo \u0026\u0026 workaround is in effect)`. You\u0027ll need a Vulkan feature and a `ShCompileOptions` entry.\n\nI\u0027d like to keep the effect of this as contained as possible.",
+      "range": {
+        "startLine": 5991,
+        "startChar": 4,
+        "endLine": 5991,
+        "endChar": 8
+      },
+      "revId": "eec0089a9e58b9012aa20d7a0d9077edee929e7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
