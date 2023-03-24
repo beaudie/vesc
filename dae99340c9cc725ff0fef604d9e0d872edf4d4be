@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dfec3544_80848b62",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2499,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-03-24T14:52:47Z",
+      "side": 1,
+      "message": "Looking at https://chromium-review.googlesource.com/c/angle/angle/+/241880 and https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d873, I think the test indeed is intended to test something specific to D3D backend. I think:\n1. We should run it only on D3D backend\n2. We should move it to whitebox tests, as it assumes internal representation",
+      "parentUuid": "b2ff882f_4a8c950d",
+      "range": {
+        "startLine": 2498,
+        "startChar": 64,
+        "endLine": 2499,
+        "endChar": 46
+      },
+      "revId": "dae99340c9cc725ff0fef604d9e0d872edf4d4be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6a9a1baa_19b8ae05",
         "filename": "src/tests/gl_tests/TextureTest.cpp",
         "patchSetId": 4
