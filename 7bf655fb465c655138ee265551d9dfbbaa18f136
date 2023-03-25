@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "549b5b9a_5630ddb1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-03-25T01:57:29Z",
+      "side": 1,
+      "message": "I can\u0027t really tell if resource aliasing is supported on D3D: \n\nIn this post: it firstly mentioned: `Aliasing of resource ranges is not allowed.`.\n\nThen in the below section: \nhttps://learn.microsoft.com/en-us/windows/win32/direct3d12/resource-binding-in-hlsl#resource-aliasing, it says `However, the root signature mechanism makes it possible to alias (overlap) heap ranges of compatible types.`\n\nI will skip the test on D3D11 backend for now.",
+      "revId": "7bf655fb465c655138ee265551d9dfbbaa18f136",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
