@@ -16,6 +16,69 @@
       "message": "I can\u0027t really tell if resource aliasing is supported on D3D: \n\nIn this post: it firstly mentioned: `Aliasing of resource ranges is not allowed.`.\n\nThen in the below section: \nhttps://learn.microsoft.com/en-us/windows/win32/direct3d12/resource-binding-in-hlsl#resource-aliasing, it says `However, the root signature mechanism makes it possible to alias (overlap) heap ranges of compatible types.`\n\nI will skip the test on D3D11 backend for now.",
       "revId": "7bf655fb465c655138ee265551d9dfbbaa18f136",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b950013f_8e264b5d",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-26T04:54:53Z",
+      "side": 1,
+      "message": "nit: `issuetracker.google.com/`. `b/` doesn\u0027t make sense to non-Googlers",
+      "range": {
+        "startLine": 420,
+        "startChar": 7,
+        "endLine": 420,
+        "endChar": 9
+      },
+      "revId": "7bf655fb465c655138ee265551d9dfbbaa18f136",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99e3a550_841630e2",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 7
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-26T04:54:53Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 11,
+        "startChar": 28,
+        "endLine": 11,
+        "endChar": 34
+      },
+      "revId": "7bf655fb465c655138ee265551d9dfbbaa18f136",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2e925b3_af70ea78",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 1174,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-26T04:54:53Z",
+      "side": 1,
+      "message": "If you enable this workaround on QC, does the test pass Pixel 4 too? What about using Volatile?\n\nI\u0027m curious to know if QC also has some optimization here",
+      "revId": "7bf655fb465c655138ee265551d9dfbbaa18f136",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
