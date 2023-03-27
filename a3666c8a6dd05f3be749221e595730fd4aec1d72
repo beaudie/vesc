@@ -285,6 +285,24 @@
       "parentUuid": "b5e94d79_deaa790e",
       "revId": "a3666c8a6dd05f3be749221e595730fd4aec1d72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f092240_175fffc3",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1267026
+      },
+      "writtenOn": "2023-03-27T21:33:41Z",
+      "side": 1,
+      "message": "just had an offline chat with vasiliy. windows and linux are using gltexture backing and not egl ones but angle backend for them are different d3d for windows and desktop gl for linux. so essentially might be using different code.\ni am checking where the rgba8 format texture is being generated in chrome to debug more.",
+      "parentUuid": "6907b85f_1996c27f",
+      "revId": "a3666c8a6dd05f3be749221e595730fd4aec1d72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
