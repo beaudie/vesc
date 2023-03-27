@@ -4650,12 +4650,17 @@ void ContextVk::updateSampleMaskWithRasterizationSamples(const uint32_t rasteriz
     ASSERT(mState.getMaxSampleMaskWords() == 1);
 
     uint32_t mask = std::numeric_limits<uint16_t>::max();
-    if (mState.isSampleMaskEnabled() && rasterizationSamples > 1)
-    {
-        mask = mState.getSampleMaskWord(0) & angle::BitMask<uint32_t>(rasterizationSamples);
-    }
 
-    ApplySampleCoverage(mState, coverageSampleCount, &mask);
+    // This condition assumes that sample counts do not contain 1.
+    if (rasterizationSamples > 1)
+    {
+        if (mState.isSampleMaskEnabled())
+        {
+            mask = mState.getSampleMaskWord(0) & angle::BitMask<uint32_t>(rasterizationSamples);
+        }
+
+        ApplySampleCoverage(mState, coverageSampleCount, &mask);
+    }
 
     mGraphicsPipelineDesc->updateSampleMask(&mGraphicsPipelineTransition, 0, mask);
 }
