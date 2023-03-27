@@ -16,6 +16,23 @@
       "message": "+Geoff for owners",
       "revId": "33f10a4478b9e6de8c7ff90c88be0ddaaed7e700",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a293b30_0b7fc2d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-27T15:05:17Z",
+      "side": 1,
+      "message": "Drive by: _Or_ just add `operator !\u003d` manually to avoid tripping up others in the future.",
+      "revId": "33f10a4478b9e6de8c7ff90c88be0ddaaed7e700",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
