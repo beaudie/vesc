@@ -34,6 +34,24 @@
       "parentUuid": "3cac9f5a_f9797301",
       "revId": "648f3657c3f70fd7b95379b2b075eeca42e54020",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1c36e5a_b619a394",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2023-03-27T13:54:19Z",
+      "side": 1,
+      "message": "Ah, this is actually relying on a C++20 feature that automatically generates `operator!\u003d` from `operator\u003d\u003d`. (Note that, other than designated initializers, chromium isn\u0027t allowing C++20 yet https://chromium.googlesource.com/chromium/src/+/HEAD/styleguide/c++/c++-features.md)",
+      "parentUuid": "29e7f248_bddd1dc3",
+      "revId": "648f3657c3f70fd7b95379b2b075eeca42e54020",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
