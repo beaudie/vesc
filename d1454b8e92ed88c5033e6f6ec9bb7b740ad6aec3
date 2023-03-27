@@ -79,6 +79,24 @@
       "message": "Please change to a helper in the anonymous namespace at the top of the file.",
       "revId": "d1454b8e92ed88c5033e6f6ec9bb7b740ad6aec3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7472121e_2eb97d28",
+        "filename": "src/compiler/translator/BuildSPIRV.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2041,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-03-27T16:30:45Z",
+      "side": 1,
+      "message": "Should the helper\u0027s signature be like this?\n```\nvoid WriteDecoration(spirv::Blob \u0026spirvDecorations,\n                     spirv::IdRef id,\n                     uint32_t fieldIndex,\n                     spv::Decoration decoration)\n```",
+      "parentUuid": "8f569d7e_6e947d55",
+      "revId": "d1454b8e92ed88c5033e6f6ec9bb7b740ad6aec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
