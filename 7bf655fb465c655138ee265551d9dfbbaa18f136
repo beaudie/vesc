@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f7ec5d7_4a5f2578",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-03-27T17:47:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b950013f_8e264b5d",
+      "range": {
+        "startLine": 420,
+        "startChar": 7,
+        "endLine": 420,
+        "endChar": 9
+      },
+      "revId": "7bf655fb465c655138ee265551d9dfbbaa18f136",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "99e3a550_841630e2",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "13efe48d_e824fb8e",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 7
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-03-27T17:47:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99e3a550_841630e2",
+      "range": {
+        "startLine": 11,
+        "startChar": 28,
+        "endLine": 11,
+        "endChar": 34
+      },
+      "revId": "7bf655fb465c655138ee265551d9dfbbaa18f136",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e2e925b3_af70ea78",
@@ -77,6 +125,24 @@
       "writtenOn": "2023-03-26T04:54:53Z",
       "side": 1,
       "message": "If you enable this workaround on QC, does the test pass Pixel 4 too? What about using Volatile?\n\nI\u0027m curious to know if QC also has some optimization here",
+      "revId": "7bf655fb465c655138ee265551d9dfbbaa18f136",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e37d5fe8_a6dbdd1b",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 1174,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-03-27T17:47:11Z",
+      "side": 1,
+      "message": "If I enable this workaround on QC, the test still fails on Pixel4.\nIf I enable this workaround + using `DecorationVolatile`, the test still fails on Pixel4:(",
+      "parentUuid": "e2e925b3_af70ea78",
       "revId": "7bf655fb465c655138ee265551d9dfbbaa18f136",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
