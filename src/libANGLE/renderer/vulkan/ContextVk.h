@@ -626,9 +626,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         return mRenderPassCommands->started() && mRenderPassCommands->usesImage(image);
     }
 
-    bool hasActiveRenderPassWithCommands() const
+    bool hasStartedRenderPassWithCommands() const
     {
-        return hasActiveRenderPass() && !mRenderPassCommands->getCommandBuffer().empty();
+        return mRenderPassCommands->started() && !mRenderPassCommands->getCommandBuffer().empty();
     }
 
     vk::RenderPassCommandBufferHelper &getStartedRenderPassCommands()

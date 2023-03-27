@@ -2289,14 +2289,14 @@ angle::Result ContextVk::handleDirtyGraphicsRenderPass(DirtyBits::Iterator *dirt
     // clear are handled differently.
     bool reactivateStartedRenderPass =
         hasStartedRenderPassWithQueueSerial(drawFramebufferVk->getLastRenderPassQueueSerial()) &&
-        mAllowRenderPassToReactivate && !drawFramebufferVk->hasDeferredClears() &&
-        renderArea == mRenderPassCommands->getRenderArea();
+        mAllowRenderPassToReactivate && renderArea == mRenderPassCommands->getRenderArea();
     if (reactivateStartedRenderPass)
     {
         ANGLE_VK_PERF_WARNING(this, GL_DEBUG_SEVERITY_HIGH,
                               "Reactivate already started render pass on draw. Avoid unnecessary "
                               "framebuffer changes.");
         mRenderPassCommandBuffer = &mRenderPassCommands->getCommandBuffer();
+        ASSERT(!drawFramebufferVk->hasDeferredClears());
         ASSERT(hasActiveRenderPass());
         ASSERT(drawFramebufferVk->getRenderPassDesc() == mRenderPassCommands->getRenderPassDesc());
 

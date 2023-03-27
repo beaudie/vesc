@@ -523,7 +523,7 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
     bool clearDepthWithDraw   = clearDepth && scissoredClear;
     bool clearStencilWithDraw = clearStencil && (maskedClearStencil || scissoredClear);
 
-    const bool isMidRenderPassClear = contextVk->hasActiveRenderPassWithCommands();
+    const bool isMidRenderPassClear = contextVk->hasStartedRenderPassWithCommands();
     if (isMidRenderPassClear)
     {
         // If a render pass is open with commands, it must be for this framebuffer.  Otherwise,
