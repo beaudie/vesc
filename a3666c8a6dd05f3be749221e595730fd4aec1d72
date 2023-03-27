@@ -249,6 +249,24 @@
       "parentUuid": "aacf59ac_190d9004",
       "revId": "a3666c8a6dd05f3be749221e595730fd4aec1d72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5e94d79_deaa790e",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1267026
+      },
+      "writtenOn": "2023-03-27T19:57:53Z",
+      "side": 1,
+      "message": "windows uses egl(via d3dimage) but linux seems to not.\ni tried to check some existing linux bots and seems like we do have same \"texture not renderable\" errors in the logs with webgl tests. Those errors are ignored and tests are reported as passing by bots currently.\ni am ok with moving to egl on android and maybe on linux later as well.",
+      "parentUuid": "5a179473_c19949c7",
+      "revId": "a3666c8a6dd05f3be749221e595730fd4aec1d72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
