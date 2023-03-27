@@ -63,7 +63,6 @@ namespace sh
 namespace
 {
 
-constexpr Name kSampleMaskWriteFuncName("writeSampleMask", SymbolType::AngleInternal);
 constexpr Name kFlippedPointCoordName("flippedPointCoord", SymbolType::AngleInternal);
 constexpr Name kFlippedFragCoordName("flippedFragCoord", SymbolType::AngleInternal);
 
@@ -320,14 +319,169 @@ void AddFragDepthEXTDeclaration(TCompiler &compiler, TIntermBlock &root, TSymbol
     }
     AddFragDepthDeclaration(root, symbolTable);
 }
-void AddSampleMaskDeclaration(TIntermBlock &root, TSymbolTable &symbolTable)
+
+[[nodiscard]] bool AddNumSamplesDeclaration(TCompiler &compiler,
+                                            TIntermBlock &root,
+                                            TSymbolTable &symbolTable)
 {
-    TType *gl_SampleMaskType = new TType(EbtUInt, EbpHigh, EvqSampleMask, 1, 1);
-    const TVariable *gl_SampleMask =
-        new TVariable(&symbolTable, ImmutableString("gl_SampleMask"), gl_SampleMaskType,
-                      SymbolType::BuiltIn, TExtension::UNDEFINED);
-    root.insertChildNodes(FindMainIndex(&root),
-                          TIntermSequence{new TIntermDeclaration{gl_SampleMask}});
+    const TVariable *glNumSamples = BuiltInVariable::gl_NumSamples();
+    DeclareRightBeforeMain(root, *glNumSamples);
+
+    TIntermBinary *assignment = new TIntermBinary(
+        TOperator::EOpAssign, new TIntermSymbol(glNumSamples),
+        CreateBuiltInFunctionCallNode("numSamples", {}, symbolTable, kESSLInternalBackendBuiltIns));
+    return RunAtTheBeginningOfShader(&compiler, &root, assignment);
+}
+
+[[nodiscard]] bool AddSamplePositionDeclaration(TCompiler &compiler,
+                                                TIntermBlock &root,
+                                                TSymbolTable &symbolTable)
+{
+    const TVariable *glSamplePosition = BuiltInVariable::gl_SamplePosition();
+    DeclareRightBeforeMain(root, *glSamplePosition);
+
+    // gl_SamplePosition = metal::get_sample_position(uint(gl_SampleID))
+    TIntermBinary *assignment = new TIntermBinary(
+        TOperator::EOpAssign, new TIntermSymbol(glSamplePosition),
+        CreateBuiltInFunctionCallNode("samplePosition",
+                                      {TIntermAggregate::CreateConstructor(
+                                          *StaticType::GetBasic<EbtUInt, EbpHigh>(),
+                                          {new TIntermSymbol(BuiltInVariable::gl_SampleID())})},
+                                      symbolTable, kESSLInternalBackendBuiltIns));
+    return RunAtTheBeginningOfShader(&compiler, &root, assignment);
+}
+
+[[nodiscard]] bool AddSampleMaskInDeclaration(TCompiler &compiler,
+                                              TIntermBlock &root,
+                                              TSymbolTable &symbolTable,
+                                              const DriverUniformMetal *driverUniforms,
+                                              bool perSampleShading)
+{
+    // in highp int gl_SampleMaskIn[1]
+    const TVariable *glSampleMaskIn = static_cast<const TVariable *>(
+        symbolTable.findBuiltIn(ImmutableString("gl_SampleMaskIn"), compiler.getShaderVersion()));
+    DeclareRightBeforeMain(root, *glSampleMaskIn);
+
+    // Reference to gl_SampleMaskIn[0]
+    TIntermBinary *glSampleMaskIn0 =
+        new TIntermBinary(EOpIndexDirect, new TIntermSymbol(glSampleMaskIn), CreateIndexNode(0));
+
+    // When per-sample shading is active due to the use of a fragment input qualified
+    // by sample or due to the use of the gl_SampleID or gl_SamplePosition variables,
+    // only the bit for the current sample is set in gl_SampleMaskIn.
+    TIntermBlock *block = new TIntermBlock;
+    if (perSampleShading)
+    {
+        // gl_SampleMaskIn[0] = 1 << gl_SampleID;
+        block->appendStatement(new TIntermBinary(
+            EOpAssign, glSampleMaskIn0,
+            new TIntermBinary(EOpBitShiftLeft, CreateUIntNode(1),
+                              new TIntermSymbol(BuiltInVariable::gl_SampleID()))));
+    }
+    else
+    {
+        // uint32_t ANGLE_metal_SampleMaskIn [[sample_mask]]
+        TVariable *angleSampleMaskIn = new TVariable(
+            &symbolTable, ImmutableString("metal_SampleMaskIn"),
+            new TType(EbtUInt, EbpHigh, EvqSampleMaskIn, 1), SymbolType::AngleInternal);
+        DeclareRightBeforeMain(root, *angleSampleMaskIn);
+
+        // gl_SampleMaskIn[0] = ANGLE_metal_SampleMaskIn;
+        block->appendStatement(
+            new TIntermBinary(EOpAssign, glSampleMaskIn0, new TIntermSymbol(angleSampleMaskIn)));
+    }
+
+    // Bits in the sample mask corresponding to covered samples
+    // that will be unset due to SAMPLE_COVERAGE or SAMPLE_MASK
+    // will not be set (section 4.1.3).
+    // if (ANGLESampleMaskEnabled)
+    // {
+    //      gl_SampleMaskIn[0] &= ANGLE_angleUniforms.coverageMask;
+    // }
+    TIntermBlock *coverageBlock = new TIntermBlock;
+    coverageBlock->appendStatement(new TIntermBinary(
+        EOpBitwiseAndAssign, glSampleMaskIn0->deepCopy(), driverUniforms->getCoverageMaskField()));
+
+    TVariable *sampleMaskEnabledVar = new TVariable(
+        &symbolTable, sh::ImmutableString(mtl::kSampleMaskEnabledConstName),
+        StaticType::Get<EbtBool, EbpUndefined, EvqSpecConst, 1, 1>(), SymbolType::AngleInternal);
+    block->appendStatement(
+        new TIntermIfElse(new TIntermSymbol(sampleMaskEnabledVar), coverageBlock, nullptr));
+
+    return RunAtTheBeginningOfShader(&compiler, &root, block);
+}
+
+[[nodiscard]] bool AddSampleMaskDeclaration(TCompiler &compiler,
+                                            TIntermBlock &root,
+                                            TSymbolTable &symbolTable,
+                                            const DriverUniformMetal *driverUniforms,
+                                            bool emulateAlphaToCoverage,
+                                            bool usesSampleMask)
+{
+    // uint32_t ANGLE_metal_SampleMask [[sample_mask]]
+    TVariable *angleSampleMask =
+        new TVariable(&symbolTable, ImmutableString("metal_SampleMask"),
+                      new TType(EbtUInt, EbpHigh, EvqSampleMask, 1), SymbolType::AngleInternal);
+    DeclareRightBeforeMain(root, *angleSampleMask);
+
+    // ANGLE_metal_SampleMask = ANGLE_angleUniforms.coverageMask;
+    TIntermBlock *block = new TIntermBlock;
+    block->appendStatement(new TIntermBinary(EOpAssign, new TIntermSymbol(angleSampleMask),
+                                             driverUniforms->getCoverageMaskField()));
+    if (usesSampleMask)
+    {
+        // out highp int gl_SampleMask[1];
+        const TVariable *glSampleMask = static_cast<const TVariable *>(
+            symbolTable.findBuiltIn(ImmutableString("gl_SampleMask"), compiler.getShaderVersion()));
+        DeclareRightBeforeMain(root, *glSampleMask);
+
+        // ANGLE_metal_SampleMask &= gl_SampleMask[0];
+        TIntermBinary *glSampleMask0 =
+            new TIntermBinary(EOpIndexDirect, new TIntermSymbol(glSampleMask), CreateIndexNode(0));
+        block->appendStatement(new TIntermBinary(
+            EOpBitwiseAndAssign, new TIntermSymbol(angleSampleMask), glSampleMask0));
+    }
+
+    if (emulateAlphaToCoverage)
+    {
+        TVariable *alpha0 =
+            new TVariable(&symbolTable, sh::ImmutableString("_ALPHA0"),
+                          StaticType::Get<EbtFloat, EbpUndefined, EvqSpecConst, 1, 1>(),
+                          SymbolType::AngleInternal);
+
+        // TODO: dithering
+        // ANGLE_metal_SampleMask &= (1 << uint(round(saturate(alpha) * get_num_samples()))) - 1;
+        TIntermTyped *saturatedAlpha = CreateBuiltInFunctionCallNode(
+            "saturate", {new TIntermSymbol(alpha0)}, symbolTable, kESSLInternalBackendBuiltIns);
+
+        TIntermTyped *scaledAlpha =
+            new TIntermBinary(EOpMul, saturatedAlpha,
+                              CreateBuiltInFunctionCallNode("numSamples", {}, symbolTable,
+                                                            kESSLInternalBackendBuiltIns));
+
+        TIntermTyped *numberOfSamplesUsed = TIntermAggregate::CreateConstructor(
+            *StaticType::GetBasic<EbtUInt, EbpHigh>(),
+            {CreateBuiltInFunctionCallNode("round", {scaledAlpha}, symbolTable, 300)});
+
+        TIntermTyped *mask = new TIntermBinary(
+            EOpSub, new TIntermBinary(EOpBitShiftLeft, CreateUIntNode(1), numberOfSamplesUsed),
+            CreateUIntNode(1));
+
+        TIntermBlock *alphaBlock = new TIntermBlock;
+        alphaBlock->appendStatement(
+            new TIntermBinary(EOpBitwiseAndAssign, new TIntermSymbol(angleSampleMask), mask));
+
+        block->appendStatement(
+            new TIntermIfElse(driverUniforms->getAlphaToCoverage(), alphaBlock, nullptr));
+    }
+
+    // Sample mask output assignment is guarded by ANGLESampleMaskEnabled specialization constant
+    TVariable *sampleMaskEnabledVar = new TVariable(
+        &symbolTable, sh::ImmutableString(mtl::kSampleMaskEnabledConstName),
+        StaticType::Get<EbtBool, EbpUndefined, EvqSpecConst, 1, 1>(), SymbolType::AngleInternal);
+    return RunAtTheEndOfShader(
+        &compiler, &root,
+        new TIntermIfElse(new TIntermSymbol(sampleMaskEnabledVar), block, nullptr), &symbolTable);
 }
 
 [[nodiscard]] bool AddFragDataDeclaration(TCompiler &compiler,
@@ -502,67 +656,6 @@ TranslatorMetalDirect::TranslatorMetalDirect(sh::GLenum type,
                                              ShShaderOutput output)
     : TCompiler(type, spec, output)
 {}
-
-// Add sample_mask writing to main, guarded by the function constant
-// kCoverageMaskEnabledName
-[[nodiscard]] bool TranslatorMetalDirect::insertSampleMaskWritingLogic(
-    TIntermBlock &root,
-    DriverUniformMetal &driverUniforms)
-{
-    if (!usesSampleMask())
-    {
-        return true;
-    }
-
-    // This transformation leaves the tree in an inconsistent state by using a variable that's
-    // defined in text, outside of the knowledge of the AST.
-    mValidateASTOptions.validateVariableReferences = false;
-    // It also uses a function call (ANGLE_writeSampleMask) that's unknown to the AST.
-    mValidateASTOptions.validateFunctionCall = false;
-
-    TSymbolTable *symbolTable = &getSymbolTable();
-
-    // Create kCoverageMaskEnabled and kSampleMaskWriteFuncName variable references.
-    TType *boolType = new TType(EbtBool);
-    boolType->setQualifier(EvqConst);
-    TVariable *coverageMaskEnabledVar =
-        new TVariable(symbolTable, sh::ImmutableString(sh::mtl::kCoverageMaskEnabledConstName),
-                      boolType, SymbolType::AngleInternal);
-
-    TFunction *sampleMaskWriteFunc = new TFunction(
-        symbolTable, kSampleMaskWriteFuncName.rawName(), kSampleMaskWriteFuncName.symbolType(),
-        StaticType::GetBasic<EbtVoid, EbpUndefined>(), false);
-
-    TType *uintType = new TType(EbtUInt);
-    TVariable *maskArg =
-        new TVariable(symbolTable, ImmutableString("mask"), uintType, SymbolType::AngleInternal);
-    sampleMaskWriteFunc->addParameter(maskArg);
-
-    TVariable *gl_SampleMaskArg = new TVariable(symbolTable, ImmutableString("gl_SampleMask"),
-                                                uintType, SymbolType::AngleInternal);
-    sampleMaskWriteFunc->addParameter(gl_SampleMaskArg);
-
-    // Insert this MSL code to the end of main() in the shader
-    // if (ANGLECoverageMaskEnabled)
-    // {
-    //      ANGLE_writeSampleMask(ANGLE_angleUniforms.coverageMask,
-    //      ANGLE_fragmentOut.gl_SampleMask);
-    // }
-    TIntermSequence *args      = new TIntermSequence;
-    TIntermTyped *coverageMask = driverUniforms.getCoverageMaskField();
-    args->push_back(coverageMask);
-    const TIntermSymbol *gl_SampleMask = FindSymbolNode(&root, ImmutableString("gl_SampleMask"));
-    args->push_back(gl_SampleMask->deepCopy());
-
-    TIntermAggregate *callSampleMaskWriteFunc =
-        TIntermAggregate::CreateFunctionCall(*sampleMaskWriteFunc, args);
-    TIntermBlock *callBlock = new TIntermBlock;
-    callBlock->appendStatement(callSampleMaskWriteFunc);
-
-    TIntermSymbol *coverageMaskEnabled = new TIntermSymbol(coverageMaskEnabledVar);
-    TIntermIfElse *ifCall              = new TIntermIfElse(coverageMaskEnabled, callBlock, nullptr);
-    return RunAtTheEndOfShader(this, &root, ifCall, symbolTable);
-}
 
 [[nodiscard]] bool TranslatorMetalDirect::insertRasterizationDiscardLogic(TIntermBlock &root)
 {
@@ -861,13 +954,16 @@ bool TranslatorMetalDirect::translateImpl(TInfoSinkBase &sink,
         }
     }
     SymbolEnv symbolEnv(*this, *root);
-    // Declare gl_FragColor and gl_FragData as webgl_FragColor and webgl_FragData
-    // if it's core profile shaders and they are used.
+
+    bool usesSampleMask = false;
     if (getShaderType() == GL_FRAGMENT_SHADER)
     {
-        bool usesPointCoord  = false;
-        bool usesFragCoord   = false;
-        bool usesFrontFacing = false;
+        bool usesPointCoord     = false;
+        bool usesFragCoord      = false;
+        bool usesFrontFacing    = false;
+        bool usesSampleID       = false;
+        bool usesSamplePosition = false;
+        bool usesSampleMaskIn   = false;
         for (const ShaderVariable &inputVarying : mInputVaryings)
         {
             if (inputVarying.isBuiltIn())
@@ -883,6 +979,19 @@ bool TranslatorMetalDirect::translateImpl(TInfoSinkBase &sink,
                 else if (inputVarying.name == "gl_FrontFacing")
                 {
                     usesFrontFacing = true;
+                }
+                else if (inputVarying.name == "gl_SampleID")
+                {
+                    usesSampleID = true;
+                }
+                else if (inputVarying.name == "gl_SamplePosition")
+                {
+                    usesSampleID       = true;
+                    usesSamplePosition = true;
+                }
+                else if (inputVarying.name == "gl_SampleMaskIn")
+                {
+                    usesSampleMaskIn = true;
                 }
             }
         }
@@ -920,6 +1029,10 @@ bool TranslatorMetalDirect::translateImpl(TInfoSinkBase &sink,
                 else if (outputVarying.name == "gl_SecondaryFragDataEXT")
                 {
                     usesSecondaryFragDataEXT = true;
+                }
+                else if (outputVarying.name == "gl_SampleMask")
+                {
+                    usesSampleMask = true;
                 }
             }
         }
@@ -963,10 +1076,29 @@ bool TranslatorMetalDirect::translateImpl(TInfoSinkBase &sink,
             }
         }
 
-        if (usesSampleMask())
+        if (usesSampleID)
         {
-            AddSampleMaskDeclaration(*root, symbolTable);
+            DeclareRightBeforeMain(*root, *BuiltInVariable::gl_SampleID());
         }
+
+        if (usesSamplePosition)
+        {
+            if (!AddSamplePositionDeclaration(*this, *root, symbolTable))
+            {
+                return false;
+            }
+        }
+
+        if (usesSampleMaskIn)
+        {
+            if (!AddSampleMaskInDeclaration(*this, *root, symbolTable, driverUniforms,
+                                            usesSampleID))
+            {
+                return false;
+            }
+        }
+
+        ASSERT(!usesSampleMask || isSampleMaskAllowed());
 
         if (usesPointCoord)
         {
@@ -1011,6 +1143,24 @@ bool TranslatorMetalDirect::translateImpl(TInfoSinkBase &sink,
         if (usesFrontFacing)
         {
             DeclareRightBeforeMain(*root, *BuiltInVariable::gl_FrontFacing());
+        }
+
+        bool usesNumSamples = false;
+        for (const ShaderVariable &uniform : mUniforms)
+        {
+            if (uniform.name == "gl_NumSamples")
+            {
+                usesNumSamples = true;
+                break;
+            }
+        }
+
+        if (usesNumSamples)
+        {
+            if (!AddNumSamplesDeclaration(*this, *root, symbolTable))
+            {
+                return false;
+            }
         }
     }
     else if (getShaderType() == GL_VERTEX_SHADER)
@@ -1093,9 +1243,14 @@ bool TranslatorMetalDirect::translateImpl(TInfoSinkBase &sink,
     }
     else if (getShaderType() == GL_FRAGMENT_SHADER)
     {
-        if (!insertSampleMaskWritingLogic(*root, *driverUniforms))
+        if (isSampleMaskAllowed())
         {
-            return false;
+            mValidateASTOptions.validateVariableReferences = false;
+            if (!AddSampleMaskDeclaration(*this, *root, symbolTable, driverUniforms,
+                                          compileOptions.emulateAlphaToCoverage, usesSampleMask))
+            {
+                return false;
+            }
         }
     }
 
