@@ -458,11 +458,9 @@ b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.debug.error_groups.case_9
 6678 UBSAN : dEQP-GLES31.functional.shaders.builtin_functions.integer.bitfield* = SKIP
 6678 UBSAN : dEQP-GLES31.functional.shaders.sample_variables.sample_pos.distribution.* = SKIP
 
-6678 UBSAN : dEQP-GLES31.functional.shaders.framebuffer_fetch.framebuffer_format.r8 = SKIP
-6678 UBSAN : dEQP-GLES31.functional.shaders.framebuffer_fetch.framebuffer_format.rg32i = SKIP
-6678 UBSAN : dEQP-GLES31.functional.shaders.framebuffer_fetch.framebuffer_format.rg8 = SKIP
-6678 UBSAN : dEQP-GLES31.functional.shaders.framebuffer_fetch.framebuffer_format.rgb565 = SKIP
 6678 UBSAN : dEQP-GLES31.functional.shaders.framebuffer_fetch.framebuffer_format.rgb8 = SKIP
+<<<<<<< PATCH SET (cb2dc3 UBSAN: Remove suppression of passing tests)
+=======
 6678 UBSAN : dEQP-GLES31.functional.shaders.framebuffer_fetch.framebuffer_format.rgba32i = SKIP
 
 // Samsung Galaxy S23
@@ -476,3 +474,4 @@ b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.debug.error_groups.case_9
 8157 GALAXYS23 VULKAN : dEQP-GLES31.functional.shaders.builtin_functions.pack_unpack.* = SKIP
 8157 GALAXYS23 VULKAN : dEQP-GLES31.functional.shaders.linkage.es31.geometry.varying.types.float_struct = SKIP
 8157 GALAXYS23 VULKAN : dEQP-GLES31.functional.texture.border_clamp.* = SKIP
+>>>>>>> BASE      (efeb65 Suppress ParallelLinkProgramBenchmark.Run/gl_* on Linux)
