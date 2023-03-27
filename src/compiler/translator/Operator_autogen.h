@@ -468,6 +468,13 @@ enum TOperator : uint16_t
     EOpAnyInvocation,
     EOpAllInvocations,
     EOpAllInvocationsEqual,
+
+    // Group MetalFragmentSampleFunctions
+    EOpNumSamples,
+    EOpSamplePosition,
+
+    // Group MetalCommonFunctions
+    EOpSaturate,
 };
 
 // Returns the string corresponding to the operator in GLSL.  For built-in functions use the
