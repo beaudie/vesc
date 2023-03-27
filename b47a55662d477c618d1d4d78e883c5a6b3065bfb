@@ -16,6 +16,29 @@
       "message": "PTAL",
       "revId": "b47a55662d477c618d1d4d78e883c5a6b3065bfb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6f549c1_5892f614",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-03-27T16:45:16Z",
+      "side": 1,
+      "message": "The bug (to be fixed in a later patch) is due to this. Setting DIRTY_BIT_EXTENDED would cause all extended dirty bits to be synced.",
+      "range": {
+        "startLine": 701,
+        "startChar": 0,
+        "endLine": 702,
+        "endChar": 37
+      },
+      "revId": "b47a55662d477c618d1d4d78e883c5a6b3065bfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
