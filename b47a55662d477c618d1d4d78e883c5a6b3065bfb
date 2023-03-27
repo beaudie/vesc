@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1519b3e2_2c8879a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-27T18:47:31Z",
+      "side": 1,
+      "message": "I recall our microbenchmarks were very sensitive here, if you care to do any measurements.\n\nIt also looks like the dirty bits should just extend beyond 64 bits (and become `BitSetArray`), but let\u0027s leave that for another time.",
+      "revId": "b47a55662d477c618d1d4d78e883c5a6b3065bfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b6f549c1_5892f614",
