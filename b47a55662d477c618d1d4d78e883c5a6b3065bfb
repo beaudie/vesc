@@ -74,6 +74,30 @@
       },
       "revId": "b47a55662d477c618d1d4d78e883c5a6b3065bfb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eef6b9d3_94a6ba6d",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-27T19:37:37Z",
+      "side": 1,
+      "message": "I had a WIP change a few years ago to pass these by value instead of reference (because 64-bit!) and that showed regressions, which was surprising.\n\nI doubt it\u0027ll be felt in any real app though, just microbenchmarks",
+      "parentUuid": "b6f549c1_5892f614",
+      "range": {
+        "startLine": 701,
+        "startChar": 0,
+        "endLine": 702,
+        "endChar": 37
+      },
+      "revId": "b47a55662d477c618d1d4d78e883c5a6b3065bfb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
