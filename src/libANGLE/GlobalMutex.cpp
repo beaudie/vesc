@@ -7,7 +7,7 @@
 
 #include "libANGLE/GlobalMutex.h"
 
-#include <atomic>
+#include "common/FastMutex.h"
 
 #include "common/debug.h"
 #include "common/system_utils.h"
@@ -16,7 +16,7 @@ namespace egl
 {
 namespace priv
 {
-using GlobalMutexType = std::mutex;
+using GlobalMutexType = angle::FastMutex3;
 
 #if !defined(ANGLE_ENABLE_ASSERTS) && !defined(ANGLE_ENABLE_GLOBAL_MUTEX_RECURSION)
 // Default version.
