@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cac9f5a_f9797301",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1185214
+      },
+      "writtenOn": "2023-03-27T12:57:22Z",
+      "side": 1,
+      "message": "This line is failing to compile on Skia\u0027s Mac-ANGLE bot:\n\nhttps://logs.chromium.org/logs/skia/612b57ba98612811/+/steps/ninja/0/stdout\n\nLooking at the relevant code, it looks like TSymbolUniqueID only has operator\u003d\u003d, not operator!\u003d, so I\u0027m not sure how this is working elsewhere?\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/compiler/translator/SymbolUniqueId.h;l\u003d26;drc\u003d8101d6d81854e4f437e0f03f77694a01aaa8df7a",
+      "revId": "648f3657c3f70fd7b95379b2b075eeca42e54020",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
