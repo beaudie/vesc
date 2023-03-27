@@ -498,8 +498,8 @@ angle::Result VertexDataManager::reserveSpaceForAttrib(const gl::Context *contex
     BufferD3D *bufferD3D = buffer ? GetImplAs<BufferD3D>(buffer) : nullptr;
     ASSERT(!bufferD3D || bufferD3D->getStaticVertexBuffer(attrib, binding) == nullptr);
 
-    size_t totalCount = gl::ComputeVertexBindingElementCount(binding.getDivisor(), count,
-                                                             static_cast<size_t>(instances));
+    size_t totalCount = gl::ComputeVertexBindingElementCount(
+        binding.getDivisor(), count, static_cast<size_t>(std::max(instances, 1)));
     // TODO(jiajia.qin@intel.com): force the index buffer to clamp any out of range indices instead
     // of invalid operation here.
     if (bufferD3D)
