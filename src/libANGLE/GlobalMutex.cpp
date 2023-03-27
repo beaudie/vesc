@@ -7,7 +7,7 @@
 
 #include "libANGLE/GlobalMutex.h"
 
-#include <atomic>
+#include "common/FastMutex.h"
 
 #include "common/debug.h"
 #include "common/system_utils.h"
@@ -18,7 +18,9 @@ namespace priv
 {
 namespace
 {
-using GlobalMutexType = std::mutex;
+// Use FastMutex2 instead of FastMutex1 because EGL has higher chance of blocking but relatively low
+// API call count.
+using GlobalMutexType = angle::FastMutex2;
 
 class SimpleGlobalMutex : angle::NonCopyable
 {
