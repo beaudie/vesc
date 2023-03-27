@@ -64,6 +64,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "20beadc3_b9d45fce",
+        "filename": "src/compiler/translator/BaseTypes.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1100,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-03-27T19:05:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe6e0246_d4403315",
+      "range": {
+        "startLine": 1100,
+        "startChar": 4,
+        "endLine": 1100,
+        "endChar": 27
+      },
+      "revId": "d1454b8e92ed88c5033e6f6ec9bb7b740ad6aec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28188f52_0d52cae3",
+        "filename": "src/compiler/translator/BaseTypes.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1100,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-03-27T19:05:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9caa22e9_9cf01cd6",
+      "range": {
+        "startLine": 1100,
+        "startChar": 8,
+        "endLine": 1100,
+        "endChar": 12
+      },
+      "revId": "d1454b8e92ed88c5033e6f6ec9bb7b740ad6aec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f569d7e_6e947d55",
@@ -113,6 +161,24 @@
       "side": 1,
       "message": "We tend to not take non-const references (and use pointers instead). Other than that, maybe call it `WriteInterpolationDecoration`? We write many decorations, none of the other ones use this helper.\n\nNot a big deal what the name is though in the end.",
       "parentUuid": "7472121e_2eb97d28",
+      "revId": "d1454b8e92ed88c5033e6f6ec9bb7b740ad6aec3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1150fc31_5297b4c2",
+        "filename": "src/compiler/translator/BuildSPIRV.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2041,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-03-27T19:05:48Z",
+      "side": 1,
+      "message": "PTAL",
+      "parentUuid": "3db73f4d_2f4a68ad",
       "revId": "d1454b8e92ed88c5033e6f6ec9bb7b740ad6aec3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
