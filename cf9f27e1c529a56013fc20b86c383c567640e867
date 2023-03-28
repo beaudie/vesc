@@ -51,6 +51,24 @@
       "message": "Is it possible to get here with an active render pass that\u0027s _not_ `mLastRenderPassQueueSerial`? That sounds like it can be problematic.",
       "revId": "cf9f27e1c529a56013fc20b86c383c567640e867",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b62a3fb7_602007ae",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-28T21:58:09Z",
+      "side": 1,
+      "message": "Added assertion.",
+      "parentUuid": "5594f0ea_fc75afd1",
+      "revId": "cf9f27e1c529a56013fc20b86c383c567640e867",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
