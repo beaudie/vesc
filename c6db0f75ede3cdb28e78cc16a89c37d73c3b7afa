@@ -68,6 +68,24 @@
       "message": "Just curious where is the draw call for the `blue quad`? I dont\u0027t see the `glDraw*` before the next draw call `drawWithDepthValue()`",
       "revId": "c6db0f75ede3cdb28e78cc16a89c37d73c3b7afa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccd694f1_680e3031",
+        "filename": "src/tests/gl_tests/BlitFramebufferANGLETest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3001,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-28T18:05:13Z",
+      "side": 1,
+      "message": "Its at line 3018 drawWithDepthValue. I have a typo in comment (should be depth\u003d\u003d0.75). Will fix in next update.",
+      "parentUuid": "9b2bb1a7_1fcf069c",
+      "revId": "c6db0f75ede3cdb28e78cc16a89c37d73c3b7afa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
