@@ -4152,7 +4152,10 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // http://anglebug.com/7308
     // Flushing mutable textures causes flakes in perf tests using Windows/Intel GPU. Failures are
     // due to lost context/device.
-    ANGLE_FEATURE_CONDITION(&mFeatures, mutableMipmapTextureUpload, !(IsWindows() && isIntel));
+    // http://b/264143971
+    // The mutable texture uploading feature can sometimes result in incorrect rendering of some
+    // textures.
+    ANGLE_FEATURE_CONDITION(&mFeatures, mutableMipmapTextureUpload, false);
 
     // Use VMA for image suballocation.
     ANGLE_FEATURE_CONDITION(&mFeatures, useVmaForImageSuballocation, true);
@@ -4365,6 +4368,18 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     ANGLE_FEATURE_CONDITION(&mFeatures, mapUnspecifiedColorSpaceToPassThrough, isVenus);
 
     ApplyFeatureOverrides(&mFeatures, displayVk->getState());
+
+    // Disable async command queue when using Vulkan secondary command buffers temporarily to avoid
+    // threading hazards with ContextVk::mCommandPools.  Note that this is done even if the feature
+    // is enabled through an override.
+    // TODO: Investigate whether async command queue is useful with Vulkan secondary command buffers
+    // and enable the feature.  http://anglebug.com/6811
+    if (!vk::OutsideRenderPassCommandBuffer::ExecutesInline() ||
+        !vk::RenderPassCommandBuffer::ExecutesInline())
+    {
+        mFeatures.asyncCommandQueue.enabled       = false;
+        mFeatures.asyncCommandBufferReset.enabled = false;
+    }
 
     // Disable memory report feature overrides if extension is not supported.
     if ((mFeatures.logMemoryReportCallbacks.enabled || mFeatures.logMemoryReportStats.enabled) &&

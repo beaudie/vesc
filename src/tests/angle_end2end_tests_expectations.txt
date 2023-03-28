@@ -356,29 +356,6 @@
 
 7451 MAC METAL INTEL : PointSpritesTest.PointSizeAboveMaxIsClamped/ES2_Metal = SKIP
 
-// New failures on MacBook Pro 2019 macOS 13.2.1
-8091 MAC METAL AMD : ClearTest.ClearStencilMask/* = SKIP
-8091 MAC METAL AMD : ClearTestES3.ClearBufferivStencilMask/* = SKIP
-8091 MAC METAL AMD : ClearTestES3.RepeatedStencilClear/* = SKIP
-8091 MAC METAL AMD : DepthWriteTest.Test/* = SKIP
-8091 MAC METAL AMD : MaskedScissoredClearTest.Test/* = SKIP
-8091 MAC METAL AMD : PixelLocalStorageTest.Coherency/* = SKIP
-8091 MAC METAL AMD : PixelLocalStorageTest.ForgetBarrier/* = SKIP
-8091 MAC METAL AMD : PixelLocalStorageTest.FragmentReject_viewport/* = SKIP
-8091 MAC METAL AMD : PixelLocalStorageTest.FunctionArguments/* = SKIP
-8091 MAC METAL AMD : PixelLocalStorageTest.Interrupt/* = SKIP
-8091 MAC METAL AMD : PixelLocalStorageTest.LoadAfterStore/* = SKIP
-8091 MAC METAL AMD : PixelLocalStorageTest.LoadOnly/* = SKIP
-8091 MAC METAL AMD : PixelLocalStorageTest.LoadOps/* = SKIP
-8091 MAC METAL AMD : PixelLocalStorageTest.MaxCombinedDrawBuffersAndPLSPlanes/* = SKIP
-8091 MAC METAL AMD : PixelLocalStorageTest.MemorylessStorage/* = SKIP
-8091 MAC METAL AMD : PixelLocalStorageTest.MipMapLevels/* = SKIP
-8091 MAC METAL AMD : PixelLocalStorageTest.PLSWithSamplers/* = SKIP
-8091 MAC METAL AMD : PixelLocalStorageTest.ProgramCache/* = SKIP
-8091 MAC METAL AMD : PixelLocalStorageTest.R32/* = SKIP
-8091 MAC METAL AMD : PixelLocalStorageTest.RGBA8/* = SKIP
-8091 MAC METAL AMD : StateChangeTestES3.StencilReferenceAndCompareMask/* = SKIP
-
 
 // D3D
 6432 WIN D3D9 : GLSLTest.HandleExcessiveLoopBug/* = SKIP
@@ -833,8 +810,6 @@
 7994 IOS METAL : PixelLocalStorageTest.FragmentReject_viewport/ES3_Metal_EmulatePixelLocalStorage_DisableRasterOrderGroups = SKIP
 7994 IOS METAL : PixelLocalStorageTest.FunctionArguments/ES3_Metal_EmulatePixelLocalStorage = SKIP
 7994 IOS METAL : PixelLocalStorageTest.FunctionArguments/ES3_Metal_EmulatePixelLocalStorage_DisableRasterOrderGroups = SKIP
-7994 IOS METAL : PixelLocalStorageTest.Interrupt/ES3_Metal_EmulatePixelLocalStorage = SKIP
-7994 IOS METAL : PixelLocalStorageTest.Interrupt/ES3_Metal_EmulatePixelLocalStorage_DisableRasterOrderGroups = SKIP
 7994 IOS METAL : PixelLocalStorageTest.LoadAfterStore/ES3_Metal_EmulatePixelLocalStorage = SKIP
 7994 IOS METAL : PixelLocalStorageTest.LoadAfterStore/ES3_Metal_EmulatePixelLocalStorage_DisableRasterOrderGroups = SKIP
 7994 IOS METAL : PixelLocalStorageTest.LoadOnly/ES3_Metal_EmulatePixelLocalStorage = SKIP
@@ -1116,43 +1091,6 @@
 // ReadPixels returns zeros on Red and Red-Green 16-bit snorm color buffers
 8048 NVIDIA OPENGL : FramebufferTest_ES3.RenderSnorm16* = SKIP
 8048 NVIDIA GLES : FramebufferTest_ES3.RenderSnorm16* = SKIP
-
-// D3D needs a workaround to follow OpenGL rules
-8077 D3D9 : DepthWriteTest.Test/ES2_D3D9__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthBetweenZeroAndNearPlane_* = SKIP
-8077 D3D9 : DepthWriteTest.Test/ES2_D3D9__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthBetweenFarPlaneAndOne_* = SKIP
-8077 D3D9 : DepthWriteTest.Test/ES2_D3D9__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthNegative_* = SKIP
-8077 D3D9 : DepthWriteTest.Test/ES2_D3D9__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthGreaterThanOne_* = SKIP
-8077 D3D11 : DepthWriteTest.Test/ES2_D3D11__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthBetweenZeroAndNearPlane_* = SKIP
-8077 D3D11 : DepthWriteTest.Test/ES2_D3D11__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthBetweenFarPlaneAndOne_* = SKIP
-8077 D3D11 : DepthWriteTest.Test/ES2_D3D11__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthNegative_* = SKIP
-8077 D3D11 : DepthWriteTest.Test/ES2_D3D11__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthGreaterThanOne_* = SKIP
-8077 D3D11 : DepthWriteTest.Test/ES3_D3D11__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthBetweenZeroAndNearPlane_* = SKIP
-8077 D3D11 : DepthWriteTest.Test/ES3_D3D11__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthBetweenFarPlaneAndOne_* = SKIP
-8077 D3D11 : DepthWriteTest.Test/ES3_D3D11__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthNegative_* = SKIP
-8077 D3D11 : DepthWriteTest.Test/ES3_D3D11__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthGreaterThanOne_* = SKIP
-
-// Vulkan needs a workaround and/or extensions usage to avoid undefined behavior
-8077 VULKAN : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthBetweenZeroAndNearPlane_* = SKIP
-8077 VULKAN : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthBetweenFarPlaneAndOne_* = SKIP
-8077 VULKAN : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthNegative_* = SKIP
-8077 VULKAN : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthGreaterThanOne_* = SKIP
-
-// Driver bugs
-8077 WIN INTEL OPENGL : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthBetweenZeroAndNearPlane_* = SKIP
-8077 WIN INTEL OPENGL : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthBetweenFarPlaneAndOne_* = SKIP
-8077 WIN INTEL OPENGL : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthNegative_* = SKIP
-8077 WIN INTEL OPENGL : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthGreaterThanOne_* = SKIP
-8077 MAC INTEL : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthBetweenZeroAndNearPlane_* = SKIP
-8077 MAC INTEL : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthBetweenFarPlaneAndOne_* = SKIP
-8077 MAC INTEL : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthNegative_* = SKIP
-8077 MAC INTEL : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthGreaterThanOne_* = SKIP
-8077 IOS : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthBetweenZeroAndNearPlane_* = SKIP
-8077 IOS : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthBetweenFarPlaneAndOne_* = SKIP
-8077 IOS : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthNegative_* = SKIP
-8077 IOS : DepthWriteTest.Test/*__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthGreaterThanOne_* = SKIP
-
-// gl_PointCoord origin is flipped for non-default framebuffers
-8066 WIN INTEL OPENGL : ClipControlTest.OriginPointCoord/* = SKIP
 
 // bits 24..31 from glClearValueuiv value don't work on Intel Metal.
 7794 MAC INTEL METAL : PixelLocalStorageTest.ClearValues_r32/* = SKIP

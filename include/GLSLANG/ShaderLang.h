@@ -26,7 +26,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 322
+#define ANGLE_SH_VERSION 320
 
 enum ShShaderSpec
 {
@@ -453,7 +453,6 @@ struct ShBuiltInResources
     int NV_EGL_stream_consumer_external;
     int ARB_texture_rectangle;
     int EXT_blend_func_extended;
-    int EXT_conservative_depth;
     int EXT_draw_buffers;
     int EXT_frag_depth;
     int EXT_shader_texture_lod;

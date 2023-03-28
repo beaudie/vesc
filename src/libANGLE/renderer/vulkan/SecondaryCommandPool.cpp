@@ -50,9 +50,7 @@ angle::Result SecondaryCommandPool::init(Context *context,
 
 void SecondaryCommandPool::destroy(VkDevice device)
 {
-    // Command buffers will be destroyed with the Pool. Avoid possible slowdown during cleanup.
-    mCollectedBuffers.clear();
-    mCollectedBuffersOverflow.clear();
+    freeCollectedBuffers(device);
     mCommandPool.destroy(device);
 }
 
