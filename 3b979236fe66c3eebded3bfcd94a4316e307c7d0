@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b59a693_77b2f482",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2263,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-28T17:33:00Z",
+      "side": 1,
+      "message": "https://chromium-review.googlesource.com/c/angle/angle/+/4374145",
+      "parentUuid": "2068f28a_c704707e",
+      "range": {
+        "startLine": 2263,
+        "startChar": 56,
+        "endLine": 2263,
+        "endChar": 95
+      },
+      "revId": "3b979236fe66c3eebded3bfcd94a4316e307c7d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a5d94554_8c636cc8",
