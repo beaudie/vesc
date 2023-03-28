@@ -4385,7 +4385,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
                                 (mFeatures.preferMonolithicPipelinesOverLibraries.enabled &&
                                  libraryBlobsAreReusedByMonolithicPipelines));
 
-    ANGLE_FEATURE_CONDITION(&mFeatures, enableAsyncPipelineCacheCompression, isVenus);
+    ANGLE_FEATURE_CONDITION(&mFeatures, enableAsyncPipelineCacheCompression, true);
 
     // Sync monolithic pipelines to the blob cache occasionally on platforms that would benefit from
     // it:
