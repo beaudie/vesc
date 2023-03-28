@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0991abd5_962db745",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-28T19:29:56Z",
+      "side": 1,
+      "message": "One special thing about `hasActiveRenderPassWithCommands` was that if the render pass is active but _without_ commands (i.e. RP started just to set loadOps to clear), then the reclear would just overwrite the old clear values. With this change, the reclears turn into `vkCmdClearAttachment`.\n\nThis can actually happen with 3D or external textures (see the block starting at line 612), leading to `clearWithLoadOp` (line 620).\n\nIs it possible to add the `\u0026\u0026 has commands` bit back to this expression?",
+      "revId": "cf9f27e1c529a56013fc20b86c383c567640e867",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5594f0ea_fc75afd1",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-28T19:29:56Z",
+      "side": 1,
+      "message": "Is it possible to get here with an active render pass that\u0027s _not_ `mLastRenderPassQueueSerial`? That sounds like it can be problematic.",
+      "revId": "cf9f27e1c529a56013fc20b86c383c567640e867",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
