@@ -16,6 +16,24 @@
       "message": "this static assert means it is not intended to run on machines which can not guarantee 64bit atomics like mips32, ppc32? can you confirm.",
       "revId": "ce8ce6f81eff8a84e2ea59930cb995b1107181e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fdc8844_4676e3e4",
+        "filename": "src/libANGLE/renderer/serial_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-28T19:35:25Z",
+      "side": 1,
+      "message": "To be honest we might as well drop the assertion; we don\u0027t have a fallback if the architecture has slow atomics anyway (@Charlie who added the assertion)",
+      "parentUuid": "e8fddf44_97df4483",
+      "revId": "ce8ce6f81eff8a84e2ea59930cb995b1107181e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
