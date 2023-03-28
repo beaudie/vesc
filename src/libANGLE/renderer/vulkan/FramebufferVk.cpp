@@ -534,6 +534,8 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
     }
     else
     {
+        ASSERT(!contextVk->hasActiveRenderPass() ||
+               contextVk->hasStartedRenderPassWithQueueSerial(mLastRenderPassQueueSerial));
         // Emit debug-util markers for this outside-render-pass clear
         ANGLE_TRY(
             contextVk->handleGraphicsEventLog(rx::GraphicsEventCmdBuf::InOutsideCmdBufQueryCmd));
