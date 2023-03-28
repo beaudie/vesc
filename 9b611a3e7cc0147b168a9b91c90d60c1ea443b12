@@ -16,6 +16,23 @@
       "message": "PTAL! Sorry for no test coverage in this CL, it comes in a following patch.",
       "revId": "9b611a3e7cc0147b168a9b91c90d60c1ea443b12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8cbb172d_9f232362",
+        "filename": "src/libANGLE/renderer/gl/BlitGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-03-28T15:56:11Z",
+      "side": 1,
+      "message": "Depth clamp should have no effect here because emulated blits/copies do not produce vertices outside near or far clipping planes.",
+      "revId": "9b611a3e7cc0147b168a9b91c90d60c1ea443b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
