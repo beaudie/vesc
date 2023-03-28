@@ -937,6 +937,8 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
 
     if (mSurface)
     {
+        // This call is only possible from the EGL API.
+        egl::ScopedGlobalMutexUnlock unlock(egl::GlobalMutexUnlockType::Always);
         vkDestroySurfaceKHR(instance, mSurface, nullptr);
         mSurface = VK_NULL_HANDLE;
     }
@@ -1509,7 +1511,19 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     // TODO: Once EGL_SWAP_BEHAVIOR_PRESERVED_BIT is supported, the contents of the old swapchain
     // need to carry over to the new one.  http://anglebug.com/2942
     VkSwapchainKHR newSwapChain = VK_NULL_HANDLE;
-    ANGLE_VK_TRY(context, vkCreateSwapchainKHR(device, &swapchainInfo, nullptr, &newSwapChain));
+
+    // Must not happen - for debugging
+    ASSERT(!mReentrancyLock);
+    mReentrancyLock = true;
+    VkResult result = VK_ERROR_DEVICE_LOST;
+    {
+        // Possible from EGL, EGL+Context, and Context only
+        vk::ScopedContextUnlock unlock(context);
+        result = vkCreateSwapchainKHR(device, &swapchainInfo, nullptr, &newSwapChain);
+    }
+    mReentrancyLock = false;
+    ANGLE_VK_TRY(context, result);
+
     mSwapchain            = newSwapChain;
     mSwapchainPresentMode = mDesiredSwapchainPresentMode;
 
