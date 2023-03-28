@@ -34,6 +34,24 @@
       "parentUuid": "3dd3ad72_8d0b3594",
       "revId": "1ee4d3f4de9995678b256a6d72ced22c80bfb103",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f476bbe_f5b2d6da",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2271,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-28T19:18:07Z",
+      "side": 1,
+      "message": "If the app can hit this path legitimately, it\u0027s better not to give a perf warning then. If you can manage to isolate the bad pattern though, it\u0027d be great if this feedback can be given.",
+      "parentUuid": "9cb98e3d_0ba75bd1",
+      "revId": "1ee4d3f4de9995678b256a6d72ced22c80bfb103",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
