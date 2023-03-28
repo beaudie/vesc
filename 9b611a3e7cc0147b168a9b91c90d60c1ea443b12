@@ -33,6 +33,24 @@
       "message": "Depth clamp should have no effect here because emulated blits/copies do not produce vertices outside near or far clipping planes.",
       "revId": "9b611a3e7cc0147b168a9b91c90d60c1ea443b12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "786421cb_25cd9012",
+        "filename": "src/libANGLE/renderer/gl/BlitGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-03-28T16:58:06Z",
+      "side": 1,
+      "message": "Agreed, still feels like we should reset it so that we\u0027re in a \"default\" state.",
+      "parentUuid": "8cbb172d_9f232362",
+      "revId": "9b611a3e7cc0147b168a9b91c90d60c1ea443b12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
