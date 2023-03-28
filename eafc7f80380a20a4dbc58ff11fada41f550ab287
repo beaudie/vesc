@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bdb8f583_fedda7c3",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3857,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-03-28T12:28:45Z",
+      "side": 1,
+      "message": "Shabi, not sure what this does, but looks like things work without it on Mesa 20.0.8 per https://ci.chromium.org/ui/p/angle/builders/try/linux-test/12733/overview.\nShould I try to land this?\nLooks like some of the disabled tests were flaky, so I\u0027ll need to watch the waterfall afterwards.",
+      "range": {
+        "startLine": 3857,
+        "startChar": 40,
+        "endLine": 3857,
+        "endChar": 63
+      },
+      "revId": "eafc7f80380a20a4dbc58ff11fada41f550ab287",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
