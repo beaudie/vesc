@@ -1,0 +1,187 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2fe57f4f_39ad9ccb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-28T01:05:33Z",
+      "side": 1,
+      "message": "Can you add a note here that your adding a method to recompress paletted textures, which we\u0027ll read back during capture?",
+      "revId": "beb4f61e96e415f9df6e8a9e563c9a8a06e05fa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66d39b1a_0d671ae2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-28T01:05:33Z",
+      "side": 1,
+      "message": "Constantine, thanks for putting this together.  Let\u0027s move forward with it, even though we know there are some unresolved issues with the target trace (likely unrelated to this change).\n\n+Shahbaz for the store image changes.",
+      "revId": "beb4f61e96e415f9df6e8a9e563c9a8a06e05fa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa9d99f0_3a15a8ce",
+        "filename": "src/image_util/storeimage_paletted.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-28T01:05:33Z",
+      "side": 1,
+      "message": "Can you put the parameters inside paranthesis, like `sizeof(key)`",
+      "range": {
+        "startLine": 77,
+        "startChar": 18,
+        "endLine": 77,
+        "endChar": 28
+      },
+      "revId": "beb4f61e96e415f9df6e8a9e563c9a8a06e05fa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d00d6ab1_2311ffe6",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3943,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-28T01:05:33Z",
+      "side": 1,
+      "message": "Can you add a comment for this block along the lines of: `\"Read back the uncompressed paletted texture, then re-compress it to store in the trace.\"`",
+      "range": {
+        "startLine": 3943,
+        "startChar": 0,
+        "endLine": 3943,
+        "endChar": 44
+      },
+      "revId": "beb4f61e96e415f9df6e8a9e563c9a8a06e05fa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b10e06d7_1d8e5567",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3945,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-28T01:05:33Z",
+      "side": 1,
+      "message": "Can this be `format.channelCount`?  Okay to assert that it is 4, just easier to understand if not a fixed number.",
+      "range": {
+        "startLine": 3945,
+        "startChar": 45,
+        "endLine": 3945,
+        "endChar": 46
+      },
+      "revId": "beb4f61e96e415f9df6e8a9e563c9a8a06e05fa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ff0ae42_986e6e3c",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3952,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-28T01:05:33Z",
+      "side": 1,
+      "message": "after `getTexImage`, can we move the rest of this to a helper like below, or similar?\n```\nCompressPalettedTexture(data, tmp, format, extents);\n```",
+      "revId": "beb4f61e96e415f9df6e8a9e563c9a8a06e05fa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "691c206f_e333977b",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4031,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-28T01:05:33Z",
+      "side": 1,
+      "message": "Is this also channel count?",
+      "range": {
+        "startLine": 4031,
+        "startChar": 24,
+        "endLine": 4031,
+        "endChar": 25
+      },
+      "revId": "beb4f61e96e415f9df6e8a9e563c9a8a06e05fa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b188748_03c813ba",
+        "filename": "src/tests/gl_tests/gles1/PalettedTextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-28T01:05:33Z",
+      "side": 1,
+      "message": "It would be nice if we could add a test here or in `GetImageTest.cpp` that populates a paletted texture, reads it back, re-compresses it, and validates you got back the expected result.  Then we\u0027d know the readback continues to work outside of capture/replay.  It isn\u0027t clear to me that we could have a test that supports `GL_ANGLE_get_image` and `GL_OES_compressed_paletted_texture` at the same time though.",
+      "revId": "beb4f61e96e415f9df6e8a9e563c9a8a06e05fa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c76d456_3072c32e",
+        "filename": "src/tests/gl_tests/gles1/PalettedTextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-28T01:05:33Z",
+      "side": 1,
+      "message": "I don\u0027t think empty swaps will help frame capture.  You could move most of the block above (everything after clear) into the loop here and you get an interesting capture.",
+      "range": {
+        "startLine": 137,
+        "startChar": 0,
+        "endLine": 137,
+        "endChar": 22
+      },
+      "revId": "beb4f61e96e415f9df6e8a9e563c9a8a06e05fa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
