@@ -34,6 +34,24 @@
       "parentUuid": "e8fddf44_97df4483",
       "revId": "ce8ce6f81eff8a84e2ea59930cb995b1107181e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60395225_5b5b2016",
+        "filename": "src/libANGLE/renderer/serial_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-28T19:40:53Z",
+      "side": 1,
+      "message": "It will still work, just might be slower (due to lock). The assertion is mainly an alert so that we are aware of this and understand the perf impact. So far all architecture we care are actually lock free.",
+      "parentUuid": "0fdc8844_4676e3e4",
+      "revId": "ce8ce6f81eff8a84e2ea59930cb995b1107181e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
