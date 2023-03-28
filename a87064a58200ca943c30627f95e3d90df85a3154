@@ -16,6 +16,40 @@
       "message": "LGTM",
       "revId": "a87064a58200ca943c30627f95e3d90df85a3154",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "effe8023_cea47bda",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-28T21:42:41Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "a87064a58200ca943c30627f95e3d90df85a3154",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffe78b8c_52d217b0",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-28T21:42:41Z",
+      "side": 1,
+      "message": "Relieved that your new tests are passing on newer configurations, Vulkan in particular!",
+      "revId": "a87064a58200ca943c30627f95e3d90df85a3154",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
