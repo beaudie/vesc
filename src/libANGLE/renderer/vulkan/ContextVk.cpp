@@ -1195,11 +1195,6 @@ void ContextVk::onDestroy(const gl::Context *context)
     }
 
     // Recycle current command buffers.
-
-    // Release functions are only used for Vulkan secondary command buffers.
-    mOutsideRenderPassCommands->releaseCommandPool();
-    mRenderPassCommands->releaseCommandPool();
-
     // Detach functions are only used for ring buffer allocators.
     mOutsideRenderPassCommands->detachAllocator();
     mRenderPassCommands->detachAllocator();
@@ -1217,17 +1212,6 @@ void ContextVk::onDestroy(const gl::Context *context)
     mRenderPassCache.destroy(this);
     mShaderLibrary.destroy(device);
     mGpuEventQueryPool.destroy(device);
-
-    // Must retire all Vulkan secondary command buffers before destroying the pools.
-    if ((!vk::OutsideRenderPassCommandBuffer::ExecutesInline() ||
-         !vk::RenderPassCommandBuffer::ExecutesInline()) &&
-        mRenderer->isAsyncCommandBufferResetEnabled())
-    {
-        // This will also reset Primary command buffers which is REQUIRED on some buggy Vulkan
-        // implementations.
-        (void)mRenderer->retireFinishedCommands(this);
-    }
-
     mCommandPools.outsideRenderPassPool.destroy(device);
     mCommandPools.renderPassPool.destroy(device);
 
@@ -1381,17 +1365,6 @@ angle::Result ContextVk::initialize()
     emptyBufferInfo.pQueueFamilyIndices         = nullptr;
     constexpr VkMemoryPropertyFlags kMemoryType = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
     ANGLE_TRY(mEmptyBuffer.init(this, emptyBufferInfo, kMemoryType));
-
-    // If the share group has one context and is about to add the second one, the first context's
-    // mutable textures should be flushed.
-    if (isEligibleForMutableTextureFlush())
-    {
-        ASSERT(mShareGroupVk->getContextCount() == 1);
-        for (auto context : mShareGroupVk->getContexts())
-        {
-            ANGLE_TRY(context->flushOutsideRenderPassCommands());
-        }
-    }
 
     // Add context into the share group
     mShareGroupVk->addContext(this);
@@ -3194,7 +3167,7 @@ angle::Result ContextVk::handleDirtyDescriptorSetsImpl(CommandBufferHelperT *com
 {
     // When using Vulkan secondary command buffers, the descriptor sets need to be updated before
     // they are bound.
-    if (!CommandBufferHelperT::ExecutesInline())
+    if (!commandBufferHelper->getCommandBuffer().ExecutesInline())
     {
         flushDescriptorSetUpdates();
     }
@@ -5116,8 +5089,6 @@ angle::Result ContextVk::invalidateProgramExecutableHelper(const gl::Context *co
 angle::Result ContextVk::syncState(const gl::Context *context,
                                    const gl::State::DirtyBits &dirtyBits,
                                    const gl::State::DirtyBits &bitMask,
-                                   const gl::State::ExtendedDirtyBits &extendedDirtyBits,
-                                   const gl::State::ExtendedDirtyBits &extendedBitMask,
                                    gl::Command command)
 {
     const gl::State &glState                       = context->getState();
@@ -5537,6 +5508,8 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 break;
             case gl::State::DIRTY_BIT_EXTENDED:
             {
+                gl::State::ExtendedDirtyBits extendedDirtyBits =
+                    glState.getAndResetExtendedDirtyBits();
                 for (size_t extendedDirtyBit : extendedDirtyBits)
                 {
                     switch (extendedDirtyBit)

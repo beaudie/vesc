@@ -318,28 +318,14 @@ std::string DynamicHLSL::generateVertexShaderForInputLayout(
 std::string DynamicHLSL::generatePixelShaderForOutputSignature(
     const std::string &sourceShader,
     const std::vector<PixelShaderOutputVariable> &outputVariables,
-    FragDepthUsage fragDepthUsage,
+    bool usesFragDepth,
     const std::vector<GLenum> &outputLayout,
     const std::vector<ShaderStorageBlock> &shaderStorageBlocks,
     size_t baseUAVRegister) const
 {
     const int shaderModel      = mRenderer->getMajorShaderModel();
     std::string targetSemantic = (shaderModel >= 4) ? "SV_TARGET" : "COLOR";
-    std::string depthSemantic  = [shaderModel, fragDepthUsage]() {
-        if (shaderModel < 4)
-        {
-            return "DEPTH";
-        }
-        switch (fragDepthUsage)
-        {
-            case FragDepthUsage::Less:
-                return "SV_DepthLessEqual";
-            case FragDepthUsage::Greater:
-                return "SV_DepthGreaterEqual";
-            default:
-                return "SV_Depth";
-        }
-    }();
+    std::string depthSemantic  = (shaderModel >= 4) ? "SV_Depth" : "DEPTH";
 
     std::ostringstream declarationStream;
     std::ostringstream copyStream;
@@ -388,7 +374,7 @@ std::string DynamicHLSL::generatePixelShaderForOutputSignature(
         }
     }
 
-    if (fragDepthUsage != FragDepthUsage::Unused)
+    if (usesFragDepth)
     {
         declarationStream << "    float gl_Depth : " << depthSemantic << ";\n";
         copyStream << "    output.gl_Depth = gl_Depth; \n";

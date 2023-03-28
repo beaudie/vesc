@@ -1866,9 +1866,7 @@ void StateManagerGL::setClearStencil(GLint clearStencil)
 
 angle::Result StateManagerGL::syncState(const gl::Context *context,
                                         const gl::State::DirtyBits &glDirtyBits,
-                                        const gl::State::DirtyBits &bitMask,
-                                        const gl::State::ExtendedDirtyBits &extendedDirtyBits,
-                                        const gl::State::ExtendedDirtyBits &extendedBitMask)
+                                        const gl::State::DirtyBits &bitMask)
 {
     const gl::State &state = context->getState();
 
@@ -2256,6 +2254,8 @@ angle::Result StateManagerGL::syncState(const gl::Context *context,
                 break;
             case gl::State::DIRTY_BIT_EXTENDED:
             {
+                const gl::State::ExtendedDirtyBits extendedDirtyBits =
+                    state.getAndResetExtendedDirtyBits();
                 const gl::State::ExtendedDirtyBits glAndLocalExtendedDirtyBits =
                     extendedDirtyBits | mLocalExtendedDirtyBits;
                 for (size_t extendedDirtyBit : glAndLocalExtendedDirtyBits)

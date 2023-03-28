@@ -499,7 +499,6 @@ class RendererVk : angle::NonCopyable
                                                             VkResult *result);
     angle::Result finish(vk::Context *context);
     angle::Result checkCompletedCommands(vk::Context *context);
-    angle::Result retireFinishedCommands(vk::Context *context);
 
     angle::Result flushWaitSemaphores(vk::ProtectionType protectionType,
                                       egl::ContextPriority priority,
@@ -1055,11 +1054,6 @@ ANGLE_INLINE void RendererVk::requestAsyncCommandsAndGarbageCleanup(vk::Context 
 ANGLE_INLINE angle::Result RendererVk::checkCompletedCommands(vk::Context *context)
 {
     return mCommandQueue.checkAndCleanupCompletedCommands(context);
-}
-
-ANGLE_INLINE angle::Result RendererVk::retireFinishedCommands(vk::Context *context)
-{
-    return mCommandQueue.retireFinishedCommands(context);
 }
 }  // namespace rx
 

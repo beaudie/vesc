@@ -618,13 +618,11 @@ bool TParseContext::checkCanBeLValue(const TSourceLoc &line, const char *op, TIn
         case EvqGeometryIn:
         case EvqTessControlIn:
         case EvqTessEvaluationIn:
-        case EvqSmoothIn:
         case EvqFlatIn:
         case EvqNoPerspectiveIn:
+        case EvqSmoothIn:
         case EvqCentroidIn:
         case EvqSampleIn:
-        case EvqNoPerspectiveCentroidIn:
-        case EvqNoPerspectiveSampleIn:
             message = "can't modify an input";
             break;
         case EvqUniform:
@@ -2939,9 +2937,7 @@ TPublicType TParseContext::addFullySpecifiedType(const TTypeQualifierBuilder &ty
     checkEarlyFragmentTestsIsNotSpecified(typeSpecifier.getLine(),
                                           returnType.layoutQualifier.earlyFragmentTests);
 
-    if (returnType.qualifier == EvqSampleIn || returnType.qualifier == EvqSampleOut ||
-        returnType.qualifier == EvqNoPerspectiveSampleIn ||
-        returnType.qualifier == EvqNoPerspectiveSampleOut)
+    if (returnType.qualifier == EvqSampleIn || returnType.qualifier == EvqSampleOut)
     {
         mSampleQualifierSpecified = true;
     }
@@ -3217,27 +3213,20 @@ void TParseContext::checkTessellationShaderUnsizedArraysAndSetSize(const TSource
         {
             case EvqTessControlIn:
             case EvqTessEvaluationIn:
-            case EvqSmoothIn:
             case EvqFlatIn:
-            case EvqNoPerspectiveIn:
             case EvqCentroidIn:
+            case EvqSmoothIn:
             case EvqSampleIn:
-            case EvqNoPerspectiveCentroidIn:
-            case EvqNoPerspectiveSampleIn:
                 // Declaring an array size is optional. If no size is specified, it will be taken
                 // from the implementation-dependent maximum patch size (gl_MaxPatchVertices).
                 ASSERT(mMaxPatchVertices > 0);
                 type->sizeOutermostUnsizedArray(mMaxPatchVertices);
                 break;
             case EvqTessControlOut:
-            case EvqTessEvaluationOut:
-            case EvqSmoothOut:
             case EvqFlatOut:
-            case EvqNoPerspectiveOut:
             case EvqCentroidOut:
+            case EvqSmoothOut:
             case EvqSampleOut:
-            case EvqNoPerspectiveCentroidOut:
-            case EvqNoPerspectiveSampleOut:
                 // Declaring an array size is optional. If no size is specified, it will be taken
                 // from output patch size declared in the shader.  If the patch size is not yet
                 // declared, this is deferred until such time as it does.
@@ -4937,20 +4926,14 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
                 }
                 break;
             // a member variable in io block may have different interpolation.
-            case EvqSmoothIn:
-            case EvqSmoothOut:
             case EvqFlatIn:
             case EvqFlatOut:
             case EvqNoPerspectiveIn:
             case EvqNoPerspectiveOut:
+            case EvqSmoothIn:
+            case EvqSmoothOut:
             case EvqCentroidIn:
             case EvqCentroidOut:
-            case EvqSampleIn:
-            case EvqSampleOut:
-            case EvqNoPerspectiveCentroidIn:
-            case EvqNoPerspectiveCentroidOut:
-            case EvqNoPerspectiveSampleIn:
-            case EvqNoPerspectiveSampleOut:
                 break;
             // a member variable can have an incomplete qualifier because shader io block has either
             // in or out.
@@ -4958,9 +4941,6 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
             case EvqFlat:
             case EvqNoPerspective:
             case EvqCentroid:
-            case EvqSample:
-            case EvqNoPerspectiveCentroid:
-            case EvqNoPerspectiveSample:
             case EvqGeometryIn:
             case EvqGeometryOut:
                 if (!IsShaderIoBlock(typeQualifier.qualifier) &&

@@ -7009,69 +7009,6 @@ TEST_P(GLSLTest_ES3, AliasedSampleQualifiers)
     ANGLE_GL_PROGRAM(program, kVS, kFS);
 }
 
-// Test that `noperspective centroid` passes the validation and compiles.
-TEST_P(GLSLTest_ES3, NoPerspectiveCentroid)
-{
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_NV_shader_noperspective_interpolation"));
-
-    constexpr char kVS[] =
-        R"(#version 300 es
-        #extension GL_NV_shader_noperspective_interpolation : require
-
-        noperspective centroid out mediump float f;
-        void main()
-        {
-            f = 1.0;
-            gl_Position = vec4(0.0, 0.0, 0.0, 1.0);
-        })";
-
-    constexpr char kFS[] =
-        R"(#version 300 es
-        #extension GL_NV_shader_noperspective_interpolation : require
-
-        noperspective centroid in mediump float f;
-        out mediump vec4 color;
-        void main()
-        {
-            color = vec4(f, 0.0, 0.0, 1.0);
-        })";
-
-    ANGLE_GL_PROGRAM(program, kVS, kFS);
-}
-
-// Test that `noperspective sample` passes the validation and compiles.
-TEST_P(GLSLTest_ES3, NoPerspectiveSample)
-{
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_shader_multisample_interpolation"));
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_NV_shader_noperspective_interpolation"));
-
-    constexpr char kVS[] =
-        R"(#version 300 es
-        #extension GL_OES_shader_multisample_interpolation : require
-        #extension GL_NV_shader_noperspective_interpolation : require
-
-        noperspective sample out mediump float f;
-        void main()
-        {
-            f = 1.0;
-            gl_Position = vec4(f, 0.0, 0.0, 1.0);
-        })";
-
-    constexpr char kFS[] =
-        R"(#version 300 es
-        #extension GL_OES_shader_multisample_interpolation : require
-        #extension GL_NV_shader_noperspective_interpolation : require
-
-        noperspective sample in mediump float f;
-        out mediump vec4 color;
-        void main()
-        {
-            color = vec4(f, 0.0, 0.0, 1.0);
-        })";
-
-    ANGLE_GL_PROGRAM(program, kVS, kFS);
-}
-
 // Test that a shader with sample in / sample out can be used successfully when the varying
 // precision is different between VS and FS.
 TEST_P(GLSLTest_ES31, VaryingSampleInAndOutDifferentPrecision)
@@ -16263,24 +16200,6 @@ void main()
 })";
 
     ANGLE_GL_PROGRAM(testProgram, kVS, kFS);
-}
-
-// Test that sample variables compile.
-TEST_P(GLSLTest_ES3, SampleVariables)
-{
-    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_sample_variables"));
-
-    const char kFS[] = R"(#version 300 es
-#extension GL_OES_sample_variables : require
-precision highp float;
-out vec4 color;
-void main()
-{
-    gl_SampleMask[0] = gl_SampleMaskIn[0] & 0x55555555;
-    color = vec4(gl_SamplePosition.yx, float(gl_SampleID), float(gl_MaxSamples + gl_NumSamples));
-})";
-
-    ANGLE_GL_PROGRAM(testProgram, essl3_shaders::vs::Simple(), kFS);
 }
 
 // Test that shader caching maintains uniforms across compute shader compilations.

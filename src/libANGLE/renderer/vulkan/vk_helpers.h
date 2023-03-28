@@ -1095,6 +1095,8 @@ constexpr uint32_t kInfiniteCmdCount = 0xFFFFFFFF;
 class CommandBufferHelperCommon : angle::NonCopyable
 {
   public:
+    SecondaryCommandPool *getCommandPool() { return mCommandPool; }
+
     void bufferWrite(ContextVk *contextVk,
                      VkAccessFlags writeAccessType,
                      PipelineStage writeStage,
@@ -1134,6 +1136,8 @@ class CommandBufferHelperCommon : angle::NonCopyable
 
     const QueueSerial &getQueueSerial() const { return mQueueSerial; }
 
+    bool hasAllocatorLinks() const { return mCommandAllocator.hasAllocatorLinks(); }
+
     // Dumping the command stream is disabled by default.
     static constexpr bool kEnableCommandStreamDiagnostics = false;
 
@@ -1141,24 +1145,9 @@ class CommandBufferHelperCommon : angle::NonCopyable
     CommandBufferHelperCommon();
     ~CommandBufferHelperCommon();
 
-    void initializeImpl();
+    void initializeImpl(SecondaryCommandPool *commandPool);
 
     void resetImpl();
-
-    template <class DerivedT>
-    angle::Result attachCommandPoolImpl(Context *context, SecondaryCommandPool *commandPool);
-    template <class DerivedT, bool kIsRenderPassBuffer>
-    angle::Result detachCommandPoolImpl(Context *context, SecondaryCommandPool **commandPoolOut);
-    template <class DerivedT>
-    void releaseCommandPoolImpl();
-
-    template <class DerivedT>
-    void attachAllocatorImpl(SecondaryCommandMemoryAllocator *allocator);
-    template <class DerivedT>
-    SecondaryCommandMemoryAllocator *detachAllocatorImpl();
-
-    template <class DerivedT>
-    void assertCanBeRecycledImpl();
 
     void imageReadImpl(ContextVk *contextVk,
                        VkImageAspectFlags aspectFlags,
@@ -1211,27 +1200,16 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
     OutsideRenderPassCommandBufferHelper();
     ~OutsideRenderPassCommandBufferHelper();
 
-    angle::Result initialize(Context *context);
+    angle::Result initialize(Context *context, SecondaryCommandPool *commandPool);
 
     angle::Result reset(Context *context, SecondaryCommandBufferCollector *commandBufferCollector);
-
-    static constexpr bool ExecutesInline()
-    {
-        return OutsideRenderPassCommandBuffer::ExecutesInline();
-    }
 
     OutsideRenderPassCommandBuffer &getCommandBuffer() { return mCommandBuffer; }
 
     bool empty() const { return mCommandBuffer.empty(); }
 
-    angle::Result attachCommandPool(Context *context, SecondaryCommandPool *commandPool);
-    angle::Result detachCommandPool(Context *context, SecondaryCommandPool **commandPoolOut);
-    void releaseCommandPool();
-
     void attachAllocator(SecondaryCommandMemoryAllocator *allocator);
     SecondaryCommandMemoryAllocator *detachAllocator();
-
-    void assertCanBeRecycled();
 
 #if defined(ANGLE_ENABLE_ASSERTS)
     void markOpen() { mCommandBuffer.open(); }
@@ -1276,12 +1254,8 @@ class OutsideRenderPassCommandBufferHelper final : public CommandBufferHelperCom
 
   private:
     angle::Result initializeCommandBuffer(Context *context);
-    angle::Result endCommandBuffer(Context *context);
 
     OutsideRenderPassCommandBuffer mCommandBuffer;
-    bool mIsCommandBufferEnded = false;
-
-    friend class CommandBufferHelperCommon;
 };
 
 enum class ImagelessStatus
@@ -1331,11 +1305,9 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     RenderPassCommandBufferHelper();
     ~RenderPassCommandBufferHelper();
 
-    angle::Result initialize(Context *context);
+    angle::Result initialize(Context *context, SecondaryCommandPool *commandPool);
 
     angle::Result reset(Context *context, SecondaryCommandBufferCollector *commandBufferCollector);
-
-    static constexpr bool ExecutesInline() { return RenderPassCommandBuffer::ExecutesInline(); }
 
     RenderPassCommandBuffer &getCommandBuffer()
     {
@@ -1344,14 +1316,8 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
 
     bool empty() const { return !started(); }
 
-    angle::Result attachCommandPool(Context *context, SecondaryCommandPool *commandPool);
-    void detachCommandPool(SecondaryCommandPool **commandPoolOut);
-    void releaseCommandPool();
-
     void attachAllocator(SecondaryCommandMemoryAllocator *allocator);
     SecondaryCommandMemoryAllocator *detachAllocator();
-
-    void assertCanBeRecycled();
 
 #if defined(ANGLE_ENABLE_ASSERTS)
     void markOpen() { getCommandBuffer().open(); }
@@ -1588,8 +1554,6 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     // This is last renderpass before present and this is the image will be presented. We can use
     // final layout of the renderpass to transition it to the presentable layout
     ImageHelper *mImageOptimizeForPresent;
-
-    friend class CommandBufferHelperCommon;
 };
 
 // The following class helps support both Vulkan and ANGLE secondary command buffers by

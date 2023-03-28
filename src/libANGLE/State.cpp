@@ -3863,6 +3863,13 @@ AttributesMask State::getAndResetDirtyCurrentValues() const
     return retVal;
 }
 
+State::ExtendedDirtyBits State::getAndResetExtendedDirtyBits() const
+{
+    ExtendedDirtyBits retVal = mExtendedDirtyBits;
+    mExtendedDirtyBits.reset();
+    return retVal;
+}
+
 void State::initializeForCapture(const Context *context)
 {
     mCaps       = context->getCaps();
