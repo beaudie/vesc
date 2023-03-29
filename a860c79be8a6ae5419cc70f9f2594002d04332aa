@@ -16,6 +16,23 @@
       "message": "lgtm+2\n\nIt might be pointed out that the check of the definition and value are a little redundant, but we don\u0027t know how Apple\u0027s build system works nor whether it might explicitly define some of these platform macros to 0.",
       "revId": "a860c79be8a6ae5419cc70f9f2594002d04332aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4fdaab4_62a6542f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-29T03:36:44Z",
+      "side": 1,
+      "message": "The mac-angle-chromium-try flakes are anglebug.com/8099 . If this doesn\u0027t work on retry then we can consider landing it manually.",
+      "revId": "a860c79be8a6ae5419cc70f9f2594002d04332aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
