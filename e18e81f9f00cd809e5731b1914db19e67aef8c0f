@@ -88,6 +88,24 @@
       "parentUuid": "13747c0e_b5a5f5f3",
       "revId": "e18e81f9f00cd809e5731b1914db19e67aef8c0f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12f80a03_9fdf2c43",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2023-03-29T18:55:57Z",
+      "side": 1,
+      "message": "I tested enabling 3.2 and tries that test. It failed with `Could not pack varying gl_TessLevelOuter`",
+      "parentUuid": "6c093402_5797774f",
+      "revId": "e18e81f9f00cd809e5731b1914db19e67aef8c0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
