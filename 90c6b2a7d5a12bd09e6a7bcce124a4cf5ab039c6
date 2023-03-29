@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70f5c312_6edf80a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-29T02:20:16Z",
+      "side": 1,
+      "message": "lgtm+2 directly\n\nPer update on the linked bug, re-verified that one particular test case of concern still runs correctly with this new limit.",
+      "revId": "90c6b2a7d5a12bd09e6a7bcce124a4cf5ab039c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
