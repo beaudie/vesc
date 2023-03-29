@@ -4077,6 +4077,13 @@ CallCapture ParseCallCapture(const Token &nameToken,
                 paramTokens, strings);
         return CallCapture(EntryPoint::GLMaxShaderCompilerThreadsKHR, std::move(params));
     }
+    if (strcmp(nameToken, "glMemoryAllocLogANGLE") == 0)
+    {
+        ParamBuffer params =
+            ParseParameters<std::remove_pointer<PFNGLMEMORYALLOCLOGANGLEPROC>::type>(paramTokens,
+                                                                                     strings);
+        return CallCapture(EntryPoint::GLMemoryAllocLogANGLE, std::move(params));
+    }
     if (strcmp(nameToken, "glMemoryBarrier") == 0)
     {
         ParamBuffer params = ParseParameters<std::remove_pointer<PFNGLMEMORYBARRIERPROC>::type>(

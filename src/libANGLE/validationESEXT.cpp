@@ -3859,4 +3859,10 @@ bool ValidateLogicOpANGLE(const Context *context,
 
     return ValidateLogicOpCommon(context, entryPoint, opcodePacked);
 }
+
+bool ValidateMemoryAllocLogANGLE(const Context *context, angle::EntryPoint entryPoint)
+{
+    UNIMPLEMENTED();
+    return false;
+}
 }  // namespace gl

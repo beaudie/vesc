@@ -9959,6 +9959,11 @@ void Context::logicOpANGLE(LogicalOperation opcodePacked)
     mState.setLogicOp(opcodePacked);
 }
 
+void Context::memoryAllocLog()
+{
+    UNIMPLEMENTED();
+}
+
 egl::Error Context::releaseHighPowerGPU()
 {
     return mImplementation->releaseHighPowerGPU(this);
