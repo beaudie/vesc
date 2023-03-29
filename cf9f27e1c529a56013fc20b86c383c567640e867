@@ -105,6 +105,24 @@
       "parentUuid": "8a0b6b6b_cfad418a",
       "revId": "cf9f27e1c529a56013fc20b86c383c567640e867",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90230af6_ffbde1cc",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-29T16:22:27Z",
+      "side": 1,
+      "message": "Oh right, so the clear is now applied to the started/inactive RP and then `handleDirtyGraphicsRenderPass` makes the RP active right? Would it be easier if the RP is activated before the midRP clear is applied to it?\n\nResolving the thread nevertheless",
+      "parentUuid": "07ae1789_735d5bfe",
+      "revId": "cf9f27e1c529a56013fc20b86c383c567640e867",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
