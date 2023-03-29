@@ -2984,6 +2984,12 @@ void GL_APIENTRY glLogicOpANGLE(GLenum opcode)
     return GL_LogicOpANGLE(opcode);
 }
 
+// GL_ANGLE_memory_alloc_log
+void GL_APIENTRY glMemoryAllocLogANGLE()
+{
+    return GL_MemoryAllocLogANGLE();
+}
+
 // GL_ANGLE_memory_object_flags
 void GL_APIENTRY glTexStorageMemFlags2DANGLE(GLenum target,
                                              GLsizei levels,

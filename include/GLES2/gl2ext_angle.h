@@ -713,6 +713,7 @@ GL_APICALL void GL_APIENTRY glGetFramebufferPixelLocalStorageParameterivRobustAN
 #define GL_LOGIC_OP_NAND_ANGLE           0x150E
 #define GL_LOGIC_OP_SET_ANGLE            0x150F
 typedef void (GL_APIENTRYP PFNGLLOGICOPANGLEPROC) (GLenum);
+typedef void (GL_APIENTRYP PFNGLMEMORYALLOCLOGANGLEPROC) (void);
 #ifdef GL_GLEXT_PROTOTYPES
 GL_APICALL void GL_APIENTRY glLogicOpANGLE (GLenum);
 #endif

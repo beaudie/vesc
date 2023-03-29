@@ -1015,6 +1015,7 @@ enum class EntryPoint
     GLMatrixIndexPointerOES,
     GLMatrixMode,
     GLMaxShaderCompilerThreadsKHR,
+    GLMemoryAllocLogANGLE,
     GLMemoryBarrier,
     GLMemoryBarrierByRegion,
     GLMemoryObjectParameterivEXT,

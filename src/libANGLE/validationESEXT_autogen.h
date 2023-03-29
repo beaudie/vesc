@@ -235,6 +235,9 @@ bool ValidateLogicOpANGLE(const Context *context,
                           angle::EntryPoint entryPoint,
                           LogicalOperation opcodePacked);
 
+// GL_ANGLE_memory_alloc_log
+bool ValidateMemoryAllocLogANGLE(const Context *context, angle::EntryPoint entryPoint);
+
 // GL_ANGLE_memory_object_flags
 bool ValidateTexStorageMemFlags2DANGLE(const Context *context,
                                        angle::EntryPoint entryPoint,

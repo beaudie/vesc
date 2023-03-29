@@ -230,6 +230,7 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_ANGLE_logic_op"] = enableableExtension(&Extensions::logicOpANGLE);
         map["GL_CHROMIUM_lose_context"] = enableableExtension(&Extensions::loseContextCHROMIUM);
         map["GL_ANGLE_lossy_etc_decode"] = enableableExtension(&Extensions::lossyEtcDecodeANGLE);
+        map["GL_ANGLE_memory_alloc_log"] = enableableExtension(&Extensions::memoryAllocLogANGLE);
         map["GL_ANGLE_memory_object_flags"] = enableableExtension(&Extensions::memoryObjectFlagsANGLE);
         map["GL_ANGLE_memory_object_fuchsia"] = enableableExtension(&Extensions::memoryObjectFuchsiaANGLE);
         map["GL_ANGLE_memory_size"] = enableableExtension(&Extensions::memorySizeANGLE);

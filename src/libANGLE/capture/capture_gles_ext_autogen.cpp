@@ -1030,6 +1030,13 @@ CallCapture CaptureLogicOpANGLE(const State &glState,
     return CallCapture(angle::EntryPoint::GLLogicOpANGLE, std::move(paramBuffer));
 }
 
+CallCapture CaptureMemoryAllocLogANGLE(const State &glState, bool isCallValid)
+{
+    ParamBuffer paramBuffer;
+
+    return CallCapture(angle::EntryPoint::GLMemoryAllocLogANGLE, std::move(paramBuffer));
+}
+
 CallCapture CaptureTexStorageMemFlags2DANGLE(const State &glState,
                                              bool isCallValid,
                                              TextureType targetPacked,
