@@ -33,6 +33,24 @@
       "message": "I\u0027m having a hard time following this comment, why is \"sample count\" plural?",
       "revId": "f21a91ecf26b1ccefe48c55fb0694fc5931fb2d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82f6cd02_fb55864f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4654,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-03-29T14:40:07Z",
+      "side": 1,
+      "message": "It refers to `TextureCaps.sampleCounts`. If that set contains `1`, then it\u0027s possible to create a \"multisample\" renderbuffer with only one sample, which should follow multisampling rules wrt coverage.\n\nCurrently, only Direct3D backends do that. Others would clamp such requests to `2` or `4`. Should Vulkan backend follow this behavior, this condition would have to be adjusted.",
+      "parentUuid": "f6110764_af61684d",
+      "revId": "f21a91ecf26b1ccefe48c55fb0694fc5931fb2d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
