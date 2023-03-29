@@ -22,6 +22,30 @@
       },
       "revId": "9ba88a5cc4d7d0b2124fe289df2b6890bfb44c2d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89bc3e18_8ea7afad",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-03-29T21:56:24Z",
+      "side": 1,
+      "message": "`*success` is set to `true` at the end of the function. The variable is initialized to `false` before `initPipelineCache()` is called. Currently it will remain `false` unless it reaches the end.",
+      "parentUuid": "47930a62_f4fbccf0",
+      "range": {
+        "startLine": 1090,
+        "startChar": 7,
+        "endLine": 1092,
+        "endChar": 39
+      },
+      "revId": "9ba88a5cc4d7d0b2124fe289df2b6890bfb44c2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
