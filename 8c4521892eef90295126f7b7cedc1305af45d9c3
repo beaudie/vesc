@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e29d78b_2fdff580",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2023-03-29T00:58:56Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "5f29d8cc_9651e168",
+      "revId": "8c4521892eef90295126f7b7cedc1305af45d9c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3eb96a22_a4cf3dc8",
@@ -49,6 +67,24 @@
       "writtenOn": "2023-03-29T00:17:13Z",
       "side": 1,
       "message": "`... \u0026\u0026 (isVenus || armDriverVersion \u003e\u003d ARMDriverVersion(38, 1, 0))`",
+      "revId": "8c4521892eef90295126f7b7cedc1305af45d9c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b13f49c9_295f3ef2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 3621,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2023-03-29T00:58:56Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "3eb96a22_a4cf3dc8",
       "revId": "8c4521892eef90295126f7b7cedc1305af45d9c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
