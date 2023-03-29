@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4810debf_5a29fe2d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-29T14:02:54Z",
+      "side": 1,
+      "message": "Thanks for the fix! If there isn\u0027t one already, do you mind adding a test that tests state changes here? Like draw with GL_SAMPLE_COVERAGE enabled, then disabled, then enabled again.\n\nSpecifically w.r.t this change, the test should do something like draw single sampled, change the framebuffer attachment to be multisampled, draw, change attachment back to single-sampled, draw. If you want to go the extra mile, you can have a variant that changes the framebuffer binding instead of changing the framebuffer itself.",
+      "revId": "f21a91ecf26b1ccefe48c55fb0694fc5931fb2d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6110764_af61684d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4654,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-29T14:02:54Z",
+      "side": 1,
+      "message": "I\u0027m having a hard time following this comment, why is \"sample count\" plural?",
+      "revId": "f21a91ecf26b1ccefe48c55fb0694fc5931fb2d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
