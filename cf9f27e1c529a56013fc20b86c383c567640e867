@@ -123,6 +123,24 @@
       "parentUuid": "07ae1789_735d5bfe",
       "revId": "cf9f27e1c529a56013fc20b86c383c567640e867",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96f03352_c6132ffb",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-29T16:38:45Z",
+      "side": 1,
+      "message": "\u003eso the clear is now applied to the started/inactive RP and then handleDirtyGraphicsRenderPass makes the RP active right?\n\nCorrect, but handleDirtyGraphicsRenderPass makes the RP active only if there is draw call followed and it is suitable to reactivate.\n\n\u003e Would it be easier if the RP is activated before the midRP clear is applied to it?\n\nThat is alternative solution, I don\u0027t know what other side effect it will have though. Feel free to try it if you are interested.",
+      "parentUuid": "90230af6_ffbde1cc",
+      "revId": "cf9f27e1c529a56013fc20b86c383c567640e867",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
