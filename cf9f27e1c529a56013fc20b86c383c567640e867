@@ -69,6 +69,24 @@
       "parentUuid": "5594f0ea_fc75afd1",
       "revId": "cf9f27e1c529a56013fc20b86c383c567640e867",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a0b6b6b_cfad418a",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-29T02:01:50Z",
+      "side": 1,
+      "message": "Thanks.\n\nAm I missing something though, aren\u0027t the new and old code doing exactly the same thing?\n\n- If !Active, both go to `else`\n- If mLastRenderPassQueueSerial and empty, both go to `else`\n- If mLastRenderPassQueueSerial and !empty, both go to `if`\n- If Active but not mLastRenderPassQueueSerial, that\u0027s asserted as impossible",
+      "parentUuid": "b62a3fb7_602007ae",
+      "revId": "cf9f27e1c529a56013fc20b86c383c567640e867",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
