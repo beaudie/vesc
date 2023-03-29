@@ -87,6 +87,24 @@
       "parentUuid": "b62a3fb7_602007ae",
       "revId": "cf9f27e1c529a56013fc20b86c383c567640e867",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07ae1789_735d5bfe",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 535,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-29T16:14:59Z",
+      "side": 1,
+      "message": "I think you confused `active` with `started but inactive`. `active` means RP is still open and active. `started but inactive` means onRenderPassFinished has been called we are about to endRP, but not yet end. The RP that started by UtilsVk::blitResolve is always a `started but inactive`, it never set ContextVk::mRenderPassCommandBuffer pointer. \n\nThe change here is that previously a clear call on a `started but inactive` render pass will go down deferred clear code path. i.e., isMidRenderPassClear will set to false because we were checking ContextVk::hasActiveRenderPassWithCommands(). After this CL, it now allows a midRenderPassClear on a `started but inactive` render pass, exactly try to address your comment in the other CL. No app actually runs into this but one of your test does. (Blit to depth buffer and then clear color buffer, which sounds like reasonable usage).",
+      "parentUuid": "8a0b6b6b_cfad418a",
+      "revId": "cf9f27e1c529a56013fc20b86c383c567640e867",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
