@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "093bcc1d_ab86e33a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 946,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-03-29T20:59:42Z",
+      "side": 1,
+      "message": "Yes. Updated the cache size cast to `uint32_t` to use 4 bytes.",
+      "parentUuid": "3576459e_2cbc45f0",
+      "range": {
+        "startLine": 945,
+        "startChar": 0,
+        "endLine": 946,
+        "endChar": 96
+      },
+      "revId": "036855c21d1bb859ed4a7242d2ce3311ce2e2867",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "331c187c_b3da4565",
@@ -37,6 +61,24 @@
       "writtenOn": "2023-03-29T02:05:45Z",
       "side": 1,
       "message": "Good to write them, but equally important to read them back on load to validate them 😊",
+      "revId": "036855c21d1bb859ed4a7242d2ce3311ce2e2867",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "964a2f5d_225dce6d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-03-29T20:59:42Z",
+      "side": 1,
+      "message": "Thanks! Added the change for `GetAndDecompressPipelineCacheVk` as well.",
+      "parentUuid": "331c187c_b3da4565",
       "revId": "036855c21d1bb859ed4a7242d2ce3311ce2e2867",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
