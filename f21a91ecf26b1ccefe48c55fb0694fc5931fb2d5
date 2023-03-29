@@ -51,6 +51,24 @@
       "parentUuid": "f6110764_af61684d",
       "revId": "f21a91ecf26b1ccefe48c55fb0694fc5931fb2d5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a9eab8e_faa8c8b1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4654,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-29T15:24:49Z",
+      "side": 1,
+      "message": "Thanks, that was not obvious! Suggest clarifying the comment like:\n\n```\n// The following assumes that supported sample counts for multisampled rendering does not include 1. This is true in the Vulkan backend, where 1x multisampling is disallowed.\n```",
+      "parentUuid": "82f6cd02_fb55864f",
+      "revId": "f21a91ecf26b1ccefe48c55fb0694fc5931fb2d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
