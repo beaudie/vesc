@@ -539,4 +539,6 @@ void ContextNULL::handleError(GLenum errorCode,
     errorStream << "Internal NULL back-end error: " << message << ".";
     mErrors->handleError(errorCode, errorStream.str().c_str(), file, function, line);
 }
+
+void ContextNULL::memoryAllocLog() {}
 }  // namespace rx

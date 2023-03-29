@@ -255,6 +255,8 @@ class Context9 : public ContextD3D
                       const char *function,
                       unsigned int line) override;
 
+    void memoryAllocLog() override;
+
   private:
     Renderer9 *mRenderer;
     IncompleteTextureSet mIncompleteTextures;
