@@ -72,6 +72,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8a1b857_a58e24f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2023-03-29T07:44:29Z",
+      "side": 1,
+      "message": "No hurry here. Don\u0027t worry ; )\n\nWe chose to revert the mali uprev on the release branch.",
+      "parentUuid": "fd7a7bfe_5f38d078",
+      "revId": "8c4521892eef90295126f7b7cedc1305af45d9c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3eb96a22_a4cf3dc8",
