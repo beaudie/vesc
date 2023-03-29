@@ -799,6 +799,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                mShareGroupVk->getContextCount() == 1;
     }
 
+    void memoryAllocLog() override;
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t

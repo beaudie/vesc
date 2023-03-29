@@ -262,6 +262,8 @@ class ContextNULL : public ContextImpl
                      const char *function,
                      unsigned int line);
 
+    void memoryAllocLog() override;
+
   private:
     gl::Caps mCaps;
     gl::TextureCapsMap mTextureCaps;

@@ -281,6 +281,9 @@ class ContextImpl : public GLImplFactory
                                                           const gl::PixelLocalStoragePlane[],
                                                           const GLenum storeops[]);
 
+    // GL_ANGLE_memory_alloc_log
+    virtual void memoryAllocLog() = 0;
+
   protected:
     const gl::State &mState;
     gl::MemoryProgramCache *mMemoryProgramCache;

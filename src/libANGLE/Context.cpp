@@ -9961,7 +9961,8 @@ void Context::logicOpANGLE(LogicalOperation opcodePacked)
 
 void Context::memoryAllocLog()
 {
-    UNIMPLEMENTED();
+    WARN() << "Memory alloc extension available.";
+    mImplementation->memoryAllocLog();
 }
 
 egl::Error Context::releaseHighPowerGPU()

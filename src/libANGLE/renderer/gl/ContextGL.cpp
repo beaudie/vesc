@@ -1124,4 +1124,6 @@ angle::Result ContextGL::drawPixelLocalStorageEXTDisable(gl::Context *context,
     return angle::Result::Continue;
 }
 
+void ContextGL::memoryAllocLog() {}
+
 }  // namespace rx

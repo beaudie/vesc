@@ -1117,4 +1117,6 @@ angle::ImageLoadContext Context11::getImageLoadContext() const
 {
     return getRenderer()->getDisplay()->getImageLoadContext();
 }
+
+void Context11::memoryAllocLog() {}
 }  // namespace rx

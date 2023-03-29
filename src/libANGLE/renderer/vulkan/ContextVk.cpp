@@ -8256,6 +8256,11 @@ angle::ImageLoadContext ContextVk::getImageLoadContext() const
     return getRenderer()->getDisplay()->getImageLoadContext();
 }
 
+void ContextVk::memoryAllocLog()
+{
+    mRenderer->getMemoryAllocationTracker()->logMemoryStatsOnError();
+}
+
 angle::Result ContextVk::ensureInterfacePipelineCache()
 {
     if (!mInterfacePipelinesCache.valid())
