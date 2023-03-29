@@ -70,6 +70,24 @@
       "parentUuid": "fea52e50_cc94d0f8",
       "revId": "e18e81f9f00cd809e5731b1914db19e67aef8c0f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c093402_5797774f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2023-03-29T18:50:29Z",
+      "side": 1,
+      "message": "We are not exposing es3.2 on mali/intel/amd. So nope.\n\nBtw, those 2 tests mentioned also pass on AMD with Venus on RADV now.",
+      "parentUuid": "13747c0e_b5a5f5f3",
+      "revId": "e18e81f9f00cd809e5731b1914db19e67aef8c0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
