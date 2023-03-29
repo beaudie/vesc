@@ -178,6 +178,9 @@ ANGLE_EXPORT void GL_APIENTRY GL_VertexAttribDivisorANGLE(GLuint index, GLuint d
 // GL_ANGLE_logic_op
 ANGLE_EXPORT void GL_APIENTRY GL_LogicOpANGLE(GLenum opcode);
 
+// GL_ANGLE_memory_alloc_log
+ANGLE_EXPORT void GL_APIENTRY GL_MemoryAllocLogANGLE();
+
 // GL_ANGLE_memory_object_flags
 ANGLE_EXPORT void GL_APIENTRY GL_TexStorageMemFlags2DANGLE(GLenum target,
                                                            GLsizei levels,

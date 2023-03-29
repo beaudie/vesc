@@ -2018,6 +2018,8 @@ const char *GetEntryPointName(EntryPoint ep)
             return "glMatrixMode";
         case EntryPoint::GLMaxShaderCompilerThreadsKHR:
             return "glMaxShaderCompilerThreadsKHR";
+        case EntryPoint::GLMemoryAllocLogANGLE:
+            return "glMemoryAllocLogANGLE";
         case EntryPoint::GLMemoryBarrier:
             return "glMemoryBarrier";
         case EntryPoint::GLMemoryBarrierByRegion:

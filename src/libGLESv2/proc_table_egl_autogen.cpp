@@ -929,6 +929,7 @@ const ProcEntry g_procTable[] = {
     {"glMatrixIndexPointerOES", P(GL_MatrixIndexPointerOES)},
     {"glMatrixMode", P(GL_MatrixMode)},
     {"glMaxShaderCompilerThreadsKHR", P(GL_MaxShaderCompilerThreadsKHR)},
+    {"glMemoryAllocLogANGLE", P(GL_MemoryAllocLogANGLE)},
     {"glMemoryBarrier", P(GL_MemoryBarrier)},
     {"glMemoryBarrierByRegion", P(GL_MemoryBarrierByRegion)},
     {"glMemoryObjectParameterivEXT", P(GL_MemoryObjectParameterivEXT)},

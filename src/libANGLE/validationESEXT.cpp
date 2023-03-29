@@ -3859,4 +3859,15 @@ bool ValidateLogicOpANGLE(const Context *context,
 
     return ValidateLogicOpCommon(context, entryPoint, opcodePacked);
 }
+
+bool ValidateMemoryAllocLogANGLE(const Context *context, angle::EntryPoint entryPoint)
+{
+    if (!context->getExtensions().memoryAllocLogANGLE)
+    {
+        context->validationError(entryPoint, GL_INVALID_OPERATION, kExtensionNotEnabled);
+        return false;
+    }
+
+    return true;
+}
 }  // namespace gl
