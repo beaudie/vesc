@@ -236,6 +236,9 @@ angle::CallCapture CaptureLogicOpANGLE(const State &glState,
                                        bool isCallValid,
                                        LogicalOperation opcodePacked);
 
+// GL_ANGLE_memory_alloc_log
+angle::CallCapture CaptureMemoryAllocLogANGLE(const State &glState, bool isCallValid);
+
 // GL_ANGLE_memory_object_flags
 angle::CallCapture CaptureTexStorageMemFlags2DANGLE(const State &glState,
                                                     bool isCallValid,

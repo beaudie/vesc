@@ -1190,6 +1190,9 @@ void RendererVk::ensureCapsInitialized() const
     }
 
     mNativeExtensions.logicOpANGLE = mPhysicalDeviceFeatures.logicOp == VK_TRUE;
+
+    // Memory alloc log ANGLE
+    mNativeExtensions.memoryAllocLogANGLE = true;
 }
 
 namespace vk

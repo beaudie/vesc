@@ -9968,6 +9968,11 @@ void Context::logicOpANGLE(LogicalOperation opcodePacked)
     mState.setLogicOp(opcodePacked);
 }
 
+void Context::memoryAllocLog()
+{
+    WARN() << "Memory alloc extension available.";
+}
+
 egl::Error Context::releaseHighPowerGPU()
 {
     return mImplementation->releaseHighPowerGPU(this);

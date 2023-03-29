@@ -1001,6 +1001,32 @@ void GL_APIENTRY GL_LogicOpANGLE(GLenum opcode)
     }
 }
 
+// GL_ANGLE_memory_alloc_log
+void GL_APIENTRY GL_MemoryAllocLogANGLE()
+{
+    Context *context = GetValidGlobalContext();
+    EVENT(context, GLMemoryAllocLogANGLE, "context = %d", CID(context));
+
+    if (context)
+    {
+        SCOPED_SHARE_CONTEXT_LOCK(context);
+        bool isCallValid =
+            (context->skipValidation() ||
+             (ValidatePixelLocalStorageInactive(context,
+                                                angle::EntryPoint::GLMemoryAllocLogANGLE) &&
+              ValidateMemoryAllocLogANGLE(context, angle::EntryPoint::GLMemoryAllocLogANGLE)));
+        if (isCallValid)
+        {
+            context->memoryAllocLog();
+        }
+        ANGLE_CAPTURE_GL(MemoryAllocLogANGLE, isCallValid, context);
+    }
+    else
+    {
+        GenerateContextLostErrorOnCurrentGlobalContext();
+    }
+}
+
 // GL_ANGLE_memory_object_flags
 void GL_APIENTRY GL_TexStorageMemFlags2DANGLE(GLenum target,
                                               GLsizei levels,

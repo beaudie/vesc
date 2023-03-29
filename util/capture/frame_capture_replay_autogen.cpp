@@ -2277,6 +2277,9 @@ void ReplayTraceFunctionCall(const CallCapture &call, const TraceFunctionMap &cu
         case angle::EntryPoint::GLMaxShaderCompilerThreadsKHR:
             glMaxShaderCompilerThreadsKHR(captures[0].value.GLuintVal);
             break;
+        case angle::EntryPoint::GLMemoryAllocLogANGLE:
+            glMemoryAllocLogANGLE();
+            break;
         case angle::EntryPoint::GLMemoryBarrier:
             glMemoryBarrier(captures[0].value.GLbitfieldVal);
             break;

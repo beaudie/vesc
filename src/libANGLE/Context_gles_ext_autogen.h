@@ -384,6 +384,8 @@
     /* GL_ANGLE_logic_op */                                                                        \
     void logicOpANGLE(LogicalOperation opcodePacked);                                              \
     /* GL_ANGLE_lossy_etc_decode */                                                                \
+    /* GL_ANGLE_memory_alloc_log */                                                                \
+    void memoryAllocLog();                                                                         \
     /* GL_ANGLE_memory_object_flags */                                                             \
     void texStorageMemFlags2D(TextureType targetPacked, GLsizei levels, GLenum internalFormat,     \
                               GLsizei width, GLsizei height, MemoryObjectID memoryPacked,          \
