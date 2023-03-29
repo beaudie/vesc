@@ -535,4 +535,6 @@ angle::ImageLoadContext Context9::getImageLoadContext() const
 {
     return getRenderer()->getDisplay()->getImageLoadContext();
 }
+
+void Context9::memoryAllocLog() {}
 }  // namespace rx

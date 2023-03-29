@@ -319,6 +319,8 @@ class ContextGL : public ContextImpl
     // in order to guarantee every pixel gets updated.
     void resetDrawStateForPixelLocalStorageEXT(const gl::Context *context);
 
+    void memoryAllocLog() override;
+
   protected:
     std::shared_ptr<RendererGL> mRenderer;
 

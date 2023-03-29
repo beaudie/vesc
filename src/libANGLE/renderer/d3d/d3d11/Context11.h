@@ -271,6 +271,8 @@ class Context11 : public ContextD3D, public MultisampleTextureInitializer
     UINT64 getDisjointFrequency();
     void setDisjointFrequency(UINT64 frequency);
 
+    void memoryAllocLog() override;
+
   private:
     angle::Result drawElementsImpl(const gl::Context *context,
                                    gl::PrimitiveMode mode,
