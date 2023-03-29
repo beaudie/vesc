@@ -70,6 +70,30 @@
       },
       "revId": "9ba88a5cc4d7d0b2124fe289df2b6890bfb44c2d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03d28c09_7d36a300",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-29T22:27:33Z",
+      "side": 1,
+      "message": "I see. It is a bit odd that we reply on caller to set to false here.",
+      "parentUuid": "f76ae856_52e8fccc",
+      "range": {
+        "startLine": 1090,
+        "startChar": 7,
+        "endLine": 1092,
+        "endChar": 39
+      },
+      "revId": "9ba88a5cc4d7d0b2124fe289df2b6890bfb44c2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
