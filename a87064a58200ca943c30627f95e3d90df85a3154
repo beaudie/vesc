@@ -50,6 +50,24 @@
       "message": "Relieved that your new tests are passing on newer configurations, Vulkan in particular!",
       "revId": "a87064a58200ca943c30627f95e3d90df85a3154",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d842f005_a7c3cb23",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 511,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-29T01:42:19Z",
+      "side": 1,
+      "message": "Technically it should work everywhere, but per anglebug.com/2046 the whole init code is disabled on Qualcomm :shrug:\n\nAnd for some reason HLSL is taking a special path that I didn\u0027t find (nor could I test with if I did)",
+      "parentUuid": "ffe78b8c_52d217b0",
+      "revId": "a87064a58200ca943c30627f95e3d90df85a3154",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
