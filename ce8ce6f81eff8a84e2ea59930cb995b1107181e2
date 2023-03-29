@@ -106,6 +106,24 @@
       "parentUuid": "0a67a105_3ddc9e0d",
       "revId": "ce8ce6f81eff8a84e2ea59930cb995b1107181e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d6f11c5_9b636617",
+        "filename": "src/libANGLE/renderer/serial_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-29T19:15:24Z",
+      "side": 1,
+      "message": "Sure.",
+      "parentUuid": "7965c8a2_ef620295",
+      "revId": "ce8ce6f81eff8a84e2ea59930cb995b1107181e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
