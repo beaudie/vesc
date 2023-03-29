@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24fa5e8a_55e82700",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-03-29T15:30:57Z",
+      "side": 1,
+      "message": "PTAL. Final fix ended up not needing to sync any extended dirty bits for TexImage calls once the GL backend bugs were fixed.\n\nWe could revert the previous patch to pass the extended bits to syncState but we may hit this problem again in the future with some operation needing to sync an extended dirty bit.",
+      "revId": "b8c21a78953be3a46e2ca0317fb13aa8fea06392",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
