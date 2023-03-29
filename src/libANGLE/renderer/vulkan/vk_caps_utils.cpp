@@ -1043,6 +1043,11 @@ void RendererVk::ensureCapsInitialized() const
                 maxCombinedAtomicCounterBuffers;
         }
 
+        // Cap maxTessControlInputComponents by maxVertexOutputComponents; there can't be more
+        // inputs than there are outputs in the previous stage.
+        mNativeCaps.maxTessControlInputComponents = std::min(
+            mNativeCaps.maxTessControlInputComponents, mNativeCaps.maxVertexOutputComponents);
+
         // Reserve a uniform buffer binding for each tessellation stage
         if (tessellationShaderEnabled)
         {
