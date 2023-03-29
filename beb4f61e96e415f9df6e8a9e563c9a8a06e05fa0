@@ -248,6 +248,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "538dca29_c926b47d",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3945,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-29T16:36:50Z",
+      "side": 1,
+      "message": "Okay, I see you added `uncompressedChannelCount` in the function, keeping this 4 here is okay with me with a quick comment, i.e. \"The target uncompressed format has 4 channels\"",
+      "parentUuid": "e4a3dd15_a4037cb7",
+      "range": {
+        "startLine": 3945,
+        "startChar": 45,
+        "endLine": 3945,
+        "endChar": 46
+      },
+      "revId": "beb4f61e96e415f9df6e8a9e563c9a8a06e05fa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9ff0ae42_986e6e3c",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 6
@@ -359,6 +383,24 @@
       "side": 1,
       "message": "Good idea, but among other things I\u0027m not sure how I would plumb the recompression code from its current place in FrameCapture.cpp to some place that\u0027s accessible from tests? I guess image_util is sort of the appropriate place for it...",
       "parentUuid": "9b188748_03c813ba",
+      "revId": "beb4f61e96e415f9df6e8a9e563c9a8a06e05fa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5501ef3f_3c1e3645",
+        "filename": "src/tests/gl_tests/gles1/PalettedTextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-29T16:36:50Z",
+      "side": 1,
+      "message": "The test could just use `StoreRGBA8ToPalettedImpl` and duplicate any of the bits needed to feed it data.  Lubosz did something similar in `GetImageTest.cpp` `CompressionExtension`.  Although none of those tests support emulated formats, so we\u0027re out front here.\n\nIf you have time this week, you could add something here, but the time would be better spent understanding the last remaining issues with the trace using RenderDoc.",
+      "parentUuid": "099c3cfb_ea5e0f89",
       "revId": "beb4f61e96e415f9df6e8a9e563c9a8a06e05fa0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

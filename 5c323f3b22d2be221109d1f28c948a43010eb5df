@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82a65094_ebab9a32",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-29T16:36:50Z",
+      "side": 1,
+      "message": "A couple of nits and suggestions, but +2\u0027ing for timezone friendly reviews, and I know your time on this is short.",
+      "revId": "5c323f3b22d2be221109d1f28c948a43010eb5df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fcf2abc_45a82397",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 3604,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-03-29T16:36:50Z",
+      "side": 1,
+      "message": "This can be `const gl::Extents \u0026extents`",
+      "range": {
+        "startLine": 3604,
+        "startChar": 29,
+        "endLine": 3604,
+        "endChar": 48
+      },
+      "revId": "5c323f3b22d2be221109d1f28c948a43010eb5df",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
