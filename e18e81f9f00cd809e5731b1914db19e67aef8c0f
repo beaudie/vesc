@@ -52,6 +52,24 @@
       "parentUuid": "a40ff468_97556082",
       "revId": "e18e81f9f00cd809e5731b1914db19e67aef8c0f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13747c0e_b5a5f5f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-29T18:42:46Z",
+      "side": 1,
+      "message": "Did you happen to check `KHR-GLES32.core.tessellation_shader.tessellation_shader_tessellation.max_in_out_attributes`?",
+      "parentUuid": "fea52e50_cc94d0f8",
+      "revId": "e18e81f9f00cd809e5731b1914db19e67aef8c0f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
