@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2247a910_b300c5fe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-29T18:38:47Z",
+      "side": 1,
+      "message": "These are impressive results, but unfortunately we can\u0027t just unlock things in the backend. This has come up numerous times in the past. See the first section of this comment where I previously explained (to another contributor) why this is dangerous: issuetracker.google.com/268091451#comment5\n\nThe issue of global and display lock is real though (with both deadlocks and performance), and I\u0027m glad you are tackling this. But let\u0027s take a step back and brainstorm a design that fixes things properly once and for all.\n\nI\u0027ll take up the action of learning how the front-end locking works, and then we can perhaps set up a meeting and talk it out. What do you think?",
+      "revId": "79d1882d3034cd0d34032b3eeb679e28b15f7e2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06aa5b25_eb44c83f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-29T18:38:47Z",
+      "side": 1,
+      "message": "This should be fixed in RenderDoc IMO. it shouldn\u0027t call `eglX` from a call to `vkY`.\n\nWe do have this mutex recursion problem with Android though, and IMO there\u0027s no way to keep things robust as long as ANGLE calls into platform code and the platform code calls back into ANGLE. I\u0027d really like to see Android fixed with this respect and we get rid of the recursiveness of the mutex altogether.",
+      "revId": "79d1882d3034cd0d34032b3eeb679e28b15f7e2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
