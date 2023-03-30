@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6860b84e_23bfcbcc",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-03-30T09:41:11Z",
+      "side": 1,
+      "message": "Please clarify that this error is generated only when `target` is `BLEND`.",
+      "revId": "a73c375e8e88e0eba15854a904462b617c2f014a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
