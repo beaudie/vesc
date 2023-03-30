@@ -23,6 +23,8 @@
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "libANGLE/trace.h"
 
+#include "libGLESv2/global_state.h"
+
 namespace rx
 {
 
@@ -1762,9 +1764,19 @@ void WindowSurfaceVk::destroySwapChainImages(DisplayVk *displayVk)
 
 egl::Error WindowSurfaceVk::prepareSwap(const gl::Context *context)
 {
-    DisplayVk *displayVk = vk::GetImpl(context->getDisplay());
-    angle::Result result = prepareSwapImpl(context);
-    return angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);
+    egl::Error eglResult(EGL_SUCCESS);
+    {
+        angle::GlobalMutex &globalMutex = egl::GetGlobalMutex();
+        globalMutex.unlock();
+
+        DisplayVk *displayVk = vk::GetImpl(context->getDisplay());
+        angle::Result result = prepareSwapImpl(context);
+        // Is access displayVk here safe?
+        eglResult = angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);
+
+        globalMutex.lock();
+    }
+    return eglResult;
 }
 
 angle::Result WindowSurfaceVk::prepareSwapImpl(const gl::Context *context)

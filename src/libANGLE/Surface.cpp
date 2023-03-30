@@ -330,6 +330,8 @@ Error Surface::prepareSwap(const gl::Context *context)
 Error Surface::swap(gl::Context *context)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "egl::Surface::swap");
+    ANGLE_TRY(mImplementation->prepareSwap(context));
+
     context->onPreSwap();
 
     context->getState().getOverlay()->onSwap();

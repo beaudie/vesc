@@ -2671,9 +2671,7 @@ def get_optional_gl_locks(api, cmd_name, params):
 
 
 def get_prepare_swap_buffers_call(api, cmd_name, params):
-    if cmd_name not in [
-            "eglSwapBuffers", "eglSwapBuffersWithDamageKHR", "eglSwapBuffersWithFrameTokenANGLE"
-    ]:
+    if cmd_name not in ["eglSwapBuffersWithDamageKHR", "eglSwapBuffersWithFrameTokenANGLE"]:
         return ""
 
     passed_params = [None, None]
