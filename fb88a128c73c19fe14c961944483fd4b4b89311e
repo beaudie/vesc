@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01f21150_768d17da",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-03-30T17:19:02Z",
+      "side": 1,
+      "message": "Please add `ClipControlEXT` here.",
+      "revId": "fb88a128c73c19fe14c961944483fd4b4b89311e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68007362_8ac222e1",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 6
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-03-30T17:19:02Z",
+      "side": 1,
+      "message": "Please allow `DEPTH_CLAMP_EXT` here.",
+      "revId": "fb88a128c73c19fe14c961944483fd4b4b89311e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
