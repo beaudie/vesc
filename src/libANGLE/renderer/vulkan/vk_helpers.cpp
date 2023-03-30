@@ -5655,8 +5655,8 @@ void ImageHelper::releaseImage(RendererVk *renderer)
     renderer->collectAllocationGarbage(mUse, mVmaAllocation);
     renderer->collectGarbage(mUse, &mImage, &mDeviceMemory);
     mUse.reset();
-    mImageSerial = kInvalidImageSerial;
-    setEntireContentUndefined();
+
+    resetCachedProperties();
 }
 
 void ImageHelper::releaseImageFromShareContexts(RendererVk *renderer,
