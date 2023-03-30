@@ -155,7 +155,7 @@ EGLBoolean SurfaceAttrib(Thread *thread,
                          SurfaceID surfacePacked,
                          EGLint attribute,
                          EGLint value);
-EGLBoolean SwapBuffers(Thread *thread, egl::Display *dpyPacked, SurfaceID surfacePacked);
+EGLBoolean SwapBuffers(EGLDisplay dpy, EGLSurface surface);
 EGLBoolean SwapInterval(Thread *thread, egl::Display *dpyPacked, EGLint interval);
 EGLBoolean Terminate(Thread *thread, egl::Display *dpyPacked);
 EGLBoolean WaitClient(Thread *thread);

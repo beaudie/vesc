@@ -14,8 +14,10 @@
 #include "libANGLE/EGLSync.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/Thread.h"
+#include "libANGLE/entry_points_utils.h"
 #include "libANGLE/queryutils.h"
 #include "libANGLE/validationEGL.h"
+#include "libANGLE/validationEGL_autogen.h"
 #include "libGLESv2/global_state.h"
 #include "libGLESv2/proc_table_egl.h"
 
@@ -665,18 +667,52 @@ EGLBoolean SurfaceAttrib(Thread *thread,
     return EGL_TRUE;
 }
 
-EGLBoolean SwapBuffers(Thread *thread, Display *display, egl::SurfaceID surfaceID)
+EGLBoolean SwapBuffersImpl(Thread *thread, Display *display, egl::SurfaceID surfaceID)
 {
     Surface *eglSurface = display->getSurface(surfaceID);
 
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglSwapBuffers",
                          GetDisplayIfValid(display), EGL_FALSE);
 
-    ANGLE_EGL_TRY_RETURN(thread, eglSurface->swap(thread->getContext()), "eglSwapBuffers",
-                         GetSurfaceIfValid(display, surfaceID), EGL_FALSE);
+    egl::Error result(EGL_SUCCESS);
+    {
+        angle::GlobalMutex &globalMutex = egl::GetGlobalMutex();
+        globalMutex.unlock();
+        result = eglSurface->prepareSwap(thread->getContext());
+        globalMutex.lock();
+    }
+    if (!result.isError())
+    {
+        result = eglSurface->swap(thread->getContext());
+    }
+    ANGLE_EGL_TRY_RETURN(thread, result, "eglSwapBuffers", GetSurfaceIfValid(display, surfaceID),
+                         EGL_FALSE);
 
     thread->setSuccess();
     return EGL_TRUE;
+}
+
+EGLBoolean SwapBuffers(EGLDisplay dpy, EGLSurface surface)
+{
+    // EGLBoolean EGLAPIENTRY EGL_SwapBuffers(EGLDisplay dpy, EGLSurface surface)
+    // - removed PrepareSwapBuffersANGLE()
+    {
+        ANGLE_SCOPED_GLOBAL_LOCK();
+        EGL_EVENT(SwapBuffers, "dpy = 0x%016" PRIxPTR ", surface = 0x%016" PRIxPTR "",
+                  (uintptr_t)dpy, (uintptr_t)surface);
+
+        Thread *thread = egl::GetCurrentThread();
+
+        egl::Display *dpyPacked = PackParam<egl::Display *>(dpy);
+        SurfaceID surfacePacked = PackParam<SurfaceID>(surface);
+
+        ANGLE_EGL_VALIDATE(thread, SwapBuffers, GetDisplayIfValid(dpyPacked), EGLBoolean, dpyPacked,
+                           surfacePacked);
+
+        EGLBoolean returnValue = SwapBuffersImpl(thread, dpyPacked, surfacePacked);
+        ANGLE_CAPTURE_EGL(SwapBuffers, true, thread, dpyPacked, surfacePacked, returnValue);
+        return returnValue;
+    }
 }
 
 EGLBoolean SwapInterval(Thread *thread, Display *display, EGLint interval)
