@@ -16,6 +16,24 @@
       "message": "Suggest moving this inside `deriveImageViewFormatFromCreateInfoPNext`",
       "revId": "ec49be5a555ea0ae8433efb5c15921e4ee42faa7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97d73229_ddfc6fd6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5540,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-30T21:33:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "85be493f_632d1d73",
+      "revId": "ec49be5a555ea0ae8433efb5c15921e4ee42faa7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
