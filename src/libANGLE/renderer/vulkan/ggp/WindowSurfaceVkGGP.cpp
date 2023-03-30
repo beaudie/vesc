@@ -68,7 +68,7 @@ egl::Error WindowSurfaceVkGGP::swapWithFrameToken(const gl::Context *context,
     frameTokenData.sType                  = VK_STRUCTURE_TYPE_PRESENT_FRAME_TOKEN_GGP;
     frameTokenData.frameToken             = static_cast<GgpFrameToken>(frameToken);
 
-    angle::Result result = swapImpl(context, nullptr, 0, &frameTokenData);
+    angle::Result result = swapImpl(context, nullptr, 0, &frameTokenData, true);
     return angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);
 }
 }  // namespace rx

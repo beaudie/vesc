@@ -224,7 +224,6 @@ class WindowSurfaceVk : public SurfaceVk
                                             const gl::ImageIndex &imageIndex,
                                             GLsizei samples,
                                             FramebufferAttachmentRenderTarget **rtOut) override;
-    egl::Error prepareSwap(const gl::Context *context) override;
     egl::Error swap(const gl::Context *context) override;
     egl::Error swapWithDamage(const gl::Context *context,
                               const EGLint *rects,
@@ -322,11 +321,11 @@ class WindowSurfaceVk : public SurfaceVk
     void setTimestampsEnabled(bool enabled) override;
 
   protected:
-    angle::Result prepareSwapImpl(const gl::Context *context);
     angle::Result swapImpl(const gl::Context *context,
                            const EGLint *rects,
                            EGLint n_rects,
-                           const void *pNextChain);
+                           const void *pNextChain,
+                           bool unlockGlobalMutex);
     // Called when a swapchain image whose acquisition was deferred must be acquired.  This method
     // will recreate the swapchain (if needed) and call the acquireNextSwapchainImage() method.
     angle::Result doDeferredAcquireNextImage(const gl::Context *context, bool presentOutOfDate);
