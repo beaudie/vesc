@@ -33,6 +33,23 @@
       "message": "That\u0027s a strange flake but let me retry it.",
       "revId": "7af651974375d191f87c265ca625bcea3ed5f9bb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58242380_abd9e5a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-30T23:52:00Z",
+      "side": 1,
+      "message": "ANGLE\u0027s CQ is still affected by anglebug.com/8099 so I\u0027m landing this manually.",
+      "revId": "7af651974375d191f87c265ca625bcea3ed5f9bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
