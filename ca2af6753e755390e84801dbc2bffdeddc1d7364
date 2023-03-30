@@ -16,6 +16,29 @@
       "message": "LGTM",
       "revId": "ca2af6753e755390e84801dbc2bffdeddc1d7364",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae1ca717_2f8473a1",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1096,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-30T17:57:09Z",
+      "side": 1,
+      "message": "One more question. I thought the intent of this CL is try to troubleshoot the intermittent bot failure that we were seeing when async compression enabled. So this is a debug feature, or are we going to enable it on release build permanently? If just for debug, we should make it fatal, so that we can catch it immediately. If  for permanent, then we need to see the perf impact here since compression/decompression is going to take longer, and I am wondering do we really need this?",
+      "range": {
+        "startLine": 1091,
+        "startChar": 4,
+        "endLine": 1096,
+        "endChar": 5
+      },
+      "revId": "ca2af6753e755390e84801dbc2bffdeddc1d7364",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
