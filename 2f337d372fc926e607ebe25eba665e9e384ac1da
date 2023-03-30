@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c36e7c95_a763bc45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1113941
+      },
+      "writtenOn": "2023-03-30T15:00:35Z",
+      "side": 1,
+      "message": "Thanks! Can you send the CL to the commit queue? It looks like I can\u0027t, unless I\u0027m missing something.",
+      "revId": "2f337d372fc926e607ebe25eba665e9e384ac1da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
