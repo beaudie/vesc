@@ -443,12 +443,28 @@ CallCapture ParseCallCapture(const Token &nameToken,
                 paramTokens, strings);
         return CallCapture(EntryPoint::EGLProgramCachePopulateANGLE, std::move(params));
     }
+    if (strcmp(nameToken, "eglProgramCachePopulateMetalBinaryArchiveANGLE") == 0)
+    {
+        ParamBuffer params = ParseParameters<
+            std::remove_pointer<PFNEGLPROGRAMCACHEPOPULATEMETALBINARYARCHIVEANGLEPROC>::type>(
+            paramTokens, strings);
+        return CallCapture(EntryPoint::EGLProgramCachePopulateMetalBinaryArchiveANGLE,
+                           std::move(params));
+    }
     if (strcmp(nameToken, "eglProgramCacheQueryANGLE") == 0)
     {
         ParamBuffer params =
             ParseParameters<std::remove_pointer<PFNEGLPROGRAMCACHEQUERYANGLEPROC>::type>(
                 paramTokens, strings);
         return CallCapture(EntryPoint::EGLProgramCacheQueryANGLE, std::move(params));
+    }
+    if (strcmp(nameToken, "eglProgramCacheQueryMetalBinaryArchiveANGLE") == 0)
+    {
+        ParamBuffer params = ParseParameters<
+            std::remove_pointer<PFNEGLPROGRAMCACHEQUERYMETALBINARYARCHIVEANGLEPROC>::type>(
+            paramTokens, strings);
+        return CallCapture(EntryPoint::EGLProgramCacheQueryMetalBinaryArchiveANGLE,
+                           std::move(params));
     }
     if (strcmp(nameToken, "eglProgramCacheResizeANGLE") == 0)
     {

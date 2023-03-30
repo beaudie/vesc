@@ -1340,6 +1340,7 @@ std::vector<std::string> DisplayExtensions::getStrings() const
     InsertExtensionString("EGL_ANGLE_metal_create_context_ownership_identity",   metalCreateContextOwnershipIdentityANGLE, &extensionStrings);
     InsertExtensionString("EGL_KHR_partial_update",                              partialUpdateKHR,                   &extensionStrings);
     InsertExtensionString("EGL_ANGLE_metal_shared_event_sync",                   mtlSyncSharedEventANGLE,            &extensionStrings);
+    InsertExtensionString("EGL_ANGLE_metal_program_cache_control",               metalProgramCacheControlANGLE,            &extensionStrings);
     // clang-format on
 
     return extensionStrings;

@@ -37,6 +37,9 @@
 
 namespace rx
 {
+namespace
+{
+constexpr uint32_t kDefaultMaxCachedBinaryArchives = 1;
 
 static EGLint GetDepthSize(GLint internalformat)
 {
@@ -85,6 +88,7 @@ static EGLint GetStencilSize(GLint internalformat)
             return 0;
     }
 }
+}  // namespace
 
 bool IsMetalDisplayAvailable()
 {
@@ -109,7 +113,11 @@ struct DefaultShaderAsyncInfoMtl
 };
 
 DisplayMtl::DisplayMtl(const egl::DisplayState &state)
-    : DisplayImpl(state), mDisplay(nullptr), mStateCache(mFeatures), mUtils(this)
+    : DisplayImpl(state),
+      mDisplay(nullptr),
+      mStateCache(mFeatures),
+      mUtils(this),
+      mBinaryArchiveCache(kDefaultMaxCachedBinaryArchives)
 {}
 
 DisplayMtl::~DisplayMtl() {}
@@ -387,7 +395,21 @@ rx::ContextImpl *DisplayMtl::createContext(const gl::State &state,
                                            const gl::Context *shareContext,
                                            const egl::AttributeMap &attribs)
 {
-    return new ContextMtl(state, errorSet, attribs, this);
+    mtl::MRUBinaryArchiveCache *binaryArchiveCachePtr = nullptr;
+
+    if (ANGLE_APPLE_AVAILABLE_XCI(11, 14, 14))
+    {
+        bool binaryArchiveCacheEnabled =
+            (attribs.get(EGL_CONTEXT_METAL_BINARY_ARCHIVE_CACHE_ENABLED_ANGLE, GL_FALSE) ==
+             GL_TRUE);
+
+        if (binaryArchiveCacheEnabled)
+        {
+            binaryArchiveCachePtr = &mBinaryArchiveCache;
+        }
+    }
+
+    return new ContextMtl(state, errorSet, attribs, this, binaryArchiveCachePtr);
 }
 
 StreamProducerImpl *DisplayMtl::createStreamProducerD3DTexture(
@@ -494,6 +516,9 @@ void DisplayMtl::generateExtensions(egl::DisplayExtensions *outExtensions) const
 
     // EGL_ANGLE_metal_sync_shared_event
     outExtensions->mtlSyncSharedEventANGLE = true;
+
+    // EGL_ANGLE_metal_program_cache_control
+    outExtensions->metalProgramCacheControlANGLE = true;
 }
 
 void DisplayMtl::generateCaps(egl::Caps *outCaps) const
@@ -669,6 +694,66 @@ egl::Error DisplayMtl::validateImageClientBuffer(const gl::Context *context,
             return egl::EglBadAttribute();
     }
     return egl::NoError();
+}
+
+EGLint DisplayMtl::getMetalBinaryArchiveCacheCount() const
+{
+    return mBinaryArchiveCache.size();
+}
+
+egl::Error DisplayMtl::queryMetalBinaryArchiveFromCache(EGLint index,
+                                                        void *key,
+                                                        EGLint *keySize,
+                                                        void **binaryArchive)
+{
+    ASSERT(index >= 0 && index < static_cast<EGLint>(mBinaryArchiveCache.size()));
+
+    const egl::BlobCacheKey *hash = nullptr;
+    mtl::AutoObjCPtr<id<MTLBinaryArchive>> cachedBinaryArchive;
+    bool result =
+        mBinaryArchiveCache.getAt(static_cast<uint32_t>(index), &hash, &cachedBinaryArchive);
+    if (!result)
+    {
+        return egl::EglBadAccess() << "Binary Archive not accessible.";
+    }
+
+    ASSERT(keySize);
+
+    if (keySize)
+    {
+        ASSERT(*keySize == static_cast<EGLint>(mtl::MRUBinaryArchiveCache::kKeyLength));
+        memcpy(key, hash->data(), *keySize);
+    }
+
+    if (binaryArchive)
+    {
+        *binaryArchive = (__bridge void *)cachedBinaryArchive.get();
+    }
+
+    *keySize = static_cast<EGLint>(mtl::MRUBinaryArchiveCache::kKeyLength);
+
+    return egl::NoError();
+}
+
+void DisplayMtl::populateMetalBinaryArchiveInCache(const void *key,
+                                                   EGLint keySize,
+                                                   void *binaryArchive)
+{
+    ASSERT(keySize == static_cast<EGLint>(mtl::MRUBinaryArchiveCache::kKeyLength));
+
+    egl::BlobCacheKey hash;
+    memcpy(hash.data(), key, keySize);
+
+    mBinaryArchiveCache.put(hash, (__bridge id<MTLBinaryArchive>)binaryArchive);
+}
+
+EGLint DisplayMtl::resizeMetalBinaryArchiveCache(EGLint limit)
+{
+    EGLint initialSize = static_cast<EGLint>(mBinaryArchiveCache.size());
+
+    mBinaryArchiveCache.resize(static_cast<uint32_t>(limit));
+
+    return initialSize;
 }
 
 gl::Caps DisplayMtl::getNativeCaps() const

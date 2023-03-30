@@ -2313,6 +2313,9 @@ EGLint Display::programCacheGetAttrib(EGLenum attrib) const
         case EGL_PROGRAM_CACHE_SIZE_ANGLE:
             return static_cast<EGLint>(mMemoryProgramCache.entryCount());
 
+        case EGL_METAL_BINARY_ARCHIVE_CACHE_COUNT_ANGLE:
+            return mImplementation->getMetalBinaryArchiveCacheCount();
+
         default:
             UNREACHABLE();
             return 0;
@@ -2397,10 +2400,28 @@ EGLint Display::programCacheResize(EGLint limit, EGLenum mode)
         case EGL_PROGRAM_CACHE_TRIM_ANGLE:
             return static_cast<EGLint>(mMemoryProgramCache.trim(static_cast<size_t>(limit)));
 
+        case EGL_METAL_BINARY_ARCHIVE_CACHE_RESIZE_ANGLE:
+            return mImplementation->resizeMetalBinaryArchiveCache(limit);
+
         default:
             UNREACHABLE();
             return 0;
     }
+}
+
+Error Display::programCacheQueryMetalBinaryArchive(EGLint index,
+                                                   void *key,
+                                                   EGLint *keySize,
+                                                   void **binaryArchive)
+{
+    return mImplementation->queryMetalBinaryArchiveFromCache(index, key, keySize, binaryArchive);
+}
+
+void Display::programCachePopulateMetalBinaryArchive(const void *key,
+                                                     EGLint keySize,
+                                                     void *binaryArchive)
+{
+    mImplementation->populateMetalBinaryArchiveInCache(key, keySize, binaryArchive);
 }
 
 void Display::overrideFrontendFeatures(const std::vector<std::string> &featureNames, bool enabled)

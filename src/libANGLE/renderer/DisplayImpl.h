@@ -148,6 +148,16 @@ class DisplayImpl : public EGLImplFactory, public angle::Subject
                                             EGLBoolean *external_only,
                                             EGLint *num_modifiers);
 
+    virtual EGLint getMetalBinaryArchiveCacheCount() const;
+    virtual egl::Error queryMetalBinaryArchiveFromCache(EGLint index,
+                                                        void *key,
+                                                        EGLint *keySize,
+                                                        void **binaryArchive);
+    virtual void populateMetalBinaryArchiveInCache(const void *key,
+                                                   EGLint keySize,
+                                                   void *binaryArchive);
+    virtual EGLint resizeMetalBinaryArchiveCache(EGLint limit);
+
   protected:
     const egl::DisplayState &mState;
 

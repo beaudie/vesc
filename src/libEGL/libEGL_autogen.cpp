@@ -495,6 +495,26 @@ EGLBoolean EGLAPIENTRY eglQueryDisplayAttribANGLE(EGLDisplay dpy,
     return EGL_QueryDisplayAttribANGLE(dpy, attribute, value);
 }
 
+// EGL_ANGLE_metal_program_cache_control
+void EGLAPIENTRY eglProgramCacheQueryMetalBinaryArchiveANGLE(EGLDisplay dpy,
+                                                             EGLint index,
+                                                             void *key,
+                                                             EGLint *keySize,
+                                                             void **binaryArchive)
+{
+    EnsureEGLLoaded();
+    return EGL_ProgramCacheQueryMetalBinaryArchiveANGLE(dpy, index, key, keySize, binaryArchive);
+}
+
+void EGLAPIENTRY eglProgramCachePopulateMetalBinaryArchiveANGLE(EGLDisplay dpy,
+                                                                const void *key,
+                                                                EGLint keySize,
+                                                                void *binaryArchive)
+{
+    EnsureEGLLoaded();
+    return EGL_ProgramCachePopulateMetalBinaryArchiveANGLE(dpy, key, keySize, binaryArchive);
+}
+
 // EGL_ANGLE_metal_shared_event_sync
 void *EGLAPIENTRY eglCopyMetalSharedEventANGLE(EGLDisplay dpy, EGLSyncKHR sync)
 {

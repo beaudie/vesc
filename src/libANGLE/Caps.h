@@ -678,6 +678,9 @@ struct DisplayExtensions
 
     // EGL_ANGLE_sync_mtl_shared_event
     bool mtlSyncSharedEventANGLE = false;
+
+    // EGL_ANGLE_metal_program_cache_control
+    bool metalProgramCacheControlANGLE = false;
 };
 
 struct DeviceExtensions

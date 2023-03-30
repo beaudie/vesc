@@ -380,8 +380,12 @@ const char *GetEntryPointName(EntryPoint ep)
             return "eglProgramCacheGetAttribANGLE";
         case EntryPoint::EGLProgramCachePopulateANGLE:
             return "eglProgramCachePopulateANGLE";
+        case EntryPoint::EGLProgramCachePopulateMetalBinaryArchiveANGLE:
+            return "eglProgramCachePopulateMetalBinaryArchiveANGLE";
         case EntryPoint::EGLProgramCacheQueryANGLE:
             return "eglProgramCacheQueryANGLE";
+        case EntryPoint::EGLProgramCacheQueryMetalBinaryArchiveANGLE:
+            return "eglProgramCacheQueryMetalBinaryArchiveANGLE";
         case EntryPoint::EGLProgramCacheResizeANGLE:
             return "eglProgramCacheResizeANGLE";
         case EntryPoint::EGLQueryAPI:
