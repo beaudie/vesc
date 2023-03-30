@@ -23,6 +23,8 @@
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "libANGLE/trace.h"
 
+#include "libGLESv2/global_state.h"
+
 namespace rx
 {
 
@@ -1760,37 +1762,12 @@ void WindowSurfaceVk::destroySwapChainImages(DisplayVk *displayVk)
     mSwapchainImages.clear();
 }
 
-egl::Error WindowSurfaceVk::prepareSwap(const gl::Context *context)
-{
-    DisplayVk *displayVk = vk::GetImpl(context->getDisplay());
-    angle::Result result = prepareSwapImpl(context);
-    return angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);
-}
-
-angle::Result WindowSurfaceVk::prepareSwapImpl(const gl::Context *context)
-{
-    ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::prepareSwap");
-    if (mNeedToAcquireNextSwapchainImage)
-    {
-        // Acquire the next image (previously deferred). The image may not have been already
-        // acquired if there was no rendering done at all to the default framebuffer in this frame,
-        // for example if all rendering was done to FBOs.
-        ANGLE_TRACE_EVENT0("gpu.angle", "Acquire Swap Image Before Swap");
-        ANGLE_TRY(doDeferredAcquireNextImage(context, false));
-    }
-    if (mAcquireImageSemaphore)
-    {
-        flushAcquireImageSemaphore(context);
-    }
-    return angle::Result::Continue;
-}
-
 egl::Error WindowSurfaceVk::swapWithDamage(const gl::Context *context,
                                            const EGLint *rects,
                                            EGLint n_rects)
 {
     DisplayVk *displayVk       = vk::GetImpl(context->getDisplay());
-    const angle::Result result = swapImpl(context, rects, n_rects, nullptr);
+    const angle::Result result = swapImpl(context, rects, n_rects, nullptr, true);
     return angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);
 }
 
@@ -1811,7 +1788,7 @@ egl::Error WindowSurfaceVk::swap(const gl::Context *context)
         return angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);
     }
 
-    const angle::Result result = swapImpl(context, nullptr, 0, nullptr);
+    const angle::Result result = swapImpl(context, nullptr, 0, nullptr, true);
     return angle::ToEGL(result, displayVk, EGL_BAD_SURFACE);
 }
 
@@ -2131,11 +2108,37 @@ angle::Result WindowSurfaceVk::cleanUpPresentHistory(vk::Context *context)
 angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
                                         const EGLint *rects,
                                         EGLint n_rects,
-                                        const void *pNextChain)
+                                        const void *pNextChain,
+                                        bool unlockGlobalMutex)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::swapImpl");
 
     ContextVk *contextVk = vk::GetImpl(context);
+
+    if (mNeedToAcquireNextSwapchainImage)
+    {
+        angle::GlobalMutex &globalMutex = egl::GetGlobalMutex();
+        if (unlockGlobalMutex)
+        {
+            globalMutex.unlock();
+        }
+
+        // Acquire the next image (previously deferred). The image may not have been already
+        // acquired if there was no rendering done at all to the default framebuffer in this frame,
+        // for example if all rendering was done to FBOs.
+        ANGLE_TRACE_EVENT0("gpu.angle", "Acquire Swap Image Before Swap");
+        angle::Result result = doDeferredAcquireNextImage(context, false);
+
+        if (unlockGlobalMutex)
+        {
+            globalMutex.lock();
+        }
+        ANGLE_TRY(result);
+    }
+    if (mAcquireImageSemaphore)
+    {
+        flushAcquireImageSemaphore(context);
+    }
 
     bool presentOutOfDate = false;
     ANGLE_TRY(present(contextVk, rects, n_rects, pNextChain, &presentOutOfDate));
@@ -2162,7 +2165,7 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
 
 angle::Result WindowSurfaceVk::onSharedPresentContextFlush(const gl::Context *context)
 {
-    return swapImpl(context, nullptr, 0, nullptr);
+    return swapImpl(context, nullptr, 0, nullptr, false);
 }
 
 bool WindowSurfaceVk::hasStagedUpdates() const
