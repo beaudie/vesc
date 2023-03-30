@@ -14,8 +14,10 @@
 #include "libANGLE/EGLSync.h"
 #include "libANGLE/Surface.h"
 #include "libANGLE/Thread.h"
+#include "libANGLE/entry_points_utils.h"
 #include "libANGLE/queryutils.h"
 #include "libANGLE/validationEGL.h"
+#include "libANGLE/validationEGL_autogen.h"
 #include "libGLESv2/global_state.h"
 #include "libGLESv2/proc_table_egl.h"
 
@@ -665,7 +667,7 @@ EGLBoolean SurfaceAttrib(Thread *thread,
     return EGL_TRUE;
 }
 
-EGLBoolean SwapBuffers(Thread *thread, Display *display, egl::SurfaceID surfaceID)
+EGLBoolean SwapBuffersImpl(Thread *thread, Display *display, egl::SurfaceID surfaceID)
 {
     Surface *eglSurface = display->getSurface(surfaceID);
 
@@ -677,6 +679,73 @@ EGLBoolean SwapBuffers(Thread *thread, Display *display, egl::SurfaceID surfaceI
 
     thread->setSuccess();
     return EGL_TRUE;
+}
+
+EGLBoolean SwapBuffers(EGLDisplay dpy, EGLSurface surface)
+{
+    ANGLE_SCOPED_GLOBAL_LOCK();
+
+    // EGLBoolean PrepareSwapBuffersANGLE(EGLDisplay dpy, EGLSurface surface)
+    // - removed ANGLE_SCOPED_GLOBAL_LOCK()
+    // - added temp GLobalMutex unlock
+    {
+        egl::Display *dpyPacked        = PackParam<egl::Display *>(dpy);
+        SurfaceID surfacePacked        = PackParam<SurfaceID>(surface);
+        Thread *thread                 = egl::GetCurrentThread();
+        Surface *surfacePtr            = nullptr;
+        const egl::Surface *eglSurface = nullptr;
+        {
+            EGL_EVENT(PrepareSwapBuffersANGLE,
+                      "dpy = 0x%016" PRIxPTR ", surface = 0x%016" PRIxPTR "", (uintptr_t)dpy,
+                      (uintptr_t)surface);
+
+            ANGLE_EGL_VALIDATE(thread, PrepareSwapBuffersANGLE, GetDisplayIfValid(dpyPacked),
+                               EGLBoolean, dpyPacked, surfacePacked);
+
+            ANGLE_EGL_TRY_RETURN(thread, dpyPacked->prepareForCall(), "eglPrepareSwapBuffersANGLE",
+                                 GetDisplayIfValid(dpyPacked), EGL_FALSE);
+
+            surfacePtr = dpyPacked->getSurface(surfacePacked);
+            eglSurface = GetSurfaceIfValid(dpyPacked, surfacePacked);
+        }
+
+        {
+            angle::GlobalMutex &globalMutex = egl::GetGlobalMutex();
+            globalMutex.unlock();
+            ANGLE_EGL_TRY_RETURN(thread, surfacePtr->prepareSwap(thread->getContext()),
+                                 "prepareSwap", eglSurface, EGL_FALSE);
+            globalMutex.lock();
+        }
+
+        thread->setSuccess();
+    }
+
+    // Questions:
+    // 1. Why convert params again (below)?
+    // 2. Why Validate after temp unlock again?
+    // 3. Why call prepareForCall() again?
+    // 4. Maybe just move "prepareSwap()" with temp unlock inside SwapBuffersImpl()?
+    // 5. If the (4) is possible then no need for custom entry point.
+
+    // EGLBoolean EGLAPIENTRY EGL_SwapBuffers(EGLDisplay dpy, EGLSurface surface)
+    // - removed PrepareSwapBuffersANGLE()
+    // - removed ANGLE_SCOPED_GLOBAL_LOCK()
+    {
+        EGL_EVENT(SwapBuffers, "dpy = 0x%016" PRIxPTR ", surface = 0x%016" PRIxPTR "",
+                  (uintptr_t)dpy, (uintptr_t)surface);
+
+        Thread *thread = egl::GetCurrentThread();
+
+        egl::Display *dpyPacked = PackParam<egl::Display *>(dpy);
+        SurfaceID surfacePacked = PackParam<SurfaceID>(surface);
+
+        ANGLE_EGL_VALIDATE(thread, SwapBuffers, GetDisplayIfValid(dpyPacked), EGLBoolean, dpyPacked,
+                           surfacePacked);
+
+        EGLBoolean returnValue = SwapBuffersImpl(thread, dpyPacked, surfacePacked);
+        ANGLE_CAPTURE_EGL(SwapBuffers, true, thread, dpyPacked, surfacePacked, returnValue);
+        return returnValue;
+    }
 }
 
 EGLBoolean SwapInterval(Thread *thread, Display *display, EGLint interval)

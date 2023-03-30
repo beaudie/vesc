@@ -1578,7 +1578,7 @@ def get_packed_enums(api, cmd_packed_gl_enums, cmd_name, packed_param_types, par
     return result
 
 
-CUSTOM_EGL_ENTRY_POINTS = ["eglPrepareSwapBuffersANGLE"]
+CUSTOM_EGL_ENTRY_POINTS = ["eglPrepareSwapBuffersANGLE", "eglSwapBuffers"]
 
 
 def get_def_template(api, cmd_name, return_type, has_errcode_ret):
