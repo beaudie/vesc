@@ -87,6 +87,24 @@
       "parentUuid": "6860b84e_23bfcbcc",
       "revId": "a73c375e8e88e0eba15854a904462b617c2f014a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d1125e4_06c5607f",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-03-30T16:46:22Z",
+      "side": 1,
+      "message": "There are three unimplemented indexed caps:\n- `SCISSOR_TEST_EXCLUSIVE_NV` from `NV_scissor_exclusive`\n- `SCISSOR_TEST` from `NV_viewport_array` and `OES_viewport_array`\n- `SHADING_RATE_IMAGE_NV` from `NV_shading_rate_image`\n\nFirst two seem compatible with PLS, not sure about the third.",
+      "parentUuid": "a5412719_d14f2ec9",
+      "revId": "a73c375e8e88e0eba15854a904462b617c2f014a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
