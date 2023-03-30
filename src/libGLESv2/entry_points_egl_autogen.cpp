@@ -473,22 +473,7 @@ EGLBoolean EGLAPIENTRY EGL_QuerySurface(EGLDisplay dpy,
 
 EGLBoolean EGLAPIENTRY EGL_SwapBuffers(EGLDisplay dpy, EGLSurface surface)
 {
-    ANGLE_EGLBOOLEAN_TRY(PrepareSwapBuffersANGLE(dpy, surface));
-    ANGLE_SCOPED_GLOBAL_LOCK();
-    EGL_EVENT(SwapBuffers, "dpy = 0x%016" PRIxPTR ", surface = 0x%016" PRIxPTR "", (uintptr_t)dpy,
-              (uintptr_t)surface);
-
-    Thread *thread = egl::GetCurrentThread();
-
-    egl::Display *dpyPacked = PackParam<egl::Display *>(dpy);
-    SurfaceID surfacePacked = PackParam<SurfaceID>(surface);
-
-    ANGLE_EGL_VALIDATE(thread, SwapBuffers, GetDisplayIfValid(dpyPacked), EGLBoolean, dpyPacked,
-                       surfacePacked);
-
-    EGLBoolean returnValue = SwapBuffers(thread, dpyPacked, surfacePacked);
-    ANGLE_CAPTURE_EGL(SwapBuffers, true, thread, dpyPacked, surfacePacked, returnValue);
-    return returnValue;
+    return SwapBuffers(dpy, surface);
 }
 
 EGLBoolean EGLAPIENTRY EGL_Terminate(EGLDisplay dpy)
