@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ea1afc1b_35af7aa2",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-03-30T15:44:24Z",
+      "side": 1,
+      "message": "Does it cause a flush in the Vulkan backend or something? It would be really bad for performance if inserting a sync into the command stream caused a flush.\n\nI don\u0027t see any mention of a flush in https://docs.gl/es3/glFenceSync, and https://registry.khronos.org/OpenGL/extensions/EXT/EXT_shader_pixel_local_storage.txt also only calls out `glClientWaitSync`, not `glFenceSync`.",
+      "parentUuid": "abac0658_78f3f6f4",
+      "revId": "a73c375e8e88e0eba15854a904462b617c2f014a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6860b84e_23bfcbcc",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 3
@@ -31,6 +49,24 @@
       "writtenOn": "2023-03-30T09:41:11Z",
       "side": 1,
       "message": "Please clarify that this error is generated only when `target` is `BLEND`.",
+      "revId": "a73c375e8e88e0eba15854a904462b617c2f014a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5412719_d14f2ec9",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-03-30T15:44:24Z",
+      "side": 1,
+      "message": "Since we are creating an explicit \"allow\" list here, I think the correct approach would be to ban everything that isn\u0027t `BLEND`.\n\nEither way though, I think the result would be the same since `BLEND` is the only indexed capability in all of ES and all ES extensions that I\u0027m aware of.",
+      "parentUuid": "6860b84e_23bfcbcc",
       "revId": "a73c375e8e88e0eba15854a904462b617c2f014a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
