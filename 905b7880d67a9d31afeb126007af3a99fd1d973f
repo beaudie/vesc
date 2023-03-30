@@ -16,6 +16,24 @@
       "message": "do we need to check the `maxTessControlInputComponents` is \u003c\u003d than `maxVertexOutputComponents`? Same questions to if this is needed:\n`maxTessEvaluationInputComponents \u003c\u003d maxTessControlTotalOutputComponents`",
       "revId": "905b7880d67a9d31afeb126007af3a99fd1d973f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91060fb3_2f501308",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-30T03:40:23Z",
+      "side": 1,
+      "message": "I had tessControlInput clamped with vertexOutput in a previous PS which discovered the CTS bug. I separated that out to https://chromium-review.googlesource.com/c/angle/angle/+/4381932 so we can at least get the geometry shader tests passing for now.\n\nRegarding the limits between tessellation control and evaluation stages, I think the Vulkan limits taken as-is should be self-consistent enough for us not to have to worry about it.",
+      "parentUuid": "293044cc_afe6ed41",
+      "revId": "905b7880d67a9d31afeb126007af3a99fd1d973f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
