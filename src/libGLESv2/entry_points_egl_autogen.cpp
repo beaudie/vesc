@@ -473,7 +473,7 @@ EGLBoolean EGLAPIENTRY EGL_QuerySurface(EGLDisplay dpy,
 
 EGLBoolean EGLAPIENTRY EGL_SwapBuffers(EGLDisplay dpy, EGLSurface surface)
 {
-    ANGLE_EGLBOOLEAN_TRY(PrepareSwapBuffersANGLE(dpy, surface));
+
     ANGLE_SCOPED_GLOBAL_LOCK();
     EGL_EVENT(SwapBuffers, "dpy = 0x%016" PRIxPTR ", surface = 0x%016" PRIxPTR "", (uintptr_t)dpy,
               (uintptr_t)surface);

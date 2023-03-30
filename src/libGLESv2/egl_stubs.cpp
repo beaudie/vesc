@@ -672,8 +672,13 @@ EGLBoolean SwapBuffers(Thread *thread, Display *display, egl::SurfaceID surfaceI
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglSwapBuffers",
                          GetDisplayIfValid(display), EGL_FALSE);
 
-    ANGLE_EGL_TRY_RETURN(thread, eglSurface->swap(thread->getContext()), "eglSwapBuffers",
-                         GetSurfaceIfValid(display, surfaceID), EGL_FALSE);
+    egl::Error result = eglSurface->prepareSwap(thread->getContext());
+    if (!result.isError())
+    {
+        result = eglSurface->swap(thread->getContext());
+    }
+    ANGLE_EGL_TRY_RETURN(thread, result, "eglSwapBuffers", GetSurfaceIfValid(display, surfaceID),
+                         EGL_FALSE);
 
     thread->setSuccess();
     return EGL_TRUE;
