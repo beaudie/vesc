@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a56a5a35_597e52fd",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-30T15:48:26Z",
+      "side": 1,
+      "message": "Right, not so much a flush as breaking the render pass (which is what matters here).\n\nThe insertion of the fence doesn\u0027t incur a flush, but another thread could issue a fence wait and cause the flush anyway, so inserting a fence in the middle of a render pass cannot just defer signalling it until the natural end of render pass.",
+      "parentUuid": "ea1afc1b_35af7aa2",
+      "revId": "a73c375e8e88e0eba15854a904462b617c2f014a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6860b84e_23bfcbcc",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 3
