@@ -1026,4 +1026,33 @@ void *CopyMetalSharedEventANGLE(Thread *thread, Display *display, SyncID syncID)
     return result;
 }
 
+void ProgramCacheQueryMetalBinaryArchiveANGLE(Thread *thread,
+                                              Display *display,
+                                              EGLint index,
+                                              void *key,
+                                              EGLint *keySize,
+                                              void **binaryArchive)
+{
+    ANGLE_EGL_TRY(thread, display->prepareForCall(), "eglProgramCacheQueryMetalBinaryArchiveANGLE",
+                  GetDisplayIfValid(display));
+    ANGLE_EGL_TRY(thread,
+                  display->programCacheQueryMetalBinaryArchive(index, key, keySize, binaryArchive),
+                  "eglProgramCacheQueryMetalBinaryArchiveANGLE", GetDisplayIfValid(display));
+
+    thread->setSuccess();
+}
+
+void ProgramCachePopulateMetalBinaryArchiveANGLE(Thread *thread,
+                                                 Display *display,
+                                                 const void *key,
+                                                 EGLint keySize,
+                                                 void *binaryArchive)
+{
+    ANGLE_EGL_TRY(thread, display->prepareForCall(),
+                  "eglProgramCachePopulateMetalBinaryArchiveANGLE", GetDisplayIfValid(display));
+    display->programCachePopulateMetalBinaryArchive(key, keySize, binaryArchive);
+
+    thread->setSuccess();
+}
+
 }  // namespace egl

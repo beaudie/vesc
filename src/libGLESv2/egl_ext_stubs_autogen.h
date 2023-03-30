@@ -269,5 +269,16 @@ EGLBoolean ExportVkImageANGLE(Thread *thread,
                               void *vk_image_create_info);
 void *CopyMetalSharedEventANGLE(Thread *thread, egl::Display *dpyPacked, egl::SyncID syncPacked);
 void WaitUntilWorkScheduledANGLE(Thread *thread, egl::Display *dpyPacked);
+void ProgramCacheQueryMetalBinaryArchiveANGLE(Thread *thread,
+                                              egl::Display *dpyPacked,
+                                              EGLint index,
+                                              void *key,
+                                              EGLint *keySize,
+                                              void **binaryArchive);
+void ProgramCachePopulateMetalBinaryArchiveANGLE(Thread *thread,
+                                                 egl::Display *dpyPacked,
+                                                 const void *key,
+                                                 EGLint keySize,
+                                                 void *binaryArchive);
 }  // namespace egl
 #endif  // LIBGLESV2_EGL_EXT_STUBS_AUTOGEN_H_

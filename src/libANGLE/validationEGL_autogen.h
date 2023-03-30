@@ -242,6 +242,19 @@ bool ValidateQueryDisplayAttribANGLE(const ValidationContext *val,
                                      EGLint attribute,
                                      const EGLAttrib *value);
 
+// EGL_ANGLE_metal_program_cache_control
+bool ValidateProgramCacheQueryMetalBinaryArchiveANGLE(const ValidationContext *val,
+                                                      const egl::Display *dpyPacked,
+                                                      EGLint index,
+                                                      const void *key,
+                                                      const EGLint *keySize,
+                                                      void *const *binaryArchive);
+bool ValidateProgramCachePopulateMetalBinaryArchiveANGLE(const ValidationContext *val,
+                                                         const egl::Display *dpyPacked,
+                                                         const void *key,
+                                                         EGLint keySize,
+                                                         const void *binaryArchive);
+
 // EGL_ANGLE_metal_shared_event_sync
 bool ValidateCopyMetalSharedEventANGLE(const ValidationContext *val,
                                        const egl::Display *dpyPacked,

@@ -140,6 +140,21 @@
             <proto><ptype>void</ptype> <name>eglWaitUntilWorkScheduledANGLE</name></proto>
             <param><ptype>EGLDisplay</ptype> <name>dpy</name></param>
         </command>
+        <command>
+            <proto><ptype>void</ptype> <name>eglProgramCacheQueryMetalBinaryArchiveANGLE</name></proto>
+            <param><ptype>EGLDisplay</ptype> <name>dpy</name></param>
+            <param><ptype>EGLint</ptype> <name>index</name></param>
+            <param><ptype>void *</ptype> <name>key</name></param>
+            <param><ptype>EGLint *</ptype> <name>keySize</name></param>
+            <param><ptype>void **</ptype> <name>binaryArchive</name></param>
+        </command>
+        <command>
+            <proto><ptype>void</ptype> <name>eglProgramCachePopulateMetalBinaryArchiveANGLE</name></proto>
+            <param><ptype>EGLDisplay</ptype> <name>dpy</name></param>
+            <param><ptype>const void *</ptype> <name>key</name></param>
+            <param><ptype>EGLint</ptype> <name>keySize</name></param>
+            <param><ptype>void *</ptype> <name>binaryArchive</name></param>
+        </command>
     </commands>
     <!-- SECTION: ANGLE extension interface definitions -->
     <extensions>
@@ -472,6 +487,15 @@
                 <enum name="EGL_SYNC_METAL_SHARED_EVENT_SIGNAL_VALUE_LO_ANGLE"/>
                 <enum name="EGL_SYNC_METAL_SHARED_EVENT_SIGNAL_VALUE_HI_ANGLE"/>
                 <enum name="EGL_SYNC_METAL_SHARED_EVENT_SIGNALED" />
+            </require>
+        </extension>
+        <extension name="EGL_ANGLE_metal_program_cache_control" supported="egl">
+            <require>
+                <command name="eglProgramCacheQueryMetalBinaryArchiveANGLE"/>
+                <command name="eglProgramCachePopulateMetalBinaryArchiveANGLE"/>
+                <enum name="EGL_METAL_BINARY_ARCHIVE_CACHE_COUNT_ANGLE"/>
+                <enum name="EGL_METAL_BINARY_ARCHIVE_CACHE_RESIZE_ANGLE"/>
+                <enum name="EGL_CONTEXT_METAL_BINARY_ARCHIVE_CACHE_ENABLED_ANGLE"/>
             </require>
         </extension>
     </extensions>

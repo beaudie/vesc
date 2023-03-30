@@ -119,6 +119,16 @@ class DisplayMtl : public DisplayImpl
                                          EGLClientBuffer clientBuffer,
                                          const egl::AttributeMap &attribs) const override;
 
+    EGLint getMetalBinaryArchiveCacheCount() const override;
+    egl::Error queryMetalBinaryArchiveFromCache(EGLint index,
+                                                void *key,
+                                                EGLint *keySize,
+                                                void **binaryArchive) override;
+    void populateMetalBinaryArchiveInCache(const void *key,
+                                           EGLint keySize,
+                                           void *binaryArchive) override;
+    EGLint resizeMetalBinaryArchiveCache(EGLint limit) override;
+
     egl::ConfigSet generateConfigs() override;
 
     gl::Caps getNativeCaps() const;
@@ -198,6 +208,7 @@ class DisplayMtl : public DisplayImpl
     mtl::StateCache mStateCache;
     mtl::LibraryCache mLibraryCache;
     mtl::RenderUtils mUtils;
+    mtl::MRUBinaryArchiveCache mBinaryArchiveCache;
 
     // Built-in Shaders
     std::shared_ptr<DefaultShaderAsyncInfoMtl> mDefaultShadersAsyncInfo;

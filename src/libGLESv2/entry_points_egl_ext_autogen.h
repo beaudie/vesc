@@ -74,6 +74,17 @@ ANGLE_EXPORT EGLBoolean EGLAPIENTRY EGL_QueryDisplayAttribANGLE(EGLDisplay dpy,
                                                                 EGLint attribute,
                                                                 EGLAttrib *value);
 
+// EGL_ANGLE_metal_program_cache_control
+ANGLE_EXPORT void EGLAPIENTRY EGL_ProgramCacheQueryMetalBinaryArchiveANGLE(EGLDisplay dpy,
+                                                                           EGLint index,
+                                                                           void *key,
+                                                                           EGLint *keySize,
+                                                                           void **binaryArchive);
+ANGLE_EXPORT void EGLAPIENTRY EGL_ProgramCachePopulateMetalBinaryArchiveANGLE(EGLDisplay dpy,
+                                                                              const void *key,
+                                                                              EGLint keySize,
+                                                                              void *binaryArchive);
+
 // EGL_ANGLE_metal_shared_event_sync
 ANGLE_EXPORT void *EGLAPIENTRY EGL_CopyMetalSharedEventANGLE(EGLDisplay dpy, EGLSyncKHR sync);
 

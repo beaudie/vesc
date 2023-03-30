@@ -351,6 +351,57 @@ EGLBoolean EGLAPIENTRY EGL_QueryDisplayAttribANGLE(EGLDisplay dpy,
     return returnValue;
 }
 
+// EGL_ANGLE_metal_program_cache_control
+void EGLAPIENTRY EGL_ProgramCacheQueryMetalBinaryArchiveANGLE(EGLDisplay dpy,
+                                                              EGLint index,
+                                                              void *key,
+                                                              EGLint *keySize,
+                                                              void **binaryArchive)
+{
+
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EGL_EVENT(ProgramCacheQueryMetalBinaryArchiveANGLE,
+              "dpy = 0x%016" PRIxPTR ", index = %d, key = 0x%016" PRIxPTR
+              ", keySize = 0x%016" PRIxPTR ", binaryArchive = 0x%016" PRIxPTR "",
+              (uintptr_t)dpy, index, (uintptr_t)key, (uintptr_t)keySize, (uintptr_t)binaryArchive);
+
+    Thread *thread = egl::GetCurrentThread();
+
+    egl::Display *dpyPacked = PackParam<egl::Display *>(dpy);
+
+    ANGLE_EGL_VALIDATE_VOID(thread, ProgramCacheQueryMetalBinaryArchiveANGLE,
+                            GetDisplayIfValid(dpyPacked), dpyPacked, index, key, keySize,
+                            binaryArchive);
+
+    ProgramCacheQueryMetalBinaryArchiveANGLE(thread, dpyPacked, index, key, keySize, binaryArchive);
+    ANGLE_CAPTURE_EGL(ProgramCacheQueryMetalBinaryArchiveANGLE, true, thread, dpyPacked, index, key,
+                      keySize, binaryArchive);
+}
+
+void EGLAPIENTRY EGL_ProgramCachePopulateMetalBinaryArchiveANGLE(EGLDisplay dpy,
+                                                                 const void *key,
+                                                                 EGLint keySize,
+                                                                 void *binaryArchive)
+{
+
+    ANGLE_SCOPED_GLOBAL_LOCK();
+    EGL_EVENT(ProgramCachePopulateMetalBinaryArchiveANGLE,
+              "dpy = 0x%016" PRIxPTR ", key = 0x%016" PRIxPTR
+              ", keySize = %d, binaryArchive = 0x%016" PRIxPTR "",
+              (uintptr_t)dpy, (uintptr_t)key, keySize, (uintptr_t)binaryArchive);
+
+    Thread *thread = egl::GetCurrentThread();
+
+    egl::Display *dpyPacked = PackParam<egl::Display *>(dpy);
+
+    ANGLE_EGL_VALIDATE_VOID(thread, ProgramCachePopulateMetalBinaryArchiveANGLE,
+                            GetDisplayIfValid(dpyPacked), dpyPacked, key, keySize, binaryArchive);
+
+    ProgramCachePopulateMetalBinaryArchiveANGLE(thread, dpyPacked, key, keySize, binaryArchive);
+    ANGLE_CAPTURE_EGL(ProgramCachePopulateMetalBinaryArchiveANGLE, true, thread, dpyPacked, key,
+                      keySize, binaryArchive);
+}
+
 // EGL_ANGLE_metal_shared_event_sync
 void *EGLAPIENTRY EGL_CopyMetalSharedEventANGLE(EGLDisplay dpy, EGLSyncKHR sync)
 {

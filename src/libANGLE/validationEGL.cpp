@@ -1668,6 +1668,16 @@ bool ValidateCreateContextAttribute(const ValidationContext *val,
             }
             break;
 
+        case EGL_CONTEXT_METAL_BINARY_ARCHIVE_CACHE_ENABLED_ANGLE:
+            if (!display->getExtensions().metalProgramCacheControlANGLE)
+            {
+                val->setError(EGL_BAD_ATTRIBUTE,
+                              "Attribute EGL_CONTEXT_METAL_BINARY_ARCHIVE_CACHE_ENABLED_ANGLE "
+                              "requires EGL_ANGLE_metal_program_cache_control.");
+                return false;
+            }
+            break;
+
         case EGL_ROBUST_RESOURCE_INITIALIZATION_ANGLE:
             if (!display->getExtensions().robustResourceInitializationANGLE)
             {
@@ -1932,6 +1942,16 @@ bool ValidateCreateContextAttributeValue(const ValidationContext *val,
             {
                 val->setError(EGL_BAD_ATTRIBUTE,
                               "EGL_CONTEXT_PROGRAM_BINARY_CACHE_ENABLED_ANGLE must "
+                              "be EGL_TRUE or EGL_FALSE.");
+                return false;
+            }
+            break;
+
+        case EGL_CONTEXT_METAL_BINARY_ARCHIVE_CACHE_ENABLED_ANGLE:
+            if (value != EGL_TRUE && value != EGL_FALSE)
+            {
+                val->setError(EGL_BAD_ATTRIBUTE,
+                              "EGL_CONTEXT_METAL_BINARY_ARCHIVE_CACHE_ENABLED_ANGLE must "
                               "be EGL_TRUE or EGL_FALSE.");
                 return false;
             }
@@ -5272,6 +5292,14 @@ bool ValidateProgramCacheGetAttribANGLE(const ValidationContext *val,
         case EGL_PROGRAM_CACHE_KEY_LENGTH_ANGLE:
         case EGL_PROGRAM_CACHE_SIZE_ANGLE:
             break;
+        case EGL_METAL_BINARY_ARCHIVE_CACHE_COUNT_ANGLE:
+            if (!display->getExtensions().metalProgramCacheControlANGLE)
+            {
+                val->setError(EGL_BAD_ACCESS,
+                              "EGL_ANGLE_metal_program_cache_control extension not supported");
+                return false;
+            }
+            break;
 
         default:
             val->setError(EGL_BAD_PARAMETER, "Invalid program cache attribute.");
@@ -5384,6 +5412,14 @@ bool ValidateProgramCacheResizeANGLE(const ValidationContext *val,
     {
         case EGL_PROGRAM_CACHE_RESIZE_ANGLE:
         case EGL_PROGRAM_CACHE_TRIM_ANGLE:
+            break;
+        case EGL_METAL_BINARY_ARCHIVE_CACHE_RESIZE_ANGLE:
+            if (!display->getExtensions().metalProgramCacheControlANGLE)
+            {
+                val->setError(EGL_BAD_ACCESS,
+                              "EGL_ANGLE_metal_program_cache_control extension not supported");
+                return false;
+            }
             break;
 
         default:
@@ -6177,6 +6213,91 @@ bool ValidateCopyMetalSharedEventANGLE(const ValidationContext *val,
     }
 
     ANGLE_VALIDATION_TRY(ValidateSync(val, display, sync));
+
+    return true;
+}
+
+bool ValidateProgramCacheQueryMetalBinaryArchiveANGLE(const ValidationContext *val,
+                                                      const Display *display,
+                                                      EGLint index,
+                                                      const void *key,
+                                                      const EGLint *keySize,
+                                                      void *const *binaryArchive)
+{
+    ANGLE_VALIDATION_TRY(ValidateDisplay(val, display));
+
+    if (!display->getExtensions().programCacheControlANGLE)
+    {
+        val->setError(EGL_BAD_DISPLAY, "EGL_ANGLE_program_cache_control is not available.");
+        return false;
+    }
+
+    if (!display->getExtensions().metalProgramCacheControlANGLE)
+    {
+        val->setError(EGL_BAD_DISPLAY, "EGL_ANGLE_metal_program_cache_control is not available.");
+        return false;
+    }
+
+    if (index < 0 ||
+        index >= display->programCacheGetAttrib(EGL_METAL_BINARY_ARCHIVE_CACHE_COUNT_ANGLE))
+    {
+        val->setError(EGL_BAD_PARAMETER, "Binary archive index out of range.");
+        return false;
+    }
+
+    if (keySize == nullptr)
+    {
+        val->setError(EGL_BAD_PARAMETER, "keySize must always be a valid pointer.");
+        return false;
+    }
+
+    if (binaryArchive != nullptr && *keySize != static_cast<EGLint>(egl::BlobCache::kKeyLength))
+    {
+        val->setError(EGL_BAD_PARAMETER, "Invalid program key size.");
+        return false;
+    }
+
+    if ((key == nullptr) != (binaryArchive == nullptr))
+    {
+        val->setError(EGL_BAD_PARAMETER,
+                      "key and binaryArchive must both be null or both non-null.");
+        return false;
+    }
+
+    return true;
+}
+
+bool ValidateProgramCachePopulateMetalBinaryArchiveANGLE(const ValidationContext *val,
+                                                         const Display *display,
+                                                         const void *key,
+                                                         EGLint keySize,
+                                                         const void *binaryArchive)
+{
+    ANGLE_VALIDATION_TRY(ValidateDisplay(val, display));
+
+    if (!display->getExtensions().programCacheControlANGLE)
+    {
+        val->setError(EGL_BAD_DISPLAY, "EGL_ANGLE_program_cache_control is not available.");
+        return false;
+    }
+
+    if (!display->getExtensions().metalProgramCacheControlANGLE)
+    {
+        val->setError(EGL_BAD_DISPLAY, "EGL_ANGLE_metal_program_cache_control is not available.");
+        return false;
+    }
+
+    if (keySize != static_cast<EGLint>(egl::BlobCache::kKeyLength))
+    {
+        val->setError(EGL_BAD_PARAMETER, "Invalid program key size.");
+        return false;
+    }
+
+    if (key == nullptr || binaryArchive == nullptr)
+    {
+        val->setError(EGL_BAD_PARAMETER, "null pointer in arguments.");
+        return false;
+    }
 
     return true;
 }

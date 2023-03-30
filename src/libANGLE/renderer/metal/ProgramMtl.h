@@ -284,6 +284,8 @@ class ProgramMtl : public ProgramImpl, public mtl::RenderPipelineCacheSpecialize
 
     mtl::BufferPool *getBufferPool(ContextMtl *context);
 
+    void computeBinaryArchiveHash(const gl::Context *context, bool useTranslatedShaders);
+
     // State for the default uniform blocks.
     struct DefaultUniformBlock final : private angle::NonCopyable
     {
@@ -335,6 +337,8 @@ class ProgramMtl : public ProgramImpl, public mtl::RenderPipelineCacheSpecialize
 
     mtl::RenderPipelineCache mMetalRenderPipelineCache;
     mtl::BufferPool *mAuxBufferPool;
+
+    egl::BlobCacheKey mBinaryArchiveHash;
 };
 
 }  // namespace rx

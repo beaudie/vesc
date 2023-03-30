@@ -40,7 +40,8 @@ class ContextMtl : public ContextImpl, public mtl::Context
     ContextMtl(const gl::State &state,
                gl::ErrorSet *errorSet,
                const egl::AttributeMap &attribs,
-               DisplayMtl *display);
+               DisplayMtl *display,
+               mtl::MRUBinaryArchiveCache *binaryArchiveCache);
     ~ContextMtl() override;
 
     angle::Result initialize() override;
@@ -393,6 +394,8 @@ class ContextMtl : public ContextImpl, public mtl::Context
 
     angle::ImageLoadContext getImageLoadContext() const;
 
+    mtl::MRUBinaryArchiveCache *getBinaryArchiveCache() { return mBinaryArchiveCache; }
+
   private:
     void ensureCommandBufferReady();
     void endBlitAndComputeEncoding();
@@ -623,6 +626,8 @@ class ContextMtl : public ContextImpl, public mtl::Context
     IncompleteTextureSet mIncompleteTextures;
     bool mIncompleteTexturesInitialized = false;
     ProvokingVertexHelper mProvokingVertexHelper;
+
+    mtl::MRUBinaryArchiveCache *mBinaryArchiveCache;
 
     mtl::ContextDevice mContextDevice;
 };

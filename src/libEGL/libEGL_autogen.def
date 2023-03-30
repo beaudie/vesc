@@ -91,6 +91,10 @@ EXPORTS
     eglQueryDisplayAttribANGLE
     eglQueryStringiANGLE
 
+    ; EGL_ANGLE_metal_program_cache_control
+    eglProgramCachePopulateMetalBinaryArchiveANGLE
+    eglProgramCacheQueryMetalBinaryArchiveANGLE
+
     ; EGL_ANGLE_metal_shared_event_sync
     eglCopyMetalSharedEventANGLE
 

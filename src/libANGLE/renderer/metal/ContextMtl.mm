@@ -207,7 +207,8 @@ GLint GetOwnershipIdentity(const egl::AttributeMap &attribs)
 ContextMtl::ContextMtl(const gl::State &state,
                        gl::ErrorSet *errorSet,
                        const egl::AttributeMap &attribs,
-                       DisplayMtl *display)
+                       DisplayMtl *display,
+                       mtl::MRUBinaryArchiveCache *binaryArchiveCache)
     : ContextImpl(state, errorSet),
       mtl::Context(display),
       mCmdBuffer(&display->cmdQueue()),
@@ -216,6 +217,7 @@ ContextMtl::ContextMtl(const gl::State &state,
       mComputeEncoder(&mCmdBuffer),
       mDriverUniforms{},
       mProvokingVertexHelper(this),
+      mBinaryArchiveCache(binaryArchiveCache),
       mContextDevice(GetOwnershipIdentity(attribs))
 {
     if (@available(iOS 12.0, macOS 10.14, *))
