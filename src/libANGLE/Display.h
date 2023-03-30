@@ -282,6 +282,13 @@ class Display final : public LabeledObject,
                                const void *binary,
                                EGLint binarysize);
     EGLint programCacheResize(EGLint limit, EGLenum mode);
+    Error programCacheQueryMetalBinaryArchive(EGLint index,
+                                              void *key,
+                                              EGLint *keySize,
+                                              void **binaryArchive);
+    void programCachePopulateMetalBinaryArchive(const void *key,
+                                                EGLint keySize,
+                                                void *binaryArchive);
 
     const AttributeMap &getAttributeMap() const { return mAttributeMap; }
     EGLNativeDisplayType getNativeDisplayId() const { return mState.displayId; }

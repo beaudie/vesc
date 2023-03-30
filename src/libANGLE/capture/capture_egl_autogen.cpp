@@ -1104,6 +1104,44 @@ CallCapture CaptureQueryDisplayAttribANGLE(egl::Thread *thread,
     return CallCapture(angle::EntryPoint::EGLQueryDisplayAttribANGLE, std::move(paramBuffer));
 }
 
+CallCapture CaptureProgramCacheQueryMetalBinaryArchiveANGLE(egl::Thread *thread,
+                                                            bool isCallValid,
+                                                            egl::Display *dpyPacked,
+                                                            EGLint index,
+                                                            void *key,
+                                                            EGLint *keySize,
+                                                            void **binaryArchive)
+{
+    ParamBuffer paramBuffer;
+
+    paramBuffer.addValueParam("dpyPacked", ParamType::Tegl_DisplayPointer, dpyPacked);
+    paramBuffer.addValueParam("index", ParamType::TEGLint, index);
+    paramBuffer.addValueParam("key", ParamType::TvoidPointer, key);
+    paramBuffer.addValueParam("keySize", ParamType::TEGLintPointer, keySize);
+    paramBuffer.addValueParam("binaryArchive", ParamType::TvoidPointerPointer, binaryArchive);
+
+    return CallCapture(angle::EntryPoint::EGLProgramCacheQueryMetalBinaryArchiveANGLE,
+                       std::move(paramBuffer));
+}
+
+CallCapture CaptureProgramCachePopulateMetalBinaryArchiveANGLE(egl::Thread *thread,
+                                                               bool isCallValid,
+                                                               egl::Display *dpyPacked,
+                                                               const void *key,
+                                                               EGLint keySize,
+                                                               void *binaryArchive)
+{
+    ParamBuffer paramBuffer;
+
+    paramBuffer.addValueParam("dpyPacked", ParamType::Tegl_DisplayPointer, dpyPacked);
+    paramBuffer.addValueParam("key", ParamType::TvoidConstPointer, key);
+    paramBuffer.addValueParam("keySize", ParamType::TEGLint, keySize);
+    paramBuffer.addValueParam("binaryArchive", ParamType::TvoidPointer, binaryArchive);
+
+    return CallCapture(angle::EntryPoint::EGLProgramCachePopulateMetalBinaryArchiveANGLE,
+                       std::move(paramBuffer));
+}
+
 CallCapture CaptureCopyMetalSharedEventANGLE(egl::Thread *thread,
                                              bool isCallValid,
                                              egl::Display *dpyPacked,

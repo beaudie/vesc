@@ -13,7 +13,10 @@
 
 #include <sstream>
 
+#include <anglebase/sha1.h>
+
 #include "common/WorkerThread.h"
+#include "common/angle_version_info.h"
 #include "common/debug.h"
 #include "common/system_utils.h"
 
@@ -583,6 +586,8 @@ std::unique_ptr<rx::LinkEvent> ProgramMtl::load(const gl::Context *context,
     ANGLE_PARALLEL_LINK_TRY(loadDefaultUniformBlocksInfo(context, stream));
     ANGLE_PARALLEL_LINK_TRY(loadInterfaceBlockInfo(context, stream));
 
+    computeBinaryArchiveHash(context, /*useTranslatedShaders=*/true);
+
     return compileMslShaderLibs(context, infoLog);
 }
 
@@ -615,6 +620,7 @@ std::unique_ptr<LinkEvent> ProgramMtl::link(const gl::Context *context,
     reset(contextMtl);
     ANGLE_PARALLEL_LINK_TRY(initDefaultUniformBlocks(context));
     linkUpdateHasFlatAttributes(context);
+    computeBinaryArchiveHash(context, /*useTranslatedShaders=*/false);
 
     gl::ShaderMap<std::string> shaderSources;
     gl::ShaderMap<std::string> translatedMslShaders;
@@ -1543,8 +1549,12 @@ angle::Result ProgramMtl::setupDraw(const gl::Context *glContext,
     if (pipelineDescChanged)
     {
         // Render pipeline state needs to be changed
+        mtl::MRUBinaryArchiveCache *archiveCache = context->getBinaryArchiveCache();
+        id<MTLBinaryArchive> binaryArchive =
+            archiveCache ? archiveCache->getOrCreate(context, mBinaryArchiveHash) : nil;
         id<MTLRenderPipelineState> pipelineState =
-            mMetalRenderPipelineCache.getRenderPipelineState(context, pipelineDesc);
+            mMetalRenderPipelineCache.getRenderPipelineStateWithBinaryArchive(context, pipelineDesc,
+                                                                              binaryArchive);
         if (!pipelineState)
         {
             // Error already logged inside getRenderPipelineState()
@@ -2006,6 +2016,46 @@ angle::Result ProgramMtl::updateXfbBuffers(ContextMtl *context,
     }
 
     return angle::Result::Continue;
+}
+
+void ProgramMtl::computeBinaryArchiveHash(const gl::Context *context, bool useTranslatedShaders)
+{
+    gl::BinaryOutputStream hashStream;
+
+    // Add some ANGLE metadata and Context properties, such as version and back-end.
+    hashStream.writeString(angle::GetANGLEShaderProgramVersion());
+    hashStream.writeInt(angle::GetANGLESHVersion());
+    hashStream.writeInt(context->getClientMajorVersion());
+    hashStream.writeInt(context->getClientMinorVersion());
+    hashStream.writeString(reinterpret_cast<const char *>(context->getString(GL_RENDERER)));
+
+    // OS version
+    NSOperatingSystemVersion osVersion = [[NSProcessInfo processInfo] operatingSystemVersion];
+    std::ostringstream ss;
+    ss << osVersion.majorVersion << '.' << osVersion.minorVersion << '.' << osVersion.patchVersion;
+    hashStream.writeString(ss.str());
+
+    // Shader hashes.
+    hashStream.writeBool(useTranslatedShaders);
+    for (gl::ShaderType shaderType : gl::AllShaderTypes())
+    {
+        if (useTranslatedShaders)
+        {
+            hashStream.writeString(mMslShaderTranslateInfo[shaderType].metalShaderSource);
+        }
+        else
+        {
+            gl::Shader *shader = getState().getAttachedShader(shaderType);
+            if (shader)
+            {
+                shader->writeShaderKey(&hashStream);
+            }
+        }
+    }
+
+    // Call the secure SHA hashing function.
+    const std::vector<uint8_t> &programKey = hashStream.getData();
+    angle::base::SHA1HashBytes(programKey.data(), programKey.size(), mBinaryArchiveHash.data());
 }
 
 }  // namespace rx

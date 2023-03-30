@@ -423,6 +423,19 @@ EGLAPI void *EGLAPIENTRY eglCopyMetalSharedEventANGLE(EGLDisplay dpy, EGLSync sy
 #endif
 #endif /* EGL_ANGLE_metal_shared_event_sync */
 
+#ifndef EGL_ANGLE_metal_program_cache_control
+#define EGL_ANGLE_metal_program_cache_control 1
+#define EGL_METAL_BINARY_ARCHIVE_CACHE_COUNT_ANGLE 0x34F0
+#define EGL_METAL_BINARY_ARCHIVE_CACHE_RESIZE_ANGLE 0x34F1
+#define EGL_CONTEXT_METAL_BINARY_ARCHIVE_CACHE_ENABLED_ANGLE 0x34F2
+typedef void (EGLAPIENTRYP PFNEGLPROGRAMCACHEQUERYMETALBINARYARCHIVEANGLEPROC) (EGLDisplay dpy, EGLint index, void *key, EGLint *keySize, void **binaryArchive);
+typedef void (EGLAPIENTRYP PFNEGLPROGRAMCACHEPOPULATEMETALBINARYARCHIVEANGLEPROC) (EGLDisplay dpy, const void *key, EGLint keySize, void *binaryArchive);
+#ifdef EGL_EGLEXT_PROTOTYPES
+EGLAPI void EGLAPIENTRY eglProgramCacheQueryMetalBinaryArchiveANGLE(EGLDisplay dpy, EGLint index, void *key, EGLint *keySize, void **binaryArchive);
+EGLAPI void EGLAPIENTRY eglProgramCachePopulateMetalBinaryArchiveANGLE(EGLDisplay dpy, const void *key, EGLint keySize, void *binaryArchive);
+#endif
+#endif /* EGL_ANGLE_metal_program_cache_control */
+
 // clang-format on
 
 #endif  // INCLUDE_EGL_EGLEXT_ANGLE_

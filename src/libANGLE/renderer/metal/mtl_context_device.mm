@@ -125,6 +125,17 @@ AutoObjCPtr<id<MTLSharedEvent>> ContextDevice::newSharedEvent() const
     return adoptObjCObj([get() newSharedEvent]);
 }
 
+AutoObjCPtr<id<MTLBinaryArchive>> ContextDevice::newBinaryArchiveWithDescriptor(
+    MTLBinaryArchiveDescriptor *descriptor,
+    __autoreleasing NSError **error) const
+{
+    if (ANGLE_APPLE_AVAILABLE_XCI(11, 14, 14))
+    {
+        return adoptObjCObj([get() newBinaryArchiveWithDescriptor:descriptor error:error]);
+    }
+    return nil;
+}
+
 void ContextDevice::setOwnerWithIdentity(id<MTLResource> resource) const
 {
 #if ANGLE_USE_METAL_OWNERSHIP_IDENTITY

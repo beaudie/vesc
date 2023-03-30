@@ -58,6 +58,10 @@ class ContextDevice final : public WrappedObject<id<MTLDevice>>, angle::NonCopya
 
     AutoObjCPtr<id<MTLSharedEvent>> newSharedEvent() const;
 
+    AutoObjCPtr<id<MTLBinaryArchive>> newBinaryArchiveWithDescriptor(
+        MTLBinaryArchiveDescriptor *descriptor,
+        __autoreleasing NSError **error) const;
+
     void setOwnerWithIdentity(id<MTLResource> resource) const;
 
   private:

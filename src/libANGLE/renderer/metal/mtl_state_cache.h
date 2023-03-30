@@ -15,6 +15,7 @@
 
 #include <unordered_map>
 
+#include "libANGLE/BlobCache.h"
 #include "libANGLE/State.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/metal/mtl_common.h"
@@ -507,6 +508,11 @@ class RenderPipelineCache final : angle::NonCopyable
     AutoObjCPtr<id<MTLRenderPipelineState>> getRenderPipelineState(ContextMtl *context,
                                                                    const RenderPipelineDesc &desc);
 
+    AutoObjCPtr<id<MTLRenderPipelineState>> getRenderPipelineStateWithBinaryArchive(
+        ContextMtl *context,
+        const RenderPipelineDesc &desc,
+        id<MTLBinaryArchive> binaryArchive);
+
     void clear();
 
   protected:
@@ -517,14 +523,15 @@ class RenderPipelineCache final : angle::NonCopyable
 
   private:
     void clearPipelineStates();
-    void recreatePipelineStates(ContextMtl *context);
     AutoObjCPtr<id<MTLRenderPipelineState>> insertRenderPipelineState(
         ContextMtl *context,
         const RenderPipelineDesc &desc,
+        id<MTLBinaryArchive> binaryArchive,
         bool insertDefaultAttribLayout);
     AutoObjCPtr<id<MTLRenderPipelineState>> createRenderPipelineState(
         ContextMtl *context,
         const RenderPipelineDesc &desc,
+        id<MTLBinaryArchive> binaryArchive,
         bool insertDefaultAttribLayout);
 
     bool hasDefaultAttribs(const RenderPipelineDesc &desc) const;
@@ -605,6 +612,32 @@ class StateCache final : angle::NonCopyable
     AutoObjCPtr<id<MTLDepthStencilState>> mNullDepthStencilState = nil;
     angle::HashMap<DepthStencilDesc, AutoObjCPtr<id<MTLDepthStencilState>>> mDepthStencilStates;
     angle::HashMap<SamplerDesc, AutoObjCPtr<id<MTLSamplerState>>> mSamplerStates;
+};
+
+class MRUBinaryArchiveCache final : angle::NonCopyable
+{
+  public:
+    static constexpr size_t kKeyLength = egl::kBlobCacheKeyLength;
+
+    MRUBinaryArchiveCache(uint32_t maxArchives);
+
+    uint32_t size() const;
+    void resize(uint32_t maxArchives);
+
+    void put(const egl::BlobCacheKey &key, id<MTLBinaryArchive> binaryArchive);
+
+    bool getAt(uint32_t index,
+               const egl::BlobCacheKey **keyOut,
+               AutoObjCPtr<id<MTLBinaryArchive>> *binaryArchiveOut);
+
+    AutoObjCPtr<id<MTLBinaryArchive>> getOrCreate(ContextMtl *context,
+                                                  const egl::BlobCacheKey &key);
+
+  private:
+    using MRUCacheStore =
+        angle::base::HashingMRUCache<egl::BlobCacheKey, AutoObjCPtr<id<MTLBinaryArchive>>>;
+
+    std::unique_ptr<MRUCacheStore> mStore;
 };
 
 }  // namespace mtl

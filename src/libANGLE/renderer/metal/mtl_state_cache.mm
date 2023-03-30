@@ -877,26 +877,16 @@ void RenderPipelineCache::setVertexShader(ContextMtl *context, id<MTLFunction> s
 {
     mVertexShader.retainAssign(shader);
 
-    if (!shader)
-    {
-        clearPipelineStates();
-        return;
-    }
-
-    recreatePipelineStates(context);
+    // Clear so that the states will be recreated by calling getRenderPipelineState()
+    clearPipelineStates();
 }
 
 void RenderPipelineCache::setFragmentShader(ContextMtl *context, id<MTLFunction> shader)
 {
     mFragmentShader.retainAssign(shader);
 
-    if (!shader)
-    {
-        clearPipelineStates();
-        return;
-    }
-
-    recreatePipelineStates(context);
+    // Clear so that the states will be recreated by calling getRenderPipelineState()
+    clearPipelineStates();
 }
 
 bool RenderPipelineCache::hasDefaultAttribs(const RenderPipelineDesc &rpdesc) const
@@ -917,13 +907,21 @@ AutoObjCPtr<id<MTLRenderPipelineState>> RenderPipelineCache::getRenderPipelineSt
     ContextMtl *context,
     const RenderPipelineDesc &desc)
 {
+    return getRenderPipelineStateWithBinaryArchive(context, desc, nil);
+}
+
+AutoObjCPtr<id<MTLRenderPipelineState>>
+RenderPipelineCache::getRenderPipelineStateWithBinaryArchive(ContextMtl *context,
+                                                             const RenderPipelineDesc &desc,
+                                                             id<MTLBinaryArchive> binaryArchive)
+{
     auto insertDefaultAttribLayout = hasDefaultAttribs(desc);
     int tableIdx                   = insertDefaultAttribLayout ? 1 : 0;
     auto &table                    = mRenderPipelineStates[tableIdx];
     auto ite                       = table.find(desc);
     if (ite == table.end())
     {
-        return insertRenderPipelineState(context, desc, insertDefaultAttribLayout);
+        return insertRenderPipelineState(context, desc, binaryArchive, insertDefaultAttribLayout);
     }
 
     return ite->second;
@@ -932,10 +930,11 @@ AutoObjCPtr<id<MTLRenderPipelineState>> RenderPipelineCache::getRenderPipelineSt
 AutoObjCPtr<id<MTLRenderPipelineState>> RenderPipelineCache::insertRenderPipelineState(
     ContextMtl *context,
     const RenderPipelineDesc &desc,
+    id<MTLBinaryArchive> binaryArchive,
     bool insertDefaultAttribLayout)
 {
     AutoObjCPtr<id<MTLRenderPipelineState>> newState =
-        createRenderPipelineState(context, desc, insertDefaultAttribLayout);
+        createRenderPipelineState(context, desc, binaryArchive, insertDefaultAttribLayout);
     if (!newState)
     {
         return nil;
@@ -1011,6 +1010,7 @@ static bool ValidateRenderPipelineState(const MTLRenderPipelineDescriptor *descr
 AutoObjCPtr<id<MTLRenderPipelineState>> RenderPipelineCache::createRenderPipelineState(
     ContextMtl *context,
     const RenderPipelineDesc &originalDesc,
+    id<MTLBinaryArchive> binaryArchive,
     bool insertDefaultAttribLayout)
 {
     ANGLE_MTL_OBJC_SCOPE
@@ -1104,6 +1104,13 @@ AutoObjCPtr<id<MTLRenderPipelineState>> RenderPipelineCache::createRenderPipelin
             [objCDesc.get().vertexDescriptor.layouts setObject:defaultAttribLayoutObjCDesc
                                             atIndexedSubscript:kDefaultAttribsBindingIndex];
         }
+
+        // Binary archive
+        if (binaryArchive)
+        {
+            objCDesc.get().binaryArchives = [NSArray arrayWithObject:binaryArchive];
+        }
+
         // Create pipeline state
         NSError *err  = nil;
         auto newState = metalDevice.newRenderPipelineStateWithDescriptor(objCDesc, &err);
@@ -1114,23 +1121,12 @@ AutoObjCPtr<id<MTLRenderPipelineState>> RenderPipelineCache::createRenderPipelin
             return nil;
         }
 
-        return newState;
-    }
-}
-
-void RenderPipelineCache::recreatePipelineStates(ContextMtl *context)
-{
-    for (int hasDefaultAttrib = 0; hasDefaultAttrib <= 1; ++hasDefaultAttrib)
-    {
-        for (auto &ite : mRenderPipelineStates[hasDefaultAttrib])
+        if (binaryArchive)
         {
-            if (ite.second == nil)
-            {
-                continue;
-            }
-
-            ite.second = createRenderPipelineState(context, ite.first, hasDefaultAttrib);
+            [binaryArchive addRenderPipelineFunctionsWithDescriptor:objCDesc error:&err];
         }
+
+        return newState;
     }
 }
 
@@ -1392,6 +1388,72 @@ void StateCache::clear()
     mNullDepthStencilState = nil;
     mDepthStencilStates.clear();
     mSamplerStates.clear();
+}
+
+// MRUBinaryArchiveCache implementation
+MRUBinaryArchiveCache::MRUBinaryArchiveCache(uint32_t maxArchives)
+    : mStore(std::make_unique<MRUCacheStore>(maxArchives))
+{}
+
+uint32_t MRUBinaryArchiveCache::size() const
+{
+    return static_cast<uint32_t>(mStore->size());
+}
+
+void MRUBinaryArchiveCache::resize(uint32_t maxArchives)
+{
+    mStore = std::make_unique<MRUCacheStore>(maxArchives);
+}
+
+void MRUBinaryArchiveCache::put(const egl::BlobCacheKey &key, id<MTLBinaryArchive> binaryArchive)
+{
+    mStore->Put(key, std::move(binaryArchive));
+}
+
+bool MRUBinaryArchiveCache::getAt(uint32_t index,
+                                  const egl::BlobCacheKey **keyOut,
+                                  AutoObjCPtr<id<MTLBinaryArchive>> *binaryArchiveOut)
+{
+    if (index < mStore->size())
+    {
+        auto it = mStore->begin();
+        std::advance(it, index);
+        *keyOut           = &it->first;
+        *binaryArchiveOut = it->second;
+        return true;
+    }
+    *binaryArchiveOut = nil;
+    return false;
+}
+
+AutoObjCPtr<id<MTLBinaryArchive>> MRUBinaryArchiveCache::getOrCreate(ContextMtl *context,
+                                                                     const egl::BlobCacheKey &key)
+{
+    MRUCacheStore::iterator ite = mStore->Get(key);
+    if (ite != mStore->end())
+    {
+        return ite->second;
+    }
+
+    ANGLE_MTL_OBJC_SCOPE
+    {
+        auto objCDesc = adoptObjCObj([[MTLBinaryArchiveDescriptor alloc] init]);
+        NSError *err  = nil;
+        AutoObjCPtr<id<MTLBinaryArchive>> newArchive =
+            context->getMetalDevice().newBinaryArchiveWithDescriptor(objCDesc, &err);
+        if (err)
+        {
+            ANGLE_MTL_HANDLE_ERROR(context, mtl::FormatMetalErrorMessage(err).c_str(),
+                                   GL_INVALID_OPERATION);
+            return nil;
+        }
+
+        ASSERT(newArchive);
+
+        mStore->Put(key, newArchive);
+
+        return newArchive;
+    }
 }
 
 }  // namespace mtl

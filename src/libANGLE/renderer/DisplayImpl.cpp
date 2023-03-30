@@ -162,4 +162,33 @@ egl::Error DisplayImpl::queryDmaBufModifiers(EGLint format,
     UNREACHABLE();
     return egl::NoError();
 }
+
+EGLint DisplayImpl::getMetalBinaryArchiveCacheCount() const
+{
+    UNREACHABLE();
+    return 0;
+}
+
+egl::Error DisplayImpl::queryMetalBinaryArchiveFromCache(EGLint index,
+                                                         void *key,
+                                                         EGLint *keySize,
+                                                         void **binaryArchive)
+{
+    UNREACHABLE();
+    return egl::NoError();
+}
+
+void DisplayImpl::populateMetalBinaryArchiveInCache(const void *key,
+                                                    EGLint keySize,
+                                                    void *binaryArchive)
+{
+    UNREACHABLE();
+}
+
+EGLint DisplayImpl::resizeMetalBinaryArchiveCache(EGLint limit)
+{
+    UNREACHABLE();
+    return 0;
+}
+
 }  // namespace rx
