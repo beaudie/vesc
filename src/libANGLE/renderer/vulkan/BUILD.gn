@@ -147,6 +147,9 @@ template("angle_vulkan_backend_template") {
     # Include generated shaders.
     import("vk_internal_shaders_autogen.gni")
     sources += angle_vulkan_internal_shaders
+
+    # Temporary to enable build...
+    sources += [ "$angle_root/src/libGLESv2/global_state.h" ]
   }
 }
 
