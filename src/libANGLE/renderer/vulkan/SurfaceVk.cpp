@@ -23,6 +23,8 @@
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "libANGLE/trace.h"
 
+#include "libGLESv2/global_state.h"
+
 namespace rx
 {
 
@@ -1772,11 +1774,17 @@ angle::Result WindowSurfaceVk::prepareSwapImpl(const gl::Context *context)
     ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::prepareSwap");
     if (mNeedToAcquireNextSwapchainImage)
     {
+        angle::GlobalMutex &globalMutex = egl::GetGlobalMutex();
+        globalMutex.unlock();
+
         // Acquire the next image (previously deferred). The image may not have been already
         // acquired if there was no rendering done at all to the default framebuffer in this frame,
         // for example if all rendering was done to FBOs.
         ANGLE_TRACE_EVENT0("gpu.angle", "Acquire Swap Image Before Swap");
-        ANGLE_TRY(doDeferredAcquireNextImage(context, false));
+        angle::Result result = doDeferredAcquireNextImage(context, false);
+
+        globalMutex.lock();
+        ANGLE_TRY(result);
     }
     if (mAcquireImageSemaphore)
     {
