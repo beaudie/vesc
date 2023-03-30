@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c7f0079_9fc31784",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-03-30T14:48:44Z",
+      "side": 1,
+      "message": "I think this looks good. We have checks that mVAOState is non-null on all accesses in StateManagerGL so we\u0027re safe there. We probably could ensure that a proper VertexArrayStateGL is saved/restored though. IMO this is fine for now.",
+      "revId": "711fb608c7f91da0949dde8bfb0c09dfa9ed2e22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
