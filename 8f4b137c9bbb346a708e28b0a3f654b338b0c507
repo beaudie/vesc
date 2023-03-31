@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27f4ebfd_f5608d75",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-03-31T15:28:07Z",
+      "side": 1,
+      "message": "Do we want to go higher than 33? The bug says \"33 (at least)\"",
+      "revId": "8f4b137c9bbb346a708e28b0a3f654b338b0c507",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
