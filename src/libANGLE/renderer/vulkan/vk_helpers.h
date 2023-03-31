@@ -1769,6 +1769,7 @@ bool CanCopyWithTransfer(RendererVk *renderer,
                          VkImageTiling srcTilingMode,
                          angle::FormatID dstFormatID,
                          VkImageTiling dstTilingMode);
+
 class ImageViewHelper;
 class ImageHelper final : public Resource, public angle::Subject
 {
@@ -2562,6 +2563,7 @@ class ImageHelper final : public Resource, public angle::Subject
 
     angle::Result initializeNonZeroMemory(Context *context,
                                           bool hasProtectedContent,
+                                          VkMemoryPropertyFlags flags,
                                           VkDeviceSize size);
 
     std::vector<SubresourceUpdate> *getLevelUpdates(gl::LevelIndex level);
