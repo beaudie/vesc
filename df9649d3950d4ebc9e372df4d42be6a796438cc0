@@ -16,6 +16,23 @@
       "message": "lgtm\n\nThanks for persisting with this change.",
       "revId": "df9649d3950d4ebc9e372df4d42be6a796438cc0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36294270_120a4c26",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 10
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-03-31T20:40:52Z",
+      "side": 1,
+      "message": "nit: Following GL style, this section should list all extensions that define symbols used throughout the document not present in the core ES 3.0.\n\nAlso the document should have \"Interactions with ...\" sections for each mentioned extension like:\n```\nInteractions with EXT_depth_clamp\n\n    If EXT_depth_clamp is not supported, ignore references to DEPTH_CLAMP_EXT.\n```\n\nFeel free to postpone such update until the extension is marked as complete.",
+      "revId": "df9649d3950d4ebc9e372df4d42be6a796438cc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
