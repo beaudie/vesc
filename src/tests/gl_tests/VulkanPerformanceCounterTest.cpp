@@ -6293,6 +6293,8 @@ TEST_P(VulkanPerformanceCounterTest, VerifySubmitCounterForSwitchUserFBOToSystem
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled(kPerfMonitorExtensionName));
 
     uint64_t expectedCommandQueueSubmitCount = getPerfCounters().commandQueueSubmitCallsTotal;
+    uint64_t expectedCommandQueueWaitSemaphoreCount =
+        getPerfCounters().commandQueueWaitSemaphoresTotal;
 
     GLFramebuffer framebuffer;
     GLTexture texture;
@@ -6307,6 +6309,7 @@ TEST_P(VulkanPerformanceCounterTest, VerifySubmitCounterForSwitchUserFBOToSystem
     {
         // One submission coming from glBindFramebuffer and draw
         ++expectedCommandQueueSubmitCount;
+        // This submission should not wait for any semaphore.
     }
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -6314,6 +6317,16 @@ TEST_P(VulkanPerformanceCounterTest, VerifySubmitCounterForSwitchUserFBOToSystem
     ASSERT_GL_NO_ERROR();
 
     EXPECT_EQ(getPerfCounters().commandQueueSubmitCallsTotal, expectedCommandQueueSubmitCount);
+    EXPECT_EQ(getPerfCounters().commandQueueWaitSemaphoresTotal,
+              expectedCommandQueueWaitSemaphoreCount);
+
+    // This submission must wait for ANI's semaphore
+    ++expectedCommandQueueWaitSemaphoreCount;
+    ++expectedCommandQueueSubmitCount;
+    swapBuffers();
+    EXPECT_EQ(getPerfCounters().commandQueueSubmitCallsTotal, expectedCommandQueueSubmitCount);
+    EXPECT_EQ(getPerfCounters().commandQueueWaitSemaphoresTotal,
+              expectedCommandQueueWaitSemaphoreCount);
 }
 
 // Tests that PreferSubmitAtFBOBoundary feature works properly. Bind to different FBO and should

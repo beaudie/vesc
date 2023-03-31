@@ -1211,10 +1211,6 @@ angle::Result WindowSurfaceVk::getAttachmentRenderTarget(const gl::Context *cont
         ANGLE_VK_TRACE_EVENT_AND_MARKER(contextVk, "First Swap Image Use");
         ANGLE_TRY(doDeferredAcquireNextImage(context, false));
     }
-    if (mAcquireImageSemaphore)
-    {
-        flushAcquireImageSemaphore(context);
-    }
     return SurfaceVk::getAttachmentRenderTarget(context, binding, imageIndex, samples, rtOut);
 }
 
