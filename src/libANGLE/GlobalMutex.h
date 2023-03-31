@@ -23,8 +23,10 @@ class [[nodiscard]] ScopedGlobalMutexLock final : angle::NonCopyable
     ScopedGlobalMutexLock();
     ~ScopedGlobalMutexLock();
 
+#if !defined(ANGLE_ENABLE_GLOBAL_MUTEX_LOAD_TIME_ALLOCATE)
   private:
     priv::GlobalMutex &mMutex;
+#endif
 };
 
 enum class GlobalMutexUnlockType
@@ -42,7 +44,9 @@ class [[nodiscard]] ScopedGlobalMutexUnlock final : angle::NonCopyable
     ~ScopedGlobalMutexUnlock();
 
   private:
+#if !defined(ANGLE_ENABLE_GLOBAL_MUTEX_LOAD_TIME_ALLOCATE)
     priv::GlobalMutex &mMutex;
+#endif
     angle::ThreadId mLockThreadId;
     int mLockLevel;
 };
