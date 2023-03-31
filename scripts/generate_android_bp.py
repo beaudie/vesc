@@ -24,7 +24,6 @@ CODEGEN_TARGETS = [
     "//:libEGL",
 ]
 
-SDK_VERSION = '28'
 STL = 'libc++_static'
 
 ABI_ARM = 'arm'
@@ -353,7 +352,7 @@ def merge_bps(bps_for_abis):
     return common_bp
 
 
-def library_target_to_blueprint(target, build_info):
+def library_target_to_blueprint(target, build_info, sdk_version):
     bps_for_abis = {}
     blueprint_type = ""
     for abi in ABI_TARGETS:
@@ -380,7 +379,7 @@ def library_target_to_blueprint(target, build_info):
 
         bp['defaults'].append('angle_common_library_cflags')
 
-        bp['sdk_version'] = SDK_VERSION
+        bp['sdk_version'] = sdk_version
         bp['stl'] = STL
         if target in ROOT_TARGETS:
             bp['vendor'] = True
@@ -469,7 +468,7 @@ def handle_gn_build_arg_response_file_name(command_arg_list):
     return new_temp_file_name, updated_args
 
 
-def action_target_to_blueprint(abi, target, build_info):
+def action_target_to_blueprint(abi, target, build_info, sdk_version):
     target_info = build_info[abi][target]
     blueprint_type = blueprint_gen_types[target_info['type']]
 
@@ -521,18 +520,18 @@ def action_target_to_blueprint(abi, target, build_info):
 
     bp['cmd'] = ' '.join(cmd)
 
-    bp['sdk_version'] = SDK_VERSION
+    bp['sdk_version'] = sdk_version
 
     return blueprint_type, bp
 
 
-def gn_target_to_blueprint(target, build_info):
+def gn_target_to_blueprint(target, build_info, sdk_version):
     for abi in ABI_TARGETS:
         gn_type = build_info[abi][target]['type']
         if gn_type in blueprint_library_target_types:
-            return library_target_to_blueprint(target, build_info)
+            return library_target_to_blueprint(target, build_info, sdk_version)
         elif gn_type in blueprint_gen_types:
-            return action_target_to_blueprint(abi, target, build_info)
+            return action_target_to_blueprint(abi, target, build_info, sdk_version)
         else:
             # Target is not used by this ABI
             continue
@@ -560,6 +559,8 @@ def get_gn_target_dependencies(abi, target, build_info):
 def main():
     parser = argparse.ArgumentParser(
         description='Generate Android blueprints from gn descriptions.')
+
+    parser.add_argument('--sdk_version', required=True)
 
     for abi in ABI_TARGETS:
         parser.add_argument(
@@ -609,7 +610,7 @@ def main():
         }))
 
     for target in reversed(targets_to_write.keys()):
-        blueprint_type, bp = gn_target_to_blueprint(target, build_info)
+        blueprint_type, bp = gn_target_to_blueprint(target, build_info, args['sdk_version'])
         if target in CODEGEN_TARGETS:
             blueprint_targets.append(('angle_android_codegen', {
                 'name': bp['name'] + '_android_codegen',
@@ -688,7 +689,7 @@ def main():
         {
             'name': 'ANGLE_java_defaults',
             'sdk_version': 'system_current',
-            'min_sdk_version': SDK_VERSION,
+            'min_sdk_version': args['sdk_version'],
             'compile_multilib': 'both',
             'use_embedded_native_libs': True,
             'jni_libs': [
@@ -709,7 +710,7 @@ def main():
     blueprint_targets.append(('android_library', {
         'name': 'ANGLE_library',
         'sdk_version': 'system_current',
-        'min_sdk_version': SDK_VERSION,
+        'min_sdk_version': args['sdk_version'],
         'resource_dirs': ['src/android_system_settings/res',],
         'asset_dirs': ['src/android_system_settings/assets',],
         'aaptflags': ['-0 .json',],

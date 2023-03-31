@@ -24,6 +24,10 @@ cd "${0%/*}/.."
 
 GN_OUTPUT_DIRECTORY=out/Android
 
+SDK_VERSION=33
+# Target ndk API 26+ to make sure ANGLE can use the Vulkan backend on Android
+NDK_API_LEVEL=33
+
 function generate_Android_bp_file() {
     abis=(
         "arm"
@@ -47,9 +51,9 @@ function generate_Android_bp_file() {
             # Build for 64-bit CPUs
             "target_cpu = \"$abi\""
 
-            # Target ndk API 26 to make sure ANGLE can use the Vulkan backend on Android
-            "android32_ndk_api_level = 26"
-            "android64_ndk_api_level = 26"
+            # Target NDK_API_LEVEL
+            "android32_ndk_api_level = ${NDK_API_LEVEL}"
+            "android64_ndk_api_level = ${NDK_API_LEVEL}"
 
             # Disable all backends except Vulkan
             "angle_enable_vulkan = true"
@@ -92,6 +96,7 @@ function generate_Android_bp_file() {
     done
 
     python3 scripts/generate_android_bp.py \
+        --sdk_version=${SDK_VERSION} \
         --gn_json_arm=${GN_OUTPUT_DIRECTORY}/desc.arm.json \
         --gn_json_arm64=${GN_OUTPUT_DIRECTORY}/desc.arm64.json \
         --gn_json_x86=${GN_OUTPUT_DIRECTORY}/desc.x86.json \
