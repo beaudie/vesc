@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "72bf71bc_0051a875",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-03-31T22:38:04Z",
+      "side": 1,
+      "message": "Could you please also add an end2end test here that simulate the specific usage of animal crossing and verify that the invalidateFB call end up applying to the renderPass\u0027s storeOp?",
+      "revId": "f380fe631cefa2fcdf7a438527d2dac92ab38730",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "020fa9e4_82dbbca0",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 1
