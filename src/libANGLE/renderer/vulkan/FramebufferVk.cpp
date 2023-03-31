@@ -2126,14 +2126,19 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
         return angle::Result::Continue;
     }
 
-    if (!isBlitCommand)
-    {
+    bool endRenderPass = (
         // Don't end the render pass when handling a blit to resolve, since we may be able to
         // optimize that path which requires modifying the current render pass.
         // We're deferring the resolve check to FramebufferVk::blit(), since if the read buffer is
         // multisampled-render-to-texture, then srcFramebuffer->getSamples(context) gives > 1, but
         // there's no resolve happening as the read buffer's single sampled image will be used as
         // blit src. FramebufferVk::blit() will handle those details for us.
+        !isBlitCommand &&
+        // Invalidate is a hint, shouldn't end the render pass.
+        command != gl::Command::Invalidate);
+
+    if (endRenderPass)
+    {
         ANGLE_TRY(
             contextVk->flushCommandsAndEndRenderPass(RenderPassClosureReason::FramebufferChange));
     }

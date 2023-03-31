@@ -3581,7 +3581,7 @@ angle::Result State::syncProgramPipelineObject(const Context *context, Command c
     return angle::Result::Continue;
 }
 
-angle::Result State::syncDirtyObject(const Context *context, GLenum target)
+angle::Result State::syncDirtyObject(const Context *context, GLenum target, Command command)
 {
     DirtyObjects localSet;
 
@@ -3597,21 +3597,12 @@ angle::Result State::syncDirtyObject(const Context *context, GLenum target)
             localSet.set(DIRTY_OBJECT_READ_FRAMEBUFFER);
             localSet.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
             break;
-        case GL_VERTEX_ARRAY:
-            localSet.set(DIRTY_OBJECT_VERTEX_ARRAY);
-            break;
-        case GL_TEXTURE:
-            localSet.set(DIRTY_OBJECT_TEXTURES);
-            break;
-        case GL_SAMPLER:
-            localSet.set(DIRTY_OBJECT_SAMPLERS);
-            break;
-        case GL_PROGRAM:
-            localSet.set(DIRTY_OBJECT_PROGRAM);
+        default:
+            UNREACHABLE();
             break;
     }
 
-    return syncDirtyObjects(context, localSet, Command::Other);
+    return syncDirtyObjects(context, localSet, command);
 }
 
 void State::setObjectDirty(GLenum target)
