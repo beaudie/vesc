@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b73584c8_aec45696",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-31T17:14:36Z",
+      "side": 0,
+      "message": "Only functional difference is that this `release()` is changed to `releaseBufferAndDescriptorSetCache()` as done implicitly by `acquireBufferHelper`.",
+      "revId": "933bfeb73c70f634deb2c3f7512076e2d0069f33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
