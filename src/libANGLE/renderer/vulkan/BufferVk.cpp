@@ -386,6 +386,61 @@ angle::Result BufferVk::setData(const gl::Context *context,
     return setDataWithMemoryType(context, target, data, size, memoryPropertyFlags, usage);
 }
 
+angle::Result BufferVk::setDataImpl(ContextVk *contextVk,
+                                    VkMemoryPropertyFlags memoryPropertyFlags,
+                                    BufferUsageType usageType,
+                                    size_t bufferSize,
+                                    const void *data,
+                                    size_t updateSize,
+                                    size_t updateOffset)
+{
+    // Whether the data is coming from glBufferData or glBufferSubData, determine if it's best to
+    // reallocate the buffer or update the existing one.  Full-size glBufferSubData uploads are thus
+    // treated the same way as glBufferData is.
+    RendererVk *renderer = contextVk->getRenderer();
+
+    // If the buffer is being entirely reinitialized, reset the valid-data flag. If the caller
+    // passed in data to fill the buffer, the flag will be updated when the data is copied to the
+    // buffer.
+    const bool fullUpdate = updateSize == bufferSize;
+    if (fullUpdate)
+    {
+        mHasValidData = false;
+    }
+
+    if (updateSize == 0)
+    {
+        // Nothing to do.
+        return angle::Result::Continue;
+    }
+
+    BufferUpdateType updateType = BufferUpdateType::ContentsUpdate;
+    if (fullUpdate && !isExternalBuffer())
+    {
+        updateType = calculateBufferUpdateTypeOnFullUpdate(renderer, updateSize,
+                                                           memoryPropertyFlags, usageType, data);
+    }
+
+    if (updateType == BufferUpdateType::StorageRedefined)
+    {
+        ASSERT(fullUpdate);
+
+        mUsageType           = usageType;
+        mMemoryPropertyFlags = memoryPropertyFlags;
+        ANGLE_TRY(
+            GetMemoryTypeIndex(contextVk, updateSize, memoryPropertyFlags, &mMemoryTypeIndex));
+        ANGLE_TRY(acquireBufferHelper(contextVk, updateSize, mUsageType));
+    }
+
+    if (data)
+    {
+        ANGLE_TRY(uploadData(contextVk, bufferSize, static_cast<const uint8_t *>(data), updateSize,
+                             updateOffset, updateType));
+    }
+
+    return angle::Result::Continue;
+}
+
 angle::Result BufferVk::setDataWithMemoryType(const gl::Context *context,
                                               gl::BufferBinding target,
                                               const void *data,
@@ -393,39 +448,11 @@ angle::Result BufferVk::setDataWithMemoryType(const gl::Context *context,
                                               VkMemoryPropertyFlags memoryPropertyFlags,
                                               gl::BufferUsage usage)
 {
-    ContextVk *contextVk = vk::GetImpl(context);
-    RendererVk *renderer = contextVk->getRenderer();
-
-    // Reset the flag since the buffer contents are being reinitialized. If the caller passed in
-    // data to fill the buffer, the flag will be updated when the data is copied to the buffer.
-    mHasValidData = false;
-
-    if (size == 0)
-    {
-        // Nothing to do.
-        return angle::Result::Continue;
-    }
-
+    ContextVk *contextVk      = vk::GetImpl(context);
     BufferUsageType usageType = GetBufferUsageType(usage);
-    BufferUpdateType updateType =
-        calculateBufferUpdateTypeOnFullUpdate(renderer, size, memoryPropertyFlags, usageType, data);
 
-    if (updateType == BufferUpdateType::StorageRedefined)
-    {
-        mUsageType           = usageType;
-        mMemoryPropertyFlags = memoryPropertyFlags;
-        ANGLE_TRY(GetMemoryTypeIndex(contextVk, size, memoryPropertyFlags, &mMemoryTypeIndex));
-        ANGLE_TRY(acquireBufferHelper(contextVk, size, mUsageType));
-    }
-
-    if (data)
-    {
-        // Treat full-buffer updates as SubData calls.
-        ANGLE_TRY(
-            setDataImpl(contextVk, size, static_cast<const uint8_t *>(data), size, 0, updateType));
-    }
-
-    return angle::Result::Continue;
+    // Handle full-buffer updates similarly to glBufferSubData
+    return setDataImpl(contextVk, memoryPropertyFlags, usageType, size, data, size, 0);
 }
 
 angle::Result BufferVk::setSubData(const gl::Context *context,
@@ -437,11 +464,8 @@ angle::Result BufferVk::setSubData(const gl::Context *context,
     ASSERT(mBuffer.valid());
 
     ContextVk *contextVk = vk::GetImpl(context);
-    ANGLE_TRY(setDataImpl(contextVk, static_cast<size_t>(mState.getSize()),
-                          static_cast<const uint8_t *>(data), size, offset,
-                          BufferUpdateType::ContentsUpdate));
-
-    return angle::Result::Continue;
+    return setDataImpl(contextVk, mMemoryPropertyFlags, mUsageType,
+                       static_cast<size_t>(mState.getSize()), data, size, offset);
 }
 
 angle::Result BufferVk::copySubData(const gl::Context *context,
@@ -971,12 +995,12 @@ angle::Result BufferVk::acquireAndUpdate(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
-angle::Result BufferVk::setDataImpl(ContextVk *contextVk,
-                                    size_t bufferSize,
-                                    const uint8_t *data,
-                                    size_t updateSize,
-                                    size_t updateOffset,
-                                    BufferUpdateType updateType)
+angle::Result BufferVk::uploadData(ContextVk *contextVk,
+                                   size_t bufferSize,
+                                   const uint8_t *data,
+                                   size_t updateSize,
+                                   size_t updateOffset,
+                                   BufferUpdateType updateType)
 {
     // if the buffer is currently in use
     //     if it isn't an external buffer and sub data size meets threshold
@@ -1099,7 +1123,7 @@ BufferUpdateType BufferVk::calculateBufferUpdateTypeOnFullUpdate(
     RendererVk *renderer,
     size_t size,
     VkMemoryPropertyFlags memoryPropertyFlags,
-    BufferUsageType usage,
+    BufferUsageType usageType,
     const void *data) const
 {
     // 0-sized updates should be no-op'd before this call.
@@ -1112,7 +1136,7 @@ BufferUpdateType BufferVk::calculateBufferUpdateTypeOnFullUpdate(
     }
 
     const bool inUseAndRespecifiedWithoutData = data == nullptr && isCurrentlyInUse(renderer);
-    bool redefineStorage = shouldRedefineStorage(renderer, usage, memoryPropertyFlags, size);
+    bool redefineStorage = shouldRedefineStorage(renderer, usageType, memoryPropertyFlags, size);
 
     // Create a new buffer if the buffer is busy and it's being redefined without data.
     // Additionally, a new buffer is created if any of the parameters change (memory type, usage,
