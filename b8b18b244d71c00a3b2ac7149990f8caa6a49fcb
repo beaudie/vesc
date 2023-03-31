@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef2d6f6d_f8d61f33",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-31T20:02:20Z",
+      "side": 1,
+      "message": "lgtm+2\n\nThanks for the fix.\n\n+Apple folks as FYI.",
+      "revId": "b8b18b244d71c00a3b2ac7149990f8caa6a49fcb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
