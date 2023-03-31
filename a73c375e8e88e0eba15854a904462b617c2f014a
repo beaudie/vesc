@@ -74,6 +74,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7e061b79_9917d16f",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-03-31T01:06:54Z",
+      "side": 1,
+      "message": "Good call Ken. It looks like it was coming down through a blink callstack invoking `glDescheduleUntilFinishedCHROMIUM`, and I already covered it with an interrupt on the blink side.\n\nRe-banning `glFenceSync`.",
+      "parentUuid": "caeb336a_2e128a95",
+      "revId": "a73c375e8e88e0eba15854a904462b617c2f014a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6860b84e_23bfcbcc",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 3
@@ -121,6 +139,24 @@
       "side": 1,
       "message": "There are three unimplemented indexed caps:\n- `SCISSOR_TEST_EXCLUSIVE_NV` from `NV_scissor_exclusive`\n- `SCISSOR_TEST` from `NV_viewport_array` and `OES_viewport_array`\n- `SHADING_RATE_IMAGE_NV` from `NV_shading_rate_image`\n\nFirst two seem compatible with PLS, not sure about the third.",
       "parentUuid": "a5412719_d14f2ec9",
+      "revId": "a73c375e8e88e0eba15854a904462b617c2f014a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b29903fc_26c763cf",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-03-31T01:06:54Z",
+      "side": 1,
+      "message": "Thanks for pointing these out. Added the first two.\n\nShading rate is not compatible with PLS unless we emulate it in the shader image implementation. It sounds potentially interesting, but also costly and like it might defeat the purpose of the shading rate extension in the first place. I\u0027d rather not include it in this extension.",
+      "parentUuid": "3d1125e4_06c5607f",
       "revId": "a73c375e8e88e0eba15854a904462b617c2f014a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
