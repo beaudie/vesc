@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afcfef47_c4bcc871",
+        "filename": "src/libGLESv2/global_state.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-31T20:51:24Z",
+      "side": 0,
+      "message": "Lol\n\nI don\u0027t really understand the purpose of this function though, the global mutex is going to be reclaimed by the OS anyway on termination. I though it may be there to satisfy some leak checker somewhere, but it clearly hasn\u0027t been doing anything.\n\nAnyway, please add `{}` around `return` while you\u0027re here.",
+      "revId": "18b675ea49887fcad7557b5338faa5f105b3d877",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
