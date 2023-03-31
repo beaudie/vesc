@@ -109,15 +109,19 @@ void PrintStackBacktrace()
     while (unw_step(&cursor) > 0)
     {
         static const size_t kMax = 256;
-        char mangled[kMax], demangled[kMax];
+        char mangled[kMax];
         unw_word_t offset;
         unw_get_proc_name(&cursor, mangled, kMax, &offset);
 
         int ok;
         size_t len = kMax;
+        // The output buffer must be malloced as the demangle function may call realloc if the
+        // output doesn't fit.
+        char *demangled = static_cast<char *>(malloc(sizeof(char) * len));
         abi::__cxa_demangle(mangled, demangled, &len, &ok);
 
         printf("    %s (+0x%zx)\n", ok == 0 ? demangled : mangled, (size_t)offset);
+        free(demangled);
     }
     printf("\n");
 }
@@ -502,7 +506,7 @@ void PrintStackBacktrace()
     // Child process executes addr2line
     constexpr size_t kAddr2LineFixedParametersCount = 6;
     Addr2LineCommandLine commandLineArgs            = {
-                   "addr2line", "-s", "-p", "-f", "-C", "-e",
+        "addr2line", "-s", "-p", "-f", "-C", "-e",
     };
     const char *currentModule = "";
     std::string resolvedModule;
