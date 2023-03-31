@@ -51,6 +51,24 @@
       "parentUuid": "29792f02_02fc6510",
       "revId": "8f4b137c9bbb346a708e28b0a3f654b338b0c507",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "514020aa_0fc945a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1377582
+      },
+      "writtenOn": "2023-03-31T20:50:49Z",
+      "side": 1,
+      "message": "Changing it to `32` can compile, see http://ag/22388862.\n\nGiven the huge divergence in `Android.bp`, do you think it\u0027s possible to put the `sdk_version: \"33\"` in another `cc_defaults`(or we can repurpose `angle_common_library_cflags`) so that the conflicts in `Android.bp` will be very limited?",
+      "parentUuid": "69a55f92_f97d21a5",
+      "revId": "8f4b137c9bbb346a708e28b0a3f654b338b0c507",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
