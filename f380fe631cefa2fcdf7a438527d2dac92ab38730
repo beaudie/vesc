@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "020fa9e4_82dbbca0",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2138,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-31T18:29:14Z",
+      "side": 1,
+      "message": "`!(command \u003d\u003d gl::Command::Invalidate \u0026\u0026 !contextVk-\u003ehasStartedRenderPassWithQueueSerial(mLastRenderPassQueueSerial))` per the discussion on the issue.\n\nWould be good to put it in a variable like `isInvalidateButNotForCurrentRenderPass`",
+      "range": {
+        "startLine": 2138,
+        "startChar": 8,
+        "endLine": 2138,
+        "endChar": 42
+      },
+      "revId": "f380fe631cefa2fcdf7a438527d2dac92ab38730",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
