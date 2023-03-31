@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50cbc56a_e20b5aa3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-31T13:44:01Z",
+      "side": 1,
+      "message": "Drive by",
+      "revId": "e3875daf877eb17b102aa7b8212582a115f4ed81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dc76eef_c6bbec27",
+        "filename": "util/posix/crash_handler_posix.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-03-31T13:44:01Z",
+      "side": 1,
+      "message": "nit: braces per the style guide.",
+      "revId": "e3875daf877eb17b102aa7b8212582a115f4ed81",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
