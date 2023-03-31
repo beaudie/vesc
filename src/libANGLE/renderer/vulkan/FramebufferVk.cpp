@@ -2126,7 +2126,7 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
         return angle::Result::Continue;
     }
 
-    if (!isBlitCommand)
+    /*if (!isBlitCommand)
     {
         // Don't end the render pass when handling a blit to resolve, since we may be able to
         // optimize that path which requires modifying the current render pass.
@@ -2136,7 +2136,7 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
         // blit src. FramebufferVk::blit() will handle those details for us.
         ANGLE_TRY(
             contextVk->flushCommandsAndEndRenderPass(RenderPassClosureReason::FramebufferChange));
-    }
+    }*/
 
     updateRenderPassDesc(contextVk);
 
@@ -3073,6 +3073,11 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         depthStencilAttachmentIndex, packedClearValues, commandBufferOut));
     mLastRenderPassQueueSerial = contextVk->getStartedRenderPassCommands().getQueueSerial();
 
+    if (mBackbuffer)
+    {
+        contextVk->addWaitSemaphore(mBackbuffer->getAcquireImageSemaphore(),
+                                    vk::kSwapchainAcquireImageWaitStageFlags);
+    }
     // Add the images to the renderpass tracking list (through onColorDraw).
     vk::PackedAttachmentIndex colorAttachmentIndex(0);
     for (size_t colorIndexGL : mState.getColorAttachmentsMask())

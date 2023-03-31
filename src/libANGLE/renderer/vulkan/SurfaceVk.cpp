@@ -1211,10 +1211,10 @@ angle::Result WindowSurfaceVk::getAttachmentRenderTarget(const gl::Context *cont
         ANGLE_VK_TRACE_EVENT_AND_MARKER(contextVk, "First Swap Image Use");
         ANGLE_TRY(doDeferredAcquireNextImage(context, false));
     }
-    if (mAcquireImageSemaphore)
+    /*if (mAcquireImageSemaphore)
     {
         flushAcquireImageSemaphore(context);
-    }
+    }*/
     return SurfaceVk::getAttachmentRenderTarget(context, binding, imageIndex, samples, rtOut);
 }
 
@@ -2272,6 +2272,12 @@ void WindowSurfaceVk::flushAcquireImageSemaphore(const gl::Context *context)
     mAcquireImageSemaphore = nullptr;
 }
 
+VkSemaphore WindowSurfaceVk::getAcquireImageSemaphore()
+{
+    VkSemaphore semaphore  = mAcquireImageSemaphore->getHandle();
+    mAcquireImageSemaphore = nullptr;
+    return semaphore;
+}
 // This method will either return VK_SUCCESS or VK_ERROR_*.  Thus, it is appropriate to ASSERT that
 // the return value won't be VK_SUBOPTIMAL_KHR.
 VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)

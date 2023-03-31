@@ -320,6 +320,7 @@ class WindowSurfaceVk : public SurfaceVk
     bool hasStagedUpdates() const;
 
     void setTimestampsEnabled(bool enabled) override;
+    VkSemaphore getAcquireImageSemaphore();
 
   protected:
     angle::Result prepareSwapImpl(const gl::Context *context);
