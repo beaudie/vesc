@@ -2038,8 +2038,10 @@ static ClientExtensions GenerateClientExtensions()
 #endif
 
 #if defined(ANGLE_ENABLE_METAL)
-    extensions.platformANGLEMetal    = true;
+    extensions.platformANGLEMetal = true;
+#    if defined(ANGLE_PLATFORM_MACOS) || defined(ANGLE_PLATFORM_MACCATALYST)
     extensions.platformANGLEDeviceId = true;
+#    endif
 #endif
 
 #if defined(ANGLE_USE_X11)
@@ -2059,7 +2061,8 @@ static ClientExtensions GenerateClientExtensions()
     extensions.platformANGLEDeviceContextVolatileCgl = true;
 #endif
 
-#if defined(ANGLE_ENABLE_METAL)
+#if defined(ANGLE_ENABLE_METAL) && \
+    (defined(ANGLE_PLATFORM_MACOS) || defined(ANGLE_PLATFORM_MACCATALYST))
     extensions.displayPowerPreferenceANGLE = true;
 #endif
 
