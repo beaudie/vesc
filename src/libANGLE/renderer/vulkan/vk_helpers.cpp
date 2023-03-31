@@ -5841,11 +5841,8 @@ angle::Result ImageHelper::initMemory(Context *context,
     if (renderer->getFeatures().useVmaForImageSuballocation.enabled)
     {
         ANGLE_VK_TRY(context, renderer->getImageMemorySuballocator().allocateAndBindMemory(
-                                  renderer, &mImage, flags, flags, &mVmaAllocation,
-                                  &mMemoryTypeIndex, &mAllocationSize));
-
-        renderer->onMemoryAlloc(mMemoryAllocationType, mAllocationSize, mMemoryTypeIndex,
-                                mVmaAllocation.getHandle());
+                                  renderer, &mImage, flags, flags, allocationType, &mVmaAllocation,
+                                  &flags, &mMemoryTypeIndex, &mAllocationSize));
     }
     else
     {
