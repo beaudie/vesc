@@ -166,11 +166,18 @@ class BufferVk : public BufferImpl
                                              VkDeviceSize size,
                                              uint8_t **mapPtr);
     angle::Result setDataImpl(ContextVk *contextVk,
+                              VkMemoryPropertyFlags memoryPropertyFlags,
+                              BufferUsageType usageType,
                               size_t bufferSize,
-                              const uint8_t *data,
+                              const void *data,
                               size_t updateSize,
-                              size_t updateOffset,
-                              BufferUpdateType updateType);
+                              size_t updateOffset);
+    angle::Result uploadData(ContextVk *contextVk,
+                             size_t bufferSize,
+                             const uint8_t *data,
+                             size_t updateSize,
+                             size_t updateOffset,
+                             BufferUpdateType updateType);
     void release(ContextVk *context);
     void dataUpdated();
 
@@ -183,7 +190,7 @@ class BufferVk : public BufferImpl
         RendererVk *renderer,
         size_t size,
         VkMemoryPropertyFlags memoryPropertyFlags,
-        BufferUsageType usage,
+        BufferUsageType usageType,
         const void *data) const;
     bool shouldRedefineStorage(RendererVk *renderer,
                                BufferUsageType usageType,
