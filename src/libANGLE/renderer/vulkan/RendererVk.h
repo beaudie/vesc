@@ -81,9 +81,17 @@ class ImageMemorySuballocator : angle::NonCopyable
                                    Image *image,
                                    VkMemoryPropertyFlags requiredFlags,
                                    VkMemoryPropertyFlags preferredFlags,
+                                   MemoryAllocationType memoryAllocationType,
                                    Allocation *allocationOut,
+                                   VkMemoryPropertyFlags *memoryFlagsOut,
                                    uint32_t *memoryTypeIndexOut,
                                    VkDeviceSize *sizeOut);
+
+    // Maps the memory to initialize with non-zero value.
+    VkResult mapMemoryAndInitWithNonZeroValue(RendererVk *renderer,
+                                              Allocation *allocation,
+                                              VkMemoryPropertyFlags flags,
+                                              VkDeviceSize size);
 };
 }  // namespace vk
 
