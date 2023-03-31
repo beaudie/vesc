@@ -44,6 +44,16 @@ enum class BufferUpdateType
     ContentsUpdate,
 };
 
+struct BufferDataSource
+{
+    // Buffer data can come from two sources:
+    // glBufferData and glBufferSubData upload through a CPU pointer
+    const void *data = nullptr;
+    // glCopyBufferSubData copies data from another buffer
+    vk::BufferHelper *buffer  = nullptr;
+    VkDeviceSize bufferOffset = 0;
+};
+
 VkBufferUsageFlags GetDefaultBufferUsageFlags(RendererVk *renderer);
 
 class BufferVk : public BufferImpl
@@ -133,15 +143,16 @@ class BufferVk : public BufferImpl
 
   private:
     angle::Result updateBuffer(ContextVk *contextVk,
-                               const uint8_t *data,
+                               size_t bufferSize,
+                               const BufferDataSource &source,
                                size_t size,
                                size_t offset);
     angle::Result directUpdate(ContextVk *contextVk,
-                               const uint8_t *data,
+                               const BufferDataSource &source,
                                size_t size,
                                size_t offset);
     angle::Result stagedUpdate(ContextVk *contextVk,
-                               const uint8_t *data,
+                               const BufferDataSource &source,
                                size_t size,
                                size_t offset);
     angle::Result allocStagingBuffer(ContextVk *contextVk,
@@ -151,7 +162,7 @@ class BufferVk : public BufferImpl
     angle::Result flushStagingBuffer(ContextVk *contextVk, VkDeviceSize offset, VkDeviceSize size);
     angle::Result acquireAndUpdate(ContextVk *contextVk,
                                    size_t bufferSize,
-                                   const uint8_t *data,
+                                   const BufferDataSource &source,
                                    size_t updateSize,
                                    size_t updateOffset,
                                    BufferUpdateType updateType);
@@ -169,12 +180,12 @@ class BufferVk : public BufferImpl
                               VkMemoryPropertyFlags memoryPropertyFlags,
                               BufferUsageType usageType,
                               size_t bufferSize,
-                              const void *data,
+                              const BufferDataSource &source,
                               size_t updateSize,
                               size_t updateOffset);
     angle::Result uploadData(ContextVk *contextVk,
                              size_t bufferSize,
-                             const uint8_t *data,
+                             const BufferDataSource &source,
                              size_t updateSize,
                              size_t updateOffset,
                              BufferUpdateType updateType);
@@ -191,7 +202,7 @@ class BufferVk : public BufferImpl
         size_t size,
         VkMemoryPropertyFlags memoryPropertyFlags,
         BufferUsageType usageType,
-        const void *data) const;
+        const BufferDataSource &source) const;
     bool shouldRedefineStorage(RendererVk *renderer,
                                BufferUsageType usageType,
                                VkMemoryPropertyFlags memoryPropertyFlags,
