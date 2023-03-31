@@ -3075,7 +3075,15 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     ANGLE_TRY(contextVk->beginNewRenderPass(
         framebuffer, renderArea, mRenderPassDesc, renderPassAttachmentOps, colorIndexVk,
         depthStencilAttachmentIndex, packedClearValues, commandBufferOut));
+
     mLastRenderPassQueueSerial = contextVk->getStartedRenderPassCommands().getQueueSerial();
+    if (mBackbuffer)
+    {
+        // If this render pass uses system framebuffer, we must wait for the acquired semaphore as
+        // well.
+        contextVk->addWaitSemaphore(mBackbuffer->releaseCurrentAcquireImageSemaphore(),
+                                    vk::kSwapchainAcquireImageWaitStageFlags);
+    }
 
     // Add the images to the renderpass tracking list (through onColorDraw).
     vk::PackedAttachmentIndex colorAttachmentIndex(0);

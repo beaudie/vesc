@@ -274,6 +274,12 @@ class WindowSurfaceVk : public SurfaceVk
                                         const vk::RenderPass &compatibleRenderPass,
                                         const SwapchainResolveMode swapchainResolveMode,
                                         vk::MaybeImagelessFramebuffer *framebufferOut);
+    VkSemaphore releaseCurrentAcquireImageSemaphore()
+    {
+        VkSemaphore semaphore  = mAcquireImageSemaphore->getHandle();
+        mAcquireImageSemaphore = nullptr;
+        return semaphore;
+    }
 
     VkSurfaceTransformFlagBitsKHR getPreTransform() const
     {
