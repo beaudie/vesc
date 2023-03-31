@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ee15c50_3a546e5f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-03-31T01:09:00Z",
+      "side": 1,
+      "message": "Please remove mention of sync objects here given the new state of the code.",
+      "revId": "7b3770b49a4f0e52f56388ff0219318ae900bde3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
