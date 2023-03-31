@@ -233,6 +233,10 @@ struct RasterizerState final
     CullFaceMode cullMode;
     GLenum frontFace;
 
+    PolygonMode polygonMode;
+
+    bool polygonOffsetPoint;
+    bool polygonOffsetLine;
     bool polygonOffsetFill;
     GLfloat polygonOffsetFactor;
     GLfloat polygonOffsetUnits;
