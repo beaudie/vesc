@@ -1495,6 +1495,9 @@ void GenerateCaps(const FunctionsGL *functions,
     extensions->depthClampEXT = functions->isAtLeastGL(gl::Version(3, 2)) ||
                                 functions->hasGLExtension("GL_ARB_depth_clamp") ||
                                 functions->hasGLESExtension("GL_EXT_depth_clamp");
+    extensions->polygonModeNV = functions->standard == STANDARD_GL_DESKTOP ||
+                                functions->hasGLESExtension("GL_NV_polygon_mode");
+    extensions->polygonModeANGLE      = extensions->polygonModeNV;
     extensions->polygonOffsetClampEXT = functions->hasExtension("GL_EXT_polygon_offset_clamp");
 
     // This functionality is provided by Shader Model 5 and should be available in GLSL 4.00
