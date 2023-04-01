@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd72fd4d_9d93c08b",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 6290,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-01T01:56:51Z",
+      "side": 1,
+      "message": "Could you add a similar test that makes sure submission is done when the framebuffer has changed attachments? Wasn\u0027t that the point of this CL?",
+      "revId": "b464c504266774e753eab8396be58bc116769f3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
