@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e03396fb_6abfa921",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 10
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-04-01T01:15:21Z",
+      "side": 1,
+      "message": "Might as well deal with it now!\n\nDoes the way I dealt with it look ok? (Combining all of the \"ignore references\" statements into one sentence?)",
+      "parentUuid": "36294270_120a4c26",
+      "revId": "df9649d3950d4ebc9e372df4d42be6a796438cc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "634024a0_ab956563",
@@ -48,6 +66,24 @@
       "writtenOn": "2023-03-31T20:53:28Z",
       "side": 1,
       "message": "`SCISSOR_TEST_EXCLUSIVE_NV` is also defined as a non-indexed cap.\n\n`DEBUG_OUTPUT` and `DEBUG_OUTPUT_SYNCHRONOUS` from `KHR_debug` should probably be allowed.",
+      "revId": "df9649d3950d4ebc9e372df4d42be6a796438cc0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea3a5837_2758daa6",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 10
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-04-01T01:15:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "634024a0_ab956563",
       "revId": "df9649d3950d4ebc9e372df4d42be6a796438cc0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
