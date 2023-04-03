@@ -165,10 +165,11 @@ bool ReadFileToString(const std::string &path, std::string *stringOut)
     }
 
     inFile.seekg(0, std::ios::end);
-    stringOut->reserve(static_cast<std::string::size_type>(inFile.tellg()));
+    auto size = static_cast<std::string::size_type>(inFile.tellg());
+    stringOut->resize(size);
     inFile.seekg(0, std::ios::beg);
 
-    stringOut->assign(std::istreambuf_iterator<char>(inFile), std::istreambuf_iterator<char>());
+    inFile.read(stringOut->data(), size);
     return !inFile.fail();
 }
 
