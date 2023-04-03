@@ -51,6 +51,24 @@
       "parentUuid": "f2970356_7aa74d37",
       "revId": "23a1f66b4ad11c184df709fccf00b7960680aaaa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65f2d852_39b0d461",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-03T17:49:23Z",
+      "side": 1,
+      "message": "\u003e What do you think? \n\nI\u0027m afraid that we can\u0027t use only `ANGLE_SCOPED_GLOBAL_SURFACE_LOCK()` in the current state. Need to investigate each function individually. Some functions may access Display state, or Share Context state, for example. So need to also keep `ANGLE_SCOPED_GLOBAL_LOCK()` in such cases. Then, possibly, try to remove dependence on the Global Lock for these operations. But I do not know if such thing should be done in the generated code.\n\n\u003e when someone doing a bit lengthy work while holding global lock\n\nMy solution was to avoid such situations by temporary unlocking global lock. Each such unlock case must be investigated if it is safe to do so, of course.",
+      "parentUuid": "199a3cfa_df3b1626",
+      "revId": "23a1f66b4ad11c184df709fccf00b7960680aaaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
