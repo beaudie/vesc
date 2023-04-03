@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81089498_357b4047",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 857,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-03T22:55:27Z",
+      "side": 1,
+      "message": "It will be more readable if `BufferDataSource \u0026source` all named to `BufferDataSource \u0026dataSource`, to avoid confusion to the `source` of copyBufferSubData\u0027s source buffer.",
+      "range": {
+        "startLine": 857,
+        "startChar": 61,
+        "endLine": 857,
+        "endChar": 67
+      },
+      "revId": "ffcd8e878b1937ee05ad5511aa2e32aac41c6f60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
