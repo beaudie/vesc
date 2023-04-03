@@ -33,6 +33,24 @@
       "message": "what happens to external buffer?",
       "revId": "c4a033de1eb2b9757658bfef03749ecce7250794",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73ccf1a0_b3aab9c7",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-03T22:58:49Z",
+      "side": 1,
+      "message": "External buffers cannot get reallocated (because their storage is not ours to redefine. I\u0027ll add a comment)",
+      "parentUuid": "a91d5b84_555f4a10",
+      "revId": "c4a033de1eb2b9757658bfef03749ecce7250794",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
