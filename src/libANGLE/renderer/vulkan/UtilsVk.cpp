@@ -2328,6 +2328,9 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
             RenderPassClosureReason::XfbResumeAfterDrawBasedClear));
     }
 
+    // Dirty all context states that might have been destroyed by this function
+    contextVk->onUtilsVkRenderPassEnd();
+
     return angle::Result::Continue;
 }
 
@@ -2718,6 +2721,9 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
     // ContextVk::startRenderPass. As such, occlusion queries are not enabled.
     commandBuffer->draw(3, 0);
 
+    // Dirty all context states that might have been destroyed by this function
+    contextVk->onUtilsVkRenderPassEnd();
+
     return angle::Result::Continue;
 }
 
@@ -3083,6 +3089,9 @@ angle::Result UtilsVk::copyImage(ContextVk *contextVk,
     // Note: this utility creates its own framebuffer, thus bypassing ContextVk::startRenderPass.
     // As such, occlusion queries are not enabled.
     commandBuffer->draw(3, 0);
+
+    // Dirty all context states that might have been destroyed by this function
+    contextVk->onUtilsVkRenderPassEnd();
 
     // Close the render pass for this temporary framebuffer.
     return contextVk->flushCommandsAndEndRenderPass(RenderPassClosureReason::TemporaryForImageCopy);

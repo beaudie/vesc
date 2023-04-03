@@ -801,6 +801,16 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                mShareGroupVk->getContextCount() == 1;
     }
 
+    void onUtilsVkRenderPassEnd()
+    {
+        // UtilsVk starts a new render pass for blit/resolve/clear operations that will destroy most
+        // context states. After the blit/resolve/clear quad draw call, we must restore all context
+        // states, which is equivalent to starting a new command buffer.
+        DirtyBits dirtyBits = mNewGraphicsCommandBufferDirtyBits;
+        dirtyBits.reset(DIRTY_BIT_RENDER_PASS);
+        mGraphicsDirtyBits |= dirtyBits;
+    }
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
