@@ -16,6 +16,24 @@
       "message": "Doesn\u0027t `ImageHelper::initMemory` already do this when this function returns?",
       "revId": "7b1c22dfd22e8a94a4e775d8d10d7b63d19696c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bec4f3cd_d28bc794",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5456,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-04-03T18:52:10Z",
+      "side": 1,
+      "message": "At the end of `initMemory()`, `initializeNonZeroMemory()` uses a staging buffer when `VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT` is disabled in `flags` and mapping is unavailable. In the pre-VMA memory allocation method, `InitMappableDeviceMemory()` is used after the allocation when mapping is available, which is also the case for the retracing script.",
+      "parentUuid": "21a5a93b_012a9829",
+      "revId": "7b1c22dfd22e8a94a4e775d8d10d7b63d19696c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
