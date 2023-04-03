@@ -16,6 +16,23 @@
       "message": "Looks correct, CC @geofflang in case I missed something",
       "revId": "23a1f66b4ad11c184df709fccf00b7960680aaaa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2970356_7aa74d37",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-03T16:35:38Z",
+      "side": 1,
+      "message": "I thought the original intention is to partition the global lock into multiple lock domains, one of which is surface lock. Should we do the opposite: Keep the ANGLE_SCOPED_GLOBAL_SURFACE_LOCK and remove ANGLE_SCOPED_GLOBAL_LOCK here (and do similar fix for https://chromium-review.googlesource.com/c/angle/angle/+/4316610 as well which leads to this CL). What do you think? Otherwise, there will still potential lock contention that when someone doing a bit lengthy work while holding global lock, surface operation will still get blocked, and lock partition was intended to avoid that.",
+      "revId": "23a1f66b4ad11c184df709fccf00b7960680aaaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
