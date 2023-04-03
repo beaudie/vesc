@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b5462072_7bbc750b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-03T22:34:26Z",
+      "side": 1,
+      "message": "Do we have a test for full update with glBufferSubData call, which seems now will go through glBufferData logic while previously not?",
+      "revId": "c4a033de1eb2b9757658bfef03749ecce7250794",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a91d5b84_555f4a10",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 3
