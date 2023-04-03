@@ -87,6 +87,24 @@
       "parentUuid": "65f2d852_39b0d461",
       "revId": "23a1f66b4ad11c184df709fccf00b7960680aaaa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49c67b46_d3f243f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-03T18:43:22Z",
+      "side": 1,
+      "message": "Yea, I agree that simply remove global lock here and only use surface lock will not be sufficient. And the original perf bug that Frank intended to fix is still fixed",
+      "parentUuid": "980e5b91_87a48380",
+      "revId": "23a1f66b4ad11c184df709fccf00b7960680aaaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
