@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21a5a93b_012a9829",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5456,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-03T18:40:23Z",
+      "side": 1,
+      "message": "Doesn\u0027t `ImageHelper::initMemory` already do this when this function returns?",
+      "revId": "7b1c22dfd22e8a94a4e775d8d10d7b63d19696c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
