@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "840faa45_ff51e746",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-04-03T18:54:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "564df86c_47aa21e4",
+      "revId": "3b295e9738278e79122bde8867cd8d59cc471785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "fec409bd_b5f9d7cc",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 11
@@ -104,6 +122,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6f6ecfc_66486690",
+        "filename": "include/platform/mtl_features.json",
+        "patchSetId": 11
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-04-03T18:54:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ab46ddb_e77aab11",
+      "revId": "3b295e9738278e79122bde8867cd8d59cc471785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b062f005_674484d9",
@@ -117,6 +153,24 @@
       "writtenOn": "2023-03-22T22:10:39Z",
       "side": 1,
       "message": "Intel GPUs will be the majority of GPUs on Intel CPU-based Macs. Could we add a second workaround to skip the staging textures on Intel GPUs, only for the known broken formats?",
+      "revId": "3b295e9738278e79122bde8867cd8d59cc471785",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c0dbd92_45104f80",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 11
+      },
+      "lineNbr": 1274,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-04-03T18:54:51Z",
+      "side": 1,
+      "message": "Done, I added the work around in this CL.",
+      "parentUuid": "b062f005_674484d9",
       "revId": "3b295e9738278e79122bde8867cd8d59cc471785",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
