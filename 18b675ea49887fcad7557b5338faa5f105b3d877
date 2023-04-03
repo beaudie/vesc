@@ -34,6 +34,24 @@
       "parentUuid": "afcfef47_c4bcc871",
       "revId": "18b675ea49887fcad7557b5338faa5f105b3d877",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7567d7fe_2dda803c",
+        "filename": "src/libGLESv2/global_state.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-03T11:34:10Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "497860d7_1e38b7c7",
+      "revId": "18b675ea49887fcad7557b5338faa5f105b3d877",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
