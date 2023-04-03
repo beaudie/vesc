@@ -675,8 +675,7 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
         {
             // Start a new render pass if necessary to record the commands.
             vk::RenderPassCommandBuffer *commandBuffer;
-            gl::Rectangle renderArea = getRenderArea(contextVk);
-            ANGLE_TRY(contextVk->startRenderPass(renderArea, &commandBuffer, nullptr));
+            ANGLE_TRY(contextVk->startRenderPass(scissoredRenderArea, &commandBuffer, nullptr));
         }
 
         // Build clear values
@@ -2830,7 +2829,7 @@ angle::Result FramebufferVk::getSamplePosition(const gl::Context *context,
 }
 
 angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
-                                                const gl::Rectangle &renderArea,
+                                                const gl::Rectangle &scissoredRenderArea,
                                                 vk::RenderPassCommandBuffer **commandBufferOut,
                                                 bool *renderPassDescChangedOut)
 {
@@ -3063,9 +3062,13 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     ANGLE_TRY(
         getFramebuffer(contextVk, &framebuffer, nullptr, nullptr, SwapchainResolveMode::Disabled));
 
-    // If deferred clears were used in the render pass, the render area must cover the whole
+    // If deferred clears were used in the render pass, expand the render area to the whole
     // framebuffer.
-    ASSERT(!hasDeferredClears || renderArea == getRotatedCompleteRenderArea(contextVk));
+    gl::Rectangle renderArea = scissoredRenderArea;
+    if (hasDeferredClears)
+    {
+        renderArea = getRotatedCompleteRenderArea(contextVk);
+    }
 
     ANGLE_TRY(contextVk->beginNewRenderPass(
         framebuffer, renderArea, mRenderPassDesc, renderPassAttachmentOps, colorIndexVk,
@@ -3112,18 +3115,6 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
     }
 
     return angle::Result::Continue;
-}
-
-gl::Rectangle FramebufferVk::getRenderArea(ContextVk *contextVk) const
-{
-    if (hasDeferredClears())
-    {
-        return getRotatedCompleteRenderArea(contextVk);
-    }
-    else
-    {
-        return getRotatedScissoredRenderArea(contextVk);
-    }
 }
 
 void FramebufferVk::updateActiveColorMasks(size_t colorIndexGL, bool r, bool g, bool b, bool a)
