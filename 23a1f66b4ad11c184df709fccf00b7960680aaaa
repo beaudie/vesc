@@ -69,6 +69,24 @@
       "parentUuid": "199a3cfa_df3b1626",
       "revId": "23a1f66b4ad11c184df709fccf00b7960680aaaa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "980e5b91_87a48380",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-03T18:15:48Z",
+      "side": 1,
+      "message": "\u003e I thought the original intention is to partition the global lock into multiple lock domains, one of which is surface lock\n\nMy understanding is that `g_SurfaceMutex` was added to ensure that all functions that use `EGLSurface` were protected by this mutex. Concrete function is `SurfaceImpl::prepareSwap()`. In the original implementation, `g_Mutex` was released before `prepareSwap()`, while `g_SurfaceMutex` was still locked. I think that `g_SurfaceMutex` was introduced solely to protect `prepareSwap()` call. As a consequence, this caused  usage of `g_SurfaceMutex` in every other function that uses `EGLSurface`.\n\nI do not know why `g_SurfaceMutex` was necessary to protect `prepareSwap()`. Maybe just for safety. `prepareSwap()` is a pretty big method, that can recreate Swapchain, for example. If not just for safety, than removing `ANGLE_SCOPED_GLOBAL_SURFACE_LOCK()` in the recent CL was a mistake.\n\nMy next CL: `DRAFT: Try remove CUSTOM_EGL_ENTRY_POINTS.`\nmakes refactoring where `prepareSwap()` replaced with temp unlock of `g_Mutex`. But I think it is much safer to just unlock Vulkan ANI call.",
+      "parentUuid": "65f2d852_39b0d461",
+      "revId": "23a1f66b4ad11c184df709fccf00b7960680aaaa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
