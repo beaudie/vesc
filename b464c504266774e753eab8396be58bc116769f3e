@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "09be3dd4_0b38c64f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-03T18:00:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d56b0efa_4a3eea65",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 37
+      },
+      "revId": "b464c504266774e753eab8396be58bc116769f3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cd72fd4d_9d93c08b",
@@ -37,6 +61,24 @@
       "writtenOn": "2023-04-01T01:56:51Z",
       "side": 1,
       "message": "Could you add a similar test that makes sure submission is done when the framebuffer has changed attachments? Wasn\u0027t that the point of this CL?",
+      "revId": "b464c504266774e753eab8396be58bc116769f3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb3db9a1_0b2b7fbd",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 6290,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-03T18:00:09Z",
+      "side": 1,
+      "message": "Most usage is switching to system default framebuffer, but yes, a modified user framebuffer also have the same bug. Another test added.",
+      "parentUuid": "cd72fd4d_9d93c08b",
       "revId": "b464c504266774e753eab8396be58bc116769f3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
