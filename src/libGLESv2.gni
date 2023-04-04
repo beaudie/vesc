@@ -9,6 +9,7 @@ libangle_common_headers = [
   "src/common/Color.h",
   "src/common/Color.inc",
   "src/common/CompiledShaderState.h",
+  "src/common/FastMutex.h",
   "src/common/FastVector.h",
   "src/common/FixedQueue.h",
   "src/common/FixedVector.h",
@@ -64,6 +65,7 @@ libangle_common_headers = [
 ]
 
 libangle_common_sources = libangle_common_headers + [
+                            "src/common/FastMutex.cpp",
                             "src/common/Float16ToFloat32.cpp",
                             "src/common/MemoryBuffer.cpp",
                             "src/common/PackedEGLEnums_autogen.cpp",
