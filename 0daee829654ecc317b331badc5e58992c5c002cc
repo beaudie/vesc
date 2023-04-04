@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af334b82_408c8eeb",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-04T15:55:31Z",
+      "side": 1,
+      "message": "Suggest merging everything into a `64-bit` value, then write it once.",
+      "range": {
+        "startLine": 946,
+        "startChar": 0,
+        "endLine": 949,
+        "endChar": 83
+      },
+      "revId": "0daee829654ecc317b331badc5e58992c5c002cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10b4d2b8_851b5346",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-04T15:55:31Z",
+      "side": 1,
+      "message": "Just set it to `false` here!",
+      "revId": "0daee829654ecc317b331badc5e58992c5c002cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c9f756d_3986dc1c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1059,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-04T15:55:31Z",
+      "side": 1,
+      "message": "Similarly, suggest reading one 64 bit value and unpacking it.",
+      "revId": "0daee829654ecc317b331badc5e58992c5c002cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

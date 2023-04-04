@@ -39,6 +39,30 @@
       },
       "revId": "ca2af6753e755390e84801dbc2bffdeddc1d7364",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9447ae4_ff90cc5e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1096,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-04T15:55:31Z",
+      "side": 1,
+      "message": "\u003e I thought the intent of this CL is try to troubleshoot the intermittent bot failure that we were seeing when async compression enabled.\n\nPartly yes, partly no. The CRC I agree is more of a debug thing. The rest are actually checking for hash collisions and the blob cache pulling entries out from under us.",
+      "parentUuid": "ae1ca717_2f8473a1",
+      "range": {
+        "startLine": 1091,
+        "startChar": 4,
+        "endLine": 1096,
+        "endChar": 5
+      },
+      "revId": "ca2af6753e755390e84801dbc2bffdeddc1d7364",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
