@@ -1410,6 +1410,7 @@ void CommandBufferHelperCommon::initializeImpl()
 
 void CommandBufferHelperCommon::resetImpl()
 {
+    ASSERT(!mAcquireImageSemaphore.valid());
     mCommandAllocator.resetAllocator();
 }
 
@@ -1533,14 +1534,23 @@ void CommandBufferHelperCommon::bufferWrite(ContextVk *contextVk,
 }
 
 void CommandBufferHelperCommon::executeBarriers(const angle::FeaturesVk &features,
-                                                PrimaryCommandBuffer *primary)
+                                                CommandsState *commandsState)
 {
+    // Add ANI semaphore to the command submission.
+    if (mAcquireImageSemaphore.valid())
+    {
+        commandsState->waitSemaphores.emplace_back(mAcquireImageSemaphore.release());
+        commandsState->waitSemaphoreStageMasks.emplace_back(kSwapchainAcquireImageWaitStageFlags);
+    }
+
     // make a local copy for faster access
     PipelineStagesMask mask = mPipelineBarrierMask;
     if (mask.none())
     {
         return;
     }
+
+    PrimaryCommandBuffer &primary = commandsState->primaryCommands;
 
     if (features.preferAggregateBarrierCalls.enabled)
     {
@@ -1550,14 +1560,14 @@ void CommandBufferHelperCommon::executeBarriers(const angle::FeaturesVk &feature
         {
             barrier.merge(&mPipelineBarriers[*iter]);
         }
-        barrier.execute(primary);
+        barrier.execute(&primary);
     }
     else
     {
         for (PipelineStage pipelineStage : mask)
         {
             PipelineBarrier &barrier = mPipelineBarriers[pipelineStage];
-            barrier.execute(primary);
+            barrier.execute(&primary);
         }
     }
     mPipelineBarrierMask.reset();
@@ -1598,6 +1608,15 @@ void CommandBufferHelperCommon::updateImageLayoutAndBarrier(Context *context,
     if (image->updateLayoutAndBarrier(context, aspectFlags, imageLayout, mQueueSerial, barrier))
     {
         mPipelineBarrierMask.set(barrierIndex);
+
+        // Move ANI semaphore to here if any, since we just inserted a barrier. Note that all
+        // swapChain image must first do layout transit before access.
+        VkSemaphore semaphore = image->releaseAcquireImageSemaphore();
+        if (semaphore != VK_NULL_HANDLE)
+        {
+            ASSERT(!mAcquireImageSemaphore.valid());
+            mAcquireImageSemaphore.setHandle(semaphore);
+        }
     }
 }
 
@@ -1707,10 +1726,8 @@ void OutsideRenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
     image->setQueueSerial(mQueueSerial);
 }
 
-angle::Result OutsideRenderPassCommandBufferHelper::flushToPrimary(
-    Context *context,
-    PrimaryCommandBuffer *primary,
-    SecondaryCommandBufferCollector *commandBufferCollector)
+angle::Result OutsideRenderPassCommandBufferHelper::flushToPrimary(Context *context,
+                                                                   CommandsState *commandsState)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "OutsideRenderPassCommandBufferHelper::flushToPrimary");
     ASSERT(!empty());
@@ -1718,7 +1735,7 @@ angle::Result OutsideRenderPassCommandBufferHelper::flushToPrimary(
     RendererVk *renderer = context->getRenderer();
 
     // Commands that are added to primary before beginRenderPass command
-    executeBarriers(renderer->getFeatures(), primary);
+    executeBarriers(renderer->getFeatures(), commandsState);
 
     // When using Vulkan secondary command buffers and "asyncCommandQueue" is enabled, command
     // buffer MUST be already ended in the detachCommandPool() (called in the CommandProcessor).
@@ -1730,10 +1747,10 @@ angle::Result OutsideRenderPassCommandBufferHelper::flushToPrimary(
         ANGLE_TRY(endCommandBuffer(context));
     }
     ASSERT(mIsCommandBufferEnded);
-    mCommandBuffer.executeCommands(primary);
+    mCommandBuffer.executeCommands(&commandsState->primaryCommands);
 
     // Restart the command buffer.
-    return reset(context, commandBufferCollector);
+    return reset(context, &commandsState->secondaryCommands);
 }
 
 angle::Result OutsideRenderPassCommandBufferHelper::endCommandBuffer(Context *context)
@@ -2537,17 +2554,16 @@ void RenderPassCommandBufferHelper::invalidateRenderPassStencilAttachment(
                                   getRenderPassWriteCommandCount());
 }
 
-angle::Result RenderPassCommandBufferHelper::flushToPrimary(
-    Context *context,
-    PrimaryCommandBuffer *primary,
-    const RenderPass *renderPass,
-    SecondaryCommandBufferCollector *commandBufferCollector)
+angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
+                                                            CommandsState *commandsState,
+                                                            const RenderPass *renderPass)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RenderPassCommandBufferHelper::flushToPrimary");
     ASSERT(mRenderPassStarted);
+    PrimaryCommandBuffer &primary = commandsState->primaryCommands;
 
     // Commands that are added to primary before beginRenderPass command
-    executeBarriers(context->getRenderer()->getFeatures(), primary);
+    executeBarriers(context->getRenderer()->getFeatures(), commandsState);
 
     ASSERT(renderPass != nullptr);
     VkRenderPassBeginInfo beginInfo    = {};
@@ -2578,19 +2594,19 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(
         ExecutesInline() ? VK_SUBPASS_CONTENTS_INLINE
                          : VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS;
 
-    primary->beginRenderPass(beginInfo, kSubpassContents);
+    primary.beginRenderPass(beginInfo, kSubpassContents);
     for (uint32_t subpass = 0; subpass < getSubpassCommandBufferCount(); ++subpass)
     {
         if (subpass > 0)
         {
-            primary->nextSubpass(kSubpassContents);
+            primary.nextSubpass(kSubpassContents);
         }
-        mCommandBuffers[subpass].executeCommands(primary);
+        mCommandBuffers[subpass].executeCommands(&primary);
     }
-    primary->endRenderPass();
+    primary.endRenderPass();
 
     // Restart the command buffer.
-    return reset(context, commandBufferCollector);
+    return reset(context, &commandsState->secondaryCommands);
 }
 
 void RenderPassCommandBufferHelper::updateRenderPassForResolve(
@@ -5233,6 +5249,7 @@ ImageHelper::ImageHelper()
 ImageHelper::~ImageHelper()
 {
     ASSERT(!valid());
+    ASSERT(!mAcquireImageSemaphore.valid());
 }
 
 void ImageHelper::resetCachedProperties()
@@ -6517,6 +6534,37 @@ template void ImageHelper::barrierImpl<priv::CommandBuffer>(Context *context,
                                                             ImageLayout newLayout,
                                                             uint32_t newQueueFamilyIndex,
                                                             priv::CommandBuffer *commandBuffer);
+
+void ImageHelper::recordWriteBarrier(Context *context,
+                                     VkImageAspectFlags aspectMask,
+                                     ImageLayout newLayout,
+                                     OutsideRenderPassCommandBufferHelper *commands)
+{
+    barrierImpl(context, aspectMask, newLayout, mCurrentQueueFamilyIndex,
+                &commands->getCommandBuffer());
+    if (mAcquireImageSemaphore.valid())
+    {
+        commands->addAcquireImageSemaphore(mAcquireImageSemaphore.release());
+    }
+}
+
+void ImageHelper::recordReadBarrier(Context *context,
+                                    VkImageAspectFlags aspectMask,
+                                    ImageLayout newLayout,
+                                    OutsideRenderPassCommandBufferHelper *commands)
+{
+    if (!isReadBarrierNecessary(newLayout))
+    {
+        return;
+    }
+
+    barrierImpl(context, aspectMask, newLayout, mCurrentQueueFamilyIndex,
+                &commands->getCommandBuffer());
+    if (mAcquireImageSemaphore.valid())
+    {
+        commands->addAcquireImageSemaphore(mAcquireImageSemaphore.release());
+    }
+}
 
 bool ImageHelper::updateLayoutAndBarrier(Context *context,
                                          VkImageAspectFlags aspectMask,
@@ -8318,8 +8366,8 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                                          aspectFlags, this);
     }
 
-    OutsideRenderPassCommandBuffer *commandBuffer;
-    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
+    OutsideRenderPassCommandBufferHelper *commandBuffer;
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(access, &commandBuffer));
 
     for (gl::LevelIndex updateMipLevelGL = levelGLStart; updateMipLevelGL < levelGLEnd;
          ++updateMipLevelGL)
@@ -8429,7 +8477,8 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
             if (IsClearOfAllChannels(update.updateSource))
             {
                 clear(contextVk, update.data.clear.aspectFlags, update.data.clear.value,
-                      updateMipLevelVk, updateBaseLayer, updateLayerCount, commandBuffer);
+                      updateMipLevelVk, updateBaseLayer, updateLayerCount,
+                      &commandBuffer->getCommandBuffer());
                 // Remember the latest operation is a clear call
                 mCurrentSingleClearValue = update.data.clear;
 
@@ -8453,7 +8502,8 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                 // Refresh the command buffer because clearEmulatedChannels may have flushed it.
                 // This also transitions the image back to TransferDst, in case it's no longer in
                 // that layout.
-                ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
+                ANGLE_TRY(
+                    contextVk->getOutsideRenderPassCommandBufferHelper(access, &commandBuffer));
             }
             else if (update.updateSource == UpdateSource::Buffer)
             {
@@ -8469,18 +8519,19 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                 if (transCoding)
                 {
                     bufferAccess.onBufferComputeShaderRead(currentBuffer);
-                    ANGLE_TRY(
-                        contextVk->getOutsideRenderPassCommandBuffer(bufferAccess, &commandBuffer));
+                    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(bufferAccess,
+                                                                                 &commandBuffer));
                     ANGLE_TRY(contextVk->getUtils().transCodeEtcToBc(contextVk, currentBuffer, this,
                                                                      copyRegion));
                 }
                 else
                 {
                     bufferAccess.onBufferTransferRead(currentBuffer);
-                    ANGLE_TRY(
-                        contextVk->getOutsideRenderPassCommandBuffer(bufferAccess, &commandBuffer));
-                    commandBuffer->copyBufferToImage(currentBuffer->getBuffer().getHandle(), mImage,
-                                                     getCurrentLayout(contextVk), 1, copyRegion);
+                    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(bufferAccess,
+                                                                                 &commandBuffer));
+                    commandBuffer->getCommandBuffer().copyBufferToImage(
+                        currentBuffer->getBuffer().getHandle(), mImage, getCurrentLayout(contextVk),
+                        1, copyRegion);
                 }
                 bool commandBufferWasFlushed = false;
                 ANGLE_TRY(
@@ -8493,7 +8544,8 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
 
                 if (commandBufferWasFlushed)
                 {
-                    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer({}, &commandBuffer));
+                    ANGLE_TRY(
+                        contextVk->getOutsideRenderPassCommandBufferHelper({}, &commandBuffer));
                 }
             }
             else
@@ -8501,13 +8553,14 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                 ASSERT(update.updateSource == UpdateSource::Image);
                 CommandBufferAccess imageAccess;
                 imageAccess.onImageTransferRead(aspectFlags, &update.refCounted.image->get());
-                ANGLE_TRY(
-                    contextVk->getOutsideRenderPassCommandBuffer(imageAccess, &commandBuffer));
+                ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(imageAccess,
+                                                                             &commandBuffer));
 
                 VkImageCopy *copyRegion = &update.data.image.copyRegion;
-                commandBuffer->copyImage(update.refCounted.image->get().getImage(),
-                                         update.refCounted.image->get().getCurrentLayout(contextVk),
-                                         mImage, getCurrentLayout(contextVk), 1, copyRegion);
+                commandBuffer->getCommandBuffer().copyImage(
+                    update.refCounted.image->get().getImage(),
+                    update.refCounted.image->get().getCurrentLayout(contextVk), mImage,
+                    getCurrentLayout(contextVk), 1, copyRegion);
                 onWrite(updateMipLevelGL, 1, updateBaseLayer, updateLayerCount,
                         copyRegion->dstSubresource.aspectMask);
             }
@@ -8961,10 +9014,11 @@ angle::Result ImageHelper::copySurfaceImageToBuffer(DisplayVk *displayVk,
     ANGLE_VK_TRY(displayVk, primaryCommandBuffer.end());
 
     QueueSerial submitQueueSerial;
-    ANGLE_TRY(rendererVk->queueSubmitOneOff(displayVk, std::move(primaryCommandBuffer),
-                                            ProtectionType::Unprotected,
-                                            egl::ContextPriority::Medium, nullptr, 0, nullptr,
-                                            vk::SubmitPolicy::AllowDeferred, &submitQueueSerial));
+    ANGLE_TRY(rendererVk->queueSubmitOneOff(
+        displayVk, std::move(primaryCommandBuffer), ProtectionType::Unprotected,
+        egl::ContextPriority::Medium, &mAcquireImageSemaphore, kSwapchainAcquireImageWaitStageFlags,
+        nullptr, vk::SubmitPolicy::AllowDeferred, &submitQueueSerial));
+    mAcquireImageSemaphore.release();
 
     return rendererVk->finishQueueSerial(displayVk, submitQueueSerial);
 }
@@ -9007,10 +9061,11 @@ angle::Result ImageHelper::copyBufferToSurfaceImage(DisplayVk *displayVk,
     ANGLE_VK_TRY(displayVk, commandBuffer.end());
 
     QueueSerial submitQueueSerial;
-    ANGLE_TRY(rendererVk->queueSubmitOneOff(displayVk, std::move(commandBuffer),
-                                            ProtectionType::Unprotected,
-                                            egl::ContextPriority::Medium, nullptr, 0, nullptr,
-                                            vk::SubmitPolicy::AllowDeferred, &submitQueueSerial));
+    ANGLE_TRY(rendererVk->queueSubmitOneOff(
+        displayVk, std::move(commandBuffer), ProtectionType::Unprotected,
+        egl::ContextPriority::Medium, &mAcquireImageSemaphore, kSwapchainAcquireImageWaitStageFlags,
+        nullptr, vk::SubmitPolicy::AllowDeferred, &submitQueueSerial));
+    mAcquireImageSemaphore.release();
 
     return rendererVk->finishQueueSerial(displayVk, submitQueueSerial);
 }
