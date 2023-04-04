@@ -446,4 +446,42 @@ TEST(SystemUtils, MAYBE_PageFaultHandlerDefaultHandler)
 TEST(SystemUtils, MAYBE_PageFaultHandlerDefaultHandler) {}
 #endif
 
+// Tests basic usage of GetCurrentThreadId.
+TEST(SystemUtils, GetCurrentThreadId)
+{
+    constexpr size_t kThreadCount = 16;
+
+    std::mutex mutex;
+    std::condition_variable condVar;
+
+    std::vector<std::thread> threads;
+    std::set<ThreadId> threadIds;
+    size_t readyCount = 0;
+
+    for (size_t i = 0; i < kThreadCount; ++i)
+    {
+        threads.emplace_back([&]() {
+            std::unique_lock<std::mutex> lock(mutex);
+            threadIds.insert(angle::GetCurrentThreadId());
+            ++readyCount;
+            if (readyCount < kThreadCount)
+            {
+                condVar.wait(lock, [&]() { return readyCount == kThreadCount; });
+            }
+            else
+            {
+                condVar.notify_all();
+            }
+            threadIds.insert(angle::GetCurrentThreadId());
+        });
+    }
+
+    for (size_t i = 0; i < kThreadCount; ++i)
+    {
+        threads[i].join();
+    }
+
+    EXPECT_EQ(threadIds.size(), kThreadCount);
+}
+
 }  // anonymous namespace
