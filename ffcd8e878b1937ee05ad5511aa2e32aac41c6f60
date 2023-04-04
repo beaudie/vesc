@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fc2c99a3_c3f74b01",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-04-04T17:16:57Z",
+      "side": 1,
+      "message": "nit: does the comment `can\u0027t read from it from the CPU` intend to say: `read from the CPU` instead?",
+      "revId": "ffcd8e878b1937ee05ad5511aa2e32aac41c6f60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "81089498_357b4047",
         "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
         "patchSetId": 6
