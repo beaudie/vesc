@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eadf0848_8b0349b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-04T20:41:12Z",
+      "side": 1,
+      "message": "lgtm+2\n\n+geofflang as FYI",
+      "revId": "8f6b15d5c9cd555aebc7ecc22a47f33009d7c44d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
