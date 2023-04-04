@@ -865,7 +865,6 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState, EGLNativ
       mEmulatedPreTransform(VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR),
       mCompositeAlpha(VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR),
       mCurrentSwapchainImageIndex(0),
-      mAcquireImageSemaphore(nullptr),
       mDepthStencilImageBinding(this, kAnySurfaceImageSubjectIndex),
       mColorImageMSBinding(this, kAnySurfaceImageSubjectIndex),
       mNeedToAcquireNextSwapchainImage(false),
@@ -1210,10 +1209,6 @@ angle::Result WindowSurfaceVk::getAttachmentRenderTarget(const gl::Context *cont
         ContextVk *contextVk = vk::GetImpl(context);
         ANGLE_VK_TRACE_EVENT_AND_MARKER(contextVk, "First Swap Image Use");
         ANGLE_TRY(doDeferredAcquireNextImage(context, false));
-    }
-    if (mAcquireImageSemaphore)
-    {
-        flushAcquireImageSemaphore(context);
     }
     return SurfaceVk::getAttachmentRenderTarget(context, binding, imageIndex, samples, rtOut);
 }
@@ -1742,6 +1737,9 @@ void WindowSurfaceVk::destroySwapChainImages(DisplayVk *displayVk)
     for (SwapchainImage &swapchainImage : mSwapchainImages)
     {
         ASSERT(swapchainImage.image);
+        // We actually own mAcquireImageSemaphores. Release ani semaphore from image so that it
+        // can destroy cleanly without hitting assertion..
+        swapchainImage.image->getANISemaphore().release();
         // We don't own the swapchain image handles, so we just remove our reference to it.
         swapchainImage.image->resetImageWeakReference();
         swapchainImage.image->destroy(renderer);
@@ -1777,10 +1775,6 @@ angle::Result WindowSurfaceVk::prepareSwapImpl(const gl::Context *context)
         // for example if all rendering was done to FBOs.
         ANGLE_TRACE_EVENT0("gpu.angle", "Acquire Swap Image Before Swap");
         ANGLE_TRY(doDeferredAcquireNextImage(context, false));
-    }
-    if (mAcquireImageSemaphore)
-    {
-        flushAcquireImageSemaphore(context);
     }
     return angle::Result::Continue;
 }
@@ -1858,6 +1852,14 @@ angle::Result WindowSurfaceVk::prePresentSubmit(ContextVk *contextVk,
     ANGLE_TRY(
         image.image->flushStagedUpdates(contextVk, gl::LevelIndex(0), gl::LevelIndex(1), 0, 1, {}));
 
+    if (renderer->getFeatures().supportsPresentation.enabled &&
+        image.image->getCurrentImageLayout() == vk::ImageLayout::Present &&
+        image.image->getANISemaphore().valid())
+    {
+        contextVk->addWaitSemaphore(image.image->getANISemaphore().release(),
+                                    vk::kSwapchainAcquireImageWaitStageFlags);
+    }
+
     // We can only do present related optimization if this is the last renderpass that touches the
     // swapchain image. MSAA resolve and overlay will insert another renderpass which disqualifies
     // the optimization.
@@ -1875,8 +1877,8 @@ angle::Result WindowSurfaceVk::prePresentSubmit(ContextVk *contextVk,
     contextVk->finalizeImageLayout(image.image.get(), {});
     contextVk->finalizeImageLayout(&mColorImageMS, {});
 
-    vk::OutsideRenderPassCommandBuffer *commandBuffer;
-    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer({}, &commandBuffer));
+    vk::OutsideRenderPassCommandBufferHelper *commandBuffer;
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper({}, &commandBuffer));
 
     if (mColorImageMS.valid() && !imageResolved)
     {
@@ -1886,7 +1888,7 @@ angle::Result WindowSurfaceVk::prePresentSubmit(ContextVk *contextVk,
         access.onImageTransferWrite(gl::LevelIndex(0), 1, 0, 1, VK_IMAGE_ASPECT_COLOR_BIT,
                                     image.image.get());
 
-        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
+        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(access, &commandBuffer));
 
         VkImageResolve resolveRegion                = {};
         resolveRegion.srcSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -1898,7 +1900,7 @@ angle::Result WindowSurfaceVk::prePresentSubmit(ContextVk *contextVk,
         resolveRegion.dstOffset                     = {};
         resolveRegion.extent                        = image.image->getRotatedExtents();
 
-        mColorImageMS.resolve(image.image.get(), resolveRegion, commandBuffer);
+        mColorImageMS.resolve(image.image.get(), resolveRegion, &commandBuffer->getCommandBuffer());
         contextVk->getPerfCounters().swapchainResolveOutsideSubpass++;
     }
 
@@ -2011,7 +2013,7 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         }
     }
 
-    ASSERT(mAcquireImageSemaphore == nullptr);
+    ASSERT(!mSwapchainImages[mCurrentSwapchainImageIndex].image->getANISemaphore().valid());
 
     renderer->queuePresent(contextVk, contextVk->getPriority(), presentInfo, &mSwapchainStatus);
 
@@ -2263,15 +2265,6 @@ angle::Result WindowSurfaceVk::doDeferredAcquireNextImage(const gl::Context *con
     return angle::Result::Continue;
 }
 
-void WindowSurfaceVk::flushAcquireImageSemaphore(const gl::Context *context)
-{
-    ASSERT(mAcquireImageSemaphore);
-    ContextVk *contextVk = vk::GetImpl(context);
-    contextVk->addWaitSemaphore(mAcquireImageSemaphore->getHandle(),
-                                vk::kSwapchainAcquireImageWaitStageFlags);
-    mAcquireImageSemaphore = nullptr;
-}
-
 // This method will either return VK_SUCCESS or VK_ERROR_*.  Thus, it is appropriate to ASSERT that
 // the return value won't be VK_SUBOPTIMAL_KHR.
 VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
@@ -2332,41 +2325,53 @@ VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
 
     SwapchainImage &image = mSwapchainImages[mCurrentSwapchainImageIndex];
 
-    // Single Image Mode
-    if (isSharedPresentMode() &&
-        (image.image->getCurrentImageLayout() != vk::ImageLayout::SharedPresent))
+    if (isSharedPresentMode())
     {
-        rx::RendererVk *rendererVk = context->getRenderer();
-        rx::vk::PrimaryCommandBuffer primaryCommandBuffer;
-        auto protectionType = vk::ConvertProtectionBoolToType(mState.hasProtectedContent());
-        if (rendererVk->getCommandBufferOneOff(context, protectionType, &primaryCommandBuffer) ==
-            angle::Result::Continue)
+        // Single Image Mode
+        if (image.image->getCurrentImageLayout() != vk::ImageLayout::SharedPresent)
         {
-            // Note return errors is early exit may leave new Image and Swapchain in unknown state.
-            image.image->recordWriteBarrierOneOff(context, vk::ImageLayout::SharedPresent,
-                                                  &primaryCommandBuffer);
-            if (primaryCommandBuffer.end() != VK_SUCCESS)
+            rx::RendererVk *rendererVk = context->getRenderer();
+            rx::vk::PrimaryCommandBuffer primaryCommandBuffer;
+            auto protectionType = vk::ConvertProtectionBoolToType(mState.hasProtectedContent());
+            if (rendererVk->getCommandBufferOneOff(
+                    context, protectionType, &primaryCommandBuffer) == angle::Result::Continue)
             {
-                mDesiredSwapchainPresentMode = vk::PresentMode::FifoKHR;
-                return VK_ERROR_OUT_OF_DATE_KHR;
+                // Note return errors is early exit may leave new Image and Swapchain in unknown
+                // state.
+                image.image->recordWriteBarrierOneOff(context, vk::ImageLayout::SharedPresent,
+                                                      &primaryCommandBuffer);
+                if (primaryCommandBuffer.end() != VK_SUCCESS)
+                {
+                    mDesiredSwapchainPresentMode = vk::PresentMode::FifoKHR;
+                    return VK_ERROR_OUT_OF_DATE_KHR;
+                }
+                QueueSerial queueSerial;
+                if (rendererVk->queueSubmitOneOff(
+                        context, std::move(primaryCommandBuffer), protectionType,
+                        egl::ContextPriority::Medium, acquireImageSemaphore,
+                        VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, nullptr,
+                        vk::SubmitPolicy::EnsureSubmitted, &queueSerial) != angle::Result::Continue)
+                {
+                    mDesiredSwapchainPresentMode = vk::PresentMode::FifoKHR;
+                    return VK_ERROR_OUT_OF_DATE_KHR;
+                }
+                acquireImageSemaphore = nullptr;
             }
-            QueueSerial queueSerial;
-            if (rendererVk->queueSubmitOneOff(
-                    context, std::move(primaryCommandBuffer), protectionType,
-                    egl::ContextPriority::Medium, acquireImageSemaphore,
-                    VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, nullptr,
-                    vk::SubmitPolicy::EnsureSubmitted, &queueSerial) != angle::Result::Continue)
-            {
-                mDesiredSwapchainPresentMode = vk::PresentMode::FifoKHR;
-                return VK_ERROR_OUT_OF_DATE_KHR;
-            }
-            acquireImageSemaphore = nullptr;
+            // No need to wait for ani semaphore in single buffer mode.
+            image.image->getANISemaphore().release();
         }
+    }
+    else
+    {
+        // Let Image keep the ani semaphore so that it can add to the semaphore wait list if it is
+        // being used (when a barrier is added). Note that all use of swapChain image must first
+        // insert a barrier to do layout change.
+        VkSemaphore semaphore = acquireImageSemaphore->getHandle();
+        image.image->setANISemaphore(semaphore);
     }
 
     // The semaphore will be waited on in the next flush.
     mAcquireImageSemaphores.next();
-    mAcquireImageSemaphore = acquireImageSemaphore;
 
     // Update RenderTarget pointers to this swapchain image if not multisampling.  Note: a possible
     // optimization is to defer the |vkAcquireNextImageKHR| call itself to |present()| if
@@ -2674,10 +2679,6 @@ angle::Result WindowSurfaceVk::initializeContents(const gl::Context *context,
         // because of dirty-object processing.
         ANGLE_VK_TRACE_EVENT_AND_MARKER(contextVk, "Initialize Swap Image");
         ANGLE_TRY(doDeferredAcquireNextImage(context, false));
-    }
-    if (mAcquireImageSemaphore)
-    {
-        flushAcquireImageSemaphore(context);
     }
 
     ASSERT(mSwapchainImages.size() > 0);
