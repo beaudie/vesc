@@ -9,6 +9,7 @@ angle_unittests_sources = [
   "../../util/test_utils_unittest_helper.h",
   "../common/BinaryStream_unittest.cpp",
   "../common/CircularBuffer_unittest.cpp",
+  "../common/FastMutex_unittest.cpp",
   "../common/FastVector_unittest.cpp",
   "../common/FixedQueue_unittest.cpp",
   "../common/FixedVector_unittest.cpp",
