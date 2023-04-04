@@ -16,6 +16,24 @@
       "message": "There are better data structures to store sets-of-strings -\u003e values. If this is still taking anything longer than negligible, you could turn it into a basic Trie (https://en.wikipedia.org/wiki/Trie), which should make this O(logN) times faster.",
       "revId": "c723d71fc8af32e84474642e53f7c973fb8bc073",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3e373dd_a12eccf0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-04T12:59:09Z",
+      "side": 1,
+      "message": "yeah there is a code complexity / performance trade-off to watch out for though. Originally I wanted to just use a hashmap (which would be `O(1)`) but man, does C++ make it hard to do trivial things due to shenanigans around destruction of global objects. I chose this approach because it doesn\u0027t require global destructors (or additional structures, args, cleanup methods etc) and is already `O(logN)` as it\u0027s a binary search so further improvements are likely to be minor.",
+      "parentUuid": "d0102ff6_134f217c",
+      "revId": "c723d71fc8af32e84474642e53f7c973fb8bc073",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
