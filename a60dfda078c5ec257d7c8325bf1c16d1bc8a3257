@@ -63,6 +63,30 @@
       },
       "revId": "a60dfda078c5ec257d7c8325bf1c16d1bc8a3257",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e583caa_be7ec182",
+        "filename": "src/common/string_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-04T13:28:09Z",
+      "side": 1,
+      "message": "uh, ifstream is such a mess... If `.read()` returned the size that it actually wrote to the buffer (on top of setting the eof and fail bits), I could just handle it gracefully as it\u0027s guaranteed that the output contains the data. But it seems there\u0027s just no way to tell how much it read in this case!\n\nThen there is `.readsome()` but that\u0027ll read only up to internal buffer so that would require a loop.\n\nI\u0027m kind of inclined to just go with `std::ios::binary` and let the caller deal with `\\r`\u0027s\n\nAny objections / other thoughts?",
+      "parentUuid": "af8b255d_30f5c9b5",
+      "range": {
+        "startLine": 161,
+        "startChar": 37,
+        "endLine": 161,
+        "endChar": 39
+      },
+      "revId": "a60dfda078c5ec257d7c8325bf1c16d1bc8a3257",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
