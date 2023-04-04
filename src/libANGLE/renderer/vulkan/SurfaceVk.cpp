@@ -865,7 +865,6 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState, EGLNativ
       mEmulatedPreTransform(VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR),
       mCompositeAlpha(VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR),
       mCurrentSwapchainImageIndex(0),
-      mAcquireImageSemaphore(nullptr),
       mDepthStencilImageBinding(this, kAnySurfaceImageSubjectIndex),
       mColorImageMSBinding(this, kAnySurfaceImageSubjectIndex),
       mNeedToAcquireNextSwapchainImage(false),
@@ -1210,10 +1209,6 @@ angle::Result WindowSurfaceVk::getAttachmentRenderTarget(const gl::Context *cont
         ContextVk *contextVk = vk::GetImpl(context);
         ANGLE_VK_TRACE_EVENT_AND_MARKER(contextVk, "First Swap Image Use");
         ANGLE_TRY(doDeferredAcquireNextImage(context, false));
-    }
-    if (mAcquireImageSemaphore)
-    {
-        flushAcquireImageSemaphore(context);
     }
     return SurfaceVk::getAttachmentRenderTarget(context, binding, imageIndex, samples, rtOut);
 }
@@ -1742,6 +1737,9 @@ void WindowSurfaceVk::destroySwapChainImages(DisplayVk *displayVk)
     for (SwapchainImage &swapchainImage : mSwapchainImages)
     {
         ASSERT(swapchainImage.image);
+        // We actually own mAcquireImageSemaphores. Release ani semaphore from image so that it
+        // can destroy cleanly without hitting assertion..
+        swapchainImage.image->releaseAcquireImageSemaphore();
         // We don't own the swapchain image handles, so we just remove our reference to it.
         swapchainImage.image->resetImageWeakReference();
         swapchainImage.image->destroy(renderer);
@@ -1778,10 +1776,7 @@ angle::Result WindowSurfaceVk::prepareSwapImpl(const gl::Context *context)
         ANGLE_TRACE_EVENT0("gpu.angle", "Acquire Swap Image Before Swap");
         ANGLE_TRY(doDeferredAcquireNextImage(context, false));
     }
-    if (mAcquireImageSemaphore)
-    {
-        flushAcquireImageSemaphore(context);
-    }
+    flushAcquireImageSemaphore(context);
     return angle::Result::Continue;
 }
 
@@ -2011,7 +2006,8 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         }
     }
 
-    ASSERT(mAcquireImageSemaphore == nullptr);
+    ASSERT(mSwapchainImages[mCurrentSwapchainImageIndex].image->releaseAcquireImageSemaphore() ==
+           VK_NULL_HANDLE);
 
     renderer->queuePresent(contextVk, contextVk->getPriority(), presentInfo, &mSwapchainStatus);
 
@@ -2265,11 +2261,13 @@ angle::Result WindowSurfaceVk::doDeferredAcquireNextImage(const gl::Context *con
 
 void WindowSurfaceVk::flushAcquireImageSemaphore(const gl::Context *context)
 {
-    ASSERT(mAcquireImageSemaphore);
-    ContextVk *contextVk = vk::GetImpl(context);
-    contextVk->addWaitSemaphore(mAcquireImageSemaphore->getHandle(),
-                                vk::kSwapchainAcquireImageWaitStageFlags);
-    mAcquireImageSemaphore = nullptr;
+    const VkSemaphore semaphore =
+        mSwapchainImages[mCurrentSwapchainImageIndex].image->releaseAcquireImageSemaphore();
+    if (semaphore != VK_NULL_HANDLE)
+    {
+        ContextVk *contextVk = vk::GetImpl(context);
+        contextVk->addWaitSemaphore(semaphore, vk::kSwapchainAcquireImageWaitStageFlags);
+    }
 }
 
 // This method will either return VK_SUCCESS or VK_ERROR_*.  Thus, it is appropriate to ASSERT that
@@ -2366,7 +2364,7 @@ VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
 
     // The semaphore will be waited on in the next flush.
     mAcquireImageSemaphores.next();
-    mAcquireImageSemaphore = acquireImageSemaphore;
+    image.image->addAcquireImageSemaphore(acquireImageSemaphore->getHandle());
 
     // Update RenderTarget pointers to this swapchain image if not multisampling.  Note: a possible
     // optimization is to defer the |vkAcquireNextImageKHR| call itself to |present()| if
@@ -2675,10 +2673,7 @@ angle::Result WindowSurfaceVk::initializeContents(const gl::Context *context,
         ANGLE_VK_TRACE_EVENT_AND_MARKER(contextVk, "Initialize Swap Image");
         ANGLE_TRY(doDeferredAcquireNextImage(context, false));
     }
-    if (mAcquireImageSemaphore)
-    {
-        flushAcquireImageSemaphore(context);
-    }
+    flushAcquireImageSemaphore(context);
 
     ASSERT(mSwapchainImages.size() > 0);
     ASSERT(mCurrentSwapchainImageIndex < mSwapchainImages.size());

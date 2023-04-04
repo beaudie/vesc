@@ -1410,6 +1410,7 @@ void CommandBufferHelperCommon::initializeImpl()
 
 void CommandBufferHelperCommon::resetImpl()
 {
+    ASSERT(!mAcquireImageSemaphore.valid());
     mCommandAllocator.resetAllocator();
 }
 
@@ -1533,7 +1534,7 @@ void CommandBufferHelperCommon::bufferWrite(ContextVk *contextVk,
 }
 
 void CommandBufferHelperCommon::executeBarriers(const angle::FeaturesVk &features,
-                                                PrimaryCommandBuffer *primary)
+                                                CommandsState *commandsState)
 {
     // make a local copy for faster access
     PipelineStagesMask mask = mPipelineBarrierMask;
@@ -1541,6 +1542,8 @@ void CommandBufferHelperCommon::executeBarriers(const angle::FeaturesVk &feature
     {
         return;
     }
+
+    PrimaryCommandBuffer &primary = commandsState->primaryCommands;
 
     if (features.preferAggregateBarrierCalls.enabled)
     {
@@ -1550,17 +1553,24 @@ void CommandBufferHelperCommon::executeBarriers(const angle::FeaturesVk &feature
         {
             barrier.merge(&mPipelineBarriers[*iter]);
         }
-        barrier.execute(primary);
+        barrier.execute(&primary);
     }
     else
     {
         for (PipelineStage pipelineStage : mask)
         {
             PipelineBarrier &barrier = mPipelineBarriers[pipelineStage];
-            barrier.execute(primary);
+            barrier.execute(&primary);
         }
     }
     mPipelineBarrierMask.reset();
+
+    // Add ANI semaphore to the command submission.
+    if (mAcquireImageSemaphore.valid())
+    {
+        commandsState->waitSemaphores.emplace_back(mAcquireImageSemaphore.release());
+        commandsState->waitSemaphoreStageMasks.emplace_back(kSwapchainAcquireImageWaitStageFlags);
+    }
 }
 
 void CommandBufferHelperCommon::imageReadImpl(ContextVk *contextVk,
@@ -1598,6 +1608,8 @@ void CommandBufferHelperCommon::updateImageLayoutAndBarrier(Context *context,
     if (image->updateLayoutAndBarrier(context, aspectFlags, imageLayout, mQueueSerial, barrier))
     {
         mPipelineBarrierMask.set(barrierIndex);
+        ASSERT(!mAcquireImageSemaphore.valid());
+        mAcquireImageSemaphore.setHandle(image->releaseAcquireImageSemaphore());
     }
 }
 
@@ -1707,10 +1719,8 @@ void OutsideRenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
     image->setQueueSerial(mQueueSerial);
 }
 
-angle::Result OutsideRenderPassCommandBufferHelper::flushToPrimary(
-    Context *context,
-    PrimaryCommandBuffer *primary,
-    SecondaryCommandBufferCollector *commandBufferCollector)
+angle::Result OutsideRenderPassCommandBufferHelper::flushToPrimary(Context *context,
+                                                                   CommandsState *commandsState)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "OutsideRenderPassCommandBufferHelper::flushToPrimary");
     ASSERT(!empty());
@@ -1718,7 +1728,7 @@ angle::Result OutsideRenderPassCommandBufferHelper::flushToPrimary(
     RendererVk *renderer = context->getRenderer();
 
     // Commands that are added to primary before beginRenderPass command
-    executeBarriers(renderer->getFeatures(), primary);
+    executeBarriers(renderer->getFeatures(), commandsState);
 
     // When using Vulkan secondary command buffers and "asyncCommandQueue" is enabled, command
     // buffer MUST be already ended in the detachCommandPool() (called in the CommandProcessor).
@@ -1730,10 +1740,10 @@ angle::Result OutsideRenderPassCommandBufferHelper::flushToPrimary(
         ANGLE_TRY(endCommandBuffer(context));
     }
     ASSERT(mIsCommandBufferEnded);
-    mCommandBuffer.executeCommands(primary);
+    mCommandBuffer.executeCommands(&commandsState->primaryCommands);
 
     // Restart the command buffer.
-    return reset(context, commandBufferCollector);
+    return reset(context, &commandsState->secondaryCommands);
 }
 
 angle::Result OutsideRenderPassCommandBufferHelper::endCommandBuffer(Context *context)
@@ -2537,17 +2547,16 @@ void RenderPassCommandBufferHelper::invalidateRenderPassStencilAttachment(
                                   getRenderPassWriteCommandCount());
 }
 
-angle::Result RenderPassCommandBufferHelper::flushToPrimary(
-    Context *context,
-    PrimaryCommandBuffer *primary,
-    const RenderPass *renderPass,
-    SecondaryCommandBufferCollector *commandBufferCollector)
+angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
+                                                            CommandsState *commandsState,
+                                                            const RenderPass *renderPass)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "RenderPassCommandBufferHelper::flushToPrimary");
     ASSERT(mRenderPassStarted);
+    PrimaryCommandBuffer &primary = commandsState->primaryCommands;
 
     // Commands that are added to primary before beginRenderPass command
-    executeBarriers(context->getRenderer()->getFeatures(), primary);
+    executeBarriers(context->getRenderer()->getFeatures(), commandsState);
 
     ASSERT(renderPass != nullptr);
     VkRenderPassBeginInfo beginInfo    = {};
@@ -2578,19 +2587,19 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(
         ExecutesInline() ? VK_SUBPASS_CONTENTS_INLINE
                          : VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS;
 
-    primary->beginRenderPass(beginInfo, kSubpassContents);
+    primary.beginRenderPass(beginInfo, kSubpassContents);
     for (uint32_t subpass = 0; subpass < getSubpassCommandBufferCount(); ++subpass)
     {
         if (subpass > 0)
         {
-            primary->nextSubpass(kSubpassContents);
+            primary.nextSubpass(kSubpassContents);
         }
-        mCommandBuffers[subpass].executeCommands(primary);
+        mCommandBuffers[subpass].executeCommands(&primary);
     }
-    primary->endRenderPass();
+    primary.endRenderPass();
 
     // Restart the command buffer.
-    return reset(context, commandBufferCollector);
+    return reset(context, &commandsState->secondaryCommands);
 }
 
 void RenderPassCommandBufferHelper::updateRenderPassForResolve(
@@ -5233,6 +5242,7 @@ ImageHelper::ImageHelper()
 ImageHelper::~ImageHelper()
 {
     ASSERT(!valid());
+    ASSERT(!mAcquireImageSemaphore.valid());
 }
 
 void ImageHelper::resetCachedProperties()
