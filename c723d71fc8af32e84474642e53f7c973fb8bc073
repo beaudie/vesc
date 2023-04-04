@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0102ff6_134f217c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-04T03:06:08Z",
+      "side": 1,
+      "message": "There are better data structures to store sets-of-strings -\u003e values. If this is still taking anything longer than negligible, you could turn it into a basic Trie (https://en.wikipedia.org/wiki/Trie), which should make this O(logN) times faster.",
+      "revId": "c723d71fc8af32e84474642e53f7c973fb8bc073",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
