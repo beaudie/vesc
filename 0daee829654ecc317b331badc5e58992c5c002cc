@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f165589e_75cb6307",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-04-04T19:55:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af334b82_408c8eeb",
+      "range": {
+        "startLine": 946,
+        "startChar": 0,
+        "endLine": 949,
+        "endChar": 83
+      },
+      "revId": "0daee829654ecc317b331badc5e58992c5c002cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "10b4d2b8_851b5346",
@@ -41,6 +65,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "00792695_8739c938",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1008,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-04-04T19:55:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "10b4d2b8_851b5346",
+      "revId": "0daee829654ecc317b331badc5e58992c5c002cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6c9f756d_3986dc1c",
@@ -54,6 +96,24 @@
       "writtenOn": "2023-04-04T15:55:31Z",
       "side": 1,
       "message": "Similarly, suggest reading one 64 bit value and unpacking it.",
+      "revId": "0daee829654ecc317b331badc5e58992c5c002cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d611659_2ccc18b6",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1059,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-04-04T19:55:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c9f756d_3986dc1c",
       "revId": "0daee829654ecc317b331badc5e58992c5c002cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

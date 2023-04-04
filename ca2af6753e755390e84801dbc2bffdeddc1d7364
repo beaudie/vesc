@@ -63,6 +63,30 @@
       },
       "revId": "ca2af6753e755390e84801dbc2bffdeddc1d7364",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "794be21a_9900e143",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1096,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-04-04T19:55:34Z",
+      "side": 1,
+      "message": "Updated the CRC calculation to be for debugging purposes and changed the corresponding `WARN()` message to `FATAL()`. I will run some tests to see the impact on performance.",
+      "parentUuid": "ae1ca717_2f8473a1",
+      "range": {
+        "startLine": 1091,
+        "startChar": 4,
+        "endLine": 1096,
+        "endChar": 5
+      },
+      "revId": "ca2af6753e755390e84801dbc2bffdeddc1d7364",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
