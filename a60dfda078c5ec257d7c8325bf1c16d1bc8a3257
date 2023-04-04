@@ -39,6 +39,30 @@
       },
       "revId": "a60dfda078c5ec257d7c8325bf1c16d1bc8a3257",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af8b255d_30f5c9b5",
+        "filename": "src/common/string_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-04T02:54:52Z",
+      "side": 1,
+      "message": "They gave in to `/`, it\u0027s high time they embraced `\\n`, it\u0027s been too long \u003e:(",
+      "parentUuid": "beef3a46_3678627d",
+      "range": {
+        "startLine": 161,
+        "startChar": 37,
+        "endLine": 161,
+        "endChar": 39
+      },
+      "revId": "a60dfda078c5ec257d7c8325bf1c16d1bc8a3257",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
