@@ -43,7 +43,7 @@ vars = {
   'checkout_angle_mesa': False,
 
   # Version of Chromium our Chromium-based DEPS are mirrored from.
-  'chromium_revision': '198e6d1c360e26159232c97916afc641bcf99021',
+  'chromium_revision': '58d772d9511be7abf76678ee9c1fb2273f69e619',
   # We never want to checkout chromium,
   # but need a dummy DEPS entry for the autoroller
   'dummy_checkout_chromium': False,
@@ -88,11 +88,11 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling catapult
   # and whatever else without interference from each other.
-  'catapult_revision': 'fdcbdb2b3eece968d35fe374169fd94080eeea54',
+  'catapult_revision': '561451ff1d47cba62dd088d1439086a92a48adc8',
 
   # the commit queue can handle CLs rolling Fuchsia sdk
   # and whatever else without interference from each other.
-  'fuchsia_version': 'version:12.20230402.3.1',
+  'fuchsia_version': 'version:12.20230330.3.1',
 
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling luci-go
@@ -140,7 +140,7 @@ vars = {
 deps = {
 
   'build': {
-    'url': '{chromium_git}/chromium/src/build.git@b3fc6af816c433dd88644ff2356cfd2922b2cef0',
+    'url': '{chromium_git}/chromium/src/build.git@cf17e4eea4414c275a3cb8d87661d48b5f2d23fa',
     'condition': 'not build_with_chromium',
   },
 
@@ -203,7 +203,7 @@ deps = {
   },
 
   'testing': {
-    'url': '{chromium_git}/chromium/src/testing@124d121ec0c2750ca21ffcaac7eafb89acc6268a',
+    'url': '{chromium_git}/chromium/src/testing@ff1fe7a03472349b02d36c94ad264fcf51420a33',
     'condition': 'not build_with_chromium',
   },
 
@@ -380,7 +380,7 @@ deps = {
   },
 
   'third_party/depot_tools': {
-    'url': '{chromium_git}/chromium/tools/depot_tools.git@401f0f6e433c9143bef1ac901f230f82e5f7c180',
+    'url': '{chromium_git}/chromium/tools/depot_tools.git@ef6c30622146c4f273157eb40927fa669717a1f9',
     'condition': 'not build_with_chromium',
   },
 
@@ -659,7 +659,7 @@ deps = {
   },
 
   'third_party/zlib': {
-    'url': '{chromium_git}/chromium/src/third_party/zlib@5edb52d4302d7aef232d585ec9ae27ef5c3c5438',
+    'url': '{chromium_git}/chromium/src/third_party/zlib@b890619bc2b193b8fbe9c1c053f4cd19a9791d92',
     'condition': 'not build_with_chromium',
   },
 
@@ -700,7 +700,7 @@ deps = {
   },
 
   'tools/mb': {
-    'url': '{chromium_git}/chromium/src/tools/mb@45fb5a967feac6c595a9694259527709bc0c0464',
+    'url': '{chromium_git}/chromium/src/tools/mb@e0c7d9376eb167c7354dba3bebfa5ebe90976370',
     'condition': 'not build_with_chromium',
   },
 
@@ -715,7 +715,7 @@ deps = {
   },
 
   'tools/perf': {
-    'url': '{chromium_git}/chromium/src/tools/perf@18e0d7aac4ba86fb4c7e35fa21b23243fe6cfcc8',
+    'url': '{chromium_git}/chromium/src/tools/perf@3e925a49b2e3813e27b2c53c6e3c87ec19bc292d',
     'condition': 'not build_with_chromium',
   },
 
