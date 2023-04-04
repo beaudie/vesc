@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffe6747a_107510af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-04T22:55:53Z",
+      "side": 1,
+      "message": "Still lgtm - a few tiny grammar nits.",
+      "revId": "e29010334c4303763ed17726eb9d20a553449d2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cd32e43_ed9a1a23",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 12
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-04T22:55:53Z",
+      "side": 1,
+      "message": "Nit: missing period at end of line.",
+      "revId": "e29010334c4303763ed17726eb9d20a553449d2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1273fc7c_caf110f3",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 12
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-04T22:55:53Z",
+      "side": 1,
+      "message": "Nit: missing comma at end of line.",
+      "revId": "e29010334c4303763ed17726eb9d20a553449d2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10a68925_a9e60828",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-04T22:55:53Z",
+      "side": 1,
+      "message": "Nit: missing comma at end of line.",
+      "revId": "e29010334c4303763ed17726eb9d20a553449d2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
