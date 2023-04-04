@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d1363ba_621862de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-04T02:36:23Z",
+      "side": 1,
+      "message": "We have plenty, but a log of mine didn\u0027t hit this path, which made me realize this change is actually useless. The decision made here to reallocate the buffer only triggers with incompatible changes, and is never made for subdata.\n\nGoing to abandon. I\u0027ll squash whatever tiny fixes may be applicable into the next CL.",
+      "parentUuid": "b5462072_7bbc750b",
+      "revId": "c4a033de1eb2b9757658bfef03749ecce7250794",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a91d5b84_555f4a10",
