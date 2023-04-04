@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a02c61ea_b18771de",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3079,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-04T16:04:47Z",
+      "side": 1,
+      "message": "Can this be in `ContextVk::beginNewRenderPass` instead? UtilsVk calls into it as well, and it might need the semaphore. I took a quick look, and I think the overlay is the only case right now.\n\nSpeaking of UtilsVk, I think this changing is breaking `glCopyTexSubImage`. That can go through `TextureVk::copySubImageImplWithDraw` which ends up sampling from the framebuffer, but the wait semaphore hasn\u0027t happened yet. Same situation if the transfer path is taken. Generally any path that can read from the default framebuffer also needs to have this code added.\n\nMaybe we could add an `onAccess` method or something to SurfaceVk to add this semaphore to the context, and call it anywhere access is happening.",
+      "revId": "3c08fb94b2bce31457d578dad7711d6aeb9d8e93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
