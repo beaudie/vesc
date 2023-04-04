@@ -3291,6 +3291,8 @@ void ContextVk::syncObjectPerfCounters(const angle::VulkanPerfCounters &commandQ
         commandQueuePerfCounters.commandQueueSubmitCallsPerFrame;
     mPerfCounters.vkQueueSubmitCallsTotal    = commandQueuePerfCounters.vkQueueSubmitCallsTotal;
     mPerfCounters.vkQueueSubmitCallsPerFrame = commandQueuePerfCounters.vkQueueSubmitCallsPerFrame;
+    mPerfCounters.commandQueueWaitSemaphoresTotal =
+        commandQueuePerfCounters.commandQueueWaitSemaphoresTotal;
 
     // Return current drawFramebuffer's cache stats
     mPerfCounters.framebufferCacheSize = mShareGroupVk->getFramebufferCache().getSize();
@@ -7875,15 +7877,12 @@ angle::Result ContextVk::onResourceAccess(const vk::CommandBufferAccess &access)
 {
     ANGLE_TRY(flushCommandBuffersIfNecessary(access));
 
-    vk::OutsideRenderPassCommandBuffer *commandBuffer =
-        &mOutsideRenderPassCommands->getCommandBuffer();
-
     for (const vk::CommandBufferImageAccess &imageAccess : access.getReadImages())
     {
         ASSERT(!isRenderPassStartedAndUsesImage(*imageAccess.image));
 
         imageAccess.image->recordReadBarrier(this, imageAccess.aspectFlags, imageAccess.imageLayout,
-                                             commandBuffer);
+                                             mOutsideRenderPassCommands);
         mOutsideRenderPassCommands->retainResource(imageAccess.image);
     }
 
@@ -7892,7 +7891,8 @@ angle::Result ContextVk::onResourceAccess(const vk::CommandBufferAccess &access)
         ASSERT(!isRenderPassStartedAndUsesImage(*imageWrite.access.image));
 
         imageWrite.access.image->recordWriteBarrier(this, imageWrite.access.aspectFlags,
-                                                    imageWrite.access.imageLayout, commandBuffer);
+                                                    imageWrite.access.imageLayout,
+                                                    mOutsideRenderPassCommands);
         mOutsideRenderPassCommands->retainResource(imageWrite.access.image);
         imageWrite.access.image->onWrite(imageWrite.levelStart, imageWrite.levelCount,
                                          imageWrite.layerStart, imageWrite.layerCount,
