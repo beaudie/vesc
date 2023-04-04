@@ -1134,6 +1134,8 @@ class CommandBufferHelperCommon : angle::NonCopyable
 
     const QueueSerial &getQueueSerial() const { return mQueueSerial; }
 
+    VkSemaphore releaseAcquireImageSemaphore() { return mAcquireImageSemaphore.release(); }
+
     // Dumping the command stream is disabled by default.
     static constexpr bool kEnableCommandStreamDiagnostics = false;
 
@@ -1201,6 +1203,9 @@ class CommandBufferHelperCommon : angle::NonCopyable
 
     // Tracks resources used in the command buffer.
     QueueSerial mQueueSerial;
+
+    // Only used for swapChain images
+    Semaphore mAcquireImageSemaphore;
 };
 
 class SecondaryCommandBufferCollector;
@@ -2406,6 +2411,13 @@ class ImageHelper final : public Resource, public angle::Subject
                                                    gl::LevelIndex levelEnd,
                                                    angle::FormatID formatID) const;
 
+    void addAcquireImageSemaphore(const VkSemaphore &vkSemaphore)
+    {
+        ASSERT(!mAcquireImageSemaphore.valid());
+        mAcquireImageSemaphore.setHandle(vkSemaphore);
+    }
+    VkSemaphore releaseAcquireImageSemaphore() { return mAcquireImageSemaphore.release(); }
+
   private:
     ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
     struct ClearUpdate
@@ -2734,6 +2746,11 @@ class ImageHelper final : public Resource, public angle::Subject
     MemoryAllocationType mMemoryAllocationType;
     // Memory type index used for the allocation. It can be used to determine the heap index.
     uint32_t mMemoryTypeIndex;
+
+    // Only used for swapChain images. This is set when an image is acquired and is waited on
+    // by the next submission (which uses this image), at which point it is reset so future
+    // submissions don't wait on it until the next acquire.
+    vk::Semaphore mAcquireImageSemaphore;
 };
 
 ANGLE_INLINE bool RenderPassCommandBufferHelper::usesImage(const ImageHelper &image) const

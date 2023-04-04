@@ -1410,6 +1410,7 @@ void CommandBufferHelperCommon::initializeImpl()
 
 void CommandBufferHelperCommon::resetImpl()
 {
+    ASSERT(!mAcquireImageSemaphore.valid());
     mCommandAllocator.resetAllocator();
 }
 
@@ -1598,6 +1599,8 @@ void CommandBufferHelperCommon::updateImageLayoutAndBarrier(Context *context,
     if (image->updateLayoutAndBarrier(context, aspectFlags, imageLayout, mQueueSerial, barrier))
     {
         mPipelineBarrierMask.set(barrierIndex);
+        ASSERT(!mAcquireImageSemaphore.valid());
+        mAcquireImageSemaphore.setHandle(image->releaseAcquireImageSemaphore());
     }
 }
 
@@ -5233,6 +5236,7 @@ ImageHelper::ImageHelper()
 ImageHelper::~ImageHelper()
 {
     ASSERT(!valid());
+    ASSERT(!mAcquireImageSemaphore.valid());
 }
 
 void ImageHelper::resetCachedProperties()

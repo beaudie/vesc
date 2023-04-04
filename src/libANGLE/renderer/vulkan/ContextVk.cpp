@@ -3291,6 +3291,8 @@ void ContextVk::syncObjectPerfCounters(const angle::VulkanPerfCounters &commandQ
         commandQueuePerfCounters.commandQueueSubmitCallsPerFrame;
     mPerfCounters.vkQueueSubmitCallsTotal    = commandQueuePerfCounters.vkQueueSubmitCallsTotal;
     mPerfCounters.vkQueueSubmitCallsPerFrame = commandQueuePerfCounters.vkQueueSubmitCallsPerFrame;
+    mPerfCounters.commandQueueWaitSemaphoresTotal =
+        commandQueuePerfCounters.commandQueueWaitSemaphoresTotal;
 
     // Return current drawFramebuffer's cache stats
     mPerfCounters.framebufferCacheSize = mShareGroupVk->getFramebufferCache().getSize();
@@ -7373,6 +7375,12 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassCl
     ASSERT(mLastFlushedQueueSerial < mRenderPassCommands->getQueueSerial());
     mLastFlushedQueueSerial = mRenderPassCommands->getQueueSerial();
 
+    VkSemaphore acquireImageSemaphore = mOutsideRenderPassCommands->releaseAcquireImageSemaphore();
+    if (acquireImageSemaphore != VK_NULL_HANDLE)
+    {
+        addWaitSemaphore(acquireImageSemaphore, vk::kSwapchainAcquireImageWaitStageFlags);
+    }
+
     ANGLE_TRY(mRenderer->flushRenderPassCommands(this, getProtectionType(), mContextPriority,
                                                  *renderPass, &mRenderPassCommands));
 
@@ -7589,6 +7597,12 @@ angle::Result ContextVk::flushAndSubmitOutsideRenderPassCommands()
 
 angle::Result ContextVk::flushOutsideRenderPassCommands()
 {
+    VkSemaphore acquireImageSemaphore = mOutsideRenderPassCommands->releaseAcquireImageSemaphore();
+    if (acquireImageSemaphore != VK_NULL_HANDLE)
+    {
+        addWaitSemaphore(acquireImageSemaphore, vk::kSwapchainAcquireImageWaitStageFlags);
+    }
+
     if (!mWaitSemaphores.empty())
     {
         ASSERT(mHasWaitSemaphoresPendingSubmission);
