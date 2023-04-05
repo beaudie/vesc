@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a75708f6_de216cf5",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 12
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-04-05T19:05:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7cd32e43_ed9a1a23",
+      "revId": "e29010334c4303763ed17726eb9d20a553449d2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1273fc7c_caf110f3",
@@ -69,6 +87,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9122d7e4_dd017623",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 12
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-04-05T19:05:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1273fc7c_caf110f3",
+      "revId": "e29010334c4303763ed17726eb9d20a553449d2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "10a68925_a9e60828",
@@ -82,6 +118,24 @@
       "writtenOn": "2023-04-04T22:55:53Z",
       "side": 1,
       "message": "Nit: missing comma at end of line.",
+      "revId": "e29010334c4303763ed17726eb9d20a553449d2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "997b8efc_23b6af4b",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 579,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-04-05T19:05:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "10a68925_a9e60828",
       "revId": "e29010334c4303763ed17726eb9d20a553449d2c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
