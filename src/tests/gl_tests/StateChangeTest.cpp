@@ -10317,6 +10317,57 @@ TEST_P(StateChangeTestES3, SampleCoverageFramebufferAttachmentSwitch)
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
+// Tests a bug around texture bindings for textures previously involved in a feedback loop
+TEST_P(StateChangeTestES3, FeedbackLoopTextureBindings)
+{
+    constexpr char kVS[] = R"(#version 300 es
+precision highp float;
+out vec2 texCoord;
+const vec2 kVertices[4] = vec2[4](vec2(-1, -1), vec2( 1, -1), vec2(-1,  1), vec2( 1,  1));
+void main()
+{
+    gl_Position = vec4(kVertices[gl_VertexID], 0.0, 1.0);
+    texCoord = (kVertices[gl_VertexID] * 0.5) + 0.5;
+})";
+
+    constexpr char kFS[] = R"(#version 300 es
+precision highp float;
+uniform sampler2D sampler;
+in vec2 texCoord;
+out vec4 colorOut;
+void main()
+{
+    vec4 texColor = texture(sampler, texCoord);
+    // rotate R,G,B -> B,R,G
+    colorOut = vec4(texColor.b, texColor.r, texColor.g, texColor.a);
+})";
+
+    ANGLE_GL_PROGRAM(prog1, kVS, kFS);
+    glUseProgram(prog1);
+
+    // init tex red
+    GLTexture tex;
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, 1, 1);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::red);
+
+    // Render tex -> tex (feedback loop), will rotate RGB so tex turns green
+    glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffer);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+    const GLenum buffers[]{GL_COLOR_ATTACHMENT0};
+    glDrawBuffers(1, buffers);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, GLColor::green, 1);
+    ASSERT_GL_NO_ERROR();
+
+    // Render tex -> framebuffer (remove feedback loop), will rotate RGB again so result is blue
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, GLColor::blue, 1);
+    ASSERT_GL_NO_ERROR();
+}
+
 }  // anonymous namespace
 
 ANGLE_INSTANTIATE_TEST_ES2(StateChangeTest);
