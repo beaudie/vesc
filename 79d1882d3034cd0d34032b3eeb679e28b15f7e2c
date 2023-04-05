@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ab6797ab_bbbb188d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-05T20:52:37Z",
+      "side": 1,
+      "message": "\u003eThe entirety of everything that happens in the GL call is just too complex to make sure that thread 2\u0027s GL call doesn\u0027t cause havoc in thread 1\u0027s processing of the GL call once it comes out of ANI. \n\nThen we need to move ANI to a place where unlock will not cause a havoc and will keep it that way.\n\n\u003e the issue is not accesses to the surface from other threads, but rather the context that was processing ANI.\n\n\u003e With the prepare-for-swap call we came up with in the past, we do solve the locked ANI situation (minus bugs, which I have ideas how to address) for when it happens from an EGL call (i.e. swap).\n\nprepare-for-swap access Context without lock at all. What if some other context modify that context or the shared state?\n\nHere I refactor prepare-for-swap into unlock.\nhttps://chromium-review.googlesource.com/c/angle/angle/+/4385294/17\nWhat is the difference? Better to answer in that CL.\n\nI do not understand the difference between prepare-for-swap and unlocking. Essentially it is the same thing, except prepare-for-swap makes you believe that everything is fine)",
+      "parentUuid": "b29511f3_0f15e259",
+      "revId": "79d1882d3034cd0d34032b3eeb679e28b15f7e2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "06aa5b25_eb44c83f",
         "filename": "/COMMIT_MSG",
         "patchSetId": 4
