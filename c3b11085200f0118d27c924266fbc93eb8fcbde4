@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6cee744f_6aca102a",
+        "filename": "src/libANGLE/renderer/metal/mtl_context_device.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-04-05T17:42:32Z",
+      "side": 1,
+      "message": "heads up that this is a 10.15+ function [0] and we saw a bunch of crashes on 10.14 from when this patch was landed.\n\n[0] https://developer.apple.com/documentation/metal/mtldevice/3229025-hasunifiedmemory",
+      "range": {
+        "startLine": 137,
+        "startChar": 4,
+        "endLine": 137,
+        "endChar": 36
+      },
+      "revId": "c3b11085200f0118d27c924266fbc93eb8fcbde4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
