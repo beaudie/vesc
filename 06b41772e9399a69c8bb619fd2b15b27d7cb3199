@@ -46,6 +46,30 @@
       },
       "revId": "06b41772e9399a69c8bb619fd2b15b27d7cb3199",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30217690_7282f229",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-05T22:41:33Z",
+      "side": 0,
+      "message": "I did almost as you say here:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/4392879\n\n`SharedFence` has not atomic ref counter. I was thinking to modify it instead, but decided to create separate class - `ExternalFence`.\n\nUsing `queueSubmitOneOff()` call may result in two `vkQueueSubmit` calls. one for the flush and second for just a fence. I want to avoid that and attach fence exactly to the batch we are interested in.\n\n\u003e And the advantage is that you will still have mUse and it will track things just normally.\n\nYou can use `mUse` with  `ExternalFence`, but I decided to removed it here (optional):\nhttps://chromium-review.googlesource.com/c/angle/angle/+/4392880/1?usp\u003drelated-change\nDid this to simplify logic, because we still need a separate code path when we do not have `mUse`.",
+      "parentUuid": "adb1df30_7cf633d0",
+      "range": {
+        "startLine": 281,
+        "startChar": 24,
+        "endLine": 281,
+        "endChar": 43
+      },
+      "revId": "06b41772e9399a69c8bb619fd2b15b27d7cb3199",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
