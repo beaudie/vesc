@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96c21212_041a1c27",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-05T22:31:49Z",
+      "side": 0,
+      "message": "The way I was thinking to simplify is that  you create SharedFence and then pass the SharedFence into this queueSubmitOneOff() call. Now you have two refcount on the fence, one from SyncHelperNativeFence and another from CommandBatch. All we need to do here is ensure SyncHelperNativeFence release *after* CommandBatch (so that it will not recycle). Or the other way is have a type in SharedFence indicate it is export fence and don\u0027t recycle. This approach has small code diff and the reset of code can just treat it like a normal SharedFence.",
+      "range": {
+        "startLine": 281,
+        "startChar": 24,
+        "endLine": 281,
+        "endChar": 43
+      },
+      "revId": "06b41772e9399a69c8bb619fd2b15b27d7cb3199",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
