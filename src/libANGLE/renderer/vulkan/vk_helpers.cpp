@@ -1410,6 +1410,7 @@ void CommandBufferHelperCommon::initializeImpl()
 
 void CommandBufferHelperCommon::resetImpl()
 {
+    ASSERT(!mANISemaphore.valid());
     mCommandAllocator.resetAllocator();
 }
 
@@ -1535,6 +1536,13 @@ void CommandBufferHelperCommon::bufferWrite(ContextVk *contextVk,
 void CommandBufferHelperCommon::executeBarriers(const angle::FeaturesVk &features,
                                                 CommandsState *commandsState)
 {
+    // Add ANI semaphore to the command submission.
+    if (mANISemaphore.valid())
+    {
+        commandsState->waitSemaphores.emplace_back(mANISemaphore.release());
+        commandsState->waitSemaphoreStageMasks.emplace_back(kSwapchainAcquireImageWaitStageFlags);
+    }
+
     // make a local copy for faster access
     PipelineStagesMask mask = mPipelineBarrierMask;
     if (mask.none())
@@ -1597,9 +1605,19 @@ void CommandBufferHelperCommon::updateImageLayoutAndBarrier(Context *context,
     PipelineStage barrierIndex = kImageMemoryBarrierData[imageLayout].barrierIndex;
     ASSERT(barrierIndex != PipelineStage::InvalidEnum);
     PipelineBarrier *barrier = &mPipelineBarriers[barrierIndex];
-    if (image->updateLayoutAndBarrier(context, aspectFlags, imageLayout, mQueueSerial, barrier))
+    VkSemaphore semaphore;
+    if (image->updateLayoutAndBarrier(context, aspectFlags, imageLayout, mQueueSerial, barrier,
+                                      &semaphore))
     {
         mPipelineBarrierMask.set(barrierIndex);
+
+        // Move ANI semaphore to here if any, since we just inserted a barrier. Note that all
+        // swapChain image must first do layout transit before access.
+        if (semaphore != VK_NULL_HANDLE)
+        {
+            ASSERT(!mANISemaphore.valid());
+            mANISemaphore.setHandle(semaphore);
+        }
     }
 }
 
@@ -4915,10 +4933,10 @@ angle::Result BufferHelper::initializeNonZeroMemory(Context *context,
         ANGLE_VK_TRY(context, commandBuffer.end());
 
         QueueSerial queueSerial;
-        ANGLE_TRY(renderer->queueSubmitOneOff(context, std::move(commandBuffer),
-                                              ProtectionType::Unprotected,
-                                              egl::ContextPriority::Medium, nullptr, 0, nullptr,
-                                              vk::SubmitPolicy::AllowDeferred, &queueSerial));
+        ANGLE_TRY(renderer->queueSubmitOneOff(
+            context, std::move(commandBuffer), ProtectionType::Unprotected,
+            egl::ContextPriority::Medium, VK_NULL_HANDLE, 0, nullptr,
+            vk::SubmitPolicy::AllowDeferred, &queueSerial));
 
         stagingBuffer.collectGarbage(renderer, queueSerial);
         // Update both ResourceUse objects, since mReadOnlyUse tracks when the buffer can be
@@ -5232,6 +5250,7 @@ ImageHelper::ImageHelper()
 ImageHelper::~ImageHelper()
 {
     ASSERT(!valid());
+    ASSERT(!mANISemaphore.valid());
 }
 
 void ImageHelper::resetCachedProperties()
@@ -5735,8 +5754,11 @@ angle::Result ImageHelper::initializeNonZeroMemory(Context *context,
     ANGLE_TRY(renderer->getCommandBufferOneOff(context, protectionType, &commandBuffer));
 
     // Queue a DMA copy.
+    VkSemaphore aniSemaphore;
     barrierImpl(context, getAspectFlags(), ImageLayout::TransferDst, mCurrentQueueFamilyIndex,
-                &commandBuffer);
+                &commandBuffer, &aniSemaphore);
+    // SwapChain image should not come here
+    ASSERT(aniSemaphore == VK_NULL_HANDLE);
 
     StagingBuffer stagingBuffer;
 
@@ -5816,7 +5838,7 @@ angle::Result ImageHelper::initializeNonZeroMemory(Context *context,
 
     QueueSerial queueSerial;
     ANGLE_TRY(renderer->queueSubmitOneOff(context, std::move(commandBuffer), protectionType,
-                                          egl::ContextPriority::Medium, nullptr, 0, nullptr,
+                                          egl::ContextPriority::Medium, VK_NULL_HANDLE, 0, nullptr,
                                           vk::SubmitPolicy::AllowDeferred, &queueSerial));
 
     if (isCompressedFormat)
@@ -6373,7 +6395,10 @@ void ImageHelper::changeLayoutAndQueue(Context *context,
                                        OutsideRenderPassCommandBuffer *commandBuffer)
 {
     ASSERT(isQueueChangeNeccesary(newQueueFamilyIndex));
-    barrierImpl(context, aspectMask, newLayout, newQueueFamilyIndex, commandBuffer);
+    VkSemaphore aniSemaphore;
+    barrierImpl(context, aspectMask, newLayout, newQueueFamilyIndex, commandBuffer, &aniSemaphore);
+    // SwapChain image should not get here.
+    ASSERT(aniSemaphore == VK_NULL_HANDLE);
 }
 
 void ImageHelper::acquireFromExternal(ContextVk *contextVk,
@@ -6470,8 +6495,12 @@ void ImageHelper::barrierImpl(Context *context,
                               VkImageAspectFlags aspectMask,
                               ImageLayout newLayout,
                               uint32_t newQueueFamilyIndex,
-                              CommandBufferT *commandBuffer)
+                              CommandBufferT *commandBuffer,
+                              VkSemaphore *aniSemaphoreOut)
 {
+    // Release the ANI semaphore to caller to add to the command submission.
+    *aniSemaphoreOut = mANISemaphore.release();
+
     if (mCurrentLayout == ImageLayout::SharedPresent)
     {
         const ImageMemoryBarrierData &transition = kImageMemoryBarrierData[mCurrentLayout];
@@ -6515,15 +6544,22 @@ template void ImageHelper::barrierImpl<priv::CommandBuffer>(Context *context,
                                                             VkImageAspectFlags aspectMask,
                                                             ImageLayout newLayout,
                                                             uint32_t newQueueFamilyIndex,
-                                                            priv::CommandBuffer *commandBuffer);
+                                                            priv::CommandBuffer *commandBuffer,
+                                                            VkSemaphore *aniSemaphoreOut);
 
 void ImageHelper::recordWriteBarrier(Context *context,
                                      VkImageAspectFlags aspectMask,
                                      ImageLayout newLayout,
                                      OutsideRenderPassCommandBufferHelper *commands)
 {
+    VkSemaphore aniSemaphore;
     barrierImpl(context, aspectMask, newLayout, mCurrentQueueFamilyIndex,
-                &commands->getCommandBuffer());
+                &commands->getCommandBuffer(), &aniSemaphore);
+
+    if (aniSemaphore != VK_NULL_HANDLE)
+    {
+        commands->addANISemaphore(aniSemaphore);
+    }
 }
 
 void ImageHelper::recordReadBarrier(Context *context,
@@ -6536,15 +6572,22 @@ void ImageHelper::recordReadBarrier(Context *context,
         return;
     }
 
+    VkSemaphore aniSemaphore;
     barrierImpl(context, aspectMask, newLayout, mCurrentQueueFamilyIndex,
-                &commands->getCommandBuffer());
+                &commands->getCommandBuffer(), &aniSemaphore);
+
+    if (aniSemaphore != VK_NULL_HANDLE)
+    {
+        commands->addANISemaphore(aniSemaphore);
+    }
 }
 
 bool ImageHelper::updateLayoutAndBarrier(Context *context,
                                          VkImageAspectFlags aspectMask,
                                          ImageLayout newLayout,
                                          const QueueSerial &queueSerial,
-                                         PipelineBarrier *barrier)
+                                         PipelineBarrier *barrier,
+                                         VkSemaphore *semaphoreOut)
 {
     ASSERT(queueSerial.valid());
     ASSERT(!mBarrierQueueSerial.valid() ||
@@ -6627,6 +6670,10 @@ bool ImageHelper::updateLayoutAndBarrier(Context *context,
         }
         mCurrentLayout = newLayout;
     }
+
+    ASSERT(barrierModified || !mANISemaphore.valid());
+    *semaphoreOut = mANISemaphore.release();
+
     return barrierModified;
 }
 
@@ -8980,18 +9027,19 @@ angle::Result ImageHelper::copySurfaceImageToBuffer(DisplayVk *displayVk,
     ANGLE_TRY(rendererVk->getCommandBufferOneOff(displayVk, ProtectionType::Unprotected,
                                                  &primaryCommandBuffer));
 
+    VkSemaphore aniSemaphore;
     barrierImpl(displayVk, getAspectFlags(), ImageLayout::TransferSrc, mCurrentQueueFamilyIndex,
-                &primaryCommandBuffer);
+                &primaryCommandBuffer, &aniSemaphore);
     primaryCommandBuffer.copyImageToBuffer(mImage, getCurrentLayout(displayVk),
                                            bufferHelper->getBuffer().getHandle(), 1, &region);
 
     ANGLE_VK_TRY(displayVk, primaryCommandBuffer.end());
 
     QueueSerial submitQueueSerial;
-    ANGLE_TRY(rendererVk->queueSubmitOneOff(displayVk, std::move(primaryCommandBuffer),
-                                            ProtectionType::Unprotected,
-                                            egl::ContextPriority::Medium, nullptr, 0, nullptr,
-                                            vk::SubmitPolicy::AllowDeferred, &submitQueueSerial));
+    ANGLE_TRY(rendererVk->queueSubmitOneOff(
+        displayVk, std::move(primaryCommandBuffer), ProtectionType::Unprotected,
+        egl::ContextPriority::Medium, aniSemaphore, kSwapchainAcquireImageWaitStageFlags, nullptr,
+        vk::SubmitPolicy::AllowDeferred, &submitQueueSerial));
 
     return rendererVk->finishQueueSerial(displayVk, submitQueueSerial);
 }
@@ -9026,18 +9074,19 @@ angle::Result ImageHelper::copyBufferToSurfaceImage(DisplayVk *displayVk,
     ANGLE_TRY(
         rendererVk->getCommandBufferOneOff(displayVk, ProtectionType::Unprotected, &commandBuffer));
 
+    VkSemaphore aniSemaphore;
     barrierImpl(displayVk, getAspectFlags(), ImageLayout::TransferDst, mCurrentQueueFamilyIndex,
-                &commandBuffer);
+                &commandBuffer, &aniSemaphore);
     commandBuffer.copyBufferToImage(bufferHelper->getBuffer().getHandle(), mImage,
                                     getCurrentLayout(displayVk), 1, &region);
 
     ANGLE_VK_TRY(displayVk, commandBuffer.end());
 
     QueueSerial submitQueueSerial;
-    ANGLE_TRY(rendererVk->queueSubmitOneOff(displayVk, std::move(commandBuffer),
-                                            ProtectionType::Unprotected,
-                                            egl::ContextPriority::Medium, nullptr, 0, nullptr,
-                                            vk::SubmitPolicy::AllowDeferred, &submitQueueSerial));
+    ANGLE_TRY(rendererVk->queueSubmitOneOff(
+        displayVk, std::move(commandBuffer), ProtectionType::Unprotected,
+        egl::ContextPriority::Medium, aniSemaphore, kSwapchainAcquireImageWaitStageFlags, nullptr,
+        vk::SubmitPolicy::AllowDeferred, &submitQueueSerial));
 
     return rendererVk->finishQueueSerial(displayVk, submitQueueSerial);
 }
