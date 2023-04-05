@@ -88,6 +88,24 @@
       "parentUuid": "ef56972f_92509e88",
       "revId": "7b1c22dfd22e8a94a4e775d8d10d7b63d19696c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ceca11e5_62b8ce08",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5456,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-04-05T20:46:38Z",
+      "side": 1,
+      "message": "I have moved `mapMemoryAndInitWithNonZeroValue()` up to `initMemory()`. We could move up the initialization in the else case as well. However, in addition to `initMemory()`, we should also add it in other functions that use the allocation in `FindAndAllocateCompatibleMemory()` (such as `initExternalMemory()`). The buffers also need to use it before calling their own `initializeNonZeroMemory()`, right?",
+      "parentUuid": "748821cf_f4d8c0f0",
+      "revId": "7b1c22dfd22e8a94a4e775d8d10d7b63d19696c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
