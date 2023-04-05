@@ -92,6 +92,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "af45a738_6611677c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-05T21:53:56Z",
+      "side": 1,
+      "message": "I see.\n\nFor example, if we do that - reduce prepare solely to ANI call. I think we can still refactor everything so it will be same as unlock inside the back end.\n\nWhat I try to say is make some exceptions where unlock is possible.\nBig functions already consist of many small functions. Each function already must not assume state of other functions. So we divide big function to small one in such a ways that one of them will be just ANI. That one function will unlock the mutex. Functions that will be called after ANI function should validate state if necessary.\n\nI agree, that unlocking during prepareForDraw is dangerous, because we unlock in the middle of the complex function.",
+      "parentUuid": "2e218853_a48e7289",
+      "revId": "79d1882d3034cd0d34032b3eeb679e28b15f7e2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "06aa5b25_eb44c83f",
         "filename": "/COMMIT_MSG",
         "patchSetId": 4
