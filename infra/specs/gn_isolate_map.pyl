@@ -109,8 +109,12 @@
     "script": "//src/tests/restricted_traces/retrace_restricted_traces.py",
     "type": "script",
   },
-  "angle_trace_tests": {
-    "label": "//src/tests:angle_trace_tests",
+  "angle_trace_tests_a_m": {
+    "label": "//src/tests:angle_trace_tests_a_m",
+    "type": "windowed_test_launcher",
+  },
+  "angle_trace_tests_n_z": {
+    "label": "//src/tests:angle_trace_tests_n_z",
     "type": "windowed_test_launcher",
   },
   "angle_trace_perf_tests": {

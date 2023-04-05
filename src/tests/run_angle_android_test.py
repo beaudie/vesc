@@ -29,7 +29,10 @@ def main():
     parser.add_argument(
         'suite',
         help='Test suite to run.',
-        choices=['angle_end2end_tests', 'angle_perftests', 'angle_trace_tests'])
+        choices=[
+            'angle_end2end_tests', 'angle_perftests', 'angle_trace_tests', 'angle_trace_tests_a_m',
+            'angle_trace_tests_n_z'
+        ])
     parser.add_argument(
         '-f',
         '--filter',
@@ -62,7 +65,7 @@ def main():
             print(test)
         return 0
 
-    if args.suite == 'angle_trace_tests':
+    if args.suite.startswith('angle_trace_tests'):
         traces = set(android_helper.GetTraceFromTestName(test) for test in tests)
         android_helper.PrepareRestrictedTraces(traces)
 

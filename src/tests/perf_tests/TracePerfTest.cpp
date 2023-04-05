@@ -27,6 +27,7 @@
 #include <cassert>
 #include <fstream>
 #include <functional>
+#include <regex>
 #include <sstream>
 
 // When --minimize-gpu-work is specified, we want to reduce GPU work to minimum and lift up the CPU
@@ -1656,8 +1657,23 @@ void TracePerfTest::initializeBenchmark()
     else
     {
         std::stringstream traceNameStr;
-        traceNameStr << "angle_restricted_traces_" << traceInfo.name;
+        traceNameStr << "angle_restricted_traces_";
+#if defined(ANGLE_TRACE_TEST_SPLIT)
+
+        std::regex regex("^[a-m].*");
+        if (std::regex_match(traceInfo.name, regex))
+        {
+            traceNameStr << "a_m_";
+        }
+        else
+        {
+            traceNameStr << "n_z_";
+        }
+#endif
+        traceNameStr << traceInfo.name;
         std::string traceName = traceNameStr.str();
+        // TODO: Remove this print
+        INFO() << "CLN: attempting to load: " << traceName;
         mTraceReplay.reset(new TraceLibrary(traceName.c_str()));
     }
 

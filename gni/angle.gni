@@ -38,6 +38,11 @@ declare_args() {
 
   # Expose GLX entry points by default when using Desktop GL on Linux.
   angle_expose_glx_entry_points = angle_enable_gl_desktop_frontend && is_linux
+
+  # TODO(http://b/276474703) The trace test APK is too large if all traces are compiled on Android.
+  # Break up the APK unless a subset is being targeted. This should only affect Android bots or
+  # folks doing full test runs on Android.
+  do_split_trace_test_apk = is_android && angle_restricted_traces == []
 }
 
 if (angle_has_build) {

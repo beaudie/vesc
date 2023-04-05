@@ -34,7 +34,7 @@ if PY_UTILS not in sys.path:
 import android_helper
 import angle_test_util
 
-DEFAULT_TEST_SUITE = angle_test_util.ANGLE_TRACE_TEST_SUITE
+DEFAULT_TEST_SUITES = angle_test_util.ANGLE_TRACE_TEST_SUITES
 DEFAULT_TEST_JSON = 'restricted_traces.json'
 DEFAULT_LOG_LEVEL = 'info'
 DEFAULT_BACKUP_FOLDER = 'retrace-backups'
@@ -531,8 +531,8 @@ def main():
     parser.add_argument('-l', '--log', help='Logging level.', default=DEFAULT_LOG_LEVEL)
     parser.add_argument(
         '--test-suite',
-        help='Test Suite. Default is %s' % DEFAULT_TEST_SUITE,
-        default=DEFAULT_TEST_SUITE)
+        help='Test Suite. Default is %s' % DEFAULT_TEST_SUITES[0],
+        default=DEFAULT_TEST_SUITES[0])
     parser.add_argument(
         '--no-swiftshader',
         help='Trace against native Vulkan.',

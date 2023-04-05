@@ -24,7 +24,7 @@ import common
 import xvfb
 
 
-ANGLE_TRACE_TEST_SUITE = 'angle_trace_tests'
+ANGLE_TRACE_TEST_SUITES = ['angle_trace_tests', 'angle_trace_tests_a_m', 'angle_trace_tests_n_z']
 
 
 def Initialize(suite_name):

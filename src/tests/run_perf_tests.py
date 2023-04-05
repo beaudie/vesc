@@ -587,7 +587,7 @@ def main():
     args, extra_flags = parser.parse_known_args()
 
     if args.trace_tests:
-        args.test_suite = angle_test_util.ANGLE_TRACE_TEST_SUITE
+        args.test_suite = angle_test_util.ANGLE_TRACE_TEST_SUITES[0]
 
     angle_test_util.SetupLogging(args.log.upper())
 

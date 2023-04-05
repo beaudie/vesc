@@ -37,7 +37,7 @@ angle_path_util.AddDepsDirToPath('testing/scripts')
 import common
 
 
-DEFAULT_TEST_SUITE = angle_test_util.ANGLE_TRACE_TEST_SUITE
+DEFAULT_TEST_SUITES = angle_test_util.ANGLE_TRACE_TEST_SUITES
 DEFAULT_TEST_PREFIX = 'TraceTest.'
 DEFAULT_SCREENSHOT_PREFIX = 'angle_vulkan_'
 SWIFTSHADER_SCREENSHOT_PREFIX = 'angle_vulkan_swiftshader_'
@@ -346,7 +346,7 @@ def _get_gtest_filter_for_batch(args, batch):
 def _run_tests(args, tests, extra_flags, env, screenshot_dir, results, test_results):
     keys = get_skia_gold_keys(args, env)
 
-    if angle_test_util.IsAndroid() and args.test_suite == DEFAULT_TEST_SUITE:
+    if angle_test_util.IsAndroid() and args.test_suite in DEFAULT_TEST_SUITES:
         android_helper.RunSmokeTest()
 
     with temporary_dir('angle_skia_gold_') as skia_gold_temp_dir:
@@ -440,7 +440,7 @@ def main():
     parser.add_argument('--isolated-script-test-output', type=str)
     parser.add_argument('--isolated-script-test-perf-output', type=str)
     parser.add_argument('-f', '--isolated-script-test-filter', '--filter', type=str)
-    parser.add_argument('--test-suite', help='Test suite to run.', default=DEFAULT_TEST_SUITE)
+    parser.add_argument('--test-suite', help='Test suite to run.', default=DEFAULT_TEST_SUITES[0])
     parser.add_argument('--render-test-output-dir', help='Directory to store screenshots')
     parser.add_argument('--xvfb', help='Start xvfb.', action='store_true')
     parser.add_argument(

@@ -21,7 +21,7 @@ import time
 
 import angle_path_util
 
-from angle_test_util import ANGLE_TRACE_TEST_SUITE
+from angle_test_util import ANGLE_TRACE_TEST_SUITES
 
 # Currently we only support a single test package name.
 TEST_PACKAGE_NAME = 'com.android.angle.test'
@@ -215,7 +215,7 @@ def _PrepareTestSuite(suite_name):
 
     _AdbShell('mkdir -p /sdcard/chromium_tests_root/')
 
-    if suite_name == ANGLE_TRACE_TEST_SUITE:
+    if suite_name in ANGLE_TRACE_TEST_SUITES:
         _AddRestrictedTracesJson()
 
     if suite_name == 'angle_end2end_tests':
@@ -230,14 +230,24 @@ def PrepareRestrictedTraces(traces):
     total_size = 0
     skipped = 0
     for trace in traces:
-        path_from_root = 'src/tests/restricted_traces/' + trace + '/' + trace + '.angledata.gz'
-        local_path = '../../' + path_from_root
-        device_path = '/sdcard/chromium_tests_root/' + path_from_root
-        if _CompareHashes(local_path, device_path):
+        # TODO: Clean this up with a helper
+        data_path_from_root = 'src/tests/restricted_traces/' + trace + '/' + trace + '.angledata.gz'
+        data_local_path = '../../' + data_path_from_root
+        data_device_path = '/sdcard/chromium_tests_root/' + data_path_from_root
+        if _CompareHashes(data_local_path, data_device_path):
             skipped += 1
         else:
-            total_size += os.path.getsize(local_path)
-            _AdbRun(['push', local_path, device_path])
+            total_size += os.path.getsize(data_local_path)
+            _AdbRun(['push', data_local_path, data_device_path])
+
+        json_path_from_root = 'src/tests/restricted_traces/' + trace + '/' + trace + '.json'
+        json_local_path = '../../' + json_path_from_root
+        json_device_path = '/sdcard/chromium_tests_root/' + json_path_from_root
+        if _CompareHashes(json_local_path, json_device_path):
+            skipped += 1
+        else:
+            total_size += os.path.getsize(json_local_path)
+            _AdbRun(['push', json_local_path, json_device_path])
 
     logging.info('Synced %d trace files (%.1fMB, %d files already ok) in %.1fs', len(traces),
                  total_size / 1e6, skipped,
@@ -362,7 +372,14 @@ def _RemoveFlag(args, f):
 
 
 def RunSmokeTest():
-    _EnsureTestSuite(ANGLE_TRACE_TEST_SUITE)
+    # words_with_friends_2 will be in ANGLE_TRACE_TEST_SUITES[2]
+    smoke_test_suite = ''
+    if IsAndroid():
+        smoke_test_suite = ANGLE_TRACE_TEST_SUITES[2]
+    else:
+        smoke_test_suite = ANGLE_TRACE_TEST_SUITES[0]
+
+    _EnsureTestSuite(smoke_test_suite)
 
     test_name = 'TraceTest.words_with_friends_2'
     run_instrumentation_timeout = 60

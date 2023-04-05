@@ -493,7 +493,9 @@ if (build_angle_perftests) {
 }
 
 if (build_angle_trace_tests) {
-  angle_test("angle_trace_tests") {
+  angle_source_set("angle_trace_common") {
+    testonly = true
+
     # http://anglebug.com/6009: Traces with long shaders are hitting string literal
     # limit in MSVC, so only compile them when using clang
     assert(is_clang, "angle trace tests require clang")
@@ -501,6 +503,10 @@ if (build_angle_trace_tests) {
     if (is_ios) {
       # shared libraries are hidden inside ios_framework_bundle, but we include headers from them
       check_includes = false
+    }
+    if (do_split_trace_test_apk) {
+      # This affects the name of the trace used in TracePerfTest.cpp
+      defines = [ "ANGLE_TRACE_TEST_SPLIT" ]
     }
     sources = [
       "angle_trace_tests_main.cpp",
@@ -511,7 +517,6 @@ if (build_angle_trace_tests) {
       "$angle_root:angle_compression",
       "$angle_root/util:angle_frame_capture_test_utils",
       "$angle_root/util:angle_png_utils",
-      "restricted_traces:angle_restricted_traces",
     ]
 
     data = [ "$angle_root/src/tests/py_utils/android_helper.py" ]
@@ -521,6 +526,29 @@ if (build_angle_trace_tests) {
     if (is_clang) {
       # Allows us to edit traces and remove chunks of code without compile warnings.
       cflags_cc = [ "-Wno-unused-const-variable" ]
+    }
+  }
+
+  if (do_split_trace_test_apk) {
+    # On Android, the APK has gotten large enough that we need to split it up
+    angle_test("angle_trace_tests_a_m") {
+      deps = [
+        ":angle_trace_common",
+        "restricted_traces:angle_restricted_traces_a_m",
+      ]
+    }
+    angle_test("angle_trace_tests_n_z") {
+      deps = [
+        ":angle_trace_common",
+        "restricted_traces:angle_restricted_traces_n_z",
+      ]
+    }
+  } else {
+    angle_test("angle_trace_tests") {
+      deps = [
+        ":angle_trace_common",
+        "restricted_traces:angle_restricted_traces",
+      ]
     }
   }
 
@@ -534,10 +562,16 @@ if (build_angle_trace_tests) {
       "$angle_root/src/tests/run_perf_tests.py",
     ]
 
-    data_deps = [
-      ":angle_trace_tests",
-      "//testing:run_perf_test",
-    ]
+    data_deps = [ "//testing:run_perf_test" ]
+
+    if (do_split_trace_test_apk) {
+      data_deps += [
+        ":angle_trace_tests_a_m",
+        ":angle_trace_tests_n_z",
+      ]
+    } else {
+      data_deps += [ ":angle_trace_tests" ]
+    }
   }
 
   group("angle_trace_interpreter_tests") {
@@ -546,7 +580,14 @@ if (build_angle_trace_tests) {
       "restricted_traces/gen_restricted_traces.py",
       "restricted_traces/retrace_restricted_traces.py",
     ]
-    data_deps = [ ":angle_trace_tests" ]
+    if (do_split_trace_test_apk) {
+      data_deps = [
+        ":angle_trace_tests_a_m",
+        ":angle_trace_tests_n_z",
+      ]
+    } else {
+      data_deps = [ ":angle_trace_tests" ]
+    }
   }
 }
 
@@ -1694,7 +1735,14 @@ group("angle_tests") {
     deps += [ ":angle_perftests" ]
   }
   if (build_angle_trace_tests) {
-    deps += [ ":angle_trace_tests" ]
+    if (do_split_trace_test_apk) {
+      deps += [
+        ":angle_trace_tests_a_m",
+        ":angle_trace_tests_n_z",
+      ]
+    } else {
+      deps += [ ":angle_trace_tests" ]
+    }
   }
   if (is_clang) {
     deps += [ "capture_replay_tests" ]
