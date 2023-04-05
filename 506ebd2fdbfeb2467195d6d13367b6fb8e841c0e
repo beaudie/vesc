@@ -16,6 +16,29 @@
       "message": "Thanks",
       "revId": "506ebd2fdbfeb2467195d6d13367b6fb8e841c0e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2728ebdc_a54a9b1d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5859,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-05T21:41:16Z",
+      "side": 1,
+      "message": "I mean merge this into initializeNonZeroMemory, and remove zerofill from AllocateImageMemory().",
+      "range": {
+        "startLine": 5853,
+        "startChar": 8,
+        "endLine": 5859,
+        "endChar": 9
+      },
+      "revId": "506ebd2fdbfeb2467195d6d13367b6fb8e841c0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
