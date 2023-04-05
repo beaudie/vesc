@@ -70,6 +70,24 @@
       "parentUuid": "e94f6b8d_362ea68c",
       "revId": "7b1c22dfd22e8a94a4e775d8d10d7b63d19696c3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "748821cf_f4d8c0f0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5456,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-05T16:10:41Z",
+      "side": 1,
+      "message": "I was initially thinking the same. But there\u0027s the else case in `ImageHelper::initMemory` which has the non-zero-init buried deep inside the memory allocation code.\n\nStill an improvement though, I agree.",
+      "parentUuid": "ef56972f_92509e88",
+      "revId": "7b1c22dfd22e8a94a4e775d8d10d7b63d19696c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
