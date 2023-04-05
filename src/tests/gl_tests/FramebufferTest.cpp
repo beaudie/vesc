@@ -5028,6 +5028,58 @@ void main()
     ASSERT_GL_NO_ERROR();
 }
 
+// Regression test for a bug in the Vulkan backend where sampling from a
+// texture previously involved in a framebuffer feedback loop would produce
+// VUID-VkDescriptorImageInfo-imageLayout-00344 and VUID-vkCmdDraw-None-02699
+// because of an incorrect cached descriptor set.
+TEST_P(FramebufferTest_ES3, FeedbackLoopTextureBindings)
+{
+    constexpr char kVS[] = R"(#version 300 es
+precision highp float;
+out vec2 texCoord;
+const vec2 kVertices[4] = vec2[4](vec2(-1, -1), vec2( 1, -1), vec2(-1,  1), vec2( 1,  1));
+void main()
+{
+    gl_Position = vec4(kVertices[gl_VertexID], 0.0, 1.0);
+    texCoord = (kVertices[gl_VertexID] * 0.5) + 0.5;
+})";
+
+    constexpr char kFS[] = R"(#version 300 es
+precision highp float;
+uniform sampler2D sampler;
+in vec2 texCoord;
+out vec4 colorOut;
+void main()
+{
+    vec4 texColor = texture(sampler, texCoord);
+    // rotate R,G,B -> B,R,G
+    colorOut = vec4(texColor.b, texColor.r, texColor.g, texColor.a);
+})";
+
+    ANGLE_GL_PROGRAM(prog1, kVS, kFS);
+    glUseProgram(prog1);
+
+    GLTexture tex;
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, 1, 1);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &GLColor::red);
+
+    // Render tex -> tex (feedback loop)
+    GLFramebuffer framebuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+    const GLenum buffers[]{GL_COLOR_ATTACHMENT0};
+    glDrawBuffers(1, buffers);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    ASSERT_GL_NO_ERROR();
+
+    // Render tex -> default framebuffer (no feedback loop)
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    ASSERT_GL_NO_ERROR();
+}
+
 // Tests change of framebuffer dimensions vs gl_FragCoord.
 TEST_P(FramebufferTest_ES3, FramebufferDimensionsChangeAndFragCoord)
 {
