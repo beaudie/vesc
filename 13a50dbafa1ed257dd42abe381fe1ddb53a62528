@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dda2a106_afd9c7a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-05T00:17:51Z",
+      "side": 1,
+      "message": "lgtm\n\nWe\u0027re aiming to get off OpenGL on as many platforms as possible, so these restrictions and test suppressions aren\u0027t any concern. Nice work on the test.",
+      "revId": "13a50dbafa1ed257dd42abe381fe1ddb53a62528",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
