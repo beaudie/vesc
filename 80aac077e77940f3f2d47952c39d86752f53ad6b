@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "80aac077e77940f3f2d47952c39d86752f53ad6b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce7c4b71_3b8815fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-04-05T18:54:52Z",
+      "side": 1,
+      "message": "LGTM, although I can\u0027t access the bug.\n\nYou might want to apply it in `src/libANGLE/renderer/metal/DisplayMtl.mm` as well.",
+      "revId": "80aac077e77940f3f2d47952c39d86752f53ad6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
