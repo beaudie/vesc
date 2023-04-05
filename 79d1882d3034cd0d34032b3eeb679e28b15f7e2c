@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b29511f3_0f15e259",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-05T20:20:03Z",
+      "side": 1,
+      "message": "\u003e You say \"we can\u0027t just unlock things in the backend\", but I spend time to investigate. It is not that I just decided to unlock the mutex and do not understand that it is potentially dangerous.\n\nI don\u0027t doubt that.\n\nTake this scenario however. Say there are 2 shared contexts. We take the share context lock when accessing the contexts, so when one GL call is handled, we know it\u0027s \"atomic\". With unlock around ANI, this can happen:\n\n```\nThread 1:                                  Thread 2\n...\nBind framebuffer 0\nDraw:\n  Call syncState on many objects\n  Call syncState on framebuffer\n    Unlock Share Context Mutex\n    Calls ANI                              Call any GL function\n                                           Potentially using\n                                           shared resources, or\n                                           even making changes to\n                                           thread 1\u0027s context\n    Lock Share Context Mutex\n  Call syncState on more objects\n  Draw\n...\n```\n\nThe entirety of everything that happens in the GL call is just too complex to make sure that thread 2\u0027s GL call doesn\u0027t cause havoc in thread 1\u0027s processing of the GL call once it comes out of ANI. Even if you have meticulously validated that it\u0027s all ok now, I don\u0027t trust myself (and for that matter anybody else) not to screw it up in the future.\n\n\u003e What may happen with the Surface from other thread during ANI?\n\nAnd now I can answer this; the issue is not accesses to the _surface_ from other threads, but rather the context that was processing ANI.\n\nThat said, if the share context mutex is not unlocked it\u0027s much more reasonable, but I suspect that also doesn\u0027t actually solve your problem in any way.\n\n---\n\nWith the prepare-for-swap call we came up with in the past, we do solve the locked ANI situation (minus bugs, which I have ideas how to address) for when it happens from an EGL call (i.e. swap).\n\nI asked some Android experts by the way, blocking ANI during a GL call (clear, draw etc) ending up blocking other contexts has been a known issue for native drivers as well, and from what I gather no one figured out a safe way around it.",
+      "parentUuid": "80f34512_e5750baa",
+      "revId": "79d1882d3034cd0d34032b3eeb679e28b15f7e2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "06aa5b25_eb44c83f",
         "filename": "/COMMIT_MSG",
         "patchSetId": 4
