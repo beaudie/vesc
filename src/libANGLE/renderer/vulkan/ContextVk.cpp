@@ -5414,7 +5414,8 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 }
 
                 onRenderPassFinished(RenderPassClosureReason::FramebufferBindingChange);
-                if (getFeatures().preferSubmitAtFBOBoundary.enabled &&
+                if ((getFeatures().preferSubmitAtFBOBoundary.enabled ||
+                     mState.getDrawFramebuffer()->isDefault()) &&
                     mRenderPassCommands->started())
                 {
                     // This will behave as if user called glFlush, but the actual flush will be
