@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddc989a4_c7c81f4a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-04-06T04:45:08Z",
+      "side": 1,
+      "message": "Here\u0027s a WIP take on splitting the Android APK into two, each with roughly half the traces.",
+      "revId": "71ed8b7ad728610de2d0a7789165854a15e524ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
