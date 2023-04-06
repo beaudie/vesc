@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "99c66554_deb31871",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-06T19:21:57Z",
+      "side": 1,
+      "message": "If I understand correctly, with https://chromium-review.googlesource.com/c/angle/angle/+/4392877/1, you dont need this CL, right?",
+      "revId": "53e2eb55e6feaa8adfe9f0ce908ab6c4b1b429ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7176be46_d24cd2e8",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
         "patchSetId": 1
