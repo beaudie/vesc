@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93792bbf_d832e0e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-04-06T18:16:11Z",
+      "side": 1,
+      "message": "Looks good to me, but someone else must approve",
+      "revId": "42af8a41df621d15610ed45c2b85f565ec13443b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07d3ca9e_7aa7fcd6",
+        "filename": "src/libANGLE/renderer/gl/eagl/DeviceEAGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-04-06T18:16:11Z",
+      "side": 1,
+      "message": "Is this due to the style guide?",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 50
+      },
+      "revId": "42af8a41df621d15610ed45c2b85f565ec13443b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
