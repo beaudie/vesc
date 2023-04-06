@@ -70,6 +70,30 @@
       },
       "revId": "06b41772e9399a69c8bb619fd2b15b27d7cb3199",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de9f29e7_98d8261e",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-06T00:09:12Z",
+      "side": 0,
+      "message": "Understood. You can add API and call into RendererVK to retain/release under mMutex lock. Since it only affect this one place, should be easy to change, and not affect other usages (not eating cost of atomic).",
+      "parentUuid": "30217690_7282f229",
+      "range": {
+        "startLine": 281,
+        "startChar": 24,
+        "endLine": 281,
+        "endChar": 43
+      },
+      "revId": "06b41772e9399a69c8bb619fd2b15b27d7cb3199",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
