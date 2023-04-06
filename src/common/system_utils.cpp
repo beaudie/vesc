@@ -242,31 +242,26 @@ std::string StripFilenameFromPath(const std::string &path)
     return (lastPathSepLoc != std::string::npos) ? path.substr(0, lastPathSepLoc) : "";
 }
 
-static std::atomic<uint64_t> globalThreadSerial(1);
-
 #if defined(ANGLE_PLATFORM_APPLE)
 // https://anglebug.com/6479, similar to egl::GetCurrentThread() in libGLESv2/global_state.cpp
 uint64_t GetCurrentThreadUniqueId()
 {
+    static std::atomic<uint64_t> globalThreadSerial;
     static pthread_key_t tlsIndex;
     static dispatch_once_t once;
     dispatch_once(&once, ^{
-      ASSERT(pthread_key_create(&tlsIndex, nullptr) == 0);
+      auto result = pthread_key_create(&tlsIndex, nullptr);
+      ASSERT(result == 0);
+      result = pthread_setspecific(tlsIndex, reinterpret_cast<void *>(++globalThreadSerial));
+      ASSERT(result == 0);
     });
-
-    void *tlsValue = pthread_getspecific(tlsIndex);
-    if (tlsValue == nullptr)
-    {
-        uint64_t threadId = globalThreadSerial++;
-        ASSERT(pthread_setspecific(tlsIndex, reinterpret_cast<void *>(threadId)) == 0);
-        return threadId;
-    }
-    return reinterpret_cast<uint64_t>(tlsValue);
+    return reinterpret_cast<uint64_t>(pthread_getspecific(tlsIndex));
 }
 #else
 uint64_t GetCurrentThreadUniqueId()
 {
-    thread_local uint64_t threadId(globalThreadSerial++);
+    static std::atomic<uint64_t> globalThreadSerial;
+    thread_local uint64_t threadId(++globalThreadSerial);
     return threadId;
 }
 #endif
