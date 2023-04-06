@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "daac3246_994bc424",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-06T21:38:17Z",
+      "side": 1,
+      "message": "lgtm\n\nGreat job cleaning this up!",
+      "revId": "42af8a41df621d15610ed45c2b85f565ec13443b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "07d3ca9e_7aa7fcd6",
@@ -55,6 +72,30 @@
       "side": 1,
       "message": "First include is for the companion .h file. For DeviceEAGL.cpp, the companion is DeviceEAGL.h",
       "parentUuid": "07d3ca9e_7aa7fcd6",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 50
+      },
+      "revId": "42af8a41df621d15610ed45c2b85f565ec13443b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fc75587_2a2e0d0a",
+        "filename": "src/libANGLE/renderer/gl/eagl/DeviceEAGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-06T21:38:17Z",
+      "side": 1,
+      "message": "That\u0027s right. Resolving this to let the auto-CQ take effect.",
+      "parentUuid": "72f87ed4_04da6e2d",
       "range": {
         "startLine": 9,
         "startChar": 0,
