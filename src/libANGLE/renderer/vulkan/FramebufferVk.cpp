@@ -1017,7 +1017,8 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
     UtilsVk &utilsVk     = contextVk->getUtils();
-
+    WARN() << "\t** mask:0x" << std::hex << mask << " filter:0x" << filter
+           << " dynamicState:" << contextVk->getFeatures().supportsExtendedDynamicState.enabled;
     // If any clears were picked up when syncing the read framebuffer (as the blit source), redefer
     // them.  They correspond to attachments that are not used in the blit.  This will cause the
     // read framebuffer to become dirty, so the attachments will be synced again on the next command

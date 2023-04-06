@@ -2146,6 +2146,7 @@ angle::Result UtilsVk::startRenderPass(ContextVk *contextVk,
                                        const gl::Rectangle &renderArea,
                                        vk::RenderPassCommandBuffer **commandBufferOut)
 {
+    WARN() << "\t\t enter";
     const vk::RenderPass *compatibleRenderPass = nullptr;
     ANGLE_TRY(contextVk->getCompatibleRenderPass(renderPassDesc, &compatibleRenderPass));
 
@@ -2185,6 +2186,7 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
                                         FramebufferVk *framebuffer,
                                         const ClearFramebufferParameters &params)
 {
+    WARN() << "\t\t enter";
     ANGLE_TRY(ensureImageClearResourcesInitialized(contextVk));
 
     const gl::Rectangle &scissoredRenderArea = params.clearArea;
@@ -2453,6 +2455,7 @@ angle::Result UtilsVk::depthStencilBlitResolve(ContextVk *contextVk,
                                                const vk::ImageView *srcStencilView,
                                                const BlitResolveParameters &params)
 {
+    WARN() << "\t\t enter";
     return blitResolveImpl(contextVk, framebuffer, src, nullptr, srcDepthView, srcStencilView,
                            params);
 }
@@ -2465,6 +2468,7 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
                                        const vk::ImageView *srcStencilView,
                                        const BlitResolveParameters &params)
 {
+    WARN() << "\t\t enter";
     // Possible ways to resolve color are:
     //
     // - vkCmdResolveImage: This is by far the easiest method, but lacks the ability to flip
@@ -2728,6 +2732,7 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
                                                         const vk::ImageView *srcStencilView,
                                                         const BlitResolveParameters &params)
 {
+    WARN() << "\t\t enter";
     // When VK_EXT_shader_stencil_export is not available, stencil is blitted/resolved into a
     // temporary buffer which is then copied into the stencil aspect of the image.
     ANGLE_TRY(ensureBlitResolveStencilNoExportResourcesInitialized(contextVk));
