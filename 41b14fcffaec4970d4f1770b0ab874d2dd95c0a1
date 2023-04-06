@@ -41,6 +41,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "54acc02c_87f9bf5d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-06T22:13:04Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "41b14fcffaec4970d4f1770b0ab874d2dd95c0a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cab5188f_80017e57",
@@ -54,6 +71,24 @@
       "writtenOn": "2023-04-06T18:02:36Z",
       "side": 1,
       "message": "Would it not be better to predicate `ANGLE_ENABLE_EAGL` on not `ANGLE_PLATFORM_MACCATALYST` instead of having this `||` of the two?",
+      "revId": "41b14fcffaec4970d4f1770b0ab874d2dd95c0a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "177f8d5a_1e6f8a66",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-06T22:13:04Z",
+      "side": 1,
+      "message": "Since there\u0027s no longer logic in platform.h defining ANGLE_ENABLE_EAGL, and the surrounding build system decides whether to define it, I\u0027m guessing that this would be challenging.",
+      "parentUuid": "cab5188f_80017e57",
       "revId": "41b14fcffaec4970d4f1770b0ab874d2dd95c0a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
