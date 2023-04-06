@@ -527,6 +527,8 @@ Context::Context(egl::Display *display,
       mSaveAndRestoreState(GetSaveAndRestoreState(attribs)),
       mIsDestroyed(false)
 {
+    WARN() << "this: " << this;
+
     for (angle::SubjectIndex uboIndex = kUniformBuffer0SubjectIndex;
          uboIndex < kUniformBufferMaxSubjectIndex; ++uboIndex)
     {
@@ -881,7 +883,10 @@ egl::Error Context::onDestroy(const egl::Display *display)
     return egl::NoError();
 }
 
-Context::~Context() {}
+Context::~Context()
+{
+    WARN() << "this: " << this;
+}
 
 void Context::setLabel(EGLLabelKHR label)
 {

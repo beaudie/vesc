@@ -1133,16 +1133,20 @@ Error Display::initialize()
     mMultiThreadPool  = angle::WorkerThreadPool::Create(0, ANGLEPlatformCurrent());
 
     mInitialized = true;
+    WARN() << "this: " << this << "; mInitialized: " << mInitialized;
 
     return NoError();
 }
 
 Error Display::destroyInvalidEglObjects()
 {
+    WARN() << "this: " << this << "; mInvalidContextMap.size(): " << mInvalidContextMap.size();
+
     // Destroy invalid EGL objects
     while (!mInvalidContextMap.empty())
     {
         gl::Context *context = mInvalidContextMap.begin()->second;
+        WARN() << "this: " << this << "; -> releaseContextImpl(" << context << ")";
         context->setIsDestroyed();
         ANGLE_TRY(releaseContextImpl(context, &mInvalidContextMap));
     }
@@ -1167,20 +1171,32 @@ Error Display::destroyInvalidEglObjects()
         destroySyncImpl(mInvalidSyncMap.begin()->second, &mInvalidSyncMap);
     }
 
+    WARN() << "this: " << this << "; END";
     return NoError();
 }
 
 Error Display::terminate(Thread *thread, TerminateReason terminateReason)
 {
+    WARN() << "this: " << this << "; BEGIN";
+    WARN() << "this: " << this << "; mInitialized:          " << mInitialized;
+    WARN() << "this: " << this << "; thread:                " << thread;
+    WARN() << "this: " << this << "; terminateReason:       " << (int)terminateReason;
+
     if (terminateReason == TerminateReason::Api)
     {
         mTerminatedByApi = true;
+        WARN() << "this: " << this << "; mActiveThreads.erase(" << thread << ")";
+        mActiveThreads.erase(thread);
     }
+
+    WARN() << "this: " << this << "; mActiveThreads.size(): " << mActiveThreads.size();
+    WARN() << "this: " << this << "; mTerminatedByApi:      " << mTerminatedByApi;
 
     // All subsequent calls assume the display to be valid and terminated by app.
     // If it is not terminated or if it isn't even initialized, early return.
     if (!mTerminatedByApi || !mInitialized)
     {
+        WARN() << "this: " << this << "; END (noop)";
         return NoError();
     }
 
@@ -1216,24 +1232,37 @@ Error Display::terminate(Thread *thread, TerminateReason terminateReason)
     ContextMap contextsStillCurrent = {};
     for (auto context : mState.contextMap)
     {
+        WARN() << "this: " << this << "; context.second:                " << context.second;
+        WARN() << "this: " << this
+               << "; context.second->getRefCount(): " << context.second->getRefCount();
         if (context.second->getRefCount() > 0)
         {
             if (terminateReason == TerminateReason::NoActiveThreads)
             {
+                WARN() << "this: " << this
+                       << "; terminateReason == TerminateReason::NoActiveThreads";
                 ASSERT(mTerminatedByApi);
                 context.second->release();
+                WARN() << "this: " << this << "; -> context.second->unMakeCurrent()";
                 (void)context.second->unMakeCurrent(this);
             }
             else
             {
+                WARN() << "this: " << this << "; -> contextsStillCurrent.emplace(" << context.second
+                       << ")";
                 contextsStillCurrent.emplace(context);
                 continue;
             }
         }
 
         // Add context that is not current to mInvalidContextSet for cleanup.
+        WARN() << "this: " << this << "; mInvalidContextMap.emplace(" << context.second << ")";
         mInvalidContextMap.emplace(context);
     }
+
+    WARN() << "this: " << this << "; mState.contextMap.size():    " << mState.contextMap.size();
+    WARN() << "this: " << this << "; contextsStillCurrent.size(): " << contextsStillCurrent.size();
+    WARN() << "this: " << this << "; mInvalidContextSet.size():   " << mInvalidContextMap.size();
 
     // There are many methods that require contexts that are still current to be present in
     // display's contextSet like during context release or to notify of state changes in a subject.
@@ -1251,6 +1280,7 @@ Error Display::terminate(Thread *thread, TerminateReason terminateReason)
     if (!mState.contextMap.empty())
     {
         // There was atleast 1 context that was current on some thread, early return.
+        WARN() << "this: " << this << "; END (non empty contextMap)";
         return NoError();
     }
 
@@ -1287,12 +1317,14 @@ Error Display::terminate(Thread *thread, TerminateReason terminateReason)
     mDeviceLost = false;
 
     mInitialized = false;
+    WARN() << "this: " << this << "; mInitialized: " << mInitialized;
 
     gl::UninitializeDebugAnnotations();
 
     // TODO(jmadill): Store Platform in Display and deinit here.
     ANGLEResetDisplayPlatform(this);
 
+    WARN() << "this: " << this << "; END";
     return NoError();
 }
 
@@ -1309,19 +1341,27 @@ Error Display::releaseThread()
 
 void Display::addActiveThread(Thread *thread)
 {
+    WARN() << "this: " << this << "; mActiveThreads.insert(" << thread << ")";
     mActiveThreads.insert(thread);
+    WARN() << "this: " << this << "; mActiveThreads.size(): " << mActiveThreads.size();
 }
 
 void Display::threadCleanup(Thread *thread)
 {
+    WARN() << "this: " << this << "; BEGIN";
+
+    WARN() << "this: " << this << "; mActiveThreads.erase(" << thread << ")";
     mActiveThreads.erase(thread);
+    WARN() << "this: " << this << "; mActiveThreads.size() " << mActiveThreads.size();
     const bool noActiveThreads = mActiveThreads.size() == 0;
 
+    WARN() << "this: " << this << "; -> terminate(noActiveThreads = " << noActiveThreads << ")";
     (void)terminate(thread, noActiveThreads ? TerminateReason::NoActiveThreads
                                             : TerminateReason::InternalCleanup);
 
     // This "thread" is no longer active, reset its cached context
     thread->setCurrent(nullptr);
+    WARN() << "this: " << this << "; END";
 }
 
 std::vector<const Config *> Display::getConfigs(const egl::AttributeMap &attribs) const
@@ -1662,6 +1702,9 @@ Error Display::makeCurrent(Thread *thread,
     bool contextChanged = context != previousContext;
     if (previousContext != nullptr && contextChanged)
     {
+        WARN() << "this: " << this << "; previousContext:                " << previousContext;
+        WARN() << "this: " << this
+               << "; previousContext->getRefCount(): " << previousContext->getRefCount();
         previousContext->release();
         thread->setCurrent(nullptr);
 
@@ -1670,11 +1713,13 @@ Error Display::makeCurrent(Thread *thread,
         {
             // The previous Context may have been created with a different Display.
             Display *previousDisplay = previousContext->getDisplay();
+            WARN() << "this: " << this << "; -> releaseContext(" << previousContext << ")";
             ANGLE_TRY(previousDisplay->releaseContext(previousContext, thread));
         }
         ANGLE_TRY(error);
     }
 
+    WARN() << "this: " << this << "; thread: " << thread << "; context: " << context;
     thread->setCurrent(context);
 
     ANGLE_TRY(mImplementation->makeCurrent(this, drawSurface, readSurface, context));
@@ -1778,6 +1823,7 @@ Error Display::releaseContext(gl::Context *context, Thread *thread)
 
 Error Display::releaseContextImpl(gl::Context *context, ContextMap *contexts)
 {
+    WARN() << "this: " << this << "; context: " << context;
     ASSERT(context->getRefCount() == 0);
 
     // Use scoped_ptr to make sure the context is always freed.
@@ -1815,6 +1861,7 @@ Error Display::releaseContextImpl(gl::Context *context, ContextMap *contexts)
 
     ANGLE_TRY(context->onDestroy(this));
 
+    WARN() << "this: " << this << "; END";
     return NoError();
 }
 
@@ -1871,6 +1918,7 @@ Error Display::destroyContext(Thread *thread, gl::Context *context)
             }
         }
 
+        WARN() << "this: " << this << "; -> terminate(TerminateReason::InternalCleanup)";
         return terminate(thread, TerminateReason::InternalCleanup);
     }
 
