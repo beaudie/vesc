@@ -118,6 +118,30 @@
       },
       "revId": "06b41772e9399a69c8bb619fd2b15b27d7cb3199",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af457451_aa6a2b9b",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-06T00:23:27Z",
+      "side": 0,
+      "message": "\u003e (I mean create/release under mMutex lock)\n\nI understand correctly.\nActually create may be without mutex. Release with mutex only needed if fence was already passed to the `RendererVk`.\n\nWanted to suggest this also. Problem is that I can\u0027t predict what you will accept.\nWhat is better? Two separate classes with specific function or one universal class...\nGuess I guessed wrong...\n\nAnd there is another problem. Need to exportFd in the `CommandQueue`.\nBecause fence handle can\u0027t be used after export. Also it is not safe to wait on fence while export is performed in other thread.\n\nSo solution will be almost same, as I did except all functionality will move to `SharedFence` and remove code that handles separate fence type in the `CommandBatch`.\n\nHowever, this CL is intermediate. It fixes the problem that `mUse` can\u0027t be used for one off submissions with the fence. And it was not used actually, because always invalid, that makes code that checks for `mUse` a dead code. However it is not possible to fix dead code without fixing one off submission first.\n\nAlternatively, I can fix both issues with a single CL.",
+      "parentUuid": "de9f29e7_98d8261e",
+      "range": {
+        "startLine": 281,
+        "startChar": 24,
+        "endLine": 281,
+        "endChar": 43
+      },
+      "revId": "06b41772e9399a69c8bb619fd2b15b27d7cb3199",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
