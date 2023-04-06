@@ -94,6 +94,30 @@
       },
       "revId": "06b41772e9399a69c8bb619fd2b15b27d7cb3199",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8e55631_857e4783",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-06T00:13:09Z",
+      "side": 0,
+      "message": "(I mean create/release under mMutex lock)",
+      "parentUuid": "de9f29e7_98d8261e",
+      "range": {
+        "startLine": 281,
+        "startChar": 24,
+        "endLine": 281,
+        "endChar": 43
+      },
+      "revId": "06b41772e9399a69c8bb619fd2b15b27d7cb3199",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
