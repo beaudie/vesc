@@ -16,6 +16,23 @@
       "message": "lgtm+2\n\nYuly, are the win-angle-chromium-try bots known to not work against ANGLE CLs? I keep forgetting what bots can try what CLs. Thanks.",
       "revId": "e8e30d3f0e45d75e367ed8eff4a6864255ec5f84",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "193442c5_54859caa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-04-06T18:22:09Z",
+      "side": 1,
+      "message": "Excellent, but someone else must approve",
+      "revId": "e8e30d3f0e45d75e367ed8eff4a6864255ec5f84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
