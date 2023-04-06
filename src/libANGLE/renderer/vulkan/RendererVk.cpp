@@ -4169,28 +4169,19 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
         &mFeatures, preferDeviceLocalMemoryHostVisible,
         canPreferDeviceLocalMemoryHostVisible(mPhysicalDeviceProperties.deviceType));
 
-    ANGLE_FEATURE_CONDITION(&mFeatures, supportsExtendedDynamicState,
-                            mExtendedDynamicStateFeatures.extendedDynamicState == VK_TRUE);
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsExtendedDynamicState, false);
 
-    ANGLE_FEATURE_CONDITION(&mFeatures, supportsExtendedDynamicState2,
-                            mExtendedDynamicState2Features.extendedDynamicState2 == VK_TRUE);
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsExtendedDynamicState2, false);
 
     // Disabled on Intel/Mesa due to driver bug (crbug.com/1379201).  This bug is fixed since Mesa
     // 22.2.0.
-    const bool isAtLeastMesa22_2 =
-        mesaVersion.major >= 22 || (mesaVersion.major == 22 && mesaVersion.minor >= 2);
-    ANGLE_FEATURE_CONDITION(
-        &mFeatures, supportsLogicOpDynamicState,
-        mExtendedDynamicState2Features.extendedDynamicState2LogicOp == VK_TRUE &&
-            (!(IsLinux() && isIntel) || isAtLeastMesa22_2));
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsLogicOpDynamicState, false);
 
     // Avoid dynamic state for vertex input binding stride on buggy drivers.
-    ANGLE_FEATURE_CONDITION(&mFeatures, forceStaticVertexStrideState,
-                            mFeatures.supportsExtendedDynamicState.enabled && isARM);
+    ANGLE_FEATURE_CONDITION(&mFeatures, forceStaticVertexStrideState, false);
 
     // Avoid dynamic state for primitive restart on buggy drivers.
-    ANGLE_FEATURE_CONDITION(&mFeatures, forceStaticPrimitiveRestartState,
-                            mFeatures.supportsExtendedDynamicState2.enabled && isARM);
+    ANGLE_FEATURE_CONDITION(&mFeatures, forceStaticPrimitiveRestartState, false);
 
     // Support GL_QCOM_shading_rate extension
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsFragmentShadingRate,

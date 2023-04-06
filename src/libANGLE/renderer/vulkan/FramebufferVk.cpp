@@ -40,12 +40,6 @@ constexpr VkClearValue kUninitializedClearValue = {{{0.95, 0.05, 0.95, 0.95}}};
 // automatically convert to the actual data type.
 constexpr unsigned int kEmulatedAlphaValue = 1;
 
-bool HasSrcBlitFeature(RendererVk *renderer, RenderTargetVk *srcRenderTarget)
-{
-    angle::FormatID srcFormatID = srcRenderTarget->getImageActualFormatID();
-    return renderer->hasImageFormatFeatureBits(srcFormatID, VK_FORMAT_FEATURE_BLIT_SRC_BIT);
-}
-
 bool HasDstBlitFeature(RendererVk *renderer, RenderTargetVk *dstRenderTarget)
 {
     angle::FormatID dstFormatID = dstRenderTarget->getImageActualFormatID();
@@ -1017,7 +1011,8 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
     UtilsVk &utilsVk     = contextVk->getUtils();
-
+    WARN() << "\t** mask:0x" << std::hex << mask << " filter:0x" << filter
+           << " dynamicState:" << contextVk->getFeatures().supportsExtendedDynamicState.enabled;
     // If any clears were picked up when syncing the read framebuffer (as the blit source), redefer
     // them.  They correspond to attachments that are not used in the blit.  This will cause the
     // read framebuffer to become dirty, so the attachments will be synced again on the next command
@@ -1216,10 +1211,7 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
         return angle::Result::Continue;
     }
 
-    bool noClip = blitArea == destArea && stretch[0] == 1.0f && stretch[1] == 1.0f;
     bool noFlip = !flipX && !flipY;
-    bool disableFlippingBlitWithCommand =
-        contextVk->getRenderer()->getFeatures().disableFlippingBlitWithCommand.enabled;
 
     UtilsVk::BlitResolveParameters commonParams;
     commonParams.srcOffset[0]           = sourceArea.x;
@@ -1255,9 +1247,7 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
         // Non-identity pre-rotation cases do not use Vulkan's builtin blit.
         //
         // For simplicity, we either blit all render targets with a Vulkan command, or none.
-        bool canBlitWithCommand =
-            !isColorResolve && noClip && (noFlip || !disableFlippingBlitWithCommand) &&
-            HasSrcBlitFeature(renderer, readRenderTarget) && rotation == SurfaceRotation::Identity;
+        bool canBlitWithCommand = false;
         // If we need to reinterpret the colorspace then the blit must be done through a shader
         bool reinterpretsColorspace =
             mCurrentFramebufferDesc.getWriteControlMode() != gl::SrgbWriteControlMode::Default;
@@ -1373,10 +1363,7 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
         ASSERT(!isDepthStencilResolve || readRenderTarget->getLevelIndex() == gl::LevelIndex(0));
 
         // Similarly, only blit if there's been no clipping or rotating.
-        bool canBlitWithCommand =
-            !isDepthStencilResolve && noClip && (noFlip || !disableFlippingBlitWithCommand) &&
-            HasSrcBlitFeature(renderer, readRenderTarget) &&
-            HasDstBlitFeature(renderer, drawRenderTarget) && rotation == SurfaceRotation::Identity;
+        bool canBlitWithCommand = false;
         bool areChannelsBlitCompatible =
             AreSrcAndDstDepthStencilChannelsBlitCompatible(readRenderTarget, drawRenderTarget);
 
