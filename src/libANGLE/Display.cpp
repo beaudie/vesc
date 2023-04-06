@@ -1175,6 +1175,7 @@ Error Display::terminate(Thread *thread, TerminateReason terminateReason)
     if (terminateReason == TerminateReason::Api)
     {
         mTerminatedByApi = true;
+        mActiveThreads.erase(thread);
     }
 
     // All subsequent calls assume the display to be valid and terminated by app.
