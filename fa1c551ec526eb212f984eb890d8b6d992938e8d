@@ -16,6 +16,24 @@
       "message": "Good find Mike!\n\n+Shabi, this fixes at least three real apps throwing VVL errors.\n\nNot sure about the test.  I\u0027m surprised it actually renders correctly on GL and Vulkan.  Do we handle that on some ANGLE backends now?",
       "revId": "fa1c551ec526eb212f984eb890d8b6d992938e8d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b96b6555_9bbd35a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2023-04-06T23:01:55Z",
+      "side": 1,
+      "message": "I\u0027ve seen it render correctly, but I\u0027m unsure if it is technically still undefined behavior. I took out the pixel color verification steps because it definitely doesn\u0027t work on D3D11. I also moved the test to be near an existing regression test that is very similar: FramebufferTest_ES3.FramebufferConditionalFeedbackLoop.",
+      "parentUuid": "9e539a36_f71e9e30",
+      "revId": "fa1c551ec526eb212f984eb890d8b6d992938e8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
