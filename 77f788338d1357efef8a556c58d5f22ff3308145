@@ -16,6 +16,23 @@
       "message": "Looks good to me, but someone else must approve",
       "revId": "77f788338d1357efef8a556c58d5f22ff3308145",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ddfbca4_a6b09f83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-06T22:21:53Z",
+      "side": 1,
+      "message": "Nice cleanup. lgtm",
+      "revId": "77f788338d1357efef8a556c58d5f22ff3308145",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
