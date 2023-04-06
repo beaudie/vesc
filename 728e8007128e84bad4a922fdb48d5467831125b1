@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9064465_246b3a38",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6383,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-04-06T23:35:59Z",
+      "side": 0,
+      "message": "Do we want to remove the `if (hasPreferSubmitAtFBOBoundary())` check on line 6427?",
+      "revId": "728e8007128e84bad4a922fdb48d5467831125b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
