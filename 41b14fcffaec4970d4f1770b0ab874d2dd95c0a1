@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "456819ae_3562ff3d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-04-06T18:02:36Z",
+      "side": 1,
+      "message": "Thank you. This resolves a question I had about this pattern of defines.",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 54
+      },
+      "revId": "41b14fcffaec4970d4f1770b0ab874d2dd95c0a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef733756_566086ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-04-06T18:02:36Z",
+      "side": 1,
+      "message": "Looks good to me, but someone else must approve",
+      "revId": "41b14fcffaec4970d4f1770b0ab874d2dd95c0a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cab5188f_80017e57",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-04-06T18:02:36Z",
+      "side": 1,
+      "message": "Would it not be better to predicate `ANGLE_ENABLE_EAGL` on not `ANGLE_PLATFORM_MACCATALYST` instead of having this `||` of the two?",
+      "revId": "41b14fcffaec4970d4f1770b0ab874d2dd95c0a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
