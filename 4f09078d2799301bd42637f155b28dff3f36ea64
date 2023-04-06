@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aab9f58a_206df4c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-06T19:24:08Z",
+      "side": 1,
+      "message": "I guess this and 4392879 are alternative fix to 4392877? If yes, my preference is the first two CLs (i.e., https://chromium-review.googlesource.com/c/angle/angle/+/4392877)",
+      "revId": "4f09078d2799301bd42637f155b28dff3f36ea64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
