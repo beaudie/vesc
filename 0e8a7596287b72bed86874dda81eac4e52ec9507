@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3df222d6_29bfb05b",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 15
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-04-06T16:09:47Z",
+      "side": 1,
+      "message": "These parameters are ignored when `SAMPLE_BUFFERS` is zero so generating an error seems redundant.",
+      "range": {
+        "startLine": 339,
+        "startChar": 0,
+        "endLine": 342,
+        "endChar": 0
+      },
+      "revId": "0e8a7596287b72bed86874dda81eac4e52ec9507",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1eaede1_815bd0df",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 15
+      },
+      "lineNbr": 604,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-04-06T16:09:47Z",
+      "side": 1,
+      "message": "The counter value cannot get greater than 255.",
+      "revId": "0e8a7596287b72bed86874dda81eac4e52ec9507",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96237fc5_09fdd0fb",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 15
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-04-06T16:09:47Z",
+      "side": 1,
+      "message": "Are PLS cubemaps supported on all configs? If so, this parameter should be also defined for `TEXTURE_CUBE_MAP_ARRAY` provided by `OES_texture_cube_map_array` and included in ES 3.2.",
+      "revId": "0e8a7596287b72bed86874dda81eac4e52ec9507",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
