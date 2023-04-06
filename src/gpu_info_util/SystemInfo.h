@@ -14,6 +14,7 @@
 #include <string>
 #include <vector>
 
+#include "common/platform.h"
 namespace angle
 {
 
