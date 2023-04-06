@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "58f05e26_eeed6db7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-06T22:27:42Z",
+      "side": 1,
+      "message": "lgtm\n\n+msisov as FYI since some of these code paths are built via GN",
+      "revId": "1bff2088cc174943c316b9b7ecd517ea14adcc4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "47004b1c_1b6ccaff",
@@ -31,6 +48,24 @@
       "writtenOn": "2023-04-06T18:11:06Z",
       "side": 1,
       "message": "I believe that ANGLE uses `TODO:`, not `FIXME:` (at least kbr asked me to change one I added, even though I see ~35 FIXME in ANGLE source directory)",
+      "revId": "1bff2088cc174943c316b9b7ecd517ea14adcc4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a4ca337_f483b73b",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1383,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-06T22:27:42Z",
+      "side": 1,
+      "message": "Yes, please use TODO(anglebug.com/XYZW) ideally, rather than TODO(person). Thanks. Also could you clarify \"The above\"? All of the formats above, or the #if-check? Suggestion: \"The #if-check above and code below are not correct...\"",
+      "parentUuid": "47004b1c_1b6ccaff",
       "revId": "1bff2088cc174943c316b9b7ecd517ea14adcc4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
