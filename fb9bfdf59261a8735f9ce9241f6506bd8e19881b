@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84d9437a_33648ba7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-06T19:11:58Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "fb9bfdf59261a8735f9ce9241f6506bd8e19881b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39ae23b0_6869f74b",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1425,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-06T19:11:58Z",
+      "side": 1,
+      "message": "I think you can remove this from argument and just retrieve it from commandBatch. Previously this is needed because of the native sync usage case, but with your fix,  that native sync fence is passed from externalFence, thus make fence always same as commandBatch.fence, I think.",
+      "range": {
+        "startLine": 1425,
+        "startChar": 40,
+        "endLine": 1425,
+        "endChar": 53
+      },
+      "revId": "fb9bfdf59261a8735f9ce9241f6506bd8e19881b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

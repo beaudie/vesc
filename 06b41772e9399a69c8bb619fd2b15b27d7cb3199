@@ -142,6 +142,30 @@
       },
       "revId": "06b41772e9399a69c8bb619fd2b15b27d7cb3199",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88ff0c47_3da5b938",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-06T19:11:58Z",
+      "side": 0,
+      "message": "Thought about this a bit more, I think your change is fine. What I missed is `fence handle can\u0027t be used after export.`. With that in consideration, I think this is essentially what I am thinking as well. Thanks for explanation.",
+      "parentUuid": "af457451_aa6a2b9b",
+      "range": {
+        "startLine": 281,
+        "startChar": 24,
+        "endLine": 281,
+        "endChar": 43
+      },
+      "revId": "06b41772e9399a69c8bb619fd2b15b27d7cb3199",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
