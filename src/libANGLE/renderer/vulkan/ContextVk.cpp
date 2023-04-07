@@ -2300,7 +2300,8 @@ angle::Result ContextVk::handleDirtyGraphicsRenderPass(DirtyBits::Iterator *dirt
         mAllowRenderPassToReactivate && renderArea == mRenderPassCommands->getRenderArea();
     if (reactivateStartedRenderPass)
     {
-        INFO() << "Reactivate already started render pass on draw.";
+        printf("%s @line:%d Reactivate already started render pass on draw.\n", __FUNCTION__,
+               __LINE__);
         mRenderPassCommandBuffer = &mRenderPassCommands->getCommandBuffer();
         ASSERT(!drawFramebufferVk->hasDeferredClears());
         ASSERT(hasActiveRenderPass());
