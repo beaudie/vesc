@@ -89,7 +89,7 @@ angle::Result GLES1Renderer::prepareForDraw(PrimitiveMode mode, Context *context
 
     GLES1ShaderState::BoolTexArray &tex2DEnables   = mShaderState.tex2DEnables;
     GLES1ShaderState::BoolTexArray &texCubeEnables = mShaderState.texCubeEnables;
-    GLES1ShaderState::IntTexArray &tex2DFormats    = mShaderState.tex2DFormats;
+    GLES1ShaderState::UintTexArray &tex2DFormats   = mShaderState.tex2DFormats;
 
     for (int i = 0; i < kTexUnitCount; i++)
     {
@@ -143,21 +143,21 @@ angle::Result GLES1Renderer::prepareForDraw(PrimitiveMode mode, Context *context
         }
     }
 
-    GLES1ShaderState::IntTexArray &texEnvModes          = mShaderState.texEnvModes;
-    GLES1ShaderState::IntTexArray &texCombineRgbs       = mShaderState.texCombineRgbs;
-    GLES1ShaderState::IntTexArray &texCombineAlphas     = mShaderState.texCombineAlphas;
-    GLES1ShaderState::IntTexArray &texCombineSrc0Rgbs   = mShaderState.texCombineSrc0Rgbs;
-    GLES1ShaderState::IntTexArray &texCombineSrc0Alphas = mShaderState.texCombineSrc0Alphas;
-    GLES1ShaderState::IntTexArray &texCombineSrc1Rgbs   = mShaderState.texCombineSrc1Rgbs;
-    GLES1ShaderState::IntTexArray &texCombineSrc1Alphas = mShaderState.texCombineSrc1Alphas;
-    GLES1ShaderState::IntTexArray &texCombineSrc2Rgbs   = mShaderState.texCombineSrc2Rgbs;
-    GLES1ShaderState::IntTexArray &texCombineSrc2Alphas = mShaderState.texCombineSrc2Alphas;
-    GLES1ShaderState::IntTexArray &texCombineOp0Rgbs    = mShaderState.texCombineOp0Rgbs;
-    GLES1ShaderState::IntTexArray &texCombineOp0Alphas  = mShaderState.texCombineOp0Alphas;
-    GLES1ShaderState::IntTexArray &texCombineOp1Rgbs    = mShaderState.texCombineOp1Rgbs;
-    GLES1ShaderState::IntTexArray &texCombineOp1Alphas  = mShaderState.texCombineOp1Alphas;
-    GLES1ShaderState::IntTexArray &texCombineOp2Rgbs    = mShaderState.texCombineOp2Rgbs;
-    GLES1ShaderState::IntTexArray &texCombineOp2Alphas  = mShaderState.texCombineOp2Alphas;
+    GLES1ShaderState::UintTexArray &texEnvModes          = mShaderState.texEnvModes;
+    GLES1ShaderState::UintTexArray &texCombineRgbs       = mShaderState.texCombineRgbs;
+    GLES1ShaderState::UintTexArray &texCombineAlphas     = mShaderState.texCombineAlphas;
+    GLES1ShaderState::UintTexArray &texCombineSrc0Rgbs   = mShaderState.texCombineSrc0Rgbs;
+    GLES1ShaderState::UintTexArray &texCombineSrc0Alphas = mShaderState.texCombineSrc0Alphas;
+    GLES1ShaderState::UintTexArray &texCombineSrc1Rgbs   = mShaderState.texCombineSrc1Rgbs;
+    GLES1ShaderState::UintTexArray &texCombineSrc1Alphas = mShaderState.texCombineSrc1Alphas;
+    GLES1ShaderState::UintTexArray &texCombineSrc2Rgbs   = mShaderState.texCombineSrc2Rgbs;
+    GLES1ShaderState::UintTexArray &texCombineSrc2Alphas = mShaderState.texCombineSrc2Alphas;
+    GLES1ShaderState::UintTexArray &texCombineOp0Rgbs    = mShaderState.texCombineOp0Rgbs;
+    GLES1ShaderState::UintTexArray &texCombineOp0Alphas  = mShaderState.texCombineOp0Alphas;
+    GLES1ShaderState::UintTexArray &texCombineOp1Rgbs    = mShaderState.texCombineOp1Rgbs;
+    GLES1ShaderState::UintTexArray &texCombineOp1Alphas  = mShaderState.texCombineOp1Alphas;
+    GLES1ShaderState::UintTexArray &texCombineOp2Rgbs    = mShaderState.texCombineOp2Rgbs;
+    GLES1ShaderState::UintTexArray &texCombineOp2Alphas  = mShaderState.texCombineOp2Alphas;
 
     if (gles1State.isDirty(GLES1State::DIRTY_GLES1_TEXTURE_ENVIRONMENT))
     {
@@ -636,6 +636,7 @@ angle::Result GLES1Renderer::compileShader(Context *context,
         shaderObject->getInfoLog(context, infoLogLength - 1, nullptr, infoLog.data());
 
         ERR() << "Internal GLES 1 shader compile failed. Info log: " << infoLog.data();
+        ERR() << "Shader source:" << src;
         ANGLE_CHECK(context, false, "GLES1Renderer shader compile failed.", GL_INVALID_OPERATION);
         return angle::Result::Stop;
     }
@@ -709,25 +710,25 @@ void GLES1Renderer::addShaderDefine(std::stringstream &outStream,
     outStream << "#define " << enableString << " " << getShaderBool(state);
 }
 
-void GLES1Renderer::addShaderInt(std::stringstream &outStream, const char *name, int value)
+void GLES1Renderer::addShaderUint(std::stringstream &outStream, const char *name, uint16_t value)
 {
     outStream << "\n";
-    outStream << "const int " << name << " = " << value << ";";
+    outStream << "const uint " << name << " = " << value << "u;";
 }
 
-void GLES1Renderer::addShaderIntTexArray(std::stringstream &outStream,
-                                         const char *texString,
-                                         GLES1ShaderState::IntTexArray &texState)
+void GLES1Renderer::addShaderUintTexArray(std::stringstream &outStream,
+                                          const char *texString,
+                                          GLES1ShaderState::UintTexArray &texState)
 {
     outStream << "\n";
-    outStream << "const int " << texString << "[kMaxTexUnits] = int[kMaxTexUnits](";
+    outStream << "const uint " << texString << "[kMaxTexUnits] = uint[kMaxTexUnits](";
     for (int i = 0; i < kTexUnitCount; i++)
     {
         if (i != 0)
         {
             outStream << ", ";
         }
-        outStream << texState[i];
+        outStream << texState[i] << "u";
     }
     outStream << ");";
 }
@@ -817,7 +818,7 @@ void GLES1Renderer::addFragmentShaderDefs(std::stringstream &outStream)
     addShaderBoolTexArray(outStream, "enable_texture_cube_map", mShaderState.texCubeEnables);
 
     // int texture_format[kMaxTexUnits] = int[kMaxTexUnits](...);
-    addShaderIntTexArray(outStream, "texture_format", mShaderState.tex2DFormats);
+    addShaderUintTexArray(outStream, "texture_format", mShaderState.tex2DFormats);
 
     // bool point_sprite_coord_replace[kMaxTexUnits] = bool[kMaxTexUnits](...);
     addShaderBoolTexArray(outStream, "point_sprite_coord_replace",
@@ -827,55 +828,55 @@ void GLES1Renderer::addFragmentShaderDefs(std::stringstream &outStream)
     addShaderBoolClipPlaneArray(outStream, "clip_plane_enables", mShaderState.clipPlaneEnables);
 
     // int texture_format[kMaxTexUnits] = int[kMaxTexUnits](...);
-    addShaderIntTexArray(outStream, "texture_env_mode", mShaderState.texEnvModes);
+    addShaderUintTexArray(outStream, "texture_env_mode", mShaderState.texEnvModes);
 
     // int combine_rgb[kMaxTexUnits];
-    addShaderIntTexArray(outStream, "combine_rgb", mShaderState.texCombineRgbs);
+    addShaderUintTexArray(outStream, "combine_rgb", mShaderState.texCombineRgbs);
 
     // int combine_alpha[kMaxTexUnits];
-    addShaderIntTexArray(outStream, "combine_alpha", mShaderState.texCombineAlphas);
+    addShaderUintTexArray(outStream, "combine_alpha", mShaderState.texCombineAlphas);
 
     // int src0_rgb[kMaxTexUnits];
-    addShaderIntTexArray(outStream, "src0_rgb", mShaderState.texCombineSrc0Rgbs);
+    addShaderUintTexArray(outStream, "src0_rgb", mShaderState.texCombineSrc0Rgbs);
 
     // int src0_alpha[kMaxTexUnits];
-    addShaderIntTexArray(outStream, "src0_alpha", mShaderState.texCombineSrc0Alphas);
+    addShaderUintTexArray(outStream, "src0_alpha", mShaderState.texCombineSrc0Alphas);
 
     // int src1_rgb[kMaxTexUnits];
-    addShaderIntTexArray(outStream, "src1_rgb", mShaderState.texCombineSrc1Rgbs);
+    addShaderUintTexArray(outStream, "src1_rgb", mShaderState.texCombineSrc1Rgbs);
 
     // int src1_alpha[kMaxTexUnits];
-    addShaderIntTexArray(outStream, "src1_alpha", mShaderState.texCombineSrc1Alphas);
+    addShaderUintTexArray(outStream, "src1_alpha", mShaderState.texCombineSrc1Alphas);
 
     // int src2_rgb[kMaxTexUnits];
-    addShaderIntTexArray(outStream, "src2_rgb", mShaderState.texCombineSrc2Rgbs);
+    addShaderUintTexArray(outStream, "src2_rgb", mShaderState.texCombineSrc2Rgbs);
 
     // int src2_alpha[kMaxTexUnits];
-    addShaderIntTexArray(outStream, "src2_alpha", mShaderState.texCombineSrc2Alphas);
+    addShaderUintTexArray(outStream, "src2_alpha", mShaderState.texCombineSrc2Alphas);
 
     // int op0_rgb[kMaxTexUnits];
-    addShaderIntTexArray(outStream, "op0_rgb", mShaderState.texCombineOp0Rgbs);
+    addShaderUintTexArray(outStream, "op0_rgb", mShaderState.texCombineOp0Rgbs);
 
     // int op0_alpha[kMaxTexUnits];
-    addShaderIntTexArray(outStream, "op0_alpha", mShaderState.texCombineOp0Alphas);
+    addShaderUintTexArray(outStream, "op0_alpha", mShaderState.texCombineOp0Alphas);
 
     // int op1_rgb[kMaxTexUnits];
-    addShaderIntTexArray(outStream, "op1_rgb", mShaderState.texCombineOp1Rgbs);
+    addShaderUintTexArray(outStream, "op1_rgb", mShaderState.texCombineOp1Rgbs);
 
     // int op1_alpha[kMaxTexUnits];
-    addShaderIntTexArray(outStream, "op1_alpha", mShaderState.texCombineOp1Alphas);
+    addShaderUintTexArray(outStream, "op1_alpha", mShaderState.texCombineOp1Alphas);
 
     // int op2_rgb[kMaxTexUnits];
-    addShaderIntTexArray(outStream, "op2_rgb", mShaderState.texCombineOp2Rgbs);
+    addShaderUintTexArray(outStream, "op2_rgb", mShaderState.texCombineOp2Rgbs);
 
     // int op2_alpha[kMaxTexUnits];
-    addShaderIntTexArray(outStream, "op2_alpha", mShaderState.texCombineOp2Alphas);
+    addShaderUintTexArray(outStream, "op2_alpha", mShaderState.texCombineOp2Alphas);
 
     // int alpha_func;
-    addShaderInt(outStream, "alpha_func", ToGLenum(mShaderState.alphaTestFunc));
+    addShaderUint(outStream, "alpha_func", ToGLenum(mShaderState.alphaTestFunc));
 
     // int fog_mode;
-    addShaderInt(outStream, "fog_mode", ToGLenum(mShaderState.fogMode));
+    addShaderUint(outStream, "fog_mode", ToGLenum(mShaderState.fogMode));
 }
 
 angle::Result GLES1Renderer::initializeRendererProgram(Context *context, State *glState)
@@ -923,7 +924,7 @@ angle::Result GLES1Renderer::initializeRendererProgram(Context *context, State *
 
     std::stringstream vertexStream;
     vertexStream << kGLES1DrawVShaderHeader;
-    vertexStream << kGLES1TexUnitsDefine << maxTexUnitsEnabled << "\n";
+    vertexStream << kGLES1TexUnitsDefine << maxTexUnitsEnabled << "u\n";
     vertexStream << GLES1DrawVShaderStateDefs.str();
     vertexStream << kGLES1DrawVShader;
 
@@ -947,7 +948,7 @@ angle::Result GLES1Renderer::initializeRendererProgram(Context *context, State *
         }
     }
     fragmentStream << kGLES1DrawFShaderHeader;
-    fragmentStream << kGLES1TexUnitsDefine << maxTexUnitsEnabled << "\n";
+    fragmentStream << kGLES1TexUnitsDefine << maxTexUnitsEnabled << "u\n";
     fragmentStream << GLES1DrawFShaderStateDefs.str();
     fragmentStream << kGLES1DrawFShaderUniformDefs;
     if (mShaderState.mGLES1StateEnabled[GLES1StateEnables::LogicOpThroughFramebufferFetch])
