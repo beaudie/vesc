@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f13a6f3_8f18d321",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-07T21:35:36Z",
+      "side": 1,
+      "message": "Bear with me that I am still thinking alternative solution to consolidate two cases into one, mainly because it is complicated. \n\nHow about we create a VkFence and import inFd into VkFence, and then pass the VkFence to flushImpl? The inFd\u003d\u003dkInvalidFenceFd case, you create fence, and export to mNativeFenceFd, and then you create another VkFence and then import mNativeFenceFd into VkFence. Now two usage cases are consolidated: both have mNativeFenceFd and mFenceWithFd and both are valid and can wait on. Then you Create SharedFence (lets call it mSharedFenceWithFd) out of mFenceWithFd, and pass mSharedFenceWithFd to CommandQueue via flushImpl/submitCommands, and it will be stored to CommandBatch with another refcount. The rest of code will see no difference, it is just another SharedFence.\n\nThe trick here is that there is limitation of fence export (that you can\u0027t wait on the vkFence after export), but import native fence into VkFence does not have this limitation and we can use that to our advantage. With this approach, you will only have much smaller diff and the code mostly is going to be here. CommandQueue will have very small changes. What do you think?",
+      "range": {
+        "startLine": 298,
+        "startChar": 8,
+        "endLine": 298,
+        "endChar": 35
+      },
+      "revId": "950b6278f23933418e3785a0e391b6ceccf767ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
