@@ -34,6 +34,24 @@
       "parentUuid": "aab9f58a_206df4c2",
       "revId": "4f09078d2799301bd42637f155b28dff3f36ea64",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90868a1d_b1d04504",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-07T17:11:58Z",
+      "side": 1,
+      "message": "\u003e Separate question....\n\nRight, the reasons are 1) previously the checkCompletedCommands are doing lots of work (reset/garbage collection), but now that has reduced merely to check fence status, so the overhead should be much less now to deserve the different behavior. 2) It is also try to solve the exact problem you described above that check fence says one thing but check mUse says different answer.\n(Will look at the last two CLs more in detail later of the day.)",
+      "parentUuid": "627207a2_19f0f706",
+      "revId": "4f09078d2799301bd42637f155b28dff3f36ea64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
