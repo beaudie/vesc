@@ -1018,6 +1018,8 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
     RendererVk *renderer = contextVk->getRenderer();
     UtilsVk &utilsVk     = contextVk->getUtils();
 
+    WARN() << " @line:" << __LINE__
+           << " dynamicState:" << contextVk->getFeatures().supportsExtendedDynamicState.enabled;
     // If any clears were picked up when syncing the read framebuffer (as the blit source), redefer
     // them.  They correspond to attachments that are not used in the blit.  This will cause the
     // read framebuffer to become dirty, so the attachments will be synced again on the next command
@@ -1383,6 +1385,9 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
         // glBlitFramebuffer requires that depth/stencil blits have matching formats.
         ASSERT(AreSrcAndDstFormatsIdentical(readRenderTarget, drawRenderTarget));
 
+        WARN() << " @line" << __LINE__ << " canBlitWithCommand:" << canBlitWithCommand
+               << " intendedFormatID:" << ToUnderlying(readRenderTarget->getImageIntendedFormatID())
+               << " actualFormatID:" << ToUnderlying(readRenderTarget->getImageActualFormatID());
         if (canBlitWithCommand && areChannelsBlitCompatible)
         {
             ANGLE_TRY(blitWithCommand(contextVk, sourceArea, destArea, readRenderTarget,
