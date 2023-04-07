@@ -134,6 +134,30 @@
       },
       "revId": "a18dd59888b184b60db2de15e823cf45c7ad5d5e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bfaa1ef_a19b1a0f",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-07T17:14:11Z",
+      "side": 1,
+      "message": "\u003e Provided FD may be not signaled. \n\nGood point.",
+      "parentUuid": "4abccda8_217beab4",
+      "range": {
+        "startLine": 387,
+        "startChar": 3,
+        "endLine": 388,
+        "endChar": 52
+      },
+      "revId": "a18dd59888b184b60db2de15e823cf45c7ad5d5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
