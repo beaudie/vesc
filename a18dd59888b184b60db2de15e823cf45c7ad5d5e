@@ -110,6 +110,30 @@
       },
       "revId": "a18dd59888b184b60db2de15e823cf45c7ad5d5e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4abccda8_217beab4",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-07T17:09:37Z",
+      "side": 1,
+      "message": "\u003e Then in this case mUse will be empty and an empty mUse will appears as finished. All you need to do here is remove line 382 and this entire function is simply call getStatusFromUse(). What do you think? \n\nProvided FD may be not signaled. `SyncHelperNativeFence::getStatus()` should check provided FD instead of mUse when there was no submit (`mUse` is invalid).\nChecking not valid/empty/finished `mUse` is incorrect.\n\n\u003e ResourceUse.valid() method should eventually be removed. It does not make sense to have a valid method. I kept there simply because there are a few places still using it. And this will one inch closer to remove it.\n\nThis removes `mUse` completely: https://chromium-review.googlesource.com/c/angle/angle/+/4392880\nSo also make it close to remove `valid()` method.",
+      "parentUuid": "5ecdf602_a0931d80",
+      "range": {
+        "startLine": 387,
+        "startChar": 3,
+        "endLine": 388,
+        "endChar": 52
+      },
+      "revId": "a18dd59888b184b60db2de15e823cf45c7ad5d5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
