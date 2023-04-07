@@ -153,6 +153,13 @@ void Format::initImageFallback(RendererVk *renderer, const ImageFormatInitInfo *
     }
 
     int i = FindSupportedFormat(renderer, info, skip, static_cast<uint32_t>(numInfo), testFunction);
+    // Hack to simulate intel GPU capability
+    if (i == 0 && info[0].format == angle::FormatID::S8_UINT &&
+        mIntendedGLFormat == GL_STENCIL_INDEX8 && numInfo == 4 &&
+        info[1].format == angle::FormatID::D24_UNORM_S8_UINT)
+    {
+        i = 1;
+    }
     mActualSampleOnlyImageFormatID = info[i].format;
     mImageInitializerFunction      = info[i].initializer;
 

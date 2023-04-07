@@ -1697,12 +1697,19 @@ angle::Result UtilsVk::setupGraphicsProgram(ContextVk *contextVk,
         ANGLE_TRY(programAndPipelines->program.createGraphicsPipeline(
             contextVk, &programAndPipelines->pipelines, &pipelineCache, *compatibleRenderPass,
             pipelineLayout.get(), PipelineSource::Utils, *pipelineDesc, {}, &descPtr, &helper));
+        WARN() << "UtilsVk::setupGraphicsProgram cache missed. created new pipeline:"
+               << helper->getPipeline().getHandle();
     }
-
+    else
+    {
+        WARN() << "UtilsVk::setupGraphicsProgram cache hit. pipeline:"
+               << helper->getPipeline().getHandle();
+    }
     contextVk->getStartedRenderPassCommands().retainResource(helper);
     commandBuffer->bindGraphicsPipeline(helper->getPipeline());
 
     contextVk->invalidateGraphicsPipelineBinding();
+    // contextVk->resetCurrentGraphicsPipeline();
 
     if (descriptorSet != VK_NULL_HANDLE)
     {
@@ -2146,6 +2153,7 @@ angle::Result UtilsVk::startRenderPass(ContextVk *contextVk,
                                        const gl::Rectangle &renderArea,
                                        vk::RenderPassCommandBuffer **commandBufferOut)
 {
+    WARN() << __FUNCTION__ << " @line:" << __LINE__ << " enter";
     const vk::RenderPass *compatibleRenderPass = nullptr;
     ANGLE_TRY(contextVk->getCompatibleRenderPass(renderPassDesc, &compatibleRenderPass));
 
@@ -2185,6 +2193,7 @@ angle::Result UtilsVk::clearFramebuffer(ContextVk *contextVk,
                                         FramebufferVk *framebuffer,
                                         const ClearFramebufferParameters &params)
 {
+    WARN() << __FUNCTION__ << " @line:" << __LINE__ << " enter";
     ANGLE_TRY(ensureImageClearResourcesInitialized(contextVk));
 
     const gl::Rectangle &scissoredRenderArea = params.clearArea;
@@ -2453,6 +2462,7 @@ angle::Result UtilsVk::depthStencilBlitResolve(ContextVk *contextVk,
                                                const vk::ImageView *srcStencilView,
                                                const BlitResolveParameters &params)
 {
+    WARN() << __FUNCTION__ << " @line:" << __LINE__ << " enter";
     return blitResolveImpl(contextVk, framebuffer, src, nullptr, srcDepthView, srcStencilView,
                            params);
 }
@@ -2465,6 +2475,7 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
                                        const vk::ImageView *srcStencilView,
                                        const BlitResolveParameters &params)
 {
+    WARN() << __FUNCTION__ << " @line:" << __LINE__ << " enter";
     // Possible ways to resolve color are:
     //
     // - vkCmdResolveImage: This is by far the easiest method, but lacks the ability to flip
@@ -2693,6 +2704,9 @@ angle::Result UtilsVk::blitResolveImpl(ContextVk *contextVk,
     VkRect2D scissor = gl_vk::GetRect(params.blitArea);
     commandBuffer->setScissor(0, 1, &scissor);
 
+    WARN() << __FUNCTION__ << " @line:" << __LINE__ << " blitDepth:" << blitDepth
+           << " blitStencil:" << blitStencil << " supportsExtendedDynamicState:"
+           << contextVk->getFeatures().supportsExtendedDynamicState.enabled;
     if (blitDepth && contextVk->getFeatures().supportsExtendedDynamicState.enabled)
     {
         commandBuffer->setDepthTestEnable(VK_TRUE);
@@ -2728,6 +2742,7 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
                                                         const vk::ImageView *srcStencilView,
                                                         const BlitResolveParameters &params)
 {
+    WARN() << __FUNCTION__ << " @line:" << __LINE__ << " enter";
     // When VK_EXT_shader_stencil_export is not available, stencil is blitted/resolved into a
     // temporary buffer which is then copied into the stencil aspect of the image.
     ANGLE_TRY(ensureBlitResolveStencilNoExportResourcesInitialized(contextVk));

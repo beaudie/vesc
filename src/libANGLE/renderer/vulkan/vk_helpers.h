@@ -3156,6 +3156,8 @@ class ShaderProgramHelper : angle::NonCopyable
         const GraphicsPipelineDesc **descPtrOut,
         PipelineHelper **pipelineOut) const
     {
+        WARN() << "createGraphicsPipeline graphicsPipelines:" << graphicsPipelines
+               << " pipelineCache:" << pipelineCache;
         return graphicsPipelines->createPipeline(contextVk, pipelineCache, compatibleRenderPass,
                                                  pipelineLayout, mShaders, specConsts, source,
                                                  pipelineDesc, descPtrOut, pipelineOut);

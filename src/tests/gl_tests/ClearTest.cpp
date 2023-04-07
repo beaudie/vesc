@@ -3300,7 +3300,8 @@ TEST_P(ClearTestES3, RepeatedStencilClearWithBlitInBetween)
     // Clear to the original value and make sure it's applied.
     glClearStencil(0xE4);
     glClear(GL_STENCIL_BUFFER_BIT);
-    verifyStencil(0xE4, 1);
+    // Force test failure so that I can see logs from win-test bot
+    verifyStencil(0xE4, 0);
 
     ASSERT_GL_NO_ERROR();
 }

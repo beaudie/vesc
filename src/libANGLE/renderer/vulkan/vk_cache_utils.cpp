@@ -3130,6 +3130,11 @@ VkResult GraphicsPipelineDesc::initializePipeline(Context *context,
     dynamicState.dynamicStateCount = static_cast<uint32_t>(dynamicStateList.size());
     dynamicState.pDynamicStates    = dynamicStateList.data();
     createInfo.pDynamicState       = dynamicStateList.empty() ? nullptr : &dynamicState;
+    WARN() << "createInfo.pDynamicState:" << createInfo.pDynamicState
+           << " subset:" << ToUnderlying(subset) << " pipelineCache:" << pipelineCache
+           << " hasVertexInput:" << hasVertexInput << " hasShaders:" << hasShaders
+           << " hasShadersOrFragmentOutput:" << hasShadersOrFragmentOutput
+           << "hasFragmentOutput:" << hasFragmentOutput << " desc:" << this;
 
     // If not a complete pipeline, specify which subset is being created
     VkGraphicsPipelineLibraryCreateInfoEXT libraryInfo = {};
@@ -4545,6 +4550,7 @@ void CreateMonolithicPipelineTask::setCompatibleRenderPass(const RenderPass *com
 void CreateMonolithicPipelineTask::operator()()
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "CreateMonolithicPipelineTask");
+    WARN() << "CreateMonolithicPipelineTask::operator(). mDesc:" << &mDesc;
     mResult = mDesc.initializePipeline(this, &mPipelineCache, vk::GraphicsPipelineSubset::Complete,
                                        *mCompatibleRenderPass, mPipelineLayout, mShaders,
                                        mSpecConsts, &mPipeline, &mFeedback);
