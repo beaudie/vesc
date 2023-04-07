@@ -16,6 +16,24 @@
       "message": "I guess this and 4392879 are alternative fix to 4392877? If yes, my preference is the first two CLs (i.e., https://chromium-review.googlesource.com/c/angle/angle/+/4392877)",
       "revId": "4f09078d2799301bd42637f155b28dff3f36ea64",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "627207a2_19f0f706",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-07T16:10:25Z",
+      "side": 1,
+      "message": "Correct.\nThis CL is a follow up for 4392879 (`rx::vk::ExternalFence`). It is optional. Only difference is that with `mUse` we also check all previous fences in the `mInFlightCommands`.\n\n\nFirst two CLs will fix both bugs.\n\nNext two CLs is optimization that removes extra `vkQueueSubmit()` and also one problem (if it is a problem).\n\nThe problem with first 2 CLs:\n- App creates (indirectly) `SyncHelperNativeFence` without providing fence FD.\n- `initializeWithFd()` will flush commands with two submissions:\n- first submit will submit fence with FD;\n- second will submit only internal CQs fence.\n- App exports fence FD (`SyncHelperNativeFencedupNativeFenceFD`).\n- App checks fence FD status using system API until it **is signaled**.\n- App checks `SyncHelperNativeFence::getStatus()` - it **may be unsignalled** because uses `mUse` that check other fence, that was submitted in a second submission.\n\nI think that `SyncHelperNativeFence::getStatus()` and checking fence FD directly by the APP should produce identical results.\n\nTo fix this problem without adding `rx::vk::ExternalFence` class `SyncHelperNativeFence` should not use `mUse` at all for checking status or waiting. `mUse` will be there only to correctly destroy the external fence.\n\n---\n\nSeparate question.\nPreviously, `waitForResourceUseToFinishWithUserTimeout()` was only checking single fence without updating completed serial or resetting command buffers. But then you changed implementation and now it is almost the same as `finishResourceUse()`. I thought `waitForResourceUseToFinishWithUserTimeout()` was specifically designed like that, so it only checks single fence without extra overhead.",
+      "parentUuid": "aab9f58a_206df4c2",
+      "revId": "4f09078d2799301bd42637f155b28dff3f36ea64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
