@@ -16,6 +16,24 @@
       "message": "Do we want to remove the `if (hasPreferSubmitAtFBOBoundary())` check on line 6427?",
       "revId": "728e8007128e84bad4a922fdb48d5467831125b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ecea1cb_04f547c1",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6383,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-07T17:52:45Z",
+      "side": 0,
+      "message": "No. This CL is changing behavior only when switch to default system framebuffer. line 6427 is testing FBO switch to another user FBO, so not affected by this CL.",
+      "parentUuid": "c9064465_246b3a38",
+      "revId": "728e8007128e84bad4a922fdb48d5467831125b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
