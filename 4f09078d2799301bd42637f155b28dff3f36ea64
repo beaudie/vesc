@@ -52,6 +52,24 @@
       "parentUuid": "627207a2_19f0f706",
       "revId": "4f09078d2799301bd42637f155b28dff3f36ea64",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1d030dd_189c7829",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-07T21:44:47Z",
+      "side": 1,
+      "message": "The idea to remove mUse here is good. I think even with my other proposal in previous CL, this is still doable. So lets settle down the previous CL and then we will get to this one.",
+      "parentUuid": "90868a1d_b1d04504",
+      "revId": "4f09078d2799301bd42637f155b28dff3f36ea64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
