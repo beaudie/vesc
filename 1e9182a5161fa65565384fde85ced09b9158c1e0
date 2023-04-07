@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bddd67d_5e0472ed",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/ProgramPrelude.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1494,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-04-07T19:25:27Z",
+      "side": 0,
+      "message": "This got moved into the AST, right? No need to take an action, just looking for some clarification.",
+      "revId": "1e9182a5161fa65565384fde85ced09b9158c1e0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

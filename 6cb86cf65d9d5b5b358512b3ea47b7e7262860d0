@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "327136b9_28685a6e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-04-07T19:25:27Z",
+      "side": 1,
+      "message": "Looks good, with one AI To add a bug number.",
+      "revId": "6cb86cf65d9d5b5b358512b3ea47b7e7262860d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e70c814_e9333179",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 452,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-04-07T19:25:27Z",
+      "side": 1,
+      "message": "Please add a bug tracking this TODO",
+      "revId": "6cb86cf65d9d5b5b358512b3ea47b7e7262860d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
