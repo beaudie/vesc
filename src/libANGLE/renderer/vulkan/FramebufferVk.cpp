@@ -1018,6 +1018,10 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
     RendererVk *renderer = contextVk->getRenderer();
     UtilsVk &utilsVk     = contextVk->getUtils();
 
+    WARN() << " @line:" << __LINE__ << " supportsExtendedDynamicState:"
+           << contextVk->getFeatures().supportsExtendedDynamicState.enabled
+           << " supportsExtendedDynamicState2:"
+           << contextVk->getFeatures().supportsExtendedDynamicState2.enabled;
     // If any clears were picked up when syncing the read framebuffer (as the blit source), redefer
     // them.  They correspond to attachments that are not used in the blit.  This will cause the
     // read framebuffer to become dirty, so the attachments will be synced again on the next command
@@ -1375,7 +1379,7 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
         // Similarly, only blit if there's been no clipping or rotating.
         bool canBlitWithCommand =
             !isDepthStencilResolve && noClip && (noFlip || !disableFlippingBlitWithCommand) &&
-            HasSrcBlitFeature(renderer, readRenderTarget) &&
+            false && HasSrcBlitFeature(renderer, readRenderTarget) &&
             HasDstBlitFeature(renderer, drawRenderTarget) && rotation == SurfaceRotation::Identity;
         bool areChannelsBlitCompatible =
             AreSrcAndDstDepthStencilChannelsBlitCompatible(readRenderTarget, drawRenderTarget);
@@ -1383,6 +1387,9 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
         // glBlitFramebuffer requires that depth/stencil blits have matching formats.
         ASSERT(AreSrcAndDstFormatsIdentical(readRenderTarget, drawRenderTarget));
 
+        WARN() << " @line" << __LINE__ << " canBlitWithCommand:" << canBlitWithCommand
+               << " intendedFormatID:" << ToUnderlying(readRenderTarget->getImageIntendedFormatID())
+               << " actualFormatID:" << ToUnderlying(readRenderTarget->getImageActualFormatID());
         if (canBlitWithCommand && areChannelsBlitCompatible)
         {
             ANGLE_TRY(blitWithCommand(contextVk, sourceArea, destArea, readRenderTarget,
@@ -1431,6 +1438,10 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
             bool hasShaderStencilExport =
                 contextVk->getRenderer()->getFeatures().supportsShaderStencilExport.enabled;
 
+            WARN() << " @line:" << __LINE__ << " blitDepthBuffer:" << blitDepthBuffer
+                   << " blitStencilBuffer:" << blitStencilBuffer
+                   << " hasShaderStencilExport:" << hasShaderStencilExport
+                   << " isDepthStencilResolve:" << isDepthStencilResolve;
             // Blit depth. If shader stencil export is present, blit stencil as well.
             if (blitDepthBuffer || (blitStencilBuffer && hasShaderStencilExport))
             {

@@ -1525,6 +1525,8 @@ angle::Result ContextVk::setupDraw(const gl::Context *context,
         return angle::Result::Continue;
     }
 
+    WARN() << " dirtyBits:0x" << std::hex << dirtyBits.to_ulong() << " dirtyBitMask:0x"
+           << dirtyBitMask.to_ulong() << " mGraphicsDirtyBits:0x" << mGraphicsDirtyBits.to_ulong();
     // Flush any relevant dirty bits.
     for (DirtyBits::Iterator dirtyBitIter = dirtyBits.begin(); dirtyBitIter != dirtyBits.end();
          ++dirtyBitIter)
@@ -2300,7 +2302,7 @@ angle::Result ContextVk::handleDirtyGraphicsRenderPass(DirtyBits::Iterator *dirt
         mAllowRenderPassToReactivate && renderArea == mRenderPassCommands->getRenderArea();
     if (reactivateStartedRenderPass)
     {
-        INFO() << "Reactivate already started render pass on draw.";
+        WARN() << " @line:" << __LINE__ << " Reactivate already started render pass on draw.";
         mRenderPassCommandBuffer = &mRenderPassCommands->getCommandBuffer();
         ASSERT(!drawFramebufferVk->hasDeferredClears());
         ASSERT(hasActiveRenderPass());

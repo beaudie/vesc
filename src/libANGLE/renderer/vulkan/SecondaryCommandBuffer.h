@@ -1695,6 +1695,7 @@ ANGLE_INLINE void SecondaryCommandBuffer::setDepthTestEnable(VkBool32 depthTestE
     SetDepthTestEnableParams *paramStruct =
         initCommand<SetDepthTestEnableParams>(CommandID::SetDepthTestEnable);
     paramStruct->depthTestEnable = depthTestEnable;
+    WARN() << " depthTestEnable:" << depthTestEnable;
 }
 
 ANGLE_INLINE void SecondaryCommandBuffer::setDepthWriteEnable(VkBool32 depthWriteEnable)
