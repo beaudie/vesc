@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "38ea085c_7e4536d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-07T12:45:04Z",
+      "side": 1,
+      "message": "Technically yes. This CL is optional.\n\nThis CL is optimization, that remove extra `vkQueueSubmit()` call.\n\nAdditionally, since there will be only single `vkQueueSubmit()` there will be single Fence, so that `mUse` status will always match native FD status. Because when checking `mUse` we essentially checking native FD.\n\nI wanted to make this CL right away, but decided to split. First is the fix only, second is optimization. I thought this way it would be easier to track why final change turned out the way it is.",
+      "parentUuid": "99c66554_deb31871",
+      "revId": "53e2eb55e6feaa8adfe9f0ce908ab6c4b1b429ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7176be46_d24cd2e8",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
         "patchSetId": 1
