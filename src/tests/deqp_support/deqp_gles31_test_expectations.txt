@@ -221,10 +221,13 @@ b/266710445 WIN OPENGL NVIDIA : dEQP-GLES31.functional.image_load_store.buffer.a
 7415 NVIDIA VULKAN : dEQP-GLES31.functional.copy_image.mixed.*astc* = FAIL
 7415 NVIDIA VULKAN : dEQP-GLES31.functional.copy_image.compressed.viewclass_astc* = FAIL
 
+<<<<<<< PATCH SET (729485 Unsuppress passing tests)
+=======
 // Vulkan Pixel4 failures with these formats
 5277 VULKAN PIXEL4ORXL : dEQP-GLES31.functional.copy_image.non_compressed.viewclass_32_bits.rgba8_snorm_rgb10_a2* = FAIL
 5277 VULKAN PIXEL4ORXL : dEQP-GLES31.functional.copy_image.non_compressed.viewclass_32_bits.rgba8_snorm_rgb9_e5* = FAIL
 
+>>>>>>> BASE      (efeb65 Suppress ParallelLinkProgramBenchmark.Run/gl_* on Linux)
 // When ANGLE allows non-conformant features, imageAtomicExchange with r32f fails
 5503 SWIFTSHADER : dEQP-GLES31.functional.image_load_store.*.atomic.exchange_r32f* = SKIP
 
