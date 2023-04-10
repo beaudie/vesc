@@ -46,6 +46,30 @@
       },
       "revId": "5cf6b833e8efff9fc42a4a2ef3cef13ad2d0c2bc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af09c86c_c120f947",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-10T14:45:09Z",
+      "side": 1,
+      "message": "Private inheritance is not an option, because `SyncHelper` is used as `Resource` in the `ContextVk::onSyncObjectInit()`. I could solve this by adding `asResource()` method, that would expose private `Resource`, but this would also make it accessible to `SyncHelperNativeFence`.\n\nSolved by introducing new `SyncHelperInterface` base for both `SyncHelper` (which is `Resource`) and `SyncHelperNativeFence` (which is not).",
+      "parentUuid": "31cb8fa8_a078408b",
+      "range": {
+        "startLine": 341,
+        "startChar": 14,
+        "endLine": 341,
+        "endChar": 35
+      },
+      "revId": "5cf6b833e8efff9fc42a4a2ef3cef13ad2d0c2bc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
