@@ -22,6 +22,30 @@
       },
       "revId": "950b6278f23933418e3785a0e391b6ceccf767ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8efb4de_8aa94a9f",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-10T13:47:28Z",
+      "side": 1,
+      "message": "First, lets make sure I understand everything. Because it is sounds a lot more complicated for me.\n\nThere are two cases:\n1) `inFd !\u003d kInvalidFenceFd`.\nIn this case `initializeWithFd()` does not need to insert `inFd` into the command stream at all, so no need to call `flushImpl()` or pass any fence.\n```\n    \"When a fence sync object is created or when an EGL native fence sync\n    object is created with the EGL_SYNC_NATIVE_FENCE_FD_ANDROID attribute set\n    to EGL_NO_NATIVE_FENCE_FD_ANDROID, eglCreateSyncKHR also inserts a fence\n    command into the command stream of the bound client API\u0027s current context\n    (i.e., the context returned by eglGetCurrentContext), and associates it\n    with the newly created sync object.\n```\nDescription has **\"also inserts\"** when no FD is provided (`inFd \u003d\u003d kInvalidFenceFd`), therefore if FD is provided, no fence command is inserted.\n\n2) `inFd \u003d\u003d kInvalidFenceFd`.\n\u003e you create fence, and export to mNativeFenceFd, and then you create another VkFence and then import mNativeFenceFd into VkFence. \n\nIn order to do this, **first fence must be already submitted** as far as I know.\n\n\u003e Then you Create SharedFence (lets call it mSharedFenceWithFd) out of mFenceWithFd, and pass mSharedFenceWithFd to CommandQueue via flushImpl/submitCommands, and it will be stored to CommandBatch with another refcount.\n\nThis will not be possible because of the above.\n\nI think alternative may be possible:\n`initializeWithFd()` creates `SharedFence` from `VkFence` that can be exported and passes to `flushImpl()`. Then after `queueSubmit()`, `CommandQueue` will export handle (as in this CL), then create another `VkFence`, import FD into that fence, replace `VkFence` in the `SharedFence` with that fence, and use it in the `CommandBatch`. However, need to also keep first fence around for cleanup.\n\n\u003e but import native fence into VkFence does not have this limitation and we can use that to our advantage. \n\nI have doubts regarding this. This is from spec:\n```\n Importing a payload using handle types with copy transference creates a duplicate\ncopy of the payload at the time of import, but makes no further reference to it.\nFence signaling, waiting, and resetting operations performed on the target of copy\nimports must not affect any other fence or payload.\n```\nBut I do not completely understand this. Form spec when exporting:\n```\nIf handleType refers to a handle type with copy payload transference semantics,\nfence must be signaled, or have an associated fence signal operation pending\nexecution\n```\nIf we export already signaled fence, then importing will creates a signaled fence. Manually signaling should be No-op and it is not allowed to submit in signaled state. Waiting should be read only operation. Resting possible only for *persistent transference*, we have *temporary transference* and reset will revert to the persistent payload.\n\nWe more likely to export pending signal fence, then importing will create a pending signal fence. We can\u0027t submit, manually signal or reset such fence. Waiting is read only.\n\nI have a question for: *\"copy transference creates a duplicate copy of the payload at the time of import\"*. What should happen with payload copy when original FD is signaled?\n\nAdditionally:\n```\nImporting a fence payload from a file descriptor transfers ownership of the file\ndescriptor from the application to the Vulkan implementation. The application must\nnot perform any operations on the file descriptor after a successful import.\n\nApplications can import the same fence payload into multiple instances of Vulkan,\ninto the same instance from which it was exported, and multiple times into a given\nVulkan instance.\n```\nSo it is looks like we need `dup()` in order to use `mNativeFenceFd`.\nThis is also confusing. What happens with dupped FD after import? It will be closed by Vulkan and when? If so, then how can we use same fence payload multiple times? Is using as payload for import is *\"any operation\"* that must not be performed?\n\nWe already use import FD for Semaphore in `SyncHelperNativeFence::serverWait()` and we are using `dup()`. Dupped FD never closed even if import fails (leak in case of failure?). Logic assumes, that signal of `mNativeFenceFd` will cause signal of the `VkSemaphore`. If this code written and works correctly, then similar should be true for importing into `VkFence`.\n\nWill try to check how everything is actually working on device, because it is rather confusing in the spec.",
+      "parentUuid": "5f13a6f3_8f18d321",
+      "range": {
+        "startLine": 298,
+        "startChar": 8,
+        "endLine": 298,
+        "endChar": 35
+      },
+      "revId": "950b6278f23933418e3785a0e391b6ceccf767ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
