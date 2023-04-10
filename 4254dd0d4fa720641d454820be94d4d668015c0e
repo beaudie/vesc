@@ -51,6 +51,24 @@
       "parentUuid": "a4780a64_efa27164",
       "revId": "4254dd0d4fa720641d454820be94d4d668015c0e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0002a52c_b9cbb3d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-10T19:53:06Z",
+      "side": 1,
+      "message": "I\u0027m not sure off the top of my head. You\u0027ve found that the initialization of ANGLE\u0027s internal GL/GLES context is definitely succeeding? I haven\u0027t grepped through the sources recently but note that DisplayGL::initialize is a no-op which always returns true - seems problematic.",
+      "parentUuid": "f2c483ed_20783a66",
+      "revId": "4254dd0d4fa720641d454820be94d4d668015c0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
