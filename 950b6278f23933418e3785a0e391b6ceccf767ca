@@ -46,6 +46,30 @@
       },
       "revId": "950b6278f23933418e3785a0e391b6ceccf767ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fb4c62b_2a0d6d5d",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-10T19:00:15Z",
+      "side": 1,
+      "message": "\u003e Will try to check how everything is actually working on device, because it is rather confusing in the spec.\n\nI checked and there are a lot of results)\n\nDuring testing I used slightly modified `AndroidNativeFence_WaitSync` test and added fence dup/import code to the `if (externalFence !\u003d nullptr)` section after the `queueSubmit()` of this CL. In the test I inserted 1000 `drawQuad()` calls, otherwise fence was immediately signaled after the `queueSubmit()`.\n\nReceived `VUID-vkResetCommandBuffer-commandBuffer-00045` validation error.\n```\nAttempt to reset VkCommandBuffer 0x7a756e6110[] which is in use.\n```\n\nI think the problem because VVL has a bug and can\u0027t work normally when exported fence is used to tell if command buffers is finished or not. I want to investigate this later.\n\n---\n\nNow results of exporting, duping and importing the FD.\nI tested 3 Android devices with 3 different GPUs: S906B, G996B, G991U.\nAll have different behavior)\n\nWhen `externalFence` is signaled right after the `queueSubmit()`.\n```\nOperation                                      S906B    G996B    G991U\nexternalFence status (mFence)  before export       0        0        0\nexternalFence status (mFenceFd) after export       0        0        0\nexternalFence mFence status after export           1        1        0\n0 - VK_SUCCESS\n1 - VK_NO_READY\n```\n\nWhen `externalFence` is NOT signaled right after the `queueSubmit()`.\n```\nOperation                                      S906B    G996B    G991U\nexternalFence status (mFence)  before export       1        1        1\nexternalFence status (mFenceFd) after export       1        1        1\nexternalFence mFence status after export           1        1        1\n\nexternalFence mFenceFd value                     117      119      121\ndupFD \u003d dup(mFenceFd)                            118      118      122\nSyncWaitFd(dupFD, 0, VK_NOT_READY)                 1        1        1\n\nCreate importFence and import dupFD\nimportFence status                                 1        1        1\nSyncWaitFd(dupFD, 0, VK_NOT_READY)               -13        1        1\n\nWAIT on externalFence \n\nexternalFence status (mFenceFd) after export       0        0        0\nexternalFence mFence status after export           1        1        0\nimportFence status                                 0        0        0\nSyncWaitFd(dupFD, 0, VK_NOT_READY)               -13        0        0\n\nOne of the below:\na) close(dupFD) before importFence destroy        -1        0        0\nb) close(dupFD) after importFence destroy         -1       -1       -1\n```\n\nFrom the above `G991U` (Adreno) not resetting original `mFence` handle after the export operation, also status of the `mFence` is updated after waiting on `mFenceFd`. Other devices perform reset and remain that state after wait.\n\n`S906B` generates error in `SyncWaitFd()` after import. Other devices allow using handle. Spec. forbids the usage after import (but allows import multiple times, how?).\n\n`S906B` also does not allow `close` on `dupFD` after the import, before destroying the `importFence`. Other devices allow that and it seems that `importFence` destruction works fine after that.\n\nAll devices generate error `-1` when call `close(dupFD)` after `importFence` destruction. This means that duplicate fence really was consumed by the Vulkan.\n\n---\n\nDespite the differences in the Vulkan implementations, I think it is possible to use `importFence` in the `CommandBatch` as a normal fence. However, we still need to preserve original `VkFence` that was used in submission and from which we exported the FD. We can encapsulate everything into the `SharedFence`. Can add export method that will export, dup, create new fence, import and use new fence.\n\nI will try to do above tomorrow. Interested to see how much time will it take for these extra steps and how will VVL behave.",
+      "parentUuid": "f8efb4de_8aa94a9f",
+      "range": {
+        "startLine": 298,
+        "startChar": 8,
+        "endLine": 298,
+        "endChar": 35
+      },
+      "revId": "950b6278f23933418e3785a0e391b6ceccf767ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
