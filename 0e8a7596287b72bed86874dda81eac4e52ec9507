@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a822f20_d0442a51",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 15
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-04-10T16:23:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3df222d6_29bfb05b",
+      "range": {
+        "startLine": 339,
+        "startChar": 0,
+        "endLine": 342,
+        "endChar": 0
+      },
+      "revId": "0e8a7596287b72bed86874dda81eac4e52ec9507",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c1eaede1_815bd0df",
@@ -41,6 +65,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb43f8be_ba9ef7a5",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 15
+      },
+      "lineNbr": 604,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-04-10T16:23:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1eaede1_815bd0df",
+      "revId": "0e8a7596287b72bed86874dda81eac4e52ec9507",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "96237fc5_09fdd0fb",
@@ -54,6 +96,24 @@
       "writtenOn": "2023-04-06T16:09:47Z",
       "side": 1,
       "message": "Are PLS cubemaps supported on all configs? If so, this parameter should be also defined for `TEXTURE_CUBE_MAP_ARRAY` provided by `OES_texture_cube_map_array` and included in ES 3.2.",
+      "revId": "0e8a7596287b72bed86874dda81eac4e52ec9507",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f21af17a_fc0d63e8",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 15
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-04-10T16:23:43Z",
+      "side": 1,
+      "message": "I would love to simply not support cube maps. They will complicate things if we want to write an implementation that uses `texelFetch`. Can we just drop them?\n\nI might also want to drop support for `TEXTURE_3D` and `TEXTURE_2D_ARRAY`, since they seemed to have bugs on the ANGLE backends. Do you see any reason to keep supporting these?",
+      "parentUuid": "96237fc5_09fdd0fb",
       "revId": "0e8a7596287b72bed86874dda81eac4e52ec9507",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
