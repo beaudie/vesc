@@ -16,6 +16,46 @@
       "message": "+Charlie\nShabi to CC",
       "revId": "1e9291ee46bfd26f9f77dad1869645ec3303dc3a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f350f3d2_e1e47d30",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-10T23:44:02Z",
+      "side": 1,
+      "message": "Nice finding and I think the fix is also correct.",
+      "revId": "1e9291ee46bfd26f9f77dad1869645ec3303dc3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5725adec_25066827",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5065,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-10T23:44:02Z",
+      "side": 1,
+      "message": "feedback loop is undefined in GL. See https://registry.khronos.org/OpenGL/specs/es/3.2/es_spec_3.2.pdf, Section 9.3.1 Rendering Feedback Loops\n\n```\nWhile this condition holds, texturing operations\naccessing that image will produce undefined results\n```\nYou can modify the test to make it legit use and I think will still reproduce the bug. Make tetxure have two mipmap levels and then attach level 0 to FBO and then change base level to 1 and sample from it.\n\n```\nNote that if TEXTURE_BASE_LEVEL and TEXTURE_MAX_LEVEL exclude any\nlevels containing image(s) attached to the currently bound draw framebuffer object,\nthen the above conditions will not be met (i.e., the above rule will not cause the\nvalues of rendered fragments to be undefined.)\n```",
+      "range": {
+        "startLine": 5065,
+        "startChar": 34,
+        "endLine": 5065,
+        "endChar": 35
+      },
+      "revId": "1e9291ee46bfd26f9f77dad1869645ec3303dc3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
