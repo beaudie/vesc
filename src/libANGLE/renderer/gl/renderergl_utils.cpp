@@ -41,9 +41,10 @@ namespace rx
 namespace
 {
 
-const char *GetString(const FunctionsGL *functions, GLenum name)
+std::string GetString(const FunctionsGL *functions, GLenum name)
 {
-    return reinterpret_cast<const char *>(functions->getString(name));
+    const char *s = reinterpret_cast<const char *>(functions->getString(name));
+    return s == nullptr ? "" : std::string(s);
 }
 
 bool IsMesa(const FunctionsGL *functions, std::array<int, 3> *version)
@@ -55,8 +56,8 @@ bool IsMesa(const FunctionsGL *functions, std::array<int, 3> *version)
         return false;
     }
 
-    std::string nativeVersionString(GetString(functions, GL_VERSION));
-    size_t pos = nativeVersionString.find("Mesa");
+    std::string nativeVersionString = GetString(functions, GL_VERSION);
+    size_t pos                      = nativeVersionString.find("Mesa");
     if (pos == std::string::npos)
     {
         return false;
@@ -74,9 +75,9 @@ int getAdrenoNumber(const FunctionsGL *functions)
     static int number = -1;
     if (number == -1)
     {
-        const char *nativeGLRenderer = GetString(functions, GL_RENDERER);
-        if (std::sscanf(nativeGLRenderer, "Adreno (TM) %d", &number) < 1 &&
-            std::sscanf(nativeGLRenderer, "FD%d", &number) < 1)
+        std::string nativeGLRenderer = GetString(functions, GL_RENDERER);
+        if (std::sscanf(nativeGLRenderer.c_str(), "Adreno (TM) %d", &number) < 1 &&
+            std::sscanf(nativeGLRenderer.c_str(), "FD%d", &number) < 1)
         {
             number = 0;
         }
@@ -89,8 +90,8 @@ int getMaliTNumber(const FunctionsGL *functions)
     static int number = -1;
     if (number == -1)
     {
-        const char *nativeGLRenderer = GetString(functions, GL_RENDERER);
-        if (std::sscanf(nativeGLRenderer, "Mali-T%d", &number) < 1)
+        std::string nativeGLRenderer = GetString(functions, GL_RENDERER);
+        if (std::sscanf(nativeGLRenderer.c_str(), "Mali-T%d", &number) < 1)
         {
             number = 0;
         }
@@ -103,8 +104,8 @@ int getMaliGNumber(const FunctionsGL *functions)
     static int number = -1;
     if (number == -1)
     {
-        const char *nativeGLRenderer = GetString(functions, GL_RENDERER);
-        if (std::sscanf(nativeGLRenderer, "Mali-G%d", &number) < 1)
+        std::string nativeGLRenderer = GetString(functions, GL_RENDERER);
+        if (std::sscanf(nativeGLRenderer.c_str(), "Mali-G%d", &number) < 1)
         {
             number = 0;
         }
@@ -139,7 +140,7 @@ bool IsAdreno5xx(const FunctionsGL *functions)
 bool IsMali(const FunctionsGL *functions)
 {
     constexpr char Mali[]        = "Mali";
-    const char *nativeGLRenderer = GetString(functions, GL_RENDERER);
+    std::string nativeGLRenderer = GetString(functions, GL_RENDERER);
     return angle::BeginsWith(nativeGLRenderer, Mali);
 }
 
@@ -173,14 +174,14 @@ int GetAndroidSdkLevel()
 bool IsAndroidEmulator(const FunctionsGL *functions)
 {
     constexpr char androidEmulator[] = "Android Emulator";
-    const char *nativeGLRenderer     = GetString(functions, GL_RENDERER);
+    std::string nativeGLRenderer     = GetString(functions, GL_RENDERER);
     return angle::BeginsWith(nativeGLRenderer, androidEmulator);
 }
 
 bool IsPowerVrRogue(const FunctionsGL *functions)
 {
     constexpr char powerVRRogue[] = "PowerVR Rogue";
-    const char *nativeGLRenderer  = GetString(functions, GL_RENDERER);
+    std::string nativeGLRenderer  = GetString(functions, GL_RENDERER);
     return angle::BeginsWith(nativeGLRenderer, powerVRRogue);
 }
 
@@ -208,7 +209,7 @@ SwapControlData::SwapControlData()
 
 VendorID GetVendorID(const FunctionsGL *functions)
 {
-    std::string nativeVendorString(GetString(functions, GL_VENDOR));
+    std::string nativeVendorString = GetString(functions, GL_VENDOR);
     // Concatenate GL_RENDERER to the string being checked because some vendors put their names in
     // GL_RENDERER
     nativeVendorString += " ";
@@ -248,7 +249,7 @@ VendorID GetVendorID(const FunctionsGL *functions)
 
 uint32_t GetDeviceID(const FunctionsGL *functions)
 {
-    std::string nativeRendererString(GetString(functions, GL_RENDERER));
+    std::string nativeRendererString = GetString(functions, GL_RENDERER);
     constexpr std::pair<const char *, uint32_t> kKnownDeviceIDs[] = {
         {"Adreno (TM) 418", ANDROID_DEVICE_ID_NEXUS5X},
         {"Adreno (TM) 530", ANDROID_DEVICE_ID_PIXEL1XL},
