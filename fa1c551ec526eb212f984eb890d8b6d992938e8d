@@ -34,6 +34,24 @@
       "parentUuid": "9e539a36_f71e9e30",
       "revId": "fa1c551ec526eb212f984eb890d8b6d992938e8d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04227600_c462d23d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-04-10T14:37:33Z",
+      "side": 1,
+      "message": "Is your target app doing something similar (using a conditional) to control the feedback loop?  I know your fix isn\u0027t designed to allow feedback loops, just recovering from them.  We don\u0027t necessarily want to include an end2end that endorses real feedback loops.",
+      "parentUuid": "b96b6555_9bbd35a7",
+      "revId": "fa1c551ec526eb212f984eb890d8b6d992938e8d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
