@@ -16,6 +16,23 @@
       "message": "not sure why winuwp-compile is failing.\nLooks like most tryjobs are broken\nhttps://ci.chromium.org/p/angle/builders/try/winuwp-compile",
       "revId": "4254dd0d4fa720641d454820be94d4d668015c0e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4780a64_efa27164",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-10T19:37:49Z",
+      "side": 1,
+      "message": "Slightly concerned that this change will sweep issues under the rug. These GL calls should only return nullptr if there\u0027s no valid context current. Should this not be happening?",
+      "revId": "4254dd0d4fa720641d454820be94d4d668015c0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
