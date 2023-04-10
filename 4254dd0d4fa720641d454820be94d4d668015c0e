@@ -33,6 +33,24 @@
       "message": "Slightly concerned that this change will sweep issues under the rug. These GL calls should only return nullptr if there\u0027s no valid context current. Should this not be happening?",
       "revId": "4254dd0d4fa720641d454820be94d4d668015c0e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2c483ed_20783a66",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1306173
+      },
+      "writtenOn": "2023-04-10T19:46:30Z",
+      "side": 1,
+      "message": "hm - is there a place before eglInitialize where the absence of a context should be checked instead? \n\nwe\u0027re already checking eglGetDisplay / eglGetCurrentDisplay for EGL_NO_DISPLAY",
+      "parentUuid": "a4780a64_efa27164",
+      "revId": "4254dd0d4fa720641d454820be94d4d668015c0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
