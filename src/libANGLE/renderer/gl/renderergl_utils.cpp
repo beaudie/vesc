@@ -41,9 +41,13 @@ namespace rx
 namespace
 {
 
-const char *GetString(const FunctionsGL *functions, GLenum name)
+std::string GetString(const FunctionsGL *functions, GLenum name)
 {
-    return reinterpret_cast<const char *>(functions->getString(name));
+    const GLubyte * ptr = functions->getString(name);
+    if (ptr == nullptr) {
+        return "";
+    }
+    return std::string(reinterpret_cast<const char *>(ptr));
 }
 
 bool IsMesa(const FunctionsGL *functions, std::array<int, 3> *version)
