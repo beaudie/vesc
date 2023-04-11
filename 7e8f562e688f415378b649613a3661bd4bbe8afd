@@ -16,6 +16,24 @@
       "message": "Can you also add it to continuous testing like what was done in previous interpreter CLs? (http://crrev/c/4178021)\n\n(As I look, I see that previous one didn\u0027t land...)",
       "revId": "7e8f562e688f415378b649613a3661bd4bbe8afd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c348b6c_82c912d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-11T20:33:21Z",
+      "side": 1,
+      "message": "Good idea, thanks. Added to CI, running presubmits now.",
+      "parentUuid": "e45fe1a2_952ba78a",
+      "revId": "7e8f562e688f415378b649613a3661bd4bbe8afd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
