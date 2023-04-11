@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0cec2a2_11a39025",
+        "filename": "util/capture/trace_interpreter.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-04-11T22:37:02Z",
+      "side": 1,
+      "message": "This behavior is dependent on `atoi` ignoring characters after those that are not integral (i.e. `\"]\"`).  This isn\u0027t new (it was doing this before), but worth noting.",
+      "range": {
+        "startLine": 423,
+        "startChar": 11,
+        "endLine": 423,
+        "endChar": 30
+      },
+      "revId": "a514493636897ebc143833703ef06cb884419dc6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
