@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3193538_25114c4f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-11T13:49:42Z",
+      "side": 1,
+      "message": "@Igor FYI",
+      "revId": "728e8007128e84bad4a922fdb48d5467831125b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7622a8c_1cc73878",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 5733,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-11T13:49:42Z",
+      "side": 1,
+      "message": "nit: ANI",
+      "range": {
+        "startLine": 5733,
+        "startChar": 76,
+        "endLine": 5733,
+        "endChar": 79
+      },
+      "revId": "728e8007128e84bad4a922fdb48d5467831125b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3cd1492_da7f523f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 5735,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-11T13:49:42Z",
+      "side": 1,
+      "message": "Suggest doing this from the Surface itself, so _it_ will be the one managing this semaphore (for example if a future implementation transfers ownership instead).",
+      "revId": "728e8007128e84bad4a922fdb48d5467831125b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1dcb0724_02c758a5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 2538,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-11T13:49:42Z",
+      "side": 1,
+      "message": "nit: suggest either capitalizing ANI everywhere (even in the beginning), or better use a word instead? Like `swapchainSemaphore` or `swapchainAcquireSemaphore`.",
+      "range": {
+        "startLine": 2538,
+        "startChar": 34,
+        "endLine": 2538,
+        "endChar": 37
+      },
+      "revId": "728e8007128e84bad4a922fdb48d5467831125b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
