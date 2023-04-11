@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "406c746e_b729dadd",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5418,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-11T19:01:57Z",
+      "side": 1,
+      "message": "Please add a comment that this is specifically so that earlier work doesn\u0027t need to wait for the acquire semaphore.\n\nI suggest gating this by a feature too, you never know which user may want to disable it.",
+      "revId": "00c5a97048ec78bbd7ce0b3163eaabbbe5634b74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
