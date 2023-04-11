@@ -33,6 +33,24 @@
       "message": "Excellent, but someone else must approve",
       "revId": "e8e30d3f0e45d75e367ed8eff4a6864255ec5f84",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc108f49_4e70b298",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-04-11T17:58:22Z",
+      "side": 1,
+      "message": "These bots are ANGLE CQ bots, they are known to work, meaning this CL would break Chrome.\nIt looks like when SystemInfo.h is included here\nhttps://source.chromium.org/chromium/chromium/src/+/main:gpu/config/gpu_info_collector.cc;l\u003d30;drc\u003dfb74c17f6c344fd7b4f2cf0ecba5b69c550b698c\nsomething goes wrong with the defines.",
+      "parentUuid": "a1febe84_00100891",
+      "revId": "e8e30d3f0e45d75e367ed8eff4a6864255ec5f84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
