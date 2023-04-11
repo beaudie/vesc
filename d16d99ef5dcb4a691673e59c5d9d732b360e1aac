@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24144f46_b37100a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-11T16:38:34Z",
+      "side": 1,
+      "message": "lgtm whenever this you\u0027re ready to land this.\n\n+ynovikov about the WinUWP build failures - Yuly, have seen this on multiple CLs recently. Could you help take a look?",
+      "revId": "d16d99ef5dcb4a691673e59c5d9d732b360e1aac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
