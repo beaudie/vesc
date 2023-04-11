@@ -55,6 +55,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "3917088e_a2b0b37f",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1767,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-11T19:12:56Z",
+      "side": 1,
+      "message": "Good catch. This diff is not intended, even though it will be removed in next CL. Probably I mistakenly added to wrong function when I try to split the change from the other CL.",
+      "parentUuid": "d5e2bd28_056d2c7c",
+      "revId": "aaa625c1f07b3d3cf741dbb9e531fa6bcaeca0e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "b0a43131_961c9631",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 1
