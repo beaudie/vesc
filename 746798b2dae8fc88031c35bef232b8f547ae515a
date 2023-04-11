@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a0cd041_a4cc3b43",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-04-11T11:16:54Z",
+      "side": 1,
+      "message": "Thanks!\nSorry, was out on a sick leave (I thought Gerrit shows this?)",
+      "revId": "746798b2dae8fc88031c35bef232b8f547ae515a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
