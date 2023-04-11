@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "df6c4cf2_dbd86eca",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1860,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-11T20:18:08Z",
+      "side": 1,
+      "message": "Thanks for catching the assertion. I added three new tests based on your comment.\nThe single buffer mode there is no ANI call (See https://chromium.googlesource.com/angle/angle/+/refs/heads/main/src/libANGLE/renderer/vulkan/SurfaceVk.cpp#2281 to 2291). There is only one time ANI call when we switch from double buffer mode to single buffer mode, and at that time we insert the semaphore wait as well as layout change ( see https://chromium.googlesource.com/angle/angle/+/refs/heads/main/src/libANGLE/renderer/vulkan/SurfaceVk.cpp#2337 to #2365)",
+      "parentUuid": "1857e443_7253280c",
+      "revId": "728e8007128e84bad4a922fdb48d5467831125b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a7622a8c_1cc73878",
@@ -66,6 +84,30 @@
       "writtenOn": "2023-04-11T13:49:42Z",
       "side": 1,
       "message": "nit: ANI",
+      "range": {
+        "startLine": 5733,
+        "startChar": 76,
+        "endLine": 5733,
+        "endChar": 79
+      },
+      "revId": "728e8007128e84bad4a922fdb48d5467831125b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8575821_a4f45408",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 5733,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-11T20:18:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7622a8c_1cc73878",
       "range": {
         "startLine": 5733,
         "startChar": 76,
@@ -93,6 +135,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5832d3c6_e4e85f80",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 5735,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-11T20:18:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b3cd1492_da7f523f",
+      "revId": "728e8007128e84bad4a922fdb48d5467831125b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "73c0cd19_7b67c7dd",
@@ -106,6 +166,24 @@
       "writtenOn": "2023-04-11T17:37:20Z",
       "side": 1,
       "message": "Why it is `add` and not `set`?",
+      "revId": "728e8007128e84bad4a922fdb48d5467831125b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92538886_c8118406",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1165,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-11T20:18:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73c0cd19_7b67c7dd",
       "revId": "728e8007128e84bad4a922fdb48d5467831125b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -127,6 +205,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6de3e69_65ebdab3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 2418,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-11T20:18:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c31b3dea_052fa8cc",
+      "revId": "728e8007128e84bad4a922fdb48d5467831125b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1dcb0724_02c758a5",
@@ -140,6 +236,30 @@
       "writtenOn": "2023-04-11T13:49:42Z",
       "side": 1,
       "message": "nit: suggest either capitalizing ANI everywhere (even in the beginning), or better use a word instead? Like `swapchainSemaphore` or `swapchainAcquireSemaphore`.",
+      "range": {
+        "startLine": 2538,
+        "startChar": 34,
+        "endLine": 2538,
+        "endChar": 37
+      },
+      "revId": "728e8007128e84bad4a922fdb48d5467831125b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd00bbc3_e063b8c2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 2538,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-11T20:18:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1dcb0724_02c758a5",
       "range": {
         "startLine": 2538,
         "startChar": 34,
