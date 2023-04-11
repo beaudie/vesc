@@ -16,6 +16,23 @@
       "message": "Kenneth, could you check out the patch again?\nI had to move some functions form SystemInfo.h to SystemInfo_internal.h, due to contradiction of:\n1) Chromium uses SystemInfo.h but doesn\u0027t have common/* in include path.\n2) SystemInfo.h used defines from common/platform.h, but did not include it until this work.\n \nI don\u0027t know what\u0027s up with winuwp compile, maybe it\u0027s broken and will be fixed after Easter break?",
       "revId": "f434bf489936348c0f7b419d2d6515341d00f6f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b56d347_58916d26",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-11T15:46:32Z",
+      "side": 1,
+      "message": "Still lgtm. Thanks for persisting with this.\n\n+ynovikov about the WinUWP build failures. It looks like they might have been addressed already. Let me try CQ\u0027ing this for you.",
+      "revId": "f434bf489936348c0f7b419d2d6515341d00f6f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
