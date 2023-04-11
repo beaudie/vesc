@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1857e443_7253280c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1860,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-11T17:48:06Z",
+      "side": 1,
+      "message": "Here is my test code:\n```\n        glClearColor(0.0, 1.0, 0.0, 1.0);\n        glClear(GL_COLOR_BUFFER_BIT);\n        glFlush();\n\n        glEnable(GL_SCISSOR_TEST);  // Works fine without scissor (can\u0027t tell why).\n        glScissor(1, 1, 10, 10);\n        glClearColor(0.0f, 0.5f, 0.0f, 1.0f);\n        // glClear(GL_COLOR_BUFFER_BIT);\n        ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Red());\n        drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);\n        glFlush();  // Assert in the next flush.\n        glDisable(GL_SCISSOR_TEST);\n```",
+      "parentUuid": "67026990_28bd0577",
+      "revId": "728e8007128e84bad4a922fdb48d5467831125b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a7622a8c_1cc73878",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 15
