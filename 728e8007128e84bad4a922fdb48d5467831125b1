@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "67026990_28bd0577",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1860,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-11T17:37:20Z",
+      "side": 1,
+      "message": "This ASSERT fired in a simple test app. Need to update enf2end tests to also cover this case.\n\n```\neglMakeCurrent(display, surface, surface, context);\neglSurfaceAttrib(display, surface, EGL_RENDER_BUFFER, EGL_SINGLE_BUFFER);\neglSwapBuffers(display, surface);\n\nglClearColor(0.2f, 0.2f, 0.2f, 1.0f);\nglClear(GL_COLOR_BUFFER_BIT);\nglFlush();\n\nglEnable(GL_SCISSOR_TEST);  // Works fine without scissor (can\u0027t tell why).\nglScissor(100, 100, 100, 100);\nglClearColor(0.0f, 0.5f, 0.0f, 1.0f);\nglClear(GL_COLOR_BUFFER_BIT);\nglFlush();  // Assert in this flush.\n\nAbort message: \u0027FATAL: SurfaceVk.cpp:1860 (prePresentSubmit):        ! Assert failed in prePresentSubmit (../../src/libANGLE/renderer/vulkan/SurfaceVk.cpp:1860): !renderer-\u003egetFeatures().supportsPresentation.enabled || image.image-\u003egetCurrentImageLayout() \u003d\u003d vk::ImageLayout::Present || image.image-\u003egetCurrentImageLayout() \u003d\u003d vk::ImageLayout::Undefined\u0027\n```\n\n\u003e image may already in Present layout (if single buffer mode)\n\nIn single buffer mode Layout is `vk::ImageLayout::SharedPresent`. Adding this layout fixes the above assert.\n\nHowever, `vk::ImageLayout::Present` still need to be present. Because this layout happens a lot in FIFO mode, when testing this CL as system driver on the S906B device. From my testing `vk::ImageLayout::Present` happens in a simple test:\n```\n// Will also test for vk::ImageLayout::Undefined\nfor (int i \u003d 0; i \u003c 10; ++i)\n{\n    eglSwapBuffers(display, surface);\n}\n```\n\nTherefore, comment to this `if` is not completely correct.\n\n---\n\nThis assert got me thinking...\nThe clear with scissor writte some commands but did NOT processed the ANI semaphore! What if that commands will be flushed to primary somehow and then submitted without a semaphore at all? I suspect a bug.\n\nTherefore, this `addWaitSemaphore()` is a bit dangerous. It will skip possible bugs and add wait semaphore after commands that access the image.\n\nThe only valid case for `addWaitSemaphore()` is when there was no access to the image at ALL. Unfortunately, `ASSERT` can\u0027t distinguish cases when there was no access or there was access but ANI was not processed.\n\n---\n\nMade additional checks. ASSERT also fires if replace scissored clear with `drawQuad()`. So it turns out problem affects everything that performs draw with RenderPass.\n\nThis time I tested in the modified `EGLSingleBufferTest.OnSetSurfaceAttrib` test. Basically inserted test code after the line:\n```\n        // Check color for automation.\n        EXPECT_PIXEL_COLOR_EQ(1, 1, GLColor::green);\n```\n\nAfter adding `vk::ImageLayout::SharedPresent` into the ASSERT I got VVL error:\n```\nRR: RendererVk.cpp:761 (DebugUtilsMessenger): [ UNASSIGNED-CoreValidation-DrawState-InvalidImageLayout ] Validation Error: [ UNASSIGNED-CoreValidation-DrawState-InvalidImageLayout ] Object 0: handle \u003d 0x79fb5a0c10, type \u003d VK_OBJECT_TYPE_COMMAND_BUFFER; | MessageID \u003d 0x4dae5635 | vkQueueSubmit(): pSubmits[0].pCommandBuffers[0] command buffer VkCommandBuffer 0x79fb5a0c10[] expects VkImage 0x1f000000001f[] (subresource: aspectMask 0x1 array layer 0, mip level 0) to be in layout VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL--instead, current layout is VK_IMAGE_LAYOUT_SHARED_PRESENT_KHR.\n```",
+      "revId": "728e8007128e84bad4a922fdb48d5467831125b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a7622a8c_1cc73878",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 15
@@ -54,6 +71,40 @@
       "writtenOn": "2023-04-11T13:49:42Z",
       "side": 1,
       "message": "Suggest doing this from the Surface itself, so _it_ will be the one managing this semaphore (for example if a future implementation transfers ownership instead).",
+      "revId": "728e8007128e84bad4a922fdb48d5467831125b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73c0cd19_7b67c7dd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 1165,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-11T17:37:20Z",
+      "side": 1,
+      "message": "Why it is `add` and not `set`?",
+      "revId": "728e8007128e84bad4a922fdb48d5467831125b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c31b3dea_052fa8cc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 2418,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-11T17:37:20Z",
+      "side": 1,
+      "message": "Need `ASSERT(semaphore !\u003d VK_NULL_HANDLE);`?",
       "revId": "728e8007128e84bad4a922fdb48d5467831125b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
