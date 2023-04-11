@@ -688,6 +688,7 @@ def main():
         {
             'name': 'ANGLE_java_defaults',
             'sdk_version': 'system_current',
+            'target_sdk_version': 'system_current',
             'min_sdk_version': SDK_VERSION,
             'compile_multilib': 'both',
             'use_embedded_native_libs': True,
