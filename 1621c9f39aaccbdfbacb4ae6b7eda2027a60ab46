@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6732d6a3_5229186e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1377582
+      },
+      "writtenOn": "2023-04-11T18:05:07Z",
+      "side": 1,
+      "message": "https://android-build.googleplex.com/builds/abtd/run/L29700000959799286 should be testing this CL on our side.",
+      "revId": "1621c9f39aaccbdfbacb4ae6b7eda2027a60ab46",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
