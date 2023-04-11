@@ -134,6 +134,24 @@
       "parentUuid": "f21af17a_fc0d63e8",
       "revId": "0e8a7596287b72bed86874dda81eac4e52ec9507",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "728afaee_b47d73fa",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 15
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-04-11T16:19:16Z",
+      "side": 1,
+      "message": "This seems like an issue for a new CL. Done here:\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/4415150",
+      "parentUuid": "37fd7071_4e3c51d6",
+      "revId": "0e8a7596287b72bed86874dda81eac4e52ec9507",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
