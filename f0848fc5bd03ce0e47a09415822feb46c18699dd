@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1ed4e12_26925776",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-11T16:37:07Z",
+      "side": 1,
+      "message": "This doesn\u0027t roll, actually :(\n```\nerror: external/angle/Android.bp:7055:1: module \"ANGLE_library\" variant \"android_common\": invalid targetSdkVersion: invalid version in sdk_version \"system_current\"\n```",
+      "revId": "f0848fc5bd03ce0e47a09415822feb46c18699dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
