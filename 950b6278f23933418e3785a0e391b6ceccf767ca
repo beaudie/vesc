@@ -94,6 +94,30 @@
       },
       "revId": "950b6278f23933418e3785a0e391b6ceccf767ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb87f063_4debd0cf",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-11T17:29:19Z",
+      "side": 1,
+      "message": "Thanks for all the experiment. Lets go with this version for now and we can always revisit in future if we have better way.",
+      "parentUuid": "8f2c713f_542dd537",
+      "range": {
+        "startLine": 298,
+        "startChar": 8,
+        "endLine": 298,
+        "endChar": 35
+      },
+      "revId": "950b6278f23933418e3785a0e391b6ceccf767ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
