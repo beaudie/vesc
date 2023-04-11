@@ -466,8 +466,15 @@ void PackConstPointerParameter(ParamBuffer &params, ParamType paramType, const T
     }
     else if (token[0] == 'g')
     {
-        ASSERT(strcmp(token, "gResourceIDBuffer") == 0);
-        params.addUnnamedParam(paramType, reinterpret_cast<const T *>(gResourceIDBuffer));
+        if (strcmp(token, "gReadBuffer") == 0)
+        {
+            params.addUnnamedParam(paramType, reinterpret_cast<const T *>(gReadBuffer));
+        }
+        else
+        {
+            ASSERT(strcmp(token, "gResourceIDBuffer") == 0);
+            params.addUnnamedParam(paramType, reinterpret_cast<const T *>(gResourceIDBuffer));
+        }
     }
     else
     {
@@ -739,7 +746,7 @@ void PackParameter<uint8_t>(ParamBuffer &params, const Token &token, const Trace
 template <>
 void PackParameter<float *>(ParamBuffer &params, const Token &token, const TraceStringMap &strings)
 {
-    UNREACHABLE();
+    PackMutablePointerParameter<float>(params, ParamType::TGLfloatPointer, token);
 }
 
 template <>
@@ -845,7 +852,7 @@ void PackParameter<unsigned char *>(ParamBuffer &params,
                                     const Token &token,
                                     const TraceStringMap &strings)
 {
-    UNREACHABLE();
+    PackConstPointerParameter<GLubyte>(params, ParamType::TGLubyteConstPointer, token);
 }
 
 template <>
