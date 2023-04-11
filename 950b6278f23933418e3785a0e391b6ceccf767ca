@@ -70,6 +70,30 @@
       },
       "revId": "950b6278f23933418e3785a0e391b6ceccf767ca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f2c713f_542dd537",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-11T14:06:49Z",
+      "side": 1,
+      "message": "I tried to encapsulate logic into the `SharedFence` but failed. Because `SharedFence` supports copy operations and has `release()` method without `device` that is called from destructor, so it is impossible to destroy export Fence without rewriting `SharedFence` interface, which will be a more code diff.\n\nInstead, I imported FD from new `ExternalFence` into the `SharedFence`. Here is the draft CL: https://chromium-review.googlesource.com/c/angle/angle/+/4414860\nThe VVL `VUID-vkResetCommandBuffer-commandBuffer-00045` is still present in the draft CL.\n\nThere are additional problems. How handle errors in `exportFd`, `dup` and `importFd` inside the `CommandQueue`? Problem is that we already used `ExternalFence` for successful submission - we need a Fence to track that submission. But we can theoretically fail to initialize `SharedFence` from `ExternalFence`.\n\nThis CL does not have the above problem. If `exportFd` we will still have valid `VkFence` and error `ExternalFence::mFenceFdStatus` will be handled by `SyncHelperNativeFence`.\n\nHere some performance numbers from this CL on Android S906B.\n```\nexportFd, dup, importFd:  10.508,   0.938,  12.382 microsec\nexportFd, dup, importFd:  12.031,   1.055,   6.953 microsec\nexportFd, dup, importFd:  10.586,   1.015,   7.110 microsec\nexportFd, dup, importFd:  12.343,   0.938,   6.953 microsec\nexportFd, dup, importFd:  10.743,   1.132,   7.539 microsec\nexportFd, dup, importFd:   9.570,   0.938,   6.445 microsec\nexportFd, dup, importFd:  10.000,   0.860,   6.718 microsec\nexportFd, dup, importFd:   9.649,   0.898,   6.875 microsec\nexportFd, dup, importFd:  10.234,   0.938,   6.289 microsec\nexportFd, dup, importFd:  11.367,   0.820,   6.289 microsec\nexportFd, dup, importFd:   8.946,   0.742,   5.820 microsec\nexportFd, dup, importFd:  10.820,   0.938,   7.539 microsec\nexportFd, dup, importFd:  10.938,   0.937,   6.797 microsec\nexportFd, dup, importFd:  10.351,   0.859,   6.055 microsec\nexportFd, dup, importFd:  10.586,   1.133,  60.039 microsec\nexportFd, dup, importFd:  10.508,   1.094,   7.968 microsec\nexportFd, dup, importFd:  12.109,   0.820,   6.094 microsec\nexportFd, dup, importFd:  10.547,   1.054,   6.993 microsec\nexportFd, dup, importFd:  10.977,   0.938,   6.328 microsec\nexportFd, dup, importFd:  10.546,   0.899,   6.680 microsec\nexportFd, dup, importFd:  10.976,   1.016,   6.054 microsec\nexportFd, dup, importFd:  14.180,   1.055,   6.757 microsec\nexportFd, dup, importFd:  12.734,   1.250,   9.141 microsec\nexportFd, dup, importFd:  37.969,   3.867,  22.305 microsec\n```",
+      "parentUuid": "0fb4c62b_2a0d6d5d",
+      "range": {
+        "startLine": 298,
+        "startChar": 8,
+        "endLine": 298,
+        "endChar": 35
+      },
+      "revId": "950b6278f23933418e3785a0e391b6ceccf767ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
