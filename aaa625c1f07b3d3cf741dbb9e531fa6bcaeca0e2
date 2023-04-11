@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "731c35ab_67904727",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-11T13:36:06Z",
+      "side": 1,
+      "message": "@Igor FYI",
+      "revId": "aaa625c1f07b3d3cf741dbb9e531fa6bcaeca0e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b585263_8b6acbc7",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1767,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-11T13:36:06Z",
+      "side": 1,
+      "message": "Since you\u0027re working around here, would you mind (as a follow up), moving this out of prepareSwap entirely?\n\nIt was wrong to put it here, because this function is called without any front-end locks. Calling `doDeferredAcquireNextImage` in its entirety is also wrong. I was going to change this so that it only calls `vkAcquireNextImageKHR` once and return no matter what the result is, but I\u0027m not sure how much time I can spend working this week. If you move this out, it\u0027ll help me with that.",
+      "revId": "aaa625c1f07b3d3cf741dbb9e531fa6bcaeca0e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0a43131_961c9631",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1086,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-11T13:36:06Z",
+      "side": 1,
+      "message": "nit: now that it\u0027s out of the class, please consider a more descriptive name. Maybe `SubmissionResources`?\n\nMarking resolved though, can be follow up.",
+      "range": {
+        "startLine": 1086,
+        "startChar": 7,
+        "endLine": 1086,
+        "endChar": 20
+      },
+      "revId": "aaa625c1f07b3d3cf741dbb9e531fa6bcaeca0e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
