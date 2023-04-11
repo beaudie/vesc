@@ -3301,14 +3301,49 @@ TEST_P(PixelLocalStorageValidationTest, FramebufferTexturePixelLocalStorageANGLE
     EXPECT_GL_SINGLE_ERROR(GL_INVALID_OPERATION);
     EXPECT_GL_SINGLE_ERROR_MSG("Texture is not immutable.");
 
-    // INVALID_ENUM is generated if <backingtexture> is nonzero and not of type GL_TEXTURE_2D,
-    // GL_TEXTURE_CUBE_MAP, GL_TEXTURE_2D_ARRAY, or GL_TEXTURE_3D.
+    // INVALID_OPERATION is generated if <backingtexture> is nonzero and not of type TEXTURE_2D.
+    GLTexture texCube;
+    glBindTexture(GL_TEXTURE_CUBE_MAP, texCube);
+    glTexStorage2D(GL_TEXTURE_CUBE_MAP, 1, GL_RGBA8, 10, 10);
+    EXPECT_GL_NO_ERROR();
+    glFramebufferTexturePixelLocalStorageANGLE(0, texCube, 0, 1);
+    EXPECT_GL_SINGLE_ERROR(GL_INVALID_OPERATION);
+    EXPECT_GL_SINGLE_ERROR_MSG("Invalid pixel local storage texture type.");
+    EXPECT_PLS_INTEGER(0, GL_PIXEL_LOCAL_FORMAT_ANGLE, GL_NONE);
+    EXPECT_PLS_INTEGER(0, GL_PIXEL_LOCAL_TEXTURE_NAME_ANGLE, 0);
+    EXPECT_PLS_INTEGER(0, GL_PIXEL_LOCAL_TEXTURE_LEVEL_ANGLE, 0);
+    EXPECT_PLS_INTEGER(0, GL_PIXEL_LOCAL_TEXTURE_LAYER_ANGLE, 0);
+
+    GLTexture tex2DArray;
+    glBindTexture(GL_TEXTURE_2D_ARRAY, tex2DArray);
+    glTexStorage3D(GL_TEXTURE_2D_ARRAY, 2, GL_RGBA8I, 10, 10, 7);
+    EXPECT_GL_NO_ERROR();
+    glFramebufferTexturePixelLocalStorageANGLE(2, tex2DArray, 1, 6);
+    EXPECT_GL_SINGLE_ERROR(GL_INVALID_OPERATION);
+    EXPECT_GL_SINGLE_ERROR_MSG("Invalid pixel local storage texture type.");
+    EXPECT_PLS_INTEGER(2, GL_PIXEL_LOCAL_FORMAT_ANGLE, GL_NONE);
+    EXPECT_PLS_INTEGER(2, GL_PIXEL_LOCAL_TEXTURE_NAME_ANGLE, 0);
+    EXPECT_PLS_INTEGER(2, GL_PIXEL_LOCAL_TEXTURE_LEVEL_ANGLE, 0);
+    EXPECT_PLS_INTEGER(2, GL_PIXEL_LOCAL_TEXTURE_LAYER_ANGLE, 0);
+
+    GLTexture tex3D;
+    glBindTexture(GL_TEXTURE_3D, tex3D);
+    glTexStorage3D(GL_TEXTURE_3D, 3, GL_RGBA8I, 10, 10, 256);
+    EXPECT_GL_NO_ERROR();
+    glFramebufferTexturePixelLocalStorageANGLE(0, tex3D, 2, 255);
+    EXPECT_GL_SINGLE_ERROR(GL_INVALID_OPERATION);
+    EXPECT_GL_SINGLE_ERROR_MSG("Invalid pixel local storage texture type.");
+    EXPECT_PLS_INTEGER(0, GL_PIXEL_LOCAL_FORMAT_ANGLE, GL_NONE);
+    EXPECT_PLS_INTEGER(0, GL_PIXEL_LOCAL_TEXTURE_NAME_ANGLE, 0);
+    EXPECT_PLS_INTEGER(0, GL_PIXEL_LOCAL_TEXTURE_LEVEL_ANGLE, 0);
+    EXPECT_PLS_INTEGER(0, GL_PIXEL_LOCAL_TEXTURE_LAYER_ANGLE, 0);
+
     GLTexture tex2DMultisample;
     glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, tex2DMultisample);
     glTexStorage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 1, GL_RGBA8, 10, 10, 1);
     EXPECT_GL_NO_ERROR();
     glFramebufferTexturePixelLocalStorageANGLE(0, tex2DMultisample, 0, 0);
-    EXPECT_GL_SINGLE_ERROR(GL_INVALID_ENUM);
+    EXPECT_GL_SINGLE_ERROR(GL_INVALID_OPERATION);
     EXPECT_GL_SINGLE_ERROR_MSG("Invalid pixel local storage texture type.");
     EXPECT_PLS_INTEGER(0, GL_PIXEL_LOCAL_FORMAT_ANGLE, GL_NONE);
     EXPECT_PLS_INTEGER(0, GL_PIXEL_LOCAL_TEXTURE_NAME_ANGLE, 0);
@@ -3339,72 +3374,6 @@ TEST_P(PixelLocalStorageValidationTest, FramebufferTexturePixelLocalStorageANGLE
     glFramebufferTexturePixelLocalStorageANGLE(2, tex, 1, 1);
     EXPECT_GL_SINGLE_ERROR(GL_INVALID_VALUE);
     EXPECT_GL_SINGLE_ERROR_MSG("Layer is larger than texture depth.");
-
-    GLTexture texCube;
-    glBindTexture(GL_TEXTURE_CUBE_MAP, texCube);
-    glTexStorage2D(GL_TEXTURE_CUBE_MAP, 1, GL_RGBA8, 10, 10);
-    EXPECT_GL_NO_ERROR();
-    glFramebufferTexturePixelLocalStorageANGLE(2, texCube, 0, 6);
-    EXPECT_GL_SINGLE_ERROR(GL_INVALID_VALUE);
-    EXPECT_GL_SINGLE_ERROR_MSG("Layer is larger than texture depth.");
-    glFramebufferTexturePixelLocalStorageANGLE(2, texCube, 1, 5);
-    EXPECT_GL_SINGLE_ERROR(GL_INVALID_VALUE);
-    EXPECT_GL_SINGLE_ERROR_MSG("Level is larger than texture level count.");
-    glFramebufferTexturePixelLocalStorageANGLE(2, texCube, 0, 5);
-    EXPECT_GL_NO_ERROR();
-    EXPECT_PLS_INTEGER(2, GL_PIXEL_LOCAL_FORMAT_ANGLE, GL_RGBA8);
-    EXPECT_PLS_INTEGER(2, GL_PIXEL_LOCAL_TEXTURE_NAME_ANGLE, texCube);
-    EXPECT_PLS_INTEGER(2, GL_PIXEL_LOCAL_TEXTURE_LEVEL_ANGLE, 0);
-    EXPECT_PLS_INTEGER(2, GL_PIXEL_LOCAL_TEXTURE_LAYER_ANGLE, 5);
-    texCube.reset();
-    EXPECT_PLS_INTEGER(2, GL_PIXEL_LOCAL_FORMAT_ANGLE, GL_RGBA8);
-    EXPECT_PLS_INTEGER(2, GL_PIXEL_LOCAL_TEXTURE_NAME_ANGLE, 0);
-    EXPECT_PLS_INTEGER(2, GL_PIXEL_LOCAL_TEXTURE_LEVEL_ANGLE, 0);
-    EXPECT_PLS_INTEGER(2, GL_PIXEL_LOCAL_TEXTURE_LAYER_ANGLE, 0);
-
-    GLTexture tex2DArray;
-    glBindTexture(GL_TEXTURE_2D_ARRAY, tex2DArray);
-    glTexStorage3D(GL_TEXTURE_2D_ARRAY, 2, GL_RGBA8I, 10, 10, 7);
-    EXPECT_GL_NO_ERROR();
-    glFramebufferTexturePixelLocalStorageANGLE(2, tex2DArray, 1, 7);
-    EXPECT_GL_SINGLE_ERROR(GL_INVALID_VALUE);
-    EXPECT_GL_SINGLE_ERROR_MSG("Layer is larger than texture depth.");
-    glFramebufferTexturePixelLocalStorageANGLE(2, tex2DArray, 2, 6);
-    EXPECT_GL_SINGLE_ERROR(GL_INVALID_VALUE);
-    EXPECT_GL_SINGLE_ERROR_MSG("Level is larger than texture level count.");
-    glFramebufferTexturePixelLocalStorageANGLE(2, tex2DArray, 1, 6);
-    EXPECT_GL_NO_ERROR();
-    EXPECT_PLS_INTEGER(2, GL_PIXEL_LOCAL_FORMAT_ANGLE, GL_RGBA8I);
-    EXPECT_PLS_INTEGER(2, GL_PIXEL_LOCAL_TEXTURE_NAME_ANGLE, tex2DArray);
-    EXPECT_PLS_INTEGER(2, GL_PIXEL_LOCAL_TEXTURE_LEVEL_ANGLE, 1);
-    EXPECT_PLS_INTEGER(2, GL_PIXEL_LOCAL_TEXTURE_LAYER_ANGLE, 6);
-    tex2DArray.reset();
-    EXPECT_PLS_INTEGER(2, GL_PIXEL_LOCAL_FORMAT_ANGLE, GL_RGBA8I);
-    EXPECT_PLS_INTEGER(2, GL_PIXEL_LOCAL_TEXTURE_NAME_ANGLE, 0);
-    EXPECT_PLS_INTEGER(2, GL_PIXEL_LOCAL_TEXTURE_LEVEL_ANGLE, 0);
-    EXPECT_PLS_INTEGER(2, GL_PIXEL_LOCAL_TEXTURE_LAYER_ANGLE, 0);
-
-    GLTexture tex3D;
-    glBindTexture(GL_TEXTURE_3D, tex3D);
-    glTexStorage3D(GL_TEXTURE_3D, 3, GL_RGBA8I, 10, 10, 256);
-    EXPECT_GL_NO_ERROR();
-    glFramebufferTexturePixelLocalStorageANGLE(0, tex3D, 2, 256);
-    EXPECT_GL_SINGLE_ERROR(GL_INVALID_VALUE);
-    EXPECT_GL_SINGLE_ERROR_MSG("Layer is larger than texture depth.");
-    glFramebufferTexturePixelLocalStorageANGLE(0, tex3D, 3, 255);
-    EXPECT_GL_SINGLE_ERROR(GL_INVALID_VALUE);
-    EXPECT_GL_SINGLE_ERROR_MSG("Level is larger than texture level count.");
-    glFramebufferTexturePixelLocalStorageANGLE(0, tex3D, 2, 255);
-    EXPECT_GL_NO_ERROR();
-    EXPECT_PLS_INTEGER(0, GL_PIXEL_LOCAL_FORMAT_ANGLE, GL_RGBA8I);
-    EXPECT_PLS_INTEGER(0, GL_PIXEL_LOCAL_TEXTURE_NAME_ANGLE, tex3D);
-    EXPECT_PLS_INTEGER(0, GL_PIXEL_LOCAL_TEXTURE_LEVEL_ANGLE, 2);
-    EXPECT_PLS_INTEGER(0, GL_PIXEL_LOCAL_TEXTURE_LAYER_ANGLE, 255);
-    tex3D.reset();
-    EXPECT_PLS_INTEGER(0, GL_PIXEL_LOCAL_FORMAT_ANGLE, GL_RGBA8I);
-    EXPECT_PLS_INTEGER(0, GL_PIXEL_LOCAL_TEXTURE_NAME_ANGLE, 0);
-    EXPECT_PLS_INTEGER(0, GL_PIXEL_LOCAL_TEXTURE_LEVEL_ANGLE, 0);
-    EXPECT_PLS_INTEGER(0, GL_PIXEL_LOCAL_TEXTURE_LAYER_ANGLE, 0);
 
     // INVALID_ENUM is generated if <backingtexture> is nonzero and its internalformat is not
     // one of the acceptable values in Table X.2.
