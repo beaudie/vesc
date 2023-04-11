@@ -610,10 +610,22 @@ CGSize WindowSurfaceMtl::calcExpectedDrawableSize() const
 
 bool WindowSurfaceMtl::checkIfLayerResized(const gl::Context *context)
 {
-    if (mMetalLayer.get() != mLayer && mMetalLayer.get().contentsScale != mLayer.contentsScale)
+    if (mMetalLayer.get() != mLayer)
     {
-        // Parent layer's content scale has changed, update Metal layer's scale factor.
-        mMetalLayer.get().contentsScale = mLayer.contentsScale;
+        if (mMetalLayer.get().contentsScale != mLayer.contentsScale)
+        {
+            // Parent layer's content scale has changed, update Metal layer's scale factor.
+            mMetalLayer.get().contentsScale = mLayer.contentsScale;
+        }
+#if !TARGET_OS_OSX && !TARGET_OS_MACCATALYST
+        // Only macOS supports autoresizing mask. Thus, the metal layer has to be manually
+        // updated.
+        if (!CGRectEqualToRect(mMetalLayer.get().bounds, mLayer.bounds))
+        {
+            // Parent layer's bounds has changed, update the Metal layer's bounds as well.
+            mMetalLayer.get().bounds = mLayer.bounds;
+        }
+#endif
     }
 
     CGSize currentLayerDrawableSize = mMetalLayer.get().drawableSize;
