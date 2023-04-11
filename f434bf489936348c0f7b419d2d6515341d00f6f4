@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02c01e11_72369a64",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-04-11T11:30:20Z",
+      "side": 1,
+      "message": "Kenneth, could you check out the patch again?\nI had to move some functions form SystemInfo.h to SystemInfo_internal.h, due to contradiction of:\n1) Chromium uses SystemInfo.h but doesn\u0027t have common/* in include path.\n2) SystemInfo.h used defines from common/platform.h, but did not include it until this work.\n \nI don\u0027t know what\u0027s up with winuwp compile, maybe it\u0027s broken and will be fixed after Easter break?",
+      "revId": "f434bf489936348c0f7b419d2d6515341d00f6f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
