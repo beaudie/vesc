@@ -10,6 +10,7 @@
 #include "libANGLE/renderer/vulkan/CommandProcessor.h"
 #include "common/system_utils.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
+#include "libANGLE/renderer/vulkan/SyncVk.h"
 
 namespace rx
 {
@@ -211,7 +212,7 @@ void CommandProcessorTask::initTask()
     mRenderPassCommandBuffer        = nullptr;
     mRenderPass                     = nullptr;
     mSemaphore                      = VK_NULL_HANDLE;
-    mExternalFence                  = VK_NULL_HANDLE;
+    mExternalFence                  = nullptr;
     mOneOffWaitSemaphore            = VK_NULL_HANDLE;
     mOneOffWaitSemaphoreStageMask   = 0;
     mPresentInfo                    = {};
@@ -369,7 +370,7 @@ void CommandProcessorTask::initPresent(egl::ContextPriority priority,
 }
 
 void CommandProcessorTask::initFlushAndQueueSubmit(VkSemaphore semaphore,
-                                                   VkFence externalFence,
+                                                   ExternalFence *externalFence,
                                                    ProtectionType protectionType,
                                                    egl::ContextPriority priority,
                                                    const QueueSerial &submitQueueSerial)
@@ -430,7 +431,8 @@ CommandProcessorTask &CommandProcessorTask::operator=(CommandProcessorTask &&rhs
 }
 
 // CommandBatch implementation.
-CommandBatch::CommandBatch() : protectionType(ProtectionType::InvalidEnum) {}
+CommandBatch::CommandBatch() : externalFence(nullptr), protectionType(ProtectionType::InvalidEnum)
+{}
 
 CommandBatch::~CommandBatch() = default;
 
@@ -444,6 +446,7 @@ CommandBatch &CommandBatch::operator=(CommandBatch &&other)
     std::swap(primaryCommands, other.primaryCommands);
     std::swap(secondaryCommands, other.secondaryCommands);
     std::swap(fence, other.fence);
+    std::swap(externalFence, other.externalFence);
     std::swap(queueSerial, other.queueSerial);
     std::swap(protectionType, other.protectionType);
     return *this;
@@ -454,6 +457,10 @@ void CommandBatch::destroy(VkDevice device)
     primaryCommands.destroy(device);
     secondaryCommands.retireCommandBuffers();
     fence.destroy(device);
+    if (externalFence != nullptr)
+    {
+        externalFence->release(device);
+    }
     protectionType = ProtectionType::InvalidEnum;
 }
 
@@ -794,7 +801,7 @@ angle::Result CommandProcessor::enqueueSubmitCommands(Context *context,
                                                       ProtectionType protectionType,
                                                       egl::ContextPriority priority,
                                                       VkSemaphore signalSemaphore,
-                                                      VkFence externalFence,
+                                                      ExternalFence *externalFence,
                                                       const QueueSerial &submitQueueSerial)
 {
     ANGLE_TRY(checkAndPopPendingError(context));
@@ -807,7 +814,7 @@ angle::Result CommandProcessor::enqueueSubmitCommands(Context *context,
 
     mLastEnqueuedSerials.setQueueSerial(submitQueueSerial);
 
-    if (externalFence != VK_NULL_HANDLE)
+    if (externalFence != nullptr)
     {
         ANGLE_TRY(waitForQueueSerialToBeSubmitted(context, submitQueueSerial));
     }
@@ -1064,6 +1071,11 @@ void CommandQueue::handleDeviceLost(RendererVk *renderer)
 
             batch.fence.destroy(device);
         }
+        if (batch.externalFence != nullptr)
+        {
+            batch.externalFence->release(device);
+            batch.externalFence = nullptr;
+        }
 
         // On device lost, here simply destroy the CommandBuffer, it will fully cleared later
         // by CommandPool::destroy
@@ -1290,7 +1302,7 @@ angle::Result CommandQueue::submitCommands(Context *context,
                                            ProtectionType protectionType,
                                            egl::ContextPriority priority,
                                            VkSemaphore signalSemaphore,
-                                           VkFence externalFence,
+                                           ExternalFence *externalFence,
                                            const QueueSerial &submitQueueSerial)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandQueue::submitCommands");
@@ -1322,8 +1334,8 @@ angle::Result CommandQueue::submitCommands(Context *context,
 
     // Don't make a submission if there is nothing to submit.
     const bool needsQueueSubmit = batch.primaryCommands.valid() ||
-                                  signalSemaphore != VK_NULL_HANDLE ||
-                                  externalFence != VK_NULL_HANDLE || !waitSemaphores.empty();
+                                  signalSemaphore != VK_NULL_HANDLE || externalFence != nullptr ||
+                                  !waitSemaphores.empty();
     VkSubmitInfo submitInfo                   = {};
     VkProtectedSubmitInfo protectedSubmitInfo = {};
 
@@ -1348,13 +1360,19 @@ angle::Result CommandQueue::submitCommands(Context *context,
 
         ANGLE_VK_TRY(context, batch.fence.init(context->getDevice(), &mFenceRecycler));
 
+        if (externalFence != nullptr)
+        {
+            batch.externalFence = externalFence;
+            batch.externalFence->addRef();
+        }
+
         ++mPerfCounters.vkQueueSubmitCallsTotal;
         ++mPerfCounters.vkQueueSubmitCallsPerFrame;
     }
 
     // Note queueSubmit will release the lock.
-    ANGLE_TRY(queueSubmit(context, std::move(lock), priority, submitInfo, externalFence,
-                          scopedBatch, submitQueueSerial));
+    ANGLE_TRY(queueSubmit(context, std::move(lock), priority, submitInfo, scopedBatch,
+                          submitQueueSerial));
 
     // Clear local vector without lock.
     waitSemaphores.clear();
@@ -1411,15 +1429,14 @@ angle::Result CommandQueue::queueSubmitOneOff(Context *context,
     ++mPerfCounters.vkQueueSubmitCallsPerFrame;
 
     // Note queueSubmit will release the lock.
-    return queueSubmit(context, std::move(lock), contextPriority, submitInfo, VK_NULL_HANDLE,
-                       scopedBatch, submitQueueSerial);
+    return queueSubmit(context, std::move(lock), contextPriority, submitInfo, scopedBatch,
+                       submitQueueSerial);
 }
 
 angle::Result CommandQueue::queueSubmit(Context *context,
                                         std::unique_lock<std::mutex> &&dequeueLock,
                                         egl::ContextPriority contextPriority,
                                         const VkSubmitInfo &submitInfo,
-                                        VkFence externalFence,
                                         DeviceScoped<CommandBatch> &commandBatch,
                                         const QueueSerial &submitQueueSerial)
 {
@@ -1443,24 +1460,39 @@ angle::Result CommandQueue::queueSubmit(Context *context,
 
     if (submitInfo.sType == VK_STRUCTURE_TYPE_SUBMIT_INFO)
     {
+        const Fence &batchFence      = commandBatch.get().fence.get();
+        ExternalFence *externalFence = commandBatch.get().externalFence;
+
         VkQueue queue = getQueue(contextPriority);
-        VkFence fence = commandBatch.get().fence.get().getHandle();
+        VkFence fence =
+            externalFence != nullptr ? externalFence->getHandle() : batchFence.getHandle();
         ASSERT(fence != VK_NULL_HANDLE);
-        if (externalFence == VK_NULL_HANDLE)
+        ANGLE_VK_TRY(context, vkQueueSubmit(queue, 1, &submitInfo, fence));
+
+        if (externalFence != nullptr)
         {
-            // Submit as usual if no externalFence provided.
-            ANGLE_VK_TRY(context, vkQueueSubmit(queue, 1, &submitInfo, fence));
-        }
-        else
-        {
-            // Submit the batch using the provided externalFence.
-            ANGLE_VK_TRY(context, vkQueueSubmit(queue, 1, &submitInfo, externalFence));
-            // Submit fence alone to be able to wait for completion using QueueSerial.
-            VkSubmitInfo fenceSubmitInfo = {};
-            fenceSubmitInfo.sType        = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-            ANGLE_VK_TRY(context, vkQueueSubmit(queue, 1, &fenceSubmitInfo, fence));
-            // Possible problem with double submissions: externalFence may be already in signaled
-            // state, while QueueSerial (based on fence) will still be not finished.
+            VkDevice device = context->getDevice();
+
+            VkFenceGetFdInfoKHR fenceGetFdInfo = {};
+            fenceGetFdInfo.sType               = VK_STRUCTURE_TYPE_FENCE_GET_FD_INFO_KHR;
+            fenceGetFdInfo.fence               = externalFence->getHandle();
+            fenceGetFdInfo.handleType          = VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT_KHR;
+            externalFence->exportFd(device, fenceGetFdInfo);
+
+            // TODO: How to handle case if export failed? Because we already have successful
+            // submission that we should track using the externalFence.
+            ASSERT(externalFence->getFenceFdStatus() == VK_SUCCESS);
+            const int dupFD = dup(externalFence->getFenceFd());
+
+            VkImportFenceFdInfoKHR importFdInfo = {};
+            importFdInfo.sType                  = VK_STRUCTURE_TYPE_IMPORT_FENCE_FD_INFO_KHR;
+            importFdInfo.fence                  = batchFence.getHandle();
+            importFdInfo.flags                  = VK_FENCE_IMPORT_TEMPORARY_BIT_KHR;
+            importFdInfo.handleType             = VK_EXTERNAL_FENCE_HANDLE_TYPE_SYNC_FD_BIT_KHR;
+            importFdInfo.fd                     = dupFD;
+            VkResult result                     = batchFence.importFd(device, importFdInfo);
+            // TODO: Same as above.
+            ASSERT(result == VK_SUCCESS);
         }
     }
 
@@ -1579,6 +1611,10 @@ angle::Result CommandQueue::retireFinishedCommandsLocked(Context *context)
         if (batch.fence)
         {
             batch.fence.release();
+        }
+        if (batch.externalFence != nullptr)
+        {
+            batch.externalFence->release(context->getDevice());
         }
         if (batch.primaryCommands.valid())
         {

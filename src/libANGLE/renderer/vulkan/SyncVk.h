@@ -27,6 +27,49 @@ namespace vk
 // Represents an invalid native fence FD.
 constexpr int kInvalidFenceFd = EGL_NO_NATIVE_FENCE_FD_ANDROID;
 
+class ExternalFence final : angle::NonCopyable
+{
+  public:
+    ExternalFence();
+    ~ExternalFence();
+
+    VkResult init(VkDevice device, const VkFenceCreateInfo &createInfo);
+    void init(int fenceFd);
+
+    void addRef()
+    {
+        ASSERT(mRefCount != std::numeric_limits<uint32_t>::max());
+        mRefCount.fetch_add(1, std::memory_order_relaxed);
+    }
+
+    void release(VkDevice device)
+    {
+        ASSERT(mRefCount > 0);
+        if (mRefCount.fetch_sub(1, std::memory_order_release) == 1)
+        {
+            destroy(device);
+            delete this;
+        }
+    }
+
+    VkFence getHandle() const { return mFence.getHandle(); }
+    VkResult getStatus(VkDevice device) const;
+    VkResult wait(VkDevice device, uint64_t timeout) const;
+
+    void exportFd(VkDevice device, const VkFenceGetFdInfoKHR &fenceGetFdInfo);
+    VkResult getFenceFdStatus() const { return mFenceFdStatus; }
+    int getFenceFd() const { return mFenceFd; }
+
+  private:
+    void destroy(VkDevice device);
+
+  private:
+    std::atomic<uint32_t> mRefCount;
+    Fence mFence;
+    VkResult mFenceFdStatus;
+    int mFenceFd;
+};
+
 // Implementation of fence types - glFenceSync, and EGLSync(EGL_SYNC_FENCE_KHR).
 // The behaviors of SyncVk and EGLFenceSyncVk as fence syncs are currently
 // identical for the Vulkan backend, and this class implements both interfaces.
@@ -78,8 +121,7 @@ class SyncHelperNativeFence : public SyncHelper
     angle::Result dupNativeFenceFD(Context *context, int *fdOut) const override;
 
   private:
-    vk::Fence mFenceWithFd;
-    int mNativeFenceFd;
+    ExternalFence *mExternalFence;
 };
 
 }  // namespace vk
