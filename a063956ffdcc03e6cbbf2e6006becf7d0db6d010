@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bcbaaa02_227a6ed5",
+        "filename": "src/common/system_utils_unittest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-12T13:47:50Z",
+      "side": 1,
+      "message": "\u003e Please verify that the contents of threadIds are unique.\n\n`set` contains only unique ids and I check `size()` at the end. Is this not enough?\n\n\u003e Also verify that none of them are equal to InvalidThreadId().\n\nOK.",
+      "parentUuid": "d7b80a51_35f8aea3",
+      "revId": "a063956ffdcc03e6cbbf2e6006becf7d0db6d010",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c10f969b_29507f5f",
         "filename": "src/common/system_utils_unittest.cpp",
         "patchSetId": 5
@@ -31,6 +49,24 @@
       "writtenOn": "2023-04-12T04:56:21Z",
       "side": 1,
       "message": "For fun, I suggest joining only half the threads, then spawn another kThreadCount/2 threads and accumulate their ids in `threadIds` (write over the half that was joined).\n\nThen do the same checks as above again; that ids are unique and valid.\n\nThen join all threads before ending.",
+      "revId": "a063956ffdcc03e6cbbf2e6006becf7d0db6d010",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e963684c_50c7b4af",
+        "filename": "src/common/system_utils_unittest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-12T13:47:50Z",
+      "side": 1,
+      "message": "I do not understand.\n\nNew `kThreadCount/2` threads may get reused IDs or may get new IDs, so the resulting `threadIds.size()` may be anywhere in `[kThreadCount..kThreadCount+kThreadCount/2]`.\n\nAdditionally, even if not join other half, they may be already finished, so new threads may reuse IDs of these threads. This is why I have `readyCount \u003d\u003d kThreadCount`, to ensure threads are not running one by one for example.",
+      "parentUuid": "c10f969b_29507f5f",
       "revId": "a063956ffdcc03e6cbbf2e6006becf7d0db6d010",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
