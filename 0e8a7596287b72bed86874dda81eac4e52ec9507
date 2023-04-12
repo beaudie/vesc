@@ -85,6 +85,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0db1b851_c9de0918",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 15
+      },
+      "lineNbr": 604,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-04-12T07:44:03Z",
+      "side": 1,
+      "message": "I meant that the error condition should be just \"count ... is equal to 255\" because it cannot get greater anyway.",
+      "parentUuid": "bb43f8be_ba9ef7a5",
+      "revId": "0e8a7596287b72bed86874dda81eac4e52ec9507",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "96237fc5_09fdd0fb",
         "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
         "patchSetId": 15
