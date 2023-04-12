@@ -16,6 +16,40 @@
       "message": "This is slightly better fix for single buffer mode ANI semaphore wait. I think in reality it probably does not matter: single buffer mode is expected to see tearing anyway. We probably even don\u0027t need semaphores at all during single buffer mode, including transition into single buffer mode (I will leave that to others for now). In this CL, the ANI semaphore is consumed right after ANI call instead of at present time.",
       "revId": "368670eeb798d7ba815b4802dadf1ebb02ebfb2d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6602b64_72571c6f",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1860,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-12T17:33:24Z",
+      "side": 1,
+      "message": "This comment incorrectly mentions \"single buffer mode\".\n`vk::ImageLayout::Present` is possible in `EGLSurfaceTest.SwapWithoutAnyDraw*` test.\n\nMay change like this:\n```\nimage may already be in Present layout (if swap without any draw)\n```",
+      "revId": "368670eeb798d7ba815b4802dadf1ebb02ebfb2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "267c0742_f760e84e",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2286,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-12T17:33:24Z",
+      "side": 1,
+      "message": "IMO we need to postpone this CL until `!mNeedToAcquireNextSwapchainImage` is removed.\n\nBut before that, need to fix `mPresentHistory` problem. It uses `presentFence` that is actually ANI fence. If remove ANI call in a single buffer mode, `mPresentHistory` will grow infinitely.\n\nSince ANI is unnecessarily called each flush, this CL will also add empty `queueSubmitOneOff()` each time.\n\nBut when remove repeated ANI calls, maybe this CL may not be even required. Because logic below will skip ANI if layout already is `vk::ImageLayout::SharedPresent`. So it should not be possible at all get ANI semaphore in present and `vk::ImageLayout::SharedPresent`.\n\nI have in plans to fix `mPresentHistory` in a single buffer mode and then remove this `!mNeedToAcquireNextSwapchainImage`.",
+      "revId": "368670eeb798d7ba815b4802dadf1ebb02ebfb2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
