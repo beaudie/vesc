@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5338852_a5fa24ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-12T17:02:17Z",
+      "side": 1,
+      "message": "This is slightly better fix for single buffer mode ANI semaphore wait. I think in reality it probably does not matter: single buffer mode is expected to see tearing anyway. We probably even don\u0027t need semaphores at all during single buffer mode, including transition into single buffer mode (I will leave that to others for now). In this CL, the ANI semaphore is consumed right after ANI call instead of at present time.",
+      "revId": "368670eeb798d7ba815b4802dadf1ebb02ebfb2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
