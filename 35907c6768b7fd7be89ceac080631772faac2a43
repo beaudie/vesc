@@ -16,6 +16,24 @@
       "message": "Did anything change in this CL? I saw the flakes still happening when only the second CL was reverted",
       "revId": "35907c6768b7fd7be89ceac080631772faac2a43",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5f50046_94d9d9c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-12T17:31:06Z",
+      "side": 1,
+      "message": "Nothing changed. I am trying to reproduce it again and somehow never reproduce again here over past few days (see the Debug CL above) with many tries. The failure is somehow validation layer think depth write is enabled but it actually does not. I think we should try to reland this CL again and I will watch in the field and the worst case is disable render pass reuse for UtilsVk::blit.",
+      "parentUuid": "0571ea54_cb0ab494",
+      "revId": "35907c6768b7fd7be89ceac080631772faac2a43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
