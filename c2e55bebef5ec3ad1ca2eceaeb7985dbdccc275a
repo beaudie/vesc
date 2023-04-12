@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4eff8104_1d1b1194",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-04-12T07:56:09Z",
+      "side": 1,
+      "message": "Dropping cubemaps seems fine, dropping arrays is concerning.\n\nUsing PLS for dynamic material texture generation, it\u0027s easy to hit the limit of 16 texture units as our full PBR model is already at such capacity. Supporting texture arrays would alleviate this issue because the max number of array elements is much greater than 16.",
+      "revId": "c2e55bebef5ec3ad1ca2eceaeb7985dbdccc275a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
