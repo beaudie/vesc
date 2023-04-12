@@ -33,6 +33,24 @@
       "message": "Still lgtm. Thanks for persisting with this.\n\n+ynovikov about the WinUWP build failures. It looks like they might have been addressed already. Let me try CQ\u0027ing this for you.",
       "revId": "f434bf489936348c0f7b419d2d6515341d00f6f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52c37ce7_fb7fdae6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-04-12T11:25:18Z",
+      "side": 1,
+      "message": "Yes, WinUWP was fixed by https://chromium-review.googlesource.com/c/angle/angle/+/4414482",
+      "parentUuid": "2b56d347_58916d26",
+      "revId": "f434bf489936348c0f7b419d2d6515341d00f6f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
