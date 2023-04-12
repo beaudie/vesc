@@ -141,6 +141,24 @@
       "parentUuid": "62b810b2_23fdda8e",
       "revId": "a063956ffdcc03e6cbbf2e6006becf7d0db6d010",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f84ed992_50041aae",
+        "filename": "src/common/system_utils_unittest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-12T16:27:44Z",
+      "side": 1,
+      "message": "Check on Android, Linux and Windows this modified test:\n```\n    for (size_t i \u003d 0; i \u003c kThreadCount; ++i)\n    {\n        readyCount \u003d 0;\n        threads.emplace_back([\u0026]() {\n            std::unique_lock\u003cstd::mutex\u003e lock(mutex);\n            threadIds.insert(angle::GetCurrentThreadId());\n            ++readyCount;\n            condVar.notify_all();\n        });\n        {\n            std::unique_lock\u003cstd::mutex\u003e lock(mutex);\n            condVar.wait(lock, [\u0026]() { return readyCount \u003d\u003d 1; });\n        }\n    }\n```\n\nIt passes with `kThreadCount \u003d\u003d 1000` on Android and Linux 100% of times.\n\nHowever it fails 100% of times on Windows even with `kThreadCount \u003d\u003d 16`.\n```\n..\\..\\src\\common\\system_utils_unittest.cpp(481): error: Expected equality of these values:\n  threadIds.size()\n    Which is: 13\n  kThreadCount\n    Which is: 16\n[  FAILED  ] SystemUtils.GetCurrentThreadId (3 ms)\n```\n\nWhen `kThreadCount \u003d\u003d 1000` almost all runs:\n```\n..\\..\\src\\common\\system_utils_unittest.cpp(481): error: Expected equality of these values:\n  threadIds.size()\n    Which is: 49\n  kThreadCount\n    Which is: 1000\n[  FAILED  ] SystemUtils.GetCurrentThreadId (89 ms)\n```\nBut sometimes:\n```\n..\\..\\src\\common\\system_utils_unittest.cpp(481): error: Expected equality of these values:\n  threadIds.size()\n    Which is: 8\n  kThreadCount\n    Which is: 1000\n[  FAILED  ] SystemUtils.GetCurrentThreadId (99 ms)\n```",
+      "parentUuid": "9c4e0cc0_0db356ba",
+      "revId": "a063956ffdcc03e6cbbf2e6006becf7d0db6d010",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
