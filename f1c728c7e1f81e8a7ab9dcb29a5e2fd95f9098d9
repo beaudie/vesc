@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "efaefb4f_82ff0b5a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-12T18:13:07Z",
+      "side": 1,
+      "message": "lgtm - thanks for cleaning up the macro usage.",
+      "revId": "f1c728c7e1f81e8a7ab9dcb29a5e2fd95f9098d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
