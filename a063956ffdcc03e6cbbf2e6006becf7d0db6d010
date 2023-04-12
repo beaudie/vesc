@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "78a90b31_cbe35daa",
+        "filename": "src/common/system_utils_unittest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 477,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-12T14:13:10Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "bcbaaa02_227a6ed5",
+      "revId": "a063956ffdcc03e6cbbf2e6006becf7d0db6d010",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c10f969b_29507f5f",
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "I do not understand.\n\nNew `kThreadCount/2` threads may get reused IDs or may get new IDs, so the resulting `threadIds.size()` may be anywhere in `[kThreadCount..kThreadCount+kThreadCount/2]`.\n\nAdditionally, even if not join other half, they may be already finished, so new threads may reuse IDs of these threads. This is why I have `readyCount \u003d\u003d kThreadCount`, to ensure threads are not running one by one for example.",
       "parentUuid": "c10f969b_29507f5f",
+      "revId": "a063956ffdcc03e6cbbf2e6006becf7d0db6d010",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0b0aef3_0de0e2f3",
+        "filename": "src/common/system_utils_unittest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-12T14:13:10Z",
+      "side": 1,
+      "message": "Right, I was assuming `threadIds` is a `vector` (so you could know which thread ids to discard after joining which threads).\n\n\u003e Additionally, even if not join other half, they may be already finished, so new threads may reuse IDs of these threads\n\nIs that true? Aren\u0027t the threads zombie (and hold on to their resources, like TLS) until joined? It sounds to me like you could just let the threads immediately finish and the test should still pass",
+      "parentUuid": "e963684c_50c7b4af",
       "revId": "a063956ffdcc03e6cbbf2e6006becf7d0db6d010",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
