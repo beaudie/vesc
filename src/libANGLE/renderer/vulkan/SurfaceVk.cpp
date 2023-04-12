@@ -1862,7 +1862,6 @@ angle::Result WindowSurfaceVk::prePresentSubmit(ContextVk *contextVk,
     {
         ASSERT(!renderer->getFeatures().supportsPresentation.enabled ||
                image.image->getCurrentImageLayout() == vk::ImageLayout::Present ||
-               image.image->getCurrentImageLayout() == vk::ImageLayout::SharedPresent ||
                image.image->getCurrentImageLayout() == vk::ImageLayout::Undefined);
         contextVk->addWaitSemaphore(image.image->getAcquireNextImageSemaphore().getHandle(),
                                     vk::kSwapchainAcquireImageWaitStageFlags);
@@ -2346,8 +2345,7 @@ VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
     image.image->setAcquireNextImageSemaphore(acquireImageSemaphore);
 
     // Single Image Mode
-    if (isSharedPresentMode() &&
-        (image.image->getCurrentImageLayout() != vk::ImageLayout::SharedPresent))
+    if (isSharedPresentMode())
     {
         rx::RendererVk *rendererVk = context->getRenderer();
         rx::vk::PrimaryCommandBuffer primaryCommandBuffer;
@@ -2356,9 +2354,20 @@ VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
             angle::Result::Continue)
         {
             VkSemaphore semaphore;
-            // Note return errors is early exit may leave new Image and Swapchain in unknown state.
-            image.image->recordWriteBarrierOneOff(context, vk::ImageLayout::SharedPresent,
-                                                  &primaryCommandBuffer, &semaphore);
+            if (image.image->getCurrentImageLayout() != vk::ImageLayout::SharedPresent)
+            {
+                // Note return errors is early exit may leave new Image and Swapchain in unknown
+                // state.
+                image.image->recordWriteBarrierOneOff(context, vk::ImageLayout::SharedPresent,
+                                                      &primaryCommandBuffer, &semaphore);
+            }
+            else
+            {
+                // Ensure we always wait for ANI semaphore
+                semaphore = image.image->getAcquireNextImageSemaphore().getHandle();
+                image.image->resetAcquireNextImageSemaphore();
+            }
+            ASSERT(semaphore == acquireImageSemaphore);
             if (primaryCommandBuffer.end() != VK_SUCCESS)
             {
                 mDesiredSwapchainPresentMode = vk::PresentMode::FifoKHR;
