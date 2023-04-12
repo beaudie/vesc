@@ -159,6 +159,24 @@
       "parentUuid": "9c4e0cc0_0db356ba",
       "revId": "a063956ffdcc03e6cbbf2e6006becf7d0db6d010",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f75a95f_08266ad2",
+        "filename": "src/common/system_utils_unittest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-12T16:38:35Z",
+      "side": 1,
+      "message": "And here is result on Windows if remove `readyCount` logic from the original test (this CL).\n\n```\n..\\..\\src\\common\\system_utils_unittest.cpp(484): error: Expected equality of these values:\n  threadIds.size()\n    Which is: 951\n  kThreadCount\n    Which is: 1000\n[  FAILED  ] SystemUtils.GetCurrentThreadId (75 ms)\n```\nI did not reproduced this problem before, I just assumed that this may happen and it did)",
+      "parentUuid": "f84ed992_50041aae",
+      "revId": "a063956ffdcc03e6cbbf2e6006becf7d0db6d010",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
