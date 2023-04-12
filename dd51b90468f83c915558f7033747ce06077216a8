@@ -33,6 +33,24 @@
       "message": "I think this file should use the ANGLE_PLATFORM_ macros in src/common/platform.h rather than the TARGET_ macros directly. Would you consider updating this and the couple of other instances of these #ifs in this file to:\n\n#if !ANGLE_PLATFORM_MACOS \u0026\u0026 !ANGLE_PLATFORM_MACCATALYST\n\nor whatever is the most appropriate combination? (e.g. #if ANGLE_PLATFORM_IOS)\n\nThanks.",
       "revId": "dd51b90468f83c915558f7033747ce06077216a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7ae5deb_58e35a62",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1228974
+      },
+      "writtenOn": "2023-04-12T05:52:14Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "e725d372_a8492d2c",
+      "revId": "dd51b90468f83c915558f7033747ce06077216a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
