@@ -56,6 +56,30 @@
       },
       "revId": "1e9291ee46bfd26f9f77dad1869645ec3303dc3a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bae7fc1_21441c71",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5065,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2023-04-12T17:35:24Z",
+      "side": 1,
+      "message": "I was not able to reproduce the validation error by sampling different mip levels, but I did modify the test based on Cody\u0027s feedback so that a uniform condition prevents an actually rendering feedback loop.",
+      "parentUuid": "5725adec_25066827",
+      "range": {
+        "startLine": 5065,
+        "startChar": 34,
+        "endLine": 5065,
+        "endChar": 35
+      },
+      "revId": "1e9291ee46bfd26f9f77dad1869645ec3303dc3a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
