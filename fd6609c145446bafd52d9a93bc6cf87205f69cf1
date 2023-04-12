@@ -33,6 +33,24 @@
       "message": "This could be removed\n  #include \u003cTargetConditionals.h\u003e\n\nThis could be added in below hunk.\n  #include \"common/platform.h\"",
       "revId": "fd6609c145446bafd52d9a93bc6cf87205f69cf1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a8fd358_6f8f3d98",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1228974
+      },
+      "writtenOn": "2023-04-12T07:52:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c6f687d1_57c69896",
+      "revId": "fd6609c145446bafd52d9a93bc6cf87205f69cf1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
