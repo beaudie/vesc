@@ -91,6 +91,24 @@
       "parentUuid": "cab5188f_80017e57",
       "revId": "41b14fcffaec4970d4f1770b0ab874d2dd95c0a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25fa0af8_c0539d0c",
+        "filename": "src/libANGLE/Caps.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-04-12T07:32:41Z",
+      "side": 1,
+      "message": "I don\u0027t entirely understand the question.\nThis patch is trying to just keep things as they were.\nThis ifdef is broken anyway.",
+      "parentUuid": "177f8d5a_1e6f8a66",
+      "revId": "41b14fcffaec4970d4f1770b0ab874d2dd95c0a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
