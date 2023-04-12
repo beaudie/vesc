@@ -89,6 +89,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbeb7113_2d4bb106",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1860,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-12T17:04:04Z",
+      "side": 1,
+      "message": "Right, I think you probably even don\u0027t need any of ANI semaphores, just pass in nullptr for the semaphore when you make ANI calls. But anyway, I made a separate CL for slightly better fix for this. See https://chromium-review.googlesource.com/c/angle/angle/+/4419126",
+      "parentUuid": "e183ed7e_5de5b661",
+      "revId": "728e8007128e84bad4a922fdb48d5467831125b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a7622a8c_1cc73878",
