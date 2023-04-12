@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "146e214d_226d18d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-12T01:23:13Z",
+      "side": 1,
+      "message": "@i.nazarov@samsung.com You may want to check on your device as well. We are seeing significant performance improvement with app traces with the previous CL (it brings ~20 out of ~30 lowest performing app traces from bellow 80% of native to above 90%). And this CL should also give the same benefit to non-ARM devices.",
+      "revId": "181e52a660eafca03789e76edcdd5931e25d4203",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
