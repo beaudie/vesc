@@ -68,6 +68,24 @@
       "parentUuid": "47004b1c_1b6ccaff",
       "revId": "1bff2088cc174943c316b9b7ecd517ea14adcc4e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a807cee_7e1d3d8d",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1383,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-04-12T09:37:22Z",
+      "side": 1,
+      "message": "I removed the comment, maybe it confuses more than it helps.\nNone the code in the ifdefs are really correct, so maybe they\u0027ll be fixed in one go",
+      "parentUuid": "0a4ca337_f483b73b",
+      "revId": "1bff2088cc174943c316b9b7ecd517ea14adcc4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
