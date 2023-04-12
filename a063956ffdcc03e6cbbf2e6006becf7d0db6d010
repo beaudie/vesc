@@ -105,6 +105,24 @@
       "parentUuid": "e963684c_50c7b4af",
       "revId": "a063956ffdcc03e6cbbf2e6006becf7d0db6d010",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62b810b2_23fdda8e",
+        "filename": "src/common/system_utils_unittest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-12T14:22:46Z",
+      "side": 1,
+      "message": "\u003e Is that true? Aren\u0027t the threads zombie (and hold on to their resources, like TLS) until joined?\n\nIt is complicated topic. Different platforms may have different behaviors. Maybe TLS slot is released, before moving to a zombie state for example. I do not know... I can check, but I would not rely on this anyway.\n\nAnd it is not imported. I do not want to enfore `GetCurrentThreadId()` to return unique IDs for all not joined threads. It must return unique ID only for the running threads.",
+      "parentUuid": "a0b0aef3_0de0e2f3",
+      "revId": "a063956ffdcc03e6cbbf2e6006becf7d0db6d010",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
