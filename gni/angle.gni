@@ -653,12 +653,20 @@ template("angle_trace_library") {
     } else {
       _target = "${target_name}_$_trace"
     }
+
+    action("gen${target_name}_$_trace") {
+      script = "//scripts/bundle_trace.py"
+      args = [ _trace ]
+      outputs = [ "$root_gen_dir/bundle_$_trace.gz" ]
+    }
+
     angle_trace(_target) {
       sources = rebase_path(_trace_data.TraceFiles, ".", _trace_dir)
 
       data = [
         "$_trace_dir/$_trace.json",
         "$_trace_dir/$_trace.angledata.gz",
+        "$root_gen_dir/bundle_$_trace.gz",
       ]
 
       if (invoker.short_names) {
@@ -666,7 +674,7 @@ template("angle_trace_library") {
       }
     }
 
-    _trace_targets += [ ":$_target" ]
+    _trace_targets += [ ":$_target", ":gen${target_name}_$_trace" ]
   }
 
   angle_shared_library(target_name) {
