@@ -46,6 +46,47 @@
       },
       "revId": "afa8dfda7068bc60bb63ba6444289dc8a25830f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f122b1b_77b6f218",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-04-13T19:37:34Z",
+      "side": 1,
+      "message": "The tracer is moving towards emitting pure C, but I don\u0027t believe it is there yet. \n I\u0027m actually okay allowing CPP parsing so that folks can continue to emit CPP traces for compilation and modification.  I don\u0027t think anyone wants to be limited to C when you start hacking a trace.\n \nThat being said, we want to continue progressing the pure C interpreter so all traces can be supported there.",
+      "parentUuid": "3f6d0353_32ae4f20",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 44
+      },
+      "revId": "afa8dfda7068bc60bb63ba6444289dc8a25830f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4989e375_22f01d10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-04-13T19:37:34Z",
+      "side": 1,
+      "message": "+1 in case Shabi has strong feelings about allowing CPP parsing.",
+      "revId": "afa8dfda7068bc60bb63ba6444289dc8a25830f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
