@@ -99,6 +99,11 @@
     "script": "//src/tests/run_perf_tests.py",
     "type": "script",
   },
+  "angle_restricted_trace_gold_interpreted_tests": {
+    "label": "//src/tests/restricted_traces:angle_restricted_trace_gold_interpreted_tests",
+    "script": "//src/tests/restricted_traces/restricted_trace_gold_tests.py",
+    "type": "script",
+  },
   "angle_restricted_trace_gold_tests": {
     "label": "//src/tests/restricted_traces:angle_restricted_trace_gold_tests",
     "script": "//src/tests/restricted_traces/restricted_trace_gold_tests.py",
