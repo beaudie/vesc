@@ -34,7 +34,7 @@ if PY_UTILS not in sys.path:
 import android_helper
 import angle_test_util
 
-DEFAULT_TEST_SUITE = angle_test_util.ANGLE_TRACE_TEST_SUITE
+DEFAULT_TEST_SUITE = angle_test_util.ANGLE_TRACE_TEST_SUITES[0]
 DEFAULT_TEST_JSON = 'restricted_traces.json'
 DEFAULT_LOG_LEVEL = 'info'
 DEFAULT_BACKUP_FOLDER = 'retrace-backups'
