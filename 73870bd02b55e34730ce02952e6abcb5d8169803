@@ -16,6 +16,24 @@
       "message": "I am not a fan of pure virtual functions. Compare to earlier version, I prefer the earlier version with comments why mUse should not be used. But I will leave to you here.",
       "revId": "73870bd02b55e34730ce02952e6abcb5d8169803",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cffd7b24_ec536353",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-13T15:25:20Z",
+      "side": 1,
+      "message": "My vote for pure virtual. Will wait what @syoussefi@chromium.org will say.",
+      "parentUuid": "56fb8451_faa2609c",
+      "revId": "73870bd02b55e34730ce02952e6abcb5d8169803",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
