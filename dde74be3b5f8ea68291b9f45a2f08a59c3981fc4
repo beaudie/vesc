@@ -16,6 +16,24 @@
       "message": "Hi Shabi, thank you a lot for your help offline. As mentioned last time, the change will result some render results difference: https://angle-gold.skia.org/search?issue\u003d4400404\u0026crs\u003dgerrit\u0026patchsets\u003d8\u0026corpus\u003dangle.\n\nHow to determine if such difference is acceptable?",
       "revId": "dde74be3b5f8ea68291b9f45a2f08a59c3981fc4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "258324ff_6a30347d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-04-13T04:31:39Z",
+      "side": 1,
+      "message": "leave the comment as unresolved.",
+      "parentUuid": "3c1d7a50_85809a83",
+      "revId": "dde74be3b5f8ea68291b9f45a2f08a59c3981fc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
