@@ -16,6 +16,29 @@
       "message": "Hey Roman - this isn\u0027t cleaned up yet, but let me know what you think of the approach.",
       "revId": "d0a0cfda396b31e35012f83e5340d7c899ee22c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d9f8501_231e9703",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-04-13T09:40:21Z",
+      "side": 1,
+      "message": "I\u0027m not sure if \"group\" is compatible with isolates.",
+      "range": {
+        "startLine": 574,
+        "startChar": 4,
+        "endLine": 574,
+        "endChar": 9
+      },
+      "revId": "d0a0cfda396b31e35012f83e5340d7c899ee22c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
