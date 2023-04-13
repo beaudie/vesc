@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9e3e100_44689340",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-04-13T20:15:59Z",
+      "side": 1,
+      "message": "I believe the TracePerfTest callbacks are the only things exposed by trace libraries, so it is nice to have the interpreter behave the same way.",
+      "range": {
+        "startLine": 12,
+        "startChar": 51,
+        "endLine": 13,
+        "endChar": 9
+      },
+      "revId": "91f8d85f4c87d4342b9de30e9427e2d814ac1f65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39eb4ecb_da9949c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-04-13T20:15:59Z",
+      "side": 1,
+      "message": "This looks fine to me, but is there a reason not to bring the entire CL over?  I don\u0027t want to lose track of the other fixes Jamie had in there.",
+      "revId": "91f8d85f4c87d4342b9de30e9427e2d814ac1f65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0305e117_a7d02412",
+        "filename": "util/capture/trace_fixture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-04-13T20:15:59Z",
+      "side": 1,
+      "message": "nit: This is used on line 49, is there a reason you moved it?",
+      "range": {
+        "startLine": 200,
+        "startChar": 12,
+        "endLine": 200,
+        "endChar": 26
+      },
+      "revId": "91f8d85f4c87d4342b9de30e9427e2d814ac1f65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
