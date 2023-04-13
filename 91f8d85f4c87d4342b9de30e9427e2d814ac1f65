@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "d36a548e_583a6ead",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-13T20:27:48Z",
+      "side": 1,
+      "message": "Right but that\u0027s not what the original CL claims (that the callbacks were not getting called, and I\u0027m seeing them getting called on Linux).",
+      "parentUuid": "b9e3e100_44689340",
+      "range": {
+        "startLine": 12,
+        "startChar": 51,
+        "endLine": 13,
+        "endChar": 9
+      },
+      "revId": "91f8d85f4c87d4342b9de30e9427e2d814ac1f65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "39eb4ecb_da9949c0",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 7
@@ -37,6 +61,24 @@
       "writtenOn": "2023-04-13T20:15:59Z",
       "side": 1,
       "message": "This looks fine to me, but is there a reason not to bring the entire CL over?  I don\u0027t want to lose track of the other fixes Jamie had in there.",
+      "revId": "91f8d85f4c87d4342b9de30e9427e2d814ac1f65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca308cad_6cbb3026",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-13T20:27:48Z",
+      "side": 1,
+      "message": "That CL is difficult to understand as it mixes together multiple changes. This CL does one thing in a way I understand, can reason about. I made this CL step by step by trying to achieve the same goal as in the previous CL and that way I understood why certain changes were needed. I\u0027m planning to send other changes from that CL as separate CLs.",
+      "parentUuid": "39eb4ecb_da9949c0",
       "revId": "91f8d85f4c87d4342b9de30e9427e2d814ac1f65",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -54,6 +96,30 @@
       "writtenOn": "2023-04-13T20:15:59Z",
       "side": 1,
       "message": "nit: This is used on line 49, is there a reason you moved it?",
+      "range": {
+        "startLine": 200,
+        "startChar": 12,
+        "endLine": 200,
+        "endChar": 26
+      },
+      "revId": "91f8d85f4c87d4342b9de30e9427e2d814ac1f65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "198f31e5_b33811be",
+        "filename": "util/capture/trace_fixture.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-13T20:27:48Z",
+      "side": 1,
+      "message": "It\u0027s moved to another namespace. I was originally surprised by this too :)",
+      "parentUuid": "0305e117_a7d02412",
       "range": {
         "startLine": 200,
         "startChar": 12,
