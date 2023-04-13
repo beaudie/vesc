@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69d207a8_9b4b57da",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-13T17:09:24Z",
+      "side": 1,
+      "message": "I thought the point was to make sure the traces are pure C, so C++ features don\u0027t creep it (which presumably the interpreter is unable to consume).",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 44
+      },
+      "revId": "afa8dfda7068bc60bb63ba6444289dc8a25830f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
