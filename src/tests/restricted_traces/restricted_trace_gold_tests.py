@@ -41,7 +41,7 @@ DEFAULT_TEST_SUITE = angle_test_util.ANGLE_TRACE_TEST_SUITE
 DEFAULT_TEST_PREFIX = 'TraceTest.'
 DEFAULT_SCREENSHOT_PREFIX = 'angle_vulkan_'
 SWIFTSHADER_SCREENSHOT_PREFIX = 'angle_vulkan_swiftshader_'
-DEFAULT_BATCH_SIZE = 5
+DEFAULT_BATCH_SIZE = 1
 DEFAULT_LOG = 'info'
 DEFAULT_GOLD_INSTANCE = 'angle'
 
@@ -381,6 +381,7 @@ def _run_tests(args, tests, extra_flags, env, screenshot_dir, results, test_resu
                     '--verbose-logging',
                     '--render-test-output-dir=%s' % screenshot_dir,
                     '--save-screenshots',
+                    '--trace-interpreter',
                 ] + extra_flags
                 if args.swiftshader:
                     cmd_args += ['--use-angle=swiftshader']
