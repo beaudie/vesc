@@ -168,6 +168,6 @@ TraceLibrary::TraceLibrary(const std::string &traceName, const TraceInfo &traceI
     std::string libName = libNameStr.str();
     mTraceLibrary.reset(OpenSharedLibrary(libName.c_str(), SearchType::ModuleDir));
 
-    callFunc<SetTraceInfoFunc>("SetTraceInfo", traceInfo.traceFiles);
+    callFunc<SetTraceInfoFunc>("SetTraceInfo", traceInfo.name, traceInfo.traceFiles);
 }
 }  // namespace angle

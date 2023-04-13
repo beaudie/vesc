@@ -381,6 +381,7 @@ def _run_tests(args, tests, extra_flags, env, screenshot_dir, results, test_resu
                     '--verbose-logging',
                     '--render-test-output-dir=%s' % screenshot_dir,
                     '--save-screenshots',
+                    '--trace-interpreter',
                 ] + extra_flags
                 if args.swiftshader:
                     cmd_args += ['--use-angle=swiftshader']
