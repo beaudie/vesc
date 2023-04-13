@@ -38,6 +38,9 @@ declare_args() {
 
   # Expose GLX entry points by default when using Desktop GL on Linux.
   angle_expose_glx_entry_points = angle_enable_gl_desktop_frontend && is_linux
+
+  # Only bundle traces in the APK if we're building a subset
+  restricted_traces_outside_of_apk = is_android && angle_restricted_traces == []
 }
 
 if (angle_has_build) {
@@ -557,10 +560,18 @@ if (angle_standalone || build_with_chromium) {
 
       if (is_android) {
         public_configs += [ "$angle_root:build_id_config" ]
-        configs -= [ "//build/config/android:hide_all_but_jni" ]
         use_default_launcher = false
-        generate_final_jni = false
-        android_manifest_template = "$angle_root/src/tests/test_utils/runner/android/java/AndroidManifest.xml.jinja2"
+
+        do_APK_build = true
+        if (defined(invoker.use_raw_android_executable)) {
+          do_APK_build = !invoker.use_raw_android_executable
+        }
+
+        if (do_APK_build) {
+          generate_final_jni = false
+          android_manifest_template = "$angle_root/src/tests/test_utils/runner/android/java/AndroidManifest.xml.jinja2"
+          configs -= [ "//build/config/android:hide_all_but_jni" ]
+        }
         deps += [
           "$angle_root/src/tests:native_test_java",
           "$angle_root/src/tests:native_test_support_android",

@@ -230,6 +230,8 @@ def PrepareRestrictedTraces(traces):
     total_size = 0
     skipped = 0
 
+    device_tmp_path = '/data/local/tmp/angle_traces/'
+
     def _Push(local_path, path_from_root):
         nonlocal total_size, skipped
         device_path = '/sdcard/chromium_tests_root/' + path_from_root
@@ -239,12 +241,44 @@ def PrepareRestrictedTraces(traces):
             total_size += os.path.getsize(local_path)
             _AdbRun(['push', local_path, device_path])
 
+    def _PushToAppDir(local_path, binary_name):
+        nonlocal device_tmp_path
+        _AdbRun(['push', local_path, device_tmp_path + binary_name])
+        _AdbShell('run-as ' + TEST_PACKAGE_NAME + ' cp ' + device_tmp_path + binary_name +
+                  ' ./angle_traces/')
+
+    # Create the directories we need
+    _AdbShell('mkdir -p ' + device_tmp_path)
+    _AdbShell('run-as ' + TEST_PACKAGE_NAME + ' mkdir -p angle_traces')
+
+    # The interpreter is loaded as a trace, it needs to be brought over too
+    interpreter_name = 'libangle_trace_interpreter.so'
+    local_interpreter_path = 'angle_trace_tests_android_binaries__dist/' + interpreter_name
+    if os.path.isfile(local_interpreter_path):
+        _PushToAppDir(local_interpreter_path, interpreter_name)
+
+    # Set up each trace
     for trace in traces:
         path_from_root = 'src/tests/restricted_traces/' + trace + '/' + trace + '.angledata.gz'
         _Push('../../' + path_from_root, path_from_root)
 
         tracegz = 'gen/tracegz_' + trace + '.gz'
         _Push(tracegz, tracegz)
+
+        binary_name = 'libangle_restricted_traces_' + trace + '.so'
+        local_binary_path = 'angle_trace_tests_android_binaries__dist/' + binary_name
+        if os.path.isfile(local_binary_path) == False:
+            # The Chromium build will insert a '.cr' in the file names, account for that
+            binary_name = 'libangle_restricted_traces_' + trace + '.cr.so'
+            local_binary_path = 'angle_trace_tests_android_binaries__dist/' + binary_name
+        device_binary_path = '/data/user/0/com.android.angle.test/angle_traces/' + binary_name
+
+        if _CompareHashes(local_binary_path, device_binary_path):
+            skipped += 1
+        else:
+            total_size += os.path.getsize(local_binary_path)
+            # Copy into the test app's home directory
+            _PushToAppDir(local_binary_path, binary_name)
 
     logging.info('Synced %d trace files (%.1fMB, %d files already ok) in %.1fs', len(traces),
                  total_size / 1e6, skipped,
