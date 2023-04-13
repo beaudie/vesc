@@ -83,6 +83,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd871a6a_5b4a11d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-04-13T20:52:01Z",
+      "side": 1,
+      "message": "SGTM, as long as you are building an understanding of what\u0027s there, and where it can go.",
+      "parentUuid": "ca308cad_6cbb3026",
+      "revId": "91f8d85f4c87d4342b9de30e9427e2d814ac1f65",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0305e117_a7d02412",
