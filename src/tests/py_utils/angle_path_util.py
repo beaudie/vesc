@@ -21,3 +21,28 @@ def AddDepsDirToPath(posixpath_from_root):
 
     if full_path not in sys.path:
         sys.path.insert(0, full_path)
+
+
+def print_parent_directories():
+
+    # Get the parent directory of the specified directory.
+    current_dir = os.getcwd()
+    print("Current dir: %s" % current_dir)
+
+    current_contents = os.listdir(current_dir)
+    print("Contents of current dir: ")
+    print("\n".join(sorted(current_contents)))
+
+    parent_directory = os.path.dirname(current_dir)
+    print("\n\nParent dir: %s\n\n" % parent_directory)
+
+    parent_contents = os.listdir(parent_directory)
+    print("Contents of parent dir: ")
+    print("\n".join(parent_contents))
+
+    binary_dir = current_dir + '/angle_trace_tests_android_binaries__dist'
+    print("\n\nBinary dir: %s\n\n" % binary_dir)
+
+    binary_dir_contents = os.listdir(binary_dir)
+    print("Contents of parent binary_dir: ")
+    print("\n".join(binary_dir_contents))
