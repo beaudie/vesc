@@ -587,7 +587,10 @@ def main():
     args, extra_flags = parser.parse_known_args()
 
     if args.trace_tests:
-        args.test_suite = angle_test_util.ANGLE_TRACE_TEST_SUITE
+        if angle_test_util.IsAndroid():
+            args.test_suite = angle_test_util.ANGLE_TRACE_TEST_SUITES[1]
+        else:
+            args.test_suite = angle_test_util.ANGLE_TRACE_TEST_SUITES[0]
 
     angle_test_util.SetupLogging(args.log.upper())
 
@@ -637,7 +640,7 @@ def main():
         logging.error('No tests to run.')
         return EXIT_FAILURE
 
-    if angle_test_util.IsAndroid() and args.test_suite == android_helper.ANGLE_TRACE_TEST_SUITE:
+    if angle_test_util.IsAndroid() and args.test_suite == android_helper.ANGLE_TRACE_TEST_SUITE[1]:
         android_helper.RunSmokeTest()
 
     logging.info('Running %d test%s' % (len(tests), 's' if len(tests) > 1 else ' '))

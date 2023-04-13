@@ -493,35 +493,85 @@ if (build_angle_perftests) {
 }
 
 if (build_angle_trace_tests) {
-  angle_test("angle_trace_tests") {
-    # http://anglebug.com/6009: Traces with long shaders are hitting string literal
-    # limit in MSVC, so only compile them when using clang
-    assert(is_clang, "angle trace tests require clang")
+  _angle_trace_common_sources = [
+    "angle_trace_tests_main.cpp",
+    "perf_tests/TracePerfTest.cpp",
+  ]
+  _angle_trace_common_deps = [
+    ":angle_perftests_shared",
+    "$angle_root:angle_compression",
+    "$angle_root/util:angle_png_utils",
+    "$angle_root/util:angle_trace_interpreter",
+  ]
 
-    if (is_ios) {
-      # shared libraries are hidden inside ios_framework_bundle, but we include headers from them
-      check_includes = false
+  _angle_replay_common_data =
+      [ "$angle_root/src/tests/py_utils/android_helper.py" ]
+  _angle_replay_common_data_deps = [ "${angle_root}:angle" ]
+
+  # Allows us to edit traces and remove chunks of code without compile warnings.
+  _angle_trace_common_clang_flags = [ "-Wno-unused-const-variable" ]
+
+  if (is_android) {
+    # Build the trace shared objects outside of the APK
+    angle_test("angle_trace_tests_android_binaries") {
+      angle_trace_android_binaries = true
+      use_raw_android_executable = true
+
+      sources = _angle_trace_common_sources
+      deps = _angle_trace_common_deps + [
+               "$angle_root/util:angle_frame_capture_test_utils",
+               "$angle_root/util:angle_trace_fixture",
+               "restricted_traces:angle_restricted_traces",
+             ]
+      cflags_cc = _angle_trace_common_clang_flags
     }
-    sources = [
-      "angle_trace_tests_main.cpp",
-      "perf_tests/TracePerfTest.cpp",
-    ]
-    deps = [
-      ":angle_perftests_shared",
-      "$angle_root:angle_compression",
-      "$angle_root/util:angle_frame_capture_test_utils",
-      "$angle_root/util:angle_png_utils",
-      "$angle_root/util:angle_trace_interpreter",
-      "restricted_traces:angle_restricted_traces",
-    ]
 
-    data = [ "$angle_root/src/tests/py_utils/android_helper.py" ]
+    # Build the trace test APK without the trace libraries
+    angle_test("angle_trace_tests_standalone_apk") {
+      sources = _angle_trace_common_sources
+      deps =
+          _angle_trace_common_deps + [
+            "$angle_root/util:angle_frame_capture_test_utils_external_binaries",
+            "$angle_root/util:angle_trace_loader",
+          ]
+      data = _angle_replay_common_data
+      data_deps = _angle_replay_common_data_deps
+    }
 
-    data_deps = [ "${angle_root}:angle" ]
+    # Build the trace test APK with bundled libraries
+    angle_test("angle_trace_tests_subset") {
+      sources = _angle_trace_common_sources
+      deps = _angle_trace_common_deps + [
+               "$angle_root/util:angle_frame_capture_test_utils",
+               "restricted_traces:angle_restricted_traces",
+             ]
+      data = _angle_replay_common_data
+      data_deps = _angle_replay_common_data_deps
+    }
+  } else {
+    # Build the trace tests for every other platform
+    angle_test("angle_trace_tests") {
+      # http://anglebug.com/6009: Traces with long shaders are hitting string literal
+      # limit in MSVC, so only compile them when using clang
+      assert(is_clang, "angle trace tests require clang")
 
-    if (is_clang) {
-      # Allows us to edit traces and remove chunks of code without compile warnings.
-      cflags_cc = [ "-Wno-unused-const-variable" ]
+      if (is_ios) {
+        # shared libraries are hidden inside ios_framework_bundle, but we include headers from them
+        check_includes = false
+      }
+
+      sources = _angle_trace_common_sources
+      deps = _angle_trace_common_deps + [
+               "$angle_root/util:angle_frame_capture_test_utils",
+               "restricted_traces:angle_restricted_traces",
+             ]
+
+      data = _angle_replay_common_data
+      data_deps = _angle_replay_common_data_deps
+
+      if (is_clang) {
+        cflags_cc = _angle_trace_common_clang_flags
+      }
     }
   }
 
@@ -548,6 +598,16 @@ if (build_angle_trace_tests) {
       "restricted_traces/retrace_restricted_traces.py",
     ]
     data_deps = [ ":angle_trace_tests" ]
+  }
+
+  if (is_android) {
+    group("angle_trace_tests") {
+      testonly = true
+      data_deps = [
+        ":angle_trace_tests_android_binaries",
+        ":angle_trace_tests_standalone_apk",
+      ]
+    }
   }
 }
 
