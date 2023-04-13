@@ -97,6 +97,15 @@ class TraceLibrary : public TraceReplayInterface
     TraceLibrary(const char *traceNameIn)
     {
         std::stringstream traceNameStr;
+        SearchType searchType = SearchType::ModuleDir;
+
+#if defined(ANGLE_TRACE_ANDROID_BINARIES)
+        // This means we are using the binary build of traces on Android (i.e.
+        // not bundled in the APK).  They will be pushed to the right location
+        // at run time using run_angle_android_test.py
+        searchType = SearchType::SystemDir;
+        traceNameStr << "/data/user/0/com.android.angle.test/";
+#endif  // defined(ANGLE_TRACE_ANDROID_BINARIES)
 #if !defined(ANGLE_PLATFORM_WINDOWS)
         traceNameStr << "lib";
 #endif  // !defined(ANGLE_PLATFORM_WINDOWS)
@@ -107,7 +116,7 @@ class TraceLibrary : public TraceReplayInterface
         traceNameStr << ".cr";
 #endif  // defined(ANGLE_PLATFORM_ANDROID) && defined(COMPONENT_BUILD)
         std::string traceName = traceNameStr.str();
-        mTraceLibrary.reset(OpenSharedLibrary(traceName.c_str(), SearchType::ModuleDir));
+        mTraceLibrary.reset(OpenSharedLibrary(traceName.c_str(), searchType));
     }
 
     bool valid() const override
