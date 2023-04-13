@@ -22,6 +22,30 @@
       },
       "revId": "afa8dfda7068bc60bb63ba6444289dc8a25830f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f6d0353_32ae4f20",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-13T17:30:03Z",
+      "side": 1,
+      "message": "yeah, eventually we should switch the filenames to C, this CL is not a suggestion to keep them .cpp nor will it get in the way",
+      "parentUuid": "69d207a8_9b4b57da",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 44
+      },
+      "revId": "afa8dfda7068bc60bb63ba6444289dc8a25830f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
