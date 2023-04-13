@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a8ffbcf_59371940",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1860,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-13T00:19:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d6602b64_72571c6f",
+      "revId": "368670eeb798d7ba815b4802dadf1ebb02ebfb2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "267c0742_f760e84e",
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "Right, if you remove the extra ANI call, this is not required. The already landed fix is also good for now. I am fine with either way.",
       "parentUuid": "267c0742_f760e84e",
+      "revId": "368670eeb798d7ba815b4802dadf1ebb02ebfb2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cf6b27c_c1d9795e",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2286,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-13T00:19:20Z",
+      "side": 1,
+      "message": "Before you fix mNeedToAcquireNextSwapchainImage, this CL is slight better than what I have landed, I think. So lets land it now and feel free to fix the mNeedToAcquireNextSwapchainImage thing.",
+      "parentUuid": "eaf31e81_057d7b8f",
       "revId": "368670eeb798d7ba815b4802dadf1ebb02ebfb2d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
