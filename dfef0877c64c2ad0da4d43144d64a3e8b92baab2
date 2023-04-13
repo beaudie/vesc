@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d928d21_e964e3ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1500872
+      },
+      "writtenOn": "2023-04-13T17:09:06Z",
+      "side": 1,
+      "message": "New dithering looks really good, great comments. It\u0027s super appreciated.",
+      "revId": "dfef0877c64c2ad0da4d43144d64a3e8b92baab2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
