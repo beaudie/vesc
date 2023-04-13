@@ -14,6 +14,9 @@
 #include "common/string_utils.h"
 #include "trace_fixture.h"
 
+#define USE_SYSTEM_ZLIB
+#include "compression_utils_portable.h"
+
 namespace angle
 {
 namespace
@@ -532,33 +535,76 @@ void TraceInterpreter::replayFrame(uint32_t frameIndex)
 
 void TraceInterpreter::setupReplay()
 {
-    for (const std::string &file : gTraceFiles)
+    bool loaded = false;
     {
-        if (!ShouldParseFile(file))
+        std::stringstream pathStream;
+        pathStream << angle::GetExecutableDirectory() << angle::GetPathSeparator() << "gen/bundle_"
+                   << gTraceName << ".gz";
+        // pathStream << "/sdcard/chromium_tests_root" << angle::GetPathSeparator() << "gen/bundle_"
+        // << gTraceName << ".gz";
+        printf("Loading gz bundle from: %s\n", pathStream.str().c_str());
+        FILE *fp = fopen(pathStream.str().c_str(), "rb");
+        if (fp == 0)
         {
+            fprintf(stderr, "Error loading bundle\n");
+            loaded = false;
+        }
+        fseek(fp, 0, SEEK_END);
+        long size = ftell(fp);
+        fseek(fp, 0, SEEK_SET);
+
+        std::vector<uint8_t> compressedData(size);
+        (void)fread(compressedData.data(), 1, size, fp);
+
+        uint32_t uncompressedSize =
+            zlib_internal::GetGzipUncompressedSize(compressedData.data(), compressedData.size());
+
+        std::string uncompressedData(uncompressedSize, 0);
+        uLong destLen = uncompressedSize;
+        int zResult   = zlib_internal::GzipUncompressHelper(
+            (uint8_t *)uncompressedData.data(), &destLen, compressedData.data(),
+            static_cast<uLong>(compressedData.size()));
+
+        if (zResult != Z_OK)
+        {
+            std::cerr << "Failure to decompressed binary data: " << zResult << "\n";
+            exit(1);
+        }
+
+        Parser parser(uncompressedData, mTraceFunctions, mTraceStrings, mVerboseLogging);
+        parser.parse();
+    }
+
+    if (!loaded)
+    {
+        for (const std::string &file : gTraceFiles)
+        {
+            if (!ShouldParseFile(file))
+            {
+                if (mVerboseLogging)
+                {
+                    printf("Skipping function parsing for %s.\n", file.c_str());
+                }
+                continue;
+            }
+
             if (mVerboseLogging)
             {
-                printf("Skipping function parsing for %s.\n", file.c_str());
+                printf("Parsing functions from %s\n", file.c_str());
             }
-            continue;
-        }
+            std::stringstream pathStream;
+            pathStream << gBinaryDataDir << GetPathSeparator() << file;
+            std::string path = pathStream.str();
 
-        if (mVerboseLogging)
-        {
-            printf("Parsing functions from %s\n", file.c_str());
-        }
-        std::stringstream pathStream;
-        pathStream << gBinaryDataDir << GetPathSeparator() << file;
-        std::string path = pathStream.str();
+            std::string fileData;
+            if (!ReadFileToString(path, &fileData))
+            {
+                UNREACHABLE();
+            }
 
-        std::string fileData;
-        if (!ReadFileToString(path, &fileData))
-        {
-            UNREACHABLE();
+            Parser parser(fileData, mTraceFunctions, mTraceStrings, mVerboseLogging);
+            parser.parse();
         }
-
-        Parser parser(fileData, mTraceFunctions, mTraceStrings, mVerboseLogging);
-        parser.parse();
     }
 
     if (mTraceFunctions.count("SetupReplay") == 0)

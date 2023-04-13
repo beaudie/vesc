@@ -405,10 +405,12 @@ void SetValidateSerializedStateCallback(ValidateSerializedStateCallback callback
     gValidateSerializedStateCallback = callback;
 }
 
+std::string gTraceName;
 std::vector<std::string> gTraceFiles;
 
-void SetTraceInfo(const std::vector<std::string> &traceFiles)
+void SetTraceInfo(const std::string &traceName, const std::vector<std::string> &traceFiles)
 {
+    gTraceName  = traceName;
     gTraceFiles = traceFiles;
 }
 
