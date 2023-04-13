@@ -46,6 +46,9 @@ DEFAULT_SAMPLES = 10
 DEFAULT_TRIALS = 4
 DEFAULT_MAX_ERRORS = 3
 
+DESKTOP_TRACE_TEST_SUITE = angle_test_util.ANGLE_TRACE_TEST_SUITES[0]
+ANDROID_TRACE_TEST_SUITE = angle_test_util.ANGLE_TRACE_TEST_SUITES[1]
+
 # These parameters condition the test warmup to stabilize the scores across runs.
 DEFAULT_WARMUP_TRIALS = 2
 DEFAULT_TRIAL_TIME = 3
@@ -331,7 +334,7 @@ def _skipped_or_glmark2(test, test_status):
     return False
 
 
-def _run_tests(tests, args, extra_flags, env):
+def _run_tests(test_suite, tests, args, extra_flags, env):
     result_suffix = '_shard%d' % (args.shard_index if args.shard_index != None else None)
     results = Results(result_suffix)
     histograms = histogram_set.HistogramSet()
@@ -348,7 +351,7 @@ def _run_tests(tests, args, extra_flags, env):
         if angle_test_util.IsAndroid():
             trace = android_helper.GetTraceFromTestName(test)
             if trace and trace not in prepared_traces:
-                android_helper.PrepareRestrictedTraces([trace])
+                android_helper.PrepareRestrictedTraces(test_suite, [trace])
                 prepared_traces.add(trace)
 
         common_args = [
@@ -520,6 +523,10 @@ def main():
         '--trace-tests',
         help='Run with the angle_trace_tests test suite.',
         action='store_true')
+    parser.add_argument(
+        '--android-external-binaries',
+        help='Use in combination with --trace-tests on Android.',
+        action='store_true')
     parser.add_argument('--xvfb', help='Use xvfb.', action='store_true')
     parser.add_argument(
         '--shard-count',
@@ -587,7 +594,10 @@ def main():
     args, extra_flags = parser.parse_known_args()
 
     if args.trace_tests:
-        args.test_suite = angle_test_util.ANGLE_TRACE_TEST_SUITE
+        if args.android_external_binaries:
+            args.test_suite = ANDROID_TRACE_TEST_SUITE
+        else:
+            args.test_suite = DESKTOP_TRACE_TEST_SUITE
 
     angle_test_util.SetupLogging(args.log.upper())
 
@@ -637,14 +647,15 @@ def main():
         logging.error('No tests to run.')
         return EXIT_FAILURE
 
-    if angle_test_util.IsAndroid() and args.test_suite == android_helper.ANGLE_TRACE_TEST_SUITE:
+    if angle_test_util.IsAndroid() and args.test_suite == ANDROID_TRACE_TEST_SUITE:
         android_helper.RunSmokeTest()
 
     logging.info('Running %d test%s' % (len(tests), 's' if len(tests) > 1 else ' '))
 
     try:
         with _maybe_lock_gpu_clocks():
-            results, histograms, metrics = _run_tests(tests, args, extra_flags, env)
+            results, histograms, metrics = _run_tests(args.test_suite, tests, args, extra_flags,
+                                                      env)
     except _MaxErrorsException:
         logging.error('Error count exceeded max errors (%d). Aborting.' % args.max_errors)
         return EXIT_FAILURE

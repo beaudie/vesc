@@ -25,6 +25,7 @@ import generate_buildbot_json
 ADDITIONAL_MIXINS = {
     'angle_skia_gold_test': {
         '$mixin_append': {
+            'android_args': ['--test-suite=angle_trace_tests_standalone_apk',],
             'args': [
                 '--git-revision=${got_angle_revision}',
                 # BREAK GLASS IN CASE OF EMERGENCY

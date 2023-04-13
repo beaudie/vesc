@@ -788,6 +788,7 @@
       'angle_trace_perf_native_tests': {
         'android_args': {
           '--trial-time=10',
+          '--android-external-binaries',
         },
         'args': [
           '--log=debug',
@@ -811,6 +812,9 @@
 
     'angle_trace_perf_native_smoke_isolated_scripts': {
       'angle_trace_perf_native_tests': {
+        'android_args': {
+          '--android-external-binaries',
+        },
         'args': [
           '--log=debug',
           '--smoke-test-mode',
@@ -839,6 +843,7 @@
       'angle_trace_perf_vulkan_tests': {
         'android_args': {
           '--trial-time=10',
+          '--android-external-binaries',
         },
         'args': [
           '--log=debug',
@@ -862,6 +867,9 @@
 
     'angle_trace_perf_vulkan_smoke_isolated_scripts': {
       'angle_trace_perf_vulkan_tests': {
+        'android_args': {
+          '--android-external-binaries',
+        },
         'args': [
           '--log=debug',
           '--smoke-test-mode',

@@ -302,7 +302,8 @@
           "--test-machine-name",
           "${buildername}",
           "-v",
-          "--git-revision=${got_angle_revision}"
+          "--git-revision=${got_angle_revision}",
+          "--test-suite=angle_trace_tests_standalone_apk"
         ],
         "isolate_name": "angle_restricted_trace_gold_tests",
         "merge": {
@@ -774,7 +775,8 @@
           "--trace-interpreter=gz",
           "--filter=fishdom:geometry_dash:merge_dragons:minecraft_bedrock:new_legend_of_the_condor_heroes:street_fighter_duel:teslagrad:vainglory",
           "-v",
-          "--git-revision=${got_angle_revision}"
+          "--git-revision=${got_angle_revision}",
+          "--test-suite=angle_trace_tests_standalone_apk"
         ],
         "isolate_name": "angle_restricted_trace_gold_interpreted_tests",
         "merge": {
@@ -809,7 +811,8 @@
           "--test-machine-name",
           "${buildername}",
           "-v",
-          "--git-revision=${got_angle_revision}"
+          "--git-revision=${got_angle_revision}",
+          "--test-suite=angle_trace_tests_standalone_apk"
         ],
         "isolate_name": "angle_restricted_trace_gold_tests",
         "merge": {
@@ -845,7 +848,8 @@
           "--smoke-test-mode",
           "--show-test-stdout",
           "--use-gl=native",
-          "--trace-tests"
+          "--trace-tests",
+          "--android-external-binaries"
         ],
         "isolate_name": "angle_trace_perf_native_tests",
         "merge": {
@@ -879,7 +883,8 @@
           "--smoke-test-mode",
           "--show-test-stdout",
           "--use-angle=vulkan",
-          "--trace-tests"
+          "--trace-tests",
+          "--android-external-binaries"
         ],
         "isolate_name": "angle_trace_perf_vulkan_tests",
         "merge": {
@@ -950,7 +955,8 @@
           "--split-shard-samples",
           "--use-gl=native",
           "--trace-tests",
-          "--trial-time=10"
+          "--trial-time=10",
+          "--android-external-binaries"
         ],
         "isolate_name": "angle_trace_perf_native_tests",
         "merge": {
@@ -984,7 +990,8 @@
           "--split-shard-samples",
           "--use-angle=vulkan",
           "--trace-tests",
-          "--trial-time=10"
+          "--trial-time=10",
+          "--android-external-binaries"
         ],
         "isolate_name": "angle_trace_perf_vulkan_tests",
         "merge": {
@@ -1304,7 +1311,8 @@
           "--test-machine-name",
           "${buildername}",
           "-v",
-          "--git-revision=${got_angle_revision}"
+          "--git-revision=${got_angle_revision}",
+          "--test-suite=angle_trace_tests_standalone_apk"
         ],
         "isolate_name": "angle_restricted_trace_gold_tests",
         "merge": {
@@ -1377,7 +1385,8 @@
           "--split-shard-samples",
           "--use-gl=native",
           "--trace-tests",
-          "--trial-time=10"
+          "--trial-time=10",
+          "--android-external-binaries"
         ],
         "isolate_name": "angle_trace_perf_native_tests",
         "merge": {
@@ -1411,7 +1420,8 @@
           "--split-shard-samples",
           "--use-angle=vulkan",
           "--trace-tests",
-          "--trial-time=10"
+          "--trial-time=10",
+          "--android-external-binaries"
         ],
         "isolate_name": "angle_trace_perf_vulkan_tests",
         "merge": {

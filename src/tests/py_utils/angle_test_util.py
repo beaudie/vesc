@@ -24,7 +24,7 @@ import common
 import xvfb
 
 
-ANGLE_TRACE_TEST_SUITE = 'angle_trace_tests'
+ANGLE_TRACE_TEST_SUITES = ['angle_trace_tests', 'angle_trace_tests_standalone_apk']
 
 
 def Initialize(suite_name):
@@ -34,7 +34,6 @@ def Initialize(suite_name):
 # Requires .Initialize() to be called first
 def IsAndroid():
     return android_helper.IsAndroid()
-
 
 class LogFormatter(logging.Formatter):
 

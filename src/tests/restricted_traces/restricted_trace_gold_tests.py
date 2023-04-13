@@ -36,14 +36,15 @@ from skia_gold import angle_skia_gold_session_manager
 angle_path_util.AddDepsDirToPath('testing/scripts')
 import common
 
-
-DEFAULT_TEST_SUITE = angle_test_util.ANGLE_TRACE_TEST_SUITE
+DEFAULT_TEST_SUITE = angle_test_util.ANGLE_TRACE_TEST_SUITES[0]
 DEFAULT_TEST_PREFIX = 'TraceTest.'
 DEFAULT_SCREENSHOT_PREFIX = 'angle_vulkan_'
 SWIFTSHADER_SCREENSHOT_PREFIX = 'angle_vulkan_swiftshader_'
 DEFAULT_BATCH_SIZE = 5
 DEFAULT_LOG = 'info'
 DEFAULT_GOLD_INSTANCE = 'angle'
+
+ANDROID_TEST_SUITE = angle_test_util.ANGLE_TRACE_TEST_SUITES[1]
 
 # Test expectations
 FAIL = 'FAIL'
@@ -343,10 +344,10 @@ def _get_gtest_filter_for_batch(args, batch):
     return '--gtest_filter=%s' % ':'.join(expanded)
 
 
-def _run_tests(args, tests, extra_flags, env, screenshot_dir, results, test_results):
+def _run_tests(args, test_suite, tests, extra_flags, env, screenshot_dir, results, test_results):
     keys = get_skia_gold_keys(args, env)
 
-    if angle_test_util.IsAndroid() and args.test_suite == DEFAULT_TEST_SUITE:
+    if angle_test_util.IsAndroid() and args.test_suite == ANDROID_TEST_SUITE:
         android_helper.RunSmokeTest()
 
     with temporary_dir('angle_skia_gold_') as skia_gold_temp_dir:
@@ -364,7 +365,7 @@ def _run_tests(args, tests, extra_flags, env, screenshot_dir, results, test_resu
 
         for batch in batches:
             if angle_test_util.IsAndroid():
-                android_helper.PrepareRestrictedTraces(batch)
+                android_helper.PrepareRestrictedTraces(test_suite, batch)
 
             for iteration in range(0, args.flaky_retries + 1):
                 # This is how we signal early exit
@@ -381,6 +382,7 @@ def _run_tests(args, tests, extra_flags, env, screenshot_dir, results, test_resu
                     '--verbose-logging',
                     '--render-test-output-dir=%s' % screenshot_dir,
                     '--save-screenshots',
+                    '--log=debug',
                 ] + extra_flags
                 if args.swiftshader:
                     cmd_args += ['--use-angle=swiftshader']
@@ -519,17 +521,17 @@ def main():
         sharded_tests = _shard_tests(tests['traces'], args.shard_count, args.shard_index)
 
         if args.render_test_output_dir:
-            if not _run_tests(args, sharded_tests, extra_flags, env, args.render_test_output_dir,
-                              results, test_results):
+            if not _run_tests(args, args.test_suite, sharded_tests, extra_flags, env,
+                              args.render_test_output_dir, results, test_results):
                 rc = 1
         elif 'ISOLATED_OUTDIR' in env:
-            if not _run_tests(args, sharded_tests, extra_flags, env, env['ISOLATED_OUTDIR'],
-                              results, test_results):
+            if not _run_tests(args, args.test_suite, sharded_tests, extra_flags, env,
+                              env['ISOLATED_OUTDIR'], results, test_results):
                 rc = 1
         else:
             with temporary_dir('angle_trace_') as temp_dir:
-                if not _run_tests(args, sharded_tests, extra_flags, env, temp_dir, results,
-                                  test_results):
+                if not _run_tests(args, args.test_suite, sharded_tests, extra_flags, env, temp_dir,
+                                  results, test_results):
                     rc = 1
 
     except Exception:
