@@ -74,6 +74,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "fbdb3387_a685d4b0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-13T19:57:28Z",
+      "side": 1,
+      "message": "The parser in its current state is nowhere close to supporting even a reasonable subset of C. It really only grabs the list of functions to call (no variables, no branching is supported) and makes a lot of trace-specific assumptions about the variables that can be passed to those functions.\n\nIMO restricting this to C won\u0027t help much - there\u0027s plenty of ways a totally valid and compile-able C file would break the parser. The way parser is currently written, even adding spaces in certain spots will break it.\n\nThe only benefit we get from renaming the output files to C is a bit more clarity that this is the intended format of the file (but given the constrains above, how much does this really help? also taking into account that we\u0027re running interpreter tests on CI so if something breaks the parser then presubmits will supposedly catch it)\n\nThat said, CPP vs C is quite out of scope of this CL. All I\u0027m trying to do here is gain the ability to run a few existing .cpp traces that are already in the latest format. We can always change course later. This CL is not binding in any way. This discussion should not be blocking this CL IMO.",
+      "parentUuid": "1f122b1b_77b6f218",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 44
+      },
+      "revId": "afa8dfda7068bc60bb63ba6444289dc8a25830f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "4989e375_22f01d10",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
