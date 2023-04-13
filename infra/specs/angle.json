@@ -845,7 +845,8 @@
           "--smoke-test-mode",
           "--show-test-stdout",
           "--use-gl=native",
-          "--trace-tests"
+          "--trace-tests",
+          "--android-external-binaries"
         ],
         "isolate_name": "angle_trace_perf_native_tests",
         "merge": {
@@ -879,7 +880,8 @@
           "--smoke-test-mode",
           "--show-test-stdout",
           "--use-angle=vulkan",
-          "--trace-tests"
+          "--trace-tests",
+          "--android-external-binaries"
         ],
         "isolate_name": "angle_trace_perf_vulkan_tests",
         "merge": {
@@ -950,6 +952,7 @@
           "--split-shard-samples",
           "--use-gl=native",
           "--trace-tests",
+          "--android-external-binaries",
           "--trial-time=10"
         ],
         "isolate_name": "angle_trace_perf_native_tests",
@@ -984,6 +987,7 @@
           "--split-shard-samples",
           "--use-angle=vulkan",
           "--trace-tests",
+          "--android-external-binaries",
           "--trial-time=10"
         ],
         "isolate_name": "angle_trace_perf_vulkan_tests",
@@ -1377,6 +1381,7 @@
           "--split-shard-samples",
           "--use-gl=native",
           "--trace-tests",
+          "--android-external-binaries",
           "--trial-time=10"
         ],
         "isolate_name": "angle_trace_perf_native_tests",
@@ -1411,6 +1416,7 @@
           "--split-shard-samples",
           "--use-angle=vulkan",
           "--trace-tests",
+          "--android-external-binaries",
           "--trial-time=10"
         ],
         "isolate_name": "angle_trace_perf_vulkan_tests",

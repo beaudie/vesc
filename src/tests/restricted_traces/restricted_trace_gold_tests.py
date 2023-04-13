@@ -36,14 +36,15 @@ from skia_gold import angle_skia_gold_session_manager
 angle_path_util.AddDepsDirToPath('testing/scripts')
 import common
 
-
-DEFAULT_TEST_SUITE = angle_test_util.ANGLE_TRACE_TEST_SUITE
+DEFAULT_TEST_SUITE = angle_test_util.ANGLE_TRACE_TEST_SUITES[0]
 DEFAULT_TEST_PREFIX = 'TraceTest.'
 DEFAULT_SCREENSHOT_PREFIX = 'angle_vulkan_'
 SWIFTSHADER_SCREENSHOT_PREFIX = 'angle_vulkan_swiftshader_'
 DEFAULT_BATCH_SIZE = 5
 DEFAULT_LOG = 'info'
 DEFAULT_GOLD_INSTANCE = 'angle'
+
+ANDROID_TEST_SUITE = angle_test_util.ANGLE_TRACE_TEST_SUITES[1]
 
 # Test expectations
 FAIL = 'FAIL'
@@ -346,7 +347,7 @@ def _get_gtest_filter_for_batch(args, batch):
 def _run_tests(args, tests, extra_flags, env, screenshot_dir, results, test_results):
     keys = get_skia_gold_keys(args, env)
 
-    if angle_test_util.IsAndroid() and args.test_suite == DEFAULT_TEST_SUITE:
+    if angle_test_util.IsAndroid() and args.test_suite == ANDROID_TEST_SUITE:
         android_helper.RunSmokeTest()
 
     with temporary_dir('angle_skia_gold_') as skia_gold_temp_dir:
@@ -381,6 +382,7 @@ def _run_tests(args, tests, extra_flags, env, screenshot_dir, results, test_resu
                     '--verbose-logging',
                     '--render-test-output-dir=%s' % screenshot_dir,
                     '--save-screenshots',
+                    '--log=debug',
                 ] + extra_flags
                 if args.swiftshader:
                     cmd_args += ['--use-angle=swiftshader']

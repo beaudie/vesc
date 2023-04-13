@@ -21,7 +21,7 @@ import time
 
 import angle_path_util
 
-from angle_test_util import ANGLE_TRACE_TEST_SUITE
+from angle_test_util import ANGLE_TRACE_TEST_SUITES
 
 # Currently we only support a single test package name.
 TEST_PACKAGE_NAME = 'com.android.angle.test'
@@ -215,7 +215,7 @@ def _PrepareTestSuite(suite_name):
 
     _AdbShell('mkdir -p /sdcard/chromium_tests_root/')
 
-    if suite_name == ANGLE_TRACE_TEST_SUITE:
+    if suite_name in ANGLE_TRACE_TEST_SUITES:
         _AddRestrictedTracesJson()
 
     if suite_name == 'angle_end2end_tests':
@@ -225,7 +225,7 @@ def _PrepareTestSuite(suite_name):
         ])
 
 
-def PrepareRestrictedTraces(traces):
+def PrepareRestrictedTraces(suite_name, traces):
     start = time.time()
     total_size = 0
     skipped = 0
@@ -245,6 +245,24 @@ def PrepareRestrictedTraces(traces):
 
         tracegz = 'gen/tracegz_' + trace + '.gz'
         _Push(tracegz, tracegz)
+
+        if suite_name == ANGLE_TRACE_TEST_SUITES[1]:
+            # Also push the trace binary
+            binary_name = 'libangle_restricted_traces_' + trace + '.so'
+            device_binary_path = '/data/user/0/com.android.angle.test/angle_traces/' + binary_name
+            local_binary_path = 'angle_trace_tests_android_binaries__dist/' + binary_name
+            if _CompareHashes(local_binary_path, device_binary_path):
+                skipped += 1
+            else:
+                total_size += os.path.getsize(local_binary_path)
+                # Copy into the test app's home directory
+                device_tmp_path = '/data/local/tmp/angle_traces/'
+                _AdbShell('mkdir -p ' + device_tmp_path)
+                device_binary_tmp_path = device_tmp_path + binary_name
+                _AdbRun(['push', local_binary_path, device_binary_tmp_path])
+                _AdbShell('run-as ' + TEST_PACKAGE_NAME + ' mkdir -p angle_traces')
+                _AdbShell('run-as ' + TEST_PACKAGE_NAME + ' cp ' + device_binary_tmp_path +
+                          ' ./angle_traces/')
 
     logging.info('Synced %d trace files (%.1fMB, %d files already ok) in %.1fs', len(traces),
                  total_size / 1e6, skipped,
@@ -369,7 +387,7 @@ def _RemoveFlag(args, f):
 
 
 def RunSmokeTest():
-    _EnsureTestSuite(ANGLE_TRACE_TEST_SUITE)
+    _EnsureTestSuite(ANGLE_TRACE_TEST_SUITES[1])
 
     test_name = 'TraceTest.words_with_friends_2'
     run_instrumentation_timeout = 60
@@ -380,7 +398,7 @@ def RunSmokeTest():
     if not trace_name:
         raise Exception('Cannot find trace name from %s.' % test_name)
 
-    PrepareRestrictedTraces([trace_name])
+    PrepareRestrictedTraces(ANGLE_TRACE_TEST_SUITES[1], [trace_name])
 
     with _TempDeviceFile() as device_test_output_path:
         flags = [
