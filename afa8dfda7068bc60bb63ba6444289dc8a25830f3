@@ -111,6 +111,23 @@
       "message": "+1 in case Shabi has strong feelings about allowing CPP parsing.",
       "revId": "afa8dfda7068bc60bb63ba6444289dc8a25830f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "803d92fe_5c2055eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-13T23:16:16Z",
+      "side": 1,
+      "message": "No objections from me",
+      "revId": "afa8dfda7068bc60bb63ba6444289dc8a25830f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
