@@ -46,6 +46,9 @@ DEFAULT_SAMPLES = 10
 DEFAULT_TRIALS = 4
 DEFAULT_MAX_ERRORS = 3
 
+DESKTOP_TRACE_TEST_SUITE = angle_test_util.ANGLE_TRACE_TEST_SUITES[0]
+ANDROID_TRACE_TEST_SUITE = angle_test_util.ANGLE_TRACE_TEST_SUITES[1]
+
 # These parameters condition the test warmup to stabilize the scores across runs.
 DEFAULT_WARMUP_TRIALS = 2
 DEFAULT_TRIAL_TIME = 3
@@ -587,7 +590,10 @@ def main():
     args, extra_flags = parser.parse_known_args()
 
     if args.trace_tests:
-        args.test_suite = angle_test_util.ANGLE_TRACE_TEST_SUITE
+        if angle_test_util.IsAndroid():
+            args.test_suite = ANDROID_TRACE_TEST_SUITE
+        else:
+            args.test_suite = DESKTOP_TRACE_TEST_SUITE
 
     angle_test_util.SetupLogging(args.log.upper())
 
@@ -637,7 +643,7 @@ def main():
         logging.error('No tests to run.')
         return EXIT_FAILURE
 
-    if angle_test_util.IsAndroid() and args.test_suite == android_helper.ANGLE_TRACE_TEST_SUITE:
+    if angle_test_util.IsAndroid() and args.test_suite == ANDROID_TRACE_TEST_SUITE:
         android_helper.RunSmokeTest()
 
     logging.info('Running %d test%s' % (len(tests), 's' if len(tests) > 1 else ' '))
