@@ -70,7 +70,7 @@ using ResetReplayFunc                        = void (*)();
 using FinishReplayFunc                       = void (*)();
 using GetSerializedContextStateFunc          = const char *(*)(uint32_t);
 using SetValidateSerializedStateCallbackFunc = void (*)(ValidateSerializedStateCallback);
-using SetTraceInfoFunc                       = void (*)(const std::vector<std::string> &);
+using SetTraceInfoFunc = void (*)(const std::string &, const std::vector<std::string> &);
 
 struct TraceInfo;
 
