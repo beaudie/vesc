@@ -23,13 +23,15 @@ if PY_UTILS not in sys.path:
 import android_helper
 import angle_test_util
 
+from angle_test_util import ANGLE_TRACE_TEST_SUITES
+
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         'suite',
         help='Test suite to run.',
-        choices=['angle_end2end_tests', 'angle_perftests', 'angle_trace_tests'])
+        choices=['angle_end2end_tests', 'angle_perftests'] + ANGLE_TRACE_TEST_SUITES)
     parser.add_argument(
         '-f',
         '--filter',
@@ -62,12 +64,17 @@ def main():
             print(test)
         return 0
 
-    if args.suite == 'angle_trace_tests':
+    if args.suite in ANGLE_TRACE_TEST_SUITES:
         traces = set(android_helper.GetTraceFromTestName(test) for test in tests)
-        android_helper.PrepareRestrictedTraces(traces)
+        android_helper.PrepareRestrictedTraces(args.suite, traces)
 
     flags = ['--gtest_filter=' + args.filter] if args.filter else []
-    return android_helper.RunTests(args.suite, flags + extra_flags)[0]
+    rc, _, _ = android_helper.RunTests(args.suite, flags + extra_flags)
+
+    if args.suite in ANGLE_TRACE_TEST_SUITES:
+        android_helper.CleanupRestrictedTraces(args.suite, traces)
+
+    return rc
 
 
 if __name__ == '__main__':

@@ -493,6 +493,50 @@ if (build_angle_perftests) {
 }
 
 if (build_angle_trace_tests) {
+  angle_trace_common_sources = [
+    "angle_trace_tests_main.cpp",
+    "perf_tests/TracePerfTest.cpp",
+  ]
+  angle_trace_common_deps = [
+    ":angle_perftests_shared",
+    "$angle_root:angle_compression",
+    "$angle_root/util:angle_frame_capture_test_utils",
+    "$angle_root/util:angle_png_utils",
+    "$angle_root/util:angle_trace_interpreter",
+  ]
+
+  angle_replay_common_data =
+      [ "$angle_root/src/tests/py_utils/android_helper.py" ]
+  angle_replay_common_data_deps = [ "${angle_root}:angle" ]
+
+  # Allows us to edit traces and remove chunks of code without compile warnings.
+  angle_trace_common_clang_flags = [ "-Wno-unused-const-variable" ]
+
+  if (is_android) {
+    # Build the trace shared objects outside of the APK
+    angle_test("angle_trace_tests_android_binaries") {
+      angle_trace_android_binaries = true
+      use_raw_android_executable = true
+
+      sources = angle_trace_common_sources
+      deps = angle_trace_common_deps +
+             [ "restricted_traces:angle_restricted_traces" ]
+      cflags_cc = angle_trace_common_clang_flags
+    }
+
+    # Build the trace test APK without the trace libraries
+    angle_test("angle_trace_tests_standalone_apk") {
+      # This define changes where the replayer finds libraries
+      defines = [ "ANGLE_TRACE_ANDROID_BINARIES" ]
+
+      sources = angle_trace_common_sources
+      deps = angle_trace_common_deps
+
+      data = angle_replay_common_data
+      data_deps = angle_replay_common_data_deps
+    }
+  }
+
   angle_test("angle_trace_tests") {
     # http://anglebug.com/6009: Traces with long shaders are hitting string literal
     # limit in MSVC, so only compile them when using clang
@@ -502,26 +546,18 @@ if (build_angle_trace_tests) {
       # shared libraries are hidden inside ios_framework_bundle, but we include headers from them
       check_includes = false
     }
-    sources = [
-      "angle_trace_tests_main.cpp",
-      "perf_tests/TracePerfTest.cpp",
-    ]
-    deps = [
-      ":angle_perftests_shared",
-      "$angle_root:angle_compression",
-      "$angle_root/util:angle_frame_capture_test_utils",
-      "$angle_root/util:angle_png_utils",
-      "$angle_root/util:angle_trace_interpreter",
-      "restricted_traces:angle_restricted_traces",
-    ]
 
-    data = [ "$angle_root/src/tests/py_utils/android_helper.py" ]
+    sources = angle_trace_common_sources
+    deps = angle_trace_common_deps
 
-    data_deps = [ "${angle_root}:angle" ]
+    data = angle_replay_common_data
+    data_deps = angle_replay_common_data_deps
+
+    # For this target, include the libraries in the APK
+    deps += [ "restricted_traces:angle_restricted_traces" ]
 
     if (is_clang) {
-      # Allows us to edit traces and remove chunks of code without compile warnings.
-      cflags_cc = [ "-Wno-unused-const-variable" ]
+      cflags_cc = angle_trace_common_clang_flags
     }
   }
 
@@ -548,6 +584,16 @@ if (build_angle_trace_tests) {
       "restricted_traces/retrace_restricted_traces.py",
     ]
     data_deps = [ ":angle_trace_tests" ]
+  }
+
+  if (is_android) {
+    group("angle_trace_tests_apk_with_binaries") {
+      testonly = true
+      data_deps = [
+        ":angle_trace_tests_android_binaries",
+        ":angle_trace_tests_standalone_apk",
+      ]
+    }
   }
 }
 
@@ -1696,6 +1742,9 @@ group("angle_tests") {
   }
   if (build_angle_trace_tests) {
     deps += [ ":angle_trace_tests" ]
+    if (is_android) {
+      deps += [ ":angle_trace_tests_apk_with_binaries" ]
+    }
   }
   if (is_clang) {
     deps += [ "capture_replay_tests" ]
