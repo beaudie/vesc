@@ -56,7 +56,7 @@ class Sync final : public RefCountObject<SyncID>, public LabeledObject
     Sync(rx::GLImplFactory *factory, SyncID id);
     ~Sync() override;
 
-    void onDestroy(const Context *context) override;
+    void onDestroy(const Context *context, angle::UnlockedTailCall *unlockedTailCall) override;
 
     angle::Result setLabel(const Context *context, const std::string &label) override;
     const std::string &getLabel() const override;

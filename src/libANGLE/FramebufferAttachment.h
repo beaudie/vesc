@@ -67,7 +67,7 @@ class FramebufferAttachment final
 
     ~FramebufferAttachment();
 
-    void detach(const Context *context, rx::UniqueSerial framebufferSerial);
+    void detach(const Context *context, rx::UniqueSerial framebufferSerial, angle::UnlockedTailCall *unlockedTailCall);
     void attach(const Context *context,
                 GLenum type,
                 GLenum binding,
@@ -77,7 +77,7 @@ class FramebufferAttachment final
                 GLuint baseViewIndex,
                 bool isMultiview,
                 GLsizei samples,
-                rx::UniqueSerial framebufferSerial);
+                rx::UniqueSerial framebufferSerial, angle::UnlockedTailCall *unlockedTailCall);
 
     // Helper methods
     GLuint getRedSize() const;
@@ -232,7 +232,7 @@ class FramebufferAttachmentObject : public angle::Subject, public angle::Observe
     virtual bool hasProtectedContent() const                                               = 0;
 
     virtual void onAttach(const Context *context, rx::UniqueSerial framebufferSerial) = 0;
-    virtual void onDetach(const Context *context, rx::UniqueSerial framebufferSerial) = 0;
+    virtual void onDetach(const Context *context, rx::UniqueSerial framebufferSerial, angle::UnlockedTailCall *unlockedTailCall) = 0;
     virtual GLuint getId() const                                                      = 0;
 
     // These are used for robust resource initialization.

@@ -89,7 +89,7 @@ EGLSurface CreatePlatformWindowSurfaceEXT(Thread *thread,
                                           Display *display,
                                           Config *configPacked,
                                           void *native_window,
-                                          const AttributeMap &attributes)
+                                          const AttributeMap &attributes, angle::UnlockedTailCall *unlockedTailCall)
 {
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglCreatePlatformWindowSurfaceEXT",
                          GetDisplayIfValid(display), EGL_NO_SURFACE);
@@ -104,7 +104,7 @@ EGLSurface CreatePlatformWindowSurfaceEXT(Thread *thread,
     EGLNativeWindowType nativeWindow = reinterpret_cast<EGLNativeWindowType>(actualNativeWindow);
 
     ANGLE_EGL_TRY_RETURN(
-        thread, display->createWindowSurface(configPacked, nativeWindow, attributes, &surface),
+        thread, display->createWindowSurface(configPacked, nativeWindow, attributes, &surface, unlockedTailCall),
         "eglPlatformCreateWindowSurfaceEXT", GetDisplayIfValid(display), EGL_NO_SURFACE);
 
     return reinterpret_cast<EGLSurface>(static_cast<uintptr_t>(surface->id().value));

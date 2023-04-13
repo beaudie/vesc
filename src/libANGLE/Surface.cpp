@@ -167,11 +167,11 @@ rx::FramebufferAttachmentObjectImpl *Surface::getAttachmentImpl() const
     return mImplementation;
 }
 
-Error Surface::destroyImpl(const Display *display)
+Error Surface::destroyImpl(const Display *display, angle::UnlockedTailCall *unlockedTailCall)
 {
     if (mImplementation)
     {
-        mImplementation->destroy(display);
+        mImplementation->destroy(display, unlockedTailCall);
     }
 
     ASSERT(!mTexture);
@@ -276,32 +276,32 @@ Error Surface::makeCurrent(const gl::Context *context)
     return NoError();
 }
 
-Error Surface::unMakeCurrent(const gl::Context *context)
+Error Surface::unMakeCurrent(const gl::Context *context, angle::UnlockedTailCall *unlockedTailCall)
 {
     ANGLE_TRY(mImplementation->unMakeCurrent(context));
     mIsCurrentOnAnyContext = false;
-    return releaseRef(context->getDisplay());
+    return releaseRef(context->getDisplay(), unlockedTailCall);
 }
 
-Error Surface::releaseRef(const Display *display)
+Error Surface::releaseRef(const Display *display, angle::UnlockedTailCall *unlockedTailCall)
 {
     ASSERT(mRefCount > 0);
     mRefCount--;
     if (mRefCount == 0 && mDestroyed)
     {
         ASSERT(display);
-        return destroyImpl(display);
+        return destroyImpl(display, unlockedTailCall);
     }
 
     return NoError();
 }
 
-Error Surface::onDestroy(const Display *display)
+Error Surface::onDestroy(const Display *display, angle::UnlockedTailCall *unlockedTailCall)
 {
     mDestroyed = true;
     if (mRefCount == 0)
     {
-        return destroyImpl(display);
+        return destroyImpl(display, unlockedTailCall);
     }
     return NoError();
 }
@@ -565,7 +565,9 @@ Error Surface::bindTexImage(gl::Context *context, gl::Texture *texture, EGLint b
     return NoError();
 }
 
-Error Surface::releaseTexImage(const gl::Context *context, EGLint buffer)
+Error Surface::releaseTexImage(const gl::Context *context,
+                               EGLint buffer,
+                               angle::UnlockedTailCall *unlockedTailCall)
 {
     ASSERT(context);
 
@@ -574,7 +576,7 @@ Error Surface::releaseTexImage(const gl::Context *context, EGLint buffer)
     ASSERT(mTexture);
     ANGLE_TRY(ResultToEGL(mTexture->releaseTexImageFromSurface(context)));
 
-    return releaseTexImageFromTexture(context);
+    return releaseTexImageFromTexture(context, unlockedTailCall);
 }
 
 Error Surface::getSyncValues(EGLuint64KHR *ust, EGLuint64KHR *msc, EGLuint64KHR *sbc)
@@ -587,11 +589,12 @@ Error Surface::getMscRate(EGLint *numerator, EGLint *denominator)
     return mImplementation->getMscRate(numerator, denominator);
 }
 
-Error Surface::releaseTexImageFromTexture(const gl::Context *context)
+Error Surface::releaseTexImageFromTexture(const gl::Context *context,
+                                          angle::UnlockedTailCall *unlockedTailCall)
 {
     ASSERT(mTexture);
     mTexture = nullptr;
-    return releaseRef(context->getDisplay());
+    return releaseRef(context->getDisplay(), unlockedTailCall);
 }
 
 gl::Extents Surface::getAttachmentSize(const gl::ImageIndex & /*target*/) const
@@ -935,13 +938,15 @@ PixmapSurface::~PixmapSurface() {}
 
 // SurfaceDeleter implementation.
 
-SurfaceDeleter::SurfaceDeleter(const Display *display) : mDisplay(display) {}
+SurfaceDeleter::SurfaceDeleter(const Display *display, angle::UnlockedTailCall *unlockedTailCall)
+    : mDisplay(display), mNoLockTailCall(unlockedTailCall)
+{}
 
 SurfaceDeleter::~SurfaceDeleter() {}
 
 void SurfaceDeleter::operator()(Surface *surface)
 {
-    ANGLE_SWALLOW_ERR(surface->onDestroy(mDisplay));
+    ANGLE_SWALLOW_ERR(surface->onDestroy(mDisplay, mNoLockTailCall));
 }
 
 }  // namespace egl

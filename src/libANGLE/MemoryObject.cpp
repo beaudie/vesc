@@ -24,7 +24,7 @@ MemoryObject::MemoryObject(rx::GLImplFactory *factory, MemoryObjectID id)
 
 MemoryObject::~MemoryObject() {}
 
-void MemoryObject::onDestroy(const Context *context)
+void MemoryObject::onDestroy(const Context *context, angle::UnlockedTailCall *unlockedTailCall)
 {
     mImplementation->onDestroy(context);
 }

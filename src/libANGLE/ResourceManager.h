@@ -53,7 +53,7 @@ class ResourceManagerBase : angle::NonCopyable
     void release(const Context *context);
 
   protected:
-    virtual void reset(const Context *context) = 0;
+    virtual void reset(const Context *context, angle::UnlockedTailCall *unlockedTailCall) = 0;
     virtual ~ResourceManagerBase();
 
     HandleAllocator mHandleAllocator;
@@ -68,7 +68,7 @@ class TypedResourceManager : public ResourceManagerBase
   public:
     TypedResourceManager() {}
 
-    void deleteObject(const Context *context, IDType handle);
+    void deleteObject(const Context *context, IDType handle, angle::UnlockedTailCall *unlockedTailCall);
     ANGLE_INLINE bool isHandleGenerated(IDType handle) const
     {
         // Zero is always assumed to have been generated implicitly.
@@ -104,7 +104,7 @@ class TypedResourceManager : public ResourceManagerBase
         return checkObjectAllocationImpl(factory, handle, args...);
     }
 
-    void reset(const Context *context) override;
+    void reset(const Context *context, angle::UnlockedTailCall *unlockedTailCall) override;
 
     ResourceMap<ResourceType, IDType> mObjectMap;
 
@@ -139,7 +139,7 @@ class BufferManager : public TypedResourceManager<Buffer, BufferManager, BufferI
 
     // TODO(jmadill): Investigate design which doesn't expose these methods publicly.
     static Buffer *AllocateNewObject(rx::GLImplFactory *factory, BufferID handle);
-    static void DeleteObject(const Context *context, Buffer *buffer);
+    static void DeleteObject(const Context *context, Buffer *buffer, angle::UnlockedTailCall *unlockedTailCall);
 
   protected:
     ~BufferManager() override;
@@ -178,7 +178,7 @@ class ShaderProgramManager : public ResourceManagerBase
     template <typename ObjectType, typename IDType>
     void deleteObject(const Context *context,
                       ResourceMap<ObjectType, IDType> *objectMap,
-                      IDType id);
+                      IDType id, angle::UnlockedTailCall *unlockedTailCall);
 
     void reset(const Context *context) override;
 
@@ -208,7 +208,7 @@ class TextureManager : public TypedResourceManager<Texture, TextureManager, Text
     static Texture *AllocateNewObject(rx::GLImplFactory *factory,
                                       TextureID handle,
                                       TextureType type);
-    static void DeleteObject(const Context *context, Texture *texture);
+    static void DeleteObject(const Context *context, Texture *texture, angle::UnlockedTailCall *unlockedTailCall);
 
     void enableHandleAllocatorLogging();
 
@@ -229,7 +229,7 @@ class RenderbufferManager
     }
 
     static Renderbuffer *AllocateNewObject(rx::GLImplFactory *factory, RenderbufferID handle);
-    static void DeleteObject(const Context *context, Renderbuffer *renderbuffer);
+    static void DeleteObject(const Context *context, Renderbuffer *renderbuffer, angle::UnlockedTailCall *unlockedTailCall);
 
   protected:
     ~RenderbufferManager() override;
@@ -248,7 +248,7 @@ class SamplerManager : public TypedResourceManager<Sampler, SamplerManager, Samp
     }
 
     static Sampler *AllocateNewObject(rx::GLImplFactory *factory, SamplerID handle);
-    static void DeleteObject(const Context *context, Sampler *sampler);
+    static void DeleteObject(const Context *context, Sampler *sampler, angle::UnlockedTailCall *unlockedTailCall);
 
   protected:
     ~SamplerManager() override;
@@ -260,7 +260,7 @@ class SyncManager : public TypedResourceManager<Sync, SyncManager, SyncID>
     SyncID createSync(rx::GLImplFactory *factory);
     Sync *getSync(SyncID handle) const;
 
-    static void DeleteObject(const Context *context, Sync *sync);
+    static void DeleteObject(const Context *context, Sync *sync, angle::UnlockedTailCall *unlockedTailCall);
 
   protected:
     ~SyncManager() override;
@@ -287,7 +287,7 @@ class FramebufferManager
     static Framebuffer *AllocateNewObject(rx::GLImplFactory *factory,
                                           FramebufferID handle,
                                           const Context *context);
-    static void DeleteObject(const Context *context, Framebuffer *framebuffer);
+    static void DeleteObject(const Context *context, Framebuffer *framebuffer, angle::UnlockedTailCall *unlockedTailCall);
 
   protected:
     ~FramebufferManager() override;
@@ -307,7 +307,7 @@ class ProgramPipelineManager
     }
 
     static ProgramPipeline *AllocateNewObject(rx::GLImplFactory *factory, ProgramPipelineID handle);
-    static void DeleteObject(const Context *context, ProgramPipeline *pipeline);
+    static void DeleteObject(const Context *context, ProgramPipeline *pipeline, angle::UnlockedTailCall *unlockedTailCall);
 
   protected:
     ~ProgramPipelineManager() override;

@@ -40,7 +40,7 @@ class Sync final : public angle::RefCountObject<Display, angle::Result>, public 
 
     const SyncID &id() const { return mId; }
 
-    void onDestroy(const Display *display) override;
+    void onDestroy(const Display *display, angle::UnlockedTailCall *unlockedTailCall) override;
 
     Error initialize(const Display *display, const gl::Context *context);
     Error clientWait(const Display *display,

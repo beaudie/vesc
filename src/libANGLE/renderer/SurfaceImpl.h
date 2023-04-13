@@ -46,7 +46,7 @@ class SurfaceImpl : public FramebufferAttachmentObjectImpl
   public:
     SurfaceImpl(const egl::SurfaceState &surfaceState);
     ~SurfaceImpl() override;
-    virtual void destroy(const egl::Display *display) {}
+    virtual void destroy(const egl::Display *display, angle::UnlockedTailCall *unlockedTailCall) {}
 
     virtual egl::Error initialize(const egl::Display *display) = 0;
     virtual egl::Error makeCurrent(const gl::Context *context);

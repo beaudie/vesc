@@ -455,7 +455,7 @@ SurfaceVk::SurfaceVk(const egl::SurfaceState &surfaceState) : SurfaceImpl(surfac
 
 SurfaceVk::~SurfaceVk() {}
 
-void SurfaceVk::destroy(const egl::Display *display)
+void SurfaceVk::destroy(const egl::Display *display, angle::UnlockedTailCall *unlockedTailCall)
 {
     DisplayVk *displayVk = vk::GetImpl(display);
     RendererVk *renderer = displayVk->getRenderer();
@@ -592,7 +592,8 @@ angle::Result OffscreenSurfaceVk::initializeImpl(DisplayVk *displayVk)
     return angle::Result::Continue;
 }
 
-void OffscreenSurfaceVk::destroy(const egl::Display *display)
+void OffscreenSurfaceVk::destroy(const egl::Display *display,
+                                 angle::UnlockedTailCall *unlockedTailCall)
 {
     mColorAttachment.destroy(display);
     mDepthStencilAttachment.destroy(display);
@@ -603,7 +604,7 @@ void OffscreenSurfaceVk::destroy(const egl::Display *display)
     }
 
     // Call parent class to destroy any resources parent owns.
-    SurfaceVk::destroy(display);
+    SurfaceVk::destroy(display, unlockedTailCall);
 }
 
 egl::Error OffscreenSurfaceVk::unMakeCurrent(const gl::Context *context)
@@ -888,7 +889,8 @@ WindowSurfaceVk::~WindowSurfaceVk()
     ASSERT(mSwapchain == VK_NULL_HANDLE);
 }
 
-void WindowSurfaceVk::destroy(const egl::Display *display)
+void WindowSurfaceVk::destroy(const egl::Display *display,
+                              angle::UnlockedTailCall *unlockedTailCall)
 {
     DisplayVk *displayVk = vk::GetImpl(display);
     RendererVk *renderer = displayVk->getRenderer();
@@ -933,17 +935,37 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
     }
     mOldSwapchains.clear();
 
-    if (mSurface)
-    {
-        vkDestroySurfaceKHR(instance, mSurface, nullptr);
-        mSurface = VK_NULL_HANDLE;
-    }
-
     mPresentSemaphoreRecycler.destroy(device);
     mPresentFenceRecycler.destroy(device);
 
     // Call parent class to destroy any resources parent owns.
-    SurfaceVk::destroy(display);
+    SurfaceVk::destroy(display, unlockedTailCall);
+
+    // Destroy the surface without holding the EGL lock.  This works around a specific deadlock
+    // in Android.  On this platform:
+    //
+    // - For EGL applications, parts of surface creation and destruction are handled by the
+    //   platform, and parts of it are done by the native EGL driver.  Namely, on surface
+    //   destruction, native_window_api_disconnect is called outside the EGL driver.
+    // - For Vulkan applications, vkDestroySurfaceKHR takes full responsibility for destroying
+    //   the surface, including calling native_window_api_disconnect.
+    //
+    // Unfortunately, native_window_api_disconnect may use EGL sync objects and can lead to
+    // calling into the EGL driver.  For ANGLE, this is particularly problematic because it is
+    // simultaneously a Vulkan application and the EGL driver, causing `vkDestroySurfaceKHR` to
+    // call back into ANGLE and attempt to reacquire the EGL lock.
+    //
+    // Since there are no users of the surface when calling vkDestroySurfaceKHR, it is safe for
+    // ANGLE to destroy it without holding the EGL lock, effectively simulating the situation
+    // for EGL applications, where native_window_api_disconnect is called after the EGL driver
+    // has returned.
+    if (mSurface)
+    {
+        unlockedTailCall->add([surface = mSurface, instance]() {
+            vkDestroySurfaceKHR(instance, surface, nullptr);
+        });
+        mSurface = VK_NULL_HANDLE;
+    }
 }
 
 egl::Error WindowSurfaceVk::initialize(const egl::Display *display)

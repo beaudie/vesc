@@ -41,7 +41,7 @@ class SurfaceMtl : public SurfaceImpl
                const egl::AttributeMap &attribs);
     ~SurfaceMtl() override;
 
-    void destroy(const egl::Display *display) override;
+    void destroy(const egl::Display *display, angle::UnlockedTailCall *unlockedTailCall) override;
 
     egl::Error initialize(const egl::Display *display) override;
 
@@ -134,7 +134,7 @@ class WindowSurfaceMtl : public SurfaceMtl
                      const egl::AttributeMap &attribs);
     ~WindowSurfaceMtl() override;
 
-    void destroy(const egl::Display *display) override;
+    void destroy(const egl::Display *display, angle::UnlockedTailCall *unlockedTailCall) override;
 
     egl::Error initialize(const egl::Display *display) override;
 
@@ -197,7 +197,7 @@ class OffscreenSurfaceMtl : public SurfaceMtl
                         const egl::AttributeMap &attribs);
     ~OffscreenSurfaceMtl() override;
 
-    void destroy(const egl::Display *display) override;
+    void destroy(const egl::Display *display, angle::UnlockedTailCall *unlockedTailCall) override;
 
     EGLint getWidth() const override;
     EGLint getHeight() const override;

@@ -34,7 +34,7 @@ class SurfaceVk : public SurfaceImpl, public angle::ObserverInterface
     SurfaceVk(const egl::SurfaceState &surfaceState);
     ~SurfaceVk() override;
 
-    void destroy(const egl::Display *display) override;
+    void destroy(const egl::Display *display, angle::UnlockedTailCall *unlockedTailCall) override;
     // We monitor the staging buffer for changes. This handles staged data from outside this class.
     void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
 
@@ -49,7 +49,7 @@ class OffscreenSurfaceVk : public SurfaceVk
     ~OffscreenSurfaceVk() override;
 
     egl::Error initialize(const egl::Display *display) override;
-    void destroy(const egl::Display *display) override;
+    void destroy(const egl::Display *display, angle::UnlockedTailCall *unlockedTailCall) override;
 
     egl::Error unMakeCurrent(const gl::Context *context) override;
     const vk::ImageHelper *getColorImage() const { return &mColorAttachment.image; }
@@ -213,7 +213,7 @@ class WindowSurfaceVk : public SurfaceVk
     WindowSurfaceVk(const egl::SurfaceState &surfaceState, EGLNativeWindowType window);
     ~WindowSurfaceVk() override;
 
-    void destroy(const egl::Display *display) override;
+    void destroy(const egl::Display *display, angle::UnlockedTailCall *unlockedTailCall) override;
 
     egl::Error initialize(const egl::Display *display) override;
 

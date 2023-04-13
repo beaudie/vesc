@@ -64,10 +64,10 @@ ImageSibling::~ImageSibling()
     ASSERT(mTargetOf.get() == nullptr);
 }
 
-void ImageSibling::setTargetImage(const gl::Context *context, egl::Image *imageTarget)
+void ImageSibling::setTargetImage(const gl::Context *context, egl::Image *imageTarget, angle::UnlockedTailCall *unlockedTailCall)
 {
     ASSERT(imageTarget != nullptr);
-    mTargetOf.set(DisplayFromContext(context), imageTarget);
+    mTargetOf.set(DisplayFromContext(context), imageTarget, unlockedTailCall);
     imageTarget->addTargetSibling(this);
 }
 
@@ -178,7 +178,7 @@ ExternalImageSibling::ExternalImageSibling(rx::EGLImplFactory *factory,
 
 ExternalImageSibling::~ExternalImageSibling() = default;
 
-void ExternalImageSibling::onDestroy(const egl::Display *display)
+void ExternalImageSibling::onDestroy(const egl::Display *display, angle::UnlockedTailCall *unlockedTailCall)
 {
     mImplementation->onDestroy(display);
 }
@@ -244,7 +244,7 @@ bool ExternalImageSibling::hasProtectedContent() const
 void ExternalImageSibling::onAttach(const gl::Context *context, rx::UniqueSerial framebufferSerial)
 {}
 
-void ExternalImageSibling::onDetach(const gl::Context *context, rx::UniqueSerial framebufferSerial)
+void ExternalImageSibling::onDetach(const gl::Context *context, rx::UniqueSerial framebufferSerial, angle::UnlockedTailCall *unlockedTailCall)
 {}
 
 GLuint ExternalImageSibling::getId() const
@@ -318,7 +318,7 @@ Image::Image(rx::EGLImplFactory *factory,
     mState.source->addImageSource(this);
 }
 
-void Image::onDestroy(const Display *display)
+void Image::onDestroy(const Display *display, angle::UnlockedTailCall *unlockedTailCall)
 {
     // All targets should hold a ref to the egl image and it should not be deleted until there are
     // no siblings left.

@@ -103,7 +103,7 @@ class FenceSyncTest : public Test
         mFence->addRef();
     }
 
-    void TearDown() override { mFence->release(nullptr); }
+    void TearDown() override { mFence->release(nullptr, nullptr); }
 
     NiceMock<rx::MockGLFactory> factory;
     MockSyncImpl *mImpl;

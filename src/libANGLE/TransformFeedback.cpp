@@ -94,7 +94,7 @@ TransformFeedback::TransformFeedback(rx::GLImplFactory *implFactory,
     ASSERT(mImplementation != nullptr);
 }
 
-void TransformFeedback::onDestroy(const Context *context)
+void TransformFeedback::onDestroy(const Context *context, angle::UnlockedTailCall *unlockedTailCall)
 {
     ASSERT(!context || !context->isCurrentTransformFeedback(this));
     if (mState.mProgram)

@@ -91,12 +91,12 @@ FramebufferAttachment::~FramebufferAttachment()
     ASSERT(!isAttached());
 }
 
-void FramebufferAttachment::detach(const Context *context, rx::UniqueSerial framebufferSerial)
+void FramebufferAttachment::detach(const Context *context, rx::UniqueSerial framebufferSerial, angle::UnlockedTailCall *unlockedTailCall)
 {
     mType = GL_NONE;
     if (mResource != nullptr)
     {
-        mResource->onDetach(context, framebufferSerial);
+        mResource->onDetach(context, framebufferSerial, unlockedTailCall);
         mResource = nullptr;
     }
     mNumViews      = kDefaultNumViews;
@@ -116,7 +116,7 @@ void FramebufferAttachment::attach(const Context *context,
                                    GLuint baseViewIndex,
                                    bool isMultiview,
                                    GLsizei samples,
-                                   rx::UniqueSerial framebufferSerial)
+                                   rx::UniqueSerial framebufferSerial, angle::UnlockedTailCall *unlockedTailCall)
 {
     if (resource == nullptr)
     {
@@ -134,7 +134,7 @@ void FramebufferAttachment::attach(const Context *context,
 
     if (mResource != nullptr)
     {
-        mResource->onDetach(context, framebufferSerial);
+        mResource->onDetach(context, framebufferSerial, unlockedTailCall);
     }
 
     mResource = resource;

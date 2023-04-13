@@ -55,7 +55,7 @@ Buffer::~Buffer()
     SafeDelete(mImpl);
 }
 
-void Buffer::onDestroy(const Context *context)
+void Buffer::onDestroy(const Context *context, angle::UnlockedTailCall *unlockedTailCall)
 {
     // In tests, mImpl might be null.
     if (mImpl)

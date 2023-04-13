@@ -75,7 +75,7 @@ class Renderbuffer final : public RefCountObject<RenderbufferID>,
     Renderbuffer(rx::GLImplFactory *implFactory, RenderbufferID id);
     ~Renderbuffer() override;
 
-    void onDestroy(const Context *context) override;
+    void onDestroy(const Context *context, angle::UnlockedTailCall *unlockedTailCall) override;
 
     angle::Result setLabel(const Context *context, const std::string &label) override;
     const std::string &getLabel() const override;
@@ -83,14 +83,14 @@ class Renderbuffer final : public RefCountObject<RenderbufferID>,
     angle::Result setStorage(const Context *context,
                              GLenum internalformat,
                              GLsizei width,
-                             GLsizei height);
+                             GLsizei height, angle::UnlockedTailCall *unlockedTailCall);
     angle::Result setStorageMultisample(const Context *context,
                                         GLsizei samplesIn,
                                         GLenum internalformat,
                                         GLsizei width,
                                         GLsizei height,
-                                        MultisamplingMode mode);
-    angle::Result setStorageEGLImageTarget(const Context *context, egl::Image *imageTarget);
+                                        MultisamplingMode mode, angle::UnlockedTailCall *unlockedTailCall);
+    angle::Result setStorageEGLImageTarget(const Context *context, egl::Image *imageTarget, angle::UnlockedTailCall *unlockedTailCall);
 
     angle::Result copyRenderbufferSubData(Context *context,
                                           const gl::Renderbuffer *srcBuffer,
@@ -146,7 +146,7 @@ class Renderbuffer final : public RefCountObject<RenderbufferID>,
                       const ImageIndex &imageIndex) const override;
 
     void onAttach(const Context *context, rx::UniqueSerial framebufferSerial) override;
-    void onDetach(const Context *context, rx::UniqueSerial framebufferSerial) override;
+    void onDetach(const Context *context, rx::UniqueSerial framebufferSerial, angle::UnlockedTailCall *unlockedTailCall) override;
     GLuint getId() const override;
 
     InitState initState(GLenum binding, const ImageIndex &imageIndex) const override;

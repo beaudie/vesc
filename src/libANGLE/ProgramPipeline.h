@@ -93,7 +93,7 @@ class ProgramPipeline final : public RefCountObject<ProgramPipelineID>,
     ProgramPipeline(rx::GLImplFactory *factory, ProgramPipelineID handle);
     ~ProgramPipeline() override;
 
-    void onDestroy(const Context *context) override;
+    void onDestroy(const Context *context, angle::UnlockedTailCall *unlockedTailCall) override;
 
     angle::Result setLabel(const Context *context, const std::string &label) override;
     const std::string &getLabel() const override;

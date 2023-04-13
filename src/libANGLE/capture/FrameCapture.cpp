@@ -8130,11 +8130,13 @@ void FrameCaptureShared::runMidExecutionCapture(gl::Context *mainContext)
                 shareContextState.hasRobustAccess(), shareContextState.hasProtectedContent());
             auxContextReplayState.initializeForCapture(shareContext);
 
-            egl::Error error = shareContext->makeCurrent(display, draw, read);
+            angle::UnlockedTailCall unlockedTailCall;
+            egl::Error error = shareContext->makeCurrent(display, draw, read, &unlockedTailCall);
             if (error.isError())
             {
                 INFO() << "MEC unable to make secondary context current";
             }
+            unlockedTailCall.run();
 
             CaptureMidExecutionSetup(shareContext, &frameCapture->getSetupCalls(),
                                      frameCapture->getStateResetHelper().getResetCalls(),
@@ -8153,11 +8155,13 @@ void FrameCaptureShared::runMidExecutionCapture(gl::Context *mainContext)
         mActiveContexts.insert(shareContext->id().value);
     }
 
+    angle::UnlockedTailCall unlockedTailCall;
     egl::Error error = mainContext->makeCurrent(display, draw, read);
     if (error.isError())
     {
         INFO() << "MEC unable to make main context current again";
     }
+    unlockedTailCall.run();
 }
 
 void FrameCaptureShared::onEndFrame(gl::Context *context)

@@ -768,11 +768,11 @@ Texture::Texture(rx::GLImplFactory *factory, TextureID id, TextureType type)
     mDirtyBits.set(DIRTY_BIT_IMPLEMENTATION);
 }
 
-void Texture::onDestroy(const Context *context)
+void Texture::onDestroy(const Context *context, angle::UnlockedTailCall *unlockedTailCall)
 {
     if (mBoundSurface)
     {
-        ANGLE_SWALLOW_ERR(mBoundSurface->releaseTexImage(context, EGL_BACK_BUFFER));
+        ANGLE_SWALLOW_ERR(mBoundSurface->releaseTexImage(context, EGL_BACK_BUFFER, unlockedTailCall));
         mBoundSurface = nullptr;
     }
     if (mBoundStream)
@@ -781,10 +781,10 @@ void Texture::onDestroy(const Context *context)
         mBoundStream = nullptr;
     }
 
-    egl::RefCountObjectReleaser<egl::Image> releaseImage;
+    egl::RefCountObjectReleaser<egl::Image> releaseImage(unlockedTailCall);
     (void)orphanImages(context, &releaseImage);
 
-    mState.mBuffer.set(context, nullptr, 0, 0);
+    mState.mBuffer.set(context, nullptr, 0, 0, unlockedTailCall);
 
     if (mTexture)
     {
@@ -1230,14 +1230,14 @@ angle::Result Texture::setImage(Context *context,
                                 const Extents &size,
                                 GLenum format,
                                 GLenum type,
-                                const uint8_t *pixels)
+                                const uint8_t *pixels, angle::UnlockedTailCall *unlockedTailCall)
 {
     ASSERT(TextureTargetToType(target) == mState.mType);
 
     // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
-    ANGLE_TRY(releaseTexImageInternal(context));
+    ANGLE_TRY(releaseTexImageInternal(context, unlockedTailCall));
 
-    egl::RefCountObjectReleaser<egl::Image> releaseImage;
+    egl::RefCountObjectReleaser<egl::Image> releaseImage(unlockedTailCall);
     ANGLE_TRY(orphanImages(context, &releaseImage));
 
     ImageIndex index = ImageIndex::MakeFromTarget(target, level, size.depth);
@@ -1287,14 +1287,14 @@ angle::Result Texture::setCompressedImage(Context *context,
                                           GLenum internalFormat,
                                           const Extents &size,
                                           size_t imageSize,
-                                          const uint8_t *pixels)
+                                          const uint8_t *pixels, angle::UnlockedTailCall *unlockedTailCall)
 {
     ASSERT(TextureTargetToType(target) == mState.mType);
 
     // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
-    ANGLE_TRY(releaseTexImageInternal(context));
+    ANGLE_TRY(releaseTexImageInternal(context, unlockedTailCall));
 
-    egl::RefCountObjectReleaser<egl::Image> releaseImage;
+    egl::RefCountObjectReleaser<egl::Image> releaseImage(unlockedTailCall);
     ANGLE_TRY(orphanImages(context, &releaseImage));
 
     ImageIndex index = ImageIndex::MakeFromTarget(target, level, size.depth);
@@ -1338,14 +1338,14 @@ angle::Result Texture::copyImage(Context *context,
                                  GLint level,
                                  const Rectangle &sourceArea,
                                  GLenum internalFormat,
-                                 Framebuffer *source)
+                                 Framebuffer *source, angle::UnlockedTailCall *unlockedTailCall)
 {
     ASSERT(TextureTargetToType(target) == mState.mType);
 
     // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
-    ANGLE_TRY(releaseTexImageInternal(context));
+    ANGLE_TRY(releaseTexImageInternal(context, unlockedTailCall));
 
-    egl::RefCountObjectReleaser<egl::Image> releaseImage;
+    egl::RefCountObjectReleaser<egl::Image> releaseImage(unlockedTailCall);
     ANGLE_TRY(orphanImages(context, &releaseImage));
 
     ImageIndex index = ImageIndex::MakeFromTarget(target, level, 1);
@@ -1505,15 +1505,15 @@ angle::Result Texture::copyTexture(Context *context,
                                    bool unpackFlipY,
                                    bool unpackPremultiplyAlpha,
                                    bool unpackUnmultiplyAlpha,
-                                   Texture *source)
+                                   Texture *source, angle::UnlockedTailCall *unlockedTailCall)
 {
     ASSERT(TextureTargetToType(target) == mState.mType);
     ASSERT(source->getType() != TextureType::CubeMap);
 
     // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
-    ANGLE_TRY(releaseTexImageInternal(context));
+    ANGLE_TRY(releaseTexImageInternal(context, unlockedTailCall));
 
-    egl::RefCountObjectReleaser<egl::Image> releaseImage;
+    egl::RefCountObjectReleaser<egl::Image> releaseImage(unlockedTailCall);
     ANGLE_TRY(orphanImages(context, &releaseImage));
 
     // Initialize source texture.
@@ -1567,12 +1567,12 @@ angle::Result Texture::copySubTexture(const Context *context,
     return angle::Result::Continue;
 }
 
-angle::Result Texture::copyCompressedTexture(Context *context, const Texture *source)
+angle::Result Texture::copyCompressedTexture(Context *context, const Texture *source, angle::UnlockedTailCall *unlockedTailCall)
 {
     // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
-    ANGLE_TRY(releaseTexImageInternal(context));
+    ANGLE_TRY(releaseTexImageInternal(context, unlockedTailCall));
 
-    egl::RefCountObjectReleaser<egl::Image> releaseImage;
+    egl::RefCountObjectReleaser<egl::Image> releaseImage(unlockedTailCall);
     ANGLE_TRY(orphanImages(context, &releaseImage));
 
     ANGLE_TRY(mTexture->copyCompressedTexture(context, source));
@@ -1589,14 +1589,14 @@ angle::Result Texture::setStorage(Context *context,
                                   TextureType type,
                                   GLsizei levels,
                                   GLenum internalFormat,
-                                  const Extents &size)
+                                  const Extents &size, angle::UnlockedTailCall *unlockedTailCall)
 {
     ASSERT(type == mState.mType);
 
     // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
-    ANGLE_TRY(releaseTexImageInternal(context));
+    ANGLE_TRY(releaseTexImageInternal(context, unlockedTailCall));
 
-    egl::RefCountObjectReleaser<egl::Image> releaseImage;
+    egl::RefCountObjectReleaser<egl::Image> releaseImage(unlockedTailCall);
     ANGLE_TRY(orphanImages(context, &releaseImage));
 
     mState.mImmutableFormat = true;
@@ -1626,14 +1626,14 @@ angle::Result Texture::setImageExternal(Context *context,
                                         GLenum internalFormat,
                                         const Extents &size,
                                         GLenum format,
-                                        GLenum type)
+                                        GLenum type, angle::UnlockedTailCall *unlockedTailCall)
 {
     ASSERT(TextureTargetToType(target) == mState.mType);
 
     // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
-    ANGLE_TRY(releaseTexImageInternal(context));
+    ANGLE_TRY(releaseTexImageInternal(context, unlockedTailCall));
 
-    egl::RefCountObjectReleaser<egl::Image> releaseImage;
+    egl::RefCountObjectReleaser<egl::Image> releaseImage(unlockedTailCall);
     ANGLE_TRY(orphanImages(context, &releaseImage));
 
     ImageIndex index = ImageIndex::MakeFromTarget(target, level, size.depth);
@@ -1655,14 +1655,14 @@ angle::Result Texture::setStorageMultisample(Context *context,
                                              GLsizei samplesIn,
                                              GLint internalFormat,
                                              const Extents &size,
-                                             bool fixedSampleLocations)
+                                             bool fixedSampleLocations, angle::UnlockedTailCall *unlockedTailCall)
 {
     ASSERT(type == mState.mType);
 
     // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
-    ANGLE_TRY(releaseTexImageInternal(context));
+    ANGLE_TRY(releaseTexImageInternal(context, unlockedTailCall));
 
-    egl::RefCountObjectReleaser<egl::Image> releaseImage;
+    egl::RefCountObjectReleaser<egl::Image> releaseImage(unlockedTailCall);
     ANGLE_TRY(orphanImages(context, &releaseImage));
 
     // Potentially adjust "samples" to a supported value
@@ -1692,14 +1692,14 @@ angle::Result Texture::setStorageExternalMemory(Context *context,
                                                 GLuint64 offset,
                                                 GLbitfield createFlags,
                                                 GLbitfield usageFlags,
-                                                const void *imageCreateInfoPNext)
+                                                const void *imageCreateInfoPNext, angle::UnlockedTailCall *unlockedTailCall)
 {
     ASSERT(type == mState.mType);
 
     // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
-    ANGLE_TRY(releaseTexImageInternal(context));
+    ANGLE_TRY(releaseTexImageInternal(context, unlockedTailCall));
 
-    egl::RefCountObjectReleaser<egl::Image> releaseImage;
+    egl::RefCountObjectReleaser<egl::Image> releaseImage(unlockedTailCall);
     ANGLE_TRY(orphanImages(context, &releaseImage));
 
     ANGLE_TRY(mTexture->setStorageExternalMemory(context, type, levels, internalFormat, size,
@@ -1724,14 +1724,14 @@ angle::Result Texture::setStorageExternalMemory(Context *context,
     return angle::Result::Continue;
 }
 
-angle::Result Texture::generateMipmap(Context *context)
+angle::Result Texture::generateMipmap(Context *context, angle::UnlockedTailCall *unlockedTailCall)
 {
     // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
-    ANGLE_TRY(releaseTexImageInternal(context));
+    ANGLE_TRY(releaseTexImageInternal(context, unlockedTailCall));
 
     // EGL_KHR_gl_image states that images are only orphaned when generating mipmaps if the texture
     // is not mip complete.
-    egl::RefCountObjectReleaser<egl::Image> releaseImage;
+    egl::RefCountObjectReleaser<egl::Image> releaseImage(unlockedTailCall);
     if (!isMipmapComplete())
     {
         ANGLE_TRY(orphanImages(context, &releaseImage));
@@ -1867,12 +1867,12 @@ angle::Result Texture::releaseImageFromStream(const Context *context)
     return angle::Result::Continue;
 }
 
-angle::Result Texture::releaseTexImageInternal(Context *context)
+angle::Result Texture::releaseTexImageInternal(Context *context, angle::UnlockedTailCall *unlockedTailCall)
 {
     if (mBoundSurface)
     {
         // Notify the surface
-        egl::Error eglErr = mBoundSurface->releaseTexImageFromTexture(context);
+        egl::Error eglErr = mBoundSurface->releaseTexImageFromTexture(context, unlockedTailCall);
         // TODO(jmadill): Remove this once refactor is complete. http://anglebug.com/3041
         if (eglErr.isError())
         {
@@ -1889,17 +1889,17 @@ angle::Result Texture::releaseTexImageInternal(Context *context)
 angle::Result Texture::setEGLImageTargetImpl(Context *context,
                                              TextureType type,
                                              GLuint levels,
-                                             egl::Image *imageTarget)
+                                             egl::Image *imageTarget, angle::UnlockedTailCall *unlockedTailCall)
 {
     ASSERT(type == mState.mType);
 
     // Release from previous calls to eglBindTexImage, to avoid calling the Impl after
-    ANGLE_TRY(releaseTexImageInternal(context));
+    ANGLE_TRY(releaseTexImageInternal(context, unlockedTailCall));
 
-    egl::RefCountObjectReleaser<egl::Image> releaseImage;
+    egl::RefCountObjectReleaser<egl::Image> releaseImage(unlockedTailCall);
     ANGLE_TRY(orphanImages(context, &releaseImage));
 
-    setTargetImage(context, imageTarget);
+    setTargetImage(context, imageTarget, unlockedTailCall);
 
     auto initState = imageTarget->sourceInitState();
 
@@ -1928,13 +1928,13 @@ angle::Result Texture::setEGLImageTarget(Context *context,
 angle::Result Texture::setStorageEGLImageTarget(Context *context,
                                                 TextureType type,
                                                 egl::Image *imageTarget,
-                                                const GLint *attrib_list)
+                                                const GLint *attrib_list, angle::UnlockedTailCall *unlockedTailCall)
 {
     ASSERT(type == TextureType::External || type == TextureType::_3D || type == TextureType::_2D ||
            type == TextureType::_2DArray || type == TextureType::CubeMap ||
            type == TextureType::CubeMapArray);
 
-    ANGLE_TRY(setEGLImageTargetImpl(context, type, imageTarget->getLevelCount(), imageTarget));
+    ANGLE_TRY(setEGLImageTargetImpl(context, type, imageTarget->getLevelCount(), imageTarget, unlockedTailCall));
 
     mState.mImmutableLevels = imageTarget->getLevelCount();
     mState.mImmutableFormat = true;
@@ -2137,13 +2137,13 @@ void Texture::onAttach(const Context *context, rx::UniqueSerial framebufferSeria
     }
 }
 
-void Texture::onDetach(const Context *context, rx::UniqueSerial framebufferSerial)
+void Texture::onDetach(const Context *context, rx::UniqueSerial framebufferSerial, angle::UnlockedTailCall *unlockedTailCall)
 {
     // Erase first instance. If there are multiple bindings, leave the others.
     ASSERT(isBoundToFramebuffer(framebufferSerial));
     mBoundFramebufferSerials.remove_and_permute(framebufferSerial);
 
-    release(context);
+    release(context, unlockedTailCall);
 }
 
 GLuint Texture::getId() const
@@ -2330,11 +2330,11 @@ angle::Result Texture::ensureSubImageInitialized(const Context *context,
     return angle::Result::Continue;
 }
 
-angle::Result Texture::handleMipmapGenerationHint(Context *context, int level)
+angle::Result Texture::handleMipmapGenerationHint(Context *context, int level, angle::UnlockedTailCall *unlockedTailCall)
 {
     if (getGenerateMipmapHint() == GL_TRUE && level == 0)
     {
-        ANGLE_TRY(generateMipmap(context));
+        ANGLE_TRY(generateMipmap(context, unlockedTailCall));
     }
 
     return angle::Result::Continue;

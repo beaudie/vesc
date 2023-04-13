@@ -65,14 +65,14 @@ TypedResourceManager<ResourceType, ImplT, IDType>::~TypedResourceManager()
 }
 
 template <typename ResourceType, typename ImplT, typename IDType>
-void TypedResourceManager<ResourceType, ImplT, IDType>::reset(const Context *context)
+void TypedResourceManager<ResourceType, ImplT, IDType>::reset(const Context *context, angle::UnlockedTailCall *unlockedTailCall)
 {
     this->mHandleAllocator.reset();
     for (const auto &resource : mObjectMap)
     {
         if (resource.second)
         {
-            ImplT::DeleteObject(context, resource.second);
+            ImplT::DeleteObject(context, resource.second, unlockedTailCall);
         }
     }
     mObjectMap.clear();
@@ -80,7 +80,7 @@ void TypedResourceManager<ResourceType, ImplT, IDType>::reset(const Context *con
 
 template <typename ResourceType, typename ImplT, typename IDType>
 void TypedResourceManager<ResourceType, ImplT, IDType>::deleteObject(const Context *context,
-                                                                     IDType handle)
+                                                                     IDType handle, angle::UnlockedTailCall *unlockedTailCall)
 {
     ResourceType *resource = nullptr;
     if (!mObjectMap.erase(handle, &resource))
@@ -93,7 +93,7 @@ void TypedResourceManager<ResourceType, ImplT, IDType>::deleteObject(const Conte
 
     if (resource)
     {
-        ImplT::DeleteObject(context, resource);
+        ImplT::DeleteObject(context, resource, unlockedTailCall);
     }
 }
 
@@ -117,9 +117,9 @@ Buffer *BufferManager::AllocateNewObject(rx::GLImplFactory *factory, BufferID ha
 }
 
 // static
-void BufferManager::DeleteObject(const Context *context, Buffer *buffer)
+void BufferManager::DeleteObject(const Context *context, Buffer *buffer, angle::UnlockedTailCall *unlockedTailCall)
 {
-    buffer->release(context);
+    buffer->release(context, unlockedTailCall);
 }
 
 BufferID BufferManager::createBuffer()
@@ -202,7 +202,7 @@ void ShaderProgramManager::deleteObject(const Context *context,
     if (object->getRefCount() == 0)
     {
         mHandleAllocator.release(id.value);
-        object->onDestroy(context);
+        object->onDestroy(context, nullptr);
         objectMap->erase(id, &object);
     }
     else
@@ -226,9 +226,9 @@ Texture *TextureManager::AllocateNewObject(rx::GLImplFactory *factory,
 }
 
 // static
-void TextureManager::DeleteObject(const Context *context, Texture *texture)
+void TextureManager::DeleteObject(const Context *context, Texture *texture, angle::UnlockedTailCall *unlockedTailCall)
 {
-    texture->release(context);
+    texture->release(context, unlockedTailCall);
 }
 
 TextureID TextureManager::createTexture()
@@ -268,9 +268,9 @@ Renderbuffer *RenderbufferManager::AllocateNewObject(rx::GLImplFactory *factory,
 }
 
 // static
-void RenderbufferManager::DeleteObject(const Context *context, Renderbuffer *renderbuffer)
+void RenderbufferManager::DeleteObject(const Context *context, Renderbuffer *renderbuffer, angle::UnlockedTailCall *unlockedTailCall)
 {
-    renderbuffer->release(context);
+    renderbuffer->release(context, unlockedTailCall);
 }
 
 RenderbufferID RenderbufferManager::createRenderbuffer()
@@ -296,9 +296,9 @@ Sampler *SamplerManager::AllocateNewObject(rx::GLImplFactory *factory, SamplerID
 }
 
 // static
-void SamplerManager::DeleteObject(const Context *context, Sampler *sampler)
+void SamplerManager::DeleteObject(const Context *context, Sampler *sampler, angle::UnlockedTailCall *unlockedTailCall)
 {
-    sampler->release(context);
+    sampler->release(context, unlockedTailCall);
 }
 
 SamplerID SamplerManager::createSampler()
@@ -321,9 +321,9 @@ bool SamplerManager::isSampler(SamplerID sampler) const
 SyncManager::~SyncManager() = default;
 
 // static
-void SyncManager::DeleteObject(const Context *context, Sync *sync)
+void SyncManager::DeleteObject(const Context *context, Sync *sync, angle::UnlockedTailCall *unlockedTailCall)
 {
-    sync->release(context);
+    sync->release(context, unlockedTailCall);
 }
 
 SyncID SyncManager::createSync(rx::GLImplFactory *factory)
@@ -355,9 +355,9 @@ Framebuffer *FramebufferManager::AllocateNewObject(rx::GLImplFactory *factory,
 }
 
 // static
-void FramebufferManager::DeleteObject(const Context *context, Framebuffer *framebuffer)
+void FramebufferManager::DeleteObject(const Context *context, Framebuffer *framebuffer, angle::UnlockedTailCall *unlockedTailCall)
 {
-    framebuffer->onDestroy(context);
+    framebuffer->onDestroy(context, unlockedTailCall);
     delete framebuffer;
 }
 
@@ -407,9 +407,9 @@ ProgramPipeline *ProgramPipelineManager::AllocateNewObject(rx::GLImplFactory *fa
 }
 
 // static
-void ProgramPipelineManager::DeleteObject(const Context *context, ProgramPipeline *pipeline)
+void ProgramPipelineManager::DeleteObject(const Context *context, ProgramPipeline *pipeline, angle::UnlockedTailCall *unlockedTailCall)
 {
-    pipeline->release(context);
+    pipeline->release(context, unlockedTailCall);
 }
 
 ProgramPipelineID ProgramPipelineManager::createProgramPipeline()

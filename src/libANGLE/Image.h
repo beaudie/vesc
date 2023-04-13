@@ -57,7 +57,7 @@ class ImageSibling : public gl::FramebufferAttachmentObject
 
   protected:
     // Set the image target of this sibling
-    void setTargetImage(const gl::Context *context, egl::Image *imageTarget);
+    void setTargetImage(const gl::Context *context, egl::Image *imageTarget, angle::UnlockedTailCall *unlockedTailCall);
 
     // Orphan all EGL image sources and targets
     angle::Result orphanImages(const gl::Context *context,
@@ -91,7 +91,7 @@ class ExternalImageSibling : public ImageSibling
                          const AttributeMap &attribs);
     ~ExternalImageSibling() override;
 
-    void onDestroy(const egl::Display *display);
+    void onDestroy(const egl::Display *display, angle::UnlockedTailCall *unlockedTailCall);
 
     Error initialize(const Display *display, const gl::Context *context);
 
@@ -109,7 +109,7 @@ class ExternalImageSibling : public ImageSibling
     bool hasProtectedContent() const override;
 
     void onAttach(const gl::Context *context, rx::UniqueSerial framebufferSerial) override;
-    void onDetach(const gl::Context *context, rx::UniqueSerial framebufferSerial) override;
+    void onDetach(const gl::Context *context, rx::UniqueSerial framebufferSerial, angle::UnlockedTailCall *unlockedTailCall) override;
     GLuint getId() const override;
 
     gl::InitState initState(GLenum binding, const gl::ImageIndex &imageIndex) const override;
@@ -167,7 +167,7 @@ class Image final : public RefCountObject, public LabeledObject
           ImageSibling *buffer,
           const AttributeMap &attribs);
 
-    void onDestroy(const Display *display) override;
+    void onDestroy(const Display *display, angle::UnlockedTailCall *unlockedTailCall) override;
     ~Image() override;
 
     ImageID id() const { return mState.id; }

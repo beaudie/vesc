@@ -761,7 +761,7 @@ void Context::initializeDefaultResources()
     mOverlay.init();
 }
 
-egl::Error Context::onDestroy(const egl::Display *display)
+egl::Error Context::onDestroy(const egl::Display *display, angle::UnlockedTailCall *unlockedTailCall)
 {
     if (!mHasBeenCurrent)
     {
@@ -784,7 +784,7 @@ egl::Error Context::onDestroy(const egl::Display *display)
         mGLES1Renderer->onDestroy(this, &mState);
     }
 
-    ANGLE_TRY(unMakeCurrent(display));
+    ANGLE_TRY(unMakeCurrent(display, unlockedTailCall));
 
     mDefaultFramebuffer->onDestroy(this);
     mDefaultFramebuffer.reset();
@@ -836,7 +836,7 @@ egl::Error Context::onDestroy(const egl::Display *display)
 
     releaseShaderCompiler();
 
-    mState.reset(this);
+    mState.reset(this, unlockedTailCall);
 
     mState.mBufferManager->release(this);
     // mProgramPipelineManager must be before mShaderProgramManager to give each
@@ -876,7 +876,8 @@ EGLLabelKHR Context::getLabel() const
 
 egl::Error Context::makeCurrent(egl::Display *display,
                                 egl::Surface *drawSurface,
-                                egl::Surface *readSurface)
+                                egl::Surface *readSurface,
+                                angle::UnlockedTailCall *unlockedTailCall)
 {
     mDisplay = display;
 
@@ -901,7 +902,7 @@ egl::Error Context::makeCurrent(egl::Display *display,
         mHasBeenCurrent = true;
     }
 
-    ANGLE_TRY(unsetDefaultFramebuffer());
+    ANGLE_TRY(unsetDefaultFramebuffer(unlockedTailCall));
 
     getShareGroup()->getFrameCaptureShared()->onMakeCurrent(this, drawSurface);
 
@@ -917,18 +918,19 @@ egl::Error Context::makeCurrent(egl::Display *display,
     // If the implementation fails onMakeCurrent, unset the default framebuffer.
     if (implResult != angle::Result::Continue)
     {
-        ANGLE_TRY(unsetDefaultFramebuffer());
+        ANGLE_TRY(unsetDefaultFramebuffer(unlockedTailCall));
         return angle::ResultToEGL(implResult);
     }
 
     return egl::NoError();
 }
 
-egl::Error Context::unMakeCurrent(const egl::Display *display)
+egl::Error Context::unMakeCurrent(const egl::Display *display,
+                                  angle::UnlockedTailCall *unlockedTailCall)
 {
     ANGLE_TRY(angle::ResultToEGL(mImplementation->onUnMakeCurrent(this)));
 
-    ANGLE_TRY(unsetDefaultFramebuffer());
+    ANGLE_TRY(unsetDefaultFramebuffer(unlockedTailCall));
 
     // Return the scratch buffers to the display so they can be shared with other contexts while
     // this one is not current.
@@ -1321,7 +1323,7 @@ GLboolean Context::isSampler(SamplerID samplerName) const
     return mState.mSamplerManager->isSampler(samplerName);
 }
 
-void Context::bindTexture(TextureType target, TextureID handle)
+void Context::bindTexture(TextureType target, TextureID handle, angle::UnlockedTailCall *unlockedTailCall)
 {
     // Some apps enable KHR_create_context_no_error but pass in an invalid texture type.
     // Workaround this by silently returning in such situations.
@@ -1348,7 +1350,7 @@ void Context::bindTexture(TextureType target, TextureID handle)
         return;
     }
 
-    mState.setSamplerTexture(this, target, texture);
+    mState.setSamplerTexture(this, target, texture, unlockedTailCall);
     mStateCache.onActiveTextureChange(this);
 }
 
@@ -9886,7 +9888,7 @@ egl::Error Context::setDefaultFramebuffer(egl::Surface *drawSurface, egl::Surfac
     return egl::NoError();
 }
 
-egl::Error Context::unsetDefaultFramebuffer()
+egl::Error Context::unsetDefaultFramebuffer(angle::UnlockedTailCall *unlockedTailCall)
 {
     Framebuffer *defaultFramebuffer =
         mState.mFramebufferManager->getFramebuffer(Framebuffer::kDefaultDrawFramebufferHandle);
@@ -9917,11 +9919,11 @@ egl::Error Context::unsetDefaultFramebuffer()
     mCurrentReadSurface       = nullptr;
     if (drawSurface)
     {
-        ANGLE_TRY(drawSurface->unMakeCurrent(this));
+        ANGLE_TRY(drawSurface->unMakeCurrent(this, unlockedTailCall));
     }
     if (drawSurface != readSurface)
     {
-        ANGLE_TRY(readSurface->unMakeCurrent(this));
+        ANGLE_TRY(readSurface->unMakeCurrent(this, unlockedTailCall));
     }
 
     return egl::NoError();

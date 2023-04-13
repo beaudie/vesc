@@ -150,7 +150,7 @@ void PixelLocalStoragePlane::onFramebufferDestroyed(const Context *context)
 {
     if (mTextureRef != nullptr)
     {
-        mTextureRef->release(context);
+        mTextureRef->release(context, nullptr);
         mTextureRef = nullptr;
     }
 }
@@ -169,7 +169,7 @@ void PixelLocalStoragePlane::deinitialize(Context *context)
     }
     if (mTextureRef != nullptr)
     {
-        mTextureRef->release(context);
+        mTextureRef->release(context, nullptr);
         mTextureRef = nullptr;
     }
 }
@@ -730,7 +730,7 @@ class PixelLocalStorageImageLoadStore : public PixelLocalStorage
                                       binding.layer, binding.access, binding.format);
 
             // BindingPointers have to be explicitly cleaned up.
-            binding.texture.set(context, nullptr);
+            binding.texture.set(context, nullptr, nullptr);
         }
         mSavedImageBindings.clear();
 

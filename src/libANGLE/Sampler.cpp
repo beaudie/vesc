@@ -28,7 +28,7 @@ Sampler::~Sampler()
     SafeDelete(mSampler);
 }
 
-void Sampler::onDestroy(const Context *context)
+void Sampler::onDestroy(const Context *context, angle::UnlockedTailCall *unlockedTailCall)
 {
     if (mSampler)
     {

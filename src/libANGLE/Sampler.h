@@ -30,7 +30,7 @@ class Sampler final : public RefCountObject<SamplerID>, public LabeledObject, pu
     Sampler(rx::GLImplFactory *factory, SamplerID id);
     ~Sampler() override;
 
-    void onDestroy(const Context *context) override;
+    void onDestroy(const Context *context, angle::UnlockedTailCall *unlockedTailCall) override;
 
     angle::Result setLabel(const Context *context, const std::string &label) override;
     const std::string &getLabel() const override;

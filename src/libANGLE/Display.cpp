@@ -1093,40 +1093,40 @@ Error Display::initialize()
     return NoError();
 }
 
-Error Display::destroyInvalidEglObjects()
+Error Display::destroyInvalidEglObjects(angle::UnlockedTailCall *unlockedTailCall)
 {
     // Destroy invalid EGL objects
     while (!mInvalidContextSet.empty())
     {
         gl::Context *context = *mInvalidContextSet.begin();
         context->setIsDestroyed();
-        ANGLE_TRY(releaseContextImpl(context, &mInvalidContextSet));
+        ANGLE_TRY(releaseContextImpl(context, &mInvalidContextSet, unlockedTailCall));
     }
 
     while (!mInvalidImageSet.empty())
     {
-        destroyImageImpl(*mInvalidImageSet.begin(), &mInvalidImageSet);
+        destroyImageImpl(*mInvalidImageSet.begin(), &mInvalidImageSet, unlockedTailCall);
     }
 
     while (!mInvalidStreamSet.empty())
     {
-        destroyStreamImpl(*mInvalidStreamSet.begin(), &mInvalidStreamSet);
+        destroyStreamImpl(*mInvalidStreamSet.begin(), &mInvalidStreamSet, unlockedTailCall);
     }
 
     while (!mInvalidSurfaceSet.empty())
     {
-        ANGLE_TRY(destroySurfaceImpl(*mInvalidSurfaceSet.begin(), &mInvalidSurfaceSet));
+        ANGLE_TRY(destroySurfaceImpl(*mInvalidSurfaceSet.begin(), &mInvalidSurfaceSet, unlockedTailCall));
     }
 
     while (!mInvalidSyncSet.empty())
     {
-        destroySyncImpl(*mInvalidSyncSet.begin(), &mInvalidSyncSet);
+        destroySyncImpl(*mInvalidSyncSet.begin(), &mInvalidSyncSet, unlockedTailCall);
     }
 
     return NoError();
 }
 
-Error Display::terminate(Thread *thread, TerminateReason terminateReason)
+Error Display::terminate(Thread *thread, TerminateReason terminateReason, angle::UnlockedTailCall *unlockedTailCall)
 {
     if (terminateReason == TerminateReason::Api)
     {
@@ -1178,7 +1178,7 @@ Error Display::terminate(Thread *thread, TerminateReason terminateReason)
             {
                 ASSERT(mTerminatedByApi);
                 context->release();
-                (void)context->unMakeCurrent(this);
+                (void)context->unMakeCurrent(this, unlockedTailCall);
             }
             else
             {
@@ -1216,7 +1216,7 @@ Error Display::terminate(Thread *thread, TerminateReason terminateReason)
     ASSERT(mGlobalSemaphoreShareGroupUsers == 0 && mSemaphoreManager == nullptr);
 
     // Clean up all invalid objects
-    ANGLE_TRY(destroyInvalidEglObjects());
+    ANGLE_TRY(destroyInvalidEglObjects(unlockedTailCall));
 
     mConfigSet.clear();
 
@@ -1253,10 +1253,10 @@ Error Display::prepareForCall()
     return mImplementation->prepareForCall();
 }
 
-Error Display::releaseThread()
+Error Display::releaseThread(angle::UnlockedTailCall *unlockedTailCall)
 {
     ANGLE_TRY(mImplementation->releaseThread());
-    return destroyInvalidEglObjects();
+    return destroyInvalidEglObjects(unlockedTailCall);
 }
 
 void Display::addActiveThread(Thread *thread)
@@ -1264,13 +1264,13 @@ void Display::addActiveThread(Thread *thread)
     mActiveThreads.insert(thread);
 }
 
-void Display::threadCleanup(Thread *thread)
+void Display::threadCleanup(Thread *thread, angle::UnlockedTailCall *unlockedTailCall)
 {
     mActiveThreads.erase(thread);
     const bool noActiveThreads = mActiveThreads.size() == 0;
 
     (void)terminate(thread, noActiveThreads ? TerminateReason::NoActiveThreads
-                                            : TerminateReason::InternalCleanup);
+                                            : TerminateReason::InternalCleanup, &unlockedTailCall);
 
     // This "thread" is no longer active, reset its cached context
     thread->setCurrent(nullptr);
@@ -1311,7 +1311,8 @@ std::vector<const Config *> Display::chooseConfig(const egl::AttributeMap &attri
 Error Display::createWindowSurface(const Config *configuration,
                                    EGLNativeWindowType window,
                                    const AttributeMap &attribs,
-                                   Surface **outSurface)
+                                   Surface **outSurface,
+                                   angle::UnlockedTailCall *unlockedTailCall)
 {
     if (mImplementation->testDeviceLost())
     {
@@ -1321,7 +1322,7 @@ Error Display::createWindowSurface(const Config *configuration,
     SurfaceID id = {mSurfaceHandleAllocator.allocate()};
     SurfacePointer surface(new WindowSurface(mImplementation, id, configuration, window, attribs,
                                              mFrontendFeatures.forceRobustResourceInit.enabled),
-                           this);
+                           SurfaceDeleter(this, unlockedTailCall));
     ANGLE_TRY(surface->initialize(this));
 
     ASSERT(outSurface != nullptr);
@@ -1339,7 +1340,8 @@ Error Display::createWindowSurface(const Config *configuration,
 
 Error Display::createPbufferSurface(const Config *configuration,
                                     const AttributeMap &attribs,
-                                    Surface **outSurface)
+                                    Surface **outSurface,
+                                    angle::UnlockedTailCall *unlockedTailCall)
 {
     ASSERT(isInitialized());
 
@@ -1351,7 +1353,7 @@ Error Display::createPbufferSurface(const Config *configuration,
     SurfaceID id = {mSurfaceHandleAllocator.allocate()};
     SurfacePointer surface(new PbufferSurface(mImplementation, id, configuration, attribs,
                                               mFrontendFeatures.forceRobustResourceInit.enabled),
-                           this);
+                           SurfaceDeleter(this, unlockedTailCall));
     ANGLE_TRY(surface->initialize(this));
 
     ASSERT(outSurface != nullptr);
@@ -1365,7 +1367,8 @@ Error Display::createPbufferFromClientBuffer(const Config *configuration,
                                              EGLenum buftype,
                                              EGLClientBuffer clientBuffer,
                                              const AttributeMap &attribs,
-                                             Surface **outSurface)
+                                             Surface **outSurface,
+                                             angle::UnlockedTailCall *unlockedTailCall)
 {
     ASSERT(isInitialized());
 
@@ -1378,7 +1381,7 @@ Error Display::createPbufferFromClientBuffer(const Config *configuration,
     SurfacePointer surface(
         new PbufferSurface(mImplementation, id, configuration, buftype, clientBuffer, attribs,
                            mFrontendFeatures.forceRobustResourceInit.enabled),
-        this);
+        SurfaceDeleter(this, unlockedTailCall));
     ANGLE_TRY(surface->initialize(this));
 
     ASSERT(outSurface != nullptr);
@@ -1391,7 +1394,8 @@ Error Display::createPbufferFromClientBuffer(const Config *configuration,
 Error Display::createPixmapSurface(const Config *configuration,
                                    NativePixmapType nativePixmap,
                                    const AttributeMap &attribs,
-                                   Surface **outSurface)
+                                   Surface **outSurface,
+                                   angle::UnlockedTailCall *unlockedTailCall)
 {
     ASSERT(isInitialized());
 
@@ -1404,7 +1408,7 @@ Error Display::createPixmapSurface(const Config *configuration,
     SurfacePointer surface(
         new PixmapSurface(mImplementation, id, configuration, nativePixmap, attribs,
                           mFrontendFeatures.forceRobustResourceInit.enabled),
-        this);
+        SurfaceDeleter(this, unlockedTailCall));
     ANGLE_TRY(surface->initialize(this));
 
     ASSERT(outSurface != nullptr);
@@ -1448,7 +1452,7 @@ Error Display::createImage(const gl::Context *context,
 
     ImageID id = {mImageHandleAllocator.allocate()};
     angle::UniqueObjectPointer<Image, Display> imagePtr(
-        new Image(mImplementation, id, context, target, sibling, attribs), this);
+        new Image(mImplementation, id, context, target, sibling, attribs), DestroyThenDelete(this, nullptr));
     ANGLE_TRY(imagePtr->initialize(this, context));
 
     Image *image = imagePtr.release();
@@ -1587,7 +1591,7 @@ Error Display::createSync(const gl::Context *currentContext,
     }
 
     angle::UniqueObjectPointer<egl::Sync, Display> syncPtr(
-        new Sync(mImplementation, id, type, attribs), this);
+        new Sync(mImplementation, id, type, attribs), DestroyThenDelete(this, nullptr));
 
     ANGLE_TRY(syncPtr->initialize(this, currentContext));
 
@@ -1604,7 +1608,7 @@ Error Display::makeCurrent(Thread *thread,
                            gl::Context *previousContext,
                            egl::Surface *drawSurface,
                            egl::Surface *readSurface,
-                           gl::Context *context)
+                           gl::Context *context, angle::UnlockedTailCall *unlockedTailCall)
 {
     if (!mInitialized)
     {
@@ -1617,7 +1621,7 @@ Error Display::makeCurrent(Thread *thread,
         previousContext->release();
         thread->setCurrent(nullptr);
 
-        auto error = previousContext->unMakeCurrent(this);
+        auto error = previousContext->unMakeCurrent(this, unlockedTailCall);
         if (previousContext->getRefCount() == 0 && previousContext->isDestroyed())
         {
             // The previous Context may have been created with a different Display.
@@ -1633,7 +1637,7 @@ Error Display::makeCurrent(Thread *thread,
 
     if (context != nullptr)
     {
-        ANGLE_TRY(context->makeCurrent(this, drawSurface, readSurface));
+        ANGLE_TRY(context->makeCurrent(this, drawSurface, readSurface, unlockedTailCall));
         if (contextChanged)
         {
             context->addRef();
@@ -1674,7 +1678,7 @@ Error Display::restoreLostDevice()
     return mImplementation->restoreLostDevice(this);
 }
 
-Error Display::destroySurfaceImpl(Surface *surface, SurfaceSet *surfaces)
+Error Display::destroySurfaceImpl(Surface *surface, SurfaceSet *surfaces, angle::UnlockedTailCall *unlockedTailCall)
 {
     if (surface->getType() == EGL_WINDOW_BIT)
     {
@@ -1700,20 +1704,20 @@ Error Display::destroySurfaceImpl(Surface *surface, SurfaceSet *surfaces)
     ASSERT(iter != surfaces->end());
     mSurfaceHandleAllocator.release(surface->id().value);
     surfaces->erase(iter);
-    ANGLE_TRY(surface->onDestroy(this));
+    ANGLE_TRY(surface->onDestroy(this, unlockedTailCall));
     return NoError();
 }
 
-void Display::destroyImageImpl(Image *image, ImageSet *images)
+void Display::destroyImageImpl(Image *image, ImageSet *images, angle::UnlockedTailCall *unlockedTailCall)
 {
     auto iter = images->find(image);
     ASSERT(iter != images->end());
     mImageHandleAllocator.release(image->id().value);
-    (*iter)->release(this);
+    (*iter)->release(this, unlockedTailCall);
     images->erase(iter);
 }
 
-void Display::destroyStreamImpl(Stream *stream, StreamSet *streams)
+void Display::destroyStreamImpl(Stream *stream, StreamSet *streams, angle::UnlockedTailCall *unlockedTailCall)
 {
     streams->erase(stream);
     SafeDelete(stream);
@@ -1723,12 +1727,12 @@ void Display::destroyStreamImpl(Stream *stream, StreamSet *streams)
 // To do that we can only call this in two places, Display::makeCurrent at the point where this
 // context is being made uncurrent and in Display::destroyContext where we make the context current
 // as part of destruction.
-Error Display::releaseContext(gl::Context *context, Thread *thread)
+Error Display::releaseContext(gl::Context *context, Thread *thread, angle::UnlockedTailCall *unlockedTailCall)
 {
-    return releaseContextImpl(context, &mState.contextSet);
+    return releaseContextImpl(context, &mState.contextSet, unlockedTailCall);
 }
 
-Error Display::releaseContextImpl(gl::Context *context, ContextSet *contexts)
+Error Display::releaseContextImpl(gl::Context *context, ContextSet *contexts, angle::UnlockedTailCall *unlockedTailCall)
 {
     ASSERT(context->getRefCount() == 0);
 
@@ -1765,12 +1769,12 @@ Error Display::releaseContextImpl(gl::Context *context, ContextSet *contexts)
         mGlobalSemaphoreShareGroupUsers--;
     }
 
-    ANGLE_TRY(context->onDestroy(this));
+    ANGLE_TRY(context->onDestroy(this, unlockedTailCall));
 
     return NoError();
 }
 
-Error Display::destroyContext(Thread *thread, gl::Context *context)
+Error Display::destroyContext(Thread *thread, gl::Context *context, angle::UnlockedTailCall *unlockedTailCall)
 {
     auto *currentContext     = thread->getContext();
     auto *currentDrawSurface = thread->getCurrentDrawSurface();
@@ -1789,7 +1793,7 @@ Error Display::destroyContext(Thread *thread, gl::Context *context)
     // make sure the native context is current.
     if (context->isExternal())
     {
-        ANGLE_TRY(releaseContext(context, thread));
+        ANGLE_TRY(releaseContext(context, thread, unlockedTailCall));
     }
     else
     {
@@ -1806,9 +1810,9 @@ Error Display::destroyContext(Thread *thread, gl::Context *context)
         // when context is released from the current, it will be destroyed.
         // TODO(http://www.anglebug.com/6322): Don't require a Context to be current in order to
         // destroy it.
-        ANGLE_TRY(makeCurrent(thread, currentContext, nullptr, nullptr, context));
+        ANGLE_TRY(makeCurrent(thread, currentContext, nullptr, nullptr, context, unlockedTailCall));
         ANGLE_TRY(
-            makeCurrent(thread, context, currentDrawSurface, currentReadSurface, currentContext));
+            makeCurrent(thread, context, currentDrawSurface, currentReadSurface, currentContext, unlockedTailCall));
     }
 
     // If eglTerminate() has previously been called and this is the last Context the Display owns,
@@ -1823,39 +1827,39 @@ Error Display::destroyContext(Thread *thread, gl::Context *context)
             }
         }
 
-        return terminate(thread, TerminateReason::InternalCleanup);
+        return terminate(thread, TerminateReason::InternalCleanup, unlockedTailCall);
     }
 
     return NoError();
 }
 
-void Display::destroySyncImpl(Sync *sync, SyncSet *syncs)
+void Display::destroySyncImpl(Sync *sync, SyncSet *syncs, angle::UnlockedTailCall *unlockedTailCall)
 {
     auto iter = syncs->find(sync);
     ASSERT(iter != syncs->end());
     mSyncHandleAllocator.release((*iter)->id().value);
-    (*iter)->release(this);
+    (*iter)->release(this, unlockedTailCall);
     syncs->erase(iter);
 }
 
-void Display::destroyImage(Image *image)
+void Display::destroyImage(Image *image, angle::UnlockedTailCall *unlockedTailCall)
 {
-    return destroyImageImpl(image, &mImageSet);
+    return destroyImageImpl(image, &mImageSet, unlockedTailCall);
 }
 
-void Display::destroyStream(Stream *stream)
+void Display::destroyStream(Stream *stream, angle::UnlockedTailCall *unlockedTailCall)
 {
-    return destroyStreamImpl(stream, &mStreamSet);
+    return destroyStreamImpl(stream, &mStreamSet, unlockedTailCall);
 }
 
-Error Display::destroySurface(Surface *surface)
+Error Display::destroySurface(Surface *surface, angle::UnlockedTailCall *unlockedTailCall)
 {
-    return destroySurfaceImpl(surface, &mState.surfaceSet);
+    return destroySurfaceImpl(surface, &mState.surfaceSet, unlockedTailCall);
 }
 
-void Display::destroySync(Sync *sync)
+void Display::destroySync(Sync *sync, angle::UnlockedTailCall *unlockedTailCall)
 {
-    return destroySyncImpl(sync, &mSyncSet);
+    return destroySyncImpl(sync, &mSyncSet, unlockedTailCall);
 }
 
 bool Display::isDeviceLost() const

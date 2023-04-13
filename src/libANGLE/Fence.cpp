@@ -71,7 +71,7 @@ Sync::Sync(rx::GLImplFactory *factory, SyncID id)
       mFlags(0)
 {}
 
-void Sync::onDestroy(const Context *context)
+void Sync::onDestroy(const Context *context, angle::UnlockedTailCall *unlockedTailCall)
 {
     ASSERT(mFence);
     mFence->onDestroy(context);

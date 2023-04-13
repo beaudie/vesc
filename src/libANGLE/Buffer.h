@@ -89,7 +89,7 @@ class Buffer final : public RefCountObject<BufferID>,
   public:
     Buffer(rx::GLImplFactory *factory, BufferID id);
     ~Buffer() override;
-    void onDestroy(const Context *context) override;
+    void onDestroy(const Context *context, angle::UnlockedTailCall *unlockedTailCall) override;
 
     angle::Result setLabel(const Context *context, const std::string &label) override;
     const std::string &getLabel() const override;

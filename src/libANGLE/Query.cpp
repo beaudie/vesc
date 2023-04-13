@@ -22,7 +22,7 @@ Query::~Query()
     SafeDelete(mQuery);
 }
 
-void Query::onDestroy(const Context *context)
+void Query::onDestroy(const Context *context, angle::UnlockedTailCall *unlockedTailCall)
 {
     ASSERT(mQuery);
     mQuery->onDestroy(context);

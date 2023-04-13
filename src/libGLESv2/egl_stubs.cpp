@@ -169,14 +169,14 @@ EGLSurface CreatePbufferFromClientBuffer(Thread *thread,
                                          EGLenum buftype,
                                          EGLClientBuffer buffer,
                                          Config *configuration,
-                                         const AttributeMap &attributes)
+                                         const AttributeMap &attributes, angle::UnlockedTailCall *unlockedTailCall)
 {
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglCreatePbufferFromClientBuffer",
                          GetDisplayIfValid(display), EGL_NO_SURFACE);
     Surface *surface = nullptr;
     ANGLE_EGL_TRY_RETURN(thread,
                          display->createPbufferFromClientBuffer(configuration, buftype, buffer,
-                                                                attributes, &surface),
+                                                                attributes, &surface, unlockedTailCall),
                          "eglCreatePbufferFromClientBuffer", GetDisplayIfValid(display),
                          EGL_NO_SURFACE);
 
@@ -186,12 +186,12 @@ EGLSurface CreatePbufferFromClientBuffer(Thread *thread,
 EGLSurface CreatePbufferSurface(Thread *thread,
                                 Display *display,
                                 Config *configuration,
-                                const AttributeMap &attributes)
+                                const AttributeMap &attributes, angle::UnlockedTailCall *unlockedTailCall)
 {
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglCreatePbufferSurface",
                          GetDisplayIfValid(display), EGL_NO_SURFACE);
     Surface *surface = nullptr;
-    ANGLE_EGL_TRY_RETURN(thread, display->createPbufferSurface(configuration, attributes, &surface),
+    ANGLE_EGL_TRY_RETURN(thread, display->createPbufferSurface(configuration, attributes, &surface, unlockedTailCall),
                          "eglCreatePbufferSurface", GetDisplayIfValid(display), EGL_NO_SURFACE);
 
     return reinterpret_cast<EGLSurface>(static_cast<uintptr_t>(surface->id().value));
@@ -201,13 +201,13 @@ EGLSurface CreatePixmapSurface(Thread *thread,
                                Display *display,
                                Config *configuration,
                                EGLNativePixmapType pixmap,
-                               const AttributeMap &attributes)
+                               const AttributeMap &attributes, angle::UnlockedTailCall *unlockedTailCall)
 {
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglCreatePixmapSurface",
                          GetDisplayIfValid(display), EGL_NO_SURFACE);
     Surface *surface = nullptr;
     ANGLE_EGL_TRY_RETURN(thread,
-                         display->createPixmapSurface(configuration, pixmap, attributes, &surface),
+                         display->createPixmapSurface(configuration, pixmap, attributes, &surface, unlockedTailCall),
                          "eglCreatePixmapSurface", GetDisplayIfValid(display), EGL_NO_SURFACE);
 
     thread->setSuccess();
@@ -218,14 +218,14 @@ EGLSurface CreatePlatformPixmapSurface(Thread *thread,
                                        Display *display,
                                        Config *configuration,
                                        void *pixmap,
-                                       const AttributeMap &attributes)
+                                       const AttributeMap &attributes, angle::UnlockedTailCall *unlockedTailCall)
 {
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglCreatePlatformPixmapSurface",
                          GetDisplayIfValid(display), EGL_NO_SURFACE);
     Surface *surface                 = nullptr;
     EGLNativePixmapType nativePixmap = reinterpret_cast<EGLNativePixmapType>(pixmap);
     ANGLE_EGL_TRY_RETURN(
-        thread, display->createPixmapSurface(configuration, nativePixmap, attributes, &surface),
+        thread, display->createPixmapSurface(configuration, nativePixmap, attributes, &surface, unlockedTailCall),
         "eglCreatePlatformPixmapSurface", GetDisplayIfValid(display), EGL_NO_SURFACE);
 
     thread->setSuccess();
@@ -236,14 +236,14 @@ EGLSurface CreatePlatformWindowSurface(Thread *thread,
                                        Display *display,
                                        Config *configuration,
                                        void *win,
-                                       const AttributeMap &attributes)
+                                       const AttributeMap &attributes, angle::UnlockedTailCall *unlockedTailCall)
 {
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglCreatePlatformWindowSurface",
                          GetDisplayIfValid(display), EGL_NO_SURFACE);
     Surface *surface                 = nullptr;
     EGLNativeWindowType nativeWindow = reinterpret_cast<EGLNativeWindowType>(win);
     ANGLE_EGL_TRY_RETURN(
-        thread, display->createWindowSurface(configuration, nativeWindow, attributes, &surface),
+        thread, display->createWindowSurface(configuration, nativeWindow, attributes, &surface, unlockedTailCall),
         "eglPlatformCreateWindowSurface", GetDisplayIfValid(display), EGL_NO_SURFACE);
 
     return reinterpret_cast<EGLSurface>(static_cast<uintptr_t>(surface->id().value));
@@ -267,14 +267,14 @@ EGLSurface CreateWindowSurface(Thread *thread,
                                Display *display,
                                Config *configuration,
                                EGLNativeWindowType win,
-                               const AttributeMap &attributes)
+                               const AttributeMap &attributes, angle::UnlockedTailCall *unlockedTailCall)
 {
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglCreateWindowSurface",
                          GetDisplayIfValid(display), EGL_NO_SURFACE);
 
     Surface *surface = nullptr;
     ANGLE_EGL_TRY_RETURN(thread,
-                         display->createWindowSurface(configuration, win, attributes, &surface),
+                         display->createWindowSurface(configuration, win, attributes, &surface, unlockedTailCall),
                          "eglCreateWindowSurface", GetDisplayIfValid(display), EGL_NO_SURFACE);
 
     return reinterpret_cast<EGLSurface>(static_cast<uintptr_t>(surface->id().value));
@@ -480,7 +480,7 @@ EGLBoolean MakeCurrent(Thread *thread,
                        Display *display,
                        egl::SurfaceID drawSurfaceID,
                        egl::SurfaceID readSurfaceID,
-                       gl::ContextID contextID)
+                       gl::ContextID contextID, angle::UnlockedTailCall *unlockedTailCall)
 {
     Surface *drawSurface = display->getSurface(drawSurfaceID);
     Surface *readSurface = display->getSurface(readSurfaceID);
@@ -499,7 +499,7 @@ EGLBoolean MakeCurrent(Thread *thread,
     {
         ANGLE_EGL_TRY_RETURN(
             thread,
-            display->makeCurrent(thread, previousContext, drawSurface, readSurface, context),
+            display->makeCurrent(thread, previousContext, drawSurface, readSurface, context, unlockedTailCall),
             "eglMakeCurrent", GetContextIfValid(display, contextID), EGL_FALSE);
     }
 
@@ -595,7 +595,7 @@ EGLBoolean QuerySurface(Thread *thread,
 EGLBoolean ReleaseTexImage(Thread *thread,
                            Display *display,
                            egl::SurfaceID surfaceID,
-                           EGLint buffer)
+                           EGLint buffer, angle::UnlockedTailCall *unlockedTailCall)
 {
     Surface *eglSurface = display->getSurface(surfaceID);
 
@@ -608,7 +608,7 @@ EGLBoolean ReleaseTexImage(Thread *thread,
 
         if (texture)
         {
-            ANGLE_EGL_TRY_RETURN(thread, eglSurface->releaseTexImage(thread->getContext(), buffer),
+            ANGLE_EGL_TRY_RETURN(thread, eglSurface->releaseTexImage(thread->getContext(), buffer, unlockedTailCall),
                                  "eglReleaseTexImage", GetSurfaceIfValid(display, surfaceID),
                                  EGL_FALSE);
         }
@@ -617,7 +617,7 @@ EGLBoolean ReleaseTexImage(Thread *thread,
     return EGL_TRUE;
 }
 
-EGLBoolean ReleaseThread(Thread *thread)
+EGLBoolean ReleaseThread(Thread *thread, angle::UnlockedTailCall *unlockedTailCall)
 {
     ScopedSyncCurrentContextFromThread scopedSyncCurrent(thread);
 
@@ -636,10 +636,10 @@ EGLBoolean ReleaseThread(Thread *thread)
         {
             ANGLE_EGL_TRY_RETURN(
                 thread,
-                previousDisplay->makeCurrent(thread, previousContext, nullptr, nullptr, nullptr),
+                previousDisplay->makeCurrent(thread, previousContext, nullptr, nullptr, nullptr, unlockedTailCall),
                 "eglReleaseThread", nullptr, EGL_FALSE);
         }
-        ANGLE_EGL_TRY_RETURN(thread, previousDisplay->releaseThread(), "eglReleaseThread",
+        ANGLE_EGL_TRY_RETURN(thread, previousDisplay->releaseThread(unlockedTailCall), "eglReleaseThread",
                              GetDisplayIfValid(previousDisplay), EGL_FALSE);
     }
 
@@ -695,14 +695,14 @@ EGLBoolean SwapInterval(Thread *thread, Display *display, EGLint interval)
     return EGL_TRUE;
 }
 
-EGLBoolean Terminate(Thread *thread, Display *display)
+EGLBoolean Terminate(Thread *thread, Display *display, angle::UnlockedTailCall *unlockedTailCall)
 {
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglTerminate",
                          GetDisplayIfValid(display), EGL_FALSE);
 
     ScopedSyncCurrentContextFromThread scopedSyncCurrent(thread);
 
-    ANGLE_EGL_TRY_RETURN(thread, display->terminate(thread, Display::TerminateReason::Api),
+    ANGLE_EGL_TRY_RETURN(thread, display->terminate(thread, Display::TerminateReason::Api, unlockedTailCall),
                          "eglTerminate", GetDisplayIfValid(display), EGL_FALSE);
 
     thread->setSuccess();

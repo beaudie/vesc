@@ -43,7 +43,7 @@ class VertexBinding final : angle::NonCopyable
 
     ANGLE_INLINE void setBuffer(const gl::Context *context, Buffer *bufferIn)
     {
-        mBuffer.set(context, bufferIn);
+        mBuffer.set(context, bufferIn, nullptr);
     }
 
     // Skips ref counting for better inlined performance.

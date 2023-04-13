@@ -52,7 +52,7 @@ class TransformFeedbackTest : public testing::Test
     {
         if (mFeedback)
         {
-            mFeedback->release(nullptr);
+            mFeedback->release(nullptr, nullptr);
         }
 
         // Only needed because the mock is leaked if bugs are present,
@@ -138,7 +138,7 @@ TEST_F(TransformFeedbackTest, BufferBinding)
     const size_t releaseCount = mFeedback->getRefCount();
     for (size_t count = 0; count < releaseCount; ++count)
     {
-        mFeedback->release(nullptr);
+        mFeedback->release(nullptr, nullptr);
     }
 
     mFeedback = nullptr;

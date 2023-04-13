@@ -128,7 +128,7 @@ ANGLE_INLINE void UpdateNonTFBufferBindingWebGL(const Context *context,
     if (oldBuffer)
     {
         oldBuffer->onNonTFBindingChanged(-1);
-        oldBuffer->release(context);
+        oldBuffer->release(context, nullptr);
     }
     binding->assign(buffer, args...);
     if (buffer)
@@ -169,7 +169,7 @@ void UpdateBufferBinding(const Context *context,
     }
     else
     {
-        binding->set(context, buffer);
+        binding->set(context, buffer, nullptr);
     }
 }
 
@@ -207,7 +207,7 @@ void State::setGenericBufferBindingWithBit(const Context *context, Buffer *buffe
     }
     else
     {
-        mBoundBuffers[Target].set(context, buffer);
+        mBoundBuffers[Target].set(context, buffer, nullptr);
     }
     mDirtyBits.set(kBufferBindingDirtyBits[Target]);
 }
@@ -221,7 +221,7 @@ void State::setGenericBufferBinding(const Context *context, Buffer *buffer)
     }
     else
     {
-        mBoundBuffers[Target].set(context, buffer);
+        mBoundBuffers[Target].set(context, buffer, nullptr);
     }
 }
 
@@ -236,7 +236,7 @@ void State::setGenericBufferBinding<BufferBinding::TransformFeedback>(const Cont
     }
     else
     {
-        mBoundBuffers[BufferBinding::TransformFeedback].set(context, buffer);
+        mBoundBuffers[BufferBinding::TransformFeedback].set(context, buffer, nullptr);
     }
 }
 
@@ -253,7 +253,7 @@ void State::setGenericBufferBinding<BufferBinding::ElementArray>(const Context *
         {
             oldBuffer->onNonTFBindingChanged(-1);
         }
-        oldBuffer->release(context);
+        oldBuffer->release(context, nullptr);
     }
     mVertexArray->mState.mElementArrayBuffer.assign(buffer);
     if (buffer)
@@ -555,7 +555,7 @@ void State::initialize(Context *context)
 
     for (QueryType type : angle::AllEnums<QueryType>())
     {
-        mActiveQueries[type].set(context, nullptr);
+        mActiveQueries[type].set(context, nullptr, nullptr);
     }
 
     mProgram    = nullptr;
@@ -587,7 +587,7 @@ void State::initialize(Context *context)
     }
 }
 
-void State::reset(const Context *context)
+void State::reset(const Context *context, angle::UnlockedTailCall *unlockedTailCall)
 {
     // Force a sync so clear doesn't end up dereferencing stale pointers.
     (void)syncActiveTextures(context, Command::Other);
@@ -597,17 +597,17 @@ void State::reset(const Context *context)
     {
         for (BindingPointer<Texture> &texBinding : bindingVec)
         {
-            texBinding.set(context, nullptr);
+            texBinding.set(context, nullptr, unlockedTailCall);
         }
     }
     for (size_t samplerIdx = 0; samplerIdx < mSamplers.size(); samplerIdx++)
     {
-        mSamplers[samplerIdx].set(context, nullptr);
+        mSamplers[samplerIdx].set(context, nullptr, unlockedTailCall);
     }
 
     for (ImageUnit &imageUnit : mImageUnits)
     {
-        imageUnit.texture.set(context, nullptr);
+        imageUnit.texture.set(context, nullptr, unlockedTailCall);
         imageUnit.level   = 0;
         imageUnit.layered = false;
         imageUnit.layer   = 0;
@@ -615,7 +615,7 @@ void State::reset(const Context *context)
         imageUnit.format  = GL_R32UI;
     }
 
-    mRenderbuffer.set(context, nullptr);
+    mRenderbuffer.set(context, nullptr, unlockedTailCall);
 
     for (BufferBinding type : angle::AllEnums<BufferBinding>())
     {
@@ -624,21 +624,21 @@ void State::reset(const Context *context)
 
     if (mProgram)
     {
-        mProgram->release(context);
+        mProgram->release(context, unlockedTailCall);
     }
     mProgram = nullptr;
-    mProgramPipeline.set(context, nullptr);
+    mProgramPipeline.set(context, nullptr, unlockedTailCall);
     mExecutable = nullptr;
 
     if (mTransformFeedback.get())
     {
         mTransformFeedback->onBindingChanged(context, false);
     }
-    mTransformFeedback.set(context, nullptr);
+    mTransformFeedback.set(context, nullptr, unlockedTailCall);
 
     for (QueryType type : angle::AllEnums<QueryType>())
     {
-        mActiveQueries[type].set(context, nullptr);
+        mActiveQueries[type].set(context, nullptr, unlockedTailCall);
     }
 
     for (OffsetBindingPointer<Buffer> &buf : mUniformBuffers)
@@ -1681,7 +1681,7 @@ void State::setActiveSampler(unsigned int active)
     mActiveSampler = active;
 }
 
-void State::setSamplerTexture(const Context *context, TextureType type, Texture *texture)
+void State::setSamplerTexture(const Context *context, TextureType type, Texture *texture, angle::UnlockedTailCall *unlockedTailCall)
 {
     if (mExecutable && mExecutable->getActiveSamplersMask()[mActiveSampler] &&
         IsTextureCompatibleWithSampler(type, mExecutable->getActiveSamplerTypes()[mActiveSampler]))
@@ -1689,7 +1689,7 @@ void State::setSamplerTexture(const Context *context, TextureType type, Texture 
         updateTextureBinding(context, mActiveSampler, texture);
     }
 
-    mSamplerTextures[type][mActiveSampler].set(context, texture);
+    mSamplerTextures[type][mActiveSampler].set(context, texture, unlockedTailCall);
 
     mDirtyBits.set(DIRTY_BIT_TEXTURE_BINDINGS);
 }

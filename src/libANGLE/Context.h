@@ -385,7 +385,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     egl::Error initialize();
 
-    egl::Error onDestroy(const egl::Display *display);
+    egl::Error onDestroy(const egl::Display *display, angle::UnlockedTailCall *unlockedTailCall);
     ~Context() override;
 
     void setLabel(EGLLabelKHR label) override;
@@ -393,8 +393,10 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     egl::Error makeCurrent(egl::Display *display,
                            egl::Surface *drawSurface,
-                           egl::Surface *readSurface);
-    egl::Error unMakeCurrent(const egl::Display *display);
+                           egl::Surface *readSurface,
+                           angle::UnlockedTailCall *unlockedTailCall);
+    egl::Error unMakeCurrent(const egl::Display *display,
+                             angle::UnlockedTailCall *unlockedTailCall);
 
     // These create and destroy methods pass through to ResourceManager, which owns these objects.
     BufferID createBuffer();
@@ -726,7 +728,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     void detachProgramPipeline(ProgramPipelineID pipeline);
 
     egl::Error setDefaultFramebuffer(egl::Surface *drawSurface, egl::Surface *readSurface);
-    egl::Error unsetDefaultFramebuffer();
+    egl::Error unsetDefaultFramebuffer(angle::UnlockedTailCall *unlockedTailCall);
 
     void initRendererString();
     void initVersionStrings();

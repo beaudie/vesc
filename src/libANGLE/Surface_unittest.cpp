@@ -28,7 +28,7 @@ class MockSurfaceImpl : public rx::SurfaceImpl
     MockSurfaceImpl() : SurfaceImpl(mockState), mockState({1}, nullptr, egl::AttributeMap()) {}
     virtual ~MockSurfaceImpl() { destructor(); }
 
-    MOCK_METHOD1(destroy, void(const egl::Display *));
+    MOCK_METHOD2(destroy, void(const egl::Display *, angle::UnlockedTailCall *));
     MOCK_METHOD1(initialize, egl::Error(const egl::Display *));
     MOCK_METHOD1(swap, egl::Error(const gl::Context *));
     MOCK_METHOD3(swapWithDamage, egl::Error(const gl::Context *, const EGLint *, EGLint));
@@ -67,7 +67,8 @@ TEST(SurfaceTest, DestructionDeletesImpl)
     egl::Surface *surface = new egl::WindowSurface(
         &factory, {1}, &config, static_cast<EGLNativeWindowType>(0), egl::AttributeMap(), false);
 
-    EXPECT_CALL(*impl, destroy(_)).Times(1).RetiresOnSaturation();
+    angle::UnlockedTailCall unlockedTailCall;
+    EXPECT_CALL(*impl, destroy(_, &unlockedTailCall)).Times(1).RetiresOnSaturation();
     EXPECT_CALL(*impl, destructor()).Times(1).RetiresOnSaturation();
 
     EXPECT_FALSE(surface->onDestroy(nullptr).isError());

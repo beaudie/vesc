@@ -659,14 +659,14 @@ void IncompleteTextureSet::onDestroy(const gl::Context *context)
         {
             if (incompleteTexture.get() != nullptr)
             {
-                incompleteTexture->onDestroy(context);
-                incompleteTexture.set(context, nullptr);
+                incompleteTexture->onDestroy(context, nullptr);
+                incompleteTexture.set(context, nullptr, nullptr);
             }
         }
     }
     if (mIncompleteTextureBufferAttachment != nullptr)
     {
-        mIncompleteTextureBufferAttachment->onDestroy(context);
+        mIncompleteTextureBufferAttachment->onDestroy(context, nullptr);
         mIncompleteTextureBufferAttachment = nullptr;
     }
 }
@@ -712,7 +712,7 @@ angle::Result IncompleteTextureSet::getIncompleteTexture(
 
     gl::Texture *tex =
         new gl::Texture(implFactory, {std::numeric_limits<GLuint>::max()}, createType);
-    angle::UniqueObjectPointer<gl::Texture, gl::Context> t(tex, context);
+    angle::UniqueObjectPointer<gl::Texture, gl::Context> t(tex, context, nullptr);
 
     // This is a bit of a kludge but is necessary to consume the error.
     gl::Context *mutableContext = const_cast<gl::Context *>(context);
@@ -730,12 +730,12 @@ angle::Result IncompleteTextureSet::getIncompleteTexture(
     {
         ANGLE_TRY(t->setStorageMultisample(mutableContext, createType, 1,
                                            incompleteTextureParam.sizedInternalFormat, colorSize,
-                                           true));
+                                           true, nullptr));
     }
     else
     {
         ANGLE_TRY(t->setStorage(mutableContext, createType, 1,
-                                incompleteTextureParam.sizedInternalFormat, colorSize));
+                                incompleteTextureParam.sizedInternalFormat, colorSize, nullptr));
     }
 
     if (type == gl::TextureType::CubeMap)
@@ -792,7 +792,7 @@ angle::Result IncompleteTextureSet::getIncompleteTexture(
 
     ANGLE_TRY(t->syncState(context, gl::Command::Other));
 
-    mIncompleteTextures[format][type].set(context, t.release());
+    mIncompleteTextures[format][type].set(context, t.release(), nullptr);
     *textureOut = mIncompleteTextures[format][type].get();
     return angle::Result::Continue;
 }

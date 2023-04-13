@@ -63,7 +63,7 @@ Sync::Sync(rx::EGLImplFactory *factory,
     }
 }
 
-void Sync::onDestroy(const Display *display)
+void Sync::onDestroy(const Display *display, angle::UnlockedTailCall *unlockedTailCall)
 {
     ASSERT(mFence);
     mFence->onDestroy(display);

@@ -150,11 +150,11 @@ Shader::Shader(ShaderProgramManager *manager,
     ASSERT(mImplementation);
 }
 
-void Shader::onDestroy(const gl::Context *context)
+void Shader::onDestroy(const gl::Context *context, angle::UnlockedTailCall *unlockedTailCall)
 {
     resolveCompile(context);
     mImplementation->destroy();
-    mBoundCompiler.set(context, nullptr);
+    mBoundCompiler.set(context, nullptr, unlockedTailCall);
     mImplementation.reset(nullptr);
     delete this;
 }
@@ -438,7 +438,8 @@ void Shader::compile(const Context *context)
         options.initializeUninitializedLocals = true;
     }
 
-    mBoundCompiler.set(context, context->getCompiler());
+    // Note: No tail calls for compilation currently.
+    mBoundCompiler.set(context, context->getCompiler(), nullptr);
 
     ASSERT(mBoundCompiler.get());
     ShCompilerInstance compilerInstance = mBoundCompiler->getInstance(mType);

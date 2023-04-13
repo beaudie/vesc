@@ -76,13 +76,14 @@ TEST(ImageTest, RefCounting)
         .WillOnce(Return(angle::Result::Continue))
         .RetiresOnSaturation();
     EXPECT_CALL(*textureImpl, destructor()).Times(1).RetiresOnSaturation();
-    texture->release(nullptr);
+    angle::UnlockedTailCall unlockedTailCall;
+    texture->release(nullptr, &unlockedTailCall);
     EXPECT_EQ(2u, image->getRefCount());
     EXPECT_EQ(1u, renderbuffer->getRefCount());
 
     // Simulate deletion of the image and verify that it still exists because the renderbuffer holds
     // a ref
-    image->release(nullptr);
+    image->release(nullptr, &unlockedTailCall);
     EXPECT_EQ(1u, image->getRefCount());
     EXPECT_EQ(1u, renderbuffer->getRefCount());
 
@@ -94,7 +95,7 @@ TEST(ImageTest, RefCounting)
 
     EXPECT_CALL(*renderbufferImpl, destructor()).Times(1).RetiresOnSaturation();
 
-    renderbuffer->release(nullptr);
+    renderbuffer->release(nullptr, &unlockedTailCall);
 }
 
 // Verify that respecifying textures releases references to the Image.
@@ -150,12 +151,13 @@ TEST(ImageTest, RespecificationReleasesReferences)
 
     // Delete the texture and verify that the image still exists
     EXPECT_CALL(*textureImpl, destructor()).Times(1).RetiresOnSaturation();
-    texture->release(nullptr);
+    angle::UnlockedTailCall unlockedTailCall;
+    texture->release(nullptr, &unlockedTailCall);
 
     EXPECT_EQ(1u, image->getRefCount());
 
     // Delete the image
     EXPECT_CALL(*imageImpl, destructor()).Times(1).RetiresOnSaturation();
-    image->release(nullptr);
+    image->release(nullptr, &unlockedTailCall);
 }
 }  // namespace angle

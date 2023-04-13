@@ -274,7 +274,7 @@ class Texture final : public RefCountObject<TextureID>,
     Texture(rx::GLImplFactory *factory, TextureID id, TextureType type);
     ~Texture() override;
 
-    void onDestroy(const Context *context) override;
+    void onDestroy(const Context *context, angle::UnlockedTailCall *unlockedTailCall) override;
 
     angle::Result setLabel(const Context *context, const std::string &label) override;
 
@@ -390,7 +390,7 @@ class Texture final : public RefCountObject<TextureID>,
                            const Extents &size,
                            GLenum format,
                            GLenum type,
-                           const uint8_t *pixels);
+                           const uint8_t *pixels, angle::UnlockedTailCall *unlockedTailCall);
     angle::Result setSubImage(Context *context,
                               const PixelUnpackState &unpackState,
                               Buffer *unpackBuffer,
@@ -408,7 +408,7 @@ class Texture final : public RefCountObject<TextureID>,
                                      GLenum internalFormat,
                                      const Extents &size,
                                      size_t imageSize,
-                                     const uint8_t *pixels);
+                                     const uint8_t *pixels, angle::UnlockedTailCall *unlockedTailCall);
     angle::Result setCompressedSubImage(const Context *context,
                                         const PixelUnpackState &unpackState,
                                         TextureTarget target,
@@ -423,7 +423,7 @@ class Texture final : public RefCountObject<TextureID>,
                             GLint level,
                             const Rectangle &sourceArea,
                             GLenum internalFormat,
-                            Framebuffer *source);
+                            Framebuffer *source, angle::UnlockedTailCall *unlockedTailCall);
     angle::Result copySubImage(Context *context,
                                const ImageIndex &index,
                                const Offset &destOffset,
@@ -467,7 +467,7 @@ class Texture final : public RefCountObject<TextureID>,
                               bool unpackFlipY,
                               bool unpackPremultiplyAlpha,
                               bool unpackUnmultiplyAlpha,
-                              Texture *source);
+                              Texture *source, angle::UnlockedTailCall *unlockedTailCall);
     angle::Result copySubTexture(const Context *context,
                                  TextureTarget target,
                                  GLint level,
@@ -478,20 +478,20 @@ class Texture final : public RefCountObject<TextureID>,
                                  bool unpackPremultiplyAlpha,
                                  bool unpackUnmultiplyAlpha,
                                  Texture *source);
-    angle::Result copyCompressedTexture(Context *context, const Texture *source);
+    angle::Result copyCompressedTexture(Context *context, const Texture *source, angle::UnlockedTailCall *unlockedTailCall);
 
     angle::Result setStorage(Context *context,
                              TextureType type,
                              GLsizei levels,
                              GLenum internalFormat,
-                             const Extents &size);
+                             const Extents &size, angle::UnlockedTailCall *unlockedTailCall);
 
     angle::Result setStorageMultisample(Context *context,
                                         TextureType type,
                                         GLsizei samplesIn,
                                         GLint internalformat,
                                         const Extents &size,
-                                        bool fixedSampleLocations);
+                                        bool fixedSampleLocations, angle::UnlockedTailCall *unlockedTailCall);
 
     angle::Result setStorageExternalMemory(Context *context,
                                            TextureType type,
@@ -502,7 +502,7 @@ class Texture final : public RefCountObject<TextureID>,
                                            GLuint64 offset,
                                            GLbitfield createFlags,
                                            GLbitfield usageFlags,
-                                           const void *imageCreateInfoPNext);
+                                           const void *imageCreateInfoPNext, angle::UnlockedTailCall *unlockedTailCall);
 
     angle::Result setImageExternal(Context *context,
                                    TextureTarget target,
@@ -510,16 +510,16 @@ class Texture final : public RefCountObject<TextureID>,
                                    GLenum internalFormat,
                                    const Extents &size,
                                    GLenum format,
-                                   GLenum type);
+                                   GLenum type, angle::UnlockedTailCall *unlockedTailCall);
 
     angle::Result setEGLImageTarget(Context *context, TextureType type, egl::Image *imageTarget);
 
     angle::Result setStorageEGLImageTarget(Context *context,
                                            TextureType type,
                                            egl::Image *image,
-                                           const GLint *attrib_list);
+                                           const GLint *attrib_list, angle::UnlockedTailCall *unlockedTailCall);
 
-    angle::Result generateMipmap(Context *context);
+    angle::Result generateMipmap(Context *context, angle::UnlockedTailCall *unlockedTailCall);
 
     void onBindAsImageTexture();
     void onBind3DTextureAs2DImage();
@@ -579,7 +579,7 @@ class Texture final : public RefCountObject<TextureID>,
     GLenum getGenerateMipmapHint() const;
 
     void onAttach(const Context *context, rx::UniqueSerial framebufferSerial) override;
-    void onDetach(const Context *context, rx::UniqueSerial framebufferSerial) override;
+    void onDetach(const Context *context, rx::UniqueSerial framebufferSerial, angle::UnlockedTailCall *unlockedTailCall) override;
 
     // Used specifically for FramebufferAttachmentObject.
     GLuint getId() const override;
@@ -675,7 +675,7 @@ class Texture final : public RefCountObject<TextureID>,
     angle::Result releaseImageFromStream(const Context *context);
 
     void invalidateCompletenessCache() const;
-    angle::Result releaseTexImageInternal(Context *context);
+    angle::Result releaseTexImageInternal(Context *context, angle::UnlockedTailCall *unlockedTailCall);
 
     bool doesSubImageNeedInit(const Context *context,
                               const ImageIndex &imageIndex,
@@ -684,12 +684,12 @@ class Texture final : public RefCountObject<TextureID>,
                                             const ImageIndex &imageIndex,
                                             const Box &area);
 
-    angle::Result handleMipmapGenerationHint(Context *context, int level);
+    angle::Result handleMipmapGenerationHint(Context *context, int level, angle::UnlockedTailCall *unlockedTailCall);
 
     angle::Result setEGLImageTargetImpl(Context *context,
                                         TextureType type,
                                         GLuint levels,
-                                        egl::Image *imageTarget);
+                                        egl::Image *imageTarget, angle::UnlockedTailCall *unlockedTailCall);
 
     void signalDirtyState(size_t dirtyBit);
 

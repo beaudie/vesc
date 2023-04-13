@@ -23,6 +23,7 @@
 
 namespace angle
 {
+class UnlockedTailCall;
 
 template <typename ContextT, typename ErrorT>
 class RefCountObject : angle::NonCopyable
@@ -33,16 +34,16 @@ class RefCountObject : angle::NonCopyable
 
     RefCountObject() : mRefCount(0) {}
 
-    virtual void onDestroy(const ContextType *context) {}
+    virtual void onDestroy(const ContextType *context, angle::UnlockedTailCall *unlockedTailCall) {}
 
     void addRef() const { ++mRefCount; }
 
-    ANGLE_INLINE void release(const ContextType *context)
+    ANGLE_INLINE void release(const ContextType *context, angle::UnlockedTailCall *unlockedTailCall)
     {
         ASSERT(mRefCount > 0);
         if (--mRefCount == 0)
         {
-            onDestroy(context);
+            onDestroy(context, unlockedTailCall);
             delete this;
         }
     }
@@ -62,22 +63,24 @@ class RefCountObjectReleaser : angle::NonCopyable
     using ContextType = ContextT;
     using ErrorType   = ErrorT;
 
-    RefCountObjectReleaser() {}
-    RefCountObjectReleaser(const ContextType *context, ObjectType *object)
-        : mContext(context), mObject(object)
+    RefCountObjectReleaser(angle::UnlockedTailCall *unlockedTailCall): mUnlockedTailCall(unlockedTailCall) {}
+    RefCountObjectReleaser(const ContextType *context, ObjectType *object, angle::UnlockedTailCall *unlockedTailCall)
+        : mContext(context), mObject(object), mUnlockedTailCall(unlockedTailCall)
     {}
 
     RefCountObjectReleaser(RefCountObjectReleaser &&other)
-        : mContext(other.mContext), mObject(other.mObject)
+        : mContext(other.mContext), mObject(other.mObject), mUnlockedTailCall(other.mUnlockedTailCall)
     {
         other.mContext = nullptr;
         other.mObject  = nullptr;
+        other.mUnlockedTailCall = nullptr;
     }
 
     RefCountObjectReleaser &operator=(RefCountObjectReleaser &&other)
     {
         std::swap(mContext, other.mContext);
         std::swap(mObject, other.mObject);
+        std::swap(mUnlockedTailCall, other.mUnlockedTailCall);
         return *this;
     }
 
@@ -85,7 +88,7 @@ class RefCountObjectReleaser : angle::NonCopyable
     {
         if (mObject)
         {
-            reinterpret_cast<RefCountObject<ContextType, ErrorType> *>(mObject)->release(mContext);
+            reinterpret_cast<RefCountObject<ContextType, ErrorType> *>(mObject)->release(mContext, mUnlockedTailCall);
             mObject = nullptr;
         }
     }
@@ -93,6 +96,7 @@ class RefCountObjectReleaser : angle::NonCopyable
   private:
     const ContextType *mContext = nullptr;
     ObjectType *mObject         = nullptr;
+    angle::UnlockedTailCall *mUnlockedTailCall = nullptr;
 };
 
 template <class ObjectType, typename ContextT, typename ErrorT = angle::Result>
@@ -134,7 +138,7 @@ class BindingPointer
     }
 
     RefCountObjectReleaser<ObjectType, ContextType, ErrorT> set(const ContextType *context,
-                                                                ObjectType *newObject)
+                                                                ObjectType *newObject, angle::UnlockedTailCall *unlockedTailCall)
     {
         // addRef first in case newObject == mObject and this is the last reference to it.
         if (newObject != nullptr)
@@ -146,7 +150,7 @@ class BindingPointer
         // Otherwise the object could still be referenced when its destructor is called.
         ObjectType *oldObject = mObject;
         mObject               = newObject;
-        return RefCountObjectReleaser<ObjectType, ContextType, ErrorT>(context, oldObject);
+        return RefCountObjectReleaser<ObjectType, ContextType, ErrorT>(context, oldObject, unlockedTailCall);
     }
 
     void assign(ObjectType *object) { mObject = object; }
@@ -224,7 +228,8 @@ class OffsetBindingPointer : public BindingPointer<ObjectType>
 
     void set(const ContextType *context, ObjectType *newObject, GLintptr offset, GLsizeiptr size)
     {
-        set(context, newObject);
+        // Note: No buffer-related tail calls currently implemented.
+        set(context, newObject, nullptr);
         updateOffsetAndSize(newObject, offset, size);
     }
 

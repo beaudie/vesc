@@ -29,7 +29,9 @@ void PthreadKeyDestructorCallback(void *ptr)
     {
         ASSERT(display);
         // Perform necessary cleanup.
-        display->threadCleanup(thread);
+        angle::UnlockedTailCall unlockedTailCall;
+        display->threadCleanup(thread, &unlockedTailCall);
+        unlockedTailCall.run();
     }
 }
 }  // namespace angle

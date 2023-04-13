@@ -142,18 +142,18 @@ class Display final : public LabeledObject,
         InvalidEnum,
         EnumCount = InvalidEnum,
     };
-    Error terminate(Thread *thread, TerminateReason terminateReason);
+    Error terminate(Thread *thread, TerminateReason terminateReason, angle::UnlockedTailCall *unlockedTailCall);
     // Called before all display state dependent EGL functions. Backends can set up, for example,
     // thread-specific backend state through this function. Not called for functions that do not
     // need the state.
     Error prepareForCall();
     // Called on eglReleaseThread. Backends can tear down thread-specific backend state through
     // this function.
-    Error releaseThread();
+    Error releaseThread(angle::UnlockedTailCall *unlockedTailCall);
 
     // Helpers to maintain active thread set to assist with freeing invalid EGL objects.
     void addActiveThread(Thread *thread);
-    void threadCleanup(Thread *thread);
+    void threadCleanup(Thread *thread, angle::UnlockedTailCall *unlockedTailCall);
 
     static Display *GetDisplayFromDevice(Device *device, const AttributeMap &attribMap);
     static Display *GetDisplayFromNativeDisplay(EGLenum platform,
@@ -173,19 +173,23 @@ class Display final : public LabeledObject,
     Error createWindowSurface(const Config *configuration,
                               EGLNativeWindowType window,
                               const AttributeMap &attribs,
-                              Surface **outSurface);
+                              Surface **outSurface,
+                              angle::UnlockedTailCall *unlockedTailCall);
     Error createPbufferSurface(const Config *configuration,
                                const AttributeMap &attribs,
-                               Surface **outSurface);
+                               Surface **outSurface,
+                               angle::UnlockedTailCall *unlockedTailCall);
     Error createPbufferFromClientBuffer(const Config *configuration,
                                         EGLenum buftype,
                                         EGLClientBuffer clientBuffer,
                                         const AttributeMap &attribs,
-                                        Surface **outSurface);
+                                        Surface **outSurface,
+                                        angle::UnlockedTailCall *unlockedTailCall);
     Error createPixmapSurface(const Config *configuration,
                               NativePixmapType nativePixmap,
                               const AttributeMap &attribs,
-                              Surface **outSurface);
+                              Surface **outSurface,
+                              angle::UnlockedTailCall *unlockedTailCall);
 
     Error createImage(const gl::Context *context,
                       EGLenum target,
@@ -210,14 +214,14 @@ class Display final : public LabeledObject,
                       gl::Context *previousContext,
                       Surface *drawSurface,
                       Surface *readSurface,
-                      gl::Context *context);
+                      gl::Context *context, angle::UnlockedTailCall *unlockedTailCall);
 
     Error destroySurface(Surface *surface);
-    void destroyImage(Image *image);
-    void destroyStream(Stream *stream);
-    Error destroyContext(Thread *thread, gl::Context *context);
+    void destroyImage(Image *image, angle::UnlockedTailCall *unlockedTailCall);
+    void destroyStream(Stream *stream, angle::UnlockedTailCall *unlockedTailCall);
+    Error destroyContext(Thread *thread, gl::Context *context, angle::UnlockedTailCall *unlockedTailCall);
 
-    void destroySync(Sync *sync);
+    void destroySync(Sync *sync, angle::UnlockedTailCall *unlockedTailCall);
 
     bool isInitialized() const;
     bool isValidConfig(const Config *config) const;
@@ -356,8 +360,8 @@ class Display final : public LabeledObject,
     void setupDisplayPlatform(rx::DisplayImpl *impl);
 
     Error restoreLostDevice();
-    Error releaseContext(gl::Context *context, Thread *thread);
-    Error releaseContextImpl(gl::Context *context, ContextSet *contexts);
+    Error releaseContext(gl::Context *context, Thread *thread, angle::UnlockedTailCall *unlockedTailCall);
+    Error releaseContextImpl(gl::Context *context, ContextSet *contexts, angle::UnlockedTailCall *unlockedTailCall);
 
     void initDisplayExtensions();
     void initVendorString();
@@ -369,7 +373,7 @@ class Display final : public LabeledObject,
     void returnScratchBufferImpl(angle::ScratchBuffer scratchBuffer,
                                  std::vector<angle::ScratchBuffer> *bufferVector);
 
-    Error destroyInvalidEglObjects();
+    Error destroyInvalidEglObjects(angle::UnlockedTailCall *unlockedTailCall);
 
     DisplayState mState;
     rx::DisplayImpl *mImplementation;
@@ -388,10 +392,10 @@ class Display final : public LabeledObject,
     typedef angle::HashSet<Sync *> SyncSet;
     SyncSet mSyncSet;
 
-    void destroyImageImpl(Image *image, ImageSet *images);
-    void destroyStreamImpl(Stream *stream, StreamSet *streams);
-    Error destroySurfaceImpl(Surface *surface, SurfaceSet *surfaces);
-    void destroySyncImpl(Sync *sync, SyncSet *syncs);
+    void destroyImageImpl(Image *image, ImageSet *images, angle::UnlockedTailCall *unlockedTailCall);
+    void destroyStreamImpl(Stream *stream, StreamSet *streams, angle::UnlockedTailCall *unlockedTailCall);
+    Error destroySurfaceImpl(Surface *surface, SurfaceSet *surfaces, angle::UnlockedTailCall *unlockedTailCall);
+    void destroySyncImpl(Sync *sync, SyncSet *syncs, angle::UnlockedTailCall *unlockedTailCall);
 
     ContextSet mInvalidContextSet;
     ImageSet mInvalidImageSet;

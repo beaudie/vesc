@@ -108,9 +108,9 @@ Renderbuffer::Renderbuffer(rx::GLImplFactory *implFactory, RenderbufferID id)
     mImplObserverBinding.bind(mImplementation.get());
 }
 
-void Renderbuffer::onDestroy(const Context *context)
+void Renderbuffer::onDestroy(const Context *context, angle::UnlockedTailCall *unlockedTailCall, angle::UnlockedTailCall *unlockedTailCall)
 {
-    egl::RefCountObjectReleaser<egl::Image> releaseImage;
+    egl::RefCountObjectReleaser<egl::Image> releaseImage(unlockedTailCall);
     (void)orphanImages(context, &releaseImage);
 
     if (mImplementation)
@@ -140,10 +140,10 @@ const std::string &Renderbuffer::getLabel() const
 angle::Result Renderbuffer::setStorage(const Context *context,
                                        GLenum internalformat,
                                        GLsizei width,
-                                       GLsizei height)
+                                       GLsizei height, angle::UnlockedTailCall *unlockedTailCall)
 {
 
-    egl::RefCountObjectReleaser<egl::Image> releaseImage;
+    egl::RefCountObjectReleaser<egl::Image> releaseImage(unlockedTailCall);
     ANGLE_TRY(orphanImages(context, &releaseImage));
 
     ANGLE_TRY(mImplementation->setStorage(context, internalformat, width, height));
@@ -160,9 +160,9 @@ angle::Result Renderbuffer::setStorageMultisample(const Context *context,
                                                   GLenum internalformat,
                                                   GLsizei width,
                                                   GLsizei height,
-                                                  MultisamplingMode mode)
+                                                  MultisamplingMode mode, angle::UnlockedTailCall *unlockedTailCall)
 {
-    egl::RefCountObjectReleaser<egl::Image> releaseImage;
+    egl::RefCountObjectReleaser<egl::Image> releaseImage(unlockedTailCall);
     ANGLE_TRY(orphanImages(context, &releaseImage));
 
     // Potentially adjust "samplesIn" to a supported value
@@ -179,14 +179,14 @@ angle::Result Renderbuffer::setStorageMultisample(const Context *context,
     return angle::Result::Continue;
 }
 
-angle::Result Renderbuffer::setStorageEGLImageTarget(const Context *context, egl::Image *image)
+angle::Result Renderbuffer::setStorageEGLImageTarget(const Context *context, egl::Image *image, angle::UnlockedTailCall *unlockedTailCall)
 {
-    egl::RefCountObjectReleaser<egl::Image> releaseImage;
+    egl::RefCountObjectReleaser<egl::Image> releaseImage(unlockedTailCall);
     ANGLE_TRY(orphanImages(context, &releaseImage));
 
     ANGLE_TRY(mImplementation->setStorageEGLImageTarget(context, image));
 
-    setTargetImage(context, image);
+    setTargetImage(context, image, unlockedTailCall);
 
     mState.update(static_cast<GLsizei>(image->getWidth()), static_cast<GLsizei>(image->getHeight()),
                   Format(image->getFormat()), 0, MultisamplingMode::Regular,

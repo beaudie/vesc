@@ -123,7 +123,7 @@ SurfaceMtl::SurfaceMtl(DisplayMtl *display,
 
 SurfaceMtl::~SurfaceMtl() {}
 
-void SurfaceMtl::destroy(const egl::Display *display)
+void SurfaceMtl::destroy(const egl::Display *display, angle::UnlockedTailCall *unlockedTailCall)
 {
     mColorTexture   = nullptr;
     mDepthTexture   = nullptr;
@@ -429,9 +429,10 @@ WindowSurfaceMtl::WindowSurfaceMtl(DisplayMtl *display,
 
 WindowSurfaceMtl::~WindowSurfaceMtl() {}
 
-void WindowSurfaceMtl::destroy(const egl::Display *display)
+void WindowSurfaceMtl::destroy(const egl::Display *display,
+                               angle::UnlockedTailCall *unlockedTailCall)
 {
-    SurfaceMtl::destroy(display);
+    SurfaceMtl::destroy(display, unlockedTailCall);
 
     mCurrentDrawable = nil;
     if (mMetalLayer && mMetalLayer.get() != mLayer)
@@ -722,9 +723,10 @@ OffscreenSurfaceMtl::OffscreenSurfaceMtl(DisplayMtl *display,
 
 OffscreenSurfaceMtl::~OffscreenSurfaceMtl() {}
 
-void OffscreenSurfaceMtl::destroy(const egl::Display *display)
+void OffscreenSurfaceMtl::destroy(const egl::Display *display,
+                                  angle::UnlockedTailCall *unlockedTailCall)
 {
-    SurfaceMtl::destroy(display);
+    SurfaceMtl::destroy(display, unlockedTailCall);
 }
 
 EGLint OffscreenSurfaceMtl::getWidth() const

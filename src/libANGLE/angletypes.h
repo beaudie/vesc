@@ -22,6 +22,7 @@
 #include <stdint.h>
 
 #include <bitset>
+#include <functional>
 #include <map>
 #include <memory>
 #include <unordered_map>
@@ -1122,6 +1123,39 @@ inline DestT *SafeGetImplAs(SrcT *src)
 
 namespace angle
 {
+// Under certain circumstances, such as for increased parallelism, the backend may defer an
+// operation to be done at the end of a call after the locks have been unlocked.  The entry point
+// function passes an |UnlockedTailCall| through the frontend to the backend.  If it is set, the
+// entry point would execute it at the end of the call.
+//
+// Since the function is called without any locks, care must be taken to minimize the amount of work
+// in such calls and ensure thread safety (for example by using fine grained locks inside the call
+// itself).
+// TODO: unit tests
+class UnlockedTailCall final : angle::NonCopyable
+{
+  public:
+    using CallType = std::function<void(void)>;
+
+    UnlockedTailCall();
+    ~UnlockedTailCall();
+
+    void add(CallType &&call);
+    void run();
+
+    bool any() const { return !mCalls.empty(); }
+
+  private:
+    // Typically, there is only one tail call.  It is possible to end up with 2 tail calls currently
+    // with unMakeCurrent destroying both the read and draw surfaces, each adding a tail call in the
+    // Vulkan backend.
+    //
+    // The max count can be increased as necessary.  An assertion would fire inside FixedVector if
+    // the max count is surpassed.
+    static constexpr size_t kMaxCallCount = 2;
+    angle::FixedVector<CallType, kMaxCallCount> mCalls;
+};
+
 // Zero-based for better array indexing
 enum FramebufferBinding
 {
@@ -1170,16 +1204,18 @@ class DestroyThenDelete
 {
   public:
     DestroyThenDelete() = default;
-    DestroyThenDelete(const ContextT *context) : mContext(context) {}
+    DestroyThenDelete(const ContextT *context, angle::UnlockedTailCall *unlockedTailCall) : mContext(context),
+      mUnlockedTailCall(unlockedTailCall) {}
 
     void operator()(ObjT *obj)
     {
-        (void)(obj->onDestroy(mContext));
+        (void)(obj->onDestroy(mContext, mUnlockedTailCall));
         delete obj;
     }
 
   private:
     const ContextT *mContext = nullptr;
+    angle::UnlockedTailCall *mUnlockedTailCall = nullptr;
 };
 
 template <typename ObjT, typename ContextT>

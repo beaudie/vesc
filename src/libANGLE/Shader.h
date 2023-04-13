@@ -169,7 +169,7 @@ class Shader final : angle::NonCopyable, public LabeledObject
            ShaderType type,
            ShaderProgramID handle);
 
-    void onDestroy(const Context *context);
+    void onDestroy(const Context *context, angle::UnlockedTailCall *unlockedTailCall);
 
     angle::Result setLabel(const Context *context, const std::string &label) override;
     const std::string &getLabel() const override;

@@ -2726,6 +2726,20 @@ def write_stubs_header(api, annotation, title, data_source, out_file, all_comman
         else:
             internal_params = get_internal_params(api, cmd_name, params, cmd_packed_egl_enums,
                                                   packed_param_types)
+            # TODO: add unlockedTailCall for select functions:
+            #
+            # - CreatePlatformWindowSurfaceEXT
+            # - CreatePbufferFromClientBuffer
+            # - CreatePbufferSurface
+            # - CreatePixmapSurface
+            # - CreatePlatformPixmapSurface
+            # - CreatePlatformWindowSurface
+            # - CreateWindowSurface
+            # - MakeCurrent
+            # - ReleaseTexImage
+            # - ReleaseThread
+            # - 
+            # - 
             stubs.append("%s %s(%s);" % (return_type, strip_api_prefix(cmd_name), internal_params))
 
     args = {

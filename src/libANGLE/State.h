@@ -106,7 +106,7 @@ class State : angle::NonCopyable
     ~State();
 
     void initialize(Context *context);
-    void reset(const Context *context);
+    void reset(const Context *context, angle::UnlockedTailCall *unlockedTailCall);
 
     // Getters
     ContextID getContextID() const { return mID; }
@@ -312,7 +312,7 @@ class State : angle::NonCopyable
     void setActiveSampler(unsigned int active);
     unsigned int getActiveSampler() const { return static_cast<unsigned int>(mActiveSampler); }
 
-    void setSamplerTexture(const Context *context, TextureType type, Texture *texture);
+    void setSamplerTexture(const Context *context, TextureType type, Texture *texture, angle::UnlockedTailCall *unlockedTailCall);
     Texture *getTargetTexture(TextureType type) const;
 
     Texture *getSamplerTexture(unsigned int sampler, TextureType type) const
