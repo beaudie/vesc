@@ -239,6 +239,19 @@ def PrepareRestrictedTraces(traces):
             total_size += os.path.getsize(local_path)
             _AdbRun(['push', local_path, device_path])
 
+        # Also push the trace binary
+        binary_name = 'libangle_restricted_traces_' + trace + '.so'
+        device_binary_path = '/data/user/0/com.android.angle.test/' + binary_name
+        local_binary_path = 'angle_trace_binaries__dist/' + binary_name
+        if _CompareHashes(local_binary_path, device_binary_path):
+            skipped += 1
+        else:
+            total_size += os.path.getsize(local_binary_path)
+            # Move into the test app's home directory
+            device_binary_tmp_path = '/data/local/tmp/' + binary_name
+            _AdbRun(['push', local_binary_path, device_binary_tmp_path])
+            _AdbShell('run-as ' + TEST_PACKAGE_NAME + ' cp ' + device_binary_tmp_path + ' .')
+
     logging.info('Synced %d trace files (%.1fMB, %d files already ok) in %.1fs', len(traces),
                  total_size / 1e6, skipped,
                  time.time() - start)
