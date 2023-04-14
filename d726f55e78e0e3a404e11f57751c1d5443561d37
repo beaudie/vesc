@@ -52,6 +52,24 @@
       "parentUuid": "981d2c83_cc936fc5",
       "revId": "d726f55e78e0e3a404e11f57751c1d5443561d37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e6267a7_2b2aaa04",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-04-14T08:46:18Z",
+      "side": 1,
+      "message": "\u003e That\u0027s a platform independent, right? So, regardless of the actual backend, that will cover the WebGL case, won\u0027t it?\n\nYes, that code covers WebGL validation regardless of the backend used.",
+      "parentUuid": "cb66fc70_78799a4e",
+      "revId": "d726f55e78e0e3a404e11f57751c1d5443561d37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
