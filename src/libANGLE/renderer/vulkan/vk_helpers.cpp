@@ -5925,8 +5925,9 @@ angle::Result ImageHelper::initMemory(Context *context,
         memoryRequirements.size < kMaxImageSizeForSuballocation)
     {
         ANGLE_VK_TRY(context, renderer->getImageMemorySuballocator().allocateAndBindMemory(
-                                  renderer, &mImage, flags, flags, mMemoryAllocationType,
-                                  &mVmaAllocation, &flags, &mMemoryTypeIndex, &mAllocationSize));
+                                  renderer, &mImage, &mVkImageCreateInfo, flags, flags,
+                                  mMemoryAllocationType, &mVmaAllocation, &flags, &mMemoryTypeIndex,
+                                  &mAllocationSize));
     }
     else
     {
