@@ -165,6 +165,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d461b11_db9b1a9f",
+        "filename": "src/compiler/translator/Types.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-04-14T18:31:01Z",
+      "side": 1,
+      "message": "Sorry I was thinking about `isVectorFloat()` but I typed it wrongly. I removed this function from `TType` class and placed the check in the function `OutputSPIRVTraverser::visitDeclaration()` as Shabi suggested.",
+      "parentUuid": "1f38801a_eb0d59f8",
+      "range": {
+        "startLine": 252,
+        "startChar": 9,
+        "endLine": 252,
+        "endChar": 23
+      },
+      "revId": "2ab34d752ea345c19cadde8976539fdcc684bcb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "07cf236a_8359b4f0",
