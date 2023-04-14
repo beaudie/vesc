@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44905d87_5da5274f",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-14T01:32:37Z",
+      "side": 1,
+      "message": "nit: feel free to use the `unused` bit above.",
+      "revId": "2ab34d752ea345c19cadde8976539fdcc684bcb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bba589f6_6371537d",
+        "filename": "src/compiler/translator/OutputSPIRV.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 6044,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-14T01:32:37Z",
+      "side": 1,
+      "message": "You need to have the same decorations as initializerId here. In particular, you want the quantized value to still be `RelaxedPrecision`; otherwise it\u0027s a 16-bit value in a 32-bit container.\n\n`mBuilder.getDecorations(symbol-\u003egetType())` should do as argument to `getNewId`",
+      "range": {
+        "startLine": 6044,
+        "startChar": 71,
+        "endLine": 6044,
+        "endChar": 73
+      },
+      "revId": "2ab34d752ea345c19cadde8976539fdcc684bcb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c27cc85_de0fb59b",
+        "filename": "src/compiler/translator/OutputSPIRV.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 6053,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-14T01:32:37Z",
+      "side": 1,
+      "message": "nit: please move this OpStore out of the `if`. In the `true` block, do OpQuantizeToF16 and overwrite `initializerId` so the `WriteStore` is identical in both paths.",
+      "revId": "2ab34d752ea345c19cadde8976539fdcc684bcb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b222cf0_171fb8c8",
+        "filename": "src/compiler/translator/Types.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-14T01:32:37Z",
+      "side": 1,
+      "message": "nit: \"scalar vector\" doesn\u0027t make sense. Scalar means it has only one component.\n\nSince this is a very targeted fix, you might as well put this logic in `OutputSPIRV.cpp`.",
+      "range": {
+        "startLine": 252,
+        "startChar": 9,
+        "endLine": 252,
+        "endChar": 23
+      },
+      "revId": "2ab34d752ea345c19cadde8976539fdcc684bcb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

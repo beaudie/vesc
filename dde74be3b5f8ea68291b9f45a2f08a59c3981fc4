@@ -34,6 +34,24 @@
       "parentUuid": "3c1d7a50_85809a83",
       "revId": "dde74be3b5f8ea68291b9f45a2f08a59c3981fc4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "146cc411_00279cde",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-14T01:32:37Z",
+      "side": 1,
+      "message": "Most of the diffs look perfectly fine. Except the water reflection in asphalt_8 which has visibly lower quality. I\u0027d check with native to see how the reflection looks like there. I\u0027ll leave it to @Cody to tell if that\u0027s acceptable (it _is_ in my opinion, because we are respective the user\u0027s choice of mediump more strongly now)\n\nThat said, I\u0027d take the traces with the biggest diffs (car_chase, black_desert_mobile, manhattan_31, portal_knights and aztec_ruins_high) and do a before/after comparison of performance. Is this change improving or degrading the performance in any measurable way?",
+      "parentUuid": "258324ff_6a30347d",
+      "revId": "dde74be3b5f8ea68291b9f45a2f08a59c3981fc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
