@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52fd0559_2e5f3446",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2023-04-14T06:18:15Z",
+      "side": 1,
+      "message": "nvm, just realize there\u0027s a typoe in commit message. The feature should be `enableAsyncPipelineCacheCompression`",
+      "revId": "28edde6f2b7b306f37ce85527f90586f1ddd5015",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
