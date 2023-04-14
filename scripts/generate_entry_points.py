@@ -234,13 +234,16 @@ void GL_APIENTRY GL_{name}({params})
 
     if ({valid_context_check})
     {{{packed_gl_enum_conversions}
-        SCOPED_SHARE_CONTEXT_LOCK(context);
-        bool isCallValid = (context->skipValidation() || {validation_expression});
-        if (isCallValid)
         {{
-            context->{name_lower_no_suffix}({internal_params});
+            SCOPED_SHARE_CONTEXT_LOCK(context);
+            bool isCallValid = (context->skipValidation() || {validation_expression});
+            if (isCallValid)
+            {{
+                context->{name_lower_no_suffix}({internal_params});
+            }}
+            ANGLE_CAPTURE_GL({name}, isCallValid, {gl_capture_params});
         }}
-        ANGLE_CAPTURE_GL({name}, isCallValid, {gl_capture_params});
+        context->getDisplay()->getCurrentThreadUnlockedTailCall()->run();
     }}
     else
     {{
@@ -258,17 +261,20 @@ TEMPLATE_GLES_ENTRY_POINT_WITH_RETURN = """\
     {return_type} returnValue;
     if ({valid_context_check})
     {{{packed_gl_enum_conversions}
-        SCOPED_SHARE_CONTEXT_LOCK(context);
-        bool isCallValid = (context->skipValidation() || {validation_expression});
-        if (isCallValid)
         {{
-            returnValue = context->{name_lower_no_suffix}({internal_params});
+            SCOPED_SHARE_CONTEXT_LOCK(context);
+            bool isCallValid = (context->skipValidation() || {validation_expression});
+            if (isCallValid)
+            {{
+                returnValue = context->{name_lower_no_suffix}({internal_params});
+            }}
+            else
+            {{
+                returnValue = GetDefaultReturnValue<angle::EntryPoint::GL{name}, {return_type}>();
+            }}
+            ANGLE_CAPTURE_GL({name}, isCallValid, {gl_capture_params}, returnValue);
         }}
-        else
-        {{
-            returnValue = GetDefaultReturnValue<angle::EntryPoint::GL{name}, {return_type}>();
-    }}
-        ANGLE_CAPTURE_GL({name}, isCallValid, {gl_capture_params}, returnValue);
+        context->getDisplay()->getCurrentThreadUnlockedTailCall()->run();
     }}
     else
     {{
@@ -283,17 +289,19 @@ TEMPLATE_EGL_ENTRY_POINT_NO_RETURN = """\
 void EGLAPIENTRY EGL_{name}({params})
 {{
     {preamble}
-    ANGLE_SCOPED_GLOBAL_LOCK();
-    EGL_EVENT({name}, "{format_params}"{comma_if_needed}{pass_params});
-
     Thread *thread = egl::GetCurrentThread();
+    {{
+        ANGLE_SCOPED_GLOBAL_LOCK();
+        EGL_EVENT({name}, "{format_params}"{comma_if_needed}{pass_params});
 
-    {packed_gl_enum_conversions}
+        {packed_gl_enum_conversions}
 
-    ANGLE_EGL_VALIDATE_VOID(thread, {name}, {labeled_object}, {internal_params});
+        ANGLE_EGL_VALIDATE_VOID(thread, {name}, {labeled_object}, {internal_params});
 
-    {name}(thread{comma_if_needed}{internal_params});
-    ANGLE_CAPTURE_EGL({name}, true, {egl_capture_params});
+        {name}(thread{comma_if_needed}{internal_params});
+        ANGLE_CAPTURE_EGL({name}, true, {egl_capture_params});
+    }}
+    thread->unlockedTailCall()->run();
 }}
 """
 
@@ -308,17 +316,20 @@ TEMPLATE_EGL_ENTRY_POINT_WITH_RETURN = """\
 {return_type} EGLAPIENTRY EGL_{name}({params})
 {{
     {preamble}
-    ANGLE_SCOPED_GLOBAL_LOCK();
-    EGL_EVENT({name}, "{format_params}"{comma_if_needed}{pass_params});
-
     Thread *thread = egl::GetCurrentThread();
+    {return_type} returnValue;
+    {{
+        ANGLE_SCOPED_GLOBAL_LOCK();
+        EGL_EVENT({name}, "{format_params}"{comma_if_needed}{pass_params});
 
-    {packed_gl_enum_conversions}
+        {packed_gl_enum_conversions}
 
-    ANGLE_EGL_VALIDATE(thread, {name}, {labeled_object}, {return_type}{comma_if_needed}{internal_params});
+        ANGLE_EGL_VALIDATE(thread, {name}, {labeled_object}, {return_type}{comma_if_needed}{internal_params});
 
-    {return_type} returnValue = {name}(thread{comma_if_needed}{internal_params});
-    ANGLE_CAPTURE_EGL({name}, true, {egl_capture_params}, returnValue);
+        returnValue = {name}(thread{comma_if_needed}{internal_params});
+        ANGLE_CAPTURE_EGL({name}, true, {egl_capture_params}, returnValue);
+    }}
+    thread->unlockedTailCall()->run();
     return returnValue;
 }}
 """

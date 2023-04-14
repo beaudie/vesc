@@ -44,6 +44,8 @@
 #include "libANGLE/renderer/ImageImpl.h"
 #include "libANGLE/trace.h"
 
+#include "libGLESv2/global_state.h"
+
 #if defined(ANGLE_ENABLE_D3D9) || defined(ANGLE_ENABLE_D3D11)
 #    include <versionhelpers.h>
 
@@ -2589,4 +2591,9 @@ egl::Sync *Display::getSync(egl::SyncID syncID)
     return GetResourceFromHashSet<egl::Sync *>(syncID, mSyncSet);
 }
 
+angle::UnlockedTailCall *Display::getCurrentThreadUnlockedTailCall() const
+{
+    Thread *thread = GetCurrentThread();
+    return thread->unlockedTailCall();
+}
 }  // namespace egl
