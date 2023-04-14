@@ -1,0 +1,84 @@
+Name
+
+    ANGLE_prepare_create_window_surface
+
+Name Strings
+
+    EGL_ANGLE_prepare_create_window_surface
+
+Contributors
+
+    Shahbaz Youssefi
+
+Contacts
+
+    Shahbaz Youssefi, Google Inc. (syoussefi 'at' google.com)
+
+Status
+
+    Draft
+
+Version
+
+    Version 1, April 14, 2023
+
+Number
+
+    EGL Extension #??
+
+Dependencies
+
+    This extension is written against the wording of the EGL 1.5
+    Specification.
+
+Overview
+
+    On Android, for EGL applications native_window_api_disconnect() is called
+    after the native EGL driver is invoked. For Vulkan applications, it is
+    called as part of vkDestroySurfaceKHR.
+
+    With ANGLE, this results in native_window_api_disconnect() being called
+    while the EGL lock is held (which is a different scenario from native EGL
+    drivers).  However native_window_api_disconnect() may end up calling EGL
+    functions of its own (e.g. sync primitives) leading to a deadlock in ANGLE.
+
+    As a result, ANGLE destroys the surface asynchronously without holding the
+    EGL lock.  The entry point in this extension waits for previous Vulkan
+    surfaces to be destroyed in preparation for creating new ones (potentially
+    out of the same window).
+
+New Types
+
+    None.
+
+New Procedures and Functions
+
+    EGLBoolean eglPrepareCreateWindowSurfaceANGLE(
+        EGLDisplay dpy);
+
+New Tokens
+
+    None
+
+Additions to the EGL 1.5 Specification
+
+    Add the following to section 3.5.1 " Creating On-Screen Rendering Surfaces":
+
+    To wait for internal clean up of previous surface destruction events before
+    creating a new window surface, call
+
+        EGLBoolean eglPrepareCreateWindowSurfaceANGLE(
+            EGLDisplay dpy);
+
+    It is not necessary to call this function; it is automatically called
+    before creating window surfaces.
+
+Issues
+
+    None yet.
+
+Revision History
+
+    Rev.    Date         Author     Changes
+    ----  -------------  ---------  ----------------------------------------
+      1   Apr 14, 2023   syoussefi  Initial version

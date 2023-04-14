@@ -1190,6 +1190,12 @@
             "issue": "https://issuetracker.google.com/255411748"
         },
         {
+            "name": "async_surface_destruction",
+            "category": "Workarounds",
+            "description":["Call vkDestroySurfaceKHR asynchronously and without holding the EGL lock."],
+            "issue": "https://anglebug.com/8127"
+        },
+        {
             "name": "use_reset_command_buffer_bit_for_secondary_pools",
             "category": "Workarounds",
             "description": [

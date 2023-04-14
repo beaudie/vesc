@@ -42,6 +42,7 @@ enum class Feature
     AppendAliasedMemoryDecorationsToSsbo,
     AsyncCommandBufferReset,
     AsyncCommandQueue,
+    AsyncSurfaceDestruction,
     Avoid1BitAlphaTextureFormats,
     AvoidStencilTextureSwizzle,
     BindFramebufferForTimerQueries,

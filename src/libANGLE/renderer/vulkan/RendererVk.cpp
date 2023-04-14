@@ -1162,6 +1162,43 @@ angle::Result GetAndDecompressPipelineCacheVk(VkPhysicalDeviceProperties physica
     return angle::Result::Continue;
 }
 
+// A task to destroy the surface without holding the EGL lock.  This works around a specific
+// deadlock in Android.  On this platform:
+//
+// - For EGL applications, parts of surface creation and destruction are handled by the platform,
+//   and parts of it are done by the native EGL driver.  Namely, on surface destruction,
+//   native_window_api_disconnect is called outside the EGL driver.
+// - For Vulkan applications, vkDestroySurfaceKHR takes full responsibility for destroying the
+//   surface, including calling native_window_api_disconnect.
+//
+// Unfortunately, native_window_api_disconnect may use EGL sync objects and can lead to
+// calling into the EGL driver.  For ANGLE, this is particularly problematic because it is
+// simultaneously a Vulkan application and the EGL driver, causing `vkDestroySurfaceKHR` to
+// call back into ANGLE and attempt to reacquire the EGL lock.
+//
+// Since there are no users of the surface when calling vkDestroySurfaceKHR, it is safe for
+// ANGLE to destroy it without holding the EGL lock.
+//
+// Note: since this task references the VkInstance, it must be waited on before the instance is
+// destroyed.
+class DestroySurfaceTask : public angle::Closure
+{
+  public:
+    DestroySurfaceTask(VkInstance instance, VkSurfaceKHR surface)
+        : mInstance(instance), mSurface(surface)
+    {}
+
+    void operator()() override
+    {
+        ANGLE_TRACE_EVENT0("gpu.angle", "DestroySurface");
+        vkDestroySurfaceKHR(mInstance, mSurface, nullptr);
+    }
+
+  private:
+    VkInstance mInstance;
+    VkSurfaceKHR mSurface;
+};
+
 // Environment variable (and associated Android property) to enable Vulkan debug-utils markers
 constexpr char kEnableDebugMarkersVarName[]      = "ANGLE_ENABLE_DEBUG_MARKERS";
 constexpr char kEnableDebugMarkersPropertyName[] = "debug.angle.markers";
@@ -1383,6 +1420,10 @@ void RendererVk::onDestroy(vk::Context *context)
 
     if (mInstance)
     {
+        // Wait for all surface destruction jobs to finish before destroying the instance.  These
+        // tasks reference `mInstance`.
+        waitSurfaceDestructionUNLOCKED();
+
         vkDestroyInstance(mInstance, nullptr);
         mInstance = VK_NULL_HANDLE;
     }
@@ -4488,6 +4529,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // in virtualized environment. https://issuetracker.google.com/246218584
     ANGLE_FEATURE_CONDITION(&mFeatures, mapUnspecifiedColorSpaceToPassThrough, isVenus);
 
+    // Make sure vkDestroySurfaceKHR is called without holding the EGL lock on Android.
+    ANGLE_FEATURE_CONDITION(&mFeatures, asyncSurfaceDestruction, IsAndroid());
+
     ApplyFeatureOverrides(&mFeatures, displayVk->getState());
 
     // Disable memory report feature overrides if extension is not supported.
@@ -5516,6 +5560,42 @@ angle::Result RendererVk::allocateQueueSerialIndex(QueueSerial *queueSerialOut)
 void RendererVk::releaseQueueSerialIndex(SerialIndex index)
 {
     mQueueSerialIndexAllocator.release(index);
+}
+
+void RendererVk::destroySurface(const egl::Display *display, VkSurfaceKHR surface)
+{
+    if (mFeatures.asyncSurfaceDestruction.enabled)
+    {
+        auto destroyTask = std::make_shared<DestroySurfaceTask>(mInstance, surface);
+
+        std::shared_ptr<angle::WaitableEvent> event =
+            display->getMultiThreadPool()->postWorkerTask(destroyTask);
+
+        std::unique_lock<std::mutex> lock(mSurfaceDestructionEventsMutex);
+        mSurfaceDestructionEvents.push(std::move(event));
+    }
+    else
+    {
+        vkDestroySurfaceKHR(mInstance, surface, nullptr);
+    }
+}
+
+void RendererVk::waitSurfaceDestructionUNLOCKED()
+{
+    // Wait for all surface destruction events to finish.  This is called without holding the EGL
+    // lock, and so the data structure is protected by its own mutex.
+    std::unique_lock<std::mutex> lock(mSurfaceDestructionEventsMutex);
+    while (!mSurfaceDestructionEvents.empty())
+    {
+        mSurfaceDestructionEvents.front()->wait();
+        mSurfaceDestructionEvents.pop();
+    }
+}
+
+angle::Result RendererVk::onSwap(DisplayVk *displayVk, const gl::Context *context)
+{
+    // Sync the pipeline cache every now and then.
+    return syncPipelineCacheVk(displayVk, context);
 }
 
 // static

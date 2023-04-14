@@ -1578,7 +1578,7 @@ def get_packed_enums(api, cmd_packed_gl_enums, cmd_name, packed_param_types, par
     return result
 
 
-CUSTOM_EGL_ENTRY_POINTS = ["eglPrepareSwapBuffersANGLE"]
+CUSTOM_EGL_ENTRY_POINTS = ['eglPrepareSwapBuffersANGLE', 'eglPrepareCreateWindowSurfaceANGLE']
 
 
 def get_def_template(api, cmd_name, return_type, has_errcode_ret):
@@ -2670,11 +2670,15 @@ def get_optional_gl_locks(api, cmd_name, params):
     return "ANGLE_SCOPED_GLOBAL_LOCK();"
 
 
+def make_custom_call(name, passed_params):
+    return [name, '(%s)' % (', '.join([just_the_name(param) for param in passed_params]))]
+
+
 def get_prepare_swap_buffers_call(api, cmd_name, params):
     if cmd_name not in [
             "eglSwapBuffers", "eglSwapBuffersWithDamageKHR", "eglSwapBuffersWithFrameTokenANGLE"
     ]:
-        return ""
+        return []
 
     passed_params = [None, None]
 
@@ -2685,15 +2689,34 @@ def get_prepare_swap_buffers_call(api, cmd_name, params):
         if param_type == "EGLSurface":
             passed_params[1] = param
 
-    return "ANGLE_EGLBOOLEAN_TRY(PrepareSwapBuffersANGLE(%s));" % (", ".join(
-        [just_the_name(param) for param in passed_params]))
+    return ['ANGLE_EGLBOOLEAN_TRY('] + make_custom_call('PrepareSwapBuffersANGLE',
+                                                        passed_params) + [');']
+
+
+def get_prepare_create_window_surface_call(api, cmd_name, params):
+    if cmd_name not in [
+            "eglCreateWindowSurface",
+            "eglCreatePlatformWindowSurface",
+            "eglCreatePlatformWindowSurfaceEXT",
+    ]:
+        return []
+
+    passed_params = [None]
+
+    for param in params:
+        param_type = just_the_type(param)
+        if param_type == "EGLDisplay":
+            passed_params[0] = param
+
+    return ['if (!'] + make_custom_call('PrepareCreateWindowSurfaceANGLE',
+                                        passed_params) + [') { return EGL_NO_SURFACE; }']
 
 
 def get_preamble(api, cmd_name, params):
-    preamble = ""
+    preamble = []
     preamble += get_prepare_swap_buffers_call(api, cmd_name, params)
-    # TODO: others?
-    return preamble
+    preamble += get_prepare_create_window_surface_call(api, cmd_name, params)
+    return '\n'.join(preamble)
 
 
 def write_stubs_header(api, annotation, title, data_source, out_file, all_commands, commands,

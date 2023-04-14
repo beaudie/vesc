@@ -192,6 +192,7 @@ enum class EntryPoint
     EGLLockSurfaceKHR,
     EGLMakeCurrent,
     EGLPostSubBufferNV,
+    EGLPrepareCreateWindowSurfaceANGLE,
     EGLPrepareSwapBuffersANGLE,
     EGLPresentationTimeANDROID,
     EGLProgramCacheGetAttribANGLE,

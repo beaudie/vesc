@@ -322,6 +322,7 @@ supported_egl_extensions = [
     "EGL_ANGLE_metal_create_context_ownership_identity",
     "EGL_ANGLE_metal_shared_event_sync",
     "EGL_ANGLE_power_preference",
+    "EGL_ANGLE_prepare_create_window_surface",
     "EGL_ANGLE_prepare_swap_buffers",
     "EGL_ANGLE_program_cache_control",
     "EGL_ANGLE_query_surface_pointer",

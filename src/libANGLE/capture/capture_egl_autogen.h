@@ -356,6 +356,10 @@ angle::CallCapture CaptureForceGPUSwitchANGLE(egl::Thread *thread,
                                               egl::Display *dpyPacked,
                                               EGLint gpuIDHigh,
                                               EGLint gpuIDLow);
+angle::CallCapture CapturePrepareCreateWindowSurfaceANGLE(egl::Thread *thread,
+                                                          bool isCallValid,
+                                                          egl::Display *dpyPacked,
+                                                          EGLBoolean returnValue);
 angle::CallCapture CapturePrepareSwapBuffersANGLE(egl::Thread *thread,
                                                   bool isCallValid,
                                                   egl::Display *dpyPacked,

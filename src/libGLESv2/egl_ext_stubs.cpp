@@ -105,7 +105,7 @@ EGLSurface CreatePlatformWindowSurfaceEXT(Thread *thread,
 
     ANGLE_EGL_TRY_RETURN(
         thread, display->createWindowSurface(configPacked, nativeWindow, attributes, &surface),
-        "eglPlatformCreateWindowSurfaceEXT", GetDisplayIfValid(display), EGL_NO_SURFACE);
+        "eglCreatePlatformWindowSurfaceEXT", GetDisplayIfValid(display), EGL_NO_SURFACE);
 
     return reinterpret_cast<EGLSurface>(static_cast<uintptr_t>(surface->id().value));
 }
@@ -662,6 +662,29 @@ EGLBoolean PrepareSwapBuffersANGLE(EGLDisplay dpy, EGLSurface surface)
     }
     ANGLE_EGL_TRY_RETURN(thread, surfacePtr->prepareSwap(thread->getContext()), "prepareSwap",
                          eglSurface, EGL_FALSE);
+
+    thread->setSuccess();
+    return EGL_TRUE;
+}
+
+EGLBoolean PrepareCreateWindowSurfaceANGLE(EGLDisplay dpy)
+{
+    egl::Display *dpyPacked = PackParam<egl::Display *>(dpy);
+    Thread *thread          = egl::GetCurrentThread();
+    {
+        ANGLE_SCOPED_GLOBAL_LOCK();
+
+        EGL_EVENT(PrepareCreateWindowSurfaceANGLE, "dpy = 0x%016" PRIxPTR, (uintptr_t)dpy);
+
+        ANGLE_EGL_VALIDATE(thread, PrepareCreateWindowSurfaceANGLE, GetDisplayIfValid(dpyPacked),
+                           EGLBoolean, dpyPacked);
+
+        ANGLE_EGL_TRY_RETURN(thread, dpyPacked->prepareForCall(),
+                             "eglPrepareCreateWindowSurfaceANGLE", GetDisplayIfValid(dpyPacked),
+                             EGL_FALSE);
+    }
+    ANGLE_EGL_TRY_RETURN(thread, dpyPacked->prepareCreateWindowSurfaceUNLOCKED(),
+                         "prepareCreateWindowSurface", dpyPacked, EGL_FALSE);
 
     thread->setSuccess();
     return EGL_TRUE;
