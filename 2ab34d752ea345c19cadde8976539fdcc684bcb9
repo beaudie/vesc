@@ -85,6 +85,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "90c99be9_b2aae61a",
+        "filename": "src/compiler/translator/OutputSPIRV.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 6044,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-14T19:15:31Z",
+      "side": 1,
+      "message": "\u003e reduce the precision of a relaxed-precision result to 16-bit precision\n\nIt specifically says it reduces the precision of a \"relaxed-precision\" result (i.e. id). If the id is not RelaxedPrecision, we end up doing the job of quantizing to fp16, but then say that it needs to stay in a 32-bit container (SPIR-V id, register, whatever).\n\nDrivers may deal with it just fine, it\u0027s just inconsistent of us to ask for reduced precision but not specify RelaxedPrecision on the id.\n\n\u003e It reads to me that adding OpQuantizeToF16 is to make sure the result is fixed at 16-bit\n\nNot exactly, it says the result is \"quantized to fp16\", not that it\u0027s actually fp16. For example, say 1.1234 gets quantized to 1.12; there\u0027s nothing stopping an fp32 or even fp64 to contain the resulting 1.12 value (it\u0027s still quantized to something that fp16 _can_ hold).\n\n\u003e and adding back RelaxedPrecision decoration will defeat the purpose of OpQuantizeToF16\n\nNo, they work together (or rather, they are orthogonal). `RelaxedPrecision` says the driver has the option to use a precision less than 32 bits. By using OpQuantizeToF16 we make sure the **contents** are representable by fp16. The driver may still choose to use fp32 if it wants (but at least we know comparison with fp16 would be meaningful). The hope is that the driver would take OpQuantizeToF16 as indication that it really should use fp16.",
+      "parentUuid": "8b81670d_94c45f24",
+      "range": {
+        "startLine": 6044,
+        "startChar": 71,
+        "endLine": 6044,
+        "endChar": 73
+      },
+      "revId": "2ab34d752ea345c19cadde8976539fdcc684bcb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6c27cc85_de0fb59b",
         "filename": "src/compiler/translator/OutputSPIRV.cpp",
         "patchSetId": 14
