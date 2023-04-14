@@ -33,6 +33,23 @@
       "message": "Anything stopping us from landing this?",
       "revId": "31aeea86c83f517c6fe0a93995053e5cc116ade5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24b26b6c_01891246",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-14T19:52:49Z",
+      "side": 1,
+      "message": "Since Alexey\u0027s probably out for the weekend and you\u0027ve addressed his feedback, I\u0027ll +2 this directly so it can land now. Thanks for your effort spec\u0027ing this.",
+      "revId": "31aeea86c83f517c6fe0a93995053e5cc116ade5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
