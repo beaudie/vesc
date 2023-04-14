@@ -56,13 +56,14 @@ egl::Error DisplayVkWayland::initialize(egl::Display *display)
 
 void DisplayVkWayland::terminate()
 {
+    DisplayVk::terminate();
+
     if (mOwnDisplay)
     {
         wl_display_disconnect(mWaylandDisplay);
         mOwnDisplay = false;
     }
     mWaylandDisplay = nullptr;
-    DisplayVk::terminate();
 }
 
 bool DisplayVkWayland::isValidNativeWindow(EGLNativeWindowType window) const
