@@ -5530,21 +5530,37 @@ ImageMemorySuballocator::~ImageMemorySuballocator() {}
 
 void ImageMemorySuballocator::destroy(RendererVk *renderer) {}
 
-VkResult ImageMemorySuballocator::allocateAndBindMemory(RendererVk *renderer,
-                                                        Image *image,
-                                                        VkMemoryPropertyFlags requiredFlags,
-                                                        VkMemoryPropertyFlags preferredFlags,
-                                                        MemoryAllocationType memoryAllocationType,
-                                                        Allocation *allocationOut,
-                                                        VkMemoryPropertyFlags *memoryFlagsOut,
-                                                        uint32_t *memoryTypeIndexOut,
-                                                        VkDeviceSize *sizeOut)
+VkResult ImageMemorySuballocator::allocateAndBindMemory(
+    RendererVk *renderer,
+    Image *image,
+    const VkImageCreateInfo *imageCreateInfo,
+    const VkMemoryRequirements *memoryRequirements,
+    VkMemoryPropertyFlags requiredFlags,
+    VkMemoryPropertyFlags preferredFlags,
+    MemoryAllocationType memoryAllocationType,
+    Allocation *allocationOut,
+    VkMemoryPropertyFlags *memoryFlagsOut,
+    uint32_t *memoryTypeIndexOut,
+    VkDeviceSize *sizeOut)
 {
     ASSERT(image && image->valid());
     ASSERT(allocationOut && !allocationOut->valid());
     const Allocator &allocator = renderer->getAllocator();
 
-    VkResult result = vma::AllocateAndBindMemoryForImage(
+    // Set pending memory allocation.
+    uint32_t pendingMemoryTypeIndex;
+    VkResult result =
+        vma::FindMemoryTypeIndexForImageInfo(allocator.getHandle(), imageCreateInfo, requiredFlags,
+                                             preferredFlags, &pendingMemoryTypeIndex);
+    if (result != VK_SUCCESS)
+    {
+        return result;
+    }
+    renderer->getMemoryAllocationTracker()->setPendingMemoryAlloc(
+        memoryAllocationType, memoryRequirements->size, pendingMemoryTypeIndex);
+
+    // Allocate and bind memory for the image.
+    result = vma::AllocateAndBindMemoryForImage(
         allocator.getHandle(), &image->mHandle, requiredFlags, preferredFlags,
         &allocationOut->mHandle, memoryTypeIndexOut, sizeOut);
     if (result != VK_SUCCESS)
