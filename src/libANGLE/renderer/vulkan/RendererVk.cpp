@@ -5536,6 +5536,7 @@ void ImageMemorySuballocator::destroy(RendererVk *renderer) {}
 
 VkResult ImageMemorySuballocator::allocateAndBindMemory(RendererVk *renderer,
                                                         Image *image,
+                                                        const VkImageCreateInfo *imageCreateInfo,
                                                         VkMemoryPropertyFlags requiredFlags,
                                                         VkMemoryPropertyFlags preferredFlags,
                                                         MemoryAllocationType memoryAllocationType,
@@ -5547,6 +5548,7 @@ VkResult ImageMemorySuballocator::allocateAndBindMemory(RendererVk *renderer,
     ASSERT(image && image->valid());
     ASSERT(allocationOut && !allocationOut->valid());
     const Allocator &allocator = renderer->getAllocator();
+    VkResult result;
 
     // Maximum size to use VMA image suballocation. Any allocation greater than or equal to this
     // value will use a dedicated VkDeviceMemory.
@@ -5555,8 +5557,20 @@ VkResult ImageMemorySuballocator::allocateAndBindMemory(RendererVk *renderer,
     image->getMemoryRequirements(renderer->getDevice(), &memoryRequirements);
     bool allocateDedicatedMemory = memoryRequirements.size >= kMaxImageSizeForSuballocation;
 
+    // Set pending memory allocation.
+    uint32_t pendingMemoryTypeIndex;
+    result =
+        vma::FindMemoryTypeIndexForImageInfo(allocator.getHandle(), imageCreateInfo, requiredFlags,
+                                             preferredFlags, &pendingMemoryTypeIndex);
+    if (result != VK_SUCCESS)
+    {
+        return result;
+    }
+    renderer->getMemoryAllocationTracker()->setPendingMemoryAlloc(
+        memoryAllocationType, memoryRequirements.size, pendingMemoryTypeIndex);
+
     // Allocate and bind memory for the image.
-    VkResult result = vma::AllocateAndBindMemoryForImage(
+    result = vma::AllocateAndBindMemoryForImage(
         allocator.getHandle(), &image->mHandle, requiredFlags, preferredFlags,
         allocateDedicatedMemory, &allocationOut->mHandle, memoryTypeIndexOut, sizeOut);
     if (result != VK_SUCCESS)

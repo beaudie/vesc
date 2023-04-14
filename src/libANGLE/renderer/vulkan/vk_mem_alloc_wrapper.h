@@ -89,6 +89,12 @@ VkResult FindMemoryTypeIndexForBufferInfo(VmaAllocator allocator,
                                           bool persistentlyMappedBuffers,
                                           uint32_t *pMemoryTypeIndexOut);
 
+VkResult FindMemoryTypeIndexForImageInfo(VmaAllocator allocator,
+                                         const VkImageCreateInfo *pImageCreateInfo,
+                                         VkMemoryPropertyFlags requiredFlags,
+                                         VkMemoryPropertyFlags preferredFlags,
+                                         uint32_t *pMemoryTypeIndexOut);
+
 void GetMemoryTypeProperties(VmaAllocator allocator,
                              uint32_t memoryTypeIndex,
                              VkMemoryPropertyFlags *pFlags);
