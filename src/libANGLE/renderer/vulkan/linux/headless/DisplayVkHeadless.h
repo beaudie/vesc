@@ -20,7 +20,6 @@ class DisplayVkHeadless : public DisplayVkLinux
 {
   public:
     DisplayVkHeadless(const egl::DisplayState &state);
-    void terminate() override;
 
     bool isValidNativeWindow(EGLNativeWindowType window) const override;
 

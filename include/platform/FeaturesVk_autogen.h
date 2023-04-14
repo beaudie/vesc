@@ -887,6 +887,11 @@ struct FeaturesVk : FeatureSetBase
                                            "Reset command buffer in async thread.", &members,
                                            "https://issuetracker.google.com/255411748"};
 
+    FeatureInfo asyncSurfaceDestruction = {
+        "asyncSurfaceDestruction", FeatureCategory::VulkanWorkarounds,
+        "Call vkDestroySurfaceKHR asynchronously and without holding the EGL lock.", &members,
+        "https://anglebug.com/8127"};
+
     FeatureInfo useResetCommandBufferBitForSecondaryPools = {
         "useResetCommandBufferBitForSecondaryPools",
         FeatureCategory::VulkanWorkarounds,

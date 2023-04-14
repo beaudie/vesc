@@ -43,6 +43,7 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
     {Feature::AppendAliasedMemoryDecorationsToSsbo, "appendAliasedMemoryDecorationsToSsbo"},
     {Feature::AsyncCommandBufferReset, "asyncCommandBufferReset"},
     {Feature::AsyncCommandQueue, "asyncCommandQueue"},
+    {Feature::AsyncSurfaceDestruction, "asyncSurfaceDestruction"},
     {Feature::Avoid1BitAlphaTextureFormats, "avoid1BitAlphaTextureFormats"},
     {Feature::AvoidStencilTextureSwizzle, "avoidStencilTextureSwizzle"},
     {Feature::BindFramebufferForTimerQueries, "bindFramebufferForTimerQueries"},

@@ -19,11 +19,6 @@ namespace rx
 
 DisplayVkHeadless::DisplayVkHeadless(const egl::DisplayState &state) : DisplayVkLinux(state) {}
 
-void DisplayVkHeadless::terminate()
-{
-    DisplayVk::terminate();
-}
-
 bool DisplayVkHeadless::isValidNativeWindow(EGLNativeWindowType window) const
 {
     return true;

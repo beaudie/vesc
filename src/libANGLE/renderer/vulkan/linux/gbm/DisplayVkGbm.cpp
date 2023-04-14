@@ -36,8 +36,9 @@ egl::Error DisplayVkGbm::initialize(egl::Display *display)
 
 void DisplayVkGbm::terminate()
 {
-    mGbmDevice = nullptr;
     DisplayVk::terminate();
+
+    mGbmDevice = nullptr;
 }
 
 bool DisplayVkGbm::isValidNativeWindow(EGLNativeWindowType window) const

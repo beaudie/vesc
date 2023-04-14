@@ -1440,7 +1440,8 @@ ANGLE_INSTANTIATE_TEST(EGLContextSharingTestNoFixture,
                        WithNoFixture(ES2_OPENGL()),
                        WithNoFixture(ES3_OPENGL()),
                        WithNoFixture(ES2_VULKAN()),
-                       WithNoFixture(ES3_VULKAN()));
+                       WithNoFixture(ES3_VULKAN()),
+                       WithNoFixture(ES3_VULKAN()).enable(Feature::AsyncSurfaceDestruction));
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(EGLContextSharingTestNoSyncTextureUploads);
 ANGLE_INSTANTIATE_TEST(EGLContextSharingTestNoSyncTextureUploads,

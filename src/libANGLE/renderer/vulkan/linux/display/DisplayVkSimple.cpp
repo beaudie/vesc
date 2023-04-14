@@ -19,11 +19,6 @@ namespace rx
 
 DisplayVkSimple::DisplayVkSimple(const egl::DisplayState &state) : DisplayVkLinux(state) {}
 
-void DisplayVkSimple::terminate()
-{
-    DisplayVk::terminate();
-}
-
 bool DisplayVkSimple::isValidNativeWindow(EGLNativeWindowType window) const
 {
     return true;

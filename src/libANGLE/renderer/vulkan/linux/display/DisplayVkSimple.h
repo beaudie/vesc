@@ -20,7 +20,6 @@ class DisplayVkSimple : public DisplayVkLinux
 {
   public:
     DisplayVkSimple(const egl::DisplayState &state);
-    void terminate() override;
 
     bool isValidNativeWindow(EGLNativeWindowType window) const override;
 

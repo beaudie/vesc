@@ -3014,6 +3014,8 @@ ANGLE_INSTANTIATE_TEST(
         .enable(Feature::PermanentlySwitchToFramebufferFetchMode)
         .enable(Feature::PreferMonolithicPipelinesOverLibraries)
         .enable(Feature::SlowDownMonolithicPipelineCreationForTesting),
+    ES3_VULKAN().enable(Feature::AsyncSurfaceDestruction),
+    ES3_VULKAN_SWIFTSHADER().enable(Feature::AsyncSurfaceDestruction),
     ES2_D3D11(),
     ES3_D3D11());
 
@@ -3043,6 +3045,8 @@ ANGLE_INSTANTIATE_TEST(
         .enable(Feature::PermanentlySwitchToFramebufferFetchMode)
         .enable(Feature::PreferMonolithicPipelinesOverLibraries)
         .enable(Feature::SlowDownMonolithicPipelineCreationForTesting),
+    ES3_VULKAN().enable(Feature::AsyncSurfaceDestruction),
+    ES3_VULKAN_SWIFTSHADER().enable(Feature::AsyncSurfaceDestruction),
     ES3_D3D11());
 
 }  // namespace angle
