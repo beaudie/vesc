@@ -2757,6 +2757,10 @@ class ImageHelper final : public Resource, public angle::Subject
     // Only used for swapChain images. This is set when an image is acquired and is waited on
     // by the next submission (which uses this image), at which point it is released.
     Semaphore mAcquireNextImageSemaphore;
+
+    // Maximum size to use VMA image suballocation. Any allocation greater than or equal to this
+    // value will use Vulkan to directly allocate a dedicated VkDeviceMemory.
+    static constexpr size_t kMaxImageSizeForSuballocation = 4 * 1024 * 1024;
 };
 
 ANGLE_INLINE bool RenderPassCommandBufferHelper::usesImage(const ImageHelper &image) const
