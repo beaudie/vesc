@@ -5895,11 +5895,16 @@ angle::Result ImageHelper::initMemory(Context *context,
 
     // To allocate memory here, if possible, we use the image memory suballocator which uses VMA.
     RendererVk *renderer = context->getRenderer();
-    if (renderer->getFeatures().useVmaForImageSuballocation.enabled)
+    VkMemoryRequirements memoryRequirements;
+    mImage.getMemoryRequirements(renderer->getDevice(), &memoryRequirements);
+
+    if (renderer->getFeatures().useVmaForImageSuballocation.enabled &&
+        memoryRequirements.size < kMaxImageSizeForSuballocation)
     {
         ANGLE_VK_TRY(context, renderer->getImageMemorySuballocator().allocateAndBindMemory(
-                                  renderer, &mImage, flags, flags, mMemoryAllocationType,
-                                  &mVmaAllocation, &flags, &mMemoryTypeIndex, &mAllocationSize));
+                                  renderer, &mImage, &mVkImageCreateInfo, flags, flags,
+                                  mMemoryAllocationType, &mVmaAllocation, &flags, &mMemoryTypeIndex,
+                                  &mAllocationSize));
     }
     else
     {

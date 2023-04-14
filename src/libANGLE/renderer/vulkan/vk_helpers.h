@@ -2736,6 +2736,10 @@ class ImageHelper final : public Resource, public angle::Subject
     MemoryAllocationType mMemoryAllocationType;
     // Memory type index used for the allocation. It can be used to determine the heap index.
     uint32_t mMemoryTypeIndex;
+
+    // Maximum size to use VMA image suballocation. Any allocation greater than or equal to this
+    // value will use Vulkan to directly allocate a dedicated VkDeviceMemory.
+    static constexpr size_t kMaxImageSizeForSuballocation = 4 * 1024 * 1024;
 };
 
 ANGLE_INLINE bool RenderPassCommandBufferHelper::usesImage(const ImageHelper &image) const
