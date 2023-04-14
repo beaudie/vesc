@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f59a4319_019ec2e6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-04-14T07:28:52Z",
+      "side": 1,
+      "message": "What if WebGL does the same? Is it somehow disallowed in WebGL, or does some layer prevent the undefined pixel data being read from WebGL?\n\nIf not, I believe the idea of the check is that we prevent a case which could expose undefined data to webgl. In this case, the further idea is that the restriction can only be lifted once the code guarantees that in WebGL mode, the undefined data is defined, e.g. zeros for example.",
+      "revId": "d726f55e78e0e3a404e11f57751c1d5443561d37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
