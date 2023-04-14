@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "473a626e_d042c8bb",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-04-14T18:28:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "44905d87_5da5274f",
+      "revId": "2ab34d752ea345c19cadde8976539fdcc684bcb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bba589f6_6371537d",
@@ -43,6 +61,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8b81670d_94c45f24",
+        "filename": "src/compiler/translator/OutputSPIRV.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 6044,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-04-14T18:28:21Z",
+      "side": 1,
+      "message": "Can I ask why it\u0027s a 16-bit value in a 32-bit container?\n\nIn Spirv Spec, it says this for `RelaxedPrecision`:\n```\nThe RelaxedPrecision Decoration allows 32-bit integer and 32-bit floating-point operations to execute with a relaxed precision of somewhere between 16 and 32 bits.\n```\n\nAnd for `OpQuantizeToF16`:\n```\nFor debugging portability of floating-point operations, OpQuantizeToF16 may be used to explicitly reduce the precision of a relaxed-precision result to 16-bit precision. (Integer-result precision can be reduced, for example, using left- and right-shift opcodes.)\n```\n\nIt reads to me that adding `OpQuantizeToF16` is to make sure the result is fixed at 16-bit, and adding back `RelaxedPrecision` decoration will defeat the purpose of `OpQuantizeToF16`. Am I reading it wrongly here?",
+      "parentUuid": "bba589f6_6371537d",
+      "range": {
+        "startLine": 6044,
+        "startChar": 71,
+        "endLine": 6044,
+        "endChar": 73
+      },
+      "revId": "2ab34d752ea345c19cadde8976539fdcc684bcb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6c27cc85_de0fb59b",
         "filename": "src/compiler/translator/OutputSPIRV.cpp",
         "patchSetId": 14
@@ -54,6 +96,24 @@
       "writtenOn": "2023-04-14T01:32:37Z",
       "side": 1,
       "message": "nit: please move this OpStore out of the `if`. In the `true` block, do OpQuantizeToF16 and overwrite `initializerId` so the `WriteStore` is identical in both paths.",
+      "revId": "2ab34d752ea345c19cadde8976539fdcc684bcb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb712d7f_b85cf952",
+        "filename": "src/compiler/translator/OutputSPIRV.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 6053,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-04-14T18:28:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c27cc85_de0fb59b",
       "revId": "2ab34d752ea345c19cadde8976539fdcc684bcb9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -165,6 +225,30 @@
       "writtenOn": "2023-04-14T02:01:54Z",
       "side": 1,
       "message": "Recommend something other than black, it is too easy to accidentally get nothing.",
+      "range": {
+        "startLine": 127,
+        "startChar": 53,
+        "endLine": 127,
+        "endChar": 58
+      },
+      "revId": "2ab34d752ea345c19cadde8976539fdcc684bcb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cae3fb62_e4c88b08",
+        "filename": "src/tests/gl_tests/ShaderAlgorithmTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-04-14T18:28:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "842f2291_de032aee",
       "range": {
         "startLine": 127,
         "startChar": 53,
