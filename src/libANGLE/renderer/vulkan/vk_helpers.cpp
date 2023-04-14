@@ -5241,14 +5241,13 @@ void BufferHelper::fillWithColor(const angle::Color<uint8_t> &color,
     }
 }
 
-// Used for ImageHelper non-zero memory allocation when useVmaForImageSuballocation is disabled.
+// Used for ImageHelper non-zero memory allocation when VMA image suballocation is not used.
 angle::Result InitMappableDeviceMemory(Context *context,
                                        DeviceMemory *deviceMemory,
                                        VkDeviceSize size,
                                        int value,
                                        VkMemoryPropertyFlags memoryPropertyFlags)
 {
-    ASSERT(!context->getFeatures().useVmaForImageSuballocation.enabled);
     VkDevice device = context->getDevice();
 
     uint8_t *mapPointer;
@@ -5775,7 +5774,7 @@ angle::Result ImageHelper::initializeNonZeroMemory(Context *context,
         // Wipe memory to an invalid value when the 'allocateNonZeroMemory' feature is enabled. The
         // invalid values ensures our testing doesn't assume zero-initialized memory.
         constexpr int kNonZeroInitValue = 0x3F;
-        if (renderer->getFeatures().useVmaForImageSuballocation.enabled)
+        if (renderer->getFeatures().useVmaForImageSuballocation.enabled && mVmaAllocation.valid())
         {
             ANGLE_VK_TRY(context,
                          renderer->getImageMemorySuballocator().mapMemoryAndInitWithNonZeroValue(
@@ -5783,6 +5782,7 @@ angle::Result ImageHelper::initializeNonZeroMemory(Context *context,
         }
         else
         {
+            ASSERT(mDeviceMemory.valid());
             ANGLE_TRY(vk::InitMappableDeviceMemory(context, &mDeviceMemory, size, kNonZeroInitValue,
                                                    flags));
         }
@@ -5918,7 +5918,11 @@ angle::Result ImageHelper::initMemory(Context *context,
 
     // To allocate memory here, if possible, we use the image memory suballocator which uses VMA.
     RendererVk *renderer = context->getRenderer();
-    if (renderer->getFeatures().useVmaForImageSuballocation.enabled)
+    VkMemoryRequirements memoryRequirements;
+    mImage.getMemoryRequirements(renderer->getDevice(), &memoryRequirements);
+
+    if (renderer->getFeatures().useVmaForImageSuballocation.enabled &&
+        memoryRequirements.size < kMaxImageSizeForSuballocation)
     {
         ANGLE_VK_TRY(context, renderer->getImageMemorySuballocator().allocateAndBindMemory(
                                   renderer, &mImage, flags, flags, mMemoryAllocationType,
