@@ -106,6 +106,7 @@ const ProcEntry g_procTable[] = {
     {"eglLockSurfaceKHR", P(EGL_LockSurfaceKHR)},
     {"eglMakeCurrent", P(EGL_MakeCurrent)},
     {"eglPostSubBufferNV", P(EGL_PostSubBufferNV)},
+    {"eglPrepareCreateWindowSurfaceANGLE", P(EGL_PrepareCreateWindowSurfaceANGLE)},
     {"eglPrepareSwapBuffersANGLE", P(EGL_PrepareSwapBuffersANGLE)},
     {"eglPresentationTimeANDROID", P(EGL_PresentationTimeANDROID)},
     {"eglProgramCacheGetAttribANGLE", P(EGL_ProgramCacheGetAttribANGLE)},

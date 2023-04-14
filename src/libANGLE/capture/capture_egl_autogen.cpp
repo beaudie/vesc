@@ -1174,6 +1174,23 @@ CallCapture CaptureForceGPUSwitchANGLE(egl::Thread *thread,
     return CallCapture(angle::EntryPoint::EGLForceGPUSwitchANGLE, std::move(paramBuffer));
 }
 
+CallCapture CapturePrepareCreateWindowSurfaceANGLE(egl::Thread *thread,
+                                                   bool isCallValid,
+                                                   egl::Display *dpyPacked,
+                                                   EGLBoolean returnValue)
+{
+    ParamBuffer paramBuffer;
+
+    paramBuffer.addValueParam("dpyPacked", ParamType::Tegl_DisplayPointer, dpyPacked);
+
+    ParamCapture returnValueCapture("returnValue", ParamType::TEGLBoolean);
+    InitParamValue(ParamType::TEGLBoolean, returnValue, &returnValueCapture.value);
+    paramBuffer.addReturnValue(std::move(returnValueCapture));
+
+    return CallCapture(angle::EntryPoint::EGLPrepareCreateWindowSurfaceANGLE,
+                       std::move(paramBuffer));
+}
+
 CallCapture CapturePrepareSwapBuffersANGLE(egl::Thread *thread,
                                            bool isCallValid,
                                            egl::Display *dpyPacked,

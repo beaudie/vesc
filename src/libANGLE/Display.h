@@ -170,6 +170,7 @@ class Display final : public LabeledObject,
     std::vector<const Config *> getConfigs(const AttributeMap &attribs) const;
     std::vector<const Config *> chooseConfig(const AttributeMap &attribs) const;
 
+    Error prepareCreateWindowSurfaceUNLOCKED();
     Error createWindowSurface(const Config *configuration,
                               EGLNativeWindowType window,
                               const AttributeMap &attribs,

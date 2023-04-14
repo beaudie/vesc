@@ -163,7 +163,10 @@ EGLSurface EGLAPIENTRY EGL_CreateWindowSurface(EGLDisplay dpy,
                                                EGLNativeWindowType win,
                                                const EGLint *attrib_list)
 {
-
+    if (!PrepareCreateWindowSurfaceANGLE(dpy))
+    {
+        return EGL_NO_SURFACE;
+    }
     ANGLE_SCOPED_GLOBAL_LOCK();
     EGL_EVENT(CreateWindowSurface,
               "dpy = 0x%016" PRIxPTR ", config = 0x%016" PRIxPTR ", win = 0x%016" PRIxPTR
@@ -814,7 +817,10 @@ EGLSurface EGLAPIENTRY EGL_CreatePlatformWindowSurface(EGLDisplay dpy,
                                                        void *native_window,
                                                        const EGLAttrib *attrib_list)
 {
-
+    if (!PrepareCreateWindowSurfaceANGLE(dpy))
+    {
+        return EGL_NO_SURFACE;
+    }
     ANGLE_SCOPED_GLOBAL_LOCK();
     EGL_EVENT(CreatePlatformWindowSurface,
               "dpy = 0x%016" PRIxPTR ", config = 0x%016" PRIxPTR ", native_window = 0x%016" PRIxPTR

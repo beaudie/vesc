@@ -415,6 +415,13 @@ CallCapture ParseCallCapture(const Token &nameToken,
             paramTokens, strings);
         return CallCapture(EntryPoint::EGLPostSubBufferNV, std::move(params));
     }
+    if (strcmp(nameToken, "eglPrepareCreateWindowSurfaceANGLE") == 0)
+    {
+        ParamBuffer params =
+            ParseParameters<std::remove_pointer<PFNEGLPREPARECREATEWINDOWSURFACEANGLEPROC>::type>(
+                paramTokens, strings);
+        return CallCapture(EntryPoint::EGLPrepareCreateWindowSurfaceANGLE, std::move(params));
+    }
     if (strcmp(nameToken, "eglPrepareSwapBuffersANGLE") == 0)
     {
         ParamBuffer params =

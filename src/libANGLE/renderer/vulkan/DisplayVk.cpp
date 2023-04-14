@@ -201,6 +201,11 @@ DeviceImpl *DisplayVk::createDevice()
     return new DeviceVk();
 }
 
+void DisplayVk::prepareCreateWindowSurfaceUNLOCKED()
+{
+    mRenderer->waitSurfaceDestructionUNLOCKED();
+}
+
 egl::Error DisplayVk::waitClient(const gl::Context *context)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "DisplayVk::waitClient");

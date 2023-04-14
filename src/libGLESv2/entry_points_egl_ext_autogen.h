@@ -85,6 +85,9 @@ ANGLE_EXPORT void EGLAPIENTRY EGL_ForceGPUSwitchANGLE(EGLDisplay dpy,
                                                       EGLint gpuIDHigh,
                                                       EGLint gpuIDLow);
 
+// EGL_ANGLE_prepare_create_window_surface
+ANGLE_EXPORT EGLBoolean EGLAPIENTRY EGL_PrepareCreateWindowSurfaceANGLE(EGLDisplay dpy);
+
 // EGL_ANGLE_prepare_swap_buffers
 ANGLE_EXPORT EGLBoolean EGLAPIENTRY EGL_PrepareSwapBuffersANGLE(EGLDisplay dpy, EGLSurface surface);
 

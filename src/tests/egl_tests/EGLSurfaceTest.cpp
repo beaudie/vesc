@@ -2650,37 +2650,45 @@ TEST_P(EGLSurfaceTest, DISABLED_RandomClearTearing)
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(EGLSingleBufferTest);
 ANGLE_INSTANTIATE_TEST(EGLSingleBufferTest,
                        WithNoFixture(ES2_VULKAN()),
-                       WithNoFixture(ES3_VULKAN()));
+                       WithNoFixture(ES3_VULKAN()),
+                       WithNoFixture(ES3_VULKAN()).enable(Feature::AsyncSurfaceDestruction));
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(EGLAndroidAutoRefreshTest);
 ANGLE_INSTANTIATE_TEST(EGLAndroidAutoRefreshTest, WithNoFixture(ES3_VULKAN()));
 
-ANGLE_INSTANTIATE_TEST(EGLSurfaceTest,
-                       WithNoFixture(ES2_D3D9()),
-                       WithNoFixture(ES2_D3D11()),
-                       WithNoFixture(ES3_D3D11()),
-                       WithNoFixture(ES2_OPENGL()),
-                       WithNoFixture(ES3_OPENGL()),
-                       WithNoFixture(ES2_OPENGLES()),
-                       WithNoFixture(ES3_OPENGLES()),
-                       WithNoFixture(ES2_VULKAN()),
-                       WithNoFixture(ES3_VULKAN()),
-                       WithNoFixture(ES2_VULKAN_SWIFTSHADER()),
-                       WithNoFixture(ES3_VULKAN_SWIFTSHADER()));
+ANGLE_INSTANTIATE_TEST(
+    EGLSurfaceTest,
+    WithNoFixture(ES2_D3D9()),
+    WithNoFixture(ES2_D3D11()),
+    WithNoFixture(ES3_D3D11()),
+    WithNoFixture(ES2_OPENGL()),
+    WithNoFixture(ES3_OPENGL()),
+    WithNoFixture(ES2_OPENGLES()),
+    WithNoFixture(ES3_OPENGLES()),
+    WithNoFixture(ES2_VULKAN()),
+    WithNoFixture(ES3_VULKAN()),
+    WithNoFixture(ES2_VULKAN_SWIFTSHADER()),
+    WithNoFixture(ES3_VULKAN_SWIFTSHADER()),
+    WithNoFixture(ES3_VULKAN()).enable(Feature::AsyncSurfaceDestruction),
+    WithNoFixture(ES3_VULKAN_SWIFTSHADER()).enable(Feature::AsyncSurfaceDestruction));
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(EGLFloatSurfaceTest);
 ANGLE_INSTANTIATE_TEST(EGLFloatSurfaceTest,
                        WithNoFixture(ES2_OPENGL()),
                        WithNoFixture(ES3_OPENGL()),
                        WithNoFixture(ES2_VULKAN()),
-                       WithNoFixture(ES3_VULKAN()));
+                       WithNoFixture(ES3_VULKAN()),
+                       WithNoFixture(ES3_VULKAN()).enable(Feature::AsyncSurfaceDestruction));
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(EGLSurfaceTest3);
-ANGLE_INSTANTIATE_TEST(EGLSurfaceTest3,
-                       WithNoFixture(ES3_D3D11()),
-                       WithNoFixture(ES3_OPENGLES()),
-                       WithNoFixture(ES3_VULKAN()),
-                       WithNoFixture(ES3_VULKAN_SWIFTSHADER()));
+ANGLE_INSTANTIATE_TEST(
+    EGLSurfaceTest3,
+    WithNoFixture(ES3_D3D11()),
+    WithNoFixture(ES3_OPENGLES()),
+    WithNoFixture(ES3_VULKAN()),
+    WithNoFixture(ES3_VULKAN_SWIFTSHADER()),
+    WithNoFixture(ES3_VULKAN()).enable(Feature::AsyncSurfaceDestruction),
+    WithNoFixture(ES3_VULKAN_SWIFTSHADER()).enable(Feature::AsyncSurfaceDestruction));
 
 #if defined(ANGLE_ENABLE_D3D11)
 ANGLE_INSTANTIATE_TEST(EGLSurfaceTestD3D11, WithNoFixture(ES2_D3D11()), WithNoFixture(ES3_D3D11()));

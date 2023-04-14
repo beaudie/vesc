@@ -893,7 +893,6 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
     DisplayVk *displayVk = vk::GetImpl(display);
     RendererVk *renderer = displayVk->getRenderer();
     VkDevice device      = renderer->getDevice();
-    VkInstance instance  = renderer->getInstance();
 
     // flush the pipe.
     (void)renderer->finish(displayVk);
@@ -935,7 +934,7 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
 
     if (mSurface)
     {
-        vkDestroySurfaceKHR(instance, mSurface, nullptr);
+        renderer->destroySurface(display, mSurface);
         mSurface = VK_NULL_HANDLE;
     }
 
@@ -2170,7 +2169,7 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
 
     RendererVk *renderer = contextVk->getRenderer();
     DisplayVk *displayVk = vk::GetImpl(context->getDisplay());
-    ANGLE_TRY(renderer->syncPipelineCacheVk(displayVk, context));
+    ANGLE_TRY(renderer->onSwap(displayVk, context));
 
     return angle::Result::Continue;
 }

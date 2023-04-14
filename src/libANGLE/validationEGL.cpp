@@ -6216,6 +6216,11 @@ bool ValidateSwapBuffersWithFrameTokenANGLE(const ValidationContext *val,
     return true;
 }
 
+bool ValidatePrepareCreateWindowSurfaceANGLE(const ValidationContext *val, const Display *display)
+{
+    return ValidateDisplay(val, display);
+}
+
 bool ValidatePrepareSwapBuffersANGLE(const ValidationContext *val,
                                      const Display *display,
                                      SurfaceID surfaceID)

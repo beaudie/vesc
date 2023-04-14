@@ -185,6 +185,10 @@ class DisplayVk : public DisplayImpl, public vk::Context
     ~DisplayVk() override;
 
     egl::Error initialize(egl::Display *display) override;
+
+    // Note: From the derived classes, call DisplayVk::terminate() first before disconnecting from
+    // the window system, as this function may be cleaning up outstanding surface-related
+    // operations.
     void terminate() override;
 
     egl::Error makeCurrent(egl::Display *display,
@@ -200,6 +204,8 @@ class DisplayVk : public DisplayImpl, public vk::Context
     std::string getVersionString(bool includeFullVersion) override;
 
     DeviceImpl *createDevice() override;
+
+    void prepareCreateWindowSurfaceUNLOCKED() override;
 
     egl::Error waitClient(const gl::Context *context) override;
     egl::Error waitNative(const gl::Context *context, EGLint engine) override;

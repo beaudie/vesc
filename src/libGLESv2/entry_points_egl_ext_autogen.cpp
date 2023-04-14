@@ -439,6 +439,12 @@ void EGLAPIENTRY EGL_ForceGPUSwitchANGLE(EGLDisplay dpy, EGLint gpuIDHigh, EGLin
     ANGLE_CAPTURE_EGL(ForceGPUSwitchANGLE, true, thread, dpyPacked, gpuIDHigh, gpuIDLow);
 }
 
+// EGL_ANGLE_prepare_create_window_surface
+EGLBoolean EGLAPIENTRY EGL_PrepareCreateWindowSurfaceANGLE(EGLDisplay dpy)
+{
+    return PrepareCreateWindowSurfaceANGLE(dpy);
+}
+
 // EGL_ANGLE_prepare_swap_buffers
 EGLBoolean EGLAPIENTRY EGL_PrepareSwapBuffersANGLE(EGLDisplay dpy, EGLSurface surface)
 {
@@ -903,7 +909,10 @@ EGLSurface EGLAPIENTRY EGL_CreatePlatformWindowSurfaceEXT(EGLDisplay dpy,
                                                           void *native_window,
                                                           const EGLint *attrib_list)
 {
-
+    if (!PrepareCreateWindowSurfaceANGLE(dpy))
+    {
+        return EGL_NO_SURFACE;
+    }
     ANGLE_SCOPED_GLOBAL_LOCK();
     EGL_EVENT(CreatePlatformWindowSurfaceEXT,
               "dpy = 0x%016" PRIxPTR ", config = 0x%016" PRIxPTR ", native_window = 0x%016" PRIxPTR

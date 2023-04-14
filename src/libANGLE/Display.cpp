@@ -1308,6 +1308,13 @@ std::vector<const Config *> Display::chooseConfig(const egl::AttributeMap &attri
     return mConfigSet.filter(attribsWithDefaults);
 }
 
+Error Display::prepareCreateWindowSurfaceUNLOCKED()
+{
+    // Note: this function is called without holding the EGL lock
+    mImplementation->prepareCreateWindowSurfaceUNLOCKED();
+    return NoError();
+}
+
 Error Display::createWindowSurface(const Config *configuration,
                                    EGLNativeWindowType window,
                                    const AttributeMap &attribs,

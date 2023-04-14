@@ -350,6 +350,14 @@ EGLAPI EGLBoolean EGLAPIENTRY eglSwapBuffersWithFrameTokenANGLE(EGLDisplay dpy, 
 #endif
 #endif /* EGL_ANGLE_swap_with_frame_token */
 
+#ifndef EGL_ANGLE_prepare_create_window_surface
+#define EGL_ANGLE_prepare_create_window_surface 1
+typedef EGLBoolean (EGLAPIENTRYP PFNEGLPREPARECREATEWINDOWSURFACEANGLEPROC)(EGLDisplay dpy);
+#ifdef EGL_EGLEXT_PROTOTYPES
+EGLAPI EGLBoolean EGLAPIENTRY eglPrepareCreateWindowSurfaceANGLE(EGLDisplay dpy);
+#endif
+#endif /* EGL_ANGLE_prepare_create_window_surface */
+
 #ifndef EGL_ANGLE_prepare_swap_buffers
 #define EGL_ANGLE_prepare_swap_buffers 1
 typedef EGLBoolean (EGLAPIENTRYP PFNEGLPREPARESWAPBUFFERSANGLEPROC)(EGLDisplay dpy, EGLSurface surface);

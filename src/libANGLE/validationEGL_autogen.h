@@ -260,6 +260,10 @@ bool ValidateForceGPUSwitchANGLE(const ValidationContext *val,
                                  EGLint gpuIDHigh,
                                  EGLint gpuIDLow);
 
+// EGL_ANGLE_prepare_create_window_surface
+bool ValidatePrepareCreateWindowSurfaceANGLE(const ValidationContext *val,
+                                             const egl::Display *dpyPacked);
+
 // EGL_ANGLE_prepare_swap_buffers
 bool ValidatePrepareSwapBuffersANGLE(const ValidationContext *val,
                                      const egl::Display *dpyPacked,

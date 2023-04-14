@@ -28,6 +28,8 @@ DisplayVkWin32::~DisplayVkWin32() {}
 
 void DisplayVkWin32::terminate()
 {
+    DisplayVk::terminate();
+
     if (mMockWindow)
     {
         DestroyWindow(mMockWindow);
@@ -42,8 +44,6 @@ void DisplayVkWin32::terminate()
         }
         mWindowClass = NULL;
     }
-
-    DisplayVk::terminate();
 }
 
 bool DisplayVkWin32::isValidNativeWindow(EGLNativeWindowType window) const

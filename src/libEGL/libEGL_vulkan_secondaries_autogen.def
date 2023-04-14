@@ -100,6 +100,9 @@ EXPORTS
     eglReacquireHighPowerGPUANGLE
     eglReleaseHighPowerGPUANGLE
 
+    ; EGL_ANGLE_prepare_create_window_surface
+    eglPrepareCreateWindowSurfaceANGLE
+
     ; EGL_ANGLE_prepare_swap_buffers
     eglPrepareSwapBuffersANGLE
 

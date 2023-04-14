@@ -67,13 +67,14 @@ egl::Error DisplayVkXcb::initialize(egl::Display *display)
 
 void DisplayVkXcb::terminate()
 {
+    DisplayVk::terminate();
+
     if (mHasXDisplay)
     {
         ASSERT(mXcbConnection != nullptr);
         xcb_disconnect(mXcbConnection);
         mXcbConnection = nullptr;
     }
-    DisplayVk::terminate();
 }
 
 bool DisplayVkXcb::isValidNativeWindow(EGLNativeWindowType window) const

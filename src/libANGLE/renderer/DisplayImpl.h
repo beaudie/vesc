@@ -110,6 +110,9 @@ class DisplayImpl : public EGLImplFactory, public angle::Subject
 
     virtual DeviceImpl *createDevice();
 
+    // Called without holding the EGL lock before creating a window surface.
+    virtual void prepareCreateWindowSurfaceUNLOCKED() {}
+
     virtual egl::Error waitClient(const gl::Context *context)                = 0;
     virtual egl::Error waitNative(const gl::Context *context, EGLint engine) = 0;
     virtual gl::Version getMaxSupportedESVersion() const                     = 0;
