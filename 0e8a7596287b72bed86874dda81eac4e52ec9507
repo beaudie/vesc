@@ -101,6 +101,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6946b7e1_29657b33",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 15
+      },
+      "lineNbr": 604,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-04-14T16:06:51Z",
+      "side": 1,
+      "message": "I addressed this but forgot to mark the comment done.",
+      "parentUuid": "0db1b851_c9de0918",
+      "revId": "0e8a7596287b72bed86874dda81eac4e52ec9507",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "96237fc5_09fdd0fb",
