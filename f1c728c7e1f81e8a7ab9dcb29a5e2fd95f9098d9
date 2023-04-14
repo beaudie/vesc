@@ -51,6 +51,24 @@
       "parentUuid": "c9545a3a_de1236b5",
       "revId": "f1c728c7e1f81e8a7ab9dcb29a5e2fd95f9098d9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea1d125a_e10ac0a9",
+        "filename": "src/libANGLE/renderer/metal/SurfaceMtl.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-14T18:30:46Z",
+      "side": 1,
+      "message": "FWIW this looks correctly ordered to me.",
+      "parentUuid": "3a6f89d0_de67d0bc",
+      "revId": "f1c728c7e1f81e8a7ab9dcb29a5e2fd95f9098d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
