@@ -235,9 +235,6 @@ class RendererVk : angle::NonCopyable
 
     const vk::Format &getFormat(angle::FormatID formatID) const { return mFormatTable[formatID]; }
 
-    angle::Result getPipelineCacheSize(DisplayVk *displayVk, size_t *pipelineCacheSizeOut);
-    angle::Result syncPipelineCacheVk(DisplayVk *displayVk, const gl::Context *context);
-
     const angle::FeaturesVk &getFeatures() const { return mFeatures; }
     uint32_t getMaxVertexAttribDivisor() const { return mMaxVertexAttribDivisor; }
     VkDeviceSize getMaxVertexAttribStride() const { return mMaxVertexAttribStride; }
@@ -680,6 +677,12 @@ class RendererVk : angle::NonCopyable
 
     void requestAsyncCommandsAndGarbageCleanup(vk::Context *context);
 
+    void destroySurface(const egl::Display *display, VkSurfaceKHR surface);
+
+    // Some jobs are done every now and done, and eglSwapBuffers() is used as a trigger for these
+    // jobs.
+    angle::Result onSwap(DisplayVk *displayVk, const gl::Context *context);
+
     // Static function to get Vulkan object type name.
     static const char *GetVulkanObjectTypeName(VkObjectType type);
 
@@ -728,6 +731,8 @@ class RendererVk : angle::NonCopyable
     angle::Result initPipelineCache(DisplayVk *display,
                                     vk::PipelineCache *pipelineCache,
                                     bool *success);
+    angle::Result getPipelineCacheSize(DisplayVk *displayVk, size_t *pipelineCacheSizeOut);
+    angle::Result syncPipelineCacheVk(DisplayVk *displayVk, const gl::Context *context);
 
     template <VkFormatFeatureFlags VkFormatProperties::*features>
     VkFormatFeatureFlags getFormatFeatureBits(angle::FormatID formatID,
@@ -982,6 +987,9 @@ class RendererVk : angle::NonCopyable
 
     // Use thread pool to compress cache data.
     std::shared_ptr<rx::WaitableCompressEvent> mCompressEvent;
+
+    // Surface destruction events in progress.
+    std::queue<std::shared_ptr<angle::WaitableEvent>> mSurfaceDestructionEvents;
 
     vk::ExtensionNameList mEnabledInstanceExtensions;
     vk::ExtensionNameList mEnabledDeviceExtensions;
