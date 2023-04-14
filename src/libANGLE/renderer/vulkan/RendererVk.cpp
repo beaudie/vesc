@@ -5548,9 +5548,17 @@ VkResult ImageMemorySuballocator::allocateAndBindMemory(RendererVk *renderer,
     ASSERT(allocationOut && !allocationOut->valid());
     const Allocator &allocator = renderer->getAllocator();
 
+    // Maximum size to use VMA image suballocation. Any allocation greater than or equal to this
+    // value will use a dedicated VkDeviceMemory.
+    static constexpr size_t kMaxImageSizeForSuballocation = 4 * 1024 * 1024;
+    VkMemoryRequirements memoryRequirements;
+    image->getMemoryRequirements(renderer->getDevice(), &memoryRequirements);
+    bool allocateDedicatedMemory = memoryRequirements.size >= kMaxImageSizeForSuballocation;
+
+    // Allocate and bind memory for the image.
     VkResult result = vma::AllocateAndBindMemoryForImage(
         allocator.getHandle(), &image->mHandle, requiredFlags, preferredFlags,
-        &allocationOut->mHandle, memoryTypeIndexOut, sizeOut);
+        allocateDedicatedMemory, &allocationOut->mHandle, memoryTypeIndexOut, sizeOut);
     if (result != VK_SUCCESS)
     {
         return result;
