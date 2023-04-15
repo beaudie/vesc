@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6353e92b_3a9fd11f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-15T00:04:42Z",
+      "side": 1,
+      "message": "lgtm+2",
+      "revId": "b96e1476a3d05820c8d33741490c0287ef47b23f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b62865f_1d5b5495",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-15T00:04:42Z",
+      "side": 1,
+      "message": "This emulation is fantastic - have to admit I mostly don\u0027t understand it. One question below.",
+      "revId": "b96e1476a3d05820c8d33741490c0287ef47b23f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9b97a76_41ced930",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-15T00:04:42Z",
+      "side": 1,
+      "message": "Since MSAA 2/4/8 are handled, do higher values (16x) need to be?",
+      "revId": "b96e1476a3d05820c8d33741490c0287ef47b23f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63752b26_12bda4c9",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1376,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-15T00:04:42Z",
+      "side": 1,
+      "message": "Is it necessary to write this all the time? I see that AddSampleMaskDeclaration does some work even if usesSampleMask is false.",
+      "revId": "b96e1476a3d05820c8d33741490c0287ef47b23f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
