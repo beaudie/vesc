@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fb63136_a0ad74f3",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-04-15T01:30:32Z",
+      "side": 1,
+      "message": "Metal is limited to 8 samples:\nhttps://developer.apple.com/documentation/metal/mtldevice/1433355-supportstexturesamplecount",
+      "parentUuid": "a9b97a76_41ced930",
+      "revId": "b96e1476a3d05820c8d33741490c0287ef47b23f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "63752b26_12bda4c9",
@@ -65,6 +83,24 @@
       "writtenOn": "2023-04-15T00:04:42Z",
       "side": 1,
       "message": "Is it necessary to write this all the time? I see that AddSampleMaskDeclaration does some work even if usesSampleMask is false.",
+      "revId": "b96e1476a3d05820c8d33741490c0287ef47b23f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d0d0654_8ffb0089",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1376,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-04-15T01:30:32Z",
+      "side": 1,
+      "message": "A sample mask fragment output is always added to MSL unless PLS uniforms are present (this line).\n\nIf the current rendering is single-sampled, all related code would be dropped during MSL compilation because of `ANGLESampleMaskEnabled` function constant.\n\nIf the current rendering is multisampled, sample mask fragment output is needed for A2C (optionally) and `GL_SAMPLE_COVERAGE` emulation regardless of `gl_SampleMask` usage.",
+      "parentUuid": "63752b26_12bda4c9",
       "revId": "b96e1476a3d05820c8d33741490c0287ef47b23f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
