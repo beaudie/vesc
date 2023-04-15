@@ -88,6 +88,23 @@
       "parentUuid": "8e6267a7_2b2aaa04",
       "revId": "d726f55e78e0e3a404e11f57751c1d5443561d37",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6664b8d_88325f87",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-15T01:13:50Z",
+      "side": 1,
+      "message": "lgtm given that this doesn\u0027t affect WebGL\u0027s behavior.",
+      "revId": "d726f55e78e0e3a404e11f57751c1d5443561d37",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
