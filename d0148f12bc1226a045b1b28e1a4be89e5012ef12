@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2aba475b_06cb4855",
+        "filename": "gni/angle.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-17T19:11:24Z",
+      "side": 0,
+      "message": "These particular shader transforms are only used on the GLSL (ES) backend on Apple platforms? I guess things wouldn\u0027t compile if they were used by the Metal backend. Might be worth a comment either here or the declaration of angle_translator_apple_sources in compiler.gni about where they\u0027re used.",
+      "revId": "d0148f12bc1226a045b1b28e1a4be89e5012ef12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
