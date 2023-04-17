@@ -1946,6 +1946,7 @@ class ImageHelper final : public Resource, public angle::Subject
     void finalizeImageLayoutInShareContexts(RendererVk *renderer,
                                             ContextVk *contextVk,
                                             UniqueSerial imageSiblingSerial);
+    void flushUnsubmittedUseInShareContexts(ContextVk *contextVk);
     void releaseStagedUpdates(RendererVk *renderer);
 
     bool valid() const { return mImage.valid(); }

@@ -5724,12 +5724,28 @@ void ImageHelper::finalizeImageLayoutInShareContexts(RendererVk *renderer,
                                                      ContextVk *contextVk,
                                                      UniqueSerial imageSiblingSerial)
 {
-    if (contextVk && mImageSerial.valid())
+    if (contextVk)
     {
         const ContextVkSet &shareContextSet = contextVk->getShareGroup()->getContexts();
         for (ContextVk *ctx : shareContextSet)
         {
             ctx->finalizeImageLayout(this, imageSiblingSerial);
+        }
+    }
+}
+
+void ImageHelper::flushUnsubmittedUseInShareContexts(ContextVk *contextVk)
+{
+    if (contextVk)
+    {
+        const ContextVkSet &shareContextSet = contextVk->getShareGroup()->getContexts();
+        for (ContextVk *ctx : shareContextSet)
+        {
+            if (ctx->hasUnsubmittedUse(getResourceUse()))
+            {
+                (void)ctx->flushImpl(nullptr,
+                                     RenderPassClosureReason::ImageUseThenReleaseToExternal);
+            }
         }
     }
 }
