@@ -349,6 +349,8 @@ class Display final : public LabeledObject,
     egl::Image *getImage(egl::ImageID imageID);
     egl::Sync *getSync(egl::SyncID syncID);
 
+    angle::UnlockedTailCall *getCurrentThreadUnlockedTailCall() const;
+
   private:
     Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDevice);
 
