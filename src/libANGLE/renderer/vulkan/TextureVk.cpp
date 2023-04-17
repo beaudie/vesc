@@ -3274,6 +3274,12 @@ void TextureVk::releaseImage(ContextVk *contextVk)
         }
         else
         {
+            if (contextVk->hasUnsubmittedUse(mImage->getResourceUse()))
+            {
+                (void)contextVk->flushImpl(nullptr,
+                                           RenderPassClosureReason::ImageUseThenReleaseToExternal);
+            }
+
             mImage->finalizeImageLayoutInShareContexts(renderer, contextVk, mImageSiblingSerial);
             mImageObserverBinding.bind(nullptr);
             mImage = nullptr;
