@@ -1183,6 +1183,16 @@ void main()
         return IsEGLDisplayExtensionEnabled(getEGLWindow()->getDisplay(), kCubemapExt);
     }
 
+    angle::VulkanPerfCounters getPerfCounters()
+    {
+        if (mCounterNameToIndexMap.empty())
+        {
+            mCounterNameToIndexMap = BuildCounterNameToIndexMap();
+        }
+
+        return GetPerfCounters(mCounterNameToIndexMap);
+    }
+
     EGLint *get3DAttributes(const bool withColorspace = false, EGLint layer = 0)
     {
         if (!withColorspace)
@@ -1348,6 +1358,8 @@ void main()
 
     GLuint mRenderYUVProgram        = 0;
     GLint mRenderYUVUniformLocation = -1;
+
+    CounterNameToIndexMap mCounterNameToIndexMap;
 };
 
 class ImageTestES3 : public ImageTest
@@ -3338,6 +3350,49 @@ TEST_P(ImageTestES3, ClearYUVAHB)
 }
 
 #if defined(ANGLE_AHARDWARE_BUFFER_SUPPORT)
+
+// Test repeatedly importing and releasing AHBs into textures to replicate behavior where
+// SurfaceFlinger optimistically imports AHBs but never actually ends up using them. Regression
+// test to check that AHB releases are fully flushed to avoid running out of memory.
+TEST_P(ImageTestES3, AHBImportReleaseStress)
+{
+    ANGLE_SKIP_TEST_IF(!hasOESExt() || !hasBaseExt() || !has2DTextureExt());
+    ANGLE_SKIP_TEST_IF(!hasAndroidImageNativeBufferExt() || !hasAndroidHardwareBufferSupport());
+
+    const GLubyte kBlack[] = {0, 0, 0, 0};
+
+    glFinish();
+
+    const uint64_t initialPendingSubmissionGarbageObjects =
+        getPerfCounters().pendingSubmissionGarbageObjects;
+
+    for (int i = 0; i < 20; i++)
+    {
+        AHardwareBuffer *ahb;
+        EGLImageKHR ahbImage;
+        createEGLImageAndroidHardwareBufferSource(1, 1, 1, AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM,
+                                                  kDefaultAHBUsage, kDefaultAttribs, {{kBlack, 4}},
+                                                  &ahb, &ahbImage);
+
+        {
+            GLTexture ahbTexture;
+            glBindTexture(GL_TEXTURE_2D, ahbTexture);
+            glEGLImageTargetTexture2DOES(GL_TEXTURE_2D, ahbImage);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            ASSERT_GL_NO_ERROR();
+
+            // Intentionally not doing anything which may explicitly flush operations on the AHB.
+        }
+
+        eglDestroyImageKHR(getEGLWindow()->getDisplay(), ahbImage);
+        destroyAndroidHardwareBuffer(ahb);
+    }
+
+    EXPECT_LE(getPerfCounters().pendingSubmissionGarbageObjects,
+              initialPendingSubmissionGarbageObjects + 10);
+}
+
 // Test glClear on FBO with AHB attachment is applied to the AHB image before we read back
 TEST_P(ImageTestES3, AHBClearAppliedBeforeReadBack)
 {

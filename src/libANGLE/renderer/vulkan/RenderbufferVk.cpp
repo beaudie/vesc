@@ -331,6 +331,7 @@ void RenderbufferVk::releaseImage(ContextVk *contextVk)
         if (mImage)
         {
             mImage->finalizeImageLayoutInShareContexts(renderer, contextVk, mImageSiblingSerial);
+            mImage->flushUnsubmittedUseInShareContexts(contextVk);
         }
         mImage = nullptr;
         mImageObserverBinding.bind(nullptr);
