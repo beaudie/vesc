@@ -3338,6 +3338,39 @@ TEST_P(ImageTestES3, ClearYUVAHB)
 }
 
 #if defined(ANGLE_AHARDWARE_BUFFER_SUPPORT)
+
+// Test repeatedly importing and releasing AHBs into textures to replicate behavior where
+// SurfaceFlinger optimistically imports AHBs but never actually ends up using them. Regression
+// test to check that AHB releases are fully flushed to avoid running out of memory.
+TEST_P(ImageTestES3, AHBImportReleaseStress)
+{
+    EGLWindow *window = getEGLWindow();
+
+    ANGLE_SKIP_TEST_IF(!hasOESExt() || !hasBaseExt() || !has2DTextureExt());
+    ANGLE_SKIP_TEST_IF(!hasAndroidImageNativeBufferExt() || !hasAndroidHardwareBufferSupport());
+
+    const GLubyte kBlack[] = {0, 0, 0, 0};
+
+    for (int i = 0; i < 2000; i++)
+    {
+        AHardwareBuffer *ahb;
+        EGLImageKHR ahbImage;
+        createEGLImageAndroidHardwareBufferSource(1, 1, 1, AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM,
+                                                  kDefaultAHBUsage, kDefaultAttribs, {{kBlack, 4}},
+                                                  &ahb, &ahbImage);
+
+        {
+            GLTexture ahbTexture;
+            createEGLImageTargetTexture2D(ahbImage, ahbTexture);
+
+            // Intentionally not doing anything which may explicitly flush operations on the AHB.
+        }
+
+        eglDestroyImageKHR(window->getDisplay(), ahbImage);
+        destroyAndroidHardwareBuffer(ahb);
+    }
+}
+
 // Test glClear on FBO with AHB attachment is applied to the AHB image before we read back
 TEST_P(ImageTestES3, AHBClearAppliedBeforeReadBack)
 {
