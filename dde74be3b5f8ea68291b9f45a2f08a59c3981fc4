@@ -70,6 +70,24 @@
       "parentUuid": "146cc411_00279cde",
       "revId": "dde74be3b5f8ea68291b9f45a2f08a59c3981fc4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db2f3b15_d23adcb5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-04-17T22:23:12Z",
+      "side": 1,
+      "message": "Thank you Shabi and Cody for checking the rendering diffs.\n\nThe trace results before and after this change is here https://docs.google.com/spreadsheets/d/1PNnb83pAgFgbsyo4VskDZqhHNhduq7cugVEfi13IWUU/edit?usp\u003dsharing. On Pixel 7, after the change, most of the traces `wall time compare` improved. On Pixel 6, more than half of the traces `wall time compare` degraded. The change of `wall time compare` and `CPU time compare` is consistent: if `CPU time` improved after change, the `wall time` improved, too. Since the GPU measurement on ARM is broken right now, I can\u0027t get the GPU perf data with the current trace test. Any recommendations on how to get GPU perf impact? Charlie has recommended \nme `writing a specific test that runs shader on a large FBO and benchmark the rendering operation`. Would you please let me know if this is necessary?\n\nI have compared the native and angle results of the 16 traces that failed the test: https://docs.google.com/document/d/1ot9UAPBPGMfKAXkQZx24WujStAZdDOYeZKWW57QuwFg/edit?usp\u003dsharing. Most of the diffs match with the diffs that is flagged by the golden trace tests. The `asphalt_8` water rendering on native is closer to the reference image in Gold test, unfortunately. If this is a concern, how should we proceed here? Shall I debug it in RenderDoc and understand why the change is making the rendering more pixelated?",
+      "parentUuid": "4c7e6c24_2427b0e3",
+      "revId": "dde74be3b5f8ea68291b9f45a2f08a59c3981fc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
