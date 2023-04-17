@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50287e11_8617e37c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-17T23:25:20Z",
+      "side": 1,
+      "message": "Note win-trace failures might have just been resolved - there were consistent failures up until a couple of builds ago. See also https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d7432 .",
+      "revId": "fce9b9d23dc645b24373b7cec852ab5cd3e9ab12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
