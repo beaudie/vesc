@@ -46,6 +46,10 @@ const GLColor GLColor::magenta          = GLColor(255u, 0u, 255u, 255u);
 
 namespace
 {
+constexpr char kOESExt[]       = "GL_OES_EGL_image";
+constexpr char kBaseExt[]      = "EGL_KHR_image_base";
+constexpr char k2DTextureExt[] = "EGL_KHR_gl_texture_2D_image";
+
 float ColorNorm(GLubyte channelValue)
 {
     return static_cast<float>(channelValue) / 255.0f;
@@ -1276,6 +1280,333 @@ bool ANGLETestBase::platformSupportsMultithreading() const
             IsEGLDisplayExtensionEnabled(mFixture->eglWindow->getDisplay(),
                                          "EGL_ANGLE_context_virtualization")) ||
            IsVulkan();
+}
+
+bool ANGLETestBase::hasOESExt() const
+{
+    return IsGLExtensionEnabled(kOESExt);
+}
+
+bool ANGLETestBase::hasBaseExt() const
+{
+    return IsEGLDisplayExtensionEnabled(getEGLWindow()->getDisplay(), kBaseExt);
+}
+
+bool ANGLETestBase::has2DTextureExt() const
+{
+    return IsEGLDisplayExtensionEnabled(getEGLWindow()->getDisplay(), k2DTextureExt);
+}
+
+bool ANGLETestBase::hasAndroidImageNativeBufferExt() const
+{
+    return IsEGLDisplayExtensionEnabled(getEGLWindow()->getDisplay(),
+                                        "EGL_ANDROID_image_native_buffer");
+}
+
+AHardwareBuffer *ANGLETestBase::createAndroidHardwareBuffer(size_t width,
+                                                            size_t height,
+                                                            size_t depth,
+                                                            int androidFormat,
+                                                            uint32_t usage,
+                                                            const std::vector<AHBPlaneData> &data)
+{
+#if defined(ANGLE_AHARDWARE_BUFFER_SUPPORT)
+    // The height and width are number of pixels of size format
+    AHardwareBuffer_Desc aHardwareBufferDescription = {};
+    aHardwareBufferDescription.width                = width;
+    aHardwareBufferDescription.height               = height;
+    aHardwareBufferDescription.layers               = depth;
+    aHardwareBufferDescription.format               = androidFormat;
+    aHardwareBufferDescription.usage = angle::android::ANGLE_AHB_USAGE_CPU_WRITE_RARELY;
+    if ((usage & kAHBUsageGPUSampledImage) != 0)
+    {
+        aHardwareBufferDescription.usage |= angle::android::ANGLE_AHB_USAGE_GPU_SAMPLED_IMAGE;
+    }
+    if ((usage & kAHBUsageGPUFramebuffer) != 0)
+    {
+        aHardwareBufferDescription.usage |= angle::android::ANGLE_AHB_USAGE_GPU_FRAMEBUFFER;
+    }
+    if ((usage & kAHBUsageGPUCubeMap) != 0)
+    {
+        aHardwareBufferDescription.usage |= angle::android::ANGLE_AHB_USAGE_GPU_CUBE_MAP;
+    }
+    if ((usage & kAHBUsageGPUMipMapComplete) != 0)
+    {
+        aHardwareBufferDescription.usage |= angle::android::ANGLE_AHB_USAGE_GPU_MIPMAP_COMPLETE;
+    }
+    if ((usage & kAHBUsageFrontBuffer) != 0)
+    {
+        aHardwareBufferDescription.usage |= angle::android::ANGLE_AHB_USAGE_FRONT_BUFFER;
+    }
+    aHardwareBufferDescription.stride = 0;
+    aHardwareBufferDescription.rfu0   = 0;
+    aHardwareBufferDescription.rfu1   = 0;
+
+    // Allocate memory from Android Hardware Buffer
+    AHardwareBuffer *aHardwareBuffer = nullptr;
+    EXPECT_EQ(0, AHardwareBuffer_allocate(&aHardwareBufferDescription, &aHardwareBuffer));
+
+    if (!data.empty())
+    {
+        const bool isYUV = androidFormat == angle::android::ANGLE_AHB_FORMAT_Y8Cb8Cr8_420 ||
+                           androidFormat == angle::android::ANGLE_AHB_FORMAT_YV12;
+        writeAHBData(aHardwareBuffer, width, height, depth, isYUV, data);
+    }
+
+    return aHardwareBuffer;
+#else
+    return nullptr;
+#endif // defined(ANGLE_AHARDWARE_BUFFER_SUPPORT)
+}
+
+void ANGLETestBase::destroyAndroidHardwareBuffer(AHardwareBuffer *aHardwarebuffer)
+{
+#if defined(ANGLE_AHARDWARE_BUFFER_SUPPORT)
+    AHardwareBuffer_release(aHardwarebuffer);
+#endif
+}
+
+void ANGLETestBase::createEGLImageAndroidHardwareBufferSource(size_t width,
+                                                              size_t height,
+                                                              size_t depth,
+                                                              int androidPixelFormat,
+                                                              uint32_t usage,
+                                                              const EGLint *attribs,
+                                                              const std::vector<AHBPlaneData> &data,
+                                                              AHardwareBuffer **outSourceAHB,
+                                                              EGLImageKHR *outSourceImage)
+{
+    // Set Android Memory
+    AHardwareBuffer *aHardwareBuffer =
+        createAndroidHardwareBuffer(width, height, depth, androidPixelFormat, usage, data);
+    EXPECT_NE(aHardwareBuffer, nullptr);
+
+    // Create an image from the source AHB
+    EGLWindow *window = getEGLWindow();
+
+    EGLImageKHR image =
+        eglCreateImageKHR(window->getDisplay(), EGL_NO_CONTEXT, EGL_NATIVE_BUFFER_ANDROID,
+                          angle::android::AHardwareBufferToClientBuffer(aHardwareBuffer), attribs);
+    ASSERT_EGL_SUCCESS();
+
+    *outSourceAHB   = aHardwareBuffer;
+    *outSourceImage = image;
+}
+
+namespace
+{
+#if defined(ANGLE_AHARDWARE_BUFFER_SUPPORT)
+size_t getLayerPitch(size_t height, size_t rowStride)
+{
+    // Undocumented alignment of layer stride.  This is potentially platform dependent, but
+    // allows functionality to be tested.
+    constexpr size_t kLayerAlignment = 4096;
+
+    const size_t layerSize = height * rowStride;
+    return (layerSize + kLayerAlignment - 1) & ~(kLayerAlignment - 1);
+}
+#endif // defined(ANGLE_AHARDWARE_BUFFER_SUPPORT)
+
+}  // namespace
+
+void ANGLETestBase::writeAHBData(AHardwareBuffer *aHardwareBuffer,
+                                 size_t width,
+                                 size_t height,
+                                 size_t depth,
+                                 bool isYUV,
+                                 const std::vector<AHBPlaneData> &data)
+{
+#if defined(ANGLE_AHARDWARE_BUFFER_SUPPORT)
+#    if defined(ANGLE_AHARDWARE_BUFFER_LOCK_PLANES_SUPPORT)
+    AHardwareBuffer_Planes planeInfo;
+    int res = AHardwareBuffer_lockPlanes(aHardwareBuffer, AHARDWAREBUFFER_USAGE_CPU_WRITE_RARELY,
+                                         -1, nullptr, &planeInfo);
+    EXPECT_EQ(res, 0);
+    EXPECT_EQ(data.size(), planeInfo.planeCount);
+
+    for (size_t planeIdx = 0; planeIdx < data.size(); planeIdx++)
+    {
+        const AHBPlaneData &planeData      = data[planeIdx];
+        const AHardwareBuffer_Plane &plane = planeInfo.planes[planeIdx];
+
+        size_t planeHeight = (isYUV && planeIdx > 0) ? (height / 2) : height;
+        size_t planeWidth  = (isYUV && planeIdx > 0) ? (width / 2) : width;
+        size_t layerPitch  = getLayerPitch(planeHeight, plane.rowStride);
+
+        for (size_t z = 0; z < depth; z++)
+        {
+            const uint8_t *srcDepthSlice = reinterpret_cast<const uint8_t *>(planeData.data) +
+                                           z * planeHeight * planeWidth * planeData.bytesPerPixel;
+
+            for (size_t y = 0; y < planeHeight; y++)
+            {
+                const uint8_t *srcRow = srcDepthSlice + y * planeWidth * planeData.bytesPerPixel;
+
+                for (size_t x = 0; x < planeWidth; x++)
+                {
+                    const uint8_t *src = srcRow + x * planeData.bytesPerPixel;
+                    uint8_t *dst       = reinterpret_cast<uint8_t *>(plane.data) + z * layerPitch +
+                                   y * plane.rowStride + x * plane.pixelStride;
+                    memcpy(dst, src, planeData.bytesPerPixel);
+                }
+            }
+        }
+    }
+
+    res = AHardwareBuffer_unlock(aHardwareBuffer, nullptr);
+    EXPECT_EQ(res, 0);
+#    else
+    EXPECT_EQ(1u, data.size());
+    void *mappedMemory = nullptr;
+    int res = AHardwareBuffer_lock(aHardwareBuffer, AHARDWAREBUFFER_USAGE_CPU_WRITE_RARELY, -1,
+                                   nullptr, &mappedMemory);
+    EXPECT_EQ(res, 0);
+
+    // Need to grab the stride the implementation might have enforced
+    AHardwareBuffer_Desc aHardwareBufferDescription = {};
+    AHardwareBuffer_describe(aHardwareBuffer, &aHardwareBufferDescription);
+    const size_t stride = aHardwareBufferDescription.stride * data[0].bytesPerPixel;
+    size_t layerPitch   = getLayerPitch(height, stride);
+
+    uint32_t rowSize = stride * height;
+    for (size_t z = 0; z < depth; z++)
+    {
+        for (uint32_t y = 0; y < height; y++)
+        {
+            size_t dstPtrOffset = z * layerPitch + y * stride;
+            size_t srcPtrOffset = (z * height + y) * width * data[0].bytesPerPixel;
+
+            uint8_t *dst = reinterpret_cast<uint8_t *>(mappedMemory) + dstPtrOffset;
+            memcpy(dst, data[0].data + srcPtrOffset, rowSize);
+        }
+    }
+
+    res = AHardwareBuffer_unlock(aHardwareBuffer, nullptr);
+    EXPECT_EQ(res, 0);
+#    endif
+#endif // defined(ANGLE_AHARDWARE_BUFFER_SUPPORT)
+}
+
+void ANGLETestBase::verifyResultAHB(AHardwareBuffer *source,
+                                    const std::vector<AHBPlaneData> &data,
+                                    AHBVerifyRegion verifyRegion)
+{
+#if defined(ANGLE_AHARDWARE_BUFFER_SUPPORT)
+    AHardwareBuffer_Desc aHardwareBufferDescription;
+    AHardwareBuffer_describe(source, &aHardwareBufferDescription);
+    bool isYUV = (aHardwareBufferDescription.format == android::ANGLE_AHB_FORMAT_Y8Cb8Cr8_420);
+    const uint32_t width  = aHardwareBufferDescription.width;
+    const uint32_t height = aHardwareBufferDescription.height;
+    const uint32_t depth  = aHardwareBufferDescription.layers;
+
+#    if defined(ANGLE_AHARDWARE_BUFFER_LOCK_PLANES_SUPPORT)
+    AHardwareBuffer_Planes planeInfo;
+    ASSERT_EQ(0, AHardwareBuffer_lockPlanes(source, AHARDWAREBUFFER_USAGE_CPU_WRITE_RARELY, -1,
+                                            nullptr, &planeInfo));
+    ASSERT_EQ(data.size(), planeInfo.planeCount);
+
+    for (size_t planeIdx = 0; planeIdx < data.size(); planeIdx++)
+    {
+        const AHBPlaneData &planeData      = data[planeIdx];
+        const AHardwareBuffer_Plane &plane = planeInfo.planes[planeIdx];
+
+        const size_t planeHeight = (isYUV && planeIdx > 0) ? (height / 2) : height;
+        const size_t planeWidth  = (isYUV && planeIdx > 0) ? (width / 2) : width;
+        size_t layerPitch        = getLayerPitch(planeHeight, plane.rowStride);
+
+        uint32_t xStart = 0;
+        uint32_t xEnd   = planeWidth;
+
+        switch (verifyRegion)
+        {
+            case AHBVerifyRegion::Entire:
+                break;
+            case AHBVerifyRegion::LeftHalf:
+                xEnd = planeWidth / 2;
+                break;
+            case AHBVerifyRegion::RightHalf:
+                xStart = planeWidth / 2;
+                break;
+        }
+
+        for (size_t z = 0; z < depth; z++)
+        {
+            const uint8_t *referenceDepthSlice =
+                reinterpret_cast<const uint8_t *>(planeData.data) +
+                z * planeHeight * (xEnd - xStart) * planeData.bytesPerPixel;
+            for (size_t y = 0; y < planeHeight; y++)
+            {
+                const uint8_t *referenceRow =
+                    referenceDepthSlice + y * (xEnd - xStart) * planeData.bytesPerPixel;
+                for (size_t x = xStart; x < xEnd; x++)
+                {
+                    const uint8_t *referenceData =
+                        referenceRow + (x - xStart) * planeData.bytesPerPixel;
+                    std::vector<uint8_t> reference(referenceData,
+                                                   referenceData + planeData.bytesPerPixel);
+
+                    const uint8_t *ahbData = reinterpret_cast<uint8_t *>(plane.data) +
+                                             z * layerPitch + y * plane.rowStride +
+                                             x * plane.pixelStride;
+                    std::vector<uint8_t> ahb(ahbData, ahbData + planeData.bytesPerPixel);
+
+                    EXPECT_EQ(reference, ahb)
+                        << "at (" << x << ", " << y << ") on plane " << planeIdx;
+                }
+            }
+        }
+    }
+    ASSERT_EQ(0, AHardwareBuffer_unlock(source, nullptr));
+#    else
+    ASSERT_EQ(1u, data.size());
+    ASSERT_FALSE(isYUV);
+
+    const uint32_t rowStride = aHardwareBufferDescription.stride * data[0].bytesPerPixel;
+    size_t layerPitch        = getLayerPitch(height, rowStride);
+
+    void *mappedMemory = nullptr;
+    ASSERT_EQ(0, AHardwareBuffer_lock(source, AHARDWAREBUFFER_USAGE_CPU_WRITE_RARELY, -1, nullptr,
+                                      &mappedMemory));
+
+    uint32_t xStart = 0;
+    uint32_t xEnd   = width;
+
+    switch (verifyRegion)
+    {
+        case AHBVerifyRegion::Entire:
+            break;
+        case AHBVerifyRegion::LeftHalf:
+            xEnd = width / 2;
+            break;
+        case AHBVerifyRegion::RightHalf:
+            xStart = width / 2;
+            break;
+    }
+    for (size_t z = 0; z < depth; z++)
+    {
+        const uint8_t *referenceDepthSlice = reinterpret_cast<const uint8_t *>(data[0].data) +
+                                             z * height * (xEnd - xStart) * data[0].bytesPerPixel;
+        for (size_t y = 0; y < height; y++)
+        {
+            const uint8_t *referenceRow =
+                referenceDepthSlice + y * (xEnd - xStart) * data[0].bytesPerPixel;
+            for (size_t x = xStart; x < xEnd; x++)
+            {
+                const uint8_t *referenceData = referenceRow + (x - xStart) * data[0].bytesPerPixel;
+                std::vector<uint8_t> reference(referenceData,
+                                               referenceData + data[0].bytesPerPixel);
+
+                const uint8_t *ahbData = reinterpret_cast<uint8_t *>(mappedMemory) +
+                                         z * layerPitch + y * rowStride + x * data[0].bytesPerPixel;
+                std::vector<uint8_t> ahb(ahbData, ahbData + data[0].bytesPerPixel);
+
+                EXPECT_EQ(reference, ahb) << "at (" << x << ", " << y << ")";
+            }
+        }
+    }
+    ASSERT_EQ(0, AHardwareBuffer_unlock(source, nullptr));
+#    endif
+#endif  // defined(ANGLE_AHARDWARE_BUFFER_SUPPORT)
 }
 
 void ANGLETestBase::checkD3D11SDKLayersMessages()
