@@ -24,6 +24,8 @@ using namespace angle;
 
 namespace
 {
+constexpr EGLint kDefaultAttribs[] = {EGL_IMAGE_PRESERVED, EGL_TRUE, EGL_NONE};
+
 // Normally, if LOAD_OP_NONE is not supported, LOAD_OP_LOAD is used instead.  Similarly, if
 // STORE_OP_NONE is not supported, STORE_OP_STORE is used instead.
 //
@@ -6928,7 +6930,6 @@ TEST_P(VulkanPerformanceCounterTest, Source2DAndRepeatedlyRespecifyTarget2DWithS
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     ASSERT_GL_NO_ERROR();
     // Create an eglImage from the source texture
-    constexpr EGLint kDefaultAttribs[] = {EGL_IMAGE_PRESERVED, EGL_TRUE, EGL_NONE};
     EGLClientBuffer clientBuffer =
         reinterpret_cast<EGLClientBuffer>(static_cast<size_t>(sourceTexture.get()));
     EGLImageKHR image = eglCreateImageKHR(window->getDisplay(), window->getContext(),
@@ -7382,6 +7383,54 @@ TEST_P(VulkanPerformanceCounterTest,
     glUnmapBuffer(GL_ARRAY_BUFFER);
     ASSERT_GL_NO_ERROR();
 }
+
+#if defined(ANGLE_AHARDWARE_BUFFER_SUPPORT)
+
+// jasonjason
+
+// Test repeatedly importing and releasing AHBs into textures to replicate behavior where
+// SurfaceFlinger optimistically imports AHBs but never actually ends up using them. Regression
+// test to check that AHB releases are fully flushed to avoid running out of memory.
+TEST_P(VulkanPerformanceCounterTest, AHBImportReleaseStress)
+{
+    ANGLE_SKIP_TEST_IF(!hasOESExt() || !hasBaseExt() || !has2DTextureExt());
+    ANGLE_SKIP_TEST_IF(!hasAndroidImageNativeBufferExt() || !hasAndroidHardwareBufferSupport());
+
+    const GLubyte kBlack[] = {0, 0, 0, 0};
+
+    glFinish();
+
+    const uint64_t initialPendingSubmissionGarbageObjects =
+        getPerfCounters().pendingSubmissionGarbageObjects;
+
+    for (int i = 0; i < 20; i++)
+    {
+        AHardwareBuffer *ahb;
+        EGLImageKHR ahbImage;
+        createEGLImageAndroidHardwareBufferSource(1, 1, 1, AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM,
+                                                  kDefaultAHBUsage, kDefaultAttribs, {{kBlack, 4}},
+                                                  &ahb, &ahbImage);
+
+        {
+            GLTexture ahbTexture;
+            glBindTexture(GL_TEXTURE_2D, ahbTexture);
+            glEGLImageTargetTexture2DOES(GL_TEXTURE_2D, ahbImage);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            ASSERT_GL_NO_ERROR();
+
+            // Intentionally not doing anything which may explicitly flush operations on the AHB.
+        }
+
+        eglDestroyImageKHR(getEGLWindow()->getDisplay(), ahbImage);
+        destroyAndroidHardwareBuffer(ahb);
+    }
+
+    EXPECT_LE(getPerfCounters().pendingSubmissionGarbageObjects,
+              initialPendingSubmissionGarbageObjects + 10);
+}
+
+#endif  // defined(ANGLE_AHARDWARE_BUFFER_SUPPORT)
 
 class VulkanPerformanceCounterTest_AsyncCQ : public VulkanPerformanceCounterTest
 {};

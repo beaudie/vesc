@@ -323,14 +323,14 @@ void RenderbufferVk::releaseImage(ContextVk *contextVk)
 
     if (mImage && mOwnsImage)
     {
-        mImage->releaseImageFromShareContexts(renderer, contextVk, mImageSiblingSerial);
+        mImage->releaseImageFromShareContexts(renderer, contextVk);
         mImage->releaseStagedUpdates(renderer);
     }
     else
     {
         if (mImage)
         {
-            mImage->finalizeImageLayoutInShareContexts(renderer, contextVk, mImageSiblingSerial);
+            mImage->flushUnsubmittedUseInShareContexts(renderer, contextVk);
         }
         mImage = nullptr;
         mImageObserverBinding.bind(nullptr);
@@ -338,7 +338,7 @@ void RenderbufferVk::releaseImage(ContextVk *contextVk)
 
     if (mMultisampledImage.valid())
     {
-        mMultisampledImage.releaseImageFromShareContexts(renderer, contextVk, mImageSiblingSerial);
+        mMultisampledImage.releaseImageFromShareContexts(renderer, contextVk);
     }
 }
 

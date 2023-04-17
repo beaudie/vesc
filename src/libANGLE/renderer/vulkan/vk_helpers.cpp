@@ -5712,24 +5712,24 @@ void ImageHelper::releaseImage(RendererVk *renderer)
     setEntireContentUndefined();
 }
 
-void ImageHelper::releaseImageFromShareContexts(RendererVk *renderer,
-                                                ContextVk *contextVk,
-                                                UniqueSerial imageSiblingSerial)
+void ImageHelper::releaseImageFromShareContexts(RendererVk *renderer, ContextVk *contextVk)
 {
-    finalizeImageLayoutInShareContexts(renderer, contextVk, imageSiblingSerial);
+    flushUnsubmittedUseInShareContexts(renderer, contextVk);
     releaseImage(renderer);
 }
 
-void ImageHelper::finalizeImageLayoutInShareContexts(RendererVk *renderer,
-                                                     ContextVk *contextVk,
-                                                     UniqueSerial imageSiblingSerial)
+void ImageHelper::flushUnsubmittedUseInShareContexts(RendererVk *renderer, ContextVk *contextVk)
 {
-    if (contextVk && mImageSerial.valid())
+    if (contextVk)
     {
         const ContextVkSet &shareContextSet = contextVk->getShareGroup()->getContexts();
         for (ContextVk *ctx : shareContextSet)
         {
-            ctx->finalizeImageLayout(this, imageSiblingSerial);
+            if (ctx->hasUnsubmittedUse(getResourceUse()))
+            {
+                (void)ctx->flushImpl(nullptr,
+                                     RenderPassClosureReason::ImageUseThenReleaseToExternal);
+            }
         }
     }
 }
