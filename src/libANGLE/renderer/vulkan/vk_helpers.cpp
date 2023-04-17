@@ -5305,6 +5305,7 @@ void ImageHelper::resetCachedProperties()
     mAllocationSize              = 0;
     mMemoryAllocationType        = MemoryAllocationType::InvalidEnum;
     mMemoryTypeIndex             = kInvalidMemoryTypeIndex;
+    mIsExternalImage             = false;
     std::fill(mViewFormats.begin(), mViewFormats.begin() + mViewFormats.max_size(),
               VK_FORMAT_UNDEFINED);
     mYcbcrConversionDesc.reset();
@@ -5504,6 +5505,7 @@ angle::Result ImageHelper::initExternal(Context *context,
         // Derive the tiling for external images.
         deriveExternalImageTiling(externalImageCreateInfo);
     }
+    mIsExternalImage = externalImageCreateInfo != nullptr;
 
     mYcbcrConversionDesc.reset();
 
@@ -5730,6 +5732,22 @@ void ImageHelper::finalizeImageLayoutInShareContexts(RendererVk *renderer,
         for (ContextVk *ctx : shareContextSet)
         {
             ctx->finalizeImageLayout(this, imageSiblingSerial);
+        }
+    }
+}
+
+void ImageHelper::flushUnsubmittedUseInShareContexts(ContextVk *contextVk)
+{
+    if (contextVk)
+    {
+        const ContextVkSet &shareContextSet = contextVk->getShareGroup()->getContexts();
+        for (ContextVk *ctx : shareContextSet)
+        {
+            if (ctx->hasUnsubmittedUse(getResourceUse()))
+            {
+                (void)ctx->flushImpl(nullptr,
+                                     RenderPassClosureReason::ImageUseThenReleaseToExternal);
+            }
         }
     }
 }

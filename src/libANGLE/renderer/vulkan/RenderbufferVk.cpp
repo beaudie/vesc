@@ -330,7 +330,15 @@ void RenderbufferVk::releaseImage(ContextVk *contextVk)
     {
         if (mImage)
         {
-            mImage->finalizeImageLayoutInShareContexts(renderer, contextVk, mImageSiblingSerial);
+            if (mImage->isExternalImage())
+            {
+                mImage->flushUnsubmittedUseInShareContexts(contextVk);
+            }
+            else
+            {
+                mImage->finalizeImageLayoutInShareContexts(renderer, contextVk,
+                                                           mImageSiblingSerial);
+            }
         }
         mImage = nullptr;
         mImageObserverBinding.bind(nullptr);
