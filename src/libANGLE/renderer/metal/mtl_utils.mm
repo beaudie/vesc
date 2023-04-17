@@ -14,12 +14,14 @@
 #include <TargetConditionals.h>
 
 #include "common/MemoryBuffer.h"
+#include "common/string_utils.h"
 #include "common/system_utils.h"
 #include "gpu_info_util/SystemInfo_internal.h"
 #include "libANGLE/renderer/metal/ContextMtl.h"
 #include "libANGLE/renderer/metal/DisplayMtl.h"
 #include "libANGLE/renderer/metal/RenderTargetMtl.h"
 #include "libANGLE/renderer/metal/mtl_render_utils.h"
+#include "libANGLE/renderer/metal/process.h"
 
 // Compiler can turn on programmatical frame capture in release build by defining
 // ANGLE_METAL_FRAME_CAPTURE flag.
@@ -886,6 +888,77 @@ AutoObjCPtr<id<MTLLibrary>> CreateShaderLibrary(
 
         return library;
     }
+}
+
+std::string CompileShaderLibraryToFile(const std::string &source,
+                                       const std::map<std::string, std::string> &macros,
+                                       bool enableFastMath)
+{
+    auto tmp_dir = angle::GetTempDirectory();
+    if (!tmp_dir.valid())
+    {
+        FATAL() << "angle::GetTempDirectory() failed";
+    }
+    // NOTE: metal/metallib seem to require extensions, otherwise they interpret the files
+    // differently.
+    auto metal_file_name =
+        angle::CreateTemporaryFileInDirectoryWithExtension(tmp_dir.value(), ".metal");
+    auto air_file_name =
+        angle::CreateTemporaryFileInDirectoryWithExtension(tmp_dir.value(), ".air");
+    auto metallib_file_name =
+        angle::CreateTemporaryFileInDirectoryWithExtension(tmp_dir.value(), ".metallib");
+    if (!metal_file_name.valid() || !air_file_name.valid() || !metallib_file_name.valid())
+    {
+        FATAL() << "Unable to generate temporary files for compiling metal";
+    }
+    // Save the source.
+    {
+        angle::SaveFileHelper save_file_helper(metal_file_name.value());
+        save_file_helper << source;
+    }
+
+    // metal -> air
+    std::vector<std::string> metal_to_air_argv{"/usr/bin/xcrun",
+                                               "/usr/bin/xcrun",
+                                               "-sdk",
+                                               "macosx",
+                                               "metal",
+                                               "-c",
+                                               metal_file_name.value(),
+                                               "-o",
+                                               air_file_name.value()};
+    // Macros are passed using `-D key=value`.
+    for (const auto &macro : macros)
+    {
+        metal_to_air_argv.push_back("-D");
+        // TODO: not sure if this needs to escape strings or what (for example, might
+        // a space cause problems)?
+        metal_to_air_argv.push_back(macro.first + "=" + macro.second);
+    }
+    // TODO: is this right, not sure if enableFastMath is same as -ffast-math.
+    if (enableFastMath)
+    {
+        metal_to_air_argv.push_back("-ffast-math");
+    }
+    Process metal_to_air_process(metal_to_air_argv);
+    int exit_code = -1;
+    if (!metal_to_air_process.DidLaunch() || !metal_to_air_process.WaitForExit(exit_code) ||
+        exit_code != 0)
+    {
+        FATAL() << "Generating air file failed";
+    }
+
+    // air -> metallib
+    const std::vector<std::string> air_to_metallib_argv{
+        "xcrun",    "/usr/bin/xcrun",      "-sdk", "macosx",
+        "metallib", air_file_name.value(), "-o",   metallib_file_name.value()};
+    Process air_to_metallib_process(air_to_metallib_argv);
+    if (!air_to_metallib_process.DidLaunch() || !air_to_metallib_process.WaitForExit(exit_code) ||
+        exit_code != 0)
+    {
+        FATAL() << "Ggenerating metallib file failed";
+    }
+    return metallib_file_name.value();
 }
 
 AutoObjCPtr<id<MTLLibrary>> CreateShaderLibraryFromBinary(id<MTLDevice> metalDevice,
