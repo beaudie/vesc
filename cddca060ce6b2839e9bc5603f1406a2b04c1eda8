@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc9baf47_dbfb7631",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-04-17T17:15:18Z",
+      "side": 1,
+      "message": "Test: retrace_restricted_traces.py",
+      "revId": "cddca060ce6b2839e9bc5603f1406a2b04c1eda8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e88f00ca_f68ab318",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-04-17T17:15:18Z",
+      "side": 1,
+      "message": "LGTM - nice work Amirali!",
+      "revId": "cddca060ce6b2839e9bc5603f1406a2b04c1eda8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
