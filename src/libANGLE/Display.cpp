@@ -518,7 +518,7 @@ rx::DisplayImpl *CreateDisplayFromAttribs(EGLAttrib displayType,
             }
 #endif
             // No display available
-            UNREACHABLE();
+            impl = nullptr;
             break;
 
         case EGL_PLATFORM_ANGLE_TYPE_NULL_ANGLE:
