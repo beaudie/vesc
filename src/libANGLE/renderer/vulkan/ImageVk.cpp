@@ -124,7 +124,7 @@ angle::Result ImageVk::orphan(const gl::Context *context, egl::ImageSibling *sib
         {
             TextureVk *textureVk = GetImplAs<TextureVk>(GetAs<gl::Texture>(mState.source));
             ASSERT(mImage == &textureVk->getImage());
-            textureVk->releaseOwnershipOfImage(context);
+            ANGLE_TRY(textureVk->releaseOwnershipOfImage(context));
             mOwnsImage = true;
         }
         else if (egl::IsRenderbufferTarget(mState.target))

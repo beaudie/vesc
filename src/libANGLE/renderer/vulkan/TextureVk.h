@@ -222,7 +222,7 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     bool isImmutable() { return mState.getImmutableFormat(); }
     bool imageValid() const { return (mImage && mImage->valid()); }
 
-    void releaseOwnershipOfImage(const gl::Context *context);
+    angle::Result releaseOwnershipOfImage(const gl::Context *context);
 
     const vk::ImageView &getReadImageView(vk::Context *context,
                                           GLenum srgbDecode,
@@ -350,7 +350,7 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     // Get the level count for views.
     uint32_t getImageViewLevelCount() const;
 
-    void releaseAndDeleteImageAndViews(ContextVk *contextVk);
+    angle::Result releaseAndDeleteImageAndViews(ContextVk *contextVk);
     angle::Result ensureImageAllocated(ContextVk *contextVk, const vk::Format &format);
     void setImageHelper(ContextVk *contextVk,
                         vk::ImageHelper *imageHelper,
@@ -418,7 +418,7 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
                                         VkImageAspectFlags aspectFlags);
 
     // Called from syncState to prepare the image for mipmap generation.
-    void prepareForGenerateMipmap(ContextVk *contextVk);
+    angle::Result prepareForGenerateMipmap(ContextVk *contextVk);
 
     // Generate mipmaps from level 0 into the rest of the mips.  This requires the image to have
     // STORAGE usage.
@@ -483,7 +483,7 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
                             angle::FormatID intendedImageFormatID,
                             angle::FormatID actualImageFormatID,
                             ImageMipLevels mipLevels);
-    void releaseImage(ContextVk *contextVk);
+    angle::Result releaseImage(ContextVk *contextVk);
     void releaseImageViews(ContextVk *contextVk);
     void releaseStagedUpdates(ContextVk *contextVk);
     uint32_t getMipLevelCount(ImageMipLevels mipLevels) const;

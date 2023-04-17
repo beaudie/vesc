@@ -315,7 +315,7 @@ void TextureVk::onDestroy(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
 
-    releaseAndDeleteImageAndViews(contextVk);
+    (void)releaseAndDeleteImageAndViews(contextVk);
     resetSampler();
 }
 
@@ -1389,7 +1389,7 @@ angle::Result TextureVk::setStorageMultisample(const gl::Context *context,
 
     if (!mOwnsImage)
     {
-        releaseAndDeleteImageAndViews(contextVk);
+        ANGLE_TRY(releaseAndDeleteImageAndViews(contextVk));
     }
     else if (mImage)
     {
@@ -1408,7 +1408,7 @@ angle::Result TextureVk::setStorageMultisample(const gl::Context *context,
 
     if (mImage->valid())
     {
-        releaseImage(contextVk);
+        ANGLE_TRY(releaseImage(contextVk));
     }
 
     ASSERT(mState.getImmutableFormat());
@@ -1435,7 +1435,7 @@ angle::Result TextureVk::setStorageExternalMemory(const gl::Context *context,
     RendererVk *renderer           = contextVk->getRenderer();
     MemoryObjectVk *memoryObjectVk = vk::GetImpl(memoryObject);
 
-    releaseAndDeleteImageAndViews(contextVk);
+    ANGLE_TRY(releaseAndDeleteImageAndViews(contextVk));
 
     const vk::Format &format = renderer->getFormat(internalFormat);
 
@@ -1511,7 +1511,7 @@ angle::Result TextureVk::setEGLImageTarget(const gl::Context *context,
     // http://anglebug.com/5773
     handleImmutableSamplerTransition(mImage, imageVk ? imageVk->getImage() : nullptr);
 
-    releaseAndDeleteImageAndViews(contextVk);
+    ANGLE_TRY(releaseAndDeleteImageAndViews(contextVk));
 
     const vk::Format &format   = renderer->getFormat(image->getFormat().info->sizedInternalFormat);
     UniqueSerial siblingSerial = imageVk->generateSiblingSerial();
@@ -1564,7 +1564,7 @@ angle::Result TextureVk::setImageExternal(const gl::Context *context,
 angle::Result TextureVk::setBuffer(const gl::Context *context, GLenum internalFormat)
 {
     // No longer an image
-    releaseAndDeleteImageAndViews(vk::GetImpl(context));
+    ANGLE_TRY(releaseAndDeleteImageAndViews(vk::GetImpl(context)));
     resetSampler();
 
     // There's nothing else to do here.
@@ -1599,12 +1599,12 @@ uint32_t TextureVk::getNativeImageLayer(uint32_t frontendLayer) const
     return frontendLayer + mEGLImageLayerOffset;
 }
 
-void TextureVk::releaseAndDeleteImageAndViews(ContextVk *contextVk)
+angle::Result TextureVk::releaseAndDeleteImageAndViews(ContextVk *contextVk)
 {
     if (mImage)
     {
         releaseStagedUpdates(contextVk);
-        releaseImage(contextVk);
+        ANGLE_TRY(releaseImage(contextVk));
         mImageObserverBinding.bind(nullptr);
         mRequiresMutableStorage = false;
         mRequiredImageAccess    = vk::ImageAccess::SampleOnly;
@@ -1620,6 +1620,8 @@ void TextureVk::releaseAndDeleteImageAndViews(ContextVk *contextVk)
     mBufferViews.release(contextVk);
     mRedefinedLevels.reset();
     mDescriptorSetCacheManager.releaseKeys(contextVk);
+
+    return angle::Result::Continue;
 }
 
 void TextureVk::initImageUsageFlags(ContextVk *contextVk, angle::FormatID actualFormatID)
@@ -1721,7 +1723,7 @@ angle::Result TextureVk::redefineLevel(const gl::Context *context,
 
     if (!mOwnsImage)
     {
-        releaseAndDeleteImageAndViews(contextVk);
+        ANGLE_TRY(releaseAndDeleteImageAndViews(contextVk));
     }
 
     if (mImage != nullptr)
@@ -1792,7 +1794,7 @@ angle::Result TextureVk::redefineLevel(const gl::Context *context,
             // recreated immediately.  This is an optimization to avoid an extra copy.
             if (!isCompatibleRedefinition && isUpdateToSingleLevelImage)
             {
-                releaseImage(contextVk);
+                ANGLE_TRY(releaseImage(contextVk));
             }
         }
     }
@@ -2358,7 +2360,7 @@ angle::Result TextureVk::respecifyImageStorage(ContextVk *contextVk)
         gl::LevelIndex previousFirstAllocateLevel = mImage->getFirstAllocatedLevel();
 
         // If we didn't own the image, release the current and create a new one
-        releaseImage(contextVk);
+        ANGLE_TRY(releaseImage(contextVk));
 
         // Create the image helper
         ANGLE_TRY(ensureImageAllocated(contextVk, format));
@@ -2385,7 +2387,7 @@ angle::Result TextureVk::respecifyImageStorage(ContextVk *contextVk)
         }
         // Release the current image so that it will be recreated with the correct number of mip
         // levels, base level, and max level.
-        releaseImage(contextVk);
+        ANGLE_TRY(releaseImage(contextVk));
     }
 
     return angle::Result::Continue;
@@ -2396,7 +2398,7 @@ angle::Result TextureVk::bindTexImage(const gl::Context *context, egl::Surface *
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
 
-    releaseAndDeleteImageAndViews(contextVk);
+    ANGLE_TRY(releaseAndDeleteImageAndViews(contextVk));
 
     const gl::InternalFormat &glInternalFormat = *surface->getBindTexImageFormat().info;
     const vk::Format &format = renderer->getFormat(glInternalFormat.sizedInternalFormat);
@@ -2416,9 +2418,7 @@ angle::Result TextureVk::releaseTexImage(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
 
-    releaseImage(contextVk);
-
-    return angle::Result::Continue;
+    return releaseImage(contextVk);
 }
 
 angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
@@ -2636,7 +2636,7 @@ RenderTargetVk *TextureVk::getMultiLayerRenderTarget(ContextVk *contextVk,
     return rt.get();
 }
 
-void TextureVk::prepareForGenerateMipmap(ContextVk *contextVk)
+angle::Result TextureVk::prepareForGenerateMipmap(ContextVk *contextVk)
 {
     gl::LevelIndex baseLevel(mState.getEffectiveBaseLevel());
     gl::LevelIndex maxLevel(mState.getMipmapMaxLevel());
@@ -2662,7 +2662,7 @@ void TextureVk::prepareForGenerateMipmap(ContextVk *contextVk)
     if (mRedefinedLevels.test(baseLevel.get()))
     {
         ASSERT(!mState.getImmutableFormat());
-        releaseImage(contextVk);
+        ANGLE_TRY(releaseImage(contextVk));
     }
 
     const gl::ImageDesc &baseLevelDesc = mState.getBaseLevelDesc();
@@ -2677,6 +2677,8 @@ void TextureVk::prepareForGenerateMipmap(ContextVk *contextVk)
     {
         mImageUsageFlags |= VK_IMAGE_USAGE_STORAGE_BIT;
     }
+
+    return angle::Result::Continue;
 }
 
 angle::Result TextureVk::respecifyImageStorageIfNecessary(ContextVk *contextVk, gl::Command source)
@@ -2740,7 +2742,7 @@ angle::Result TextureVk::respecifyImageStorageIfNecessary(ContextVk *contextVk, 
     const bool isGenerateMipmap = source == gl::Command::GenerateMipmap;
     if (isGenerateMipmap)
     {
-        prepareForGenerateMipmap(contextVk);
+        ANGLE_TRY(prepareForGenerateMipmap(contextVk));
     }
 
     // For immutable texture, base level does not affect allocation. Only usage flags are. If usage
@@ -2797,7 +2799,7 @@ angle::Result TextureVk::respecifyImageStorageIfNecessary(ContextVk *contextVk, 
         stageSelfAsSubresourceUpdates(contextVk);
 
         // Release the mImage without collecting garbage from image views.
-        releaseImage(contextVk);
+        ANGLE_TRY(releaseImage(contextVk));
     }
 
     // Respecify the image if it's changed in usage, or if any of its levels are redefined and no
@@ -2964,14 +2966,14 @@ angle::Result TextureVk::initializeContentsWithBlack(const gl::Context *context,
         format.getActualImageFormat(getRequiredImageAccess()), clearValue);
 }
 
-void TextureVk::releaseOwnershipOfImage(const gl::Context *context)
+angle::Result TextureVk::releaseOwnershipOfImage(const gl::Context *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
 
     ASSERT(!mImageSiblingSerial.valid());
 
     mOwnsImage = false;
-    releaseAndDeleteImageAndViews(contextVk);
+    return releaseAndDeleteImageAndViews(contextVk);
 }
 
 bool TextureVk::shouldDecodeSRGB(vk::Context *context,
@@ -3260,7 +3262,7 @@ angle::Result TextureVk::initImageViews(ContextVk *contextVk, uint32_t levelCoun
     return angle::Result::Continue;
 }
 
-void TextureVk::releaseImage(ContextVk *contextVk)
+angle::Result TextureVk::releaseImage(ContextVk *contextVk)
 {
     RendererVk *renderer = contextVk->getRenderer();
 
@@ -3274,6 +3276,11 @@ void TextureVk::releaseImage(ContextVk *contextVk)
         }
         else
         {
+            if (contextVk->hasUnsubmittedUse(mImage->getResourceUse()))
+            {
+                ANGLE_TRY(contextVk->flushImpl(nullptr, RenderPassClosureReason::ImageUseThenReleaseToExternal));
+            }
+
             mImage->finalizeImageLayoutInShareContexts(renderer, contextVk, mImageSiblingSerial);
             mImageObserverBinding.bind(nullptr);
             mImage = nullptr;
@@ -3290,6 +3297,8 @@ void TextureVk::releaseImage(ContextVk *contextVk)
 
     onStateChange(angle::SubjectMessage::SubjectChanged);
     mRedefinedLevels.reset();
+
+    return angle::Result::Continue;
 }
 
 void TextureVk::releaseImageViews(ContextVk *contextVk)
