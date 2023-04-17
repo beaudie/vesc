@@ -1940,12 +1940,8 @@ class ImageHelper final : public Resource, public angle::Subject
     void releaseImage(RendererVk *renderer);
     // Similar to releaseImage, but also notify all contexts in the same share group to stop
     // accessing to it.
-    void releaseImageFromShareContexts(RendererVk *renderer,
-                                       ContextVk *contextVk,
-                                       UniqueSerial imageSiblingSerial);
-    void finalizeImageLayoutInShareContexts(RendererVk *renderer,
-                                            ContextVk *contextVk,
-                                            UniqueSerial imageSiblingSerial);
+    void releaseImageFromShareContexts(RendererVk *renderer, ContextVk *contextVk);
+    void flushUnsubmittedUseInShareContexts(RendererVk *renderer, ContextVk *contextVk);
     void releaseStagedUpdates(RendererVk *renderer);
 
     bool valid() const { return mImage.valid(); }

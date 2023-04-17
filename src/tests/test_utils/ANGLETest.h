@@ -17,6 +17,7 @@
 #include "RenderDoc.h"
 #include "angle_test_configs.h"
 #include "angle_test_platform.h"
+#include "common/android_util.h"
 #include "common/angleutils.h"
 #include "common/system_utils.h"
 #include "common/vector_utils.h"
@@ -24,6 +25,14 @@
 #include "util/EGLWindow.h"
 #include "util/shader_utils.h"
 #include "util/util_gl.h"
+
+#if defined(ANGLE_PLATFORM_ANDROID) && __ANDROID_API__ >= 26
+#    define ANGLE_AHARDWARE_BUFFER_SUPPORT
+#    include <android/hardware_buffer.h>
+#    if __ANDROID_API__ >= 29
+#        define ANGLE_AHARDWARE_BUFFER_LOCK_PLANES_SUPPORT
+#    endif
+#endif
 
 namespace angle
 {
@@ -550,6 +559,78 @@ class ANGLETestBase
     }
 
     bool platformSupportsMultithreading() const;
+
+    bool hasOESExt() const;
+    bool hasBaseExt() const;
+    bool has2DTextureExt() const;
+
+    bool hasAndroidHardwareBufferSupport() const
+    {
+#if defined(ANGLE_AHARDWARE_BUFFER_SUPPORT)
+        return true;
+#else
+        return false;
+#endif
+    }
+
+    bool hasAndroidImageNativeBufferExt() const;
+
+    enum AHBUsage
+    {
+        kAHBUsageGPUSampledImage   = 1 << 0,
+        kAHBUsageGPUFramebuffer    = 1 << 1,
+        kAHBUsageGPUCubeMap        = 1 << 2,
+        kAHBUsageGPUMipMapComplete = 1 << 3,
+        kAHBUsageFrontBuffer       = 1 << 4,
+    };
+
+    constexpr static uint32_t kDefaultAHBUsage = kAHBUsageGPUSampledImage | kAHBUsageGPUFramebuffer;
+    constexpr static uint32_t kDefaultAHBYUVUsage = kAHBUsageGPUSampledImage;
+
+    struct AHBPlaneData
+    {
+        const GLubyte *data;
+        size_t bytesPerPixel;
+    };
+
+#if defined(ANGLE_AHARDWARE_BUFFER_SUPPORT)
+    AHardwareBuffer *createAndroidHardwareBuffer(size_t width,
+                                                 size_t height,
+                                                 size_t depth,
+                                                 int androidFormat,
+                                                 uint32_t usage,
+                                                 const std::vector<AHBPlaneData> &data);
+    void destroyAndroidHardwareBuffer(AHardwareBuffer *aHardwarebuffer);
+
+    void createEGLImageAndroidHardwareBufferSource(size_t width,
+                                                   size_t height,
+                                                   size_t depth,
+                                                   int androidPixelFormat,
+                                                   uint32_t usage,
+                                                   const EGLint *attribs,
+                                                   const std::vector<AHBPlaneData> &data,
+                                                   AHardwareBuffer **outSourceAHB,
+                                                   EGLImageKHR *outSourceImage);
+
+    void writeAHBData(AHardwareBuffer *aHardwareBuffer,
+                      size_t width,
+                      size_t height,
+                      size_t depth,
+                      bool isYUV,
+                      const std::vector<AHBPlaneData> &data);
+
+    enum class AHBVerifyRegion
+    {
+        Entire,
+        LeftHalf,
+        RightHalf,
+    };
+
+    void verifyResultAHB(AHardwareBuffer *source,
+                         const std::vector<AHBPlaneData> &data,
+                         AHBVerifyRegion verifyRegion = AHBVerifyRegion::Entire);
+
+#endif  // defined(ANGLE_AHARDWARE_BUFFER_SUPPORT)
 
     bool mIsSetUp = false;
 

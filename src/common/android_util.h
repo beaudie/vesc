@@ -90,6 +90,11 @@ enum {
     ANGLE_AHB_FORMAT_B4G4R4A4_UNORM           = 7,
 
     /**
+     * Legacy format deprecated in favor of YCBCR_420_888. NV21.
+     */
+    ANGLE_AHB_FORMAT_YCRCB_420_SP           = 0x11,
+
+    /**
      * Corresponding formats:
      *   Android: AHARDWAREBUFFER_FORMAT_R16G16B16A16_FLOAT
      *   Vulkan: VK_FORMAT_R16G16B16A16_SFLOAT
@@ -197,6 +202,130 @@ enum {
      */
     ANGLE_AHB_FORMAT_R8_UNORM   = 0x38,
 };
+
+enum {
+    /**
+     * The buffer will never be locked for direct CPU reads using the
+     * AHardwareBuffer_lock() function. Note that reading the buffer
+     * using OpenGL or Vulkan functions or memory mappings is still
+     * allowed.
+     */
+    ANGLE_AHB_USAGE_CPU_READ_NEVER        = 0UL,
+    /**
+     * The buffer will sometimes be locked for direct CPU reads using
+     * the AHardwareBuffer_lock() function. Note that reading the
+     * buffer using OpenGL or Vulkan functions or memory mappings
+     * does not require the presence of this flag.
+     */
+    ANGLE_AHB_USAGE_CPU_READ_RARELY       = 2UL,
+    /**
+     * The buffer will often be locked for direct CPU reads using
+     * the AHardwareBuffer_lock() function. Note that reading the
+     * buffer using OpenGL or Vulkan functions or memory mappings
+     * does not require the presence of this flag.
+     */
+    ANGLE_AHB_USAGE_CPU_READ_OFTEN        = 3UL,
+
+    /** CPU read value mask. */
+    ANGLE_AHB_USAGE_CPU_READ_MASK         = 0xFUL,
+    /**
+     * The buffer will never be locked for direct CPU writes using the
+     * AHardwareBuffer_lock() function. Note that writing the buffer
+     * using OpenGL or Vulkan functions or memory mappings is still
+     * allowed.
+     */
+    ANGLE_AHB_USAGE_CPU_WRITE_NEVER       = 0UL << 4,
+    /**
+     * The buffer will sometimes be locked for direct CPU writes using
+     * the AHardwareBuffer_lock() function. Note that writing the
+     * buffer using OpenGL or Vulkan functions or memory mappings
+     * does not require the presence of this flag.
+     */
+    ANGLE_AHB_USAGE_CPU_WRITE_RARELY      = 2UL << 4,
+    /**
+     * The buffer will often be locked for direct CPU writes using
+     * the AHardwareBuffer_lock() function. Note that writing the
+     * buffer using OpenGL or Vulkan functions or memory mappings
+     * does not require the presence of this flag.
+     */
+    ANGLE_AHB_USAGE_CPU_WRITE_OFTEN       = 3UL << 4,
+    /** CPU write value mask. */
+    ANGLE_AHB_USAGE_CPU_WRITE_MASK        = 0xFUL << 4,
+    /** The buffer will be read from by the GPU as a texture. */
+    ANGLE_AHB_USAGE_GPU_SAMPLED_IMAGE     = 1UL << 8,
+    /** The buffer will be written to by the GPU as a framebuffer attachment.*/
+    ANGLE_AHB_USAGE_GPU_FRAMEBUFFER       = 1UL << 9,
+    /**
+     * The buffer will be written to by the GPU as a framebuffer
+     * attachment.
+     *
+     * Note that the name of this flag is somewhat misleading: it does
+     * not imply that the buffer contains a color format. A buffer with
+     * depth or stencil format that will be used as a framebuffer
+     * attachment should also have this flag. Use the equivalent flag
+     * ANGLE_AHB_USAGE_GPU_FRAMEBUFFER to avoid this confusion.
+     */
+    ANGLE_AHB_USAGE_GPU_COLOR_OUTPUT      = ANGLE_AHB_USAGE_GPU_FRAMEBUFFER,
+    /**
+     * The buffer will be used as a composer HAL overlay layer.
+     *
+     * This flag is currently only needed when using ASurfaceTransaction_setBuffer
+     * to set a buffer. In all other cases, the framework adds this flag
+     * internally to buffers that could be presented in a composer overlay.
+     * ASurfaceTransaction_setBuffer is special because it uses buffers allocated
+     * directly through AHardwareBuffer_allocate instead of buffers allocated
+     * by the framework.
+     */
+    ANGLE_AHB_USAGE_COMPOSER_OVERLAY      = 1ULL << 11,
+    /**
+     * The buffer is protected from direct CPU access or being read by
+     * non-secure hardware, such as video encoders.
+     *
+     * This flag is incompatible with CPU read and write flags. It is
+     * mainly used when handling DRM video. Refer to the EGL extension
+     * EGL_EXT_protected_content and GL extension
+     * GL_EXT_protected_textures for more information on how these
+     * buffers are expected to behave.
+     */
+    ANGLE_AHB_USAGE_PROTECTED_CONTENT     = 1UL << 14,
+    /** The buffer will be read by a hardware video encoder. */
+    ANGLE_AHB_USAGE_VIDEO_ENCODE          = 1UL << 16,
+    /**
+     * The buffer will be used for direct writes from sensors.
+     * When this flag is present, the format must be AHARDWAREBUFFER_FORMAT_BLOB.
+     */
+    ANGLE_AHB_USAGE_SENSOR_DIRECT_DATA    = 1UL << 23,
+    /**
+     * The buffer will be used as a shader storage or uniform buffer object.
+     * When this flag is present, the format must be AHARDWAREBUFFER_FORMAT_BLOB.
+     */
+    ANGLE_AHB_USAGE_GPU_DATA_BUFFER       = 1UL << 24,
+    /**
+     * The buffer will be used as a cube map texture.
+     * When this flag is present, the buffer must have a layer count
+     * that is a multiple of 6. Note that buffers with this flag must be
+     * bound to OpenGL textures using the extension
+     * GL_EXT_EGL_image_storage instead of GL_KHR_EGL_image.
+     */
+    ANGLE_AHB_USAGE_GPU_CUBE_MAP          = 1UL << 25,
+    /**
+     * The buffer contains a complete mipmap hierarchy.
+     * Note that buffers with this flag must be bound to OpenGL textures using
+     * the extension GL_EXT_EGL_image_storage instead of GL_KHR_EGL_image.
+     */
+    ANGLE_AHB_USAGE_GPU_MIPMAP_COMPLETE   = 1UL << 26,
+
+    /**
+     * Usage: The buffer is used for front-buffer rendering. When
+     * front-buffering rendering is specified, different usages may adjust their
+     * behavior as a result. For example, when used as GPU_COLOR_OUTPUT the buffer
+     * will behave similar to a single-buffered window. When used with
+     * COMPOSER_OVERLAY, the system will try to prioritize the buffer receiving
+     * an overlay plane & avoid caching it in intermediate composition buffers.
+     */
+    ANGLE_AHB_USAGE_FRONT_BUFFER = 1UL << 32,
+};
+
 // clang-format on
 
 constexpr std::array<GLenum, 3> kSupportedSizedInternalFormats = {GL_RGBA8, GL_RGB8, GL_RGB565};
