@@ -246,6 +246,7 @@ void GL_APIENTRY GL_{name}({params})
     {{
         {constext_lost_error_generator}
     }}
+    ASSERT(!egl::Display::getCurrentThreadUnlockedTailCall()->any());
 }}
 """
 
@@ -267,7 +268,7 @@ TEMPLATE_GLES_ENTRY_POINT_WITH_RETURN = """\
         else
         {{
             returnValue = GetDefaultReturnValue<angle::EntryPoint::GL{name}, {return_type}>();
-    }}
+        }}
         ANGLE_CAPTURE_GL({name}, isCallValid, {gl_capture_params}, returnValue);
     }}
     else
@@ -275,6 +276,7 @@ TEMPLATE_GLES_ENTRY_POINT_WITH_RETURN = """\
         {constext_lost_error_generator}
         returnValue = GetDefaultReturnValue<angle::EntryPoint::GL{name}, {return_type}>();
     }}
+    ASSERT(!egl::Display::getCurrentThreadUnlockedTailCall()->any());
     return returnValue;
 }}
 """
@@ -295,6 +297,7 @@ void EGLAPIENTRY EGL_{name}({params})
         {name}(thread{comma_if_needed}{internal_params});
         ANGLE_CAPTURE_EGL({name}, true, {egl_capture_params});
     }}
+    {epilog}
 }}
 """
 
@@ -322,6 +325,7 @@ TEMPLATE_EGL_ENTRY_POINT_WITH_RETURN = """\
         returnValue = {name}(thread{comma_if_needed}{internal_params});
         ANGLE_CAPTURE_EGL({name}, true, {egl_capture_params}, returnValue);
     }}
+    {epilog}
     return returnValue;
 }}
 """
@@ -1684,7 +1688,9 @@ def format_entry_point_def(api, command_node, cmd_name, proto, params, cmd_packe
         "optional_gl_entry_point_locks":
             get_optional_gl_locks(api, cmd_name, params),
         "preamble":
-            get_preamble(api, cmd_name, params)
+            get_preamble(api, cmd_name, params),
+        "epilog":
+            get_epilog(api, cmd_name),
     }
 
     template = get_def_template(api, cmd_name, return_type, has_errcode_ret)
@@ -2697,6 +2703,24 @@ def get_preamble(api, cmd_name, params):
     preamble += get_prepare_swap_buffers_call(api, cmd_name, params)
     # TODO: others?
     return preamble
+
+
+def get_unlocked_tail_call(api, cmd_name):
+    # Only the following can generate tail calls:
+    #
+    # - eglDestroySurface -> May destroy VkSurfaceKHR in tail call
+    # - eglMakeCurrent -> May destroy VkSurfaceKHR in tail call
+    #
+    if cmd_name in ['eglDestroySurface', 'eglMakeCurrent']:
+        return 'egl::Display::getCurrentThreadUnlockedTailCall()->run();'
+
+    # Otherwise assert that no tail calls where generated
+    return 'ASSERT(!egl::Display::getCurrentThreadUnlockedTailCall()->any());'
+
+
+def get_epilog(api, cmd_name):
+    epilog = get_unlocked_tail_call(api, cmd_name)
+    return epilog
 
 
 def write_stubs_header(api, annotation, title, data_source, out_file, all_commands, commands,
