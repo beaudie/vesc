@@ -88,6 +88,24 @@
       "parentUuid": "4c7e6c24_2427b0e3",
       "revId": "dde74be3b5f8ea68291b9f45a2f08a59c3981fc4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fefb08cd_8f37392f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-04-17T22:36:31Z",
+      "side": 1,
+      "message": "\u003e On Pixel 7, after the change, most of the traces wall time compare improved. On Pixel 6, more than half of the traces wall time compare degraded.\n\nI commented on the doc, but the variance is too high to draw any conclusions.  Need to run more iterations, possibly for longer duration.\n\n\u003e The asphalt_8 water rendering on native is closer to the reference image in Gold test, unfortunately.\n\nThis is really odd.  The native driver is matching previous ANGLE results.  It could be the native driver is keeping the higher precision, but Vulkan is forcing it lower.",
+      "parentUuid": "db2f3b15_d23adcb5",
+      "revId": "dde74be3b5f8ea68291b9f45a2f08a59c3981fc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
