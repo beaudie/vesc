@@ -8,10 +8,8 @@
 
 #include "angle_gl.h"
 #include "common/utilities.h"
-#include "compiler/translator/BuiltinsWorkaroundGLSL.h"
 #include "compiler/translator/DriverUniformMetal.h"
 #include "compiler/translator/ImmutableStringBuilder.h"
-#include "compiler/translator/OutputGLSLBase.h"
 #include "compiler/translator/StaticType.h"
 #include "compiler/translator/TranslatorMetalDirect/AddExplicitTypeCasts.h"
 #include "compiler/translator/TranslatorMetalDirect/AstHelpers.h"
@@ -1343,17 +1341,6 @@ bool TranslatorMetalDirect::translateImpl(TInfoSinkBase &sink,
         {
             return false;
         }
-    }
-    else if (getShaderType() == GL_GEOMETRY_SHADER)
-    {
-        WriteGeometryShaderLayoutQualifiers(
-            sink, getGeometryShaderInputPrimitiveType(), getGeometryShaderInvocations(),
-            getGeometryShaderOutputPrimitiveType(), getGeometryShaderMaxVertices());
-    }
-    else
-    {
-        ASSERT(getShaderType() == GL_COMPUTE_SHADER);
-        EmitWorkGroupSizeGLSL(*this, sink);
     }
 
     if (getShaderType() == GL_VERTEX_SHADER)
