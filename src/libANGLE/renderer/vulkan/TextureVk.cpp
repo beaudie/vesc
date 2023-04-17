@@ -3274,7 +3274,15 @@ void TextureVk::releaseImage(ContextVk *contextVk)
         }
         else
         {
-            mImage->finalizeImageLayoutInShareContexts(renderer, contextVk, mImageSiblingSerial);
+            if (mImage->isExternalImage())
+            {
+                mImage->flushUnsubmittedUseInShareContexts(contextVk);
+            }
+            else
+            {
+                mImage->finalizeImageLayoutInShareContexts(renderer, contextVk,
+                                                           mImageSiblingSerial);
+            }
             mImageObserverBinding.bind(nullptr);
             mImage = nullptr;
         }

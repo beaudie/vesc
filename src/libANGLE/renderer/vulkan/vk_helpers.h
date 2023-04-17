@@ -1946,6 +1946,7 @@ class ImageHelper final : public Resource, public angle::Subject
     void finalizeImageLayoutInShareContexts(RendererVk *renderer,
                                             ContextVk *contextVk,
                                             UniqueSerial imageSiblingSerial);
+    void flushUnsubmittedUseInShareContexts(ContextVk *contextVk);
     void releaseStagedUpdates(RendererVk *renderer);
 
     bool valid() const { return mImage.valid(); }
@@ -2423,6 +2424,8 @@ class ImageHelper final : public Resource, public angle::Subject
     const Semaphore &getAcquireNextImageSemaphore() const { return mAcquireNextImageSemaphore; }
     void resetAcquireNextImageSemaphore() { mAcquireNextImageSemaphore.release(); }
 
+    bool isExternalImage() const { return mIsExternalImage; }
+
   private:
     ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
     struct ClearUpdate
@@ -2757,6 +2760,8 @@ class ImageHelper final : public Resource, public angle::Subject
     // Only used for swapChain images. This is set when an image is acquired and is waited on
     // by the next submission (which uses this image), at which point it is released.
     Semaphore mAcquireNextImageSemaphore;
+
+    bool mIsExternalImage;
 };
 
 ANGLE_INLINE bool RenderPassCommandBufferHelper::usesImage(const ImageHelper &image) const
