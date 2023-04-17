@@ -50,6 +50,7 @@ void GL_APIENTRY GL_BeginConditionalRender(GLuint id, GLenum mode)
             context->beginConditionalRender(id, mode);
         }
         ANGLE_CAPTURE_GL(BeginConditionalRender, isCallValid, context, id, mode);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -79,6 +80,7 @@ void GL_APIENTRY GL_BindFragDataLocation(GLuint program, GLuint color, const GLc
             context->bindFragDataLocation(programPacked, color, name);
         }
         ANGLE_CAPTURE_GL(BindFragDataLocation, isCallValid, context, programPacked, color, name);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -104,6 +106,7 @@ void GL_APIENTRY GL_ClampColor(GLenum target, GLenum clamp)
             context->clampColor(target, clamp);
         }
         ANGLE_CAPTURE_GL(ClampColor, isCallValid, context, target, clamp);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -129,6 +132,7 @@ void GL_APIENTRY GL_EndConditionalRender()
             context->endConditionalRender();
         }
         ANGLE_CAPTURE_GL(EndConditionalRender, isCallValid, context);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -167,6 +171,7 @@ void GL_APIENTRY GL_FramebufferTexture1D(GLenum target,
         }
         ANGLE_CAPTURE_GL(FramebufferTexture1D, isCallValid, context, target, attachment,
                          textargetPacked, texturePacked, level);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -207,6 +212,7 @@ void GL_APIENTRY GL_FramebufferTexture3D(GLenum target,
         }
         ANGLE_CAPTURE_GL(FramebufferTexture3D, isCallValid, context, target, attachment,
                          textargetPacked, texturePacked, level, zoffset);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -230,6 +236,7 @@ void GL_APIENTRY GL_VertexAttribI1i(GLuint index, GLint x)
             context->vertexAttribI1i(index, x);
         }
         ANGLE_CAPTURE_GL(VertexAttribI1i, isCallValid, context, index, x);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -254,6 +261,7 @@ void GL_APIENTRY GL_VertexAttribI1iv(GLuint index, const GLint *v)
             context->vertexAttribI1iv(index, v);
         }
         ANGLE_CAPTURE_GL(VertexAttribI1iv, isCallValid, context, index, v);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -277,6 +285,7 @@ void GL_APIENTRY GL_VertexAttribI1ui(GLuint index, GLuint x)
             context->vertexAttribI1ui(index, x);
         }
         ANGLE_CAPTURE_GL(VertexAttribI1ui, isCallValid, context, index, x);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -301,6 +310,7 @@ void GL_APIENTRY GL_VertexAttribI1uiv(GLuint index, const GLuint *v)
             context->vertexAttribI1uiv(index, v);
         }
         ANGLE_CAPTURE_GL(VertexAttribI1uiv, isCallValid, context, index, v);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -325,6 +335,7 @@ void GL_APIENTRY GL_VertexAttribI2i(GLuint index, GLint x, GLint y)
             context->vertexAttribI2i(index, x, y);
         }
         ANGLE_CAPTURE_GL(VertexAttribI2i, isCallValid, context, index, x, y);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -349,6 +360,7 @@ void GL_APIENTRY GL_VertexAttribI2iv(GLuint index, const GLint *v)
             context->vertexAttribI2iv(index, v);
         }
         ANGLE_CAPTURE_GL(VertexAttribI2iv, isCallValid, context, index, v);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -373,6 +385,7 @@ void GL_APIENTRY GL_VertexAttribI2ui(GLuint index, GLuint x, GLuint y)
             context->vertexAttribI2ui(index, x, y);
         }
         ANGLE_CAPTURE_GL(VertexAttribI2ui, isCallValid, context, index, x, y);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -397,6 +410,7 @@ void GL_APIENTRY GL_VertexAttribI2uiv(GLuint index, const GLuint *v)
             context->vertexAttribI2uiv(index, v);
         }
         ANGLE_CAPTURE_GL(VertexAttribI2uiv, isCallValid, context, index, v);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -421,6 +435,7 @@ void GL_APIENTRY GL_VertexAttribI3i(GLuint index, GLint x, GLint y, GLint z)
             context->vertexAttribI3i(index, x, y, z);
         }
         ANGLE_CAPTURE_GL(VertexAttribI3i, isCallValid, context, index, x, y, z);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -445,6 +460,7 @@ void GL_APIENTRY GL_VertexAttribI3iv(GLuint index, const GLint *v)
             context->vertexAttribI3iv(index, v);
         }
         ANGLE_CAPTURE_GL(VertexAttribI3iv, isCallValid, context, index, v);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -469,6 +485,7 @@ void GL_APIENTRY GL_VertexAttribI3ui(GLuint index, GLuint x, GLuint y, GLuint z)
             context->vertexAttribI3ui(index, x, y, z);
         }
         ANGLE_CAPTURE_GL(VertexAttribI3ui, isCallValid, context, index, x, y, z);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -493,6 +510,7 @@ void GL_APIENTRY GL_VertexAttribI3uiv(GLuint index, const GLuint *v)
             context->vertexAttribI3uiv(index, v);
         }
         ANGLE_CAPTURE_GL(VertexAttribI3uiv, isCallValid, context, index, v);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -517,6 +535,7 @@ void GL_APIENTRY GL_VertexAttribI4bv(GLuint index, const GLbyte *v)
             context->vertexAttribI4bv(index, v);
         }
         ANGLE_CAPTURE_GL(VertexAttribI4bv, isCallValid, context, index, v);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -541,6 +560,7 @@ void GL_APIENTRY GL_VertexAttribI4sv(GLuint index, const GLshort *v)
             context->vertexAttribI4sv(index, v);
         }
         ANGLE_CAPTURE_GL(VertexAttribI4sv, isCallValid, context, index, v);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -565,6 +585,7 @@ void GL_APIENTRY GL_VertexAttribI4ubv(GLuint index, const GLubyte *v)
             context->vertexAttribI4ubv(index, v);
         }
         ANGLE_CAPTURE_GL(VertexAttribI4ubv, isCallValid, context, index, v);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -589,6 +610,7 @@ void GL_APIENTRY GL_VertexAttribI4usv(GLuint index, const GLushort *v)
             context->vertexAttribI4usv(index, v);
         }
         ANGLE_CAPTURE_GL(VertexAttribI4usv, isCallValid, context, index, v);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -624,6 +646,7 @@ void GL_APIENTRY GL_GetActiveUniformName(GLuint program,
         }
         ANGLE_CAPTURE_GL(GetActiveUniformName, isCallValid, context, programPacked, uniformIndex,
                          bufSize, length, uniformName);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -649,6 +672,7 @@ void GL_APIENTRY GL_PrimitiveRestartIndex(GLuint index)
             context->primitiveRestartIndex(index);
         }
         ANGLE_CAPTURE_GL(PrimitiveRestartIndex, isCallValid, context, index);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -690,6 +714,7 @@ void GL_APIENTRY GL_MultiDrawElementsBaseVertex(GLenum mode,
         }
         ANGLE_CAPTURE_GL(MultiDrawElementsBaseVertex, isCallValid, context, modePacked, count,
                          typePacked, indices, drawcount, basevertex);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -716,6 +741,7 @@ void GL_APIENTRY GL_ProvokingVertex(GLenum mode)
             context->provokingVertex(modePacked);
         }
         ANGLE_CAPTURE_GL(ProvokingVertex, isCallValid, context, modePacked);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -754,6 +780,7 @@ void GL_APIENTRY GL_TexImage2DMultisample(GLenum target,
         }
         ANGLE_CAPTURE_GL(TexImage2DMultisample, isCallValid, context, target, samples,
                          internalformat, width, height, fixedsamplelocations);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -794,6 +821,7 @@ void GL_APIENTRY GL_TexImage3DMultisample(GLenum target,
         }
         ANGLE_CAPTURE_GL(TexImage3DMultisample, isCallValid, context, target, samples,
                          internalformat, width, height, depth, fixedsamplelocations);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -828,6 +856,7 @@ void GL_APIENTRY GL_BindFragDataLocationIndexed(GLuint program,
         }
         ANGLE_CAPTURE_GL(BindFragDataLocationIndexed, isCallValid, context, programPacked,
                          colorNumber, index, name);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -853,6 +882,7 @@ void GL_APIENTRY GL_ColorP3ui(GLenum type, GLuint color)
             context->colorP3ui(type, color);
         }
         ANGLE_CAPTURE_GL(ColorP3ui, isCallValid, context, type, color);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -878,6 +908,7 @@ void GL_APIENTRY GL_ColorP3uiv(GLenum type, const GLuint *color)
             context->colorP3uiv(type, color);
         }
         ANGLE_CAPTURE_GL(ColorP3uiv, isCallValid, context, type, color);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -903,6 +934,7 @@ void GL_APIENTRY GL_ColorP4ui(GLenum type, GLuint color)
             context->colorP4ui(type, color);
         }
         ANGLE_CAPTURE_GL(ColorP4ui, isCallValid, context, type, color);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -928,6 +960,7 @@ void GL_APIENTRY GL_ColorP4uiv(GLenum type, const GLuint *color)
             context->colorP4uiv(type, color);
         }
         ANGLE_CAPTURE_GL(ColorP4uiv, isCallValid, context, type, color);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -958,6 +991,7 @@ GLint GL_APIENTRY GL_GetFragDataIndex(GLuint program, const GLchar *name)
             returnValue = GetDefaultReturnValue<angle::EntryPoint::GLGetFragDataIndex, GLint>();
         }
         ANGLE_CAPTURE_GL(GetFragDataIndex, isCallValid, context, programPacked, name, returnValue);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -987,6 +1021,7 @@ void GL_APIENTRY GL_GetQueryObjecti64v(GLuint id, GLenum pname, GLint64 *params)
             context->getQueryObjecti64v(idPacked, pname, params);
         }
         ANGLE_CAPTURE_GL(GetQueryObjecti64v, isCallValid, context, idPacked, pname, params);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1013,6 +1048,7 @@ void GL_APIENTRY GL_GetQueryObjectui64v(GLuint id, GLenum pname, GLuint64 *param
             context->getQueryObjectui64v(idPacked, pname, params);
         }
         ANGLE_CAPTURE_GL(GetQueryObjectui64v, isCallValid, context, idPacked, pname, params);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1040,6 +1076,7 @@ void GL_APIENTRY GL_MultiTexCoordP1ui(GLenum texture, GLenum type, GLuint coords
             context->multiTexCoordP1ui(texture, type, coords);
         }
         ANGLE_CAPTURE_GL(MultiTexCoordP1ui, isCallValid, context, texture, type, coords);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1068,6 +1105,7 @@ void GL_APIENTRY GL_MultiTexCoordP1uiv(GLenum texture, GLenum type, const GLuint
             context->multiTexCoordP1uiv(texture, type, coords);
         }
         ANGLE_CAPTURE_GL(MultiTexCoordP1uiv, isCallValid, context, texture, type, coords);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1095,6 +1133,7 @@ void GL_APIENTRY GL_MultiTexCoordP2ui(GLenum texture, GLenum type, GLuint coords
             context->multiTexCoordP2ui(texture, type, coords);
         }
         ANGLE_CAPTURE_GL(MultiTexCoordP2ui, isCallValid, context, texture, type, coords);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1123,6 +1162,7 @@ void GL_APIENTRY GL_MultiTexCoordP2uiv(GLenum texture, GLenum type, const GLuint
             context->multiTexCoordP2uiv(texture, type, coords);
         }
         ANGLE_CAPTURE_GL(MultiTexCoordP2uiv, isCallValid, context, texture, type, coords);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1150,6 +1190,7 @@ void GL_APIENTRY GL_MultiTexCoordP3ui(GLenum texture, GLenum type, GLuint coords
             context->multiTexCoordP3ui(texture, type, coords);
         }
         ANGLE_CAPTURE_GL(MultiTexCoordP3ui, isCallValid, context, texture, type, coords);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1178,6 +1219,7 @@ void GL_APIENTRY GL_MultiTexCoordP3uiv(GLenum texture, GLenum type, const GLuint
             context->multiTexCoordP3uiv(texture, type, coords);
         }
         ANGLE_CAPTURE_GL(MultiTexCoordP3uiv, isCallValid, context, texture, type, coords);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1205,6 +1247,7 @@ void GL_APIENTRY GL_MultiTexCoordP4ui(GLenum texture, GLenum type, GLuint coords
             context->multiTexCoordP4ui(texture, type, coords);
         }
         ANGLE_CAPTURE_GL(MultiTexCoordP4ui, isCallValid, context, texture, type, coords);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1233,6 +1276,7 @@ void GL_APIENTRY GL_MultiTexCoordP4uiv(GLenum texture, GLenum type, const GLuint
             context->multiTexCoordP4uiv(texture, type, coords);
         }
         ANGLE_CAPTURE_GL(MultiTexCoordP4uiv, isCallValid, context, texture, type, coords);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1258,6 +1302,7 @@ void GL_APIENTRY GL_NormalP3ui(GLenum type, GLuint coords)
             context->normalP3ui(type, coords);
         }
         ANGLE_CAPTURE_GL(NormalP3ui, isCallValid, context, type, coords);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1283,6 +1328,7 @@ void GL_APIENTRY GL_NormalP3uiv(GLenum type, const GLuint *coords)
             context->normalP3uiv(type, coords);
         }
         ANGLE_CAPTURE_GL(NormalP3uiv, isCallValid, context, type, coords);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1311,6 +1357,7 @@ void GL_APIENTRY GL_QueryCounter(GLuint id, GLenum target)
             context->queryCounter(idPacked, targetPacked);
         }
         ANGLE_CAPTURE_GL(QueryCounter, isCallValid, context, idPacked, targetPacked);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1337,6 +1384,7 @@ void GL_APIENTRY GL_SecondaryColorP3ui(GLenum type, GLuint color)
             context->secondaryColorP3ui(type, color);
         }
         ANGLE_CAPTURE_GL(SecondaryColorP3ui, isCallValid, context, type, color);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1363,6 +1411,7 @@ void GL_APIENTRY GL_SecondaryColorP3uiv(GLenum type, const GLuint *color)
             context->secondaryColorP3uiv(type, color);
         }
         ANGLE_CAPTURE_GL(SecondaryColorP3uiv, isCallValid, context, type, color);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1388,6 +1437,7 @@ void GL_APIENTRY GL_TexCoordP1ui(GLenum type, GLuint coords)
             context->texCoordP1ui(type, coords);
         }
         ANGLE_CAPTURE_GL(TexCoordP1ui, isCallValid, context, type, coords);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1413,6 +1463,7 @@ void GL_APIENTRY GL_TexCoordP1uiv(GLenum type, const GLuint *coords)
             context->texCoordP1uiv(type, coords);
         }
         ANGLE_CAPTURE_GL(TexCoordP1uiv, isCallValid, context, type, coords);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1438,6 +1489,7 @@ void GL_APIENTRY GL_TexCoordP2ui(GLenum type, GLuint coords)
             context->texCoordP2ui(type, coords);
         }
         ANGLE_CAPTURE_GL(TexCoordP2ui, isCallValid, context, type, coords);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1463,6 +1515,7 @@ void GL_APIENTRY GL_TexCoordP2uiv(GLenum type, const GLuint *coords)
             context->texCoordP2uiv(type, coords);
         }
         ANGLE_CAPTURE_GL(TexCoordP2uiv, isCallValid, context, type, coords);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1488,6 +1541,7 @@ void GL_APIENTRY GL_TexCoordP3ui(GLenum type, GLuint coords)
             context->texCoordP3ui(type, coords);
         }
         ANGLE_CAPTURE_GL(TexCoordP3ui, isCallValid, context, type, coords);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1513,6 +1567,7 @@ void GL_APIENTRY GL_TexCoordP3uiv(GLenum type, const GLuint *coords)
             context->texCoordP3uiv(type, coords);
         }
         ANGLE_CAPTURE_GL(TexCoordP3uiv, isCallValid, context, type, coords);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1538,6 +1593,7 @@ void GL_APIENTRY GL_TexCoordP4ui(GLenum type, GLuint coords)
             context->texCoordP4ui(type, coords);
         }
         ANGLE_CAPTURE_GL(TexCoordP4ui, isCallValid, context, type, coords);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1563,6 +1619,7 @@ void GL_APIENTRY GL_TexCoordP4uiv(GLenum type, const GLuint *coords)
             context->texCoordP4uiv(type, coords);
         }
         ANGLE_CAPTURE_GL(TexCoordP4uiv, isCallValid, context, type, coords);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1589,6 +1646,7 @@ void GL_APIENTRY GL_VertexAttribP1ui(GLuint index, GLenum type, GLboolean normal
             context->vertexAttribP1ui(index, type, normalized, value);
         }
         ANGLE_CAPTURE_GL(VertexAttribP1ui, isCallValid, context, index, type, normalized, value);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1619,6 +1677,7 @@ void GL_APIENTRY GL_VertexAttribP1uiv(GLuint index,
             context->vertexAttribP1uiv(index, type, normalized, value);
         }
         ANGLE_CAPTURE_GL(VertexAttribP1uiv, isCallValid, context, index, type, normalized, value);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1645,6 +1704,7 @@ void GL_APIENTRY GL_VertexAttribP2ui(GLuint index, GLenum type, GLboolean normal
             context->vertexAttribP2ui(index, type, normalized, value);
         }
         ANGLE_CAPTURE_GL(VertexAttribP2ui, isCallValid, context, index, type, normalized, value);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1675,6 +1735,7 @@ void GL_APIENTRY GL_VertexAttribP2uiv(GLuint index,
             context->vertexAttribP2uiv(index, type, normalized, value);
         }
         ANGLE_CAPTURE_GL(VertexAttribP2uiv, isCallValid, context, index, type, normalized, value);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1701,6 +1762,7 @@ void GL_APIENTRY GL_VertexAttribP3ui(GLuint index, GLenum type, GLboolean normal
             context->vertexAttribP3ui(index, type, normalized, value);
         }
         ANGLE_CAPTURE_GL(VertexAttribP3ui, isCallValid, context, index, type, normalized, value);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1731,6 +1793,7 @@ void GL_APIENTRY GL_VertexAttribP3uiv(GLuint index,
             context->vertexAttribP3uiv(index, type, normalized, value);
         }
         ANGLE_CAPTURE_GL(VertexAttribP3uiv, isCallValid, context, index, type, normalized, value);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1757,6 +1820,7 @@ void GL_APIENTRY GL_VertexAttribP4ui(GLuint index, GLenum type, GLboolean normal
             context->vertexAttribP4ui(index, type, normalized, value);
         }
         ANGLE_CAPTURE_GL(VertexAttribP4ui, isCallValid, context, index, type, normalized, value);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1787,6 +1851,7 @@ void GL_APIENTRY GL_VertexAttribP4uiv(GLuint index,
             context->vertexAttribP4uiv(index, type, normalized, value);
         }
         ANGLE_CAPTURE_GL(VertexAttribP4uiv, isCallValid, context, index, type, normalized, value);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1812,6 +1877,7 @@ void GL_APIENTRY GL_VertexP2ui(GLenum type, GLuint value)
             context->vertexP2ui(type, value);
         }
         ANGLE_CAPTURE_GL(VertexP2ui, isCallValid, context, type, value);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1837,6 +1903,7 @@ void GL_APIENTRY GL_VertexP2uiv(GLenum type, const GLuint *value)
             context->vertexP2uiv(type, value);
         }
         ANGLE_CAPTURE_GL(VertexP2uiv, isCallValid, context, type, value);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1862,6 +1929,7 @@ void GL_APIENTRY GL_VertexP3ui(GLenum type, GLuint value)
             context->vertexP3ui(type, value);
         }
         ANGLE_CAPTURE_GL(VertexP3ui, isCallValid, context, type, value);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1887,6 +1955,7 @@ void GL_APIENTRY GL_VertexP3uiv(GLenum type, const GLuint *value)
             context->vertexP3uiv(type, value);
         }
         ANGLE_CAPTURE_GL(VertexP3uiv, isCallValid, context, type, value);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1912,6 +1981,7 @@ void GL_APIENTRY GL_VertexP4ui(GLenum type, GLuint value)
             context->vertexP4ui(type, value);
         }
         ANGLE_CAPTURE_GL(VertexP4ui, isCallValid, context, type, value);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {
@@ -1937,6 +2007,7 @@ void GL_APIENTRY GL_VertexP4uiv(GLenum type, const GLuint *value)
             context->vertexP4uiv(type, value);
         }
         ANGLE_CAPTURE_GL(VertexP4uiv, isCallValid, context, type, value);
+        ASSERT(!context->getDisplay()->getCurrentThreadUnlockedTailCall()->any());
     }
     else
     {

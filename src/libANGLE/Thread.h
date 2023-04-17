@@ -12,6 +12,7 @@
 #include <EGL/egl.h>
 
 #include "libANGLE/Debug.h"
+#include "libANGLE/angletypes.h"
 
 #include <atomic>
 
@@ -64,11 +65,18 @@ class Thread : public LabeledObject
     gl::Context *getContext() const;
     Display *getDisplay() const;
 
+    angle::UnlockedTailCall *unlockedTailCall() { return &mUnlockedTailCall; }
+
   private:
     EGLLabelKHR mLabel;
     EGLint mError;
     EGLenum mAPI;
     gl::Context *mContext;
+
+    // Tail calls generated during execution of the entry point, to be run at the end of the entry
+    // point.  mUnlockedTailCall.run() is called at the end of any EGL entry point that is expected
+    // to generate such calls.  At the end of every other call, it is asserted that this is empty.
+    angle::UnlockedTailCall mUnlockedTailCall;
 };
 
 void EnsureDebugAllocated();
