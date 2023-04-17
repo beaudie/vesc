@@ -1841,6 +1841,51 @@ TEST_P(EGLSurfaceTest, CreateSurfaceSwapIntervalANGLE)
     }
 }
 
+// Test repeatedly creating, swapping, and releasing an ANW surface. SurfaceFlinger will
+// optimistically import the swapped buffers but will never actually end up using them.
+// Regression test to check that AHB releases are fully flushed to avoid running out of memory.
+TEST_P(EGLSurfaceTest, SurfaceCreateSwapDestroyStress)
+{
+    initializeDisplay();
+
+    constexpr const int kWidth  = 32;
+    constexpr const int kHeight = 32;
+
+    OSWindow *osWindow = OSWindow::New();
+    osWindow->initialize("EGLSurfaceTest", kWidth, kHeight);
+
+    EGLConfig config = chooseDefaultConfig(true);
+    ASSERT_NE(config, nullptr);
+
+    for (int i = 0; i < 2000; i++)
+    {
+        EGLint contextAttribs[] = {EGL_CONTEXT_MAJOR_VERSION, 3, EGL_NONE};
+        EGLContext context      = eglCreateContext(mDisplay, config, nullptr, contextAttribs);
+        ASSERT_EGL_SUCCESS() << "eglCreateContext failed.";
+        ASSERT_NE(EGL_NO_CONTEXT, context);
+
+        EGLSurface surface =
+            eglCreateWindowSurface(mDisplay, config, mOSWindow->getNativeWindow(), NULL);
+        ASSERT_EGL_SUCCESS() << "eglCreateWindowSurface failed.";
+        ASSERT_NE(EGL_NO_SURFACE, surface);
+
+        EXPECT_EGL_TRUE(eglMakeCurrent(mDisplay, surface, surface, context));
+        ASSERT_EGL_SUCCESS();
+
+        eglSwapBuffers(mDisplay, surface);
+        ASSERT_EGL_SUCCESS();
+
+        EXPECT_EGL_TRUE(eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
+        ASSERT_EGL_SUCCESS();
+
+        eglDestroySurface(mDisplay, surface);
+        ASSERT_EGL_SUCCESS();
+
+        eglDestroyContext(mDisplay, context);
+        ASSERT_EGL_SUCCESS();
+    }
+}
+
 // Test that setting a surface's timestamp attribute works when the extension
 // EGL_ANGLE_timestamp_surface_attribute is supported.
 TEST_P(EGLSurfaceTest, TimestampSurfaceAttribute)

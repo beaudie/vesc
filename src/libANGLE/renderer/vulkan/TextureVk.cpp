@@ -3270,11 +3270,11 @@ void TextureVk::releaseImage(ContextVk *contextVk)
     {
         if (mOwnsImage)
         {
-            mImage->releaseImageFromShareContexts(renderer, contextVk, mImageSiblingSerial);
+            mImage->releaseImageFromShareContexts(renderer, contextVk);
         }
         else
         {
-            mImage->finalizeImageLayoutInShareContexts(renderer, contextVk, mImageSiblingSerial);
+            mImage->flushUnsubmittedUseInShareContexts(renderer, contextVk);
             mImageObserverBinding.bind(nullptr);
             mImage = nullptr;
         }
@@ -3284,7 +3284,7 @@ void TextureVk::releaseImage(ContextVk *contextVk)
     {
         if (image.valid())
         {
-            image.releaseImageFromShareContexts(renderer, contextVk, mImageSiblingSerial);
+            image.releaseImageFromShareContexts(renderer, contextVk);
         }
     }
 
