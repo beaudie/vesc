@@ -693,8 +693,18 @@ void PackParameter<int32_t>(ParamBuffer &params, const Token &token, const Trace
 template <>
 void PackParameter<void *>(ParamBuffer &params, const Token &token, const TraceStringMap &strings)
 {
-    void *value = 0;
-    params.addUnnamedParam(ParamType::TvoidPointer, value);
+    if (BeginsWith(token, "gContextMap2"))
+    {
+        const char *start = strrchr(token, '[');
+        ASSERT(start != nullptr && EndsWith(token, "]"));
+        uint32_t value = atoi(start + 1);
+        params.addUnnamedParam(ParamType::TGLuint, value);
+    }
+    else
+    {
+        void *value = 0;
+        params.addUnnamedParam(ParamType::TvoidPointer, value);
+    }
 }
 
 template <>
@@ -1001,7 +1011,7 @@ void PackParameter<unsigned long>(ParamBuffer &params,
 }
 #endif  // defined(ANGLE_PLATFORM_APPLE) || !defined(ANGLE_IS_64_BIT_CPU)
 
-GLuint GetResourceIDMapValue(ResourceIDType resourceIDType, GLuint key)
+GLuint GetUIntResourceIDMapValue(ResourceIDType resourceIDType, GLuint key)
 {
     switch (resourceIDType)
     {
@@ -1029,6 +1039,21 @@ GLuint GetResourceIDMapValue(ResourceIDType resourceIDType, GLuint key)
             return gTransformFeedbackMap[key];
         case ResourceIDType::VertexArray:
             return gVertexArrayMap[key];
+        default:
+            printf("Incompatible resource ID type: %d\n", static_cast<int>(resourceIDType));
+            UNREACHABLE();
+            return 0;
+    }
+}
+
+void *GetPointerResourceIDMapValue(ResourceIDType resourceIDType, void *key)
+{
+    uint32_t id = gl::unsafe_pointer_to_int_cast<uint32_t>(key);
+
+    switch (resourceIDType)
+    {
+        case ResourceIDType::Context:
+            return gContextMap2[id];
         default:
             printf("Incompatible resource ID type: %d\n", static_cast<int>(resourceIDType));
             UNREACHABLE();

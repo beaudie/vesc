@@ -185,7 +185,8 @@ template <typename T>
 struct AssertFalse : std::false_type
 {};
 
-GLuint GetResourceIDMapValue(ResourceIDType resourceIDType, GLuint key);
+GLuint GetUIntResourceIDMapValue(ResourceIDType resourceIDType, GLuint key);
+void *GetPointerResourceIDMapValue(ResourceIDType resourceIDType, void *key);
 
 template <typename T>
 T GetParamValue(ParamType type, const ParamValue &value);
@@ -200,7 +201,7 @@ inline GLuint GetParamValue<GLuint>(ParamType type, const ParamValue &value)
     }
     else
     {
-        return GetResourceIDMapValue(resourceIDType, value.GLuintVal);
+        return GetUIntResourceIDMapValue(resourceIDType, value.GLuintVal);
     }
 }
 
@@ -237,7 +238,15 @@ inline const char *GetParamValue<const char *>(ParamType type, const ParamValue 
 template <>
 inline void *GetParamValue<void *>(ParamType type, const ParamValue &value)
 {
-    return value.voidPointerVal;
+    ResourceIDType resourceIDType = GetResourceIDTypeFromParamType(type);
+    if (resourceIDType == ResourceIDType::InvalidEnum)
+    {
+        return value.voidPointerVal;
+    }
+    else
+    {
+        return GetPointerResourceIDMapValue(resourceIDType, value.voidPointerVal);
+    }
 }
 
 #if defined(ANGLE_IS_64_BIT_CPU)
