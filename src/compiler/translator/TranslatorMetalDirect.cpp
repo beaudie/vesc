@@ -23,6 +23,7 @@
 #include "compiler/translator/TranslatorMetalDirect/NameEmbeddedUniformStructsMetal.h"
 #include "compiler/translator/TranslatorMetalDirect/ReduceInterfaceBlocks.h"
 #include "compiler/translator/TranslatorMetalDirect/RewriteCaseDeclarations.h"
+#include "compiler/translator/TranslatorMetalDirect/RewriteInterpolants.h"
 #include "compiler/translator/TranslatorMetalDirect/RewriteOutArgs.h"
 #include "compiler/translator/TranslatorMetalDirect/RewritePipelines.h"
 #include "compiler/translator/TranslatorMetalDirect/RewriteUnaddressableReferences.h"
@@ -1206,7 +1207,18 @@ bool TranslatorMetalDirect::translateImpl(TInfoSinkBase &sink,
             }
         }
 
-        if (usesSampleID)
+        bool usesSampleInterpolation = false;
+        bool usesSampleInterpolant   = false;
+        if ((getShaderVersion() >= 320 ||
+             IsExtensionEnabled(getExtensionBehavior(),
+                                TExtension::OES_shader_multisample_interpolation)) &&
+            !RewriteInterpolants(*this, *root, symbolTable, &usesSampleInterpolation,
+                                 &usesSampleInterpolant))
+        {
+            return false;
+        }
+
+        if (usesSampleID || (usesSampleMaskIn && usesSampleInterpolation) || usesSampleInterpolant)
         {
             DeclareRightBeforeMain(*root, *BuiltInVariable::gl_SampleID());
         }
@@ -1222,7 +1234,7 @@ bool TranslatorMetalDirect::translateImpl(TInfoSinkBase &sink,
         if (usesSampleMaskIn)
         {
             if (!AddSampleMaskInDeclaration(*this, *root, symbolTable, driverUniforms,
-                                            usesSampleID))
+                                            usesSampleID || usesSampleInterpolation))
             {
                 return false;
             }

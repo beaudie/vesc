@@ -1016,6 +1016,18 @@ void DisplayMtl::initializeExtensions() const
 
     mNativeExtensions.sampleVariablesOES = true;
 
+    if (ANGLE_APPLE_AVAILABLE_XCI(11.0, 14.0, 14.0))
+    {
+        mNativeExtensions.shaderMultisampleInterpolationOES =
+            [mMetalDevice supportsPullModelInterpolation];
+        if (mNativeExtensions.shaderMultisampleInterpolationOES)
+        {
+            mNativeCaps.minInterpolationOffset          = -0.5f;
+            mNativeCaps.maxInterpolationOffset          = 0.4375f;  // 0.5 - 1.0 / 16.0
+            mNativeCaps.subPixelInterpolationOffsetBits = 4;
+        }
+    }
+
     mNativeExtensions.shaderNoperspectiveInterpolationNV = true;
 
     mNativeExtensions.shaderTextureLodEXT = true;

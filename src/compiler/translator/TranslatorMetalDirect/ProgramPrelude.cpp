@@ -109,6 +109,7 @@ class ProgramPrelude : public TIntermTraverser
     void include_metal_common();
     void include_metal_geometric();
     void include_metal_graphics();
+    void include_metal_interpolate();
     void include_metal_math();
     void include_metal_matrix();
     void include_metal_pack();
@@ -265,6 +266,10 @@ class ProgramPrelude : public TIntermTraverser
     void imageLoad();
     void imageStore();
     void memoryBarrierImage();
+    void interpolateAtCenter();
+    void interpolateAtCentroid();
+    void interpolateAtSample();
+    void interpolateAtOffset();
 
   private:
     TInfoSinkBase &mOut;
@@ -304,6 +309,7 @@ PROGRAM_PRELUDE_INCLUDE(metal_atomic)
 PROGRAM_PRELUDE_INCLUDE(metal_common)
 PROGRAM_PRELUDE_INCLUDE(metal_geometric)
 PROGRAM_PRELUDE_INCLUDE(metal_graphics)
+PROGRAM_PRELUDE_INCLUDE(metal_interpolate)
 PROGRAM_PRELUDE_INCLUDE(metal_math)
 PROGRAM_PRELUDE_INCLUDE(metal_matrix)
 PROGRAM_PRELUDE_INCLUDE(metal_pack)
@@ -3136,6 +3142,59 @@ ANGLE_ALWAYS_INLINE void ANGLE_memoryBarrierImage()
 }
 )")
 
+PROGRAM_PRELUDE_DECLARE(interpolateAtCenter,
+                        R"(
+template <typename T, typename P>
+ANGLE_ALWAYS_INLINE T ANGLE_interpolateAtCenter(
+    thread metal::interpolant<T, P> &interpolant)
+{
+    return interpolant.interpolate_at_center();
+}
+)",
+                        include_metal_interpolate())
+
+PROGRAM_PRELUDE_DECLARE(interpolateAtCentroid,
+                        R"(
+template <typename T, typename P>
+ANGLE_ALWAYS_INLINE T ANGLE_interpolateAtCentroid(
+    thread metal::interpolant<T, P> &interpolant)
+{
+    return interpolant.interpolate_at_centroid();
+}
+template <typename T>
+ANGLE_ALWAYS_INLINE T ANGLE_interpolateAtCentroid(T value) { return value; }
+)",
+                        include_metal_interpolate())
+
+PROGRAM_PRELUDE_DECLARE(interpolateAtSample,
+                        R"(
+template <typename T, typename P>
+ANGLE_ALWAYS_INLINE T ANGLE_interpolateAtSample(
+    thread metal::interpolant<T, P> &interpolant,
+    int const sample)
+{
+    return interpolant.interpolate_at_sample(static_cast<uint32_t>(sample));
+}
+template <typename T>
+ANGLE_ALWAYS_INLINE T ANGLE_interpolateAtSample(T value, int) { return value; }
+)",
+                        include_metal_interpolate())
+
+PROGRAM_PRELUDE_DECLARE(interpolateAtOffset,
+                        R"(
+template <typename T, typename P>
+ANGLE_ALWAYS_INLINE T ANGLE_interpolateAtOffset(
+    thread metal::interpolant<T, P> &interpolant,
+    float2 const offset)
+{
+    return interpolant.interpolate_at_offset(metal::fract(offset));
+}
+template <typename T>
+ANGLE_ALWAYS_INLINE T ANGLE_interpolateAtOffset(T value, float2) { return value; }
+)",
+                        include_metal_interpolate(),
+                        include_metal_math())
+
 ////////////////////////////////////////////////////////////////////////////////
 
 // Returned Name is valid for as long as `buffer` is still alive.
@@ -3535,6 +3594,11 @@ ProgramPrelude::FuncToEmitter ProgramPrelude::BuildFuncToEmitter()
     putBuiltIn("imageLoad", EMIT_METHOD(imageLoad));
     putBuiltIn("imageStore", EMIT_METHOD(imageStore));
     putBuiltIn("memoryBarrierImage", EMIT_METHOD(memoryBarrierImage));
+
+    putBuiltIn("interpolateAtCenter", EMIT_METHOD(interpolateAtCenter));
+    putBuiltIn("interpolateAtCentroid", EMIT_METHOD(interpolateAtCentroid));
+    putBuiltIn("interpolateAtSample", EMIT_METHOD(interpolateAtSample));
+    putBuiltIn("interpolateAtOffset", EMIT_METHOD(interpolateAtOffset));
 
     return map;
 
