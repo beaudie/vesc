@@ -11,6 +11,7 @@
 #include "common/debug.h"
 #include "common/platform.h"
 #include "common/system_utils.h"
+#include "libANGLE/Display.h"
 #include "libANGLE/ErrorStrings.h"
 #include "libANGLE/Thread.h"
 #include "libGLESv2/resource.h"
@@ -39,6 +40,7 @@ Thread *AllocateCurrentThread()
     Thread *thread;
     {
         // Global thread intentionally leaked
+        // UnlockedTailCall intentionally leaked
         ANGLE_SCOPED_DISABLE_LSAN();
         thread = new Thread();
 #if defined(ANGLE_PLATFORM_APPLE)
@@ -46,6 +48,9 @@ Thread *AllocateCurrentThread()
 #else
         gCurrentThread = thread;
 #endif
+
+        angle::UnlockedTailCall *unlockedTailCall = new angle::UnlockedTailCall();
+        egl::SetUnlockedTailCallTLS(unlockedTailCall);
     }
 
     // Initialize current-context TLS slot
