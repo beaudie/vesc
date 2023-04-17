@@ -394,6 +394,45 @@ void PackResourceID(ParamBuffer &params, const Token &token)
 }
 
 template <typename IntT>
+void ParseInt(const Token &token, IntT &value);
+
+template <>
+void ParseInt<int16_t>(const Token &token, int16_t &value)
+{
+    value = static_cast<int16_t>(strtol(token, nullptr, 10));
+}
+
+template <>
+void ParseInt<int32_t>(const Token &token, int32_t &value)
+{
+    value = static_cast<int32_t>(strtol(token, nullptr, 10));
+}
+
+template <>
+void ParseInt<uint32_t>(const Token &token, uint32_t &value)
+{
+    value = static_cast<uint32_t>(strtoul(token, nullptr, 10));
+}
+
+template <>
+void ParseInt<int64_t>(const Token &token, int64_t &value)
+{
+    value = strtoll(token, nullptr, 10);
+}
+
+template <>
+void ParseInt<uint8_t>(const Token &token, uint8_t &value)
+{
+    value = static_cast<uint8_t>(strtoul(token, nullptr, 10));
+}
+
+template <>
+void ParseInt<uint64_t>(const Token &token, uint64_t &value)
+{
+    value = strtoull(token, nullptr, 10);
+}
+
+template <typename IntT>
 void PackIntParameter(ParamBuffer &params, ParamType paramType, const Token &token)
 {
     IntT value;
@@ -423,7 +462,7 @@ void PackIntParameter(ParamBuffer &params, ParamType paramType, const Token &tok
         }
         else
         {
-            value = static_cast<IntT>(atoi(token));
+            ParseInt(token, value);
         }
     }
 
@@ -732,15 +771,13 @@ void PackParameter<int32_t *>(ParamBuffer &params,
 template <>
 void PackParameter<uint64_t>(ParamBuffer &params, const Token &token, const TraceStringMap &strings)
 {
-    params.addUnnamedParam(ParamType::TGLuint64,
-                           static_cast<GLuint64>(std::strtoull(token, nullptr, 10)));
+    PackIntParameter<uint64_t>(params, ParamType::TGLuint64, token);
 }
 
 template <>
 void PackParameter<int64_t>(ParamBuffer &params, const Token &token, const TraceStringMap &strings)
 {
-    params.addUnnamedParam(ParamType::TGLint64,
-                           static_cast<GLint64>(std::strtoll(token, nullptr, 10)));
+    PackIntParameter<int64_t>(params, ParamType::TGLint64, token);
 }
 
 template <>

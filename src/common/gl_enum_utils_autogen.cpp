@@ -18770,7 +18770,7 @@ const char *GLenumToString(BigGLEnum enumGroup, unsigned int value)
 
 namespace
 {
-using StringEnumEntry                      = std::pair<const char *, unsigned int>;
+using StringEnumEntry                      = std::pair<const char *, uint64_t>;
 static StringEnumEntry g_stringEnumTable[] = {
     {"GL_1PASS_EXT", 0x80A1},
     {"GL_1PASS_SGIS", 0x80A1},
@@ -24166,8 +24166,8 @@ static StringEnumEntry g_stringEnumTable[] = {
     {"GL_TIMELINE_SEMAPHORE_VALUE_NV", 0x9595},
     {"GL_TIMEOUT_EXPIRED", 0x911B},
     {"GL_TIMEOUT_EXPIRED_APPLE", 0x911B},
-    {"GL_TIMEOUT_IGNORED", 0xFFFFFFFF},
-    {"GL_TIMEOUT_IGNORED_APPLE", 0xFFFFFFFF},
+    {"GL_TIMEOUT_IGNORED", 0xFFFFFFFFFFFFFFFFull},
+    {"GL_TIMEOUT_IGNORED_APPLE", 0xFFFFFFFFFFFFFFFFull},
     {"GL_TIMESTAMP", 0x8E28},
     {"GL_TIMESTAMP_EXT", 0x8E28},
     {"GL_TIME_ELAPSED", 0x88BF},
@@ -24827,7 +24827,7 @@ static StringEnumEntry g_stringEnumTable[] = {
 const size_t g_numStringEnums = std::size(g_stringEnumTable);
 }  // anonymous namespace
 
-unsigned int StringToGLenum(const char *str)
+uint64_t StringToGLenum(const char *str)
 {
     auto it = std::lower_bound(
         &g_stringEnumTable[0], &g_stringEnumTable[g_numStringEnums], str,

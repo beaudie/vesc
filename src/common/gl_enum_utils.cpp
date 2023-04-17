@@ -123,9 +123,9 @@ const char *GLinternalFormatToString(unsigned int format)
     return GLenumToString(gl::GLESEnum::InternalFormat, format);
 }
 
-unsigned int StringToGLbitfield(const char *str)
+uint64_t StringToGLbitfield(const char *str)
 {
-    unsigned int value = 0;
+    uint64_t value = 0;
     std::vector<std::string> strings =
         angle::SplitString(str, " |", angle::WhitespaceHandling::TRIM_WHITESPACE,
                            angle::SplitResult::SPLIT_WANT_NONEMPTY);

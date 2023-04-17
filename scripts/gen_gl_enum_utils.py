@@ -95,7 +95,7 @@ const char *GLenumToString(BigGLEnum enumGroup, unsigned int value)
 
 namespace
 {{
-using StringEnumEntry = std::pair<const char*, unsigned int>;
+using StringEnumEntry = std::pair<const char*, uint64_t>;
 static StringEnumEntry g_stringEnumTable[] = {{
     {string_to_enum_table}
 }};
@@ -103,7 +103,7 @@ static StringEnumEntry g_stringEnumTable[] = {{
 const size_t g_numStringEnums = std::size(g_stringEnumTable);
 }}  // anonymous namespace
 
-unsigned int StringToGLenum(const char *str)
+uint64_t StringToGLenum(const char *str)
 {{
     auto it = std::lower_bound(
         &g_stringEnumTable[0], &g_stringEnumTable[g_numStringEnums], str,
@@ -188,8 +188,8 @@ def dump_string_to_value_mapping(enums_and_values):
             return "0x%04X" % value
         if value <= 0xFFFFFFFF:
             return "0x%X" % value
-        else:
-            return "0xFFFFFFFF"
+        assert value <= 0xFFFFFFFFFFFFFFFF
+        return "0x%Xull" % value
 
     return '\n'.join('{"%s", %s},' % (k, f(v)) for k, v in sorted(enums_and_values))
 
