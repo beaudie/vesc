@@ -33,6 +33,23 @@
       "message": "99% sure the win-trace failure was a flake. CC\u0027ing Yuly as FYI.",
       "revId": "1ff3ec5a8709b6c7df679d42b18e1509b6bc2b96",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3556ea2c_aef49e91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-17T20:05:26Z",
+      "side": 1,
+      "message": "Commented on win-trace flakiness bug:\nhttps://bugs.chromium.org/p/angleproject/issues/detail?id\u003d7432",
+      "revId": "1ff3ec5a8709b6c7df679d42b18e1509b6bc2b96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
