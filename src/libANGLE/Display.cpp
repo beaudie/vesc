@@ -44,6 +44,11 @@
 #include "libANGLE/renderer/ImageImpl.h"
 #include "libANGLE/trace.h"
 
+#if defined(ANGLE_PLATFORM_APPLE)
+#    include <dispatch/dispatch.h>
+#    include "common/tls.h"
+#endif
+
 #if defined(ANGLE_ENABLE_D3D9) || defined(ANGLE_ENABLE_D3D11)
 #    include <versionhelpers.h>
 
@@ -1230,6 +1235,10 @@ Error Display::terminate(Thread *thread, TerminateReason terminateReason)
         // We also shouldn't set it to null in case eglInitialize() is called again later
         SafeDelete(mDevice);
     }
+
+    // Before tearing down the backend device, ensure all deferred operations are run.  It is not
+    // possible to defer them beyond this point.
+    getCurrentThreadUnlockedTailCall()->run();
 
     mImplementation->terminate();
 
@@ -2593,4 +2602,51 @@ egl::Sync *Display::getSync(egl::SyncID syncID)
     return GetResourceFromHashSet<egl::Sync *>(syncID, mSyncSet);
 }
 
+#if defined(ANGLE_PLATFORM_APPLE)
+// TODO(angleproject:6479): Due to a bug in Apple's dyld loader, `thread_local` will cause
+// excessive memory use. Temporarily avoid it by using pthread's thread
+// local storage instead.
+static TLSIndex GetUnlockedTailCallTLSIndex()
+{
+    static TLSIndex UnlockedTailCallIndex = TLS_INVALID_INDEX;
+    static dispatch_once_t once;
+    dispatch_once(&once, ^{
+      ASSERT(UnlockedTailCallIndex == TLS_INVALID_INDEX);
+      UnlockedTailCallIndex = CreateTLSIndex(nullptr);
+    });
+    return UnlockedTailCallIndex;
+}
+angle::UnlockedTailCall *GetUnlockedTailCallTLS()
+{
+    TLSIndex UnlockedTailCallIndex = GetUnlockedTailCallTLSIndex();
+    ASSERT(UnlockedTailCallIndex != TLS_INVALID_INDEX);
+    return static_cast<angle::UnlockedTailCall *>(GetTLSValue(UnlockedTailCallIndex));
+}
+void SetUnlockedTailCallTLS(angle::UnlockedTailCall *unlockedTailCall)
+{
+    TLSIndex UnlockedTailCallIndex = GetUnlockedTailCallTLSIndex();
+    ASSERT(UnlockedTailCallIndex != TLS_INVALID_INDEX);
+    SetTLSValue(UnlockedTailCallIndex, unlockedTailCall);
+}
+#else
+// Tail calls generated during execution of the entry point, to be run at the end of the entry
+// point.  gUnlockedTailCall->run() is called at the end of any EGL entry point that is expected to
+// generate such calls.  At the end of every other call, it is asserted that this is empty.
+thread_local angle::UnlockedTailCall *gUnlockedTailCall = nullptr;
+
+void SetUnlockedTailCallTLS(angle::UnlockedTailCall *unlockedTailCall)
+{
+    gUnlockedTailCall = unlockedTailCall;
+}
+#endif
+
+// static
+angle::UnlockedTailCall *Display::getCurrentThreadUnlockedTailCall()
+{
+#if defined(ANGLE_PLATFORM_APPLE)
+    return GetUnlockedTailCallTLS();
+#else
+    return gUnlockedTailCall;
+#endif
+}
 }  // namespace egl
