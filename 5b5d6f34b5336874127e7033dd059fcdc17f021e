@@ -128,6 +128,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fcac93c2_21ee8b5e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3277,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-18T17:51:33Z",
+      "side": 1,
+      "message": "\u003e The hasUnsubmittedUse() check will only return true if resource has an unsubmitted queue serial of this context. So in case of two context, only one context will end up with flush.\n\n\u003e I mean that\u0027s the problem. You don\u0027t know which context the texture is used in, because any context can be releasing it, so you\u0027d have to do this for all contexts in the share group, not just this context.\n\nI guess this CL should do similar thing to `finalizeImageLayoutInShareContexts()`.\nIt should go over each context in a share group, check if it `hasUnsubmittedUse` and if it does - call `flushImpl`.\n\nMay name this function `flushUsubmittedUseInShareContexts()`, for example.\n\n\u003e And then finalizeImageLayoutInShareContexts becomes redundant because the flush would do the same thing.\n\nI think you are right. If Image Layout is not finalized it must have unsubmitted use. Calling `flushImpl()` will finalize the layout.\n\n---\n\nAnother question. Should similar be performed in the `RenderbufferVk::releaseImage()` for consistency? If yes, then `flushUsubmittedUseInShareContexts` will replace `finalizeImageLayoutInShareContexts` completely.",
+      "parentUuid": "133363cf_7eb8b48e",
+      "revId": "5b5d6f34b5336874127e7033dd059fcdc17f021e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "636a8064_7b9a5be5",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 5
