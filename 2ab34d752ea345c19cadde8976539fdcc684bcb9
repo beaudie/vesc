@@ -109,6 +109,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8481d3a4_27fd144b",
+        "filename": "src/compiler/translator/OutputSPIRV.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 6044,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-04-18T01:08:47Z",
+      "side": 1,
+      "message": "\u003e It specifically says it reduces the precision of a \"relaxed-precision\" result (i.e. id). If the id is not RelaxedPrecision, we end up doing the job of quantizing to fp16, but then say that it needs to stay in a 32-bit container (SPIR-V id, register, whatever).\n\nMy understanding was the original SpirV:\n```\nOpDecorate %Id1 RelaxedPrecision\nOpDecorate %Id2 RelaxedPrecision\n%Id1 \u003d OpLoad %typeFloat %_ua_unitCoords\nOpStore %Id2 %Id1\n```\n\nchanges to:\n```\nOpDecorate %Id1 RelaxedPrecision\nOpDecorate %Id2 RelaxedPrecision\n%Id1 \u003d OpLoad %typeFloat %_ua_unitCoords\n%Id3 \u003d OpQuantizeToF16 %typeFloat %Id1\nOpStore %Id2 %Id3\n```\n\nThe spec requires %Id1 to be declared as `RelaxedPrecision`, and it does not enforce the result %Id3 to be declared as `RelaxedPrecision`.\n\nIn the [OpQuantizeToF16](https://registry.khronos.org/SPIR-V/specs/unified1/SPIRV.html#OpQuantizeToF16) spec section, it also mentioned:\n`The RelaxedPrecision Decoration has no effect on this instruction.`",
+      "parentUuid": "90c99be9_b2aae61a",
+      "range": {
+        "startLine": 6044,
+        "startChar": 71,
+        "endLine": 6044,
+        "endChar": 73
+      },
+      "revId": "2ab34d752ea345c19cadde8976539fdcc684bcb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6c27cc85_de0fb59b",
         "filename": "src/compiler/translator/OutputSPIRV.cpp",
         "patchSetId": 14
