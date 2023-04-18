@@ -329,9 +329,11 @@ angle::Result TextureVk::setImage(const gl::Context *context,
                                   gl::Buffer *unpackBuffer,
                                   const uint8_t *pixels)
 {
-    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(internalFormat, type);
+    const gl::InternalFormat &internalFormatInfo = gl::GetInternalFormatInfo(internalFormat, type);
+    const gl::InternalFormat &pixelsFormatInfo   = gl::GetInternalFormatInfo(format, type);
 
-    return setImageImpl(context, index, formatInfo, size, type, unpack, unpackBuffer, pixels);
+    return setImageImpl(context, index, internalFormatInfo, pixelsFormatInfo, size, type, unpack,
+                        unpackBuffer, pixels);
 }
 
 angle::Result TextureVk::setSubImage(const gl::Context *context,
@@ -343,14 +345,14 @@ angle::Result TextureVk::setSubImage(const gl::Context *context,
                                      gl::Buffer *unpackBuffer,
                                      const uint8_t *pixels)
 {
-    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(format, type);
-    ContextVk *contextVk                 = vk::GetImpl(context);
-    const gl::ImageDesc &levelDesc       = mState.getImageDesc(index);
-    const vk::Format &vkFormat =
+    const gl::InternalFormat &pixelsFormatInfo = gl::GetInternalFormatInfo(format, type);
+    ContextVk *contextVk                       = vk::GetImpl(context);
+    const gl::ImageDesc &levelDesc             = mState.getImageDesc(index);
+    const vk::Format &storageFormat =
         contextVk->getRenderer()->getFormat(levelDesc.format.info->sizedInternalFormat);
 
-    return setSubImageImpl(context, index, area, formatInfo, type, unpack, unpackBuffer, pixels,
-                           vkFormat);
+    return setSubImageImpl(context, index, area, pixelsFormatInfo, type, unpack, unpackBuffer,
+                           pixels, storageFormat);
 }
 
 angle::Result TextureVk::setCompressedImage(const gl::Context *context,
@@ -366,8 +368,8 @@ angle::Result TextureVk::setCompressedImage(const gl::Context *context,
     const gl::State &glState = context->getState();
     gl::Buffer *unpackBuffer = glState.getTargetBuffer(gl::BufferBinding::PixelUnpack);
 
-    return setImageImpl(context, index, formatInfo, size, GL_UNSIGNED_BYTE, unpack, unpackBuffer,
-                        pixels);
+    return setImageImpl(context, index, formatInfo, formatInfo, size, GL_UNSIGNED_BYTE, unpack,
+                        unpackBuffer, pixels);
 }
 
 angle::Result TextureVk::setCompressedSubImage(const gl::Context *context,
@@ -379,21 +381,23 @@ angle::Result TextureVk::setCompressedSubImage(const gl::Context *context,
                                                const uint8_t *pixels)
 {
 
-    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(format, GL_UNSIGNED_BYTE);
-    ContextVk *contextVk                 = vk::GetImpl(context);
-    const gl::ImageDesc &levelDesc       = mState.getImageDesc(index);
-    const vk::Format &vkFormat =
+    const gl::InternalFormat &pixelsFormatInfo =
+        gl::GetInternalFormatInfo(format, GL_UNSIGNED_BYTE);
+    ContextVk *contextVk           = vk::GetImpl(context);
+    const gl::ImageDesc &levelDesc = mState.getImageDesc(index);
+    const vk::Format &storageFormat =
         contextVk->getRenderer()->getFormat(levelDesc.format.info->sizedInternalFormat);
     const gl::State &glState = contextVk->getState();
     gl::Buffer *unpackBuffer = glState.getTargetBuffer(gl::BufferBinding::PixelUnpack);
 
-    return setSubImageImpl(context, index, area, formatInfo, GL_UNSIGNED_BYTE, unpack, unpackBuffer,
-                           pixels, vkFormat);
+    return setSubImageImpl(context, index, area, pixelsFormatInfo, GL_UNSIGNED_BYTE, unpack,
+                           unpackBuffer, pixels, storageFormat);
 }
 
 angle::Result TextureVk::setImageImpl(const gl::Context *context,
                                       const gl::ImageIndex &index,
-                                      const gl::InternalFormat &formatInfo,
+                                      const gl::InternalFormat &internalFormatInfo,
+                                      const gl::InternalFormat &pixelsFormatInfo,
                                       const gl::Extents &size,
                                       GLenum type,
                                       const gl::PixelUnpackState &unpack,
@@ -403,9 +407,9 @@ angle::Result TextureVk::setImageImpl(const gl::Context *context,
     ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
 
-    const vk::Format &vkFormat = renderer->getFormat(formatInfo.sizedInternalFormat);
+    const vk::Format &storageFormat = renderer->getFormat(internalFormatInfo.sizedInternalFormat);
 
-    ANGLE_TRY(redefineLevel(context, index, vkFormat, size));
+    ANGLE_TRY(redefineLevel(context, index, storageFormat, size));
 
     // Early-out on empty textures, don't create a zero-sized storage.
     if (size.empty())
@@ -413,8 +417,8 @@ angle::Result TextureVk::setImageImpl(const gl::Context *context,
         return angle::Result::Continue;
     }
 
-    return setSubImageImpl(context, index, gl::Box(gl::kOffsetZero, size), formatInfo, type, unpack,
-                           unpackBuffer, pixels, vkFormat);
+    return setSubImageImpl(context, index, gl::Box(gl::kOffsetZero, size), pixelsFormatInfo, type,
+                           unpack, unpackBuffer, pixels, storageFormat);
 }
 
 bool TextureVk::isFastUnpackPossible(const vk::Format &vkFormat, size_t offset) const
@@ -573,12 +577,12 @@ bool TextureVk::shouldUpdateBeStaged(gl::LevelIndex textureLevelIndexGL,
 angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
                                          const gl::ImageIndex &index,
                                          const gl::Box &area,
-                                         const gl::InternalFormat &formatInfo,
+                                         const gl::InternalFormat &pixelsFormatInfo,
                                          GLenum type,
                                          const gl::PixelUnpackState &unpack,
                                          gl::Buffer *unpackBuffer,
                                          const uint8_t *pixels,
-                                         const vk::Format &vkFormat)
+                                         const vk::Format &storageFormat)
 {
     ContextVk *contextVk = vk::GetImpl(context);
 
@@ -586,7 +590,7 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
     bool shouldFlush = false;
     if (!mOwnsImage || mState.getImmutableFormat() ||
         (!shouldUpdateBeStaged(gl::LevelIndex(index.getLevelIndex()),
-                               vkFormat.getActualImageFormatID(getRequiredImageAccess()))))
+                               storageFormat.getActualImageFormatID(getRequiredImageAccess()))))
     {
         shouldFlush = true;
     }
@@ -602,26 +606,26 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
         GLuint inputSkipBytes          = 0;
 
         ANGLE_TRY(mImage->CalculateBufferInfo(
-            contextVk, gl::Extents(area.width, area.height, area.depth), formatInfo, unpack, type,
-            index.usesTex3D(), &inputRowPitch, &inputDepthPitch, &inputSkipBytes));
+            contextVk, gl::Extents(area.width, area.height, area.depth), pixelsFormatInfo, unpack,
+            type, index.usesTex3D(), &inputRowPitch, &inputDepthPitch, &inputSkipBytes));
 
         size_t offsetBytes = static_cast<size_t>(bufferOffset + offset + inputSkipBytes);
 
         // Note: cannot directly copy from a depth/stencil PBO.  GL requires depth and stencil data
         // to be packed, while Vulkan requires them to be separate.
         const VkImageAspectFlags aspectFlags =
-            vk::GetFormatAspectFlags(vkFormat.getIntendedFormat());
+            vk::GetFormatAspectFlags(storageFormat.getIntendedFormat());
 
         if (!shouldUpdateBeStaged(gl::LevelIndex(index.getLevelIndex()),
-                                  vkFormat.getActualImageFormatID(getRequiredImageAccess())) &&
-            isFastUnpackPossible(vkFormat, offsetBytes))
+                                  storageFormat.getActualImageFormatID(getRequiredImageAccess())) &&
+            isFastUnpackPossible(storageFormat, offsetBytes))
         {
-            GLuint pixelSize   = formatInfo.pixelBytes;
-            GLuint blockWidth  = formatInfo.compressedBlockWidth;
-            GLuint blockHeight = formatInfo.compressedBlockHeight;
-            if (!formatInfo.compressed)
+            GLuint pixelSize   = pixelsFormatInfo.pixelBytes;
+            GLuint blockWidth  = pixelsFormatInfo.compressedBlockWidth;
+            GLuint blockHeight = pixelsFormatInfo.compressedBlockHeight;
+            if (!pixelsFormatInfo.compressed)
             {
-                pixelSize   = formatInfo.computePixelBytes(type);
+                pixelSize   = pixelsFormatInfo.computePixelBytes(type);
                 blockWidth  = 1;
                 blockHeight = 1;
             }
@@ -650,8 +654,9 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
             ANGLE_TRY(mImage->stageSubresourceUpdateImpl(
                 contextVk, getNativeImageIndex(index),
                 gl::Extents(area.width, area.height, area.depth),
-                gl::Offset(area.x, area.y, area.z), formatInfo, unpack, type, source, vkFormat,
-                getRequiredImageAccess(), inputRowPitch, inputDepthPitch, inputSkipBytes));
+                gl::Offset(area.x, area.y, area.z), pixelsFormatInfo, unpack, type, source,
+                storageFormat, getRequiredImageAccess(), inputRowPitch, inputDepthPitch,
+                inputSkipBytes));
 
             ANGLE_TRY(unpackBufferVk->unmapImpl(contextVk));
         }
@@ -660,8 +665,8 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
     {
         ANGLE_TRY(mImage->stageSubresourceUpdate(
             contextVk, getNativeImageIndex(index), gl::Extents(area.width, area.height, area.depth),
-            gl::Offset(area.x, area.y, area.z), formatInfo, unpack, type, pixels, vkFormat,
-            getRequiredImageAccess()));
+            gl::Offset(area.x, area.y, area.z), pixelsFormatInfo, unpack, type, pixels,
+            storageFormat, getRequiredImageAccess()));
     }
 
     // If we used context's staging buffer, flush out the updates
