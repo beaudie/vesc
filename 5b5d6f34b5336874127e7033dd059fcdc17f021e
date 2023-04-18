@@ -146,6 +146,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "eb7dfa00_15e33a82",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3277,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-18T18:03:52Z",
+      "side": 1,
+      "message": "\u003e I mean that\u0027s the problem. You don\u0027t know which context the texture is used in, because any context can be releasing it, so you\u0027d have to do this for all contexts in the share group, not just this context.\n\nI think you are right. Also agree with Igor, maybe should piggyback on finalizeImageLayoutInShareContexts and rename it with proper name.",
+      "parentUuid": "fcac93c2_21ee8b5e",
+      "revId": "5b5d6f34b5336874127e7033dd059fcdc17f021e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "636a8064_7b9a5be5",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 5
