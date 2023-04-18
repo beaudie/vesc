@@ -34,6 +34,24 @@
       "parentUuid": "bf62c73a_d6848916",
       "revId": "f32368672706bdde1feb0d4e5e3e9b004bb76f9c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5185e21_36f5fdab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-18T18:00:16Z",
+      "side": 1,
+      "message": "Ok, would you please add `ES3_VULKAN().enable(Feature::ForceFallbackFormat)` to the ClearTestES3 (and other clear) suites? That should make it easier to reproduce this.\n\nI have a feeling after this lands we\u0027re going to forget about it. What do you think of suppressing the test and passing it to LunarG to debug VVL? I forgot VVL is firing (so unlikely to be a driver bug), which very much sounds like a VVL issue (we do frequently keep hitting dynamic state bugs with VVL). You could also suppress the validation message.",
+      "parentUuid": "d74a7d4e_8ca52e6f",
+      "revId": "f32368672706bdde1feb0d4e5e3e9b004bb76f9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
