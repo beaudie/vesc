@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cb23d7dd_fa777785",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3277,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-18T16:02:58Z",
+      "side": 1,
+      "message": "You can call `ContextVk::onImageReleaseToExternal()` instead.\n\nThat said, is there a more constrained place we could call this? Like at the call site which specifically has something to do with external images?\n\nThis seems like it\u0027s in the wrong place, other than the `(void)` cast being an indication, in the very least it should be done after finalizeImageLayoutInShareContexts(), don\u0027t you think?",
+      "revId": "5b5d6f34b5336874127e7033dd059fcdc17f021e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "636a8064_7b9a5be5",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 5
