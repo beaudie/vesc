@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8a68c674_5fbb42c1",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3277,
+      "author": {
+        "id": 1379716
+      },
+      "writtenOn": "2023-04-18T16:45:20Z",
+      "side": 1,
+      "message": "Yup, that still works.\n\nre: the `ANGLE_TRY()`, I tried plumbing the `angle::Result` further up in patchset 3 but cclao@ suggested to just drop the result in https://chromium-review.googlesource.com/c/angle/angle/+/4436529/comment/cd02cd8b_ede70764/ .",
+      "parentUuid": "2dd128a8_12e44639",
+      "revId": "5b5d6f34b5336874127e7033dd059fcdc17f021e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "636a8064_7b9a5be5",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 5
@@ -67,6 +85,30 @@
       "writtenOn": "2023-04-18T00:07:02Z",
       "side": 1,
       "message": "Does it need to be 2000 to reproduce (it increases test time)? If this is deterministic (if I understand problem correctly), then loop once should be enough?",
+      "range": {
+        "startLine": 1860,
+        "startChar": 24,
+        "endLine": 1860,
+        "endChar": 28
+      },
+      "revId": "5b5d6f34b5336874127e7033dd059fcdc17f021e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a35c246_5f8d0e8e",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1860,
+      "author": {
+        "id": 1379716
+      },
+      "writtenOn": "2023-04-18T16:45:20Z",
+      "side": 1,
+      "message": "I guess the issue is that there is not really an available and clean mechanism for checking how many outstanding gralloc buffers are imported and being kept alive (there is a `gralloc-\u003edumpBuffers()` but IIUC that is intended for debugging) so the failures manifest as the device running out of memory (and/or in this specific Cuttlefish case when we are using GPU passthrough with Gfxstream, the host GPU running out of memory) and kind of dying in weird ways. Maybe these tests are better left downstream if there is worry about the test time?",
+      "parentUuid": "636a8064_7b9a5be5",
       "range": {
         "startLine": 1860,
         "startChar": 24,
