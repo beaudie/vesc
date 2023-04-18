@@ -231,6 +231,30 @@
       },
       "revId": "5b5d6f34b5336874127e7033dd059fcdc17f021e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cec1aec5_04f01c4f",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1860,
+      "author": {
+        "id": 1379716
+      },
+      "writtenOn": "2023-04-18T22:40:45Z",
+      "side": 1,
+      "message": "One issue is that the `HardwareBufferImageSiblingVkAndroid`s and `ImageHelper`s are being cleaned up immediately but the underlying `ImageHelper::mDeviceMemory`s are not being cleaned up immediately on `ImageHelper::releaseImage()`. The `ImageHelper::mDeviceMemory`s are added to the \"pending garbage\" list based on the `ImageHelper::mUse` (which, IIUC, comes from the external queue acquire barrier) on `ImageHelper::releaseImage()`. So the performance counter would have to either have to track active `vk::DeviceMemory` which might be conflated with device memory for things other than external images or we would have to attach extra tags into `vk::DeviceMemory` which seems wrong. WDYT?",
+      "parentUuid": "3de41bf9_3ccc86dd",
+      "range": {
+        "startLine": 1860,
+        "startChar": 24,
+        "endLine": 1860,
+        "endChar": 28
+      },
+      "revId": "5b5d6f34b5336874127e7033dd059fcdc17f021e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
