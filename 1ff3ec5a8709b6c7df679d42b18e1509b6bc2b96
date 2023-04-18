@@ -50,6 +50,24 @@
       "message": "Commented on win-trace flakiness bug:\nhttps://bugs.chromium.org/p/angleproject/issues/detail?id\u003d7432",
       "revId": "1ff3ec5a8709b6c7df679d42b18e1509b6bc2b96",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdd8a5d6_3b8d3d38",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-04-18T14:41:35Z",
+      "side": 1,
+      "message": "Wasn\u0027t a flake, bot was broken.\nFixed by https://chromium-review.googlesource.com/c/angle/angle/+/4436590",
+      "parentUuid": "3556ea2c_aef49e91",
+      "revId": "1ff3ec5a8709b6c7df679d42b18e1509b6bc2b96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
