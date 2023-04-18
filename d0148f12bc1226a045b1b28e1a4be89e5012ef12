@@ -69,6 +69,24 @@
       "parentUuid": "c7c44562_b5a30c61",
       "revId": "d0148f12bc1226a045b1b28e1a4be89e5012ef12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "042a0775_a87fe74a",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1347,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-04-18T22:11:28Z",
+      "side": 0,
+      "message": "👍",
+      "parentUuid": "8df1b5b7_9956c1ff",
+      "revId": "d0148f12bc1226a045b1b28e1a4be89e5012ef12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
