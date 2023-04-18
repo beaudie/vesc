@@ -131,6 +131,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "119ae466_993ee1b4",
+        "filename": "src/compiler/translator/OutputSPIRV.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 6044,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-18T02:15:46Z",
+      "side": 1,
+      "message": "\u003e In the OpQuantizeToF16 spec section, it also mentioned:\n\u003e `The RelaxedPrecision Decoration has no effect on this instruction.`\n\nAh good catch, that\u0027s what I get for going on a hunch, lol 😄\n\nSo this was not really necessary (but I\u0027d keep it anyway just in case in the future there are other decorations coming out of `mBuilder.getDecorations` for some reason)",
+      "parentUuid": "8481d3a4_27fd144b",
+      "range": {
+        "startLine": 6044,
+        "startChar": 71,
+        "endLine": 6044,
+        "endChar": 73
+      },
+      "revId": "2ab34d752ea345c19cadde8976539fdcc684bcb9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6c27cc85_de0fb59b",

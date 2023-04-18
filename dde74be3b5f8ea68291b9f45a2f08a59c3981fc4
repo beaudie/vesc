@@ -106,6 +106,24 @@
       "parentUuid": "db2f3b15_d23adcb5",
       "revId": "dde74be3b5f8ea68291b9f45a2f08a59c3981fc4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c72f370_8a2c2f39",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-18T02:15:46Z",
+      "side": 1,
+      "message": "\u003e The change of wall time compare and CPU time compare is consistent: if CPU time improved after change, the wall time improved\n\nThen really that means the measurements were not stable; this change should not really affect CPU perf in any way. Just eyeballing the data, it looks like there\u0027s no significant effect on the GPU perf IMO.\n\n\u003e Charlie has recommended me ...\n\nAny effect on the perf would really only be visible on complex shaders where this forces the compiler to use more fp16 than it otherwise would. Chances are it\u0027s already using fp16 to a large degree. IMO it\u0027s pretty obvious already that the effect of this on perf is negligible, so I\u0027m ok with moving on.\n\n\u003e This is really odd. The native driver is matching previous ANGLE results. It could be the native driver is keeping the higher precision, but Vulkan is forcing it lower.\n\nThe native driver matches previous ANGLE results because ARM made the same decisions for mediump as RelaxedPrecision (so they aren\u0027t forcing it lower). It\u0027s this change in particular that\u0027s forcing the precision lower, which is exactly its intended behavior.\n\n\u003e If this is a concern, how should we proceed here? Shall I debug it in RenderDoc and understand why the change is making the rendering more pixelated?\n\nThis is not a concern IMO, the application asked for mediump and we delivered fp16, that\u0027s well within our rights. And the difference in rendering is not going to be noticeable, especially with everything passing by so quickly in a racing game like that!\n\nAnd no, there\u0027s no reason for debugging; obviously with lower precision rendering gets less smooth.\n\n---\n\nTL;DR, I\u0027m satisfied with the change",
+      "parentUuid": "fefb08cd_8f37392f",
+      "revId": "dde74be3b5f8ea68291b9f45a2f08a59c3981fc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
