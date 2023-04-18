@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0d7601ad_86a28a4d",
+        "filename": "gni/angle.gni",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-04-18T06:30:37Z",
+      "side": 0,
+      "message": "I was hoping to not need to rename the poorly named variables / defines, but I suppose that is in order.",
+      "parentUuid": "2aba475b_06cb4855",
+      "revId": "d0148f12bc1226a045b1b28e1a4be89e5012ef12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c7c44562_b5a30c61",
         "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
         "patchSetId": 1
@@ -31,6 +49,24 @@
       "writtenOn": "2023-04-18T03:22:24Z",
       "side": 0,
       "message": "Why was this code removed?",
+      "revId": "d0148f12bc1226a045b1b28e1a4be89e5012ef12",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8df1b5b7_9956c1ff",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1347,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-04-18T06:30:37Z",
+      "side": 0,
+      "message": "It\u0027s buggy code. It inserts GLSL in the middle of MSL output.",
+      "parentUuid": "c7c44562_b5a30c61",
       "revId": "d0148f12bc1226a045b1b28e1a4be89e5012ef12",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
