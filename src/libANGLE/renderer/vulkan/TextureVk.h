@@ -389,6 +389,7 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
                                GLenum type,
                                const gl::PixelUnpackState &unpack,
                                gl::Buffer *unpackBuffer,
+                               const gl::InternalFormat &pixelsFormatInfo,
                                const uint8_t *pixels);
     angle::Result setSubImageImpl(const gl::Context *context,
                                   const gl::ImageIndex &index,
@@ -397,6 +398,7 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
                                   GLenum type,
                                   const gl::PixelUnpackState &unpack,
                                   gl::Buffer *unpackBuffer,
+                                  const gl::InternalFormat &pixelsFormatInfo,
                                   const uint8_t *pixels,
                                   const vk::Format &vkFormat);
 

@@ -329,9 +329,11 @@ angle::Result TextureVk::setImage(const gl::Context *context,
                                   gl::Buffer *unpackBuffer,
                                   const uint8_t *pixels)
 {
-    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(internalFormat, type);
+    const gl::InternalFormat &formatInfo       = gl::GetInternalFormatInfo(internalFormat, type);
+    const gl::InternalFormat &pixelsFormatInfo = gl::GetInternalFormatInfo(format, type);
 
-    return setImageImpl(context, index, formatInfo, size, type, unpack, unpackBuffer, pixels);
+    return setImageImpl(context, index, formatInfo, size, type, unpack, unpackBuffer,
+                        pixelsFormatInfo, pixels);
 }
 
 angle::Result TextureVk::setSubImage(const gl::Context *context,
@@ -349,8 +351,8 @@ angle::Result TextureVk::setSubImage(const gl::Context *context,
     const vk::Format &vkFormat =
         contextVk->getRenderer()->getFormat(levelDesc.format.info->sizedInternalFormat);
 
-    return setSubImageImpl(context, index, area, formatInfo, type, unpack, unpackBuffer, pixels,
-                           vkFormat);
+    return setSubImageImpl(context, index, area, formatInfo, type, unpack, unpackBuffer, formatInfo,
+                           pixels, vkFormat);
 }
 
 angle::Result TextureVk::setCompressedImage(const gl::Context *context,
@@ -367,7 +369,7 @@ angle::Result TextureVk::setCompressedImage(const gl::Context *context,
     gl::Buffer *unpackBuffer = glState.getTargetBuffer(gl::BufferBinding::PixelUnpack);
 
     return setImageImpl(context, index, formatInfo, size, GL_UNSIGNED_BYTE, unpack, unpackBuffer,
-                        pixels);
+                        formatInfo, pixels);
 }
 
 angle::Result TextureVk::setCompressedSubImage(const gl::Context *context,
@@ -388,7 +390,7 @@ angle::Result TextureVk::setCompressedSubImage(const gl::Context *context,
     gl::Buffer *unpackBuffer = glState.getTargetBuffer(gl::BufferBinding::PixelUnpack);
 
     return setSubImageImpl(context, index, area, formatInfo, GL_UNSIGNED_BYTE, unpack, unpackBuffer,
-                           pixels, vkFormat);
+                           formatInfo, pixels, vkFormat);
 }
 
 angle::Result TextureVk::setImageImpl(const gl::Context *context,
@@ -398,6 +400,7 @@ angle::Result TextureVk::setImageImpl(const gl::Context *context,
                                       GLenum type,
                                       const gl::PixelUnpackState &unpack,
                                       gl::Buffer *unpackBuffer,
+                                      const gl::InternalFormat &pixelsFormatInfo,
                                       const uint8_t *pixels)
 {
     ContextVk *contextVk = vk::GetImpl(context);
@@ -414,7 +417,7 @@ angle::Result TextureVk::setImageImpl(const gl::Context *context,
     }
 
     return setSubImageImpl(context, index, gl::Box(gl::kOffsetZero, size), formatInfo, type, unpack,
-                           unpackBuffer, pixels, vkFormat);
+                           unpackBuffer, pixelsFormatInfo, pixels, vkFormat);
 }
 
 bool TextureVk::isFastUnpackPossible(const vk::Format &vkFormat, size_t offset) const
@@ -577,6 +580,7 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
                                          GLenum type,
                                          const gl::PixelUnpackState &unpack,
                                          gl::Buffer *unpackBuffer,
+                                         const gl::InternalFormat &pixelsFormatInfo,
                                          const uint8_t *pixels,
                                          const vk::Format &vkFormat)
 {
@@ -602,8 +606,8 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
         GLuint inputSkipBytes          = 0;
 
         ANGLE_TRY(mImage->CalculateBufferInfo(
-            contextVk, gl::Extents(area.width, area.height, area.depth), formatInfo, unpack, type,
-            index.usesTex3D(), &inputRowPitch, &inputDepthPitch, &inputSkipBytes));
+            contextVk, gl::Extents(area.width, area.height, area.depth), pixelsFormatInfo, unpack,
+            type, index.usesTex3D(), &inputRowPitch, &inputDepthPitch, &inputSkipBytes));
 
         size_t offsetBytes = static_cast<size_t>(bufferOffset + offset + inputSkipBytes);
 
@@ -616,12 +620,12 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
                                   vkFormat.getActualImageFormatID(getRequiredImageAccess())) &&
             isFastUnpackPossible(vkFormat, offsetBytes))
         {
-            GLuint pixelSize   = formatInfo.pixelBytes;
-            GLuint blockWidth  = formatInfo.compressedBlockWidth;
-            GLuint blockHeight = formatInfo.compressedBlockHeight;
-            if (!formatInfo.compressed)
+            GLuint pixelSize   = pixelsFormatInfo.pixelBytes;
+            GLuint blockWidth  = pixelsFormatInfo.compressedBlockWidth;
+            GLuint blockHeight = pixelsFormatInfo.compressedBlockHeight;
+            if (!pixelsFormatInfo.compressed)
             {
-                pixelSize   = formatInfo.computePixelBytes(type);
+                pixelSize   = pixelsFormatInfo.computePixelBytes(type);
                 blockWidth  = 1;
                 blockHeight = 1;
             }
@@ -650,8 +654,9 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
             ANGLE_TRY(mImage->stageSubresourceUpdateImpl(
                 contextVk, getNativeImageIndex(index),
                 gl::Extents(area.width, area.height, area.depth),
-                gl::Offset(area.x, area.y, area.z), formatInfo, unpack, type, source, vkFormat,
-                getRequiredImageAccess(), inputRowPitch, inputDepthPitch, inputSkipBytes));
+                gl::Offset(area.x, area.y, area.z), pixelsFormatInfo, unpack, type, source,
+                vkFormat, getRequiredImageAccess(), inputRowPitch, inputDepthPitch,
+                inputSkipBytes));
 
             ANGLE_TRY(unpackBufferVk->unmapImpl(contextVk));
         }
@@ -660,7 +665,7 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
     {
         ANGLE_TRY(mImage->stageSubresourceUpdate(
             contextVk, getNativeImageIndex(index), gl::Extents(area.width, area.height, area.depth),
-            gl::Offset(area.x, area.y, area.z), formatInfo, unpack, type, pixels, vkFormat,
+            gl::Offset(area.x, area.y, area.z), pixelsFormatInfo, unpack, type, pixels, vkFormat,
             getRequiredImageAccess()));
     }
 

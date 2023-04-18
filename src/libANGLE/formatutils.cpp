@@ -1714,8 +1714,11 @@ const InternalFormat &GetInternalFormatInfo(GLenum internalFormat, GLenum type)
 GLuint InternalFormat::computePixelBytes(GLenum formatType) const
 {
     const auto &typeInfo = GetTypeInfo(formatType);
-    GLuint components    = typeInfo.specialInterpretation ? 1u : componentCount;
-    return components * typeInfo.bytes;
+    if (typeInfo.specialInterpretation)
+    {
+        return typeInfo.bytes;
+    }
+    return pixelBytes;
 }
 
 bool InternalFormat::computeBufferRowLength(uint32_t width, uint32_t *resultOut) const
