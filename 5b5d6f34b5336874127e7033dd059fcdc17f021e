@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2dd128a8_12e44639",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3277,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-18T16:34:21Z",
+      "side": 1,
+      "message": "Ok, does this work?\n\n```\n         else\n         {\n-            if (contextVk-\u003ehasUnsubmittedUse(mImage-\u003egetResourceUse()))\n-            {\n-                ANGLE_TRY(contextVk-\u003eflushImpl(nullptr, RenderPassClosureReason::ImageUseThenReleaseToExternal));\n-            }\n-\n             mImage-\u003efinalizeImageLayoutInShareContexts(renderer, contextVk, mImageSiblingSerial);\n+\n+            if (contextVk-\u003ehasUnsubmittedUse(mImage-\u003egetResourceUse()))\n+            {\n+                ANGLE_TRY(contextVk-\u003eflushImpl(nullptr, RenderPassClosureReason::ImageUseThenReleaseToExternal));\n+            }\n+\n             mImageObserverBinding.bind(nullptr);\n             mImage \u003d nullptr;\n         }\n```\n\nSomething still feels wrong to me; like `glDeleteTextures` and `eglDestroyImage` may come from another context, so now you need to call flush on all contexts in the share group, not just the current context.\n\nAnd then `finalizeImageLayoutInShareContexts` becomes redundant because the flush would do the same thing.\n\n@Igor who recently added the finalizeImageLayoutInShareContexts() call here",
+      "parentUuid": "3e9adf63_6d6394b9",
+      "revId": "5b5d6f34b5336874127e7033dd059fcdc17f021e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "636a8064_7b9a5be5",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 5
