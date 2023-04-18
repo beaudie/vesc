@@ -110,6 +110,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8dbf3de9_baa76466",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3277,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-18T17:50:24Z",
+      "side": 1,
+      "message": "\u003e The hasUnsubmittedUse() check will only return true if resource has an unsubmitted queue serial of this context. So in case of two context, only one context will end up with flush.\n\nI mean that\u0027s the problem. You don\u0027t know which context the texture is used in, because any context can be releasing it, so you\u0027d have to do this for all contexts in the share group, not just this context.",
+      "parentUuid": "67ad74d3_05006cce",
+      "revId": "5b5d6f34b5336874127e7033dd059fcdc17f021e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "636a8064_7b9a5be5",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 5
