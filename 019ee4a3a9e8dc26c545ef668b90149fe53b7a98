@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e26cd5bd_961c2a45",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5925,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-18T17:46:22Z",
+      "side": 1,
+      "message": "I think you can tell VMA to do this for you instead of adding your own code path. See https://gpuopen-librariesandsdks.github.io/VulkanMemoryAllocator/html/choosing_memory_type.html at the bottom of the page \"Dedicated allocations\". That way, all image memory allocation still comes from VMA and all stats is still valid. You also avoid other code changes in this CL as well.",
+      "range": {
+        "startLine": 5924,
+        "startChar": 68,
+        "endLine": 5925,
+        "endChar": 63
+      },
+      "revId": "019ee4a3a9e8dc26c545ef668b90149fe53b7a98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
