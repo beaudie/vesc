@@ -16,6 +16,24 @@
       "message": "Do you suspect a driver bug here? If that\u0027s the case, maybe just skip the test.",
       "revId": "f32368672706bdde1feb0d4e5e3e9b004bb76f9c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d74a7d4e_8ca52e6f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-18T17:56:09Z",
+      "side": 1,
+      "message": "The problem is that I do not know for sure. Based on my debugging, it does appear to me either a driver bug or VVL bug. I am not seeing anything obvious that ANGLE is doing wrong. It appears the win-intel bot is the only bot has supportsExtendedDynamicState2 enabled, and stencil8 falls back to D24_s8. But my local nvidia GPU has supportsExtendedDynamicState2 support as well and I forced S8 to D24S8 format and forced to go down the same code path as well but not reproducing the VVL error. Further, the VVL error complains depthWrite is enabled, but I verified we are calling VkCmdSetDepthTestEnable to false. See debug logs in https://chromium-review.googlesource.com/c/angle/angle/+/4022247\n\nSince I do not have a firm root cause, I would rather just disallow reuse of renderpass while I still debugging this. Once root cause is clearly understood, we can revise this fix/workaround.",
+      "parentUuid": "bf62c73a_d6848916",
+      "revId": "f32368672706bdde1feb0d4e5e3e9b004bb76f9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
