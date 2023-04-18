@@ -255,6 +255,30 @@
       },
       "revId": "5b5d6f34b5336874127e7033dd059fcdc17f021e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d97f7281_f202d5d4",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1860,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-18T23:09:05Z",
+      "side": 1,
+      "message": "\u003e  track active vk::DeviceMemory which might be conflated with device memory for things other than external images\n\nRight, but even for non-AHB, it should not leak as well, right? There is accounting for that memory count already. And to simplify further, you can add a perfCounter that reports the sum of getActiveMemoryAllocationsCount(i). That should not increase with each loop of your test (if you wait a little bit for everything to finish, and you only need to loop a few times).",
+      "parentUuid": "cec1aec5_04f01c4f",
+      "range": {
+        "startLine": 1860,
+        "startChar": 24,
+        "endLine": 1860,
+        "endChar": 28
+      },
+      "revId": "5b5d6f34b5336874127e7033dd059fcdc17f021e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
