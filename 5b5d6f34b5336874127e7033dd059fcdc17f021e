@@ -74,6 +74,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "133363cf_7eb8b48e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3277,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-18T17:24:13Z",
+      "side": 1,
+      "message": "\u003e like glDeleteTextures and eglDestroyImage may come from another context, so now you need to call flush on all contexts in the share group, not just the current context.\n\nThe hasUnsubmittedUse() check will only return true if resource has an unsubmitted queue serial of *this* context. So in case of two context, only one context will end up with flush.",
+      "parentUuid": "8a68c674_5fbb42c1",
+      "revId": "5b5d6f34b5336874127e7033dd059fcdc17f021e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "636a8064_7b9a5be5",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 5
@@ -109,6 +127,30 @@
       "side": 1,
       "message": "I guess the issue is that there is not really an available and clean mechanism for checking how many outstanding gralloc buffers are imported and being kept alive (there is a `gralloc-\u003edumpBuffers()` but IIUC that is intended for debugging) so the failures manifest as the device running out of memory (and/or in this specific Cuttlefish case when we are using GPU passthrough with Gfxstream, the host GPU running out of memory) and kind of dying in weird ways. Maybe these tests are better left downstream if there is worry about the test time?",
       "parentUuid": "636a8064_7b9a5be5",
+      "range": {
+        "startLine": 1860,
+        "startChar": 24,
+        "endLine": 1860,
+        "endChar": 28
+      },
+      "revId": "5b5d6f34b5336874127e7033dd059fcdc17f021e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3de41bf9_3ccc86dd",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1860,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-18T17:24:13Z",
+      "side": 1,
+      "message": "I also realized this after commenting. One way to deal with it is add a performance counter to how many active ImageHelper object in the system (i.e, you keep std::atomic\u003csize_t\u003e mTotalActivateImageHelperCount in the renderer and then retrieve it via performance counter. See vkQueueSubmitCallsTotal and VulkanPerformanceCounterTest.cpp for example. Or you can check number of submissions to ensure after each release there is a submit call. Check on submit call sounds a bit odd since what you really care is AHB coounts. Or you can count how many HardwareBufferImageSiblingVkAndroid objects instead of ImageHelper. Either way should work, I think.",
+      "parentUuid": "3a35c246_5f8d0e8e",
       "range": {
         "startLine": 1860,
         "startChar": 24,
