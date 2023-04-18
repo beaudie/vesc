@@ -16,6 +16,23 @@
       "message": "lgtm",
       "revId": "c06344d7df38feefb83ce08ee553f4b589261749",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf74ee2c_fab04cd5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-04-18T03:22:24Z",
+      "side": 1,
+      "message": "The change to TranslatorMetalDirect.cpp looks independent of the rest of the changes in this patch. The removed code does mention GLSL, so perhaps it\u0027s OK to remove it, but that might be better in a separate patch.",
+      "revId": "c06344d7df38feefb83ce08ee553f4b589261749",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
