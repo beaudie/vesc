@@ -303,6 +303,30 @@
       },
       "revId": "5b5d6f34b5336874127e7033dd059fcdc17f021e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83d19e8b_5c8fff8e",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1860,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-18T23:27:45Z",
+      "side": 1,
+      "message": "Would add a perfCount for mPendingSubmissionGarbage.count help the test? Before your fix, it will increase with every loop, after fix, it should always be zero?",
+      "parentUuid": "d97f7281_f202d5d4",
+      "range": {
+        "startLine": 1860,
+        "startChar": 24,
+        "endLine": 1860,
+        "endChar": 28
+      },
+      "revId": "5b5d6f34b5336874127e7033dd059fcdc17f021e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
