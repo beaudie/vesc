@@ -92,6 +92,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "67ad74d3_05006cce",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3277,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-18T17:30:50Z",
+      "side": 1,
+      "message": "You probably can move the fix one call higher, add into TextureVk::releaseAndDeleteImageAndViews instead of here, since all other places that calls releaseImage are due to respecify, which won\u0027t happen with AHB. But I think just ignore the return value might still good to avoid having to change all other APIs to return angle::Result.",
+      "parentUuid": "133363cf_7eb8b48e",
+      "revId": "5b5d6f34b5336874127e7033dd059fcdc17f021e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "636a8064_7b9a5be5",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 5
