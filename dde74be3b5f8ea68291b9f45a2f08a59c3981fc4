@@ -124,6 +124,24 @@
       "parentUuid": "fefb08cd_8f37392f",
       "revId": "dde74be3b5f8ea68291b9f45a2f08a59c3981fc4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fda5abbb_3a0a4887",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-04-18T02:28:46Z",
+      "side": 1,
+      "message": "\u003e The native driver matches previous ANGLE results because ARM made the same decisions for mediump as RelaxedPrecision (so they aren\u0027t forcing it lower). It\u0027s this change in particular that\u0027s forcing the precision lower, which is exactly its intended behavior.\n\nBleh, I think we\u0027re always going to have slightly worse visual results due to this.  But we don\u0027t really have a choice.  Maybe we\u0027ll get some perf wins out of it.",
+      "parentUuid": "1c72f370_8a2c2f39",
+      "revId": "dde74be3b5f8ea68291b9f45a2f08a59c3981fc4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
