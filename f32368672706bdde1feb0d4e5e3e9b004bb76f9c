@@ -88,6 +88,24 @@
       "parentUuid": "68d7f605_e5e93d64",
       "revId": "f32368672706bdde1feb0d4e5e3e9b004bb76f9c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f5706fe_5e026602",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-18T19:01:31Z",
+      "side": 1,
+      "message": "filed VVL issue \nhttps://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/5677",
+      "parentUuid": "68d7f605_e5e93d64",
+      "revId": "f32368672706bdde1feb0d4e5e3e9b004bb76f9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
