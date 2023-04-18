@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3e9adf63_6d6394b9",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3277,
+      "author": {
+        "id": 1379716
+      },
+      "writtenOn": "2023-04-18T16:27:50Z",
+      "side": 1,
+      "message": "```\n         else\n         {\n-            if (contextVk-\u003ehasUnsubmittedUse(mImage-\u003egetResourceUse()))\n-            {\n-                ANGLE_TRY(contextVk-\u003eflushImpl(nullptr, RenderPassClosureReason::ImageUseThenReleaseToExternal));\n-            }\n-\n             mImage-\u003efinalizeImageLayoutInShareContexts(renderer, contextVk, mImageSiblingSerial);\n+\n+            (void)contextVk-\u003eonImageReleaseToExternal(*mImage);\n+\n             mImageObserverBinding.bind(nullptr);\n             mImage \u003d nullptr;\n         }\n```\n\ndoes not seem to work. Potentially a render pass is not actually started since SurfaceFlinger is not actually doing any \"real work\" and is just repeatedly \n\n```\neglCreateImage(ahb);\nglGenTexture();\nglBindTexture();\nglEGLImageTargetTexture2DOES(image);\nglDeleteTextures();\neglDestroyImage();\n```",
+      "parentUuid": "cb23d7dd_fa777785",
+      "revId": "5b5d6f34b5336874127e7033dd059fcdc17f021e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "636a8064_7b9a5be5",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 5
