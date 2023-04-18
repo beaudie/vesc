@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "155ad7bc_bcb820bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-04-18T15:39:54Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "bc1aa3e2d283613cc062322e543c1d4ef3a0aec0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ead6199_e7f81fd3",
+        "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 897,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-04-18T15:39:54Z",
+      "side": 1,
+      "message": "nit: Can you use camel case for the variables in this function?\n\nI think we should leave the Chrome naming in process.h/cpp though since it\u0027s copied from Chrome.",
+      "range": {
+        "startLine": 897,
+        "startChar": 9,
+        "endLine": 897,
+        "endChar": 16
+      },
+      "revId": "bc1aa3e2d283613cc062322e543c1d4ef3a0aec0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
