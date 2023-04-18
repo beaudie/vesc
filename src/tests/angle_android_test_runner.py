@@ -1,17 +1,5 @@
-#! /usr/bin/env python3
-#
-# Copyright 2022 The ANGLE Project Authors. All rights reserved.
-# Use of this source code is governed by a BSD-style license that can be
-# found in the LICENSE file.
-#
-# run_angle_android_test.py:
-#   Runs ANGLE tests using android_helper wrapper. Example:
-#     (cd out/Android; ../../src/tests/run_angle_android_test.py \
-#       angle_trace_tests \
-#       --filter='TraceTest.words_with_friends_2' \
-#       --no-warmup --steps-per-trial 1000 --trials 1)
-
 import argparse
+import json
 import logging
 import os
 import pathlib
@@ -24,12 +12,14 @@ import android_helper
 import angle_test_util
 
 
-def main():
+def main(raw_args):
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        'suite',
-        help='Test suite to run.',
-        choices=['angle_end2end_tests', 'angle_perftests', 'angle_trace_tests'])
+    parser.add_argument('--suite', help='Test suite binary.', choices=['angle_trace_tests'])
+    parser.add_argument('-l', '--log', help='Logging level.', default='warn')
+    parser.add_argument('--output-directory')
+    parser.add_argument('--wrapper-script-args')
+    parser.add_argument('--runtime-deps-path')
+    parser.add_argument('--list-tests', help='List tests.', action='store_true')
     parser.add_argument(
         '-f',
         '--filter',
@@ -37,18 +27,18 @@ def main():
         '--gtest_filter',
         type=str,
         help='Test filter.')
-    parser.add_argument('--list-tests', help='List tests.', action='store_true')
-    parser.add_argument('-l', '--log', help='Logging level.', default='info')
 
-    args, extra_flags = parser.parse_known_args()
+    args, extra_args = parser.parse_known_args(raw_args)
 
-    angle_test_util.SetupLogging(args.log.upper())
+    logging.basicConfig(level=args.log.upper())
+
+    os.chdir(args.output_directory)
 
     android_helper.Initialize(args.suite)
     assert android_helper.IsAndroid()
 
     rc, output, _ = android_helper.RunTests(
-        args.suite, ['--list-tests', '--verbose'] + extra_flags, log_output=False)
+        args.suite, ['--list-tests', '--verbose'] + extra_args, log_output=False)
     if rc != 0:
         logging.fatal('Could not find test list from test output:\n%s' % output)
         return rc
@@ -67,8 +57,8 @@ def main():
         android_helper.PrepareRestrictedTraces(traces)
 
     flags = ['--gtest_filter=' + args.filter] if args.filter else []
-    return android_helper.RunTests(args.suite, flags + extra_flags)[0]
+    return android_helper.RunTests(args.suite, flags + extra_args)[0]
 
 
-if __name__ == '__main__':
-    sys.exit(main())
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[2:]))
