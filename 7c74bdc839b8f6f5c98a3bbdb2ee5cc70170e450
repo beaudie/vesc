@@ -33,6 +33,23 @@
       "message": "Looks good to me, but someone else must approve",
       "revId": "7c74bdc839b8f6f5c98a3bbdb2ee5cc70170e450",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b97905c_801f5751",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-19T04:34:58Z",
+      "side": 1,
+      "message": "lgtm+2 given others\u0027 reviews.",
+      "revId": "7c74bdc839b8f6f5c98a3bbdb2ee5cc70170e450",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
