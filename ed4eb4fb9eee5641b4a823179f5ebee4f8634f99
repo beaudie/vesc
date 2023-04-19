@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6facf8c8_7335f1e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-04-19T16:44:13Z",
+      "side": 1,
+      "message": "Removing myself and Jamie from Reviewers",
+      "revId": "ed4eb4fb9eee5641b4a823179f5ebee4f8634f99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
