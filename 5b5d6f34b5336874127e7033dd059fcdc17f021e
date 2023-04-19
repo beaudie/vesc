@@ -162,6 +162,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "267ec322_2055370e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3277,
+      "author": {
+        "id": 1379716
+      },
+      "writtenOn": "2023-04-19T18:37:54Z",
+      "side": 1,
+      "message": "Replaced `finalizeImageLayoutInShareContexts` with `flushUnsubmittedUseInShareContexts`. PTAL!",
+      "parentUuid": "eb7dfa00_15e33a82",
+      "revId": "5b5d6f34b5336874127e7033dd059fcdc17f021e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "636a8064_7b9a5be5",
