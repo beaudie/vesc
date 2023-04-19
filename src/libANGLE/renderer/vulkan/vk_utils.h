@@ -650,18 +650,18 @@ class [[nodiscard]] RendererScoped final : angle::NonCopyable
 
 // This is a very simple RefCount class that has no autoreleasing. Used in the descriptor set and
 // pipeline layout caches.
-template <typename T>
+template <typename T, typename CounterType = uint32_t>
 class RefCounted : angle::NonCopyable
 {
   public:
     RefCounted() : mRefCount(0) {}
     explicit RefCounted(T &&newObject) : mRefCount(0), mObject(std::move(newObject)) {}
-    ~RefCounted() { ASSERT(mRefCount == 0 && !mObject.valid()); }
+    ~RefCounted() { ASSERT(!isReferenced() && !mObject.valid()); }
 
-    RefCounted(RefCounted &&copy) : mRefCount(copy.mRefCount), mObject(std::move(copy.mObject))
+    RefCounted(RefCounted &&other) : mRefCount(other.mRefCount), mObject(std::move(other.mObject))
     {
-        ASSERT(this != &copy);
-        copy.mRefCount = 0;
+        ASSERT(this != &other);
+        other.mRefCount = 0;
     }
 
     RefCounted &operator=(RefCounted &&rhs)
@@ -673,26 +673,63 @@ class RefCounted : angle::NonCopyable
 
     void addRef()
     {
-        ASSERT(mRefCount != std::numeric_limits<uint32_t>::max());
+        ASSERT(mRefCount < std::numeric_limits<CounterType>::max());
         mRefCount++;
     }
 
-    void releaseRef()
+    CounterType releaseRef()
     {
         ASSERT(isReferenced());
-        mRefCount--;
+        return --mRefCount;
     }
 
-    bool isReferenced() const { return mRefCount != 0; }
+    bool isReferenced() const { return mRefCount > CounterType(0); }
 
     T &get() { return mObject; }
     const T &get() const { return mObject; }
 
     // A debug function to validate that the reference count is as expected used for assertions.
-    bool isRefCountAsExpected(uint32_t expectedRefCount) { return mRefCount == expectedRefCount; }
+    bool isRefCountAsExpected(CounterType expectedRefCount)
+    {
+        return mRefCount == expectedRefCount;
+    }
 
   private:
-    uint32_t mRefCount;
+    CounterType mRefCount;
+    T mObject;
+};
+
+template <typename T, typename AtomicCounterType>
+class RefCounted<T, std::atomic<AtomicCounterType>> : angle::NonCopyable
+{
+  public:
+    RefCounted() : mRefCount(0) {}
+    explicit RefCounted(T &&newObject) : mRefCount(0), mObject(std::move(newObject)) {}
+    ~RefCounted() { ASSERT(!isReferenced() && !mObject.valid()); }
+
+    void addRef()
+    {
+        ASSERT(mRefCount.load(std::memory_order_relaxed) <
+               std::numeric_limits<AtomicCounterType>::max());
+        mRefCount.fetch_add(1, std::memory_order_relaxed);
+    }
+
+    AtomicCounterType releaseRef()
+    {
+        ASSERT(isReferenced());
+        return (mRefCount.fetch_sub(1, std::memory_order_release) - 1);
+    }
+
+    bool isReferenced() const
+    {
+        return mRefCount.load(std::memory_order_relaxed) > AtomicCounterType(0);
+    }
+
+    T &get() { return mObject; }
+    const T &get() const { return mObject; }
+
+  private:
+    std::atomic<AtomicCounterType> mRefCount;
     T mObject;
 };
 
@@ -738,10 +775,12 @@ class BindingPointer final : angle::NonCopyable
 
 // Helper class to share ref-counted Vulkan objects.  Requires that T have a destroy method
 // that takes a VkDevice and returns void.
-template <typename T>
+template <typename T, typename CounterType = uint32_t>
 class Shared final : angle::NonCopyable
 {
   public:
+    using RefCountedT = RefCounted<T, CounterType>;
+
     Shared() : mRefCounted(nullptr) {}
     ~Shared() { ASSERT(mRefCounted == nullptr); }
 
@@ -754,12 +793,11 @@ class Shared final : angle::NonCopyable
         return *this;
     }
 
-    void set(VkDevice device, RefCounted<T> *refCounted)
+    void set(VkDevice device, RefCountedT *refCounted)
     {
         if (mRefCounted)
         {
-            mRefCounted->releaseRef();
-            if (!mRefCounted->isReferenced())
+            if (mRefCounted->releaseRef() == 0)
             {
                 mRefCounted->get().destroy(device);
                 SafeDelete(mRefCounted);
@@ -774,7 +812,7 @@ class Shared final : angle::NonCopyable
         }
     }
 
-    void setUnreferenced(RefCounted<T> *refCounted)
+    void setUnreferenced(RefCountedT *refCounted)
     {
         ASSERT(!mRefCounted);
         ASSERT(refCounted);
@@ -785,12 +823,12 @@ class Shared final : angle::NonCopyable
 
     void assign(VkDevice device, T &&newObject)
     {
-        set(device, new RefCounted<T>(std::move(newObject)));
+        set(device, new RefCountedT(std::move(newObject)));
     }
 
-    void copy(VkDevice device, const Shared<T> &other) { set(device, other.mRefCounted); }
+    void copy(VkDevice device, const Shared &other) { set(device, other.mRefCounted); }
 
-    void copyUnreferenced(const Shared<T> &other) { setUnreferenced(other.mRefCounted); }
+    void copyUnreferenced(const Shared &other) { setUnreferenced(other.mRefCounted); }
 
     void reset(VkDevice device) { set(device, nullptr); }
 
@@ -799,8 +837,7 @@ class Shared final : angle::NonCopyable
     {
         if (mRefCounted)
         {
-            mRefCounted->releaseRef();
-            if (!mRefCounted->isReferenced())
+            if (mRefCounted->releaseRef() == 0)
             {
                 ASSERT(mRefCounted->get().valid());
                 recycler->recycle(std::move(mRefCounted->get()));
@@ -816,8 +853,7 @@ class Shared final : angle::NonCopyable
     {
         if (mRefCounted)
         {
-            mRefCounted->releaseRef();
-            if (!mRefCounted->isReferenced())
+            if (mRefCounted->releaseRef() == 0)
             {
                 ASSERT(mRefCounted->get().valid());
                 (*onRelease)(std::move(mRefCounted->get()));
@@ -848,7 +884,7 @@ class Shared final : angle::NonCopyable
     }
 
   private:
-    RefCounted<T> *mRefCounted;
+    RefCountedT *mRefCounted;
 };
 
 template <typename T>
