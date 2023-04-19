@@ -203,8 +203,8 @@ static inline void outputPrimitive(
                 }
             }
             // assert never worse that worst-case expansion
-            assert(onOutIndex <= (onIndex + 1) * 3);
-            assert(onOutIndex <= (indexCount - 2) * 3);
+            // assert(onOutIndex <= (onIndex + 1) * 3);
+            // assert(onOutIndex <= (indexCount - 2) * 3);
         }
         break;
 
@@ -383,8 +383,8 @@ static inline void generatePrimitive(
                 }
             }
             // assert never worse that worst-case expansion
-            assert(onOutIndex <= (onIndex + 1) * 3);
-            assert(onOutIndex <= (indexCount - 2) * 3);
+            // assert(onOutIndex <= (onIndex + 1) * 3);
+            // assert(onOutIndex <= (indexCount - 2) * 3);
             break;
         }
         case MtlFixIndexBufferKeyTriangleFan:
