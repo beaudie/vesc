@@ -222,6 +222,24 @@
       "parentUuid": "c08db547_1473cb90",
       "revId": "dd05fae4aa6672d0ca3c26c28d017b7661c288ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4650eef2_491ee734",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-19T18:31:47Z",
+      "side": 1,
+      "message": "Hmm ok wait, it\u0027d suck if the atomic ends up getting copied around because of that. If it turns out non-trivial to avoid it, let\u0027s just stick with what you have here.",
+      "parentUuid": "7c6cf243_f84b6d78",
+      "revId": "dd05fae4aa6672d0ca3c26c28d017b7661c288ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
