@@ -302,18 +302,12 @@ Optional<std::string> GetTempDirectory()
 
 Optional<std::string> CreateTemporaryFileInDirectory(const std::string &directory)
 {
-    return CreateTemporaryFileInDirectoryWithExtension(directory, std::string());
-}
-
-Optional<std::string> CreateTemporaryFileInDirectoryWithExtension(const std::string &directory,
-                                                                  const std::string &extension)
-{
-    std::string tempFileTemplate = directory + "/.angle.XXXXXX" + extension;
+    std::string tempFileTemplate = directory + "/.angle.XXXXXX";
 
     char tempFile[1000];
     strcpy(tempFile, tempFileTemplate.c_str());
 
-    int fd = mkstemps(tempFile, static_cast<int>(extension.size()));
+    int fd = mkstemp(tempFile);
     close(fd);
 
     if (fd != -1)
