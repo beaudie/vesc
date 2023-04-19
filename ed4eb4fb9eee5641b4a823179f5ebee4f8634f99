@@ -16,6 +16,23 @@
       "message": "Removing myself and Jamie from Reviewers",
       "revId": "ed4eb4fb9eee5641b4a823179f5ebee4f8634f99",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "580ddd44_2c835d25",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-04-19T16:48:25Z",
+      "side": 1,
+      "message": "I don\u0027t know why so many reviewers were added to this CL last night, but I apologize for the spam.\n\nCan we wrap this CL up though? It\u0027s blocking the draft extension and we can always address more issues with the spec in a new CL.",
+      "revId": "ed4eb4fb9eee5641b4a823179f5ebee4f8634f99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
