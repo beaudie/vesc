@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1aad6a1f_a96f6f0f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-19T14:45:30Z",
+      "side": 1,
+      "message": "nit: IIUC, this CL https://chromium-review.googlesource.com/c/angle/angle/+/4392879 makes them exactly the same, right?",
+      "range": {
+        "startLine": 9,
+        "startChar": 65,
+        "endLine": 10,
+        "endChar": 8
+      },
+      "revId": "8eb248d6ab900fd5b31f9b6e1ce187ee0b33a1e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
