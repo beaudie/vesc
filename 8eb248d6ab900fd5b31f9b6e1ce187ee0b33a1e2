@@ -22,6 +22,30 @@
       },
       "revId": "8eb248d6ab900fd5b31f9b6e1ce187ee0b33a1e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2993174a_1e0804fe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-19T15:38:57Z",
+      "side": 1,
+      "message": "Correct.\n\nDifference is that waiting on `mUse` will update `CommandQueue` state and reset command buffers.\n\nOther reason to remove `mUse` is that Fence will wait exactly on the required submission, independently of what Fence was used to  to track the `CommandBatch` (in case we will have additional submission with normal Fence).",
+      "parentUuid": "1aad6a1f_a96f6f0f",
+      "range": {
+        "startLine": 9,
+        "startChar": 65,
+        "endLine": 10,
+        "endChar": 8
+      },
+      "revId": "8eb248d6ab900fd5b31f9b6e1ce187ee0b33a1e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
