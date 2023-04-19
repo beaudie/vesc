@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9f8351ca_f3a0a4a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-19T17:57:00Z",
+      "side": 1,
+      "message": "If it\u0027s just a harmless VVL bug, you can suppress it in RendererVk.cpp (`kSkippedMessages`).\n\n\u003e Another question. Is VVL always enabled for tests?\n\nYes. Let\u0027s not go down the path of changing behavior with VVL enabled, it\u0027s always good to be able to enable VVL and catch bugs (which we can\u0027t do if we change behavior under VVL).\n\nThe point about unique handles is valid, I\u0027ll check around to see if we can get a no-VVL build tested somewhere.",
+      "parentUuid": "4cef9e26_cddf446c",
+      "revId": "dd05fae4aa6672d0ca3c26c28d017b7661c288ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "07301377_f81a0537",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
         "patchSetId": 5
@@ -72,6 +90,24 @@
       "side": 1,
       "message": "\u003e I don\u0027t quite follow this, is this exporting the external fence to itself?\n\nYes.\n\nInternally `ExternalFence` has `Fence mFence` and `int mFenceFd`.\nInitially, `mFenceFd` is invalid so `mFence` is used.\n\nAfter *successful* `exportFd` we no longer can use `mFence` (because export has reset side effect). Therefore, `ExternalFence` will use `mFenceFd` instead.\n\nIf `exportFd` *fails*, then `ExternalFence` will use `mFence` as before. Error (`mFenceFdStatus`) will be handled by `SyncHelperNativeFence` as before.\n\n\u003e Shouldn\u0027t exportFd write to batch.fence or something?\n\nThis is only possible if do import into `batch.fence`. This will also require `dup`\nAdditionally, need to handle errors from export/dup/import, that will complicate everything. In the current implementation no dup/import/error handling is required.",
       "parentUuid": "f853ebd7_96c2f64c",
+      "revId": "dd05fae4aa6672d0ca3c26c28d017b7661c288ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88dc8fb8_973146c8",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1429,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-19T17:57:00Z",
+      "side": 1,
+      "message": "Got it",
+      "parentUuid": "1da014b4_8e605d0b",
       "revId": "dd05fae4aa6672d0ca3c26c28d017b7661c288ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -130,6 +166,24 @@
       "side": 1,
       "message": "I will check. I want to preserve relaxed atomic operations.\n\nAnd how is better to pass function arguments?\nAs `const SharedExternalFence \u0026` or as `RefCounted\u003cExternalFence\u003e *`.",
       "parentUuid": "6c4d640e_3e70a0d9",
+      "revId": "dd05fae4aa6672d0ca3c26c28d017b7661c288ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f05fad9_57d31dbd",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-19T17:57:00Z",
+      "side": 1,
+      "message": "Depends, if you are passing a copy, yes `const SharedExternalFence \u0026`. If you are moving it, `SharedExternalFence \u0026\u0026` and std::move.\n\nThanks for looking into it. TBH, I wouldn\u0027t really bother with relaxed atomics, this is not on the hot path, and is in the order of like one operation per frame.",
+      "parentUuid": "c08db547_1473cb90",
       "revId": "dd05fae4aa6672d0ca3c26c28d017b7661c288ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
