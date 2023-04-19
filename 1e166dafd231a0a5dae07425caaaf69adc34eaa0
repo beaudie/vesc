@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ce6d5eb_c61b9dce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-04-19T17:55:50Z",
+      "side": 1,
+      "message": "PixelLocalStorageTest.TextureLevelsAndLayers/ES3_Metal_EmulatePixelLocalStorage started failing on https://luci-milo.appspot.com/ui/p/chromium/builders/ci/ios-angle-intel/30301/overview after this CL.",
+      "revId": "1e166dafd231a0a5dae07425caaaf69adc34eaa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
