@@ -16,6 +16,24 @@
       "message": "Nice trick moving this to submission. Can we somehow ASSERT that the fd dup actually happened?\n\nLike maybe initialize mFenceFdStatus with something invalid, then ASSERT that it\u0027s not that after the flush",
       "revId": "a731fdeb5a83799514cebf6deaa00aefcaa3158a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b29b2122_149b5bb0",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-19T15:30:54Z",
+      "side": 0,
+      "message": "Initially `mFenceFdStatus \u003d\u003d VK_INCOMPLETE`, so we will get the assert.",
+      "parentUuid": "ce542dbf_d161141e",
+      "revId": "a731fdeb5a83799514cebf6deaa00aefcaa3158a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

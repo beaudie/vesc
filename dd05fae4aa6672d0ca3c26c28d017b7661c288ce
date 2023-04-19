@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4cef9e26_cddf446c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-19T15:30:54Z",
+      "side": 1,
+      "message": "@syoussefi@chromium.org There is a problem with this CL.\n\nIt may generate `VUID-vkResetCommandBuffer-commandBuffer-00045` and related errors.\nI already investigated this and it is a VVL bug (false positive).\n\nI already implemented a fix and want to submit it today. If my fix is OK it may be merged relatively quickly.\n\nBut before the fix in VVL gets to the ANGLE we can\u0027t merge the change.\n\nAlternatively, I can add runtime feature (for example: `useExternalFenceToTrackCommandBuffers`) and disable it when `getEnableValidationLayers() \u003d\u003d true`.\nWhen enabled, this feature will use `ExternalFence` to check for Command Buffer completion.\nWhen disabled, additional normal Fence submission will be performed right after the `ExternalFence` submission. This Normal Fence will be used to check for Command Buffer completion.\n\nThis feature may be also used for debugging, in case we suspect misbehavior of the `ExternalFence`.\n\nAlso I want to update/add en2end test so it generate this VVL bug.\n\nWhat do you think?\n\n---\n\nAnother question. Is VVL always enabled for tests?\nI\u0027m asking because there might be cases when tests will fail without VVL and pass with VVL. One reason is that VVL replace original Vulkan Handles with unique  values. Other is like the proposed feature above, that is disabled with VVL.",
+      "revId": "dd05fae4aa6672d0ca3c26c28d017b7661c288ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "07301377_f81a0537",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
         "patchSetId": 5
@@ -43,6 +60,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1da014b4_8e605d0b",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1429,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-19T15:30:54Z",
+      "side": 1,
+      "message": "\u003e I don\u0027t quite follow this, is this exporting the external fence to itself?\n\nYes.\n\nInternally `ExternalFence` has `Fence mFence` and `int mFenceFd`.\nInitially, `mFenceFd` is invalid so `mFence` is used.\n\nAfter *successful* `exportFd` we no longer can use `mFence` (because export has reset side effect). Therefore, `ExternalFence` will use `mFenceFd` instead.\n\nIf `exportFd` *fails*, then `ExternalFence` will use `mFence` as before. Error (`mFenceFdStatus`) will be handled by `SyncHelperNativeFence` as before.\n\n\u003e Shouldn\u0027t exportFd write to batch.fence or something?\n\nThis is only possible if do import into `batch.fence`. This will also require `dup`\nAdditionally, need to handle errors from export/dup/import, that will complicate everything. In the current implementation no dup/import/error handling is required.",
+      "parentUuid": "f853ebd7_96c2f64c",
+      "revId": "dd05fae4aa6672d0ca3c26c28d017b7661c288ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e2f36eb8_21947a2e",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
         "patchSetId": 5
@@ -77,6 +112,24 @@
       "writtenOn": "2023-04-19T14:38:58Z",
       "side": 1,
       "message": "Can we consolidate this with vk::Shared? How about this, we can add a template parameter to `vk::RefCounted` (and `vk::Shared`) like `CounterType \u003d uint32_t`, then have `SyncHelperNativeFence` keep a `vk::Shared\u003cExternalFence, std::atomic\u003cuint32_t\u003e\u003e` (you can add a `using SharedExternalFence \u003d ...` so you don\u0027t have to repeat that everywhere).\n\nThat would deduplicate the ref-counting logic with the one we already have.",
+      "revId": "dd05fae4aa6672d0ca3c26c28d017b7661c288ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c08db547_1473cb90",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-19T15:30:54Z",
+      "side": 1,
+      "message": "I will check. I want to preserve relaxed atomic operations.\n\nAnd how is better to pass function arguments?\nAs `const SharedExternalFence \u0026` or as `RefCounted\u003cExternalFence\u003e *`.",
+      "parentUuid": "6c4d640e_3e70a0d9",
       "revId": "dd05fae4aa6672d0ca3c26c28d017b7661c288ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
