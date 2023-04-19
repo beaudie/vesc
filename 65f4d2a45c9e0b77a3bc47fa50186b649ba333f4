@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbc1ba94_b11bfdd1",
+        "filename": "src/libANGLE/renderer/metal/process.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-04-19T16:19:40Z",
+      "side": 1,
+      "message": "not available on iOS\nhttps://luci-milo.appspot.com/ui/p/chromium/builders/ci/ios-angle-builder/119271/overview",
+      "range": {
+        "startLine": 92,
+        "startChar": 18,
+        "endLine": 92,
+        "endChar": 54
+      },
+      "revId": "65f4d2a45c9e0b77a3bc47fa50186b649ba333f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
