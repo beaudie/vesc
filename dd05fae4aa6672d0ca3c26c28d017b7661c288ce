@@ -240,6 +240,24 @@
       "parentUuid": "7c6cf243_f84b6d78",
       "revId": "dd05fae4aa6672d0ca3c26c28d017b7661c288ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1438efc_5821f859",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-19T18:35:12Z",
+      "side": 1,
+      "message": "I have added specialization\n```\ntemplate \u003ctypename T, typename AtomicCounterType\u003e\nclass RefCounted\u003cT, std::atomic\u003cAtomicCounterType\u003e\u003e : angle::NonCopyable\n{\n```\nwithout move functionality.\n\nSo it is easily avoided.",
+      "parentUuid": "4650eef2_491ee734",
+      "revId": "dd05fae4aa6672d0ca3c26c28d017b7661c288ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
