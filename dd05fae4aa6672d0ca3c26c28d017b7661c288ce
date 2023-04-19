@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "71bb84d9_95f07fb0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-19T18:24:52Z",
+      "side": 1,
+      "message": "\u003e If it\u0027s just a harmless VVL bug, you can suppress it in RendererVk.cpp\n\nIt is not harmless if it is not false positive.\nAdditionally, there will be tons of other bugs as a consequence of the same problem.\n\nSo need to wait for VVL fix (already pushed pull request).",
+      "parentUuid": "9f8351ca_f3a0a4a7",
+      "revId": "dd05fae4aa6672d0ca3c26c28d017b7661c288ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "07301377_f81a0537",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
         "patchSetId": 5
@@ -183,6 +201,24 @@
       "writtenOn": "2023-04-19T17:57:00Z",
       "side": 1,
       "message": "Depends, if you are passing a copy, yes `const SharedExternalFence \u0026`. If you are moving it, `SharedExternalFence \u0026\u0026` and std::move.\n\nThanks for looking into it. TBH, I wouldn\u0027t really bother with relaxed atomics, this is not on the hot path, and is in the order of like one operation per frame.",
+      "parentUuid": "c08db547_1473cb90",
+      "revId": "dd05fae4aa6672d0ca3c26c28d017b7661c288ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c6cf243_f84b6d78",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-19T18:24:52Z",
+      "side": 1,
+      "message": "\u003e Depends, if you are passing a copy, yes const SharedExternalFence \u0026. If you are moving it, SharedExternalFence \u0026\u0026 and std::move.\n\nYes) But I\u0027m not sure if I want to move or copy)\nDecided to move, because that way I can avoid extra copy in the `CommandProcessorTask`.\n\n\u003e Thanks for looking into it. TBH, I wouldn\u0027t really bother with relaxed atomics, this is not on the hot path, and is in the order of like one operation per frame.\n\nStill need to implement specialization, because `std::atomic\u003c\u003e` does not support copy/move that `RefCounted\u003c\u003e` requires.",
       "parentUuid": "c08db547_1473cb90",
       "revId": "dd05fae4aa6672d0ca3c26c28d017b7661c288ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
