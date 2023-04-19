@@ -2086,13 +2086,14 @@ angle::Result WindowSurfaceVk::prePresentSubmit(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
-angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
+angle::Result WindowSurfaceVk::present(const gl::Context *context,
                                        const EGLint *rects,
                                        EGLint n_rects,
                                        const void *pNextChain,
                                        bool *presentOutOfDate)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::present");
+    ContextVk *contextVk = vk::GetImpl(context);
     RendererVk *renderer = contextVk->getRenderer();
 
     // Get a new semaphore to use for present.
@@ -2207,17 +2208,17 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
 
     // Now update swapSerial With last submitted queue serial and apply CPU throttle if needed
     QueueSerial swapSerial = contextVk->getLastSubmittedQueueSerial();
-    ANGLE_TRY(throttleCPU(contextVk, swapSerial));
+    ANGLE_TRY(throttleCPU(context->getDisplay(), swapSerial));
 
     contextVk->resetPerFramePerfCounters();
 
     return angle::Result::Continue;
 }
 
-angle::Result WindowSurfaceVk::throttleCPU(ContextVk *contextVk,
+angle::Result WindowSurfaceVk::throttleCPU(const egl::Display *display,
                                            const QueueSerial &currentSubmitSerial)
 {
-    RendererVk *renderer = contextVk->getRenderer();
+    DisplayVk *displayVk = vk::GetImpl(display);
 
     // Wait on the oldest serial and replace it with the newest as the circular buffer moves
     // forward.
@@ -2225,10 +2226,19 @@ angle::Result WindowSurfaceVk::throttleCPU(ContextVk *contextVk,
     mSwapHistory.front()   = currentSubmitSerial;
     mSwapHistory.next();
 
-    if (swapSerial.valid())
+    if (swapSerial.valid() && !displayVk->getRenderer()->hasQueueSerialFinished(swapSerial))
     {
-        ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::throttleCPU");
-        ANGLE_TRY(renderer->finishQueueSerial(contextVk, swapSerial));
+        // Make this call after unlocking the EGL lock.   The RendererVk::finishQueueSerial is
+        // necessarily thread-safe because it can get called from any number of GL commands, which
+        // don't necessarily hold the EGL lock.
+        //
+        // As this is an unlocked tail call, it must not access anything else in RendererVk.  The
+        // display passed to |finishQueueSerial| is a |vk::Context|, and the only possible
+        // modification to it is through |handleError()|.
+        egl::Display::GetCurrentThreadUnlockedTailCall()->add([displayVk, swapSerial]() {
+            ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::throttleCPU");
+            (void)displayVk->getRenderer()->finishQueueSerial(displayVk, swapSerial);
+        });
     }
 
     return angle::Result::Continue;
@@ -2320,7 +2330,7 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
     }
 
     bool presentOutOfDate = false;
-    ANGLE_TRY(present(contextVk, rects, n_rects, pNextChain, &presentOutOfDate));
+    ANGLE_TRY(present(context, rects, n_rects, pNextChain, &presentOutOfDate));
 
     if (!presentOutOfDate)
     {
