@@ -428,7 +428,7 @@ class WindowSurfaceVk : public SurfaceVk
                                           VkResult result,
                                           bool *presentOutOfDate);
     angle::Result prePresentSubmit(ContextVk *contextVk, const vk::Semaphore &presentSemaphore);
-    angle::Result present(ContextVk *contextVk,
+    angle::Result present(const gl::Context *context,
                           const EGLint *rects,
                           EGLint n_rects,
                           const void *pNextChain,
@@ -440,7 +440,7 @@ class WindowSurfaceVk : public SurfaceVk
     // than two frame ahead of the frame being rendered (and three frames ahead of the one being
     // presented).  This is a failsafe, as the application should ensure command buffer recording is
     // not ahead of the frame being rendered by *one* frame.
-    angle::Result throttleCPU(ContextVk *contextVk, const QueueSerial &currentSubmitSerial);
+    angle::Result throttleCPU(const egl::Display *display, const QueueSerial &currentSubmitSerial);
 
     // Finish all GPU operations on the surface
     angle::Result finish(vk::Context *context);
