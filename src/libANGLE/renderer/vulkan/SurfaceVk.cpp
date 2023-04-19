@@ -2218,8 +2218,6 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
 angle::Result WindowSurfaceVk::throttleCPU(ContextVk *contextVk,
                                            const QueueSerial &currentSubmitSerial)
 {
-    RendererVk *renderer = contextVk->getRenderer();
-
     // Wait on the oldest serial and replace it with the newest as the circular buffer moves
     // forward.
     QueueSerial swapSerial = mSwapHistory.front();
@@ -2228,8 +2226,15 @@ angle::Result WindowSurfaceVk::throttleCPU(ContextVk *contextVk,
 
     if (swapSerial.valid())
     {
-        ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::throttleCPU");
-        ANGLE_TRY(renderer->finishQueueSerial(contextVk, swapSerial));
+        // Make this call after unlocking the EGL lock.   The RendererVk::finishQueueSerial is
+        // necessarily thread-safe because it can get called from any number of GL commands, which
+        // don't necessarily hold the EGL lock.
+        //
+        // As this is an unlocked tail call, it must not access anything else in RendererVk.
+        egl::Display::getCurrentThreadUnlockedTailCall()->add([context = contextVk, swapSerial]() {
+            ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::throttleCPU");
+            (void)context->getRenderer()->finishQueueSerial(context, swapSerial);
+        });
     }
 
     return angle::Result::Continue;
