@@ -184,17 +184,13 @@ constexpr const char *kSkippedMessages[] = {
     // http://anglebug.com/5027
     "UNASSIGNED-CoreValidation-Shader-PushConstantOutOfRange",
     // http://anglebug.com/5304
-    "VUID-vkCmdDraw-magFilter-04553",
-    "VUID-vkCmdDrawIndexed-magFilter-04553",
+    "VUID-vkCmdDraw-magFilter-04553", "VUID-vkCmdDrawIndexed-magFilter-04553",
     // http://anglebug.com/5309
     "VUID-VkImageViewCreateInfo-usage-02652",
     // http://issuetracker.google.com/175584609
-    "VUID-vkCmdDraw-None-04584",
-    "VUID-vkCmdDrawIndexed-None-04584",
-    "VUID-vkCmdDrawIndirect-None-04584",
-    "VUID-vkCmdDrawIndirectCount-None-04584",
-    "VUID-vkCmdDrawIndexedIndirect-None-04584",
-    "VUID-vkCmdDrawIndexedIndirectCount-None-04584",
+    "VUID-vkCmdDraw-None-04584", "VUID-vkCmdDrawIndexed-None-04584",
+    "VUID-vkCmdDrawIndirect-None-04584", "VUID-vkCmdDrawIndirectCount-None-04584",
+    "VUID-vkCmdDrawIndexedIndirect-None-04584", "VUID-vkCmdDrawIndexedIndirectCount-None-04584",
     // http://anglebug.com/5912
     "VUID-VkImageViewCreateInfo-pNext-01585",
     // http://anglebug.com/6442
@@ -211,8 +207,7 @@ constexpr const char *kSkippedMessages[] = {
     // http://anglebug.com/6811
     "VUID-vkCmdExecuteCommands-pCommandBuffers-00099",
     // http://anglebug.com/7105
-    "VUID-vkCmdDraw-None-06538",
-    "VUID-vkCmdDrawIndexed-None-06538",
+    "VUID-vkCmdDraw-None-06538", "VUID-vkCmdDrawIndexed-None-06538",
     // http://anglebug.com/7325
     "VUID-vkCmdBindVertexBuffers2-pStrides-06209",
     // http://anglebug.com/7729
@@ -220,8 +215,7 @@ constexpr const char *kSkippedMessages[] = {
     // http://anglebug.com/7843
     "VUID-VkGraphicsPipelineCreateInfo-Vertex-07722",
     // http://anglebug.com/7861
-    "VUID-vkCmdDraw-None-06887",
-    "VUID-vkCmdDrawIndexed-None-06887",
+    "VUID-vkCmdDraw-None-06887", "VUID-vkCmdDrawIndexed-None-06887",
     // http://anglebug.com/7865
     "VUID-VkDescriptorImageInfo-imageView-06711",
     // http://crbug.com/1412096
@@ -233,6 +227,8 @@ constexpr const char *kSkippedMessages[] = {
     // http://anglebug.com/8119
     "VUID-VkGraphicsPipelineCreateInfo-Input-07905",
     "UNASSIGNED-CoreValidation-Shader-VertexInputMismatch",
+    //"VUID-vkCmdDraw-None-02859",
+    //"VUID-vkCmdDrawIndexed-None-02859"
 };
 
 // Validation messages that should be ignored only when VK_EXT_primitive_topology_list_restart is
