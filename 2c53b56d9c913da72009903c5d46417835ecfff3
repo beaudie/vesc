@@ -39,6 +39,23 @@
       },
       "revId": "2c53b56d9c913da72009903c5d46417835ecfff3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5a07258_eba6e3b0",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2236,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-20T18:27:20Z",
+      "side": 1,
+      "message": "What if other context in a share group make access to the `context`. For example, will flush all of its commands?\n\nOnly problem I can think of is the concurrent calls to the `Context::handleError()`.",
+      "revId": "2c53b56d9c913da72009903c5d46417835ecfff3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
