@@ -1,6 +1,7 @@
 {
   "comments": [
     {
+      "unresolved": true,
       "key": {
         "uuid": "5f1c70d0_bd8b4ce0",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
@@ -14,10 +15,10 @@
       "side": 1,
       "message": "Why is this necessary?   Why don\u0027t any of the other reset()\u0027s get hit instead?",
       "revId": "c08071924a0e984d20a7bebdfda8d8143d5ce3e9",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "bdce5378_e198ae80",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
@@ -31,10 +32,10 @@
       "side": 1,
       "message": "Please add comments inside each `if` block below as to why the calls are made the way they are.",
       "revId": "c08071924a0e984d20a7bebdfda8d8143d5ce3e9",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "edea879e_a8fe3f18",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
@@ -48,10 +49,10 @@
       "side": 1,
       "message": "Did Samsung ever land their CLs to add Geometry shader support in the vulkan backend?   I can\u0027t remember the context of them adding it (emulation for some GLES feature, but I can\u0027t remember which, or if that code is even being used).\n\nRegardless, this looks like an easy place for someone to lose a couple hours tracking down that GeometryShaderWrite is missing, when support is officially added in the future.   Should it be added now?   It\u0027ll obviously hurt the O(n^2) looping here, but the numbers should be small enough for it not to matter.",
       "revId": "c08071924a0e984d20a7bebdfda8d8143d5ce3e9",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "60bd2e78_53c875dc",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
@@ -71,10 +72,10 @@
         "endChar": 13
       },
       "revId": "c08071924a0e984d20a7bebdfda8d8143d5ce3e9",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "7a601afa_b2077258",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
@@ -94,10 +95,10 @@
         "endChar": 71
       },
       "revId": "c08071924a0e984d20a7bebdfda8d8143d5ce3e9",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "543b4b39_4a71468a",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
@@ -111,10 +112,10 @@
       "side": 1,
       "message": "Can you clarify this comment?",
       "revId": "c08071924a0e984d20a7bebdfda8d8143d5ce3e9",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "ba6d2171_2a2dcbb9",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
@@ -134,10 +135,10 @@
         "endChar": 17
       },
       "revId": "c08071924a0e984d20a7bebdfda8d8143d5ce3e9",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "bec14e6c_7a421399",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
@@ -157,10 +158,10 @@
         "endChar": 44
       },
       "revId": "c08071924a0e984d20a7bebdfda8d8143d5ce3e9",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "ffc7cef5_edacbba7",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
@@ -180,10 +181,10 @@
         "endChar": 82
       },
       "revId": "c08071924a0e984d20a7bebdfda8d8143d5ce3e9",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "cad3dd3d_88f625b4",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
@@ -203,8 +204,139 @@
         "endChar": 82
       },
       "revId": "c08071924a0e984d20a7bebdfda8d8143d5ce3e9",
-      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba",
-      "unresolved": true
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ],
+  "submitRequirementResults": [
+    {
+      "submitRequirement": {
+        "name": "Code-Owners",
+        "description": {
+          "value": "User with the code owner override approved the change"
+        },
+        "applicabilityExpression": {
+          "value": {
+            "expressionString": "has:enabled_code-owners"
+          }
+        },
+        "submittabilityExpression": {
+          "expressionString": "has:approval_code-owners"
+        },
+        "overrideExpression": {
+          "value": {
+            "expressionString": "label:Owners-Override\u003d+1"
+          }
+        },
+        "allowOverrideInChildProjects": true
+      },
+      "applicabilityExpressionResult": {
+        "value": {"expression":{"expressionString":"has:enabled_code-owners"},"status":"PASS","errorMessage":{"value":null},"passingAtoms":["has:enabled_code-owners"],"failingAtoms":[]}
+      },
+      "submittabilityExpressionResult": {
+        "value": {"expression":{"expressionString":"has:approval_code-owners"},"status":"PASS","errorMessage":{"value":null},"passingAtoms":["has:approval_code-owners"],"failingAtoms":[]}
+      },
+      "overrideExpressionResult": {
+        "value": {"expression":{"expressionString":"label:Owners-Override=+1"},"status":"FAIL","errorMessage":{"value":null},"passingAtoms":[],"failingAtoms":["label:Owners-Override=+1"]}
+      },
+      "patchSetCommitId": "c08071924a0e984d20a7bebdfda8d8143d5ce3e9",
+      "legacy": {
+        "value": false
+      },
+      "forced": {},
+      "hidden": {}
+    },
+    {
+      "submitRequirement": {
+        "name": "Code-Review",
+        "description": {
+          "value": "Submit requirement for the \u0027Code-Review\u0027 label"
+        },
+        "applicabilityExpression": {},
+        "submittabilityExpression": {
+          "expressionString": "label:Code-Review\u003dMAX,user\u003dnon_uploader -label:Code-Review\u003dMIN"
+        },
+        "overrideExpression": {
+          "value": {
+            "expressionString": "label:Bot-Commit\u003d+1 AND -label:Code-Review\u003dMIN"
+          }
+        },
+        "allowOverrideInChildProjects": true
+      },
+      "applicabilityExpressionResult": {},
+      "submittabilityExpressionResult": {
+        "value": {"expression":{"expressionString":"label:Code-Review=MAX,user=non_uploader -label:Code-Review=MIN"},"status":"FAIL","errorMessage":{"value":null},"passingAtoms":[],"failingAtoms":["label:Code-Review=MAX,user=non_uploader","label:Code-Review=MIN"]}
+      },
+      "overrideExpressionResult": {
+        "value": {"expression":{"expressionString":"label:Bot-Commit=+1 AND -label:Code-Review=MIN"},"status":"FAIL","errorMessage":{"value":null},"passingAtoms":[],"failingAtoms":["label:Bot-Commit=+1","label:Code-Review=MIN"]}
+      },
+      "patchSetCommitId": "c08071924a0e984d20a7bebdfda8d8143d5ce3e9",
+      "legacy": {
+        "value": false
+      },
+      "forced": {},
+      "hidden": {}
+    },
+    {
+      "submitRequirement": {
+        "name": "Review-Enforcement",
+        "description": {
+          "value": "Two Google employees must approve the change. Uploading the change or voting positively on Code-Review count as approval."
+        },
+        "applicabilityExpression": {
+          "value": {
+            "expressionString": "is:review-enforced_gerrit"
+          }
+        },
+        "submittabilityExpression": {
+          "expressionString": "is:review-enforcement-satisfied_gerrit"
+        },
+        "overrideExpression": {},
+        "allowOverrideInChildProjects": false
+      },
+      "applicabilityExpressionResult": {
+        "value": {"expression":{"expressionString":"is:review-enforced_gerrit"},"status":"FAIL","errorMessage":{"value":null},"passingAtoms":[],"failingAtoms":["is:review-enforced_gerrit"]}
+      },
+      "submittabilityExpressionResult": {
+        "value": {"expression":{"expressionString":"is:review-enforcement-satisfied_gerrit"},"status":"NOT_EVALUATED","errorMessage":{"value":null},"passingAtoms":[],"failingAtoms":[]}
+      },
+      "overrideExpressionResult": {},
+      "patchSetCommitId": "c08071924a0e984d20a7bebdfda8d8143d5ce3e9",
+      "legacy": {
+        "value": false
+      },
+      "forced": {},
+      "hidden": {}
+    },
+    {
+      "submitRequirement": {
+        "name": "Verified",
+        "description": {
+          "value": "Submit requirement for the \u0027Verified\u0027 label"
+        },
+        "applicabilityExpression": {
+          "value": {
+            "expressionString": "is:false"
+          }
+        },
+        "submittabilityExpression": {
+          "expressionString": "is:true"
+        },
+        "overrideExpression": {},
+        "allowOverrideInChildProjects": true
+      },
+      "applicabilityExpressionResult": {
+        "value": {"expression":{"expressionString":"is:false"},"status":"FAIL","errorMessage":{"value":null},"passingAtoms":[],"failingAtoms":["is:false"]}
+      },
+      "submittabilityExpressionResult": {
+        "value": {"expression":{"expressionString":"is:true"},"status":"NOT_EVALUATED","errorMessage":{"value":null},"passingAtoms":[],"failingAtoms":[]}
+      },
+      "overrideExpressionResult": {},
+      "patchSetCommitId": "c08071924a0e984d20a7bebdfda8d8143d5ce3e9",
+      "legacy": {
+        "value": false
+      },
+      "forced": {},
+      "hidden": {}
     }
   ]
 }
