@@ -485,6 +485,9 @@ void SetTexParameterBase(Context *context, Texture *texture, GLenum pname, const
         case GL_TEXTURE_PROTECTED_EXT:
             texture->setProtectedContent(context, (params[0] == GL_TRUE));
             break;
+        case GL_SKIP_RENDERABILITY_CHECKS_ANGLE:
+            texture->setSkipRenderabilityChecks(context, (params[0] == GL_TRUE));
+            break;
         default:
             UNREACHABLE();
             break;

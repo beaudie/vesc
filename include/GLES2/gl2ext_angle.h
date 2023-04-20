@@ -66,6 +66,11 @@ GL_APICALL void GL_APIENTRY glProvokingVertexANGLE(GLenum provokeMode);
 #define GL_DEPTH_STENCIL_TEXTURE_MODE_ANGLE           0x90EA
 #endif /* GL_ANGLE_stencil_texturing */
 
+#ifndef GL_ANGLE_skip_renderability_checks
+#define GL_ANGLE_skip_renderability_checks 1
+#define GL_SKIP_RENDERABILITY_CHECKS_ANGLE    0x9EA0
+#endif /* GL_ANGLE_skip_renderability_checks */
+
 #ifndef GL_CHROMIUM_framebuffer_mixed_samples
 #define GL_CHROMIUM_frambuffer_mixed_samples 1
 #define GL_COVERAGE_MODULATION_CHROMIUM 0x9332
