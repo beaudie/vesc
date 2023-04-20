@@ -16,6 +16,24 @@
       "message": "I think Auto-Submit doesn\u0027t work for me, because I\u0027m not allowed to submit. Can you do please?",
       "revId": "045bd5d4e539034dac3a520c4d20669d4f637c43",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "853b2634_2f7dc720",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-20T13:53:14Z",
+      "side": 1,
+      "message": "Yeap, just did a minute before.",
+      "parentUuid": "09f318cf_58b417bc",
+      "revId": "045bd5d4e539034dac3a520c4d20669d4f637c43",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
