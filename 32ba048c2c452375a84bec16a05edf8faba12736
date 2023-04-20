@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1ff1433_0f0034e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-20T18:11:05Z",
+      "side": 1,
+      "message": "Looks nice to me!\nMoving shabi to reviewer as well since people have commented quite a bit.",
+      "revId": "32ba048c2c452375a84bec16a05edf8faba12736",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3129cea1_c79e428f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 5741,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-20T18:11:05Z",
+      "side": 1,
+      "message": "This check is unnecessary. You can assert if you want.",
+      "range": {
+        "startLine": 5741,
+        "startChar": 4,
+        "endLine": 5741,
+        "endChar": 18
+      },
+      "revId": "32ba048c2c452375a84bec16a05edf8faba12736",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
