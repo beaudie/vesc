@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52bab6f0_555652d8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-20T21:11:10Z",
+      "side": 1,
+      "message": "Side discussion: We use renderdoc all the time, what is the scenario in which this happens? Is it a special build of RenderDoc? I\u0027m curious to understand why I\u0027ve never hit it.",
+      "revId": "5f462cdfbb801c04dc50a3f5516a6e67f2839e96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11e95d20_cdd02da0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-20T21:11:10Z",
+      "side": 1,
+      "message": "LGTM so far, logic seems solid, but I kept getting interrupted with meetings. I\u0027ll have another pass to make sure I didn\u0027t miss anything.\n\nCould you please add some unit tests for ScopedGlobalMutexLock and ScopedOptionalGlobalMutexLock?",
+      "revId": "5f462cdfbb801c04dc50a3f5516a6e67f2839e96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2230e4f_7bbf9117",
+        "filename": "src/libANGLE/GlobalMutex.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-20T21:11:10Z",
+      "side": 1,
+      "message": "nit: inheritance doesn\u0027t really seem necessary here. We generally prefer composition; so you could have a `SimpleGlobalMutex mMutex` private member here and use that.\n\nSame with `RecursiveGlobalMutex` using `ThreadIdGlobalMutex`",
+      "range": {
+        "startLine": 33,
+        "startChar": 25,
+        "endLine": 33,
+        "endChar": 52
+      },
+      "revId": "5f462cdfbb801c04dc50a3f5516a6e67f2839e96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a8b6724_c521047c",
+        "filename": "src/libANGLE/GlobalMutex.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-20T21:11:10Z",
+      "side": 1,
+      "message": "nit: `uint32_t`",
+      "range": {
+        "startLine": 116,
+        "startChar": 4,
+        "endLine": 116,
+        "endChar": 7
+      },
+      "revId": "5f462cdfbb801c04dc50a3f5516a6e67f2839e96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b63ec06_4fd77779",
+        "filename": "src/libANGLE/GlobalMutex.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-20T21:11:10Z",
+      "side": 1,
+      "message": "nit: This can complicate testing, like our TSAN tests run with assertions enabled I think, so they won\u0027t cover the no-ASSERT build (or if I\u0027m wrong, vice versa).\n\nWhat happens if we use ThreadIdGlobalMutex when ASSERts are off? Technically the compiler should be able to see that the atomic is only stored to and never read, so it could optimize it out entirely. Do you think you could check that in assembly? It\u0027ll make it easier if we could use one implementation both with and without asserts.",
+      "range": {
+        "startLine": 123,
+        "startChar": 0,
+        "endLine": 128,
+        "endChar": 3
+      },
+      "revId": "5f462cdfbb801c04dc50a3f5516a6e67f2839e96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
