@@ -703,6 +703,9 @@ struct Extensions
     // GL_ANGLE_shader_pixel_local_storage_coherent
     bool shaderPixelLocalStorageCoherentANGLE = false;
 
+    // GL_ANGLE_skip_renderability_checks
+    bool skipRenderabilityChecksANGLE = false;
+
     // GL_ANGLE_stencil_texturing
     bool stencilTexturingANGLE = false;
 
