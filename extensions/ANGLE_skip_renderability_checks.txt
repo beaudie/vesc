@@ -1,0 +1,74 @@
+Name
+
+    ANGLE_skip_renderability_checks
+
+Name Strings
+
+    GL_ANGLE_skip_renderability_checks
+
+Contributors
+
+    Vikas Soni, Google
+
+Contact
+
+    Vikas Soni, Google (vikassoni 'at' chromium.com)
+
+Status
+
+    Draft
+
+Version
+
+    Last Modified Date: April 20, 2023
+    Revision: 1
+
+Number
+
+    OpenGL ES Extension XX
+
+Dependencies
+
+    None
+
+Overview
+
+    This extension allows ANGLE to skip texture format renderability checks if
+    a texture format is renderable. GL_SKIP_RENDERABILITY_CHECKS_ANGLE can be
+    set to GL_TRUE or GL_FALSE via glTexParameteri.
+    Note that if a texture is not renderable at all, then this will be a no-op.
+
+New Procedures and Functions
+
+    None
+
+New Tokens
+
+    Accepted by the <pname> parameter of TexParameteri:
+
+        GL_SKIP_RENDERABILITY_CHECKS_ANGLE	0x9EA0
+
+Additions to the OpenGL Specification
+
+    None.
+
+New Behavior
+
+    ANGLE texture sharing between GLES3 and GLES2 context currently fails
+    texture renderability checks. When a texture is created in GLES3 context
+    with a sized format RGBA8 for example and then later imported into a
+    GLES2/WEBGL1 context, it fails during texture renderability checks since
+    sized format RGBA8 is not supported in GLES2.
+    Clients can use this extension while creating the GLES3 texture to indicate
+    ANGLE that renderability checks should be skipped when the same texture is
+    used in GLES2 context.
+    Example Usage :
+    glTexParameteri(GL_TEXTURE_2D, GL_SKIP_RENDERABILITY_CHECKS_ANGLE, GL_TRUE);
+
+Issues
+
+Revision History
+
+    Version 1, 2023-04-20(Vikas Soni)
+      - Initial draft
+
