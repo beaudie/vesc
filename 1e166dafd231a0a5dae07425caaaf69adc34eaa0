@@ -34,6 +34,24 @@
       "parentUuid": "2ce6d5eb_c61b9dce",
       "revId": "1e166dafd231a0a5dae07425caaaf69adc34eaa0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "771c039a_20036053",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-04-20T13:36:57Z",
+      "side": 1,
+      "message": "Adding to other PixelLocalStorageTest suppressions in https://chromium-review.googlesource.com/c/angle/angle/+/4455107.",
+      "parentUuid": "fa503356_52628199",
+      "revId": "1e166dafd231a0a5dae07425caaaf69adc34eaa0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
