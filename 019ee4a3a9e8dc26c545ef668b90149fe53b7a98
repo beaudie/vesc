@@ -70,6 +70,30 @@
       },
       "revId": "019ee4a3a9e8dc26c545ef668b90149fe53b7a98",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f8e25a4_a57ca254",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5925,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-04-20T20:41:27Z",
+      "side": 1,
+      "message": "The flag seems to be working as intended. However, the reported memory heap usage on Linux shows that the heap is already almost full even with the VMA suballocation disabled (`3,794,862,080` bytes out of a budget of `3,880,910,848` bytes).\nI tried disabling `mutableMipmapTextureUpload` instead, and the heap usage dropped to around `1,126,891,520`. The trace in question include many compressed textures. If we enable `kSupportTranscodeEtcToBc` instead, the heap usage becomes `960,299,008`.",
+      "parentUuid": "487aa8fb_bfde2cb3",
+      "range": {
+        "startLine": 5924,
+        "startChar": 68,
+        "endLine": 5925,
+        "endChar": 63
+      },
+      "revId": "019ee4a3a9e8dc26c545ef668b90149fe53b7a98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
