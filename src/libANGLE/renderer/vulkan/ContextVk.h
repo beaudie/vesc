@@ -1333,6 +1333,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     void generateOutsideRenderPassCommandsQueueSerial();
     void generateRenderPassCommandsQueueSerial(QueueSerial *queueSerialOut);
+    bool isCurrent() const { return mIsCurrent; }
 
     angle::Result ensureInterfacePipelineCache();
 
@@ -1450,6 +1451,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     // Whether this context should do seamful cube map sampling emulation.
     bool mEmulateSeamfulCubeMapSampling;
+
+    // True if it is the current context on any thread
+    bool mIsCurrent;
 
     // This info is used in the descriptor update step.
     gl::ActiveTextureArray<TextureVk *> mActiveTextures;

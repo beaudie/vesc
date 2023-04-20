@@ -609,6 +609,12 @@ void KHRONOS_APIENTRY BeginTransformFeedbackMinimizedProc(GLenum primitiveMode)
     glBeginTransformFeedback(GL_POINTS);
 }
 
+void KHRONOS_APIENTRY GetQueryObjectuivProc(GLuint id, GLenum pname, GLuint *params)
+{
+    // if(pname == GL_QUERY_RESULT) { return; }
+    glGetQueryObjectuiv(id, pname, params);
+}
+
 angle::GenericProc KHRONOS_APIENTRY TraceLoadProc(const char *procName)
 {
     // EGL
@@ -807,6 +813,11 @@ angle::GenericProc KHRONOS_APIENTRY TraceLoadProc(const char *procName)
         {
             return reinterpret_cast<angle::GenericProc>(BeginTransformFeedbackMinimizedProc);
         }
+    }
+
+    if (strcmp(procName, "glGetQueryObjectuiv") == 0)
+    {
+        return reinterpret_cast<angle::GenericProc>(GetQueryObjectuivProc);
     }
 
     return gCurrentTracePerfTest->getGLWindow()->getProcAddress(procName);
