@@ -249,6 +249,7 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_ANGLE_shader_binary"] = esOnlyExtension(&Extensions::shaderBinaryANGLE);
         map["GL_ANGLE_shader_pixel_local_storage"] = enableableExtension(&Extensions::shaderPixelLocalStorageANGLE);
         map["GL_ANGLE_shader_pixel_local_storage_coherent"] = enableableExtension(&Extensions::shaderPixelLocalStorageCoherentANGLE);
+        map["GL_ANGLE_skip_renderability_checks"] = enableableExtension(&Extensions::skipRenderabilityChecksANGLE);
         map["GL_ANGLE_stencil_texturing"] = enableableExtension(&Extensions::stencilTexturingANGLE);
         map["GL_CHROMIUM_sync_query"] = enableableExtension(&Extensions::syncQueryCHROMIUM);
         map["GL_ANGLE_texture_compression_dxt3"] = enableableExtension(&Extensions::textureCompressionDxt3ANGLE);
