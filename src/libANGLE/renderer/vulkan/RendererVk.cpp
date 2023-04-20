@@ -4163,7 +4163,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // improves 7%. Disable for MESA Virtio-GPU Venus driver in virtualized environment where
     // batching is preferred.
     ANGLE_FEATURE_CONDITION(&mFeatures, preferSubmitAtFBOBoundary,
-                            (isARM || isSwiftShader) && !isVenus);
+                            (/*isARM*/ true || isSwiftShader) && !isVenus);
 
     // In order to support immutable samplers tied to external formats, we need to overallocate
     // descriptor counts for such immutable samplers
@@ -4223,7 +4223,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // can be adjusted.  On such hardware, the switch to framebuffer fetch mode is made permanent so
     // such render pass breaks don't happen.
     ANGLE_FEATURE_CONDITION(&mFeatures, permanentlySwitchToFramebufferFetchMode,
-                            isTileBasedRenderer);
+                            /*isTileBasedRenderer*/ true);
 
     // Support EGL_KHR_lock_surface3 extension.
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsLockSurfaceExtension, IsAndroid());
@@ -4461,7 +4461,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // query back to back, this should only introduce one extra flush per frame.
     // https://issuetracker.google.com/250706693
     ANGLE_FEATURE_CONDITION(&mFeatures, preferSubmitOnAnySamplesPassedQueryEnd,
-                            isTileBasedRenderer);
+                            /*isTileBasedRenderer*/ true);
 
     // ARM driver appears having a bug that if we did not wait for submission to complete, but call
     // vkGetQueryPoolResults(VK_QUERY_RESULT_WAIT_BIT), it may result VK_NOT_READY.
@@ -4471,7 +4471,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // driver, vkGetQueryPoolResult() with VK_QUERY_RESULT_WAIT_BIT may result in incorrect result.
     // In that case we force into CPU wait for submission to complete. http://anglebug.com/6692
     ANGLE_FEATURE_CONDITION(&mFeatures, forceWaitForSubmissionToCompleteForQueryResult,
-                            isARM || (isNvidia && nvidiaVersion.major < 470u));
+                            /*isARM*/ true || (isNvidia && nvidiaVersion.major < 470u));
 
     // Some ARM drivers may not free memory in "vkFreeCommandBuffers()" without
     // VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT flag.
@@ -4933,6 +4933,7 @@ void RendererVk::pruneOrphanedBufferBlocks()
 void RendererVk::cleanupGarbage()
 {
     std::unique_lock<std::mutex> lock(mGarbageMutex);
+    ANGLE_TRACE_EVENT0("gpu.angle", "cleanupGarbage");
 
     // Clean up general garbages
     while (!mSharedGarbage.empty())

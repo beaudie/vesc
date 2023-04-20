@@ -873,6 +873,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mFlipViewportForReadFramebuffer(false),
       mIsAnyHostVisibleBufferWritten(false),
       mEmulateSeamfulCubeMapSampling(false),
+      mIsCurrent(true),
       mCurrentQueueSerialIndex(kInvalidQueueSerialIndex),
       mOutsideRenderPassCommands(nullptr),
       mRenderPassCommands(nullptr),
@@ -5749,18 +5750,18 @@ angle::Result ContextVk::onMakeCurrent(const gl::Context *context)
         }
     }
 
+    mIsCurrent = true;
+
     return angle::Result::Continue;
 }
 
 angle::Result ContextVk::onUnMakeCurrent(const gl::Context *context)
 {
-    ANGLE_TRY(flushImpl(nullptr, RenderPassClosureReason::ContextChange));
+    // ANGLE_TRY(flushImpl(nullptr, RenderPassClosureReason::ContextChange));
     mCurrentWindowSurface = nullptr;
+    // Keep mCurrentQueueSerialIndex as is and evict it when needed.
+    mIsCurrent = false;
 
-    if (mCurrentQueueSerialIndex != kInvalidQueueSerialIndex)
-    {
-        releaseQueueSerialIndex();
-    }
     return angle::Result::Continue;
 }
 
@@ -7005,34 +7006,22 @@ angle::Result ContextVk::updateActiveImages(CommandBufferHelperT *commandBufferH
 angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore,
                                    RenderPassClosureReason renderPassClosureReason)
 {
-    bool someCommandsNeedFlush =
-        !mOutsideRenderPassCommands->empty() || !mRenderPassCommands->empty();
-    bool someCommandAlreadyFlushedNeedsSubmit =
-        mLastFlushedQueueSerial != mLastSubmittedQueueSerial;
-    bool someSemaphoreNeedsSubmit =
-        signalSemaphore != nullptr || mHasWaitSemaphoresPendingSubmission;
-
-    if (!someCommandsNeedFlush && !someCommandAlreadyFlushedNeedsSubmit &&
-        !someSemaphoreNeedsSubmit)
+    bool allCommandsEmpty = mOutsideRenderPassCommands->empty() && mRenderPassCommands->empty();
+    if (allCommandsEmpty && mLastFlushedQueueSerial == mLastSubmittedQueueSerial &&
+        signalSemaphore == nullptr && !mHasWaitSemaphoresPendingSubmission)
     {
         // We have nothing to submit.
         return angle::Result::Continue;
     }
 
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::flushImpl");
-    if (someCommandsNeedFlush)
+    //    ALOG("\tflushImpl:%d", ToUnderlying(renderPassClosureReason));
+
+    if (!allCommandsEmpty)
     {
         // If any of secondary command buffer not empty, we need to do flush
         // Avoid calling vkQueueSubmit() twice, since submitCommands() below will do that.
         ANGLE_TRY(flushCommandsAndEndRenderPassWithoutSubmit(renderPassClosureReason));
-    }
-    else if (someCommandAlreadyFlushedNeedsSubmit)
-    {
-        // This is when someone already called flushCommandsAndEndRenderPassWithoutQueueSubmit.
-        // Nothing to flush but we have some command to submit.
-        ASSERT(mLastFlushedQueueSerial.valid());
-        ASSERT(QueueSerialsHaveDifferentIndexOrSmaller(mLastSubmittedQueueSerial,
-                                                       mLastFlushedQueueSerial));
     }
 
     if (mIsAnyHostVisibleBufferWritten)
@@ -7077,7 +7066,6 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore,
     if (mLastFlushedQueueSerial == mLastSubmittedQueueSerial)
     {
         // We have to do empty submission...
-        ASSERT(!someCommandsNeedFlush);
         mLastFlushedQueueSerial = mOutsideRenderPassCommands->getQueueSerial();
         generateOutsideRenderPassCommandsQueueSerial();
     }
@@ -8258,8 +8246,31 @@ angle::Result ContextVk::switchToFramebufferFetchMode(bool hasFramebufferFetch)
 ANGLE_INLINE angle::Result ContextVk::allocateQueueSerialIndex()
 {
     ASSERT(mCurrentQueueSerialIndex == kInvalidQueueSerialIndex);
+
     // Make everything appears to be flushed and submitted
-    ANGLE_TRY(mRenderer->allocateQueueSerialIndex(&mCurrentQueueSerialIndex));
+    SerialIndex index;
+    ANGLE_TRY(mRenderer->allocateQueueSerialIndex(&index));
+
+    if (index >= vk::kMaxFastQueueSerials)
+    {
+        // Try to evict any non-current context's queue index
+        bool anyReleased = false;
+        for (auto &ctx : mShareGroupVk->getContexts())
+        {
+            if (!ctx->isCurrent())
+            {
+                ctx->releaseQueueSerialIndex();
+                anyReleased = true;
+            }
+        }
+        if (anyReleased)
+        {
+            mRenderer->releaseQueueSerialIndex(index);
+            ANGLE_TRY(mRenderer->allocateQueueSerialIndex(&index));
+        }
+    }
+    mCurrentQueueSerialIndex = index;
+
     // Note queueSerial for render pass is deferred until begin time.
     generateOutsideRenderPassCommandsQueueSerial();
     return angle::Result::Continue;
@@ -8267,9 +8278,11 @@ ANGLE_INLINE angle::Result ContextVk::allocateQueueSerialIndex()
 
 ANGLE_INLINE void ContextVk::releaseQueueSerialIndex()
 {
-    ASSERT(mCurrentQueueSerialIndex != kInvalidQueueSerialIndex);
-    mRenderer->releaseQueueSerialIndex(mCurrentQueueSerialIndex);
-    mCurrentQueueSerialIndex = kInvalidQueueSerialIndex;
+    if (mCurrentQueueSerialIndex != kInvalidQueueSerialIndex)
+    {
+        mRenderer->releaseQueueSerialIndex(mCurrentQueueSerialIndex);
+        mCurrentQueueSerialIndex = kInvalidQueueSerialIndex;
+    }
 }
 
 ANGLE_INLINE void ContextVk::generateOutsideRenderPassCommandsQueueSerial()
