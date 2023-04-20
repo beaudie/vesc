@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9ec3877_1a9e46d3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 5719,
+      "author": {
+        "id": 1379716
+      },
+      "writtenOn": "2023-04-20T16:26:49Z",
+      "side": 0,
+      "message": "I think I misunderstood\n\n\u003e  If yes, then flushUsubmittedUseInShareContexts will replace finalizeImageLayoutInShareContexts completely.\n\nfrom https://chromium-review.googlesource.com/c/angle/angle/+/4436529/comment/cb23d7dd_fa777785/\n\nPTAL to see if I understood your latest suggestion correctly!",
+      "parentUuid": "3ecea415_2e9cfb3c",
+      "range": {
+        "startLine": 5719,
+        "startChar": 4,
+        "endLine": 5719,
+        "endChar": 80
+      },
+      "revId": "a7bd3f53fa68bf9351a712c618b37bc1fa79817c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d8f5000_33b40370",
