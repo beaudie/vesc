@@ -4194,6 +4194,8 @@ void GL_APIENTRY GL_GetFramebufferPixelLocalStorageParameterivRobustANGLE(GLint 
     }
 }
 
+// GL_ANGLE_skip_renderability_checks
+
 // GL_ANGLE_stencil_texturing
 
 // GL_ANGLE_texture_compression_dxt3

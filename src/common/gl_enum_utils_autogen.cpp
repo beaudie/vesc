@@ -2760,6 +2760,8 @@ const char *GLenumToString(GLESEnum enumGroup, unsigned int value)
                     return "GL_PIXEL_LOCAL_CLEAR_VALUE_INT_ANGLE";
                 case 0x96EE:
                     return "GL_PIXEL_LOCAL_CLEAR_VALUE_UNSIGNED_INT_ANGLE";
+                case 0x9EA0:
+                    return "GL_SKIP_RENDERABILITY_CHECKS_ANGLE";
                 case 0xFFFFFFFF:
                     return "GL_INVALID_INDEX";
                 default:
@@ -7453,6 +7455,8 @@ const char *GLenumToString(GLESEnum enumGroup, unsigned int value)
                     return "GL_DEPTH_STENCIL_TEXTURE_MODE";
                 case 0x9580:
                     return "GL_TEXTURE_TILING_EXT";
+                case 0x9EA0:
+                    return "GL_SKIP_RENDERABILITY_CHECKS_ANGLE";
                 default:
                     return UnknownEnumToString(value);
             }
@@ -23414,6 +23418,7 @@ static StringEnumEntry g_stringEnumTable[] = {
     {"GL_SKIP_COMPONENTS4_NV", -3},
     {"GL_SKIP_DECODE_EXT", 0x8A4A},
     {"GL_SKIP_MISSING_GLYPH_NV", 0x90A9},
+    {"GL_SKIP_RENDERABILITY_CHECKS_ANGLE", 0x9EA0},
     {"GL_SLICE_ACCUM_SUN", 0x85CC},
     {"GL_SLIM10U_SGIX", 0x831E},
     {"GL_SLIM12S_SGIX", 0x831F},

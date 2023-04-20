@@ -7927,6 +7927,15 @@ bool ValidateTexParameterBase(const Context *context,
             }
             break;
 
+        case GL_SKIP_RENDERABILITY_CHECKS_ANGLE:
+            if (context->getClientMajorVersion() < 3 ||
+                !context->getExtensions().skipRenderabilityChecksANGLE)
+            {
+                context->validationErrorF(entryPoint, GL_INVALID_ENUM, kEnumNotSupported, pname);
+                return false;
+            }
+            break;
+
         default:
             context->validationErrorF(entryPoint, GL_INVALID_ENUM, kEnumNotSupported, pname);
             return false;
