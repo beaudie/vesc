@@ -144,6 +144,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8c3ea55_e1017199",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 5719,
+      "author": {
+        "id": 1379716
+      },
+      "writtenOn": "2023-04-20T17:33:04Z",
+      "side": 0,
+      "message": "\u003e In other words, call `flushUnsubmittedUseInShareContexts()` in case of AHB, and call `finalizeImageLayoutInShareContexts()` (like before) in all other cases.\n\u003eIs this possible?\n\nAttempted, PTAL!",
+      "parentUuid": "7048ef0c_8e3d9cd8",
+      "range": {
+        "startLine": 5719,
+        "startChar": 4,
+        "endLine": 5719,
+        "endChar": 80
+      },
+      "revId": "a7bd3f53fa68bf9351a712c618b37bc1fa79817c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d8f5000_33b40370",
