@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e99d1e49_c8b94c55",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-20T03:54:58Z",
+      "side": 1,
+      "message": "lgtm\n\nGoing forward, for any objective-C++ where it makes sense, we should put these initializations into the class declaration to keep them in one place.",
+      "revId": "14bd92c340e4f85cf071d30b2533cbdf18128dcf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
