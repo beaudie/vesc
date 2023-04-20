@@ -129,6 +129,7 @@ TextureState::TextureState(TextureType type)
       mImmutableLevels(0),
       mUsage(GL_NONE),
       mHasProtectedContent(false),
+      mSkipRenderabilityChecks(false),
       mImageDescs((IMPLEMENTATION_MAX_TEXTURE_LEVELS + 1) * (type == TextureType::CubeMap ? 6 : 1)),
       mCropRect(0, 0, 0, 0),
       mGenerateMipmapHint(GL_FALSE),
@@ -1103,6 +1104,11 @@ bool Texture::hasProtectedContent() const
     return mState.mHasProtectedContent;
 }
 
+void Texture::setSkipRenderabilityChecks(Context *context, bool skipRenderabilityChecks)
+{
+    mState.mSkipRenderabilityChecks = skipRenderabilityChecks;
+}
+
 const TextureState &Texture::getTextureState() const
 {
     return mState;
@@ -2009,6 +2015,13 @@ bool Texture::isRenderable(const Context *context,
     // Surfaces bound to textures are always renderable. This avoids issues with surfaces with ES3+
     // formats not being renderable when bound to textures in ES2 contexts.
     if (mBoundSurface)
+    {
+        return true;
+    }
+
+    // Skip the renderability checks if it is set via glTexParameteri and current
+    // context is less than GLES3.
+    if (mState.skipRenderabilityChecks() && context->getClientMajorVersion() < 3)
     {
         return true;
     }
