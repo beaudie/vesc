@@ -596,6 +596,7 @@
     void getFramebufferPixelLocalStorageParameterivRobust(                                         \
         GLint plane, GLenum pname, GLsizei bufSize, GLsizei *length, GLint *params);               \
     /* GL_ANGLE_shader_pixel_local_storage_coherent */                                             \
+    /* GL_ANGLE_skip_renderability_checks */                                                       \
     /* GL_ANGLE_stencil_texturing */                                                               \
     /* GL_ANGLE_texture_compression_dxt3 */                                                        \
     /* GL_ANGLE_texture_compression_dxt5 */                                                        \
