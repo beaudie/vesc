@@ -1,0 +1,60 @@
+Name
+
+    ANGLE_skip_renderability_checks
+
+Name Strings
+
+    GL_ANGLE_skip_renderability_checks
+
+Contributors
+
+    Vikas Soni, Google
+
+Contact
+
+    Vikas Soni, Google (vikassoni 'at' chromium.com)
+
+Status
+
+    Draft
+
+Version
+
+    Last Modified Date: April 20, 2023
+    Revision: 1
+
+Number
+
+    OpenGL ES Extension XX
+
+Dependencies
+
+    None
+
+Overview
+
+    This extension allows ANGLE to skip texture format renderability checks.
+
+New Procedures and Functions
+
+    None
+
+New Tokens
+
+    Accepted by the <pname> parameter of TexParameteri:
+
+        GL_SKIP_RENDERABILITY_CHECKS_ANGLE	0x9EA0
+
+Additions to the OpenGL Specification
+
+    None.
+
+New Behavior
+
+Issues
+
+Revision History
+
+    Version 1, 2023-04-20(Vikas Soni)
+      - Initial draft
+
