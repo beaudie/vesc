@@ -46,6 +46,47 @@
       },
       "revId": "a7bd3f53fa68bf9351a712c618b37bc1fa79817c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ecea415_2e9cfb3c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 5719,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-20T14:18:39Z",
+      "side": 0,
+      "message": "I have question. Why this change replaces call to `finalizeImageLayout()` to `flushImpl()` in the first place?\n\nMy original proposition was to have 2 methods:\n- `releaseImageFromShareContexts()` -\u003e calls `finalizeImageLayout()` unconditionally.\n- `flushUnsubmittedUseInShareContexts()` -\u003e `flushImpl()` if `hasUnsubmittedUse()`\n\nSo we will have copy of `for (ContextVk *ctx : shareContextSet)` loop. Also suggest  keep original logic in `releaseImageFromShareContexts()` as is (except for pure refactoring) to avoid undesriable side effects. I\u0027m talking about removing the `mImageSerial.valid()` check.",
+      "parentUuid": "d30db4f9_ea086936",
+      "range": {
+        "startLine": 5719,
+        "startChar": 4,
+        "endLine": 5719,
+        "endChar": 80
+      },
+      "revId": "a7bd3f53fa68bf9351a712c618b37bc1fa79817c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d8f5000_33b40370",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1945,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-20T14:18:39Z",
+      "side": 0,
+      "message": "It is look like after this CL you may remove `imageSiblingSerial` related code completely.\nIt was introduced in this CL: https://chromium-review.googlesource.com/c/angle/angle/+/4296014",
+      "revId": "a7bd3f53fa68bf9351a712c618b37bc1fa79817c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
