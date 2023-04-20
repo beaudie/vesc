@@ -122,6 +122,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7048ef0c_8e3d9cd8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 5719,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-20T16:55:40Z",
+      "side": 0,
+      "message": "Just want to chime in that I\u0027m in favor of Igor\u0027s suggestion not to do flush unless external (e.g. AHB). Chrome is/will be a heavy user of EGL images (not external, just for sharing between contexts) and I\u0027m somewhat concerned about the unnecessary flushes.",
+      "parentUuid": "c21d703c_1fc4928c",
+      "range": {
+        "startLine": 5719,
+        "startChar": 4,
+        "endLine": 5719,
+        "endChar": 80
+      },
+      "revId": "a7bd3f53fa68bf9351a712c618b37bc1fa79817c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6d8f5000_33b40370",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 11
