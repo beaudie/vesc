@@ -3791,6 +3791,12 @@ Extensions Context::generateSupportedExtensions() const
         supportedExtensions.colorBufferFloatRgbaCHROMIUM = false;
     }
 
+    if (getClientVersion() >= ES_3_0)
+    {
+        // Default enable this extension.
+        supportedExtensions.skipRenderabilityChecksANGLE = true;
+    }
+
     if (getFrontendFeatures().disableDrawBuffersIndexed.enabled)
     {
         supportedExtensions.drawBuffersIndexedEXT = false;
