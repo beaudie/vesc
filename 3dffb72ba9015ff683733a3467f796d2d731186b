@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49ded9f6_1c164723",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-20T21:54:00Z",
+      "side": 1,
+      "message": "Overall idea looks okay to me, but it is quite complicated to understand. I am wondering it might be helpful to make it easier to understand, if we can create one class wrap mUnlockedTryAcquireData and mUnlockedTryAcquireResult as well as mNeedToAcquireNextSwapchainImage all into one class with well encapsulated and lock protected APIs, and pass this object here instead of each individual arguments.",
+      "range": {
+        "startLine": 453,
+        "startChar": 33,
+        "endLine": 459,
+        "endChar": 71
+      },
+      "revId": "3dffb72ba9015ff683733a3467f796d2d731186b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
