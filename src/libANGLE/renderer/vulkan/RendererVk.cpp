@@ -4439,7 +4439,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     //    decide cpu or gpu upload texture based on texture size.
     constexpr VkSubgroupFeatureFlags kRequiredSubgroupOp =
         VK_SUBGROUP_FEATURE_SHUFFLE_BIT | VK_SUBGROUP_FEATURE_CLUSTERED_BIT;
-    static constexpr bool kSupportTranscodeEtcToBc = false;
+    static constexpr bool kSupportTranscodeEtcToBc = true;
     static constexpr uint32_t kMaxTexelBufferSize  = 64 * 1024 * 1024;
     const VkPhysicalDeviceLimits &limitsVk         = mPhysicalDeviceProperties.limits;
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsComputeTranscodeEtcToBc,
