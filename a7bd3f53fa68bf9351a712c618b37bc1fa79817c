@@ -22,6 +22,30 @@
       },
       "revId": "a7bd3f53fa68bf9351a712c618b37bc1fa79817c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d30db4f9_ea086936",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 5719,
+      "author": {
+        "id": 1379716
+      },
+      "writtenOn": "2023-04-20T00:22:13Z",
+      "side": 0,
+      "message": "Yeah, I need more time to investigate. I think I\u0027m seeing ANGLE record to a command buffer it has already ended with this current patchset.",
+      "parentUuid": "5f97eb0e_c3c6a263",
+      "range": {
+        "startLine": 5719,
+        "startChar": 4,
+        "endLine": 5719,
+        "endChar": 80
+      },
+      "revId": "a7bd3f53fa68bf9351a712c618b37bc1fa79817c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
