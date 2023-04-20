@@ -168,6 +168,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "eeff0da1_bef617a7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 5719,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-20T17:53:01Z",
+      "side": 0,
+      "message": "\u003e Attempted, PTAL!\n\nLGTM, except maybe for copy-paste. However, I can\u0027t suggest a good name for a method.",
+      "parentUuid": "c8c3ea55_e1017199",
+      "range": {
+        "startLine": 5719,
+        "startChar": 4,
+        "endLine": 5719,
+        "endChar": 80
+      },
+      "revId": "a7bd3f53fa68bf9351a712c618b37bc1fa79817c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d8f5000_33b40370",
@@ -199,6 +223,24 @@
       "side": 0,
       "message": "The above is only true if not using `finalizeImageLayoutInShareContexts()` (except for `releaseImageFromShareContexts()`).",
       "parentUuid": "6d8f5000_33b40370",
+      "revId": "a7bd3f53fa68bf9351a712c618b37bc1fa79817c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45705101_9249d453",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1945,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-20T17:53:01Z",
+      "side": 0,
+      "message": "No longer actual.",
+      "parentUuid": "b0c28957_104d6e07",
       "revId": "a7bd3f53fa68bf9351a712c618b37bc1fa79817c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aca317f7_463b8545",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 5315,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-20T17:53:01Z",
+      "side": 1,
+      "message": "nit: extra blank line.",
+      "revId": "54fa7ee947904aecbe41408efd595aeee9131102",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

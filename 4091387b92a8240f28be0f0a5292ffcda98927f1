@@ -34,6 +34,24 @@
       "parentUuid": "18a5df46_1c06f30b",
       "revId": "4091387b92a8240f28be0f0a5292ffcda98927f1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6131b450_bb12c09f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 5727,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-20T17:53:01Z",
+      "side": 1,
+      "message": "From base to the last patchset `mImageSerial.valid()` is still removed.\nIs this a typo?",
+      "parentUuid": "e77634d6_61b9db45",
+      "revId": "4091387b92a8240f28be0f0a5292ffcda98927f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
