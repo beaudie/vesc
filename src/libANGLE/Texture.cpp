@@ -2091,6 +2091,7 @@ angle::Result Texture::setBufferRange(const gl::Context *context,
     mState.mImmutableFormat = true;
     mState.mBuffer.set(context, buffer, offset, size);
     ANGLE_TRY(mTexture->setBuffer(context, internalFormat));
+    mDirtyBits.set(DIRTY_BIT_IMPLEMENTATION);
 
     mState.clearImageDescs();
     if (buffer == nullptr)
