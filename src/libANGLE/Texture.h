@@ -144,6 +144,7 @@ class TextureState final : private angle::NonCopyable
     const SamplerState &getSamplerState() const { return mSamplerState; }
     GLenum getUsage() const { return mUsage; }
     bool hasProtectedContent() const { return mHasProtectedContent; }
+    bool skipRenderabilityChecks() const { return mSkipRenderabilityChecks; }
     GLenum getDepthStencilTextureMode() const { return mDepthStencilTextureMode; }
 
     bool hasBeenBoundAsImage() const { return mHasBeenBoundAsImage; }
@@ -242,6 +243,8 @@ class TextureState final : private angle::NonCopyable
 
     // GL_EXT_protected_textures
     bool mHasProtectedContent;
+
+    bool mSkipRenderabilityChecks;
 
     std::vector<ImageDesc> mImageDescs;
 
@@ -350,6 +353,8 @@ class Texture final : public RefCountObject<TextureID>,
 
     void setProtectedContent(Context *context, bool hasProtectedContent);
     bool hasProtectedContent() const override;
+
+    void setSkipRenderabilityChecks(Context *context, bool skipRenderabilityChecks);
 
     const TextureState &getState() const { return mState; }
 
