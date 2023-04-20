@@ -9019,6 +9019,22 @@ void Context::getFramebufferPixelLocalStorageParameterivRobust(GLint plane,
     }
 }
 
+void Context::framebufferMTLRasterizationRateMap(GLenum target, GLMTLRasterizationRateMapANGLE map)
+{
+    Framebuffer *framebuffer = mState.getTargetFramebuffer(target);
+    ASSERT(framebuffer);
+
+    framebuffer->setRasterizationRateMap(map);
+}
+
+GLMTLRasterizationRateMapANGLE Context::getFramebufferMTLRasterizationRateMap(GLenum target)
+{
+    const Framebuffer *framebuffer = mState.getTargetFramebuffer(target);
+    ASSERT(framebuffer);
+
+    return framebuffer->getRasterizationRateMap();
+}
+
 void Context::eGLImageTargetTexStorage(GLenum target, egl::ImageID image, const GLint *attrib_list)
 {
     Texture *texture        = getTextureByType(FromGLenum<TextureType>(target));
@@ -9899,6 +9915,19 @@ void Context::textureFoveationParameters(TextureID texturePacked,
     ASSERT(texture);
     texture->setFocalPoint(layer, focalPoint, focalX, focalY, gainX, gainY, foveaArea);
 }
+
+// TODO(djg)
+/*
+void Context::bindMetalRasterizationRateMap(GLuint renderbufferHandle,
+                                            GLMTLRasterizationRateMapANGLE map)
+{
+    Renderbuffer *renderbuffer = getRenderbuffer({renderbufferHandle});
+    rx::RenderbufferImpl *renderbufferImpl =
+        renderbuffer ? renderbuffer->getImplementation() : nullptr;
+    ANGLE_CONTEXT_TRY(mImplementation->bindMetalRasterizationRateMap(this, renderbufferImpl, map));
+    getMutablePrivateState()->setVariableRasterizationRateMap(map);
+}
+*/
 
 // ErrorSet implementation.
 ErrorSet::ErrorSet(Debug *debug,

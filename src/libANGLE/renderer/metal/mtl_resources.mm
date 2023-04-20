@@ -1151,5 +1151,21 @@ MTLStorageMode Buffer::storageMode() const
 {
     return get().storageMode;
 }
+
+/** static */
+RasterizationRateMapRef RasterizationRateMap::MakeFromMetal(
+    id<MTLRasterizationRateMap> metalRasterizationRateMap)
+{
+    ANGLE_MTL_OBJC_SCOPE
+    {
+        return RasterizationRateMapRef(new RasterizationRateMap(metalRasterizationRateMap));
+    }
+}
+
+RasterizationRateMap::RasterizationRateMap(id<MTLRasterizationRateMap> metalRasterizationRateMap)
+{
+    set(metalRasterizationRateMap);
+}
+
 }  // namespace mtl
 }  // namespace rx

@@ -194,6 +194,7 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
     {Feature::HasEvents, "hasEvents"},
     {Feature::HasExplicitMemBarrier, "hasExplicitMemBarrier"},
     {Feature::HasNonUniformDispatch, "hasNonUniformDispatch"},
+    {Feature::HasRasterizationRateMap, "hasRasterizationRateMap"},
     {Feature::HasShaderStencilOutput, "hasShaderStencilOutput"},
     {Feature::HasStencilAutoResolve, "hasStencilAutoResolve"},
     {Feature::HasTextureSwizzle, "hasTextureSwizzle"},
