@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21419003_0ac99963",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-20T13:39:13Z",
+      "side": 1,
+      "message": "Please add a `Bug:` tag to pass presubmit.",
+      "revId": "b09a690e636bf301186d05fc2d9b094088963b7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
