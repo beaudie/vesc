@@ -2727,6 +2727,7 @@ template <>
 void StateManagerGL::get(GLenum name, GLboolean *value)
 {
     mFunctions->getBooleanv(name, value);
+    ASSERT(mFunctions->getError() == GL_NO_ERROR);
 }
 
 template <>
@@ -2734,6 +2735,7 @@ void StateManagerGL::get(GLenum name, bool *value)
 {
     GLboolean v;
     get(name, &v);
+    ASSERT(mFunctions->getError() == GL_NO_ERROR);
     *value = (v == GL_TRUE);
 }
 
@@ -2742,6 +2744,7 @@ void StateManagerGL::get(GLenum name, std::array<bool, 4> *values)
 {
     GLboolean v[4];
     get(name, v);
+    ASSERT(mFunctions->getError() == GL_NO_ERROR);
     for (size_t i = 0; i < 4; i++)
     {
         (*values)[i] = (v[i] == GL_TRUE);
@@ -2752,6 +2755,7 @@ template <>
 void StateManagerGL::get(GLenum name, GLint *value)
 {
     mFunctions->getIntegerv(name, value);
+    ASSERT(mFunctions->getError() == GL_NO_ERROR);
 }
 
 template <>
@@ -2759,6 +2763,7 @@ void StateManagerGL::get(GLenum name, GLenum *value)
 {
     GLint v;
     get(name, &v);
+    ASSERT(mFunctions->getError() == GL_NO_ERROR);
     *value = static_cast<GLenum>(v);
 }
 
@@ -2767,6 +2772,7 @@ void StateManagerGL::get(GLenum name, gl::Rectangle *rect)
 {
     GLint v[4];
     get(name, v);
+    ASSERT(mFunctions->getError() == GL_NO_ERROR);
     *rect = gl::Rectangle(v[0], v[1], v[2], v[3]);
 }
 
@@ -2774,6 +2780,7 @@ template <>
 void StateManagerGL::get(GLenum name, GLfloat *value)
 {
     mFunctions->getFloatv(name, value);
+    ASSERT(mFunctions->getError() == GL_NO_ERROR);
 }
 
 template <>
@@ -2781,6 +2788,7 @@ void StateManagerGL::get(GLenum name, gl::ColorF *color)
 {
     GLfloat v[4];
     get(name, v);
+    ASSERT(mFunctions->getError() == GL_NO_ERROR);
     *color = gl::ColorF(v[0], v[1], v[2], v[3]);
 }
 
