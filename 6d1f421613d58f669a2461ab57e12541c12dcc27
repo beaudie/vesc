@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b3540f9_99a06de7",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 7404,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-20T00:07:07Z",
+      "side": 1,
+      "message": "I guess the big diff in ANGLETEST.cpp is because of this test? I think it is okay, but the alternative is keep this test in ImageTest.cpp and add getPerfCounters method to ImageTest, which likely is much smaller change.",
+      "range": {
+        "startLine": 7404,
+        "startChar": 8,
+        "endLine": 7404,
+        "endChar": 23
+      },
+      "revId": "6d1f421613d58f669a2461ab57e12541c12dcc27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

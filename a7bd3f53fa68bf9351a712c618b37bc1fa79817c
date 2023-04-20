@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f97eb0e_c3c6a263",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 5719,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-20T00:07:07Z",
+      "side": 0,
+      "message": "I am wondering the test failure might related to this, that after this CL it is doing a flushImpl call which previously not. Maybe you still want to keep finalizeImageLayoutInShareContexts and only do the flush from where it is required.",
+      "range": {
+        "startLine": 5719,
+        "startChar": 4,
+        "endLine": 5719,
+        "endChar": 80
+      },
+      "revId": "a7bd3f53fa68bf9351a712c618b37bc1fa79817c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
