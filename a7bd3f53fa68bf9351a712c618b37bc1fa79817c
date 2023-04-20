@@ -98,6 +98,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c21d703c_1fc4928c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 5719,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-20T16:51:56Z",
+      "side": 0,
+      "message": "\u003e PTAL to see if I understood your latest suggestion correctly!\n\nFirst part is correct -\u003e implementing separate `flushUnsubmittedUseInShareContexts()` method.\n\nAnother suggestion was to remove calls to `finalizeImageLayoutInShareContexts()` before `flushUnsubmittedUseInShareContexts()`. Logic is that if layout needs finalization - it is used and not submitted. So there is no point finalizing layout before `flushImpl()`, because this will happen as part of the flush.\nRemoving `finalizeImageLayoutInShareContexts()` calls will allow to remove the method completely and move its code inside `releaseImageFromShareContexts()` (like it was before my change).\n\n---\n\nI have another suggestion regarding `finalizeImageLayoutInShareContexts()` method, that makes my previous suggestion obsolete.\n\nCurrently, this CL will call `flushImpl()` for all siblings that has `mOwnsImage \u003d\u003d false`. However, not all such siblings may be external image siblings.\n\nMy suggestion is to keep `finalizeImageLayoutInShareContexts()` and only call `flushUnsubmittedUseInShareContexts()` when external image siblings are released.\nThis is to prevent excessive calls to `flushImpl()` when using `EGLImages` that are not AHBs.\n\nIn other words, call `flushUnsubmittedUseInShareContexts()` in case of AHB, and call `finalizeImageLayoutInShareContexts()` (like before) in all other cases.\n\nIs this possible?",
+      "parentUuid": "3ecea415_2e9cfb3c",
+      "range": {
+        "startLine": 5719,
+        "startChar": 4,
+        "endLine": 5719,
+        "endChar": 80
+      },
+      "revId": "a7bd3f53fa68bf9351a712c618b37bc1fa79817c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6d8f5000_33b40370",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
         "patchSetId": 11
@@ -109,6 +133,24 @@
       "writtenOn": "2023-04-20T14:18:39Z",
       "side": 0,
       "message": "It is look like after this CL you may remove `imageSiblingSerial` related code completely.\nIt was introduced in this CL: https://chromium-review.googlesource.com/c/angle/angle/+/4296014",
+      "revId": "a7bd3f53fa68bf9351a712c618b37bc1fa79817c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0c28957_104d6e07",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 1945,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-20T16:51:56Z",
+      "side": 0,
+      "message": "The above is only true if not using `finalizeImageLayoutInShareContexts()` (except for `releaseImageFromShareContexts()`).",
+      "parentUuid": "6d8f5000_33b40370",
       "revId": "a7bd3f53fa68bf9351a712c618b37bc1fa79817c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
