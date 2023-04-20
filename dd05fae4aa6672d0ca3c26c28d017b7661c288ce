@@ -155,6 +155,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8054b416_22ca7c35",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-20T22:13:04Z",
+      "side": 1,
+      "message": "I still think you can avoid all diffs in this CommandBatch class here by:\n1) Add SharedFence::initWithExternalFence() API by importing the native fence into the fence, and set mRecycler to null to indicate this can not recycled. And also add SharedFence::isRecycleable() const { return mRecycler!\u003dnullptr;}\n2) In retireFinishedCommandsLocked you do this:\nif(batch.fence.isRecycleable()\n{\n    batch.fence.release();\n} \nelse\n{\n    batch.fence.destroy();\n} \n\nThis way, commandBatch has one fence and it do not know it is external or internal. It just check or wait normally. The native fence is hidden in the VkFence by importing it into VkFence. The concept of external fence is going to be limited to queueSubmit and syncVk. The problem you brought up with error handling if export/import failed is not a big problem, you have to deal with it in this CL anyway if exportFd fails, even though less likely. You can always wait for everything to finish if needed. I just think the code diff will be smaller and overall design will be cleaner doing it this way (mainly because CommandBatch only sees one fence, so no if check). It is not a correctness issue, so I am still keeping +1 here.",
+      "range": {
+        "startLine": 264,
+        "startChar": 4,
+        "endLine": 264,
+        "endChar": 32
+      },
+      "revId": "dd05fae4aa6672d0ca3c26c28d017b7661c288ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6c4d640e_3e70a0d9",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.h",
         "patchSetId": 5
