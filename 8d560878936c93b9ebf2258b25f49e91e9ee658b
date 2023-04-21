@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1a0b551_4cbe5660",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-21T20:17:09Z",
+      "side": 1,
+      "message": "Awesome work Alexey figuring out how to translate this.\n\nlgtm - couple of small questions.",
+      "revId": "8d560878936c93b9ebf2258b25f49e91e9ee658b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "778307b8_45c88adb",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/RewriteInterpolants.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-21T20:17:09Z",
+      "side": 1,
+      "message": "Are these invariants enforced by the frontend, and is that why it\u0027s safe to guard this logic with an ASSERT below?",
+      "revId": "8d560878936c93b9ebf2258b25f49e91e9ee658b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4618762f_0037a0d7",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/RewriteInterpolants.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-21T20:17:09Z",
+      "side": 1,
+      "message": "From the comment in the header, my understanding is that this takes all regular uses of interpolated variables and wraps them in explicit calls to interpolateCenter, interpolateCentroid, etc. It ignores variables which already have existing calls to those interpolation functions. Do I understand this correctly? If so is it possible to add a comment describing the shader source before and after this transformation?",
+      "revId": "8d560878936c93b9ebf2258b25f49e91e9ee658b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2294e9e2_7de8730a",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/RewriteInterpolants.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-21T20:17:09Z",
+      "side": 1,
+      "message": "Could you give a brief example of which constructs are being skipped for wrapping here? For example is this ignoring arguments inside function declarations?",
+      "revId": "8d560878936c93b9ebf2258b25f49e91e9ee658b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dce5349a_b78aea6e",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/RewriteInterpolants.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-21T20:17:09Z",
+      "side": 1,
+      "message": "Which extension specification defines interpolateAtCenter? OES_shader_multisample_interpolation only defines interpolateAtCentroid, interpolateAtSample and interpolateAtOffset.",
+      "revId": "8d560878936c93b9ebf2258b25f49e91e9ee658b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d11fc70b_60080114",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/RewriteInterpolants.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-21T20:17:09Z",
+      "side": 1,
+      "message": "Just clarifying - gl_SampleID is only implicitly defined when it\u0027s needed? Want to confirm that GPU register pressure isn\u0027t artificially increaed all the time.",
+      "revId": "8d560878936c93b9ebf2258b25f49e91e9ee658b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
