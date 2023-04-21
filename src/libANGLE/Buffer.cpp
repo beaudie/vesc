@@ -57,6 +57,8 @@ Buffer::~Buffer()
 
 void Buffer::onDestroy(const Context *context)
 {
+    mContentsObservers.clear();
+
     // In tests, mImpl might be null.
     if (mImpl)
         mImpl->destroy(context);
@@ -417,33 +419,76 @@ size_t Buffer::getContentsObserverIndex(VertexArray *vertexArray, uint32_t buffe
     return kInvalidContentsObserverIndex;
 }
 
+size_t Buffer::getContentsObserverIndex(Texture *texture) const
+{
+    for (size_t observerIndex = 0; observerIndex < mContentsObservers.size(); ++observerIndex)
+    {
+        const ContentsObserver &observer = mContentsObservers[observerIndex];
+        if (observer.texture == texture)
+        {
+            return observerIndex;
+        }
+    }
+
+    return kInvalidContentsObserverIndex;
+}
+
 void Buffer::addContentsObserver(VertexArray *vertexArray, uint32_t bufferIndex)
 {
     if (getContentsObserverIndex(vertexArray, bufferIndex) == kInvalidContentsObserverIndex)
     {
-        mContentsObservers.push_back({vertexArray, bufferIndex});
+        mContentsObservers.push_back({vertexArray, bufferIndex, nullptr});
+    }
+}
+
+void Buffer::removeContentsObserverAt(size_t index)
+{
+    if (index != kInvalidContentsObserverIndex)
+    {
+        size_t lastObserverIndex = mContentsObservers.size() - 1;
+        if (index != lastObserverIndex)
+        {
+            mContentsObservers[index] = mContentsObservers[lastObserverIndex];
+        }
+        mContentsObservers.pop_back();
     }
 }
 
 void Buffer::removeContentsObserver(VertexArray *vertexArray, uint32_t bufferIndex)
 {
-    size_t foundObserver = getContentsObserverIndex(vertexArray, bufferIndex);
-    if (foundObserver != kInvalidContentsObserverIndex)
+    removeContentsObserverAt(getContentsObserverIndex(vertexArray, bufferIndex));
+}
+
+void Buffer::addContentsObserver(Texture *texture)
+{
+    if (getContentsObserverIndex(texture) == kInvalidContentsObserverIndex)
     {
-        size_t lastObserverIndex = mContentsObservers.size() - 1;
-        if (foundObserver != lastObserverIndex)
-        {
-            mContentsObservers[foundObserver] = mContentsObservers[lastObserverIndex];
-        }
-        mContentsObservers.pop_back();
+        mContentsObservers.push_back({nullptr, 0, texture});
     }
+}
+
+void Buffer::removeContentsObserver(Texture *texture)
+{
+    removeContentsObserverAt(getContentsObserverIndex(texture));
+}
+
+bool Buffer::hasContentsObserver(Texture *texture) const
+{
+    return getContentsObserverIndex(texture) != kInvalidContentsObserverIndex;
 }
 
 void Buffer::onContentsChange()
 {
     for (const ContentsObserver &observer : mContentsObservers)
     {
-        observer.vertexArray->onBufferContentsChange(observer.bufferIndex);
+        if (observer.vertexArray != nullptr)
+        {
+            observer.vertexArray->onBufferContentsChange(observer.bufferIndex);
+        }
+        else
+        {
+            observer.texture->onBufferContentsChange();
+        }
     }
 }
 }  // namespace gl

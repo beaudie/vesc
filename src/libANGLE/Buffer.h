@@ -69,16 +69,21 @@ class BufferState final : angle::NonCopyable
     GLboolean mExternal;
 };
 
-// Some Vertex Array Objects track buffer data updates.
+// Some Objects track buffer data updates.
 struct ContentsObserver
 {
+    // Vertex Array
     VertexArray *vertexArray = nullptr;
     uint32_t bufferIndex     = 0;
+
+    // Texture buffers
+    Texture *texture = nullptr;
 };
 
 ANGLE_INLINE bool operator==(const ContentsObserver &lhs, const ContentsObserver &rhs)
 {
-    return lhs.vertexArray == rhs.vertexArray && lhs.bufferIndex == rhs.bufferIndex;
+    return lhs.vertexArray == rhs.vertexArray && lhs.bufferIndex == rhs.bufferIndex &&
+           lhs.texture == rhs.texture;
 }
 
 class Buffer final : public RefCountObject<BufferID>,
@@ -188,6 +193,9 @@ class Buffer final : public RefCountObject<BufferID>,
 
     void addContentsObserver(VertexArray *vertexArray, uint32_t bufferIndex);
     void removeContentsObserver(VertexArray *vertexArray, uint32_t bufferIndex);
+    void addContentsObserver(Texture *texture);
+    void removeContentsObserver(Texture *texture);
+    bool hasContentsObserver(Texture *texture) const;
 
   private:
     angle::Result bufferDataImpl(Context *context,
@@ -204,6 +212,8 @@ class Buffer final : public RefCountObject<BufferID>,
 
     void onContentsChange();
     size_t getContentsObserverIndex(VertexArray *vertexArray, uint32_t bufferIndex) const;
+    size_t getContentsObserverIndex(Texture *texture) const;
+    void removeContentsObserverAt(size_t index);
 
     BufferState mState;
     rx::BufferImpl *mImpl;
