@@ -142,6 +142,30 @@
       },
       "revId": "019ee4a3a9e8dc26c545ef668b90149fe53b7a98",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eabad438_f4c797d2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5925,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-21T18:17:48Z",
+      "side": 1,
+      "message": "\u003e disable `mutableMipmapTextureUpload` for desktop GPUs\n\nOr rather when `kSupportTranscodeEtcToBc` is false, and ETC is not supported (I think Intel supports it).",
+      "parentUuid": "b1236710_3e7b2535",
+      "range": {
+        "startLine": 5924,
+        "startChar": 68,
+        "endLine": 5925,
+        "endChar": 63
+      },
+      "revId": "019ee4a3a9e8dc26c545ef668b90149fe53b7a98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
