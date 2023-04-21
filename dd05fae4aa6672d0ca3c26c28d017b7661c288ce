@@ -178,6 +178,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1c7ff882_5ea47a0a",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-21T13:57:59Z",
+      "side": 1,
+      "message": "I already tried this: https://chromium-review.googlesource.com/c/angle/angle/+/4414860\n\n\u003e 1) Add SharedFence::initWithExternalFence() API by importing the native fence into the fence, and set mRecycler to null to indicate this can not recycled. And also add SharedFence::isRecycleable() const { return mRecycler!\u003dnullptr;}\n\n`~SharedFence()` calls `release()` and can\u0027t call `destroy(VkDevice device)` since no `device` in the destructor.\n\nHowever, it seems that we can recycle imported fence anyway, since it is a temporary import. Reset will restore permanent internal payload. Therefore, no need extra code in `retireFinishedCommandsLocked()`.\nBut who knows, how some buggy driver may behave...\n\n\u003e The problem you brought up with error handling if export/import failed is not a big problem, you have to deal with it in this CL anyway if exportFd fails, even though less likely\n\nError is handled in the `SyncHelperNativeFence`. In case of fail it is does not matter for the `CommandQueue` - it will use already submitted `VKFence`. Failure of export handled by the `ExternalFence` itself (as nothing happened).\n\nIf `dup` or `import` fails, however - we no longer have `SharedFence` to use in the `CommandBatch`. So yes, need to wait what is submitted - wait the `ExternalFence`.\n\n\u003e  I just think the code diff will be smaller and overall design will be cleaner doing it this way (mainly because CommandBatch only sees one fence, so no if check). It is not a correctness issue, so I am still keeping +1 here.\n\nCode diff maybe, yes. However diff is fairly simple, most of which is refactoring.\nWe also add 2 extra calls, that may fail (complication of handling errors) and take time (unnecessarily).\n\nI like separate approach more, because I was thinking adding optional feature to perform 2 submissions: one with `ExternalFence`, and one with `SharedFence`. It may be used as a workaround in case of some problem with using `ExternalFence`. Currently the problem is VVL.",
+      "parentUuid": "8054b416_22ca7c35",
+      "range": {
+        "startLine": 264,
+        "startChar": 4,
+        "endLine": 264,
+        "endChar": 32
+      },
+      "revId": "dd05fae4aa6672d0ca3c26c28d017b7661c288ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6c4d640e_3e70a0d9",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.h",
         "patchSetId": 5
