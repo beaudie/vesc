@@ -63,6 +63,30 @@
       },
       "revId": "19a53867f8d2878b848d419373e56e4f28df1ae4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c04e94b3_b62dbf6b",
+        "filename": "BUILD.gn",
+        "patchSetId": 8
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-21T23:52:54Z",
+      "side": 1,
+      "message": "But I thought before this CL it was also a recursive lock (see `using GlobalMutex \u003d std::recursive_mutex;`). So there is no change in this regard. If this improves performance, I am wondering we should just enable it for all and remove this compile flag.",
+      "parentUuid": "0fef2020_96efd69b",
+      "range": {
+        "startLine": 78,
+        "startChar": 40,
+        "endLine": 78,
+        "endChar": 73
+      },
+      "revId": "19a53867f8d2878b848d419373e56e4f28df1ae4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
