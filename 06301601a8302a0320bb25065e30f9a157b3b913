@@ -16,6 +16,23 @@
       "message": "Since the A2C behavior on the Vulkan backend has been fixed, the failed trace should be recreated.",
       "revId": "06301601a8302a0320bb25065e30f9a157b3b913",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b25fe111_70a9fd9e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-21T17:54:41Z",
+      "side": 1,
+      "message": "vulkan/ and tests/ LGTM",
+      "revId": "06301601a8302a0320bb25065e30f9a157b3b913",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
