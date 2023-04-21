@@ -77,6 +77,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "66aa4ef1_397fc1be",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-21T14:45:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07301377_f81a0537",
+      "range": {
+        "startLine": 1123,
+        "startChar": 0,
+        "endLine": 1131,
+        "endChar": 13
+      },
+      "revId": "dd05fae4aa6672d0ca3c26c28d017b7661c288ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f853ebd7_96c2f64c",
@@ -143,6 +167,30 @@
       "writtenOn": "2023-04-19T14:38:58Z",
       "side": 1,
       "message": "nit: ditto, feel free to add a `releaseFence` to `CommandBatch`",
+      "range": {
+        "startLine": 1635,
+        "startChar": 0,
+        "endLine": 1643,
+        "endChar": 9
+      },
+      "revId": "dd05fae4aa6672d0ca3c26c28d017b7661c288ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c28db465_a01759c3",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1643,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-21T14:45:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e2f36eb8_21947a2e",
       "range": {
         "startLine": 1635,
         "startChar": 0,
@@ -303,6 +351,24 @@
       "side": 1,
       "message": "I have added specialization\n```\ntemplate \u003ctypename T, typename AtomicCounterType\u003e\nclass RefCounted\u003cT, std::atomic\u003cAtomicCounterType\u003e\u003e : angle::NonCopyable\n{\n```\nwithout move functionality.\n\nSo it is easily avoided.",
       "parentUuid": "4650eef2_491ee734",
+      "revId": "dd05fae4aa6672d0ca3c26c28d017b7661c288ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a2ef766_f2adb4eb",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-21T14:45:58Z",
+      "side": 1,
+      "message": "Done in separate CL: https://chromium-review.googlesource.com/c/angle/angle/+/4459182",
+      "parentUuid": "c1438efc_5821f859",
       "revId": "dd05fae4aa6672d0ca3c26c28d017b7661c288ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
