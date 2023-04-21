@@ -56,6 +56,30 @@
       },
       "revId": "562f6fc6a48c86b94773424b32b897cf514fd19c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0c3e0e8_dea4a0a4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5553,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-04-21T18:07:11Z",
+      "side": 1,
+      "message": "Renamed to `kImageSizeThresholdForDedicatedMemoryAllocation`.",
+      "parentUuid": "e776326d_60f330ff",
+      "range": {
+        "startLine": 5553,
+        "startChar": 28,
+        "endLine": 5553,
+        "endChar": 57
+      },
+      "revId": "562f6fc6a48c86b94773424b32b897cf514fd19c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -118,6 +118,30 @@
       },
       "revId": "019ee4a3a9e8dc26c545ef668b90149fe53b7a98",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1236710_3e7b2535",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5925,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-04-21T18:07:11Z",
+      "side": 1,
+      "message": "Thanks. I will land the CL after making the changes. Regarding the follow-up CL, I tried enabling `kSupportTranscodeEtcToBc` (https://chromium-review.googlesource.com/c/angle/angle/+/4457007), but the Windows and Linux bots seem to be failing on some dEQP and end2end tests in addition to the gold tests. I will create another CL to disable `mutableMipmapTextureUpload` for desktop GPUs.",
+      "parentUuid": "3f8bd4e7_918aa70e",
+      "range": {
+        "startLine": 5924,
+        "startChar": 68,
+        "endLine": 5925,
+        "endChar": 63
+      },
+      "revId": "019ee4a3a9e8dc26c545ef668b90149fe53b7a98",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
