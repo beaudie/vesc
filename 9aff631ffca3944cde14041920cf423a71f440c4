@@ -39,6 +39,30 @@
       },
       "revId": "9aff631ffca3944cde14041920cf423a71f440c4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e53da0a_b8ee2381",
+        "filename": "src/libGLESv2/entry_points_gles_ext_autogen.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4727,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-21T20:16:39Z",
+      "side": 1,
+      "message": "I noticed this too and was planning on making `mContextLost` atomic. Normally `Context::setContextLost` also sets the current context pointer to nullptr, so there\u0027s no perf cost to that in the hot-path... except the Android path doesn\u0027t do that, which we should fix.\n\nDoes that sound good?",
+      "parentUuid": "053b7023_af265cc1",
+      "range": {
+        "startLine": 4727,
+        "startChar": 23,
+        "endLine": 4727,
+        "endChar": 44
+      },
+      "revId": "9aff631ffca3944cde14041920cf423a71f440c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
