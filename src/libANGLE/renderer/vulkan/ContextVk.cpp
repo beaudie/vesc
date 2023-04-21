@@ -1405,9 +1405,6 @@ angle::Result ContextVk::initialize()
     // Add context into the share group
     mShareGroupVk->addContext(this);
 
-    // Allocate queueSerial index and generate queue serial for commands.
-    ANGLE_TRY(allocateQueueSerialIndex());
-
     return angle::Result::Continue;
 }
 
@@ -5696,12 +5693,10 @@ GLint64 ContextVk::getTimestamp()
 
 angle::Result ContextVk::onMakeCurrent(const gl::Context *context)
 {
+    ASSERT(mCurrentQueueSerialIndex == kInvalidQueueSerialIndex);
     mRenderer->reloadVolkIfNeeded();
 
-    if (mCurrentQueueSerialIndex == kInvalidQueueSerialIndex)
-    {
-        ANGLE_TRY(allocateQueueSerialIndex());
-    }
+    ANGLE_TRY(allocateQueueSerialIndex());
 
     // Flip viewports if the user did not request that the surface is flipped.
     const egl::Surface *drawSurface = context->getCurrentDrawSurface();
@@ -5743,13 +5738,12 @@ angle::Result ContextVk::onMakeCurrent(const gl::Context *context)
 
 angle::Result ContextVk::onUnMakeCurrent(const gl::Context *context)
 {
+    ASSERT(mCurrentQueueSerialIndex != kInvalidQueueSerialIndex);
     ANGLE_TRY(flushImpl(nullptr, RenderPassClosureReason::ContextChange));
     mCurrentWindowSurface = nullptr;
 
-    if (mCurrentQueueSerialIndex != kInvalidQueueSerialIndex)
-    {
-        releaseQueueSerialIndex();
-    }
+    releaseQueueSerialIndex();
+
     return angle::Result::Continue;
 }
 

@@ -1097,14 +1097,14 @@ Error Display::initialize()
     return NoError();
 }
 
-Error Display::destroyInvalidEglObjects()
+Error Display::destroyInvalidEglObjects(Thread *thread)
 {
     // Destroy invalid EGL objects
     while (!mInvalidContextSet.empty())
     {
         gl::Context *context = *mInvalidContextSet.begin();
         context->setIsDestroyed();
-        ANGLE_TRY(releaseContextImpl(context, &mInvalidContextSet));
+        ANGLE_TRY(releaseContextImpl(context, &mInvalidContextSet, thread));
     }
 
     while (!mInvalidImageSet.empty())
@@ -1220,7 +1220,7 @@ Error Display::terminate(Thread *thread, TerminateReason terminateReason)
     ASSERT(mGlobalSemaphoreShareGroupUsers == 0 && mSemaphoreManager == nullptr);
 
     // Clean up all invalid objects
-    ANGLE_TRY(destroyInvalidEglObjects());
+    ANGLE_TRY(destroyInvalidEglObjects(thread));
 
     mConfigSet.clear();
 
@@ -1257,10 +1257,10 @@ Error Display::prepareForCall()
     return mImplementation->prepareForCall();
 }
 
-Error Display::releaseThread()
+Error Display::releaseThread(Thread *thread)
 {
     ANGLE_TRY(mImplementation->releaseThread());
-    return destroyInvalidEglObjects();
+    return destroyInvalidEglObjects(thread);
 }
 
 void Display::addActiveThread(Thread *thread)
@@ -1729,10 +1729,10 @@ void Display::destroyStreamImpl(Stream *stream, StreamSet *streams)
 // as part of destruction.
 Error Display::releaseContext(gl::Context *context, Thread *thread)
 {
-    return releaseContextImpl(context, &mState.contextSet);
+    return releaseContextImpl(context, &mState.contextSet, thread);
 }
 
-Error Display::releaseContextImpl(gl::Context *context, ContextSet *contexts)
+Error Display::releaseContextImpl(gl::Context *context, ContextSet *contexts, Thread *thread)
 {
     ASSERT(context->getRefCount() == 0);
 
@@ -1767,6 +1767,12 @@ Error Display::releaseContextImpl(gl::Context *context, ContextSet *contexts)
             mSemaphoreManager = nullptr;
         }
         mGlobalSemaphoreShareGroupUsers--;
+    }
+
+    auto *currentContext = thread->getContext();
+    if (context == currentContext)
+    {
+        ANGLE_TRY(context->unMakeCurrent(this));
     }
 
     ANGLE_TRY(context->onDestroy(this));
@@ -1805,14 +1811,6 @@ Error Display::destroyContext(Thread *thread, gl::Context *context)
         ScopedSurfaceRef drawSurfaceRef(currentDrawSurface);
         ScopedSurfaceRef readSurfaceRef(
             currentReadSurface == currentDrawSurface ? nullptr : currentReadSurface);
-
-        // Make the context current, so we can release resources belong to the context, and then
-        // when context is released from the current, it will be destroyed.
-        // TODO(http://www.anglebug.com/6322): Don't require a Context to be current in order to
-        // destroy it.
-        ANGLE_TRY(makeCurrent(thread, currentContext, nullptr, nullptr, context));
-        ANGLE_TRY(
-            makeCurrent(thread, context, currentDrawSurface, currentReadSurface, currentContext));
     }
 
     // If eglTerminate() has previously been called and this is the last Context the Display owns,

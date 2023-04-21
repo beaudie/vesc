@@ -784,8 +784,6 @@ egl::Error Context::onDestroy(const egl::Display *display)
         mGLES1Renderer->onDestroy(this, &mState);
     }
 
-    ANGLE_TRY(unMakeCurrent(display));
-
     mDefaultFramebuffer->onDestroy(this);
     mDefaultFramebuffer.reset();
 

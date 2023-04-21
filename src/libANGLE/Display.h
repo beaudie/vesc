@@ -149,7 +149,7 @@ class Display final : public LabeledObject,
     Error prepareForCall();
     // Called on eglReleaseThread. Backends can tear down thread-specific backend state through
     // this function.
-    Error releaseThread();
+    Error releaseThread(Thread *thread);
 
     // Helpers to maintain active thread set to assist with freeing invalid EGL objects.
     void addActiveThread(Thread *thread);
@@ -357,7 +357,7 @@ class Display final : public LabeledObject,
 
     Error restoreLostDevice();
     Error releaseContext(gl::Context *context, Thread *thread);
-    Error releaseContextImpl(gl::Context *context, ContextSet *contexts);
+    Error releaseContextImpl(gl::Context *context, ContextSet *contexts, Thread *thread);
 
     void initDisplayExtensions();
     void initVendorString();
@@ -369,7 +369,7 @@ class Display final : public LabeledObject,
     void returnScratchBufferImpl(angle::ScratchBuffer scratchBuffer,
                                  std::vector<angle::ScratchBuffer> *bufferVector);
 
-    Error destroyInvalidEglObjects();
+    Error destroyInvalidEglObjects(Thread *thread);
 
     DisplayState mState;
     rx::DisplayImpl *mImplementation;

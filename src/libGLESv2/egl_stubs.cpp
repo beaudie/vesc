@@ -639,7 +639,7 @@ EGLBoolean ReleaseThread(Thread *thread)
                 previousDisplay->makeCurrent(thread, previousContext, nullptr, nullptr, nullptr),
                 "eglReleaseThread", nullptr, EGL_FALSE);
         }
-        ANGLE_EGL_TRY_RETURN(thread, previousDisplay->releaseThread(), "eglReleaseThread",
+        ANGLE_EGL_TRY_RETURN(thread, previousDisplay->releaseThread(thread), "eglReleaseThread",
                              GetDisplayIfValid(previousDisplay), EGL_FALSE);
     }
 
