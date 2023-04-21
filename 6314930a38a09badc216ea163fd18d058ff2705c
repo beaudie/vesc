@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1cf1081_c75d84e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1267026
+      },
+      "writtenOn": "2023-04-21T16:55:39Z",
+      "side": 1,
+      "message": "Hi Geoff,\n\n want to get feedback if this is something what we want. currently also working on chrome side changes to validate if this ANGLE change works.\n please take a look.\n \n thanks",
+      "revId": "6314930a38a09badc216ea163fd18d058ff2705c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
