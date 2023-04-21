@@ -563,6 +563,9 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
 
     angle::Result updateTextureLabel(ContextVk *contextVk);
 
+    vk::BufferHelper *getRGBAConversionBufferHelper(RendererVk *renderer, angle::FormatID formatID);
+    angle::Result convertBufferToRGBA(ContextVk *contextVk, VkDeviceSize &conversionBufferSize);
+
     bool mOwnsImage;
     // Generated from ImageVk if EGLImage target, or from throw-away generator if Surface target.
     UniqueSerial mImageSiblingSerial;

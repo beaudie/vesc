@@ -1048,6 +1048,11 @@ b/273271471 WIN INTEL VULKAN : ShaderAlgorithmTest.rgb_to_hsl_vertex_shader/* = 
 7495 OpenGL : EGLContextSharingTestNoFixture.InactiveThreadDoesntPreventCleanup/* = SKIP
 7495 WIN GLES : EGLContextSharingTestNoFixture.InactiveThreadDoesntPreventCleanup/* = SKIP
 
+// GL, GLES seem to ignore mapped texture buffer updates
+8128 WIN OpenGL : GLSLTest_ES31.RGBTextureBufferEmulation*/* = SKIP
+8128 WIN GLES : GLSLTest_ES31.RGBTextureBufferEmulation*/* = SKIP
+8128 LINUX NVIDIA OpenGL : GLSLTest_ES31.RGBTextureBufferEmulation*/* = SKIP
+
 7546 LINUX VULKAN : FramebufferTest_ES3.SurfaceDimensionsChangeAndFragCoord/* = SKIP
 
 7624 WIN INTEL : *EmulateCopyTexImage2DFromRenderbuffers* = SKIP
