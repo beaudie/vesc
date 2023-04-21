@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "153e24fb_6c45e98b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-21T14:30:26Z",
+      "side": 1,
+      "message": "\u003e Could you please add some unit tests for ScopedGlobalMutexLock and ScopedOptionalGlobalMutexLock?\n\nOK.",
+      "parentUuid": "11e95d20_cdd02da0",
+      "revId": "5f462cdfbb801c04dc50a3f5516a6e67f2839e96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d2230e4f_7bbf9117",
         "filename": "src/libANGLE/GlobalMutex.cpp",
         "patchSetId": 7
@@ -48,6 +66,30 @@
       "writtenOn": "2023-04-20T21:11:10Z",
       "side": 1,
       "message": "nit: inheritance doesn\u0027t really seem necessary here. We generally prefer composition; so you could have a `SimpleGlobalMutex mMutex` private member here and use that.\n\nSame with `RecursiveGlobalMutex` using `ThreadIdGlobalMutex`",
+      "range": {
+        "startLine": 33,
+        "startChar": 25,
+        "endLine": 33,
+        "endChar": 52
+      },
+      "revId": "5f462cdfbb801c04dc50a3f5516a6e67f2839e96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ad2580c_b2089b10",
+        "filename": "src/libANGLE/GlobalMutex.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-21T14:30:26Z",
+      "side": 1,
+      "message": "I can try that.\nHowever this may add more code, so it may be easier just implement all 3 classes from scratch.\n\nAdditionally this may affect performance. On Android even tiny change affects performance. Sometimes you can\u0027t explain why. For example, making constructor not inline affected performance of lock/unlock, despite constructor is called only once.\n\nSo I really do not want to change the code, because do not want spend time for performance checks...\n\nI think, I will remove inheritance for `ThreadIdGlobalMutex` but keep it for the `RecursiveGlobalMutex`.",
+      "parentUuid": "d2230e4f_7bbf9117",
       "range": {
         "startLine": 33,
         "startChar": 25,
@@ -94,6 +136,30 @@
       "writtenOn": "2023-04-20T21:11:10Z",
       "side": 1,
       "message": "nit: This can complicate testing, like our TSAN tests run with assertions enabled I think, so they won\u0027t cover the no-ASSERT build (or if I\u0027m wrong, vice versa).\n\nWhat happens if we use ThreadIdGlobalMutex when ASSERts are off? Technically the compiler should be able to see that the atomic is only stored to and never read, so it could optimize it out entirely. Do you think you could check that in assembly? It\u0027ll make it easier if we could use one implementation both with and without asserts.",
+      "range": {
+        "startLine": 123,
+        "startChar": 0,
+        "endLine": 128,
+        "endChar": 3
+      },
+      "revId": "5f462cdfbb801c04dc50a3f5516a6e67f2839e96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "418bdc1f_3cd9bfbb",
+        "filename": "src/libANGLE/GlobalMutex.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-21T14:30:26Z",
+      "side": 1,
+      "message": "\u003e This can complicate testing, like our TSAN tests run with assertions enabled I think, so they won\u0027t cover the no-ASSERT build (or if I\u0027m wrong, vice versa).\n\nOnly difference in `ThreadIdGlobalMutex` and `SimpleGlobalMutex` is in asserts.\nIt is like different versions of std container implementation in debug and release.\nThe `mOwnerThreadId` only used for asserts.\n\nHowever, `ThreadIdGlobalMutex` also used as base to `RecursiveGlobalMutex`, in which case `mOwnerThreadId` required for `lock()` functionality.\n\n\u003e What happens if we use ThreadIdGlobalMutex when ASSERts are off?\n\nThere will be unnecessary `mOwnerThreadId.store()` calls.\n\n\u003e Technically the compiler should be able to see that the atomic is only stored to and never read, so it could optimize it out entirely. Do you think you could check that in assembly? \n\nIt is atomic - it is always does what you code without optimizations. It is like `volatile` with additional guarantees.\nSo `ThreadIdGlobalMutex` with disabled asserts will just have dead code in it.\n\n\u003e It\u0027ll make it easier if we could use one implementation both with and without asserts.\n\nYes. But this will harm the performance without any reason.",
+      "parentUuid": "2b63ec06_4fd77779",
       "range": {
         "startLine": 123,
         "startChar": 0,
