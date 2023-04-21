@@ -446,6 +446,24 @@ void SetCurrentValidContextTLS(Context *context)
 thread_local Context *gCurrentValidContext = nullptr;
 #endif
 
+// Handle setting the current context in TLS on different platforms
+extern void SetCurrentValidContext(Context *context)
+{
+#if defined(ANGLE_USE_ANDROID_TLS_SLOT)
+    if (angle::gUseAndroidOpenGLTlsSlot)
+    {
+        ANGLE_ANDROID_GET_GL_TLS()[angle::kAndroidOpenGLTlsSlot] = static_cast<void *>(value);
+        return;
+    }
+#endif
+
+#if defined(ANGLE_PLATFORM_APPLE)
+    gl::SetCurrentValidContextTLS(context);
+#else
+    gl::gCurrentValidContext = context;
+#endif
+}
+
 Context::Context(egl::Display *display,
                  const egl::Config *config,
                  const Context *shareContext,
@@ -2990,11 +3008,7 @@ void Context::setContextLost()
     mSkipValidation = false;
 
     // Make sure we update TLS.
-#if defined(ANGLE_PLATFORM_APPLE)
-    SetCurrentValidContextTLS(nullptr);
-#else
-    gCurrentValidContext = nullptr;
-#endif
+    SetCurrentValidContext(nullptr);
 }
 
 GLenum Context::getGraphicsResetStatus()

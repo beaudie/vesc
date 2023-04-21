@@ -31,16 +31,6 @@ ANGLE_REQUIRE_CONSTANT_INIT gl::Context *g_LastContext(nullptr);
 static_assert(std::is_trivially_destructible<decltype(g_LastContext)>::value,
               "global last context is not trivially destructible");
 
-void SetContextToAndroidOpenGLTLSSlot(gl::Context *value)
-{
-#if defined(ANGLE_USE_ANDROID_TLS_SLOT)
-    if (angle::gUseAndroidOpenGLTlsSlot)
-    {
-        ANGLE_ANDROID_GET_GL_TLS()[angle::kAndroidOpenGLTlsSlot] = static_cast<void *>(value);
-    }
-#endif
-}
-
 // Called only on Android platform
 [[maybe_unused]] void ThreadCleanupCallback(void *ptr)
 {
@@ -62,14 +52,8 @@ Thread *AllocateCurrentThread()
 #endif
     }
 
-    // Initialize fast TLS slot
-    SetContextToAndroidOpenGLTLSSlot(nullptr);
-
-#if defined(ANGLE_PLATFORM_APPLE)
-    gl::SetCurrentValidContextTLS(nullptr);
-#else
-    gl::gCurrentValidContext = nullptr;
-#endif
+    // Initialize current-context TLS slot
+    gl::SetCurrentValidContext(nullptr);
 
 #if defined(ANGLE_PLATFORM_ANDROID)
     static pthread_once_t keyOnce          = PTHREAD_ONCE_INIT;
@@ -165,7 +149,7 @@ ANGLE_NO_SANITIZE_MEMORY ANGLE_NO_SANITIZE_THREAD Thread *GetCurrentThread()
 #if defined(ANGLE_PLATFORM_APPLE)
     Thread *current = GetCurrentThreadTLS();
 #else
-    Thread *current          = gCurrentThread;
+    Thread *current       = gCurrentThread;
 #endif
     return (current ? current : AllocateCurrentThread());
 }
@@ -175,17 +159,12 @@ void SetContextCurrent(Thread *thread, gl::Context *context)
 #if defined(ANGLE_PLATFORM_APPLE)
     Thread *currentThread = GetCurrentThreadTLS();
 #else
-    Thread *currentThread    = gCurrentThread;
+    Thread *currentThread = gCurrentThread;
 #endif
     ASSERT(currentThread);
     currentThread->setCurrent(context);
-    SetContextToAndroidOpenGLTLSSlot(context);
 
-#if defined(ANGLE_PLATFORM_APPLE)
-    gl::SetCurrentValidContextTLS(context);
-#else
-    gl::gCurrentValidContext = context;
-#endif
+    gl::SetCurrentValidContext(context);
 
 #if defined(ANGLE_FORCE_CONTEXT_CHECK_EVERY_CALL)
     DirtyContextIfNeeded(context);
