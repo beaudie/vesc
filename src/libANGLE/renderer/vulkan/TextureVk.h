@@ -599,6 +599,8 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     // Texture buffers create texel buffer views instead.  |BufferViewHelper| contains the views
     // corresponding to the attached buffer range.
     vk::BufferViewHelper mBufferViews;
+    vk::BufferHelper mTempBuffer;
+    vk::BufferViewHelper mTempBufferViews;
 
     // Render targets stored as array of vector of vectors
     //

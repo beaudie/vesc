@@ -260,6 +260,11 @@ class UtilsVk : angle::NonCopyable
                                 vk::ImageHelper *src,
                                 const CopyImageBitsParameters &params);
 
+    angle::Result copyRgbToRgba(ContextVk *contextVk,
+                                vk::BufferHelper *srcBuffer,
+                                uint32_t srcOffset,
+                                vk::BufferHelper *dstBuffer);
+
     angle::Result transCodeEtcToBc(ContextVk *contextVk,
                                    vk::BufferHelper *srcBuffer,
                                    vk::ImageHelper *dstImage,

@@ -24,6 +24,7 @@
 #include "libANGLE/renderer/vulkan/RenderbufferVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/SurfaceVk.h"
+#include "libANGLE/renderer/vulkan/UtilsVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
@@ -1622,6 +1623,8 @@ void TextureVk::releaseAndDeleteImageAndViews(ContextVk *contextVk)
         mBufferViews.release(contextVk);
         onStateChange(angle::SubjectMessage::SubjectChanged);
     }
+    mTempBuffer.release(contextVk->getRenderer());
+    mTempBufferViews.release(contextVk);
     mRedefinedLevels.reset();
     mDescriptorSetCacheManager.releaseKeys(contextVk);
 }
@@ -3147,6 +3150,41 @@ angle::Result TextureVk::getBufferViewAndRecordUse(vk::Context *context,
     // Create a view for the required format.
     const vk::BufferHelper &buffer = vk::GetImpl(mState.getBuffer().get())->getBuffer();
     VkDeviceSize bufferOffset      = buffer.getOffset();
+
+    if (!isImage && imageUniformFormat->getIntendedFormatID() == angle::FormatID::R32G32B32_UINT)
+    {
+        const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding = mState.getBuffer();
+        const VkDeviceSize offset                                 = bufferBinding.getOffset();
+        const VkDeviceSize size       = gl::GetBoundBufferAvailableSize(bufferBinding);
+        const VkDeviceSize scaledSize = (size * 4) / 3;
+
+        ContextVk *contextVk           = (ContextVk *)context;
+        BufferVk *bufferVk             = vk::GetImpl(getBuffer().get());
+        vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
+
+        VkBufferCreateInfo bufferInfo = {};
+        bufferInfo.sType              = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+        bufferInfo.flags              = 0;
+        bufferInfo.size               = roundUpPow2<uint64_t>(scaledSize, sizeof(uint32_t));
+        bufferInfo.usage = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT |
+                           VK_BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT;
+        bufferInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
+        bufferInfo.queueFamilyIndexCount = 0;
+        bufferInfo.pQueueFamilyIndices   = nullptr;
+
+        mTempBuffer.release(renderer);
+        ANGLE_TRY(mTempBuffer.init(context, bufferInfo, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
+
+        UtilsVk &utilsVk = contextVk->getUtils();
+        ANGLE_TRY(utilsVk.copyRgbToRgba(contextVk, &bufferHelper, static_cast<uint32_t>(offset),
+                                        &mTempBuffer));
+
+        mTempBufferViews.release(contextVk);
+        mTempBufferViews.init(renderer, 0, scaledSize);
+        return mTempBufferViews.getView(contextVk, mTempBuffer, bufferOffset,
+                                        renderer->getFormat(angle::FormatID::R32G32B32A32_UINT),
+                                        viewOut);
+    }
 
     return mBufferViews.getView(context, buffer, bufferOffset, *imageUniformFormat, viewOut);
 }

@@ -7236,6 +7236,64 @@ TEST_P(GLSLTest_ES31, VaryingIOBlockDeclaredAsInAndOut)
     ASSERT_GL_NO_ERROR();
 }
 
+// Tests RGB32 texture buffer emulation
+TEST_P(GLSLTest_ES31, RGBTextureBufferEmulation)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_buffer"));
+
+    constexpr char kVS[] = R"(#version 310 es
+    precision highp float;
+    in vec4 inputAttribute;
+
+    void main()
+    {
+        gl_Position = inputAttribute;
+    })";
+
+    constexpr char kFS[] = R"(#version 310 es
+    #extension GL_OES_texture_buffer : require
+    precision mediump float;
+    uniform highp usamplerBuffer tex;
+    layout(location = 0) out mediump vec4 color;
+
+    void main()
+    {
+        uvec4 v = texelFetch(tex, 1);
+        color = vec4(v);
+    })";
+
+    GLuint texData[] = {
+        0,   0,   0,  // offset = 0
+        255, 0,   0,  // first texel(1) red
+        0,   0,   0,  // ...alignment...
+        0,   0,   0,  // ...alignment...
+        0,   0,   0,  // offset = pixelSize * 4
+        0,   255, 0,  // second texel(1) green
+    };
+
+    const GLuint pixelSize = sizeof(GLuint) * 3;
+
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_BUFFER, texture);
+
+    GLBuffer buffer;
+    glBindBuffer(GL_TEXTURE_BUFFER, buffer);
+    glBufferData(GL_TEXTURE_BUFFER, pixelSize * 6, texData, GL_STATIC_DRAW);
+    ASSERT_GL_NO_ERROR();
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+
+    glTexBufferEXT(GL_TEXTURE_BUFFER, GL_RGB32UI, buffer);
+    drawQuad(program.get(), "inputAttribute", 0.5f);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+
+    // Note: offset must be aligned to GL_TEXTURE_BUFFER_OFFSET_ALIGNMENT (16)
+    glTexBufferRangeEXT(GL_TEXTURE_BUFFER, GL_RGB32UI, buffer, pixelSize * 4, pixelSize * 2);
+    drawQuad(program.get(), "inputAttribute", 0.5f);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
 // Test that texture buffers can be accessed in a tessellation stage
 // Triggers a bug in the Vulkan backend: http://anglebug.com/7135
 TEST_P(GLSLTest_ES31, TessellationTextureBufferAccess)

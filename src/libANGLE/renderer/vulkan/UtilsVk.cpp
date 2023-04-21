@@ -3323,6 +3323,73 @@ angle::Result UtilsVk::copyImageBits(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+angle::Result UtilsVk::copyRgbToRgba(ContextVk *contextVk,
+                                     vk::BufferHelper *srcBuffer,
+                                     uint32_t srcOffset,
+                                     vk::BufferHelper *dstBuffer)
+{
+    const uint32_t totalPixelCount = static_cast<uint32_t>(srcBuffer->getSize() / 3);
+
+    vk::OutsideRenderPassCommandBufferHelper *commandBufferHelper;
+    vk::OutsideRenderPassCommandBuffer *commandBuffer;
+    vk::CommandBufferAccess access;
+    access.onBufferTransferRead(srcBuffer);
+    // access.onBufferTransferWrite(dstBuffer);
+    access.onBufferComputeShaderWrite(dstBuffer);
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(access, &commandBufferHelper));
+    commandBuffer = &commandBufferHelper->getCommandBuffer();
+
+    const angle::Format &srcImageFormat = angle::Format::Get(angle::FormatID::R32G32B32_UINT);
+    const angle::Format &dstImageFormat = angle::Format::Get(angle::FormatID::R32G32B32A32_UINT);
+
+    rx::UtilsVk::ConvertVertexShaderParams shaderParams;
+    shaderParams.Ns = 3;
+    shaderParams.Bs = srcImageFormat.pixelBytes / srcImageFormat.channelCount;
+    shaderParams.Ss = srcImageFormat.pixelBytes;
+    shaderParams.Nd = dstImageFormat.channelCount;
+    shaderParams.Bd = dstImageFormat.pixelBytes / dstImageFormat.channelCount;
+    shaderParams.Sd = shaderParams.Nd * shaderParams.Bd;
+    // The component size is expected to either be 1, 2 or 4 bytes.
+    ASSERT(4 % shaderParams.Bs == 0);
+    ASSERT(4 % shaderParams.Bd == 0);
+    shaderParams.Es = 4 / shaderParams.Bs;
+    shaderParams.Ed = 4 / shaderParams.Bd;
+    // Total number of output components is simply the number of pixels by number of components in
+    // each.
+    shaderParams.componentCount = totalPixelCount * shaderParams.Nd;
+    // Total number of 4-byte outputs is the number of components divided by how many components can
+    // fit in a 4-byte value.  Note that this value is also the invocation size of the shader.
+    shaderParams.outputCount  = UnsignedCeilDivide(shaderParams.componentCount, shaderParams.Ed);
+    shaderParams.srcOffset    = srcOffset;
+    shaderParams.dstOffset    = 0;
+    shaderParams.isSrcHDR     = 0;
+    shaderParams.isSrcA2BGR10 = 0;
+    shaderParams.srcEmulatedAlpha = 1;
+
+    // Add a barrier prior to dispatch call.
+    VkMemoryBarrier memoryBarrier = {};
+    memoryBarrier.sType           = VK_STRUCTURE_TYPE_MEMORY_BARRIER;
+    memoryBarrier.srcAccessMask   = VK_ACCESS_TRANSFER_WRITE_BIT;
+    memoryBarrier.dstAccessMask   = VK_ACCESS_SHADER_READ_BIT;
+
+    commandBuffer->memoryBarrier(VK_PIPELINE_STAGE_TRANSFER_BIT,
+                                 VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, &memoryBarrier);
+
+    // Use UintToUint conversion to preserve the bit pattern during transfer.
+    const uint32_t flags = ConvertVertex_comp::kUintToUint;
+    ANGLE_TRY(convertVertexBufferImpl(contextVk, dstBuffer, srcBuffer, flags, commandBufferHelper,
+                                      shaderParams));
+
+    // Another barrier
+    memoryBarrier.srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT;
+    memoryBarrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+
+    commandBuffer->memoryBarrier(VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+                                 VK_PIPELINE_STAGE_TRANSFER_BIT, &memoryBarrier);
+
+    return angle::Result::Continue;
+}
+
 uint32_t GetEtcToBcFlags(const angle::Format &format)
 {
     switch (format.id)
