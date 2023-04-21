@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "20b88dec_c652beda",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/RewriteInterpolants.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-21T21:56:38Z",
+      "side": 1,
+      "message": "Thanks.",
+      "parentUuid": "af517310_a2e51907",
+      "revId": "8d560878936c93b9ebf2258b25f49e91e9ee658b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4618762f_0037a0d7",
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "\u003e Do I understand this correctly?\n\nYes. A very short example is at L280-284.",
       "parentUuid": "4618762f_0037a0d7",
+      "revId": "8d560878936c93b9ebf2258b25f49e91e9ee658b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1443f5f_c00fe87d",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/RewriteInterpolants.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-21T21:56:38Z",
+      "side": 1,
+      "message": "Thanks, I see - that seems fine.",
+      "parentUuid": "744c1c33_54f81dc3",
       "revId": "8d560878936c93b9ebf2258b25f49e91e9ee658b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -125,6 +161,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "33665b38_ce09c0cf",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/RewriteInterpolants.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-21T21:56:38Z",
+      "side": 1,
+      "message": "That additional detail would be great as a comment. Would you add it?",
+      "parentUuid": "2e18f064_2c58a486",
+      "revId": "8d560878936c93b9ebf2258b25f49e91e9ee658b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dce5349a_b78aea6e",
         "filename": "src/compiler/translator/TranslatorMetalDirect/RewriteInterpolants.cpp",
         "patchSetId": 4
@@ -160,6 +214,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "59a6fbfd_0429f8cd",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/RewriteInterpolants.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-21T21:56:38Z",
+      "side": 1,
+      "message": "I see. If it won\u0027t add too much noise to the code in your opinion, would you just add that text verbatim here as a comment?",
+      "parentUuid": "0b008dcd_02b425c2",
+      "revId": "8d560878936c93b9ebf2258b25f49e91e9ee658b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d11fc70b_60080114",
         "filename": "src/compiler/translator/TranslatorMetalDirect/RewriteInterpolants.h",
         "patchSetId": 4
@@ -189,6 +261,24 @@
       "side": 1,
       "message": "Yes. This flag is set only if all these conditions are true simultaneously:\n- the original fragment shader has an input with a `sample` qualifier;\n- the input is used with an explicit interpolation function;\n- the input is used directly.",
       "parentUuid": "d11fc70b_60080114",
+      "revId": "8d560878936c93b9ebf2258b25f49e91e9ee658b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06707a40_747cca71",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/RewriteInterpolants.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-21T21:56:38Z",
+      "side": 1,
+      "message": "Thanks.",
+      "parentUuid": "769e84e3_cda40dc4",
       "revId": "8d560878936c93b9ebf2258b25f49e91e9ee658b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
