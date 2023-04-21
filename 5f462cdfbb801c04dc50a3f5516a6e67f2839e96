@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0fa0176_37de6137",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-21T17:03:30Z",
+      "side": 1,
+      "message": "Ah ok, that explains it. Thanks!",
+      "parentUuid": "cbc72d3e_455f524d",
+      "revId": "5f462cdfbb801c04dc50a3f5516a6e67f2839e96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "11e95d20_cdd02da0",
@@ -226,6 +244,30 @@
       "side": 1,
       "message": "\u003e This can complicate testing, like our TSAN tests run with assertions enabled I think, so they won\u0027t cover the no-ASSERT build (or if I\u0027m wrong, vice versa).\n\nOnly difference in `ThreadIdGlobalMutex` and `SimpleGlobalMutex` is in asserts.\nIt is like different versions of std container implementation in debug and release.\nThe `mOwnerThreadId` only used for asserts.\n\nHowever, `ThreadIdGlobalMutex` also used as base to `RecursiveGlobalMutex`, in which case `mOwnerThreadId` required for `lock()` functionality.\n\n\u003e What happens if we use ThreadIdGlobalMutex when ASSERts are off?\n\nThere will be unnecessary `mOwnerThreadId.store()` calls.\n\n\u003e Technically the compiler should be able to see that the atomic is only stored to and never read, so it could optimize it out entirely. Do you think you could check that in assembly? \n\nIt is atomic - it is always does what you code without optimizations. It is like `volatile` with additional guarantees.\nSo `ThreadIdGlobalMutex` with disabled asserts will just have dead code in it.\n\n\u003e It\u0027ll make it easier if we could use one implementation both with and without asserts.\n\nYes. But this will harm the performance without any reason.",
       "parentUuid": "2b63ec06_4fd77779",
+      "range": {
+        "startLine": 123,
+        "startChar": 0,
+        "endLine": 128,
+        "endChar": 3
+      },
+      "revId": "5f462cdfbb801c04dc50a3f5516a6e67f2839e96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16a7b99e_b266c517",
+        "filename": "src/libANGLE/GlobalMutex.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-21T17:03:30Z",
+      "side": 1,
+      "message": "Ack, the new default/debug versions of GlobalMutex are trivial enough to verify",
+      "parentUuid": "418bdc1f_3cd9bfbb",
       "range": {
         "startLine": 123,
         "startChar": 0,
