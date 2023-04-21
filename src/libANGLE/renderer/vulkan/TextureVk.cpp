@@ -24,6 +24,7 @@
 #include "libANGLE/renderer/vulkan/RenderbufferVk.h"
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/SurfaceVk.h"
+#include "libANGLE/renderer/vulkan/UtilsVk.h"
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
@@ -1620,6 +1621,11 @@ void TextureVk::releaseAndDeleteImageAndViews(ContextVk *contextVk)
         contextVk->getShareGroup()->onTextureRelease(this);
     }
 
+    if (getBuffer().get() != nullptr)
+    {
+        mBufferContentsObservers->disableForBuffer(getBuffer().get());
+    }
+
     if (mBufferViews.isInitialized())
     {
         mBufferViews.release(contextVk);
@@ -2855,8 +2861,50 @@ angle::Result TextureVk::syncState(const gl::Context *context,
 
         const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding = mState.getBuffer();
 
-        const VkDeviceSize offset = bufferBinding.getOffset();
-        const VkDeviceSize size   = gl::GetBoundBufferAvailableSize(bufferBinding);
+        VkDeviceSize offset = bufferBinding.getOffset();
+        VkDeviceSize size   = gl::GetBoundBufferAvailableSize(bufferBinding);
+
+        const gl::ImageDesc &baseLevelDesc = mState.getBaseLevelDesc();
+        const vk::Format *imageUniformFormat =
+            &renderer->getFormat(baseLevelDesc.format.info->sizedInternalFormat);
+
+        if (imageUniformFormat->getIntendedFormatID() == angle::FormatID::R32G32B32_UINT)
+        {
+            BufferVk *bufferVk                      = vk::GetImpl(getBuffer().get());
+            const VkDeviceSize bindingOffset        = bufferBinding.getOffset();
+            const VkDeviceSize bufferSize           = bufferVk->getSize();
+            const VkDeviceSize bufferSizeFromOffset = bufferSize - bindingOffset;
+            const VkDeviceSize scaledBufferSize     = (bufferSizeFromOffset / 3) * 4;
+
+            ConversionBuffer *conversion =
+                bufferVk->getVertexConversionBuffer(renderer, angle::FormatID::R32G32B32_UINT, 16,
+                                                    static_cast<uint32_t>(bindingOffset), false);
+            mBufferContentsObservers->enableForBuffer(getBuffer().get());
+            vk::BufferHelper *conversionBufferHelper = conversion->data.get();
+            if (!conversionBufferHelper->valid())
+            {
+                size_t conversionBufferSize =
+                    roundUpPow2<size_t>(scaledBufferSize, 4 * sizeof(uint32_t));
+                ANGLE_TRY(conversionBufferHelper->allocateForVertexConversion(
+                    contextVk, conversionBufferSize, vk::MemoryHostVisibility::NonVisible));
+            }
+
+            if (conversion->dirty)
+            {
+                vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
+                UtilsVk &utilsVk               = contextVk->getUtils();
+                const VkDeviceSize pixelSize   = 3 * sizeof(uint32_t);
+                const VkDeviceSize pixelCount  = bufferSizeFromOffset / pixelSize;
+
+                ANGLE_TRY(utilsVk.copyRgbToRgba(
+                    contextVk, &bufferHelper, static_cast<uint32_t>(bindingOffset),
+                    static_cast<uint32_t>(pixelCount), conversionBufferHelper));
+                conversion->dirty = false;
+            }
+
+            offset = 0;
+            size   = scaledBufferSize;
+        }
 
         mBufferViews.release(contextVk);
         mBufferViews.init(renderer, offset, size);
@@ -3150,6 +3198,21 @@ angle::Result TextureVk::getBufferViewAndRecordUse(vk::Context *context,
     // Create a view for the required format.
     const vk::BufferHelper &buffer = vk::GetImpl(mState.getBuffer().get())->getBuffer();
     VkDeviceSize bufferOffset      = buffer.getOffset();
+
+    if (imageUniformFormat->getIntendedFormatID() == angle::FormatID::R32G32B32_UINT)
+    {
+        BufferVk *bufferVk                                        = vk::GetImpl(getBuffer().get());
+        const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding = mState.getBuffer();
+        const VkDeviceSize bindingOffset                          = bufferBinding.getOffset();
+        ConversionBuffer *conversion =
+            bufferVk->getVertexConversionBuffer(renderer, angle::FormatID::R32G32B32_UINT, 16,
+                                                static_cast<uint32_t>(bindingOffset), false);
+        vk::BufferHelper *conversionBufferHelper = conversion->data.get();
+
+        return mBufferViews.getView(
+            context, *conversionBufferHelper, conversionBufferHelper->getOffset(),
+            renderer->getFormat(angle::FormatID::R32G32B32A32_UINT), viewOut);
+    }
 
     return mBufferViews.getView(context, buffer, bufferOffset, *imageUniformFormat, viewOut);
 }
