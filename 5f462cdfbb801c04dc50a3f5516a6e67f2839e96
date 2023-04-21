@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbc72d3e_455f524d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-21T16:15:59Z",
+      "side": 1,
+      "message": "\u003e We use renderdoc all the time\n\u003e I\u0027m curious to understand why I\u0027ve never hit it.\n\nIt is works fine because `egl::GetGlobalMutex()` currently uses `std::recursive_mutex`.\n\n\u003e Is it a special build of RenderDoc?\n\nNo.\n\n\u003e what is the scenario in which this happens? \n\nJust use normal RenderDoc to capture ANGLE but use `std::mutex` in the `egl::GetGlobalMutex()`.\nI did not check latest RenderDoc, so it may work with `std::mutex`.\n\n---\n\nInitially I replaced `std::recursive_mutex` with `std::mutex` when implemented the unlock. And later got the problem with the RenderDoc.",
+      "parentUuid": "52bab6f0_555652d8",
+      "revId": "5f462cdfbb801c04dc50a3f5516a6e67f2839e96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "11e95d20_cdd02da0",
@@ -100,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a89773f_45ed6376",
+        "filename": "src/libANGLE/GlobalMutex.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-21T16:15:59Z",
+      "side": 1,
+      "message": "Removed inheritance. Replaced with independent implementation with slight logic duplication.",
+      "parentUuid": "1ad2580c_b2089b10",
+      "range": {
+        "startLine": 33,
+        "startChar": 25,
+        "endLine": 33,
+        "endChar": 52
+      },
+      "revId": "5f462cdfbb801c04dc50a3f5516a6e67f2839e96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2a8b6724_c521047c",
@@ -113,6 +155,30 @@
       "writtenOn": "2023-04-20T21:11:10Z",
       "side": 1,
       "message": "nit: `uint32_t`",
+      "range": {
+        "startLine": 116,
+        "startChar": 4,
+        "endLine": 116,
+        "endChar": 7
+      },
+      "revId": "5f462cdfbb801c04dc50a3f5516a6e67f2839e96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7397741_1722c733",
+        "filename": "src/libANGLE/GlobalMutex.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-21T16:15:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a8b6724_c521047c",
       "range": {
         "startLine": 116,
         "startChar": 4,
