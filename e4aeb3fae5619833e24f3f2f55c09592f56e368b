@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "551d097e_093c19af",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 713,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-21T16:53:07Z",
+      "side": 1,
+      "message": "memory_order_acquire so the ref is taken before the object is used",
+      "range": {
+        "startLine": 713,
+        "startChar": 36,
+        "endLine": 713,
+        "endChar": 56
+      },
+      "revId": "e4aeb3fae5619833e24f3f2f55c09592f56e368b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
