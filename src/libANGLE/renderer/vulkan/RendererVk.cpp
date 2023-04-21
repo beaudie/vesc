@@ -4269,11 +4269,6 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // states they should have a top-left origin.
     ANGLE_FEATURE_CONDITION(&mFeatures, bottomLeftOriginPresentRegionRectangles, IsAndroid());
 
-    // http://anglebug.com/7308
-    // Flushing mutable textures causes flakes in perf tests using Windows/Intel GPU. Failures are
-    // due to lost context/device.
-    ANGLE_FEATURE_CONDITION(&mFeatures, mutableMipmapTextureUpload, !(IsWindows() && isIntel));
-
     // Use VMA for image suballocation.
     ANGLE_FEATURE_CONDITION(&mFeatures, useVmaForImageSuballocation, true);
 
@@ -4448,6 +4443,16 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
                                 (mSubgroupProperties.supportedOperations & kRequiredSubgroupOp) ==
                                     kRequiredSubgroupOp &&
                                 (limitsVk.maxTexelBufferElements >= kMaxTexelBufferSize));
+
+    // http://anglebug.com/7308
+    // Flushing mutable textures causes flakes in perf tests using Windows/Intel GPU. Failures are
+    // due to lost context/device.
+    // http://b/278600575
+    // Flushing mutable texture is disabled for desktop GPUs due to the increased allocated memory
+    // for the compressed textures.
+    bool supportsETC = kSupportTranscodeEtcToBc || mPhysicalDeviceFeatures.textureCompressionETC2;
+    ANGLE_FEATURE_CONDITION(&mFeatures, mutableMipmapTextureUpload,
+                            supportsETC && !(IsWindows() && isIntel));
 
     // Allow passthrough of EGL colorspace attributes on Android platform and for vendors that
     // are known to support wide color gamut.
