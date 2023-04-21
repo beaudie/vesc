@@ -50,6 +50,24 @@
       "message": "Alexey, do you have access to the restricted traces? Are you able to see the GOLD failure? I see the teslagrad trace showing a difference where A2C seems to be applied currently, but isn\u0027t anymore after your change. I don\u0027t know which is correct though, needs looking into.\n\nLet me know if you are able to access the trace and investigate.",
       "revId": "06301601a8302a0320bb25065e30f9a157b3b913",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b7fe579_8bc858dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-21T18:41:44Z",
+      "side": 1,
+      "message": "Talked offline, and I checked and can confirm the new image is more correct.\n\nStill something weird going on with the sky leaking through the building windows, but at least it\u0027s not leaking even more due to A2C!",
+      "parentUuid": "5f840f49_22f57a98",
+      "revId": "06301601a8302a0320bb25065e30f9a157b3b913",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
