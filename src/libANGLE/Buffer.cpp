@@ -439,11 +439,34 @@ void Buffer::removeContentsObserver(VertexArray *vertexArray, uint32_t bufferInd
     }
 }
 
+void Buffer::addGenericContentsObserver(GenericContentsObserver *observer)
+{
+    if (std::find(mGenericContentsObservers.begin(), mGenericContentsObservers.end(), observer) ==
+        mGenericContentsObservers.end())
+    {
+        mGenericContentsObservers.push_back(observer);
+    }
+}
+
+void Buffer::removeGenericContentsObserver(GenericContentsObserver *observer)
+{
+    auto it =
+        std::find(mGenericContentsObservers.begin(), mGenericContentsObservers.end(), observer);
+    if (it != mGenericContentsObservers.end())
+    {
+        mGenericContentsObservers.erase(it);
+    }
+}
+
 void Buffer::onContentsChange()
 {
     for (const ContentsObserver &observer : mContentsObservers)
     {
         observer.vertexArray->onBufferContentsChange(observer.bufferIndex);
+    }
+    for (GenericContentsObserver *observer : mGenericContentsObservers)
+    {
+        observer->onBufferContentsChanged();
     }
 }
 }  // namespace gl

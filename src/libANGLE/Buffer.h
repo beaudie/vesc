@@ -76,6 +76,12 @@ struct ContentsObserver
     uint32_t bufferIndex     = 0;
 };
 
+struct GenericContentsObserver
+{
+    virtual void onBufferContentsChanged() = 0;
+    virtual ~GenericContentsObserver() {}
+};
+
 ANGLE_INLINE bool operator==(const ContentsObserver &lhs, const ContentsObserver &rhs)
 {
     return lhs.vertexArray == rhs.vertexArray && lhs.bufferIndex == rhs.bufferIndex;
@@ -188,6 +194,8 @@ class Buffer final : public RefCountObject<BufferID>,
 
     void addContentsObserver(VertexArray *vertexArray, uint32_t bufferIndex);
     void removeContentsObserver(VertexArray *vertexArray, uint32_t bufferIndex);
+    void addGenericContentsObserver(GenericContentsObserver *observer);
+    void removeGenericContentsObserver(GenericContentsObserver *observer);
 
   private:
     angle::Result bufferDataImpl(Context *context,
@@ -210,6 +218,7 @@ class Buffer final : public RefCountObject<BufferID>,
     angle::ObserverBinding mImplObserver;
 
     angle::FastVector<ContentsObserver, angle::kMaxFixedObservers> mContentsObservers;
+    std::vector<GenericContentsObserver *> mGenericContentsObservers;
     mutable IndexRangeCache mIndexRangeCache;
 };
 

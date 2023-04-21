@@ -34,7 +34,9 @@ enum class TextureUpdateResult
     ImageRespecified,
 };
 
-class TextureVk : public TextureImpl, public angle::ObserverInterface
+class TextureVk : public TextureImpl,
+                  public angle::ObserverInterface,
+                  public gl::GenericContentsObserver
 {
   public:
     TextureVk(const gl::TextureState &state, RendererVk *renderer);
@@ -562,6 +564,8 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     void updateCachedImageViewSerials();
 
     angle::Result updateTextureLabel(ContextVk *contextVk);
+
+    void onBufferContentsChanged() override;
 
     bool mOwnsImage;
     // Generated from ImageVk if EGLImage target, or from throw-away generator if Surface target.
