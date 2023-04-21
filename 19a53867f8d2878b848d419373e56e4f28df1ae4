@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a084f81_ff38a8f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-21T20:25:40Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "19a53867f8d2878b848d419373e56e4f28df1ae4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "917275f5_69e8d695",
+        "filename": "BUILD.gn",
+        "patchSetId": 8
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-21T20:25:40Z",
+      "side": 1,
+      "message": "Is the reason we only enable on android/vulkan simply because it perform better, but on other config it perform worse? Or just try to limit the risk?",
+      "range": {
+        "startLine": 78,
+        "startChar": 40,
+        "endLine": 78,
+        "endChar": 73
+      },
+      "revId": "19a53867f8d2878b848d419373e56e4f28df1ae4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
