@@ -87,6 +87,30 @@
       },
       "revId": "9aff631ffca3944cde14041920cf423a71f440c4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ff184fd_00a7f8c1",
+        "filename": "src/libGLESv2/entry_points_gles_ext_autogen.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4727,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-22T02:42:29Z",
+      "side": 1,
+      "message": "With this change, `GetValidGlobalContext` shouldn\u0027t access `mContextLost` any more https://chromium-review.googlesource.com/c/angle/angle/+/4454769\n\nI also wrote https://chromium-review.googlesource.com/c/angle/angle/+/4462131 but now I don\u0027t think we actually need that.",
+      "parentUuid": "e4ce6227_8a91598e",
+      "range": {
+        "startLine": 4727,
+        "startChar": 23,
+        "endLine": 4727,
+        "endChar": 44
+      },
+      "revId": "9aff631ffca3944cde14041920cf423a71f440c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
