@@ -13,6 +13,7 @@
 #include "common/FixedVector.h"
 #include "libANGLE/renderer/metal/mtl_resources.h"
 
+#include <map>
 #include <vector>
 
 namespace rx
@@ -51,7 +52,7 @@ namespace mtl
 
 // This macro enables showing the running totals of the various
 // buckets of unused buffers.
-// #define ANGLE_MTL_TRACK_BUFFER_MEM
+#define ANGLE_MTL_TRACK_BUFFER_MEM
 
 class BufferManager
 {
@@ -65,6 +66,7 @@ class BufferManager
 #else
     static constexpr int kNumCachedStorageModes = 1;
 #endif
+    static constexpr size_t kEpochsBetweenGC = 10;
     angle::Result queueBlitCopyDataToBuffer(ContextMtl *contextMtl,
                                             const void *srcPtr,
                                             size_t sizeToCopy,
@@ -77,18 +79,27 @@ class BufferManager
                             mtl::BufferRef &bufferRef);
     void returnBuffer(ContextMtl *contextMtl, mtl::BufferRef &bufferRef);
 
+    // Called upon context MakeCurrent
+    void incrementBufferManagerEpoch();
+
   private:
     typedef std::vector<mtl::BufferRef> BufferList;
+    typedef std::multimap<size_t, mtl::BufferRef> BufferMap;
 
     void freeUnusedBuffers(ContextMtl *contextMtl);
     void addBufferRefToFreeLists(mtl::BufferRef &bufferRef);
 
     BufferList mInUseBuffers;
 
-    angle::FixedVector<BufferList, kMaxSizePowerOf2> mFreeBuffers[kNumCachedStorageModes];
+    BufferMap mFreeBuffers[kNumCachedStorageModes];
+
+    // For garbage collecting expired buffer shadow copies
+    size_t mEpoch       = 0;
+    size_t mLastGCEpoch = 0;
+
 #ifdef ANGLE_MTL_TRACK_BUFFER_MEM
-    angle::FixedVector<size_t, kMaxSizePowerOf2> mAllocations;
     size_t mTotalMem = 0;
+    std::map<size_t, size_t> mAllocatedSizes;
 #endif
 };
 

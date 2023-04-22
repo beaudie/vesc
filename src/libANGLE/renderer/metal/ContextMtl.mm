@@ -1427,6 +1427,7 @@ angle::Result ContextMtl::onMakeCurrent(const gl::Context *context)
     {
         GetImplAs<QueryMtl>(query)->onContextMakeCurrent(context);
     }
+    mBufferManager.incrementBufferManagerEpoch();
     return angle::Result::Continue;
 }
 angle::Result ContextMtl::onUnMakeCurrent(const gl::Context *context)

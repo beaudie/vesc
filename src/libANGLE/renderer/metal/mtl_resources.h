@@ -407,10 +407,15 @@ class Buffer final : public Resource, public WrappedObject<id<MTLBuffer>>
     size_t estimatedByteSize() const override { return size(); }
     id getID() const override { return get(); }
 
+    size_t getLastUsedBufferManagerEpoch() { return mLastUsedBufferManagerEpoch; }
+    void setLastUsedBufferManagerEpoch(size_t epoch) { mLastUsedBufferManagerEpoch = epoch; }
+
   private:
     Buffer(ContextMtl *context, MTLStorageMode storageMode, size_t size, const uint8_t *data);
 
     bool mMapReadOnly = true;
+    // For garbage collecting shadow buffers in BufferManager.
+    size_t mLastUsedBufferManagerEpoch = 0;
 };
 
 class NativeTexLevelArray
