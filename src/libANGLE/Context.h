@@ -11,6 +11,7 @@
 #ifndef LIBANGLE_CONTEXT_H_
 #define LIBANGLE_CONTEXT_H_
 
+#include <atomic>
 #include <mutex>
 #include <set>
 #include <string>
@@ -490,7 +491,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     void markContextLost(GraphicsResetStatus status);
 
-    bool isContextLost() const { return mContextLost; }
+    bool isContextLost() const { return mContextLost.load(std::memory_order_relaxed); }
     void setContextLost();
 
     GLenum getGraphicsResetStrategy() const { return mResetStrategy; }
@@ -802,7 +803,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     // Current/lost context flags
     bool mHasBeenCurrent;
-    bool mContextLost;  // Set with setContextLost so that we also set mSkipValidation=false.
+    // Set with setContextLost so that we also set mSkipValidation=false.
+    std::atomic<bool> mContextLost;
     GraphicsResetStatus mResetStatus;
     bool mContextLostForced;
     GLenum mResetStrategy;

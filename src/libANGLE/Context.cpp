@@ -7388,7 +7388,7 @@ void Context::getProgramivRobust(ShaderProgramID program,
 void Context::getProgramPipelineiv(ProgramPipelineID pipeline, GLenum pname, GLint *params)
 {
     ProgramPipeline *programPipeline = nullptr;
-    if (!mContextLost)
+    if (!isContextLost())
     {
         programPipeline = getProgramPipeline(pipeline);
     }
