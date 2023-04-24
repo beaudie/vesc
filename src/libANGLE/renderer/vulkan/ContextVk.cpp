@@ -3833,6 +3833,8 @@ void ContextVk::handleDeviceLost()
     (void)mOutsideRenderPassCommands->reset(this, &collector);
     (void)mRenderPassCommands->reset(this, &collector);
     collector.retireCommandBuffers();
+
+    mRenderer->notifyDeviceLost();
 }
 
 angle::Result ContextVk::drawArrays(const gl::Context *context,
