@@ -134,6 +134,24 @@
       "parentUuid": "58bd2cec_3fbdb257",
       "revId": "2c53b56d9c913da72009903c5d46417835ecfff3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9238a4e_34eba3d5",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2236,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-24T18:49:06Z",
+      "side": 1,
+      "message": "(Hmm.. the last idea could lead to lock recursion)",
+      "parentUuid": "dd884386_11441211",
+      "revId": "2c53b56d9c913da72009903c5d46417835ecfff3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
