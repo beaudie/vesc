@@ -106,6 +106,16 @@ namespace egl
 namespace
 {
 
+struct TLSData
+{
+    angle::UnlockedTailCall unlockedTailCall;
+    Error errorScratchSpace;
+
+    TLSData();
+};
+
+TLSData::TLSData() : errorScratchSpace(0) {}
+
 constexpr angle::SubjectIndex kGPUSwitchedSubjectIndex = 0;
 
 static constexpr size_t kWindowSurfaceMapSize = 32;
@@ -2606,47 +2616,63 @@ egl::Sync *Display::getSync(egl::SyncID syncID)
 // TODO(angleproject:6479): Due to a bug in Apple's dyld loader, `thread_local` will cause
 // excessive memory use. Temporarily avoid it by using pthread's thread
 // local storage instead.
-static TLSIndex GetUnlockedTailCallTLSIndex()
+static TLSIndex GetDisplayTLSIndex()
 {
-    static TLSIndex UnlockedTailCallIndex = TLS_INVALID_INDEX;
+    static TLSIndex DisplayIndex = TLS_INVALID_INDEX;
     static dispatch_once_t once;
     dispatch_once(&once, ^{
-      ASSERT(UnlockedTailCallIndex == TLS_INVALID_INDEX);
-      UnlockedTailCallIndex = CreateTLSIndex(nullptr);
+      ASSERT(DisplayIndex == TLS_INVALID_INDEX);
+      DisplayIndex = CreateTLSIndex(nullptr);
     });
-    return UnlockedTailCallIndex;
+    return DisplayIndex;
 }
-angle::UnlockedTailCall *GetUnlockedTailCallTLS()
+TLSData *GetDisplayTLS()
 {
-    TLSIndex UnlockedTailCallIndex = GetUnlockedTailCallTLSIndex();
-    ASSERT(UnlockedTailCallIndex != TLS_INVALID_INDEX);
-    return static_cast<angle::UnlockedTailCall *>(GetTLSValue(UnlockedTailCallIndex));
+    TLSIndex DisplayIndex = GetDisplayTLSIndex();
+    ASSERT(DisplayIndex != TLS_INVALID_INDEX);
+    return static_cast<TLSData *>(GetTLSValue(DisplayIndex));
 }
-void SetUnlockedTailCallTLS(angle::UnlockedTailCall *unlockedTailCall)
+void SetDisplayTLS(TLSData *tlsData)
 {
-    TLSIndex UnlockedTailCallIndex = GetUnlockedTailCallTLSIndex();
-    ASSERT(UnlockedTailCallIndex != TLS_INVALID_INDEX);
-    SetTLSValue(UnlockedTailCallIndex, unlockedTailCall);
+    TLSIndex DisplayIndex = GetDisplayTLSIndex();
+    ASSERT(DisplayIndex != TLS_INVALID_INDEX);
+    SetTLSValue(DisplayIndex, tlsData);
 }
 #else
 // Tail calls generated during execution of the entry point, to be run at the end of the entry
-// point.  gUnlockedTailCall->run() is called at the end of any EGL entry point that is expected to
-// generate such calls.  At the end of every other call, it is asserted that this is empty.
-thread_local angle::UnlockedTailCall *gUnlockedTailCall = nullptr;
+// point.  gTLSData->unlockedTailCall.run() is called at the end of any EGL entry point that is
+// expected to generate such calls.  At the end of every other call, it is asserted that this is
+// empty.
+thread_local TLSData *gDisplayTLS = nullptr;
 
-void SetUnlockedTailCallTLS(angle::UnlockedTailCall *unlockedTailCall)
+TLSData *GetDisplayTLS()
 {
-    gUnlockedTailCall = unlockedTailCall;
+    return gDisplayTLS;
 }
 #endif
 
 // static
+void Display::InitTLS()
+{
+    // TLS data is intentionally leaked.  MSAN is disabled when InitTLS() is called.
+    TLSData *tlsData = new TLSData;
+
+#if defined(ANGLE_PLATFORM_APPLE)
+    SetDisplayTLS(tlsData);
+#else
+    gDisplayTLS = tlsData;
+#endif
+}
+
+// static
 angle::UnlockedTailCall *Display::GetCurrentThreadUnlockedTailCall()
 {
-#if defined(ANGLE_PLATFORM_APPLE)
-    return GetUnlockedTailCallTLS();
-#else
-    return gUnlockedTailCall;
-#endif
+    return &GetDisplayTLS()->unlockedTailCall;
+}
+
+// static
+Error *Display::GetCurrentThreadErrorScratchSpace()
+{
+    return &GetDisplayTLS()->errorScratchSpace;
 }
 }  // namespace egl
