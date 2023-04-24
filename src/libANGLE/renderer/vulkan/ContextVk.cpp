@@ -6996,25 +6996,20 @@ angle::Result ContextVk::updateActiveImages(CommandBufferHelperT *commandBufferH
 angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore,
                                    RenderPassClosureReason renderPassClosureReason)
 {
-    ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::flushImpl");
-
     bool allCommandsEmpty = mOutsideRenderPassCommands->empty() && mRenderPassCommands->empty();
+    if (allCommandsEmpty && mLastFlushedQueueSerial == mLastSubmittedQueueSerial &&
+        signalSemaphore == nullptr && !mHasWaitSemaphoresPendingSubmission)
+    {
+        // We have nothing to submit.
+        return angle::Result::Continue;
+    }
+
+    ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::flushImpl");
     if (!allCommandsEmpty)
     {
         // If any of secondary command buffer not empty, we need to do flush
         // Avoid calling vkQueueSubmit() twice, since submitCommands() below will do that.
         ANGLE_TRY(flushCommandsAndEndRenderPassWithoutSubmit(renderPassClosureReason));
-    }
-    else if (mLastFlushedQueueSerial != mLastSubmittedQueueSerial)
-    {
-        // This is when someone already called flushCommandsAndEndRenderPassWithoutQueueSubmit.
-        ASSERT(mLastFlushedQueueSerial.getIndex() != mLastSubmittedQueueSerial.getIndex() ||
-               mLastFlushedQueueSerial > mLastSubmittedQueueSerial);
-    }
-    else if (signalSemaphore == nullptr && !mHasWaitSemaphoresPendingSubmission)
-    {
-        // We have nothing to submit.
-        return angle::Result::Continue;
     }
 
     if (mIsAnyHostVisibleBufferWritten)
