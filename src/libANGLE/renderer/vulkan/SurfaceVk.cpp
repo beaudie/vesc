@@ -965,10 +965,13 @@ egl::Error WindowSurfaceVk::unMakeCurrent(const gl::Context *context)
     DisplayVk *displayVk = vk::GetImpl(context->getDisplay());
 
     angle::Result result = contextVk->onSurfaceUnMakeCurrent(this);
-    // Even though all swap chain images are tracked individually, the semaphores are not tracked by
-    // ResourceUse. This propagates context's queue serial to surface when it detaches from context
-    // so that surface will always wait until context is finished.
-    mUse.setQueueSerial(contextVk->getLastSubmittedQueueSerial());
+    if (contextVk->getLastSubmittedQueueSerial().valid())
+    {
+        // Even though all swap chain images are tracked individually, the semaphores are not
+        // tracked by ResourceUse. This propagates context's queue serial to surface when it
+        // detaches from context so that surface will always wait until context is finished.
+        mUse.setQueueSerial(contextVk->getLastSubmittedQueueSerial());
+    }
 
     return angle::ToEGL(result, displayVk, EGL_BAD_CURRENT_SURFACE);
 }
