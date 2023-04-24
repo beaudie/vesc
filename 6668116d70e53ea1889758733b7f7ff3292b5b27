@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f247ca92_e4720657",
+        "filename": "extensions/ANGLE_skip_renderability_checks.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-04-24T20:05:54Z",
+      "side": 1,
+      "message": "Thinking about the name a bit. I think something like `ANGLE_renderability_validation` is the most fitting. GL spec language tends to use \"validation\" over \"checks\" and we can omit the \"skip\"",
+      "range": {
+        "startLine": 3,
+        "startChar": 4,
+        "endLine": 3,
+        "endChar": 35
+      },
+      "revId": "6668116d70e53ea1889758733b7f7ff3292b5b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99a86d2f_815d9427",
+        "filename": "extensions/ANGLE_skip_renderability_checks.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-04-24T20:05:54Z",
+      "side": 1,
+      "message": "I would rewrite this as:\n\nThis extension allows skipping texture format renderability validation if the implementation is capable of rendering to the underlying texture format. This can be useful in situations where textures are created externally and the current context\u0027s version and extensions do not allow rendering to the texture but the implementation is capable.\n\nIt words it to not be specific to ANGLE.",
+      "range": {
+        "startLine": 36,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 79
+      },
+      "revId": "6668116d70e53ea1889758733b7f7ff3292b5b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b17f77dc_c7e930fa",
+        "filename": "extensions/ANGLE_skip_renderability_checks.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-04-24T20:05:54Z",
+      "side": 1,
+      "message": "Stealing some of the wording from https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/extensions/ANGLE_texture_usage.txt : \n```\n    Accepted as a value for \u003cpname\u003e for the TexParameter{if} and \n    TexParameter{if}v commands and for the \u003cvalue\u003e parameter of\n    GetTexParameter{if}v:\n```",
+      "range": {
+        "startLine": 47,
+        "startChar": 4,
+        "endLine": 47,
+        "endChar": 55
+      },
+      "revId": "6668116d70e53ea1889758733b7f7ff3292b5b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2bea48a8_f2ff4342",
+        "filename": "extensions/ANGLE_skip_renderability_checks.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-04-24T20:05:54Z",
+      "side": 1,
+      "message": "tiny nit: tab snuck in",
+      "range": {
+        "startLine": 49,
+        "startChar": 42,
+        "endLine": 49,
+        "endChar": 43
+      },
+      "revId": "6668116d70e53ea1889758733b7f7ff3292b5b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82823b1b_aa52f555",
+        "filename": "extensions/ANGLE_skip_renderability_checks.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-04-24T20:05:54Z",
+      "side": 1,
+      "message": "This can become GL_RENDERABILITY_VALIDATION_ANGLE. Defaulting to true.",
+      "range": {
+        "startLine": 49,
+        "startChar": 8,
+        "endLine": 49,
+        "endChar": 42
+      },
+      "revId": "6668116d70e53ea1889758733b7f7ff3292b5b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02294089_a2a6c3f7",
+        "filename": "extensions/ANGLE_skip_renderability_checks.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-04-24T20:05:54Z",
+      "side": 1,
+      "message": "Borrowing again from the language in https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/extensions/ANGLE_texture_usage.txt : \n\n\n```\nAdditions to Chapter 3 of the OpenGL ES 2.0 Specification (Rasterization)\n\n    Add a new row to Table 3.10 (Texture parameters and their values):\n\n    Name                           | Type | Legal Values \n    ------------------------------------------------------------\n    RENDERABILITY_VALIDATION_ANGLE | bool | TRUE, FALSE\n\n    Add a new section 3.7.x (Texture Usage) before section 3.7.12 and \n    renumber the subsequent sections: \n\n    \"3.7.x Texture Usage\n\n    Texture renderability validation can be controled via the\n    RENDERABILITY_VALIDATION_ANGLE value for the \u003cpname\u003e argument to\n    TexParameter{if}[v].\n\n    Possible values for \u003cparams\u003e when \u003cpname\u003e is TEXTURE_USAGE_ANGLE are:\n\n    TRUE - the default. Renderability validation is unchanged.\n\n    FALSE - Renderability of the texture becomes implementation dependent.\n        The implementation will allow rendering to the format if it is\n        capable.\"\n```",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 80
+      },
+      "revId": "6668116d70e53ea1889758733b7f7ff3292b5b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cc59694_495ed04f",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-04-24T20:05:54Z",
+      "side": 1,
+      "message": "If you call `invalidateCompletenessCache` and set `mState.mCachedSamplerFormatValid \u003d false` here, it will force a re-validation next time the texture is used.\n\nIt may also need a `onStateChange(angle::SubjectMessage::DirtyBitsFlagged);` to reset some addition caching we have at higher levels.\n\nWe basically want to trigger `Texture::signalDirtyState` but without setting a dirty bit because the backend doesn\u0027t care about this state at all.",
+      "revId": "6668116d70e53ea1889758733b7f7ff3292b5b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
