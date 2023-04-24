@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ee964946_63792144",
+        "filename": "src/common/FastMutex.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-24T21:50:24Z",
+      "side": 1,
+      "message": "1ms sleep used on 0.02176% of all cases in the above test.\n\nIn case if ANI or other long wait would block we may waste a lot of CPU power...\nThe std::mutex wake up time also not small... (easily may be 0.5ms)",
+      "parentUuid": "5bce82ba_4c558b9b",
+      "revId": "5be760f05a9cc18c504db14e08c2ed1d12dff74c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6535c191_fb725efa",
         "filename": "src/common/FastMutex.cpp",
         "patchSetId": 9
@@ -54,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0f38719c_ca99fad0",
+        "filename": "src/common/FastMutex.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-24T21:50:24Z",
+      "side": 1,
+      "message": "I was not concerned with performance here, since we will call system function anyway.\n\nLong time ago I wrote function to process pixels of a buffer using lambda and compiler inlined everything. Performance was as if i wrote everything myself)\n\nSo I need to implement 2 almost same methods?",
+      "parentUuid": "6535c191_fb725efa",
+      "revId": "5be760f05a9cc18c504db14e08c2ed1d12dff74c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e831dab9_b1a1ec12",
         "filename": "src/common/FastMutex.cpp",
         "patchSetId": 9
@@ -65,6 +101,30 @@
       "writtenOn": "2023-04-24T21:12:47Z",
       "side": 1,
       "message": "What (in the C++ spec) is stopping this load from getting hoisted out of the loop? It\u0027s not synchronizing with anything else.",
+      "range": {
+        "startLine": 39,
+        "startChar": 29,
+        "endLine": 39,
+        "endChar": 49
+      },
+      "revId": "5be760f05a9cc18c504db14e08c2ed1d12dff74c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2732baef_51f00e10",
+        "filename": "src/common/FastMutex.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-24T21:50:24Z",
+      "side": 1,
+      "message": "I guess the fact that it is a function that must be executed in any case:\n```\nAtomically loads and returns the current value of the atomic variable.\nMemory is affected according to the value of order. \n```\nMemory order affect only memory ordering. Load must still be performed.",
+      "parentUuid": "e831dab9_b1a1ec12",
       "range": {
         "startLine": 39,
         "startChar": 29,
@@ -100,6 +160,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4209275f_62c71fae",
+        "filename": "src/common/FastMutex.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-24T21:50:24Z",
+      "side": 1,
+      "message": "`SpinLock` has different wait logic, I do not understand how I can merge them...",
+      "parentUuid": "9a837271_f3d46a8e",
+      "range": {
+        "startLine": 22,
+        "startChar": 6,
+        "endLine": 22,
+        "endChar": 16
+      },
+      "revId": "5be760f05a9cc18c504db14e08c2ed1d12dff74c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1003d5ed_fdefb90b",
         "filename": "src/common/FastMutex.h",
         "patchSetId": 9
@@ -111,6 +195,30 @@
       "writtenOn": "2023-04-24T21:12:47Z",
       "side": 1,
       "message": "I don\u0027t think this is acceptable (no matter how unlikely it might be).",
+      "range": {
+        "startLine": 41,
+        "startChar": 3,
+        "endLine": 41,
+        "endChar": 93
+      },
+      "revId": "5be760f05a9cc18c504db14e08c2ed1d12dff74c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f69eeb91_5f723344",
+        "filename": "src/common/FastMutex.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-24T21:50:24Z",
+      "side": 1,
+      "message": "That is why wait uses 1ms timeout. During stress testing there was no missed notify calls at all.",
+      "parentUuid": "1003d5ed_fdefb90b",
       "range": {
         "startLine": 41,
         "startChar": 3,
