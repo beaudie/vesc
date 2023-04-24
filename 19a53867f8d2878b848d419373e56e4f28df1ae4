@@ -111,6 +111,30 @@
       },
       "revId": "19a53867f8d2878b848d419373e56e4f28df1ae4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "115e8946_b8dac455",
+        "filename": "BUILD.gn",
+        "patchSetId": 8
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-24T13:54:28Z",
+      "side": 1,
+      "message": "\u003e Is the reason we only enable on android/vulkan simply because it perform better, but on other config it perform worse? Or just try to limit the risk?\n\nIt is enabled only on Android/Vulkan because the original problem that made `GlobalMutex \u003d std::recursive_mutex` happened on Andoird/Vulkan and also because new recursive implementation perform worse on Windows (and possible other platforms as well).\n\n\u003e But I thought before this CL it was also a recursive lock (see using GlobalMutex \u003d std::recursive_mutex;). \n\n`std::recursive_mutex` was used because of the Android/Vulkan problem.\nHowever, it was used for all platforms. I assume because on other platforms `std::recursive_mutex` has no performance penalty (compared to Android).\n\nMy recursive `GlobalMutex` uses `std::mutex` and `GetCurrentThreadId()` which is faster than `std::recursive_mutex` on Android, but slower on Windows.\nHowever recursive mutex was not required for Windows anyway, so instead of using `std::recursive_mutex` on Windows (and other platforms) I decided to use `std::mutex` instead (e.g. default `GlobalMutex` implementation).\n\n\u003e If this improves performance, I am wondering we should just enable it for all and remove this compile flag.\n\nWith recursive `GlobalMutex` performance improved only on Android. On Windows it is slightly slower.\n\nI can remove the `angle_enable_global_mutex_recursion` flag and use `std::recursive_mutex` on non Android Platforms. So every platform will use fastest implementation of the recursive mutex (or same as before). However in the future we may not need recursive mutex at all, and instead of rewriting the `GlobalMutex` implementation we can simply disable the option and later remove it completely (or keep just in case).",
+      "parentUuid": "4ea55f64_e4674e8a",
+      "range": {
+        "startLine": 78,
+        "startChar": 40,
+        "endLine": 78,
+        "endChar": 73
+      },
+      "revId": "19a53867f8d2878b848d419373e56e4f28df1ae4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
