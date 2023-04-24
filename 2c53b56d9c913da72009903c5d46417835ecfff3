@@ -188,6 +188,24 @@
       "parentUuid": "1c23dc38_417ad36d",
       "revId": "2c53b56d9c913da72009903c5d46417835ecfff3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08e91755_990a93a9",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2236,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-24T20:08:48Z",
+      "side": 1,
+      "message": "It is I who removed `mRenderer-\u003enotifyDeviceLost();` from `ContextVk::handleDeviceLost()`!\n\nhttps://chromium-review.googlesource.com/c/angle/angle/+/4334579/10/src/libANGLE/renderer/vulkan/ContextVk.cpp#b3757\n\nWill return it right away)",
+      "parentUuid": "1c23dc38_417ad36d",
+      "revId": "2c53b56d9c913da72009903c5d46417835ecfff3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
