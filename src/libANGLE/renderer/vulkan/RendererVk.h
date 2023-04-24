@@ -645,7 +645,7 @@ class RendererVk : angle::NonCopyable
     }
 
     angle::Result allocateScopedQueueSerialIndex(vk::ScopedQueueSerialIndex *indexOut);
-    angle::Result allocateQueueSerialIndex(QueueSerial *queueSerialOut);
+    angle::Result allocateQueueSerialIndex(SerialIndex *serialIndexOut);
     size_t getLargestQueueSerialIndexEverAllocated() const
     {
         return mQueueSerialIndexAllocator.getLargestIndexEverAllocated();
@@ -759,8 +759,6 @@ class RendererVk : angle::NonCopyable
                                        vk::SecondaryCommandMemoryAllocator *commandsAllocator,
                                        RecyclerT *recycler,
                                        CommandBufferHelperT **commandBufferHelperOut);
-
-    angle::Result allocateQueueSerialIndexImpl(SerialIndex *indexOut);
 
     egl::Display *mDisplay;
 
