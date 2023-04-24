@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6dd1372a_b6c25c73",
+        "filename": "extensions/ANGLE_skip_renderability_checks.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1267026
+      },
+      "writtenOn": "2023-04-24T21:47:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f247ca92_e4720657",
+      "range": {
+        "startLine": 3,
+        "startChar": 4,
+        "endLine": 3,
+        "endChar": 35
+      },
+      "revId": "6668116d70e53ea1889758733b7f7ff3292b5b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "99a86d2f_815d9427",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9918f64_a4c3f144",
+        "filename": "extensions/ANGLE_skip_renderability_checks.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1267026
+      },
+      "writtenOn": "2023-04-24T21:47:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99a86d2f_815d9427",
+      "range": {
+        "startLine": 36,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 79
+      },
+      "revId": "6668116d70e53ea1889758733b7f7ff3292b5b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b17f77dc_c7e930fa",
@@ -60,6 +108,30 @@
       "writtenOn": "2023-04-24T20:05:54Z",
       "side": 1,
       "message": "Stealing some of the wording from https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/extensions/ANGLE_texture_usage.txt : \n```\n    Accepted as a value for \u003cpname\u003e for the TexParameter{if} and \n    TexParameter{if}v commands and for the \u003cvalue\u003e parameter of\n    GetTexParameter{if}v:\n```",
+      "range": {
+        "startLine": 47,
+        "startChar": 4,
+        "endLine": 47,
+        "endChar": 55
+      },
+      "revId": "6668116d70e53ea1889758733b7f7ff3292b5b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "044f940a_813b4122",
+        "filename": "extensions/ANGLE_skip_renderability_checks.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1267026
+      },
+      "writtenOn": "2023-04-24T21:47:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b17f77dc_c7e930fa",
       "range": {
         "startLine": 47,
         "startChar": 4,
@@ -116,6 +188,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e790ea85_be7a325e",
+        "filename": "extensions/ANGLE_skip_renderability_checks.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1267026
+      },
+      "writtenOn": "2023-04-24T21:47:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2bea48a8_f2ff4342",
+      "range": {
+        "startLine": 49,
+        "startChar": 42,
+        "endLine": 49,
+        "endChar": 43
+      },
+      "revId": "6668116d70e53ea1889758733b7f7ff3292b5b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9696f2b0_d70545ce",
+        "filename": "extensions/ANGLE_skip_renderability_checks.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1267026
+      },
+      "writtenOn": "2023-04-24T21:47:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82823b1b_aa52f555",
+      "range": {
+        "startLine": 49,
+        "startChar": 8,
+        "endLine": 49,
+        "endChar": 42
+      },
+      "revId": "6668116d70e53ea1889758733b7f7ff3292b5b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "02294089_a2a6c3f7",
@@ -139,6 +259,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2feed39e_57647768",
+        "filename": "extensions/ANGLE_skip_renderability_checks.txt",
+        "patchSetId": 11
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1267026
+      },
+      "writtenOn": "2023-04-24T21:47:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02294089_a2a6c3f7",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 80
+      },
+      "revId": "6668116d70e53ea1889758733b7f7ff3292b5b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9cc59694_495ed04f",
@@ -152,6 +296,24 @@
       "writtenOn": "2023-04-24T20:05:54Z",
       "side": 1,
       "message": "If you call `invalidateCompletenessCache` and set `mState.mCachedSamplerFormatValid \u003d false` here, it will force a re-validation next time the texture is used.\n\nIt may also need a `onStateChange(angle::SubjectMessage::DirtyBitsFlagged);` to reset some addition caching we have at higher levels.\n\nWe basically want to trigger `Texture::signalDirtyState` but without setting a dirty bit because the backend doesn\u0027t care about this state at all.",
+      "revId": "6668116d70e53ea1889758733b7f7ff3292b5b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad01f11b_5e565a80",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 1267026
+      },
+      "writtenOn": "2023-04-24T21:47:39Z",
+      "side": 1,
+      "message": "I added a new dirty bit which is no-op in the backend and just called signalDirtyState() on that bit. seems to be cleaner way to reset caches.",
+      "parentUuid": "9cc59694_495ed04f",
       "revId": "6668116d70e53ea1889758733b7f7ff3292b5b27",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
