@@ -70,6 +70,24 @@
       "parentUuid": "dcb8a579_52e4771e",
       "revId": "3ec5561741eb0b0a733a702416bba3302b66c99a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b182575_01cec0d6",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-24T15:35:45Z",
+      "side": 0,
+      "message": "\u003e I read the anglebug.com/8139 issue. It looks like the issue addresses the problem I described above.\n\nYes, I just opened it based on your comment above 😊\n\n\u003e Other GLES APIs do not have the global lock before GetValidGlobalContext() call, what is so special about EGLImage APIs?\n\nYou\u0027re right, your change is not introducing a new race either, I saw your recent comment after making the above.",
+      "parentUuid": "07197400_8fc121b6",
+      "revId": "3ec5561741eb0b0a733a702416bba3302b66c99a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
