@@ -54,7 +54,7 @@ Thread *AllocateCurrentThread()
     Thread *thread;
     {
         // Global thread intentionally leaked
-        // UnlockedTailCall intentionally leaked
+        // Display TLS is also intentionally leaked
         ANGLE_SCOPED_DISABLE_LSAN();
         thread = new Thread();
 #if defined(ANGLE_PLATFORM_APPLE)
@@ -63,8 +63,7 @@ Thread *AllocateCurrentThread()
         gCurrentThread = thread;
 #endif
 
-        angle::UnlockedTailCall *unlockedTailCall = new angle::UnlockedTailCall();
-        egl::SetUnlockedTailCallTLS(unlockedTailCall);
+        egl::Display::InitTLS();
     }
 
     // Initialize fast TLS slot
