@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c30877e3_505e9ada",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-24T14:37:57Z",
+      "side": 0,
+      "message": "Skipping `context-\u003eisContextLost()` check will have different behavior.\n\nIn cases if Context is lost in other thread it will update TLS of that thread. This thread will have not `nullptr` TLS with lost Context.\n\nI do not know how we can fix Context Lost race.\nI guess implementing `GetValidGlobalContext()` is not possible if Context may be lost any time right after the call. So we need to use `GetGlobalContext()` everywhere and check for `isContextLost()` after acquiring the Context lock.\n\nWe also have race in this method for non-Shared Contexts.\n```\nvoid Display::notifyDeviceLost()\n{\n    if (mDeviceLost)\n    {\n        return;\n    }\n\n    for (ContextSet::iterator context \u003d mState.contextSet.begin();\n         context !\u003d mState.contextSet.end(); context++)\n    {\n        (*context)-\u003emarkContextLost(gl::GraphicsResetStatus::UnknownContextReset);\n    }\n\n    mDeviceLost \u003d true;\n}\n```",
+      "revId": "3ec5561741eb0b0a733a702416bba3302b66c99a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
