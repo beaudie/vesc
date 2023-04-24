@@ -791,6 +791,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     }
 
     const QueueSerial &getLastSubmittedQueueSerial() const { return mLastSubmittedQueueSerial; }
+    const vk::ResourceUse &getLastSubmittedResourceUse() const { return mSubmittedResourceUse; }
 
     // Uploading mutable mipmap textures is currently restricted to single-context applications.
     bool isEligibleForMutableTextureFlush() const

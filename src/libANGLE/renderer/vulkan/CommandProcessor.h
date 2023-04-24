@@ -343,8 +343,6 @@ class CommandQueue : angle::NonCopyable
 
     VkQueue getQueue(egl::ContextPriority priority) const { return mQueueMap[priority]; }
 
-    Serial getLastSubmittedSerial(SerialIndex index) const { return mLastSubmittedSerials[index]; }
-
     // The ResourceUse still have unfinished queue serial by ANGLE or vulkan.
     bool hasResourceUseFinished(const ResourceUse &use) const
     {
@@ -597,7 +595,6 @@ class CommandProcessor : public Context
     {
         return queueSerial <= mLastEnqueuedSerials;
     }
-    Serial getLastEnqueuedSerial(SerialIndex index) const { return mLastEnqueuedSerials[index]; }
 
   private:
     bool hasPendingError() const
