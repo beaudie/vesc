@@ -1,0 +1,147 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66f97f47_ac146416",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-24T21:12:47Z",
+      "side": 1,
+      "message": "I highly suggest moving this to _after_ the next CL. I would very much like to have all the locking stuff finalized before we move on to using custom implementations of mutex.\n\nThe reason I\u0027m asking is that these need a _lot_ of testing to both ensure robustness and performance, including w.r.t power usage. I wouldn\u0027t want to block the next change on it. I also wouldn\u0027t want to have to repeat these tests as locking in ANGLE keeps changing.",
+      "revId": "5be760f05a9cc18c504db14e08c2ed1d12dff74c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bce82ba_4c558b9b",
+        "filename": "src/common/FastMutex.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-24T21:12:47Z",
+      "side": 1,
+      "message": "I\u0027d just drop the 1ms sleep. If it happens, it\u0027s too huge!\n\nAnd the 1us sleep and yield don\u0027t feel any different. I\u0027d probably just use yield on windows, 1us sleep everywhere else and call it a day.",
+      "revId": "5be760f05a9cc18c504db14e08c2ed1d12dff74c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6535c191_fb725efa",
+        "filename": "src/common/FastMutex.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-24T21:12:47Z",
+      "side": 1,
+      "message": "nit: you may get better perf using two specialized functions (doSpinWaitWithYield/Sleep) and avoiding lambdas\u0027 type erasure overhead (assuming the compiler is not inlining it all).",
+      "revId": "5be760f05a9cc18c504db14e08c2ed1d12dff74c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e831dab9_b1a1ec12",
+        "filename": "src/common/FastMutex.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-24T21:12:47Z",
+      "side": 1,
+      "message": "What (in the C++ spec) is stopping this load from getting hoisted out of the loop? It\u0027s not synchronizing with anything else.",
+      "range": {
+        "startLine": 39,
+        "startChar": 29,
+        "endLine": 39,
+        "endChar": 49
+      },
+      "revId": "5be760f05a9cc18c504db14e08c2ed1d12dff74c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a837271_f3d46a8e",
+        "filename": "src/common/FastMutex.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-24T21:12:47Z",
+      "side": 1,
+      "message": "nit: we already have a `SpinLock` in `SpinLock.h`, you can merge with that.",
+      "range": {
+        "startLine": 22,
+        "startChar": 6,
+        "endLine": 22,
+        "endChar": 16
+      },
+      "revId": "5be760f05a9cc18c504db14e08c2ed1d12dff74c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1003d5ed_fdefb90b",
+        "filename": "src/common/FastMutex.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-24T21:12:47Z",
+      "side": 1,
+      "message": "I don\u0027t think this is acceptable (no matter how unlikely it might be).",
+      "range": {
+        "startLine": 41,
+        "startChar": 3,
+        "endLine": 41,
+        "endChar": 93
+      },
+      "revId": "5be760f05a9cc18c504db14e08c2ed1d12dff74c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d0137c0_966e3cde",
+        "filename": "src/common/FastMutex.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-24T21:12:47Z",
+      "side": 1,
+      "message": "I have to study a bit more to understand if these memory orderings are enough to satisfy what mutexes guarantee.",
+      "range": {
+        "startLine": 141,
+        "startChar": 47,
+        "endLine": 141,
+        "endChar": 67
+      },
+      "revId": "5be760f05a9cc18c504db14e08c2ed1d12dff74c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
