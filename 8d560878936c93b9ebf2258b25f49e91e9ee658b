@@ -177,6 +177,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "77e39ffe_03f9eb41",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/RewriteInterpolants.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-04-24T15:22:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33665b38_ce09c0cf",
+      "revId": "8d560878936c93b9ebf2258b25f49e91e9ee658b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dce5349a_b78aea6e",
@@ -226,6 +244,24 @@
       "side": 1,
       "message": "I see. If it won\u0027t add too much noise to the code in your opinion, would you just add that text verbatim here as a comment?",
       "parentUuid": "0b008dcd_02b425c2",
+      "revId": "8d560878936c93b9ebf2258b25f49e91e9ee658b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ceaa9b9_c8746d21",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/RewriteInterpolants.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-04-24T15:22:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "59a6fbfd_0429f8cd",
       "revId": "8d560878936c93b9ebf2258b25f49e91e9ee658b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
