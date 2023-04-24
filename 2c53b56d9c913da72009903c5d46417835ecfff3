@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7caf8bdb_5bc8e9e8",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2227,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-24T15:20:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6660cfbe_3325a80e",
+      "range": {
+        "startLine": 2227,
+        "startChar": 8,
+        "endLine": 2227,
+        "endChar": 26
+      },
+      "revId": "2c53b56d9c913da72009903c5d46417835ecfff3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b5a07258_eba6e3b0",
@@ -54,6 +78,24 @@
       "writtenOn": "2023-04-20T18:27:20Z",
       "side": 1,
       "message": "What if other context in a share group make access to the `context`. For example, will flush all of its commands?\n\nOnly problem I can think of is the concurrent calls to the `Context::handleError()`.",
+      "revId": "2c53b56d9c913da72009903c5d46417835ecfff3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "928d4ce4_224dfba1",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2236,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-24T15:20:01Z",
+      "side": 1,
+      "message": "Good point, I mistakenly thought the `(void)` stopping the error from bubbling up prevents that call, but now I see it\u0027s being done in `ANGLE_VK_TRY`.\n\nOther than that though, the `finishQueueSerial` function doesn\u0027t actually do anything with contexts, it waits for an-already-submitted serial to finish and is pretty much independent of contexts.\n\n`finishQueueSerial` gets a `vk::Context`, so I changed the call here to get the display instead of the context. That should hopefully make it clear that this function has nothing to do with ContextVk. It\u0027s also an improvement I think because if there\u0027s an error, it\u0027ll be counted as an EGL error (instead of GL) which is more appropriate for this function.\n\nThere\u0027s still a race though with `DisplayVk::mSavedError`, which shouldn\u0027t have been global like that. Let me see if I can just remove that somehow; otherwise it\u0027ll have to turn thread-local.",
+      "parentUuid": "b5a07258_eba6e3b0",
       "revId": "2c53b56d9c913da72009903c5d46417835ecfff3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
