@@ -135,6 +135,30 @@
       },
       "revId": "19a53867f8d2878b848d419373e56e4f28df1ae4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05c2d512_f162cf3b",
+        "filename": "BUILD.gn",
+        "patchSetId": 8
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-24T14:30:42Z",
+      "side": 1,
+      "message": "\u003e I can remove the angle_enable_global_mutex_recursion flag and use std::recursive_mutex on non Android Platforms. So every platform will use fastest implementation of the recursive mutex (or same as before)\n\nNo, let\u0027s avoid recursive mutexes as much as possible. Limiting it to Android is better than having it everywhere.\n\n---\n\nAn interesting read from the creator of recursive mutexes (and why they are bad): http://www.zaval.org/resources/library/butenhof1.html",
+      "parentUuid": "115e8946_b8dac455",
+      "range": {
+        "startLine": 78,
+        "startChar": 40,
+        "endLine": 78,
+        "endChar": 73
+      },
+      "revId": "19a53867f8d2878b848d419373e56e4f28df1ae4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
