@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09723614_0461d189",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-24T18:55:20Z",
+      "side": 1,
+      "message": "May use `WARN() \u003c\u003c errorStream.str()` here.",
+      "revId": "60d488fde8e3409b2c7469ce1971b60675f59fd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00fa9078_5ed1e013",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-24T18:55:20Z",
+      "side": 1,
+      "message": "`displayVk` is no longer used.",
+      "range": {
+        "startLine": 24,
+        "startChar": 47,
+        "endLine": 24,
+        "endChar": 56
+      },
+      "revId": "60d488fde8e3409b2c7469ce1971b60675f59fd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
