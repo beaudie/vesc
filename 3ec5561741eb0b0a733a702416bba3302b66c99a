@@ -52,6 +52,24 @@
       "parentUuid": "9aa30074_143f1201",
       "revId": "3ec5561741eb0b0a733a702416bba3302b66c99a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07197400_8fc121b6",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-24T15:21:49Z",
+      "side": 0,
+      "message": "\u003e How about we take this change (so isContextLost() is removed from this path for the sake of your CL), and we can deal with the races (for all platforms) at some point later.\n\nI read the anglebug.com/8139 issue. It looks like the issue addresses the problem I described above.\n\nSince the above problem was actual for all non-Android Platforms anyway, I agree to lend this change and fix other problems later.",
+      "parentUuid": "dcb8a579_52e4771e",
+      "revId": "3ec5561741eb0b0a733a702416bba3302b66c99a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
