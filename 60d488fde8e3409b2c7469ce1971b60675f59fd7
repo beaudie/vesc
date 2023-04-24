@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "72454914_1d089e8e",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 581,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-24T20:21:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09723614_0461d189",
+      "revId": "60d488fde8e3409b2c7469ce1971b60675f59fd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "00fa9078_5ed1e013",
@@ -31,6 +49,30 @@
       "writtenOn": "2023-04-24T18:55:20Z",
       "side": 1,
       "message": "`displayVk` is no longer used.",
+      "range": {
+        "startLine": 24,
+        "startChar": 47,
+        "endLine": 24,
+        "endChar": 56
+      },
+      "revId": "60d488fde8e3409b2c7469ce1971b60675f59fd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "503ba713_b84c5119",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-24T20:21:14Z",
+      "side": 1,
+      "message": "Done, cleaned up in a follow up CL: https://chromium-review.googlesource.com/c/angle/angle/+/4470387",
+      "parentUuid": "00fa9078_5ed1e013",
       "range": {
         "startLine": 24,
         "startChar": 47,
