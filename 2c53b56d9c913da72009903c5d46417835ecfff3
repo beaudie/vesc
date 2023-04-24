@@ -98,6 +98,24 @@
       "parentUuid": "b5a07258_eba6e3b0",
       "revId": "2c53b56d9c913da72009903c5d46417835ecfff3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58bd2cec_3fbdb257",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2236,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-24T15:37:57Z",
+      "side": 1,
+      "message": "\u003e There\u0027s still a race though with DisplayVk::mSavedError, which shouldn\u0027t have been global like that. Let me see if I can just remove that somehow; otherwise it\u0027ll have to turn thread-local.\n\nAlso:\n```\nDisplayVk::handleError() -\u003e RendererVk::notifyDeviceLost() -\u003e Display::notifyDeviceLost() -\u003e Context::markContextLost() -\u003e Context::setContextLost()\n```\n\nI think we need to handle errors similar to `ErrorProxyContext` here: https://chromium-review.googlesource.com/c/angle/angle/+/4386409\n\nTail call uses `ErrorProxyContext`. In case if there is an error after the tail call -\u003e lock necessary mutex and handles the error.\n\nHere I added `ContextType` for the purpose of unlock: https://chromium-review.googlesource.com/c/angle/angle/+/4374547\nBut we may use it for locking instead.\n\n- So we pass `ErrorProxyContext` to the lambda by value. \n- `ErrorProxyContext` remembers the original context and knows what mutex must be used to protect it.\n- We use `ErrorProxyContext` inside the tail call.\n- In `ErrorProxyContext` destructor, in case of any error we lock mutexes and handle errors using the original context.",
+      "parentUuid": "928d4ce4_224dfba1",
+      "revId": "2c53b56d9c913da72009903c5d46417835ecfff3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
