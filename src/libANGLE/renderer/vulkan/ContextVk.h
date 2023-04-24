@@ -791,6 +791,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     }
 
     const QueueSerial &getLastSubmittedQueueSerial() const { return mLastSubmittedQueueSerial; }
+    const vk::ResourceUse &getLastSubmittedResourceUse() const { return mSubmittedResourceUse; }
 
     // Uploading mutable mipmap textures is currently restricted to single-context applications.
     bool isEligibleForMutableTextureFlush() const
@@ -1659,7 +1660,9 @@ ANGLE_INLINE angle::Result ContextVk::onVertexAttributeChange(size_t attribIndex
 
 ANGLE_INLINE bool ContextVk::hasUnsubmittedUse(const vk::ResourceUse &use) const
 {
-    return mCurrentQueueSerialIndex != kInvalidQueueSerialIndex && use > mLastSubmittedQueueSerial;
+    return mCurrentQueueSerialIndex != kInvalidQueueSerialIndex &&
+           use > QueueSerial(mCurrentQueueSerialIndex,
+                             mRenderer->getLastSubmittedSerial(mCurrentQueueSerialIndex));
 }
 
 ANGLE_INLINE bool UseLineRaster(const ContextVk *contextVk, gl::PrimitiveMode mode)
