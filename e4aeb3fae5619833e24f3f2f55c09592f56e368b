@@ -22,6 +22,30 @@
       },
       "revId": "e4aeb3fae5619833e24f3f2f55c09592f56e368b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e30ff24_1766ce1d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 713,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-24T18:01:00Z",
+      "side": 1,
+      "message": "What is wrong with that?\n\nWhen we construct the object we already using it, then we call  `addRef()`.\nIn case if class has `init()` method, we may call `addRef()` before or after the `init()`. `acquire` will be applied to the `fetch` part of the operation, however this method does not use the fetched result.\n\nAdditionally, `acquire` requires corresponding `release` for work correctly. So we need to use `memory_order_acq_rel` in `addRef()` and call this after initialization.\n\nBut `mRefCount` purpose is to only to properly destroy the object and not synchronize usage. usage must already be synchronized by other means (like passing command to the `CommandProcessor`, for example).\n\n`std::shared_ptr\u003c\u003e` also uses relaxed in this case.\nHowever it uses `memory_order_acq_rel` in the `release()`. As I understand, `acquire` is needed to form a dependency chain from all last uses up to destruction. I suspected that error, when was writing that `addRef` is not using fetched value.\n\n```\ntemplate \u003cclass _Tp\u003e\ninline _LIBCPP_INLINE_VISIBILITY _Tp\n__libcpp_atomic_refcount_increment(_Tp\u0026 __t) _NOEXCEPT\n{\n#if defined(_LIBCPP_HAS_BUILTIN_ATOMIC_SUPPORT) \u0026\u0026 !defined(_LIBCPP_HAS_NO_THREADS)\n    return __atomic_add_fetch(\u0026__t, 1, __ATOMIC_RELAXED);\n#else\n    return __t +\u003d 1;\n#endif\n}\n\ntemplate \u003cclass _Tp\u003e\ninline _LIBCPP_INLINE_VISIBILITY _Tp\n__libcpp_atomic_refcount_decrement(_Tp\u0026 __t) _NOEXCEPT\n{\n#if defined(_LIBCPP_HAS_BUILTIN_ATOMIC_SUPPORT) \u0026\u0026 !defined(_LIBCPP_HAS_NO_THREADS)\n    return __atomic_add_fetch(\u0026__t, -1, __ATOMIC_ACQ_REL);\n#else\n    return __t -\u003d 1;\n#endif\n}\n```",
+      "parentUuid": "551d097e_093c19af",
+      "range": {
+        "startLine": 713,
+        "startChar": 36,
+        "endLine": 713,
+        "endChar": 56
+      },
+      "revId": "e4aeb3fae5619833e24f3f2f55c09592f56e368b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
