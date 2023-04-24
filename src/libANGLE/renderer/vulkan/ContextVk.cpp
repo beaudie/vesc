@@ -3460,12 +3460,15 @@ angle::Result ContextVk::submitCommands(const vk::Semaphore *signalSemaphore, Su
         mRenderer->collectGarbage(use, std::move(mCurrentGarbage));
     }
 
-    ASSERT(mLastFlushedQueueSerial > mLastSubmittedQueueSerial);
+    ASSERT(mLastFlushedQueueSerial.valid());
+    ASSERT(mLastFlushedQueueSerial.getIndex() != mLastSubmittedQueueSerial.getIndex() ||
+           mLastFlushedQueueSerial > mLastSubmittedQueueSerial);
 
     ANGLE_TRY(mRenderer->submitCommands(this, getProtectionType(), mContextPriority,
                                         signalSemaphore, mLastFlushedQueueSerial));
 
-    ASSERT(mLastSubmittedQueueSerial < mLastFlushedQueueSerial);
+    ASSERT(mLastSubmittedQueueSerial.getIndex() != mLastFlushedQueueSerial.getIndex() ||
+           mLastSubmittedQueueSerial < mLastFlushedQueueSerial);
     mLastSubmittedQueueSerial = mLastFlushedQueueSerial;
     mSubmittedResourceUse.setQueueSerial(mLastSubmittedQueueSerial);
 
@@ -7006,7 +7009,8 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore,
     else if (mLastFlushedQueueSerial != mLastSubmittedQueueSerial)
     {
         // This is when someone already called flushCommandsAndEndRenderPassWithoutQueueSubmit.
-        ASSERT(mLastFlushedQueueSerial > mLastSubmittedQueueSerial);
+        ASSERT(mLastFlushedQueueSerial.getIndex() != mLastSubmittedQueueSerial.getIndex() ||
+               mLastFlushedQueueSerial > mLastSubmittedQueueSerial);
     }
     else if (signalSemaphore == nullptr && !mHasWaitSemaphoresPendingSubmission)
     {
@@ -7404,7 +7408,8 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassCl
 
     // Save the queueSerial before calling flushRenderPassCommands, which may return a new
     // mRenderPassCommands
-    ASSERT(mLastFlushedQueueSerial < mRenderPassCommands->getQueueSerial());
+    ASSERT(mLastFlushedQueueSerial.getIndex() != mRenderPassCommands->getQueueSerial().getIndex() ||
+           mLastFlushedQueueSerial < mRenderPassCommands->getQueueSerial());
     mLastFlushedQueueSerial = mRenderPassCommands->getQueueSerial();
 
     ANGLE_TRY(mRenderer->flushRenderPassCommands(this, getProtectionType(), mContextPriority,
@@ -7501,7 +7506,12 @@ angle::Result ContextVk::onSyncObjectInit(vk::SyncHelper *syncHelper, bool isEGL
     if (isEGLSyncObject || !mRenderPassCommands->started())
     {
         ANGLE_TRY(flushImpl(nullptr, RenderPassClosureReason::SyncObjectInit));
-        syncHelper->setQueueSerial(mLastSubmittedQueueSerial);
+        // If sync inserted before any command is generated, and flushImpl bails out, then no need
+        // to set queueSerial. It will always test finished/signaled.
+        if (mLastSubmittedQueueSerial.valid())
+        {
+            syncHelper->setQueueSerial(mLastSubmittedQueueSerial);
+        }
         return angle::Result::Continue;
     }
 
@@ -7649,7 +7659,9 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
 
     // Save the queueSerial before calling flushRenderPassCommands, which may return a new
     // mRenderPassCommands
-    ASSERT(mLastFlushedQueueSerial <= mOutsideRenderPassCommands->getQueueSerial());
+    ASSERT(mLastFlushedQueueSerial.getIndex() !=
+               mOutsideRenderPassCommands->getQueueSerial().getIndex() ||
+           mLastFlushedQueueSerial < mOutsideRenderPassCommands->getQueueSerial());
     mLastFlushedQueueSerial = mOutsideRenderPassCommands->getQueueSerial();
 
     ANGLE_TRY(mRenderer->flushOutsideRPCommands(this, getProtectionType(), mContextPriority,
@@ -8231,9 +8243,7 @@ ANGLE_INLINE angle::Result ContextVk::allocateQueueSerialIndex()
 {
     ASSERT(mCurrentQueueSerialIndex == kInvalidQueueSerialIndex);
     // Make everything appears to be flushed and submitted
-    ANGLE_TRY(mRenderer->allocateQueueSerialIndex(&mLastFlushedQueueSerial));
-    mCurrentQueueSerialIndex  = mLastFlushedQueueSerial.getIndex();
-    mLastSubmittedQueueSerial = mLastFlushedQueueSerial;
+    ANGLE_TRY(mRenderer->allocateQueueSerialIndex(&mCurrentQueueSerialIndex));
     // Note queueSerial for render pass is deferred until begin time.
     generateOutsideRenderPassCommandsQueueSerial();
     return angle::Result::Continue;
