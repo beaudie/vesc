@@ -34,6 +34,24 @@
       "parentUuid": "c30877e3_505e9ada",
       "revId": "3ec5561741eb0b0a733a702416bba3302b66c99a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcb8a579_52e4771e",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-24T15:12:30Z",
+      "side": 0,
+      "message": "\u003e I don\u0027t believe this CL is adding a new race though;\n\nProblem in this CL is not a new race. If ignore the race:\n\nBefore this CL:\n- Context 1 is current in Thread 1.\n- Thread 2 makes Contex1 lost -\u003e set `mContextLost \u003d true` and updates TLS.\n- Thread 1 reads TLS (not nullptr) checks `mContextLost` -\u003e skips the call.\n\nAfter this CL:\n- Context 1 is current in Thread 1.\n- Thread 2 makes Contex1 lost -\u003e set `mContextLost \u003d true` and updates TLS.\n- Thread 1 reads TLS (not nullptr) -\u003e uses Context that is Lost.\n\n\u003e  (so isContextLost() is removed from this path for the sake of your CL)\n\nI do not understand what is wrong with my CL. It removes lock that was added only recently and for other reason (protect `EGLImage` access). Other GLES APIs do not have the global lock before `GetValidGlobalContext()` call, what is so special about `EGLImage` APIs?",
+      "parentUuid": "9aa30074_143f1201",
+      "revId": "3ec5561741eb0b0a733a702416bba3302b66c99a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
