@@ -152,6 +152,24 @@
       "parentUuid": "dd884386_11441211",
       "revId": "2c53b56d9c913da72009903c5d46417835ecfff3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c23dc38_417ad36d",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2236,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-24T19:36:51Z",
+      "side": 1,
+      "message": "\u003e  That is, if mContextLost is atomic, Display::notifyDeviceLost() can continue to be done unlocked, and the context will pick it up on its next entry point (and do whatever processing it needs to do).\n\nThis will not prevent Context to become lost after checking the atomic.\n\nTo guarantee that Context is not lost while it holding the Share Context lock - we must only make it Lost inside that lock.\nOtherwise, if Context may be Lost during the call - mContextLost race is not a problem at all)\n\n\u003e Another approach could be for Display::notifyDeviceLost() to take the share group locks per https://chromium-review.googlesource.com/c/angle/angle/+/4374545 right away and handle the error. What do you think of that?\n\nI need to think about this.\n\nThere are 2 problems:\n1) Tail call may call `handleError()` without lock. No matter if `vk::Context` is `ContextVk` or `DisplayVk`.\n2) `Display::notifyDeviceLost()` access all contexts without locks.\n\nTo fix (1) may use `ErrorProxyContext` that will take necessary lock when calling `handleError()`. This is just so that `handleError()` called with the same mutex as it would without the tail call.\n\nFor problem (2).\n\nCalls to `Display::notifyDeviceLost()` must be protected by a Global Mutex, because it accesses `mState.contextSet`. So if some non Shared Context calls this, then there is a race (and it looks like it is called in some back-ends). It seems that with my SharedContextMutex CL, race will happen also for Shared Contexts...\nSo we need to detect when `Display::notifyDeviceLost()` is called with/without Global Lock and make Global Lock if needed (need to track `ThreadId` for that...). \n\nAlternatively, we can protect `mState.contextSet` by separate mutex, so that `Display::notifyDeviceLost()` does not require a GlobalLock. Can\u0027t say now what to do with `mDeviceLost`, because do not know how it is used and how it relates to the `mContextLost`.\n\nWhen using SharedContextMutex we need to pass `Context` inside `Display::notifyDeviceLost()` when applicable. Passing the `Context` will assume that it\u0027s mutex is locked. Then, we can compare what mutex each context is using and lock it if it is different.\n\n---\n\nAlso it is strange that `ContextVk::handleError()` does not make Lost all other Contexts, while `DisplayVk::handleError` does.\n`Context11::handleResult()` for example, calls `Display::notifyDeviceLost()`.",
+      "parentUuid": "c9238a4e_34eba3d5",
+      "revId": "2c53b56d9c913da72009903c5d46417835ecfff3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
