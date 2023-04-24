@@ -170,6 +170,24 @@
       "parentUuid": "c9238a4e_34eba3d5",
       "revId": "2c53b56d9c913da72009903c5d46417835ecfff3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96547394_7dfc253c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2236,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-24T20:07:18Z",
+      "side": 1,
+      "message": "\u003e Also it is strange that ContextVk::handleError() does not make Lost all other Contexts, while DisplayVk::handleError does.\n\nContext loss should only make other contexts in the same share group lost. This is per KHR_robustness:\n\n\u003e 6. If a graphics reset occurs in a shared context, what happens in\n\u003e    shared contexts?\n\u003e\n\u003e    RESOLVED: A reset in one context will result in a reset in all other\n\u003e    contexts in its share group.\n\nDevice loss ends up losing all contexts because they are all backed by the same device.\n\n---\n\nI don\u0027t want to gloss over this of course (I\u0027ll create a tracking issue for this once discussions settle), but I kind of feel like it\u0027s a low priority problem. Device loss is already rare, and I suspect if a call on some context goes through after the device is lost, it\u0027ll just fail on the next call anyway (and just generate another loss). Don\u0027t you agree?",
+      "parentUuid": "1c23dc38_417ad36d",
+      "revId": "2c53b56d9c913da72009903c5d46417835ecfff3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
