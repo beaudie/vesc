@@ -116,6 +116,24 @@
       "parentUuid": "928d4ce4_224dfba1",
       "revId": "2c53b56d9c913da72009903c5d46417835ecfff3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd884386_11441211",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2236,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-24T18:47:52Z",
+      "side": 1,
+      "message": "Thanks, that\u0027s interesting.\n\nSince you mentioned issues with the \"current valid context\" TLS and the idea of always getting the \"current context\" and check for isContextLost() in the call itself, perhaps there is a way to make that solve this at the same time. That is, if mContextLost is atomic, Display::notifyDeviceLost() can continue to be done unlocked, and the context will pick it up on its next entry point (and do whatever processing it needs to do). This has the downside of an atomic read on every entry point, though I\u0027m speculating what the cost is.\n\nAnother approach could be for Display::notifyDeviceLost() to take the share group locks per https://chromium-review.googlesource.com/c/angle/angle/+/4374545 right away and handle the error. What do you think of that?",
+      "parentUuid": "58bd2cec_3fbdb257",
+      "revId": "2c53b56d9c913da72009903c5d46417835ecfff3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
