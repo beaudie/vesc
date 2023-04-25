@@ -16,6 +16,24 @@
       "message": "My understanding was that each index has its own queue serial timeline. The index/serial was updated on makeCurrent so that the context is placed on any available timeline. Is that right?\n\nI don\u0027t quite follow what\u0027s going on now. It _looks_ like on makeCurrent, only the index is updated (which puts the context on an available timeline like before), but what\u0027s happening to the serial now? If the \"real\" last submitted serial is retrieved from the renderer, what\u0027s the point of `mLastSubmittedQueueSerial`?",
       "revId": "d6d7e551cb185c310a2a200ed9b3bcfd27653051",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddc1e827_d428e65f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1662,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-25T15:46:23Z",
+      "side": 0,
+      "message": "If I may, will comment my understanding...\n\n\u003e The index/serial was updated on makeCurrent so that the context is placed on any available timeline. Is that right?\n\nYes. However, available timeline may be from some other Context that was just made uncurrent (and flushed all of its commands). And this is the problem. Now, waiting everything that was submitted, will wait what was submitted by the previous Context.\n\n\u003e but what\u0027s happening to the serial now?\n\nOld serials remains as it is - indicating in what timeline last time was flush/submit (must match) by that Context. However, new flushes/submissins will be to a different timeline.\n\n\u003e If the \"real\" last submitted serial is retrieved from the renderer, what\u0027s the point of mLastSubmittedQueueSerial?\n\nIt is not \"real\" it is last submitted to the current timeline (index).\n`mLastSubmittedQueueSerial` is used in `onSyncObjectInit()`, to handle empty flushes and for assertions.\n\n---\n\nI\u0027m not sure why need to call `mRenderer-\u003egetLastSubmittedSerial()`\nWill this work?\n\n```\nreturn mLastSubmittedQueueSerial.valid() \u0026\u0026 \n       mLastSubmittedQueueSerial.getIndex() \u003d\u003d mCurrentQueueSerialIndex \u0026\u0026\n       use \u003e mLastSubmittedQueueSerial;\n```\nIf initialize `mLastSubmittedQueueSerial` when creating context, we may avoid `mLastSubmittedQueueSerial.valid()` check.",
+      "parentUuid": "62c60aad_6b39cf04",
+      "revId": "d6d7e551cb185c310a2a200ed9b3bcfd27653051",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
