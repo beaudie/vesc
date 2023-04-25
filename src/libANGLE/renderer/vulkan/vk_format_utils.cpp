@@ -57,8 +57,8 @@ void FillTextureFormatCaps(RendererVk *renderer,
             // Some drivers report different depth and stencil sample counts.  We'll AND those
             // counts together, limiting all depth and/or stencil formats to the lower number of
             // sample counts.
-            vk_gl::AddSampleCounts((physicalDeviceLimits.framebufferDepthSampleCounts &
-                                    physicalDeviceLimits.framebufferStencilSampleCounts),
+            vk_gl::AddSampleCounts(((physicalDeviceLimits.framebufferDepthSampleCounts &
+                                     physicalDeviceLimits.framebufferStencilSampleCounts)),
                                    &outTextureCaps->sampleCounts);
         }
     }
