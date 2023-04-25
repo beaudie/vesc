@@ -47,18 +47,22 @@ void FillTextureFormatCaps(RendererVk *renderer,
 
     if (outTextureCaps->renderbuffer)
     {
+        const uint32_t maxSampleCountLimit =
+            renderer->getFeatures().disableMultisample.enabled ? 0x1 : 0xffffffff;
         if (hasColorAttachmentFeatureBit)
         {
-            vk_gl::AddSampleCounts(physicalDeviceLimits.framebufferColorSampleCounts,
-                                   &outTextureCaps->sampleCounts);
+            vk_gl::AddSampleCounts(
+                physicalDeviceLimits.framebufferColorSampleCounts & maxSampleCountLimit,
+                &outTextureCaps->sampleCounts);
         }
         if (hasDepthAttachmentFeatureBit)
         {
             // Some drivers report different depth and stencil sample counts.  We'll AND those
             // counts together, limiting all depth and/or stencil formats to the lower number of
             // sample counts.
-            vk_gl::AddSampleCounts((physicalDeviceLimits.framebufferDepthSampleCounts &
-                                    physicalDeviceLimits.framebufferStencilSampleCounts),
+            vk_gl::AddSampleCounts(((physicalDeviceLimits.framebufferDepthSampleCounts &
+                                     physicalDeviceLimits.framebufferStencilSampleCounts) &
+                                    maxSampleCountLimit),
                                    &outTextureCaps->sampleCounts);
         }
     }

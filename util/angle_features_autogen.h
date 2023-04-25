@@ -71,6 +71,7 @@ enum class Feature
     DisableDrawBuffersIndexed,
     DisableFlippingBlitWithCommand,
     DisableGPUSwitchingSupport,
+    DisableMultisample,
     DisableMultisampledRenderToTexture,
     DisableNativeParallelCompile,
     DisableProgramBinary,
