@@ -16,6 +16,24 @@
       "message": "I can\u0027t find `mLastFlushQueueSerial` in class `ContextVk`, is that going to be introduced in another CL?",
       "revId": "588e31f346bb69f51ab1863d952e5c056061b40f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bc22465_cd3161f8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-04-25T02:22:11Z",
+      "side": 1,
+      "message": "I think you meant `mLastFlushedQueueSerial`, so this is just a typo in the comment.\n\nI don\u0027t see there are changes being made on how `mLastFlushedQueueSerial` gets its\u0027 value assigned, shall we remove `ContextVk::mLastFlushedQueueSerial` from the commit message?",
+      "parentUuid": "0e2530db_44e78b1e",
+      "revId": "588e31f346bb69f51ab1863d952e5c056061b40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
