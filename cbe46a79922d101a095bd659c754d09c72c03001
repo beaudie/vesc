@@ -277,6 +277,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "425bd766_ebcbda1e",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 20
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-04-25T20:20:02Z",
+      "side": 1,
+      "message": "Heh, yes, I had the `yield` block in there, but it wasn\u0027t reporting the exception I needed to debug, so I changed it.",
+      "parentUuid": "2d40ad67_6463c34f",
+      "range": {
+        "startLine": 233,
+        "startChar": 4,
+        "endLine": 233,
+        "endChar": 19
+      },
+      "revId": "cbe46a79922d101a095bd659c754d09c72c03001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1044d9d9_23d836d9",
