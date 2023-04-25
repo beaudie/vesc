@@ -891,6 +891,10 @@ struct FeaturesVk : FeatureSetBase
         "SecondaryCommandPools when using VulkanSecondaryCommandBuffer. ",
         &members,
     };
+
+    FeatureInfo disableMultisample = {"disableMultisample", FeatureCategory::VulkanWorkarounds,
+                                      "disable multisample.", &members,
+                                      "https://issuetracker.google.com/279185729"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

@@ -1204,6 +1204,14 @@
                 "Use VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT for initializing ",
                 "SecondaryCommandPools when using VulkanSecondaryCommandBuffer. "
             ]
+        },
+		{
+            "name": "disable_multisample",
+            "category": "Workarounds",
+            "description": [
+                "disable multisample."
+            ],
+			"issue": "https://issuetracker.google.com/279185729"
         }
     ]
 }
