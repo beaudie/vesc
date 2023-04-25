@@ -16,6 +16,24 @@
       "message": "Charlie recommended to look into vertex conversion buffers and it seems we might be able to reuse that? There is already some `dirty` flag handling in these so maybe that would work here as well? It seems I\u0027m able to get a \"vertex conversion\" buffer but use it for texels here. I ended up resetting mBufferViews as in syncState where it is initialized we don\u0027t seem to have access to `isImage` which is what we need to set up the correct offset/size. `getVertexConversionBuffer` doesn\u0027t take `size` however so I suppose this won\u0027t work when we set up a range at the same offset but with a different size.",
       "revId": "d48fc53271fbfe21a5cc7d978112b84137c327dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2efb3be_6bfaaf45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-25T19:39:42Z",
+      "side": 1,
+      "message": "Phew, no, this crashes on SwS\n```\nValidationObject::LogError(LogObjectList const\u0026, std::Cr::basic_string_view\u003cchar, std::Cr::char_traits\u003cchar\u003e \u003e, char const*, ...) const at chassis.h:4068\nObjectLifetimes::CheckObjectValidity(unsigned long, VulkanObjectType, bool, char const*, char const*) const at object_lifetime_validation.h:?\nObjectLifetimes::PreCallValidateUnmapMemory(VkDevice_T*, VkDeviceMemory_T*) const at object_tracker.cpp:339\nvulkan_layer_chassis::UnmapMemory(VkDevice_T*, VkDeviceMemory_T*) at chassis.cpp:1299\nrx::vk::BufferBlock::unmap(VkDevice_T*) at Suballocation.cpp:149\nrx::vk::BufferBlock::destroy(rx::RendererVk*) at Suballocation.cpp:79\nrx::RendererVk::collectSuballocationGarbage(rx::vk::ResourceUse const\u0026, rx::vk::BufferSuballocation\u0026\u0026, rx::vk::Buffer\u0026\u0026) at angleutils.h:277\nrx::vk::BufferHelper::release(rx::RendererVk*) at FastVector.h:489\nrx::BufferVk::destroy(gl::Context const*) at wrap_iter.h:101\nangle::RefCountObjectReleaser\u003cgl::Texture, gl::Context, angle::Result\u003e::~RefCountObjectReleaser() at RefCountObject.h:46\ngl::Texture::onDestroy(gl::Context const*) at RefCountObject.h:?\ngl::BufferManager::DeleteObject(gl::Context const*, gl::Buffer*) at RefCountObject.h:46\ngl::TypedResourceManager\u003cgl::Buffer, gl::BufferManager, gl::BufferID\u003e::deleteObject(gl::Context const*, gl::BufferID) at ResourceManager.cpp:98\ngl::Context::deleteTexture(gl::TextureID) at Context.cpp:1086\ngl::Context::deleteTextures(int, gl::TextureID const*) at Context.cpp:?\nGL_DeleteTextures at Context.h:548\n(anonymous namespace)::GLSLTest_ES31_RGBTextureBufferEmulation_Test::TestBody() at vector:447\n```",
+      "parentUuid": "55862fa7_3279cc51",
+      "revId": "d48fc53271fbfe21a5cc7d978112b84137c327dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
