@@ -34,6 +34,144 @@
       "parentUuid": "0e2530db_44e78b1e",
       "revId": "588e31f346bb69f51ab1863d952e5c056061b40f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b55c9410_84028959",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-25T12:55:31Z",
+      "side": 1,
+      "message": "It was previously assigned as an output argument:\n```\nANGLE_INLINE angle::Result ContextVk::allocateQueueSerialIndex()\n{\n    ASSERT(mCurrentQueueSerialIndex \u003d\u003d kInvalidQueueSerialIndex);\n    // Make everything appears to be flushed and submitted\n    ANGLE_TRY(mRenderer-\u003eallocateQueueSerialIndex(\u0026mLastFlushedQueueSerial));\n```",
+      "parentUuid": "7bc22465_cd3161f8",
+      "revId": "588e31f346bb69f51ab1863d952e5c056061b40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da662f8e_37206f66",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3462,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-25T12:55:31Z",
+      "side": 1,
+      "message": "Suggest adding `ASSERT(mLastFlushedQueueSerial.valid())` so it is clear that `mLastSubmittedQueueSerial` may be invalid but not `mLastFlushedQueueSerial`.",
+      "revId": "588e31f346bb69f51ab1863d952e5c056061b40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94bcc250_a8062802",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3464,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-25T12:55:31Z",
+      "side": 1,
+      "message": "Should not happen in practice, but...\n\nCalling `flushAndSubmitOutsideRenderPassCommands()` as the first submission will have invalid `mLastFlushedQueueSerial` and then assert inside `QueueSerial::operator\u003e`.\n\nSuggest adding check `if (mLastFlushedQueueSerial.valid())` to the `flushAndSubmitOutsideRenderPassCommands()`.\n\nOr maybe initialize `mLastSubmittedQueueSerial` and `mLastFlushedQueueSerial` when Context is created as an exception?",
+      "range": {
+        "startLine": 3464,
+        "startChar": 11,
+        "endLine": 3464,
+        "endChar": 62
+      },
+      "revId": "588e31f346bb69f51ab1863d952e5c056061b40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb28988e_6eb71174",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 7010,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-25T12:55:31Z",
+      "side": 1,
+      "message": "Suggest adding `ASSERT(mLastFlushedQueueSerial.valid())`.",
+      "revId": "588e31f346bb69f51ab1863d952e5c056061b40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07f589e3_b3ff8914",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 7508,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-25T12:55:31Z",
+      "side": 1,
+      "message": "If I understand correctly, this may only fail if a Context never submitted any commands, and will always pass after first submission?\n\nSuggest adding comment for clarity.\n\nOr maybe initialize `mLastSubmittedQueueSerial` and `mLastFlushedQueueSerial` when Context is created as an exception?",
+      "revId": "588e31f346bb69f51ab1863d952e5c056061b40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "192ca994_1ecd3efe",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 7661,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-25T12:55:31Z",
+      "side": 1,
+      "message": "`\u003c\u003d` operator was in existing code, however I just noticed the difference with `mLastFlushedQueueSerial \u003c mRenderPassCommands-\u003egetQueueSerial()`.\n\nI think operator should be the same in both cases.\n\nOnly case when we may need `\u003c\u003d` is if `flushOutsideRPCommands()` fails and we repeat same submission. Repeated flush/submission after failure is a low priority problem.",
+      "range": {
+        "startLine": 7661,
+        "startChar": 11,
+        "endLine": 7661,
+        "endChar": 82
+      },
+      "revId": "588e31f346bb69f51ab1863d952e5c056061b40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2defae3_ac3ce114",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 794,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-25T12:55:31Z",
+      "side": 1,
+      "message": "Name does not match `mSubmittedResourceUse` member. Suggest remove/add `Last` to both.\n\nIMO, it should not have `Last` in the name, because `ResourceUse` represents all ever submitted `QueueSerials`.",
+      "range": {
+        "startLine": 794,
+        "startChar": 27,
+        "endLine": 794,
+        "endChar": 54
+      },
+      "revId": "588e31f346bb69f51ab1863d952e5c056061b40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
