@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e2530db_44e78b1e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-04-25T02:11:23Z",
+      "side": 1,
+      "message": "I can\u0027t find `mLastFlushQueueSerial` in class `ContextVk`, is that going to be introduced in another CL?",
+      "revId": "588e31f346bb69f51ab1863d952e5c056061b40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
