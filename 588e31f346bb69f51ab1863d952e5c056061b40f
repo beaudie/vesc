@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "117764fe_7cdc08e1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-25T18:12:56Z",
+      "side": 1,
+      "message": "Right, typo. Fixed.",
+      "parentUuid": "b55c9410_84028959",
+      "revId": "588e31f346bb69f51ab1863d952e5c056061b40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "da662f8e_37206f66",
@@ -67,6 +85,24 @@
       "writtenOn": "2023-04-25T12:55:31Z",
       "side": 1,
       "message": "Suggest adding `ASSERT(mLastFlushedQueueSerial.valid())` so it is clear that `mLastSubmittedQueueSerial` may be invalid but not `mLastFlushedQueueSerial`.",
+      "revId": "588e31f346bb69f51ab1863d952e5c056061b40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "373f1b58_9ed97df3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3462,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-25T18:12:56Z",
+      "side": 1,
+      "message": "Good point. Added.",
+      "parentUuid": "da662f8e_37206f66",
       "revId": "588e31f346bb69f51ab1863d952e5c056061b40f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -96,6 +132,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "54f74685_6ca3d339",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3464,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-25T18:12:56Z",
+      "side": 1,
+      "message": "I have added ASSERT(mLastFlushedQueueSerial.valid()). When you come to submitCommands, mLastFlushedQueueSerial is guarantted to be valid. Even if first submisison is flushAndSubmitOutsideRenderPassCommands and outsideRPCOmmands is empty (which you did not actually flush), we will still regenerate queue serial for outsideRPCommands at COntextVk.cpp line 7064.",
+      "parentUuid": "94bcc250_a8062802",
+      "range": {
+        "startLine": 3464,
+        "startChar": 11,
+        "endLine": 3464,
+        "endChar": 62
+      },
+      "revId": "588e31f346bb69f51ab1863d952e5c056061b40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eb28988e_6eb71174",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
@@ -107,6 +167,24 @@
       "writtenOn": "2023-04-25T12:55:31Z",
       "side": 1,
       "message": "Suggest adding `ASSERT(mLastFlushedQueueSerial.valid())`.",
+      "revId": "588e31f346bb69f51ab1863d952e5c056061b40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2a29813_fed4f98f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 7010,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-25T18:12:56Z",
+      "side": 1,
+      "message": "This can be invalid, as you suggested in the other comment (that this is the first flush and all command buffer are empty). It will hit line 7059 bellow.",
+      "parentUuid": "eb28988e_6eb71174",
       "revId": "588e31f346bb69f51ab1863d952e5c056061b40f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -128,6 +206,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfe49e3b_a3c7b9e9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 7508,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-25T18:12:56Z",
+      "side": 1,
+      "message": "Right. Comment added.",
+      "parentUuid": "07f589e3_b3ff8914",
+      "revId": "588e31f346bb69f51ab1863d952e5c056061b40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "192ca994_1ecd3efe",
@@ -141,6 +237,30 @@
       "writtenOn": "2023-04-25T12:55:31Z",
       "side": 1,
       "message": "`\u003c\u003d` operator was in existing code, however I just noticed the difference with `mLastFlushedQueueSerial \u003c mRenderPassCommands-\u003egetQueueSerial()`.\n\nI think operator should be the same in both cases.\n\nOnly case when we may need `\u003c\u003d` is if `flushOutsideRPCommands()` fails and we repeat same submission. Repeated flush/submission after failure is a low priority problem.",
+      "range": {
+        "startLine": 7661,
+        "startChar": 11,
+        "endLine": 7661,
+        "endChar": 82
+      },
+      "revId": "588e31f346bb69f51ab1863d952e5c056061b40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35ee3290_7441f514",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 7661,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-25T18:12:56Z",
+      "side": 1,
+      "message": "Removed `\u003d\u003d`.",
+      "parentUuid": "192ca994_1ecd3efe",
       "range": {
         "startLine": 7661,
         "startChar": 11,
@@ -187,6 +307,48 @@
       "writtenOn": "2023-04-25T13:50:02Z",
       "side": 1,
       "message": "There is no actual \"resource use\" here, so it feels like this is leaking internals of ContextVk more than anything. How about a function that instead takes a resource use and merges it with `mSubmittedResourceUse` and keep `mSubmittedResourceUse` hidden?\n\nMaybe something like `mergeResourceUseWithLastSubmitted...` (QueueSerial?)",
+      "revId": "588e31f346bb69f51ab1863d952e5c056061b40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "651e05f7_752aad36",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 794,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-25T18:12:56Z",
+      "side": 1,
+      "message": "Good point. Renamed to getSubmittedResourceUse;",
+      "parentUuid": "b2defae3_ac3ce114",
+      "range": {
+        "startLine": 794,
+        "startChar": 27,
+        "endLine": 794,
+        "endChar": 54
+      },
+      "revId": "588e31f346bb69f51ab1863d952e5c056061b40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "744ba2fd_de52ebcf",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 794,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-25T18:12:56Z",
+      "side": 1,
+      "message": "`contextVk-\u003emergeResourceUseWithLastSubmitted(mUse)` is a bit counter intuitive, that it modifies passed in argument instead of caller\u0027s mUse. You can think about context as a container resource, every time it submitted to command, it is been used. Per Igor\u0027s sussgestion, I have renamed to getSubmittedResourceUse().",
+      "parentUuid": "5c730c3e_4edd76c6",
       "revId": "588e31f346bb69f51ab1863d952e5c056061b40f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
