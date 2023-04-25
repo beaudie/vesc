@@ -99,6 +99,30 @@
       },
       "revId": "25083b0106ed53b1ec5855386f9974519bac6a2b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "705e504a_062e8d01",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-25T16:01:43Z",
+      "side": 1,
+      "message": "Just for curiosity (I asked it before the `std::shared_ptr` suggestion, or at least before I noticed it!)",
+      "parentUuid": "153de7ab_e35ad709",
+      "range": {
+        "startLine": 724,
+        "startChar": 35,
+        "endLine": 724,
+        "endChar": 55
+      },
+      "revId": "25083b0106ed53b1ec5855386f9974519bac6a2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
