@@ -16,6 +16,259 @@
       "message": "Hey Roman - I think this is ready for review now.",
       "revId": "cbe46a79922d101a095bd659c754d09c72c03001",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "710a2aa1_38148233",
+        "filename": "gni/angle.gni",
+        "patchSetId": 20
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-25T13:50:11Z",
+      "side": 1,
+      "message": "Nit: APK-\u003eapk like in other places. Maybe `build_apk`? Also a little comment explaining \"the why\" would help as this is not self-explanatory.",
+      "range": {
+        "startLine": 565,
+        "startChar": 8,
+        "endLine": 565,
+        "endChar": 20
+      },
+      "revId": "cbe46a79922d101a095bd659c754d09c72c03001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e219312_9e0e7abd",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 20
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-25T13:50:11Z",
+      "side": 1,
+      "message": "These two seem to be used exactly once, could be inlined? Or is something missing?",
+      "range": {
+        "startLine": 508,
+        "startChar": 0,
+        "endLine": 510,
+        "endChar": 60
+      },
+      "revId": "cbe46a79922d101a095bd659c754d09c72c03001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50a39486_4dc1711d",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 20
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-25T13:50:11Z",
+      "side": 1,
+      "message": "Could you include a comment explaining that this is not an actual test and a reason we\u0027re still using angle_test",
+      "range": {
+        "startLine": 517,
+        "startChar": 16,
+        "endLine": 517,
+        "endChar": 50
+      },
+      "revId": "cbe46a79922d101a095bd659c754d09c72c03001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5aa080b9_61050caa",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 20
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-25T13:50:11Z",
+      "side": 1,
+      "message": "Could you clarify the comment regarding the intent behind setting this flag?",
+      "range": {
+        "startLine": 518,
+        "startChar": 6,
+        "endLine": 519,
+        "endChar": 39
+      },
+      "revId": "cbe46a79922d101a095bd659c754d09c72c03001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c0eab18_73750f36",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 20
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-25T13:50:11Z",
+      "side": 1,
+      "message": "Could you add a comment clarifying how this path is used (no cleanup). If there is no cleanup it means we\u0027ll have 2 copies of each trace, one in tmp and another in the app dir? If cleanup is intended then maybe we could use the `with _TempDeviceDir() as temp_dir` helper already in this file, or try/finally with adb shell rm to try to get it deleted in case of an exception.\n\nOr maybe `run-as pkg mv` instead of `cp` would work? (also unsure if need `-f` to overwrite, does `cp` overwrite without it?)",
+      "range": {
+        "startLine": 233,
+        "startChar": 4,
+        "endLine": 233,
+        "endChar": 19
+      },
+      "revId": "cbe46a79922d101a095bd659c754d09c72c03001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1044d9d9_23d836d9",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 20
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-25T13:50:11Z",
+      "side": 1,
+      "message": "How about binary-\u003elib (or \"library\" etc) throughout? Would be a bit more specific, easier to read",
+      "range": {
+        "startLine": 244,
+        "startChar": 34,
+        "endLine": 244,
+        "endChar": 45
+      },
+      "revId": "cbe46a79922d101a095bd659c754d09c72c03001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e2ec6b7_7a31d615",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 20
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-25T13:50:11Z",
+      "side": 1,
+      "message": "Shouldn\u0027t need nonlocal as long as you\u0027re not modifying the var",
+      "range": {
+        "startLine": 245,
+        "startChar": 8,
+        "endLine": 245,
+        "endChar": 32
+      },
+      "revId": "cbe46a79922d101a095bd659c754d09c72c03001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f039d746_ea30b228",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 20
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-25T13:50:11Z",
+      "side": 1,
+      "message": "optional: maybe `posixpath.join(device_tmp_path, binary_name)`, here and other places where paths are concatenated",
+      "range": {
+        "startLine": 247,
+        "startChar": 59,
+        "endLine": 247,
+        "endChar": 89
+      },
+      "revId": "cbe46a79922d101a095bd659c754d09c72c03001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "016b06c1_f9c886b8",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 20
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-25T13:50:11Z",
+      "side": 1,
+      "message": "This var can be set once after the if, once we have the right binary_name",
+      "range": {
+        "startLine": 269,
+        "startChar": 8,
+        "endLine": 269,
+        "endChar": 85
+      },
+      "revId": "cbe46a79922d101a095bd659c754d09c72c03001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adb677d9_8e2be54b",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 20
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-25T13:50:11Z",
+      "side": 1,
+      "message": "`if x \u003d\u003d False` -\u003e `if not x`",
+      "range": {
+        "startLine": 270,
+        "startChar": 8,
+        "endLine": 270,
+        "endChar": 54
+      },
+      "revId": "cbe46a79922d101a095bd659c754d09c72c03001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "104e0942_cab7e8c9",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 20
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-25T13:50:11Z",
+      "side": 1,
+      "message": "This is no longer correct. Actually it\u0027s already been incorrect since \nI added `_Push(tracegz, tracegz)`. I guess this would be `len(traces)*3` now? Or yet another counter :S",
+      "range": {
+        "startLine": 283,
+        "startChar": 81,
+        "endLine": 283,
+        "endChar": 92
+      },
+      "revId": "cbe46a79922d101a095bd659c754d09c72c03001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

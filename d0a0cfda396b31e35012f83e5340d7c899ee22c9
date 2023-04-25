@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a7c7b37_63dd196c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-25T13:50:11Z",
+      "side": 1,
+      "message": "resolved",
+      "parentUuid": "47fafa9a_654a3682",
+      "revId": "d0a0cfda396b31e35012f83e5340d7c899ee22c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9d9f8501_231e9703",
@@ -72,6 +90,30 @@
       "side": 1,
       "message": "`angle_trace_interpreter_tests` right above is a group too?\n\nhttps://crsrc.org/c/third_party/angle/infra/specs/test_suites.pyl;drc\u003df093a9b346c221dd663e8a3d74565c68d591ecb0;l\u003d758",
       "parentUuid": "9d9f8501_231e9703",
+      "range": {
+        "startLine": 574,
+        "startChar": 4,
+        "endLine": 574,
+        "endChar": 9
+      },
+      "revId": "d0a0cfda396b31e35012f83e5340d7c899ee22c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86592b84_a7e6a24a",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 1
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-25T13:50:11Z",
+      "side": 1,
+      "message": "resolved",
+      "parentUuid": "bb8997ff_09fba978",
       "range": {
         "startLine": 574,
         "startChar": 4,
