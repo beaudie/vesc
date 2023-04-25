@@ -269,6 +269,30 @@
       },
       "revId": "cbe46a79922d101a095bd659c754d09c72c03001",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "084124a4_074abdba",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 20
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-25T14:00:36Z",
+      "side": 1,
+      "message": "Actually, we can just rephrase this so that it says something like \"files for N traces\" instead of \"N trace files\" and keep len(traces)",
+      "parentUuid": "104e0942_cab7e8c9",
+      "range": {
+        "startLine": 283,
+        "startChar": 81,
+        "endLine": 283,
+        "endChar": 92
+      },
+      "revId": "cbe46a79922d101a095bd659c754d09c72c03001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
