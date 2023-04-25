@@ -172,6 +172,23 @@
       },
       "revId": "588e31f346bb69f51ab1863d952e5c056061b40f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c730c3e_4edd76c6",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 794,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-25T13:50:02Z",
+      "side": 1,
+      "message": "There is no actual \"resource use\" here, so it feels like this is leaking internals of ContextVk more than anything. How about a function that instead takes a resource use and merges it with `mSubmittedResourceUse` and keep `mSubmittedResourceUse` hidden?\n\nMaybe something like `mergeResourceUseWithLastSubmitted...` (QueueSerial?)",
+      "revId": "588e31f346bb69f51ab1863d952e5c056061b40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

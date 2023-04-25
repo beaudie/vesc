@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62c60aad_6b39cf04",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1662,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-25T13:50:02Z",
+      "side": 0,
+      "message": "My understanding was that each index has its own queue serial timeline. The index/serial was updated on makeCurrent so that the context is placed on any available timeline. Is that right?\n\nI don\u0027t quite follow what\u0027s going on now. It _looks_ like on makeCurrent, only the index is updated (which puts the context on an available timeline like before), but what\u0027s happening to the serial now? If the \"real\" last submitted serial is retrieved from the renderer, what\u0027s the point of `mLastSubmittedQueueSerial`?",
+      "revId": "d6d7e551cb185c310a2a200ed9b3bcfd27653051",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
