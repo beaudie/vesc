@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58923afb_e9b4f7f8",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 21
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-25T18:30:13Z",
+      "side": 1,
+      "message": "I suggest this (_AdbShell might raise, _RemoveDeviceFile ignores errors via || true):\n```\n        try:\n            _AdbRun([\u0027push\u0027, local_path, tmp_path])\n            _AdbShell(\u0027run-as \u0027 + TEST_PACKAGE_NAME + \u0027 cp \u0027 + tmp_path + \u0027 ./angle_traces/\u0027)\n        except Exception as e:\n            logging.error(\u0027An error occurred in _PushToAppDir: %s\u0027 % e)\n        finally:\n            _RemoveDeviceFile(tmp_path)\n```",
+      "range": {
+        "startLine": 256,
+        "startChar": 0,
+        "endLine": 262,
+        "endChar": 43
+      },
+      "revId": "d8518119e89c366496f57ffbc42a1d28686ff44e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "266cee82_58754104",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 21
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-25T18:30:13Z",
+      "side": 1,
+      "message": "Looks like this slipped, should be `if not os.path.isfile(local_lib_path)`",
+      "range": {
+        "startLine": 284,
+        "startChar": 11,
+        "endLine": 284,
+        "endChar": 50
+      },
+      "revId": "d8518119e89c366496f57ffbc42a1d28686ff44e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
