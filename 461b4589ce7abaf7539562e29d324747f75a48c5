@@ -16,6 +16,29 @@
       "message": "Following up from the comments in https://chromium-review.googlesource.com/c/angle/angle/+/4428536",
       "revId": "461b4589ce7abaf7539562e29d324747f75a48c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9f77a7e_d7111495",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4453,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-25T21:13:22Z",
+      "side": 1,
+      "message": "I think you want to check \nmFeatures.supportsComputeTranscodeEtcToBc || mPhysicalDeviceFeatures.textureCompressionETC2?",
+      "range": {
+        "startLine": 4453,
+        "startChar": 23,
+        "endLine": 4453,
+        "endChar": 98
+      },
+      "revId": "461b4589ce7abaf7539562e29d324747f75a48c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
