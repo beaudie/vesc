@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "03532b43_b6d0e83d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-25T15:34:48Z",
+      "side": 1,
+      "message": "Yeah, I guess that\u0027s better than duplicating `std::shared_ptr`",
+      "parentUuid": "6bc514c1_7f881242",
+      "revId": "25083b0106ed53b1ec5855386f9974519bac6a2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b897c2de_038b67c3",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 3
