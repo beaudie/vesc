@@ -56,6 +56,30 @@
       },
       "revId": "557fdfef9c7962c7e40f65f4e9431cc4b32eee06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea165e90_edb73cde",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/RewriteInterpolants.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-04-25T20:18:13Z",
+      "side": 1,
+      "message": "The order of variable type replacements should not affect generated MSL output.",
+      "parentUuid": "6df09866_6e4bf4f6",
+      "range": {
+        "startLine": 275,
+        "startChar": 32,
+        "endLine": 275,
+        "endChar": 75
+      },
+      "revId": "557fdfef9c7962c7e40f65f4e9431cc4b32eee06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
