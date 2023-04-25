@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bcb3a2a_04acc3f0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7000,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-25T19:21:23Z",
+      "side": 1,
+      "message": "This is `\u0026\u0026`, not `||`. I am pretty sure the logic is exactly the same as before.",
+      "parentUuid": "f4ac39bc_d05b3813",
+      "range": {
+        "startLine": 7000,
+        "startChar": 28,
+        "endLine": 7000,
+        "endChar": 80
+      },
+      "revId": "e0c2790214f3c2885fead961fcf10ec6f23d1564",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "20d2eeba_78093a06",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-04-25T15:27:26Z",
       "side": 1,
       "message": "Suggest putting `mLastFlushedQueueSerial \u003d\u003d mLastSubmittedQueueSerial` and `signalSemaphore \u003d\u003d nullptr \u0026\u0026 !mHasWaitSemaphoresPendingSubmission` in bools with a descriptive name for clarity.",
+      "range": {
+        "startLine": 7001,
+        "startChar": 8,
+        "endLine": 7001,
+        "endChar": 74
+      },
+      "revId": "e0c2790214f3c2885fead961fcf10ec6f23d1564",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee764d52_358a2099",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7001,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-25T19:21:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "20d2eeba_78093a06",
       "range": {
         "startLine": 7001,
         "startChar": 8,
