@@ -156,6 +156,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "28845084_a7aafe9d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3464,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-25T18:43:57Z",
+      "side": 1,
+      "message": "line 7064 is from `ContextVk::flushImpl()`.\n\nThe `flushAndSubmitOutsideRenderPassCommands()` calls `submitCommands()` directly, so line 7064 will not be executed and we hit the added ASSERT().",
+      "parentUuid": "54f74685_6ca3d339",
+      "range": {
+        "startLine": 3464,
+        "startChar": 11,
+        "endLine": 3464,
+        "endChar": 62
+      },
+      "revId": "588e31f346bb69f51ab1863d952e5c056061b40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eb28988e_6eb71174",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
@@ -185,6 +209,24 @@
       "side": 1,
       "message": "This can be invalid, as you suggested in the other comment (that this is the first flush and all command buffer are empty). It will hit line 7059 bellow.",
       "parentUuid": "eb28988e_6eb71174",
+      "revId": "588e31f346bb69f51ab1863d952e5c056061b40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac790732_3f555667",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 7010,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-25T18:43:57Z",
+      "side": 1,
+      "message": "Yes, it can be invalid. But `mLastSubmittedQueueSerial` must be also invalid. We can not have invalid flush but valid submit. In that case, `(mLastFlushedQueueSerial !\u003d mLastSubmittedQueueSerial)` will be false.\n\nWe get inside this branch only when something was flushed - this is written in the comment. And if something is flushed `mLastFlushedQueueSerial` must be valid.",
+      "parentUuid": "c2a29813_fed4f98f",
       "revId": "588e31f346bb69f51ab1863d952e5c056061b40f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

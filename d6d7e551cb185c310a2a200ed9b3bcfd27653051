@@ -52,6 +52,24 @@
       "parentUuid": "ddc1e827_d428e65f",
       "revId": "d6d7e551cb185c310a2a200ed9b3bcfd27653051",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96a49603_2cd649ee",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 1662,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-25T18:43:57Z",
+      "side": 0,
+      "message": "\u003e What you suggested wont work, for example, if we never submitted anything yet, with your suggestion, hasUnSubmittedUse() will always return false, even if we do need to submit. If I get a index that I have never used, this context will have no knowledge about last submitted serial. It has to ask renderer for such information.\n\nThanks for the explanation! Yes, I guess there is no other way to rewrite this method...",
+      "parentUuid": "fe5d8796_bc162d81",
+      "revId": "d6d7e551cb185c310a2a200ed9b3bcfd27653051",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
