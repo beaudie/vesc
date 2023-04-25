@@ -316,6 +316,24 @@
       "parentUuid": "9cc59694_495ed04f",
       "revId": "6668116d70e53ea1889758733b7f7ff3292b5b27",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84f8dce5_1f689ebb",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-04-25T19:36:50Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "ad01f11b_5e565a80",
+      "revId": "6668116d70e53ea1889758733b7f7ff3292b5b27",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
