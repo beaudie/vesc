@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4463c618_ad57b41a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-25T00:05:37Z",
+      "side": 1,
+      "message": "Before you make this more complicated, I am wondering if we could actually switch SharedFence to use std::shared_ptr instead of our own refcounting. I had this question before, when I was working on SHaredFence. At that time I chose to keep using RefCounted mainly because it is already good enough to fit our needs (that we do not specifically needs thread safety). Now looks like you actually have a need to make the refcounting thread safe, then why not just switch to std::shared_ptr? The reason that destroy needs mDevice is easy to solve by storing mDevice in the object. Thoughts?",
+      "revId": "25083b0106ed53b1ec5855386f9974519bac6a2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
