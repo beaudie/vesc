@@ -46,6 +46,30 @@
       },
       "revId": "e4aeb3fae5619833e24f3f2f55c09592f56e368b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5f7213c_62f061f6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 713,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-25T15:09:45Z",
+      "side": 1,
+      "message": "Ack, I can\u0027t say I\u0027m qualified to analyze this. Following well-established implementations is fine with me though.",
+      "parentUuid": "3e30ff24_1766ce1d",
+      "range": {
+        "startLine": 713,
+        "startChar": 36,
+        "endLine": 713,
+        "endChar": 56
+      },
+      "revId": "e4aeb3fae5619833e24f3f2f55c09592f56e368b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -34,6 +34,29 @@
       "parentUuid": "4463c618_ad57b41a",
       "revId": "25083b0106ed53b1ec5855386f9974519bac6a2b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b897c2de_038b67c3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-25T15:09:45Z",
+      "side": 1,
+      "message": "Could you please check with `std::shared_ptr` what it uses for `operator bool`?",
+      "range": {
+        "startLine": 724,
+        "startChar": 35,
+        "endLine": 724,
+        "endChar": 55
+      },
+      "revId": "25083b0106ed53b1ec5855386f9974519bac6a2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
