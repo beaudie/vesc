@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0860385_1057d0b5",
+        "filename": "gni/angle.gni",
+        "patchSetId": 20
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-04-25T18:00:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "710a2aa1_38148233",
+      "range": {
+        "startLine": 565,
+        "startChar": 8,
+        "endLine": 565,
+        "endChar": 20
+      },
+      "revId": "cbe46a79922d101a095bd659c754d09c72c03001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3e219312_9e0e7abd",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-04-25T13:50:11Z",
       "side": 1,
       "message": "These two seem to be used exactly once, could be inlined? Or is something missing?",
+      "range": {
+        "startLine": 508,
+        "startChar": 0,
+        "endLine": 510,
+        "endChar": 60
+      },
+      "revId": "cbe46a79922d101a095bd659c754d09c72c03001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6194077c_329b4601",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 20
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-04-25T18:00:10Z",
+      "side": 1,
+      "message": "Whoops, nope.  Cruft at this point.  Fixed.",
+      "parentUuid": "3e219312_9e0e7abd",
       "range": {
         "startLine": 508,
         "startChar": 0,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "444ef64e_814c239f",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 20
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-04-25T18:00:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50a39486_4dc1711d",
+      "range": {
+        "startLine": 517,
+        "startChar": 16,
+        "endLine": 517,
+        "endChar": 50
+      },
+      "revId": "cbe46a79922d101a095bd659c754d09c72c03001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5aa080b9_61050caa",
@@ -100,6 +172,30 @@
       "writtenOn": "2023-04-25T13:50:11Z",
       "side": 1,
       "message": "Could you clarify the comment regarding the intent behind setting this flag?",
+      "range": {
+        "startLine": 518,
+        "startChar": 6,
+        "endLine": 519,
+        "endChar": 39
+      },
+      "revId": "cbe46a79922d101a095bd659c754d09c72c03001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0e5f0ef_1a07e97b",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 20
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-04-25T18:00:10Z",
+      "side": 1,
+      "message": "I dropped it, it was more of an implementation detail.",
+      "parentUuid": "5aa080b9_61050caa",
       "range": {
         "startLine": 518,
         "startChar": 6,
@@ -135,6 +231,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6f9aff01_e04a2faa",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 20
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-04-25T18:00:10Z",
+      "side": 1,
+      "message": "`run-as` doesn\u0027t allow `mv`, only `cp` unfortunately.  I don\u0027t have the details in front of me as to why, it has just always been that way.\n\nThe current helpers are using `sdcard` for tmp, which probably makes sense for things that need to end up on sdcard.  In the app case, that\u0027s a different partition, so I\u0027d like to use /data/local/tmp.  I added the `yield` block, let me know if that looks correct.\n\nAlso, I went ahead and added a clean up step for tmp - no reason to keep it around after the copy.",
+      "parentUuid": "0c0eab18_73750f36",
+      "range": {
+        "startLine": 233,
+        "startChar": 4,
+        "endLine": 233,
+        "endChar": 19
+      },
+      "revId": "cbe46a79922d101a095bd659c754d09c72c03001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1044d9d9_23d836d9",
         "filename": "src/tests/py_utils/android_helper.py",
         "patchSetId": 20
@@ -146,6 +266,30 @@
       "writtenOn": "2023-04-25T13:50:11Z",
       "side": 1,
       "message": "How about binary-\u003elib (or \"library\" etc) throughout? Would be a bit more specific, easier to read",
+      "range": {
+        "startLine": 244,
+        "startChar": 34,
+        "endLine": 244,
+        "endChar": 45
+      },
+      "revId": "cbe46a79922d101a095bd659c754d09c72c03001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec1fbfcb_2060f6c0",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 20
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-04-25T18:00:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1044d9d9_23d836d9",
       "range": {
         "startLine": 244,
         "startChar": 34,
@@ -179,6 +323,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8358b002_3405cf5c",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 20
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-04-25T18:00:10Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "6e2ec6b7_7a31d615",
+      "range": {
+        "startLine": 245,
+        "startChar": 8,
+        "endLine": 245,
+        "endChar": 32
+      },
+      "revId": "cbe46a79922d101a095bd659c754d09c72c03001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f039d746_ea30b228",
@@ -192,6 +360,30 @@
       "writtenOn": "2023-04-25T13:50:11Z",
       "side": 1,
       "message": "optional: maybe `posixpath.join(device_tmp_path, binary_name)`, here and other places where paths are concatenated",
+      "range": {
+        "startLine": 247,
+        "startChar": 59,
+        "endLine": 247,
+        "endChar": 89
+      },
+      "revId": "cbe46a79922d101a095bd659c754d09c72c03001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e9dbfab_f441298e",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 20
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-04-25T18:00:10Z",
+      "side": 1,
+      "message": "I added it here, but I didn\u0027t add it everywhere we are building paths.  This is the one that is purely variables.",
+      "parentUuid": "f039d746_ea30b228",
       "range": {
         "startLine": 247,
         "startChar": 59,
@@ -225,6 +417,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "049f621c_705c37f0",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 20
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-04-25T18:00:10Z",
+      "side": 1,
+      "message": "I have to build the path first to check for its existence.",
+      "parentUuid": "016b06c1_f9c886b8",
+      "range": {
+        "startLine": 269,
+        "startChar": 8,
+        "endLine": 269,
+        "endChar": 85
+      },
+      "revId": "cbe46a79922d101a095bd659c754d09c72c03001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "adb677d9_8e2be54b",
@@ -238,6 +454,30 @@
       "writtenOn": "2023-04-25T13:50:11Z",
       "side": 1,
       "message": "`if x \u003d\u003d False` -\u003e `if not x`",
+      "range": {
+        "startLine": 270,
+        "startChar": 8,
+        "endLine": 270,
+        "endChar": 54
+      },
+      "revId": "cbe46a79922d101a095bd659c754d09c72c03001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85d07023_fa8ec02b",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 20
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-04-25T18:00:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "adb677d9_8e2be54b",
       "range": {
         "startLine": 270,
         "startChar": 8,
@@ -285,6 +525,30 @@
       "side": 1,
       "message": "Actually, we can just rephrase this so that it says something like \"files for N traces\" instead of \"N trace files\" and keep len(traces)",
       "parentUuid": "104e0942_cab7e8c9",
+      "range": {
+        "startLine": 283,
+        "startChar": 81,
+        "endLine": 283,
+        "endChar": 92
+      },
+      "revId": "cbe46a79922d101a095bd659c754d09c72c03001",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73999a0b_4714318e",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 20
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-04-25T18:00:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "084124a4_074abdba",
       "range": {
         "startLine": 283,
         "startChar": 81,
