@@ -180,6 +180,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1ac49f0d_7c3bf628",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3464,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-25T19:04:08Z",
+      "side": 1,
+      "message": "We only call flushAndSubmitOutsideRenderPassCommands if (mTotalBufferToImageCopySize \u003e\u003d kMaxBufferToImageCopySize),\nwhich means mOutsideRPCommands must not empty. So this should be assert instead of if check. The assertion is already added in submitCommands (line 3463) per your other suggestion. I think it should catch all the cases you mentioned?",
+      "parentUuid": "28845084_a7aafe9d",
+      "range": {
+        "startLine": 3464,
+        "startChar": 11,
+        "endLine": 3464,
+        "endChar": 62
+      },
+      "revId": "588e31f346bb69f51ab1863d952e5c056061b40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eb28988e_6eb71174",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 6
@@ -227,6 +251,24 @@
       "side": 1,
       "message": "Yes, it can be invalid. But `mLastSubmittedQueueSerial` must be also invalid. We can not have invalid flush but valid submit. In that case, `(mLastFlushedQueueSerial !\u003d mLastSubmittedQueueSerial)` will be false.\n\nWe get inside this branch only when something was flushed - this is written in the comment. And if something is flushed `mLastFlushedQueueSerial` must be valid.",
       "parentUuid": "c2a29813_fed4f98f",
+      "revId": "588e31f346bb69f51ab1863d952e5c056061b40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46a5bead_95c6aa9d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 7010,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-25T19:04:08Z",
+      "side": 1,
+      "message": "Agreed.",
+      "parentUuid": "ac790732_3f555667",
       "revId": "588e31f346bb69f51ab1863d952e5c056061b40f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
