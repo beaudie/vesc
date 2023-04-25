@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c41e3b95_6a5beb2d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3181,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-25T20:23:34Z",
+      "side": 1,
+      "message": "You can just init once instead of release/init every time here. Same thing with mBufferViews. Basically something like this:\n```\nif(!conversionBufferHelper-\u003evalid())\n{\n     ANGLE_TRY(conversionBufferHelper-\u003einit());\n     mBufferViews.getView();\n}\n\nif(conversion-\u003edirty())\n{\n     ANGLE_TRY(utilsVk.copyRgbToRgba());\n     conversion-\u003emDirty \u003d false;\n}\n```",
+      "range": {
+        "startLine": 3179,
+        "startChar": 12,
+        "endLine": 3181,
+        "endChar": 88
+      },
+      "revId": "6d9231b0939adeb34a9b8abf17cf3337295af467",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
