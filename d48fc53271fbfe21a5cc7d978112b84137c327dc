@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55862fa7_3279cc51",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-25T19:12:50Z",
+      "side": 1,
+      "message": "Charlie recommended to look into vertex conversion buffers and it seems we might be able to reuse that? There is already some `dirty` flag handling in these so maybe that would work here as well? It seems I\u0027m able to get a \"vertex conversion\" buffer but use it for texels here. I ended up resetting mBufferViews as in syncState where it is initialized we don\u0027t seem to have access to `isImage` which is what we need to set up the correct offset/size. `getVertexConversionBuffer` doesn\u0027t take `size` however so I suppose this won\u0027t work when we set up a range at the same offset but with a different size.",
+      "revId": "d48fc53271fbfe21a5cc7d978112b84137c327dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
