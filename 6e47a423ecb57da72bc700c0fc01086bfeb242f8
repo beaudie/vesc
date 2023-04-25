@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6a9c92d_18634164",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1883,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-25T15:20:29Z",
+      "side": 1,
+      "message": "Why not also use tail call in case of recreate?",
+      "revId": "6e47a423ecb57da72bc700c0fc01086bfeb242f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ce81fdb_bb797b52",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1897,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-25T15:20:29Z",
+      "side": 1,
+      "message": "Technically `mSwapchain` is not accessed, lambda uses a copy.\n\nShould be `mPresentFenceRecycler`.\nAlso it seems that we can avoid using `mPresentFenceRecycler` without the lock either. Just prepare fence before the call.\n\nIt is hard to follow, and possible easy to break, why it is safe to use `mPresentFenceRecycler` without the lock, since it is used in `WindowSurfaceVk::cleanUpPresentHistory()`, for example. Maybe add `ASSERT(!needsAcquireNextSwapchainImage()` into `cleanUpPresentHistory()`?\n\nAt the same time, I can\u0027t think about case when `prepareSwap()` may be called concurrently with ANI related methods.\nExcept maybe if `eglPrepareSwap()` is called directly (not as part of swap), and right after that surface made current to other surface and we use that surface.",
+      "revId": "6e47a423ecb57da72bc700c0fc01086bfeb242f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fa5560d_83682d7e",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1905,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-25T15:20:29Z",
+      "side": 1,
+      "message": "EGL/GLES call.",
+      "range": {
+        "startLine": 1905,
+        "startChar": 58,
+        "endLine": 1905,
+        "endChar": 62
+      },
+      "revId": "6e47a423ecb57da72bc700c0fc01086bfeb242f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65a7a42b_155d2d10",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2618,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-25T15:20:29Z",
+      "side": 1,
+      "message": "Name is confusing with `mNeedToAcquireNextSwapchainImage` member.\n\nSuggest renaming to `isCurrentSwapchainImageReady()`. You will also need to negate all conditions...",
+      "range": {
+        "startLine": 2618,
+        "startChar": 22,
+        "endLine": 2618,
+        "endChar": 52
+      },
+      "revId": "6e47a423ecb57da72bc700c0fc01086bfeb242f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
