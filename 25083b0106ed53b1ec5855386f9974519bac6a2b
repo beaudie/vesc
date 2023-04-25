@@ -75,6 +75,30 @@
       },
       "revId": "25083b0106ed53b1ec5855386f9974519bac6a2b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "153de7ab_e35ad709",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-25T15:58:25Z",
+      "side": 1,
+      "message": "It just checks the pointer for nullptr.\n`isReferenced()` used only for debugging, I wanted to add comment.\n\nHowever here is `use_count()`:\n```\nlong use_count() const _NOEXCEPT {return __cntrl_ ? __cntrl_-\u003euse_count() : 0;}\n\n    long use_count() const _NOEXCEPT {\n        return __libcpp_relaxed_load(\u0026__shared_owners_) + 1;\n    }\n    \ntemplate \u003cclass _ValueType\u003e\ninline _LIBCPP_INLINE_VISIBILITY\n_ValueType __libcpp_relaxed_load(_ValueType const* __value) {\n#if !defined(_LIBCPP_HAS_NO_THREADS) \u0026\u0026 \\\n    defined(__ATOMIC_RELAXED) \u0026\u0026        \\\n    (__has_builtin(__atomic_load_n) || defined(_LIBCPP_COMPILER_GCC))\n    return __atomic_load_n(__value, __ATOMIC_RELAXED);\n#else\n    return *__value;\n#endif\n}\n```\n\nIt uses **relaxed**. This is again because, reference counting is not for access synchronization. The only use is to check if it equals 1, I guess.\n\n```\nNotes\n\nCommon use cases include\n\n    comparison with ​0​. If use_count returns zero, the shared pointer is empty and\n    manages no objects (whether or not its stored pointer is nullptr).\n \n    comparison with 1. If use_count returns 1, there are no other owners.\n    The deprecated (since C++17) member function unique() is provided for this use\n    case. (until C++20) In multithreaded environment, this does not imply that the\n    object is safe to modify because accesses to the managed object by former\n    shared owners may not have completed, and because new shared owners may be\n    introduced concurrently, such as by std::weak_ptr::lock.\n```\n\n---\n\nI\u0027m confused. I need to abandon this and use `std::shared_ptr\u003c\u003e`?\nThis question was just for curiosity?",
+      "parentUuid": "b897c2de_038b67c3",
+      "range": {
+        "startLine": 724,
+        "startChar": 35,
+        "endLine": 724,
+        "endChar": 55
+      },
+      "revId": "25083b0106ed53b1ec5855386f9974519bac6a2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
