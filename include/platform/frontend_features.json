@@ -153,6 +153,14 @@
                 "Disables saving programs to the cache"
             ],
             "issue": "http://anglebug.com/1423136"
+        },
+        {
+            "name": "disable_multisample",
+            "category": "Workarounds",
+            "description": [
+                "disable multisample."
+            ],
+            "issue": "https://issuetracker.google.com/279185729"
         }
     ]
 }

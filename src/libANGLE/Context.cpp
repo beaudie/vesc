@@ -6632,6 +6632,10 @@ void Context::texStorage2DMultisample(TextureType target,
 {
     Extents size(width, height, 1);
     Texture *texture = getTextureByType(target);
+    if (getFrontendFeatures().disableMultisample.enabled)
+    {
+        samples = 0;
+    }
     ANGLE_CONTEXT_TRY(texture->setStorageMultisample(this, target, samples, internalformat, size,
                                                      ConvertToBool(fixedsamplelocations)));
 }
@@ -6646,6 +6650,10 @@ void Context::texStorage3DMultisample(TextureType target,
 {
     Extents size(width, height, depth);
     Texture *texture = getTextureByType(target);
+    if (getFrontendFeatures().disableMultisample.enabled)
+    {
+        samples = 0;
+    }
     ANGLE_CONTEXT_TRY(texture->setStorageMultisample(this, target, samples, internalformat, size,
                                                      ConvertToBool(fixedsamplelocations)));
 }
@@ -6736,6 +6744,10 @@ void Context::renderbufferStorageMultisampleImpl(GLenum target,
                                                  GLsizei height,
                                                  MultisamplingMode mode)
 {
+    if (getFrontendFeatures().disableMultisample.enabled)
+    {
+        samples = 0;
+    }
     // Hack for the special WebGL 1 "DEPTH_STENCIL" internal format.
     GLenum convertedInternalFormat = getConvertedRenderbufferFormat(internalformat);
 
