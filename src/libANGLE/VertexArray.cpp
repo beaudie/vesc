@@ -128,7 +128,7 @@ VertexArray::VertexArray(rx::GLImplFactory *factory,
 void VertexArray::onDestroy(const Context *context)
 {
     bool isBound = context->isCurrentVertexArray(this);
-    for (uint32_t bindingIndex = 0; bindingIndex < mState.mVertexBindings.size(); ++bindingIndex)
+    for (size_t bindingIndex : mState.mArrayBufferBindingBitMask)
     {
         VertexBinding &binding = mState.mVertexBindings[bindingIndex];
         Buffer *buffer         = binding.getBuffer().get();
@@ -142,10 +142,12 @@ void VertexArray::onDestroy(const Context *context)
         if (buffer)
         {
             // Note: the non-contents observer is unbound in the ObserverBinding destructor.
-            buffer->removeContentsObserver(this, bindingIndex);
+            buffer->removeContentsObserver(this, static_cast<uint32_t>(bindingIndex));
         }
         binding.setBuffer(context, nullptr);
     }
+    mState.mArrayBufferBindingBitMask.reset();
+
     if (mState.mElementArrayBuffer.get())
     {
         if (isBound)
@@ -194,7 +196,7 @@ bool VertexArray::detachBuffer(const Context *context, BufferID bufferID)
 {
     bool isBound           = context->isCurrentVertexArray(this);
     bool anyBufferDetached = false;
-    for (uint32_t bindingIndex = 0; bindingIndex < mState.mVertexBindings.size(); ++bindingIndex)
+    for (size_t bindingIndex : mState.mArrayBufferBindingBitMask)
     {
         VertexBinding &binding                      = mState.mVertexBindings[bindingIndex];
         const BindingPointer<Buffer> &bufferBinding = binding.getBuffer();
@@ -205,9 +207,10 @@ bool VertexArray::detachBuffer(const Context *context, BufferID bufferID)
                 if (bufferBinding.get())
                     bufferBinding->onNonTFBindingChanged(-1);
             }
-            bufferBinding->removeContentsObserver(this, bindingIndex);
+            bufferBinding->removeContentsObserver(this, static_cast<uint32_t>(bindingIndex));
             binding.setBuffer(context, nullptr);
             mArrayBufferObserverBindings[bindingIndex].reset();
+            mState.mArrayBufferBindingBitMask.reset(bindingIndex);
 
             if (context->getClientVersion() >= ES_3_1)
             {
@@ -381,6 +384,7 @@ bool VertexArray::bindVertexBufferImpl(const Context *context,
     binding->setOffset(offset);
     binding->setStride(stride);
     updateCachedBufferBindingSize(binding);
+    mState.mArrayBufferBindingBitMask.set(bindingIndex);
 
     // Update client memory attribute pointers. Affects all bound attributes.
     if (boundBuffer)
@@ -709,8 +713,7 @@ void VertexArray::onUnbind(const Context *context)
     // This vertex array becoming non-current. For performance reason, if there are too many
     // observers in the buffer, we remove it from the buffers' observer list so that the cost of
     // buffer sending signal to observers will be too expensive.
-    for (uint32_t bindingIndex = 0; bindingIndex < mArrayBufferObserverBindings.size();
-         ++bindingIndex)
+    for (size_t bindingIndex : mState.mArrayBufferBindingBitMask)
     {
         const gl::VertexBinding &binding = mState.getVertexBindings()[bindingIndex];
         gl::Buffer *bufferGL             = binding.getBuffer().get();
@@ -742,10 +745,12 @@ void VertexArray::onBindingChanged(const Context *context, int incr)
     if (context->isWebGL())
     {
         if (mState.mElementArrayBuffer.get())
-            mState.mElementArrayBuffer->onNonTFBindingChanged(incr);
-        for (auto &binding : mState.mVertexBindings)
         {
-            binding.onContainerBindingChanged(context, incr);
+            mState.mElementArrayBuffer->onNonTFBindingChanged(incr);
+        }
+        for (size_t bindingIndex : mState.mArrayBufferBindingBitMask)
+        {
+            mState.mVertexBindings[bindingIndex].onContainerBindingChanged(context, incr);
         }
     }
 }

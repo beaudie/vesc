@@ -94,6 +94,10 @@ class VertexArrayState final : angle::NonCopyable
     ComponentTypeMask mVertexAttributesTypeMask;
     AttributesMask mLastSyncedEnabledAttributesMask;
 
+    // Track which binding index has a buffer bound
+    using ArrayBufferBindingBits = angle::BitSet<gl::MAX_VERTEX_ATTRIB_BINDINGS>;
+    ArrayBufferBindingBits mArrayBufferBindingBitMask;
+
     // This is a performance optimization for buffer binding. Allows element array buffer updates.
     friend class State;
 
