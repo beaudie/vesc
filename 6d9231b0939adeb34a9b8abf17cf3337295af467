@@ -3,6 +3,80 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "169a1988_12f51333",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3152,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-26T18:05:14Z",
+      "side": 1,
+      "message": "nit: in the end, don\u0027t forget to support all three RGB32 formats.\n\nAlso, would be nice to refactor this into a helper.",
+      "revId": "6d9231b0939adeb34a9b8abf17cf3337295af467",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d523e70_dcc8cbaf",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3156,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-26T18:05:14Z",
+      "side": 1,
+      "message": "Per the other comment, need to derive `size` from `bufferVk` instead of the binding. The vertex conversion buffer cache doesn\u0027t track size and assumes the entire buffer is converted.",
+      "revId": "6d9231b0939adeb34a9b8abf17cf3337295af467",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2ac1c02_b751a7aa",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3163,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-26T18:05:14Z",
+      "side": 1,
+      "message": "Stride should be 16",
+      "range": {
+        "startLine": 3163,
+        "startChar": 55,
+        "endLine": 3163,
+        "endChar": 56
+      },
+      "revId": "6d9231b0939adeb34a9b8abf17cf3337295af467",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a1dfe29_53f64819",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3177,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-26T18:05:14Z",
+      "side": 1,
+      "message": "Could this be simplified to something like `conversionBufferHelper-\u003eallocateForVertexConversion` so the usual buffer allocation mechanism takes care of it?",
+      "revId": "6d9231b0939adeb34a9b8abf17cf3337295af467",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c41e3b95_6a5beb2d",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 3
@@ -19,6 +93,103 @@
         "startChar": 12,
         "endLine": 3181,
         "endChar": 88
+      },
+      "revId": "6d9231b0939adeb34a9b8abf17cf3337295af467",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1389d415_9175312a",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3335,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-26T18:05:14Z",
+      "side": 1,
+      "message": "`onBufferComputeShaderRead`",
+      "revId": "6d9231b0939adeb34a9b8abf17cf3337295af467",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f4f0432_83c1388c",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3336,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-26T18:05:14Z",
+      "side": 1,
+      "message": "nit: clean up",
+      "revId": "6d9231b0939adeb34a9b8abf17cf3337295af467",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8e530ed_216fa1e5",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3342,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-26T18:05:14Z",
+      "side": 1,
+      "message": "nit: to be generalized",
+      "revId": "6d9231b0939adeb34a9b8abf17cf3337295af467",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7d692de_aa54340a",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3375,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-26T18:05:14Z",
+      "side": 1,
+      "message": "No barrier needed, the above `CommandBufferAccess` takes care of it.",
+      "range": {
+        "startLine": 3369,
+        "startChar": 0,
+        "endLine": 3375,
+        "endChar": 87
+      },
+      "revId": "6d9231b0939adeb34a9b8abf17cf3337295af467",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28e37ca5_3bd84ae4",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3394,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-26T18:05:14Z",
+      "side": 1,
+      "message": "The reason I asked for a barrier here is that we are circumventing the automatic-barrier management by switching the buffer view and not the buffer itself.\n\nSee `ContextVk::handleDirtyTexturesImpl`, and how it\u0027s calling `OnTextureBufferRead`, which in turn calls `commandBufferHelper-\u003ebufferRead`; that\u0027s the one setting up the barrier. So the source buffer is being managed correctly, the destination buffer is being written to in compute out of the blue and used with no knowledge of it elsewhere.\n\nSo you\u0027d want a memory barrier here from `STAGE_COMPUTE/ACCESS_SHADER_WRITE` to `STAGE_ALL_GRAPHICS/ACCESS_SHADER_READ`.\n\n---\n\nIf one day we care, we could make ContextVk aware of the conversion buffer so that it would do the conversion itself (in ContextVk::handleDirtyTexturesImpl), then mark the conversion buffer as used in the command buffer, and then all barrier tracking becomes automatic. But then we\u0027d need to make sure it\u0027s the same conversion buffer we use to get the view later.",
+      "range": {
+        "startLine": 3383,
+        "startChar": 0,
+        "endLine": 3394,
+        "endChar": 91
       },
       "revId": "6d9231b0939adeb34a9b8abf17cf3337295af467",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"

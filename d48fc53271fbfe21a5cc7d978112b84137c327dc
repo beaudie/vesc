@@ -34,6 +34,24 @@
       "parentUuid": "55862fa7_3279cc51",
       "revId": "d48fc53271fbfe21a5cc7d978112b84137c327dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9793f4e0_b11889b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-26T18:05:14Z",
+      "side": 1,
+      "message": "Piggy-backing on vertex-conversion buffers was my first idea too, but I figured it could get tricky with notifications and VertexArray involved. If it doesn\u0027t, then even better!\n\nI didn\u0027t understand the second comment though, it crashes but that\u0027s a relief?! I think the reason the conversion buffer cache doesn\u0027t take size into account is because we always convert the entire buffer, even if it only partially contains vertex data. Until we improve that, we should do the same here: use the buffer size instead of the binding size.",
+      "parentUuid": "d2efb3be_6bfaaf45",
+      "revId": "d48fc53271fbfe21a5cc7d978112b84137c327dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
