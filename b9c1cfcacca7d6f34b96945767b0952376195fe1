@@ -22,6 +22,30 @@
       },
       "revId": "b9c1cfcacca7d6f34b96945767b0952376195fe1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8628c053_570a0aef",
+        "filename": "src/libANGLE/renderer/metal/shaders/gen_mtl_internal_shaders.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-04-26T20:39:23Z",
+      "side": 1,
+      "message": "Thanks. I updated the 2.1 shaders. AFAIK the min_os_version just affects the format of the air, not necessarily the code generated.",
+      "parentUuid": "fa7bd202_3cc3e3a0",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 2
+      },
+      "revId": "b9c1cfcacca7d6f34b96945767b0952376195fe1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
