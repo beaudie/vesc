@@ -202,6 +202,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7da66e1_b21788f3",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 3464,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-26T11:20:51Z",
+      "side": 1,
+      "message": "\u003e We only call flushAndSubmitOutsideRenderPassCommands if (mTotalBufferToImageCopySize \u003e\u003d kMaxBufferToImageCopySize),\n\nYes, this is why I wrote: \"Should not happen in practice, but...\".\n\n\u003e I think it should catch all the cases you mentioned?\n\nYes, I also wrote that: \"line 7064 will not be executed and we hit the added ASSERT().\".\n\nI was suggesting modifying `flushAndSubmitOutsideRenderPassCommands()` so that it is safe to call even if nothing was flushed. I do not know, may be in the future changes. The logic is that it should be safe to flush no matter what, without some hidden constrains.\n\nHowever, I leave this for you to decide).",
+      "parentUuid": "1ac49f0d_7c3bf628",
+      "range": {
+        "startLine": 3464,
+        "startChar": 11,
+        "endLine": 3464,
+        "endChar": 62
+      },
+      "revId": "588e31f346bb69f51ab1863d952e5c056061b40f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb28988e_6eb71174",
