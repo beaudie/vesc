@@ -412,10 +412,11 @@ void AssociateFenceWithPresentHistory(uint32_t imageIndex,
     }
 
     // If no previous presentation with this index, add an empty entry just so the fence can be
-    // cleaned up.
-    presentHistory->emplace_back();
-    presentHistory->back().fence      = std::move(presentFence);
-    presentHistory->back().imageIndex = imageIndex;
+    // cleaned up. Adding to the front, as if present with this image was already done. This will
+    // allow cleanup this item sooner.
+    presentHistory->emplace_front();
+    presentHistory->front().fence      = std::move(presentFence);
+    presentHistory->front().imageIndex = imageIndex;
 }
 
 bool HasAnyOldSwapchains(const std::deque<impl::ImagePresentOperation> &presentHistory)
@@ -874,6 +875,7 @@ WindowSurfaceVk::WindowSurfaceVk(const egl::SurfaceState &surfaceState, EGLNativ
       mEmulatedPreTransform(VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR),
       mCompositeAlpha(VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR),
       mCurrentSwapchainImageIndex(0),
+      mSharedPresentModeVirtualImageIndex(0),
       mDepthStencilImageBinding(this, kAnySurfaceImageSubjectIndex),
       mColorImageMSBinding(this, kAnySurfaceImageSubjectIndex),
       mNeedToAcquireNextSwapchainImage(false),
@@ -1960,6 +1962,10 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::present");
     RendererVk *renderer = contextVk->getRenderer();
 
+    // Clean up whatever present is already finished. Do this before allocating new semaphore/fence
+    // to reduce number of allocations.
+    ANGLE_TRY(cleanUpPresentHistory(contextVk));
+
     // Get a new semaphore to use for present.
     vk::Semaphore presentSemaphore;
     ANGLE_TRY(NewSemaphore(contextVk, &mPresentSemaphoreRecycler, &presentSemaphore));
@@ -2055,16 +2061,21 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         mPresentHistory.back().imageIndex = kInvalidImageIndex;
         mPresentHistory.back().fence      = std::move(presentFence);
     }
-    else
+    else if (!isSharedPresentMode())
     {
         // The fence needed to know when the semaphore can be recycled will be one that is passed to
         // vkAcquireNextImageKHR that returns the same image index.  That is why the image index
         // needs to be tracked in this case.
         mPresentHistory.back().imageIndex = mCurrentSwapchainImageIndex;
     }
-
-    // Clean up whatever present is already finished.
-    ANGLE_TRY(cleanUpPresentHistory(contextVk));
+    else
+    {
+        // In Shared Present Mode, mCurrentSwapchainImageIndex is always 0 and fence is always
+        // signaled right after vkAcquireNextImageKHR call. In other words, if call
+        // cleanUpPresentHistory right after the ANI call it will clean entire history. Using
+        // virtual image index instead. See kSharedPresentModeVirtualImageCount for more details.
+        mPresentHistory.back().imageIndex = mSharedPresentModeVirtualImageIndex;
+    }
 
     ANGLE_TRY(
         computePresentOutOfDate(contextVk, mSwapchainStatus.lastPresentResult, presentOutOfDate));
@@ -2132,7 +2143,8 @@ angle::Result WindowSurfaceVk::cleanUpPresentHistory(vk::Context *context)
     // never acquired in the future.  In that case, there's no fence associated with that present
     // operation.  Move the offending entry to last, so the resources associated with the rest of
     // the present operations can be duly freed.
-    if (mPresentHistory.size() > mSwapchainImages.size() * 2 &&
+    if (mPresentHistory.size() >
+            std::max<size_t>(mSwapchainImages.size() * 2, kSharedPresentModeVirtualImageCount) &&
         !mPresentHistory.front().fence.valid())
     {
         impl::ImagePresentOperation presentOperation = std::move(mPresentHistory.front());
@@ -2343,8 +2355,14 @@ VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
     // Associate the present fence with the last present operation.
     if (presentFenceInferredFromAcquire)
     {
-        AssociateFenceWithPresentHistory(mCurrentSwapchainImageIndex, std::move(presentFence),
-                                         &mPresentHistory);
+        uint32_t imageIndex = mCurrentSwapchainImageIndex;
+        if (isSharedPresentMode())
+        {
+            mSharedPresentModeVirtualImageIndex =
+                (mSharedPresentModeVirtualImageIndex + 1) % kSharedPresentModeVirtualImageCount;
+            imageIndex = mSharedPresentModeVirtualImageIndex;
+        }
+        AssociateFenceWithPresentHistory(imageIndex, std::move(presentFence), &mPresentHistory);
     }
 
     SwapchainImage &image = mSwapchainImages[mCurrentSwapchainImageIndex];
