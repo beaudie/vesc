@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa7bd202_3cc3e3a0",
+        "filename": "src/libANGLE/renderer/metal/shaders/gen_mtl_internal_shaders.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-04-26T20:22:01Z",
+      "side": 1,
+      "message": "Please check if these configs are correct.\n- Metal 2.0 is supported on macOS 10.13+ / iOS 11.0+\n- Metal 2.1 is supported on macOS 10.14+ / iOS 12.0+",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 2
+      },
+      "revId": "b9c1cfcacca7d6f34b96945767b0952376195fe1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
