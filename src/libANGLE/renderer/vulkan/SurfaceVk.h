@@ -180,6 +180,8 @@ struct ImagePresentOperation : angle::NonCopyable
     // always associated with the present operation.
     // If there is no fence, invalid imageIndex indicates discared item (used in SharedPresentMode).
     uint32_t imageIndex;
+
+    QueueSerial swapSerial;
 };
 
 // Swapchain images and their associated objects.

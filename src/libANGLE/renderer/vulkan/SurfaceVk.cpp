@@ -433,6 +433,9 @@ void AssociateFenceWithPresentHistory(uint32_t imageIndex,
     presentHistory->emplace_front();
     presentHistory->front().fence      = std::move(presentFence);
     presentHistory->front().imageIndex = imageIndex;
+
+    WARN() << "INAZ: presentHistory->front().imageIndex: " << presentHistory->front().imageIndex;
+    WARN() << "INAZ: presentHistory->size(): " << presentHistory->size();
 }
 
 bool HasAnyOldSwapchains(const std::deque<impl::ImagePresentOperation> &presentHistory)
@@ -841,7 +844,8 @@ ImagePresentOperation::ImagePresentOperation(ImagePresentOperation &&other)
     : fence(std::move(other.fence)),
       semaphore(std::move(other.semaphore)),
       oldSwapchains(std::move(other.oldSwapchains)),
-      imageIndex(other.imageIndex)
+      imageIndex(other.imageIndex),
+      swapSerial(other.swapSerial)
 {}
 
 ImagePresentOperation &ImagePresentOperation::operator=(ImagePresentOperation &&other)
@@ -850,6 +854,7 @@ ImagePresentOperation &ImagePresentOperation::operator=(ImagePresentOperation &&
     std::swap(semaphore, other.semaphore);
     std::swap(oldSwapchains, other.oldSwapchains);
     std::swap(imageIndex, other.imageIndex);
+    std::swap(swapSerial, other.swapSerial);
     return *this;
 }
 
@@ -2021,9 +2026,12 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     ANGLE_TRACE_EVENT0("gpu.angle", "WindowSurfaceVk::present");
     RendererVk *renderer = contextVk->getRenderer();
 
+    WARN() << "INAZ: mPresentHistory.size(): " << mPresentHistory.size();
     // Clean up whatever present is already finished. Do this before allocating new semaphore/fence
     // to reduce number of allocations.
     ANGLE_TRY(cleanUpPresentHistory(contextVk));
+    WARN() << "INAZ: mPresentHistory.size(): " << mPresentHistory.size();
+    WARN() << "INAZ: ====";
 
     // Get a new semaphore to use for present.
     vk::Semaphore presentSemaphore;
@@ -2141,6 +2149,12 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
 
     // Now update swapSerial With last submitted queue serial and apply CPU throttle if needed
     QueueSerial swapSerial = contextVk->getLastSubmittedQueueSerial();
+
+    mPresentHistory.back().swapSerial = swapSerial;
+    WARN() << "INAZ: mPresentHistory.back().swapSerial(" << swapSerial.getIndex() << ":"
+           << swapSerial.getSerial().getValue() << ")"
+           << "; mPresentHistory.back().imageIndex: " << mPresentHistory.back().imageIndex;
+
     ANGLE_TRY(throttleCPU(contextVk, swapSerial));
 
     contextVk->resetPerFramePerfCounters();
@@ -2173,6 +2187,15 @@ angle::Result WindowSurfaceVk::cleanUpPresentHistory(vk::Context *context)
     RendererVk *renderer  = context->getRenderer();
     const VkDevice device = renderer->getDevice();
 
+    for (impl::ImagePresentOperation &presentOperation : mPresentHistory)
+    {
+        WARN() << "INAZ: presentOperation.swapSerial: " << presentOperation.swapSerial.getIndex()
+               << ":" << presentOperation.swapSerial.getSerial().getValue()
+               << "; imageIndex: " << presentOperation.imageIndex
+               << "; fence.valid(): " << presentOperation.fence.valid()
+               << "; oldSwapchains.empty(): " << presentOperation.oldSwapchains.empty();
+    }
+
     while (!mPresentHistory.empty())
     {
         impl::ImagePresentOperation &presentOperation = mPresentHistory.front();
@@ -2195,6 +2218,14 @@ angle::Result WindowSurfaceVk::cleanUpPresentHistory(vk::Context *context)
         {
             // ... it can't be cleaned up yet.
             break;
+        }
+
+        if (presentOperation.swapSerial.valid())
+        {
+            ASSERT(context->getRenderer() != nullptr);
+            ANGLE_TRY(context->getRenderer()->checkCompletedCommands(context));
+            WARN() << "INAZ: hasQueueSerialFinished(): "
+                   << context->getRenderer()->hasQueueSerialFinished(presentOperation.swapSerial);
         }
 
         presentOperation.destroy(renderer, &mPresentFenceRecycler, &mPresentSemaphoreRecycler);
