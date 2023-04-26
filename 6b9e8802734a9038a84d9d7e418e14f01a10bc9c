@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8904d2f5_ff7eeedc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-04-26T02:13:48Z",
+      "side": 1,
+      "message": "Just a comment update, but please note the new way to set up for the script.",
+      "revId": "6b9e8802734a9038a84d9d7e418e14f01a10bc9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
