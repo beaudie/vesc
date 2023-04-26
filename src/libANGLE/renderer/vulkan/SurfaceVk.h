@@ -430,6 +430,27 @@ class WindowSurfaceVk : public SurfaceVk
     std::vector<angle::ObserverBinding> mSwapchainImageBindings;
     uint32_t mCurrentSwapchainImageIndex;
 
+    // In Shared Present Mode, mCurrentSwapchainImageIndex can't be used to manage mPresentHistory.
+    // Current logic assumes that PE will only signal image's ANI fence after waiting on previous
+    // present semaphore with this image. In reality, PE returns same image index and fence that is
+    // always signaled. Additionally, ANI call is not required at all.
+    //
+    // Therefore, need alternative mechanism to tell when Presentation Engine done waiting on
+    // present fence. Turns out, there is no 100% safe way to tell when PE done waiting on present
+    // semaphore. The least we can do, is NOT reuse semaphore that may still be inflight, based on
+    // the CPU throttling logic.
+    //
+    // Similarly to AcquireImageSemaphores, we need at least "impl::kSwapHistorySize + 1" present
+    // semaphores, to guarantee that we are not reuse semaphore that may still be inflight. Because
+    // PE may still wait on semaphore, even after we waited on the corresponding fence, this
+    // solution has additional "buffer" item, resulting in total "impl::kSwapHistorySize + 2" items.
+    // Actual PE implementation on Android waits (blocking) previous present semaphore when
+    // presenting current frame, so even 2 items should be enough. To avoid implementing separate
+    // present history structures, this solution reuses existing mPresentHistory logic, but
+    // generates "VirtualImageIndex" for each SharedPresentMode present.
+    static constexpr uint32_t kSharedPresentModeVirtualImageCount = impl::kSwapHistorySize + 2;
+    uint32_t mSharedPresentModeVirtualImageIndex;
+
     // Given that the CPU is throttled after a number of swaps, there is an upper bound to the
     // number of semaphores that are used to acquire swapchain images, and that is
     // kSwapHistorySize+1:
