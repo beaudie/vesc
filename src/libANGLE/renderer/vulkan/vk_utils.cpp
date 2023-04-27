@@ -466,7 +466,7 @@ angle::Result MemoryProperties::findCompatibleMemoryIndex(
     }
 
     // We did not find a compatible memory type. When importing external memory, there may be
-    // additional restrictions on memoryType. Fallback to requesting device local memory.
+    // additional restrictions on memoryType.
     if (isExternalMemory)
     {
         // The Vulkan spec says the following -
@@ -474,6 +474,16 @@ angle::Result MemoryProperties::findCompatibleMemoryIndex(
         //     bit set in its propertyFlags
         if (FindCompatibleMemory(mMemoryProperties, memoryRequirements,
                                  VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, memoryPropertyFlagsOut,
+                                 typeIndexOut))
+        {
+            return angle::Result::Continue;
+        }
+
+        // We are here if device-local is requested but not available for special external memory
+        // requirements. So we fallback to pick the first available mem type instead. e.g. AHB
+        // allocated with CPU R/W often usage bits is only importable for non-device-local heap on
+        // some AMD systems
+        if (FindCompatibleMemory(mMemoryProperties, memoryRequirements, 0, memoryPropertyFlagsOut,
                                  typeIndexOut))
         {
             return angle::Result::Continue;
