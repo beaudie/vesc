@@ -685,9 +685,6 @@ void VertexArray::onBind(const Context *context)
         bufferGL->addObserver(&mArrayBufferObserverBindings[bindingIndex]);
         updateCachedMappedArrayBuffersBinding(mState.mVertexBindings[bindingIndex]);
 
-        // Assume both data and internal storage has been dirtied.
-        mDirtyBits.set(DIRTY_BIT_BINDING_0 + bindingIndex);
-
         if (mBufferAccessValidationEnabled)
         {
             for (size_t boundAttribute :
@@ -703,7 +700,12 @@ void VertexArray::onBind(const Context *context)
             updateCachedTransformFeedbackBindingValidation(bindingIndex, bufferGL);
         }
     }
-    mDirtyObserverBindingBits.reset();
+
+    if (mDirtyObserverBindingBits.any())
+    {
+        mDirtyBits.set(DIRTY_BIT_MISSED_OBSERVE);
+        mDirtyObserverBindingBits.reset();
+    }
 
     onStateChange(angle::SubjectMessage::ContentsChanged);
 }
