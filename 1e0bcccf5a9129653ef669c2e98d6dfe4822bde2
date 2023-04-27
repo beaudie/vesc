@@ -39,6 +39,30 @@
       },
       "revId": "1e0bcccf5a9129653ef669c2e98d6dfe4822bde2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1dd39fd6_9485c36f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 3471,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-27T18:14:25Z",
+      "side": 1,
+      "message": "Added helper function: QueueSerialsHaveDifferentIndexOrSmaller()\nThis assertion actually is redundant with the one at 3465. So this one is removed now.",
+      "parentUuid": "65399b55_8b36c468",
+      "range": {
+        "startLine": 3471,
+        "startChar": 11,
+        "endLine": 3471,
+        "endChar": 62
+      },
+      "revId": "1e0bcccf5a9129653ef669c2e98d6dfe4822bde2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
