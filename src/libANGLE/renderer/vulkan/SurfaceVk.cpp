@@ -777,24 +777,47 @@ void SwapchainCleanupData::destroy(VkDevice device,
                                    vk::Recycler<vk::Fence> *fenceRecycler,
                                    vk::Recycler<vk::Semaphore> *semaphoreRecycler)
 {
+    fprintf(stderr, "BEGIN; %s: %d\n", __FUNCTION__, __LINE__);
+
+    // Check status before Swapchain destruction (Intel Driver bug).
+    for (vk::Fence &fence : fences)
+    {
+        fprintf(stderr, "fence.getStatus()... %s: %d\n", __FUNCTION__, __LINE__);
+        ASSERT(fence.getStatus(device) == VK_SUCCESS);
+    }
+
     if (swapchain)
     {
+        fprintf(stderr, "vkDestroySwapchainKHR()... %s: %d\n", __FUNCTION__, __LINE__);
         vkDestroySwapchainKHR(device, swapchain, nullptr);
         swapchain = VK_NULL_HANDLE;
     }
 
+    fprintf(stderr, "for (vk::Fence &fence : fences)... %s: %d\n", __FUNCTION__, __LINE__);
+
     for (vk::Fence &fence : fences)
     {
+        fprintf(stderr, "fence.getStatus()... %s: %d\n", __FUNCTION__, __LINE__);
         ASSERT(fence.getStatus(device) == VK_SUCCESS);
+        fprintf(stderr, "%s: %d\n", __FUNCTION__, __LINE__);
         fenceRecycler->recycle(std::move(fence));
     }
     fences.clear();
 
+    fprintf(stderr, "for (vk::Semaphore &semaphore : semaphores)... %s: %d\n", __FUNCTION__,
+            __LINE__);
+
+    // Destroy fences after the Swapchain...
+    // fenceRecycler->destroy(device);
+
     for (vk::Semaphore &semaphore : semaphores)
     {
+        fprintf(stderr, "%s: %d\n", __FUNCTION__, __LINE__);
         semaphoreRecycler->recycle(std::move(semaphore));
     }
     semaphores.clear();
+
+    fprintf(stderr, "END; %s: %d\n", __FUNCTION__, __LINE__);
 }
 
 ImagePresentOperation::ImagePresentOperation() : imageIndex(kInvalidImageIndex) {}
