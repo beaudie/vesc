@@ -51,6 +51,121 @@
       "parentUuid": "997e9477_eeeda123",
       "revId": "23cbd3dcdf8b4cc4e87b4523e98ebdb9617bf06f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "812bbd6a_405ab5db",
+        "filename": "src/libANGLE/renderer/metal/shaders/gen_mtl_internal_shaders.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-04-27T20:13:19Z",
+      "side": 1,
+      "message": "nit: \"_autogen\" suffix?",
+      "range": {
+        "startLine": 23,
+        "startChar": 15,
+        "endLine": 23,
+        "endChar": 45
+      },
+      "revId": "23cbd3dcdf8b4cc4e87b4523e98ebdb9617bf06f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0ae0cac_e229dff5",
+        "filename": "src/libANGLE/renderer/metal/shaders/gen_mtl_internal_shaders.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-04-27T20:13:19Z",
+      "side": 1,
+      "message": "I think this variable is not used.",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 37
+      },
+      "revId": "23cbd3dcdf8b4cc4e87b4523e98ebdb9617bf06f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55f534af_ae140604",
+        "filename": "src/libANGLE/renderer/metal/shaders/gen_mtl_internal_shaders.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-04-27T20:13:19Z",
+      "side": 1,
+      "message": "ditto.",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 35
+      },
+      "revId": "23cbd3dcdf8b4cc4e87b4523e98ebdb9617bf06f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32d1dfe0_375d2741",
+        "filename": "src/libANGLE/renderer/metal/shaders/gen_mtl_internal_shaders.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-04-27T20:13:19Z",
+      "side": 1,
+      "message": "for ios I think you need to use `iphoneos` sdk.",
+      "range": {
+        "startLine": 104,
+        "startChar": 26,
+        "endLine": 104,
+        "endChar": 32
+      },
+      "revId": "23cbd3dcdf8b4cc4e87b4523e98ebdb9617bf06f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59696387_f6f9d650",
+        "filename": "src/libANGLE/renderer/metal/shaders/gen_mtl_internal_shaders.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-04-27T20:13:19Z",
+      "side": 1,
+      "message": "Similarly, for ios I think we need to use `-mios-version-min`.",
+      "range": {
+        "startLine": 105,
+        "startChar": 10,
+        "endLine": 105,
+        "endChar": 29
+      },
+      "revId": "23cbd3dcdf8b4cc4e87b4523e98ebdb9617bf06f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
