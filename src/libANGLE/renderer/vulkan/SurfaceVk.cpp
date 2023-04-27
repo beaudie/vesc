@@ -777,6 +777,12 @@ void SwapchainCleanupData::destroy(VkDevice device,
                                    vk::Recycler<vk::Fence> *fenceRecycler,
                                    vk::Recycler<vk::Semaphore> *semaphoreRecycler)
 {
+    // Check status before Swapchain destruction (Intel Driver bug).
+    for (vk::Fence &fence : fences)
+    {
+        ASSERT(fence.getStatus(device) == VK_SUCCESS);
+    }
+
     if (swapchain)
     {
         vkDestroySwapchainKHR(device, swapchain, nullptr);
@@ -785,7 +791,9 @@ void SwapchainCleanupData::destroy(VkDevice device,
 
     for (vk::Fence &fence : fences)
     {
-        ASSERT(fence.getStatus(device) == VK_SUCCESS);
+        // Check that reset fixes the Fence crashing in the getStatus()...
+        ASSERT(fence.reset(device) == VK_SUCCESS);
+        ASSERT(fence.getStatus(device) == VK_NOT_READY);
         fenceRecycler->recycle(std::move(fence));
     }
     fences.clear();
