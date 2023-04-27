@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0295fe95_49cefe4d",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2640,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-04-27T18:43:10Z",
+      "side": 1,
+      "message": "If we\u0027re intentionally leaking the global, let\u0027s just remove the Set function and lazily initialize gUnlockedTailCall in GetCurrentThreadUnlockedTailCall. Also saves the allocation if we\u0027re on non-Vulkan/Android backends.",
+      "range": {
+        "startLine": 2637,
+        "startChar": 0,
+        "endLine": 2640,
+        "endChar": 1
+      },
+      "revId": "18c6388db19ed5908433692fe9557a69cd40a80e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ae4c4b9_ef78c1ff",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2642,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-04-27T18:43:10Z",
+      "side": 1,
+      "message": "Gross. We should factor this logic into the tls code at some point. It\u0027s now being duplicated multiple times.\n\nFine for now.",
+      "range": {
+        "startLine": 2605,
+        "startChar": 1,
+        "endLine": 2642,
+        "endChar": 0
+      },
+      "revId": "18c6388db19ed5908433692fe9557a69cd40a80e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
