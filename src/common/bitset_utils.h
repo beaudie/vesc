@@ -513,6 +513,7 @@ class BitSetArray final
     using param_type = BaseBitSet::param_type;
 
     constexpr BitSetArray();
+    constexpr explicit BitSetArray(uint64_t value);
     constexpr explicit BitSetArray(std::initializer_list<param_type> init);
 
     constexpr BitSetArray(const BitSetArray<N> &other);
@@ -713,6 +714,22 @@ constexpr BitSetArray<N>::BitSetArray()
 {
     static_assert(N > priv::kDefaultBitSetSize, "BitSetArray type can't support requested size.");
     reset();
+}
+
+template <std::size_t N>
+constexpr BitSetArray<N>::BitSetArray(uint64_t value)
+{
+    reset();
+
+    for (param_type i = 0; i < std::min<param_type>(N, sizeof(value)); ++i)
+    {
+        if (value & (0x1 << i))
+        {
+            size_t index  = i >> kShiftForDivision;
+            size_t offset = i & kDefaultBitSetSizeMinusOne;
+            mBaseBitSetArray[index].set(offset, true);
+        }
+    }
 }
 
 template <std::size_t N>
