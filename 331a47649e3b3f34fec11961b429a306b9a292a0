@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "84cd1c13_6add00f4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-27T23:20:21Z",
+      "side": 1,
+      "message": "Drive-by: Please prefix the title with `metal: ` to make it obvious to which developers it may be relevant.",
+      "revId": "331a47649e3b3f34fec11961b429a306b9a292a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "7073344f_728e5057",
