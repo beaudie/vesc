@@ -33,6 +33,24 @@
       "message": "LGTM. Maybe we can consider only supporting metal 2.1.",
       "revId": "be20a50d026a61da76b8c45db0e05cc4fc72b3a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6962e348_65d4582e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-04-27T19:35:41Z",
+      "side": 1,
+      "message": "Agreed.",
+      "parentUuid": "9413beab_fa3fdbab",
+      "revId": "be20a50d026a61da76b8c45db0e05cc4fc72b3a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
