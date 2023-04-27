@@ -266,7 +266,20 @@ angle::Result VertexArrayMtl::syncState(const gl::Context *context,
     const std::vector<gl::VertexAttribute> &attribs = mState.getVertexAttributes();
     const std::vector<gl::VertexBinding> &bindings  = mState.getVertexBindings();
 
-    for (size_t dirtyBit : dirtyBits)
+    gl::VertexArray::DirtyBits localDirtyBits = dirtyBits;
+    // If vertex array was not observing while unbound, we need to check buffer's internal storage
+    // and take action if buffer has changed while not observing. For now we just simply assume
+    // buffer storage has changed and always dirty all binding points.
+    if (localDirtyBits.test(gl::VertexArray::DIRTY_BIT_OBSERVER))
+    {
+        for (size_t bindingIndex : mState.getBufferBindingMask())
+        {
+            localDirtyBits.set(gl::VertexArray::DIRTY_BIT_BINDING_0 + bindingIndex);
+        }
+        localDirtyBits.reset(gl::VertexArray::DIRTY_BIT_OBSERVER);
+    }
+
+    for (size_t dirtyBit : localDirtyBits)
     {
         switch (dirtyBit)
         {
