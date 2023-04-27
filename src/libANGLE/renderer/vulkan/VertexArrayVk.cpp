@@ -517,7 +517,35 @@ angle::Result VertexArrayVk::syncState(const gl::Context *context,
     const std::vector<gl::VertexAttribute> &attribs = mState.getVertexAttributes();
     const std::vector<gl::VertexBinding> &bindings  = mState.getVertexBindings();
 
-    for (auto iter = dirtyBits.begin(), endIter = dirtyBits.end(); iter != endIter; ++iter)
+    gl::VertexArray::DirtyBits localDirtyBits = dirtyBits;
+    // If vertex array was not observing while unbound, we need to check buffer's internal storage
+    // and take action if buffer storage has changed while not observing.
+    if (localDirtyBits.test(gl::VertexArray::DIRTY_BIT_OBSERVER))
+    {
+#if 0
+        for (size_t bindingIndex : mState.getBufferBindingMask())
+        {
+            const gl::Buffer *bufferGL    = bindings[bindingIndex].getBuffer().get();
+            vk::BufferSerial bufferSerial = vk::GetImpl(bufferGL)->getBuffer().getBufferSerial();
+            for (size_t attribIndex : bindings[bindingIndex].getBoundAttributesMask())
+            {
+                if (attribs[attribIndex].enabled &&
+                    bufferSerial != mCurrentArrayBuffers[attribIndex]->getBufferSerial())
+                {
+                    localDirtyBits.set(bindingIndex);
+                    break;
+                }
+            }
+        }
+#else
+        localDirtyBits |= gl::VertexArray::DirtyBits(mState.getBufferBindingMask().to_ulong()
+                                                     << gl::VertexArray::DIRTY_BIT_BINDING_0);
+#endif
+        localDirtyBits.reset(gl::VertexArray::DIRTY_BIT_OBSERVER);
+    }
+
+    for (auto iter = localDirtyBits.begin(), endIter = localDirtyBits.end(); iter != endIter;
+         ++iter)
     {
         size_t dirtyBit = *iter;
         switch (dirtyBit)
