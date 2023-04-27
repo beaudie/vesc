@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7073344f_728e5057",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-27T22:30:30Z",
+      "side": 1,
+      "message": "lgtm+2 since this is small.",
+      "revId": "331a47649e3b3f34fec11961b429a306b9a292a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0d633f8_617db30d",
+        "filename": "src/libANGLE/renderer/metal/mtl_library_cache.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-27T22:30:30Z",
+      "side": 1,
+      "message": "Note also this dump of the shader source:\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/metal/mtl_utils.mm;l\u003d884\n\nJust calling it to your attention in case these paths should be unified in any way.",
+      "revId": "331a47649e3b3f34fec11961b429a306b9a292a0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
