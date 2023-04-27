@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d48d727_f9694fb7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-04-27T19:15:01Z",
+      "side": 1,
+      "message": "PTAL\n\nSomething\u0027s still fishy here, the hasShaderStencilOutput metal feature is checked in a few places so it\u0027s possible that we\u0027re missing some fallback path to avoid these shaders. Either way, this is better than crashing.",
+      "revId": "be20a50d026a61da76b8c45db0e05cc4fc72b3a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
