@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "110f6515_1ee7369f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-04-27T19:12:27Z",
+      "side": 1,
+      "message": "PTAL. This existed at one point, adding it back in for startup perf.\n\nThe binary size cost of this is about 500kb (200-300kb per metal version). I could optionally gzip the the metallibs to about 300kb and then pay the cost of decompression at startup. Also going to look into compiling the 2.1 shaders into a separate library and updating the code to use a different library for those blit shaders.",
+      "revId": "23cbd3dcdf8b4cc4e87b4523e98ebdb9617bf06f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
