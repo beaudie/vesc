@@ -4301,8 +4301,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
                             mFeatures.supportsExtendedDynamicState2.enabled && isARM);
 
     // Support GL_QCOM_shading_rate extension
-    ANGLE_FEATURE_CONDITION(&mFeatures, supportsFragmentShadingRate,
-                            canSupportFragmentShadingRate(deviceExtensionNames));
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsFragmentShadingRate, false);
 
     // We can use the interlock to support GL_ANGLE_shader_pixel_local_storage_coherent.
     ANGLE_FEATURE_CONDITION(

@@ -1,0 +1,494 @@
+# Copyright (C) 2018-2021 The ANGLE Project Authors.
+# Copyright (C) 2019-2023 LunarG, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build_overrides/vulkan_validation_layers.gni")
+
+vulkan_undefine_configs = []
+if (is_win) {
+  vulkan_undefine_configs += [ "//build/config/win:unicode" ]
+}
+
+vulkan_gen_dir = "$target_gen_dir/$vulkan_gen_subdir"
+raw_vulkan_gen_dir = rebase_path(vulkan_gen_dir, root_build_dir)
+
+vulkan_data_dir = "$root_out_dir/$vulkan_data_subdir"
+raw_vulkan_data_dir = rebase_path(vulkan_data_dir, root_build_dir)
+
+raw_root_out_dir = rebase_path(root_out_dir, root_build_dir)
+
+# This special action is needed to remove old VVL objects that are now renamed.
+action("vulkan_clean_old_validation_layer_objects") {
+  script = "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/build-gn/remove_files.py"
+
+  # inputs is a (random) new file since the vvl roll, used to ensure the cleanup is done only once
+  inputs = [ "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/gpu_validation/gpu_validation.cpp" ]
+  outputs = [ "$vulkan_gen_dir/old_vvl_files_are_removed" ]
+  args = [
+    "$raw_vulkan_gen_dir/old_vvl_files_are_removed",
+    "$raw_root_out_dir/libVkLayer*",
+    "$raw_root_out_dir/VkLayer*",
+    "$raw_vulkan_data_dir/VkLayer*.json",
+  ]
+}
+
+config("generated_layers_config") {
+  if (is_clang) {
+    cflags = [
+      "-Wno-conversion",
+      "-Wno-deprecated-copy",
+      "-Wno-extra-semi",
+      "-Wno-implicit-fallthrough",
+      "-Wno-missing-field-initializers",
+      "-Wno-newline-eof",
+      "-Wno-sign-compare",
+      "-Wno-unused-const-variable",
+    ]
+  }
+}
+
+config("vulkan_internal_config") {
+  defines = [
+    "VULKAN_NON_CMAKE_BUILD",
+    "VK_ENABLE_BETA_EXTENSIONS",
+  ]
+
+  if (!is_win) {
+    cflags_cc = [ "-std=c++17" ]
+  } else {
+    cflags_cc = [ "/std:c++17" ]
+  }
+
+  cflags = []
+  if (is_clang || !is_win) {
+    cflags += [ "-Wno-unused-function" ]
+  }
+  if (is_clang && is_mac) {
+    cflags += [ "-Wno-unguarded-availability-new" ]
+  }
+  if (is_linux) {
+    defines += [
+      "SYSCONFDIR=\"/etc\"",
+      "FALLBACK_CONFIG_DIRS=\"/etc/xdg\"",
+      "FALLBACK_DATA_DIRS=\"/usr/local/share:/usr/share\"",
+    ]
+  }
+
+  # Suppress warnings the vulkan code doesn't comply with.
+  if (is_fuchsia) {
+    configs = [ "//build/config:Wno-unused-but-set-variable" ]
+  }
+  if (is_clang) {
+    cflags += [ "-Wno-extra-semi" ]
+  }
+}
+
+# The validation layers
+# ---------------------
+
+config("vulkan_layer_config") {
+  include_dirs = [
+    "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers",
+    "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/external",
+    "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated",
+  ]
+  if (is_clang) {
+    cflags = [ "-Wno-extra-semi" ]
+  }
+}
+
+core_validation_sources = [
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/containers/qfo_transfer.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/containers/range_vector.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/containers/subresource_adapter.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/containers/subresource_adapter.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/core_checks/cc_android.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/core_checks/cc_buffer.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/core_checks/cc_buffer_address.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/core_checks/cc_cmd_buffer.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/core_checks/cc_cmd_buffer_dynamic.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/core_checks/cc_copy_blit_resolve.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/core_checks/cc_descriptor.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/core_checks/cc_device.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/core_checks/cc_device_memory.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/core_checks/cc_drawdispatch.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/core_checks/cc_external_object.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/core_checks/cc_image.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/core_checks/cc_image_layout.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/core_checks/cc_pipeline.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/core_checks/cc_pipeline_compute.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/core_checks/cc_pipeline_graphics.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/core_checks/cc_pipeline_ray_tracing.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/core_checks/cc_query.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/core_checks/cc_queue.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/core_checks/cc_ray_tracing.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/core_checks/cc_render_pass.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/core_checks/cc_shader.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/core_checks/cc_shader.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/core_checks/cc_synchronization.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/core_checks/cc_video.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/core_checks/cc_wsi.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/core_checks/cc_ycbcr.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/core_checks/core_validation.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/error_message/core_error_location.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/error_message/core_error_location.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/error_message/validation_error_enums.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/external/vma/vk_mem_alloc.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/external/vma/vma.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/external/vma/vma.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/command_validation.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/command_validation.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/gpu_as_inspection_comp.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/gpu_pre_dispatch_comp.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/gpu_pre_draw_vert.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/spirv_grammar_helper.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/spirv_grammar_helper.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/spirv_validation_helper.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/sync_validation_types.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/sync_validation_types.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/gpu_shaders/gpu_shaders_constants.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/gpu_validation/gpu_utils.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/gpu_validation/gpu_utils.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/gpu_validation/gpu_validation.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/gpu_validation/gpu_validation.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/gpu_validation/gpu_vuids.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/base_node.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/base_node.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/buffer_state.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/buffer_state.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/cmd_buffer_state.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/cmd_buffer_state.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/descriptor_sets.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/descriptor_sets.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/device_memory_state.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/device_memory_state.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/device_state.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/image_layout_map.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/image_layout_map.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/image_state.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/image_state.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/pipeline_layout_state.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/pipeline_layout_state.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/pipeline_state.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/pipeline_state.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/pipeline_sub_state.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/pipeline_sub_state.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/query_state.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/queue_state.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/queue_state.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/ray_tracing_state.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/render_pass_state.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/render_pass_state.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/sampler_state.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/shader_instruction.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/shader_instruction.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/shader_module.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/shader_module.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/state_tracker.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/video_session_state.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/state_tracker/video_session_state.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/sync/sync_utils.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/sync/sync_utils.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/sync/sync_validation.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/sync/sync_validation.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/sync/sync_vuid_maps.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/sync/sync_vuid_maps.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/utils/android_ndk_types.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/utils/convert_to_renderpass2.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/utils/convert_to_renderpass2.h",
+  "layers/state_tracker/state_tracker.cpp",
+]
+
+object_lifetimes_sources = [
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/object_tracker.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/object_tracker.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/object_tracker/object_lifetime_validation.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/object_tracker/object_tracker_utils.cpp",
+]
+
+stateless_validation_sources = [
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/enum_flag_bits.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/parameter_validation.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/parameter_validation.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/stateless/parameter_name.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/stateless/sl_buffer.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/stateless/sl_cmd_buffer.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/stateless/sl_cmd_buffer_dynamic.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/stateless/sl_descriptor.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/stateless/sl_device_memory.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/stateless/sl_external_object.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/stateless/sl_framebuffer.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/stateless/sl_image.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/stateless/sl_instance_device.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/stateless/sl_pipeline.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/stateless/sl_ray_tracing.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/stateless/sl_render_pass.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/stateless/sl_synchronization.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/stateless/sl_wsi.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/stateless/stateless_validation.h",
+]
+
+thread_safety_sources = [
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/thread_safety.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/thread_safety.h",
+]
+
+unique_objects_sources = []
+
+best_practices_sources = [
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/best_practices/best_practices_error_enums.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/best_practices/best_practices_utils.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/best_practices/best_practices_validation.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/best_practices/bp_buffer.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/best_practices/bp_cmd_buffer.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/best_practices/bp_copy_blit_resolve.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/best_practices/bp_descriptor.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/best_practices/bp_device_memory.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/best_practices/bp_drawdispatch.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/best_practices/bp_framebuffer.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/best_practices/bp_image.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/best_practices/bp_instance_device.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/best_practices/bp_pipeline.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/best_practices/bp_ray_tracing.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/best_practices/bp_render_pass.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/best_practices/bp_synchronization.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/best_practices/bp_video.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/best_practices/bp_wsi.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/best_practices.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/best_practices.h",
+]
+
+debug_printf_sources = [
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/gpu_validation/debug_printf.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/gpu_validation/debug_printf.h",
+]
+
+chassis_sources = [
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/chassis.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/chassis_dispatch_helper.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/layer_chassis_dispatch.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/layer_chassis_dispatch.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/valid_param_values.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/valid_param_values.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/vk_dispatch_table_helper.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/vk_extension_helper.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/vk_safe_struct.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/layer_options.cpp",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/layer_options.h",
+  "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/vk_layer_settings_ext.h",
+  "$vulkan_headers_dir/include/vulkan/vk_layer.h",
+  "$vulkan_headers_dir/include/vulkan/vulkan.h",
+  "layers/generated/chassis.cpp",
+]
+
+layers = [ [
+      "khronos_validation",
+      core_validation_sources + object_lifetimes_sources +
+          stateless_validation_sources + thread_safety_sources +
+          unique_objects_sources + best_practices_sources +
+          debug_printf_sources + chassis_sources,
+      [ ":vulkan_core_validation_glslang" ],
+      [],
+    ] ]
+
+if (!is_android) {
+  action("vulkan_gen_json_files") {
+    script = "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/build-gn/generate_vulkan_layers_json.py"
+
+    deps = [ "$vulkan_headers_dir:vulkan_headers" ]
+    if (!is_fuchsia) {
+      # Make sure that the cleanup of old layer JSON files happens before the new ones are generated.
+      deps += [ ":vulkan_clean_old_validation_layer_objects" ]
+    }
+
+    sources = [ "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/VkLayer_khronos_validation.json.in" ]
+    outputs = [ "$vulkan_data_dir/VkLayer_khronos_validation.json" ]
+
+    if (is_linux) {
+      _platform = "Linux"
+    } else if (is_win) {
+      _platform = "Windows"
+    } else if (is_mac) {
+      _platform = "Darwin"
+    } else if (is_fuchsia) {
+      _platform = "Fuchsia"
+    } else {
+      _platform = "Other"
+    }
+
+    args = [
+             "--platform",
+             _platform,
+             rebase_path(
+                 "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/",
+                 root_build_dir),
+             rebase_path(vulkan_data_dir, root_build_dir),
+           ] + rebase_path(sources, root_build_dir)
+    if (is_fuchsia) {
+      args += [ "--no-path-prefix" ]
+    }
+
+    # The layer JSON files are part of the necessary data deps.
+    data = outputs
+  }
+}
+
+config("vulkan_memory_allocator_config") {
+  if (is_clang) {
+    cflags_cc = [ "-Wno-nullability-completeness" ]
+  }
+}
+
+source_set("vulkan_layer_utils") {
+  include_dirs = [
+    "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers",
+    "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/external",
+    "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated",
+  ]
+  sources = [
+    "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/containers/custom_containers.h",
+    "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/containers/sparse_containers.h",
+    "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/error_message/logging.cpp",
+    "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/error_message/logging.h",
+    "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/external/xxhash.cpp",
+    "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/external/xxhash.h",
+    "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/vk_enum_string_helper.h",
+    "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/vk_extension_helper.h",
+    "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/vk_format_utils.cpp",
+    "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/vk_format_utils.h",
+    "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/vk_layer_dispatch_table.h",
+    "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/vk_object_types.h",
+    "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/vk_safe_struct.h",
+    "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/vk_typemap_helper.h",
+    "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/generated/vk_validation_error_messages.h",
+    "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/utils/android_ndk_types.h",
+    "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/utils/cast_utils.h",
+    "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/utils/hash_util.h",
+    "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/utils/hash_vk_types.h",
+    "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/utils/vk_layer_extension_utils.cpp",
+    "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/utils/vk_layer_extension_utils.h",
+    "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/utils/vk_layer_utils.cpp",
+    "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/utils/vk_layer_utils.h",
+    "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/vk_layer_config.cpp",
+    "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/vk_layer_config.h",
+    "$vulkan_headers_dir/include/vulkan/vk_layer.h",
+    "$vulkan_headers_dir/include/vulkan/vulkan.h",
+  ]
+  defines = [ "XXH_NO_LONG_LONG" ]
+  public_configs = [
+    ":vulkan_internal_config",
+    ":vulkan_memory_allocator_config",
+  ]
+  public_deps = [ "$vulkan_headers_dir:vulkan_headers" ]
+
+  configs -= vulkan_undefine_configs
+  if (!is_fuchsia) {
+    configs -= [ "//build/config/compiler:chromium_code" ]
+    configs += [ "//build/config/compiler:no_chromium_code" ]
+  }
+}
+
+config("vulkan_core_validation_config") {
+  include_dirs = [ "$vvl_glslang_dir" ]
+}
+
+source_set("vulkan_core_validation_glslang") {
+  public_deps = [
+    "${vvl_spirv_tools_dir}:spvtools",
+    "${vvl_spirv_tools_dir}:spvtools_opt",
+    "${vvl_spirv_tools_dir}:spvtools_val",
+  ]
+  public_configs = [
+    "$vulkan_headers_dir:vulkan_headers_config",
+    ":vulkan_core_validation_config",
+  ]
+}
+
+config("vulkan_stateless_validation_config") {
+  if (is_clang) {
+    cflags_cc = [ "-Wno-unused-const-variable" ]
+  }
+}
+
+if (is_fuchsia) {
+  library_type = "loadable_module"
+} else {
+  library_type = "shared_library"
+}
+
+foreach(layer_info, layers) {
+  name = layer_info[0]
+  target(library_type, "VkLayer_$name") {
+    defines = []
+    ldflags = []
+    if (is_fuchsia) {
+      configs -= [ "//build/config:thread_safety_annotations" ]
+      ldflags += [ "-static-libstdc++" ]
+      configs += [ "//build/config:rtti" ]
+    } else {
+      configs -= [ "//build/config/compiler:chromium_code" ]
+      configs += [ "//build/config/compiler:no_chromium_code" ]
+      configs += [ "//build/config/compiler:rtti" ]
+    }
+    configs -= vulkan_undefine_configs
+    configs += [ ":generated_layers_config" ]
+    public_configs = [ ":vulkan_layer_config" ]
+    deps = [ ":vulkan_layer_utils" ]
+    if (!is_fuchsia) {
+      deps += [
+        # Make sure the cleanup of old layers happen before the new ones are compiled.
+        ":vulkan_clean_old_validation_layer_objects",
+      ]
+    }
+    if (layer_info[2] != "") {
+      deps += layer_info[2]
+    }
+    sources = layer_info[1]
+    if (is_win) {
+      defines += [ "NOMINMAX" ]
+      sources += [ "$angle_root/third_party/vulkan-deps/vulkan-validation-layers/src/layers/VkLayer_$name.def" ]
+    }
+    if (is_linux || is_android || is_fuchsia) {
+      ldflags += [ "-Wl,-Bsymbolic,--exclude-libs,ALL" ]
+    }
+    if (defined(ozone_platform_x11) && ozone_platform_x11) {
+      defines += [ "VK_USE_PLATFORM_XLIB_KHR" ]
+    }
+    if (is_android) {
+      libs = [
+        "log",
+        "nativewindow",
+      ]
+      configs -= [ "//build/config/android:hide_all_but_jni_onload" ]
+    }
+    defines += layer_info[3]
+  }
+}
+
+group("vulkan_validation_layers") {
+  public_deps = []
+  data_deps = []
+  foreach(layer_info, layers) {
+    name = layer_info[0]
+    if (is_fuchsia) {
+      public_deps += [ ":VkLayer_$name" ]
+    } else {
+      data_deps += [ ":VkLayer_$name" ]
+    }
+  }
+}
+
+group("tests") {
+  # TODO(fxbug.dev/13288)
+}
