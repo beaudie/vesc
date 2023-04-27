@@ -19,8 +19,6 @@ namespace gl
 {
 namespace
 {
-constexpr size_t kMaxObserverCountToTriggerUnobserve = 20;
-
 bool IsElementArrayBufferSubjectIndex(angle::SubjectIndex subjectIndex)
 {
     return (subjectIndex == kElementArrayBufferIndex);
@@ -685,9 +683,6 @@ void VertexArray::onBind(const Context *context)
         bufferGL->addObserver(&mArrayBufferObserverBindings[bindingIndex]);
         updateCachedMappedArrayBuffersBinding(mState.mVertexBindings[bindingIndex]);
 
-        // Assume both data and internal storage has been dirtied.
-        mDirtyBits.set(DIRTY_BIT_BINDING_0 + bindingIndex);
-
         if (mBufferAccessValidationEnabled)
         {
             for (size_t boundAttribute :
@@ -703,7 +698,12 @@ void VertexArray::onBind(const Context *context)
             updateCachedTransformFeedbackBindingValidation(bindingIndex, bufferGL);
         }
     }
-    mDirtyObserverBindingBits.reset();
+
+    if (mDirtyObserverBindingBits.any())
+    {
+        mDirtyBits.set(DIRTY_BIT_OBSERVER);
+        mDirtyObserverBindingBits.reset();
+    }
 
     onStateChange(angle::SubjectMessage::ContentsChanged);
 }
@@ -718,11 +718,9 @@ void VertexArray::onUnbind(const Context *context)
     {
         const VertexBinding &binding = mState.getVertexBindings()[bindingIndex];
         Buffer *bufferGL             = binding.getBuffer().get();
-        if (bufferGL && bufferGL->getObserversCount() > kMaxObserverCountToTriggerUnobserve)
-        {
-            bufferGL->removeObserver(&mArrayBufferObserverBindings[bindingIndex]);
-            mDirtyObserverBindingBits.set(bindingIndex);
-        }
+        ASSERT(bufferGL != nullptr);
+        bufferGL->removeObserver(&mArrayBufferObserverBindings[bindingIndex]);
+        mDirtyObserverBindingBits.set(bindingIndex);
     }
 }
 
