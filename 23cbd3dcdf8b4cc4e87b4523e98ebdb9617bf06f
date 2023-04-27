@@ -16,6 +16,23 @@
       "message": "PTAL. This existed at one point, adding it back in for startup perf.\n\nThe binary size cost of this is about 500kb (200-300kb per metal version). I could optionally gzip the the metallibs to about 300kb and then pay the cost of decompression at startup. Also going to look into compiling the 2.1 shaders into a separate library and updating the code to use a different library for those blit shaders.",
       "revId": "23cbd3dcdf8b4cc4e87b4523e98ebdb9617bf06f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "997e9477_eeeda123",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-04-27T19:23:46Z",
+      "side": 1,
+      "message": "In the past we decided to not precompile default shaders because if someone modifies the angle_format.json, then the default shaders will need to be re-generated. The angle_format.json is important because we reuse the format\u0027s enum values in the blitting compute shaders.\n\nThis is also problematic because if the person modifying angle_format.json mainly works on linux/windows, he/she might not have a mac machine to re-generate the metal shader binaries. Is it acceptable at this point?",
+      "revId": "23cbd3dcdf8b4cc4e87b4523e98ebdb9617bf06f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
