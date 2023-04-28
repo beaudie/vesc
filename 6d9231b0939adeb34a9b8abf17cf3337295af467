@@ -232,6 +232,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "da007523_b6b4e05b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3181,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-28T17:49:22Z",
+      "side": 1,
+      "message": "You need to get the size from conversion buffer, and adjust the offset with conversion buffer as well (at syncState time you have that information). What I am saying is that the bufferView setup should be all done in syncState. Once it is done, then every time should still work as it is (it will still adjust the offset with actual buffer\u0027s offset when call into vulkan driver, that is done automatically). Basically in TetxureVk whenever you look at buffer binding, you need have if(RGB32){get information from conversion} else{existing code}.",
+      "parentUuid": "7a7ce7b4_68c7387a",
+      "range": {
+        "startLine": 3179,
+        "startChar": 12,
+        "endLine": 3181,
+        "endChar": 88
+      },
+      "revId": "6d9231b0939adeb34a9b8abf17cf3337295af467",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1389d415_9175312a",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 3
