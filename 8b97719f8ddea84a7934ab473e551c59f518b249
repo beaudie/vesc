@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "805a2fb2_53dd8899",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1113941
+      },
+      "writtenOn": "2023-04-28T08:38:42Z",
+      "side": 1,
+      "message": "Don\u0027t push this yet, as it still needs to be verified in canary (5738 hasn\u0027t yet shipped). Please see the email that I\u0027m going to send to you separately about this.",
+      "revId": "8b97719f8ddea84a7934ab473e551c59f518b249",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
