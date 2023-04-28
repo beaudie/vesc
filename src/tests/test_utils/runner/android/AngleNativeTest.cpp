@@ -171,6 +171,14 @@ Java_com_android_angle_test_AngleNativeTest_nativeRunTests(JNIEnv *env,
 
     dup2(STDOUT_FILENO, STDERR_FILENO);
 
+    // Line-buffered stdout/sterr to get full logs on crashes.
+    // Don't do this on /sdcard/ (see https://crrev.com/c/3615081 for details)
+    if (stdoutFilePath.rfind("/data/", 0) == 0)
+    {
+        setlinebuf(stdout);
+        setlinebuf(stderr);
+    }
+
     std::vector<char *> argv;
     size_t argc = ArgsToArgv(args, &argv);
 
