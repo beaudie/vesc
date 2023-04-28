@@ -160,6 +160,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3ed287df_b6a827e3",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3181,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-28T16:23:12Z",
+      "side": 1,
+      "message": "Thanks, trying this. The reason I did the mBufferViews.release/init thing here was because `TextureVk::syncState` calls mBufferViews.init with the original offset and size and that gets stored inside mBufferViews so I think we need to somehow account for that here.",
+      "parentUuid": "c41e3b95_6a5beb2d",
+      "range": {
+        "startLine": 3179,
+        "startChar": 12,
+        "endLine": 3181,
+        "endChar": 88
+      },
+      "revId": "6d9231b0939adeb34a9b8abf17cf3337295af467",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1389d415_9175312a",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 3
