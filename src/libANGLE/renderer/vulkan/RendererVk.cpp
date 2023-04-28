@@ -5539,7 +5539,7 @@ ImageMemorySuballocator::~ImageMemorySuballocator() {}
 
 void ImageMemorySuballocator::destroy(RendererVk *renderer) {}
 
-VkResult ImageMemorySuballocator::allocateAndBindMemory(RendererVk *renderer,
+VkResult ImageMemorySuballocator::allocateAndBindMemory(Context *context,
                                                         Image *image,
                                                         const VkImageCreateInfo *imageCreateInfo,
                                                         VkMemoryPropertyFlags requiredFlags,
@@ -5552,6 +5552,7 @@ VkResult ImageMemorySuballocator::allocateAndBindMemory(RendererVk *renderer,
 {
     ASSERT(image && image->valid());
     ASSERT(allocationOut && !allocationOut->valid());
+    RendererVk *renderer       = context->getRenderer();
     const Allocator &allocator = renderer->getAllocator();
     VkResult result;
 
@@ -5572,13 +5573,17 @@ VkResult ImageMemorySuballocator::allocateAndBindMemory(RendererVk *renderer,
     renderer->getMemoryAllocationTracker()->setPendingMemoryAlloc(
         memoryAllocationType, memoryRequirements.size, pendingMemoryTypeIndex);
 
-    // Allocate and bind memory for the image.
+    // Allocate and bind memory for the image. If unsuccessful, retry allocation before reporting
+    // the allocation failure.
     result = vma::AllocateAndBindMemoryForImage(
         allocator.getHandle(), &image->mHandle, requiredFlags, preferredFlags,
-        allocateDedicatedMemory, &allocationOut->mHandle, memoryTypeIndexOut, sizeOut);
+        memoryRequirements.memoryTypeBits, allocateDedicatedMemory, &allocationOut->mHandle,
+        memoryTypeIndexOut, sizeOut);
     if (result != VK_SUCCESS)
     {
-        return result;
+        return retryAllocateAndBindMemory(context, result, image, requiredFlags, preferredFlags,
+                                          memoryAllocationType, 0, false, allocationOut,
+                                          memoryFlagsOut, memoryTypeIndexOut, sizeOut);
     }
 
     // We need to get the property flags of the allocated memory.
@@ -5588,6 +5593,67 @@ VkResult ImageMemorySuballocator::allocateAndBindMemory(RendererVk *renderer,
     renderer->onMemoryAlloc(memoryAllocationType, *sizeOut, *memoryTypeIndexOut,
                             allocationOut->getHandle());
     return VK_SUCCESS;
+}
+
+VkResult ImageMemorySuballocator::retryAllocateAndBindMemory(
+    Context *context,
+    const VkResult allocationError,
+    Image *image,
+    VkMemoryPropertyFlags requiredFlags,
+    VkMemoryPropertyFlags preferredFlags,
+    MemoryAllocationType memoryAllocationType,
+    uint32_t memoryTypeBits,
+    bool allocateDedicatedMemory,
+    Allocation *allocationOut,
+    VkMemoryPropertyFlags *memoryFlagsOut,
+    uint32_t *memoryTypeIndexOut,
+    VkDeviceSize *sizeOut)
+{
+    ASSERT(allocationError != VK_SUCCESS);
+    ASSERT(image && image->valid());
+    ASSERT(allocationOut && !allocationOut->valid());
+    RendererVk *renderer                     = context->getRenderer();
+    const Allocator &allocator               = renderer->getAllocator();
+    const MemoryProperties &memoryProperties = renderer->getMemoryProperties();
+
+    if (allocationError == VK_ERROR_OUT_OF_DEVICE_MEMORY)
+    {
+        // In the case of a device out-of-memory issue, it may be possible to allocate on another
+        // heap which is not necessarily local to the device.
+        INFO() << "Out of device memory; retrying memory allocation on other memory types "
+                  "(this may result in suboptimal performance)";
+        requiredFlags &= ~VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+
+        for (size_t retryMemoryIndex : angle::BitSet32<32>(memoryTypeBits))
+        {
+            // We should make sure that the other required flags are still supported.
+            VkMemoryPropertyFlags retryFlags =
+                memoryProperties.getMemoryType(static_cast<uint32_t>(retryMemoryIndex))
+                    .propertyFlags;
+            if ((requiredFlags & ~retryFlags) != 0)
+            {
+                continue;
+            }
+
+            // Retry allocating and binding memory for the image.
+            VkResult result = vma::AllocateAndBindMemoryForImage(
+                allocator.getHandle(), &image->mHandle, requiredFlags, preferredFlags,
+                1 << retryMemoryIndex, allocateDedicatedMemory, &allocationOut->mHandle,
+                memoryTypeIndexOut, sizeOut);
+            if (result == VK_SUCCESS)
+            {
+                // If successful, we should update the property flags of the allocated memory.
+                *memoryFlagsOut = memoryProperties.getMemoryType(*memoryTypeIndexOut).propertyFlags;
+
+                renderer->onMemoryAlloc(memoryAllocationType, *sizeOut, *memoryTypeIndexOut,
+                                        allocationOut->getHandle());
+                return VK_SUCCESS;
+            }
+        }
+    }
+
+    // If there was no successful allocation, return the original error.
+    return allocationError;
 }
 
 VkResult ImageMemorySuballocator::mapMemoryAndInitWithNonZeroValue(RendererVk *renderer,
