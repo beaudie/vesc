@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbf2affd_5c614dcf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-28T20:51:31Z",
+      "side": 1,
+      "message": "Nice find and fix, thanks a lot!",
+      "revId": "97e77ef1a30f710cb21506efa530666139e40e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7b79312_adabc620",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-04-28T20:51:31Z",
+      "side": 1,
+      "message": "I almost think you can also change CommandQueue::queuePresent to return VkResult directly and remove swapchainStatus from argument, it will be more readable and simpler.",
+      "range": {
+        "startLine": 790,
+        "startChar": 4,
+        "endLine": 790,
+        "endChar": 31
+      },
+      "revId": "97e77ef1a30f710cb21506efa530666139e40e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
