@@ -1,0 +1,517 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f05e66c_e9321ee4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-28T20:17:48Z",
+      "side": 1,
+      "message": "First round of review! Thanks a lot for the excellent job, and sorry again this is going so slowly.",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8bae0dd1_83905304",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 9560,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-28T20:17:48Z",
+      "side": 1,
+      "message": "nit: this doesn\u0027t make sense outside the context of code review. It should describe what happens without reference to history of evolution of this code.",
+      "range": {
+        "startLine": 9560,
+        "startChar": 45,
+        "endLine": 9560,
+        "endChar": 97
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63f5d561_c281a75b",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 9579,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-28T20:17:48Z",
+      "side": 1,
+      "message": "_Loving_ how simple this makes EGL images! Awesome!",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d70e4a11_797a399d",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-28T20:17:48Z",
+      "side": 1,
+      "message": "If I understand correctly, all these sleeps and uncertainties are because `SingleContextMutex` is not actually a lock, right? If it were a lock, wouldn\u0027t you be able to get rid of the sleeps, and also guarantee there wouldn\u0027t be a problem?\n\nIt seems to me like if you used `angle::Spinlock` inside `SingleContextMutex` that would do the trick. In normal single-context operation, it\u0027s exactly the same as the current `SingleContextMutex`, because it\u0027s just an atomic set/unset. When there\u0027s context merging going on, there\u0027s a bit of spinning, but that\u0027s a one time thing and it\u0027s totally worth not having to game the scheduler and rely on luck.",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "baaaafe5_24947132",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1545,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-28T20:17:48Z",
+      "side": 1,
+      "message": "I noticed a bunch of these `#if`s all around. So we try our best to contain these to avoid an `#if` mess.\n\nOne way we could do it for this (and like, the one in Image.cpp) is to have a header with a few helper functions, and 2 source files, one which implements it as a no-op/UNREACHABLE/etc, and another that implements it for real. Then in the build scripts you choose to either build one file or the other based on the gn flag. For example, see `system_utils.h` vs `system_utils_*.cpp`\n\nIf not, at least put the helpers in `SharedContextMutex.h/cpp` so there\u0027d be one `#if` encompassing all of them",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f21189f8_167610ac",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1760,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-28T20:17:48Z",
+      "side": 1,
+      "message": "Suggest this instead:\n\n```\nContextMutex::AddRefLock lock(image-\u003egetSharedContextMutex())\n```\n\nAnd in the constructor do `if (mutex) lock(mutex)`",
+      "range": {
+        "startLine": 1756,
+        "startChar": 0,
+        "endLine": 1760,
+        "endChar": 5
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9728745_92c04060",
+        "filename": "src/libANGLE/SharedContextMutex.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-28T20:17:48Z",
+      "side": 1,
+      "message": "nit: The way we tend to avoid the `#if` mess is to use helper functions that are entirely contained within `ASSERT`, so they get compiled out naturally without asserts. For example:\n\n```\nbool CheckSameThread(angle::ThreadId currentThread, const std::atomic\u003cangle::ThreadId\u003e \u0026ownerThread)\n{\n    return ownerThread.load(std::memory_order_relaxed) \u003d\u003d currentThread;\n}\n\nbool CheckSameThreadAndUpdate(angle::ThreadId currentThread, angle::ThreadId newThread, std::atomic\u003cangle::ThreadId\u003e *ownerThread)\n{\n    const bool sameThread \u003d CheckSameThread(currentThread, ownerThread);\n    ownerThread-\u003estore(newThread, std::memory_order_relaxed);\n}\n```\n\nThen you can just write this where needed, no `#if` necessary.\n\n```\nASSERT(!CheckSameThread(angle::GetCurrentThreadId(), mOwnerThreadId));\nASSERT(CheckSameThreadAndUpdate(angle::InvalidThreadId(), threadId, \u0026mOwnerThreadId);\nASSERT(CheckSameThreadAndUpdate(angle::GetCurrentThreadId(), angle::InvalidThreadId(), \u0026mOwnerThreadId);\n// etc\n```",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "251dbf1e_c4271589",
+        "filename": "src/libANGLE/SharedContextMutex.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-28T20:17:48Z",
+      "side": 1,
+      "message": "Should these two be reordered? Otherwise the root may change in between",
+      "range": {
+        "startLine": 151,
+        "startChar": 0,
+        "endLine": 153,
+        "endChar": 0
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "705ca0c4_18c1f53b",
+        "filename": "src/libANGLE/SharedContextMutex.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-28T20:17:48Z",
+      "side": 1,
+      "message": "If you remove the `#if` from the header, you can also make this initialization unconditional.",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91af88f2_72746832",
+        "filename": "src/libANGLE/SharedContextMutex.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-28T20:17:48Z",
+      "side": 1,
+      "message": "A high level description of what\u0027s going on here would be good. Something about successfully acquiring the roots of both this and the other share group under their own locks, meanwhile accounting for the fact that root may change.",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23a829bf_1be1d041",
+        "filename": "src/libANGLE/SharedContextMutex.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-28T20:17:48Z",
+      "side": 1,
+      "message": "A comment as to why the tree height (even though the tree is later flattened) is being tracked here would be useful. IIUC, the node with a higher rank has gone through fewer root changes and so is carrying a smaller `mOldRoots` (according to the comment on `mRank`)?",
+      "range": {
+        "startLine": 224,
+        "startChar": 0,
+        "endLine": 233,
+        "endChar": 5
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9939681d_fab59d91",
+        "filename": "src/libANGLE/SharedContextMutex.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-28T20:17:48Z",
+      "side": 1,
+      "message": "Please comment that this is called with the mutex held.\n\nStill, is it possible for another SharedContextMutex to call `getRoot()` without holding the lock at this time? What happens if that other share group gets the old root?",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f294d53_a3cc41a3",
+        "filename": "src/libANGLE/SharedContextMutex.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-28T20:17:48Z",
+      "side": 1,
+      "message": "Why not `oldRoot-\u003erelease()` here and avoid tracking old roots altogether?",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7889238_76f57896",
+        "filename": "src/libANGLE/SharedContextMutex.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-28T20:17:48Z",
+      "side": 1,
+      "message": "ditto (comment that it\u0027s called with lock)",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8ce99fd_dccae448",
+        "filename": "src/libANGLE/SharedContextMutex.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-28T20:17:48Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e13f33b9_cb19573c",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-28T20:17:48Z",
+      "side": 1,
+      "message": "We tend to avoid nested classes in most cases. Why not call it `ScopedContextMutex` and move it below this class?",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "295a5ab3_734f2265",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-28T20:17:48Z",
+      "side": 1,
+      "message": "Please avoid default arguments, as well as bool arguments. I haven\u0027t looked for all the places this is called, but either have `release()` and `releaseAndUnlock()`, or have an `enum class` that names the two states being passed to `release()`.",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "029720db_cde34811",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-28T20:17:48Z",
+      "side": 1,
+      "message": "nit: suggest `getState(std::memory_order order)` to make it clear at call site what the memory order is (and also because on its own `acquireState` is just synonym with `getState`, `fetchState`, `retrieveState`, `loadState` etc; it\u0027s not clear that it\u0027s talking about `memory_order_acquire`)",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91c160d4_58484d7f",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-28T20:17:48Z",
+      "side": 1,
+      "message": "Not clear what this means, add/release must be synchronized... by a mutex? Which mutex? And what is \"single mutex\"?",
+      "range": {
+        "startLine": 81,
+        "startChar": 7,
+        "endLine": 81,
+        "endChar": 96
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "017bca3d_35ab9aef",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-28T20:17:48Z",
+      "side": 1,
+      "message": "nit: could use a better explanation, it\u0027s obviously an array of references, but why is it keeping references?",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c420cb3_0e662abf",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-28T20:17:48Z",
+      "side": 1,
+      "message": "super nit: you can simplify by having this be unconditionally defined in the header, but unused elsewhere without asserts. (i.e. you can remove the `#if`)",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "787cb45c_967d11d0",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-28T20:17:48Z",
+      "side": 1,
+      "message": "AFAICT, this should just be a few global functions? What\u0027s with the pure virtual class and inheritance?",
+      "range": {
+        "startLine": 116,
+        "startChar": 0,
+        "endLine": 134,
+        "endChar": 2
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c542761b_68a6a184",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 1083,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-28T20:17:48Z",
+      "side": 1,
+      "message": "Naming nit:` mUsesSharedContextMutex`?",
+      "range": {
+        "startLine": 1083,
+        "startChar": 20,
+        "endLine": 1083,
+        "endChar": 47
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25c097c1_b3b634ab",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 4443,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-28T20:17:48Z",
+      "side": 1,
+      "message": "I don\u0027t entirely like what I\u0027m about to say, but it\u0027s probably better to just lock this on the entry point. If any other case ends up using the context, it\u0027s going to be very easy to miss this lock.\n\nIf you _really_ want to limit it to BUFFER_AGE, I\u0027d make the decision that BUFFER_AGE is the only one that needs the context right in the entry point (like `QuerySurface()` in `egl_stubs.cpp`) and then lock for \"all cases that need the context (currently only buffer age)\" and then send a `nullptr` context to this function for the other cases. If anyone needs the context elsewhere, they\u0027ll be forced to update the entry point and naturally end up taking the lock.",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57aa0eda_0d8336b1",
+        "filename": "src/libANGLE/validationEGL.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-28T20:17:48Z",
+      "side": 1,
+      "message": "Could we use some Scoped* something and let destructor deal with it?",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2b3604a_52c93a01",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-28T20:17:48Z",
+      "side": 1,
+      "message": "These functions only have a few possibilities, I suggest putting the list of what function needs what call in the python script, generate that on the entry point as necessary and pass it `ANGLE_EGL_CONTEXT_LOCK`.\n\nIf it helps, I\u0027d honestly get rid of the `!defined(ANGLE_ENABLE_SHARED_CONTEXT_MUTEX)` path",
+      "range": {
+        "startLine": 218,
+        "startChar": 48,
+        "endLine": 218,
+        "endChar": 68
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2686868_72f7cfc4",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-28T20:17:48Z",
+      "side": 1,
+      "message": "nit: `Active` is an internal detail of how the share group mutex is managed. I think we can drop it from the function name.",
+      "range": {
+        "startLine": 230,
+        "startChar": 38,
+        "endLine": 230,
+        "endChar": 44
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
