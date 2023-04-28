@@ -195,6 +195,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "22c634ab_14decbc9",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3335,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-28T15:23:35Z",
+      "side": 1,
+      "message": "The VkAccessFlagBits man page for the summary, which typically links to other parts of the spec: https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VkAccessFlagBits.html\n\nIf you want to understand how Vulkan synchronization works in general, the spec is naturally very pedantic, but if you can read through the math, it\u0027s not that complicated: https://registry.khronos.org/vulkan/specs/1.3/html/chap7.html#synchronization-dependencies\n\nWe can always have a chat about it 😊",
+      "parentUuid": "1f1e5b47_2919d1d4",
+      "revId": "6d9231b0939adeb34a9b8abf17cf3337295af467",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2f4f0432_83c1388c",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 3
