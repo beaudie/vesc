@@ -16,6 +16,29 @@
       "message": "This is a test that failed:\nhttps://ci.chromium.org/ui/p/angle/builders/try/linux-asan-test/11571/overview",
       "revId": "46bb8e84763b1ef2b153f4314cedb2cbff891a2c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f217817f_db699a35",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-28T18:36:09Z",
+      "side": 1,
+      "message": "```suggestion\n            // Do not access task-\u003egetSwapchainStatus() after this call because it is marked as no\n            // longer pending, and so may get deleted or clobbered by another thread.\n```",
+      "range": {
+        "startLine": 662,
+        "startChar": 12,
+        "endLine": 662,
+        "endChar": 72
+      },
+      "revId": "46bb8e84763b1ef2b153f4314cedb2cbff891a2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
