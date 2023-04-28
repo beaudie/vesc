@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8cbd979_caf7f8b6",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3152,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-28T13:24:39Z",
+      "side": 1,
+      "message": "Yes, of course. This will happen on the way out of WIP.",
+      "parentUuid": "169a1988_12f51333",
+      "revId": "6d9231b0939adeb34a9b8abf17cf3337295af467",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5d523e70_dcc8cbaf",
@@ -60,6 +78,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "93a34dfd_b3fe88bf",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3163,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-28T13:24:39Z",
+      "side": 1,
+      "message": "Oops thanks, will fix.",
+      "parentUuid": "d2ac1c02_b751a7aa",
+      "range": {
+        "startLine": 3163,
+        "startChar": 55,
+        "endLine": 3163,
+        "endChar": 56
+      },
+      "revId": "6d9231b0939adeb34a9b8abf17cf3337295af467",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6a1dfe29_53f64819",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 3
@@ -71,6 +113,24 @@
       "writtenOn": "2023-04-26T18:05:14Z",
       "side": 1,
       "message": "Could this be simplified to something like `conversionBufferHelper-\u003eallocateForVertexConversion` so the usual buffer allocation mechanism takes care of it?",
+      "revId": "6d9231b0939adeb34a9b8abf17cf3337295af467",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0ab5ef6_1478d322",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3177,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-28T13:24:39Z",
+      "side": 1,
+      "message": "I had tried exactly this but something was missing or different. I\u0027ll have another look.",
+      "parentUuid": "6a1dfe29_53f64819",
       "revId": "6d9231b0939adeb34a9b8abf17cf3337295af467",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -117,6 +177,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1f1e5b47_2919d1d4",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3335,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-28T13:24:39Z",
+      "side": 1,
+      "message": "Thanks! Any suggestions what I should read to understand when we need VK_ACCESS_TRANSFER_READ_BIT vs VK_ACCESS_SHADER_READ_BIT?",
+      "parentUuid": "1389d415_9175312a",
+      "revId": "6d9231b0939adeb34a9b8abf17cf3337295af467",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2f4f0432_83c1388c",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 3
@@ -128,6 +206,24 @@
       "writtenOn": "2023-04-26T18:05:14Z",
       "side": 1,
       "message": "nit: clean up",
+      "revId": "6d9231b0939adeb34a9b8abf17cf3337295af467",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ca7c370_35655e2b",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3336,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-28T13:24:39Z",
+      "side": 1,
+      "message": "Sure thing",
+      "parentUuid": "2f4f0432_83c1388c",
       "revId": "6d9231b0939adeb34a9b8abf17cf3337295af467",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -149,6 +245,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d447fe00_429753aa",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3342,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-28T13:24:39Z",
+      "side": 1,
+      "message": "Absolutely, will happen on the way out of WIP.",
+      "parentUuid": "d8e530ed_216fa1e5",
+      "revId": "6d9231b0939adeb34a9b8abf17cf3337295af467",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a7d692de_aa54340a",
@@ -162,6 +276,30 @@
       "writtenOn": "2023-04-26T18:05:14Z",
       "side": 1,
       "message": "No barrier needed, the above `CommandBufferAccess` takes care of it.",
+      "range": {
+        "startLine": 3369,
+        "startChar": 0,
+        "endLine": 3375,
+        "endChar": 87
+      },
+      "revId": "6d9231b0939adeb34a9b8abf17cf3337295af467",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80d8fe8e_0b527540",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3375,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-28T13:24:39Z",
+      "side": 1,
+      "message": ":o",
+      "parentUuid": "a7d692de_aa54340a",
       "range": {
         "startLine": 3369,
         "startChar": 0,

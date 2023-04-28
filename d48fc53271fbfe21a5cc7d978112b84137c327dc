@@ -52,6 +52,24 @@
       "parentUuid": "d2efb3be_6bfaaf45",
       "revId": "d48fc53271fbfe21a5cc7d978112b84137c327dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "398b70cf_39647c40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-28T13:24:39Z",
+      "side": 1,
+      "message": "\"Phew\" wasn\u0027t a sign of relief in this case, there are other flavors of \"phew\" :)\n\nMy first iteration was converting the entire buffer - but that went beyond what glBufferData was setting, the entire underlying allocation I suppose, so while figuring out a solution for this I thought why not only convert the part that we actually need and that\u0027s how we ended here. Given how you pointed out that we\u0027re not doing it like that in other places, I\u0027ll look into converting the entire buffer but only according to the actual data size.",
+      "parentUuid": "9793f4e0_b11889b5",
+      "revId": "d48fc53271fbfe21a5cc7d978112b84137c327dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

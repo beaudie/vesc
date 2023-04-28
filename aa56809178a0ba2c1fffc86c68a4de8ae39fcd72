@@ -52,6 +52,24 @@
       "parentUuid": "1ba8fd71_77fa1a90",
       "revId": "aa56809178a0ba2c1fffc86c68a4de8ae39fcd72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3aa0f511_7281f5fc",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3388,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-28T13:24:39Z",
+      "side": 1,
+      "message": "Okay, so the reason I used VkBufferMemoryBarrier was because you said \"for texel buffers, not transfer\" so looking for how to set up a barrier on the buffer I ended up with this (I barely understand what I\u0027m doing when it comes to these barriers)\n\nI\u0027ll do \"STAGE_COMPUTE/ACCESS_SHADER_WRITE to STAGE_ALL_GRAPHICS/ACCESS_SHADER_READ\" as you suggested on the other comment, thanks.",
+      "parentUuid": "ac3ba9a5_e713d28a",
+      "revId": "aa56809178a0ba2c1fffc86c68a4de8ae39fcd72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
