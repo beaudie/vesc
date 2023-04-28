@@ -5572,6 +5572,10 @@ VkResult ImageMemorySuballocator::allocateAndBindMemory(RendererVk *renderer,
 
     renderer->onMemoryAlloc(memoryAllocationType, *sizeOut, *memoryTypeIndexOut,
                             allocationOut->getHandle());
+    renderer->getMemoryAllocationTracker()->compareExpectedFlagsWithAllocatedFlags(
+        requiredFlags, preferredFlags, *memoryFlagsOut,
+        reinterpret_cast<void *>(allocationOut->getHandle()));
+
     return VK_SUCCESS;
 }
 
