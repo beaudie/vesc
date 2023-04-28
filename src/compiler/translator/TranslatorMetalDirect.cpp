@@ -1390,8 +1390,8 @@ bool TranslatorMetalDirect::translateImpl(TInfoSinkBase &sink,
         if (isSampleMaskAllowed())
         {
             mValidateASTOptions.validateVariableReferences = false;
-            if (!AddSampleMaskDeclaration(*this, *root, symbolTable, driverUniforms,
-                                          compileOptions.emulateAlphaToCoverage, usesSampleMask))
+            if (!AddSampleMaskDeclaration(*this, *root, symbolTable, driverUniforms, true,
+                                          usesSampleMask))
             {
                 return false;
             }
