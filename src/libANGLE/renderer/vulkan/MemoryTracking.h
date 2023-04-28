@@ -153,6 +153,11 @@ class MemoryAllocationTracker : angle::NonCopyable
     uint64_t getActiveMemoryAllocationsCount(uint32_t allocTypeIndex) const;
     uint64_t getActiveHeapMemoryAllocationsCount(uint32_t allocTypeIndex, uint32_t heapIndex) const;
 
+    // Compare the preferred flags with the flags of the allocated memory.
+    void comparePreferredFlagsWithAllocatedFlags(VkMemoryPropertyFlags preferredFlags,
+                                                 VkMemoryPropertyFlags allocatedFlags,
+                                                 void *handle);
+
     // Pending memory allocation information is used for logging in case of an unsuccessful
     // allocation. It is cleared in onMemoryAlloc().
     VkDeviceSize getPendingMemoryAllocationSize() const;
