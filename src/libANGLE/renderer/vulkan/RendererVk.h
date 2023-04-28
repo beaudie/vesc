@@ -77,7 +77,7 @@ class ImageMemorySuballocator : angle::NonCopyable
     void destroy(RendererVk *renderer);
 
     // Allocates memory for the image and binds it.
-    VkResult allocateAndBindMemory(RendererVk *renderer,
+    VkResult allocateAndBindMemory(Context *context,
                                    Image *image,
                                    const VkImageCreateInfo *imageCreateInfo,
                                    VkMemoryPropertyFlags requiredFlags,
@@ -94,6 +94,21 @@ class ImageMemorySuballocator : angle::NonCopyable
                                               VkDeviceSize size,
                                               int value,
                                               VkMemoryPropertyFlags flags);
+
+  private:
+    // Tries to reallocate memory in the case of failure.
+    VkResult retryAllocateAndBindMemory(Context *context,
+                                        const VkResult allocationError,
+                                        Image *image,
+                                        VkMemoryPropertyFlags requiredFlags,
+                                        VkMemoryPropertyFlags preferredFlags,
+                                        MemoryAllocationType memoryAllocationType,
+                                        uint32_t memoryTypeBits,
+                                        bool allocateDedicatedMemory,
+                                        Allocation *allocationOut,
+                                        VkMemoryPropertyFlags *memoryFlagsOut,
+                                        uint32_t *memoryTypeIndexOut,
+                                        VkDeviceSize *sizeOut);
 };
 }  // namespace vk
 
