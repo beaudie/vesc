@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88692731_e407151c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-04-28T00:15:32Z",
+      "side": 1,
+      "message": "lgtm+2\n\nCC\u0027ing geofflang@ in case he\u0027d like to look at this tomorrow.",
+      "revId": "ec7f6e195fa359a0ea149efbc4dc989c76e6519a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
