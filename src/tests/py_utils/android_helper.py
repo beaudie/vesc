@@ -354,13 +354,13 @@ def _DumpDebugInfo(since_time):
     logcat_output = _AdbRun(['logcat', '-t', since_time]).decode()
     logging.info('logcat:\n%s', logcat_output)
 
-    pid_lines = [
-        ln for ln in logcat_output.split('\n')
-        if 'org.chromium.native_test.NativeTest.StdoutFile' in ln
-    ]
-    if pid_lines:
-        debuggerd_output = _AdbShell('debuggerd %s' % pid_lines[-1].split(' ')[2]).decode()
-        logging.warning('debuggerd output:\n%s', debuggerd_output)
+    # pid_lines = [
+    #     ln for ln in logcat_output.split('\n')
+    #     if 'org.chromium.native_test.NativeTest.StdoutFile' in ln
+    # ]
+    # if pid_lines:
+    #     debuggerd_output = _AdbShell('debuggerd %s' % pid_lines[-1].split(' ')[2]).decode()
+    #     logging.warning('debuggerd output:\n%s', debuggerd_output)
 
 
 def _RunInstrumentationWithTimeout(flags, timeout):
@@ -475,13 +475,18 @@ def RunTests(test_suite, args, stdoutfile=None, log_output=True):
                 device_output_dir = stack.enter_context(_TempDeviceDir())
                 args.append('--render-test-output-dir=' + device_output_dir)
 
+            initial_time = _AdbShell('date +"%F %T.%3N"').decode().strip()
             output = _RunInstrumentationWithTimeout(args, timeout=10 * 60)
 
             if '--list-tests' in args:
                 # When listing tests, there may be no output file. We parse stdout anyways.
                 test_output = '{"interrupted": false}'
             else:
-                test_output = _ReadDeviceFile(device_test_output_path)
+                try:
+                    test_output = _ReadDeviceFile(device_test_output_path)
+                except subprocess.CalledProcessError:
+                    _DumpDebugInfo(since_time=initial_time)
+                    raise
 
             if test_output_path:
                 with open(test_output_path, 'wb') as f:
