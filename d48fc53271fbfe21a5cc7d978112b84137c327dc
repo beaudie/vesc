@@ -70,6 +70,24 @@
       "parentUuid": "9793f4e0_b11889b5",
       "revId": "d48fc53271fbfe21a5cc7d978112b84137c327dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b98abfca_1585cf6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-04-28T13:41:07Z",
+      "side": 1,
+      "message": "aha, I think my previous issue was due to using `bufferHelper-\u003egetSize()` instead of `bufferVk-\u003egetSize()`\n\n```\nbinding size\u003d24 bufferVk-\u003egetSize()\u003d56 bufferHelper-\u003egetSize()\u003d256\n```",
+      "parentUuid": "398b70cf_39647c40",
+      "revId": "d48fc53271fbfe21a5cc7d978112b84137c327dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
