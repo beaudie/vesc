@@ -496,6 +496,53 @@ TEST_P(VulkanImageTest, ClientBufferWithDraw)
     vkFreeMemory(helper.getDevice(), vkDeviceMemory, nullptr);
 }
 
+// Test that when VMA image suballocation is used, image memory can be allocated from the system in
+// case the device memory runs out.
+TEST_P(VulkanImageTest, AllocateVMAImageWhenDeviceOOM)
+{
+    ANGLE_SKIP_TEST_IF(!getEGLWindow()->isFeatureEnabled(Feature::UseVmaForImageSuballocation));
+
+    VulkanHelper helper;
+    helper.initializeFromANGLE();
+
+    // Acquire the sizes and memory property flags for all available memory types. There should be
+    // at least one memory heap without the device local bit (VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT).
+    // Otherwise, the test should be skipped.
+    VkPhysicalDeviceMemoryProperties memoryProperties;
+    vkGetPhysicalDeviceMemoryProperties(helper.getPhysicalDevice(), &memoryProperties);
+
+    VkDeviceSize maxDeviceMemoryHeapSize      = 0;
+    uint32_t heapsWithoutLocalDeviceMemoryBit = 0;
+    for (uint32_t i = 0; i < memoryProperties.memoryHeapCount; i++)
+    {
+        if ((memoryProperties.memoryHeaps[i].flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT) == 0)
+        {
+            heapsWithoutLocalDeviceMemoryBit++;
+        }
+        else if (maxDeviceMemoryHeapSize < memoryProperties.memoryHeaps[i].size)
+        {
+            maxDeviceMemoryHeapSize = memoryProperties.memoryHeaps[i].size;
+        }
+    }
+    ANGLE_SKIP_TEST_IF(heapsWithoutLocalDeviceMemoryBit == 0);
+
+    // Device memory is the first choice for image memory allocation. However, in case it runs out,
+    // memory should be allocated from the system if available. Therefore, we want to make sure that
+    // we can still allocate image memory even if the device memory is full.
+    constexpr VkDeviceSize kTextureSize = 2048 * 2048 * 4;
+    VkDeviceSize textureCount           = (maxDeviceMemoryHeapSize / kTextureSize) + 2;
+
+    std::vector<GLTexture> textures;
+    textures.resize(textureCount);
+    for (uint32_t i = 0; i < textureCount; i++)
+    {
+        glBindTexture(GL_TEXTURE_2D, textures[i]);
+        glTexStorage2DEXT(GL_TEXTURE_2D, 1, GL_RGBA8, 2048, 2048);
+        glDrawArrays(GL_POINTS, 0, 1);
+        EXPECT_GL_NO_ERROR();
+    }
+}
+
 // Test that texture storage created from VkImage memory is considered pre-initialized in GL.
 TEST_P(VulkanImageTest, PreInitializedOnGLImport)
 {

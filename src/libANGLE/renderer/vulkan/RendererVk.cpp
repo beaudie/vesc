@@ -5571,6 +5571,12 @@ VkResult ImageMemorySuballocator::allocateAndBindMemory(RendererVk *renderer,
 
     renderer->onMemoryAlloc(memoryAllocationType, *sizeOut, *memoryTypeIndexOut,
                             allocationOut->getHandle());
+    if (preferredFlags != *memoryFlagsOut)
+    {
+        INFO() << "Memory type index chosen for object " << allocationOut->getHandle()
+               << " does not have the preferred property flags.";
+    }
+
     return VK_SUCCESS;
 }
 
