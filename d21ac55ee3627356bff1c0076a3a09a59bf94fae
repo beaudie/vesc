@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d8b6f2a_f19fa508",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-04-28T18:33:10Z",
+      "side": 1,
+      "message": "Note: currently this CL fails because of a VVL bug.\n\nTemporary fix for VVL bug is here: https://chromium-review.googlesource.com/c/angle/angle/+/4481916\n\nI plan to report and fix this issue in the VVL repo.",
+      "revId": "d21ac55ee3627356bff1c0076a3a09a59bf94fae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
