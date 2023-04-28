@@ -502,7 +502,6 @@ if (build_angle_trace_tests) {
     "$angle_root:angle_compression",
     "$angle_root/util:angle_frame_capture_test_utils",
     "$angle_root/util:angle_png_utils",
-    "$angle_root/util:angle_trace_interpreter",
   ]
 
   # Allows us to edit traces and remove chunks of code without compile warnings.
@@ -519,6 +518,7 @@ if (build_angle_trace_tests) {
       sources = _angle_trace_common_sources
       deps = _angle_trace_common_deps + [
                "$angle_root/util:angle_trace_fixture",
+               "$angle_root/util:angle_trace_interpreter",
                "restricted_traces:angle_restricted_traces",
              ]
       cflags_cc = _angle_trace_common_clang_flags
@@ -541,7 +541,10 @@ if (build_angle_trace_tests) {
     if (restricted_traces_outside_of_apk) {
       deps += [ "$angle_root/util:angle_trace_loader" ]
     } else {
-      deps += [ "restricted_traces:angle_restricted_traces" ]
+      deps += [
+        "$angle_root/util:angle_trace_interpreter",
+        "restricted_traces:angle_restricted_traces",
+      ]
     }
 
     data = [ "$angle_root/src/tests/py_utils/android_helper.py" ]
