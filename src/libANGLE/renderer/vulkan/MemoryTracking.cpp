@@ -410,6 +410,25 @@ uint64_t MemoryAllocationTracker::getActiveHeapMemoryAllocationsCount(uint32_t a
     return mActivePerHeapMemoryAllocationsCount[allocTypeIndex][heapIndex];
 }
 
+void MemoryAllocationTracker::compareExpectedFlagsWithAllocatedFlags(
+    VkMemoryPropertyFlags requiredFlags,
+    VkMemoryPropertyFlags preferredFlags,
+    VkMemoryPropertyFlags allocatedFlags,
+    void *handle)
+{
+    if (!kTrackMemoryAllocationDebug)
+    {
+        return;
+    }
+
+    ASSERT((requiredFlags & ~allocatedFlags) == 0);
+    if ((preferredFlags | requiredFlags) & ~allocatedFlags)
+    {
+        INFO() << "Memory type index chosen for object " << handle
+               << " lacks some of the preferred property flags.";
+    }
+}
+
 VkDeviceSize MemoryAllocationTracker::getPendingMemoryAllocationSize() const
 {
     if (!kTrackMemoryAllocationSizes)
