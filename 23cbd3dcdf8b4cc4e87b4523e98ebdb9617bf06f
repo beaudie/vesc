@@ -93,6 +93,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "367f35e8_d6c93e29",
+        "filename": "src/libANGLE/renderer/metal/shaders/gen_mtl_internal_shaders.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-04-28T16:11:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "812bbd6a_405ab5db",
+      "range": {
+        "startLine": 23,
+        "startChar": 15,
+        "endLine": 23,
+        "endChar": 45
+      },
+      "revId": "23cbd3dcdf8b4cc4e87b4523e98ebdb9617bf06f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d0ae0cac_e229dff5",
@@ -106,6 +130,30 @@
       "writtenOn": "2023-04-27T20:13:19Z",
       "side": 1,
       "message": "I think this variable is not used.",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 37
+      },
+      "revId": "23cbd3dcdf8b4cc4e87b4523e98ebdb9617bf06f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "736ec2b5_a6ee3ca9",
+        "filename": "src/libANGLE/renderer/metal/shaders/gen_mtl_internal_shaders.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-04-28T16:11:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0ae0cac_e229dff5",
       "range": {
         "startLine": 41,
         "startChar": 0,
@@ -139,6 +187,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee22155b_5c079384",
+        "filename": "src/libANGLE/renderer/metal/shaders/gen_mtl_internal_shaders.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-04-28T16:11:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55f534af_ae140604",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 35
+      },
+      "revId": "23cbd3dcdf8b4cc4e87b4523e98ebdb9617bf06f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "32d1dfe0_375d2741",
@@ -162,6 +234,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c379c6e3_b1154e18",
+        "filename": "src/libANGLE/renderer/metal/shaders/gen_mtl_internal_shaders.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-04-28T16:11:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32d1dfe0_375d2741",
+      "range": {
+        "startLine": 104,
+        "startChar": 26,
+        "endLine": 104,
+        "endChar": 32
+      },
+      "revId": "23cbd3dcdf8b4cc4e87b4523e98ebdb9617bf06f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "59696387_f6f9d650",
@@ -175,6 +271,30 @@
       "writtenOn": "2023-04-27T20:13:19Z",
       "side": 1,
       "message": "Similarly, for ios I think we need to use `-mios-version-min`.",
+      "range": {
+        "startLine": 105,
+        "startChar": 10,
+        "endLine": 105,
+        "endChar": 29
+      },
+      "revId": "23cbd3dcdf8b4cc4e87b4523e98ebdb9617bf06f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47e1b918_9b72f9d9",
+        "filename": "src/libANGLE/renderer/metal/shaders/gen_mtl_internal_shaders.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-04-28T16:11:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "59696387_f6f9d650",
       "range": {
         "startLine": 105,
         "startChar": 10,
