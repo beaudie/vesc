@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ade1c36_fea7ee18",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-04-29T01:40:58Z",
+      "side": 1,
+      "message": "Please split the registry+autogen stuff in a separate CL. That helps review by making the CL smaller, and we can land that faster and avoid unnecessary merge conflicts due to rebase during review.",
+      "revId": "ece4ba666d4715be97cfc6821282e62447a1e740",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
