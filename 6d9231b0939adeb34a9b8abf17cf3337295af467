@@ -280,6 +280,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b9fac3e9_750eb289",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3181,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-01T17:17:07Z",
+      "side": 1,
+      "message": "I updated the CL to do this. It seems to work mostly, but SwiftShader blows up with some kind of corruption it seems. I\u0027m getting a variety of crashes re-running the test, some with double-free message, various assertion failures in VVL or ANGLE. Any ideas what might be going wrong here?\n\nExamples (got all of these just re-running the same test):\n\n```\ndouble free or corruption (out)\n```\n\n```\nCouldn\u0027t find VkBuffer Object 0x2c000000002c. This should not happen and may indicate a bug in the application\n```\n\nSIGSEGV\n```\nsw::Spirv::~Spirv() at SpirvShader.cpp:832\nstd::Cr::shared_ptr\u003csw::SpirvShader\u003e::reset() at shared_ptr.h:214\nvk::GraphicsPipeline::destroyPipeline(VkAllocationCallbacks const*) at VkPipeline.cpp:572\n```\n\nSIGSEGV\n```\nFreePnextChain(void const*) at vk_safe_struct.cpp:64768\nFragmentShaderState::~FragmentShaderState() at unique_ptr.h:65\nPIPELINE_STATE::~PIPELINE_STATE() at shared_ptr.h:214\nValidationStateTracker::PreCallRecordDestroyPipeline(VkDevice_T*, VkPipeline_T*, VkAllocationCallbacks const*) at shared_ptr.h:214\nvulkan_layer_chassis::DestroyPipeline(VkDevice_T*, VkPipeline_T*, VkAllocationCallbacks const*) at unique_lock.h:62\nrx::vk::PipelineHelper::release(rx::ContextVk*) at vk_wrapper.h:1773\nrx::GraphicsPipelineCache\u003crx::GraphicsPipelineDescCompleteHash\u003e::release(rx::ContextVk*) at vk_cache_utils.cpp:6568\nrx::ProgramExecutableVk::resetLayout(rx::ContextVk*) at ProgramExecutableVk.cpp:428\nrx::ProgramExecutableVk::reset(rx::ContextVk*) at vk_wrapper.h:104\ngl::Program::onDestroy(gl::Context const*) at Program.cpp:914\n```\n\nSIGSEGV\n```\nSHADER_MODULE_STATE::StaticData::~StaticData() at __hash_table:1532\nSHADER_MODULE_STATE::~SHADER_MODULE_STATE() at vector:447\nValidationStateTracker::PreCallRecordDestroyShaderModule(VkDevice_T*, VkShaderModule_T*, VkAllocationCallbacks const*) at shared_ptr.h:214\nvulkan_layer_chassis::DestroyShaderModule(VkDevice_T*, VkShaderModule_T*, VkAllocationCallbacks const*) at unique_lock.h:62\nrx::ProgramInfo::release(rx::ContextVk*) at vk_wrapper.h:1697\nrx::ProgramExecutableVk::resetLayout(rx::ContextVk*) at ProgramExecutableVk.cpp:439\nrx::ProgramExecutableVk::reset(rx::ContextVk*) at vk_wrapper.h:104\ngl::Program::onDestroy(gl::Context const*) at Program.cpp:914\n```\n\nSIGSEGV\n```\n__libc_free at ??:?\nstd::Cr::deque\u003crx::vk::DescriptorSetHelper, std::Cr::allocator\u003crx::vk::DescriptorSetHelper\u003e \u003e::pop_front() at deque:2072\nrx::vk::DescriptorPoolHelper::allocateDescriptorSet(rx::vk::Context*, rx::vk::DescriptorSetLayout const\u0026, VkDescriptorSet_T**) at vk_helpers.cpp:3590\nrx::vk::DynamicDescriptorPool::allocateDescriptorSet(rx::vk::Context*, rx::vk::DescriptorSetLayout const\u0026, rx::vk::BindingPointer\u003crx::vk::DescriptorPoolHelper\u003e*, VkDescriptorSet_T**) at vk_helpers.cpp:?\nrx::UtilsVk::allocateDescriptorSet(rx::ContextVk*, rx::vk::CommandBufferHelperCommon*, rx::UtilsVk::Function, VkDescriptorSet_T**) at UtilsVk.cpp:?\nrx::UtilsVk::convertVertexBufferImpl(rx::ContextVk*, rx::vk::BufferHelper*, rx::vk::BufferHelper*, unsigned int, rx::vk::OutsideRenderPassCommandBufferHelper*, rx::UtilsVk::ConvertVertexShaderParams const\u0026) at UtilsVk.cpp:?\nrx::UtilsVk::copyRgbToRgba(rx::ContextVk*, rx::vk::BufferHelper*, unsigned int, unsigned int, rx::vk::BufferHelper*) at Error.h:179\n```",
+      "parentUuid": "e89ef852_e561c7a1",
+      "range": {
+        "startLine": 3179,
+        "startChar": 12,
+        "endLine": 3181,
+        "endChar": 88
+      },
+      "revId": "6d9231b0939adeb34a9b8abf17cf3337295af467",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1389d415_9175312a",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 3
