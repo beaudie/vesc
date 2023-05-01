@@ -274,7 +274,7 @@ TEST_P(ProgramBinaryTest, ZeroSizedUnlinkedBinary)
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
-ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(ProgramBinaryTest);
+ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(ProgramBinaryTest);
 
 class ProgramBinaryES3Test : public ProgramBinaryTest
 {
