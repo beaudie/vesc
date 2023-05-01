@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ef0e373_65f275c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-01T18:24:58Z",
+      "side": 1,
+      "message": "Good change, I\u0027ve been doing something similar locally, just hadn\u0027t polished it up.",
+      "revId": "96cd6743d5d68981bb03dbeb8c922fe73df6e16d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
