@@ -19,6 +19,7 @@ namespace mtl
 const char kMultisampledRenderingConstName[]    = "ANGLEMultisampledRendering";
 const char kRasterizerDiscardEnabledConstName[] = "ANGLERasterizerDisabled";
 const char kDepthWriteEnabledConstName[]        = "ANGLEDepthWriteEnabled";
+const char kEmulateAlphaToCoverageConstName[]   = "ANGLEEmulateAlphaToCoverageEnabled";
 }  // namespace mtl
 
 }  // namespace sh
