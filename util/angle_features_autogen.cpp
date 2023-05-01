@@ -76,6 +76,7 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
     {Feature::DisableGPUSwitchingSupport, "disableGPUSwitchingSupport"},
     {Feature::DisableMultisampledRenderToTexture, "disableMultisampledRenderToTexture"},
     {Feature::DisableNativeParallelCompile, "disableNativeParallelCompile"},
+    {Feature::DisablePipelinecachedataCompression, "disablePipelinecachedataCompression"},
     {Feature::DisableProgramBinary, "disableProgramBinary"},
     {Feature::DisableProgramCaching, "disableProgramCaching"},
     {Feature::DisableProgramCachingForTransformFeedback,

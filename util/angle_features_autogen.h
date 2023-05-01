@@ -73,6 +73,7 @@ enum class Feature
     DisableGPUSwitchingSupport,
     DisableMultisampledRenderToTexture,
     DisableNativeParallelCompile,
+    DisablePipelinecachedataCompression,
     DisableProgramBinary,
     DisableProgramCaching,
     DisableProgramCachingForTransformFeedback,
