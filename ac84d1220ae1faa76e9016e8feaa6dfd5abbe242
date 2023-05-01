@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46722efa_7bd44bd5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-01T14:54:09Z",
+      "side": 1,
+      "message": "LGTM, one comment request.\n\nDo you have any indication of how much this impacts debug performance?\n\nWe\u0027ll probably want to watch the performance of the bots.",
+      "revId": "ac84d1220ae1faa76e9016e8feaa6dfd5abbe242",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c224114_c2eb629c",
+        "filename": "src/tests/test_utils/runner/android/AngleNativeTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-01T14:54:09Z",
+      "side": 1,
+      "message": "Can you migrate your descriptive CL message to a comment here?  Otherwise will be difficult to remember the reasoning for this.",
+      "revId": "ac84d1220ae1faa76e9016e8feaa6dfd5abbe242",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
