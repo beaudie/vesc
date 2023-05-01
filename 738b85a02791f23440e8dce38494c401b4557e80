@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d87f6f6_782d7257",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-01T14:06:12Z",
+      "side": 1,
+      "message": "This is being unconditionally enabled in https://chromium-review.googlesource.com/c/angle/angle/+/4485008",
+      "revId": "738b85a02791f23440e8dce38494c401b4557e80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
