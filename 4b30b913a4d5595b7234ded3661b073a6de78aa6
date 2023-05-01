@@ -22,6 +22,30 @@
       },
       "revId": "4b30b913a4d5595b7234ded3661b073a6de78aa6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b026187a_6930b66e",
+        "filename": "extensions/ANGLE_polygon_mode.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-01T18:44:35Z",
+      "side": 1,
+      "message": "Never mind, just noticed that face is necessarily always FRONT_AND_BACK.",
+      "parentUuid": "f8a68314_5150214f",
+      "range": {
+        "startLine": 44,
+        "startChar": 31,
+        "endLine": 44,
+        "endChar": 35
+      },
+      "revId": "4b30b913a4d5595b7234ded3661b073a6de78aa6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
