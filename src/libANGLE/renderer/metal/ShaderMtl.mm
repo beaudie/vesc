@@ -123,7 +123,11 @@ std::shared_ptr<WaitableCompileEvent> ShaderMtl::compile(const gl::Context *cont
     options->clampFragDepth = true;
 #endif
 
-    if (displayMtl->getFeatures().emulateAlphaToCoverage.enabled)
+    options->metal.generateShareableShaders =
+        displayMtl->getFeatures().generateShareableShaders.enabled;
+
+    if (displayMtl->getFeatures().emulateAlphaToCoverage.enabled ||
+        options->metal.generateShareableShaders)
     {
         options->emulateAlphaToCoverage = true;
     }
