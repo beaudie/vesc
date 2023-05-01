@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8a68314_5150214f",
+        "filename": "extensions/ANGLE_polygon_mode.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-01T18:42:04Z",
+      "side": 1,
+      "message": "How does this interact with `VkPipelineRasterizationStateCreateInfo::polygonMode`?\n\nI\u0027m not sure I understand the GL side correctly, if `glPolygonMode` sets different modes for front and back facing triangles, and then rendering is done without both faces (i.e. without culling either), do you actually get differently rendered triangles?\n\nIt doesn\u0027t look to me like that can be done in Vulkan. In the above, you\u0027d set `VkPipelineRasterizationStateCreateInfo::cullMode` to `VK_CULL_MODE_FRONT_AND_BACK`, but you can\u0027t set `VkPipelineRasterizationStateCreateInfo::polygonMode` individually for front and back-facing triangles.\n\nShould the extension be simplified even further so more backends can support it?",
+      "range": {
+        "startLine": 44,
+        "startChar": 31,
+        "endLine": 44,
+        "endChar": 35
+      },
+      "revId": "4b30b913a4d5595b7234ded3661b073a6de78aa6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
