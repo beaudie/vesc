@@ -26,7 +26,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 328
+#define ANGLE_SH_VERSION 329
 
 enum ShShaderSpec
 {
@@ -86,6 +86,8 @@ struct ShCompileOptionsMetal
     int defaultUniformsBindingIndex;
     // Binding index for UBO's argument buffer
     int UBOArgumentBufferBindingIndex;
+
+    bool generateShareableShaders;
 };
 
 // For ANGLE_shader_pixel_local_storage.
