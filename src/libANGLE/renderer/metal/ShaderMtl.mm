@@ -127,6 +127,8 @@ std::shared_ptr<WaitableCompileEvent> ShaderMtl::compile(const gl::Context *cont
     {
         options->emulateAlphaToCoverage = true;
     }
+    options->metal.generateShareableShaders =
+        displayMtl->getFeatures().generateShareableShaders.enabled;
 
     // Constants:
     options->metal.driverUniformsBindingIndex    = mtl::kDriverUniformsBindingIndex;
