@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a6c0229_423f2dcf",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-01T18:03:01Z",
+      "side": 1,
+      "message": "Could `buffer` be assumed `!\u003d nullptr` now?",
+      "revId": "b5bb6147a0aade93629332e5a4d15b020015809b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb1cd943_1f4c9575",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-01T18:03:01Z",
+      "side": 1,
+      "message": "```suggestion\n    // buffer sending signal to observers will not be too expensive.\n```",
+      "range": {
+        "startLine": 716,
+        "startChar": 42,
+        "endLine": 716,
+        "endChar": 49
+      },
+      "revId": "b5bb6147a0aade93629332e5a4d15b020015809b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "828f0773_4e5d7190",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-01T18:03:01Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 721,
+        "startChar": 12,
+        "endLine": 721,
+        "endChar": 20
+      },
+      "revId": "b5bb6147a0aade93629332e5a4d15b020015809b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
