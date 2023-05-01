@@ -26,7 +26,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 328
+#define ANGLE_SH_VERSION 329
 
 enum ShShaderSpec
 {
@@ -86,6 +86,8 @@ struct ShCompileOptionsMetal
     int defaultUniformsBindingIndex;
     // Binding index for UBO's argument buffer
     int UBOArgumentBufferBindingIndex;
+
+    bool generateShareableShaders;
 };
 
 // For ANGLE_shader_pixel_local_storage.
@@ -978,17 +980,19 @@ extern const char kDriverUniformsVarName[];
 // - 1 bit for whether depth should be transformed to Vulkan clip space
 // - 1 bit for whether alpha to coverage is enabled
 // - 10 bits unused
-constexpr uint32_t kDriverUniformsMiscSwapXYMask                  = 0x1;
-constexpr uint32_t kDriverUniformsMiscAdvancedBlendEquationOffset = 1;
-constexpr uint32_t kDriverUniformsMiscAdvancedBlendEquationMask   = 0x1F;
-constexpr uint32_t kDriverUniformsMiscSampleCountOffset           = 6;
-constexpr uint32_t kDriverUniformsMiscSampleCountMask             = 0x3F;
-constexpr uint32_t kDriverUniformsMiscEnabledClipPlanesOffset     = 12;
-constexpr uint32_t kDriverUniformsMiscEnabledClipPlanesMask       = 0xFF;
-constexpr uint32_t kDriverUniformsMiscTransformDepthOffset        = 20;
-constexpr uint32_t kDriverUniformsMiscTransformDepthMask          = 0x1;
-constexpr uint32_t kDriverUniformsMiscAlphaToCoverageOffset       = 21;
-constexpr uint32_t kDriverUniformsMiscAlphaToCoverageMask         = 0x1;
+constexpr uint32_t kDriverUniformsMiscSwapXYMask                   = 0x1;
+constexpr uint32_t kDriverUniformsMiscAdvancedBlendEquationOffset  = 1;
+constexpr uint32_t kDriverUniformsMiscAdvancedBlendEquationMask    = 0x1F;
+constexpr uint32_t kDriverUniformsMiscSampleCountOffset            = 6;
+constexpr uint32_t kDriverUniformsMiscSampleCountMask              = 0x3F;
+constexpr uint32_t kDriverUniformsMiscEnabledClipPlanesOffset      = 12;
+constexpr uint32_t kDriverUniformsMiscEnabledClipPlanesMask        = 0xFF;
+constexpr uint32_t kDriverUniformsMiscTransformDepthOffset         = 20;
+constexpr uint32_t kDriverUniformsMiscTransformDepthMask           = 0x1;
+constexpr uint32_t kDriverUniformsMiscAlphaToCoverageOffset        = 21;
+constexpr uint32_t kDriverUniformsMiscAlphaToCoverageMask          = 0x1;
+constexpr uint32_t kDriverUniformsMiscEmulateAlphaToCoverageOffset = 022;
+constexpr uint32_t kDriverUniformsMiscEmulateAlphaToCoverageMask   = 0x1;
 
 // Interface block array name used for atomic counter emulation
 extern const char kAtomicCountersBlockName[];

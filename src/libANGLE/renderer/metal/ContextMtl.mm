@@ -2756,10 +2756,15 @@ angle::Result ContextMtl::handleDirtyDriverUniforms(const gl::Context *context,
     const uint32_t alphaToCoverage = mState.isSampleAlphaToCoverageEnabled();
     ASSERT((alphaToCoverage & ~sh::vk::kDriverUniformsMiscAlphaToCoverageMask) == 0);
 
+    const uint32_t emulateAlphaToCoverage =
+        getDisplay()->getFeatures().emulateAlphaToCoverage.enabled;
+    ASSERT((emulateAlphaToCoverage & ~sh::vk::kDriverUniformsMiscEmulateAlphaToCoverageMask) == 0);
+
     mDriverUniforms.misc =
         (enabledClipDistances << sh::vk::kDriverUniformsMiscEnabledClipPlanesOffset) |
         (transformDepth << sh::vk::kDriverUniformsMiscTransformDepthOffset) |
-        (alphaToCoverage << sh::vk::kDriverUniformsMiscAlphaToCoverageOffset);
+        (alphaToCoverage << sh::vk::kDriverUniformsMiscAlphaToCoverageOffset) |
+        (emulateAlphaToCoverage << sh::vk::kDriverUniformsMiscEmulateAlphaToCoverageOffset);
 
     // Sample coverage mask
     if (mState.isSampleCoverageEnabled())

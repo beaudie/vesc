@@ -386,6 +386,23 @@ TIntermTyped *DriverUniform::getAlphaToCoverage() const
                                                &args);
 }
 
+TIntermTyped *DriverUniform::getEmulateAlphaToCoverage() const
+{
+    TIntermTyped *miscRef = createDriverUniformRef(kMisc);
+    TIntermTyped *emulateAlphaToCoverage =
+        new TIntermBinary(EOpBitShiftRight, miscRef,
+                          CreateUIntNode(vk::kDriverUniformsMiscEmulateAlphaToCoverageOffset));
+    emulateAlphaToCoverage =
+        new TIntermBinary(EOpBitwiseAnd, emulateAlphaToCoverage,
+                          CreateUIntNode(vk::kDriverUniformsMiscEmulateAlphaToCoverageMask));
+
+    TIntermSequence args = {
+        emulateAlphaToCoverage,
+    };
+    return TIntermAggregate::CreateConstructor(*StaticType::GetBasic<EbtBool, EbpUndefined>(),
+                                               &args);
+}
+
 //
 // Class DriverUniformExtended
 //
