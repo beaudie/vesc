@@ -64,6 +64,15 @@ namespace
 constexpr Name kFlippedPointCoordName("flippedPointCoord", SymbolType::AngleInternal);
 constexpr Name kFlippedFragCoordName("flippedFragCoord", SymbolType::AngleInternal);
 
+TVariable *CreateEmulateAlphaToCoverageVar(TSymbolTable &symbolTable)
+{
+    TType *boolType = new TType(EbtBool);
+    boolType->setQualifier(EvqConst);
+    return new TVariable(&symbolTable,
+                         sh::ImmutableString(sh::mtl::kEmulateAlphaToCoverageConstName), boolType,
+                         SymbolType::AngleInternal);
+}
+
 constexpr const TVariable kgl_VertexIDMetal(BuiltInId::gl_VertexID,
                                             ImmutableString("gl_VertexID"),
                                             SymbolType::BuiltIn,
@@ -219,7 +228,8 @@ TIntermSequence *GetMainSequence(TIntermBlock *root)
                                        TSymbolTable *symbolTable,
                                        const TVariable *builtin,
                                        const Name &flippedVariableName,
-                                       TIntermTyped *pivot)
+                                       TIntermTyped *pivot,
+                                       bool makeConditional)
 {
     // Create a symbol reference to 'builtin'.
     TIntermSymbol *builtinRef = new TIntermSymbol(builtin);
@@ -259,10 +269,34 @@ TIntermSequence *GetMainSequence(TIntermBlock *root)
         new TIntermSwizzle(flippedBuiltinRef->deepCopy(), swizzleOffsetXY);
     TIntermBinary *assignToY = new TIntermBinary(EOpAssign, correctedXY, plusPivot);
 
-    // Add this assigment at the beginning of the main function
-    insertSequence->insert(insertSequence->begin(), assignToY);
-    insertSequence->insert(insertSequence->begin(), assignment);
+    if (makeConditional)
+    {
+        TIntermBlock *flipBlock = new TIntermBlock;
+        flipBlock->appendStatement(assignment);
+        flipBlock->appendStatement(assignToY);
 
+        TIntermSequence noFlipSequence;
+        noFlipSequence.push_back(builtinRef->deepCopy());
+        TIntermAggregate *noFlipAggregate =
+            TIntermAggregate::CreateConstructor(builtin->getType(), &noFlipSequence);
+        TIntermBinary *noFlipAssignment =
+            new TIntermBinary(EOpAssign, flippedBuiltinRef, noFlipAggregate);
+        TIntermBlock *noFlipBlock = new TIntermBlock();
+        noFlipBlock->appendStatement(noFlipAssignment);
+
+        TVariable *emulateAlphaToCoverageVar = CreateEmulateAlphaToCoverageVar(*symbolTable);
+        TIntermIfElse *flipIfElse =
+            new TIntermIfElse(new TIntermSymbol(emulateAlphaToCoverageVar), flipBlock, noFlipBlock);
+
+        // Add this assigment at the beginning of the main function
+        insertSequence->insert(insertSequence->begin(), flipIfElse);
+    }
+    else
+    {
+        // Add this assigment at the beginning of the main function
+        insertSequence->insert(insertSequence->begin(), assignToY);
+        insertSequence->insert(insertSequence->begin(), assignment);
+    }
     return compiler->validateAST(root);
 }
 
@@ -271,7 +305,8 @@ TIntermSequence *GetMainSequence(TIntermBlock *root)
                                              TIntermBlock *root,
                                              TIntermSequence *insertSequence,
                                              TSymbolTable *symbolTable,
-                                             const DriverUniformMetal *driverUniforms)
+                                             const DriverUniformMetal *driverUniforms,
+                                             bool makeConditional)
 {
     TIntermTyped *flipXY = driverUniforms->getFlipXY(symbolTable, DriverUniformFlip::Fragment);
     TIntermTyped *pivot  = driverUniforms->getHalfRenderArea();
@@ -279,7 +314,7 @@ TIntermSequence *GetMainSequence(TIntermBlock *root)
     const TVariable *fragCoord = static_cast<const TVariable *>(
         symbolTable->findBuiltIn(ImmutableString("gl_FragCoord"), compiler->getShaderVersion()));
     return FlipBuiltinVariable(compiler, root, insertSequence, flipXY, symbolTable, fragCoord,
-                               kFlippedFragCoordName, pivot);
+                               kFlippedFragCoordName, pivot, makeConditional);
 }
 
 void DeclareRightBeforeMain(TIntermBlock &root, const TVariable &var)
@@ -431,6 +466,7 @@ void AddFragDepthEXTDeclaration(TCompiler &compiler, TIntermBlock &root, TSymbol
                                             TSymbolTable &symbolTable,
                                             const DriverUniformMetal *driverUniforms,
                                             bool emulateAlphaToCoverage,
+                                            bool alwaysIncludeEmulateAlpha,
                                             bool usesSampleMask)
 {
     // uint32_t ANGLE_metal_SampleMask [[sample_mask]]
@@ -457,7 +493,7 @@ void AddFragDepthEXTDeclaration(TCompiler &compiler, TIntermBlock &root, TSymbol
             EOpBitwiseAndAssign, new TIntermSymbol(angleSampleMask), glSampleMask0));
     }
 
-    if (emulateAlphaToCoverage)
+    if (emulateAlphaToCoverage || alwaysIncludeEmulateAlpha)
     {
         // Some Metal drivers ignore alpha-to-coverage state when a fragment
         // shader writes to [[sample_mask]]. Moreover, Metal pipeline state
@@ -615,8 +651,19 @@ void AddFragDepthEXTDeclaration(TCompiler &compiler, TIntermBlock &root, TSymbol
         alphaBlock->appendStatement(new TIntermBinary(
             EOpBitwiseAndAssign, new TIntermSymbol(angleSampleMask), new TIntermSymbol(alphaMask)));
 
-        block->appendStatement(
-            new TIntermIfElse(driverUniforms->getAlphaToCoverage(), alphaBlock, nullptr));
+        TIntermTyped *useAlphaToCoverage;
+        if (alwaysIncludeEmulateAlpha)
+        {
+            TVariable *emulateAlphaToCoverageVar = CreateEmulateAlphaToCoverageVar(symbolTable);
+            useAlphaToCoverage =
+                new TIntermBinary(TOperator::EOpLogicalAnd, driverUniforms->getAlphaToCoverage(),
+                                  new TIntermSymbol(emulateAlphaToCoverageVar));
+        }
+        else
+        {
+            useAlphaToCoverage = driverUniforms->getAlphaToCoverage();
+        }
+        block->appendStatement(new TIntermIfElse(useAlphaToCoverage, alphaBlock, nullptr));
     }
 
     // Sample mask assignment is guarded by ANGLEMultisampledRendering specialization constant
@@ -1262,17 +1309,19 @@ bool TranslatorMetalDirect::translateImpl(TInfoSinkBase &sink,
             TIntermConstantUnion *pivot = CreateFloatNode(0.5f, EbpMedium);
             if (!FlipBuiltinVariable(this, root, GetMainSequence(root), flipNegXY,
                                      &getSymbolTable(), BuiltInVariable::gl_PointCoord(),
-                                     kFlippedPointCoordName, pivot))
+                                     kFlippedPointCoordName, pivot, false))
             {
                 return false;
             }
             DeclareRightBeforeMain(*root, *BuiltInVariable::gl_PointCoord());
         }
 
-        if (usesFragCoord || compileOptions.emulateAlphaToCoverage)
+        if (usesFragCoord || compileOptions.emulateAlphaToCoverage ||
+            compileOptions.metal.generateShareableShaders)
         {
+            const bool useConditional = !usesFragCoord;
             if (!InsertFragCoordCorrection(this, compileOptions, root, GetMainSequence(root),
-                                           &getSymbolTable(), driverUniforms))
+                                           &getSymbolTable(), driverUniforms, useConditional))
             {
                 return false;
             }
@@ -1391,7 +1440,9 @@ bool TranslatorMetalDirect::translateImpl(TInfoSinkBase &sink,
         {
             mValidateASTOptions.validateVariableReferences = false;
             if (!AddSampleMaskDeclaration(*this, *root, symbolTable, driverUniforms,
-                                          compileOptions.emulateAlphaToCoverage, usesSampleMask))
+                                          compileOptions.emulateAlphaToCoverage,
+                                          compileOptions.metal.generateShareableShaders,
+                                          usesSampleMask))
             {
                 return false;
             }

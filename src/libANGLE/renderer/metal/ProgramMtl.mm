@@ -966,6 +966,13 @@ angle::Result ProgramMtl::getSpecializedShader(ContextMtl *context,
             [funcConstants setConstantValue:&allowFragDepthWrite
                                        type:MTLDataTypeBool
                                    withName:depthWriteEnabledStr];
+            const bool emulateAlphaToCoverageEnabled =
+                renderPipelineDesc.emulateAlphaToCoverageEnabled;
+            NSString *emulateAlphaToCoverageStr =
+                [NSString stringWithUTF8String:sh::mtl::kEmulateAlphaToCoverageConstName];
+            [funcConstants setConstantValue:&emulateAlphaToCoverageEnabled
+                                       type:MTLDataTypeBool
+                                   withName:emulateAlphaToCoverageStr];
         }
 
     }  // gl::ShaderType::Fragment
