@@ -1309,6 +1309,8 @@ void DisplayMtl::initializeFeatures()
     ANGLE_FEATURE_CONDITION(&mFeatures, disableStagedInitializationOfPackedTextureFormats,
                             isIntel() || isAMD());
 
+    ANGLE_FEATURE_CONDITION((&mFeatures), generateShareableShaders, true);
+
     ApplyFeatureOverrides(&mFeatures, getState());
 }
 
