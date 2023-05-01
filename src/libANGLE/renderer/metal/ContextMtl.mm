@@ -2896,9 +2896,11 @@ angle::Result ContextMtl::checkIfPipelineChanged(const gl::Context *context,
             mRenderPipelineDesc.rasterizationType = mtl::RenderPipelineRasterization::Enabled;
         }
         mRenderPipelineDesc.inputPrimitiveTopology = topologyClass;
+        mRenderPipelineDesc.emulateAlphaToCoverageEnabled =
+            getDisplay()->getFeatures().emulateAlphaToCoverage.enabled;
         mRenderPipelineDesc.alphaToCoverageEnabled =
             mState.isSampleAlphaToCoverageEnabled() &&
-            !getDisplay()->getFeatures().emulateAlphaToCoverage.enabled;
+            !mRenderPipelineDesc.emulateAlphaToCoverageEnabled;
 
         mRenderPipelineDesc.outputDescriptor.updateEnabledDrawBuffers(
             mDrawFramebuffer->getState().getEnabledDrawBuffers());

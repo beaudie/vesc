@@ -284,6 +284,8 @@ struct alignas(4) RenderPipelineDesc
 
     bool alphaToCoverageEnabled : 1;
 
+    bool emulateAlphaToCoverageEnabled : 1;
+
     // These flags are for emulation and do not correspond to any flags in
     // MTLRenderPipelineDescriptor descriptor. These flags should be used by
     // RenderPipelineCacheSpecializeShaderFactory.
