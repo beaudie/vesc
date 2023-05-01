@@ -70,6 +70,30 @@
       },
       "revId": "c64a410816c6f7558a692dd7097b236b77a5ab8e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22bd4966_2ef09f06",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2899,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-05-01T22:47:29Z",
+      "side": 1,
+      "message": "(BTW, with this new finding, I am not sure getBufferViewAndRecordUse is still the right place to do conversion. Once you figure out how the texture gets notified for buffer change, we can see where is easy place to do conversion, it could be syncState is better place).",
+      "parentUuid": "9798d552_6874ba6a",
+      "range": {
+        "startLine": 2890,
+        "startChar": 12,
+        "endLine": 2899,
+        "endChar": 13
+      },
+      "revId": "c64a410816c6f7558a692dd7097b236b77a5ab8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
