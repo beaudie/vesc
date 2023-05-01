@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0459833_2bf5ac66",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2640,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-01T17:56:58Z",
+      "side": 1,
+      "message": "Done, made the allocation lazy. I can\u0027t say it makes things better though, the entry point still asks if there are any unlocked tail calls, and that ends up making the allocation anyway :shrug:",
+      "parentUuid": "0295fe95_49cefe4d",
+      "range": {
+        "startLine": 2637,
+        "startChar": 0,
+        "endLine": 2640,
+        "endChar": 1
+      },
+      "revId": "18c6388db19ed5908433692fe9557a69cd40a80e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1ae4c4b9_ef78c1ff",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-04-27T18:43:10Z",
       "side": 1,
       "message": "Gross. We should factor this logic into the tls code at some point. It\u0027s now being duplicated multiple times.\n\nFine for now.",
+      "range": {
+        "startLine": 2605,
+        "startChar": 1,
+        "endLine": 2642,
+        "endChar": 0
+      },
+      "revId": "18c6388db19ed5908433692fe9557a69cd40a80e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9feb894_aa44b846",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2642,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-01T17:56:58Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "1ae4c4b9_ef78c1ff",
       "range": {
         "startLine": 2605,
         "startChar": 1,
