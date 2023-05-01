@@ -328,6 +328,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a8565666_9c8a0b6d",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3181,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-01T20:50:19Z",
+      "side": 1,
+      "message": "Aha thanks, yup it was the conversion itself that I mis-configured. The pixel count was incorrect so it overran the buffer and wreaked havoc. Now I\u0027m only getting 2 failures yay:\n* D3D11 backend on Win (pixels remain black). D3D11.. Just skip this I guess?\n* ES3_1_OpenGLES backend on Android:\n```\nERROR: 0:2: \u0027\u0027 :     GLSL error: extension \u0027GL_OES_texture_buffer\u0027 is not supported\nERROR: 0:3: \u0027usamplerBuffer\u0027 : requires extension GL_EXT_texture_buffer to be enabled \n```\nI\u0027m skipping the test if `GL_EXT_texture_buffer` is not available.. I guess that doesn\u0027t work correctly in this case.",
+      "parentUuid": "1cc9d985_7d143b05",
+      "range": {
+        "startLine": 3179,
+        "startChar": 12,
+        "endLine": 3181,
+        "endChar": 88
+      },
+      "revId": "6d9231b0939adeb34a9b8abf17cf3337295af467",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1389d415_9175312a",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 3
