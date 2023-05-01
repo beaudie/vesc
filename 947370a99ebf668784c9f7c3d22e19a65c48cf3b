@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "710b45b9_5fa46c02",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-05-01T22:07:29Z",
+      "side": 1,
+      "message": "The improvement is conclusive with asphalt_9 (consistent with 3 test run), just not big as micro benchmark would produce.",
+      "parentUuid": "8a71274b_f1b2682e",
+      "range": {
+        "startLine": 20,
+        "startChar": 8,
+        "endLine": 20,
+        "endChar": 57
+      },
+      "revId": "947370a99ebf668784c9f7c3d22e19a65c48cf3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ceeb518c_6aef5f13",
@@ -41,6 +65,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "500eea02_431dc201",
+        "filename": "src/common/bitset_utils.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 720,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-05-01T22:07:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ceeb518c_6aef5f13",
+      "revId": "947370a99ebf668784c9f7c3d22e19a65c48cf3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "acb82eb8_3b12e654",
@@ -54,6 +96,30 @@
       "writtenOn": "2023-05-01T18:23:25Z",
       "side": 1,
       "message": "`sizeof(value) * 8`?",
+      "range": {
+        "startLine": 724,
+        "startChar": 55,
+        "endLine": 724,
+        "endChar": 68
+      },
+      "revId": "947370a99ebf668784c9f7c3d22e19a65c48cf3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c70b5f6_93ed9e04",
+        "filename": "src/common/bitset_utils.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-05-01T22:07:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "acb82eb8_3b12e654",
       "range": {
         "startLine": 724,
         "startChar": 55,
@@ -87,6 +153,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "42314375_d5aa30b9",
+        "filename": "src/common/bitset_utils.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 733,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-05-01T22:07:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "afb26313_4b2808b0",
+      "range": {
+        "startLine": 722,
+        "startChar": 0,
+        "endLine": 733,
+        "endChar": 0
+      },
+      "revId": "947370a99ebf668784c9f7c3d22e19a65c48cf3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ac7848e1_962d04f2",
@@ -100,6 +190,24 @@
       "writtenOn": "2023-05-01T18:23:25Z",
       "side": 1,
       "message": "Comment could use improvement, something about unassigning subject because it was removed from the buffer\u0027s observer list.",
+      "revId": "947370a99ebf668784c9f7c3d22e19a65c48cf3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "019df182_b3ba3156",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-05-01T22:07:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac7848e1_962d04f2",
       "revId": "947370a99ebf668784c9f7c3d22e19a65c48cf3b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -127,6 +235,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "674d3c87_5c6608bb",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-05-01T22:07:29Z",
+      "side": 1,
+      "message": "No this one is specific for content change.\nChanged to mBitMask, since it is inside VertexArrayBufferContentsObservers class, the class already indicates \"buffer content observer\".",
+      "parentUuid": "c04728d2_bcd1bd30",
+      "range": {
+        "startLine": 890,
+        "startChar": 5,
+        "endLine": 890,
+        "endChar": 10
+      },
+      "revId": "947370a99ebf668784c9f7c3d22e19a65c48cf3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aa77477b_a65e53c6",
@@ -140,6 +272,30 @@
       "writtenOn": "2023-05-01T18:23:25Z",
       "side": 1,
       "message": "```suggestion\n        // This vertex array were not observing changes inside buffer while it was not current.\n```",
+      "range": {
+        "startLine": 149,
+        "startChar": 76,
+        "endLine": 149,
+        "endChar": 87
+      },
+      "revId": "947370a99ebf668784c9f7c3d22e19a65c48cf3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afa1de1c_1e1da71f",
+        "filename": "src/libANGLE/VertexArray.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-05-01T22:07:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa77477b_a65e53c6",
       "range": {
         "startLine": 149,
         "startChar": 76,
