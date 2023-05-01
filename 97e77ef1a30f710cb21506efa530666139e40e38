@@ -39,6 +39,30 @@
       },
       "revId": "97e77ef1a30f710cb21506efa530666139e40e38",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f85563b_d119dd93",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 790,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-01T12:20:39Z",
+      "side": 1,
+      "message": "In that case `lastPresentResult` will be always `VK_NOT_READY` when `asyncCommandQueue` is disabled. I want to have valid `lastPresentResult` regardless of `asyncCommandQueue` status.\n\nTo have valid `lastPresentResult` when `asyncCommandQueue` is disabled need to update `lastPresentResult` in the `RendererVk`, and I think that this is a less clean solution.\n\nIn my initial implementation both `CommandQueue::queuePresent` and `CommandProcessor::enqueuePresent` were returning `VkResult` and also updated `lastPresentResult`. First result is for the `RendererVk` method itself (which may be `CommandProcessor::enqueuePresent` - not a present), and the `lastPresentResult` is the actual present result. Now, `CommandProcessor::enqueuePresent()` initializes  `lastPresentResult` to `VK_SUCCESS` that is technically incorrect.\n\nIMO it is better to have 2 VkResult. Return result for the synchronous operation, and `SwapchainStatus` for asynchronous. However, when `asyncCommandQueue` is disabled, `SwapchainStatus` is still updated synchronously for consistency. I think this way we even can remove check for `asyncCommandQueue` in the `WindowSurfaceVk` and check `SwapchainStatus` unconditionally.",
+      "parentUuid": "d7b79312_adabc620",
+      "range": {
+        "startLine": 790,
+        "startChar": 4,
+        "endLine": 790,
+        "endChar": 31
+      },
+      "revId": "97e77ef1a30f710cb21506efa530666139e40e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
