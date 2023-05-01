@@ -307,20 +307,6 @@ std::string UpdateFragmentShaderOutputs(std::string shaderSourceIn,
         outputSource =
             outputSource.replace(alphaFound, alphaPlaceholder.length(), alphaStream.str());
     }
-    /*
-      else if (generateShareableShaders)
-    {
-        // This is necessary as some of the else branches use ANGLE_ALPHA0. It should never be used
-        // because else branches should be false. Set a value used for alpha-to-coverage emulation
-        const std::string alphaPlaceholder("#define ANGLE_ALPHA0");
-        size_t alphaFound = outputSource.find(alphaPlaceholder);
-        ASSERT(alphaFound != std::string::npos);
-
-        std::ostringstream alphaStream;
-        alphaStream << alphaPlaceholder << " 1.0f";
-        outputSource =
-            outputSource.replace(alphaFound, alphaPlaceholder.length(), alphaStream.str());
-            }*/
 
     return outputSource;
 }
