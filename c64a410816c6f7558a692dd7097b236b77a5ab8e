@@ -22,6 +22,30 @@
       },
       "revId": "c64a410816c6f7558a692dd7097b236b77a5ab8e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2b831b6_c85ca9c6",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2899,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-01T21:56:39Z",
+      "side": 1,
+      "message": "Ah I see. So I tried adding `glBufferSubData()` and that works for the _OpenGL test but _Vulkan doesn\u0027t see the update (neither syncState nor getBufferViewAndRecordUse is called). I think this is where we\u0027re hitting the descriptor cache issue that Shabi pointed out earlier. We hit this path:\nhttps://crsrc.org/c/third_party/angle/src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp;drc\u003d868b63ab48420c3101447cdf0af1c5e849b531a6;l\u003d1614\nso we don\u0027t call updateFullActiveTextures-\u003egetBufferViewAndRecordUse.\n\nMaybe this is because the descriptor cache contains the conversion buffer and that doesn\u0027t get updated before we hit the cache? So maybe this dirty check needs to be done even further out somewhere?",
+      "parentUuid": "a5d03a94_ae4a49d8",
+      "range": {
+        "startLine": 2890,
+        "startChar": 12,
+        "endLine": 2899,
+        "endChar": 13
+      },
+      "revId": "c64a410816c6f7558a692dd7097b236b77a5ab8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
