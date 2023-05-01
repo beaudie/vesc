@@ -34,6 +34,24 @@
       "parentUuid": "0171a78b_5fd4a902",
       "revId": "b725417e2d6062821c6112fba03c825d2bcb1a64",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96ecb993_da45171e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-01T20:52:16Z",
+      "side": 1,
+      "message": "Thanks. Indeed, I was asking for that in advance of EDS3 support",
+      "parentUuid": "5dbc0562_33ab275d",
+      "revId": "b725417e2d6062821c6112fba03c825d2bcb1a64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
