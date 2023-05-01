@@ -209,6 +209,26 @@ TEST_P(ProgramBinaryTest, SaveAndLoadBinary)
     EXPECT_GL_NO_ERROR();
 }
 
+class ProgramBinaryNoPipelineCacheDataCompressed : public ProgramBinaryTest
+{};
+// This tests the ability to successfully save and load a program binary without
+// pipeline cache data compressed.
+TEST_P(ProgramBinaryNoPipelineCacheDataCompressed, SaveAndLoadBinary)
+{
+    if (!supported() || !IsVulkan() ||
+        !getEGLWindow()->isFeatureEnabled(Feature::EnablePipelineCacheDataCompression))
+    {
+        return;
+    }
+
+    GLuint programToLoad = glCreateProgram();
+
+    saveAndLoadProgram(mProgram, programToLoad);
+
+    glDeleteProgram(programToLoad);
+    EXPECT_GL_NO_ERROR();
+}
+
 // This tests the ability to successfully save and load a program binary and then
 // save and load from the same program that was loaded.
 TEST_P(ProgramBinaryTest, SaveAndLoadBinaryTwice)
@@ -275,6 +295,9 @@ TEST_P(ProgramBinaryTest, ZeroSizedUnlinkedBinary)
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(ProgramBinaryTest);
+
+ANGLE_INSTANTIATE_TEST_ES3_AND(ProgramBinaryNoPipelineCacheDataCompressed,
+                               ES3_VULKAN().disable(Feature::EnablePipelineCacheDataCompression));
 
 class ProgramBinaryES3Test : public ProgramBinaryTest
 {
