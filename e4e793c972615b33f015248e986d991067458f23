@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cf128ee_526f7e4e",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 7300,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-01T20:58:34Z",
+      "side": 1,
+      "message": "Please add a test where the application writes to a buffer in the fragment shader through SSBO, calls glMemoryBarrier(GL_TEXTURE_FETCH_BARRIER_BIT), then samples from the buffer in a second draw call. This should work fine.\n\n_Then_, duplicate the test and remove the `glMemoryBarrier` call. The results will be undefined (so, can\u0027t check it), but it shouldn\u0027t blow up. To satisfy this, in UtilsVk you should make a call like `contextVk-\u003eisBufferWrittenToInRenderPass()` and if that\u0027s the case, just clear it to some garbage value and return it (i.e. no conversion done). That\u0027s because `getOutsideRenderPassCommandBufferHelper` will close the render pass if you call it and cause havoc.",
+      "revId": "e4e793c972615b33f015248e986d991067458f23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
