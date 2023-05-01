@@ -64,6 +64,15 @@ namespace
 constexpr Name kFlippedPointCoordName("flippedPointCoord", SymbolType::AngleInternal);
 constexpr Name kFlippedFragCoordName("flippedFragCoord", SymbolType::AngleInternal);
 
+TVariable *CreateEmulateAlphaToCoverageVar(TSymbolTable &symbolTable)
+{
+    TType *boolType = new TType(EbtBool);
+    boolType->setQualifier(EvqConst);
+    return new TVariable(&symbolTable,
+                         sh::ImmutableString(sh::mtl::kEmulateAlphaToCoverageConstName), boolType,
+                         SymbolType::AngleInternal);
+}
+
 constexpr const TVariable kgl_VertexIDMetal(BuiltInId::gl_VertexID,
                                             ImmutableString("gl_VertexID"),
                                             SymbolType::BuiltIn,
@@ -211,15 +220,27 @@ TIntermSequence *GetMainSequence(TIntermBlock *root)
     return main->getBody()->getSequence();
 }
 
+struct FlipBuiltInVariableResult
+{
+    // Whether FlipBuiltInVariableResult() succeeded.
+    bool success = false;
+
+    // The variable the flipped coordinates are stored in.
+    TVariable *flippedFragCoordVar = nullptr;
+};
+
 // Replaces a builtin variable with a version that is rotated and corrects the X and Y coordinates.
-[[nodiscard]] bool FlipBuiltinVariable(TCompiler *compiler,
-                                       TIntermBlock *root,
-                                       TIntermSequence *insertSequence,
-                                       TIntermTyped *flipXY,
-                                       TSymbolTable *symbolTable,
-                                       const TVariable *builtin,
-                                       const Name &flippedVariableName,
-                                       TIntermTyped *pivot)
+[[nodiscard]] FlipBuiltInVariableResult FlipBuiltinVariable(
+    TCompiler *compiler,
+    TIntermBlock *root,
+    TIntermSequence *insertSequence,
+    TIntermTyped *flipXY,
+    TSymbolTable *symbolTable,
+    const TVariable *builtin,
+    const Name &flippedVariableName,
+    TIntermTyped *pivot,
+    bool makeConditional,
+    const DriverUniformMetal *driverUniforms)
 {
     // Create a symbol reference to 'builtin'.
     TIntermSymbol *builtinRef = new TIntermSymbol(builtin);
@@ -236,11 +257,15 @@ TIntermSequence *GetMainSequence(TIntermBlock *root)
     DeclareGlobalVariable(root, replacementVar);
     TIntermSymbol *flippedBuiltinRef = new TIntermSymbol(replacementVar);
 
+    FlipBuiltInVariableResult result;
+
     // Use this new variable instead of 'builtin' everywhere.
     if (!ReplaceVariable(compiler, root, builtin, replacementVar))
     {
-        return false;
+        return result;
     }
+
+    result.flippedFragCoordVar = replacementVar;
 
     // Create the expression "(builtin.xy - pivot) * flipXY + pivot
     TIntermBinary *removePivot = new TIntermBinary(EOpSub, builtinXY, pivot);
@@ -259,19 +284,46 @@ TIntermSequence *GetMainSequence(TIntermBlock *root)
         new TIntermSwizzle(flippedBuiltinRef->deepCopy(), swizzleOffsetXY);
     TIntermBinary *assignToY = new TIntermBinary(EOpAssign, correctedXY, plusPivot);
 
-    // Add this assigment at the beginning of the main function
-    insertSequence->insert(insertSequence->begin(), assignToY);
-    insertSequence->insert(insertSequence->begin(), assignment);
+    if (makeConditional)
+    {
+        TIntermBlock *flipBlock = new TIntermBlock;
+        flipBlock->appendStatement(assignment);
+        flipBlock->appendStatement(assignToY);
 
-    return compiler->validateAST(root);
+        TIntermSequence noFlipSequence;
+        noFlipSequence.push_back(builtinRef->deepCopy());
+        TIntermAggregate *noFlipAggregate =
+            TIntermAggregate::CreateConstructor(builtin->getType(), &noFlipSequence);
+        TIntermBinary *noFlipAssignment =
+            new TIntermBinary(EOpAssign, flippedBuiltinRef, noFlipAggregate);
+        TIntermBlock *noFlipBlock = new TIntermBlock();
+        noFlipBlock->appendStatement(noFlipAssignment);
+
+        TVariable *emulateAlphaToCoverageVar = CreateEmulateAlphaToCoverageVar(*symbolTable);
+        TIntermIfElse *flipIfElse =
+            new TIntermIfElse(new TIntermSymbol(emulateAlphaToCoverageVar), flipBlock, noFlipBlock);
+
+        // Add this assigment at the beginning of the main function
+        insertSequence->insert(insertSequence->begin(), flipIfElse);
+    }
+    else
+    {
+        // Add this assigment at the beginning of the main function
+        insertSequence->insert(insertSequence->begin(), assignToY);
+        insertSequence->insert(insertSequence->begin(), assignment);
+    }
+    result.success = compiler->validateAST(root);
+    return result;
 }
 
-[[nodiscard]] bool InsertFragCoordCorrection(TCompiler *compiler,
-                                             const ShCompileOptions &compileOptions,
-                                             TIntermBlock *root,
-                                             TIntermSequence *insertSequence,
-                                             TSymbolTable *symbolTable,
-                                             const DriverUniformMetal *driverUniforms)
+[[nodiscard]] FlipBuiltInVariableResult InsertFragCoordCorrection(
+    TCompiler *compiler,
+    const ShCompileOptions &compileOptions,
+    TIntermBlock *root,
+    TIntermSequence *insertSequence,
+    TSymbolTable *symbolTable,
+    const DriverUniformMetal *driverUniforms,
+    bool makeConditional)
 {
     TIntermTyped *flipXY = driverUniforms->getFlipXY(symbolTable, DriverUniformFlip::Fragment);
     TIntermTyped *pivot  = driverUniforms->getHalfRenderArea();
@@ -279,7 +331,7 @@ TIntermSequence *GetMainSequence(TIntermBlock *root)
     const TVariable *fragCoord = static_cast<const TVariable *>(
         symbolTable->findBuiltIn(ImmutableString("gl_FragCoord"), compiler->getShaderVersion()));
     return FlipBuiltinVariable(compiler, root, insertSequence, flipXY, symbolTable, fragCoord,
-                               kFlippedFragCoordName, pivot);
+                               kFlippedFragCoordName, pivot, makeConditional, driverUniforms);
 }
 
 void DeclareRightBeforeMain(TIntermBlock &root, const TVariable &var)
@@ -431,7 +483,9 @@ void AddFragDepthEXTDeclaration(TCompiler &compiler, TIntermBlock &root, TSymbol
                                             TSymbolTable &symbolTable,
                                             const DriverUniformMetal *driverUniforms,
                                             bool emulateAlphaToCoverage,
-                                            bool usesSampleMask)
+                                            bool alwaysIncludeEmulateAlpha,
+                                            bool usesSampleMask,
+                                            const TVariable *fragCoordVar)
 {
     // uint32_t ANGLE_metal_SampleMask [[sample_mask]]
     TVariable *angleSampleMask =
@@ -457,7 +511,7 @@ void AddFragDepthEXTDeclaration(TCompiler &compiler, TIntermBlock &root, TSymbol
             EOpBitwiseAndAssign, new TIntermSymbol(angleSampleMask), glSampleMask0));
     }
 
-    if (emulateAlphaToCoverage)
+    if (emulateAlphaToCoverage || alwaysIncludeEmulateAlpha)
     {
         // Some Metal drivers ignore alpha-to-coverage state when a fragment
         // shader writes to [[sample_mask]]. Moreover, Metal pipeline state
@@ -486,10 +540,14 @@ void AddFragDepthEXTDeclaration(TCompiler &compiler, TIntermBlock &root, TSymbol
         // and constant values depend on the number of samples used.
         TVariable *p = CreateTempVariable(&symbolTable, StaticType::GetBasic<EbtInt, EbpHigh>());
         TVariable *y = CreateTempVariable(&symbolTable, StaticType::GetBasic<EbtInt, EbpHigh>());
+        if (!fragCoordVar)
+        {
+            fragCoordVar = BuiltInVariable::gl_FragCoord();
+        }
         alphaBlock->appendStatement(CreateTempInitDeclarationNode(
-            p, new TIntermSwizzle(new TIntermSymbol(BuiltInVariable::gl_FragCoord()), {0})));
+            p, new TIntermSwizzle(new TIntermSymbol(fragCoordVar), {0})));
         alphaBlock->appendStatement(CreateTempInitDeclarationNode(
-            y, new TIntermSwizzle(new TIntermSymbol(BuiltInVariable::gl_FragCoord()), {1})));
+            y, new TIntermSwizzle(new TIntermSymbol(fragCoordVar), {1})));
         alphaBlock->appendStatement(
             new TIntermBinary(EOpBitShiftLeftAssign, new TIntermSymbol(p), CreateIndexNode(1)));
         alphaBlock->appendStatement(
@@ -615,8 +673,19 @@ void AddFragDepthEXTDeclaration(TCompiler &compiler, TIntermBlock &root, TSymbol
         alphaBlock->appendStatement(new TIntermBinary(
             EOpBitwiseAndAssign, new TIntermSymbol(angleSampleMask), new TIntermSymbol(alphaMask)));
 
-        block->appendStatement(
-            new TIntermIfElse(driverUniforms->getAlphaToCoverage(), alphaBlock, nullptr));
+        TIntermTyped *useAlphaToCoverage;
+        if (alwaysIncludeEmulateAlpha)
+        {
+            TVariable *emulateAlphaToCoverageVar = CreateEmulateAlphaToCoverageVar(symbolTable);
+            useAlphaToCoverage =
+                new TIntermBinary(TOperator::EOpLogicalAnd, driverUniforms->getAlphaToCoverage(),
+                                  new TIntermSymbol(emulateAlphaToCoverageVar));
+        }
+        else
+        {
+            useAlphaToCoverage = driverUniforms->getAlphaToCoverage();
+        }
+        block->appendStatement(new TIntermIfElse(useAlphaToCoverage, alphaBlock, nullptr));
     }
 
     // Sample mask assignment is guarded by ANGLEMultisampledRendering specialization constant
@@ -1099,7 +1168,8 @@ bool TranslatorMetalDirect::translateImpl(TInfoSinkBase &sink,
     }
     SymbolEnv symbolEnv(*this, *root);
 
-    bool usesSampleMask = false;
+    bool usesSampleMask     = false;
+    TVariable *fragCoordVar = nullptr;
     if (getShaderType() == GL_FRAGMENT_SHADER)
     {
         bool usesPointCoord     = false;
@@ -1260,22 +1330,29 @@ bool TranslatorMetalDirect::translateImpl(TInfoSinkBase &sink,
             TIntermTyped *flipNegXY =
                 driverUniforms->getNegFlipXY(&getSymbolTable(), DriverUniformFlip::Fragment);
             TIntermConstantUnion *pivot = CreateFloatNode(0.5f, EbpMedium);
-            if (!FlipBuiltinVariable(this, root, GetMainSequence(root), flipNegXY,
-                                     &getSymbolTable(), BuiltInVariable::gl_PointCoord(),
-                                     kFlippedPointCoordName, pivot))
+            FlipBuiltInVariableResult result =
+                FlipBuiltinVariable(this, root, GetMainSequence(root), flipNegXY, &getSymbolTable(),
+                                    BuiltInVariable::gl_PointCoord(), kFlippedPointCoordName, pivot,
+                                    false, driverUniforms);
+            if (!result.success)
             {
                 return false;
             }
             DeclareRightBeforeMain(*root, *BuiltInVariable::gl_PointCoord());
         }
 
-        if (usesFragCoord || compileOptions.emulateAlphaToCoverage)
+        if (usesFragCoord || compileOptions.emulateAlphaToCoverage ||
+            compileOptions.metal.generateShareableShaders)
         {
-            if (!InsertFragCoordCorrection(this, compileOptions, root, GetMainSequence(root),
-                                           &getSymbolTable(), driverUniforms))
+            const bool useConditional = !usesFragCoord;
+            FlipBuiltInVariableResult result =
+                InsertFragCoordCorrection(this, compileOptions, root, GetMainSequence(root),
+                                          &getSymbolTable(), driverUniforms, useConditional);
+            if (!result.success)
             {
                 return false;
             }
+            fragCoordVar               = result.flippedFragCoordVar;
             const TVariable *fragCoord = static_cast<const TVariable *>(
                 getSymbolTable().findBuiltIn(ImmutableString("gl_FragCoord"), getShaderVersion()));
             DeclareRightBeforeMain(*root, *fragCoord);
@@ -1391,7 +1468,9 @@ bool TranslatorMetalDirect::translateImpl(TInfoSinkBase &sink,
         {
             mValidateASTOptions.validateVariableReferences = false;
             if (!AddSampleMaskDeclaration(*this, *root, symbolTable, driverUniforms,
-                                          compileOptions.emulateAlphaToCoverage, usesSampleMask))
+                                          compileOptions.emulateAlphaToCoverage,
+                                          compileOptions.metal.generateShareableShaders,
+                                          usesSampleMask, fragCoordVar))
             {
                 return false;
             }
