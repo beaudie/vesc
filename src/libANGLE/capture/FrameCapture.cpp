@@ -5237,16 +5237,28 @@ void CaptureMidExecutionSetup(const gl::Context *context,
         currentBlendState.sourceBlendAlpha != defaultBlendState.sourceBlendAlpha ||
         currentBlendState.destBlendAlpha != defaultBlendState.destBlendAlpha)
     {
-        // BlendFunc could be used instead of BlendFuncSeparate in some cases but there's no
-        // advantage and it makes Reset more difficult as both functions affect the same state.
-        cap(CaptureBlendFuncSeparate(
-            replayState, true, currentBlendState.sourceBlendRGB, currentBlendState.destBlendRGB,
-            currentBlendState.sourceBlendAlpha, currentBlendState.destBlendAlpha));
-        Capture(&resetCalls[angle::EntryPoint::GLBlendFuncSeparate],
-                CaptureBlendFuncSeparate(replayState, true, currentBlendState.sourceBlendRGB,
-                                         currentBlendState.destBlendRGB,
-                                         currentBlendState.sourceBlendAlpha,
-                                         currentBlendState.destBlendAlpha));
+        if (context->isGLES1())
+        {
+            cap(CaptureBlendFunc(replayState, true, currentBlendState.sourceBlendRGB,
+                                 currentBlendState.destBlendRGB));
+            Capture(&resetCalls[angle::EntryPoint::GLBlendFunc],
+                    CaptureBlendFunc(replayState, true, currentBlendState.sourceBlendRGB,
+                                     currentBlendState.destBlendRGB));
+        }
+        else
+        {
+            // Outside of GLES1 BlendFunc could be used instead of BlendFuncSeparate in some cases
+            // but there's no advantage and it makes Reset more difficult as both functions
+            // affect the same state.
+            cap(CaptureBlendFuncSeparate(
+                replayState, true, currentBlendState.sourceBlendRGB, currentBlendState.destBlendRGB,
+                currentBlendState.sourceBlendAlpha, currentBlendState.destBlendAlpha));
+            Capture(&resetCalls[angle::EntryPoint::GLBlendFuncSeparate],
+                    CaptureBlendFuncSeparate(replayState, true, currentBlendState.sourceBlendRGB,
+                                             currentBlendState.destBlendRGB,
+                                             currentBlendState.sourceBlendAlpha,
+                                             currentBlendState.destBlendAlpha));
+        }
     }
 
     if (currentBlendState.blendEquationRGB != defaultBlendState.blendEquationRGB ||
@@ -7446,7 +7458,6 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
             }
             break;
         }
-
         case EntryPoint::GLBlendFunc:
         case EntryPoint::GLBlendFuncSeparate:
         {
@@ -8379,11 +8390,21 @@ void StateResetHelper::setDefaultResetCalls(const gl::Context *context,
         }
         case angle::EntryPoint::GLBlendFuncSeparate:
         {
-            Capture(&mResetCalls[angle::EntryPoint::GLBlendFuncSeparate],
-                    CaptureBlendFuncSeparate(
-                        context->getState(), true, kDefaultBlendState.sourceBlendRGB,
-                        kDefaultBlendState.destBlendRGB, kDefaultBlendState.sourceBlendAlpha,
-                        kDefaultBlendState.destBlendAlpha));
+            if (context->isGLES1())
+            {
+                Capture(
+                    &mResetCalls[angle::EntryPoint::GLBlendFuncSeparate],
+                    CaptureBlendFunc(context->getState(), true, kDefaultBlendState.sourceBlendRGB,
+                                     kDefaultBlendState.destBlendRGB));
+            }
+            else
+            {
+                Capture(&mResetCalls[angle::EntryPoint::GLBlendFuncSeparate],
+                        CaptureBlendFuncSeparate(
+                            context->getState(), true, kDefaultBlendState.sourceBlendRGB,
+                            kDefaultBlendState.destBlendRGB, kDefaultBlendState.sourceBlendAlpha,
+                            kDefaultBlendState.destBlendAlpha));
+            }
             break;
         }
         case angle::EntryPoint::GLBlendEquation:
