@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8918db7_104ecaad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-01T17:27:37Z",
+      "side": 1,
+      "message": "I don\u0027t have a direct indication but I also don\u0027t know a viable alternative to doing this. Ideally we\u0027d have stdout/err piped to another process but this probably requires a tricky setup on Android.\n\nNote that this currently only applies to tests that use android_helper (trace and perf) as everything else is going to keep doing fully-buffered writes to /sdcard/. So the impact is quite limited.",
+      "parentUuid": "46722efa_7bd44bd5",
+      "revId": "ac84d1220ae1faa76e9016e8feaa6dfd5abbe242",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4c224114_c2eb629c",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-05-01T14:54:09Z",
       "side": 1,
       "message": "Can you migrate your descriptive CL message to a comment here?  Otherwise will be difficult to remember the reasoning for this.",
+      "revId": "ac84d1220ae1faa76e9016e8feaa6dfd5abbe242",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6155443_5339933f",
+        "filename": "src/tests/test_utils/runner/android/AngleNativeTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-01T17:27:37Z",
+      "side": 1,
+      "message": "There is alrady a comment above and it has a link to more context, in what way are you suggesting it should be improved?",
+      "parentUuid": "4c224114_c2eb629c",
       "revId": "ac84d1220ae1faa76e9016e8feaa6dfd5abbe242",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
