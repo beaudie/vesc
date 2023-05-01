@@ -208,19 +208,36 @@ void GetPipelineCacheData(ContextVk *contextVk,
         return;
     }
 
-    std::vector<uint8_t> pipelineCacheData(pipelineCacheSize);
-    result = pipelineCache.getCacheData(contextVk->getDevice(), &pipelineCacheSize,
-                                        pipelineCacheData.data());
-    if (result != VK_SUCCESS && result != VK_INCOMPLETE)
+    if (contextVk->getFeatures().enablePipelineCacheDataCompression.enabled)
     {
-        return;
-    }
+        std::vector<uint8_t> pipelineCacheData(pipelineCacheSize);
+        result = pipelineCache.getCacheData(contextVk->getDevice(), &pipelineCacheSize,
+                                            pipelineCacheData.data());
+        if (result != VK_SUCCESS && result != VK_INCOMPLETE)
+        {
+            return;
+        }
 
-    // Compress it.
-    if (!egl::CompressBlobCacheData(pipelineCacheData.size(), pipelineCacheData.data(),
-                                    cacheDataOut))
+        // Compress it.
+        if (!egl::CompressBlobCacheData(pipelineCacheData.size(), pipelineCacheData.data(),
+                                        cacheDataOut))
+        {
+            cacheDataOut->clear();
+        }
+    }
+    else
     {
-        cacheDataOut->clear();
+        if (!cacheDataOut->resize(pipelineCacheSize))
+        {
+            ERR() << "Failed to allocate memory for pipeline cache data.";
+            return;
+        }
+        result = pipelineCache.getCacheData(contextVk->getDevice(), &pipelineCacheSize,
+                                            cacheDataOut->data());
+        if (result != VK_SUCCESS && result != VK_INCOMPLETE)
+        {
+            cacheDataOut->clear();
+        }
     }
 }
 
@@ -463,17 +480,24 @@ angle::Result ProgramExecutableVk::initializePipelineCache(
 {
     ASSERT(!mPipelineCache.valid());
 
+    size_t dataSize            = compressedPipelineData.size();
+    const uint8_t *dataPointer = compressedPipelineData.data();
+
     angle::MemoryBuffer uncompressedData;
-    if (!egl::DecompressBlobCacheData(compressedPipelineData.data(), compressedPipelineData.size(),
-                                      &uncompressedData))
+    if (contextVk->getFeatures().enablePipelineCacheDataCompression.enabled)
     {
-        return angle::Result::Stop;
+        if (!egl::DecompressBlobCacheData(dataPointer, dataSize, &uncompressedData))
+        {
+            return angle::Result::Stop;
+        }
+        dataSize    = uncompressedData.size();
+        dataPointer = uncompressedData.data();
     }
 
     VkPipelineCacheCreateInfo pipelineCacheCreateInfo = {};
     pipelineCacheCreateInfo.sType           = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
-    pipelineCacheCreateInfo.initialDataSize = uncompressedData.size();
-    pipelineCacheCreateInfo.pInitialData    = uncompressedData.data();
+    pipelineCacheCreateInfo.initialDataSize = dataSize;
+    pipelineCacheCreateInfo.pInitialData    = dataPointer;
 
     if (contextVk->getFeatures().supportsPipelineCreationCacheControl.enabled)
     {
