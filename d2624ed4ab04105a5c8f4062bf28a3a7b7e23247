@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf72f779_8093e643",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 9560,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-01T15:05:20Z",
+      "side": 1,
+      "message": "OK. My point was that before `mShared` was not atomic and everything was working fine and we was fine with this. Actually, I raised this problem to you (not personally to you) a long time ago (with a first batch of patches), and got a response that this is not a big problem in a real life - only during deliberate testing.\n\nCan describe what will happen instead, if will be still relevant.",
+      "parentUuid": "8bae0dd1_83905304",
+      "range": {
+        "startLine": 9560,
+        "startChar": 45,
+        "endLine": 9560,
+        "endChar": 97
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "63f5d561_c281a75b",
@@ -77,6 +101,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fff5f19d_47c20238",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-01T15:05:20Z",
+      "side": 1,
+      "message": "\u003e If I understand correctly, all these sleeps and uncertainties are because SingleContextMutex is not actually a lock, right? If it were a lock, wouldn\u0027t you be able to get rid of the sleeps, and also guarantee there wouldn\u0027t be a problem?\n\nCorrect.\n\n\u003e It seems to me like if you used angle::Spinlock inside SingleContextMutex that would do the trick. In normal single-context operation, it\u0027s exactly the same as the current SingleContextMutex, because it\u0027s just an atomic set/unset. When there\u0027s context merging going on, there\u0027s a bit of spinning, but that\u0027s a one time thing and it\u0027s totally worth not having to game the scheduler and rely on luck.\n\n`angle::Spinlock` is not exactly the same. It has different memory order that will affect Android performance in a measurable way. With `SingleContextMutex` performance is the same as before when `mShared \u003d\u003d false`.\n\nHere some test results:\n```\n    Some GFXBench \"1080p Driver Overhead 2 Offscreen\" performance numbers.\n    Tested on S906B (Samsung Galaxy S22+) on old ANGLE base:\n        https://chromium.googlesource.com/angle/angle/+/807c94ea85e046c6f279d081d99f0fb1bcf1191a\n        Capture/Replay: Adjust tests do adhere to capture limits\n    \n    Each test result is an average frame number from 6 runs.\n    \n        SingleContextMutex                            6579 ( +0.13%)\n        (old) GetContextLock() (mShared is false)     6570\n    \n    Forced `mShared \u003d true` or not using `SingleContextMutex`.\n    \n        SharedContextMutex\u003cFastMutex1\u003e FORCE          6299 ( -4.13%)\n        SharedContextMutex\u003cFastMutex2\u003e FORCE          6095 ( -7.23%)\n        SharedContextMutex\u003cFastMutex3\u003e FORCE          5963 ( -9.25%)\n        SharedContextMutex\u003cstd::mutex\u003e FORCE          5061 (-22.97%)\n        (old) GetContextLock() FORCE                  4766 (-27.46%)\n```\n\nHowever, the `SharedContextMutex\u003cFastMutex1\u003e` has more overhead than *proposed* `SingleContextMutex` that uses `angle::Spinlock` and so will have better performance. But it still be worse than we have now with `mShared \u003d\u003d false`. **I will do this test**\n\nMy guess is around 2% performance loss on Android with `angle::Spinlock` inside `SingleContextMutex` compared to current state with `mShared \u003d\u003d false`.\n\nI do not know if we will accept performance regression for tiny improvement in stability. Currently, `mShared` is not atomic at all, and it is working some how, for many year. I think not 100% safe solution in theory is not a big problem. I also did stress tests and there was no single case when mutex replacement failed. But test failed will less delay. Current `100ms` was taken with overhead.\n\nOne more possible positive using `angle::Spinlock`. Since it is a normal mutex we may use `SingleContextMutex` to temporary lock single Context from other threads. Currently we need to `ensureSharedMutexActive()` and only then lock that Context. Method of locking Context in such way will be not simple, but I think it is possible to encapsulate the logic.",
+      "parentUuid": "d70e4a11_797a399d",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "baaaafe5_24947132",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 18
@@ -88,6 +130,24 @@
       "writtenOn": "2023-04-28T20:17:48Z",
       "side": 1,
       "message": "I noticed a bunch of these `#if`s all around. So we try our best to contain these to avoid an `#if` mess.\n\nOne way we could do it for this (and like, the one in Image.cpp) is to have a header with a few helper functions, and 2 source files, one which implements it as a no-op/UNREACHABLE/etc, and another that implements it for real. Then in the build scripts you choose to either build one file or the other based on the gn flag. For example, see `system_utils.h` vs `system_utils_*.cpp`\n\nIf not, at least put the helpers in `SharedContextMutex.h/cpp` so there\u0027d be one `#if` encompassing all of them",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d2602c0_f6204415",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1545,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-01T15:05:20Z",
+      "side": 1,
+      "message": "\u003e I noticed a bunch of these #ifs all around. So we try our best to contain these to avoid an #if mess.\n\nI know. This is my best try to limit this to minimum, while keep code readable.\n\nIt may be harder to understand when code is teared up to a different pieces and files, however with less #ifs.\n\nWill try to think something...",
+      "parentUuid": "baaaafe5_24947132",
       "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -117,6 +177,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "447e90c6_a567d9fe",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1760,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-01T15:05:20Z",
+      "side": 1,
+      "message": "Do not like this. May cause errors if there `nullptr` that we do not want.\nWill overload constructor instead.",
+      "parentUuid": "f21189f8_167610ac",
+      "range": {
+        "startLine": 1756,
+        "startChar": 0,
+        "endLine": 1760,
+        "endChar": 5
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a9728745_92c04060",
         "filename": "src/libANGLE/SharedContextMutex.cpp",
         "patchSetId": 18
@@ -134,6 +218,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "303791b5_46cc5231",
+        "filename": "src/libANGLE/SharedContextMutex.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-01T15:05:20Z",
+      "side": 1,
+      "message": "I know, but the proposed solution is less readable. Not checked if it is correct.\nBut I am not arguing, will rewrite as you do.",
+      "parentUuid": "a9728745_92c04060",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "251dbf1e_c4271589",
         "filename": "src/libANGLE/SharedContextMutex.cpp",
         "patchSetId": 18
@@ -145,6 +247,30 @@
       "writtenOn": "2023-04-28T20:17:48Z",
       "side": 1,
       "message": "Should these two be reordered? Otherwise the root may change in between",
+      "range": {
+        "startLine": 151,
+        "startChar": 0,
+        "endLine": 153,
+        "endChar": 0
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ba96534_2f088e77",
+        "filename": "src/libANGLE/SharedContextMutex.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-01T15:05:20Z",
+      "side": 1,
+      "message": "No.\n\n`mMutex` is not root (above if) and it is unlocked, because no point holding mutex that is not root.\n\nThen we calling recursively `doLock` with *currently unstable* root. If after locking root of locked root is root - then *root is stable*. It is impossible to change root of a mutex while it is locked.\n\n\u003e Otherwise the root may change in between\n\n`mRoot` of `root` may change even if not unlock `mMutex`. `mMutex` is a leaf of `root` now and does not participate in locking. So locking `mMutex` was a mistake.",
+      "parentUuid": "251dbf1e_c4271589",
       "range": {
         "startLine": 151,
         "startChar": 0,
@@ -191,6 +317,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bc4b2015_d92174b8",
+        "filename": "src/libANGLE/SharedContextMutex.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-01T15:05:20Z",
+      "side": 1,
+      "message": "Agree. It is hard to make description clear, but Ill try...",
+      "parentUuid": "91af88f2_72746832",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "23a829bf_1be1d041",
         "filename": "src/libANGLE/SharedContextMutex.cpp",
         "patchSetId": 18
@@ -202,6 +346,30 @@
       "writtenOn": "2023-04-28T20:17:48Z",
       "side": 1,
       "message": "A comment as to why the tree height (even though the tree is later flattened) is being tracked here would be useful. IIUC, the node with a higher rank has gone through fewer root changes and so is carrying a smaller `mOldRoots` (according to the comment on `mRank`)?",
+      "range": {
+        "startLine": 224,
+        "startChar": 0,
+        "endLine": 233,
+        "endChar": 5
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5597b3b_28eb6009",
+        "filename": "src/libANGLE/SharedContextMutex.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-01T15:05:20Z",
+      "side": 1,
+      "message": "I see tree and flattened tree as completely different trees that exist to solve different problems.\n\n\u003e IIUC, the node with a higher rank has gone through fewer root changes and so is carrying a smaller mOldRoots (according to the comment on mRank)?\n\nCorrectly: leaf nodes of the root node with a higher rank has gone through fewer root changes and so these nodes carrying a smaller mOldRoots.\n\nFor a root note, root change may happen only once, after that it is always a leaf node. `mRank` is only relevant for a root node.",
+      "parentUuid": "23a829bf_1be1d041",
       "range": {
         "startLine": 224,
         "startChar": 0,
@@ -231,6 +399,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "af74537b_e06ac697",
+        "filename": "src/libANGLE/SharedContextMutex.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-01T15:05:20Z",
+      "side": 1,
+      "message": "This is a private method. I generally do not comment such thing in small classes.\n\n\u003e Still, is it possible for another SharedContextMutex to call getRoot() without holding the lock at this time?\n\nYes. This is the first that is called to lock the mutex: get root and lock it.\nThere is a comment in the `getRoot()` method.\n\n\u003e What happens if that other share group gets the old root?\n\nThere are 2 scenarios:\n1) SharedContextMutex is not locked\n\nWe may get old root, however it is still OK to lock the old root.\nSo first we must lock the returned root.\nThen check what is the root of that root? If it itself, than we have locked root -\u003e scenario 2.\n\n2) SharedContextMutex is locked.\n\nReturned mutex can\u0027t be old since `setNewRoot()` only called while mutex is locked.\nSo we may safely use `getRoot()` inside locks for comparisons. For example, to tell if other Context uses same root mutex or not (can be used in `notifyDeviceLost` to lock all Contexts).",
+      "parentUuid": "9939681d_fab59d91",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6f294d53_a3cc41a3",
         "filename": "src/libANGLE/SharedContextMutex.cpp",
         "patchSetId": 18
@@ -242,6 +428,24 @@
       "writtenOn": "2023-04-28T20:17:48Z",
       "side": 1,
       "message": "Why not `oldRoot-\u003erelease()` here and avoid tracking old roots altogether?",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e586b38_7fb9a016",
+        "filename": "src/libANGLE/SharedContextMutex.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-01T15:05:20Z",
+      "side": 1,
+      "message": "Same question as for why have `mOldRoots` and `mRank`.\n`mOldRoots` are here to fix a specific problem. I will add description in the comments to the `mOldRoots`.\nI will also try to describe overall data structure and high level design.",
+      "parentUuid": "6f294d53_a3cc41a3",
       "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -299,6 +503,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5d645b21_f3053611",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-01T15:05:20Z",
+      "side": 1,
+      "message": "Because I personally like nesting) And code was written a long time ago...\n\n\u003e Why not call it ScopedContextMutex and move it below this class?\n\nBecause there will be another why: \"Why not use `std::lock_guard\u003c\u003e`?\"\n\nThis lock specifically adds references and used in specific places when required. Other places may use `std::lock_guard\u003c\u003e`, like `SCOPED_SHARE_CONTEXT_LOCK()` for example.\n\nSo the name should be at least: `ScopedContextMutexAddRefLock`.",
+      "parentUuid": "e13f33b9_cb19573c",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "295a5ab3_734f2265",
         "filename": "src/libANGLE/SharedContextMutex.h",
         "patchSetId": 18
@@ -316,6 +538,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "25b7efbe_1276dc02",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-01T15:05:20Z",
+      "side": 1,
+      "message": "It is OK if private method will have `bool` argument?",
+      "parentUuid": "295a5ab3_734f2265",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "029720db_cde34811",
         "filename": "src/libANGLE/SharedContextMutex.h",
         "patchSetId": 18
@@ -327,6 +567,24 @@
       "writtenOn": "2023-04-28T20:17:48Z",
       "side": 1,
       "message": "nit: suggest `getState(std::memory_order order)` to make it clear at call site what the memory order is (and also because on its own `acquireState` is just synonym with `getState`, `fetchState`, `retrieveState`, `loadState` etc; it\u0027s not clear that it\u0027s talking about `memory_order_acquire`)",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9896c316_b9607c54",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-01T15:05:20Z",
+      "side": 1,
+      "message": "\u003e it\u0027s not clear that it\u0027s talking about \n\nNot everything is clear from the first glance. It is just 2 different getters with encapsulated memory order. In this case we need to remember that one is relaxed and other is acquire.\n\nI do not want to add an argument. Rather rename to be more explicit.",
+      "parentUuid": "029720db_cde34811",
       "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -356,6 +614,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2789aa30_f07498fe",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-01T15:05:20Z",
+      "side": 1,
+      "message": "\u003e Not clear what this means, add/release must be synchronized... by a mutex? Which mutex?\n\nMaybe. Or using atomic, or anything else.\nSame as for Vulkan APIs, that require external synchronization.\nSimply, can\u0027t call `addRef/release()` at the same time - that is it.\n\nAgree that this may be unclear, but I want for implementation to decide what will be used for this synchronization. Currently, `ContextMutex` itself is used for synchronization (like in `AddRefLock` lock).\n\nI instead could write specifically: lock the mutex while calling its `addRef/release()`, but this may potentially (but unlikely) limit other valid uses. For example, we may create some global mutex to protect `addRef/release()` call for all Contex mutexes.\n\n\u003e And what is \"single mutex\"\n\nNot merged.\n\nFor example: we have MutexA and MutexB each may be synchronized by different mutex. In this implementation, mutexes themself are used to synchronize their `addRef/release()` calls.\nAfter the merge we will still have MutexA and MutexB, however now both must be synchronized as if they are a single mutex. Fortunately, after merging, they will act as a single mutex (but with different handles) and will satisfy synchronization requirement.",
+      "parentUuid": "91c160d4_58484d7f",
+      "range": {
+        "startLine": 81,
+        "startChar": 7,
+        "endLine": 81,
+        "endChar": 96
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "017bca3d_35ab9aef",
         "filename": "src/libANGLE/SharedContextMutex.h",
         "patchSetId": 18
@@ -367,6 +649,24 @@
       "writtenOn": "2023-04-28T20:17:48Z",
       "side": 1,
       "message": "nit: could use a better explanation, it\u0027s obviously an array of references, but why is it keeping references?",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca557765_8672dbda",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-01T15:05:20Z",
+      "side": 1,
+      "message": "It is not obvious that for each element was called `addRef`.\nI will try to add explanation why...",
+      "parentUuid": "017bca3d_35ab9aef",
       "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -390,6 +690,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7877b9d4_eb7b522e",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-01T15:05:20Z",
+      "side": 1,
+      "message": "In theory I can, but it may affect the performance. I know, this sounds  unrealistic, but on Android I was getting different kinds of strange behaviors. For example if constructor is not inline (not this class, but older not virtual version), then lock/unlock worked slower!\n\nI will try to remove this `#if` and see if it affects the performance.",
+      "parentUuid": "9c420cb3_0e662abf",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "787cb45c_967d11d0",
         "filename": "src/libANGLE/SharedContextMutex.h",
         "patchSetId": 18
@@ -401,6 +719,30 @@
       "writtenOn": "2023-04-28T20:17:48Z",
       "side": 1,
       "message": "AFAICT, this should just be a few global functions? What\u0027s with the pure virtual class and inheritance?",
+      "range": {
+        "startLine": 116,
+        "startChar": 0,
+        "endLine": 134,
+        "endChar": 2
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70bdf50e_3071edf6",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-01T15:05:20Z",
+      "side": 1,
+      "message": "I wanted make it simple to change `SharedContextMutexManager` `Mutex` type also at runtime. With this interface we just need to instantiate required `SharedContextMutexManager\u003cMutex\u003e` instance and use it in the code.\n\nWith the global functions we need to know how to cast from `ContextMutex` to `SharedContextMutex\u003cMutex\u003e` in each function. With compile time `Mutex` type this is not a problem, but may require `RendererVk` in a run-time case.",
+      "parentUuid": "787cb45c_967d11d0",
       "range": {
         "startLine": 116,
         "startChar": 0,
@@ -436,6 +778,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "be47916a_3339b03c",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 1083,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-01T15:05:20Z",
+      "side": 1,
+      "message": "Uses is incorrect.\nIt is a 2 stage process: 1 - use; 2 - activate.\n\nAlready have:\n`isUsingSharedContextMutex()` and `isSharedContextMutexActive()`.\n\nTwo states needed for mutex replacement. Maybe would not be required if use `SpinLock` in the `SingleContextMutex`. But need to be careful...",
+      "parentUuid": "c542761b_68a6a184",
+      "range": {
+        "startLine": 1083,
+        "startChar": 20,
+        "endLine": 1083,
+        "endChar": 47
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "25c097c1_b3b634ab",
         "filename": "src/libANGLE/queryutils.cpp",
         "patchSetId": 18
@@ -453,6 +819,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f0cd3487_43bd6fa5",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 4443,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-01T15:05:20Z",
+      "side": 1,
+      "message": "\u003e I don\u0027t entirely like what I\u0027m about to say, but it\u0027s probably better to just lock this on the entry point. If any other case ends up using the context, it\u0027s going to be very easy to miss this lock.\n\nUnfortunately this is true for all other EGL APIs that do not use Context lock at all. So we need to lock Context unconditionally in all EGL APIs that have Context current then? What if some API does not use current Context now, bot will use it later?\n\n\u003e if you really want to limit it to BUFFER_AGE, I\u0027d make the decision that BUFFER_AGE is the only one that needs the context right in the entry point (like QuerySurface() in egl_stubs.cpp) and then lock for \"all cases that need the context (currently only buffer age)\" and then send a nullptr context to this function for the other cases. If anyone needs the context elsewhere, they\u0027ll be forced to update the entry point and naturally end up taking the lock.\n\nI want to limit locking as much as possible...\nWill try to do the suggested.",
+      "parentUuid": "25c097c1_b3b634ab",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "57aa0eda_0d8336b1",
         "filename": "src/libANGLE/validationEGL.h",
         "patchSetId": 18
@@ -464,6 +848,24 @@
       "writtenOn": "2023-04-28T20:17:48Z",
       "side": 1,
       "message": "Could we use some Scoped* something and let destructor deal with it?",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d681245_dea7af38",
+        "filename": "src/libANGLE/validationEGL.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-01T15:05:20Z",
+      "side": 1,
+      "message": "I can try. I used `std::unique_lock` before and performance was slower. Maybe with custom `Scoped` class performance will be the same.",
+      "parentUuid": "57aa0eda_0d8336b1",
       "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -493,6 +895,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "90fee2a9_8b32008b",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-01T15:05:20Z",
+      "side": 1,
+      "message": "\u003e These functions only have a few possibilities, I suggest putting the list of what function needs what call in the python script, generate that on the entry point as necessary and pass it ANGLE_EGL_CONTEXT_LOCK.\n\nI do not like this. If in the future we add another API that requires lock we may forget to add this function in that list. Currently there will be linking error.\n\n\u003e If it helps, I\u0027d honestly get rid of the !defined(ANGLE_ENABLE_SHARED_CONTEXT_MUTEX) path\n\nImpossible unless remove `ANGLE_FORCE_CONTEXT_CHECK_EVERY_CALL` and `ANGLE_ENABLE_SHARE_CONTEXT_LOCK` options.",
+      "parentUuid": "e2b3604a_52c93a01",
+      "range": {
+        "startLine": 218,
+        "startChar": 48,
+        "endLine": 218,
+        "endChar": 68
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d2686868_72f7cfc4",
         "filename": "src/libGLESv2/global_state.h",
         "patchSetId": 18
@@ -504,6 +930,30 @@
       "writtenOn": "2023-04-28T20:17:48Z",
       "side": 1,
       "message": "nit: `Active` is an internal detail of how the share group mutex is managed. I think we can drop it from the function name.",
+      "range": {
+        "startLine": 230,
+        "startChar": 38,
+        "endLine": 230,
+        "endChar": 44
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e78b2479_92b649ac",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-01T15:05:20Z",
+      "side": 1,
+      "message": "It is not internal details.\n\nPublic methods:\n`\nContext::getContextMutex()\nContext::ensureSharedMutexActive()\n`\n\nSo `Active` comes from public `ensureSharedMutexActive()`.\nTo drop `Active` need also rename `ensureSharedMutexActive()`.\n\nMay rename to `ensureUsingSharedMutex()` but inside this method will check for `Active`, so that `Active` state will be internal only.",
+      "parentUuid": "d2686868_72f7cfc4",
       "range": {
         "startLine": 230,
         "startChar": 38,
