@@ -5237,16 +5237,26 @@ void CaptureMidExecutionSetup(const gl::Context *context,
         currentBlendState.sourceBlendAlpha != defaultBlendState.sourceBlendAlpha ||
         currentBlendState.destBlendAlpha != defaultBlendState.destBlendAlpha)
     {
-        // BlendFunc could be used instead of BlendFuncSeparate in some cases but there's no
-        // advantage and it makes Reset more difficult as both functions affect the same state.
-        cap(CaptureBlendFuncSeparate(
-            replayState, true, currentBlendState.sourceBlendRGB, currentBlendState.destBlendRGB,
-            currentBlendState.sourceBlendAlpha, currentBlendState.destBlendAlpha));
-        Capture(&resetCalls[angle::EntryPoint::GLBlendFuncSeparate],
-                CaptureBlendFuncSeparate(replayState, true, currentBlendState.sourceBlendRGB,
-                                         currentBlendState.destBlendRGB,
-                                         currentBlendState.sourceBlendAlpha,
-                                         currentBlendState.destBlendAlpha));
+        if (context->isGLES1())
+        {
+            cap(CaptureBlendFunc(replayState, true, currentBlendState.sourceBlendRGB,
+                                 currentBlendState.destBlendRGB));
+            Capture(&resetCalls[angle::EntryPoint::GLBlendFunc],
+                    CaptureBlendFunc(replayState, true, currentBlendState.sourceBlendRGB,
+                                     currentBlendState.destBlendRGB));
+        }
+        else
+        {
+            // Always use BlendFuncSeparate for non-GLES1 as it covers all cases
+            cap(CaptureBlendFuncSeparate(
+                replayState, true, currentBlendState.sourceBlendRGB, currentBlendState.destBlendRGB,
+                currentBlendState.sourceBlendAlpha, currentBlendState.destBlendAlpha));
+            Capture(&resetCalls[angle::EntryPoint::GLBlendFuncSeparate],
+                    CaptureBlendFuncSeparate(replayState, true, currentBlendState.sourceBlendRGB,
+                                             currentBlendState.destBlendRGB,
+                                             currentBlendState.sourceBlendAlpha,
+                                             currentBlendState.destBlendAlpha));
+        }
     }
 
     if (currentBlendState.blendEquationRGB != defaultBlendState.blendEquationRGB ||
@@ -7446,8 +7456,15 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
             }
             break;
         }
-
         case EntryPoint::GLBlendFunc:
+        {
+            if (isCaptureActive())
+            {
+                context->getFrameCapture()->getStateResetHelper().setEntryPointDirty(
+                    EntryPoint::GLBlendFunc);
+            }
+            break;
+        }
         case EntryPoint::GLBlendFuncSeparate:
         {
             if (isCaptureActive())
@@ -8374,7 +8391,9 @@ void StateResetHelper::setDefaultResetCalls(const gl::Context *context,
         }
         case angle::EntryPoint::GLBlendFunc:
         {
-            UNREACHABLE();  // GLBlendFuncSeparate is always used instead
+            Capture(&mResetCalls[angle::EntryPoint::GLBlendFunc],
+                    CaptureBlendFunc(context->getState(), true, kDefaultBlendState.sourceBlendRGB,
+                                     kDefaultBlendState.destBlendRGB));
             break;
         }
         case angle::EntryPoint::GLBlendFuncSeparate:
