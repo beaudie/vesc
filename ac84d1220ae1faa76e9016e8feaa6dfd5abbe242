@@ -69,6 +69,24 @@
       "parentUuid": "4c224114_c2eb629c",
       "revId": "ac84d1220ae1faa76e9016e8feaa6dfd5abbe242",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "facea5ab_820a0f19",
+        "filename": "src/tests/test_utils/runner/android/AngleNativeTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-01T18:21:18Z",
+      "side": 1,
+      "message": "The existing comment wasn\u0027t enough info for me, and your CL message made sense.  Maybe something like this:\n```\n// When using a temp path on `/data`, performance is good enough we can line buffer\n// stdout/stderr.  This makes e.g. FATAL() \u003c\u003c \"message\"; show up in the logs in CI\n// or local runs.\n```",
+      "parentUuid": "d6155443_5339933f",
+      "revId": "ac84d1220ae1faa76e9016e8feaa6dfd5abbe242",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
