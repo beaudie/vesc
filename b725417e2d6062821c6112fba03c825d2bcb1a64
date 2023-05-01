@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0171a78b_5fd4a902",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-01T18:53:49Z",
+      "side": 1,
+      "message": "LGTM. Could you please add a state-change test to make sure state transitions are handled correctly? I\u0027ve been adding these when implementing dynamic state in the Vulkan backend. See for example:\n\n```\nTEST_P(StateChangeTestES3, RasterizerDiscard)\nTEST_P(StateChangeTestES3, PolygonOffsetFill)\nTEST_P(StateChangeTestES3, PrimitiveRestart)\nTEST_P(StateChangeTestES3, StencilTestAndFunc)\n```\n\nEach test tries to minimally change state between draw calls and only validate the result in the end, to make sure the state change is taken into account only when that\u0027s basically the only state change (as much as possible).",
+      "revId": "b725417e2d6062821c6112fba03c825d2bcb1a64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
