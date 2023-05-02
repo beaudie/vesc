@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f1127b6_afdebb41",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1883,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-02T13:03:44Z",
+      "side": 1,
+      "message": "I know. But this is just more complex code.\n\nMy suggestion use tail call in this case even if it is not necessary. Simply because we already have this call and to avoid adding extra code path. What is wrong with that? (this was my original question).",
+      "parentUuid": "193d44c3_ae9b31cd",
+      "revId": "6e47a423ecb57da72bc700c0fc01086bfeb242f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9ce81fdb_bb797b52",
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "\u003e Technically mSwapchain is not accessed, lambda uses a copy.\n\nRight, I mean to say the swapchain object itself is accessed.\n\n\u003e Should be mPresentFenceRecycler.\n\nDone.\n\n\u003e Also it seems that we can avoid using mPresentFenceRecycler without the lock either. Just prepare fence before the call.\n\nThis is a bit less straightforward. The thing is by the time the actual unlocked call is made, another thread may end up doing ANI anyway (not today, but in a follow up change I intend to make where ANI is moved to the end of render pass, which means now it can be triggered with other contexts causing a flush in this context). And now you are left with a fence that you need to release back to the recycler.\n\nIn that case, if the fence release can be made thread safe, so can the fence acquire!\n\n\u003e I can\u0027t think about case when prepareSwap() may be called concurrently with ANI related methods.\n\nThat is the idea. Otherwise this couldn\u0027t work given that it only uses the new mutex inside the try-acquire call, and nowhere else where the result is being processed.\n\n\u003e Maybe add ASSERT(!needsAcquireNextSwapchainImage() into cleanUpPresentHistory()?\n\nDone.",
       "parentUuid": "9ce81fdb_bb797b52",
+      "revId": "6e47a423ecb57da72bc700c0fc01086bfeb242f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80deac0c_75f2291e",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1897,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-02T13:03:44Z",
+      "side": 1,
+      "message": "\u003e In that case, if the fence release can be made thread safe, so can the fence acquire!\n\nUnderstand.\n\n\u003e That is the idea. Otherwise this couldn\u0027t work given that it only uses the new mutex inside the try-acquire call, and nowhere else where the result is being processed.\n\nThis I do not understand)",
+      "parentUuid": "c09aff2b_2c3600fd",
       "revId": "6e47a423ecb57da72bc700c0fc01086bfeb242f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
