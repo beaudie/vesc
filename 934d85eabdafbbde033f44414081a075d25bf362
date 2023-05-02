@@ -105,6 +105,24 @@
       "parentUuid": "e7feb7e2_5ab70c91",
       "revId": "934d85eabdafbbde033f44414081a075d25bf362",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16103dee_0805710a",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1000763
+      },
+      "writtenOn": "2023-05-02T21:41:13Z",
+      "side": 1,
+      "message": "I added that because https://chromium.googlesource.com/angle/angle/+/refs/heads/main/src/compiler/translator/TranslatorMetalDirect.cpp#490 needs gl_fragcoord. That code is conditional based on alphaToCoverage. On tip-of-tree, if emulateAlphaToCoverage is true, won\u0027t this code be executed? Perhaps I\u0027m misreading the code or misunderstanding? What are you suggesting this should be?",
+      "parentUuid": "4f7f2238_7d17af7f",
+      "revId": "934d85eabdafbbde033f44414081a075d25bf362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
