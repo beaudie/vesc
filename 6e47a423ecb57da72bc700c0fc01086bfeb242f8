@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "193d44c3_ae9b31cd",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1883,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-02T03:08:13Z",
+      "side": 1,
+      "message": "It\u0027s a fresh swapchain, so it\u0027s not going to block anyway!",
+      "parentUuid": "d6a9c92d_18634164",
+      "revId": "6e47a423ecb57da72bc700c0fc01086bfeb242f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9ce81fdb_bb797b52",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-04-25T15:20:29Z",
       "side": 1,
       "message": "Technically `mSwapchain` is not accessed, lambda uses a copy.\n\nShould be `mPresentFenceRecycler`.\nAlso it seems that we can avoid using `mPresentFenceRecycler` without the lock either. Just prepare fence before the call.\n\nIt is hard to follow, and possible easy to break, why it is safe to use `mPresentFenceRecycler` without the lock, since it is used in `WindowSurfaceVk::cleanUpPresentHistory()`, for example. Maybe add `ASSERT(!needsAcquireNextSwapchainImage()` into `cleanUpPresentHistory()`?\n\nAt the same time, I can\u0027t think about case when `prepareSwap()` may be called concurrently with ANI related methods.\nExcept maybe if `eglPrepareSwap()` is called directly (not as part of swap), and right after that surface made current to other surface and we use that surface.",
+      "revId": "6e47a423ecb57da72bc700c0fc01086bfeb242f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c09aff2b_2c3600fd",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1897,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-02T03:08:13Z",
+      "side": 1,
+      "message": "\u003e Technically mSwapchain is not accessed, lambda uses a copy.\n\nRight, I mean to say the swapchain object itself is accessed.\n\n\u003e Should be mPresentFenceRecycler.\n\nDone.\n\n\u003e Also it seems that we can avoid using mPresentFenceRecycler without the lock either. Just prepare fence before the call.\n\nThis is a bit less straightforward. The thing is by the time the actual unlocked call is made, another thread may end up doing ANI anyway (not today, but in a follow up change I intend to make where ANI is moved to the end of render pass, which means now it can be triggered with other contexts causing a flush in this context). And now you are left with a fence that you need to release back to the recycler.\n\nIn that case, if the fence release can be made thread safe, so can the fence acquire!\n\n\u003e I can\u0027t think about case when prepareSwap() may be called concurrently with ANI related methods.\n\nThat is the idea. Otherwise this couldn\u0027t work given that it only uses the new mutex inside the try-acquire call, and nowhere else where the result is being processed.\n\n\u003e Maybe add ASSERT(!needsAcquireNextSwapchainImage() into cleanUpPresentHistory()?\n\nDone.",
+      "parentUuid": "9ce81fdb_bb797b52",
       "revId": "6e47a423ecb57da72bc700c0fc01086bfeb242f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -58,6 +94,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fe24602_4413cb38",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1905,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-02T03:08:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8fa5560d_83682d7e",
+      "range": {
+        "startLine": 1905,
+        "startChar": 58,
+        "endLine": 1905,
+        "endChar": 62
+      },
+      "revId": "6e47a423ecb57da72bc700c0fc01086bfeb242f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "65a7a42b_155d2d10",
@@ -71,6 +131,30 @@
       "writtenOn": "2023-04-25T15:20:29Z",
       "side": 1,
       "message": "Name is confusing with `mNeedToAcquireNextSwapchainImage` member.\n\nSuggest renaming to `isCurrentSwapchainImageReady()`. You will also need to negate all conditions...",
+      "range": {
+        "startLine": 2618,
+        "startChar": 22,
+        "endLine": 2618,
+        "endChar": 52
+      },
+      "revId": "6e47a423ecb57da72bc700c0fc01086bfeb242f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18d5673d_e0e183b0",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2618,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-02T03:08:13Z",
+      "side": 1,
+      "message": "Renamed to `needsAcquireImageOrProcessResult`",
+      "parentUuid": "65a7a42b_155d2d10",
       "range": {
         "startLine": 2618,
         "startChar": 22,
