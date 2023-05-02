@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fb26f888_49fcbf98",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-02T18:08:57Z",
+      "side": 1,
+      "message": "SwiftShader supports it, you might be able to make an end2end test that fails on SwiftShader",
+      "parentUuid": "d111309e_cab436d2",
+      "revId": "5bef5c7666a2af9c86628a127082173445d7a925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "63bc0d3d_7a0f8bef",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 7
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "History may have duplicate items: first from ANI, then from present.\n\nFirst will have fence already. Second will have not.\n\nCalling `cleanUpPresentHistory()` before present should remove first item, since fence from first ANI should be signaled immediately. However this is not guaranteed. Second, I do not want to tie this function to `cleanUpPresentHistory()` calls. Third, calling `cleanUpPresentHistory()` before present in this CL will make Single Buffer Mode problem worse.",
       "parentUuid": "63bc0d3d_7a0f8bef",
+      "revId": "5bef5c7666a2af9c86628a127082173445d7a925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8876857_70287a4c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-02T18:08:57Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "dc66d47c_395921be",
       "revId": "5bef5c7666a2af9c86628a127082173445d7a925",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -102,6 +138,24 @@
       "side": 1,
       "message": "I do not understand how this would work...\n\nIf I recycle the fence, it will be in the `mPresentFenceRecycler`. So now `mPresentFenceRecycler` may have fence inflight. And nothing will prevent acquiring this fence from `mPresentFenceRecycler` in the next ANI/present.",
       "parentUuid": "dba27b4f_0b13b3cd",
+      "revId": "5bef5c7666a2af9c86628a127082173445d7a925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38943e42_afa2e2ad",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-02T18:08:57Z",
+      "side": 1,
+      "message": "Good point",
+      "parentUuid": "9f341ed5_1cefe48c",
       "revId": "5bef5c7666a2af9c86628a127082173445d7a925",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
