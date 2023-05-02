@@ -87,6 +87,24 @@
       "parentUuid": "f31b39df_21691565",
       "revId": "934d85eabdafbbde033f44414081a075d25bf362",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f7f2238_7d17af7f",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-05-02T21:08:45Z",
+      "side": 1,
+      "message": "The `alphaToCoverage` driver uniform bit (when used) reflects a specific multisample rasterization state that is not related to flipping any built-in variables.",
+      "parentUuid": "e7feb7e2_5ab70c91",
+      "revId": "934d85eabdafbbde033f44414081a075d25bf362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
