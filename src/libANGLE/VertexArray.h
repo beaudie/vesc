@@ -184,6 +184,7 @@ class VertexArray final : public angle::ObserverInterface,
     enum DirtyAttribBitType
     {
         DIRTY_ATTRIB_ENABLED,
+        DIRTY_ATTRIB_STRIDE,
         DIRTY_ATTRIB_POINTER,
         DIRTY_ATTRIB_FORMAT,
         DIRTY_ATTRIB_BINDING,

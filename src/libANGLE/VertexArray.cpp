@@ -568,7 +568,10 @@ ANGLE_INLINE void VertexArray::setVertexAttribPointerImpl(const Context *context
 
     SetComponentTypeMask(componentType, attribIndex, &mState.mVertexAttributesTypeMask);
 
-    bool attribDirty = setVertexAttribFormatImpl(&attrib, size, type, normalized, pureInteger, 0);
+    if (setVertexAttribFormatImpl(&attrib, size, type, normalized, pureInteger, 0))
+    {
+        setDirtyAttribBit(attribIndex, DIRTY_ATTRIB_FORMAT);
+    }
 
     if (attrib.bindingIndex != attribIndex)
     {
@@ -580,7 +583,7 @@ ANGLE_INLINE void VertexArray::setVertexAttribPointerImpl(const Context *context
 
     if (attrib.vertexAttribArrayStride != static_cast<GLuint>(stride))
     {
-        attribDirty = true;
+        setDirtyAttribBit(attribIndex, DIRTY_ATTRIB_STRIDE);
     }
     attrib.vertexAttribArrayStride = stride;
 
@@ -589,7 +592,7 @@ ANGLE_INLINE void VertexArray::setVertexAttribPointerImpl(const Context *context
     const VertexBinding &binding = mState.mVertexBindings[attribIndex];
     if ((boundBuffer == nullptr) != (binding.getBuffer().get() == nullptr))
     {
-        attribDirty = true;
+        setDirtyAttribBit(attribIndex, DIRTY_ATTRIB_POINTER);
     }
 
     // Change of attrib.pointer is not part of attribDirty. Pointer is actually the buffer offset
@@ -598,12 +601,7 @@ ANGLE_INLINE void VertexArray::setVertexAttribPointerImpl(const Context *context
     GLintptr offset = boundBuffer ? reinterpret_cast<GLintptr>(pointer) : 0;
     const bool bufferDirty =
         bindVertexBufferImpl(context, attribIndex, boundBuffer, offset, effectiveStride);
-
-    if (attribDirty)
-    {
-        setDirtyAttribBit(attribIndex, DIRTY_ATTRIB_POINTER);
-    }
-    else if (bufferDirty)
+    if (bufferDirty)
     {
         setDirtyAttribBit(attribIndex, DIRTY_ATTRIB_POINTER_BUFFER);
     }
