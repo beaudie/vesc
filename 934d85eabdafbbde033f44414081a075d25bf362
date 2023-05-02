@@ -123,6 +123,24 @@
       "parentUuid": "4f7f2238_7d17af7f",
       "revId": "934d85eabdafbbde033f44414081a075d25bf362",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3a460ce_66c3e164",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-05-02T22:30:09Z",
+      "side": 1,
+      "message": "A2C emulation is currently controlled by several flags, including a platform-dependent feature and a frontend A2C toggle, which may be translated into a driver uniform bit. Note that the platform-dependent feature also affects pipeline descriptor states. Given that ANGLE CI does not run end2end tests on Apple Silicon, which must have A2C emulation disabled, new regressions may be introduced by not accounting for all possible permutations.\n\nAFAIK, the goal is to make the generated MSL invariant of whether A2C emulation is needed. The simplest way to achieve that would be to:\n- assume that `compileOptions.emulateAlphaToCoverage` is true;\n- introduce a new MSL function constant named like `ANGLEEmulateAlphaToCoverage`, set it to true on the appropriate platforms from `ProgramMtl::getSpecializedShader` (see `ANGLEUseSampleCompareGradient` nearby);\n- change the generated MSL condition that wraps `alphaBlock` in `AddSampleMaskDeclaration` to be AND of the function constant reference (created similar to `sampleMaskEnabledVar`) and the driver uniform reference as it is currently.",
+      "parentUuid": "16103dee_0805710a",
+      "revId": "934d85eabdafbbde033f44414081a075d25bf362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
