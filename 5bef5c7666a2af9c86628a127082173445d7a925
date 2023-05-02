@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da32a23c_68185a6f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-02T16:49:22Z",
+      "side": 1,
+      "message": "Was this actually a bug?",
+      "revId": "5bef5c7666a2af9c86628a127082173445d7a925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63bc0d3d_7a0f8bef",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-02T16:49:22Z",
+      "side": 1,
+      "message": "IIUC, walking backwards is no longer necessary. You can change this to a ranged `for`",
+      "revId": "5bef5c7666a2af9c86628a127082173445d7a925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dba27b4f_0b13b3cd",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-02T16:49:22Z",
+      "side": 1,
+      "message": "Can\u0027t you just recycle the fence here? You don\u0027t need to wait on it if you\u0027re relying on the fence of the next swapchain for clean up. That should avoid the Intel bug issue you mentioned too I believe.",
+      "revId": "5bef5c7666a2af9c86628a127082173445d7a925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "549d6c0e_799f49a2",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1271,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-02T16:49:22Z",
+      "side": 1,
+      "message": "nit: you can drop the `if`, it\u0027s redundant.",
+      "range": {
+        "startLine": 1270,
+        "startChar": 0,
+        "endLine": 1271,
+        "endChar": 9
+      },
+      "revId": "5bef5c7666a2af9c86628a127082173445d7a925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee263071_0ccb8212",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2112,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-02T16:49:22Z",
+      "side": 1,
+      "message": "```suggestion\n\t    // |kInvalidImageIndex| is only possible when |VkSwapchainPresentFenceInfoEXT| is used,\n\t    // in which case |fence| is always valid.\n```",
+      "range": {
+        "startLine": 2112,
+        "startChar": 15,
+        "endLine": 2112,
+        "endChar": 90
+      },
+      "revId": "5bef5c7666a2af9c86628a127082173445d7a925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7f95a9f_cc7ac1f0",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2141,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-02T16:49:22Z",
+      "side": 1,
+      "message": "Same suggestion",
+      "revId": "5bef5c7666a2af9c86628a127082173445d7a925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
