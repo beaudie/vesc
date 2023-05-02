@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d938d205_8f911a7f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-02T16:22:09Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "469bf1d8dae087d8d353150255c4f1444ae1fb94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf6a14b8_ef6cef34",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5652,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-02T16:22:09Z",
+      "side": 1,
+      "message": "The way we deal with this is to expose the iterator of the `for` loop above (say, `extendedIter`) and then do this:\n\n```\nstatic_assert(gl::State::EXTENDED_DIRTY_BIT_POLYGON_OFFSET_LINE_ENABLED \u003e\n                  gl::State::EXTENDED_DIRTY_BIT_POLYGON_MODE,\n              \"Dirty bit order\");\nextendedIter.setLaterBit(gl::State::EXTENDED_DIRTY_BIT_POLYGON_OFFSET_LINE_ENABLED);\n```\n\nMakes it easier to move code around and not worry about mistakes with fallthrough. You can see an example of this in handling `DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED` above for example.",
+      "range": {
+        "startLine": 5652,
+        "startChar": 28,
+        "endLine": 5652,
+        "endChar": 44
+      },
+      "revId": "469bf1d8dae087d8d353150255c4f1444ae1fb94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
