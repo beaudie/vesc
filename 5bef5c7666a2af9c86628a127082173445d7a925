@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ab7c9e9a_f199e328",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-02T18:40:10Z",
+      "side": 1,
+      "message": "I do not know how SwiftShader works. I will leave it unresolved and investigate this later.\n\nIn any case, old code had bug:\n```\n    if (mPresentHistory.empty() || mPresentHistory.back().imageIndex \u003d\u003d kInvalidImageIndex)\n    {\n        // Destroy the current (never-used) swapchain.\n        swapchainToDestroy \u003d mSwapchain;\n    }\n```\nIt says \"Destroy the current (never-used) swapchain.\" but it is not true.\nBug was introduced after implementing \"VK_EXT_swapchain_maintenance1\". After that, `kInvalidImageIndex` has double meaning...",
+      "parentUuid": "fb26f888_49fcbf98",
+      "revId": "5bef5c7666a2af9c86628a127082173445d7a925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "63bc0d3d_7a0f8bef",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 7
