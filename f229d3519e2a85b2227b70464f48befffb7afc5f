@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "12d29c02_cb434a69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-05-02T19:12:35Z",
+      "side": 1,
+      "message": "seems need a way to get verify it is compressed or not? add a counter?",
+      "parentUuid": "ec131ff0_0c1af338",
+      "revId": "f229d3519e2a85b2227b70464f48befffb7afc5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9f4c4e51_c387ce1b",
         "filename": "include/platform/vk_features.json",
         "patchSetId": 5
@@ -31,6 +49,30 @@
       "writtenOn": "2023-05-02T02:11:33Z",
       "side": 1,
       "message": "nit: please call this `enable`. Easier to reason when names are positive (and avoids double negation like `!disable...`)\n\nAlso, `...pipeline_cache_data...` so it reads better.",
+      "range": {
+        "startLine": 1209,
+        "startChar": 21,
+        "endLine": 1209,
+        "endChar": 28
+      },
+      "revId": "f229d3519e2a85b2227b70464f48befffb7afc5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86e71148_dd3c850c",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 1209,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-05-02T19:12:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f4c4e51_c387ce1b",
       "range": {
         "startLine": 1209,
         "startChar": 21,
@@ -58,6 +100,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d43819ea_4f13ab83",
+        "filename": "infra/specs/mixins.pyl",
+        "patchSetId": 5
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-05-02T19:12:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d74db842_22e6532d",
+      "revId": "f229d3519e2a85b2227b70464f48befffb7afc5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "33c2f2d2_2ad6f62c",
@@ -71,6 +131,30 @@
       "writtenOn": "2023-05-02T02:11:33Z",
       "side": 1,
       "message": "nit: `dataPointer, dataSize`",
+      "range": {
+        "startLine": 489,
+        "startChar": 42,
+        "endLine": 490,
+        "endChar": 71
+      },
+      "revId": "f229d3519e2a85b2227b70464f48befffb7afc5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "482b2097_c4a2f338",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-05-02T19:12:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33c2f2d2_2ad6f62c",
       "range": {
         "startLine": 489,
         "startChar": 42,
@@ -104,6 +188,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d3f6c0b_fc3b5d8a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 947,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-05-02T19:12:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "10ae784f_5e2509eb",
+      "range": {
+        "startLine": 947,
+        "startChar": 40,
+        "endLine": 947,
+        "endChar": 74
+      },
+      "revId": "f229d3519e2a85b2227b70464f48befffb7afc5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "813bed56_3296a5c0",
@@ -117,6 +225,30 @@
       "writtenOn": "2023-05-02T02:11:33Z",
       "side": 1,
       "message": "Suggest: `cacheData`",
+      "range": {
+        "startLine": 1086,
+        "startChar": 25,
+        "endLine": 1086,
+        "endChar": 32
+      },
+      "revId": "f229d3519e2a85b2227b70464f48befffb7afc5f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0d0632e_27361ad8",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1086,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-05-02T19:12:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "813bed56_3296a5c0",
       "range": {
         "startLine": 1086,
         "startChar": 25,
