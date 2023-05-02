@@ -22,6 +22,30 @@
       },
       "revId": "0fa38fcb0af21c160400b15a890f51f8e64523cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11c7a95d_3c9e4e9f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 5572,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-05-02T18:26:10Z",
+      "side": 1,
+      "message": "It refers to the size and memory type of the next allocation call that will be made at `AllocateAndBindMemoryForImage()` later. If there is a failure there, the log shows the size and target memory heap for the failed allocation.",
+      "parentUuid": "4d6a3ca6_829059e5",
+      "range": {
+        "startLine": 5572,
+        "startChar": 44,
+        "endLine": 5572,
+        "endChar": 65
+      },
+      "revId": "0fa38fcb0af21c160400b15a890f51f8e64523cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
