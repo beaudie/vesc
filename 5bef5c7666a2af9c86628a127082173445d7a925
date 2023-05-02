@@ -74,6 +74,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "94b81a6c_a31ecb59",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-02T19:27:37Z",
+      "side": 1,
+      "message": "Ack. For future reference, just running `./angle_end2end_tests --gtest_filter\u003dTest.Name/ES3_Vulkan_SwiftShader` lets you run things over SwiftShader on desktop.",
+      "parentUuid": "ab7c9e9a_f199e328",
+      "revId": "5bef5c7666a2af9c86628a127082173445d7a925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "63bc0d3d_7a0f8bef",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 7
