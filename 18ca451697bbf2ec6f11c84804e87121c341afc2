@@ -33,6 +33,23 @@
       "message": "Gregg, Geoff: could you please review? The only significant (and still small) change is between patchsets 1 and 2. See the linked bug for more details. Thanks.\n\nKyle, Kimmo: any comments welcome. Will email you about this separately.",
       "revId": "18ca451697bbf2ec6f11c84804e87121c341afc2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b1a6cb6_5d078d25",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-05-02T18:45:36Z",
+      "side": 1,
+      "message": "Just a refresher for me, I don\u0027t remember exactly how the ordering goes:\nSo here we leave the current render encoder open, with the intention that the next draw call can be added to the render pass.\n\nSo suppose the next draw call is supposed to use the contents of the new buffer.\n\nBy intention the draw call will be appended to the open render encoder, while the new buffer blit is sitting in the (uncommitted?) blit encoder?",
+      "revId": "18ca451697bbf2ec6f11c84804e87121c341afc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
