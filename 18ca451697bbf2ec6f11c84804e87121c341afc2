@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d306f45f_096bf71f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-05-02T05:00:19Z",
+      "side": 1,
+      "message": "Gregg, Geoff: could you please review? The only significant (and still small) change is between patchsets 1 and 2. See the linked bug for more details. Thanks.\n\nKyle, Kimmo: any comments welcome. Will email you about this separately.",
+      "revId": "18ca451697bbf2ec6f11c84804e87121c341afc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
