@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29778205_1c0a9b88",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-05-02T18:36:54Z",
+      "side": 0,
+      "message": "Are we still able to somehow limit the amount of memory used by series of updates?\n\nPreviously it seemed we were?\n\nSo if I have 100mb buffer and make updates in a draw loop, looping 100 times, do we still limit the memory somehow?",
+      "revId": "1fc399c6552281c8473e7edfb394209a4abf3b18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
