@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d111309e_cab436d2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-02T17:41:59Z",
+      "side": 1,
+      "message": "As I understand - yes.\n\nWhen using `VK_STRUCTURE_TYPE_SWAPCHAIN_PRESENT_FENCE_INFO_EXT` `imageIndex` always `kInvalidImageIndex`. This will assign `swapchainToDestroy` to the `mSwapchain` and then destroy it without waiting.\nMy devices does not support `VK_STRUCTURE_TYPE_SWAPCHAIN_PRESENT_FENCE_INFO_EXT`, but I can try to simulate this behaviour.",
+      "parentUuid": "da32a23c_68185a6f",
+      "revId": "5bef5c7666a2af9c86628a127082173445d7a925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "63bc0d3d_7a0f8bef",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 7
@@ -31,6 +49,24 @@
       "writtenOn": "2023-05-02T16:49:22Z",
       "side": 1,
       "message": "IIUC, walking backwards is no longer necessary. You can change this to a ranged `for`",
+      "revId": "5bef5c7666a2af9c86628a127082173445d7a925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc66d47c_395921be",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-02T17:41:59Z",
+      "side": 1,
+      "message": "History may have duplicate items: first from ANI, then from present.\n\nFirst will have fence already. Second will have not.\n\nCalling `cleanUpPresentHistory()` before present should remove first item, since fence from first ANI should be signaled immediately. However this is not guaranteed. Second, I do not want to tie this function to `cleanUpPresentHistory()` calls. Third, calling `cleanUpPresentHistory()` before present in this CL will make Single Buffer Mode problem worse.",
+      "parentUuid": "63bc0d3d_7a0f8bef",
       "revId": "5bef5c7666a2af9c86628a127082173445d7a925",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -54,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9f341ed5_1cefe48c",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1262,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-02T17:41:59Z",
+      "side": 1,
+      "message": "I do not understand how this would work...\n\nIf I recycle the fence, it will be in the `mPresentFenceRecycler`. So now `mPresentFenceRecycler` may have fence inflight. And nothing will prevent acquiring this fence from `mPresentFenceRecycler` in the next ANI/present.",
+      "parentUuid": "dba27b4f_0b13b3cd",
+      "revId": "5bef5c7666a2af9c86628a127082173445d7a925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "549d6c0e_799f49a2",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 7
@@ -65,6 +119,30 @@
       "writtenOn": "2023-05-02T16:49:22Z",
       "side": 1,
       "message": "nit: you can drop the `if`, it\u0027s redundant.",
+      "range": {
+        "startLine": 1270,
+        "startChar": 0,
+        "endLine": 1271,
+        "endChar": 9
+      },
+      "revId": "5bef5c7666a2af9c86628a127082173445d7a925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce4e7713_c0a03f5d",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 1271,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-02T17:41:59Z",
+      "side": 1,
+      "message": "Yes.\n\nI was thinking checking \"empty()\" one time is faster than no-op loop + no-op clear(). Having this \"if\" may save typing for debugging purposes).\n\nDone.",
+      "parentUuid": "549d6c0e_799f49a2",
       "range": {
         "startLine": 1270,
         "startChar": 0,
@@ -98,6 +176,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "69a22094_2d5f81dc",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2112,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-02T17:41:59Z",
+      "side": 1,
+      "message": "Thanks!\n\nDone",
+      "parentUuid": "ee263071_0ccb8212",
+      "range": {
+        "startLine": 2112,
+        "startChar": 15,
+        "endLine": 2112,
+        "endChar": 90
+      },
+      "revId": "5bef5c7666a2af9c86628a127082173445d7a925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d7f95a9f_cc7ac1f0",
@@ -111,6 +213,24 @@
       "writtenOn": "2023-05-02T16:49:22Z",
       "side": 1,
       "message": "Same suggestion",
+      "revId": "5bef5c7666a2af9c86628a127082173445d7a925",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d8c9477_a86235d5",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2141,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-02T17:41:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7f95a9f_cc7ac1f0",
       "revId": "5bef5c7666a2af9c86628a127082173445d7a925",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
