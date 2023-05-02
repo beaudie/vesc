@@ -740,6 +740,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e2909af5_eee800c0",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-02T18:32:55Z",
+      "side": 1,
+      "message": "\u003e Does something like this explain it? \"addRef()/release() should be protected by an external mutex after merging two mutexes (just as is the case for unmerged mutexes)\"\n\nYes. I already have more detailed explanation. I also want to avoid words like \"protected by an external mutex\". This may be anything, including SharedCpontexMutex itself.",
+      "parentUuid": "5c98ea89_33fb77e3",
+      "range": {
+        "startLine": 81,
+        "startChar": 7,
+        "endLine": 81,
+        "endChar": 96
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "017bca3d_35ab9aef",
         "filename": "src/libANGLE/SharedContextMutex.h",
         "patchSetId": 18
@@ -869,6 +893,30 @@
       "side": 1,
       "message": "\u003e I wanted make it simple to change SharedContextMutexManager Mutex type also at runtime.\n\nDo you have a specific use case in mind? Unless you\u0027re planning on adding such a thing, it\u0027s ok to keep this a compile-time thing for now and save some complexity 😊",
       "parentUuid": "70bdf50e_3071edf6",
+      "range": {
+        "startLine": 116,
+        "startChar": 0,
+        "endLine": 134,
+        "endChar": 2
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c90ce4c9_27c015b8",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-02T18:32:55Z",
+      "side": 1,
+      "message": "In the beginning there was FastMutex implementations, so I was planning changing mutex type. By default it could be FastMutex1 but change to other type if there some problems in specific apps. How end where to detect apps is a different question.\n\nOther case is for debugging/testing. So to test different mutex types without recompilation.\n\nI do not want to rewrite what is already implemented into global functions...",
+      "parentUuid": "5df69078_c605c92e",
       "range": {
         "startLine": 116,
         "startChar": 0,
