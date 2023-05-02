@@ -283,6 +283,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c96e6750_fdf3ae66",
+        "filename": "src/libANGLE/VertexArray.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-05-02T17:52:04Z",
+      "side": 1,
+      "message": "Changed to mBufferObserversBitMask",
+      "parentUuid": "79360c0c_96bc8bfb",
+      "range": {
+        "startLine": 890,
+        "startChar": 5,
+        "endLine": 890,
+        "endChar": 10
+      },
+      "revId": "947370a99ebf668784c9f7c3d22e19a65c48cf3b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aa77477b_a65e53c6",
