@@ -69,6 +69,24 @@
       "message": "A2C state does not affect built-in variables.",
       "revId": "934d85eabdafbbde033f44414081a075d25bf362",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7feb7e2_5ab70c91",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1000763
+      },
+      "writtenOn": "2023-05-02T21:02:52Z",
+      "side": 1,
+      "message": "Can you elaborate more on the concern?",
+      "parentUuid": "f31b39df_21691565",
+      "revId": "934d85eabdafbbde033f44414081a075d25bf362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
