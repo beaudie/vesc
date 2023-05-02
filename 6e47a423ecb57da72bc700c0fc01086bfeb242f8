@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b26149f0_6a473bed",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1883,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-02T14:01:50Z",
+      "side": 1,
+      "message": "Ok, I\u0027ll do that as a follow up if you don\u0027t mind. I recall when writing this CL that there were a lot of tricky cases, and I don\u0027t remember if I put it there to handle a particular scenario or not. We\u0027ll discover that in the follow up CL!",
+      "parentUuid": "2f1127b6_afdebb41",
+      "revId": "6e47a423ecb57da72bc700c0fc01086bfeb242f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9ce81fdb_bb797b52",
@@ -103,6 +121,24 @@
       "side": 1,
       "message": "\u003e In that case, if the fence release can be made thread safe, so can the fence acquire!\n\nUnderstand.\n\n\u003e That is the idea. Otherwise this couldn\u0027t work given that it only uses the new mutex inside the try-acquire call, and nowhere else where the result is being processed.\n\nThis I do not understand)",
       "parentUuid": "c09aff2b_2c3600fd",
+      "revId": "6e47a423ecb57da72bc700c0fc01086bfeb242f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e73fbd11_44c51474",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1897,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-02T14:01:50Z",
+      "side": 1,
+      "message": "\u003e \u003e That is the idea. Otherwise this couldn\u0027t work given that it only uses the new mutex inside the try-acquire call, and nowhere else where the result is being processed.\n\n\u003e This I do not understand)\n\nI was trying to emphasize that what you said is correct:\n\n\u003e At the same time, I can\u0027t think about case when prepareSwap() may be called concurrently with ANI related methods.\n\nAnd the reason this code works is exactly because there _shouldn\u0027t_ be a case when `prepareSwap` is called concurrently with ANI related methods.\n\nWhat can happen (again, not now, but in a future where ANI is called at the end of RP, i.e. potentially from another context) is this:\n\n- Thread/Context 1 calls prepareSwap\n- Thread/Context 2 causes context 1 to flush, causing ANI\n\nThe atomic `needToAcquireNextSwapchainImage` makes sure accesses to it are safe from both threads. Depending on ordering, both threads may end up calling `TryAcquireNextImageUnlocked`. One of them will go through, the other would block. The one that blocked would early-out because after mutex lock it sees that `needToAcquireNextSwapchainImage` is no longer true.\n\nWhoever ends up post-processing the result of ANI is doing it under the share group lock.\n\nDid I miss anything?",
+      "parentUuid": "80deac0c_75f2291e",
       "revId": "6e47a423ecb57da72bc700c0fc01086bfeb242f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
