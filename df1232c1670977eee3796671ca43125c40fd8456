@@ -16,6 +16,24 @@
       "message": "Any regression test that could be written for this?",
       "revId": "df1232c1670977eee3796671ca43125c40fd8456",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb761b2a_5e26210b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-02T17:43:16Z",
+      "side": 1,
+      "message": "I do not think so.\n\nAndroid N\u0027s present always waits (blocking on CPU) for (N-1)\u0027s present semaphore.\nBecause before this CL `cleanUpPresentHistory()` was called after present we was using 2 present semaphores. So everything worked fine.\n\nI do not know what test should do, We already have Single Buffer Mode tests.\nI guess if move `cleanUpPresentHistory()` before present without this fix, then existing tests may crash (or may not). Screen tearing already not a problem in this mode, so it will be hard to even visually detect a problem with semaphore.\n\nI think, that using glReadPixels will not detect problems either.",
+      "parentUuid": "5667cb3c_2412ebbd",
+      "revId": "df1232c1670977eee3796671ca43125c40fd8456",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
