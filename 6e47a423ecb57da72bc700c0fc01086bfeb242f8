@@ -143,6 +143,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "92b22825_3d8365bf",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1897,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-02T14:17:35Z",
+      "side": 1,
+      "message": "Thanks, now I understand)\n\nExcept one thing:\n\u003e And the reason this code works is exactly because there shouldn\u0027t be a case when prepareSwap is called concurrently with ANI related methods.\n\n\"ANI related methods\" is any method that can call ANI. So in your example (in the future), flush will be ANI related method.\n\nNow ANI may be called from syncState, but this method should not be called from other threads. And if we do not use `eglPrepareSwap()` directly, then we do not need atomic or TryAcquire mutex. That was my question, why we need atomic and mutex if concurrent calls is not possible. Now I understand, that it is for future changes.\n\n\u003e Whoever ends up post-processing the result of ANI is doing it under the share group lock\n\nIt will be the one from flush. eglSwap after prepareSwap will see processed result.\n\n\u003e Did I miss anything?\n\nI think everything is correct.",
+      "parentUuid": "e73fbd11_44c51474",
+      "revId": "6e47a423ecb57da72bc700c0fc01086bfeb242f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8fa5560d_83682d7e",
