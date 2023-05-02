@@ -281,6 +281,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d6d27b1_4e6cdd83",
+        "filename": "src/libANGLE/SharedContextMutex.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-02T18:02:49Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "6ba96534_2f088e77",
+      "range": {
+        "startLine": 151,
+        "startChar": 0,
+        "endLine": 153,
+        "endChar": 0
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "705ca0c4_18c1f53b",
@@ -521,6 +545,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0b42bd95_16d5843f",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-02T18:02:49Z",
+      "side": 1,
+      "message": "`ScopedContextMutexAddRefLock` SGTM",
+      "parentUuid": "5d645b21_f3053611",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "295a5ab3_734f2265",
         "filename": "src/libANGLE/SharedContextMutex.h",
         "patchSetId": 18
@@ -550,6 +592,24 @@
       "side": 1,
       "message": "It is OK if private method will have `bool` argument?",
       "parentUuid": "295a5ab3_734f2265",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b853a3ab_e863a9b7",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-02T18:02:49Z",
+      "side": 1,
+      "message": "In this case (small class), that should be fine.",
+      "parentUuid": "25b7efbe_1276dc02",
       "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -591,6 +651,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "841e1d74_18a05dc1",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-02T18:02:49Z",
+      "side": 1,
+      "message": "That\u0027s fine too.",
+      "parentUuid": "9896c316_b9607c54",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "91c160d4_58484d7f",
         "filename": "src/libANGLE/SharedContextMutex.h",
         "patchSetId": 18
@@ -626,6 +704,30 @@
       "side": 1,
       "message": "\u003e Not clear what this means, add/release must be synchronized... by a mutex? Which mutex?\n\nMaybe. Or using atomic, or anything else.\nSame as for Vulkan APIs, that require external synchronization.\nSimply, can\u0027t call `addRef/release()` at the same time - that is it.\n\nAgree that this may be unclear, but I want for implementation to decide what will be used for this synchronization. Currently, `ContextMutex` itself is used for synchronization (like in `AddRefLock` lock).\n\nI instead could write specifically: lock the mutex while calling its `addRef/release()`, but this may potentially (but unlikely) limit other valid uses. For example, we may create some global mutex to protect `addRef/release()` call for all Contex mutexes.\n\n\u003e And what is \"single mutex\"\n\nNot merged.\n\nFor example: we have MutexA and MutexB each may be synchronized by different mutex. In this implementation, mutexes themself are used to synchronize their `addRef/release()` calls.\nAfter the merge we will still have MutexA and MutexB, however now both must be synchronized as if they are a single mutex. Fortunately, after merging, they will act as a single mutex (but with different handles) and will satisfy synchronization requirement.",
       "parentUuid": "91c160d4_58484d7f",
+      "range": {
+        "startLine": 81,
+        "startChar": 7,
+        "endLine": 81,
+        "endChar": 96
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c98ea89_33fb77e3",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-02T18:02:49Z",
+      "side": 1,
+      "message": "\u003e Simply, can\u0027t call addRef/release() at the same time - that is it.\n\nI guess the sentence is a bit out of context, I don\u0027t really understand what the point about `addRef()/release()` is above `Merge()`. Are you saying _after_ the merge they should be synchronized?\n\nDoes something like this explain it? \"addRef()/release() should be protected by an external mutex after merging two mutexes (just as is the case for unmerged mutexes)\"",
+      "parentUuid": "2789aa30_f07498fe",
       "range": {
         "startLine": 81,
         "startChar": 7,
@@ -743,6 +845,30 @@
       "side": 1,
       "message": "I wanted make it simple to change `SharedContextMutexManager` `Mutex` type also at runtime. With this interface we just need to instantiate required `SharedContextMutexManager\u003cMutex\u003e` instance and use it in the code.\n\nWith the global functions we need to know how to cast from `ContextMutex` to `SharedContextMutex\u003cMutex\u003e` in each function. With compile time `Mutex` type this is not a problem, but may require `RendererVk` in a run-time case.",
       "parentUuid": "787cb45c_967d11d0",
+      "range": {
+        "startLine": 116,
+        "startChar": 0,
+        "endLine": 134,
+        "endChar": 2
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5df69078_c605c92e",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-02T18:02:49Z",
+      "side": 1,
+      "message": "\u003e I wanted make it simple to change SharedContextMutexManager Mutex type also at runtime.\n\nDo you have a specific use case in mind? Unless you\u0027re planning on adding such a thing, it\u0027s ok to keep this a compile-time thing for now and save some complexity 😊",
+      "parentUuid": "70bdf50e_3071edf6",
       "range": {
         "startLine": 116,
         "startChar": 0,
