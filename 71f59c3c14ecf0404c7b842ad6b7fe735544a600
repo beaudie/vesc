@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb1bc707_92ce51a8",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 945,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-02T19:31:18Z",
+      "side": 1,
+      "message": "You should make this part of the key and data, then verify on load that it matches the expected value. Otherwise it\u0027s going to cause annoyance during tests when the flag is toggled.",
+      "revId": "71f59c3c14ecf0404c7b842ad6b7fe735544a600",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
