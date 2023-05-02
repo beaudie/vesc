@@ -224,6 +224,24 @@
       "parentUuid": "08e91755_990a93a9",
       "revId": "2c53b56d9c913da72009903c5d46417835ecfff3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91327270_1b0872e4",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2236,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-02T13:13:10Z",
+      "side": 1,
+      "message": "Now that \"Vulkan: Use thread-local space for EGL errors\" is landed, the only problems left calling `DisplayVk::handleError()` without a lock are related to device lost:\n- access `RendererVk::mDeviceLost`;\n- access `Display::mDeviceLost`;\n- access `Display::mState` `contextSet`;\n- call to `Context::markContextLost()` - problem also existed before this CL.",
+      "parentUuid": "68507084_2fccc711",
+      "revId": "2c53b56d9c913da72009903c5d46417835ecfff3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
