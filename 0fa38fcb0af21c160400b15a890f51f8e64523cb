@@ -70,6 +70,30 @@
       },
       "revId": "0fa38fcb0af21c160400b15a890f51f8e64523cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5aef9fd5_193e6184",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 5572,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-05-02T19:32:55Z",
+      "side": 1,
+      "message": "I agree. I have moved the related code to where the allocation fails. Thanks.",
+      "parentUuid": "6f132519_498a1244",
+      "range": {
+        "startLine": 5572,
+        "startChar": 44,
+        "endLine": 5572,
+        "endChar": 65
+      },
+      "revId": "0fa38fcb0af21c160400b15a890f51f8e64523cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
