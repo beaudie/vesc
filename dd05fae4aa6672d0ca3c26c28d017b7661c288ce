@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f7e0180_30204f03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-02T20:38:11Z",
+      "side": 1,
+      "message": "VVL fix is merged into the repository and rolled into vulkan-deps.\n\nVVL repo issue: https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/5694\nVVL repo PR: https://github.com/KhronosGroup/Vulkan-ValidationLayers/pull/5695\n\nAlso added new test to specifically test for that VVL bug.",
+      "parentUuid": "71bb84d9_95f07fb0",
+      "revId": "dd05fae4aa6672d0ca3c26c28d017b7661c288ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "07301377_f81a0537",
