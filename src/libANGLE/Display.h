@@ -356,6 +356,7 @@ class Display final : public LabeledObject,
     // - Scratch space for an egl::Error used by the backends (this is not used by all backends, and
     //   access *must* be restricted to backends that use it).
     //
+    static void InitTLS();
     static angle::UnlockedTailCall *GetCurrentThreadUnlockedTailCall();
     static Error *GetCurrentThreadErrorScratchSpace();
 

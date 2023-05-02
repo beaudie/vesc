@@ -2665,6 +2665,20 @@ egl::Sync *Display::getSync(egl::SyncID syncID)
 }
 
 // static
+void Display::InitTLS()
+{
+    // Satisfy MSAN by setting the display TLS to nullptr, even though:
+    //
+    // - With thread_local, the variable is already initialized as nullptr
+    // - With pthread TLS, pthread_getspecific returns nullptr when index is not set.
+#if defined(ANGLE_PLATFORM_APPLE)
+    SetDisplayTLS(nullptr);
+#else
+    gDisplayTLS = nullptr;
+#endif
+}
+
+// static
 angle::UnlockedTailCall *Display::GetCurrentThreadUnlockedTailCall()
 {
     if (GetDisplayTLS() == nullptr)
