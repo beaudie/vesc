@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "352bb20b_6d3f7e6d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-05-02T17:44:40Z",
+      "side": 1,
+      "message": "You can imagine content with, say, for loop calling drawIndexed for 30 mins straight. There\u0027s no conceptual opengl context switches here.\n\nOn WebKit, there should not be any context switches in normal operation.\n\nHow about if command buffer completion could be used as the natural epoch, since the free buffers are available after the completion? If the buffers are not used within few completions, they are likely unneeded.",
+      "revId": "18ca451697bbf2ec6f11c84804e87121c341afc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "d306f45f_096bf71f",
