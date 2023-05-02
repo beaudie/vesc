@@ -16,6 +16,24 @@
       "message": "I think VMA hhas the ability doing this for you, all you need to do is set preferredFlags bits. See the VMA doc for detail.",
       "revId": "f9cc6d7e59938e02d46f7c27cdf61615bab4b332",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cde13ca9_0d9a5d90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-05-02T19:37:58Z",
+      "side": 1,
+      "message": "Thanks! I have removed `VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT` from `requiredFlags`. However, if `preferredFlags` still has this bit, it should still allocate from the device memory until it is unavailable. Is this correct?",
+      "parentUuid": "43230bb7_90b4bc27",
+      "revId": "f9cc6d7e59938e02d46f7c27cdf61615bab4b332",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
