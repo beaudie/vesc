@@ -12,6 +12,7 @@
 
 #include <gtest/gtest.h>
 
+#include <unordered_set>
 #include <vector>
 
 #include "common/debug.h"
@@ -516,13 +517,21 @@ void RegisterContextCompatibilityTests()
             return;
         }
 
-        std::vector<EGLConfig> configs = GetConfigs(display);
+        std::vector<EGLConfig> configs;
         std::vector<std::string> configNames;
+        std::unordered_set<std::string> configNameSet;
         std::string rendererName = GetRendererName(renderer);
 
-        for (EGLConfig config : configs)
+        for (EGLConfig config : GetConfigs(display))
         {
-            configNames.push_back(EGLConfigName(display, config));
+            std::string configName = EGLConfigName(display, config);
+            // Skip configs with duplicate names
+            if (configNameSet.count(configName) == 0)
+            {
+                configNames.push_back(configName);
+                configNameSet.insert(configName);
+                configs.push_back(config);
+            }
         }
 
         for (size_t configIndex = 0; configIndex < configs.size(); ++configIndex)
