@@ -1123,6 +1123,8 @@ angle::Result CommandQueue::finishResourceUse(Context *context,
                 const SharedFence localSharedFenceToWaitOn = mInFlightCommands.front().fence;
                 lock.unlock();
                 VkResult status = localSharedFenceToWaitOn.wait(device, timeout);
+                fprintf(stderr, "INAZ: finishResourceUse() fence: %p; wait status: %d;\n",
+                        localSharedFenceToWaitOn.get().getHandle(), (int)status);
                 lock.lock();
 
                 ANGLE_VK_TRY(context, status);
@@ -1445,8 +1447,21 @@ angle::Result CommandQueue::queueSubmit(Context *context,
 
     if (submitInfo.sType == VK_STRUCTURE_TYPE_SUBMIT_INFO)
     {
+        if (submitInfo.waitSemaphoreCount > 0)
+        {
+            fprintf(stderr, "INAZ: queueSubmit() submitInfo.waitSemaphoreCount: %u:\n",
+                    submitInfo.waitSemaphoreCount);
+            for (uint32_t i = 0; i < submitInfo.waitSemaphoreCount; ++i)
+            {
+                fprintf(stderr, "INAZ: queueSubmit() submitInfo.pWaitSemaphores[%u]: %p:\n", i,
+                        submitInfo.pWaitSemaphores[i]);
+            }
+        }
+
         VkQueue queue = getQueue(contextPriority);
         ANGLE_VK_TRY(context, vkQueueSubmit(queue, 1, &submitInfo, fence));
+        fprintf(stderr, "INAZ: queueSubmit() serialIndex: %u; serial: %d; fence: %p:\n",
+                submitQueueSerial.getIndex(), (int)submitQueueSerial.getSerial().getValue(), fence);
     }
 
     mInFlightCommands.push(commandBatch.release());
@@ -1504,6 +1519,11 @@ angle::Result CommandQueue::checkOneCommandBatch(Context *context, bool *finishe
     if (batch.fence)
     {
         VkResult status = batch.fence.getStatus(device);
+        fprintf(
+            stderr,
+            "INAZ: checkOneCommandBatch() serialIndex: %u; serial: %d; fence: %p; status: %d;\n",
+            batch.queueSerial.getIndex(), (int)batch.queueSerial.getSerial().getValue(),
+            batch.fence.get().getHandle(), (int)status);
         if (status == VK_NOT_READY)
         {
             return angle::Result::Continue;
