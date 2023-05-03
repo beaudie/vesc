@@ -332,6 +332,7 @@ TEST_P(MultisampleTest, AlphaToSampleCoverage)
 // Test that resolve from multisample default framebuffer works.
 TEST_P(MultisampleTestES3, ResolveToFBO)
 {
+    fprintf(stderr, "INAZ: MultisampleTestES3, ResolveToFBO BEGIN\n");
     GLTexture resolveTexture;
     glBindTexture(GL_TEXTURE_2D, resolveTexture);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kWindowWidth, kWindowHeight, 0, GL_RGBA,
@@ -363,6 +364,7 @@ TEST_P(MultisampleTestES3, ResolveToFBO)
     EXPECT_PIXEL_COLOR_NEAR(0, kWindowHeight - 1, kResult, 1);
     EXPECT_PIXEL_COLOR_NEAR(kWindowWidth - 1, kWindowHeight - 1, kResult, 1);
     EXPECT_PIXEL_COLOR_NEAR(kWindowWidth / 2, kWindowHeight / 2, kResult, 1);
+    fprintf(stderr, "INAZ: MultisampleTestES3, ResolveToFBO END\n");
 }
 
 class MultisampleResolveTest : public ANGLETest<>
