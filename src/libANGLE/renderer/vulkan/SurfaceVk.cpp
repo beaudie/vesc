@@ -776,7 +776,12 @@ void SwapchainCleanupData::waitFences(VkDevice device, uint64_t timeout) const
 {
     for (const vk::Fence &fence : fences)
     {
-        (void)fence.wait(device, timeout);
+        VkResult status = fence.getStatus(device);
+        fprintf(stderr, "INAZ: %p - SwapchainCleanupData::waitFences() fence(%p).getStatus: %d;\n",
+                this, fence.getHandle(), (int)status);
+        status = fence.wait(device, timeout);
+        fprintf(stderr, "INAZ: %p - SwapchainCleanupData::waitFences() fence(%p).wait: %d;\n", this,
+                fence.getHandle(), (int)status);
     }
 }
 
@@ -784,12 +789,17 @@ void SwapchainCleanupData::destroy(VkDevice device,
                                    vk::Recycler<vk::Fence> *fenceRecycler,
                                    vk::Recycler<vk::Semaphore> *semaphoreRecycler)
 {
+    fprintf(stderr, "INAZ: SwapchainCleanupData::destroy() BEGIN\n");
+
     // Check status and recycle fences before destroying the Swapchain.
     // There is a bug on some Intel drivers, that causes crash if check Fence status after Swapchain
     // destruction. Resetting Fence after Swapchain destruction works as expected.
     for (vk::Fence &fence : fences)
     {
-        ASSERT(fence.getStatus(device) == VK_SUCCESS);
+        VkResult status = fence.getStatus(device);
+        fprintf(stderr, "INAZ: SwapchainCleanupData::destroy() fence(%p).getStatus: %d;\n",
+                fence.getHandle(), (int)status);
+        ASSERT(status == VK_SUCCESS);
         fenceRecycler->recycle(std::move(fence));
     }
     fences.clear();
@@ -806,6 +816,8 @@ void SwapchainCleanupData::destroy(VkDevice device,
         vkDestroySwapchainKHR(device, swapchain, nullptr);
         swapchain = VK_NULL_HANDLE;
     }
+
+    fprintf(stderr, "INAZ: SwapchainCleanupData::destroy() END\n");
 }
 
 ImagePresentOperation::ImagePresentOperation() : imageIndex(kInvalidImageIndex) {}
@@ -836,7 +848,12 @@ void ImagePresentOperation::waitFences(VkDevice device, uint64_t timeout) const
 {
     if (fence.valid())
     {
-        (void)fence.wait(device, timeout);
+        VkResult status = fence.getStatus(device);
+        fprintf(stderr, "INAZ: %p - ImagePresentOperation::waitFences() fence(%p).getStatus: %d;\n",
+                this, fence.getHandle(), (int)status);
+        status = fence.wait(device, timeout);
+        fprintf(stderr, "INAZ: %p - ImagePresentOperation::waitFences() fence(%p).wait: %d;\n",
+                this, fence.getHandle(), (int)status);
     }
 
     for (const SwapchainCleanupData &oldSwapchain : oldSwapchains)
@@ -849,10 +866,17 @@ void ImagePresentOperation::destroy(VkDevice device,
                                     vk::Recycler<vk::Fence> *fenceRecycler,
                                     vk::Recycler<vk::Semaphore> *semaphoreRecycler)
 {
+    fprintf(stderr,
+            "INAZ: ImagePresentOperation::destroy() fence.valid(): %d; oldSwapchains.size(): %d\n",
+            fence.valid(), (int)oldSwapchains.size());
+
     // Fence may be unassigned when surface is destroyed.
     if (fence.valid())
     {
-        ASSERT(fence.getStatus(device) == VK_SUCCESS);
+        VkResult status = fence.getStatus(device);
+        fprintf(stderr, "INAZ: ImagePresentOperation::destroy() fence(%p).getStatus: %d;\n",
+                fence.getHandle(), (int)status);
+        ASSERT(status == VK_SUCCESS);
         fenceRecycler->recycle(std::move(fence));
     }
 
@@ -924,10 +948,32 @@ WindowSurfaceVk::~WindowSurfaceVk()
 
 void WindowSurfaceVk::destroy(const egl::Display *display)
 {
+    fprintf(stderr, "INAZ: %p - destroy() BEGIN\n", this);
     DisplayVk *displayVk = vk::GetImpl(display);
     RendererVk *renderer = displayVk->getRenderer();
     VkDevice device      = renderer->getDevice();
     VkInstance instance  = renderer->getInstance();
+
+    for (uint32_t index = 0; index < 4; ++index)
+    {
+        Serial lastSubmittedSerial = renderer->getLastSubmittedSerial(index);
+        fprintf(stderr, "INAZ: %p - present() lastSubmittedSerial: {index: %u; serial: %d}\n", this,
+                index, (int)lastSubmittedSerial.getValue());
+    }
+
+    fprintf(stderr, "INAZ: %p - destroy() mPresentHistory.size(): %d;\n", this,
+            (int)mPresentHistory.size());
+    for (impl::ImagePresentOperation &presentOperation : mPresentHistory)
+    {
+        if (presentOperation.fence.valid())
+        {
+            VkResult status = presentOperation.fence.getStatus(device);
+            fprintf(stderr,
+                    "INAZ: %p - destroy() presentOperation.fence(%p).getStatus: %d "
+                    "(before finish...);\n",
+                    this, presentOperation.fence.getHandle(), (int)status);
+        }
+    }
 
     // flush the pipe.
     (void)renderer->waitForPresentToBeSubmitted(&mSwapchainStatus);
@@ -950,7 +996,7 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
         // fences before destroying Present Semaphores or the Swapchain itself. When extension is
         // not supported, we can only wait until submission is finished and that Swapchain
         // destruction ensures that semaphore is safe to destroy/recycle.
-        presentOperation.waitFences(device, renderer->getMaxFenceWaitTimeNs());
+        // presentOperation.waitFences(device, renderer->getMaxFenceWaitTimeNs());
         presentOperation.destroy(device, &mPresentFenceRecycler, &mPresentSemaphoreRecycler);
     }
     mPresentHistory.clear();
@@ -967,9 +1013,11 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
     {
         semaphore.destroy(device);
     }
+    fprintf(stderr, "INAZ: %p - destroy() mOldSwapchains.size(): %d;\n", this,
+            (int)mOldSwapchains.size());
     for (SwapchainCleanupData &oldSwapchain : mOldSwapchains)
     {
-        oldSwapchain.waitFences(device, renderer->getMaxFenceWaitTimeNs());
+        // oldSwapchain.waitFences(device, renderer->getMaxFenceWaitTimeNs());
         oldSwapchain.destroy(device, &mPresentFenceRecycler, &mPresentSemaphoreRecycler);
     }
     mOldSwapchains.clear();
@@ -1006,10 +1054,12 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
         });
         mSurface = VK_NULL_HANDLE;
     }
+    fprintf(stderr, "INAZ: %p - destroy() END\n", this);
 }
 
 egl::Error WindowSurfaceVk::initialize(const egl::Display *display)
 {
+    fprintf(stderr, "INAZ: %p - initialize()\n", this);
     DisplayVk *displayVk = vk::GetImpl(display);
     angle::Result result = initializeImpl(displayVk);
     if (result == angle::Result::Incomplete)
@@ -1292,6 +1342,8 @@ angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk, const gl:
     // The old(er) swapchains still need to be kept to be scheduled for destruction.
     VkSwapchainKHR swapchainToDestroy = VK_NULL_HANDLE;
 
+    fprintf(stderr, "INAZ: %p - recreateSwapchain() mPresentHistory.size(): %d;\n", this,
+            (int)mPresentHistory.size());
     if (mPresentHistory.empty())
     {
         // Destroy the current (never-used) swapchain.
@@ -1301,6 +1353,9 @@ angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk, const gl:
     // Place all present operation into mOldSwapchains. That gets scheduled for destruction when the
     // semaphore of the first image of the next swapchain can be recycled.
     SwapchainCleanupData cleanupData;
+
+    fprintf(stderr, "INAZ: %p - recreateSwapchain() mOldSwapchains.size(): %d (begin);\n", this,
+            (int)mOldSwapchains.size());
 
     // If the swapchain is not being immediately destroyed, schedule it for destruction.
     if (swapchainToDestroy == VK_NULL_HANDLE)
@@ -1329,6 +1384,11 @@ angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk, const gl:
     }
     mPresentHistory.clear();
 
+    fprintf(stderr,
+            "INAZ: %p - recreateSwapchain() mOldSwapchains.size(): %d (after processing "
+            "mPresentHistory);\n",
+            this, (int)mOldSwapchains.size());
+
     // If too many old swapchains have accumulated, wait idle and destroy them.  This is to prevent
     // failures due to too many swapchains allocated.
     //
@@ -1352,6 +1412,10 @@ angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk, const gl:
     {
         mOldSwapchains.emplace_back(std::move(cleanupData));
     }
+    fprintf(stderr,
+            "INAZ: %p - recreateSwapchain() mOldSwapchains.size(): %d (after processing "
+            "cleanupData);\n",
+            this, (int)mOldSwapchains.size());
 
     // Recreate the swapchain based on the most recent one.
     VkSwapchainKHR lastSwapchain = mSwapchain;
@@ -1684,12 +1748,20 @@ angle::Result WindowSurfaceVk::checkForOutOfDateSwapchain(ContextVk *contextVk,
     bool swapIntervalChanged =
         !IsCompatiblePresentMode(mDesiredSwapchainPresentMode, mCompatiblePresentModes.data(),
                                  mCompatiblePresentModes.size());
+    fprintf(
+        stderr,
+        "INAZ: %p - checkForOutOfDateSwapchain() swapIntervalChanged: %d; presentOutOfDate: %d\n",
+        this, (int)swapIntervalChanged, presentOutOfDate);
     presentOutOfDate = presentOutOfDate || swapIntervalChanged;
 
     // If there's no change, early out.
     if (!contextVk->getRenderer()->getFeatures().perFrameWindowSizeQuery.enabled &&
         !presentOutOfDate)
     {
+        fprintf(stderr,
+                "INAZ: %p - checkForOutOfDateSwapchain() no changes "
+                "(perFrameWindowSizeQuery: disabled)...\n",
+                this);
         return angle::Result::Continue;
     }
 
@@ -1706,11 +1778,19 @@ angle::Result WindowSurfaceVk::checkForOutOfDateSwapchain(ContextVk *contextVk,
         presentOutOfDate         = mSurfaceCaps.currentTransform != mPreTransform ||
                            mSurfaceCaps.currentExtent.width != swapchainWidth ||
                            mSurfaceCaps.currentExtent.height != swapchainHeight;
+        if (presentOutOfDate)
+        {
+            fprintf(stderr, "INAZ: %p - checkForOutOfDateSwapchain() size change...\n", this);
+        }
     }
 
     // If anything has changed, recreate the swapchain.
     if (!presentOutOfDate)
     {
+        fprintf(stderr,
+                "INAZ: %p - checkForOutOfDateSwapchain() no changes "
+                "(perFrameWindowSizeQuery: enabled)...\n",
+                this);
         return angle::Result::Continue;
     }
 
@@ -1723,6 +1803,7 @@ angle::Result WindowSurfaceVk::checkForOutOfDateSwapchain(ContextVk *contextVk,
         mPreTransform = mSurfaceCaps.currentTransform;
     }
 
+    fprintf(stderr, "INAZ: %p - checkForOutOfDateSwapchain() -> recreateSwapchain()...\n", this);
     return recreateSwapchain(contextVk, newSwapchainExtents);
 }
 
@@ -1783,6 +1864,14 @@ angle::Result WindowSurfaceVk::finish(vk::Context *context)
     for (SwapchainImage &swapchainImage : mSwapchainImages)
     {
         mUse.merge(swapchainImage.image->getResourceUse());
+    }
+
+    const vk::Serials &useSerials = mUse.getSerials();
+    fprintf(stderr, "INAZ: %p - finish() useSerials.size(): %d;\n", this, (int)useSerials.size());
+    for (uint32_t index = 0; index < useSerials.size(); ++index)
+    {
+        fprintf(stderr, "INAZ: %p - finish() index: %u; serial: %d;\n", this, index,
+                (int)useSerials[index].getValue());
     }
 
     return renderer->finishResourceUse(context, mUse);
@@ -1851,6 +1940,7 @@ egl::Error WindowSurfaceVk::prepareSwap(const gl::Context *context)
             if (mNeedToAcquireNextSwapchainImage)
             {
                 ANGLE_TRACE_EVENT0("gpu.angle", "Acquire Swap Image Before Swap");
+                fprintf(stderr, "INAZ: %p - prepareSwap() -> doDeferredAcquireNextImage()\n", this);
                 (void)doDeferredAcquireNextImage(context, false);
             }
         });
@@ -2103,12 +2193,16 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
                 .valid());
 
     renderer->queuePresent(contextVk, contextVk->getPriority(), presentInfo, &mSwapchainStatus);
+    fprintf(stderr, "INAZ: %p - present() lastPresentResult: %d;\n", this,
+            (int)mSwapchainStatus.lastPresentResult);
 
     // Set FrameNumber for the presented image.
     mSwapchainImages[mCurrentSwapchainImageIndex].frameNumber = mFrameCount++;
 
     // Place the semaphore in the present history.  Schedule pending old swapchains to be destroyed
     // at the same time the semaphore for this present can be destroyed.
+    fprintf(stderr, "INAZ: %p - present() mOldSwapchains.size(): %d;\n", this,
+            (int)mOldSwapchains.size());
     mPresentHistory.emplace_back();
     mPresentHistory.back().semaphore     = std::move(presentSemaphore);
     mPresentHistory.back().oldSwapchains = std::move(mOldSwapchains);
@@ -2124,9 +2218,14 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         // needs to be tracked in this case.
         mPresentHistory.back().imageIndex = mCurrentSwapchainImageIndex;
     }
+    fprintf(stderr, "INAZ: %p - present() mPresentHistory.size(): %d (after emplace_back);\n", this,
+            (int)mPresentHistory.size());
 
     // Clean up whatever present is already finished.
     ANGLE_TRY(cleanUpPresentHistory(contextVk));
+    fprintf(stderr,
+            "INAZ: %p - present() mPresentHistory.size(): %d (after cleanUpPresentHistory);\n",
+            this, (int)mPresentHistory.size());
 
     ANGLE_TRY(
         computePresentOutOfDate(contextVk, mSwapchainStatus.lastPresentResult, presentOutOfDate));
@@ -2134,6 +2233,9 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     // Now update swapSerial With last submitted queue serial and apply CPU throttle if needed
     QueueSerial swapSerial = contextVk->getLastSubmittedQueueSerial();
     ANGLE_TRY(throttleCPU(contextVk, swapSerial));
+
+    fprintf(stderr, "INAZ: %p - present() swapSerial: {index: %d; serial: %d}\n", this,
+            (int)swapSerial.getIndex(), (int)swapSerial.getSerial().getValue());
 
     contextVk->resetPerFramePerfCounters();
 
@@ -2238,6 +2340,9 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
     }
     else
     {
+        fprintf(stderr,
+                "INAZ: %p - swapImpl() presentOutOfDate: %d; -> doDeferredAcquireNextImage()\n",
+                this, presentOutOfDate);
         // Immediately try to acquire the next image, which will recognize the out-of-date
         // swapchain (potentially because of a rotation change), and recreate it.
         ANGLE_VK_TRACE_EVENT_AND_MARKER(contextVk, "Out-of-Date Swapbuffer");
@@ -2247,6 +2352,8 @@ angle::Result WindowSurfaceVk::swapImpl(const gl::Context *context,
     RendererVk *renderer = contextVk->getRenderer();
     DisplayVk *displayVk = vk::GetImpl(context->getDisplay());
     ANGLE_TRY(renderer->syncPipelineCacheVk(displayVk, context));
+
+    fprintf(stderr, "INAZ:\n");
 
     return angle::Result::Continue;
 }
@@ -2299,6 +2406,8 @@ angle::Result WindowSurfaceVk::doDeferredAcquireNextImage(const gl::Context *con
         ANGLE_TRY(computePresentOutOfDate(contextVk, result, &presentOutOfDate));
     }
 
+    fprintf(stderr, "INAZ: %p - doDeferredAcquireNextImage() -> checkForOutOfDateSwapchain()\n",
+            this);
     ANGLE_TRY(checkForOutOfDateSwapchain(contextVk, presentOutOfDate));
 
     {
@@ -2314,6 +2423,10 @@ angle::Result WindowSurfaceVk::doDeferredAcquireNextImage(const gl::Context *con
         // continuing.
         if (ANGLE_UNLIKELY(result == VK_ERROR_OUT_OF_DATE_KHR))
         {
+            fprintf(stderr,
+                    "INAZ: %p - doDeferredAcquireNextImage() -> checkForOutOfDateSwapchain() "
+                    "VK_ERROR_OUT_OF_DATE_KHR\n",
+                    this);
             ANGLE_TRY(checkForOutOfDateSwapchain(contextVk, true));
             // Try one more time and bail if we fail
             result = acquireNextSwapchainImage(contextVk);
@@ -2392,6 +2505,9 @@ VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
 
     VkResult result = vkAcquireNextImageKHR(device, mSwapchain, UINT64_MAX, acquireImageSemaphore,
                                             presentFence.getHandle(), &mCurrentSwapchainImageIndex);
+    fprintf(stderr,
+            "INAZ: %p - acquireNextSwapchainImage() result: %d; mCurrentSwapchainImageIndex: %u\n",
+            this, (int)result, mCurrentSwapchainImageIndex);
 
     // VK_SUBOPTIMAL_KHR is ok since we still have an Image that can be presented successfully
     if (ANGLE_UNLIKELY(result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR))
@@ -2407,8 +2523,13 @@ VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
     // Associate the present fence with the last present operation.
     if (presentFenceInferredFromAcquire)
     {
+        fprintf(stderr, "INAZ: %p - acquireNextSwapchainImage() presentFence.getHandle(): %p:\n",
+                this, presentFence.getHandle());
+
         AssociateFenceWithPresentHistory(mCurrentSwapchainImageIndex, std::move(presentFence),
                                          &mPresentHistory);
+        fprintf(stderr, "INAZ: %p - acquireNextSwapchainImage() mPresentHistory.size(): %d;\n",
+                this, (int)mPresentHistory.size());
     }
 
     SwapchainImage &image = mSwapchainImages[mCurrentSwapchainImageIndex];
@@ -2420,6 +2541,9 @@ VkResult WindowSurfaceVk::acquireNextSwapchainImage(vk::Context *context)
     // this is tracked bny ImageHelper object, it also ensures it only added to command that
     // image is actually being referenced, thus avoid potential bugs.
     image.image->setAcquireNextImageSemaphore(acquireImageSemaphore);
+
+    fprintf(stderr, "INAZ: %p - acquireNextSwapchainImage() acquireImageSemaphore: %p:\n", this,
+            acquireImageSemaphore);
 
     // Single Image Mode
     if (isSharedPresentMode())
