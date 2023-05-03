@@ -1776,6 +1776,16 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     std::vector<VkPhysicalDevice> physicalDevices(physicalDeviceCount);
     ANGLE_VK_TRY(displayVk, vkEnumeratePhysicalDevices(mInstance, &physicalDeviceCount,
                                                        physicalDevices.data()));
+
+    fprintf(stderr, "INAZ: initialize() physicalDeviceCount: %u;\n", physicalDeviceCount);
+    for (uint32_t i = 0; i < physicalDeviceCount; ++i)
+    {
+        VkPhysicalDeviceProperties props;
+        vkGetPhysicalDeviceProperties(physicalDevices[i], &props);
+        fprintf(stderr, "INAZ: initialize() physicalDevices[%u]: deviceName: %s; vendorID: %u;\n",
+                i, &props.deviceName[0], props.vendorID);
+    }
+
     uint32_t preferredVendorId =
         static_cast<uint32_t>(attribs.get(EGL_PLATFORM_ANGLE_DEVICE_ID_HIGH_ANGLE, 0));
     uint32_t preferredDeviceId =
@@ -1783,6 +1793,9 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     ChoosePhysicalDevice(vkGetPhysicalDeviceProperties, physicalDevices, mEnabledICD,
                          preferredVendorId, preferredDeviceId, &mPhysicalDevice,
                          &mPhysicalDeviceProperties);
+
+    fprintf(stderr, "INAZ: initialize() mPhysicalDeviceProperties.deviceName: %s;\n",
+            &mPhysicalDeviceProperties.deviceName[0]);
 
     // The device version that is assumed by ANGLE is the minimum of the actual device version and
     // the highest it's allowed to use.
@@ -3678,6 +3691,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     constexpr uint32_t kPixel2DriverWithRelaxedPrecision        = 0x801EA000;
     constexpr uint32_t kPixel4DriverWithWorkingSpecConstSupport = 0x80201000;
 
+    fprintf(stderr, "INAZ: initFeatures() mPhysicalDeviceProperties.vendorID: %u;\n",
+            mPhysicalDeviceProperties.vendorID);
+
     const bool isAMD      = IsAMD(mPhysicalDeviceProperties.vendorID);
     const bool isARM      = IsARM(mPhysicalDeviceProperties.vendorID);
     const bool isIntel    = IsIntel(mPhysicalDeviceProperties.vendorID);
@@ -3976,9 +3992,18 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsMultiDrawIndirect,
                             mPhysicalDeviceFeatures.multiDrawIndirect == VK_TRUE);
 
+    fprintf(stderr,
+            "INAZ: initFeatures() IsAndroid(): %d; IsWindows(): %d; IsFuchsia(): %d; "
+            "isIntel: %d; isNvidia: %d; isAMD: %d; isSamsung: %d; isWayland: %d;\n",
+            IsAndroid(), IsWindows(), IsFuchsia(), isIntel, isNvidia, isAMD, isSamsung,
+            displayVk->isWayland());
+
     ANGLE_FEATURE_CONDITION(&mFeatures, perFrameWindowSizeQuery,
                             IsAndroid() || isIntel || (IsWindows() && isAMD) || IsFuchsia() ||
                                 isSamsung || displayVk->isWayland());
+
+    fprintf(stderr, "INAZ: initFeatures() perFrameWindowSizeQuery.enabled: %d;\n",
+            mFeatures.perFrameWindowSizeQuery.enabled);
 
     ANGLE_FEATURE_CONDITION(&mFeatures, padBuffersToMaxVertexAttribStride, isAMD || isSamsung);
     mMaxVertexAttribStride = std::min(static_cast<uint32_t>(gl::limits::kMaxVertexAttribStride),
