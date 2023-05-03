@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "880cc676_e3f12131",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-03T16:30:31Z",
+      "side": 1,
+      "message": "PTAL. It hit a VVL bug that I suppressed (https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues/5783)",
+      "revId": "3164ca76102bf0166df0efb0111713276cfb31f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
