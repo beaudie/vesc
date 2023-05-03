@@ -52,6 +52,24 @@
       "parentUuid": "bb1bc707_92ce51a8",
       "revId": "71f59c3c14ecf0404c7b842ad6b7fe735544a600",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff6c41fd_cfb9ce44",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 945,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-03T02:49:06Z",
+      "side": 1,
+      "message": "No, I\u0027ll be surprised if it didn\u0027t fail when presented uncompressed data.",
+      "parentUuid": "892d1357_4af25a6c",
+      "revId": "71f59c3c14ecf0404c7b842ad6b7fe735544a600",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
