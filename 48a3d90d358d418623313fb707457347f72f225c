@@ -62,6 +62,30 @@
       },
       "revId": "48a3d90d358d418623313fb707457347f72f225c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c27e068_c7ba4702",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 5163,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-03T16:56:33Z",
+      "side": 1,
+      "message": "Then need to change the argument type to `vk::SharedExternalFence \u0026\u0026externalFence`.\nI used pointer, because IMO it is more appropriate type for optional argument.\n\nIf you prefer using `{}` instead of `nullptr` in all other places, then I will change argument type to `vk::SharedExternalFence \u0026\u0026externalFence`.",
+      "parentUuid": "4ca4c213_875f1c57",
+      "range": {
+        "startLine": 5159,
+        "startChar": 4,
+        "endLine": 5163,
+        "endChar": 5
+      },
+      "revId": "48a3d90d358d418623313fb707457347f72f225c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
