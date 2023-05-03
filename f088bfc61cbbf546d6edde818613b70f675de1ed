@@ -16,6 +16,24 @@
       "message": "```suggestion\n        // Even if no commands is generated, and flushImpl bails out, queueSerial is valid\n```",
       "revId": "f088bfc61cbbf546d6edde818613b70f675de1ed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c2bc805_7d38b82f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 7560,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-03T20:05:50Z",
+      "side": 1,
+      "message": "Thanks!\nDone.",
+      "parentUuid": "6e973509_e8b7f673",
+      "revId": "f088bfc61cbbf546d6edde818613b70f675de1ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
