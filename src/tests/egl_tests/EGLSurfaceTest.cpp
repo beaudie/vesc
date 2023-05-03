@@ -616,6 +616,8 @@ TEST_P(EGLSurfaceTest, SurfaceUseAfterFreeBug)
 // Test that the window surface is correctly resized after calling swapBuffers
 TEST_P(EGLSurfaceTest, ResizeWindow)
 {
+    printf("INAZ: EGLSurfaceTest.ResizeWindow; BEGIN\n");
+
     // http://anglebug.com/4453
     ANGLE_SKIP_TEST_IF(isVulkanRenderer() && IsLinux() && IsIntel());
     // Flaky on Linux SwANGLE http://anglebug.com/4453
@@ -637,7 +639,9 @@ TEST_P(EGLSurfaceTest, ResizeWindow)
     initializeMainContext();
     ASSERT_NE(mWindowSurface, EGL_NO_SURFACE);
 
+    printf("INAZ: EGLSurfaceTest.ResizeWindow; eglMakeCurrent()...\n");
     eglMakeCurrent(mDisplay, mWindowSurface, mWindowSurface, mContext);
+    printf("INAZ: EGLSurfaceTest.ResizeWindow; eglSwapBuffers()...\n");
     eglSwapBuffers(mDisplay, mWindowSurface);
     ASSERT_EGL_SUCCESS();
 
@@ -646,9 +650,11 @@ TEST_P(EGLSurfaceTest, ResizeWindow)
     ASSERT_EGL_SUCCESS();
     ASSERT_EQ(64, height);  // initial size
 
+    printf("INAZ: EGLSurfaceTest.ResizeWindow; mOSWindow->resize(64, minSize)...\n");
     // set window's height to 0 (if possible) or 1
     mOSWindow->resize(64, minSize);
 
+    printf("INAZ: EGLSurfaceTest.ResizeWindow; eglSwapBuffers()...\n");
     eglSwapBuffers(mDisplay, mWindowSurface);
     ASSERT_EGL_SUCCESS();
 
@@ -660,15 +666,19 @@ TEST_P(EGLSurfaceTest, ResizeWindow)
     ASSERT_EGL_SUCCESS();
     ASSERT_EQ(minSize, height);
 
+    printf("INAZ: EGLSurfaceTest.ResizeWindow; mOSWindow->resize(64, 64)...\n");
     // restore window's height
     mOSWindow->resize(64, 64);
 
+    printf("INAZ: EGLSurfaceTest.ResizeWindow; eglSwapBuffers()...\n");
     eglSwapBuffers(mDisplay, mWindowSurface);
     ASSERT_EGL_SUCCESS();
 
     eglQuerySurface(mDisplay, mWindowSurface, EGL_HEIGHT, &height);
     ASSERT_EGL_SUCCESS();
     ASSERT_EQ(64, height);
+
+    printf("INAZ: EGLSurfaceTest.ResizeWindow; END\n");
 }
 
 // Test that the backbuffer is correctly resized after calling swapBuffers
