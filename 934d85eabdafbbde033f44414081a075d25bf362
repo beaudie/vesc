@@ -159,6 +159,24 @@
       "parentUuid": "c3a460ce_66c3e164",
       "revId": "934d85eabdafbbde033f44414081a075d25bf362",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94942a8a_2bb01611",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-05-03T16:40:57Z",
+      "side": 1,
+      "message": "The new variable should be a Metal function constant, not a driver uniform. Also please revert all changes made to the `fragCoord` built-in var.",
+      "parentUuid": "d332779a_904daa61",
+      "revId": "934d85eabdafbbde033f44414081a075d25bf362",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
