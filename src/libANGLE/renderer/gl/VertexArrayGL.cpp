@@ -868,22 +868,34 @@ angle::Result VertexArrayGL::syncDirtyAttrib(
 {
     ASSERT(dirtyAttribBits.any());
 
-    for (size_t dirtyBit : dirtyAttribBits)
+    for (auto iter = dirtyAttribBits.begin(), endIter = dirtyAttribBits.end(); iter != endIter;
+         ++iter)
     {
+        size_t dirtyBit = *iter;
         switch (dirtyBit)
         {
             case VertexArray::DIRTY_ATTRIB_ENABLED:
                 ANGLE_TRY(updateAttribEnabled(context, attribIndex));
                 break;
 
-            case VertexArray::DIRTY_ATTRIB_POINTER_BUFFER:
+            case VertexArray::DIRTY_ATTRIB_BUFFER:
+            case VertexArray::DIRTY_ATTRIB_DIVISOR:
+            case VertexArray::DIRTY_ATTRIB_STRIDE:
             case VertexArray::DIRTY_ATTRIB_POINTER:
                 ANGLE_TRY(updateAttribPointer(context, attribIndex));
+                // Clear these bits to avoid repeated processing
+                iter.resetLaterBits(gl::VertexArray::DirtyAttribBits{
+                    VertexArray::DIRTY_ATTRIB_BUFFER, VertexArray::DIRTY_ATTRIB_DIVISOR,
+                    VertexArray::DIRTY_ATTRIB_STRIDE, VertexArray::DIRTY_ATTRIB_POINTER});
                 break;
 
             case VertexArray::DIRTY_ATTRIB_FORMAT:
+            case VertexArray::DIRTY_ATTRIB_OFFSET:
                 ASSERT(supportVertexAttribBinding(context));
                 ANGLE_TRY(updateAttribFormat(context, attribIndex));
+                // Clear these bits to avoid repeated processing
+                iter.resetLaterBits(gl::VertexArray::DirtyAttribBits{
+                    VertexArray::DIRTY_ATTRIB_FORMAT, VertexArray::DIRTY_ATTRIB_OFFSET});
                 break;
 
             case VertexArray::DIRTY_ATTRIB_BINDING:
@@ -906,13 +918,21 @@ angle::Result VertexArrayGL::syncDirtyBinding(
 {
     // Dependent state changes in buffers can trigger updates with no dirty bits set.
 
-    for (size_t dirtyBit : dirtyBindingBits)
+    for (auto iter = dirtyBindingBits.begin(), endIter = dirtyBindingBits.end(); iter != endIter;
+         ++iter)
     {
+        size_t dirtyBit = *iter;
         switch (dirtyBit)
         {
             case VertexArray::DIRTY_BINDING_BUFFER:
+            case VertexArray::DIRTY_BINDING_STRIDE:
+            case VertexArray::DIRTY_BINDING_OFFSET:
                 ASSERT(supportVertexAttribBinding(context));
                 ANGLE_TRY(updateBindingBuffer(context, bindingIndex));
+                // Clear these bits to avoid repeated processing
+                iter.resetLaterBits(gl::VertexArray::DirtyBindingBits{
+                    VertexArray::DIRTY_BINDING_BUFFER, VertexArray::DIRTY_BINDING_STRIDE,
+                    VertexArray::DIRTY_BINDING_OFFSET});
                 break;
 
             case VertexArray::DIRTY_BINDING_DIVISOR:
