@@ -96,6 +96,12 @@ class BitSetT final
             mBitsCopy |= bits;
         }
 
+        void resetLaterBits(const BitSetT &bits)
+        {
+            ASSERT((BitSetT(bits) &= Mask(mCurrentBit + 1)).none());
+            mBitsCopy &= ~bits;
+        }
+
       private:
         std::size_t getNextBit();
 
@@ -127,6 +133,9 @@ class BitSetT final
     constexpr std::size_t count() const;
 
     constexpr static std::size_t size() { return N; }
+
+    constexpr bool anyExcluding(const BitSetT &other) const;
+    constexpr bool noneExcluding(const BitSetT &other) const;
 
     constexpr BitSetT &operator&=(const BitSetT &other);
     constexpr BitSetT &operator|=(const BitSetT &other);
@@ -255,6 +264,18 @@ template <size_t N, typename BitsT, typename ParamT>
 constexpr std::size_t BitSetT<N, BitsT, ParamT>::count() const
 {
     return gl::BitCount(mBits);
+}
+
+template <size_t N, typename BitsT, typename ParamT>
+constexpr bool BitSetT<N, BitsT, ParamT>::anyExcluding(const BitSetT &other) const
+{
+    return (mBits & ~other.mBits) != 0;
+}
+
+template <size_t N, typename BitsT, typename ParamT>
+constexpr bool BitSetT<N, BitsT, ParamT>::noneExcluding(const BitSetT &other) const
+{
+    return (mBits & ~other.mBits) == 0;
 }
 
 template <size_t N, typename BitsT, typename ParamT>

@@ -141,9 +141,6 @@ class VertexArray final : public angle::ObserverInterface,
     // can't support the advanced 64-bit scanning intrinsics. We could consider packing the
     // binding and attribute bits together if this becomes a problem.
     //
-    // Special note on "DIRTY_ATTRIB_POINTER_BUFFER": this is a special case when the app
-    // calls glVertexAttribPointer but only changes a VBO and/or offset binding. This allows
-    // the Vulkan back-end to skip performing a pipeline change for performance.
     enum DirtyBitType
     {
         // This vertex array has lost buffer observation. Check against actual buffer storage is
@@ -183,11 +180,14 @@ class VertexArray final : public angle::ObserverInterface,
 
     enum DirtyAttribBitType
     {
+        DIRTY_ATTRIB_BUFFER,
+        DIRTY_ATTRIB_DIVISOR,
+        DIRTY_ATTRIB_STRIDE,
+        DIRTY_ATTRIB_OFFSET,
         DIRTY_ATTRIB_ENABLED,
         DIRTY_ATTRIB_POINTER,
         DIRTY_ATTRIB_FORMAT,
         DIRTY_ATTRIB_BINDING,
-        DIRTY_ATTRIB_POINTER_BUFFER,
         DIRTY_ATTRIB_UNKNOWN,
         DIRTY_ATTRIB_MAX = DIRTY_ATTRIB_UNKNOWN,
     };
@@ -196,16 +196,29 @@ class VertexArray final : public angle::ObserverInterface,
     {
         DIRTY_BINDING_BUFFER,
         DIRTY_BINDING_DIVISOR,
+        DIRTY_BINDING_STRIDE,
+        DIRTY_BINDING_OFFSET,
         DIRTY_BINDING_UNKNOWN,
         DIRTY_BINDING_MAX = DIRTY_BINDING_UNKNOWN,
     };
 
-    using DirtyBits                = angle::BitSet<DIRTY_BIT_MAX>;
-    using DirtyAttribBits          = angle::BitSet<DIRTY_ATTRIB_MAX>;
-    using DirtyBindingBits         = angle::BitSet<DIRTY_BINDING_MAX>;
-    using DirtyAttribBitsArray     = std::array<DirtyAttribBits, MAX_VERTEX_ATTRIBS>;
-    using DirtyBindingBitsArray    = std::array<DirtyBindingBits, MAX_VERTEX_ATTRIB_BINDINGS>;
-    using DirtyObserverBindingBits = angle::BitSet<MAX_VERTEX_ATTRIB_BINDINGS>;
+    // bindVertexBufferImpl use these bits inter-exchangeable for both attribs and binding
+    static_assert(ToUnderlying(DIRTY_ATTRIB_BUFFER) == ToUnderlying(DIRTY_BINDING_BUFFER));
+    static_assert(ToUnderlying(DIRTY_ATTRIB_DIVISOR) == ToUnderlying(DIRTY_BINDING_DIVISOR));
+    static_assert(ToUnderlying(DIRTY_ATTRIB_STRIDE) == ToUnderlying(DIRTY_BINDING_STRIDE));
+    static_assert(ToUnderlying(DIRTY_ATTRIB_OFFSET) == ToUnderlying(DIRTY_BINDING_OFFSET));
+
+    using DirtyBits             = angle::BitSet<DIRTY_BIT_MAX>;
+    using DirtyAttribBits       = angle::BitSet<DIRTY_ATTRIB_MAX>;
+    using DirtyBindingBits      = angle::BitSet<DIRTY_BINDING_MAX>;
+    using DirtyAttribBitsArray  = std::array<DirtyAttribBits, MAX_VERTEX_ATTRIBS>;
+    using DirtyBindingBitsArray = std::array<DirtyBindingBits, MAX_VERTEX_ATTRIB_BINDINGS>;
+
+    // Special note on "kBufferOnlyDirtyAttrib": this is a special case when the app
+    // calls glVertexAttribPointer but only changes a VBO and/or offset binding. This allows
+    // the Vulkan back-end to skip performing a pipeline change for performance.
+    static constexpr DirtyAttribBits kBufferOnlyDirtyAttrib{
+        DIRTY_ATTRIB_BUFFER, DIRTY_ATTRIB_STRIDE, DIRTY_ATTRIB_OFFSET};
 
     VertexArray(rx::GLImplFactory *factory,
                 VertexArrayID id,
@@ -374,17 +387,17 @@ class VertexArray final : public angle::ObserverInterface,
                                     const void *pointer);
 
     // These two functions return true if the state was dirty.
-    bool setVertexAttribFormatImpl(VertexAttribute *attrib,
-                                   GLint size,
-                                   VertexAttribType type,
-                                   bool normalized,
-                                   bool pureInteger,
-                                   GLuint relativeOffset);
-    bool bindVertexBufferImpl(const Context *context,
-                              size_t bindingIndex,
-                              Buffer *boundBuffer,
-                              GLintptr offset,
-                              GLsizei stride);
+    DirtyAttribBits setVertexAttribFormatImpl(VertexAttribute *attrib,
+                                              GLint size,
+                                              VertexAttribType type,
+                                              bool normalized,
+                                              bool pureInteger,
+                                              GLuint relativeOffset);
+    DirtyBindingBits bindVertexBufferImpl(const Context *context,
+                                          size_t bindingIndex,
+                                          Buffer *boundBuffer,
+                                          GLintptr offset,
+                                          GLsizei stride);
 
     void onBind(const Context *context);
     void onUnbind(const Context *context);
