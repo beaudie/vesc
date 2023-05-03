@@ -689,6 +689,8 @@ void ANGLETestBase::ANGLETestSetUp()
 
     if (osWindowWidth != mWidth || osWindowHeight != mHeight)
     {
+        fprintf(stderr, "INAZ: osWindowWidth: %d; osWindowHeight: %d; mWidth: %d; mHeight: %d;\n",
+                osWindowWidth, osWindowHeight, mWidth, mHeight);
         int newWindowWidth  = mWidth;
         int newWindowHeight = mHeight;
         if (isRotated)
@@ -702,6 +704,7 @@ void ANGLETestBase::ANGLETestSetUp()
         }
         needSwap = true;
     }
+    fprintf(stderr, "INAZ: needSwap: %d;\n", needSwap);
     // WGL tests are currently disabled.
     if (mFixture->wglWindow)
     {
@@ -776,6 +779,8 @@ void ANGLETestBase::ANGLETestSetUp()
 
 void ANGLETestBase::ANGLETestPreTearDown()
 {
+    fprintf(stderr, "INAZ: gEnableANGLEPerTestCaptureLabel: %d;\n",
+            gEnableANGLEPerTestCaptureLabel);
     // We swap an extra time before we call "tearDown" to capture resources before they're freed.
     if (gEnableANGLEPerTestCaptureLabel)
     {
@@ -800,6 +805,7 @@ void ANGLETestBase::ANGLETestTearDown()
         return;
     }
 
+    fprintf(stderr, "INAZ: swapBuffers()...;\n");
     swapBuffers();
     mFixture->osWindow->messageLoop();
 

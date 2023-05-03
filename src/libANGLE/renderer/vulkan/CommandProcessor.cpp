@@ -431,7 +431,8 @@ CommandProcessorTask &CommandProcessorTask::operator=(CommandProcessorTask &&rhs
 }
 
 // CommandBatch implementation.
-CommandBatch::CommandBatch() : protectionType(ProtectionType::InvalidEnum) {}
+CommandBatch::CommandBatch() : protectionType(ProtectionType::InvalidEnum), hasWaitSemaphore(false)
+{}
 
 CommandBatch::~CommandBatch() = default;
 
@@ -447,6 +448,7 @@ CommandBatch &CommandBatch::operator=(CommandBatch &&other)
     std::swap(fence, other.fence);
     std::swap(queueSerial, other.queueSerial);
     std::swap(protectionType, other.protectionType);
+    std::swap(hasWaitSemaphore, other.hasWaitSemaphore);
     return *this;
 }
 
@@ -1121,10 +1123,16 @@ angle::Result CommandQueue::finishResourceUse(Context *context,
             if (!finished)
             {
                 // You can only use the local copy of the sharedFence without lock;
+                const bool hasWaitSemaphore = mInFlightCommands.front().hasWaitSemaphore;
                 const SharedFence localSharedFenceToWaitOn = mInFlightCommands.front().fence;
                 lock.unlock();
                 VkResult status = localSharedFenceToWaitOn.wait(device, timeout);
                 lock.lock();
+                if (hasWaitSemaphore)
+                {
+                    fprintf(stderr, "INAZ: finishResourceUse() fence: %p; wait status: %d;\n",
+                            localSharedFenceToWaitOn.get().getHandle(), (int)status);
+                }
 
                 ANGLE_VK_TRY(context, status);
             }
@@ -1458,6 +1466,21 @@ angle::Result CommandQueue::queueSubmit(Context *context,
             // Possible problem with double submissions: externalFence may be already in signaled
             // state, while QueueSerial (based on fence) will still be not finished.
         }
+
+        if (submitInfo.waitSemaphoreCount > 0)
+        {
+            fprintf(stderr, "INAZ: queueSubmit() submitInfo.waitSemaphoreCount: %u:\n",
+                    submitInfo.waitSemaphoreCount);
+            for (uint32_t i = 0; i < submitInfo.waitSemaphoreCount; ++i)
+            {
+                fprintf(stderr, "INAZ: queueSubmit() submitInfo.pWaitSemaphores[%u]: %p:\n", i,
+                        submitInfo.pWaitSemaphores[i]);
+            }
+            fprintf(stderr, "INAZ: queueSubmit() serialIndex: %u; serial: %d; fence: %p:\n",
+                    submitQueueSerial.getIndex(), (int)submitQueueSerial.getSerial().getValue(),
+                    fence);
+            commandBatch.get().hasWaitSemaphore = true;
+        }
     }
 
     mInFlightCommands.push(commandBatch.release());
@@ -1515,6 +1538,14 @@ angle::Result CommandQueue::checkOneCommandBatch(Context *context, bool *finishe
     if (batch.fence)
     {
         VkResult status = batch.fence.getStatus(device);
+        if (batch.hasWaitSemaphore)
+        {
+            fprintf(stderr,
+                    "INAZ: checkOneCommandBatch() serialIndex: %u; serial: %d; "
+                    "fence: %p; status: %d;\n",
+                    batch.queueSerial.getIndex(), (int)batch.queueSerial.getSerial().getValue(),
+                    batch.fence.get().getHandle(), (int)status);
+        }
         if (status == VK_NOT_READY)
         {
             return angle::Result::Continue;

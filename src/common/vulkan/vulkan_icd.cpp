@@ -277,9 +277,15 @@ void ChoosePhysicalDevice(PFN_vkGetPhysicalDeviceProperties pGetPhysicalDevicePr
     for (const VkPhysicalDevice &physicalDevice : physicalDevices)
     {
         pGetPhysicalDeviceProperties(physicalDevice, physicalDevicePropertiesOut);
+
+        fprintf(stderr,
+                "INAZ: ChoosePhysicalDevice() physicalDevicePropertiesOut->deviceName: %s;\n",
+                &physicalDevicePropertiesOut->deviceName[0]);
+
         if (filter(*physicalDevicePropertiesOut))
         {
             *physicalDeviceOut = physicalDevice;
+            fprintf(stderr, "INAZ: ChoosePhysicalDevice() selected using filter.\n");
             return;
         }
 
@@ -305,6 +311,7 @@ void ChoosePhysicalDevice(PFN_vkGetPhysicalDeviceProperties pGetPhysicalDevicePr
             if (matchVendorID && matchDeviceID)
             {
                 *physicalDeviceOut = physicalDevice;
+                fprintf(stderr, "INAZ: ChoosePhysicalDevice() using preferred.\n");
                 return;
             }
         }
@@ -319,6 +326,7 @@ void ChoosePhysicalDevice(PFN_vkGetPhysicalDeviceProperties pGetPhysicalDevicePr
         if (physicalDevicePropertiesOut->deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
         {
             *physicalDeviceOut = physicalDevice;
+            fprintf(stderr, "INAZ: ChoosePhysicalDevice() using discrete GPU.\n");
             return;
         }
         if (physicalDevicePropertiesOut->deviceType == VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU &&
@@ -335,6 +343,7 @@ void ChoosePhysicalDevice(PFN_vkGetPhysicalDeviceProperties pGetPhysicalDevicePr
     {
         *physicalDeviceOut           = integratedDevice.value();
         *physicalDevicePropertiesOut = integratedDeviceProperties;
+        fprintf(stderr, "INAZ: ChoosePhysicalDevice() using integrated GPU.\n");
         return;
     }
 

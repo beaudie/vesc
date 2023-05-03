@@ -261,6 +261,7 @@ struct CommandBatch final : angle::NonCopyable
     SharedFence fence;
     QueueSerial queueSerial;
     ProtectionType protectionType;
+    bool hasWaitSemaphore;
 };
 using CommandBatchQueue = angle::FixedQueue<CommandBatch, kInFlightCommandsLimit>;
 

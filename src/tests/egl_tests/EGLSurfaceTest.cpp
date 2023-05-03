@@ -616,6 +616,8 @@ TEST_P(EGLSurfaceTest, SurfaceUseAfterFreeBug)
 // Test that the window surface is correctly resized after calling swapBuffers
 TEST_P(EGLSurfaceTest, ResizeWindow)
 {
+    fprintf(stderr, "INAZ: EGLSurfaceTest.ResizeWindow; BEGIN\n");
+
     // http://anglebug.com/4453
     ANGLE_SKIP_TEST_IF(isVulkanRenderer() && IsLinux() && IsIntel());
     // Flaky on Linux SwANGLE http://anglebug.com/4453
@@ -637,7 +639,9 @@ TEST_P(EGLSurfaceTest, ResizeWindow)
     initializeMainContext();
     ASSERT_NE(mWindowSurface, EGL_NO_SURFACE);
 
+    fprintf(stderr, "INAZ: EGLSurfaceTest.ResizeWindow; eglMakeCurrent()...\n");
     eglMakeCurrent(mDisplay, mWindowSurface, mWindowSurface, mContext);
+    fprintf(stderr, "INAZ: EGLSurfaceTest.ResizeWindow; eglSwapBuffers()...\n");
     eglSwapBuffers(mDisplay, mWindowSurface);
     ASSERT_EGL_SUCCESS();
 
@@ -646,9 +650,11 @@ TEST_P(EGLSurfaceTest, ResizeWindow)
     ASSERT_EGL_SUCCESS();
     ASSERT_EQ(64, height);  // initial size
 
+    fprintf(stderr, "INAZ: EGLSurfaceTest.ResizeWindow; mOSWindow->resize(64, minSize)...\n");
     // set window's height to 0 (if possible) or 1
     mOSWindow->resize(64, minSize);
 
+    fprintf(stderr, "INAZ: EGLSurfaceTest.ResizeWindow; eglSwapBuffers()...\n");
     eglSwapBuffers(mDisplay, mWindowSurface);
     ASSERT_EGL_SUCCESS();
 
@@ -660,15 +666,19 @@ TEST_P(EGLSurfaceTest, ResizeWindow)
     ASSERT_EGL_SUCCESS();
     ASSERT_EQ(minSize, height);
 
+    fprintf(stderr, "INAZ: EGLSurfaceTest.ResizeWindow; mOSWindow->resize(64, 64)...\n");
     // restore window's height
     mOSWindow->resize(64, 64);
 
+    fprintf(stderr, "INAZ: EGLSurfaceTest.ResizeWindow; eglSwapBuffers()...\n");
     eglSwapBuffers(mDisplay, mWindowSurface);
     ASSERT_EGL_SUCCESS();
 
     eglQuerySurface(mDisplay, mWindowSurface, EGL_HEIGHT, &height);
     ASSERT_EGL_SUCCESS();
     ASSERT_EQ(64, height);
+
+    fprintf(stderr, "INAZ: EGLSurfaceTest.ResizeWindow; END\n");
 }
 
 // Test that the backbuffer is correctly resized after calling swapBuffers
