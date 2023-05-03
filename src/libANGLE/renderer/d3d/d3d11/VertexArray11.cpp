@@ -34,18 +34,18 @@ void VertexArray11::destroy(const gl::Context *context) {}
 
 // As VertexAttribPointer can modify both attribute and binding, we should also set other attributes
 // that are also using this binding dirty.
-#define ANGLE_VERTEX_DIRTY_ATTRIB_FUNC(INDEX)                                                \
-    case gl::VertexArray::DIRTY_BIT_ATTRIB_0 + INDEX:                                        \
-        if ((*attribBits)[INDEX][gl::VertexArray::DirtyAttribBitType::DIRTY_ATTRIB_POINTER]) \
-        {                                                                                    \
-            attributesToUpdate |= mState.getBindingToAttributesMask(INDEX);                  \
-        }                                                                                    \
-        else                                                                                 \
-        {                                                                                    \
-            attributesToUpdate.set(INDEX);                                                   \
-        }                                                                                    \
-        invalidateVertexBuffer = true;                                                       \
-        (*attribBits)[INDEX].reset();                                                        \
+#define ANGLE_VERTEX_DIRTY_ATTRIB_FUNC(INDEX)                                \
+    case gl::VertexArray::DIRTY_BIT_ATTRIB_0 + INDEX:                        \
+        if ((*attribBits)[INDEX] & ~gl::VertexArray::kBufferOnlyDirtyAttrib) \
+        {                                                                    \
+            attributesToUpdate |= mState.getBindingToAttributesMask(INDEX);  \
+        }                                                                    \
+        else                                                                 \
+        {                                                                    \
+            attributesToUpdate.set(INDEX);                                   \
+        }                                                                    \
+        invalidateVertexBuffer = true;                                       \
+        (*attribBits)[INDEX].reset();                                        \
         break;
 
 #define ANGLE_VERTEX_DIRTY_BINDING_FUNC(INDEX)                          \

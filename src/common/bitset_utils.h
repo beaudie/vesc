@@ -96,6 +96,12 @@ class BitSetT final
             mBitsCopy |= bits;
         }
 
+        void resetLaterBits(const BitSetT &bits)
+        {
+            ASSERT((BitSetT(bits) &= Mask(mCurrentBit + 1)).none());
+            mBitsCopy &= ~bits;
+        }
+
       private:
         std::size_t getNextBit();
 

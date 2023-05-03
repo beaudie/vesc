@@ -585,9 +585,9 @@ angle::Result VertexArrayVk::syncState(const gl::Context *context,
 #define ANGLE_VERTEX_DIRTY_ATTRIB_FUNC(INDEX)                                                 \
     case gl::VertexArray::DIRTY_BIT_ATTRIB_0 + INDEX:                                         \
     {                                                                                         \
-        const bool bufferOnly =                                                               \
-            (*attribBits)[INDEX].to_ulong() ==                                                \
-            angle::Bit<unsigned long>(gl::VertexArray::DIRTY_ATTRIB_POINTER_BUFFER);          \
+        gl::VertexArray::DirtyAttribBits dirtyBitsExcludingBufferOnly =                       \
+            (*attribBits)[0] & (~gl::VertexArray::kBufferOnlyDirtyAttrib);                    \
+        const bool bufferOnly = dirtyBitsExcludingBufferOnly.any();                           \
         ANGLE_TRY(syncDirtyAttrib(contextVk, attribs[INDEX],                                  \
                                   bindings[attribs[INDEX].bindingIndex], INDEX, bufferOnly)); \
         (*attribBits)[INDEX].reset();                                                         \

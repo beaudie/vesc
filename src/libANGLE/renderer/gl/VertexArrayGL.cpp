@@ -868,17 +868,26 @@ angle::Result VertexArrayGL::syncDirtyAttrib(
 {
     ASSERT(dirtyAttribBits.any());
 
-    for (size_t dirtyBit : dirtyAttribBits)
+    for (auto iter = dirtyAttribBits.begin(), endIter = dirtyAttribBits.end(); iter != endIter;
+         ++iter)
     {
+        size_t dirtyBit = *iter;
         switch (dirtyBit)
         {
             case VertexArray::DIRTY_ATTRIB_ENABLED:
                 ANGLE_TRY(updateAttribEnabled(context, attribIndex));
                 break;
 
-            case VertexArray::DIRTY_ATTRIB_POINTER_BUFFER:
+            case VertexArray::DIRTY_ATTRIB_BUFFER:
+            case VertexArray::DIRTY_ATTRIB_DIVISOR:
+            case VertexArray::DIRTY_ATTRIB_STRIDE:
+            case VertexArray::DIRTY_ATTRIB_OFFSET:
             case VertexArray::DIRTY_ATTRIB_POINTER:
                 ANGLE_TRY(updateAttribPointer(context, attribIndex));
+                iter.resetLaterBits(gl::VertexArray::DirtyAttribBits{
+                    VertexArray::DIRTY_ATTRIB_BUFFER, VertexArray::DIRTY_ATTRIB_DIVISOR,
+                    VertexArray::DIRTY_ATTRIB_STRIDE, VertexArray::DIRTY_ATTRIB_OFFSET,
+                    VertexArray::DIRTY_ATTRIB_POINTER});
                 break;
 
             case VertexArray::DIRTY_ATTRIB_FORMAT:
