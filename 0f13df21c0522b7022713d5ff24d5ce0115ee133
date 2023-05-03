@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f798f1ff_d1dc7daa",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-03T23:36:16Z",
+      "side": 1,
+      "message": "nit: a bit more descriptive, this is global to the entire RendererVk.cpp file.",
+      "range": {
+        "startLine": 95,
+        "startChar": 19,
+        "endLine": 95,
+        "endChar": 34
+      },
+      "revId": "0f13df21c0522b7022713d5ff24d5ce0115ee133",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34539ddf_b7096cc9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 882,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-03T23:36:16Z",
+      "side": 1,
+      "message": "You can use `angle::Bit` to simplify",
+      "range": {
+        "startLine": 882,
+        "startChar": 33,
+        "endLine": 882,
+        "endChar": 77
+      },
+      "revId": "0f13df21c0522b7022713d5ff24d5ce0115ee133",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23b868bf_67b76dd3",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-03T23:36:16Z",
+      "side": 1,
+      "message": "Please use `angle::BitMask`",
+      "range": {
+        "startLine": 904,
+        "startChar": 53,
+        "endLine": 904,
+        "endChar": 84
+      },
+      "revId": "0f13df21c0522b7022713d5ff24d5ce0115ee133",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e607e9a_e5a87474",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1007,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-03T23:36:16Z",
+      "side": 1,
+      "message": "suggest: `(cacheData.size() \u003e\u003e kCompressionBit) \u003d\u003d 0`",
+      "range": {
+        "startLine": 1007,
+        "startChar": 15,
+        "endLine": 1007,
+        "endChar": 59
+      },
+      "revId": "0f13df21c0522b7022713d5ff24d5ce0115ee133",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7647abe_86ef8e67",
+        "filename": "src/tests/gl_tests/ProgramBinaryTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-03T23:36:16Z",
+      "side": 1,
+      "message": "This test already exists in `ProgramBinaryTest, right? Just do this below:\n\n```\nANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(ProgramBinaryTest, ES3_VULKAN().disable(Feature::EnablePipelineCacheDataCompression));\n```\n\nThere\u0027s no reason to skip the test without the feature either; it\u0027s still a valid test.",
+      "range": {
+        "startLine": 216,
+        "startChar": 7,
+        "endLine": 216,
+        "endChar": 49
+      },
+      "revId": "0f13df21c0522b7022713d5ff24d5ce0115ee133",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
