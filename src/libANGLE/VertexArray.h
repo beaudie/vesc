@@ -183,29 +183,30 @@ class VertexArray final : public angle::ObserverInterface,
 
     enum DirtyAttribBitType
     {
+        DIRTY_ATTRIB_STRIDE,
         DIRTY_ATTRIB_ENABLED,
         DIRTY_ATTRIB_POINTER,
         DIRTY_ATTRIB_FORMAT,
+        DIRTY_ATTRIB_OFFSET,
         DIRTY_ATTRIB_BINDING,
         DIRTY_ATTRIB_POINTER_BUFFER,
-        DIRTY_ATTRIB_UNKNOWN,
-        DIRTY_ATTRIB_MAX = DIRTY_ATTRIB_UNKNOWN,
+        DIRTY_ATTRIB_MAX,
     };
 
     enum DirtyBindingBitType
     {
         DIRTY_BINDING_BUFFER,
+        DIRTY_BINDING_STRIDE,
+        DIRTY_BINDING_OFFSET,
         DIRTY_BINDING_DIVISOR,
-        DIRTY_BINDING_UNKNOWN,
-        DIRTY_BINDING_MAX = DIRTY_BINDING_UNKNOWN,
+        DIRTY_BINDING_MAX,
     };
 
-    using DirtyBits                = angle::BitSet<DIRTY_BIT_MAX>;
-    using DirtyAttribBits          = angle::BitSet<DIRTY_ATTRIB_MAX>;
-    using DirtyBindingBits         = angle::BitSet<DIRTY_BINDING_MAX>;
-    using DirtyAttribBitsArray     = std::array<DirtyAttribBits, MAX_VERTEX_ATTRIBS>;
-    using DirtyBindingBitsArray    = std::array<DirtyBindingBits, MAX_VERTEX_ATTRIB_BINDINGS>;
-    using DirtyObserverBindingBits = angle::BitSet<MAX_VERTEX_ATTRIB_BINDINGS>;
+    using DirtyBits             = angle::BitSet<DIRTY_BIT_MAX>;
+    using DirtyAttribBits       = angle::BitSet<DIRTY_ATTRIB_MAX>;
+    using DirtyBindingBits      = angle::BitSet<DIRTY_BINDING_MAX>;
+    using DirtyAttribBitsArray  = std::array<DirtyAttribBits, MAX_VERTEX_ATTRIBS>;
+    using DirtyBindingBitsArray = std::array<DirtyBindingBits, MAX_VERTEX_ATTRIB_BINDINGS>;
 
     VertexArray(rx::GLImplFactory *factory,
                 VertexArrayID id,
@@ -374,17 +375,17 @@ class VertexArray final : public angle::ObserverInterface,
                                     const void *pointer);
 
     // These two functions return true if the state was dirty.
-    bool setVertexAttribFormatImpl(VertexAttribute *attrib,
-                                   GLint size,
-                                   VertexAttribType type,
-                                   bool normalized,
-                                   bool pureInteger,
-                                   GLuint relativeOffset);
-    bool bindVertexBufferImpl(const Context *context,
-                              size_t bindingIndex,
-                              Buffer *boundBuffer,
-                              GLintptr offset,
-                              GLsizei stride);
+    DirtyAttribBits setVertexAttribFormatImpl(VertexAttribute *attrib,
+                                              GLint size,
+                                              VertexAttribType type,
+                                              bool normalized,
+                                              bool pureInteger,
+                                              GLuint relativeOffset);
+    DirtyBindingBits bindVertexBufferImpl(const Context *context,
+                                          size_t bindingIndex,
+                                          Buffer *boundBuffer,
+                                          GLintptr offset,
+                                          GLsizei stride);
 
     void onBind(const Context *context);
     void onUnbind(const Context *context);
