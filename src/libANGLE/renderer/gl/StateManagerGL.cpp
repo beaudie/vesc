@@ -2181,7 +2181,6 @@ angle::Result StateManagerGL::syncState(const gl::Context *context,
                         dirtyBits.set(gl::VertexArray::DIRTY_BIT_ATTRIB_0 + attrib);
                         dirtyAttribBits[attrib].set(gl::VertexArray::DIRTY_ATTRIB_ENABLED);
                         dirtyAttribBits[attrib].set(gl::VertexArray::DIRTY_ATTRIB_POINTER);
-                        dirtyAttribBits[attrib].set(gl::VertexArray::DIRTY_ATTRIB_POINTER_BUFFER);
                     }
                     for (size_t binding = 0; binding < mDefaultVAOState.bindings.size(); binding++)
                     {
