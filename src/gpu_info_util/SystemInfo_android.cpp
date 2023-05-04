@@ -9,6 +9,7 @@
 #include "gpu_info_util/SystemInfo_internal.h"
 
 #include <sys/system_properties.h>
+#include <cstdlib>
 #include <cstring>
 #include <fstream>
 #include <string>
@@ -47,7 +48,9 @@ bool GetSystemInfo(SystemInfo *info)
     std::string androidSdkLevel;
     isFullyPopulated =
         GetAndroidSystemProperty("ro.build.version.sdk", &androidSdkLevel) && isFullyPopulated;
-    info->androidSdkLevel = std::stoi(androidSdkLevel);
+    if (!androidSdkLevel.empty()) {
+        info->androidSdkLevel = std::atoi(androidSdkLevel.c_str());
+    }
 
     return GetSystemInfoVulkan(info) && isFullyPopulated;
 }
