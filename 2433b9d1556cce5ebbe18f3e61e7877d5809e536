@@ -98,6 +98,30 @@
       },
       "revId": "2433b9d1556cce5ebbe18f3e61e7877d5809e536",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "074119bf_97399e7d",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 12
+      },
+      "lineNbr": 945,
+      "author": {
+        "id": 1000763
+      },
+      "writtenOn": "2023-05-04T14:21:20Z",
+      "side": 1,
+      "message": "Done (hopefully)",
+      "parentUuid": "7b86cc16_de04d3d6",
+      "range": {
+        "startLine": 945,
+        "startChar": 49,
+        "endLine": 945,
+        "endChar": 95
+      },
+      "revId": "2433b9d1556cce5ebbe18f3e61e7877d5809e536",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
