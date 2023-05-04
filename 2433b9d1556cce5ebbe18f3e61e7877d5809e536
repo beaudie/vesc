@@ -74,6 +74,30 @@
       },
       "revId": "2433b9d1556cce5ebbe18f3e61e7877d5809e536",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b86cc16_de04d3d6",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 12
+      },
+      "lineNbr": 945,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-05-04T13:14:46Z",
+      "side": 1,
+      "message": "In this specific case, the specialization constant value is fixed at display creation, so it should not be included in the runtime cache and also should not be included in the pipeline state, see `ANGLEUseSampleCompareGradient` for example.",
+      "parentUuid": "67972f12_1819e8de",
+      "range": {
+        "startLine": 945,
+        "startChar": 49,
+        "endLine": 945,
+        "endChar": 95
+      },
+      "revId": "2433b9d1556cce5ebbe18f3e61e7877d5809e536",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
