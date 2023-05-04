@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19a90ade_5a25f2f9",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 8148,
+      "author": {
+        "id": 1115939
+      },
+      "writtenOn": "2023-05-04T17:32:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d37e34f9_323914ed",
+      "range": {
+        "startLine": 8148,
+        "startChar": 14,
+        "endLine": 8148,
+        "endChar": 27
+      },
+      "revId": "4898109c5679dd383c2d0f979d38122cba654e6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d200c36b_8aafd5cb",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19ad7274_e9ae7afc",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 8150,
+      "author": {
+        "id": 1115939
+      },
+      "writtenOn": "2023-05-04T17:32:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d200c36b_8aafd5cb",
+      "range": {
+        "startLine": 8150,
+        "startChar": 8,
+        "endLine": 8150,
+        "endChar": 57
+      },
+      "revId": "4898109c5679dd383c2d0f979d38122cba654e6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "78539357_46d8019b",
@@ -60,6 +108,30 @@
       "writtenOn": "2023-05-04T15:58:17Z",
       "side": 1,
       "message": "nit: `const` is not required. Suggest to remove for consistency with other code.",
+      "range": {
+        "startLine": 296,
+        "startChar": 9,
+        "endLine": 296,
+        "endChar": 15
+      },
+      "revId": "4898109c5679dd383c2d0f979d38122cba654e6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be8fcdc6_188bcc39",
+        "filename": "src/libANGLE/renderer/d3d/DisplayD3D.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1115939
+      },
+      "writtenOn": "2023-05-04T17:32:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "78539357_46d8019b",
       "range": {
         "startLine": 296,
         "startChar": 9,
