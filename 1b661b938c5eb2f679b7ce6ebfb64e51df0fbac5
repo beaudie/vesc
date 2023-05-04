@@ -69,6 +69,24 @@
       "parentUuid": "dbab05d8_714700e2",
       "revId": "1b661b938c5eb2f679b7ce6ebfb64e51df0fbac5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c935ff57_aa0c5cc5",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-04T16:55:46Z",
+      "side": 1,
+      "message": "My reasoning was:\n\n- The atomic is used freely by many functions to check if ANI is needed\n- UnlockedTryAcquireData is the input to the function that does ANI. Its mutex protects the ANI call (and the bits around it)\n- UnlockedTryAcquireResult is the output of the function that does ANI. It is _not_ protected by the mutex when it\u0027s processed because of the share group mutex.\n\nSo the scope of the mutex is really only whatever touches `UnlockedTryAcquireData`. If the code doesn\u0027t touch `UnlockedTryAcquireData`, it doesn\u0027t need mutex. I think putting the mutex there makes the association clearer.\n\nI grouped the fields in three pieces according to the above logical division of what they are.",
+      "parentUuid": "34f2008a_eaa2dd2b",
+      "revId": "1b661b938c5eb2f679b7ce6ebfb64e51df0fbac5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
