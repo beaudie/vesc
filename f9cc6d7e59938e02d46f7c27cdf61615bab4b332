@@ -52,6 +52,24 @@
       "parentUuid": "cde13ca9_0d9a5d90",
       "revId": "f9cc6d7e59938e02d46f7c27cdf61615bab4b332",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00fb5fe0_bcaa23b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-05-04T16:52:00Z",
+      "side": 1,
+      "message": "Test added: `VulkanImageTest.AllocateVMAImageWhenDeviceOOM`",
+      "parentUuid": "45ee0f4c_e402b892",
+      "revId": "f9cc6d7e59938e02d46f7c27cdf61615bab4b332",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
