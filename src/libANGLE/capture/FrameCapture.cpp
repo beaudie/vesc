@@ -8145,8 +8145,9 @@ void FrameCaptureShared::runMidExecutionCapture(gl::Context *mainContext)
     egl::Surface *draw    = mainContext->getCurrentDrawSurface();
     egl::Surface *read    = mainContext->getCurrentReadSurface();
 
-    for (gl::Context *shareContext : shareGroup->getContexts())
+    for (auto context_iter : shareGroup->getContexts())
     {
+        gl::Context *shareContext  = context_iter.second;
         FrameCapture *frameCapture = shareContext->getFrameCapture();
         ASSERT(frameCapture->getSetupCalls().empty());
 
