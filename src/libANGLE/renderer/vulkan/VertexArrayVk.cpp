@@ -598,17 +598,12 @@ angle::Result VertexArrayVk::syncState(const gl::Context *context,
 
 // Since BINDING already implies DATA and ATTRIB change, we remove these here to avoid redundant
 // processing.
-#define ANGLE_VERTEX_DIRTY_BINDING_FUNC(INDEX)                                          \
-    case gl::VertexArray::DIRTY_BIT_BINDING_0 + INDEX:                                  \
-        for (size_t attribIndex : bindings[INDEX].getBoundAttributesMask())             \
-        {                                                                               \
-            ANGLE_TRY(syncDirtyAttrib(contextVk, attribs[attribIndex], bindings[INDEX], \
-                                      attribIndex, false));                             \
-            iter.resetLaterBit(gl::VertexArray::DIRTY_BIT_BUFFER_DATA_0 + attribIndex); \
-            iter.resetLaterBit(gl::VertexArray::DIRTY_BIT_ATTRIB_0 + attribIndex);      \
-            (*attribBits)[attribIndex].reset();                                         \
-        }                                                                               \
-        (*bindingBits)[INDEX].reset();                                                  \
+#define ANGLE_VERTEX_DIRTY_BINDING_FUNC(INDEX)                                             \
+    case gl::VertexArray::DIRTY_BIT_BINDING_0 + INDEX:                                     \
+        iter.setLaterBits(                                                                 \
+            gl::VertexArray::DirtyBits(bindings[INDEX].getBoundAttributesMask().to_ulong() \
+                                       << gl::VertexArray::DIRTY_BIT_ATTRIB_0));           \
+        (*bindingBits)[INDEX].reset();                                                     \
         break;
 
                 ANGLE_VERTEX_INDEX_CASES(ANGLE_VERTEX_DIRTY_BINDING_FUNC)
