@@ -646,9 +646,16 @@ set_defaults("angle_trace_library") {
 
 template("angle_trace_library") {
   _trace_targets = []
+  _trace_lib_files = []
 
   if (invoker.short_names) {
     _trace_counter = 1
+  }
+
+  if (is_android && is_component_build) {
+    _cr_suffix = ".cr"
+  } else {
+    _cr_suffix = ""
   }
 
   foreach(_trace_and_version, invoker.trace_list) {
@@ -698,6 +705,21 @@ template("angle_trace_library") {
     }
 
     _trace_targets += [ ":$_target" ]
+    _trace_lib_files += [ "${root_out_dir}/lib${_target}${_cr_suffix}.so" ]
+  }
+
+  if (restricted_traces_outside_of_apk) {
+    group("angle_trace_tests_android_binaries") {
+      testonly = true
+      deps = [
+        ":angle_restricted_traces",
+        "$angle_root/util:angle_trace_interpreter",
+      ]
+
+      # Also need files listed as data to be picked up by isolate
+      data = _trace_lib_files +
+             [ "${root_out_dir}/libangle_trace_interpreter${_cr_suffix}.so" ]
+    }
   }
 
   angle_shared_library(target_name) {
