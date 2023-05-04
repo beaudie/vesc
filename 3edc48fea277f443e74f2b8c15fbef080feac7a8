@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89cacb78_6dcf0c54",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-04T22:44:03Z",
+      "side": 1,
+      "message": "This doesn\u0027t look right to me.  `angle_trace_tests_android_binaries` isn\u0027t specified in `restricted_traces`",
+      "range": {
+        "startLine": 559,
+        "startChar": 0,
+        "endLine": 559,
+        "endChar": 71
+      },
+      "revId": "3edc48fea277f443e74f2b8c15fbef080feac7a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
