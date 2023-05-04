@@ -51,6 +51,29 @@
       "message": "Great work Scott redoing this in terms of function constants. It looks good to me but either Alexey or Kyle (or both) should review as well.",
       "revId": "2433b9d1556cce5ebbe18f3e61e7877d5809e536",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67972f12_1819e8de",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 12
+      },
+      "lineNbr": 945,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-05-04T12:46:17Z",
+      "side": 1,
+      "message": "FYI, we cache the specialized fragment shader object created from a particular `renderPipelineDesc` to avoid re-creating it every time.\n\nThe current way of caching is storing a table mapping from a key to the created shader object. The key is formed by combining relevant attributes in the `renderPipelineDesc`. For example, previously, `outputDescriptor.sampleCount` and `outputDescriptor.depthAttachmentPixelFormat` are two attributes that will affect the shader object\u0027s creation. If the next time this function is called with the same `sampleCount` \u0026 `depthAttachmentPixelFormat`, the cached shader object will be returned instead of creating a new one.\n\nIn this CL, you are adding a new attribute `emulateAlphaToCoverageEnabled` to the `RenderPipelineDesc` and it directly affects the shader object\u0027s creation. So we will need to include it in the caching key\u0027s calculation as well.",
+      "range": {
+        "startLine": 945,
+        "startChar": 49,
+        "endLine": 945,
+        "endChar": 95
+      },
+      "revId": "2433b9d1556cce5ebbe18f3e61e7877d5809e536",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
