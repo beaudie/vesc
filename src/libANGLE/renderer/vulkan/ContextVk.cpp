@@ -1639,7 +1639,8 @@ angle::Result ContextVk::setupIndirectDraw(const gl::Context *context,
 
     // Break the render pass if the indirect buffer was previously used as the output from transform
     // feedback.
-    if (mCurrentTransformFeedbackBuffers.contains(indirectBuffer))
+    if (mCurrentTransformFeedbackQueueSerial.valid() &&
+        indirectBuffer->writtenByCommandBuffer(mCurrentTransformFeedbackQueueSerial))
     {
         ANGLE_TRY(
             flushCommandsAndEndRenderPass(RenderPassClosureReason::XfbWriteThenIndirectDrawBuffer));
@@ -2793,7 +2794,7 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
                                              vk::PipelineStage::VertexShader, bufferHelper);
         }
 
-        populateTransformFeedbackBufferSet(bufferCount, bufferHelpers);
+        mCurrentTransformFeedbackQueueSerial = mRenderPassCommands->getQueueSerial();
     }
 
     ProgramExecutableVk *executableVk      = getExecutable();
@@ -2879,7 +2880,7 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(
     mRenderPassCommands->beginTransformFeedback(bufferCount, counterBufferHandles.data(),
                                                 counterBufferOffsets.data(), rebindBuffers);
 
-    populateTransformFeedbackBufferSet(bufferCount, buffers);
+    mCurrentTransformFeedbackQueueSerial = mRenderPassCommands->getQueueSerial();
 
     return angle::Result::Continue;
 }
@@ -6289,20 +6290,6 @@ angle::Result ContextVk::onBeginTransformFeedback(
     return angle::Result::Continue;
 }
 
-void ContextVk::populateTransformFeedbackBufferSet(
-    size_t bufferCount,
-    const gl::TransformFeedbackBuffersArray<vk::BufferHelper *> &buffers)
-{
-    for (size_t bufferIndex = 0; bufferIndex < bufferCount; ++bufferIndex)
-    {
-        vk::BufferHelper *buffer = buffers[bufferIndex];
-        if (!mCurrentTransformFeedbackBuffers.contains(buffer))
-        {
-            mCurrentTransformFeedbackBuffers.insert(buffer);
-        }
-    }
-}
-
 void ContextVk::onEndTransformFeedback()
 {
     if (getFeatures().supportsTransformFeedbackExtension.enabled)
@@ -6394,7 +6381,8 @@ angle::Result ContextVk::dispatchComputeIndirect(const gl::Context *context, GLi
 
     // Break the render pass if the indirect buffer was previously used as the output from transform
     // feedback.
-    if (mCurrentTransformFeedbackBuffers.contains(&buffer))
+    if (mCurrentTransformFeedbackQueueSerial.valid() &&
+        buffer.writtenByCommandBuffer(mCurrentTransformFeedbackQueueSerial))
     {
         ANGLE_TRY(flushCommandsAndEndRenderPass(
             RenderPassClosureReason::XfbWriteThenIndirectDispatchBuffer));
@@ -7421,7 +7409,7 @@ angle::Result ContextVk::flushCommandsAndEndRenderPassWithoutSubmit(RenderPassCl
     // Restart at subpass 0.
     mGraphicsPipelineDesc->resetSubpass(&mGraphicsPipelineTransition);
 
-    mCurrentTransformFeedbackBuffers.clear();
+    mCurrentTransformFeedbackQueueSerial = QueueSerial();
 
     onRenderPassFinished(reason);
 
@@ -8088,7 +8076,7 @@ angle::Result ContextVk::endRenderPassIfComputeReadAfterTransformFeedbackWrite()
     // Similar to flushCommandBuffersIfNecessary(), but using uniform buffers currently bound and
     // used by the current (compute) program.  This is to handle read-after-write hazards where the
     // write originates from transform feedback.
-    if (mCurrentTransformFeedbackBuffers.empty())
+    if (!mCurrentTransformFeedbackQueueSerial.valid())
     {
         return angle::Result::Continue;
     }
@@ -8111,7 +8099,7 @@ angle::Result ContextVk::endRenderPassIfComputeReadAfterTransformFeedbackWrite()
         }
 
         vk::BufferHelper &buffer = vk::GetImpl(bufferBinding.get())->getBuffer();
-        if (mCurrentTransformFeedbackBuffers.contains(&buffer))
+        if (buffer.writtenByCommandBuffer(mCurrentTransformFeedbackQueueSerial))
         {
             return flushCommandsAndEndRenderPass(RenderPassClosureReason::XfbWriteThenComputeRead);
         }
