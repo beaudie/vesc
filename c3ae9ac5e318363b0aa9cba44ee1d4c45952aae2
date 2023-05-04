@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e601617_25f1ecf3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-04T14:27:04Z",
+      "side": 1,
+      "message": "Should probably skip this on Intel? Seems to flake almost half the time on perf bots",
+      "revId": "c3ae9ac5e318363b0aa9cba44ee1d4c45952aae2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
