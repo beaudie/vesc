@@ -1275,10 +1275,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result endRenderPassIfComputeReadAfterTransformFeedbackWrite();
     angle::Result endRenderPassIfComputeAccessAfterGraphicsImageAccess();
 
-    void populateTransformFeedbackBufferSet(
-        size_t bufferCount,
-        const gl::TransformFeedbackBuffersArray<vk::BufferHelper *> &buffers);
-
     // Update framebuffer's read-only depth feedback loop mode.  Typically called from
     // handleDirtyGraphicsReadOnlyDepthFeedbackLoopMode, but can be called from UtilsVk in functions
     // that don't necessarily break the render pass.
@@ -1482,6 +1478,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     QueueSerial mLastSubmittedQueueSerial;
     // All submitted queue serials over the life time of this context.
     vk::ResourceUse mSubmittedResourceUse;
+    // Current active transform buffer queue serial. Invalid if TF not active.
+    QueueSerial mCurrentTransformFeedbackQueueSerial;
 
     // The garbage list for single context use objects. The list will be GPU tracked by next
     // submission queueSerial. Note: Resource based shared object should always be added to
@@ -1508,11 +1506,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // is complete, the front-end calls ContextVk::endEventLogForQuery(), which needs to know which
     // command buffer to call endDebugUtilsLabelEXT() for.
     GraphicsEventCmdBuf mQueryEventType;
-
-    // Transform feedback buffers.
-    angle::FlatUnorderedSet<const vk::BufferHelper *,
-                            gl::IMPLEMENTATION_MAX_TRANSFORM_FEEDBACK_BUFFERS>
-        mCurrentTransformFeedbackBuffers;
 
     // Internal shader library.
     vk::ShaderLibrary mShaderLibrary;
@@ -1614,7 +1607,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 ANGLE_INLINE angle::Result ContextVk::endRenderPassIfTransformFeedbackBuffer(
     const vk::BufferHelper *buffer)
 {
-    if (!buffer || !mCurrentTransformFeedbackBuffers.contains(buffer))
+    if (!mCurrentTransformFeedbackQueueSerial.valid() || !buffer ||
+        !buffer->writtenByCommandBuffer(mCurrentTransformFeedbackQueueSerial))
     {
         return angle::Result::Continue;
     }
