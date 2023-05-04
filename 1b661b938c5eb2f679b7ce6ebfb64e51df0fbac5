@@ -33,6 +33,24 @@
       "message": "What is the reason, why `atomic` is here, while `mutex` is on another structure?\nAlso why have separate structures and not have all members inside this structure?\n\nWhile `mutex` is required to protect `vkAcquireNextImageKHR`, we can\u0027t write result without this mutex.\n\nTechnically, we can write result without a `mutex` lock, but then we need to assign `needToAcquireNextSwapchainImage`, that must be done while still holding the `mutex` lock. So result must also be written inside the mutex.\n\nThe above makes two structures very closely related and IMO it would be simple to have a single structure.",
       "revId": "1b661b938c5eb2f679b7ce6ebfb64e51df0fbac5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbab05d8_714700e2",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-04T16:32:21Z",
+      "side": 1,
+      "message": "Because of that future change we talked about. When ANI is called at the end of render pass, it means that other contexts may cause it. The atomic is used to make the access to this boolean from other contexts safe.\n\nI _could_ protect it with the mutex, but then it means every check of it would have to lock the mutex only to find out no ANI is needed. The fact that it\u0027s independent of the mutex is the reason I didn\u0027t put it in `UnlockedTryAcquireData`",
+      "parentUuid": "bedda6b2_5310e4f8",
+      "revId": "1b661b938c5eb2f679b7ce6ebfb64e51df0fbac5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
