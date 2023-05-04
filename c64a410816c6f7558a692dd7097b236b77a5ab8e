@@ -142,6 +142,30 @@
       },
       "revId": "c64a410816c6f7558a692dd7097b236b77a5ab8e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1928832_2c8faf63",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2899,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-04T14:40:53Z",
+      "side": 1,
+      "message": "All this is why I was suggesting just throwing the buffer right away ;)\n\nHooking up the content change observer shouldn\u0027t be difficult, just duplicate what\u0027s there for size change?",
+      "parentUuid": "67d8ac4a_f58e8fb8",
+      "range": {
+        "startLine": 2890,
+        "startChar": 12,
+        "endLine": 2899,
+        "endChar": 13
+      },
+      "revId": "c64a410816c6f7558a692dd7097b236b77a5ab8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
