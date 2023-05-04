@@ -22,6 +22,30 @@
       },
       "revId": "3f17c63772c3d63f267456d13dcacf6ca2d780cf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60eae633_74932a33",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5238,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-05-04T16:42:07Z",
+      "side": 1,
+      "message": "Yes, alpha is covered by RGB.",
+      "parentUuid": "b5ea47d6_9fccdd72",
+      "range": {
+        "startLine": 5237,
+        "startChar": 0,
+        "endLine": 5238,
+        "endChar": 77
+      },
+      "revId": "3f17c63772c3d63f267456d13dcacf6ca2d780cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
