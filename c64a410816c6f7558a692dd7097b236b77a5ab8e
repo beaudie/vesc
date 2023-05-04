@@ -190,6 +190,30 @@
       },
       "revId": "c64a410816c6f7558a692dd7097b236b77a5ab8e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef2c3d66_2cef0621",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2899,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-04T14:46:59Z",
+      "side": 1,
+      "message": "That can always be duplicated.\n\nAlternatively, is it easy to send the conversion buffer (or even all conversion buffers of the BufferVk) for garbage collection somewhere around this code?",
+      "parentUuid": "7af2d3cc_13899878",
+      "range": {
+        "startLine": 2890,
+        "startChar": 12,
+        "endLine": 2899,
+        "endChar": 13
+      },
+      "revId": "c64a410816c6f7558a692dd7097b236b77a5ab8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
