@@ -87,6 +87,24 @@
       "parentUuid": "34f2008a_eaa2dd2b",
       "revId": "1b661b938c5eb2f679b7ce6ebfb64e51df0fbac5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f935c0eb_c76db4a9",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-04T17:01:11Z",
+      "side": 1,
+      "message": "Now I see. Atomic is like a bridge between the ANI mutex and share group mutex.",
+      "parentUuid": "c935ff57_aa0c5cc5",
+      "revId": "1b661b938c5eb2f679b7ce6ebfb64e51df0fbac5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
