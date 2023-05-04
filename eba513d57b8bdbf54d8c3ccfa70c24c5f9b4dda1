@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9595c064_4172b297",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-04T16:59:49Z",
+      "side": 1,
+      "message": "Roman, this LGTM.  I confirmed locally that packaging with mb.py gives you a working bundle now.  It is also nice to get away from the directory change.  Can you also update the documentation (see doc ref)?",
+      "revId": "eba513d57b8bdbf54d8c3ccfa70c24c5f9b4dda1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35baa8ee_1090d688",
+        "filename": "src/tests/restricted_traces/README.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-04T16:59:49Z",
+      "side": 1,
+      "message": "doc ref",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 96,
+        "endChar": 176
+      },
+      "revId": "eba513d57b8bdbf54d8c3ccfa70c24c5f9b4dda1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13dd8d31_9a9749f4",
+        "filename": "src/tests/run_angle_android_test.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-04T16:59:49Z",
+      "side": 1,
+      "message": "I think this is the default, FWIW.  I\u0027m fine keeping it here, as defaults can change.",
+      "range": {
+        "startLine": 11,
+        "startChar": 8,
+        "endLine": 11,
+        "endChar": 26
+      },
+      "revId": "eba513d57b8bdbf54d8c3ccfa70c24c5f9b4dda1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
