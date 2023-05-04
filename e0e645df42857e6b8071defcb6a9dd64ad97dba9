@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c55a123e_ea5beb28",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1377,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-04T17:52:09Z",
+      "side": 1,
+      "message": "Why not `mState.surfaceMap[(*outSurface)-\u003eid().value] \u003d *outSurface` and similar below?",
+      "revId": "e0e645df42857e6b8071defcb6a9dd64ad97dba9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
