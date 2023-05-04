@@ -84,6 +84,13 @@ class BitSetT final
             mBitsCopy.reset(index);
         }
 
+        void resetLaterBits(const BitSetT &bits)
+        {
+            BitSetT maskedBits = ~Mask(mCurrentBit + 1);
+            maskedBits &= bits;
+            mBitsCopy &= ~maskedBits;
+        }
+
         void setLaterBit(std::size_t index)
         {
             ASSERT(index > mCurrentBit);
