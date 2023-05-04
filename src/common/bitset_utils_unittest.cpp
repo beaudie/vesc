@@ -364,7 +364,7 @@ TYPED_TEST(BitSetIteratorTest, SetLaterBit)
     EXPECT_EQ(expectedValues, actualValues);
 }
 
-// Tests removing bits from the iterator during iteration.
+// Tests removing bit from the iterator during iteration.
 TYPED_TEST(BitSetIteratorTest, ResetLaterBit)
 {
     TypeParam mStateBits            = this->mStateBits;
@@ -383,6 +383,36 @@ TYPED_TEST(BitSetIteratorTest, ResetLaterBit)
             iter.resetLaterBit(4);
             iter.resetLaterBit(6);
             iter.resetLaterBit(8);
+        }
+
+        actualValues.insert(*iter);
+    }
+
+    EXPECT_EQ(expectedValues, actualValues);
+}
+
+// Tests removing bits from the iterator during iteration.
+TYPED_TEST(BitSetIteratorTest, ResetLaterBits)
+{
+    TypeParam mStateBits            = this->mStateBits;
+    std::set<size_t> expectedValues = {1, 3, 5, 7, 9};
+
+    for (size_t index = 1; index <= 9; ++index)
+        mStateBits.set(index);
+
+    TypeParam resetBits;
+    resetBits.set(2);
+    resetBits.set(4);
+    resetBits.set(6);
+    resetBits.set(8);
+
+    std::set<size_t> actualValues;
+
+    for (auto iter = mStateBits.begin(), end = mStateBits.end(); iter != end; ++iter)
+    {
+        if (*iter == 1)
+        {
+            iter.resetLaterBits(resetBits);
         }
 
         actualValues.insert(*iter);
