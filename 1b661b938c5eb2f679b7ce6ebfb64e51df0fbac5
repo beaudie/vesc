@@ -51,6 +51,24 @@
       "parentUuid": "bedda6b2_5310e4f8",
       "revId": "1b661b938c5eb2f679b7ce6ebfb64e51df0fbac5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34f2008a_eaa2dd2b",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-04T16:37:14Z",
+      "side": 1,
+      "message": "That is not what I mean. No need to remove atomic.\n\nMy question was why atomic and mutex are in different structures, and why to have these structures. Why not just have everything in a singe `ImageAcquireOperation` structure?\n\nThis will make code easier to read. And removes the question why we need separate structures, that used together anyway.",
+      "parentUuid": "dbab05d8_714700e2",
+      "revId": "1b661b938c5eb2f679b7ce6ebfb64e51df0fbac5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
