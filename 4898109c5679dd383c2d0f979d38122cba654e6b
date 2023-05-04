@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d37e34f9_323914ed",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 8148,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-04T15:58:17Z",
+      "side": 1,
+      "message": "nit: snake case is usually not used for local variables.\nIt is not an iterator, but rather map item.",
+      "range": {
+        "startLine": 8148,
+        "startChar": 14,
+        "endLine": 8148,
+        "endChar": 27
+      },
+      "revId": "4898109c5679dd383c2d0f979d38122cba654e6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d200c36b_8aafd5cb",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 8150,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-04T15:58:17Z",
+      "side": 1,
+      "message": "nit: you declared local variable to keep the old code.\nOn the line 8885 you used the map item instead, and updated the code.\nSuggest rewriting same way for consistency.\n\nSince rest of the code in this CL uses map item, IMO it is better to also use it here.",
+      "range": {
+        "startLine": 8150,
+        "startChar": 8,
+        "endLine": 8150,
+        "endChar": 57
+      },
+      "revId": "4898109c5679dd383c2d0f979d38122cba654e6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78539357_46d8019b",
+        "filename": "src/libANGLE/renderer/d3d/DisplayD3D.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-04T15:58:17Z",
+      "side": 1,
+      "message": "nit: `const` is not required. Suggest to remove for consistency with other code.",
+      "range": {
+        "startLine": 296,
+        "startChar": 9,
+        "endLine": 296,
+        "endChar": 15
+      },
+      "revId": "4898109c5679dd383c2d0f979d38122cba654e6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
