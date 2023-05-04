@@ -16,6 +16,23 @@
       "message": "want_lgtm\u003dany :)",
       "revId": "263d2d9a97a079ea293254ae16dcb885f729d5c7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fef845ee_db564036",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-04T23:09:25Z",
+      "side": 1,
+      "message": "It\u0027s a good feeling to spot code that was just absolutely wasting time! Thank you!",
+      "revId": "263d2d9a97a079ea293254ae16dcb885f729d5c7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
