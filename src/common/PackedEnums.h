@@ -170,21 +170,26 @@ using PackedEnumBitSet = BitSetT<EnumSize<E>(), DataT, E>;
 
 }  // namespace angle
 
-#define ANGLE_DEFINE_ID_TYPE(Type)          \
-    class Type;                             \
-    struct Type##ID                         \
-    {                                       \
-        GLuint value;                       \
-    };                                      \
-    template <>                             \
-    struct ResourceTypeToID<Type>           \
-    {                                       \
-        using IDType = Type##ID;            \
-    };                                      \
-    template <>                             \
-    struct IsResourceIDType<Type##ID>       \
-    {                                       \
-        static constexpr bool value = true; \
+#define ANGLE_DEFINE_ID_TYPE(Type)                 \
+    class Type;                                    \
+    struct Type##ID                                \
+    {                                              \
+        GLuint value;                              \
+    };                                             \
+    template <typename H>                          \
+    H AbslHashValue(H h, const Type##ID &id)       \
+    {                                              \
+        return H::combine(std::move(h), id.value); \
+    }                                              \
+    template <>                                    \
+    struct ResourceTypeToID<Type>                  \
+    {                                              \
+        using IDType = Type##ID;                   \
+    };                                             \
+    template <>                                    \
+    struct IsResourceIDType<Type##ID>              \
+    {                                              \
+        static constexpr bool value = true;        \
     };
 
 namespace gl
