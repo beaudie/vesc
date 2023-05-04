@@ -602,8 +602,9 @@ angle::Result VertexArrayVk::syncState(const gl::Context *context,
     case gl::VertexArray::DIRTY_BIT_BINDING_0 + INDEX:                                  \
         for (size_t attribIndex : bindings[INDEX].getBoundAttributesMask())             \
         {                                                                               \
+            const bool bufferOnly = (*attribBits)[attribIndex].none();                  \
             ANGLE_TRY(syncDirtyAttrib(contextVk, attribs[attribIndex], bindings[INDEX], \
-                                      attribIndex, false));                             \
+                                      attribIndex, bufferOnly));                        \
             iter.resetLaterBit(gl::VertexArray::DIRTY_BIT_BUFFER_DATA_0 + attribIndex); \
             iter.resetLaterBit(gl::VertexArray::DIRTY_BIT_ATTRIB_0 + attribIndex);      \
             (*attribBits)[attribIndex].reset();                                         \
