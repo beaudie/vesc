@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ab4fdbd_1dcfc54d",
+        "filename": "src/tests/restricted_traces/README.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-04T17:29:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "35baa8ee_1090d688",
+      "range": {
+        "startLine": 96,
+        "startChar": 0,
+        "endLine": 96,
+        "endChar": 176
+      },
+      "revId": "eba513d57b8bdbf54d8c3ccfa70c24c5f9b4dda1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "13dd8d31_9a9749f4",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-05-04T16:59:49Z",
       "side": 1,
       "message": "I think this is the default, FWIW.  I\u0027m fine keeping it here, as defaults can change.",
+      "range": {
+        "startLine": 11,
+        "startChar": 8,
+        "endLine": 11,
+        "endChar": 26
+      },
+      "revId": "eba513d57b8bdbf54d8c3ccfa70c24c5f9b4dda1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "976b0847_123dcd90",
+        "filename": "src/tests/run_angle_android_test.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-04T17:29:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13dd8d31_9a9749f4",
       "range": {
         "startLine": 11,
         "startChar": 8,
