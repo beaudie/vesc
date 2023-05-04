@@ -118,6 +118,30 @@
       },
       "revId": "c64a410816c6f7558a692dd7097b236b77a5ab8e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67d8ac4a_f58e8fb8",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2899,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-04T13:43:15Z",
+      "side": 1,
+      "message": "I am not sure I\u0027d be able to implement that correctly actually (as buffer bindings change etc). Maybe there is an easier way, like somehow bypassing the descriptor set cache for these buffers as Shabi was suggesting? This would be less efficient of course, but this has no users currently so easier is probably better.",
+      "parentUuid": "e78cdec5_1dc21851",
+      "range": {
+        "startLine": 2890,
+        "startChar": 12,
+        "endLine": 2899,
+        "endChar": 13
+      },
+      "revId": "c64a410816c6f7558a692dd7097b236b77a5ab8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
