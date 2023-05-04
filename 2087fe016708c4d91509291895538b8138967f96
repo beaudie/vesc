@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0083585_0658af81",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-04T20:15:20Z",
+      "side": 0,
+      "message": "This can also be cleaned up in `gni/angle.gni`",
+      "range": {
+        "startLine": 522,
+        "startChar": 6,
+        "endLine": 522,
+        "endChar": 32
+      },
+      "revId": "2087fe016708c4d91509291895538b8138967f96",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
