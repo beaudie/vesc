@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "965434b6_3519335e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-04T16:49:00Z",
+      "side": 1,
+      "message": "LGTM, thanks Mark!\n\nRoman, PTAL since you touched this last, if you have any concerns.",
+      "revId": "3f17c63772c3d63f267456d13dcacf6ca2d780cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b5ea47d6_9fccdd72",
@@ -38,6 +55,30 @@
       "side": 1,
       "message": "Yes, alpha is covered by RGB.",
       "parentUuid": "b5ea47d6_9fccdd72",
+      "range": {
+        "startLine": 5237,
+        "startChar": 0,
+        "endLine": 5238,
+        "endChar": 77
+      },
+      "revId": "3f17c63772c3d63f267456d13dcacf6ca2d780cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "679e91a0_c294f119",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5238,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-04T16:49:00Z",
+      "side": 1,
+      "message": "Excellent, thanks for verifying.",
+      "parentUuid": "60eae633_74932a33",
       "range": {
         "startLine": 5237,
         "startChar": 0,
