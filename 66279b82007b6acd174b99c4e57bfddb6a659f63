@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96a72745_e0fe233c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-05-04T22:27:56Z",
+      "side": 1,
+      "message": "lgtm+2\n\nUnfortunately this needs to be reverted in order to unblock ANGLE rolls which are currently failing on the iOS Simulator, but hopefully it can be relanded fairly easily.",
+      "revId": "66279b82007b6acd174b99c4e57bfddb6a659f63",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
