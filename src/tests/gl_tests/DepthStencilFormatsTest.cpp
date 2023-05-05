@@ -1436,6 +1436,214 @@ TEST_P(TinyDepthStencilWorkaroundTest, DepthTexturesStick)
     }
 }
 
+// test
+constexpr char kTestVertexShader[] = R"(#version 310 es
+
+void main() {
+  gl_PointSize = 1.0;
+  vec2 pos[6] = vec2[6](vec2(-1.0f), vec2(1.0f, -1.0f), vec2(-1.0f, 1.0f), vec2(-1.0f, 1.0f), vec2(1.0f, -1.0f), vec2(1.0f));
+  gl_Position = vec4(pos[uint(gl_VertexID)], 0.5f, 1.0f);
+  return;
+}
+)";
+
+// // bottom left corner
+// constexpr char kTestVertexShader[] = R"(#version 310 es
+// vec4 tint_symbol(uint VertexIndex) {
+//   vec2 pos[6] = vec2[6](vec2(-1.0f), vec2(0.0f, -1.0f), vec2(-1.0f, 0.0f), vec2(-1.0f, 0.0f), vec2(0.0f, -1.0f), vec2(0.0f));
+//   return vec4(pos[VertexIndex], 0.0f, 1.0f);
+// }
+
+// void main() {
+//   gl_PointSize = 1.0;
+//   vec4 inner_result = tint_symbol(uint(gl_VertexID));
+//   gl_Position = inner_result;
+//   gl_Position.y = -(gl_Position.y);
+// //   gl_Position.z = ((2.0f * gl_Position.z) - gl_Position.w);
+//   gl_Position.z = 0.0f;
+//   return;
+// }
+// )";
+
+constexpr char kTestFragmentShader[] = R"(#version 310 es
+precision highp float;
+
+float tint_symbol() {
+  return 0.51f;
+}
+
+void main() {
+  float inner_result = tint_symbol();
+  gl_FragDepth = inner_result;
+  return;
+}
+)";
+
+
+
+constexpr char kTestComputeShader[] = R"(#version 310 es
+
+layout(binding = 0, std430) buffer dst_buf_block_ssbo {
+  float inner[];
+} dst_buf;
+
+// struct Params {
+//   uvec2 srcOrigin;
+//   uvec2 srcExtent;
+//   uint indicesPerRow;
+//   uint rowsPerImage;
+//   uint indicesOffset;
+//   uint pad;
+// };
+
+// layout(binding = 0, std140) uniform params_block_ubo {
+//   Params inner;
+// } params;
+
+uniform highp sampler2D dawn_combined_placeholder_sampler_with_0_0;
+void blit_depth_to_buffer(uvec3 id) {
+  uvec2 srcBoundary = uvec2(1, 1);
+  uvec2 coord = (id.xy);
+  if (any(greaterThanEqual(coord, srcBoundary))) {
+    return;
+  }
+  uint dstOffset = (id.x + (id.y * 1u));
+  dst_buf.inner[dstOffset] = texelFetch(dawn_combined_placeholder_sampler_with_0_0, ivec2(coord), 0).x;
+//   dst_buf.inner[dstOffset] = 0.9876;
+}
+
+layout(local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
+void main() {
+  blit_depth_to_buffer(gl_GlobalInvocationID);
+  return;
+}
+)";
+
+// This test will initialize a depth texture, clear it and read it back, if possible
+TEST_P(DepthStencilFormatsTestES31, DepthStencilReadback_Bug_Repro)
+{
+    GLfloat depthValue          = 0.51f;
+    GLfloat depthErrorTolerance = 0.001f;
+
+    GLTexture depthTexture;
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, depthTexture);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 1);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_DEPTH_COMPONENT32F, 1, 1);
+
+    // Clear depth texture to depthValue
+    GLFramebuffer framebuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture, 0);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+
+    // // 1. Use Clear depth
+    // glClearDepthf(depthValue);
+    // glClear(GL_DEPTH_BUFFER_BIT);
+    
+
+    // 2. Draw and write to gl_FragDepth
+    ANGLE_GL_PROGRAM(graphicsProgram, kTestVertexShader, kTestFragmentShader);
+    glUseProgram(graphicsProgram);
+    EXPECT_GL_NO_ERROR();
+
+    // GLint maxDrawBuffers;
+    // glGetIntegerv(GL_MAX_DRAW_BUFFERS, &maxDrawBuffers);
+    // std::vector<GLenum> drawBuffers(maxDrawBuffers, GL_NONE);
+    // glDrawBuffers(maxDrawBuffers, drawBuffers.data());
+    // EXPECT_GL_NO_ERROR();
+
+
+    glDrawBuffers(0, nullptr);
+    EXPECT_GL_NO_ERROR();
+
+    // glClearDepthf(0.88);
+    glClearDepthf(0.8);
+    // glDisable(GL_DEPTH_TEST);
+    glEnable(GL_DEPTH_TEST);      // vital.... 
+    glDepthFunc(GL_ALWAYS);
+    glDisable(GL_CULL_FACE);
+    glDepthMask(true);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    EXPECT_GL_NO_ERROR();
+
+
+//     // 3. Draw vertices (bind buffer)
+//         const char kVS[] = R"(#version 310 es
+// layout (location = 0) in vec3 pos;
+// void main(void) {
+//     gl_Position = vec4(pos, 1.0);
+// })";
+
+//     const char kFS[] = R"(#version 310 es
+// precision highp float;
+// void main() {
+//   gl_FragDepth = 0.51f;
+//   return;
+// })";
+
+//     ANGLE_GL_PROGRAM(graphicsProgram, kVS, kFS);
+//     glUseProgram(graphicsProgram);
+//     EXPECT_GL_NO_ERROR();
+//     const auto &quadVertices = GetQuadVertices();
+//     GLBuffer arrayBuffer;
+//     glBindBuffer(GL_ARRAY_BUFFER, arrayBuffer);
+//     glBufferData(GL_ARRAY_BUFFER, quadVertices.size() * sizeof(Vector3), quadVertices.data(),
+//                  GL_STATIC_DRAW);
+//     GLint positionAttributeLocation = 0;
+//     glBindAttribLocation(graphicsProgram, positionAttributeLocation, "pos");
+//     glVertexAttribPointer(positionAttributeLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+//     glEnableVertexAttribArray(positionAttributeLocation);
+
+
+
+//     GLint maxDrawBuffers;
+//     glGetIntegerv(GL_MAX_DRAW_BUFFERS, &maxDrawBuffers);
+//     std::vector<GLenum> drawBuffers(maxDrawBuffers, GL_NONE);
+//     glDrawBuffers(maxDrawBuffers, drawBuffers.data());
+//     EXPECT_GL_NO_ERROR();
+
+//     glDepthMask(true);
+//     glDepthFunc(GL_ALWAYS);
+//     glDrawArrays(GL_TRIANGLES, 0, 6);
+//     EXPECT_GL_NO_ERROR();
+
+
+
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
+
+
+    ANGLE_GL_COMPUTE_PROGRAM(computeProgram, kTestComputeShader);
+    glUseProgram(computeProgram);
+
+    GLint uTextureLocation =
+        glGetUniformLocation(computeProgram, "dawn_combined_placeholder_sampler_with_0_0");
+    ASSERT_NE(-1, uTextureLocation);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, depthTexture);
+    glUniform1i(uTextureLocation, 0);
+
+    GLBuffer ssbo;
+    const std::vector<GLfloat> initialData(16, 0.0f);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, 16, initialData.data(), GL_STATIC_DRAW);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssbo);
+    glDispatchCompute(1, 1, 1);
+    glMemoryBarrier(GL_BUFFER_UPDATE_BARRIER_BIT);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+    const GLfloat *ptr = reinterpret_cast<const GLfloat *>(
+        glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, 16, GL_MAP_READ_BIT));
+    EXPECT_NEAR(depthValue, ptr[0], depthErrorTolerance);
+    EXPECT_GL_NO_ERROR();
+}
+
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(TinyDepthStencilWorkaroundTest);
 ANGLE_INSTANTIATE_TEST_ES3_AND(TinyDepthStencilWorkaroundTest,
                                ES3_D3D11().enable(Feature::EmulateTinyStencilTextures));
