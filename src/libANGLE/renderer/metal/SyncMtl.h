@@ -63,13 +63,15 @@ class Sync
     void *copySharedEvent() const;
 
   private:
-    SharedEventRef mMetalSharedEvent;
+    AutoObjCPtr<id<MTLSharedEvent>> mMetalSharedEvent;
     uint64_t mSignalValue = 0;
 
     std::shared_ptr<std::condition_variable> mCv;
     std::shared_ptr<std::mutex> mLock;
 };
-#else   // #if defined(__IPHONE_12_0) || defined(__MAC_10_14)
+
+#else  // #if defined(__IPHONE_12_0) || defined(__MAC_10_14)
+
 class Sync
 {
   public:
@@ -106,6 +108,7 @@ class Sync
         return nullptr;
     }
 };
+
 #endif  // #if defined(__IPHONE_12_0) || defined(__MAC_10_14)
 }  // namespace mtl
 
@@ -118,28 +121,6 @@ class FenceNVMtl : public FenceNVImpl
     angle::Result set(const gl::Context *context, GLenum condition) override;
     angle::Result test(const gl::Context *context, GLboolean *outFinished) override;
     angle::Result finish(const gl::Context *context) override;
-
-  private:
-    mtl::Sync mSync;
-};
-
-class SyncMtl : public SyncImpl
-{
-  public:
-    SyncMtl();
-    ~SyncMtl() override;
-
-    void onDestroy(const gl::Context *context) override;
-
-    angle::Result set(const gl::Context *context, GLenum condition, GLbitfield flags) override;
-    angle::Result clientWait(const gl::Context *context,
-                             GLbitfield flags,
-                             GLuint64 timeout,
-                             GLenum *outResult) override;
-    angle::Result serverWait(const gl::Context *context,
-                             GLbitfield flags,
-                             GLuint64 timeout) override;
-    angle::Result getStatus(const gl::Context *context, GLint *outResult) override;
 
   private:
     mtl::Sync mSync;
@@ -176,6 +157,64 @@ class EGLSyncMtl final : public EGLSyncImpl
     EGLenum mType;
     EGLenum mCondition;
 };
+
+#if defined(ANGLE_MTL_EVENT_AVAILABLE)
+
+class SyncMtl : public SyncImpl
+{
+  public:
+    SyncMtl();
+    ~SyncMtl() override;
+
+    void onDestroy(const gl::Context *context) override;
+
+    angle::Result set(const gl::Context *context, GLenum condition, GLbitfield flags) override;
+    angle::Result clientWait(const gl::Context *context,
+                             GLbitfield flags,
+                             GLuint64 timeout,
+                             GLenum *outResult) override;
+    angle::Result serverWait(const gl::Context *context,
+                             GLbitfield flags,
+                             GLuint64 timeout) override;
+    angle::Result getStatus(const gl::Context *context, GLint *outResult) override;
+
+  private:
+    bool mSignalled = false;
+    mtl::AutoObjCPtr<id<MTLEvent>> mMetalEvent;
+    std::shared_ptr<std::mutex> mLock;
+};
+
+#else
+
+class SyncMtl : public SyncImpl
+{
+  public:
+    void onDestroy(const gl::Context *context) override { UNREACHABLE(); }
+
+    angle::Result set(const gl::Context *context, GLenum condition, GLbitfield flags) override
+    {
+        UNREACHABLE();
+    }
+    angle::Result clientWait(const gl::Context *context,
+                             GLbitfield flags,
+                             GLuint64 timeout,
+                             GLenum *outResult) override
+    {
+        UNREACHABLE();
+    }
+    angle::Result serverWait(const gl::Context *context,
+                             GLbitfield flags,
+                             GLuint64 timeout) override
+    {
+        UNREACHABLE();
+    }
+    angle::Result getStatus(const gl::Context *context, GLint *outResult) override
+    {
+        UNREACHABLE();
+    }
+};
+
+#endif
 
 }  // namespace rx
 
