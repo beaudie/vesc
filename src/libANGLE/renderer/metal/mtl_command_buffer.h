@@ -44,6 +44,7 @@ class CommandBuffer;
 class CommandEncoder;
 class RenderCommandEncoder;
 class OcclusionQueryPool;
+class Sync;
 
 class CommandQueue final : public WrappedObject<id<MTLCommandQueue>>, angle::NonCopyable
 {
@@ -87,6 +88,8 @@ class CommandQueue final : public WrappedObject<id<MTLCommandQueue>>, angle::Non
     void setActiveTimeElapsedEntry(uint64_t id);
     bool isTimeElapsedEntryComplete(uint64_t id);
     double getTimeElapsedEntryInSeconds(uint64_t id);
+
+    bool isEventCompleted(mtl::Sync *sync);
 
   private:
     void onCommandBufferCompleted(id<MTLCommandBuffer> buf,
@@ -152,8 +155,15 @@ class CommandBuffer final : public WrappedObject<id<MTLCommandBuffer>>, angle::N
     void setReadDependency(const ResourceRef &resource);
     void setReadDependency(Resource *resourcePtr);
 
-    void queueEventSignal(const mtl::SharedEventRef &event, uint64_t value);
-    void serverWaitEvent(const mtl::SharedEventRef &event, uint64_t value);
+#if ANGLE_MTL_EVENT_AVAILABLE
+    // Implementations of FenceNV and Sync must pass in a shared_ptr to their internal mtl::Sync
+    // object. EGLSyncKHR's implementation should pass in an empty shared_ptr.
+    void queueEventSignal(id<MTLEvent> event, uint64_t value, std::shared_ptr<mtl::Sync> sync);
+    void serverWaitEvent(id<MTLEvent> event, uint64_t value);
+
+    // Only used by implementations of FenceNV and Sync.
+    bool isEventCompleted(mtl::Sync *sync);
+#endif
 
     void insertDebugSign(const std::string &marker);
     void pushDebugGroup(const std::string &marker);
@@ -176,8 +186,10 @@ class CommandBuffer final : public WrappedObject<id<MTLCommandBuffer>>, angle::N
     void forceEndingCurrentEncoder();
 
     void setPendingEvents();
-    void setEventImpl(const mtl::SharedEventRef &event, uint64_t value);
-    void waitEventImpl(const mtl::SharedEventRef &event, uint64_t value);
+#if ANGLE_MTL_EVENT_AVAILABLE
+    void setEventImpl(id<MTLEvent> event, uint64_t value, mtl::Sync *sync);
+    void waitEventImpl(id<MTLEvent> event, uint64_t value);
+#endif
 
     void pushDebugGroupImpl(const std::string &marker);
     void popDebugGroupImpl();
@@ -196,7 +208,10 @@ class CommandBuffer final : public WrappedObject<id<MTLCommandBuffer>>, angle::N
     mutable std::mutex mLock;
 
     std::vector<std::string> mPendingDebugSigns;
-    std::vector<std::pair<mtl::SharedEventRef, uint64_t>> mPendingSignalEvents;
+#if ANGLE_MTL_EVENT_AVAILABLE
+    std::vector<std::tuple<AutoObjCPtr<id<MTLEvent>>, uint64_t, std::shared_ptr<mtl::Sync>>>
+        mPendingSignalEvents;
+#endif
     std::vector<std::string> mDebugGroups;
 
     std::unordered_set<id> mResourceList;
