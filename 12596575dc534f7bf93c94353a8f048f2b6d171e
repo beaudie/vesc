@@ -16,6 +16,24 @@
       "message": "```suggestion\n    // Current active transform feedback buffer queue serial. Invalid if TF not active.\n```",
       "revId": "12596575dc534f7bf93c94353a8f048f2b6d171e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76e9b1d1_7819ba35",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1481,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-05-05T16:45:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "05833d19_3560f8ee",
+      "revId": "12596575dc534f7bf93c94353a8f048f2b6d171e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
