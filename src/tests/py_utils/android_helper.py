@@ -34,6 +34,7 @@ class _Global(object):
     lib_extension = None
     traces_outside_of_apk = False
     temp_dir = None
+    device_arg = []
 
 
 def _ApkPath(suite_name):
@@ -67,6 +68,14 @@ def _FindPackageName(apk_path):
     return package_name
 
 
+def _SetDeviceArg(device_serial):
+    # If multiple devices are connected, adb needs a device serial input.
+    if device_serial is None:
+        return []
+
+    return ['-s', device_serial]
+
+
 def _InitializeAndroid(apk_path):
     if _GetAdbRoot():
         # /data/local/tmp/ is not writable by apps.. So use the app path
@@ -94,13 +103,14 @@ def _InitializeAndroid(apk_path):
         logging.debug(_AdbShell('df -h').decode())
 
 
-def Initialize(suite_name):
+def Initialize(suite_name, device_serial=None):
     if _Global.initialized:
         return
 
     apk_path = _ApkPath(suite_name)
     if os.path.exists(apk_path):
         _Global.is_android = True
+        _Global.device_arg = _SetDeviceArg(device_serial)
         _InitializeAndroid(apk_path)
 
     _Global.initialized = True
@@ -143,11 +153,11 @@ def _FindAdb():
 
 
 def _AdbRun(args):
-    return _Run([_FindAdb()] + args)
+    return _Run([_FindAdb()] + _Global.device_arg + args)
 
 
 def _AdbShell(cmd):
-    return _Run([_FindAdb(), 'shell', cmd])
+    return _Run([_FindAdb()] + _Global.device_arg + ['shell', cmd])
 
 
 def _GetAdbRoot():
