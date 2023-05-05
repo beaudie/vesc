@@ -153,9 +153,10 @@ angle::Result Sync::getStatus(bool *signaled)
 
 void *Sync::copySharedEvent() const
 {
-    mtl::SharedEventRef copySharedEvent = mMetalSharedEvent;
+    AutoObjCPtr<id<MTLSharedEvent>> copySharedEvent = mMetalSharedEvent;
     return reinterpret_cast<void *>(copySharedEvent.leakObject());
 }
+
 #endif  // #if defined(__IPHONE_12_0) || defined(__MAC_10_14)
 }  // namespace mtl
 
@@ -205,19 +206,34 @@ angle::Result FenceNVMtl::finish(const gl::Context *context)
 }
 
 // SyncMtl implementation
-SyncMtl::SyncMtl() : SyncImpl() {}
+SyncMtl::SyncMtl() = default;
 
-SyncMtl::~SyncMtl() {}
+SyncMtl::~SyncMtl() = default;
 
 void SyncMtl::onDestroy(const gl::Context *context)
 {
-    mSync.onDestroy();
+    mMetalEvent = nil;
 }
+
+// MtlEvent starts with a value of 0, use 1 to signal it.
+static constexpr uint64_t kMTLEventSignalValue = 1;
 
 angle::Result SyncMtl::set(const gl::Context *context, GLenum condition, GLbitfield flags)
 {
+    // set() is only called once.
+    ASSERT(!mMetalEvent);
+    ASSERT(condition == GL_SYNC_GPU_COMMANDS_COMPLETE);
+    ASSERT(flags == 0);
     ContextMtl *contextMtl = mtl::GetImpl(context);
-    return mSync.set(contextMtl, condition, flags, nil, Optional<uint64_t>{});
+    ANGLE_MTL_OBJC_SCOPE
+    {
+        mMetalEvent = contextMtl->getMetalDevice().newEvent();
+    }
+
+    contextMtl->queueEventSignal(mMetalEvent, kMTLEventSignalValue);
+
+    mLock.reset(new std::mutex());
+    return angle::Result::Continue;
 }
 
 angle::Result SyncMtl::clientWait(const gl::Context *context,
@@ -225,13 +241,31 @@ angle::Result SyncMtl::clientWait(const gl::Context *context,
                                   GLuint64 timeout,
                                   GLenum *outResult)
 {
-    ContextMtl *contextMtl = mtl::GetImpl(context);
-
     ASSERT((flags & ~GL_SYNC_FLUSH_COMMANDS_BIT) == 0);
 
-    bool flush = (flags & GL_SYNC_FLUSH_COMMANDS_BIT) != 0;
+    // TODO: is this lock needed? Seems bad to hold lock and call to CommandBuffer.
+    std::unique_lock<std::mutex> lg(*mLock);
+    if (mSignalled)
+    {
+        *outResult = GL_ALREADY_SIGNALED;
+        return angle::Result::Continue;
+    }
 
-    return mSync.clientWait(contextMtl, flush, timeout, outResult);
+    ContextMtl *contextMtl = mtl::GetImpl(context);
+
+    if ((flags & GL_SYNC_FLUSH_COMMANDS_BIT) != 0)
+    {
+        contextMtl->flushCommandBuffer(mtl::WaitUntilScheduled);
+    }
+    // TODO: non-zero timeout can't be supported with this api. Also note that some tests pass in a
+    // timeout of 0.
+    contextMtl->serverWaitEvent(mMetalEvent, kMTLEventSignalValue);
+    // TODO: is it possible for `this` to be destroyed by the time wait completes?
+    mSignalled = true;
+    // NOTE: dEQP-GLES3.functional.fence_sync.client_wait_sync_finish expects GL_ALREADY_SIGNALED.
+    *outResult = GL_ALREADY_SIGNALED;
+
+    return angle::Result::Continue;
 }
 
 angle::Result SyncMtl::serverWait(const gl::Context *context, GLbitfield flags, GLuint64 timeout)
@@ -239,17 +273,21 @@ angle::Result SyncMtl::serverWait(const gl::Context *context, GLbitfield flags, 
     ASSERT(flags == 0);
     ASSERT(timeout == GL_TIMEOUT_IGNORED);
 
-    ContextMtl *contextMtl = mtl::GetImpl(context);
-    mSync.serverWait(contextMtl);
+    std::unique_lock<std::mutex> lg(*mLock);
+    if (mSignalled)
+    {
+        return angle::Result::Continue;
+    }
+    mtl::GetImpl(context)->serverWaitEvent(mMetalEvent, 1);
+    // TODO: is it possible for `this` to be destroyed by the time wait completes?
+    mSignalled = true;
     return angle::Result::Continue;
 }
 
 angle::Result SyncMtl::getStatus(const gl::Context *context, GLint *outResult)
 {
-    bool signaled = false;
-    ANGLE_TRY(mSync.getStatus(&signaled));
-
-    *outResult = signaled ? GL_SIGNALED : GL_UNSIGNALED;
+    // TODO: should this grab a lock first?
+    *outResult = mSignalled ? GL_SIGNALED : GL_UNSIGNALED;
     return angle::Result::Continue;
 }
 

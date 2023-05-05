@@ -947,7 +947,8 @@ void CommandBuffer::popDebugGroup()
     }
 }
 
-void CommandBuffer::queueEventSignal(const mtl::SharedEventRef &event, uint64_t value)
+#if defined(ANGLE_MTL_EVENT_AVAILABLE)
+void CommandBuffer::queueEventSignal(id<MTLEvent> event, uint64_t value)
 {
     std::lock_guard<std::mutex> lg(mLock);
 
@@ -957,7 +958,7 @@ void CommandBuffer::queueEventSignal(const mtl::SharedEventRef &event, uint64_t 
     {
         // We cannot set event when there is an active render pass, defer the setting until the
         // pass end.
-        mPendingSignalEvents.push_back({event, value});
+        mPendingSignalEvents.push_back({AutoObjCPtr<id<MTLEvent>>(std::move(event)), value});
     }
     else
     {
@@ -965,13 +966,14 @@ void CommandBuffer::queueEventSignal(const mtl::SharedEventRef &event, uint64_t 
     }
 }
 
-void CommandBuffer::serverWaitEvent(const mtl::SharedEventRef &event, uint64_t value)
+void CommandBuffer::serverWaitEvent(id<MTLEvent> event, uint64_t value)
 {
     std::lock_guard<std::mutex> lg(mLock);
     ASSERT(readyImpl());
 
     waitEventImpl(event, value);
 }
+#endif
 
 /** private use only */
 void CommandBuffer::set(id<MTLCommandBuffer> metalBuffer)
@@ -1058,7 +1060,7 @@ void CommandBuffer::forceEndingCurrentEncoder()
 void CommandBuffer::setPendingEvents()
 {
 #if ANGLE_MTL_EVENT_AVAILABLE
-    for (const std::pair<mtl::SharedEventRef, uint64_t> &eventEntry : mPendingSignalEvents)
+    for (const auto &eventEntry : mPendingSignalEvents)
     {
         setEventImpl(eventEntry.first, eventEntry.second);
     }
@@ -1066,24 +1068,19 @@ void CommandBuffer::setPendingEvents()
 #endif
 }
 
-void CommandBuffer::setEventImpl(const mtl::SharedEventRef &event, uint64_t value)
-{
 #if ANGLE_MTL_EVENT_AVAILABLE
+void CommandBuffer::setEventImpl(id<MTLEvent> event, uint64_t value)
+{
     ASSERT(!mActiveCommandEncoder || mActiveCommandEncoder->getType() != CommandEncoder::RENDER);
     // For non-render command encoder, we can safely end it, so that we can encode a signal
     // event.
     forceEndingCurrentEncoder();
 
     [get() encodeSignalEvent:event value:value];
-#else
-    UNIMPLEMENTED();
-    UNREACHABLE();
-#endif  // #if ANGLE_MTL_EVENT_AVAILABLE
 }
 
-void CommandBuffer::waitEventImpl(const mtl::SharedEventRef &event, uint64_t value)
+void CommandBuffer::waitEventImpl(id<MTLEvent> event, uint64_t value)
 {
-#if ANGLE_MTL_EVENT_AVAILABLE
     ASSERT(!mActiveCommandEncoder || mActiveCommandEncoder->getType() != CommandEncoder::RENDER);
 
     forceEndingCurrentEncoder();
@@ -1092,11 +1089,8 @@ void CommandBuffer::waitEventImpl(const mtl::SharedEventRef &event, uint64_t val
     setPendingEvents();
 
     [get() encodeWaitForEvent:event value:value];
-#else
-    UNIMPLEMENTED();
-    UNREACHABLE();
-#endif  // #if ANGLE_MTL_EVENT_AVAILABLE
 }
+#endif  // #if ANGLE_MTL_EVENT_AVAILABLE
 
 void CommandBuffer::pushDebugGroupImpl(const std::string &marker)
 {

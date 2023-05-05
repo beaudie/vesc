@@ -315,8 +315,10 @@ class ContextMtl : public ContextImpl, public mtl::Context
     void onTransformFeedbackInactive(const gl::Context *context, TransformFeedbackMtl *xfb);
 
     // Invoke by mtl::Sync
-    void queueEventSignal(const mtl::SharedEventRef &event, uint64_t value);
-    void serverWaitEvent(const mtl::SharedEventRef &event, uint64_t value);
+#if defined(ANGLE_MTL_EVENT_AVAILABLE)
+    void queueEventSignal(id<MTLEvent> event, uint64_t value);
+    void serverWaitEvent(id<MTLEvent> event, uint64_t value);
+#endif
 
     const mtl::ClearColorValue &getClearColorValue() const;
     const mtl::WriteMaskArray &getWriteMaskArray() const;
