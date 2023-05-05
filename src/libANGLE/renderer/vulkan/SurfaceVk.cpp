@@ -29,18 +29,18 @@ namespace rx
 namespace
 {
 // To see how ANI Fences signal state changes.
-constexpr size_t kAcquireHistoryMaxSize = 10;  // 0 - disable
+constexpr size_t kAcquireHistoryMaxSize = 0;  // 0 - disable
 
 // Disabling cleanup will isolate bug with incorrect Fence signaling (may unblock crashing).
 constexpr bool kDisablePresentHistoryCleanup     = false;
-constexpr bool kEnableAssertAcquireFenceSignaled = true;  // Might fire on Intel (with cleanup)
-constexpr bool kWaitForPresentToBeSubmitted      = true;  // Increases chance of the assert
+constexpr bool kEnableAssertAcquireFenceSignaled = false;  // Might fire on Intel (with cleanup)
+constexpr bool kWaitForPresentToBeSubmitted      = false;  // Increases chance of the assert
 
 // Mainly to test crashing. May need to disable cleanup to reproduce.
 constexpr bool kDestroyFenceRecyclerBeforeSwapchain = false;  // This should fix crashing on Intel
-constexpr bool kDestroyFenceRecyclerNeedCheckStatus = true;   // Test if crash in getStatus()
-constexpr bool kDestroyFenceRecyclerNeedWait        = true;   // Test if crash in wait()
-constexpr bool kDestroyFenceRecyclerNeedReset       = true;   // Test if crash in rest()
+constexpr bool kDestroyFenceRecyclerNeedCheckStatus = false;  // Test if crash in getStatus()
+constexpr bool kDestroyFenceRecyclerNeedWait        = false;  // Test if crash in wait()
+constexpr bool kDestroyFenceRecyclerNeedReset       = false;  // Test if crash in rest()
 
 angle::SubjectIndex kAnySurfaceImageSubjectIndex = 0;
 
