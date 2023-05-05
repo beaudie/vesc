@@ -16,6 +16,74 @@
       "message": "Alexey, does this lg?",
       "revId": "a69e4cbf59e1223efffc373d93a31bd771176adc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60b059e6_822452ff",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-05-05T17:39:02Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this change (and below in this function) be reverted?",
+      "revId": "a69e4cbf59e1223efffc373d93a31bd771176adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "118fcd42_4fff8f87",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-05-05T17:39:02Z",
+      "side": 1,
+      "message": "Ditto",
+      "revId": "a69e4cbf59e1223efffc373d93a31bd771176adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52a948fc_5843884d",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-05-05T17:39:02Z",
+      "side": 1,
+      "message": "The `TVariable` should be created like `sampleMaskEnabledVar` below, with the same static type. Since it doesn\u0027t seem to be needed outside of this function, the declaration could be inlined here.",
+      "revId": "a69e4cbf59e1223efffc373d93a31bd771176adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8423b4f2_228dc5bc",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/ConstantNames.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-05-05T17:39:02Z",
+      "side": 1,
+      "message": "nit: rename to `ANGLEEmulateAlphaToCoverage` for brevity.",
+      "revId": "a69e4cbf59e1223efffc373d93a31bd771176adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
