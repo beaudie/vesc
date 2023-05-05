@@ -28,6 +28,15 @@ namespace rx
 
 namespace
 {
+// false is the base behaviour...
+constexpr bool kEnableAcquireHistory                = true;
+constexpr bool kEnableAssertFenceSignaledInCleanup  = true;  // Might fire on Intel.
+constexpr bool kDisablePresentHistoryCleanup        = true;
+constexpr bool kDestroyFenceRecyclerNeedCheckStatus = true;
+constexpr bool kDestroyFenceRecyclerNeedWait        = true;
+constexpr bool kDestroyFenceRecyclerNeedReset       = true;
+constexpr bool kDestroyFenceRecyclerBeforeSwapchain = false;  // This will fix crashing on Intel.
+
 angle::SubjectIndex kAnySurfaceImageSubjectIndex = 0;
 
 // Special value for currentExtent if surface size is determined by the swapchain's extent.  See
@@ -377,6 +386,10 @@ VkResult NewFence(VkDevice device, vk::Recycler<vk::Fence> *fenceRecycler, vk::F
         fenceCreateInfo.sType             = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
         fenceCreateInfo.flags             = 0;
         result                            = fenceOut->init(device, fenceCreateInfo);
+        if (result == VK_SUCCESS)
+        {
+            WARN() << "Create new VkFence: " << fenceOut->getHandle();
+        }
     }
     else
     {
@@ -386,11 +399,48 @@ VkResult NewFence(VkDevice device, vk::Recycler<vk::Fence> *fenceRecycler, vk::F
         {
             fenceRecycler->recycle(std::move(*fenceOut));
         }
+        else
+        {
+            WARN() << "Reuse old VkFence: " << fenceOut->getHandle();
+        }
     }
     return result;
 }
 
-void AssociateFenceWithPresentHistory(uint32_t imageIndex,
+void DumpAcquireHistory(VkDevice device,
+                        const std::vector<impl::AcquireHistoryItem> &acquireHistory)
+{
+    for (size_t i = 0; i < acquireHistory.size(); ++i)
+    {
+        const impl::AcquireHistoryItem &item = acquireHistory[i];
+        VkResult status                      = vkGetFenceStatus(device, item.fence);
+        WARN() << "acquireHistory[" << i << "] swapchainId: " << item.swapchainId
+               << "; imageIndex: " << item.imageIndex << "; fence: " << item.fence
+               << "; fenceStatus: " << status << ";";
+    }
+}
+
+void DumpPresentHistory(VkDevice device,
+                        const std::deque<impl::ImagePresentOperation> &presentHistory)
+{
+    for (size_t i = 0; i < presentHistory.size(); ++i)
+    {
+        const impl::ImagePresentOperation &item = presentHistory[i];
+        if (item.fence.valid())
+        {
+            VkResult status = item.fence.getStatus(device);
+            WARN() << "presentHistory[" << i << "] imageIndex: " << item.imageIndex
+                   << "; fence: " << item.fence.getHandle() << "; fenceStatus: " << status << ";";
+        }
+        else
+        {
+            WARN() << "presentHistory[" << i << "] imageIndex: " << item.imageIndex << "; no fence";
+        }
+    }
+}
+
+void AssociateFenceWithPresentHistory(VkDevice device,
+                                      uint32_t imageIndex,
                                       vk::Fence &&presentFence,
                                       std::deque<impl::ImagePresentOperation> *presentHistory)
 {
@@ -423,6 +473,40 @@ void AssociateFenceWithPresentHistory(uint32_t imageIndex,
     presentHistory->emplace_back();
     presentHistory->back().fence      = std::move(presentFence);
     presentHistory->back().imageIndex = imageIndex;
+    if (!kDisablePresentHistoryCleanup)
+    {
+        WARN() << "Add ImagePresentOperation...";
+        DumpPresentHistory(device, *presentHistory);
+    }
+}
+
+void DestroyFenceRecycler(VkDevice device, vk::Recycler<vk::Fence> *fenceRecycler)
+{
+    for (vk::Fence &fence : fenceRecycler->mObjectFreeList)
+    {
+        VkResult result;
+        if (kDestroyFenceRecyclerNeedCheckStatus)
+        {
+            WARN() << "fence(" << fence.getHandle() << ").getStatus()...";
+            result = fence.getStatus(device);
+            WARN() << "fence(" << fence.getHandle() << ").getStatus() -> " << result;
+        }
+        if (kDestroyFenceRecyclerNeedWait)
+        {
+            WARN() << "fence(" << fence.getHandle() << ").wait()...";
+            result = fence.wait(device, -1);
+            WARN() << "fence(" << fence.getHandle() << ").wait()      -> " << result;
+        }
+        if (kDestroyFenceRecyclerNeedReset)
+        {
+            WARN() << "fence(" << fence.getHandle() << ").reset()...";
+            result = fence.reset(device);
+            WARN() << "fence(" << fence.getHandle() << ").reset()     -> " << result;
+        }
+        WARN() << "fence(" << fence.getHandle() << ").destroy()...";
+        fence.destroy(device);
+    }
+    fenceRecycler->mObjectFreeList.clear();
 }
 
 bool HasAnyOldSwapchains(const std::deque<impl::ImagePresentOperation> &presentHistory)
@@ -493,6 +577,17 @@ void TryAcquireNextImageUnlocked(VkDevice device,
         result->result =
             vkAcquireNextImageKHR(device, swapchain, UINT64_MAX, result->acquireSemaphore,
                                   result->acquireFence.getHandle(), &result->imageIndex);
+    }
+
+    WARN() << "vkAcquireNextImageKHR(swapchain: " << swapchain
+           << "; fence: " << result->acquireFence.getHandle() << ") -> result: " << result->result
+           << "; imageIndex: " << result->imageIndex << ";";
+
+    if (needsAcquireFence && result->result == VK_SUCCESS)
+    {
+        WARN() << "fence(" << result->acquireFence.getHandle() << ").getStatus()...";
+        VkResult status = result->acquireFence.getStatus(device);
+        WARN() << "fence(" << result->acquireFence.getHandle() << ").getStatus() -> " << status;
     }
 
     // Don't process the results.  It will be done later when the share group lock is held.
@@ -841,6 +936,7 @@ void SwapchainCleanupData::destroy(VkDevice device, vk::Recycler<vk::Semaphore> 
 {
     if (swapchain)
     {
+        WARN() << "vkDestroySwapchainKHR(" << swapchain << ")";
         vkDestroySwapchainKHR(device, swapchain, nullptr);
         swapchain = VK_NULL_HANDLE;
     }
@@ -880,7 +976,14 @@ void ImagePresentOperation::destroy(VkDevice device,
                                     vk::Recycler<vk::Fence> *fenceRecycler,
                                     vk::Recycler<vk::Semaphore> *semaphoreRecycler)
 {
-    fenceRecycler->recycle(std::move(fence));
+    if (fence.valid())
+    {
+        WARN() << "Recycle retired VkFence: " << fence.getHandle();
+        VkResult status = fence.getStatus(device);
+        WARN() << "fence(" << fence.getHandle() << ").getStatus() -> " << status;
+        ASSERT(!kEnableAssertFenceSignaledInCleanup || status == VK_SUCCESS);
+        fenceRecycler->recycle(std::move(fence));
+    }
 
     // On the first acquire of the image, a fence is used but there is no present semaphore to clean
     // up.  That fence is placed in the present history just for clean up purposes.
@@ -965,20 +1068,34 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
         mLockBufferHelper.destroy(renderer);
     }
 
+    if (kDisablePresentHistoryCleanup)
+    {
+        WARN() << "PresentHistory state at surface destruction:";
+        DumpPresentHistory(device, mPresentHistory);
+    }
+
     for (impl::ImagePresentOperation &presentOperation : mPresentHistory)
     {
         if (presentOperation.fence.valid())
         {
-            (void)presentOperation.fence.wait(device, renderer->getMaxFenceWaitTimeNs());
+            VkResult result =
+                presentOperation.fence.wait(device, renderer->getMaxFenceWaitTimeNs());
+            WARN() << "fence(" << presentOperation.fence.getHandle() << ").wait()-> " << result;
         }
         presentOperation.destroy(device, &mPresentFenceRecycler, &mPresentSemaphoreRecycler);
     }
     mPresentHistory.clear();
 
+    if (kDestroyFenceRecyclerBeforeSwapchain)
+    {
+        DestroyFenceRecycler(device, &mPresentFenceRecycler);
+    }
+
     destroySwapChainImages(displayVk);
 
     if (mSwapchain)
     {
+        WARN() << "vkDestroySwapchainKHR(" << mSwapchain << ")";
         vkDestroySwapchainKHR(device, mSwapchain, nullptr);
         mSwapchain = VK_NULL_HANDLE;
     }
@@ -994,7 +1111,13 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
     mOldSwapchains.clear();
 
     mPresentSemaphoreRecycler.destroy(device);
+#if 0
     mPresentFenceRecycler.destroy(device);
+#endif
+    if (!kDestroyFenceRecyclerBeforeSwapchain)
+    {
+        DestroyFenceRecycler(device, &mPresentFenceRecycler);
+    }
 
     // Call parent class to destroy any resources parent owns.
     SurfaceVk::destroy(display);
@@ -1310,6 +1433,12 @@ angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk, const gl:
     // The old(er) swapchains still need to be kept to be scheduled for destruction.
     VkSwapchainKHR swapchainToDestroy = VK_NULL_HANDLE;
 
+    if (!kDisablePresentHistoryCleanup)
+    {
+        WARN() << "PresentHistory state before Swapchain recreation:";
+        DumpPresentHistory(contextVk->getDevice(), mPresentHistory);
+    }
+
     if (mPresentHistory.empty() || mPresentHistory.back().imageIndex == kInvalidImageIndex)
     {
         // Destroy the current (never-used) swapchain.
@@ -1420,7 +1549,14 @@ angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk, const gl:
     // If the most recent swapchain was never used, destroy it right now.
     if (swapchainToDestroy)
     {
+        WARN() << "vkDestroySwapchainKHR(" << swapchainToDestroy << ")";
         vkDestroySwapchainKHR(contextVk->getDevice(), swapchainToDestroy, nullptr);
+    }
+
+    if (!kDisablePresentHistoryCleanup)
+    {
+        WARN() << "PresentHistory state after Swapchain recreation:";
+        DumpPresentHistory(contextVk->getDevice(), mPresentHistory);
     }
 
     return result;
@@ -1591,6 +1727,10 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     ANGLE_VK_TRY(context, vkCreateSwapchainKHR(device, &swapchainInfo, nullptr, &newSwapChain));
     mSwapchain            = newSwapChain;
     mSwapchainPresentMode = mDesiredSwapchainPresentMode;
+
+    ++mCurrentSwapchainId;
+    WARN() << "vkCreateSwapchainKHR() -> handle: " << mSwapchain
+           << "; swapchainId: " << mCurrentSwapchainId;
 
     // If frame timestamp was enabled for the surface, [re]enable it when [re]creating the swapchain
     if (renderer->getFeatures().supportsTimestampSurfaceAttribute.enabled &&
@@ -2198,9 +2338,17 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
         // needs to be tracked in this case.
         mPresentHistory.back().imageIndex = mCurrentSwapchainImageIndex;
     }
+    if (!kDisablePresentHistoryCleanup)
+    {
+        WARN() << "Add ImagePresentOperation...";
+        DumpPresentHistory(contextVk->getDevice(), mPresentHistory);
+    }
 
     // Clean up whatever present is already finished.
-    ANGLE_TRY(cleanUpPresentHistory(contextVk));
+    if (!kDisablePresentHistoryCleanup)
+    {
+        ANGLE_TRY(cleanUpPresentHistory(contextVk));
+    }
 
     ANGLE_TRY(
         computePresentOutOfDate(contextVk, mSwapchainStatus.lastPresentResult, presentOutOfDate));
@@ -2245,6 +2393,8 @@ angle::Result WindowSurfaceVk::cleanUpPresentHistory(vk::Context *context)
 {
     const VkDevice device = context->getDevice();
 
+    bool changed = false;
+
     // Present history clean up uses the |mPresentFenceRecycler|, ensure no vkAcquireNextImageKHR
     // cannot be pending (which also accesses |mPresentFenceRecycler| and may be run without holding
     // the front-end lock.
@@ -2269,11 +2419,13 @@ angle::Result WindowSurfaceVk::cleanUpPresentHistory(vk::Context *context)
             // Not yet
             break;
         }
+        WARN() << "fence(" << presentOperation.fence.getHandle() << ").getStatus()-> " << result;
 
         ANGLE_VK_TRY(context, result);
 
         presentOperation.destroy(device, &mPresentFenceRecycler, &mPresentSemaphoreRecycler);
         mPresentHistory.pop_front();
+        changed = true;
     }
 
     // The present history can grow indefinitely if a present operation is done on an index that's
@@ -2298,6 +2450,13 @@ angle::Result WindowSurfaceVk::cleanUpPresentHistory(vk::Context *context)
         // Put the present operation at the end of the queue so it's revisited after the rest of the
         // present operations are cleaned up.
         mPresentHistory.push_back(std::move(presentOperation));
+        changed = true;
+    }
+
+    if (changed)
+    {
+        WARN() << "PresentHistory state after cleanup:";
+        DumpPresentHistory(device, mPresentHistory);
     }
 
     return angle::Result::Continue;
@@ -2532,6 +2691,8 @@ VkResult WindowSurfaceVk::postProcessUnlockedTryAcquire(vk::Context *context)
         if (mAcquireOperation.unlockedTryAcquireResult.acquireFence.valid())
         {
             ASSERT(!context->getFeatures().supportsSwapchainMaintenance1.enabled);
+            WARN() << "Recycle not used VkFence: "
+                   << mAcquireOperation.unlockedTryAcquireResult.acquireFence.getHandle();
             mPresentFenceRecycler.recycle(
                 std::move(mAcquireOperation.unlockedTryAcquireResult.acquireFence));
         }
@@ -2547,8 +2708,20 @@ VkResult WindowSurfaceVk::postProcessUnlockedTryAcquire(vk::Context *context)
     if (mAcquireOperation.unlockedTryAcquireResult.acquireFence.valid())
     {
         ASSERT(!context->getFeatures().supportsSwapchainMaintenance1.enabled);
+
+        if (kEnableAcquireHistory)
+        {
+            WARN() << "Add AcquireHistoryItem...";
+            mAcquireHistory.emplace_back();
+            mAcquireHistory.back().swapchainId = mCurrentSwapchainId;
+            mAcquireHistory.back().imageIndex  = mCurrentSwapchainImageIndex;
+            mAcquireHistory.back().fence =
+                mAcquireOperation.unlockedTryAcquireResult.acquireFence.getHandle();
+            DumpAcquireHistory(context->getDevice(), mAcquireHistory);
+        }
+
         AssociateFenceWithPresentHistory(
-            mCurrentSwapchainImageIndex,
+            context->getDevice(), mCurrentSwapchainImageIndex,
             std::move(mAcquireOperation.unlockedTryAcquireResult.acquireFence), &mPresentHistory);
     }
 

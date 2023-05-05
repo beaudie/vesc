@@ -194,6 +194,13 @@ struct SwapchainImage : angle::NonCopyable
     uint64_t frameNumber = 0;
 };
 
+struct AcquireHistoryItem
+{
+    uint32_t swapchainId;
+    uint32_t imageIndex;
+    VkFence fence;
+};
+
 // Associated data for a call to vkAcquireNextImageKHR without necessarily holding the share group
 // lock.
 struct UnlockedTryAcquireData : angle::NonCopyable
@@ -522,6 +529,9 @@ class WindowSurfaceVk : public SurfaceVk
 
     // The presentation history, used to recycle semaphores and destroy old swapchains.
     std::deque<impl::ImagePresentOperation> mPresentHistory;
+
+    std::vector<impl::AcquireHistoryItem> mAcquireHistory;
+    uint32_t mCurrentSwapchainId = 0;
 
     // Depth/stencil image.  Possibly multisampled.
     vk::ImageHelper mDepthStencilImage;
