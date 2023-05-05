@@ -2334,13 +2334,16 @@ void ContextMtl::onTransformFeedbackInactive(const gl::Context *context, Transfo
     endEncoding(true);
 }
 
-void ContextMtl::queueEventSignal(const mtl::SharedEventRef &event, uint64_t value)
+#if ANGLE_MTL_EVENT_AVAILABLE
+void ContextMtl::queueEventSignal(id<MTLEvent> event,
+                                  uint64_t value,
+                                  std::shared_ptr<mtl::Sync> sync)
 {
     ensureCommandBufferReady();
-    mCmdBuffer.queueEventSignal(event, value);
+    mCmdBuffer.queueEventSignal(event, value, sync);
 }
 
-void ContextMtl::serverWaitEvent(const mtl::SharedEventRef &event, uint64_t value)
+void ContextMtl::serverWaitEvent(id<MTLEvent> event, uint64_t value)
 {
     ensureCommandBufferReady();
 
@@ -2349,6 +2352,13 @@ void ContextMtl::serverWaitEvent(const mtl::SharedEventRef &event, uint64_t valu
 
     mCmdBuffer.serverWaitEvent(event, value);
 }
+
+bool ContextMtl::isEventCompleted(mtl::Sync *sync)
+{
+    ensureCommandBufferReady();
+    return mCmdBuffer.isEventCompleted(sync);
+}
+#endif
 
 void ContextMtl::updateProgramExecutable(const gl::Context *context)
 {

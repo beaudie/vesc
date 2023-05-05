@@ -33,9 +33,9 @@ class ContextMtl;
 namespace mtl
 {
 
-// Common class to be used by both SyncImpl and EGLSyncImpl.
-// NOTE: SharedEvent is only declared on iOS 12.0+ or mac 10.14+
-#if defined(__IPHONE_12_0) || defined(__MAC_10_14)
+// Common class used by both SyncImpl and FenceNVImpl.
+// NOTE: MTLEvent and MTLSharedEvent are only available on iOS 12.0+ or mac 10.14+
+#if ANGLE_MTL_EVENT_AVAILABLE
 class Sync
 {
   public:
@@ -44,32 +44,30 @@ class Sync
 
     void onDestroy();
 
-    angle::Result initialize(ContextMtl *contextMtl,
-                             id<MTLSharedEvent> sharedEvent,
-                             Optional<uint64_t> signalValue);
+    angle::Result initialize(ContextMtl *contextMtl, id<MTLEvent> event);
 
     angle::Result set(ContextMtl *contextMtl,
                       GLenum condition,
                       GLbitfield flags,
-                      id<MTLSharedEvent> sharedEvent,
-                      Optional<uint64_t> signalValue);
+                      id<MTLEvent> event,
+                      std::shared_ptr<Sync> sharedThis);
     angle::Result clientWait(ContextMtl *contextMtl,
                              bool flushCommands,
                              uint64_t timeout,
                              GLenum *outResult);
     void serverWait(ContextMtl *contextMtl);
-    angle::Result getStatus(bool *signaled);
+    angle::Result getStatus(ContextMtl *contextMtl, bool *signaled);
 
-    void *copySharedEvent() const;
+    void setEnqueuedCommandBufferSerial(uint64_t serial);
+    uint64_t getEnqueuedCommandBufferSerial();
 
   private:
-    SharedEventRef mMetalSharedEvent;
-    uint64_t mSignalValue = 0;
-
-    std::shared_ptr<std::condition_variable> mCv;
-    std::shared_ptr<std::mutex> mLock;
+    mtl::AutoObjCPtr<id<MTLEvent>> mMetalEvent;
+    uint64_t mEncodedCommandBufferSerial = 0;
 };
-#else   // #if defined(__IPHONE_12_0) || defined(__MAC_10_14)
+
+#else   // #if ANGLE_MTL_EVENT_AVAILABLE
+
 class Sync
 {
   public:
@@ -106,7 +104,7 @@ class Sync
         return nullptr;
     }
 };
-#endif  // #if defined(__IPHONE_12_0) || defined(__MAC_10_14)
+#endif  // #if ANGLE_MTL_EVENT_AVAILABLE
 }  // namespace mtl
 
 class FenceNVMtl : public FenceNVImpl
@@ -120,7 +118,7 @@ class FenceNVMtl : public FenceNVImpl
     angle::Result finish(const gl::Context *context) override;
 
   private:
-    mtl::Sync mSync;
+    std::shared_ptr<mtl::Sync> mSync;
 };
 
 class SyncMtl : public SyncImpl
@@ -142,7 +140,7 @@ class SyncMtl : public SyncImpl
     angle::Result getStatus(const gl::Context *context, GLint *outResult) override;
 
   private:
-    mtl::Sync mSync;
+    std::shared_ptr<mtl::Sync> mSync;
 };
 
 class EGLSyncMtl final : public EGLSyncImpl
@@ -170,11 +168,27 @@ class EGLSyncMtl final : public EGLSyncImpl
     egl::Error dupNativeFenceFD(const egl::Display *display, EGLint *result) const override;
 
   private:
-    mtl::Sync mSync;
-    id<MTLSharedEvent> mSharedEvent;
+    angle::Result initializeImpl(ContextMtl *contextMtl,
+                                 id<MTLSharedEvent> sharedEvent,
+                                 Optional<uint64_t> signalValue);
+    void initializeLockAndCV();
+    angle::Result setImpl(ContextMtl *contextMtl,
+                          GLenum condition,
+                          GLbitfield flags,
+                          id<MTLSharedEvent> sharedEvent,
+                          Optional<uint64_t> signalValue);
+    angle::Result clientWaitImpl(ContextMtl *contextMtl,
+                                 bool flushCommands,
+                                 uint64_t timeout,
+                                 GLenum *outResult);
+
+    mtl::AutoObjCPtr<id<MTLSharedEvent>> mSharedEvent;
     Optional<uint64_t> mSignalValue;
+    std::shared_ptr<std::condition_variable> mCv;
+    std::shared_ptr<std::mutex> mLock;
     EGLenum mType;
     EGLenum mCondition;
+    bool mInitialized = false;
 };
 
 }  // namespace rx

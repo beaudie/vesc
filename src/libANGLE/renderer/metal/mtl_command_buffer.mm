@@ -18,6 +18,7 @@
 #endif
 
 #include "common/debug.h"
+#include "libANGLE/renderer/metal/SyncMtl.h"
 #include "libANGLE/renderer/metal/mtl_occlusion_query_pool.h"
 #include "libANGLE/renderer/metal/mtl_resources.h"
 #include "libANGLE/renderer/metal/mtl_utils.h"
@@ -709,6 +710,12 @@ double CommandQueue::getTimeElapsedEntryInSeconds(uint64_t id)
     return result->second.elapsed_seconds;
 }
 
+bool CommandQueue::isEventCompleted(mtl::Sync *sync)
+{
+    return mCompletedBufferSerial.load(std::memory_order_relaxed) >=
+           sync->getEnqueuedCommandBufferSerial();
+}
+
 // Private.
 void CommandQueue::addCommandBufferToTimeElapsedEntry(std::lock_guard<std::mutex> &lg, uint64_t id)
 {
@@ -947,7 +954,10 @@ void CommandBuffer::popDebugGroup()
     }
 }
 
-void CommandBuffer::queueEventSignal(const mtl::SharedEventRef &event, uint64_t value)
+#if ANGLE_MTL_EVENT_AVAILABLE
+void CommandBuffer::queueEventSignal(id<MTLEvent> event,
+                                     uint64_t value,
+                                     std::shared_ptr<mtl::Sync> sync)
 {
     std::lock_guard<std::mutex> lg(mLock);
 
@@ -957,21 +967,27 @@ void CommandBuffer::queueEventSignal(const mtl::SharedEventRef &event, uint64_t 
     {
         // We cannot set event when there is an active render pass, defer the setting until the
         // pass end.
-        mPendingSignalEvents.push_back({event, value});
+        mPendingSignalEvents.push_back({AutoObjCPtr<id<MTLEvent>>(std::move(event)), value, sync});
     }
     else
     {
-        setEventImpl(event, value);
+        setEventImpl(event, value, sync.get());
     }
 }
 
-void CommandBuffer::serverWaitEvent(const mtl::SharedEventRef &event, uint64_t value)
+void CommandBuffer::serverWaitEvent(id<MTLEvent> event, uint64_t value)
 {
     std::lock_guard<std::mutex> lg(mLock);
     ASSERT(readyImpl());
 
     waitEventImpl(event, value);
 }
+
+bool CommandBuffer::isEventCompleted(mtl::Sync *sync)
+{
+    return cmdQueue().isEventCompleted(sync);
+}
+#endif
 
 /** private use only */
 void CommandBuffer::set(id<MTLCommandBuffer> metalBuffer)
@@ -1058,32 +1074,34 @@ void CommandBuffer::forceEndingCurrentEncoder()
 void CommandBuffer::setPendingEvents()
 {
 #if ANGLE_MTL_EVENT_AVAILABLE
-    for (const std::pair<mtl::SharedEventRef, uint64_t> &eventEntry : mPendingSignalEvents)
+    for (const auto &eventEntry : mPendingSignalEvents)
     {
-        setEventImpl(eventEntry.first, eventEntry.second);
+        setEventImpl(std::get<0>(eventEntry), std::get<1>(eventEntry),
+                     std::get<2>(eventEntry).get());
     }
     mPendingSignalEvents.clear();
 #endif
 }
 
-void CommandBuffer::setEventImpl(const mtl::SharedEventRef &event, uint64_t value)
-{
 #if ANGLE_MTL_EVENT_AVAILABLE
+void CommandBuffer::setEventImpl(id<MTLEvent> event, uint64_t value, mtl::Sync *sync)
+{
     ASSERT(!mActiveCommandEncoder || mActiveCommandEncoder->getType() != CommandEncoder::RENDER);
     // For non-render command encoder, we can safely end it, so that we can encode a signal
     // event.
     forceEndingCurrentEncoder();
 
     [get() encodeSignalEvent:event value:value];
-#else
-    UNIMPLEMENTED();
-    UNREACHABLE();
-#endif  // #if ANGLE_MTL_EVENT_AVAILABLE
+
+    // Incoming mtl::Sync will be nullptr if dealing with a MTLSharedEvent.
+    if (sync)
+    {
+        sync->setEnqueuedCommandBufferSerial(mQueueSerial);
+    }
 }
 
-void CommandBuffer::waitEventImpl(const mtl::SharedEventRef &event, uint64_t value)
+void CommandBuffer::waitEventImpl(id<MTLEvent> event, uint64_t value)
 {
-#if ANGLE_MTL_EVENT_AVAILABLE
     ASSERT(!mActiveCommandEncoder || mActiveCommandEncoder->getType() != CommandEncoder::RENDER);
 
     forceEndingCurrentEncoder();
@@ -1092,11 +1110,8 @@ void CommandBuffer::waitEventImpl(const mtl::SharedEventRef &event, uint64_t val
     setPendingEvents();
 
     [get() encodeWaitForEvent:event value:value];
-#else
-    UNIMPLEMENTED();
-    UNREACHABLE();
-#endif  // #if ANGLE_MTL_EVENT_AVAILABLE
 }
+#endif  // #if ANGLE_MTL_EVENT_AVAILABLE
 
 void CommandBuffer::pushDebugGroupImpl(const std::string &marker)
 {
