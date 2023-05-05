@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8dfd8e3f_0cd79fe5",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000763
+      },
+      "writtenOn": "2023-05-05T18:16:36Z",
+      "side": 1,
+      "message": "It\u0027s entirely possible I\u0027m misunderstanding things. In order to always include the emulateAlphaCoverage code this function needs to always be called, but what it does is only needed if emulateAlphaCoverage is true. That\u0027s why I made this conditional. Call site is here: https://chromium-review.googlesource.com/c/angle/angle/+/4496254/13/src/compiler/translator/TranslatorMetalDirect.cpp#1323 . If I remove this conditional and always call this function, then all this code would be executed even if it\u0027s not necessary.\n\nPerhaps you\u0027re saying it\u0027s always ok to call this even if emulateAlphaCoverage is false?",
+      "parentUuid": "60b059e6_822452ff",
+      "revId": "a69e4cbf59e1223efffc373d93a31bd771176adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "118fcd42_4fff8f87",
         "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
         "patchSetId": 13
