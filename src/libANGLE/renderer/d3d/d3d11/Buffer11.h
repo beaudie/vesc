@@ -128,6 +128,8 @@ class Buffer11 : public BufferD3D
     angle::Result unmap(const gl::Context *context, GLboolean *result) override;
     angle::Result markTransformFeedbackUsage(const gl::Context *context) override;
 
+    void onBufferChange(const gl::Context *context);
+
   private:
     class BufferStorage;
     class EmulatedIndexedStorage;

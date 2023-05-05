@@ -146,7 +146,7 @@ angle::Result Buffer::bufferDataImpl(Context *context,
         mState.mSize = 0;
 
         // Notify when storage changes.
-        onStateChange(angle::SubjectMessage::SubjectChanged);
+        onBufferStateChange(context, angle::SubjectMessage::SubjectChanged);
 
         return angle::Result::Stop;
     }
@@ -162,11 +162,11 @@ angle::Result Buffer::bufferDataImpl(Context *context,
     // Notify when storage changes.
     if (wholeBuffer)
     {
-        onContentsChange();
+        onBufferContentsChange();
     }
     else
     {
-        onStateChange(angle::SubjectMessage::SubjectChanged);
+        onBufferStateChange(context, angle::SubjectMessage::SubjectChanged);
     }
 
     return angle::Result::Continue;
@@ -199,7 +199,7 @@ angle::Result Buffer::bufferExternalDataImpl(Context *context,
         mState.mSize = 0;
 
         // Notify when storage changes.
-        onStateChange(angle::SubjectMessage::SubjectChanged);
+        onBufferStateChange(context, angle::SubjectMessage::SubjectChanged);
 
         return angle::Result::Stop;
     }
@@ -212,7 +212,7 @@ angle::Result Buffer::bufferExternalDataImpl(Context *context,
     mState.mExternal             = GL_TRUE;
 
     // Notify when storage changes.
-    onStateChange(angle::SubjectMessage::SubjectChanged);
+    onBufferStateChange(context, angle::SubjectMessage::SubjectChanged);
 
     return angle::Result::Continue;
 }
@@ -229,7 +229,7 @@ angle::Result Buffer::bufferSubData(const Context *context,
                                      static_cast<unsigned int>(size));
 
     // Notify when data changes.
-    onContentsChange();
+    onBufferContentsChange();
 
     return angle::Result::Continue;
 }
@@ -247,7 +247,7 @@ angle::Result Buffer::copyBufferSubData(const Context *context,
                                      static_cast<unsigned int>(size));
 
     // Notify when data changes.
-    onContentsChange();
+    onBufferContentsChange();
 
     return angle::Result::Continue;
 }
@@ -269,7 +269,7 @@ angle::Result Buffer::map(const Context *context, GLenum access)
     mIndexRangeCache.clear();
 
     // Notify when state changes.
-    onStateChange(angle::SubjectMessage::SubjectMapped);
+    onBufferStateChange(context, angle::SubjectMessage::SubjectMapped);
 
     return angle::Result::Continue;
 }
@@ -303,7 +303,7 @@ angle::Result Buffer::mapRange(const Context *context,
     }
 
     // Notify when state changes.
-    onStateChange(angle::SubjectMessage::SubjectMapped);
+    onBufferStateChange(context, angle::SubjectMessage::SubjectMapped);
 
     return angle::Result::Continue;
 }
@@ -323,7 +323,7 @@ angle::Result Buffer::unmap(const Context *context, GLboolean *result)
     mState.mAccessFlags = 0;
 
     // Notify when data changes.
-    onStateChange(angle::SubjectMessage::SubjectUnmapped);
+    onBufferStateChange(context, angle::SubjectMessage::SubjectUnmapped);
 
     return angle::Result::Continue;
 }
@@ -333,7 +333,7 @@ void Buffer::onDataChanged()
     mIndexRangeCache.clear();
 
     // Notify when data changes.
-    onContentsChange();
+    onBufferContentsChange();
 
     mImpl->onDataChanged();
 }
@@ -378,7 +378,7 @@ void Buffer::onTFBindingChanged(const Context *context, bool bound, bool indexed
         ASSERT(bound || mState.mTransformFeedbackIndexedBindingCount > 0);
         mState.mTransformFeedbackIndexedBindingCount += bound ? 1 : -1;
 
-        onStateChange(angle::SubjectMessage::BindingChanged);
+        onBufferStateChange(context, angle::SubjectMessage::BindingChanged);
     }
     else
     {
@@ -439,11 +439,25 @@ void Buffer::removeContentsObserver(VertexArray *vertexArray, uint32_t bufferInd
     }
 }
 
-void Buffer::onContentsChange()
+void Buffer::onBufferContentsChange()
 {
     for (const ContentsObserver &observer : mContentsObservers)
     {
         observer.vertexArray->onBufferContentsChange(observer.bufferIndex);
+    }
+}
+
+void Buffer::onBufferStateChange(const Context *context, angle::SubjectMessage message)
+{
+    onStateChange(message);
+
+    // For performance reason, VertexArray dirty bits does not go through subject/observer
+    // notifications. If this buffer is bound to the current vertex array, set proper dirty bits on
+    // the vertex array.
+    if (mState.mCurrentVertexArrayBindingMask.any())
+    {
+        context->getState().getVertexArray()->onBufferStateChange(
+            angle::SubjectMessage::SubjectUnmapped, mState.mCurrentVertexArrayBindingMask);
     }
 }
 }  // namespace gl

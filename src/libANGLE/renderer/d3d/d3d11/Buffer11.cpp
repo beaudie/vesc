@@ -155,7 +155,7 @@ class Buffer11::BufferStorage : angle::NonCopyable
 class Buffer11::NativeStorage : public Buffer11::BufferStorage
 {
   public:
-    NativeStorage(Renderer11 *renderer, BufferUsage usage, const angle::Subject *onStorageChanged);
+    NativeStorage(Renderer11 *renderer, BufferUsage usage, const Buffer11 *onStorageChanged);
     ~NativeStorage() override;
 
     bool isCPUAccessible(GLbitfield access) const override;
@@ -188,7 +188,7 @@ class Buffer11::NativeStorage : public Buffer11::BufferStorage
 
   protected:
     d3d11::Buffer mBuffer;
-    const angle::Subject *mOnStorageChanged;
+    const Buffer11 *mOnStorageChanged;
 
   private:
     static void FillBufferDesc(D3D11_BUFFER_DESC *bufferDesc,
@@ -207,7 +207,7 @@ class Buffer11::StructuredBufferStorage : public Buffer11::NativeStorage
   public:
     StructuredBufferStorage(Renderer11 *renderer,
                             BufferUsage usage,
-                            const angle::Subject *onStorageChanged);
+                            const Buffer11 *onStorageChanged);
     ~StructuredBufferStorage() override;
     angle::Result resizeStructuredBuffer(const gl::Context *context,
                                          unsigned int size,
@@ -1075,13 +1075,23 @@ bool Buffer11::supportsDirectBinding() const
 void Buffer11::initializeStaticData(const gl::Context *context)
 {
     BufferD3D::initializeStaticData(context);
-    onStateChange(angle::SubjectMessage::SubjectChanged);
+    onBufferChange(context);
 }
 
 void Buffer11::invalidateStaticData(const gl::Context *context)
 {
     BufferD3D::invalidateStaticData(context);
+    onBufferChange(context);
+}
+
+void Buffer11::onBufferChange(const gl::Context *context)
+{
     onStateChange(angle::SubjectMessage::SubjectChanged);
+    if (mState.getVertexArrayBufferBindingMask().any())
+    {
+        context->getState().getVertexArray()->onBufferStateChange(
+            angle::SubjectMessage::SubjectChanged, mState.getVertexArrayBufferBindingMask());
+    }
 }
 
 void Buffer11::onCopyStorage(BufferStorage *dest, BufferStorage *source)
@@ -1133,7 +1143,7 @@ angle::Result Buffer11::BufferStorage::setData(const gl::Context *context,
 
 Buffer11::NativeStorage::NativeStorage(Renderer11 *renderer,
                                        BufferUsage usage,
-                                       const angle::Subject *onStorageChanged)
+                                       const Buffer11 *onStorageChanged)
     : BufferStorage(renderer, usage), mBuffer(), mOnStorageChanged(onStorageChanged)
 {}
 
@@ -1275,7 +1285,7 @@ angle::Result Buffer11::NativeStorage::resize(const gl::Context *context,
     // Notify that the storage has changed.
     if (mOnStorageChanged)
     {
-        mOnStorageChanged->onStateChange(angle::SubjectMessage::SubjectChanged);
+        mOnStorageChanged->onBufferChange(context);
     }
 
     return angle::Result::Continue;
@@ -1461,7 +1471,7 @@ void Buffer11::NativeStorage::clearUAVs()
 
 Buffer11::StructuredBufferStorage::StructuredBufferStorage(Renderer11 *renderer,
                                                            BufferUsage usage,
-                                                           const angle::Subject *onStorageChanged)
+                                                           const Buffer11 *onStorageChanged)
     : NativeStorage(renderer, usage, onStorageChanged), mStructuredBufferResourceView()
 {}
 
@@ -1505,7 +1515,7 @@ angle::Result Buffer11::StructuredBufferStorage::resizeStructuredBuffer(
     // Notify that the storage has changed.
     if (mOnStorageChanged)
     {
-        mOnStorageChanged->onStateChange(angle::SubjectMessage::SubjectChanged);
+        mOnStorageChanged->onBufferChange(context);
     }
 
     return angle::Result::Continue;
