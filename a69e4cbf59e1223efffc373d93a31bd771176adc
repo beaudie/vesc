@@ -127,6 +127,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2da8f1c6_6d402f51",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-05-05T19:45:15Z",
+      "side": 1,
+      "message": "For now, let\u0027s always do the flip. If really needed, this condition could be implemented directly inside `InsertFragCoordCorrection` to skip the `FlipBuiltinVariable` call altogether.",
+      "parentUuid": "ca835c89_d5d2d8ac",
+      "revId": "a69e4cbf59e1223efffc373d93a31bd771176adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "118fcd42_4fff8f87",
         "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
         "patchSetId": 13
