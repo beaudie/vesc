@@ -1162,6 +1162,12 @@ angle::Result BufferVk::acquireBufferHelper(ContextVk *contextVk,
     // be recreated and point to the new buffer, along with updating the descriptor sets
     // to use the new buffer.
     onStateChange(angle::SubjectMessage::InternalMemoryAllocationChanged);
+    if (mState.getVertexArrayBufferBindingMask().any())
+    {
+        contextVk->getState().getVertexArray()->onBufferStateChange(
+            angle::SubjectMessage::InternalMemoryAllocationChanged,
+            mState.getVertexArrayBufferBindingMask());
+    }
 
     return angle::Result::Continue;
 }

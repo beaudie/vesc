@@ -140,7 +140,11 @@ class BitSetT final
     constexpr BitSetT &operator&=(const BitSetT &other);
     constexpr BitSetT &operator|=(const BitSetT &other);
     constexpr BitSetT &operator^=(const BitSetT &other);
+
     constexpr BitSetT operator~() const;
+    constexpr BitSetT operator&(const BitSetT &other) const;
+    constexpr BitSetT operator|(const BitSetT &other) const;
+    constexpr BitSetT operator^(const BitSetT &other) const;
 
     constexpr BitSetT &operator&=(BitsT value);
     constexpr BitSetT &operator|=(BitsT value);
@@ -291,6 +295,24 @@ template <size_t N, typename BitsT, typename ParamT>
 constexpr BitSetT<N, BitsT, ParamT> BitSetT<N, BitsT, ParamT>::operator~() const
 {
     return BitSetT<N, BitsT, ParamT>(~mBits & Mask(N).bits());
+}
+
+template <size_t N, typename BitsT, typename ParamT>
+constexpr BitSetT<N, BitsT, ParamT> BitSetT<N, BitsT, ParamT>::operator&(const BitSetT &other) const
+{
+    return BitSetT<N, BitsT, ParamT>(mBits & other.mBits);
+}
+
+template <size_t N, typename BitsT, typename ParamT>
+constexpr BitSetT<N, BitsT, ParamT> BitSetT<N, BitsT, ParamT>::operator|(const BitSetT &other) const
+{
+    return BitSetT<N, BitsT, ParamT>(mBits | other.mBits);
+}
+
+template <size_t N, typename BitsT, typename ParamT>
+constexpr BitSetT<N, BitsT, ParamT> BitSetT<N, BitsT, ParamT>::operator^(const BitSetT &other) const
+{
+    return BitSetT<N, BitsT, ParamT>(mBits ^ other.mBits);
 }
 
 template <size_t N, typename BitsT, typename ParamT>
