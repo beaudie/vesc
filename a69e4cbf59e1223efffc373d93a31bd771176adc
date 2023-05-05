@@ -91,6 +91,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "604b6ac4_bb602b50",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-05-05T19:01:24Z",
+      "side": 1,
+      "message": "It should. My comment is about `makeConditional` change being unnecessary.",
+      "parentUuid": "556224bb_f2691dda",
+      "revId": "a69e4cbf59e1223efffc373d93a31bd771176adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "118fcd42_4fff8f87",
         "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
         "patchSetId": 13
