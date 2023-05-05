@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be43976f_5e67244e",
+        "filename": "src/libANGLE/renderer/metal/SyncMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-05-05T20:53:18Z",
+      "side": 1,
+      "message": "As we discussed in chat, it\u0027s true that this call doesn\u0027t block - so yes, the mSignalled flag won\u0027t be maintained correctly right now.\n\nI have a feeling this won\u0027t adversely impact either the tests or applications relying on this API, but it is definitely worth the TODO.\n\nWe could make this more correct by doing some work in the completed handler in CommandQueue::makeMetalCommandBuffer. That callback is called on a different thread, so if we wanted to use it, we would need mLock - but, if we take the shortcut and lie to applications about the client wait state, then we could actually eliminate mLock in this implementation, which would also probably yield a good performance boost.",
+      "revId": "10c8eaf60d55d442f70a176b50d83f68b129239f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
