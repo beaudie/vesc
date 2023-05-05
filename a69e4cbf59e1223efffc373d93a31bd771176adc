@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "47ea0331_7a80649e",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-05-05T18:30:53Z",
+      "side": 1,
+      "message": "This function, which flips an arbitrary variable, does does not depend on A2C emulation anyway. If proven to be needed, such condition may be added to `InsertFragCoordCorrection` in a follow up.",
+      "parentUuid": "8dfd8e3f_0cd79fe5",
+      "revId": "a69e4cbf59e1223efffc373d93a31bd771176adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "118fcd42_4fff8f87",
         "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
         "patchSetId": 13
