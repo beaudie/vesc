@@ -22,6 +22,30 @@
       },
       "revId": "3edc48fea277f443e74f2b8c15fbef080feac7a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b92e5e1_9b1eb571",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-05T00:25:23Z",
+      "side": 1,
+      "message": "I moved it to restricted_traces. CI would fail if it was incorrect.",
+      "parentUuid": "89cacb78_6dcf0c54",
+      "range": {
+        "startLine": 559,
+        "startChar": 0,
+        "endLine": 559,
+        "endChar": 71
+      },
+      "revId": "3edc48fea277f443e74f2b8c15fbef080feac7a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
