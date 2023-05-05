@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "556224bb_f2691dda",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000763
+      },
+      "writtenOn": "2023-05-05T18:48:39Z",
+      "side": 1,
+      "message": "Thanks for the information. Could you elaborate on why the call site:\nhttps://chromium.googlesource.com/angle/angle/+/refs/heads/main/src/compiler/translator/TranslatorMetalDirect.cpp#1274 , which calls to InsertFragCoordCorrection, and then FlipBuiltinVariable if emulateAlphaCoverage is true, shouldn\u0027t always be called when we are trying to share shaders? Won\u0027t this mean that if emulateAlphaCoverage is true, we\u0027ll generate a different shader program, which is why I\u0027m trying to change?",
+      "parentUuid": "47ea0331_7a80649e",
+      "revId": "a69e4cbf59e1223efffc373d93a31bd771176adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "118fcd42_4fff8f87",
         "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
         "patchSetId": 13
