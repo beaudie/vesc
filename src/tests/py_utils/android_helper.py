@@ -210,7 +210,7 @@ def _GetDeviceApkPath():
 
 
 def _CompareHashes(local_path, device_path):
-    device_hash = _AdbShell('sha256sum -b ' + device_path +
+    device_hash = _AdbShell('run-as ' + TEST_PACKAGE_NAME + ' sha256sum -b ' + device_path +
                             ' 2> /dev/null || true').decode().strip()
     if not device_hash:
         logging.debug('_CompareHashes: File not found on device')
