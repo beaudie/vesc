@@ -27,8 +27,8 @@ import xvfb
 ANGLE_TRACE_TEST_SUITE = 'angle_trace_tests'
 
 
-def Initialize(suite_name):
-    android_helper.Initialize(suite_name)
+def Initialize(suite_name, device_serial):
+    android_helper.Initialize(suite_name, device_serial)
 
 
 # Requires .Initialize() to be called first
