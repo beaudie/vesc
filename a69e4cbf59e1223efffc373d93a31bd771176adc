@@ -105,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "43119331_dc6d2f22",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1000763
+      },
+      "writtenOn": "2023-05-05T18:32:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "52a948fc_5843884d",
+      "revId": "a69e4cbf59e1223efffc373d93a31bd771176adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8423b4f2_228dc5bc",
@@ -118,6 +136,24 @@
       "writtenOn": "2023-05-05T17:39:02Z",
       "side": 1,
       "message": "nit: rename to `ANGLEEmulateAlphaToCoverage` for brevity.",
+      "revId": "a69e4cbf59e1223efffc373d93a31bd771176adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50657cd7_1d94205b",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/ConstantNames.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000763
+      },
+      "writtenOn": "2023-05-05T18:32:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8423b4f2_228dc5bc",
       "revId": "a69e4cbf59e1223efffc373d93a31bd771176adc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
