@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7f251bc_229c6b04",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-05T16:50:54Z",
+      "side": 1,
+      "message": "This doesn\u0027t match the implementation",
+      "range": {
+        "startLine": 15,
+        "startChar": 44,
+        "endLine": 15,
+        "endChar": 56
+      },
+      "revId": "95dc891226a1b85fe25588f0ac14c3cfc35c67ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7911c6a_3eb8a9b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-05T16:50:54Z",
+      "side": 1,
+      "message": "LGTM, nit in CL message",
+      "revId": "95dc891226a1b85fe25588f0ac14c3cfc35c67ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
