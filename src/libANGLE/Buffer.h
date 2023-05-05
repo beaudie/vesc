@@ -47,6 +47,10 @@ class BufferState final : angle::NonCopyable
     GLint64 getSize() const { return mSize; }
     bool isBoundForTransformFeedback() const { return mTransformFeedbackIndexedBindingCount != 0; }
     std::string getLabel() const { return mLabel; }
+    const VertexArrayBufferBindingMask &getVertexArrayBufferBindingMask() const
+    {
+        return mCurrentVertexArrayBindingMask;
+    }
 
   private:
     friend class Buffer;
@@ -67,6 +71,9 @@ class BufferState final : angle::NonCopyable
     GLboolean mImmutable;
     GLbitfield mStorageExtUsageFlags;
     GLboolean mExternal;
+
+    // The binding index of the current vertex array it is bound to
+    VertexArrayBufferBindingMask mCurrentVertexArrayBindingMask;
 };
 
 // Some Vertex Array Objects track buffer data updates.
@@ -189,6 +196,15 @@ class Buffer final : public RefCountObject<BufferID>,
     void addContentsObserver(VertexArray *vertexArray, uint32_t bufferIndex);
     void removeContentsObserver(VertexArray *vertexArray, uint32_t bufferIndex);
 
+    void onVertexBufferBound(size_t bindingIndex)
+    {
+        mState.mCurrentVertexArrayBindingMask.set(bindingIndex);
+    }
+    void onVertexBufferUnbound(size_t bindingIndex)
+    {
+        mState.mCurrentVertexArrayBindingMask.reset(bindingIndex);
+    }
+
   private:
     angle::Result bufferDataImpl(Context *context,
                                  BufferBinding target,
@@ -204,6 +220,7 @@ class Buffer final : public RefCountObject<BufferID>,
 
     void onContentsChange();
     size_t getContentsObserverIndex(VertexArray *vertexArray, uint32_t bufferIndex) const;
+    void setCurrentVertexArrayDirtyBits(const Context *context, angle::SubjectMessage message);
 
     BufferState mState;
     rx::BufferImpl *mImpl;

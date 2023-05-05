@@ -147,6 +147,7 @@ angle::Result Buffer::bufferDataImpl(Context *context,
 
         // Notify when storage changes.
         onStateChange(angle::SubjectMessage::SubjectChanged);
+        setCurrentVertexArrayDirtyBits(context, angle::SubjectMessage::SubjectChanged);
 
         return angle::Result::Stop;
     }
@@ -167,6 +168,7 @@ angle::Result Buffer::bufferDataImpl(Context *context,
     else
     {
         onStateChange(angle::SubjectMessage::SubjectChanged);
+        setCurrentVertexArrayDirtyBits(context, angle::SubjectMessage::SubjectChanged);
     }
 
     return angle::Result::Continue;
@@ -200,6 +202,7 @@ angle::Result Buffer::bufferExternalDataImpl(Context *context,
 
         // Notify when storage changes.
         onStateChange(angle::SubjectMessage::SubjectChanged);
+        setCurrentVertexArrayDirtyBits(context, angle::SubjectMessage::SubjectChanged);
 
         return angle::Result::Stop;
     }
@@ -213,6 +216,7 @@ angle::Result Buffer::bufferExternalDataImpl(Context *context,
 
     // Notify when storage changes.
     onStateChange(angle::SubjectMessage::SubjectChanged);
+    setCurrentVertexArrayDirtyBits(context, angle::SubjectMessage::SubjectChanged);
 
     return angle::Result::Continue;
 }
@@ -270,6 +274,7 @@ angle::Result Buffer::map(const Context *context, GLenum access)
 
     // Notify when state changes.
     onStateChange(angle::SubjectMessage::SubjectMapped);
+    setCurrentVertexArrayDirtyBits(context, angle::SubjectMessage::SubjectMapped);
 
     return angle::Result::Continue;
 }
@@ -304,6 +309,7 @@ angle::Result Buffer::mapRange(const Context *context,
 
     // Notify when state changes.
     onStateChange(angle::SubjectMessage::SubjectMapped);
+    setCurrentVertexArrayDirtyBits(context, angle::SubjectMessage::SubjectMapped);
 
     return angle::Result::Continue;
 }
@@ -324,6 +330,7 @@ angle::Result Buffer::unmap(const Context *context, GLboolean *result)
 
     // Notify when data changes.
     onStateChange(angle::SubjectMessage::SubjectUnmapped);
+    setCurrentVertexArrayDirtyBits(context, angle::SubjectMessage::SubjectUnmapped);
 
     return angle::Result::Continue;
 }
@@ -379,6 +386,7 @@ void Buffer::onTFBindingChanged(const Context *context, bool bound, bool indexed
         mState.mTransformFeedbackIndexedBindingCount += bound ? 1 : -1;
 
         onStateChange(angle::SubjectMessage::BindingChanged);
+        setCurrentVertexArrayDirtyBits(context, angle::SubjectMessage::BindingChanged);
     }
     else
     {
@@ -444,6 +452,15 @@ void Buffer::onContentsChange()
     for (const ContentsObserver &observer : mContentsObservers)
     {
         observer.vertexArray->onBufferContentsChange(observer.bufferIndex);
+    }
+}
+
+void Buffer::setCurrentVertexArrayDirtyBits(const Context *context, angle::SubjectMessage message)
+{
+    if (mState.mCurrentVertexArrayBindingMask.any())
+    {
+        context->getState().getVertexArray()->onBufferStateChange(
+            angle::SubjectMessage::SubjectUnmapped, mState.mCurrentVertexArrayBindingMask);
     }
 }
 }  // namespace gl
