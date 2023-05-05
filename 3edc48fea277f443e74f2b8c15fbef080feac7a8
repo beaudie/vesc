@@ -70,6 +70,30 @@
       },
       "revId": "3edc48fea277f443e74f2b8c15fbef080feac7a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38c27239_0d7970b5",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 5
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-05T13:06:40Z",
+      "side": 1,
+      "message": "I agree it is confusing.. angle_trace_library template is instantiated in src/tests/restricted_traces so that\u0027s where angle_trace_tests_android_binaries end up:\nhttps://crsrc.org/c/third_party/angle/src/tests/restricted_traces/BUILD.gn;drc\u003d35461e60bdaacb6f1985acda6fa24297e0d6bfbe;l\u003d9\n\nI can have a look at restructuring this (in a separate CL, let\u0027s keep this one small.. unless you have an idea how to do this differently without restructuring - note the dependency on `_trace_lib_files`)",
+      "parentUuid": "7484e6b0_843040fe",
+      "range": {
+        "startLine": 559,
+        "startChar": 0,
+        "endLine": 559,
+        "endChar": 71
+      },
+      "revId": "3edc48fea277f443e74f2b8c15fbef080feac7a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
