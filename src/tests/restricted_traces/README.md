@@ -93,7 +93,7 @@ autoninja -C out/<config> angle_trace_perf_tests
 ```
 and run with (including recommended options):
 ```
-out/<config>/angle_trace_tests --filter='*among_us*' --verbose --fixed-test-time-with-warmup 10
+out/<config>/angle_trace_tests --filter='*among_us*' --verbose --fixed-test-time-with-warmup 10 [--device <device_serial>]
 ```
 
 # Capturing and adding new Android traces
