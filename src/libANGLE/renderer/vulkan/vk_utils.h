@@ -869,7 +869,6 @@ class Recycler final : angle::NonCopyable
 
     bool empty() const { return mObjectFreeList.empty(); }
 
-  private:
     std::vector<T> mObjectFreeList;
 };
 
