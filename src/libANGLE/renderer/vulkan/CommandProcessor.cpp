@@ -1533,6 +1533,9 @@ void CommandQueue::queuePresent(egl::ContextPriority contextPriority,
     std::lock_guard<std::mutex> queueSubmitLock(mQueueSubmitMutex);
     VkQueue queue                      = getQueue(contextPriority);
     swapchainStatus->lastPresentResult = vkQueuePresentKHR(queue, &presentInfo);
+    WARN() << "vkQueuePresentKHR(swapchain: " << presentInfo.pSwapchains[0]
+           << "imageIndex: " << presentInfo.pImageIndices[0] << ") -> "
+           << swapchainStatus->lastPresentResult;
 }
 
 const angle::VulkanPerfCounters CommandQueue::getPerfCounters() const
