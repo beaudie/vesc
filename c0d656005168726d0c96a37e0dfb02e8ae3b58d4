@@ -16,6 +16,24 @@
       "message": "LGTM and working well locally.  Determining root is such a pseudoscience.",
       "revId": "c0d656005168726d0c96a37e0dfb02e8ae3b58d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25273406_f54de986",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-05T14:38:01Z",
+      "side": 1,
+      "message": "haha yeah I\u0027d totally not be surprised if we stumble upon a device which has \"su\" but can\u0027t adb root for some fancy reason, but we\u0027ll cross that bridge if we get there.",
+      "parentUuid": "cfdd82ea_568af83b",
+      "revId": "c0d656005168726d0c96a37e0dfb02e8ae3b58d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
