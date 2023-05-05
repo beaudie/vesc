@@ -84,4 +84,20 @@ TEST_P(VulkanSharedFenceTest, InitDestroyInit)
 
 ANGLE_INSTANTIATE_TEST(VulkanSharedFenceTest, ES2_VULKAN());
 
+class VulkanIntelANIFenceBugTest : public ANGLETest<>
+{};
+
+// Test that just calls eglSwapBuffer() to test Inter driver bugs with ANI Fences.
+TEST_P(VulkanIntelANIFenceBugTest, SwapBuffers)
+{
+    for (int i = 0; i < 5; ++i)
+    {
+        swapBuffers();
+    }
+}
+
+ANGLE_INSTANTIATE_TEST(VulkanIntelANIFenceBugTest,
+                       ES2_VULKAN(),
+                       ES2_VULKAN().enable(Feature::AsyncCommandQueue));
+
 }  // namespace
