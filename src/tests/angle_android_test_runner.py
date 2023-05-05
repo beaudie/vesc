@@ -40,12 +40,13 @@ def AddCommonParserArgs(parser):
         '--gtest_filter',
         type=str,
         help='Test filter.')
+    parser.add_argument('-d', '--device', help='Device to run test on.', default=None)
 
 
 def RunAndroidTestSuite(args, extra_args):
     angle_test_util.SetupLogging(args.log.upper())
 
-    android_helper.Initialize(args.suite)
+    android_helper.Initialize(args.suite, args.device)
     assert android_helper.IsAndroid()
 
     rc, output, _ = android_helper.RunTests(
