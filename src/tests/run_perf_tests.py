@@ -545,6 +545,7 @@ def main():
         help='Number of trials to run per sample. Default is %d.' % DEFAULT_TRIALS,
         type=int,
         default=DEFAULT_TRIALS)
+    parser.add_argument('-d', '--device', help='Device to run test on.', default=None)
     trial_group = parser.add_mutually_exclusive_group()
     trial_group.add_argument(
         '--steps-per-trial', help='Fixed number of steps to run per trial.', type=int)
@@ -612,7 +613,7 @@ def main():
         else:
             os.chdir(test_suite_dir)
 
-    angle_test_util.Initialize(args.test_suite)
+    angle_test_util.Initialize(args.test_suite, args.device)
 
     # Get test list
     exit_code, output, _ = _run_test_suite(args, ['--list-tests', '--verbose'] + extra_flags, env)
