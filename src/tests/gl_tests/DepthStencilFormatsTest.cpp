@@ -1436,6 +1436,93 @@ TEST_P(TinyDepthStencilWorkaroundTest, DepthTexturesStick)
     }
 }
 
+constexpr char kTestComputeShader[] = R"(#version 310 es
+
+layout(binding = 0, std430) buffer dst_buf_block_ssbo {
+  float inner[];
+} dst_buf;
+
+// struct Params {
+//   uvec2 srcOrigin;
+//   uvec2 srcExtent;
+//   uint indicesPerRow;
+//   uint rowsPerImage;
+//   uint indicesOffset;
+//   uint pad;
+// };
+
+// layout(binding = 0, std140) uniform params_block_ubo {
+//   Params inner;
+// } params;
+
+uniform highp sampler2D dawn_combined_placeholder_sampler_with_0_0;
+void blit_depth_to_buffer(uvec3 id) {
+  uvec2 srcBoundary = uvec2(1, 1);
+  uvec2 coord = (id.xy);
+  if (any(greaterThanEqual(coord, srcBoundary))) {
+    return;
+  }
+  uint dstOffset = (id.x + (id.y * 1u));
+  dst_buf.inner[dstOffset] = texelFetch(dawn_combined_placeholder_sampler_with_0_0, ivec2(coord), 0).x;
+}
+
+layout(local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
+void main() {
+  blit_depth_to_buffer(gl_GlobalInvocationID);
+  return;
+}
+)";
+
+// This test will initialize a depth texture, clear it and read it back, if possible
+TEST_P(DepthStencilFormatsTestES31, DepthStencilReadback_Bug_Repro)
+{
+    GLfloat depthValue          = 0.51f;
+    GLfloat depthErrorTolerance = 0.001f;
+
+    GLTexture depthTexture;
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, depthTexture);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 1);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_DEPTH_COMPONENT32F, 1, 1);
+
+    // Clear depth texture to depthValue
+    GLFramebuffer framebuffer;
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTexture, 0);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+    glClearDepthf(depthValue);
+    glClear(GL_DEPTH_BUFFER_BIT);
+    // GLuint actualDepthValue;
+    // glReadPixels(0, 0, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &actualDepthValue);
+    // EXPECT_NEAR(depthValue, actualDepthValue / (float)UINT_MAX, depthErrorTolerance);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    ANGLE_GL_COMPUTE_PROGRAM(computeProgram, kTestComputeShader);
+    glUseProgram(computeProgram);
+
+    GLint uTextureLocation =
+        glGetUniformLocation(computeProgram, "dawn_combined_placeholder_sampler_with_0_0");
+    ASSERT_NE(-1, uTextureLocation);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, depthTexture);
+    glUniform1i(uTextureLocation, 0);
+
+    GLBuffer ssbo;
+    const std::vector<GLfloat> initialData(16, 0.0f);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, 16, initialData.data(), GL_STATIC_DRAW);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssbo);
+    glDispatchCompute(1, 1, 1);
+    glMemoryBarrier(GL_BUFFER_UPDATE_BARRIER_BIT);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+    const GLfloat *ptr = reinterpret_cast<const GLfloat *>(
+        glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, 16, GL_MAP_READ_BIT));
+    EXPECT_NEAR(depthValue, ptr[0], depthErrorTolerance);
+    EXPECT_GL_NO_ERROR();
+}
+
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(TinyDepthStencilWorkaroundTest);
 ANGLE_INSTANTIATE_TEST_ES3_AND(TinyDepthStencilWorkaroundTest,
                                ES3_D3D11().enable(Feature::EmulateTinyStencilTextures));
