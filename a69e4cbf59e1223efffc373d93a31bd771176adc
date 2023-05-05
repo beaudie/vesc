@@ -109,6 +109,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ca835c89_d5d2d8ac",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000763
+      },
+      "writtenOn": "2023-05-05T19:26:04Z",
+      "side": 1,
+      "message": "Just to make sure I\u0027m understanding your concern. You\u0027re suggesting that I remove makeConditional, and always use an ifelse? If I did that, then wouldn\u0027t the wrong thing happen if usesFragCoord is true, but emulateAlphaToCoverag was false?\nIsn\u0027t `makeConditional` needed for the case where usesFragCoord is true? Perhaps you\u0027re suggesting we always do the flip? Wouldn\u0027t that mean we do some unnecessary work? Perhaps it doesn\u0027t matter much? Thanks again for the help.",
+      "parentUuid": "604b6ac4_bb602b50",
+      "revId": "a69e4cbf59e1223efffc373d93a31bd771176adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "118fcd42_4fff8f87",
         "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
         "patchSetId": 13
