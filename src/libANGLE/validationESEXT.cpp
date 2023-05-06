@@ -1722,6 +1722,36 @@ bool ValidatePLSTextureType(const Context *context,
     }
 }
 
+bool ValidatePLSActiveBlendEquation(const Context *context,
+                                    angle::EntryPoint entryPoint,
+                                    GLenum blendEquation)
+{
+    // INVALID_OPERATION is generated if BLEND_EQUATION_RGB and/or BLEND_EQUATION_ALPHA are one of
+    // the advanced blend equations defined in KHR_blend_equation_advanced.
+    switch (blendEquation)
+    {
+        case GL_MULTIPLY_KHR:
+        case GL_SCREEN_KHR:
+        case GL_OVERLAY_KHR:
+        case GL_DARKEN_KHR:
+        case GL_LIGHTEN_KHR:
+        case GL_COLORDODGE_KHR:
+        case GL_COLORBURN_KHR:
+        case GL_HARDLIGHT_KHR:
+        case GL_SOFTLIGHT_KHR:
+        case GL_DIFFERENCE_KHR:
+        case GL_EXCLUSION_KHR:
+        case GL_HSL_HUE_KHR:
+        case GL_HSL_SATURATION_KHR:
+        case GL_HSL_COLOR_KHR:
+        case GL_HSL_LUMINOSITY_KHR:
+            context->validationError(entryPoint, GL_INVALID_OPERATION, kPLSAdvancedBlendEnabled);
+            return false;
+        default:
+            return true;
+    }
+}
+
 bool ValidatePLSLoadOperation(const Context *context, angle::EntryPoint entryPoint, GLenum loadop)
 {
     // INVALID_ENUM is generated if <loadops>[0..<n>-1] is not one of the Load Operations enumerated
@@ -1938,6 +1968,23 @@ bool ValidateBeginPixelLocalStorageANGLE(const Context *context,
     if (state.isRasterizerDiscardEnabled())
     {
         context->validationError(entryPoint, GL_INVALID_OPERATION, kPLSRasterizerDiscardEnabled);
+        return false;
+    }
+
+    // INVALID_OPERATION is generated if BLEND_EQUATION_RGB and/or BLEND_EQUATION_ALPHA are one of
+    // the advanced blend equations defined in KHR_blend_equation_advanced.
+    if (!ValidatePLSActiveBlendEquation(context, entryPoint,
+                                        state.getBlendStateExt().getEquationColorIndexed(0)) ||
+        !ValidatePLSActiveBlendEquation(context, entryPoint,
+                                        state.getBlendStateExt().getEquationAlphaIndexed(0)))
+    {
+        return false;
+    }
+
+    // INVALID_OPERATION is generated if TRANSFORM_FEEDBACK_ACTIVE is true.
+    if (state.isTransformFeedbackActive())
+    {
+        context->validationError(entryPoint, GL_INVALID_OPERATION, kPLSTransformFeedbackActive);
         return false;
     }
 
