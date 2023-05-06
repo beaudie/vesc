@@ -29,7 +29,9 @@ void error(const TIntermSymbol &symbol, const char *reason, TDiagnostics *diagno
 class ValidateOutputsTraverser : public TIntermTraverser
 {
   public:
-    ValidateOutputsTraverser(const TExtensionBehavior &extBehavior, int maxDrawBuffers);
+    ValidateOutputsTraverser(const TCompiler *,
+                             const TExtensionBehavior &extBehavior,
+                             int maxDrawBuffers);
 
     void validate(TDiagnostics *diagnostics) const;
 
@@ -37,7 +39,8 @@ class ValidateOutputsTraverser : public TIntermTraverser
 
   private:
     int mMaxDrawBuffers;
-    bool mAllowUnspecifiedOutputLocationResolution;
+    bool mEnablesBlendFuncExtended;
+    bool mUsesPixelLocalStorage;
     bool mUsesFragDepth;
 
     typedef std::vector<TIntermSymbol *> OutputVector;
@@ -47,12 +50,14 @@ class ValidateOutputsTraverser : public TIntermTraverser
     std::set<int> mVisitedSymbols;  // Visited symbol ids.
 };
 
-ValidateOutputsTraverser::ValidateOutputsTraverser(const TExtensionBehavior &extBehavior,
+ValidateOutputsTraverser::ValidateOutputsTraverser(const TCompiler *compiler,
+                                                   const TExtensionBehavior &extBehavior,
                                                    int maxDrawBuffers)
     : TIntermTraverser(true, false, false),
       mMaxDrawBuffers(maxDrawBuffers),
-      mAllowUnspecifiedOutputLocationResolution(
+      mEnablesBlendFuncExtended(
           IsExtensionEnabled(extBehavior, TExtension::EXT_blend_func_extended)),
+      mUsesPixelLocalStorage(compiler->hasPixelLocalStorageUniforms()),
       mUsesFragDepth(false)
 {}
 
@@ -142,15 +147,27 @@ void ValidateOutputsTraverser::validate(TDiagnostics *diagnostics) const
         }
     }
 
-    if (!mAllowUnspecifiedOutputLocationResolution &&
-        ((!mOutputs.empty() && !mUnspecifiedLocationOutputs.empty()) ||
-         mUnspecifiedLocationOutputs.size() > 1))
+    if ((!mOutputs.empty() && !mUnspecifiedLocationOutputs.empty()) ||
+        mUnspecifiedLocationOutputs.size() > 1)
     {
-        for (const auto &symbol : mUnspecifiedLocationOutputs)
+        const char *unspecifiedLocationErrorMessage = nullptr;
+        if (!mEnablesBlendFuncExtended)
         {
-            error(*symbol,
-                  "must explicitly specify all locations when using multiple fragment outputs",
-                  diagnostics);
+            unspecifiedLocationErrorMessage =
+                "must explicitly specify all locations when using multiple fragment outputs";
+        }
+        else if (mUsesPixelLocalStorage)
+        {
+            unspecifiedLocationErrorMessage =
+                "must explicitly specify all locations when using multiple fragment outputs and "
+                "pixel local storage, even if EXT_blend_func_extended is enabled";
+        }
+        if (unspecifiedLocationErrorMessage != nullptr)
+        {
+            for (const auto &symbol : mUnspecifiedLocationOutputs)
+            {
+                error(*symbol, unspecifiedLocationErrorMessage, diagnostics);
+            }
         }
     }
 
@@ -170,11 +187,12 @@ void ValidateOutputsTraverser::validate(TDiagnostics *diagnostics) const
 }  // anonymous namespace
 
 bool ValidateOutputs(TIntermBlock *root,
+                     const TCompiler *compiler,
                      const TExtensionBehavior &extBehavior,
                      int maxDrawBuffers,
                      TDiagnostics *diagnostics)
 {
-    ValidateOutputsTraverser validateOutputs(extBehavior, maxDrawBuffers);
+    ValidateOutputsTraverser validateOutputs(compiler, extBehavior, maxDrawBuffers);
     root->traverse(&validateOutputs);
     int numErrorsBefore = diagnostics->numErrors();
     validateOutputs.validate(diagnostics);

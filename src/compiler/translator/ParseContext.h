@@ -702,7 +702,15 @@ class TParseContext : angle::NonCopyable
         // To ensure identical behavior across all backends, we disallow assignment to these values
         // if pixel local storage uniforms have been declared.
         AssignFragDepth,
-        AssignSampleMask
+        AssignSampleMask,
+
+        // EXT_blend_func_extended restricts the number of draw buffers that may be used, which can
+        // invalidate a PLS implementation.
+        FragDataIndex,
+
+        // KHR_blend_equation_advanced is incompatible with multiple draw buffers, which is a
+        // required feature for many PLS implementations.
+        EnableAdvancedBlendEquation,
     };
 
     // Generates an error if any pixel local storage uniforms have been declared (more specifically,
