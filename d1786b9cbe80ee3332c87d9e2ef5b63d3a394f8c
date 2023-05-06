@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62f2453b_0289fca4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-05-06T06:35:44Z",
+      "side": 1,
+      "message": "Shabi, do you remember why we decided to ban transform feedback? Can it cause a render pass break?",
+      "revId": "d1786b9cbe80ee3332c87d9e2ef5b63d3a394f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
