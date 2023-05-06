@@ -3924,13 +3924,24 @@ bool ValidateBlendColor(const Context *context,
 
 bool ValidateBlendEquation(const Context *context, angle::EntryPoint entryPoint, GLenum mode)
 {
-    if (!ValidBlendEquationMode(context, mode) && !ValidAdvancedBlendEquationMode(context, mode))
+    if (ValidBlendEquationMode(context, mode))
     {
-        context->validationError(entryPoint, GL_INVALID_ENUM, kInvalidBlendEquation);
-        return false;
+        return true;
     }
 
-    return true;
+    if (ValidAdvancedBlendEquationMode(context, mode))
+    {
+        if (context->getState().getPixelLocalStorageActivePlanes() != 0)
+        {
+            context->validationError(entryPoint, GL_INVALID_OPERATION,
+                                     kPLSAdvancedBlendNotSupported);
+            return false;
+        }
+        return true;
+    }
+
+    context->validationError(entryPoint, GL_INVALID_ENUM, kInvalidBlendEquation);
+    return false;
 }
 
 bool ValidateBlendEquationSeparate(const Context *context,

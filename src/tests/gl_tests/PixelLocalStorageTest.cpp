@@ -3135,11 +3135,11 @@ class ScopedEnable
         ASSERT_EQ(value, GLint(expected)); \
     }
 
-#define EXPECT_GL_INTEGER(pname, expected)     \
-    {                                          \
-        GLint value;                           \
-        glGetIntegerv(pname, &value);          \
-        EXPECT_EQ(value, GLboolean(expected)); \
+#define EXPECT_GL_INTEGER(pname, expected) \
+    {                                      \
+        GLint value;                       \
+        glGetIntegerv(pname, &value);      \
+        EXPECT_EQ(value, GLint(expected)); \
     }
 
 #define EXPECT_PLS_INTEGER(plane, pname, expected)                                                 \
@@ -3622,6 +3622,48 @@ TEST_P(PixelLocalStorageValidationTest, glFramebufferPixelLocalClearValuesANGLE)
     ASSERT_GL_NO_ERROR();
 }
 
+#define EXPECT_BANNED(cmd, msg)                   \
+    cmd;                                          \
+    EXPECT_GL_SINGLE_ERROR(GL_INVALID_OPERATION); \
+    EXPECT_GL_SINGLE_ERROR_MSG(msg)
+
+#define EXPECT_BANNED_DEFAULT_MSG(cmd) \
+    EXPECT_BANNED(cmd, "Operation not permitted while pixel local storage is active.")
+
+static std::vector<char> FormatBannedCapMsg(GLenum cap)
+{
+    constexpr char format[] =
+        "Cap 0x%04X cannot be enabled or disabled while pixel local storage is active.";
+    std::vector<char> msg(std::snprintf(nullptr, 0, format, cap) + 1);
+    std::snprintf(msg.data(), msg.size(), format, cap);
+    return msg;
+}
+
+#define EXPECT_ALLOWED_CAP(cap) \
+    {                           \
+        glEnable(cap);          \
+        glDisable(cap);         \
+        glIsEnabled(cap);       \
+        EXPECT_GL_NO_ERROR();   \
+    }
+
+#define EXPECT_BANNED_CAP(cap)                           \
+    {                                                    \
+        std::vector<char> msg = FormatBannedCapMsg(cap); \
+        EXPECT_BANNED(glEnable(cap), msg.data());        \
+        EXPECT_BANNED(glDisable(cap), msg.data());       \
+        glIsEnabled(cap);                                \
+        EXPECT_GL_NO_ERROR();                            \
+    }
+
+#define EXPECT_BANNED_CAP_INDEXED(cap)                   \
+    {                                                    \
+        std::vector<char> msg = FormatBannedCapMsg(cap); \
+        EXPECT_BANNED(glEnablei(cap, 0), msg.data());    \
+        EXPECT_BANNED(glDisablei(cap, 0), msg.data());   \
+        EXPECT_GL_NO_ERROR();                            \
+    }
+
 // Check that glBeginPixelLocalStorageANGLE validates non-PLS context state as specified.
 TEST_P(PixelLocalStorageValidationTest, BeginPixelLocalStorageANGLE_context_state)
 {
@@ -3695,6 +3737,122 @@ TEST_P(PixelLocalStorageValidationTest, BeginPixelLocalStorageANGLE_context_stat
         EXPECT_GL_SINGLE_ERROR_MSG(
             "Attempted to begin pixel local storage with GL_RASTERIZER_DISCARD enabled.");
         ASSERT_GL_INTEGER(GL_PIXEL_LOCAL_STORAGE_ACTIVE_PLANES_ANGLE, 0);
+    }
+
+    // INVALID_OPERATION is generated if BLEND_EQUATION_RGB and/or BLEND_EQUATION_ALPHA are equal to
+    // one of the advanced blend equations defined in KHR_blend_equation_advanced.
+    if (EnsureGLExtensionEnabled("GL_KHR_blend_equation_advanced"))
+    {
+        for (auto blendEquation : {
+                 GL_MULTIPLY_KHR,
+                 GL_SCREEN_KHR,
+                 GL_OVERLAY_KHR,
+                 GL_DARKEN_KHR,
+                 GL_LIGHTEN_KHR,
+                 GL_COLORDODGE_KHR,
+                 GL_COLORBURN_KHR,
+                 GL_HARDLIGHT_KHR,
+                 GL_SOFTLIGHT_KHR,
+                 GL_DIFFERENCE_KHR,
+                 GL_EXCLUSION_KHR,
+                 GL_HSL_HUE_KHR,
+                 GL_HSL_SATURATION_KHR,
+                 GL_HSL_COLOR_KHR,
+                 GL_HSL_LUMINOSITY_KHR,
+             })
+        {
+            glBlendEquation(blendEquation);
+            ASSERT_GL_NO_ERROR();
+
+            glBeginPixelLocalStorageANGLE(1, GLenumArray({GL_LOAD_OP_ZERO_ANGLE}));
+            EXPECT_GL_SINGLE_ERROR(GL_INVALID_OPERATION);
+            EXPECT_GL_SINGLE_ERROR_MSG(
+                "Attempted to begin pixel local storage with an advanced blend equation "
+                "enabled.");
+            EXPECT_GL_INTEGER(GL_PIXEL_LOCAL_STORAGE_ACTIVE_PLANES_ANGLE, 0);
+
+            glBlendEquation(GL_FUNC_ADD);
+            glBlendEquationi(0, blendEquation);
+            ASSERT_GL_NO_ERROR();
+            glBeginPixelLocalStorageANGLE(1, GLenumArray({GL_LOAD_OP_ZERO_ANGLE}));
+            EXPECT_GL_SINGLE_ERROR(GL_INVALID_OPERATION);
+            EXPECT_GL_SINGLE_ERROR_MSG(
+                "Attempted to begin pixel local storage with an advanced blend equation "
+                "enabled.");
+
+            glBlendEquationi(0, GL_FUNC_ADD);
+            ASSERT_GL_NO_ERROR();
+
+            glBeginPixelLocalStorageANGLE(1, GLenumArray({GL_LOAD_OP_ZERO_ANGLE}));
+            EXPECT_GL_NO_ERROR();
+            EXPECT_GL_INTEGER(GL_PIXEL_LOCAL_STORAGE_ACTIVE_PLANES_ANGLE, 1);
+
+            // glBlendEquation is not on the PLS allow list.
+            EXPECT_BANNED_DEFAULT_MSG(glBlendEquation(blendEquation))
+
+            // INVALID_OPERATION is generated by BlendEquationi*() if <mode> is one of the advanced
+            // blend equations defined in KHR_blend_equation_advanced.
+            if (IsGLExtensionEnabled("GL_OES_draw_buffers_indexed"))
+            {
+                glBlendEquationi(0, blendEquation);
+                EXPECT_GL_ERROR(GL_INVALID_OPERATION);
+                EXPECT_GL_SINGLE_ERROR_MSG(
+                    "Advanced blend equations are not supported when pixel local storage is "
+                    "active.");
+            }
+
+            EXPECT_GL_INTEGER(GL_BLEND_EQUATION_RGB, GL_FUNC_ADD);
+            EXPECT_GL_INTEGER(GL_BLEND_EQUATION_ALPHA, GL_FUNC_ADD);
+            ASSERT_GL_NO_ERROR();
+
+            glEndPixelLocalStorageANGLE(1, GLenumArray({GL_DONT_CARE}));
+            EXPECT_GL_NO_ERROR();
+        }
+    }
+
+    // INVALID_OPERATION is generated if TRANSFORM_FEEDBACK_ACTIVE is true.
+    {
+        constexpr char kFS[] = R"(#version 300 es
+        out mediump vec4 color;
+        void main()
+        {
+            color = vec4(0.6, 0.0, 0.0, 1.0);
+        })";
+        std::vector<std::string> xfVaryings;
+        xfVaryings.push_back("gl_Position");
+        ANGLE_GL_PROGRAM_TRANSFORM_FEEDBACK(xfProgram, essl3_shaders::vs::Simple(), kFS, xfVaryings,
+                                            GL_INTERLEAVED_ATTRIBS);
+        glUseProgram(xfProgram);
+        GLuint xfBuffer;
+        glGenBuffers(1, &xfBuffer);
+        glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, xfBuffer);
+        glBufferData(GL_TRANSFORM_FEEDBACK_BUFFER, 1024, nullptr, GL_STATIC_DRAW);
+        glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, xfBuffer);
+        glBeginTransformFeedback(GL_TRIANGLES);
+        ASSERT_GL_NO_ERROR();
+        ASSERT_GL_INTEGER(GL_TRANSFORM_FEEDBACK_ACTIVE, 1);
+
+        glBeginPixelLocalStorageANGLE(1, GLenumArray({GL_LOAD_OP_ZERO_ANGLE}));
+        EXPECT_GL_SINGLE_ERROR(GL_INVALID_OPERATION);
+        EXPECT_GL_SINGLE_ERROR_MSG(
+            "Attempted to begin pixel local storage with transform feedback active.");
+        ASSERT_GL_INTEGER(GL_PIXEL_LOCAL_STORAGE_ACTIVE_PLANES_ANGLE, 0);
+
+        glEndTransformFeedback();
+
+        glBeginPixelLocalStorageANGLE(1, GLenumArray({GL_LOAD_OP_ZERO_ANGLE}));
+        EXPECT_GL_NO_ERROR();
+        EXPECT_GL_INTEGER(GL_PIXEL_LOCAL_STORAGE_ACTIVE_PLANES_ANGLE, 1);
+
+        // glBeginTransformFeedback is not on the PLS allow list.
+        EXPECT_BANNED_DEFAULT_MSG(glBeginTransformFeedback(GL_TRIANGLES))
+        ASSERT_GL_INTEGER(GL_TRANSFORM_FEEDBACK_ACTIVE, 0);
+
+        glEndPixelLocalStorageANGLE(1, GLenumArray({GL_DONT_CARE}));
+        EXPECT_GL_NO_ERROR();
+
+        glUseProgram(0);
+        ASSERT_GL_NO_ERROR();
     }
 }
 
@@ -4492,48 +4650,6 @@ TEST_P(PixelLocalStorageValidationTest, GetFramebufferPixelLocalStorageParameter
     EXPECT_GL_SINGLE_ERROR(GL_INVALID_VALUE);
     EXPECT_GL_SINGLE_ERROR_MSG("<params> cannot be null.");
 }
-
-#define EXPECT_BANNED(cmd, msg)                   \
-    cmd;                                          \
-    EXPECT_GL_SINGLE_ERROR(GL_INVALID_OPERATION); \
-    EXPECT_GL_SINGLE_ERROR_MSG(msg)
-
-#define EXPECT_BANNED_DEFAULT_MSG(cmd) \
-    EXPECT_BANNED(cmd, "Operation not permitted while pixel local storage is active.")
-
-static std::vector<char> FormatBannedCapMsg(GLenum cap)
-{
-    constexpr char format[] =
-        "Cap 0x%04X cannot be enabled or disabled while pixel local storage is active.";
-    std::vector<char> msg(std::snprintf(nullptr, 0, format, cap) + 1);
-    std::snprintf(msg.data(), msg.size(), format, cap);
-    return msg;
-}
-
-#define EXPECT_ALLOWED_CAP(cap) \
-    {                           \
-        glEnable(cap);          \
-        glDisable(cap);         \
-        glIsEnabled(cap);       \
-        EXPECT_GL_NO_ERROR();   \
-    }
-
-#define EXPECT_BANNED_CAP(cap)                           \
-    {                                                    \
-        std::vector<char> msg = FormatBannedCapMsg(cap); \
-        EXPECT_BANNED(glEnable(cap), msg.data());        \
-        EXPECT_BANNED(glDisable(cap), msg.data());       \
-        glIsEnabled(cap);                                \
-        EXPECT_GL_NO_ERROR();                            \
-    }
-
-#define EXPECT_BANNED_CAP_INDEXED(cap)                   \
-    {                                                    \
-        std::vector<char> msg = FormatBannedCapMsg(cap); \
-        EXPECT_BANNED(glEnablei(cap, 0), msg.data());    \
-        EXPECT_BANNED(glDisablei(cap, 0), msg.data());   \
-        EXPECT_GL_NO_ERROR();                            \
-    }
 
 // Check command-specific errors that go into effect when PLS is active, as well as commands
 // specifically called out by EXT_shader_pixel_local_storage for flushing tiled memory.
