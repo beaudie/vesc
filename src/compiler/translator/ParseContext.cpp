@@ -434,6 +434,10 @@ void TParseContext::errorIfPLSDeclared(const TSourceLoc &loc, PLSIllegalOperatio
             error(loc, "value not assignable when pixel local storage is declared",
                   "gl_SampleMask");
             break;
+        case PLSIllegalOperations::EnableAdvancedBlendEquation:
+            error(loc, "illegal advanced blend equation when pixel local storage is declared",
+                  "layout");
+            break;
     }
 }
 
@@ -4188,6 +4192,7 @@ void TParseContext::parseGlobalLayoutQualifier(const TTypeQualifierBuilder &type
             return;
         }
 
+        errorIfPLSDeclared(typeQualifier.line, PLSIllegalOperations::EnableAdvancedBlendEquation);
         mAdvancedBlendEquations |= layoutQualifier.advancedBlendEquations;
     }
     else if (typeQualifier.qualifier == EvqTessControlOut)
