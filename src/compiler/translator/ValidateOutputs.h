@@ -16,11 +16,13 @@
 namespace sh
 {
 
+class TCompiler;
 class TIntermBlock;
 class TDiagnostics;
 
 // Returns true if the shader has no conflicting or otherwise erroneous fragment outputs.
 bool ValidateOutputs(TIntermBlock *root,
+                     const TCompiler *,
                      const TExtensionBehavior &extBehavior,
                      int maxDrawBuffers,
                      TDiagnostics *diagnostics);
