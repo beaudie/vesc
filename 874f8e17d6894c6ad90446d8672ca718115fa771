@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a11bf59c_8313d650",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-08T21:46:47Z",
+      "side": 1,
+      "message": "Does this always work for `/sdcard/chromium_tests_root/...` locations?\nhttps://crsrc.org/c/third_party/angle/src/tests/py_utils/android_helper.py;drc\u003d7d6d18e4dad1df4722c58aaf7ad8697787e9e771;l\u003d285",
+      "range": {
+        "startLine": 213,
+        "startChar": 29,
+        "endLine": 213,
+        "endChar": 35
+      },
+      "revId": "874f8e17d6894c6ad90446d8672ca718115fa771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
