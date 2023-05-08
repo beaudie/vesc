@@ -310,15 +310,15 @@ Optional<std::string> CreateTemporaryFileInDirectoryWithExtension(const std::str
 {
     std::string tempFileTemplate = directory + "/.angle.XXXXXX" + extension;
 
-    char tempFile[1000];
-    strcpy(tempFile, tempFileTemplate.c_str());
+    std::vector<char> tempFile(tempFileTemplate.begin(), tempFileTemplate.end());
+    tempFile.push_back(0);
 
-    int fd = mkstemps(tempFile, static_cast<int>(extension.size()));
+    int fd = mkstemps(tempFile.data(), static_cast<int>(extension.size()));
     close(fd);
 
     if (fd != -1)
     {
-        return std::string(tempFile);
+        return std::string(tempFile.data(), tempFile.size());
     }
 
     return Optional<std::string>::Invalid();
