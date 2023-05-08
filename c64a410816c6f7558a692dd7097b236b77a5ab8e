@@ -238,6 +238,30 @@
       },
       "revId": "c64a410816c6f7558a692dd7097b236b77a5ab8e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "114ebfdd_d8a2ff6f",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2899,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-08T17:35:37Z",
+      "side": 1,
+      "message": "Alright, so I duplicated the onBufferContentsChanged path and it passes my data update test.. but IMO this doesn\u0027t look nice, as it adds one more path to the existing onSubjectStateChange, onBufferContentsChanged. Is that how we want to do it?\n\nAlso I\u0027m not sure if I need to be more careful about calling removeGenericContentsObserver in more places?",
+      "parentUuid": "faa0480e_720f6274",
+      "range": {
+        "startLine": 2890,
+        "startChar": 12,
+        "endLine": 2899,
+        "endChar": 13
+      },
+      "revId": "c64a410816c6f7558a692dd7097b236b77a5ab8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
