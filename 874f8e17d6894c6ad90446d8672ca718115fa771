@@ -22,6 +22,30 @@
       },
       "revId": "874f8e17d6894c6ad90446d8672ca718115fa771",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc2136bb_08153a5a",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-08T22:17:46Z",
+      "side": 1,
+      "message": "I believe so, since our test app has both:\n```\nuses-permission: name\u003d\u0027android.permission.MANAGE_EXTERNAL_STORAGE\u0027\nuses-permission: name\u003d\u0027android.permission.WRITE_EXTERNAL_STORAGE\u0027\n```",
+      "parentUuid": "a11bf59c_8313d650",
+      "range": {
+        "startLine": 213,
+        "startChar": 29,
+        "endLine": 213,
+        "endChar": 35
+      },
+      "revId": "874f8e17d6894c6ad90446d8672ca718115fa771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
