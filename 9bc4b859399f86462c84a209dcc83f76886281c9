@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e60a6ee_cc6f9d4e",
+        "filename": "src/tests/gl_tests/VulkanImageTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-05-08T22:19:43Z",
+      "side": 1,
+      "message": "maxDeviceLocalmemoryHeapSize?",
+      "range": {
+        "startLine": 514,
+        "startChar": 17,
+        "endLine": 514,
+        "endChar": 40
+      },
+      "revId": "9bc4b859399f86462c84a209dcc83f76886281c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cef9221e_2b65f607",
+        "filename": "src/tests/gl_tests/VulkanImageTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-05-08T22:19:43Z",
+      "side": 1,
+      "message": "Have you confirmed locally that it hits the fallback code path? I am wondering if it end up with device local heap with different flag bits (coherent/non-coherent). So one way to ensure is try with three loops: 1) with maxDeviceMemoryHeapSize and 2) totalDeviceMemoryHeapSize, and 3) a few more textures on top of totalDeviceMemoryHeapSize.\n \nCould you also verify the textured draw renderings correctly?",
+      "range": {
+        "startLine": 537,
+        "startChar": 3,
+        "endLine": 543,
+        "endChar": 5
+      },
+      "revId": "9bc4b859399f86462c84a209dcc83f76886281c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
