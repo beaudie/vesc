@@ -177,6 +177,24 @@
       "parentUuid": "386bb468_bef43edb",
       "revId": "d1786b9cbe80ee3332c87d9e2ef5b63d3a394f8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe5b3d2f_3dd543ab",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-05-08T19:49:10Z",
+      "side": 1,
+      "message": "To fix the bug please add the following to `GenerateMinimumCaps` in `src/libANGLE/Caps.cpp`, somewhere near `if (extensions.textureRectangleANGLE)`:\n```\nif (extensions.blendFuncExtendedEXT)\n{\n    caps.maxDualSourceDrawBuffers \u003d 1;\n}\n```",
+      "parentUuid": "bb4fadeb_1dc09459",
+      "revId": "d1786b9cbe80ee3332c87d9e2ef5b63d3a394f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
