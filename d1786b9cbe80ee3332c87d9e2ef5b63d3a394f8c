@@ -87,6 +87,24 @@
       "parentUuid": "2b18a218_41da9495",
       "revId": "d1786b9cbe80ee3332c87d9e2ef5b63d3a394f8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ad3dca7_ab696416",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-08T07:42:47Z",
+      "side": 1,
+      "message": "\u003e Enabling (or requiring) all extensions is not allowed in ESSL.\n\nAre you sure? I had to deal with `#extension all : enable` in the ANGLE translator in the past.",
+      "parentUuid": "7c894ab9_4fbfbcb9",
+      "revId": "d1786b9cbe80ee3332c87d9e2ef5b63d3a394f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
