@@ -46,6 +46,30 @@
       },
       "revId": "874f8e17d6894c6ad90446d8672ca718115fa771",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f09cd4da_be094d55",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-08T22:24:52Z",
+      "side": 1,
+      "message": "From my tests and the following link, these permissions don\u0027t seem to apply to `run-as`?\nhttps://android.stackexchange.com/questions/248079/how-to-give-adb-run-as-external-storage-permission\n\nMy worry here is that the sha256sum binary might fail due to permissions. Maybe we should only `run-as` for `/data` but not other locations?",
+      "parentUuid": "dc2136bb_08153a5a",
+      "range": {
+        "startLine": 213,
+        "startChar": 29,
+        "endLine": 213,
+        "endChar": 35
+      },
+      "revId": "874f8e17d6894c6ad90446d8672ca718115fa771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
