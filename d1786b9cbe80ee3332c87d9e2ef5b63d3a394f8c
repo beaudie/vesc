@@ -159,6 +159,24 @@
       "parentUuid": "05c7f7c7_1f836885",
       "revId": "d1786b9cbe80ee3332c87d9e2ef5b63d3a394f8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb4fadeb_1dc09459",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-05-08T17:39:07Z",
+      "side": 1,
+      "message": "I am unable to fully implement the EXT_blend_func_extended interaction due to https://bugs.chromium.org/p/angleproject/issues/detail?id\u003d8158 , but I\u0027ve added the spec wording and a currently-disabled unit test. I can finish the implementation once that bug is resolved.",
+      "parentUuid": "386bb468_bef43edb",
+      "revId": "d1786b9cbe80ee3332c87d9e2ef5b63d3a394f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
