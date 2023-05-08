@@ -664,6 +664,8 @@ class Texture final : public RefCountObject<TextureID>,
     // ObserverInterface implementation.
     void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
 
+    uint64_t globallyUniqueID() const;
+
   private:
     rx::FramebufferAttachmentObjectImpl *getAttachmentImpl() const override;
 
@@ -733,6 +735,8 @@ class Texture final : public RefCountObject<TextureID>,
     };
 
     mutable SamplerCompletenessCache mCompletenessCache;
+
+    mutable uint64_t mGloballyUniqueID = 0;
 };
 
 inline bool operator==(const TextureState &a, const TextureState &b)
