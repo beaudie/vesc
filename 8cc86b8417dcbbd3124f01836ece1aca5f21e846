@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "721b561a_c300b2eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-08T12:56:36Z",
+      "side": 1,
+      "message": "I checked `adb --help` and saw ANDROID_SERIAL mentioned:\n```\n $ANDROID_SERIAL          serial number to connect to (see -s)\n```\n\nMaybe we could just set this var without any modifications to the scripts?\n\n```\nANDROID_SERIAL\u003dabcd; out/Android/angle_trace_tests ...\n```",
+      "revId": "8cc86b8417dcbbd3124f01836ece1aca5f21e846",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ea8e9f5_cb2184eb",
+        "filename": "src/tests/restricted_traces/README.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-08T12:56:36Z",
+      "side": 1,
+      "message": "I suggest to move this out, something like \"if you have multiple devices connected, use ...\"",
+      "range": {
+        "startLine": 96,
+        "startChar": 96,
+        "endLine": 96,
+        "endChar": 122
+      },
+      "revId": "8cc86b8417dcbbd3124f01836ece1aca5f21e846",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
