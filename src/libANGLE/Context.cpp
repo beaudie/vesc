@@ -9494,7 +9494,7 @@ void Context::getFramebufferPixelLocalStorageParameterivRobust(GLint plane,
             {
                 *length = 1;
             }
-            *params = pls.getPlane(plane).getIntegeri(this, pname);
+            *params = pls.getPlane(plane).getIntegeri(pname);
             break;
         case GL_PIXEL_LOCAL_CLEAR_VALUE_INT_ANGLE:
             if (length != nullptr)

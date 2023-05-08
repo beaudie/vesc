@@ -70,7 +70,8 @@ enum class SubjectMessage
     // Other types of uniform change.
     ProgramUniformUpdated,
 
-    // Indicates a Storage of back-end in gl::Texture has been released.
+    // Indicates a Storage of back-end in gl::Texture has been released, or that the gl::Texture is
+    // being destroyed.
     StorageReleased,
 
     // Indicates that all pending updates are complete in the subject.
