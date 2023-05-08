@@ -22,6 +22,30 @@
       },
       "revId": "e34b4f204c485480fc5547482ca0479d8f7f28d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4a5b696_6db960b2",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 1280,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-08T05:38:40Z",
+      "side": 1,
+      "message": "Yes unfortunately.\n\nhttps://source.chromium.org/chromium/chromium/src/+/refs/heads/main:third_party/angle/src/libANGLE/renderer/vulkan/ContextVk.cpp;l\u003d2191;drc\u003de0e0d24aaa54727dc0a8bc4b159ccdf80d3f5d8d",
+      "parentUuid": "516d835e_a830f17c",
+      "range": {
+        "startLine": 1279,
+        "startChar": 20,
+        "endLine": 1280,
+        "endChar": 21
+      },
+      "revId": "e34b4f204c485480fc5547482ca0479d8f7f28d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
