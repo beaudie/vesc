@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17546896_a7d4ff4f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-05-08T22:19:23Z",
+      "side": 1,
+      "message": "lgtm+2",
+      "revId": "689ae74074ea9c791d077979487c1bd76339650b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fbd704d6_d92fb79d",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 1313,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-05-08T22:19:23Z",
+      "side": 1,
+      "message": "How about a comment indicating that there were attempts to precompile these on the simulator, but there were problems with some YUV shaders?",
+      "revId": "689ae74074ea9c791d077979487c1bd76339650b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
