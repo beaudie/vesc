@@ -33,6 +33,24 @@
       "message": "How about a comment indicating that there were attempts to precompile these on the simulator, but there were problems with some YUV shaders?",
       "revId": "689ae74074ea9c791d077979487c1bd76339650b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d534791_31ef3141",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 1313,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-05-08T22:30:45Z",
+      "side": 1,
+      "message": "Done. Added a comment. I think those were just the only tests running on that bot which used the built-in shaders for blitting.",
+      "parentUuid": "fbd704d6_d92fb79d",
+      "revId": "689ae74074ea9c791d077979487c1bd76339650b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
