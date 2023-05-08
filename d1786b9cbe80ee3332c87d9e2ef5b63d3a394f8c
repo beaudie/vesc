@@ -33,6 +33,24 @@
       "message": "Similar interactions are needed for `EXT_blend_func_extended`:\n* Ban `*SRC1*` factors when PLS is active\n* Ban use of the extension string in fragment shaders together with PLS",
       "revId": "d1786b9cbe80ee3332c87d9e2ef5b63d3a394f8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b18a218_41da9495",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-05-08T05:23:34Z",
+      "side": 1,
+      "message": "Done.\n\nIt\u0027s hard to ban based on extension strings because if the shader does something like:\n\n```\n#extension all : enable\n```\n\nWe probably shouldn\u0027t cause PLS to fail by default because a blend extension was implicitly enabled.\n\nInstead, I updated the compiler to error if a shader *uses* PLS and KHR_blend_equation_advanced together.\n\nI believe there\u0027s nothing to do on the shader side for EXT_blend_func_extended because `gl_SecondaryFrag*` are only defined in the ES 1.00 shading language, whereas PLS is only defined in ES 3.0+.",
+      "parentUuid": "a4630bcb_95f74a91",
+      "revId": "d1786b9cbe80ee3332c87d9e2ef5b63d3a394f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
