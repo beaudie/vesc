@@ -2518,4 +2518,14 @@ void Texture::onBind3DTextureAs2DImage()
     }
 }
 
+uint64_t Texture::globallyUniqueID() const
+{
+    if (mGloballyUniqueID == 0)
+    {
+        static std::atomic_uint64_t globallyUniqueIDCounter{0};
+        mGloballyUniqueID = ++globallyUniqueIDCounter;
+    }
+    return mGloballyUniqueID;
+}
+
 }  // namespace gl

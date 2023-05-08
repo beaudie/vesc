@@ -2009,7 +2009,7 @@ bool ValidateBeginPixelLocalStorageANGLE(const Context *context,
 
         // INVALID_OPERATION is generated if a pixel local storage plane at index [0..<n>-1] is in a
         // deinitialized state.
-        if (pls == nullptr || pls->getPlane(i).isDeinitialized())
+        if (pls == nullptr || pls->getPlane(i).isDeinitialized(context))
         {
             context->validationError(entryPoint, GL_INVALID_OPERATION,
                                      kPLSEnablingDeinitializedPlane);

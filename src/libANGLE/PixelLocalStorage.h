@@ -37,30 +37,20 @@ class PixelLocalStoragePlane : angle::NonCopyable
     // handles.
     void onContextObjectsLost();
 
-    // Called when the owning framebuffer is being destroyed. Causes this class to release its
-    // texture object reference.
-    void onFramebufferDestroyed(const Context *);
-
     void deinitialize(Context *);
     void setMemoryless(Context *, GLenum internalformat);
     void setTextureBacked(Context *, Texture *, int level, int layer);
 
-    bool isDeinitialized() const { return mInternalformat == GL_NONE; }
-
-    // Returns true if the texture ID bound to this plane has been deleted.
-    //
-    // [ANGLE_shader_pixel_local_storage] Section 4.4.2.X "Configuring Pixel Local Storage
-    // on a Framebuffer": When a texture object is deleted, any pixel local storage plane to
-    // which it was bound is automatically converted to a memoryless plane of matching
-    // internalformat.
-    bool isTextureIDDeleted(const Context *) const;
-
     bool isMemoryless() const
     {
         // isMemoryless() should be false if the plane is deinitialized.
-        ASSERT(!(isDeinitialized() && mMemoryless));
+        ASSERT(!mMemoryless || mInternalformat != GL_NONE);
         return mMemoryless;
     }
+
+    // Returns true if the plane is deinitialized, either explicitly or implicitly via deleting the
+    // texture that was attached to it.
+    bool isDeinitialized(const Context *context) const;
 
     // Ensures we have an internal backing texture for memoryless planes. In some implementations we
     // need a backing texture even if the plane is memoryless.
@@ -118,9 +108,9 @@ class PixelLocalStoragePlane : angle::NonCopyable
   private:
     GLenum mInternalformat = GL_NONE;  // GL_NONE if this plane is in a deinitialized state.
     bool mMemoryless       = false;
-    TextureID mMemorylessTextureID{};  // We own memoryless backing textures and must delete them.
+    TextureID mTextureID   = TextureID();
+    uint64_t mGloballyUniqueTextureID = 0;  // Catches when mTextureID gets deleted.
     ImageIndex mTextureImageIndex;
-    Texture *mTextureRef = nullptr;
 
     // Clear value state.
     std::array<GLfloat, 4> mClearValuef{};
