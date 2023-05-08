@@ -134,91 +134,87 @@ class ScopedEnableColorMask : angle::NonCopyable
 PixelLocalStoragePlane::~PixelLocalStoragePlane()
 {
     // Call deinitialize or onContextObjectsLost first!
-    ASSERT(mMemorylessTextureID.value == 0);
-    // Call deinitialize or onFramebufferDestroyed first!
-    ASSERT(mTextureRef == nullptr);
+    // (PixelLocalStorage::deleteContextObjects calls deinitialize.)
+    ASSERT(mTextureID.value == 0);
+    ASSERT(mGloballyUniqueTextureID == 0);
 }
 
 void PixelLocalStoragePlane::onContextObjectsLost()
 {
+    mInternalformat = GL_NONE;
+    mMemoryless     = false;
     // We normally call deleteTexture on the memoryless plane texture ID, since we own it, but in
     // this case we can let it go.
-    mMemorylessTextureID = TextureID();
-}
-
-void PixelLocalStoragePlane::onFramebufferDestroyed(const Context *context)
-{
-    if (mTextureRef != nullptr)
-    {
-        mTextureRef->release(context);
-        mTextureRef = nullptr;
-    }
+    mTextureID               = TextureID();
+    mGloballyUniqueTextureID = 0;
 }
 
 void PixelLocalStoragePlane::deinitialize(Context *context)
 {
-    mInternalformat = GL_NONE;
-    mMemoryless     = false;
-    if (mMemorylessTextureID.value != 0)
+    if (mMemoryless && mTextureID.value != 0)
     {
-        // The app could have technically deleted mMemorylessTextureID by guessing its value and
-        // calling glDeleteTextures, but it seems unnecessary to worry about that here. (Worst case
-        // we delete one of their textures.) This also isn't a problem in WebGL.
-        context->deleteTexture(mMemorylessTextureID);
-        mMemorylessTextureID = TextureID();
+        context->deleteTexture(mTextureID);
     }
-    if (mTextureRef != nullptr)
-    {
-        mTextureRef->release(context);
-        mTextureRef = nullptr;
-    }
+    mInternalformat          = GL_NONE;
+    mMemoryless              = false;
+    mTextureID               = TextureID();
+    mGloballyUniqueTextureID = 0;
 }
 
 void PixelLocalStoragePlane::setMemoryless(Context *context, GLenum internalformat)
 {
     deinitialize(context);
-    mInternalformat    = internalformat;
-    mMemoryless        = true;
-    mTextureImageIndex = ImageIndex::MakeFromType(TextureType::_2D, 0, 0);
+    mInternalformat = internalformat;
+    mMemoryless     = true;
     // The backing texture will get allocated lazily, once we know what dimensions it should be.
-    ASSERT(mMemorylessTextureID.value == 0);
-    ASSERT(mTextureRef == nullptr);
+    ASSERT(mTextureID.value == 0);
+    ASSERT(mGloballyUniqueTextureID == 0);
+    mTextureImageIndex = ImageIndex::MakeFromType(TextureType::_2D, 0, 0);
 }
 
 void PixelLocalStoragePlane::setTextureBacked(Context *context, Texture *tex, int level, int layer)
 {
     deinitialize(context);
     ASSERT(tex->getImmutableFormat());
-    mInternalformat    = tex->getState().getBaseLevelDesc().format.info->internalFormat;
-    mMemoryless        = false;
-    mTextureImageIndex = ImageIndex::MakeFromType(tex->getType(), level, layer);
-    mTextureRef        = tex;
-    mTextureRef->addRef();
+    mInternalformat          = tex->getState().getBaseLevelDesc().format.info->internalFormat;
+    mMemoryless              = false;
+    mTextureID               = tex->id();
+    mGloballyUniqueTextureID = tex->globallyUniqueID();
+    mTextureImageIndex       = ImageIndex::MakeFromType(tex->getType(), level, layer);
 }
 
-bool PixelLocalStoragePlane::isTextureIDDeleted(const Context *context) const
+bool PixelLocalStoragePlane::isDeinitialized(const Context *context) const
 {
-    // We can tell if the texture has been deleted by looking up mTextureRef's ID on the Context. If
-    // they don't match, it's been deleted.
-    ASSERT(!isDeinitialized() || mTextureRef == nullptr);
-    return mTextureRef != nullptr && context->getTexture(mTextureRef->id()) != mTextureRef;
+    if (mInternalformat == GL_NONE)
+    {
+        ASSERT(!isMemoryless());
+        ASSERT(mTextureID.value == 0);
+        return true;
+    }
+    if (isMemoryless())
+    {
+        return false;
+    }
+    // Check if the attached texture has been deleted.
+    ASSERT(mTextureID.value != 0);
+    Texture *tex = context->getTexture(mTextureID);
+    return tex == nullptr || tex->globallyUniqueID() != mGloballyUniqueTextureID;
 }
 
 GLint PixelLocalStoragePlane::getIntegeri(const Context *context, GLenum target) const
 {
-    if (!isDeinitialized())
+    if (!isDeinitialized(context))
     {
-        bool memoryless = isMemoryless() || isTextureIDDeleted(context);
         switch (target)
         {
             case GL_PIXEL_LOCAL_FORMAT_ANGLE:
                 return mInternalformat;
             case GL_PIXEL_LOCAL_TEXTURE_NAME_ANGLE:
-                return memoryless ? 0 : mTextureRef->id().value;
+                return isMemoryless() ? 0 : mTextureID.value;
             case GL_PIXEL_LOCAL_TEXTURE_LEVEL_ANGLE:
-                return memoryless ? 0 : mTextureImageIndex.getLevelIndex();
+                return isMemoryless() ? 0 : mTextureImageIndex.getLevelIndex();
             case GL_PIXEL_LOCAL_TEXTURE_LAYER_ANGLE:
-                return memoryless ? 0 : mTextureImageIndex.getLayerIndex();
+                return isMemoryless() ? 0 : mTextureImageIndex.getLayerIndex();
         }
     }
     // Since GL_NONE == 0, PLS queries all return 0 when the plane is deinitialized.
@@ -228,24 +224,24 @@ GLint PixelLocalStoragePlane::getIntegeri(const Context *context, GLenum target)
 
 bool PixelLocalStoragePlane::getTextureImageExtents(const Context *context, Extents *extents) const
 {
-    if (isDeinitialized() || isMemoryless() || isTextureIDDeleted(context))
+    ASSERT(!isDeinitialized(context));
+    if (isMemoryless())
     {
         return false;
     }
-    ASSERT(mTextureRef != nullptr);
-    *extents =
-        mTextureRef->getExtents(mTextureImageIndex.getTarget(), mTextureImageIndex.getLevelIndex());
+    Texture *tex = context->getTexture(mTextureID);
+    ASSERT(tex != nullptr);
+    *extents = tex->getExtents(mTextureImageIndex.getTarget(), mTextureImageIndex.getLevelIndex());
     extents->depth = 0;
     return true;
 }
 
 void PixelLocalStoragePlane::ensureBackingTextureIfMemoryless(Context *context, Extents plsExtents)
 {
-    ASSERT(!isDeinitialized());
-    ASSERT(!isTextureIDDeleted(context));  // Convert to memoryless first in this case.
+    ASSERT(!isDeinitialized(context));
     if (!isMemoryless())
     {
-        ASSERT(mTextureRef != nullptr);
+        ASSERT(mTextureID.value != 0);
         return;
     }
 
@@ -253,50 +249,55 @@ void PixelLocalStoragePlane::ensureBackingTextureIfMemoryless(Context *context, 
     ASSERT(mTextureImageIndex.getType() == TextureType::_2D);
     ASSERT(mTextureImageIndex.getLevelIndex() == 0);
     ASSERT(mTextureImageIndex.getLayerIndex() == 0);
-    const bool hasMemorylessTextureId = mMemorylessTextureID.value != 0;
-    const bool hasTextureRef          = mTextureRef != nullptr;
-    ASSERT(hasMemorylessTextureId == hasTextureRef);
+
+    Texture *tex = nullptr;
+    if (mTextureID.value != 0)
+    {
+        tex = context->getTexture(mTextureID);
+        ASSERT(tex == nullptr || tex->globallyUniqueID() == mGloballyUniqueTextureID);
+    }
 
     // Do we need to allocate a new backing texture?
-    if (mTextureRef == nullptr ||
-        static_cast<GLsizei>(mTextureRef->getWidth(TextureTarget::_2D, 0)) != plsExtents.width ||
-        static_cast<GLsizei>(mTextureRef->getHeight(TextureTarget::_2D, 0)) != plsExtents.height)
+    if (tex == nullptr ||
+        static_cast<GLsizei>(tex->getWidth(TextureTarget::_2D, 0)) != plsExtents.width ||
+        static_cast<GLsizei>(tex->getHeight(TextureTarget::_2D, 0)) != plsExtents.height)
     {
         // Call setMemoryless() to release our current data.
         setMemoryless(context, mInternalformat);
-        ASSERT(mTextureRef == nullptr);
-        ASSERT(mMemorylessTextureID.value == 0);
+        ASSERT(mTextureID.value == 0);
+        ASSERT(mGloballyUniqueTextureID == 0);
 
         // Create a new texture that backs the memoryless plane.
-        mMemorylessTextureID = context->createTexture();
+        mTextureID = context->createTexture();
         {
-            ScopedBindTexture2D scopedBindTexture2D(context, mMemorylessTextureID);
-            context->bindTexture(TextureType::_2D, mMemorylessTextureID);
+            ScopedBindTexture2D scopedBindTexture2D(context, mTextureID);
+            context->bindTexture(TextureType::_2D, mTextureID);
             context->texStorage2D(TextureType::_2D, 1, mInternalformat, plsExtents.width,
                                   plsExtents.height);
         }
 
-        mTextureRef = context->getTexture(mMemorylessTextureID);
-        ASSERT(mTextureRef != nullptr);
-        ASSERT(mTextureRef->id() == mMemorylessTextureID);
-        mTextureRef->addRef();
+        tex = context->getTexture(mTextureID);
+        ASSERT(tex != nullptr);
+        ASSERT(tex->id() == mTextureID);
+        mGloballyUniqueTextureID = tex->globallyUniqueID();
     }
 }
 
 void PixelLocalStoragePlane::attachToDrawFramebuffer(Context *context, GLenum colorAttachment) const
 {
-    ASSERT(!isDeinitialized());
-    ASSERT(mTextureRef != nullptr);      // Call ensureBackingTextureIfMemoryless() first!
+    ASSERT(!isDeinitialized(context));
+    // Call ensureBackingTextureIfMemoryless() first!
+    ASSERT(mTextureID.value != 0 && context->getTexture(mTextureID) != nullptr);
     if (mTextureImageIndex.usesTex3D())  // GL_TEXTURE_3D or GL_TEXTURE_2D_ARRAY.
     {
-        context->framebufferTextureLayer(GL_DRAW_FRAMEBUFFER, colorAttachment, mTextureRef->id(),
+        context->framebufferTextureLayer(GL_DRAW_FRAMEBUFFER, colorAttachment, mTextureID,
                                          mTextureImageIndex.getLevelIndex(),
                                          mTextureImageIndex.getLayerIndex());
     }
     else
     {
         context->framebufferTexture2D(GL_DRAW_FRAMEBUFFER, colorAttachment,
-                                      mTextureImageIndex.getTarget(), mTextureRef->id(),
+                                      mTextureImageIndex.getTarget(), mTextureID,
                                       mTextureImageIndex.getLevelIndex());
     }
 }
@@ -390,8 +391,9 @@ void PixelLocalStoragePlane::issueClearCommand(ClearCommands *clearCommands,
 
 void PixelLocalStoragePlane::bindToImage(Context *context, GLuint unit, bool needsR32Packing) const
 {
-    ASSERT(!isDeinitialized());
-    ASSERT(mTextureRef != nullptr);  // Call ensureBackingTextureIfMemoryless() first!
+    ASSERT(!isDeinitialized(context));
+    // Call ensureBackingTextureIfMemoryless() first!
+    ASSERT(mTextureID.value != 0 && context->getTexture(mTextureID) != nullptr);
     GLenum imageBindingFormat = mInternalformat;
     if (needsR32Packing)
     {
@@ -407,17 +409,18 @@ void PixelLocalStoragePlane::bindToImage(Context *context, GLuint unit, bool nee
                 break;
         }
     }
-    context->bindImageTexture(unit, mTextureRef->id(), mTextureImageIndex.getLevelIndex(), GL_FALSE,
+    context->bindImageTexture(unit, mTextureID, mTextureImageIndex.getLevelIndex(), GL_FALSE,
                               mTextureImageIndex.getLayerIndex(), GL_READ_WRITE,
                               imageBindingFormat);
 }
 
 const Texture *PixelLocalStoragePlane::getBackingTexture(const Context *context) const
 {
-    ASSERT(!isDeinitialized());
+    ASSERT(!isDeinitialized(context));
     ASSERT(!isMemoryless());
-    ASSERT(!isTextureIDDeleted(context));  // In this case we are also memoryless.
-    return mTextureRef;
+    const Texture *tex = context->getTexture(mTextureID);
+    ASSERT(tex != nullptr);
+    return tex;
 }
 
 PixelLocalStorage::PixelLocalStorage(const ShPixelLocalStorageOptions &plsOptions)
@@ -425,6 +428,23 @@ PixelLocalStorage::PixelLocalStorage(const ShPixelLocalStorageOptions &plsOption
 {}
 
 PixelLocalStorage::~PixelLocalStorage() {}
+
+namespace
+{
+bool AllPlanesDeinitialized(
+    const std::array<PixelLocalStoragePlane, IMPLEMENTATION_MAX_PIXEL_LOCAL_STORAGE_PLANES> &planes,
+    const Context *context)
+{
+    for (const PixelLocalStoragePlane &plane : planes)
+    {
+        if (!plane.isDeinitialized(context))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+}  // namespace
 
 void PixelLocalStorage::onFramebufferDestroyed(const Context *context)
 {
@@ -439,10 +459,8 @@ void PixelLocalStorage::onFramebufferDestroyed(const Context *context)
             plane.onContextObjectsLost();
         }
     }
-    for (PixelLocalStoragePlane &plane : mPlanes)
-    {
-        plane.onFramebufferDestroyed(context);
-    }
+    // Call deleteContextObjects() when a Framebuffer is destroyed outside of context teardown!
+    ASSERT(AllPlanesDeinitialized(mPlanes, context));
 }
 
 void PixelLocalStorage::deleteContextObjects(Context *context)
@@ -456,24 +474,16 @@ void PixelLocalStorage::deleteContextObjects(Context *context)
 
 void PixelLocalStorage::begin(Context *context, GLsizei n, const GLenum loadops[])
 {
-    // Convert planes whose backing texture has been deleted to memoryless, and find the pixel local
-    // storage rendering dimensions.
+    // Find the pixel local storage rendering dimensions.
     Extents plsExtents;
     bool hasPLSExtents = false;
     for (GLsizei i = 0; i < n; ++i)
     {
         PixelLocalStoragePlane &plane = mPlanes[i];
-        if (plane.isTextureIDDeleted(context))
-        {
-            // [ANGLE_shader_pixel_local_storage] Section 4.4.2.X "Configuring Pixel Local Storage
-            // on a Framebuffer": When a texture object is deleted, any pixel local storage plane to
-            // which it was bound is automatically converted to a memoryless plane of matching
-            // internalformat.
-            plane.setMemoryless(context, plane.getInternalformat());
-        }
-        if (!hasPLSExtents && plane.getTextureImageExtents(context, &plsExtents))
+        if (plane.getTextureImageExtents(context, &plsExtents))
         {
             hasPLSExtents = true;
+            break;
         }
     }
     if (!hasPLSExtents)
@@ -666,7 +676,6 @@ class PixelLocalStorageImageLoadStore : public PixelLocalStorage
             {
                 GLenum loadop                       = loadops[i];
                 const PixelLocalStoragePlane &plane = getPlane(i);
-                ASSERT(!plane.isDeinitialized());
                 plane.bindToImage(context, i, !mPLSOptions.supportsNativeRGBA8ImageFormats);
                 if (loadop == GL_LOAD_OP_ZERO_ANGLE || loadop == GL_LOAD_OP_CLEAR_ANGLE)
                 {
@@ -841,7 +850,7 @@ class PixelLocalStorageFramebufferFetch : public PixelLocalStorage
             GLuint drawBufferIdx                = GetDrawBufferIdx(caps, i);
             GLenum loadop                       = loadops[i];
             const PixelLocalStoragePlane &plane = getPlane(i);
-            ASSERT(!plane.isDeinitialized());
+            ASSERT(!plane.isDeinitialized(context));
 
             // Attach our PLS texture to the framebuffer. Validation should have already ensured
             // nothing else was attached at this point.
