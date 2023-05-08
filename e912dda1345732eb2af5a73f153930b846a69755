@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f51a98c_f5a2f0b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-05-08T18:50:15Z",
+      "side": 1,
+      "message": "Looks good overall, couple more comments.",
+      "revId": "e912dda1345732eb2af5a73f153930b846a69755",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "550de96b_a9e0ffd2",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-05-08T18:50:15Z",
+      "side": 1,
+      "message": "Due to various limitations of ANGLE\u0027s MSL translator, compound expressions are split during code emission and this part is written as\n```\n// driverUniforms-\u003egetAlphaToCoverage()\nuint32_t ANGLE_20 \u003d (ANGLE_angleUniforms.ANGLE_misc \u003e\u003e 21u);\nuint32_t ANGLE_21 \u003d (ANGLE_20 \u0026 1u);\nbool ANGLE_23 \u003d bool(ANGLE_21);\n\n// EOpLogicalAnd\nif (ANGLE_23)\n{\n  ANGLE_23 \u003d ANGLEEmulateAlphaToCoverage;\n} else {}\n\n// TIntermIfElse(useAlphaToCoverage, ...\nif (ANGLE_23)\n{\n```\n\nTo ensure that all emulation code is removed during final shader compilation on platforms that do not need it, we should generate this instead:\n```\nif (ANGLEEmulateAlphaToCoverage)\n{\n  uint32_t ANGLE_20 \u003d (ANGLE_angleUniforms.ANGLE_misc \u003e\u003e 21u);\n  uint32_t ANGLE_21 \u003d (ANGLE_20 \u0026 1u);\n  bool ANGLE_23 \u003d bool(ANGLE_21);\n  if (ANGLE_23)\n  {\n```\n\nI.e., the compound `EOpLogicalAnd` should be replaced with a nested `TIntermIfElse`.",
+      "revId": "e912dda1345732eb2af5a73f153930b846a69755",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17635673_6de1f4c6",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/ProgramPrelude.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1523,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-05-08T18:50:15Z",
+      "side": 1,
+      "message": "nit: since the new variable name was shortened during PS13-\u003ePS14, please revert the indentation change to retain git history for unaffected lines.",
+      "range": {
+        "startLine": 1518,
+        "startChar": 0,
+        "endLine": 1523,
+        "endChar": 110
+      },
+      "revId": "e912dda1345732eb2af5a73f153930b846a69755",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

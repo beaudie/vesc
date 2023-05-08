@@ -161,6 +161,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe0655a9_110b58af",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-05-08T18:50:15Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "a2f5ed9e_e6d3955c",
+      "revId": "a69e4cbf59e1223efffc373d93a31bd771176adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "118fcd42_4fff8f87",
@@ -174,6 +192,24 @@
       "writtenOn": "2023-05-05T17:39:02Z",
       "side": 1,
       "message": "Ditto",
+      "revId": "a69e4cbf59e1223efffc373d93a31bd771176adc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a75dfb8_6b3a0694",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-05-08T18:50:15Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "118fcd42_4fff8f87",
       "revId": "a69e4cbf59e1223efffc373d93a31bd771176adc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
