@@ -29,8 +29,19 @@
 #include "mtl_command_buffer.h"
 #include "platform/PlatformMethods.h"
 
+<<<<<<< HEAD   (a501c8 M114: WebGL: Limit total size of private data)
 #ifdef ANGLE_METAL_XCODE_BUILDS_SHADERS
 #    include "libANGLE/renderer/metal/mtl_default_shaders_compiled.inc"
+=======
+#if TARGET_OS_SIMULATOR
+#    include "libANGLE/renderer/metal/shaders/mtl_internal_shaders_src_autogen.h"
+#elif defined(ANGLE_PLATFORM_MACOS)
+#    include "libANGLE/renderer/metal/shaders/mtl_internal_shaders_2_0_macos_autogen.h"
+#    include "libANGLE/renderer/metal/shaders/mtl_internal_shaders_2_1_macos_autogen.h"
+#else
+#    include "libANGLE/renderer/metal/shaders/mtl_internal_shaders_2_0_ios_autogen.h"
+#    include "libANGLE/renderer/metal/shaders/mtl_internal_shaders_2_1_ios_autogen.h"
+>>>>>>> CHANGE (fbca2b Metal: Build built-in shaders from source on the simulator)
 #endif
 
 #include "EGL/eglext.h"
@@ -1290,9 +1301,30 @@ void DisplayMtl::initializeFeatures()
 
 angle::Result DisplayMtl::initializeShaderLibrary()
 {
+<<<<<<< HEAD   (a501c8 M114: WebGL: Limit total size of private data)
 #ifdef ANGLE_METAL_XCODE_BUILDS_SHADERS
     mDefaultShadersAsyncInfo.reset(new DefaultShaderAsyncInfoMtl);
+=======
+    mtl::AutoObjCPtr<NSError *> err = nil;
+#if TARGET_OS_SIMULATOR
+    mDefaultShaders = mtl::CreateShaderLibrary(getMetalDevice(), gDefaultMetallibSrc,
+                                               std::size(gDefaultMetallibSrc), &err);
+#else
+    const uint8_t *metalLibData = nullptr;
+    size_t metalLibDataSize     = 0;
+    if (ANGLE_APPLE_AVAILABLE_XCI(10.14, 13.0, 12.0))
+    {
+        metalLibData     = gDefaultMetallib_2_1;
+        metalLibDataSize = std::size(gDefaultMetallib_2_1);
+    }
+    else
+    {
+        metalLibData     = gDefaultMetallib_2_0;
+        metalLibDataSize = std::size(gDefaultMetallib_2_0);
+    }
+>>>>>>> CHANGE (fbca2b Metal: Build built-in shaders from source on the simulator)
 
+<<<<<<< HEAD   (a501c8 M114: WebGL: Limit total size of private data)
     const uint8_t *compiled_shader_binary;
     size_t compiled_shader_binary_len;
     compiled_shader_binary                           = gMetalBinaryShaders;
@@ -1303,6 +1335,17 @@ angle::Result DisplayMtl::initializeShaderLibrary()
     mDefaultShadersAsyncInfo->defaultShaders             = std::move(mDefaultShaders.get());
     mDefaultShadersAsyncInfo->defaultShadersCompileError = std::move(err.get());
     mDefaultShadersAsyncInfo->compiled                   = true;
+=======
+    mDefaultShaders =
+        mtl::CreateShaderLibraryFromBinary(getMetalDevice(), metalLibData, metalLibDataSize, &err);
+#endif
+
+    if (err)
+    {
+        ERR() << "Internal error: " << err.get().localizedDescription.UTF8String;
+        return angle::Result::Stop;
+    }
+>>>>>>> CHANGE (fbca2b Metal: Build built-in shaders from source on the simulator)
 
 #else
     mDefaultShadersAsyncInfo.reset(new DefaultShaderAsyncInfoMtl);

@@ -22,9 +22,23 @@
   "src/libANGLE/renderer/metal/shaders/gen_mipmap.metal":
     "fab35deec42fd89ae7a11d2f87b6e0b4",
   "src/libANGLE/renderer/metal/shaders/gen_mtl_internal_shaders.py":
+<<<<<<< HEAD   (a501c8 M114: WebGL: Limit total size of private data)
     "039f57f41009d70dacdc3c38449054c8",
   "src/libANGLE/renderer/metal/shaders/mtl_default_shaders_src_autogen.inc":
     "c6a00db0f34dd89f94686f44fe58e16b",
+=======
+    "5e0600683a59874ecb8cb1ee4f321fc3",
+  "src/libANGLE/renderer/metal/shaders/mtl_internal_shaders_2_0_ios_autogen.h":
+    "27e00026ef392b5c81d4a408a4c3d111",
+  "src/libANGLE/renderer/metal/shaders/mtl_internal_shaders_2_0_macos_autogen.h":
+    "4368ac69249f28b26832a1356f975d7b",
+  "src/libANGLE/renderer/metal/shaders/mtl_internal_shaders_2_1_ios_autogen.h":
+    "fc5322b9914fdea4d9fedb358329253e",
+  "src/libANGLE/renderer/metal/shaders/mtl_internal_shaders_2_1_macos_autogen.h":
+    "1433cbb0da151d50508ba4ede27a87c4",
+  "src/libANGLE/renderer/metal/shaders/mtl_internal_shaders_src_autogen.h":
+    "07e6430d6ebccbe1b56a47122fecb3f1",
+>>>>>>> CHANGE (fbca2b Metal: Build built-in shaders from source on the simulator)
   "src/libANGLE/renderer/metal/shaders/rewrite_indices.metal":
     "a29210b023ed3393e1342d94e338d449",
   "src/libANGLE/renderer/metal/shaders/visibility.metal":
