@@ -141,6 +141,24 @@
       "parentUuid": "30d17c7b_ed2f565c",
       "revId": "d1786b9cbe80ee3332c87d9e2ef5b63d3a394f8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "386bb468_bef43edb",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-05-08T08:37:48Z",
+      "side": 1,
+      "message": "That test is correct; `all : warn` is indeed the edge case here.\n\nNevertheless, the PLS extension should define whether the following shader and its variations are valid:\n```\n#extension all : warn\nlayout(binding\u003d0, rgba8) uniform lowp pixelLocalANGLE plane1;\nlayout(location\u003d0, index\u003d1) out vec4 outColor1;\n```",
+      "parentUuid": "05c7f7c7_1f836885",
+      "revId": "d1786b9cbe80ee3332c87d9e2ef5b63d3a394f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
