@@ -51,6 +51,24 @@
       "parentUuid": "a4630bcb_95f74a91",
       "revId": "d1786b9cbe80ee3332c87d9e2ef5b63d3a394f8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4957da5b_9ace9b2b",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-05-08T06:31:14Z",
+      "side": 1,
+      "message": "Also, we probably should ban `BindFragDataLocation*EXT` when the program has PLS, but our program objects are not yet set up to do that. Do you mind if we wait to implement that until programs have PLS information?",
+      "parentUuid": "2b18a218_41da9495",
+      "revId": "d1786b9cbe80ee3332c87d9e2ef5b63d3a394f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
