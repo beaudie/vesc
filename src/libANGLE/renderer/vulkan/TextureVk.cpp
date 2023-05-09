@@ -1603,7 +1603,10 @@ void TextureVk::releaseAndDeleteImageAndViews(ContextVk *contextVk)
 {
     if (mImage)
     {
-        releaseImage(contextVk);
+        if (mOwnsImage)
+        {
+            releaseImage(contextVk);
+        }
         mImageObserverBinding.bind(nullptr);
         mRequiresMutableStorage = false;
         mRequiredImageAccess    = vk::ImageAccess::SampleOnly;
