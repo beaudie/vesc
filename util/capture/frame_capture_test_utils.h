@@ -143,7 +143,6 @@ static constexpr size_t kTraceInfoMaxNameLen = 128;
 struct TraceInfo
 {
     char name[kTraceInfoMaxNameLen];
-    bool initialized = false;
     uint32_t contextClientMajorVersion;
     uint32_t contextClientMinorVersion;
     uint32_t frameStart;
@@ -171,9 +170,8 @@ struct TraceInfo
 };
 
 bool LoadTraceNamesFromJSON(const std::string jsonFilePath, std::vector<std::string> *namesOut);
-bool LoadTraceInfoFromJSON(const std::string &traceName,
-                           const std::string &traceJsonPath,
-                           TraceInfo *traceInfoOut);
+bool LoadTraceInfosFromJSON(const std::string &traceJsonPath,
+                            std::vector<TraceInfo> &traceInfosOut);
 
 using TraceFunction    = std::vector<CallCapture>;
 using TraceFunctionMap = std::map<std::string, TraceFunction>;

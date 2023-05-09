@@ -69,9 +69,7 @@ bool LoadTraceNamesFromJSON(const std::string jsonFilePath, std::vector<std::str
     return true;
 }
 
-bool LoadTraceInfoFromJSON(const std::string &traceName,
-                           const std::string &traceJsonPath,
-                           TraceInfo *traceInfoOut)
+bool LoadTraceInfosFromJSON(const std::string &traceJsonPath, std::vector<TraceInfo> &traceInfosOut)
 {
     rapidjson::Document doc;
     if (!LoadJSONFromFile(traceJsonPath, &doc))
@@ -79,77 +77,90 @@ bool LoadTraceInfoFromJSON(const std::string &traceName,
         return false;
     }
 
-    if (!doc.IsObject() || !doc.HasMember("TraceMetadata"))
+    if (!doc.IsArray())
     {
         return false;
     }
 
-    const rapidjson::Document::Object &meta = doc["TraceMetadata"].GetObj();
+    traceInfosOut.reserve(doc.GetArray().Size());
 
-    strncpy(traceInfoOut->name, traceName.c_str(), kTraceInfoMaxNameLen);
-    traceInfoOut->contextClientMajorVersion = meta["ContextClientMajorVersion"].GetInt();
-    traceInfoOut->contextClientMinorVersion = meta["ContextClientMinorVersion"].GetInt();
-    traceInfoOut->frameEnd                  = meta["FrameEnd"].GetInt();
-    traceInfoOut->frameStart                = meta["FrameStart"].GetInt();
-    traceInfoOut->drawSurfaceHeight         = meta["DrawSurfaceHeight"].GetInt();
-    traceInfoOut->drawSurfaceWidth          = meta["DrawSurfaceWidth"].GetInt();
-
-    angle::HexStringToUInt(meta["DrawSurfaceColorSpace"].GetString(),
-                           &traceInfoOut->drawSurfaceColorSpace);
-    angle::HexStringToUInt(meta["DisplayPlatformType"].GetString(),
-                           &traceInfoOut->displayPlatformType);
-    angle::HexStringToUInt(meta["DisplayDeviceType"].GetString(), &traceInfoOut->displayDeviceType);
-
-    traceInfoOut->configRedBits     = meta["ConfigRedBits"].GetInt();
-    traceInfoOut->configGreenBits   = meta["ConfigGreenBits"].GetInt();
-    traceInfoOut->configBlueBits    = meta["ConfigBlueBits"].GetInt();
-    traceInfoOut->configAlphaBits   = meta["ConfigAlphaBits"].GetInt();
-    traceInfoOut->configDepthBits   = meta["ConfigDepthBits"].GetInt();
-    traceInfoOut->configStencilBits = meta["ConfigStencilBits"].GetInt();
-
-    traceInfoOut->isBinaryDataCompressed = meta["IsBinaryDataCompressed"].GetBool();
-    traceInfoOut->areClientArraysEnabled = meta["AreClientArraysEnabled"].GetBool();
-    traceInfoOut->isBindGeneratesResourcesEnabled =
-        meta["IsBindGeneratesResourcesEnabled"].GetBool();
-    traceInfoOut->isWebGLCompatibilityEnabled = meta["IsWebGLCompatibilityEnabled"].GetBool();
-    traceInfoOut->isRobustResourceInitEnabled = meta["IsRobustResourceInitEnabled"].GetBool();
-    traceInfoOut->windowSurfaceContextId      = doc["WindowSurfaceContextID"].GetInt();
-
-    if (doc.HasMember("RequiredExtensions"))
+    for (auto &trace_info : doc.GetArray())
     {
-        const rapidjson::Value &requiredExtensions = doc["RequiredExtensions"];
-        if (!requiredExtensions.IsArray())
+        if (!trace_info.IsObject() || !trace_info.HasMember("TraceMetadata"))
         {
             return false;
         }
-        for (rapidjson::SizeType i = 0; i < requiredExtensions.Size(); i++)
+        traceInfosOut.emplace_back();
+        TraceInfo *traceInfoOut = &traceInfosOut.back();
+
+        strncpy(traceInfoOut->name, trace_info["TraceName"].GetString(), kTraceInfoMaxNameLen);
+
+        const rapidjson::Document::Object &meta = trace_info["TraceMetadata"].GetObj();
+
+        traceInfoOut->contextClientMajorVersion = meta["ContextClientMajorVersion"].GetInt();
+        traceInfoOut->contextClientMinorVersion = meta["ContextClientMinorVersion"].GetInt();
+        traceInfoOut->frameEnd                  = meta["FrameEnd"].GetInt();
+        traceInfoOut->frameStart                = meta["FrameStart"].GetInt();
+        traceInfoOut->drawSurfaceHeight         = meta["DrawSurfaceHeight"].GetInt();
+        traceInfoOut->drawSurfaceWidth          = meta["DrawSurfaceWidth"].GetInt();
+
+        angle::HexStringToUInt(meta["DrawSurfaceColorSpace"].GetString(),
+                               &traceInfoOut->drawSurfaceColorSpace);
+        angle::HexStringToUInt(meta["DisplayPlatformType"].GetString(),
+                               &traceInfoOut->displayPlatformType);
+        angle::HexStringToUInt(meta["DisplayDeviceType"].GetString(),
+                               &traceInfoOut->displayDeviceType);
+
+        traceInfoOut->configRedBits     = meta["ConfigRedBits"].GetInt();
+        traceInfoOut->configGreenBits   = meta["ConfigGreenBits"].GetInt();
+        traceInfoOut->configBlueBits    = meta["ConfigBlueBits"].GetInt();
+        traceInfoOut->configAlphaBits   = meta["ConfigAlphaBits"].GetInt();
+        traceInfoOut->configDepthBits   = meta["ConfigDepthBits"].GetInt();
+        traceInfoOut->configStencilBits = meta["ConfigStencilBits"].GetInt();
+
+        traceInfoOut->isBinaryDataCompressed = meta["IsBinaryDataCompressed"].GetBool();
+        traceInfoOut->areClientArraysEnabled = meta["AreClientArraysEnabled"].GetBool();
+        traceInfoOut->isBindGeneratesResourcesEnabled =
+            meta["IsBindGeneratesResourcesEnabled"].GetBool();
+        traceInfoOut->isWebGLCompatibilityEnabled = meta["IsWebGLCompatibilityEnabled"].GetBool();
+        traceInfoOut->isRobustResourceInitEnabled = meta["IsRobustResourceInitEnabled"].GetBool();
+        traceInfoOut->windowSurfaceContextId      = doc["WindowSurfaceContextID"].GetInt();
+
+        if (doc.HasMember("RequiredExtensions"))
         {
-            std::string ext = std::string(requiredExtensions[i].GetString());
-            traceInfoOut->requiredExtensions.push_back(ext);
+            const rapidjson::Value &requiredExtensions = doc["RequiredExtensions"];
+            if (!requiredExtensions.IsArray())
+            {
+                return false;
+            }
+            for (rapidjson::SizeType i = 0; i < requiredExtensions.Size(); i++)
+            {
+                std::string ext = std::string(requiredExtensions[i].GetString());
+                traceInfoOut->requiredExtensions.push_back(ext);
+            }
+        }
+
+        if (meta.HasMember("KeyFrames"))
+        {
+            const rapidjson::Value &keyFrames = meta["KeyFrames"];
+            if (!keyFrames.IsArray())
+            {
+                return false;
+            }
+            for (rapidjson::SizeType i = 0; i < keyFrames.Size(); i++)
+            {
+                int frame = keyFrames[i].GetInt();
+                traceInfoOut->keyFrames.push_back(frame);
+            }
+        }
+
+        const rapidjson::Document::Array &traceFiles = doc["TraceFiles"].GetArray();
+        for (const rapidjson::Value &value : traceFiles)
+        {
+            traceInfoOut->traceFiles.push_back(value.GetString());
         }
     }
 
-    if (meta.HasMember("KeyFrames"))
-    {
-        const rapidjson::Value &keyFrames = meta["KeyFrames"];
-        if (!keyFrames.IsArray())
-        {
-            return false;
-        }
-        for (rapidjson::SizeType i = 0; i < keyFrames.Size(); i++)
-        {
-            int frame = keyFrames[i].GetInt();
-            traceInfoOut->keyFrames.push_back(frame);
-        }
-    }
-
-    const rapidjson::Document::Array &traceFiles = doc["TraceFiles"].GetArray();
-    for (const rapidjson::Value &value : traceFiles)
-    {
-        traceInfoOut->traceFiles.push_back(value.GetString());
-    }
-
-    traceInfoOut->initialized = true;
     return true;
 }
 

@@ -185,18 +185,10 @@ def _RemoveDeviceFile(device_path):
 
 
 def _AddRestrictedTracesJson():
-    def add(tar, fn):
-        assert (fn.startswith('../../'))
-        tar.add(fn, arcname=fn.replace('../../', ''))
-
-    with _TempLocalFile() as tempfile_path:
-        with tarfile.open(tempfile_path, 'w', format=tarfile.GNU_FORMAT) as tar:
-            for f in glob.glob('../../src/tests/restricted_traces/*/*.json', recursive=True):
-                add(tar, f)
-            add(tar, '../../src/tests/restricted_traces/restricted_traces.json')
-        _AdbRun(['push', tempfile_path, '/sdcard/chromium_tests_root/t.tar'])
-
-    _AdbShell('r=/sdcard/chromium_tests_root; tar -xf $r/t.tar -C $r/ && rm $r/t.tar')
+    traces_merged = 'gen/restricted_traces_merged.json'
+    device_path = '/sdcard/chromium_tests_root/' + traces_merged
+    if not _CompareHashes(traces_merged, device_path):
+        _AdbRun(['push', traces_merged, device_path])
 
 
 def _GetDeviceApkPath():
