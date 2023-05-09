@@ -3134,6 +3134,13 @@ bool Context::isTransformFeedbackGenerated(TransformFeedbackID transformFeedback
 
 void Context::detachTexture(TextureID texture)
 {
+    // Since the draw framebuffer may internally attach its planes as images or color attachments,
+    // detach the texture from PLS first.
+    if (PixelLocalStorage *pls = mState.getDrawFramebuffer()->peekPixelLocalStorage())
+    {
+        pls->detachTexture(this, texture);
+    }
+
     // The State cannot unbind image observers itself, they are owned by the Context
     Texture *tex = mState.mTextureManager->getTexture(texture);
     for (auto &imageBinding : mImageObserverBindings)
@@ -9401,6 +9408,15 @@ void Context::endPixelLocalStorage(GLsizei n, const GLenum storeops[])
 
     pls.end(this, storeops);
     mState.setPixelLocalStorageActivePlanes(0);
+}
+
+void Context::endPixelLocalStorageWithStoreOpsStore()
+{
+    GLsizei n = mState.getPixelLocalStorageActivePlanes();
+    ASSERT(n >= 1);
+    angle::FixedVector<GLenum, IMPLEMENTATION_MAX_PIXEL_LOCAL_STORAGE_PLANES> storeops(
+        n, GL_STORE_OP_STORE_ANGLE);
+    endPixelLocalStorage(n, storeops.data());
 }
 
 void Context::pixelLocalStorageBarrier()

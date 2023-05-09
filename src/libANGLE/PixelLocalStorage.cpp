@@ -151,14 +151,20 @@ void PixelLocalStoragePlane::onContextObjectsLost()
 
 void PixelLocalStoragePlane::deinitialize(Context *context)
 {
-    if (mMemoryless && mTextureID.value != 0)
+    TextureID textureToDelete{};
+    if (mMemoryless)
     {
-        context->deleteTexture(mTextureID);
+        ASSERT(!isDeinitialized(context));
+        textureToDelete = mTextureID;
     }
     mInternalformat          = GL_NONE;
     mMemoryless              = false;
     mTextureID               = TextureID();
     mGloballyUniqueTextureID = 0;
+    if (textureToDelete.value != 0)
+    {
+        context->deleteTexture(mTextureID);
+    }
 }
 
 void PixelLocalStoragePlane::setMemoryless(Context *context, GLenum internalformat)
@@ -423,8 +429,8 @@ const Texture *PixelLocalStoragePlane::getBackingTexture(const Context *context)
     return tex;
 }
 
-PixelLocalStorage::PixelLocalStorage(const ShPixelLocalStorageOptions &plsOptions)
-    : mPLSOptions(plsOptions)
+PixelLocalStorage::PixelLocalStorage(const ShPixelLocalStorageOptions &plsOptions, const Caps &caps)
+    : mPLSOptions(plsOptions), mPlanes(caps.maxPixelLocalStoragePlanes)
 {}
 
 PixelLocalStorage::~PixelLocalStorage() {}
@@ -432,7 +438,8 @@ PixelLocalStorage::~PixelLocalStorage() {}
 namespace
 {
 bool AllPlanesDeinitialized(
-    const std::array<PixelLocalStoragePlane, IMPLEMENTATION_MAX_PIXEL_LOCAL_STORAGE_PLANES> &planes,
+    const angle::FixedVector<PixelLocalStoragePlane, IMPLEMENTATION_MAX_PIXEL_LOCAL_STORAGE_PLANES>
+        &planes,
     const Context *context)
 {
     for (const PixelLocalStoragePlane &plane : planes)
@@ -469,6 +476,34 @@ void PixelLocalStorage::deleteContextObjects(Context *context)
     for (PixelLocalStoragePlane &plane : mPlanes)
     {
         plane.deinitialize(context);
+    }
+}
+
+void PixelLocalStorage::detachTexture(Context *context, TextureID textureID)
+{
+    for (PixelLocalStoragePlane &plane : mPlanes)
+    {
+        // First ensure that plane.getTextureID() is valid. (If it's from an old texture ID that has
+        // since been deleted, then the textureID is invalid and the plane is actually
+        // deinitialized.)
+        if (plane.isDeinitialized(context))
+        {
+            continue;
+        }
+        if (plane.getTextureID() == textureID)
+        {
+            ASSERT(!plane.isMemoryless());
+            if (context->getState().getPixelLocalStorageActivePlanes() != 0)
+            {
+                // If a texture object is deleted while its image is bound to a pixel local storage
+                // plane on the currently bound draw framebuffer, and pixel local storage is active,
+                // then it is as if EndPixelLocalStorageANGLE() had been called with
+                // <n>=PIXEL_LOCAL_STORAGE_ACTIVE_PLANES_ANGLE and <storeops> of
+                // STORE_OP_STORE_ANGLE.
+                context->endPixelLocalStorageWithStoreOpsStore();
+            }
+            plane.deinitialize(context);
+        }
     }
 }
 
@@ -533,9 +568,7 @@ void PixelLocalStorage::interrupt(Context *context)
                mActivePlanesAtInterrupt <= IMPLEMENTATION_MAX_PIXEL_LOCAL_STORAGE_PLANES);
         if (mActivePlanesAtInterrupt >= 1)
         {
-            angle::FixedVector<GLenum, IMPLEMENTATION_MAX_PIXEL_LOCAL_STORAGE_PLANES> storeops(
-                mActivePlanesAtInterrupt, GL_STORE_OP_STORE_ANGLE);
-            context->endPixelLocalStorage(mActivePlanesAtInterrupt, storeops.data());
+            context->endPixelLocalStorageWithStoreOpsStore();
         }
     }
     ++mInterruptCount;
@@ -566,8 +599,8 @@ namespace
 class PixelLocalStorageImageLoadStore : public PixelLocalStorage
 {
   public:
-    PixelLocalStorageImageLoadStore(const ShPixelLocalStorageOptions &plsOptions)
-        : PixelLocalStorage(plsOptions)
+    PixelLocalStorageImageLoadStore(const ShPixelLocalStorageOptions &plsOptions, const Caps &caps)
+        : PixelLocalStorage(plsOptions, caps)
     {
         ASSERT(mPLSOptions.type == ShPixelLocalStorageType::ImageLoadStore);
     }
@@ -790,8 +823,9 @@ class PixelLocalStorageImageLoadStore : public PixelLocalStorage
 class PixelLocalStorageFramebufferFetch : public PixelLocalStorage
 {
   public:
-    PixelLocalStorageFramebufferFetch(const ShPixelLocalStorageOptions &plsOptions)
-        : PixelLocalStorage(plsOptions)
+    PixelLocalStorageFramebufferFetch(const ShPixelLocalStorageOptions &plsOptions,
+                                      const Caps &caps)
+        : PixelLocalStorage(plsOptions, caps)
     {
         ASSERT(mPLSOptions.type == ShPixelLocalStorageType::FramebufferFetch);
     }
@@ -1003,8 +1037,8 @@ class PixelLocalStorageFramebufferFetch : public PixelLocalStorage
 class PixelLocalStorageEXT : public PixelLocalStorage
 {
   public:
-    PixelLocalStorageEXT(const ShPixelLocalStorageOptions &plsOptions)
-        : PixelLocalStorage(plsOptions)
+    PixelLocalStorageEXT(const ShPixelLocalStorageOptions &plsOptions, const Caps &caps)
+        : PixelLocalStorage(plsOptions, caps)
     {
         ASSERT(mPLSOptions.type == ShPixelLocalStorageType::PixelLocalStorageEXT);
     }
@@ -1074,14 +1108,15 @@ std::unique_ptr<PixelLocalStorage> PixelLocalStorage::Make(const Context *contex
 {
     const ShPixelLocalStorageOptions &plsOptions =
         context->getImplementation()->getNativePixelLocalStorageOptions();
+    const Caps &caps = context->getState().getCaps();
     switch (plsOptions.type)
     {
         case ShPixelLocalStorageType::ImageLoadStore:
-            return std::make_unique<PixelLocalStorageImageLoadStore>(plsOptions);
+            return std::make_unique<PixelLocalStorageImageLoadStore>(plsOptions, caps);
         case ShPixelLocalStorageType::FramebufferFetch:
-            return std::make_unique<PixelLocalStorageFramebufferFetch>(plsOptions);
+            return std::make_unique<PixelLocalStorageFramebufferFetch>(plsOptions, caps);
         case ShPixelLocalStorageType::PixelLocalStorageEXT:
-            return std::make_unique<PixelLocalStorageEXT>(plsOptions);
+            return std::make_unique<PixelLocalStorageEXT>(plsOptions, caps);
         default:
             UNREACHABLE();
             return nullptr;

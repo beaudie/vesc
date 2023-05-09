@@ -19,6 +19,7 @@
 namespace gl
 {
 
+struct Caps;
 class Context;
 class Texture;
 
@@ -41,6 +42,10 @@ class PixelLocalStoragePlane : angle::NonCopyable
     void setMemoryless(Context *, GLenum internalformat);
     void setTextureBacked(Context *, Texture *, int level, int layer);
 
+    // Returns true if the plane is deinitialized, either explicitly or implicitly via deleting the
+    // texture that was attached to it.
+    bool isDeinitialized(const Context *context) const;
+
     bool isMemoryless() const
     {
         // isMemoryless() should be false if the plane is deinitialized.
@@ -48,9 +53,7 @@ class PixelLocalStoragePlane : angle::NonCopyable
         return mMemoryless;
     }
 
-    // Returns true if the plane is deinitialized, either explicitly or implicitly via deleting the
-    // texture that was attached to it.
-    bool isDeinitialized(const Context *context) const;
+    TextureID getTextureID() const { return mTextureID; }
 
     // Ensures we have an internal backing texture for memoryless planes. In some implementations we
     // need a backing texture even if the plane is memoryless.
@@ -139,6 +142,9 @@ class PixelLocalStorage
     // cleaned up in the destructor because they require a non-const Context object.
     void deleteContextObjects(Context *);
 
+    // Called for the currently bound draw framebuffer whenever a texture is deleted.
+    void detachTexture(Context *, TextureID);
+
     const PixelLocalStoragePlane &getPlane(GLint plane) const
     {
         ASSERT(0 <= plane && plane < IMPLEMENTATION_MAX_PIXEL_LOCAL_STORAGE_PLANES);
@@ -169,7 +175,7 @@ class PixelLocalStorage
     void restore(Context *);
 
   protected:
-    PixelLocalStorage(const ShPixelLocalStorageOptions &);
+    PixelLocalStorage(const ShPixelLocalStorageOptions &, const Caps &);
 
     // Called when the context is lost or destroyed. Causes the subclass to clear its GL object
     // handles.
@@ -187,7 +193,8 @@ class PixelLocalStorage
     const ShPixelLocalStorageOptions mPLSOptions;
 
   private:
-    std::array<PixelLocalStoragePlane, IMPLEMENTATION_MAX_PIXEL_LOCAL_STORAGE_PLANES> mPlanes;
+    angle::FixedVector<PixelLocalStoragePlane, IMPLEMENTATION_MAX_PIXEL_LOCAL_STORAGE_PLANES>
+        mPlanes;
     size_t mInterruptCount           = 0;
     GLsizei mActivePlanesAtInterrupt = 0;
 };
