@@ -129,6 +129,47 @@ class VertexArrayBufferContentsObservers final : angle::NonCopyable
     gl::AttributesMask mBufferObserversBitMask;
 };
 
+// Keeps a binding between a Subject and Observer, with a specific subject index.
+class VertexArrayBufferStateObserver final : public angle::ObserverBindingBase
+{
+  public:
+    VertexArrayBufferStateObserver() : ObserverBindingBase(nullptr, 0), mSubject(nullptr) {}
+    VertexArrayBufferStateObserver(angle::ObserverInterface *vertexArray,
+                                   Buffer *buffer,
+                                   size_t bindingIndex);
+    ~VertexArrayBufferStateObserver() override;
+    VertexArrayBufferStateObserver(const VertexArrayBufferStateObserver &other);
+    VertexArrayBufferStateObserver &operator=(const VertexArrayBufferStateObserver &other);
+
+    void onStateChange(angle::SubjectMessage message) const;
+    void onSubjectReset() override;
+
+    ANGLE_INLINE const angle::Subject *getSubject() const { return mSubject; }
+
+    ANGLE_INLINE void addBindingIndex(size_t bindingIndex)
+    {
+        VertexArrayBufferBindingMask bindingMask(getSubjectIndex());
+        bindingMask.set(bindingIndex);
+        setSubjectIndex(bindingMask.to_ulong());
+    }
+
+    ANGLE_INLINE void removeBindingIndex(size_t bindingIndex)
+    {
+        VertexArrayBufferBindingMask bindingMask(getSubjectIndex());
+        bindingMask.reset(bindingIndex);
+        setSubjectIndex(bindingMask.to_ulong());
+    }
+
+    ANGLE_INLINE VertexArrayBufferBindingMask getBindingMask() const
+    {
+        return VertexArrayBufferBindingMask(getSubjectIndex());
+    }
+
+  private:
+    Buffer *mSubject;
+};
+using VertexArrayBufferStateObservers = std::vector<VertexArrayBufferStateObserver>;
+
 class VertexArray final : public angle::ObserverInterface,
                           public LabeledObject,
                           public angle::Subject
@@ -400,7 +441,7 @@ class VertexArray final : public angle::ObserverInterface,
 
     rx::VertexArrayImpl *mVertexArray;
 
-    std::vector<angle::ObserverBinding> mArrayBufferObserverBindings;
+    VertexArrayBufferStateObservers mArrayBufferObserverBindings;
 
     AttributesMask mCachedTransformFeedbackConflictedBindingsMask;
 
