@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac4f043e_91ec2af3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2023-05-09T20:42:28Z",
+      "side": 1,
+      "message": "I don\u0027t know much about ANGLE\u0027s architecture, but I just wanted to point out that there\u0027s also [this feature](http://cs/android-internal/external/angle/util/angle_features_autogen.h;l\u003d179;rcl\u003d6defb7fb64fb27aad87db4369f5847c0a31b75b8) which limits MSAA samples to 4. \n\nNot sure how if it makes sense for this CL to share some of that feature\u0027s logic?",
+      "revId": "5df7581f01135a9d46bab82cc1501440f743b502",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
