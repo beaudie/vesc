@@ -1603,8 +1603,15 @@ void TextureVk::releaseAndDeleteImageAndViews(ContextVk *contextVk)
 {
     if (mImage)
     {
+<<<<<<< PATCH SET (d68f5c Vulkan: skip releaseStagedUpdates when not owned)
+        if (mOwnsImage)
+        {
+            releaseImage(contextVk);
+        }
+=======
         releaseStagedUpdates(contextVk);
         releaseImage(contextVk);
+>>>>>>> BASE      (e482d4 Store the temp file name in a std::string instead of stack a)
         mImageObserverBinding.bind(nullptr);
         mRequiresMutableStorage = false;
         mRequiredImageAccess    = vk::ImageAccess::SampleOnly;
