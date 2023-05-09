@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f4998c9_9019d5c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-09T20:51:12Z",
+      "side": 1,
+      "message": "Very cool, thanks Roman.  Tested it out locally with a couple of individual traces.\n\nDo you know if we could bundle some of the dependencies too?  For instance, vpython3 is required, but can be hard to find.",
+      "revId": "ad43888263909b44cf50ea83e98d76e8c043fc91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc7261f3_a3d4560e",
+        "filename": "scripts/angle_trace_bundle.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-09T20:51:12Z",
+      "side": 1,
+      "message": "Its a little weird that you have to specify them both in the GN args and via command line.  But that\u0027s okay.  Would be nice if it could rely on one or the other.",
+      "range": {
+        "startLine": 16,
+        "startChar": 64,
+        "endLine": 16,
+        "endChar": 86
+      },
+      "revId": "ad43888263909b44cf50ea83e98d76e8c043fc91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abc691d7_99b05343",
+        "filename": "scripts/angle_trace_bundle.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-09T20:51:12Z",
+      "side": 1,
+      "message": "Also, it listed all traces, not just the ones specified in GN args and `--trace-name`:\n```\nI14:39:02.150117Z Skipping APK install because host and device hashes match\nTraceTest.1945_air_force\nTraceTest.20_minutes_till_dawn\nTraceTest.2_3_4_player_mini_games\nTraceTest.3d_pool_ball\n...\n```",
+      "range": {
+        "startLine": 20,
+        "startChar": 19,
+        "endLine": 20,
+        "endChar": 30
+      },
+      "revId": "ad43888263909b44cf50ea83e98d76e8c043fc91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "650a2fec_56bf34df",
+        "filename": "scripts/angle_trace_bundle.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-09T20:51:12Z",
+      "side": 1,
+      "message": "These two lines didn\u0027t work for me:\n```\n./angle_trace/list_traces.sh: line 3: out/AndroidPerformance//angle_trace_tests: No such file or directory\n```\nThis does though:\n```\ncd angle_trace\n./list_traces.sh\n./run_trace.sh\n```",
+      "range": {
+        "startLine": 20,
+        "startChar": 19,
+        "endLine": 20,
+        "endChar": 33
+      },
+      "revId": "ad43888263909b44cf50ea83e98d76e8c043fc91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a36f6e0_9392a7f2",
+        "filename": "scripts/angle_trace_bundle.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-09T20:51:12Z",
+      "side": 1,
+      "message": "Mmmm, magic.  I figured out `0o777` (chmod 551?), but curious what the rest of this is doing?",
+      "range": {
+        "startLine": 81,
+        "startChar": 8,
+        "endLine": 81,
+        "endChar": 40
+      },
+      "revId": "ad43888263909b44cf50ea83e98d76e8c043fc91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
