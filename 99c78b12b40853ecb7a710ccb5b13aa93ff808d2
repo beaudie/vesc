@@ -33,6 +33,24 @@
       "message": "nit: The second variable is now redundant; the OR condition could be checked at the call site.",
       "revId": "99c78b12b40853ecb7a710ccb5b13aa93ff808d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "005d32db_a1140fdf",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1000763
+      },
+      "writtenOn": "2023-05-09T20:49:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f375aa23_a916d83f",
+      "revId": "99c78b12b40853ecb7a710ccb5b13aa93ff808d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
