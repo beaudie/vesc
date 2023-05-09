@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a097a8a_34ae79cc",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-05-09T17:25:49Z",
+      "side": 1,
+      "message": "This is a pretty heavy handed addition, just to achieve what is effectively a weak Texture reference. Is there a better mechanism to do this?\n\nPLS holds a TextureID, but needs a way to tell if that TextureID has been deleted.",
+      "revId": "9f558fbcbf56180cad13a2562a8e4dc4738bd4a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
