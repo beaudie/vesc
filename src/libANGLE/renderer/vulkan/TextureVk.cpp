@@ -45,7 +45,7 @@ constexpr VkFormatFeatureFlags kBlitFeatureFlags =
     VK_FORMAT_FEATURE_BLIT_SRC_BIT | VK_FORMAT_FEATURE_BLIT_DST_BIT;
 
 constexpr VkImageAspectFlags kDepthStencilAspects =
-    VK_IMAGE_ASPECT_STENCIL_BIT | VK_IMAGE_ASPECT_DEPTH_BIT;
+ releaseStagedUpdates   VK_IMAGE_ASPECT_STENCIL_BIT | VK_IMAGE_ASPECT_DEPTH_BIT;
 
 constexpr angle::SubjectIndex kTextureImageSubjectIndex = 0;
 
@@ -1603,7 +1603,10 @@ void TextureVk::releaseAndDeleteImageAndViews(ContextVk *contextVk)
 {
     if (mImage)
     {
-        releaseStagedUpdates(contextVk);
+        if (mOwnsImage)
+        {
+            releaseStagedUpdates(contextVk);
+        }
         releaseImage(contextVk);
         mImageObserverBinding.bind(nullptr);
         mRequiresMutableStorage = false;
