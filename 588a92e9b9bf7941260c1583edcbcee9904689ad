@@ -16,6 +16,23 @@
       "message": "Roman: PTAL",
       "revId": "588a92e9b9bf7941260c1583edcbcee9904689ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "211376b4_386ccbf9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-09T14:39:15Z",
+      "side": 1,
+      "message": "Since C++11 .data() or \u0026s[0] is guaranteed to be a contiguous char array so I think we can just use std::string here and drop all the conversions, like this:\n\nhttps://crsrc.org/c/buildtools/third_party/libc++/trunk/test/support/platform_support.h;drc\u003daf83f5d2fada265d8b5adc0a23a29e060907b3e7;l\u003d76",
+      "revId": "588a92e9b9bf7941260c1583edcbcee9904689ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
