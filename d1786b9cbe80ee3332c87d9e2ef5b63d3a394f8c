@@ -213,6 +213,24 @@
       "parentUuid": "fe5b3d2f_3dd543ab",
       "revId": "d1786b9cbe80ee3332c87d9e2ef5b63d3a394f8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfe18a46_fe0dce87",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-05-09T16:06:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea10ddcd_f73e2a2b",
+      "revId": "d1786b9cbe80ee3332c87d9e2ef5b63d3a394f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2521bae6_db6bb4bf",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 1143,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-05-09T16:06:14Z",
+      "side": 1,
+      "message": "Done. Also added your example to a test!",
+      "parentUuid": "5472b276_ff395076",
+      "revId": "c37012dbec1a9fbf5c0d365f0cc159e42eb22b44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0f3bc9d1_536458cb",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-05-08T18:00:35Z",
       "side": 1,
       "message": "That restriction is active only when non-zero `index` layout qualifier is used in a shader or when a non-zero index is set using `BindFragDataLocationIndexedEXT`, which should probably be banned with PLS anyway. Although multiple unassigned output locations are assigned automatically at link time, which may be safe with PLS, it still makes sense to ban all implicit fragment output assignments when PLS is used.\n\nTo make the rationale more precise, consider:\n\u003e EXT_blend_func_extended may restrict the number of draw buffers depending on API state...",
+      "revId": "c37012dbec1a9fbf5c0d365f0cc159e42eb22b44",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20672879_7b0ca4e8",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-05-09T16:06:14Z",
+      "side": 1,
+      "message": "Done.\n\nI can\u0027t implement the BindFragDataLocation*EXT yet, but I\u0027ve added it to the TODO list here: https://docs.google.com/document/d/1BsXxar1gbJ_w-Xvy76VbgmLOgB3qON6BY6YB5LVOqwo/edit",
+      "parentUuid": "0f3bc9d1_536458cb",
       "revId": "c37012dbec1a9fbf5c0d365f0cc159e42eb22b44",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
