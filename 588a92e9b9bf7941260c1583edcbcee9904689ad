@@ -87,6 +87,24 @@
       "parentUuid": "276d07bd_e5a99d8a",
       "revId": "588a92e9b9bf7941260c1583edcbcee9904689ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43ad353b_7a499285",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-05-09T15:39:09Z",
+      "side": 1,
+      "message": "Done. I hadn\u0027t realized that those operators add the null terminator now too.",
+      "parentUuid": "e1e05f1c_ddf1a313",
+      "revId": "588a92e9b9bf7941260c1583edcbcee9904689ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
