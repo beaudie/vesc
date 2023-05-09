@@ -253,7 +253,8 @@ TEST_P(RenderbufferMultisampleTestES31, ColorBurnBlend)
 }
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(RenderbufferMultisampleTest);
-ANGLE_INSTANTIATE_TEST_ES3_AND_ES31(RenderbufferMultisampleTest);
+ANGLE_INSTANTIATE_TEST_ES3_AND_ES31_AND(RenderbufferMultisampleTest,
+                                        ES3_VULKAN().enable(Feature::DisableMultipleSamples));
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(RenderbufferMultisampleTestES31);
 ANGLE_INSTANTIATE_TEST_ES31(RenderbufferMultisampleTestES31);
