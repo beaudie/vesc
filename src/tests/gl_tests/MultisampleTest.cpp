@@ -993,6 +993,7 @@ ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND_ES31_AND(
     ES3_VULKAN().enable(Feature::EmulatedPrerotation90),
     ES3_VULKAN().enable(Feature::EmulatedPrerotation180),
     ES3_VULKAN().enable(Feature::EmulatedPrerotation270),
+    ES3_VULKAN().enable(Feature::DisableMultipleSamples),
     // Simulate missing msaa auto resolve feature in Metal.
     ES2_METAL().disable(Feature::AllowMultisampleStoreAndResolve));
 

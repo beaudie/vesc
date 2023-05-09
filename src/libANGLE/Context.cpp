@@ -4164,6 +4164,13 @@ void Context::initCaps()
 #endif
     }
 
+    if (getFrontendFeatures().disableMultipleSamples.enabled)
+    {
+        constexpr GLint maxSamples = 0;
+        INFO() << "Limiting GL_MAX_SAMPLES to " << maxSamples;
+        ANGLE_LIMIT_CAP(mState.mCaps.maxSamples, maxSamples);
+    }
+
     // If we're capturing application calls for replay, apply some feature limits to increase
     // portability of the trace.
     if (getShareGroup()->getFrameCaptureShared()->enabled() ||
