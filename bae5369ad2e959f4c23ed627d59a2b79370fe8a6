@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a49b95d8_80ee8344",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 1143,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-05-09T19:19:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98f15b75_4e3c2a5c",
+      "revId": "bae5369ad2e959f4c23ed627d59a2b79370fe8a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "47b557ab_b7949701",
@@ -31,6 +49,30 @@
       "writtenOn": "2023-05-09T18:43:30Z",
       "side": 1,
       "message": "This rationale does not apply here. Non-zero index layout qualifiers are not allowed because they, not the API state, restrict the number of draw buffers.",
+      "range": {
+        "startLine": 1145,
+        "startChar": 0,
+        "endLine": 1146,
+        "endChar": 76
+      },
+      "revId": "bae5369ad2e959f4c23ed627d59a2b79370fe8a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c9cc74f_b21e09d8",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 1146,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-05-09T19:19:47Z",
+      "side": 1,
+      "message": "I think this wording is better.",
+      "parentUuid": "47b557ab_b7949701",
       "range": {
         "startLine": 1145,
         "startChar": 0,
