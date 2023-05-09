@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4816810c_f262ffe8",
+        "filename": "src/compiler/translator/TranslatorMetalDirect.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1000763
+      },
+      "writtenOn": "2023-05-09T00:16:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "550de96b_a9e0ffd2",
+      "revId": "e912dda1345732eb2af5a73f153930b846a69755",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "17635673_6de1f4c6",
@@ -48,6 +66,30 @@
       "writtenOn": "2023-05-08T18:50:15Z",
       "side": 1,
       "message": "nit: since the new variable name was shortened during PS13-\u003ePS14, please revert the indentation change to retain git history for unaffected lines.",
+      "range": {
+        "startLine": 1518,
+        "startChar": 0,
+        "endLine": 1523,
+        "endChar": 110
+      },
+      "revId": "e912dda1345732eb2af5a73f153930b846a69755",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2d4a7ad_362f2497",
+        "filename": "src/compiler/translator/TranslatorMetalDirect/ProgramPrelude.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 1523,
+      "author": {
+        "id": 1000763
+      },
+      "writtenOn": "2023-05-09T00:16:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17635673_6de1f4c6",
       "range": {
         "startLine": 1518,
         "startChar": 0,
