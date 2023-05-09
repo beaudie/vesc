@@ -65,6 +65,8 @@ template("angle_trace_libs") {
     _cr_suffix = ""
   }
 
+  _all_trace_json_paths = []
+
   foreach(_trace_and_version, invoker.trace_list) {
     _trace_and_version_arr = []
     _trace_and_version_arr = string_split(_trace_and_version)
@@ -77,6 +79,8 @@ template("angle_trace_libs") {
     _trace_json_path = "$_trace_dir/$_trace.json"
     _trace_data = []
     _trace_data = read_file(_trace_json_path, "json")
+
+    _all_trace_json_paths += [ _trace_json_path ]
 
     if (invoker.short_names) {
       _target = "cr_trace_${_trace_counter}"
@@ -115,11 +119,33 @@ template("angle_trace_libs") {
     _trace_lib_files += [ "${root_out_dir}/lib${_target}${_cr_suffix}.so" ]
   }
 
+  _trace_info_json = "$root_gen_dir/restricted_traces_merged.json"
+
+  action("angle_trace_info") {
+    response_file_contents = rebase_path(_all_trace_json_paths, root_build_dir)
+
+    script = "gen_trace_info.py"
+    outputs = [ _trace_info_json ]
+
+    inputs = _all_trace_json_paths
+
+    args = [
+      "{{response_file_name}}",
+      rebase_path(_trace_info_json, root_build_dir),
+    ]
+  }
+
   angle_shared_library(target_name) {
     testonly = true
-    data = [ invoker.json_path ]
+    data = [
+      invoker.json_path,
+      _trace_info_json,
+    ]
     data_deps = _trace_targets
-    deps = [ "$angle_root:angle_common" ]
+    deps = [
+      ":angle_trace_info",
+      "$angle_root:angle_common",
+    ]
     public_deps = [ "$angle_root/util:angle_trace_loader" ]
   }
 
