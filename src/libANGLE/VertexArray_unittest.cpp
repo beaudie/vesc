@@ -28,22 +28,32 @@ TEST(VertexArrayTest, VerifyGetIndexFromDirtyBit)
 
     for (size_t dirtyBit : dirtyBits)
     {
-        const size_t index = VertexArray::GetVertexIndexFromDirtyBit(dirtyBit);
         if (dirtyBit < VertexArray::DIRTY_BIT_ATTRIB_0)
         {
             continue;
         }
-        else if (dirtyBit < VertexArray::DIRTY_BIT_ATTRIB_MAX)
-        {
-            EXPECT_EQ(dirtyBit - VertexArray::DIRTY_BIT_ATTRIB_0, index);
-        }
         else if (dirtyBit < VertexArray::DIRTY_BIT_BINDING_MAX)
         {
+            const size_t index = VertexArray::GetVertexIndexFromDirtyBit(dirtyBit);
             EXPECT_EQ(dirtyBit - VertexArray::DIRTY_BIT_BINDING_0, index);
+        }
+        else if (dirtyBit == VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER)
+        {
+            EXPECT_EQ(dirtyBit - VertexArray::DIRTY_BIT_BINDING_0, kElementArrayBufferIndex);
         }
         else if (dirtyBit < VertexArray::DIRTY_BIT_BUFFER_DATA_MAX)
         {
+            const size_t index = VertexArray::GetVertexIndexFromDirtyBit(dirtyBit);
             EXPECT_EQ(dirtyBit - VertexArray::DIRTY_BIT_BUFFER_DATA_0, index);
+        }
+        else if (dirtyBit == VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER_DATA)
+        {
+            EXPECT_EQ(dirtyBit - VertexArray::DIRTY_BIT_BUFFER_DATA_0, kElementArrayBufferIndex);
+        }
+        else if (dirtyBit < VertexArray::DIRTY_BIT_ATTRIB_MAX)
+        {
+            const size_t index = VertexArray::GetVertexIndexFromDirtyBit(dirtyBit);
+            EXPECT_EQ(dirtyBit - VertexArray::DIRTY_BIT_ATTRIB_0, index);
         }
         else
             ASSERT_TRUE(false);

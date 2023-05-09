@@ -32,7 +32,9 @@ namespace gl
 {
 class Buffer;
 
-constexpr uint32_t kElementArrayBufferIndex = MAX_VERTEX_ATTRIBS;
+constexpr uint32_t kElementArrayBufferIndex           = MAX_VERTEX_ATTRIB_BINDINGS;
+constexpr uint32_t kVertexArrayBufferObserversMaxSize = kElementArrayBufferIndex + 1;
+using VertexArrayBufferObserverBindingMask = angle::BitSet<kVertexArrayBufferObserversMaxSize>;
 
 class VertexArrayState final : angle::NonCopyable
 {
@@ -129,6 +131,60 @@ class VertexArrayBufferContentsObservers final : angle::NonCopyable
     gl::AttributesMask mBufferObserversBitMask;
 };
 
+// Keeps a binding between a Subject and Observer, with a specific subject index.
+class VertexArrayBufferStateObserver final : public angle::ObserverBindingBase
+{
+  public:
+    VertexArrayBufferStateObserver() : ObserverBindingBase(nullptr, 0), mSubject(nullptr) {}
+    VertexArrayBufferStateObserver(angle::ObserverInterface *vertexArray,
+                                   Buffer *buffer,
+                                   size_t bindingIndex)
+        : ObserverBindingBase(vertexArray, angle::SubjectIndex(0x1 << bindingIndex)),
+          mSubject(buffer)
+    {
+        mSubject->addObserver(this);
+    }
+    ~VertexArrayBufferStateObserver() override;
+    VertexArrayBufferStateObserver(const VertexArrayBufferStateObserver &other)
+        : ObserverBindingBase(other), mSubject(other.mSubject)
+    {
+        mSubject->addObserver(this);
+    }
+    VertexArrayBufferStateObserver &operator=(const VertexArrayBufferStateObserver &other);
+
+    void onStateChange(angle::SubjectMessage message) const;
+    void onSubjectReset() override;
+
+    ANGLE_INLINE const angle::Subject *getSubject() const { return mSubject; }
+    ANGLE_INLINE void resetSubject() { mSubject = nullptr; }
+
+    ANGLE_INLINE void enable() { mSubject->addObserver(this); }
+    ANGLE_INLINE void disable() { mSubject->removeObserver(this); }
+
+    ANGLE_INLINE void addBindingIndex(size_t bindingIndex)
+    {
+        VertexArrayBufferObserverBindingMask bindingMask(getSubjectIndex());
+        bindingMask.set(bindingIndex);
+        setSubjectIndex(bindingMask.to_ulong());
+    }
+
+    ANGLE_INLINE void removeBindingIndex(size_t bindingIndex)
+    {
+        VertexArrayBufferObserverBindingMask bindingMask(getSubjectIndex());
+        bindingMask.reset(bindingIndex);
+        setSubjectIndex(bindingMask.to_ulong());
+    }
+
+    ANGLE_INLINE VertexArrayBufferObserverBindingMask getBindingMask() const
+    {
+        return VertexArrayBufferObserverBindingMask(getSubjectIndex());
+    }
+
+  private:
+    Buffer *mSubject;
+};
+using VertexArrayBufferStateObservers = std::vector<VertexArrayBufferStateObserver>;
+
 class VertexArray final : public angle::ObserverInterface,
                           public LabeledObject,
                           public angle::Subject
@@ -150,19 +206,18 @@ class VertexArray final : public angle::ObserverInterface,
         // required.
         DIRTY_BIT_LOST_OBSERVATION,
 
-        DIRTY_BIT_ELEMENT_ARRAY_BUFFER,
-        DIRTY_BIT_ELEMENT_ARRAY_BUFFER_DATA,
-
         // Dirty bits for bindings.
         DIRTY_BIT_BINDING_0,
-        DIRTY_BIT_BINDING_MAX = DIRTY_BIT_BINDING_0 + MAX_VERTEX_ATTRIB_BINDINGS,
+        DIRTY_BIT_BINDING_MAX          = DIRTY_BIT_BINDING_0 + MAX_VERTEX_ATTRIB_BINDINGS,
+        DIRTY_BIT_ELEMENT_ARRAY_BUFFER = DIRTY_BIT_BINDING_MAX,
 
         // We keep separate dirty bits for bound buffers whose data changed since last update.
-        DIRTY_BIT_BUFFER_DATA_0   = DIRTY_BIT_BINDING_MAX,
-        DIRTY_BIT_BUFFER_DATA_MAX = DIRTY_BIT_BUFFER_DATA_0 + MAX_VERTEX_ATTRIB_BINDINGS,
+        DIRTY_BIT_BUFFER_DATA_0             = DIRTY_BIT_ELEMENT_ARRAY_BUFFER + 1,
+        DIRTY_BIT_BUFFER_DATA_MAX           = DIRTY_BIT_BUFFER_DATA_0 + MAX_VERTEX_ATTRIB_BINDINGS,
+        DIRTY_BIT_ELEMENT_ARRAY_BUFFER_DATA = DIRTY_BIT_BUFFER_DATA_MAX,
 
         // Dirty bits for attributes.
-        DIRTY_BIT_ATTRIB_0   = DIRTY_BIT_BUFFER_DATA_MAX,
+        DIRTY_BIT_ATTRIB_0   = DIRTY_BIT_ELEMENT_ARRAY_BUFFER_DATA + 1,
         DIRTY_BIT_ATTRIB_MAX = DIRTY_BIT_ATTRIB_0 + MAX_VERTEX_ATTRIBS,
 
         DIRTY_BIT_UNKNOWN = DIRTY_BIT_ATTRIB_MAX,
@@ -200,12 +255,11 @@ class VertexArray final : public angle::ObserverInterface,
         DIRTY_BINDING_MAX,
     };
 
-    using DirtyBits                = angle::BitSet<DIRTY_BIT_MAX>;
-    using DirtyAttribBits          = angle::BitSet<DIRTY_ATTRIB_MAX>;
-    using DirtyBindingBits         = angle::BitSet<DIRTY_BINDING_MAX>;
-    using DirtyAttribBitsArray     = std::array<DirtyAttribBits, MAX_VERTEX_ATTRIBS>;
-    using DirtyBindingBitsArray    = std::array<DirtyBindingBits, MAX_VERTEX_ATTRIB_BINDINGS>;
-    using DirtyObserverBindingBits = angle::BitSet<MAX_VERTEX_ATTRIB_BINDINGS>;
+    using DirtyBits             = angle::BitSet<DIRTY_BIT_MAX>;
+    using DirtyAttribBits       = angle::BitSet<DIRTY_ATTRIB_MAX>;
+    using DirtyBindingBits      = angle::BitSet<DIRTY_BINDING_MAX>;
+    using DirtyAttribBitsArray  = std::array<DirtyAttribBits, MAX_VERTEX_ATTRIBS>;
+    using DirtyBindingBitsArray = std::array<DirtyBindingBits, MAX_VERTEX_ATTRIB_BINDINGS>;
 
     VertexArray(rx::GLImplFactory *factory,
                 VertexArrayID id,
@@ -346,6 +400,8 @@ class VertexArray final : public angle::ObserverInterface,
 
     DirtyBitType getDirtyBitFromIndex(bool contentsChanged, angle::SubjectIndex index) const;
     void setDependentDirtyBit(bool contentsChanged, angle::SubjectIndex index);
+    void setDependentDirtyBits(bool contentsChanged,
+                               const VertexArrayBufferObserverBindingMask &bindingMask);
 
     // These are used to optimize draw call validation.
     void updateCachedBufferBindingSize(VertexBinding *binding);
@@ -400,7 +456,7 @@ class VertexArray final : public angle::ObserverInterface,
 
     rx::VertexArrayImpl *mVertexArray;
 
-    std::vector<angle::ObserverBinding> mArrayBufferObserverBindings;
+    VertexArrayBufferStateObservers mArrayBufferObserverBindings;
 
     AttributesMask mCachedTransformFeedbackConflictedBindingsMask;
 
@@ -442,6 +498,30 @@ class VertexArray final : public angle::ObserverInterface,
     bool mBufferAccessValidationEnabled;
     VertexArrayBufferContentsObservers mContentsObservers;
 };
+
+ANGLE_INLINE void VertexArray::setDependentDirtyBit(bool contentsChanged, angle::SubjectIndex index)
+{
+    DirtyBitType dirtyBit = getDirtyBitFromIndex(contentsChanged, index);
+    ASSERT(!mDirtyBitsGuard.valid() || mDirtyBitsGuard.value().test(dirtyBit));
+    mDirtyBits.set(dirtyBit);
+    onStateChange(angle::SubjectMessage::ContentsChanged);
+}
+
+ANGLE_INLINE void VertexArray::setDependentDirtyBits(
+    bool contentsChanged,
+    const VertexArrayBufferObserverBindingMask &bindingMask)
+{
+    // Note: this currently just gets the top-level dirty bit.
+    if (contentsChanged)
+    {
+        mDirtyBits |= DirtyBits(bindingMask.to_ulong() << DIRTY_BIT_BINDING_0);
+    }
+    else
+    {
+        mDirtyBits |= DirtyBits(bindingMask.to_ulong() << DIRTY_BIT_BUFFER_DATA_0);
+    }
+    onStateChange(angle::SubjectMessage::ContentsChanged);
+}
 
 }  // namespace gl
 
