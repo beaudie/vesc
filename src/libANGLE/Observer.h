@@ -98,6 +98,7 @@ class ObserverBindingBase
 
     ObserverInterface *getObserver() const { return mObserver; }
     SubjectIndex getSubjectIndex() const { return mIndex; }
+    void setSubjectIndex(SubjectIndex subjectIndex) { mIndex = subjectIndex; }
 
     virtual void onSubjectReset() {}
 
