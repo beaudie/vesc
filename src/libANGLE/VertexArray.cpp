@@ -104,6 +104,57 @@ void VertexArrayState::updateCachedMutableOrNonPersistentArrayBuffers(size_t ind
     mCachedMutableOrImpersistentArrayBuffers.set(index, isMutableOrImpersistentArrayBuffer);
 }
 
+// VertexArrayBufferStateObserver implementation.
+VertexArrayBufferStateObserver::VertexArrayBufferStateObserver(
+    angle::ObserverInterface *vertexArray,
+    Buffer *buffer,
+    size_t bindingIndex)
+    : ObserverBindingBase(vertexArray, angle::SubjectIndex(0x1 << bindingIndex)), mSubject(buffer)
+{
+    mSubject->addObserver(this);
+}
+
+VertexArrayBufferStateObserver::VertexArrayBufferStateObserver(
+    const VertexArrayBufferStateObserver &other)
+    : ObserverBindingBase(other), mSubject(other.mSubject)
+{
+    mSubject->addObserver(this);
+}
+
+VertexArrayBufferStateObserver &VertexArrayBufferStateObserver::operator=(
+    const VertexArrayBufferStateObserver &other)
+{
+    if (mSubject)
+    {
+        mSubject->removeObserver(this);
+        mSubject = nullptr;
+    }
+
+    ObserverBindingBase::operator=(other);
+    mSubject = other.mSubject;
+    mSubject->addObserver(this);
+    return *this;
+}
+
+VertexArrayBufferStateObserver::~VertexArrayBufferStateObserver()
+{
+    if (mSubject)
+    {
+        mSubject->removeObserver(this);
+        mSubject = nullptr;
+    }
+}
+
+void VertexArrayBufferStateObserver::onStateChange(angle::SubjectMessage message) const
+{
+    getObserver()->onSubjectStateChange(getSubjectIndex(), message);
+}
+
+void VertexArrayBufferStateObserver::onSubjectReset()
+{
+    mSubject = nullptr;
+}
+
 // VertexArray implementation.
 VertexArray::VertexArray(rx::GLImplFactory *factory,
                          VertexArrayID id,
@@ -115,11 +166,6 @@ VertexArray::VertexArray(rx::GLImplFactory *factory,
       mBufferAccessValidationEnabled(false),
       mContentsObservers(this)
 {
-    for (size_t attribIndex = 0; attribIndex < maxAttribBindings; ++attribIndex)
-    {
-        mArrayBufferObserverBindings.emplace_back(this, attribIndex);
-    }
-
     mVertexArray->setContentsObservers(&mContentsObservers);
 }
 
@@ -139,13 +185,17 @@ void VertexArray::onDestroy(const Context *context)
         {
             // un-assigning to avoid assertion, since it was already removed from buffer's observer
             // list.
-            mArrayBufferObserverBindings[bindingIndex].assignSubject(nullptr);
+            for (VertexArrayBufferStateObserver &observer : mArrayBufferObserverBindings)
+            {
+                observer.resetSubject();
+            }
         }
         // Note: the non-contents observer is unbound in the ObserverBinding destructor.
         buffer->removeContentsObserver(this, static_cast<uint32_t>(bindingIndex));
         binding.setBuffer(context, nullptr);
     }
     mState.mBufferBindingMask.reset();
+    mArrayBufferObserverBindings.clear();
 
     if (mState.mElementArrayBuffer.get())
     {
@@ -197,10 +247,21 @@ bool VertexArray::detachBuffer(const Context *context, BufferID bufferID)
             {
                 if (bufferBinding.get())
                     bufferBinding->onNonTFBindingChanged(-1);
+
+                for (VertexArrayBufferStateObservers::iterator iter =
+                         mArrayBufferObserverBindings.begin();
+                     iter != mArrayBufferObserverBindings.end(); ++iter)
+                {
+                    if ((*iter).getSubject() == bufferBinding.get())
+                    {
+                        mArrayBufferObserverBindings.erase(iter);
+                        break;
+                    }
+                }
             }
+
             bufferBinding->removeContentsObserver(this, static_cast<uint32_t>(bindingIndex));
             binding.setBuffer(context, nullptr);
-            mArrayBufferObserverBindings[bindingIndex].reset();
             mState.mBufferBindingMask.reset(bindingIndex);
 
             if (context->getClientVersion() >= ES_3_1)
@@ -360,14 +421,51 @@ VertexArray::DirtyBindingBits VertexArray::bindVertexBufferImpl(const Context *c
         return dirtyBindingBits;
     }
 
-    angle::ObserverBinding *observer = &mArrayBufferObserverBindings[bindingIndex];
-    observer->assignSubject(boundBuffer);
+    if (dirtyBindingBits.test(DIRTY_BINDING_BUFFER))
+    {
+        if (oldBuffer != nullptr)
+        {
+            for (VertexArrayBufferStateObservers::iterator iter =
+                     mArrayBufferObserverBindings.begin();
+                 iter != mArrayBufferObserverBindings.end(); ++iter)
+            {
+                if ((*iter).getSubject() == oldBuffer)
+                {
+                    (*iter).removeBindingIndex(bindingIndex);
+                    if ((*iter).getBindingMask().none())
+                    {
+                        mArrayBufferObserverBindings.erase(iter);
+                    }
+                    break;
+                }
+            }
+        }
+
+        if (boundBuffer != nullptr)
+        {
+            bool newBufferObserverFound = false;
+            for (VertexArrayBufferStateObservers::iterator iter =
+                     mArrayBufferObserverBindings.begin();
+                 iter != mArrayBufferObserverBindings.end(); ++iter)
+            {
+                if ((*iter).getSubject() == boundBuffer)
+                {
+                    (*iter).addBindingIndex(bindingIndex);
+                    newBufferObserverFound = true;
+                    break;
+                }
+            }
+            if (!newBufferObserverFound)
+            {
+                mArrayBufferObserverBindings.emplace_back(this, boundBuffer, bindingIndex);
+            }
+        }
+    }
 
     // Several nullptr checks are combined here for optimization purposes.
     if (oldBuffer)
     {
         oldBuffer->onNonTFBindingChanged(-1);
-        oldBuffer->removeObserver(observer);
         oldBuffer->removeContentsObserver(this, static_cast<uint32_t>(bindingIndex));
         oldBuffer->release(context);
         mState.mBufferBindingMask.reset(bindingIndex);
@@ -383,7 +481,6 @@ VertexArray::DirtyBindingBits VertexArray::bindVertexBufferImpl(const Context *c
     {
         boundBuffer->addRef();
         boundBuffer->onNonTFBindingChanged(1);
-        boundBuffer->addObserver(observer);
         if (context->isWebGL())
         {
             mCachedTransformFeedbackConflictedBindingsMask.set(
@@ -672,7 +769,6 @@ void VertexArray::onBind(const Context *context)
         Buffer *bufferGL             = binding.getBuffer().get();
         ASSERT(bufferGL != nullptr);
 
-        bufferGL->addObserver(&mArrayBufferObserverBindings[bindingIndex]);
         updateCachedMappedArrayBuffersBinding(mState.mVertexBindings[bindingIndex]);
 
         if (mBufferAccessValidationEnabled)
@@ -691,6 +787,10 @@ void VertexArray::onBind(const Context *context)
         }
     }
 
+    for (VertexArrayBufferStateObserver &observer : mArrayBufferObserverBindings)
+    {
+        observer.enable();
+    }
     mDirtyBits.set(DIRTY_BIT_LOST_OBSERVATION);
     onStateChange(angle::SubjectMessage::ContentsChanged);
 }
@@ -701,12 +801,9 @@ void VertexArray::onUnbind(const Context *context)
     // This vertex array becoming non-current. For performance reason, we remove it from the
     // buffers' observer list so that the cost of buffer sending signal to observers will not be too
     // expensive.
-    for (size_t bindingIndex : mState.mBufferBindingMask)
+    for (VertexArrayBufferStateObserver &observer : mArrayBufferObserverBindings)
     {
-        const VertexBinding &binding = mState.getVertexBindings()[bindingIndex];
-        Buffer *bufferGL             = binding.getBuffer().get();
-        ASSERT(bufferGL != nullptr);
-        bufferGL->removeObserver(&mArrayBufferObserverBindings[bindingIndex]);
+        observer.disable();
     }
 }
 
@@ -752,58 +849,99 @@ VertexArray::DirtyBitType VertexArray::getDirtyBitFromIndex(bool contentsChanged
     else
     {
         // Note: this currently just gets the top-level dirty bit.
-        ASSERT(index < mArrayBufferObserverBindings.size());
         return static_cast<DirtyBitType>(
             (contentsChanged ? DIRTY_BIT_BUFFER_DATA_0 : DIRTY_BIT_BINDING_0) + index);
     }
 }
 
-void VertexArray::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message)
+void VertexArray::onSubjectStateChange(angle::SubjectIndex subjectIndex,
+                                       angle::SubjectMessage message)
 {
     switch (message)
     {
         case angle::SubjectMessage::SubjectChanged:
-            if (!IsElementArrayBufferSubjectIndex(index))
+        {
+            VertexArrayBufferBindingMask bindingMask(subjectIndex);
+            for (size_t index : bindingMask)
             {
-                updateCachedBufferBindingSize(&mState.mVertexBindings[index]);
+                if (!IsElementArrayBufferSubjectIndex(index))
+                {
+                    updateCachedBufferBindingSize(&mState.mVertexBindings[index]);
+                }
             }
-            setDependentDirtyBit(false, index);
-            break;
+            setDependentDirtyBit(false, bindingMask);
+        }
+        break;
 
         case angle::SubjectMessage::BindingChanged:
-            if (!IsElementArrayBufferSubjectIndex(index))
+        {
+            VertexArrayBufferBindingMask bindingMask(subjectIndex);
+            for (size_t index : bindingMask)
             {
-                const Buffer *buffer = mState.mVertexBindings[index].getBuffer().get();
-                updateCachedTransformFeedbackBindingValidation(index, buffer);
+                if (!IsElementArrayBufferSubjectIndex(index))
+                {
+                    const Buffer *buffer = mState.mVertexBindings[index].getBuffer().get();
+                    updateCachedTransformFeedbackBindingValidation(index, buffer);
+                }
             }
-            break;
+        }
+        break;
 
         case angle::SubjectMessage::SubjectMapped:
-            if (!IsElementArrayBufferSubjectIndex(index))
+        {
+            VertexArrayBufferBindingMask bindingMask(subjectIndex);
+            for (size_t index : bindingMask)
             {
-                updateCachedMappedArrayBuffersBinding(mState.mVertexBindings[index]);
+                if (!IsElementArrayBufferSubjectIndex(index))
+                {
+                    updateCachedMappedArrayBuffersBinding(mState.mVertexBindings[index]);
+                }
             }
             onStateChange(angle::SubjectMessage::SubjectMapped);
-            break;
+        }
+        break;
 
         case angle::SubjectMessage::SubjectUnmapped:
-            setDependentDirtyBit(true, index);
-
-            if (!IsElementArrayBufferSubjectIndex(index))
+        {
+            VertexArrayBufferBindingMask bindingMask(subjectIndex);
+            for (size_t index : bindingMask)
             {
-                updateCachedMappedArrayBuffersBinding(mState.mVertexBindings[index]);
+                if (!IsElementArrayBufferSubjectIndex(index))
+                {
+                    updateCachedMappedArrayBuffersBinding(mState.mVertexBindings[index]);
+                }
             }
+            setDependentDirtyBit(true, bindingMask);
             onStateChange(angle::SubjectMessage::SubjectUnmapped);
-            break;
+        }
+        break;
 
         case angle::SubjectMessage::InternalMemoryAllocationChanged:
-            setDependentDirtyBit(false, index);
-            break;
+        {
+            VertexArrayBufferBindingMask bindingMask(subjectIndex);
+            setDependentDirtyBit(false, bindingMask);
+        }
+        break;
 
         default:
             UNREACHABLE();
             break;
     }
+}
+
+void VertexArray::setDependentDirtyBit(bool contentsChanged,
+                                       const VertexArrayBufferBindingMask &bindingMask)
+{
+    // Note: this currently just gets the top-level dirty bit.
+    if (contentsChanged)
+    {
+        mDirtyBits |= DirtyBits(bindingMask.to_ulong() << DIRTY_BIT_BINDING_0);
+    }
+    else
+    {
+        mDirtyBits |= DirtyBits(bindingMask.to_ulong() << DIRTY_BIT_BUFFER_DATA_0);
+    }
+    onStateChange(angle::SubjectMessage::ContentsChanged);
 }
 
 void VertexArray::setDependentDirtyBit(bool contentsChanged, angle::SubjectIndex index)
