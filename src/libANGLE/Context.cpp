@@ -4164,6 +4164,13 @@ void Context::initCaps()
 #endif
     }
 
+    if (getFrontendFeatures().disableMultipleSamples.enabled)
+    {
+        constexpr GLint maxSamples = 0;
+        INFO() << "Limiting GL_MAX_SAMPLES to " << maxSamples;
+        ANGLE_LIMIT_CAP(mState.mCaps.maxSamples, maxSamples);
+    }
+
     // If we're capturing application calls for replay, apply some feature limits to increase
     // portability of the trace.
     if (getShareGroup()->getFrameCaptureShared()->enabled() ||
@@ -4392,9 +4399,11 @@ void Context::updateCaps()
 
         // OpenGL ES does not support multisampling with non-rendererable formats
         // OpenGL ES 3.0 or prior does not support multisampling with integer formats
+        // Also check whether multiple samples have been disabled
         if (!formatCaps.renderbuffer ||
             (getClientVersion() < ES_3_1 && !mState.mExtensions.textureMultisampleANGLE &&
-             formatInfo.isInt()))
+             formatInfo.isInt()) ||
+            getFrontendFeatures().disableMultipleSamples.enabled)
         {
             formatCaps.sampleCounts.clear();
         }
