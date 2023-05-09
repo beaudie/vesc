@@ -862,12 +862,6 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
     bool isNVIDIAWinANGLE    = isNVIDIAWin && mParams->isANGLE();
     bool isNVIDIAWinNative   = isNVIDIAWin && !mParams->isANGLE();
 
-    if (!mParams->traceInfo.initialized)
-    {
-        failTest("Failed to load trace json.");
-        return;
-    }
-
     for (std::string extension : mParams->traceInfo.requiredExtensions)
     {
         addExtensionPrerequisite(extension);
@@ -1647,6 +1641,21 @@ std::string FindTraceGzPath(const std::string &traceName)
         return "";
     }
     pathStream << genDir << angle::GetPathSeparator() << "tracegz_" << traceName << ".gz";
+
+    return pathStream.str();
+}
+
+std::string FindRestrictedTracesMergedPath()
+{
+    std::stringstream pathStream;
+
+    char genDir[kMaxPath] = {};
+    if (!angle::FindTestDataPath("gen", genDir, kMaxPath))
+    {
+        return "";
+    }
+
+    pathStream << genDir << angle::GetPathSeparator() << "restricted_traces_merged.json";
 
     return pathStream.str();
 }
@@ -2472,31 +2481,14 @@ void RegisterTraceTests()
 
     // Load JSON data.
     std::vector<std::string> traces;
+    std::vector<TraceInfo> traceInfos;
     {
-        std::stringstream tracesJsonStream;
-        tracesJsonStream << rootTracePath << GetPathSeparator() << "restricted_traces.json";
-        std::string tracesJsonPath = tracesJsonStream.str();
-
-        if (!LoadTraceNamesFromJSON(tracesJsonPath, &traces))
+        std::string traceJsonPath = FindRestrictedTracesMergedPath();
+        if (!LoadTraceInfosFromJSON(traceJsonPath, traceInfos))
         {
-            ERR() << "Unable to load traces from JSON file: " << tracesJsonPath;
+            ERR() << "Unable to load traces from JSON file: " << traceJsonPath;
             return;
         }
-    }
-
-    std::vector<TraceInfo> traceInfos;
-    for (const std::string &trace : traces)
-    {
-        std::stringstream traceJsonStream;
-        traceJsonStream << rootTracePath << GetPathSeparator() << trace << GetPathSeparator()
-                        << trace << ".json";
-        std::string traceJsonPath = traceJsonStream.str();
-
-        TraceInfo traceInfo = {};
-        strncpy(traceInfo.name, trace.c_str(), kTraceInfoMaxNameLen);
-        traceInfo.initialized = LoadTraceInfoFromJSON(trace, traceJsonPath, &traceInfo);
-
-        traceInfos.push_back(traceInfo);
     }
 
     for (const TraceInfo &traceInfo : traceInfos)
