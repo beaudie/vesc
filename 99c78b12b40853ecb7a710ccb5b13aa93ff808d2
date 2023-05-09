@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01aa8223_a7ddc4d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000763
+      },
+      "writtenOn": "2023-05-09T00:18:20Z",
+      "side": 1,
+      "message": "Alexey, could you make sure I implemented the ifelse correctly?",
+      "revId": "99c78b12b40853ecb7a710ccb5b13aa93ff808d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
