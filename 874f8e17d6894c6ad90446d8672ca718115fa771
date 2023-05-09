@@ -70,6 +70,30 @@
       },
       "revId": "874f8e17d6894c6ad90446d8672ca718115fa771",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2885a23_04e63e0c",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-09T01:42:27Z",
+      "side": 1,
+      "message": "Ah, got it.  Fair enough, updated the CL to choose based on path.  Also verified I get output like this:\n```\nD19:37:38.466755Z Executing command: [\u0027/home/cnorthrop/code/angle/third_party/android_sdk/public/platform-tools/adb\u0027, \u0027shell\u0027, \u0027sha256sum -b /sdcard/chromium_tests_root/gen/tracegz_minetest.gz 2\u003e /dev/null || true\u0027]\n...\nD19:37:39.185818Z Executing command: [\u0027/home/cnorthrop/code/angle/third_party/android_sdk/public/platform-tools/adb\u0027, \u0027shell\u0027, \u0027run-as com.android.angle.test sha256sum -b /data/user/0/com.android.angle.test/angle_traces/libangle_restricted_traces_minetest.so 2\u003e /dev/null || true\u0027]\n```",
+      "parentUuid": "f09cd4da_be094d55",
+      "range": {
+        "startLine": 213,
+        "startChar": 29,
+        "endLine": 213,
+        "endChar": 35
+      },
+      "revId": "874f8e17d6894c6ad90446d8672ca718115fa771",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
