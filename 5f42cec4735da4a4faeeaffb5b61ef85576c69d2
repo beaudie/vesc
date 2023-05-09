@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45efe328_9c6dc41c",
+        "filename": "src/compiler/translator/ValidateOutputs.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-05-09T19:55:56Z",
+      "side": 1,
+      "message": "Ditto.",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 49
+      },
+      "revId": "5f42cec4735da4a4faeeaffb5b61ef85576c69d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3a62bc3_2e412503",
+        "filename": "src/compiler/translator/ValidateOutputs.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-05-09T19:55:56Z",
+      "side": 1,
+      "message": "Looks like `TCompiler` has only one use there so the signature could be simplified to\n```\nbool ValidateOutputs(TIntermBlock *root,\n                     const TExtensionBehavior \u0026extBehavior,\n                     int maxDrawBuffers,\n                     bool usesPixelLocalStorage,\n                     TDiagnostics *diagnostics);\n```",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 48
+      },
+      "revId": "5f42cec4735da4a4faeeaffb5b61ef85576c69d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b67a78a_fb977dda",
+        "filename": "src/libANGLE/ErrorStrings.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-05-09T19:55:56Z",
+      "side": 1,
+      "message": "typo: functions",
+      "revId": "5f42cec4735da4a4faeeaffb5b61ef85576c69d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "264250c3_c01be7c5",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 875,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-05-09T19:55:56Z",
+      "side": 1,
+      "message": "This function would return `true` on `GL_SRC_ALPHA_SATURATE_EXT`, which does not require the secondary color input and therefore should be compatible with PLS.",
+      "revId": "5f42cec4735da4a4faeeaffb5b61ef85576c69d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ade9f118_9e3fa2ff",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-05-09T19:55:56Z",
+      "side": 1,
+      "message": "Ditto.",
+      "revId": "5f42cec4735da4a4faeeaffb5b61ef85576c69d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
