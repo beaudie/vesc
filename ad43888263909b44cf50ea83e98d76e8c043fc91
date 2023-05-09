@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "812e83de_5addcb11",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-09T21:35:15Z",
+      "side": 1,
+      "message": "Is vpython3 actually required? shebang points to regular python3 and I\u0027m running these scripts with python3 a lot of the time, just occasionally running into issues that something wouldn\u0027t work on bots because they use vpython3. Do you have a different experience?",
+      "parentUuid": "1f4998c9_9019d5c1",
+      "revId": "ad43888263909b44cf50ea83e98d76e8c043fc91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fc7261f3_a3d4560e",
         "filename": "scripts/angle_trace_bundle.py",
         "patchSetId": 5
@@ -31,6 +49,30 @@
       "writtenOn": "2023-05-09T20:51:12Z",
       "side": 1,
       "message": "Its a little weird that you have to specify them both in the GN args and via command line.  But that\u0027s okay.  Would be nice if it could rely on one or the other.",
+      "range": {
+        "startLine": 16,
+        "startChar": 64,
+        "endLine": 16,
+        "endChar": 86
+      },
+      "revId": "ad43888263909b44cf50ea83e98d76e8c043fc91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1baa8219_b9989c10",
+        "filename": "scripts/angle_trace_bundle.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-09T21:35:15Z",
+      "side": 1,
+      "message": "In theory we could make the script make a clean build by setting up the right gn args in `out/{some_dir}` if that\u0027s what you think it should be doing... My idea with this CL was that I already have a build that I\u0027ve been testing so I know it works, so I just package that the same way I\u0027d do with mb.py. mb.py wouldn\u0027t have any way to know if I set `angle_restricted_traces` in gn args. `angle_restricted_traces` could be set to multiple traces and `--trace-name` could be omitted. `angle_restricted_traces` could be not set in gn args at all and then we\u0027ll bundle all the traces. If we go down the route of adding all of that into the script we might end up with quite a few cases there.",
+      "parentUuid": "fc7261f3_a3d4560e",
       "range": {
         "startLine": 16,
         "startChar": 64,
@@ -87,6 +129,54 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "58c7f7bd_632e4c38",
+        "filename": "scripts/angle_trace_bundle.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-09T21:35:15Z",
+      "side": 1,
+      "message": "Oops, I\u0027ve been testing this incorrectly. Added `cd \"$(dirname \"$0\")\"`",
+      "parentUuid": "650a2fec_56bf34df",
+      "range": {
+        "startLine": 20,
+        "startChar": 19,
+        "endLine": 20,
+        "endChar": 33
+      },
+      "revId": "ad43888263909b44cf50ea83e98d76e8c043fc91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25b43c7f_bd331041",
+        "filename": "scripts/angle_trace_bundle.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-09T21:35:15Z",
+      "side": 1,
+      "message": "Yes, this is just the way our harness currently works. It registers all trace tests but when attempting to run them it will fail. I\u0027m messing around with doing this differently, but it\u0027s a separate issue and would be a separate CL.",
+      "parentUuid": "abc691d7_99b05343",
+      "range": {
+        "startLine": 20,
+        "startChar": 19,
+        "endLine": 20,
+        "endChar": 30
+      },
+      "revId": "ad43888263909b44cf50ea83e98d76e8c043fc91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5a36f6e0_9392a7f2",
@@ -100,6 +190,30 @@
       "writtenOn": "2023-05-09T20:51:12Z",
       "side": 1,
       "message": "Mmmm, magic.  I figured out `0o777` (chmod 551?), but curious what the rest of this is doing?",
+      "range": {
+        "startLine": 81,
+        "startChar": 8,
+        "endLine": 81,
+        "endChar": 40
+      },
+      "revId": "ad43888263909b44cf50ea83e98d76e8c043fc91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee2b96ce_914be5a8",
+        "filename": "scripts/angle_trace_bundle.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-09T21:35:15Z",
+      "side": 1,
+      "message": "yeah it\u0027s some magic I copy-pasted from elsewhere, and it uses this weird octal stuff so 0o777 means 777. I added a little comment and changed to 777 to 755 to get `rwxr-x-r-x`.",
+      "parentUuid": "5a36f6e0_9392a7f2",
       "range": {
         "startLine": 81,
         "startChar": 8,
