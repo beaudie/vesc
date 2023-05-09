@@ -896,6 +896,11 @@ struct FeaturesVk : FeatureSetBase
         "enablePipelineCacheDataCompression", FeatureCategory::VulkanFeatures,
         "enable pipeline cache data compression.", &members,
         "https://issuetracker.google.com/258207403"};
+
+    FeatureInfo limitMaxMsaaSamplesTo1 = {
+        "limitMaxMsaaSamplesTo1", FeatureCategory::VulkanFeatures,
+        "Limit max sample count to 1 to save memory on low end devices.", &members,
+        "http://anglebug.com/8162"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

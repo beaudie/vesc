@@ -179,6 +179,7 @@ enum class Feature
     LimitMax3dArrayTextureSizeTo1024,
     LimitMaxColorTargetBitsForTesting,
     LimitMaxDrawBuffersForTesting,
+    LimitMaxMsaaSamplesTo1,
     LimitMaxMSAASamplesTo4,
     LimitWebglMaxTextureSizeTo4096,
     LoadMetalShadersFromBlobCache,

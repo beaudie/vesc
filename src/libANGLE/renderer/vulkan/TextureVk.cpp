@@ -3183,6 +3183,10 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
     uint32_t layerCount;
     gl_vk::GetExtentsAndLayerCount(mState.getType(), firstLevelExtents, &vkExtent, &layerCount);
     GLint samples = mState.getBaseLevelDesc().samples ? mState.getBaseLevelDesc().samples : 1;
+    if (contextVk->getFeatures().limitMaxMsaaSamplesTo1.enabled)
+    {
+        samples = std::min(samples, 1);
+    }
 
     if (mState.hasProtectedContent())
     {

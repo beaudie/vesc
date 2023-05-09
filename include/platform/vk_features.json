@@ -1210,6 +1210,14 @@
             "category": "Features",
             "description":["enable pipeline cache data compression."],
             "issue": "https://issuetracker.google.com/258207403"
+        },
+        {
+            "name": "limit_max_msaa_samples_to_1",
+            "category": "Features",
+            "description": [
+              "Limit max sample count to 1 to save memory on low end devices."
+            ],
+            "issue": "http://anglebug.com/8162"
         }
     ]
 }
