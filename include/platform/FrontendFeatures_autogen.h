@@ -121,6 +121,10 @@ struct FrontendFeatures : FeatureSetBase
     FeatureInfo disableProgramCaching = {"disableProgramCaching", FeatureCategory::FrontendFeatures,
                                          "Disables saving programs to the cache", &members,
                                          "http://anglebug.com/1423136"};
+
+    FeatureInfo disableMultipleSamples = {
+        "disableMultipleSamples", FeatureCategory::FrontendFeatures, "Limit sample count to 1",
+        &members, "https://b.corp.google.com/issues/279498079"};
 };
 
 inline FrontendFeatures::FrontendFeatures()  = default;

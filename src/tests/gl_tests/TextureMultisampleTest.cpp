@@ -1226,7 +1226,8 @@ void main()
 }
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(TextureMultisampleTest);
-ANGLE_INSTANTIATE_TEST_ES3_AND_ES31(TextureMultisampleTest);
+ANGLE_INSTANTIATE_TEST_ES3_AND_ES31_AND(TextureMultisampleTest,
+                                        ES3_VULKAN().enable(Feature::DisableMultipleSamples));
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(NegativeTextureMultisampleTest);
 ANGLE_INSTANTIATE_TEST_ES3(NegativeTextureMultisampleTest);
