@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6421ff23_def8b8f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-05-10T20:46:18Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "a7df14a8cb11869411bf05c483cb618620798c59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "030c93e6_5c505521",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-05-10T20:46:18Z",
+      "side": 1,
+      "message": "It\u0027s interesting that no code needed to be added to ANGLE to handle glDelete* in the general case. Is any implicit PLS interrupt/restore needed in the general case? If so, is it warranted to document that?",
+      "revId": "a7df14a8cb11869411bf05c483cb618620798c59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4beb1305_84c25982",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-05-10T20:46:18Z",
+      "side": 1,
+      "message": "Nit: missing closing \u0027\"\u0027.",
+      "revId": "a7df14a8cb11869411bf05c483cb618620798c59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab65a57c_a5cb9f22",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2715,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-05-10T20:46:18Z",
+      "side": 1,
+      "message": "I\u0027d suggest splitting up this test into multiple, which test various sub-behaviors in a more targeted fashion.",
+      "revId": "a7df14a8cb11869411bf05c483cb618620798c59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
