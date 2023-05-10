@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5236cdcf_34d9c8e7",
+        "filename": "src/compiler/translator/ValidateOutputs.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-05-10T05:24:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "45efe328_9c6dc41c",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 49
+      },
+      "revId": "5f42cec4735da4a4faeeaffb5b61ef85576c69d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f3a62bc3_2e412503",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-05-09T19:55:56Z",
       "side": 1,
       "message": "Looks like `TCompiler` has only one use there so the signature could be simplified to\n```\nbool ValidateOutputs(TIntermBlock *root,\n                     const TExtensionBehavior \u0026extBehavior,\n                     int maxDrawBuffers,\n                     bool usesPixelLocalStorage,\n                     TDiagnostics *diagnostics);\n```",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 48
+      },
+      "revId": "5f42cec4735da4a4faeeaffb5b61ef85576c69d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3799c0d6_b3f3283e",
+        "filename": "src/compiler/translator/ValidateOutputs.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-05-10T05:24:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f3a62bc3_2e412503",
       "range": {
         "startLine": 24,
         "startChar": 0,
@@ -64,6 +112,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9ae5429_5746a196",
+        "filename": "src/libANGLE/ErrorStrings.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-05-10T05:24:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b67a78a_fb977dda",
+      "revId": "5f42cec4735da4a4faeeaffb5b61ef85576c69d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "264250c3_c01be7c5",
@@ -81,6 +147,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8880013c_72838f90",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 875,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-05-10T05:24:55Z",
+      "side": 1,
+      "message": "Eek!\n\nThank you for catching that. I updated the logic and added a test.",
+      "parentUuid": "264250c3_c01be7c5",
+      "revId": "5f42cec4735da4a4faeeaffb5b61ef85576c69d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ade9f118_9e3fa2ff",
@@ -94,6 +178,24 @@
       "writtenOn": "2023-05-09T19:55:56Z",
       "side": 1,
       "message": "Ditto.",
+      "revId": "5f42cec4735da4a4faeeaffb5b61ef85576c69d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "477a7408_e236dfaf",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-05-10T05:24:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ade9f118_9e3fa2ff",
       "revId": "5f42cec4735da4a4faeeaffb5b61ef85576c69d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
