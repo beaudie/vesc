@@ -7,6 +7,8 @@
 // BufferImpl.cpp: Implementation methods rx::BufferImpl class.
 
 #include "libANGLE/renderer/BufferImpl.h"
+#include "libANGLE/Buffer.h"
+#include "libANGLE/Texture.h"
 
 namespace rx
 {
@@ -36,4 +38,9 @@ angle::Result BufferImpl::onLabelUpdate(const gl::Context *context)
     return angle::Result::Continue;
 }
 
+void BufferImpl::onStateChange(angle::SubjectMessage message) const
+{
+    ASSERT(mBufferImplObserver != nullptr);
+    mBufferImplObserver->onSubjectStateChange(message);
+}
 }  // namespace rx

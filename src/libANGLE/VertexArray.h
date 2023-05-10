@@ -90,7 +90,7 @@ class VertexArrayState final : angle::NonCopyable
     friend class VertexArray;
     std::string mLabel;
     std::vector<VertexAttribute> mVertexAttributes;
-    SubjectBindingPointer<Buffer> mElementArrayBuffer;
+    BindingPointer<Buffer> mElementArrayBuffer;
     std::vector<VertexBinding> mVertexBindings;
     AttributesMask mEnabledAttributesMask;
     ComponentTypeMask mVertexAttributesTypeMask;
@@ -129,9 +129,7 @@ class VertexArrayBufferContentsObservers final : angle::NonCopyable
     gl::AttributesMask mBufferObserversBitMask;
 };
 
-class VertexArray final : public angle::ObserverInterface,
-                          public LabeledObject,
-                          public angle::Subject
+class VertexArray final : public LabeledObject, public angle::Subject
 {
   public:
     // Dirty bits for VertexArrays use a hierarchical design. At the top level, each attribute
@@ -300,7 +298,7 @@ class VertexArray final : public angle::ObserverInterface,
     bool isBufferAccessValidationEnabled() const { return mBufferAccessValidationEnabled; }
 
     // Observer implementation
-    void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
+    void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message);
     void onBufferContentsChange(uint32_t bufferIndex);
 
     static size_t GetVertexIndexFromDirtyBit(size_t dirtyBit);
@@ -400,7 +398,8 @@ class VertexArray final : public angle::ObserverInterface,
 
     rx::VertexArrayImpl *mVertexArray;
 
-    std::vector<angle::ObserverBinding> mArrayBufferObserverBindings;
+    std::vector<angle::ObserverBindingT<VertexArray, Buffer>> mArrayBufferObserverBindings;
+    angle::ObserverBindingT<VertexArray, Buffer> mElementBufferObserverBinding;
 
     AttributesMask mCachedTransformFeedbackConflictedBindingsMask;
 

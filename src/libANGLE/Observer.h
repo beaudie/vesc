@@ -162,6 +162,135 @@ class ObserverBinding final : public ObserverBindingBase
     Subject *mSubject;
 };
 
+template <typename ObjectT>
+class Observer
+{
+  public:
+    Observer() : mObserver(nullptr), mIndex(0) {}
+    Observer(ObjectT *observer, SubjectIndex subjectIndex)
+        : mObserver(observer), mIndex(subjectIndex)
+    {}
+    ~Observer() {}
+
+    Observer(const Observer &other)            = default;
+    Observer &operator=(const Observer &other) = default;
+
+    ObjectT *getObserver() const { return mObserver; }
+    SubjectIndex getSubjectIndex() const { return mIndex; }
+    void onSubjectReset() {}
+
+    void onSubjectStateChange(SubjectMessage message)
+    {
+        mObserver->onSubjectStateChange(mIndex, message);
+    }
+
+  private:
+    ObjectT *mObserver;
+    SubjectIndex mIndex;
+};
+
+template <typename ObjectT, typename SubjectT>
+class ObserverBindingT final : public Observer<ObjectT>
+{
+  public:
+    ObserverBindingT() : Observer<ObjectT>(), mSubject(nullptr) {}
+    ObserverBindingT(ObjectT *observer, SubjectIndex index)
+        : Observer<ObjectT>(observer, index), mSubject(nullptr)
+    {
+        ASSERT(observer);
+    }
+    ~ObserverBindingT() { reset(); }
+    ObserverBindingT(const ObserverBindingT &other) : Observer<ObjectT>(other), mSubject(nullptr)
+    {
+        bind(other.mSubject);
+    }
+    ObserverBindingT &operator=(const ObserverBindingT &other)
+    {
+        reset();
+        Observer<ObjectT>::operator=(other);
+        bind(other.mSubject);
+        return *this;
+    }
+
+    ANGLE_INLINE void bind(SubjectT *subject)
+    {
+        ASSERT(Observer<ObjectT>::getObserver() || !subject);
+        if (mSubject)
+        {
+            mSubject->removeObserver(this);
+        }
+
+        mSubject = subject;
+
+        if (mSubject)
+        {
+            mSubject->addObserver(this);
+        }
+    }
+
+    ANGLE_INLINE void reset() { bind(nullptr); }
+
+    ANGLE_INLINE void onStateChange(SubjectMessage message) const
+    {
+        Observer<ObjectT>::getObserver()->onSubjectStateChange(Observer<ObjectT>::getSubjectIndex(),
+                                                               message);
+    }
+    void onSubjectReset() { mSubject = nullptr; }
+
+    ANGLE_INLINE const SubjectT *getSubject() const { return mSubject; }
+
+    ANGLE_INLINE void assignSubject(SubjectT *subject) { mSubject = subject; }
+
+  private:
+    SubjectT *mSubject;
+};
+
+// Maintains a list of observer bindings. Sends update messages to the observer.
+template <typename ObjectT, typename SubjectT>
+class ObserverBindingTs : NonCopyable
+{
+  public:
+    ObserverBindingTs() {}
+    ~ObserverBindingTs() { resetObservers(); }
+
+    ANGLE_INLINE void onStateChange(SubjectMessage message) const
+    {
+        if (mObservers.empty())
+            return;
+
+        for (const ObserverBindingT<ObjectT, SubjectT> *binding : mObservers)
+        {
+            binding->getObserver()->onSubjectStateChange(binding->getSubjectIndex(), message);
+        }
+    }
+    ANGLE_INLINE bool hasObservers() const { return !mObservers.empty(); }
+    ANGLE_INLINE void resetObservers()
+    {
+        for (ObserverBindingT<ObjectT, SubjectT> *binding : mObservers)
+        {
+            binding->onSubjectReset();
+        }
+        mObservers.clear();
+    }
+    ANGLE_INLINE size_t getObserversCount() const { return mObservers.size(); }
+
+    ANGLE_INLINE void addObserver(ObserverBindingT<ObjectT, SubjectT> *observer)
+    {
+        ASSERT(!IsInContainer(mObservers, observer));
+        mObservers.push_back(observer);
+    }
+    ANGLE_INLINE void removeObserver(ObserverBindingT<ObjectT, SubjectT> *observer)
+    {
+        ASSERT(IsInContainer(mObservers, observer));
+        mObservers.remove_and_permute(observer);
+    }
+
+  private:
+    // Keep a short list of observers so we can allocate/free them quickly. But since we support
+    // unlimited bindings, have a spill-over list of that uses dynamic allocation.
+    angle::FastVector<ObserverBindingT<ObjectT, SubjectT> *, kMaxFixedObservers> mObservers;
+};
+
 }  // namespace angle
 
 #endif  // LIBANGLE_OBSERVER_H_

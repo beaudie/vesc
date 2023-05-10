@@ -146,7 +146,8 @@ angle::Result TransformFeedbackVk::end(const gl::Context *context)
         vk::GetImpl(transformFeedbackQuery)->onTransformFeedbackEnd(mState.getPrimitivesDrawn());
     }
 
-    for (angle::ObserverBinding &bufferBinding : mBufferObserverBindings)
+    for (angle::ObserverBindingT<TransformFeedbackVk, BufferVk> &bufferBinding :
+         mBufferObserverBindings)
     {
         bufferBinding.reset();
     }
