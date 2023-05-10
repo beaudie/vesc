@@ -704,7 +704,7 @@ class Texture final : public RefCountObject<TextureID>,
     rx::TextureImpl *mTexture;
     angle::ObserverBinding mImplObserver;
     // For EXT_texture_buffer, observes buffer changes.
-    angle::ObserverBinding mBufferObserver;
+    angle::ObserverBindingT<Texture, Buffer> mBufferObserver;
 
     egl::Surface *mBoundSurface;
     egl::Stream *mBoundStream;

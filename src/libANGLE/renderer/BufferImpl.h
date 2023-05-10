@@ -28,11 +28,11 @@ namespace rx
 // We use two set of Subject messages. The CONTENTS_CHANGED message is signaled whenever data
 // changes, to trigger re-translation or other events. Some buffers only need to be updated when the
 // underlying driver object changes - this is notified via the STORAGE_CHANGED message.
-class BufferImpl : public angle::Subject
+class BufferImpl : public angle::NonCopyable
 {
   public:
-    BufferImpl(const gl::BufferState &state) : mState(state) {}
-    ~BufferImpl() override {}
+    BufferImpl(const gl::BufferState &state) : mState(state), mBufferImplObserver(nullptr) {}
+    virtual ~BufferImpl() {}
     virtual void destroy(const gl::Context *context) {}
 
     virtual angle::Result setDataWithUsageFlags(const gl::Context *context,
@@ -84,8 +84,22 @@ class BufferImpl : public angle::Subject
 
     virtual void onDataChanged() {}
 
+    ANGLE_INLINE void addObserver(angle::Observer<gl::Buffer> *observer)
+    {
+        ASSERT(mBufferImplObserver == nullptr);
+        mBufferImplObserver = observer;
+    }
+    ANGLE_INLINE void removeObserver(angle::Observer<gl::Buffer> *observer)
+    {
+        ASSERT(mBufferImplObserver != nullptr);
+        mBufferImplObserver = nullptr;
+    }
+
+    void onStateChange(angle::SubjectMessage message) const;
+
   protected:
     const gl::BufferState &mState;
+    angle::Observer<gl::Buffer> *mBufferImplObserver;
 };
 
 inline GLint64 BufferImpl::getMemorySize() const

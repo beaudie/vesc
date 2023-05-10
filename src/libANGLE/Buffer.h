@@ -81,10 +81,7 @@ ANGLE_INLINE bool operator==(const ContentsObserver &lhs, const ContentsObserver
     return lhs.vertexArray == rhs.vertexArray && lhs.bufferIndex == rhs.bufferIndex;
 }
 
-class Buffer final : public RefCountObject<BufferID>,
-                     public LabeledObject,
-                     public angle::ObserverInterface,
-                     public angle::Subject
+class Buffer final : public RefCountObject<BufferID>, public LabeledObject
 {
   public:
     Buffer(rx::GLImplFactory *factory, BufferID id);
@@ -184,10 +181,41 @@ class Buffer final : public RefCountObject<BufferID>,
                              void *outData);
 
     // angle::ObserverInterface implementation.
-    void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
+    void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message);
 
     void addContentsObserver(VertexArray *vertexArray, uint32_t bufferIndex);
     void removeContentsObserver(VertexArray *vertexArray, uint32_t bufferIndex);
+
+    ANGLE_INLINE void addObserver(angle::Observer<Texture> *observer)
+    {
+        ASSERT(!IsInContainer(mTextureObservers, observer));
+        mTextureObservers.push_back(observer);
+    }
+    ANGLE_INLINE void removeObserver(angle::Observer<Texture> *observer)
+    {
+        ASSERT(IsInContainer(mTextureObservers, observer));
+        mTextureObservers.remove_and_permute(observer);
+    }
+    ANGLE_INLINE void addObserver(angle::Observer<VertexArray> *observer)
+    {
+        ASSERT(!IsInContainer(mVertexArrayObservers, observer));
+        mVertexArrayObservers.push_back(observer);
+    }
+    ANGLE_INLINE void removeObserver(angle::Observer<VertexArray> *observer)
+    {
+        ASSERT(IsInContainer(mVertexArrayObservers, observer));
+        mVertexArrayObservers.remove_and_permute(observer);
+    }
+    ANGLE_INLINE void addObserver(angle::Observer<Context> *observer)
+    {
+        ASSERT(!IsInContainer(mContextObservers, observer));
+        mContextObservers.push_back(observer);
+    }
+    ANGLE_INLINE void removeObserver(angle::Observer<Context> *observer)
+    {
+        ASSERT(IsInContainer(mContextObservers, observer));
+        mContextObservers.remove_and_permute(observer);
+    }
 
   private:
     angle::Result bufferDataImpl(Context *context,
@@ -203,14 +231,20 @@ class Buffer final : public RefCountObject<BufferID>,
                                          GLbitfield flags);
 
     void onContentsChange();
+    void onStateChange(angle::SubjectMessage message);
     size_t getContentsObserverIndex(VertexArray *vertexArray, uint32_t bufferIndex) const;
 
     BufferState mState;
     rx::BufferImpl *mImpl;
-    angle::ObserverBinding mImplObserver;
+    angle::ObserverBindingT<Buffer, rx::BufferImpl> mImplObserver;
 
     angle::FastVector<ContentsObserver, angle::kMaxFixedObservers> mContentsObservers;
     mutable IndexRangeCache mIndexRangeCache;
+
+    angle::FastVector<angle::Observer<Texture> *, angle::kMaxFixedObservers> mTextureObservers;
+    angle::FastVector<angle::Observer<VertexArray> *, angle::kMaxFixedObservers>
+        mVertexArrayObservers;
+    angle::FastVector<angle::Observer<Context> *, angle::kMaxFixedObservers> mContextObservers;
 };
 
 }  // namespace gl

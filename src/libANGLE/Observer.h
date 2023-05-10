@@ -162,6 +162,89 @@ class ObserverBinding final : public ObserverBindingBase
     Subject *mSubject;
 };
 
+template <typename ObjectT>
+class Observer
+{
+  public:
+    Observer() : mObserver(nullptr), mIndex(0) {}
+    Observer(ObjectT *observer, SubjectIndex subjectIndex)
+        : mObserver(observer), mIndex(subjectIndex)
+    {}
+    ~Observer() {}
+
+    Observer(const Observer &other)            = default;
+    Observer &operator=(const Observer &other) = default;
+
+    ObjectT *getObserver() const { return mObserver; }
+    SubjectIndex getSubjectIndex() const { return mIndex; }
+    void onSubjectReset() {}
+
+    void onSubjectStateChange(SubjectMessage message)
+    {
+        mObserver->onSubjectStateChange(mIndex, message);
+    }
+
+  private:
+    ObjectT *mObserver;
+    SubjectIndex mIndex;
+};
+
+template <typename ObjectT, typename SubjectT>
+class ObserverBindingT final : public Observer<ObjectT>
+{
+  public:
+    ObserverBindingT() : Observer<ObjectT>(), mSubject(nullptr) {}
+    ObserverBindingT(ObjectT *observer, SubjectIndex index)
+        : Observer<ObjectT>(observer, index), mSubject(nullptr)
+    {
+        ASSERT(observer);
+    }
+    ~ObserverBindingT() { reset(); }
+    ObserverBindingT(const ObserverBindingT &other) : Observer<ObjectT>(other), mSubject(nullptr)
+    {
+        bind(other.mSubject);
+    }
+    ObserverBindingT &operator=(const ObserverBindingT &other)
+    {
+        reset();
+        Observer<ObjectT>::operator=(other);
+        bind(other.mSubject);
+        return *this;
+    }
+
+    void bind(SubjectT *subject)
+    {
+        ASSERT(Observer<ObjectT>::getObserver() || !subject);
+        if (mSubject)
+        {
+            mSubject->removeObserver(this);
+        }
+
+        mSubject = subject;
+
+        if (mSubject)
+        {
+            mSubject->addObserver(this);
+        }
+    }
+
+    ANGLE_INLINE void reset() { bind(nullptr); }
+
+    void onStateChange(SubjectMessage message) const
+    {
+        Observer<ObjectT>::getObserver()->onSubjectStateChange(Observer<ObjectT>::getSubjectIndex(),
+                                                               message);
+    }
+    void onSubjectReset() { mSubject = nullptr; }
+
+    ANGLE_INLINE const SubjectT *getSubject() const { return mSubject; }
+
+    ANGLE_INLINE void assignSubject(SubjectT *subject) { mSubject = subject; }
+
+  private:
+    SubjectT *mSubject;
+};
+
 }  // namespace angle
 
 #endif  // LIBANGLE_OBSERVER_H_
