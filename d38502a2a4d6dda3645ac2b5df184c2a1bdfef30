@@ -22,6 +22,30 @@
       },
       "revId": "d38502a2a4d6dda3645ac2b5df184c2a1bdfef30",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "454576e2_f843b5c0",
+        "filename": "include/platform/frontend_features.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-10T20:27:28Z",
+      "side": 1,
+      "message": "That\u0027s what I had in patchset 1, but it depends on the goal. If you want to pretend the device doesn\u0027t support multisampling, then 0 is the way to go in GLES (I believe).  If you want to allow multisampling but just expose the bare minimum, then 1 is a good value.",
+      "parentUuid": "feb237e8_539d4f78",
+      "range": {
+        "startLine": 161,
+        "startChar": 37,
+        "endLine": 161,
+        "endChar": 39
+      },
+      "revId": "d38502a2a4d6dda3645ac2b5df184c2a1bdfef30",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
