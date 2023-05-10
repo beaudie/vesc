@@ -853,9 +853,9 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     angle::ObserverBinding mDrawFramebufferObserverBinding;
     angle::ObserverBinding mReadFramebufferObserverBinding;
     angle::ObserverBinding mProgramPipelineObserverBinding;
-    std::vector<angle::ObserverBinding> mUniformBufferObserverBindings;
-    std::vector<angle::ObserverBinding> mAtomicCounterBufferObserverBindings;
-    std::vector<angle::ObserverBinding> mShaderStorageBufferObserverBindings;
+    std::vector<angle::ObserverBindingT<Context, Buffer>> mUniformBufferObserverBindings;
+    std::vector<angle::ObserverBindingT<Context, Buffer>> mAtomicCounterBufferObserverBindings;
+    std::vector<angle::ObserverBindingT<Context, Buffer>> mShaderStorageBufferObserverBindings;
     std::vector<angle::ObserverBinding> mSamplerObserverBindings;
     std::vector<angle::ObserverBinding> mImageObserverBindings;
 

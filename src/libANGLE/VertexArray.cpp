@@ -29,7 +29,6 @@ bool IsElementArrayBufferSubjectIndex(angle::SubjectIndex subjectIndex)
 VertexArrayState::VertexArrayState(VertexArray *vertexArray,
                                    size_t maxAttribs,
                                    size_t maxAttribBindings)
-    : mElementArrayBuffer(vertexArray, kElementArrayBufferIndex)
 {
     ASSERT(maxAttribs <= maxAttribBindings);
 
@@ -112,6 +111,7 @@ VertexArray::VertexArray(rx::GLImplFactory *factory,
     : mId(id),
       mState(this, maxAttribs, maxAttribBindings),
       mVertexArray(factory->createVertexArray(mState)),
+      mElementBufferObserverBinding(this, kElementArrayBufferIndex),
       mBufferAccessValidationEnabled(false),
       mContentsObservers(this)
 {
@@ -155,7 +155,7 @@ void VertexArray::onDestroy(const Context *context)
         }
         mState.mElementArrayBuffer->removeContentsObserver(this, kElementArrayBufferIndex);
     }
-    mState.mElementArrayBuffer.bind(context, nullptr);
+    mState.mElementArrayBuffer.set(context, nullptr);
 
     mVertexArray->destroy(context);
     SafeDelete(mVertexArray);
@@ -227,7 +227,7 @@ bool VertexArray::detachBuffer(const Context *context, BufferID bufferID)
         if (isBound && mState.mElementArrayBuffer.get())
             mState.mElementArrayBuffer->onNonTFBindingChanged(-1);
         mState.mElementArrayBuffer->removeContentsObserver(this, kElementArrayBufferIndex);
-        mState.mElementArrayBuffer.bind(context, nullptr);
+        mState.mElementArrayBuffer.set(context, nullptr);
         mDirtyBits.set(DIRTY_BIT_ELEMENT_ARRAY_BUFFER);
         anyBufferDetached = true;
     }
@@ -360,7 +360,8 @@ VertexArray::DirtyBindingBits VertexArray::bindVertexBufferImpl(const Context *c
         return dirtyBindingBits;
     }
 
-    angle::ObserverBinding *observer = &mArrayBufferObserverBindings[bindingIndex];
+    angle::ObserverBindingT<VertexArray, Buffer> *observer =
+        &mArrayBufferObserverBindings[bindingIndex];
     observer->assignSubject(boundBuffer);
 
     // Several nullptr checks are combined here for optimization purposes.

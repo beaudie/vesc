@@ -446,4 +446,11 @@ void Buffer::onContentsChange()
         observer.vertexArray->onBufferContentsChange(observer.bufferIndex);
     }
 }
+
+void Buffer::onStateChange(angle::SubjectMessage message)
+{
+    mTextureObservers.onStateChange(message);
+    mVertexArrayObservers.onStateChange(message);
+    mContextObservers.onStateChange(message);
+}
 }  // namespace gl

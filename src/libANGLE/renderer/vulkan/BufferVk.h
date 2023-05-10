@@ -143,6 +143,15 @@ class BufferVk : public BufferImpl
                                                 size_t offset,
                                                 bool hostVisible);
 
+    ANGLE_INLINE void addObserver(angle::Observer<TransformFeedbackVk> *observer)
+    {
+        mTransformFeedbackObserver = observer;
+    }
+    ANGLE_INLINE void removeObserver(angle::Observer<TransformFeedbackVk> *observer)
+    {
+        mTransformFeedbackObserver = nullptr;
+    }
+
   private:
     angle::Result updateBuffer(ContextVk *contextVk,
                                size_t bufferSize,
@@ -253,6 +262,8 @@ class BufferVk : public BufferImpl
     // mapped from angle internal.
     VkDeviceSize mMappedOffset;
     VkDeviceSize mMappedLength;
+
+    angle::Observer<TransformFeedbackVk> *mTransformFeedbackObserver;
 };
 
 }  // namespace rx
