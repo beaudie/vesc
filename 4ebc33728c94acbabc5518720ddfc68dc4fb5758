@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fba9b39_03aee743",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1113941
+      },
+      "writtenOn": "2023-05-10T08:15:07Z",
+      "side": 1,
+      "message": "Thanks! Out of curiosity, how much broader is this exclusion than the Huawei devices to which the problems seems to be limited? Could be worth adding a comment that we only witnessed problems on Huawei devices so that if this broad exclusion ever becomes problematic in the future, folks have a starting point for examination.",
+      "revId": "4ebc33728c94acbabc5518720ddfc68dc4fb5758",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
