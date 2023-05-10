@@ -81,10 +81,7 @@ ANGLE_INLINE bool operator==(const ContentsObserver &lhs, const ContentsObserver
     return lhs.vertexArray == rhs.vertexArray && lhs.bufferIndex == rhs.bufferIndex;
 }
 
-class Buffer final : public RefCountObject<BufferID>,
-                     public LabeledObject,
-                     public angle::ObserverInterface,
-                     public angle::Subject
+class Buffer final : public RefCountObject<BufferID>, public LabeledObject
 {
   public:
     Buffer(rx::GLImplFactory *factory, BufferID id);
@@ -184,10 +181,35 @@ class Buffer final : public RefCountObject<BufferID>,
                              void *outData);
 
     // angle::ObserverInterface implementation.
-    void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
+    void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message);
 
     void addContentsObserver(VertexArray *vertexArray, uint32_t bufferIndex);
     void removeContentsObserver(VertexArray *vertexArray, uint32_t bufferIndex);
+
+    ANGLE_INLINE void addObserver(angle::ObserverBindingT<Texture, Buffer> *observer)
+    {
+        mTextureObservers.addObserver(observer);
+    }
+    ANGLE_INLINE void removeObserver(angle::ObserverBindingT<Texture, Buffer> *observer)
+    {
+        mTextureObservers.removeObserver(observer);
+    }
+    ANGLE_INLINE void addObserver(angle::ObserverBindingT<VertexArray, Buffer> *observer)
+    {
+        mVertexArrayObservers.addObserver(observer);
+    }
+    ANGLE_INLINE void removeObserver(angle::ObserverBindingT<VertexArray, Buffer> *observer)
+    {
+        mVertexArrayObservers.removeObserver(observer);
+    }
+    ANGLE_INLINE void addObserver(angle::ObserverBindingT<Context, Buffer> *observer)
+    {
+        mContextObservers.addObserver(observer);
+    }
+    ANGLE_INLINE void removeObserver(angle::ObserverBindingT<Context, Buffer> *observer)
+    {
+        mContextObservers.removeObserver(observer);
+    }
 
   private:
     angle::Result bufferDataImpl(Context *context,
@@ -203,14 +225,19 @@ class Buffer final : public RefCountObject<BufferID>,
                                          GLbitfield flags);
 
     void onContentsChange();
+    void onStateChange(angle::SubjectMessage message);
     size_t getContentsObserverIndex(VertexArray *vertexArray, uint32_t bufferIndex) const;
 
     BufferState mState;
     rx::BufferImpl *mImpl;
-    angle::ObserverBinding mImplObserver;
+    angle::ObserverBindingT<Buffer, rx::BufferImpl> mImplObserver;
 
     angle::FastVector<ContentsObserver, angle::kMaxFixedObservers> mContentsObservers;
     mutable IndexRangeCache mIndexRangeCache;
+
+    angle::ObserverBindingTs<Texture, Buffer> mTextureObservers;
+    angle::ObserverBindingTs<VertexArray, Buffer> mVertexArrayObservers;
+    angle::ObserverBindingTs<Context, Buffer> mContextObservers;
 };
 
 }  // namespace gl
