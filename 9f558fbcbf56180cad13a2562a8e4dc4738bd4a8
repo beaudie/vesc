@@ -52,6 +52,24 @@
       "parentUuid": "0da60bb4_0ff4f0ae",
       "revId": "9f558fbcbf56180cad13a2562a8e4dc4738bd4a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "388ed5f5_0b32474d",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-11T13:53:36Z",
+      "side": 1,
+      "message": "Got it. What you _really_ want is to be notified about the texture deletion and reset `mTextureRef` to nullptr. You don\u0027t need to \"check if deleted\" later, because there\u0027d be no texture referenced.\n\nWe do that with the observer pattern. The plane needs to add itself as an observer of the texture. The texture would need to `onStateChange(SubjectMessage::StorageReleased)` or something (need to make the `StorageReleased` comment more generic), and the plane would process that in `onSubjectStateChanged` to set the pointer to nullptr.",
+      "parentUuid": "620c7a2f_6aaa9c37",
+      "revId": "9f558fbcbf56180cad13a2562a8e4dc4738bd4a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
