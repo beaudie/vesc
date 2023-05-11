@@ -52,7 +52,17 @@ typedef pthread_key_t TLSIndex;
 //
 // Choose the TLS_SLOT_OPENGL TLS slot with the value that matches value in the header file in
 // bionic(tls_defines.h).  Note that this slot cannot be used when the GLES backend of is in use.
+#if defined(__arm__) || defined(__aarch64__)
 constexpr size_t kAndroidOpenGLTlsSlot = 3;
+#elif defined(__i386__) || defined(__x86_64__)
+constexpr size_t kAndroidOpenGLTlsSlot = 3;
+#elif defined(__riscv)
+constexpr int kAndroidOpenGLTlsSlot = -5;
+#else
+#    error Unsupported platform.
+#error
+#endif
+
 
 #if defined(ANGLE_PLATFORM_ANDROID)
 
