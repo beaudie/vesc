@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "357833dd_d307189d",
+        "filename": "src/tests/gl_tests/VulkanImageTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 514,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-05-11T19:24:52Z",
+      "side": 1,
+      "message": "Changed to `totalDeviceLocalMemoryHeapSize`",
+      "parentUuid": "0e60a6ee_cc6f9d4e",
+      "range": {
+        "startLine": 514,
+        "startChar": 17,
+        "endLine": 514,
+        "endChar": 40
+      },
+      "revId": "9bc4b859399f86462c84a209dcc83f76886281c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cef9221e_2b65f607",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-05-08T22:19:43Z",
       "side": 1,
       "message": "Have you confirmed locally that it hits the fallback code path? I am wondering if it end up with device local heap with different flag bits (coherent/non-coherent). So one way to ensure is try with three loops: 1) with maxDeviceMemoryHeapSize and 2) totalDeviceMemoryHeapSize, and 3) a few more textures on top of totalDeviceMemoryHeapSize.\n \nCould you also verify the textured draw renderings correctly?",
+      "range": {
+        "startLine": 537,
+        "startChar": 3,
+        "endLine": 543,
+        "endChar": 5
+      },
+      "revId": "9bc4b859399f86462c84a209dcc83f76886281c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c6b4834_8ae4282d",
+        "filename": "src/tests/gl_tests/VulkanImageTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-05-11T19:24:52Z",
+      "side": 1,
+      "message": "I added a perf counter to make sure that the fallback does happen in the test, and instead of the max device memory size, we now use the total device memory size. In addition, a texture allocated on the system memory is attached to an FBO object.",
+      "parentUuid": "cef9221e_2b65f607",
       "range": {
         "startLine": 537,
         "startChar": 3,
