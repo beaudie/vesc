@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f278219d_2e6a1c95",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-11T18:31:40Z",
+      "side": 1,
+      "message": "Ah, dang, indeed, chromium wrappers use vpython3 in shebang\n```\n% head out/Android/angle_trace_tests\n#!/usr/bin/env vpython3\n```\n\nSwitched to calling into our runner directly. This seems to work without vpython.",
+      "parentUuid": "04259a2d_1b9e457c",
+      "revId": "ad43888263909b44cf50ea83e98d76e8c043fc91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fc7261f3_a3d4560e",
@@ -115,6 +133,30 @@
       "side": 1,
       "message": "Not a big deal, just awkward.",
       "parentUuid": "1baa8219_b9989c10",
+      "range": {
+        "startLine": 16,
+        "startChar": 64,
+        "endLine": 16,
+        "endChar": 86
+      },
+      "revId": "ad43888263909b44cf50ea83e98d76e8c043fc91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da46e12c_8d9652e0",
+        "filename": "scripts/angle_trace_bundle.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-11T18:31:40Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "843cc05d_6dd7f480",
       "range": {
         "startLine": 16,
         "startChar": 64,
