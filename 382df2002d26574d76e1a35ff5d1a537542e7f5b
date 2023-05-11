@@ -81,6 +81,30 @@
       },
       "revId": "382df2002d26574d76e1a35ff5d1a537542e7f5b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4326991c_c5c0c270",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4404,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-05-11T16:55:32Z",
+      "side": 1,
+      "message": "Yea, it probably means that the tests assumed multisampling on the required formats.\n\nInstead, you could put this feature in the VK backend and fake it. Make the client think they\u0027re using multisampling but the backend allocates single-sampled textures. It would make sure the app behaviour stays the same too.",
+      "parentUuid": "608a1cdc_e917d745",
+      "range": {
+        "startLine": 4404,
+        "startChar": 32,
+        "endLine": 4404,
+        "endChar": 33
+      },
+      "revId": "382df2002d26574d76e1a35ff5d1a537542e7f5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
