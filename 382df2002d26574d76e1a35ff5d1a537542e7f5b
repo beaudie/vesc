@@ -105,6 +105,30 @@
       },
       "revId": "382df2002d26574d76e1a35ff5d1a537542e7f5b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "506f36d7_32fd0876",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4404,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-11T21:17:49Z",
+      "side": 1,
+      "message": "I feel like that will break applications in subtle ways, but we can do it.\n\n@gregschlom@google.com, that would bring us back to a solution like `limitMaxMSAASamplesTo4`, but we\u0027d set it to 1 instead, and only use it in the Vulkan backend.",
+      "parentUuid": "4326991c_c5c0c270",
+      "range": {
+        "startLine": 4404,
+        "startChar": 32,
+        "endLine": 4404,
+        "endChar": 33
+      },
+      "revId": "382df2002d26574d76e1a35ff5d1a537542e7f5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
