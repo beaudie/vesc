@@ -8782,6 +8782,19 @@ void FrameCaptureShared::writeCppReplayIndexFiles(const gl::Context *context,
     }
 
     {
+        std::string proto = "void SetEGLDisplay(EGLDisplay eglDisplay)";
+
+        std::stringstream source;
+        source << "EGLDisplay gEGLDisplay;\n";
+        source << proto << "\n";
+        source << "{\n";
+        source << "    gEGLDisplay = eglDisplay;\n";
+        source << "}\n";
+
+        mReplayWriter.addPublicFunction(proto, std::stringstream(), source);
+    }
+
+    {
         std::string proto = "void ReplayFrame(uint32_t frameIndex)";
 
         std::stringstream source;
@@ -9518,6 +9531,9 @@ void ReplayWriter::saveHeader()
     SaveFileHelper saveH(headerPath);
 
     saveH << mHeaderPrologue << "\n";
+
+    saveH << "extern EGLDisplay gEGLDisplay;\n";
+    saveH << "\n";
 
     saveH << "// Public functions are declared in trace_fixture.h.\n";
     saveH << "\n";

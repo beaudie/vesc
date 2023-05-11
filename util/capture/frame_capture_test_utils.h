@@ -73,6 +73,8 @@ using SetValidateSerializedStateCallbackFunc = void (*)(ValidateSerializedStateC
 using SetTraceInfoFunc                       = void (*)(const std::vector<std::string> &);
 using SetTraceGzPathFunc                     = void (*)(const std::string &);
 
+using SetEGLDisplayFunc = void (*)(const EGLDisplay);
+
 struct TraceInfo;
 
 class TraceLibrary : angle::NonCopyable
@@ -119,6 +121,15 @@ class TraceLibrary : angle::NonCopyable
     void setTraceGzPath(const std::string &traceGzPath)
     {
         callFunc<SetTraceGzPathFunc>("SetTraceGzPath", traceGzPath);
+    }
+
+    void setEGLDisplay(EGLDisplay eglDisplay)
+    {
+        void *untypedFunc = mTraceLibrary->getSymbol("SetEGLDisplay");
+        if (untypedFunc)
+        {
+            callFunc<SetEGLDisplayFunc>("SetEGLDisplay", eglDisplay);
+        }
     }
 
   private:

@@ -1698,6 +1698,8 @@ void TracePerfTest::initializeBenchmark()
     mTraceReplay->setBinaryDataDecompressCallback(DecompressBinaryData, DeleteBinaryData);
     mTraceReplay->setValidateSerializedStateCallback(ValidateSerializedState);
     mTraceReplay->setBinaryDataDir(testDataDir);
+    EGLDisplay eglDisplay = ((EGLWindow *)getGLWindow())->getDisplay();
+    mTraceReplay->setEGLDisplay(eglDisplay);
 
     if (gMinimizeGPUWork)
     {

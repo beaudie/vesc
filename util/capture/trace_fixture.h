@@ -66,6 +66,8 @@ ANGLE_REPLAY_EXPORT void SetValidateSerializedStateCallback(
 // Only defined if serialization is enabled.
 ANGLE_REPLAY_EXPORT const char *GetSerializedContextState(uint32_t frameIndex);
 
+ANGLE_REPLAY_EXPORT void SetEGLDisplay(const EGLDisplay eglDisplay);
+
 ANGLE_REPLAY_EXPORT void SetTraceInfo(const std::vector<std::string> &traceFiles);
 ANGLE_REPLAY_EXPORT void SetTraceGzPath(const std::string &traceGzPath);
 #endif  // defined(__cplusplus)
@@ -75,6 +77,8 @@ ANGLE_REPLAY_EXPORT void SetupReplay(void);
 ANGLE_REPLAY_EXPORT void ReplayFrame(uint32_t frameIndex);
 ANGLE_REPLAY_EXPORT void ResetReplay(void);
 ANGLE_REPLAY_EXPORT const char *GetSerializedContextState(uint32_t frameIndex);
+
+ANGLE_REPLAY_EXPORT void SetEGLDisplay(const EGLDisplay eglDisplay);
 
 // Maps from <captured Program ID, captured location> to run-time location.
 extern GLint **gUniformLocations;
