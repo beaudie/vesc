@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54984d3a_5ff36c5e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-05-11T15:43:59Z",
+      "side": 1,
+      "message": "FYI this will make ANGLE non-conformant for ES3+. Multisampling with samples \u003e\u003d 4 is required.",
+      "revId": "382df2002d26574d76e1a35ff5d1a537542e7f5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0aed534e_177d2fc5",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4404,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-05-11T15:43:59Z",
+      "side": 1,
+      "message": "You will also need to check the feature here.",
+      "range": {
+        "startLine": 4404,
+        "startChar": 32,
+        "endLine": 4404,
+        "endChar": 33
+      },
+      "revId": "382df2002d26574d76e1a35ff5d1a537542e7f5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
