@@ -34,6 +34,24 @@
       "parentUuid": "9a097a8a_34ae79cc",
       "revId": "9f558fbcbf56180cad13a2562a8e4dc4738bd4a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "620c7a2f_6aaa9c37",
+        "filename": "src/libANGLE/Texture.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 669,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-05-11T03:11:11Z",
+      "side": 1,
+      "message": "It doesn\u0027t have to. The rationale was that before, since it was being converted to memoryless anyway, and most memoryless planes consume memory, it was pretty harmless to keep that texture allocation alive until the framebuffer let it go.\n\nNow, since the spec states that the plane should be deinitialized, it feels worse to keep a reference that prevents the texture memory from being deleted. The idea of `globallyUniqueID` was just to be able to tell if `mTextureID` had been deleted, without keeping a chunk of memory alive on the GPU.\n\nI\u0027m happy to just go back to mTextureRef if it\u0027s acceptable. The global id is a hack.",
+      "parentUuid": "0da60bb4_0ff4f0ae",
+      "revId": "9f558fbcbf56180cad13a2562a8e4dc4738bd4a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
