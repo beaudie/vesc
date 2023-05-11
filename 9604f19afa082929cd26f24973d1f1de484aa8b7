@@ -16,6 +16,24 @@
       "message": "since we don\u0027t have version at the blob header, this make it hard to extend the blob header. the new code will no way to identify it is old header or new header.\n(old data may stored at some device).  or either we flip the compression bit \nbit[31] \u003d 0 means compression and bit[31] \u003d1 means uncompression. but this will not work for future extendings.",
       "revId": "9604f19afa082929cd26f24973d1f1de484aa8b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1db0b0c_d3f40efa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 27
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-05-11T00:47:28Z",
+      "side": 1,
+      "message": "since B* didn\u0027t go to global cache path. I will revert the global cache control compression.",
+      "parentUuid": "284474d3_0954cfa0",
+      "revId": "9604f19afa082929cd26f24973d1f1de484aa8b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
