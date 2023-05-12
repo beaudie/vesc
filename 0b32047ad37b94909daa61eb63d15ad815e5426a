@@ -22,6 +22,30 @@
       },
       "revId": "0b32047ad37b94909daa61eb63d15ad815e5426a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5712f022_e7cb4682",
+        "filename": "include/platform/FeaturesVk_autogen.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-12T23:26:29Z",
+      "side": 1,
+      "message": "We just call this sort of thing Workaround. No one has so far needed this categorization to be any more precise",
+      "parentUuid": "06bcb0a2_42e6edb0",
+      "range": {
+        "startLine": 901,
+        "startChar": 51,
+        "endLine": 901,
+        "endChar": 65
+      },
+      "revId": "0b32047ad37b94909daa61eb63d15ad815e5426a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
