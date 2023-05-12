@@ -1520,35 +1520,6 @@ angle::Result TextureVk::setEGLImageTarget(const gl::Context *context,
 
     ANGLE_TRY(initImageViews(contextVk, getImageViewLevelCount()));
 
-    // Transfer the image to this queue if needed
-    uint32_t rendererQueueFamilyIndex = renderer->getQueueFamilyIndex();
-    if (mImage->isQueueChangeNeccesary(rendererQueueFamilyIndex))
-    {
-        vk::ImageLayout newLayout = vk::ImageLayout::AllGraphicsShadersWrite;
-        if (mImage->getUsage() & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT)
-        {
-            newLayout = vk::ImageLayout::ColorWrite;
-        }
-        else if (mImage->getUsage() & VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT)
-        {
-            newLayout = vk::ImageLayout::DepthWriteStencilWrite;
-        }
-        else if (mImage->getUsage() &
-                 (VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT))
-        {
-            newLayout = vk::ImageLayout::AllGraphicsShadersReadOnly;
-        }
-
-        vk::OutsideRenderPassCommandBuffer *commandBuffer;
-        vk::CommandBufferAccess access;
-        access.onExternalAcquireRelease(mImage);
-        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
-        mImage->changeLayoutAndQueue(contextVk, mImage->getAspectFlags(), newLayout,
-                                     rendererQueueFamilyIndex, commandBuffer);
-
-        ANGLE_TRY(contextVk->onEGLImageQueueChange());
-    }
-
     return angle::Result::Continue;
 }
 
@@ -2862,6 +2833,34 @@ angle::Result TextureVk::syncState(const gl::Context *context,
         mBufferViews.init(renderer, offset, size);
         mDescriptorSetCacheManager.releaseKeys(contextVk);
         return angle::Result::Continue;
+    }
+
+    // Transfer the image to this queue if needed.
+    const uint32_t rendererQueueFamilyIndex = renderer->getQueueFamilyIndex();
+    if (mImage->valid() && mImage->isQueueChangeNeccesary(rendererQueueFamilyIndex))
+    {
+        vk::ImageLayout newLayout = vk::ImageLayout::AllGraphicsShadersWrite;
+        if (mImage->getUsage() & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT)
+        {
+            newLayout = vk::ImageLayout::ColorWrite;
+        }
+        else if (mImage->getUsage() & VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT)
+        {
+            newLayout = vk::ImageLayout::DepthWriteStencilWrite;
+        }
+        else if (mImage->getUsage() &
+                 (VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT))
+        {
+            newLayout = vk::ImageLayout::AllGraphicsShadersReadOnly;
+        }
+
+        vk::OutsideRenderPassCommandBuffer *commandBuffer;
+        vk::CommandBufferAccess access;
+        access.onExternalAcquireRelease(mImage);
+        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
+        mImage->changeLayoutAndQueue(contextVk, mImage->getAspectFlags(), newLayout,
+                                     rendererQueueFamilyIndex, commandBuffer);
+        ANGLE_TRY(contextVk->onEGLImageQueueChange());
     }
 
     ANGLE_TRY(respecifyImageStorageIfNecessary(contextVk, source));
