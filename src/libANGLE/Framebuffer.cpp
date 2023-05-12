@@ -2148,6 +2148,53 @@ angle::Result Framebuffer::syncState(const Context *context,
 {
     if (mDirtyBits.any())
     {
+        for (size_t dirtyBit : mDirtyBits)
+        {
+            switch (dirtyBit)
+            {
+                case gl::Framebuffer::DIRTY_BIT_DEPTH_ATTACHMENT:
+                case gl::Framebuffer::DIRTY_BIT_DEPTH_BUFFER_CONTENTS:
+                case gl::Framebuffer::DIRTY_BIT_STENCIL_ATTACHMENT:
+                case gl::Framebuffer::DIRTY_BIT_STENCIL_BUFFER_CONTENTS:
+                case gl::Framebuffer::DIRTY_BIT_READ_BUFFER:
+                case gl::Framebuffer::DIRTY_BIT_DRAW_BUFFERS:
+                case gl::Framebuffer::DIRTY_BIT_DEFAULT_WIDTH:
+                case gl::Framebuffer::DIRTY_BIT_DEFAULT_HEIGHT:
+                case gl::Framebuffer::DIRTY_BIT_DEFAULT_SAMPLES:
+                case gl::Framebuffer::DIRTY_BIT_DEFAULT_FIXED_SAMPLE_LOCATIONS:
+                case gl::Framebuffer::DIRTY_BIT_FRAMEBUFFER_SRGB_WRITE_CONTROL_MODE:
+                case gl::Framebuffer::DIRTY_BIT_DEFAULT_LAYERS:
+                    break;
+                default:
+                {
+                    uint32_t colorIndexGL;
+                    if (dirtyBit < gl::Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_MAX)
+                    {
+                        colorIndexGL = static_cast<uint32_t>(
+                            dirtyBit - gl::Framebuffer::DIRTY_BIT_COLOR_ATTACHMENT_0);
+                    }
+                    else
+                    {
+                        ASSERT(dirtyBit >= gl::Framebuffer::DIRTY_BIT_COLOR_BUFFER_CONTENTS_0 &&
+                               dirtyBit < gl::Framebuffer::DIRTY_BIT_COLOR_BUFFER_CONTENTS_MAX);
+                        colorIndexGL = static_cast<uint32_t>(
+                            dirtyBit - gl::Framebuffer::DIRTY_BIT_COLOR_BUFFER_CONTENTS_0);
+                    }
+
+                    const FramebufferAttachment *colorAttachment = getColorAttachment(colorIndexGL);
+                    if (colorAttachment->type() == GL_TEXTURE)
+                    {
+                        Texture *texture = colorAttachment->getTexture();
+                        ASSERT(texture);
+
+                        ANGLE_TRY(texture->syncState(context, command));
+                    }
+
+                    break;
+                }
+            }
+        }
+
         mDirtyBitsGuard = mDirtyBits;
         ANGLE_TRY(mImpl->syncState(context, framebufferBinding, mDirtyBits, command));
         mDirtyBits.reset();
