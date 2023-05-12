@@ -38,7 +38,7 @@ import common
 
 
 DEFAULT_TEST_SUITE = angle_test_util.ANGLE_TRACE_TEST_SUITE
-DEFAULT_TEST_PREFIX = 'TraceTest.'
+TEST_PREFIX = 'TraceTest.'
 DEFAULT_SCREENSHOT_PREFIX = 'angle_vulkan_'
 SWIFTSHADER_SCREENSHOT_PREFIX = 'angle_vulkan_swiftshader_'
 DEFAULT_BATCH_SIZE = 5
@@ -339,13 +339,12 @@ def _get_batches(traces, batch_size):
 
 
 def _get_gtest_filter_for_batch(args, batch):
-    expanded = ['%s%s' % (DEFAULT_TEST_PREFIX, trace) for trace in batch]
+    expanded = ['%s%s' % (TEST_PREFIX, trace) for trace in batch]
     return '--gtest_filter=%s' % ':'.join(expanded)
 
 
-def _run_tests(args, tests, extra_flags, env, screenshot_dir, results, test_results):
-    keys = get_skia_gold_keys(args, env)
-
+def _run_tests(skia_gold_keys, args, traces, extra_flags, env, screenshot_dir, results,
+               test_results):
     if angle_test_util.IsAndroid() and args.test_suite == DEFAULT_TEST_SUITE:
         android_helper.RunSmokeTest()
 
@@ -353,12 +352,8 @@ def _run_tests(args, tests, extra_flags, env, screenshot_dir, results, test_resu
         gold_properties = angle_skia_gold_properties.ANGLESkiaGoldProperties(args)
         gold_session_manager = angle_skia_gold_session_manager.ANGLESkiaGoldSessionManager(
             skia_gold_temp_dir, gold_properties)
-        gold_session = gold_session_manager.GetSkiaGoldSession(keys, instance=args.instance)
-
-        traces = [trace.split(' ')[0] for trace in tests]
-
-        if args.isolated_script_test_filter:
-            traces = angle_test_util.FilterTests(traces, args.isolated_script_test_filter)
+        gold_session = gold_session_manager.GetSkiaGoldSession(
+            skia_gold_keys, instance=args.instance)
 
         batches = _get_batches(traces, args.batch_size)
 
@@ -400,7 +395,7 @@ def _run_tests(args, tests, extra_flags, env, screenshot_dir, results, test_resu
                     artifacts = {}
 
                     if batch_result == PASS:
-                        test_name = DEFAULT_TEST_PREFIX + trace
+                        test_name = TEST_PREFIX + trace
                         if json_results['tests'][test_name]['actual'] == 'SKIP':
                             logging.info('Test skipped by suite: %s' % test_name)
                             result = SKIP
@@ -509,28 +504,41 @@ def main():
     rc = 0
 
     try:
-        # read test set
-        json_name = os.path.join(angle_path_util.ANGLE_ROOT_DIR, 'src', 'tests',
-                                 'restricted_traces', 'restricted_traces.json')
-        with open(json_name) as fp:
-            tests = json.load(fp)
+        # On Android, system info overwrites test apk, do first and skip if unnecessary
+        if not args.bypass_skia_gold_functionality:
+            skia_gold_keys = get_skia_gold_keys(args, env)
+        else:
+            skia_gold_keys = {}
+
+        result, output, _ = angle_test_util.RunTestSuite(
+            args.test_suite, ['--list-tests', '--verbose'] + extra_flags,
+            env,
+            use_xvfb=args.xvfb,
+            show_test_stdout=False)
+        tests = angle_test_util.GetTestsFromOutput(output)
+        assert tests, 'No tests found'
+
+        if args.isolated_script_test_filter:
+            tests = angle_test_util.FilterTests(tests, args.isolated_script_test_filter)
+            assert tests, 'No tests matching filter found'
+
+        assert all(test.startswith(TEST_PREFIX) for test in tests)
+        traces = [test[len(TEST_PREFIX):] for test in tests]
 
         # Split tests according to sharding
-        sharded_tests = _shard_tests(tests['traces'], args.shard_count, args.shard_index)
+        sharded_tests = _shard_tests(traces, args.shard_count, args.shard_index)
 
-        if args.render_test_output_dir:
-            if not _run_tests(args, sharded_tests, extra_flags, env, args.render_test_output_dir,
+        with contextlib.ExitStack() as stack:
+            if args.render_test_output_dir:
+                out_dir = args.render_test_output_dir
+            elif 'ISOLATED_OUTDIR' in env:
+                out_dir = env['ISOLATED_OUTDIR']
+            else:
+                out_dir = stack.enter_context(temporary_dir('angle_trace_'))
+
+            if not _run_tests(skia_gold_keys, args, sharded_tests, extra_flags, env, out_dir,
                               results, test_results):
                 rc = 1
-        elif 'ISOLATED_OUTDIR' in env:
-            if not _run_tests(args, sharded_tests, extra_flags, env, env['ISOLATED_OUTDIR'],
-                              results, test_results):
-                rc = 1
-        else:
-            with temporary_dir('angle_trace_') as temp_dir:
-                if not _run_tests(args, sharded_tests, extra_flags, env, temp_dir, results,
-                                  test_results):
-                    rc = 1
 
     except Exception:
         traceback.print_exc()

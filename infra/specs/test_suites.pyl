@@ -745,7 +745,7 @@
           '--test-machine-name',
           '${buildername}',
           '--trace-interpreter=gz',
-          '--filter=fishdom:geometry_dash:merge_dragons:minecraft_bedrock:new_legend_of_the_condor_heroes:street_fighter_duel:teslagrad:vainglory',
+          '--filter=*.fishdom:*.geometry_dash:*.merge_dragons:*.minecraft_bedrock:*.new_legend_of_the_condor_heroes:*.street_fighter_duel:*.teslagrad:*.vainglory',
         ],
         'mixins': [
           'angle_skia_gold_test',

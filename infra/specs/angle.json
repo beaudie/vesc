@@ -772,7 +772,7 @@
           "--test-machine-name",
           "${buildername}",
           "--trace-interpreter=gz",
-          "--filter=fishdom:geometry_dash:merge_dragons:minecraft_bedrock:new_legend_of_the_condor_heroes:street_fighter_duel:teslagrad:vainglory",
+          "--filter=*.fishdom:*.geometry_dash:*.merge_dragons:*.minecraft_bedrock:*.new_legend_of_the_condor_heroes:*.street_fighter_duel:*.teslagrad:*.vainglory",
           "-v",
           "--git-revision=${got_angle_revision}"
         ],
@@ -1599,7 +1599,7 @@
           "--test-machine-name",
           "${buildername}",
           "--trace-interpreter=gz",
-          "--filter=fishdom:geometry_dash:merge_dragons:minecraft_bedrock:new_legend_of_the_condor_heroes:street_fighter_duel:teslagrad:vainglory",
+          "--filter=*.fishdom:*.geometry_dash:*.merge_dragons:*.minecraft_bedrock:*.new_legend_of_the_condor_heroes:*.street_fighter_duel:*.teslagrad:*.vainglory",
           "--git-revision=${got_angle_revision}"
         ],
         "isolate_name": "angle_restricted_trace_gold_interpreted_tests",
@@ -2411,7 +2411,7 @@
           "--test-machine-name",
           "${buildername}",
           "--trace-interpreter=gz",
-          "--filter=fishdom:geometry_dash:merge_dragons:minecraft_bedrock:new_legend_of_the_condor_heroes:street_fighter_duel:teslagrad:vainglory",
+          "--filter=*.fishdom:*.geometry_dash:*.merge_dragons:*.minecraft_bedrock:*.new_legend_of_the_condor_heroes:*.street_fighter_duel:*.teslagrad:*.vainglory",
           "--git-revision=${got_angle_revision}"
         ],
         "isolate_name": "angle_restricted_trace_gold_interpreted_tests",
@@ -4587,7 +4587,7 @@
           "--test-machine-name",
           "${buildername}",
           "--trace-interpreter=gz",
-          "--filter=fishdom:geometry_dash:merge_dragons:minecraft_bedrock:new_legend_of_the_condor_heroes:street_fighter_duel:teslagrad:vainglory",
+          "--filter=*.fishdom:*.geometry_dash:*.merge_dragons:*.minecraft_bedrock:*.new_legend_of_the_condor_heroes:*.street_fighter_duel:*.teslagrad:*.vainglory",
           "--git-revision=${got_angle_revision}"
         ],
         "isolate_name": "angle_restricted_trace_gold_interpreted_tests",
@@ -5508,7 +5508,7 @@
           "--test-machine-name",
           "${buildername}",
           "--trace-interpreter=gz",
-          "--filter=fishdom:geometry_dash:merge_dragons:minecraft_bedrock:new_legend_of_the_condor_heroes:street_fighter_duel:teslagrad:vainglory",
+          "--filter=*.fishdom:*.geometry_dash:*.merge_dragons:*.minecraft_bedrock:*.new_legend_of_the_condor_heroes:*.street_fighter_duel:*.teslagrad:*.vainglory",
           "--git-revision=${got_angle_revision}"
         ],
         "isolate_name": "angle_restricted_trace_gold_interpreted_tests",
