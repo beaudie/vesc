@@ -883,35 +883,54 @@ uint16_t ComputeCRC16(const uint8_t *data, const size_t size)
     return rem;
 }
 
+// Header data type used for the pipeline cache.
+class CacheDataHeader
+{
+  public:
+    template <typename T>
+    void setValue(int index, T value)
+    {
+        ASSERT(index + sizeof(T) <= kBlobHeaderSize);
+        reinterpret_cast<T &>(*(headerData.data() + index)) = value;
+    }
+
+    template <typename T>
+    T getValue(int index)
+    {
+        ASSERT(index + sizeof(T) <= kBlobHeaderSize);
+        return reinterpret_cast<T &>(*(headerData.data() + index));
+    }
+
+    uint8_t *data() { return headerData.data(); }
+
+  private:
+    std::array<uint8_t, kBlobHeaderSize> headerData;
+};
+
 // Pack header data for the pipeline cache key data.
 void PackHeaderDataForPipelineCache(uint32_t cacheDataSize,
                                     uint16_t compressedDataCRC,
                                     uint8_t numChunks,
                                     uint8_t chunkIndex,
-                                    uint64_t *dataOut)
+                                    CacheDataHeader *dataOut)
 {
-    uint64_t concatenatedData = cacheDataSize;
-    concatenatedData          = (concatenatedData << 16) | compressedDataCRC;
-    concatenatedData          = (concatenatedData << 8) | numChunks;
-    concatenatedData          = (concatenatedData << 8) | chunkIndex;
-
-    *dataOut = concatenatedData;
+    dataOut->setValue<uint8_t>(0, chunkIndex);
+    dataOut->setValue<uint8_t>(1, numChunks);
+    dataOut->setValue<uint16_t>(2, compressedDataCRC);
+    dataOut->setValue<uint32_t>(4, cacheDataSize);
 }
 
 // Unpack header data from the pipeline cache key data.
-void UnpackHeaderDataForPipelineCache(uint64_t data,
+void UnpackHeaderDataForPipelineCache(CacheDataHeader *data,
                                       uint32_t *cacheDataSizeOut,
                                       uint16_t *compressedDataCRCOut,
                                       size_t *numChunksOut,
                                       size_t *chunkIndexOut)
 {
-    *chunkIndexOut = data & 0xFF;
-    data >>= 8;
-    *numChunksOut = data & 0xFF;
-    data >>= 8;
-    *compressedDataCRCOut = data & 0xFFFF;
-    data >>= 16;
-    *cacheDataSizeOut = static_cast<uint32_t>(data);
+    *chunkIndexOut        = data->getValue<uint8_t>(0);
+    *numChunksOut         = data->getValue<uint8_t>(1);
+    *compressedDataCRCOut = data->getValue<uint16_t>(2);
+    *cacheDataSizeOut     = data->getValue<uint32_t>(4);
 }
 
 void ComputePipelineCacheVkChunkKey(VkPhysicalDeviceProperties physicalDeviceProperties,
@@ -999,12 +1018,11 @@ void CompressAndStorePipelineCacheVk(VkPhysicalDeviceProperties physicalDevicePr
 
         // Add the header data, followed by the compressed data.
         ASSERT(numChunks <= UINT8_MAX && chunkIndex <= UINT8_MAX && cacheData.size() <= UINT32_MAX);
-        uint64_t headerData;
+        CacheDataHeader headerData = {};
         PackHeaderDataForPipelineCache(static_cast<uint32_t>(cacheData.size()), compressedDataCRC,
                                        static_cast<uint8_t>(numChunks),
                                        static_cast<uint8_t>(chunkIndex), &headerData);
-        *reinterpret_cast<uint64_t *>(keyData.data()) = headerData;
-
+        memcpy(keyData.data(), headerData.data(), kBlobHeaderSize);
         memcpy(keyData.data() + kBlobHeaderSize, compressedData.data() + compressedOffset,
                chunkSize);
         compressedOffset += chunkSize;
@@ -1084,10 +1102,18 @@ angle::Result GetAndDecompressPipelineCacheVk(VkPhysicalDeviceProperties physica
     size_t numChunks;
     size_t chunkIndex0;
 
-    uint64_t headerData = *reinterpret_cast<const uint64_t *>(keyData.data());
-    UnpackHeaderDataForPipelineCache(headerData, &uncompressedCacheDataSize, &compressedDataCRC,
+    CacheDataHeader headerData = {};
+    memcpy(headerData.data(), keyData.data(), kBlobHeaderSize);
+    UnpackHeaderDataForPipelineCache(&headerData, &uncompressedCacheDataSize, &compressedDataCRC,
                                      &numChunks, &chunkIndex0);
-    ASSERT(chunkIndex0 == 0);
+    if (chunkIndex0 != 0 || numChunks == 0 || uncompressedCacheDataSize == 0)
+    {
+        // Either the header structure has been updated, or the header value has been changed.
+        WARN() << "Unexpected values while unpacking chunk index 0: "
+               << "chunkIndex = " << chunkIndex0 << ", numChunks = " << numChunks
+               << ", uncompressedCacheDataSize = " << uncompressedCacheDataSize;
+        return angle::Result::Continue;
+    }
 
     size_t chunkSize      = keySize - kBlobHeaderSize;
     size_t compressedSize = 0;
@@ -1118,8 +1144,8 @@ angle::Result GetAndDecompressPipelineCacheVk(VkPhysicalDeviceProperties physica
         size_t checkNumChunks;
         size_t checkChunkIndex;
 
-        headerData = *reinterpret_cast<const uint64_t *>(keyData.data());
-        UnpackHeaderDataForPipelineCache(headerData, &checkUncompressedCacheDataSize,
+        memcpy(headerData.data(), keyData.data(), kBlobHeaderSize);
+        UnpackHeaderDataForPipelineCache(&headerData, &checkUncompressedCacheDataSize,
                                          &checkCompressedDataCRC, &checkNumChunks,
                                          &checkChunkIndex);
 
