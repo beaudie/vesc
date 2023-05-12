@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3f6ce3d_ddfa1e96",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 757,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-12T23:11:17Z",
+      "side": 1,
+      "message": "Do the dimensions matter for the sake of this query? Can we always use 1x1x1?",
+      "range": {
+        "startLine": 757,
+        "startChar": 44,
+        "endLine": 757,
+        "endChar": 64
+      },
+      "revId": "769c315861831678c3ae26d13a9ef601ac39587a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
