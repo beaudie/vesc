@@ -42,6 +42,7 @@ function generate_Android_bp_file() {
             "symbol_level = 0"
             "angle_standalone = false"
             "angle_build_all = false"
+            "build_angle_end2end_tests = true"
             "angle_expose_non_conformant_extensions_and_versions = true"
 
             # Build for 64-bit CPUs

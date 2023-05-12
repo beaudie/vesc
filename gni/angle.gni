@@ -483,7 +483,7 @@ template("angle_static_library") {
   }
 }
 
-if (angle_standalone || build_with_chromium) {
+if (angle_standalone || build_with_chromium || true) {
   template("angle_test") {
     test(target_name) {
       forward_variables_from(invoker,

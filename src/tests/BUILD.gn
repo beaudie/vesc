@@ -283,7 +283,7 @@ if (is_win || is_linux || is_chromeos || is_android || is_fuchsia || is_apple) {
       include_dirs += [ "${android_ndk_root}/sysroot/usr/includes" ]
     }
 
-    data_deps = [ "$angle_root:angle" ]
+    # data_deps = [ "$angle_root:angle" ]
 
     if (angle_build_mesa) {
       data_deps += [ "$angle_root/third_party/mesa" ]
@@ -1720,46 +1720,45 @@ if (build_angle_deqp_tests && !is_fuchsia) {
     expectations_file = "deqp_gles31_rotate_test_expectations.txt"
   }
 }
-
-group("angle_tests") {
-  testonly = true
-  deps = [
-    ":angle_end2end_tests",
-    ":angle_system_info_test",
-    ":angle_unittests",
-  ]
-  if (build_angle_perftests) {
-    deps += [ ":angle_perftests" ]
-  }
-  if (build_angle_trace_tests) {
-    deps += [ ":angle_trace_perf_tests" ]
-  }
-  if (is_clang) {
-    deps += [ "capture_replay_tests" ]
-  }
-  if (!is_fuchsia) {
-    deps += [
-      ":angle_white_box_perftests",
-      ":angle_white_box_tests",
-    ]
-  }
-  if (build_angle_deqp_tests && !is_fuchsia) {
-    deps += [
-      ":angle_deqp_egl_tests",
-      ":angle_deqp_gl46_tests",
-      ":angle_deqp_gles2_tests",
-      ":angle_deqp_gles31_tests",
-      ":angle_deqp_gles3_tests",
-    ]
-  }
-  if (build_angle_gles1_conform_tests) {
-    deps += [
-      ":angle_gles1_conformance_tests",
-      ":angle_gles1_covegl_no_gtest",
-      ":angle_gles1_primtest_tests",
-    ]
-    if (!is_win && !is_apple) {
-      deps += [ ":angle_gles1_covgl_tests" ]
-    }
-  }
-}
+# group("angle_tests") {
+#   testonly = true
+#   deps = [
+#     ":angle_end2end_tests",
+#     ":angle_system_info_test",
+#     ":angle_unittests",
+#   ]
+#   if (build_angle_perftests) {
+#     deps += [ ":angle_perftests" ]
+#   }
+#   if (build_angle_trace_tests) {
+#     deps += [ ":angle_trace_perf_tests" ]
+#   }
+#   if (is_clang) {
+#     deps += [ "capture_replay_tests" ]
+#   }
+#   if (!is_fuchsia) {
+#     deps += [
+#       ":angle_white_box_perftests",
+#       ":angle_white_box_tests",
+#     ]
+#   }
+#   if (build_angle_deqp_tests && !is_fuchsia) {
+#     deps += [
+#       ":angle_deqp_egl_tests",
+#       ":angle_deqp_gl46_tests",
+#       ":angle_deqp_gles2_tests",
+#       ":angle_deqp_gles31_tests",
+#       ":angle_deqp_gles3_tests",
+#     ]
+#   }
+#   if (build_angle_gles1_conform_tests) {
+#     deps += [
+#       ":angle_gles1_conformance_tests",
+#       ":angle_gles1_covegl_no_gtest",
+#       ":angle_gles1_primtest_tests",
+#     ]
+#     if (!is_win && !is_apple) {
+#       deps += [ ":angle_gles1_covgl_tests" ]
+#     }
+#   }
+# }
