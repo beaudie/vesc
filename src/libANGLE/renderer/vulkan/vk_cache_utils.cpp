@@ -5980,6 +5980,129 @@ void DescriptorSetDescBuilder::updateShaderBuffers(
     }
 }
 
+void DescriptorSetDescBuilder::updateShaderBuffers1(
+    gl::ShaderType shaderType,
+    ShaderVariableType variableType,
+    const ShaderInterfaceVariableInfoMap &variableInfoMap,
+    const std::vector<gl::InterfaceBlock> &blocks,
+    VkDescriptorType descriptorType)
+{
+    // Initialize the descriptor writes in a first pass. This ensures we can pack the structures
+    // corresponding to array elements tightly.
+    for (uint32_t bufferIndex = 0; bufferIndex < blocks.size(); ++bufferIndex)
+    {
+        const gl::InterfaceBlock &block = blocks[bufferIndex];
+
+        if (!block.isActive(shaderType))
+        {
+            continue;
+        }
+
+        const ShaderInterfaceVariableInfo &info =
+            variableInfoMap.getIndexedVariableInfo(shaderType, variableType, bufferIndex);
+        if (info.isDuplicate)
+        {
+            continue;
+        }
+
+        if (block.isArray && block.arrayElement > 0)
+        {
+            mDesc.incrementDescriptorCount(info.binding, 1);
+            mCurrentInfoIndex++;
+        }
+        else
+        {
+            updateWriteDesc(info.binding, descriptorType, 1);
+        }
+    }
+}
+
+void DescriptorSetDescBuilder::updateShaderBuffers2(
+    gl::ShaderType shaderType,
+    ShaderVariableType variableType,
+    const ShaderInterfaceVariableInfoMap &variableInfoMap,
+    const gl::BufferVector &buffers,
+    const std::vector<gl::InterfaceBlock> &blocks,
+    VkDescriptorType descriptorType,
+    VkDeviceSize maxBoundBufferRange,
+    const BufferHelper &emptyBuffer)
+{
+    // Now that we have the proper array elements counts, initialize the info structures.
+    for (uint32_t bufferIndex = 0; bufferIndex < blocks.size(); ++bufferIndex)
+    {
+        const gl::InterfaceBlock &block                           = blocks[bufferIndex];
+        const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding = buffers[block.binding];
+
+        if (!block.isActive(shaderType))
+        {
+            continue;
+        }
+
+        const ShaderInterfaceVariableInfo &info =
+            variableInfoMap.getIndexedVariableInfo(shaderType, variableType, bufferIndex);
+        if (info.isDuplicate)
+        {
+            continue;
+        }
+
+        uint32_t binding       = info.binding;
+        uint32_t arrayElement  = block.isArray ? block.arrayElement : 0;
+        uint32_t infoDescIndex = mDesc.getInfoDescIndex(binding) + arrayElement;
+
+        if (bufferBinding.get() == nullptr)
+        {
+            DescriptorInfoDesc emptyDesc = {};
+            SetBitField(emptyDesc.imageLayoutOrRange, emptyBuffer.getSize());
+            emptyDesc.imageViewSerialOrOffset = 0;
+            emptyDesc.samplerOrBufferSerial   = emptyBuffer.getBlockSerial().getValue();
+
+            mDesc.updateInfoDesc(infoDescIndex, emptyDesc);
+
+            mHandles[infoDescIndex].buffer = emptyBuffer.getBuffer().getHandle();
+
+            if (IsDynamicDescriptor(descriptorType))
+            {
+                mDynamicOffsets[infoDescIndex] = 0;
+            }
+        }
+        else
+        {
+            // Limit bound buffer size to maximum resource binding size.
+            GLsizeiptr boundBufferSize = gl::GetBoundBufferAvailableSize(bufferBinding);
+            VkDeviceSize size = std::min<VkDeviceSize>(boundBufferSize, maxBoundBufferRange);
+
+            // Make sure there's no possible under/overflow with binding size.
+            static_assert(sizeof(VkDeviceSize) >= sizeof(bufferBinding.getSize()),
+                          "VkDeviceSize too small");
+            ASSERT(bufferBinding.getSize() >= 0);
+
+            BufferVk *bufferVk         = vk::GetImpl(bufferBinding.get());
+            BufferHelper &bufferHelper = bufferVk->getBuffer();
+
+            DescriptorInfoDesc infoDesc = {};
+            SetBitField(infoDesc.imageLayoutOrRange, size);
+            infoDesc.samplerOrBufferSerial = bufferHelper.getBlockSerial().getValue();
+
+            VkDeviceSize offset = bufferBinding.getOffset() + bufferHelper.getOffset();
+
+            if (IsDynamicDescriptor(descriptorType))
+            {
+                SetBitField(mDynamicOffsets[infoDescIndex], offset);
+                mUsedBufferBlocks.emplace_back(bufferHelper.getBufferBlock());
+            }
+            else
+            {
+                SetBitField(infoDesc.imageViewSerialOrOffset, offset);
+                mUsedBufferHelpers.emplace_back(&bufferHelper);
+            }
+
+            mDesc.updateInfoDesc(infoDescIndex, infoDesc);
+
+            mHandles[infoDescIndex].buffer = bufferHelper.getBuffer().getHandle();
+        }
+    }
+}
+
 void DescriptorSetDescBuilder::updateAtomicCounters(
     gl::ShaderType shaderType,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,

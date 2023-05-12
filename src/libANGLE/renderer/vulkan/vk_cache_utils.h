@@ -1673,6 +1673,20 @@ class DescriptorSetDescBuilder final
                               const BufferHelper &emptyBuffer,
                               bool activeUnpaused,
                               TransformFeedbackVk *transformFeedbackVk);
+    // LAO
+    void updateShaderBuffers1(gl::ShaderType shaderType,
+                              ShaderVariableType variableType,
+                              const ShaderInterfaceVariableInfoMap &variableInfoMap,
+                              const std::vector<gl::InterfaceBlock> &blocks,
+                              VkDescriptorType descriptorType);
+    void updateShaderBuffers2(gl::ShaderType shaderType,
+                              ShaderVariableType variableType,
+                              const ShaderInterfaceVariableInfoMap &variableInfoMap,
+                              const gl::BufferVector &buffers,
+                              const std::vector<gl::InterfaceBlock> &blocks,
+                              VkDescriptorType descriptorType,
+                              VkDeviceSize maxBoundBufferRange,
+                              const BufferHelper &emptyBuffer);
 
     // Specific helpers for shader resource descriptors.
     void updateShaderBuffers(gl::ShaderType shaderType,

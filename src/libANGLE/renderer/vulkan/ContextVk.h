@@ -973,7 +973,17 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         ContextVk::*)(DirtyBits::Iterator *dirtyBitsIterator, DirtyBits dirtyBitMask);
     using ComputeDirtyBitHandler = angle::Result (ContextVk::*)();
 
-    // The GpuEventQuery struct holds together a timestamp query and enough data to create a
+    enum ShaderResourceDirtyBitType
+    {
+        SHADER_RESOURCE_DIRTY_BIT_IMAGE,
+        SHADER_RESOURCE_DIRTY_BIT_STORAGE_BUFFER,
+        SHADER_RESOURCE_DIRTY_BIT_UNIFORM_BUFFER,
+        SHADER_RESOURCE_DIRTY_BIT_ATOMIC_COUNTER_BUFFER,
+        SHADER_RESOURCE_DIRTY_BIT_INPUT_ATTACHMENT,
+        SHADER_RESOURCE_DIRTY_BIT_PROGRAM_EXECUTABLE,
+        SHADER_RESOURCE_DIRTY_BIT_MAX,
+    };
+    using ShaderResourceDirtyBits = angle::BitSet<SHADER_RESOURCE_DIRTY_BIT_MAX>;
     // trace event based on that. Use traceGpuEvent to insert such queries.  They will be readback
     // when the results are available, without inserting a GPU bubble.
     //
@@ -1605,6 +1615,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     std::ostringstream mPipelineCacheGraph;
 
     RangedSerialFactory mOutsideRenderPassSerialFactory;
+
+    ShaderResourceDirtyBits mShaderResourceDirtyBits;
 };
 
 ANGLE_INLINE angle::Result ContextVk::endRenderPassIfTransformFeedbackBuffer(

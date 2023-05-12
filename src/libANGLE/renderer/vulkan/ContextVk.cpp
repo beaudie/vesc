@@ -5535,6 +5535,8 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                               "Dirty bit order");
                 iter.setLaterBit(gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING);
                 ANGLE_TRY(invalidateProgramExecutableHelper(context));
+                // Update everything
+                mShaderResourceDirtyBits.set();
 
                 static_assert(
                     gl::State::DIRTY_BIT_SAMPLE_SHADING > gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE,
@@ -5561,26 +5563,24 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 // Nothing to do.
                 break;
             case gl::State::DIRTY_BIT_IMAGE_BINDINGS:
-                static_assert(gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING >
-                                  gl::State::DIRTY_BIT_IMAGE_BINDINGS,
-                              "Dirty bit order");
-                iter.setLaterBit(gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING);
+                ANGLE_TRY(invalidateCurrentShaderResources(command));
+                invalidateDriverUniforms();
+                mShaderResourceDirtyBits.set(SHADER_RESOURCE_DIRTY_BIT_IMAGE);
                 break;
             case gl::State::DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING:
-                static_assert(gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING >
-                                  gl::State::DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING,
-                              "Dirty bit order");
-                iter.setLaterBit(gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING);
+                ANGLE_TRY(invalidateCurrentShaderResources(command));
+                invalidateDriverUniforms();
+                mShaderResourceDirtyBits.set(SHADER_RESOURCE_DIRTY_BIT_STORAGE_BUFFER);
                 break;
             case gl::State::DIRTY_BIT_UNIFORM_BUFFER_BINDINGS:
-                static_assert(gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING >
-                                  gl::State::DIRTY_BIT_UNIFORM_BUFFER_BINDINGS,
-                              "Dirty bit order");
-                iter.setLaterBit(gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING);
+                ANGLE_TRY(invalidateCurrentShaderResources(command));
+                invalidateDriverUniforms();
+                mShaderResourceDirtyBits.set(SHADER_RESOURCE_DIRTY_BIT_UNIFORM_BUFFER);
                 break;
             case gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING:
                 ANGLE_TRY(invalidateCurrentShaderResources(command));
                 invalidateDriverUniforms();
+                mShaderResourceDirtyBits.set(SHADER_RESOURCE_DIRTY_BIT_ATOMIC_COUNTER_BUFFER);
                 break;
             case gl::State::DIRTY_BIT_MULTISAMPLING:
                 // When disabled, this should configure the pipeline to render as if single-sampled,
@@ -6112,34 +6112,93 @@ angle::Result ContextVk::updateShaderResourcesDescriptorDesc(PipelineType pipeli
         return angle::Result::Continue;
     }
 
-    mShaderBuffersDescriptorDesc.reset();
-
     const VkPhysicalDeviceLimits &limits    = mRenderer->getPhysicalDeviceProperties().limits;
     const ProgramExecutableVk &executableVk = *getExecutable();
     const ShaderInterfaceVariableInfoMap &variableInfoMap = executableVk.getVariableInfoMap();
 
-    for (gl::ShaderType shaderType : executable->getLinkedShaderStages())
+    if (mShaderResourceDirtyBits.test(SHADER_RESOURCE_DIRTY_BIT_PROGRAM_EXECUTABLE) ||
+        mShaderResourceDirtyBits.test(SHADER_RESOURCE_DIRTY_BIT_ATOMIC_COUNTER_BUFFER) ||
+        mShaderResourceDirtyBits.test(SHADER_RESOURCE_DIRTY_BIT_IMAGE) ||
+        mShaderResourceDirtyBits.test(SHADER_RESOURCE_DIRTY_BIT_INPUT_ATTACHMENT))
     {
-        mShaderBuffersDescriptorDesc.updateShaderBuffers(
-            shaderType, ShaderVariableType::UniformBuffer, variableInfoMap,
-            mState.getOffsetBindingPointerUniformBuffers(), executable->getUniformBlocks(),
-            executableVk.getUniformBufferDescriptorType(), limits.maxUniformBufferRange,
-            mEmptyBuffer);
-        mShaderBuffersDescriptorDesc.updateShaderBuffers(
-            shaderType, ShaderVariableType::ShaderStorageBuffer, variableInfoMap,
-            mState.getOffsetBindingPointerShaderStorageBuffers(),
-            executable->getShaderStorageBlocks(), executableVk.getStorageBufferDescriptorType(),
-            limits.maxStorageBufferRange, mEmptyBuffer);
-        mShaderBuffersDescriptorDesc.updateAtomicCounters(
-            shaderType, variableInfoMap, mState.getOffsetBindingPointerAtomicCounterBuffers(),
-            executable->getAtomicCounterBuffers(), limits.minStorageBufferOffsetAlignment,
-            &mEmptyBuffer);
-        ANGLE_TRY(mShaderBuffersDescriptorDesc.updateImages(
-            this, shaderType, *executable, variableInfoMap, mActiveImages, mState.getImageUnits()));
-        ANGLE_TRY(mShaderBuffersDescriptorDesc.updateInputAttachments(
-            this, shaderType, *executable, variableInfoMap,
-            vk::GetImpl(mState.getDrawFramebuffer())));
+        WARN() << "mShaderResourceDirtyBits:0x" << std::hex << mShaderResourceDirtyBits.to_ulong();
+        mShaderBuffersDescriptorDesc.reset();
+        for (gl::ShaderType shaderType : executable->getLinkedShaderStages())
+        {
+            mShaderBuffersDescriptorDesc.updateShaderBuffers(
+                shaderType, ShaderVariableType::UniformBuffer, variableInfoMap,
+                mState.getOffsetBindingPointerUniformBuffers(), executable->getUniformBlocks(),
+                executableVk.getUniformBufferDescriptorType(), limits.maxUniformBufferRange,
+                mEmptyBuffer);
+
+            mShaderBuffersDescriptorDesc.updateShaderBuffers(
+                shaderType, ShaderVariableType::ShaderStorageBuffer, variableInfoMap,
+                mState.getOffsetBindingPointerShaderStorageBuffers(),
+                executable->getShaderStorageBlocks(), executableVk.getStorageBufferDescriptorType(),
+                limits.maxStorageBufferRange, mEmptyBuffer);
+
+            mShaderBuffersDescriptorDesc.updateAtomicCounters(
+                shaderType, variableInfoMap, mState.getOffsetBindingPointerAtomicCounterBuffers(),
+                executable->getAtomicCounterBuffers(), limits.minStorageBufferOffsetAlignment,
+                &mEmptyBuffer);
+
+            ANGLE_TRY(mShaderBuffersDescriptorDesc.updateImages(this, shaderType, *executable,
+                                                                variableInfoMap, mActiveImages,
+                                                                mState.getImageUnits()));
+
+            ANGLE_TRY(mShaderBuffersDescriptorDesc.updateInputAttachments(
+                this, shaderType, *executable, variableInfoMap,
+                vk::GetImpl(mState.getDrawFramebuffer())));
+        }
+        mShaderResourceDirtyBits.reset();
     }
+    else
+    {
+        WARN() << "*** Optimized. mShaderResourceDirtyBits:0x" << std::hex
+               << mShaderResourceDirtyBits.to_ulong();
+        for (gl::ShaderType shaderType : executable->getLinkedShaderStages())
+        {
+            if (mShaderResourceDirtyBits.test(SHADER_RESOURCE_DIRTY_BIT_UNIFORM_BUFFER))
+            {
+                mShaderBuffersDescriptorDesc.updateShaderBuffers2(
+                    shaderType, ShaderVariableType::UniformBuffer, variableInfoMap,
+                    mState.getOffsetBindingPointerUniformBuffers(), executable->getUniformBlocks(),
+                    executableVk.getUniformBufferDescriptorType(), limits.maxUniformBufferRange,
+                    mEmptyBuffer);
+            }
+
+            if (mShaderResourceDirtyBits.test(SHADER_RESOURCE_DIRTY_BIT_STORAGE_BUFFER))
+            {
+                mShaderBuffersDescriptorDesc.updateShaderBuffers2(
+                    shaderType, ShaderVariableType::ShaderStorageBuffer, variableInfoMap,
+                    mState.getOffsetBindingPointerShaderStorageBuffers(),
+                    executable->getShaderStorageBlocks(),
+                    executableVk.getStorageBufferDescriptorType(), limits.maxStorageBufferRange,
+                    mEmptyBuffer);
+            }
+            if (mShaderResourceDirtyBits.test(SHADER_RESOURCE_DIRTY_BIT_ATOMIC_COUNTER_BUFFER))
+            {
+                mShaderBuffersDescriptorDesc.updateAtomicCounters(
+                    shaderType, variableInfoMap,
+                    mState.getOffsetBindingPointerAtomicCounterBuffers(),
+                    executable->getAtomicCounterBuffers(), limits.minStorageBufferOffsetAlignment,
+                    &mEmptyBuffer);
+            }
+            if (mShaderResourceDirtyBits.test(SHADER_RESOURCE_DIRTY_BIT_IMAGE))
+            {
+                ANGLE_TRY(mShaderBuffersDescriptorDesc.updateImages(this, shaderType, *executable,
+                                                                    variableInfoMap, mActiveImages,
+                                                                    mState.getImageUnits()));
+            }
+            if (mShaderResourceDirtyBits.test(SHADER_RESOURCE_DIRTY_BIT_INPUT_ATTACHMENT))
+            {
+                ANGLE_TRY(mShaderBuffersDescriptorDesc.updateInputAttachments(
+                    this, shaderType, *executable, variableInfoMap,
+                    vk::GetImpl(mState.getDrawFramebuffer())));
+            }
+        }
+    }
+    mShaderResourceDirtyBits.reset();
 
     return angle::Result::Continue;
 }
@@ -6191,6 +6250,7 @@ angle::Result ContextVk::onFramebufferChange(FramebufferVk *framebufferVk, gl::C
     if (mState.getProgramExecutable())
     {
         ANGLE_TRY(invalidateCurrentShaderResources(command));
+        mShaderResourceDirtyBits.set(SHADER_RESOURCE_DIRTY_BIT_INPUT_ATTACHMENT);
     }
 
     onDrawFramebufferRenderPassDescChange(framebufferVk, nullptr);
