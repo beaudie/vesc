@@ -188,11 +188,13 @@ angle_test("angle_unittests") {
 
   deps = [
     ":angle_test_expectations",
-    "$angle_root:angle_json_serializer",
     "$angle_root:angle_static",
     "$angle_root:libfeature_support",
     "$angle_root/util:angle_util_static",
   ]
+  if (angle_has_rapidjson) {
+    deps += [ "$angle_root:angle_json_serializer" ]
+  }
 
   if (angle_enable_vulkan) {
     sources += [ "compiler_tests/Precise_test.cpp" ]
