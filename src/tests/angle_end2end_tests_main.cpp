@@ -29,6 +29,7 @@ int main(int argc, char **argv)
     auto registerTestsCallback = [] {
         if (!IsTSan())
         {
+            ERR() << "=========== IsTSan() is false";
             RegisterContextCompatibilityTests();
         }
     };
