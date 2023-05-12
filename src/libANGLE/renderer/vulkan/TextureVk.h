@@ -509,8 +509,9 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
                                          size_t layer,
                                          const vk::ImageView **imageViewOut);
 
-    // Flush image's staged updates for all levels and layers.
     angle::Result flushImageStagedUpdates(ContextVk *contextVk);
+
+    angle::Result performImageQueueTransferIfNecessary(ContextVk *contextVk);
 
     // For various reasons, the underlying image may need to be respecified.  For example because
     // base/max level changed, usage/create flags have changed, the format needs modification to
