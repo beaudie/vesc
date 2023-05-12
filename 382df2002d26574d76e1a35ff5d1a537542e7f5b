@@ -153,6 +153,30 @@
       },
       "revId": "382df2002d26574d76e1a35ff5d1a537542e7f5b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac2aae05_00a87f62",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4404,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-12T02:15:22Z",
+      "side": 1,
+      "message": "Doing it surgically in the backend is actually more difficult than doing it in the front end.  I\u0027ve got the beginnings of it up, but need to keep searching.  Things like this are baked in:\n```\nconstexpr unsigned int kSupportedSampleCounts \u003d (VK_SAMPLE_COUNT_2_BIT | VK_SAMPLE_COUNT_4_BIT |\n                                                 VK_SAMPLE_COUNT_8_BIT | VK_SAMPLE_COUNT_16_BIT);\n```\nI\u0027m running end2end tests with `ANGLE_FEATURE_OVERRIDES_ENABLED\u003dlimitMaxMsaaSamplesTo1` to see what errors and crashes pop out.",
+      "parentUuid": "32709ce6_af251558",
+      "range": {
+        "startLine": 4404,
+        "startChar": 32,
+        "endLine": 4404,
+        "endChar": 33
+      },
+      "revId": "382df2002d26574d76e1a35ff5d1a537542e7f5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
