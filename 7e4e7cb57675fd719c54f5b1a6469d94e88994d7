@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5483131e_fde9845d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-05-12T20:49:51Z",
+      "side": 1,
+      "message": "Overall looks much better now.",
+      "revId": "7e4e7cb57675fd719c54f5b1a6469d94e88994d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74c26a0d_ed2b2d7f",
+        "filename": "src/libANGLE/Buffer.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-05-12T20:49:51Z",
+      "side": 1,
+      "message": "You probably can compact this data structure by union {vertexArray, texture}, and then use special bufferIndex (something like `static constexpr uint32_t kBufferTextureIndex\u003d-1`) for texture. And then  you can use template for addContentsObserver/removeContentsObserver/getContentsObserverIndex functions. You can assert if it is texture, the index passed in must be kBufferTextureIndex and if it is vertexArray it must not equal kBufferTextureIndex.",
+      "range": {
+        "startLine": 80,
+        "startChar": 4,
+        "endLine": 80,
+        "endChar": 31
+      },
+      "revId": "7e4e7cb57675fd719c54f5b1a6469d94e88994d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
