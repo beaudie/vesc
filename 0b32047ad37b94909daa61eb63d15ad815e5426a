@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06bcb0a2_42e6edb0",
+        "filename": "include/platform/FeaturesVk_autogen.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-05-12T21:33:43Z",
+      "side": 1,
+      "message": "related comment while reading this code: VulkanFeatures seems miss used. We need a new category like AppBugWorkAround or NoneConformIntervention.",
+      "range": {
+        "startLine": 901,
+        "startChar": 51,
+        "endLine": 901,
+        "endChar": 65
+      },
+      "revId": "0b32047ad37b94909daa61eb63d15ad815e5426a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
