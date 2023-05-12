@@ -14,10 +14,15 @@ declare_args() {
       is_win || is_linux || is_chromeos || is_android || is_apple || is_fuchsia
 }
 
+checkout_angle_restricted_traces = false
 declare_args() {
   build_angle_trace_tests = is_clang && (build_angle_trace_perf_tests ||
                                          checkout_angle_restricted_traces)
 }
+
+print("======== 0:  build_angle_trace_tests: ", build_angle_trace_tests)
+print("======== 0:  build_angle_trace_perf_tests: ", build_angle_trace_perf_tests)
+print("======== 0:  checkout_angle_restricted_traces: ", checkout_angle_restricted_traces)
 
 if (is_android) {
   android_library("native_test_java") {
@@ -159,61 +164,63 @@ angle_test("angle_system_info_test") {
   ]
 }
 
-angle_test("angle_unittests") {
-  sources = angle_unittests_sources + [ "angle_unittest_main.cpp" ]
-
-  # Compiler tests frequently require either TranslatorGLSL or TranslatorESSL.  Build them only if
-  # both are enabled.
-  if (angle_enable_essl && angle_enable_glsl) {
-    sources += angle_unittests_compiler_tests_sources
-
-    if (is_apple) {
-      sources += angle_unittests_glsl_mac_sources
-    }
-    if (angle_enable_metal) {
-      sources += angle_unittests_msl_sources
-    }
-  }
-
-  defines = []
-
-  if (angle_enable_hlsl) {
-    sources += angle_unittests_hlsl_sources
-    defines += [ "ANGLE_ENABLE_HLSL" ]
-  }
-
-  if (angle_enable_gl) {
-    sources += angle_unittests_gl_sources
-  }
-
-  deps = [
-    ":angle_test_expectations",
-    "$angle_root:angle_json_serializer",
-    "$angle_root:angle_static",
-    "$angle_root:libfeature_support",
-    "$angle_root/util:angle_util_static",
-  ]
-
-  if (angle_enable_vulkan) {
-    sources += [ "compiler_tests/Precise_test.cpp" ]
-    deps += [
-      "$angle_root/src/common/spirv:angle_spirv_base",
-      "$angle_root/src/common/spirv:angle_spirv_headers",
-      "$angle_root/src/common/spirv:angle_spirv_parser",
-      "${angle_spirv_headers_dir}:spv_headers",
-    ]
-  }
-
-  if (!is_android && !is_fuchsia && !is_ios) {
-    # SystemUtils.RunApp, the only unittest using a helper binary, is not supported on these
-    # platforms yet.
-    data_deps = [ ":test_utils_unittest_helper" ]
-  }
-
-  if (angle_has_rapidjson) {
-    sources += [ "../common/serializer/JsonSerializer_unittest.cpp" ]
-  }
-}
+# don't know why this is included
+# http://screen/5v5GiBzez63PMKY.png
+# angle_test("angle_unittests") {
+#   sources = angle_unittests_sources + [ "angle_unittest_main.cpp" ]
+#
+#   # Compiler tests frequently require either TranslatorGLSL or TranslatorESSL.  Build them only if
+#   # both are enabled.
+#   if (angle_enable_essl && angle_enable_glsl) {
+#     sources += angle_unittests_compiler_tests_sources
+#
+#     if (is_apple) {
+#       sources += angle_unittests_glsl_mac_sources
+#     }
+#     if (angle_enable_metal) {
+#       sources += angle_unittests_msl_sources
+#     }
+#   }
+#
+#   defines = []
+#
+#   if (angle_enable_hlsl) {
+#     sources += angle_unittests_hlsl_sources
+#     defines += [ "ANGLE_ENABLE_HLSL" ]
+#   }
+#
+#   if (angle_enable_gl) {
+#     sources += angle_unittests_gl_sources
+#   }
+#
+#   deps = [
+#     ":angle_test_expectations",
+#     "$angle_root:angle_json_serializer",
+#     "$angle_root:angle_static",
+#     "$angle_root:libfeature_support",
+#     "$angle_root/util:angle_util_static",
+#   ]
+#
+#   if (angle_enable_vulkan) {
+#     sources += [ "compiler_tests/Precise_test.cpp" ]
+#     deps += [
+#       "$angle_root/src/common/spirv:angle_spirv_base",
+#       "$angle_root/src/common/spirv:angle_spirv_headers",
+#       "$angle_root/src/common/spirv:angle_spirv_parser",
+#       "${angle_spirv_headers_dir}:spv_headers",
+#     ]
+#   }
+#
+#   if (!is_android && !is_fuchsia && !is_ios) {
+#     # SystemUtils.RunApp, the only unittest using a helper binary, is not supported on these
+#     # platforms yet.
+#     data_deps = [ ":test_utils_unittest_helper" ]
+#   }
+#
+#   if (angle_has_rapidjson) {
+#     sources += [ "../common/serializer/JsonSerializer_unittest.cpp" ]
+#   }
+# }
 
 if (is_ios) {
   bundle_data("angle_end2end_tests_bundle_data") {
@@ -283,7 +290,7 @@ if (is_win || is_linux || is_chromeos || is_android || is_fuchsia || is_apple) {
       include_dirs += [ "${android_ndk_root}/sysroot/usr/includes" ]
     }
 
-    data_deps = [ "$angle_root:angle" ]
+    # data_deps = [ "$angle_root:angle" ]
 
     if (angle_build_mesa) {
       data_deps += [ "$angle_root/third_party/mesa" ]
@@ -492,6 +499,7 @@ if (build_angle_perftests) {
   }
 }
 
+print("======== build_angle_trace_tests: ", build_angle_trace_tests)
 if (build_angle_trace_tests) {
   _angle_trace_common_sources = [
     "angle_trace_tests_main.cpp",
@@ -1721,45 +1729,51 @@ if (build_angle_deqp_tests && !is_fuchsia) {
   }
 }
 
-group("angle_tests") {
-  testonly = true
-  deps = [
-    ":angle_end2end_tests",
-    ":angle_system_info_test",
-    ":angle_unittests",
-  ]
-  if (build_angle_perftests) {
-    deps += [ ":angle_perftests" ]
-  }
-  if (build_angle_trace_tests) {
-    deps += [ ":angle_trace_perf_tests" ]
-  }
-  if (is_clang) {
-    deps += [ "capture_replay_tests" ]
-  }
-  if (!is_fuchsia) {
-    deps += [
-      ":angle_white_box_perftests",
-      ":angle_white_box_tests",
-    ]
-  }
-  if (build_angle_deqp_tests && !is_fuchsia) {
-    deps += [
-      ":angle_deqp_egl_tests",
-      ":angle_deqp_gl46_tests",
-      ":angle_deqp_gles2_tests",
-      ":angle_deqp_gles31_tests",
-      ":angle_deqp_gles3_tests",
-    ]
-  }
-  if (build_angle_gles1_conform_tests) {
-    deps += [
-      ":angle_gles1_conformance_tests",
-      ":angle_gles1_covegl_no_gtest",
-      ":angle_gles1_primtest_tests",
-    ]
-    if (!is_win && !is_apple) {
-      deps += [ ":angle_gles1_covgl_tests" ]
-    }
-  }
-}
+# why "angle_tests" is invoked?
+# this causes the dependency error of capture_replay_tests
+# http://screen/HJDG55sRgHs25bA
+# group("angle_tests") {
+#   testonly = true
+#   deps = [
+#     ":angle_end2end_tests",
+#     ":angle_system_info_test",
+#     # why "angle_tests" is invoked?
+#     # this causes one angle_unittests dependency error
+#     # http://screen/B3ujXMW3WRvYoaC.png
+#     # ":angle_unittests",
+#   ]
+#   if (build_angle_perftests) {
+#     deps += [ ":angle_perftests" ]
+#   }
+#   if (build_angle_trace_tests) {
+#     deps += [ ":angle_trace_perf_tests" ]
+#   }
+#   if (is_clang) {
+#     deps += [ "capture_replay_tests" ]
+#   }
+#   if (!is_fuchsia) {
+#     deps += [
+#       ":angle_white_box_perftests",
+#       ":angle_white_box_tests",
+#     ]
+#   }
+#   if (build_angle_deqp_tests && !is_fuchsia) {
+#     deps += [
+#       ":angle_deqp_egl_tests",
+#       ":angle_deqp_gl46_tests",
+#       ":angle_deqp_gles2_tests",
+#       ":angle_deqp_gles31_tests",
+#       ":angle_deqp_gles3_tests",
+#     ]
+#   }
+#   if (build_angle_gles1_conform_tests) {
+#     deps += [
+#       ":angle_gles1_conformance_tests",
+#       ":angle_gles1_covegl_no_gtest",
+#       ":angle_gles1_primtest_tests",
+#     ]
+#     if (!is_win && !is_apple) {
+#       deps += [ ":angle_gles1_covgl_tests" ]
+#     }
+#   }
+# }

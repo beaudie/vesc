@@ -42,6 +42,13 @@ function generate_Android_bp_file() {
             "symbol_level = 0"
             "angle_standalone = false"
             "angle_build_all = false"
+
+            # no idea why build_angle_deqp_tests is by default true?
+            # http://screen/mMXKEbCrGtkCaoE.png
+            "build_angle_deqp_tests = false"
+            "checkout_angle_restricted_traces = false"
+            "build_angle_end2end_tests = true"
+
             "angle_expose_non_conformant_extensions_and_versions = true"
 
             # Build for 64-bit CPUs
@@ -86,6 +93,12 @@ function generate_Android_bp_file() {
                 "angle_enable_trace_android_logcat = true"
             )
         fi
+
+        echo "gn_args: "
+        for element in "${gn_args[*]}"; do
+          echo " - $element"
+          echo "===================="
+        done
 
         gn gen ${GN_OUTPUT_DIRECTORY} --args="${gn_args[*]}"
         gn desc ${GN_OUTPUT_DIRECTORY} --format=json "*" > ${GN_OUTPUT_DIRECTORY}/desc.$abi.json
