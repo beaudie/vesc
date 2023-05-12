@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2914d282_5fe5f0a1",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3156,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-12T19:06:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5d523e70_dcc8cbaf",
+      "revId": "6d9231b0939adeb34a9b8abf17cf3337295af467",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d2ac1c02_b751a7aa",
@@ -90,6 +108,30 @@
       "side": 1,
       "message": "Oops thanks, will fix.",
       "parentUuid": "d2ac1c02_b751a7aa",
+      "range": {
+        "startLine": 3163,
+        "startChar": 55,
+        "endLine": 3163,
+        "endChar": 56
+      },
+      "revId": "6d9231b0939adeb34a9b8abf17cf3337295af467",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a52b168a_f9a483e5",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3163,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-12T19:06:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93a34dfd_b3fe88bf",
       "range": {
         "startLine": 3163,
         "startChar": 55,
@@ -568,6 +610,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "47815ae3_b7d70ed7",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3375,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-12T19:06:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80d8fe8e_0b527540",
+      "range": {
+        "startLine": 3369,
+        "startChar": 0,
+        "endLine": 3375,
+        "endChar": 87
+      },
+      "revId": "6d9231b0939adeb34a9b8abf17cf3337295af467",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "28e37ca5_3bd84ae4",
@@ -581,6 +647,30 @@
       "writtenOn": "2023-04-26T18:05:14Z",
       "side": 1,
       "message": "The reason I asked for a barrier here is that we are circumventing the automatic-barrier management by switching the buffer view and not the buffer itself.\n\nSee `ContextVk::handleDirtyTexturesImpl`, and how it\u0027s calling `OnTextureBufferRead`, which in turn calls `commandBufferHelper-\u003ebufferRead`; that\u0027s the one setting up the barrier. So the source buffer is being managed correctly, the destination buffer is being written to in compute out of the blue and used with no knowledge of it elsewhere.\n\nSo you\u0027d want a memory barrier here from `STAGE_COMPUTE/ACCESS_SHADER_WRITE` to `STAGE_ALL_GRAPHICS/ACCESS_SHADER_READ`.\n\n---\n\nIf one day we care, we could make ContextVk aware of the conversion buffer so that it would do the conversion itself (in ContextVk::handleDirtyTexturesImpl), then mark the conversion buffer as used in the command buffer, and then all barrier tracking becomes automatic. But then we\u0027d need to make sure it\u0027s the same conversion buffer we use to get the view later.",
+      "range": {
+        "startLine": 3383,
+        "startChar": 0,
+        "endLine": 3394,
+        "endChar": 91
+      },
+      "revId": "6d9231b0939adeb34a9b8abf17cf3337295af467",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d93751f1_ee27158a",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3394,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-12T19:06:43Z",
+      "side": 1,
+      "message": "Thanks! I added the barrier configured as you suggested.",
+      "parentUuid": "28e37ca5_3bd84ae4",
       "range": {
         "startLine": 3383,
         "startChar": 0,
