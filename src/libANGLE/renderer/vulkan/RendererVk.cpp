@@ -89,7 +89,7 @@ constexpr uint32_t kPreferredVulkanAPIVersion = VK_API_VERSION_1_1;
 // validate the data. For example, if the original and compressed sizes are 70000 bytes (68k) and
 // 68841 bytes (67k), the compressed data will be divided into two chunks: {70000,crc0,2,0;34421
 // bytes} and {70000,crc1,2,1;34420 bytes}.
-constexpr size_t kBlobHeaderSize = 8 * sizeof(uint8_t);
+constexpr size_t kBlobHeaderSize = 10 * sizeof(uint8_t);
 
 bool IsVulkan11(uint32_t apiVersion)
 {
@@ -910,14 +910,14 @@ class CacheDataHeader
 // Pack header data for the pipeline cache key data.
 void PackHeaderDataForPipelineCache(uint32_t cacheDataSize,
                                     uint16_t compressedDataCRC,
-                                    uint8_t numChunks,
-                                    uint8_t chunkIndex,
+                                    uint16_t numChunks,
+                                    uint16_t chunkIndex,
                                     CacheDataHeader *dataOut)
 {
-    dataOut->setValue<uint8_t>(0, chunkIndex);
-    dataOut->setValue<uint8_t>(1, numChunks);
-    dataOut->setValue<uint16_t>(2, compressedDataCRC);
-    dataOut->setValue<uint32_t>(4, cacheDataSize);
+    dataOut->setValue<uint16_t>(0, chunkIndex);
+    dataOut->setValue<uint16_t>(2, numChunks);
+    dataOut->setValue<uint16_t>(4, compressedDataCRC);
+    dataOut->setValue<uint32_t>(6, cacheDataSize);
 }
 
 // Unpack header data from the pipeline cache key data.
@@ -927,10 +927,10 @@ void UnpackHeaderDataForPipelineCache(CacheDataHeader *data,
                                       size_t *numChunksOut,
                                       size_t *chunkIndexOut)
 {
-    *chunkIndexOut        = data->getValue<uint8_t>(0);
-    *numChunksOut         = data->getValue<uint8_t>(1);
-    *compressedDataCRCOut = data->getValue<uint16_t>(2);
-    *cacheDataSizeOut     = data->getValue<uint32_t>(4);
+    *chunkIndexOut        = data->getValue<uint16_t>(0);
+    *numChunksOut         = data->getValue<uint16_t>(2);
+    *compressedDataCRCOut = data->getValue<uint16_t>(4);
+    *cacheDataSizeOut     = data->getValue<uint32_t>(6);
 }
 
 void ComputePipelineCacheVkChunkKey(VkPhysicalDeviceProperties physicalDeviceProperties,
@@ -1017,11 +1017,12 @@ void CompressAndStorePipelineCacheVk(VkPhysicalDeviceProperties physicalDevicePr
         }
 
         // Add the header data, followed by the compressed data.
-        ASSERT(numChunks <= UINT8_MAX && chunkIndex <= UINT8_MAX && cacheData.size() <= UINT32_MAX);
+        ASSERT(numChunks <= UINT16_MAX && chunkIndex <= UINT16_MAX &&
+               cacheData.size() <= UINT32_MAX);
         CacheDataHeader headerData = {};
         PackHeaderDataForPipelineCache(static_cast<uint32_t>(cacheData.size()), compressedDataCRC,
-                                       static_cast<uint8_t>(numChunks),
-                                       static_cast<uint8_t>(chunkIndex), &headerData);
+                                       static_cast<uint16_t>(numChunks),
+                                       static_cast<uint16_t>(chunkIndex), &headerData);
         memcpy(keyData.data(), headerData.data(), kBlobHeaderSize);
         memcpy(keyData.data() + kBlobHeaderSize, compressedData.data() + compressedOffset,
                chunkSize);
