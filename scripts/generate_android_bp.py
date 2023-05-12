@@ -13,11 +13,18 @@ import os
 import argparse
 import functools
 import collections
+import traceback
 
 ROOT_TARGETS = [
     "//:libGLESv2",
     "//:libGLESv1_CM",
     "//:libEGL",
+    "//src/tests:angle_end2end_tests__library",
+    "//third_party/googletest:gtest",
+    "//third_party/googletest:gtest_main",
+    "//testing/gtest:gtest",
+    "//testing/gtest:gtest_main",
+    # "//:angle_end2end_tests"
 ]
 
 MIN_SDK_VERSION = '28'
@@ -30,6 +37,14 @@ ABI_X86 = 'x86'
 ABI_X64 = 'x86_64'
 
 ABI_TARGETS = [ABI_ARM, ABI_ARM64, ABI_X86, ABI_X64]
+
+
+file_path = '/tmp/gen_android_bp_log'
+
+
+def log(msg):
+    with open(file_path, 'a') as file:
+        file.write(msg + '\n')
 
 
 def gn_abi(abi):
@@ -124,11 +139,13 @@ def gn_target_to_blueprint_target(target, target_info):
 
     # Split the gn target name (in the form of //gn_file_path:target_name) into gn_file_path and
     # target_name
-    match = re.match(r"^//([a-zA-Z0-9\-\+_/]*):([a-zA-Z0-9\-\+_.]+)$", target)
-    assert match is not None
+    match = re.match(r"^//([a-zA-Z0-9\-\+_/]*):([a-zA-Z0-9\-\+_.():/]+)$", target)
+
+    assert match is not None, target
 
     gn_file_path = match.group(1)
     target_name = match.group(2)
+
     assert len(target_name) > 0
 
     # Clean up the gn file path to be a valid blueprint target name.
@@ -526,6 +543,8 @@ def gn_target_to_blueprint(target, build_info):
         elif gn_type in blueprint_gen_types:
             return action_target_to_blueprint(abi, target, build_info)
         else:
+            log(f"============= target: {target}, abi: {abi}")
+            log(f"gn_type: {gn_type}")
             # Target is not used by this ABI
             continue
 
@@ -534,6 +553,8 @@ def gn_target_to_blueprint(target, build_info):
 def get_gn_target_dependencies(abi, target, build_info):
     result = collections.OrderedDict()
     result[target] = 1
+    # if target == '//third_party/zlib:zlib_slide_hash_simd(//build/toolchain/linux:clang_x64)':
+    #   raise Exception('//third_party/zlib:zlib_slide_hash_simd(//build/toolchain/linux:clang_x64)')
 
     for dep in build_info[abi][target]['deps']:
         if dep in target_blockist:
@@ -544,12 +565,22 @@ def get_gn_target_dependencies(abi, target, build_info):
             continue
 
         # Recurse
-        result.update(get_gn_target_dependencies(abi, dep, build_info))
+        try:
+            temp = get_gn_target_dependencies(abi, dep, build_info)
+        except Exception as e:
+            with open('/tmp/dependencies', 'a') as f:
+                f.write(target + '\n')
+                raise e
+
+        result.update(temp)
 
     return result
 
 
 def main():
+    if os.path.exists(file_path):
+        os.remove(file_path)
+
     parser = argparse.ArgumentParser(
         description='Generate Android blueprints from gn descriptions.')
 
@@ -562,6 +593,7 @@ def main():
     args = vars(parser.parse_args())
 
     infos = {}
+    # each abi has an gn json
     for abi in ABI_TARGETS:
         with open(args['gn_json_' + gn_abi(abi)], 'r') as f:
             infos[abi] = json.load(f)

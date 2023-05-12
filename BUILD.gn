@@ -44,6 +44,9 @@ declare_args() {
   angle_build_all = !build_with_chromium && !angle_is_winuwp &&
                     !angle_is_msvc && angle_has_build && angle_build_tests
 
+  # Build ANGLE e2e test app
+  build_angle_end2end_tests = false
+
   # Enable generating current commit information using git
   angle_enable_commit_id = true
 
@@ -111,6 +114,13 @@ if (angle_build_all) {
     if (angle_build_mesa) {
       deps += [ "$angle_root/third_party/mesa" ]
     }
+  }
+}
+
+if (build_angle_end2end_tests) {
+  group("angle_end2end_tests") {
+    testonly = true
+    deps = [ "$angle_root/src/tests:angle_end2end_tests" ]
   }
 }
 
@@ -1654,7 +1664,7 @@ angle_executable("angle_shader_translator") {
   }
 }
 
-if (angle_standalone || build_with_chromium) {
+if (angle_standalone || build_with_chromium || is_android) {
   config("angle_feature_support_config") {
     include_dirs = [
       "include",

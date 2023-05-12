@@ -35,10 +35,12 @@ angle_executable("capture_replay_tests") {
   sources = [ "CaptureReplayTests.cpp" ]
   deps = [
     "$angle_root:angle_compression",
-    "$angle_root/util:angle_frame_capture_test_utils",
     "$angle_root/util:angle_trace_loader",
     "$angle_root/util:angle_util",
   ]
+  if (angle_has_frame_capture) {
+    deps += [ "$angle_root/util:angle_frame_capture_test_utils" ]
+  }
 
   data_deps = [
     "$angle_root:libEGL",

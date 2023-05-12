@@ -13,8 +13,8 @@
 #include <signal.h>
 #include <string.h>
 #include <unistd.h>
-
 #include "common/angleutils.h"
+#include "common/debug.h"
 #include "common/string_utils.h"
 
 // The main function of the program to be wrapped as a test apk.
@@ -121,6 +121,7 @@ Java_com_android_angle_test_AngleNativeTest_nativeRunTests(JNIEnv *env,
                                                            jstring jcommandLineFilePath,
                                                            jstring jstdoutFilePath)
 {
+    ERR() << "================ Java_com_android_angle_test_AngleNativeTest_nativeRunTests";
     InstallExceptionHandlers();
 
     const std::string commandLineFlags(ASCIIJavaStringToUTF8(env, jcommandLineFlags));
@@ -185,6 +186,12 @@ Java_com_android_angle_test_AngleNativeTest_nativeRunTests(JNIEnv *env,
 
     {
         ScopedMainEntryLogger scoped_main_entry_logger;
+        AndroidLog(ANDROID_LOG_ERROR, "=========== before main(static_cast<int>(argc), &argv[0]);");
+        AndroidLog(ANDROID_LOG_ERROR, "=========== argc: %d", argc);
+        for (size_t i = 0; i < argc; ++i)
+        {
+            AndroidLog(ANDROID_LOG_ERROR, "=========== argv[%d]: %s", i, argv[i]);
+        }
         main(static_cast<int>(argc), &argv[0]);
     }
 

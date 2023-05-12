@@ -26,9 +26,18 @@ constexpr char kTestExpectationsPath[] = "src/tests/angle_end2end_tests_expectat
 
 int main(int argc, char **argv)
 {
+    ERR() << "=============== main() in src/tests/angle_end2end_tests_main.cpp, from ANGLE "
+             "standalone";
+    ERR() << "=========== argc: " << argc;
+    for (int argIndex = 0; argIndex < argc; argIndex++)
+    {
+        ERR() << "============ argv[" << argIndex << "]: " << argv[argIndex];
+    }
     auto registerTestsCallback = [] {
+        ERR() << "=========== checking IsTSan()";
         if (!IsTSan())
         {
+            ERR() << "=========== IsTSan() is false";
             RegisterContextCompatibilityTests();
         }
     };
