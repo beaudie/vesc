@@ -177,6 +177,30 @@
       },
       "revId": "382df2002d26574d76e1a35ff5d1a537542e7f5b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3eafd4e4_b6bb2190",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4404,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-12T13:25:35Z",
+      "side": 1,
+      "message": "\u003e It would make sure the app behaviour stays the same too.\n\nThat\u0027s not always possible. There are some state that only apply to multisampling (like alpha to coverage) and the app could be using that to get correct rendering. Implicitly disabling multisampling will make it nearly impossible to stay correct.\n\nIt might just be fine to drop to ES2 support if the device is so weak anyway.",
+      "parentUuid": "ac2aae05_00a87f62",
+      "range": {
+        "startLine": 4404,
+        "startChar": 32,
+        "endLine": 4404,
+        "endChar": 33
+      },
+      "revId": "382df2002d26574d76e1a35ff5d1a537542e7f5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
