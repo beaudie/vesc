@@ -3245,6 +3245,18 @@ VkResult GraphicsPipelineDesc::initializePipeline(Context *context,
     return result;
 }
 
+angle::FormatID patchVertexAttribComponentType(angle::FormatID format)
+{
+    const gl::VertexFormat &vertexFormat = gl::GetVertexFormatFromID(format);
+    if (vertexFormat.normalized)
+    {
+        return format;
+    }
+    return gl::GetVertexFormatID(gl::FromGLenum<gl::VertexAttribType>(vertexFormat.type),
+                                 vertexFormat.normalized, vertexFormat.normalized,
+                                 !vertexFormat.pureInteger);
+}
+
 void GraphicsPipelineDesc::initializePipelineVertexInputState(
     Context *context,
     GraphicsPipelineVertexInputVulkanStructs *stateOut,
@@ -3301,14 +3313,19 @@ void GraphicsPipelineDesc::initializePipelineVertexInputState(
 
         // This forces stride to 0 when glVertexAttribPointer specifies a different type from the
         // program's attribute type except when the type mismatch is a mismatched integer sign.
-        if (bindingDesc.stride > 0 && attribType != programAttribType)
+        if (attribType != programAttribType)
         {
             if (attribType == gl::ComponentType::Float ||
                 programAttribType == gl::ComponentType::Float)
             {
-                // When dealing with float to int or unsigned int or vice versa, just override the
-                // format with a compatible one.
-                vkFormat = kMismatchedComponentTypeMap[programAttribType];
+                // Vertex Attib input as float, while Vertex Shader Input as unsigned/signed
+                // Do we need patch all cases ?
+                if (programAttribType != gl::ComponentType::Float)
+                {
+                    vkFormat = context->getRenderer()
+                                   ->getFormat(patchVertexAttribComponentType(formatID))
+                                   .getActualBufferVkFormat(packedAttrib.compressed);
+                }
             }
             else
             {
@@ -3328,12 +3345,6 @@ void GraphicsPipelineDesc::initializePipelineVertexInputState(
             }
 
             ASSERT(context->getRenderer()->getNativeExtensions().relaxedVertexAttributeTypeANGLE);
-
-            if (programAttribType == gl::ComponentType::Float ||
-                attribType == gl::ComponentType::Float)
-            {
-                bindingDesc.stride = 0;  // Prevent out-of-bounds accesses.
-            }
         }
 
         attribDesc.binding  = attribIndex;
