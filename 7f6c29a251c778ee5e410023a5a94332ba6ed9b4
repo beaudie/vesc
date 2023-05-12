@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef385341_5664016c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-12T13:22:13Z",
+      "side": 1,
+      "message": "Replace with the following to pass presubmit:\n\n```\nBug: b/273278430\nChange-Id: Ib32f7dbcc158085b75f4befc277a03229ff87152\n```",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 52
+      },
+      "revId": "7f6c29a251c778ee5e410023a5a94332ba6ed9b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
