@@ -72,6 +72,7 @@ class ResourceUse final
         {
             mSerials.resize(index + 1, kZeroSerial);
         }
+        ERR() << "jasonjason index = " << index  << " mSerials[index] = " << mSerials[index].getValue() << " vs serial = " << serial.getValue();
         ASSERT(mSerials[index] <= serial);
         mSerials[index] = serial;
     }
