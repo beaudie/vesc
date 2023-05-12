@@ -1725,6 +1725,7 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     {
         ANGLE_SCOPED_DISABLE_LSAN();
         ANGLE_SCOPED_DISABLE_MSAN();
+        ERR() << "=========== (void*)vkEnumerateInstanceLayerProperties: " << (void*)vkEnumerateInstanceLayerProperties;
         ANGLE_VK_TRY(displayVk, vkEnumerateInstanceLayerProperties(&instanceLayerCount, nullptr));
     }
 
