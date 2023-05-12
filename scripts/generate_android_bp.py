@@ -15,9 +15,10 @@ import functools
 import collections
 
 ROOT_TARGETS = [
-    "//:libGLESv2",
-    "//:libGLESv1_CM",
-    "//:libEGL",
+    # "//:libGLESv2",
+    # "//:libGLESv1_CM",
+    # "//:libEGL",
+    "$angle_root/src/tests:angle_tests"
 ]
 
 CODEGEN_TARGETS = [
@@ -34,6 +35,14 @@ ABI_X86 = 'x86'
 ABI_X64 = 'x86_64'
 
 ABI_TARGETS = [ABI_ARM, ABI_ARM64, ABI_X86, ABI_X64]
+
+
+file_path = '/tmp/gen_android_bp_log'
+
+
+def log(msg):
+    with open(file_path, 'a') as file:
+        file.write(msg + '\n')
 
 
 def gn_abi(abi):
@@ -544,6 +553,9 @@ def get_gn_target_dependencies(abi, target, build_info):
     result = collections.OrderedDict()
     result[target] = 1
 
+    log(f"abi: {abi}, target: {target}")
+    log(f"build_info[abi].keys(): {build_info[abi].keys()}")
+    log(f" build_info[abi][target]:  { build_info[abi][target]}")
     for dep in build_info[abi][target]['deps']:
         if dep in target_blockist:
             # Blocklisted dep
@@ -559,6 +571,9 @@ def get_gn_target_dependencies(abi, target, build_info):
 
 
 def main():
+    if os.path.exists(file_path):
+        os.remove(file_path)
+
     parser = argparse.ArgumentParser(
         description='Generate Android blueprints from gn descriptions.')
 
@@ -571,7 +586,9 @@ def main():
     args = vars(parser.parse_args())
 
     infos = {}
+    # each abi has an gn json
     for abi in ABI_TARGETS:
+        log(f"args['gn_json_' + gn_abi(abi)]: {args['gn_json_' + gn_abi(abi)]}")
         with open(args['gn_json_' + gn_abi(abi)], 'r') as f:
             infos[abi] = json.load(f)
 
