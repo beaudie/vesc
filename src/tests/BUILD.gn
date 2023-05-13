@@ -227,6 +227,8 @@ if (is_ios) {
 if (is_win || is_linux || is_chromeos || is_android || is_fuchsia || is_apple) {
   import("angle_end2end_tests.gni")
 
+  # angle_end2end_tests_template("angle_end2end_tests") {
+  # }
   angle_test("angle_end2end_tests") {
     include_dirs = [ "." ]
 
