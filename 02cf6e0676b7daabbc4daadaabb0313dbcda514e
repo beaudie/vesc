@@ -60,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bc649400_29072c2a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 5596,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-05-13T00:33:16Z",
+      "side": 1,
+      "message": "Thanks. Condition and assert updated.\nIt seems that `ANGLE_VK_PERF_WARNING()` doesn\u0027t work with `vk::Context`, only with `ContextVk`. I have added a similar warning to `compareExpectedFlagsWithAllocatedFlags()`.",
+      "parentUuid": "31d13cfd_ac3e8b2d",
+      "range": {
+        "startLine": 5591,
+        "startChar": 4,
+        "endLine": 5596,
+        "endChar": 0
+      },
+      "revId": "02cf6e0676b7daabbc4daadaabb0313dbcda514e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "01a8659e_1e7913c6",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 12
@@ -71,6 +95,30 @@
       "writtenOn": "2023-05-12T16:39:24Z",
       "side": 1,
       "message": "Also this can be moved into line 5594 as well, right?",
+      "range": {
+        "startLine": 5599,
+        "startChar": 4,
+        "endLine": 5601,
+        "endChar": 62
+      },
+      "revId": "02cf6e0676b7daabbc4daadaabb0313dbcda514e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84177a2f_3b54428d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 5601,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-05-13T00:33:16Z",
+      "side": 1,
+      "message": "I agree. Moved.",
+      "parentUuid": "01a8659e_1e7913c6",
       "range": {
         "startLine": 5599,
         "startChar": 4,
