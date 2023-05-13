@@ -50,6 +50,15 @@ angle_test("test_utils_unittest_helper") {
   ]
 }
 
+angle_test("test_utils_unittest_helper_fake") {
+  sources = [
+    "../../util/test_utils_unittest_helper.cpp",
+    "../../util/test_utils_unittest_helper.h",
+    "test_utils/angle_test_instantiate.h",
+    "test_utils/runner/TestSuite_unittest.cpp",
+  ]
+}
+
 test_expectations_sources = [
   "test_expectations/GPUTestConfig.cpp",
   "test_expectations/GPUTestConfig.h",
@@ -227,6 +236,8 @@ if (is_ios) {
 if (is_win || is_linux || is_chromeos || is_android || is_fuchsia || is_apple) {
   import("angle_end2end_tests.gni")
 
+  # angle_end2end_tests_template("angle_end2end_tests") {
+  # }
   angle_test("angle_end2end_tests") {
     include_dirs = [ "." ]
 
@@ -491,7 +502,7 @@ if (build_angle_perftests) {
     }
   }
 }
-
+build_angle_trace_tests = false
 if (build_angle_trace_tests) {
   _angle_trace_common_sources = [
     "angle_trace_tests_main.cpp",
