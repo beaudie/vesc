@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7755a972_cda5d961",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-05-13T07:19:01Z",
+      "side": 1,
+      "message": "Kimmo: could you please test patchset 5 on iOS? The latest heuristic, for GC\u0027ing every 64 MB of shadow buffer memory allocated, decreases Figma\u0027s peak GPU memory consumption by ~75%.\n\nThere may still be some test failures that need to be diagnosed before landing; I didn\u0027t investigate those yet.",
+      "revId": "447385c5222f975e345b8a468e534e525f5c0993",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
