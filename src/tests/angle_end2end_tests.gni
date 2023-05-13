@@ -1,7 +1,7 @@
 # Copyright 2014 The ANGLE Project Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
-
+import("../../gni/angle.gni")
 angle_end2end_tests_sources = [
   "egl_tests/EGLAndroidFrameBufferTargetTest.cpp",
   "egl_tests/EGLBackwardsCompatibleContextTest.cpp",
@@ -229,3 +229,122 @@ angle_end2end_tests_win_sources = [
   "egl_tests/media/yuvtest.inl",
   "gl_tests/D3DImageFormatConversionTest.cpp",
 ]
+
+template("angle_end2end_tests_template") {
+  angle_test(target_name) {
+    # To avoid the error:
+    #    solti@solti:~/angle$ autoninja -C out/Android angle_end2end_tests
+    #    ninja: Entering directory `out/Android'
+    #    [0/1] Regenerating ninja files
+    #    ERROR at //src/tests/BUILD.gn:230:3: Assignment had no effect.
+    #      angle_end2end_tests_template("angle_end2end_tests") {
+    #      ^----------------------------------------------------
+    #    You set the variable "invoker" here and it was unused before it went
+    #    out of scope.
+    #
+    #    Via these template invocations:
+    #      angle_end2end_tests_template("angle_end2end_tests")  //src/tests/BUILD.gn:230
+    #
+    #    See //src/tests/BUILD.gn:230:3: whence it was called.
+    #      angle_end2end_tests_template("angle_end2end_tests") {
+    #      ^----------------------------------------------------
+    #    See //BUILD.gn:95:7: which caused the file to be included.
+    #          "$angle_root/src/tests:angle_tests",
+    #          ^----------------------------------
+    #    FAILED: build.ninja.stamp
+    #    ../../buildtools/linux64/gn --root=../.. -q --regeneration gen .
+    #    ninja: error: rebuilding 'build.ninja': subcommand failed
+    #    solti@solti:~/angle$
+    forward_variables_from(invoker, "*")
+
+    include_dirs = [ "." ]
+
+    sources = angle_end2end_tests_sources + [ "angle_end2end_tests_main.cpp" ]
+    libs = []
+
+    if (is_ios) {
+      sources += angle_end2end_tests_ios_sources
+      frameworks = [ "IOSurface.framework" ]
+    }
+    if (is_mac) {
+      sources += angle_end2end_tests_mac_sources
+      frameworks = [
+        "CoreFoundation.framework",
+        "IOSurface.framework",
+      ]
+      ldflags = [
+        "-weak_framework",
+        "Metal",
+      ]
+      cflags_objcc = [
+        "-Wno-nullability-completeness",
+        "-Wno-unguarded-availability",
+      ]
+    }
+    if (is_win) {
+      sources += angle_end2end_tests_win_sources
+    }
+    if (angle_use_x11) {
+      sources += [ "egl_tests/EGLX11VisualTest.cpp" ]
+    }
+    if (angle_use_wayland) {
+      sources += [ "egl_tests/EGLWaylandTest.cpp" ]
+    }
+
+    deps = [
+      ":angle_common_test_utils_shared",
+      "$angle_root:angle_gl_enum_utils",
+      "$angle_root:angle_image_util",
+      "$angle_root:translator",
+    ]
+
+    if (is_ios) {
+      deps += [ ":angle_end2end_tests_bundle_data" ]
+    } else {
+      data = [ "angle_end2end_tests_expectations.txt" ]
+    }
+
+    if (angle_has_rapidjson) {
+      deps += [ "$angle_root:angle_json_serializer" ]
+    }
+
+    if (is_android) {
+      include_dirs += [ "${android_ndk_root}/sysroot/usr/includes" ]
+    }
+
+    data_deps = [ "$angle_root:angle" ]
+
+    if (angle_build_mesa) {
+      data_deps += [ "$angle_root/third_party/mesa" ]
+    }
+
+    if (angle_enable_vulkan) {
+      sources += [
+        "gl_tests/VulkanExternalImageTest.cpp",
+        "gl_tests/VulkanImageTest.cpp",
+        "test_utils/VulkanHelper.cpp",
+        "test_utils/VulkanHelper.h",
+      ]
+      deps += [ "$angle_root/src/common/vulkan" ]
+    }
+
+    if (is_fuchsia) {
+      # TODO(crbug.com/1185811): Investigate removing the requirement for
+      # job_policy_ambient_mark_vmo_exec.
+      test_runner_shard = "//build/config/fuchsia/test/elf_test_ambient_exec_runner.shard.test-cml"
+      additional_manifest_fragments = [
+        "//build/config/fuchsia/test/present_view.shard.test-cml",
+        "//third_party/fuchsia-sdk/sdk/pkg/vulkan/client.shard.cml",
+      ]
+    }
+
+    if (is_ios) {
+      xcode_extra_attributes = {
+        SUPPORTS_MACCATALYST = "YES"
+      }
+
+      # Need to bundle the libraries inside the .app.
+      deps += [ "$angle_root:angle" ]
+    }
+  }
+}
