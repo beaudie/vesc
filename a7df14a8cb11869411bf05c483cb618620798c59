@@ -54,6 +54,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "59a32563_2309c610",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3139,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-13T11:55:05Z",
+      "side": 1,
+      "message": "Please initialize variables outside `if`. We `avoid` assignment as part of if condition.",
+      "range": {
+        "startLine": 3139,
+        "startChar": 8,
+        "endLine": 3139,
+        "endChar": 32
+      },
+      "revId": "a7df14a8cb11869411bf05c483cb618620798c59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ab65a57c_a5cb9f22",
         "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
         "patchSetId": 2
