@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e46d3a8b_dc718484",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-05-15T18:08:10Z",
+      "side": 1,
+      "message": "Looks like Shabi already has valuable feedback on this CL, so not touching its state.",
+      "revId": "9f558fbcbf56180cad13a2562a8e4dc4738bd4a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a097a8a_34ae79cc",
