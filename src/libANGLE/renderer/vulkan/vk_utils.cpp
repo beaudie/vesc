@@ -1408,8 +1408,14 @@ VkFrontFace GetFrontFace(GLenum frontFace, bool invertCullFace)
     }
 }
 
-VkSampleCountFlagBits GetSamples(GLint sampleCount)
+VkSampleCountFlagBits GetSamples(GLint sampleCount, bool capSamples)
 {
+    if (capSamples)
+    {
+        // Capping at 2 will allow single sampling to work with 1
+        sampleCount = std::min(sampleCount, 2);
+    }
+
     switch (sampleCount)
     {
         case 0:
