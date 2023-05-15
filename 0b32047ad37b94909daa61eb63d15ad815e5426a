@@ -46,6 +46,30 @@
       },
       "revId": "0b32047ad37b94909daa61eb63d15ad815e5426a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7985d47_a81c771b",
+        "filename": "include/platform/FeaturesVk_autogen.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-15T16:48:04Z",
+      "side": 1,
+      "message": "I started with it as a gl::Limitation, but there\u0027s no infrastructure for setting those dynamically on the terminal or triggering tests with them enabled.",
+      "parentUuid": "5712f022_e7cb4682",
+      "range": {
+        "startLine": 901,
+        "startChar": 51,
+        "endLine": 901,
+        "endChar": 65
+      },
+      "revId": "0b32047ad37b94909daa61eb63d15ad815e5426a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
