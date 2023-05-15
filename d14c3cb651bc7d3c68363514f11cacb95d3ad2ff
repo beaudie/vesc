@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f050c9f7_4804acde",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-05-15T17:51:51Z",
+      "side": 1,
+      "message": "lgtm+2 in case Alexey is unavailable. Great work Chris thinking through these interactions.",
+      "revId": "d14c3cb651bc7d3c68363514f11cacb95d3ad2ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8171fb5d_714fde65",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 3743,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-05-15T17:51:51Z",
+      "side": 1,
+      "message": "Perhaps in a follow-on CL, I\u0027d suggest putting these new code blocks into their own tests, since this specific unit test is turning into a mega-test which is hard to debug if something goes wrong.",
+      "revId": "d14c3cb651bc7d3c68363514f11cacb95d3ad2ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
