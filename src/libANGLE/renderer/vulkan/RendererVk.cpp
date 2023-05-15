@@ -4514,6 +4514,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
 
     ANGLE_FEATURE_CONDITION(&mFeatures, enablePipelineCacheDataCompression, true);
 
+    // CLN HACK FOR TESTING
+    ANGLE_FEATURE_CONDITION(&mFeatures, limitSampleCountTo2, true);
+
     ApplyFeatureOverrides(&mFeatures, displayVk->getState());
 
     // Disable memory report feature overrides if extension is not supported.
