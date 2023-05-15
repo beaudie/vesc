@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f225f2d_35cb8d33",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-15T16:01:50Z",
+      "side": 1,
+      "message": "Change LGTM, but over to Geoff as I\u0027m not sure how AUTHOR vs CONTRIBUTOR works.",
+      "revId": "c007a0ad1e05ed27d84f8fd14f78cf5232f004d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "196a4e13_000438b0",
+        "filename": "AUTHORS",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-15T16:01:50Z",
+      "side": 1,
+      "message": "I believe you should add your organization name to AUTHOR, and your names to CONTRIBUTOR.  We can get your email addresses from the commit or this code review.",
+      "range": {
+        "startLine": 82,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 34
+      },
+      "revId": "c007a0ad1e05ed27d84f8fd14f78cf5232f004d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
