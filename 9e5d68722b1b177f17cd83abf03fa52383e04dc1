@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "acc6b304_baa4b571",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 889,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-05-15T19:11:37Z",
+      "side": 1,
+      "message": "Thanks. Moved `kBlobHeaderSize` into the class as a private constant, accessible through a static function. I agree that other header-related processes can also be moved here.",
+      "parentUuid": "a4b460cf_a9050458",
+      "revId": "9e5d68722b1b177f17cd83abf03fa52383e04dc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ca69d61f_52a1ce7c",
@@ -48,6 +66,24 @@
       "writtenOn": "2023-05-13T01:16:25Z",
       "side": 1,
       "message": "The structure of this data is known, this should just be a proper set of members with the right type. You can use bitfields where appropriate. Use `ANGLE_ENABLE_STRUCT_PADDING_WARNINGS` and `ANGLE_DISABLE_STRUCT_PADDING_WARNINGS` around the class to ensure it\u0027s packed.",
+      "revId": "9e5d68722b1b177f17cd83abf03fa52383e04dc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "979e23be_c8ed0f9b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 907,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-05-15T19:11:37Z",
+      "side": 1,
+      "message": "Thanks. Class updated.",
+      "parentUuid": "ca69d61f_52a1ce7c",
       "revId": "9e5d68722b1b177f17cd83abf03fa52383e04dc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
