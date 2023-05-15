@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b3982571_56745e2d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3246,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-05-15T19:11:37Z",
+      "side": 1,
+      "message": "yeah, we can do. but this will make it quite strange. let\u0027s just keep it for normalized.",
+      "parentUuid": "7348416e_97c939fd",
+      "range": {
+        "startLine": 3246,
+        "startChar": 30,
+        "endLine": 3246,
+        "endChar": 45
+      },
+      "revId": "e3d0dd923049d4617790253d1e4b64be8b7bab90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7b5b1dac_58e82426",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 13
@@ -54,6 +78,24 @@
       "writtenOn": "2023-05-13T01:27:33Z",
       "side": 1,
       "message": "Given the assumptions below, can you `ASSERT` that `vsInputType` is either Int or UnsignedInt here?",
+      "revId": "e3d0dd923049d4617790253d1e4b64be8b7bab90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00161f71_ec2a53bd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3253,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-05-15T19:11:37Z",
+      "side": 1,
+      "message": "it can be Float.",
+      "parentUuid": "7b5b1dac_58e82426",
       "revId": "e3d0dd923049d4617790253d1e4b64be8b7bab90",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -75,6 +117,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e3fbc39_e6a06e0f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3265,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-05-15T19:11:37Z",
+      "side": 1,
+      "message": "for USCALED,SSCALED, the attribType will be GL_BYTE(SHORT ..)\nnormalized \u003d false, components is the same. but pureInteger will be flipped.\nso the result will be GL_BYTE (SHORT... ) as integer.",
+      "parentUuid": "7bad6b1b_390e995e",
+      "revId": "e3d0dd923049d4617790253d1e4b64be8b7bab90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6f0a1779_07038ebe",
@@ -92,6 +152,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1d9f6e0_1e2d245f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3326,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-05-15T19:11:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f0a1779_07038ebe",
+      "revId": "e3d0dd923049d4617790253d1e4b64be8b7bab90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e5c73f71_6e89a001",
@@ -105,6 +183,30 @@
       "writtenOn": "2023-05-13T01:27:33Z",
       "side": 1,
       "message": "nit: Place the result in temp variable for readability.",
+      "range": {
+        "startLine": 3334,
+        "startChar": 36,
+        "endLine": 3334,
+        "endChar": 95
+      },
+      "revId": "e3d0dd923049d4617790253d1e4b64be8b7bab90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16682ffb_40f89fa1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3334,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-05-15T19:11:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5c73f71_6e89a001",
       "range": {
         "startLine": 3334,
         "startChar": 36,
