@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "57c94c6e_f7ca330f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-16T16:53:26Z",
+      "side": 1,
+      "message": "Ah ok, I guess it\u0027s fine if there\u0027s precedence.",
+      "parentUuid": "ee5a54da_df78766d",
+      "revId": "00dcad768746bbb39b5cd7a55671032cc4346f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7a053acb_3bda2621",
@@ -128,6 +146,29 @@
         "startChar": 33,
         "endLine": 3383,
         "endChar": 67
+      },
+      "revId": "00dcad768746bbb39b5cd7a55671032cc4346f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49eb2067_5709f50c",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 7312,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-16T16:53:26Z",
+      "side": 1,
+      "message": "Suggest not reusing colors or same values for channels; it should make debugging a bit easier. For the GL failure, it\u0027s not clear if the `memcpy` did nothing (and the color is still blue) or if there\u0027s a shift in channels and the green value ends in the blue channel.\n\nYou can use any value here, like `77, 162, 94` (anything really). Just use `EXPECT_PIXEL_COLOR_NEAR(..., 1)` later when verifying.",
+      "range": {
+        "startLine": 7312,
+        "startChar": 37,
+        "endLine": 7312,
+        "endChar": 46
       },
       "revId": "00dcad768746bbb39b5cd7a55671032cc4346f53",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
