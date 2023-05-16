@@ -5743,6 +5743,14 @@ VkResult ImageMemorySuballocator::allocateAndBindMemory(Context *context,
         INFO() << "Garbage freed; retrying allocation.";
 
         requiredFlags &= (~VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+
+        //        auto contextVk = static_cast<ContextVk *>(context);
+        //        (void)contextVk->finishImpl(RenderPassClosureReason::MemorySpaceLimitation);
+        //        ANGLE_VK_PERF_WARNING(contextVk, GL_DEBUG_SEVERITY_HIGH,
+        //                              "Garbage freed; will retry allocation.");
+        //        renderer->cleanupGarbage();
+        //        INFO() << "Garbage freed; retrying allocation";
+
         result = vma::AllocateAndBindMemoryForImage(
             allocator.getHandle(), &image->mHandle, requiredFlags, preferredFlags,
             allocateDedicatedMemory, &allocationOut->mHandle, memoryTypeIndexOut, sizeOut);
