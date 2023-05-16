@@ -179,12 +179,14 @@ class ProgramExecutableVk
     angle::Result updateShaderResourcesDescriptorSet(
         vk::Context *context,
         UpdateDescriptorSetsBuilder *updateBuilder,
+        const vk::WriteDescriptorDescs &writeDescriptorDescs,
         vk::CommandBufferHelperCommon *commandBufferHelper,
         const vk::DescriptorSetDescBuilder &shaderResourcesDesc,
         vk::SharedDescriptorSetCacheKey *newSharedCacheKeyOut);
     angle::Result updateUniformsAndXfbDescriptorSet(
         vk::Context *context,
         UpdateDescriptorSetsBuilder *updateBuilder,
+        const vk::WriteDescriptorDescs &writeDescriptorDescs,
         vk::CommandBufferHelperCommon *commandBufferHelper,
         vk::BufferHelper *defaultUniformBuffer,
         vk::DescriptorSetDescBuilder *uniformsAndXfbDesc);
@@ -243,6 +245,15 @@ class ProgramExecutableVk
 
     angle::Result warmUpPipelineCache(ContextVk *contextVk,
                                       const gl::ProgramExecutable &glExecutable);
+
+    const vk::WriteDescriptorDescs &getShaderResourceWriteDescriptorDescs() const
+    {
+        return mShaderResourceWriteDescriptorDescs;
+    }
+    const vk::WriteDescriptorDescs &getTextureWriteDescriptorDescs() const
+    {
+        return mTextureWriteDescriptorDescs;
+    }
 
   private:
     friend class ProgramVk;
@@ -345,6 +356,7 @@ class ProgramExecutableVk
                                              UpdateDescriptorSetsBuilder *updateBuilder,
                                              vk::CommandBufferHelperCommon *commandBufferHelper,
                                              const vk::DescriptorSetDescBuilder &descriptorSetDesc,
+                                             const vk::WriteDescriptorDescs &writeDescriptorDescs,
                                              DescriptorSetIndex setIndex,
                                              vk::SharedDescriptorSetCacheKey *newSharedCacheKeyOut);
 
@@ -413,6 +425,9 @@ class ProgramExecutableVk
     // With VK_EXT_graphics_pipeline_library, this cache is used for the "shaders" subset of the
     // pipeline.
     vk::PipelineCache mPipelineCache;
+
+    vk::WriteDescriptorDescs mShaderResourceWriteDescriptorDescs;
+    vk::WriteDescriptorDescs mTextureWriteDescriptorDescs;
 };
 
 }  // namespace rx

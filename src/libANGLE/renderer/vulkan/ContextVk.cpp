@@ -2651,8 +2651,8 @@ angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferHelperT *co
 
     vk::SharedDescriptorSetCacheKey newSharedCacheKey;
     ANGLE_TRY(executableVk->updateShaderResourcesDescriptorSet(
-        this, mShareGroupVk->getUpdateDescriptorSetsBuilder(), commandBufferHelper,
-        mShaderBuffersDescriptorDesc, &newSharedCacheKey));
+        this, mShareGroupVk->getUpdateDescriptorSetsBuilder(), mShaderBufferWriteDescriptorDescs,
+        commandBufferHelper, mShaderBuffersDescriptorDesc, &newSharedCacheKey));
 
     mShaderBuffersDescriptorDesc.updateImagesAndBuffersWithSharedCacheKey(newSharedCacheKey);
 
@@ -2805,13 +2805,14 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
     vk::BufferHelper *currentUniformBuffer = mDefaultUniformStorage.getCurrentBuffer();
 
     vk::DescriptorSetDescBuilder uniformsAndXfbDesc;
+    vk::WriteDescriptorDescs writeDescriptorDescs;
     uniformsAndXfbDesc.updateUniformsAndXfb(
         this, *executable, *executableVk, currentUniformBuffer, mEmptyBuffer,
-        mState.isTransformFeedbackActiveUnpaused(), transformFeedbackVk);
+        mState.isTransformFeedbackActiveUnpaused(), transformFeedbackVk, writeDescriptorDescs);
 
     return executableVk->updateUniformsAndXfbDescriptorSet(
-        this, mShareGroupVk->getUpdateDescriptorSetsBuilder(), mRenderPassCommands,
-        currentUniformBuffer, &uniformsAndXfbDesc);
+        this, mShareGroupVk->getUpdateDescriptorSetsBuilder(), writeDescriptorDescs,
+        mRenderPassCommands, currentUniformBuffer, &uniformsAndXfbDesc);
 }
 
 angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersExtension(
@@ -6118,27 +6119,34 @@ angle::Result ContextVk::updateShaderResourcesDescriptorDesc(PipelineType pipeli
     const ProgramExecutableVk &executableVk = *getExecutable();
     const ShaderInterfaceVariableInfoMap &variableInfoMap = executableVk.getVariableInfoMap();
 
+    mShaderBufferWriteDescriptorDescs = executableVk.getShaderResourceWriteDescriptorDescs();
+    // Update writeDescriptorDescs with inputAttachments
+    mShaderBufferWriteDescriptorDescs.updateInputAttachments(
+        gl::ShaderType::Fragment, *executable, variableInfoMap,
+        vk::GetImpl(mState.getDrawFramebuffer()));
+
     for (gl::ShaderType shaderType : executable->getLinkedShaderStages())
     {
         mShaderBuffersDescriptorDesc.updateShaderBuffers(
             shaderType, ShaderVariableType::UniformBuffer, variableInfoMap,
             mState.getOffsetBindingPointerUniformBuffers(), executable->getUniformBlocks(),
             executableVk.getUniformBufferDescriptorType(), limits.maxUniformBufferRange,
-            mEmptyBuffer);
+            mEmptyBuffer, mShaderBufferWriteDescriptorDescs);
         mShaderBuffersDescriptorDesc.updateShaderBuffers(
             shaderType, ShaderVariableType::ShaderStorageBuffer, variableInfoMap,
             mState.getOffsetBindingPointerShaderStorageBuffers(),
             executable->getShaderStorageBlocks(), executableVk.getStorageBufferDescriptorType(),
-            limits.maxStorageBufferRange, mEmptyBuffer);
+            limits.maxStorageBufferRange, mEmptyBuffer, mShaderBufferWriteDescriptorDescs);
         mShaderBuffersDescriptorDesc.updateAtomicCounters(
             shaderType, variableInfoMap, mState.getOffsetBindingPointerAtomicCounterBuffers(),
             executable->getAtomicCounterBuffers(), limits.minStorageBufferOffsetAlignment,
-            &mEmptyBuffer);
+            &mEmptyBuffer, mShaderBufferWriteDescriptorDescs);
         ANGLE_TRY(mShaderBuffersDescriptorDesc.updateImages(
-            this, shaderType, *executable, variableInfoMap, mActiveImages, mState.getImageUnits()));
+            this, shaderType, *executable, variableInfoMap, mActiveImages, mState.getImageUnits(),
+            mShaderBufferWriteDescriptorDescs));
         ANGLE_TRY(mShaderBuffersDescriptorDesc.updateInputAttachments(
             this, shaderType, *executable, variableInfoMap,
-            vk::GetImpl(mState.getDrawFramebuffer())));
+            vk::GetImpl(mState.getDrawFramebuffer()), mShaderBufferWriteDescriptorDescs));
     }
 
     return angle::Result::Continue;
