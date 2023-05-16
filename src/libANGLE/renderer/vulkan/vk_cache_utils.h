@@ -1507,6 +1507,13 @@ struct WriteDescriptorDesc
 
 static_assert(sizeof(WriteDescriptorDesc) == 4, "Size mismatch");
 
+// Generic description of a descriptor set. Used as a key when indexing descriptor set caches. The
+// key storage is an angle:FixedVector. Beyond a certain fixed size we'll end up using heap memory
+// to store keys. Currently we specialize the structure for three use cases: uniforms, textures,
+// and other shader resources. Because of the way the specialization works we can't currently cache
+// programs that use some types of resources.
+static constexpr size_t kFastDescriptorSetDescLimit = 8;
+
 struct DescriptorInfoDesc
 {
     uint32_t samplerOrBufferSerial;
@@ -1518,13 +1525,6 @@ struct DescriptorInfoDesc
 
 static_assert(sizeof(DescriptorInfoDesc) == 20, "Size mismatch");
 
-// Generic description of a descriptor set. Used as a key when indexing descriptor set caches. The
-// key storage is an angle:FixedVector. Beyond a certain fixed size we'll end up using heap memory
-// to store keys. Currently we specialize the structure for three use cases: uniforms, textures,
-// and other shader resources. Because of the way the specialization works we can't currently cache
-// programs that use some types of resources.
-static constexpr size_t kFastDescriptorSetDescLimit = 8;
-
 struct DescriptorDescHandles
 {
     VkBuffer buffer;
@@ -1533,54 +1533,26 @@ struct DescriptorDescHandles
     VkBufferView bufferView;
 };
 
-class DescriptorSetDesc
+class WriteDescriptorDescs
 {
   public:
-    DescriptorSetDesc()  = default;
-    ~DescriptorSetDesc() = default;
-
-    DescriptorSetDesc(const DescriptorSetDesc &other)
-        : mWriteDescriptors(other.mWriteDescriptors), mDescriptorInfos(other.mDescriptorInfos)
-    {}
-
-    DescriptorSetDesc &operator=(const DescriptorSetDesc &other)
-    {
-        mWriteDescriptors = other.mWriteDescriptors;
-        mDescriptorInfos  = other.mDescriptorInfos;
-        return *this;
-    }
-
     size_t hash() const;
 
     void reset()
     {
         mWriteDescriptors.clear();
-        mDescriptorInfos.clear();
+        mCurrentInfoIndex = 0;
     }
 
     size_t getKeySizeBytes() const
     {
-        return mWriteDescriptors.size() * sizeof(WriteDescriptorDesc) +
-               mDescriptorInfos.size() * sizeof(DescriptorInfoDesc);
-    }
-
-    bool operator==(const DescriptorSetDesc &other) const
-    {
-        return (mDescriptorInfos == other.mDescriptorInfos);
+        return mWriteDescriptors.size() * sizeof(WriteDescriptorDesc);
     }
 
     bool hasWriteDescAtIndex(uint32_t bindingIndex) const
     {
         return bindingIndex < mWriteDescriptors.size() &&
                mWriteDescriptors[bindingIndex].descriptorCount > 0;
-    }
-
-    // Returns the info desc offset.
-    void updateWriteDesc(const WriteDescriptorDesc &writeDesc);
-
-    void updateInfoDesc(uint32_t infoDescIndex, const DescriptorInfoDesc &infoDesc)
-    {
-        mDescriptorInfos[infoDescIndex] = infoDesc;
     }
 
     void incrementDescriptorCount(uint32_t bindingIndex, uint32_t count)
@@ -1596,23 +1568,87 @@ class DescriptorSetDesc
         return mWriteDescriptors[bindingIndex].descriptorCount;
     }
 
-    void updateDescriptorSet(Context *context,
-                             UpdateDescriptorSetsBuilder *updateBuilder,
-                             const DescriptorDescHandles *handles,
-                             VkDescriptorSet descriptorSet) const;
-
     bool empty() const { return mWriteDescriptors.size() == 0; }
 
-    void streamOut(std::ostream &os) const;
-
+    // Returns the info desc offset.
     uint32_t getInfoDescIndex(uint32_t bindingIndex) const
     {
         return mWriteDescriptors[bindingIndex].descriptorInfoIndex;
     }
 
+    void updateShaderBuffers(gl::ShaderType shaderType,
+                             ShaderVariableType variableType,
+                             const ShaderInterfaceVariableInfoMap &variableInfoMap,
+                             const std::vector<gl::InterfaceBlock> &blocks,
+                             VkDescriptorType descriptorType);
+
+    void updateWriteDesc(uint32_t bindingIndex,
+                         VkDescriptorType descriptorType,
+                         uint32_t descriptorCount);
+
+    uint32_t getSize() const { return static_cast<uint32_t>(mWriteDescriptors.size()); }
+    const WriteDescriptorDesc &getWriteDescriptor(uint32_t index) const
+    {
+        return mWriteDescriptors[index];
+    }
+
   private:
     // After a preliminary minimum size, use heap memory.
     angle::FastMap<WriteDescriptorDesc, kFastDescriptorSetDescLimit> mWriteDescriptors;
+    uint32_t mCurrentInfoIndex = 0;
+};
+
+class DescriptorSetDesc
+{
+  public:
+    DescriptorSetDesc()  = default;
+    ~DescriptorSetDesc() = default;
+
+    DescriptorSetDesc(const DescriptorSetDesc &other) : mDescriptorInfos(other.mDescriptorInfos) {}
+
+    DescriptorSetDesc &operator=(const DescriptorSetDesc &other)
+    {
+        mDescriptorInfos = other.mDescriptorInfos;
+        return *this;
+    }
+
+    size_t hash() const;
+
+    void reset()
+    {
+        mWriteDescriptorDescs.reset();
+        mDescriptorInfos.clear();
+    }
+
+    size_t getKeySizeBytes() const { return mDescriptorInfos.size() * sizeof(DescriptorInfoDesc); }
+
+    bool operator==(const DescriptorSetDesc &other) const
+    {
+        return (mDescriptorInfos == other.mDescriptorInfos);
+    }
+
+    void updateInfoDesc(uint32_t infoDescIndex, const DescriptorInfoDesc &infoDesc)
+    {
+        mDescriptorInfos[infoDescIndex] = infoDesc;
+    }
+
+    void updateDescriptorSet(Context *context,
+                             UpdateDescriptorSetsBuilder *updateBuilder,
+                             const DescriptorDescHandles *handles,
+                             VkDescriptorSet descriptorSet) const;
+
+    void streamOut(std::ostream &os) const;
+
+    WriteDescriptorDescs &getWriteDescriptorDescs() { return mWriteDescriptorDescs; }
+    // Returns the info desc offset.
+    uint32_t getInfoDescIndex(uint32_t bindingIndex) const
+    {
+        return mWriteDescriptorDescs.getInfoDescIndex(bindingIndex);
+    }
+
+  private:
+    WriteDescriptorDescs mWriteDescriptorDescs;
+    // After a preliminary minimum size, use heap memory.
     angle::FastMap<DescriptorInfoDesc, kFastDescriptorSetDescLimit> mDescriptorInfos;
 };
 
@@ -1743,8 +1779,11 @@ class DescriptorSetDescBuilder final
 
     void updateWriteDesc(uint32_t bindingIndex,
                          VkDescriptorType descriptorType,
-                         uint32_t descriptorCount);
-
+                         uint32_t descriptorCount)
+    {
+        mDesc.getWriteDescriptorDescs().updateWriteDesc(bindingIndex, descriptorType,
+                                                        descriptorCount);
+    }
     DescriptorSetDesc mDesc;
     angle::FastMap<DescriptorDescHandles, kFastDescriptorSetDescLimit> mHandles;
     angle::FastMap<uint32_t, kFastDescriptorSetDescLimit> mDynamicOffsets;
