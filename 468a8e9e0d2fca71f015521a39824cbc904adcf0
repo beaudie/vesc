@@ -34,6 +34,24 @@
       "parentUuid": "1aa21bd4_1a6cda93",
       "revId": "468a8e9e0d2fca71f015521a39824cbc904adcf0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91778be3_0bc8a2fb",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 895,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-16T17:59:48Z",
+      "side": 1,
+      "message": "I wouldn\u0027t worry about copying 2 extra bytes every second ;)",
+      "parentUuid": "d13bfbf7_52dbc2cb",
+      "revId": "468a8e9e0d2fca71f015521a39824cbc904adcf0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
