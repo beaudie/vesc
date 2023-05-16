@@ -22,6 +22,30 @@
       },
       "revId": "57da0936803cb5053ceaaefe394daad570b7cf2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b116853b_a4fffe57",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 7
+      },
+      "lineNbr": 1216,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-16T16:56:28Z",
+      "side": 1,
+      "message": "Ah, whoops.  I didn\u0027t realize that was feedback previously, just thought it was a comment.  I\u0027ll update it.",
+      "parentUuid": "2d593ab5_3dade969",
+      "range": {
+        "startLine": 1216,
+        "startChar": 25,
+        "endLine": 1216,
+        "endChar": 33
+      },
+      "revId": "57da0936803cb5053ceaaefe394daad570b7cf2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
