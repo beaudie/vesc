@@ -1490,6 +1490,23 @@ angle::Result ProgramExecutableVk::createPipelineLayout(
         ANGLE_TRY(contextVk->switchToFramebufferFetchMode(true));
     }
 
+    // Update mShaderResourceWriteDescriptorDescs
+    for (gl::ShaderType shaderType : linkedShaderStages)
+    {
+        mShaderResourceWriteDescriptorDescs.updateShaderBuffers(
+            shaderType, ShaderVariableType::UniformBuffer, mVariableInfoMap,
+            glExecutable.getUniformBlocks(), getUniformBufferDescriptorType());
+        mShaderResourceWriteDescriptorDescs.updateShaderBuffers(
+            shaderType, ShaderVariableType::ShaderStorageBuffer, mVariableInfoMap,
+            glExecutable.getShaderStorageBlocks(), getStorageBufferDescriptorType());
+        mShaderResourceWriteDescriptorDescs.updateAtomicCounters(
+            shaderType, mVariableInfoMap, glExecutable.getAtomicCounterBuffers());
+        ANGLE_TRY(mShaderResourceWriteDescriptorDescs.updateImages(shaderType, glExecutable,
+                                                                   mVariableInfoMap));
+        ANGLE_TRY(mShaderResourceWriteDescriptorDescs.updateInputAttachments(
+            shaderType, glExecutable, mVariableInfoMap));
+    }
+
     return angle::Result::Continue;
 }
 
@@ -1551,7 +1568,8 @@ angle::Result ProgramExecutableVk::getOrAllocateDescriptorSet(
     if (*newSharedCacheKeyOut != nullptr)
     {
         // Cache miss. A new cache entry has been created.
-        descriptorSetDesc.updateDescriptorSet(context, updateBuilder, mDescriptorSets[setIndex]);
+        descriptorSetDesc.updateDescriptorSet(context, mShaderResourceWriteDescriptorDescs,
+                                              updateBuilder, mDescriptorSets[setIndex]);
     }
     else
     {
@@ -1629,11 +1647,12 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
     if (newSharedCacheKey != nullptr)
     {
         vk::DescriptorSetDescBuilder fullDesc;
+        vk::WriteDescriptorDescs writeDescriptorDescs;
         // Cache miss. A new cache entry has been created.
-        ANGLE_TRY(fullDesc.updateFullActiveTextures(context, mVariableInfoMap, executable, textures,
-                                                    samplers, emulateSeamfulCubeMapSampling,
-                                                    pipelineType, newSharedCacheKey));
-        fullDesc.updateDescriptorSet(context, updateBuilder,
+        ANGLE_TRY(fullDesc.updateFullActiveTextures(
+            context, mVariableInfoMap, writeDescriptorDescs, executable, textures, samplers,
+            emulateSeamfulCubeMapSampling, pipelineType, newSharedCacheKey));
+        fullDesc.updateDescriptorSet(context, mShaderResourceWriteDescriptorDescs, updateBuilder,
                                      mDescriptorSets[DescriptorSetIndex::Texture]);
     }
     else
@@ -1799,10 +1818,12 @@ angle::Result ProgramExecutableVk::updateUniforms(
         // We need to reinitialize the descriptor sets if we newly allocated buffers since we can't
         // modify the descriptor sets once initialized.
         vk::DescriptorSetDescBuilder uniformsAndXfbDesc;
+        vk::WriteDescriptorDescs writeDescriptorDescs;
         uniformsAndXfbDesc.updateUniformsAndXfb(
             context, glExecutable, *this, defaultUniformBuffer, *emptyBuffer,
             isTransformFeedbackActiveUnpaused,
-            glExecutable.hasTransformFeedbackOutput() ? transformFeedbackVk : nullptr);
+            glExecutable.hasTransformFeedbackOutput() ? transformFeedbackVk : nullptr,
+            writeDescriptorDescs);
 
         ANGLE_TRY(updateUniformsAndXfbDescriptorSet(context, updateBuilder, commandBufferHelper,
                                                     defaultUniformBuffer, &uniformsAndXfbDesc));

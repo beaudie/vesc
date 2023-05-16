@@ -244,6 +244,11 @@ class ProgramExecutableVk
     angle::Result warmUpPipelineCache(ContextVk *contextVk,
                                       const gl::ProgramExecutable &glExecutable);
 
+    const vk::WriteDescriptorDescs &getShaderResourceWriteDescriptorDescs() const
+    {
+        return mShaderResourceWriteDescriptorDescs;
+    }
+
   private:
     friend class ProgramVk;
     friend class ProgramPipelineVk;
@@ -413,6 +418,8 @@ class ProgramExecutableVk
     // With VK_EXT_graphics_pipeline_library, this cache is used for the "shaders" subset of the
     // pipeline.
     vk::PipelineCache mPipelineCache;
+
+    vk::WriteDescriptorDescs mShaderResourceWriteDescriptorDescs;
 };
 
 }  // namespace rx
