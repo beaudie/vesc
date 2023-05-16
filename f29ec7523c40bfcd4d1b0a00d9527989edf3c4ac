@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36534cd4_225b1669",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-16T16:49:40Z",
+      "side": 1,
+      "message": "Nice, this looks like a great change Roman.  The parallel upload check is really important (it used to take a long time to iterate through every trace), and you\u0027ve maintained that.\n\nI should be able to test this out in the next day or so.",
+      "revId": "f29ec7523c40bfcd4d1b0a00d9527989edf3c4ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75624bb4_e6843ca3",
+        "filename": "src/tests/restricted_traces/sync_restricted_traces_to_cipd.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-16T16:49:40Z",
+      "side": 1,
+      "message": "Sucks that we have to build this little list.  It should really be in the JSON file.  Maybe we need a `TraceSupportFiles` entry that includes them.  Or make it a subgroup under `TraceFiles` along with another one called `TraceSourceFiles`.",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 80,
+        "endChar": 69
+      },
+      "revId": "f29ec7523c40bfcd4d1b0a00d9527989edf3c4ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
