@@ -16,6 +16,24 @@
       "message": "You don\u0027t really need this or `kBlobHeaderSize` for that matter now, `sizeof(CacheDataHeader)` gives the same value 😊",
       "revId": "468a8e9e0d2fca71f015521a39824cbc904adcf0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d13bfbf7_52dbc2cb",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 895,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-05-16T17:27:11Z",
+      "side": 1,
+      "message": "I have a question. Currently the size is 8 bytes. If we add 1 or 2 bytes to the data, wouldn\u0027t `sizeof(CacheDataHeader)` be aligned to 12 bytes? In that case, if we want to `memcpy()` to/from the cache data, would it copy extra data?",
+      "parentUuid": "1aa21bd4_1a6cda93",
+      "revId": "468a8e9e0d2fca71f015521a39824cbc904adcf0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
