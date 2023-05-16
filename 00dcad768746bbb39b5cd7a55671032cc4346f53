@@ -20,6 +20,41 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "73727e1f_e7db7e86",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-16T16:18:13Z",
+      "side": 1,
+      "message": "Shabi, what should I do with the /ES3_1_OpenGL test failures - skip in expectations?",
+      "revId": "00dcad768746bbb39b5cd7a55671032cc4346f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee5a54da_df78766d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-16T16:18:13Z",
+      "side": 1,
+      "message": "This simply mirrors `VertexArrayBufferContentsObservers` (which I believe has the same flaws and is certainly confusing, but after talking with Charlie this is what we thought would be the way forward)\nhttps://crsrc.org/c/third_party/angle/src/libANGLE/VertexArray.h;drc\u003d76fa380683ca3b1812cfbd3ef4e7ea768819bc75;l\u003d118\n\nMy understanding has been that this needs to be done on the Buffer level (or we will be missing syncState etc) - but I am pretty vague on the way notifications work in ANGLE so I might be wrong. If you could give pointers on what needs to be done to make this work correctly with Vk objects that\u0027d be a big help.",
+      "parentUuid": "d5f6d626_6ae47316",
+      "revId": "00dcad768746bbb39b5cd7a55671032cc4346f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7a053acb_3bda2621",
         "filename": "src/libANGLE/Buffer.cpp",
         "patchSetId": 15
