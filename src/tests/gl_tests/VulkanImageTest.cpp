@@ -774,6 +774,176 @@ TEST_P(VulkanImageTest, FreeGarbageTest2)
     EXPECT_PIXEL_RECT_EQ(0, 0, kWidth, kHeight, GLColor::magenta);
 }
 
+// Test that we can allocate from a previously allocated memory that has now been freed. This means
+// that if the memory is no longer in use and in the garbage, we should be able to clean it and use
+// it for a different allocation.
+TEST_P(VulkanImageTest, AllocateVMAImageAfterDeviceOOMAndFreeBuffers)
+{
+    ANGLE_SKIP_TEST_IF(!IsVulkan());
+    ANGLE_SKIP_TEST_IF(!getEGLWindow()->isFeatureEnabled(Feature::UseVmaForImageSuballocation));
+
+    VulkanHelper helper;
+    helper.initializeFromANGLE();
+    uint64_t expectedAllocationFallbacks =
+        getPerfCounters().deviceMemoryImageAllocationFallbacks + 1;
+
+    // Acquire the sizes and memory property flags for all available memory types. There should be
+    // at least one memory heap without the device local bit (VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT).
+    // Otherwise, the test should be skipped.
+    VkPhysicalDeviceMemoryProperties memoryProperties;
+    vkGetPhysicalDeviceMemoryProperties(helper.getPhysicalDevice(), &memoryProperties);
+
+    VkDeviceSize totalDeviceLocalMemoryHeapSize = 0;
+    uint32_t heapsWithoutLocalDeviceMemoryBit   = 0;
+    for (uint32_t i = 0; i < memoryProperties.memoryHeapCount; i++)
+    {
+        if ((memoryProperties.memoryHeaps[i].flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT) == 0)
+        {
+            heapsWithoutLocalDeviceMemoryBit++;
+        }
+        else
+        {
+            totalDeviceLocalMemoryHeapSize += memoryProperties.memoryHeaps[i].size;
+        }
+    }
+    ANGLE_SKIP_TEST_IF(heapsWithoutLocalDeviceMemoryBit == 0 ||
+                       totalDeviceLocalMemoryHeapSize == 0);
+
+    // Allocate a few buffers on the device.
+    constexpr uint64_t kBufferSize  = 1 << 24;
+    constexpr uint64_t kBufferCount = 3;
+    GLuint buffer[kBufferCount];
+
+    for (uint64_t i = 0; i < kBufferCount; i++)
+    {
+        glGenBuffers(1, &buffer[i]);
+        glBindBuffer(GL_ARRAY_BUFFER, buffer[i]);
+        glBufferData(GL_ARRAY_BUFFER, kBufferSize, nullptr, GL_STATIC_DRAW);
+        glDrawArrays(GL_POINTS, 1, 0);
+    }
+
+    // Allocate images on the device until it runs out of memory and we fall back to system memory.
+    constexpr VkDeviceSize kTextureWidth  = 2048;
+    constexpr VkDeviceSize kTextureHeight = 2048;
+    constexpr VkDeviceSize kTextureSize   = kTextureWidth * kTextureHeight * 4;
+    VkDeviceSize textureCount             = (totalDeviceLocalMemoryHeapSize / kTextureSize) + 1;
+
+    std::vector<GLTexture> textures;
+    textures.resize(textureCount);
+
+    for (uint32_t i = 0; i < textureCount; i++)
+    {
+        glBindTexture(GL_TEXTURE_2D, textures[i]);
+        glTexStorage2DEXT(GL_TEXTURE_2D, 1, GL_RGBA8, kTextureWidth, kTextureHeight);
+        glDrawArrays(GL_POINTS, 0, 1);
+        EXPECT_GL_NO_ERROR();
+        // This process only needs to continue until the allocation is no longer on the device.
+        if (getPerfCounters().deviceMemoryImageAllocationFallbacks == expectedAllocationFallbacks)
+        {
+            break;
+        }
+    }
+    EXPECT_EQ(getPerfCounters().deviceMemoryImageAllocationFallbacks, expectedAllocationFallbacks);
+
+    // Now that the device is out of memory, the buffers will be freed. The next image allocation
+    // should be successful on the device. If the buffers still reside in the memory as garbage,
+    // they should be cleaned.
+    for (uint64_t i = 0; i < kBufferCount; i++)
+    {
+        glDeleteBuffers(1, &buffer[i]);
+    }
+
+    GLTexture texture;
+    std::vector<GLColor> textureColor(kTextureWidth * kTextureHeight, GLColor::magenta);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexStorage2DEXT(GL_TEXTURE_2D, 1, GL_RGBA8, kTextureWidth, kTextureHeight);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, kTextureWidth, kTextureHeight, GL_RGBA,
+                    GL_UNSIGNED_BYTE, textureColor.data());
+
+    EXPECT_EQ(getPerfCounters().deviceMemoryImageAllocationFallbacks, expectedAllocationFallbacks);
+
+    // Draw on an FBO with the last texture.
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+    EXPECT_PIXEL_RECT_EQ(0, 0, kWidth, kHeight, GLColor::magenta);
+}
+
+// Test that we can allocate buffers from a previously allocated memory that has now been deleted.
+// If the deleted buffer is still in the memory as garbage, it should be cleaned.
+TEST_P(VulkanImageTest, AllocateFreeAllocateBuffersShouldNotOOM)
+{
+    ANGLE_SKIP_TEST_IF(!IsVulkan());
+    VulkanHelper helper;
+    helper.initializeFromANGLE();
+
+    // Acquire the sizes and memory property flags for all available memory types. There should be
+    // at least one memory heap without the device local bit (VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT).
+    // Otherwise, the test should be skipped.
+    VkPhysicalDeviceMemoryProperties memoryProperties;
+    vkGetPhysicalDeviceMemoryProperties(helper.getPhysicalDevice(), &memoryProperties);
+
+    VkDeviceSize totalDeviceLocalMemoryHeapSize = 0;
+    uint32_t heapsWithoutLocalDeviceMemoryBit   = 0;
+    for (uint32_t i = 0; i < memoryProperties.memoryHeapCount; i++)
+    {
+        if ((memoryProperties.memoryHeaps[i].flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT) == 0)
+        {
+            heapsWithoutLocalDeviceMemoryBit++;
+        }
+        else
+        {
+            totalDeviceLocalMemoryHeapSize += memoryProperties.memoryHeaps[i].size;
+        }
+    }
+    ANGLE_SKIP_TEST_IF(heapsWithoutLocalDeviceMemoryBit == 0 ||
+                       totalDeviceLocalMemoryHeapSize == 0);
+
+    // We want to be able to allocate more than one buffer in the device for this test.
+    uint64_t bufferSize = 1 << 30;
+    while (totalDeviceLocalMemoryHeapSize < bufferSize)
+    {
+        bufferSize >>= 1;
+    }
+    bufferSize >>= 1;
+
+    // Allocate the first half of the buffers with the size above on the device.
+    uint64_t bufferCount = totalDeviceLocalMemoryHeapSize / bufferSize;
+    std::vector<GLuint> buffers;
+    buffers.resize(bufferCount);
+
+    for (uint64_t i = 0; i < bufferCount / 2; i++)
+    {
+        glGenBuffers(1, &buffers[i]);
+        glBindBuffer(GL_ARRAY_BUFFER, buffers[i]);
+        glBufferData(GL_ARRAY_BUFFER, bufferSize, nullptr, GL_STATIC_DRAW);
+        glDrawArrays(GL_POINTS, 1, 0);
+        EXPECT_GL_NO_ERROR();
+    }
+
+    // Free the allocated buffers and allocate the second half of the buffers. The device should not
+    // run out of memory.
+    for (uint64_t i = 0; i < bufferCount / 2; i++)
+    {
+        glDeleteBuffers(1, &buffers[i]);
+    }
+    for (uint64_t i = bufferCount / 2; i < bufferCount; i++)
+    {
+        glGenBuffers(1, &buffers[i]);
+        glBindBuffer(GL_ARRAY_BUFFER, buffers[i]);
+        glBufferData(GL_ARRAY_BUFFER, bufferSize, nullptr, GL_STATIC_DRAW);
+        glDrawArrays(GL_POINTS, 1, 0);
+        EXPECT_GL_NO_ERROR();
+    }
+
+    // Free the second half of the buffers.
+    for (uint64_t i = bufferCount / 2; i < bufferCount; i++)
+    {
+        glDeleteBuffers(1, &buffers[i]);
+    }
+}
+
 // Test that texture storage created from VkImage memory is considered pre-initialized in GL.
 TEST_P(VulkanImageTest, PreInitializedOnGLImport)
 {

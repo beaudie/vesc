@@ -109,9 +109,14 @@ angle::Result FindAndAllocateCompatibleMemory(vk::Context *context,
     renderer->getMemoryAllocationTracker()->setPendingMemoryAlloc(
         memoryAllocationType, allocInfo.allocationSize, *memoryTypeIndexOut);
 
-    // If the allocation fails, we should try cleaning the garbage before trying again.
+    // If the allocation fails, we should make sure to flush all the commands in case there are
+    // calls to free the memory. Then we try again.
     if (deviceMemoryOut->allocate(device, allocInfo) != VK_SUCCESS)
     {
+        auto contextVk = static_cast<ContextVk *>(context);
+        ANGLE_TRY(contextVk->finishImpl(RenderPassClosureReason::MemorySpaceLimitation));
+        ANGLE_VK_PERF_WARNING(contextVk, GL_DEBUG_SEVERITY_HIGH,
+                              "Garbage freed; will retry allocation.");
         renderer->cleanupGarbage();
         ANGLE_VK_TRY(context, deviceMemoryOut->allocate(device, allocInfo));
     }

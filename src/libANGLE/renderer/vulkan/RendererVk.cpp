@@ -5725,7 +5725,8 @@ VkResult ImageMemorySuballocator::allocateAndBindMemory(Context *context,
         memoryRequirements.size >= kImageSizeThresholdForDedicatedMemoryAllocation;
 
     // Allocate and bind memory for the image. Try allocating on the device first. If unsuccessful,
-    // it is possible to retry allocation after cleaning the garbage.
+    // it is possible to retry allocation after cleaning the garbage. We should also make sure to
+    // flush all the commands in case there are calls to free the memory.
     VkResult result = vma::AllocateAndBindMemoryForImage(
         allocator.getHandle(), &image->mHandle, requiredFlags | VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
         preferredFlags, allocateDedicatedMemory, &allocationOut->mHandle, memoryTypeIndexOut,
@@ -5733,6 +5734,10 @@ VkResult ImageMemorySuballocator::allocateAndBindMemory(Context *context,
 
     if (result != VK_SUCCESS)
     {
+        auto contextVk = static_cast<ContextVk *>(context);
+        (void)contextVk->finishImpl(RenderPassClosureReason::MemorySpaceLimitation);
+        ANGLE_VK_PERF_WARNING(contextVk, GL_DEBUG_SEVERITY_HIGH,
+                              "Garbage freed; will retry allocation.");
         renderer->cleanupGarbage();
         INFO() << "Garbage freed; retrying allocation";
         result = vma::AllocateAndBindMemoryForImage(
