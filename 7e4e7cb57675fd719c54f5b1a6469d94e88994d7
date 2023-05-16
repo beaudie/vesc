@@ -87,6 +87,30 @@
       },
       "revId": "7e4e7cb57675fd719c54f5b1a6469d94e88994d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c3cc380_214d5657",
+        "filename": "src/libANGLE/Buffer.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-16T16:05:26Z",
+      "side": 1,
+      "message": "Instead of `void *`, why not use `angle::ObserverInterface`?",
+      "parentUuid": "f73eec57_f00efdff",
+      "range": {
+        "startLine": 80,
+        "startChar": 4,
+        "endLine": 80,
+        "endChar": 31
+      },
+      "revId": "7e4e7cb57675fd719c54f5b1a6469d94e88994d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

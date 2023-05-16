@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5f6d626_6ae47316",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-16T16:05:26Z",
+      "side": 1,
+      "message": "`TextureBufferContentsObserver` looks fishy. Could you please give an overview of what the design here is? IIUC, it\u0027s for `TextureVk` to decide if `gl::Texture` should observe `gl::Buffer`. Depends on what messages exactly `gl::Texture` needs to react too, but could we reroute the messages to avoid the unusual design? How about `TextureVk` observing `BufferVk` itself, and then forward notifications to `gl::Texture`?",
+      "revId": "00dcad768746bbb39b5cd7a55671032cc4346f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a053acb_3bda2621",
+        "filename": "src/libANGLE/Buffer.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-16T16:05:26Z",
+      "side": 1,
+      "message": "nit: a simpler term for `observingObject` is ... `observer` 😊",
+      "range": {
+        "startLine": 408,
+        "startChar": 46,
+        "endLine": 408,
+        "endChar": 61
+      },
+      "revId": "00dcad768746bbb39b5cd7a55671032cc4346f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e745af2c_ff62a6da",
+        "filename": "src/libANGLE/Texture.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2449,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-16T16:05:26Z",
+      "side": 1,
+      "message": "I suggest not removing the observer here. The logic is based on a detail of the Vulkan backend and the front-end is not supposed to care about it.",
+      "revId": "00dcad768746bbb39b5cd7a55671032cc4346f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48123e89_c295db34",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2905,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-16T16:05:26Z",
+      "side": 1,
+      "message": "Could you please move all these to a helper?",
+      "revId": "00dcad768746bbb39b5cd7a55671032cc4346f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35686d25_6b34ec5b",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 3383,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-16T16:05:26Z",
+      "side": 1,
+      "message": "This should be `| VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT`. The texture buffer may be used by a compute shader.",
+      "range": {
+        "startLine": 3383,
+        "startChar": 33,
+        "endLine": 3383,
+        "endChar": 67
+      },
+      "revId": "00dcad768746bbb39b5cd7a55671032cc4346f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
