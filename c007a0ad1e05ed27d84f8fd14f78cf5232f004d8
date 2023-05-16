@@ -39,6 +39,30 @@
       },
       "revId": "c007a0ad1e05ed27d84f8fd14f78cf5232f004d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98c0e8a5_ecca77e9",
+        "filename": "AUTHORS",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1579002
+      },
+      "writtenOn": "2023-05-16T14:30:07Z",
+      "side": 1,
+      "message": "@cnorthrop@google.com, I followed your suggestion and updated AUTHORS CONTRIBUTORS. Since I\u0027m as an individual, I keeps myself in AUTHORS. Please help me to double check it.\nThanks for your guide.",
+      "parentUuid": "196a4e13_000438b0",
+      "range": {
+        "startLine": 82,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 34
+      },
+      "revId": "c007a0ad1e05ed27d84f8fd14f78cf5232f004d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
