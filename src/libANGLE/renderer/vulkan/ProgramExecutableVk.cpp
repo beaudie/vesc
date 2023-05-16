@@ -1490,6 +1490,60 @@ angle::Result ProgramExecutableVk::createPipelineLayout(
         ANGLE_TRY(contextVk->switchToFramebufferFetchMode(true));
     }
 
+    // Update mShaderResourceWriteDescriptorDescs
+    mShaderResourceWriteDescriptorDescs.reset();
+    for (gl::ShaderType shaderType : linkedShaderStages)
+    {
+        mShaderResourceWriteDescriptorDescs.updateShaderBuffers(
+            shaderType, ShaderVariableType::UniformBuffer, mVariableInfoMap,
+            glExecutable.getUniformBlocks(), getUniformBufferDescriptorType());
+        mShaderResourceWriteDescriptorDescs.updateShaderBuffers(
+            shaderType, ShaderVariableType::ShaderStorageBuffer, mVariableInfoMap,
+            glExecutable.getShaderStorageBlocks(), getStorageBufferDescriptorType());
+        mShaderResourceWriteDescriptorDescs.updateAtomicCounters(
+            shaderType, mVariableInfoMap, glExecutable.getAtomicCounterBuffers());
+        mShaderResourceWriteDescriptorDescs.updateImages(shaderType, glExecutable,
+                                                         mVariableInfoMap);
+    }
+
+    // Update mTextureWriteDescriptorDescs
+    mTextureWriteDescriptorDescs.reset();
+    for (gl::ShaderType shaderType : linkedShaderStages)
+    {
+        mTextureWriteDescriptorDescs.updateExecutableActiveTexturesForShader(
+            shaderType, mVariableInfoMap, glExecutable);
+    }
+
+    // Update mDefaultUniformWriteDescriptorDescs
+    mDefaultUniformWriteDescriptorDescs.reset();
+    for (gl::ShaderType shaderType : linkedShaderStages)
+    {
+        mDefaultUniformWriteDescriptorDescs.updateDefaultUniform(shaderType, mVariableInfoMap,
+                                                                 glExecutable);
+    }
+
+    mDefaultUniformAndXfbWriteDescriptorDescs.reset();
+    if (glExecutable.hasTransformFeedbackOutput() &&
+        contextVk->getRenderer()->getFeatures().emulateTransformFeedback.enabled)
+    {
+        // Update mDefaultUniformAndXfbWriteDescriptorDescs for the emulation code path.
+        for (gl::ShaderType shaderType : linkedShaderStages)
+        {
+            mDefaultUniformAndXfbWriteDescriptorDescs.updateDefaultUniform(
+                shaderType, mVariableInfoMap, glExecutable);
+            if (shaderType == gl::ShaderType::Vertex)
+            {
+                mDefaultUniformAndXfbWriteDescriptorDescs.updateTransformFeedbackWrite(
+                    mVariableInfoMap, glExecutable);
+            }
+        }
+    }
+    else
+    {
+        // Otherwise it will be the same as default uniform
+        mDefaultUniformAndXfbWriteDescriptorDescs = mDefaultUniformWriteDescriptorDescs;
+    }
+
     return angle::Result::Continue;
 }
 
@@ -1539,6 +1593,7 @@ angle::Result ProgramExecutableVk::getOrAllocateDescriptorSet(
     UpdateDescriptorSetsBuilder *updateBuilder,
     vk::CommandBufferHelperCommon *commandBufferHelper,
     const vk::DescriptorSetDescBuilder &descriptorSetDesc,
+    const vk::WriteDescriptorDescs &writeDescriptorDescs,
     DescriptorSetIndex setIndex,
     vk::SharedDescriptorSetCacheKey *newSharedCacheKeyOut)
 {
@@ -1551,7 +1606,8 @@ angle::Result ProgramExecutableVk::getOrAllocateDescriptorSet(
     if (*newSharedCacheKeyOut != nullptr)
     {
         // Cache miss. A new cache entry has been created.
-        descriptorSetDesc.updateDescriptorSet(context, updateBuilder, mDescriptorSets[setIndex]);
+        descriptorSetDesc.updateDescriptorSet(context, writeDescriptorDescs, updateBuilder,
+                                              mDescriptorSets[setIndex]);
     }
     else
     {
@@ -1564,6 +1620,7 @@ angle::Result ProgramExecutableVk::getOrAllocateDescriptorSet(
 angle::Result ProgramExecutableVk::updateShaderResourcesDescriptorSet(
     vk::Context *context,
     UpdateDescriptorSetsBuilder *updateBuilder,
+    const vk::WriteDescriptorDescs &writeDescriptorDescs,
     vk::CommandBufferHelperCommon *commandBufferHelper,
     const vk::DescriptorSetDescBuilder &shaderResourcesDesc,
     vk::SharedDescriptorSetCacheKey *newSharedCacheKeyOut)
@@ -1575,8 +1632,8 @@ angle::Result ProgramExecutableVk::updateShaderResourcesDescriptorSet(
     }
 
     ANGLE_TRY(getOrAllocateDescriptorSet(context, updateBuilder, commandBufferHelper,
-                                         shaderResourcesDesc, DescriptorSetIndex::ShaderResource,
-                                         newSharedCacheKeyOut));
+                                         shaderResourcesDesc, writeDescriptorDescs,
+                                         DescriptorSetIndex::ShaderResource, newSharedCacheKeyOut));
 
     size_t numOffsets = shaderResourcesDesc.getDynamicOffsetsSize();
     mDynamicShaderResourceDescriptorOffsets.resize(numOffsets);
@@ -1592,6 +1649,7 @@ angle::Result ProgramExecutableVk::updateShaderResourcesDescriptorSet(
 angle::Result ProgramExecutableVk::updateUniformsAndXfbDescriptorSet(
     vk::Context *context,
     UpdateDescriptorSetsBuilder *updateBuilder,
+    const vk::WriteDescriptorDescs &writeDescriptorDescs,
     vk::CommandBufferHelperCommon *commandBufferHelper,
     vk::BufferHelper *defaultUniformBuffer,
     vk::DescriptorSetDescBuilder *uniformsAndXfbDesc)
@@ -1601,8 +1659,8 @@ angle::Result ProgramExecutableVk::updateUniformsAndXfbDescriptorSet(
 
     vk::SharedDescriptorSetCacheKey newSharedCacheKey;
     ANGLE_TRY(getOrAllocateDescriptorSet(context, updateBuilder, commandBufferHelper,
-                                         *uniformsAndXfbDesc, DescriptorSetIndex::UniformsAndXfb,
-                                         &newSharedCacheKey));
+                                         *uniformsAndXfbDesc, writeDescriptorDescs,
+                                         DescriptorSetIndex::UniformsAndXfb, &newSharedCacheKey));
     uniformsAndXfbDesc->updateImagesAndBuffersWithSharedCacheKey(newSharedCacheKey);
     return angle::Result::Continue;
 }
@@ -1630,10 +1688,10 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
     {
         vk::DescriptorSetDescBuilder fullDesc;
         // Cache miss. A new cache entry has been created.
-        ANGLE_TRY(fullDesc.updateFullActiveTextures(context, mVariableInfoMap, executable, textures,
-                                                    samplers, emulateSeamfulCubeMapSampling,
-                                                    pipelineType, newSharedCacheKey));
-        fullDesc.updateDescriptorSet(context, updateBuilder,
+        ANGLE_TRY(fullDesc.updateFullActiveTextures(
+            context, mVariableInfoMap, mTextureWriteDescriptorDescs, executable, textures, samplers,
+            emulateSeamfulCubeMapSampling, pipelineType, newSharedCacheKey));
+        fullDesc.updateDescriptorSet(context, mTextureWriteDescriptorDescs, updateBuilder,
                                      mDescriptorSets[DescriptorSetIndex::Texture]);
     }
     else
@@ -1799,13 +1857,16 @@ angle::Result ProgramExecutableVk::updateUniforms(
         // We need to reinitialize the descriptor sets if we newly allocated buffers since we can't
         // modify the descriptor sets once initialized.
         vk::DescriptorSetDescBuilder uniformsAndXfbDesc;
+        const vk::WriteDescriptorDescs writeDescriptorDescs =
+            getDefaultUniformWriteDescriptorDescs(transformFeedbackVk);
         uniformsAndXfbDesc.updateUniformsAndXfb(
-            context, glExecutable, *this, defaultUniformBuffer, *emptyBuffer,
+            context, glExecutable, *this, writeDescriptorDescs, defaultUniformBuffer, *emptyBuffer,
             isTransformFeedbackActiveUnpaused,
             glExecutable.hasTransformFeedbackOutput() ? transformFeedbackVk : nullptr);
 
-        ANGLE_TRY(updateUniformsAndXfbDescriptorSet(context, updateBuilder, commandBufferHelper,
-                                                    defaultUniformBuffer, &uniformsAndXfbDesc));
+        ANGLE_TRY(updateUniformsAndXfbDescriptorSet(context, updateBuilder, writeDescriptorDescs,
+                                                    commandBufferHelper, defaultUniformBuffer,
+                                                    &uniformsAndXfbDesc));
     }
 
     return angle::Result::Continue;
