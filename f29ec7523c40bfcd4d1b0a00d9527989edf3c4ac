@@ -39,6 +39,30 @@
       },
       "revId": "f29ec7523c40bfcd4d1b0a00d9527989edf3c4ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7783a04_8a0dc5d8",
+        "filename": "src/tests/restricted_traces/sync_restricted_traces_to_cipd.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-16T17:32:32Z",
+      "side": 1,
+      "message": "This set is just `.angledata.gz` as there isn\u0027t a lot of benefit in making trace_json reference itself :) but yeah would be nice to have angledata listed in there somewhere. The other thing that keeps bugging me is that the file name is hard-coded in the cpp itself:\n`InitializeReplay4(\"arknights.angledata.gz\",..);` which would be nice to fix together with what you\u0027re suggesting (but outside of scope of this change)",
+      "parentUuid": "75624bb4_e6843ca3",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 80,
+        "endChar": 69
+      },
+      "revId": "f29ec7523c40bfcd4d1b0a00d9527989edf3c4ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
