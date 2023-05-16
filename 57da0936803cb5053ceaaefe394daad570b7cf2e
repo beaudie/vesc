@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d593ab5_3dade969",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 7
+      },
+      "lineNbr": 1216,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-16T16:54:38Z",
+      "side": 1,
+      "message": "Still a workaround 😊",
+      "range": {
+        "startLine": 1216,
+        "startChar": 25,
+        "endLine": 1216,
+        "endChar": 33
+      },
+      "revId": "57da0936803cb5053ceaaefe394daad570b7cf2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
