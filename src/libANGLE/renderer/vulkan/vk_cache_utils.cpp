@@ -5345,26 +5345,82 @@ RenderPassPerfCounters &RenderPassHelper::getPerfCounters()
     return mPerfCounters;
 }
 
-// DescriptorSetDesc implementation.
-void DescriptorSetDesc::updateWriteDesc(const WriteDescriptorDesc &writeDesc)
+// WriteDescriptorDescs implementation.
+void WriteDescriptorDescs::updateWriteDesc(uint32_t bindingIndex,
+                                           VkDescriptorType descriptorType,
+                                           uint32_t descriptorCount)
 {
-    uint32_t binding              = writeDesc.binding;
-    WriteDescriptorDesc &destDesc = mWriteDescriptors[binding];
-
-    ASSERT(writeDesc.descriptorCount > 0);
-
-    destDesc = writeDesc;
+    if (hasWriteDescAtIndex(bindingIndex))
+    {
+        uint32_t infoIndex          = getInfoDescIndex(bindingIndex);
+        uint32_t oldDescriptorCount = getDescriptorSetCount(bindingIndex);
+        if (descriptorCount != oldDescriptorCount)
+        {
+            ASSERT(infoIndex + oldDescriptorCount == mCurrentInfoIndex);
+            ASSERT(descriptorCount > oldDescriptorCount);
+            uint32_t additionalDescriptors = descriptorCount - oldDescriptorCount;
+            incrementDescriptorCount(bindingIndex, additionalDescriptors);
+            mCurrentInfoIndex += additionalDescriptors;
+        }
+    }
+    else
+    {
+        WriteDescriptorDesc &writeDesc = mWriteDescriptors[bindingIndex];
+        SetBitField(writeDesc.binding, bindingIndex);
+        SetBitField(writeDesc.descriptorCount, descriptorCount);
+        SetBitField(writeDesc.descriptorType, descriptorType);
+        SetBitField(writeDesc.descriptorInfoIndex, mCurrentInfoIndex);
+        mCurrentInfoIndex += descriptorCount;
+        ASSERT(writeDesc.descriptorCount > 0);
+    }
 }
 
+void WriteDescriptorDescs::updateShaderBuffers(
+    gl::ShaderType shaderType,
+    ShaderVariableType variableType,
+    const ShaderInterfaceVariableInfoMap &variableInfoMap,
+    const std::vector<gl::InterfaceBlock> &blocks,
+    VkDescriptorType descriptorType)
+{
+    // Initialize the descriptor writes in a first pass. This ensures we can pack the structures
+    // corresponding to array elements tightly.
+    for (uint32_t bufferIndex = 0; bufferIndex < blocks.size(); ++bufferIndex)
+    {
+        const gl::InterfaceBlock &block = blocks[bufferIndex];
+
+        if (!block.isActive(shaderType))
+        {
+            continue;
+        }
+
+        const ShaderInterfaceVariableInfo &info =
+            variableInfoMap.getIndexedVariableInfo(shaderType, variableType, bufferIndex);
+        if (info.isDuplicate)
+        {
+            continue;
+        }
+
+        if (block.isArray && block.arrayElement > 0)
+        {
+            incrementDescriptorCount(info.binding, 1);
+            mCurrentInfoIndex++;
+        }
+        else
+        {
+            updateWriteDesc(info.binding, descriptorType, 1);
+        }
+    }
+}
+
+// DescriptorSetDesc implementation.
 void DescriptorSetDesc::updateDescriptorSet(Context *context,
                                             UpdateDescriptorSetsBuilder *updateBuilder,
                                             const DescriptorDescHandles *handles,
                                             VkDescriptorSet descriptorSet) const
 {
-    for (uint32_t writeIndex = 0; writeIndex < static_cast<uint32_t>(mWriteDescriptors.size());
-         ++writeIndex)
+    for (uint32_t writeIndex = 0; writeIndex < mWriteDescriptorDescs.getSize(); ++writeIndex)
     {
-        const WriteDescriptorDesc &writeDesc = mWriteDescriptors[writeIndex];
+        const WriteDescriptorDesc &writeDesc = mWriteDescriptorDescs.getWriteDescriptor(writeIndex);
 
         if (writeDesc.descriptorCount == 0)
         {
@@ -5450,11 +5506,11 @@ void DescriptorSetDesc::updateDescriptorSet(Context *context,
 
 void DescriptorSetDesc::streamOut(std::ostream &ostr) const
 {
-    ostr << mWriteDescriptors.size() << " write descriptor descs:\n";
+    ostr << mWriteDescriptorDescs.getSize() << " write descriptor descs:\n";
 
-    for (uint32_t index = 0; index < static_cast<uint32_t>(mWriteDescriptors.size()); ++index)
+    for (uint32_t index = 0; index < mWriteDescriptorDescs.getSize(); ++index)
     {
-        const WriteDescriptorDesc &writeDesc = mWriteDescriptors[index];
+        const WriteDescriptorDesc &writeDesc = mWriteDescriptorDescs.getWriteDescriptor(index);
         ostr << static_cast<int>(writeDesc.binding) << ": "
              << static_cast<int>(writeDesc.descriptorCount) << " "
              << kDescriptorTypeNameMap[writeDesc.descriptorType] << " descriptors: ";
@@ -5513,36 +5569,6 @@ void DescriptorSetDescBuilder::reset()
     mUsedImages.clear();
     mUsedBufferBlocks.clear();
     mUsedBufferHelpers.clear();
-}
-
-void DescriptorSetDescBuilder::updateWriteDesc(uint32_t bindingIndex,
-                                               VkDescriptorType descriptorType,
-                                               uint32_t descriptorCount)
-{
-    if (mDesc.hasWriteDescAtIndex(bindingIndex))
-    {
-        uint32_t infoIndex          = mDesc.getInfoDescIndex(bindingIndex);
-        uint32_t oldDescriptorCount = mDesc.getDescriptorSetCount(bindingIndex);
-        if (descriptorCount != oldDescriptorCount)
-        {
-            ASSERT(infoIndex + oldDescriptorCount == mCurrentInfoIndex);
-            ASSERT(descriptorCount > oldDescriptorCount);
-            uint32_t additionalDescriptors = descriptorCount - oldDescriptorCount;
-            mDesc.incrementDescriptorCount(bindingIndex, additionalDescriptors);
-            mCurrentInfoIndex += additionalDescriptors;
-        }
-    }
-    else
-    {
-        WriteDescriptorDesc writeDesc = {};
-        SetBitField(writeDesc.binding, bindingIndex);
-        SetBitField(writeDesc.descriptorCount, descriptorCount);
-        SetBitField(writeDesc.descriptorType, descriptorType);
-        SetBitField(writeDesc.descriptorInfoIndex, mCurrentInfoIndex);
-        mCurrentInfoIndex += descriptorCount;
-
-        mDesc.updateWriteDesc(writeDesc);
-    }
 }
 
 void DescriptorSetDescBuilder::updateUniformWrite(uint32_t shaderStageCount)
@@ -5875,34 +5901,9 @@ void DescriptorSetDescBuilder::updateShaderBuffers(
     VkDeviceSize maxBoundBufferRange,
     const BufferHelper &emptyBuffer)
 {
-    // Initialize the descriptor writes in a first pass. This ensures we can pack the structures
-    // corresponding to array elements tightly.
-    for (uint32_t bufferIndex = 0; bufferIndex < blocks.size(); ++bufferIndex)
-    {
-        const gl::InterfaceBlock &block = blocks[bufferIndex];
-
-        if (!block.isActive(shaderType))
-        {
-            continue;
-        }
-
-        const ShaderInterfaceVariableInfo &info =
-            variableInfoMap.getIndexedVariableInfo(shaderType, variableType, bufferIndex);
-        if (info.isDuplicate)
-        {
-            continue;
-        }
-
-        if (block.isArray && block.arrayElement > 0)
-        {
-            mDesc.incrementDescriptorCount(info.binding, 1);
-            mCurrentInfoIndex++;
-        }
-        else
-        {
-            updateWriteDesc(info.binding, descriptorType, 1);
-        }
-    }
+    WriteDescriptorDescs &writeDescriptorDescs = mDesc.getWriteDescriptorDescs();
+    writeDescriptorDescs.updateShaderBuffers(shaderType, variableType, variableInfoMap, blocks,
+                                             descriptorType);
 
     // Now that we have the proper array elements counts, initialize the info structures.
     for (uint32_t bufferIndex = 0; bufferIndex < blocks.size(); ++bufferIndex)
@@ -5924,7 +5925,7 @@ void DescriptorSetDescBuilder::updateShaderBuffers(
 
         uint32_t binding       = info.binding;
         uint32_t arrayElement  = block.isArray ? block.arrayElement : 0;
-        uint32_t infoDescIndex = mDesc.getInfoDescIndex(binding) + arrayElement;
+        uint32_t infoDescIndex = writeDescriptorDescs.getInfoDescIndex(binding) + arrayElement;
 
         if (bufferBinding.get() == nullptr)
         {
