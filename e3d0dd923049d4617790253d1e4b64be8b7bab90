@@ -102,6 +102,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0b3fdd25_a1124bf7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3253,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-16T16:22:44Z",
+      "side": 1,
+      "message": "I mean, inside the `if` it\u0027s already checked that it\u0027s not `Float`",
+      "parentUuid": "00161f71_ec2a53bd",
+      "revId": "e3d0dd923049d4617790253d1e4b64be8b7bab90",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7bad6b1b_390e995e",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 13
