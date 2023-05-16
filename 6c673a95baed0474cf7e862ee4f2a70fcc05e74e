@@ -16,6 +16,29 @@
       "message": "LGTM",
       "revId": "6c673a95baed0474cf7e862ee4f2a70fcc05e74e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8dfe8416_f7934113",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1018,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-05-16T16:44:37Z",
+      "side": 1,
+      "message": "ASSERT(numChunks \u003c\u003d UINT16_MAX) can be done right after it is calculated at line 992. chunkIndex assertion is meeningless due to for loop condition.",
+      "range": {
+        "startLine": 1018,
+        "startChar": 15,
+        "endLine": 1018,
+        "endChar": 66
+      },
+      "revId": "6c673a95baed0474cf7e862ee4f2a70fcc05e74e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
