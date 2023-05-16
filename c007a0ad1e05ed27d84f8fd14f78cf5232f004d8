@@ -63,6 +63,30 @@
       },
       "revId": "c007a0ad1e05ed27d84f8fd14f78cf5232f004d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec21e93d_422b5c9c",
+        "filename": "AUTHORS",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-16T23:22:46Z",
+      "side": 1,
+      "message": "This looks good, thank you.\n\nLooks like I forgot to actually send this to Geoff, but I think we can move forward.",
+      "parentUuid": "98c0e8a5_ecca77e9",
+      "range": {
+        "startLine": 82,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 34
+      },
+      "revId": "c007a0ad1e05ed27d84f8fd14f78cf5232f004d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
