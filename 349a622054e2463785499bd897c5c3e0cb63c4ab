@@ -16,6 +16,24 @@
       "message": "Thanks. It\u0027s a bit tricky to review the new logic. Could you please add tests where shader and api types mismatch to make sure we always take the shader info and use it correctly? The tests would need to cover all the possible mismatches you\u0027ve handled here, but it\u0027ll probably just be a lot of copy-paste.",
       "revId": "349a622054e2463785499bd897c5c3e0cb63c4ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6885cdc7_cbc6d59c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-05-16T17:15:35Z",
+      "side": 1,
+      "message": "sure, will add tests to cover all the cases.",
+      "parentUuid": "1028142a_b20493df",
+      "revId": "349a622054e2463785499bd897c5c3e0cb63c4ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
