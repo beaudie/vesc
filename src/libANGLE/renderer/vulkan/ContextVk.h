@@ -1459,6 +1459,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // avoid calling vkAllocateDesctiporSets each texture update.
     vk::DescriptorSetDesc mActiveTexturesDesc;
 
+    vk::WriteDescriptorDescs mShaderBufferWriteDescriptorDescs;
     vk::DescriptorSetDescBuilder mShaderBuffersDescriptorDesc;
 
     gl::ActiveTextureArray<TextureVk *> mActiveImages;
