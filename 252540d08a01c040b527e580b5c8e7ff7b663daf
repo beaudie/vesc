@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64c49137_7a44cfd1",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2874,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-16T15:14:48Z",
+      "side": 1,
+      "message": "nit: For consistency with `getAttachmentRenderTarget`, please move this under `respecifyImageStorageIfNecessary`. I realize the order shouldn\u0027t matter here",
+      "revId": "252540d08a01c040b527e580b5c8e7ff7b663daf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ce5ecd2_c93ecfff",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-16T15:14:48Z",
+      "side": 0,
+      "message": "Revert this?",
+      "revId": "c94ee61c70b53ddcbc115096a63acc47409ba3ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
