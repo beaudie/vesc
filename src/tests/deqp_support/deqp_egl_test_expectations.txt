@@ -103,6 +103,9 @@
 2546 MAC OPENGL : dEQP-EGL.functional.query_surface.simple.pbuffer.rgba8888_depth_stencil = FAIL
 2546 MAC : dEQP-EGL.functional.thread_cleanup.* = SKIP
 
+// New crash since VK-GL-CTS roller on 2023-05-03
+8167 MAC METAL : dEQP-EGL.functional.fence_sync.valid.egl_fence_persistent_buffer = SKIP
+
 // Android GLES-only failues
 2567 ANDROID GLES : dEQP-EGL.functional.image.api.create_image_gles2_tex2d_red = FAIL
 2567 ANDROID GLES : dEQP-EGL.functional.image.api.create_image_gles2_tex2d_rg = FAIL
