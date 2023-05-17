@@ -2805,10 +2805,11 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
     vk::BufferHelper *currentUniformBuffer = mDefaultUniformStorage.getCurrentBuffer();
 
     vk::DescriptorSetDescBuilder uniformsAndXfbDesc;
-    vk::WriteDescriptorDescs writeDescriptorDescs;
+    const vk::WriteDescriptorDescs writeDescriptorDescs =
+        executableVk->getDefaultUniformWriteDescriptorDescs(transformFeedbackVk);
     uniformsAndXfbDesc.updateUniformsAndXfb(
-        this, *executable, *executableVk, currentUniformBuffer, mEmptyBuffer,
-        mState.isTransformFeedbackActiveUnpaused(), transformFeedbackVk, writeDescriptorDescs);
+        this, *executable, *executableVk, writeDescriptorDescs, currentUniformBuffer, mEmptyBuffer,
+        mState.isTransformFeedbackActiveUnpaused(), transformFeedbackVk);
 
     return executableVk->updateUniformsAndXfbDescriptorSet(
         this, mShareGroupVk->getUpdateDescriptorSetsBuilder(), writeDescriptorDescs,

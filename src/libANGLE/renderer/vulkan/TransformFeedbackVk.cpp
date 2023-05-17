@@ -307,14 +307,12 @@ void TransformFeedbackVk::updateTransformFeedbackDescriptorDesc(
     const vk::Context *context,
     const gl::ProgramExecutable &executable,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
-    vk::WriteDescriptorDescs &writeDescriptorDescs,
+    const vk::WriteDescriptorDescs &writeDescriptorDescs,
     const vk::BufferHelper &emptyBuffer,
     bool activeUnpaused,
     vk::DescriptorSetDescBuilder *builder) const
 {
     size_t xfbBufferCount = executable.getTransformFeedbackBufferCount();
-    builder->updateTransformFeedbackWrite(variableInfoMap, writeDescriptorDescs,
-                                          static_cast<uint32_t>(xfbBufferCount));
 
     for (uint32_t bufferIndex = 0; bufferIndex < xfbBufferCount; ++bufferIndex)
     {

@@ -250,9 +250,11 @@ class ProgramExecutableVk
     {
         return mShaderResourceWriteDescriptorDescs;
     }
-    const vk::WriteDescriptorDescs &getTextureWriteDescriptorDescs() const
+    const vk::WriteDescriptorDescs &getDefaultUniformWriteDescriptorDescs(
+        TransformFeedbackVk *transformFeedbackVk) const
     {
-        return mTextureWriteDescriptorDescs;
+        return transformFeedbackVk == nullptr ? mDefaultUniformWriteDescriptorDescs
+                                              : mDefaultUniformAndXfbWriteDescriptorDescs;
     }
 
   private:
@@ -428,6 +430,8 @@ class ProgramExecutableVk
 
     vk::WriteDescriptorDescs mShaderResourceWriteDescriptorDescs;
     vk::WriteDescriptorDescs mTextureWriteDescriptorDescs;
+    vk::WriteDescriptorDescs mDefaultUniformWriteDescriptorDescs;
+    vk::WriteDescriptorDescs mDefaultUniformAndXfbWriteDescriptorDescs;
 };
 
 }  // namespace rx

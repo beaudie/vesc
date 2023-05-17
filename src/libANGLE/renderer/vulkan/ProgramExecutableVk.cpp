@@ -1514,6 +1514,36 @@ angle::Result ProgramExecutableVk::createPipelineLayout(
             shaderType, mVariableInfoMap, glExecutable);
     }
 
+    // Update mDefaultUniformWriteDescriptorDescs
+    mDefaultUniformWriteDescriptorDescs.reset();
+    for (gl::ShaderType shaderType : linkedShaderStages)
+    {
+        mDefaultUniformWriteDescriptorDescs.updateDefaultUniform(shaderType, mVariableInfoMap,
+                                                                 glExecutable);
+    }
+
+    mDefaultUniformAndXfbWriteDescriptorDescs.reset();
+    if (glExecutable.hasTransformFeedbackOutput() &&
+        contextVk->getRenderer()->getFeatures().emulateTransformFeedback.enabled)
+    {
+        // Update mDefaultUniformAndXfbWriteDescriptorDescs for the emulation code path.
+        for (gl::ShaderType shaderType : linkedShaderStages)
+        {
+            mDefaultUniformAndXfbWriteDescriptorDescs.updateDefaultUniform(
+                shaderType, mVariableInfoMap, glExecutable);
+            if (shaderType == gl::ShaderType::Vertex)
+            {
+                mDefaultUniformAndXfbWriteDescriptorDescs.updateTransformFeedbackWrite(
+                    mVariableInfoMap, glExecutable);
+            }
+        }
+    }
+    else
+    {
+        // Otherwise it will be the same as default uniform
+        mDefaultUniformAndXfbWriteDescriptorDescs = mDefaultUniformWriteDescriptorDescs;
+    }
+
     return angle::Result::Continue;
 }
 
@@ -1827,12 +1857,12 @@ angle::Result ProgramExecutableVk::updateUniforms(
         // We need to reinitialize the descriptor sets if we newly allocated buffers since we can't
         // modify the descriptor sets once initialized.
         vk::DescriptorSetDescBuilder uniformsAndXfbDesc;
-        vk::WriteDescriptorDescs writeDescriptorDescs;
+        const vk::WriteDescriptorDescs writeDescriptorDescs =
+            getDefaultUniformWriteDescriptorDescs(transformFeedbackVk);
         uniformsAndXfbDesc.updateUniformsAndXfb(
-            context, glExecutable, *this, defaultUniformBuffer, *emptyBuffer,
+            context, glExecutable, *this, writeDescriptorDescs, defaultUniformBuffer, *emptyBuffer,
             isTransformFeedbackActiveUnpaused,
-            glExecutable.hasTransformFeedbackOutput() ? transformFeedbackVk : nullptr,
-            writeDescriptorDescs);
+            glExecutable.hasTransformFeedbackOutput() ? transformFeedbackVk : nullptr);
 
         ANGLE_TRY(updateUniformsAndXfbDescriptorSet(context, updateBuilder, writeDescriptorDescs,
                                                     commandBufferHelper, defaultUniformBuffer,

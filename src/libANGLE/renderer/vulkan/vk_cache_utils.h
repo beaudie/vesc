@@ -1536,17 +1536,10 @@ struct DescriptorDescHandles
 class WriteDescriptorDescs
 {
   public:
-    size_t hash() const;
-
     void reset()
     {
         mWriteDescriptors.clear();
         mCurrentInfoIndex = 0;
-    }
-
-    size_t getKeySizeBytes() const
-    {
-        return mWriteDescriptors.size() * sizeof(WriteDescriptorDesc);
     }
 
     bool hasWriteDescAtIndex(uint32_t bindingIndex) const
@@ -1576,10 +1569,6 @@ class WriteDescriptorDescs
         return mWriteDescriptors[bindingIndex].descriptorInfoIndex;
     }
 
-    void updateWriteDesc(uint32_t bindingIndex,
-                         VkDescriptorType descriptorType,
-                         uint32_t descriptorCount);
-
     void updateShaderBuffers(gl::ShaderType shaderType,
                              ShaderVariableType variableType,
                              const ShaderInterfaceVariableInfoMap &variableInfoMap,
@@ -1604,6 +1593,13 @@ class WriteDescriptorDescs
         const ShaderInterfaceVariableInfoMap &variableInfoMap,
         const gl::ProgramExecutable &executable);
 
+    void updateDefaultUniform(gl::ShaderType shaderType,
+                              const ShaderInterfaceVariableInfoMap &variableInfoMap,
+                              const gl::ProgramExecutable &executable);
+
+    void updateTransformFeedbackWrite(const ShaderInterfaceVariableInfoMap &variableInfoMap,
+                                      const gl::ProgramExecutable &executable);
+
     uint32_t getSize() const { return static_cast<uint32_t>(mWriteDescriptors.size()); }
     const WriteDescriptorDesc &getWriteDescriptor(uint32_t index) const
     {
@@ -1613,6 +1609,10 @@ class WriteDescriptorDescs
     void streamOut(std::ostream &os) const;
 
   private:
+    void updateWriteDesc(uint32_t bindingIndex,
+                         VkDescriptorType descriptorType,
+                         uint32_t descriptorCount);
+
     // After a preliminary minimum size, use heap memory.
     angle::FastMap<WriteDescriptorDesc, kFastDescriptorSetDescLimit> mWriteDescriptors;
     uint32_t mCurrentInfoIndex = 0;
@@ -1716,11 +1716,11 @@ class DescriptorSetDescBuilder final
     void updateUniformsAndXfb(Context *context,
                               const gl::ProgramExecutable &executable,
                               const ProgramExecutableVk &executableVk,
+                              const WriteDescriptorDescs &writeDescriptorDescs,
                               const BufferHelper *currentUniformBuffer,
                               const BufferHelper &emptyBuffer,
                               bool activeUnpaused,
-                              TransformFeedbackVk *transformFeedbackVk,
-                              WriteDescriptorDescs &writeDescriptorDescs);
+                              TransformFeedbackVk *transformFeedbackVk);
 
     // Specific helpers for shader resource descriptors.
     void updateShaderBuffers(gl::ShaderType shaderType,

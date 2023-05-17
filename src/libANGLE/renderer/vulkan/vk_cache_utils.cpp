@@ -5544,6 +5544,24 @@ void WriteDescriptorDescs::updateExecutableActiveTexturesForShader(
     }
 }
 
+void WriteDescriptorDescs::updateDefaultUniform(
+    gl::ShaderType shaderType,
+    const ShaderInterfaceVariableInfoMap &variableInfoMap,
+    const gl::ProgramExecutable &executable)
+{
+    uint32_t binding = variableInfoMap.getDefaultUniformBinding(shaderType);
+    updateWriteDesc(binding, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1);
+}
+
+void WriteDescriptorDescs::updateTransformFeedbackWrite(
+    const ShaderInterfaceVariableInfoMap &variableInfoMap,
+    const gl::ProgramExecutable &executable)
+{
+    uint32_t xfbBufferCount = static_cast<uint32_t>(executable.getTransformFeedbackBufferCount());
+    updateWriteDesc(variableInfoMap.getXfbBufferBinding(0), VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+                    xfbBufferCount);
+}
+
 void WriteDescriptorDescs::streamOut(std::ostream &ostr) const
 {
     ostr << mWriteDescriptors.size() << " write descriptor descs:\n";
@@ -5723,15 +5741,6 @@ void DescriptorSetDescBuilder::updateUniformBuffer(uint32_t bindingIndex,
     mHandles[infoIndex].buffer = bufferHelper.getBuffer().getHandle();
 }
 
-void DescriptorSetDescBuilder::updateTransformFeedbackWrite(
-    const ShaderInterfaceVariableInfoMap &variableInfoMap,
-    WriteDescriptorDescs &writeDescriptorDescs,
-    uint32_t xfbBufferCount)
-{
-    writeDescriptorDescs.updateWriteDesc(variableInfoMap.getXfbBufferBinding(0),
-                                         VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, xfbBufferCount);
-}
-
 void DescriptorSetDescBuilder::updateTransformFeedbackBuffer(
     const Context *context,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
@@ -5762,14 +5771,15 @@ void DescriptorSetDescBuilder::updateTransformFeedbackBuffer(
     mHandles[infoIndex].buffer = bufferHelper.getBuffer().getHandle();
 }
 
-void DescriptorSetDescBuilder::updateUniformsAndXfb(Context *context,
-                                                    const gl::ProgramExecutable &executable,
-                                                    const ProgramExecutableVk &executableVk,
-                                                    const BufferHelper *currentUniformBuffer,
-                                                    const BufferHelper &emptyBuffer,
-                                                    bool activeUnpaused,
-                                                    TransformFeedbackVk *transformFeedbackVk,
-                                                    WriteDescriptorDescs &writeDescriptorDescs)
+void DescriptorSetDescBuilder::updateUniformsAndXfb(
+    Context *context,
+    const gl::ProgramExecutable &executable,
+    const ProgramExecutableVk &executableVk,
+    const WriteDescriptorDescs &writeDescriptorDescs,
+    const BufferHelper *currentUniformBuffer,
+    const BufferHelper &emptyBuffer,
+    bool activeUnpaused,
+    TransformFeedbackVk *transformFeedbackVk)
 {
     gl::ShaderBitSet linkedStages = executable.getLinkedShaderStages();
 
@@ -5777,9 +5787,7 @@ void DescriptorSetDescBuilder::updateUniformsAndXfb(Context *context,
 
     for (const gl::ShaderType shaderType : linkedStages)
     {
-        uint32_t binding = variableInfoMap.getDefaultUniformBinding(shaderType);
-        writeDescriptorDescs.updateWriteDesc(binding, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 1);
-
+        uint32_t binding         = variableInfoMap.getDefaultUniformBinding(shaderType);
         VkDeviceSize bufferRange = executableVk.getDefaultUniformAlignedSize(context, shaderType);
         if (bufferRange == 0)
         {
