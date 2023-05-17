@@ -44,6 +44,8 @@ function generate_Android_bp_file() {
             "angle_build_all = false"
             "angle_expose_non_conformant_extensions_and_versions = true"
 
+            "build_angle_end2end_tests = true"
+
             # Build for 64-bit CPUs
             "target_cpu = \"$abi\""
 
