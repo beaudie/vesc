@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2f5946f_301886a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-05-17T15:32:49Z",
+      "side": 1,
+      "message": "Adds global EGLDisplay handle `gEGLDisplay` to the trace.  In addition to replacing all occurrences of `EGL_NO_DISPLAY` with the new handle name, codegen also results in the following trace changes:\n\ntracename.h:\n```\n#include \u003cEGL/egl.h\u003e\n#include \u003cstdint.h\u003e\n\nextern EGLDisplay gEGLDisplay;    \u003c\u003c NEW\n```\n\ntracename.cpp:\n```\n#include \"infinity_ops.h\"\n#include \"trace_fixture.h\"\n#include \"angle_trace_gl.h\"\n\nEGLDisplay gEGLDisplay;          \u003c\u003c NEW\n\n// Private Functions\n```\n\ntracename_001.cpp:\n```\n// Public Functions\n\nvoid SetupReplay(void)\n{\n    InitReplay();\n    gEGLDisplay \u003d eglGetCurrentDisplay();   \u003c\u003c NEW\n    SetupReplayContextShared();\n    SetCurrentContextID(2);\n    SetupReplayContext2();\n\n}\n```",
+      "revId": "db7a683459d92ebc5edde8a1c84ad0adc60105d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
