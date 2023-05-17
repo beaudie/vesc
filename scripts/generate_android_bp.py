@@ -15,9 +15,10 @@ import functools
 import collections
 
 ROOT_TARGETS = [
-    "//:libGLESv2",
-    "//:libGLESv1_CM",
-    "//:libEGL",
+    # "//:libGLESv2",
+    # "//:libGLESv1_CM",
+    # "//:libEGL",
+    "//:angle_end2end_tests",
 ]
 
 CODEGEN_TARGETS = [
