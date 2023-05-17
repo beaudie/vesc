@@ -15,9 +15,10 @@ import functools
 import collections
 
 ROOT_TARGETS = [
-    "//:libGLESv2",
-    "//:libGLESv1_CM",
-    "//:libEGL",
+    # "//:libGLESv2",
+    # "//:libGLESv1_CM",
+    # "//:libEGL",
+    "//:angle_end2end_tests_main",
 ]
 
 CODEGEN_TARGETS = [
@@ -35,6 +36,10 @@ ABI_X64 = 'x86_64'
 
 ABI_TARGETS = [ABI_ARM, ABI_ARM64, ABI_X86, ABI_X64]
 
+def log(msg):
+    file_path = '/tmp/gen_android_bp_log'
+    with open(file_path, 'a') as file:
+        file.write(msg + '\n')
 
 def gn_abi(abi):
     # gn uses x64, rather than x86_64
@@ -129,6 +134,10 @@ def gn_target_to_blueprint_target(target, target_info):
     # Split the gn target name (in the form of //gn_file_path:target_name) into gn_file_path and
     # target_name
     match = re.match(r"^//([a-zA-Z0-9\-\+_/]*):([a-zA-Z0-9\-\+_.]+)$", target)
+    if match is None:
+      log(f"===================== none matching target: {target}")
+      # result:
+      # ===================== none matching target: //third_party/zlib:zlib_slide_hash_simd(//build/toolchain/linux:clang_x64)
     assert match is not None
 
     gn_file_path = match.group(1)

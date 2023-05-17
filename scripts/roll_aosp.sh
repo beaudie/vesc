@@ -44,6 +44,13 @@ function generate_Android_bp_file() {
             "angle_build_all = false"
             "angle_expose_non_conformant_extensions_and_versions = true"
 
+            #  angle_has_frame_capture is needed to avoid the error:
+            #    ERROR Unresolved dependencies.
+            #    //src/tests/capture_replay_tests:capture_replay_tests(//build/toolchain/android:android_clang_arm)
+            #      needs //util:angle_frame_capture_test_utils(//build/toolchain/android:android_clang_arm)
+            "angle_has_frame_capture = true"
+            "build_angle_end2end_tests = true"
+
             # Build for 64-bit CPUs
             "target_cpu = \"$abi\""
 
