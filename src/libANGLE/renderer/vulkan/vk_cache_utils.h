@@ -1590,14 +1590,19 @@ class WriteDescriptorDescs
                               const ShaderInterfaceVariableInfoMap &variableInfoMap,
                               const std::vector<gl::AtomicCounterBuffer> &atomicCounterBuffers);
 
-    angle::Result updateImages(gl::ShaderType shaderType,
-                               const gl::ProgramExecutable &executable,
-                               const ShaderInterfaceVariableInfoMap &variableInfoMap);
+    void updateImages(gl::ShaderType shaderType,
+                      const gl::ProgramExecutable &executable,
+                      const ShaderInterfaceVariableInfoMap &variableInfoMap);
 
-    angle::Result updateInputAttachments(gl::ShaderType shaderType,
-                                         const gl::ProgramExecutable &executable,
-                                         const ShaderInterfaceVariableInfoMap &variableInfoMap,
-                                         FramebufferVk *framebufferVk);
+    void updateInputAttachments(gl::ShaderType shaderType,
+                                const gl::ProgramExecutable &executable,
+                                const ShaderInterfaceVariableInfoMap &variableInfoMap,
+                                FramebufferVk *framebufferVk);
+
+    void updateExecutableActiveTexturesForShader(
+        gl::ShaderType shaderType,
+        const ShaderInterfaceVariableInfoMap &variableInfoMap,
+        const gl::ProgramExecutable &executable);
 
     uint32_t getSize() const { return static_cast<uint32_t>(mWriteDescriptors.size()); }
     const WriteDescriptorDesc &getWriteDescriptor(uint32_t index) const
@@ -1755,7 +1760,7 @@ class DescriptorSetDescBuilder final
 
     angle::Result updateFullActiveTextures(Context *context,
                                            const ShaderInterfaceVariableInfoMap &variableInfoMap,
-                                           WriteDescriptorDescs &writeDescriptorDescs,
+                                           const WriteDescriptorDescs &writeDescriptorDescs,
                                            const gl::ProgramExecutable &executable,
                                            const gl::ActiveTextureArray<TextureVk *> &textures,
                                            const gl::SamplerBindingVector &samplers,
@@ -1783,7 +1788,7 @@ class DescriptorSetDescBuilder final
         Context *context,
         gl::ShaderType shaderType,
         const ShaderInterfaceVariableInfoMap &variableInfoMap,
-        WriteDescriptorDescs &writeDescriptorDescs,
+        const WriteDescriptorDescs &writeDescriptorDescs,
         const gl::ProgramExecutable &executable,
         const gl::ActiveTextureArray<TextureVk *> &textures,
         const gl::SamplerBindingVector &samplers,

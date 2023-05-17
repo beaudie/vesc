@@ -1501,8 +1501,15 @@ angle::Result ProgramExecutableVk::createPipelineLayout(
             glExecutable.getShaderStorageBlocks(), getStorageBufferDescriptorType());
         mShaderResourceWriteDescriptorDescs.updateAtomicCounters(
             shaderType, mVariableInfoMap, glExecutable.getAtomicCounterBuffers());
-        ANGLE_TRY(mShaderResourceWriteDescriptorDescs.updateImages(shaderType, glExecutable,
-                                                                   mVariableInfoMap));
+        mShaderResourceWriteDescriptorDescs.updateImages(shaderType, glExecutable,
+                                                         mVariableInfoMap);
+    }
+
+    // Update mTextureWriteDescriptorDescs
+    for (gl::ShaderType shaderType : linkedShaderStages)
+    {
+        mTextureWriteDescriptorDescs.updateExecutableActiveTexturesForShader(
+            shaderType, mVariableInfoMap, glExecutable);
     }
 
     return angle::Result::Continue;
@@ -1648,12 +1655,11 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
     if (newSharedCacheKey != nullptr)
     {
         vk::DescriptorSetDescBuilder fullDesc;
-        vk::WriteDescriptorDescs writeDescriptorDescs;
         // Cache miss. A new cache entry has been created.
         ANGLE_TRY(fullDesc.updateFullActiveTextures(
-            context, mVariableInfoMap, writeDescriptorDescs, executable, textures, samplers,
+            context, mVariableInfoMap, mTextureWriteDescriptorDescs, executable, textures, samplers,
             emulateSeamfulCubeMapSampling, pipelineType, newSharedCacheKey));
-        fullDesc.updateDescriptorSet(context, writeDescriptorDescs, updateBuilder,
+        fullDesc.updateDescriptorSet(context, mTextureWriteDescriptorDescs, updateBuilder,
                                      mDescriptorSets[DescriptorSetIndex::Texture]);
     }
     else

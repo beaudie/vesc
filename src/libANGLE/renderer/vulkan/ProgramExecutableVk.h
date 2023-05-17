@@ -250,6 +250,10 @@ class ProgramExecutableVk
     {
         return mShaderResourceWriteDescriptorDescs;
     }
+    const vk::WriteDescriptorDescs &getTextureWriteDescriptorDescs() const
+    {
+        return mTextureWriteDescriptorDescs;
+    }
 
   private:
     friend class ProgramVk;
@@ -423,6 +427,7 @@ class ProgramExecutableVk
     vk::PipelineCache mPipelineCache;
 
     vk::WriteDescriptorDescs mShaderResourceWriteDescriptorDescs;
+    vk::WriteDescriptorDescs mTextureWriteDescriptorDescs;
 };
 
 }  // namespace rx

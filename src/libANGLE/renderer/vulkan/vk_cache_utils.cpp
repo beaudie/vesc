@@ -5431,17 +5431,16 @@ void WriteDescriptorDescs::updateAtomicCounters(
                     gl::IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFER_BINDINGS);
 }
 
-angle::Result WriteDescriptorDescs::updateImages(
-    gl::ShaderType shaderType,
-    const gl::ProgramExecutable &executable,
-    const ShaderInterfaceVariableInfoMap &variableInfoMap)
+void WriteDescriptorDescs::updateImages(gl::ShaderType shaderType,
+                                        const gl::ProgramExecutable &executable,
+                                        const ShaderInterfaceVariableInfoMap &variableInfoMap)
 {
     const std::vector<gl::ImageBinding> &imageBindings = executable.getImageBindings();
     const std::vector<gl::LinkedUniform> &uniforms     = executable.getUniforms();
 
     if (imageBindings.empty())
     {
-        return angle::Result::Continue;
+        return;
     }
 
     for (uint32_t imageIndex = 0; imageIndex < imageBindings.size(); ++imageIndex)
@@ -5470,11 +5469,9 @@ angle::Result WriteDescriptorDescs::updateImages(
 
         updateWriteDesc(info.binding, descriptorType, descriptorCount);
     }
-
-    return angle::Result::Continue;
 }
 
-angle::Result WriteDescriptorDescs::updateInputAttachments(
+void WriteDescriptorDescs::updateInputAttachments(
     gl::ShaderType shaderType,
     const gl::ProgramExecutable &executable,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
@@ -5482,14 +5479,14 @@ angle::Result WriteDescriptorDescs::updateInputAttachments(
 {
     if (shaderType != gl::ShaderType::Fragment)
     {
-        return angle::Result::Continue;
+        return;
     }
 
     const std::vector<gl::LinkedUniform> &uniforms = executable.getUniforms();
 
     if (!executable.usesFramebufferFetch())
     {
-        return angle::Result::Continue;
+        return;
     }
 
     const uint32_t baseUniformIndex              = executable.getFragmentInoutRange().low();
@@ -5499,7 +5496,7 @@ angle::Result WriteDescriptorDescs::updateInputAttachments(
         variableInfoMap.getFramebufferFetchInfo(shaderType);
     if (baseInfo.isDuplicate)
     {
-        return angle::Result::Continue;
+        return;
     }
 
     uint32_t baseBinding = baseInfo.binding - baseInputAttachment.location;
@@ -5509,8 +5506,42 @@ angle::Result WriteDescriptorDescs::updateInputAttachments(
         uint32_t binding = baseBinding + static_cast<uint32_t>(colorIndex);
         updateWriteDesc(binding, VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1);
     }
+}
 
-    return angle::Result::Continue;
+void WriteDescriptorDescs::updateExecutableActiveTexturesForShader(
+    gl::ShaderType shaderType,
+    const ShaderInterfaceVariableInfoMap &variableInfoMap,
+    const gl::ProgramExecutable &executable)
+{
+    const std::vector<gl::SamplerBinding> &samplerBindings = executable.getSamplerBindings();
+    const std::vector<gl::LinkedUniform> &uniforms         = executable.getUniforms();
+
+    for (uint32_t samplerIndex = 0; samplerIndex < samplerBindings.size(); ++samplerIndex)
+    {
+        const gl::SamplerBinding &samplerBinding = samplerBindings[samplerIndex];
+        uint32_t uniformIndex = executable.getUniformIndexFromSamplerIndex(samplerIndex);
+        const gl::LinkedUniform &samplerUniform = uniforms[uniformIndex];
+
+        if (!samplerUniform.isActive(shaderType))
+        {
+            continue;
+        }
+
+        const ShaderInterfaceVariableInfo &info = variableInfoMap.getIndexedVariableInfo(
+            shaderType, ShaderVariableType::Texture, samplerIndex);
+        if (info.isDuplicate)
+        {
+            continue;
+        }
+
+        uint32_t arraySize       = static_cast<uint32_t>(samplerBinding.boundTextureUnits.size());
+        uint32_t descriptorCount = arraySize * gl::ArraySizeProduct(samplerUniform.outerArraySizes);
+        VkDescriptorType descriptorType = (samplerBinding.textureType == gl::TextureType::Buffer)
+                                              ? VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER
+                                              : VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+
+        updateWriteDesc(info.binding, descriptorType, descriptorCount);
+    }
 }
 
 void WriteDescriptorDescs::streamOut(std::ostream &ostr) const
@@ -5856,7 +5887,7 @@ void UpdatePreCacheActiveTextures(const gl::ProgramExecutable &executable,
 angle::Result DescriptorSetDescBuilder::updateFullActiveTextures(
     Context *context,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
-    WriteDescriptorDescs &writeDescriptorDescs,
+    const WriteDescriptorDescs &writeDescriptorDescs,
     const gl::ProgramExecutable &executable,
     const gl::ActiveTextureArray<TextureVk *> &textures,
     const gl::SamplerBindingVector &samplers,
@@ -5865,7 +5896,6 @@ angle::Result DescriptorSetDescBuilder::updateFullActiveTextures(
     const SharedDescriptorSetCacheKey &sharedCacheKey)
 {
     reset();
-    writeDescriptorDescs.reset();
     for (gl::ShaderType shaderType : executable.getLinkedShaderStages())
     {
         ANGLE_TRY(updateExecutableActiveTexturesForShader(
@@ -5880,7 +5910,7 @@ angle::Result DescriptorSetDescBuilder::updateExecutableActiveTexturesForShader(
     Context *context,
     gl::ShaderType shaderType,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
-    WriteDescriptorDescs &writeDescriptorDescs,
+    const WriteDescriptorDescs &writeDescriptorDescs,
     const gl::ProgramExecutable &executable,
     const gl::ActiveTextureArray<TextureVk *> &textures,
     const gl::SamplerBindingVector &samplers,
@@ -5910,14 +5940,7 @@ angle::Result DescriptorSetDescBuilder::updateExecutableActiveTexturesForShader(
             continue;
         }
 
-        uint32_t arraySize       = static_cast<uint32_t>(samplerBinding.boundTextureUnits.size());
-        uint32_t descriptorCount = arraySize * gl::ArraySizeProduct(samplerUniform.outerArraySizes);
-        VkDescriptorType descriptorType = (samplerBinding.textureType == gl::TextureType::Buffer)
-                                              ? VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER
-                                              : VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-
-        writeDescriptorDescs.updateWriteDesc(info.binding, descriptorType, descriptorCount);
-
+        uint32_t arraySize        = static_cast<uint32_t>(samplerBinding.boundTextureUnits.size());
         bool isSamplerExternalY2Y = samplerBinding.samplerType == GL_SAMPLER_EXTERNAL_2D_Y2Y_EXT;
 
         for (uint32_t arrayElement = 0; arrayElement < arraySize; ++arrayElement)

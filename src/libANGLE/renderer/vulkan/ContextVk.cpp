@@ -6121,9 +6121,9 @@ angle::Result ContextVk::updateShaderResourcesDescriptorDesc(PipelineType pipeli
 
     mShaderBufferWriteDescriptorDescs = executableVk.getShaderResourceWriteDescriptorDescs();
     // Update writeDescriptorDescs with inputAttachments
-    ANGLE_TRY(mShaderBufferWriteDescriptorDescs.updateInputAttachments(
+    mShaderBufferWriteDescriptorDescs.updateInputAttachments(
         gl::ShaderType::Fragment, *executable, variableInfoMap,
-        vk::GetImpl(mState.getDrawFramebuffer())));
+        vk::GetImpl(mState.getDrawFramebuffer()));
 
     for (gl::ShaderType shaderType : executable->getLinkedShaderStages())
     {
