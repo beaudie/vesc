@@ -3961,9 +3961,11 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
             mMultisampledRenderToSingleSampledFeaturesGOOGLEX.multisampledRenderToSingleSampled ==
                 VK_TRUE);
 
-    ANGLE_FEATURE_CONDITION(&mFeatures, supportsImage2dViewOf3d,
-                            mImage2dViewOf3dFeatures.image2DViewOf3D == VK_TRUE &&
-                                mImage2dViewOf3dFeatures.sampler2DViewOf3D == VK_TRUE);
+    // TODO: b/274478146 - drop Venus on AMD exception after RADV supports it.
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, supportsImage2dViewOf3d,
+        mImage2dViewOf3dFeatures.image2DViewOf3D == VK_TRUE &&
+            ((isVenus && isAMD) || mImage2dViewOf3dFeatures.sampler2DViewOf3D == VK_TRUE));
 
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsMultiview, mMultiviewFeatures.multiview == VK_TRUE);
 
