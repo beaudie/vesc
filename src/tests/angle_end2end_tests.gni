@@ -292,7 +292,7 @@ template("angle_end2end_tests_template") {
     }
 
     deps = [
-      ":angle_common_test_utils_shared",
+      "$angle_root/src/tests:angle_common_test_utils_shared",
       "$angle_root:angle_gl_enum_utils",
       "$angle_root:angle_image_util",
       "$angle_root:translator",
