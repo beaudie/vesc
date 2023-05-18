@@ -70,6 +70,30 @@
       },
       "revId": "8fdb164b45a06e3efc3b4b45bfb0d705043ad0d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69995956_23f1d76b",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 8766,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-05-18T15:55:50Z",
+      "side": 1,
+      "message": "Ah, OK, for sure we can duplicate this pattern. I had hoped to avoid it only because it breaks RenderDoc and makes debugging more difficult.",
+      "parentUuid": "a80d4958_4fb0553b",
+      "range": {
+        "startLine": 8766,
+        "startChar": 8,
+        "endLine": 8766,
+        "endChar": 46
+      },
+      "revId": "8fdb164b45a06e3efc3b4b45bfb0d705043ad0d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
