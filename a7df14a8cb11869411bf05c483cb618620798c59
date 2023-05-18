@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdc3501c_f9e1f332",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-05-18T18:45:42Z",
+      "side": 1,
+      "message": "No need for interrupt, because the glDelete* methods are now spec\u0027d to implicitly disable PLS.\n\nWe did in fact add ANGLE code to handle glDelete* in the general case: we deactivate PLS now when deleting active framebuffer attachments.",
+      "parentUuid": "030c93e6_5c505521",
+      "revId": "a7df14a8cb11869411bf05c483cb618620798c59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4beb1305_84c25982",
@@ -48,6 +66,24 @@
       "writtenOn": "2023-05-10T20:46:18Z",
       "side": 1,
       "message": "Nit: missing closing \u0027\"\u0027.",
+      "revId": "a7df14a8cb11869411bf05c483cb618620798c59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "961ecd76_139a1d53",
+        "filename": "extensions/ANGLE_shader_pixel_local_storage.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-05-18T18:45:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4beb1305_84c25982",
       "revId": "a7df14a8cb11869411bf05c483cb618620798c59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -89,6 +125,30 @@
       "side": 1,
       "message": "Lol, not sure how I ended up adding markup around \"avoid\"",
       "parentUuid": "59a32563_2309c610",
+      "range": {
+        "startLine": 3139,
+        "startChar": 8,
+        "endLine": 3139,
+        "endChar": 32
+      },
+      "revId": "a7df14a8cb11869411bf05c483cb618620798c59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f383b264_6588a649",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3139,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2023-05-18T18:45:42Z",
+      "side": 1,
+      "message": "😄 Done",
+      "parentUuid": "b98b0756_f2d8ec8e",
       "range": {
         "startLine": 3139,
         "startChar": 8,
