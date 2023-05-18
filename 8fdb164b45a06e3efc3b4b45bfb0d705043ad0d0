@@ -94,6 +94,30 @@
       },
       "revId": "8fdb164b45a06e3efc3b4b45bfb0d705043ad0d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28f6fae7_a47f403a",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 8766,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-05-18T17:32:40Z",
+      "side": 1,
+      "message": "NM about RenderDoc, am now unable to reproduce the issue I had seen.",
+      "parentUuid": "69995956_23f1d76b",
+      "range": {
+        "startLine": 8766,
+        "startChar": 8,
+        "endLine": 8766,
+        "endChar": 46
+      },
+      "revId": "8fdb164b45a06e3efc3b4b45bfb0d705043ad0d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
