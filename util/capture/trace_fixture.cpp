@@ -196,6 +196,7 @@ EGLSurface *gSurfaceMap2;
 EGLContext *gContextMap2;
 GLsync *gSyncMap2;
 EGLSync *gEGLSyncMap;
+EGLDisplay gEGLDisplay;
 
 std::string gBinaryDataDir = ".";
 
@@ -647,6 +648,11 @@ void CreateContext(GLuint contextID)
 void SetCurrentContextID(GLuint id)
 {
     gContextMap2[id] = eglGetCurrentContext();
+}
+
+void SetCurrentEGLDisplay(GLuint id)
+{
+    gEGLDisplay = eglGetCurrentDisplay();
 }
 
 ANGLE_REPLAY_EXPORT PFNEGLCREATEIMAGEPROC r_eglCreateImage;

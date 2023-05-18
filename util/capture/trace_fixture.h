@@ -50,6 +50,9 @@ using DecompressCallback              = uint8_t *(*)(const std::vector<uint8_t> 
 using DeleteCallback                  = void (*)(uint8_t *);
 using ValidateSerializedStateCallback = void (*)(const char *, const char *, uint32_t);
 
+// Traces use a single global EGLDisplay in place of a map
+#    define ANGLE_GLOBAL_EGLDISPLAY 0
+
 // Exported trace functions.
 extern "C" {
 
@@ -113,6 +116,7 @@ extern EGLSurface *gSurfaceMap2;
 extern EGLContext *gContextMap2;
 extern GLsync *gSyncMap2;
 extern EGLSync *gEGLSyncMap;
+extern EGLDisplay gEGLDisplay;
 void InitializeReplay4(const char *binaryDataFileName,
                        size_t maxClientArraySize,
                        size_t readBufferSize,
@@ -220,6 +224,8 @@ void UpdateTransformFeedbackID(GLuint id, GLsizei readBufferOffset);
 void UpdateVertexArrayID(GLuint id, GLsizei readBufferOffset);
 
 void SetCurrentContextID(GLuint id);
+
+void SetCurrentEGLDisplay(GLuint id);
 
 void SetFramebufferID(GLuint id);
 void SetBufferID(GLuint id);
