@@ -189,7 +189,8 @@ class ProgramExecutableVk
         const vk::WriteDescriptorDescs &writeDescriptorDescs,
         vk::CommandBufferHelperCommon *commandBufferHelper,
         vk::BufferHelper *defaultUniformBuffer,
-        vk::DescriptorSetDescBuilder *uniformsAndXfbDesc);
+        vk::DescriptorSetDescBuilder *uniformsAndXfbDesc,
+        vk::SharedDescriptorSetCacheKey *sharedCacheKeyOut);
 
     template <typename CommandBufferT>
     angle::Result bindDescriptorSets(vk::Context *context,
