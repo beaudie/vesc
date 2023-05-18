@@ -106,7 +106,7 @@
   },
   "angle_trace_interpreter_tests": {
     "label": "//src/tests:angle_trace_interpreter_tests",
-    "script": "//src/tests/restricted_traces/retrace_restricted_traces.py",
+    "script": "//src/tests/capture_tests/capture_tests.py",
     "type": "script",
   },
   "angle_trace_perf_tests": {
