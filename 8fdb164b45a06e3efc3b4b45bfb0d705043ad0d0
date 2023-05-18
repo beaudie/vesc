@@ -118,6 +118,30 @@
       },
       "revId": "8fdb164b45a06e3efc3b4b45bfb0d705043ad0d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df35b16f_7b5478f4",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 8766,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-18T17:50:50Z",
+      "side": 1,
+      "message": "yeah I\u0027m not sure how this would cause issues with renderdoc, it should be just a slightly different way to access the global state without functional differences. trace_fixture is linked into libs together with the trace itself, just a different object file. If you do end up running into issues it would be good to know why.",
+      "parentUuid": "28f6fae7_a47f403a",
+      "range": {
+        "startLine": 8766,
+        "startChar": 8,
+        "endLine": 8766,
+        "endChar": 46
+      },
+      "revId": "8fdb164b45a06e3efc3b4b45bfb0d705043ad0d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
