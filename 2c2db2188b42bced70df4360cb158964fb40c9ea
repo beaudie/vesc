@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4934c287_e92de74a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3974,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-18T02:27:53Z",
+      "side": 1,
+      "message": "Suggest specifically doing it for mesa AMD (not all AMD).",
+      "range": {
+        "startLine": 3974,
+        "startChar": 33,
+        "endLine": 3974,
+        "endChar": 38
+      },
+      "revId": "2c2db2188b42bced70df4360cb158964fb40c9ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
