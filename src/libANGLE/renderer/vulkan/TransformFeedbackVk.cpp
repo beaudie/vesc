@@ -331,4 +331,15 @@ void TransformFeedbackVk::updateTransformFeedbackDescriptorDesc(
         }
     }
 }
+
+void TransformFeedbackVk::onNewDescriptorSet(const vk::SharedDescriptorSetCacheKey &sharedCacheKey)
+{
+    for (vk::BufferHelper *buffer : mBufferHelpers)
+    {
+        if (buffer && buffer->valid())
+        {
+            buffer->getBufferBlock()->onNewDescriptorSet(sharedCacheKey);
+        }
+    }
+}
 }  // namespace rx

@@ -189,7 +189,8 @@ class ProgramExecutableVk
         const vk::WriteDescriptorDescs &writeDescriptorDescs,
         vk::CommandBufferHelperCommon *commandBufferHelper,
         vk::BufferHelper *defaultUniformBuffer,
-        vk::DescriptorSetDescBuilder *uniformsAndXfbDesc);
+        vk::DescriptorSetDescBuilder *uniformsAndXfbDesc,
+        vk::SharedDescriptorSetCacheKey *sharedCacheKeyOut);
 
     template <typename CommandBufferT>
     angle::Result bindDescriptorSets(vk::Context *context,
@@ -204,6 +205,10 @@ class ProgramExecutableVk
     VkDescriptorType getUniformBufferDescriptorType() const { return mUniformBufferDescriptorType; }
     bool usesDynamicShaderStorageBufferDescriptors() const { return false; }
     VkDescriptorType getStorageBufferDescriptorType() const
+    {
+        return VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+    }
+    VkDescriptorType getAtomicCounterBufferDescriptorType() const
     {
         return VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
     }
