@@ -16,6 +16,125 @@
       "message": "I ended up making a few changes after rebase. PTAL",
       "revId": "12e7d499f0feb7af374e37797814b0820d549751",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d9a78e2_a6c6f873",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-05-18T21:46:49Z",
+      "side": 1,
+      "message": "Fantastic work Chris. Still lgtm. A couple of small suggestions about the test names; not necessary to update them if you don\u0027t want to.",
+      "revId": "12e7d499f0feb7af374e37797814b0820d549751",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58eb2d97_05afd462",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3515,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-05-18T21:46:49Z",
+      "side": 1,
+      "message": "uts -\u003e its, here and throughout",
+      "revId": "12e7d499f0feb7af374e37797814b0820d549751",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f194cad_b6653b4f",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 3972,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-05-18T21:46:49Z",
+      "side": 1,
+      "message": "Nit: I realize there\u0027s a naming convention already for similar tests above, but for clarity in understanding what these tests do just from their name, would suggest a name like PLSActive_transform_feedback_banned, PLSActive_bans_transform_feedback or similar.",
+      "revId": "12e7d499f0feb7af374e37797814b0820d549751",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02f35fd5_36c47ff8",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4025,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-05-18T21:46:49Z",
+      "side": 1,
+      "message": "Similarly, consider a name like PLSActive_bans_blend_func_extended for easy readability.",
+      "revId": "12e7d499f0feb7af374e37797814b0820d549751",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a09b4462_81dd8930",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 4145,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-05-18T21:46:49Z",
+      "side": 1,
+      "message": "Perhaps PLSActive_bans_blend_equation_advanced?",
+      "revId": "12e7d499f0feb7af374e37797814b0820d549751",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86a92514_e4307c90",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 6059,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-05-18T21:46:49Z",
+      "side": 1,
+      "message": "Suggest again naming the test to describe what it does, like BlendFuncExtended_illegal_with_PLS.",
+      "revId": "12e7d499f0feb7af374e37797814b0820d549751",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3431308_08e83af7",
+        "filename": "src/tests/gl_tests/PixelLocalStorageTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 6117,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-05-18T21:46:49Z",
+      "side": 1,
+      "message": "Same for this test name.",
+      "revId": "12e7d499f0feb7af374e37797814b0820d549751",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
