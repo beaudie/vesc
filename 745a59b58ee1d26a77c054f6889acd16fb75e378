@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "76a487fb_33bf5b88",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-18T14:06:11Z",
+      "side": 1,
+      "message": "Nice 👍",
+      "revId": "745a59b58ee1d26a77c054f6889acd16fb75e378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e4503e53_83ff14fc",
@@ -14,6 +31,24 @@
       "writtenOn": "2023-05-18T06:46:30Z",
       "side": 1,
       "message": "Too magical?\n\nIt\u0027s complicated to add a ref the texture since we need a Context to release the ref. It\u0027s doable, but makes the code more complex.",
+      "revId": "745a59b58ee1d26a77c054f6889acd16fb75e378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "213eb5a7_f7996530",
+        "filename": "src/libANGLE/PixelLocalStorage.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-18T14:06:11Z",
+      "side": 1,
+      "message": "No, it seems reasonable. Unlike the rest of GL (which explicitly ref counts stuff), PLS is being clear that as soon as `glDeleteTextures` is called the planes are gone.",
+      "parentUuid": "e4503e53_83ff14fc",
       "revId": "745a59b58ee1d26a77c054f6889acd16fb75e378",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
