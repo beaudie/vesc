@@ -46,6 +46,30 @@
       },
       "revId": "2c2db2188b42bced70df4360cb158964fb40c9ea",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78c7ad5a_aead37fe",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3974,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2023-05-18T03:05:04Z",
+      "side": 1,
+      "message": "Done. Unless we need a separete mesa amd.",
+      "parentUuid": "f615497c_a866aa61",
+      "range": {
+        "startLine": 3974,
+        "startChar": 33,
+        "endLine": 3974,
+        "endChar": 38
+      },
+      "revId": "2c2db2188b42bced70df4360cb158964fb40c9ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
