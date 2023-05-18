@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18f5681a_6e18bfd0",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 8766,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-18T13:19:45Z",
+      "side": 1,
+      "message": "This looks like it\u0027s done differently from other similar cases and will certainly break the trace interpreter.\n\nHave you tried doing this following the usual pattern of adding globals to trace_fixture and turning them into function calls in the trace?",
+      "range": {
+        "startLine": 8766,
+        "startChar": 8,
+        "endLine": 8766,
+        "endChar": 46
+      },
+      "revId": "8fdb164b45a06e3efc3b4b45bfb0d705043ad0d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
