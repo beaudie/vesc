@@ -1,0 +1,32 @@
+{
+    "TraceMetadata": {
+        "AreClientArraysEnabled": true,
+        "CaptureRevision": 21119,
+        "ConfigAlphaBits": 8,
+        "ConfigBlueBits": 8,
+        "ConfigDepthBits": 0,
+        "ConfigGreenBits": 8,
+        "ConfigRedBits": 8,
+        "ConfigStencilBits": 0,
+        "ContextClientMajorVersion": 2,
+        "ContextClientMinorVersion": 0,
+        "DisplayDeviceType": "0x3487",
+        "DisplayPlatformType": "0x3450",
+        "DrawSurfaceColorSpace": "0x308A",
+        "DrawSurfaceHeight": 128,
+        "DrawSurfaceWidth": 128,
+        "FrameEnd": 2,
+        "FrameStart": 1,
+        "IsBinaryDataCompressed": true,
+        "IsBindGeneratesResourcesEnabled": true,
+        "IsRobustResourceInitEnabled": true,
+        "IsTrimmingEnabled": true,
+        "IsWebGLCompatibilityEnabled": false
+    },
+    "TraceFiles": [
+        "ActiveTextureCacheTest_UniformChangeUpdatesActiveTextureCache_ES2_Vulkan_SwiftShader.cpp",
+        "ActiveTextureCacheTest_UniformChangeUpdatesActiveTextureCache_ES2_Vulkan_SwiftShader.h",
+        "ActiveTextureCacheTest_UniformChangeUpdatesActiveTextureCache_ES2_Vulkan_SwiftShader_001.cpp"
+    ],
+    "WindowSurfaceContextID": 1
+}
