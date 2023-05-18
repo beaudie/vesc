@@ -1651,16 +1651,16 @@ angle::Result ProgramExecutableVk::updateUniformsAndXfbDescriptorSet(
     const vk::WriteDescriptorDescs &writeDescriptorDescs,
     vk::CommandBufferHelperCommon *commandBufferHelper,
     vk::BufferHelper *defaultUniformBuffer,
-    vk::DescriptorSetDescBuilder *uniformsAndXfbDesc)
+    vk::DescriptorSetDescBuilder *uniformsAndXfbDesc,
+    vk::SharedDescriptorSetCacheKey *sharedCacheKeyOut)
 {
     mCurrentDefaultUniformBufferSerial =
         defaultUniformBuffer ? defaultUniformBuffer->getBufferSerial() : vk::kInvalidBufferSerial;
 
-    vk::SharedDescriptorSetCacheKey newSharedCacheKey;
     ANGLE_TRY(getOrAllocateDescriptorSet(context, updateBuilder, commandBufferHelper,
                                          *uniformsAndXfbDesc, writeDescriptorDescs,
-                                         DescriptorSetIndex::UniformsAndXfb, &newSharedCacheKey));
-    uniformsAndXfbDesc->updateImagesAndBuffersWithSharedCacheKey(newSharedCacheKey);
+                                         DescriptorSetIndex::UniformsAndXfb, sharedCacheKeyOut));
+
     return angle::Result::Continue;
 }
 
@@ -1863,9 +1863,18 @@ angle::Result ProgramExecutableVk::updateUniforms(
             isTransformFeedbackActiveUnpaused,
             glExecutable.hasTransformFeedbackOutput() ? transformFeedbackVk : nullptr);
 
+        vk::SharedDescriptorSetCacheKey newSharedCacheKey;
         ANGLE_TRY(updateUniformsAndXfbDescriptorSet(context, updateBuilder, writeDescriptorDescs,
                                                     commandBufferHelper, defaultUniformBuffer,
-                                                    &uniformsAndXfbDesc));
+                                                    &uniformsAndXfbDesc, &newSharedCacheKey));
+        if (newSharedCacheKey)
+        {
+            defaultUniformBuffer->getBufferBlock()->onNewDescriptorSet(newSharedCacheKey);
+            if (glExecutable.hasTransformFeedbackOutput())
+            {
+                transformFeedbackVk->onNewDescriptorSet(newSharedCacheKey);
+            }
+        }
     }
 
     return angle::Result::Continue;
