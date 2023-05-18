@@ -570,10 +570,10 @@ if (build_angle_trace_tests) {
   group("angle_trace_interpreter_tests") {
     testonly = true
     data = [
-      "restricted_traces/gen_restricted_traces.py",
-      "restricted_traces/retrace_restricted_traces.py",
+      "capture_tests/capture_tests.py",
+      "capture_tests/expected",
     ]
-    data_deps = [ ":angle_trace_perf_tests" ]
+    data_deps = [ ":angle_end2end_tests" ]
   }
 }
 
