@@ -22,6 +22,30 @@
       },
       "revId": "8fdb164b45a06e3efc3b4b45bfb0d705043ad0d0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f93b0a0_aaf5a9d0",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 8766,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-05-18T15:08:20Z",
+      "side": 1,
+      "message": "Roman, thanks for the feedback. Can you take a look at patch set one on this CL and see if that\u0027s a better approach, and if not, maybe point out an example of the usual pattern?  Thanks!",
+      "parentUuid": "18f5681a_6e18bfd0",
+      "range": {
+        "startLine": 8766,
+        "startChar": 8,
+        "endLine": 8766,
+        "endChar": 46
+      },
+      "revId": "8fdb164b45a06e3efc3b4b45bfb0d705043ad0d0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
