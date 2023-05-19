@@ -1602,6 +1602,16 @@ angle::Result CommandQueue::checkOneCommandBatch(Context *context, bool *finishe
     return angle::Result::Continue;
 }
 
+angle::Result CommandQueue::finishOneCommandBatchAndCleanupIfInFlight(Context *context)
+{
+    if (!mInFlightCommands.empty())
+    {
+        ANGLE_TRY(finishOneCommandBatchAndCleanup(context,
+                                                  context->getRenderer()->getMaxFenceWaitTimeNs()));
+    }
+    return angle::Result::Continue;
+}
+
 angle::Result CommandQueue::finishOneCommandBatchAndCleanup(Context *context, uint64_t timeout)
 {
     ASSERT(!mInFlightCommands.empty());
