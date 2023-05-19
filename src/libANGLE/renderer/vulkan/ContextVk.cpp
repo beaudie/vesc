@@ -2843,13 +2843,16 @@ angle::Result ContextVk::handleDirtyUniformBuffersImpl(CommandBufferT *commandBu
     ProgramExecutableVk &executableVk    = *getExecutable();
     const ShaderInterfaceVariableInfoMap &variableInfoMap = executableVk.getVariableInfoMap();
 
+    bool descriptorSetDirty = false;
     for (gl::ShaderType shaderType : executable->getLinkedShaderStages())
     {
-        mShaderBuffersDescriptorDesc.updateShaderBuffers(
-            shaderType, ShaderVariableType::UniformBuffer, variableInfoMap,
-            mState.getOffsetBindingPointerUniformBuffers(), executable->getUniformBlocks(),
-            executableVk.getUniformBufferDescriptorType(), limits.maxUniformBufferRange,
-            mEmptyBuffer, mShaderBufferWriteDescriptorDescs);
+        descriptorSetDirty =
+            descriptorSetDirty ||
+            mShaderBuffersDescriptorDesc.updateShaderBuffers(
+                shaderType, ShaderVariableType::UniformBuffer, variableInfoMap,
+                mState.getOffsetBindingPointerUniformBuffers(), executable->getUniformBlocks(),
+                executableVk.getUniformBufferDescriptorType(), limits.maxUniformBufferRange,
+                mEmptyBuffer, mShaderBufferWriteDescriptorDescs);
 
         const std::vector<gl::InterfaceBlock> &ubos = executable->getUniformBlocks();
         for (const gl::InterfaceBlock &ubo : ubos)
@@ -2869,17 +2872,25 @@ angle::Result ContextVk::handleDirtyUniformBuffersImpl(CommandBufferT *commandBu
         }
     }
 
-    vk::SharedDescriptorSetCacheKey newSharedCacheKey;
-    ANGLE_TRY(executableVk.updateShaderResourcesDescriptorSet(
-        this, mShareGroupVk->getUpdateDescriptorSetsBuilder(), mShaderBufferWriteDescriptorDescs,
-        commandBufferHelper, mShaderBuffersDescriptorDesc, &newSharedCacheKey));
-
-    if (newSharedCacheKey)
+    if (descriptorSetDirty)
     {
-        // A new cache entry has been created. We record this cache key in the images and
-        // buffers so that the descriptorSet cache can be destroyed when buffer/image is
-        // destroyed.
-        updateShaderResourcesWithSharedCacheKey(newSharedCacheKey);
+        vk::SharedDescriptorSetCacheKey newSharedCacheKey;
+        ANGLE_TRY(executableVk.updateShaderResourcesDescriptorSet(
+            this, mShareGroupVk->getUpdateDescriptorSetsBuilder(),
+            mShaderBufferWriteDescriptorDescs, commandBufferHelper, mShaderBuffersDescriptorDesc,
+            &newSharedCacheKey));
+
+        if (newSharedCacheKey)
+        {
+            // A new cache entry has been created. We record this cache key in the images and
+            // buffers so that the descriptorSet cache can be destroyed when buffer/image is
+            // destroyed.
+            updateShaderResourcesWithSharedCacheKey(newSharedCacheKey);
+        }
+    }
+    else
+    {
+        executableVk.updateShaderResourcesDynamicOffsets(mShaderBuffersDescriptorDesc);
     }
 
     return angle::Result::Continue;

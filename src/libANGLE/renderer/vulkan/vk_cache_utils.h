@@ -1721,7 +1721,7 @@ class DescriptorSetDescBuilder final
                               TransformFeedbackVk *transformFeedbackVk);
 
     // Specific helpers for shader resource descriptors.
-    void updateShaderBuffers(gl::ShaderType shaderType,
+    bool updateShaderBuffers(gl::ShaderType shaderType,
                              ShaderVariableType variableType,
                              const ShaderInterfaceVariableInfoMap &variableInfoMap,
                              const gl::BufferVector &buffers,
