@@ -108,7 +108,13 @@ angle::Result FindAndAllocateCompatibleMemory(vk::Context *context,
     RendererVk *renderer = context->getRenderer();
     renderer->getMemoryAllocationTracker()->setPendingMemoryAlloc(
         memoryAllocationType, allocInfo.allocationSize, *memoryTypeIndexOut);
-    ANGLE_VK_TRY(context, deviceMemoryOut->allocate(device, allocInfo));
+
+    // If the allocation fails, we should try cleaning the garbage before trying again.
+    if (deviceMemoryOut->allocate(device, allocInfo) != VK_SUCCESS)
+    {
+        renderer->cleanupGarbage();
+        ANGLE_VK_TRY(context, deviceMemoryOut->allocate(device, allocInfo));
+    }
 
     renderer->onMemoryAlloc(memoryAllocationType, allocInfo.allocationSize, *memoryTypeIndexOut,
                             deviceMemoryOut->getHandle());
