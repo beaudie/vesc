@@ -512,6 +512,10 @@ TEST_P(VulkanImageTest, ClientBufferWithDraw)
 // case the device memory runs out.
 TEST_P(VulkanImageTest, AllocateVMAImageWhenDeviceOOM)
 {
+    EGLWindow *window  = getEGLWindow();
+    EGLDisplay display = window->getDisplay();
+
+    ANGLE_SKIP_TEST_IF(!IsEGLDisplayExtensionEnabled(display, "EGL_ANGLE_vulkan_image"));
     ANGLE_SKIP_TEST_IF(!getEGLWindow()->isFeatureEnabled(Feature::UseVmaForImageSuballocation));
 
     VulkanHelper helper;
