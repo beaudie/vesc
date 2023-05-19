@@ -34,6 +34,24 @@
       "parentUuid": "0cf128ee_526f7e4e",
       "revId": "e4e793c972615b33f015248e986d991067458f23",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f983aff9_20ec35fb",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 7300,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-19T22:03:13Z",
+      "side": 1,
+      "message": "Done. As discussed offline, I wasn\u0027t able to make it run into issues without the barrier, but still added the test as you suggested.",
+      "parentUuid": "04b4adcf_613a3b04",
+      "revId": "e4e793c972615b33f015248e986d991067458f23",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

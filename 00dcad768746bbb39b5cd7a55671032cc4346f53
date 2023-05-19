@@ -89,6 +89,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19a66e06_72f95021",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-19T22:03:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48462ce7_828f0fcf",
+      "revId": "00dcad768746bbb39b5cd7a55671032cc4346f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7a053acb_3bda2621",
@@ -184,6 +202,24 @@
       "writtenOn": "2023-05-16T16:05:26Z",
       "side": 1,
       "message": "Could you please move all these to a helper?",
+      "revId": "00dcad768746bbb39b5cd7a55671032cc4346f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a195f60f_10616c9c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2905,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-19T22:03:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48123e89_c295db34",
       "revId": "00dcad768746bbb39b5cd7a55671032cc4346f53",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
