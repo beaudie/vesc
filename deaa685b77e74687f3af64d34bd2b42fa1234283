@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11326a3a_eb9954f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-05-19T17:07:49Z",
+      "side": 1,
+      "message": "This change makes the EGLDisplay handling more closely match the SetCurrentContextID implementation. One difference is that this is necessary for MEC as well as full captures.  The resulting call in the trace source code looks like so:\n```\n5 void SetupReplay(void)\n   6836 {\n   6837     InitReplay();\n   6838     SetCurrentEGLDisplay(ANGLE_GLOBAL_EGLDISPLAY);   \u003c\u003c\u003c NEW\n   6839     SetupReplayContextShared();\n   6840     SetCurrentContextID(2);\n   6841     SetupReplayContext2();\n   6842 \n   6843 }\n```",
+      "revId": "deaa685b77e74687f3af64d34bd2b42fa1234283",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
