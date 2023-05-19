@@ -237,6 +237,17 @@ class DynamicDescriptorPool final : angle::NonCopyable
 
     bool valid() const { return !mDescriptorPools.empty(); }
 
+    VkDescriptorSet getDescriptorSet(const DescriptorSetDesc &desc)
+    {
+        vk::RefCountedDescriptorPoolHelper *poolOut;
+        VkDescriptorSet descriptorSetOut;
+        if (mDescriptorSetCache.getDescriptorSet(desc, &descriptorSetOut, &poolOut))
+        {
+            return descriptorSetOut;
+        }
+        return VK_NULL_HANDLE;
+    }
+
     // We use the descriptor type to help count the number of free sets.
     // By convention, sets are indexed according to the constants in vk_cache_utils.h.
     angle::Result allocateDescriptorSet(Context *context,
