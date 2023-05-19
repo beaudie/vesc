@@ -1326,6 +1326,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result updateShaderResourcesDescriptorDesc(PipelineType pipelineType);
     void updateShaderResourcesWithSharedCacheKey(
         const vk::SharedDescriptorSetCacheKey &sharedCacheKey);
+    angle::Result updateUniformBuffers(gl::Command command);
 
     angle::Result createGraphicsPipeline();
 

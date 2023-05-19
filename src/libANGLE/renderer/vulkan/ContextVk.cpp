@@ -5604,6 +5604,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                               "Dirty bit order");
                 iter.setLaterBit(gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING);
                 ANGLE_TRY(invalidateProgramExecutableHelper(context));
+                ANGLE_TRY(invalidateCurrentShaderResources(command));
 
                 static_assert(
                     gl::State::DIRTY_BIT_SAMPLE_SHADING > gl::State::DIRTY_BIT_PROGRAM_EXECUTABLE,
@@ -5642,10 +5643,10 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 iter.setLaterBit(gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING);
                 break;
             case gl::State::DIRTY_BIT_UNIFORM_BUFFER_BINDINGS:
-                static_assert(gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING >
-                                  gl::State::DIRTY_BIT_UNIFORM_BUFFER_BINDINGS,
-                              "Dirty bit order");
-                iter.setLaterBit(gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING);
+                if (programExecutable->hasUniformBuffers())
+                {
+                    ANGLE_TRY(updateUniformBuffers(command));
+                }
                 break;
             case gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING:
                 ANGLE_TRY(invalidateCurrentShaderResources(command));
@@ -6134,6 +6135,16 @@ angle::Result ContextVk::invalidateCurrentShaderResources(gl::Command command)
 
     if (hasUniformBuffers || hasStorageBuffers || hasImages || executable->usesFramebufferFetch())
     {
+        const ProgramExecutableVk &executableVk               = *getExecutable();
+        const ShaderInterfaceVariableInfoMap &variableInfoMap = executableVk.getVariableInfoMap();
+
+        mShaderBufferWriteDescriptorDescs = executableVk.getShaderResourceWriteDescriptors();
+        mShaderBufferWriteDescriptorDescs.updateInputAttachments(
+            gl::ShaderType::Fragment, *executable, variableInfoMap,
+            vk::GetImpl(mState.getDrawFramebuffer()));
+
+        mShaderBuffersDescriptorDesc.reset();
+
         mGraphicsDirtyBits |= kResourcesAndDescSetDirtyBits;
         mComputeDirtyBits |= kResourcesAndDescSetDirtyBits;
     }
@@ -6181,17 +6192,9 @@ angle::Result ContextVk::updateShaderResourcesDescriptorDesc(PipelineType pipeli
         return angle::Result::Continue;
     }
 
-    mShaderBuffersDescriptorDesc.reset();
-
     const VkPhysicalDeviceLimits &limits    = mRenderer->getPhysicalDeviceProperties().limits;
     const ProgramExecutableVk &executableVk = *getExecutable();
     const ShaderInterfaceVariableInfoMap &variableInfoMap = executableVk.getVariableInfoMap();
-
-    mShaderBufferWriteDescriptorDescs = executableVk.getShaderResourceWriteDescriptors();
-    // Update writeDescriptorDescs with inputAttachments
-    mShaderBufferWriteDescriptorDescs.updateInputAttachments(
-        gl::ShaderType::Fragment, *executable, variableInfoMap,
-        vk::GetImpl(mState.getDrawFramebuffer()));
 
     for (gl::ShaderType shaderType : executable->getLinkedShaderStages())
     {
@@ -6215,6 +6218,39 @@ angle::Result ContextVk::updateShaderResourcesDescriptorDesc(PipelineType pipeli
         ANGLE_TRY(mShaderBuffersDescriptorDesc.updateInputAttachments(
             this, shaderType, *executable, variableInfoMap,
             vk::GetImpl(mState.getDrawFramebuffer()), mShaderBufferWriteDescriptorDescs));
+    }
+
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::updateUniformBuffers(gl::Command command)
+{
+    const gl::ProgramExecutable *executable = mState.getProgramExecutable();
+    ASSERT(executable);
+    ASSERT(executable->hasUniformBuffers());
+
+    const VkPhysicalDeviceLimits &limits    = mRenderer->getPhysicalDeviceProperties().limits;
+    const ProgramExecutableVk &executableVk = *getExecutable();
+    const ShaderInterfaceVariableInfoMap &variableInfoMap = executableVk.getVariableInfoMap();
+
+    for (gl::ShaderType shaderType : executable->getLinkedShaderStages())
+    {
+        mShaderBuffersDescriptorDesc.updateShaderBuffers(
+            shaderType, ShaderVariableType::UniformBuffer, variableInfoMap,
+            mState.getOffsetBindingPointerUniformBuffers(), executable->getUniformBlocks(),
+            executableVk.getUniformBufferDescriptorType(), limits.maxUniformBufferRange,
+            mEmptyBuffer, mShaderBufferWriteDescriptorDescs);
+    }
+
+    // Take care of read-after-write hazards that require implicit synchronization.
+    if (command == gl::Command::Dispatch)
+    {
+        ANGLE_TRY(endRenderPassIfComputeReadAfterTransformFeedbackWrite());
+        mComputeDirtyBits |= kResourcesAndDescSetDirtyBits;
+    }
+    else
+    {
+        mGraphicsDirtyBits |= kResourcesAndDescSetDirtyBits;
     }
 
     return angle::Result::Continue;
