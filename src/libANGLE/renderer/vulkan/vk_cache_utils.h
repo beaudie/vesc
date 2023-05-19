@@ -1640,6 +1640,19 @@ class DescriptorSetDesc
         return (mDescriptorInfos == other.mDescriptorInfos);
     }
 
+    bool match(uint32_t infoDescIndex, const DescriptorInfoDesc &infoDesc) const
+    {
+        return infoDescIndex < mDescriptorInfos.size() &&
+               mDescriptorInfos[infoDescIndex].imageLayoutOrRange == infoDesc.imageLayoutOrRange &&
+               mDescriptorInfos[infoDescIndex].samplerOrBufferSerial ==
+                   infoDesc.samplerOrBufferSerial &&
+               mDescriptorInfos[infoDescIndex].imageViewSerialOrOffset ==
+                   infoDesc.imageViewSerialOrOffset &&
+               mDescriptorInfos[infoDescIndex].imageSubresourceRange ==
+                   infoDesc.imageSubresourceRange &&
+               mDescriptorInfos[infoDescIndex].binding == infoDesc.binding;
+    }
+
     void updateInfoDesc(uint32_t infoDescIndex, const DescriptorInfoDesc &infoDesc)
     {
         mDescriptorInfos[infoDescIndex] = infoDesc;
@@ -1726,7 +1739,8 @@ class DescriptorSetDescBuilder final
                              VkDescriptorType descriptorType,
                              VkDeviceSize maxBoundBufferRange,
                              const BufferHelper &emptyBuffer,
-                             const WriteDescriptorDescs &writeDescriptorDescs);
+                             const WriteDescriptorDescs &writeDescriptorDescs,
+                             bool *dirty);
     void updateAtomicCounters(gl::ShaderType shaderType,
                               const ShaderInterfaceVariableInfoMap &variableInfoMap,
                               const gl::BufferVector &buffers,

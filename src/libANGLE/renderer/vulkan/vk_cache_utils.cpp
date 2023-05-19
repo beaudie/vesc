@@ -6063,7 +6063,8 @@ void DescriptorSetDescBuilder::updateShaderBuffers(
     VkDescriptorType descriptorType,
     VkDeviceSize maxBoundBufferRange,
     const BufferHelper &emptyBuffer,
-    const WriteDescriptorDescs &writeDescriptorDescs)
+    const WriteDescriptorDescs &writeDescriptorDescs,
+    bool *descriptorSetDescDirty)
 {
     // Now that we have the proper array elements counts, initialize the info structures.
     for (uint32_t bufferIndex = 0; bufferIndex < blocks.size(); ++bufferIndex)
@@ -6102,6 +6103,7 @@ void DescriptorSetDescBuilder::updateShaderBuffers(
             {
                 mDynamicOffsets[infoDescIndex] = 0;
             }
+            *descriptorSetDescDirty = true;
         }
         else
         {
@@ -6132,7 +6134,11 @@ void DescriptorSetDescBuilder::updateShaderBuffers(
                 SetBitField(infoDesc.imageViewSerialOrOffset, offset);
             }
 
-            mDesc.updateInfoDesc(infoDescIndex, infoDesc);
+            if (!mDesc.match(infoDescIndex, infoDesc))
+            {
+                mDesc.updateInfoDesc(infoDescIndex, infoDesc);
+                *descriptorSetDescDirty = true;
+            }
 
             mHandles[infoDescIndex].buffer = bufferHelper.getBuffer().getHandle();
         }
