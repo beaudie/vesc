@@ -16,6 +16,23 @@
       "message": "This and the previous patch should take care of the sample shading issue.\n\nThe end2end test I have written has a bug though, I\u0027m testing `centroid` to make sure `sample` is not automatically added to it, but I\u0027m not sure how I can actually get the test to detect that. I thought `centroid` would interpolate at center, but it clearly doesn\u0027t!",
       "revId": "4f870f022e0085697ba494eb73fb8d93da4cc475",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbbf0800_057a4a37",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2023-05-19T02:43:00Z",
+      "side": 1,
+      "message": "`dEQP-GLES31.functional.sample_shading.min_sample_shading.multisample.*` is passing with this!",
+      "revId": "4f870f022e0085697ba494eb73fb8d93da4cc475",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
