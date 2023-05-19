@@ -585,6 +585,195 @@ TEST_P(VulkanImageTest, AllocateVMAImageWhenDeviceOOM)
     EXPECT_PIXEL_RECT_EQ(0, 0, kWidth, kHeight, GLColor::magenta);
 }
 
+// Free garbage using GL_TEXTURE_2D and texSubImage2D
+TEST_P(VulkanImageTest, FreeGarbageTest1)
+{
+    ANGLE_SKIP_TEST_IF(!getEGLWindow()->isFeatureEnabled(Feature::UseVmaForImageSuballocation));
+
+    VulkanHelper helper;
+    helper.initializeFromANGLE();
+    uint64_t expectedAllocationFallbacks =
+        getPerfCounters().deviceMemoryImageAllocationFallbacks + 1;
+
+    // Acquire the sizes and memory property flags for all available memory types. There should be
+    // at least one memory heap without the device local bit (VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT).
+    // Otherwise, the test should be skipped.
+    VkPhysicalDeviceMemoryProperties memoryProperties;
+    vkGetPhysicalDeviceMemoryProperties(helper.getPhysicalDevice(), &memoryProperties);
+
+    VkDeviceSize totalDeviceLocalMemoryHeapSize = 0;
+    uint32_t heapsWithoutLocalDeviceMemoryBit   = 0;
+    for (uint32_t i = 0; i < memoryProperties.memoryHeapCount; i++)
+    {
+        if ((memoryProperties.memoryHeaps[i].flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT) == 0)
+        {
+            heapsWithoutLocalDeviceMemoryBit++;
+        }
+        else
+        {
+            totalDeviceLocalMemoryHeapSize += memoryProperties.memoryHeaps[i].size;
+        }
+    }
+    ANGLE_SKIP_TEST_IF(heapsWithoutLocalDeviceMemoryBit == 0 ||
+                       totalDeviceLocalMemoryHeapSize == 0);
+
+    // Device memory is the first choice for image memory allocation. However, in case it runs out,
+    // memory should be allocated from the system if available. Therefore, we want to make sure that
+    // we can still allocate image memory even if the device memory is full.
+    constexpr VkDeviceSize kTextureWidth  = 2048;
+    constexpr VkDeviceSize kTextureHeight = 2048;
+    constexpr VkDeviceSize kTextureSize   = kTextureWidth * kTextureHeight * 4;
+    VkDeviceSize textureCount             = (totalDeviceLocalMemoryHeapSize / kTextureSize) + 1;
+
+    std::vector<GLuint> textures;
+    textures.resize(textureCount);
+    // glTexStorage2DEXT(GL_TEXTURE_2D, 1, GL_RGBA8, kTextureWidth, kTextureHeight);
+    for (uint32_t i = 0; i < textureCount; i++)
+    {
+        glGenTextures(1, &textures[i]);
+    }
+    for (uint32_t i = 0; i < textureCount; i++)
+    {
+        glGenTextures(1, &textures[i]);
+        std::vector<GLColor> textureColor(kTextureWidth * kTextureHeight, GLColor(0, 255, 0, 255));
+        glBindTexture(GL_TEXTURE_2D, textures[i]);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kTextureWidth, kTextureHeight, 0, GL_RGBA,
+                     GL_UNSIGNED_BYTE, nullptr);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, kTextureWidth, kTextureHeight, GL_RGBA,
+                        GL_UNSIGNED_BYTE, textureColor.data());
+        ANGLE_GL_PROGRAM(drawTex2D, essl1_shaders::vs::Texture2D(), essl1_shaders::fs::Texture2D());
+        drawQuad(drawTex2D, essl1_shaders::PositionAttrib(), 0.5f);
+        EXPECT_PIXEL_RECT_EQ(0, 0, 1, 1, GLColor::green);
+        EXPECT_GL_NO_ERROR();
+        // This process only needs to continue until the allocation is no longer on the device.
+        if (getPerfCounters().deviceMemoryImageAllocationFallbacks == expectedAllocationFallbacks)
+        {
+            break;
+        }
+    }
+    for (uint32_t i = 0; i < textureCount; i++)
+    {
+        glDeleteTextures(1, &textures[i]);
+    }
+
+    // TODO: The next texture should be allocated on the device but it should only be possible after
+    // freeing the garbage.
+    GLTexture texture;
+    std::vector<GLColor> textureColor(kTextureWidth * kTextureHeight, GLColor::magenta);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexStorage2DEXT(GL_TEXTURE_2D, 1, GL_RGBA8, kTextureWidth, kTextureHeight);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, kTextureWidth, kTextureHeight, GL_RGBA,
+                    GL_UNSIGNED_BYTE, textureColor.data());
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+    EXPECT_PIXEL_RECT_EQ(0, 0, kWidth, kHeight, GLColor::magenta);
+}
+
+// Free garbage using GT_TEXTURE_2D_ARRAY and texSubImage3D
+TEST_P(VulkanImageTest, FreeGarbageTest2)
+{
+    ANGLE_SKIP_TEST_IF(!getEGLWindow()->isFeatureEnabled(Feature::UseVmaForImageSuballocation));
+
+    VulkanHelper helper;
+    helper.initializeFromANGLE();
+    uint64_t expectedAllocationFallbacks =
+        getPerfCounters().deviceMemoryImageAllocationFallbacks + 1;
+    uint64_t expectedAllocationFallbacksAfterLastTexture =
+        getPerfCounters().deviceMemoryImageAllocationFallbacks + 2;
+
+    // Acquire the sizes and memory property flags for all available memory types. There should be
+    // at least one memory heap without the device local bit (VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT).
+    // Otherwise, the test should be skipped.
+    VkPhysicalDeviceMemoryProperties memoryProperties;
+    vkGetPhysicalDeviceMemoryProperties(helper.getPhysicalDevice(), &memoryProperties);
+
+    VkDeviceSize totalDeviceLocalMemoryHeapSize = 0;
+    uint32_t heapsWithoutLocalDeviceMemoryBit   = 0;
+    for (uint32_t i = 0; i < memoryProperties.memoryHeapCount; i++)
+    {
+        if ((memoryProperties.memoryHeaps[i].flags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT) == 0)
+        {
+            heapsWithoutLocalDeviceMemoryBit++;
+        }
+        else
+        {
+            totalDeviceLocalMemoryHeapSize += memoryProperties.memoryHeaps[i].size;
+        }
+    }
+    ANGLE_SKIP_TEST_IF(heapsWithoutLocalDeviceMemoryBit == 0 ||
+                       totalDeviceLocalMemoryHeapSize == 0);
+
+    // Device memory is the first choice for image memory allocation. However, in case it runs out,
+    // memory should be allocated from the system if available. Therefore, we want to make sure that
+    // we can still allocate image memory even if the device memory is full.
+    constexpr VkDeviceSize kTextureWidth  = 512;
+    constexpr VkDeviceSize kTextureHeight = 512;
+    constexpr VkDeviceSize kTextureSize   = kTextureWidth * kTextureHeight * 4;
+    VkDeviceSize textureCount             = (totalDeviceLocalMemoryHeapSize / kTextureSize) + 1;
+    VkDeviceSize textureCount3D           = 80;
+
+    // Use a 2D texture array.
+    std::vector<GLTexture> textures;
+    textures.resize(textureCount);
+
+    GLuint texture3D;
+    glGenTextures(1, &texture3D);
+    glBindTexture(GL_TEXTURE_2D_ARRAY, texture3D);
+    glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA, kTextureWidth, kTextureHeight, textureCount3D, 0,
+                 GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    for (uint32_t i = 0; i < textureCount3D; i++)
+    {
+        std::vector<GLColor> textureColor(kTextureWidth * kTextureHeight, GLColor(0, 255, 0, 255));
+        glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, i, kTextureWidth, kTextureHeight, 1, GL_RGBA,
+                        GL_UNSIGNED_BYTE, textureColor.data());
+    }
+
+    ANGLE_GL_PROGRAM(drawTex2D, essl1_shaders::vs::Texture2DArray(),
+                     essl1_shaders::fs::Texture2DArray());
+    drawQuad(drawTex2D, essl1_shaders::PositionAttrib(), 0.5f);
+    glDeleteTextures(1, &texture3D);
+
+    for (uint32_t i = 0; i < textureCount; i++)
+    {
+        glBindTexture(GL_TEXTURE_2D, textures[i]);
+        glTexStorage2DEXT(GL_TEXTURE_2D, 1, GL_RGBA8, kTextureWidth, kTextureHeight);
+        EXPECT_GL_NO_ERROR();
+
+        // This process only needs to continue until the allocation is no longer on the device.
+        if (getPerfCounters().deviceMemoryImageAllocationFallbacks == expectedAllocationFallbacks)
+        {
+            break;
+        }
+    }
+
+    // TODO: The next texture should be allocated on the device but it should only be possible after
+    // freeing the garbage.
+    GLTexture texture;
+    std::vector<GLColor> textureColor(kTextureWidth * kTextureHeight, GLColor::magenta);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexStorage2DEXT(GL_TEXTURE_2D, 1, GL_RGBA8, kTextureWidth, kTextureHeight);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, kTextureWidth, kTextureHeight, GL_RGBA,
+                    GL_UNSIGNED_BYTE, textureColor.data());
+    EXPECT_EQ(getPerfCounters().deviceMemoryImageAllocationFallbacks,
+              expectedAllocationFallbacksAfterLastTexture);
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+    EXPECT_PIXEL_RECT_EQ(0, 0, kWidth, kHeight, GLColor::magenta);
+}
+
 // Test that texture storage created from VkImage memory is considered pre-initialized in GL.
 TEST_P(VulkanImageTest, PreInitializedOnGLImport)
 {
@@ -690,6 +879,15 @@ TEST_P(VulkanImageTest, PreInitializedOnGLImport)
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
-ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(VulkanImageTest);
+ANGLE_INSTANTIATE_TEST(VulkanImageTest,
+                       ES2_VULKAN(),
+                       ES3_VULKAN(),
+                       ES3_VULKAN_SWIFTSHADER().enable(Feature::AsyncCommandQueue),
+                       ES3_VULKAN_SWIFTSHADER()
+                           .enable(Feature::AsyncCommandQueue)
+                           .enable(Feature::SlowAsyncCommandQueueForTesting),
+                       ES3_VULKAN()
+                           .enable(Feature::AsyncCommandQueue)
+                           .enable(Feature::SlowAsyncCommandQueueForTesting));
 
 }  // namespace angle

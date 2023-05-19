@@ -5724,10 +5724,22 @@ VkResult ImageMemorySuballocator::allocateAndBindMemory(Context *context,
     bool allocateDedicatedMemory =
         memoryRequirements.size >= kImageSizeThresholdForDedicatedMemoryAllocation;
 
-    // Allocate and bind memory for the image.
+    // Allocate and bind memory for the image. Try allocating on the device first. If unsuccessful,
+    // it is possible to retry allocation after cleaning the garbage.
     VkResult result = vma::AllocateAndBindMemoryForImage(
-        allocator.getHandle(), &image->mHandle, requiredFlags, preferredFlags,
-        allocateDedicatedMemory, &allocationOut->mHandle, memoryTypeIndexOut, sizeOut);
+        allocator.getHandle(), &image->mHandle, requiredFlags | VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        preferredFlags, allocateDedicatedMemory, &allocationOut->mHandle, memoryTypeIndexOut,
+        sizeOut);
+
+    if (result != VK_SUCCESS)
+    {
+        renderer->cleanupGarbage();
+        INFO() << "Garbage freed; retrying allocation";
+        result = vma::AllocateAndBindMemoryForImage(
+            allocator.getHandle(), &image->mHandle, requiredFlags, preferredFlags,
+            allocateDedicatedMemory, &allocationOut->mHandle, memoryTypeIndexOut, sizeOut);
+    }
+
     if (result != VK_SUCCESS)
     {
         // Record the failed memory allocation.
