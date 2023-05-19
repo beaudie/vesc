@@ -16,6 +16,29 @@
       "message": "This change makes the EGLDisplay handling more closely match the SetCurrentContextID implementation. One difference is that this is necessary for MEC as well as full captures.  The resulting call in the trace source code looks like so:\n```\n5 void SetupReplay(void)\n   6836 {\n   6837     InitReplay();\n   6838     SetCurrentEGLDisplay(ANGLE_GLOBAL_EGLDISPLAY);   \u003c\u003c\u003c NEW\n   6839     SetupReplayContextShared();\n   6840     SetCurrentContextID(2);\n   6841     SetupReplayContext2();\n   6842 \n   6843 }\n```",
       "revId": "deaa685b77e74687f3af64d34bd2b42fa1234283",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "beab7174_0b42b420",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 8892,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-19T17:59:04Z",
+      "side": 1,
+      "message": "Sorry if I misguided you, Mark, but now that I see these calls next to each other and `SetCurrentEGLDisplay` not being called elsewhere - is there a reason this variable cannot be just set inside `InitializeReplay4()` similarly to this:\nhttps://crsrc.org/c/third_party/angle/util/capture/trace_fixture.cpp;drc\u003d4e07335654ec2c1fa3a607e924c53f1b6f3d3d34;l\u003d324\n?\n\nAs is, interpreter will probably just choke on ANGLE_GLOBAL_EGLDISPLAY - I am not 100% sure but it\u0027s very likely it doesn\u0027t parse defines :)\n(but if the above works then we shouldn\u0027t need any defines in the trace, and in this case I just setting it to 0 without global constants would seem reasonable)",
+      "range": {
+        "startLine": 8891,
+        "startChar": 0,
+        "endLine": 8892,
+        "endChar": 74
+      },
+      "revId": "deaa685b77e74687f3af64d34bd2b42fa1234283",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
