@@ -1648,6 +1648,11 @@ angle::Result ProgramExecutableVk::updateShaderResourcesDescriptorSet(
 void ProgramExecutableVk::updateShaderResourcesDynamicOffsets(
     const vk::DescriptorSetDescBuilder &shaderResourcesDesc)
 {
+    ASSERT(mDescriptorSets[DescriptorSetIndex::ShaderResource]);
+    ASSERT(mDescriptorPools[DescriptorSetIndex::ShaderResource].get().getDescriptorSet(
+               shaderResourcesDesc.getDesc()) ==
+           mDescriptorSets[DescriptorSetIndex::ShaderResource]);
+
     size_t numOffsets = shaderResourcesDesc.getDynamicOffsetsSize();
     mDynamicShaderResourceDescriptorOffsets.resize(numOffsets);
     if (numOffsets > 0)

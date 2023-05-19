@@ -1643,6 +1643,12 @@ class DescriptorSetDesc
         return (mDescriptorInfos == other.mDescriptorInfos);
     }
 
+    size_t size() const { return mDescriptorInfos.size(); }
+    const DescriptorInfoDesc &getInfoDesc(uint32_t infoDescIndex) const
+    {
+        return mDescriptorInfos[infoDescIndex];
+    }
+
     void updateInfoDesc(uint32_t infoDescIndex, const DescriptorInfoDesc &infoDesc)
     {
         mDescriptorInfos[infoDescIndex] = infoDesc;
@@ -1721,7 +1727,7 @@ class DescriptorSetDescBuilder final
                               TransformFeedbackVk *transformFeedbackVk);
 
     // Specific helpers for shader resource descriptors.
-    void updateShaderBuffers(gl::ShaderType shaderType,
+    bool updateShaderBuffers(gl::ShaderType shaderType,
                              ShaderVariableType variableType,
                              const ShaderInterfaceVariableInfoMap &variableInfoMap,
                              const gl::BufferVector &buffers,
