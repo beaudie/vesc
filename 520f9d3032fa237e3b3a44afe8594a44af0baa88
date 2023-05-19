@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39ca193d_5735b72a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-05-19T14:04:35Z",
+      "side": 1,
+      "message": "If generate_final_jni is deprecated, how do we indicate that we don\u0027t want to generate JNI?",
+      "revId": "520f9d3032fa237e3b3a44afe8594a44af0baa88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
