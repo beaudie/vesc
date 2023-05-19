@@ -34,6 +34,24 @@
       "parentUuid": "29778205_1c0a9b88",
       "revId": "1fc399c6552281c8473e7edfb394209a4abf3b18",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8303292e_2125944b",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-05-19T00:18:31Z",
+      "side": 0,
+      "message": "The latest patch set expands the GC heuristic to force an aggressive GC if the amount of allocated shadow buffer memory increases significantly. In this case it waits for GPU work to complete and then tries to clean up all allocated shadow buffers. This has dramatically improved peak memory consumption on the Figma test case, and I think will address this concern.",
+      "parentUuid": "d89fd784_8fc834d5",
+      "revId": "1fc399c6552281c8473e7edfb394209a4abf3b18",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
