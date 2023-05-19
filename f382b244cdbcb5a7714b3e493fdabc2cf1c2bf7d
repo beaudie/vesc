@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2537b955_877ef985",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 898,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-05-19T20:42:49Z",
+      "side": 1,
+      "message": "We should migrate from GOMA to ReClient eventually.\nSo we can\u0027t relay on goma_dir forever.\n\nIf you just wanted to check whether this test can run on the bots, a better way would be to use LED. go/luci-how-to-led",
+      "range": {
+        "startLine": 898,
+        "startChar": 0,
+        "endLine": 898,
+        "endChar": 83
+      },
+      "revId": "f382b244cdbcb5a7714b3e493fdabc2cf1c2bf7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
