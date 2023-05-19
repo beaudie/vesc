@@ -6008,7 +6008,7 @@ angle::Result DescriptorSetDescBuilder::updateExecutableActiveTexturesForShader(
     return angle::Result::Continue;
 }
 
-void DescriptorSetDescBuilder::updateShaderBuffers(
+bool DescriptorSetDescBuilder::updateShaderBuffers(
     gl::ShaderType shaderType,
     ShaderVariableType variableType,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
@@ -6019,6 +6019,7 @@ void DescriptorSetDescBuilder::updateShaderBuffers(
     const BufferHelper &emptyBuffer,
     const WriteDescriptorDescs &writeDescriptorDescs)
 {
+    bool descriptorSetDirty = false;
     // Now that we have the proper array elements counts, initialize the info structures.
     for (uint32_t bufferIndex = 0; bufferIndex < blocks.size(); ++bufferIndex)
     {
@@ -6056,6 +6057,7 @@ void DescriptorSetDescBuilder::updateShaderBuffers(
             {
                 mDynamicOffsets[infoDescIndex] = 0;
             }
+            descriptorSetDirty = true;
         }
         else
         {
@@ -6086,11 +6088,19 @@ void DescriptorSetDescBuilder::updateShaderBuffers(
                 SetBitField(infoDesc.imageViewSerialOrOffset, offset);
             }
 
-            mDesc.updateInfoDesc(infoDescIndex, infoDesc);
+            const DescriptorInfoDesc &originalInfoDesc = mDesc.getInfoDesc(infoDescIndex);
+            if (originalInfoDesc.imageLayoutOrRange != infoDesc.imageLayoutOrRange ||
+                originalInfoDesc.samplerOrBufferSerial != infoDesc.samplerOrBufferSerial ||
+                originalInfoDesc.imageViewSerialOrOffset != infoDesc.imageViewSerialOrOffset)
+            {
+                mDesc.updateInfoDesc(infoDescIndex, infoDesc);
+                descriptorSetDirty = true;
+            }
 
             mHandles[infoDescIndex].buffer = bufferHelper.getBuffer().getHandle();
         }
     }
+    return descriptorSetDirty;
 }
 
 void DescriptorSetDescBuilder::updateAtomicCounters(
