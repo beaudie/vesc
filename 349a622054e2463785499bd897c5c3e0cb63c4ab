@@ -34,6 +34,24 @@
       "parentUuid": "1028142a_b20493df",
       "revId": "349a622054e2463785499bd897c5c3e0cb63c4ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbdfec34_0d972189",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-05-19T18:55:35Z",
+      "side": 1,
+      "message": "add some tests to the change. \nfound UScale and SScale at some devices (like pixel 4). was emulated.\ncurrently restrict the test only running on nvidia device.",
+      "parentUuid": "6885cdc7_cbc6d59c",
+      "revId": "349a622054e2463785499bd897c5c3e0cb63c4ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
