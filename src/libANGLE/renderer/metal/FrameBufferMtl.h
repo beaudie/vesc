@@ -214,7 +214,7 @@ class FramebufferMtl : public FramebufferImpl
     bool totalBitsUsedIsLessThanOrEqualToMaxBitsSupported(const gl::Context *context) const;
 
     RenderTargetMtl *getColorReadRenderTargetNoCache(const gl::Context *context) const;
-    bool prepareForUse(const gl::Context *context) const;
+    angle::Result prepareForUse(const gl::Context *context) const;
 
     // NOTE: we cannot use RenderTargetCache here because it doesn't support separate
     // depth & stencil attachments as of now. Separate depth & stencil could be useful to

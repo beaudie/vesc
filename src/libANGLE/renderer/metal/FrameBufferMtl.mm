@@ -718,43 +718,36 @@ angle::Result FramebufferMtl::getSamplePosition(const gl::Context *context,
     return angle::Result::Stop;
 }
 
-bool FramebufferMtl::prepareForUse(const gl::Context *context) const
+angle::Result FramebufferMtl::prepareForUse(const gl::Context *context) const
 {
     if (mBackbuffer)
     {
         // Backbuffer might obtain new drawable, which means it might change the
         // the native texture used as the target of the render pass.
         // We need to call this before creating render encoder.
-        if (IsError(mBackbuffer->ensureCurrentDrawableObtained(context)))
-        {
-            return false;
-        }
+        ANGLE_TRY(mBackbuffer->ensureCurrentDrawableObtained(context));
 
         if (mBackbuffer->hasRobustResourceInit())
         {
-            (void)mBackbuffer->initializeContents(context, GL_BACK, gl::ImageIndex::Make2D(0));
+            ANGLE_TRY(mBackbuffer->initializeContents(context, GL_BACK, gl::ImageIndex::Make2D(0)));
             if (mBackbuffer->hasDepthStencil())
             {
-                (void)mBackbuffer->initializeContents(context, GL_DEPTH, gl::ImageIndex::Make2D(0));
+                ANGLE_TRY(mBackbuffer->initializeContents(context, GL_DEPTH, gl::ImageIndex::Make2D(0)));
             }
         }
     }
-    return true;
+    
+    return angle::Result::Continue;
 }
 
-RenderTargetMtl *FramebufferMtl::getColorReadRenderTarget(const gl::Context *context) const
+angle::Result FramebufferMtl::getColorReadRenderTarget(const gl::Context *context, RenderTargetMtl **outRenderTarget) const
 {
-    if (mState.getReadIndex() >= mColorRenderTargets.size())
-    {
-        return nullptr;
-    }
+    ASSERT(mState.getReadIndex() < mColorRenderTargets.size());
 
-    if (!prepareForUse(context))
-    {
-        return nullptr;
-    }
+    ANGLE_TRY(prepareForUse(context));
 
-    return mColorRenderTargets[mState.getReadIndex()];
+    *outRenderTarget = mColorRenderTargets[mState.getReadIndex()];
+    return angle::Result::Continue;
 }
 
 RenderTargetMtl *FramebufferMtl::getColorReadRenderTargetNoCache(const gl::Context *context) const
