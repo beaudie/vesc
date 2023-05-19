@@ -466,6 +466,9 @@ class CommandQueue : angle::NonCopyable
     }
     angle::Result postSubmitCheck(Context *context);
 
+    // Finish one command batch in the case of OOM.
+    angle::Result finishOneCommandBatchAndCleanupIfInFlight(Context *context);
+
     // All these private APIs are called with mutex locked, so we must not take lock again.
   private:
     // Check the first command buffer in mInFlightCommands and update mLastCompletedSerials if

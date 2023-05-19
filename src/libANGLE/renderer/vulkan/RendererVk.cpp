@@ -5690,6 +5690,11 @@ void RendererVk::releaseQueueSerialIndex(SerialIndex index)
     mQueueSerialIndexAllocator.release(index);
 }
 
+void RendererVk::finishOneCommandBatchAndCleanup(vk::Context *context)
+{
+    (void)mCommandQueue.finishOneCommandBatchAndCleanupIfInFlight(context);
+}
+
 // static
 const char *RendererVk::GetVulkanObjectTypeName(VkObjectType type)
 {
@@ -5724,10 +5729,25 @@ VkResult ImageMemorySuballocator::allocateAndBindMemory(Context *context,
     bool allocateDedicatedMemory =
         memoryRequirements.size >= kImageSizeThresholdForDedicatedMemoryAllocation;
 
-    // Allocate and bind memory for the image.
+    // Allocate and bind memory for the image. Try allocating on the device first. If unsuccessful,
+    // it is possible to retry allocation after cleaning the garbage. If there is still no space for
+    // the new allocation, the allocation may still be made outside the device, although it will
+    // result in performance penalty.
     VkResult result = vma::AllocateAndBindMemoryForImage(
         allocator.getHandle(), &image->mHandle, requiredFlags, preferredFlags,
         allocateDedicatedMemory, &allocationOut->mHandle, memoryTypeIndexOut, sizeOut);
+
+    if (result != VK_SUCCESS)
+    {
+        renderer->finishOneCommandBatchAndCleanup(context);
+        INFO() << "Garbage freed; retrying allocation.";
+
+        requiredFlags &= (~VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+        result = vma::AllocateAndBindMemoryForImage(
+            allocator.getHandle(), &image->mHandle, requiredFlags, preferredFlags,
+            allocateDedicatedMemory, &allocationOut->mHandle, memoryTypeIndexOut, sizeOut);
+    }
+
     if (result != VK_SUCCESS)
     {
         // Record the failed memory allocation.
