@@ -33,6 +33,24 @@
       "message": "Note to self: need to guard this with an availability macro.",
       "revId": "447385c5222f975e345b8a468e534e525f5c0993",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae622edd_19966411",
+        "filename": "src/libANGLE/renderer/metal/mtl_context_device.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-05-20T00:18:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be849481_43dc5a15",
+      "revId": "447385c5222f975e345b8a468e534e525f5c0993",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
