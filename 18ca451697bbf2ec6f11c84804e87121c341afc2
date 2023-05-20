@@ -86,6 +86,24 @@
       "parentUuid": "3b1a6cb6_5d078d25",
       "revId": "18ca451697bbf2ec6f11c84804e87121c341afc2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32ded9c8_1ffa3ef0",
+        "filename": "src/libANGLE/renderer/metal/BufferMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-05-20T00:02:04Z",
+      "side": 1,
+      "message": "Considering this resolved.",
+      "parentUuid": "3e952c67_07da48bc",
+      "revId": "18ca451697bbf2ec6f11c84804e87121c341afc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
