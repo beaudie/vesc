@@ -1132,6 +1132,8 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
         &ContextVk::handleDirtyGraphicsUniformBuffers;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_STORAGE_BUFFERS] =
         &ContextVk::handleDirtyGraphicsStorageBuffers;
+    mGraphicsDirtyBitHandlers[DIRTY_BIT_SHADER_IMAGES] =
+        &ContextVk::handleDirtyGraphicsShaderImages;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_FRAMEBUFFER_FETCH_BARRIER] =
         &ContextVk::handleDirtyGraphicsFramebufferFetchBarrier;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_BLEND_BARRIER] =
@@ -1209,6 +1211,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
         &ContextVk::handleDirtyComputeUniformBuffers;
     mComputeDirtyBitHandlers[DIRTY_BIT_STORAGE_BUFFERS] =
         &ContextVk::handleDirtyComputeStorageBuffers;
+    mComputeDirtyBitHandlers[DIRTY_BIT_SHADER_IMAGES] = &ContextVk::handleDirtyComputeShaderImages;
     mComputeDirtyBitHandlers[DIRTY_BIT_DESCRIPTOR_SETS] =
         &ContextVk::handleDirtyComputeDescriptorSets;
 
@@ -2837,9 +2840,9 @@ void ContextVk::handleDirtyShaderBufferResourcesImpl(CommandBufferT *commandBuff
 angle::Result ContextVk::handleDirtyGraphicsShaderResources(DirtyBits::Iterator *dirtyBitsIterator,
                                                             DirtyBits dirtyBitMask)
 {
-    // This will handle all shader resources, including uniform/storage buffer.
+    // This will handle all shader resources, including uniform/storage buffer and images.
     dirtyBitsIterator->resetLaterBits(
-        DirtyBits{DIRTY_BIT_UNIFORM_BUFFERS, DIRTY_BIT_STORAGE_BUFFERS});
+        DirtyBits{DIRTY_BIT_UNIFORM_BUFFERS, DIRTY_BIT_STORAGE_BUFFERS, DIRTY_BIT_SHADER_IMAGES});
     return handleDirtyShaderResourcesImpl(mRenderPassCommands, PipelineType::Graphics);
 }
 
@@ -2955,6 +2958,53 @@ angle::Result ContextVk::handleDirtyComputeStorageBuffers()
 {
     ANGLE_TRY(handleDirtyStorageBuffersImpl(mOutsideRenderPassCommands));
     return angle::Result::Continue;
+}
+
+template <typename CommandBufferT>
+angle::Result ContextVk::handleDirtyShaderImagesImpl(CommandBufferT *commandBufferHelper)
+{
+    const gl::ProgramExecutable *executable = mState.getProgramExecutable();
+    ASSERT(executable);
+    ASSERT(executable->hasImages());
+
+    ProgramExecutableVk &executableVk                     = *getExecutable();
+    const ShaderInterfaceVariableInfoMap &variableInfoMap = executableVk.getVariableInfoMap();
+
+    ANGLE_TRY(updateActiveImages(commandBufferHelper));
+
+    for (gl::ShaderType shaderType : executable->getLinkedShaderStages())
+    {
+        ANGLE_TRY(mShaderBuffersDescriptorDesc.updateImages(
+            this, shaderType, *executable, variableInfoMap, mActiveImages, mState.getImageUnits(),
+            mShaderBufferWriteDescriptorDescBuilder.getDescs()));
+    }
+
+    vk::SharedDescriptorSetCacheKey newSharedCacheKey;
+    ANGLE_TRY(executableVk.updateShaderResourcesDescriptorSet(
+        this, mShareGroupVk->getUpdateDescriptorSetsBuilder(),
+        mShaderBufferWriteDescriptorDescBuilder.getDescs(), commandBufferHelper,
+        mShaderBuffersDescriptorDesc, &newSharedCacheKey));
+
+    if (newSharedCacheKey)
+    {
+        // A new cache entry has been created. We record this cache key in the images and
+        // buffers so that the descriptorSet cache can be destroyed when buffer/image is
+        // destroyed.
+        updateShaderResourcesWithSharedCacheKey(newSharedCacheKey);
+    }
+
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::handleDirtyGraphicsShaderImages(DirtyBits::Iterator *dirtyBitsIterator,
+                                                         DirtyBits dirtyBitMask)
+{
+    return handleDirtyShaderImagesImpl(mRenderPassCommands);
+}
+
+angle::Result ContextVk::handleDirtyComputeShaderImages()
+{
+    return handleDirtyShaderImagesImpl(mOutsideRenderPassCommands);
 }
 
 angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
@@ -5763,10 +5813,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 // Nothing to do.
                 break;
             case gl::State::DIRTY_BIT_IMAGE_BINDINGS:
-                static_assert(gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING >
-                                  gl::State::DIRTY_BIT_IMAGE_BINDINGS,
-                              "Dirty bit order");
-                iter.setLaterBit(gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING);
+                ANGLE_TRY(invalidateCurrentShaderImages(command));
                 break;
             case gl::State::DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING:
                 invalidateCurrentShaderStorageBuffers(command);
@@ -6334,6 +6381,39 @@ void ContextVk::invalidateCurrentShaderStorageBuffers(gl::Command command)
             mComputeDirtyBits.set(DIRTY_BIT_MEMORY_BARRIER);
         }
     }
+}
+
+angle::Result ContextVk::invalidateCurrentShaderImages(gl::Command command)
+{
+    const gl::ProgramExecutable *executable = mState.getProgramExecutable();
+    ASSERT(executable);
+
+    if (executable->hasImages())
+    {
+        mGraphicsDirtyBits |= kResourcesAndDescSetDirtyBits;
+        mComputeDirtyBits |= kResourcesAndDescSetDirtyBits;
+
+        // Take care of implict layout transition by compute program access-after-read.
+        if (command == gl::Command::Dispatch)
+        {
+            ANGLE_TRY(endRenderPassIfComputeAccessAfterGraphicsImageAccess());
+        }
+
+        // If memory barrier has been issued but the command buffers haven't been flushed, make sure
+        // they get a chance to do so if necessary on program and storage buffer/image binding
+        // change.
+        const bool hasGLMemoryBarrierIssuedInCommandBuffers =
+            mOutsideRenderPassCommands->hasGLMemoryBarrierIssued() ||
+            mRenderPassCommands->hasGLMemoryBarrierIssued();
+
+        if (hasGLMemoryBarrierIssuedInCommandBuffers)
+        {
+            mGraphicsDirtyBits.set(DIRTY_BIT_MEMORY_BARRIER);
+            mComputeDirtyBits.set(DIRTY_BIT_MEMORY_BARRIER);
+        }
+    }
+
+    return angle::Result::Continue;
 }
 
 angle::Result ContextVk::updateShaderResourcesDescriptorDesc(PipelineType pipelineType)
