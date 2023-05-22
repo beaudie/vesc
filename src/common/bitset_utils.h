@@ -565,6 +565,13 @@ class BitSetArray final
             updateIteratorBit(pos, false);
         }
 
+        void resetLaterBits(const BitSetArray &bits)
+        {
+            prepareCopy();
+            mParentCopy &= ~bits;
+            updateIteratorBits(bits, false);
+        }
+
         void setLaterBit(std::size_t pos)
         {
             ASSERT(pos > (mIndex * priv::kDefaultBitSetSize) + *mCurrentIterator);
@@ -577,7 +584,7 @@ class BitSetArray final
         {
             prepareCopy();
             mParentCopy |= bits;
-            updateIteratorBits(bits);
+            updateIteratorBits(bits, true);
         }
 
       private:
@@ -610,9 +617,16 @@ class BitSetArray final
             }
         }
 
-        ANGLE_INLINE void updateIteratorBits(const BitSetArray &bits)
+        ANGLE_INLINE void updateIteratorBits(const BitSetArray &bits, bool setBit)
         {
-            mCurrentIterator.setLaterBits(bits.mBaseBitSetArray[mIndex]);
+            if (setBit)
+            {
+                mCurrentIterator.setLaterBits(bits.mBaseBitSetArray[mIndex]);
+            }
+            else
+            {
+                mCurrentIterator.resetLaterBits(bits.mBaseBitSetArray[mIndex]);
+            }
         }
 
         // Problem -

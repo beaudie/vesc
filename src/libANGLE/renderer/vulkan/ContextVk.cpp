@@ -1130,6 +1130,12 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
         &ContextVk::handleDirtyGraphicsShaderResources;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_UNIFORM_BUFFERS] =
         &ContextVk::handleDirtyGraphicsUniformBuffers;
+    mGraphicsDirtyBitHandlers[DIRTY_BIT_STORAGE_BUFFERS] =
+        &ContextVk::handleDirtyGraphicsStorageBuffers;
+    mGraphicsDirtyBitHandlers[DIRTY_BIT_SHADER_IMAGES] =
+        &ContextVk::handleDirtyGraphicsShaderImages;
+    mGraphicsDirtyBitHandlers[DIRTY_BIT_ATOMIC_COUNTER_BUFFERS] =
+        &ContextVk::handleDirtyGraphicsAtomicCounterBuffers;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_FRAMEBUFFER_FETCH_BARRIER] =
         &ContextVk::handleDirtyGraphicsFramebufferFetchBarrier;
     mGraphicsDirtyBitHandlers[DIRTY_BIT_BLEND_BARRIER] =
@@ -1205,6 +1211,11 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
         &ContextVk::handleDirtyComputeShaderResources;
     mComputeDirtyBitHandlers[DIRTY_BIT_UNIFORM_BUFFERS] =
         &ContextVk::handleDirtyComputeUniformBuffers;
+    mComputeDirtyBitHandlers[DIRTY_BIT_STORAGE_BUFFERS] =
+        &ContextVk::handleDirtyComputeStorageBuffers;
+    mComputeDirtyBitHandlers[DIRTY_BIT_SHADER_IMAGES] = &ContextVk::handleDirtyComputeShaderImages;
+    mComputeDirtyBitHandlers[DIRTY_BIT_ATOMIC_COUNTER_BUFFERS] =
+        &ContextVk::handleDirtyComputeAtomicCounterBuffers;
     mComputeDirtyBitHandlers[DIRTY_BIT_DESCRIPTOR_SETS] =
         &ContextVk::handleDirtyComputeDescriptorSets;
 
@@ -2827,7 +2838,9 @@ angle::Result ContextVk::handleDirtyGraphicsShaderResources(DirtyBits::Iterator 
     // DIRTY_BIT_SHADER_RESOURCES gets set when program executable changed. When program executable
     // changed, handleDirtyShaderResourcesImpl will update entire shader resource descriptorSet.
     // This means there is no need to process uniform buffer binding change if it is also set.
-    dirtyBitsIterator->resetLaterBit(DIRTY_BIT_UNIFORM_BUFFERS);
+    dirtyBitsIterator->resetLaterBits(DirtyBits{DIRTY_BIT_UNIFORM_BUFFERS,
+                                                DIRTY_BIT_STORAGE_BUFFERS, DIRTY_BIT_SHADER_IMAGES,
+                                                DIRTY_BIT_ATOMIC_COUNTER_BUFFERS});
     return handleDirtyShaderResourcesImpl(mRenderPassCommands, PipelineType::Graphics);
 }
 
@@ -2887,6 +2900,173 @@ angle::Result ContextVk::handleDirtyGraphicsUniformBuffers(DirtyBits::Iterator *
 angle::Result ContextVk::handleDirtyComputeUniformBuffers()
 {
     return handleDirtyUniformBuffersImpl(mOutsideRenderPassCommands);
+}
+
+template <typename CommandBufferT>
+angle::Result ContextVk::handleDirtyStorageBuffersImpl(CommandBufferT *commandBufferHelper)
+{
+    const gl::ProgramExecutable *executable = mState.getProgramExecutable();
+    ASSERT(executable);
+    ASSERT(executable->hasStorageBuffers());
+
+    const VkPhysicalDeviceLimits &limits = mRenderer->getPhysicalDeviceProperties().limits;
+    ProgramExecutableVk &executableVk    = *getExecutable();
+    const ShaderInterfaceVariableInfoMap &variableInfoMap = executableVk.getVariableInfoMap();
+
+    for (gl::ShaderType shaderType : executable->getLinkedShaderStages())
+    {
+        mShaderBuffersDescriptorDesc.updateShaderBuffers(
+            shaderType, ShaderVariableType::ShaderStorageBuffer, variableInfoMap,
+            mState.getOffsetBindingPointerShaderStorageBuffers(),
+            executable->getShaderStorageBlocks(), executableVk.getStorageBufferDescriptorType(),
+            limits.maxStorageBufferRange, mEmptyBuffer,
+            mShaderBufferWriteDescriptorDescBuilder.getDescs());
+
+        const vk::PipelineStage pipelineStage = vk::GetPipelineStage(shaderType);
+        UpdateShaderStorageBuffers(this, commandBufferHelper, shaderType, pipelineStage,
+                                   executable->getShaderStorageBlocks(),
+                                   mState.getOffsetBindingPointerShaderStorageBuffers());
+    }
+
+    // Record usage of storage buffers and images in the command buffer to aid handling of
+    // glMemoryBarrier.
+    commandBufferHelper->setHasShaderStorageOutput();
+
+    vk::SharedDescriptorSetCacheKey newSharedCacheKey;
+    ANGLE_TRY(executableVk.updateShaderResourcesDescriptorSet(
+        this, mShareGroupVk->getUpdateDescriptorSetsBuilder(),
+        mShaderBufferWriteDescriptorDescBuilder.getDescs(), commandBufferHelper,
+        mShaderBuffersDescriptorDesc, &newSharedCacheKey));
+
+    if (newSharedCacheKey)
+    {
+        // A new cache entry has been created. We record this cache key in the images and
+        // buffers so that the descriptorSet cache can be destroyed when buffer/image is
+        // destroyed.
+        updateShaderResourcesWithSharedCacheKey(newSharedCacheKey);
+    }
+
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::handleDirtyGraphicsStorageBuffers(DirtyBits::Iterator *dirtyBitsIterator,
+                                                           DirtyBits dirtyBitMask)
+{
+    return handleDirtyStorageBuffersImpl(mRenderPassCommands);
+}
+
+angle::Result ContextVk::handleDirtyComputeStorageBuffers()
+{
+    return handleDirtyStorageBuffersImpl(mOutsideRenderPassCommands);
+}
+
+template <typename CommandBufferT>
+angle::Result ContextVk::handleDirtyShaderImagesImpl(CommandBufferT *commandBufferHelper)
+{
+    const gl::ProgramExecutable *executable = mState.getProgramExecutable();
+    ASSERT(executable);
+    ASSERT(executable->hasImages());
+
+    ProgramExecutableVk &executableVk                     = *getExecutable();
+    const ShaderInterfaceVariableInfoMap &variableInfoMap = executableVk.getVariableInfoMap();
+
+    ANGLE_TRY(updateActiveImages(commandBufferHelper));
+
+    for (gl::ShaderType shaderType : executable->getLinkedShaderStages())
+    {
+        ANGLE_TRY(mShaderBuffersDescriptorDesc.updateImages(
+            this, shaderType, *executable, variableInfoMap, mActiveImages, mState.getImageUnits(),
+            mShaderBufferWriteDescriptorDescBuilder.getDescs()));
+    }
+
+    // Record usage of storage buffers and images in the command buffer to aid handling of
+    // glMemoryBarrier.
+    commandBufferHelper->setHasShaderStorageOutput();
+
+    vk::SharedDescriptorSetCacheKey newSharedCacheKey;
+    ANGLE_TRY(executableVk.updateShaderResourcesDescriptorSet(
+        this, mShareGroupVk->getUpdateDescriptorSetsBuilder(),
+        mShaderBufferWriteDescriptorDescBuilder.getDescs(), commandBufferHelper,
+        mShaderBuffersDescriptorDesc, &newSharedCacheKey));
+
+    if (newSharedCacheKey)
+    {
+        // A new cache entry has been created. We record this cache key in the images and
+        // buffers so that the descriptorSet cache can be destroyed when buffer/image is
+        // destroyed.
+        updateShaderResourcesWithSharedCacheKey(newSharedCacheKey);
+    }
+
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::handleDirtyGraphicsShaderImages(DirtyBits::Iterator *dirtyBitsIterator,
+                                                         DirtyBits dirtyBitMask)
+{
+    return handleDirtyShaderImagesImpl(mRenderPassCommands);
+}
+
+angle::Result ContextVk::handleDirtyComputeShaderImages()
+{
+    return handleDirtyShaderImagesImpl(mOutsideRenderPassCommands);
+}
+
+template <typename CommandBufferHelperT>
+angle::Result ContextVk::handleDirtyAtomicCounterBuffersImpl(
+    CommandBufferHelperT *commandBufferHelper)
+{
+    const gl::ProgramExecutable *executable = mState.getProgramExecutable();
+    ASSERT(executable);
+    ASSERT(executable->hasAtomicCounterBuffers());
+
+    const VkPhysicalDeviceLimits &limits = mRenderer->getPhysicalDeviceProperties().limits;
+    ProgramExecutableVk &executableVk    = *getExecutable();
+    const ShaderInterfaceVariableInfoMap &variableInfoMap = executableVk.getVariableInfoMap();
+
+    // Process buffer barriers.
+    for (const gl::ShaderType shaderType : executable->getLinkedShaderStages())
+    {
+        mShaderBuffersDescriptorDesc.updateAtomicCounters(
+            shaderType, variableInfoMap, mState.getOffsetBindingPointerAtomicCounterBuffers(),
+            executable->getAtomicCounterBuffers(), limits.minStorageBufferOffsetAlignment,
+            &mEmptyBuffer, mShaderBufferWriteDescriptorDescBuilder.getDescs());
+
+        const vk::PipelineStage pipelineStage = vk::GetPipelineStage(shaderType);
+        UpdateShaderAtomicCounterBuffers(this, commandBufferHelper, shaderType, pipelineStage,
+                                         executable->getAtomicCounterBuffers(),
+                                         mState.getOffsetBindingPointerAtomicCounterBuffers());
+    }
+
+    // Record usage of storage buffers and images in the command buffer to aid handling of
+    // glMemoryBarrier.
+    commandBufferHelper->setHasShaderStorageOutput();
+
+    vk::SharedDescriptorSetCacheKey newSharedCacheKey;
+    ANGLE_TRY(executableVk.updateShaderResourcesDescriptorSet(
+        this, mShareGroupVk->getUpdateDescriptorSetsBuilder(),
+        mShaderBufferWriteDescriptorDescBuilder.getDescs(), commandBufferHelper,
+        mShaderBuffersDescriptorDesc, &newSharedCacheKey));
+
+    if (newSharedCacheKey)
+    {
+        // A new cache entry has been created. We record this cache key in the images and buffers so
+        // that the descriptorSet cache can be destroyed when buffer/image is destroyed.
+        updateShaderResourcesWithSharedCacheKey(newSharedCacheKey);
+    }
+
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::handleDirtyGraphicsAtomicCounterBuffers(
+    DirtyBits::Iterator *dirtyBitsIterator,
+    DirtyBits dirtyBitMask)
+{
+    return handleDirtyAtomicCounterBuffersImpl(mRenderPassCommands);
+}
+
+angle::Result ContextVk::handleDirtyComputeAtomicCounterBuffers()
+{
+    return handleDirtyAtomicCounterBuffersImpl(mOutsideRenderPassCommands);
 }
 
 angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
@@ -5695,23 +5875,16 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 // Nothing to do.
                 break;
             case gl::State::DIRTY_BIT_IMAGE_BINDINGS:
-                static_assert(gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING >
-                                  gl::State::DIRTY_BIT_IMAGE_BINDINGS,
-                              "Dirty bit order");
-                iter.setLaterBit(gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING);
+                ANGLE_TRY(invalidateCurrentShaderImages(command));
                 break;
             case gl::State::DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING:
-                static_assert(gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING >
-                                  gl::State::DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING,
-                              "Dirty bit order");
-                iter.setLaterBit(gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING);
+                invalidateCurrentShaderStorageBuffers(command);
                 break;
             case gl::State::DIRTY_BIT_UNIFORM_BUFFER_BINDINGS:
                 ANGLE_TRY(invalidateCurrentShaderUniformBuffers(command));
                 break;
             case gl::State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING:
-                ANGLE_TRY(invalidateCurrentShaderResources(command));
-                invalidateDriverUniforms();
+                invalidateCurrentAtomicCounterBuffers(command);
                 break;
             case gl::State::DIRTY_BIT_MULTISAMPLING:
                 // When disabled, this should configure the pipeline to render as if single-sampled,
@@ -6253,6 +6426,106 @@ angle::Result ContextVk::invalidateCurrentShaderUniformBuffers(gl::Command comma
         }
     }
     return angle::Result::Continue;
+}
+
+void ContextVk::invalidateCurrentShaderStorageBuffers(gl::Command command)
+{
+    const gl::ProgramExecutable *executable = mState.getProgramExecutable();
+    ASSERT(executable);
+
+    if (executable->hasStorageBuffers())
+    {
+        if (command == gl::Command::Dispatch)
+        {
+            mComputeDirtyBits |= kStorageBuffersAndDescSetDirtyBits;
+        }
+        else
+        {
+            mGraphicsDirtyBits |= kStorageBuffersAndDescSetDirtyBits;
+        }
+
+        // If memory barrier has been issued but the command buffers haven't been flushed, make sure
+        // they get a chance to do so if necessary on program and storage buffer/image binding
+        // change.
+        const bool hasGLMemoryBarrierIssuedInCommandBuffers =
+            mOutsideRenderPassCommands->hasGLMemoryBarrierIssued() ||
+            mRenderPassCommands->hasGLMemoryBarrierIssued();
+
+        if (hasGLMemoryBarrierIssuedInCommandBuffers)
+        {
+            mGraphicsDirtyBits.set(DIRTY_BIT_MEMORY_BARRIER);
+            mComputeDirtyBits.set(DIRTY_BIT_MEMORY_BARRIER);
+        }
+    }
+}
+
+angle::Result ContextVk::invalidateCurrentShaderImages(gl::Command command)
+{
+    const gl::ProgramExecutable *executable = mState.getProgramExecutable();
+    ASSERT(executable);
+
+    if (executable->hasImages())
+    {
+        mGraphicsDirtyBits |= kResourcesAndDescSetDirtyBits;
+        mComputeDirtyBits |= kResourcesAndDescSetDirtyBits;
+
+        // Take care of implict layout transition by compute program access-after-read.
+        if (command == gl::Command::Dispatch)
+        {
+            ANGLE_TRY(endRenderPassIfComputeAccessAfterGraphicsImageAccess());
+        }
+
+        // If memory barrier has been issued but the command buffers haven't been flushed, make sure
+        // they get a chance to do so if necessary on program and storage buffer/image binding
+        // change.
+        const bool hasGLMemoryBarrierIssuedInCommandBuffers =
+            mOutsideRenderPassCommands->hasGLMemoryBarrierIssued() ||
+            mRenderPassCommands->hasGLMemoryBarrierIssued();
+
+        if (hasGLMemoryBarrierIssuedInCommandBuffers)
+        {
+            mGraphicsDirtyBits.set(DIRTY_BIT_MEMORY_BARRIER);
+            mComputeDirtyBits.set(DIRTY_BIT_MEMORY_BARRIER);
+        }
+    }
+
+    return angle::Result::Continue;
+}
+
+void ContextVk::invalidateCurrentAtomicCounterBuffers(gl::Command command)
+{
+    const gl::ProgramExecutable *executable = mState.getProgramExecutable();
+    ASSERT(executable);
+
+    if (executable->hasAtomicCounterBuffers())
+    {
+        // If memory barrier has been issued but the command buffers haven't been flushed, make sure
+        // they get a chance to do so if necessary on program and storage buffer/image binding
+        // change.
+        const bool hasGLMemoryBarrierIssuedInCommandBuffers =
+            mOutsideRenderPassCommands->hasGLMemoryBarrierIssued() ||
+            mRenderPassCommands->hasGLMemoryBarrierIssued();
+
+        if (command == gl::Command::Dispatch)
+        {
+            mComputeDirtyBits |= kAtomicCounterBuffersAndDescSetDirtyBits;
+            // We are using driver uniforms to handle unaligned atomic counter buffer offset
+            mGraphicsDirtyBits.set(DIRTY_BIT_DRIVER_UNIFORMS);
+            if (hasGLMemoryBarrierIssuedInCommandBuffers)
+            {
+                mGraphicsDirtyBits.set(DIRTY_BIT_MEMORY_BARRIER);
+            }
+        }
+        else
+        {
+            mGraphicsDirtyBits |= kAtomicCounterBuffersAndDescSetDirtyBits;
+            mComputeDirtyBits.set(DIRTY_BIT_DRIVER_UNIFORMS);
+            if (hasGLMemoryBarrierIssuedInCommandBuffers)
+            {
+                mComputeDirtyBits.set(DIRTY_BIT_MEMORY_BARRIER);
+            }
+        }
+    }
 }
 
 angle::Result ContextVk::updateShaderResourcesDescriptorDesc(PipelineType pipelineType)
