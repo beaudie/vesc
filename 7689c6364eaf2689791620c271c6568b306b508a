@@ -16,6 +16,29 @@
       "message": "Added support and tests for Sint and Float, working locally. Running CI tests, will finalize and send for review next week :)",
       "revId": "7689c6364eaf2689791620c271c6568b306b508a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a8ac788_023096c0",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 2939,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-05-22T17:47:47Z",
+      "side": 1,
+      "message": "What if driver does support R32G32B32_FLOAT native, from this logic, it appears will still go down conversion code path?",
+      "range": {
+        "startLine": 2939,
+        "startChar": 12,
+        "endLine": 2939,
+        "endChar": 82
+      },
+      "revId": "7689c6364eaf2689791620c271c6568b306b508a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
