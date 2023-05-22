@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0f3c704_08675d89",
+        "filename": "src/tests/restricted_traces/sync_restricted_traces_to_cipd.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-22T00:56:52Z",
+      "side": 1,
+      "message": "This seems flipped? It looks like this block does print, but the else doesn\u0027t.",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 23
+      },
+      "revId": "4260cd82aa9f399c9cd5b4f36b6f1c8af15ddb5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
