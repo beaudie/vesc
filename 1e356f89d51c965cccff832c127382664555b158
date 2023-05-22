@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa930205_3f4aea68",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-05-22T18:02:14Z",
+      "side": 1,
+      "message": "Should this automatic, for example, use the commit hashtag? I thouht we have similar versions for program/shader cache?",
+      "range": {
+        "startLine": 77,
+        "startChar": 19,
+        "endLine": 77,
+        "endChar": 40
+      },
+      "revId": "1e356f89d51c965cccff832c127382664555b158",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
