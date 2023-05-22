@@ -842,6 +842,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         // Shader resources excluding textures, which are handled separately.
         DIRTY_BIT_SHADER_RESOURCES,
         DIRTY_BIT_UNIFORM_BUFFERS,
+        DIRTY_BIT_STORAGE_BUFFERS,
         DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS,
         DIRTY_BIT_TRANSFORM_FEEDBACK_RESUME,
         DIRTY_BIT_DESCRIPTOR_SETS,
@@ -918,6 +919,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     static_assert(
         DIRTY_BIT_UNIFORM_BUFFERS > DIRTY_BIT_SHADER_RESOURCES,
         "Uniform buffer using dirty bit must be handled after the shader resource dirty bit");
+    static_assert(
+        DIRTY_BIT_STORAGE_BUFFERS > DIRTY_BIT_SHADER_RESOURCES,
+        "Storage buffer using dirty bit must be handled after the shader resource dirty bit");
     static_assert(DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS > DIRTY_BIT_RENDER_PASS,
                   "Render pass using dirty bit must be handled after the render pass dirty bit");
     static_assert(DIRTY_BIT_TRANSFORM_FEEDBACK_RESUME > DIRTY_BIT_RENDER_PASS,
@@ -1094,6 +1098,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result invalidateCurrentTextures(const gl::Context *context, gl::Command command);
     angle::Result invalidateCurrentShaderResources(gl::Command command);
     angle::Result invalidateCurrentShaderUniformBuffers(gl::Command command);
+    void invalidateCurrentShaderStorageBuffers(gl::Command command);
     void invalidateGraphicsDriverUniforms();
     void invalidateDriverUniforms();
 
@@ -1132,6 +1137,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result handleDirtyGraphicsShaderResources(DirtyBits::Iterator *dirtyBitsIterator,
                                                      DirtyBits dirtyBitMask);
     angle::Result handleDirtyGraphicsUniformBuffers(DirtyBits::Iterator *dirtyBitsIterator,
+                                                    DirtyBits dirtyBitMask);
+    angle::Result handleDirtyGraphicsStorageBuffers(DirtyBits::Iterator *dirtyBitsIterator,
                                                     DirtyBits dirtyBitMask);
     angle::Result handleDirtyGraphicsFramebufferFetchBarrier(DirtyBits::Iterator *dirtyBitsIterator,
                                                              DirtyBits dirtyBitMask);
@@ -1204,6 +1211,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     angle::Result handleDirtyComputeDriverUniforms();
     angle::Result handleDirtyComputeShaderResources();
     angle::Result handleDirtyComputeUniformBuffers();
+    angle::Result handleDirtyComputeStorageBuffers();
     angle::Result handleDirtyComputeDescriptorSets();
     angle::Result handleDirtyComputeUniforms();
 
@@ -1221,6 +1229,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                                  PipelineType pipelineType);
     template <typename CommandBufferHelperT>
     angle::Result handleDirtyUniformBuffersImpl(CommandBufferHelperT *commandBufferHelper);
+    template <typename CommandBufferHelperT>
+    angle::Result handleDirtyStorageBuffersImpl(CommandBufferHelperT *commandBufferHelper);
     template <typename CommandBufferHelperT>
     angle::Result handleDirtyDescriptorSetsImpl(CommandBufferHelperT *commandBufferHelper,
                                                 PipelineType pipelineType);
@@ -1424,6 +1434,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     static constexpr DirtyBits kResourcesAndDescSetDirtyBits{DIRTY_BIT_SHADER_RESOURCES,
                                                              DIRTY_BIT_DESCRIPTOR_SETS};
     static constexpr DirtyBits kUniformBuffersAndDescSetDirtyBits{DIRTY_BIT_UNIFORM_BUFFERS,
+                                                                  DIRTY_BIT_DESCRIPTOR_SETS};
+    static constexpr DirtyBits kStorageBuffersAndDescSetDirtyBits{DIRTY_BIT_STORAGE_BUFFERS,
                                                                   DIRTY_BIT_DESCRIPTOR_SETS};
     static constexpr DirtyBits kXfbBuffersAndDescSetDirtyBits{DIRTY_BIT_TRANSFORM_FEEDBACK_BUFFERS,
                                                               DIRTY_BIT_DESCRIPTOR_SETS};
