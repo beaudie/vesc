@@ -208,41 +208,6 @@ TYPED_TEST(BitSetTest, Mask)
     }
 }
 
-// Tests removing bits from the iterator during iteration.
-TYPED_TEST(BitSetTest, ResetLaterBits)
-{
-    TypeParam bits;
-    std::set<size_t> expectedValues;
-    for (size_t i = 1; i < TypeParam::size(); i += 2)
-    {
-        expectedValues.insert(i);
-    }
-
-    for (size_t i = 1; i < TypeParam::size(); ++i)
-        bits.set(i);
-
-    // Remove the even bits
-    TypeParam resetBits;
-    for (size_t i = 2; i < TypeParam::size(); i += 2)
-    {
-        resetBits.set(i);
-    }
-
-    std::set<size_t> actualValues;
-
-    for (auto iter = bits.begin(), end = bits.end(); iter != end; ++iter)
-    {
-        if (*iter == 1)
-        {
-            iter.resetLaterBits(resetBits);
-        }
-
-        actualValues.insert(*iter);
-    }
-
-    EXPECT_EQ(expectedValues, actualValues);
-}
-
 template <typename T>
 class BitSetIteratorTest : public testing::Test
 {
@@ -418,6 +383,41 @@ TYPED_TEST(BitSetIteratorTest, ResetLaterBit)
             iter.resetLaterBit(4);
             iter.resetLaterBit(6);
             iter.resetLaterBit(8);
+        }
+
+        actualValues.insert(*iter);
+    }
+
+    EXPECT_EQ(expectedValues, actualValues);
+}
+
+// Tests removing bits from the iterator during iteration.
+TYPED_TEST(BitSetIteratorTest, ResetLaterBits)
+{
+    TypeParam bits;
+    std::set<size_t> expectedValues;
+    for (size_t i = 1; i < TypeParam::size(); i += 2)
+    {
+        expectedValues.insert(i);
+    }
+
+    for (size_t i = 1; i < TypeParam::size(); ++i)
+        bits.set(i);
+
+    // Remove the even bits
+    TypeParam resetBits;
+    for (size_t i = 2; i < TypeParam::size(); i += 2)
+    {
+        resetBits.set(i);
+    }
+
+    std::set<size_t> actualValues;
+
+    for (auto iter = bits.begin(), end = bits.end(); iter != end; ++iter)
+    {
+        if (*iter == 1)
+        {
+            iter.resetLaterBits(resetBits);
         }
 
         actualValues.insert(*iter);
