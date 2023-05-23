@@ -22,6 +22,30 @@
       },
       "revId": "957c0106c88510df2b21b2fc6e9ca062d2a60ba4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "927e4677_d195befe",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 849,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-05-23T19:12:33Z",
+      "side": 1,
+      "message": "It is `if (!block.isActive(shaderType))`, which I think is declared-in-shader-but-inactive. Also note that I am also looking to address this in the follow up CL.",
+      "parentUuid": "66d4a932_6f35342d",
+      "range": {
+        "startLine": 849,
+        "startChar": 60,
+        "endLine": 849,
+        "endChar": 65
+      },
+      "revId": "957c0106c88510df2b21b2fc6e9ca062d2a60ba4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
