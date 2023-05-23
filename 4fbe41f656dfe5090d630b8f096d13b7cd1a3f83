@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87b343ea_3537871e",
+        "filename": "src/tests/gl_tests/AttributeLayoutTest.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-23T16:00:34Z",
+      "side": 1,
+      "message": "nit: per our style, use `camelCase` for non-static member functions.",
+      "range": {
+        "startLine": 649,
+        "startChar": 11,
+        "endLine": 649,
+        "endChar": 12
+      },
+      "revId": "4fbe41f656dfe5090d630b8f096d13b7cd1a3f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aec0a369_09ac128f",
+        "filename": "src/tests/gl_tests/AttributeLayoutTest.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 889,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-23T16:00:34Z",
+      "side": 1,
+      "message": "No `_AND` needed",
+      "range": {
+        "startLine": 889,
+        "startChar": 26,
+        "endLine": 889,
+        "endChar": 30
+      },
+      "revId": "4fbe41f656dfe5090d630b8f096d13b7cd1a3f83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

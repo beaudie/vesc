@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db670ddb_bf99cfb7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 3336,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-23T16:00:34Z",
+      "side": 0,
+      "message": "If possible, would be good to assert that the size of the desired and the actual format end up being the same no matter what.",
+      "revId": "b795a6a8e8790183a7bddbfec46de907c5076062",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
