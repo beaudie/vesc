@@ -22,6 +22,81 @@
       },
       "revId": "1e356f89d51c965cccff832c127382664555b158",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44da95b3_501afc3c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-23T17:54:15Z",
+      "side": 1,
+      "message": "I was talking about this with Amirali before, he mentioned having a version here is better because the cache doesn\u0027t get obliterated with ANGLE updates. It makes sense since the contents of the cache (Vulkan pipelines) is entirely independent of ANGLE itself, and would indeed lead to a better user experience.",
+      "parentUuid": "aa930205_3f4aea68",
+      "range": {
+        "startLine": 77,
+        "startChar": 19,
+        "endLine": 77,
+        "endChar": 40
+      },
+      "revId": "1e356f89d51c965cccff832c127382664555b158",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "825b03d4_27beb61c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 886,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-23T17:54:15Z",
+      "side": 1,
+      "message": "Please initialize the padding too, otherwise it\u0027s leaking something to persistent memory.",
+      "revId": "1e356f89d51c965cccff832c127382664555b158",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a033d7f7_345fd3ee",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 912,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-23T17:54:15Z",
+      "side": 1,
+      "message": "Might as well make this 16 bit and put it in the padding below. Or since the layout is changing anyway might as well move the CRC up so the version and CRC take up one 32-bit value and remove the padding.\n\nIt\u0027ll probably cause some problems given that version didn\u0027t exist before (and given the layout change), but ultimately we need the version to deal with that and this is going to have to happen at some point.",
+      "revId": "1e356f89d51c965cccff832c127382664555b158",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "474fa8c8_81509dc6",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1132,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-23T17:54:15Z",
+      "side": 1,
+      "message": "Isn\u0027t this going to happen on the first update of ANGLE after this CL if there\u0027s a cache lying around from before it? We should make sure that\u0027s not fatal.\n\nIt\u0027s probably fine to make the message below a WARN(), let ANGLE get updated everywhere and make it FATAL() like in a year",
+      "revId": "1e356f89d51c965cccff832c127382664555b158",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
