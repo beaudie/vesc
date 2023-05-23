@@ -39,6 +39,29 @@
       },
       "revId": "7689c6364eaf2689791620c271c6568b306b508a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c65ddb87_0d0dcd42",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 3395,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-23T17:32:35Z",
+      "side": 1,
+      "message": "FWIW, now that you\u0027ve done all the tracking and proper non-hacky implementation, you can have `ContextVk::handleDirtyTexturesImpl` and `ContextVk::updateActiveImages` use the conversion buffer instead of the original buffer for tracking purposes, and then this barrier would be automatic.\n\nIt seems to me like it\u0027s pretty much enough to have `TextureVk::getBuffer()` return the appropriate buffer and you\u0027re all set (but please double check)",
+      "range": {
+        "startLine": 3386,
+        "startChar": 0,
+        "endLine": 3395,
+        "endChar": 99
+      },
+      "revId": "7689c6364eaf2689791620c271c6568b306b508a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
