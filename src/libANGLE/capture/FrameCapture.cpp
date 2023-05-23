@@ -5598,7 +5598,6 @@ void FrameCapture::reset()
 
 FrameCaptureShared::FrameCaptureShared()
     : mLastContextId{0},
-      mEnabled(true),
       mSerializeStateEnabled(false),
       mCompression(true),
       mClientVertexArrayMap{},
@@ -5616,13 +5615,6 @@ FrameCaptureShared::FrameCaptureShared()
       mWindowSurfaceContextID({0})
 {
     reset();
-
-    std::string enabledFromEnv =
-        GetEnvironmentVarOrUnCachedAndroidProperty(kEnabledVarName, kAndroidEnabled);
-    if (enabledFromEnv == "0")
-    {
-        mEnabled = false;
-    }
 
     std::string pathFromEnv =
         GetEnvironmentVarOrUnCachedAndroidProperty(kOutDirectoryVarName, kAndroidOutDir);
@@ -5760,7 +5752,9 @@ FrameCaptureShared::FrameCaptureShared()
         setCaptureActive();
     }
 
-    if (mCaptureEndFrame < mCaptureStartFrame)
+    mEnabled = mCaptureStartFrame <= mCaptureEndFrame;  // Defaults to disabled (start > end)
+    // Capture can also be _disabled_ by setting this var to 0
+    if (GetEnvironmentVarOrUnCachedAndroidProperty(kEnabledVarName, kAndroidEnabled) == "0")
     {
         mEnabled = false;
     }
