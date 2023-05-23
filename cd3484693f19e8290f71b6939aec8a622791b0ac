@@ -3,6 +3,46 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7893ea64_4b6c0100",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 866,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-23T20:14:27Z",
+      "side": 1,
+      "message": "nit: s/UpdateBarrierFor/Update/\n\nIt\u0027s also keeping track of usages, not just for barrier purposes.",
+      "range": {
+        "startLine": 866,
+        "startChar": 5,
+        "endLine": 866,
+        "endChar": 21
+      },
+      "revId": "cd3484693f19e8290f71b6939aec8a622791b0ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "119dd0e0_2681b80e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1132,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-23T20:14:27Z",
+      "side": 1,
+      "message": "This bit should be added to `mNew*CommandBufferDirtyBits`.\n\nCould you please add a regression test for it?\n\n- Start a render pass using uniform buffer B\n- Close the render pass and start it again\n  * Missing dirty bit here means the second render pass is not tracking that it\u0027s using buffer B\n- Use the buffer in a way that would normally need to close the render pass, ghost the buffer, etc, like write data to it\n  * With the current change, it wouldn\u0027t do that which means the second RP is reading data written to B after the RP.\n  \n---\n\nEdit: reading on, I think that\u0027s actually not a problem because DIRTY_BIT_SHADER_RESOURCES handles UBOs too. I\u0027d still appreciate such a test though, it\u0027s unlikely to be something that\u0027s otherwise tested.",
+      "revId": "cd3484693f19e8290f71b6939aec8a622791b0ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "da85a0c7_51822478",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
         "patchSetId": 9
@@ -44,6 +84,23 @@
         "endLine": 2827,
         "endChar": 71
       },
+      "revId": "cd3484693f19e8290f71b6939aec8a622791b0ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "800e5105_5137af56",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 6237,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-23T20:14:27Z",
+      "side": 1,
+      "message": "This shouldn\u0027t depend on the command. What if the buffer change is processed on a dispatch call, but then a draw call uses the same buffer at the same binding (i.e. we don\u0027t otherwise get a dirty bit about the buffers having changed).",
       "revId": "cd3484693f19e8290f71b6939aec8a622791b0ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
