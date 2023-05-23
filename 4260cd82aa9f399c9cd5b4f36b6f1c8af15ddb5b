@@ -22,6 +22,30 @@
       },
       "revId": "4260cd82aa9f399c9cd5b4f36b6f1c8af15ddb5b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b826b35_5fbffaca",
+        "filename": "src/tests/restricted_traces/sync_restricted_traces_to_cipd.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-23T12:47:54Z",
+      "side": 1,
+      "message": "yeah I see how it can be confusing. I added comments, hopefully that makes it more clear.",
+      "parentUuid": "d0f3c704_08675d89",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 23
+      },
+      "revId": "4260cd82aa9f399c9cd5b4f36b6f1c8af15ddb5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
