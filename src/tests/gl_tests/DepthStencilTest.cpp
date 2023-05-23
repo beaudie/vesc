@@ -730,6 +730,72 @@ TEST_P(DepthStencilTestES3, ReadOnlyDepthStencilThenOutputDepthStencil)
     EXPECT_PIXEL_COLOR_EQ(kSize / 2, kSize / 2, GLColor::yellow);
 }
 
+// Reproduce a rendering issue on SwiftShader that causes shadows not to be drawn
+TEST_P(DepthStencilTestES3, Depth24Sample)
+{
+    ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3 && !IsGLExtensionEnabled("GL_OES_depth24"));
+
+    constexpr char kVS[] = R"(#version 300 es
+precision highp float;
+out vec2 tex_coord;
+void main()
+{
+    vec2 full_tri[3] = vec2[3] (vec2(-1, -1), vec2(-1, 3), vec2(3, -1));
+    gl_Position = vec4(full_tri[gl_VertexID], 0, 1);
+    tex_coord = (full_tri[gl_VertexID] + 1.0) / 2.0;
+})";
+
+    constexpr char kFS[] = R"(#version 300 es
+precision highp float;
+in vec2 tex_coord;
+out vec4 color;
+uniform highp sampler2D depth_tex;
+void main()
+{
+    float depth = texture(depth_tex, tex_coord).r;
+    color = vec4(depth, depth, depth, 1.0);
+})";
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+    glUseProgram(program);
+
+    // 2x2 Depth texture, all black with one gray corner
+    glActiveTexture(GL_TEXTURE0);
+    GLTexture depth_tex;
+    glBindTexture(GL_TEXTURE_2D, depth_tex);
+    GLuint depth_data[4] = {UINT_MAX / 2};
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, 2, 2, 0, GL_DEPTH_COMPONENT,
+                 GL_UNSIGNED_INT, depth_data);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_LOD, 0);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_LOD, 0);
+
+    // Undefined behavior per GLES 3.2 - 11.1.3.5 Texture Access
+    // The sampler used in a texture lookup function is not one of the shadow
+    // sampler types, the texture object's base internal format is
+    // DEPTH_COMPONENT or DEPTH_STENCIL, and the TEXTURE_COMPARE_MODE is not
+    // NONE.
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+
+    // Linear filtering also seems to be impacted by the above setting on Mesa.
+    // GL_LINEAR doesn't work with GL_TEXTURE_COMPARE_MODE set to GL_NONE
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // Render depth texture to full screen triangle
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glClearColor(1.0, 1.0, 1.0, 1.0);
+    glClearDepthf(1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    ASSERT_GL_NO_ERROR();
+
+    // Look for the gray corner
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, GLColor(127, 127, 127, 255), 1);
+}
+
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3_AND(
     DepthStencilTest,
     ES2_VULKAN().enable(Feature::ForceFallbackFormat),
