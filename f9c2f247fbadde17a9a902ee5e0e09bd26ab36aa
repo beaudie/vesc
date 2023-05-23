@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28d0df0d_37deb72f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-23T20:19:11Z",
+      "side": 1,
+      "message": "TBH, I\u0027d just leave this be. It\u0027s just more code for something with almost no impact; SSBOs and storage images are rarely used, and when they are there\u0027s like 1 or 2 of them, and UBOs probably change at the same time.",
+      "revId": "f9c2f247fbadde17a9a902ee5e0e09bd26ab36aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
