@@ -34,6 +34,24 @@
       "parentUuid": "da2388b2_cf80d71b",
       "revId": "c9ce8f33a8a44330b02ef56447ba8802a0ae0f0a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "752d173b_79fbaf6c",
+        "filename": "src/tests/compiler_tests/Precise_test.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-23T23:27:10Z",
+      "side": 0,
+      "message": "Ok. Given that `precise` is practically not used outside of tessellation, and that tessellation itself is rarely used, it\u0027s probably not worth going overboard with corner cases.",
+      "parentUuid": "43bd5291_ef24a46f",
+      "revId": "c9ce8f33a8a44330b02ef56447ba8802a0ae0f0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
