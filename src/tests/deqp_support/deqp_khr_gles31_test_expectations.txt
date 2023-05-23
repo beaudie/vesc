@@ -17,7 +17,7 @@
 ////
 
 // No known implementation supports STORAGE_TEXEL_BUFFER support for RGB32 formats
-3573 VULKAN : KHR-GLES31.core.texture_buffer.texture_buffer_texture_buffer_range = SKIP
+//3573 VULKAN : KHR-GLES31.core.texture_buffer.texture_buffer_texture_buffer_range = SKIP
 
 // Failures on nvidia
 5579 VULKAN NVIDIA : KHR-GLES31.core.geometry_shader.adjacency.adjacency_indiced_triangle_strip = FAIL
@@ -66,8 +66,8 @@
 4128 VULKAN NVIDIA : KHR-GLES31.core.shader_storage_buffer_object.advanced-unsizedArrayLength-fs-*-matR* = SKIP
 
 // https://gitlab.khronos.org/Tracker/vk-gl-cts/-/issues/4292
-5978 : KHR-GLES31.core.texture_border_clamp.Texture2DDC16Linear = SKIP
-5978 : KHR-GLES31.core.texture_border_clamp.Texture2DDC32FLinear = SKIP
+//5978 : KHR-GLES31.core.texture_border_clamp.Texture2DDC16Linear = SKIP
+//5978 : KHR-GLES31.core.texture_border_clamp.Texture2DDC32FLinear = SKIP
 
 ////
 //// SwANGLE expectations
@@ -78,7 +78,7 @@
 ////
 
 // Crashes on Android
-4107 VULKAN ANDROID : KHR-GLES31.core.shader_storage_buffer_object.advanced-unsizedArrayLength* = SKIP
+//4107 VULKAN ANDROID : KHR-GLES31.core.shader_storage_buffer_object.advanced-unsizedArrayLength* = SKIP
 
 // Failing on Android with SwiftShader
 4300 SWIFTSHADER ANDROID : KHR-GLES31.core.shader_integer_mix.mix-bvec4 = FAIL
@@ -105,7 +105,7 @@
 5806 VULKAN NVIDIA : KHR-GLES31.core.texture_storage_multisample.APIDependencies.fbo_with_renderbuffer_and_multisample_texture_attachments_with_different_number_of_samples = SKIP
 
 // New test in VK-GL-CTS roll 2022-08-19
-7592 ANDROID VULKAN : KHR-GLES31.core.shader_atomic_counters.negative-large-offset = FAIL
+//7592 ANDROID VULKAN : KHR-GLES31.core.shader_atomic_counters.negative-large-offset = FAIL
 
 // Pixel 4 expectations.
 5990 PIXEL4ORXL VULKAN : KHR-GLES31.core.compute_shader.built-in-variables = SKIP
@@ -258,8 +258,8 @@
 
 // Slow tests
 5755 SWIFTSHADER : KHR-GLES31.core.arrays_of_arrays.SizedDeclarationsPrimitive = TIMEOUT
-6295 : KHR-GLES31.core.arrays_of_arrays.ConstructorsAndUnsizedDeclConstructors1 = TIMEOUT
-6295 : KHR-GLES31.core.arrays_of_arrays.ConstructorsAndUnsizedDeclConstructorSizing1 = TIMEOUT
+//6295 : KHR-GLES31.core.arrays_of_arrays.ConstructorsAndUnsizedDeclConstructors1 = TIMEOUT
+//6295 : KHR-GLES31.core.arrays_of_arrays.ConstructorsAndUnsizedDeclConstructorSizing1 = TIMEOUT
 
 // ASAN Test bugs.
 6678 ASAN : KHR-GLES31.core.draw_indirect.negative-noVAO-arrays = SKIP
@@ -275,7 +275,7 @@
 6729 UBSAN : KHR-GLES31.core.compute_shader.shared-max = SKIP
 
 // Failure since VK-GL-CTS roll (2023-02-28)
-8045 : KHR-GLES31.shaders.negative.non_precision_qualifiers_in_struct_members = SKIP
+//8045 : KHR-GLES31.shaders.negative.non_precision_qualifiers_in_struct_members = SKIP
 
 // Failure since VK-GL-CTS roll (2023-05-03)
 8166 WIN SWIFTSHADER : KHR-GLES31.core.texture_buffer.texture_buffer_errors = FAIL
