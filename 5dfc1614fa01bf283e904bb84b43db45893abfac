@@ -22,6 +22,30 @@
       },
       "revId": "5dfc1614fa01bf283e904bb84b43db45893abfac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ecd6d07_e2010288",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 5720,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-05-23T16:16:44Z",
+      "side": 1,
+      "message": "FastMap itself has the assertion.",
+      "parentUuid": "26794c26_ff5fd8cf",
+      "range": {
+        "startLine": 5720,
+        "startChar": 25,
+        "endLine": 5720,
+        "endChar": 46
+      },
+      "revId": "5dfc1614fa01bf283e904bb84b43db45893abfac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
