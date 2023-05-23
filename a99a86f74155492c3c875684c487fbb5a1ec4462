@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "f19644ee_e8a82216",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-23T18:12:20Z",
+      "side": 1,
+      "message": "Could you please include the spec version too? And also a quote from the spec.\n\nI looked at all 4 specs (GLSL ES 100, 300, 310 and 320) and none of them have a 4.8.1 Structures section.",
+      "revId": "a99a86f74155492c3c875684c487fbb5a1ec4462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "7266043f_13cbc759",
@@ -14,6 +31,29 @@
       "writtenOn": "2023-05-22T20:52:35Z",
       "side": 1,
       "message": "PTAL",
+      "revId": "a99a86f74155492c3c875684c487fbb5a1ec4462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c1f78e5_134820bb",
+        "filename": "src/compiler/translator/ParseContext.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6423,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-23T18:12:20Z",
+      "side": 1,
+      "message": "super nit: `getAnyQualifierString`. Otherwise it sounds like \"first\" has some significance.",
+      "range": {
+        "startLine": 6423,
+        "startChar": 37,
+        "endLine": 6423,
+        "endChar": 42
+      },
       "revId": "a99a86f74155492c3c875684c487fbb5a1ec4462",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

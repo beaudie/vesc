@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da2388b2_cf80d71b",
+        "filename": "src/tests/compiler_tests/Precise_test.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-23T18:12:20Z",
+      "side": 0,
+      "message": "Could you please wrap the precise members into a separate struct and put `precise` on the struct definition itself? The spec says:\n\n\u003e When applied to a block, a structure type, or a variable of structure type, precise applies to each contained member, recursively.\n\nSo `precise struct S { ... }` should work, and the test can remain as is.\n\nIf the implementation of `precise` on struct definitions is broken, I\u0027d rather have the tests ready with a bug filed that says implementation is broken, rather than the tests removed.",
+      "revId": "c9ce8f33a8a44330b02ef56447ba8802a0ae0f0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
