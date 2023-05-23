@@ -39,6 +39,30 @@
       },
       "revId": "8170c302a8fba9492161e8b8696d3e28137b9814",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13516c92_8866178d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3008,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-05-23T16:22:28Z",
+      "side": 1,
+      "message": "It will be used for supporting `EXT_depth_clamp`.",
+      "parentUuid": "51e0c798_eef82dd2",
+      "range": {
+        "startLine": 3008,
+        "startChar": 30,
+        "endLine": 3008,
+        "endChar": 46
+      },
+      "revId": "8170c302a8fba9492161e8b8696d3e28137b9814",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
