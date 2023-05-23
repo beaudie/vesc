@@ -3,6 +3,46 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dd13fbba_04249b94",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-23T19:32:16Z",
+      "side": 1,
+      "message": "Reminder that we have a spare descriptor set that we could move input attachments to, so we can make that independent from program desc sets.",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 38
+      },
+      "revId": "5dfc1614fa01bf283e904bb84b43db45893abfac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0cb0afd_1b0bd763",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1493,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-23T19:32:16Z",
+      "side": 1,
+      "message": "nit: Please refactor into a helper, this function is quite large already.",
+      "revId": "5dfc1614fa01bf283e904bb84b43db45893abfac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "26794c26_ff5fd8cf",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 13
