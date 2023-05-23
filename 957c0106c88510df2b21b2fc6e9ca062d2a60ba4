@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66d4a932_6f35342d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 849,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-23T18:52:53Z",
+      "side": 1,
+      "message": "nit: buffer\n\nIs this talking about declared-in-shader-but-inactive or just all buffers that may be completely irrelevant to the program?",
+      "range": {
+        "startLine": 849,
+        "startChar": 60,
+        "endLine": 849,
+        "endChar": 65
+      },
+      "revId": "957c0106c88510df2b21b2fc6e9ca062d2a60ba4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
