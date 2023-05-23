@@ -22,6 +22,30 @@
       },
       "revId": "cd3484693f19e8290f71b6939aec8a622791b0ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c4af9a1_4860571a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2827,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-05-23T16:22:34Z",
+      "side": 1,
+      "message": "Will add a more detailed comment in next update. \n(Also a side note, at the end of these CLs, I am also experimenting to remove handleDirtyGraphicsShaderResources all together and replace it with DIRTY_BIT_UNIFORM_BUFFERS | DIRTY_BIT_STORAGE_BUFFERS | DIRTY_BIT_SHADER_IMAGES | DIRTY_BIT_ATOMIC_COUNTER_BUFFERS. I need to see how much extra overhead it will have.)",
+      "parentUuid": "da85a0c7_51822478",
+      "range": {
+        "startLine": 2827,
+        "startChar": 4,
+        "endLine": 2827,
+        "endChar": 71
+      },
+      "revId": "cd3484693f19e8290f71b6939aec8a622791b0ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
