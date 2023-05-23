@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da85a0c7_51822478",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 2827,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-23T15:19:58Z",
+      "side": 1,
+      "message": "This comment confuses me. What is intended to add to the function/bit naming below? Should it be something along the lines of \"set DIRTY_BIT_UNIFORM_BUFFERS here because...\", or no comment at all?",
+      "range": {
+        "startLine": 2827,
+        "startChar": 4,
+        "endLine": 2827,
+        "endChar": 71
+      },
+      "revId": "cd3484693f19e8290f71b6939aec8a622791b0ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
