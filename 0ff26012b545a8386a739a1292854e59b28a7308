@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87ab485d_a3ab09aa",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-23T20:10:13Z",
+      "side": 1,
+      "message": "Can you add a note about adding eglGetCurrentDisplay support to the EGL on WGL shim?",
+      "revId": "0ff26012b545a8386a739a1292854e59b28a7308",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9656c79_9e91f446",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-23T20:10:13Z",
+      "side": 1,
+      "message": "LGTM - thank Mark!\n\nRoman, only diff from when you reviewed is adding support for eglGetCurrentDisplay to our EGL on WGL shim.",
+      "revId": "0ff26012b545a8386a739a1292854e59b28a7308",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
