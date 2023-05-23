@@ -16,6 +16,24 @@
       "message": "Could you please wrap the precise members into a separate struct and put `precise` on the struct definition itself? The spec says:\n\n\u003e When applied to a block, a structure type, or a variable of structure type, precise applies to each contained member, recursively.\n\nSo `precise struct S { ... }` should work, and the test can remain as is.\n\nIf the implementation of `precise` on struct definitions is broken, I\u0027d rather have the tests ready with a bug filed that says implementation is broken, rather than the tests removed.",
       "revId": "c9ce8f33a8a44330b02ef56447ba8802a0ae0f0a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43bd5291_ef24a46f",
+        "filename": "src/tests/compiler_tests/Precise_test.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1359667
+      },
+      "writtenOn": "2023-05-23T21:10:29Z",
+      "side": 0,
+      "message": "I don\u0027t think there\u0027s a good way to fix these tests like that, because of the following restriction on the \"precise\" qualifier:\n\n\"This qualifier will affect the evaluation of an r-value in a particular function if and only if the result\nis eventually consumed in the same function by an l-value qualified as precise. Any other\nexpressions within a function are not affected, including return values and output parameters not\ndeclared as precise but that are eventually consumed outside the function by a variable qualified\nas precise.\" (GLSL ES 3.2 spec, section 4.9)\n\nIf you assign to a non-precise lvalue that has a struct member that is precise, I think this implies that the precise nature of the struct members is ignored. I\u0027m not fully confident in this, but it seems to me as if mixed precise/non-precise struct members is not something the spec allows in a meaningful way.\n\nRegardless, for this test in particular, the purpose is to \"Test that precise on struct member works\", which is explicitly disallowed by the specification.",
+      "parentUuid": "da2388b2_cf80d71b",
+      "revId": "c9ce8f33a8a44330b02ef56447ba8802a0ae0f0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
