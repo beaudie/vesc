@@ -16,6 +16,24 @@
       "message": "This appears to have broken Android roller: https://r.android.com/2601286\nLogcat shows a bunch of various shaders wtih \"Shader compilation error\" which seems odd, not sure if this can be a side effect of this CL?..",
       "revId": "7abc5248d8657811a029e0901d65787a8f625645",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fbcb09f_81e294e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-05-24T12:49:21Z",
+      "side": 1,
+      "message": "The only shader-related difference introduced by this CL is enabling the `clampFragDepth` workaround, which is needed on some drivers when `VK_EXT_depth_clamp_zero_one` is not available.\n\nIs it possible to check specific shaders that fail to compile? There were no errors on ANGLE\u0027s Android bots. In the meantime, we could try restricting the workaround to the affected drivers.",
+      "parentUuid": "185394bc_cf97f5d9",
+      "revId": "7abc5248d8657811a029e0901d65787a8f625645",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
