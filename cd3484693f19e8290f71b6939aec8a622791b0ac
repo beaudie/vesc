@@ -205,6 +205,24 @@
       "parentUuid": "3f72d69e_e5d9fe7a",
       "revId": "cd3484693f19e8290f71b6939aec8a622791b0ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c571bda_0ab68b9c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 6237,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-24T18:34:31Z",
+      "side": 1,
+      "message": "Thanks. I did realize _currently_ binding the program sets SHADER_RESOURCE, but I think it\u0027s more for simplicity than anything. If we track the program\u0027s \"layout\" as a separate entity, you could switch a program to another with the same layout and then you won\u0027t need to actually reprocess the descriptor sets.",
+      "parentUuid": "d4ddabf2_c6341283",
+      "revId": "cd3484693f19e8290f71b6939aec8a622791b0ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
