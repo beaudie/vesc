@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2fa1a20a_4aea29a4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-24T18:28:07Z",
+      "side": 1,
+      "message": "We used to use 4 descriptor sets, but we turned driver uniforms into push constants so we use 3 descriptor sets now. Vulkan requires that drivers support at least 4 sets, so we have 1 descriptor set index free to use.\n\nWe can put input attachments into their own descriptor set and update it per render pass instead of per program.",
+      "parentUuid": "e4a3288e_880873e1",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 38
+      },
+      "revId": "5dfc1614fa01bf283e904bb84b43db45893abfac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c0cb0afd_1b0bd763",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 13
