@@ -70,6 +70,24 @@
       "parentUuid": "b393e7c7_6ea89daa",
       "revId": "7abc5248d8657811a029e0901d65787a8f625645",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ac12106_291d40d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-24T17:22:04Z",
+      "side": 1,
+      "message": "Thanks, https://crrev.com/c/4562134 appears to have resolved the issue: https://r.android.com/2602825 passed Android presubmits. I don\u0027t understand how exactly things got broken, it might be specific to the way things are set up in Cuttlefish (if so, that would explain why we didn\u0027t catch this on ANGLE CI)",
+      "parentUuid": "d61a90ca_40a9af65",
+      "revId": "7abc5248d8657811a029e0901d65787a8f625645",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
