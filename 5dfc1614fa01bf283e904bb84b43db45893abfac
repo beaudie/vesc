@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e4a3288e_880873e1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-05-24T17:29:46Z",
+      "side": 1,
+      "message": "Not exactly sure what that is, are you referring to default uniform descriptor set?",
+      "parentUuid": "dd13fbba_04249b94",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 38
+      },
+      "revId": "5dfc1614fa01bf283e904bb84b43db45893abfac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c0cb0afd_1b0bd763",
         "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
         "patchSetId": 13
@@ -37,6 +61,24 @@
       "writtenOn": "2023-05-23T19:32:16Z",
       "side": 1,
       "message": "nit: Please refactor into a helper, this function is quite large already.",
+      "revId": "5dfc1614fa01bf283e904bb84b43db45893abfac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce0df8cf_4ed74d8f",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 1493,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-05-24T17:29:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0cb0afd_1b0bd763",
       "revId": "5dfc1614fa01bf283e904bb84b43db45893abfac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
