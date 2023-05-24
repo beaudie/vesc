@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c21a571_3459888b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-05-24T19:56:40Z",
+      "side": 1,
+      "message": "I see. That is a something we can try with follow up CL.",
+      "parentUuid": "2fa1a20a_4aea29a4",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 38
+      },
+      "revId": "5dfc1614fa01bf283e904bb84b43db45893abfac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c0cb0afd_1b0bd763",
