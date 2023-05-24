@@ -34,6 +34,24 @@
       "parentUuid": "185394bc_cf97f5d9",
       "revId": "7abc5248d8657811a029e0901d65787a8f625645",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b393e7c7_6ea89daa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-24T12:51:51Z",
+      "side": 1,
+      "message": "+1 to restricting `clampFragDepth` to Nvidia (at least for now). Without `VK_EXT_depth_clamp_zero_one`, the spec says the implementation \"may\" clamp. The majority of implementations seem to clamp anyway so `clampFragDepth` is wasted effort on those implementations.",
+      "parentUuid": "0fbcb09f_81e294e0",
+      "revId": "7abc5248d8657811a029e0901d65787a8f625645",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
