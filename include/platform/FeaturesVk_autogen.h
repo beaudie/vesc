@@ -62,6 +62,11 @@ struct FeaturesVk : FeatureSetBase
         "VkDevice supports the VK_EXT_depth_clamp_zero_one extension", &members,
         "http://anglebug.com/3970"};
 
+    FeatureInfo clampFragDepth = {
+        "clampFragDepth", FeatureCategory::VulkanWorkarounds,
+        "gl_FragDepth is not clamped correctly when rendering to a floating point depth buffer",
+        &members, "http://anglebug.com/3970"};
+
     FeatureInfo mutableMipmapTextureUpload = {
         "mutableMipmapTextureUpload", FeatureCategory::VulkanFeatures,
         "Enable uploading the previously defined mutable mipmap texture.", &members,
