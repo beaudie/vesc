@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "185394bc_cf97f5d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-24T12:29:20Z",
+      "side": 1,
+      "message": "This appears to have broken Android roller: https://r.android.com/2601286\nLogcat shows a bunch of various shaders wtih \"Shader compilation error\" which seems odd, not sure if this can be a side effect of this CL?..",
+      "revId": "7abc5248d8657811a029e0901d65787a8f625645",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
