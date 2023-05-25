@@ -1596,6 +1596,10 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
     if (traceNameIs("honkai_star_rail"))
     {
         addExtensionPrerequisite("GL_KHR_texture_compression_astc_ldr");
+        if (isIntelWin)
+        {
+            skipTest("Consistently stuck on Intel/windows");
+        }
     }
 
     // glDebugMessageControlKHR and glDebugMessageCallbackKHR crash on ARM GLES1.
