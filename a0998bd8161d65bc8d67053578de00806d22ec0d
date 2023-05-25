@@ -33,6 +33,24 @@
       "message": "Roman, could you CQ, looks like i can only dry run",
       "revId": "a0998bd8161d65bc8d67053578de00806d22ec0d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef29048c_7c7b8314",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-25T15:25:53Z",
+      "side": 1,
+      "message": "done, thanks",
+      "parentUuid": "ec5a1a07_8acdf381",
+      "revId": "a0998bd8161d65bc8d67053578de00806d22ec0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
