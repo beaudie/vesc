@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9aed0733_f1371699",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-25T21:01:20Z",
+      "side": 1,
+      "message": "I see. Changed the first check to an assert instead.",
+      "parentUuid": "8ad44f3e_5e85d1bf",
+      "range": {
+        "startLine": 309,
+        "startChar": 4,
+        "endLine": 310,
+        "endChar": 21
+      },
+      "revId": "b862a204bcc882ffa4879084c7617a7002f860b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a5e6f4e9_ff57d51b",
@@ -54,6 +78,24 @@
       "writtenOn": "2023-05-25T20:39:08Z",
       "side": 1,
       "message": "Can you add an assertion:\nASSERT(getBaseLevelFormat(renderer).getIntendedFormatID() \u003d\u003d getBaseLevelFormat(renderer).getActualFormatID(getRequiredImageAccess()));",
+      "revId": "b862a204bcc882ffa4879084c7617a7002f860b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee0c9a7e_e7e64475",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 2941,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-25T21:01:20Z",
+      "side": 1,
+      "message": "This assert fails on Linux:\n```\ngetBaseLevelFormat(renderer).getIntendedFormatID()\n-\u003e R32G32B32_UINT\ngetBaseLevelFormat(renderer).getActualImageFormatID(getRequiredImageAccess())\n-\u003e R32G32B32A32_UINT\n```\n\nDo you mean we should check for `GetRGBAEmulationDstFormat(first) \u003d\u003d second`?",
+      "parentUuid": "a5e6f4e9_ff57d51b",
       "revId": "b862a204bcc882ffa4879084c7617a7002f860b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
