@@ -5432,9 +5432,9 @@ void WriteDescriptorDescBuilder::updateShaderBuffers(
 {
     // Initialize the descriptor writes in a first pass. This ensures we can pack the structures
     // corresponding to array elements tightly.
-    for (uint32_t bufferIndex = 0; bufferIndex < blocks.size(); ++bufferIndex)
+    for (uint32_t blockIndex = 0; blockIndex < blocks.size(); ++blockIndex)
     {
-        const gl::InterfaceBlock &block = blocks[bufferIndex];
+        const gl::InterfaceBlock &block = blocks[blockIndex];
 
         if (!block.isActive(shaderType))
         {
@@ -5442,7 +5442,7 @@ void WriteDescriptorDescBuilder::updateShaderBuffers(
         }
 
         const ShaderInterfaceVariableInfo &info =
-            variableInfoMap.getIndexedVariableInfo(shaderType, variableType, bufferIndex);
+            variableInfoMap.getIndexedVariableInfo(shaderType, variableType, blockIndex);
         if (info.isDuplicate)
         {
             continue;
@@ -6086,6 +6086,82 @@ void DescriptorSetDescBuilder::updateShaderBuffers(
         uint32_t binding       = info.binding;
         uint32_t arrayElement  = block.isArray ? block.arrayElement : 0;
         uint32_t infoDescIndex = writeDescriptorDescs[binding].descriptorInfoIndex + arrayElement;
+
+        if (bufferBinding.get() == nullptr)
+        {
+            DescriptorInfoDesc emptyDesc = {};
+            SetBitField(emptyDesc.imageLayoutOrRange, emptyBuffer.getSize());
+            emptyDesc.imageViewSerialOrOffset = 0;
+            emptyDesc.samplerOrBufferSerial   = emptyBuffer.getBlockSerial().getValue();
+
+            mDesc.updateInfoDesc(infoDescIndex, emptyDesc);
+
+            mHandles[infoDescIndex].buffer = emptyBuffer.getBuffer().getHandle();
+
+            if (IsDynamicDescriptor(descriptorType))
+            {
+                mDynamicOffsets[infoDescIndex] = 0;
+            }
+        }
+        else
+        {
+            // Limit bound buffer size to maximum resource binding size.
+            GLsizeiptr boundBufferSize = gl::GetBoundBufferAvailableSize(bufferBinding);
+            VkDeviceSize size = std::min<VkDeviceSize>(boundBufferSize, maxBoundBufferRange);
+
+            // Make sure there's no possible under/overflow with binding size.
+            static_assert(sizeof(VkDeviceSize) >= sizeof(bufferBinding.getSize()),
+                          "VkDeviceSize too small");
+            ASSERT(bufferBinding.getSize() >= 0);
+
+            BufferVk *bufferVk         = vk::GetImpl(bufferBinding.get());
+            BufferHelper &bufferHelper = bufferVk->getBuffer();
+
+            DescriptorInfoDesc infoDesc = {};
+            SetBitField(infoDesc.imageLayoutOrRange, size);
+            infoDesc.samplerOrBufferSerial = bufferHelper.getBlockSerial().getValue();
+
+            VkDeviceSize offset = bufferBinding.getOffset() + bufferHelper.getOffset();
+
+            if (IsDynamicDescriptor(descriptorType))
+            {
+                SetBitField(mDynamicOffsets[infoDescIndex], offset);
+            }
+            else
+            {
+                SetBitField(infoDesc.imageViewSerialOrOffset, offset);
+            }
+
+            mDesc.updateInfoDesc(infoDescIndex, infoDesc);
+
+            mHandles[infoDescIndex].buffer = bufferHelper.getBuffer().getHandle();
+        }
+    }
+}
+
+void DescriptorSetDescBuilder::updateUniformBuffers(
+    const gl::BufferVector &buffers,
+    const std::vector<gl::InterfaceBlock> &blocks,
+    const std::vector<uint32_t> &infoIndices,
+    VkDescriptorType descriptorType,
+    VkDeviceSize maxBoundBufferRange,
+    const BufferHelper &emptyBuffer,
+    const WriteDescriptorDescs &writeDescriptorDescs)
+{
+    // Now that we have the proper array elements counts, initialize the info structures.
+    for (uint32_t blockIndex = 0; blockIndex < blocks.size(); ++blockIndex)
+    {
+        const gl::InterfaceBlock &block                           = blocks[blockIndex];
+        const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding = buffers[block.binding];
+
+        if (infoIndices[blockIndex] == kInvalidDescriptorSetInfoIndex)
+        {
+            continue;
+        }
+
+        uint32_t arrayElement = block.isArray ? block.arrayElement : 0;
+        uint32_t infoDescIndex =
+            writeDescriptorDescs[infoIndices[blockIndex]].descriptorInfoIndex + arrayElement;
 
         if (bufferBinding.get() == nullptr)
         {

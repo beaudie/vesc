@@ -107,6 +107,7 @@ using DescriptorSetCountList   = angle::PackedEnumMap<DescriptorSetIndex, uint32
 using ImmutableSamplerIndexMap = angle::HashMap<vk::YcbcrConversionDesc, uint32_t>;
 
 using DefaultUniformBlockMap = gl::ShaderMap<std::shared_ptr<DefaultUniformBlock>>;
+static constexpr uint32_t kInvalidDescriptorSetInfoIndex = 0xff;
 
 class ProgramExecutableVk
 {
@@ -267,6 +268,10 @@ class ProgramExecutableVk
                    ? mDefaultUniformWriteDescriptorDescBuilder.getDescs()
                    : mDefaultUniformAndXfbWriteDescriptorDescBuilder.getDescs();
     }
+    const std::vector<uint32_t> &getCachedUniformBufferInfoIndices() const
+    {
+        return mCachedUniformBufferInfoIndices;
+    }
 
   private:
     friend class ProgramVk;
@@ -383,6 +388,7 @@ class ProgramExecutableVk
     void resetLayout(ContextVk *contextVk);
     void initializeWriteDescriptorDesc(ContextVk *contextVk,
                                        const gl::ProgramExecutable &glExecutable);
+    void initializeCachedUniformBufferInfoIndices(const gl::ProgramExecutable &glExecutable);
 
     // Descriptor sets and pools for shader resources for this program.
     vk::DescriptorSetArray<VkDescriptorSet> mDescriptorSets;
@@ -446,6 +452,8 @@ class ProgramExecutableVk
     vk::WriteDescriptorDescBuilder mTextureWriteDescriptorDescBuilder;
     vk::WriteDescriptorDescBuilder mDefaultUniformWriteDescriptorDescBuilder;
     vk::WriteDescriptorDescBuilder mDefaultUniformAndXfbWriteDescriptorDescBuilder;
+    // Cached infoMap.binding of uniformBlock for fast access without loop over shader.
+    std::vector<uint32_t> mCachedUniformBufferInfoIndices;
 };
 
 }  // namespace rx

@@ -2845,16 +2845,15 @@ angle::Result ContextVk::handleDirtyUniformBuffersImpl(CommandBufferT *commandBu
 
     const VkPhysicalDeviceLimits &limits = mRenderer->getPhysicalDeviceProperties().limits;
     ProgramExecutableVk &executableVk    = *getExecutable();
-    const ShaderInterfaceVariableInfoMap &variableInfoMap = executableVk.getVariableInfoMap();
+
+    mShaderBuffersDescriptorDesc.updateUniformBuffers(
+        mState.getOffsetBindingPointerUniformBuffers(), executable->getUniformBlocks(),
+        executableVk.getCachedUniformBufferInfoIndices(),
+        executableVk.getUniformBufferDescriptorType(), limits.maxUniformBufferRange, mEmptyBuffer,
+        mShaderBufferWriteDescriptorDescBuilder.getDescs());
 
     for (gl::ShaderType shaderType : executable->getLinkedShaderStages())
     {
-        mShaderBuffersDescriptorDesc.updateShaderBuffers(
-            shaderType, ShaderVariableType::UniformBuffer, variableInfoMap,
-            mState.getOffsetBindingPointerUniformBuffers(), executable->getUniformBlocks(),
-            executableVk.getUniformBufferDescriptorType(), limits.maxUniformBufferRange,
-            mEmptyBuffer, mShaderBufferWriteDescriptorDescBuilder.getDescs());
-
         const vk::PipelineStage pipelineStage = vk::GetPipelineStage(shaderType);
         UpdateShaderUniformBuffers(this, commandBufferHelper, shaderType, pipelineStage,
                                    executable->getUniformBlocks(),
@@ -6284,13 +6283,13 @@ angle::Result ContextVk::updateShaderResourcesDescriptorDesc(PipelineType pipeli
         gl::ShaderType::Fragment, *executable, variableInfoMap,
         vk::GetImpl(mState.getDrawFramebuffer()));
 
+    mShaderBuffersDescriptorDesc.updateUniformBuffers(
+        mState.getOffsetBindingPointerUniformBuffers(), executable->getUniformBlocks(),
+        executableVk.getCachedUniformBufferInfoIndices(),
+        executableVk.getUniformBufferDescriptorType(), limits.maxUniformBufferRange, mEmptyBuffer,
+        mShaderBufferWriteDescriptorDescBuilder.getDescs());
     for (gl::ShaderType shaderType : executable->getLinkedShaderStages())
     {
-        mShaderBuffersDescriptorDesc.updateShaderBuffers(
-            shaderType, ShaderVariableType::UniformBuffer, variableInfoMap,
-            mState.getOffsetBindingPointerUniformBuffers(), executable->getUniformBlocks(),
-            executableVk.getUniformBufferDescriptorType(), limits.maxUniformBufferRange,
-            mEmptyBuffer, mShaderBufferWriteDescriptorDescBuilder.getDescs());
         mShaderBuffersDescriptorDesc.updateShaderBuffers(
             shaderType, ShaderVariableType::ShaderStorageBuffer, variableInfoMap,
             mState.getOffsetBindingPointerShaderStorageBuffers(),

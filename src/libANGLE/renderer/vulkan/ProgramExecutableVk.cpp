@@ -1119,6 +1119,42 @@ angle::Result ProgramExecutableVk::addTextureDescriptorSetDesc(
     return angle::Result::Continue;
 }
 
+void ProgramExecutableVk::initializeCachedUniformBufferInfoIndices(
+    const gl::ProgramExecutable &glExecutable)
+{
+    const gl::ShaderBitSet &linkedShaderStages           = glExecutable.getLinkedShaderStages();
+    const std::vector<gl::InterfaceBlock> &uniformBlocks = glExecutable.getUniformBlocks();
+
+    mCachedUniformBufferInfoIndices.resize(uniformBlocks.size());
+    for (size_t i = 0; i < uniformBlocks.size(); i++)
+    {
+        mCachedUniformBufferInfoIndices[i] = kInvalidDescriptorSetInfoIndex;
+    }
+
+    for (gl::ShaderType shaderType : linkedShaderStages)
+    {
+        for (uint32_t blockIndex = 0; blockIndex < uniformBlocks.size(); ++blockIndex)
+        {
+            const gl::InterfaceBlock &block = uniformBlocks[blockIndex];
+
+            if (!block.isActive(shaderType))
+            {
+                continue;
+            }
+
+            const ShaderInterfaceVariableInfo &info = mVariableInfoMap.getIndexedVariableInfo(
+                shaderType, ShaderVariableType::UniformBuffer, blockIndex);
+            if (info.isDuplicate)
+            {
+                continue;
+            }
+
+            ASSERT(mCachedUniformBufferInfoIndices[blockIndex] == kInvalidDescriptorSetInfoIndex);
+            mCachedUniformBufferInfoIndices[blockIndex] = info.binding;
+        }
+    }
+}
+
 void ProgramExecutableVk::initializeWriteDescriptorDesc(ContextVk *contextVk,
                                                         const gl::ProgramExecutable &glExecutable)
 {
@@ -1550,6 +1586,7 @@ angle::Result ProgramExecutableVk::createPipelineLayout(
         ANGLE_TRY(contextVk->switchToFramebufferFetchMode(true));
     }
 
+    initializeCachedUniformBufferInfoIndices(glExecutable);
     initializeWriteDescriptorDesc(contextVk, glExecutable);
 
     return angle::Result::Continue;
