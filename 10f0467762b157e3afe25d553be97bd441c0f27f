@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b5ae6e8_b17ee378",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5087,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-25T21:40:16Z",
+      "side": 1,
+      "message": "Does this work?\n\n```\n   float minSampleShading \u003d getFeatures().forceMaximumMinSampleShading.enabled\n                                ? 1\n                                : mState.getMinSampleShading();\n```\n\nor even with `sampleShadingEnable \u0026\u0026` added to the condition. It feels a bit more natural to pretend that the front-end state itself was 1.0.",
+      "revId": "10f0467762b157e3afe25d553be97bd441c0f27f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04587a6b_1f8ae5c7",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3783,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-25T21:40:16Z",
+      "side": 1,
+      "message": "nit: if all we care about is recent enough radv where `driverID` is available, might as well just check `driverId \u003d\u003d VK_DRIVER_ID_MESA_RADV`.",
+      "range": {
+        "startLine": 3783,
+        "startChar": 67,
+        "endLine": 3783,
+        "endChar": 93
+      },
+      "revId": "10f0467762b157e3afe25d553be97bd441c0f27f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
