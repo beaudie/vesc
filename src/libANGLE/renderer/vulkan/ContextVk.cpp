@@ -5098,6 +5098,10 @@ void ContextVk::updateSampleShadingWithRasterizationSamples(const uint32_t raste
             minSampleShading    = 1.0;
         }
     }
+    else if (sampleShadingEnable && getFeatures().forceMaximumMinSampleShading.enabled)
+    {
+        minSampleShading = 1.0;
+    }
 
     mGraphicsPipelineDesc->updateSampleShading(&mGraphicsPipelineTransition, sampleShadingEnable,
                                                minSampleShading);

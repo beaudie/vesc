@@ -101,6 +101,23 @@ bool IsVenus(uint32_t driverId, const char *deviceName)
     return strstr(deviceName, "Venus") != nullptr;
 }
 
+bool IsRADV(uint32_t vendorId, uint32_t driverId, const char *deviceName)
+{
+    if (!IsAMD(vendorId))
+    {
+        return false;
+    }
+
+    // Check against RADV driver id.
+    if (driverId == VK_DRIVER_ID_MESA_RADV)
+    {
+        return true;
+    }
+
+    // Fallback to check if below Venus.
+    return IsVenus(driverId, deviceName);
+}
+
 bool IsQualcommOpenSource(uint32_t vendorId, uint32_t driverId, const char *deviceName)
 {
     if (!IsQualcomm(vendorId))
@@ -3762,6 +3779,10 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // MESA Virtio-GPU Venus driver: https://docs.mesa3d.org/drivers/venus.html
     const bool isVenus = IsVenus(mDriverProperties.driverID, mPhysicalDeviceProperties.deviceName);
 
+    // MESA RADV driver: https://docs.mesa3d.org/drivers/radv.html
+    const bool isRADV = IsRADV(mPhysicalDeviceProperties.vendorID, mDriverProperties.driverID,
+                               mPhysicalDeviceProperties.deviceName);
+
     const bool isGalaxyS23 =
         IsGalaxyS23(mPhysicalDeviceProperties.vendorID, mPhysicalDeviceProperties.deviceID);
 
@@ -4563,6 +4584,10 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // Some ARM drivers may not free memory in "vkFreeCommandBuffers()" without
     // VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT flag.
     ANGLE_FEATURE_CONDITION(&mFeatures, useResetCommandBufferBitForSecondaryPools, isARM);
+
+    // AMD MESA RADV driver is returning false sample mask being zero when minSampleShading is below
+    // 0.5f for MSAA 4x+ on samples 2+. https://issuetracker.google.com/274478377
+    ANGLE_FEATURE_CONDITION(&mFeatures, forceMaximumMinSampleShading, isRADV);
 
     // Required to pass android.media.cts.DecodeAccuracyTest with MESA Virtio-GPU Venus driver in
     // virtualized environment. https://issuetracker.google.com/246378938
