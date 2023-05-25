@@ -910,6 +910,11 @@ struct FeaturesVk : FeatureSetBase
     FeatureInfo limitSampleCountTo2 = {"limitSampleCountTo2", FeatureCategory::VulkanWorkarounds,
                                        "Limit sample count to 2 to save memory on low end devices.",
                                        &members, "http://anglebug.com/8162"};
+
+    FeatureInfo forceMaximumMinSampleShading = {
+        "forceMaximumMinSampleShading", FeatureCategory::VulkanWorkarounds,
+        "Force minSampleShading to be 1.0 due to driver bug.", &members,
+        "https://issuetracker.google.com/274478377"};
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

@@ -160,6 +160,7 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
      "forceFragmentShaderPrecisionHighpToMediump"},
     {Feature::ForceGlErrorChecking, "forceGlErrorChecking"},
     {Feature::ForceInitShaderVariables, "forceInitShaderVariables"},
+    {Feature::ForceMaximumMinSampleShading, "forceMaximumMinSampleShading"},
     {Feature::ForceMaxUniformBufferSize16KB, "forceMaxUniformBufferSize16KB"},
     {Feature::ForceNearestFiltering, "forceNearestFiltering"},
     {Feature::ForceNearestMipFiltering, "forceNearestMipFiltering"},
