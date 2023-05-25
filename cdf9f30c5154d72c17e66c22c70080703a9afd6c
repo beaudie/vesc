@@ -34,6 +34,24 @@
       "parentUuid": "92811884_b7d971c4",
       "revId": "cdf9f30c5154d72c17e66c22c70080703a9afd6c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c71e1f6_1695fcea",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-05-25T17:38:04Z",
+      "side": 1,
+      "message": "True :) I commented out the whole test except for these lines:\n```\nVulkanHelper helper;\nhelper.initializeFromANGLE();\n```\nHowever, there is still flakiness in the test when running with `ES3_Vulkan_SwiftShader_AsyncCommandQueue`",
+      "parentUuid": "ae5b8013_39a8dfa9",
+      "revId": "cdf9f30c5154d72c17e66c22c70080703a9afd6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
