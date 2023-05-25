@@ -5457,6 +5457,10 @@ void WriteDescriptorDescBuilder::updateShaderBuffers(
         {
             updateWriteDesc(info.binding, descriptorType, 1);
         }
+
+        uint32_t arrayElement = block.isArray ? block.arrayElement : 0;
+        mBufferBindingToInfoDescIndexMap[block.binding].set(
+            mDescs[info.binding].descriptorInfoIndex + arrayElement);
     }
 }
 
@@ -6135,6 +6139,83 @@ void DescriptorSetDescBuilder::updateShaderBuffers(
             mDesc.updateInfoDesc(infoDescIndex, infoDesc);
 
             mHandles[infoDescIndex].buffer = bufferHelper.getBuffer().getHandle();
+        }
+    }
+}
+
+void DescriptorSetDescBuilder::updateShaderUniformBuffers(
+    const gl::BufferVector &buffers,
+    VkDescriptorType descriptorType,
+    VkDeviceSize maxBoundBufferRange,
+    const BufferHelper &emptyBuffer,
+    const WriteDescriptorDescBuilder &writeDescriptorDescsBuilder,
+    const angle::FastMap<InfoDescIndexMask, kFastDescriptorSetDescLimit>
+        &bufferBindingToInfoDescIndexMap)
+{
+    // Now that we have the proper array elements counts, initialize the info structures.
+    for (uint32_t bufferBindingIndex = 0;
+         bufferBindingIndex < bufferBindingToInfoDescIndexMap.size(); bufferBindingIndex++)
+    {
+        const InfoDescIndexMask &infoDescIndexMask =
+            bufferBindingToInfoDescIndexMap[bufferBindingIndex];
+        if (infoDescIndexMask.none())
+        {
+            continue;
+        }
+
+        const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding = buffers[bufferBindingIndex];
+        for (size_t index : infoDescIndexMask)
+        {
+            uint32_t infoDescIndex = static_cast<uint32_t>(index);
+            if (bufferBinding.get() == nullptr)
+            {
+                DescriptorInfoDesc emptyDesc = {};
+                SetBitField(emptyDesc.imageLayoutOrRange, emptyBuffer.getSize());
+                emptyDesc.imageViewSerialOrOffset = 0;
+                emptyDesc.samplerOrBufferSerial   = emptyBuffer.getBlockSerial().getValue();
+
+                mDesc.updateInfoDesc(infoDescIndex, emptyDesc);
+
+                mHandles[infoDescIndex].buffer = emptyBuffer.getBuffer().getHandle();
+
+                if (IsDynamicDescriptor(descriptorType))
+                {
+                    mDynamicOffsets[infoDescIndex] = 0;
+                }
+            }
+            else
+            {
+                // Limit bound buffer size to maximum resource binding size.
+                GLsizeiptr boundBufferSize = gl::GetBoundBufferAvailableSize(bufferBinding);
+                VkDeviceSize size = std::min<VkDeviceSize>(boundBufferSize, maxBoundBufferRange);
+
+                // Make sure there's no possible under/overflow with binding size.
+                static_assert(sizeof(VkDeviceSize) >= sizeof(bufferBinding.getSize()),
+                              "VkDeviceSize too small");
+                ASSERT(bufferBinding.getSize() >= 0);
+
+                BufferVk *bufferVk         = vk::GetImpl(bufferBinding.get());
+                BufferHelper &bufferHelper = bufferVk->getBuffer();
+
+                DescriptorInfoDesc infoDesc = {};
+                SetBitField(infoDesc.imageLayoutOrRange, size);
+                infoDesc.samplerOrBufferSerial = bufferHelper.getBlockSerial().getValue();
+
+                VkDeviceSize offset = bufferBinding.getOffset() + bufferHelper.getOffset();
+
+                if (IsDynamicDescriptor(descriptorType))
+                {
+                    SetBitField(mDynamicOffsets[infoDescIndex], offset);
+                }
+                else
+                {
+                    SetBitField(infoDesc.imageViewSerialOrOffset, offset);
+                }
+
+                mDesc.updateInfoDesc(infoDescIndex, infoDesc);
+
+                mHandles[infoDescIndex].buffer = bufferHelper.getBuffer().getHandle();
+            }
         }
     }
 }

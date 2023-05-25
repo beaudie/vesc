@@ -383,6 +383,7 @@ class ProgramExecutableVk
     void resetLayout(ContextVk *contextVk);
     void initializeWriteDescriptorDesc(ContextVk *contextVk,
                                        const gl::ProgramExecutable &glExecutable);
+    void updateUniformBlockBinding(const gl::Context *context);
 
     // Descriptor sets and pools for shader resources for this program.
     vk::DescriptorSetArray<VkDescriptorSet> mDescriptorSets;

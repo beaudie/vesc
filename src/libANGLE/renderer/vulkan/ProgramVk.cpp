@@ -339,6 +339,24 @@ GLboolean ProgramVk::validate(const gl::Caps &caps, gl::InfoLog *infoLog)
     return GL_TRUE;
 }
 
+angle::Result ProgramVk::syncState(const gl::Context *context,
+                                   const gl::Program::DirtyBits &dirtyBits)
+{
+    ASSERT(dirtyBits.any());
+
+    /*    for (auto iter = dirtyBits.begin(), endIter = dirtyBits.end(); iter != endIter; ++iter)
+        {
+            size_t dirtyBit = *iter;
+            if(dirtyBit >= gl::Program::DIRTY_BIT_UNIFORM_BLOCK_BINDING_0 &&
+                dirtyBit < gl::Program::DIRTY_BIT_UNIFORM_BLOCK_BINDING_MAX)
+            {
+                uint32_t blockIndex = dirtyBit - gl::Program::DIRTY_BIT_UNIFORM_BLOCK_BINDING_0;
+            }
+        }*/
+    mExecutable.updateUniformBlockBinding(context);
+    return angle::Result::Continue;
+}
+
 template <typename T>
 void ProgramVk::setUniformImpl(GLint location, GLsizei count, const T *v, GLenum entryPointType)
 {

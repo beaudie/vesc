@@ -1119,6 +1119,28 @@ angle::Result ProgramExecutableVk::addTextureDescriptorSetDesc(
     return angle::Result::Continue;
 }
 
+void ProgramExecutableVk::updateUniformBlockBinding(const gl::Context *context)
+{
+    const gl::ProgramExecutable &glExecutable  = *context->getState().getProgramExecutable();
+    const gl::ShaderBitSet &linkedShaderStages = glExecutable.getLinkedShaderStages();
+
+    // Update mShaderResourceWriteDescriptorDescBuilder
+    mShaderResourceWriteDescriptorDescBuilder.reset();
+    for (gl::ShaderType shaderType : linkedShaderStages)
+    {
+        mShaderResourceWriteDescriptorDescBuilder.updateShaderBuffers(
+            shaderType, ShaderVariableType::UniformBuffer, mVariableInfoMap,
+            glExecutable.getUniformBlocks(), getUniformBufferDescriptorType());
+        mShaderResourceWriteDescriptorDescBuilder.updateShaderBuffers(
+            shaderType, ShaderVariableType::ShaderStorageBuffer, mVariableInfoMap,
+            glExecutable.getShaderStorageBlocks(), getStorageBufferDescriptorType());
+        mShaderResourceWriteDescriptorDescBuilder.updateAtomicCounters(
+            shaderType, mVariableInfoMap, glExecutable.getAtomicCounterBuffers());
+        mShaderResourceWriteDescriptorDescBuilder.updateImages(shaderType, glExecutable,
+                                                               mVariableInfoMap);
+    }
+}
+
 void ProgramExecutableVk::initializeWriteDescriptorDesc(ContextVk *contextVk,
                                                         const gl::ProgramExecutable &glExecutable)
 {
