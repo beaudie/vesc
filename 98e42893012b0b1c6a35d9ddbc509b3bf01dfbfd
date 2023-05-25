@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5b37d8f_f9d9b234",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-05-25T17:27:29Z",
+      "side": 1,
+      "message": "LGTM. Trusting the verification of the version numbers.",
+      "revId": "98e42893012b0b1c6a35d9ddbc509b3bf01dfbfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
