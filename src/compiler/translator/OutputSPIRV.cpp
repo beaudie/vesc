@@ -6107,6 +6107,14 @@ bool OutputSPIRVTraverser::visitDeclaration(Visit visit, TIntermDeclaration *nod
                                  {});
         }
     }
+    else if (IsImage(type.getBasicType()))
+    {
+        if (!memoryQualifier.restrictQualifier && mCompileOptions.aliasedSSBOUnlessRestrict)
+        {
+            spirv::WriteDecorate(mBuilder.getSpirvDecorations(), variableId, spv::DecorationAliased,
+                                 {});
+        }
+    }
 
     // Write DescriptorSet, Binding, Location etc decorations if necessary.
     mBuilder.writeInterfaceVariableDecorations(type, variableId);
