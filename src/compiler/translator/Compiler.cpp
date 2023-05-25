@@ -1725,7 +1725,10 @@ bool TCompiler::limitExpressionComplexity(TIntermBlock *root)
 
 bool TCompiler::shouldCollectVariables(const ShCompileOptions &compileOptions)
 {
-    return compileOptions.variables;
+    // Note: the SPIR-V and MSL translators depend on collected variable info, for example to gather
+    // default uniforms into a uniform block among other reasons.
+    return compileOptions.variables || mOutputType == SH_SPIRV_VULKAN_OUTPUT ||
+           mOutputType == SH_MSL_METAL_OUTPUT;
 }
 
 bool TCompiler::wereVariablesCollected() const
