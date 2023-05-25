@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "abb28aec_eeeaf135",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-25T20:03:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d91845a_b6b8f449",
+      "range": {
+        "startLine": 307,
+        "startChar": 50,
+        "endLine": 307,
+        "endChar": 70
+      },
+      "revId": "179102282ddacee31bc65c0de6c82cbfc5e28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "934aa9f8_0ae0e5f8",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-05-25T19:59:51Z",
       "side": 1,
       "message": "```suggestion\n    //    32-bit components, except RGB32 all others required by vulkan.\n    //                       RGB32 is emulated by ANGLE\n```",
+      "range": {
+        "startLine": 941,
+        "startChar": 10,
+        "endLine": 941,
+        "endChar": 72
+      },
+      "revId": "179102282ddacee31bc65c0de6c82cbfc5e28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c3f2b3f_da053fef",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 941,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-25T20:03:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "934aa9f8_0ae0e5f8",
       "range": {
         "startLine": 941,
         "startChar": 10,
