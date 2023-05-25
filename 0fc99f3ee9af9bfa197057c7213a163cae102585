@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "486641de_074be9a5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 23
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-25T20:04:08Z",
+      "side": 1,
+      "message": "Also, prefix title with `Vulkan: `\n\nYou can s/when they are not supported/when unsupported, or just drop it as it\u0027s implied.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 7
+      },
+      "revId": "0fc99f3ee9af9bfa197057c7213a163cae102585",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
