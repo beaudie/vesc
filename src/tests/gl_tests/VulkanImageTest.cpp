@@ -516,10 +516,6 @@ TEST_P(VulkanImageTest, AllocateVMAImageWhenDeviceOOM)
 
     VulkanHelper helper;
     helper.initializeFromANGLE();
-    uint64_t expectedAllocationFallbacks =
-        getPerfCounters().deviceMemoryImageAllocationFallbacks + 1;
-    uint64_t expectedAllocationFallbacksAfterLastTexture =
-        getPerfCounters().deviceMemoryImageAllocationFallbacks + 2;
 
     // Acquire the sizes and memory property flags for all available memory types. There should be
     // at least one memory heap without the device local bit (VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT).
@@ -546,6 +542,11 @@ TEST_P(VulkanImageTest, AllocateVMAImageWhenDeviceOOM)
     // Device memory is the first choice for image memory allocation. However, in case it runs out,
     // memory should be allocated from the system if available. Therefore, we want to make sure that
     // we can still allocate image memory even if the device memory is full.
+    uint64_t expectedAllocationFallbacks =
+        getPerfCounters().deviceMemoryImageAllocationFallbacks + 1;
+    uint64_t expectedAllocationFallbacksAfterLastTexture =
+        getPerfCounters().deviceMemoryImageAllocationFallbacks + 2;
+
     constexpr VkDeviceSize kTextureWidth  = 2048;
     constexpr VkDeviceSize kTextureHeight = 2048;
     constexpr VkDeviceSize kTextureSize   = kTextureWidth * kTextureHeight * 4;
