@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b1e004e_b353cadc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-25T19:59:51Z",
+      "side": 1,
+      "message": "Re-LGTM",
+      "revId": "179102282ddacee31bc65c0de6c82cbfc5e28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d91845a_b6b8f449",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-25T19:59:51Z",
+      "side": 1,
+      "message": "super nit: pass in the renderer first, that\u0027s typically what every other function does (take renderer or context first)",
+      "range": {
+        "startLine": 307,
+        "startChar": 50,
+        "endLine": 307,
+        "endChar": 70
+      },
+      "revId": "179102282ddacee31bc65c0de6c82cbfc5e28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "934aa9f8_0ae0e5f8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 22
+      },
+      "lineNbr": 941,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-25T19:59:51Z",
+      "side": 1,
+      "message": "```suggestion\n    //    32-bit components, except RGB32 all others required by vulkan.\n    //                       RGB32 is emulated by ANGLE\n```",
+      "range": {
+        "startLine": 941,
+        "startChar": 10,
+        "endLine": 941,
+        "endChar": 72
+      },
+      "revId": "179102282ddacee31bc65c0de6c82cbfc5e28253",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
