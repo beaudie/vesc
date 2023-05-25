@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59354ab4_1c3b87e5",
+        "filename": "src/tests/gl_tests/VulkanImageTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-05-25T17:07:11Z",
+      "side": 0,
+      "message": "How would this cause flakiness if skipped later? Its not been used if skipped, right?",
+      "range": {
+        "startLine": 519,
+        "startChar": 4,
+        "endLine": 522,
+        "endChar": 66
+      },
+      "revId": "ae0f0f47e1b4cb3ac7e8919a2930ca174a7f5a5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
