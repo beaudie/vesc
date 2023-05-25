@@ -30,6 +30,7 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/Context.inl.h"
 #include "libANGLE/Display.h"
+#include "libANGLE/EGLSync.h"
 #include "libANGLE/Fence.h"
 #include "libANGLE/Framebuffer.h"
 #include "libANGLE/GLES1Renderer.h"
@@ -1408,6 +1409,54 @@ void MaybeResetFenceSyncObjects(std::stringstream &out,
     }
 }
 
+void MaybeResetEGLSyncObjects(std::stringstream &out,
+                              ReplayWriter &replayWriter,
+                              std::stringstream &header,
+                              const gl::Context *context,
+                              ResourceTracker *resourceTracker,
+                              std::vector<uint8_t> *binaryData,
+                              size_t *maxResourceIDBufferSize)
+{
+    TrackedResource &trackedEGLSyncs =
+        resourceTracker->getTrackedResource(context->id(), ResourceIDType::egl_Sync);
+    ResourceSet &newEGLSyncs         = trackedEGLSyncs.getNewResources();
+    ResourceSet &eglSyncsToDelete    = trackedEGLSyncs.getResourcesToDelete();
+    ResourceSet &eglSyncsToRegen     = trackedEGLSyncs.getResourcesToRegen();
+    ResourceCalls &eglSyncRegenCalls = trackedEGLSyncs.getResourceRegenCalls();
+
+    if (!newEGLSyncs.empty() || !eglSyncsToDelete.empty())
+    {
+        size_t count = 0;
+
+        for (GLuint oldResource : eglSyncsToDelete)
+        {
+            count++;
+            out << "    eglDestroySyncKHR(gEGLDisplay, gEGLSyncMap[" << oldResource << "]);\n";
+        }
+
+        for (GLuint newResource : newEGLSyncs)
+        {
+            count++;
+            out << "    eglDestroySyncKHR(gEGLDisplay, gEGLSyncMap[" << newResource << "]);\n";
+        }
+
+        *maxResourceIDBufferSize = std::max(*maxResourceIDBufferSize, count);
+    }
+
+    // If any of our starting EGLsyncs were deleted during the run, recreate them
+    for (GLuint id : eglSyncsToRegen)
+    {
+        // Emit their regen calls
+        for (CallCapture &call : eglSyncRegenCalls[id])
+        {
+            out << "    ";
+            WriteCppReplayForCall(call, replayWriter, out, header, binaryData,
+                                  maxResourceIDBufferSize);
+            out << ";\n";
+        }
+    }
+}
+
 void Capture(std::vector<CallCapture> *setupCalls, CallCapture &&call)
 {
     setupCalls->emplace_back(std::move(call));
@@ -1527,6 +1576,9 @@ void MaybeResetOpaqueTypeObjects(ReplayWriter &replayWriter,
 {
     MaybeResetFenceSyncObjects(out, replayWriter, header, resourceTracker, binaryData,
                                maxResourceIDBufferSize);
+
+    MaybeResetEGLSyncObjects(out, replayWriter, header, context, resourceTracker, binaryData,
+                             maxResourceIDBufferSize);
 
     MaybeResetDefaultUniforms(out, replayWriter, header, context, resourceTracker, binaryData,
                               maxResourceIDBufferSize);
@@ -3540,6 +3592,21 @@ void CaptureFenceSyncResetCalls(const gl::Context *context,
     MaybeCaptureUpdateResourceIDs(context, resourceTracker, &fenceSyncRegenCalls[syncID]);
 }
 
+void CaptureEGLSyncResetCalls(const gl::Context *context,
+                              const gl::State &replayState,
+                              ResourceTracker *resourceTracker,
+                              egl::SyncID eglSyncID,
+                              EGLSync eglSyncObject,
+                              const egl::Sync *eglSync)
+{
+    EGLSyncCalls &eglSyncRegenCalls = resourceTracker->getEGLSyncRegenCalls();
+    CallCapture createEGLSync =
+        CaptureCreateSyncKHR(nullptr, true, context->getDisplay(), eglSync->getType(),
+                             eglSync->getAttributeMap(), eglSyncObject);
+    CaptureCustomCreateEGLSync("CreateEGLSyncKHR", createEGLSync, eglSyncRegenCalls[eglSyncID]);
+    MaybeCaptureUpdateResourceIDs(context, resourceTracker, &eglSyncRegenCalls[eglSyncID]);
+}
+
 void CaptureBufferBindingResetCalls(const gl::State &replayState,
                                     ResourceTracker *resourceTracker,
                                     gl::BufferBinding binding,
@@ -4447,6 +4514,26 @@ void CaptureShareGroupMidExecutionSetup(
         CaptureCustomFenceSync(fenceSync, *setupCalls);
         CaptureFenceSyncResetCalls(context, replayState, resourceTracker, syncID, syncObject, sync);
         resourceTracker->getStartingFenceSyncs().insert(syncID);
+    }
+
+    const egl::SyncMap eglSyncMap = context->getDisplay()->getSyncsForCapture();
+    for (const auto &eglSyncIter : eglSyncMap)
+    {
+        egl::SyncID eglSyncID    = {eglSyncIter.first};
+        const egl::Sync *eglSync = eglSyncIter.second;
+        EGLSync eglSyncObject    = gl::unsafe_int_to_pointer_cast<EGLSync>(eglSyncID.value);
+
+        if (!eglSync)
+        {
+            continue;
+        }
+        CallCapture createEGLSync =
+            CaptureCreateSync(nullptr, true, context->getDisplay(), eglSync->getType(),
+                              eglSync->getAttributeMap(), eglSyncObject);
+        CaptureCustomCreateEGLSync("CreateEGLSyncKHR", createEGLSync, *setupCalls);
+        CaptureEGLSyncResetCalls(context, replayState, resourceTracker, eglSyncID, eglSyncObject,
+                                 eglSync);
+        resourceTracker->getStartingEGLSyncs().insert(eglSyncID);
     }
 
     GLint contextUnpackAlignment = context->getState().getUnpackState().alignment;
@@ -7563,6 +7650,33 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
                                                 egl::AttributeMap::CreateFromIntArray);
             break;
         }
+        case EntryPoint::EGLCreateSync:
+        case EntryPoint::EGLCreateSyncKHR:
+        {
+            egl::SyncID eglSyncID = call.params.getReturnValue().value.egl_SyncIDVal;
+            FrameCaptureShared *frameCaptureShared =
+                context->getShareGroup()->getFrameCaptureShared();
+            // If we're capturing, track which egl sync has been created
+            if (frameCaptureShared->isCaptureActive())
+            {
+                handleGennedResource(context, eglSyncID);
+            }
+            break;
+        }
+        case EntryPoint::EGLDestroySync:
+        case EntryPoint::EGLDestroySyncKHR:
+        {
+            egl::SyncID eglSyncID =
+                call.params.getParam("syncPacked", ParamType::Tegl_SyncID, 1).value.egl_SyncIDVal;
+            FrameCaptureShared *frameCaptureShared =
+                context->getShareGroup()->getFrameCaptureShared();
+            // If we're capturing, track which EGL sync has been deleted
+            if (frameCaptureShared->isCaptureActive())
+            {
+                mResourceTracker.setDeletedEGLSync(eglSyncID);
+            }
+            break;
+        }
         case EntryPoint::GLDispatchCompute:
         {
             // When using shadow memory we need to update the real memory here
@@ -8488,6 +8602,19 @@ void ResourceTracker::setDeletedFenceSync(gl::SyncID sync)
 
     // In this case, the app is deleting a fence sync we started with, we need to regen on loop.
     mFenceSyncsToRegen.insert(sync);
+}
+
+void ResourceTracker::setDeletedEGLSync(egl::SyncID eglSync)
+{
+    ASSERT(eglSync.value != 0);
+    if (mStartingEGLSyncs.find(eglSync) == mStartingEGLSyncs.end())
+    {
+        // This is an EGL sync created after MEC was initialized. Ignore it.
+        return;
+    }
+
+    // In this case, the app is deleting a fence sync we started with, we need to regen on loop.
+    mEGLSyncsToRegen.insert(eglSync);
 }
 
 void ResourceTracker::setModifiedDefaultUniform(gl::ShaderProgramID programID,

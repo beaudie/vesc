@@ -140,6 +140,9 @@ using BufferMapStatusMap = std::map<GLuint, bool>;
 using FenceSyncSet   = std::set<gl::SyncID>;
 using FenceSyncCalls = std::map<gl::SyncID, std::vector<CallCapture>>;
 
+using EGLSyncSet   = std::set<egl::SyncID>;
+using EGLSyncCalls = std::map<egl::SyncID, std::vector<CallCapture>>;
+
 // For default uniforms, we need to track which ones are dirty, and the series of calls to reset.
 // Each program has unique default uniforms, and each uniform has one or more locations in the
 // default buffer. For reset efficiency, we track only the uniforms dirty by location, per program.
@@ -248,6 +251,11 @@ class ResourceTracker final : angle::NonCopyable
     FenceSyncSet &getFenceSyncsToRegen() { return mFenceSyncsToRegen; }
     void setDeletedFenceSync(gl::SyncID sync);
 
+    EGLSyncSet &getStartingEGLSyncs() { return mStartingEGLSyncs; }
+    EGLSyncCalls &getEGLSyncRegenCalls() { return mEGLSyncRegenCalls; }
+    EGLSyncSet &getEGLSyncsToRegen() { return mEGLSyncsToRegen; }
+    void setDeletedEGLSync(egl::SyncID eglSyncID);
+
     DefaultUniformLocationsPerProgramMap &getDefaultUniformsToReset()
     {
         return mDefaultUniformsToReset;
@@ -310,6 +318,14 @@ class ResourceTracker final : angle::NonCopyable
     // Fence syncs to regen are a list of starting fence sync objects that were deleted and need to
     // be regen'ed.
     FenceSyncSet mFenceSyncsToRegen;
+
+    // EGL sync objects created during MEC setup
+    EGLSyncSet mStartingEGLSyncs;
+    // EGL sync regen calls will create an EGL sync object
+    EGLSyncCalls mEGLSyncRegenCalls;
+    // EGL syncs to regen are a list of starting EGL sync objects that were deleted and need to
+    // be regen'ed.
+    EGLSyncSet mEGLSyncsToRegen;
 
     // Default uniforms that were modified during the run
     DefaultUniformLocationsPerProgramMap mDefaultUniformsToReset;
