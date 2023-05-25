@@ -16,6 +16,23 @@
       "message": "Renaming clang_format/scripts path as announced here:\nhttps://groups.google.com/u/0/a/chromium.org/g/chromium-dev/c/RkYsIcfww2A",
       "revId": "a0998bd8161d65bc8d67053578de00806d22ec0d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec5a1a07_8acdf381",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1237795
+      },
+      "writtenOn": "2023-05-25T15:22:41Z",
+      "side": 1,
+      "message": "Roman, could you CQ, looks like i can only dry run",
+      "revId": "a0998bd8161d65bc8d67053578de00806d22ec0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
