@@ -1534,6 +1534,7 @@ struct DescriptorDescHandles
 };
 
 using WriteDescriptorDescs = angle::FastMap<WriteDescriptorDesc, kFastDescriptorSetDescLimit>;
+using InfoDescIndexMask    = angle::BitSet64<64>;
 
 class WriteDescriptorDescBuilder
 {
@@ -1542,6 +1543,7 @@ class WriteDescriptorDescBuilder
     {
         mDescs.clear();
         mCurrentInfoIndex = 0;
+        mBufferBindingToInfoDescIndexMap.clear();
     }
 
     uint32_t getDescriptorSetCount(uint32_t bindingIndex) const
@@ -1590,6 +1592,11 @@ class WriteDescriptorDescBuilder
                                       const gl::ProgramExecutable &executable);
 
     const WriteDescriptorDescs &getDescs() const { return mDescs; }
+    const angle::FastMap<InfoDescIndexMask, kFastDescriptorSetDescLimit> &
+    getBufferBindingToInfoDescIndexMap() const
+    {
+        return mBufferBindingToInfoDescIndexMap;
+    }
 
     void streamOut(std::ostream &os) const;
 
@@ -1613,6 +1620,9 @@ class WriteDescriptorDescBuilder
     // After a preliminary minimum size, use heap memory.
     WriteDescriptorDescs mDescs;
     uint32_t mCurrentInfoIndex = 0;
+
+  public:
+    angle::FastMap<InfoDescIndexMask, kFastDescriptorSetDescLimit> mBufferBindingToInfoDescIndexMap;
 };
 
 class DescriptorSetDesc
@@ -1717,6 +1727,14 @@ class DescriptorSetDescBuilder final
                               bool activeUnpaused,
                               TransformFeedbackVk *transformFeedbackVk);
 
+    void updateShaderUniformBuffers(
+        const gl::BufferVector &buffers,
+        VkDescriptorType descriptorType,
+        VkDeviceSize maxBoundBufferRange,
+        const BufferHelper &emptyBuffer,
+        const WriteDescriptorDescBuilder &writeDescriptorDescsBuilder,
+        const angle::FastMap<InfoDescIndexMask, kFastDescriptorSetDescLimit>
+            &bufferBindingToInfoDescIndexMap);
     // Specific helpers for shader resource descriptors.
     void updateShaderBuffers(gl::ShaderType shaderType,
                              ShaderVariableType variableType,

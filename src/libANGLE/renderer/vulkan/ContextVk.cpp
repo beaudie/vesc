@@ -2845,16 +2845,16 @@ angle::Result ContextVk::handleDirtyUniformBuffersImpl(CommandBufferT *commandBu
 
     const VkPhysicalDeviceLimits &limits = mRenderer->getPhysicalDeviceProperties().limits;
     ProgramExecutableVk &executableVk    = *getExecutable();
-    const ShaderInterfaceVariableInfoMap &variableInfoMap = executableVk.getVariableInfoMap();
+
+    mShaderBuffersDescriptorDesc.updateShaderUniformBuffers(
+        mState.getOffsetBindingPointerUniformBuffers(),
+        executableVk.getUniformBufferDescriptorType(), limits.maxUniformBufferRange, mEmptyBuffer,
+        mShaderBufferWriteDescriptorDescBuilder,
+        executableVk.getShaderResourceWriteDescriptorDescBuilder()
+            .getBufferBindingToInfoDescIndexMap());
 
     for (gl::ShaderType shaderType : executable->getLinkedShaderStages())
     {
-        mShaderBuffersDescriptorDesc.updateShaderBuffers(
-            shaderType, ShaderVariableType::UniformBuffer, variableInfoMap,
-            mState.getOffsetBindingPointerUniformBuffers(), executable->getUniformBlocks(),
-            executableVk.getUniformBufferDescriptorType(), limits.maxUniformBufferRange,
-            mEmptyBuffer, mShaderBufferWriteDescriptorDescBuilder.getDescs());
-
         const vk::PipelineStage pipelineStage = vk::GetPipelineStage(shaderType);
         UpdateShaderUniformBuffers(this, commandBufferHelper, shaderType, pipelineStage,
                                    executable->getUniformBlocks(),
