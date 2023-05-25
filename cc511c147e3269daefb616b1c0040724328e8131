@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb309896_f44b203d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-05-25T20:09:44Z",
+      "side": 1,
+      "message": "There is a similar issue in the following bug with a similar message: https://anglebug.com/7204\nI will suppress the test for *AsyncCommandQueue for now.",
+      "revId": "cc511c147e3269daefb616b1c0040724328e8131",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
