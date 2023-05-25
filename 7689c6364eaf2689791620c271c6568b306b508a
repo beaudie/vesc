@@ -105,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ce55fc2_7b3fabd7",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 3395,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-25T14:50:04Z",
+      "side": 1,
+      "message": "That\u0027s fine as a follow up.",
+      "parentUuid": "86125768_a38ff02f",
+      "range": {
+        "startLine": 3386,
+        "startChar": 0,
+        "endLine": 3395,
+        "endChar": 99
+      },
+      "revId": "7689c6364eaf2689791620c271c6568b306b508a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c733e15c_0cca4498",
