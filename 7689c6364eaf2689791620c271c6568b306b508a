@@ -81,6 +81,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "86125768_a38ff02f",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 3395,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-25T14:40:40Z",
+      "side": 1,
+      "message": "This change is not obvious to me; I\u0027d like to finalize this CL even if some things are not perfect.",
+      "parentUuid": "c65ddb87_0d0dcd42",
+      "range": {
+        "startLine": 3386,
+        "startChar": 0,
+        "endLine": 3395,
+        "endChar": 99
+      },
+      "revId": "7689c6364eaf2689791620c271c6568b306b508a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c733e15c_0cca4498",
