@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5514671c_2a7a76b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-25T19:02:01Z",
+      "side": 1,
+      "message": "This should wait until the other change lands and rolls into Chromium, then Chromium stops setting the variable and rolled back into ANGLE",
+      "revId": "16afb85ecd2abe65afcb1e77a750914bedea11ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
