@@ -5084,7 +5084,8 @@ void ContextVk::updateSampleShadingWithRasterizationSamples(const uint32_t raste
 {
     bool sampleShadingEnable =
         (rasterizationSamples <= 1 ? false : mState.isSampleShadingEnabled());
-    float minSampleShading = mState.getMinSampleShading();
+    float minSampleShading =
+        getFeatures().forceMaximumMinSampleShading.enabled ? 1.0f : mState.getMinSampleShading();
 
     // If sample shading is not enabled, check if it should be implicitly enabled according to the
     // program.  Normally the driver should do this, but some drivers don't.
