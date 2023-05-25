@@ -6023,6 +6023,10 @@ bool OutputSPIRVTraverser::visitDeclaration(Visit visit, TIntermDeclaration *nod
     {
         decorations.push_back(spv::DecorationRestrict);
     }
+    else
+    {
+        decorations.push_back(spv::DecorationAliased);
+    }
     if (memoryQualifier.readonly)
     {
         decorations.push_back(spv::DecorationNonWritable);
@@ -6097,16 +6101,28 @@ bool OutputSPIRVTraverser::visitDeclaration(Visit visit, TIntermDeclaration *nod
             type.getQualifier() == EvqUniform ? spv::DecorationBlock : spv::DecorationBufferBlock;
         spirv::WriteDecorate(mBuilder.getSpirvDecorations(), nonArrayTypeId, decoration, {});
 
-        if (type.getQualifier() == EvqBuffer && !memoryQualifier.restrictQualifier &&
-            mCompileOptions.aliasedSSBOUnlessRestrict)
-        {
-            // If GLSL does not specify the SSBO has restrict memory qualifier, assume the memory
-            // qualifier is aliased
-            // issuetracker.google.com/266235549
-            spirv::WriteDecorate(mBuilder.getSpirvDecorations(), variableId, spv::DecorationAliased,
-                                 {});
-        }
+        //        if (type.getQualifier() == EvqBuffer && !memoryQualifier.restrictQualifier &&
+        //            mCompileOptions.aliasedSSBOUnlessRestrict)
+        //        {
+        //            // If GLSL does not specify the SSBO has restrict memory qualifier, assume the
+        //            memory
+        //            // qualifier is aliased
+        //            // issuetracker.google.com/266235549
+        //            spirv::WriteDecorate(mBuilder.getSpirvDecorations(), variableId,
+        //            spv::DecorationAliased,
+        //                                 {});
+        //        }
     }
+    //    else if (IsImage(type.getBasicType()) && type.getQualifier() == EvqUniform)
+    //    {
+    //        if (!memoryQualifier.restrictQualifier && mCompileOptions.aliasedSSBOUnlessRestrict)
+    //        {
+    //            INFO() << "Yuxin Debug image uniform data type";
+    //            spirv::WriteDecorate(mBuilder.getSpirvDecorations(), variableId,
+    //            spv::DecorationAliased,
+    //                                 {});
+    //        }
+    //    }
 
     // Write DescriptorSet, Binding, Location etc decorations if necessary.
     mBuilder.writeInterfaceVariableDecorations(type, variableId);
