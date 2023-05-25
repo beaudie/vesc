@@ -690,6 +690,12 @@ TEST_P(VulkanImageTest, PreInitializedOnGLImport)
 
 // Use this to select which configurations (e.g. which renderer, which GLES major version) these
 // tests should be run against.
-ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(VulkanImageTest);
+ANGLE_INSTANTIATE_TEST(VulkanImageTest,
+                       ES2_VULKAN(),
+                       ES3_VULKAN(),
+                       ES3_VULKAN_SWIFTSHADER().enable(Feature::AsyncCommandQueue),
+                       ES3_VULKAN_SWIFTSHADER()
+                           .enable(Feature::AsyncCommandQueue)
+                           .enable(Feature::SlowAsyncCommandQueueForTesting));
 
 }  // namespace angle
