@@ -152,6 +152,7 @@ enum class Feature
     ForceFragmentShaderPrecisionHighpToMediump,
     ForceGlErrorChecking,
     ForceInitShaderVariables,
+    ForceMaximumMinSampleShading,
     ForceMaxUniformBufferSize16KB,
     ForceNearestFiltering,
     ForceNearestMipFiltering,

@@ -1234,6 +1234,12 @@
               "Limit sample count to 2 to save memory on low end devices."
             ],
             "issue": "http://anglebug.com/8162"
+        },
+        {
+            "name": "force_maximum_min_sample_shading",
+            "category": "Workarounds",
+            "description": ["Force minSampleShading to be 1.0 due to driver bug."],
+            "issue": "https://issuetracker.google.com/274478377"
         }
     ]
 }
