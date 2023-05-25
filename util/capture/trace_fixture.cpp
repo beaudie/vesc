@@ -384,6 +384,7 @@ void FinishReplay()
     delete[] gBufferMap;
     delete[] gContextMap2;
     delete[] gEGLImageMap2;
+    delete[] gEGLSyncMap;
     delete[] gRenderbufferMap;
     delete[] gTextureMap;
     delete[] gFramebufferMap;
