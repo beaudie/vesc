@@ -76,6 +76,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ead87ad0_8173304e",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 2939,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-25T19:03:15Z",
+      "side": 1,
+      "message": "Updated to use the check which was previously done in HasTextureBufferSupport\n\nI had to:\n* skip a VVL error as per https://anglebug.com/8128#c3\n* remove the SSBOWriteWithoutBarrier test as it was crashing when we did NOT take the emulation path (https://paste.googleplex.com/5432101254987776)",
+      "parentUuid": "4a8ac788_023096c0",
+      "range": {
+        "startLine": 2939,
+        "startChar": 12,
+        "endLine": 2939,
+        "endChar": 82
+      },
+      "revId": "7689c6364eaf2689791620c271c6568b306b508a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c65ddb87_0d0dcd42",
