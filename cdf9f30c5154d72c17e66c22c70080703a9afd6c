@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92811884_b7d971c4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-25T17:17:49Z",
+      "side": 1,
+      "message": "I would understand if the code in between is making allocations, but the skip should have nothing to do with this. It doesn\u0027t hurt to get the counters then skip.",
+      "revId": "cdf9f30c5154d72c17e66c22c70080703a9afd6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
