@@ -776,6 +776,11 @@ class Program final : public LabeledObject, public angle::Subject
     const ProgramExecutable &getExecutable() const { return mState.getExecutable(); }
     ProgramExecutable &getExecutable() { return mState.getExecutable(); }
 
+    void onUniformBufferStateChange(size_t uniformBufferIndex)
+    {
+        mDirtyBits.set(DIRTY_BIT_UNIFORM_BLOCK_BINDING_0 + uniformBufferIndex);
+    }
+
   private:
     struct LinkingState;
 
