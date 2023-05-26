@@ -81,6 +81,30 @@
       },
       "revId": "10f0467762b157e3afe25d553be97bd441c0f27f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14084556_552eda3b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3783,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-26T13:43:56Z",
+      "side": 1,
+      "message": "Ack. That\u0027ll come back to bite us at some point, if you have ideas on how to expose the underlying driver id, it might be worth fixing it in Vulkan while it\u0027s not yet a problem. Like maybe something for a future maintenance extension.",
+      "parentUuid": "ecf4a3ed_fe91f249",
+      "range": {
+        "startLine": 3783,
+        "startChar": 67,
+        "endLine": 3783,
+        "endChar": 93
+      },
+      "revId": "10f0467762b157e3afe25d553be97bd441c0f27f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
