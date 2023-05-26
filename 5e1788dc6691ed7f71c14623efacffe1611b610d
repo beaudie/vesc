@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3dbaac2e_456ca8ab",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2044,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-26T20:19:16Z",
+      "side": 1,
+      "message": "Please document its usage here too (here or next CL doesn\u0027t matter)",
+      "revId": "5e1788dc6691ed7f71c14623efacffe1611b610d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
