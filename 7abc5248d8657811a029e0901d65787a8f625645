@@ -22,6 +22,30 @@
       },
       "revId": "7abc5248d8657811a029e0901d65787a8f625645",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3630a88_c005a184",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5601,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-26T22:01:28Z",
+      "side": 0,
+      "message": "\u003e (disabled is the exception)\n\nWhat do you mean by \"the exception\"? Running ANGLE without any env vars gives us `mEnabled\u003dfalse` due to the `mCaptureEndFrame \u003c mCaptureStartFrame` check. So the default behavior is `mEnabled\u003dfalse` and `mEnabled\u003dtrue` in the constructor is misleading.",
+      "parentUuid": "5d3f1ef2_6519c9e6",
+      "range": {
+        "startLine": 5601,
+        "startChar": 7,
+        "endLine": 5601,
+        "endChar": 21
+      },
+      "revId": "7abc5248d8657811a029e0901d65787a8f625645",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
