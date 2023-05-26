@@ -2803,6 +2803,8 @@ angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferHelperT *co
         mShaderBufferWriteDescriptorDescBuilder.getDescs(), commandBufferHelper,
         mShaderBuffersDescriptorDesc, &newSharedCacheKey));
 
+    executableVk->getAndResetDirtyBits();
+
     if (newSharedCacheKey)
     {
         // A new cache entry has been created. We record this cache key in the images and buffers so
@@ -2847,9 +2849,10 @@ angle::Result ContextVk::handleDirtyUniformBuffersImpl(CommandBufferT *commandBu
     ProgramExecutableVk &executableVk    = *getExecutable();
     const ShaderInterfaceVariableInfoMap &variableInfoMap = executableVk.getVariableInfoMap();
 
-    mShaderBuffersDescriptorDesc.updateShaderBuffers(
+    const gl::Program::DirtyBits dirtyBits = executableVk.getAndResetDirtyBits();
+    mShaderBuffersDescriptorDesc.updateUniformBuffers(
         ShaderVariableType::UniformBuffer, variableInfoMap,
-        mState.getOffsetBindingPointerUniformBuffers(), executable->getUniformBlocks(),
+        mState.getOffsetBindingPointerUniformBuffers(), executable->getUniformBlocks(), dirtyBits,
         executableVk.getUniformBufferDescriptorType(), limits.maxUniformBufferRange, mEmptyBuffer,
         mShaderBufferWriteDescriptorDescBuilder.getDescs());
 
