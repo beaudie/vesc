@@ -206,6 +206,24 @@
       "parentUuid": "eea3a493_2852ed81",
       "revId": "b862a204bcc882ffa4879084c7617a7002f860b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6cc9cde1_272a6a64",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 2941,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-26T18:12:20Z",
+      "side": 1,
+      "message": "Charlie, please lmk if you think this CL is good to go or if I should investigate something could you give me some pointers what kind of test I should make? I\u0027m lacking context to fully interpret this discussion.",
+      "parentUuid": "18d66645_6efc1a7c",
+      "revId": "b862a204bcc882ffa4879084c7617a7002f860b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
