@@ -120,6 +120,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "40f892cf_3a764dc4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-05-26T01:19:51Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "5d0b9c87_e6f52919",
+      "range": {
+        "startLine": 77,
+        "startChar": 19,
+        "endLine": 77,
+        "endChar": 40
+      },
+      "revId": "1e356f89d51c965cccff832c127382664555b158",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "825b03d4_27beb61c",
@@ -133,6 +157,24 @@
       "writtenOn": "2023-05-23T17:54:15Z",
       "side": 1,
       "message": "Please initialize the padding too, otherwise it\u0027s leaking something to persistent memory.",
+      "revId": "1e356f89d51c965cccff832c127382664555b158",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b833d08_c432d06d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 886,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-05-26T01:19:51Z",
+      "side": 1,
+      "message": "Padding removed.",
+      "parentUuid": "825b03d4_27beb61c",
       "revId": "1e356f89d51c965cccff832c127382664555b158",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -154,6 +196,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2070fc4_232cbe6f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 912,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-05-26T01:19:51Z",
+      "side": 1,
+      "message": "The header class has been restructured. Version is now `uint16_t` and on top, followed by the CRC.",
+      "parentUuid": "a033d7f7_345fd3ee",
+      "revId": "1e356f89d51c965cccff832c127382664555b158",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "474fa8c8_81509dc6",
@@ -167,6 +227,24 @@
       "writtenOn": "2023-05-23T17:54:15Z",
       "side": 1,
       "message": "Isn\u0027t this going to happen on the first update of ANGLE after this CL if there\u0027s a cache lying around from before it? We should make sure that\u0027s not fatal.\n\nIt\u0027s probably fine to make the message below a WARN(), let ANGLE get updated everywhere and make it FATAL() like in a year",
+      "revId": "1e356f89d51c965cccff832c127382664555b158",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "208f923f_c32929b0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1132,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-05-26T01:19:51Z",
+      "side": 1,
+      "message": "You are right. It is possible. I have changed it into a `WARN()` and added a TODO above it.",
+      "parentUuid": "474fa8c8_81509dc6",
       "revId": "1e356f89d51c965cccff832c127382664555b158",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
