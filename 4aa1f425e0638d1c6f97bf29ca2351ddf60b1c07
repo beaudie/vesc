@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7fc1cb5_6d6460eb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 6172,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-26T20:45:55Z",
+      "side": 1,
+      "message": "Side note: you might as well inline the implementation of this function; it\u0027s one instruction",
+      "range": {
+        "startLine": 6172,
+        "startChar": 61,
+        "endLine": 6172,
+        "endChar": 90
+      },
+      "revId": "4aa1f425e0638d1c6f97bf29ca2351ddf60b1c07",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
