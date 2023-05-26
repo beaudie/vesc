@@ -1718,6 +1718,15 @@ class DescriptorSetDescBuilder final
                               TransformFeedbackVk *transformFeedbackVk);
 
     // Specific helpers for shader resource descriptors.
+    void updateUniformBuffers(ShaderVariableType variableType,
+                              const ShaderInterfaceVariableInfoMap &variableInfoMap,
+                              const gl::BufferVector &buffers,
+                              const std::vector<gl::InterfaceBlock> &blocks,
+                              const gl::Program::DirtyBits &dirtyBits,
+                              VkDescriptorType descriptorType,
+                              VkDeviceSize maxBoundBufferRange,
+                              const BufferHelper &emptyBuffer,
+                              const WriteDescriptorDescs &writeDescriptorDescs);
     void updateShaderBuffers(ShaderVariableType variableType,
                              const ShaderInterfaceVariableInfoMap &variableInfoMap,
                              const gl::BufferVector &buffers,
@@ -1779,6 +1788,16 @@ class DescriptorSetDescBuilder final
         bool emulateSeamfulCubeMapSampling,
         PipelineType pipelineType,
         const SharedDescriptorSetCacheKey &sharedCacheKey);
+
+    void updateShaderBuffer(ShaderVariableType variableType,
+                            const ShaderInterfaceVariableInfoMap &variableInfoMap,
+                            const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding,
+                            const gl::InterfaceBlock &block,
+                            uint32_t blockIndex,
+                            VkDescriptorType descriptorType,
+                            VkDeviceSize maxBoundBufferRange,
+                            const BufferHelper &emptyBuffer,
+                            const WriteDescriptorDescs &writeDescriptorDescs);
 
     DescriptorSetDesc mDesc;
     angle::FastMap<DescriptorDescHandles, kFastDescriptorSetDescLimit> mHandles;
