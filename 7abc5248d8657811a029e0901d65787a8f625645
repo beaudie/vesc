@@ -46,6 +46,30 @@
       },
       "revId": "7abc5248d8657811a029e0901d65787a8f625645",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b75d07cd_0b2e19cf",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5601,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-26T22:36:02Z",
+      "side": 0,
+      "message": "It looks like has changed over time.  If this code is included at all (instead of the mock), the assumption was you want to do a capture and you\u0027ll set some reasonable frame limits, which is what most people do.  I believe originally we had some default number of frames at first, like 10.\n\nWe need to be careful not to break the `trigger` route, which is the primary way we use this.  When the trigger is set, `start` and `end` are set to `UINT32_MAX`, but we want capture enabled.\n\nHow about the following:\n\nKeep `mEnabled` in the initializer list, but set to false.\n\nDown here we can do:\n\n```\n  if ((mCaptureEndFrame \u003e\u003d mCaptureStartFrame) \u0026\u0026\n      GetEnvironmentVarOrUnCachedAndroidProperty(kEnabledVarName, kAndroidEnabled) !\u003d \"0\")\n  {\n      mEnabled \u003d true;\n  }\n```",
+      "parentUuid": "b3630a88_c005a184",
+      "range": {
+        "startLine": 5601,
+        "startChar": 7,
+        "endLine": 5601,
+        "endChar": 21
+      },
+      "revId": "7abc5248d8657811a029e0901d65787a8f625645",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
