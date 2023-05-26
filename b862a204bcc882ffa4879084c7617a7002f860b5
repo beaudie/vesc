@@ -170,6 +170,24 @@
       "parentUuid": "fef25004_85923a30",
       "revId": "b862a204bcc882ffa4879084c7617a7002f860b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eea3a493_2852ed81",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 2941,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-05-26T17:04:05Z",
+      "side": 1,
+      "message": "I guess your point is getActualImageFormatID has the \"image\" in the name, so it does not apply here. Looking at the usage, it appears all places we use getActualImageFormatID should not get into with buffer textures, so we might be okay here. My guess is that the format maybe does not support  VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT, is why we are getting different format.",
+      "parentUuid": "6336fee6_d7d4422c",
+      "revId": "b862a204bcc882ffa4879084c7617a7002f860b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
