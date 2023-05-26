@@ -9876,6 +9876,7 @@ void Context::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMess
             {
                 mState.onUniformBufferStateChange(index - kUniformBuffer0SubjectIndex);
                 mStateCache.onUniformBufferStateChange(this);
+                mState.setObjectDirty(GL_PROGRAM);
             }
             else if (index < kAtomicCounterBufferMaxSubjectIndex)
             {
