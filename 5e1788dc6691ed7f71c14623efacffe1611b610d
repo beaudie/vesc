@@ -16,6 +16,24 @@
       "message": "Please document its usage here too (here or next CL doesn\u0027t matter)",
       "revId": "5e1788dc6691ed7f71c14623efacffe1611b610d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ca57a58_918244fb",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2044,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-26T20:32:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3dbaac2e_456ca8ab",
+      "revId": "5e1788dc6691ed7f71c14623efacffe1611b610d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
