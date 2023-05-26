@@ -268,6 +268,12 @@ class ProgramExecutableVk
                    ? mDefaultUniformWriteDescriptorDescBuilder.getDescs()
                    : mDefaultUniformAndXfbWriteDescriptorDescBuilder.getDescs();
     }
+    gl::Program::DirtyBits getAndResetDirtyBits()
+    {
+        gl::Program::DirtyBits dirtyBits = mDirtyBits;
+        mDirtyBits.reset();
+        return dirtyBits;
+    }
 
   private:
     friend class ProgramVk;
@@ -447,6 +453,8 @@ class ProgramExecutableVk
     vk::WriteDescriptorDescBuilder mTextureWriteDescriptorDescBuilder;
     vk::WriteDescriptorDescBuilder mDefaultUniformWriteDescriptorDescBuilder;
     vk::WriteDescriptorDescBuilder mDefaultUniformAndXfbWriteDescriptorDescBuilder;
+
+    gl::Program::DirtyBits mDirtyBits;
 };
 
 }  // namespace rx

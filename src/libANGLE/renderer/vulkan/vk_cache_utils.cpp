@@ -6072,6 +6072,105 @@ bool AssertAllShaderStageHasTheInfoBinding(ShaderVariableType variableType,
     return true;
 }
 
+void DescriptorSetDescBuilder::updateShaderBuffer(
+    ShaderVariableType variableType,
+    const ShaderInterfaceVariableInfoMap &variableInfoMap,
+    const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding,
+    const gl::InterfaceBlock &block,
+    uint32_t blockIndex,
+    VkDescriptorType descriptorType,
+    VkDeviceSize maxBoundBufferRange,
+    const BufferHelper &emptyBuffer,
+    const WriteDescriptorDescs &writeDescriptorDescs)
+{
+    if (block.activeShaders().none())
+    {
+        return;
+    }
+
+    const ShaderInterfaceVariableInfo &info = variableInfoMap.getIndexedVariableInfo(
+        block.getFirstShaderTypeWhereActive(), variableType, blockIndex);
+    uint32_t binding = info.binding;
+    ASSERT(AssertAllShaderStageHasTheInfoBinding(variableType, block, blockIndex, variableInfoMap,
+                                                 binding));
+    uint32_t arrayElement  = block.isArray ? block.arrayElement : 0;
+    uint32_t infoDescIndex = writeDescriptorDescs[binding].descriptorInfoIndex + arrayElement;
+
+    if (bufferBinding.get() == nullptr)
+    {
+        DescriptorInfoDesc emptyDesc = {};
+        SetBitField(emptyDesc.imageLayoutOrRange, emptyBuffer.getSize());
+        emptyDesc.imageViewSerialOrOffset = 0;
+        emptyDesc.samplerOrBufferSerial   = emptyBuffer.getBlockSerial().getValue();
+
+        mDesc.updateInfoDesc(infoDescIndex, emptyDesc);
+
+        mHandles[infoDescIndex].buffer = emptyBuffer.getBuffer().getHandle();
+
+        if (IsDynamicDescriptor(descriptorType))
+        {
+            mDynamicOffsets[infoDescIndex] = 0;
+        }
+    }
+    else
+    {
+        // Limit bound buffer size to maximum resource binding size.
+        GLsizeiptr boundBufferSize = gl::GetBoundBufferAvailableSize(bufferBinding);
+        VkDeviceSize size          = std::min<VkDeviceSize>(boundBufferSize, maxBoundBufferRange);
+
+        // Make sure there's no possible under/overflow with binding size.
+        static_assert(sizeof(VkDeviceSize) >= sizeof(bufferBinding.getSize()),
+                      "VkDeviceSize too small");
+        ASSERT(bufferBinding.getSize() >= 0);
+
+        BufferVk *bufferVk         = vk::GetImpl(bufferBinding.get());
+        BufferHelper &bufferHelper = bufferVk->getBuffer();
+
+        DescriptorInfoDesc infoDesc = {};
+        SetBitField(infoDesc.imageLayoutOrRange, size);
+        infoDesc.samplerOrBufferSerial = bufferHelper.getBlockSerial().getValue();
+
+        VkDeviceSize offset = bufferBinding.getOffset() + bufferHelper.getOffset();
+
+        if (IsDynamicDescriptor(descriptorType))
+        {
+            SetBitField(mDynamicOffsets[infoDescIndex], offset);
+        }
+        else
+        {
+            SetBitField(infoDesc.imageViewSerialOrOffset, offset);
+        }
+
+        mDesc.updateInfoDesc(infoDescIndex, infoDesc);
+
+        mHandles[infoDescIndex].buffer = bufferHelper.getBuffer().getHandle();
+    }
+}
+
+void DescriptorSetDescBuilder::updateUniformBuffers(
+    ShaderVariableType variableType,
+    const ShaderInterfaceVariableInfoMap &variableInfoMap,
+    const gl::BufferVector &buffers,
+    const std::vector<gl::InterfaceBlock> &blocks,
+    const gl::Program::DirtyBits &dirtyBits,
+    VkDescriptorType descriptorType,
+    VkDeviceSize maxBoundBufferRange,
+    const BufferHelper &emptyBuffer,
+    const WriteDescriptorDescs &writeDescriptorDescs)
+{
+    // Now that we have the proper array elements counts, initialize the info structures.
+    for (uint32_t blockIndex = 0; blockIndex < blocks.size(); ++blockIndex)
+    {
+        if (dirtyBits[gl::Program::DIRTY_BIT_UNIFORM_BLOCK_BINDING_0 + blockIndex])
+        {
+            const gl::InterfaceBlock &block = blocks[blockIndex];
+            updateShaderBuffer(variableType, variableInfoMap, buffers[block.binding], block,
+                               blockIndex, descriptorType, maxBoundBufferRange, emptyBuffer,
+                               writeDescriptorDescs);
+        }
+    }
+}
+
 void DescriptorSetDescBuilder::updateShaderBuffers(
     ShaderVariableType variableType,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
@@ -6085,71 +6184,9 @@ void DescriptorSetDescBuilder::updateShaderBuffers(
     // Now that we have the proper array elements counts, initialize the info structures.
     for (uint32_t blockIndex = 0; blockIndex < blocks.size(); ++blockIndex)
     {
-        const gl::InterfaceBlock &block                           = blocks[blockIndex];
-        const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding = buffers[block.binding];
-
-        if (block.activeShaders().none())
-        {
-            continue;
-        }
-
-        const ShaderInterfaceVariableInfo &info = variableInfoMap.getIndexedVariableInfo(
-            block.getFirstShaderTypeWhereActive(), variableType, blockIndex);
-        uint32_t binding = info.binding;
-        ASSERT(AssertAllShaderStageHasTheInfoBinding(variableType, block, blockIndex,
-                                                     variableInfoMap, binding));
-        uint32_t arrayElement  = block.isArray ? block.arrayElement : 0;
-        uint32_t infoDescIndex = writeDescriptorDescs[binding].descriptorInfoIndex + arrayElement;
-
-        if (bufferBinding.get() == nullptr)
-        {
-            DescriptorInfoDesc emptyDesc = {};
-            SetBitField(emptyDesc.imageLayoutOrRange, emptyBuffer.getSize());
-            emptyDesc.imageViewSerialOrOffset = 0;
-            emptyDesc.samplerOrBufferSerial   = emptyBuffer.getBlockSerial().getValue();
-
-            mDesc.updateInfoDesc(infoDescIndex, emptyDesc);
-
-            mHandles[infoDescIndex].buffer = emptyBuffer.getBuffer().getHandle();
-
-            if (IsDynamicDescriptor(descriptorType))
-            {
-                mDynamicOffsets[infoDescIndex] = 0;
-            }
-        }
-        else
-        {
-            // Limit bound buffer size to maximum resource binding size.
-            GLsizeiptr boundBufferSize = gl::GetBoundBufferAvailableSize(bufferBinding);
-            VkDeviceSize size = std::min<VkDeviceSize>(boundBufferSize, maxBoundBufferRange);
-
-            // Make sure there's no possible under/overflow with binding size.
-            static_assert(sizeof(VkDeviceSize) >= sizeof(bufferBinding.getSize()),
-                          "VkDeviceSize too small");
-            ASSERT(bufferBinding.getSize() >= 0);
-
-            BufferVk *bufferVk         = vk::GetImpl(bufferBinding.get());
-            BufferHelper &bufferHelper = bufferVk->getBuffer();
-
-            DescriptorInfoDesc infoDesc = {};
-            SetBitField(infoDesc.imageLayoutOrRange, size);
-            infoDesc.samplerOrBufferSerial = bufferHelper.getBlockSerial().getValue();
-
-            VkDeviceSize offset = bufferBinding.getOffset() + bufferHelper.getOffset();
-
-            if (IsDynamicDescriptor(descriptorType))
-            {
-                SetBitField(mDynamicOffsets[infoDescIndex], offset);
-            }
-            else
-            {
-                SetBitField(infoDesc.imageViewSerialOrOffset, offset);
-            }
-
-            mDesc.updateInfoDesc(infoDescIndex, infoDesc);
-
-            mHandles[infoDescIndex].buffer = bufferHelper.getBuffer().getHandle();
-        }
+        const gl::InterfaceBlock &block = blocks[blockIndex];
+        updateShaderBuffer(variableType, variableInfoMap, buffers[block.binding], block, blockIndex,
+                           descriptorType, maxBoundBufferRange, emptyBuffer, writeDescriptorDescs);
     }
 }
 
