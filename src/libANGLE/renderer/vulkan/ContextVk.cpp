@@ -2803,6 +2803,8 @@ angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferHelperT *co
         mShaderBufferWriteDescriptorDescBuilder.getDescs(), commandBufferHelper,
         mShaderBuffersDescriptorDesc, &newSharedCacheKey));
 
+    executableVk->resetDirtyBits();
+
     if (newSharedCacheKey)
     {
         // A new cache entry has been created. We record this cache key in the images and buffers so
@@ -2847,19 +2849,17 @@ angle::Result ContextVk::handleDirtyUniformBuffersImpl(CommandBufferT *commandBu
     ProgramExecutableVk &executableVk    = *getExecutable();
     const ShaderInterfaceVariableInfoMap &variableInfoMap = executableVk.getVariableInfoMap();
 
-    mShaderBuffersDescriptorDesc.updateShaderBuffers(
-        ShaderVariableType::UniformBuffer, variableInfoMap,
-        mState.getOffsetBindingPointerUniformBuffers(), executable->getUniformBlocks(),
-        executableVk.getUniformBufferDescriptorType(), limits.maxUniformBufferRange, mEmptyBuffer,
-        mShaderBufferWriteDescriptorDescBuilder.getDescs());
-
-    for (gl::ShaderType shaderType : executable->getLinkedShaderStages())
+    const gl::Program::DirtyBits &dirtyBits = executableVk.getDirtyBits();
+    for (size_t blockIndex : dirtyBits)
     {
-        const vk::PipelineStage pipelineStage = vk::GetPipelineStage(shaderType);
-        UpdateShaderUniformBuffers(this, commandBufferHelper, shaderType, pipelineStage,
-                                   executable->getUniformBlocks(),
-                                   mState.getOffsetBindingPointerUniformBuffers());
+        mShaderBuffersDescriptorDesc.updateOneUniformBuffer(
+            this, commandBufferHelper, variableInfoMap,
+            mState.getOffsetBindingPointerUniformBuffers(), executable->getUniformBlocks(),
+            static_cast<uint32_t>(blockIndex), executableVk.getUniformBufferDescriptorType(),
+            limits.maxUniformBufferRange, mEmptyBuffer,
+            mShaderBufferWriteDescriptorDescBuilder.getDescs());
     }
+    executableVk.resetDirtyBits();
 
     vk::SharedDescriptorSetCacheKey newSharedCacheKey;
     ANGLE_TRY(executableVk.updateShaderResourcesDescriptorSet(

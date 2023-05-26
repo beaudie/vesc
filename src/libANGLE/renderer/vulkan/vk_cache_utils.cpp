@@ -6072,6 +6072,114 @@ bool AssertAllShaderStageHasTheInfoBinding(ShaderVariableType variableType,
     return true;
 }
 
+template <typename CommandBufferT>
+void DescriptorSetDescBuilder::updateOneUniformBuffer(
+    ContextVk *contextVk,
+    CommandBufferT *commandBufferHelper,
+    const ShaderInterfaceVariableInfoMap &variableInfoMap,
+    const gl::BufferVector &buffers,
+    const std::vector<gl::InterfaceBlock> &blocks,
+    uint32_t blockIndex,
+    VkDescriptorType descriptorType,
+    VkDeviceSize maxBoundBufferRange,
+    const BufferHelper &emptyBuffer,
+    const WriteDescriptorDescs &writeDescriptorDescs)
+{
+    const gl::InterfaceBlock &block = blocks[blockIndex];
+    if (block.activeShaders().none())
+    {
+        return;
+    }
+
+    const ShaderInterfaceVariableInfo &info = variableInfoMap.getIndexedVariableInfo(
+        block.getFirstShaderTypeWhereActive(), ShaderVariableType::UniformBuffer, blockIndex);
+    uint32_t binding = info.binding;
+    ASSERT(AssertAllShaderStageHasTheInfoBinding(ShaderVariableType::UniformBuffer, block,
+                                                 blockIndex, variableInfoMap, binding));
+    uint32_t arrayElement  = block.isArray ? block.arrayElement : 0;
+    uint32_t infoDescIndex = writeDescriptorDescs[binding].descriptorInfoIndex + arrayElement;
+
+    const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding = buffers[block.binding];
+    if (bufferBinding.get() == nullptr)
+    {
+        DescriptorInfoDesc emptyDesc = {};
+        SetBitField(emptyDesc.imageLayoutOrRange, emptyBuffer.getSize());
+        emptyDesc.imageViewSerialOrOffset = 0;
+        emptyDesc.samplerOrBufferSerial   = emptyBuffer.getBlockSerial().getValue();
+
+        mDesc.updateInfoDesc(infoDescIndex, emptyDesc);
+
+        mHandles[infoDescIndex].buffer = emptyBuffer.getBuffer().getHandle();
+
+        if (IsDynamicDescriptor(descriptorType))
+        {
+            mDynamicOffsets[infoDescIndex] = 0;
+        }
+    }
+    else
+    {
+        // Limit bound buffer size to maximum resource binding size.
+        GLsizeiptr boundBufferSize = gl::GetBoundBufferAvailableSize(bufferBinding);
+        VkDeviceSize size          = std::min<VkDeviceSize>(boundBufferSize, maxBoundBufferRange);
+
+        // Make sure there's no possible under/overflow with binding size.
+        static_assert(sizeof(VkDeviceSize) >= sizeof(bufferBinding.getSize()),
+                      "VkDeviceSize too small");
+        ASSERT(bufferBinding.getSize() >= 0);
+
+        BufferVk *bufferVk         = vk::GetImpl(bufferBinding.get());
+        BufferHelper &bufferHelper = bufferVk->getBuffer();
+
+        commandBufferHelper->bufferRead(contextVk, VK_ACCESS_UNIFORM_READ_BIT,
+                                        block.activeShaders(), &bufferHelper);
+
+        DescriptorInfoDesc infoDesc = {};
+        SetBitField(infoDesc.imageLayoutOrRange, size);
+        infoDesc.samplerOrBufferSerial = bufferHelper.getBlockSerial().getValue();
+
+        VkDeviceSize offset = bufferBinding.getOffset() + bufferHelper.getOffset();
+
+        if (IsDynamicDescriptor(descriptorType))
+        {
+            SetBitField(mDynamicOffsets[infoDescIndex], offset);
+        }
+        else
+        {
+            SetBitField(infoDesc.imageViewSerialOrOffset, offset);
+        }
+
+        mDesc.updateInfoDesc(infoDescIndex, infoDesc);
+
+        mHandles[infoDescIndex].buffer = bufferHelper.getBuffer().getHandle();
+    }
+}
+
+// Explict instantiate
+template void DescriptorSetDescBuilder::updateOneUniformBuffer<vk::RenderPassCommandBufferHelper>(
+    ContextVk *contextVk,
+    RenderPassCommandBufferHelper *commandBufferHelper,
+    const ShaderInterfaceVariableInfoMap &variableInfoMap,
+    const gl::BufferVector &buffers,
+    const std::vector<gl::InterfaceBlock> &blocks,
+    uint32_t blockIndex,
+    VkDescriptorType descriptorType,
+    VkDeviceSize maxBoundBufferRange,
+    const BufferHelper &emptyBuffer,
+    const WriteDescriptorDescs &writeDescriptorDescs);
+
+template void
+DescriptorSetDescBuilder::updateOneUniformBuffer<vk::OutsideRenderPassCommandBufferHelper>(
+    ContextVk *contextVk,
+    OutsideRenderPassCommandBufferHelper *commandBufferHelper,
+    const ShaderInterfaceVariableInfoMap &variableInfoMap,
+    const gl::BufferVector &buffers,
+    const std::vector<gl::InterfaceBlock> &blocks,
+    uint32_t blockIndex,
+    VkDescriptorType descriptorType,
+    VkDeviceSize maxBoundBufferRange,
+    const BufferHelper &emptyBuffer,
+    const WriteDescriptorDescs &writeDescriptorDescs);
+
 void DescriptorSetDescBuilder::updateShaderBuffers(
     ShaderVariableType variableType,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
