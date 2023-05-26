@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "543bacd0_9aa03981",
+        "filename": "src/tests/gl_tests/DepthStencilFormatsTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1448,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-26T20:29:51Z",
+      "side": 1,
+      "message": "For future reference, you can also draw a triangle with `(-1, -1), (3, -1), (-1, 3)` to the same effect.",
+      "range": {
+        "startLine": 1448,
+        "startChar": 0,
+        "endLine": 1448,
+        "endChar": 125
+      },
+      "revId": "f7ce89e90c8fd1c1b8ddb67592ecde565bd138ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
