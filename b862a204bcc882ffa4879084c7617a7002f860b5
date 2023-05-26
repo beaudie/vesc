@@ -188,6 +188,24 @@
       "parentUuid": "6336fee6_d7d4422c",
       "revId": "b862a204bcc882ffa4879084c7617a7002f860b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18d66645_6efc1a7c",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 2941,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-26T18:08:47Z",
+      "side": 1,
+      "message": "Yes that\u0027s exactly it. Fallbacks for image formats are common, so we have the intended vs actual image format distinction. Buffer formats (for texture buffers) never had fallbacks (until this change), so there is no intended vs actual distinction. The distinction for images and texture buffers (or vertex array buffers for that matter) are based on different format feature flags.",
+      "parentUuid": "eea3a493_2852ed81",
+      "revId": "b862a204bcc882ffa4879084c7617a7002f860b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
