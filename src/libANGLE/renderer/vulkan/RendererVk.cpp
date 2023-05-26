@@ -2170,6 +2170,11 @@ void RendererVk::appendDeviceExtensionFeaturesNotPromoted(
         vk::AddToPNextChain(deviceFeatures, &mSwapchainMaintenance1Features);
     }
 
+    if (ExtensionFound(VK_EXT_LEGACY_DITHERING_EXTENSION_NAME, deviceExtensionNames))
+    {
+        vk::AddToPNextChain(deviceFeatures, &mDitheringFeatures);
+    }
+
     if (ExtensionFound(VK_EXT_PHYSICAL_DEVICE_DRM_EXTENSION_NAME, deviceExtensionNames))
     {
         vk::AddToPNextChain(deviceProperties, &mDrmProperties);
@@ -2449,6 +2454,9 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     mSwapchainMaintenance1Features.sType =
         VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SWAPCHAIN_MAINTENANCE_1_FEATURES_EXT;
 
+    mDitheringFeatures       = {};
+    mDitheringFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_LEGACY_DITHERING_FEATURES_EXT;
+
     mDrmProperties       = {};
     mDrmProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DRM_PROPERTIES_EXT;
 
@@ -2517,6 +2525,7 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
     mPipelineProtectedAccessFeatures.pNext                  = nullptr;
     mRasterizationOrderAttachmentAccessFeatures.pNext       = nullptr;
     mSwapchainMaintenance1Features.pNext                    = nullptr;
+    mDitheringFeatures.pNext                                = nullptr;
     mDrmProperties.pNext                                    = nullptr;
 }
 
@@ -4288,6 +4297,10 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     //
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsSwapchainMaintenance1,
                             mSwapchainMaintenance1Features.swapchainMaintenance1 == VK_TRUE);
+
+    // The VK_EXT_legacy_dithering extension enables dithering support without emulation
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsLegacyDithering,
+                            mDitheringFeatures.legacyDithering == VK_TRUE);
 
     // http://anglebug.com/6872
     // On ARM hardware, framebuffer-fetch-like behavior on Vulkan is already coherent, so we can
