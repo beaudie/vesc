@@ -16,6 +16,23 @@
       "message": "Bots all green.",
       "revId": "4494f048704861fd53aa677afd93162071d7ff6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce9ec938_e513b831",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 28
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-26T23:41:43Z",
+      "side": 1,
+      "message": "Thank you for the thorough reviews, Charlie and Shabi!",
+      "revId": "4494f048704861fd53aa677afd93162071d7ff6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
