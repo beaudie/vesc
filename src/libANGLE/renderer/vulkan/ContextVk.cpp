@@ -868,10 +868,17 @@ void UpdateShaderUniformBuffers(ContextVk *contextVk,
                                 gl::ShaderType shaderType,
                                 const vk::PipelineStage pipelineStage,
                                 const std::vector<gl::InterfaceBlock> &ubos,
+                                const gl::Program::DirtyBits dirtyBits,
                                 const gl::BufferVector &bufferBindings)
 {
-    for (const gl::InterfaceBlock &ubo : ubos)
+    for (uint32_t blockIndex = 0; blockIndex < ubos.size(); ++blockIndex)
     {
+        if (!dirtyBits[gl::Program::DIRTY_BIT_UNIFORM_BLOCK_BINDING_0 + blockIndex])
+        {
+            continue;
+        }
+
+        const gl::InterfaceBlock &ubo = ubos[blockIndex];
         if (!ubo.isActive(shaderType) || bufferBindings[ubo.binding].get() == nullptr)
         {
             continue;
@@ -885,12 +892,13 @@ void UpdateShaderUniformBuffers(ContextVk *contextVk,
 }
 
 template <typename CommandBufferT>
-void UpdateShaderStorageBuffers(ContextVk *contextVk,
-                                CommandBufferT *commandBufferHelper,
-                                gl::ShaderType shaderType,
-                                const vk::PipelineStage pipelineStage,
-                                const std::vector<gl::InterfaceBlock> &ssbos,
-                                const gl::BufferVector &bufferBindings)
+void UpdateShaderBuffers(ContextVk *contextVk,
+                         CommandBufferT *commandBufferHelper,
+                         ShaderVariableType variableType,
+                         gl::ShaderType shaderType,
+                         const vk::PipelineStage pipelineStage,
+                         const std::vector<gl::InterfaceBlock> &ssbos,
+                         const gl::BufferVector &bufferBindings)
 {
     for (const gl::InterfaceBlock &ssbo : ssbos)
     {
@@ -902,20 +910,30 @@ void UpdateShaderStorageBuffers(ContextVk *contextVk,
         BufferVk *bufferVk             = vk::GetImpl(bufferBindings[ssbo.binding].get());
         vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
 
-        if (ssbo.isReadOnly)
+        if (variableType == ShaderVariableType::UniformBuffer)
         {
-            // Avoid unnecessary barriers for readonly SSBOs by making sure the buffers are
-            // marked read-only.  This also helps BufferVk make better decisions during buffer
-            // data uploads and copies by knowing that the buffers are not actually being
-            // written to.
-            commandBufferHelper->bufferRead(contextVk, VK_ACCESS_SHADER_READ_BIT, pipelineStage,
+            commandBufferHelper->bufferRead(contextVk, VK_ACCESS_UNIFORM_READ_BIT, pipelineStage,
                                             &bufferHelper);
         }
         else
         {
-            // We set the SHADER_READ_BIT to be conservative.
-            VkAccessFlags accessFlags = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
-            commandBufferHelper->bufferWrite(contextVk, accessFlags, pipelineStage, &bufferHelper);
+            ASSERT(variableType == ShaderVariableType::ShaderStorageBuffer);
+            if (ssbo.isReadOnly)
+            {
+                // Avoid unnecessary barriers for readonly SSBOs by making sure the buffers are
+                // marked read-only.  This also helps BufferVk make better decisions during buffer
+                // data uploads and copies by knowing that the buffers are not actually being
+                // written to.
+                commandBufferHelper->bufferRead(contextVk, VK_ACCESS_SHADER_READ_BIT, pipelineStage,
+                                                &bufferHelper);
+            }
+            else
+            {
+                // We set the SHADER_READ_BIT to be conservative.
+                VkAccessFlags accessFlags = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
+                commandBufferHelper->bufferWrite(contextVk, accessFlags, pipelineStage,
+                                                 &bufferHelper);
+            }
         }
     }
 }
@@ -2782,12 +2800,12 @@ angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferHelperT *co
     {
         const vk::PipelineStage pipelineStage = vk::GetPipelineStage(shaderType);
 
-        UpdateShaderUniformBuffers(this, commandBufferHelper, shaderType, pipelineStage,
-                                   executable->getUniformBlocks(),
-                                   mState.getOffsetBindingPointerUniformBuffers());
-        UpdateShaderStorageBuffers(this, commandBufferHelper, shaderType, pipelineStage,
-                                   executable->getShaderStorageBlocks(),
-                                   mState.getOffsetBindingPointerShaderStorageBuffers());
+        UpdateShaderBuffers(this, commandBufferHelper, ShaderVariableType::UniformBuffer,
+                            shaderType, pipelineStage, executable->getUniformBlocks(),
+                            mState.getOffsetBindingPointerUniformBuffers());
+        UpdateShaderBuffers(this, commandBufferHelper, ShaderVariableType::ShaderStorageBuffer,
+                            shaderType, pipelineStage, executable->getShaderStorageBlocks(),
+                            mState.getOffsetBindingPointerShaderStorageBuffers());
         UpdateShaderAtomicCounterBuffers(this, commandBufferHelper, shaderType, pipelineStage,
                                          executable->getAtomicCounterBuffers(),
                                          mState.getOffsetBindingPointerAtomicCounterBuffers());
@@ -2847,9 +2865,10 @@ angle::Result ContextVk::handleDirtyUniformBuffersImpl(CommandBufferT *commandBu
     ProgramExecutableVk &executableVk    = *getExecutable();
     const ShaderInterfaceVariableInfoMap &variableInfoMap = executableVk.getVariableInfoMap();
 
-    mShaderBuffersDescriptorDesc.updateShaderBuffers(
+    const gl::Program::DirtyBits dirtyBits = executableVk.getAndResetDirtyBits();
+    mShaderBuffersDescriptorDesc.updateUniformBuffers(
         ShaderVariableType::UniformBuffer, variableInfoMap,
-        mState.getOffsetBindingPointerUniformBuffers(), executable->getUniformBlocks(),
+        mState.getOffsetBindingPointerUniformBuffers(), executable->getUniformBlocks(), dirtyBits,
         executableVk.getUniformBufferDescriptorType(), limits.maxUniformBufferRange, mEmptyBuffer,
         mShaderBufferWriteDescriptorDescBuilder.getDescs());
 
@@ -2857,7 +2876,7 @@ angle::Result ContextVk::handleDirtyUniformBuffersImpl(CommandBufferT *commandBu
     {
         const vk::PipelineStage pipelineStage = vk::GetPipelineStage(shaderType);
         UpdateShaderUniformBuffers(this, commandBufferHelper, shaderType, pipelineStage,
-                                   executable->getUniformBlocks(),
+                                   executable->getUniformBlocks(), dirtyBits,
                                    mState.getOffsetBindingPointerUniformBuffers());
     }
 

@@ -1178,7 +1178,10 @@ angle::Result ProgramGL::syncState(const gl::Context *context,
     {
         ASSERT(dirtyBit <= gl::Program::DIRTY_BIT_UNIFORM_BLOCK_BINDING_MAX);
         GLuint binding = static_cast<GLuint>(dirtyBit);
-        setUniformBlockBinding(binding, mState.getUniformBlockBinding(binding));
+        if (binding < mState.getUniformBlocks().size())
+        {
+            setUniformBlockBinding(binding, mState.getUniformBlockBinding(binding));
+        }
     }
     return angle::Result::Continue;
 }

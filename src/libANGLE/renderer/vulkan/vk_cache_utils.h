@@ -1718,6 +1718,15 @@ class DescriptorSetDescBuilder final
                               TransformFeedbackVk *transformFeedbackVk);
 
     // Specific helpers for shader resource descriptors.
+    void updateUniformBuffers(ShaderVariableType variableType,
+                              const ShaderInterfaceVariableInfoMap &variableInfoMap,
+                              const gl::BufferVector &buffers,
+                              const std::vector<gl::InterfaceBlock> &blocks,
+                              const gl::Program::DirtyBits &dirtyBits,
+                              VkDescriptorType descriptorType,
+                              VkDeviceSize maxBoundBufferRange,
+                              const BufferHelper &emptyBuffer,
+                              const WriteDescriptorDescs &writeDescriptorDescs);
     void updateShaderBuffers(ShaderVariableType variableType,
                              const ShaderInterfaceVariableInfoMap &variableInfoMap,
                              const gl::BufferVector &buffers,
