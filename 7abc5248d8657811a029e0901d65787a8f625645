@@ -70,6 +70,30 @@
       },
       "revId": "7abc5248d8657811a029e0901d65787a8f625645",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b444f646_10e974a6",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5601,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-26T23:49:42Z",
+      "side": 0,
+      "message": "This is effectively what this CL does, except for\n\n* mEnabled is just not set in the initializer list at all, which is a totally valid thing to do.. and the reason for this is to point the reader to the line that _actually_ initializes the value. All of the lines touched here are part of the constructor. I\u0027m not sure why we would necessarily want to have it set to a value in the initializer list.\n\n* formats the same expression in a slightly different way, which is a bit more `git cl format` friendly with some additional comments.\n\nIf you find that confusing, could you point out which part specifically seems confusing to you?",
+      "parentUuid": "b75d07cd_0b2e19cf",
+      "range": {
+        "startLine": 5601,
+        "startChar": 7,
+        "endLine": 5601,
+        "endChar": 21
+      },
+      "revId": "7abc5248d8657811a029e0901d65787a8f625645",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
