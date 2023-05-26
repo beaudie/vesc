@@ -134,6 +134,24 @@
       "parentUuid": "cb378604_76196ddd",
       "revId": "b862a204bcc882ffa4879084c7617a7002f860b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fef25004_85923a30",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 2941,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-05-26T16:39:58Z",
+      "side": 1,
+      "message": "Right, but the format picking logic has nothing to do with buffer or image. If we emulate RGB32, then the format picking logic should pick RGB32 instead of RGBA32. There are many places we are using actualImageFormatID, it is a bit dangerous to have it return different value.",
+      "parentUuid": "33c81623_1e269c76",
+      "revId": "b862a204bcc882ffa4879084c7617a7002f860b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
