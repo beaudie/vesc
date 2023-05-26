@@ -2229,6 +2229,11 @@ angle::Result State::setIndexedBufferBinding(const Context *context,
             mBoundUniformBuffersMask.set(index, buffer != nullptr);
             UpdateIndexedBufferBinding(context, &mUniformBuffers[index], buffer, target, offset,
                                        size);
+            if (mProgram)
+            {
+                mProgram->onUniformBufferStateChange(index);
+                setObjectDirty(GL_PROGRAM);
+            }
             break;
         case BufferBinding::AtomicCounter:
             mBoundAtomicCounterBuffersMask.set(index, buffer != nullptr);
@@ -3884,6 +3889,10 @@ void State::onImageStateChange(const Context *context, size_t unit)
 
 void State::onUniformBufferStateChange(size_t uniformBufferIndex)
 {
+    if (mProgram)
+    {
+        mProgram->onUniformBufferStateChange(uniformBufferIndex);
+    }
     // This could be represented by a different dirty bit. Using the same one keeps it simple.
     mDirtyBits.set(DIRTY_BIT_UNIFORM_BUFFER_BINDINGS);
 }
