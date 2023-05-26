@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03f71c31_52c432c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2023-05-26T06:12:31Z",
+      "side": 1,
+      "message": "Let me put this on hold since there\u0027s deeper issue in RADV. This workaround is causing Yuxin\u0027s `image_alias_write` fix to fail. I\u0027ll take a look.\n\nOtherwise, the clean `patchset 2` at https://chromium-review.googlesource.com/c/angle/angle/+/4568287/2 already fixes `dEQP-GLES31.functional.synchronization.*.image_alias_write`",
+      "revId": "843e61e01fc58e2fe196877716eb94538de94a7f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
