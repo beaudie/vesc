@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7cd64d2_75b2a4e7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-26T14:23:41Z",
+      "side": 1,
+      "message": "Bug: chromium:1447924",
+      "revId": "8cf03e9d22e70e89754bb60f48f1932f15c9b586",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
