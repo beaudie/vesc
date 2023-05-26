@@ -556,6 +556,57 @@ void main()
     glDeleteProgram(mFragProg);
 }
 
+// Test glUniformBlockBinding
+TEST_P(ProgramPipelineTest31, FragmentStageUniformBlockBindingTest)
+{
+    ANGLE_SKIP_TEST_IF(!IsVulkan());
+
+    // Create two separable program objects from a
+    // single source string respectively (vertSrc and fragSrc)
+    const GLchar *vertString = essl31_shaders::vs::Simple();
+    const GLchar *fragString = R"(#version 310 es
+precision highp float;
+layout (std140) uniform color_ubo
+{
+    float redColorIn;
+    float greenColorIn;
+};
+
+out vec4 my_FragColor;
+void main()
+{
+    my_FragColor = vec4(redColorIn, greenColorIn, 0.0, 1.0);
+})";
+
+    bindProgramPipeline(vertString, fragString);
+
+    // Set the output color to yellow
+    glActiveShaderProgram(mPipeline, mFragProg);
+    GLint uboIndex = glGetUniformBlockIndex(mFragProg, "color_ubo");
+    GLBuffer uboBuf;
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, uboBuf);
+    static constexpr GLColor32F kFloatYellow = {1.0f, 1.0f, 0.0f, 0.0f};
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(GLColor32F), &kFloatYellow, GL_STATIC_DRAW);
+    glUniformBlockBinding(mFragProg, uboIndex, 0);
+    drawQuadWithPPO(essl31_shaders::PositionAttrib(), 0.5f, 1.0f);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::yellow);
+
+    // Clear and test again
+    glClearColor(0.0, 0.0, 0.0, 0.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+    drawQuadWithPPO(essl31_shaders::PositionAttrib(), 0.5f, 1.0f);
+    // Set the output color to red
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(GLColor32F), &kFloatRed, GL_STATIC_DRAW);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, uboBuf);
+    drawQuadWithPPO(essl31_shaders::PositionAttrib(), 0.5f, 1.0f);
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+
+    glDeleteProgram(mVertProg);
+    glDeleteProgram(mFragProg);
+}
+
 // Test varyings
 TEST_P(ProgramPipelineTest31, ProgramPipelineVaryings)
 {
