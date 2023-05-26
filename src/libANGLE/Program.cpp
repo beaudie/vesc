@@ -2634,9 +2634,23 @@ const InterfaceBlock &Program::getShaderStorageBlockByIndex(GLuint index) const
 void Program::bindUniformBlock(UniformBlockIndex uniformBlockIndex, GLuint uniformBlockBinding)
 {
     ASSERT(!mLinkingState);
+
+    if (mState.mExecutable->mActiveUniformBlockBindings[uniformBlockIndex.value])
+    {
+        GLuint previousBinding =
+            mState.mExecutable->mUniformBlocks[uniformBlockIndex.value].binding;
+        mUniformBlockBindingMasks[previousBinding].reset(uniformBlockIndex.value);
+    }
+
     mState.mExecutable->mUniformBlocks[uniformBlockIndex.value].binding = uniformBlockBinding;
+    if (uniformBlockBinding >= mUniformBlockBindingMasks.size())
+    {
+        mUniformBlockBindingMasks.resize(uniformBlockBinding + 1, UniformBlockBindingMask());
+    }
+    mUniformBlockBindingMasks[uniformBlockBinding].set(uniformBlockIndex.value);
     mState.mExecutable->mActiveUniformBlockBindings.set(uniformBlockIndex.value,
                                                         uniformBlockBinding != 0);
+
     mDirtyBits.set(DIRTY_BIT_UNIFORM_BLOCK_BINDING_0 + uniformBlockIndex.value);
 }
 
@@ -3644,6 +3658,16 @@ angle::Result Program::deserialize(const Context *context,
         stream.readBool(&variable.ignored);
 
         mState.mUniformLocations.push_back(variable);
+    }
+
+    for (size_t uniformBlockIndex : mState.mExecutable->mActiveUniformBlockBindings)
+    {
+        GLuint uniformBlockBinding = mState.mExecutable->mUniformBlocks[uniformBlockIndex].binding;
+        if (uniformBlockBinding >= mUniformBlockBindingMasks.size())
+        {
+            mUniformBlockBindingMasks.resize(uniformBlockBinding + 1, UniformBlockBindingMask());
+        }
+        mUniformBlockBindingMasks[uniformBlockBinding].set(uniformBlockIndex);
     }
 
     size_t bufferVariableCount = stream.readInt<size_t>();
