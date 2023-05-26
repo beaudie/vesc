@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71c3cdcc_a7badc62",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2023-05-26T17:28:10Z",
+      "side": 1,
+      "message": "Patchset 17:\n- matching http://ag/23413229 patchset 8\n- going to include test util component",
+      "revId": "b04cd5f31a26dc7e97e84aee15ccc029c54d6853",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
