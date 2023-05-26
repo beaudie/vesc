@@ -52,6 +52,24 @@
       "parentUuid": "f975aae1_a129d7ab",
       "revId": "520f9d3032fa237e3b3a44afe8594a44af0baa88",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9dccda0f_a717922d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1286337
+      },
+      "writtenOn": "2023-05-26T18:47:25Z",
+      "side": 1,
+      "message": "Is the autoroller broken right now? I was expecting https://chromium-review.googlesource.com/c/chromium/src/+/4567106 to fix it but I\u0027m not seeing this change.",
+      "parentUuid": "c020e536_035ff60c",
+      "revId": "520f9d3032fa237e3b3a44afe8594a44af0baa88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
