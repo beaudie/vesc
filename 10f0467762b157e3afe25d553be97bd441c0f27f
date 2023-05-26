@@ -105,6 +105,30 @@
       },
       "revId": "10f0467762b157e3afe25d553be97bd441c0f27f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03506aac_4ce17977",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3783,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2023-05-26T17:31:53Z",
+      "side": 1,
+      "message": "yeah, totally. When the time comes, we could forward host driver id while relying on the driver name to tell if venus is in between.",
+      "parentUuid": "14084556_552eda3b",
+      "range": {
+        "startLine": 3783,
+        "startChar": 67,
+        "endLine": 3783,
+        "endChar": 93
+      },
+      "revId": "10f0467762b157e3afe25d553be97bd441c0f27f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
