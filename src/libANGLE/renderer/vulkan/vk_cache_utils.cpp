@@ -6055,7 +6055,6 @@ angle::Result DescriptorSetDescBuilder::updateExecutableActiveTexturesForShader(
 }
 
 void DescriptorSetDescBuilder::updateShaderBuffers(
-    gl::ShaderType shaderType,
     ShaderVariableType variableType,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
     const gl::BufferVector &buffers,
@@ -6071,13 +6070,13 @@ void DescriptorSetDescBuilder::updateShaderBuffers(
         const gl::InterfaceBlock &block                           = blocks[bufferIndex];
         const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding = buffers[block.binding];
 
-        if (!block.isActive(shaderType))
+        if (block.activeShaders().none())
         {
             continue;
         }
 
-        const ShaderInterfaceVariableInfo &info =
-            variableInfoMap.getIndexedVariableInfo(shaderType, variableType, bufferIndex);
+        const ShaderInterfaceVariableInfo &info = variableInfoMap.getIndexedVariableInfo(
+            block.getFirstShaderTypeWhereActive(), variableType, bufferIndex);
         if (info.isDuplicate)
         {
             continue;
