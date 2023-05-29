@@ -1173,6 +1173,7 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
     const bool canRemoveResolveAttachments =
         isRenderToTextureThroughEmulation && !hasUnresolveAttachments;
 
+    bool dither = false;
     // Pack color attachments
     PackedAttachmentIndex attachmentCount(0);
     for (uint32_t colorIndexGL = 0; colorIndexGL < desc.colorAttachmentRange(); ++colorIndexGL)
@@ -1194,6 +1195,11 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
 
         angle::FormatID attachmentFormatID = desc[colorIndexGL];
         ASSERT(attachmentFormatID != angle::FormatID::NONE);
+        if (attachmentFormatID == angle::FormatID::R4G4B4A4_UNORM)
+        {
+            dither = true;
+        }
+        printf("init renderpass colorIndexGL=%u attachmentFormatID=%d dither=%d\n", colorIndexGL, attachmentFormatID, dither);
 
         VkAttachmentReference2 colorRef = {};
         colorRef.sType                  = VK_STRUCTURE_TYPE_ATTACHMENT_REFERENCE_2;
@@ -1385,6 +1391,14 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
         }
     }
 
+    if (contextVk->getFeatures().supportsLegacyDithering.enabled && dither)
+    {
+        for (VkSubpassDescription2 &subpass : subpassDesc)
+        {
+            subpass.flags |= VK_SUBPASS_DESCRIPTION_ENABLE_LEGACY_DITHERING_BIT_EXT;
+        }
+    }
+
     // If depth/stencil is to be resolved, add a VkSubpassDescriptionDepthStencilResolve to the
     // pNext chain of the subpass description.
     VkSubpassDescriptionDepthStencilResolve depthStencilResolve  = {};
@@ -1435,6 +1449,7 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
     createInfo.pAttachments            = attachmentDescs.data();
     createInfo.subpassCount            = static_cast<uint32_t>(subpassDesc.size());
     createInfo.pSubpasses              = subpassDesc.data();
+    printf("VkRenderPassCreateInfo2 subpassCount=%u subpassDesc[0].flags=0x%x\n", createInfo.subpassCount, subpassDesc[0].flags);
 
     if (!subpassDependencies.empty())
     {
