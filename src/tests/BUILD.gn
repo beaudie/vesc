@@ -267,6 +267,7 @@ if (is_win || is_linux || is_chromeos || is_android || is_fuchsia || is_apple) {
       "$angle_root:angle_gl_enum_utils",
       "$angle_root:angle_image_util",
       "$angle_root:translator",
+      "$angle_root/util:angle_png_utils",
     ]
 
     if (is_ios) {

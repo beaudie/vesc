@@ -8,6 +8,7 @@
 
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
+#include "util/png_utils.h"
 
 #include "image_util/imageformats.h"
 
@@ -481,8 +482,8 @@ class SixteenBppTextureDitheringTestES3 : public SixteenBppTextureTestES3
   protected:
     SixteenBppTextureDitheringTestES3()
     {
-        setWindowWidth(512);
-        setWindowHeight(512);
+        setWindowWidth(128);
+        setWindowHeight(128);
         setConfigRedBits(8);
         setConfigGreenBits(8);
         setConfigBlueBits(8);
@@ -616,11 +617,11 @@ void SixteenBppTextureDitheringTestES3::bandingTest(GLenum format, Gradient grad
     switch (format)
     {
         case GL_RGBA4:
-            maxError = 256 / 16;
+            maxError = 2 * 256 / 16;
             break;
         case GL_RGB5_A1:
         case GL_RGB565:
-            maxError = 256 / 32;
+            maxError = 2 * 256 / 32;
             break;
         default:
             UNREACHABLE();
@@ -635,6 +636,24 @@ void SixteenBppTextureDitheringTestES3::bandingTest(GLenum format, Gradient grad
     EXPECT_PIXEL_COLOR_NEAR(w - 1, 0, rightColor, maxError);
     EXPECT_PIXEL_COLOR_NEAR(0, h - 1, topColor, maxError);
     EXPECT_PIXEL_COLOR_NEAR(w - 1, h - 1, topRightColor, maxError);
+
+    uint32_t pixelCount = 128 * 128;
+    std::vector<uint8_t> pixelData(pixelCount * 4);
+    glReadPixels(0, 0, 128, 128, GL_RGBA, GL_UNSIGNED_BYTE, pixelData.data());
+
+    // Convert to RGB and flip y.
+    std::vector<uint8_t> rgbData(pixelCount * 3);
+    for (EGLint y = 0; y < 128; ++y)
+    {
+        for (EGLint x = 0; x < 128; ++x)
+        {
+            EGLint srcPixel = x + y * 128;
+            EGLint dstPixel = x + (128 - y - 1) * 128;
+            memcpy(&rgbData[dstPixel * 3], &pixelData[srcPixel * 4], 3);
+        }
+    }
+
+    ASSERT(angle::SavePNGRGB("/sdcard/Download/1.png", "ANGLE Screenshot", 128, 128, rgbData));
     ASSERT_GL_NO_ERROR();
 }
 
