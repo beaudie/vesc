@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8753ae29_e362f128",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-30T18:57:21Z",
+      "side": 1,
+      "message": "Weird that VVL never complained about our usage of swapchain maint1 without enabling the feature 😐",
+      "revId": "be242e1728cde2b6fb52ee5279217a49d98f824b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
