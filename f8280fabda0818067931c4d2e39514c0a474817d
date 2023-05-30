@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b72da13_cde87a92",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-30T23:05:26Z",
+      "side": 1,
+      "message": "Alright I tried this on the interpreter and it crashes the same way (before/after this CL) as it doesn\u0027t currently support `eglDestroySyncKHR` at all:\nwe gather `egl_ext_commands` here:\nhttps://crsrc.org/c/third_party/angle/scripts/generate_entry_points.py;drc\u003d7d4c6d1d07ac52b486d9b4d589dcd92678ad68c5;l\u003d3248\nbut then they\u0027re only used in a `write_stubs_header` call and nowhere else. So they are missing from the mapping in `frame_capture_replay_autogen.cpp` and the interpreter can\u0027t call the function. If I just skip the assert and call in that file, interpreter can run the trace before or after this CL.",
+      "parentUuid": "796997a4_e47065f2",
+      "revId": "f8280fabda0818067931c4d2e39514c0a474817d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f4cbd176_6d0cf8f6",
