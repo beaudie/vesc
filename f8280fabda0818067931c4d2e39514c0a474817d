@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ac65fc8_dae54638",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-30T19:06:08Z",
+      "side": 1,
+      "message": "Is there an existing trace or an end2end test that I could retrace to try this change? If not, what would be a typical sequence of calls that we would be capturing?",
+      "revId": "f8280fabda0818067931c4d2e39514c0a474817d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4cbd176_6d0cf8f6",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1406,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-05-30T19:06:08Z",
+      "side": 1,
+      "message": "Could you add a comment why we need this here and how `count` is used?\n\nI see similar code here:\nhttps://crsrc.org/c/third_party/angle/src/libANGLE/capture/FrameCapture.cpp;drc\u003d9e47cbd300ca9d9948be7aef33887a0b57daf666;l\u003d1005\n\nbut there we\u0027re calling `UpdateResourceIDBuffer` so it makes sense.",
+      "range": {
+        "startLine": 1406,
+        "startChar": 17,
+        "endLine": 1406,
+        "endChar": 40
+      },
+      "revId": "f8280fabda0818067931c4d2e39514c0a474817d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
