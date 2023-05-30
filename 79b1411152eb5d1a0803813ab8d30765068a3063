@@ -43,6 +43,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7438ee92_361ab56a",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2102,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-05-30T20:59:17Z",
+      "side": 1,
+      "message": "These two sentence is a bit odd/confusing to read, maybe want to consider reword (or delete it).",
+      "range": {
+        "startLine": 2100,
+        "startChar": 83,
+        "endLine": 2102,
+        "endChar": 61
+      },
+      "revId": "79b1411152eb5d1a0803813ab8d30765068a3063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e3a8369b_75ba49c2",
         "filename": "src/libANGLE/renderer/vulkan/doc/PresentSemaphores.md",
         "patchSetId": 2
