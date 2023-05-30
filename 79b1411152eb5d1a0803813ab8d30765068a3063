@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b2e55a7_556efc9b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-30T18:19:30Z",
+      "side": 1,
+      "message": "Thanks. We\u0027re back to what ANGLE had in the past. I figured using the fence would make the logic simpler between with and without maint1, but the code looks actually simpler now.",
+      "revId": "79b1411152eb5d1a0803813ab8d30765068a3063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "512804e4_22276bcc",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2099,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-30T18:19:30Z",
+      "side": 1,
+      "message": "```suggestion\n        // Associate swapSerial of this present with the previous present of the same imageIndex.\n```",
+      "range": {
+        "startLine": 2099,
+        "startChar": 66,
+        "endLine": 2099,
+        "endChar": 72
+      },
+      "revId": "79b1411152eb5d1a0803813ab8d30765068a3063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3a8369b_75ba49c2",
+        "filename": "src/libANGLE/renderer/vulkan/doc/PresentSemaphores.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-30T18:19:30Z",
+      "side": 1,
+      "message": "```suggestion\nANI fence can be used instead of QueueSerial with dependency on ANI semaphore,\nhowever bugs have been observed on some implementations with Shared Present Mode\nwhere the ANI semaphore/fence are always signaled.\n```",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 36
+      },
+      "revId": "79b1411152eb5d1a0803813ab8d30765068a3063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
