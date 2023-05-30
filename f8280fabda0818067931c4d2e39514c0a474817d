@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "796997a4_e47065f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-30T19:20:44Z",
+      "side": 1,
+      "message": "Yeah, you can retrace `infinity_ops` or `kentucky_route_zero` to see the effect. I started with frame 2 and ended at 3 just for speed.  The difference will be:\n```\n    # In Setup, you will see an EGL sync created\n    CreateEGLSyncKHR(gEGLDisplay, 12537, 0, 1);\n\n    # In Reset, you will see an EGL sync destroyed and the original one restored.\n    eglDestroySyncKHR(gEGLDisplay, gEGLSyncMap[1]);\n    CreateEGLSyncKHR(gEGLDisplay, 12537, 0, 1);\n```",
+      "parentUuid": "1ac65fc8_dae54638",
+      "revId": "f8280fabda0818067931c4d2e39514c0a474817d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f4cbd176_6d0cf8f6",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 5
