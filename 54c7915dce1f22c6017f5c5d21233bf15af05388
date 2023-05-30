@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48e501f9_1d2f0cda",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 899,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-30T18:04:33Z",
+      "side": 1,
+      "message": "Looks like `fenceRecycler-\u003erecycle(std::move(fence));` called with `fence.get() \u003d\u003d VK_NULL_HANDLE` was a bug then, can that be reproduced in a test?",
+      "revId": "54c7915dce1f22c6017f5c5d21233bf15af05388",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
