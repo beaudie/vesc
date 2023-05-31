@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e1b7ebeb_32945ee2",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2099,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-31T11:03:01Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "512804e4_22276bcc",
+      "range": {
+        "startLine": 2099,
+        "startChar": 66,
+        "endLine": 2099,
+        "endChar": 72
+      },
+      "revId": "79b1411152eb5d1a0803813ab8d30765068a3063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7438ee92_361ab56a",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 2
@@ -66,6 +90,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c7e6e91b_e2c79c3f",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2102,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-31T11:03:01Z",
+      "side": 1,
+      "message": "I will try.",
+      "parentUuid": "7438ee92_361ab56a",
+      "range": {
+        "startLine": 2100,
+        "startChar": 83,
+        "endLine": 2102,
+        "endChar": 61
+      },
+      "revId": "79b1411152eb5d1a0803813ab8d30765068a3063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e3a8369b_75ba49c2",
         "filename": "src/libANGLE/renderer/vulkan/doc/PresentSemaphores.md",
         "patchSetId": 2
@@ -77,6 +125,30 @@
       "writtenOn": "2023-05-30T18:19:30Z",
       "side": 1,
       "message": "```suggestion\nANI fence can be used instead of QueueSerial with dependency on ANI semaphore,\nhowever bugs have been observed on some implementations with Shared Present Mode\nwhere the ANI semaphore/fence are always signaled.\n```",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 36
+      },
+      "revId": "79b1411152eb5d1a0803813ab8d30765068a3063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72731393_661b7f07",
+        "filename": "src/libANGLE/renderer/vulkan/doc/PresentSemaphores.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-31T11:03:01Z",
+      "side": 1,
+      "message": "Suggested comment changes the meaning. Original comment used semicolon (;) to list problems.\n\nThere two different problems:\n1. bugs with ANI Fences regardless of the present mode.\n2. and using ANI Fence will not work in Shared Present Mode. And it is not a bug, because ANI is not even required in SPM, so the fact that ANI semaphore is signaled if we do call ANI - is expected.\n\nMy previous CL fixed second problem using Virtual Image Index: https://chromium-review.googlesource.com/c/angle/angle/+/4481252?usp\u003ddashboard\nWith this CL separate fix for SPM problem is not required. It is a happy bonus from not using ANI Fences)",
+      "parentUuid": "e3a8369b_75ba49c2",
       "range": {
         "startLine": 73,
         "startChar": 0,
