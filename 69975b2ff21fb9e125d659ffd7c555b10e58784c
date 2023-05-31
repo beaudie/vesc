@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea7ef0d9_18b8829f",
+        "filename": "src/compiler/translator/BuildSPIRV.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2380,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-05-31T20:30:02Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "76799fe1_b9a8eee5",
+      "revId": "69975b2ff21fb9e125d659ffd7c555b10e58784c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ff289d9e_32580d2a",
