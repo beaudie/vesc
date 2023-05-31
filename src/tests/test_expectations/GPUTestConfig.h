@@ -67,6 +67,7 @@ struct GPUTestConfig
         kConditionPixel2OrXL,
         kConditionPixel4OrXL,
         kConditionPixel6,
+        kConditionPixel7OrPro,
         kConditionGalaxyS23,
         kConditionNVIDIAQuadroP400,
         kConditionNVIDIAGTX1660,

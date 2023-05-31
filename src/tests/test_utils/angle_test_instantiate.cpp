@@ -372,6 +372,16 @@ bool IsPixel6()
     return IsAndroidDevice("Pixel 6");
 }
 
+bool IsPixel7()
+{
+    return IsAndroidDevice("Pixel 7");
+}
+
+bool IsPixel7Pro()
+{
+    return IsAndroidDevice("Pixel 7 Pro");
+}
+
 bool IsNVIDIAShield()
 {
     return IsAndroidDevice("SHIELD Android TV");

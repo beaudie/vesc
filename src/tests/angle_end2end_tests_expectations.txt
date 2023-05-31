@@ -1257,6 +1257,40 @@ b/273271471 WIN INTEL VULKAN : ShaderAlgorithmTest.rgb_to_hsl_vertex_shader/* = 
 // GalaxyS23 ES3_2 tests
 8157 GALAXYS23 VULKAN : TransformFeedbackTestES32.PrimitivesGeneratedVsIndirectDraw/* = SKIP
 
+// Pixel 7
+0000 PIXEL7ORPRO VULKAN : ExternalBufferTestES31.* = SKIP
+0000 PIXEL7ORPRO VULKAN : FramebufferFetchES31.DrawNonFetchDrawFetchInStorageBuffer* = SKIP
+0000 PIXEL7ORPRO VULKAN : FramebufferTest_ES31.MultipleTextureMultisampleResolve* = SKIP
+0000 PIXEL7ORPRO VULKAN : FramebufferTest_ES31.MultisampleResolveWithBlitThenDrawAttachment1/* = SKIP
+0000 PIXEL7ORPRO VULKAN : ImageTest.ANGLEExtensionAvailability/* = SKIP
+0000 PIXEL7ORPRO VULKAN : ImageTestES31.SourceAHBCubeArrayTargetCubeArray/* = SKIP
+0000 PIXEL7ORPRO VULKAN : ImageTestES3.RGBXAHBImportMultipleLayers/* = SKIP
+0000 PIXEL7ORPRO VULKAN : ImageTestES3.SourceAHBCubeTargetCube/* = SKIP
+0000 PIXEL7ORPRO VULKAN : ImageTestES3.SourceAHBMipTarget2DMip/* = SKIP
+0000 PIXEL7ORPRO VULKAN : ImageTestES3.SourceAHBMipTarget2DMipGenerateMipmap/* = SKIP
+0000 PIXEL7ORPRO VULKAN : ImageTest.SourceNativeClientBufferTargetRenderbuffer/* = SKIP
+0000 PIXEL7ORPRO VULKAN : MultisampledRenderToTextureES31Test.BlitFramebufferAttachment1/* = SKIP
+0000 PIXEL7ORPRO VULKAN : MultisampledRenderToTextureES31Test.MixedMultisampledAndMultisampledRenderToTexture/* = SKIP
+0000 PIXEL7ORPRO VULKAN : MultisampledRenderToTextureES31Test.RenderbufferBlitFramebufferAttachment1/* = SKip
+0000 PIXEL7ORPRO VULKAN : MultisampledRenderToTextureWithAdvancedBlendTest* = SKIP
+0000 PIXEL7ORPRO VULKAN : MultithreadingTestES3.MultithreadFenceDraw/* = SKIP
+0000 PIXEL7ORPRO VULKAN : MultithreadingTestES3.MultithreadFenceTexImage/* = SKIP
+0000 PIXEL7ORPRO VULKAN : OcclusionQueriesTestES3.UnresolveNotCounted/* = SKIP
+0000 PIXEL7ORPRO VULKAN : ProgramInterfaceTestES31.ReloadFromCacheShouldNotCrash/* = SKIP
+0000 PIXEL7ORPRO VULKAN : ProgramPipelineTest31.ImageUniforms/* = SKIP
+0000 PIXEL7ORPRO VULKAN : Texture2DTestES3.TexStorage2DCycleThroughYuvAndRgbSources/* = SKIP
+0000 PIXEL7ORPRO VULKAN : Texture2DTestES3.TexStorage2DCycleThroughYuvSourcesNoData/* = SKIP
+0000 PIXEL7ORPRO VULKAN : Texture2DTestES3.TexStorage2DLargeYuvTextureCount/* = SKIP
+0000 PIXEL7ORPRO VULKAN : Texture2DTestES3.TexStorage2DSimultaneousUseOfMultipleYuvSourcesNoData/* = SKIP
+0000 PIXEL7ORPRO VULKAN : Texture2DTestES3YUV.TexStorage2DYuvFilterModes/* = SKIP
+0000 PIXEL7ORPRO VULKAN : TransformFeedbackTestIOBlocks.Separate/* = SKIP
+0000 PIXEL7ORPRO VULKAN : VulkanPerformanceCounterTest.MappingGpuReadOnlyBufferGhostsBuffer_Copy/* = SKIP
+0000 PIXEL7ORPRO VULKAN : VulkanPerformanceCounterTest.MappingGpuReadOnlyBufferGhostsBuffer_SubData/* = SKIP
+0000 PIXEL7ORPRO VULKAN : VulkanPerformanceCounterTest.RenderToTextureDepthStencilRenderbufferShouldNotLoad/* = SKIP
+0000 PIXEL7ORPRO VULKAN : VulkanPerformanceCounterTest.RenderToTextureDepthStencilTextureShouldNotLoad/* = SKIP
+0000 PIXEL7ORPRO VULKAN : VulkanPerformanceCounterTest.RenderToTextureUninitializedAndUnusedDepthStencil/* = SKIP
+0000 PIXEL7ORPRO VULKAN : WebGLCompatibilityTest.FramebufferFloatColorAttachmentMRT/* = SKIP
+
 // Please do not add expectations below this line,
 // so that TIMEOUT expectations above don't override more precise SKIP expectations
 
