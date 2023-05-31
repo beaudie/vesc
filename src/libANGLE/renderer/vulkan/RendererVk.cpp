@@ -4388,8 +4388,34 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsExtendedDynamicState,
                             mExtendedDynamicStateFeatures.extendedDynamicState == VK_TRUE);
 
+    // By default, use all state from VK_EXT_extended_dynamic_state, unless they hit driver bugs.
+    ANGLE_FEATURE_CONDITION(&mFeatures, useVertexInputBindingStrideDynamicState,
+                            mFeatures.supportsExtendedDynamicState.enabled && !isARM);
+    ANGLE_FEATURE_CONDITION(&mFeatures, useCullModeDynamicState,
+                            mFeatures.supportsExtendedDynamicState.enabled);
+    ANGLE_FEATURE_CONDITION(&mFeatures, useDepthCompareOpDynamicState,
+                            mFeatures.supportsExtendedDynamicState.enabled);
+    ANGLE_FEATURE_CONDITION(&mFeatures, useDepthTestEnableDynamicState,
+                            mFeatures.supportsExtendedDynamicState.enabled);
+    ANGLE_FEATURE_CONDITION(&mFeatures, useDepthWriteEnableDynamicState,
+                            mFeatures.supportsExtendedDynamicState.enabled);
+    ANGLE_FEATURE_CONDITION(&mFeatures, useFrontFaceDynamicState,
+                            mFeatures.supportsExtendedDynamicState.enabled);
+    ANGLE_FEATURE_CONDITION(&mFeatures, useStencilOpDynamicState,
+                            mFeatures.supportsExtendedDynamicState.enabled);
+    ANGLE_FEATURE_CONDITION(&mFeatures, useStencilTestEnableDynamicState,
+                            mFeatures.supportsExtendedDynamicState.enabled);
+
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsExtendedDynamicState2,
                             mExtendedDynamicState2Features.extendedDynamicState2 == VK_TRUE);
+
+    // By default, use all state from VK_EXT_extended_dynamic_state, unless they hit driver bugs.
+    ANGLE_FEATURE_CONDITION(&mFeatures, usePrimitiveRestartEnableDynamicState,
+                            mFeatures.supportsExtendedDynamicState.enabled && !isARM);
+    ANGLE_FEATURE_CONDITION(&mFeatures, useRasterizerDiscardEnableDynamicState,
+                            mFeatures.supportsExtendedDynamicState.enabled);
+    ANGLE_FEATURE_CONDITION(&mFeatures, useDepthBiasEnableDynamicState,
+                            mFeatures.supportsExtendedDynamicState.enabled);
 
     // Disabled on Intel/Mesa due to driver bug (crbug.com/1379201).  This bug is fixed since Mesa
     // 22.2.0.
@@ -4401,14 +4427,6 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
         mFeatures.supportsExtendedDynamicState2.enabled &&
             mExtendedDynamicState2Features.extendedDynamicState2LogicOp == VK_TRUE &&
             !(IsLinux() && isIntel && isMesaLessThan22_2) && !(IsAndroid() && isGalaxyS23));
-
-    // Avoid dynamic state for vertex input binding stride on buggy drivers.
-    ANGLE_FEATURE_CONDITION(&mFeatures, forceStaticVertexStrideState,
-                            mFeatures.supportsExtendedDynamicState.enabled && isARM);
-
-    // Avoid dynamic state for primitive restart on buggy drivers.
-    ANGLE_FEATURE_CONDITION(&mFeatures, forceStaticPrimitiveRestartState,
-                            mFeatures.supportsExtendedDynamicState2.enabled && isARM);
 
     // Support GL_QCOM_shading_rate extension
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsFragmentShadingRate,
