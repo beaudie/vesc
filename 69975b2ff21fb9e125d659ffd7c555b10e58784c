@@ -16,6 +16,40 @@
       "message": "A bit of set up to handle SPV_KHR_non_semantic_info, but will make things simpler in future CLs.\n\nThere are two main reasons for this work:\n\n* Let the compiler communicate information to the SPIR-V transformer to reduce overall complexity\n* Reduce the workload on SPIR-V transformer (run all the time, sometimes at draw time) at the cost of a bit of work in the compiler (which runs earlier and whose results are cached)",
       "revId": "69975b2ff21fb9e125d659ffd7c555b10e58784c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dd5f104_862bf0ff",
+        "filename": "src/compiler/translator/BuildSPIRV.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2380,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-05-31T19:08:16Z",
+      "side": 1,
+      "message": "I don\u0027t quite get hot can 32-bit mask cover all the bits in ReservedIds: ReservedIds has more than 32 enum values.",
+      "revId": "69975b2ff21fb9e125d659ffd7c555b10e58784c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff289d9e_32580d2a",
+        "filename": "src/libANGLE/renderer/vulkan/spv_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1211,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-05-31T19:08:16Z",
+      "side": 1,
+      "message": "nit: is it a typo? Should `mIvecId` be `mIvec4Id`?",
+      "revId": "69975b2ff21fb9e125d659ffd7c555b10e58784c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
