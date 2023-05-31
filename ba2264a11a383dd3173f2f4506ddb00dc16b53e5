@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77c99ad0_5ddc3433",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-31T20:26:38Z",
+      "side": 1,
+      "message": "LGTM, mostly on the assumption that this is mostly moving code around\n\n(Adding Roman as second reviewer)",
+      "revId": "ba2264a11a383dd3173f2f4506ddb00dc16b53e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
