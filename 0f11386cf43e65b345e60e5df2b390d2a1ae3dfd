@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "f16a6d98_592ec5c4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-31T10:14:43Z",
+      "side": 1,
+      "message": "I will try. Problem is that oneOff submission is tiny and skipping waiting did not cause problems. I will try submit some heavy GPU work before causing the oneOff submission. I found this bug purely from code review.",
+      "parentUuid": "9048f7dc_b0707cd0",
+      "range": {
+        "startLine": 10,
+        "startChar": 34,
+        "endLine": 12,
+        "endChar": 23
+      },
+      "revId": "0f11386cf43e65b345e60e5df2b390d2a1ae3dfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "f51c59b8_887165a7",
