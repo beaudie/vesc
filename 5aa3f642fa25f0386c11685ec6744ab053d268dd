@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "003fa8d8_23060a6e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-05-31T15:11:47Z",
+      "side": 1,
+      "message": "Submitting No-try due to Mac failures crbug.com/1450207.",
+      "revId": "5aa3f642fa25f0386c11685ec6744ab053d268dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
