@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6094af54_81def73a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-31T14:31:08Z",
+      "side": 1,
+      "message": "A bit of set up to handle SPV_KHR_non_semantic_info, but will make things simpler in future CLs.\n\nThere are two main reasons for this work:\n\n* Let the compiler communicate information to the SPIR-V transformer to reduce overall complexity\n* Reduce the workload on SPIR-V transformer (run all the time, sometimes at draw time) at the cost of a bit of work in the compiler (which runs earlier and whose results are cached)",
+      "revId": "69975b2ff21fb9e125d659ffd7c555b10e58784c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
