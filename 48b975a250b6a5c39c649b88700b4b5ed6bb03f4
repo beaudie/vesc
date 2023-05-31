@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0dab42c8_957cec46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 27
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-31T20:41:58Z",
+      "side": 1,
+      "message": "Much better thanks!\n\nI think it\u0027d be valuable to have some tests exercise this rigorously. Like a test that changes the buffer bindings while also redefining the buffer, binds multiple buffers to the same index and then redefines the buffer, and the like. Just to verify that all bindings that need to be processed are actually processed.",
+      "revId": "48b975a250b6a5c39c649b88700b4b5ed6bb03f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad86ab3b_1aa22367",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 2804,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-31T20:41:58Z",
+      "side": 1,
+      "message": "nit: perhaps calling it `resetUniformBuffersDirtyBits` makes it clearer that the dirty bits have just been about uniform buffers. If one day we add other dirty bits, this reset would reset too much.",
+      "range": {
+        "startLine": 2804,
+        "startChar": 17,
+        "endLine": 2804,
+        "endChar": 31
+      },
+      "revId": "48b975a250b6a5c39c649b88700b4b5ed6bb03f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
