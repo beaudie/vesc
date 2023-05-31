@@ -50,6 +50,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "eebeec2c_3a370cdd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-31T13:50:29Z",
+      "side": 1,
+      "message": "I added test. I checked, without this fix Semaphore actually destroyed while submission was still inflight, however nothing happened.",
+      "parentUuid": "f16a6d98_592ec5c4",
+      "range": {
+        "startLine": 10,
+        "startChar": 34,
+        "endLine": 12,
+        "endChar": 23
+      },
+      "revId": "0f11386cf43e65b345e60e5df2b390d2a1ae3dfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "f51c59b8_887165a7",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
