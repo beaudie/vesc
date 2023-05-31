@@ -67,6 +67,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "bf849d13_aee55d15",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 9560,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-31T19:50:17Z",
+      "side": 1,
+      "message": "Added description.\nHope replacing with `SpinLock` will not add too much overhead.",
+      "parentUuid": "cf72f779_8093e643",
+      "range": {
+        "startLine": 9560,
+        "startChar": 45,
+        "endLine": 9560,
+        "endChar": 97
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "63f5d561_c281a75b",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 18
@@ -189,6 +213,30 @@
       "side": 1,
       "message": "Do not like this. May cause errors if there `nullptr` that we do not want.\nWill overload constructor instead.",
       "parentUuid": "f21189f8_167610ac",
+      "range": {
+        "startLine": 1756,
+        "startChar": 0,
+        "endLine": 1760,
+        "endChar": 5
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2a267e1_105db16e",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1760,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-31T19:50:17Z",
+      "side": 1,
+      "message": "Added `kContextMutexMayBeNull` argument for constructor overloading.",
+      "parentUuid": "447e90c6_a567d9fe",
       "range": {
         "startLine": 1756,
         "startChar": 0,
@@ -357,6 +405,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "af6fd5ba_45e09898",
+        "filename": "src/libANGLE/SharedContextMutex.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-31T19:50:17Z",
+      "side": 1,
+      "message": "Added description. Hope it is clear...",
+      "parentUuid": "bc4b2015_d92174b8",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "23a829bf_1be1d041",
@@ -404,6 +470,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ece8a26_84b63e2f",
+        "filename": "src/libANGLE/SharedContextMutex.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-31T19:50:17Z",
+      "side": 1,
+      "message": "See description for `mRank`.",
+      "parentUuid": "d5597b3b_28eb6009",
+      "range": {
+        "startLine": 224,
+        "startChar": 0,
+        "endLine": 233,
+        "endChar": 5
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9939681d_fab59d91",
@@ -435,6 +525,24 @@
       "side": 1,
       "message": "This is a private method. I generally do not comment such thing in small classes.\n\n\u003e Still, is it possible for another SharedContextMutex to call getRoot() without holding the lock at this time?\n\nYes. This is the first that is called to lock the mutex: get root and lock it.\nThere is a comment in the `getRoot()` method.\n\n\u003e What happens if that other share group gets the old root?\n\nThere are 2 scenarios:\n1) SharedContextMutex is not locked\n\nWe may get old root, however it is still OK to lock the old root.\nSo first we must lock the returned root.\nThen check what is the root of that root? If it itself, than we have locked root -\u003e scenario 2.\n\n2) SharedContextMutex is locked.\n\nReturned mutex can\u0027t be old since `setNewRoot()` only called while mutex is locked.\nSo we may safely use `getRoot()` inside locks for comparisons. For example, to tell if other Context uses same root mutex or not (can be used in `notifyDeviceLost` to lock all Contexts).",
       "parentUuid": "9939681d_fab59d91",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "534762dc_cb924b94",
+        "filename": "src/libANGLE/SharedContextMutex.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-31T19:50:17Z",
+      "side": 1,
+      "message": "Added comment.",
+      "parentUuid": "af74537b_e06ac697",
       "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -474,6 +582,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe662225_0968491e",
+        "filename": "src/libANGLE/SharedContextMutex.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-31T19:50:17Z",
+      "side": 1,
+      "message": "Added description why need to track `mOldRoots`.",
+      "parentUuid": "0e586b38_7fb9a016",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b7889238_76f57896",
@@ -491,6 +617,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b281261_f5b865e8",
+        "filename": "src/libANGLE/SharedContextMutex.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-31T19:50:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b7889238_76f57896",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d8ce99fd_dccae448",
@@ -504,6 +648,24 @@
       "writtenOn": "2023-04-28T20:17:48Z",
       "side": 1,
       "message": "ditto",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3227163_2875d92f",
+        "filename": "src/libANGLE/SharedContextMutex.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-31T19:50:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8ce99fd_dccae448",
       "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -561,6 +723,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "961269ca_3e6e7f55",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-31T19:50:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b42bd95_16d5843f",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "295a5ab3_734f2265",
@@ -614,6 +794,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a84d7ac8_8e910db1",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-31T19:50:17Z",
+      "side": 1,
+      "message": "Added enum `UnlockBehaviour`.",
+      "parentUuid": "b853a3ab_e863a9b7",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "029720db_cde34811",
@@ -663,6 +861,24 @@
       "side": 1,
       "message": "That\u0027s fine too.",
       "parentUuid": "9896c316_b9607c54",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6a3e07d_49c7ab36",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-31T19:50:17Z",
+      "side": 1,
+      "message": "Decided to add the `std::memory_order order` argument.",
+      "parentUuid": "841e1d74_18a05dc1",
       "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -762,6 +978,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e5c2bd7_42c6dbb2",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-31T19:50:17Z",
+      "side": 1,
+      "message": "Update the comment.",
+      "parentUuid": "e2909af5_eee800c0",
+      "range": {
+        "startLine": 81,
+        "startChar": 7,
+        "endLine": 81,
+        "endChar": 96
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "017bca3d_35ab9aef",
@@ -793,6 +1033,24 @@
       "side": 1,
       "message": "It is not obvious that for each element was called `addRef`.\nI will try to add explanation why...",
       "parentUuid": "017bca3d_35ab9aef",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "577c5904_7232c5b7",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-31T19:50:17Z",
+      "side": 1,
+      "message": "Added the explanation why need `mOldRoots`.",
+      "parentUuid": "ca557765_8672dbda",
       "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1009,6 +1267,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9e5f6a1_c205d8be",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 4443,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-31T19:50:17Z",
+      "side": 1,
+      "message": "Moved lock to `GetContextMutex_QuerySurface` and pass not null context in `QuerySurface()` only if `attribute \u003d\u003d EGL_BUFFER_AGE_EXT`.",
+      "parentUuid": "f0cd3487_43bd6fa5",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "57aa0eda_0d8336b1",
@@ -1128,6 +1404,30 @@
       "side": 1,
       "message": "It is not internal details.\n\nPublic methods:\n`\nContext::getContextMutex()\nContext::ensureSharedMutexActive()\n`\n\nSo `Active` comes from public `ensureSharedMutexActive()`.\nTo drop `Active` need also rename `ensureSharedMutexActive()`.\n\nMay rename to `ensureUsingSharedMutex()` but inside this method will check for `Active`, so that `Active` state will be internal only.",
       "parentUuid": "d2686868_72f7cfc4",
+      "range": {
+        "startLine": 230,
+        "startChar": 38,
+        "endLine": 230,
+        "endChar": 44
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f10a65e0_8cc25309",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-31T19:50:17Z",
+      "side": 1,
+      "message": "If rename to `TryGetSharedContextMutex` it is not clear that this method will also change the mutex type from `SingleContextMutex` to `SharedContextMutex\u003c\u003e`.\n\nInitially Context may have both mutexes, in which case `mSharedContextMutex` will be inactive. So:\n\n```\nTryGetContextMutex()       -\u003e mSingleContextMutex\nTryGetSharedContextMutex() -\u003e mSharedContextMutex\nTryGetContextMutex()       -\u003e mSharedContextMutex or mSingleContextMutex?\nTryGetSharedContextMutex() -\u003e mSharedContextMutex\n```\n\nHaving `Active` adds a hint, that `mSharedContextMutex` will be activated (if not already) and then returned.\n```\nTryGetContextMutex()             -\u003e mSingleContextMutex\nTryGetActiveSharedContextMutex() -\u003e mSharedContextMutex\nTryGetContextMutex()             -\u003e mSharedContextMutex\nTryGetActiveSharedContextMutex() -\u003e mSharedContextMutex\n```\n\nI do not know what is wrong with `Active` and why it should be internal state...",
+      "parentUuid": "e78b2479_92b649ac",
       "range": {
         "startLine": 230,
         "startChar": 38,
