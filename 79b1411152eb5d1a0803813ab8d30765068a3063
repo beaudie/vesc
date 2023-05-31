@@ -157,6 +157,30 @@
       },
       "revId": "79b1411152eb5d1a0803813ab8d30765068a3063",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c25af5c9_8230c268",
+        "filename": "src/libANGLE/renderer/vulkan/doc/PresentSemaphores.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-31T13:16:34Z",
+      "side": 1,
+      "message": "Ok thanks, the clarification is useful in the text:\n\n```suggestion\nANI fence cannot always be used instead of QueueSerial with dependency on ANI\nsemaphore. This is because with Shared Present mode, the fence and semaphore are\nexpected to be already signaled on the second and later ANI calls.\n```\n\nWe don\u0027t really need to mention driver bugs in the high level documentation IMO, ANI fences already don\u0027t work because of SPM",
+      "parentUuid": "72731393_661b7f07",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 36
+      },
+      "revId": "79b1411152eb5d1a0803813ab8d30765068a3063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
