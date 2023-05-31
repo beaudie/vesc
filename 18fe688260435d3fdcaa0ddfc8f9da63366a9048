@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bdfa7cb_af77150f",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 10563,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-05-31T23:29:02Z",
+      "side": 1,
+      "message": "if `SupportsExtendedDynamicState` feature is disabled, then feature `UseVertexInputBindingStrideDynamicState` is also disabled, based on this condition in RendererVk.cpp: \n```\nANGLE_FEATURE_CONDITION(\u0026mFeatures, useVertexInputBindingStrideDynamicState,\n                      mFeatures.supportsExtendedDynamicState.enabled \u0026\u0026 !isARM);\n```\n\nCan I ask why we need to explicitly disable `SupportsExtendedDynamicState`?",
+      "revId": "18fe688260435d3fdcaa0ddfc8f9da63366a9048",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
