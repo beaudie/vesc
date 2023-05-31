@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2d767cc2_36221c91",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-05-31T17:39:52Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "e895f218_eb1c56bc",
+      "revId": "b475b7525146dc216f57a062e60096a694b74060",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "68056f38_9b59b3c0",
         "filename": "src/tests/gl_tests/MaxTextureSizeTest.cpp",
         "patchSetId": 1
