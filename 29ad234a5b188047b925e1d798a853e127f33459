@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d7904c3_ac351df4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4411,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-31T21:21:04Z",
+      "side": 0,
+      "message": "Was there a bug tracking these?  I think I\u0027m going to be adding another.",
+      "range": {
+        "startLine": 4405,
+        "startChar": 0,
+        "endLine": 4411,
+        "endChar": 86
+      },
+      "revId": "29ad234a5b188047b925e1d798a853e127f33459",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72ec3fe5_c76fa6a7",
+        "filename": "src/tests/gl_tests/AttributeLayoutTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-05-31T21:21:04Z",
+      "side": 0,
+      "message": "This is going away because it is only used for ES1, right?",
+      "range": {
+        "startLine": 512,
+        "startChar": 61,
+        "endLine": 512,
+        "endChar": 88
+      },
+      "revId": "29ad234a5b188047b925e1d798a853e127f33459",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
