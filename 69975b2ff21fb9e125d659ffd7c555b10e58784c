@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "76799fe1_b9a8eee5",
+        "filename": "src/compiler/translator/BuildSPIRV.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2380,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-31T19:42:46Z",
+      "side": 1,
+      "message": "It doesn\u0027t. Only the first few ids in ReservedIds are optional and may need communication. Everything else will eventually be unconditionally present (where applicable).\n\nThe ids are divided accordingly with the comment in ReservedIds:\n\n```\n// Ids that are fixed and are always present in the SPIR-V where applicable.  The SPIR-V\n// transformer can thus reliably use these ids.\n```",
+      "parentUuid": "9dd5f104_862bf0ff",
+      "revId": "69975b2ff21fb9e125d659ffd7c555b10e58784c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ff289d9e_32580d2a",
         "filename": "src/libANGLE/renderer/vulkan/spv_utils.cpp",
         "patchSetId": 2
@@ -48,6 +66,24 @@
       "writtenOn": "2023-05-31T19:08:16Z",
       "side": 1,
       "message": "nit: is it a typo? Should `mIvecId` be `mIvec4Id`?",
+      "revId": "69975b2ff21fb9e125d659ffd7c555b10e58784c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "061f31b9_ccbb6033",
+        "filename": "src/libANGLE/renderer/vulkan/spv_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1211,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-31T19:42:46Z",
+      "side": 1,
+      "message": "Yes, it\u0027s a pre-existing typo. Upcoming CL removes this line.",
+      "parentUuid": "ff289d9e_32580d2a",
       "revId": "69975b2ff21fb9e125d659ffd7c555b10e58784c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
