@@ -181,6 +181,30 @@
       },
       "revId": "79b1411152eb5d1a0803813ab8d30765068a3063",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d04f7ab_5b9c4fe0",
+        "filename": "src/libANGLE/renderer/vulkan/doc/PresentSemaphores.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-05-31T13:24:56Z",
+      "side": 1,
+      "message": "I understand. Will update the documentation.\n\nIt just for me the motivation to remove ANI Fence was bugs and not and SPM. Fix of SPM was a surprise, as well as a simpler overall implementation at the end).",
+      "parentUuid": "c25af5c9_8230c268",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 36
+      },
+      "revId": "79b1411152eb5d1a0803813ab8d30765068a3063",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
