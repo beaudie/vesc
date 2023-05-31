@@ -1665,6 +1665,10 @@ bool OutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
             {
                 TIntermAggregate *atomicFunctionNode = node->getRight()->getAsAggregate();
                 TOperator atomicFunctionOp           = atomicFunctionNode->getOp();
+                if (IsInShaderStorageBlock(node->getLeft()))
+                {
+                    out << "int temp;\n";
+                }
                 out << GetHLSLAtomicFunctionStringAndLeftParenthesis(atomicFunctionOp);
                 TIntermSequence *argumentSeq = atomicFunctionNode->getSequence();
                 ASSERT(argumentSeq->size() >= 2u);
@@ -1672,6 +1676,13 @@ bool OutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
                 {
                     argument->traverse(this);
                     out << ", ";
+                }
+                if (IsInShaderStorageBlock(node->getLeft()))
+                {
+                    out << "temp);\n";
+                    mSSBOOutputHLSL->outputStoreFunctionCallPrefix(node->getLeft());
+                    out << ", temp)";
+                    return false;
                 }
                 node->getLeft()->traverse(this);
                 out << ")";
