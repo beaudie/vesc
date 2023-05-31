@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc42391d_23be0ce5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 25
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-31T16:51:17Z",
+      "side": 1,
+      "message": "Could you please:\n\n- Split the no-op refactorings into a separate CL to simplify things\n- Make sure PPOs exercise the paths in this change (not sure if that\u0027s applicable?)",
+      "revId": "6febb1b96e6bbd6b855c58097a51b29617527866",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07bb049c_5ae63de2",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 3672,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-05-31T16:51:17Z",
+      "side": 1,
+      "message": "The spec says:\n\n\u003e Each of a program’s active uniform blocks has a corresponding uniform buffer object binding point. The binding is established when a program is linked or relinked, and the initial value of the binding is specified by a layout qualifier (if present), or zero otherwise.\n\nThe above is already implemented for link (`initInterfaceBlockBindings`), why not call that instead? It feels like `deserialize()` should have called `initInterfaceBlockBindings` already, but I don\u0027t see it; it could be a bug?",
+      "range": {
+        "startLine": 3663,
+        "startChar": 0,
+        "endLine": 3672,
+        "endChar": 5
+      },
+      "revId": "6febb1b96e6bbd6b855c58097a51b29617527866",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
