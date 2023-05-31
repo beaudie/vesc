@@ -1665,17 +1665,35 @@ bool OutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
             {
                 TIntermAggregate *atomicFunctionNode = node->getRight()->getAsAggregate();
                 TOperator atomicFunctionOp           = atomicFunctionNode->getOp();
-                out << GetHLSLAtomicFunctionStringAndLeftParenthesis(atomicFunctionOp);
-                TIntermSequence *argumentSeq = atomicFunctionNode->getSequence();
-                ASSERT(argumentSeq->size() >= 2u);
-                for (auto &argument : *argumentSeq)
+                TIntermSequence *argumentSeq         = atomicFunctionNode->getSequence();
+                if (IsInShaderStorageBlock(node->getLeft()))
                 {
-                    argument->traverse(this);
-                    out << ", ";
+                    out << "int temp;\n";
+                    out << GetHLSLAtomicFunctionStringAndLeftParenthesis(atomicFunctionOp);
+                    ASSERT(argumentSeq->size() >= 2u);
+                    for (auto &argument : *argumentSeq)
+                    {
+                        argument->traverse(this);
+                        out << ", ";
+                    }
+                    out << "temp);\n";
+                    mSSBOOutputHLSL->outputStoreFunctionCallPrefix(node->getLeft());
+                    out << ", temp)";
+                    return false;
                 }
-                node->getLeft()->traverse(this);
-                out << ")";
-                return false;
+                else
+                {
+                    out << GetHLSLAtomicFunctionStringAndLeftParenthesis(atomicFunctionOp);
+                    ASSERT(argumentSeq->size() >= 2u);
+                    for (auto &argument : *argumentSeq)
+                    {
+                        argument->traverse(this);
+                        out << ", ";
+                    }
+                    node->getLeft()->traverse(this);
+                    out << ")";
+                    return false;
+                }
             }
             else if (IsInShaderStorageBlock(node->getLeft()))
             {
