@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5525f60_856e2b93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1174609
+      },
+      "writtenOn": "2023-05-31T04:29:25Z",
+      "side": 1,
+      "message": "Note - this CL is required to fix the current auto-roller breakage.",
+      "revId": "b9b28497baff94eb9f5406be7071f13ac6410246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
