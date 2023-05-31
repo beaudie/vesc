@@ -2791,18 +2791,6 @@ void RendererVk::enableDeviceExtensionsNotPromoted(
         mEnabledDeviceExtensions.push_back(VK_EXT_IMAGE_2D_VIEW_OF_3D_EXTENSION_NAME);
         vk::AddToPNextChain(&mEnabledFeatures, &mImage2dViewOf3dFeatures);
     }
-
-    if (mFeatures.supportsSwapchainMaintenance1.enabled)
-    {
-        mEnabledDeviceExtensions.push_back(VK_EXT_SWAPCHAIN_MAINTENANCE_1_EXTENSION_NAME);
-        vk::AddToPNextChain(&mEnabledFeatures, &mSwapchainMaintenance1Features);
-    }
-
-    if (mFeatures.supportsLegacyDithering.enabled)
-    {
-        mEnabledDeviceExtensions.push_back(VK_EXT_LEGACY_DITHERING_EXTENSION_NAME);
-        vk::AddToPNextChain(&mEnabledFeatures, &mDitheringFeatures);
-    }
 }
 
 // See comment above appendDeviceExtensionFeaturesPromotedTo11.  Additional extensions are enabled
@@ -3834,7 +3822,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
         isVulkan11Device() ||
         ExtensionFound(VK_KHR_MAINTENANCE1_EXTENSION_NAME, deviceExtensionNames);
 
-    ANGLE_FEATURE_CONDITION(&mFeatures, appendAliasedMemoryDecorations, true);
+    ANGLE_FEATURE_CONDITION(&mFeatures, appendAliasedMemoryDecorationsToSsbo, true);
 
     ANGLE_FEATURE_CONDITION(
         &mFeatures, supportsSharedPresentableImageExtension,

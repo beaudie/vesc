@@ -270,9 +270,12 @@ def main():
 
         for fname, new_hashes in all_new_hashes.items():
             hash_fname = os.path.join(hash_dir, fname)
-            with open(hash_fname, "w") as f:
-                json.dump(new_hashes, f, indent=2, sort_keys=True, separators=(',', ':\n    '))
-                f.write('\n')  # json.dump doesn't end with newline
+            json.dump(
+                new_hashes,
+                open(hash_fname, "w"),
+                indent=2,
+                sort_keys=True,
+                separators=(',', ':\n    '))
 
 
 if __name__ == '__main__':

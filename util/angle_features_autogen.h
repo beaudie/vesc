@@ -42,7 +42,7 @@ enum class Feature
     AlwaysUseManagedStorageModeForBuffers,
     AlwaysUseSharedStorageModeForBuffers,
     AlwaysUseStagedBufferUpdates,
-    AppendAliasedMemoryDecorations,
+    AppendAliasedMemoryDecorationsToSsbo,
     AsyncCommandBufferReset,
     AsyncCommandQueue,
     Avoid1BitAlphaTextureFormats,

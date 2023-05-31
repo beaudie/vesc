@@ -2866,7 +2866,7 @@ angle::Result TextureVk::updateTextureLabel(ContextVk *contextVk)
 }
 
 vk::BufferHelper *TextureVk::getRGBAConversionBufferHelper(RendererVk *renderer,
-                                                           angle::FormatID formatID) const
+                                                           angle::FormatID formatID)
 {
     BufferVk *bufferVk                                        = vk::GetImpl(getBuffer().get());
     const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding = mState.getBuffer();
@@ -3212,20 +3212,6 @@ angle::Result TextureVk::getStorageImageView(vk::Context *context,
         format->getActualImageFormatID(getRequiredImageAccess()), imageViewOut);
 }
 
-vk::BufferHelper *TextureVk::getPossiblyEmulatedTextureBuffer(vk::Context *context) const
-{
-    RendererVk *renderer = context->getRenderer();
-
-    angle::FormatID format = getBaseLevelFormat(renderer).getIntendedFormatID();
-    if (NeedsRGBAEmulation(renderer, format))
-    {
-        return getRGBAConversionBufferHelper(renderer, format);
-    }
-
-    BufferVk *bufferVk = vk::GetImpl(getBuffer().get());
-    return &bufferVk->getBuffer();
-}
-
 angle::Result TextureVk::getBufferViewAndRecordUse(vk::Context *context,
                                                    const vk::Format *imageUniformFormat,
                                                    bool isImage,
@@ -3238,7 +3224,8 @@ angle::Result TextureVk::getBufferViewAndRecordUse(vk::Context *context,
     // Use the format specified by glTexBuffer if no format specified by the shader.
     if (imageUniformFormat == nullptr)
     {
-        imageUniformFormat = &getBaseLevelFormat(renderer);
+        const gl::ImageDesc &baseLevelDesc = mState.getBaseLevelDesc();
+        imageUniformFormat = &renderer->getFormat(baseLevelDesc.format.info->sizedInternalFormat);
     }
 
     if (isImage)

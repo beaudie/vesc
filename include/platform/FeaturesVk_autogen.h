@@ -20,10 +20,10 @@ struct FeaturesVk : FeatureSetBase
     FeaturesVk();
     ~FeaturesVk();
 
-    FeatureInfo appendAliasedMemoryDecorations = {
-        "appendAliasedMemoryDecorations", FeatureCategory::VulkanWorkarounds,
-        "Append aliased memory decoration to ssbo and image in SpirV if they are not declared with "
-        "restrict memory qualifier in GLSL",
+    FeatureInfo appendAliasedMemoryDecorationsToSsbo = {
+        "appendAliasedMemoryDecorationsToSsbo", FeatureCategory::VulkanWorkarounds,
+        "Append aliased memory decoration to ssbo in SpirV if the ssbo in GLSL is not declared "
+        "with restrict memory qualifier",
         &members, "b/266235549"};
 
     FeatureInfo bresenhamLineRasterization = {

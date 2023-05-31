@@ -311,7 +311,6 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     {
         return mState.getBuffer();
     }
-    vk::BufferHelper *getPossiblyEmulatedTextureBuffer(vk::Context *context) const;
 
     bool isSRGBOverrideEnabled() const
     {
@@ -566,8 +565,7 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
 
     angle::Result updateTextureLabel(ContextVk *contextVk);
 
-    vk::BufferHelper *getRGBAConversionBufferHelper(RendererVk *renderer,
-                                                    angle::FormatID formatID) const;
+    vk::BufferHelper *getRGBAConversionBufferHelper(RendererVk *renderer, angle::FormatID formatID);
     angle::Result convertBufferToRGBA(ContextVk *contextVk, size_t &conversionBufferSize);
 
     bool mOwnsImage;

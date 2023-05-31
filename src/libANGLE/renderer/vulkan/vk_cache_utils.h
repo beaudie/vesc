@@ -1718,7 +1718,8 @@ class DescriptorSetDescBuilder final
                               TransformFeedbackVk *transformFeedbackVk);
 
     // Specific helpers for shader resource descriptors.
-    void updateShaderBuffers(ShaderVariableType variableType,
+    void updateShaderBuffers(gl::ShaderType shaderType,
+                             ShaderVariableType variableType,
                              const ShaderInterfaceVariableInfoMap &variableInfoMap,
                              const gl::BufferVector &buffers,
                              const std::vector<gl::InterfaceBlock> &blocks,
@@ -1726,19 +1727,22 @@ class DescriptorSetDescBuilder final
                              VkDeviceSize maxBoundBufferRange,
                              const BufferHelper &emptyBuffer,
                              const WriteDescriptorDescs &writeDescriptorDescs);
-    void updateAtomicCounters(const ShaderInterfaceVariableInfoMap &variableInfoMap,
+    void updateAtomicCounters(gl::ShaderType shaderType,
+                              const ShaderInterfaceVariableInfoMap &variableInfoMap,
                               const gl::BufferVector &buffers,
                               const std::vector<gl::AtomicCounterBuffer> &atomicCounterBuffers,
                               const VkDeviceSize requiredOffsetAlignment,
                               vk::BufferHelper *emptyBuffer,
                               const WriteDescriptorDescs &writeDescriptorDescs);
     angle::Result updateImages(Context *context,
+                               gl::ShaderType shaderType,
                                const gl::ProgramExecutable &executable,
                                const ShaderInterfaceVariableInfoMap &variableInfoMap,
                                const gl::ActiveTextureArray<TextureVk *> &activeImages,
                                const std::vector<gl::ImageUnit> &imageUnits,
                                const WriteDescriptorDescs &writeDescriptorDescs);
     angle::Result updateInputAttachments(vk::Context *context,
+                                         gl::ShaderType shaderType,
                                          const gl::ProgramExecutable &executable,
                                          const ShaderInterfaceVariableInfoMap &variableInfoMap,
                                          FramebufferVk *framebufferVk,

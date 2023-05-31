@@ -108,9 +108,9 @@ std::shared_ptr<WaitableCompileEvent> ShaderVk::compile(const gl::Context *conte
         options->roundOutputAfterDithering = true;
     }
 
-    if (contextVk->getFeatures().appendAliasedMemoryDecorations.enabled)
+    if (contextVk->getFeatures().appendAliasedMemoryDecorationsToSsbo.enabled)
     {
-        options->aliasedUnlessRestrict = true;
+        options->aliasedSSBOUnlessRestrict = true;
     }
 
     if (contextVk->getFeatures().explicitlyCastMediumpFloatTo16Bit.enabled)
