@@ -27,6 +27,7 @@
 #include "compiler/translator/blocklayout.h"
 #include "compiler/translator/tree_ops/d3d/RemoveSwitchFallThrough.h"
 #include "compiler/translator/tree_util/FindSymbolNode.h"
+#include "compiler/translator/tree_util/IntermNode_util.h"
 #include "compiler/translator/tree_util/NodeSearch.h"
 #include "compiler/translator/util.h"
 
@@ -1665,6 +1666,13 @@ bool OutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
             {
                 TIntermAggregate *atomicFunctionNode = node->getRight()->getAsAggregate();
                 TOperator atomicFunctionOp           = atomicFunctionNode->getOp();
+                TVariable *temp                      = nullptr;
+                if (IsInShaderStorageBlock(node->getLeft()))
+                {
+                    const TType *type = StaticType::GetBasic<EbtInt, EbpHigh>();
+                    temp              = CreateTempVariable(mSymbolTable, type);
+                    out << TypeString(*type) << " " << temp->name() << ";\n";
+                }
                 out << GetHLSLAtomicFunctionStringAndLeftParenthesis(atomicFunctionOp);
                 TIntermSequence *argumentSeq = atomicFunctionNode->getSequence();
                 ASSERT(argumentSeq->size() >= 2u);
@@ -1672,6 +1680,13 @@ bool OutputHLSL::visitBinary(Visit visit, TIntermBinary *node)
                 {
                     argument->traverse(this);
                     out << ", ";
+                }
+                if (IsInShaderStorageBlock(node->getLeft()))
+                {
+                    out << temp->name() << ");\n";
+                    mSSBOOutputHLSL->outputStoreFunctionCallPrefix(node->getLeft());
+                    out << ", " << temp->name() << ")";
+                    return false;
                 }
                 node->getLeft()->traverse(this);
                 out << ")";
