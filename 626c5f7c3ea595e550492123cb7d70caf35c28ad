@@ -51,6 +51,24 @@
       "parentUuid": "7cb49164_23d5455d",
       "revId": "626c5f7c3ea595e550492123cb7d70caf35c28ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1033fb0_461e7cfc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2023-06-01T18:59:56Z",
+      "side": 1,
+      "message": "`isARM` checks against the vendor pci id and venus forwards it. We were relying on that check before getting the driver fix. Internally we have already verified by then that the driver fix backport is sufficient without the angle workaround.",
+      "parentUuid": "9aca1c06_068d9e06",
+      "revId": "626c5f7c3ea595e550492123cb7d70caf35c28ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
