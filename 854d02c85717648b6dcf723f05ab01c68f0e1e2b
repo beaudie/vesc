@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29bb5b63_4894629d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2756,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-01T13:36:56Z",
+      "side": 1,
+      "message": "This looks like this is fixing a bug? If so, maybe mention in the description on a separate line, and is this something we\u0027re missing a test for?",
+      "range": {
+        "startLine": 2756,
+        "startChar": 42,
+        "endLine": 2756,
+        "endChar": 65
+      },
+      "revId": "854d02c85717648b6dcf723f05ab01c68f0e1e2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbead68a_b3c2d285",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6125,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-01T13:36:56Z",
+      "side": 1,
+      "message": "Suggestion: maybe early-return here to unindent all of the code below.",
+      "range": {
+        "startLine": 6125,
+        "startChar": 8,
+        "endLine": 6125,
+        "endChar": 22
+      },
+      "revId": "854d02c85717648b6dcf723f05ab01c68f0e1e2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e37da336_d50412aa",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1728,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-01T13:36:56Z",
+      "side": 1,
+      "message": "Would it be possible to either make the existing `bufferRead(PipelineStage)` call this function, or move most of the code to a common helper to avoid duplication (especially of the elaborate comment)?",
+      "range": {
+        "startLine": 1728,
+        "startChar": 43,
+        "endLine": 1728,
+        "endChar": 53
+      },
+      "revId": "854d02c85717648b6dcf723f05ab01c68f0e1e2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
