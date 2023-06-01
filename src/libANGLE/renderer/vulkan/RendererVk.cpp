@@ -3577,6 +3577,16 @@ gl::Version RendererVk::getMaxSupportedESVersion() const
     {
         maxVersion = LimitVersionTo(maxVersion, {3, 1});
     }
+    else
+    {
+        // Swiftshader is missing geometry shader and tessellation shader support.
+        // Do not expose 3.2 on Swiftshader backend even the
+        // exposeNonConformantExtensionsAndVersions is enabled.
+        if (IsSwiftshader(mPhysicalDeviceProperties.vendorID, mPhysicalDeviceProperties.deviceID))
+        {
+            maxVersion = LimitVersionTo(maxVersion, {3, 1});
+        }
+    }
 
     // Limit to ES3.0 if there are any blockers for 3.1.
 
@@ -4254,10 +4264,13 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // Negative viewports are exposed in the Maintenance1 extension and in core Vulkan 1.1+.
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsNegativeViewport, supportsNegativeViewport);
 
-    // Whether non-conformant configurations and extensions should be exposed. Always disable for
-    // MESA Virtio-GPU Venus driver for production purpose.
-    ANGLE_FEATURE_CONDITION(&mFeatures, exposeNonConformantExtensionsAndVersions,
-                            kExposeNonConformantExtensionsAndVersions && !isVenus);
+    // Whether non-conformant configurations and extensions should be exposed.
+    // Always disable for MESA Virtio-GPU Venus driver for production purpose.
+    // Always disable for swiftshader because swiftshader does not support geometry and tessellation
+    // shader.
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, exposeNonConformantExtensionsAndVersions,
+        kExposeNonConformantExtensionsAndVersions && !isVenus && !isSwiftShader);
 
     ANGLE_FEATURE_CONDITION(
         &mFeatures, supportsMemoryBudget,
