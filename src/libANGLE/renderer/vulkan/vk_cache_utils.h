@@ -1637,9 +1637,9 @@ class DescriptorSetDesc
         return (mDescriptorInfos == other.mDescriptorInfos);
     }
 
-    void updateInfoDesc(uint32_t infoDescIndex, const DescriptorInfoDesc &infoDesc)
+    DescriptorInfoDesc &getInfoDesc(uint32_t infoDescIndex)
     {
-        mDescriptorInfos[infoDescIndex] = infoDesc;
+        return mDescriptorInfos[infoDescIndex];
     }
 
     void updateDescriptorSet(Context *context,
