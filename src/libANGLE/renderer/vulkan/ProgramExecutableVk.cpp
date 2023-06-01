@@ -1646,7 +1646,9 @@ angle::Result ProgramExecutableVk::updateShaderResourcesDescriptorSet(
                                          shaderResourcesDesc, writeDescriptorDescs,
                                          DescriptorSetIndex::ShaderResource, newSharedCacheKeyOut));
 
-    size_t numOffsets = shaderResourcesDesc.getDynamicOffsetsSize();
+    size_t numOffsets = writeDescriptorDescs.hasDynamicDescriptorSet()
+                            ? shaderResourcesDesc.getDynamicOffsetsSize()
+                            : 0;
     mDynamicShaderResourceDescriptorOffsets.resize(numOffsets);
     if (numOffsets > 0)
     {
@@ -1655,18 +1657,6 @@ angle::Result ProgramExecutableVk::updateShaderResourcesDescriptorSet(
     }
 
     return angle::Result::Continue;
-}
-
-void ProgramExecutableVk::updateShaderResourcesDynamicOffsets(
-    const vk::DescriptorSetDescBuilder &shaderResourcesDesc)
-{
-    size_t numOffsets = shaderResourcesDesc.getDynamicOffsetsSize();
-    mDynamicShaderResourceDescriptorOffsets.resize(numOffsets);
-    if (numOffsets > 0)
-    {
-        memcpy(mDynamicShaderResourceDescriptorOffsets.data(),
-               shaderResourcesDesc.getDynamicOffsets(), numOffsets * sizeof(uint32_t));
-    }
 }
 
 angle::Result ProgramExecutableVk::updateUniformsAndXfbDescriptorSet(
@@ -1708,6 +1698,7 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
     if (newSharedCacheKey != nullptr)
     {
         vk::DescriptorSetDescBuilder fullDesc;
+        fullDesc.resize(mTextureWriteDescriptorDescBuilder.size());
         // Cache miss. A new cache entry has been created.
         ANGLE_TRY(fullDesc.updateFullActiveTextures(
             context, mVariableInfoMap, mTextureWriteDescriptorDescBuilder.getDescs(), executable,
@@ -1880,6 +1871,7 @@ angle::Result ProgramExecutableVk::updateUniforms(
         vk::DescriptorSetDescBuilder uniformsAndXfbDesc;
         const vk::WriteDescriptorDescs writeDescriptorDescs =
             getDefaultUniformWriteDescriptorDescs(transformFeedbackVk);
+        uniformsAndXfbDesc.resize(writeDescriptorDescs.size());
         uniformsAndXfbDesc.updateUniformsAndXfb(
             context, glExecutable, *this, writeDescriptorDescs, defaultUniformBuffer, *emptyBuffer,
             isTransformFeedbackActiveUnpaused,

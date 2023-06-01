@@ -186,9 +186,6 @@ class ProgramExecutableVk
         const vk::DescriptorSetDescBuilder &shaderResourcesDesc,
         vk::SharedDescriptorSetCacheKey *newSharedCacheKeyOut);
 
-    void updateShaderResourcesDynamicOffsets(
-        const vk::DescriptorSetDescBuilder &shaderResourcesDesc);
-
     angle::Result updateUniformsAndXfbDescriptorSet(
         vk::Context *context,
         UpdateDescriptorSetsBuilder *updateBuilder,
@@ -269,6 +266,10 @@ class ProgramExecutableVk
                    : mDefaultUniformAndXfbWriteDescriptorDescBuilder.getDescs();
     }
 
+    const vk::WriteDescriptorDescBuilder &getTextureWriteDescriptorDescBuilder() const
+    {
+        return mTextureWriteDescriptorDescBuilder;
+    }
     const gl::Program::DirtyBits &getDirtyBits() const { return mDirtyBits; }
     void resetUniformBufferDirtyBits() { mDirtyBits.reset(); }
 
