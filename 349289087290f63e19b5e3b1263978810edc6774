@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "21ccb7fc_9c6cd195",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1087,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-01T13:53:57Z",
+      "side": 0,
+      "message": "The names aren\u0027t deleted, they are just moved out of this public header since they\u0027ve become an internal detail of the translator.\n\nWhen I\u0027m done with this work, all the names here would similarly end up moving to `src/compiler/translator/`.",
+      "parentUuid": "938fc673_e843cd7f",
+      "revId": "349289087290f63e19b5e3b1263978810edc6774",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "991550a0_f48848e9",
@@ -35,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "01826fa3_a774509d",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-01T13:53:57Z",
+      "side": 0,
+      "message": "ditto",
+      "parentUuid": "991550a0_f48848e9",
+      "revId": "349289087290f63e19b5e3b1263978810edc6774",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "23870dd5_3c63a2a8",
@@ -48,6 +84,24 @@
       "writtenOn": "2023-06-01T06:03:07Z",
       "side": 0,
       "message": "Same as above",
+      "revId": "349289087290f63e19b5e3b1263978810edc6774",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a36a5f2a_67aedf5a",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1097,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-01T13:53:57Z",
+      "side": 0,
+      "message": "ditto",
+      "parentUuid": "23870dd5_3c63a2a8",
       "revId": "349289087290f63e19b5e3b1263978810edc6774",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
