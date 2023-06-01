@@ -86,6 +86,11 @@ class FixedVector final
 
     bool full() const;
 
+    bool operator==(const FixedVector<T, N, Storage> &other) const
+    {
+        return (size() == other.size()) && (memcmp(data(), other.data(), size() * sizeof(T)) == 0);
+    }
+
   private:
     void assign_from_initializer_list(std::initializer_list<value_type> init);
 

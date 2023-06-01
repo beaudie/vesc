@@ -1530,7 +1530,25 @@ struct DescriptorDescHandles
     VkBufferView bufferView;
 };
 
-using WriteDescriptorDescs = angle::FastMap<WriteDescriptorDesc, kFastDescriptorSetDescLimit>;
+class WriteDescriptorDescs
+{
+  public:
+    WriteDescriptorDesc &operator[](uint32_t key) { return mWriteDescs[key]; }
+    const WriteDescriptorDesc &operator[](uint32_t key) const { return mWriteDescs[key]; }
+
+    size_t size() const { return mWriteDescs.size(); }
+    void clear()
+    {
+        mWriteDescs.clear();
+        mDynamicDescriptorSetCount = 0;
+    }
+    size_t getDynamicDescriptorSetCount() const { return mDynamicDescriptorSetCount; }
+
+  private:
+    friend class WriteDescriptorDescBuilder;
+    angle::FastMap<WriteDescriptorDesc, kFastDescriptorSetDescLimit> mWriteDescs;
+    size_t mDynamicDescriptorSetCount = 0;
+};
 
 class WriteDescriptorDescBuilder
 {
@@ -1587,6 +1605,8 @@ class WriteDescriptorDescBuilder
                                       const gl::ProgramExecutable &executable);
 
     const WriteDescriptorDescs &getDescs() const { return mDescs; }
+    size_t size() const { return mCurrentInfoIndex; }
+    void updateDynamicDescriptorsCount();
 
     void streamOut(std::ostream &os) const;
 
@@ -1628,7 +1648,7 @@ class DescriptorSetDesc
 
     size_t hash() const;
 
-    void reset() { mDescriptorInfos.clear(); }
+    void resize(size_t count) { mDescriptorInfos.resize(count); }
 
     size_t getKeySizeBytes() const { return mDescriptorInfos.size() * sizeof(DescriptorInfoDesc); }
 
@@ -1637,9 +1657,9 @@ class DescriptorSetDesc
         return (mDescriptorInfos == other.mDescriptorInfos);
     }
 
-    void updateInfoDesc(uint32_t infoDescIndex, const DescriptorInfoDesc &infoDesc)
+    DescriptorInfoDesc &getInfoDesc(uint32_t infoDescIndex)
     {
-        mDescriptorInfos[infoDescIndex] = infoDesc;
+        return mDescriptorInfos[infoDescIndex];
     }
 
     void updateDescriptorSet(Context *context,
@@ -1652,7 +1672,7 @@ class DescriptorSetDesc
 
   private:
     // After a preliminary minimum size, use heap memory.
-    angle::FastMap<DescriptorInfoDesc, kFastDescriptorSetDescLimit> mDescriptorInfos;
+    angle::FixedVector<DescriptorInfoDesc, 128> mDescriptorInfos;
 };
 
 class DescriptorPoolHelper;
@@ -1689,7 +1709,12 @@ class DescriptorSetDescBuilder final
 
     const DescriptorSetDesc &getDesc() const { return mDesc; }
 
-    void reset();
+    void resize(size_t count)
+    {
+        mDesc.resize(count);
+        mHandles.resize(count);
+        mDynamicOffsets.resize(count);
+    }
 
     // Specific helpers for uniforms/xfb descriptors.
     void updateUniformBuffer(uint32_t shaderIndex,
@@ -1799,8 +1824,8 @@ class DescriptorSetDescBuilder final
         const SharedDescriptorSetCacheKey &sharedCacheKey);
 
     DescriptorSetDesc mDesc;
-    angle::FastMap<DescriptorDescHandles, kFastDescriptorSetDescLimit> mHandles;
-    angle::FastMap<uint32_t, kFastDescriptorSetDescLimit> mDynamicOffsets;
+    angle::FixedVector<DescriptorDescHandles, 128> mHandles;
+    angle::FixedVector<uint32_t, 128> mDynamicOffsets;
 };
 
 // Specialized update for textures.
