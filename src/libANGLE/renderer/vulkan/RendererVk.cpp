@@ -4411,7 +4411,8 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
 
     // By default, use all state from VK_EXT_extended_dynamic_state, unless they hit driver bugs.
     ANGLE_FEATURE_CONDITION(&mFeatures, usePrimitiveRestartEnableDynamicState,
-                            mFeatures.supportsExtendedDynamicState2.enabled && !isARM);
+                            mFeatures.supportsExtendedDynamicState2.enabled &&
+                                (!isARM || armDriverVersion >= ARMDriverVersion(43, 0, 0)));
     ANGLE_FEATURE_CONDITION(&mFeatures, useRasterizerDiscardEnableDynamicState,
                             mFeatures.supportsExtendedDynamicState2.enabled);
     ANGLE_FEATURE_CONDITION(&mFeatures, useDepthBiasEnableDynamicState,
