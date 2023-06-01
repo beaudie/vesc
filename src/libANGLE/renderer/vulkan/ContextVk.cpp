@@ -2735,7 +2735,7 @@ angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferHelperT *co
         gl::ShaderType::Fragment, *executable, variableInfoMap,
         vk::GetImpl(mState.getDrawFramebuffer()));
 
-    mShaderBuffersDescriptorDesc.reset();
+    mShaderBuffersDescriptorDesc.resize(mShaderBufferWriteDescriptorDescBuilder.size());
     if (hasUniformBuffers)
     {
         mShaderBuffersDescriptorDesc.updateShaderBuffers(
@@ -2906,6 +2906,7 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
     const vk::WriteDescriptorDescs writeDescriptorDescs =
         executableVk->getDefaultUniformWriteDescriptorDescs(transformFeedbackVk);
 
+    uniformsAndXfbDesc.resize(writeDescriptorDescs.size());
     uniformsAndXfbDesc.updateUniformsAndXfb(
         this, *executable, *executableVk, writeDescriptorDescs, currentUniformBuffer, mEmptyBuffer,
         mState.isTransformFeedbackActiveUnpaused(), transformFeedbackVk);
