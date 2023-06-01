@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "50677553_817a8565",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2756,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-01T13:59:48Z",
+      "side": 1,
+      "message": "Without `setHasShaderStorageOutput`, `glMemoryBarrier` wouldn\u0027t work as intended. This is supposed to be tested by `MemoryBarrierTestBase::atomicCounterBitAtomicThenBufferWrite`.\n\nIt does look like a bug, but I\u0027m not sure offhand why the test didn\u0027t catch it.",
+      "parentUuid": "29bb5b63_4894629d",
+      "range": {
+        "startLine": 2756,
+        "startChar": 42,
+        "endLine": 2756,
+        "endChar": 65
+      },
+      "revId": "854d02c85717648b6dcf723f05ab01c68f0e1e2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bbead68a_b3c2d285",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 2
