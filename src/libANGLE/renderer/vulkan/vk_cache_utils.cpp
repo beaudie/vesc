@@ -5620,6 +5620,19 @@ void WriteDescriptorDescBuilder::updateTransformFeedbackWrite(
                     xfbBufferCount);
 }
 
+void WriteDescriptorDescBuilder::updateDynamicDescriptorsCount()
+{
+    mDescs.mDynamicDescriptorSetCount = 0;
+    for (uint32_t index = 0; index < mDescs.size(); ++index)
+    {
+        const WriteDescriptorDesc &writeDesc = mDescs[index];
+        if (IsDynamicDescriptor(static_cast<VkDescriptorType>(writeDesc.descriptorType)))
+        {
+            mDescs.mDynamicDescriptorSetCount += writeDesc.descriptorCount;
+        }
+    }
+}
+
 void WriteDescriptorDescBuilder::streamOut(std::ostream &ostr) const
 {
     ostr << mDescs.size() << " write descriptor descs:\n";
@@ -5742,6 +5755,10 @@ void DescriptorSetDesc::streamOut(std::ostream &ostr) const
 
 // DescriptorSetDescBuilder implementation.
 DescriptorSetDescBuilder::DescriptorSetDescBuilder() = default;
+DescriptorSetDescBuilder::DescriptorSetDescBuilder(size_t descriptorCount)
+{
+    resize(descriptorCount);
+}
 
 DescriptorSetDescBuilder::~DescriptorSetDescBuilder() {}
 
@@ -5757,25 +5774,20 @@ DescriptorSetDescBuilder &DescriptorSetDescBuilder::operator=(const DescriptorSe
     return *this;
 }
 
-void DescriptorSetDescBuilder::reset()
-{
-    mDesc.reset();
-    mHandles.clear();
-    mDynamicOffsets.clear();
-}
-
 void DescriptorSetDescBuilder::updateUniformBuffer(uint32_t bindingIndex,
                                                    const WriteDescriptorDescs &writeDescriptorDescs,
                                                    const BufferHelper &bufferHelper,
                                                    VkDeviceSize bufferRange)
 {
-    DescriptorInfoDesc infoDesc = {};
+    uint32_t infoIndex           = writeDescriptorDescs[bindingIndex].descriptorInfoIndex;
+    DescriptorInfoDesc &infoDesc = mDesc.getInfoDesc(infoIndex);
+
+    infoDesc.samplerOrBufferSerial   = bufferHelper.getBlockSerial().getValue();
+    infoDesc.imageViewSerialOrOffset = 0;
     SetBitField(infoDesc.imageLayoutOrRange, bufferRange);
-    infoDesc.samplerOrBufferSerial = bufferHelper.getBlockSerial().getValue();
+    infoDesc.imageSubresourceRange = 0;
+    infoDesc.binding               = 0;
 
-    uint32_t infoIndex = writeDescriptorDescs[bindingIndex].descriptorInfoIndex;
-
-    mDesc.updateInfoDesc(infoIndex, infoDesc);
     mHandles[infoIndex].buffer = bufferHelper.getBuffer().getHandle();
 }
 
@@ -5797,14 +5809,14 @@ void DescriptorSetDescBuilder::updateTransformFeedbackBuffer(
     VkDeviceSize alignedOffset = (bufferOffset / offsetAlignment) * offsetAlignment;
     VkDeviceSize adjustedRange = bufferRange + (bufferOffset - alignedOffset);
 
-    DescriptorInfoDesc infoDesc = {};
-    SetBitField(infoDesc.imageLayoutOrRange, adjustedRange);
-    SetBitField(infoDesc.imageViewSerialOrOffset, alignedOffset);
-    infoDesc.samplerOrBufferSerial = bufferHelper.getBlockSerial().getValue();
-
     uint32_t infoIndex = writeDescriptorDescs[baseBinding].descriptorInfoIndex + xfbBufferIndex;
+    DescriptorInfoDesc &infoDesc   = mDesc.getInfoDesc(infoIndex);
+    infoDesc.samplerOrBufferSerial = bufferHelper.getBlockSerial().getValue();
+    SetBitField(infoDesc.imageViewSerialOrOffset, alignedOffset);
+    SetBitField(infoDesc.imageLayoutOrRange, adjustedRange);
+    infoDesc.imageSubresourceRange = 0;
+    infoDesc.binding               = 0;
 
-    mDesc.updateInfoDesc(infoIndex, infoDesc);
     mHandles[infoIndex].buffer = bufferHelper.getBuffer().getHandle();
 }
 
@@ -5854,7 +5866,9 @@ void UpdatePreCacheActiveTextures(const gl::ProgramExecutable &executable,
                                   const gl::SamplerBindingVector &samplers,
                                   DescriptorSetDesc *desc)
 {
-    desc->reset();
+    const WriteDescriptorDescs &writeDescriptorDescs =
+        executableVk.getTextureWriteDescriptorDescBuilder().getDescs();
+    desc->resize(writeDescriptorDescs.size());
 
     const ShaderInterfaceVariableInfoMap &variableInfoMap = executableVk.getVariableInfoMap();
     const std::vector<gl::LinkedUniform> &uniforms        = executable.getUniforms();
@@ -5864,10 +5878,6 @@ void UpdatePreCacheActiveTextures(const gl::ProgramExecutable &executable,
         for (uint32_t samplerIndex = 0; samplerIndex < samplerBindings.size(); ++samplerIndex)
         {
             const gl::SamplerBinding &samplerBinding = samplerBindings[samplerIndex];
-            uint32_t arraySize = static_cast<uint32_t>(samplerBinding.boundTextureUnits.size());
-            bool isSamplerExternalY2Y =
-                samplerBinding.samplerType == GL_SAMPLER_EXTERNAL_2D_Y2Y_EXT;
-
             uint32_t uniformIndex = executable.getUniformIndexFromSamplerIndex(samplerIndex);
             const gl::LinkedUniform &samplerUniform = uniforms[uniformIndex];
 
@@ -5883,6 +5893,10 @@ void UpdatePreCacheActiveTextures(const gl::ProgramExecutable &executable,
                 continue;
             }
 
+            uint32_t arraySize = static_cast<uint32_t>(samplerBinding.boundTextureUnits.size());
+            bool isSamplerExternalY2Y =
+                samplerBinding.samplerType == GL_SAMPLER_EXTERNAL_2D_Y2Y_EXT;
+
             for (uint32_t arrayElement = 0; arrayElement < arraySize; ++arrayElement)
             {
                 GLuint textureUnit = samplerBinding.boundTextureUnits[arrayElement];
@@ -5890,14 +5904,19 @@ void UpdatePreCacheActiveTextures(const gl::ProgramExecutable &executable,
                     continue;
                 TextureVk *textureVk = textures[textureUnit];
 
-                DescriptorInfoDesc infoDesc = {};
-                infoDesc.binding            = info.binding;
+                uint32_t infoIndex = writeDescriptorDescs[info.binding].descriptorInfoIndex +
+                                     arrayElement + samplerUniform.outerArrayOffset;
+                DescriptorInfoDesc &infoDesc = desc->getInfoDesc(infoIndex);
+                infoDesc.binding             = info.binding;
 
                 if (textureVk->getState().getType() == gl::TextureType::Buffer)
                 {
                     ImageOrBufferViewSubresourceSerial imageViewSerial =
                         textureVk->getBufferViewSerial();
                     infoDesc.imageViewSerialOrOffset = imageViewSerial.viewSerial.getValue();
+                    infoDesc.imageLayoutOrRange      = 0;
+                    infoDesc.samplerOrBufferSerial   = 0;
+                    infoDesc.imageSubresourceRange   = 0;
                 }
                 else
                 {
@@ -5916,14 +5935,11 @@ void UpdatePreCacheActiveTextures(const gl::ProgramExecutable &executable,
 
                     ImageLayout imageLayout = textureVk->getImage().getCurrentImageLayout();
                     SetBitField(infoDesc.imageLayoutOrRange, imageLayout);
-
                     infoDesc.imageViewSerialOrOffset = imageViewSerial.viewSerial.getValue();
                     infoDesc.samplerOrBufferSerial   = samplerHelper.getSamplerSerial().getValue();
                     memcpy(&infoDesc.imageSubresourceRange, &imageViewSerial.subresource,
                            sizeof(uint32_t));
                 }
-
-                desc->updateInfoDesc(static_cast<uint32_t>(textureUnit), infoDesc);
             }
         }
     }
@@ -5940,7 +5956,6 @@ angle::Result DescriptorSetDescBuilder::updateFullActiveTextures(
     PipelineType pipelineType,
     const SharedDescriptorSetCacheKey &sharedCacheKey)
 {
-    reset();
     for (gl::ShaderType shaderType : executable.getLinkedShaderStages())
     {
         ANGLE_TRY(updateExecutableActiveTexturesForShader(
@@ -5993,16 +6008,19 @@ angle::Result DescriptorSetDescBuilder::updateExecutableActiveTexturesForShader(
             GLuint textureUnit   = samplerBinding.boundTextureUnits[arrayElement];
             TextureVk *textureVk = textures[textureUnit];
 
-            DescriptorInfoDesc infoDesc = {};
-
             uint32_t infoIndex = writeDescriptorDescs[info.binding].descriptorInfoIndex +
                                  arrayElement + samplerUniform.outerArrayOffset;
+            DescriptorInfoDesc &infoDesc = mDesc.getInfoDesc(infoIndex);
+            infoDesc.binding             = info.binding;
 
             if (textureTypes[textureUnit] == gl::TextureType::Buffer)
             {
                 ImageOrBufferViewSubresourceSerial imageViewSerial =
                     textureVk->getBufferViewSerial();
                 infoDesc.imageViewSerialOrOffset = imageViewSerial.viewSerial.getValue();
+                infoDesc.imageLayoutOrRange      = 0;
+                infoDesc.samplerOrBufferSerial   = 0;
+                infoDesc.imageSubresourceRange   = 0;
 
                 textureVk->onNewDescriptorSet(sharedCacheKey);
 
@@ -6027,7 +6045,6 @@ angle::Result DescriptorSetDescBuilder::updateExecutableActiveTexturesForShader(
                 textureVk->onNewDescriptorSet(sharedCacheKey);
 
                 ImageLayout imageLayout = textureVk->getImage().getCurrentImageLayout();
-
                 SetBitField(infoDesc.imageLayoutOrRange, imageLayout);
                 infoDesc.imageViewSerialOrOffset = imageViewSerial.viewSerial.getValue();
                 infoDesc.samplerOrBufferSerial   = samplerHelper.getSamplerSerial().getValue();
@@ -6056,8 +6073,6 @@ angle::Result DescriptorSetDescBuilder::updateExecutableActiveTexturesForShader(
                     mHandles[infoIndex].imageView = imageView.getHandle();
                 }
             }
-
-            mDesc.updateInfoDesc(infoIndex, infoDesc);
         }
     }
 
@@ -6086,12 +6101,10 @@ void DescriptorSetDescBuilder::setEmptyBuffer(uint32_t infoDescIndex,
                                               VkDescriptorType descriptorType,
                                               const BufferHelper &emptyBuffer)
 {
-    DescriptorInfoDesc emptyDesc = {};
+    DescriptorInfoDesc &emptyDesc = mDesc.getInfoDesc(infoDescIndex);
     SetBitField(emptyDesc.imageLayoutOrRange, emptyBuffer.getSize());
     emptyDesc.imageViewSerialOrOffset = 0;
     emptyDesc.samplerOrBufferSerial   = emptyBuffer.getBlockSerial().getValue();
-
-    mDesc.updateInfoDesc(infoDescIndex, emptyDesc);
 
     mHandles[infoDescIndex].buffer = emptyBuffer.getBuffer().getHandle();
 
@@ -6178,22 +6191,23 @@ void DescriptorSetDescBuilder::updateOneShaderBuffer(
         }
     }
 
-    DescriptorInfoDesc infoDesc = {};
-    SetBitField(infoDesc.imageLayoutOrRange, size);
-    infoDesc.samplerOrBufferSerial = bufferHelper.getBlockSerial().getValue();
-
     VkDeviceSize offset = bufferBinding.getOffset() + bufferHelper.getOffset();
 
+    DescriptorInfoDesc &infoDesc   = mDesc.getInfoDesc(infoDescIndex);
+    infoDesc.samplerOrBufferSerial = bufferHelper.getBlockSerial().getValue();
     if (IsDynamicDescriptor(descriptorType))
     {
         SetBitField(mDynamicOffsets[infoDescIndex], offset);
+        infoDesc.imageViewSerialOrOffset = 0;
     }
     else
     {
         SetBitField(infoDesc.imageViewSerialOrOffset, offset);
     }
+    SetBitField(infoDesc.imageLayoutOrRange, size);
+    infoDesc.imageSubresourceRange = 0;
+    infoDesc.binding               = 0;
 
-    mDesc.updateInfoDesc(infoDescIndex, infoDesc);
     mHandles[infoDescIndex].buffer = bufferHelper.getBuffer().getHandle();
 }
 
@@ -6284,12 +6298,13 @@ void DescriptorSetDescBuilder::updateAtomicCounters(
 
         VkDeviceSize range = gl::GetBoundBufferAvailableSize(bufferBinding) + offsetDiff;
 
-        DescriptorInfoDesc infoDesc = {};
+        DescriptorInfoDesc &infoDesc = mDesc.getInfoDesc(infoIndex);
         SetBitField(infoDesc.imageLayoutOrRange, range);
         SetBitField(infoDesc.imageViewSerialOrOffset, offset);
         infoDesc.samplerOrBufferSerial = bufferHelper.getBlockSerial().getValue();
+        infoDesc.imageSubresourceRange = 0;
+        infoDesc.binding               = 0;
 
-        mDesc.updateInfoDesc(infoIndex, infoDesc);
         mHandles[infoIndex].buffer = bufferHelper.getBuffer().getHandle();
     }
 }
@@ -6422,11 +6437,14 @@ angle::Result DescriptorSetDescBuilder::updateImages(
                 const vk::BufferView *view = nullptr;
                 ANGLE_TRY(textureVk->getBufferViewAndRecordUse(context, format, true, &view));
 
-                DescriptorInfoDesc infoDesc = {};
+                DescriptorInfoDesc &infoDesc = mDesc.getInfoDesc(infoIndex);
                 infoDesc.imageViewSerialOrOffset =
                     textureVk->getBufferViewSerial().viewSerial.getValue();
+                infoDesc.imageLayoutOrRange    = 0;
+                infoDesc.imageSubresourceRange = 0;
+                infoDesc.samplerOrBufferSerial = 0;
+                infoDesc.binding               = 0;
 
-                mDesc.updateInfoDesc(infoIndex, infoDesc);
                 mHandles[infoIndex].bufferView = view->getHandle();
             }
         }
@@ -6451,12 +6469,13 @@ angle::Result DescriptorSetDescBuilder::updateImages(
 
                 // Note: binding.access is unused because it is implied by the shader.
 
-                DescriptorInfoDesc infoDesc = {};
+                DescriptorInfoDesc &infoDesc = mDesc.getInfoDesc(infoIndex);
                 SetBitField(infoDesc.imageLayoutOrRange, image->getCurrentImageLayout());
                 memcpy(&infoDesc.imageSubresourceRange, &serial.subresource, sizeof(uint32_t));
                 infoDesc.imageViewSerialOrOffset = serial.viewSerial.getValue();
+                infoDesc.samplerOrBufferSerial   = 0;
+                infoDesc.binding                 = 0;
 
-                mDesc.updateInfoDesc(infoIndex, infoDesc);
                 mHandles[infoIndex].imageView = imageView->getHandle();
             }
         }
@@ -6498,15 +6517,16 @@ angle::Result DescriptorSetDescBuilder::updateInputAttachments(
 
         uint32_t infoIndex = writeDescriptorDescs[binding].descriptorInfoIndex;
 
-        DescriptorInfoDesc infoDesc = {};
+        DescriptorInfoDesc &infoDesc = mDesc.getInfoDesc(infoIndex);
 
         // We just need any layout that represents GENERAL. The serial is also not totally precise.
         ImageOrBufferViewSubresourceSerial serial = renderTargetVk->getDrawSubresourceSerial();
         SetBitField(infoDesc.imageLayoutOrRange, ImageLayout::FragmentShaderWrite);
         infoDesc.imageViewSerialOrOffset = serial.viewSerial.getValue();
         memcpy(&infoDesc.imageSubresourceRange, &serial.subresource, sizeof(uint32_t));
+        infoDesc.samplerOrBufferSerial = 0;
+        infoDesc.binding               = 0;
 
-        mDesc.updateInfoDesc(infoIndex, infoDesc);
         mHandles[infoIndex].imageView = imageView->getHandle();
     }
 
