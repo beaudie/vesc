@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "08087142_a3660ab5",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2756,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-06-01T16:31:17Z",
+      "side": 1,
+      "message": "Before the CL `hasStorageBuffers \u003d\n        executable-\u003ehasStorageBuffers() || executable-\u003ehasAtomicCounterBuffers();`\nI have made hasStorageBuffers means  hasStorageBuffers(), which is why you see the diff here. There should be no functional change here.\n\nWe could make it a bitset and all these check will be slightly cheaper.",
+      "parentUuid": "50677553_817a8565",
+      "range": {
+        "startLine": 2756,
+        "startChar": 42,
+        "endLine": 2756,
+        "endChar": 65
+      },
+      "revId": "854d02c85717648b6dcf723f05ab01c68f0e1e2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bbead68a_b3c2d285",
@@ -71,6 +95,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "db525725_9aa39333",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6125,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-06-01T16:31:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bbead68a_b3c2d285",
+      "range": {
+        "startLine": 6125,
+        "startChar": 8,
+        "endLine": 6125,
+        "endChar": 22
+      },
+      "revId": "854d02c85717648b6dcf723f05ab01c68f0e1e2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e37da336_d50412aa",
@@ -84,6 +132,30 @@
       "writtenOn": "2023-06-01T13:36:56Z",
       "side": 1,
       "message": "Would it be possible to either make the existing `bufferRead(PipelineStage)` call this function, or move most of the code to a common helper to avoid duplication (especially of the elaborate comment)?",
+      "range": {
+        "startLine": 1728,
+        "startChar": 43,
+        "endLine": 1728,
+        "endChar": 53
+      },
+      "revId": "854d02c85717648b6dcf723f05ab01c68f0e1e2b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "662d6940_da0be10e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1728,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-06-01T16:31:17Z",
+      "side": 1,
+      "message": "The problem is pipelineStage is more than ShaderStage.",
+      "parentUuid": "e37da336_d50412aa",
       "range": {
         "startLine": 1728,
         "startChar": 43,
