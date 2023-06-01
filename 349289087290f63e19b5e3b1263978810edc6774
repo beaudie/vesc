@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "760c994b_11529f06",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1087,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-06-01T16:49:17Z",
+      "side": 0,
+      "message": "Oh yes, I just saw that they are declared in OutputSPIRV.h.",
+      "parentUuid": "21ccb7fc_9c6cd195",
+      "revId": "349289087290f63e19b5e3b1263978810edc6774",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "991550a0_f48848e9",
