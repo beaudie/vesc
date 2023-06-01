@@ -358,6 +358,98 @@ b/266710445 WIN OPENGL NVIDIA : dEQP-GLES31.functional.image_load_store.buffer.a
 5990 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.synchronization.in_invocation.ssbo_atomic_read_write = SKIP
 5990 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.synchronization.inter_call.with_memory_barrier.image_atomic_write_read = SKIP
 
+
+// Test failures due to backend does not support all functions in GLES 3.2
+// Swift shader does not fully support tessellation and geometry shaders
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.primitive_bounding_box* = SKIP
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.builtin_functions.common.*.*geometry = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.builtin_functions.common.*.*tess* = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.builtin_functions.pack_unpack.*geometry = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.builtin_functions.pack_unpack.*tess* = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.builtin_functions.integer.*.*geometry = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.builtin_functions.integer.*.*tess* = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.opaque_type_indexing.sampler.const_literal.geometry.* = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.opaque_type_indexing.sampler.const_literal.tessellation* = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.opaque_type_indexing.sampler.const_expression.geometry.* = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.opaque_type_indexing.sampler.const_expression.tessellation* = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.opaque_type_indexing.sampler.uniform.geometry.* = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.opaque_type_indexing.sampler.uniform.tessellation* = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.opaque_type_indexing.sampler.dynamically_uniform.geometry.* = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.opaque_type_indexing.sampler.dynamically_uniform.tessellation* = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.opaque_type_indexing.ubo.*geometry = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.opaque_type_indexing.ubo.*tessellation* = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.opaque_type_indexing.ssbo.*geometry = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.opaque_type_indexing.ssbo.*tessellation* = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.opaque_type_indexing.atomic_counter.const_expression_vertex = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.opaque_type_indexing.atomic_counter.uniform_vertex = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.opaque_type_indexing.atomic_counter.dynamically_uniform_vertex = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.functions.es31.overloading.arrays_of_arrays_size_vertex = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.linkage.es31.tessellation.* = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.linkage.es31.tessellation_geometry.* = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.linkage.es32.geometry.* = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.linkage.es32.tessellation.* = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.linkage.es32.tessellation_geometry.* = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.builtin_constants.core.* = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.builtin_constants.sample_variables.* = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.builtin_constants.geometry_shader.* = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.builtin_constants.tessellation_shader.* = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.helper_invocation.value.lines_8_samples = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.helper_invocation.value.points_8_samples = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.helper_invocation.value.triangles_max_samples = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.helper_invocation.derivate.triangles_8_samples_dfdy = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.helper_invocation.derivate.lines_8_samples_dfdx = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.helper_invocation.derivate.lines_8_samples_fwidth = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.helper_invocation.derivate.wide_lines_8_samples_dfdy = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.helper_invocation.derivate.points_8_samples_dfdx = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.helper_invocation.derivate.points_8_samples_fwidth = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.helper_invocation.derivate.wide_points_8_samples_dfdy = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.shaders.helper_invocation.derivate.triangles_max_samples_dfdx = FAIL
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.tessellation.state_query* = SKIP
+
+// Pixel 4 Bugs in tessellation and geometry shader support
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.shaders.builtin_functions.common.*.*geometry = FAIL
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.shaders.builtin_functions.common.*.*tess* = FAIL
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.shaders.builtin_functions.pack_unpack.*geometry = FAIL
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.shaders.builtin_functions.pack_unpack.*tess* = FAIL
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.shaders.builtin_functions.integer.*.*geometry = FAIL
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.shaders.builtin_functions.integer.*.*tess* = FAIL
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.shaders.builtin_constants.core.* = FAIL
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.shaders.builtin_constants.sample_variables.* = FAIL
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.shaders.builtin_constants.geometry_shader.* = FAIL
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.shaders.builtin_constants.tessellation_shader.* = FAIL
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.shaders.linkage.es31.tessellation* = FAIL
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.shaders.linkage.es32.geometry* = FAIL
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.shaders.linkage.es32.tessellation* = FAIL
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.state_query.integer.* = FAIL
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.program_interface_query.* = FAIL
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.layout_binding.negative.ssbo.* = FAIL
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.layout_binding.negative.ubo.* = FAIL
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.layout_binding.negative.sampler.* = FAIL
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.layout_binding.negative.image.* = FAIL
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.android_extension_pack.shaders.es31.extension_directive.ext_tessellation_shader = FAIL
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.android_extension_pack.shaders.es31.extension_directive.ext_primitive_bounding_box = FAIL
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.android_extension_pack.shaders.es32.extension_macros.android_extension_pack_es31a = FAIL
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.android_extension_pack.shaders.es32.extension_directive.ext_primitive_bounding_box = FAIL
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.android_extension_pack.shaders.es32.extension_directive.ext_tessellation_shader = FAIL
+
+// Pixel 4 does not support VkPhysicalDeviceCustomBorderColorFeaturesEXT.customBorderColors and VkPhysicalDeviceCustomBorderColorFeaturesEXT.customBorderColorWithoutFormat
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.texture.border_clamp.* = SKIP
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.debug.negative_coverage.* = SKIP
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.debug.error_filters.case_22 = SKIP
+
+// Pixel 4 hits asserts in TransformFeedbackVk
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.tessellation* = SKIP
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.geometry_shading* = SKIP
+
+// Pixel 4 hits asserts in FramebufferVk
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.ubo.2_level_array* = SKIP
+
+// Pixel 4 Failed to query GL_MAX_TESS_EVALUATION_SHADER_STORAGE_BLOCKS or
+// GL_MAX_TESS_CONTROL_SHADER_STORAGE_BLOCKS on - got GL_INVALID_ENUM
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.shaders.opaque_type_indexing.sampler.*tessellation* = FAIL
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.shaders.opaque_type_indexing.ubo.*tessellation* = FAIL
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.shaders.opaque_type_indexing.ssbo.*tessellation* = FAIL
+
 // Fails when the expression being interpolated as an indexed varying array.
 6194 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.shaders.multisample_interpolation.interpolate_at_offset.array_element.* = FAIL
 
