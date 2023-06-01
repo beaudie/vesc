@@ -16,6 +16,23 @@
       "message": "We have gotten the mali driver fix backported, so it\u0027d be nice to also allow `isVenus` here, but it\u0027s also fine to keep it disabled until our next mali uprev (unless there\u0027s noticeable perf delta?).",
       "revId": "626c5f7c3ea595e550492123cb7d70caf35c28ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ac64121_a32b5971",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-06-01T18:47:47Z",
+      "side": 1,
+      "message": "Hi Yiwei, would you please verify this doesn\u0027t break the test in http://b/275210062? Thank you.",
+      "revId": "626c5f7c3ea595e550492123cb7d70caf35c28ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
