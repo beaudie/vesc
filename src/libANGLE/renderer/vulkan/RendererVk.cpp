@@ -4256,8 +4256,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
 
     // Whether non-conformant configurations and extensions should be exposed. Always disable for
     // MESA Virtio-GPU Venus driver for production purpose.
-    ANGLE_FEATURE_CONDITION(&mFeatures, exposeNonConformantExtensionsAndVersions,
-                            kExposeNonConformantExtensionsAndVersions && !isVenus);
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, exposeNonConformantExtensionsAndVersions,
+        kExposeNonConformantExtensionsAndVersions && !isVenus && !isSwiftShader);
 
     ANGLE_FEATURE_CONDITION(
         &mFeatures, supportsMemoryBudget,
