@@ -2734,7 +2734,8 @@ angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferHelperT *co
     mShaderBufferWriteDescriptorDescBuilder.updateInputAttachments(
         *executable, variableInfoMap, vk::GetImpl(mState.getDrawFramebuffer()));
 
-    mShaderBuffersDescriptorDesc.reset();
+    mShaderBuffersDescriptorDesc.resize(
+        mShaderBufferWriteDescriptorDescBuilder.getDescriptorCount());
     if (hasUniformBuffers)
     {
         mShaderBuffersDescriptorDesc.updateShaderBuffers(
@@ -2901,18 +2902,21 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
     ProgramExecutableVk *executableVk      = getExecutable();
     vk::BufferHelper *currentUniformBuffer = mDefaultUniformStorage.getCurrentBuffer();
 
-    vk::DescriptorSetDescBuilder uniformsAndXfbDesc;
-    const vk::WriteDescriptorDescs writeDescriptorDescs =
-        executableVk->getDefaultUniformWriteDescriptorDescs(transformFeedbackVk);
+    const vk::WriteDescriptorDescBuilder &writeDescriptorDescsBuilder =
+        executableVk->getDefaultUniformWriteDescriptorDescsBuilder(transformFeedbackVk);
 
+    vk::DescriptorSetDescBuilder uniformsAndXfbDesc(
+        writeDescriptorDescsBuilder.getDescriptorCount());
     uniformsAndXfbDesc.updateUniformsAndXfb(
-        this, *executable, *executableVk, writeDescriptorDescs, currentUniformBuffer, mEmptyBuffer,
-        mState.isTransformFeedbackActiveUnpaused(), transformFeedbackVk);
+        this, *executable, *executableVk, writeDescriptorDescsBuilder.getDescs(),
+        currentUniformBuffer, mEmptyBuffer, mState.isTransformFeedbackActiveUnpaused(),
+        transformFeedbackVk);
 
     vk::SharedDescriptorSetCacheKey newSharedCacheKey;
     ANGLE_TRY(executableVk->updateUniformsAndXfbDescriptorSet(
-        this, mShareGroupVk->getUpdateDescriptorSetsBuilder(), writeDescriptorDescs,
-        mRenderPassCommands, currentUniformBuffer, &uniformsAndXfbDesc, &newSharedCacheKey));
+        this, mShareGroupVk->getUpdateDescriptorSetsBuilder(),
+        writeDescriptorDescsBuilder.getDescs(), mRenderPassCommands, currentUniformBuffer,
+        &uniformsAndXfbDesc, &newSharedCacheKey));
 
     if (newSharedCacheKey)
     {

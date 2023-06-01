@@ -170,6 +170,8 @@ class FastVector final
     void remove_and_permute(const value_type &element);
     void remove_and_permute(iterator pos);
 
+    bool operator==(const FastVector<T, N, Storage> &other) const;
+
   private:
     void assign_from_initializer_list(std::initializer_list<value_type> init);
     void ensure_capacity(size_t capacity);
@@ -571,6 +573,13 @@ void FastVector<T, N, Storage>::ensure_capacity(size_t capacity)
         mData         = newData;
         mReservedSize = newSize;
     }
+}
+
+template <class T, size_t N, class Storage>
+ANGLE_INLINE bool FastVector<T, N, Storage>::operator==(
+    const FastVector<T, N, Storage> &other) const
+{
+    return (size() == other.size()) && (memcmp(data(), other.data(), size() * sizeof(T)) == 0);
 }
 
 template <class Value, size_t N>
