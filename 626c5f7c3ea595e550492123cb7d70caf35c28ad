@@ -87,6 +87,24 @@
       "parentUuid": "f1033fb0_461e7cfc",
       "revId": "626c5f7c3ea595e550492123cb7d70caf35c28ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c5e418f_cf2f2ad0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2023-06-01T19:29:56Z",
+      "side": 1,
+      "message": "\u003e Do you mean isARM will be true for mesa venus GPU driver?\n\nYes. You can consider Venus as being a different driver implementation for the various GPUs. So pci vendor id is from the physical device. The prior workaround is to mitigate the issue found with venus atop mali ddkr40.\n\n\u003e I think if Venus no longer needs the workaround, we can add isVenus to the condition here.\n\nThanks, and `Patchset 2` lgtm!",
+      "parentUuid": "5b49ab2b_5cfd2acc",
+      "revId": "626c5f7c3ea595e550492123cb7d70caf35c28ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
