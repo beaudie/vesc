@@ -2774,6 +2774,8 @@ angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferHelperT *co
             this, *executable, variableInfoMap, vk::GetImpl(mState.getDrawFramebuffer()),
             mShaderBufferWriteDescriptorDescBuilder.getDescs()));
     }
+    ASSERT(mShaderBuffersDescriptorDesc.getDesc().size() ==
+           mShaderBufferWriteDescriptorDescBuilder.size());
 
     vk::SharedDescriptorSetCacheKey newSharedCacheKey;
     ANGLE_TRY(executableVk.updateShaderResourcesDescriptorSet(
@@ -2909,6 +2911,7 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
     uniformsAndXfbDesc.updateUniformsAndXfb(
         this, *executable, *executableVk, writeDescriptorDescs, currentUniformBuffer, mEmptyBuffer,
         mState.isTransformFeedbackActiveUnpaused(), transformFeedbackVk);
+    ASSERT(uniformsAndXfbDesc.getDesc().size() == writeDescriptorDescs.size());
 
     vk::SharedDescriptorSetCacheKey newSharedCacheKey;
     ANGLE_TRY(executableVk->updateUniformsAndXfbDescriptorSet(

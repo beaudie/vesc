@@ -1587,6 +1587,7 @@ class WriteDescriptorDescBuilder
                                       const gl::ProgramExecutable &executable);
 
     const WriteDescriptorDescs &getDescs() const { return mDescs; }
+    size_t size() const { return mCurrentInfoIndex; }
 
     void streamOut(std::ostream &os) const;
 
@@ -1630,6 +1631,7 @@ class DescriptorSetDesc
 
     void reset() { mDescriptorInfos.clear(); }
 
+    size_t size() const { return mDescriptorInfos.size(); }
     size_t getKeySizeBytes() const { return mDescriptorInfos.size() * sizeof(DescriptorInfoDesc); }
 
     bool operator==(const DescriptorSetDesc &other) const
@@ -1637,9 +1639,9 @@ class DescriptorSetDesc
         return (mDescriptorInfos == other.mDescriptorInfos);
     }
 
-    void updateInfoDesc(uint32_t infoDescIndex, const DescriptorInfoDesc &infoDesc)
+    DescriptorInfoDesc &getInfoDesc(uint32_t infoDescIndex)
     {
-        mDescriptorInfos[infoDescIndex] = infoDesc;
+        return mDescriptorInfos[infoDescIndex];
     }
 
     void updateDescriptorSet(Context *context,

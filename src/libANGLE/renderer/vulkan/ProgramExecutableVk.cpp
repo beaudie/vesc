@@ -1714,6 +1714,7 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
             textures, samplers, emulateSeamfulCubeMapSampling, pipelineType, newSharedCacheKey));
         fullDesc.updateDescriptorSet(context, mTextureWriteDescriptorDescBuilder.getDescs(),
                                      updateBuilder, mDescriptorSets[DescriptorSetIndex::Texture]);
+        ASSERT(fullDesc.getDesc().size() == mTextureWriteDescriptorDescBuilder.size());
     }
     else
     {
@@ -1884,6 +1885,7 @@ angle::Result ProgramExecutableVk::updateUniforms(
             context, glExecutable, *this, writeDescriptorDescs, defaultUniformBuffer, *emptyBuffer,
             isTransformFeedbackActiveUnpaused,
             glExecutable.hasTransformFeedbackOutput() ? transformFeedbackVk : nullptr);
+        ASSERT(uniformsAndXfbDesc.getDesc().size() == writeDescriptorDescs.size());
 
         vk::SharedDescriptorSetCacheKey newSharedCacheKey;
         ANGLE_TRY(updateUniformsAndXfbDescriptorSet(context, updateBuilder, writeDescriptorDescs,
