@@ -69,6 +69,24 @@
       "parentUuid": "9aca1c06_068d9e06",
       "revId": "626c5f7c3ea595e550492123cb7d70caf35c28ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b49ab2b_5cfd2acc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-06-01T19:24:10Z",
+      "side": 1,
+      "message": "Do you mean `isARM` will be true for mesa venus GPU driver? Thus this new feature bit won\u0027t be turned on for Venus: Venus driver will still treat primitiveRestartEnable as static state (the workaround needed to avoid the dynamic state driver bug)\n\nI think if Venus no longer needs the workaround, we can add `isVenus` to the condition here.\n\nIt would be nice to have a crash course on `vendorId`, `driverId`, and `deviceName`:)",
+      "parentUuid": "f1033fb0_461e7cfc",
+      "revId": "626c5f7c3ea595e550492123cb7d70caf35c28ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
