@@ -143,6 +143,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1617814d_c4e543f0",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-01T18:33:45Z",
+      "side": 1,
+      "message": "\u003e\u003e If I understand correctly, all these sleepd uncertainties are because SingleContextMutex is not actually a lock, right? If it were a lock, wouldn\u0027t you be able to get rid of the sleeps, and also guarantee there wouldn\u0027t be a problem?\n\u003e\n\u003eCorrect.\n\n**I was wrong...***\n\nWe need sleep not because `SingleContextMutex` is not actual mutex. If update `SingleContextMutex` to use `Spinlock` nothing will change for current Context, because no other Context will lock this mutex.\n\nWe need `activationDelayMicro` sleep **because of the `mState::mContextMutex` pointer caching** before taking the lock. Caching includes CPU cache and even local value on the stack. Example:\n```\nThread 1:\n    egl::ContextMutex *mutex \u003d Context::getContextMutex()\n        State::getContextMutex()\n            State::mContextMutex.load(std::memory_order_relaxed)\n\n    // Thread 2 updates State::mContextMutex, but \"mutex\" contains old value\n    std::lock_guard\u003cegl::ContextMutex\u003e(*mutex)\n        SingleContextMutex::lock()\n\nThread 2:\n    Context::ensureSharedMutexActive()\n        State::useSharedContextMutex()\n            State::mContextMutex.store(mSharedContextMutex)\n\n        // This sleep so that Thread 1 acquired SingleContextMutex lock.\n        // After this sleep we assume, that Thread 1 will not lock\n        // SingleContextMutex again, because it will load updated value next time.\n        this_thread::sleep_for(chrono::microseconds(activationDelayMicro))\n\n        // Wait while currently locked SingleContextMutex is unlocked\n```\n\nTo solve the above problem without sleep and 100% safe, Thread 1 must check after locking the mutex if current mutex changed or not. However, this logic already implemented in the `SharedContextMutex\u003c\u003e`. Only difference is that not the `State::mContextMutex` pointer is updated, but the mutex itself (`mRoot` pointer). Such update requires that the original mutex was a real mutex.\n\nThe fastest real mutex that is possible (assuming no thread contention) is `angle::FastMutex1` or `angle::Spinlock`. But my original plan was to use `SharedContextMutex\u003cangle::FastMutex1\u003e` anyway, so no point treating single Context differently.\n\nPossible scenario is to use `SharedContextMutex\u003cangle::FastMutex1\u003e` for single context and then switch to `SharedContextMutex\u003cstd::mutex\u003e` when there are multiple contexts. However, changing `Mutex` type is not supported. I may add this support, but it may run slower at the end.\n\nIMO I would use `SharedContextMutex\u003cangle::FastMutex1\u003e` regardless of the number of Contexts. I think in the real word there should not be too much thread contention with multiple Contexts where `angle::FastMutex1` will perform significantly worse than `std::mutex`.\n\n---\n\nAnyway, I still have some performance numbers:\n```\nAndroid S906B\nTime in ms for 1000\u0027000 `glGetError()` calls (average from 3x5 runs).\n\nNo Shared Context Mutex (mShared \u003d false)     9.973\nNo Shared Context Mutex (mShared \u003d true)     31.599\n\nSingleContextMutex (std::atomic_int)          9.684\nSingleContextMutex (angle::Spinlock)         13.933\nSharedContextMutex\u003cangle::FastMutex1\u003e        13.681\nSharedContextMutex\u003cstd::mutex\u003e               29.704\n```\n\nAs you can see, `SharedContextMutex\u003cangle::FastMutex1\u003e` works even faster than `SingleContextMutex` that uses `angle::Spinlock`. I can\u0027t explain this. I just experimented with code to make `SharedContextMutex\u003c\u003e` run as fast as possible on mobile.\n\nAlso note that original `SingleContextMutex` works slightly faster than the current code when `mShared \u003d false`. This was my goal. Unfortunately the price is not 100% safe transition to `SharedContextMutex\u003c\u003e`.",
+      "parentUuid": "fff5f19d_47c20238",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "baaaafe5_24947132",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 18
@@ -282,6 +300,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad7994d2_e0dbb76e",
+        "filename": "src/libANGLE/SharedContextMutex.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-01T18:33:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "303791b5_46cc5231",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "251dbf1e_c4271589",
@@ -366,6 +402,24 @@
       "writtenOn": "2023-04-28T20:17:48Z",
       "side": 1,
       "message": "If you remove the `#if` from the header, you can also make this initialization unconditional.",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0633e18a_3b93aaac",
+        "filename": "src/libANGLE/SharedContextMutex.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-01T18:33:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "705ca0c4_18c1f53b",
       "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1090,6 +1144,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0146be0c_f5b1326b",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-01T18:33:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7877b9d4_eb7b522e",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "787cb45c_967d11d0",
@@ -1316,6 +1388,24 @@
       "side": 1,
       "message": "I can try. I used `std::unique_lock` before and performance was slower. Maybe with custom `Scoped` class performance will be the same.",
       "parentUuid": "57aa0eda_0d8336b1",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cd413de_c2b18063",
+        "filename": "src/libANGLE/validationEGL.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-01T18:33:45Z",
+      "side": 1,
+      "message": "Added `ScopedOptionalContextMutexLock`. Performance is the same.",
+      "parentUuid": "8d681245_dea7af38",
       "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
