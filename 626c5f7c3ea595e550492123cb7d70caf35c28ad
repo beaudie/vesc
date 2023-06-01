@@ -33,6 +33,24 @@
       "message": "Hi Yiwei, would you please verify this doesn\u0027t break the test in http://b/275210062? Thank you.",
       "revId": "626c5f7c3ea595e550492123cb7d70caf35c28ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9aca1c06_068d9e06",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-06-01T18:53:03Z",
+      "side": 1,
+      "message": "I believe the feature is enabled on `isVenus`, because the condition `!isARM` should cover it, please correct me if I am wrong.",
+      "parentUuid": "7cb49164_23d5455d",
+      "revId": "626c5f7c3ea595e550492123cb7d70caf35c28ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
