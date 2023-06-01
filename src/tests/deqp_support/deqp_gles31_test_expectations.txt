@@ -358,6 +358,33 @@ b/266710445 WIN OPENGL NVIDIA : dEQP-GLES31.functional.image_load_store.buffer.a
 5990 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.synchronization.in_invocation.ssbo_atomic_read_write = SKIP
 5990 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.synchronization.inter_call.with_memory_barrier.image_atomic_write_read = SKIP
 
+// Swift shader does not support tessellation and geometry shaders
+b/224537784 SWIFTSHADER : dEQP-GLES31.functional.primitive_bounding_box* = SKIP
+
+// Pixel 4 does not support VkPhysicalDeviceCustomBorderColorFeaturesEXT.customBorderColors and VkPhysicalDeviceCustomBorderColorFeaturesEXT.customBorderColorWithoutFormat
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.texture.border_clamp.* = SKIP
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.debug.negative_coverage.* = SKIP
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.debug.error_filters.case_22 = SKIP
+
+// Pixel 4 hits asserts in TransformFeedbackVk
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.tessellation* = SKIP
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.geometry_shading* = SKIP
+
+// Pixel 4 hits asserts in FramebufferVk
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.ubo.2_level_array* = SKIP
+
+// Pixel 4 Failed to query GL_MAX_TESS_EVALUATION_SHADER_STORAGE_BLOCKS or
+// GL_MAX_TESS_CONTROL_SHADER_STORAGE_BLOCKS on - got GL_INVALID_ENUM
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.shaders.builtin_functions.*tess* = SKIP
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.shaders.opaque_type_indexing.sampler.const_expression.tessellation* = SKIP
+
+// Pixel 4 Bugs in tessellation and geometry shader support
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.shaders.linkage.es31.tessellation* = SKIP
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.shaders.linkage.es32.geometry* = SKIP
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.shaders.linkage.es32.tessellation* = SKIP
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.state_query.integer.* = SKIP
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.program_interface_query.* = SKIP
+
 // Fails when the expression being interpolated as an indexed varying array.
 6194 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.shaders.multisample_interpolation.interpolate_at_offset.array_element.* = FAIL
 
