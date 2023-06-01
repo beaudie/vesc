@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b2f573d_30736349",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4411,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-01T00:03:48Z",
+      "side": 0,
+      "message": "Yes, the bugs were also specified in the features json file. Yuxin, please follow up with enabling `usePrimitiveRestartEnableDynamicState`.",
+      "parentUuid": "31c2f8a3_ead01913",
+      "range": {
+        "startLine": 4405,
+        "startChar": 0,
+        "endLine": 4411,
+        "endChar": 86
+      },
+      "revId": "29ad234a5b188047b925e1d798a853e127f33459",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "72ec3fe5_c76fa6a7",
@@ -61,6 +85,30 @@
       "writtenOn": "2023-05-31T21:21:04Z",
       "side": 0,
       "message": "This is going away because it is only used for ES1, right?",
+      "range": {
+        "startLine": 512,
+        "startChar": 61,
+        "endLine": 512,
+        "endChar": 88
+      },
+      "revId": "29ad234a5b188047b925e1d798a853e127f33459",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1aade1f5_35376eac",
+        "filename": "src/tests/gl_tests/AttributeLayoutTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-01T00:03:48Z",
+      "side": 0,
+      "message": "No, because I changed things so that disabling EDS2 implicitly disables it. We have this issue where feature overrides don\u0027t take feature dependencies into account, and the `use*DynamicState()` helpers I added in RendererVk are working around that problem. While I was here, I made logicOp also use that kind of helper which made this unnecessary.",
+      "parentUuid": "72ec3fe5_c76fa6a7",
       "range": {
         "startLine": 512,
         "startChar": 61,

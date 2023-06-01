@@ -16,6 +16,24 @@
       "message": "if `SupportsExtendedDynamicState` feature is disabled, then feature `UseVertexInputBindingStrideDynamicState` is also disabled, based on this condition in RendererVk.cpp: \n```\nANGLE_FEATURE_CONDITION(\u0026mFeatures, useVertexInputBindingStrideDynamicState,\n                      mFeatures.supportsExtendedDynamicState.enabled \u0026\u0026 !isARM);\n```\n\nCan I ask why we need to explicitly disable `SupportsExtendedDynamicState`?",
       "revId": "18fe688260435d3fdcaa0ddfc8f9da63366a9048",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75de82b4_92403640",
+        "filename": "src/tests/gl_tests/StateChangeTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 10563,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-01T00:03:48Z",
+      "side": 1,
+      "message": "\u003e if SupportsExtendedDynamicState feature is disabled, then feature UseVertexInputBindingStrideDynamicState is also disabled\n\nThat is correct.\n\n\u003e Can I ask why we need to explicitly disable SupportsExtendedDynamicState?\n\nWe don\u0027t? `ES3_VULKAN().disable(Feature::UseVertexInputBindingStrideDynamicState)` is a config that _only_ disables UseVertexInputBindingStrideDynamicState. It leaves SupportsExtendedDynamicState be.",
+      "parentUuid": "0bdfa7cb_af77150f",
+      "revId": "18fe688260435d3fdcaa0ddfc8f9da63366a9048",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

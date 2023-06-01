@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "02129270_e15b23c4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-01T00:03:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e1a15db9_f8083bdb",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 8
+      },
+      "revId": "e32b93dd181cddd194e84c8da99f17bddc0af96e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bf626a47_f5a08910",
@@ -43,6 +67,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "d53b7546_651e01b3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-01T00:03:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf626a47_f5a08910",
+      "revId": "e32b93dd181cddd194e84c8da99f17bddc0af96e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "de19b2d6_9dac9c08",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -54,6 +96,24 @@
       "writtenOn": "2023-05-31T21:21:04Z",
       "side": 1,
       "message": "That was more involved than I expected!",
+      "revId": "e32b93dd181cddd194e84c8da99f17bddc0af96e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ec02315_23de42ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-01T00:03:48Z",
+      "side": 1,
+      "message": "Yeah, I sneaked in some refactoring to make things more manageable too.",
+      "parentUuid": "de19b2d6_9dac9c08",
       "revId": "e32b93dd181cddd194e84c8da99f17bddc0af96e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
