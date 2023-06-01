@@ -14,7 +14,7 @@ assert(angle_enable_vulkan)
 
 declare_args() {
   # Enable custom (cpu-side) secondary command buffers
-  angle_enable_custom_vulkan_cmd_buffers = true
+  angle_enable_custom_vulkan_cmd_buffers = false
 
   # Enable Vulkan GPU trace event capability
   angle_enable_vulkan_gpu_trace_events = false
