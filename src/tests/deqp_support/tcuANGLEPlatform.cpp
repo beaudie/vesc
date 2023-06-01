@@ -90,8 +90,8 @@ ANGLEPlatform::ANGLEPlatform(angle::LogErrorFunc logErrorFunc, uint32_t preRotat
 
     // Enable non-conformant ES versions and extensions for testing.  Our test expectations would
     // suppress failing tests, but allowing continuous testing of the pieces that are implemented.
-    mEnableFeatureOverrides.push_back(
-        angle::GetFeatureName(angle::Feature::ExposeNonConformantExtensionsAndVersions));
+    //    mEnableFeatureOverrides.push_back(
+    //        angle::GetFeatureName(angle::Feature::ExposeNonConformantExtensionsAndVersions));
 
     // Create pre-rotation attributes.
     switch (preRotation)

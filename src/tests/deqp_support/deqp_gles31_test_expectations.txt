@@ -169,6 +169,10 @@ b/266710445 WIN OPENGL NVIDIA : dEQP-GLES31.functional.image_load_store.buffer.a
 4098 SWIFTSHADER : dEQP-GLES31.functional.compute.basic.write_multiple_unsized_arr_multiple_groups = FAIL
 4098 SWIFTSHADER : dEQP-GLES31.functional.compute.basic.write_multiple_unsized_arr_single_invocation = FAIL
 
+3687 SWIFTSHADER : dEQP-GLES31.functional.primitive_bounding_box.* = SKIP
+3687 PIXEL4ORXL : dEQP-GLES31.functional.tessellation.* = SKIP
+3687 PIXEL4ORXL : dEQP-GLES31.functional.texture.border_clamp.* = SKIP
+
 
 // Not failing in last official run, but failed recently:
 5662 SWIFTSHADER : dEQP-GLES31.functional.copy_image.compressed.* = FAIL

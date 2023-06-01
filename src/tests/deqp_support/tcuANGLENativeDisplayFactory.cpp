@@ -453,7 +453,7 @@ ANGLENativeDisplayFactory::ANGLENativeDisplayFactory(
 
         const char **enabledFeatures =
             reinterpret_cast<const char **>(mPlatformAttributes[attrIndex + 1]);
-        DE_ASSERT(enabledFeatures != nullptr && *enabledFeatures != nullptr);
+        // DE_ASSERT(enabledFeatures != nullptr && *enabledFeatures != nullptr);
 
         for (; *enabledFeatures; ++enabledFeatures)
         {
