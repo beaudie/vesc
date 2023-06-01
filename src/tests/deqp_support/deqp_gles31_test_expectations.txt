@@ -357,6 +357,10 @@ b/266710445 WIN OPENGL NVIDIA : dEQP-GLES31.functional.image_load_store.buffer.a
 5990 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.synchronization.in_invocation.ssbo_alias_write = SKIP
 5990 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.synchronization.in_invocation.ssbo_atomic_read_write = SKIP
 5990 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.synchronization.inter_call.with_memory_barrier.image_atomic_write_read = SKIP
+// Pixel 4 does not support VkPhysicalDeviceCustomBorderColorFeaturesEXT.customBorderColors and VkPhysicalDeviceCustomBorderColorFeaturesEXT.customBorderColorWithoutFormat
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.texture.border_clamp.* = SKIP
+// Pixel 4 hits asserts in TransformFeedbackVk
+b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.tessellation.* = SKIP
 
 // Fails when the expression being interpolated as an indexed varying array.
 6194 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.shaders.multisample_interpolation.interpolate_at_offset.array_element.* = FAIL
