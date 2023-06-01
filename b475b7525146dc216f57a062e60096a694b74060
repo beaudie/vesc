@@ -74,6 +74,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "21e1e7ab_95ebec0e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2023-06-01T13:58:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f86488e7_7c4a3e67",
+      "revId": "b475b7525146dc216f57a062e60096a694b74060",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "19a87e81_30fa653d",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -120,6 +138,30 @@
       "writtenOn": "2023-05-31T17:38:17Z",
       "side": 1,
       "message": "2.0f?",
+      "range": {
+        "startLine": 290,
+        "startChar": 23,
+        "endLine": 290,
+        "endChar": 44
+      },
+      "revId": "b475b7525146dc216f57a062e60096a694b74060",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2444371_6c35a58c",
+        "filename": "src/tests/gl_tests/MaxTextureSizeTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1395734
+      },
+      "writtenOn": "2023-06-01T13:58:08Z",
+      "side": 1,
+      "message": "Sure! that should be 2.0f. Will update the patch",
+      "parentUuid": "68056f38_9b59b3c0",
       "range": {
         "startLine": 290,
         "startChar": 23,
