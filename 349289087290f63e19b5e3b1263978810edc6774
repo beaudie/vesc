@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "938fc673_e843cd7f",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1087,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-06-01T06:03:07Z",
+      "side": 0,
+      "message": "`kXfbEmulationGetOffsetsFunctionName[]` is used by `TranslatorVulkan`: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/compiler/translator/TranslatorVulkan.cpp;l\u003d378. Shall we remove it from `TranslatorVulkan`, too?",
+      "revId": "349289087290f63e19b5e3b1263978810edc6774",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "991550a0_f48848e9",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1088,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-06-01T06:03:07Z",
+      "side": 0,
+      "message": "Same as above.",
+      "revId": "349289087290f63e19b5e3b1263978810edc6774",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23870dd5_3c63a2a8",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1097,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-06-01T06:03:07Z",
+      "side": 0,
+      "message": "Same as above",
+      "revId": "349289087290f63e19b5e3b1263978810edc6774",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
