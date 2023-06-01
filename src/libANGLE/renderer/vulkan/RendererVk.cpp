@@ -4254,8 +4254,10 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // Negative viewports are exposed in the Maintenance1 extension and in core Vulkan 1.1+.
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsNegativeViewport, supportsNegativeViewport);
 
-    // Whether non-conformant configurations and extensions should be exposed. Always disable for
-    // MESA Virtio-GPU Venus driver for production purpose.
+    // Whether non-conformant configurations and extensions should be exposed.
+    // Always disable for MESA Virtio-GPU Venus driver for production purpose.
+    // Always disable for swiftshader because swiftshader does not support geometry and tessellation
+    // shader.
     ANGLE_FEATURE_CONDITION(&mFeatures, exposeNonConformantExtensionsAndVersions,
                             kExposeNonConformantExtensionsAndVersions && !isVenus);
 
