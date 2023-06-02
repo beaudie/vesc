@@ -277,11 +277,14 @@ deps = {
     'condition': 'checkout_android and not build_with_chromium',
   },
 
+<<<<<<< PATCH SET (8003dd Remove stale Android NDK and references [2/2])
+=======
   'third_party/android_ndk': {
     'url': '{chromium_git}/android_ndk.git@310956bd122ec2b96049f8d7398de6b717f3452e',
     'condition': 'checkout_android and not build_with_chromium',
   },
 
+>>>>>>> BASE      (15a294 Migrate Android NDK to CIPD [1/2])
   'third_party/android_toolchain': {
       'packages': [
             {
