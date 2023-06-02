@@ -689,6 +689,8 @@ constexpr angle::PackedEnumMap<RenderPassClosureReason, const char *> kRenderPas
      "Render pass closed due to fallback to CPU when generating mipmaps"},
     {RenderPassClosureReason::CopyTextureOnCPU,
      "Render pass closed due to fallback to CPU when copying texture"},
+    {RenderPassClosureReason::RGBAToASTCImageCopyOnCPU,
+     "Render pass closed due to fallback to CPU when copying RGBA to ASTC image"},
     {RenderPassClosureReason::TextureReformatToRenderable,
      "Render pass closed due to reformatting texture to a renderable fallback"},
     {RenderPassClosureReason::DeviceLocalBufferMap,

@@ -28,8 +28,7 @@ void LoadASTCToRGBA8Inner(const ImageLoadContext &context,
     auto imgWidth  = static_cast<uint32_t>(width);
     auto imgHeight = static_cast<uint32_t>(height);
 
-    AstcDecompressor &decompressor = AstcDecompressor::get();
-    if (!decompressor.available())
+    if (!AstcDecompressor::available())
     {
         ERR() << "Trying to decompress ASTC without having ASTC support built.";
         return;
@@ -42,6 +41,7 @@ void LoadASTCToRGBA8Inner(const ImageLoadContext &context,
     // Space needed for 16 bytes of output per compressed block
     size_t blockSize = blockCountX * blockCountY * 16;
 
+    AstcDecompressor &decompressor = AstcDecompressor::get();
     int32_t result =
         decompressor.decompress(context.singleThreadPool, context.multiThreadPool, imgWidth,
                                 imgHeight, blockWidth, blockHeight, input, blockSize, output);

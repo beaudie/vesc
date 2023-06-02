@@ -30,7 +30,7 @@ class AstcDecompressor
     //   - It wasn't compiled on this platform.
     //   - The CPU doesn't support AVX2 instructions.
     // If this returns false, decompress() will fail.
-    virtual bool available() const = 0;
+    static bool available();
 
     // Decompress an ASTC texture.
     //

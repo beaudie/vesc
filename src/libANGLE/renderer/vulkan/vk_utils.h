@@ -1266,6 +1266,7 @@ enum class RenderPassClosureReason
     ColorBufferInvalidate,
     GenerateMipmapOnCPU,
     CopyTextureOnCPU,
+    RGBAToASTCImageCopyOnCPU,
     TextureReformatToRenderable,
     DeviceLocalBufferMap,
     OutOfReservedQueueSerialForOutsideCommands,

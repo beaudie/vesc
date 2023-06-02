@@ -177,12 +177,6 @@ class AstcDecompressorImpl : public AstcDecompressor
 
     ~AstcDecompressorImpl() override = default;
 
-    bool available() const override
-    {
-        static bool available = IsAstcDecompressorAvailable();
-        return available;
-    }
-
     int32_t decompress(std::shared_ptr<WorkerThreadPool> singleThreadPool,
                        std::shared_ptr<WorkerThreadPool> multiThreadPool,
                        const uint32_t imgWidth,
@@ -249,6 +243,13 @@ class AstcDecompressorImpl : public AstcDecompressor
 };
 
 }  // namespace
+
+// static
+bool AstcDecompressor::available()
+{
+    static bool available = IsAstcDecompressorAvailable();
+    return available;
+}
 
 AstcDecompressor &AstcDecompressor::get()
 {

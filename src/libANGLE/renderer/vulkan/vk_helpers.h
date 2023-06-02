@@ -2105,7 +2105,6 @@ class ImageHelper final : public Resource, public angle::Subject
                                              const gl::Extents &glExtents,
                                              const gl::Offset &offset,
                                              const gl::InternalFormat &formatInfo,
-                                             const gl::PixelUnpackState &unpack,
                                              GLenum type,
                                              const uint8_t *pixels,
                                              const Format &vkFormat,

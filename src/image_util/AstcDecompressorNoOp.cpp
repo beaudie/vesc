@@ -17,8 +17,6 @@ namespace
 class AstcDecompressorNoOp : public AstcDecompressor
 {
   public:
-    bool available() const override { return false; }
-
     int32_t decompress(std::shared_ptr<WorkerThreadPool> singleThreadPool,
                        std::shared_ptr<WorkerThreadPool> multiThreadPool,
                        uint32_t imgWidth,
@@ -39,6 +37,12 @@ class AstcDecompressorNoOp : public AstcDecompressor
 };
 
 }  // namespace
+
+// static
+bool AstcDecompressor::available()
+{
+    return false;
+}
 
 AstcDecompressor &AstcDecompressor::get()
 {

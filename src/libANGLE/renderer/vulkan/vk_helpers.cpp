@@ -10,6 +10,7 @@
 
 #include "common/utilities.h"
 #include "common/vulkan/vk_headers.h"
+#include "image_util/AstcDecompressor.h"
 #include "image_util/loadimage.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/renderer/driver_utils.h"
@@ -977,6 +978,64 @@ bool CheckSubpassCommandBufferCount(uint32_t count)
     // Custom command buffer (priv::SecondaryCommandBuffer) may contain commands for multiple
     // subpasses, therefore we do not need multiple buffers.
     return (count == 1 || !RenderPassCommandBuffer::ExecutesInline());
+}
+
+bool IsASTCFormat(angle::FormatID id)
+{
+    switch (id)
+    {
+        case angle::FormatID::ASTC_10x10_SRGB_BLOCK:
+        case angle::FormatID::ASTC_10x10_UNORM_BLOCK:
+        case angle::FormatID::ASTC_10x5_SRGB_BLOCK:
+        case angle::FormatID::ASTC_10x5_UNORM_BLOCK:
+        case angle::FormatID::ASTC_10x6_SRGB_BLOCK:
+        case angle::FormatID::ASTC_10x6_UNORM_BLOCK:
+        case angle::FormatID::ASTC_10x8_SRGB_BLOCK:
+        case angle::FormatID::ASTC_10x8_UNORM_BLOCK:
+        case angle::FormatID::ASTC_12x10_SRGB_BLOCK:
+        case angle::FormatID::ASTC_12x10_UNORM_BLOCK:
+        case angle::FormatID::ASTC_12x12_SRGB_BLOCK:
+        case angle::FormatID::ASTC_12x12_UNORM_BLOCK:
+        case angle::FormatID::ASTC_3x3x3_UNORM_BLOCK:
+        case angle::FormatID::ASTC_3x3x3_UNORM_SRGB_BLOCK:
+        case angle::FormatID::ASTC_4x3x3_UNORM_BLOCK:
+        case angle::FormatID::ASTC_4x3x3_UNORM_SRGB_BLOCK:
+        case angle::FormatID::ASTC_4x4_SRGB_BLOCK:
+        case angle::FormatID::ASTC_4x4_UNORM_BLOCK:
+        case angle::FormatID::ASTC_4x4x3_UNORM_BLOCK:
+        case angle::FormatID::ASTC_4x4x3_UNORM_SRGB_BLOCK:
+        case angle::FormatID::ASTC_4x4x4_UNORM_BLOCK:
+        case angle::FormatID::ASTC_4x4x4_UNORM_SRGB_BLOCK:
+        case angle::FormatID::ASTC_5x4_SRGB_BLOCK:
+        case angle::FormatID::ASTC_5x4_UNORM_BLOCK:
+        case angle::FormatID::ASTC_5x4x4_UNORM_BLOCK:
+        case angle::FormatID::ASTC_5x4x4_UNORM_SRGB_BLOCK:
+        case angle::FormatID::ASTC_5x5_SRGB_BLOCK:
+        case angle::FormatID::ASTC_5x5_UNORM_BLOCK:
+        case angle::FormatID::ASTC_5x5x4_UNORM_BLOCK:
+        case angle::FormatID::ASTC_5x5x4_UNORM_SRGB_BLOCK:
+        case angle::FormatID::ASTC_5x5x5_UNORM_BLOCK:
+        case angle::FormatID::ASTC_5x5x5_UNORM_SRGB_BLOCK:
+        case angle::FormatID::ASTC_6x5_SRGB_BLOCK:
+        case angle::FormatID::ASTC_6x5_UNORM_BLOCK:
+        case angle::FormatID::ASTC_6x5x5_UNORM_BLOCK:
+        case angle::FormatID::ASTC_6x5x5_UNORM_SRGB_BLOCK:
+        case angle::FormatID::ASTC_6x6_SRGB_BLOCK:
+        case angle::FormatID::ASTC_6x6_UNORM_BLOCK:
+        case angle::FormatID::ASTC_6x6x5_UNORM_BLOCK:
+        case angle::FormatID::ASTC_6x6x5_UNORM_SRGB_BLOCK:
+        case angle::FormatID::ASTC_6x6x6_UNORM_BLOCK:
+        case angle::FormatID::ASTC_6x6x6_UNORM_SRGB_BLOCK:
+        case angle::FormatID::ASTC_8x5_SRGB_BLOCK:
+        case angle::FormatID::ASTC_8x5_UNORM_BLOCK:
+        case angle::FormatID::ASTC_8x6_SRGB_BLOCK:
+        case angle::FormatID::ASTC_8x6_UNORM_BLOCK:
+        case angle::FormatID::ASTC_8x8_SRGB_BLOCK:
+        case angle::FormatID::ASTC_8x8_UNORM_BLOCK:
+            return true;
+        default:
+            return false;
+    }
 }
 }  // anonymous namespace
 
@@ -6936,12 +6995,12 @@ angle::Result ImageHelper::CopyImageSubData(const gl::Context *context,
     const gl::LevelIndex srcLevelGL = gl::LevelIndex(srcLevel);
     const gl::LevelIndex dstLevelGL = gl::LevelIndex(dstLevel);
 
+    const bool isSrc3D = srcImage->getType() == VK_IMAGE_TYPE_3D;
+    const bool isDst3D = dstImage->getType() == VK_IMAGE_TYPE_3D;
+
     if (CanCopyWithTransferForCopyImage(contextVk->getRenderer(), srcImage, srcTilingMode, dstImage,
                                         destTilingMode))
     {
-        bool isSrc3D = srcImage->getType() == VK_IMAGE_TYPE_3D;
-        bool isDst3D = dstImage->getType() == VK_IMAGE_TYPE_3D;
-
         VkImageCopy region = {};
 
         region.srcSubresource.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -7001,6 +7060,56 @@ angle::Result ImageHelper::CopyImageSubData(const gl::Context *context,
         params.copyExtents[2] = srcDepth;
 
         ANGLE_TRY(utilsVk.copyImageBits(contextVk, dstImage, srcImage, params));
+    }
+    else if (angle::AstcDecompressor::available() && IsASTCFormat(dstImage->getIntendedFormatID()))
+    {
+        RendererVk *renderer = contextVk->getRenderer();
+
+        // RGBA32->ASTC copies are emulated with a CPU readback for now
+        ANGLE_VK_PERF_WARNING(
+            contextVk, GL_DEBUG_SEVERITY_HIGH,
+            "CopyImageSubData from RGBA to ASTC done on CPU due to ASTC emulation");
+
+        // Read back the requested region of the source texture
+        const gl::Box sourceBox(srcX, srcY, isSrc3D ? srcZ : 0, srcWidth, srcHeight,
+                                isSrc3D ? srcDepth : 1);
+        const uint32_t srcBaseLayer  = isSrc3D ? 0 : srcZ;
+        const uint32_t srcLayerCount = isSrc3D ? 1 : srcDepth;
+
+        vk::RendererScoped<vk::BufferHelper> bufferHelper(renderer);
+        vk::BufferHelper *srcBuffer = &bufferHelper.get();
+        uint8_t *srcData            = nullptr;
+        ANGLE_TRY(srcImage->copyImageDataToBuffer(contextVk, srcLevelGL, srcLayerCount,
+                                                  srcBaseLayer, sourceBox, srcBuffer, &srcData));
+
+        // Wait for copy to finish
+        ANGLE_TRY(contextVk->finishImpl(RenderPassClosureReason::RGBAToASTCImageCopyOnCPU));
+
+        // Map the buffer and use stageSubresourceUpdate to upload the ASTC contents from the src
+        // image.  That function will automatically decompress the data.
+        uint8_t *source = nullptr;
+
+        ANGLE_TRY(srcBuffer->map(contextVk, &source));
+        ANGLE_TRY(srcBuffer->invalidate(renderer));
+
+        const gl::ImageIndex index =
+            isDst3D ? gl::ImageIndex::Make3D(dstLevel)
+                    : gl::ImageIndex::Make2DArrayRange(dstLevel, isDst3D ? 0 : dstZ,
+                                                       isDst3D ? 1 : srcDepth);
+        const GLenum glInternalFormat        = dstImage->getIntendedFormat().glInternalFormat;
+        const gl::InternalFormat &formatInfo = gl::GetSizedInternalFormatInfo(glInternalFormat);
+        const vk::Format &vkFormat           = renderer->getFormat(glInternalFormat);
+        const gl::PixelUnpackState unpack;
+
+        const gl::Extents dstExtents(srcWidth * formatInfo.compressedBlockWidth,
+                                     srcHeight * formatInfo.compressedBlockHeight,
+                                     isDst3D ? srcDepth * formatInfo.compressedBlockDepth : 1);
+
+        ANGLE_TRY(dstImage->stageSubresourceUpdate(
+            contextVk, index, dstExtents, gl::Offset(dstX, dstY, isDst3D ? dstZ : 0), formatInfo,
+            unpack, GL_UNSIGNED_BYTE, source, vkFormat, ImageAccess::SampleOnly));
+
+        srcBuffer->unmap(renderer);
     }
     else
     {
@@ -7230,7 +7339,6 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
                                                       const gl::Extents &glExtents,
                                                       const gl::Offset &offset,
                                                       const gl::InternalFormat &formatInfo,
-                                                      const gl::PixelUnpackState &unpack,
                                                       GLenum type,
                                                       const uint8_t *pixels,
                                                       const Format &vkFormat,
@@ -7851,9 +7959,9 @@ angle::Result ImageHelper::stageSubresourceUpdate(ContextVk *contextVk,
     ANGLE_TRY(CalculateBufferInfo(contextVk, glExtents, formatInfo, unpack, type, index.usesTex3D(),
                                   &inputRowPitch, &inputDepthPitch, &inputSkipBytes));
 
-    ANGLE_TRY(stageSubresourceUpdateImpl(contextVk, index, glExtents, offset, formatInfo, unpack,
-                                         type, pixels, vkFormat, access, inputRowPitch,
-                                         inputDepthPitch, inputSkipBytes));
+    ANGLE_TRY(stageSubresourceUpdateImpl(contextVk, index, glExtents, offset, formatInfo, type,
+                                         pixels, vkFormat, access, inputRowPitch, inputDepthPitch,
+                                         inputSkipBytes));
 
     return angle::Result::Continue;
 }
