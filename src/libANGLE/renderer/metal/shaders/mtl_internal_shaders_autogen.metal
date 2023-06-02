@@ -6,8 +6,6 @@
 // found in the LICENSE file.
 //
 
-// Combined Metal default shaders.
-
 # 1 "temp_master_source.metal"
 # 1 "<built-in>" 1
 # 1 "<built-in>" 3
