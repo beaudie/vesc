@@ -227,6 +227,8 @@ angle::Result CreateMslShader(Context *context,
                               MTLFunctionConstantValues *funcConstants,
                               id<MTLFunction> *shaderOut);
 
+size_t PackSampleCount(GLint sampleCount);
+
 }  // namespace mtl
 }  // namespace rx
 

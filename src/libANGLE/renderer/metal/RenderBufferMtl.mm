@@ -101,11 +101,24 @@ angle::Result RenderbufferMtl::setStorageImpl(const gl::Context *context,
         }
         else
         {
+            const bool hasRenderToTextureEXT =
+                contextMtl->getDisplay()->getNativeExtensions().multisampledRenderToTextureEXT;
+
+            if (!hasRenderToTextureEXT)
+            {
+                return angle::Result::Stop;
+            }
+
+            ANGLE_TRY(mtl::Texture::Make2DTexture(
+                contextMtl, mFormat, static_cast<uint32_t>(width), static_cast<uint32_t>(height), 1,
+                /* renderTargetOnly */ false,
+                /* allowFormatView */ mFormat.hasDepthAndStencilBits(), &mTexture));
+
             ANGLE_TRY(mtl::Texture::Make2DMSTexture(
                 contextMtl, mFormat, static_cast<uint32_t>(width), static_cast<uint32_t>(height),
                 actualSamples,
                 /* renderTargetOnly */ false,
-                /* allowFormatView */ mFormat.hasDepthAndStencilBits(), &mTexture));
+                /* allowFormatView */ mFormat.hasDepthAndStencilBits(), &mImplicitMSTexture));
         }
 
         mRenderTarget.setWithImplicitMSTexture(mTexture, mImplicitMSTexture,

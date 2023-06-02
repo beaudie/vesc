@@ -109,7 +109,7 @@ class FramebufferMtl : public FramebufferImpl
     mtl::RenderCommandEncoder *ensureRenderPassStarted(const gl::Context *context);
 
     // Call this to notify FramebufferMtl whenever its render pass has started.
-    void onStartedDrawingToFrameBuffer(const gl::Context *context);
+    void onStartedDrawingToFrameBuffer(const gl::Context *context, bool is_newly_bound = false);
     void onFrameEnd(const gl::Context *context);
 
     // The actual area will be adjusted based on framebuffer flipping property.
@@ -213,6 +213,10 @@ class FramebufferMtl : public FramebufferImpl
     // Flag indicating the render pass start is a clean start or a resume from interruption such
     // as by a compute pass.
     bool mRenderPassCleanStart = false;
+
+    // Flag indicating that the framebuffer must load resolve texture contents as the texture might
+    // have been updated by another fbo. See more at ensureRenderPassStarted.
+    bool mLoadMSAAFromResolve = false;
 
     WindowSurfaceMtl *mBackbuffer = nullptr;
     bool mFlipY                   = false;

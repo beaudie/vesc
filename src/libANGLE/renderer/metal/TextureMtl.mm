@@ -665,13 +665,21 @@ void TextureMtl::releaseTexture(bool releaseImages, bool releaseTextureObjectsOn
     mNativeTexture                    = nullptr;
     mNativeSwizzleStencilSamplingView = nullptr;
 
-    // Clear render target cache for each texture's image. We don't erase them because they
-    // might still be referenced by a framebuffer.
-    for (auto &sliceRenderTargets : mPerLayerRenderTargets)
+    for (mtl::TextureRef ref : mImplicitMSTextures)
     {
-        for (RenderTargetMtl &mipRenderTarget : sliceRenderTargets.second)
+        ref = nullptr;
+    }
+
+    // Clear render target cache for each texture's image (and render to texture sample level).
+    // We don't erase them because they might still be referenced by a framebuffer.
+    for (auto &renderToTextureRenderTarget : mPerLayerRenderTargets)
+    {
+        for (auto &sliceRenderTargets : renderToTextureRenderTarget)
         {
-            mipRenderTarget.reset();
+            for (RenderTargetMtl &mipRenderTarget : sliceRenderTargets.second)
+            {
+                mipRenderTarget.reset();
+            }
         }
     }
 
@@ -1001,27 +1009,33 @@ ImageDefinitionMtl &TextureMtl::getImageDefinition(const gl::ImageIndex &imageIn
 
     return imageDef;
 }
-RenderTargetMtl &TextureMtl::getRenderTarget(const gl::ImageIndex &imageIndex)
+RenderTargetMtl &TextureMtl::getRenderTarget(
+    const gl::RenderToTextureImageIndex &renderToTextureIndex,
+    const gl::ImageIndex &imageIndex)
 {
     ASSERT(imageIndex.getType() == gl::TextureType::_2D ||
            imageIndex.getType() == gl::TextureType::Rectangle ||
            imageIndex.getType() == gl::TextureType::_2DMultisample || imageIndex.hasLayer());
-    GLuint layer         = GetImageLayerIndexFrom(imageIndex);
-    RenderTargetMtl &rtt = mPerLayerRenderTargets[layer][imageIndex.getLevelIndex()];
+    GLuint layer = GetImageLayerIndexFrom(imageIndex);
+    RenderTargetMtl &rtt =
+        mPerLayerRenderTargets[renderToTextureIndex][layer][imageIndex.getLevelIndex()];
     if (!rtt.getTexture())
     {
         // Lazy initialization of render target:
         mtl::TextureRef &image = getImage(imageIndex);
         if (image)
         {
-            if (imageIndex.getType() == gl::TextureType::CubeMap)
+            // Cube map is special, the image is already the view of its layer
+            const GLuint usedLayerLevel =
+                imageIndex.getType() == gl::TextureType::CubeMap ? 0 : layer;
+            if (mtl::TextureRef textureRef = mImplicitMSTextures[renderToTextureIndex])
             {
-                // Cube map is special, the image is already the view of its layer
-                rtt.set(image, mtl::kZeroNativeMipLevel, 0, mFormat);
+                rtt.setWithImplicitMSTexture(image, textureRef, mtl::kZeroNativeMipLevel,
+                                             usedLayerLevel, mFormat);
             }
             else
             {
-                rtt.set(image, mtl::kZeroNativeMipLevel, layer, mFormat);
+                rtt.set(image, mtl::kZeroNativeMipLevel, usedLayerLevel, mFormat);
             }
         }
     }
@@ -1452,7 +1466,40 @@ angle::Result TextureMtl::getAttachmentRenderTarget(const gl::Context *context,
     ContextMtl *contextMtl = mtl::GetImpl(context);
     ANGLE_MTL_TRY(contextMtl, mNativeTexture);
 
-    *rtOut = &getRenderTarget(imageIndex);
+    const bool hasRenderToTextureEXT =
+        contextMtl->getDisplay()->getNativeExtensions().multisampledRenderToTextureEXT;
+
+    if (samples > 1 && !hasRenderToTextureEXT)
+    {
+        return angle::Result::Stop;
+    }
+
+    //  If samples > 1 here, we have a singlesampled texture that's being multisampled rendered
+    //  to. In this case, create a multisampled texture that is otherwise identical to the single
+    //  sampled image.  That multisampled texture is used as color attachment, while the original
+    //  image is used as the resolve attachment.
+    gl::RenderToTextureImageIndex renderToTextureIndex =
+        !hasRenderToTextureEXT
+            ? gl::RenderToTextureImageIndex::Default
+            : static_cast<gl::RenderToTextureImageIndex>(mtl::PackSampleCount(samples));
+
+    if (samples > 1)
+    {
+        // Create an intermediate multisample texture that is going to be used for multisampling if
+        // doesn't exist.
+        const ImageDefinitionMtl &imageDef = getImageDefinition(imageIndex);
+        if (!mImplicitMSTextures[renderToTextureIndex])
+        {
+            const bool allowFormatView = mFormat.hasDepthAndStencilBits();
+            ANGLE_TRY(mtl::Texture::Make2DMSTexture(contextMtl, mFormat,
+                                                    imageDef.image->sizeAt0().width,
+                                                    imageDef.image->sizeAt0().height, samples,
+                                                    /* renderTargetOnly */ false, allowFormatView,
+                                                    &mImplicitMSTextures[renderToTextureIndex]));
+        }
+    }
+
+    *rtOut = &getRenderTarget(renderToTextureIndex, imageIndex);
 
     return angle::Result::Continue;
 }
@@ -2254,7 +2301,8 @@ angle::Result TextureMtl::copySubImageWithDraw(const gl::Context *context,
     ContextMtl *contextMtl = mtl::GetImpl(context);
     DisplayMtl *displayMtl = contextMtl->getDisplay();
 
-    const RenderTargetMtl &imageRtt = getRenderTarget(index);
+    const RenderTargetMtl &imageRtt =
+        getRenderTarget(gl::RenderToTextureImageIndex::Default, index);
 
     mtl::RenderCommandEncoder *cmdEncoder = contextMtl->getRenderTargetCommandEncoder(imageRtt);
     mtl::ColorBlitParams blitParams;

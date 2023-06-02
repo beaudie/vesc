@@ -1824,5 +1824,22 @@ angle::Result CreateMslShader(Context *context,
     shaderOut->retainAssign(outFunction);
     return angle::Result::Continue;
 }
+
+// Return the log of samples.  Assumes |sampleCount| is a power of 2.  The result can be used to
+// index an array based on sample count.
+// TODO(msisov): this must be shared with Vulkan as it's copied from there.
+size_t PackSampleCount(GLint sampleCount)
+{
+    if (sampleCount == 0)
+    {
+        sampleCount = 1;
+    }
+
+    // We currently only support up to 16xMSAA.
+    // TODO(msisov): check max sample count.
+    ASSERT(sampleCount <= 16);
+    ASSERT(gl::isPow2(sampleCount));
+    return gl::ScanForward(static_cast<uint32_t>(sampleCount));
+}
 }  // namespace mtl
 }  // namespace rx
