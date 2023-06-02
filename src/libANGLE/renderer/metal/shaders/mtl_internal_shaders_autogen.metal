@@ -6,9 +6,6 @@
 // found in the LICENSE file.
 //
 
-// C++ string version of combined Metal default shaders.
-
-static char gDefaultMetallibSrc[] = R"(
 # 1 "temp_master_source.metal"
 # 1 "<built-in>" 1
 # 1 "<built-in>" 3
@@ -3616,4 +3613,3 @@ kernel void genIndexBuffer(
 # 8 "temp_master_source.metal" 2
 
 
-)";

@@ -28,12 +28,14 @@
 #include "mtl_command_buffer.h"
 #include "platform/PlatformMethods.h"
 
-#if TARGET_OS_SIMULATOR
-#    include "libANGLE/renderer/metal/shaders/mtl_internal_shaders_src_autogen.h"
-#elif defined(ANGLE_PLATFORM_MACOS)
-#    include "libANGLE/renderer/metal/shaders/mtl_internal_shaders_macos_autogen.h"
+#if !defined(ANGLE_METAL_COMPILE_INTERNAL_SHADERS_FROM_SOURCE)
+#    define ANGLE_METAL_COMPILE_INTERNAL_SHADERS_FROM_SOURCE TARGET_OS_SIMULATOR
+#endif
+
+#if ANGLE_METAL_COMPILE_INTERNAL_SHADERS_FROM_SOURCE
+#    include "mtl_internal_shaders_src_autogen.h"
 #else
-#    include "libANGLE/renderer/metal/shaders/mtl_internal_shaders_ios_autogen.h"
+#    include "mtl_internal_shaders_autogen.h"
 #endif
 
 #include "EGL/eglext.h"
@@ -1346,8 +1348,9 @@ void DisplayMtl::initializeFeatures()
 angle::Result DisplayMtl::initializeShaderLibrary()
 {
     mtl::AutoObjCPtr<NSError *> err = nil;
-#if TARGET_OS_SIMULATOR
-    mDefaultShaders = mtl::CreateShaderLibrary(getMetalDevice(), gDefaultMetallibSrc,
+#if ANGLE_METAL_COMPILE_INTERNAL_SHADERS_FROM_SOURCE
+    mDefaultShaders = mtl::CreateShaderLibrary(getMetalDevice(),
+                                               reinterpret_cast<const char *>(gDefaultMetallibSrc),
                                                std::size(gDefaultMetallibSrc), &err);
 #else
     mDefaultShaders = mtl::CreateShaderLibraryFromBinary(getMetalDevice(), gDefaultMetallib,
