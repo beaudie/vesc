@@ -16,7 +16,34 @@ config("angle_metal_backend_config") {
     "-weak_framework",
     "Metal",
   ]
+  include_dirs = [ "$root_gen_dir/angle" ]
 }
+
+action("angle_compile_metal_internal_shaders") {
+  _metal_internal_shaders_metal_source =
+      "shaders/mtl_internal_shaders_autogen.metal"
+  script = "shaders/build_mtl_internal_shaders.py"
+
+  outputs = [ metal_internal_shaders_header ]
+
+  args = [
+    "--source",
+    rebase_path(_metal_internal_shaders_metal_source, root_build_dir),
+    "--sdk",
+    "macosx",
+    "--std",
+    "macos-metal2.1",
+    "-mmacosx-version-min",
+    "10.14",
+    "--variable",
+    "gDefaultMetallib_2_1",
+    "--output",
+    rebase_path(metal_internal_shaders_header, root_build_dir),
+  ]
+}
+
+#action("angle_package_metal_internal_shaders") {
+#}
 
 angle_source_set("angle_metal_backend") {
   public_configs = [ ":angle_metal_backend_config" ]
@@ -31,6 +58,7 @@ angle_source_set("angle_metal_backend") {
   libs = []
 
   public_deps = [
+    ":angle_compile_metal_internal_shaders",
     "${angle_root}:angle_common",
     "${angle_root}:angle_gpu_info_util",
     "${angle_root}:angle_image_util",
