@@ -1050,6 +1050,7 @@ angle::Result FramebufferMtl::prepareRenderPass(const gl::Context *context,
     uint32_t maxColorAttachments = static_cast<uint32_t>(mState.getColorAttachments().size());
     desc.numColorAttachments     = 0;
     desc.sampleCount             = 1;
+    uint32_t sampleCount         = 0;
     for (uint32_t colorIndexGL = 0; colorIndexGL < maxColorAttachments; ++colorIndexGL)
     {
         ASSERT(colorIndexGL < mColorRenderTargets.size());
@@ -1066,6 +1067,15 @@ angle::Result FramebufferMtl::prepareRenderPass(const gl::Context *context,
 
             desc.numColorAttachments = std::max(desc.numColorAttachments, colorIndexGL + 1);
             desc.sampleCount = std::max(desc.sampleCount, colorRenderTarget->getRenderSamples());
+
+            if (sampleCount == 0)
+            {
+                sampleCount = desc.sampleCount;
+            }
+            else
+            {
+                ASSERT(sampleCount == desc.sampleCount);
+            }
 
             if (!mRenderPassFirstColorAttachmentFormat)
             {
@@ -1092,6 +1102,14 @@ angle::Result FramebufferMtl::prepareRenderPass(const gl::Context *context,
     {
         mDepthRenderTarget->toRenderPassAttachmentDesc(&desc.depthAttachment);
         desc.sampleCount = std::max(desc.sampleCount, mDepthRenderTarget->getRenderSamples());
+        if (sampleCount == 0)
+        {
+            sampleCount = desc.sampleCount;
+        }
+        else
+        {
+            ASSERT(sampleCount == desc.sampleCount);
+        }
     }
     else
     {
@@ -1102,6 +1120,14 @@ angle::Result FramebufferMtl::prepareRenderPass(const gl::Context *context,
     {
         mStencilRenderTarget->toRenderPassAttachmentDesc(&desc.stencilAttachment);
         desc.sampleCount = std::max(desc.sampleCount, mStencilRenderTarget->getRenderSamples());
+        if (sampleCount == 0)
+        {
+            sampleCount = desc.sampleCount;
+        }
+        else
+        {
+            ASSERT(sampleCount == desc.sampleCount);
+        }
     }
     else
     {
@@ -1162,7 +1188,6 @@ angle::Result FramebufferMtl::clearWithLoadOpRenderPassNotStarted(
         mtl::RenderPassColorAttachmentDesc &colorAttachment =
             tempDesc.colorAttachments[colorIndexGL];
         const mtl::TextureRef &texture = colorAttachment.texture;
-
         if (clearColorBuffers.test(colorIndexGL))
         {
             colorAttachment.loadAction = MTLLoadActionClear;
