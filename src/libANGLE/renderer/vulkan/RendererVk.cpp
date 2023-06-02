@@ -5640,6 +5640,21 @@ VkResult ImageMemorySuballocator::allocateAndBindMemory(Context *context,
     VkResult result = vma::AllocateAndBindMemoryForImage(
         allocator.getHandle(), &image->mHandle, requiredFlags, preferredFlags,
         allocateDedicatedMemory, &allocationOut->mHandle, memoryTypeIndexOut, sizeOut);
+
+    if (result != VK_SUCCESS)
+    {
+        // If the original allocation fails, retry on other memory types than the device.
+        requiredFlags &= (~VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+        result = vma::AllocateAndBindMemoryForImage(
+            allocator.getHandle(), &image->mHandle, requiredFlags, preferredFlags,
+            allocateDedicatedMemory, &allocationOut->mHandle, memoryTypeIndexOut, sizeOut);
+
+        if (result == VK_SUCCESS)
+        {
+            context->getPerfCounters().deviceMemoryImageAllocationFallbacks++;
+        }
+    }
+
     if (result != VK_SUCCESS)
     {
         // Record the failed memory allocation.
@@ -5658,16 +5673,17 @@ VkResult ImageMemorySuballocator::allocateAndBindMemory(Context *context,
     // We need to get the property flags of the allocated memory.
     *memoryFlagsOut =
         renderer->getMemoryProperties().getMemoryType(*memoryTypeIndexOut).propertyFlags;
-    if ((~(*memoryFlagsOut) & preferredFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT) != 0)
-    {
-        // For images allocated here, although allocation is preferred on the device, it is not
-        // required.
-        ASSERT((requiredFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT) == 0);
-        renderer->getMemoryAllocationTracker()->compareExpectedFlagsWithAllocatedFlags(
-            requiredFlags, preferredFlags, *memoryFlagsOut,
-            reinterpret_cast<void *>(allocationOut->getHandle()));
-        context->getPerfCounters().deviceMemoryImageAllocationFallbacks++;
-    }
+    //    if ((~(*memoryFlagsOut) & preferredFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT) != 0)
+    //    {
+    //        // For images allocated here, although allocation is preferred on the device, it is
+    //        not
+    //        // required.
+    //        ASSERT((requiredFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT) == 0);
+    //        renderer->getMemoryAllocationTracker()->compareExpectedFlagsWithAllocatedFlags(
+    //            requiredFlags, preferredFlags, *memoryFlagsOut,
+    //            reinterpret_cast<void *>(allocationOut->getHandle()));
+    //        context->getPerfCounters().deviceMemoryImageAllocationFallbacks++;
+    //    }
 
     renderer->onMemoryAlloc(memoryAllocationType, *sizeOut, *memoryTypeIndexOut,
                             allocationOut->getHandle());
