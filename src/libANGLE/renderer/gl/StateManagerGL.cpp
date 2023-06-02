@@ -104,6 +104,7 @@ StateManagerGL::StateManagerGL(const FunctionsGL *functions,
       mFramebuffers(angle::FramebufferBindingSingletonMax, 0),
       mRenderbuffer(0),
       mPlaceholderFbo(0),
+      mPlaceholderRbo(0),
       mScissorTestEnabled(false),
       mScissor(0, 0, 0, 0),
       mViewport(0, 0, 0, 0),
@@ -231,6 +232,10 @@ StateManagerGL::~StateManagerGL()
     if (mPlaceholderFbo != 0)
     {
         deleteFramebuffer(mPlaceholderFbo);
+    }
+    if (mPlaceholderRbo != 0)
+    {
+        deleteRenderbuffer(mPlaceholderRbo);
     }
     if (mDefaultVAO != 0)
     {
@@ -775,8 +780,11 @@ void StateManagerGL::beginQuery(gl::QueryType type, QueryGL *queryObject, GLuint
     ASSERT(mQueries[type] == nullptr);
     ASSERT(queryId != 0);
 
-    if (mFeatures.bindFramebufferForTimerQueries.enabled &&
-        mFramebuffers[angle::FramebufferBindingDraw] == 0 &&
+    GLuint oldFramebufferBindingRead = mFramebuffers[angle::FramebufferBindingRead];
+    GLuint oldFramebufferBindingDraw = mFramebuffers[angle::FramebufferBindingDraw];
+    if (mFeatures.bindCompleteFramebufferForTimerQueries.enabled &&
+        (mFramebuffers[angle::FramebufferBindingDraw] == 0 ||
+         mFunctions->checkFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) &&
         (type == gl::QueryType::TimeElapsed || type == gl::QueryType::Timestamp))
     {
         if (!mPlaceholderFbo)
@@ -784,10 +792,36 @@ void StateManagerGL::beginQuery(gl::QueryType type, QueryGL *queryObject, GLuint
             mFunctions->genFramebuffers(1, &mPlaceholderFbo);
         }
         bindFramebuffer(GL_FRAMEBUFFER, mPlaceholderFbo);
+
+        if (!mPlaceholderRbo)
+        {
+            GLuint oldRenderBufferBinding = mRenderbuffer;
+            mFunctions->genRenderbuffers(1, &mPlaceholderRbo);
+            bindRenderbuffer(GL_RENDERBUFFER, mPlaceholderRbo);
+            mFunctions->renderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, 2, 2);
+            bindRenderbuffer(GL_RENDERBUFFER, oldRenderBufferBinding);
+        }
+
+        mFunctions->framebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER,
+                                            mPlaceholderRbo);
     }
 
     mQueries[type] = queryObject;
     mFunctions->beginQuery(ToGLenum(type), queryId);
+
+    if (mFeatures.bindCompleteFramebufferForTimerQueries.enabled && oldFramebufferBindingDraw &&
+        oldFramebufferBindingDraw != mPlaceholderFbo)
+    {
+        if (oldFramebufferBindingRead != oldFramebufferBindingDraw)
+        {
+            bindFramebuffer(GL_READ_FRAMEBUFFER, oldFramebufferBindingRead);
+            bindFramebuffer(GL_DRAW_FRAMEBUFFER, oldFramebufferBindingDraw);
+        }
+        else
+        {
+            bindFramebuffer(GL_FRAMEBUFFER, oldFramebufferBindingDraw);
+        }
+    }
 }
 
 void StateManagerGL::endQuery(gl::QueryType type, QueryGL *queryObject, GLuint queryId)
