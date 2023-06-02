@@ -1768,6 +1768,12 @@ void MultisampledRenderToTextureES3Test::drawCopyDrawAttachDepthStencilClearThen
     bool useRenderbuffer)
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
+    if (!useRenderbuffer)
+    {
+        // FramebufferTexture2DMultisampleEXT allows only GL_COLOR_ATTACHMENT0 unless
+        // the GL_EXT_multisampled_render_to_texture2 extension is supported.
+        ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture2"));
+    }
     constexpr GLsizei kSize = 64;
 
     // http://anglebug.com/4935
