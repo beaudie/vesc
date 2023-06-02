@@ -4,6 +4,7 @@
 #
 # This file houses the build configuration for the ANGLE Metal back-end.
 
+import("//build/config/mac/mac_sdk.gni")
 import("../../../../gni/angle.gni")
 import("metal_backend.gni")
 
@@ -16,6 +17,74 @@ config("angle_metal_backend_config") {
     "-weak_framework",
     "Metal",
   ]
+  include_dirs = [ "$root_gen_dir/angle" ]
+}
+
+_metal_internal_shaders_metal_source =
+    "shaders/mtl_internal_shaders_autogen.metal"
+_metal_internal_shaders_air_file =
+    "$root_gen_dir/angle/mtl_internal_shaders_autogen.air"
+_metal_internal_shaders_metallib_file =
+    "$root_gen_dir/angle/mtl_internal_shaders_autogen.metallib"
+
+action("angle_metal_internal_shaders_to_air") {
+  script = "shaders/metal_wrapper.py"
+
+  outputs = [ _metal_internal_shaders_air_file ]
+
+  sources = [ _metal_internal_shaders_metal_source ]
+
+  args = [
+    rebase_path(mac_bin_path + "metal", root_build_dir, angle_root),
+    "--std=macos-metal2.1",
+    "-mmacosx-version-min=10.14",
+    "-c",
+    rebase_path(_metal_internal_shaders_metal_source, root_build_dir),
+    "-o",
+    rebase_path(_metal_internal_shaders_air_file, root_build_dir),
+  ]
+}
+
+action("angle_metal_internal_shaders_to_mtllib") {
+  script = "shaders/metal_wrapper.py"
+
+  outputs = [ _metal_internal_shaders_metallib_file ]
+
+  sources = [ _metal_internal_shaders_air_file ]
+
+  deps = [ ":angle_metal_internal_shaders_to_air" ]
+
+  args = [
+    rebase_path(mac_bin_path + "metallib", root_build_dir, angle_root),
+    rebase_path(_metal_internal_shaders_air_file, root_build_dir),
+    "-o",
+    rebase_path(_metal_internal_shaders_metallib_file, root_build_dir),
+  ]
+}
+
+config("angle_metal_internal_shaders_config") {
+  include_dirs = [ "$root_gen_dir/angle" ]
+}
+
+action("angle_metal_internal_shaders") {
+  script = "shaders/embed_in_header.py"
+
+  outputs = [ metal_internal_shaders_header ]
+
+  sources = [ _metal_internal_shaders_metallib_file ]
+
+  deps = [ ":angle_metal_internal_shaders_to_mtllib" ]
+
+  args = [
+    "--source",
+    rebase_path(_metal_internal_shaders_metallib_file, root_build_dir),
+    "--variable-name",
+    "gDefaultMetallib",
+    "--header",
+    rebase_path(metal_internal_shaders_header, root_build_dir),
+  ]
+
+  public_configs = [ ":angle_metal_internal_shaders_config" ]
 }
 
 angle_source_set("angle_metal_backend") {
@@ -31,6 +100,7 @@ angle_source_set("angle_metal_backend") {
   libs = []
 
   public_deps = [
+    ":angle_metal_internal_shaders",
     "${angle_root}:angle_common",
     "${angle_root}:angle_gpu_info_util",
     "${angle_root}:angle_image_util",
