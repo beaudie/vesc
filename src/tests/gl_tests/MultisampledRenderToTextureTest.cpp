@@ -452,7 +452,8 @@ TEST_P(MultisampledRenderToTextureTest, FramebufferCompleteness)
     // http://anglebug.com/3107
     ANGLE_SKIP_TEST_IF(IsD3D());
 
-    if (getClientMajorVersion() >= 3)
+    // GL_COLOR_ATTACHMENT0 + x is only available with the render_to_texture2.
+    if (EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture2"))
     {
         // Texture attachment for color attachment 1.
         GLTexture texture2;
@@ -1768,6 +1769,8 @@ void MultisampledRenderToTextureES3Test::drawCopyDrawAttachDepthStencilClearThen
     bool useRenderbuffer)
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
+    ANGLE_SKIP_TEST_IF(!useRenderbuffer &&
+                       !EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture2"));
     constexpr GLsizei kSize = 64;
 
     // http://anglebug.com/4935
@@ -2367,9 +2370,15 @@ TEST_P(MultisampledRenderToTextureES3Test, RenderbufferClearThenBlitDepthStencil
     constexpr GLsizei kSize = 64;
 
     setupCopyTexProgram();
-
+    fprintf(stdout, "--------\n");
+    fflush(stdout);
+    fprintf(stdout, "bind draw/read fboMS\n");
+    fflush(stdout);
     GLFramebuffer fboMS;
     glBindFramebuffer(GL_FRAMEBUFFER, fboMS);
+
+    fprintf(stdout, "bind texture\n");
+    fflush(stdout);
 
     // Create framebuffer to draw into, with both color and depth/stencil attachments.
     GLTexture color;
@@ -2378,6 +2387,8 @@ TEST_P(MultisampledRenderToTextureES3Test, RenderbufferClearThenBlitDepthStencil
     glFramebufferTexture2DMultisampleEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, color,
                                          0, 4);
 
+    fprintf(stdout, "bind render depth/stencil\n");
+    fflush(stdout);
     GLRenderbuffer depthStencilMS;
     glBindRenderbuffer(GL_RENDERBUFFER, depthStencilMS);
     glRenderbufferStorageMultisampleEXT(GL_RENDERBUFFER, 4, GL_DEPTH24_STENCIL8, kSize, kSize);
@@ -2386,24 +2397,39 @@ TEST_P(MultisampledRenderToTextureES3Test, RenderbufferClearThenBlitDepthStencil
     ASSERT_GL_NO_ERROR();
     EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
 
+    fprintf(stdout, "clear depth/stencil\n");
+    fflush(stdout);
     // Clear depth/stencil
     glClearDepthf(1);
     glClearStencil(0x55);
     glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
     // Create framebuffer as blit target.
+    fprintf(stdout, "--------\n");
+    fflush(stdout);
+    fprintf(stdout, "bind draw fbo\n");
+    fflush(stdout);
     GLFramebuffer fbo;
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo);
 
+    fprintf(stdout, "bind tex to draw fbo\n");
+    fflush(stdout);
     glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, color, 0);
 
     GLRenderbuffer depthStencil;
     glBindRenderbuffer(GL_RENDERBUFFER, depthStencil);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, kSize, kSize);
+    fprintf(stdout, "bind depth/stencil to draw fbo\n");
+    fflush(stdout);
     glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
                               depthStencil);
     ASSERT_GL_NO_ERROR();
     EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_DRAW_FRAMEBUFFER);
+
+    fprintf(stdout, "--------\n");
+    fflush(stdout);
+    fprintf(stdout, "blit to fbo from fboms\n");
+    fflush(stdout);
 
     // Blit depth/stencil
     glBlitFramebuffer(0, 0, kSize, kSize, 0, 0, kSize, kSize,
@@ -2421,6 +2447,10 @@ TEST_P(MultisampledRenderToTextureES3Test, RenderbufferClearThenBlitDepthStencil
     glStencilFunc(GL_EQUAL, 0x55, 0xFF);
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
     glStencilMask(0xFF);
+    fprintf(stdout, "--------\n");
+    fflush(stdout);
+    fprintf(stdout, "draw red to fbo\n");
+    fflush(stdout);
 
     // Set up program
     ANGLE_GL_PROGRAM(drawColor, essl1_shaders::vs::Simple(), essl1_shaders::fs::UniformColor());
@@ -2433,6 +2463,12 @@ TEST_P(MultisampledRenderToTextureES3Test, RenderbufferClearThenBlitDepthStencil
     glUniform4f(colorUniformLocation, 1.0f, 0.0f, 0.0f, 1.0f);
     drawQuad(drawColor, essl1_shaders::PositionAttrib(), 0.0f);
     ASSERT_GL_NO_ERROR();
+    glFlush();
+
+    fprintf(stdout, "--------\n");
+    fflush(stdout);
+    fprintf(stdout, "verify fboMS\n");
+    fflush(stdout);
 
     // Verify that the texture is now red
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
@@ -2445,11 +2481,19 @@ TEST_P(MultisampledRenderToTextureES3Test, RenderbufferClearThenBlitDepthStencil
     glClearDepthf(0);
     glClearStencil(0x3E);
     glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    fprintf(stdout, "--------\n");
+    fflush(stdout);
+    fprintf(stdout, "blit to fbo\n");
+    fflush(stdout);
 
     // Blit
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo);
     glBlitFramebuffer(0, 0, kSize, kSize, kSize, kSize, 0, 0,
                       GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT, GL_NEAREST);
+    fprintf(stdout, "--------\n");
+    fflush(stdout);
+    fprintf(stdout, "draw green fbo\n");
+    fflush(stdout);
 
     // Draw green
     glDepthFunc(GL_GREATER);
@@ -2457,6 +2501,11 @@ TEST_P(MultisampledRenderToTextureES3Test, RenderbufferClearThenBlitDepthStencil
     glUniform4f(colorUniformLocation, 0.0f, 1.0f, 0.0f, 1.0f);
     drawQuad(drawColor, essl1_shaders::PositionAttrib(), 0.0f);
     ASSERT_GL_NO_ERROR();
+
+    fprintf(stdout, "--------\n");
+    fflush(stdout);
+    fprintf(stdout, "verify fboMS is green \n");
+    fflush(stdout);
 
     // Verify that the texture is now green
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);

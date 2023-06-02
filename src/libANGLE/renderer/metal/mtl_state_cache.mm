@@ -310,6 +310,7 @@ void DepthStencilDesc::updateDepthCompareFunc(const gl::DepthStencilState &dsSta
         return;
     }
     depthCompareFunction = GetCompareFunc(dsState.depthFunc);
+    fprintf(stdout, "set %d\n", depthCompareFunction);
 }
 
 void DepthStencilDesc::updateStencilTestEnabled(const gl::DepthStencilState &dsState)
