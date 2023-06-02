@@ -2210,9 +2210,11 @@ void ContextMtl::updateDrawFrameBufferBinding(const gl::Context *context)
 {
     const gl::State &glState = getState();
 
+    auto *prev       = mDrawFramebuffer;
     mDrawFramebuffer = mtl::GetImpl(glState.getDrawFramebuffer());
 
-    mDrawFramebuffer->onStartedDrawingToFrameBuffer(context);
+    const bool is_newly_bound = prev != mDrawFramebuffer;
+    mDrawFramebuffer->onStartedDrawingToFrameBuffer(context, is_newly_bound);
 
     onDrawFrameBufferChangedState(context, mDrawFramebuffer, true);
 }
