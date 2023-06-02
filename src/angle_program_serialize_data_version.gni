@@ -23,6 +23,8 @@ angle_code_affecting_program_serialize += libangle_headers
 angle_code_affecting_program_serialize += libangle_sources
 angle_code_affecting_program_serialize += libangle_includes
 
+angle_dependencies_affecting_program_serialize = []
+
 vulkan_backend_dir = "libANGLE/renderer/vulkan/"
 angle_code_affecting_program_serialize +=
     rebase_path(vulkan_backend_sources, angle_root, vulkan_backend_dir)
@@ -49,9 +51,13 @@ null_backend_dir = "libANGLE/renderer/null/"
 angle_code_affecting_program_serialize +=
     rebase_path(null_backend_sources, angle_root, null_backend_dir)
 
-metal_backend_dir = "libANGLE/renderer/metal/"
-angle_code_affecting_program_serialize +=
-    rebase_path(metal_backend_sources, angle_root, metal_backend_dir)
+if (angle_enable_metal) {
+  metal_backend_dir = "libANGLE/renderer/metal/"
+  angle_code_affecting_program_serialize +=
+      rebase_path(metal_backend_sources, angle_root, metal_backend_dir)
+  angle_dependencies_affecting_program_serialize +=
+      [ "src/libANGLE/renderer/metal:angle_compile_metal_internal_shaders" ]
+}
 
 if (angle_has_frame_capture) {
   angle_code_affecting_program_serialize += libangle_capture_sources

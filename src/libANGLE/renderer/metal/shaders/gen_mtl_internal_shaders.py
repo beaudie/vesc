@@ -38,6 +38,7 @@ configs = [{
     "header": "mtl_internal_shaders_2_0_ios_autogen.h"
 }]
 
+metal_source_output_file = "mtl_internal_shaders_autogen.metal"
 metal_source_output_header = "mtl_internal_shaders_src_autogen.h"
 
 template_header_boilerplate = """// GENERATED FILE - DO NOT EDIT.
@@ -204,6 +205,18 @@ def generate_combined_metal_src_header(combined_metal_src, dest_header):
         out_file.close()
 
 
+def generate_combined_metal_src_file(combined_metal_src, dest_file):
+    boilerplate_code = template_header_boilerplate.format(
+        script_name=os.path.basename(sys.argv[0]))
+
+    with open(dest_file, 'wt') as out_file:
+        out_file.write(boilerplate_code)
+        out_file.write('\n')
+        out_file.write(combined_metal_src.decode("utf-8"))
+        out_file.write('\n')
+        out_file.close()
+
+
 def main():
     angle_format_script_files = [
         '../../angle_format_map.json', '../../angle_format.py', '../../gen_angle_format_table.py'
@@ -216,7 +229,7 @@ def main():
     # auto_script parameters.
     if len(sys.argv) > 1:
         inputs = angle_format_script_files + src_files + ['common.h', 'constants.h']
-        outputs = [config["header"] for config in configs] + [metal_source_output_header]
+        outputs = [metal_source_output_header, metal_source_output_file]
 
         if sys.argv[1] == 'inputs':
             print(','.join(inputs))
@@ -232,10 +245,11 @@ def main():
     combined_metal_src = generate_combined_metal_src(src_files)
 
     generate_combined_metal_src_header(combined_metal_src, metal_source_output_header)
+    generate_combined_metal_src_file(combined_metal_src, metal_source_output_file)
 
-    for config in configs:
-        generate_metallib_header(combined_metal_src, config["sdk"], config["compile_flags"],
-                                 config["variable_name"], config["header"])
+    #for config in configs:
+    #    generate_metallib_header(combined_metal_src, config["sdk"], config["compile_flags"],
+    #                             config["variable_name"], config["header"])
 
 
 if __name__ == '__main__':
