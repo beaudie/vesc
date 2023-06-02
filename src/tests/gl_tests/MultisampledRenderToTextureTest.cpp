@@ -1768,6 +1768,7 @@ void MultisampledRenderToTextureES3Test::drawCopyDrawAttachDepthStencilClearThen
     bool useRenderbuffer)
 {
     ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture2"));
     constexpr GLsizei kSize = 64;
 
     // http://anglebug.com/4935
@@ -3881,6 +3882,45 @@ TEST_P(MultisampledRenderToTextureES3Test, RenderbufferUnresolveColorAndStencilT
 TEST_P(MultisampledRenderToTextureES3Test, RenderbufferUnresolveColorAndDepthStencilThenTwoColors)
 {
     renderbufferUnresolveColorAndDepthStencilThenTwoColors(true, true);
+}
+
+// Verifies drawing to a framebuffer that uses render to texture doesn't result in any errors.
+TEST_P(MultisampledRenderToTextureES3Test, VerifyDrawToMultiSample)
+{
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_multisampled_render_to_texture"));
+
+    const uint32_t width  = 1088;
+    const uint32_t height = 544;
+
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 2048, 2048, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    ASSERT_GL_NO_ERROR();
+
+    GLFramebuffer FBO;
+    glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+    glFramebufferTexture2DMultisampleEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                                         texture, 0, 4);
+    ASSERT_GL_NO_ERROR();
+
+    GLRenderbuffer renderbuffer;
+    glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer);
+    glRenderbufferStorageMultisampleEXT(GL_RENDERBUFFER, 4, GL_STENCIL_INDEX8, width, height);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, renderbuffer);
+    glCheckFramebufferStatus(GL_FRAMEBUFFER);
+
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Green());
+    glUseProgram(program);
+    GLint positionLocation = glGetAttribLocation(program, essl1_shaders::PositionAttrib());
+    ASSERT_NE(-1, positionLocation);
+
+    setupQuadVertexBuffer(0.5f, 0.5f);
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(positionLocation);
+
+    // Draw green square
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    ASSERT_GL_NO_ERROR();
 }
 
 // Make sure deferred clears are flushed correctly when the framebuffer switches between
