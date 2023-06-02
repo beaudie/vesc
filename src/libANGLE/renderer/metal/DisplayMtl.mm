@@ -968,17 +968,12 @@ void DisplayMtl::initializeExtensions() const
     // regular 2D textures with Metal, and causes other problems such as
     // breaking the SPIR-V Metal compiler.
 
-    // TODO(anglebug.com/6395): figure out why WebGL drawing buffer
-    // creation fails on macOS when the Metal backend advertises the
-    // EXT_multisampled_render_to_texture extension.
-#if !defined(ANGLE_PLATFORM_MACOS)
     // EXT_multisampled_render_to_texture
     if (mFeatures.allowMultisampleStoreAndResolve.enabled &&
         mFeatures.hasDepthAutoResolve.enabled && mFeatures.hasStencilAutoResolve.enabled)
     {
         mNativeExtensions.multisampledRenderToTextureEXT = true;
     }
-#endif
 
     // Enable EXT_blend_minmax
     mNativeExtensions.blendMinmaxEXT = true;
