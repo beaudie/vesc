@@ -5640,6 +5640,16 @@ VkResult ImageMemorySuballocator::allocateAndBindMemory(Context *context,
     VkResult result = vma::AllocateAndBindMemoryForImage(
         allocator.getHandle(), &image->mHandle, requiredFlags, preferredFlags,
         allocateDedicatedMemory, &allocationOut->mHandle, memoryTypeIndexOut, sizeOut);
+
+    if (result != VK_SUCCESS)
+    {
+        // If the original allocation fails, retry on other memory types than the device.
+        requiredFlags &= (~VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+        result = vma::AllocateAndBindMemoryForImage(
+            allocator.getHandle(), &image->mHandle, requiredFlags, preferredFlags,
+            allocateDedicatedMemory, &allocationOut->mHandle, memoryTypeIndexOut, sizeOut);
+    }
+
     if (result != VK_SUCCESS)
     {
         // Record the failed memory allocation.

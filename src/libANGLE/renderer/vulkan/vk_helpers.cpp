@@ -5950,7 +5950,7 @@ angle::Result ImageHelper::initMemory(Context *context,
     {
         // While it may be preferable to allocate the image on the device, it should also be
         // possible to allocate on other memory types if the device is out of memory.
-        VkMemoryPropertyFlags requiredFlags  = flags & (~VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+        VkMemoryPropertyFlags requiredFlags  = flags;
         VkMemoryPropertyFlags preferredFlags = flags;
 
         ANGLE_VK_TRY(context, renderer->getImageMemorySuballocator().allocateAndBindMemory(
