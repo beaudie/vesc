@@ -820,6 +820,30 @@ mtl::RenderCommandEncoder *FramebufferMtl::ensureRenderPassStarted(const gl::Con
 
     if (mRenderPassCleanStart)
     {
+        for (const mtl::RenderPassColorAttachmentDesc &colorAttachment : desc.colorAttachments)
+        {
+            // If the implicit multisample texture is set, this render pass is going to be used for
+            // MSAA. However, the texture, where this pass will resolve to, will be cleared (that's
+            // by Metal design. LoadAction is only applied to colorAttachment.texture, the
+            // resolveTexture is always cleared), thus loosing any previous content set by another
+            // render pass if it also used that texture. Thus, one must first make a copy of pixels
+            // to the MSTexture and only then schedule any other draw operations with resolve.
+            if (colorAttachment.hasImplicitMSTexture() &&
+                colorAttachment.loadAction == MTLLoadActionLoad)
+            {
+                mtl::TextureRef image = colorAttachment.texture;
+                ASSERT(image && image->valid());
+                angle::FormatID angleFormatId =
+                    mtl::Format::MetalToAngleFormatID(image->pixelFormat());
+                const angle::Format &format = angle::Format::Get(angleFormatId);
+                if (contextMtl->getDisplay()->getUtils().blitColorWithDraw(
+                        context, encoder, format, image) == angle::Result::Stop)
+                {
+                    return nullptr;
+                }
+            }
+        }
+
         // After a clean start we should reset the loadOp to MTLLoadActionLoad in case this render
         // pass could be interrupted by a conversion compute shader pass then being resumed later.
         mRenderPassCleanStart = false;
@@ -1050,6 +1074,9 @@ angle::Result FramebufferMtl::prepareRenderPass(const gl::Context *context,
     uint32_t maxColorAttachments = static_cast<uint32_t>(mState.getColorAttachments().size());
     desc.numColorAttachments     = 0;
     desc.sampleCount             = 1;
+    // Used for sanity check - the render pass and its all attachments must have the same sample
+    // count.
+    uint32_t renderPassSampleCount = 0;
     for (uint32_t colorIndexGL = 0; colorIndexGL < maxColorAttachments; ++colorIndexGL)
     {
         ASSERT(colorIndexGL < mColorRenderTargets.size());
@@ -1066,6 +1093,15 @@ angle::Result FramebufferMtl::prepareRenderPass(const gl::Context *context,
 
             desc.numColorAttachments = std::max(desc.numColorAttachments, colorIndexGL + 1);
             desc.sampleCount = std::max(desc.sampleCount, colorRenderTarget->getRenderSamples());
+
+            if (renderPassSampleCount == 0)
+            {
+                renderPassSampleCount = desc.sampleCount;
+            }
+            else
+            {
+                ASSERT(renderPassSampleCount == desc.sampleCount);
+            }
 
             if (!mRenderPassFirstColorAttachmentFormat)
             {
@@ -1092,6 +1128,14 @@ angle::Result FramebufferMtl::prepareRenderPass(const gl::Context *context,
     {
         mDepthRenderTarget->toRenderPassAttachmentDesc(&desc.depthAttachment);
         desc.sampleCount = std::max(desc.sampleCount, mDepthRenderTarget->getRenderSamples());
+        if (renderPassSampleCount == 0)
+        {
+            renderPassSampleCount = desc.sampleCount;
+        }
+        else
+        {
+            ASSERT(renderPassSampleCount == desc.sampleCount);
+        }
     }
     else
     {
@@ -1102,6 +1146,14 @@ angle::Result FramebufferMtl::prepareRenderPass(const gl::Context *context,
     {
         mStencilRenderTarget->toRenderPassAttachmentDesc(&desc.stencilAttachment);
         desc.sampleCount = std::max(desc.sampleCount, mStencilRenderTarget->getRenderSamples());
+        if (renderPassSampleCount == 0)
+        {
+            renderPassSampleCount = desc.sampleCount;
+        }
+        else
+        {
+            ASSERT(renderPassSampleCount == desc.sampleCount);
+        }
     }
     else
     {

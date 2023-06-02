@@ -204,7 +204,8 @@ class TextureMtl : public TextureImpl
     mtl::MipmapNativeLevel getNativeLevel(const gl::ImageIndex &imageIndex) const;
     mtl::TextureRef &getImage(const gl::ImageIndex &imageIndex);
     ImageDefinitionMtl &getImageDefinition(const gl::ImageIndex &imageIndex);
-    RenderTargetMtl &getRenderTarget(const gl::ImageIndex &imageIndex);
+    RenderTargetMtl &getRenderTarget(const gl::RenderToTextureImageIndex &renderToTextureIndex,
+                                     const gl::ImageIndex &imageIndex);
     bool isIndexWithinMinMaxLevels(const gl::ImageIndex &imageIndex) const;
     mtl::TextureRef &getImplicitMSTexture(const gl::ImageIndex &imageIndex);
 
@@ -344,10 +345,19 @@ class TextureMtl : public TextureImpl
     //  because the Cube map's image is defined per face & per level.
     //  - For other texture types, there will be only one entry in the map table. All other textures
     //  except Cube map has texture image defined per level (all slices included).
-    //  - These three variables' second dimension are indexed by image index (base level included).
+    //  - These two variables' second dimension are indexed by image index (base level included).
     std::map<int, gl::TexLevelArray<ImageDefinitionMtl>> mTexImageDefs;
-    std::map<int, gl::TexLevelArray<RenderTargetMtl>> mPerLayerRenderTargets;
-    std::map<int, gl::TexLevelArray<mtl::TextureRef>> mImplicitMSTextures;
+    gl::RenderToTextureImageMap<std::map<int, gl::TexLevelArray<RenderTargetMtl>>>
+        mPerLayerRenderTargets;
+
+    // If multisampled rendering to texture, an intermediate multisampled image is created for use
+    // as renderpass color attachment.Index 0 corresponds to the non-multisampled-render-to-texture
+    // usage of the texture.
+    //
+    // - index 0: non-multisampled-render-to-texture usage
+    // - index N: intermediate multisampled image used for multisampled rendering to texture with
+    //   1 << N samples
+    gl::RenderToTextureImageMap<mtl::TextureRef> mImplicitMSTextures;
 
     // Views for glBindImageTexture.
     std::map<MTLPixelFormat, gl::TexLevelArray<mtl::TextureRef>> mShaderImageViews;
