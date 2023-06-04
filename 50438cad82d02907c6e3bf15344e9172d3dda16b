@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c495b62_712d161f",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 794,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-04T00:11:13Z",
+      "side": 1,
+      "message": "Drive-by: Sorry I\u0027m lacking the context here, but does the read fbo also needs to be non-zero/complete? If the driver bug is worked around just by changing the draw framebuffer binding, it would make things simpler.",
+      "range": {
+        "startLine": 794,
+        "startChar": 24,
+        "endLine": 794,
+        "endChar": 38
+      },
+      "revId": "50438cad82d02907c6e3bf15344e9172d3dda16b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90162c09_46118ed2",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 813,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-04T00:11:13Z",
+      "side": 1,
+      "message": "How about let the above `if` set a flag like `fboWasOverriden` and then here do `if (fboWasOverriden)` and not have to figure it out again?",
+      "range": {
+        "startLine": 812,
+        "startChar": 8,
+        "endLine": 813,
+        "endChar": 52
+      },
+      "revId": "50438cad82d02907c6e3bf15344e9172d3dda16b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
