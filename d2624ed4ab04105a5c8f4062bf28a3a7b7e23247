@@ -1652,6 +1652,30 @@
       },
       "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea9c9f65_326cd644",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-05T18:40:21Z",
+      "side": 1,
+      "message": "Ok, I\u0027m not going to push for the name, resolving the issue.\n\nI still think `GetAndActive` (while keeping `ensure...Activate`) is better because `GetActive` looks like a getter without any \"action\". The precision of `GetAndActivate` vs `GetAndActivateIfNotAlready` doesn\u0027t really matter.",
+      "parentUuid": "b87b2daf_2174db11",
+      "range": {
+        "startLine": 230,
+        "startChar": 38,
+        "endLine": 230,
+        "endChar": 44
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

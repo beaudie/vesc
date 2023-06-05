@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "51641f7f_8a198d3f",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1607,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-05T18:40:21Z",
+      "side": 1,
+      "message": "Thanks, much better!",
+      "parentUuid": "3ce0ca47_55c9a262",
+      "revId": "91c8132275a651dd9e414e23d239a447a09cb76f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "338dace3_c73cdf64",
@@ -103,6 +121,24 @@
       "side": 1,
       "message": "I remembered. I initialized `mManagersMutex` at the same time as `mTextureManager/mSemaphoreManager` for consistency. This is to indicate that `mManagersMutex` only needed if we have `mTextureManager/mSemaphoreManager`.\n\nI removed lazy initialization. Should I keep changes or return the old code?",
       "parentUuid": "e35f90e1_d932f299",
+      "revId": "91c8132275a651dd9e414e23d239a447a09cb76f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b53089a_4e38263c",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1863,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-05T18:40:21Z",
+      "side": 1,
+      "message": "Let\u0027s keep the simpler code, thanks",
+      "parentUuid": "31827f79_53a2188a",
       "revId": "91c8132275a651dd9e414e23d239a447a09cb76f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
