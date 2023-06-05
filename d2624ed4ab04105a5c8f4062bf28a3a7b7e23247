@@ -161,6 +161,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "37b84883_13d1b178",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-05T14:54:14Z",
+      "side": 1,
+      "message": "Thanks for the explanations. I understand the problem, but I also don\u0027t have a solution that wouldn\u0027t regress performance. I have a strong dislike for the sleep, simply because the longevity of the caches (CPU and stack) are not a function of time, but as you said we\u0027ve currently been merging contexts entirely unsafely and it hasn\u0027t practically caused a problem. I have a few questions about this though:\n\n\u003e I also did stress tests and there was no single case when mutex replacement failed. But test failed will less delay.\n\nIs that a test you wrote specifically for merging mutexes, or an existing test / app? Just for the sake of argument, if we completely ignore safety here, how much is the code simplified? Just the 100ms sleep, or anything else? (I\u0027m not asking to remove the safety, just want to make sure I understand how much complexity it\u0027s bringing with it)\n\n\u003e Anyway, I still have some performance numbers:\n\nJust to be super clear, are these with locked CPU clocks?\n\nAlso would be interesting to try spinlock with pause() correctly implemented to see how much it affects performance (I suspect it makes things worse, but is it significant?). Currently, pause() is added only for x86*:\n\n```\n// TODO(jplate) Add pause for ARM, http://anglebug.com:6067\n...\n#    define ANGLE_SMT_PAUSE() ...\n```\n\n---\n\nTL;DR, I think we\u0027ll just have to move forward with what you have already.",
+      "parentUuid": "1617814d_c4e543f0",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "baaaafe5_24947132",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 18
@@ -190,6 +208,24 @@
       "side": 1,
       "message": "\u003e I noticed a bunch of these #ifs all around. So we try our best to contain these to avoid an #if mess.\n\nI know. This is my best try to limit this to minimum, while keep code readable.\n\nIt may be harder to understand when code is teared up to a different pieces and files, however with less #ifs.\n\nWill try to think something...",
       "parentUuid": "baaaafe5_24947132",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7edfbe95_37cf0105",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1545,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-05T14:54:14Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "4d2602c0_f6204415",
       "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -1257,6 +1293,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a60767b1_9cb52435",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-05T14:54:14Z",
+      "side": 1,
+      "message": "Acknowledged. I may follow up with a simplification after this change, which you can keep reverted downstream. I don\u0027t suspect it would cause too much merge conflict annoyance",
+      "parentUuid": "c90ce4c9_27c015b8",
+      "range": {
+        "startLine": 116,
+        "startChar": 0,
+        "endLine": 134,
+        "endChar": 2
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c542761b_68a6a184",
@@ -1518,6 +1578,30 @@
       "side": 1,
       "message": "If rename to `TryGetSharedContextMutex` it is not clear that this method will also change the mutex type from `SingleContextMutex` to `SharedContextMutex\u003c\u003e`.\n\nInitially Context may have both mutexes, in which case `mSharedContextMutex` will be inactive. So:\n\n```\nTryGetContextMutex()       -\u003e mSingleContextMutex\nTryGetSharedContextMutex() -\u003e mSharedContextMutex\nTryGetContextMutex()       -\u003e mSharedContextMutex or mSingleContextMutex?\nTryGetSharedContextMutex() -\u003e mSharedContextMutex\n```\n\nHaving `Active` adds a hint, that `mSharedContextMutex` will be activated (if not already) and then returned.\n```\nTryGetContextMutex()             -\u003e mSingleContextMutex\nTryGetActiveSharedContextMutex() -\u003e mSharedContextMutex\nTryGetContextMutex()             -\u003e mSharedContextMutex\nTryGetActiveSharedContextMutex() -\u003e mSharedContextMutex\n```\n\nI do not know what is wrong with `Active` and why it should be internal state...",
       "parentUuid": "e78b2479_92b649ac",
+      "range": {
+        "startLine": 230,
+        "startChar": 38,
+        "endLine": 230,
+        "endChar": 44
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c2d8085_be9cf940",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-05T14:54:14Z",
+      "side": 1,
+      "message": "\u003e Having Active adds a hint, that mSharedContextMutex will be activated (if not already) and then returned.\n\nAh got it, in that case I suggest calling it `TryGetAndActivate...` that makes it clear that you are not \"getting an active mutex\", but rather you are \"getting _and_ activating mutex\".",
+      "parentUuid": "f10a65e0_8cc25309",
       "range": {
         "startLine": 230,
         "startChar": 38,

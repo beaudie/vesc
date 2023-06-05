@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2eb47664_b67a2568",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1607,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-05T14:54:14Z",
+      "side": 1,
+      "message": "nit: a bit of comment here would be helpful. Like, is `mManagersMutex` a global mutex because share textures/semaphores go beyond share groups? If so, why is `sharedContextMutex` overriden later with `shareContext-\u003egetContextMutex()`? What if share context does not have share textures (and so the mutex covers fewer contexts)?",
+      "revId": "91c8132275a651dd9e414e23d239a447a09cb76f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "338dace3_c73cdf64",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1863,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-05T14:54:14Z",
+      "side": 1,
+      "message": "Why not just allocate/release `mManagersMutex` at the same time as `mSharedContextMutexManager`?",
+      "revId": "91c8132275a651dd9e414e23d239a447a09cb76f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "797ef8ba_9aca9fe6",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-05T14:54:14Z",
+      "side": 1,
+      "message": "In the description of `mRoot/mLeaves` above, it says:\n\n\u003e \"root\" mutex stores unreferenced pointers to all its leaves\n\nWhy can\u0027t root addRef the leaves? It seems to me that if it does that, then you don\u0027t have this problem anymore",
+      "revId": "91c8132275a651dd9e414e23d239a447a09cb76f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4dcb87c7_b10cf040",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-05T14:54:14Z",
+      "side": 1,
+      "message": "nit: can be removed now",
+      "revId": "91c8132275a651dd9e414e23d239a447a09cb76f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "653b60a7_e683715f",
+        "filename": "src/libGLESv2/egl_context_mutex_impl.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-05T14:54:14Z",
+      "side": 1,
+      "message": "Is this function typically called often for the other attributes? AFAICT, they are rare setup calls. Can we just lock the mutex for all of them?\n\nMy reasoning is that with QuerySurface, the front-end has a failsafe; the stub passes a nullptr context and any change that makes it need the context for other attributes ends up next to the comment that says GetContextMutex_QuerySurface needs to be updated.\n\nThere is no such failsafe for QueryContext.",
+      "revId": "91c8132275a651dd9e414e23d239a447a09cb76f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
