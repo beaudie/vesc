@@ -736,6 +736,7 @@ enum class MemoryHostVisibility
     Visible
 };
 
+class BufferPool;
 class BufferHelper : public ReadWriteResource
 {
   public:
@@ -893,6 +894,9 @@ class BufferHelper : public ReadWriteResource
     BufferSerial mSerial;
     // Manages the descriptorSet cache that created with this BufferHelper object.
     DescriptorSetCacheManager mDescriptorSetCacheManager;
+
+    // Test
+    BufferPool *mPool;
 };
 
 class BufferPool : angle::NonCopyable
@@ -901,6 +905,8 @@ class BufferPool : angle::NonCopyable
     BufferPool();
     BufferPool(BufferPool &&other);
     ~BufferPool();
+
+    void destroyBufferBlock(RendererVk *renderer, BufferBlock *block);
 
     // Init that gives the ability to pass in specified memory property flags for the buffer.
     void initWithFlags(RendererVk *renderer,
