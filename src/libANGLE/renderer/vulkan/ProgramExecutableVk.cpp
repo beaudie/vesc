@@ -1773,6 +1773,7 @@ angle::Result ProgramExecutableVk::updateUniforms(
 
     uint8_t *bufferData       = defaultUniformBuffer->getMappedMemory();
     VkDeviceSize bufferOffset = defaultUniformBuffer->getOffset();
+    // WARN() << "Context: " << context << " | DUB Offset: " << bufferOffset;
     for (gl::ShaderType shaderType : glExecutable.getLinkedShaderStages())
     {
         if (mDefaultUniformBlocksDirty[shaderType])

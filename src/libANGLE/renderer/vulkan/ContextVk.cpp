@@ -1476,6 +1476,7 @@ angle::Result ContextVk::initialize()
     emptyBufferInfo.pQueueFamilyIndices         = nullptr;
     constexpr VkMemoryPropertyFlags kMemoryType = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
     ANGLE_TRY(mEmptyBuffer.init(this, emptyBufferInfo, kMemoryType));
+    WARN() << "Empty buffer allocated";
 
     // If the share group has one context and is about to add the second one, the first context's
     // mutable textures should be flushed.
@@ -2581,6 +2582,12 @@ angle::Result ContextVk::handleDirtyGraphicsTextures(DirtyBits::Iterator *dirtyB
 angle::Result ContextVk::handleDirtyComputeTextures()
 {
     return handleDirtyTexturesImpl(mOutsideRenderPassCommands, PipelineType::Compute);
+}
+
+void ContextVk::updateVertexArrayAfterTransfer(vk::BufferHelper *bufferHelper)
+{
+    // vk::GetImpl(mState.getVertexArray())->updateAfterTransfer(bufferHelper);
+    // vk::GetImpl(mState.getCurrentTransformFeedback())->updateAfterTransfer(bufferHelper);
 }
 
 angle::Result ContextVk::handleDirtyGraphicsVertexBuffers(DirtyBits::Iterator *dirtyBitsIterator,

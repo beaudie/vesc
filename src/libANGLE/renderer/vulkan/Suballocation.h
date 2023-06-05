@@ -28,6 +28,7 @@ namespace vk
 class Context;
 
 // BufferBlock
+static uint32_t kTotalBlockCount = 0;
 class BufferBlock final : angle::NonCopyable
 {
   public:
@@ -66,7 +67,7 @@ class BufferBlock final : angle::NonCopyable
                       VkDeviceSize alignment,
                       VmaVirtualAllocation *allocationOut,
                       VkDeviceSize *offsetOut);
-    void free(VmaVirtualAllocation allocation, VkDeviceSize offset);
+    void free(VmaVirtualAllocation allocation, VkDeviceSize offset, VkDeviceSize size);
     VkBool32 isEmpty();
 
     bool hasVirtualBlock() const { return mVirtualBlock.valid(); }
@@ -86,6 +87,100 @@ class BufferBlock final : angle::NonCopyable
     {
         mDescriptorSetCacheManager.addKey(sharedCacheKey);
     }
+
+    void incrementSuballocStats(VkDeviceSize size, VkDeviceSize offset)
+    {
+        mSuballocationCount++;
+        mSuballocationSize += size;
+
+        mOffsetSizePairs.insert(std::make_pair(offset, size));
+
+        if (mSuballocationMaxCount < mSuballocationCount)
+        {
+            mSuballocationMaxCount = mSuballocationCount;
+        }
+
+        if (mSuballocationMaxSize < mSuballocationSize)
+        {
+            mSuballocationMaxSize = mSuballocationSize;
+        }
+    }
+
+    VkDeviceSize getFirstBound()
+    {
+        if (mOffsetSizePairs.empty())
+        {
+            return 0;
+        }
+        return mOffsetSizePairs.begin()->first;
+    }
+
+    VkDeviceSize getLastBound()
+    {
+        if (mOffsetSizePairs.empty())
+        {
+            return 0;
+        }
+        return mOffsetSizePairs.rbegin()->first + mOffsetSizePairs.rbegin()->second;
+    }
+
+    VkDeviceSize getTotalGap()
+    {
+        if (mOffsetSizePairs.empty())
+        {
+            return 0;
+        }
+        // The space at the beginning also counts.
+        VkDeviceSize prevLimit = mOffsetSizePairs.begin()->first;
+        VkDeviceSize gap       = prevLimit;
+        for (auto &osPair : mOffsetSizePairs)
+        {
+            if (prevLimit != osPair.first)
+            {
+                gap += osPair.first - prevLimit;
+            }
+            prevLimit = osPair.first + osPair.second;
+        }
+
+        return gap;
+    }
+
+    void printOffsetSizePairs()
+    {
+        if (mOffsetSizePairs.size() > 16)
+        {
+            WARN() << "---->> Too many pairs";
+            WARN() << "First bound: " << getFirstBound() << " | Last bound: " << getLastBound()
+                   << " | Gap: " << getTotalGap();
+            return;
+        }
+
+        VkDeviceSize prevLimit = UINT64_MAX;
+        for (auto &osPair : mOffsetSizePairs)
+        {
+            if (prevLimit == UINT64_MAX || prevLimit == osPair.first)
+            {
+                WARN() << "---->> SubARange: (" << osPair.first << " -> "
+                       << osPair.first + osPair.second << ")";
+            }
+            else
+            {
+                WARN() << "---->> SubARange: (" << osPair.first << " -> "
+                       << osPair.first + osPair.second << ") | FGap: " << osPair.first - prevLimit;
+            }
+            prevLimit = osPair.first + osPair.second;
+        }
+        WARN() << "First bound: " << getFirstBound() << " | Last bound: " << getLastBound()
+               << " | Gap: " << getTotalGap();
+    }
+
+    uint32_t getMemoryTypeIndex() { return mMemoryTypeIndex; }
+
+    VkDeviceSize getSuballocSize() { return mSuballocationSize; }
+    uint32_t getSuballocCount() { return mSuballocationCount; }
+
+    VkDeviceSize getSuballocMaxSize() { return mSuballocationMaxSize; }
+    uint32_t getSuballocMaxCount() { return mSuballocationMaxCount; }
 
   private:
     mutable std::mutex mVirtualBlockMutex;
@@ -112,6 +207,13 @@ class BufferBlock final : angle::NonCopyable
     int32_t mCountRemainsEmpty;
     // Manages the descriptorSet cache that created with this BufferBlock.
     DescriptorSetCacheManager mDescriptorSetCacheManager;
+
+    uint32_t mSuballocationCount;
+    VkDeviceSize mSuballocationSize;
+    uint32_t mSuballocationMaxCount;
+    VkDeviceSize mSuballocationMaxSize;
+
+    std::set<std::pair<VkDeviceSize, VkDeviceSize>> mOffsetSizePairs;
 };
 using BufferBlockPointerVector = std::vector<std::unique_ptr<BufferBlock>>;
 
@@ -270,7 +372,7 @@ ANGLE_INLINE void BufferSuballocation::destroy(RendererVk *renderer)
         ASSERT(mBufferBlock);
         if (mBufferBlock->hasVirtualBlock())
         {
-            mBufferBlock->free(mAllocation, mOffset);
+            mBufferBlock->free(mAllocation, mOffset, mSize);
             mBufferBlock = nullptr;
         }
         else
@@ -302,6 +404,15 @@ ANGLE_INLINE void BufferSuballocation::init(BufferBlock *block,
     mAllocation  = allocation;
     mOffset      = offset;
     mSize        = size;
+
+    block->incrementSuballocStats(size, offset);
+
+    WARN() << "[INIT] Buffer suballocation init: " << block->getDeviceMemory().getHandle() << " T"
+           << block->getMemoryTypeIndex() << " | Offset: " << offset << " | Size: " << size
+           << " | Suballocation count: " << block->getSuballocCount() << "<("
+           << block->getSuballocMaxCount() << ")"
+           << " | Suballocation size: " << block->getSuballocSize() << "<("
+           << block->getSuballocMaxSize() << ")";
 }
 
 ANGLE_INLINE void BufferSuballocation::initWithEntireBuffer(

@@ -426,6 +426,9 @@ void ShareGroupVk::pruneDefaultBufferPools(RendererVk *renderer)
         return;
     }
 
+    // TODO: This can be a good spot to perform defragmentation?
+    // Also, we could technically copy buffer data somewhere on itself, if there is no conflict.
+
     for (vk::BufferPoolPointerArray &array : mDefaultBufferPools)
     {
         for (std::unique_ptr<vk::BufferPool> &pool : array)
@@ -442,6 +445,29 @@ void ShareGroupVk::pruneDefaultBufferPools(RendererVk *renderer)
 #if ANGLE_ENABLE_BUFFER_POOL_STATS_LOGGING
     logBufferPools();
 #endif
+}
+
+vk::BufferBlock *ShareGroupVk::getTempBufferBlock(vk::BufferPool *pool)
+{
+    if (mPoolBlockMap.find(pool) != mPoolBlockMap.end())
+    {
+        return mPoolBlockMap[pool];
+    }
+
+    return nullptr;
+}
+
+void ShareGroupVk::setTempBufferBlock(vk::BufferPool *pool, vk::BufferBlock *block)
+{
+    mPoolBlockMap[pool] = block;
+}
+
+void ShareGroupVk::cleanTempBufferBlock(vk::BufferPool *pool)
+{
+    if (mPoolBlockMap.find(pool) != mPoolBlockMap.end())
+    {
+        mPoolBlockMap.erase(pool);
+    }
 }
 
 bool ShareGroupVk::isDueForBufferPoolPrune(RendererVk *renderer)

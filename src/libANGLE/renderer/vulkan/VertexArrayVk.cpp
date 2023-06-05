@@ -1084,6 +1084,24 @@ angle::Result VertexArrayVk::handleLineLoop(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+void VertexArrayVk::updateAfterTransfer(vk::BufferHelper *bufferHelper)
+{
+    // Some of the following need to change to accomodate the data transfer.
+    // The buffer helper object itself should be fine. However, its corresponding VkBuffer and
+    // offset have to change at least!
+
+    for (size_t attribIndex = 0; attribIndex < mCurrentArrayBuffers.size(); attribIndex++)
+    {
+        if (mCurrentArrayBuffers[attribIndex] == bufferHelper)
+        {
+            mCurrentArrayBufferOffsets[attribIndex] = bufferHelper->getOffset();
+            mCurrentArrayBufferSerial[attribIndex]  = bufferHelper->getBufferSerial();
+            mCurrentArrayBufferHandles[attribIndex] = bufferHelper->getBuffer().getHandle();
+            mCurrentArrayBufferStrides[attribIndex] = 0;
+        }
+    }
+}
+
 angle::Result VertexArrayVk::updateDefaultAttrib(ContextVk *contextVk, size_t attribIndex)
 {
     if (!mState.getEnabledAttributesMask().test(attribIndex))

@@ -802,6 +802,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                mShareGroupVk->getContextCount() == 1;
     }
 
+    void updateVertexArrayAfterTransfer(vk::BufferHelper *bufferHelper);
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t

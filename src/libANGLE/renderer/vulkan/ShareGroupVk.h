@@ -122,6 +122,10 @@ class ShareGroupVk : public ShareGroupImpl
         vk::WaitableMonolithicPipelineCreationTask *taskOut);
     void waitForCurrentMonolithicPipelineCreationTask();
 
+    vk::BufferBlock *getTempBufferBlock(vk::BufferPool *pool);
+    void setTempBufferBlock(vk::BufferPool *pool, vk::BufferBlock *block);
+    void cleanTempBufferBlock(vk::BufferPool *pool);
+
   private:
     angle::Result updateContextsPriority(ContextVk *contextVk, egl::ContextPriority newPriority);
 
@@ -175,6 +179,8 @@ class ShareGroupVk : public ShareGroupImpl
     // If true, it is expected that a BufferBlock may still in used by textures that outlived
     // ShareGroup. The non-empty BufferBlock will be put into RendererVk's orphan list instead.
     bool mOrphanNonEmptyBufferBlock;
+
+    std::unordered_map<vk::BufferPool *, vk::BufferBlock *> mPoolBlockMap;
 };
 }  // namespace rx
 
