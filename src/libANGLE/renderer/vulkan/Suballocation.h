@@ -87,6 +87,15 @@ class BufferBlock final : angle::NonCopyable
         mDescriptorSetCacheManager.addKey(sharedCacheKey);
     }
 
+    void incrementSuballocStats(VkDeviceSize size)
+    {
+        mSuballocationCount++;
+        mSuballocationSize += size;
+    }
+
+    VkDeviceSize getSuballocSize() { return mSuballocationSize; }
+    uint32_t getSuballocCount() { return mSuballocationCount; }
+
   private:
     mutable std::mutex mVirtualBlockMutex;
     VirtualBlock mVirtualBlock;
@@ -112,6 +121,9 @@ class BufferBlock final : angle::NonCopyable
     int32_t mCountRemainsEmpty;
     // Manages the descriptorSet cache that created with this BufferBlock.
     DescriptorSetCacheManager mDescriptorSetCacheManager;
+
+    uint32_t mSuballocationCount;
+    VkDeviceSize mSuballocationSize;
 };
 using BufferBlockPointerVector = std::vector<std::unique_ptr<BufferBlock>>;
 
@@ -302,6 +314,13 @@ ANGLE_INLINE void BufferSuballocation::init(BufferBlock *block,
     mAllocation  = allocation;
     mOffset      = offset;
     mSize        = size;
+
+    block->incrementSuballocStats(size);
+
+    WARN() << "[INIT] Buffer suballocation init: " << block->getDeviceMemory().getHandle()
+           << " | Offset: " << offset << " | Size: " << size
+           << " | Suballocation count: " << block->getSuballocCount()
+           << " | Suballocation size: " << block->getSuballocSize();
 }
 
 ANGLE_INLINE void BufferSuballocation::initWithEntireBuffer(
