@@ -2396,7 +2396,8 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
             (IsAndroid() && GetAndroidSdkLevel() < 27 && IsAdreno5xxOrOlder(functions)) ||
             (!isMesa && IsMaliT8xxOrOlder(functions)) || (!isMesa && IsMaliG31OrOlder(functions)));
 
-    ANGLE_FEATURE_CONDITION(features, decodeEncodeSRGBForGenerateMipmap, IsApple());
+    // This workaround was needed on macOS, prior to the introduction of Apple Silicon.
+    ANGLE_FEATURE_CONDITION(features, decodeEncodeSRGBForGenerateMipmap, IsApple() && !isApple);
 
     // anglebug.com/4674
     // The (redundant) explicit exclusion of Windows AMD is because the workaround fails

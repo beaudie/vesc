@@ -1027,10 +1027,15 @@ angle::Result TextureGL::copySubTextureHelper(const gl::Context *context,
 
     GLenum sourceComponentType = sourceFormatInfo.componentType;
     GLenum destComponentType   = destFormat.componentType;
-    bool destSRGB              = destFormat.colorEncoding == GL_SRGB;
+    // GL_SRGB8 is not color-renderable on OpenGL ES, but it is
+    // renderable in the OpenGL Core Profile (4.1, anyway - the latest
+    // supported on macOS). GL_SRGB8_ALPHA8 is however renderable in
+    // both standards.
+    bool destSRGBNotRenderable =
+        (functions->standard == STANDARD_GL_ES && destFormat.sizedInternalFormat == GL_SRGB8);
     if (!unpackFlipY && unpackPremultiplyAlpha == unpackUnmultiplyAlpha && !needsLumaWorkaround &&
         sourceFormatContainSupersetOfDestFormat && sourceComponentType == destComponentType &&
-        !destSRGB && sourceGL->getType() == gl::TextureType::_2D)
+        !destSRGBNotRenderable && sourceGL->getType() == gl::TextureType::_2D)
     {
         bool copySucceeded = false;
         ANGLE_TRY(blitter->copyTexSubImage(context, sourceGL, sourceLevel, this, target, level,
@@ -1048,7 +1053,7 @@ angle::Result TextureGL::copySubTextureHelper(const gl::Context *context,
     // Behavior for now is to fallback to CPU readback implementation if the destination texture
     // is a luminance format. The correct solution is to handle both source and destination in the
     // luma workaround.
-    if (!destSRGB && !destLevelInfo.lumaWorkaround.enabled &&
+    if (!destSRGBNotRenderable && !destLevelInfo.lumaWorkaround.enabled &&
         nativegl::SupportsNativeRendering(functions, getType(), destLevelInfo.nativeInternalFormat))
     {
         bool copySucceeded = false;
