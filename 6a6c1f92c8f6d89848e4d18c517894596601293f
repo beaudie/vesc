@@ -16,6 +16,23 @@
       "message": "Aha, thanks for tracking that down. lgtm+2 for this small change.\n\nCC\u0027ing Geoff and Shabi as FYI.",
       "revId": "6a6c1f92c8f6d89848e4d18c517894596601293f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3bb84dd_bf6d0af9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-06-05T23:25:40Z",
+      "side": 1,
+      "message": "Allowing auto-submit to go through.",
+      "revId": "6a6c1f92c8f6d89848e4d18c517894596601293f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
