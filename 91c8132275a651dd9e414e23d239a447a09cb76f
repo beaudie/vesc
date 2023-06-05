@@ -318,6 +318,24 @@
       "parentUuid": "31bd08dc_4072584f",
       "revId": "91c8132275a651dd9e414e23d239a447a09cb76f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e25687fb_204e231d",
+        "filename": "src/libGLESv2/egl_context_mutex_impl.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-05T19:27:16Z",
+      "side": 1,
+      "message": "\u003e My reasoning is that with QuerySurface, the front-end has a failsafe; the stub passes a nullptr context and any change that makes it need the context for other attributes ends up next to the comment that says GetContextMutex_QuerySurface needs to be updated.\n\nAgree.\n\nHowever `QuerySurface` is a bit different. It always uses current Context from `thread` so we may lock mutex every time, even if it is `SingleContextMutex`.\n\nBut `QueryContext` uses Context from argument...\nMaybe it is possible to activate `SharedContextMutex\u003c\u003e` temporary. I will think about this...",
+      "parentUuid": "a882b8a9_2e383d85",
+      "revId": "91c8132275a651dd9e414e23d239a447a09cb76f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
