@@ -28,6 +28,7 @@ namespace vk
 class Context;
 
 // BufferBlock
+static uint32_t kTotalBlockCount = 0;
 class BufferBlock final : angle::NonCopyable
 {
   public:
@@ -66,7 +67,7 @@ class BufferBlock final : angle::NonCopyable
                       VkDeviceSize alignment,
                       VmaVirtualAllocation *allocationOut,
                       VkDeviceSize *offsetOut);
-    void free(VmaVirtualAllocation allocation, VkDeviceSize offset);
+    void free(VmaVirtualAllocation allocation, VkDeviceSize offset, VkDeviceSize size);
     VkBool32 isEmpty();
 
     bool hasVirtualBlock() const { return mVirtualBlock.valid(); }
@@ -86,6 +87,28 @@ class BufferBlock final : angle::NonCopyable
     {
         mDescriptorSetCacheManager.addKey(sharedCacheKey);
     }
+
+    void incrementSuballocStats(VkDeviceSize size)
+    {
+        mSuballocationCount++;
+        mSuballocationSize += size;
+
+        if (mSuballocationMaxCount < mSuballocationCount)
+        {
+            mSuballocationMaxCount = mSuballocationCount;
+        }
+
+        if (mSuballocationMaxSize < mSuballocationSize)
+        {
+            mSuballocationMaxSize = mSuballocationSize;
+        }
+    }
+
+    VkDeviceSize getSuballocSize() { return mSuballocationSize; }
+    uint32_t getSuballocCount() { return mSuballocationCount; }
+
+    VkDeviceSize getSuballocMaxSize() { return mSuballocationMaxSize; }
+    uint32_t getSuballocMaxCount() { return mSuballocationMaxCount; }
 
   private:
     mutable std::mutex mVirtualBlockMutex;
@@ -112,6 +135,11 @@ class BufferBlock final : angle::NonCopyable
     int32_t mCountRemainsEmpty;
     // Manages the descriptorSet cache that created with this BufferBlock.
     DescriptorSetCacheManager mDescriptorSetCacheManager;
+
+    uint32_t mSuballocationCount;
+    VkDeviceSize mSuballocationSize;
+    uint32_t mSuballocationMaxCount;
+    VkDeviceSize mSuballocationMaxSize;
 };
 using BufferBlockPointerVector = std::vector<std::unique_ptr<BufferBlock>>;
 
@@ -270,7 +298,7 @@ ANGLE_INLINE void BufferSuballocation::destroy(RendererVk *renderer)
         ASSERT(mBufferBlock);
         if (mBufferBlock->hasVirtualBlock())
         {
-            mBufferBlock->free(mAllocation, mOffset);
+            mBufferBlock->free(mAllocation, mOffset, mSize);
             mBufferBlock = nullptr;
         }
         else
@@ -302,6 +330,15 @@ ANGLE_INLINE void BufferSuballocation::init(BufferBlock *block,
     mAllocation  = allocation;
     mOffset      = offset;
     mSize        = size;
+
+    block->incrementSuballocStats(size);
+
+    WARN() << "[INIT] Buffer suballocation init: " << block->getDeviceMemory().getHandle()
+           << " | Offset: " << offset << " | Size: " << size
+           << " | Suballocation count: " << block->getSuballocCount() << "<("
+           << block->getSuballocMaxCount() << ")"
+           << " | Suballocation size: " << block->getSuballocSize() << "<("
+           << block->getSuballocMaxSize() << ")";
 }
 
 ANGLE_INLINE void BufferSuballocation::initWithEntireBuffer(
