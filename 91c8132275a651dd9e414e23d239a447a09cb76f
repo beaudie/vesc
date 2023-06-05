@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3ce0ca47_55c9a262",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1607,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-05T18:33:57Z",
+      "side": 1,
+      "message": "Updated code and added comment. Hope now it is more clear.",
+      "parentUuid": "9f7fe63a_dd58958e",
+      "revId": "91c8132275a651dd9e414e23d239a447a09cb76f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "338dace3_c73cdf64",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 21
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "Optimization... 😄\n\nWill simplify the implementation.",
       "parentUuid": "338dace3_c73cdf64",
+      "revId": "91c8132275a651dd9e414e23d239a447a09cb76f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31827f79_53a2188a",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1863,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-05T18:33:57Z",
+      "side": 1,
+      "message": "I remembered. I initialized `mManagersMutex` at the same time as `mTextureManager/mSemaphoreManager` for consistency. This is to indicate that `mManagersMutex` only needed if we have `mTextureManager/mSemaphoreManager`.\n\nI removed lazy initialization. Should I keep changes or return the old code?",
+      "parentUuid": "e35f90e1_d932f299",
       "revId": "91c8132275a651dd9e414e23d239a447a09cb76f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -159,6 +195,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f758ac7_74216a0f",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-05T18:33:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "51d559fe_4dec603e",
+      "revId": "91c8132275a651dd9e414e23d239a447a09cb76f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "653b60a7_e683715f",
@@ -208,6 +262,24 @@
       "side": 1,
       "message": "Ok I\u0027m convinced it\u0027s better to avoid the lock. I\u0027m still a bit worried about regressions though.",
       "parentUuid": "0d9e7639_c49f1829",
+      "revId": "91c8132275a651dd9e414e23d239a447a09cb76f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a882b8a9_2e383d85",
+        "filename": "src/libGLESv2/egl_context_mutex_impl.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-05T18:33:57Z",
+      "side": 1,
+      "message": "Currently there is no lock if Context is not shared even for `EGL_RENDER_BUFFER`.\nSo in this case there should not be regressions, except in cases when Context is shared and global mutex \"fixed\" everything.\n\nAfter this CL, all new code in EGL must consider the Context lock. Currently a lot of things relying on the GlobalMutex...",
+      "parentUuid": "31bd08dc_4072584f",
       "revId": "91c8132275a651dd9e414e23d239a447a09cb76f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
