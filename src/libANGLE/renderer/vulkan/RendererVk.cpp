@@ -5608,6 +5608,11 @@ const char *RendererVk::GetVulkanObjectTypeName(VkObjectType type)
     return GetVkObjectTypeName(type);
 }
 
+void RendererVk::waitToFinish(vk::Context *context)
+{
+    (void)mCommandQueue.waitIdle(context, UINT64_MAX);
+}
+
 namespace vk
 {
 ImageMemorySuballocator::ImageMemorySuballocator() {}
@@ -5640,6 +5645,16 @@ VkResult ImageMemorySuballocator::allocateAndBindMemory(Context *context,
     VkResult result = vma::AllocateAndBindMemoryForImage(
         allocator.getHandle(), &image->mHandle, requiredFlags, preferredFlags,
         allocateDedicatedMemory, &allocationOut->mHandle, memoryTypeIndexOut, sizeOut);
+
+    // If allocation failed, wait for GPU to finish and try again.
+    if (result != VK_SUCCESS)
+    {
+        renderer->waitToFinish(context);
+        result = vma::AllocateAndBindMemoryForImage(
+            allocator.getHandle(), &image->mHandle, requiredFlags, preferredFlags,
+            allocateDedicatedMemory, &allocationOut->mHandle, memoryTypeIndexOut, sizeOut);
+    }
+
     if (result != VK_SUCCESS)
     {
         // Record the failed memory allocation.
