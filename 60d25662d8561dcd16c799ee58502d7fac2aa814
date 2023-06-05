@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05a9d8a1_14de3d55",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-06-05T22:28:25Z",
+      "side": 1,
+      "message": "Geoff, Shabi: could you please review? Thanks.\n\nI\u0027m not sure this CL is 100% correct - not completely sure what warranted the earlier \"destSRGB\" checks - but it does speed up the test case completely on M1, and would presumably do so on Linux, too.",
+      "revId": "60d25662d8561dcd16c799ee58502d7fac2aa814",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
