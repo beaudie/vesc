@@ -3344,6 +3344,9 @@ angle::Result BufferPool::allocateNewBuffer(Context *context, VkDeviceSize sizeI
     ANGLE_TRY(block->init(context, buffer.get(), memoryTypeIndex, mVirtualBlockCreateFlags,
                           deviceMemory.get(), memoryPropertyFlagsOut, mSize));
 
+    kTotalBlockCount++;
+    WARN() << "Total blocks after adding: " << kTotalBlockCount;
+
     if (mHostVisible)
     {
         ANGLE_VK_TRY(context, block->map(context->getDevice()));
@@ -3466,6 +3469,43 @@ angle::Result BufferPool::allocateBuffer(Context *context,
     mNumberOfNewBuffersNeededSinceLastPrune++;
 
     return angle::Result::Continue;
+}
+
+void BufferPool::destroyBufferBlock(RendererVk *renderer, BufferBlock *block)
+{
+    if (mBufferBlocks.empty())
+    {
+        return;
+    }
+    bool needsCompact = false;
+    for (std::unique_ptr<BufferBlock> &ublock : mBufferBlocks)
+    {
+        if (ublock.get() == block)
+        {
+            mEmptyBufferBlocks.push_back(std::move(ublock));
+            needsCompact = true;
+            break;
+        }
+    }
+
+    if (needsCompact)
+    {
+        BufferBlockPointerVector compactedBlocks;
+        for (std::unique_ptr<BufferBlock> &ublock : mBufferBlocks)
+        {
+            if (ublock)
+            {
+                compactedBlocks.push_back(std::move(ublock));
+            }
+        }
+        mBufferBlocks = std::move(compactedBlocks);
+    }
+
+    for (std::unique_ptr<BufferBlock> &ublock : mEmptyBufferBlocks)
+    {
+        ublock->destroy(renderer);
+    }
+    mEmptyBufferBlocks.clear();
 }
 
 void BufferPool::destroy(RendererVk *renderer, bool orphanNonEmptyBufferBlock)
@@ -4658,7 +4698,8 @@ BufferHelper::BufferHelper()
       mCurrentReadAccess(0),
       mCurrentWriteStages(0),
       mCurrentReadStages(0),
-      mSerial()
+      mSerial(),
+      mPool(nullptr)
 {}
 
 BufferHelper::~BufferHelper() = default;
@@ -4681,6 +4722,7 @@ BufferHelper &BufferHelper::operator=(BufferHelper &&other)
     mCurrentWriteStages      = other.mCurrentWriteStages;
     mCurrentReadStages       = other.mCurrentReadStages;
     mSerial                  = other.mSerial;
+    mPool                    = other.mPool;
 
     return *this;
 }
@@ -4817,6 +4859,7 @@ angle::Result BufferHelper::initSuballocation(ContextVk *contextVk,
 
     vk::BufferPool *pool = contextVk->getDefaultBufferPool(size, memoryTypeIndex, usageType);
     ANGLE_TRY(pool->allocateBuffer(contextVk, size, alignment, &mSuballocation));
+    mPool = pool;
 
     if (renderer->getFeatures().allocateNonZeroMemory.enabled)
     {
@@ -4912,6 +4955,7 @@ ANGLE_INLINE void BufferHelper::initializeBarrierTracker(Context *context)
     RendererVk *renderer     = context->getRenderer();
     mCurrentQueueFamilyIndex = renderer->getQueueFamilyIndex();
     mSerial                  = renderer->getResourceSerialFactory().generateBufferSerial();
+    mPool                    = nullptr;
     mCurrentWriteAccess      = 0;
     mCurrentReadAccess       = 0;
     mCurrentWriteStages      = 0;
@@ -5032,8 +5076,26 @@ void BufferHelper::release(RendererVk *renderer)
 
     if (mSuballocation.valid())
     {
+        BufferBlock *block    = mSuballocation.getBufferBlock();
+        uint32_t prevCount    = block->getSuballocCount();
+        VkDeviceMemory devMem = mSuballocation.getDeviceMemory().getHandle();
         renderer->collectSuballocationGarbage(mUse, std::move(mSuballocation),
                                               std::move(mBufferForVertexArray));
+        if (block != nullptr)
+        {
+            // Destroy only if the last suballocation has been freed.
+            if (prevCount == 1 && block->getSuballocCount() == 0)
+            {
+                // block->destroy(renderer);
+                // SafeDelete(block);
+                // Release the buffer
+                mPool->destroyBufferBlock(renderer, block);
+                WARN() << "Empty suballocation buffer destroyed for " << devMem;
+
+                kTotalBlockCount--;
+                WARN() << "Total blocks remaining: " << kTotalBlockCount;
+            }
+        }
     }
     mUse.reset();
     mWriteUse.reset();
