@@ -3344,6 +3344,9 @@ angle::Result BufferPool::allocateNewBuffer(Context *context, VkDeviceSize sizeI
     ANGLE_TRY(block->init(context, buffer.get(), memoryTypeIndex, mVirtualBlockCreateFlags,
                           deviceMemory.get(), memoryPropertyFlagsOut, mSize));
 
+    kTotalBlockCount++;
+    WARN() << "Total blocks after adding: " << kTotalBlockCount;
+
     if (mHostVisible)
     {
         ANGLE_VK_TRY(context, block->map(context->getDevice()));
@@ -3414,9 +3417,26 @@ angle::Result BufferPool::allocateBuffer(Context *context,
     // We always allocate from reverse order so that older buffers have a chance to be empty. The
     // assumption is that to allocate from new buffers first may have a better chance to leave the
     // older buffers completely empty and we may able to free it.
+
+    // Temp: Print buffer blocks and the one that is chosen.
+    uint32_t blockCount = 0;
+    WARN() << "Buffer blocks in Pool " << this << " - Count is " << mBufferBlocks.size();
+    for (auto iter = mBufferBlocks.begin(); iter != mBufferBlocks.end(); ++iter)
+    {
+        std::unique_ptr<BufferBlock> &block = *iter;
+        blockCount++;
+
+        WARN() << "--> " << blockCount - 1 << ":: Count: " << block->getSuballocCount()
+               << " | Size: " << block->getSuballocSize();
+        block->printOffsetSizePairs();
+    }
+    blockCount = 0;
+
     for (auto iter = mBufferBlocks.rbegin(); iter != mBufferBlocks.rend();)
     {
         std::unique_ptr<BufferBlock> &block = *iter;
+        blockCount++;
+
         if (block->isEmpty() && block->getMemorySize() < mSize)
         {
             // Don't try to allocate from an empty buffer that has smaller size. It will get
@@ -3428,6 +3448,7 @@ angle::Result BufferPool::allocateBuffer(Context *context,
         if (block->allocate(alignedSize, alignment, &allocation, &offset) == VK_SUCCESS)
         {
             suballocation->init(block.get(), allocation, offset, alignedSize);
+            WARN() << "* Block " << mBufferBlocks.size() - blockCount << " was chosen.";
             return angle::Result::Continue;
         }
         ++iter;
@@ -3462,10 +3483,109 @@ angle::Result BufferPool::allocateBuffer(Context *context,
     ANGLE_VK_CHECK(context,
                    block->allocate(alignedSize, alignment, &allocation, &offset) == VK_SUCCESS,
                    VK_ERROR_OUT_OF_DEVICE_MEMORY);
+    WARN() << "* New block was allocated.";
     suballocation->init(block.get(), allocation, offset, alignedSize);
     mNumberOfNewBuffersNeededSinceLastPrune++;
 
     return angle::Result::Continue;
+}
+
+angle::Result BufferHelper::transferSuballocationToBlock(ContextVk *contextVk,
+                                                         BufferBlock *newBlock,
+                                                         VkDeviceSize alignment,
+                                                         bool *isSuccess)
+{
+    // Try moving a suballocation to another buffer.
+    // Possible steps: (Probably above this, where ContextVk also exists)
+    // 1. Create a new suballocation in the destination buffer.
+    // 2. Copy the data over to the new buffer (via vkCmdCopyBuffer()).
+    // 3. Delete the previous suballocation.
+    // 4. Assign the new suballocation as the current one of BufferHelper.
+    *isSuccess                = false;
+    BufferBlock *currentBlock = mSuballocation.getBufferBlock();
+
+    // 1
+    WARN() << "New suballoc";
+    BufferSuballocation newSuballocation;
+    VkDeviceSize newOffset;
+    VkDeviceSize bufferSize = mSuballocation.getSize();
+    VmaVirtualAllocation newVirtualAllocation;
+    newBlock->allocate(bufferSize, alignment, &newVirtualAllocation, &newOffset);
+    if (newVirtualAllocation == VK_NULL_HANDLE || newOffset == VK_WHOLE_SIZE)
+    {
+        WARN() << "Transfer failed.";
+        // Allocation has failed (likely due to fragmentation); maybe it is possible to move around
+        // the buffers in this block as well.
+        return angle::Result::Continue;
+    }
+    newSuballocation.init(newBlock, newVirtualAllocation, newOffset, bufferSize);
+
+    // 2
+    WARN() << "Copy data";
+    OutsideRenderPassCommandBuffer *commandBuffer;
+    CommandBufferAccess access;
+    access.onBufferSelfCopy(this);
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
+
+    VkBufferCopy bufferCopy = {};
+    bufferCopy.size         = bufferSize;
+    bufferCopy.srcOffset    = mSuballocation.getOffset();
+    bufferCopy.dstOffset    = newOffset;
+
+    //    contextVk->getStartedRenderPassCommands().getCommandBuffer().copyBuffer(currentBlock->getBuffer(),
+    //    newBlock->getBuffer(), 1, &bufferCopy);
+    commandBuffer->copyBuffer(currentBlock->getBuffer(), newBlock->getBuffer(), 1, &bufferCopy);
+    ANGLE_TRY(contextVk->flushAndSubmitOutsideRenderPassCommands());
+
+    // 3 & 4
+    WARN() << "Replace suballoc";
+    mSuballocation = std::move(newSuballocation);
+    // mSuballocation.destroy(contextVk->getRenderer());
+    currentBlock->free(newSuballocation.mAllocation, newSuballocation.getOffset(),
+                       newSuballocation.getSize());
+    WARN() << "Finished";
+
+    *isSuccess = true;
+
+    return angle::Result::Continue;
+}
+
+// No longer used. Delete?
+void BufferPool::destroyBufferBlock(RendererVk *renderer, BufferBlock *block)
+{
+    if (mBufferBlocks.empty())
+    {
+        return;
+    }
+    bool needsCompact = false;
+    for (std::unique_ptr<BufferBlock> &ublock : mBufferBlocks)
+    {
+        if (ublock.get() == block)
+        {
+            mEmptyBufferBlocks.push_back(std::move(ublock));
+            needsCompact = true;
+            break;
+        }
+    }
+
+    if (needsCompact)
+    {
+        BufferBlockPointerVector compactedBlocks;
+        for (std::unique_ptr<BufferBlock> &ublock : mBufferBlocks)
+        {
+            if (ublock)
+            {
+                compactedBlocks.push_back(std::move(ublock));
+            }
+        }
+        mBufferBlocks = std::move(compactedBlocks);
+    }
+
+    for (std::unique_ptr<BufferBlock> &ublock : mEmptyBufferBlocks)
+    {
+        ublock->destroy(renderer);
+    }
+    mEmptyBufferBlocks.clear();
 }
 
 void BufferPool::destroy(RendererVk *renderer, bool orphanNonEmptyBufferBlock)
@@ -4658,7 +4778,9 @@ BufferHelper::BufferHelper()
       mCurrentReadAccess(0),
       mCurrentWriteStages(0),
       mCurrentReadStages(0),
-      mSerial()
+      mSerial(),
+      mPool(nullptr),
+      mAlignment(0)
 {}
 
 BufferHelper::~BufferHelper() = default;
@@ -4681,6 +4803,8 @@ BufferHelper &BufferHelper::operator=(BufferHelper &&other)
     mCurrentWriteStages      = other.mCurrentWriteStages;
     mCurrentReadStages       = other.mCurrentReadStages;
     mSerial                  = other.mSerial;
+    mPool                    = other.mPool;
+    mAlignment               = other.mAlignment;
 
     return *this;
 }
@@ -4796,6 +4920,25 @@ angle::Result BufferHelper::initExternal(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+void BufferPool::addBufferToPool(BufferHelper *buffer)
+{
+    //    std::unique_lock<std::mutex> lock(mPoolMutex);
+
+    mBufferList.insert(buffer);
+    //    WARN() << "Buffer list size for " << this << " after adding: " << mBufferList.size();
+}
+
+void BufferPool::removeBufferFromPool(BufferHelper *buffer)
+{
+    //    std::unique_lock<std::mutex> lock(mPoolMutex);
+    //    if (mBufferList.contains(buffer))
+    {
+        mBufferList.erase(buffer);
+        //        WARN() << "Buffer list size for " << this << " after removing: " <<
+        //        mBufferList.size();
+    }
+}
+
 angle::Result BufferHelper::initSuballocation(ContextVk *contextVk,
                                               uint32_t memoryTypeIndex,
                                               size_t size,
@@ -4817,6 +4960,11 @@ angle::Result BufferHelper::initSuballocation(ContextVk *contextVk,
 
     vk::BufferPool *pool = contextVk->getDefaultBufferPool(size, memoryTypeIndex, usageType);
     ANGLE_TRY(pool->allocateBuffer(contextVk, size, alignment, &mSuballocation));
+    mAlignment = alignment;
+    // Compress suballocation buffers in the pool.
+    pool->addBufferToPool(this);
+    // ANGLE_TRY(pool->compressBufferBlocks(contextVk, mAlignment));
+    mPool = pool;
 
     if (renderer->getFeatures().allocateNonZeroMemory.enabled)
     {
@@ -4878,6 +5026,209 @@ angle::Result BufferHelper::allocateForVertexConversion(ContextVk *contextVk,
                              BufferUsageType::Static);
 }
 
+angle::Result BufferPool::compressBufferBlocks(ContextVk *contextVk, VkDeviceSize alignment)
+{
+    // std::unique_lock<std::mutex> lock(mPoolMutex);
+
+    // TODO: Try moving a suballocation to another buffer.
+    // 0. Find the source and the destination buffer blocks (using a policy).
+    // 1. Create a new suballocation in the destination buffer.
+    // 2. Copy the data over to the new buffer (via vkCmdCopyBuffer()).
+    // 3. Assign the new suballocation as the current one of BufferHelper.
+    // 4. Delete the previous suballocation.
+
+    // 0
+    if (mBufferBlocks.size() <= 1 || alignment == 0)
+    {
+        // Only one buffer; no compression required.
+        return angle::Result::Continue;
+    }
+
+    uint32_t minSizeBufferBlockID = UINT32_MAX;
+
+    uint32_t blockCount  = 0;
+    VkDeviceSize minSize = UINT64_MAX;
+    for (auto iter = mBufferBlocks.begin(); iter != mBufferBlocks.end(); ++iter)
+    {
+        std::unique_ptr<BufferBlock> &block = *iter;
+
+        if (block->getSuballocSize() == 0)
+        {
+            blockCount++;
+            continue;
+        }
+
+        if (minSize > block->getSuballocSize())
+        {
+            minSize              = block->getSuballocSize();
+            minSizeBufferBlockID = blockCount;
+        }
+        blockCount++;
+    }
+
+    if (minSizeBufferBlockID == UINT32_MAX)
+    {
+        return angle::Result::Continue;
+    }
+
+    uint32_t secondMinSizeBufferBlockID = UINT32_MAX;
+    VkDeviceSize secondMinSize          = UINT64_MAX;
+    blockCount                          = 0;
+    for (auto iter = mBufferBlocks.begin(); iter != mBufferBlocks.end(); ++iter)
+    {
+        std::unique_ptr<BufferBlock> &block = *iter;
+
+        if (block->getSuballocSize() == 0 || blockCount == minSizeBufferBlockID)
+        {
+            blockCount++;
+            continue;
+        }
+
+        if (secondMinSize > block->getSuballocSize())
+        {
+            secondMinSize              = block->getSuballocSize();
+            secondMinSizeBufferBlockID = blockCount;
+        }
+        blockCount++;
+    }
+
+    if (secondMinSizeBufferBlockID == UINT32_MAX)
+    {
+        return angle::Result::Continue;
+    }
+
+    std::unique_ptr<BufferBlock> &minSizeBlock       = mBufferBlocks[minSizeBufferBlockID];
+    std::unique_ptr<BufferBlock> &secondMinSizeBlock = mBufferBlocks[secondMinSizeBufferBlockID];
+
+    WARN() << "First and second smallest sizes (IDs): " << minSizeBufferBlockID << " and "
+           << secondMinSizeBufferBlockID;
+    WARN() << "First and second smallest sizes (Sizes): " << minSizeBlock->getSuballocSize()
+           << " and " << secondMinSizeBlock->getSuballocSize();
+
+    // A policy should be determined here to compress the memory. For example, move the smallest
+    // buffer to the second-smallest, or distribute the buffer with most suballocations among the
+    // rest.
+    // TODO: The buffer helpers should be embedded inside each buffer block?
+    if (minSizeBlock->getSuballocSize() < (1 << 21) &&
+        minSizeBlock->getSuballocSize() + secondMinSizeBlock->getSuballocSize() < (1 << 22))
+    {
+        ASSERT(minSizeBlock->getSuballocSize() != 0 && secondMinSizeBlock->getSuballocSize() != 0);
+        WARN() << "Merge between two smallest buffers possible.";
+        // Begin with moving the buffer with the least size to the second least size. If it failed,
+        // try the other way around.
+        VkDeviceSize sizeBeforeMove = minSizeBlock->getSuballocSize();
+        for (BufferHelper *bufferHelper : mBufferList)
+        {
+            if (bufferHelper->getBufferBlock() != minSizeBlock.get())
+            {
+                continue;
+            }
+            WARN() << "Buffer " << bufferHelper << " from Block " << minSizeBufferBlockID
+                   << " has size " << bufferHelper->getSize();
+            //            if (!contextVk->hasActiveRenderPass())
+            //            {
+            //                break;
+            //            }
+            bool isSuccess = false;
+            ANGLE_TRY(bufferHelper->transferSuballocationToBlock(
+                contextVk, secondMinSizeBlock.get(), alignment, &isSuccess));
+        }
+        if (sizeBeforeMove == minSizeBlock->getSuballocSize())
+        {
+            // Do it the other way around.
+            for (BufferHelper *bufferHelper : mBufferList)
+            {
+                if (bufferHelper->getBufferBlock() != secondMinSizeBlock.get())
+                {
+                    continue;
+                }
+                WARN() << "Buffer " << bufferHelper << " from Block " << secondMinSizeBufferBlockID
+                       << " has size " << bufferHelper->getSize();
+                //            if (!contextVk->hasActiveRenderPass())
+                //            {
+                //                break;
+                //            }
+                bool isSuccess = false;
+                ANGLE_TRY(bufferHelper->transferSuballocationToBlock(contextVk, minSizeBlock.get(),
+                                                                     alignment, &isSuccess));
+            }
+        }
+
+        // Delete old block. (Or will it be done later?)
+        //        BufferBlock* oldBlock = mBufferBlocks[minBufferBlockID].get();
+        //        if (oldBlock->getSuballocSize() == 0)
+        //        {
+        //                    destroyBufferBlock(context->getRenderer(), oldBlock);
+        //        }
+    }
+
+    // Distribute among other blocks?
+    uint32_t maxCountBufferBlockID = UINT32_MAX;
+    uint32_t maxCount              = 0;
+    blockCount                     = 0;
+    for (auto iter = mBufferBlocks.begin(); iter != mBufferBlocks.end(); ++iter)
+    {
+        std::unique_ptr<BufferBlock> &block = *iter;
+
+        if (block->getSuballocSize() == 0)
+        {
+            blockCount++;
+            continue;
+        }
+
+        if (maxCount < block->getSuballocCount())
+        {
+            maxCount              = block->getSuballocCount();
+            maxCountBufferBlockID = blockCount;
+        }
+        blockCount++;
+    }
+
+    if (maxCountBufferBlockID == UINT32_MAX)
+    {
+        return angle::Result::Continue;
+    }
+
+    std::unique_ptr<BufferBlock> &maxCountBlock = mBufferBlocks[maxCountBufferBlockID];
+    WARN() << "Largest count (ID): " << maxCountBufferBlockID << " --> "
+           << maxCountBlock->getSuballocCount();
+
+    // This loop should probably be its own function, since it is also used before. (Input would be
+    // the policy as well)
+    //    if (maxCountBlock->getSuballocSize() < (1 << 22))
+    //    {
+    //        for (BufferHelper *bufferHelper : mBufferList)
+    //        {
+    //            if (bufferHelper->getBufferBlock() != maxCountBlock.get())
+    //            {
+    //                continue;
+    //            }
+    //            WARN() << "Buffer " << bufferHelper << " from Block " << maxCountBufferBlockID
+    //                   << " has size " << bufferHelper->getSize();
+    //
+    //            for (auto &block : mBufferBlocks)
+    //            {
+    //                if (block.get() == maxCountBlock.get() || block->getSuballocSize() == 0 ||
+    //                    block->getSuballocSize() + bufferHelper->getSize() > (1 << 22))
+    //                {
+    //                    continue;
+    //                }
+    //                bool isSuccess = false;
+    //                ANGLE_TRY(bufferHelper->transferSuballocationToBlock(contextVk, block.get(),
+    //                                                                     alignment, &isSuccess));
+    //                if (isSuccess)
+    //                {
+    //                    break;
+    //                }
+    //            }
+    //        }
+    //    }
+
+    // End of moving suballocations
+
+    return angle::Result::Continue;
+}
+
 angle::Result BufferHelper::allocateForCopyImage(ContextVk *contextVk,
                                                  size_t size,
                                                  MemoryCoherency coherency,
@@ -4912,6 +5263,8 @@ ANGLE_INLINE void BufferHelper::initializeBarrierTracker(Context *context)
     RendererVk *renderer     = context->getRenderer();
     mCurrentQueueFamilyIndex = renderer->getQueueFamilyIndex();
     mSerial                  = renderer->getResourceSerialFactory().generateBufferSerial();
+    mPool                    = nullptr;
+    mAlignment               = 0;
     mCurrentWriteAccess      = 0;
     mCurrentReadAccess       = 0;
     mCurrentWriteStages      = 0;
@@ -5032,8 +5385,30 @@ void BufferHelper::release(RendererVk *renderer)
 
     if (mSuballocation.valid())
     {
+        //        BufferBlock *block    = mSuballocation.getBufferBlock();
+        //        uint32_t prevCount    = block->getSuballocCount();
+        //        VkDeviceMemory devMem = mSuballocation.getDeviceMemory().getHandle();
         renderer->collectSuballocationGarbage(mUse, std::move(mSuballocation),
                                               std::move(mBufferForVertexArray));
+        //        if (block != nullptr)
+        //        {
+        //            // Destroy only if the last suballocation has been freed.
+        //            if (prevCount == 1 && block->getSuballocCount() == 0)
+        //            {
+        //                // block->destroy(renderer);
+        //                // SafeDelete(block);
+        //                // Release the buffer
+        //                mPool->destroyBufferBlock(renderer, block);
+        //                WARN() << "Empty suballocation buffer destroyed for " << devMem;
+        //
+        //                kTotalBlockCount--;
+        //                WARN() << "Total blocks remaining: " << kTotalBlockCount;
+        //            }
+        //        }
+        if (mPool && mPool->valid())
+        {
+            mPool->removeBufferFromPool(this);
+        }
     }
     mUse.reset();
     mWriteUse.reset();
