@@ -120,6 +120,7 @@ angle::Result FindAndAllocateCompatibleMemory(vk::Context *context,
         result = deviceMemoryOut->allocate(device, allocInfo);
         if (result != VK_SUCCESS)
         {
+            renderer->waitToFinish(context);
             ANGLE_TRY(renderer->finishOneCommandBatchAndCleanup(context, &anyBatchCleaned));
 
             if (anyBatchCleaned)

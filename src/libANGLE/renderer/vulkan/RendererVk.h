@@ -766,6 +766,9 @@ class RendererVk : angle::NonCopyable
     // Static function to get Vulkan object type name.
     static const char *GetVulkanObjectTypeName(VkObjectType type);
 
+    // Wait for GPU to finish.
+    void waitToFinish(vk::Context *context);
+
   private:
     angle::Result initializeDevice(DisplayVk *displayVk, uint32_t queueFamilyIndex);
     void ensureCapsInitialized() const;

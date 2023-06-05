@@ -5785,6 +5785,11 @@ const char *RendererVk::GetVulkanObjectTypeName(VkObjectType type)
     return GetVkObjectTypeName(type);
 }
 
+void RendererVk::waitToFinish(vk::Context *context)
+{
+    (void)mCommandQueue.waitIdle(context, UINT64_MAX);
+}
+
 namespace vk
 {
 ImageMemorySuballocator::ImageMemorySuballocator() {}
@@ -5828,6 +5833,7 @@ VkResult ImageMemorySuballocator::allocateAndBindMemory(Context *context,
         if (result != VK_SUCCESS)
         {
             // If there is an error in command batch finish, a device OOM error will be returned.
+            renderer->waitToFinish(context);
             if (renderer->finishOneCommandBatchAndCleanup(context, &anyBatchCleaned) ==
                 angle::Result::Stop)
             {
