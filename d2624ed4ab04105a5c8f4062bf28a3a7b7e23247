@@ -1724,6 +1724,30 @@
       },
       "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b0990ba_5e6c6e96",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-05T18:58:01Z",
+      "side": 1,
+      "message": "\u003e is better because GetActive looks like a getter without any \"action\".\n\nBecause most of the time there will be no action. And activation may happen in many places, including Context creation.\n\nI guess we focus on different things. It is subjective. For you it is important to have action in the name, but for me state is more important.\n\nFor me with  `TryGetAndActive...` it is not clear what happen if it is already `Active`. Also actions are reversed... More correct is `TryActivateAndGet..`. But in this case it is more unclear what happen if it is already active - try will fail?\n\nThis name is longer, but at least it is clear for me what will happen: `TryEnsureActiveAndGet...`",
+      "parentUuid": "ea9c9f65_326cd644",
+      "range": {
+        "startLine": 230,
+        "startChar": 38,
+        "endLine": 230,
+        "endChar": 44
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
