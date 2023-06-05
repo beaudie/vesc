@@ -50,6 +50,24 @@
       "message": "Josip, do you know why the \"import six\" in generate_buildbot_json.py is failing?",
       "revId": "6a6c1f92c8f6d89848e4d18c517894596601293f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51332cd7_c1ddee91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1560543
+      },
+      "writtenOn": "2023-06-05T23:48:57Z",
+      "side": 1,
+      "message": "I don\u0027t know why, but we just discovered a bug in presubmit when a thread crashes and I filed https://crbug.com/1451639.\n\nGiven that\n\nhttps://ci.chromium.org/ui/p/angle/builders/try/presubmit/43103/overview - last good (has depot_tools change in it)\nhttps://ci.chromium.org/ui/p/angle/builders/try/presubmit/43104/overview - first bad\n\nI think there was some infra change in that period that resulted in six not being available. AFAIK, we shouldn\u0027t be needing six anymore, so maybe we can just remove it?",
+      "parentUuid": "afd78484_c3ddcc59",
+      "revId": "6a6c1f92c8f6d89848e4d18c517894596601293f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
