@@ -106,6 +106,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a1e34d3_8e53f4c2",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-05T18:05:31Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "76db5fbf_231af47e",
+      "revId": "91c8132275a651dd9e414e23d239a447a09cb76f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4dcb87c7_b10cf040",
@@ -172,6 +190,24 @@
       "side": 1,
       "message": "\u003e Is this function typically called often for the other attributes?\n\nI do not know.\n\n\u003e AFAICT, they are rare setup calls. Can we just lock the mutex for all of them?\n\nProblem is not skipping the mutex call, but rather calling `ensureSharedMutexActive()` that will change mutex type from `SingleContextMutex` to `SharedContextMutex\u003c\u003e` if `eglQueryContext()` is called from thread where target Context is not current.\n\nDetails of the problem:\n- `context` is not current or current in `thread1`;\n- if `context` is not current it may became current in `thread1` any time;\n- we call `eglQueryContext()` from `thread2`;\n- we can\u0027t lock `SingleContextMutex` because `thread1` may have already \"acquired the lock\".\n- `SingleContextMutex` must not be locked from more that one thread at a time.\n- therefore, `ensureSharedMutexActive()` must be called to change mutex type.\n\nFor example `EGLQueryContextTest` tests will cause `ensureSharedMutexActive()` call because `eglQueryContext()` is called when Context is not current. I assumed that many apps may do this too, and decided to limit usage of the lock from potentially other threads.",
       "parentUuid": "653b60a7_e683715f",
+      "revId": "91c8132275a651dd9e414e23d239a447a09cb76f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31bd08dc_4072584f",
+        "filename": "src/libGLESv2/egl_context_mutex_impl.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-05T18:05:31Z",
+      "side": 1,
+      "message": "Ok I\u0027m convinced it\u0027s better to avoid the lock. I\u0027m still a bit worried about regressions though.",
+      "parentUuid": "0d9e7639_c49f1829",
       "revId": "91c8132275a651dd9e414e23d239a447a09cb76f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
