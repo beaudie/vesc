@@ -33,6 +33,23 @@
       "message": "Allowing auto-submit to go through.",
       "revId": "6a6c1f92c8f6d89848e4d18c517894596601293f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afd78484_c3ddcc59",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-06-05T23:29:58Z",
+      "side": 1,
+      "message": "Josip, do you know why the \"import six\" in generate_buildbot_json.py is failing?",
+      "revId": "6a6c1f92c8f6d89848e4d18c517894596601293f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
