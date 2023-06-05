@@ -736,6 +736,7 @@ enum class MemoryHostVisibility
     Visible
 };
 
+class BufferPool;
 class BufferHelper : public ReadWriteResource
 {
   public:
@@ -862,6 +863,12 @@ class BufferHelper : public ReadWriteResource
         mDescriptorSetCacheManager.addKey(sharedCacheKey);
     }
 
+    // Test
+    angle::Result transferSuballocationToBlock(ContextVk *contextVk,
+                                               BufferBlock *newBlock,
+                                               VkDeviceSize alignment,
+                                               bool *isSuccess);
+
   private:
     void initializeBarrierTracker(Context *context);
     angle::Result initializeNonZeroMemory(Context *context,
@@ -893,6 +900,10 @@ class BufferHelper : public ReadWriteResource
     BufferSerial mSerial;
     // Manages the descriptorSet cache that created with this BufferHelper object.
     DescriptorSetCacheManager mDescriptorSetCacheManager;
+
+    // Test
+    BufferPool *mPool;
+    size_t mAlignment;
 };
 
 class BufferPool : angle::NonCopyable
@@ -901,6 +912,11 @@ class BufferPool : angle::NonCopyable
     BufferPool();
     BufferPool(BufferPool &&other);
     ~BufferPool();
+
+    void addBufferToPool(BufferHelper *buffer);
+    void removeBufferFromPool(BufferHelper *buffer);
+
+    void destroyBufferBlock(RendererVk *renderer, BufferBlock *block);
 
     // Init that gives the ability to pass in specified memory property flags for the buffer.
     void initWithFlags(RendererVk *renderer,
@@ -915,6 +931,8 @@ class BufferPool : angle::NonCopyable
                                  VkDeviceSize alignment,
                                  BufferSuballocation *suballocation);
 
+    angle::Result compressBufferBlocks(ContextVk *contextVk, VkDeviceSize alignment);
+
     // Frees resources immediately, or orphan the non-empty BufferBlocks if allowed. If orphan is
     // not allowed, it will assert if BufferBlock is still not empty.
     void destroy(RendererVk *renderer, bool orphanAllowed);
@@ -927,8 +945,9 @@ class BufferPool : angle::NonCopyable
     size_t getBufferCount() const { return mBufferBlocks.size() + mEmptyBufferBlocks.size(); }
     VkDeviceSize getMemorySize() const { return mTotalMemorySize; }
 
-  private:
     angle::Result allocateNewBuffer(Context *context, VkDeviceSize sizeInBytes);
+
+  private:
     VkDeviceSize getTotalEmptyMemorySize() const;
 
     vma::VirtualBlockCreateFlags mVirtualBlockCreateFlags;
@@ -945,6 +964,11 @@ class BufferPool : angle::NonCopyable
     // max size to go down the suballocation code path. Any allocation greater or equal this size
     // will call into vulkan directly to allocate a dedicated VkDeviceMemory.
     static constexpr size_t kMaxBufferSizeForSuballocation = 4 * 1024 * 1024;
+
+    std::set<BufferHelper *> mBufferList;
+
+    // Test
+    std::mutex mPoolMutex;
 };
 using BufferPoolPointerArray = std::array<std::unique_ptr<BufferPool>, VK_MAX_MEMORY_TYPES>;
 

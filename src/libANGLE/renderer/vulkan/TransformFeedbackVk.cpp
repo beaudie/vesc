@@ -257,6 +257,33 @@ void TransformFeedbackVk::getBufferOffsets(ContextVk *contextVk,
     }
 }
 
+void TransformFeedbackVk::updateAfterTransfer(vk::BufferHelper *bufferHelper)
+{
+    // Some of the following need to change to accomodate the data transfer.
+    // The buffer helper object itself should be fine. However, its corresponding VkBuffer and
+    // offset have to change at least!
+    for (size_t bufferIndex = 0; bufferIndex < mBufferHelpers.size(); bufferIndex++)
+    {
+        if (mBufferHelpers[bufferIndex] == bufferHelper)
+        {
+            FATAL() << "xfb buffer";
+
+            mBufferOffsets[bufferIndex] = bufferHelper->getOffset();
+            mBufferHandles[bufferIndex] = bufferHelper->getBuffer().getHandle();
+        }
+    }
+    for (size_t bufferIndex = 0; bufferIndex < mCounterBufferHelpers.size(); bufferIndex++)
+    {
+        if (&mCounterBufferHelpers[bufferIndex] == bufferHelper)
+        {
+            FATAL() << "Counter xfb buffer";
+
+            mCounterBufferOffsets[bufferIndex] = bufferHelper->getOffset();
+            mCounterBufferHandles[bufferIndex] = bufferHelper->getBuffer().getHandle();
+        }
+    }
+}
+
 void TransformFeedbackVk::onSubjectStateChange(angle::SubjectIndex index,
                                                angle::SubjectMessage message)
 {

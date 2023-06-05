@@ -696,6 +696,10 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     vk::BufferHelper &getEmptyBuffer() { return mEmptyBuffer; }
 
+    vk::BufferBlock *getTempBufferBlock(vk::BufferPool *pool);
+    void setTempBufferBlock(vk::BufferPool *pool, vk::BufferBlock *block);
+    void cleanTempBufferBlock(vk::BufferPool *pool);
+
     // Keeping track of the buffer copy size. Used to determine when to submit the outside command
     // buffer.
     angle::Result onCopyUpdate(VkDeviceSize size, bool *commandBufferWasFlushedOut);
@@ -801,6 +805,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         return getFeatures().mutableMipmapTextureUpload.enabled && !hasDisplayTextureShareGroup() &&
                mShareGroupVk->getContextCount() == 1;
     }
+
+    void updateVertexArrayAfterTransfer(vk::BufferHelper *bufferHelper);
 
   private:
     // Dirty bits.
@@ -1599,6 +1605,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // atomic counter buffer array, or places where there is no vertex buffer since Vulkan does not
     // allow binding a null vertex buffer.
     vk::BufferHelper mEmptyBuffer;
+    std::map<vk::BufferPool *, vk::BufferBlock *> mPoolBlockMap;
 
     // Storage for default uniforms of ProgramVks and ProgramPipelineVks.
     vk::DynamicBuffer mDefaultUniformStorage;

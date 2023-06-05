@@ -109,6 +109,7 @@ class TransformFeedbackVk : public TransformFeedbackImpl, public angle::Observer
 
     void onNewDescriptorSet(const gl::ProgramExecutable &executable,
                             const vk::SharedDescriptorSetCacheKey &sharedCacheKey);
+    void updateAfterTransfer(vk::BufferHelper *bufferHelper);
 
   private:
     void initializeXFBVariables(ContextVk *contextVk, uint32_t xfbBufferCount);

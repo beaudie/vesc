@@ -102,6 +102,8 @@ class BufferVk : public BufferImpl
                              GLsizeiptr size,
                              void *outData) override;
 
+    void updateAfterTransfer(vk::BufferHelper *bufferHelper);
+
     angle::Result getIndexRange(const gl::Context *context,
                                 gl::DrawElementsType type,
                                 size_t offset,

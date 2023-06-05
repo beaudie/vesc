@@ -792,6 +792,8 @@ angle::Result BufferVk::getSubData(const gl::Context *context,
     return unmapImpl(contextVk);
 }
 
+void BufferVk::updateAfterTransfer(vk::BufferHelper *bufferHelper) {}
+
 angle::Result BufferVk::getIndexRange(const gl::Context *context,
                                       gl::DrawElementsType type,
                                       size_t offset,

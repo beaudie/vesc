@@ -109,6 +109,12 @@ angle::Result BufferBlock::init(Context *context,
     mMappedMemory         = nullptr;
     mSerial               = renderer->getResourceSerialFactory().generateBufferSerial();
 
+    // Temp: Suballocation stats
+    mSuballocationCount    = 0;
+    mSuballocationSize     = 0;
+    mSuballocationMaxCount = 0;
+    mSuballocationMaxSize  = 0;
+
     return angle::Result::Continue;
 }
 
@@ -159,10 +165,22 @@ VkResult BufferBlock::allocate(VkDeviceSize size,
     return mVirtualBlock.allocate(size, alignment, allocationOut, offsetOut);
 }
 
-void BufferBlock::free(VmaVirtualAllocation allocation, VkDeviceSize offset)
+void BufferBlock::free(VmaVirtualAllocation allocation, VkDeviceSize offset, VkDeviceSize size)
 {
     std::unique_lock<std::mutex> lock(mVirtualBlockMutex);
     mVirtualBlock.free(allocation, offset);
+
+    mSuballocationCount--;
+    mSuballocationSize -= size;
+
+    mOffsetSizePairs.erase(std::make_pair(offset, size));
+
+    WARN() << "[FREE] Buffer suballocation FREE: " << getDeviceMemory().getHandle() << " T"
+           << mMemoryTypeIndex << " | Offset: " << offset << " | Size: " << size
+           << " | Suballocation count: " << mSuballocationCount << "<(" << mSuballocationMaxCount
+           << ")"
+           << " | Suballocation size: " << mSuballocationSize << "<(" << mSuballocationMaxSize
+           << ")";
 }
 
 int32_t BufferBlock::getAndIncrementEmptyCounter()

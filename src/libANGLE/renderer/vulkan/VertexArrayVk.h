@@ -92,6 +92,8 @@ class VertexArrayVk : public VertexArrayImpl
         return mCurrentArrayBufferStrides;
     }
 
+    void updateAfterTransfer(vk::BufferHelper *bufferHelper);
+
     // Update mCurrentElementArrayBuffer based on the vertex array state
     void updateCurrentElementArrayBuffer();
 
