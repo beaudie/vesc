@@ -163,6 +163,8 @@ void BufferBlock::free(VmaVirtualAllocation allocation, VkDeviceSize offset)
 {
     std::unique_lock<std::mutex> lock(mVirtualBlockMutex);
     mVirtualBlock.free(allocation, offset);
+    WARN() << "[FREE] Buffer suballocation FREE: " << getDeviceMemory().getHandle() << std::hex
+           << " | Offset: 0x" << offset;
 }
 
 int32_t BufferBlock::getAndIncrementEmptyCounter()

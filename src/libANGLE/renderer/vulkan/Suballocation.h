@@ -302,6 +302,9 @@ ANGLE_INLINE void BufferSuballocation::init(BufferBlock *block,
     mAllocation  = allocation;
     mOffset      = offset;
     mSize        = size;
+
+    WARN() << "[INIT] Buffer suballocation init: " << block->getDeviceMemory().getHandle()
+           << std::hex << " | Offset: 0x" << offset << " | Size: 0x" << size;
 }
 
 ANGLE_INLINE void BufferSuballocation::initWithEntireBuffer(
