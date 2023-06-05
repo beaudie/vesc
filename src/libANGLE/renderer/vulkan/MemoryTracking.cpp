@@ -63,12 +63,25 @@ void CheckForCurrentMemoryAllocations(RendererVk *renderer, vk::MemoryLogSeverit
     {
         for (uint32_t i = 0; i < vk::kMemoryAllocationTypeCount; i++)
         {
-            if (renderer->getMemoryAllocationTracker()->getActiveMemoryAllocationsSize(i) == 0)
+            if (renderer->getMemoryAllocationTracker()->getMaxMemoryAllocationsSize(i) == 0)
             {
                 continue;
             }
 
             std::stringstream outStream;
+
+            outStream << "Maximum allocated size for memory allocation type ("
+                      << vk::kMemoryAllocationTypeMessage[i] << "): "
+                      << renderer->getMemoryAllocationTracker()->getMaxMemoryAllocationsSize(i)
+                      << " | Count: "
+                      << renderer->getMemoryAllocationTracker()->getMaxMemoryAllocationsCount(i)
+                      << std::endl;
+
+            if (renderer->getMemoryAllocationTracker()->getActiveMemoryAllocationsSize(i) == 0)
+            {
+                OutputMemoryLogStream(outStream, severity);
+                continue;
+            }
 
             outStream << "Currently allocated size for memory allocation type ("
                       << vk::kMemoryAllocationTypeMessage[i] << "): "
@@ -91,6 +104,27 @@ void CheckForCurrentMemoryAllocations(RendererVk *renderer, vk::MemoryLogSeverit
             }
 
             // Output the log stream based on the level of severity.
+            OutputMemoryLogStream(outStream, severity);
+        }
+        {
+            std::stringstream outStream;
+            outStream << "Maximum total size of memory allocations: "
+                      << renderer->getMemoryAllocationTracker()->getTotalMemoryAllocationsSize()
+                      << std::endl;
+            for (uint32_t i = 0; i < vk::kMemoryAllocationTypeCount; i++)
+            {
+                if (renderer->getMemoryAllocationTracker()->getTotalMemoryAllocationsSizeDist(i) ==
+                    0)
+                {
+                    continue;
+                }
+                outStream
+                    << "--> Allocated size for memory allocation type ("
+                    << vk::kMemoryAllocationTypeMessage[i] << ") for max memory case: "
+                    << renderer->getMemoryAllocationTracker()->getTotalMemoryAllocationsSizeDist(i)
+                    << std::endl;
+            }
+
             OutputMemoryLogStream(outStream, severity);
         }
     }
@@ -195,11 +229,14 @@ void MemoryAllocationTracker::initMemoryTrackers()
 {
     // Allocation counters are initialized here to keep track of the size and count of the memory
     // allocations.
+    mTotalMemoryAllocationsSize = 0;
     for (size_t allocTypeIndex = 0; allocTypeIndex < mActiveMemoryAllocationsSize.size();
          allocTypeIndex++)
     {
         mActiveMemoryAllocationsSize[allocTypeIndex]  = 0;
+        mMaxMemoryAllocationsSize[allocTypeIndex]     = 0;
         mActiveMemoryAllocationsCount[allocTypeIndex] = 0;
+        mMaxMemoryAllocationsCount[allocTypeIndex]    = 0;
 
         // Per-heap allocation counters are initialized here.
         for (size_t heapIndex = 0;
@@ -254,8 +291,37 @@ void MemoryAllocationTracker::onMemoryAllocImpl(vk::MemoryAllocationType allocTy
             mRenderer->getMemoryProperties().getHeapIndexForMemoryType(memoryTypeIndex);
         mActiveMemoryAllocationsCount[allocTypeIndex]++;
         mActiveMemoryAllocationsSize[allocTypeIndex] += size;
+        if (mMaxMemoryAllocationsSize[allocTypeIndex] <
+            mActiveMemoryAllocationsSize[allocTypeIndex])
+        {
+            mMaxMemoryAllocationsSize[allocTypeIndex] =
+                mActiveMemoryAllocationsSize[allocTypeIndex].load(std::memory_order_relaxed);
+        }
+        if (mMaxMemoryAllocationsCount[allocTypeIndex] <
+            mActiveMemoryAllocationsCount[allocTypeIndex])
+        {
+            mMaxMemoryAllocationsCount[allocTypeIndex] =
+                mActiveMemoryAllocationsCount[allocTypeIndex].load(std::memory_order_relaxed);
+        }
         mActivePerHeapMemoryAllocationsCount[allocTypeIndex][memoryHeapIndex]++;
         mActivePerHeapMemoryAllocationsSize[allocTypeIndex][memoryHeapIndex] += size;
+
+        // Max total memory
+        VkDeviceSize totalMemory = 0;
+        for (uint32_t i = 0; i < mActiveMemoryAllocationsSize.size(); i++)
+        {
+            totalMemory += mActiveMemoryAllocationsSize[i];
+        }
+        if (mTotalMemoryAllocationsSize < totalMemory)
+        {
+            INFO() << "New max memory reached";
+            mTotalMemoryAllocationsSize = totalMemory;
+            for (uint32_t i = 0; i < mActiveMemoryAllocationsSize.size(); i++)
+            {
+                mTotalMemoryAllocationsSizeDist[i] =
+                    mActiveMemoryAllocationsSize[i].load(std::memory_order_relaxed);
+            }
+        }
 
         // Add the new allocation to the memory tracker.
         vk::MemoryAllocationInfo memAllocLogInfo;
@@ -269,7 +335,7 @@ void MemoryAllocationTracker::onMemoryAllocImpl(vk::MemoryAllocationType allocTy
         mMemoryAllocationRecord[angle::getBacktraceInfo()].insert(
             std::make_pair(memoryAllocInfoMapKey, memAllocLogInfo));
 
-        INFO() << "Memory allocation: (id " << memAllocLogInfo.id << ") for object "
+        WARN() << "Memory allocation: (id " << memAllocLogInfo.id << ") for object "
                << memAllocLogInfo.handle << " | Size: " << memAllocLogInfo.size
                << " | Type: " << vk::kMemoryAllocationTypeMessage[allocTypeIndex]
                << " | Memory type index: " << memoryTypeIndex
@@ -283,6 +349,18 @@ void MemoryAllocationTracker::onMemoryAllocImpl(vk::MemoryAllocationType allocTy
         uint32_t allocTypeIndex = ToUnderlying(allocType);
         mActiveMemoryAllocationsCount[allocTypeIndex]++;
         mActiveMemoryAllocationsSize[allocTypeIndex] += size;
+        if (mMaxMemoryAllocationsSize[allocTypeIndex] <
+            mActiveMemoryAllocationsSize[allocTypeIndex])
+        {
+            mMaxMemoryAllocationsSize[allocTypeIndex] =
+                mActiveMemoryAllocationsSize[allocTypeIndex].load(std::memory_order_relaxed);
+        }
+        if (mMaxMemoryAllocationsCount[allocTypeIndex] <
+            mActiveMemoryAllocationsCount[allocTypeIndex])
+        {
+            mMaxMemoryAllocationsCount[allocTypeIndex] =
+                mActiveMemoryAllocationsCount[allocTypeIndex].load(std::memory_order_relaxed);
+        }
 
         uint32_t memoryHeapIndex =
             mRenderer->getMemoryProperties().getHeapIndexForMemoryType(memoryTypeIndex);
@@ -333,7 +411,7 @@ void MemoryAllocationTracker::onMemoryDeallocImpl(vk::MemoryAllocationType alloc
                 mActivePerHeapMemoryAllocationsCount[allocTypeIndex][memoryHeapIndex]--;
                 mActivePerHeapMemoryAllocationsSize[allocTypeIndex][memoryHeapIndex] -= size;
 
-                INFO() << "Memory deallocation: (id " << memInfoEntry->id << ") for object "
+                WARN() << "Memory deallocation: (id " << memInfoEntry->id << ") for object "
                        << memInfoEntry->handle << " | Size: " << memInfoEntry->size
                        << " | Type: " << vk::kMemoryAllocationTypeMessage[allocTypeIndex]
                        << " | Memory type index: " << memoryTypeIndex
@@ -371,6 +449,50 @@ VkDeviceSize MemoryAllocationTracker::getActiveMemoryAllocationsSize(uint32_t al
 
     ASSERT(allocTypeIndex < vk::kMemoryAllocationTypeCount);
     return mActiveMemoryAllocationsSize[allocTypeIndex];
+}
+
+VkDeviceSize MemoryAllocationTracker::getMaxMemoryAllocationsSize(uint32_t allocTypeIndex) const
+{
+    if (!kTrackMemoryAllocationSizes)
+    {
+        return 0;
+    }
+
+    ASSERT(allocTypeIndex < vk::kMemoryAllocationTypeCount);
+    return mMaxMemoryAllocationsSize[allocTypeIndex];
+}
+
+VkDeviceSize MemoryAllocationTracker::getTotalMemoryAllocationsSizeDist(
+    uint32_t allocTypeIndex) const
+{
+    if (!kTrackMemoryAllocationSizes)
+    {
+        return 0;
+    }
+
+    ASSERT(allocTypeIndex < vk::kMemoryAllocationTypeCount);
+    return mTotalMemoryAllocationsSizeDist[allocTypeIndex];
+}
+
+VkDeviceSize MemoryAllocationTracker::getTotalMemoryAllocationsSize() const
+{
+    if (!kTrackMemoryAllocationSizes)
+    {
+        return 0;
+    }
+
+    return mTotalMemoryAllocationsSize;
+}
+
+uint64_t MemoryAllocationTracker::getMaxMemoryAllocationsCount(uint32_t allocTypeIndex) const
+{
+    if (!kTrackMemoryAllocationSizes)
+    {
+        return 0;
+    }
+
+    ASSERT(allocTypeIndex < vk::kMemoryAllocationTypeCount);
+    return mMaxMemoryAllocationsCount[allocTypeIndex];
 }
 
 VkDeviceSize MemoryAllocationTracker::getActiveHeapMemoryAllocationsSize(uint32_t allocTypeIndex,
