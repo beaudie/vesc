@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9f7fe63a_dd58958e",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1607,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-05T17:34:37Z",
+      "side": 1,
+      "message": "\u003e a bit of comment here would be helpful.\n\nWill add comment, or maybe even rewrite the logic so it is more clear.\n\n\u003e Like, is mManagersMutex a global mutex because share textures/semaphores go beyond share groups? \n\nYes. Same reason as for this line:\n```\nmShared(shareContext !\u003d nullptr || shareTextures !\u003d nullptr || shareSemaphores !\u003d nullptr),\n```\n\n\u003e If so, why is sharedContextMutex overriden later with shareContext-\u003egetContextMutex()?\n\nIt is not overridden. There is the `ASSERT`.\n```\nASSERT(sharedContextMutex \u003d\u003d nullptr ||\n       sharedContextMutex \u003d\u003d shareContext-\u003egetContextMutex());\n```\nIf this Context uses share textures/semaphores then `shareContext` must also use them. This is enforced in the `ValidateCreateContextAttributeValue()`.\n\n\u003e What if share context does not have share textures (and so the mutex covers fewer contexts)?\n\nIn this case this Context must also not use share textures.\nMaybe the question was if share context use share semaphores but not share textures?\nIf need support separate mutex per textures/semaphores it can be implemented. However, if some Context uses both, then these mutexes must be merged. I decided not to complicate the implementation.",
+      "parentUuid": "2eb47664_b67a2568",
+      "revId": "91c8132275a651dd9e414e23d239a447a09cb76f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "338dace3_c73cdf64",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 21
@@ -31,6 +49,24 @@
       "writtenOn": "2023-06-05T14:54:14Z",
       "side": 1,
       "message": "Why not just allocate/release `mManagersMutex` at the same time as `mSharedContextMutexManager`?",
+      "revId": "91c8132275a651dd9e414e23d239a447a09cb76f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e35f90e1_d932f299",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 1863,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-05T17:34:37Z",
+      "side": 1,
+      "message": "Optimization... 😄\n\nWill simplify the implementation.",
+      "parentUuid": "338dace3_c73cdf64",
       "revId": "91c8132275a651dd9e414e23d239a447a09cb76f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -54,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "76db5fbf_231af47e",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-05T17:34:37Z",
+      "side": 1,
+      "message": "\u003e Why can\u0027t root addRef the leaves?\n\nBecause \"leaves\" must hold references to \"root\". If add reference to \"leaves\" then there will be a circular reference.\n\nCurrently only `gl::State` and `egl::Image` hold references to `ContextMutex` instances. These instances may be \"roots\" or \"leaves\". In the worst case, all references are \"leaves\". These references is what keep \"roots\" from destruction. Therefore, we must store references to \"root\" in the \"leaf\".\n\nAdding reference to \"leaves\" in \"root\" will prevent \"leaves\" from destruction, even when there are no more `gl::State` and `egl::Image` objects. And \"leaves\" will continue to hold \"roots\" - memory leak.\n\n\u003e It seems to me that if it does that, then you don\u0027t have this problem anymore\n\nThis will not fix the problem:\n- Suppose some \"root\" holds references to its \"leaves\".\n- Then we replace \"root\" in these \"leaves\" with the new \"root\".\n- There may be no more references to the original \"root\" mutex - problem if already on stack trying to lock.",
+      "parentUuid": "797ef8ba_9aca9fe6",
+      "revId": "91c8132275a651dd9e414e23d239a447a09cb76f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4dcb87c7_b10cf040",
         "filename": "src/libANGLE/queryutils.cpp",
         "patchSetId": 21
@@ -71,6 +125,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "51d559fe_4dec603e",
+        "filename": "src/libANGLE/queryutils.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-05T17:34:37Z",
+      "side": 1,
+      "message": "Thanks.",
+      "parentUuid": "4dcb87c7_b10cf040",
+      "revId": "91c8132275a651dd9e414e23d239a447a09cb76f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "653b60a7_e683715f",
         "filename": "src/libGLESv2/egl_context_mutex_impl.h",
         "patchSetId": 21
@@ -82,6 +154,24 @@
       "writtenOn": "2023-06-05T14:54:14Z",
       "side": 1,
       "message": "Is this function typically called often for the other attributes? AFAICT, they are rare setup calls. Can we just lock the mutex for all of them?\n\nMy reasoning is that with QuerySurface, the front-end has a failsafe; the stub passes a nullptr context and any change that makes it need the context for other attributes ends up next to the comment that says GetContextMutex_QuerySurface needs to be updated.\n\nThere is no such failsafe for QueryContext.",
+      "revId": "91c8132275a651dd9e414e23d239a447a09cb76f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d9e7639_c49f1829",
+        "filename": "src/libGLESv2/egl_context_mutex_impl.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-05T17:34:37Z",
+      "side": 1,
+      "message": "\u003e Is this function typically called often for the other attributes?\n\nI do not know.\n\n\u003e AFAICT, they are rare setup calls. Can we just lock the mutex for all of them?\n\nProblem is not skipping the mutex call, but rather calling `ensureSharedMutexActive()` that will change mutex type from `SingleContextMutex` to `SharedContextMutex\u003c\u003e` if `eglQueryContext()` is called from thread where target Context is not current.\n\nDetails of the problem:\n- `context` is not current or current in `thread1`;\n- if `context` is not current it may became current in `thread1` any time;\n- we call `eglQueryContext()` from `thread2`;\n- we can\u0027t lock `SingleContextMutex` because `thread1` may have already \"acquired the lock\".\n- `SingleContextMutex` must not be locked from more that one thread at a time.\n- therefore, `ensureSharedMutexActive()` must be called to change mutex type.\n\nFor example `EGLQueryContextTest` tests will cause `ensureSharedMutexActive()` call because `eglQueryContext()` is called when Context is not current. I assumed that many apps may do this too, and decided to limit usage of the lock from potentially other threads.",
+      "parentUuid": "653b60a7_e683715f",
       "revId": "91c8132275a651dd9e414e23d239a447a09cb76f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

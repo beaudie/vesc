@@ -179,6 +179,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1a9d9564_391f6156",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-05T17:34:37Z",
+      "side": 1,
+      "message": "\u003e  However, changing Mutex type is not supported. I may add this support, but it may run slower at the end.\n\nAdded support. Tried many different implementations. All implementations were slower with `angle::FastMutex1`.\n```\nusing SharedContextMutex\u003cangle::FastMutex1\u003e\n\noriginal (no support):    13.746 - retested on the new base\nfastest with support:     14.216 (+3.91%)\nslowest with support:     15.96 (+16.66%)\n\nusing SharedContextMutex\u003cstd::mutex\u003e\noriginal (no support):    29.589 - retested on the new base\nfastest with support:     28.981 (-2.05%) - need investigate performance gain...\n```\n\nInteresting. New implementation that supports `Mutex` type change, works slower with `angle::FastMutex1`, but faster with `std::mutex`. For completeness, `SingleContextMutex` also works slower with new implementation.\n\n\u003e Is that a test you wrote specifically for merging mutexes, or an existing test / app?\n\nIt was a separate app plus additional ASSERT in the ANGLE. I do not remember the details. I just remember that without `sleep` ASSERT failed. If reduce sleep duration, ASSERT may also happen (I do not remember exact delay). I remember that 100us has additional safety margin.\n\n\u003e Just for the sake of argument, if we completely ignore safety here, how much is the code simplified? Just the 100ms sleep, or anything else?\n\nYes. Simplification will only remove this `activationDelayMicro` sleep.\nReplacement logic will be:\n```\nif (not SharedContextMutex Active)\n   mContextMutex \u003d mSharedContextMutex\n   waitWhileSingleContextMutexIsLocked()\n   Activeate SharedContextMutex \n```\n\nBut if be completely unsafe, then (can also remove `mIsSharedContextMutexActive`):\n```\n   mContextMutex \u003d mSharedContextMutex\n```\nThe above is almost like `mShared` now.\n\n\u003e Just to be super clear, are these with locked CPU clocks?\n\nYes, of course. I retry different configurations over time: cfg1, cfg2, ..., cfgN, ... cfg1, cfg2, ..., cfgN. This is to confirm that results are consistent between runs.\n\n\u003e Also would be interesting to try spinlock with pause() correctly implemented to see how much it affects performance (I suspect it makes things worse, but is it significant?). Currently, pause() is added only for x86*:\n\nIn my tests there is only single thread, so \"wait\" logic is not used.\nDifference between `Spinlock` and `FastMutex` is that first uses `std::atomic_bool`, while second uses `std::atomic_int`. Additionally, `FastMutex1::wait()` is not inline, that may also affect performance.",
+      "parentUuid": "37b84883_13d1b178",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "baaaafe5_24947132",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 18
@@ -1602,6 +1620,30 @@
       "side": 1,
       "message": "\u003e Having Active adds a hint, that mSharedContextMutex will be activated (if not already) and then returned.\n\nAh got it, in that case I suggest calling it `TryGetAndActivate...` that makes it clear that you are not \"getting an active mutex\", but rather you are \"getting _and_ activating mutex\".",
       "parentUuid": "f10a65e0_8cc25309",
+      "range": {
+        "startLine": 230,
+        "startChar": 38,
+        "endLine": 230,
+        "endChar": 44
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b87b2daf_2174db11",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-05T17:34:37Z",
+      "side": 1,
+      "message": "`TryGetAndActivate` will only activate if not active, so activate will be called only once.\n\n\u003e that makes it clear that you are not \"getting an active mutex\n\nBut your are indeed getting an active mutex)\n\nFirst time when it is not active - it is activated and then returned as active.\nOther times it is simply returned because it is already active.\n\n\u003e  but rather you are \"getting and activating mutex\"\n\nThis is not correct.\nActivate is one time operation.\n`TryGetAndActivateSharedContextMutex` will suggest that it is activated multiple times.\n\nThat is why  I have function `ensureSharedMutexActive()` and not `activateSharedMutex()`. So I operate with state `Active` not with action `Activate`.\n\nIf rename `TryGetActiveSharedContextMutex() -\u003e TryGetAndActivateSharedContextMutex()` then need also rename `ensureSharedMutexActive() -\u003e activateSharedMutex()`.\n\nBut I do not like `activateSharedMutex()` because activate may happen only once, so it will only perform its function only the first time, all other times it is just check that it is already active.",
+      "parentUuid": "1c2d8085_be9cf940",
       "range": {
         "startLine": 230,
         "startChar": 38,
