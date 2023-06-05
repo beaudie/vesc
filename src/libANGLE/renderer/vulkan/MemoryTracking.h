@@ -147,10 +147,14 @@ class MemoryAllocationTracker : angle::NonCopyable
 
     // Memory allocation statistics functions.
     VkDeviceSize getActiveMemoryAllocationsSize(uint32_t allocTypeIndex) const;
+    VkDeviceSize getMaxMemoryAllocationsSize(uint32_t allocTypeIndex) const;
+    VkDeviceSize getTotalMemoryAllocationsSizeDist(uint32_t allocTypeIndex) const;
+    VkDeviceSize getTotalMemoryAllocationsSize() const;
     VkDeviceSize getActiveHeapMemoryAllocationsSize(uint32_t allocTypeIndex,
                                                     uint32_t heapIndex) const;
 
     uint64_t getActiveMemoryAllocationsCount(uint32_t allocTypeIndex) const;
+    uint64_t getMaxMemoryAllocationsCount(uint32_t allocTypeIndex) const;
     uint64_t getActiveHeapMemoryAllocationsCount(uint32_t allocTypeIndex, uint32_t heapIndex) const;
 
     // Compare the expected flags with the flags of the allocated memory.
@@ -177,7 +181,12 @@ class MemoryAllocationTracker : angle::NonCopyable
     // For tracking the overall memory allocation sizes and counts per memory allocation type.
     std::array<std::atomic<VkDeviceSize>, vk::kMemoryAllocationTypeCount>
         mActiveMemoryAllocationsSize;
+    std::array<std::atomic<VkDeviceSize>, vk::kMemoryAllocationTypeCount> mMaxMemoryAllocationsSize;
     std::array<std::atomic<uint64_t>, vk::kMemoryAllocationTypeCount> mActiveMemoryAllocationsCount;
+    std::array<std::atomic<uint64_t>, vk::kMemoryAllocationTypeCount> mMaxMemoryAllocationsCount;
+    std::atomic<VkDeviceSize> mTotalMemoryAllocationsSize;  // Max total
+    std::array<std::atomic<VkDeviceSize>, vk::kMemoryAllocationTypeCount>
+        mTotalMemoryAllocationsSizeDist;
 
     // Memory allocation data per memory heap.
     using PerHeapMemoryAllocationSizeArray =

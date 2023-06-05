@@ -3468,6 +3468,20 @@ angle::Result BufferPool::allocateBuffer(Context *context,
     return angle::Result::Continue;
 }
 
+void BufferPool::destroyBufferBlock(RendererVk *renderer, BufferBlock *block)
+{
+    for (auto iter = mBufferBlocks.begin(); iter != mBufferBlocks.end(); iter++)
+    {
+        if (block == &(*iter->get()))
+        {
+            block->destroy(renderer);
+            // SafeDelete(block);
+            mBufferBlocks.erase(iter);
+            break;
+        }
+    }
+}
+
 void BufferPool::destroy(RendererVk *renderer, bool orphanNonEmptyBufferBlock)
 {
     for (std::unique_ptr<BufferBlock> &block : mBufferBlocks)
@@ -4658,7 +4672,8 @@ BufferHelper::BufferHelper()
       mCurrentReadAccess(0),
       mCurrentWriteStages(0),
       mCurrentReadStages(0),
-      mSerial()
+      mSerial(),
+      mPool(nullptr)
 {}
 
 BufferHelper::~BufferHelper() = default;
@@ -4681,6 +4696,7 @@ BufferHelper &BufferHelper::operator=(BufferHelper &&other)
     mCurrentWriteStages      = other.mCurrentWriteStages;
     mCurrentReadStages       = other.mCurrentReadStages;
     mSerial                  = other.mSerial;
+    mPool                    = other.mPool;
 
     return *this;
 }
@@ -4817,6 +4833,7 @@ angle::Result BufferHelper::initSuballocation(ContextVk *contextVk,
 
     vk::BufferPool *pool = contextVk->getDefaultBufferPool(size, memoryTypeIndex, usageType);
     ANGLE_TRY(pool->allocateBuffer(contextVk, size, alignment, &mSuballocation));
+    mPool = pool;
 
     if (renderer->getFeatures().allocateNonZeroMemory.enabled)
     {
@@ -4912,6 +4929,7 @@ ANGLE_INLINE void BufferHelper::initializeBarrierTracker(Context *context)
     RendererVk *renderer     = context->getRenderer();
     mCurrentQueueFamilyIndex = renderer->getQueueFamilyIndex();
     mSerial                  = renderer->getResourceSerialFactory().generateBufferSerial();
+    mPool                    = nullptr;
     mCurrentWriteAccess      = 0;
     mCurrentReadAccess       = 0;
     mCurrentWriteStages      = 0;
@@ -5032,8 +5050,17 @@ void BufferHelper::release(RendererVk *renderer)
 
     if (mSuballocation.valid())
     {
+        BufferBlock *block = mSuballocation.getBufferBlock();
         renderer->collectSuballocationGarbage(mUse, std::move(mSuballocation),
                                               std::move(mBufferForVertexArray));
+        if (block != nullptr)
+        {
+            if (block->getSuballocCount() == 0)
+            {
+                mPool->destroyBufferBlock(renderer, block);
+                WARN() << "Empty suballocation buffer destroyed.";
+            }
+        }
     }
     mUse.reset();
     mWriteUse.reset();
