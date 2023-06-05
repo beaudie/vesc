@@ -1382,6 +1382,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a0876ec_7f0130b9",
+        "filename": "src/libANGLE/State.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 1083,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-05T18:41:10Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "be47916a_3339b03c",
+      "range": {
+        "startLine": 1083,
+        "startChar": 20,
+        "endLine": 1083,
+        "endChar": 47
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "25c097c1_b3b634ab",
@@ -1525,6 +1549,30 @@
       "side": 1,
       "message": "\u003e These functions only have a few possibilities, I suggest putting the list of what function needs what call in the python script, generate that on the entry point as necessary and pass it ANGLE_EGL_CONTEXT_LOCK.\n\nI do not like this. If in the future we add another API that requires lock we may forget to add this function in that list. Currently there will be linking error.\n\n\u003e If it helps, I\u0027d honestly get rid of the !defined(ANGLE_ENABLE_SHARED_CONTEXT_MUTEX) path\n\nImpossible unless remove `ANGLE_FORCE_CONTEXT_CHECK_EVERY_CALL` and `ANGLE_ENABLE_SHARE_CONTEXT_LOCK` options.",
       "parentUuid": "e2b3604a_52c93a01",
+      "range": {
+        "startLine": 218,
+        "startChar": 48,
+        "endLine": 218,
+        "endChar": 68
+      },
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4675bb76_31308f7b",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-05T18:41:10Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "90fee2a9_8b32008b",
       "range": {
         "startLine": 218,
         "startChar": 48,
