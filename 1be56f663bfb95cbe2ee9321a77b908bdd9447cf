@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9da83484_b7676b66",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-05T13:16:40Z",
+      "side": 1,
+      "message": "This is always tempting, but please open a new bug. For one, future work to make run_code_generation or presubmit faster would all end up referred to from the bug. It also provides an opportunity to discuss the higher level goal, or for example after a few CLs comment that \"X is done, Y can be done in the future\" and release ownership.",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 9
+      },
+      "revId": "1be56f663bfb95cbe2ee9321a77b908bdd9447cf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
