@@ -3687,7 +3687,6 @@ angle::Result Program::deserialize(const Context *context,
         mState.mExecutable->updateTransformFeedbackStrides();
     }
 
-    postResolveLink(context);
     mState.mExecutable->updateCanDrawWith();
 
     if (context->getShareGroup()->getFrameCaptureShared()->enabled())
