@@ -34,6 +34,23 @@
       "parentUuid": "ed506f22_4ae8c77c",
       "revId": "cdad5d8daf1111104e5a51183320bd89884866fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35f572a1_fcec235d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-06-06T17:57:43Z",
+      "side": 1,
+      "message": "I\u0027m incorporating Geoff\u0027s https://chromium-review.googlesource.com/c/angle/angle/+/4594442 into this CL. Building on Mac Intel now to verify before uploading.",
+      "revId": "cdad5d8daf1111104e5a51183320bd89884866fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
