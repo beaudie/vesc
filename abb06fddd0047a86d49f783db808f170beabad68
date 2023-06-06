@@ -16,6 +16,23 @@
       "message": "Geoff: would you be willing to review and +2 this?\n\nAny suggestions welcome for alternative strings.",
       "revId": "abb06fddd0047a86d49f783db808f170beabad68",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c52a7c55_e84668c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-06-06T00:15:50Z",
+      "side": 1,
+      "message": "Scanned recent runs of texparameter-test.html:\nhttps://ci.chromium.org/ui/test/chromium/ninja%3A%2F%2Fchrome%2Ftest%3Atelemetry_gpu_integration_test%2Fgpu_tests.webgl1_conformance_integration_test.WebGL1ConformanceIntegrationTest.conformance%2Ftextures%2Fmisc%2Ftexparameter-test.html\n\nand don\u0027t see evidence of widespread flakiness. For this reason I don\u0027t think a suppression is warranted. Re-CQ\u0027ing.",
+      "revId": "abb06fddd0047a86d49f783db808f170beabad68",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
