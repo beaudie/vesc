@@ -18,6 +18,7 @@
 
 #include "angle_gl.h"
 #include "traces_export.h"
+#include "trace_interface.h"
 
 #if defined(__cplusplus)
 #    include <cstdio>
@@ -68,6 +69,7 @@ ANGLE_REPLAY_EXPORT const char *GetSerializedContextState(uint32_t frameIndex);
 
 ANGLE_REPLAY_EXPORT void SetTraceInfo(const std::vector<std::string> &traceFiles);
 ANGLE_REPLAY_EXPORT void SetTraceGzPath(const std::string &traceGzPath);
+ANGLE_REPLAY_EXPORT void SetTraceCallbacks(angle::TraceCallbacks* traceCallbacks);
 #endif  // defined(__cplusplus)
 
 // Exported trace functions.

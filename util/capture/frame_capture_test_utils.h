@@ -21,6 +21,7 @@
 #include "common/debug.h"
 #include "common/frame_capture_utils.h"
 #include "common/system_utils.h"
+#include "trace_interface.h"
 
 #define USE_SYSTEM_ZLIB
 #include "compression_utils_portable.h"
@@ -32,31 +33,6 @@
 
 namespace angle
 {
-
-inline uint8_t *DecompressBinaryData(const std::vector<uint8_t> &compressedData)
-{
-    uint32_t uncompressedSize =
-        zlib_internal::GetGzipUncompressedSize(compressedData.data(), compressedData.size());
-
-    std::unique_ptr<uint8_t[]> uncompressedData(new uint8_t[uncompressedSize]);
-    uLong destLen = uncompressedSize;
-    int zResult =
-        zlib_internal::GzipUncompressHelper(uncompressedData.get(), &destLen, compressedData.data(),
-                                            static_cast<uLong>(compressedData.size()));
-
-    if (zResult != Z_OK)
-    {
-        std::cerr << "Failure to decompressed binary data: " << zResult << "\n";
-        return nullptr;
-    }
-
-    return uncompressedData.release();
-}
-
-inline void DeleteBinaryData(uint8_t *uncompressedData)
-{
-    delete[] uncompressedData;
-}
 
 using DecompressCallback              = uint8_t *(*)(const std::vector<uint8_t> &);
 using DeleteCallback                  = void (*)(uint8_t *);
@@ -72,10 +48,11 @@ using GetSerializedContextStateFunc          = const char *(*)(uint32_t);
 using SetValidateSerializedStateCallbackFunc = void (*)(ValidateSerializedStateCallback);
 using SetTraceInfoFunc                       = void (*)(const std::vector<std::string> &);
 using SetTraceGzPathFunc                     = void (*)(const std::string &);
+using SetTraceCallbacks                     = void (*)(angle::TraceCallbacks*);
 
 struct TraceInfo;
 
-class TraceLibrary : angle::NonCopyable
+class TraceLibrary : angle::NonCopyable, angle::TraceCallbacks
 {
   public:
     TraceLibrary(const std::string &traceName, const TraceInfo &traceInfo);
@@ -87,6 +64,7 @@ class TraceLibrary : angle::NonCopyable
 
     void setBinaryDataDir(const char *dataDir)
     {
+        mBinaryDataDir = dataDir;
         callFunc<SetBinaryDataDirFunc>("SetBinaryDataDir", dataDir);
     }
 
@@ -103,7 +81,7 @@ class TraceLibrary : angle::NonCopyable
 
     void resetReplay() { callFunc<ResetReplayFunc>("ResetReplay"); }
 
-    void finishReplay() { callFunc<FinishReplayFunc>("FinishReplay"); }
+    void finishReplay() { callFunc<FinishReplayFunc>("FinishReplay"); mBinaryData = {};}
 
     const char *getSerializedContextState(uint32_t frameIndex)
     {
@@ -135,7 +113,11 @@ class TraceLibrary : angle::NonCopyable
         return typedFunc(args...);
     }
 
+    uint8_t* LoadBinaryData(const char *fileName) override;
+
     std::unique_ptr<Library> mTraceLibrary;
+    std::vector<uint8_t> mBinaryData;
+    std::string mBinaryDataDir;
 };
 
 static constexpr size_t kTraceInfoMaxNameLen = 128;
