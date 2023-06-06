@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fea12f6_921d8d53",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-06-06T06:14:30Z",
+      "side": 1,
+      "message": "Kimmo, Shabi: please review.\n\nPatch set 1 is Kimmo\u0027s original https://chromium-review.googlesource.com/4205889 .\n\nPatch set 2 fixes the ShaderBinaryTest on ANGLE backends where shader binaries are not supported. (It could be fixed / improved in other ways, but this is a small and correct fix.)",
+      "revId": "456b81779754baf788b89da06d616d978ac2dc93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
