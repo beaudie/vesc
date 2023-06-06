@@ -122,6 +122,24 @@
       "parentUuid": "8761e793_adde3a3d",
       "revId": "50542363d43f8896ae050485584a74980958f41b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d3db0e1_0506fd6f",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1134,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-06-06T21:28:12Z",
+      "side": 1,
+      "message": "i\u0027m not surprised your test din\u0027t fail since a call to `terminate` with `TerminateReason::NoActiveThreads` marks the display as unitialized making all subsequent calls as noops\n\nre: \"deactivate-\u003eactivate cycle\" - a clearer code would be to have `~ScopedSyncCurrentContextFromThread` set context without marking the thread as active (since \"active thread\" is from an API perspective)",
+      "parentUuid": "5a8ef296_80d2820c",
+      "revId": "50542363d43f8896ae050485584a74980958f41b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
