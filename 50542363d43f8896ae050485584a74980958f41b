@@ -104,6 +104,24 @@
       "parentUuid": "0bcde0f9_29f93372",
       "revId": "50542363d43f8896ae050485584a74980958f41b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a8ef296_80d2820c",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1134,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-06T17:13:55Z",
+      "side": 1,
+      "message": "It is in the first comment:\n\u003e thread may be not active while context is current, this may cause forced context invalidation (TerminateReason::NoActiveThreads) and then destruction (in destroyInvalidEglObjects()).\n\nI first did not notice that `ScopedSyncCurrentContextFromThread` will reactivate the thread, so I assumed a possible bug. I investigated code (except stubs...) and wrote test in order to reproduce the bug. However I failed. I investigated why there is no bug and found `ScopedSyncCurrentContextFromThread`.\n\nTest has 2 threads.\nThread 1:\n- `eglInitialize()`\n- `createContext()`\n- `createPbufferSurface()`\n- `eglMakeCurrent(mDisplay, srf, srf, ctx1)`\n- `eglTerminate()` (context will be deactivated if no `ScopedSyncCurrentContextFromThread`)\n- sleep while Thread 2 finishes.\n- `ctx1` will be destroyed because `terminate(TerminateReason::NoActiveThreads)` from Thread 2.\n- `eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT)`\n- Above may access deleted `ctx1`.\n\nThread 2:\n- `createContext()`\n- `createPbufferSurface()`\n- `eglMakeCurrent(mDisplay, srf, srf, ctx2)`\n- wait for `eglTerminate()`\n- `eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT)`\n- Thread exit will call `terminate(TerminateReason::NoActiveThreads)` and destroy `ctx1`.\n\n---\n\nRegardless of the possible bug it is not clear that thread will be reactivated later in the `ScopedSyncCurrentContextFromThread`. And why have this \"deactivate-\u003eactivate\" cycle? IMO it is better to not deactivate thread if it will be activated again for clarity and safety.",
+      "parentUuid": "8761e793_adde3a3d",
+      "revId": "50542363d43f8896ae050485584a74980958f41b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
