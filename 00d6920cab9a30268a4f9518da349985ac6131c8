@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd77daa0_f0f332ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1174609
+      },
+      "writtenOn": "2023-06-06T00:19:25Z",
+      "side": 1,
+      "message": "I should note that there are two options for the ANGLE team here, please note that this change will temporarily increase the checkout size. I can either land this, then land the upstream fix, then patchset 2 to make this a smooth transition roll,\n\nOR\n\nIf you would not prefer the temporary checkout size increase, we can forgo landing this, I can land the upstream change (this will break the ANGLE roller) and then we can land a single patch that swaps the toolchains.",
+      "revId": "00d6920cab9a30268a4f9518da349985ac6131c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
