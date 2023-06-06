@@ -86,6 +86,23 @@
       "parentUuid": "51332cd7_c1ddee91",
       "revId": "6a6c1f92c8f6d89848e4d18c517894596601293f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fb0d0b4_9a4cec9b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-06-06T14:03:20Z",
+      "side": 1,
+      "message": "Brian, any idea what\u0027s wrong with \"import six\"?\nCould this be related to python failures on UPF bot you were looking at?",
+      "revId": "6a6c1f92c8f6d89848e4d18c517894596601293f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
