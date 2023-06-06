@@ -139,6 +139,24 @@
       "parentUuid": "34c68f62_1beff4f1",
       "revId": "6a6c1f92c8f6d89848e4d18c517894596601293f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e88aaf0_dc5c5c5b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2023-06-06T17:04:51Z",
+      "side": 1,
+      "message": "I could see that being the culprit, although if it is, that\u0027s definitely a bug and not something expected. Probably worth posting there and seeing what the owner has to say.",
+      "parentUuid": "11b858a2_1c6b2607",
+      "revId": "6a6c1f92c8f6d89848e4d18c517894596601293f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
