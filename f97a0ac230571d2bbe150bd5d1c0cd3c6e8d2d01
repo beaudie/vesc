@@ -33,6 +33,24 @@
       "message": "What does this ASSERT try to enforce?",
       "revId": "f97a0ac230571d2bbe150bd5d1c0cd3c6e8d2d01",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b48cfcb4_f20a99f4",
+        "filename": "src/compiler/translator/BuildSPIRV.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2522,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-06T02:23:29Z",
+      "side": 1,
+      "message": "The overview instruction carries a few flags. The ASSERT makes sure the flags part does not contain bits that overlap with the instruction bits.",
+      "parentUuid": "0e8458f3_246eab80",
+      "revId": "f97a0ac230571d2bbe150bd5d1c0cd3c6e8d2d01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
