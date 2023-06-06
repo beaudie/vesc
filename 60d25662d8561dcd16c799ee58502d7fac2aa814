@@ -33,6 +33,69 @@
       "message": "Well, given the test failures, it looks like the destSRGB carve-out is needed in more cases.",
       "revId": "60d25662d8561dcd16c799ee58502d7fac2aa814",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9608f021_2f52f58b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-06-06T14:50:17Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "60d25662d8561dcd16c799ee58502d7fac2aa814",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2977e769_937f8f29",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1034,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-06-06T14:50:17Z",
+      "side": 1,
+      "message": "nit: Could it be inverted to `destSRGBRenderable` instead? It\u0027s only used as `!destSRGBNotRenderable` below.",
+      "range": {
+        "startLine": 1034,
+        "startChar": 9,
+        "endLine": 1034,
+        "endChar": 30
+      },
+      "revId": "60d25662d8561dcd16c799ee58502d7fac2aa814",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "747d45c1_7357f88d",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2400,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-06-06T14:50:17Z",
+      "side": 1,
+      "message": "Could you rename this variable to isAppleGPU or something similar? Looks like it\u0027s only used in one other place and it will clear up confusion.",
+      "range": {
+        "startLine": 2400,
+        "startChar": 87,
+        "endLine": 2400,
+        "endChar": 94
+      },
+      "revId": "60d25662d8561dcd16c799ee58502d7fac2aa814",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
