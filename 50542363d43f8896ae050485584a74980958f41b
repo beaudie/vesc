@@ -68,6 +68,24 @@
       "parentUuid": "0f2eaf30_68cb899e",
       "revId": "50542363d43f8896ae050485584a74980958f41b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bcde0f9_29f93372",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1134,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-06T16:46:40Z",
+      "side": 1,
+      "message": "\u003e having said that, im not sure i see the bug ...\n\nThere is no bug in this CL. But this is thanks to `ScopedSyncCurrentContextFromThread`.\n\nI just saying that this change confused me and may also confuse others, and potentially cause bugs in the future.\n\nI will try to explain:\n- This CL adds `mActiveThreads.erase(thread);`;\n- This will deactivate the thread while Context may still be current on this thread;\n- The `~ScopedSyncCurrentContextFromThread` will reactivate the thread: `Thread::setCurrent(gl::Context *context)` -\u003e `Display::addActiveThread(Thread *thread)` -\u003e `mActiveThreads.insert(thread)`\n\nIn the above situation will will have:\n- `mActiveThreads.erase(thread);` - added in this CL\n- `mActiveThreads.insert(thread);` - from `~ScopedSyncCurrentContextFromThread`\n\nThis is confusing. And I asked if this CL considered the fact that `ScopedSyncCurrentContextFromThread` will reactivate the thread. If this CL did not took this into account, then it might have introduced a bug if there was no `ScopedSyncCurrentContextFromThread` class.\n\nTherefore I suggested to add `if (thread-\u003egetContext() \u003d\u003d nullptr)` before deactivating the thread for clarity, and so there is no confusing \"deactivate -\u003e activate\" cycle.",
+      "parentUuid": "7daf9be5_d836e9fe",
+      "revId": "50542363d43f8896ae050485584a74980958f41b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
