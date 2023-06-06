@@ -16,6 +16,24 @@
       "message": "Shabi fixed this via https://chromium-review.googlesource.com/c/angle/angle/+/4594442, but I\u0027ve reverted before it landed.\nOne thing I don\u0027t understand is why Vulkan on Mac was previously gated on msl_through_spirv availability, but now can be enabled unconditionally.",
       "revId": "cdad5d8daf1111104e5a51183320bd89884866fb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20b32ad7_d8110e14",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-06T17:52:53Z",
+      "side": 1,
+      "message": "(Geoff* fixed it)\n\n\u003e One thing I don\u0027t understand is why ...\n\nBug!",
+      "parentUuid": "ed506f22_4ae8c77c",
+      "revId": "cdad5d8daf1111104e5a51183320bd89884866fb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
