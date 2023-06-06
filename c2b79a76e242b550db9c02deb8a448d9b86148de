@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d986e0c_aa410e03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-06-06T18:35:12Z",
+      "side": 1,
+      "message": "Moving forward with the reland. Patchset 1..2 shows Geoff\u0027s fix for the SwiftShader backend.",
+      "revId": "c2b79a76e242b550db9c02deb8a448d9b86148de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
