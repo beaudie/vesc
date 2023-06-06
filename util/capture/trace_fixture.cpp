@@ -22,67 +22,11 @@ void UpdateResourceMap(GLuint *resourceMap, GLuint id, GLsizei readBufferOffset)
     resourceMap[id] = returnedID;
 }
 
-DecompressCallback gDecompressCallback;
-DeleteCallback gDeleteCallback;
-
-void DeleteBinaryData()
-{
-    if (gBinaryData)
-    {
-        if (gDeleteCallback)
-        {
-            gDeleteCallback(gBinaryData);
-        }
-        else
-        {
-            delete[] gBinaryData;
-        }
-        gBinaryData = nullptr;
-    }
-}
+angle::TraceCallbacks *gTraceCallbacks = nullptr;
 
 void LoadBinaryData(const char *fileName)
 {
-    DeleteBinaryData();
-    char pathBuffer[1000] = {};
-
-    snprintf(pathBuffer, sizeof(pathBuffer), "%s/%s", gBinaryDataDir.c_str(), fileName);
-    FILE *fp = fopen(pathBuffer, "rb");
-    if (fp == 0)
-    {
-        fprintf(stderr, "Error loading binary data file: %s\n", fileName);
-        return;
-    }
-    fseek(fp, 0, SEEK_END);
-    long size = ftell(fp);
-    fseek(fp, 0, SEEK_SET);
-    if (gDecompressCallback)
-    {
-        if (!strstr(fileName, ".gz"))
-        {
-            fprintf(stderr, "Filename does not end in .gz");
-            exit(1);
-        }
-        std::vector<uint8_t> compressedData(size);
-        (void)fread(compressedData.data(), 1, size, fp);
-        gBinaryData = gDecompressCallback(compressedData);
-        if (gBinaryData == nullptr)
-        {
-            // Error already printed by the callback
-            exit(1);
-        }
-    }
-    else
-    {
-        if (!strstr(fileName, ".angledata"))
-        {
-            fprintf(stderr, "Filename does not end in .angledata");
-            exit(1);
-        }
-        gBinaryData = new uint8_t[size];
-        (void)fread(gBinaryData, 1, size, fp);
-    }
-    fclose(fp);
+    gBinaryData = gTraceCallbacks->LoadBinaryData(fileName);
 }
 
 EGLClientBuffer GetClientBuffer(EGLenum target, uintptr_t key)
@@ -199,13 +143,6 @@ EGLSync *gEGLSyncMap;
 EGLDisplay gEGLDisplay;
 
 std::string gBinaryDataDir = ".";
-
-void SetBinaryDataDecompressCallback(DecompressCallback decompressCallback,
-                                     DeleteCallback deleteCallback)
-{
-    gDecompressCallback = decompressCallback;
-    gDeleteCallback     = deleteCallback;
-}
 
 void SetBinaryDataDir(const char *dataDir)
 {
@@ -398,8 +335,6 @@ void FinishReplay()
     delete[] gSyncMap2;
     delete[] gTransformFeedbackMap;
     delete[] gVertexArrayMap;
-
-    DeleteBinaryData();
 }
 
 void SetValidateSerializedStateCallback(ValidateSerializedStateCallback callback)
@@ -418,6 +353,11 @@ void SetTraceInfo(const std::vector<std::string> &traceFiles)
 void SetTraceGzPath(const std::string &traceGzPath)
 {
     gTraceGzPath = traceGzPath;
+}
+
+void SetTraceCallbacks(angle::TraceCallbacks *traceCallbacks)
+{
+    gTraceCallbacks = traceCallbacks;
 }
 
 void UpdateClientArrayPointer(int arrayIndex, const void *data, uint64_t size)

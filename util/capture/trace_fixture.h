@@ -17,6 +17,7 @@
 #include <stdint.h>
 
 #include "angle_gl.h"
+#include "trace_interface.h"
 #include "traces_export.h"
 
 #if defined(__cplusplus)
@@ -46,15 +47,11 @@ extern std::string gBinaryDataDir;
 extern std::vector<std::string> gTraceFiles;
 extern std::string gTraceGzPath;
 
-using DecompressCallback              = uint8_t *(*)(const std::vector<uint8_t> &);
-using DeleteCallback                  = void (*)(uint8_t *);
 using ValidateSerializedStateCallback = void (*)(const char *, const char *, uint32_t);
 
 // Exported trace functions.
 extern "C" {
 
-ANGLE_REPLAY_EXPORT void SetBinaryDataDecompressCallback(DecompressCallback decompressCallback,
-                                                         DeleteCallback deleteCallback);
 ANGLE_REPLAY_EXPORT void SetBinaryDataDir(const char *dataDir);
 ANGLE_REPLAY_EXPORT void SetupReplay();
 ANGLE_REPLAY_EXPORT void ReplayFrame(uint32_t frameIndex);
@@ -68,6 +65,7 @@ ANGLE_REPLAY_EXPORT const char *GetSerializedContextState(uint32_t frameIndex);
 
 ANGLE_REPLAY_EXPORT void SetTraceInfo(const std::vector<std::string> &traceFiles);
 ANGLE_REPLAY_EXPORT void SetTraceGzPath(const std::string &traceGzPath);
+ANGLE_REPLAY_EXPORT void SetTraceCallbacks(angle::TraceCallbacks *traceCallbacks);
 #endif  // defined(__cplusplus)
 
 // Exported trace functions.
