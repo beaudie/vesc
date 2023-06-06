@@ -287,10 +287,10 @@ ParamBuffer ParseParameters(const Token *paramTokens, const TraceStringMap &stri
 }  // namespace angle
 
 extern "C" {
-ANGLE_REPLAY_EXPORT void SetupReplay();
-ANGLE_REPLAY_EXPORT void ReplayFrame(uint32_t frameIndex);
-ANGLE_REPLAY_EXPORT void ResetReplay();
-ANGLE_REPLAY_EXPORT const char *GetSerializedContextState(uint32_t frameIndex);
+void SetupReplay();
+void ReplayFrame(uint32_t frameIndex);
+void ResetReplay();
+const char *GetSerializedContextState(uint32_t frameIndex);
 }  // extern "C"
 
 #endif  // ANGLE_TRACE_INTERPRETER_H_
