@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bf57203_6dbee732",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-06-06T17:45:44Z",
+      "side": 1,
+      "message": "Working on a reland in https://chromium-review.googlesource.com/c/angle/angle/+/4594582 .",
+      "revId": "f7badd3faa8b1b04538ac7b6db833e1398b13498",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
