@@ -103,6 +103,24 @@
       "message": "Brian, any idea what\u0027s wrong with \"import six\"?\nCould this be related to python failures on UPF bot you were looking at?",
       "revId": "6a6c1f92c8f6d89848e4d18c517894596601293f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34c68f62_1beff4f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1163549
+      },
+      "writtenOn": "2023-06-06T16:15:58Z",
+      "side": 1,
+      "message": "No idea why six would be having issues. As I pointed out in https://chromium-review.googlesource.com/c/chromium/src/+/4591976/comments/598803b5_2cfa26ad, both ANGLE and depot_tools still have it in their .vpython3 files, so it should be available.\n\nIt\u0027s possible it\u0027s related to the UPF hangs, although the main thing tying them together would be \"weird Python issues\". I should be able to finish my bisect of the UPF issue later today.",
+      "parentUuid": "9fb0d0b4_9a4cec9b",
+      "revId": "6a6c1f92c8f6d89848e4d18c517894596601293f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
