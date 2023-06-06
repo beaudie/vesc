@@ -50,6 +50,24 @@
       "message": "Suggest adding `if (thread-\u003egetContext() \u003d\u003d nullptr)` for clarity and to avoid possible bugs.\n\nHowever, everything will still work fine without the `if`, because thread will be **reactivated** in the `ScopedSyncCurrentContextFromThread` destructor:\n```\nScopedSyncCurrentContextFromThread::~ScopedSyncCurrentContextFromThread()\n{\n    SetContextCurrent(mThread, mThread-\u003egetContext());\n}\n```\n\nI do not know if this CL takes into account `ScopedSyncCurrentContextFromThread` or not.\n\nBut I was confused by this change and suspected a bug: thread may be not active while context is current, this may cause forced context invalidation (`TerminateReason::NoActiveThreads`) and then destruction (in `destroyInvalidEglObjects()`). Thanks to `ScopedSyncCurrentContextFromThread` this should not be possible.",
       "revId": "50542363d43f8896ae050485584a74980958f41b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7daf9be5_d836e9fe",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1134,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-06-06T15:49:32Z",
+      "side": 1,
+      "message": "\u003e I do not know if this CL takes into account `ScopedSyncCurrentContextFromThread`\n\nthe changes related to active threads was added much later and testing / verification was done assuming behavior changes introduced by `ScopedSyncCurrentContextFromThread`\n\nhaving said that, im not sure i see the bug given that forced context invalidation due to `TerminateReason::NoActiveThreads` happens **after** acquiring the global mutex",
+      "parentUuid": "0f2eaf30_68cb899e",
+      "revId": "50542363d43f8896ae050485584a74980958f41b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
