@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d78b2d3c_d523afdf",
+        "filename": "gni/angle.gni",
+        "patchSetId": 3
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-06-06T17:06:39Z",
+      "side": 0,
+      "message": "I suspect this disables SwiftShader fallback on Mac.\nThere is also a bug on the trybot that accidentally let\nhttps://ci.chromium.org/ui/p/chromium/builders/try/mac-angle-chromium-try/18567/overview pass.\nIt should have failed like https://ci.chromium.org/ui/p/chromium/builders/try/mac-angle-chromium-try/18554/overview did.",
+      "range": {
+        "startLine": 184,
+        "startChar": 41,
+        "endLine": 184,
+        "endChar": 75
+      },
+      "revId": "e60f64ddb91952d3b68381062fd78b960228f9da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
