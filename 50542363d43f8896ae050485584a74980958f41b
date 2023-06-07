@@ -194,6 +194,24 @@
       "parentUuid": "b4c0fea7_a8c5b1e9",
       "revId": "50542363d43f8896ae050485584a74980958f41b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c25d5469_d30545b5",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1134,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-07T16:20:11Z",
+      "side": 1,
+      "message": "Want to highlught:\n\n\u003e if **contexts or surfaces**, created with respect to dpy are current (see sec-\ntion 3.7.3) to any thread, **then they are not actually destroyed** while they remain current.\n\nIn case of a bug context is actually destroyed.",
+      "parentUuid": "066b05ce_b1f0f684",
+      "revId": "50542363d43f8896ae050485584a74980958f41b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
