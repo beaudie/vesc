@@ -16,6 +16,24 @@
       "message": "Will review soon",
       "revId": "e4f5145a1803ba80995ce0e87e21a9dd4a675c29",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b6a78a2_a495d3da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-07T09:59:09Z",
+      "side": 1,
+      "message": "Thanks. I\u0027m still working on this CL. I want to add possibility to change back to `SingleContextMutex`.\nI will write when ready.",
+      "parentUuid": "444213fa_1546b1e1",
+      "revId": "e4f5145a1803ba80995ce0e87e21a9dd4a675c29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
