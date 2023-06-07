@@ -140,6 +140,24 @@
       "parentUuid": "5a8ef296_80d2820c",
       "revId": "50542363d43f8896ae050485584a74980958f41b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a05871c_c7b957cd",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1134,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-07T15:54:51Z",
+      "side": 1,
+      "message": "\u003e i\u0027m not surprised your test din\u0027t fail since a call to terminate with TerminateReason::NoActiveThreads marks the display as unitialized making all subsequent calls as noops\n\nYour are correct, there will be no failure in `eglMakeCurrent()` even when `ctx1` was destroyed. I\u0027m sorry. It was a long time ago when I wrote the test and forget that I also added `glReadPixels()` after before `eglMakeCurrent()`.\n\nIf there is no `ScopedSyncCurrentContextFromThread`\n- terminate with `TerminateReason::NoActiveThreads` will put `ctx1` to `mInvalidContextMap` and later in the same `Display::terminate()` call will destroy the `ctx1` in the `destroyInvalidEglObjects()`.\n- using `ctx1` after this may cause crash (in `glReadPixels()` for example).\n- even calling `context-\u003eskipValidation()` from entry points is unsafe because accesses dealllocated memory.\n\n\u003e re: \"deactivate-\u003eactivate cycle\" - a clearer code would be to have ~ScopedSyncCurrentContextFromThread set context without marking the thread as active (since \"active thread\" is from an API perspective)\n\nIf `~ScopedSyncCurrentContextFromThread` will not have activation then this CL will introduce a bug. IMO making thread as inactive while there is still context current is incorrect in the first place.\n\n---\n\nThis CL removes `ScopedSyncCurrentContextFromThread` from `egl::Terminate()` and tests the bug:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/4577777/4?checksPatchset\u003d4\u0026tab\u003dchecks\nhttps://chromium-swarm.appspot.com/task?id\u003d62af096ae4d50911\u0026w\u003dtrue\n\nIn patchset 5 I added suggested `if (thread-\u003egetContext() \u003d\u003d nullptr)` condition while `ScopedSyncCurrentContextFromThread` is still removed:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/4577777/4..5?tab\u003dchecks",
+      "parentUuid": "0d3db0e1_0506fd6f",
+      "revId": "50542363d43f8896ae050485584a74980958f41b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
