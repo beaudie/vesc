@@ -230,6 +230,24 @@
       "parentUuid": "c25d5469_d30545b5",
       "revId": "50542363d43f8896ae050485584a74980958f41b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e06b6f77_45898f22",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1134,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-06-07T23:21:40Z",
+      "side": 1,
+      "message": "this wording in the spec will require us to not mark the thread as inactive while a context is current\n```\n... continuing to issue commands to a bound client API context) will not result\nin interruption or termination of applications ...\n```\nthanks, will update change along with changes to some tests",
+      "parentUuid": "2328e2b9_ce412ec9",
+      "revId": "50542363d43f8896ae050485584a74980958f41b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
