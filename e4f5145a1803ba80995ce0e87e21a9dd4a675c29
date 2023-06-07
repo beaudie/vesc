@@ -52,6 +52,24 @@
       "parentUuid": "7b6a78a2_a495d3da",
       "revId": "e4f5145a1803ba80995ce0e87e21a9dd4a675c29",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a054a98f_1139ca37",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-07T13:34:52Z",
+      "side": 1,
+      "message": "This is not for this case (but may do this in the future if needed).\n\nThis is to temporary set `SharedContexMutex` for `eglQueryContext()` case, for example and then revert back to `SingleContextMutex`.\n\nIn other words this is for all cases, when Context is single in the group and uses `SingleContextMutex` but we need to access `Context` from other threads. `Context::markContextLost()` is another such example (currently `Display::notifyDeviceLost()` will do this without locks). In this cases `SharedContexMutex` will be set temporarily and then changed back to `SingleContextMutex`.\n\nTo clarify. This change may be later used to revert back to `SingleContextMutex` when context become single in the group again. But need to also account for merged mutexes...\n\nChange is not simple and requires a lot of code change and I do not want to have big -/+ diff in the follow up.",
+      "parentUuid": "f51d7a82_fb713962",
+      "revId": "e4f5145a1803ba80995ce0e87e21a9dd4a675c29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
