@@ -494,6 +494,8 @@ EGLBoolean MakeCurrent(Thread *thread,
     Surface *previousRead        = thread->getCurrentReadSurface();
     gl::Context *previousContext = thread->getContext();
 
+    WARN() << "MakeCurrent() previousContext: " << previousContext << "; context: " << context;
+
     // Only call makeCurrent if the context or surfaces have changed.
     if (previousDraw != drawSurface || previousRead != readSurface || previousContext != context)
     {
@@ -700,7 +702,7 @@ EGLBoolean Terminate(Thread *thread, Display *display)
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglTerminate",
                          GetDisplayIfValid(display), EGL_FALSE);
 
-    ScopedSyncCurrentContextFromThread scopedSyncCurrent(thread);
+    // ScopedSyncCurrentContextFromThread scopedSyncCurrent(thread);
 
     ANGLE_EGL_TRY_RETURN(thread, display->terminate(thread, Display::TerminateReason::Api),
                          "eglTerminate", GetDisplayIfValid(display), EGL_FALSE);
