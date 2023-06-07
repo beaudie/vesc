@@ -561,6 +561,10 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     bool skipValidation() const
     {
+        if (mIsDestroyed)
+        {
+            WARN() << "this: " << this << "; mIsDestroyed: " << mIsDestroyed;
+        }
         // Ensure we don't skip validation when context becomes lost, since implementations
         // generally assume a non-lost context, non-null objects, etc.
         ASSERT(!isContextLost() || !mSkipValidation);

@@ -138,6 +138,7 @@ void SetContextCurrent(Thread *thread, gl::Context *context)
     Thread *currentThread = gCurrentThread;
 #endif
     ASSERT(currentThread);
+    WARN() << "currentThread: " << currentThread << "; context: " << context;
     currentThread->setCurrent(context);
 
     gl::SetCurrentValidContext(context);
@@ -155,6 +156,7 @@ ScopedSyncCurrentContextFromThread::ScopedSyncCurrentContextFromThread(egl::Thre
 
 ScopedSyncCurrentContextFromThread::~ScopedSyncCurrentContextFromThread()
 {
+    WARN() << "-> SetContextCurrent()";
     SetContextCurrent(mThread, mThread->getContext());
 }
 
