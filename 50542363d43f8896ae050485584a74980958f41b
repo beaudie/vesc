@@ -158,6 +158,24 @@
       "parentUuid": "0d3db0e1_0506fd6f",
       "revId": "50542363d43f8896ae050485584a74980958f41b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4c0fea7_a8c5b1e9",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1134,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-06-07T16:08:58Z",
+      "side": 1,
+      "message": "\u003e I also added `glReadPixels()` after before `eglMakeCurrent`\n\nthis is a violation of spec, please refer here -\u003e https://registry.khronos.org/EGL/specs/eglspec.1.5.pdf\n\n```\nTermination marks all EGL-specific resources, such as contexts and surfaces,\nassociated with the specified display for deletion ... Applications should not try\nto perform useful work with such resources following eglTerminate...\n```",
+      "parentUuid": "2a05871c_c7b957cd",
+      "revId": "50542363d43f8896ae050485584a74980958f41b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
