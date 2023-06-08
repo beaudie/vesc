@@ -979,7 +979,7 @@ void WriteInitReplayCall(bool compression,
         out << "    // max" << name << " = " << maxIDs[resourceID] << "\n";
     }
 
-    out << "    InitializeReplay4(\"" << binaryDataFileName << "\", " << maxClientArraySize << ", "
+    out << "    InitializeReplay6(\"" << binaryDataFileName << "\", " << maxClientArraySize << ", "
         << readBufferSize << ", " << resourceIDBufferSize << ", " << contextID;
 
     for (ResourceIDType resourceID : AllEnums<ResourceIDType>())
