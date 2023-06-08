@@ -106,6 +106,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5538b034_d4ca3ac4",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 9579,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-08T20:02:01Z",
+      "side": 1,
+      "message": "I updated this part.\nNow margin happens in `SCOPED_EGL_IMAGE_SHARE_CONTEXT_LOCK` -  before validation.\n\nProblem with previous solution was that `SharedContextMutex::Merge()` may unlock the mutex resulting in unlock in the middle of the API call.\n\nNew solution also simplified merging logic as well as shared mutex activation (with new temp activation support), because now merging is done when `SingleContextMutex` is not locked.",
+      "parentUuid": "63f5d561_c281a75b",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d70e4a11_797a399d",
@@ -215,6 +233,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "aa104c78_17646df4",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-08T20:02:01Z",
+      "side": 1,
+      "message": "\u003e Given that this is potentially risky, can we make it so that we can detect the error case and ASSERT that it doesn\u0027t happen?\n\nI\u0027m not sure it is possible. I we could we would not have such problem.\n\nI will try to write a white box test at least.",
+      "parentUuid": "0543e644_d42e6df5",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "baaaafe5_24947132",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 18
@@ -262,6 +298,24 @@
       "side": 1,
       "message": "Acknowledged",
       "parentUuid": "4d2602c0_f6204415",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a660659a_c1e6a43d",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1545,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-08T20:02:01Z",
+      "side": 1,
+      "message": "Replaced all `#if`s with `kIsSharedContextMutexEnabled`.",
+      "parentUuid": "7edfbe95_37cf0105",
       "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },

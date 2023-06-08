@@ -336,6 +336,24 @@
       "parentUuid": "a882b8a9_2e383d85",
       "revId": "91c8132275a651dd9e414e23d239a447a09cb76f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d851d221_ebcc64d1",
+        "filename": "src/libGLESv2/egl_context_mutex_impl.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-08T20:02:01Z",
+      "side": 1,
+      "message": "\u003e I\u0027m still a bit worried about regressions though.\n\nThanks to `SharedContextMutexActivation::kTemporary` mutex is locked every time now!",
+      "parentUuid": "e25687fb_204e231d",
+      "revId": "91c8132275a651dd9e414e23d239a447a09cb76f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
