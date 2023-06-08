@@ -16,6 +16,24 @@
       "message": "This is causing the ANGLE -\u003e Android roller to fail, even after deleting the checkout.  I think the android_ndk entry needs to be added back.",
       "revId": "05e087658b10922b7d652ecdf4d2db61f2d2562b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a24fb42_a38e2bfc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-06-08T17:05:47Z",
+      "side": 1,
+      "message": "Eric, the roller was failing before - https://groups.google.com/a/google.com/g/angle-bots/c/d_G5_Esu-GU/m/yRRokjYBAgAJ\n\nThere was one different message https://groups.google.com/a/google.com/g/angle-bots/c/d_G5_Esu-GU/m/eOTIiu7-AQAJ\nbut then it reverted to the previous failure mode.",
+      "parentUuid": "e4b5956b_d62100d5",
+      "revId": "05e087658b10922b7d652ecdf4d2db61f2d2562b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
