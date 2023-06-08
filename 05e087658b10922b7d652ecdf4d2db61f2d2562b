@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4b5956b_d62100d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1118354
+      },
+      "writtenOn": "2023-06-08T16:39:16Z",
+      "side": 1,
+      "message": "This is causing the ANGLE -\u003e Android roller to fail, even after deleting the checkout.  I think the android_ndk entry needs to be added back.",
+      "revId": "05e087658b10922b7d652ecdf4d2db61f2d2562b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
