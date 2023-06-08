@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fec78f5_265a5075",
+        "filename": "DEPS",
+        "patchSetId": 4
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-06-08T13:10:36Z",
+      "side": 1,
+      "message": "Also needed to add this to .gitignore.\nI\u0027ll take care of it.",
+      "range": {
+        "startLine": 285,
+        "startChar": 3,
+        "endLine": 285,
+        "endChar": 32
+      },
+      "revId": "15a29438b0993312be08684e0d312d0ec1057eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
