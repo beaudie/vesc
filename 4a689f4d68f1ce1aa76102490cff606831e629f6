@@ -16,6 +16,24 @@
       "message": "Title is backwards? Looks like we download core SDK today, and the CL changes it to gn SDK?",
       "revId": "4a689f4d68f1ce1aa76102490cff606831e629f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "011bdc53_43d28e49",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1364448
+      },
+      "writtenOn": "2023-06-08T21:22:18Z",
+      "side": 1,
+      "message": "Oh I see that the change has been rolled in via https://chromium-review.googlesource.com/c/angle/angle/+/4598293, it looks like ANGLE doesn\u0027t actually need anything from the GN SDK (e.g. the BUILD.gn files it generates).",
+      "parentUuid": "2abce588_f0392828",
+      "revId": "4a689f4d68f1ce1aa76102490cff606831e629f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
