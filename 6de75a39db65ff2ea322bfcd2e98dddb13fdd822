@@ -16,6 +16,24 @@
       "message": "Thanks Yuly for flagging - I had written this CL just as I saw your message! Confirmed that this cleans up the git status (though clients will have to `gclient sync -D` to get rid of the now unused android_ndk directory).",
       "revId": "6de75a39db65ff2ea322bfcd2e98dddb13fdd822",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a54797be_a3b3b054",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-06-08T13:31:01Z",
+      "side": 1,
+      "message": "Ah, OK, I\u0027ll remove it from my CL, then, since I didn\u0027t update android_ndk.",
+      "parentUuid": "aa790da8_17d031d0",
+      "revId": "6de75a39db65ff2ea322bfcd2e98dddb13fdd822",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
