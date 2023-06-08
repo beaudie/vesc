@@ -24,7 +24,7 @@ vars = {
   'build_with_chromium': False,
 
   # By default, download the fuchsia sdk from the public sdk directory.
-  'fuchsia_sdk_cipd_prefix': 'fuchsia/sdk/gn/',
+  'fuchsia_sdk_cipd_prefix': 'fuchsia/sdk/core/',
 
   # We don't use location metadata in our test isolates.
   'generate_location_tags': False,
@@ -140,7 +140,7 @@ vars = {
 deps = {
 
   'build': {
-    'url': '{chromium_git}/chromium/src/build.git@1ee2c02fc66547e8188ed9276fca404bdaa1d895',
+    'url': '{chromium_git}/chromium/src/build.git@f8bfb7227d93b9b6919c2b868dab58e093662db6',
     'condition': 'not build_with_chromium',
   },
 
@@ -406,15 +406,9 @@ deps = {
     'condition': 'checkout_android and not build_with_chromium',
   },
 
-  'third_party/fuchsia-sdk/sdk': {
-      'packages': [
-          {
-              'package': Var('fuchsia_sdk_cipd_prefix') + '${{platform}}',
-              'version': Var('fuchsia_version'),
-          },
-      ],
+  'third_party/fuchsia-gn-sdk': {
+      'url': '{chromium_git}/chromium/src/third_party/fuchsia-gn-sdk.git@76a95f0b13ba2d7f5be0f0e84006e7d489a00d6a',
       'condition': 'checkout_fuchsia and not build_with_chromium',
-      'dep_type': 'cipd',
   },
 
   # Closed-source OpenGL ES 1.1 Conformance tests.
@@ -565,28 +559,6 @@ deps = {
   'third_party/Python-Markdown': {
     'url': '{chromium_git}/chromium/src/third_party/Python-Markdown@0f4473546172a64636f5d841410c564c0edad625',
     'condition': 'not build_with_chromium',
-  },
-
-  'third_party/qemu-linux-x64': {
-      'packages': [
-          {
-              'package': 'fuchsia/third_party/qemu/linux-amd64',
-              'version': 'FFZaD9tecL-z0lq2XP_7UqiAaMgRGwXTyvcmkv7XCQcC'
-          },
-      ],
-      'condition': 'not build_with_chromium and (host_os == "linux" and checkout_fuchsia)',
-      'dep_type': 'cipd',
-  },
-
-  'third_party/qemu-mac-x64': {
-      'packages': [
-          {
-              'package': 'fuchsia/third_party/qemu/mac-amd64',
-              'version': '79L6B9YhuL7uIg_CxwlQcZqLOixVtS2Cctn7dmVg0q4C'
-          },
-      ],
-      'condition': 'not build_with_chromium and (host_os == "mac" and checkout_fuchsia)',
-      'dep_type': 'cipd',
   },
 
   'third_party/r8': {
@@ -5180,6 +5152,19 @@ hooks = [
                 '--no_auth',
                 '--bucket', 'angle-flex-bison',
                 '-d', 'tools/flex-bison/windows/',
+    ],
+  },
+
+  # Download Fuchsia SDK.
+  {
+    'name': 'download_fuchsia_sdk',
+    'pattern': '.',
+    'condition': 'checkout_fuchsia and not build_with_chromium',
+    'action': [
+      'python3',
+      'build/fuchsia/update_sdk.py',
+      '--cipd-prefix={fuchsia_sdk_cipd_prefix}',
+      '--version={fuchsia_version}',
     ],
   },
 
