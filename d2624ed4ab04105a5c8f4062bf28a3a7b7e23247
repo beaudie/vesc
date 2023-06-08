@@ -197,6 +197,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0543e644_d42e6df5",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-06-08T19:54:07Z",
+      "side": 1,
+      "message": "Given that this is potentially risky, can we make it so that we can detect the error case and ASSERT that it doesn\u0027t happen? This will give us a sense of how often it actually happens in testing and the wild (Chrome ships with ANGLE assertions enabled on some channels).",
+      "parentUuid": "1a9d9564_391f6156",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "baaaafe5_24947132",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 18

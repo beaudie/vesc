@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "028ff773_013b986a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-06-08T19:54:07Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "17fd084d112985f28a26ce32027417f9ae4acf93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c82a067a_83b5c0f3",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-06-08T19:54:07Z",
+      "side": 1,
+      "message": "If this function is never called with anything except the default parameter (I didn\u0027t spot anywhere), let\u0027s remove the parameter and make this a constant inside the function.",
+      "range": {
+        "startLine": 688,
+        "startChar": 40,
+        "endLine": 688,
+        "endChar": 43
+      },
+      "revId": "17fd084d112985f28a26ce32027417f9ae4acf93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56dc99ca_cfef69c8",
+        "filename": "src/libANGLE/Display.h",
+        "patchSetId": 24
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-06-08T19:54:07Z",
+      "side": 1,
+      "message": "Looks like a good candidate for a unique_ptr",
+      "range": {
+        "startLine": 431,
+        "startChar": 24,
+        "endLine": 431,
+        "endChar": 25
+      },
+      "revId": "17fd084d112985f28a26ce32027417f9ae4acf93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e216848_1fcaf510",
+        "filename": "src/libGLESv2/egl_stubs.cpp",
+        "patchSetId": 24
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-06-08T19:54:07Z",
+      "side": 1,
+      "message": "Could you update this comment to explain why EGL_BUFFER_AGE_EXT needs a lock and others do not?",
+      "range": {
+        "startLine": 588,
+        "startChar": 8,
+        "endLine": 588,
+        "endChar": 92
+      },
+      "revId": "17fd084d112985f28a26ce32027417f9ae4acf93",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
