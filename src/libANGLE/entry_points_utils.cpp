@@ -15,7 +15,7 @@ namespace gl
 bool GeneratePixelLocalStorageActiveError(const Context *context, angle::EntryPoint entryPoint)
 {
     ASSERT(context->getState().getPixelLocalStorageActivePlanes() != 0);
-    context->validationError(entryPoint, GL_INVALID_OPERATION, err::kPLSActive);
+    ANGLE_VALIDATION_ERROR(context, entryPoint, GL_INVALID_OPERATION, err::kPLSActive);
     return false;
 }
 }  // namespace gl

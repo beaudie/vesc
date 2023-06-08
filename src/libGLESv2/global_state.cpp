@@ -166,7 +166,8 @@ void GenerateContextLostErrorOnContext(Context *context)
 {
     if (context && context->isContextLost())
     {
-        context->validationError(angle::EntryPoint::Invalid, GL_CONTEXT_LOST, err::kContextLost);
+        ANGLE_VALIDATION_ERROR(context, angle::EntryPoint::Invalid, GL_CONTEXT_LOST,
+                               err::kContextLost);
     }
 }
 

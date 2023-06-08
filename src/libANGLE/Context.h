@@ -100,7 +100,10 @@ class ErrorSet : angle::NonCopyable
                      const char *function,
                      unsigned int line);
 
-    void validationError(angle::EntryPoint entryPoint, GLenum errorCode, const char *message);
+    void validationError(angle::EntryPoint entryPoint,
+                         GLenum errorCode,
+                         uint32_t *repeatCount,
+                         const char *message);
 
   private:
     Context *mContext;
@@ -481,10 +484,14 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
                      const char *function,
                      unsigned int line);
 
-    void validationError(angle::EntryPoint entryPoint, GLenum errorCode, const char *message) const;
-    ANGLE_FORMAT_PRINTF(4, 5)
+    void validationError(angle::EntryPoint entryPoint,
+                         GLenum errorCode,
+                         uint32_t *repeatCount,
+                         const char *message) const;
+    ANGLE_FORMAT_PRINTF(5, 6)
     void validationErrorF(angle::EntryPoint entryPoint,
                           GLenum errorCode,
+                          uint32_t *repeatCount,
                           const char *format,
                           ...) const;
 
@@ -917,5 +924,19 @@ extern thread_local Context *gCurrentValidContext;
 extern void SetCurrentValidContext(Context *context);
 
 }  // namespace gl
+
+#define ANGLE_VALIDATION_ERROR(context, entryPoint, error, message)                  \
+    do                                                                               \
+    {                                                                                \
+        static uint32_t sRepeatCount = 0;                                            \
+        (context)->validationError((entryPoint), (error), &sRepeatCount, (message)); \
+    } while (0)
+
+#define ANGLE_VALIDATION_ERRORF(context, entryPoint, error, ...)                        \
+    do                                                                                  \
+    {                                                                                   \
+        static uint32_t sRepeatCount = 0;                                               \
+        (context)->validationErrorF((entryPoint), (error), &sRepeatCount, __VA_ARGS__); \
+    } while (0)
 
 #endif  // LIBANGLE_CONTEXT_H_

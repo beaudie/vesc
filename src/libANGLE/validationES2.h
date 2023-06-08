@@ -40,14 +40,14 @@ ANGLE_INLINE bool ValidateBindBuffer(const Context *context,
 {
     if (!context->isValidBufferBinding(target))
     {
-        context->validationError(entryPoint, GL_INVALID_ENUM, err::kInvalidBufferTypes);
+        ANGLE_VALIDATION_ERROR(context, entryPoint, GL_INVALID_ENUM, err::kInvalidBufferTypes);
         return false;
     }
 
     if (!context->getState().isBindGeneratesResourceEnabled() &&
         !context->isBufferGenerated(buffer))
     {
-        context->validationError(entryPoint, GL_INVALID_OPERATION, err::kObjectNotGenerated);
+        ANGLE_VALIDATION_ERROR(context, entryPoint, GL_INVALID_OPERATION, err::kObjectNotGenerated);
         return false;
     }
 
@@ -80,7 +80,7 @@ ANGLE_INLINE bool ValidateVertexAttribPointer(const Context *context,
 
     if (stride < 0)
     {
-        context->validationError(entryPoint, GL_INVALID_VALUE, err::kNegativeStride);
+        ANGLE_VALIDATION_ERROR(context, entryPoint, GL_INVALID_VALUE, err::kNegativeStride);
         return false;
     }
 
@@ -89,15 +89,15 @@ ANGLE_INLINE bool ValidateVertexAttribPointer(const Context *context,
         const Caps &caps = context->getCaps();
         if (stride > caps.maxVertexAttribStride)
         {
-            context->validationError(entryPoint, GL_INVALID_VALUE,
-                                     err::kExceedsMaxVertexAttribStride);
+            ANGLE_VALIDATION_ERROR(context, entryPoint, GL_INVALID_VALUE,
+                                   err::kExceedsMaxVertexAttribStride);
             return false;
         }
 
         if (index >= static_cast<GLuint>(caps.maxVertexAttribBindings))
         {
-            context->validationError(entryPoint, GL_INVALID_VALUE,
-                                     err::kExceedsMaxVertexAttribBindings);
+            ANGLE_VALIDATION_ERROR(context, entryPoint, GL_INVALID_VALUE,
+                                   err::kExceedsMaxVertexAttribBindings);
             return false;
         }
     }
@@ -111,7 +111,8 @@ ANGLE_INLINE bool ValidateVertexAttribPointer(const Context *context,
     if (!nullBufferAllowed && context->getState().getTargetBuffer(BufferBinding::Array) == 0 &&
         ptr != nullptr)
     {
-        context->validationError(entryPoint, GL_INVALID_OPERATION, err::kClientDataInVertexArray);
+        ANGLE_VALIDATION_ERROR(context, entryPoint, GL_INVALID_OPERATION,
+                               err::kClientDataInVertexArray);
         return false;
     }
 
@@ -121,7 +122,7 @@ ANGLE_INLINE bool ValidateVertexAttribPointer(const Context *context,
         // The WebGL API does not support the GL_FIXED data type.
         if (type == VertexAttribType::Fixed)
         {
-            context->validationError(entryPoint, GL_INVALID_ENUM, err::kFixedNotInWebGL);
+            ANGLE_VALIDATION_ERROR(context, entryPoint, GL_INVALID_ENUM, err::kFixedNotInWebGL);
             return false;
         }
 
@@ -158,17 +159,17 @@ ANGLE_INLINE bool ValidateBindTexture(const Context *context,
     Texture *textureObject = context->getTexture(texture);
     if (textureObject && textureObject->getType() != target)
     {
-        context->validationErrorF(
-            entryPoint, GL_INVALID_OPERATION, err::kTextureTargetMismatchWithLabel,
-            static_cast<uint8_t>(target), static_cast<uint8_t>(textureObject->getType()),
-            textureObject->getLabel().c_str());
+        ANGLE_VALIDATION_ERRORF(context, entryPoint, GL_INVALID_OPERATION,
+                                err::kTextureTargetMismatchWithLabel, static_cast<uint8_t>(target),
+                                static_cast<uint8_t>(textureObject->getType()),
+                                textureObject->getLabel().c_str());
         return false;
     }
 
     if (!context->getState().isBindGeneratesResourceEnabled() &&
         !context->isTextureGenerated(texture))
     {
-        context->validationError(entryPoint, GL_INVALID_OPERATION, err::kObjectNotGenerated);
+        ANGLE_VALIDATION_ERROR(context, entryPoint, GL_INVALID_OPERATION, err::kObjectNotGenerated);
         return false;
     }
 

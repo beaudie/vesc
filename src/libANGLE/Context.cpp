@@ -2971,13 +2971,16 @@ void Context::handleError(GLenum errorCode,
 
 void Context::validationError(angle::EntryPoint entryPoint,
                               GLenum errorCode,
+                              uint32_t *repeatCount,
                               const char *message) const
 {
-    const_cast<Context *>(this)->mErrors.validationError(entryPoint, errorCode, message);
+    const_cast<Context *>(this)->mErrors.validationError(entryPoint, errorCode, repeatCount,
+                                                         message);
 }
 
 void Context::validationErrorF(angle::EntryPoint entryPoint,
                                GLenum errorCode,
+                               uint32_t *repeatCount,
                                const char *format,
                                ...) const
 {
@@ -2990,11 +2993,11 @@ void Context::validationErrorF(angle::EntryPoint entryPoint,
 
     if (r > 0)
     {
-        validationError(entryPoint, errorCode, message);
+        validationError(entryPoint, errorCode, repeatCount, message);
     }
     else
     {
-        validationError(entryPoint, errorCode, format);
+        validationError(entryPoint, errorCode, repeatCount, format);
     }
 }
 
@@ -10320,10 +10323,25 @@ void ErrorSet::handleError(GLenum errorCode,
         std::move(formattedMessage), gl::LOG_WARN, angle::EntryPoint::Invalid);
 }
 
-void ErrorSet::validationError(angle::EntryPoint entryPoint, GLenum errorCode, const char *message)
+void ErrorSet::validationError(angle::EntryPoint entryPoint,
+                               GLenum errorCode,
+                               uint32_t *repeatCount,
+                               const char *message)
 {
     ASSERT(errorCode != GL_NO_ERROR);
     mErrors.insert(errorCode);
+
+    // Don't print the same message too many times.  It becomes more spammy than helpful.
+    {
+        constexpr uint32_t kMaxRepeat = 20;
+        std::lock_guard<std::mutex> lock(GetDebugMutex());
+
+        if (*repeatCount >= kMaxRepeat)
+        {
+            return;
+        }
+        ++*repeatCount;
+    }
 
     mContext->getState().getDebug().insertMessage(GL_DEBUG_SOURCE_API, GL_DEBUG_TYPE_ERROR,
                                                   errorCode, GL_DEBUG_SEVERITY_HIGH, message,
