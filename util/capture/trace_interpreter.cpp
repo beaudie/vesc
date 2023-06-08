@@ -314,12 +314,6 @@ class Parser : angle::NonCopyable
 
     void addFunction(const std::string &funcName, TraceFunction &func)
     {
-        // Run initialize immediately so we can load the binary data.
-        if (funcName == "InitReplay")
-        {
-            ReplayTraceFunction(func, {});
-            func.clear();
-        }
         mFunctions[funcName] = std::move(func);
     }
 

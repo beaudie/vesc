@@ -46,6 +46,11 @@ struct TraceInfo
     int windowSurfaceContextId;
     std::vector<std::string> requiredExtensions;
     std::vector<int> keyFrames;
+    std::string binaryDataFileName;
+    uint64_t maxClientArraySize;
+    uint64_t readBufferSize;
+    uint64_t resourceIDBufferSize;
+    std::vector<uint32_t> maxAccessedResourceIDs;
 };
 
 // Test suite calls into the trace library (fixture).

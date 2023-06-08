@@ -1,7 +1,8 @@
 {
     "TraceMetadata": {
         "AreClientArraysEnabled": true,
-        "CaptureRevision": 21247,
+        "BinaryDataFileName": "CapturedTest_MultiFrame_ES3_Vulkan.angledata",
+        "CaptureRevision": 21252,
         "ConfigAlphaBits": 8,
         "ConfigBlueBits": 8,
         "ConfigDepthBits": 24,
@@ -21,7 +22,30 @@
         "IsBindGeneratesResourcesEnabled": true,
         "IsRobustResourceInitEnabled": true,
         "IsTrimmingEnabled": true,
-        "IsWebGLCompatibilityEnabled": false
+        "IsWebGLCompatibilityEnabled": false,
+        "MaxAccessedResourceIDs": {
+            "Buffer": 1,
+            "Context": 1,
+            "FenceNV": 0,
+            "Framebuffer": 2,
+            "Image": 0,
+            "MemoryObject": 0,
+            "ProgramPipeline": 0,
+            "Query": 0,
+            "Renderbuffer": 0,
+            "Sampler": 0,
+            "Semaphore": 0,
+            "ShaderProgram": 3,
+            "Surface": 1,
+            "Sync": 0,
+            "Texture": 0,
+            "TransformFeedback": 0,
+            "VertexArray": 0,
+            "egl_Sync": 0
+        },
+        "MaxClientArraySize": 0,
+        "ReadBufferSize": 32,
+        "ResourceIDBufferSize": 2
     },
     "TraceFiles": [
         "CapturedTest_MultiFrame_ES3_Vulkan.cpp",

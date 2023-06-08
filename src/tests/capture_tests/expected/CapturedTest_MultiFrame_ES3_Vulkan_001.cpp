@@ -87,6 +87,5 @@ glDeleteFramebuffers(2, gResourceIDBuffer);
 
 void SetupReplay(void)
 {
-    InitReplay();
 }
 

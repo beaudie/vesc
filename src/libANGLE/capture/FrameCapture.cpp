@@ -956,41 +956,6 @@ void SaveBinaryData(bool compression,
     }
 }
 
-void WriteInitReplayCall(bool compression,
-                         std::ostream &out,
-                         gl::ContextID contextID,
-                         const std::string &captureLabel,
-                         size_t maxClientArraySize,
-                         size_t readBufferSize,
-                         size_t resourceIDBufferSize,
-                         const PackedEnumMap<ResourceIDType, uint32_t> &maxIDs)
-{
-    std::string binaryDataFileName = GetBinaryDataFilePath(compression, captureLabel);
-
-    out << "    // binaryDataFileName = " << binaryDataFileName << "\n";
-    out << "    // maxClientArraySize = " << maxClientArraySize << "\n";
-    out << "    // maxClientArraySize = " << maxClientArraySize << "\n";
-    out << "    // readBufferSize = " << readBufferSize << "\n";
-    out << "    // resourceIDBufferSize = " << resourceIDBufferSize << "\n";
-    out << "    // contextID = " << contextID << "\n";
-
-    for (ResourceIDType resourceID : AllEnums<ResourceIDType>())
-    {
-        const char *name = GetResourceIDTypeName(resourceID);
-        out << "    // max" << name << " = " << maxIDs[resourceID] << "\n";
-    }
-
-    out << "    InitializeReplay4(\"" << binaryDataFileName << "\", " << maxClientArraySize << ", "
-        << readBufferSize << ", " << resourceIDBufferSize << ", " << contextID;
-
-    for (ResourceIDType resourceID : AllEnums<ResourceIDType>())
-    {
-        out << ", " << maxIDs[resourceID];
-    }
-
-    out << ");\n";
-}
-
 void DeleteResourcesInReset(std::stringstream &out,
                             const ResourceSet &newResources,
                             const ResourceSet &resourcesToDelete,
@@ -8804,6 +8769,21 @@ void FrameCaptureShared::writeJSON(const gl::Context *context)
     json.addScalar("DrawSurfaceWidth", surfaceParams.extents.width);
     json.addScalar("DrawSurfaceHeight", surfaceParams.extents.height);
     json.addHexValue("DrawSurfaceColorSpace", ToEGLenum(surfaceParams.colorSpace));
+
+    json.addString("BinaryDataFileName", GetBinaryDataFilePath(mCompression, mCaptureLabel));
+    json.addScalar("MaxClientArraySize", MaxClientArraySize(mClientArraySizes));
+    json.addScalar("ReadBufferSize", mReadBufferSize);
+    json.addScalar("ResourceIDBufferSize", mResourceIDBufferSize);
+    // WindowSurfaceContextID already has context.id
+
+    json.startGroup("MaxAccessedResourceIDs");
+    for (ResourceIDType resourceID : AllEnums<ResourceIDType>())
+    {
+        const char *name = GetResourceIDTypeName(resourceID);
+        json.addScalar(name, mMaxAccessedResourceIDs[resourceID]);
+    }
+    json.endGroup();
+
     if (config)
     {
         json.addScalar("ConfigRedBits", config->redSize);
@@ -8877,20 +8857,6 @@ void FrameCaptureShared::writeCppReplayIndexFiles(const gl::Context *context,
 
         std::string sourcePrologue = source.str();
         mReplayWriter.setSourcePrologue(sourcePrologue);
-    }
-
-    {
-        std::string proto = "void InitReplay(void)";
-
-        std::stringstream source;
-        source << proto << "\n";
-        source << "{\n";
-        WriteInitReplayCall(mCompression, source, context->id(), mCaptureLabel,
-                            MaxClientArraySize(mClientArraySizes), mReadBufferSize,
-                            mResourceIDBufferSize, mMaxAccessedResourceIDs);
-        source << "}\n";
-
-        mReplayWriter.addPrivateFunction(proto, std::stringstream(), source);
     }
 
     {
@@ -9000,7 +8966,6 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
             out << "{\n";
 
             // Setup all of the shared objects.
-            out << "    InitReplay();\n";
             if (usesMidExecutionCapture())
             {
                 out << "    " << FmtSetupFunction(kNoPartId, kSharedContextId, FuncUsage::Call)
