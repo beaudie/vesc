@@ -90,7 +90,7 @@
       'gn_args': 'target_cpu="arm"',
     },
     'arm64': {
-      'gn_args': 'target_cpu="arm64"',
+      'gn_args': 'target_cpu="arm64" arm_control_flow_integrity="none"',
     },
     'asan': {
       'gn_args': 'is_asan=true',
