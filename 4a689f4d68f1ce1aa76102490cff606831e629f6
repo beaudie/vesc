@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2abce588_f0392828",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-08T20:06:00Z",
+      "side": 1,
+      "message": "Title is backwards? Looks like we download core SDK today, and the CL changes it to gn SDK?",
+      "revId": "4a689f4d68f1ce1aa76102490cff606831e629f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
