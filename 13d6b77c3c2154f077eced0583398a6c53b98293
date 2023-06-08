@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b78429b5_8d8e7b4c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1174609
+      },
+      "writtenOn": "2023-06-08T16:18:59Z",
+      "side": 1,
+      "message": "For reference @geofflang, requesting this roll to pull forward src/build - I\u0027m currently in the middle of a NDK CIPD bucket transition and want to try to get the last CL in today, as the in-between state increases disk usage by 2GB, so I\u0027m trying to get out of it ASAP.",
+      "revId": "13d6b77c3c2154f077eced0583398a6c53b98293",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
