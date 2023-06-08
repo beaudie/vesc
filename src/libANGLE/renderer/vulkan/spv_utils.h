@@ -20,14 +20,6 @@
 namespace rx
 {
 class ShaderInterfaceVariableInfoMap;
-constexpr gl::ShaderMap<const char *> kDefaultUniformNames = {
-    {gl::ShaderType::Vertex, sh::vk::kDefaultUniformsNameVS},
-    {gl::ShaderType::TessControl, sh::vk::kDefaultUniformsNameTCS},
-    {gl::ShaderType::TessEvaluation, sh::vk::kDefaultUniformsNameTES},
-    {gl::ShaderType::Geometry, sh::vk::kDefaultUniformsNameGS},
-    {gl::ShaderType::Fragment, sh::vk::kDefaultUniformsNameFS},
-    {gl::ShaderType::Compute, sh::vk::kDefaultUniformsNameCS},
-};
 
 struct SpvProgramInterfaceInfo
 {
@@ -136,9 +128,7 @@ struct ShaderInterfaceVariableInfo
 
 bool GetImageNameWithoutIndices(std::string *name);
 
-// Get the mapped sampler name.
-std::string SpvGetMappedSamplerName(const std::string &originalName);
-std::string SpvGetXfbBufferName(const uint32_t bufferIndex);
+uint32_t SpvGetXfbBufferBlockId(const uint32_t bufferIndex);
 
 void SpvAssignLocations(const SpvSourceOptions &options,
                         const gl::ProgramExecutable &programExecutable,
