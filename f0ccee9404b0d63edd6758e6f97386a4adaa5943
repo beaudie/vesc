@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46a17932_0f868ee8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-06-08T18:04:43Z",
+      "side": 1,
+      "message": "Roman, I\u0027m fine with this direction, and it is a good use of TraceFunctionMap.",
+      "revId": "f0ccee9404b0d63edd6758e6f97386a4adaa5943",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
