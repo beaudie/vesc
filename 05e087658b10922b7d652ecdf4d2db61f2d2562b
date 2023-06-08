@@ -34,6 +34,24 @@
       "parentUuid": "e4b5956b_d62100d5",
       "revId": "05e087658b10922b7d652ecdf4d2db61f2d2562b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4592649d_ae4f01cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-06-08T17:12:48Z",
+      "side": 1,
+      "message": "Ah, actually it might need https://chromium-review.googlesource.com/c/angle/angle/+/4585389\nLooks like removing android_ndk from .gitignore was too early.",
+      "parentUuid": "9a24fb42_a38e2bfc",
+      "revId": "05e087658b10922b7d652ecdf4d2db61f2d2562b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
