@@ -89,7 +89,7 @@ void main(void) {
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 3, GL_UNSIGNED_BYTE, false, 1, 0);
 
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawArrays(GL_TRIANGLES, 0, 4);
     EXPECT_GL_NO_ERROR();
 }
 
