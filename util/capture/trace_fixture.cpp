@@ -176,6 +176,7 @@ void InitializeReplay4(const char *binaryDataFileName,
                        uint32_t maxVertexArray,
                        GLuint maxEGLSyncID)
 {
+    printf("qwe maxShaderProgram=%d\n", maxShaderProgram);
     InitializeReplay3(binaryDataFileName, maxClientArraySize, readBufferSize, resourceIDBufferSize,
                       contextId, maxBuffer, maxContext, maxFenceNV, maxFramebuffer, maxImage,
                       maxMemoryObject, maxProgramPipeline, maxQuery, maxRenderbuffer, maxSampler,
@@ -338,7 +339,27 @@ std::string gTraceGzPath;
 
 struct TraceFunctionsImpl : angle::TraceFunctions
 {
-    void SetupReplay() override { ::SetupReplay(); }
+    void SetupReplay() override
+    {
+        if (!gTraceInfo.binaryDataFileName.empty())
+        {
+            InitializeReplay4(
+                gTraceInfo.binaryDataFileName.c_str(), gTraceInfo.maxClientArraySize,
+                gTraceInfo.readBufferSize, gTraceInfo.resourceIDBufferSize,
+                gTraceInfo.windowSurfaceContextId, gTraceInfo.maxAccessedResourceIDs[0],
+                gTraceInfo.maxAccessedResourceIDs[1], gTraceInfo.maxAccessedResourceIDs[2],
+                gTraceInfo.maxAccessedResourceIDs[3], gTraceInfo.maxAccessedResourceIDs[4],
+                gTraceInfo.maxAccessedResourceIDs[5], gTraceInfo.maxAccessedResourceIDs[6],
+                gTraceInfo.maxAccessedResourceIDs[7], gTraceInfo.maxAccessedResourceIDs[8],
+                gTraceInfo.maxAccessedResourceIDs[9], gTraceInfo.maxAccessedResourceIDs[10],
+                gTraceInfo.maxAccessedResourceIDs[11], gTraceInfo.maxAccessedResourceIDs[12],
+                gTraceInfo.maxAccessedResourceIDs[13], gTraceInfo.maxAccessedResourceIDs[14],
+                gTraceInfo.maxAccessedResourceIDs[15], gTraceInfo.maxAccessedResourceIDs[16],
+                gTraceInfo.maxAccessedResourceIDs[17]);
+        }
+
+        ::SetupReplay();
+    }
 
     void ReplayFrame(uint32_t frameIndex) override { ::ReplayFrame(frameIndex); }
 

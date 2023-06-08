@@ -11,7 +11,6 @@ void ReplayFrame1(void);
 void ReplayFrame2(void);
 void ReplayFrame3(void);
 void ReplayFrame4(void);
-void InitReplay(void);
 
 // Global variables
 

@@ -143,6 +143,24 @@ bool LoadTraceInfoFromJSON(const std::string &traceName,
         }
     }
 
+    if (meta.HasMember("BinaryDataFileName"))
+    {
+        // New format has these vars in json.
+        traceInfoOut->binaryDataFileName   = meta["BinaryDataFileName"].GetString();
+        traceInfoOut->maxClientArraySize   = meta["MaxClientArraySize"].GetInt64();
+        traceInfoOut->readBufferSize       = meta["ReadBufferSize"].GetInt64();
+        traceInfoOut->resourceIDBufferSize = meta["resourceIDBufferSize"].GetInt64();
+
+        const rapidjson::Document::Object &maxIDs = meta["MaxAccessedResourceIDs"].GetObj();
+        traceInfoOut->maxAccessedResourceIDs.resize(static_cast<size_t>(ResourceIDType::EnumCount));
+        for (ResourceIDType resourceID : AllEnums<ResourceIDType>())
+        {
+            const char *name = GetResourceIDTypeName(resourceID);
+            uint32_t value   = maxIDs.HasMember(name) ? maxIDs[name].GetInt() : 0;
+            traceInfoOut->maxAccessedResourceIDs[uint32_t(resourceID)] = value;
+        }
+    }
+
     const rapidjson::Document::Array &traceFiles = doc["TraceFiles"].GetArray();
     for (const rapidjson::Value &value : traceFiles)
     {

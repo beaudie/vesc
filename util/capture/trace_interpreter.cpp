@@ -315,11 +315,11 @@ class Parser : angle::NonCopyable
     void addFunction(const std::string &funcName, TraceFunction &func)
     {
         // Run initialize immediately so we can load the binary data.
-        if (funcName == "InitReplay")
-        {
-            ReplayTraceFunction(func, {});
-            func.clear();
-        }
+        // if (funcName == "InitReplay")
+        // {
+        //     ReplayTraceFunction(func, {});
+        //     func.clear();
+        // }
         mFunctions[funcName] = std::move(func);
     }
 
@@ -537,7 +537,10 @@ void TraceInterpreter::replayFrame(uint32_t frameIndex)
 
 void TraceInterpreter::parseTraceUncompressed()
 {
-    for (const std::string &file : gTraceInfo.traceFiles)
+    std::vector<std::string> ff = {"/tmp/capt2/vainglory.cpp", "/tmp/capt2/vainglory_001.cpp",
+                                   "/tmp/capt2/vainglory_002.cpp",
+                                   "/tmp/capt2/vainglory_shared.cpp"};
+    for (const std::string &file : ff)
     {
         if (!ShouldParseFile(file))
         {
@@ -553,7 +556,8 @@ void TraceInterpreter::parseTraceUncompressed()
             printf("Parsing functions from %s\n", file.c_str());
         }
         std::stringstream pathStream;
-        pathStream << gBinaryDataDir << GetPathSeparator() << file;
+        // pathStream << gBinaryDataDir << GetPathSeparator() << file;
+        pathStream << file;
         std::string path = pathStream.str();
 
         std::string fileData;
