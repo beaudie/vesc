@@ -22,6 +22,30 @@
       },
       "revId": "15a29438b0993312be08684e0d312d0ec1057eb6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7948909b_1f3adb1f",
+        "filename": "DEPS",
+        "patchSetId": 4
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1174609
+      },
+      "writtenOn": "2023-06-08T13:23:31Z",
+      "side": 1,
+      "message": "Oh! Thank you for flagging, I actually was just scanning through all the repos I rolled android_toolchain into because I was flagged about another repo I missed the .gitignore for, so I\u0027ve been uploading CLs for the entire set.\n\nLMK if you have a CL already, but if not, I already hit upload on: https://chromium-review.googlesource.com/c/angle/angle/+/4599944",
+      "parentUuid": "3fec78f5_265a5075",
+      "range": {
+        "startLine": 285,
+        "startChar": 3,
+        "endLine": 285,
+        "endChar": 32
+      },
+      "revId": "15a29438b0993312be08684e0d312d0ec1057eb6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
