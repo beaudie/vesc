@@ -56,17 +56,9 @@ namespace sh
 
 namespace
 {
-constexpr ImmutableString kFlippedPointCoordName = ImmutableString("flippedPointCoord");
-constexpr ImmutableString kFlippedFragCoordName  = ImmutableString("flippedFragCoord");
-
-constexpr gl::ShaderMap<const char *> kDefaultUniformNames = {
-    {gl::ShaderType::Vertex, vk::kDefaultUniformsNameVS},
-    {gl::ShaderType::TessControl, vk::kDefaultUniformsNameTCS},
-    {gl::ShaderType::TessEvaluation, vk::kDefaultUniformsNameTES},
-    {gl::ShaderType::Geometry, vk::kDefaultUniformsNameGS},
-    {gl::ShaderType::Fragment, vk::kDefaultUniformsNameFS},
-    {gl::ShaderType::Compute, vk::kDefaultUniformsNameCS},
-};
+constexpr ImmutableString kFlippedPointCoordName    = ImmutableString("flippedPointCoord");
+constexpr ImmutableString kFlippedFragCoordName     = ImmutableString("flippedFragCoord");
+constexpr ImmutableString kDefaultUniformsBlockName = ImmutableString("defaultUniforms");
 
 bool IsDefaultUniform(const TType &type)
 {
@@ -160,7 +152,7 @@ bool DeclareDefaultUniforms(TranslatorVulkan *compiler,
     layoutQualifier.blockStorage     = EbsStd140;
     const TVariable *uniformBlock    = DeclareInterfaceBlock(
         root, symbolTable, uniformList, EvqUniform, layoutQualifier, TMemoryQualifier::Create(), 0,
-        ImmutableString(kDefaultUniformNames[shaderType]), ImmutableString(""));
+        kDefaultUniformsBlockName, ImmutableString(""));
 
     compiler->assignSpirvId(uniformBlock->getType().getInterfaceBlock()->uniqueId(),
                             vk::spirv::kIdDefaultUniformsBlock);
@@ -460,12 +452,12 @@ TIntermSequence *GetMainSequence(TIntermBlock *root)
             kMaxXfbBuffers < 10,
             "ImmutableStringBuilder memory size below needs to accomodate the number of buffers");
 
-        ImmutableStringBuilder blockName(strlen(vk::kXfbEmulationBufferBlockName) + 2);
-        blockName << vk::kXfbEmulationBufferBlockName;
+        ImmutableStringBuilder blockName(strlen("ANGLEXfbBuffer") + 2);
+        blockName << "ANGLEXfbBuffer";
         blockName.appendDecimal(bufferIndex);
 
-        ImmutableStringBuilder varName(strlen(vk::kXfbEmulationBufferName) + 2);
-        varName << vk::kXfbEmulationBufferName;
+        ImmutableStringBuilder varName(strlen("ANGLEXfb") + 2);
+        varName << "ANGLEXfb";
         varName.appendDecimal(bufferIndex);
 
         TLayoutQualifier layoutQualifier = TLayoutQualifier::Create();
@@ -526,9 +518,8 @@ TIntermSequence *GetMainSequence(TIntermBlock *root)
             UNREACHABLE();
     }
 
-    TVariable *varyingVar =
-        new TVariable(symbolTable, ImmutableString(vk::kXfbExtensionPositionOutName), vec4Type,
-                      SymbolType::AngleInternal);
+    TVariable *varyingVar = new TVariable(symbolTable, ImmutableString("ANGLEXfbPosition"),
+                                          vec4Type, SymbolType::AngleInternal);
 
     compiler->assignSpirvId(varyingVar->uniqueId(), vk::spirv::kIdXfbExtensionPosition);
 
@@ -745,6 +736,15 @@ ShaderVariable *FindUniformShaderVariable(std::vector<ShaderVariable> *vars,
     }
     UNREACHABLE();
     return nullptr;
+}
+
+void SetSpirvIdInFields(uint32_t id, std::vector<ShaderVariable> *fields)
+{
+    for (ShaderVariable &field : *fields)
+    {
+        field.id = id;
+        SetSpirvIdInFields(id, &field.fields);
+    }
 }
 }  // anonymous namespace
 
@@ -1344,7 +1344,8 @@ void TranslatorVulkan::assignSpirvIds(TIntermBlock *root)
             continue;
         }
 
-        uint32_t *variableId = nullptr;
+        uint32_t *variableId                = nullptr;
+        std::vector<ShaderVariable> *fields = nullptr;
         if (type.isInterfaceBlock())
         {
             if (IsVaryingIn(qualifier))
@@ -1352,17 +1353,25 @@ void TranslatorVulkan::assignSpirvIds(TIntermBlock *root)
                 ShaderVariable *varying =
                     FindIOBlockShaderVariable(&mInputVaryings, type.getInterfaceBlock()->name());
                 variableId = &varying->id;
+                fields     = &varying->fields;
             }
             else if (IsVaryingOut(qualifier))
             {
                 ShaderVariable *varying =
                     FindIOBlockShaderVariable(&mOutputVaryings, type.getInterfaceBlock()->name());
                 variableId = &varying->id;
+                fields     = &varying->fields;
+            }
+            else if (IsStorageBuffer(qualifier))
+            {
+                InterfaceBlock *block =
+                    FindShaderVariable(&mShaderStorageBlocks, type.getInterfaceBlock()->name());
+                variableId = &block->id;
             }
             else
             {
                 InterfaceBlock *block =
-                    FindShaderVariable(&mInterfaceBlocks, type.getInterfaceBlock()->name());
+                    FindShaderVariable(&mUniformBlocks, type.getInterfaceBlock()->name());
                 variableId = &block->id;
             }
         }
@@ -1380,6 +1389,7 @@ void TranslatorVulkan::assignSpirvIds(TIntermBlock *root)
         {
             ShaderVariable *varying = FindShaderVariable(&mInputVaryings, symbol->getName());
             variableId              = &varying->id;
+            fields                  = &varying->fields;
         }
         else if (qualifier == EvqFragmentOut)
         {
@@ -1398,6 +1408,7 @@ void TranslatorVulkan::assignSpirvIds(TIntermBlock *root)
         {
             ShaderVariable *varying = FindShaderVariable(&mOutputVaryings, symbol->getName());
             variableId              = &varying->id;
+            fields                  = &varying->fields;
         }
 
         if (variableId == nullptr)
@@ -1407,7 +1418,17 @@ void TranslatorVulkan::assignSpirvIds(TIntermBlock *root)
 
         ASSERT(variableId != nullptr);
         assignSpirvId(uniqueId, mFirstUnusedSpirvId);
-        *variableId = mFirstUnusedSpirvId++;
+        *variableId = mFirstUnusedSpirvId;
+
+        // Propagate the id to the first field of structs/blocks too.  The front-end gathers
+        // varyings as fields, and the transformer needs to infer the variable id (of struct type)
+        // just by looking at the fields.
+        if (fields != nullptr)
+        {
+            SetSpirvIdInFields(mFirstUnusedSpirvId, fields);
+        }
+
+        ++mFirstUnusedSpirvId;
     }
 }
 }  // namespace sh
