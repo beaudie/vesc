@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c593e5e_c9a33578",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1174609
+      },
+      "writtenOn": "2023-06-08T00:44:43Z",
+      "side": 1,
+      "message": "Hit a small snag during the roll, I shouldn\u0027t have removed the \u0027android_ndk\u0027 dep in Chromium as I didn\u0027t realize there were scripts within these projects looking for specific subprojects to roll. The roller for \u0027android_ndk\u0027 needs to be removed so that ANGLE doesn\u0027t complain when it attempts to do the next roll.",
+      "revId": "e43c068088be1cef93a66e26b43f099a018c68e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
