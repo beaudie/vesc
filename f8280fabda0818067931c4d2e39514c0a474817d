@@ -75,6 +75,30 @@
       },
       "revId": "f8280fabda0818067931c4d2e39514c0a474817d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e64f563e_cf61dae5",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1406,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-06-08T19:38:54Z",
+      "side": 1,
+      "message": "The other resources in this function are using a shared `DeleteResourcesInReset` call.  We can\u0027t use that for EGLSync because it uses Destroy instead of Delete, and you can only do one at a time, instead of in a block.\n \nSo my intention here was to delete all the new or modified syncs, while counting how many we had, and then resizing the `maxResourceIDBufferSize`, even though we aren\u0027t calling `UpdateResourceIDBuffer` here.\n\nLooking closer, I can see we never use `UpdateResourceIDBuffer` or `gResourceIDBuffer` for syncs, so I can drop this line.",
+      "parentUuid": "f4cbd176_6d0cf8f6",
+      "range": {
+        "startLine": 1406,
+        "startChar": 17,
+        "endLine": 1406,
+        "endChar": 40
+      },
+      "revId": "f8280fabda0818067931c4d2e39514c0a474817d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
