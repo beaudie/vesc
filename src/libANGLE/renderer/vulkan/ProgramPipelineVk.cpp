@@ -70,7 +70,6 @@ angle::Result ProgramPipelineVk::link(const gl::Context *glContext,
     mExecutable.mOriginalShaderInfo.clear();
 
     gl::ShaderType frontShaderType = gl::ShaderType::InvalidEnum;
-    UniformBindingIndexMap uniformBindingIndexMap;
     for (const gl::ShaderType shaderType : glExecutable.getLinkedShaderStages())
     {
         const bool isTransformFeedbackStage =
@@ -79,7 +78,7 @@ angle::Result ProgramPipelineVk::link(const gl::Context *glContext,
 
         SpvAssignLocations(options, glExecutable, varyingPacking, shaderType, frontShaderType,
                            isTransformFeedbackStage, &spvProgramInterfaceInfo,
-                           &uniformBindingIndexMap, &mExecutable.mVariableInfoMap);
+                           &mExecutable.mVariableInfoMap);
         frontShaderType = shaderType;
 
         const gl::Program *program               = mState.getShaderProgram(shaderType);
