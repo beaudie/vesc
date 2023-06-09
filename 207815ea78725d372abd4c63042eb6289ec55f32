@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbb5922c_dc38df2f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-06-09T14:56:40Z",
+      "side": 1,
+      "message": "I\u0027m not thrilled with this solution since it turns the flag off entirely on the bots, but only for tests in our GN args.  I either need a broader spot in GN, or a narrower method in `pyl`.",
+      "revId": "207815ea78725d372abd4c63042eb6289ec55f32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
