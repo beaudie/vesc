@@ -16,6 +16,23 @@
       "message": "I\u0027ve been thinking about how to handle this case a bit. I think in the end, this is addressing a very specific edge case with the GL_RGBX8_ANGLE format, the only format which accepts a different component count in `format` from the internal format.\n\nInstead, could we add a special case in `InternalFormat::computePixelBytes` along the lines of `if (sizedInternalFormat \u003d\u003d GL_RGBX8_ANGLE) components \u003d 3`? We could additionally pass the `format` to `InternalFormat::computePixelBytes` and assert that it is `GL_RGB` when we do this special case.",
       "revId": "e81eae989659a45bc555d627bbb09ce353f6fdf4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da729f89_3c8359c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2023-06-09T22:34:15Z",
+      "side": 1,
+      "message": "Give my +1 as verified on ChromeOS against various driver backends.",
+      "revId": "e81eae989659a45bc555d627bbb09ce353f6fdf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
