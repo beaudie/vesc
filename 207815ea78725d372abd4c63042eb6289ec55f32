@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "251cb03c_67edafd3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-06-09T17:31:15Z",
+      "side": 1,
+      "message": "Have you tried https://chromium.googlesource.com/angle/angle/+/refs/heads/main/gni/angle.gni?",
+      "parentUuid": "201f7a8b_6deba99b",
+      "revId": "207815ea78725d372abd4c63042eb6289ec55f32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91d1233c_86877733",
