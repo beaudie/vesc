@@ -230,6 +230,20 @@ def main():
             infos[script] = executor.submit(auto_script, script)
 
     for name, script in sorted(ranGenerators.items()):
+        if name == 'ANGLE features':
+            # This generator is fast and supports --verify-only without hashes.
+            exe = get_executable_name(script)
+            if args.verify_only:
+                rc = subprocess.call([exe, os.path.basename(script), '--verify-only'],
+                                     cwd=get_child_script_dirname(script))
+                if rc != 0:
+                    print('ANGLE features generator dirty')
+                    any_dirty = True
+            else:
+                subprocess.check_call([exe, os.path.basename(script)],
+                                      cwd=get_child_script_dirname(script))
+            continue
+
         info = infos[script].result()
         fname = get_hash_file_name(name)
         filenames = info['inputs'] + info['outputs'] + [script]
