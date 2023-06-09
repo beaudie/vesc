@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56aaf24c_ecd89bc0",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-09T17:26:27Z",
+      "side": 1,
+      "message": "typo: `\u003d`",
+      "range": {
+        "startLine": 506,
+        "startChar": 42,
+        "endLine": 506,
+        "endChar": 44
+      },
+      "revId": "6467e156b9959e4fc417b4e6af73ea7388c2d4ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
