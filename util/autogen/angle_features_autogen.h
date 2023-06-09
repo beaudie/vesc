@@ -7,10 +7,10 @@
 //
 // angle_features_autogen.h: List of ANGLE features to help enable/disable them in tests.
 
-#ifndef ANGLE_SRC_TESTS_TEST_UTILS_ANGLE_FEATURES_AUTOGEN_H_
-#define ANGLE_SRC_TESTS_TEST_UTILS_ANGLE_FEATURES_AUTOGEN_H_
+#ifndef ANGLE_SRC_TESTS_TEST_UTIL_AUTOGEN_ANGLE_FEATURES_AUTOGEN_H_
+#define ANGLE_SRC_TESTS_TEST_UTIL_AUTOGEN_ANGLE_FEATURES_AUTOGEN_H_
 
-#include "util_export.h"
+#include "../util_export.h"
 
 namespace angle
 {
@@ -361,7 +361,6 @@ enum class Feature
     WaitIdleBeforeSwapchainRecreation,
     WarmUpPipelineCacheAtLink,
     ZeroMaxLodWorkaround,
-
     InvalidEnum,
     EnumCount = InvalidEnum,
 };
@@ -370,4 +369,4 @@ ANGLE_UTIL_EXPORT extern const char *GetFeatureName(Feature feature);
 
 }  // namespace angle
 
-#endif  // ANGLE_SRC_TESTS_TEST_UTILS_ANGLE_FEATURES_AUTOGEN_H_
+#endif  // ANGLE_SRC_TESTS_TEST_UTIL_AUTOGEN_ANGLE_FEATURES_AUTOGEN_H_
