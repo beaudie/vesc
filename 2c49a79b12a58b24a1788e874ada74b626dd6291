@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4367de1a_9ecaf5b7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2023-06-09T07:04:16Z",
+      "side": 1,
+      "message": "Looks sane though untested. Meanwhile, bots look happy ; )",
+      "revId": "2c49a79b12a58b24a1788e874ada74b626dd6291",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
