@@ -57,6 +57,30 @@
       },
       "revId": "207815ea78725d372abd4c63042eb6289ec55f32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe9c9974_185993ed",
+        "filename": "infra/specs/angle_mb_config.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-06-09T16:47:32Z",
+      "side": 1,
+      "message": "Yeah, I had that drafted locally but decided to start brutally simple.  I\u0027ll switch it up.",
+      "parentUuid": "91d1233c_86877733",
+      "range": {
+        "startLine": 93,
+        "startChar": 37,
+        "endLine": 93,
+        "endChar": 70
+      },
+      "revId": "207815ea78725d372abd4c63042eb6289ec55f32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
