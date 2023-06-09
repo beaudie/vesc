@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "201f7a8b_6deba99b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-06-09T17:24:43Z",
+      "side": 1,
+      "message": "Is there a spot in our GN files that would apply more broadly?  Everywhere I\u0027ve tried is rejected with `arm_control_flow_integrity` being unused.  Just want to avoid the bots running something different than we do locally.  I\u0027ve placed it in tests for now because that\u0027s where the crash happens.",
+      "parentUuid": "6e21bed8_05fea1af",
+      "revId": "207815ea78725d372abd4c63042eb6289ec55f32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91d1233c_86877733",
@@ -83,6 +101,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "468d39d6_c5bf4f8a",
+        "filename": "infra/specs/angle_mb_config.pyl",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-06-09T17:24:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe9c9974_185993ed",
+      "range": {
+        "startLine": 93,
+        "startChar": 37,
+        "endLine": 93,
+        "endChar": 70
+      },
+      "revId": "207815ea78725d372abd4c63042eb6289ec55f32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d6aaab95_0a3e1e08",
@@ -96,6 +138,24 @@
       "writtenOn": "2023-06-09T17:04:37Z",
       "side": 1,
       "message": "Drive by: adding the instructions (put arm_control_flow_integrity \u003d \"none\" in your args.gn file) here would be helpful to users",
+      "revId": "207815ea78725d372abd4c63042eb6289ec55f32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a17bee5_ec637dc6",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-06-09T17:24:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d6aaab95_0a3e1e08",
       "revId": "207815ea78725d372abd4c63042eb6289ec55f32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
