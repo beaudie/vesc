@@ -47,6 +47,7 @@ void GL_APIENTRY GL_Accum(GLenum op, GLfloat value)
         if (isCallValid)
         {
             context->accum(op, value);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Accum, isCallValid, context, op, value);
     }
@@ -73,6 +74,7 @@ void GL_APIENTRY GL_Begin(GLenum mode)
         if (isCallValid)
         {
             context->begin(mode);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Begin, isCallValid, context, mode);
     }
@@ -108,6 +110,7 @@ void GL_APIENTRY GL_Bitmap(GLsizei width,
         if (isCallValid)
         {
             context->bitmap(width, height, xorig, yorig, xmove, ymove, bitmap);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Bitmap, isCallValid, context, width, height, xorig, yorig, xmove, ymove,
                          bitmap);
@@ -134,6 +137,7 @@ void GL_APIENTRY GL_CallList(GLuint list)
         if (isCallValid)
         {
             context->callList(list);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(CallList, isCallValid, context, list);
     }
@@ -160,6 +164,7 @@ void GL_APIENTRY GL_CallLists(GLsizei n, GLenum type, const void *lists)
         if (isCallValid)
         {
             context->callLists(n, type, lists);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(CallLists, isCallValid, context, n, type, lists);
     }
@@ -187,6 +192,7 @@ void GL_APIENTRY GL_ClearAccum(GLfloat red, GLfloat green, GLfloat blue, GLfloat
         if (isCallValid)
         {
             context->clearAccum(red, green, blue, alpha);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(ClearAccum, isCallValid, context, red, green, blue, alpha);
     }
@@ -212,6 +218,7 @@ void GL_APIENTRY GL_ClearDepth(GLdouble depth)
         if (isCallValid)
         {
             context->clearDepth(depth);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(ClearDepth, isCallValid, context, depth);
     }
@@ -237,6 +244,7 @@ void GL_APIENTRY GL_ClearIndex(GLfloat c)
         if (isCallValid)
         {
             context->clearIndex(c);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(ClearIndex, isCallValid, context, c);
     }
@@ -263,6 +271,7 @@ void GL_APIENTRY GL_ClipPlane(GLenum plane, const GLdouble *equation)
         if (isCallValid)
         {
             context->clipPlane(plane, equation);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(ClipPlane, isCallValid, context, plane, equation);
     }
@@ -289,6 +298,7 @@ void GL_APIENTRY GL_Color3b(GLbyte red, GLbyte green, GLbyte blue)
         if (isCallValid)
         {
             context->color3b(red, green, blue);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Color3b, isCallValid, context, red, green, blue);
     }
@@ -314,6 +324,7 @@ void GL_APIENTRY GL_Color3bv(const GLbyte *v)
         if (isCallValid)
         {
             context->color3bv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Color3bv, isCallValid, context, v);
     }
@@ -340,6 +351,7 @@ void GL_APIENTRY GL_Color3d(GLdouble red, GLdouble green, GLdouble blue)
         if (isCallValid)
         {
             context->color3d(red, green, blue);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Color3d, isCallValid, context, red, green, blue);
     }
@@ -365,6 +377,7 @@ void GL_APIENTRY GL_Color3dv(const GLdouble *v)
         if (isCallValid)
         {
             context->color3dv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Color3dv, isCallValid, context, v);
     }
@@ -391,6 +404,7 @@ void GL_APIENTRY GL_Color3f(GLfloat red, GLfloat green, GLfloat blue)
         if (isCallValid)
         {
             context->color3f(red, green, blue);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Color3f, isCallValid, context, red, green, blue);
     }
@@ -416,6 +430,7 @@ void GL_APIENTRY GL_Color3fv(const GLfloat *v)
         if (isCallValid)
         {
             context->color3fv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Color3fv, isCallValid, context, v);
     }
@@ -442,6 +457,7 @@ void GL_APIENTRY GL_Color3i(GLint red, GLint green, GLint blue)
         if (isCallValid)
         {
             context->color3i(red, green, blue);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Color3i, isCallValid, context, red, green, blue);
     }
@@ -467,6 +483,7 @@ void GL_APIENTRY GL_Color3iv(const GLint *v)
         if (isCallValid)
         {
             context->color3iv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Color3iv, isCallValid, context, v);
     }
@@ -493,6 +510,7 @@ void GL_APIENTRY GL_Color3s(GLshort red, GLshort green, GLshort blue)
         if (isCallValid)
         {
             context->color3s(red, green, blue);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Color3s, isCallValid, context, red, green, blue);
     }
@@ -518,6 +536,7 @@ void GL_APIENTRY GL_Color3sv(const GLshort *v)
         if (isCallValid)
         {
             context->color3sv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Color3sv, isCallValid, context, v);
     }
@@ -544,6 +563,7 @@ void GL_APIENTRY GL_Color3ub(GLubyte red, GLubyte green, GLubyte blue)
         if (isCallValid)
         {
             context->color3ub(red, green, blue);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Color3ub, isCallValid, context, red, green, blue);
     }
@@ -569,6 +589,7 @@ void GL_APIENTRY GL_Color3ubv(const GLubyte *v)
         if (isCallValid)
         {
             context->color3ubv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Color3ubv, isCallValid, context, v);
     }
@@ -595,6 +616,7 @@ void GL_APIENTRY GL_Color3ui(GLuint red, GLuint green, GLuint blue)
         if (isCallValid)
         {
             context->color3ui(red, green, blue);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Color3ui, isCallValid, context, red, green, blue);
     }
@@ -620,6 +642,7 @@ void GL_APIENTRY GL_Color3uiv(const GLuint *v)
         if (isCallValid)
         {
             context->color3uiv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Color3uiv, isCallValid, context, v);
     }
@@ -646,6 +669,7 @@ void GL_APIENTRY GL_Color3us(GLushort red, GLushort green, GLushort blue)
         if (isCallValid)
         {
             context->color3us(red, green, blue);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Color3us, isCallValid, context, red, green, blue);
     }
@@ -671,6 +695,7 @@ void GL_APIENTRY GL_Color3usv(const GLushort *v)
         if (isCallValid)
         {
             context->color3usv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Color3usv, isCallValid, context, v);
     }
@@ -697,6 +722,7 @@ void GL_APIENTRY GL_Color4b(GLbyte red, GLbyte green, GLbyte blue, GLbyte alpha)
         if (isCallValid)
         {
             context->color4b(red, green, blue, alpha);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Color4b, isCallValid, context, red, green, blue, alpha);
     }
@@ -722,6 +748,7 @@ void GL_APIENTRY GL_Color4bv(const GLbyte *v)
         if (isCallValid)
         {
             context->color4bv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Color4bv, isCallValid, context, v);
     }
@@ -748,6 +775,7 @@ void GL_APIENTRY GL_Color4d(GLdouble red, GLdouble green, GLdouble blue, GLdoubl
         if (isCallValid)
         {
             context->color4d(red, green, blue, alpha);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Color4d, isCallValid, context, red, green, blue, alpha);
     }
@@ -773,6 +801,7 @@ void GL_APIENTRY GL_Color4dv(const GLdouble *v)
         if (isCallValid)
         {
             context->color4dv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Color4dv, isCallValid, context, v);
     }
@@ -798,6 +827,7 @@ void GL_APIENTRY GL_Color4fv(const GLfloat *v)
         if (isCallValid)
         {
             context->color4fv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Color4fv, isCallValid, context, v);
     }
@@ -824,6 +854,7 @@ void GL_APIENTRY GL_Color4i(GLint red, GLint green, GLint blue, GLint alpha)
         if (isCallValid)
         {
             context->color4i(red, green, blue, alpha);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Color4i, isCallValid, context, red, green, blue, alpha);
     }
@@ -849,6 +880,7 @@ void GL_APIENTRY GL_Color4iv(const GLint *v)
         if (isCallValid)
         {
             context->color4iv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Color4iv, isCallValid, context, v);
     }
@@ -875,6 +907,7 @@ void GL_APIENTRY GL_Color4s(GLshort red, GLshort green, GLshort blue, GLshort al
         if (isCallValid)
         {
             context->color4s(red, green, blue, alpha);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Color4s, isCallValid, context, red, green, blue, alpha);
     }
@@ -900,6 +933,7 @@ void GL_APIENTRY GL_Color4sv(const GLshort *v)
         if (isCallValid)
         {
             context->color4sv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Color4sv, isCallValid, context, v);
     }
@@ -925,6 +959,7 @@ void GL_APIENTRY GL_Color4ubv(const GLubyte *v)
         if (isCallValid)
         {
             context->color4ubv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Color4ubv, isCallValid, context, v);
     }
@@ -951,6 +986,7 @@ void GL_APIENTRY GL_Color4ui(GLuint red, GLuint green, GLuint blue, GLuint alpha
         if (isCallValid)
         {
             context->color4ui(red, green, blue, alpha);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Color4ui, isCallValid, context, red, green, blue, alpha);
     }
@@ -976,6 +1012,7 @@ void GL_APIENTRY GL_Color4uiv(const GLuint *v)
         if (isCallValid)
         {
             context->color4uiv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Color4uiv, isCallValid, context, v);
     }
@@ -1002,6 +1039,7 @@ void GL_APIENTRY GL_Color4us(GLushort red, GLushort green, GLushort blue, GLusho
         if (isCallValid)
         {
             context->color4us(red, green, blue, alpha);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Color4us, isCallValid, context, red, green, blue, alpha);
     }
@@ -1027,6 +1065,7 @@ void GL_APIENTRY GL_Color4usv(const GLushort *v)
         if (isCallValid)
         {
             context->color4usv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Color4usv, isCallValid, context, v);
     }
@@ -1054,6 +1093,7 @@ void GL_APIENTRY GL_ColorMaterial(GLenum face, GLenum mode)
         if (isCallValid)
         {
             context->colorMaterial(face, mode);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(ColorMaterial, isCallValid, context, face, mode);
     }
@@ -1081,6 +1121,7 @@ void GL_APIENTRY GL_CopyPixels(GLint x, GLint y, GLsizei width, GLsizei height, 
         if (isCallValid)
         {
             context->copyPixels(x, y, width, height, type);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(CopyPixels, isCallValid, context, x, y, width, height, type);
     }
@@ -1105,6 +1146,7 @@ void GL_APIENTRY GL_DeleteLists(GLuint list, GLsizei range)
         if (isCallValid)
         {
             context->deleteLists(list, range);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(DeleteLists, isCallValid, context, list, range);
     }
@@ -1130,6 +1172,7 @@ void GL_APIENTRY GL_DepthRange(GLdouble n, GLdouble f)
         if (isCallValid)
         {
             context->depthRange(n, f);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(DepthRange, isCallValid, context, n, f);
     }
@@ -1156,6 +1199,7 @@ void GL_APIENTRY GL_DrawBuffer(GLenum buf)
         if (isCallValid)
         {
             context->drawBuffer(buf);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(DrawBuffer, isCallValid, context, buf);
     }
@@ -1187,6 +1231,7 @@ GL_DrawPixels(GLsizei width, GLsizei height, GLenum format, GLenum type, const v
         if (isCallValid)
         {
             context->drawPixels(width, height, format, type, pixels);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(DrawPixels, isCallValid, context, width, height, format, type, pixels);
     }
@@ -1212,6 +1257,7 @@ void GL_APIENTRY GL_EdgeFlag(GLboolean flag)
         if (isCallValid)
         {
             context->edgeFlag(flag);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(EdgeFlag, isCallValid, context, flag);
     }
@@ -1238,6 +1284,7 @@ void GL_APIENTRY GL_EdgeFlagv(const GLboolean *flag)
         if (isCallValid)
         {
             context->edgeFlagv(flag);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(EdgeFlagv, isCallValid, context, flag);
     }
@@ -1262,6 +1309,7 @@ void GL_APIENTRY GL_End()
         if (isCallValid)
         {
             context->end();
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(End, isCallValid, context);
     }
@@ -1287,6 +1335,7 @@ void GL_APIENTRY GL_EndList()
         if (isCallValid)
         {
             context->endList();
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(EndList, isCallValid, context);
     }
@@ -1312,6 +1361,7 @@ void GL_APIENTRY GL_EvalCoord1d(GLdouble u)
         if (isCallValid)
         {
             context->evalCoord1d(u);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(EvalCoord1d, isCallValid, context, u);
     }
@@ -1338,6 +1388,7 @@ void GL_APIENTRY GL_EvalCoord1dv(const GLdouble *u)
         if (isCallValid)
         {
             context->evalCoord1dv(u);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(EvalCoord1dv, isCallValid, context, u);
     }
@@ -1363,6 +1414,7 @@ void GL_APIENTRY GL_EvalCoord1f(GLfloat u)
         if (isCallValid)
         {
             context->evalCoord1f(u);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(EvalCoord1f, isCallValid, context, u);
     }
@@ -1389,6 +1441,7 @@ void GL_APIENTRY GL_EvalCoord1fv(const GLfloat *u)
         if (isCallValid)
         {
             context->evalCoord1fv(u);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(EvalCoord1fv, isCallValid, context, u);
     }
@@ -1414,6 +1467,7 @@ void GL_APIENTRY GL_EvalCoord2d(GLdouble u, GLdouble v)
         if (isCallValid)
         {
             context->evalCoord2d(u, v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(EvalCoord2d, isCallValid, context, u, v);
     }
@@ -1440,6 +1494,7 @@ void GL_APIENTRY GL_EvalCoord2dv(const GLdouble *u)
         if (isCallValid)
         {
             context->evalCoord2dv(u);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(EvalCoord2dv, isCallValid, context, u);
     }
@@ -1465,6 +1520,7 @@ void GL_APIENTRY GL_EvalCoord2f(GLfloat u, GLfloat v)
         if (isCallValid)
         {
             context->evalCoord2f(u, v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(EvalCoord2f, isCallValid, context, u, v);
     }
@@ -1491,6 +1547,7 @@ void GL_APIENTRY GL_EvalCoord2fv(const GLfloat *u)
         if (isCallValid)
         {
             context->evalCoord2fv(u);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(EvalCoord2fv, isCallValid, context, u);
     }
@@ -1517,6 +1574,7 @@ void GL_APIENTRY GL_EvalMesh1(GLenum mode, GLint i1, GLint i2)
         if (isCallValid)
         {
             context->evalMesh1(mode, i1, i2);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(EvalMesh1, isCallValid, context, mode, i1, i2);
     }
@@ -1543,6 +1601,7 @@ void GL_APIENTRY GL_EvalMesh2(GLenum mode, GLint i1, GLint i2, GLint j1, GLint j
         if (isCallValid)
         {
             context->evalMesh2(mode, i1, i2, j1, j2);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(EvalMesh2, isCallValid, context, mode, i1, i2, j1, j2);
     }
@@ -1568,6 +1627,7 @@ void GL_APIENTRY GL_EvalPoint1(GLint i)
         if (isCallValid)
         {
             context->evalPoint1(i);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(EvalPoint1, isCallValid, context, i);
     }
@@ -1593,6 +1653,7 @@ void GL_APIENTRY GL_EvalPoint2(GLint i, GLint j)
         if (isCallValid)
         {
             context->evalPoint2(i, j);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(EvalPoint2, isCallValid, context, i, j);
     }
@@ -1621,6 +1682,7 @@ void GL_APIENTRY GL_FeedbackBuffer(GLsizei size, GLenum type, GLfloat *buffer)
         if (isCallValid)
         {
             context->feedbackBuffer(size, type, buffer);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(FeedbackBuffer, isCallValid, context, size, type, buffer);
     }
@@ -1647,6 +1709,7 @@ void GL_APIENTRY GL_Fogi(GLenum pname, GLint param)
         if (isCallValid)
         {
             context->fogi(pname, param);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Fogi, isCallValid, context, pname, param);
     }
@@ -1673,6 +1736,7 @@ void GL_APIENTRY GL_Fogiv(GLenum pname, const GLint *params)
         if (isCallValid)
         {
             context->fogiv(pname, params);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Fogiv, isCallValid, context, pname, params);
     }
@@ -1706,6 +1770,7 @@ void GL_APIENTRY GL_Frustum(GLdouble left,
         if (isCallValid)
         {
             context->frustum(left, right, bottom, top, zNear, zFar);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Frustum, isCallValid, context, left, right, bottom, top, zNear, zFar);
     }
@@ -1730,6 +1795,7 @@ GLuint GL_APIENTRY GL_GenLists(GLsizei range)
         if (isCallValid)
         {
             returnValue = context->genLists(range);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         else
         {
@@ -1761,6 +1827,7 @@ void GL_APIENTRY GL_GetClipPlane(GLenum plane, GLdouble *equation)
         if (isCallValid)
         {
             context->getClipPlane(plane, equation);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(GetClipPlane, isCallValid, context, plane, equation);
     }
@@ -1786,6 +1853,7 @@ void GL_APIENTRY GL_GetDoublev(GLenum pname, GLdouble *data)
         if (isCallValid)
         {
             context->getDoublev(pname, data);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(GetDoublev, isCallValid, context, pname, data);
     }
@@ -1812,6 +1880,7 @@ void GL_APIENTRY GL_GetLightiv(GLenum light, GLenum pname, GLint *params)
         if (isCallValid)
         {
             context->getLightiv(light, pname, params);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(GetLightiv, isCallValid, context, light, pname, params);
     }
@@ -1838,6 +1907,7 @@ void GL_APIENTRY GL_GetMapdv(GLenum target, GLenum query, GLdouble *v)
         if (isCallValid)
         {
             context->getMapdv(target, query, v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(GetMapdv, isCallValid, context, target, query, v);
     }
@@ -1864,6 +1934,7 @@ void GL_APIENTRY GL_GetMapfv(GLenum target, GLenum query, GLfloat *v)
         if (isCallValid)
         {
             context->getMapfv(target, query, v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(GetMapfv, isCallValid, context, target, query, v);
     }
@@ -1890,6 +1961,7 @@ void GL_APIENTRY GL_GetMapiv(GLenum target, GLenum query, GLint *v)
         if (isCallValid)
         {
             context->getMapiv(target, query, v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(GetMapiv, isCallValid, context, target, query, v);
     }
@@ -1917,6 +1989,7 @@ void GL_APIENTRY GL_GetMaterialiv(GLenum face, GLenum pname, GLint *params)
         if (isCallValid)
         {
             context->getMaterialiv(face, pname, params);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(GetMaterialiv, isCallValid, context, face, pname, params);
     }
@@ -1942,6 +2015,7 @@ void GL_APIENTRY GL_GetPixelMapfv(GLenum map, GLfloat *values)
         if (isCallValid)
         {
             context->getPixelMapfv(map, values);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(GetPixelMapfv, isCallValid, context, map, values);
     }
@@ -1967,6 +2041,7 @@ void GL_APIENTRY GL_GetPixelMapuiv(GLenum map, GLuint *values)
         if (isCallValid)
         {
             context->getPixelMapuiv(map, values);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(GetPixelMapuiv, isCallValid, context, map, values);
     }
@@ -1992,6 +2067,7 @@ void GL_APIENTRY GL_GetPixelMapusv(GLenum map, GLushort *values)
         if (isCallValid)
         {
             context->getPixelMapusv(map, values);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(GetPixelMapusv, isCallValid, context, map, values);
     }
@@ -2017,6 +2093,7 @@ void GL_APIENTRY GL_GetPolygonStipple(GLubyte *mask)
         if (isCallValid)
         {
             context->getPolygonStipple(mask);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(GetPolygonStipple, isCallValid, context, mask);
     }
@@ -2044,6 +2121,7 @@ void GL_APIENTRY GL_GetTexGendv(GLenum coord, GLenum pname, GLdouble *params)
         if (isCallValid)
         {
             context->getTexGendv(coord, pname, params);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(GetTexGendv, isCallValid, context, coord, pname, params);
     }
@@ -2071,6 +2149,7 @@ void GL_APIENTRY GL_GetTexGenfv(GLenum coord, GLenum pname, GLfloat *params)
         if (isCallValid)
         {
             context->getTexGenfv(coord, pname, params);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(GetTexGenfv, isCallValid, context, coord, pname, params);
     }
@@ -2098,6 +2177,7 @@ void GL_APIENTRY GL_GetTexGeniv(GLenum coord, GLenum pname, GLint *params)
         if (isCallValid)
         {
             context->getTexGeniv(coord, pname, params);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(GetTexGeniv, isCallValid, context, coord, pname, params);
     }
@@ -2129,6 +2209,7 @@ GL_GetTexImage(GLenum target, GLint level, GLenum format, GLenum type, void *pix
         if (isCallValid)
         {
             context->getTexImage(targetPacked, level, format, type, pixels);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(GetTexImage, isCallValid, context, targetPacked, level, format, type,
                          pixels);
@@ -2155,6 +2236,7 @@ void GL_APIENTRY GL_IndexMask(GLuint mask)
         if (isCallValid)
         {
             context->indexMask(mask);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(IndexMask, isCallValid, context, mask);
     }
@@ -2180,6 +2262,7 @@ void GL_APIENTRY GL_Indexd(GLdouble c)
         if (isCallValid)
         {
             context->indexd(c);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Indexd, isCallValid, context, c);
     }
@@ -2205,6 +2288,7 @@ void GL_APIENTRY GL_Indexdv(const GLdouble *c)
         if (isCallValid)
         {
             context->indexdv(c);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Indexdv, isCallValid, context, c);
     }
@@ -2230,6 +2314,7 @@ void GL_APIENTRY GL_Indexf(GLfloat c)
         if (isCallValid)
         {
             context->indexf(c);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Indexf, isCallValid, context, c);
     }
@@ -2255,6 +2340,7 @@ void GL_APIENTRY GL_Indexfv(const GLfloat *c)
         if (isCallValid)
         {
             context->indexfv(c);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Indexfv, isCallValid, context, c);
     }
@@ -2280,6 +2366,7 @@ void GL_APIENTRY GL_Indexi(GLint c)
         if (isCallValid)
         {
             context->indexi(c);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Indexi, isCallValid, context, c);
     }
@@ -2305,6 +2392,7 @@ void GL_APIENTRY GL_Indexiv(const GLint *c)
         if (isCallValid)
         {
             context->indexiv(c);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Indexiv, isCallValid, context, c);
     }
@@ -2330,6 +2418,7 @@ void GL_APIENTRY GL_Indexs(GLshort c)
         if (isCallValid)
         {
             context->indexs(c);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Indexs, isCallValid, context, c);
     }
@@ -2355,6 +2444,7 @@ void GL_APIENTRY GL_Indexsv(const GLshort *c)
         if (isCallValid)
         {
             context->indexsv(c);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Indexsv, isCallValid, context, c);
     }
@@ -2380,6 +2470,7 @@ void GL_APIENTRY GL_InitNames()
         if (isCallValid)
         {
             context->initNames();
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(InitNames, isCallValid, context);
     }
@@ -2404,6 +2495,7 @@ GLboolean GL_APIENTRY GL_IsList(GLuint list)
         if (isCallValid)
         {
             returnValue = context->isList(list);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         else
         {
@@ -2436,6 +2528,7 @@ void GL_APIENTRY GL_LightModeli(GLenum pname, GLint param)
         if (isCallValid)
         {
             context->lightModeli(pname, param);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(LightModeli, isCallValid, context, pname, param);
     }
@@ -2462,6 +2555,7 @@ void GL_APIENTRY GL_LightModeliv(GLenum pname, const GLint *params)
         if (isCallValid)
         {
             context->lightModeliv(pname, params);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(LightModeliv, isCallValid, context, pname, params);
     }
@@ -2489,6 +2583,7 @@ void GL_APIENTRY GL_Lighti(GLenum light, GLenum pname, GLint param)
         if (isCallValid)
         {
             context->lighti(light, pname, param);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Lighti, isCallValid, context, light, pname, param);
     }
@@ -2516,6 +2611,7 @@ void GL_APIENTRY GL_Lightiv(GLenum light, GLenum pname, const GLint *params)
         if (isCallValid)
         {
             context->lightiv(light, pname, params);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Lightiv, isCallValid, context, light, pname, params);
     }
@@ -2542,6 +2638,7 @@ void GL_APIENTRY GL_LineStipple(GLint factor, GLushort pattern)
         if (isCallValid)
         {
             context->lineStipple(factor, pattern);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(LineStipple, isCallValid, context, factor, pattern);
     }
@@ -2567,6 +2664,7 @@ void GL_APIENTRY GL_ListBase(GLuint base)
         if (isCallValid)
         {
             context->listBase(base);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(ListBase, isCallValid, context, base);
     }
@@ -2593,6 +2691,7 @@ void GL_APIENTRY GL_LoadMatrixd(const GLdouble *m)
         if (isCallValid)
         {
             context->loadMatrixd(m);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(LoadMatrixd, isCallValid, context, m);
     }
@@ -2618,6 +2717,7 @@ void GL_APIENTRY GL_LoadName(GLuint name)
         if (isCallValid)
         {
             context->loadName(name);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(LoadName, isCallValid, context, name);
     }
@@ -2649,6 +2749,7 @@ GL_Map1d(GLenum target, GLdouble u1, GLdouble u2, GLint stride, GLint order, con
         if (isCallValid)
         {
             context->map1d(target, u1, u2, stride, order, points);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Map1d, isCallValid, context, target, u1, u2, stride, order, points);
     }
@@ -2680,6 +2781,7 @@ GL_Map1f(GLenum target, GLfloat u1, GLfloat u2, GLint stride, GLint order, const
         if (isCallValid)
         {
             context->map1f(target, u1, u2, stride, order, points);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Map1f, isCallValid, context, target, u1, u2, stride, order, points);
     }
@@ -2719,6 +2821,7 @@ void GL_APIENTRY GL_Map2d(GLenum target,
         if (isCallValid)
         {
             context->map2d(target, u1, u2, ustride, uorder, v1, v2, vstride, vorder, points);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Map2d, isCallValid, context, target, u1, u2, ustride, uorder, v1, v2,
                          vstride, vorder, points);
@@ -2759,6 +2862,7 @@ void GL_APIENTRY GL_Map2f(GLenum target,
         if (isCallValid)
         {
             context->map2f(target, u1, u2, ustride, uorder, v1, v2, vstride, vorder, points);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Map2f, isCallValid, context, target, u1, u2, ustride, uorder, v1, v2,
                          vstride, vorder, points);
@@ -2786,6 +2890,7 @@ void GL_APIENTRY GL_MapGrid1d(GLint un, GLdouble u1, GLdouble u2)
         if (isCallValid)
         {
             context->mapGrid1d(un, u1, u2);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MapGrid1d, isCallValid, context, un, u1, u2);
     }
@@ -2812,6 +2917,7 @@ void GL_APIENTRY GL_MapGrid1f(GLint un, GLfloat u1, GLfloat u2)
         if (isCallValid)
         {
             context->mapGrid1f(un, u1, u2);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MapGrid1f, isCallValid, context, un, u1, u2);
     }
@@ -2840,6 +2946,7 @@ GL_MapGrid2d(GLint un, GLdouble u1, GLdouble u2, GLint vn, GLdouble v1, GLdouble
         if (isCallValid)
         {
             context->mapGrid2d(un, u1, u2, vn, v1, v2);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MapGrid2d, isCallValid, context, un, u1, u2, vn, v1, v2);
     }
@@ -2867,6 +2974,7 @@ void GL_APIENTRY GL_MapGrid2f(GLint un, GLfloat u1, GLfloat u2, GLint vn, GLfloa
         if (isCallValid)
         {
             context->mapGrid2f(un, u1, u2, vn, v1, v2);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MapGrid2f, isCallValid, context, un, u1, u2, vn, v1, v2);
     }
@@ -2894,6 +3002,7 @@ void GL_APIENTRY GL_Materiali(GLenum face, GLenum pname, GLint param)
         if (isCallValid)
         {
             context->materiali(face, pname, param);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Materiali, isCallValid, context, face, pname, param);
     }
@@ -2921,6 +3030,7 @@ void GL_APIENTRY GL_Materialiv(GLenum face, GLenum pname, const GLint *params)
         if (isCallValid)
         {
             context->materialiv(face, pname, params);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Materialiv, isCallValid, context, face, pname, params);
     }
@@ -2947,6 +3057,7 @@ void GL_APIENTRY GL_MultMatrixd(const GLdouble *m)
         if (isCallValid)
         {
             context->multMatrixd(m);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultMatrixd, isCallValid, context, m);
     }
@@ -2973,6 +3084,7 @@ void GL_APIENTRY GL_NewList(GLuint list, GLenum mode)
         if (isCallValid)
         {
             context->newList(list, mode);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(NewList, isCallValid, context, list, mode);
     }
@@ -2998,6 +3110,7 @@ void GL_APIENTRY GL_Normal3b(GLbyte nx, GLbyte ny, GLbyte nz)
         if (isCallValid)
         {
             context->normal3b(nx, ny, nz);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Normal3b, isCallValid, context, nx, ny, nz);
     }
@@ -3023,6 +3136,7 @@ void GL_APIENTRY GL_Normal3bv(const GLbyte *v)
         if (isCallValid)
         {
             context->normal3bv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Normal3bv, isCallValid, context, v);
     }
@@ -3048,6 +3162,7 @@ void GL_APIENTRY GL_Normal3d(GLdouble nx, GLdouble ny, GLdouble nz)
         if (isCallValid)
         {
             context->normal3d(nx, ny, nz);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Normal3d, isCallValid, context, nx, ny, nz);
     }
@@ -3073,6 +3188,7 @@ void GL_APIENTRY GL_Normal3dv(const GLdouble *v)
         if (isCallValid)
         {
             context->normal3dv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Normal3dv, isCallValid, context, v);
     }
@@ -3098,6 +3214,7 @@ void GL_APIENTRY GL_Normal3fv(const GLfloat *v)
         if (isCallValid)
         {
             context->normal3fv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Normal3fv, isCallValid, context, v);
     }
@@ -3123,6 +3240,7 @@ void GL_APIENTRY GL_Normal3i(GLint nx, GLint ny, GLint nz)
         if (isCallValid)
         {
             context->normal3i(nx, ny, nz);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Normal3i, isCallValid, context, nx, ny, nz);
     }
@@ -3148,6 +3266,7 @@ void GL_APIENTRY GL_Normal3iv(const GLint *v)
         if (isCallValid)
         {
             context->normal3iv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Normal3iv, isCallValid, context, v);
     }
@@ -3173,6 +3292,7 @@ void GL_APIENTRY GL_Normal3s(GLshort nx, GLshort ny, GLshort nz)
         if (isCallValid)
         {
             context->normal3s(nx, ny, nz);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Normal3s, isCallValid, context, nx, ny, nz);
     }
@@ -3198,6 +3318,7 @@ void GL_APIENTRY GL_Normal3sv(const GLshort *v)
         if (isCallValid)
         {
             context->normal3sv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Normal3sv, isCallValid, context, v);
     }
@@ -3231,6 +3352,7 @@ void GL_APIENTRY GL_Ortho(GLdouble left,
         if (isCallValid)
         {
             context->ortho(left, right, bottom, top, zNear, zFar);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Ortho, isCallValid, context, left, right, bottom, top, zNear, zFar);
     }
@@ -3256,6 +3378,7 @@ void GL_APIENTRY GL_PassThrough(GLfloat token)
         if (isCallValid)
         {
             context->passThrough(token);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(PassThrough, isCallValid, context, token);
     }
@@ -3282,6 +3405,7 @@ void GL_APIENTRY GL_PixelMapfv(GLenum map, GLsizei mapsize, const GLfloat *value
         if (isCallValid)
         {
             context->pixelMapfv(map, mapsize, values);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(PixelMapfv, isCallValid, context, map, mapsize, values);
     }
@@ -3310,6 +3434,7 @@ void GL_APIENTRY GL_PixelMapuiv(GLenum map, GLsizei mapsize, const GLuint *value
         if (isCallValid)
         {
             context->pixelMapuiv(map, mapsize, values);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(PixelMapuiv, isCallValid, context, map, mapsize, values);
     }
@@ -3338,6 +3463,7 @@ void GL_APIENTRY GL_PixelMapusv(GLenum map, GLsizei mapsize, const GLushort *val
         if (isCallValid)
         {
             context->pixelMapusv(map, mapsize, values);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(PixelMapusv, isCallValid, context, map, mapsize, values);
     }
@@ -3364,6 +3490,7 @@ void GL_APIENTRY GL_PixelStoref(GLenum pname, GLfloat param)
         if (isCallValid)
         {
             context->pixelStoref(pname, param);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(PixelStoref, isCallValid, context, pname, param);
     }
@@ -3390,6 +3517,7 @@ void GL_APIENTRY GL_PixelTransferf(GLenum pname, GLfloat param)
         if (isCallValid)
         {
             context->pixelTransferf(pname, param);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(PixelTransferf, isCallValid, context, pname, param);
     }
@@ -3416,6 +3544,7 @@ void GL_APIENTRY GL_PixelTransferi(GLenum pname, GLint param)
         if (isCallValid)
         {
             context->pixelTransferi(pname, param);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(PixelTransferi, isCallValid, context, pname, param);
     }
@@ -3442,6 +3571,7 @@ void GL_APIENTRY GL_PixelZoom(GLfloat xfactor, GLfloat yfactor)
         if (isCallValid)
         {
             context->pixelZoom(xfactor, yfactor);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(PixelZoom, isCallValid, context, xfactor, yfactor);
     }
@@ -3470,6 +3600,7 @@ void GL_APIENTRY GL_PolygonMode(GLenum face, GLenum mode)
         if (isCallValid)
         {
             context->polygonMode(face, modePacked);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(PolygonMode, isCallValid, context, face, modePacked);
     }
@@ -3496,6 +3627,7 @@ void GL_APIENTRY GL_PolygonStipple(const GLubyte *mask)
         if (isCallValid)
         {
             context->polygonStipple(mask);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(PolygonStipple, isCallValid, context, mask);
     }
@@ -3521,6 +3653,7 @@ void GL_APIENTRY GL_PopAttrib()
         if (isCallValid)
         {
             context->popAttrib();
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(PopAttrib, isCallValid, context);
     }
@@ -3546,6 +3679,7 @@ void GL_APIENTRY GL_PopName()
         if (isCallValid)
         {
             context->popName();
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(PopName, isCallValid, context);
     }
@@ -3572,6 +3706,7 @@ void GL_APIENTRY GL_PushAttrib(GLbitfield mask)
         if (isCallValid)
         {
             context->pushAttrib(mask);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(PushAttrib, isCallValid, context, mask);
     }
@@ -3597,6 +3732,7 @@ void GL_APIENTRY GL_PushName(GLuint name)
         if (isCallValid)
         {
             context->pushName(name);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(PushName, isCallValid, context, name);
     }
@@ -3622,6 +3758,7 @@ void GL_APIENTRY GL_RasterPos2d(GLdouble x, GLdouble y)
         if (isCallValid)
         {
             context->rasterPos2d(x, y);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(RasterPos2d, isCallValid, context, x, y);
     }
@@ -3648,6 +3785,7 @@ void GL_APIENTRY GL_RasterPos2dv(const GLdouble *v)
         if (isCallValid)
         {
             context->rasterPos2dv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(RasterPos2dv, isCallValid, context, v);
     }
@@ -3673,6 +3811,7 @@ void GL_APIENTRY GL_RasterPos2f(GLfloat x, GLfloat y)
         if (isCallValid)
         {
             context->rasterPos2f(x, y);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(RasterPos2f, isCallValid, context, x, y);
     }
@@ -3699,6 +3838,7 @@ void GL_APIENTRY GL_RasterPos2fv(const GLfloat *v)
         if (isCallValid)
         {
             context->rasterPos2fv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(RasterPos2fv, isCallValid, context, v);
     }
@@ -3724,6 +3864,7 @@ void GL_APIENTRY GL_RasterPos2i(GLint x, GLint y)
         if (isCallValid)
         {
             context->rasterPos2i(x, y);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(RasterPos2i, isCallValid, context, x, y);
     }
@@ -3750,6 +3891,7 @@ void GL_APIENTRY GL_RasterPos2iv(const GLint *v)
         if (isCallValid)
         {
             context->rasterPos2iv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(RasterPos2iv, isCallValid, context, v);
     }
@@ -3775,6 +3917,7 @@ void GL_APIENTRY GL_RasterPos2s(GLshort x, GLshort y)
         if (isCallValid)
         {
             context->rasterPos2s(x, y);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(RasterPos2s, isCallValid, context, x, y);
     }
@@ -3801,6 +3944,7 @@ void GL_APIENTRY GL_RasterPos2sv(const GLshort *v)
         if (isCallValid)
         {
             context->rasterPos2sv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(RasterPos2sv, isCallValid, context, v);
     }
@@ -3826,6 +3970,7 @@ void GL_APIENTRY GL_RasterPos3d(GLdouble x, GLdouble y, GLdouble z)
         if (isCallValid)
         {
             context->rasterPos3d(x, y, z);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(RasterPos3d, isCallValid, context, x, y, z);
     }
@@ -3852,6 +3997,7 @@ void GL_APIENTRY GL_RasterPos3dv(const GLdouble *v)
         if (isCallValid)
         {
             context->rasterPos3dv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(RasterPos3dv, isCallValid, context, v);
     }
@@ -3877,6 +4023,7 @@ void GL_APIENTRY GL_RasterPos3f(GLfloat x, GLfloat y, GLfloat z)
         if (isCallValid)
         {
             context->rasterPos3f(x, y, z);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(RasterPos3f, isCallValid, context, x, y, z);
     }
@@ -3903,6 +4050,7 @@ void GL_APIENTRY GL_RasterPos3fv(const GLfloat *v)
         if (isCallValid)
         {
             context->rasterPos3fv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(RasterPos3fv, isCallValid, context, v);
     }
@@ -3928,6 +4076,7 @@ void GL_APIENTRY GL_RasterPos3i(GLint x, GLint y, GLint z)
         if (isCallValid)
         {
             context->rasterPos3i(x, y, z);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(RasterPos3i, isCallValid, context, x, y, z);
     }
@@ -3954,6 +4103,7 @@ void GL_APIENTRY GL_RasterPos3iv(const GLint *v)
         if (isCallValid)
         {
             context->rasterPos3iv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(RasterPos3iv, isCallValid, context, v);
     }
@@ -3979,6 +4129,7 @@ void GL_APIENTRY GL_RasterPos3s(GLshort x, GLshort y, GLshort z)
         if (isCallValid)
         {
             context->rasterPos3s(x, y, z);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(RasterPos3s, isCallValid, context, x, y, z);
     }
@@ -4005,6 +4156,7 @@ void GL_APIENTRY GL_RasterPos3sv(const GLshort *v)
         if (isCallValid)
         {
             context->rasterPos3sv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(RasterPos3sv, isCallValid, context, v);
     }
@@ -4031,6 +4183,7 @@ void GL_APIENTRY GL_RasterPos4d(GLdouble x, GLdouble y, GLdouble z, GLdouble w)
         if (isCallValid)
         {
             context->rasterPos4d(x, y, z, w);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(RasterPos4d, isCallValid, context, x, y, z, w);
     }
@@ -4057,6 +4210,7 @@ void GL_APIENTRY GL_RasterPos4dv(const GLdouble *v)
         if (isCallValid)
         {
             context->rasterPos4dv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(RasterPos4dv, isCallValid, context, v);
     }
@@ -4083,6 +4237,7 @@ void GL_APIENTRY GL_RasterPos4f(GLfloat x, GLfloat y, GLfloat z, GLfloat w)
         if (isCallValid)
         {
             context->rasterPos4f(x, y, z, w);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(RasterPos4f, isCallValid, context, x, y, z, w);
     }
@@ -4109,6 +4264,7 @@ void GL_APIENTRY GL_RasterPos4fv(const GLfloat *v)
         if (isCallValid)
         {
             context->rasterPos4fv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(RasterPos4fv, isCallValid, context, v);
     }
@@ -4135,6 +4291,7 @@ void GL_APIENTRY GL_RasterPos4i(GLint x, GLint y, GLint z, GLint w)
         if (isCallValid)
         {
             context->rasterPos4i(x, y, z, w);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(RasterPos4i, isCallValid, context, x, y, z, w);
     }
@@ -4161,6 +4318,7 @@ void GL_APIENTRY GL_RasterPos4iv(const GLint *v)
         if (isCallValid)
         {
             context->rasterPos4iv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(RasterPos4iv, isCallValid, context, v);
     }
@@ -4187,6 +4345,7 @@ void GL_APIENTRY GL_RasterPos4s(GLshort x, GLshort y, GLshort z, GLshort w)
         if (isCallValid)
         {
             context->rasterPos4s(x, y, z, w);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(RasterPos4s, isCallValid, context, x, y, z, w);
     }
@@ -4213,6 +4372,7 @@ void GL_APIENTRY GL_RasterPos4sv(const GLshort *v)
         if (isCallValid)
         {
             context->rasterPos4sv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(RasterPos4sv, isCallValid, context, v);
     }
@@ -4239,6 +4399,7 @@ void GL_APIENTRY GL_Rectd(GLdouble x1, GLdouble y1, GLdouble x2, GLdouble y2)
         if (isCallValid)
         {
             context->rectd(x1, y1, x2, y2);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Rectd, isCallValid, context, x1, y1, x2, y2);
     }
@@ -4265,6 +4426,7 @@ void GL_APIENTRY GL_Rectdv(const GLdouble *v1, const GLdouble *v2)
         if (isCallValid)
         {
             context->rectdv(v1, v2);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Rectdv, isCallValid, context, v1, v2);
     }
@@ -4291,6 +4453,7 @@ void GL_APIENTRY GL_Rectf(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2)
         if (isCallValid)
         {
             context->rectf(x1, y1, x2, y2);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Rectf, isCallValid, context, x1, y1, x2, y2);
     }
@@ -4317,6 +4480,7 @@ void GL_APIENTRY GL_Rectfv(const GLfloat *v1, const GLfloat *v2)
         if (isCallValid)
         {
             context->rectfv(v1, v2);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Rectfv, isCallValid, context, v1, v2);
     }
@@ -4343,6 +4507,7 @@ void GL_APIENTRY GL_Recti(GLint x1, GLint y1, GLint x2, GLint y2)
         if (isCallValid)
         {
             context->recti(x1, y1, x2, y2);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Recti, isCallValid, context, x1, y1, x2, y2);
     }
@@ -4369,6 +4534,7 @@ void GL_APIENTRY GL_Rectiv(const GLint *v1, const GLint *v2)
         if (isCallValid)
         {
             context->rectiv(v1, v2);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Rectiv, isCallValid, context, v1, v2);
     }
@@ -4395,6 +4561,7 @@ void GL_APIENTRY GL_Rects(GLshort x1, GLshort y1, GLshort x2, GLshort y2)
         if (isCallValid)
         {
             context->rects(x1, y1, x2, y2);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Rects, isCallValid, context, x1, y1, x2, y2);
     }
@@ -4421,6 +4588,7 @@ void GL_APIENTRY GL_Rectsv(const GLshort *v1, const GLshort *v2)
         if (isCallValid)
         {
             context->rectsv(v1, v2);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Rectsv, isCallValid, context, v1, v2);
     }
@@ -4448,6 +4616,7 @@ GLint GL_APIENTRY GL_RenderMode(GLenum mode)
         if (isCallValid)
         {
             returnValue = context->renderMode(mode);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         else
         {
@@ -4480,6 +4649,7 @@ void GL_APIENTRY GL_Rotated(GLdouble angle, GLdouble x, GLdouble y, GLdouble z)
         if (isCallValid)
         {
             context->rotated(angle, x, y, z);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Rotated, isCallValid, context, angle, x, y, z);
     }
@@ -4505,6 +4675,7 @@ void GL_APIENTRY GL_Scaled(GLdouble x, GLdouble y, GLdouble z)
         if (isCallValid)
         {
             context->scaled(x, y, z);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Scaled, isCallValid, context, x, y, z);
     }
@@ -4531,6 +4702,7 @@ void GL_APIENTRY GL_SelectBuffer(GLsizei size, GLuint *buffer)
         if (isCallValid)
         {
             context->selectBuffer(size, buffer);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(SelectBuffer, isCallValid, context, size, buffer);
     }
@@ -4556,6 +4728,7 @@ void GL_APIENTRY GL_TexCoord1d(GLdouble s)
         if (isCallValid)
         {
             context->texCoord1d(s);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord1d, isCallValid, context, s);
     }
@@ -4582,6 +4755,7 @@ void GL_APIENTRY GL_TexCoord1dv(const GLdouble *v)
         if (isCallValid)
         {
             context->texCoord1dv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord1dv, isCallValid, context, v);
     }
@@ -4607,6 +4781,7 @@ void GL_APIENTRY GL_TexCoord1f(GLfloat s)
         if (isCallValid)
         {
             context->texCoord1f(s);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord1f, isCallValid, context, s);
     }
@@ -4633,6 +4808,7 @@ void GL_APIENTRY GL_TexCoord1fv(const GLfloat *v)
         if (isCallValid)
         {
             context->texCoord1fv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord1fv, isCallValid, context, v);
     }
@@ -4658,6 +4834,7 @@ void GL_APIENTRY GL_TexCoord1i(GLint s)
         if (isCallValid)
         {
             context->texCoord1i(s);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord1i, isCallValid, context, s);
     }
@@ -4684,6 +4861,7 @@ void GL_APIENTRY GL_TexCoord1iv(const GLint *v)
         if (isCallValid)
         {
             context->texCoord1iv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord1iv, isCallValid, context, v);
     }
@@ -4709,6 +4887,7 @@ void GL_APIENTRY GL_TexCoord1s(GLshort s)
         if (isCallValid)
         {
             context->texCoord1s(s);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord1s, isCallValid, context, s);
     }
@@ -4735,6 +4914,7 @@ void GL_APIENTRY GL_TexCoord1sv(const GLshort *v)
         if (isCallValid)
         {
             context->texCoord1sv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord1sv, isCallValid, context, v);
     }
@@ -4760,6 +4940,7 @@ void GL_APIENTRY GL_TexCoord2d(GLdouble s, GLdouble t)
         if (isCallValid)
         {
             context->texCoord2d(s, t);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord2d, isCallValid, context, s, t);
     }
@@ -4786,6 +4967,7 @@ void GL_APIENTRY GL_TexCoord2dv(const GLdouble *v)
         if (isCallValid)
         {
             context->texCoord2dv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord2dv, isCallValid, context, v);
     }
@@ -4811,6 +4993,7 @@ void GL_APIENTRY GL_TexCoord2f(GLfloat s, GLfloat t)
         if (isCallValid)
         {
             context->texCoord2f(s, t);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord2f, isCallValid, context, s, t);
     }
@@ -4837,6 +5020,7 @@ void GL_APIENTRY GL_TexCoord2fv(const GLfloat *v)
         if (isCallValid)
         {
             context->texCoord2fv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord2fv, isCallValid, context, v);
     }
@@ -4862,6 +5046,7 @@ void GL_APIENTRY GL_TexCoord2i(GLint s, GLint t)
         if (isCallValid)
         {
             context->texCoord2i(s, t);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord2i, isCallValid, context, s, t);
     }
@@ -4888,6 +5073,7 @@ void GL_APIENTRY GL_TexCoord2iv(const GLint *v)
         if (isCallValid)
         {
             context->texCoord2iv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord2iv, isCallValid, context, v);
     }
@@ -4913,6 +5099,7 @@ void GL_APIENTRY GL_TexCoord2s(GLshort s, GLshort t)
         if (isCallValid)
         {
             context->texCoord2s(s, t);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord2s, isCallValid, context, s, t);
     }
@@ -4939,6 +5126,7 @@ void GL_APIENTRY GL_TexCoord2sv(const GLshort *v)
         if (isCallValid)
         {
             context->texCoord2sv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord2sv, isCallValid, context, v);
     }
@@ -4964,6 +5152,7 @@ void GL_APIENTRY GL_TexCoord3d(GLdouble s, GLdouble t, GLdouble r)
         if (isCallValid)
         {
             context->texCoord3d(s, t, r);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord3d, isCallValid, context, s, t, r);
     }
@@ -4990,6 +5179,7 @@ void GL_APIENTRY GL_TexCoord3dv(const GLdouble *v)
         if (isCallValid)
         {
             context->texCoord3dv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord3dv, isCallValid, context, v);
     }
@@ -5015,6 +5205,7 @@ void GL_APIENTRY GL_TexCoord3f(GLfloat s, GLfloat t, GLfloat r)
         if (isCallValid)
         {
             context->texCoord3f(s, t, r);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord3f, isCallValid, context, s, t, r);
     }
@@ -5041,6 +5232,7 @@ void GL_APIENTRY GL_TexCoord3fv(const GLfloat *v)
         if (isCallValid)
         {
             context->texCoord3fv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord3fv, isCallValid, context, v);
     }
@@ -5066,6 +5258,7 @@ void GL_APIENTRY GL_TexCoord3i(GLint s, GLint t, GLint r)
         if (isCallValid)
         {
             context->texCoord3i(s, t, r);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord3i, isCallValid, context, s, t, r);
     }
@@ -5092,6 +5285,7 @@ void GL_APIENTRY GL_TexCoord3iv(const GLint *v)
         if (isCallValid)
         {
             context->texCoord3iv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord3iv, isCallValid, context, v);
     }
@@ -5117,6 +5311,7 @@ void GL_APIENTRY GL_TexCoord3s(GLshort s, GLshort t, GLshort r)
         if (isCallValid)
         {
             context->texCoord3s(s, t, r);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord3s, isCallValid, context, s, t, r);
     }
@@ -5143,6 +5338,7 @@ void GL_APIENTRY GL_TexCoord3sv(const GLshort *v)
         if (isCallValid)
         {
             context->texCoord3sv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord3sv, isCallValid, context, v);
     }
@@ -5169,6 +5365,7 @@ void GL_APIENTRY GL_TexCoord4d(GLdouble s, GLdouble t, GLdouble r, GLdouble q)
         if (isCallValid)
         {
             context->texCoord4d(s, t, r, q);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord4d, isCallValid, context, s, t, r, q);
     }
@@ -5195,6 +5392,7 @@ void GL_APIENTRY GL_TexCoord4dv(const GLdouble *v)
         if (isCallValid)
         {
             context->texCoord4dv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord4dv, isCallValid, context, v);
     }
@@ -5221,6 +5419,7 @@ void GL_APIENTRY GL_TexCoord4f(GLfloat s, GLfloat t, GLfloat r, GLfloat q)
         if (isCallValid)
         {
             context->texCoord4f(s, t, r, q);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord4f, isCallValid, context, s, t, r, q);
     }
@@ -5247,6 +5446,7 @@ void GL_APIENTRY GL_TexCoord4fv(const GLfloat *v)
         if (isCallValid)
         {
             context->texCoord4fv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord4fv, isCallValid, context, v);
     }
@@ -5273,6 +5473,7 @@ void GL_APIENTRY GL_TexCoord4i(GLint s, GLint t, GLint r, GLint q)
         if (isCallValid)
         {
             context->texCoord4i(s, t, r, q);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord4i, isCallValid, context, s, t, r, q);
     }
@@ -5299,6 +5500,7 @@ void GL_APIENTRY GL_TexCoord4iv(const GLint *v)
         if (isCallValid)
         {
             context->texCoord4iv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord4iv, isCallValid, context, v);
     }
@@ -5325,6 +5527,7 @@ void GL_APIENTRY GL_TexCoord4s(GLshort s, GLshort t, GLshort r, GLshort q)
         if (isCallValid)
         {
             context->texCoord4s(s, t, r, q);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord4s, isCallValid, context, s, t, r, q);
     }
@@ -5351,6 +5554,7 @@ void GL_APIENTRY GL_TexCoord4sv(const GLshort *v)
         if (isCallValid)
         {
             context->texCoord4sv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexCoord4sv, isCallValid, context, v);
     }
@@ -5378,6 +5582,7 @@ void GL_APIENTRY GL_TexGend(GLenum coord, GLenum pname, GLdouble param)
         if (isCallValid)
         {
             context->texGend(coord, pname, param);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexGend, isCallValid, context, coord, pname, param);
     }
@@ -5405,6 +5610,7 @@ void GL_APIENTRY GL_TexGendv(GLenum coord, GLenum pname, const GLdouble *params)
         if (isCallValid)
         {
             context->texGendv(coord, pname, params);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexGendv, isCallValid, context, coord, pname, params);
     }
@@ -5432,6 +5638,7 @@ void GL_APIENTRY GL_TexGenf(GLenum coord, GLenum pname, GLfloat param)
         if (isCallValid)
         {
             context->texGenf(coord, pname, param);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexGenf, isCallValid, context, coord, pname, param);
     }
@@ -5459,6 +5666,7 @@ void GL_APIENTRY GL_TexGenfv(GLenum coord, GLenum pname, const GLfloat *params)
         if (isCallValid)
         {
             context->texGenfv(coord, pname, params);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexGenfv, isCallValid, context, coord, pname, params);
     }
@@ -5486,6 +5694,7 @@ void GL_APIENTRY GL_TexGeni(GLenum coord, GLenum pname, GLint param)
         if (isCallValid)
         {
             context->texGeni(coord, pname, param);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexGeni, isCallValid, context, coord, pname, param);
     }
@@ -5513,6 +5722,7 @@ void GL_APIENTRY GL_TexGeniv(GLenum coord, GLenum pname, const GLint *params)
         if (isCallValid)
         {
             context->texGeniv(coord, pname, params);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexGeniv, isCallValid, context, coord, pname, params);
     }
@@ -5551,6 +5761,7 @@ void GL_APIENTRY GL_TexImage1D(GLenum target,
         if (isCallValid)
         {
             context->texImage1D(target, level, internalformat, width, border, format, type, pixels);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexImage1D, isCallValid, context, target, level, internalformat, width,
                          border, format, type, pixels);
@@ -5577,6 +5788,7 @@ void GL_APIENTRY GL_Translated(GLdouble x, GLdouble y, GLdouble z)
         if (isCallValid)
         {
             context->translated(x, y, z);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Translated, isCallValid, context, x, y, z);
     }
@@ -5602,6 +5814,7 @@ void GL_APIENTRY GL_Vertex2d(GLdouble x, GLdouble y)
         if (isCallValid)
         {
             context->vertex2d(x, y);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Vertex2d, isCallValid, context, x, y);
     }
@@ -5627,6 +5840,7 @@ void GL_APIENTRY GL_Vertex2dv(const GLdouble *v)
         if (isCallValid)
         {
             context->vertex2dv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Vertex2dv, isCallValid, context, v);
     }
@@ -5652,6 +5866,7 @@ void GL_APIENTRY GL_Vertex2f(GLfloat x, GLfloat y)
         if (isCallValid)
         {
             context->vertex2f(x, y);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Vertex2f, isCallValid, context, x, y);
     }
@@ -5677,6 +5892,7 @@ void GL_APIENTRY GL_Vertex2fv(const GLfloat *v)
         if (isCallValid)
         {
             context->vertex2fv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Vertex2fv, isCallValid, context, v);
     }
@@ -5702,6 +5918,7 @@ void GL_APIENTRY GL_Vertex2i(GLint x, GLint y)
         if (isCallValid)
         {
             context->vertex2i(x, y);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Vertex2i, isCallValid, context, x, y);
     }
@@ -5727,6 +5944,7 @@ void GL_APIENTRY GL_Vertex2iv(const GLint *v)
         if (isCallValid)
         {
             context->vertex2iv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Vertex2iv, isCallValid, context, v);
     }
@@ -5752,6 +5970,7 @@ void GL_APIENTRY GL_Vertex2s(GLshort x, GLshort y)
         if (isCallValid)
         {
             context->vertex2s(x, y);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Vertex2s, isCallValid, context, x, y);
     }
@@ -5777,6 +5996,7 @@ void GL_APIENTRY GL_Vertex2sv(const GLshort *v)
         if (isCallValid)
         {
             context->vertex2sv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Vertex2sv, isCallValid, context, v);
     }
@@ -5802,6 +6022,7 @@ void GL_APIENTRY GL_Vertex3d(GLdouble x, GLdouble y, GLdouble z)
         if (isCallValid)
         {
             context->vertex3d(x, y, z);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Vertex3d, isCallValid, context, x, y, z);
     }
@@ -5827,6 +6048,7 @@ void GL_APIENTRY GL_Vertex3dv(const GLdouble *v)
         if (isCallValid)
         {
             context->vertex3dv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Vertex3dv, isCallValid, context, v);
     }
@@ -5852,6 +6074,7 @@ void GL_APIENTRY GL_Vertex3f(GLfloat x, GLfloat y, GLfloat z)
         if (isCallValid)
         {
             context->vertex3f(x, y, z);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Vertex3f, isCallValid, context, x, y, z);
     }
@@ -5877,6 +6100,7 @@ void GL_APIENTRY GL_Vertex3fv(const GLfloat *v)
         if (isCallValid)
         {
             context->vertex3fv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Vertex3fv, isCallValid, context, v);
     }
@@ -5902,6 +6126,7 @@ void GL_APIENTRY GL_Vertex3i(GLint x, GLint y, GLint z)
         if (isCallValid)
         {
             context->vertex3i(x, y, z);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Vertex3i, isCallValid, context, x, y, z);
     }
@@ -5927,6 +6152,7 @@ void GL_APIENTRY GL_Vertex3iv(const GLint *v)
         if (isCallValid)
         {
             context->vertex3iv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Vertex3iv, isCallValid, context, v);
     }
@@ -5952,6 +6178,7 @@ void GL_APIENTRY GL_Vertex3s(GLshort x, GLshort y, GLshort z)
         if (isCallValid)
         {
             context->vertex3s(x, y, z);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Vertex3s, isCallValid, context, x, y, z);
     }
@@ -5977,6 +6204,7 @@ void GL_APIENTRY GL_Vertex3sv(const GLshort *v)
         if (isCallValid)
         {
             context->vertex3sv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Vertex3sv, isCallValid, context, v);
     }
@@ -6003,6 +6231,7 @@ void GL_APIENTRY GL_Vertex4d(GLdouble x, GLdouble y, GLdouble z, GLdouble w)
         if (isCallValid)
         {
             context->vertex4d(x, y, z, w);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Vertex4d, isCallValid, context, x, y, z, w);
     }
@@ -6028,6 +6257,7 @@ void GL_APIENTRY GL_Vertex4dv(const GLdouble *v)
         if (isCallValid)
         {
             context->vertex4dv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Vertex4dv, isCallValid, context, v);
     }
@@ -6054,6 +6284,7 @@ void GL_APIENTRY GL_Vertex4f(GLfloat x, GLfloat y, GLfloat z, GLfloat w)
         if (isCallValid)
         {
             context->vertex4f(x, y, z, w);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Vertex4f, isCallValid, context, x, y, z, w);
     }
@@ -6079,6 +6310,7 @@ void GL_APIENTRY GL_Vertex4fv(const GLfloat *v)
         if (isCallValid)
         {
             context->vertex4fv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Vertex4fv, isCallValid, context, v);
     }
@@ -6105,6 +6337,7 @@ void GL_APIENTRY GL_Vertex4i(GLint x, GLint y, GLint z, GLint w)
         if (isCallValid)
         {
             context->vertex4i(x, y, z, w);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Vertex4i, isCallValid, context, x, y, z, w);
     }
@@ -6130,6 +6363,7 @@ void GL_APIENTRY GL_Vertex4iv(const GLint *v)
         if (isCallValid)
         {
             context->vertex4iv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Vertex4iv, isCallValid, context, v);
     }
@@ -6156,6 +6390,7 @@ void GL_APIENTRY GL_Vertex4s(GLshort x, GLshort y, GLshort z, GLshort w)
         if (isCallValid)
         {
             context->vertex4s(x, y, z, w);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Vertex4s, isCallValid, context, x, y, z, w);
     }
@@ -6181,6 +6416,7 @@ void GL_APIENTRY GL_Vertex4sv(const GLshort *v)
         if (isCallValid)
         {
             context->vertex4sv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Vertex4sv, isCallValid, context, v);
     }
@@ -6214,6 +6450,7 @@ GLboolean GL_APIENTRY GL_AreTexturesResident(GLsizei n,
         if (isCallValid)
         {
             returnValue = context->areTexturesResident(n, textures, residences);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         else
         {
@@ -6247,6 +6484,7 @@ void GL_APIENTRY GL_ArrayElement(GLint i)
         if (isCallValid)
         {
             context->arrayElement(i);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(ArrayElement, isCallValid, context, i);
     }
@@ -6283,6 +6521,7 @@ void GL_APIENTRY GL_CopyTexImage1D(GLenum target,
         if (isCallValid)
         {
             context->copyTexImage1D(target, level, internalformat, x, y, width, border);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(CopyTexImage1D, isCallValid, context, target, level, internalformat, x, y,
                          width, border);
@@ -6314,6 +6553,7 @@ GL_CopyTexSubImage1D(GLenum target, GLint level, GLint xoffset, GLint x, GLint y
         if (isCallValid)
         {
             context->copyTexSubImage1D(target, level, xoffset, x, y, width);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(CopyTexSubImage1D, isCallValid, context, target, level, xoffset, x, y,
                          width);
@@ -6342,6 +6582,7 @@ void GL_APIENTRY GL_EdgeFlagPointer(GLsizei stride, const void *pointer)
         if (isCallValid)
         {
             context->edgeFlagPointer(stride, pointer);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(EdgeFlagPointer, isCallValid, context, stride, pointer);
     }
@@ -6370,6 +6611,7 @@ void GL_APIENTRY GL_IndexPointer(GLenum type, GLsizei stride, const void *pointe
         if (isCallValid)
         {
             context->indexPointer(type, stride, pointer);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(IndexPointer, isCallValid, context, type, stride, pointer);
     }
@@ -6395,6 +6637,7 @@ void GL_APIENTRY GL_Indexub(GLubyte c)
         if (isCallValid)
         {
             context->indexub(c);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Indexub, isCallValid, context, c);
     }
@@ -6420,6 +6663,7 @@ void GL_APIENTRY GL_Indexubv(const GLubyte *c)
         if (isCallValid)
         {
             context->indexubv(c);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(Indexubv, isCallValid, context, c);
     }
@@ -6448,6 +6692,7 @@ void GL_APIENTRY GL_InterleavedArrays(GLenum format, GLsizei stride, const void 
         if (isCallValid)
         {
             context->interleavedArrays(format, stride, pointer);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(InterleavedArrays, isCallValid, context, format, stride, pointer);
     }
@@ -6473,6 +6718,7 @@ void GL_APIENTRY GL_PopClientAttrib()
         if (isCallValid)
         {
             context->popClientAttrib();
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(PopClientAttrib, isCallValid, context);
     }
@@ -6501,6 +6747,7 @@ void GL_APIENTRY GL_PrioritizeTextures(GLsizei n, const GLuint *textures, const 
         if (isCallValid)
         {
             context->prioritizeTextures(n, textures, priorities);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(PrioritizeTextures, isCallValid, context, n, textures, priorities);
     }
@@ -6527,6 +6774,7 @@ void GL_APIENTRY GL_PushClientAttrib(GLbitfield mask)
         if (isCallValid)
         {
             context->pushClientAttrib(mask);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(PushClientAttrib, isCallValid, context, mask);
     }
@@ -6564,6 +6812,7 @@ void GL_APIENTRY GL_TexSubImage1D(GLenum target,
         if (isCallValid)
         {
             context->texSubImage1D(target, level, xoffset, width, format, type, pixels);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(TexSubImage1D, isCallValid, context, target, level, xoffset, width, format,
                          type, pixels);
@@ -6607,6 +6856,7 @@ void GL_APIENTRY GL_CompressedTexImage1D(GLenum target,
         {
             context->compressedTexImage1D(target, level, internalformat, width, border, imageSize,
                                           data);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(CompressedTexImage1D, isCallValid, context, target, level, internalformat,
                          width, border, imageSize, data);
@@ -6646,6 +6896,7 @@ void GL_APIENTRY GL_CompressedTexSubImage1D(GLenum target,
         {
             context->compressedTexSubImage1D(target, level, xoffset, width, format, imageSize,
                                              data);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(CompressedTexSubImage1D, isCallValid, context, target, level, xoffset,
                          width, format, imageSize, data);
@@ -6675,6 +6926,7 @@ void GL_APIENTRY GL_GetCompressedTexImage(GLenum target, GLint level, void *img)
         if (isCallValid)
         {
             context->getCompressedTexImage(targetPacked, level, img);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(GetCompressedTexImage, isCallValid, context, targetPacked, level, img);
     }
@@ -6702,6 +6954,7 @@ void GL_APIENTRY GL_LoadTransposeMatrixd(const GLdouble *m)
         if (isCallValid)
         {
             context->loadTransposeMatrixd(m);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(LoadTransposeMatrixd, isCallValid, context, m);
     }
@@ -6729,6 +6982,7 @@ void GL_APIENTRY GL_LoadTransposeMatrixf(const GLfloat *m)
         if (isCallValid)
         {
             context->loadTransposeMatrixf(m);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(LoadTransposeMatrixf, isCallValid, context, m);
     }
@@ -6756,6 +7010,7 @@ void GL_APIENTRY GL_MultTransposeMatrixd(const GLdouble *m)
         if (isCallValid)
         {
             context->multTransposeMatrixd(m);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultTransposeMatrixd, isCallValid, context, m);
     }
@@ -6783,6 +7038,7 @@ void GL_APIENTRY GL_MultTransposeMatrixf(const GLfloat *m)
         if (isCallValid)
         {
             context->multTransposeMatrixf(m);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultTransposeMatrixf, isCallValid, context, m);
     }
@@ -6809,6 +7065,7 @@ void GL_APIENTRY GL_MultiTexCoord1d(GLenum target, GLdouble s)
         if (isCallValid)
         {
             context->multiTexCoord1d(target, s);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiTexCoord1d, isCallValid, context, target, s);
     }
@@ -6835,6 +7092,7 @@ void GL_APIENTRY GL_MultiTexCoord1dv(GLenum target, const GLdouble *v)
         if (isCallValid)
         {
             context->multiTexCoord1dv(target, v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiTexCoord1dv, isCallValid, context, target, v);
     }
@@ -6861,6 +7119,7 @@ void GL_APIENTRY GL_MultiTexCoord1f(GLenum target, GLfloat s)
         if (isCallValid)
         {
             context->multiTexCoord1f(target, s);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiTexCoord1f, isCallValid, context, target, s);
     }
@@ -6887,6 +7146,7 @@ void GL_APIENTRY GL_MultiTexCoord1fv(GLenum target, const GLfloat *v)
         if (isCallValid)
         {
             context->multiTexCoord1fv(target, v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiTexCoord1fv, isCallValid, context, target, v);
     }
@@ -6913,6 +7173,7 @@ void GL_APIENTRY GL_MultiTexCoord1i(GLenum target, GLint s)
         if (isCallValid)
         {
             context->multiTexCoord1i(target, s);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiTexCoord1i, isCallValid, context, target, s);
     }
@@ -6939,6 +7200,7 @@ void GL_APIENTRY GL_MultiTexCoord1iv(GLenum target, const GLint *v)
         if (isCallValid)
         {
             context->multiTexCoord1iv(target, v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiTexCoord1iv, isCallValid, context, target, v);
     }
@@ -6965,6 +7227,7 @@ void GL_APIENTRY GL_MultiTexCoord1s(GLenum target, GLshort s)
         if (isCallValid)
         {
             context->multiTexCoord1s(target, s);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiTexCoord1s, isCallValid, context, target, s);
     }
@@ -6991,6 +7254,7 @@ void GL_APIENTRY GL_MultiTexCoord1sv(GLenum target, const GLshort *v)
         if (isCallValid)
         {
             context->multiTexCoord1sv(target, v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiTexCoord1sv, isCallValid, context, target, v);
     }
@@ -7018,6 +7282,7 @@ void GL_APIENTRY GL_MultiTexCoord2d(GLenum target, GLdouble s, GLdouble t)
         if (isCallValid)
         {
             context->multiTexCoord2d(target, s, t);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiTexCoord2d, isCallValid, context, target, s, t);
     }
@@ -7044,6 +7309,7 @@ void GL_APIENTRY GL_MultiTexCoord2dv(GLenum target, const GLdouble *v)
         if (isCallValid)
         {
             context->multiTexCoord2dv(target, v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiTexCoord2dv, isCallValid, context, target, v);
     }
@@ -7071,6 +7337,7 @@ void GL_APIENTRY GL_MultiTexCoord2f(GLenum target, GLfloat s, GLfloat t)
         if (isCallValid)
         {
             context->multiTexCoord2f(target, s, t);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiTexCoord2f, isCallValid, context, target, s, t);
     }
@@ -7097,6 +7364,7 @@ void GL_APIENTRY GL_MultiTexCoord2fv(GLenum target, const GLfloat *v)
         if (isCallValid)
         {
             context->multiTexCoord2fv(target, v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiTexCoord2fv, isCallValid, context, target, v);
     }
@@ -7124,6 +7392,7 @@ void GL_APIENTRY GL_MultiTexCoord2i(GLenum target, GLint s, GLint t)
         if (isCallValid)
         {
             context->multiTexCoord2i(target, s, t);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiTexCoord2i, isCallValid, context, target, s, t);
     }
@@ -7150,6 +7419,7 @@ void GL_APIENTRY GL_MultiTexCoord2iv(GLenum target, const GLint *v)
         if (isCallValid)
         {
             context->multiTexCoord2iv(target, v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiTexCoord2iv, isCallValid, context, target, v);
     }
@@ -7177,6 +7447,7 @@ void GL_APIENTRY GL_MultiTexCoord2s(GLenum target, GLshort s, GLshort t)
         if (isCallValid)
         {
             context->multiTexCoord2s(target, s, t);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiTexCoord2s, isCallValid, context, target, s, t);
     }
@@ -7203,6 +7474,7 @@ void GL_APIENTRY GL_MultiTexCoord2sv(GLenum target, const GLshort *v)
         if (isCallValid)
         {
             context->multiTexCoord2sv(target, v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiTexCoord2sv, isCallValid, context, target, v);
     }
@@ -7230,6 +7502,7 @@ void GL_APIENTRY GL_MultiTexCoord3d(GLenum target, GLdouble s, GLdouble t, GLdou
         if (isCallValid)
         {
             context->multiTexCoord3d(target, s, t, r);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiTexCoord3d, isCallValid, context, target, s, t, r);
     }
@@ -7256,6 +7529,7 @@ void GL_APIENTRY GL_MultiTexCoord3dv(GLenum target, const GLdouble *v)
         if (isCallValid)
         {
             context->multiTexCoord3dv(target, v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiTexCoord3dv, isCallValid, context, target, v);
     }
@@ -7283,6 +7557,7 @@ void GL_APIENTRY GL_MultiTexCoord3f(GLenum target, GLfloat s, GLfloat t, GLfloat
         if (isCallValid)
         {
             context->multiTexCoord3f(target, s, t, r);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiTexCoord3f, isCallValid, context, target, s, t, r);
     }
@@ -7309,6 +7584,7 @@ void GL_APIENTRY GL_MultiTexCoord3fv(GLenum target, const GLfloat *v)
         if (isCallValid)
         {
             context->multiTexCoord3fv(target, v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiTexCoord3fv, isCallValid, context, target, v);
     }
@@ -7336,6 +7612,7 @@ void GL_APIENTRY GL_MultiTexCoord3i(GLenum target, GLint s, GLint t, GLint r)
         if (isCallValid)
         {
             context->multiTexCoord3i(target, s, t, r);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiTexCoord3i, isCallValid, context, target, s, t, r);
     }
@@ -7362,6 +7639,7 @@ void GL_APIENTRY GL_MultiTexCoord3iv(GLenum target, const GLint *v)
         if (isCallValid)
         {
             context->multiTexCoord3iv(target, v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiTexCoord3iv, isCallValid, context, target, v);
     }
@@ -7389,6 +7667,7 @@ void GL_APIENTRY GL_MultiTexCoord3s(GLenum target, GLshort s, GLshort t, GLshort
         if (isCallValid)
         {
             context->multiTexCoord3s(target, s, t, r);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiTexCoord3s, isCallValid, context, target, s, t, r);
     }
@@ -7415,6 +7694,7 @@ void GL_APIENTRY GL_MultiTexCoord3sv(GLenum target, const GLshort *v)
         if (isCallValid)
         {
             context->multiTexCoord3sv(target, v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiTexCoord3sv, isCallValid, context, target, v);
     }
@@ -7442,6 +7722,7 @@ void GL_APIENTRY GL_MultiTexCoord4d(GLenum target, GLdouble s, GLdouble t, GLdou
         if (isCallValid)
         {
             context->multiTexCoord4d(target, s, t, r, q);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiTexCoord4d, isCallValid, context, target, s, t, r, q);
     }
@@ -7468,6 +7749,7 @@ void GL_APIENTRY GL_MultiTexCoord4dv(GLenum target, const GLdouble *v)
         if (isCallValid)
         {
             context->multiTexCoord4dv(target, v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiTexCoord4dv, isCallValid, context, target, v);
     }
@@ -7494,6 +7776,7 @@ void GL_APIENTRY GL_MultiTexCoord4fv(GLenum target, const GLfloat *v)
         if (isCallValid)
         {
             context->multiTexCoord4fv(target, v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiTexCoord4fv, isCallValid, context, target, v);
     }
@@ -7521,6 +7804,7 @@ void GL_APIENTRY GL_MultiTexCoord4i(GLenum target, GLint s, GLint t, GLint r, GL
         if (isCallValid)
         {
             context->multiTexCoord4i(target, s, t, r, q);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiTexCoord4i, isCallValid, context, target, s, t, r, q);
     }
@@ -7547,6 +7831,7 @@ void GL_APIENTRY GL_MultiTexCoord4iv(GLenum target, const GLint *v)
         if (isCallValid)
         {
             context->multiTexCoord4iv(target, v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiTexCoord4iv, isCallValid, context, target, v);
     }
@@ -7574,6 +7859,7 @@ void GL_APIENTRY GL_MultiTexCoord4s(GLenum target, GLshort s, GLshort t, GLshort
         if (isCallValid)
         {
             context->multiTexCoord4s(target, s, t, r, q);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiTexCoord4s, isCallValid, context, target, s, t, r, q);
     }
@@ -7600,6 +7886,7 @@ void GL_APIENTRY GL_MultiTexCoord4sv(GLenum target, const GLshort *v)
         if (isCallValid)
         {
             context->multiTexCoord4sv(target, v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiTexCoord4sv, isCallValid, context, target, v);
     }
@@ -7629,6 +7916,7 @@ void GL_APIENTRY GL_FogCoordPointer(GLenum type, GLsizei stride, const void *poi
         if (isCallValid)
         {
             context->fogCoordPointer(type, stride, pointer);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(FogCoordPointer, isCallValid, context, type, stride, pointer);
     }
@@ -7654,6 +7942,7 @@ void GL_APIENTRY GL_FogCoordd(GLdouble coord)
         if (isCallValid)
         {
             context->fogCoordd(coord);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(FogCoordd, isCallValid, context, coord);
     }
@@ -7680,6 +7969,7 @@ void GL_APIENTRY GL_FogCoorddv(const GLdouble *coord)
         if (isCallValid)
         {
             context->fogCoorddv(coord);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(FogCoorddv, isCallValid, context, coord);
     }
@@ -7705,6 +7995,7 @@ void GL_APIENTRY GL_FogCoordf(GLfloat coord)
         if (isCallValid)
         {
             context->fogCoordf(coord);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(FogCoordf, isCallValid, context, coord);
     }
@@ -7731,6 +8022,7 @@ void GL_APIENTRY GL_FogCoordfv(const GLfloat *coord)
         if (isCallValid)
         {
             context->fogCoordfv(coord);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(FogCoordfv, isCallValid, context, coord);
     }
@@ -7765,6 +8057,7 @@ void GL_APIENTRY GL_MultiDrawArrays(GLenum mode,
         if (isCallValid)
         {
             context->multiDrawArrays(modePacked, first, count, drawcount);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiDrawArrays, isCallValid, context, modePacked, first, count,
                          drawcount);
@@ -7802,6 +8095,7 @@ void GL_APIENTRY GL_MultiDrawElements(GLenum mode,
         if (isCallValid)
         {
             context->multiDrawElements(modePacked, count, typePacked, indices, drawcount);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(MultiDrawElements, isCallValid, context, modePacked, count, typePacked,
                          indices, drawcount);
@@ -7830,6 +8124,7 @@ void GL_APIENTRY GL_PointParameteri(GLenum pname, GLint param)
         if (isCallValid)
         {
             context->pointParameteri(pname, param);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(PointParameteri, isCallValid, context, pname, param);
     }
@@ -7857,6 +8152,7 @@ void GL_APIENTRY GL_PointParameteriv(GLenum pname, const GLint *params)
         if (isCallValid)
         {
             context->pointParameteriv(pname, params);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(PointParameteriv, isCallValid, context, pname, params);
     }
@@ -7884,6 +8180,7 @@ void GL_APIENTRY GL_SecondaryColor3b(GLbyte red, GLbyte green, GLbyte blue)
         if (isCallValid)
         {
             context->secondaryColor3b(red, green, blue);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(SecondaryColor3b, isCallValid, context, red, green, blue);
     }
@@ -7910,6 +8207,7 @@ void GL_APIENTRY GL_SecondaryColor3bv(const GLbyte *v)
         if (isCallValid)
         {
             context->secondaryColor3bv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(SecondaryColor3bv, isCallValid, context, v);
     }
@@ -7937,6 +8235,7 @@ void GL_APIENTRY GL_SecondaryColor3d(GLdouble red, GLdouble green, GLdouble blue
         if (isCallValid)
         {
             context->secondaryColor3d(red, green, blue);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(SecondaryColor3d, isCallValid, context, red, green, blue);
     }
@@ -7963,6 +8262,7 @@ void GL_APIENTRY GL_SecondaryColor3dv(const GLdouble *v)
         if (isCallValid)
         {
             context->secondaryColor3dv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(SecondaryColor3dv, isCallValid, context, v);
     }
@@ -7990,6 +8290,7 @@ void GL_APIENTRY GL_SecondaryColor3f(GLfloat red, GLfloat green, GLfloat blue)
         if (isCallValid)
         {
             context->secondaryColor3f(red, green, blue);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(SecondaryColor3f, isCallValid, context, red, green, blue);
     }
@@ -8016,6 +8317,7 @@ void GL_APIENTRY GL_SecondaryColor3fv(const GLfloat *v)
         if (isCallValid)
         {
             context->secondaryColor3fv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(SecondaryColor3fv, isCallValid, context, v);
     }
@@ -8043,6 +8345,7 @@ void GL_APIENTRY GL_SecondaryColor3i(GLint red, GLint green, GLint blue)
         if (isCallValid)
         {
             context->secondaryColor3i(red, green, blue);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(SecondaryColor3i, isCallValid, context, red, green, blue);
     }
@@ -8069,6 +8372,7 @@ void GL_APIENTRY GL_SecondaryColor3iv(const GLint *v)
         if (isCallValid)
         {
             context->secondaryColor3iv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(SecondaryColor3iv, isCallValid, context, v);
     }
@@ -8096,6 +8400,7 @@ void GL_APIENTRY GL_SecondaryColor3s(GLshort red, GLshort green, GLshort blue)
         if (isCallValid)
         {
             context->secondaryColor3s(red, green, blue);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(SecondaryColor3s, isCallValid, context, red, green, blue);
     }
@@ -8122,6 +8427,7 @@ void GL_APIENTRY GL_SecondaryColor3sv(const GLshort *v)
         if (isCallValid)
         {
             context->secondaryColor3sv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(SecondaryColor3sv, isCallValid, context, v);
     }
@@ -8149,6 +8455,7 @@ void GL_APIENTRY GL_SecondaryColor3ub(GLubyte red, GLubyte green, GLubyte blue)
         if (isCallValid)
         {
             context->secondaryColor3ub(red, green, blue);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(SecondaryColor3ub, isCallValid, context, red, green, blue);
     }
@@ -8175,6 +8482,7 @@ void GL_APIENTRY GL_SecondaryColor3ubv(const GLubyte *v)
         if (isCallValid)
         {
             context->secondaryColor3ubv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(SecondaryColor3ubv, isCallValid, context, v);
     }
@@ -8202,6 +8510,7 @@ void GL_APIENTRY GL_SecondaryColor3ui(GLuint red, GLuint green, GLuint blue)
         if (isCallValid)
         {
             context->secondaryColor3ui(red, green, blue);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(SecondaryColor3ui, isCallValid, context, red, green, blue);
     }
@@ -8228,6 +8537,7 @@ void GL_APIENTRY GL_SecondaryColor3uiv(const GLuint *v)
         if (isCallValid)
         {
             context->secondaryColor3uiv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(SecondaryColor3uiv, isCallValid, context, v);
     }
@@ -8255,6 +8565,7 @@ void GL_APIENTRY GL_SecondaryColor3us(GLushort red, GLushort green, GLushort blu
         if (isCallValid)
         {
             context->secondaryColor3us(red, green, blue);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(SecondaryColor3us, isCallValid, context, red, green, blue);
     }
@@ -8281,6 +8592,7 @@ void GL_APIENTRY GL_SecondaryColor3usv(const GLushort *v)
         if (isCallValid)
         {
             context->secondaryColor3usv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(SecondaryColor3usv, isCallValid, context, v);
     }
@@ -8314,6 +8626,7 @@ void GL_APIENTRY GL_SecondaryColorPointer(GLint size,
         if (isCallValid)
         {
             context->secondaryColorPointer(size, type, stride, pointer);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(SecondaryColorPointer, isCallValid, context, size, type, stride, pointer);
     }
@@ -8339,6 +8652,7 @@ void GL_APIENTRY GL_WindowPos2d(GLdouble x, GLdouble y)
         if (isCallValid)
         {
             context->windowPos2d(x, y);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(WindowPos2d, isCallValid, context, x, y);
     }
@@ -8365,6 +8679,7 @@ void GL_APIENTRY GL_WindowPos2dv(const GLdouble *v)
         if (isCallValid)
         {
             context->windowPos2dv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(WindowPos2dv, isCallValid, context, v);
     }
@@ -8390,6 +8705,7 @@ void GL_APIENTRY GL_WindowPos2f(GLfloat x, GLfloat y)
         if (isCallValid)
         {
             context->windowPos2f(x, y);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(WindowPos2f, isCallValid, context, x, y);
     }
@@ -8416,6 +8732,7 @@ void GL_APIENTRY GL_WindowPos2fv(const GLfloat *v)
         if (isCallValid)
         {
             context->windowPos2fv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(WindowPos2fv, isCallValid, context, v);
     }
@@ -8441,6 +8758,7 @@ void GL_APIENTRY GL_WindowPos2i(GLint x, GLint y)
         if (isCallValid)
         {
             context->windowPos2i(x, y);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(WindowPos2i, isCallValid, context, x, y);
     }
@@ -8467,6 +8785,7 @@ void GL_APIENTRY GL_WindowPos2iv(const GLint *v)
         if (isCallValid)
         {
             context->windowPos2iv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(WindowPos2iv, isCallValid, context, v);
     }
@@ -8492,6 +8811,7 @@ void GL_APIENTRY GL_WindowPos2s(GLshort x, GLshort y)
         if (isCallValid)
         {
             context->windowPos2s(x, y);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(WindowPos2s, isCallValid, context, x, y);
     }
@@ -8518,6 +8838,7 @@ void GL_APIENTRY GL_WindowPos2sv(const GLshort *v)
         if (isCallValid)
         {
             context->windowPos2sv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(WindowPos2sv, isCallValid, context, v);
     }
@@ -8543,6 +8864,7 @@ void GL_APIENTRY GL_WindowPos3d(GLdouble x, GLdouble y, GLdouble z)
         if (isCallValid)
         {
             context->windowPos3d(x, y, z);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(WindowPos3d, isCallValid, context, x, y, z);
     }
@@ -8569,6 +8891,7 @@ void GL_APIENTRY GL_WindowPos3dv(const GLdouble *v)
         if (isCallValid)
         {
             context->windowPos3dv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(WindowPos3dv, isCallValid, context, v);
     }
@@ -8594,6 +8917,7 @@ void GL_APIENTRY GL_WindowPos3f(GLfloat x, GLfloat y, GLfloat z)
         if (isCallValid)
         {
             context->windowPos3f(x, y, z);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(WindowPos3f, isCallValid, context, x, y, z);
     }
@@ -8620,6 +8944,7 @@ void GL_APIENTRY GL_WindowPos3fv(const GLfloat *v)
         if (isCallValid)
         {
             context->windowPos3fv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(WindowPos3fv, isCallValid, context, v);
     }
@@ -8645,6 +8970,7 @@ void GL_APIENTRY GL_WindowPos3i(GLint x, GLint y, GLint z)
         if (isCallValid)
         {
             context->windowPos3i(x, y, z);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(WindowPos3i, isCallValid, context, x, y, z);
     }
@@ -8671,6 +8997,7 @@ void GL_APIENTRY GL_WindowPos3iv(const GLint *v)
         if (isCallValid)
         {
             context->windowPos3iv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(WindowPos3iv, isCallValid, context, v);
     }
@@ -8696,6 +9023,7 @@ void GL_APIENTRY GL_WindowPos3s(GLshort x, GLshort y, GLshort z)
         if (isCallValid)
         {
             context->windowPos3s(x, y, z);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(WindowPos3s, isCallValid, context, x, y, z);
     }
@@ -8722,6 +9050,7 @@ void GL_APIENTRY GL_WindowPos3sv(const GLshort *v)
         if (isCallValid)
         {
             context->windowPos3sv(v);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(WindowPos3sv, isCallValid, context, v);
     }
@@ -8751,6 +9080,7 @@ void GL_APIENTRY GL_GetBufferSubData(GLenum target, GLintptr offset, GLsizeiptr 
         if (isCallValid)
         {
             context->getBufferSubData(target, offset, size, data);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(GetBufferSubData, isCallValid, context, target, offset, size, data);
     }
@@ -8778,6 +9108,7 @@ void GL_APIENTRY GL_GetQueryObjectiv(GLuint id, GLenum pname, GLint *params)
         if (isCallValid)
         {
             context->getQueryObjectiv(idPacked, pname, params);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         ANGLE_CAPTURE_GL(GetQueryObjectiv, isCallValid, context, idPacked, pname, params);
     }
@@ -8806,6 +9137,7 @@ void *GL_APIENTRY GL_MapBuffer(GLenum target, GLenum access)
         if (isCallValid)
         {
             returnValue = context->mapBuffer(targetPacked, access);
+            ASSERT(context->isContextMutexStateConsistent());
         }
         else
         {

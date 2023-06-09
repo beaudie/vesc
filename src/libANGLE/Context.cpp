@@ -985,7 +985,7 @@ egl::Error Context::makeCurrent(egl::Display *display,
         return angle::ResultToEGL(implResult);
     }
 
-    tryRevertToSingleContextMutex();
+    tryRevertToSingleContextMutex(SingleContextMutexRevert::kDefault);
 
     return egl::NoError();
 }
@@ -2897,13 +2897,13 @@ void Context::drawElementsIndirect(PrimitiveMode mode, DrawElementsType type, co
 void Context::flush()
 {
     ANGLE_CONTEXT_TRY(mImplementation->flush(this));
-    tryRevertToSingleContextMutex();
+    tryRevertToSingleContextMutex(SingleContextMutexRevert::kDefault);
 }
 
 void Context::finish()
 {
     ANGLE_CONTEXT_TRY(mImplementation->finish(this));
-    tryRevertToSingleContextMutex();
+    tryRevertToSingleContextMutex(SingleContextMutexRevert::kDefault);
 }
 
 void Context::insertEventMarker(GLsizei length, const char *marker)
@@ -9614,6 +9614,34 @@ bool Context::isSharedContextMutexActive() const
     return true;
 }
 
+bool Context::isContextMutexStateConsistent() const
+{
+    const SharedContextMutexActivation activation = mState.mSharedContextMutexActivation;
+    if (activation == SharedContextMutexActivation::kNone)
+    {
+        ASSERT(mState.mSingleContextMutex != nullptr);
+        // "SharedContextMutex" may be nullptr. "ContextMutex" may be "SharedContextMutex".
+        return true;
+    }
+    ASSERT(mState.mSharedContextMutex != nullptr);
+    ASSERT(getContextMutex() == mState.mSharedContextMutex);
+
+    if (mState.mSingleContextMutex == nullptr)
+    {
+        ASSERT(activation == SharedContextMutexActivation::kPermanent);
+        return true;
+    }
+
+    if (mState.mSingleContextMutex->isLocked(std::memory_order_acquire))
+    {
+        ERR() << "SingleContextMutex is locked while SharedContextMutex is active: "
+              << static_cast<int>(activation);
+        return false;
+    }
+
+    return true;
+}
+
 egl::ScopedContextMutexLock Context::lockAndActivateSharedContextMutex(
     SharedContextMutexActivation activation)
 {
@@ -9672,13 +9700,15 @@ egl::ScopedContextMutexLock Context::lockAndActivateSharedContextMutex(
     return lock;
 }
 
-void Context::tryRevertToSingleContextMutex()
+void Context::tryRevertToSingleContextMutex(SingleContextMutexRevert revert)
 {
     constexpr double kRevertTimeoutSec = 1.0;
 
+    ASSERT(isContextMutexStateConsistent());
     if (mState.mSharedContextMutexActivation == SharedContextMutexActivation::kTemporary &&
-        angle::GetCurrentSystemTime() - mState.mSharedContextMutexTempActivationTime >
-            kRevertTimeoutSec)
+        (revert == SingleContextMutexRevert::kEnforced ||
+         angle::GetCurrentSystemTime() - mState.mSharedContextMutexTempActivationTime >
+             kRevertTimeoutSec))
     {
         ASSERT(mState.mSingleContextMutex != nullptr);
         mState.mSharedContextMutexActivation = SharedContextMutexActivation::kNone;
@@ -10142,7 +10172,7 @@ void Context::onPreSwap()
     // Dump frame capture if enabled.
     getShareGroup()->getFrameCaptureShared()->onEndFrame(this);
 
-    tryRevertToSingleContextMutex();
+    tryRevertToSingleContextMutex(SingleContextMutexRevert::kDefault);
 }
 
 void Context::getTexImage(TextureTarget target,

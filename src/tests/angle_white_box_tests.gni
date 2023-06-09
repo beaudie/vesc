@@ -4,6 +4,7 @@
 
 angle_white_box_tests_sources = [
   "egl_tests/EGLFeatureControlTest.cpp",
+  "gl_tests/ContextMutexTest.cpp",
   "gl_tests/FormatPrintTest.cpp",
   "test_utils/ANGLETest.cpp",
   "test_utils/ANGLETest.h",

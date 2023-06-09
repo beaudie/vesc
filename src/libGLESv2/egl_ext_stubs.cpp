@@ -56,6 +56,7 @@ EGLImageKHR CreateImageKHR(Thread *thread,
     Image *image = nullptr;
     ANGLE_EGL_TRY_RETURN(thread, display->createImage(context, target, buffer, attributes, &image),
                          "", GetDisplayIfValid(display), EGL_NO_IMAGE);
+    ASSERT(context == nullptr || context->isContextMutexStateConsistent());
 
     thread->setSuccess();
     return reinterpret_cast<EGLImage>(static_cast<uintptr_t>(image->id().value));
@@ -830,6 +831,7 @@ void ReleaseHighPowerGPUANGLE(Thread *thread, Display *display, gl::ContextID co
                   GetDisplayIfValid(display));
     ANGLE_EGL_TRY(thread, context->releaseHighPowerGPU(), "eglReleaseHighPowerGPUANGLE",
                   GetDisplayIfValid(display));
+    ASSERT(context->isContextMutexStateConsistent());
 
     thread->setSuccess();
 }
@@ -841,6 +843,7 @@ void ReacquireHighPowerGPUANGLE(Thread *thread, Display *display, gl::ContextID 
                   GetDisplayIfValid(display));
     ANGLE_EGL_TRY(thread, context->reacquireHighPowerGPU(), "eglReacquireHighPowerGPUANGLE",
                   GetDisplayIfValid(display));
+    ASSERT(context->isContextMutexStateConsistent());
 
     thread->setSuccess();
 }

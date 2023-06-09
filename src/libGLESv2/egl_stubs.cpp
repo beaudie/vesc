@@ -135,6 +135,7 @@ EGLContext CreateContext(Thread *thread,
                          display->createContext(configuration, sharedGLContext, thread->getAPI(),
                                                 attributes, &context),
                          "eglCreateContext", GetDisplayIfValid(display), EGL_NO_CONTEXT);
+    ASSERT(sharedGLContext == nullptr || sharedGLContext->isContextMutexStateConsistent());
 
     thread->setSuccess();
     return reinterpret_cast<EGLContext>(static_cast<uintptr_t>(context->id().value));
@@ -159,6 +160,7 @@ EGLImage CreateImage(Thread *thread,
         thread->setError(error, "eglCreateImage", GetDisplayIfValid(display));
         return EGL_NO_IMAGE;
     }
+    ASSERT(context == nullptr || context->isContextMutexStateConsistent());
 
     thread->setSuccess();
     return reinterpret_cast<EGLImage>(static_cast<uintptr_t>(image->id().value));
@@ -526,6 +528,7 @@ EGLBoolean QueryContext(Thread *thread,
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglQueryContext",
                          GetDisplayIfValid(display), EGL_FALSE);
     QueryContextAttrib(context, attribute, value);
+    ASSERT(context->isContextMutexStateConsistent());
 
     thread->setSuccess();
     return EGL_TRUE;

@@ -116,6 +116,12 @@ enum class VertexAttribTypeCase
     ValidSize3or4  = 3,
 };
 
+enum class SingleContextMutexRevert
+{
+    kDefault,
+    kEnforced,
+};
+
 // Helper class for managing cache variables and state changes.
 class StateCache final : angle::NonCopyable
 {
@@ -672,6 +678,8 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     // For debugging purposes. "ContextMutex" MUST be locked during this call.
     bool isSharedContextMutexActive() const;
+    // For debugging purposes. "ContextMutex" MUST be locked during this call.
+    bool isContextMutexStateConsistent() const;
 
     // Important note:
     //   It is possible that this Context will continue to use "SingleContextMutex" in its current
@@ -684,7 +692,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     // "ContextMutex" MUST be locked during this call.
     // Only call from threads that are locking "ContextMutex" using `getContextMutex()` method.
-    void tryRevertToSingleContextMutex();
+    void tryRevertToSingleContextMutex(SingleContextMutexRevert revert);
 
     // "SharedContextMutex" MUST be locked and permanently active during this call.
     // Merges "SharedContextMutex" of the Context with other "ShareContextMutex".

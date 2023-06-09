@@ -253,6 +253,7 @@ void GL_APIENTRY GL_{name}({params})
         if (isCallValid)
         {{
             context->{name_lower_no_suffix}({internal_params});
+            ASSERT(context->isContextMutexStateConsistent());
         }}
         ANGLE_CAPTURE_GL({name}, isCallValid, {gl_capture_params});
     }}
@@ -278,6 +279,7 @@ TEMPLATE_GLES_ENTRY_POINT_WITH_RETURN = """\
         if (isCallValid)
         {{
             returnValue = context->{name_lower_no_suffix}({internal_params});
+            ASSERT(context->isContextMutexStateConsistent());
         }}
         else
         {{
