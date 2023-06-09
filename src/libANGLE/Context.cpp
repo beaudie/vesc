@@ -9610,6 +9610,27 @@ bool Context::isSharedContextMutexActive() const
     return true;
 }
 
+bool Context::isContextMutexStateConsistent() const
+{
+    if (!mState.mIsSharedContextMutexActive)
+    {
+        ASSERT(mState.mSingleContextMutex != nullptr);
+        // "SharedContextMutex" may be nullptr. "ContextMutex" may be "SharedContextMutex".
+        return true;
+    }
+    ASSERT(mState.mSharedContextMutex != nullptr);
+    ASSERT(getContextMutex() == mState.mSharedContextMutex);
+
+    if (mState.mSingleContextMutex != nullptr &&
+        mState.mSingleContextMutex->isLocked(std::memory_order_acquire))
+    {
+        ERR() << "SingleContextMutex is locked while SharedContextMutex is active!";
+        return false;
+    }
+
+    return true;
+}
+
 egl::ScopedContextMutexLock Context::lockAndActivateSharedContextMutex()
 {
     constexpr uint32_t kActivationDelayMicro = 100;
