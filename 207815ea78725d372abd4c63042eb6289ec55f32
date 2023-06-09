@@ -81,6 +81,23 @@
       },
       "revId": "207815ea78725d372abd4c63042eb6289ec55f32",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6aaab95_0a3e1e08",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-09T17:04:37Z",
+      "side": 1,
+      "message": "Drive by: adding the instructions (put arm_control_flow_integrity \u003d \"none\" in your args.gn file) here would be helpful to users",
+      "revId": "207815ea78725d372abd4c63042eb6289ec55f32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
