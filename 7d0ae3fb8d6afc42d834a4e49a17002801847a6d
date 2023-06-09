@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6dcb761b_dac5cc07",
+        "filename": "include/platform/.clang-format",
+        "patchSetId": 5
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-09T22:19:53Z",
+      "side": 1,
+      "message": "Ughh, this will disable clang-format in non-autogen files in this directory, such as include/platform/Feature.h\n\nSadly, I can\u0027t find a way to apply clang-format rules only to certain file. Which is why I moved angle_features_autogen files from util/ to util/codegen. I could move this to autogen/ sub-directory as well.",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 19
+      },
+      "revId": "7d0ae3fb8d6afc42d834a4e49a17002801847a6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
