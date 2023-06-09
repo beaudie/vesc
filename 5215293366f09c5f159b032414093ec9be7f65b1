@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef1cb55f_d0cc5e77",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-06-09T13:21:06Z",
+      "side": 1,
+      "message": "Breaks Perf bots:\nhttps://ci.chromium.org/ui/p/angle/builders/ci/win10-intel-uhd630-perf/1633/overview\nhttps://ci.chromium.org/ui/p/angle/builders/ci/win10-nvidia-gtx1660-perf/1606/overview\nhttps://ci.chromium.org/ui/p/angle/builders/ci/linux-nvidia-gtx1660-perf/1648/overview",
+      "revId": "5215293366f09c5f159b032414093ec9be7f65b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
