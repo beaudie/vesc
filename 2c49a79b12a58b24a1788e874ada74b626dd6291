@@ -16,6 +16,24 @@
       "message": "Looks sane though untested. Meanwhile, bots look happy ; )",
       "revId": "2c49a79b12a58b24a1788e874ada74b626dd6291",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7381de2c_4e5c39a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-09T15:34:02Z",
+      "side": 1,
+      "message": "We don\u0027t have any wayland tests unfortunately, so bots aren\u0027t testing anything!\n\nI\u0027ll +2, but do try verifying it with something",
+      "parentUuid": "4367de1a_9ecaf5b7",
+      "revId": "2c49a79b12a58b24a1788e874ada74b626dd6291",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
