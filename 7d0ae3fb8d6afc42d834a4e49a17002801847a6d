@@ -22,6 +22,30 @@
       },
       "revId": "7d0ae3fb8d6afc42d834a4e49a17002801847a6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "151d3048_d3e78e75",
+        "filename": "include/platform/.clang-format",
+        "patchSetId": 5
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-09T22:21:08Z",
+      "side": 1,
+      "message": "(I meant util/autogen instead of util/codegen)",
+      "parentUuid": "6dcb761b_dac5cc07",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 19
+      },
+      "revId": "7d0ae3fb8d6afc42d834a4e49a17002801847a6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
