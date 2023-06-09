@@ -34,6 +34,24 @@
       "parentUuid": "ef1cb55f_d0cc5e77",
       "revId": "5215293366f09c5f159b032414093ec9be7f65b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afcf57b2_45b5cb16",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-09T14:24:04Z",
+      "side": 1,
+      "message": "Heh, pretty cool crash - UB in trace corrupts `mTraceFunctions` vtable and bada boom.\n\n`glGetActiveAttrib(gShaderProgramMap[68], 2, 256, reinterpret_cast\u003cGLsizei *\u003e(gReadBuffer), reinterpret_cast\u003cGLint *\u003e(gReadBuffer), reinterpret_cast\u003cGLenum *\u003e(gReadBuffer), glGetActiveAttrib_name_5);`\n\nwhere `GLchar glGetActiveAttrib_name_5[] \u003d { \"g_vPosData\" };` is a global\n\n`glGetActiveAttrib` _writes_ to the buffer passed in the last argument, so basically `memcpy \"g_vTexUV0Data\" -\u003e glGetActiveAttrib_name_5`",
+      "parentUuid": "79030a45_0cd73624",
+      "revId": "5215293366f09c5f159b032414093ec9be7f65b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
