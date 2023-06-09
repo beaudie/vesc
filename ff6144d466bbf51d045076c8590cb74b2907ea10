@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19b5d38e_1016abb7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-06-09T17:14:22Z",
+      "side": 1,
+      "message": "lgtm+2\n\n+djg and kkinnunen as FYI.\n\nLet me CQ this for you.",
+      "revId": "ff6144d466bbf51d045076c8590cb74b2907ea10",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
