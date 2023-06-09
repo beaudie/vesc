@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0b89516_e5815daa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-06-09T16:40:39Z",
+      "side": 1,
+      "message": "Please watch how this affects variance.\nI think the idea of --split-shard-samples is that averaging results across several devices produces something consistent.",
+      "revId": "630f492344fcf1702cf627947e8bba95b0231830",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
