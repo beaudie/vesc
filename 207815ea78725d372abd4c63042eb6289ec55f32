@@ -90,6 +90,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "906d2020_b453ce53",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-06-09T18:39:22Z",
+      "side": 1,
+      "message": "It depends more on the type of target.\n\nIf I move it to a global scope, or in a config, I get:\n```\nERROR at //gni/angle.gni:329:9 (//build/toolchain/android:android_clang_arm): Undefined identifier\n        arm_control_flow_integrity \u003d\u003d \"none\",\n        ^-------------------------\n```\nI even tried putting it in `template(\"angle_shared_library\")` and get the same error.  `angle_libGLESv2(\"libGLESv2\")` doesn\u0027t work either.\n\nI just tried about 50 different places, same result.  Not sure what the secret sauce about `angle_test(\"angle_trace_tests\")` is.",
+      "parentUuid": "d10c8c45_f3d77369",
+      "revId": "207815ea78725d372abd4c63042eb6289ec55f32",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91d1233c_86877733",
