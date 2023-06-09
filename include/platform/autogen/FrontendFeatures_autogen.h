@@ -36,18 +36,25 @@ struct FrontendFeatures : FeatureSetBase
     };
 
     FeatureInfo scalarizeVecAndMatConstructorArgs = {
-        "scalarizeVecAndMatConstructorArgs", FeatureCategory::FrontendWorkarounds,
-        "Always rewrite vec/mat constructors to be consistent", &members,
-        "http://crbug.com/1165751"};
+        "scalarizeVecAndMatConstructorArgs",
+        FeatureCategory::FrontendWorkarounds,
+        "Always rewrite vec/mat constructors to be consistent",
+        &members, "http://crbug.com/1165751"
+    };
 
-    FeatureInfo disableProgramBinary = {"disableProgramBinary", FeatureCategory::FrontendFeatures,
-                                        "Disable support for GL_OES_get_program_binary", &members,
-                                        "http://anglebug.com/5007"};
+    FeatureInfo disableProgramBinary = {
+        "disableProgramBinary",
+        FeatureCategory::FrontendFeatures,
+        "Disable support for GL_OES_get_program_binary",
+        &members, "http://anglebug.com/5007"
+    };
 
     FeatureInfo disableDrawBuffersIndexed = {
-        "disableDrawBuffersIndexed", FeatureCategory::FrontendFeatures,
-        "Disable support for OES_draw_buffers_indexed and EXT_draw_buffers_indexed", &members,
-        "http://anglebug.com/7724"};
+        "disableDrawBuffersIndexed",
+        FeatureCategory::FrontendFeatures,
+        "Disable support for OES_draw_buffers_indexed and EXT_draw_buffers_indexed",
+        &members, "http://anglebug.com/7724"
+    };
 
     FeatureInfo disableAnisotropicFiltering = {
         "disableAnisotropicFiltering",
@@ -71,17 +78,25 @@ struct FrontendFeatures : FeatureSetBase
     };
 
     FeatureInfo forceDepthAttachmentInitOnClear = {
-        "forceDepthAttachmentInitOnClear", FeatureCategory::FrontendWorkarounds,
-        "Force depth attachment initialization on clear ops", &members,
-        "https://anglebug.com/7246"};
+        "forceDepthAttachmentInitOnClear",
+        FeatureCategory::FrontendWorkarounds,
+        "Force depth attachment initialization on clear ops",
+        &members, "https://anglebug.com/7246"
+    };
 
-    FeatureInfo enableCaptureLimits = {"enableCaptureLimits", FeatureCategory::FrontendFeatures,
-                                       "Set the context limits like frame capturing was enabled",
-                                       &members, "http://anglebug.com/5750"};
+    FeatureInfo enableCaptureLimits = {
+        "enableCaptureLimits",
+        FeatureCategory::FrontendFeatures,
+        "Set the context limits like frame capturing was enabled",
+        &members, "http://anglebug.com/5750"
+    };
 
     FeatureInfo forceRobustResourceInit = {
-        "forceRobustResourceInit", FeatureCategory::FrontendFeatures,
-        "Force-enable robust resource init", &members, "http://anglebug.com/6041"};
+        "forceRobustResourceInit",
+        FeatureCategory::FrontendFeatures,
+        "Force-enable robust resource init",
+        &members, "http://anglebug.com/6041"
+    };
 
     FeatureInfo forceInitShaderVariables = {
         "forceInitShaderVariables",
@@ -91,36 +106,54 @@ struct FrontendFeatures : FeatureSetBase
     };
 
     FeatureInfo enableProgramBinaryForCapture = {
-        "enableProgramBinaryForCapture", FeatureCategory::FrontendFeatures,
-        "Even if FrameCapture is enabled, enable GL_OES_get_program_binary", &members,
-        "http://anglebug.com/5658"};
+        "enableProgramBinaryForCapture",
+        FeatureCategory::FrontendFeatures,
+        "Even if FrameCapture is enabled, enable GL_OES_get_program_binary",
+        &members, "http://anglebug.com/5658"
+    };
 
     FeatureInfo forceGlErrorChecking = {
-        "forceGlErrorChecking", FeatureCategory::FrontendFeatures,
+        "forceGlErrorChecking",
+        FeatureCategory::FrontendFeatures,
         "Force GL error checking (i.e. prevent applications from disabling error checking",
-        &members, "https://issuetracker.google.com/220069903"};
+        &members, "https://issuetracker.google.com/220069903"
+    };
 
     FeatureInfo emulatePixelLocalStorage = {
-        "emulatePixelLocalStorage", FeatureCategory::FrontendFeatures,
-        "Emulate ANGLE_shader_pixel_local_storage using shader images", &members,
-        "http://anglebug.com/7279"};
+        "emulatePixelLocalStorage",
+        FeatureCategory::FrontendFeatures,
+        "Emulate ANGLE_shader_pixel_local_storage using shader images",
+        &members, "http://anglebug.com/7279"
+    };
 
-    FeatureInfo cacheCompiledShader = {"cacheCompiledShader", FeatureCategory::FrontendFeatures,
-                                       "Enable to cache compiled shaders", &members,
-                                       "http://anglebug.com/7036"};
+    FeatureInfo cacheCompiledShader = {
+        "cacheCompiledShader",
+        FeatureCategory::FrontendFeatures,
+        "Enable to cache compiled shaders",
+        &members, "http://anglebug.com/7036"
+    };
 
-    FeatureInfo dumpShaderSource = {"dumpShaderSource", FeatureCategory::FrontendFeatures,
-                                    "Write shader source to temp directory", &members,
-                                    "http://anglebug.com/7760"};
+    FeatureInfo dumpShaderSource = {
+        "dumpShaderSource",
+        FeatureCategory::FrontendFeatures,
+        "Write shader source to temp directory",
+        &members, "http://anglebug.com/7760"
+    };
 
     FeatureInfo enableShaderSubstitution = {
-        "enableShaderSubstitution", FeatureCategory::FrontendWorkarounds,
+        "enableShaderSubstitution",
+        FeatureCategory::FrontendWorkarounds,
         "Check the filesystem for shaders to use instead of those provided through glShaderSource",
-        &members, "http://anglebug.com/7761"};
+        &members, "http://anglebug.com/7761"
+    };
 
-    FeatureInfo disableProgramCaching = {"disableProgramCaching", FeatureCategory::FrontendFeatures,
-                                         "Disables saving programs to the cache", &members,
-                                         "http://anglebug.com/1423136"};
+    FeatureInfo disableProgramCaching = {
+        "disableProgramCaching",
+        FeatureCategory::FrontendFeatures,
+        "Disables saving programs to the cache",
+        &members, "http://anglebug.com/1423136"
+    };
+
 };
 
 inline FrontendFeatures::FrontendFeatures()  = default;
