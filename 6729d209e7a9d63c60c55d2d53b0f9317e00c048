@@ -16,6 +16,40 @@
       "message": "TODO: check that this (and the parent CL) works correctly on Windows (any newlines gotchas?)",
       "revId": "6729d209e7a9d63c60c55d2d53b0f9317e00c048",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fa33411_eeee0dae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-10T01:51:29Z",
+      "side": 1,
+      "message": "Thanks for getting rid of this constant source of conflict!",
+      "revId": "6729d209e7a9d63c60c55d2d53b0f9317e00c048",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88c426b6_36d22c31",
+        "filename": "include/platform/gen_features.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-10T01:51:29Z",
+      "side": 1,
+      "message": "Please add a comment that documents why this option exists and what it does",
+      "revId": "6729d209e7a9d63c60c55d2d53b0f9317e00c048",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
