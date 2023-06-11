@@ -4,9 +4,6 @@
 
 // See README.md for format.
 
-// Skip these tests due to timeouts
-1034 : dEQP-GLES2.functional.flush_finish.* = SKIP
-
 // Failures related to not supporting separate depth/stencil masks on D3D11.
 1655 D3D11 : dEQP-GLES2.functional.fragment_ops.depth_stencil.stencil_depth_funcs.stencil_* = FAIL
 1655 D3D11 : dEQP-GLES2.functional.fragment_ops.depth_stencil.write_mask.* = FAIL
