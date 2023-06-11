@@ -1156,6 +1156,7 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
     // Unpack the packed and split representation into the format required by Vulkan.
     gl::DrawBuffersVector<VkAttachmentReference2> colorAttachmentRefs;
     gl::DrawBuffersVector<VkAttachmentReference2> colorResolveAttachmentRefs;
+    gl::DrawBuffersVector<VkAttachmentReference2> inputAttachmentRefs;
     VkAttachmentReference2 depthStencilAttachmentRef        = kUnusedAttachment;
     VkAttachmentReference2 depthStencilResolveAttachmentRef = kUnusedAttachment;
 
@@ -1175,6 +1176,7 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
 
     // Pack color attachments
     PackedAttachmentIndex attachmentCount(0);
+    uint32_t anyValidColorAttachmentRefIndex = 0;
     for (uint32_t colorIndexGL = 0; colorIndexGL < desc.colorAttachmentRange(); ++colorIndexGL)
     {
         // Vulkan says:
@@ -1226,6 +1228,24 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
         isColorInvalidated.set(colorIndexGL, ops[attachmentCount].isInvalidated);
 
         ++attachmentCount;
+        anyValidColorAttachmentRefIndex = colorIndexGL;
+    }
+
+    // Make input attachments corresponding to color attachments.  Fill in the gaps with any color
+    // attachment reference.  Gaps are only needed to be filled because the translation of
+    // gl_LastFragData with variable indices accesses them, in which case the basic format of all
+    // attachments is float and any attachment would do in place of gaps.
+    if (needInputAttachments)
+    {
+        for (uint32_t colorIndexGL = 0; colorIndexGL < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS;
+             ++colorIndexGL)
+        {
+            const bool hasColorRef = colorIndexGL < desc.colorAttachmentRange() &&
+                                     desc.isColorAttachmentEnabled(colorIndexGL);
+            inputAttachmentRefs.push_back(
+                hasColorRef ? colorAttachmentRefs[colorIndexGL]
+                            : colorAttachmentRefs[anyValidColorAttachmentRefIndex]);
+        }
     }
 
     // Pack depth/stencil attachment, if any
@@ -1360,9 +1380,9 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
     applicationSubpass->sType             = VK_STRUCTURE_TYPE_SUBPASS_DESCRIPTION_2;
     applicationSubpass->pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
     applicationSubpass->inputAttachmentCount =
-        needInputAttachments ? static_cast<uint32_t>(colorAttachmentRefs.size()) : 0;
+        needInputAttachments ? static_cast<uint32_t>(inputAttachmentRefs.size()) : 0;
     applicationSubpass->pInputAttachments =
-        needInputAttachments ? colorAttachmentRefs.data() : nullptr;
+        needInputAttachments ? inputAttachmentRefs.data() : nullptr;
     applicationSubpass->colorAttachmentCount = static_cast<uint32_t>(colorAttachmentRefs.size());
     applicationSubpass->pColorAttachments    = colorAttachmentRefs.data();
     applicationSubpass->pResolveAttachments  = attachmentCount.get() > nonResolveAttachmentCount
@@ -5559,9 +5579,10 @@ void WriteDescriptorDescBuilder::updateInputAttachments(
 
     uint32_t baseBinding = baseInfo.binding - baseInputAttachment.location;
 
-    for (size_t colorIndex : framebufferVk->getState().getColorAttachmentsMask())
+    for (uint32_t colorIndexGL = 0; colorIndexGL < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS;
+         ++colorIndexGL)
     {
-        uint32_t binding = baseBinding + static_cast<uint32_t>(colorIndex);
+        uint32_t binding = baseBinding + colorIndexGL;
         updateWriteDesc(binding, VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 1);
     }
 }
@@ -6474,29 +6495,31 @@ angle::Result DescriptorSetDescBuilder::updateInputAttachments(
 {
     const std::vector<gl::LinkedUniform> &uniforms = executable.getUniforms();
 
-    if (!executable.usesFramebufferFetch())
+    if (!executable.usesFramebufferFetch() ||
+        framebufferVk->getState().getColorAttachmentsMask().none())
     {
         return angle::Result::Continue;
     }
 
     const uint32_t baseUniformIndex              = executable.getFragmentInoutRange().low();
     const gl::LinkedUniform &baseInputAttachment = uniforms.at(baseUniformIndex);
+    const gl::DrawBufferMask colorAttachmentMask =
+        framebufferVk->getState().getColorAttachmentsMask();
 
     const ShaderInterfaceVariableInfo &baseInfo =
         variableInfoMap.getFramebufferFetchInfo(gl::ShaderType::Fragment);
 
-    uint32_t baseBinding = baseInfo.binding - baseInputAttachment.location;
+    const uint32_t baseBinding = baseInfo.binding - baseInputAttachment.location;
 
-    for (size_t colorIndex : framebufferVk->getState().getColorAttachmentsMask())
+    for (size_t colorIndexGL : colorAttachmentMask)
     {
-        uint32_t binding = baseBinding + static_cast<uint32_t>(colorIndex);
+        const uint32_t binding   = baseBinding + static_cast<uint32_t>(colorIndexGL);
+        const uint32_t infoIndex = writeDescriptorDescs[binding].descriptorInfoIndex;
 
-        RenderTargetVk *renderTargetVk = framebufferVk->getColorDrawRenderTarget(colorIndex);
+        RenderTargetVk *renderTargetVk = framebufferVk->getColorDrawRenderTarget(colorIndexGL);
         const vk::ImageView *imageView = nullptr;
 
         ANGLE_TRY(renderTargetVk->getImageView(context, &imageView));
-
-        uint32_t infoIndex = writeDescriptorDescs[binding].descriptorInfoIndex;
 
         DescriptorInfoDesc infoDesc = {};
 
@@ -6508,6 +6531,26 @@ angle::Result DescriptorSetDescBuilder::updateInputAttachments(
 
         mDesc.updateInfoDesc(infoIndex, infoDesc);
         mHandles[infoIndex].imageView = imageView->getHandle();
+    }
+
+    // Fill in the gaps with an existing descriptor
+    size_t anyValidIndex = colorAttachmentMask.first();
+    for (size_t colorIndexGL = 0; colorIndexGL < gl::IMPLEMENTATION_MAX_DRAW_BUFFERS;
+         ++colorIndexGL)
+    {
+        if (colorAttachmentMask[colorIndexGL])
+        {
+            continue;
+        }
+
+        const uint32_t validBinding   = baseBinding + static_cast<uint32_t>(anyValidIndex);
+        const uint32_t validInfoIndex = writeDescriptorDescs[validBinding].descriptorInfoIndex;
+
+        const uint32_t binding   = baseBinding + static_cast<uint32_t>(colorIndexGL);
+        const uint32_t infoIndex = writeDescriptorDescs[binding].descriptorInfoIndex;
+
+        mDesc.updateInfoDesc(infoIndex, mDesc.getInfoDesc(validInfoIndex));
+        mHandles[infoIndex].imageView = mHandles[validInfoIndex].imageView;
     }
 
     return angle::Result::Continue;
