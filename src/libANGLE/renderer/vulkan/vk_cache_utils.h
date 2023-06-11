@@ -1641,6 +1641,10 @@ class DescriptorSetDesc
     {
         mDescriptorInfos[infoDescIndex] = infoDesc;
     }
+    const DescriptorInfoDesc &getInfoDesc(uint32_t infoDescIndex) const
+    {
+        return mDescriptorInfos[infoDescIndex];
+    }
 
     void updateDescriptorSet(Context *context,
                              const WriteDescriptorDescs &writeDescriptorDescs,
