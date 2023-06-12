@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83679797_94889fae",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-12T19:09:18Z",
+      "side": 1,
+      "message": "Same as previous CL, I\u0027d keep these disabled",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 67
+      },
+      "revId": "e5c6060a331e8417d0e06ca6374af87daf69fefb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d29859dc_d8013831",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 814,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-12T19:09:18Z",
+      "side": 1,
+      "message": "nit: Just suppress them for `NVIDIA` and it will cover all 3 platforms",
+      "range": {
+        "startLine": 797,
+        "startChar": 0,
+        "endLine": 814,
+        "endChar": 107
+      },
+      "revId": "e5c6060a331e8417d0e06ca6374af87daf69fefb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfe31d49_fabc7adb",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-12T19:09:18Z",
+      "side": 1,
+      "message": "Similarly, suppress for `MAC` as it affects both APIs",
+      "range": {
+        "startLine": 815,
+        "startChar": 0,
+        "endLine": 826,
+        "endChar": 101
+      },
+      "revId": "e5c6060a331e8417d0e06ca6374af87daf69fefb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
