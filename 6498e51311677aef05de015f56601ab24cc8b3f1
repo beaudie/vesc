@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d01ff10b_ff35785e",
+        "filename": "src/tests/deqp_support/deqp_gles2_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-12T19:07:14Z",
+      "side": 0,
+      "message": "These still take ~40s to run, so I suggest keeping them disabled for the bots. Flush and finish are extremely common, so chances are very low we would ever break these (without breaking anything else)",
+      "revId": "6498e51311677aef05de015f56601ab24cc8b3f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
