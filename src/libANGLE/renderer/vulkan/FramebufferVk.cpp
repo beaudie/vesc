@@ -845,7 +845,8 @@ angle::Result FramebufferVk::readPixels(const gl::Context *context,
     }
 
     // Clip read area to framebuffer.
-    const gl::Extents &fbSize = getState().getReadPixelsAttachment(format)->getSize();
+    const gl::InternalFormat &formatInfo = gl::GetInternalFormatInfo(format, type);
+    const gl::Extents &fbSize            = getState().getReadPixelsAttachment(format)->getSize();
     const gl::Rectangle fbRect(0, 0, fbSize.width, fbSize.height);
     ContextVk *contextVk = vk::GetImpl(context);
 
@@ -861,8 +862,8 @@ angle::Result FramebufferVk::readPixels(const gl::Context *context,
 
     GLuint outputSkipBytes = 0;
     PackPixelsParams params;
-    ANGLE_TRY(vk::ImageHelper::GetReadPixelsParams(contextVk, pack, packBuffer, format, type, area,
-                                                   clippedArea, &params, &outputSkipBytes));
+    ANGLE_TRY(vk::ImageHelper::GetReadPixelsParams(contextVk, pack, packBuffer, formatInfo, type,
+                                                   area, clippedArea, &params, &outputSkipBytes));
 
     bool flipY = contextVk->isViewportFlipEnabledForReadFBO();
     switch (params.rotation = contextVk->getRotationReadFramebuffer())
@@ -902,9 +903,7 @@ angle::Result FramebufferVk::readPixels(const gl::Context *context,
     {
         params.reverseRowOrder = !params.reverseRowOrder;
     }
-
-    ANGLE_TRY(readPixelsImpl(contextVk, params.area, params, getReadPixelsAspectFlags(format),
-                             getReadPixelsRenderTarget(format),
+    ANGLE_TRY(readPixelsImpl(contextVk, params.area, params, getReadPixelsRenderTarget(format),
                              static_cast<uint8_t *>(pixels) + outputSkipBytes));
     return angle::Result::Continue;
 }
@@ -938,21 +937,6 @@ RenderTargetVk *FramebufferVk::getReadPixelsRenderTarget(GLenum format) const
             return getDepthStencilRenderTarget();
         default:
             return getColorReadRenderTarget();
-    }
-}
-
-VkImageAspectFlagBits FramebufferVk::getReadPixelsAspectFlags(GLenum format) const
-{
-    switch (format)
-    {
-        case GL_DEPTH_COMPONENT:
-            return VK_IMAGE_ASPECT_DEPTH_BIT;
-        case GL_STENCIL_INDEX_OES:
-            return VK_IMAGE_ASPECT_STENCIL_BIT;
-        case GL_DEPTH_STENCIL_OES:
-            return vk::IMAGE_ASPECT_DEPTH_STENCIL;
-        default:
-            return VK_IMAGE_ASPECT_COLOR_BIT;
     }
 }
 
@@ -3155,15 +3139,14 @@ const gl::DrawBufferMask &FramebufferVk::getEmulatedAlphaAttachmentMask() const
 angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
                                             const gl::Rectangle &area,
                                             const PackPixelsParams &packPixelsParams,
-                                            VkImageAspectFlagBits copyAspectFlags,
                                             RenderTargetVk *renderTarget,
                                             void *pixels)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "FramebufferVk::readPixelsImpl");
     gl::LevelIndex levelGL = renderTarget->getLevelIndex();
     uint32_t layer         = renderTarget->getLayerIndex();
-    return renderTarget->getImageForCopy().readPixels(contextVk, area, packPixelsParams,
-                                                      copyAspectFlags, levelGL, layer, pixels);
+    return renderTarget->getImageForCopy().readPixels(contextVk, area, packPixelsParams, levelGL,
+                                                      layer, pixels);
 }
 
 gl::Extents FramebufferVk::getReadImageExtents() const

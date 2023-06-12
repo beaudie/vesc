@@ -95,7 +95,6 @@ class FramebufferVk : public FramebufferImpl
     angle::Result readPixelsImpl(ContextVk *contextVk,
                                  const gl::Rectangle &area,
                                  const PackPixelsParams &packPixelsParams,
-                                 VkImageAspectFlagBits copyAspectFlags,
                                  RenderTargetVk *renderTarget,
                                  void *pixels);
 

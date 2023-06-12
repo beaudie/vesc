@@ -258,6 +258,7 @@ void GetMatrixUniform(GLenum type, GLfloat *dataOut, const GLfloat *source, bool
 template <typename NonFloatT>
 void GetMatrixUniform(GLenum type, NonFloatT *dataOut, const NonFloatT *source, bool transpose);
 
+const angle::Format &GetFormatFromInternalFormat(const gl::InternalFormat &formatInfo);
 const angle::Format &GetFormatFromFormatType(GLenum format, GLenum type);
 
 angle::Result ComputeStartVertex(ContextImpl *contextImpl,

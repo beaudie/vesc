@@ -979,11 +979,16 @@ void GetMatrixUniform(GLenum type, NonFloatT *dataOut, const NonFloatT *source, 
     UNREACHABLE();
 }
 
+const angle::Format &GetFormatFromInternalFormat(const gl::InternalFormat &formatInfo)
+{
+    angle::FormatID angleFormatID =
+        angle::Format::InternalFormatToID(formatInfo.sizedInternalFormat);
+    return angle::Format::Get(angleFormatID);
+}
+
 const angle::Format &GetFormatFromFormatType(GLenum format, GLenum type)
 {
-    GLenum sizedInternalFormat    = gl::GetInternalFormatInfo(format, type).sizedInternalFormat;
-    angle::FormatID angleFormatID = angle::Format::InternalFormatToID(sizedInternalFormat);
-    return angle::Format::Get(angleFormatID);
+    return GetFormatFromInternalFormat(gl::GetInternalFormatInfo(format, type));
 }
 
 angle::Result ComputeStartVertex(ContextImpl *contextImpl,
