@@ -10,6 +10,8 @@
 
 #include "common/WorkerThread.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
+
 // Controls if our threading code uses std::async or falls back to single-threaded operations.
 // Note that we can't easily use std::async in UWPs due to UWP threading restrictions.
 #if !defined(ANGLE_STD_ASYNC_WORKERS) && !defined(ANGLE_ENABLE_WINDOWS_UWP)
@@ -229,7 +231,7 @@ class DelegateWorkerPool final : public WorkerThreadPool
     bool isAsync() override;
 
   private:
-    PlatformMethods *mPlatform;
+    raw_ptr<PlatformMethods> mPlatform;
 };
 
 // A function wrapper to execute the closure and to notify the waitable

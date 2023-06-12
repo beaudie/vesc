@@ -9,6 +9,7 @@
 
 #include "compiler/translator/blocklayout.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/mathutil.h"
 #include "common/utilities.h"
 #include "compiler/translator/Common.h"
@@ -48,7 +49,7 @@ class BlockLayoutMapVisitor : public BlockEncoderVisitor
     }
 
   private:
-    BlockLayoutMap *mInfoOut;
+    raw_ptr<BlockLayoutMap> mInfoOut;
 };
 
 template <typename VarT>

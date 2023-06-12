@@ -9,6 +9,7 @@
 #include "tests/test_utils/compiler_test.h"
 
 #include "angle_gl.h"
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/FunctionLookup.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
@@ -55,7 +56,7 @@ class FunctionCallFinder : public TIntermTraverser
 
   private:
     const char *mFunctionMangledName;
-    TIntermAggregate *mNodeFound;
+    raw_ptr<TIntermAggregate> mNodeFound;
 };
 
 }  // anonymous namespace

@@ -15,6 +15,7 @@
 #ifndef CUSTOM_VK_GOOGLE_SAMPLER_FILTERING_PRECISION_H_
 #define CUSTOM_VK_GOOGLE_SAMPLER_FILTERING_PRECISION_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "vk_headers.h"
 
 // THIS FILE SHOULD BE DELETED IF VK_GOOGLE_sampler_filtering_precision IS EVER ADDED TO THE VULKAN
@@ -50,7 +51,7 @@ typedef enum VkSamplerFilteringPrecisionModeGOOGLE
 typedef struct VkSamplerFilteringPrecisionGOOGLE
 {
     VkStructureType sType;
-    const void *pNext;
+    raw_ptr<const void> pNext;
     VkSamplerFilteringPrecisionModeGOOGLE samplerFilteringPrecisionMode;
 } VkSamplerFilteringPrecisionGOOGLE;
 

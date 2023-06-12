@@ -12,6 +12,7 @@
 #include "compiler/translator/TranslatorVulkan.h"
 
 #include "angle_gl.h"
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "common/PackedEnums.h"
 #include "common/utilities.h"
 #include "compiler/translator/BuiltinsWorkaroundGLSL.h"
@@ -111,13 +112,13 @@ class ReplaceDefaultUniformsTraverser : public TIntermTraverser
             return;
         }
 
-        ASSERT(mVariableMap.count(&variable) > 0);
+        ASSERT(mVariableMap->count(&variable) > 0);
 
-        queueReplacement(mVariableMap.at(&variable)->deepCopy(), OriginalNode::IS_DROPPED);
+        queueReplacement(mVariableMap->at(&variable)->deepCopy(), OriginalNode::IS_DROPPED);
     }
 
   private:
-    const VariableReplacementMap &mVariableMap;
+    const raw_ref<const VariableReplacementMap> mVariableMap;
 };
 
 bool DeclareDefaultUniforms(TranslatorVulkan *compiler,

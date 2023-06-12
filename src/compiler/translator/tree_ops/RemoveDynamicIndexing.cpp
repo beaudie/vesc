@@ -11,6 +11,7 @@
 
 #include "compiler/translator/tree_ops/RemoveDynamicIndexing.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/Diagnostics.h"
 #include "compiler/translator/InfoSink.h"
@@ -299,7 +300,7 @@ class RemoveDynamicIndexingTraverser : public TLValueTrackingTraverser
     bool mRemoveIndexSideEffectsInSubtree;
 
     DynamicIndexingNodeMatcher mMatcher;
-    PerformanceDiagnostics *mPerfDiagnostics;
+    raw_ptr<PerformanceDiagnostics> mPerfDiagnostics;
 };
 
 RemoveDynamicIndexingTraverser::RemoveDynamicIndexingTraverser(
@@ -492,7 +493,7 @@ bool RemoveDynamicIndexingTraverser::visitBinary(Visit visit, TIntermBinary *nod
                 TIntermTyped *indexInitializer               = EnsureSignedInt(node->getRight());
                 TIntermDeclaration *indexVariableDeclaration = nullptr;
                 TVariable *indexVariable                     = DeclareTempVariable(
-                                        mSymbolTable, indexInitializer, EvqTemporary, &indexVariableDeclaration);
+                    mSymbolTable, indexInitializer, EvqTemporary, &indexVariableDeclaration);
                 insertionsBefore.push_back(indexVariableDeclaration);
 
                 // s1 = dyn_index(v_expr, s0);
@@ -500,7 +501,7 @@ bool RemoveDynamicIndexingTraverser::visitBinary(Visit visit, TIntermBinary *nod
                     node, CreateTempSymbolNode(indexVariable), indexingFunction);
                 TIntermDeclaration *fieldVariableDeclaration = nullptr;
                 TVariable *fieldVariable                     = DeclareTempVariable(
-                                        mSymbolTable, indexingCall, EvqTemporary, &fieldVariableDeclaration);
+                    mSymbolTable, indexingCall, EvqTemporary, &fieldVariableDeclaration);
                 insertionsBefore.push_back(fieldVariableDeclaration);
 
                 // dyn_index_write(v_expr, s0, s1);

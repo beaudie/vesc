@@ -9,6 +9,7 @@
 #ifndef COMPILER_TRANSLATOR_DECLARATOR_H_
 #define COMPILER_TRANSLATOR_DECLARATOR_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "compiler/translator/Common.h"
 #include "compiler/translator/ImmutableString.h"
 
@@ -37,7 +38,7 @@ class TDeclarator : angle::NonCopyable
     const ImmutableString mName;
 
     // Outermost array size is stored at the end of the vector.
-    const TVector<unsigned int> *const mArraySizes;
+    const raw_ptr<const TVector<unsigned int>> mArraySizes;
 
     const TSourceLoc mLine;
 };

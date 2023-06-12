@@ -245,15 +245,15 @@ class Rebuild : public TIntermRebuild
 
         // Build a function and pass all the constructor's arguments to it.
         TIntermBlock *body  = new TIntermBlock;
-        TFunction *function = new TFunction(&mSymbolTable, ImmutableString(""),
+        TFunction *function = new TFunction(&*mSymbolTable, ImmutableString(""),
                                             SymbolType::AngleInternal, &type, true);
 
         for (size_t i = 0; i < arguments.size(); ++i)
         {
             TIntermTyped &arg = *arguments[i]->getAsTyped();
             TType *argType    = new TType(arg.getBasicType(), arg.getPrecision(), EvqParamIn,
-                                       arg.getNominalSize(), arg.getSecondarySize());
-            TVariable *var    = CreateTempVariable(&mSymbolTable, argType);
+                                          arg.getNominalSize(), arg.getSecondarySize());
+            TVariable *var    = CreateTempVariable(&*mSymbolTable, argType);
             function->addParameter(var);
         }
 
@@ -320,7 +320,7 @@ class Rebuild : public TIntermRebuild
             root.insertChildNodes(firstFunctionIndex, TIntermSequence({functionDefinition}));
         }
 
-        return mCompiler.validateAST(&root);
+        return mCompiler->validateAST(&root);
     }
 
   private:

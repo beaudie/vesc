@@ -9,6 +9,8 @@
 
 #include "compiler/translator/tree_ops/MonomorphizeUnsupportedFunctions.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "compiler/translator/ImmutableStringBuilder.h"
 #include "compiler/translator/SymbolTable.h"
 #include "compiler/translator/tree_util/IntermNode_util.h"
@@ -22,7 +24,7 @@ namespace
 struct Argument
 {
     size_t argumentIndex;
-    TIntermTyped *argument;
+    raw_ptr<TIntermTyped> argument;
 };
 
 struct FunctionData
@@ -31,7 +33,7 @@ struct FunctionData
     // all callers have been modified.
     bool isOriginalUsed;
     // The original definition of the function, used to create the monomorphized version.
-    TIntermFunctionDefinition *originalDefinition;
+    raw_ptr<TIntermFunctionDefinition> originalDefinition;
     // List of monomorphized versions of this function.  They will be added next to the original
     // version (or replace it).
     TVector<TIntermFunctionDefinition *> monomorphizedDefinitions;
@@ -345,7 +347,7 @@ class MonomorphizeTraverser final : public TIntermTraverser
         {
             // Monomorphize if the opaque uniform is a samplerCube and ES2's cube sampling emulation
             // is requested.
-            if (type.isSamplerCube() && mCompileOptions.emulateSeamfulCubeMapSampling)
+            if (type.isSamplerCube() && mCompileOptions->emulateSeamfulCubeMapSampling)
             {
                 return true;
             }
@@ -433,13 +435,13 @@ class MonomorphizeTraverser final : public TIntermTraverser
         return new TIntermFunctionDefinition(substitutePrototype, substituteBlock);
     }
 
-    TCompiler *mCompiler;
-    const ShCompileOptions &mCompileOptions;
+    raw_ptr<TCompiler> mCompiler;
+    const raw_ref<const ShCompileOptions> mCompileOptions;
     UnsupportedFunctionArgsBitSet mUnsupportedFunctionArgs;
     bool mAnyMonomorphized = false;
 
     // Map of original to monomorphized functions.
-    FunctionMap *mFunctionMap;
+    raw_ptr<FunctionMap> mFunctionMap;
 };
 
 class UpdateFunctionsDefinitionsTraverser final : public TIntermTraverser
@@ -460,9 +462,9 @@ class UpdateFunctionsDefinitionsTraverser final : public TIntermTraverser
 
         // Add to and possibly replace the function prototype with replacement prototypes.
         const TFunction *function = node->getFunction();
-        ASSERT(function && mFunctionMap.find(function) != mFunctionMap.end());
+        ASSERT(function && mFunctionMap->find(function) != mFunctionMap->end());
 
-        const FunctionData &data = mFunctionMap.at(function);
+        const FunctionData &data = mFunctionMap->at(function);
 
         // If nothing to do, leave it be.
         if (data.monomorphizedDefinitions.empty())
@@ -491,9 +493,9 @@ class UpdateFunctionsDefinitionsTraverser final : public TIntermTraverser
     {
         // Add to and possibly replace the function definition with replacement definitions.
         const TFunction *function = node->getFunction();
-        ASSERT(function && mFunctionMap.find(function) != mFunctionMap.end());
+        ASSERT(function && mFunctionMap->find(function) != mFunctionMap->end());
 
-        const FunctionData &data = mFunctionMap.at(function);
+        const FunctionData &data = mFunctionMap->at(function);
 
         // If nothing to do, leave it be.
         if (data.monomorphizedDefinitions.empty())
@@ -520,7 +522,7 @@ class UpdateFunctionsDefinitionsTraverser final : public TIntermTraverser
     }
 
   private:
-    const FunctionMap &mFunctionMap;
+    const raw_ref<const FunctionMap> mFunctionMap;
 };
 
 void SortDeclarations(TIntermBlock *root)

@@ -2968,7 +2968,7 @@ yyreduce:
             if ((yyvsp[0].interm.param).type->getBasicType() != EbtVoid)
             {
                 (yyvsp[-1].interm.function)
-                    ->addParameter((yyvsp[0].interm.param).createVariable(&context->symbolTable));
+                    ->addParameter((yyvsp[0].interm.param).createVariable(&*context->symbolTable));
             }
             else
             {
@@ -3001,7 +3001,7 @@ yyreduce:
                                    "void");
                 }
                 (yyvsp[-2].interm.function)
-                    ->addParameter((yyvsp[0].interm.param).createVariable(&context->symbolTable));
+                    ->addParameter((yyvsp[0].interm.param).createVariable(&*context->symbolTable));
             }
         }
         break;
@@ -3011,7 +3011,7 @@ yyreduce:
             (yyval.interm.function) = context->parseFunctionHeader(
                 (yyvsp[-2].interm.type), ImmutableString((yyvsp[-1].lex).string), (yylsp[-1]));
 
-            context->symbolTable.push();
+            context->symbolTable->push();
             context->enterFunctionDeclaration();
         }
         break;
@@ -3389,7 +3389,7 @@ yyreduce:
         {
             (yyval.interm.type) = (yyvsp[0].interm.type);
             (yyval.interm.type).precision =
-                context->symbolTable.getDefaultPrecision((yyvsp[0].interm.type).getBasicType());
+                context->symbolTable->getDefaultPrecision((yyvsp[0].interm.type).getBasicType());
         }
         break;
 
@@ -3463,7 +3463,7 @@ yyreduce:
         {
             (yyval.interm.type)
                 .initialize((yyvsp[0].interm.typeSpecifierNonArray),
-                            (context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary));
+                            (context->symbolTable->atGlobalLevel() ? EvqGlobal : EvqTemporary));
         }
         break;
 
@@ -3471,7 +3471,7 @@ yyreduce:
         {
             (yyval.interm.type)
                 .initialize((yyvsp[-1].interm.typeSpecifierNonArray),
-                            (context->symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary));
+                            (context->symbolTable->atGlobalLevel() ? EvqGlobal : EvqTemporary));
             (yyval.interm.type).setArraySizes((yyvsp[0].interm.arraySizes));
         }
         break;
@@ -4392,13 +4392,13 @@ yyreduce:
 
         case 283: /* $@3: %empty  */
         {
-            context->symbolTable.push();
+            context->symbolTable->push();
         }
         break;
 
         case 284: /* $@4: %empty  */
         {
-            context->symbolTable.pop();
+            context->symbolTable->pop();
         }
         break;
 
@@ -4423,26 +4423,26 @@ yyreduce:
 
         case 288: /* $@5: %empty  */
         {
-            context->symbolTable.push();
+            context->symbolTable->push();
         }
         break;
 
         case 289: /* statement_with_scope: $@5 compound_statement_no_new_scope  */
         {
-            context->symbolTable.pop();
+            context->symbolTable->pop();
             (yyval.interm.intermNode) = (yyvsp[0].interm.intermBlock);
         }
         break;
 
         case 290: /* $@6: %empty  */
         {
-            context->symbolTable.push();
+            context->symbolTable->push();
         }
         break;
 
         case 291: /* statement_with_scope: $@6 simple_statement  */
         {
-            context->symbolTable.pop();
+            context->symbolTable->pop();
             (yyval.interm.intermNode) = (yyvsp[0].interm.intermNode);
         }
         break;
@@ -4555,7 +4555,7 @@ yyreduce:
 
         case 307: /* $@8: %empty  */
         {
-            context->symbolTable.push();
+            context->symbolTable->push();
             context->incrLoopNestingLevel();
         }
         break;
@@ -4563,7 +4563,7 @@ yyreduce:
         case 308: /* iteration_statement: WHILE LEFT_PAREN $@8 condition RIGHT_PAREN
                      statement_no_new_scope  */
         {
-            context->symbolTable.pop();
+            context->symbolTable->pop();
             (yyval.interm.intermNode) =
                 context->addLoop(ELoopWhile, 0, (yyvsp[-2].interm.intermNode), 0,
                                  (yyvsp[0].interm.intermNode), (yylsp[-5]));
@@ -4589,7 +4589,7 @@ yyreduce:
 
         case 311: /* $@10: %empty  */
         {
-            context->symbolTable.push();
+            context->symbolTable->push();
             context->incrLoopNestingLevel();
         }
         break;
@@ -4597,7 +4597,7 @@ yyreduce:
         case 312: /* iteration_statement: FOR LEFT_PAREN $@10 for_init_statement for_rest_statement
                      RIGHT_PAREN statement_no_new_scope  */
         {
-            context->symbolTable.pop();
+            context->symbolTable->pop();
             (yyval.interm.intermNode) = context->addLoop(
                 ELoopFor, (yyvsp[-3].interm.intermNode), (yyvsp[-2].interm.nodePair).node1,
                 reinterpret_cast<TIntermTyped *>((yyvsp[-2].interm.nodePair).node2),

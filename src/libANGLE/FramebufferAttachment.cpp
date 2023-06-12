@@ -247,17 +247,17 @@ GLsizei FramebufferAttachment::getRenderToTextureSamples() const
 
 Texture *FramebufferAttachment::getTexture() const
 {
-    return rx::GetAs<Texture>(mResource);
+    return rx::GetAs<Texture>(mResource.get());
 }
 
 Renderbuffer *FramebufferAttachment::getRenderbuffer() const
 {
-    return rx::GetAs<Renderbuffer>(mResource);
+    return rx::GetAs<Renderbuffer>(mResource.get());
 }
 
 const egl::Surface *FramebufferAttachment::getSurface() const
 {
-    return rx::GetAs<egl::Surface>(mResource);
+    return rx::GetAs<egl::Surface>(mResource.get());
 }
 
 FramebufferAttachmentObject *FramebufferAttachment::getResource() const

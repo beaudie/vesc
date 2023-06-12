@@ -14,6 +14,8 @@
 
 #include <array>
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "common/angleutils.h"
 #include "common/debug.h"
 #include "common/mathutil.h"
@@ -62,7 +64,7 @@ class BitSetT final
 
         Reference(BitSetT *parent, ParamT bit) : mParent(parent), mBit(bit) {}
 
-        BitSetT *mParent;
+        raw_ptr<BitSetT<N, BitsT, ParamT>> mParent;
         ParamT mBit;
     };
 
@@ -533,17 +535,17 @@ class BitSetArray final
         ~Reference() {}
         Reference &operator=(bool x)
         {
-            mParent.set(mPosition, x);
+            mParent->set(mPosition, x);
             return *this;
         }
-        explicit operator bool() const { return mParent.test(mPosition); }
+        explicit operator bool() const { return mParent->test(mPosition); }
 
       private:
         friend class BitSetArray;
 
         Reference(BitSetArray &parent, std::size_t pos) : mParent(parent), mPosition(pos) {}
 
-        BitSetArray &mParent;
+        const raw_ref<BitSetArray<N>> mParent;
         std::size_t mPosition;
     };
     class Iterator final
@@ -583,11 +585,11 @@ class BitSetArray final
       private:
         ANGLE_INLINE void prepareCopy()
         {
-            ASSERT(mParent.mBaseBitSetArray[mIndex].end() ==
+            ASSERT(mParent->mBaseBitSetArray[mIndex].end() ==
                    mParentCopy.mBaseBitSetArray[mIndex].end());
             if (mParentCopy.none())
             {
-                mParentCopy    = mParent;
+                mParentCopy    = *mParent;
                 mCurrentParent = &mParentCopy;
             }
         }
@@ -640,9 +642,9 @@ class BitSetArray final
         // Resolution -
         // We settled on the copy only when necessary path.
         size_t mIndex;
-        const BitSetArray &mParent;
+        const raw_ref<const BitSetArray<N>> mParent;
         BitSetArray mParentCopy;
-        const BitSetArray *mCurrentParent;
+        raw_ptr<const BitSetArray<N>> mCurrentParent;
         typename BaseBitSet::Iterator mCurrentIterator;
     };
 
@@ -776,8 +778,8 @@ template <size_t N>
 BitSetArray<N>::Iterator::Iterator(const BitSetArray<N> &bitSetArray, std::size_t index)
     : mIndex(index),
       mParent(bitSetArray),
-      mCurrentParent(&mParent),
-      mCurrentIterator(mParent.mBaseBitSetArray[0].begin())
+      mCurrentParent(&*mParent),
+      mCurrentIterator(mParent->mBaseBitSetArray[0].begin())
 {
     while (mIndex < mCurrentParent->kArraySize)
     {

@@ -554,8 +554,8 @@ spirv::IdRef SPIRVBuilder::getNewId(const SpirvDecorations &decorations)
 spirv::IdRef SPIRVBuilder::getReservedOrNewId(TSymbolUniqueId uniqueId,
                                               const SpirvDecorations &decorations)
 {
-    auto iter = mUniqueToSpirvIdMap.find(uniqueId.get());
-    if (iter == mUniqueToSpirvIdMap.end())
+    auto iter = mUniqueToSpirvIdMap->find(uniqueId.get());
+    if (iter == mUniqueToSpirvIdMap->end())
     {
         return getNewId(decorations);
     }
@@ -714,7 +714,7 @@ spirv::IdRef SPIRVBuilder::getFunctionTypeId(spirv::IdRef returnTypeId,
 
 SpirvDecorations SPIRVBuilder::getDecorations(const TType &type)
 {
-    const bool enablePrecision = !mCompileOptions.ignorePrecisionQualifiers;
+    const bool enablePrecision = !mCompileOptions->ignorePrecisionQualifiers;
     const TPrecision precision = type.getPrecision();
 
     SpirvDecorations decorations;
@@ -1918,7 +1918,7 @@ void SPIRVBuilder::writeInterfaceVariableDecorations(const TType &type, spirv::I
     const bool needsInputAttachmentIndex = IsSubpassInputType(type.getBasicType());
     const bool needsBlendIndex =
         type.getQualifier() == EvqFragmentOut && layoutQualifier.index >= 0;
-    const bool needsYuvDecorate = mCompileOptions.addVulkanYUVLayoutQualifier &&
+    const bool needsYuvDecorate = mCompileOptions->addVulkanYUVLayoutQualifier &&
                                   type.getQualifier() == EvqFragmentOut && layoutQualifier.yuv;
 
     // If the resource declaration requires set & binding, add the DescriptorSet and Binding
@@ -2271,12 +2271,12 @@ void SPIRVBuilder::writeInterpolationDecoration(TQualifier qualifier,
 
 ImmutableString SPIRVBuilder::hashName(const TSymbol *symbol)
 {
-    return HashName(symbol, mHashFunction, &mNameMap);
+    return HashName(symbol, mHashFunction, &*mNameMap);
 }
 
 ImmutableString SPIRVBuilder::hashTypeName(const TType &type)
 {
-    return GetTypeName(type, mHashFunction, &mNameMap);
+    return GetTypeName(type, mHashFunction, &*mNameMap);
 }
 
 ImmutableString SPIRVBuilder::hashFieldName(const TField *field)
@@ -2284,7 +2284,7 @@ ImmutableString SPIRVBuilder::hashFieldName(const TField *field)
     ASSERT(field->symbolType() != SymbolType::Empty);
     if (field->symbolType() == SymbolType::UserDefined)
     {
-        return HashName(field->name(), mHashFunction, &mNameMap);
+        return HashName(field->name(), mHashFunction, &*mNameMap);
     }
 
     return field->name();

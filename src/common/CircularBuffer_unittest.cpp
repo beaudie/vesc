@@ -11,6 +11,8 @@
 
 #include "common/CircularBuffer.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
+
 namespace angle
 {
 // Make sure the various constructors compile and do basic checks
@@ -45,10 +47,10 @@ TEST(CircularBuffer, Destructor)
             }
         }
 
-        s(const s &) = default;
+        s(const s &)            = default;
         s &operator=(const s &) = default;
 
-        int *counter;
+        raw_ptr<int> counter;
     };
 
     int destructorCount = 0;

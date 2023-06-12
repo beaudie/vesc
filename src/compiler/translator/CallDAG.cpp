@@ -10,6 +10,7 @@
 
 #include "compiler/translator/CallDAG.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "compiler/translator/Diagnostics.h"
 #include "compiler/translator/SymbolTable.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
@@ -91,7 +92,7 @@ class CallDAG::CallDAGCreator : public TIntermTraverser
         {}
 
         std::set<CreatorFunctionData *> callees;
-        TIntermFunctionDefinition *definitionNode;
+        raw_ptr<TIntermFunctionDefinition> definitionNode;
         ImmutableString name;
         size_t index;
         bool indexAssigned;
@@ -249,10 +250,10 @@ class CallDAG::CallDAGCreator : public TIntermTraverser
         return result;
     }
 
-    TDiagnostics *mDiagnostics;
+    raw_ptr<TDiagnostics> mDiagnostics;
 
     std::map<int, CreatorFunctionData> mFunctions;
-    CreatorFunctionData *mCurrentFunction;
+    raw_ptr<CreatorFunctionData> mCurrentFunction;
     size_t mCurrentIndex;
 };
 

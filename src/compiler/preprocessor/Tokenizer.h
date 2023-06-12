@@ -7,6 +7,7 @@
 #ifndef COMPILER_PREPROCESSOR_TOKENIZER_H_
 #define COMPILER_PREPROCESSOR_TOKENIZER_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/angleutils.h"
 #include "compiler/preprocessor/Input.h"
 #include "compiler/preprocessor/Lexer.h"
@@ -24,7 +25,7 @@ class Tokenizer : public Lexer
   public:
     struct Context
     {
-        Diagnostics *diagnostics;
+        raw_ptr<Diagnostics> diagnostics;
 
         Input input;
         // The location where yytext points to. Token location should track

@@ -9,6 +9,7 @@
 #ifndef COMPILER_TRANSLATOR_FUNCTIONLOOKUP_H_
 #define COMPILER_TRANSLATOR_FUNCTIONLOOKUP_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "compiler/translator/ImmutableString.h"
 #include "compiler/translator/IntermNode.h"
 
@@ -49,10 +50,10 @@ class TFunctionLookup : angle::NonCopyable
                     const TSymbol *symbol);
 
     const ImmutableString mName;
-    const TType *const mConstructorType;
-    TIntermTyped *mThisNode;
+    const raw_ptr<const TType> mConstructorType;
+    raw_ptr<TIntermTyped> mThisNode;
     TIntermSequence mArguments;
-    const TSymbol *mSymbol;
+    raw_ptr<const TSymbol> mSymbol;
 };
 
 }  // namespace sh

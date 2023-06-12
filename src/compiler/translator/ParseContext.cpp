@@ -567,7 +567,7 @@ void TParseContext::markStaticReadIfSymbol(TIntermNode *node)
     TIntermSymbol *symbolNode = node->getAsSymbolNode();
     if (symbolNode)
     {
-        symbolTable.markStaticRead(symbolNode->variable());
+        symbolTable->markStaticRead(symbolNode->variable());
     }
 }
 
@@ -745,7 +745,7 @@ bool TParseContext::checkCanBeLValue(const TSourceLoc &line, const char *op, TIn
     TIntermSymbol *symNode = node->getAsSymbolNode();
     if (message.empty() && symNode != nullptr)
     {
-        symbolTable.markStaticWrite(symNode->variable());
+        symbolTable->markStaticWrite(symNode->variable());
         return true;
     }
 
@@ -795,7 +795,7 @@ void TParseContext::checkIsScalarInteger(TIntermTyped *node, const char *token)
 // globally scoped.
 bool TParseContext::checkIsAtGlobalLevel(const TSourceLoc &line, const char *token)
 {
-    if (!symbolTable.atGlobalLevel())
+    if (!symbolTable->atGlobalLevel())
     {
         error(line, "only allowed at global scope", token);
         return false;
@@ -1348,7 +1348,7 @@ bool TParseContext::declareVariable(const TSourceLoc &line,
             break;
     }
 
-    (*variable) = new TVariable(&symbolTable, identifier, type, symbolType);
+    (*variable) = new TVariable(&*symbolTable, identifier, type, symbolType);
 
     ASSERT(type->getLayoutQualifier().index == -1 ||
            (isExtensionEnabled(TExtension::EXT_blend_func_extended) &&
@@ -1389,7 +1389,7 @@ bool TParseContext::declareVariable(const TSourceLoc &line,
     if (type->isArray() && identifier.beginsWith("gl_LastFragData"))
     {
         const TVariable *maxDrawBuffers = static_cast<const TVariable *>(
-            symbolTable.findBuiltIn(ImmutableString("gl_MaxDrawBuffers"), mShaderVersion));
+            symbolTable->findBuiltIn(ImmutableString("gl_MaxDrawBuffers"), mShaderVersion));
         if (type->isArrayOfArrays())
         {
             error(line, "redeclaration of gl_LastFragData as an array of arrays", identifier);
@@ -1398,7 +1398,7 @@ bool TParseContext::declareVariable(const TSourceLoc &line,
         else if (static_cast<int>(type->getOutermostArraySize()) ==
                  maxDrawBuffers->getConstPointer()->getIConst())
         {
-            if (const TSymbol *builtInSymbol = symbolTable.findBuiltIn(identifier, mShaderVersion))
+            if (const TSymbol *builtInSymbol = symbolTable->findBuiltIn(identifier, mShaderVersion))
             {
                 needsReservedCheck = !checkCanUseOneOfExtensions(line, builtInSymbol->extensions());
             }
@@ -1413,7 +1413,7 @@ bool TParseContext::declareVariable(const TSourceLoc &line,
     else if (identifier.beginsWith("gl_LastFragColorARM"))
     {
         // gl_LastFragColorARM may be redeclared with a new precision qualifier
-        if (const TSymbol *builtInSymbol = symbolTable.findBuiltIn(identifier, mShaderVersion))
+        if (const TSymbol *builtInSymbol = symbolTable->findBuiltIn(identifier, mShaderVersion))
         {
             needsReservedCheck = !checkCanUseOneOfExtensions(line, builtInSymbol->extensions());
         }
@@ -1422,7 +1422,7 @@ bool TParseContext::declareVariable(const TSourceLoc &line,
     {
         // gl_ClipDistance can be redeclared with smaller size than gl_MaxClipDistances
         const TVariable *maxClipDistances = static_cast<const TVariable *>(
-            symbolTable.findBuiltIn(ImmutableString("gl_MaxClipDistances"), mShaderVersion));
+            symbolTable->findBuiltIn(ImmutableString("gl_MaxClipDistances"), mShaderVersion));
         if (!maxClipDistances)
         {
             // Unsupported extension
@@ -1436,7 +1436,7 @@ bool TParseContext::declareVariable(const TSourceLoc &line,
         else if (static_cast<int>(type->getOutermostArraySize()) <=
                  maxClipDistances->getConstPointer()->getIConst())
         {
-            const TSymbol *builtInSymbol = symbolTable.findBuiltIn(identifier, mShaderVersion);
+            const TSymbol *builtInSymbol = symbolTable->findBuiltIn(identifier, mShaderVersion);
             if (builtInSymbol)
             {
                 needsReservedCheck = !checkCanUseOneOfExtensions(line, builtInSymbol->extensions());
@@ -1453,7 +1453,7 @@ bool TParseContext::declareVariable(const TSourceLoc &line,
     {
         // gl_CullDistance can be redeclared with smaller size than gl_MaxCullDistances
         const TVariable *maxCullDistances = static_cast<const TVariable *>(
-            symbolTable.findBuiltIn(ImmutableString("gl_MaxCullDistances"), mShaderVersion));
+            symbolTable->findBuiltIn(ImmutableString("gl_MaxCullDistances"), mShaderVersion));
         if (!maxCullDistances)
         {
             // Unsupported extension
@@ -1467,7 +1467,7 @@ bool TParseContext::declareVariable(const TSourceLoc &line,
         else if (static_cast<int>(type->getOutermostArraySize()) <=
                  maxCullDistances->getConstPointer()->getIConst())
         {
-            if (const TSymbol *builtInSymbol = symbolTable.findBuiltIn(identifier, mShaderVersion))
+            if (const TSymbol *builtInSymbol = symbolTable->findBuiltIn(identifier, mShaderVersion))
             {
                 needsReservedCheck = !checkCanUseOneOfExtensions(line, builtInSymbol->extensions());
             }
@@ -1530,7 +1530,7 @@ bool TParseContext::declareVariable(const TSourceLoc &line,
     if (needsReservedCheck && !checkIsNotReserved(line, identifier))
         return false;
 
-    if (!symbolTable.declare(*variable))
+    if (!symbolTable->declare(*variable))
     {
         error(line, "redefinition", identifier);
         return false;
@@ -2609,8 +2609,8 @@ TIntermTyped *TParseContext::parseVariableIdentifier(const TSourceLoc &location,
     else if ((mGeometryShaderInputPrimitiveType != EptUndefined) &&
              (variableType.getQualifier() == EvqPerVertexIn))
     {
-        ASSERT(symbolTable.getGlInVariableWithArraySize() != nullptr);
-        node = new TIntermSymbol(symbolTable.getGlInVariableWithArraySize());
+        ASSERT(symbolTable->getGlInVariableWithArraySize() != nullptr);
+        node = new TIntermSymbol(symbolTable->getGlInVariableWithArraySize());
     }
     else
     {
@@ -2722,7 +2722,7 @@ bool TParseContext::executeInitializer(const TSourceLoc &line,
         IsExtensionEnabled(mDirectiveHandler.extensionBehavior(),
                            TExtension::EXT_shader_non_constant_global_initializers);
     bool globalInitWarning = false;
-    if (symbolTable.atGlobalLevel() &&
+    if (symbolTable->atGlobalLevel() &&
         !ValidateGlobalInitializer(initializer, mShaderVersion, sh::IsWebGLBasedSpec(mShaderSpec),
                                    nonConstGlobalInitializers, &globalInitWarning))
     {
@@ -3083,7 +3083,7 @@ void TParseContext::checkLocalVariableConstStorageQualifier(const TQualifierWrap
         const TStorageQualifierWrapper &storageQualifier =
             static_cast<const TStorageQualifierWrapper &>(qualifier);
         if (!declaringFunction() && storageQualifier.getQualifier() != EvqConst &&
-            !symbolTable.atGlobalLevel())
+            !symbolTable->atGlobalLevel())
         {
             error(storageQualifier.getLine(),
                   "Local variables can only use the const storage qualifier.",
@@ -3171,9 +3171,9 @@ void TParseContext::checkGeometryShaderInputAndSetArraySize(const TSourceLoc &lo
             // input primitive declaration.
             if (mGeometryShaderInputPrimitiveType != EptUndefined)
             {
-                ASSERT(symbolTable.getGlInVariableWithArraySize() != nullptr);
+                ASSERT(symbolTable->getGlInVariableWithArraySize() != nullptr);
                 type->sizeOutermostUnsizedArray(
-                    symbolTable.getGlInVariableWithArraySize()->getType().getOutermostArraySize());
+                    symbolTable->getGlInVariableWithArraySize()->getType().getOutermostArraySize());
             }
             else
             {
@@ -3350,7 +3350,7 @@ TIntermDeclaration *TParseContext::parseSingleDeclaration(
         if (type->getBasicType() == EbtStruct)
         {
             TVariable *emptyVariable =
-                new TVariable(&symbolTable, kEmptyImmutableString, type, SymbolType::Empty);
+                new TVariable(&*symbolTable, kEmptyImmutableString, type, SymbolType::Empty);
             symbol = new TIntermSymbol(emptyVariable);
         }
         else if (IsAtomicCounter(publicType.getBasicType()))
@@ -3467,7 +3467,7 @@ TIntermDeclaration *TParseContext::parseSingleInitDeclaration(const TPublicType 
         {
             // The initialization got constant folded.  If it's a struct, declare the struct anyway.
             TVariable *emptyVariable =
-                new TVariable(&symbolTable, kEmptyImmutableString, type, SymbolType::Empty);
+                new TVariable(&*symbolTable, kEmptyImmutableString, type, SymbolType::Empty);
             TIntermSymbol *symbol = new TIntermSymbol(emptyVariable);
             symbol->setLine(publicType.getLine());
             declaration->appendDeclarator(symbol);
@@ -3561,7 +3561,7 @@ TIntermGlobalQualifierDeclaration *TParseContext::parseGlobalQualifierDeclaratio
                                     typeQualifier.line);
     checkMemoryQualifierIsNotSpecified(typeQualifier.memoryQualifier, typeQualifier.line);
 
-    symbolTable.addInvariantVarying(*variable);
+    symbolTable->addInvariantVarying(*variable);
 
     TIntermSymbol *intermSymbol = new TIntermSymbol(variable);
     intermSymbol->setLine(identifierLoc);
@@ -3760,7 +3760,7 @@ void TParseContext::parseDefaultPrecisionQualifier(const TPrecision precision,
               getBasicString(type.getBasicType()));
         return;
     }
-    symbolTable.setDefaultPrecision(type.getBasicType(), precision);
+    symbolTable->setDefaultPrecision(type.getBasicType(), precision);
 }
 
 bool TParseContext::checkPrimitiveTypeMatchesTypeQualifier(const TTypeQualifier &typeQualifier)
@@ -3789,7 +3789,7 @@ bool TParseContext::checkPrimitiveTypeMatchesTypeQualifier(const TTypeQualifier 
 void TParseContext::setGeometryShaderInputArraySize(unsigned int inputArraySize,
                                                     const TSourceLoc &line)
 {
-    if (!symbolTable.setGlInArraySize(inputArraySize))
+    if (!symbolTable->setGlInArraySize(inputArraySize))
     {
         error(line,
               "Array size or input primitive declaration doesn't match the size of earlier sized "
@@ -3839,7 +3839,7 @@ bool TParseContext::parseGeometryShaderInputLayoutQualifier(const TTypeQualifier
         for (TType *type : mDeferredArrayTypesToSize)
         {
             type->sizeOutermostUnsizedArray(
-                symbolTable.getGlInVariableWithArraySize()->getType().getOutermostArraySize());
+                symbolTable->getGlInVariableWithArraySize()->getType().getOutermostArraySize());
         }
         mDeferredArrayTypesToSize.clear();
     }
@@ -4073,8 +4073,9 @@ void TParseContext::parseGlobalLayoutQualifier(const TTypeQualifierBuilder &type
             return;
         }
 
-        const TVariable *maxComputeWorkGroupSize = static_cast<const TVariable *>(
-            symbolTable.findBuiltIn(ImmutableString("gl_MaxComputeWorkGroupSize"), mShaderVersion));
+        const TVariable *maxComputeWorkGroupSize =
+            static_cast<const TVariable *>(symbolTable->findBuiltIn(
+                ImmutableString("gl_MaxComputeWorkGroupSize"), mShaderVersion));
 
         const TConstantUnion *maxComputeWorkGroupSizeData =
             maxComputeWorkGroupSize->getConstPointer();
@@ -4296,7 +4297,7 @@ TIntermFunctionPrototype *TParseContext::createPrototypeNodeFromFunction(
         {
             if (insertParametersToSymbolTable)
             {
-                if (!symbolTable.declare(const_cast<TVariable *>(param)))
+                if (!symbolTable->declare(const_cast<TVariable *>(param)))
                 {
                     error(location, "redefinition", param->name());
                 }
@@ -4325,7 +4326,7 @@ TIntermFunctionPrototype *TParseContext::addFunctionPrototypeDeclaration(
     // first declaration. Either way the instance in the symbol table is used to track whether the
     // function is declared multiple times.
     bool hadPrototypeDeclaration = false;
-    const TFunction *function    = symbolTable.markFunctionHasPrototypeDeclaration(
+    const TFunction *function    = symbolTable->markFunctionHasPrototypeDeclaration(
         parsedFunction.getMangledName(), &hadPrototypeDeclaration);
 
     if (hadPrototypeDeclaration && mShaderVersion == 100)
@@ -4338,9 +4339,9 @@ TIntermFunctionPrototype *TParseContext::addFunctionPrototypeDeclaration(
     TIntermFunctionPrototype *prototype =
         createPrototypeNodeFromFunction(*function, location, false);
 
-    symbolTable.pop();
+    symbolTable->pop();
 
-    if (!symbolTable.atGlobalLevel())
+    if (!symbolTable->atGlobalLevel())
     {
         // ESSL 3.00.4 section 4.2.4.
         error(location, "local function prototype declarations are not allowed", "function");
@@ -4358,7 +4359,7 @@ TIntermFunctionDefinition *TParseContext::addFunctionDefinition(
     if (mFunctionBodyNewScope)
     {
         mFunctionBodyNewScope = false;
-        symbolTable.pop();
+        symbolTable->pop();
     }
 
     // Check that non-void functions have at least one return statement.
@@ -4377,7 +4378,7 @@ TIntermFunctionDefinition *TParseContext::addFunctionDefinition(
         new TIntermFunctionDefinition(functionPrototype, functionBody);
     functionNode->setLine(location);
 
-    symbolTable.pop();
+    symbolTable->pop();
     return functionNode;
 }
 
@@ -4388,7 +4389,7 @@ void TParseContext::parseFunctionDefinitionHeader(const TSourceLoc &location,
     ASSERT(function);
 
     bool wasDefined = false;
-    function        = symbolTable.setFunctionParameterNamesFromDefinition(function, &wasDefined);
+    function        = symbolTable->setFunctionParameterNamesFromDefinition(function, &wasDefined);
     if (wasDefined)
     {
         error(location, "function already has a body", function->name());
@@ -4405,7 +4406,7 @@ void TParseContext::parseFunctionDefinitionHeader(const TSourceLoc &location,
     if (IsSpecWithFunctionBodyNewScope(mShaderSpec, mShaderVersion))
     {
         mFunctionBodyNewScope = true;
-        symbolTable.push();
+        symbolTable->push();
     }
 }
 
@@ -4434,8 +4435,8 @@ TFunction *TParseContext::parseFunctionDeclarator(const TSourceLoc &location, TF
 
     if (getShaderVersion() >= 300)
     {
-        if (symbolTable.isUnmangledBuiltInName(function->name(), getShaderVersion(),
-                                               extensionBehavior()))
+        if (symbolTable->isUnmangledBuiltInName(function->name(), getShaderVersion(),
+                                                extensionBehavior()))
         {
             // With ESSL 3.00 and above, names of built-in functions cannot be redeclared as
             // functions. Therefore overloading or redefining builtin functions is an error.
@@ -4448,7 +4449,7 @@ TFunction *TParseContext::parseFunctionDeclarator(const TSourceLoc &location, TF
         // ESSL 1.00.17 section 4.2.6: built-ins can be overloaded but not redefined. We assume that
         // this applies to redeclarations as well.
         const TSymbol *builtIn =
-            symbolTable.findBuiltIn(function->getMangledName(), getShaderVersion());
+            symbolTable->findBuiltIn(function->getMangledName(), getShaderVersion());
         if (builtIn)
         {
             error(location, "built-in functions cannot be redefined", function->name());
@@ -4458,7 +4459,7 @@ TFunction *TParseContext::parseFunctionDeclarator(const TSourceLoc &location, TF
     // Return types and parameter qualifiers must match in all redeclarations, so those are checked
     // here.
     const TFunction *prevDec =
-        static_cast<const TFunction *>(symbolTable.findGlobal(function->getMangledName()));
+        static_cast<const TFunction *>(symbolTable->findGlobal(function->getMangledName()));
     if (prevDec)
     {
         if (prevDec->getReturnType() != function->getReturnType())
@@ -4479,7 +4480,7 @@ TFunction *TParseContext::parseFunctionDeclarator(const TSourceLoc &location, TF
     }
 
     // Check for previously declared variables using the same name.
-    const TSymbol *prevSym   = symbolTable.find(function->name(), getShaderVersion());
+    const TSymbol *prevSym   = symbolTable->find(function->name(), getShaderVersion());
     bool insertUnmangledName = true;
     if (prevSym)
     {
@@ -4492,7 +4493,7 @@ TFunction *TParseContext::parseFunctionDeclarator(const TSourceLoc &location, TF
     // Parsing is at the inner scope level of the function's arguments and body statement at this
     // point, but declareUserDefinedFunction takes care of declaring the function at the global
     // scope.
-    symbolTable.declareUserDefinedFunction(function, insertUnmangledName);
+    symbolTable->declareUserDefinedFunction(function, insertUnmangledName);
 
     // Raise error message if main function takes any parameters or return anything other than void
     if (function->isMain())
@@ -4552,7 +4553,7 @@ TFunction *TParseContext::parseFunctionHeader(const TPublicType &type,
     }
 
     // Add the function as a prototype after parsing it (we do not support recursion)
-    return new TFunction(&symbolTable, name, SymbolType::UserDefined, new TType(type), false);
+    return new TFunction(&*symbolTable, name, SymbolType::UserDefined, new TType(type), false);
 }
 
 TFunctionLookup *TParseContext::addNonConstructorFunc(const ImmutableString &name,
@@ -5052,9 +5053,9 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
     {
         instanceSymbolType = SymbolType::BuiltIn;
     }
-    TInterfaceBlock *interfaceBlock = new TInterfaceBlock(&symbolTable, blockName, fieldList,
+    TInterfaceBlock *interfaceBlock = new TInterfaceBlock(&*symbolTable, blockName, fieldList,
                                                           blockLayoutQualifier, instanceSymbolType);
-    if (!symbolTable.declare(interfaceBlock) && isUniformOrBuffer)
+    if (!symbolTable->declare(interfaceBlock) && isUniformOrBuffer)
     {
         error(nameLine, "redefinition of an interface block name", blockName);
     }
@@ -5074,7 +5075,7 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
     // regardless of if there's an instance name. It's created as an empty symbol if there is no
     // instance name.
     TVariable *instanceVariable =
-        new TVariable(&symbolTable, instanceName, interfaceBlockType,
+        new TVariable(&*symbolTable, instanceName, interfaceBlockType,
                       instanceName.empty() ? SymbolType::Empty : SymbolType::UserDefined);
 
     if (instanceVariable->symbolType() == SymbolType::Empty)
@@ -5104,8 +5105,8 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
                 symbolType = SymbolType::BuiltIn;
             }
             TVariable *fieldVariable =
-                new TVariable(&symbolTable, field->name(), fieldType, symbolType);
-            if (!symbolTable.declare(fieldVariable))
+                new TVariable(&*symbolTable, field->name(), fieldType, symbolType);
+            if (!symbolTable->declare(fieldVariable))
             {
                 error(field->line(), "redefinition of an interface block member name",
                       field->name());
@@ -5117,7 +5118,7 @@ TIntermDeclaration *TParseContext::addInterfaceBlock(
         checkIsNotReserved(instanceLine, instanceName);
 
         // add a symbol for this interface block
-        if (!symbolTable.declare(instanceVariable))
+        if (!symbolTable->declare(instanceVariable))
         {
             error(instanceLine, "redefinition of an interface block instance name", instanceName);
         }
@@ -6095,7 +6096,7 @@ TLayoutQualifier TParseContext::parseLayoutQualifier(const ImmutableString &qual
 TTypeQualifierBuilder *TParseContext::createTypeQualifierBuilder(const TSourceLoc &loc)
 {
     return new TTypeQualifierBuilder(
-        new TStorageQualifierWrapper(symbolTable.atGlobalLevel() ? EvqGlobal : EvqTemporary, loc),
+        new TStorageQualifierWrapper(symbolTable->atGlobalLevel() ? EvqGlobal : EvqTemporary, loc),
         mShaderVersion);
 }
 
@@ -6375,16 +6376,16 @@ TTypeSpecifierNonArray TParseContext::addStructure(const TSourceLoc &structLine,
     {
         structSymbolType = SymbolType::Empty;
     }
-    TStructure *structure = new TStructure(&symbolTable, structName, fieldList, structSymbolType);
+    TStructure *structure = new TStructure(&*symbolTable, structName, fieldList, structSymbolType);
 
     // Store a bool in the struct if we're at global scope, to allow us to
     // skip the local struct scoping workaround in HLSL.
-    structure->setAtGlobalScope(symbolTable.atGlobalLevel());
+    structure->setAtGlobalScope(symbolTable->atGlobalLevel());
 
     if (structSymbolType != SymbolType::Empty)
     {
         checkIsNotReserved(nameLine, structName);
-        if (!symbolTable.declare(structure))
+        if (!symbolTable->declare(structure))
         {
             error(nameLine, "redefinition of a struct", structName);
         }
@@ -7595,12 +7596,12 @@ TIntermTyped *TParseContext::addNonConstructorFunctionCall(TFunctionLookup *fnCa
     {
         // There are no inner functions, so it's enough to look for user-defined functions in the
         // global scope.
-        const TSymbol *symbol = symbolTable.findGlobal(fnCall->getMangledName());
+        const TSymbol *symbol = symbolTable->findGlobal(fnCall->getMangledName());
 
         if (symbol == nullptr && IsDesktopGLSpec(mShaderSpec))
         {
             // If using Desktop GL spec, need to check for implicit conversion
-            symbol = symbolTable.findGlobalWithConversion(
+            symbol = symbolTable->findGlobalWithConversion(
                 fnCall->getMangledNamesForImplicitConversions());
         }
 
@@ -7617,12 +7618,12 @@ TIntermTyped *TParseContext::addNonConstructorFunctionCall(TFunctionLookup *fnCa
             return callNode;
         }
 
-        symbol = symbolTable.findBuiltIn(fnCall->getMangledName(), mShaderVersion);
+        symbol = symbolTable->findBuiltIn(fnCall->getMangledName(), mShaderVersion);
 
         if (symbol == nullptr && IsDesktopGLSpec(mShaderSpec))
         {
             // If using Desktop GL spec, need to check for implicit conversion
-            symbol = symbolTable.findBuiltInWithConversion(
+            symbol = symbolTable->findBuiltInWithConversion(
                 fnCall->getMangledNamesForImplicitConversions(), mShaderVersion);
         }
 

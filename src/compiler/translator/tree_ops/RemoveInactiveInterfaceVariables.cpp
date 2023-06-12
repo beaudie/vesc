@@ -9,6 +9,7 @@
 
 #include "compiler/translator/tree_ops/RemoveInactiveInterfaceVariables.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "compiler/translator/SymbolTable.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
 #include "compiler/translator/util.h"
@@ -36,11 +37,11 @@ class RemoveInactiveInterfaceVariablesTraverser : public TIntermTraverser
     bool visitBinary(Visit visit, TIntermBinary *node) override;
 
   private:
-    const std::vector<sh::ShaderVariable> &mAttributes;
-    const std::vector<sh::ShaderVariable> &mInputVaryings;
-    const std::vector<sh::ShaderVariable> &mOutputVariables;
-    const std::vector<sh::ShaderVariable> &mUniforms;
-    const std::vector<sh::InterfaceBlock> &mInterfaceBlocks;
+    const raw_ref<const std::vector<sh::ShaderVariable>> mAttributes;
+    const raw_ref<const std::vector<sh::ShaderVariable>> mInputVaryings;
+    const raw_ref<const std::vector<sh::ShaderVariable>> mOutputVariables;
+    const raw_ref<const std::vector<sh::ShaderVariable>> mUniforms;
+    const raw_ref<const std::vector<sh::InterfaceBlock>> mInterfaceBlocks;
     bool mRemoveFragmentOutputs;
 };
 
@@ -113,25 +114,25 @@ bool RemoveInactiveInterfaceVariablesTraverser::visitDeclaration(Visit visit,
             type.getQualifier() != EvqPatchOut)
         {
             removeDeclaration =
-                !IsVariableActive(mInterfaceBlocks, type.getInterfaceBlock()->name());
+                !IsVariableActive(*mInterfaceBlocks, type.getInterfaceBlock()->name());
         }
     }
     else if (qualifier == EvqUniform)
     {
-        removeDeclaration = !IsVariableActive(mUniforms, asSymbol->getName());
+        removeDeclaration = !IsVariableActive(*mUniforms, asSymbol->getName());
     }
     else if (qualifier == EvqAttribute || qualifier == EvqVertexIn)
     {
-        removeDeclaration = !IsVariableActive(mAttributes, asSymbol->getName());
+        removeDeclaration = !IsVariableActive(*mAttributes, asSymbol->getName());
     }
     else if (IsShaderIn(qualifier))
     {
-        removeDeclaration = !IsVariableActive(mInputVaryings, asSymbol->getName());
+        removeDeclaration = !IsVariableActive(*mInputVaryings, asSymbol->getName());
     }
     else if (qualifier == EvqFragmentOut)
     {
         removeDeclaration =
-            !IsVariableActive(mOutputVariables, asSymbol->getName()) && mRemoveFragmentOutputs;
+            !IsVariableActive(*mOutputVariables, asSymbol->getName()) && mRemoveFragmentOutputs;
     }
 
     if (removeDeclaration)
@@ -176,7 +177,7 @@ bool RemoveInactiveInterfaceVariablesTraverser::visitBinary(Visit visit, TInterm
     }
 
     const TQualifier qualifier = symbol->getType().getQualifier();
-    if (qualifier != EvqFragmentOut || IsVariableActive(mOutputVariables, symbol->getName()))
+    if (qualifier != EvqFragmentOut || IsVariableActive(*mOutputVariables, symbol->getName()))
     {
         return false;
     }

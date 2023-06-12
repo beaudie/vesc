@@ -11,6 +11,7 @@
 
 #include <functional>
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/debug.h"
 #include "util/shader_utils.h"
 

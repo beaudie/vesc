@@ -16,6 +16,7 @@
 
 #include <GLSLANG/ShaderLang.h>
 #include "angle_gl.h"
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 
 namespace sh
 {
@@ -327,7 +328,7 @@ class BlockEncoderVisitor : public VariableNameVisitor
     bool mSkipEnabled                = false;
 
   private:
-    BlockLayoutEncoder *mEncoder;
+    raw_ptr<BlockLayoutEncoder> mEncoder;
     unsigned int mStructStackSize = 0;
 };
 

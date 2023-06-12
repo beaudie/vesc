@@ -13,6 +13,7 @@
 #include <wayland-client.h>
 #include <wayland-egl-core.h>
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "util/OSWindow.h"
 #include "util/util_export.h"
 
@@ -55,10 +56,10 @@ class ANGLE_UTIL_EXPORT WaylandWindow : public OSWindow
 
     static const struct wl_registry_listener registryListener;
 
-    struct wl_display *mDisplay;
-    struct wl_compositor *mCompositor;
-    struct wl_surface *mSurface;
-    struct wl_egl_window *mWindow;
+    raw_ptr<struct wl_display> mDisplay;
+    raw_ptr<struct wl_compositor> mCompositor;
+    raw_ptr<struct wl_surface> mSurface;
+    raw_ptr<struct wl_egl_window> mWindow;
 
     struct pollfd fds[1];
 };

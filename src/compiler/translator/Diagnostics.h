@@ -7,6 +7,8 @@
 #ifndef COMPILER_TRANSLATOR_DIAGNOSTICS_H_
 #define COMPILER_TRANSLATOR_DIAGNOSTICS_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "common/angleutils.h"
 #include "compiler/preprocessor/DiagnosticsBase.h"
 #include "compiler/translator/Severity.h"
@@ -45,7 +47,7 @@ class TDiagnostics : public angle::pp::Diagnostics, angle::NonCopyable
     void print(ID id, const angle::pp::SourceLocation &loc, const std::string &text) override;
 
   private:
-    TInfoSinkBase &mInfoSink;
+    const raw_ref<TInfoSinkBase> mInfoSink;
     int mNumErrors;
     int mNumWarnings;
 };
@@ -59,7 +61,7 @@ class PerformanceDiagnostics : public angle::NonCopyable
     void warning(const TSourceLoc &loc, const char *reason, const char *token);
 
   private:
-    TDiagnostics *mDiagnostics;
+    raw_ptr<TDiagnostics> mDiagnostics;
 };
 
 }  // namespace sh

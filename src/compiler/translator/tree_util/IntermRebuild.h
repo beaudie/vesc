@@ -7,6 +7,8 @@
 #ifndef COMPILER_TRANSLATOR_TRANSLATORMETALDIRECT_INTERMREBUILD_H_
 #define COMPILER_TRANSLATOR_TRANSLATORMETALDIRECT_INTERMREBUILD_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
 #include "compiler/translator/tree_util/NodeType.h"
 
@@ -89,7 +91,7 @@ class TIntermRebuild : angle::NonCopyable
     struct ConsList
     {
         T value;
-        ConsList<T> *tail;
+        raw_ptr<ConsList<T>> tail;
     };
 
     class BaseResult
@@ -129,7 +131,7 @@ class TIntermRebuild : angle::NonCopyable
       public:
         Action mAction;
         VisitBits mVisit;
-        TIntermNode *mSingle;
+        raw_ptr<TIntermNode> mSingle;
         std::vector<TIntermNode *> mMulti;
     };
 
@@ -312,8 +314,8 @@ class TIntermRebuild : angle::NonCopyable
         TIntermGlobalQualifierDeclaration &node);
 
   protected:
-    TCompiler &mCompiler;
-    TSymbolTable &mSymbolTable;
+    const raw_ref<TCompiler> mCompiler;
+    const raw_ref<TSymbolTable> mSymbolTable;
     const TFunction *mParentFunc = nullptr;
     GetNodeType getNodeType;
 

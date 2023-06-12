@@ -2080,7 +2080,7 @@ class VertexAttributeTestES31 : public VertexAttributeTestES3
         glBufferData(GL_ARRAY_BUFFER, inputSize, nullptr, GL_STATIC_DRAW);
         glBufferSubData(GL_ARRAY_BUFFER, 0, inputSize, inputData.data());
         glVertexAttribFormat(mTestAttrib, 1, GL_FLOAT, GL_FALSE,
-                             base::checked_cast<GLuint>(inputRelativeOffset));
+                             angle::base::checked_cast<GLuint>(inputRelativeOffset));
         glBindVertexBuffer(mTestAttrib, mBuffer, 0, inputStride);
         glEnableVertexAttribArray(mTestAttrib);
 

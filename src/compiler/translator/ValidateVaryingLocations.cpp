@@ -9,6 +9,7 @@
 
 #include "ValidateVaryingLocations.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "compiler/translator/Diagnostics.h"
 #include "compiler/translator/SymbolTable.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
@@ -133,8 +134,8 @@ bool ShouldIgnoreVaryingArraySize(TQualifier qualifier, GLenum shaderType)
 
 struct SymbolAndField
 {
-    const TIntermSymbol *symbol;
-    const TField *field;
+    raw_ptr<const TIntermSymbol> symbol;
+    raw_ptr<const TField> field;
 };
 using LocationMap = std::map<int, SymbolAndField>;
 

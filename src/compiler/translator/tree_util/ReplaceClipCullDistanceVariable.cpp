@@ -9,6 +9,7 @@
 
 #include "compiler/translator/tree_util/ReplaceClipCullDistanceVariable.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/bitset_utils.h"
 #include "common/debug.h"
 #include "common/utilities.h"
@@ -159,15 +160,15 @@ class GLClipCullDistanceReferenceTraverser : public TIntermTraverser
     }
 
   private:
-    const TIntermSymbol **mRedeclaredSym;
-    const TVariable **mVariable;
+    raw_ptr<const TIntermSymbol *> mRedeclaredSym;
+    raw_ptr<const TVariable *> mVariable;
     // Flag indicating whether there is at least one reference of gl_ClipDistance with non-constant
     // index
-    bool *mUseNonConstClipCullDistanceIndex;
+    raw_ptr<bool> mUseNonConstClipCullDistanceIndex;
     // Max constant index that is used to reference gl_ClipDistance
-    unsigned int *mMaxConstClipCullDistanceIndex;
+    raw_ptr<unsigned int> mMaxConstClipCullDistanceIndex;
     // List of constant index reference of gl_ClipDistance
-    ClipCullDistanceIdxSet *mConstClipCullDistanceIndices;
+    raw_ptr<ClipCullDistanceIdxSet> mConstClipCullDistanceIndices;
     // Qualifier for gl_ClipDistance/gl_CullDistance
     const TQualifier mTargetQualifier;
 };
@@ -194,9 +195,9 @@ class ReplaceVariableExceptOneTraverser : public TIntermTraverser
     }
 
   private:
-    const TVariable *const mToBeReplaced;
-    const TIntermSymbol *const mException;
-    const TIntermTyped *const mReplacement;
+    const raw_ptr<const TVariable> mToBeReplaced;
+    const raw_ptr<const TIntermSymbol> mException;
+    const raw_ptr<const TIntermTyped> mReplacement;
 };
 
 TIntermNode *simpleAssignFunc(const unsigned int index,
@@ -286,16 +287,16 @@ class ReplaceClipCullDistanceAssignments : angle::NonCopyable
                                            AssignFunc assignFunc);
 
     // Common variables for replacing gl_Clip/CullDistances with ANGLEClip/CullDistances
-    TCompiler *mCompiler;
-    TIntermBlock *mRoot;
-    TSymbolTable *mSymbolTable;
+    raw_ptr<TCompiler> mCompiler;
+    raw_ptr<TIntermBlock> mRoot;
+    raw_ptr<TSymbolTable> mSymbolTable;
 
-    const TVariable *mGlVar;
-    const TIntermSymbol *mRedeclaredGLVar;
+    raw_ptr<const TVariable> mGlVar;
+    raw_ptr<const TIntermSymbol> mRedeclaredGLVar;
     const ImmutableString mANGLEVarName;
 
     unsigned int mEnabledDistances;
-    const TVariable *mANGLEVar = nullptr;
+    raw_ptr<const TVariable> mANGLEVar = nullptr;
 };
 
 unsigned int ReplaceClipCullDistanceAssignments::getEnabledClipCullDistance(

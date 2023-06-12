@@ -80,7 +80,7 @@ void RandomOrderExecutor::pruneStack(size_t newStackSize)
             else
                 DE_ASSERT(curEntry.children.empty());
 
-            curEntry.node = DE_NULL;
+            curEntry.node = nullptr;
             curEntry.children.clear();
         }
 
@@ -180,10 +180,10 @@ static qpTestCaseType nodeTypeToTestCaseType(TestNodeType nodeType)
 TestStatus RandomOrderExecutor::execute(const std::string &casePath)
 {
     TestCase *const testCase      = seekToCase(casePath);
-    TestLog &log                  = m_testCtx.getLog();
+    TestLog &log                  = m_testCtx->getLog();
     const qpTestCaseType caseType = nodeTypeToTestCaseType(testCase->getNodeType());
 
-    m_testCtx.setTerminateAfter(false);
+    m_testCtx->setTerminateAfter(false);
     log.startCase(casePath.c_str(), caseType);
 
     {
@@ -195,10 +195,10 @@ TestStatus RandomOrderExecutor::execute(const std::string &casePath)
 
 tcu::TestStatus RandomOrderExecutor::executeInner(TestCase *testCase, const std::string &casePath)
 {
-    TestLog &log                 = m_testCtx.getLog();
+    TestLog &log                 = m_testCtx->getLog();
     const deUint64 testStartTime = deGetMicroseconds();
 
-    m_testCtx.setTestResult(QP_TEST_RESULT_LAST, "");
+    m_testCtx->setTestResult(QP_TEST_RESULT_LAST, "");
 
     // Initialize, will return immediately if fails
     try
@@ -208,14 +208,14 @@ tcu::TestStatus RandomOrderExecutor::executeInner(TestCase *testCase, const std:
     }
     catch (const std::bad_alloc &)
     {
-        m_testCtx.setTerminateAfter(true);
+        m_testCtx->setTerminateAfter(true);
         return TestStatus(QP_TEST_RESULT_RESOURCE_ERROR,
                           "Failed to allocate memory in test case init");
     }
     catch (const TestException &e)
     {
         DE_ASSERT(e.getTestResult() != QP_TEST_RESULT_LAST);
-        m_testCtx.setTerminateAfter(e.isFatal());
+        m_testCtx->setTerminateAfter(e.isFatal());
         log << e;
         return TestStatus(e.getTestResult(), e.getMessage());
     }
@@ -232,7 +232,7 @@ tcu::TestStatus RandomOrderExecutor::executeInner(TestCase *testCase, const std:
     {
         TestCase::IterateResult iterateResult = TestCase::STOP;
 
-        m_testCtx.touchWatchdog();
+        m_testCtx->touchWatchdog();
 
         try
         {
@@ -249,30 +249,30 @@ tcu::TestStatus RandomOrderExecutor::executeInner(TestCase *testCase, const std:
         }
         catch (const std::bad_alloc &)
         {
-            m_testCtx.setTestResult(QP_TEST_RESULT_RESOURCE_ERROR,
-                                    "Failed to allocate memory during test "
-                                    "execution");
+            m_testCtx->setTestResult(QP_TEST_RESULT_RESOURCE_ERROR,
+                                     "Failed to allocate memory during test "
+                                     "execution");
         }
         catch (const TestException &e)
         {
             log << e;
-            m_testCtx.setTestResult(e.getTestResult(), e.getMessage());
-            m_testCtx.setTerminateAfter(e.isFatal());
+            m_testCtx->setTestResult(e.getTestResult(), e.getMessage());
+            m_testCtx->setTerminateAfter(e.isFatal());
         }
         catch (const Exception &e)
         {
             log << e;
-            m_testCtx.setTestResult(QP_TEST_RESULT_FAIL, e.getMessage());
+            m_testCtx->setTestResult(QP_TEST_RESULT_FAIL, e.getMessage());
         }
 
         if (iterateResult == TestCase::STOP)
             break;
     }
 
-    DE_ASSERT(m_testCtx.getTestResult() != QP_TEST_RESULT_LAST);
+    DE_ASSERT(m_testCtx->getTestResult() != QP_TEST_RESULT_LAST);
 
-    if (m_testCtx.getTestResult() == QP_TEST_RESULT_RESOURCE_ERROR)
-        m_testCtx.setTerminateAfter(true);
+    if (m_testCtx->getTestResult() == QP_TEST_RESULT_RESOURCE_ERROR)
+        m_testCtx->setTerminateAfter(true);
 
     // De-initialize
     try
@@ -286,16 +286,16 @@ tcu::TestStatus RandomOrderExecutor::executeInner(TestCase *testCase, const std:
             << "Error in test case deinit, test program "
                "will terminate."
             << TestLog::EndMessage;
-        m_testCtx.setTerminateAfter(true);
+        m_testCtx->setTerminateAfter(true);
     }
 
-    if (m_testCtx.getWatchDog())
-        qpWatchDog_reset(m_testCtx.getWatchDog());
+    if (m_testCtx->getWatchDog())
+        qpWatchDog_reset(m_testCtx->getWatchDog());
 
     {
         const TestStatus result =
-            TestStatus(m_testCtx.getTestResult(), m_testCtx.getTestResultDesc());
-        m_testCtx.setTestResult(QP_TEST_RESULT_LAST, "");
+            TestStatus(m_testCtx->getTestResult(), m_testCtx->getTestResultDesc());
+        m_testCtx->setTestResult(QP_TEST_RESULT_LAST, "");
         return result;
     }
 }

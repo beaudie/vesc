@@ -6665,7 +6665,7 @@ angle::Result ContextVk::acquireTextures(const gl::Context *context,
 {
     for (const gl::TextureAndLayout &textureBarrier : textureBarriers)
     {
-        TextureVk *textureVk   = vk::GetImpl(textureBarrier.texture);
+        TextureVk *textureVk   = vk::GetImpl(textureBarrier.texture.get());
         vk::ImageHelper &image = textureVk->getImage();
         vk::ImageLayout layout = vk::GetImageLayoutFromGLImageLayout(this, textureBarrier.layout);
         // Image should not be accessed while unowned. Emulated formats may have staged updates
@@ -6681,7 +6681,7 @@ angle::Result ContextVk::releaseTextures(const gl::Context *context,
 {
     for (gl::TextureAndLayout &textureBarrier : *textureBarriers)
     {
-        TextureVk *textureVk = vk::GetImpl(textureBarrier.texture);
+        TextureVk *textureVk = vk::GetImpl(textureBarrier.texture.get());
 
         ANGLE_TRY(textureVk->ensureImageInitialized(this, ImageMipLevels::EnabledLevels));
 

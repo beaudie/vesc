@@ -11,6 +11,7 @@
 #include <unordered_map>
 
 #include "astcenc.h"
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/WorkerThread.h"
 #include "image_util/AstcDecompressor.h"
 
@@ -156,11 +157,11 @@ struct DecompressTask : public Closure
         result = astcenc_decompress_image(context, data, dataLength, image, &kSwizzle, threadIndex);
     }
 
-    astcenc_context *context;
+    raw_ptr<astcenc_context> context;
     uint32_t threadIndex;
     const uint8_t *data;
     size_t dataLength;
-    astcenc_image *image;
+    raw_ptr<astcenc_image> image;
     astcenc_error result;
 };
 

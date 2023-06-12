@@ -9,6 +9,7 @@
 #ifndef LIBANGLE_IMAGE_INDEX_H_
 #define LIBANGLE_IMAGE_INDEX_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/PackedEnums.h"
 #include "common/mathutil.h"
 
@@ -121,7 +122,7 @@ class ImageIndexIterator
 
     const Range<GLint> mMipRange;
     const Range<GLint> mLayerRange;
-    const GLsizei *const mLayerCounts;
+    const raw_ptr<const GLsizei> mLayerCounts;
 
     ImageIndex mCurrentIndex;
 };

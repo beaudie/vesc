@@ -10,6 +10,7 @@
 
 #include "GLSLANG/ShaderLang.h"
 #include "angle_gl.h"
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "compiler/translator/TranslatorESSL.h"
 #include "gtest/gtest.h"
 
@@ -71,7 +72,7 @@ class TypeTrackingTest : public testing::Test
         return filteredLog;
     }
 
-    TranslatorESSL *mTranslator;
+    raw_ptr<TranslatorESSL> mTranslator;
     std::string mInfoLog;
 };
 

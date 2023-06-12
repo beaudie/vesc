@@ -10,6 +10,7 @@
 #include "compiler/translator/tree_ops/vulkan/FlagSamplersWithTexelFetch.h"
 
 #include "angle_gl.h"
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/utilities.h"
 
 #include "compiler/translator/SymbolTable.h"
@@ -68,7 +69,7 @@ class FlagSamplersWithTexelFetchTraverser : public TIntermTraverser
     }
 
   private:
-    std::vector<ShaderVariable> *mUniforms;
+    raw_ptr<std::vector<ShaderVariable>> mUniforms;
 };
 
 }  // anonymous namespace

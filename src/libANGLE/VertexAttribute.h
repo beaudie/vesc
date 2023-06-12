@@ -9,6 +9,7 @@
 #ifndef LIBANGLE_VERTEXATTRIBUTE_H_
 #define LIBANGLE_VERTEXATTRIBUTE_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "libANGLE/Buffer.h"
 #include "libANGLE/angletypes.h"
 #include "libANGLE/renderer/Format.h"
@@ -82,9 +83,9 @@ struct VertexAttribute final : private angle::NonCopyable
     GLint64 getCachedElementLimit() const { return mCachedElementLimit; }
 
     bool enabled;  // For glEnable/DisableVertexAttribArray
-    const angle::Format *format;
+    raw_ptr<const angle::Format> format;
 
-    const void *pointer;
+    raw_ptr<const void> pointer;
     GLuint relativeOffset;
 
     GLuint vertexAttribArrayStride;  // ONLY for queries of VERTEX_ATTRIB_ARRAY_STRIDE

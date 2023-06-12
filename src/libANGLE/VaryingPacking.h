@@ -15,6 +15,7 @@
 #include <GLSLANG/ShaderVars.h>
 
 #include "angle_gl.h"
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/angleutils.h"
 #include "libANGLE/angletypes.h"
 
@@ -43,7 +44,7 @@ struct VaryingInShaderRef : angle::NonCopyable
 
     VaryingInShaderRef &operator=(VaryingInShaderRef &&other);
 
-    const sh::ShaderVariable *varying;
+    raw_ptr<const sh::ShaderVariable> varying;
 
     ShaderType stage;
 

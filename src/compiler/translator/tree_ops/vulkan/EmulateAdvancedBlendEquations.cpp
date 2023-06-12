@@ -13,6 +13,8 @@
 #include <map>
 
 #include "GLSLANG/ShaderVars.h"
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "common/PackedEnums.h"
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/StaticType.h"
@@ -57,37 +59,37 @@ class Builder
     void generatePreamble(TIntermBlock *blendBlock);
     void generateEquationSwitch(TIntermBlock *blendBlock);
 
-    TCompiler *mCompiler;
-    TSymbolTable *mSymbolTable;
-    const DriverUniform *mDriverUniforms;
-    std::vector<ShaderVariable> *mUniforms;
-    const AdvancedBlendEquations &mAdvancedBlendEquations;
+    raw_ptr<TCompiler> mCompiler;
+    raw_ptr<TSymbolTable> mSymbolTable;
+    raw_ptr<const DriverUniform> mDriverUniforms;
+    raw_ptr<std::vector<ShaderVariable>> mUniforms;
+    const raw_ref<const AdvancedBlendEquations> mAdvancedBlendEquations;
 
     // The color input and output.  Output is the blend source, and input is the destination.
-    const TVariable *mSubpassInputVar = nullptr;
-    const TVariable *mOutputVar       = nullptr;
+    raw_ptr<const TVariable> mSubpassInputVar = nullptr;
+    raw_ptr<const TVariable> mOutputVar       = nullptr;
 
     // The value of output, premultiplied by alpha
-    TIntermSymbol *mSrc = nullptr;
+    raw_ptr<TIntermSymbol> mSrc = nullptr;
     // The value of input, premultiplied by alpha
-    TIntermSymbol *mDst = nullptr;
+    raw_ptr<TIntermSymbol> mDst = nullptr;
 
     // p0, p1 and p2 coefficients
-    TIntermSymbol *mP0 = nullptr;
-    TIntermSymbol *mP1 = nullptr;
-    TIntermSymbol *mP2 = nullptr;
+    raw_ptr<TIntermSymbol> mP0 = nullptr;
+    raw_ptr<TIntermSymbol> mP1 = nullptr;
+    raw_ptr<TIntermSymbol> mP2 = nullptr;
 
     // Functions implementing an advanced blend equation:
     angle::PackedEnumMap<gl::BlendEquationType, TIntermFunctionDefinition *> mBlendFuncs = {};
 
     // HSL helpers:
-    TIntermFunctionDefinition *mMinv3     = nullptr;
-    TIntermFunctionDefinition *mMaxv3     = nullptr;
-    TIntermFunctionDefinition *mLumv3     = nullptr;
-    TIntermFunctionDefinition *mSatv3     = nullptr;
-    TIntermFunctionDefinition *mClipColor = nullptr;
-    TIntermFunctionDefinition *mSetLum    = nullptr;
-    TIntermFunctionDefinition *mSetLumSat = nullptr;
+    raw_ptr<TIntermFunctionDefinition> mMinv3     = nullptr;
+    raw_ptr<TIntermFunctionDefinition> mMaxv3     = nullptr;
+    raw_ptr<TIntermFunctionDefinition> mLumv3     = nullptr;
+    raw_ptr<TIntermFunctionDefinition> mSatv3     = nullptr;
+    raw_ptr<TIntermFunctionDefinition> mClipColor = nullptr;
+    raw_ptr<TIntermFunctionDefinition> mSetLum    = nullptr;
+    raw_ptr<TIntermFunctionDefinition> mSetLumSat = nullptr;
 };
 
 bool Builder::build(TIntermBlock *root)
@@ -102,7 +104,7 @@ bool Builder::build(TIntermBlock *root)
 
     // If any HSL blend equation is used, generate a few utility functions used in Table X.2 in the
     // spec.
-    if (mAdvancedBlendEquations.anyHsl())
+    if (mAdvancedBlendEquations->anyHsl())
     {
         generateHslHelperFunctions();
     }
@@ -571,7 +573,7 @@ void Builder::generateBlendFunctions()
     TType *floatParamType = new TType(EbtFloat, precision, EvqParamIn, 1);
     TType *vec3ParamType  = new TType(EbtFloat, precision, EvqParamIn, 3);
 
-    gl::BlendEquationBitSet enabledBlendEquations(mAdvancedBlendEquations.bits());
+    gl::BlendEquationBitSet enabledBlendEquations(mAdvancedBlendEquations->bits());
     for (gl::BlendEquationType equation : enabledBlendEquations)
     {
         switch (equation)
@@ -1167,7 +1169,7 @@ void Builder::generateEquationSwitch(TIntermBlock *blendBlock)
 
     TIntermBlock *switchBody = new TIntermBlock;
 
-    gl::BlendEquationBitSet enabledBlendEquations(mAdvancedBlendEquations.bits());
+    gl::BlendEquationBitSet enabledBlendEquations(mAdvancedBlendEquations->bits());
     for (gl::BlendEquationType equation : enabledBlendEquations)
     {
         switchBody->appendStatement(

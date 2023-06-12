@@ -24,6 +24,8 @@
 #ifndef TCU_RANDOM_ORDER_EXECUTOR_H_
 #define TCU_RANDOM_ORDER_EXECUTOR_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "deUniquePtr.hpp"
 #include "tcuTestHierarchyIterator.hpp"
 
@@ -51,11 +53,11 @@ class RandomOrderExecutor
         TestNode *node;
         std::vector<TestNode *> children;
 
-        NodeStackEntry(void) : node(DE_NULL) {}
+        NodeStackEntry(void) : node(nullptr) {}
         NodeStackEntry(TestNode *node_) : node(node_) {}
     };
 
-    TestContext &m_testCtx;
+    const raw_ref<TestContext> m_testCtx;
 
     DefaultHierarchyInflater m_inflater;
     std::vector<NodeStackEntry> m_nodeStack;

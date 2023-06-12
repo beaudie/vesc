@@ -8,6 +8,8 @@
 
 #include "compiler/translator/tree_ops/RewriteStructSamplers.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "compiler/translator/ImmutableStringBuilder.h"
 #include "compiler/translator/SymbolTable.h"
 #include "compiler/translator/tree_util/IntermNode_util.h"
@@ -23,7 +25,7 @@ struct StructureData
 {
     // The structure this was replaced with.  If nullptr, it means the structure is removed (because
     // it had all samplers).
-    const TStructure *modified;
+    raw_ptr<const TStructure> modified;
     // Indexed by the field index of original structure, to get the field index of the modified
     // structure.  For example:
     //
@@ -117,7 +119,7 @@ class RewriteExpressionTraverser final : public TIntermTraverser
     bool visitBinary(Visit visit, TIntermBinary *node) override
     {
         TIntermTyped *rewritten = RewriteExpressionVisitBinaryHelper(
-            mCompiler, node, mStructureMap, mStructureUniformMap, mExtractedSamplers);
+            mCompiler, node, *mStructureMap, *mStructureUniformMap, *mExtractedSamplers);
 
         if (rewritten == nullptr)
         {
@@ -136,16 +138,16 @@ class RewriteExpressionTraverser final : public TIntermTraverser
         // MonomorphizeUnsupportedFunctions makes sure that whole structs containing
         // samplers are not passed to functions, so any instance of the struct uniform is
         // necessarily indexed right away.  visitBinary should have already taken care of it.
-        ASSERT(mStructureUniformMap.find(&node->variable()) == mStructureUniformMap.end());
+        ASSERT(mStructureUniformMap->find(&node->variable()) == mStructureUniformMap->end());
     }
 
   private:
-    TCompiler *mCompiler;
+    raw_ptr<TCompiler> mCompiler;
 
     // See RewriteStructSamplersTraverser.
-    const StructureMap &mStructureMap;
-    const StructureUniformMap &mStructureUniformMap;
-    const ExtractedSamplerMap &mExtractedSamplers;
+    const raw_ref<const StructureMap> mStructureMap;
+    const raw_ref<const StructureUniformMap> mStructureUniformMap;
+    const raw_ref<const ExtractedSamplerMap> mExtractedSamplers;
 };
 
 // Rewrite the index of an EOpIndexIndirect expression.  The root can never need replacing, because
@@ -644,7 +646,7 @@ class RewriteStructSamplersTraverser final : public TIntermTraverser
         mArraySizeStack.resize(mArraySizeStack.size() - arrayType.getNumArraySizes());
     }
 
-    TCompiler *mCompiler;
+    raw_ptr<TCompiler> mCompiler;
     int mRemovedUniformsCount;
 
     // Map structures with samplers to ones that have their samplers removed.

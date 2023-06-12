@@ -8,6 +8,7 @@
 
 #include "compiler/translator/ValidateBarrierFunctionCall.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "compiler/translator/Diagnostics.h"
 #include "compiler/translator/SymbolTable.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
@@ -83,11 +84,11 @@ class Traverser : public TIntermTraverser
     bool valid() const { return mValid; }
 
   private:
-    TDiagnostics *mDiagnostics = nullptr;
-    bool mInMain               = false;
-    bool mSeenReturn           = false;
-    bool mValid                = true;
-    uint32_t mBranchCount      = 0;
+    raw_ptr<TDiagnostics> mDiagnostics = nullptr;
+    bool mInMain                       = false;
+    bool mSeenReturn                   = false;
+    bool mValid                        = true;
+    uint32_t mBranchCount              = 0;
 };
 }  // anonymous namespace
 

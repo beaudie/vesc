@@ -10,6 +10,7 @@
 #include "trace_interpreter.h"
 
 #include "anglebase/no_destructor.h"
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "common/gl_enum_utils.h"
 #include "common/string_utils.h"
 #include "trace_fixture.h"
@@ -50,7 +51,7 @@ class Parser : angle::NonCopyable
 
     void parse()
     {
-        while (mIndex < mStream.size())
+        while (mIndex < mStream->size())
         {
             if (peek() == '#' || peek() == '/')
             {
@@ -75,9 +76,9 @@ class Parser : angle::NonCopyable
     }
 
   private:
-    ANGLE_INLINE char peek() const { return mStream[mIndex]; }
+    ANGLE_INLINE char peek() const { return (*mStream)[mIndex]; }
 
-    ANGLE_INLINE char look(size_t ahead) const { return mStream[mIndex + ahead]; }
+    ANGLE_INLINE char look(size_t ahead) const { return (*mStream)[mIndex + ahead]; }
 
     ANGLE_INLINE void advance() { mIndex++; }
 
@@ -91,7 +92,7 @@ class Parser : angle::NonCopyable
 
     bool check(const char *forString) const
     {
-        return mStream.substr(mIndex, strlen(forString)) == forString;
+        return mStream->substr(mIndex, strlen(forString)) == forString;
     }
 
     void skipLine()
@@ -168,7 +169,7 @@ class Parser : angle::NonCopyable
         advanceTo(delim);
         size_t tokenSize = mIndex - startIndex;
         ASSERT(tokenSize < kMaxTokenSize);
-        memcpy(token, &mStream[startIndex], tokenSize);
+        memcpy(token, &(*mStream)[startIndex], tokenSize);
         token[mIndex - startIndex] = 0;
     }
 
@@ -235,7 +236,7 @@ class Parser : angle::NonCopyable
                     ASSERT(tokenSize < kMaxTokenSize);
                     Token &token = paramTokens[numParams++];
 
-                    memcpy(token, &mStream[tokenStart], tokenSize);
+                    memcpy(token, &(*mStream)[tokenStart], tokenSize);
                     token[tokenSize] = 0;
                     advance();
                     skipWhitespace();
@@ -264,7 +265,7 @@ class Parser : angle::NonCopyable
             //}
 
             // We pass in the strings for specific use with C string array parameters.
-            CallCapture call = ParseCallCapture(nameToken, numParams, paramTokens, mStrings);
+            CallCapture call = ParseCallCapture(nameToken, numParams, paramTokens, *mStrings);
             func.push_back(std::move(call));
             skipLine();
         }
@@ -309,7 +310,7 @@ class Parser : angle::NonCopyable
             traceStr.pointers.push_back(cppstr.c_str());
         }
 
-        mStrings[name] = std::move(traceStr);
+        (*mStrings)[name] = std::move(traceStr);
     }
 
     void addFunction(const std::string &funcName, TraceFunction &func)
@@ -320,12 +321,12 @@ class Parser : angle::NonCopyable
             ReplayTraceFunction(func, {});
             func.clear();
         }
-        mFunctions[funcName] = std::move(func);
+        (*mFunctions)[funcName] = std::move(func);
     }
 
-    const std::string &mStream;
-    TraceFunctionMap &mFunctions;
-    TraceStringMap &mStrings;
+    const raw_ref<const std::string> mStream;
+    const raw_ref<TraceFunctionMap> mFunctions;
+    const raw_ref<TraceStringMap> mStrings;
     size_t mIndex;
     bool mVerboseLogging = false;
 };

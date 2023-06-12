@@ -9,6 +9,7 @@
 
 #include "compiler/translator/tree_ops/vulkan/ReplaceForShaderFramebufferFetch.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/bitset_utils.h"
 #include "compiler/translator/ImmutableStringBuilder.h"
 #include "compiler/translator/SymbolTable.h"
@@ -55,10 +56,10 @@ class InputAttachmentReferenceTraverser : public TIntermTraverser
   private:
     void setInputAttachmentIndex(unsigned int index);
 
-    std::map<unsigned int, TIntermSymbol *> *mDeclaredSym;
-    unsigned int *mMaxInputAttachmentIndex;
-    InputAttachmentIdxSet *mConstInputAttachmentIndices;
-    bool *mUsedNonConstIndex;
+    raw_ptr<std::map<unsigned int, TIntermSymbol *>> mDeclaredSym;
+    raw_ptr<unsigned int> mMaxInputAttachmentIndex;
+    raw_ptr<InputAttachmentIdxSet> mConstInputAttachmentIndices;
+    raw_ptr<bool> mUsedNonConstIndex;
 };
 
 class ReplaceVariableTraverser : public TIntermTraverser
@@ -336,10 +337,10 @@ class ReplaceSubpassInputUtils
 
     ImmutableString getInputAttachmentName(unsigned int index);
 
-    TCompiler *mCompiler;
-    TSymbolTable *mSymbolTable;
-    TIntermBlock *mRoot;
-    std::vector<ShaderVariable> *mUniforms;
+    raw_ptr<TCompiler> mCompiler;
+    raw_ptr<TSymbolTable> mSymbolTable;
+    raw_ptr<TIntermBlock> mRoot;
+    raw_ptr<std::vector<ShaderVariable>> mUniforms;
     const bool mUsedNonConstIndex;
     const InputAttachmentIdxSet mConstIndices;
     const std::map<unsigned int, TIntermSymbol *> mDeclaredVarVec;

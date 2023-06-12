@@ -6,6 +6,8 @@
 #ifndef COMPILER_TRANSLATOR_PARSECONTEXT_H_
 #define COMPILER_TRANSLATOR_PARSECONTEXT_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "compiler/preprocessor/Preprocessor.h"
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/Declarator.h"
@@ -520,7 +522,8 @@ class TParseContext : angle::NonCopyable
     ShShaderOutput getOutputType() const { return mOutputType; }
 
     // TODO(jmadill): make this private
-    TSymbolTable &symbolTable;  // symbol table that goes with the language currently being parsed
+    const raw_ref<TSymbolTable>
+        symbolTable;  // symbol table that goes with the language currently being parsed
 
   private:
     class AtomicCounterBindingState;
@@ -729,12 +732,12 @@ class TParseContext : angle::NonCopyable
     ShShaderSpec mShaderSpec;  // The language specification compiler conforms to - GLES/WebGL/etc.
     ShCompileOptions mCompileOptions;  // Options passed to TCompiler
     int mShaderVersion;
-    TIntermBlock *mTreeRoot;  // root of parse tree being created
-    int mLoopNestingLevel;    // 0 if outside all loops
-    int mStructNestingLevel;  // incremented while parsing a struct declaration
-    int mSwitchNestingLevel;  // 0 if outside all switch statements
-    const TType
-        *mCurrentFunctionType;    // the return type of the function that's currently being parsed
+    raw_ptr<TIntermBlock> mTreeRoot;  // root of parse tree being created
+    int mLoopNestingLevel;            // 0 if outside all loops
+    int mStructNestingLevel;          // incremented while parsing a struct declaration
+    int mSwitchNestingLevel;          // 0 if outside all switch statements
+    raw_ptr<const TType>
+        mCurrentFunctionType;     // the return type of the function that's currently being parsed
     bool mFunctionReturnsValue;   // true if a non-void function has a return
     bool mChecksPrecisionErrors;  // true if an error will be generated when a variable is declared
                                   // without precision, explicit or implicit.
@@ -754,10 +757,10 @@ class TParseContext : angle::NonCopyable
     TLayoutMatrixPacking mDefaultBufferMatrixPacking;
     TLayoutBlockStorage mDefaultBufferBlockStorage;
     TString mHashErrMsg;
-    TDiagnostics *mDiagnostics;
+    raw_ptr<TDiagnostics> mDiagnostics;
     TDirectiveHandler mDirectiveHandler;
     angle::pp::Preprocessor mPreprocessor;
-    void *mScanner;
+    raw_ptr<void> mScanner;
     int mMinProgramTexelOffset;
     int mMaxProgramTexelOffset;
 

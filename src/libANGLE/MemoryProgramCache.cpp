@@ -117,7 +117,7 @@ angle::Result MemoryProgramCache::getProgram(const Context *context,
                                              egl::BlobCache::Key *hashOut)
 {
     // If caching is effectively disabled, don't bother calculating the hash.
-    if (!mBlobCache.isCachingEnabled())
+    if (!mBlobCache->isCachingEnabled())
     {
         return angle::Result::Incomplete;
     }
@@ -125,7 +125,7 @@ angle::Result MemoryProgramCache::getProgram(const Context *context,
     ComputeHash(context, program, hashOut);
 
     angle::MemoryBuffer uncompressedData;
-    switch (mBlobCache.getAndDecompress(context->getScratchBuffer(), *hashOut, &uncompressedData))
+    switch (mBlobCache->getAndDecompress(context->getScratchBuffer(), *hashOut, &uncompressedData))
     {
         case egl::BlobCache::GetAndDecompressResult::NotFound:
             return angle::Result::Incomplete;
@@ -160,12 +160,12 @@ bool MemoryProgramCache::getAt(size_t index,
                                const egl::BlobCache::Key **hashOut,
                                egl::BlobCache::Value *programOut)
 {
-    return mBlobCache.getAt(index, hashOut, programOut);
+    return mBlobCache->getAt(index, hashOut, programOut);
 }
 
 void MemoryProgramCache::remove(const egl::BlobCache::Key &programHash)
 {
-    mBlobCache.remove(programHash);
+    mBlobCache->remove(programHash);
 }
 
 angle::Result MemoryProgramCache::putProgram(const egl::BlobCache::Key &programHash,
@@ -173,7 +173,7 @@ angle::Result MemoryProgramCache::putProgram(const egl::BlobCache::Key &programH
                                              const Program *program)
 {
     // If caching is effectively disabled, don't bother serializing the program.
-    if (!mBlobCache.isCachingEnabled())
+    if (!mBlobCache->isCachingEnabled())
     {
         return angle::Result::Incomplete;
     }
@@ -191,7 +191,7 @@ angle::Result MemoryProgramCache::putProgram(const egl::BlobCache::Key &programH
     }
 
     {
-        std::scoped_lock<std::mutex> lock(mBlobCache.getMutex());
+        std::scoped_lock<std::mutex> lock(mBlobCache->getMutex());
         // TODO: http://anglebug.com/7568
         // This was a workaround for Chrome until it added support for EGL_ANDROID_blob_cache,
         // tracked by http://anglebug.com/2516. This issue has since been closed, but removing this
@@ -200,7 +200,7 @@ angle::Result MemoryProgramCache::putProgram(const egl::BlobCache::Key &programH
         platform->cacheProgram(platform, programHash, compressedData.size(), compressedData.data());
     }
 
-    mBlobCache.put(programHash, std::move(compressedData));
+    mBlobCache->put(programHash, std::move(compressedData));
     return angle::Result::Continue;
 }
 
@@ -224,39 +224,39 @@ bool MemoryProgramCache::putBinary(const egl::BlobCache::Key &programHash,
     memcpy(newEntry.data(), binary, length);
 
     // Store the binary.
-    mBlobCache.populate(programHash, std::move(newEntry));
+    mBlobCache->populate(programHash, std::move(newEntry));
 
     return true;
 }
 
 void MemoryProgramCache::clear()
 {
-    mBlobCache.clear();
+    mBlobCache->clear();
 }
 
 void MemoryProgramCache::resize(size_t maxCacheSizeBytes)
 {
-    mBlobCache.resize(maxCacheSizeBytes);
+    mBlobCache->resize(maxCacheSizeBytes);
 }
 
 size_t MemoryProgramCache::entryCount() const
 {
-    return mBlobCache.entryCount();
+    return mBlobCache->entryCount();
 }
 
 size_t MemoryProgramCache::trim(size_t limit)
 {
-    return mBlobCache.trim(limit);
+    return mBlobCache->trim(limit);
 }
 
 size_t MemoryProgramCache::size() const
 {
-    return mBlobCache.size();
+    return mBlobCache->size();
 }
 
 size_t MemoryProgramCache::maxSize() const
 {
-    return mBlobCache.maxSize();
+    return mBlobCache->maxSize();
 }
 
 }  // namespace gl

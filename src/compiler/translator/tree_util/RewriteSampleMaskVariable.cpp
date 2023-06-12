@@ -9,6 +9,7 @@
 
 #include "compiler/translator/tree_util/RewriteSampleMaskVariable.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/bitset_utils.h"
 #include "common/debug.h"
 #include "common/utilities.h"
@@ -95,7 +96,7 @@ class GLSampleMaskRelatedReferenceTraverser : public TIntermTraverser
     }
 
   private:
-    const TIntermSymbol **mRedeclaredSym;
+    raw_ptr<const TIntermSymbol *> mRedeclaredSym;
     const ImmutableString mTargetStr;
 };
 

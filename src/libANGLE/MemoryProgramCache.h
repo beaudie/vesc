@@ -12,6 +12,7 @@
 
 #include <array>
 
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "common/MemoryBuffer.h"
 #include "libANGLE/BlobCache.h"
 #include "libANGLE/Error.h"
@@ -79,7 +80,7 @@ class MemoryProgramCache final : angle::NonCopyable
     size_t maxSize() const;
 
   private:
-    egl::BlobCache &mBlobCache;
+    const raw_ref<egl::BlobCache> mBlobCache;
 };
 
 }  // namespace gl

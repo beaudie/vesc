@@ -11,6 +11,8 @@
 
 #include <vector>
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
+
 namespace sh
 {
 
@@ -20,8 +22,8 @@ class TIntermSymbol;
 
 struct MappedStruct
 {
-    TIntermSymbol *blockDeclarator;
-    TField *field;
+    raw_ptr<TIntermSymbol> blockDeclarator;
+    raw_ptr<TField> field;
 };
 
 std::vector<MappedStruct> FlagStd140Structs(TIntermNode *node);

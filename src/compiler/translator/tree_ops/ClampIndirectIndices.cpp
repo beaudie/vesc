@@ -8,6 +8,7 @@
 
 #include "compiler/translator/tree_ops/ClampIndirectIndices.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/StaticType.h"
 #include "compiler/translator/SymbolTable.h"
@@ -122,7 +123,7 @@ class ClampIndirectIndicesTraverser : public TIntermTraverser
         return CreateIndexNode(value);
     }
 
-    TCompiler *mCompiler;
+    raw_ptr<TCompiler> mCompiler;
 };
 }  // anonymous namespace
 

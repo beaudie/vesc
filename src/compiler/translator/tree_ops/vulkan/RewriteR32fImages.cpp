@@ -8,6 +8,8 @@
 
 #include "compiler/translator/tree_ops/vulkan/RewriteR32fImages.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/ImmutableStringBuilder.h"
 #include "compiler/translator/StaticType.h"
@@ -51,7 +53,7 @@ class RewriteExpressionTraverser final : public TIntermTraverser
     bool visitAggregate(Visit visit, TIntermAggregate *node) override
     {
         TIntermTyped *rewritten =
-            RewriteBuiltinFunctionCall(mCompiler, mSymbolTable, node, mImageMap);
+            RewriteBuiltinFunctionCall(mCompiler, mSymbolTable, node, *mImageMap);
         if (rewritten == nullptr)
         {
             return true;
@@ -64,9 +66,9 @@ class RewriteExpressionTraverser final : public TIntermTraverser
     }
 
   private:
-    TCompiler *mCompiler;
+    raw_ptr<TCompiler> mCompiler;
 
-    const ImageMap &mImageMap;
+    const raw_ref<const ImageMap> mImageMap;
 };
 
 // Rewrite the index of an EOpIndexIndirect expression as well as any arguments to the builtin
@@ -362,7 +364,7 @@ class RewriteR32fImagesTraverser : public TIntermTraverser
     }
 
   private:
-    TCompiler *mCompiler;
+    raw_ptr<TCompiler> mCompiler;
 
     // Map from r32f image to r32ui image
     ImageMap mImageMap;

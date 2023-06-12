@@ -7,6 +7,7 @@
 #include "compiler/translator/ValidateLimitations.h"
 
 #include "angle_gl.h"
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "compiler/translator/Diagnostics.h"
 #include "compiler/translator/ParseContext.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
@@ -97,7 +98,7 @@ class ValidateLimitationsTraverser : public TLValueTrackingTraverser
     bool validateIndexing(TIntermBinary *node);
 
     sh::GLenum mShaderType;
-    TDiagnostics *mDiagnostics;
+    raw_ptr<TDiagnostics> mDiagnostics;
     std::vector<int> mLoopSymbolIds;
 };
 

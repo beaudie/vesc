@@ -17,6 +17,7 @@
 #define COMPILER_TRANSLATOR_INTERMNODE_H_
 
 #include "GLSLANG/ShaderLang.h"
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 
 #include <algorithm>
 #include <queue>
@@ -239,10 +240,10 @@ class TIntermLoop : public TIntermNode
 
   protected:
     TLoopType mType;
-    TIntermNode *mInit;   // for-loop initialization
-    TIntermTyped *mCond;  // loop exit condition
-    TIntermTyped *mExpr;  // for-loop expression
-    TIntermBlock *mBody;  // loop body
+    raw_ptr<TIntermNode> mInit;   // for-loop initialization
+    raw_ptr<TIntermTyped> mCond;  // loop exit condition
+    raw_ptr<TIntermTyped> mExpr;  // for-loop expression
+    raw_ptr<TIntermBlock> mBody;  // loop body
 
   private:
     TIntermLoop(const TIntermLoop &);
@@ -270,7 +271,7 @@ class TIntermBranch : public TIntermNode
 
   protected:
     TOperator mFlowOp;
-    TIntermTyped *mExpression;  // zero except for "return exp;" statements
+    raw_ptr<TIntermTyped> mExpression;  // zero except for "return exp;" statements
 
   private:
     TIntermBranch(const TIntermBranch &);
@@ -309,7 +310,7 @@ class TIntermSymbol : public TIntermTyped
     TIntermSymbol(const TIntermSymbol &) = default;  // Note: not deleted, just private!
     void propagatePrecision(TPrecision precision) override;
 
-    const TVariable *const mVariable;  // Guaranteed to be non-null
+    const raw_ptr<const TVariable> mVariable;  // Guaranteed to be non-null
 };
 
 // A typed expression that is not just representing a symbol table symbol.
@@ -403,7 +404,7 @@ class TIntermConstantUnion : public TIntermExpression
 
   protected:
     // Same data may be shared between multiple constant unions, so it can't be modified.
-    const TConstantUnion *mUnionArrayPointer;
+    raw_ptr<const TConstantUnion> mUnionArrayPointer;
 
   private:
     typedef float (*FloatTypeUnaryFunc)(float);
@@ -471,7 +472,7 @@ class TIntermSwizzle : public TIntermExpression
     TIntermTyped *fold(TDiagnostics *diagnostics) override;
 
   protected:
-    TIntermTyped *mOperand;
+    raw_ptr<TIntermTyped> mOperand;
     TVector<int> mSwizzleOffsets;
     bool mHasFoldedDuplicateOffsets;
 
@@ -523,8 +524,8 @@ class TIntermBinary : public TIntermOperator
     const ImmutableString &getIndexStructFieldName() const;
 
   protected:
-    TIntermTyped *mLeft;
-    TIntermTyped *mRight;
+    raw_ptr<TIntermTyped> mLeft;
+    raw_ptr<TIntermTyped> mRight;
 
   private:
     void promote();
@@ -567,13 +568,13 @@ class TIntermUnary : public TIntermOperator
     bool getUseEmulatedFunction() { return mUseEmulatedFunction; }
 
   protected:
-    TIntermTyped *mOperand;
+    raw_ptr<TIntermTyped> mOperand;
 
     // If set to true, replace the built-in function call with an emulated one
     // to work around driver bugs.
     bool mUseEmulatedFunction;
 
-    const TFunction *const mFunction;
+    const raw_ptr<const TFunction> mFunction;
 
   private:
     void promote();
@@ -663,7 +664,7 @@ class TIntermAggregate : public TIntermOperator, public TIntermAggregateBase
     // to work around driver bugs. Only for calls mapped to ops other than EOpCall*.
     bool mUseEmulatedFunction;
 
-    const TFunction *const mFunction;
+    const raw_ptr<const TFunction> mFunction;
 
   private:
     TIntermAggregate(const TFunction *func,
@@ -753,7 +754,7 @@ class TIntermFunctionPrototype : public TIntermTyped
     const TFunction *getFunction() const { return mFunction; }
 
   protected:
-    const TFunction *const mFunction;
+    const raw_ptr<const TFunction> mFunction;
 };
 
 // Node for function definitions. The prototype child node stores the function header including
@@ -788,8 +789,8 @@ class TIntermFunctionDefinition : public TIntermNode
     }
 
   private:
-    TIntermFunctionPrototype *mPrototype;
-    TIntermBlock *mBody;
+    raw_ptr<TIntermFunctionPrototype> mPrototype;
+    raw_ptr<TIntermBlock> mBody;
 };
 
 // Struct, interface block or variable declaration. Can contain multiple variable declarators.
@@ -865,7 +866,7 @@ class TIntermGlobalQualifierDeclaration : public TIntermNode
     }
 
   private:
-    TIntermSymbol *mSymbol;
+    raw_ptr<TIntermSymbol> mSymbol;
     // Either |precise| or |invariant|, determined based on this flag.
     bool mIsPrecise;
 
@@ -908,9 +909,9 @@ class TIntermTernary : public TIntermExpression
     TPrecision derivePrecision() const override;
     void propagatePrecision(TPrecision precision) override;
 
-    TIntermTyped *mCondition;
-    TIntermTyped *mTrueExpression;
-    TIntermTyped *mFalseExpression;
+    raw_ptr<TIntermTyped> mCondition;
+    raw_ptr<TIntermTyped> mTrueExpression;
+    raw_ptr<TIntermTyped> mFalseExpression;
 };
 
 class TIntermIfElse : public TIntermNode
@@ -932,9 +933,9 @@ class TIntermIfElse : public TIntermNode
     TIntermIfElse *deepCopy() const override { return new TIntermIfElse(*this); }
 
   protected:
-    TIntermTyped *mCondition;
-    TIntermBlock *mTrueBlock;
-    TIntermBlock *mFalseBlock;
+    raw_ptr<TIntermTyped> mCondition;
+    raw_ptr<TIntermBlock> mTrueBlock;
+    raw_ptr<TIntermBlock> mFalseBlock;
 
   private:
     TIntermIfElse(const TIntermIfElse &);
@@ -964,8 +965,8 @@ class TIntermSwitch : public TIntermNode
     TIntermSwitch *deepCopy() const override { return new TIntermSwitch(*this); }
 
   protected:
-    TIntermTyped *mInit;
-    TIntermBlock *mStatementList;
+    raw_ptr<TIntermTyped> mInit;
+    raw_ptr<TIntermBlock> mStatementList;
 
   private:
     TIntermSwitch(const TIntermSwitch &);
@@ -992,7 +993,7 @@ class TIntermCase : public TIntermNode
     TIntermCase *deepCopy() const override { return new TIntermCase(*this); }
 
   protected:
-    TIntermTyped *mCondition;
+    raw_ptr<TIntermTyped> mCondition;
 
   private:
     TIntermCase(const TIntermCase &);

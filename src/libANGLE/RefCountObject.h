@@ -13,6 +13,7 @@
 #define LIBANGLE_REFCOUNTOBJECT_H_
 
 #include "angle_gl.h"
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/PackedEnums.h"
 #include "common/debug.h"
 #include "libANGLE/Error.h"
@@ -85,14 +86,15 @@ class RefCountObjectReleaser : angle::NonCopyable
     {
         if (mObject)
         {
-            reinterpret_cast<RefCountObject<ContextType, ErrorType> *>(mObject)->release(mContext);
+            reinterpret_cast<RefCountObject<ContextType, ErrorType> *>(mObject.get())
+                ->release(mContext);
             mObject = nullptr;
         }
     }
 
   private:
-    const ContextType *mContext = nullptr;
-    ObjectType *mObject         = nullptr;
+    raw_ptr<const ContextType> mContext = nullptr;
+    raw_ptr<ObjectType> mObject         = nullptr;
 };
 
 template <class ObjectType, typename ContextT, typename ErrorT = angle::Result>
@@ -162,7 +164,7 @@ class BindingPointer
     ANGLE_INLINE void setImpl(ObjectType *obj) { mObject = obj; }
 
   private:
-    ObjectType *mObject;
+    raw_ptr<ObjectType> mObject;
 };
 }  // namespace angle
 

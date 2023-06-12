@@ -9,6 +9,7 @@
 
 #include <set>
 
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "compiler/translator/ExtensionBehavior.h"
 #include "compiler/translator/HashNames.h"
 #include "compiler/translator/InfoSink.h"
@@ -34,7 +35,7 @@ class TOutputGLSLBase : public TIntermTraverser
     ImmutableString hashName(const TSymbol *symbol);
 
   protected:
-    TInfoSinkBase &objSink() { return mObjSink; }
+    TInfoSinkBase &objSink() { return *mObjSink; }
     void writeFloat(TInfoSinkBase &out, float f);
     void writeTriplet(Visit visit, const char *preStr, const char *inStr, const char *postStr);
     std::string getCommonLayoutQualifiers(TIntermSymbol *variable);
@@ -103,12 +104,12 @@ class TOutputGLSLBase : public TIntermTraverser
                               const ImmutableString &functionName,
                               bool useEmulatedFunction);
 
-    TInfoSinkBase &mObjSink;
+    const raw_ref<TInfoSinkBase> mObjSink;
     bool mDeclaringVariable;
 
     // name hashing.
     ShHashFunction64 mHashFunction;
-    NameMap &mNameMap;
+    const raw_ref<NameMap> mNameMap;
 
     sh::GLenum mShaderType;
     const int mShaderVersion;
@@ -122,7 +123,7 @@ class TOutputGLSLBase : public TIntermTraverser
     // their location.
     bool mAlwaysSpecifyFragOutLocation;
 
-    const ShCompileOptions &mCompileOptions;
+    const raw_ref<const ShCompileOptions> mCompileOptions;
 };
 
 void WritePragma(TInfoSinkBase &out, const ShCompileOptions &compileOptions, const TPragma &pragma);

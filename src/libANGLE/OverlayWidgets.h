@@ -10,6 +10,7 @@
 #ifndef LIBANGLE_OVERLAYWIDGETS_H_
 #define LIBANGLE_OVERLAYWIDGETS_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/angleutils.h"
 #include "libANGLE/Overlay_autogen.h"
 
@@ -72,7 +73,7 @@ class Widget
     // In some cases, a widget may need to match its contents (e.g. graph height scaling) with
     // another related widget.  In such a case, this pointer will point to the widget it needs to
     // match to.
-    Widget *matchToWidget;
+    raw_ptr<Widget> matchToWidget;
 
     friend class gl::Overlay;
     friend class gl::OverlayState;

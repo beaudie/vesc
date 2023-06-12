@@ -8,6 +8,7 @@
 
 #include "compiler/translator/tree_ops/RewriteAtomicCounters.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/ImmutableStringBuilder.h"
 #include "compiler/translator/SymbolTable.h"
@@ -308,8 +309,8 @@ class RewriteAtomicCountersTraverser : public TIntermTraverser
         return true;
     }
 
-    const TVariable *mAtomicCounters;
-    const TIntermTyped *mAcbBufferOffsets;
+    raw_ptr<const TVariable> mAtomicCounters;
+    raw_ptr<const TIntermTyped> mAcbBufferOffsets;
 };
 
 }  // anonymous namespace

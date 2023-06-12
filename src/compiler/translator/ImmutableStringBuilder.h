@@ -10,6 +10,7 @@
 #ifndef COMPILER_TRANSLATOR_IMMUTABLESTRINGBUILDER_H_
 #define COMPILER_TRANSLATOR_IMMUTABLESTRINGBUILDER_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "compiler/translator/ImmutableString.h"
 
 namespace sh
@@ -69,7 +70,7 @@ class ImmutableStringBuilder
 
     size_t mPos;
     size_t mMaxLength;
-    char *mData;
+    raw_ptr<char> mData;
 };
 
 // GLSL ES 3.00.6 section 3.9: the maximum length of an identifier is 1024 characters.

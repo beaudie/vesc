@@ -7,6 +7,7 @@
 #ifndef LIBANGLE_TRANSFORM_FEEDBACK_H_
 #define LIBANGLE_TRANSFORM_FEEDBACK_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "libANGLE/RefCountObject.h"
 
 #include "common/PackedEnums.h"
@@ -52,7 +53,7 @@ class TransformFeedbackState final : angle::NonCopyable
     GLsizeiptr mVerticesDrawn;
     GLsizeiptr mVertexCapacity;
 
-    Program *mProgram;
+    raw_ptr<Program> mProgram;
 
     std::vector<OffsetBindingPointer<Buffer>> mIndexedBuffers;
 };

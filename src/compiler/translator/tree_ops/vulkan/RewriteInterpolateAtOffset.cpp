@@ -8,6 +8,7 @@
 
 #include "compiler/translator/tree_ops/vulkan/RewriteInterpolateAtOffset.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/angleutils.h"
 #include "compiler/translator/StaticType.h"
 #include "compiler/translator/SymbolTable.h"
@@ -35,10 +36,10 @@ class Traverser : public TIntermTraverser
 
     const TFunction *getRotateFunc();
 
-    SpecConst *mSpecConst                = nullptr;
-    const DriverUniform *mDriverUniforms = nullptr;
+    raw_ptr<SpecConst> mSpecConst                = nullptr;
+    raw_ptr<const DriverUniform> mDriverUniforms = nullptr;
 
-    TIntermFunctionDefinition *mRotateFunc = nullptr;
+    raw_ptr<TIntermFunctionDefinition> mRotateFunc = nullptr;
 };
 
 Traverser::Traverser(TSymbolTable *symbolTable,

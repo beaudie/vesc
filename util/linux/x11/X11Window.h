@@ -14,6 +14,7 @@
 #include <X11/Xutil.h>
 #include <string>
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "util/OSWindow.h"
 #include "util/util_export.h"
 

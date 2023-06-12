@@ -10,6 +10,7 @@
 #ifndef LIBANGLE_FRAME_CAPTURE_H_
 #define LIBANGLE_FRAME_CAPTURE_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/PackedEnums.h"
 #include "common/frame_capture_utils.h"
 #include "common/system_utils.h"
@@ -498,7 +499,7 @@ class CoherentBuffer
     // shadow memory releated fields
     bool mShadowMemoryEnabled;
     uintptr_t mBufferStart;
-    void *mShadowMemory;
+    raw_ptr<void> mShadowMemory;
     bool mShadowDirty;
 };
 

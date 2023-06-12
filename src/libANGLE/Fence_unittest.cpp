@@ -4,6 +4,7 @@
 // found in the LICENSE file.
 //
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
@@ -40,7 +41,7 @@ class FenceNVTest : public Test
     void SetUp() override
     {
         mImpl = new MockFenceNVImpl;
-        EXPECT_CALL(factory, createFenceNV()).WillOnce(Return(mImpl));
+        EXPECT_CALL(factory, createFenceNV()).WillOnce(Return(mImpl.get()));
 
         EXPECT_CALL(*mImpl, destroy());
         mFence = new gl::FenceNV(&factory);
@@ -49,8 +50,8 @@ class FenceNVTest : public Test
     void TearDown() override { delete mFence; }
 
     NiceMock<rx::MockGLFactory> factory;
-    MockFenceNVImpl *mImpl;
-    gl::FenceNV *mFence;
+    raw_ptr<MockFenceNVImpl> mImpl;
+    raw_ptr<gl::FenceNV> mFence;
 };
 
 TEST_F(FenceNVTest, SetAndTestBehavior)
@@ -96,7 +97,7 @@ class FenceSyncTest : public Test
     void SetUp() override
     {
         mImpl = new MockSyncImpl;
-        EXPECT_CALL(factory, createSync()).WillOnce(Return(mImpl));
+        EXPECT_CALL(factory, createSync()).WillOnce(Return(mImpl.get()));
 
         mFence = new gl::Sync(&factory, {1});
         EXPECT_CALL(*mImpl, destroy());
@@ -106,8 +107,8 @@ class FenceSyncTest : public Test
     void TearDown() override { mFence->release(nullptr); }
 
     NiceMock<rx::MockGLFactory> factory;
-    MockSyncImpl *mImpl;
-    gl::Sync *mFence;
+    raw_ptr<MockSyncImpl> mImpl;
+    raw_ptr<gl::Sync> mFence;
 };
 
 TEST_F(FenceSyncTest, SetAndGetStatusBehavior)

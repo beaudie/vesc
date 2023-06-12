@@ -8,6 +8,7 @@
 //
 
 #include "ANGLEPerfTest.h"
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/platform.h"
 #include "common/system_utils.h"
 #include "platform/PlatformMethods.h"
@@ -31,7 +32,7 @@ class EGLMakeCurrentPerfTest : public ANGLEPerfTest,
     void TearDown() override;
 
   private:
-    OSWindow *mOSWindow;
+    raw_ptr<OSWindow> mOSWindow;
     EGLDisplay mDisplay;
     EGLSurface mSurface;
     EGLConfig mConfig;

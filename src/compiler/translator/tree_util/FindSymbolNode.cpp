@@ -8,6 +8,7 @@
 
 #include "compiler/translator/tree_util/FindSymbolNode.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "compiler/translator/ImmutableString.h"
 #include "compiler/translator/Symbol.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
@@ -38,7 +39,7 @@ class SymbolFinder : public TIntermTraverser
 
   private:
     ImmutableString mSymbolName;
-    TIntermSymbol *mNodeFound;
+    raw_ptr<TIntermSymbol> mNodeFound;
 };
 
 }  // anonymous namespace

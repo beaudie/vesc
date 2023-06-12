@@ -34,6 +34,7 @@
 #include <memory>
 #include <set>
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/angleutils.h"
 #include "compiler/translator/ExtensionBehavior.h"
 #include "compiler/translator/ImmutableString.h"
@@ -355,7 +356,7 @@ class TSymbolTable : angle::NonCopyable, TSymbolTableBase
 
     // Store gl_in variable with its array size once the array size can be determined. The array
     // size can also be checked against latter input primitive type declaration.
-    TVariable *mGlInVariableWithArraySize;
+    raw_ptr<TVariable> mGlInVariableWithArraySize;
 };
 
 }  // namespace sh

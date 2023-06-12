@@ -4,6 +4,7 @@
 // found in the LICENSE file.
 //
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
 
@@ -2065,7 +2066,7 @@ void main()
     }
 
     GLuint mProgram;
-    GLfloat *mMappedPtr = nullptr;
+    raw_ptr<GLfloat> mMappedPtr = nullptr;
 };
 
 // Test using a large buffer storage for a color vertex array buffer, which is

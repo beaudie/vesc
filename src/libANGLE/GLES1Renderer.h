@@ -12,6 +12,7 @@
 
 #include "GLES1State.h"
 #include "angle_gl.h"
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/angleutils.h"
 #include "libANGLE/angletypes.h"
 
@@ -202,7 +203,7 @@ class GLES1Renderer final : angle::NonCopyable
     static constexpr int kTextureCoordAttribIndexBase = 4;
 
     bool mRendererProgramInitialized;
-    ShaderProgramManager *mShaderPrograms;
+    raw_ptr<ShaderProgramManager> mShaderPrograms;
 
     GLES1ShaderState mShaderState = {};
 

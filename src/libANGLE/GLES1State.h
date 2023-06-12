@@ -12,6 +12,7 @@
 
 #include <unordered_set>
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/FixedVector.h"
 #include "common/angleutils.h"
 #include "common/bitset_utils.h"
@@ -275,7 +276,7 @@ class GLES1State final : angle::NonCopyable
     friend class GLES1Renderer;
 
     // Back pointer for reading from State.
-    const State *mGLState;
+    raw_ptr<const State> mGLState;
 
     using DirtyBits = angle::BitSet<DIRTY_GLES1_MAX>;
     DirtyBits mDirtyBits;

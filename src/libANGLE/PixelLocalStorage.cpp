@@ -11,6 +11,7 @@
 #include "libANGLE/PixelLocalStorage.h"
 
 #include <numeric>
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/FixedVector.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Framebuffer.h"
@@ -37,7 +38,7 @@ class ScopedBindTexture2D : angle::NonCopyable
     ~ScopedBindTexture2D() { mContext->bindTexture(TextureType::_2D, mSavedTexBinding2D); }
 
   private:
-    Context *const mContext;
+    const raw_ptr<Context> mContext;
     TextureID mSavedTexBinding2D;
 };
 
@@ -53,8 +54,8 @@ class ScopedRestoreDrawFramebuffer : angle::NonCopyable
     ~ScopedRestoreDrawFramebuffer() { mContext->bindDrawFramebuffer(mSavedFramebuffer->id()); }
 
   private:
-    Context *const mContext;
-    Framebuffer *const mSavedFramebuffer;
+    const raw_ptr<Context> mContext;
+    const raw_ptr<Framebuffer> mSavedFramebuffer;
 };
 
 class ScopedDisableScissor : angle::NonCopyable
@@ -78,7 +79,7 @@ class ScopedDisableScissor : angle::NonCopyable
     }
 
   private:
-    Context *const mContext;
+    const raw_ptr<Context> mContext;
     const GLint mScissorTestEnabled;
 };
 
@@ -125,7 +126,7 @@ class ScopedEnableColorMask : angle::NonCopyable
     }
 
   private:
-    Context *const mContext;
+    const raw_ptr<Context> mContext;
     const int mNumDrawBuffers;
     DrawBuffersArray<std::array<bool, 4>> mSavedColorMasks;
 };
@@ -342,7 +343,7 @@ class ClearBufferCommands : public PixelLocalStoragePlane::ClearCommands
     }
 
   private:
-    Context *const mContext;
+    const raw_ptr<Context> mContext;
 };
 
 template <typename T, size_t N>

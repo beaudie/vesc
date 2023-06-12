@@ -9,6 +9,7 @@
 #ifndef COMMON_SYSTEM_UTILS_H_
 #define COMMON_SYSTEM_UTILS_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/Optional.h"
 #include "common/angleutils.h"
 
@@ -164,7 +165,7 @@ class Library : angle::NonCopyable
     }
 
   private:
-    void *mLibraryHandle = nullptr;
+    raw_ptr<void> mLibraryHandle = nullptr;
 };
 
 Library *OpenSharedLibrary(const char *libraryName, SearchType searchType);

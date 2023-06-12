@@ -11,6 +11,7 @@
 #define LIBANGLE_FRAMEBUFFERATTACHMENT_H_
 
 #include "angle_gl.h"
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/angleutils.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/ImageIndex.h"
@@ -198,7 +199,7 @@ class FramebufferAttachment final
 
     GLenum mType;
     Target mTarget;
-    FramebufferAttachmentObject *mResource;
+    raw_ptr<FramebufferAttachmentObject> mResource;
     GLsizei mNumViews;
     bool mIsMultiview;
     GLint mBaseViewIndex;

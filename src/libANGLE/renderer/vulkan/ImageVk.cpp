@@ -43,8 +43,8 @@ void ImageVk::onDestroy(const egl::Display *display)
     else if (egl::IsExternalImageTarget(mState.target))
     {
         ASSERT(mState.source != nullptr);
-        ExternalImageSiblingVk *externalImageSibling =
-            GetImplAs<ExternalImageSiblingVk>(GetAs<egl::ExternalImageSibling>(mState.source));
+        ExternalImageSiblingVk *externalImageSibling = GetImplAs<ExternalImageSiblingVk>(
+            GetAs<egl::ExternalImageSibling>(mState.source.get()));
         externalImageSibling->release(renderer);
         mImage = nullptr;
 
@@ -67,7 +67,7 @@ egl::Error ImageVk::initialize(const egl::Display *display)
     {
         ASSERT(mContext != nullptr);
         ContextVk *contextVk = vk::GetImpl(mContext);
-        TextureVk *textureVk = GetImplAs<TextureVk>(GetAs<gl::Texture>(mState.source));
+        TextureVk *textureVk = GetImplAs<TextureVk>(GetAs<gl::Texture>(mState.source.get()));
 
         // Make sure the texture uses renderable format
         TextureUpdateResult updateResult = TextureUpdateResult::ImageUnaffected;
@@ -88,15 +88,15 @@ egl::Error ImageVk::initialize(const egl::Display *display)
         if (egl::IsRenderbufferTarget(mState.target))
         {
             RenderbufferVk *renderbufferVk =
-                GetImplAs<RenderbufferVk>(GetAs<gl::Renderbuffer>(mState.source));
+                GetImplAs<RenderbufferVk>(GetAs<gl::Renderbuffer>(mState.source.get()));
             mImage = renderbufferVk->getImage();
 
             ASSERT(mContext != nullptr);
         }
         else if (egl::IsExternalImageTarget(mState.target))
         {
-            const ExternalImageSiblingVk *externalImageSibling =
-                GetImplAs<ExternalImageSiblingVk>(GetAs<egl::ExternalImageSibling>(mState.source));
+            const ExternalImageSiblingVk *externalImageSibling = GetImplAs<ExternalImageSiblingVk>(
+                GetAs<egl::ExternalImageSibling>(mState.source.get()));
             mImage = externalImageSibling->getImage();
 
             ASSERT(mContext == nullptr);
@@ -122,7 +122,7 @@ angle::Result ImageVk::orphan(const gl::Context *context, egl::ImageSibling *sib
     {
         if (egl::IsTextureTarget(mState.target))
         {
-            TextureVk *textureVk = GetImplAs<TextureVk>(GetAs<gl::Texture>(mState.source));
+            TextureVk *textureVk = GetImplAs<TextureVk>(GetAs<gl::Texture>(mState.source.get()));
             ASSERT(mImage == &textureVk->getImage());
             textureVk->releaseOwnershipOfImage(context);
             mOwnsImage = true;
@@ -130,7 +130,7 @@ angle::Result ImageVk::orphan(const gl::Context *context, egl::ImageSibling *sib
         else if (egl::IsRenderbufferTarget(mState.target))
         {
             RenderbufferVk *renderbufferVk =
-                GetImplAs<RenderbufferVk>(GetAs<gl::Renderbuffer>(mState.source));
+                GetImplAs<RenderbufferVk>(GetAs<gl::Renderbuffer>(mState.source.get()));
             ASSERT(mImage == renderbufferVk->getImage());
             renderbufferVk->releaseOwnershipOfImage(context);
             mOwnsImage = true;

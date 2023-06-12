@@ -10,6 +10,7 @@
 #define LIBANGLE_DEBUG_H_
 
 #include "angle_gl.h"
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/PackedEnums.h"
 #include "common/angleutils.h"
 #include "libANGLE/AttributeMap.h"
@@ -129,7 +130,7 @@ class Debug : angle::NonCopyable
 
     bool mOutputEnabled;
     GLDEBUGPROCKHR mCallbackFunction;
-    const void *mCallbackUserParam;
+    raw_ptr<const void> mCallbackUserParam;
     mutable std::deque<Message> mMessages;
     GLuint mMaxLoggedMessages;
     bool mOutputSynchronous;

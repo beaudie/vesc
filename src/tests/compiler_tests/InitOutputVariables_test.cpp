@@ -7,6 +7,7 @@
 // SH_INIT_OUTPUT_VARIABLES.
 //
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/angleutils.h"
 
 #include "compiler/translator/SymbolTable.h"
@@ -181,7 +182,7 @@ class FindStructByName final : public TIntermTraverser
 
   private:
     ImmutableString mStructName;
-    const TStructure *mStructure;
+    raw_ptr<const TStructure> mStructure;
 };
 
 }  // namespace

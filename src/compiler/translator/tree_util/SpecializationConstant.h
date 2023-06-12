@@ -9,6 +9,8 @@
 #ifndef COMPILER_TRANSLATOR_TREEUTIL_SPECIALIZATIONCONSTANT_H_
 #define COMPILER_TRANSLATOR_TREEUTIL_SPECIALIZATIONCONSTANT_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "common/angleutils.h"
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/SymbolTable.h"
@@ -41,11 +43,11 @@ class SpecConst
     TIntermSymbol *getRotation();
 
     // If unsupported, this should be set to null.
-    TSymbolTable *mSymbolTable;
-    const ShCompileOptions &mCompileOptions;
+    raw_ptr<TSymbolTable> mSymbolTable;
+    const raw_ref<const ShCompileOptions> mCompileOptions;
 
-    TVariable *mSurfaceRotationVar;
-    TVariable *mDitherVar;
+    raw_ptr<TVariable> mSurfaceRotationVar;
+    raw_ptr<TVariable> mDitherVar;
 
     // Bit is set if YFlip or Rotation has been used
     SpecConstUsageBits mUsageBits;

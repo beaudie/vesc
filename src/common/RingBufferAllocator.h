@@ -11,6 +11,7 @@
 #define COMMON_RING_BUFFER_ALLOCATOR_H_
 
 #include "angleutils.h"
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/debug.h"
 
 #include <atomic>
@@ -40,8 +41,8 @@ class RingBufferAllocatorCheckPoint final
 
   private:
     friend class RingBufferAllocator;
-    uint64_t mBufferId   = 0;
-    uint8_t *mReleasePtr = nullptr;
+    uint64_t mBufferId           = 0;
+    raw_ptr<uint8_t> mReleasePtr = nullptr;
 };
 
 class RingBufferAllocatorBuffer final

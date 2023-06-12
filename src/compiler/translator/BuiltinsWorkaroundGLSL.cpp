@@ -7,6 +7,7 @@
 #include "compiler/translator/BuiltinsWorkaroundGLSL.h"
 
 #include "angle_gl.h"
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "compiler/translator/Symbol.h"
 #include "compiler/translator/SymbolTable.h"
 #include "compiler/translator/tree_util/BuiltIn.h"
@@ -30,7 +31,7 @@ class TBuiltinsWorkaroundGLSL : public TIntermTraverser
   private:
     void ensureVersionIsAtLeast(int version);
 
-    const ShCompileOptions &mCompileOptions;
+    const raw_ref<const ShCompileOptions> mCompileOptions;
 
     bool isBaseInstanceDeclared = false;
 };

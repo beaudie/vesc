@@ -14,6 +14,8 @@
 #include <chrono>
 #include <thread>
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
+
 namespace angle
 {
 // Make sure the various constructors compile and do basic checks
@@ -42,7 +44,7 @@ TEST(FixedQueue, Destructor)
         s(const s &)            = default;
         s &operator=(const s &) = default;
 
-        int *counter;
+        raw_ptr<int> counter;
     };
 
     int destructorCount = 0;
@@ -85,7 +87,7 @@ TEST(FixedQueue, Pop)
             return *this;
         }
 
-        int *counter;
+        raw_ptr<int> counter;
     };
 
     int destructorCount = 0;

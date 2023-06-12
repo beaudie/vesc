@@ -222,7 +222,7 @@ class MultiviewGPUBoundBenchmark : public MultiviewBenchmark
 
 void MultiviewBenchmark::initializeBenchmark()
 {
-    const MultiviewPerfParams *params = static_cast<const MultiviewPerfParams *>(&mTestParams);
+    const MultiviewPerfParams *params = static_cast<const MultiviewPerfParams *>(&*mTestParams);
 
     switch (params->multiviewOption)
     {
@@ -274,7 +274,7 @@ void MultiviewBenchmark::initializeBenchmark()
 
 void MultiviewBenchmark::drawBenchmark()
 {
-    const MultiviewPerfParams *params = static_cast<const MultiviewPerfParams *>(&mTestParams);
+    const MultiviewPerfParams *params = static_cast<const MultiviewPerfParams *>(&*mTestParams);
     const int viewWidth               = params->windowWidth / params->numViews;
     const int viewHeight              = params->windowHeight;
 
@@ -308,7 +308,7 @@ void MultiviewCPUBoundBenchmark::initializeBenchmark()
 {
     MultiviewBenchmark::initializeBenchmark();
 
-    const MultiviewPerfParams *params = static_cast<const MultiviewPerfParams *>(&mTestParams);
+    const MultiviewPerfParams *params = static_cast<const MultiviewPerfParams *>(&*mTestParams);
     const bool usesMultiview = (params->multiviewOption != MultiviewOption::NoAcceleration);
 
     const std::string vs = "#version 300 es\n" +
@@ -371,7 +371,7 @@ void MultiviewCPUBoundBenchmark::renderScene()
 
     glBindVertexArray(mVAO);
 
-    const MultiviewPerfParams *params = static_cast<const MultiviewPerfParams *>(&mTestParams);
+    const MultiviewPerfParams *params = static_cast<const MultiviewPerfParams *>(&*mTestParams);
     const int viewWidth               = params->windowWidth / params->numViews;
     const int viewHeight              = params->windowHeight;
 
@@ -392,7 +392,7 @@ void MultiviewGPUBoundBenchmark::initializeBenchmark()
 {
     MultiviewBenchmark::initializeBenchmark();
 
-    const MultiviewPerfParams *params = static_cast<const MultiviewPerfParams *>(&mTestParams);
+    const MultiviewPerfParams *params = static_cast<const MultiviewPerfParams *>(&*mTestParams);
     const bool usesMultiview = (params->multiviewOption != MultiviewOption::NoAcceleration);
 
     const std::string &vs = "#version 300 es\n" +
@@ -519,7 +519,7 @@ void MultiviewGPUBoundBenchmark::renderScene()
 
     glBindVertexArray(mVAO);
 
-    const MultiviewPerfParams *params = static_cast<const MultiviewPerfParams *>(&mTestParams);
+    const MultiviewPerfParams *params = static_cast<const MultiviewPerfParams *>(&*mTestParams);
     const int viewWidth               = params->windowWidth / params->numViews;
     const int viewHeight              = params->windowHeight;
     glDrawArrays(GL_TRIANGLES, 0, viewWidth * viewHeight * 6);

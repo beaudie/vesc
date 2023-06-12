@@ -13,6 +13,7 @@
 #include <string>
 #include <vector>
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/angleutils.h"
 #include "util/Timer.h"
 
@@ -100,7 +101,7 @@ class ProcessHandle final : angle::NonCopyable
     void reset();
 
   private:
-    Process *mProcess;
+    raw_ptr<Process> mProcess;
 };
 
 // Launch a process and optionally get the output. Uses a vector of c strings as command line

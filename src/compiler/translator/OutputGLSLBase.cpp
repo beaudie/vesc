@@ -104,7 +104,7 @@ TOutputGLSLBase::TOutputGLSLBase(TCompiler *compiler,
 
 void TOutputGLSLBase::writeInvariantQualifier(const TType &type)
 {
-    if (!sh::RemoveInvariant(mShaderType, mShaderVersion, mOutput, mCompileOptions))
+    if (!sh::RemoveInvariant(mShaderType, mShaderVersion, mOutput, *mCompileOptions))
     {
         TInfoSinkBase &out = objSink();
         out << "invariant ";
@@ -354,7 +354,7 @@ void TOutputGLSLBase::writeQualifier(TQualifier qualifier, const TType &type, co
 const char *TOutputGLSLBase::mapQualifierToString(TQualifier qualifier)
 {
     if (sh::IsGLSL410OrOlder(mOutput) && mShaderVersion >= 300 &&
-        mCompileOptions.removeInvariantAndCentroidForESSL3)
+        mCompileOptions->removeInvariantAndCentroidForESSL3)
     {
         switch (qualifier)
         {
@@ -966,7 +966,7 @@ bool TOutputGLSLBase::visitAggregate(Visit visit, TIntermAggregate *node)
             else
             {
                 functionName =
-                    translateTextureFunction(node->getFunction()->name(), mCompileOptions);
+                    translateTextureFunction(node->getFunction()->name(), *mCompileOptions);
             }
         }
         writeFunctionTriplet(visit, functionName, node->getUseEmulatedFunction());
@@ -1150,12 +1150,12 @@ ImmutableString TOutputGLSLBase::getTypeName(const TType &type)
         return ImmutableString("sampler2D");
     }
 
-    return GetTypeName(type, mHashFunction, &mNameMap);
+    return GetTypeName(type, mHashFunction, &*mNameMap);
 }
 
 ImmutableString TOutputGLSLBase::hashName(const TSymbol *symbol)
 {
-    return HashName(symbol, mHashFunction, &mNameMap);
+    return HashName(symbol, mHashFunction, &*mNameMap);
 }
 
 ImmutableString TOutputGLSLBase::hashFieldName(const TField *field)
@@ -1163,7 +1163,7 @@ ImmutableString TOutputGLSLBase::hashFieldName(const TField *field)
     ASSERT(field->symbolType() != SymbolType::Empty);
     if (field->symbolType() == SymbolType::UserDefined)
     {
-        return HashName(field->name(), mHashFunction, &mNameMap);
+        return HashName(field->name(), mHashFunction, &*mNameMap);
     }
 
     return field->name();

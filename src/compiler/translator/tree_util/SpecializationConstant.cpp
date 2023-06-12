@@ -52,7 +52,7 @@ SpecConst::SpecConst(TSymbolTable *symbolTable,
     }
 
     // Mark SpecConstUsage::Rotation unconditionally.  gl_Position is always rotated.
-    if (mCompileOptions.useSpecializationConstant)
+    if (mCompileOptions->useSpecializationConstant)
     {
         mUsageBits.set(vk::SpecConstUsage::Rotation);
     }
@@ -98,7 +98,7 @@ TIntermSymbol *SpecConst::getRotation()
 
 TIntermTyped *SpecConst::getSwapXY()
 {
-    if (!mCompileOptions.useSpecializationConstant)
+    if (!mCompileOptions->useSpecializationConstant)
     {
         return nullptr;
     }

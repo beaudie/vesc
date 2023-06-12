@@ -9,6 +9,7 @@
 #include <GLSLANG/ShaderLang.h>
 #include <algorithm>
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/debug.h"
 #include "compiler/preprocessor/DiagnosticsBase.h"
 #include "compiler/preprocessor/Token.h"
@@ -62,7 +63,7 @@ class [[nodiscard]] MacroExpander::ScopedMacroReenabler final : angle::NonCopyab
     ~ScopedMacroReenabler();
 
   private:
-    MacroExpander *mExpander;
+    raw_ptr<MacroExpander> mExpander;
 };
 
 MacroExpander::ScopedMacroReenabler::ScopedMacroReenabler(MacroExpander *expander)
