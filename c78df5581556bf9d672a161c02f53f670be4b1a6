@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ee13c92_9e489edd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 30
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-12T19:02:12Z",
+      "side": 1,
+      "message": "nit: devices (same at the end of the sentence). The other backends already don\u0027t expose GLES3.2",
+      "range": {
+        "startLine": 18,
+        "startChar": 21,
+        "endLine": 18,
+        "endChar": 29
+      },
+      "revId": "c78df5581556bf9d672a161c02f53f670be4b1a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0e5000a_d9f7deda",
+        "filename": "src/tests/deqp_support/deqp_gles31_rotate_test_expectations.txt",
+        "patchSetId": 30
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-12T19:02:12Z",
+      "side": 1,
+      "message": "```suggestion\n// SwiftShader does not support tessellation and geometry shaders\n```",
+      "revId": "c78df5581556bf9d672a161c02f53f670be4b1a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce8b9ef6_ca1c0758",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 30
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-12T19:02:12Z",
+      "side": 1,
+      "message": "```suggestion\n// b/224537784 Test failures after enabling GLES3.2 context creation on all devices\n```",
+      "range": {
+        "startLine": 362,
+        "startChar": 76,
+        "endLine": 362,
+        "endChar": 84
+      },
+      "revId": "c78df5581556bf9d672a161c02f53f670be4b1a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17f894ca_cb62709c",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 30
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-12T19:02:12Z",
+      "side": 1,
+      "message": "You can simplify these a lot by suppressing:\n\n```\ndeqp-GLES31.functional.*geometry*\ndeqp-GLES31.functional.*tess*\n```",
+      "revId": "c78df5581556bf9d672a161c02f53f670be4b1a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5478d377_a90c5e81",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 30
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-12T19:02:12Z",
+      "side": 1,
+      "message": "```suggestion\n// Pixel 4 does not support VK_EXT_transform_feedback (required for geometry/tessellation)\n```",
+      "revId": "c78df5581556bf9d672a161c02f53f670be4b1a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4dd20618_37375407",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 30
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-12T19:02:12Z",
+      "side": 1,
+      "message": "All these are because of lack of `VK_EXT_transform_feedback`, no? Can we bundle all the geometry/tessellation suppressions for Pixel 4 like with SwiftShader?\n\n```\ndeqp-GLES31.functional.*geometry*\ndeqp-GLES31.functional.*tess*\n```",
+      "revId": "c78df5581556bf9d672a161c02f53f670be4b1a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
