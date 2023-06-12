@@ -91,6 +91,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2dc45fab_3d2e9a39",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-12T15:28:49Z",
+      "side": 1,
+      "message": "Can\u0027t be clang-format, otherwise `d3d/*` would also not have `\\r`. Can\u0027t be git\u0027s autocrlf either for the same reason. I think we just manually managed to do that. If you look at git history, there are a number of commits with `line ending` in the title.\n\nI don\u0027t know why Jamie didn\u0027t just put `*  eol\u003dlf` in `.gitattributes`",
+      "parentUuid": "d1166e1a_d5c3c298",
+      "revId": "6729d209e7a9d63c60c55d2d53b0f9317e00c048",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "88c426b6_36d22c31",
         "filename": "include/platform/gen_features.py",
         "patchSetId": 2
