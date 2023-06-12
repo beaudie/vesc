@@ -39,6 +39,30 @@
       },
       "revId": "9255f675d6d533127405c429e48785d2237f19c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38b6e428_69e33b6c",
+        "filename": "include/platform/gen_features.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-12T22:12:58Z",
+      "side": 1,
+      "message": "This CL doesn\u0027t change this - `header_path` also on the left. header_file is just the file name and gets included in the generated code as a reference. header_path is `autogen/{header_file}` which is where we write the code.",
+      "parentUuid": "68ef6433_a4f80060",
+      "range": {
+        "startLine": 212,
+        "startChar": 36,
+        "endLine": 212,
+        "endChar": 59
+      },
+      "revId": "9255f675d6d533127405c429e48785d2237f19c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
