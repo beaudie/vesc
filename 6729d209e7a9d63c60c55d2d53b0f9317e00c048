@@ -197,6 +197,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "21de9ba0_397c24b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-12T19:46:16Z",
+      "side": 1,
+      "message": "Yes I believe it\u0027s expected that we all have `core.autocrlf \u003d false`, I also recall having seen that as part of depot_tools setup. Feel free to make that clearer in our own docs though.",
+      "parentUuid": "72346d6c_eeb8afe5",
+      "revId": "6729d209e7a9d63c60c55d2d53b0f9317e00c048",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "88c426b6_36d22c31",
