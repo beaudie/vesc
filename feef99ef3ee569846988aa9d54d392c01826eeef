@@ -22,6 +22,30 @@
       },
       "revId": "feef99ef3ee569846988aa9d54d392c01826eeef",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e35e91b9_658b998e",
+        "filename": "include/platform/gen_features.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-12T17:00:55Z",
+      "side": 1,
+      "message": "pfft, went back to default newlines: https://chromium-review.googlesource.com/c/angle/angle/+/4604579/comments/035605b0_6e4ce536",
+      "parentUuid": "a1670d6b_a96fd44f",
+      "range": {
+        "startLine": 194,
+        "startChar": 48,
+        "endLine": 194,
+        "endChar": 60
+      },
+      "revId": "feef99ef3ee569846988aa9d54d392c01826eeef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
