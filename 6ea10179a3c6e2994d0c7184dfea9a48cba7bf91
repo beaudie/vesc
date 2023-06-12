@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b514510_11268ec3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-12T19:16:26Z",
+      "side": 1,
+      "message": "Thanks for cleaning all these up!",
+      "revId": "6ea10179a3c6e2994d0c7184dfea9a48cba7bf91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95136655_78ddf5c9",
+        "filename": "src/tests/deqp_support/deqp_khr_gles32_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-12T19:16:26Z",
+      "side": 1,
+      "message": "nit: Move Pixel6 to a separate section below.\n\nAll of tessellation tests fail?!",
+      "revId": "6ea10179a3c6e2994d0c7184dfea9a48cba7bf91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
