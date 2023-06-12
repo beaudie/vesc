@@ -127,6 +127,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "91808b67_69fbdd89",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-12T15:36:31Z",
+      "side": 1,
+      "message": "(or `newline\u003d\u0027\\n\u0027` for this CL)",
+      "parentUuid": "1d6b06f3_5da15cf1",
+      "revId": "6729d209e7a9d63c60c55d2d53b0f9317e00c048",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "88c426b6_36d22c31",
         "filename": "include/platform/gen_features.py",
         "patchSetId": 2
