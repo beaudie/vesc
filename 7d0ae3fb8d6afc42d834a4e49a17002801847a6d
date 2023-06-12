@@ -122,6 +122,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d46d7b55_ba5f2057",
+        "filename": "include/platform/.clang-format",
+        "patchSetId": 5
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-12T15:19:31Z",
+      "side": 1,
+      "message": "Looks like I am right about clang-format not supporting file matches, only dirs: https://stackoverflow.com/a/75402590\nSigh. I\u0027ll move files around then.",
+      "parentUuid": "bbe02e8d_98b396ff",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 19
+      },
+      "revId": "7d0ae3fb8d6afc42d834a4e49a17002801847a6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a6d0a4ba_e4a89064",
         "filename": "include/platform/gen_features.py",
         "patchSetId": 5
