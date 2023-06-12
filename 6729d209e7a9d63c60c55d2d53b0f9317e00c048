@@ -109,6 +109,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1d6b06f3_5da15cf1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-12T15:35:23Z",
+      "side": 1,
+      "message": "Hmm, right. clang-format seems to need a LineEnding setting to do that but we don\u0027t set it. Don\u0027t feel like messing with global git settings. I think I\u0027ll just sprinkle `.replace(\u0027\\r\\n\u0027, \u0027\\n\u0027)` in scripts.",
+      "parentUuid": "2dc45fab_3d2e9a39",
+      "revId": "6729d209e7a9d63c60c55d2d53b0f9317e00c048",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "88c426b6_36d22c31",
         "filename": "include/platform/gen_features.py",
         "patchSetId": 2
