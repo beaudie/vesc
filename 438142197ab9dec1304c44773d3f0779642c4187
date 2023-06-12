@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03f25746_598c8669",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4444,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-12T15:31:38Z",
+      "side": 1,
+      "message": "nit: extraneous `b` in bug tag. Also, please use `issuetracker.google.com`. `b/` is only accessible inside Google.",
+      "range": {
+        "startLine": 4444,
+        "startChar": 16,
+        "endLine": 4444,
+        "endChar": 17
+      },
+      "revId": "438142197ab9dec1304c44773d3f0779642c4187",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
