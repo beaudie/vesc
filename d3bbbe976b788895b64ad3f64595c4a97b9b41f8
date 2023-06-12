@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22f086e7_0ce6ca76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1379716
+      },
+      "writtenOn": "2023-06-12T20:15:01Z",
+      "side": 1,
+      "message": "Verified `atest CtsSkQPTestCases` on Cuttlefish (with https://skia-review.googlesource.com/c/skia/+/599358 and https://skia-review.googlesource.com/c/skia/+/616557).",
+      "revId": "d3bbbe976b788895b64ad3f64595c4a97b9b41f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
