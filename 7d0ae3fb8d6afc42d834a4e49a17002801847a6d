@@ -96,6 +96,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbe02e8d_98b396ff",
+        "filename": "include/platform/.clang-format",
+        "patchSetId": 5
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-12T15:06:18Z",
+      "side": 1,
+      "message": "Ok that\u0027s valid logic. Reviewers would likely notice the lack of formatting on `Feature.h` if that ever happens, so I\u0027m not too worried TBH.\n\nIn the end, it\u0027s just a path name, so either way is fine with me.",
+      "parentUuid": "3b9f1325_593d108b",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 19
+      },
+      "revId": "7d0ae3fb8d6afc42d834a4e49a17002801847a6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a6d0a4ba_e4a89064",
