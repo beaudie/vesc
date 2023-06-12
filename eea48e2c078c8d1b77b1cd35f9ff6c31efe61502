@@ -16,6 +16,23 @@
       "message": "Thank you, moving forward to submit this change.",
       "revId": "eea48e2c078c8d1b77b1cd35f9ff6c31efe61502",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a92da78f_6c4827b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1196069
+      },
+      "writtenOn": "2023-06-12T18:25:14Z",
+      "side": 1,
+      "message": "I have no permission to submit the change, not sure if you two can help to do so.\n\nThank you.",
+      "revId": "eea48e2c078c8d1b77b1cd35f9ff6c31efe61502",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
