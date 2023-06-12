@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e4d49c5_d04431e5",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1625,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-06-12T16:56:10Z",
+      "side": 1,
+      "message": "Should be NVIDIA, still failing:\nhttps://ci.chromium.org/ui/p/angle/builders/ci/linux-nvidia-gtx1660-perf/1665/overview",
+      "range": {
+        "startLine": 1625,
+        "startChar": 14,
+        "endLine": 1625,
+        "endChar": 19
+      },
+      "revId": "55f3d3c7f28535cfba4511bcfca98190785f98b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
