@@ -59,6 +59,7 @@
 /third_party/libdrm
 /third_party/libjpeg_turbo
 /third_party/libpng/src
+/third_party/lss
 /third_party/llvm-build
 /third_party/markupsafe
 /third_party/meson
@@ -105,6 +106,7 @@
 /tools/valgrind
 angle.iml
 angle_debug.txt
+/base
 /build
 /buildtools
 debug.txt
