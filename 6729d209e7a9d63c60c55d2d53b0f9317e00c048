@@ -163,6 +163,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "38275e86_4feb2c0e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-12T18:11:58Z",
+      "side": 1,
+      "message": "Are you missing `core.autocrlf \u003d false` in your `.gitconfig`?",
+      "parentUuid": "2697db54_909c0717",
+      "revId": "6729d209e7a9d63c60c55d2d53b0f9317e00c048",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "88c426b6_36d22c31",
         "filename": "include/platform/gen_features.py",
         "patchSetId": 2
