@@ -130,6 +130,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a55864c_716e6837",
+        "filename": "src/libANGLE/SharedContextMutex.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-12T15:18:50Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "b5fb0472_7c368d20",
+      "range": {
+        "startLine": 141,
+        "startChar": 19,
+        "endLine": 141,
+        "endChar": 40
+      },
+      "revId": "53b93f6519d0fe955dba8025508f08f49f1136b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8644db61_50773586",
@@ -161,6 +185,24 @@
       "side": 1,
       "message": "Global lock is to protect `mDisplay-\u003egetImage(image)` later in the `eGLImageTargetTexture2D()` ans similar methods.",
       "parentUuid": "8644db61_50773586",
+      "revId": "53b93f6519d0fe955dba8025508f08f49f1136b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "adf96cd2_0f31cb6e",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-12T15:18:50Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "61d0a2f4_3332a149",
       "revId": "53b93f6519d0fe955dba8025508f08f49f1136b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
