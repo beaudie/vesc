@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "69298cba_adc826a5",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 9641,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-12T15:11:06Z",
+      "side": 1,
+      "message": "Thanks. Will update in the next patchset.",
+      "parentUuid": "46881d95_7af0fed0",
+      "range": {
+        "startLine": 9641,
+        "startChar": 69,
+        "endLine": 9641,
+        "endChar": 73
+      },
+      "revId": "53b93f6519d0fe955dba8025508f08f49f1136b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6fae9d9f_c7bf84ee",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 25
@@ -37,6 +61,24 @@
       "writtenOn": "2023-06-12T15:03:47Z",
       "side": 1,
       "message": "```suggestion\n    // replacement) that both both access shared state in a way that may cause undefined behaviour.\n```",
+      "revId": "53b93f6519d0fe955dba8025508f08f49f1136b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e698a5c_7f7707ac",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 9643,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-12T15:11:06Z",
+      "side": 1,
+      "message": "Thanks. Will update in the next patchset.",
+      "parentUuid": "6fae9d9f_c7bf84ee",
       "revId": "53b93f6519d0fe955dba8025508f08f49f1136b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -66,6 +108,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b5fb0472_7c368d20",
+        "filename": "src/libANGLE/SharedContextMutex.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-12T15:11:06Z",
+      "side": 1,
+      "message": "If mutex is already locked in another thread `doTryLock()` will skip lock and return `nullptr`.",
+      "parentUuid": "d18b9aa5_85e30ed6",
+      "range": {
+        "startLine": 141,
+        "startChar": 19,
+        "endLine": 141,
+        "endChar": 40
+      },
+      "revId": "53b93f6519d0fe955dba8025508f08f49f1136b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8644db61_50773586",
         "filename": "src/libGLESv2/global_state.h",
         "patchSetId": 25
@@ -77,6 +143,24 @@
       "writtenOn": "2023-06-12T15:03:47Z",
       "side": 1,
       "message": "Since the image and the share context mutexes are getting merged, can we drop this global lock?",
+      "revId": "53b93f6519d0fe955dba8025508f08f49f1136b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61d0a2f4_3332a149",
+        "filename": "src/libGLESv2/global_state.h",
+        "patchSetId": 25
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-12T15:11:06Z",
+      "side": 1,
+      "message": "Global lock is to protect `mDisplay-\u003egetImage(image)` later in the `eGLImageTargetTexture2D()` ans similar methods.",
+      "parentUuid": "8644db61_50773586",
       "revId": "53b93f6519d0fe955dba8025508f08f49f1136b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
