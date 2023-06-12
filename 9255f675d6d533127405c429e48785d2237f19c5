@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e16c158_ef0b3b98",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-12T20:46:52Z",
+      "side": 1,
+      "message": "Re-LGTM",
+      "revId": "9255f675d6d533127405c429e48785d2237f19c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68ef6433_a4f80060",
+        "filename": "include/platform/gen_features.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-12T20:46:52Z",
+      "side": 1,
+      "message": "Wasn\u0027t header_file better?",
+      "range": {
+        "startLine": 212,
+        "startChar": 36,
+        "endLine": 212,
+        "endChar": 59
+      },
+      "revId": "9255f675d6d533127405c429e48785d2237f19c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
