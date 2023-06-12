@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3b9f1325_593d108b",
+        "filename": "include/platform/.clang-format",
+        "patchSetId": 5
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-12T14:47:16Z",
+      "side": 1,
+      "message": "I actually called it \"features\" first but then realized \"autogen\" makes more sense because the whole reason this directory exists is to disable clang format. It would make sense to place `include/platform/Feature.h` (or any new related hand-modified file) under `features/` which would be incorrect.\n\nI hate that I have to do this just to get around silly clang-format limitations.",
+      "parentUuid": "124bd8ce_01954f80",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 19
+      },
+      "revId": "7d0ae3fb8d6afc42d834a4e49a17002801847a6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a6d0a4ba_e4a89064",
         "filename": "include/platform/gen_features.py",
         "patchSetId": 5
