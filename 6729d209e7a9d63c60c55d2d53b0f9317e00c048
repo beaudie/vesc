@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d1166e1a_d5c3c298",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-12T15:12:24Z",
+      "side": 1,
+      "message": "hmm, looking at what we currently have (Linux checkout):\n\n`% grep -IUrl --color --exclude-dir\u003d.git $(printf \u0027\\r\u0027) src`\n\nshows\n1) `src/libANGLE/renderer/d3d/*`\n2) a couple of .rc and .bat files\n3) Certain files under `src/tests/restricted_traces/`, for example only these few in eve_echoes:\n```\nsrc/tests/restricted_traces/eve_echoes/eve_echoes_context5_011.cpp\nsrc/tests/restricted_traces/eve_echoes/eve_echoes_context5_009.cpp\nsrc/tests/restricted_traces/eve_echoes/eve_echoes_shared.cpp\nsrc/tests/restricted_traces/eve_echoes/eve_echoes_context5_029.cpp\n```\n\nbut otherwise nothing else with `\\r`.. Probably due to clang-format?.. Git seems to default to autocrlf\u003dfalse unless I\u0027m missing something.",
+      "parentUuid": "d9628f9e_d1e07c13",
+      "revId": "6729d209e7a9d63c60c55d2d53b0f9317e00c048",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "88c426b6_36d22c31",
         "filename": "include/platform/gen_features.py",
         "patchSetId": 2
