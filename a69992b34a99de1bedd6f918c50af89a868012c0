@@ -87,6 +87,30 @@
       },
       "revId": "a69992b34a99de1bedd6f918c50af89a868012c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39d236a2_d6304991",
+        "filename": "src/tests/capture_tests/capture_tests.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-12T21:43:20Z",
+      "side": 1,
+      "message": "Yeah.. probably just older traces (so almost all of them, heh, given how recent that CL is). I had to add handling to this test to pass Win CI though, I\u0027ll double check what was going on there.",
+      "parentUuid": "722be3b8_926ee09f",
+      "range": {
+        "startLine": 73,
+        "startChar": 4,
+        "endLine": 73,
+        "endChar": 32
+      },
+      "revId": "a69992b34a99de1bedd6f918c50af89a868012c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
