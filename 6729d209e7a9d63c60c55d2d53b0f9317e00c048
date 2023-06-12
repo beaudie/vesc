@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "602c87d7_ccd46174",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-12T15:09:58Z",
+      "side": 1,
+      "message": "Right. I see\n\n```\n**/shaders/gen/*.inc                       eol\u003dlf\n```\n\nwhich is from my noob-ness. At the time, I didn\u0027t know you can tell python explicitly to use `\\n` for line ending. These days I always add these to `open()`: `encoding\u003d\u0027utf8\u0027, newline\u003d\u0027\\n\u0027`. Then you won\u0027t need git attribs.",
+      "parentUuid": "d9628f9e_d1e07c13",
+      "revId": "6729d209e7a9d63c60c55d2d53b0f9317e00c048",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "88c426b6_36d22c31",
         "filename": "include/platform/gen_features.py",
         "patchSetId": 2
