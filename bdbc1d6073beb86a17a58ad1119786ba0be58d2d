@@ -16,6 +16,24 @@
       "message": "FYI Igor",
       "revId": "bdbc1d6073beb86a17a58ad1119786ba0be58d2d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bad47ddb_00c6cb76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-12T10:36:11Z",
+      "side": 1,
+      "message": "Thanks for notification.\n\n---\n\n@zijiehe@google.com Thank you for the fix!",
+      "parentUuid": "8b5241ae_a8cf1e62",
+      "revId": "bdbc1d6073beb86a17a58ad1119786ba0be58d2d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
