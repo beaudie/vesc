@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c45fa90a_0f849263",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-12T21:49:24Z",
+      "side": 0,
+      "message": "Could you add comment to the CL description regarding the status of these.\n\nDoes this run on pixel 4 bots as well? If so, might need to check if still problematic there, possibly selectively disable for pixel 4.",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 79
+      },
+      "revId": "e5c6060a331e8417d0e06ca6374af87daf69fefb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
