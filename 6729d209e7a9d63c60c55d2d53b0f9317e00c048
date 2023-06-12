@@ -145,6 +145,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2697db54_909c0717",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-12T16:55:47Z",
+      "side": 1,
+      "message": "Damn, just checked on Windows and this causes these warnings:\n```\nwarning: in the working copy of \u0027include/platform/autogen/FeaturesD3D_autogen.h\u0027, LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of \u0027include/platform/autogen/FeaturesGL_autogen.h\u0027, LF will be replaced by CRLF the next time Git touches it\n...\n```\n\nI suppose CR/CRLF tricks are enabled in Git by default.\n\nI think I\u0027ll have to let git do whatever it wants and just ignore line ending diffs in scripts. Note how when calculating hashes, for instance, we\u0027re opening the file in \"r\" mode:\nhttps://crsrc.org/c/third_party/angle/scripts/run_code_generation.py;drc\u003de7a9275be22d28c74049d397a87183d47a1d188f;l\u003d140\nwhich I believe translates \\r\\n -\u003e \\n on Windows, so we end up with the same hash despite files having different contents \u003e_\u003c",
+      "parentUuid": "91808b67_69fbdd89",
+      "revId": "6729d209e7a9d63c60c55d2d53b0f9317e00c048",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "88c426b6_36d22c31",
         "filename": "include/platform/gen_features.py",
         "patchSetId": 2
