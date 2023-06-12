@@ -267,6 +267,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfbf69b2_43668feb",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-06-12T18:14:29Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "8a771cd3_a929e049",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "baaaafe5_24947132",
