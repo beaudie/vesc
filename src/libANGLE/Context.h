@@ -16,6 +16,7 @@
 #include <string>
 
 #include "angle_gl.h"
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/MemoryBuffer.h"
 #include "common/PackedEnums.h"
 #include "common/angleutils.h"
@@ -103,7 +104,7 @@ class ErrorSet : angle::NonCopyable
     void validationError(angle::EntryPoint entryPoint, GLenum errorCode, const char *message);
 
   private:
-    Context *mContext;
+    raw_ptr<Context> mContext;
     std::set<GLenum> mErrors;
 };
 
@@ -776,7 +777,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     // Shader compiler. Lazily initialized hence the mutable value.
     mutable BindingPointer<Compiler> mCompiler;
 
-    const egl::Config *mConfig;
+    raw_ptr<const egl::Config> mConfig;
 
     TextureMap mZeroTextures;
 
@@ -810,14 +811,14 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     bool mContextLostForced;
     GLenum mResetStrategy;
     const bool mSurfacelessSupported;
-    egl::Surface *mCurrentDrawSurface;
-    egl::Surface *mCurrentReadSurface;
-    egl::Display *mDisplay;
+    raw_ptr<egl::Surface> mCurrentDrawSurface;
+    raw_ptr<egl::Surface> mCurrentReadSurface;
+    raw_ptr<egl::Display> mDisplay;
     const bool mWebGLContext;
     bool mBufferAccessValidationEnabled;
     const bool mExtensionsEnabled;
-    MemoryProgramCache *mMemoryProgramCache;
-    MemoryShaderCache *mMemoryShaderCache;
+    raw_ptr<MemoryProgramCache> mMemoryProgramCache;
+    raw_ptr<MemoryShaderCache> mMemoryShaderCache;
 
     State::DirtyObjects mDrawDirtyObjects;
 
@@ -903,7 +904,7 @@ class [[nodiscard]] ScopedContextRef
     }
 
   private:
-    Context *const mContext;
+    const raw_ptr<Context> mContext;
 };
 
 // Thread-local current valid context bound to the thread.

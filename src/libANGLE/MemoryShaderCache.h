@@ -13,6 +13,7 @@
 #include <array>
 
 #include "GLSLANG/ShaderLang.h"
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "common/MemoryBuffer.h"
 #include "libANGLE/BlobCache.h"
 #include "libANGLE/Error.h"
@@ -50,7 +51,7 @@ class MemoryShaderCache final : angle::NonCopyable
     size_t maxSize() const;
 
   private:
-    egl::BlobCache &mBlobCache;
+    const raw_ref<egl::BlobCache> mBlobCache;
 
     std::mutex mHistogramMutex;
 };

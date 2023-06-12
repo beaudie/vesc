@@ -83,8 +83,8 @@ void JsonSerializer::addBlobWithMax(const std::string &name,
 
 void JsonSerializer::addCString(const std::string &name, const char *value)
 {
-    rapidjson::Value tag(name.c_str(), mAllocator);
-    rapidjson::Value val(value, mAllocator);
+    rapidjson::Value tag(name.c_str(), *mAllocator);
+    rapidjson::Value val(value, *mAllocator);
     addValue(name, std::move(val));
 }
 
@@ -101,8 +101,8 @@ void JsonSerializer::addVectorOfStrings(const std::string &name,
 
     for (const std::string &v : value)
     {
-        rapidjson::Value str(v.c_str(), mAllocator);
-        arrayValue.PushBack(str, mAllocator);
+        rapidjson::Value str(v.c_str(), *mAllocator);
+        arrayValue.PushBack(str, *mAllocator);
     }
 
     addValue(name, std::move(arrayValue));
@@ -159,8 +159,8 @@ rapidjson::Value JsonSerializer::makeValueGroup(SortedValueGroup &group)
     rapidjson::Value valueGroup(js::kObjectType);
     for (auto &it : group)
     {
-        rapidjson::Value tag(it.first.c_str(), mAllocator);
-        valueGroup.AddMember(tag, it.second, mAllocator);
+        rapidjson::Value tag(it.first.c_str(), *mAllocator);
+        valueGroup.AddMember(tag, it.second, *mAllocator);
     }
     return valueGroup;
 }
@@ -173,8 +173,8 @@ void JsonSerializer::addValue(const std::string &name, rapidjson::Value &&value)
     }
     else
     {
-        rapidjson::Value nameValue(name, mAllocator);
-        mDoc.AddMember(nameValue, std::move(value), mAllocator);
+        rapidjson::Value nameValue(name, *mAllocator);
+        mDoc.AddMember(nameValue, std::move(value), *mAllocator);
     }
 }
 }  // namespace angle

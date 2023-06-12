@@ -8,6 +8,7 @@
 
 #include "compiler/translator/tree_ops/RewriteDfdy.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/angleutils.h"
 #include "compiler/translator/SymbolTable.h"
 #include "compiler/translator/TranslatorVulkan.h"
@@ -30,8 +31,8 @@ class Traverser : public TIntermTraverser
   private:
     bool visitAggregate(Visit visit, TIntermAggregate *node) override;
 
-    SpecConst *mSpecConst                = nullptr;
-    const DriverUniform *mDriverUniforms = nullptr;
+    raw_ptr<SpecConst> mSpecConst                = nullptr;
+    raw_ptr<const DriverUniform> mDriverUniforms = nullptr;
 };
 
 Traverser::Traverser(TSymbolTable *symbolTable,

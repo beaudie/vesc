@@ -10,6 +10,7 @@
 #ifndef COMMON_FRAME_CAPTURE_UTILS_H_
 #define COMMON_FRAME_CAPTURE_UTILS_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/frame_capture_utils_autogen.h"
 #include "common/gl_enum_utils_autogen.h"
 
@@ -385,12 +386,12 @@ void WriteParamValueReplay(std::ostream &os, const CallCapture &call, T value)
 struct FmtPointerIndex
 {
     FmtPointerIndex(const void *ptrIn) : ptr(ptrIn) {}
-    const void *ptr;
+    raw_ptr<const void> ptr;
 };
 
 inline std::ostream &operator<<(std::ostream &os, const FmtPointerIndex &fmt)
 {
-    os << reinterpret_cast<uintptr_t>(fmt.ptr) << "ul";
+    os << reinterpret_cast<uintptr_t>(fmt.ptr.get()) << "ul";
     return os;
 }
 

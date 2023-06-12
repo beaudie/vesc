@@ -12,6 +12,8 @@
 #define LIBANGLE_UNIFORMLINKER_H_
 
 #include "angle_gl.h"
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "common/PackedEnums.h"
 #include "common/angleutils.h"
 #include "libANGLE/VaryingPacking.h"
@@ -92,7 +94,7 @@ class UniformLinker final : angle::NonCopyable
     void pruneUnusedUniforms();
 
     ShaderBitSet mActiveShaderStages;
-    const ShaderMap<std::vector<sh::ShaderVariable>> &mShaderUniforms;
+    const raw_ref<const ShaderMap<std::vector<sh::ShaderVariable>>> mShaderUniforms;
     std::vector<LinkedUniform> mUniforms;
     std::vector<UnusedUniform> mUnusedUniforms;
     std::vector<VariableLocation> mUniformLocations;
@@ -144,8 +146,8 @@ class InterfaceBlockLinker : angle::NonCopyable
 
     ShaderMap<const std::vector<sh::InterfaceBlock> *> mShaderBlocks = {};
 
-    std::vector<InterfaceBlock> *mBlocksOut             = nullptr;
-    std::vector<std::string> *mUnusedInterfaceBlocksOut = nullptr;
+    raw_ptr<std::vector<InterfaceBlock>> mBlocksOut             = nullptr;
+    raw_ptr<std::vector<std::string>> mUnusedInterfaceBlocksOut = nullptr;
 };
 
 class UniformBlockLinker final : public InterfaceBlockLinker
@@ -167,7 +169,7 @@ class UniformBlockLinker final : public InterfaceBlockLinker
                                           ShaderType shaderType,
                                           int blockIndex) const override;
 
-    std::vector<LinkedUniform> *mUniformsOut = nullptr;
+    raw_ptr<std::vector<LinkedUniform>> mUniformsOut = nullptr;
 };
 
 class ShaderStorageBlockLinker final : public InterfaceBlockLinker
@@ -189,7 +191,7 @@ class ShaderStorageBlockLinker final : public InterfaceBlockLinker
                                           ShaderType shaderType,
                                           int blockIndex) const override;
 
-    std::vector<BufferVariable> *mBufferVariablesOut = nullptr;
+    raw_ptr<std::vector<BufferVariable>> mBufferVariablesOut = nullptr;
 };
 
 class AtomicCounterBufferLinker final : angle::NonCopyable
@@ -202,7 +204,7 @@ class AtomicCounterBufferLinker final : angle::NonCopyable
     void link(const std::map<int, unsigned int> &sizeMap) const;
 
   private:
-    std::vector<AtomicCounterBuffer> *mAtomicCounterBuffersOut = nullptr;
+    raw_ptr<std::vector<AtomicCounterBuffer>> mAtomicCounterBuffersOut = nullptr;
 };
 
 // The link operation is responsible for finishing the link of uniform and interface blocks.
@@ -287,7 +289,7 @@ class ProgramLinkedResourcesLinker final : angle::NonCopyable
     void getAtomicCounterBufferSizeMap(const ProgramState &programState,
                                        std::map<int, unsigned int> &sizeMapOut) const;
 
-    CustomBlockLayoutEncoderFactory *mCustomEncoderFactory;
+    raw_ptr<CustomBlockLayoutEncoderFactory> mCustomEncoderFactory;
 };
 
 using ShaderInterfaceBlock = std::pair<ShaderType, const sh::InterfaceBlock *>;

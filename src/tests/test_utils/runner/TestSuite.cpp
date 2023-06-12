@@ -8,6 +8,7 @@
 
 #include "TestSuite.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/debug.h"
 #include "common/platform.h"
 #include "common/string_utils.h"
@@ -829,11 +830,11 @@ void MetricWriter::writeInfo(const std::string &name,
     }
     ASSERT(mFile != nullptr);
 
-    fprintf(mFile, "{\"name\":\"%s\",", name.c_str());
-    fprintf(mFile, "\"backend\":\"%s\",", backend.c_str());
-    fprintf(mFile, "\"story\":\"%s\",", story.c_str());
-    fprintf(mFile, "\"metric\":\"%s\",", metric.c_str());
-    fprintf(mFile, "\"units\":\"%s\",", units.c_str());
+    fprintf(mFile.get(), "{\"name\":\"%s\",", name.c_str());
+    fprintf(mFile.get(), "\"backend\":\"%s\",", backend.c_str());
+    fprintf(mFile.get(), "\"story\":\"%s\",", story.c_str());
+    fprintf(mFile.get(), "\"metric\":\"%s\",", metric.c_str());
+    fprintf(mFile.get(), "\"units\":\"%s\",", units.c_str());
     // followed by writing value, so no closing bracket yet
 }
 
@@ -841,7 +842,7 @@ void MetricWriter::writeDoubleValue(double value)
 {
     if (mFile != nullptr)
     {
-        fprintf(mFile, "\"value\":\"%lf\"}\n", value);
+        fprintf(mFile.get(), "\"value\":\"%lf\"}\n", value);
     }
 }
 
@@ -849,7 +850,7 @@ void MetricWriter::writeIntegerValue(size_t value)
 {
     if (mFile != nullptr)
     {
-        fprintf(mFile, "\"value\":\"%zu\"}\n", value);
+        fprintf(mFile.get(), "\"value\":\"%zu\"}\n", value);
     }
 }
 
@@ -950,7 +951,7 @@ class TestSuite::TestEventListener : public testing::EmptyTestEventListener
     }
 
   private:
-    TestSuite *mTestSuite;
+    raw_ptr<TestSuite> mTestSuite;
 };
 
 TestSuite::TestSuite(int *argc, char **argv) : TestSuite(argc, argv, []() {}) {}

@@ -9,6 +9,7 @@
 #ifndef LIBANGLE_VALIDATIONEGL_H_
 #define LIBANGLE_VALIDATIONEGL_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/PackedEnums.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/Thread.h"
@@ -49,9 +50,9 @@ struct ValidationContext
     ANGLE_FORMAT_PRINTF(3, 4)
     void setError(EGLint error, const char *message...) const;
 
-    Thread *eglThread;
+    raw_ptr<Thread> eglThread;
     const char *entryPoint;
-    const LabeledObject *labeledObject;
+    raw_ptr<const LabeledObject> labeledObject;
 };
 
 // Object validation

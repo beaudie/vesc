@@ -1621,7 +1621,7 @@ void QueryVertexAttribPointerv(const VertexAttribute &attrib, GLenum pname, void
     switch (pname)
     {
         case GL_VERTEX_ATTRIB_ARRAY_POINTER:
-            *pointer = const_cast<void *>(attrib.pointer);
+            *pointer = const_cast<void *>(attrib.pointer.get());
             break;
 
         default:

@@ -16,6 +16,7 @@
 
 #include "compiler/translator/tree_util/FindPreciseNodes.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/hash_utils.h"
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/IntermNode.h"
@@ -474,8 +475,8 @@ class InfoGatherTraverser : public TIntermTraverser
         TraverseIndexNodesOnly(lvalueNode, this);
     }
 
-    ASTInfo *mInfo                    = nullptr;
-    const TFunction *mCurrentFunction = nullptr;
+    raw_ptr<ASTInfo> mInfo                    = nullptr;
+    raw_ptr<const TFunction> mCurrentFunction = nullptr;
 };
 
 // A traverser that, given an access chain, traverses an expression and marks parts of it |precise|.
@@ -630,7 +631,7 @@ class PropagatePreciseTraverser : public TIntermTraverser
     }
 
   private:
-    ASTInfo *mInfo = nullptr;
+    raw_ptr<ASTInfo> mInfo = nullptr;
     AccessChain mCurrentAccessChain;
 };
 }  // anonymous namespace

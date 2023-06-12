@@ -6,6 +6,7 @@
 
 #include "compiler/translator/ValidateAST.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/utilities.h"
 #include "compiler/translator/Diagnostics.h"
 #include "compiler/translator/ImmutableStringBuilder.h"
@@ -79,7 +80,7 @@ class ValidateAST : public TIntermTraverser
     bool validateInternal();
 
     ValidateASTOptions mOptions;
-    TDiagnostics *mDiagnostics;
+    raw_ptr<TDiagnostics> mDiagnostics;
 
     // For validateSingleParent:
     std::map<TIntermNode *, TIntermNode *> mParent;

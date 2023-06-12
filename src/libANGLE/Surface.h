@@ -15,6 +15,7 @@
 
 #include <EGL/egl.h>
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/PackedEnums.h"
 #include "common/angleutils.h"
 #include "libANGLE/AttributeMap.h"
@@ -57,7 +58,7 @@ struct SurfaceState final : private angle::NonCopyable
     SurfaceID id;
 
     EGLLabelKHR label;
-    const egl::Config *config;
+    raw_ptr<const egl::Config> config;
     AttributeMap attributes;
 
     bool timestampsEnabled;
@@ -278,7 +279,7 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
 
     // We don't use a binding pointer here. We don't ever want to own an orphaned texture. If a
     // Texture is deleted the Surface is unbound in onDestroy.
-    gl::Texture *mTexture;
+    raw_ptr<gl::Texture> mTexture;
 
     gl::Format mColorFormat;
     gl::Format mDSFormat;
@@ -373,7 +374,7 @@ class [[nodiscard]] ScopedSurfaceRef
     }
 
   private:
-    Surface *const mSurface;
+    const raw_ptr<Surface> mSurface;
 };
 
 class SurfaceDeleter final
@@ -384,7 +385,7 @@ class SurfaceDeleter final
     void operator()(Surface *surface);
 
   private:
-    const Display *mDisplay;
+    raw_ptr<const Display> mDisplay;
 };
 
 using SurfacePointer = std::unique_ptr<Surface, SurfaceDeleter>;

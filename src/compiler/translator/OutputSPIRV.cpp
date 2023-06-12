@@ -9,6 +9,8 @@
 #include "compiler/translator/OutputSPIRV.h"
 
 #include "angle_gl.h"
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "common/debug.h"
 #include "common/mathutil.h"
 #include "common/spirv/spirv_instruction_builder_autogen.h"
@@ -364,8 +366,8 @@ class OutputSPIRVTraverser : public TIntermTraverser
                                                spirv::IdRef structValue,
                                                uint32_t fieldIndex);
 
-    TCompiler *mCompiler;
-    ANGLE_MAYBE_UNUSED_PRIVATE_FIELD const ShCompileOptions &mCompileOptions;
+    raw_ptr<TCompiler> mCompiler;
+    ANGLE_MAYBE_UNUSED_PRIVATE_FIELD const raw_ref<const ShCompileOptions> mCompileOptions;
 
     SPIRVBuilder mBuilder;
 
@@ -5980,7 +5982,7 @@ bool OutputSPIRVTraverser::visitDeclaration(Visit visit, TIntermDeclaration *nod
             // To resolve the deqp test failure, we will add an OpQuantizeToF16
             // SpirV instruction to explicitly cast mediump float scalar or mediump float
             // vector to 16 bit, if the right-hand-side is a highp float.
-            if (mCompileOptions.castMediumpFloatTo16Bit)
+            if (mCompileOptions->castMediumpFloatTo16Bit)
             {
                 const TType leftType            = assign->getLeft()->getType();
                 const TType rightType           = assign->getRight()->getType();
@@ -6114,7 +6116,7 @@ bool OutputSPIRVTraverser::visitDeclaration(Visit visit, TIntermDeclaration *nod
         spirv::WriteDecorate(mBuilder.getSpirvDecorations(), nonArrayTypeId, decoration, {});
 
         if (type.getQualifier() == EvqBuffer && !memoryQualifier.restrictQualifier &&
-            mCompileOptions.aliasedUnlessRestrict)
+            mCompileOptions->aliasedUnlessRestrict)
         {
             // If GLSL does not specify the SSBO has restrict memory qualifier, assume the
             // memory qualifier is aliased
@@ -6128,7 +6130,7 @@ bool OutputSPIRVTraverser::visitDeclaration(Visit visit, TIntermDeclaration *nod
         // If GLSL does not specify the image has restrict memory qualifier, assume the memory
         // qualifier is aliased
         // issuetracker.google.com/266235549
-        if (!memoryQualifier.restrictQualifier && mCompileOptions.aliasedUnlessRestrict)
+        if (!memoryQualifier.restrictQualifier && mCompileOptions->aliasedUnlessRestrict)
         {
             spirv::WriteDecorate(mBuilder.getSpirvDecorations(), variableId, spv::DecorationAliased,
                                  {});

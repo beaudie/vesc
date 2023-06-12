@@ -8,6 +8,7 @@
 
 #include "compiler/translator/tree_ops/vulkan/EmulateFragColorData.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/ImmutableStringBuilder.h"
 #include "compiler/translator/SymbolTable.h"
@@ -105,7 +106,7 @@ class EmulateFragColorDataTraverser : public TIntermTraverser
     }
 
   private:
-    const ShBuiltInResources &mResources;
+    const raw_ref<const ShBuiltInResources> mResources;
 
     // A map of already replaced built-in variables.
     VariableReplacementMap mVariableMap;

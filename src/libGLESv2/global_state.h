@@ -9,6 +9,7 @@
 #ifndef LIBGLESV2_GLOBALSTATE_H_
 #define LIBGLESV2_GLOBALSTATE_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "libANGLE/Context.h"
 #include "libANGLE/Debug.h"
 #include "libANGLE/GlobalMutex.h"
@@ -46,7 +47,7 @@ class [[nodiscard]] ScopedSyncCurrentContextFromThread
     ~ScopedSyncCurrentContextFromThread();
 
   private:
-    egl::Thread *const mThread;
+    const raw_ptr<egl::Thread> mThread;
 };
 
 }  // namespace egl

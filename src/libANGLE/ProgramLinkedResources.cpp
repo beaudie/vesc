@@ -10,6 +10,8 @@
 
 #include "libANGLE/ProgramLinkedResources.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "common/string_utils.h"
 #include "common/utilities.h"
 #include "libANGLE/Caps.h"
@@ -222,7 +224,7 @@ class UniformBlockEncodingVisitor : public sh::VariableNameVisitor
     {
         // If getBlockMemberInfo returns false, the variable is optimized out.
         sh::BlockMemberInfo variableInfo;
-        if (!mGetMemberInfo(name, mappedName, &variableInfo))
+        if (!(*mGetMemberInfo)(name, mappedName, &variableInfo))
             return;
 
         std::string nameWithArrayIndex       = name;
@@ -236,7 +238,7 @@ class UniformBlockEncodingVisitor : public sh::VariableNameVisitor
 
         if (mBlockIndex == -1)
         {
-            SetActive(mUniformsOut, nameWithArrayIndex, mShaderType, variable.active);
+            SetActive(mUniformsOut.get(), nameWithArrayIndex, mShaderType, variable.active);
             return;
         }
 
@@ -251,8 +253,8 @@ class UniformBlockEncodingVisitor : public sh::VariableNameVisitor
     }
 
   private:
-    const GetBlockMemberInfoFunc &mGetMemberInfo;
-    std::vector<LinkedUniform> *mUniformsOut;
+    const raw_ref<const GetBlockMemberInfoFunc> mGetMemberInfo;
+    raw_ptr<std::vector<LinkedUniform>> mUniformsOut;
     const ShaderType mShaderType;
     const int mBlockIndex;
 };
@@ -286,7 +288,7 @@ class ShaderStorageBlockVisitor : public sh::BlockEncoderVisitor
 
         // If getBlockMemberInfo returns false, the variable is optimized out.
         sh::BlockMemberInfo variableInfo;
-        if (!mGetMemberInfo(name, mappedName, &variableInfo))
+        if (!(*mGetMemberInfo)(name, mappedName, &variableInfo))
             return;
 
         std::string nameWithArrayIndex       = name;
@@ -300,7 +302,7 @@ class ShaderStorageBlockVisitor : public sh::BlockEncoderVisitor
 
         if (mBlockIndex == -1)
         {
-            SetActive(mBufferVariablesOut, nameWithArrayIndex, mShaderType, variable.active);
+            SetActive(mBufferVariablesOut.get(), nameWithArrayIndex, mShaderType, variable.active);
             return;
         }
 
@@ -315,8 +317,8 @@ class ShaderStorageBlockVisitor : public sh::BlockEncoderVisitor
     }
 
   private:
-    const GetBlockMemberInfoFunc &mGetMemberInfo;
-    std::vector<BufferVariable> *mBufferVariablesOut;
+    const raw_ref<const GetBlockMemberInfoFunc> mGetMemberInfo;
+    raw_ptr<std::vector<BufferVariable>> mBufferVariablesOut;
     const ShaderType mShaderType;
     const int mBlockIndex;
     sh::StubBlockEncoder mStubEncoder;
@@ -546,12 +548,12 @@ class FlattenUniformVisitor : public sh::VariableNameVisitor
     int mBinding;
     int mOffset;
     int mLocation;
-    std::vector<LinkedUniform> *mUniforms;
-    std::vector<LinkedUniform> *mSamplerUniforms;
-    std::vector<LinkedUniform> *mImageUniforms;
-    std::vector<LinkedUniform> *mAtomicCounterUniforms;
-    std::vector<LinkedUniform> *mInputAttachmentUniforms;
-    std::vector<UnusedUniform> *mUnusedUniforms;
+    raw_ptr<std::vector<LinkedUniform>> mUniforms;
+    raw_ptr<std::vector<LinkedUniform>> mSamplerUniforms;
+    raw_ptr<std::vector<LinkedUniform>> mImageUniforms;
+    raw_ptr<std::vector<LinkedUniform>> mAtomicCounterUniforms;
+    raw_ptr<std::vector<LinkedUniform>> mInputAttachmentUniforms;
+    raw_ptr<std::vector<UnusedUniform>> mUnusedUniforms;
     std::vector<unsigned int> mArrayElementStack;
     ShaderUniformCount mUniformCount;
     unsigned int mStructStackSize = 0;
@@ -578,7 +580,7 @@ class InterfaceBlockInfo final : angle::NonCopyable
     sh::BlockLayoutMap mBlockLayout;
     // Based on the interface block layout, the std140 or std430 encoders are used.  On some
     // platforms (currently only D3D), there could be another non-standard encoder used.
-    CustomBlockLayoutEncoderFactory *mCustomEncoderFactory;
+    raw_ptr<CustomBlockLayoutEncoderFactory> mCustomEncoderFactory;
 };
 
 void InterfaceBlockInfo::getShaderBlockInfo(const std::vector<sh::InterfaceBlock> &interfaceBlocks)
@@ -934,7 +936,7 @@ bool UniformLinker::validateGraphicsUniforms(InfoLog &infoLog) const
     {
         if (shaderType == ShaderType::Vertex)
         {
-            for (const sh::ShaderVariable &vertexUniform : mShaderUniforms[ShaderType::Vertex])
+            for (const sh::ShaderVariable &vertexUniform : (*mShaderUniforms)[ShaderType::Vertex])
             {
                 linkedUniforms[vertexUniform.name] =
                     std::make_pair(ShaderType::Vertex, &vertexUniform);
@@ -962,7 +964,7 @@ bool UniformLinker::validateGraphicsUniformsPerShader(
 {
     ASSERT(mActiveShaderStages[shaderToLink] && linkedUniforms);
 
-    for (const sh::ShaderVariable &uniform : mShaderUniforms[shaderToLink])
+    for (const sh::ShaderVariable &uniform : (*mShaderUniforms)[shaderToLink])
     {
         const auto &entry = linkedUniforms->find(uniform.name);
         if (entry != linkedUniforms->end())
@@ -1185,7 +1187,7 @@ bool UniformLinker::flattenUniformsAndCheckCapsForShader(
     InfoLog &infoLog)
 {
     ShaderUniformCount shaderUniformCount;
-    for (const sh::ShaderVariable &uniform : mShaderUniforms[shaderType])
+    for (const sh::ShaderVariable &uniform : (*mShaderUniforms)[shaderType])
     {
         FlattenUniformVisitor flattener(shaderType, uniform, &mUniforms, &samplerUniforms,
                                         &imageUniforms, &atomicCounterUniforms,

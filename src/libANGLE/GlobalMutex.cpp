@@ -171,12 +171,12 @@ ScopedGlobalMutexLock::~ScopedGlobalMutexLock()
 #else
 ScopedGlobalMutexLock::ScopedGlobalMutexLock() : mMutex(*GetGlobalMutex())
 {
-    mMutex.lock();
+    mMutex->lock();
 }
 
 ScopedGlobalMutexLock::~ScopedGlobalMutexLock()
 {
-    mMutex.unlock();
+    mMutex->unlock();
 }
 #endif
 

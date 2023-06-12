@@ -9,6 +9,7 @@
 #ifndef LIBANGLE_IMAGE_H_
 #define LIBANGLE_IMAGE_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/FastVector.h"
 #include "common/angleutils.h"
 #include "libANGLE/AttributeMap.h"
@@ -140,7 +141,7 @@ struct ImageState : private angle::NonCopyable
     EGLLabelKHR label;
     EGLenum target;
     gl::ImageIndex imageIndex;
-    ImageSibling *source;
+    raw_ptr<ImageSibling> source;
 
     gl::Format format;
     bool yuv;

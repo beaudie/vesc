@@ -7,6 +7,7 @@
 #ifndef COMPILER_PREPROCESSOR_EXPRESSIONPARSER_H_
 #define COMPILER_PREPROCESSOR_EXPRESSIONPARSER_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/angleutils.h"
 #include "compiler/preprocessor/DiagnosticsBase.h"
 
@@ -37,8 +38,8 @@ class ExpressionParser : angle::NonCopyable
                bool *valid);
 
   private:
-    Lexer *mLexer;
-    Diagnostics *mDiagnostics;
+    raw_ptr<Lexer> mLexer;
+    raw_ptr<Diagnostics> mDiagnostics;
 };
 
 }  // namespace pp

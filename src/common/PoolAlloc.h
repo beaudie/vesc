@@ -10,6 +10,8 @@
 #ifndef COMMON_POOLALLOC_H_
 #define COMMON_POOLALLOC_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
+
 #if !defined(NDEBUG)
 #    define ANGLE_POOL_ALLOC_GUARD_BLOCKS  // define to enable guard block checking
 #endif
@@ -115,7 +117,7 @@ class PoolAllocator : angle::NonCopyable
             //
             // Safe to allocate from mCurrentPageOffset.
             //
-            uint8_t *memory = reinterpret_cast<uint8_t *>(mInUseList) + mCurrentPageOffset;
+            uint8_t *memory = reinterpret_cast<uint8_t *>(mInUseList.get()) + mCurrentPageOffset;
             mCurrentPageOffset += numBytes;
             return memory;
         }
@@ -139,7 +141,7 @@ class PoolAllocator : angle::NonCopyable
     struct AllocState
     {
         size_t offset;
-        PageHeader *page;
+        raw_ptr<PageHeader> page;
     };
     using AllocStack = std::vector<AllocState>;
 
@@ -159,10 +161,10 @@ class PoolAllocator : angle::NonCopyable
     // pointer size).
     size_t mCurrentPageOffset;
     // List of popped memory
-    PageHeader *mFreeList;
+    raw_ptr<PageHeader> mFreeList;
     // List of all memory currently being used.  The head of this list is where allocations are
     // currently being made from.
-    PageHeader *mInUseList;
+    raw_ptr<PageHeader> mInUseList;
     // Stack of where to allocate from, to partition pool
     AllocStack mStack;
 

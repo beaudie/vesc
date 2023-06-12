@@ -39,16 +39,16 @@ void TDiagnostics::writeInfo(Severity severity,
     }
 
     /* VC++ format: file(linenum) : error #: 'token' : extrainfo */
-    mInfoSink.prefix(severity);
-    mInfoSink.location(loc.file, loc.line);
-    mInfoSink << "'" << token << "' : " << reason << "\n";
+    mInfoSink->prefix(severity);
+    mInfoSink->location(loc.file, loc.line);
+    (*mInfoSink) << "'" << token << "' : " << reason << "\n";
 }
 
 void TDiagnostics::globalError(const char *message)
 {
     ++mNumErrors;
-    mInfoSink.prefix(SH_ERROR);
-    mInfoSink << message << "\n";
+    mInfoSink->prefix(SH_ERROR);
+    (*mInfoSink) << message << "\n";
 }
 
 void TDiagnostics::error(const angle::pp::SourceLocation &loc,

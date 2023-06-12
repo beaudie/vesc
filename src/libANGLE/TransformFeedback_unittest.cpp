@@ -4,6 +4,7 @@
 // found in the LICENSE file.
 //
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
@@ -44,7 +45,7 @@ class TransformFeedbackTest : public testing::Test
         mFeedback = new gl::TransformFeedback(&mMockFactory, gl::TransformFeedbackID{1}, mCaps);
         mFeedback->addRef();
 
-        mImpl = rx::GetImplAs<rx::MockTransformFeedbackImpl>(mFeedback);
+        mImpl = rx::GetImplAs<rx::MockTransformFeedbackImpl>(mFeedback.get());
         EXPECT_CALL(*mImpl, destructor());
     }
 
@@ -62,8 +63,8 @@ class TransformFeedbackTest : public testing::Test
     }
 
     rx::MockGLFactory mMockFactory;
-    rx::MockTransformFeedbackImpl *mImpl;
-    gl::TransformFeedback *mFeedback;
+    raw_ptr<rx::MockTransformFeedbackImpl> mImpl;
+    raw_ptr<gl::TransformFeedback> mFeedback;
     gl::Caps mCaps;
 };
 

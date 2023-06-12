@@ -143,6 +143,7 @@
 
 #include <string>
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/event_tracer.h"
 
 // By default, const char* argument values are assumed to have long-lived scope
@@ -736,7 +737,7 @@ class TraceEndOnScopeClose
 {
   public:
     // Note: members of m_data intentionally left uninitialized. See initialize.
-    TraceEndOnScopeClose() : m_pdata(0) {}
+    TraceEndOnScopeClose() : m_pdata(nullptr) {}
     ~TraceEndOnScopeClose()
     {
         if (m_pdata)
@@ -773,11 +774,11 @@ class TraceEndOnScopeClose
     // uninitialized accesses.
     struct Data
     {
-        angle::PlatformMethods *platform;
+        raw_ptr<angle::PlatformMethods> platform;
         const unsigned char *categoryEnabled;
         const char *name;
     };
-    Data *m_pdata;
+    raw_ptr<Data> m_pdata;
     Data m_data;
 };
 

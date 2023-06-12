@@ -6,6 +6,7 @@
 
 // SystemInfo_libpci.cpp: implementation of the libPCI-specific parts of SystemInfo.h
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "gpu_info_util/SystemInfo_internal.h"
 
 #include <dlfcn.h>
@@ -80,8 +81,8 @@ struct LibPCI : private angle::NonCopyable
     decltype(&::pci_read_byte) PCIReadByte  = nullptr;
 
   private:
-    void *mHandle = nullptr;
-    bool mValid   = false;
+    raw_ptr<void> mHandle = nullptr;
+    bool mValid           = false;
 };
 
 }  // anonymous namespace

@@ -7,6 +7,7 @@
 #ifndef COMPILER_PREPROCESSOR_DIRECTIVEPARSER_H_
 #define COMPILER_PREPROCESSOR_DIRECTIVEPARSER_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "compiler/preprocessor/Lexer.h"
 #include "compiler/preprocessor/Macro.h"
 #include "compiler/preprocessor/Preprocessor.h"
@@ -75,10 +76,10 @@ class DirectiveParser : public Lexer
                                      // macros, such as
                                      // #extension must be declared before all shader code.
     std::vector<ConditionalBlock> mConditionalStack;
-    Tokenizer *mTokenizer;
-    MacroSet *mMacroSet;
-    Diagnostics *mDiagnostics;
-    DirectiveHandler *mDirectiveHandler;
+    raw_ptr<Tokenizer> mTokenizer;
+    raw_ptr<MacroSet> mMacroSet;
+    raw_ptr<Diagnostics> mDiagnostics;
+    raw_ptr<DirectiveHandler> mDirectiveHandler;
     int mShaderVersion;
     const PreprocessorSettings mSettings;
 };

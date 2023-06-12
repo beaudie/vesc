@@ -6,6 +6,7 @@
 
 #include "compiler/translator/ValidateSwitch.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "compiler/translator/Diagnostics.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
 
@@ -46,7 +47,7 @@ class ValidateSwitch : public TIntermTraverser
     bool validateInternal(const TSourceLoc &loc);
 
     TBasicType mSwitchType;
-    TDiagnostics *mDiagnostics;
+    raw_ptr<TDiagnostics> mDiagnostics;
     bool mCaseTypeMismatch;
     bool mFirstCaseFound;
     bool mStatementBeforeCase;

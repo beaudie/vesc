@@ -8,6 +8,8 @@
 
 #include "compiler/translator/tree_ops/RewriteArrayOfArrayOfOpaqueUniforms.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/ImmutableStringBuilder.h"
 #include "compiler/translator/SymbolTable.h"
@@ -23,7 +25,7 @@ struct UniformData
 {
     // Corresponding to an array of array of opaque uniform variable, this is the flattened variable
     // that is replacing it.
-    const TVariable *flattened;
+    raw_ptr<const TVariable> flattened;
     // Assume a general case of array declaration with N dimensions:
     //
     //     uniform type u[Dn]..[D2][D1];
@@ -63,7 +65,7 @@ class RewriteExpressionTraverser final : public TIntermTraverser
     bool visitBinary(Visit visit, TIntermBinary *node) override
     {
         TIntermTyped *rewritten =
-            RewriteArrayOfArraySubscriptExpression(mCompiler, node, mUniformMap);
+            RewriteArrayOfArraySubscriptExpression(mCompiler, node, *mUniformMap);
         if (rewritten == nullptr)
         {
             return true;
@@ -80,13 +82,13 @@ class RewriteExpressionTraverser final : public TIntermTraverser
         // We cannot reach here for an opaque uniform that is being replaced.  visitBinary should
         // have taken care of it.
         ASSERT(!IsOpaqueType(node->getType().getBasicType()) ||
-               mUniformMap.find(&node->variable()) == mUniformMap.end());
+               mUniformMap->find(&node->variable()) == mUniformMap->end());
     }
 
   private:
-    TCompiler *mCompiler;
+    raw_ptr<TCompiler> mCompiler;
 
-    const UniformMap &mUniformMap;
+    const raw_ref<const UniformMap> mUniformMap;
 };
 
 // Rewrite the index of an EOpIndexIndirect expression.  The root can never need replacing, because
@@ -332,7 +334,7 @@ class RewriteArrayOfArrayOfOpaqueUniformsTraverser : public TIntermTraverser
     }
 
   private:
-    TCompiler *mCompiler;
+    raw_ptr<TCompiler> mCompiler;
     UniformMap mUniformMap;
 };
 }  // anonymous namespace

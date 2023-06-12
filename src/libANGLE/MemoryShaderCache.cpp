@@ -36,13 +36,14 @@ angle::Result MemoryShaderCache::getShader(const Context *context,
                                            const egl::BlobCache::Key &shaderHash)
 {
     // If caching is effectively disabled, don't bother calculating the hash.
-    if (!mBlobCache.isCachingEnabled())
+    if (!mBlobCache->isCachingEnabled())
     {
         return angle::Result::Incomplete;
     }
 
     angle::MemoryBuffer uncompressedData;
-    switch (mBlobCache.getAndDecompress(context->getScratchBuffer(), shaderHash, &uncompressedData))
+    switch (
+        mBlobCache->getAndDecompress(context->getScratchBuffer(), shaderHash, &uncompressedData))
     {
         case egl::BlobCache::GetAndDecompressResult::DecompressFailure:
             ANGLE_PERF_WARNING(context->getState().getDebug(), GL_DEBUG_SEVERITY_LOW,
@@ -69,7 +70,7 @@ angle::Result MemoryShaderCache::getShader(const Context *context,
             // Cache load failed, evict.
             ANGLE_PERF_WARNING(context->getState().getDebug(), GL_DEBUG_SEVERITY_LOW,
                                "Failed to load shader binary from cache.");
-            mBlobCache.remove(shaderHash);
+            mBlobCache->remove(shaderHash);
             return angle::Result::Incomplete;
     }
 
@@ -82,7 +83,7 @@ angle::Result MemoryShaderCache::putShader(const Context *context,
                                            const Shader *shader)
 {
     // If caching is effectively disabled, don't bother serializing the shader.
-    if (!mBlobCache.isCachingEnabled())
+    if (!mBlobCache->isCachingEnabled())
     {
         return angle::Result::Incomplete;
     }
@@ -91,7 +92,7 @@ angle::Result MemoryShaderCache::putShader(const Context *context,
     ANGLE_TRY(shader->serialize(nullptr, &serializedShader));
 
     size_t compressedSize;
-    if (!mBlobCache.compressAndPut(shaderHash, std::move(serializedShader), &compressedSize))
+    if (!mBlobCache->compressAndPut(shaderHash, std::move(serializedShader), &compressedSize))
     {
         ANGLE_PERF_WARNING(context->getState().getDebug(), GL_DEBUG_SEVERITY_LOW,
                            "Error compressing shader binary data for insertion into cache.");
@@ -109,12 +110,12 @@ angle::Result MemoryShaderCache::putShader(const Context *context,
 
 void MemoryShaderCache::clear()
 {
-    mBlobCache.clear();
+    mBlobCache->clear();
 }
 
 size_t MemoryShaderCache::maxSize() const
 {
-    return mBlobCache.maxSize();
+    return mBlobCache->maxSize();
 }
 
 }  // namespace gl

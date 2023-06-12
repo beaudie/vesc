@@ -123,12 +123,12 @@ void WaylandWindow::setNativeDisplay(EGLNativeDisplayType display)
 
 EGLNativeWindowType WaylandWindow::getNativeWindow() const
 {
-    return reinterpret_cast<EGLNativeWindowType>(mWindow);
+    return reinterpret_cast<EGLNativeWindowType>(mWindow.get());
 }
 
 EGLNativeDisplayType WaylandWindow::getNativeDisplay() const
 {
-    return reinterpret_cast<EGLNativeDisplayType>(mDisplay);
+    return reinterpret_cast<EGLNativeDisplayType>(mDisplay.get());
 }
 
 void WaylandWindow::messageLoop()

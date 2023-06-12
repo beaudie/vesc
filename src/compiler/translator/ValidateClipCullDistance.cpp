@@ -9,6 +9,7 @@
 
 #include "ValidateClipCullDistance.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "compiler/translator/Diagnostics.h"
 #include "compiler/translator/SymbolTable.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
@@ -51,8 +52,8 @@ class ValidateClipCullDistanceTraverser : public TIntermTraverser
     bool mHasNonConstClipDistanceIndex;
     bool mHasNonConstCullDistanceIndex;
 
-    const TIntermSymbol *mClipDistance;
-    const TIntermSymbol *mCullDistance;
+    raw_ptr<const TIntermSymbol> mClipDistance;
+    raw_ptr<const TIntermSymbol> mCullDistance;
 };
 
 ValidateClipCullDistanceTraverser::ValidateClipCullDistanceTraverser()
@@ -233,7 +234,8 @@ void ValidateClipCullDistanceTraverser::validate(TDiagnostics *diagnostics,
     if (combinedClipAndCullDistances > maxCombinedClipAndCullDistances)
     {
         const TIntermSymbol *greaterSymbol =
-            (enabledClipDistances >= enabledCullDistances ? mClipDistance : mCullDistance);
+            (enabledClipDistances >= enabledCullDistances ? mClipDistance.get()
+                                                          : mCullDistance.get());
 
         std::stringstream strstr = sh::InitializeStream<std::stringstream>();
         strstr << "The sum of 'gl_ClipDistance' and 'gl_CullDistance' size is greater than "

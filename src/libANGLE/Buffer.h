@@ -11,6 +11,7 @@
 #ifndef LIBANGLE_BUFFER_H_
 #define LIBANGLE_BUFFER_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/PackedEnums.h"
 #include "common/angleutils.h"
 #include "libANGLE/Debug.h"
@@ -76,7 +77,7 @@ struct ContentsObserver
     uint32_t bufferIndex                          = 0;
 
     // VertexArray* (bufferIndex != kBufferTextureIndex) or Texture*
-    void *observer = nullptr;
+    raw_ptr<void> observer = nullptr;
 };
 
 ANGLE_INLINE bool operator==(const ContentsObserver &lhs, const ContentsObserver &rhs)

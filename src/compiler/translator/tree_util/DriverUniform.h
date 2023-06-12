@@ -9,6 +9,7 @@
 #ifndef COMPILER_TRANSLATOR_TREEUTIL_DRIVERUNIFORM_H_
 #define COMPILER_TRANSLATOR_TREEUTIL_DRIVERUNIFORM_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/angleutils.h"
 #include "compiler/translator/Types.h"
 
@@ -81,8 +82,8 @@ class DriverUniform
     const TType *createEmulatedDepthRangeType(TSymbolTable *symbolTable);
 
     const DriverUniformMode mMode;
-    const TVariable *mDriverUniforms;
-    TType *mEmulatedDepthRangeType;
+    raw_ptr<const TVariable> mDriverUniforms;
+    raw_ptr<TType> mEmulatedDepthRangeType;
 };
 
 class DriverUniformExtended : public DriverUniform

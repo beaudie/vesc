@@ -12,6 +12,7 @@
 
 #include "GLSLANG/ShaderLang.h"
 #include "angle_gl.h"
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "compiler/translator/PoolAlloc.h"
 #include "gtest/gtest.h"
 
@@ -48,10 +49,10 @@ class ShaderCompileTreeTest : public testing::Test
     std::string mInfoLog;
     ShCompileOptions mCompileOptions;
 
-    TIntermBlock *mASTRoot;
+    raw_ptr<TIntermBlock> mASTRoot;
 
   private:
-    TranslatorESSL *mTranslator;
+    raw_ptr<TranslatorESSL> mTranslator;
 
     angle::PoolAllocator mAllocator;
 };

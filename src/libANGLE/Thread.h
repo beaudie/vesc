@@ -11,6 +11,7 @@
 
 #include <EGL/egl.h>
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "libANGLE/Debug.h"
 
 #include <atomic>
@@ -68,7 +69,7 @@ class Thread : public LabeledObject
     EGLLabelKHR mLabel;
     EGLint mError;
     EGLenum mAPI;
-    gl::Context *mContext;
+    raw_ptr<gl::Context> mContext;
 };
 
 void EnsureDebugAllocated();

@@ -9,6 +9,8 @@
 #ifndef LIBANGLE_INFOLOG_H_
 #define LIBANGLE_INFOLOG_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
+
 namespace gl
 {
 
@@ -57,7 +59,7 @@ class InfoLog : angle::NonCopyable
 
         StreamHelper(std::stringstream *stream) : mStream(stream) { ASSERT(stream); }
 
-        std::stringstream *mStream;
+        raw_ptr<std::stringstream> mStream;
     };
 
     template <typename T>

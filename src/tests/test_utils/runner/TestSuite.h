@@ -17,6 +17,7 @@
 #include <thread>
 
 #include "HistogramWriter.h"
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "tests/test_expectations/GPUTestExpectationsParser.h"
 #include "util/test_utils.h"
 
@@ -143,7 +144,7 @@ class MetricWriter
 
   private:
     std::string mPath;
-    FILE *mFile = nullptr;
+    raw_ptr<FILE> mFile = nullptr;
 };
 
 class TestSuite

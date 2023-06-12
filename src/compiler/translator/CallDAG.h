@@ -13,6 +13,7 @@
 
 #include <map>
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "compiler/translator/IntermNode.h"
 
 namespace sh
@@ -41,7 +42,7 @@ class CallDAG : angle::NonCopyable
 
     struct Record
     {
-        TIntermFunctionDefinition *node;  // Guaranteed to be non-null.
+        raw_ptr<TIntermFunctionDefinition> node;  // Guaranteed to be non-null.
         std::vector<int> callees;
     };
 

@@ -13,6 +13,7 @@
 #include <vector>
 
 #include "angle_gl.h"
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/Optional.h"
 #include "common/debug.h"
 #include "common/utilities.h"
@@ -276,7 +277,7 @@ class TextureBufferContentsObservers final : angle::NonCopyable
     bool isEnabledForBuffer(Buffer *buffer);
 
   private:
-    Texture *mTexture;
+    raw_ptr<Texture> mTexture;
 };
 
 class Texture final : public RefCountObject<TextureID>,
@@ -718,8 +719,8 @@ class Texture final : public RefCountObject<TextureID>,
     // For EXT_texture_buffer, observes buffer changes.
     angle::ObserverBinding mBufferObserver;
 
-    egl::Surface *mBoundSurface;
-    egl::Stream *mBoundStream;
+    raw_ptr<egl::Surface> mBoundSurface;
+    raw_ptr<egl::Stream> mBoundStream;
 
     // We track all the serials of the Framebuffers this texture is attached to. Note that this
     // allows duplicates because different ranges of a Texture can be bound to the same Framebuffer.

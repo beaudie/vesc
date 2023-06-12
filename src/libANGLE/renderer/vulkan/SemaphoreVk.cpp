@@ -99,7 +99,7 @@ angle::Result SemaphoreVk::wait(gl::Context *context,
         // update our internal state tracking.
         for (const gl::TextureAndLayout &textureBarrier : textureBarriers)
         {
-            TextureVk *textureVk   = vk::GetImpl(textureBarrier.texture);
+            TextureVk *textureVk   = vk::GetImpl(textureBarrier.texture.get());
             vk::ImageHelper &image = textureVk->getImage();
             vk::ImageLayout layout =
                 vk::GetImageLayoutFromGLImageLayout(contextVk, textureBarrier.layout);
@@ -158,7 +158,7 @@ angle::Result SemaphoreVk::signal(gl::Context *context,
         // to the requested layout.
         for (const gl::TextureAndLayout &textureBarrier : textureBarriers)
         {
-            TextureVk *textureVk   = vk::GetImpl(textureBarrier.texture);
+            TextureVk *textureVk   = vk::GetImpl(textureBarrier.texture.get());
             vk::ImageHelper &image = textureVk->getImage();
             vk::ImageLayout layout =
                 vk::GetImageLayoutFromGLImageLayout(contextVk, textureBarrier.layout);

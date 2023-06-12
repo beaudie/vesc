@@ -9,6 +9,7 @@
 #ifndef LIBANGLE_ANGLETYPES_H_
 #define LIBANGLE_ANGLETYPES_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/Color.h"
 #include "common/FixedVector.h"
 #include "common/PackedEnums.h"
@@ -1005,7 +1006,7 @@ using BufferVector         = std::vector<OffsetBindingPointer<Buffer>>;
 
 struct TextureAndLayout
 {
-    Texture *texture;
+    raw_ptr<Texture> texture;
     GLenum layout;
 };
 using TextureBarrierVector = BarrierVector<TextureAndLayout>;
@@ -1236,7 +1237,7 @@ class DestroyThenDelete
     }
 
   private:
-    const ContextT *mContext = nullptr;
+    raw_ptr<const ContextT> mContext = nullptr;
 };
 
 template <typename ObjT, typename ContextT>

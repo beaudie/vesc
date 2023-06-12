@@ -7,6 +7,7 @@
 #include "compiler/translator/ValidateTypeSizeLimitations.h"
 
 #include "angle_gl.h"
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "compiler/translator/Diagnostics.h"
 #include "compiler/translator/Symbol.h"
 #include "compiler/translator/SymbolTable.h"
@@ -228,7 +229,7 @@ class ValidateTypeSizeLimitationsTraverser : public TIntermTraverser
         }
     }
 
-    TDiagnostics *mDiagnostics;
+    raw_ptr<TDiagnostics> mDiagnostics;
     std::vector<int> mLoopSymbolIds;
 
     size_t mTotalPrivateVariablesSize;

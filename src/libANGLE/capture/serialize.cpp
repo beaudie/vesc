@@ -9,6 +9,7 @@
 
 #include "libANGLE/capture/serialize.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/Color.h"
 #include "common/MemoryBuffer.h"
 #include "common/angleutils.h"
@@ -126,7 +127,7 @@ class [[nodiscard]] GroupScope
     ~GroupScope() { mJson->endGroup(); }
 
   private:
-    JsonSerializer *mJson;
+    raw_ptr<JsonSerializer> mJson;
 };
 
 void SerializeColorF(JsonSerializer *json, const ColorF &color)

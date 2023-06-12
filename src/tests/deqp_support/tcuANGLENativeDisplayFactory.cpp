@@ -18,6 +18,7 @@
  *
  */
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "egluNativeDisplay.hpp"
 
 #include "tcuANGLENativeDisplayFactory.h"
@@ -144,7 +145,7 @@ class NativePixmap : public eglu::NativePixmap
     eglw::EGLNativePixmapType getLegacyNative() override;
 
   private:
-    OSPixmap *mPixmap;
+    raw_ptr<OSPixmap> mPixmap;
 };
 
 class NativeWindowFactory : public eglu::NativeWindowFactory
@@ -162,7 +163,7 @@ class NativeWindowFactory : public eglu::NativeWindowFactory
                                      const eglu::WindowParams &params) const override;
 
   private:
-    EventState *mEvents;
+    raw_ptr<EventState> mEvents;
     uint32_t mPreRotation;
 };
 
@@ -186,7 +187,7 @@ class NativeWindow : public eglu::NativeWindow
 
   private:
     OSWindow *mWindow;
-    EventState *mEvents;
+    raw_ptr<EventState> mEvents;
     uint32_t mPreRotation;
 };
 

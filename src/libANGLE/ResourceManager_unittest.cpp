@@ -9,6 +9,7 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "libANGLE/ResourceManager.h"
 #include "tests/angle_unittests_utils.h"
 
@@ -38,9 +39,9 @@ class ResourceManagerTest : public testing::Test
     }
 
     MockGLFactory mMockFactory;
-    TextureManager *mTextureManager;
-    BufferManager *mBufferManager;
-    RenderbufferManager *mRenderbuffermanager;
+    raw_ptr<TextureManager> mTextureManager;
+    raw_ptr<BufferManager> mBufferManager;
+    raw_ptr<RenderbufferManager> mRenderbuffermanager;
 };
 
 TEST_F(ResourceManagerTest, ReallocateBoundTexture)

@@ -8,6 +8,8 @@
 
 #include "compiler/translator/tree_ops/DeclarePerVertexBlocks.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/ImmutableStringBuilder.h"
 #include "compiler/translator/StaticType.h"
@@ -112,8 +114,8 @@ class InspectPerVertexBuiltInsTraverser : public TIntermTraverser
     }
 
   private:
-    PerVertexMemberFlags *mInvariantFlagsOut;
-    PerVertexMemberFlags *mPreciseFlagsOut;
+    raw_ptr<PerVertexMemberFlags> mInvariantFlagsOut;
+    raw_ptr<PerVertexMemberFlags> mPreciseFlagsOut;
 };
 
 // Traverser that:
@@ -315,12 +317,12 @@ class DeclarePerVertexBlocksTraverser : public TIntermTraverser
 
     const TVariable *getRedeclaredPerVertexOutVar()
     {
-        return mPerVertexOutVarRedeclared ? mPerVertexOutVar : nullptr;
+        return mPerVertexOutVarRedeclared ? mPerVertexOutVar.get() : nullptr;
     }
 
     const TVariable *getRedeclaredPerVertexInVar()
     {
-        return mPerVertexInVarRedeclared ? mPerVertexInVar : nullptr;
+        return mPerVertexInVarRedeclared ? mPerVertexInVar.get() : nullptr;
     }
 
   private:
@@ -423,7 +425,7 @@ class DeclarePerVertexBlocksTraverser : public TIntermTraverser
         if (mShaderType == GL_TESS_CONTROL_SHADER)
         {
             varName   = ImmutableString("gl_out");
-            arraySize = mResources.MaxPatchVertices;
+            arraySize = mResources->MaxPatchVertices;
         }
 
         mPerVertexOutVar           = declarePerVertex(EvqPerVertexOut, arraySize, varName);
@@ -438,7 +440,7 @@ class DeclarePerVertexBlocksTraverser : public TIntermTraverser
         // For geometry shaders, gl_in is sized based on the primitive type.
 
         ImmutableString varName("gl_in");
-        uint32_t arraySize = mResources.MaxPatchVertices;
+        uint32_t arraySize = mResources->MaxPatchVertices;
         if (mShaderType == GL_GEOMETRY_SHADER)
         {
             arraySize =
@@ -451,12 +453,12 @@ class DeclarePerVertexBlocksTraverser : public TIntermTraverser
 
     GLenum mShaderType;
     int mShaderVersion;
-    const ShBuiltInResources &mResources;
+    const raw_ref<const ShBuiltInResources> mResources;
     uint8_t mClipDistanceArraySize;
     uint8_t mCullDistanceArraySize;
 
-    const TVariable *mPerVertexInVar;
-    const TVariable *mPerVertexOutVar;
+    raw_ptr<const TVariable> mPerVertexInVar;
+    raw_ptr<const TVariable> mPerVertexOutVar;
 
     bool mPerVertexInVarRedeclared;
     bool mPerVertexOutVarRedeclared;

@@ -11,6 +11,8 @@
 #ifndef LIBANGLE_RESOURCE_MAP_H_
 #define LIBANGLE_RESOURCE_MAP_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "libANGLE/angletypes.h"
 
 namespace gl
@@ -66,7 +68,7 @@ class ResourceMap final : angle::NonCopyable
                  bool skipNulls);
         void updateValue();
 
-        const ResourceMap &mOrigin;
+        const raw_ref<const ResourceMap<ResourceType, IDType>> mOrigin;
         GLuint mFlatIndex;
         typename HashMap::const_iterator mHashIndex;
         IndexAndResource mValue;
@@ -103,7 +105,7 @@ class ResourceMap final : angle::NonCopyable
     static constexpr size_t kElementSize = sizeof(ResourceType *);
 
     size_t mFlatResourcesSize;
-    ResourceType **mFlatResources;
+    raw_ptr<ResourceType *> mFlatResources;
 
     // A map of GL objects indexed by object ID.
     HashMap mHashedResources;
@@ -300,9 +302,9 @@ template <typename ResourceType, typename IDType>
 typename ResourceMap<ResourceType, IDType>::Iterator &
 ResourceMap<ResourceType, IDType>::Iterator::operator++()
 {
-    if (mFlatIndex < static_cast<GLuint>(mOrigin.mFlatResourcesSize))
+    if (mFlatIndex < static_cast<GLuint>(mOrigin->mFlatResourcesSize))
     {
-        mFlatIndex = mOrigin.nextResource(mFlatIndex + 1, mSkipNulls);
+        mFlatIndex = mOrigin->nextResource(mFlatIndex + 1, mSkipNulls);
     }
     else
     {
@@ -329,12 +331,12 @@ ResourceMap<ResourceType, IDType>::Iterator::operator*() const
 template <typename ResourceType, typename IDType>
 void ResourceMap<ResourceType, IDType>::Iterator::updateValue()
 {
-    if (mFlatIndex < static_cast<GLuint>(mOrigin.mFlatResourcesSize))
+    if (mFlatIndex < static_cast<GLuint>(mOrigin->mFlatResourcesSize))
     {
         mValue.first  = mFlatIndex;
-        mValue.second = mOrigin.mFlatResources[mFlatIndex];
+        mValue.second = mOrigin->mFlatResources[mFlatIndex];
     }
-    else if (mHashIndex != mOrigin.mHashedResources.end())
+    else if (mHashIndex != mOrigin->mHashedResources.end())
     {
         mValue.first  = mHashIndex->first;
         mValue.second = mHashIndex->second;

@@ -13,6 +13,7 @@
 #ifndef LIBANGLE_VERTEXARRAY_H_
 #define LIBANGLE_VERTEXARRAY_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/Optional.h"
 #include "libANGLE/Constants.h"
 #include "libANGLE/Debug.h"
@@ -124,7 +125,7 @@ class VertexArrayBufferContentsObservers final : angle::NonCopyable
     bool any() const { return mBufferObserversBitMask.any(); }
 
   private:
-    VertexArray *mVertexArray;
+    raw_ptr<VertexArray> mVertexArray;
     // Bit is set when it is observing the buffer content change
     gl::AttributesMask mBufferObserversBitMask;
 };

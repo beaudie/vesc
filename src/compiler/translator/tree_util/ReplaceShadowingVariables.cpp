@@ -16,6 +16,7 @@
 //
 
 #include "compiler/translator/tree_util/ReplaceShadowingVariables.h"
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "compiler/translator/tree_util/ReplaceVariable.h"
 
 #include "compiler/translator/Compiler.h"
@@ -36,9 +37,9 @@ namespace
 // Custom struct to queue up any replacements until after AST traversal
 struct DeferredReplacementBlock
 {
-    const TVariable *originalVariable;  // variable to be replaced
-    TVariable *replacementVariable;     // variable to replace originalVar with
-    TIntermBlock *functionBody;         // function body where replacement occurs
+    raw_ptr<const TVariable> originalVariable;  // variable to be replaced
+    raw_ptr<TVariable> replacementVariable;     // variable to replace originalVar with
+    raw_ptr<TIntermBlock> functionBody;         // function body where replacement occurs
 };
 
 class ReplaceShadowingVariablesTraverser : public TIntermTraverser
@@ -119,7 +120,7 @@ class ReplaceShadowingVariablesTraverser : public TIntermTraverser
 
   private:
     std::unordered_set<std::string> mParameterNames;
-    TIntermBlock *mFunctionBody;
+    raw_ptr<TIntermBlock> mFunctionBody;
     std::vector<DeferredReplacementBlock> mReplacements;
 };
 

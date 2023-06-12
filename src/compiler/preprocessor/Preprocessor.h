@@ -10,6 +10,7 @@
 #include <cstddef>
 
 #include "GLSLANG/ShaderLang.h"
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/angleutils.h"
 
 namespace angle

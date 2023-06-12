@@ -17,6 +17,7 @@
 #include "RenderDoc.h"
 #include "angle_test_configs.h"
 #include "angle_test_platform.h"
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/angleutils.h"
 #include "common/system_utils.h"
 #include "common/vector_utils.h"
@@ -572,9 +573,9 @@ class ANGLETestBase
         TestFixture();
         ~TestFixture();
 
-        EGLWindow *eglWindow = nullptr;
-        WGLWindow *wglWindow = nullptr;
-        OSWindow *osWindow   = nullptr;
+        EGLWindow *eglWindow         = nullptr;
+        raw_ptr<WGLWindow> wglWindow = nullptr;
+        OSWindow *osWindow           = nullptr;
         ConfigParameters configParams;
         uint32_t reuseCounter = 0;
     };
@@ -610,8 +611,8 @@ class ANGLETestBase
     static OSWindow *mOSWindowSingleton;
 
     static std::map<angle::PlatformParameters, TestFixture> gFixtures;
-    const angle::PlatformParameters *mCurrentParams;
-    TestFixture *mFixture;
+    raw_ptr<const angle::PlatformParameters> mCurrentParams;
+    raw_ptr<TestFixture> mFixture;
 
     RenderDoc mRenderDoc;
 

@@ -13,6 +13,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/angleutils.h"
 #include "common/debug.h"
 #include "common/mathutil.h"
@@ -108,9 +109,9 @@ class Allocation
     unsigned char *preGuard() const { return mMem + HeaderSize(); }
     unsigned char *data() const { return preGuard() + kGuardBlockSize; }
     unsigned char *postGuard() const { return data() + mSize; }
-    size_t mSize;            // size of the user data area
-    unsigned char *mMem;     // beginning of our allocation (points to header)
-    Allocation *mPrevAlloc;  // prior allocation in the chain
+    size_t mSize;                    // size of the user data area
+    raw_ptr<unsigned char> mMem;     // beginning of our allocation (points to header)
+    raw_ptr<Allocation> mPrevAlloc;  // prior allocation in the chain
 
     static constexpr unsigned char kGuardBlockBeginVal = 0xfb;
     static constexpr unsigned char kGuardBlockEndVal   = 0xfe;
@@ -147,10 +148,10 @@ class PageHeader
 #    endif
     }
 
-    PageHeader *nextPage;
+    raw_ptr<PageHeader> nextPage;
     size_t pageCount;
 #    if defined(ANGLE_POOL_ALLOC_GUARD_BLOCKS)
-    Allocation *lastAllocation;
+    raw_ptr<Allocation> lastAllocation;
 #    endif
 };
 #endif
@@ -222,7 +223,7 @@ PoolAllocator::~PoolAllocator()
     {
         PageHeader *next = mInUseList->nextPage;
         mInUseList->~PageHeader();
-        delete[] reinterpret_cast<char *>(mInUseList);
+        delete[] reinterpret_cast<char *>(mInUseList.get());
         mInUseList = next;
     }
     // We should not check the guard blocks
@@ -232,7 +233,7 @@ PoolAllocator::~PoolAllocator()
     while (mFreeList)
     {
         PageHeader *next = mFreeList->nextPage;
-        delete[] reinterpret_cast<char *>(mFreeList);
+        delete[] reinterpret_cast<char *>(mFreeList.get());
         mFreeList = next;
     }
 #else  // !defined(ANGLE_DISABLE_POOL_ALLOC)
@@ -309,7 +310,7 @@ void PoolAllocator::pop()
         PageHeader *nextInUse = mInUseList->nextPage;
         if (mInUseList->pageCount > 1)
         {
-            delete[] reinterpret_cast<char *>(mInUseList);
+            delete[] reinterpret_cast<char *>(mInUseList.get());
         }
         else
         {
@@ -355,7 +356,7 @@ void *PoolAllocator::allocate(size_t numBytes)
     ++mNumCalls;
     mTotalBytes += numBytes;
 
-    uint8_t *currentPagePtr = reinterpret_cast<uint8_t *>(mInUseList) + mCurrentPageOffset;
+    uint8_t *currentPagePtr = reinterpret_cast<uint8_t *>(mInUseList.get()) + mCurrentPageOffset;
 
     size_t preAllocationPadding = 0;
     size_t allocationSize =
@@ -448,7 +449,7 @@ uint8_t *PoolAllocator::allocateNewPage(size_t numBytes)
 
     // Leave room for the page header.
     mCurrentPageOffset      = mPageHeaderSkip;
-    uint8_t *currentPagePtr = reinterpret_cast<uint8_t *>(mInUseList) + mCurrentPageOffset;
+    uint8_t *currentPagePtr = reinterpret_cast<uint8_t *>(mInUseList.get()) + mCurrentPageOffset;
 
     size_t preAllocationPadding = 0;
     size_t allocationSize =
@@ -457,7 +458,7 @@ uint8_t *PoolAllocator::allocateNewPage(size_t numBytes)
     mCurrentPageOffset += allocationSize;
 
     // The new allocation is made after the page header and any alignment required before it.
-    return reinterpret_cast<uint8_t *>(mInUseList) + mPageHeaderSkip + preAllocationPadding;
+    return reinterpret_cast<uint8_t *>(mInUseList.get()) + mPageHeaderSkip + preAllocationPadding;
 }
 
 void *PoolAllocator::initializeAllocation(uint8_t *memory, size_t numBytes)

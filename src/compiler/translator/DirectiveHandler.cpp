@@ -48,7 +48,7 @@ TDirectiveHandler::~TDirectiveHandler() {}
 
 void TDirectiveHandler::handleError(const angle::pp::SourceLocation &loc, const std::string &msg)
 {
-    mDiagnostics.error(loc, msg.c_str(), "");
+    mDiagnostics->error(loc, msg.c_str(), "");
 }
 
 void TDirectiveHandler::handlePragma(const angle::pp::SourceLocation &loc,
@@ -63,10 +63,10 @@ void TDirectiveHandler::handlePragma(const angle::pp::SourceLocation &loc,
 
         if (name == kInvariant && value == kAll)
         {
-            if (mShaderVersion == 300 && mShaderType == GL_FRAGMENT_SHADER)
+            if (*mShaderVersion == 300 && mShaderType == GL_FRAGMENT_SHADER)
             {
                 // ESSL 3.00.4 section 4.6.1
-                mDiagnostics.error(
+                mDiagnostics->error(
                     loc, "#pragma STDGL invariant(all) can not be used in fragment shader",
                     name.c_str());
             }
@@ -105,13 +105,14 @@ void TDirectiveHandler::handlePragma(const angle::pp::SourceLocation &loc,
         }
         else
         {
-            mDiagnostics.report(angle::pp::Diagnostics::PP_UNRECOGNIZED_PRAGMA, loc, name);
+            mDiagnostics->report(angle::pp::Diagnostics::PP_UNRECOGNIZED_PRAGMA, loc, name);
             return;
         }
 
         if (invalidValue)
         {
-            mDiagnostics.error(loc, "invalid pragma value - 'on' or 'off' expected", value.c_str());
+            mDiagnostics->error(loc, "invalid pragma value - 'on' or 'off' expected",
+                                value.c_str());
         }
     }
 }
@@ -125,7 +126,7 @@ void TDirectiveHandler::handleExtension(const angle::pp::SourceLocation &loc,
     TBehavior behaviorVal = getBehavior(behavior);
     if (behaviorVal == EBhUndefined)
     {
-        mDiagnostics.error(loc, "behavior invalid", name.c_str());
+        mDiagnostics->error(loc, "behavior invalid", name.c_str());
         return;
     }
 
@@ -133,16 +134,16 @@ void TDirectiveHandler::handleExtension(const angle::pp::SourceLocation &loc,
     {
         if (behaviorVal == EBhRequire)
         {
-            mDiagnostics.error(loc, "extension cannot have 'require' behavior", name.c_str());
+            mDiagnostics->error(loc, "extension cannot have 'require' behavior", name.c_str());
         }
         else if (behaviorVal == EBhEnable)
         {
-            mDiagnostics.error(loc, "extension cannot have 'enable' behavior", name.c_str());
+            mDiagnostics->error(loc, "extension cannot have 'enable' behavior", name.c_str());
         }
         else
         {
-            for (TExtensionBehavior::iterator iter = mExtensionBehavior.begin();
-                 iter != mExtensionBehavior.end(); ++iter)
+            for (TExtensionBehavior::iterator iter = mExtensionBehavior->begin();
+                 iter != mExtensionBehavior->end(); ++iter)
             {
                 iter->second = behaviorVal;
             }
@@ -150,16 +151,16 @@ void TDirectiveHandler::handleExtension(const angle::pp::SourceLocation &loc,
         return;
     }
 
-    TExtensionBehavior::iterator iter = mExtensionBehavior.find(GetExtensionByName(name.c_str()));
-    if (iter != mExtensionBehavior.end() && CheckExtensionVersion(iter->first, mShaderVersion))
+    TExtensionBehavior::iterator iter = mExtensionBehavior->find(GetExtensionByName(name.c_str()));
+    if (iter != mExtensionBehavior->end() && CheckExtensionVersion(iter->first, *mShaderVersion))
     {
         iter->second = behaviorVal;
         // OVR_multiview is implicitly enabled when OVR_multiview2 is enabled
         if (name == "GL_OVR_multiview2")
         {
             constexpr char kMultiviewExtName[] = "GL_OVR_multiview";
-            iter = mExtensionBehavior.find(GetExtensionByName(kMultiviewExtName));
-            if (iter != mExtensionBehavior.end())
+            iter = mExtensionBehavior->find(GetExtensionByName(kMultiviewExtName));
+            if (iter != mExtensionBehavior->end())
             {
                 iter->second = behaviorVal;
             }
@@ -180,58 +181,58 @@ void TDirectiveHandler::handleExtension(const angle::pp::SourceLocation &loc,
             constexpr char kShaderImageAtomicExtName[] = "GL_OES_shader_image_atomic";
             constexpr char kTextureStorageMultisample2dArrayExtName[] =
                 "GL_OES_texture_storage_multisample_2d_array";
-            iter = mExtensionBehavior.find(GetExtensionByName(kGeometryShaderExtName));
-            if (iter != mExtensionBehavior.end())
+            iter = mExtensionBehavior->find(GetExtensionByName(kGeometryShaderExtName));
+            if (iter != mExtensionBehavior->end())
             {
                 iter->second = behaviorVal;
             }
 
-            iter = mExtensionBehavior.find(GetExtensionByName(kTessellationShaderExtName));
-            if (iter != mExtensionBehavior.end())
+            iter = mExtensionBehavior->find(GetExtensionByName(kTessellationShaderExtName));
+            if (iter != mExtensionBehavior->end())
             {
                 iter->second = behaviorVal;
             }
 
-            iter = mExtensionBehavior.find(GetExtensionByName(kGpuShader5ExtName));
-            if (iter != mExtensionBehavior.end())
+            iter = mExtensionBehavior->find(GetExtensionByName(kGpuShader5ExtName));
+            if (iter != mExtensionBehavior->end())
             {
                 iter->second = behaviorVal;
             }
 
-            iter = mExtensionBehavior.find(GetExtensionByName(kTextureBufferExtName));
-            if (iter != mExtensionBehavior.end())
+            iter = mExtensionBehavior->find(GetExtensionByName(kTextureBufferExtName));
+            if (iter != mExtensionBehavior->end())
             {
                 iter->second = behaviorVal;
             }
 
-            iter = mExtensionBehavior.find(GetExtensionByName(kTextureCubeMapArrayExtName));
-            if (iter != mExtensionBehavior.end())
+            iter = mExtensionBehavior->find(GetExtensionByName(kTextureCubeMapArrayExtName));
+            if (iter != mExtensionBehavior->end())
             {
                 iter->second = behaviorVal;
             }
 
-            iter = mExtensionBehavior.find(GetExtensionByName(kSampleVariablesExtName));
-            if (iter != mExtensionBehavior.end())
+            iter = mExtensionBehavior->find(GetExtensionByName(kSampleVariablesExtName));
+            if (iter != mExtensionBehavior->end())
             {
                 iter->second = behaviorVal;
             }
 
-            iter =
-                mExtensionBehavior.find(GetExtensionByName(kShaderMultisampleInterpolationExtName));
-            if (iter != mExtensionBehavior.end())
+            iter = mExtensionBehavior->find(
+                GetExtensionByName(kShaderMultisampleInterpolationExtName));
+            if (iter != mExtensionBehavior->end())
             {
                 iter->second = behaviorVal;
             }
 
-            iter = mExtensionBehavior.find(GetExtensionByName(kShaderImageAtomicExtName));
-            if (iter != mExtensionBehavior.end())
+            iter = mExtensionBehavior->find(GetExtensionByName(kShaderImageAtomicExtName));
+            if (iter != mExtensionBehavior->end())
             {
                 iter->second = behaviorVal;
             }
 
-            iter = mExtensionBehavior.find(
+            iter = mExtensionBehavior->find(
                 GetExtensionByName(kTextureStorageMultisample2dArrayExtName));
-            if (iter != mExtensionBehavior.end())
+            if (iter != mExtensionBehavior->end())
             {
                 iter->second = behaviorVal;
             }
@@ -241,8 +242,8 @@ void TDirectiveHandler::handleExtension(const angle::pp::SourceLocation &loc,
         if (name == "GL_EXT_geometry_shader" || name == "GL_EXT_tessellation_shader")
         {
             constexpr char kIOBlocksExtName[] = "GL_EXT_shader_io_blocks";
-            iter = mExtensionBehavior.find(GetExtensionByName(kIOBlocksExtName));
-            if (iter != mExtensionBehavior.end())
+            iter = mExtensionBehavior->find(GetExtensionByName(kIOBlocksExtName));
+            if (iter != mExtensionBehavior->end())
             {
                 iter->second = behaviorVal;
             }
@@ -252,8 +253,8 @@ void TDirectiveHandler::handleExtension(const angle::pp::SourceLocation &loc,
         else if (name == "GL_EXT_clip_cull_distance" || name == "GL_ANGLE_clip_cull_distance")
         {
             constexpr char kAPPLEClipDistanceEXTName[] = "GL_APPLE_clip_distance";
-            iter = mExtensionBehavior.find(GetExtensionByName(kAPPLEClipDistanceEXTName));
-            if (iter != mExtensionBehavior.end())
+            iter = mExtensionBehavior->find(GetExtensionByName(kAPPLEClipDistanceEXTName));
+            if (iter != mExtensionBehavior->end())
             {
                 iter->second = behaviorVal;
             }
@@ -264,12 +265,12 @@ void TDirectiveHandler::handleExtension(const angle::pp::SourceLocation &loc,
     switch (behaviorVal)
     {
         case EBhRequire:
-            mDiagnostics.error(loc, "extension is not supported", name.c_str());
+            mDiagnostics->error(loc, "extension is not supported", name.c_str());
             break;
         case EBhEnable:
         case EBhWarn:
         case EBhDisable:
-            mDiagnostics.warning(loc, "extension is not supported", name.c_str());
+            mDiagnostics->warning(loc, "extension is not supported", name.c_str());
             break;
         default:
             UNREACHABLE();
@@ -286,10 +287,10 @@ void TDirectiveHandler::handleVersion(const angle::pp::SourceLocation &loc,
          !IsDesktopGLSpec(spec)) ||
         IsDesktopGLSpec(spec))
     {
-        mShaderVersion = version;
+        *mShaderVersion = version;
 
         // Add macros for supported extensions
-        for (const auto &iter : mExtensionBehavior)
+        for (const auto &iter : *mExtensionBehavior)
         {
             if (CheckExtensionVersion(iter.first, version))
             {
@@ -307,7 +308,7 @@ void TDirectiveHandler::handleVersion(const angle::pp::SourceLocation &loc,
         std::stringstream stream = sh::InitializeStream<std::stringstream>();
         stream << version;
         std::string str = stream.str();
-        mDiagnostics.error(loc, "client/version number not supported", str.c_str());
+        mDiagnostics->error(loc, "client/version number not supported", str.c_str());
     }
 }
 

@@ -7,6 +7,7 @@
 #ifndef COMPILER_TRANSLATOR_TYPES_H_
 #define COMPILER_TRANSLATOR_TYPES_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/angleutils.h"
 #include "common/debug.h"
 
@@ -46,7 +47,7 @@ class TField : angle::NonCopyable
     SymbolType symbolType() const { return mSymbolType; }
 
   private:
-    TType *mType;
+    raw_ptr<TType> mType;
     const ImmutableString mName;
     const TSourceLoc mLine;
     const SymbolType mSymbolType;
@@ -73,7 +74,7 @@ class TFieldListCollection : angle::NonCopyable
   protected:
     TFieldListCollection(const TFieldList *fields);
 
-    const TFieldList *mFields;
+    raw_ptr<const TFieldList> mFields;
 
   private:
     size_t calculateObjectSize() const;

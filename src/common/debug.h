@@ -19,6 +19,7 @@
 #include <sstream>
 #include <string>
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/angleutils.h"
 #include "common/entry_points_enum_autogen.h"
 #include "common/platform.h"
@@ -47,7 +48,7 @@ class [[nodiscard]] ScopedPerfEventHelper : angle::NonCopyable
     void begin(const char *format, ...);
 
   private:
-    gl::Context *mContext;
+    raw_ptr<gl::Context> mContext;
     const angle::EntryPoint mEntryPoint;
     const char *mFunctionName;
     bool mCalledBeginEvent;
@@ -184,12 +185,12 @@ class FmtHexHelper
     explicit FmtHexHelper(T value) : mPrefix(nullptr), mValue(value) {}
 
   private:
-    const C *mPrefix;
+    raw_ptr<const C> mPrefix;
     T mValue;
 
     friend std::ostream &operator<<(std::ostream &os, const FmtHexHelper &fmt)
     {
-        return FmtHexAutoSized(os, fmt.mValue, fmt.mPrefix, "0x", '0');
+        return FmtHexAutoSized(os, fmt.mValue, fmt.mPrefix.get(), "0x", '0');
     }
 
     friend std::wostream &operator<<(std::wostream &wos, const FmtHexHelper &fmt)

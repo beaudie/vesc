@@ -18,6 +18,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "platform/PlatformMethods.h"
 #include "test_utils/angle_test_configs.h"
 #include "test_utils/angle_test_instantiate.h"
@@ -214,7 +215,7 @@ class ANGLERenderTest : public ANGLEPerfTest
     bool isRenderTest() const override { return true; }
 
   protected:
-    const RenderTestParams &mTestParams;
+    const raw_ref<const RenderTestParams> mTestParams;
 
     void setWebGLCompatibilityEnabled(bool webglCompatibility);
     void setRobustResourceInit(bool enabled);

@@ -10,6 +10,7 @@
 
 #include "compiler/translator/tree_ops/SimplifyLoopConditions.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "compiler/translator/StaticType.h"
 #include "compiler/translator/tree_util/IntermNodePatternMatcher.h"
 #include "compiler/translator/tree_util/IntermNode_util.h"
@@ -23,9 +24,9 @@ namespace
 
 struct LoopInfo
 {
-    const TVariable *conditionVariable = nullptr;
-    TIntermTyped *condition            = nullptr;
-    TIntermTyped *expression           = nullptr;
+    raw_ptr<const TVariable> conditionVariable = nullptr;
+    raw_ptr<TIntermTyped> condition            = nullptr;
+    raw_ptr<TIntermTyped> expression           = nullptr;
 };
 
 class SimplifyLoopConditionsTraverser : public TLValueTrackingTraverser
@@ -50,7 +51,7 @@ class SimplifyLoopConditionsTraverser : public TLValueTrackingTraverser
     // found.
     bool mFoundLoopToChange;
     bool mInsideLoopInitConditionOrExpression;
-    const IntermNodePatternMatcher *mConditionsToSimplify;
+    raw_ptr<const IntermNodePatternMatcher> mConditionsToSimplify;
 
   private:
     LoopInfo mLoop;

@@ -14,6 +14,7 @@
 #include <mutex>
 #include <vector>
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/WorkerThread.h"
 #include "libANGLE/AttributeMap.h"
 #include "libANGLE/BlobCache.h"
@@ -423,12 +424,12 @@ class Display final : public LabeledObject,
     std::string mClientAPIString;
 
     Device *mDevice;
-    Surface *mSurface;
+    raw_ptr<Surface> mSurface;
     EGLenum mPlatform;
     angle::LoggingAnnotator mAnnotator;
 
-    gl::TextureManager *mTextureManager;
-    gl::SemaphoreManager *mSemaphoreManager;
+    raw_ptr<gl::TextureManager> mTextureManager;
+    raw_ptr<gl::SemaphoreManager> mSemaphoreManager;
     BlobCache mBlobCache;
     gl::MemoryProgramCache mMemoryProgramCache;
     gl::MemoryShaderCache mMemoryShaderCache;

@@ -10,6 +10,7 @@
 
 #include "compiler/translator/tree_ops/RemoveUnreferencedVariables.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "compiler/translator/SymbolTable.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
 
@@ -139,8 +140,8 @@ class RemoveUnreferencedVariablesTraverser : public TIntermTraverser
     void removeVariableDeclaration(TIntermDeclaration *node, TIntermTyped *declarator);
     void decrementStructTypeRefCount(const TType &type);
 
-    CollectVariableRefCountsTraverser::RefCountMap *mSymbolIdRefCounts;
-    CollectVariableRefCountsTraverser::RefCountMap *mStructIdRefCounts;
+    raw_ptr<CollectVariableRefCountsTraverser::RefCountMap> mSymbolIdRefCounts;
+    raw_ptr<CollectVariableRefCountsTraverser::RefCountMap> mStructIdRefCounts;
     bool mRemoveReferences;
 };
 

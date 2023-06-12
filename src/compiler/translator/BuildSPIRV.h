@@ -9,6 +9,8 @@
 #ifndef COMPILER_TRANSLATOR_BUILDSPIRV_H_
 #define COMPILER_TRANSLATOR_BUILDSPIRV_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "common/FixedVector.h"
 #include "common/PackedEnums.h"
 #include "common/bitset_utils.h"
@@ -471,10 +473,10 @@ class SPIRVBuilder : angle::NonCopyable
     void writeSourceExtensions(spirv::Blob *blob);
     void writeNonSemanticOverview(spirv::Blob *blob, spirv::IdRef id);
 
-    ANGLE_MAYBE_UNUSED_PRIVATE_FIELD TCompiler *mCompiler;
-    const ShCompileOptions &mCompileOptions;
+    ANGLE_MAYBE_UNUSED_PRIVATE_FIELD raw_ptr<TCompiler> mCompiler;
+    const raw_ref<const ShCompileOptions> mCompileOptions;
     gl::ShaderType mShaderType;
-    const angle::HashMap<int, uint32_t> &mUniqueToSpirvIdMap;
+    const raw_ref<const angle::HashMap<int, uint32_t>> mUniqueToSpirvIdMap;
 
     // Capabilities the shader is using.  Accumulated as the instructions are generated.  The Shader
     // capability is unconditionally generated, so it's not tracked.
@@ -545,7 +547,7 @@ class SPIRVBuilder : angle::NonCopyable
 
     // name hashing.
     ShHashFunction64 mHashFunction;
-    NameMap &mNameMap;
+    const raw_ref<NameMap> mNameMap;
 
     // Every resource that requires set & binding layout qualifiers is assigned set 0 and an
     // arbitrary binding.  Every input/output that requires a location layout qualifier is assigned

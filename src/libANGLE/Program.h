@@ -20,6 +20,7 @@
 #include <string>
 #include <vector>
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/Optional.h"
 #include "common/angleutils.h"
 #include "common/mathutil.h"
@@ -412,15 +413,16 @@ struct ProgramVaryingRef
     const sh::ShaderVariable *get(ShaderType stage) const
     {
         ASSERT(stage == frontShaderStage || stage == backShaderStage);
-        const sh::ShaderVariable *ref = stage == frontShaderStage ? frontShader : backShader;
+        const sh::ShaderVariable *ref =
+            stage == frontShaderStage ? frontShader.get() : backShader.get();
         ASSERT(ref);
         return ref;
     }
 
-    const sh::ShaderVariable *frontShader = nullptr;
-    const sh::ShaderVariable *backShader  = nullptr;
-    ShaderType frontShaderStage           = ShaderType::InvalidEnum;
-    ShaderType backShaderStage            = ShaderType::InvalidEnum;
+    raw_ptr<const sh::ShaderVariable> frontShader = nullptr;
+    raw_ptr<const sh::ShaderVariable> backShader  = nullptr;
+    ShaderType frontShaderStage                   = ShaderType::InvalidEnum;
+    ShaderType backShaderStage                    = ShaderType::InvalidEnum;
 };
 
 using ProgramMergedVaryings = std::vector<ProgramVaryingRef>;
@@ -894,7 +896,7 @@ class Program final : public LabeledObject, public angle::Subject
 
     unsigned int mRefCount;
 
-    ShaderProgramManager *mResourceManager;
+    raw_ptr<ShaderProgramManager> mResourceManager;
     const ShaderProgramID mHandle;
 
     DirtyBits mDirtyBits;

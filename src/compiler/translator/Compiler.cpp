@@ -9,6 +9,7 @@
 #include <sstream>
 
 #include "angle_gl.h"
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 
 #include "common/BinaryStream.h"
 #include "common/CompiledShaderState.h"
@@ -248,7 +249,7 @@ class [[nodiscard]] TScopedPoolAllocator
     }
 
   private:
-    angle::PoolAllocator *mAllocator;
+    raw_ptr<angle::PoolAllocator> mAllocator;
 };
 
 class [[nodiscard]] TScopedSymbolTableLevel
@@ -266,7 +267,7 @@ class [[nodiscard]] TScopedSymbolTableLevel
     }
 
   private:
-    TSymbolTable *mTable;
+    raw_ptr<TSymbolTable> mTable;
 };
 
 int GetMaxShaderVersionForSpec(ShShaderSpec spec)

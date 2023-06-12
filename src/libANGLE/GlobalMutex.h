@@ -8,6 +8,8 @@
 #ifndef LIBANGLE_GLOBAL_MUTEX_H_
 #define LIBANGLE_GLOBAL_MUTEX_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "common/angleutils.h"
 
 namespace egl
@@ -25,7 +27,7 @@ class [[nodiscard]] ScopedGlobalMutexLock final : angle::NonCopyable
 
 #if !defined(ANGLE_ENABLE_GLOBAL_MUTEX_LOAD_TIME_ALLOCATE)
   private:
-    priv::GlobalMutex &mMutex;
+    const raw_ref<priv::GlobalMutex> mMutex;
 #endif
 };
 
@@ -37,7 +39,7 @@ class [[nodiscard]] ScopedOptionalGlobalMutexLock final : angle::NonCopyable
     ~ScopedOptionalGlobalMutexLock();
 
   private:
-    priv::GlobalMutex *mMutex;
+    raw_ptr<priv::GlobalMutex> mMutex;
 };
 
 #if defined(ANGLE_PLATFORM_WINDOWS) && !defined(ANGLE_STATIC)

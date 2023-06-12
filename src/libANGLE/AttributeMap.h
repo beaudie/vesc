@@ -7,6 +7,7 @@
 #ifndef LIBANGLE_ATTRIBUTEMAP_H_
 #define LIBANGLE_ATTRIBUTEMAP_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/FastVector.h"
 #include "common/PackedEnums.h"
 
@@ -100,8 +101,8 @@ class AttributeMap final
         return mValidatedAttributes;
     }
 
-    mutable const EGLint *mIntPointer       = nullptr;
-    mutable const EGLAttrib *mAttribPointer = nullptr;
+    mutable raw_ptr<const EGLint> mIntPointer       = nullptr;
+    mutable raw_ptr<const EGLAttrib> mAttribPointer = nullptr;
     mutable Map mValidatedAttributes;
     mutable AttributeMapType mMapType = AttributeMapType::Invalid;
 };

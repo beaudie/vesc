@@ -6,6 +6,7 @@
 
 #include "compiler/preprocessor/Preprocessor.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/debug.h"
 #include "compiler/preprocessor/DiagnosticsBase.h"
 #include "compiler/preprocessor/DirectiveParser.h"
@@ -22,7 +23,7 @@ namespace pp
 
 struct PreprocessorImpl
 {
-    Diagnostics *diagnostics;
+    raw_ptr<Diagnostics> diagnostics;
     MacroSet macroSet;
     Tokenizer tokenizer;
     DirectiveParser directiveParser;

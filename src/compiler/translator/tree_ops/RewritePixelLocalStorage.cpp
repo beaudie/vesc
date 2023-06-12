@@ -6,6 +6,7 @@
 
 #include "compiler/translator/tree_ops/RewritePixelLocalStorage.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/angleutils.h"
 #include "compiler/translator/StaticType.h"
 #include "compiler/translator/SymbolTable.h"
@@ -308,12 +309,12 @@ class RewritePLSTraverser : public TIntermTraverser
         return swizzled;
     }
 
-    const TCompiler *const mCompiler;
-    const ShCompileOptions *const mCompileOptions;
+    const raw_ptr<const TCompiler> mCompiler;
+    const raw_ptr<const ShCompileOptions> mCompileOptions;
     const int mShaderVersion;
 
     // Stores the shader invocation's pixel coordinate as "ivec2(floor(gl_FragCoord.xy))".
-    TVariable *mGlobalPixelCoord = nullptr;
+    raw_ptr<TVariable> mGlobalPixelCoord = nullptr;
 };
 
 // Rewrites high level PLS operations to shader image operations.
@@ -815,8 +816,8 @@ class RewritePLSToFramebufferFetchTraverser : public RewritePLSTraverser
 
         TIntermTyped *swizzleFragmentVar() const { return swizzle(fragmentVar); }
 
-        TVariable *fragmentVar;
-        TVariable *accessVar;
+        raw_ptr<TVariable> fragmentVar;
+        raw_ptr<TVariable> accessVar;
     };
 
     PLSBackingStoreMap<PLSAttachment> mPLSAttachments;
@@ -950,11 +951,11 @@ class RewriteANGLEToEXTTraverser : public RewritePLSTraverser
                  SymbolType symbolType)
             : field(new TField(type, name, line, symbolType))
         {}
-        TField *const field;
-        TConstantUnion *const indexInPLSBlock = new TConstantUnion;
+        const raw_ptr<TField> field;
+        const raw_ptr<TConstantUnion> indexInPLSBlock = new TConstantUnion;
     };
 
-    TVariable *mBlockEXT;                     // Global __pixel_localEXT interface block.
+    raw_ptr<TVariable> mBlockEXT;             // Global __pixel_localEXT interface block.
     PLSBackingStoreMap<FieldEXT> mFieldsEXT;  // Planes within the __pixel_localEXT interface block.
 };
 }  // anonymous namespace

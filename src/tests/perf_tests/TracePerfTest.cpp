@@ -1741,8 +1741,8 @@ void TracePerfTest::initializeBenchmark()
     }
     else
     {
-        mWindowWidth  = mTestParams.windowWidth;
-        mWindowHeight = mTestParams.windowHeight;
+        mWindowWidth  = mTestParams->windowWidth;
+        mWindowHeight = mTestParams->windowHeight;
     }
     mCurrentFrame     = mStartFrame;
     mCurrentIteration = mStartFrame;
@@ -1750,7 +1750,7 @@ void TracePerfTest::initializeBenchmark()
     if (IsAndroid())
     {
         // On Android, set the orientation used by the app, based on width/height
-        getWindow()->setOrientation(mTestParams.windowWidth, mTestParams.windowHeight);
+        getWindow()->setOrientation(mTestParams->windowWidth, mTestParams->windowHeight);
     }
 
     // If we're rendering offscreen we set up a default back buffer.
@@ -1852,9 +1852,9 @@ void TracePerfTest::drawBenchmark()
     constexpr uint32_t kFramesPerXY = kFramesPerY * kFramesPerX;
 
     const uint32_t kOffscreenOffsetX =
-        static_cast<uint32_t>(static_cast<double>(mTestParams.windowWidth) / 3.0f);
+        static_cast<uint32_t>(static_cast<double>(mTestParams->windowWidth) / 3.0f);
     const uint32_t kOffscreenOffsetY =
-        static_cast<uint32_t>(static_cast<double>(mTestParams.windowHeight) / 3.0f);
+        static_cast<uint32_t>(static_cast<double>(mTestParams->windowHeight) / 3.0f);
     const uint32_t kOffscreenWidth  = kOffscreenOffsetX;
     const uint32_t kOffscreenHeight = kOffscreenOffsetY;
 
@@ -2451,7 +2451,7 @@ void TracePerfTest::saveScreenshot(const std::string &screenshotName)
     // The frame is already rendered and is waiting in the default framebuffer.
 
     // RGBA 4-byte data.
-    uint32_t pixelCount = mTestParams.windowWidth * mTestParams.windowHeight;
+    uint32_t pixelCount = mTestParams->windowWidth * mTestParams->windowHeight;
     std::vector<uint8_t> pixelData(pixelCount * 4);
 
     // Only unbind the framebuffer on context versions where it's available.
@@ -2460,23 +2460,23 @@ void TracePerfTest::saveScreenshot(const std::string &screenshotName)
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
-    glReadPixels(0, 0, mTestParams.windowWidth, mTestParams.windowHeight, GL_RGBA, GL_UNSIGNED_BYTE,
-                 pixelData.data());
+    glReadPixels(0, 0, mTestParams->windowWidth, mTestParams->windowHeight, GL_RGBA,
+                 GL_UNSIGNED_BYTE, pixelData.data());
 
     // Convert to RGB and flip y.
     std::vector<uint8_t> rgbData(pixelCount * 3);
-    for (EGLint y = 0; y < mTestParams.windowHeight; ++y)
+    for (EGLint y = 0; y < mTestParams->windowHeight; ++y)
     {
-        for (EGLint x = 0; x < mTestParams.windowWidth; ++x)
+        for (EGLint x = 0; x < mTestParams->windowWidth; ++x)
         {
-            EGLint srcPixel = x + y * mTestParams.windowWidth;
-            EGLint dstPixel = x + (mTestParams.windowHeight - y - 1) * mTestParams.windowWidth;
+            EGLint srcPixel = x + y * mTestParams->windowWidth;
+            EGLint dstPixel = x + (mTestParams->windowHeight - y - 1) * mTestParams->windowWidth;
             memcpy(&rgbData[dstPixel * 3], &pixelData[srcPixel * 4], 3);
         }
     }
 
-    if (!angle::SavePNGRGB(screenshotName.c_str(), "ANGLE Screenshot", mTestParams.windowWidth,
-                           mTestParams.windowHeight, rgbData))
+    if (!angle::SavePNGRGB(screenshotName.c_str(), "ANGLE Screenshot", mTestParams->windowWidth,
+                           mTestParams->windowHeight, rgbData))
     {
         failTest(std::string("Error saving screenshot: ") + screenshotName);
         return;

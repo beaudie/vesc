@@ -13,6 +13,7 @@
 #ifndef LIBANGLE_OBSERVER_H_
 #define LIBANGLE_OBSERVER_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/FastVector.h"
 #include "common/angleutils.h"
 
@@ -164,7 +165,7 @@ class ObserverBinding final : public ObserverBindingBase
     ANGLE_INLINE void assignSubject(Subject *subject) { mSubject = subject; }
 
   private:
-    Subject *mSubject;
+    raw_ptr<Subject> mSubject;
 };
 
 }  // namespace angle

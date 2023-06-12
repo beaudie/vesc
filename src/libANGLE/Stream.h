@@ -15,6 +15,7 @@
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/angleutils.h"
 #include "libANGLE/AttributeMap.h"
 #include "libANGLE/Debug.h"
@@ -107,7 +108,7 @@ class Stream final : public LabeledObject, angle::NonCopyable
     EGLLabelKHR mLabel;
 
     // Associated display
-    Display *mDisplay;
+    raw_ptr<Display> mDisplay;
 
     // Producer Implementation
     rx::StreamProducerImpl *mProducerImplementation;
@@ -115,7 +116,7 @@ class Stream final : public LabeledObject, angle::NonCopyable
     // Associated GL context. Note that this is a weak pointer used for validation purposes only,
     // and should never be arbitrarily dereferenced without knowing the context still exists as it
     // can become dangling at any time.
-    gl::Context *mContext;
+    raw_ptr<gl::Context> mContext;
 
     // EGL defined attributes
     EGLint mState;
@@ -131,7 +132,7 @@ class Stream final : public LabeledObject, angle::NonCopyable
     struct PlaneTexture
     {
         EGLint textureUnit;
-        gl::Texture *texture;
+        raw_ptr<gl::Texture> texture;
     };
     // Texture units and textures for all the planes
     std::array<PlaneTexture, 3> mPlanes;

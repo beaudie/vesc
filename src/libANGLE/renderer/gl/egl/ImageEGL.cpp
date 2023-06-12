@@ -61,21 +61,21 @@ egl::Error ImageEGL::initialize(const egl::Display *display)
             attributes.push_back(mState.imageIndex.getLayerIndex());
         }
 
-        const TextureGL *textureGL = GetImplAs<TextureGL>(GetAs<gl::Texture>(mState.source));
+        const TextureGL *textureGL = GetImplAs<TextureGL>(GetAs<gl::Texture>(mState.source.get()));
         buffer                = gl_egl::GLObjectHandleToEGLClientBuffer(textureGL->getTextureID());
         mNativeInternalFormat = textureGL->getNativeInternalFormat(mState.imageIndex);
     }
     else if (egl::IsRenderbufferTarget(mTarget))
     {
         const RenderbufferGL *renderbufferGL =
-            GetImplAs<RenderbufferGL>(GetAs<gl::Renderbuffer>(mState.source));
+            GetImplAs<RenderbufferGL>(GetAs<gl::Renderbuffer>(mState.source.get()));
         buffer = gl_egl::GLObjectHandleToEGLClientBuffer(renderbufferGL->getRenderbufferID());
         mNativeInternalFormat = renderbufferGL->getNativeInternalFormat();
     }
     else if (egl::IsExternalImageTarget(mTarget))
     {
-        const ExternalImageSiblingEGL *externalImageSibling =
-            GetImplAs<ExternalImageSiblingEGL>(GetAs<egl::ExternalImageSibling>(mState.source));
+        const ExternalImageSiblingEGL *externalImageSibling = GetImplAs<ExternalImageSiblingEGL>(
+            GetAs<egl::ExternalImageSibling>(mState.source.get()));
         buffer                = externalImageSibling->getBuffer();
         mNativeInternalFormat = externalImageSibling->getFormat().info->sizedInternalFormat;
 

@@ -8,6 +8,7 @@
 #define COMPILER_TRANSLATOR_DIRECTIVEHANDLER_H_
 
 #include "GLSLANG/ShaderLang.h"
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "common/angleutils.h"
 #include "compiler/preprocessor/DirectiveHandlerBase.h"
 #include "compiler/preprocessor/Macro.h"
@@ -28,7 +29,7 @@ class TDirectiveHandler : public angle::pp::DirectiveHandler, angle::NonCopyable
     ~TDirectiveHandler() override;
 
     const TPragma &pragma() const { return mPragma; }
-    const TExtensionBehavior &extensionBehavior() const { return mExtensionBehavior; }
+    const TExtensionBehavior &extensionBehavior() const { return *mExtensionBehavior; }
 
     void handleError(const angle::pp::SourceLocation &loc, const std::string &msg) override;
 
@@ -48,9 +49,9 @@ class TDirectiveHandler : public angle::pp::DirectiveHandler, angle::NonCopyable
 
   private:
     TPragma mPragma;
-    TExtensionBehavior &mExtensionBehavior;
-    TDiagnostics &mDiagnostics;
-    int &mShaderVersion;
+    const raw_ref<TExtensionBehavior> mExtensionBehavior;
+    const raw_ref<TDiagnostics> mDiagnostics;
+    const raw_ref<int> mShaderVersion;
     sh::GLenum mShaderType;
 };
 

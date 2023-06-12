@@ -6,6 +6,7 @@
 // MultiThreadSteps.h:
 //   Synchronization help for tests that use multiple threads.
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "gl_raii.h"
 
 #include <atomic>
@@ -89,9 +90,9 @@ class ThreadSynchronization
     }
 
   private:
-    E *mCurrentStep;
-    std::mutex *mMutex;
-    std::condition_variable *mCondVar;
+    raw_ptr<E> mCurrentStep;
+    raw_ptr<std::mutex> mMutex;
+    raw_ptr<std::condition_variable> mCondVar;
 };
 }  // anonymous namespace
 

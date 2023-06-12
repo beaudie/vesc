@@ -8,6 +8,7 @@
 
 #include "compiler/translator/tree_ops/RewriteTexelFetchOffset.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/angleutils.h"
 #include "compiler/translator/SymbolTable.h"
 #include "compiler/translator/tree_util/IntermNode_util.h"
@@ -32,7 +33,7 @@ class Traverser : public TIntermTraverser
     bool visitAggregate(Visit visit, TIntermAggregate *node) override;
     void nextIteration();
 
-    const TSymbolTable *symbolTable;
+    raw_ptr<const TSymbolTable> symbolTable;
     const int shaderVersion;
     bool mFound = false;
 };

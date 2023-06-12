@@ -8,6 +8,8 @@
 
 #include "compiler/translator/tree_util/ReplaceVariable.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "compiler/translator/IntermNode.h"
 #include "compiler/translator/Symbol.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
@@ -36,8 +38,8 @@ class ReplaceVariableTraverser : public TIntermTraverser
     }
 
   private:
-    const TVariable *const mToBeReplaced;
-    const TIntermTyped *const mReplacement;
+    const raw_ptr<const TVariable> mToBeReplaced;
+    const raw_ptr<const TIntermTyped> mReplacement;
 };
 
 class ReplaceVariablesTraverser : public TIntermTraverser
@@ -49,15 +51,15 @@ class ReplaceVariablesTraverser : public TIntermTraverser
 
     void visitSymbol(TIntermSymbol *node) override
     {
-        auto iter = mVariableMap.find(&node->variable());
-        if (iter != mVariableMap.end())
+        auto iter = mVariableMap->find(&node->variable());
+        if (iter != mVariableMap->end())
         {
             queueReplacement(iter->second->deepCopy(), OriginalNode::IS_DROPPED);
         }
     }
 
   private:
-    const VariableReplacementMap &mVariableMap;
+    const raw_ref<const VariableReplacementMap> mVariableMap;
 };
 
 class GetDeclaratorReplacementsTraverser : public TIntermTraverser
@@ -98,7 +100,7 @@ class GetDeclaratorReplacementsTraverser : public TIntermTraverser
     }
 
   private:
-    VariableReplacementMap *mVariableMap;
+    raw_ptr<VariableReplacementMap> mVariableMap;
 };
 
 }  // anonymous namespace

@@ -10,6 +10,7 @@
 #ifndef LIBANGLE_DEVICE_H_
 #define LIBANGLE_DEVICE_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/angleutils.h"
 #include "libANGLE/Display.h"
 #include "libANGLE/Error.h"
@@ -50,7 +51,7 @@ class Device final : public LabeledObject, angle::NonCopyable
 
     EGLLabelKHR mLabel;
 
-    Display *mOwningDisplay;
+    raw_ptr<Display> mOwningDisplay;
     std::unique_ptr<rx::DeviceImpl> mImplementation;
 
     DeviceExtensions mDeviceExtensions;

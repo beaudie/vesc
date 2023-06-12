@@ -11,6 +11,8 @@
 
 #include <vector>
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
 
@@ -68,7 +70,7 @@ class VertexData
   private:
     unsigned mNumVertices;
     int mDimension;
-    const double *mData;
+    raw_ptr<const double> mData;
     // offset and stride in doubles
     unsigned mOffset;
     unsigned mStride;
@@ -123,15 +125,15 @@ struct Attrib
 
     void fillContainer(void) const
     {
-        for (unsigned i = 0; i < mData.getNumVertices(); ++i)
+        for (unsigned i = 0; i < mData->getNumVertices(); ++i)
         {
-            for (int j = 0; j < mData.getDimension(); ++j)
+            for (int j = 0; j < mData->getDimension(); ++j)
             {
                 size_t destOffset = mOffset + mStride * i + mCTypeSize * j;
                 if (destOffset + mCTypeSize > Container::kSize)
                     FAIL() << "test case does not fit container";
 
-                double value = mData.getValue(i, j);
+                double value = mData->getValue(i, j);
                 if (mGLType == GL_FIXED)
                     value *= 1 << 16;
                 else if (mNormalized)
@@ -153,12 +155,12 @@ struct Attrib
         glBindBuffer(GL_ARRAY_BUFFER, mContainer->getBuffer());
         if (mPureInteger)
         {
-            glVertexAttribIPointer(index, mData.getDimension(), mGLType, mStride,
+            glVertexAttribIPointer(index, mData->getDimension(), mGLType, mStride,
                                    mContainer->getAddress() + mOffset);
         }
         else
         {
-            glVertexAttribPointer(index, mData.getDimension(), mGLType, mNormalized, mStride,
+            glVertexAttribPointer(index, mData->getDimension(), mGLType, mNormalized, mStride,
                                   mContainer->getAddress() + mOffset);
         }
         EXPECT_GL_NO_ERROR();
@@ -170,7 +172,7 @@ struct Attrib
     std::shared_ptr<Container> mContainer;
     unsigned mOffset;
     unsigned mStride;
-    const VertexData &mData;
+    const raw_ref<const VertexData> mData;
     void (*mStore)(double value, void *dest);
     GLenum mGLType;
     GLboolean mNormalized;
@@ -224,7 +226,7 @@ class Format
             container,
             offset,
             stride,
-            data,
+            raw_ref(data),
             Store<CType>,
             GLType,
             Normalized,

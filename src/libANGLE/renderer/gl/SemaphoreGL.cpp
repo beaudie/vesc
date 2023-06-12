@@ -36,7 +36,7 @@ void GatherNativeTextureIDs(const gl::TextureBarrierVector &textureBarriers,
     for (GLuint textureIdx = 0; textureIdx < textureBarriers.size(); textureIdx++)
     {
         (*outIDs)[textureIdx] =
-            GetImplAs<TextureGL>(textureBarriers[textureIdx].texture)->getTextureID();
+            GetImplAs<TextureGL>(textureBarriers[textureIdx].texture.get())->getTextureID();
         (*outLayouts)[textureIdx] = textureBarriers[textureIdx].layout;
     }
 }

@@ -14,6 +14,7 @@
 #include <fstream>
 #include <string>
 
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "sys/stat.h"
 
 #include "common/aligned_memory.h"
@@ -235,18 +236,18 @@ struct FmtCapturePrefix
         : contextId(contextIdIn), captureLabel(captureLabelIn)
     {}
     gl::ContextID contextId;
-    const std::string &captureLabel;
+    const raw_ref<const std::string> captureLabel;
 };
 
 std::ostream &operator<<(std::ostream &os, const FmtCapturePrefix &fmt)
 {
-    if (fmt.captureLabel.empty())
+    if (fmt.captureLabel->empty())
     {
         os << "angle_capture";
     }
     else
     {
-        os << fmt.captureLabel;
+        os << (*fmt.captureLabel);
     }
 
     if (fmt.contextId == kSharedContextId)
@@ -2993,7 +2994,8 @@ void CaptureVertexArrayState(std::vector<CallCapture> *setupCalls,
             }
             else if (attrib.bindingIndex == attribIndex &&
                      VertexBindingMatchesAttribStride(attrib, binding) &&
-                     (!buffer || binding.getOffset() == reinterpret_cast<GLintptr>(attrib.pointer)))
+                     (!buffer ||
+                      binding.getOffset() == reinterpret_cast<GLintptr>(attrib.pointer.get())))
             {
                 // Check if we can use strictly ES2 semantics, and track indexes that do.
                 vertexPointerBindings.set(attribIndex);
@@ -5883,7 +5885,7 @@ CoherentBuffer::CoherentBuffer(uintptr_t start,
         size_t numShadowPages = (size / pageSize) + 1;
         mShadowMemory         = AlignedAlloc(numShadowPages * pageSize, pageSize);
         ASSERT(mShadowMemory != nullptr);
-        start = reinterpret_cast<uintptr_t>(mShadowMemory);
+        start = reinterpret_cast<uintptr_t>(mShadowMemory.get());
     }
 
     mRange.start           = start;

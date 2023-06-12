@@ -12,6 +12,7 @@
 #include <EGL/eglext.h>
 #include <X11/Xlib.h>
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "test_utils/ANGLETest.h"
 #include "util/OSWindow.h"
 #include "util/linux/x11/X11Window.h"

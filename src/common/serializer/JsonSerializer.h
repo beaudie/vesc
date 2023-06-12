@@ -9,6 +9,7 @@
 #ifndef COMMON_JSONSERIALIZER_H_
 #define COMMON_JSONSERIALIZER_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "common/angleutils.h"
 
 #if !defined(ANGLE_HAS_RAPIDJSON)
@@ -81,7 +82,7 @@ class JsonSerializer : public angle::NonCopyable
 
         for (typename StoreAs<typename Vector::value_type>::Type v : value)
         {
-            arr.PushBack(v, mAllocator);
+            arr.PushBack(v, *mAllocator);
         }
 
         addValue(name, std::move(arr));
@@ -123,7 +124,7 @@ class JsonSerializer : public angle::NonCopyable
     using ValuePointer = std::unique_ptr<rapidjson::Value>;
 
     rapidjson::Document mDoc;
-    rapidjson::Document::AllocatorType &mAllocator;
+    const raw_ref<rapidjson::Document::AllocatorType> mAllocator;
     std::stack<std::string> mGroupNameStack;
     std::stack<SortedValueGroup> mGroupValueStack;
     std::string mResult;

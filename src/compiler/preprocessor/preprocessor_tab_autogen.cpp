@@ -46,6 +46,8 @@
    USER NAME SPACE" below.  */
 
 /* Identify Bison output, and Bison version.  */
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
+
 #define YYBISON 30802
 
 /* Bison version string.  */
@@ -128,14 +130,14 @@ namespace
 {
 struct Context
 {
-    angle::pp::Diagnostics *diagnostics;
-    angle::pp::Lexer *lexer;
-    angle::pp::Token *token;
-    int *result;
+    raw_ptr<angle::pp::Diagnostics> diagnostics;
+    raw_ptr<angle::pp::Lexer> lexer;
+    raw_ptr<angle::pp::Token> token;
+    raw_ptr<int> result;
     bool parsePresetToken;
 
     angle::pp::ExpressionParser::ErrorSettings errorSettings;
-    bool *valid;
+    raw_ptr<bool> valid;
 
     void startIgnoreErrors() { ++ignoreErrors; }
     void endIgnoreErrors() { --ignoreErrors; }

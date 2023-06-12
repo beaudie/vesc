@@ -6,6 +6,7 @@
 
 // DebugTest.cpp : Tests of the GL_KHR_debug extension
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/debug.h"
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
@@ -201,7 +202,7 @@ struct Message
     GLuint id;
     GLenum severity;
     std::string message;
-    const void *userParam;
+    raw_ptr<const void> userParam;
 };
 
 static void GL_APIENTRY Callback(GLenum source,

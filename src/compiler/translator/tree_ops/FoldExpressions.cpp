@@ -12,6 +12,7 @@
 
 #include "compiler/translator/tree_ops/FoldExpressions.h"
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "compiler/translator/Diagnostics.h"
 #include "compiler/translator/IntermNode.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
@@ -95,7 +96,7 @@ class FoldExpressionsTraverser : public TIntermTraverser
     }
 
   private:
-    TDiagnostics *mDiagnostics;
+    raw_ptr<TDiagnostics> mDiagnostics;
     bool mDidReplace;
 };
 

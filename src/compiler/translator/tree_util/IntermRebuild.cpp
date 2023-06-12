@@ -6,6 +6,7 @@
 
 #include <algorithm>
 
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "compiler/translator/Compiler.h"
 #include "compiler/translator/SymbolTable.h"
 #include "compiler/translator/tree_util/AsNode.h"
@@ -185,7 +186,7 @@ bool TIntermRebuild::rebuildRoot(TIntermBlock &root)
     {
         return false;
     }
-    return mCompiler.validateAST(&root);
+    return mCompiler->validateAST(&root);
 }
 
 bool TIntermRebuild::rebuildInPlace(TIntermAggregate &node)
@@ -303,13 +304,13 @@ bool TIntermRebuild::traverseAggregateBaseChildren(TIntermAggregateBase &node)
 struct TIntermRebuild::NodeStackGuard
 {
     ConsList<TIntermNode *> oldNodeStack;
-    ConsList<TIntermNode *> &nodeStack;
+    const raw_ref<ConsList<TIntermNode *>> nodeStack;
     NodeStackGuard(ConsList<TIntermNode *> &nodeStack, TIntermNode *node)
         : oldNodeStack(nodeStack), nodeStack(nodeStack)
     {
         nodeStack = {node, &oldNodeStack};
     }
-    ~NodeStackGuard() { nodeStack = oldNodeStack; }
+    ~NodeStackGuard() { (*nodeStack) = oldNodeStack; }
 };
 
 PostResult TIntermRebuild::traverseAny(TIntermNode &originalNode)
@@ -609,7 +610,7 @@ TIntermNode *TIntermRebuild::traverseBinaryChildren(TIntermBinary &node)
             break;
 
             case TOperator::EOpComma:
-                return TIntermBinary::CreateComma(newLeft, newRight, mCompiler.getShaderVersion());
+                return TIntermBinary::CreateComma(newLeft, newRight, mCompiler->getShaderVersion());
 
             default:
                 break;

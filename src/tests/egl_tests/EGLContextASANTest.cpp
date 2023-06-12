@@ -8,6 +8,7 @@
 
 #include <gtest/gtest.h>
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "test_utils/ANGLETest.h"
 #include "test_utils/angle_test_configs.h"
 #include "test_utils/gl_raii.h"
@@ -117,9 +118,9 @@ TEST_P(EGLContextASANTest, DestroyContextInUse)
         }
 
       private:
-        Step *mCurrentStep;
-        std::mutex *mMutex;
-        std::condition_variable *mCondVar;
+        raw_ptr<Step> mCurrentStep;
+        raw_ptr<std::mutex> mMutex;
+        raw_ptr<std::condition_variable> mCondVar;
     };
 
     std::thread deletingThread = std::thread([&]() {

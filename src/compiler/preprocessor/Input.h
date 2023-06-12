@@ -10,6 +10,8 @@
 #include <cstddef>
 #include <vector>
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
+
 namespace angle
 {
 

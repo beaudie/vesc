@@ -19,6 +19,7 @@
 
 #include <GLSLANG/ShaderLang.h>
 #include "angle_gl.h"
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 
 #include "common/BinaryStream.h"
 #include "common/CompiledShaderState.h"
@@ -321,7 +322,7 @@ class Shader final : angle::NonCopyable, public LabeledObject
     std::unique_ptr<CompilingState> mCompilingState;
     egl::BlobCache::Key mShaderHash;
 
-    ShaderProgramManager *mResourceManager;
+    raw_ptr<ShaderProgramManager> mResourceManager;
 
     GLuint mCurrentMaxComputeWorkGroupInvocations;
     unsigned int mMaxComputeSharedMemory;

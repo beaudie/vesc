@@ -13,6 +13,7 @@
 
 #include <memory>
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/angleutils.h"
 #include "libANGLE/Debug.h"
 #include "libANGLE/Program.h"
@@ -73,7 +74,7 @@ class ProgramPipelineState final : angle::NonCopyable
     std::string mLabel;
 
     // The active shader program
-    Program *mActiveShaderProgram;
+    raw_ptr<Program> mActiveShaderProgram;
     // The shader programs for each stage.
     ShaderMap<Program *> mPrograms;
 

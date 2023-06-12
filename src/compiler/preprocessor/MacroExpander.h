@@ -10,6 +10,7 @@
 #include <memory>
 #include <vector>
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "compiler/preprocessor/Lexer.h"
 #include "compiler/preprocessor/Macro.h"
 #include "compiler/preprocessor/Preprocessor.h"
@@ -67,9 +68,9 @@ class MacroExpander : public Lexer
         std::vector<Token> replacements;
     };
 
-    Lexer *mLexer;
-    MacroSet *mMacroSet;
-    Diagnostics *mDiagnostics;
+    raw_ptr<Lexer> mLexer;
+    raw_ptr<MacroSet> mMacroSet;
+    raw_ptr<Diagnostics> mDiagnostics;
     bool mParseDefined;
 
     std::unique_ptr<Token> mReserveToken;

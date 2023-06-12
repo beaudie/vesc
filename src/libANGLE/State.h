@@ -12,6 +12,7 @@
 #include <bitset>
 #include <memory>
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/Color.h"
 #include "common/angleutils.h"
 #include "common/bitset_utils.h"
@@ -1116,19 +1117,19 @@ class State : angle::NonCopyable
     ClipOrigin mClipOrigin;
     ClipDepthMode mClipDepthMode;
 
-    Framebuffer *mReadFramebuffer;
-    Framebuffer *mDrawFramebuffer;
+    raw_ptr<Framebuffer> mReadFramebuffer;
+    raw_ptr<Framebuffer> mDrawFramebuffer;
     BindingPointer<Renderbuffer> mRenderbuffer;
-    Program *mProgram;
+    raw_ptr<Program> mProgram;
     BindingPointer<ProgramPipeline> mProgramPipeline;
-    ProgramExecutable *mExecutable;
+    raw_ptr<ProgramExecutable> mExecutable;
 
     // GL_ANGLE_provoking_vertex
     ProvokingVertexConvention mProvokingVertex;
 
     using VertexAttribVector = std::vector<VertexAttribCurrentValueData>;
     VertexAttribVector mVertexAttribCurrentValues;  // From glVertexAttrib
-    VertexArray *mVertexArray;
+    raw_ptr<VertexArray> mVertexArray;
     ComponentTypeMask mCurrentValuesTypeMask;
 
     // Texture and sampler bindings
@@ -1227,7 +1228,7 @@ class State : angle::NonCopyable
     ImageUnitMask mDirtyImages;
 
     // The Overlay object, used by the backend to render the overlay.
-    const OverlayType *mOverlay;
+    raw_ptr<const OverlayType> mOverlay;
 
     // OES_draw_buffers_indexed
     DrawBufferMask mBlendFuncConstantAlphaDrawBuffers;

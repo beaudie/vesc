@@ -4,6 +4,7 @@
 // found in the LICENSE file.
 //
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
 
@@ -17,7 +18,7 @@ struct ReadbackTestParam
     GLuint attachment;
     GLuint format;
     GLuint type;
-    void *data;
+    raw_ptr<void> data;
     int depthBits;
     int stencilBits;
 };
@@ -581,7 +582,7 @@ void main()
         GLuint attachment;
         GLuint format;
         GLuint type;
-        void *data;
+        raw_ptr<void> data;
         int depthBits;
         int stencilBits;
     };

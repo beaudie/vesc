@@ -16,6 +16,7 @@
 #include "compiler/translator/tree_ops/EmulateMultiDrawShaderBuiltins.h"
 
 #include "angle_gl.h"
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "compiler/translator/StaticType.h"
 #include "compiler/translator/Symbol.h"
 #include "compiler/translator/SymbolTable.h"
@@ -49,7 +50,7 @@ class FindGLDrawIDTraverser : public TIntermTraverser
     }
 
   private:
-    const TVariable *mVariable;
+    raw_ptr<const TVariable> mVariable;
 };
 
 class AddBaseVertexToGLVertexIDTraverser : public TIntermTraverser
@@ -90,7 +91,7 @@ class FindGLBaseVertexTraverser : public TIntermTraverser
     }
 
   private:
-    const TVariable *mVariable;
+    raw_ptr<const TVariable> mVariable;
 };
 
 constexpr const ImmutableString kEmulatedGLBaseInstanceName("angle_BaseInstance");
@@ -112,7 +113,7 @@ class FindGLBaseInstanceTraverser : public TIntermTraverser
     }
 
   private:
-    const TVariable *mVariable;
+    raw_ptr<const TVariable> mVariable;
 };
 
 }  // namespace

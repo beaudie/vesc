@@ -11,6 +11,7 @@
 
 #include <vector>
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/bitset_utils.h"
 #include "common/debug.h"
 #include "common/utilities.h"
@@ -71,7 +72,7 @@ class CollectVaryingTraverser : public TIntermTraverser
     }
 
   private:
-    std::vector<const TVariable *> *mVaryingsOut;
+    raw_ptr<std::vector<const TVariable *>> mVaryingsOut;
 };
 }  // namespace
 

@@ -894,14 +894,14 @@ void ANGLERenderTest::SetUp()
     mPlatformMethods.monotonicallyIncreasingTime = MonotonicallyIncreasingTime;
     mPlatformMethods.context                     = this;
 
-    if (!mOSWindow->initialize(mName, mTestParams.windowWidth, mTestParams.windowHeight))
+    if (!mOSWindow->initialize(mName, mTestParams->windowWidth, mTestParams->windowHeight))
     {
         failTest("Failed initializing OSWindow");
         return;
     }
 
     // Override platform method parameter.
-    EGLPlatformParameters withMethods = mTestParams.eglParameters;
+    EGLPlatformParameters withMethods = mTestParams->eglParameters;
     withMethods.platformMethods       = &mPlatformMethods;
 
     // Request a common framebuffer config
@@ -911,10 +911,10 @@ void ANGLERenderTest::SetUp()
     mConfigParams.alphaBits   = 8;
     mConfigParams.depthBits   = 24;
     mConfigParams.stencilBits = 8;
-    mConfigParams.colorSpace  = mTestParams.colorSpace;
-    mConfigParams.multisample = mTestParams.multisample;
-    mConfigParams.samples     = mTestParams.samples;
-    if (mTestParams.surfaceType != SurfaceType::WindowWithVSync)
+    mConfigParams.colorSpace  = mTestParams->colorSpace;
+    mConfigParams.multisample = mTestParams->multisample;
+    mConfigParams.samples     = mTestParams->samples;
+    if (mTestParams->surfaceType != SurfaceType::WindowWithVSync)
     {
         mConfigParams.swapInterval = 0;
     }
@@ -925,7 +925,7 @@ void ANGLERenderTest::SetUp()
     }
 
     GLWindowResult res = mGLWindow->initializeGLWithResult(
-        mOSWindow, mEntryPointsLib.get(), mTestParams.driver, withMethods, mConfigParams);
+        mOSWindow, mEntryPointsLib.get(), mTestParams->driver, withMethods, mConfigParams);
     switch (res)
     {
         case GLWindowResult::NoColorspaceSupport:
@@ -974,7 +974,7 @@ void ANGLERenderTest::SetUp()
     }
 
     // Disable vsync (if not done by the window init).
-    if (mTestParams.surfaceType != SurfaceType::WindowWithVSync)
+    if (mTestParams->surfaceType != SurfaceType::WindowWithVSync)
     {
         if (!mGLWindow->setSwapInterval(0))
         {
@@ -983,7 +983,7 @@ void ANGLERenderTest::SetUp()
         }
     }
 
-    if (mTestParams.trackGpuTime)
+    if (mTestParams->trackGpuTime)
     {
         mIsTimestampQueryAvailable = EnsureGLExtensionEnabled("GL_EXT_disjoint_timer_query");
     }
@@ -1012,7 +1012,7 @@ void ANGLERenderTest::SetUp()
         // GTEST_SKIP returns.
     }
 
-    if (mTestParams.iterationsPerStep == 0)
+    if (mTestParams->iterationsPerStep == 0)
     {
         failTest("Please initialize 'iterationsPerStep'.");
         return;
@@ -1255,7 +1255,7 @@ void ANGLERenderTest::step()
 
 void ANGLERenderTest::startGpuTimer()
 {
-    if (mTestParams.trackGpuTime && mIsTimestampQueryAvailable)
+    if (mTestParams->trackGpuTime && mIsTimestampQueryAvailable)
     {
         glGenQueriesEXT(1, &mCurrentTimestampBeginQuery);
         glQueryCounterEXT(mCurrentTimestampBeginQuery, GL_TIMESTAMP_EXT);
@@ -1264,7 +1264,7 @@ void ANGLERenderTest::startGpuTimer()
 
 void ANGLERenderTest::stopGpuTimer()
 {
-    if (mTestParams.trackGpuTime && mIsTimestampQueryAvailable)
+    if (mTestParams->trackGpuTime && mIsTimestampQueryAvailable)
     {
         GLuint endQuery = 0;
         glGenQueriesEXT(1, &endQuery);
@@ -1275,7 +1275,7 @@ void ANGLERenderTest::stopGpuTimer()
 
 void ANGLERenderTest::computeGPUTime()
 {
-    if (mTestParams.trackGpuTime && mIsTimestampQueryAvailable)
+    if (mTestParams->trackGpuTime && mIsTimestampQueryAvailable)
     {
         while (!mTimestampQueries.empty())
         {
@@ -1311,7 +1311,7 @@ void ANGLERenderTest::startTest() {}
 
 void ANGLERenderTest::finishTest()
 {
-    if (mTestParams.eglParameters.deviceType != EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE &&
+    if (mTestParams->eglParameters.deviceType != EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE &&
         !gNoFinish && !gRetraceMode)
     {
         FinishAndCheckForContextLoss();

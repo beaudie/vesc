@@ -85,6 +85,9 @@ vars = {
   # Note: this dep cannot be auto-rolled b/c of nesting.
   'patched_yasm_revision': '720b70524a4424b15fc57e82263568c8ba0496ad',
 
+  # Current partition_alloc version.
+  'partition_alloc_revision' : '85270a1f9734a77c605c8ff790e5ae9b2941b0d7',
+
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling catapult
   # and whatever else without interference from each other.
@@ -98,6 +101,9 @@ vars = {
   # the commit queue can handle CLs rolling luci-go
   # and whatever else without interference from each other.
   'luci_go': 'git_revision:e99800d3fd42249c9cdda3f58ba31c674b4876f6',
+
+  # Needed by partition_alloc
+  'lss_revision': '9719c1e1e676814c456b55f5f070eabad6709d31',
 
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling android_sdk_build-tools_version
@@ -138,6 +144,11 @@ vars = {
 }
 
 deps = {
+
+  'base/allocator/partition_allocator':{
+      'url': '{chromium_git}/chromium/src/base/allocator/partition_allocator.git@{partition_alloc_revision}',
+      'condition': 'not build_with_chromium',
+  },
 
   'build': {
     'url': '{chromium_git}/chromium/src/build.git@a838ac9f43ce33d188acec29163d4d5bd4dec153',
@@ -470,6 +481,11 @@ deps = {
   'third_party/libpng/src': {
     'url': '{android_git}/platform/external/libpng@d2ece84bd73af1cd5fae5e7574f79b40e5de4fba',
     'condition': 'not build_with_chromium',
+  },
+
+  'third_party/lss': {
+      'url': '{chromium_git}/linux-syscall-support.git@{lss_revision}',
+      'condition': 'checkout_android or checkout_linux',
   },
 
   'third_party/jdk': {

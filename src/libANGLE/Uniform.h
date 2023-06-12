@@ -11,6 +11,7 @@
 #include <vector>
 
 #include "angle_gl.h"
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "common/MemoryBuffer.h"
 #include "common/debug.h"
 #include "common/utilities.h"
@@ -73,7 +74,7 @@ struct LinkedUniform : public sh::ShaderVariable, public ActiveVariable
     size_t getElementSize() const { return typeInfo->externalSize; }
     size_t getElementComponents() const { return typeInfo->componentCount; }
 
-    const UniformTypeInfo *typeInfo;
+    raw_ptr<const UniformTypeInfo> typeInfo;
 
     // Identifies the containing buffer backed resource -- interface block or atomic counter buffer.
     int bufferIndex;

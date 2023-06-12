@@ -6,6 +6,7 @@
 
 #include "compiler/translator/BuiltInFunctionEmulator.h"
 #include "angle_gl.h"
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 #include "compiler/translator/Symbol.h"
 #include "compiler/translator/tree_util/IntermTraverse.h"
 
@@ -23,7 +24,7 @@ class BuiltInFunctionEmulator::BuiltInFunctionEmulationMarker : public TIntermTr
     {
         if (node->getFunction())
         {
-            bool needToEmulate = mEmulator.setFunctionCalled(node->getFunction());
+            bool needToEmulate = mEmulator->setFunctionCalled(node->getFunction());
             if (needToEmulate)
                 node->setUseEmulatedFunction();
         }
@@ -38,14 +39,14 @@ class BuiltInFunctionEmulator::BuiltInFunctionEmulationMarker : public TIntermTr
         {
             return true;
         }
-        bool needToEmulate = mEmulator.setFunctionCalled(node->getFunction());
+        bool needToEmulate = mEmulator->setFunctionCalled(node->getFunction());
         if (needToEmulate)
             node->setUseEmulatedFunction();
         return true;
     }
 
   private:
-    BuiltInFunctionEmulator &mEmulator;
+    const raw_ref<BuiltInFunctionEmulator> mEmulator;
 };
 
 BuiltInFunctionEmulator::BuiltInFunctionEmulator() {}

@@ -7,6 +7,7 @@
 //   Various tests related for shader storage buffers.
 //
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "test_utils/ANGLETest.h"
 #include "test_utils/gl_raii.h"
 
@@ -32,7 +33,7 @@ struct MatrixCase
     unsigned int mRows;
     unsigned int mMatrixStride;
     const char *mComputeShaderSource;
-    const float *mInputdata;
+    raw_ptr<const float> mInputdata;
     const unsigned int kBytesPerComponent = sizeof(float);
 };
 
@@ -49,8 +50,8 @@ struct VectorCase
     {}
     unsigned int mComponents;
     const char *mComputeShaderSource;
-    const GLuint *mInputdata;
-    const GLuint *mExpectedData;
+    raw_ptr<const GLuint> mInputdata;
+    raw_ptr<const GLuint> mExpectedData;
     const unsigned int kBytesPerComponent = sizeof(GLuint);
 };
 

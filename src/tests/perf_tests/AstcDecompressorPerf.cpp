@@ -7,6 +7,7 @@
 //
 
 #include "ANGLEPerfTest.h"
+#include "base/allocator/partition_allocator/pointers/raw_ref.h"
 
 #include <gmock/gmock.h>
 
@@ -45,7 +46,7 @@ class AstcDecompressorPerfTest : public ANGLEPerfTest,
 
     std::string getName();
 
-    AstcDecompressor &mDecompressor;
+    const raw_ref<AstcDecompressor> mDecompressor;
     std::vector<uint8_t> mInput;
     std::vector<uint8_t> mOutput;
     std::shared_ptr<WorkerThreadPool> mSingleThreadPool;
@@ -63,8 +64,9 @@ AstcDecompressorPerfTest::AstcDecompressorPerfTest()
 
 void AstcDecompressorPerfTest::step()
 {
-    mDecompressor.decompress(mSingleThreadPool, mMultiThreadPool, GetParam().width,
-                             GetParam().height, 8, 8, mInput.data(), mInput.size(), mOutput.data());
+    mDecompressor->decompress(mSingleThreadPool, mMultiThreadPool, GetParam().width,
+                              GetParam().height, 8, 8, mInput.data(), mInput.size(),
+                              mOutput.data());
 }
 
 std::string AstcDecompressorPerfTest::getName()
@@ -77,7 +79,7 @@ std::string AstcDecompressorPerfTest::getName()
 // Measures the speed of ASTC decompression on the CPU.
 TEST_P(AstcDecompressorPerfTest, Run)
 {
-    if (!mDecompressor.available())
+    if (!mDecompressor->available())
         skipTest("ASTC decompressor not available");
 
     this->run();

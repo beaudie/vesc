@@ -12,6 +12,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "util/OSPixmap.h"
 
 class X11Pixmap : public OSPixmap

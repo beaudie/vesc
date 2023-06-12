@@ -338,7 +338,8 @@ void Image::onDestroy(const Display *display)
         // If the source is an external object, delete it
         if (IsExternalImageTarget(mState.target))
         {
-            ExternalImageSibling *externalSibling = rx::GetAs<ExternalImageSibling>(mState.source);
+            ExternalImageSibling *externalSibling =
+                rx::GetAs<ExternalImageSibling>(mState.source.get());
             externalSibling->onDestroy(display);
             delete externalSibling;
         }
@@ -428,7 +429,8 @@ bool Image::hasFrontBufferUsage() const
 {
     if (IsExternalImageTarget(mState.target))
     {
-        ExternalImageSibling *externalSibling = rx::GetAs<ExternalImageSibling>(mState.source);
+        ExternalImageSibling *externalSibling =
+            rx::GetAs<ExternalImageSibling>(mState.source.get());
         return externalSibling->hasFrontBufferUsage();
     }
 
@@ -484,7 +486,8 @@ Error Image::initialize(const Display *display, const gl::Context *context)
 {
     if (IsExternalImageTarget(mState.target))
     {
-        ExternalImageSibling *externalSibling = rx::GetAs<ExternalImageSibling>(mState.source);
+        ExternalImageSibling *externalSibling =
+            rx::GetAs<ExternalImageSibling>(mState.source.get());
         ANGLE_TRY(externalSibling->initialize(display, context));
 
         mState.hasProtectedContent = externalSibling->hasProtectedContent();
@@ -544,8 +547,9 @@ Error Image::initialize(const Display *display, const gl::Context *context)
     else if (IsExternalImageTarget(mState.target))
     {
         ASSERT(mState.source != nullptr);
-        mIsTexturable = rx::GetAs<ExternalImageSibling>(mState.source)->isTextureable(context);
-        mIsRenderable = rx::GetAs<ExternalImageSibling>(mState.source)
+        mIsTexturable =
+            rx::GetAs<ExternalImageSibling>(mState.source.get())->isTextureable(context);
+        mIsRenderable = rx::GetAs<ExternalImageSibling>(mState.source.get())
                             ->isRenderable(context, GL_NONE, gl::ImageIndex());
     }
     else

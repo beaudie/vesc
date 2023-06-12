@@ -9,6 +9,7 @@
 #ifndef COMPILER_TRANSLATOR_TREEUTIL_INTERMTRAVERSE_H_
 #define COMPILER_TRANSLATOR_TREEUTIL_INTERMTRAVERSE_H_
 
+#include "base/allocator/partition_allocator/pointers/raw_ptr.h"
 #include "compiler/translator/IntermNode.h"
 #include "compiler/translator/tree_util/Visit.h"
 
@@ -127,7 +128,7 @@ class TIntermTraverser : angle::NonCopyable
         bool isWithinDepthLimit() { return mWithinDepthLimit; }
 
       private:
-        TIntermTraverser *mTraverser;
+        raw_ptr<TIntermTraverser> mTraverser;
         bool mWithinDepthLimit;
     };
     // Optimized traversal functions for leaf nodes directly access ScopedNodeInTraversalPath.
@@ -188,8 +189,8 @@ class TIntermTraverser : angle::NonCopyable
             : parent(parentIn), original(originalIn), replacements(std::move(replacementsIn))
         {}
 
-        TIntermAggregateBase *parent;
-        TIntermNode *original;
+        raw_ptr<TIntermAggregateBase> parent;
+        raw_ptr<TIntermNode> original;
         TIntermSequence replacements;
     };
 
@@ -269,7 +270,7 @@ class TIntermTraverser : angle::NonCopyable
     // Multi replacements are processed after single replacements.
     std::vector<NodeReplaceWithMultipleEntry> mMultiReplacements;
 
-    TSymbolTable *mSymbolTable;
+    raw_ptr<TSymbolTable> mSymbolTable;
 
   private:
     // To insert multiple nodes into the parent block.
@@ -285,7 +286,7 @@ class TIntermTraverser : angle::NonCopyable
               insertionsAfter(_insertionsAfter)
         {}
 
-        TIntermBlock *parent;
+        raw_ptr<TIntermBlock> parent;
         TIntermSequence::size_type position;
         TIntermSequence insertionsBefore;
         TIntermSequence insertionsAfter;
@@ -307,9 +308,9 @@ class TIntermTraverser : angle::NonCopyable
               originalBecomesChildOfReplacement(_originalBecomesChildOfReplacement)
         {}
 
-        TIntermNode *parent;
-        TIntermNode *original;
-        TIntermNode *replacement;
+        raw_ptr<TIntermNode> parent;
+        raw_ptr<TIntermNode> original;
+        raw_ptr<TIntermNode> replacement;
         bool originalBecomesChildOfReplacement;
     };
 
@@ -319,7 +320,7 @@ class TIntermTraverser : angle::NonCopyable
             : node(nodeIn), pos(posIn)
         {}
 
-        TIntermBlock *node;
+        raw_ptr<TIntermBlock> node;
         TIntermSequence::size_type pos;
     };
 
