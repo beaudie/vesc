@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d9628f9e_d1e07c13",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-12T14:49:06Z",
+      "side": 1,
+      "message": "One thing I didn\u0027t realize until today is that git does some EOL conversions behind the scene, and we have a config for that but it doesn\u0027t seem to apply to all file extensions:\nhttps://crsrc.org/c/third_party/angle/.gitattributes",
+      "parentUuid": "035605b0_6e4ce536",
+      "revId": "6729d209e7a9d63c60c55d2d53b0f9317e00c048",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "88c426b6_36d22c31",
         "filename": "include/platform/gen_features.py",
         "patchSetId": 2
