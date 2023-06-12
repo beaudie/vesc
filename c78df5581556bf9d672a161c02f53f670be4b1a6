@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "67f6b457_fbc3c3bb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 30
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-06-12T23:45:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ee13c92_9e489edd",
+      "range": {
+        "startLine": 18,
+        "startChar": 21,
+        "endLine": 18,
+        "endChar": 29
+      },
+      "revId": "c78df5581556bf9d672a161c02f53f670be4b1a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a0e5000a_d9f7deda",
@@ -37,6 +61,24 @@
       "writtenOn": "2023-06-12T19:02:12Z",
       "side": 1,
       "message": "```suggestion\n// SwiftShader does not support tessellation and geometry shaders\n```",
+      "revId": "c78df5581556bf9d672a161c02f53f670be4b1a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dee2e7ae_9a4e2517",
+        "filename": "src/tests/deqp_support/deqp_gles31_rotate_test_expectations.txt",
+        "patchSetId": 30
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-06-12T23:45:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a0e5000a_d9f7deda",
       "revId": "c78df5581556bf9d672a161c02f53f670be4b1a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -64,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1f28ec3_728b85bd",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 30
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-06-12T23:45:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce8b9ef6_ca1c0758",
+      "range": {
+        "startLine": 362,
+        "startChar": 76,
+        "endLine": 362,
+        "endChar": 84
+      },
+      "revId": "c78df5581556bf9d672a161c02f53f670be4b1a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "17f894ca_cb62709c",
@@ -77,6 +143,24 @@
       "writtenOn": "2023-06-12T19:02:12Z",
       "side": 1,
       "message": "You can simplify these a lot by suppressing:\n\n```\ndeqp-GLES31.functional.*geometry*\ndeqp-GLES31.functional.*tess*\n```",
+      "revId": "c78df5581556bf9d672a161c02f53f670be4b1a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d51ba4e9_eaf7c187",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 30
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-06-12T23:45:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17f894ca_cb62709c",
       "revId": "c78df5581556bf9d672a161c02f53f670be4b1a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -98,6 +182,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1be75167_eeda3d09",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 30
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-06-12T23:45:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5478d377_a90c5e81",
+      "revId": "c78df5581556bf9d672a161c02f53f670be4b1a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4dd20618_37375407",
@@ -111,6 +213,24 @@
       "writtenOn": "2023-06-12T19:02:12Z",
       "side": 1,
       "message": "All these are because of lack of `VK_EXT_transform_feedback`, no? Can we bundle all the geometry/tessellation suppressions for Pixel 4 like with SwiftShader?\n\n```\ndeqp-GLES31.functional.*geometry*\ndeqp-GLES31.functional.*tess*\n```",
+      "revId": "c78df5581556bf9d672a161c02f53f670be4b1a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf0ba202_74f5ac7a",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 30
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-06-12T23:45:33Z",
+      "side": 1,
+      "message": "\u003e All these are because of lack of VK_EXT_transform_feedback, no? Can we bundle all the geometry/tessellation suppressions for Pixel 4 like with SwiftShader?\n\nYes, Pixel 4 does not support `GL_EXT_tessellation_shader` extension, due to lack of `VK_EXT_transform_feedback` and `VK_EXT_primitives_generated_query` vulkan extension.\n\nThis causes validation errors when test calls `glGetIntegerV(GL_MAX_TESS_CONTROL_SHADER_STORAGE_BLOCKS)` or `glGetIntegerV(GL_MAX_TESS_EVALUATION_SHADER_STORAGE_BLOCKS)`: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/queryutils.cpp;l\u003d4057;drc\u003db35d0400e78c4216ea3e6941d91373147572953c.\n\nI grouped it together with the other test failures on Pixel4 due to missing `GL_EXT_tessellation_shader` extension.\n\n\u003e Can we bundle all the geometry/tessellation suppressions for Pixel 4 like with SwiftShader?\n\nNot all of the `deqp-GLES31.functional.*geometry*` are failing on Pixel4 as with SwiftShader backends. e.g. `dEQP-GLES31.functional.shaders.opaque_type_indexing.sampler.dynamically_uniform.geometry.sampler2darray` fails on SwiftShader, because `mPhysicalDeviceFeatures.geometryShader` is false on Swiftshader: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/vk_caps_utils.cpp;l\u003d1028;drc\u003dff110417bb04e9bc13079eeed99940009d9c3ce1, but it is true on Pixel4: Tests that rely on values such as `mNativeCaps.maxGeometryOutputVertices` fails on SwiftShader, but can be running fine on Pixel4. Even though technically Pixel 4 does not support `GL_EXT_geometry_shader` or `GL_OES_geometry_shader`, but apparently those tests do not check against these two extensions, and based on ANGLE\u0027s current implementation, even the two geometry shader extensions are not supported, we still allow certain geometry shader functionalities to work fine. I think those `deqp-GLES31.functional.*geometry*` tests should still be enabled on Pixel 4 to maximize our test coverage. What do you think?",
+      "parentUuid": "4dd20618_37375407",
       "revId": "c78df5581556bf9d672a161c02f53f670be4b1a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
