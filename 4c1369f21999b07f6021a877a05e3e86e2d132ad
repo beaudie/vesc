@@ -83,6 +83,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c6ef63f8_00db28ed",
+        "filename": "DEPS",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1116053
+      },
+      "writtenOn": "2023-06-13T17:32:21Z",
+      "side": 1,
+      "message": "Nah, we want PA code to get pulled into base/allocator/partition_allocator, so whether ANGLE is built standalone or as part of chromium, the path to base/allocator/partition_allocator as used to include PA headers in angle is correct either way.\n\nI think for ANGLE\u0027s sake, skip the base/memory/headers, and just use the ones under partition_allocator/ when re-writing to raw_ptr. But ...\n\nThe question we have to answer is whether it will be possible to build ANGLE without PA, for some other embedders of ANGLE, who just want ordinary malloc.  PDFium has this constraint (as it builds in, say, G3 where PA is not yet supported), so it has its own pointer types that either wrap the partition_alloc/ ones or provide a fallback implementation.",
+      "parentUuid": "62f358af_e1f233aa",
+      "range": {
+        "startLine": 148,
+        "startChar": 3,
+        "endLine": 148,
+        "endChar": 37
+      },
+      "revId": "4c1369f21999b07f6021a877a05e3e86e2d132ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "744f2a65_40c3db55",
         "filename": "DEPS",
         "patchSetId": 2
@@ -94,6 +118,30 @@
       "writtenOn": "2023-06-13T15:19:00Z",
       "side": 1,
       "message": "Should this also include `not build_with_chromium` ?\n\nIf you don\u0027t, then it might be fetched twice when built with Chrome.",
+      "range": {
+        "startLine": 488,
+        "startChar": 20,
+        "endLine": 488,
+        "endChar": 54
+      },
+      "revId": "4c1369f21999b07f6021a877a05e3e86e2d132ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e955e8c8_308e3c36",
+        "filename": "DEPS",
+        "patchSetId": 2
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1116053
+      },
+      "writtenOn": "2023-06-13T17:32:21Z",
+      "side": 1,
+      "message": "If this is going to be the same model as PDFium, then my understanding is that this DEPS file is used *only* by standalone builds. Chromium\u0027s DEPS file itself will control the lss version pulled in for a non-standalone build.",
+      "parentUuid": "744f2a65_40c3db55",
       "range": {
         "startLine": 488,
         "startChar": 20,
