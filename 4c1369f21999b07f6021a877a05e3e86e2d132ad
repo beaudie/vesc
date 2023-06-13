@@ -177,6 +177,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a7d4fe4a_7f4f9dfe",
+        "filename": "DEPS",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1116053
+      },
+      "writtenOn": "2023-06-13T18:15:54Z",
+      "side": 1,
+      "message": "Ok, the subtler question becomes whether ANGLE must be able to build without running glcient sync to pull in the DEPS -- do other emebedders just pull in the angle repository itself and then rely on another builder, say, blaze in g3, to build it againt some other environment?\n \nThis determines whether you\u0027ll be able to rely on the raw_ptr fallback in base/allocator/partition_allocator/pointers/raw_ptr.h, or, if like pdfium, it has to be wrapped again at another level as in pdfium\u0027s core/fxcrt/unowned_ptr.h.",
+      "parentUuid": "baf5f53e_2945aa35",
+      "range": {
+        "startLine": 148,
+        "startChar": 3,
+        "endLine": 148,
+        "endChar": 37
+      },
+      "revId": "4c1369f21999b07f6021a877a05e3e86e2d132ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "744f2a65_40c3db55",
         "filename": "DEPS",
         "patchSetId": 2
