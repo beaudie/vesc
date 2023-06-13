@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0a56842_66444aaa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-06-13T22:40:10Z",
+      "side": 1,
+      "message": "Looks like our CLs conflicted.  You\u0027ll need to do a `git pull` and rebase on top of my CL.",
+      "revId": "1f7e68451f9b0258c0cfa100e40677b17fa94ac9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b6af7b4_c20686ae",
+        "filename": "src/tests/test_expectations/GPUTestExpectationsParser.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-06-13T22:40:10Z",
+      "side": 1,
+      "message": "Need to deal with this before we can land the CL",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 84,
+        "endChar": 12
+      },
+      "revId": "1f7e68451f9b0258c0cfa100e40677b17fa94ac9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
