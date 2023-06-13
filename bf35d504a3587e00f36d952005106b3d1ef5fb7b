@@ -52,6 +52,24 @@
       "parentUuid": "904c56aa_2a51a107",
       "revId": "bf35d504a3587e00f36d952005106b3d1ef5fb7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "305e976b_da3fd4a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-13T18:04:58Z",
+      "side": 1,
+      "message": "By \"reliable\" I meant that it may not detect a problem, so it will pass, when should instead fail.\n\n\u003e  The test would be valuable only if we have a safe way of merging contexts.\n\nMerging contexts is safe.\nNot safe is switching from `SingleContextMutex` to `SharedContextMutex`.\n\n\u003e If the test is just going to flake, we might as well not have it (because it\u0027s not testing anything). \n\nOnly purpose of the test is to show that fails are very rare or even not existent that will give us some understanding about how unsafe the operation is.\n\nSorry but I\u0027m confused...\nIf test is useless, so how is `ASSERT` is useful then?\n\nI\u0027m talking about this\n\u003e **Geoff Lang**\n Given that this is potentially risky, can we make it so that we can detect the error case and ASSERT that it doesn\u0027t happen? This will give us a sense of how often it actually happens in testing and the wild (Chrome ships with ANGLE assertions enabled on some channels).\n \nShould I keep `ASSERT` but remove test?\nWith 100us delay test will fail on S906B with a very high chance.\nI think that `ASSERT` will not fail without special test because there is no such cases in a real world.",
+      "parentUuid": "b9b0d17e_1d7fa169",
+      "revId": "bf35d504a3587e00f36d952005106b3d1ef5fb7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -323,6 +323,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "df0c2c2c_baa5a453",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-13T18:04:58Z",
+      "side": 1,
+      "message": "I like the idea removing lock from simple state-setting calls (just need to be careful).\n\n\u003e I have an idea. How about we unconditionally use ShredContextMutex\u003cangle::SpinLock\u003e even for when the context is not shared? \n\nSo we use `angle::SpinLock` even for shared Contexts?\nDetails are important. They affect implementations and performance.\nBest performance is to statically use single `ShredContextMutex\u003cangle::SpinLock\u003e` type (no virtual methods).\n\n\u003e What do you think?\n\nI was thinking similar thing, except not removing mutex lock from state-setting calls.",
+      "parentUuid": "64e4ad44_91202fd9",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "baaaafe5_24947132",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 18
