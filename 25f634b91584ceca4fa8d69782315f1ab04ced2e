@@ -16,6 +16,24 @@
       "message": "Nice, I think this would stop presubmit complaining if you rebase and try to upload before running `gclient sync` (which is something that annoys me on a daily basis)",
       "revId": "25f634b91584ceca4fa8d69782315f1ab04ced2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53b715db_c37cdd79",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-13T19:03:55Z",
+      "side": 1,
+      "message": "Not sure if this CL helps with that but I too am annoyed by having to gclient sync to upload trivial changes (I just yolo it via --bypass-hooks though)",
+      "parentUuid": "cb95be19_1f9b8a44",
+      "revId": "25f634b91584ceca4fa8d69782315f1ab04ced2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
