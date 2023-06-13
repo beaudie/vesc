@@ -70,6 +70,30 @@
       },
       "revId": "e5c6060a331e8417d0e06ca6374af87daf69fefb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bb112e6_b1f6ddac",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-06-13T22:28:00Z",
+      "side": 0,
+      "message": "Yuly said the `win-clang-x64-rel` tests are renamed to `win-test` now: https://ci.chromium.org/p/angle/builders/ci/win-test.\n\nI will add the test name in the CL description, and if it starts to flake bots I will suppress them again.",
+      "parentUuid": "a7eaf530_8e07af84",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 79
+      },
+      "revId": "e5c6060a331e8417d0e06ca6374af87daf69fefb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
