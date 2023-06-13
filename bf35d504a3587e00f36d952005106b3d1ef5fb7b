@@ -34,6 +34,24 @@
       "parentUuid": "ef0edaf9_3fad06be",
       "revId": "bf35d504a3587e00f36d952005106b3d1ef5fb7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9b0d17e_1d7fa169",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-13T17:42:21Z",
+      "side": 1,
+      "message": "\u003e Without revert test may be not as reliable.\n\nThe test can never be reliable. If the test is just going to flake, we might as well not have it (because it\u0027s not testing anything). The test would be valuable only if we have a safe way of merging contexts.",
+      "parentUuid": "904c56aa_2a51a107",
+      "revId": "bf35d504a3587e00f36d952005106b3d1ef5fb7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
