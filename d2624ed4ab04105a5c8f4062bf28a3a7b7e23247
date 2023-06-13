@@ -285,6 +285,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bbf11cf_f1e24a44",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-13T14:50:39Z",
+      "side": 1,
+      "message": "Unfortunately, `kActivationDelayMicro \u003d 100` was too small. I guess that the previous stress test that I used was not as robust as the new one. Also I might have tested on different device.\n\nCurrently only S906B is the most unstable when it come to `kActivationDelayMicro`. Other Android devices (G991U, G99GB) and Window seems to require a lot less delay to pass a stress test.\n\nAt the end, I decided to use `2500` microseconds delay regardless of the device. I hope it would be enough for the real world applications and will not cause future stress test to fail often.\n\nBecause `2500` microseconds is relatively big value, constant switching between `SingleContextMutex` and `SharedContextMutex` may affect the performance. To solve this problem, I limited the frequency of such switching to maximum once per second.",
+      "parentUuid": "cfbf69b2_43668feb",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "baaaafe5_24947132",
