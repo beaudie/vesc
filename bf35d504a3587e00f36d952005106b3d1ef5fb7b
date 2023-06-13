@@ -70,6 +70,24 @@
       "parentUuid": "b9b0d17e_1d7fa169",
       "revId": "bf35d504a3587e00f36d952005106b3d1ef5fb7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cbdd743_1445aea1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-13T18:14:01Z",
+      "side": 1,
+      "message": "The `ASSERT` is what\u0027s really valuable here. As Geoff said, we\u0027d be able to tell if it gets hit in the wild.",
+      "parentUuid": "305e976b_da3fd4a8",
+      "revId": "bf35d504a3587e00f36d952005106b3d1ef5fb7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
