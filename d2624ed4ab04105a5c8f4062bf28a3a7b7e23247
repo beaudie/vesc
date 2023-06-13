@@ -359,6 +359,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0a7e9d70_696db064",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-13T18:39:45Z",
+      "side": 1,
+      "message": "\u003e That would be ideal.\n\nBut we currently do not know how `angle::SpinLock/angle:FastMutex1` will perform in a multi Context scenarios.\n\nBecause of that, first need to add into `ShredContextMutex\u003c\u003e` ability to marge with different mutex types. So that we use `ShredContextMutex\u003cangle::SpinLock\u003e` when context is single, and switch to `ShredContextMutex\u003cstd::mutex\u003e` (other other type) when necessary. Switching will be done using merge.\n\nIf after testing we find that using `angle::SpinLock/angle:FastMutex1` is OK even for multi Context scenarios, then we do not need to change mutex type anymore. And because of that, we no longer need virtual methods.\n\n---\n\nTo be clear. We will still merge current CL with `SingleContextMutex` first, and only then try to implement alternative without `SingleContextMutex` (to use in case there will be problems in the wild).",
+      "parentUuid": "373c6f89_0b7d14bc",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "baaaafe5_24947132",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 18
