@@ -33,6 +33,24 @@
       "message": "nit: Move Pixel6 to a separate section below.\n\nAll of tessellation tests fail?!",
       "revId": "6ea10179a3c6e2994d0c7184dfea9a48cba7bf91",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "301429c0_fe248d55",
+        "filename": "src/tests/deqp_support/deqp_khr_gles32_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-06-13T22:25:53Z",
+      "side": 1,
+      "message": "Only two of them failed.\n\nI added the two tests in a separate section below.",
+      "parentUuid": "95136655_78ddf5c9",
+      "revId": "6ea10179a3c6e2994d0c7184dfea9a48cba7bf91",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
