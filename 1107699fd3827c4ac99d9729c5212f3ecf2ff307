@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1282ba2a_ce7b2a34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-06-13T12:23:18Z",
+      "side": 1,
+      "message": "For end2end tests, can only use \"SKIP\".  Cannot use \"FAIL\".",
+      "revId": "1107699fd3827c4ac99d9729c5212f3ecf2ff307",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
