@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bd82dd7_24d0bf56",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-13T18:06:56Z",
+      "side": 1,
+      "message": "And what about the `ASSERT`?\n\n\u003e I would rather not take this test until the share context mutex merge can be made safe.\n\nI\u0027m repeating myself, but will write again here.\nMutex merge is safe. Not safe is change from `SingleContextMutex` to `SharedContexMutex\u003c\u003e`.",
+      "parentUuid": "75574697_26c748bf",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 47
+      },
+      "revId": "b1dc5951113094cd0a7b08a8d7ceb257744445c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "44d81391_8a89cdac",
