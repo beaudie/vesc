@@ -22,6 +22,30 @@
       },
       "revId": "4384e49ca9e7d7c8e14f4d7272788352da45a035",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b60da1f2_cc2b7a6b",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1625,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-13T14:03:35Z",
+      "side": 0,
+      "message": "Possibly a smaller string happens to get written there, the issue is triggered by an ordering mismatch which is implementation dependent. But it really doesn\u0027t matter, we just shouldn\u0027t be testing our luck running this test.",
+      "parentUuid": "912175f2_c7726fa4",
+      "range": {
+        "startLine": 1625,
+        "startChar": 12,
+        "endLine": 1625,
+        "endChar": 30
+      },
+      "revId": "4384e49ca9e7d7c8e14f4d7272788352da45a035",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
