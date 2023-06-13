@@ -39,6 +39,30 @@
       },
       "revId": "1f7e68451f9b0258c0cfa100e40677b17fa94ac9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d7ed9ed_b19dc663",
+        "filename": "src/tests/test_expectations/GPUTestExpectationsParser.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2023-06-13T22:45:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b6af7b4_c20686ae",
+      "range": {
+        "startLine": 84,
+        "startChar": 0,
+        "endLine": 84,
+        "endChar": 12
+      },
+      "revId": "1f7e68451f9b0258c0cfa100e40677b17fa94ac9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
