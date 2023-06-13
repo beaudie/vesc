@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44d81391_8a89cdac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-13T15:53:40Z",
+      "side": 1,
+      "message": "@syoussefi@chromium.org\nI notched that `android-arm64-test` does not include `angle_white_box_tests`.\nFor the best quality, my new test must access `gl::Context` directly.\n\nAdditionally, passion `SingleContextMutexRevert::kEnforced` into `tryRevertToSingleContextMutex()` is only possible from tests, since all APIs use `SingleContextMutexRevert::kDefault`.\n\nTo be able to convert white box test to end2end test, I need to change `glFinish()` to use `kEnforced` and rely on `ASSERT()` inside entry points, instead of `EXPECT_TRUE()` in the test.\n\nIs it possible to include white box test for `android-arm64-test`?",
+      "revId": "b1dc5951113094cd0a7b08a8d7ceb257744445c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
