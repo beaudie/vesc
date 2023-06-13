@@ -135,6 +135,30 @@
       },
       "revId": "a69992b34a99de1bedd6f918c50af89a868012c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b65f484_6ffc8440",
+        "filename": "src/tests/capture_tests/capture_tests.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-13T03:27:03Z",
+      "side": 1,
+      "message": "Why not fix our `.gitattribute` to make files under `expected/` be `eol\u003dLF`?",
+      "parentUuid": "fc31d07a_954f3250",
+      "range": {
+        "startLine": 73,
+        "startChar": 4,
+        "endLine": 73,
+        "endChar": 32
+      },
+      "revId": "a69992b34a99de1bedd6f918c50af89a868012c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
