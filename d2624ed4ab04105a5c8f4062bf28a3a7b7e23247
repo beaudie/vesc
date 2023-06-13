@@ -377,6 +377,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "aa4ee7eb_cca397d8",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-13T18:51:13Z",
+      "side": 1,
+      "message": "That sounds like a plan. So let\u0027s:\n\n- Submit this with the unsafety (again, simplified to not need to revert + small delay only)\n- Follow up with a change to remove locks from most state setting calls.\n- Follow up with static usage of `SharedMutex\u003cSpinLock\u003e`.\n\nFor the sake of experiment, we can take the last change (and a variant with `std::mutex`) and have them thoroughly compared on a few applications that we know use shared contexts. We can decide if it\u0027s worth taking the hit of dynamic types for the gains of std::mutex.",
+      "parentUuid": "0a7e9d70_696db064",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "baaaafe5_24947132",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 18
