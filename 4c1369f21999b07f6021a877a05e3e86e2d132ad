@@ -201,6 +201,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a396b9a0_af25b68e",
+        "filename": "DEPS",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-13T18:19:33Z",
+      "side": 1,
+      "message": "It\u0027s ... complicated. ANGLE has a lot of users, and we all use `gclient sync`. Except ANGLE _is_ in g3 but in an unmaintained state. So I\u0027m afraid _technically_ we\u0027d have to have our own wrapper.\n\nEither that, or if g3 is getting support next week, we could live with ANGLE not rolling to g3 for a short while.",
+      "parentUuid": "a7d4fe4a_7f4f9dfe",
+      "range": {
+        "startLine": 148,
+        "startChar": 3,
+        "endLine": 148,
+        "endChar": 37
+      },
+      "revId": "4c1369f21999b07f6021a877a05e3e86e2d132ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "744f2a65_40c3db55",
         "filename": "DEPS",
         "patchSetId": 2
