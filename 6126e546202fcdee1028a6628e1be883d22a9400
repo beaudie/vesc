@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c853444d_99ae533e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2023-06-13T17:21:12Z",
+      "side": 1,
+      "message": "This should be ready to land as verified in the issue ; )\n\nHi Romaric, you can kick CQ+1 next time to start the bot stuff.",
+      "revId": "6126e546202fcdee1028a6628e1be883d22a9400",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
