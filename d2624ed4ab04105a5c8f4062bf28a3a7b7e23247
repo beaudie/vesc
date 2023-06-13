@@ -305,6 +305,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "64e4ad44_91202fd9",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-13T17:51:56Z",
+      "side": 1,
+      "message": "Based on this data you previously posted:\n\n```\nAndroid S906B\nTime in ms for 1000\u0027000 `glGetError()` calls (average from 3x5 runs).\n\nNo Shared Context Mutex (mShared \u003d false)     9.973\nNo Shared Context Mutex (mShared \u003d true)     31.599\n\nSingleContextMutex (std::atomic_int)          9.684\nSingleContextMutex (angle::Spinlock)         13.933\nSharedContextMutex\u003cangle::FastMutex1\u003e        13.681\nSharedContextMutex\u003cstd::mutex\u003e               29.704\n```\n\nI have an idea. How about we _unconditionally_ use `ShredContextMutex\u003cangle::SpinLock\u003e` even for when the context is not shared? According to the data, the overhead is 4us per call. Obviously that overhead is not great, but we can offset it with a follow up change:\n\nNormally the apps make a lot of state-setting calls in between calls that actually do anything. Looking at a handful of our traces, I see on average ~10 state setting calls for each draw call. We don\u0027t need a lock for those calls; they are just updating front-end state. We should be able to list those calls and have the entry points directly call into `context-\u003egetState()` without providing a context pointer. Then they could skip the lock, and be risk free (no risk that they may actually make the context do work).\n\nIn other words, the non-shared contexts would be using a real lock, same as shared contexts. Merges would be race free. And we greatly reduce the added overhead by removing the lock from most calls.\n\nWhat do you think?",
+      "parentUuid": "5bbf11cf_f1e24a44",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "baaaafe5_24947132",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 18
