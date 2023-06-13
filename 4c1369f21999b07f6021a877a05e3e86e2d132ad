@@ -153,6 +153,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "baf5f53e_2945aa35",
+        "filename": "DEPS",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-13T18:04:22Z",
+      "side": 1,
+      "message": "\u003e The question we have to answer is whether it will be possible to build ANGLE without PA, for some other embedders of ANGLE, who just want ordinary malloc.\n\nANGLE most definitely needs to be able to build with ordinary malloc.",
+      "parentUuid": "c6ef63f8_00db28ed",
+      "range": {
+        "startLine": 148,
+        "startChar": 3,
+        "endLine": 148,
+        "endChar": 37
+      },
+      "revId": "4c1369f21999b07f6021a877a05e3e86e2d132ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "744f2a65_40c3db55",
         "filename": "DEPS",
         "patchSetId": 2
