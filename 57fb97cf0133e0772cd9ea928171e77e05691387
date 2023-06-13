@@ -22,6 +22,30 @@
       },
       "revId": "57fb97cf0133e0772cd9ea928171e77e05691387",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c49009c8_9bc924cf",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-06-13T00:21:32Z",
+      "side": 0,
+      "message": "I believe the Undefined Behaviors are fixed in VK-GL-CTS: https://github.com/KhronosGroup/VK-GL-CTS/commit/5d286e0daeac8afaafc46b16d28991fab971240b.",
+      "parentUuid": "93f50a03_086254ed",
+      "range": {
+        "startLine": 24,
+        "startChar": 3,
+        "endLine": 24,
+        "endChar": 36
+      },
+      "revId": "57fb97cf0133e0772cd9ea928171e77e05691387",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
