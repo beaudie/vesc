@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b6f43e3_2a4cd9d6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1228344
+      },
+      "writtenOn": "2023-06-13T15:19:00Z",
+      "side": 1,
+      "message": "I think you might want to add a link to the doc and what steps is implemented here?\n\n```suggestion\nAdd PartitionAlloc as an ANGLE third_party.\n\nThis patch implements step 1 from:\nhttps://docs.google.com/document/d/1nkpcI4uIdwubO6iE8zj1jeJDXvm2gq4-NUc2bwjOOgk/edit#bookmark\u003did.x03wheclwcis\n\nThis patch:\n1. Fetches PartitionAlloc in Angle when not built within Chrome.\n2. Fetches lss when needed. This is a dependency of PartitionAlloc.\n3. Set the default `partition_alloc.gni` flag. Every features are disabled\n   by default.\n\nIn step 1, PartitionAlloc is not used yet. It will be in follow-ups.\n```",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 0
+      },
+      "revId": "4c1369f21999b07f6021a877a05e3e86e2d132ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff88306d_67657f8c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1228344
+      },
+      "writtenOn": "2023-06-13T15:19:00Z",
+      "side": 1,
+      "message": "Thanks Ali!\n\n@syoussefi@chromium.org: You gave some comment on the doc. Thank! Would you like to do a review or redirect toward someone who might?\n\n+R @tsepez@chromium.org. You did a similar patch for pdfium. I have a question for you below.\n+CC @bartekn@chromium.org FYI",
+      "revId": "4c1369f21999b07f6021a877a05e3e86e2d132ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62f358af_e1f233aa",
+        "filename": "DEPS",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1228344
+      },
+      "writtenOn": "2023-06-13T15:19:00Z",
+      "side": 1,
+      "message": "Should this be:\n```\nthird_party/partition_allocator\n```\ninstead?\n\n@tsepez@chromium.org . I guess `base/allocator/partition_allocator` was borrowed from the patch for pdfium. I wonder why we made this in pdfium. Do you happen to know?\n\n\nI guess we will have to create in Angle some headers similar to:\n```\nbase/memory/raw_ptr.h\nbase/memory/raw_ref.h\n```\nredirecting toward the `raw_ptr.h` files in @angle third_party/ or @chrome /base depending whether angle is built with Chrome or not.",
+      "range": {
+        "startLine": 148,
+        "startChar": 3,
+        "endLine": 148,
+        "endChar": 37
+      },
+      "revId": "4c1369f21999b07f6021a877a05e3e86e2d132ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "744f2a65_40c3db55",
+        "filename": "DEPS",
+        "patchSetId": 2
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1228344
+      },
+      "writtenOn": "2023-06-13T15:19:00Z",
+      "side": 1,
+      "message": "Should this also include `not build_with_chromium` ?\n\nIf you don\u0027t, then it might be fetched twice when built with Chrome.",
+      "range": {
+        "startLine": 488,
+        "startChar": 20,
+        "endLine": 488,
+        "endChar": 54
+      },
+      "revId": "4c1369f21999b07f6021a877a05e3e86e2d132ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
