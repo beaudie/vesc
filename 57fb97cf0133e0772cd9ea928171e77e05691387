@@ -46,6 +46,30 @@
       },
       "revId": "57fb97cf0133e0772cd9ea928171e77e05691387",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da718764_4bb730a1",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-13T14:10:50Z",
+      "side": 0,
+      "message": "Could you add this to the CL description please?",
+      "parentUuid": "c49009c8_9bc924cf",
+      "range": {
+        "startLine": 24,
+        "startChar": 3,
+        "endLine": 24,
+        "endChar": 36
+      },
+      "revId": "57fb97cf0133e0772cd9ea928171e77e05691387",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
