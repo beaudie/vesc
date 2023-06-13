@@ -233,6 +233,24 @@
       "parentUuid": "4dd20618_37375407",
       "revId": "c78df5581556bf9d672a161c02f53f670be4b1a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf5771b5_47072707",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 30
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-13T03:24:57Z",
+      "side": 1,
+      "message": "On the contrary, I\u0027d say those tests don\u0027t matter much. If the test is named \"geometry\", but passes on a device that doesn\u0027t expose EXT_geometry_shader, it basically means that it\u0027s not testing anything that actually _runs_ a geometry shader. Like it could just be compiling a shader, or introspect a linked program.\n\nSince those tests don\u0027t end up doing anything on the GPU, their behavior is the same on all our devices. We already run them elsewhere, so there\u0027s little value in running them on P4 again.",
+      "parentUuid": "cf0ba202_74f5ac7a",
+      "revId": "c78df5581556bf9d672a161c02f53f670be4b1a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
