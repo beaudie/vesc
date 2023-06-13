@@ -46,6 +46,30 @@
       },
       "revId": "e5c6060a331e8417d0e06ca6374af87daf69fefb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7eaf530_8e07af84",
+        "filename": "src/tests/deqp_support/deqp_gles31_test_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-13T14:13:29Z",
+      "side": 0,
+      "message": "Ah I see. Maybe just add a note to the CL description mentioning these tests to make it easier to find if it starts flaking and someone else (wrangler) needs to look into it",
+      "parentUuid": "47390bda_ee097b36",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 79
+      },
+      "revId": "e5c6060a331e8417d0e06ca6374af87daf69fefb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
