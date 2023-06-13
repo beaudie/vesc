@@ -111,6 +111,30 @@
       },
       "revId": "a69992b34a99de1bedd6f918c50af89a868012c0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc31d07a_954f3250",
+        "filename": "src/tests/capture_tests/capture_tests.py",
+        "patchSetId": 15
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-13T00:01:11Z",
+      "side": 1,
+      "message": "Ah, of course, git CRLF conversion messes up this case as well, just differently. Files are written locally with only LF - Linux or Windows. The `expected/` files though come from the source tree - so they get converted to CRLF by git checkout. If we were to --overwrite-expected them with (the captured) LF, git diff would show these files as different. So --overwrite-expected would have to copy with LF-\u003eCRLF conversion to make git on Windows (with \"* text\u003dauto\" in our .gitattributes) happy \u003e_\u003c",
+      "parentUuid": "39d236a2_d6304991",
+      "range": {
+        "startLine": 73,
+        "startChar": 4,
+        "endLine": 73,
+        "endChar": 32
+      },
+      "revId": "a69992b34a99de1bedd6f918c50af89a868012c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
