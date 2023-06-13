@@ -16,6 +16,24 @@
       "message": "This is getting a bit out of hand. Please:\n\n- Remove the ability to revert to single context mutex and the associated complication. You can special case eglQueryContext like before.\n- Remove WaitFor and the platform-specific spin times. Just sleep; there is no amount of hacks like that which could make a non-realtime system work like realtime.\n\nI suggest keeping the sleep at 100us as before, which is just as wrong as 2500us. We don\u0027t have any protection right now, and whatever works in practice is fine until we find a solution.",
       "revId": "bf35d504a3587e00f36d952005106b3d1ef5fb7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "904c56aa_2a51a107",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 26
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-13T17:36:44Z",
+      "side": 1,
+      "message": "\u003e Remove the ability to revert to single context mutex and the associated complication. You can special case eglQueryContext like before.\n\nWithout revert test may be not as reliable. New test must recreate context for each iteration.\n\n\u003e I suggest keeping the sleep at 100us as before, which is just as wrong as 2500us. We don\u0027t have any protection right now, and whatever works in practice is fine until we find a solution.\n\nProblem is that with 100us test may fail with relatively high probability.\n\nShould I also remove test and only keep the `ASSERT`?\nProblem of the test is that it is too unrealistic...",
+      "parentUuid": "ef0edaf9_3fad06be",
+      "revId": "bf35d504a3587e00f36d952005106b3d1ef5fb7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
