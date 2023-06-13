@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "75574697_26c748bf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-13T17:52:35Z",
+      "side": 1,
+      "message": "I would rather not take this test until the share context mutex merge can be made safe.",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 47
+      },
+      "revId": "b1dc5951113094cd0a7b08a8d7ceb257744445c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "44d81391_8a89cdac",
