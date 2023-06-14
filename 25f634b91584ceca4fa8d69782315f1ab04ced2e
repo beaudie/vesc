@@ -125,6 +125,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5676de4f_8f0d38bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-14T18:03:58Z",
+      "side": 1,
+      "message": "Previously git cl upload would complain due to hash mismatch. If you regenerate without gclient sync, you might get a different output and would get a different hash (either only input or also output).\n\nNow git cl upload would only complain if output mismatches. If the input file is different but produces the same output, --verify-only check passes and presubmits pass. If the difference in the input file yields a difference in the output, --verify-only check fails and presubmit fails. Running code generation without gclient sync would potentially produce an incorrect output (locally). But then when running presubmit on bots, that will run gclient sync. So if the local version is incorrect, the presubmit on bots will fail.\n\nI don\u0027t know what \"informs\" about gclient sync but as you can see from the previous discussion it seems to be hurting us more than helping.",
+      "parentUuid": "a9c2eabd_118d0fac",
+      "revId": "25f634b91584ceca4fa8d69782315f1ab04ced2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3ae7c3d7_48de5626",
@@ -148,6 +166,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f972576_f5714706",
+        "filename": "infra/specs/generate_test_spec_json.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-14T18:03:58Z",
+      "side": 1,
+      "message": "That\u0027d be the full path. Even if the file is moved and this string becomes incorrect, it\u0027s not a big deal. Verbatim strings are easier for humans to read so I tend to prefer them in cases of minor duplication.",
+      "parentUuid": "3ae7c3d7_48de5626",
+      "range": {
+        "startLine": 160,
+        "startChar": 15,
+        "endLine": 160,
+        "endChar": 37
+      },
+      "revId": "25f634b91584ceca4fa8d69782315f1ab04ced2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a2131121_68ac259e",
@@ -161,6 +203,30 @@
       "writtenOn": "2023-06-14T14:28:08Z",
       "side": 1,
       "message": "Hmm, the generator generates a file per waterfall.\nThe name angle.json comes from https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/infra/specs/waterfalls.pyl;l\u003d15;drc\u003d9208efb60c4c74bea91b6cb21d707160a797c447\nI was thinking of adding something like angle-internal for unreleased HW.",
+      "range": {
+        "startLine": 164,
+        "startChar": 15,
+        "endLine": 164,
+        "endChar": 37
+      },
+      "revId": "25f634b91584ceca4fa8d69782315f1ab04ced2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d3cf47e_4c2d6d98",
+        "filename": "infra/specs/generate_test_spec_json.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-14T18:03:58Z",
+      "side": 1,
+      "message": "Didn\u0027t realize there could be more than one file. Thanks, I\u0027ll have a look.",
+      "parentUuid": "a2131121_68ac259e",
       "range": {
         "startLine": 164,
         "startChar": 15,
