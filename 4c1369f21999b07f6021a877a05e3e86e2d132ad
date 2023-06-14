@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "e6b27e6d_6d606ff6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1549278
+      },
+      "writtenOn": "2023-06-14T15:58:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b6f43e3_2a4cd9d6",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 0
+      },
+      "revId": "4c1369f21999b07f6021a877a05e3e86e2d132ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "ff88306d_67657f8c",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -81,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "72d80458_29f91d33",
+        "filename": "DEPS",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1549278
+      },
+      "writtenOn": "2023-06-14T15:58:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ffa3422e_49dcfb6a",
+      "range": {
+        "startLine": 88,
+        "startChar": 1,
+        "endLine": 88,
+        "endChar": 36
+      },
+      "revId": "4c1369f21999b07f6021a877a05e3e86e2d132ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5550b334_7c87f463",
@@ -94,6 +142,30 @@
       "writtenOn": "2023-06-13T17:33:39Z",
       "side": 1,
       "message": "nit: ditto.",
+      "range": {
+        "startLine": 105,
+        "startChar": 0,
+        "endLine": 105,
+        "endChar": 29
+      },
+      "revId": "4c1369f21999b07f6021a877a05e3e86e2d132ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa4d4bb3_26bd73b0",
+        "filename": "DEPS",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1549278
+      },
+      "writtenOn": "2023-06-14T15:58:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5550b334_7c87f463",
       "range": {
         "startLine": 105,
         "startChar": 0,
