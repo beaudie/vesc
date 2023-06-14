@@ -403,7 +403,6 @@ class ContextMtl : public ContextImpl, public mtl::Context
   private:
     void ensureCommandBufferReady();
     void endBlitAndComputeEncoding();
-    angle::Result ensureIncompleteTexturesCreated(const gl::Context *context);
     angle::Result setupDraw(const gl::Context *context,
                             gl::PrimitiveMode mode,
                             GLint firstVertex,
@@ -631,7 +630,6 @@ class ContextMtl : public ContextImpl, public mtl::Context
     DefaultAttribute mDefaultAttributes[mtl::kMaxVertexAttribs];
 
     IncompleteTextureSet mIncompleteTextures;
-    bool mIncompleteTexturesInitialized = false;
     ProvokingVertexHelper mProvokingVertexHelper;
 
     mtl::ContextDevice mContextDevice;
