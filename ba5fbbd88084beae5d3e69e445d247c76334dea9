@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8dae46b_3c028b1f",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1379689
+      },
+      "writtenOn": "2023-06-14T19:29:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c878a601_a3328e11",
+      "revId": "ba5fbbd88084beae5d3e69e445d247c76334dea9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c4ed4815_202a73ae",
@@ -52,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "65451abc_4c2e6248",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1379689
+      },
+      "writtenOn": "2023-06-14T19:29:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4ed4815_202a73ae",
+      "revId": "ba5fbbd88084beae5d3e69e445d247c76334dea9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "49bad03c_61462af9",
@@ -65,6 +101,30 @@
       "writtenOn": "2023-06-14T19:13:19Z",
       "side": 1,
       "message": "GL_DRAW_FRAMEBUFFER",
+      "range": {
+        "startLine": 803,
+        "startChar": 48,
+        "endLine": 803,
+        "endChar": 62
+      },
+      "revId": "ba5fbbd88084beae5d3e69e445d247c76334dea9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e38891bb_71793e48",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 803,
+      "author": {
+        "id": 1379689
+      },
+      "writtenOn": "2023-06-14T19:29:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49bad03c_61462af9",
       "range": {
         "startLine": 803,
         "startChar": 48,
@@ -111,6 +171,30 @@
       "writtenOn": "2023-06-14T19:13:19Z",
       "side": 1,
       "message": "GL_DRAW_FRAMEBUFFER",
+      "range": {
+        "startLine": 808,
+        "startChar": 47,
+        "endLine": 808,
+        "endChar": 61
+      },
+      "revId": "ba5fbbd88084beae5d3e69e445d247c76334dea9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f599f8e4_b79f5479",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1379689
+      },
+      "writtenOn": "2023-06-14T19:29:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "18a85bb5_cb0a6b48",
       "range": {
         "startLine": 808,
         "startChar": 47,
