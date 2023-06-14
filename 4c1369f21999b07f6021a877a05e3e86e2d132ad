@@ -225,6 +225,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1ed8367d_9c11d6fc",
+        "filename": "DEPS",
+        "patchSetId": 2
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1228344
+      },
+      "writtenOn": "2023-06-14T15:25:25Z",
+      "side": 1,
+      "message": "\u003e The question we have to answer is whether it will be possible to build\nANGLE without PA, for some other embedders of ANGLE, who just want\nordinary malloc. PDFium has this constraint (as it builds in, say, G3\nwhere PA is not yet supported), so it has its own pointer types that\neither wrap the partition_alloc/ ones or provide a fallback implementation.\n\n\nIn the linked doc: I was thinking about always fetching the PartitionAlloc repository for consistency, but keeping its binary flags off by default. That is to say: not configuring BackupRefPtr, not replacing the malloc/free function and keeping the raw_ptr\u003cT\u003e implemented by naked pointer.\n\nIt would be turned on only for Angle test suites and performance tests. This way, we have some way to control potential performance regressions and check for dangling pointers.\n\nDoes this sounds good to you?\n\n\n----\n\n\n\n\n\u003e Ok, the subtler question becomes whether ANGLE must be able to build\nwithout running glcient sync to pull in the DEPS\n\n\u003e ANGLE has a lot of users, and we all use gclient sync\n\nInteresting!\n\n\n\u003e Either that, or if g3 is getting support next week, we could live with ANGLE not rolling to g3 for a short while.\n\nIf you are saying the potential problem will be fixed at some point, we can wait. We are anyway blocked on `step 2` for a few weeks at least.\n\n\n-----\n\n\n\u003e Nah, we want PA code to get pulled into base/allocator/partition_allocator\n\nIsn\u0027t it a problem having a `base/` directory appearing from nowhere? Is @syoussefi@chromium.org okay with that?\n\nAt some point, maybe chrome should move this into its own third_party and then we can do the same for angle.",
+      "parentUuid": "a396b9a0_af25b68e",
+      "range": {
+        "startLine": 148,
+        "startChar": 3,
+        "endLine": 148,
+        "endChar": 37
+      },
+      "revId": "4c1369f21999b07f6021a877a05e3e86e2d132ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "744f2a65_40c3db55",
         "filename": "DEPS",
         "patchSetId": 2
@@ -260,6 +284,30 @@
       "side": 1,
       "message": "If this is going to be the same model as PDFium, then my understanding is that this DEPS file is used *only* by standalone builds. Chromium\u0027s DEPS file itself will control the lss version pulled in for a non-standalone build.",
       "parentUuid": "744f2a65_40c3db55",
+      "range": {
+        "startLine": 488,
+        "startChar": 20,
+        "endLine": 488,
+        "endChar": 54
+      },
+      "revId": "4c1369f21999b07f6021a877a05e3e86e2d132ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5bd71c1_62290f6d",
+        "filename": "DEPS",
+        "patchSetId": 2
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1228344
+      },
+      "writtenOn": "2023-06-14T15:25:25Z",
+      "side": 1,
+      "message": "Most of the dependencies are under the condition `not build_with_chromium`, so if this specific condition exist, I am expecting this file to be used when `build_with_chromium \u003d true` too.",
+      "parentUuid": "e955e8c8_308e3c36",
       "range": {
         "startLine": 488,
         "startChar": 20,
