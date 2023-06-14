@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b2e5518_c3b71109",
+        "filename": "src/libANGLE/renderer/metal/mtl_pipeline_cache.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-14T19:19:54Z",
+      "side": 1,
+      "message": "Does metal/ not support no-attachment framebuffers?",
+      "revId": "dc82c692a609ac189a516c0403c399d6bc067a4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6e3c78b_c4b3f3b8",
+        "filename": "src/libANGLE/renderer/metal/mtl_pipeline_cache.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-14T19:19:54Z",
+      "side": 1,
+      "message": "nit: clean up before submission",
+      "revId": "dc82c692a609ac189a516c0403c399d6bc067a4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
