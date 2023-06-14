@@ -87,6 +87,24 @@
       "message": "How will this affect the Chromium-\u003eANGLE autoroller?\nCurrently it:\n1. Modifies DEPS\n2. gclient sync\n3. run_code_generation\n4. amend CL\nSo that it can regenerate angle.json when Chromium-side mixins change.\nWill it still work? I\u0027m not sure when --verify-only is used.",
       "revId": "25f634b91584ceca4fa8d69782315f1ab04ced2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff64071b_2469d66e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-14T13:49:18Z",
+      "side": 1,
+      "message": "run_code_generation keeps working the same way as before (module deleted file) so everything is expected to keep working\n\n--verify-only is passed from run_code_generation --verify-no-dirty which runs on presubmits",
+      "parentUuid": "e6670281_d54c4b00",
+      "revId": "25f634b91584ceca4fa8d69782315f1ab04ced2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
