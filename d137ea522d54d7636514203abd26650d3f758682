@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61c8ce15_81619402",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 19
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-06-14T12:10:29Z",
+      "side": 1,
+      "message": "Doesn\u0027t seem appropriate to appear in open-source.\nMaybe just remove it, we\u0027ll see it on CI soon enough.",
+      "range": {
+        "startLine": 24,
+        "startChar": 21,
+        "endLine": 24,
+        "endChar": 46
+      },
+      "revId": "d137ea522d54d7636514203abd26650d3f758682",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a7eaaa9_e428bdec",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 19
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-06-14T12:10:29Z",
+      "side": 1,
+      "message": "I believe building captures directly is not allowed.\nWe should put more effort into capturing traces into a data-only format.\nThis would also eliminate the need for angle_capture_tests, since problems with capturing traces can be caught while interpreting the data-only format during build.",
+      "range": {
+        "startLine": 26,
+        "startChar": 64,
+        "endLine": 27,
+        "endChar": 29
+      },
+      "revId": "d137ea522d54d7636514203abd26650d3f758682",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c642fdb_1f084d8d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-06-14T12:10:29Z",
+      "side": 1,
+      "message": "LGTM bot capacity-wise, since it\u0027s only ~10 seconds.",
+      "revId": "d137ea522d54d7636514203abd26650d3f758682",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
