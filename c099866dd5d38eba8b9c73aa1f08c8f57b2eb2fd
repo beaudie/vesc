@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c3108e1_34320c79",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-06-14T18:01:12Z",
+      "side": 1,
+      "message": "Brian, Roman, PTAL.",
+      "revId": "c099866dd5d38eba8b9c73aa1f08c8f57b2eb2fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
