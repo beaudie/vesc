@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c547536_382a0e35",
+        "filename": "infra/specs/generate_test_spec_json.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-06-14T14:28:08Z",
+      "side": 0,
+      "message": "I think removing this return kind of breaks what \u0027inputs\u0027 and \u0027outputs\u0027 args did.\nMaybe just remove these functionalities and leave \u0027--verify-only\u0027 as the only allowed argument?",
+      "range": {
+        "startLine": 92,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 16
+      },
+      "revId": "18010f58be60bfcb233f70f125c91265d33ab4a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

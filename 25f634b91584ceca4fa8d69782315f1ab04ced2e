@@ -105,6 +105,93 @@
       "parentUuid": "e6670281_d54c4b00",
       "revId": "25f634b91584ceca4fa8d69782315f1ab04ced2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9c2eabd_118d0fac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-06-14T14:28:08Z",
+      "side": 1,
+      "message": "So, if your repo has a new angle.json, but you didn\u0027t sync, so you have an old testing/buildbot/mixins.pyl, this CL doesn\u0027t change anything, right?\nThe presubmit would still complain that angle.json needs to be regenerated, correct?\nWould it also inform you to \"gclient sync\" (not sure where this happens)?",
+      "parentUuid": "7532119f_d7642f3b",
+      "revId": "25f634b91584ceca4fa8d69782315f1ab04ced2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ae7c3d7_48de5626",
+        "filename": "infra/specs/generate_test_spec_json.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-06-14T14:28:08Z",
+      "side": 1,
+      "message": "MIXIN_FILE_NAME",
+      "range": {
+        "startLine": 160,
+        "startChar": 15,
+        "endLine": 160,
+        "endChar": 37
+      },
+      "revId": "25f634b91584ceca4fa8d69782315f1ab04ced2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2131121_68ac259e",
+        "filename": "infra/specs/generate_test_spec_json.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-06-14T14:28:08Z",
+      "side": 1,
+      "message": "Hmm, the generator generates a file per waterfall.\nThe name angle.json comes from https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/infra/specs/waterfalls.pyl;l\u003d15;drc\u003d9208efb60c4c74bea91b6cb21d707160a797c447\nI was thinking of adding something like angle-internal for unreleased HW.",
+      "range": {
+        "startLine": 164,
+        "startChar": 15,
+        "endLine": 164,
+        "endChar": 37
+      },
+      "revId": "25f634b91584ceca4fa8d69782315f1ab04ced2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57985d2c_1e3b4c2a",
+        "filename": "infra/specs/generate_test_spec_json.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-06-14T14:28:08Z",
+      "side": 1,
+      "message": "Could you modify this to work with multiple JSON files?\nLike, check everything in temp_dir.",
+      "range": {
+        "startLine": 168,
+        "startChar": 0,
+        "endLine": 168,
+        "endChar": 61
+      },
+      "revId": "25f634b91584ceca4fa8d69782315f1ab04ced2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
