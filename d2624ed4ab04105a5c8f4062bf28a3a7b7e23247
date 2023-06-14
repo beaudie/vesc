@@ -413,6 +413,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "30a555c3_182eb165",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 18
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-14T14:24:56Z",
+      "side": 1,
+      "message": "@syoussefi@chromium.org\nI simplified the implementation (ps 26..30).\nIs it OK for me to submit the change?",
+      "parentUuid": "ed1be7d3_00299e80",
+      "revId": "d2624ed4ab04105a5c8f4062bf28a3a7b7e23247",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "baaaafe5_24947132",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 18
