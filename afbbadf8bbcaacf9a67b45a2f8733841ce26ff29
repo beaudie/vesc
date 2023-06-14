@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ebacd04_4e483174",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-06-14T14:56:01Z",
+      "side": 1,
+      "message": "Waiting for Mike\u0027s CL to land and will rebase then.",
+      "revId": "afbbadf8bbcaacf9a67b45a2f8733841ce26ff29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
