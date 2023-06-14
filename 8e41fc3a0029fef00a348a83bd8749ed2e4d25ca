@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "95a8e2d5_46ffcdbd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-06-14T22:52:30Z",
+      "side": 1,
+      "message": "Sure :) I will add them.",
+      "parentUuid": "127aa71c_acb5004b",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 16
+      },
+      "revId": "8e41fc3a0029fef00a348a83bd8749ed2e4d25ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "4e899041_382baa19",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
@@ -54,6 +78,30 @@
       "writtenOn": "2023-06-14T22:31:43Z",
       "side": 1,
       "message": "Probably should enable/disable these in pairs, so this one too.",
+      "range": {
+        "startLine": 4460,
+        "startChar": 40,
+        "endLine": 4460,
+        "endChar": 69
+      },
+      "revId": "8e41fc3a0029fef00a348a83bd8749ed2e4d25ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2370b9c6_99488b8c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4460,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-06-14T22:52:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a6e95a9_eb8bc745",
       "range": {
         "startLine": 4460,
         "startChar": 40,
