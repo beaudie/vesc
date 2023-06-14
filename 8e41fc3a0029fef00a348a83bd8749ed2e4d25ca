@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "127aa71c_acb5004b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-06-14T22:31:43Z",
+      "side": 1,
+      "message": "Can you also tag:\nb/285196249\nb/286224923",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 16
+      },
+      "revId": "8e41fc3a0029fef00a348a83bd8749ed2e4d25ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e899041_382baa19",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-06-14T22:31:43Z",
+      "side": 1,
+      "message": "LGTM, although I think it would be safer to disable both dynamic state extensions at once.",
+      "revId": "8e41fc3a0029fef00a348a83bd8749ed2e4d25ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a6e95a9_eb8bc745",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4460,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-06-14T22:31:43Z",
+      "side": 1,
+      "message": "Probably should enable/disable these in pairs, so this one too.",
+      "range": {
+        "startLine": 4460,
+        "startChar": 40,
+        "endLine": 4460,
+        "endChar": 69
+      },
+      "revId": "8e41fc3a0029fef00a348a83bd8749ed2e4d25ca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
