@@ -97,6 +97,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "bc27faed_c1ab2aca",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 19
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-14T13:58:47Z",
+      "side": 1,
+      "message": "also note how .angledata in this case is coming from a test included in this CL (that doesn\u0027t have any binary data in it), and then verified by the test so one can\u0027t really easily \"sneak\" custom bytes into .angledata",
+      "parentUuid": "dcbf5aaa_6973c298",
+      "range": {
+        "startLine": 26,
+        "startChar": 64,
+        "endLine": 27,
+        "endChar": 29
+      },
+      "revId": "d137ea522d54d7636514203abd26650d3f758682",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "4c642fdb_1f084d8d",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 19
