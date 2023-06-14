@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a498865_20df5dc3",
+        "filename": "src/libANGLE/renderer/metal/mtl_pipeline_cache.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-06-14T19:56:15Z",
+      "side": 1,
+      "message": "I think we don\u0027t need to worry about that until ES 3.1 for the frontend.\n\nBelow, there is a check for the allowRenderpassWithoutAttachment feature which is enabled for gpu family 2 hardware.",
+      "parentUuid": "4b2e5518_c3b71109",
+      "revId": "dc82c692a609ac189a516c0403c399d6bc067a4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d6e3c78b_c4b3f3b8",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-06-14T19:19:54Z",
       "side": 1,
       "message": "nit: clean up before submission",
+      "revId": "dc82c692a609ac189a516c0403c399d6bc067a4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6124f2c_e48d39cd",
+        "filename": "src/libANGLE/renderer/metal/mtl_pipeline_cache.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-06-14T19:56:15Z",
+      "side": 1,
+      "message": "This is copied from the old RenderPipelineCache, the old code will be removed in an upcomming patch.\n\nI dug a bit deeper and this code looks totally broken though. GetMaxRenderTargetSizeForDeviceInBytes is returning something that looks like \"max bytes per pixel\" while ComputeTotalSizeUsedForMTLRenderPipelineDescriptor computes the total number of bytes for the attachments. This code never gets run though because DeviceHasMaximumRenderTargetSize always returns false desktop hardware.\n\nI\u0027ll clean it up after to keep this a no-op copy in this patch.",
+      "parentUuid": "d6e3c78b_c4b3f3b8",
       "revId": "dc82c692a609ac189a516c0403c399d6bc067a4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
