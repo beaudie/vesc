@@ -3426,12 +3426,13 @@ bool ValidateCreateImage(const ValidationContext *val,
                 break;
 
             case EGL_TEXTURE_INTERNAL_FORMAT_ANGLE:
-                if (!displayExtensions.imageD3D11Texture && !displayExtensions.vulkanImageANGLE)
+                if (!displayExtensions.imageD3D11Texture && !displayExtensions.vulkanImageANGLE &&
+                    !displayExtensions.iosurfaceClientBuffer)
                 {
-                    val->setError(
-                        EGL_BAD_PARAMETER,
-                        "EGL_TEXTURE_INTERNAL_FORMAT_ANGLE cannot be used without "
-                        "EGL_ANGLE_image_d3d11_texture or EGL_ANGLE_vulkan_image support.");
+                    val->setError(EGL_BAD_PARAMETER,
+                                  "EGL_TEXTURE_INTERNAL_FORMAT_ANGLE cannot be used without "
+                                  "EGL_ANGLE_iosurface_client_buffer, EGL_ANGLE_image_d3d11_texture"
+                                  " or EGL_ANGLE_vulkan_image support.");
                     return false;
                 }
                 break;
@@ -3456,13 +3457,23 @@ bool ValidateCreateImage(const ValidationContext *val,
                 }
                 break;
 
+            case EGL_TEXTURE_TYPE_ANGLE:
+                if (!displayExtensions.iosurfaceClientBuffer)
+                {
+                    val->setError(EGL_BAD_ATTRIBUTE,
+                                  "EGL_TEXTURE_TYPE_ANGLE cannot be used without "
+                                  "EGL_ANGLE_iosurface_client_buffer support.");
+                    return false;
+                }
+                break;
+
             case EGL_WIDTH:
             case EGL_HEIGHT:
-                if (target != EGL_LINUX_DMA_BUF_EXT)
+                if (target != EGL_LINUX_DMA_BUF_EXT && target != EGL_IOSURFACE_ANGLE)
                 {
-                    val->setError(
-                        EGL_BAD_PARAMETER,
-                        "Parameter cannot be used if target is not EGL_LINUX_DMA_BUF_EXT");
+                    val->setError(EGL_BAD_PARAMETER,
+                                  "Parameter cannot be used if target is not EGL_IOSURFACE_ANGLE "
+                                  "or EGL_LINUX_DMA_BUF_EXT");
                     return false;
                 }
                 break;
@@ -3600,6 +3611,16 @@ bool ValidateCreateImage(const ValidationContext *val,
                     val->setError(EGL_BAD_ATTRIBUTE,
                                   "Attribute EGL_VULKAN_IMAGE_CREATE_INFO_{HI,LO}_ANGLE require "
                                   "extension EGL_ANGLE_vulkan_image.");
+                    return false;
+                }
+                break;
+
+            case EGL_IOSURFACE_PLANE_ANGLE:
+                if (!displayExtensions.iosurfaceClientBuffer)
+                {
+                    val->setError(EGL_BAD_ATTRIBUTE,
+                                  "EGL_IOSURFACE_PLANE_ANGLE cannot be used without "
+                                  "EGL_ANGLE_iosurface_client_buffer support.");
                     return false;
                 }
                 break;
@@ -3958,6 +3979,32 @@ bool ValidateCreateImage(const ValidationContext *val,
             }
             break;
 
+        case EGL_IOSURFACE_ANGLE:
+            if (!displayExtensions.iosurfaceClientBuffer)
+            {
+                val->setError(EGL_BAD_PARAMETER,
+                              "EGL_ANGLE_iosurface_client_buffer not supported.");
+                return false;
+            }
+
+            if (context != nullptr)
+            {
+                val->setError(EGL_BAD_CONTEXT, "ctx must be EGL_NO_CONTEXT.");
+                return false;
+            }
+
+            if (buffer == nullptr)
+            {
+                val->setError(EGL_BAD_PARAMETER, "buffer must be non null");
+                return false;
+            }
+
+            ANGLE_EGL_TRY_RETURN(
+                val->eglThread,
+                display->validateImageClientBuffer(context, target, buffer, attributes),
+                val->entryPoint, val->labeledObject, false);
+            break;
+
         case EGL_METAL_TEXTURE_ANGLE:
             if (!displayExtensions.mtlTextureClientBuffer)
             {
@@ -3977,6 +4024,7 @@ bool ValidateCreateImage(const ValidationContext *val,
                 display->validateImageClientBuffer(context, target, buffer, attributes),
                 val->entryPoint, val->labeledObject, false);
             break;
+
         case EGL_VULKAN_IMAGE_ANGLE:
             if (!displayExtensions.vulkanImageANGLE)
             {

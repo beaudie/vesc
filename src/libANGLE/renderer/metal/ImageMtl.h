@@ -21,10 +21,15 @@ class DisplayMtl;
 class TextureImageSiblingMtl : public ExternalImageSiblingImpl
 {
   public:
-    TextureImageSiblingMtl(EGLClientBuffer buffer);
+    TextureImageSiblingMtl(GLenum buftype,
+                           EGLClientBuffer buffer,
+                           const egl::AttributeMap &attribs);
     ~TextureImageSiblingMtl() override;
 
-    static bool ValidateClientBuffer(const DisplayMtl *display, EGLClientBuffer buffer);
+    static bool ValidateClientBuffer(const DisplayMtl *display,
+                                     GLenum buftype,
+                                     EGLClientBuffer buffer,
+                                     const egl::AttributeMap &attribs);
 
     egl::Error initialize(const egl::Display *display) override;
     void onDestroy(const egl::Display *display) override;
@@ -45,8 +50,15 @@ class TextureImageSiblingMtl : public ExternalImageSiblingImpl
   private:
     angle::Result initImpl(DisplayMtl *display);
 
+    GLenum mBuftype;
     EGLClientBuffer mBuffer;
-    gl::Format mGLFormat;
+
+    EGLAttrib mIOSurfaceWidth  = 0;
+    EGLAttrib mIOSurfaceHeight = 0;
+    GLint mIOSurfacePlane      = 0;
+    int mIOSurfaceFormatIdx    = -1;
+
+    gl::Format mGLFormat{GL_NONE};
     mtl::Format mFormat;
 
     bool mRenderable  = false;

@@ -409,8 +409,9 @@ ExternalImageSiblingImpl *DisplayMtl::createExternalImageSibling(const gl::Conte
 {
     switch (target)
     {
+        case EGL_IOSURFACE_ANGLE:
         case EGL_METAL_TEXTURE_ANGLE:
-            return new TextureImageSiblingMtl(buffer);
+            return new TextureImageSiblingMtl(target, buffer, attribs);
 
         default:
             UNREACHABLE();
@@ -657,8 +658,9 @@ egl::Error DisplayMtl::validateImageClientBuffer(const gl::Context *context,
 {
     switch (target)
     {
+        case EGL_IOSURFACE_ANGLE:
         case EGL_METAL_TEXTURE_ANGLE:
-            if (!TextureImageSiblingMtl::ValidateClientBuffer(this, clientBuffer))
+            if (!TextureImageSiblingMtl::ValidateClientBuffer(this, target, clientBuffer, attribs))
             {
                 return egl::EglBadAttribute();
             }

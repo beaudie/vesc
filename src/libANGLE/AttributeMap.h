@@ -49,6 +49,8 @@ class AttributeMap final
     EGLAttrib get(EGLAttrib key, EGLAttrib defaultValue) const;
     EGLint getAsInt(EGLAttrib key) const;
     EGLint getAsInt(EGLAttrib key, EGLint defaultValue) const;
+    GLenum getAsGLenum(EGLAttrib key) const;
+    GLenum getAsGLenum(EGLAttrib key, GLenum defaultValue) const;
 
     template <typename PackedEnumT>
     PackedEnumT getAsPackedEnum(EGLAttrib key) const

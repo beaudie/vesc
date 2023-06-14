@@ -52,6 +52,16 @@ EGLint AttributeMap::getAsInt(EGLAttrib key, EGLint defaultValue) const
     return static_cast<EGLint>(get(key, static_cast<EGLAttrib>(defaultValue)));
 }
 
+GLenum AttributeMap::getAsGLenum(EGLAttrib key) const
+{
+    return static_cast<GLenum>(get(key));
+}
+
+GLenum AttributeMap::getAsGLenum(EGLAttrib key, GLenum defaultValue) const
+{
+    return static_cast<GLenum>(get(key, static_cast<EGLAttrib>(defaultValue)));
+}
+
 bool AttributeMap::isEmpty() const
 {
     return attribs().empty();
