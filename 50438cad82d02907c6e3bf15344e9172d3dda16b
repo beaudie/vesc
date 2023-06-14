@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5eefc7e7_da026fbd",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 794,
+      "author": {
+        "id": 1379689
+      },
+      "writtenOn": "2023-06-14T19:00:04Z",
+      "side": 1,
+      "message": "Thanks, I changed it to draw framebuffer only and it didn\u0027t appear to pose any problems.",
+      "parentUuid": "8c495b62_712d161f",
+      "range": {
+        "startLine": 794,
+        "startChar": 24,
+        "endLine": 794,
+        "endChar": 38
+      },
+      "revId": "50438cad82d02907c6e3bf15344e9172d3dda16b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "90162c09_46118ed2",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-06-04T00:11:13Z",
       "side": 1,
       "message": "How about let the above `if` set a flag like `fboWasOverriden` and then here do `if (fboWasOverriden)` and not have to figure it out again?",
+      "range": {
+        "startLine": 812,
+        "startChar": 8,
+        "endLine": 813,
+        "endChar": 52
+      },
+      "revId": "50438cad82d02907c6e3bf15344e9172d3dda16b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5eca3d0b_c1bf694d",
+        "filename": "src/libANGLE/renderer/gl/StateManagerGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 813,
+      "author": {
+        "id": 1379689
+      },
+      "writtenOn": "2023-06-14T19:00:04Z",
+      "side": 1,
+      "message": "I changed to draw framebuffer only, so only needs to check one comparison now",
+      "parentUuid": "90162c09_46118ed2",
       "range": {
         "startLine": 812,
         "startChar": 8,
