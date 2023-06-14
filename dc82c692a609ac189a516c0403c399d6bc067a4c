@@ -69,6 +69,24 @@
       "parentUuid": "d6e3c78b_c4b3f3b8",
       "revId": "dc82c692a609ac189a516c0403c399d6bc067a4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d7dc4f0_b3d8d352",
+        "filename": "src/libANGLE/renderer/metal/mtl_pipeline_cache.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-06-14T20:05:07Z",
+      "side": 1,
+      "message": "Nevermind, after reading more, ComputeTotalSizeUsedForMTLRenderPipelineDescriptor is doing the right thing.\n\nThere is definitely no chance of integer overflow though. Removed that comment.",
+      "parentUuid": "b6124f2c_e48d39cd",
+      "revId": "dc82c692a609ac189a516c0403c399d6bc067a4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
