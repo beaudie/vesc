@@ -46,6 +46,30 @@
       },
       "revId": "18010f58be60bfcb233f70f125c91265d33ab4a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b324ad7_7a54909f",
+        "filename": "infra/specs/generate_test_spec_json.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-14T18:05:18Z",
+      "side": 0,
+      "message": "Oops, no you\u0027re right `return 0` is missing.",
+      "parentUuid": "f1ee8e69_beecd7a0",
+      "range": {
+        "startLine": 92,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 16
+      },
+      "revId": "18010f58be60bfcb233f70f125c91265d33ab4a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
