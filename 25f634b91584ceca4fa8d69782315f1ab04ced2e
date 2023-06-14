@@ -52,6 +52,41 @@
       "parentUuid": "53b715db_c37cdd79",
       "revId": "25f634b91584ceca4fa8d69782315f1ab04ced2e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7532119f_d7642f3b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-06-14T12:26:15Z",
+      "side": 1,
+      "message": "Wait, but we need to enforce \"gclient sync\".\nangle.json needs to get modified when\n  \"testing/buildbot/generate_buildbot_json.py\":\n  \"testing/buildbot/mixins.pyl\":\nchange.",
+      "parentUuid": "ec8b5e1c_32135a07",
+      "revId": "25f634b91584ceca4fa8d69782315f1ab04ced2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6670281_d54c4b00",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-06-14T12:26:15Z",
+      "side": 1,
+      "message": "How will this affect the Chromium-\u003eANGLE autoroller?\nCurrently it:\n1. Modifies DEPS\n2. gclient sync\n3. run_code_generation\n4. amend CL\nSo that it can regenerate angle.json when Chromium-side mixins change.\nWill it still work? I\u0027m not sure when --verify-only is used.",
+      "revId": "25f634b91584ceca4fa8d69782315f1ab04ced2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
