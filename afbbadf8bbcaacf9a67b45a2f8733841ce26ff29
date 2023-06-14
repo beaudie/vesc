@@ -33,6 +33,24 @@
       "message": "You lost `kConditionFlipN2` and `kConditionnMaliG710` in this file.",
       "revId": "afbbadf8bbcaacf9a67b45a2f8733841ce26ff29",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e03b0d60_428fee8b",
+        "filename": "src/tests/test_expectations/GPUTestExpectationsParser.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-06-14T16:05:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2cfa3493_5ba30a0d",
+      "revId": "afbbadf8bbcaacf9a67b45a2f8733841ce26ff29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
