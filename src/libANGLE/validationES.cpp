@@ -702,7 +702,8 @@ bool ValidTextureTarget(const Context *context, TextureType type)
                     context->getExtensions().texture3DOES);
 
         case TextureType::_2DArray:
-            return (context->getClientMajorVersion() >= 3);
+            return ((context->getClientMajorVersion() >= 3) ||
+                    context->getExtensions().texture3DOES);
 
         case TextureType::_2DMultisample:
             return (context->getClientVersion() >= Version(3, 1) ||

@@ -10792,7 +10792,7 @@ void StateCache::updateValidBindTextureTypes(Context *context)
 
     mCachedValidBindTextureTypes = {{
         {TextureType::_2D, true},
-        {TextureType::_2DArray, isGLES3},
+        {TextureType::_2DArray, isGLES3 || exts.texture3DOES},
         {TextureType::_2DMultisample, isGLES31 || exts.textureMultisampleANGLE},
         {TextureType::_2DMultisampleArray, exts.textureStorageMultisample2dArrayOES},
         {TextureType::_3D, isGLES3 || exts.texture3DOES},

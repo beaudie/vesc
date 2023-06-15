@@ -508,7 +508,7 @@ void State::initialize(Context *context)
     {
         mSamplerTextures[TextureType::_3D].resize(mCaps.maxCombinedTextureImageUnits);
     }
-    if (clientVersion >= Version(3, 0))
+    if (clientVersion >= Version(3, 0) || nativeExtensions.texture3DOES)
     {
         mSamplerTextures[TextureType::_2DArray].resize(mCaps.maxCombinedTextureImageUnits);
     }
