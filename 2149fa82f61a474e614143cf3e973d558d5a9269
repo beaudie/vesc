@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "35898c7e_578573de",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1557258
+      },
+      "writtenOn": "2023-06-15T22:43:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e04f33f1_5fa4f172",
+      "range": {
+        "startLine": 7,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 10
+      },
+      "revId": "2149fa82f61a474e614143cf3e973d558d5a9269",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "94c34ace_0ea4d111",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -58,6 +82,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f1828b4_7016d6c8",
+        "filename": "src/libANGLE/renderer/gl/FunctionsGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1557258
+      },
+      "writtenOn": "2023-06-15T22:43:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e4528e23_fe23629e",
+      "revId": "2149fa82f61a474e614143cf3e973d558d5a9269",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f982eb74_53938cd2",
@@ -71,6 +113,24 @@
       "writtenOn": "2023-06-15T18:33:11Z",
       "side": 1,
       "message": "nit: we avoid implicit cast to bool\n\n```suggestion\n                ASSERT(getString !\u003d nullptr \u0026\u0026 getError !\u003d nullptr);\n```",
+      "revId": "2149fa82f61a474e614143cf3e973d558d5a9269",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc2077de_5c809a93",
+        "filename": "src/libANGLE/renderer/gl/FunctionsGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1557258
+      },
+      "writtenOn": "2023-06-15T22:43:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f982eb74_53938cd2",
       "revId": "2149fa82f61a474e614143cf3e973d558d5a9269",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
