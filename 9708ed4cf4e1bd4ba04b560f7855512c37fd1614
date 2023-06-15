@@ -51,6 +51,24 @@
       "parentUuid": "befa4c36_257b8ee6",
       "revId": "9708ed4cf4e1bd4ba04b560f7855512c37fd1614",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c774bd5e_6ce7e32e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-06-15T18:53:44Z",
+      "side": 1,
+      "message": "You can update those chunks too, it keeps all the code formatted in the most recent style.",
+      "parentUuid": "65a79ed8_156293a4",
+      "revId": "9708ed4cf4e1bd4ba04b560f7855512c37fd1614",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
