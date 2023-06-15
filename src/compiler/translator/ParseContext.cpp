@@ -5269,6 +5269,11 @@ TIntermTyped *TParseContext::addIndexExpression(TIntermTyped *baseExpression,
             error(location,
                   "array indexes for fragment outputs must be constant integral expressions", "[");
         }
+        else if (baseExpression->getQualifier() == EvqFragData)
+        {
+            error(location, "array indexes for gl_FragData must be constant integral expressions",
+                  "[");
+        }
         else if (baseExpression->getQualifier() == EvqLastFragData)
         {
             error(location,
