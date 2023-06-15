@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a1fc0c9_6879af12",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 5701,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-15T18:25:54Z",
+      "side": 1,
+      "message": "I suggest removing the `IfInFlight` part, and return a `bool *anyBatchesFinishedOut`. Then, `ImageMemorySuballocator::allocateAndBindMemory` can  work like this:\n\n```\ndo\n{\n   try to allocate device-local memory\n   if (!success)\n   {\n       finishOneCommandBatchAndCleanup(\u0026cleanedAny);\n   }\n} while (!success \u0026\u0026 cleanedAny);\n\nif (!success)\n{\n    try to allocate without device-local memory\n}\n```\n\nThen ANGLE would try harder to allocate device-local memory. It also reduces the chance of OOM because we\u0027d drain all the work if necessary instead of failing allocation.\n\n---\n\nAlso, instead of ignoring the return value, just check for it and return VK_ERROR_OUT_OF_DEVICE_MEMORY or something if failed.",
+      "range": {
+        "startLine": 5701,
+        "startChar": 24,
+        "endLine": 5701,
+        "endChar": 65
+      },
+      "revId": "28de1731378e6919fb44e97ce59ce1a7ca7406ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
