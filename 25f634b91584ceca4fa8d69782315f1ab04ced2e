@@ -197,6 +197,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4358b2a0_7b343988",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-15T19:54:48Z",
+      "side": 1,
+      "message": "\u003e However, if someone does code generation and produces incorrect output, and presubmit passes locally but fails on the bots\n\nFWIW, this change doesn\u0027t affect that. This was always the case, and we did occasionally have someone commit a bad hash that the bot\u0027s presubmit caught (because the dev didn\u0027t `gclient sync`).",
+      "parentUuid": "63f0c8d5_21a8f085",
+      "revId": "25f634b91584ceca4fa8d69782315f1ab04ced2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3ae7c3d7_48de5626",
