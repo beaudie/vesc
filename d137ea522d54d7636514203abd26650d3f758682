@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e7fdcaf6_2d0f3255",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 19
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-06-15T16:15:13Z",
+      "side": 1,
+      "message": "When I inspect this failure, I search for \"fail\" and don\u0027t get a hit.  That\u0027s kind of my go-to way to find the failure.  Can we add that?",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 59
+      },
+      "revId": "d137ea522d54d7636514203abd26650d3f758682",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "61c8ce15_81619402",
         "filename": "/COMMIT_MSG",
         "patchSetId": 19
@@ -132,6 +155,109 @@
       "writtenOn": "2023-06-14T12:10:29Z",
       "side": 1,
       "message": "LGTM bot capacity-wise, since it\u0027s only ~10 seconds.",
+      "revId": "d137ea522d54d7636514203abd26650d3f758682",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20573226_652c5a92",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 19
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-06-15T16:15:13Z",
+      "side": 1,
+      "message": "Roman, this looks great to me.  I\u0027ve wanted to see captures in source control from the beginning, but they are too large from applications.  Looking forward to see how diffs change as we add features.",
+      "revId": "d137ea522d54d7636514203abd26650d3f758682",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb1c04dc_02c51a96",
+        "filename": "src/tests/capture_tests/CapturedTest.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-06-15T16:15:13Z",
+      "side": 1,
+      "message": "How is frame3 making it into the trace without a swap?  Is there a swap in the replayer somewhere?  An explicit swap would be clearer here, even if redundant.",
+      "range": {
+        "startLine": 106,
+        "startChar": 0,
+        "endLine": 106,
+        "endChar": 59
+      },
+      "revId": "d137ea522d54d7636514203abd26650d3f758682",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "399cd627_d851579e",
+        "filename": "src/tests/capture_tests/capture_tests.py",
+        "patchSetId": 19
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-06-15T16:15:13Z",
+      "side": 1,
+      "message": "100 seems rather high, maybe something under 10?  Although we\u0027ll probably want to add more frames to the test as we add features.  Like a new frame feature or something.",
+      "range": {
+        "startLine": 86,
+        "startChar": 0,
+        "endLine": 86,
+        "endChar": 45
+      },
+      "revId": "d137ea522d54d7636514203abd26650d3f758682",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "418343fb_dcc33ee1",
+        "filename": "src/tests/capture_tests/expected/CapturedTest_MultiFrame_ES3_Vulkan.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-06-15T16:15:13Z",
+      "side": 1,
+      "message": "Testing Reset is really important.  Can we come up with a way to incorporate it?  Like have a bunch of empty swaps at the end so we always get reset?  Ending the capture before reaching end frame will prevent Reset.",
+      "revId": "d137ea522d54d7636514203abd26650d3f758682",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f28f8d2b_229d4faa",
+        "filename": "src/tests/capture_tests/expected/CapturedTest_MultiFrame_ES3_Vulkan_001.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-06-15T16:15:13Z",
+      "side": 1,
+      "message": "I\u0027ve seen this in some traces but haven\u0027t had time to address it, the indent being off for some calls.  This would clearly show up as a diff when fixed, and we could approve the diff in the CL.",
+      "range": {
+        "startLine": 75,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 38
+      },
       "revId": "d137ea522d54d7636514203abd26650d3f758682",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
