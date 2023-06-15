@@ -4379,8 +4379,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // framebuffer fetch causes the render pass to break so that the layout of the color attachments
     // can be adjusted.  On such hardware, the switch to framebuffer fetch mode is made permanent so
     // such render pass breaks don't happen.
-    ANGLE_FEATURE_CONDITION(&mFeatures, permanentlySwitchToFramebufferFetchMode,
-                            isTileBasedRenderer);
+    ANGLE_FEATURE_CONDITION(&mFeatures, permanentlySwitchToFramebufferFetchMode, false);
 
     // Support EGL_KHR_lock_surface3 extension.
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsLockSurfaceExtension, IsAndroid());
