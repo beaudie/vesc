@@ -16,6 +16,24 @@
       "message": "A test will be useful, that you create bunch of garbage by allocate texture and actually use it and then free it. You can utilize slowAsyncCommandQueueForTesting feature flag which will easily create this situation with async submission code path.\n\nAlso make sure you get to this code path before the fallback. Hopefully your test could also verify that.",
       "revId": "19e79684311f8899e218f67191da43a1aad2f7dd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21f1f2ef_040f6a29",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-06-15T00:37:58Z",
+      "side": 1,
+      "message": "Thanks. Tests have been added after some updates to the code.",
+      "parentUuid": "fd7703e2_31cbc87d",
+      "revId": "19e79684311f8899e218f67191da43a1aad2f7dd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
