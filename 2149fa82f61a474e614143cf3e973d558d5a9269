@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e04f33f1_5fa4f172",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-15T18:33:11Z",
+      "side": 1,
+      "message": "nit: s/sanity/validity\n\n(per our inclusive language guide)",
+      "range": {
+        "startLine": 7,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 10
+      },
+      "revId": "2149fa82f61a474e614143cf3e973d558d5a9269",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94c34ace_0ea4d111",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-15T18:33:11Z",
+      "side": 1,
+      "message": "Thank you for your contribution! I have a few small suggestions.",
+      "revId": "2149fa82f61a474e614143cf3e973d558d5a9269",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4528e23_fe23629e",
+        "filename": "src/libANGLE/renderer/gl/FunctionsGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-15T18:33:11Z",
+      "side": 1,
+      "message": "```suggestion\n                // See http://anglebug.com/8195\n```",
+      "revId": "2149fa82f61a474e614143cf3e973d558d5a9269",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f982eb74_53938cd2",
+        "filename": "src/libANGLE/renderer/gl/FunctionsGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-15T18:33:11Z",
+      "side": 1,
+      "message": "nit: we avoid implicit cast to bool\n\n```suggestion\n                ASSERT(getString !\u003d nullptr \u0026\u0026 getError !\u003d nullptr);\n```",
+      "revId": "2149fa82f61a474e614143cf3e973d558d5a9269",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
