@@ -161,6 +161,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a805e4a4_0bb27d49",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-15T13:55:45Z",
+      "side": 1,
+      "message": "Out of sync deps can cause all sorts of other issues. Users do need to learn to keep their deps in sync either way. Forcing unresolvable merge conflicts in some specific cases (inputs to this script) is a custom hack (any other project doing this?) that isn\u0027t really solving much but is causing another issue: merge conflicts and needless rebasing.\n\nI suggest we try this and collect some actual data points on where users get confused and then consider what solutions could be (possibly some quick DEPS vs git checks).",
+      "parentUuid": "961beaf5_e5d5c5ff",
+      "revId": "25f634b91584ceca4fa8d69782315f1ab04ced2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3ae7c3d7_48de5626",
