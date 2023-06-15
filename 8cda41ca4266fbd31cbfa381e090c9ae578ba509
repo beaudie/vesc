@@ -33,6 +33,23 @@
       "message": "+geofflang, could you help review too?",
       "revId": "8cda41ca4266fbd31cbfa381e090c9ae578ba509",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52a7a1df_ac18f0aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-06-15T18:52:30Z",
+      "side": 1,
+      "message": "This looks good to me. I\u0027d like to see the spec updated though. You can pull language from EGL_ANGLE_metal_texture_client_buffer.txt and EGL_ANGLE_d3d_texture_client_buffer.txt.",
+      "revId": "8cda41ca4266fbd31cbfa381e090c9ae578ba509",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
