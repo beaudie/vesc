@@ -597,7 +597,7 @@ void Context::initializeDefaultResources()
         Texture *zeroTexture3D = new Texture(mImplementation.get(), {0}, TextureType::_3D);
         mZeroTextures[TextureType::_3D].set(this, zeroTexture3D);
     }
-    if (getClientVersion() >= Version(3, 0))
+    if (getClientVersion() >= Version(3, 0) || mSupportedExtensions.texture3DOES)
     {
         Texture *zeroTexture2DArray =
             new Texture(mImplementation.get(), {0}, TextureType::_2DArray);
@@ -10685,7 +10685,7 @@ void StateCache::updateValidBindTextureTypes(Context *context)
 
     mCachedValidBindTextureTypes = {{
         {TextureType::_2D, true},
-        {TextureType::_2DArray, isGLES3},
+        {TextureType::_2DArray, isGLES3 || exts.texture3DOES},
         {TextureType::_2DMultisample, isGLES31 || exts.textureMultisampleANGLE},
         {TextureType::_2DMultisampleArray, exts.textureStorageMultisample2dArrayOES},
         {TextureType::_3D, isGLES3 || exts.texture3DOES},
