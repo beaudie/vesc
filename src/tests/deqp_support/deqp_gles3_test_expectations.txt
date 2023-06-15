@@ -839,3 +839,17 @@
 8157 GALAXYS23 VULKAN : dEQP-GLES3.functional.transform_feedback.array_element.interleaved.* = SKIP
 8157 GALAXYS23 VULKAN : dEQP-GLES3.functional.transform_feedback.array_element.separate.* = SKIP
 8157 GALAXYS23 VULKAN : dEQP-GLES3.functional.transform_feedback.random.* = SKIP
+
+// Mali G710
+8212 MALIG710 VULKAN : dEQP-GLES3.functional.transform_feedback.array_element.interleaved.lines.* = FAIL
+8212 MALIG710 VULKAN : dEQP-GLES3.functional.transform_feedback.array_element.interleaved.points.* = FAIL
+8212 MALIG710 VULKAN : dEQP-GLES3.functional.transform_feedback.array_element.interleaved.triangles.* = FAIL
+8212 MALIG710 VULKAN : dEQP-GLES3.functional.transform_feedback.array_element.separate.lines.* = FAIL
+8212 MALIG710 VULKAN : dEQP-GLES3.functional.transform_feedback.array_element.separate.points.* = FAIL
+8212 MALIG710 VULKAN : dEQP-GLES3.functional.transform_feedback.array_element.separate.triangles.* = FAIL
+8212 MALIG710 VULKAN : dEQP-GLES3.functional.transform_feedback.random.interleaved.lines.* = FAIL
+8212 MALIG710 VULKAN : dEQP-GLES3.functional.transform_feedback.random.interleaved.points.* = FAIL
+8212 MALIG710 VULKAN : dEQP-GLES3.functional.transform_feedback.random.interleaved.triangles.* = FAIL
+8212 MALIG710 VULKAN : dEQP-GLES3.functional.transform_feedback.random.separate.lines.* = FAIL
+8212 MALIG710 VULKAN : dEQP-GLES3.functional.transform_feedback.random.separate.points.* = FAIL
+8212 MALIG710 VULKAN : dEQP-GLES3.functional.transform_feedback.random.separate.triangles.* = FAIL
