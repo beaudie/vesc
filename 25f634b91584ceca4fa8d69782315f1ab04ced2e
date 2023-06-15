@@ -291,6 +291,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2e68cdc_a96fc44e",
+        "filename": "infra/specs/generate_test_spec_json.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-15T14:36:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d3cf47e_4c2d6d98",
+      "range": {
+        "startLine": 164,
+        "startChar": 15,
+        "endLine": 164,
+        "endChar": 37
+      },
+      "revId": "25f634b91584ceca4fa8d69782315f1ab04ced2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "57985d2c_1e3b4c2a",
@@ -304,6 +328,30 @@
       "writtenOn": "2023-06-14T14:28:08Z",
       "side": 1,
       "message": "Could you modify this to work with multiple JSON files?\nLike, check everything in temp_dir.",
+      "range": {
+        "startLine": 168,
+        "startChar": 0,
+        "endLine": 168,
+        "endChar": 61
+      },
+      "revId": "25f634b91584ceca4fa8d69782315f1ab04ced2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d95fb1a_869cb180",
+        "filename": "infra/specs/generate_test_spec_json.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-15T14:36:35Z",
+      "side": 1,
+      "message": "Done, using `angle_generator.waterfalls` (we already peek into those in this file).",
+      "parentUuid": "57985d2c_1e3b4c2a",
       "range": {
         "startLine": 168,
         "startChar": 0,
