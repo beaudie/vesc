@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c667d35f_7c70a291",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-15T22:18:00Z",
+      "side": 1,
+      "message": "very cursory review from me :)",
+      "revId": "a0b5881403e5c21f913b2c35c847e199f4cc4577",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12010e2c_8603b542",
+        "filename": "src/libANGLE/renderer/vulkan/spv_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-15T22:18:00Z",
+      "side": 1,
+      "message": "Curious what\u0027s the advantage of this over just checking for `name \u003d\u003d \"x\" || name \u003d\u003d \"y\"`?\n\nSeems like we have that just below or am I missing something?\n\n```\n            if (outputVar.name \u003d\u003d \"gl_SecondaryFragColorEXT\" ||\n                outputVar.name \u003d\u003d \"gl_SecondaryFragDataEXT\")\n                ```",
+      "range": {
+        "startLine": 287,
+        "startChar": 3,
+        "endLine": 287,
+        "endChar": 87
+      },
+      "revId": "a0b5881403e5c21f913b2c35c847e199f4cc4577",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
