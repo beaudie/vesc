@@ -34,6 +34,24 @@
       "parentUuid": "4dd32199_59ff858e",
       "revId": "5d072015595518c5ecadeda8c2dd03df9cd52996",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8990a48_58280493",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-15T19:59:43Z",
+      "side": 1,
+      "message": "It may very well be that `gl_FragData[non-const]` is also invalid. But I don\u0027t know if there are users already relying on that. I plan on banning that in a follow up change.",
+      "parentUuid": "437498ba_675f6274",
+      "revId": "5d072015595518c5ecadeda8c2dd03df9cd52996",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
