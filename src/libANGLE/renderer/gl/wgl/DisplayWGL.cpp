@@ -412,7 +412,10 @@ SurfaceImpl *DisplayWGL::createWindowSurface(const egl::SurfaceState &state,
                                              const egl::AttributeMap &attribs)
 {
     EGLint orientation = static_cast<EGLint>(attribs.get(EGL_SURFACE_ORIENTATION_ANGLE, 0));
-    if (mUseDXGISwapChains)
+    // TODO(crbug.com/540829, anglebug.com/8201) other orientations
+    // are still unsupported, so allow fallback instead of crashing
+    // later in eglCreateWindowSurface
+    if (mUseDXGISwapChains && orientation == EGL_SURFACE_ORIENTATION_INVERT_Y_ANGLE)
     {
         egl::Error error = initializeD3DDevice();
         if (error.isError())
