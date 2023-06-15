@@ -4408,9 +4408,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // implemented with external memory there.
     //
     // Without VK_GOOGLE_surfaceless_query, there is no way to automatically deduce this support.
-    ANGLE_FEATURE_CONDITION(
-        &mFeatures, emulateAdvancedBlendEquations,
-        !mFeatures.supportsBlendOperationAdvanced.enabled && (isVenus || !isIntel));
+    ANGLE_FEATURE_CONDITION(&mFeatures, emulateAdvancedBlendEquations,
+                            !mFeatures.supportsBlendOperationAdvanced.enabled &&
+                                (isVenus || !isIntel) && !isQualcommProprietary);
 
     // http://anglebug.com/6933
     // Android expects VkPresentRegionsKHR rectangles with a bottom-left origin, while spec
