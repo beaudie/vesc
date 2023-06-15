@@ -215,6 +215,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aaf94ab0_ee320f5d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-15T20:27:30Z",
+      "side": 1,
+      "message": "I think there is a special case where an input outside of the ANGLE repo changed (say `testing/buildbot/mixins.pyl`) and deps are out of sync. In this case, before this CL a local presubmit would fail and after this CL it would pass, but I\u0027d like to see evidence of this being an actual issue before putting more thought into it.",
+      "parentUuid": "4358b2a0_7b343988",
+      "revId": "25f634b91584ceca4fa8d69782315f1ab04ced2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3ae7c3d7_48de5626",
