@@ -16,6 +16,41 @@
       "message": "LGTM.\n\nI wouldn\u0027t expect you to hit this path for regular ANGLE usage though. mUseDXGISwapChains should only be set to true if you initialize with a window created by another process.",
       "revId": "9708ed4cf4e1bd4ba04b560f7855512c37fd1614",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65a79ed8_156293a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557258
+      },
+      "writtenOn": "2023-06-15T17:07:39Z",
+      "side": 1,
+      "message": "Re: clang-format, there are two hits on chunks of the file that I didn\u0027t edit in this changeset. What should I do?",
+      "revId": "9708ed4cf4e1bd4ba04b560f7855512c37fd1614",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4146ffc8_9e2213cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557258
+      },
+      "writtenOn": "2023-06-15T17:07:39Z",
+      "side": 1,
+      "message": "I believe my bug case happened during regular ANGLE usage; as described in the bug report, I built the hellogles3 app from Qt6, asked libEGL for the OpenGL backend, and it crashed right at surface instantiation. It may be that there\u0027s something in Qt\u0027s native window handling that I missed, though.",
+      "parentUuid": "befa4c36_257b8ee6",
+      "revId": "9708ed4cf4e1bd4ba04b560f7855512c37fd1614",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
