@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "728daf5c_a5388c1c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-06-15T14:19:43Z",
+      "side": 1,
+      "message": "LED builds went well, submitting.\nhttps://luci-milo.appspot.com/raw/build/logs.chromium.org/angle/led/ynovikov_google.com/a3c062f21e1eff5e617735843ee3a79773894e6f7a3a982434f12a89daf3c477/+/build.proto\nhttps://luci-milo.appspot.com/raw/build/logs.chromium.org/angle/led/ynovikov_google.com/47ff6de3e1226ea9815df28bab50341302801bf123ca9a3683bbb1dadd3ff096/+/build.proto\nhttps://luci-milo.appspot.com/raw/build/logs.chromium.org/angle/led/ynovikov_google.com/0d9af125b2efc497809dc959757d2b48555f387eba987d71289a22c97878e5ac/+/build.proto\n\nThanks for review, Brian and Roman!",
+      "revId": "9264554727e936f4e9c8bb094ebbe11648415550",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
