@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ef6e2e0_f01aed27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-15T21:55:41Z",
+      "side": 1,
+      "message": "Confirmed offline that this is good to go, with follow up improvements - thanks Cody!",
+      "revId": "9a9a81327750307917430da0ac1944ee73b3af6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f500d9e6_fb301218",
@@ -31,6 +48,30 @@
       "writtenOn": "2023-06-15T21:30:09Z",
       "side": 1,
       "message": "Would be good to do some of these things in Setup too in the future.",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 4
+      },
+      "revId": "9a9a81327750307917430da0ac1944ee73b3af6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3dbec88_94962059",
+        "filename": "src/tests/capture_tests/CapturedTest.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-15T21:55:41Z",
+      "side": 1,
+      "message": "Added a TODO.",
+      "parentUuid": "f500d9e6_fb301218",
       "range": {
         "startLine": 68,
         "startChar": 0,
@@ -64,6 +105,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2b54d15_76876445",
+        "filename": "src/tests/capture_tests/expected/CapturedTest_MultiFrame_ES3_Vulkan_001.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-15T21:55:41Z",
+      "side": 1,
+      "message": "I think these are due to RAII destructors from GLProgram, GLBuffer. I agree this seems a bit confusing. I added a TODO and a note.",
+      "parentUuid": "a4b0a923_ec6f2f7c",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 38
+      },
+      "revId": "9a9a81327750307917430da0ac1944ee73b3af6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ffd4a8d1_4f9429f2",
@@ -77,6 +142,30 @@
       "writtenOn": "2023-06-15T21:30:09Z",
       "side": 1,
       "message": "This is weird, there should be some framebuffers genned in Setup to match your calls in `testSetUp`.  I think there are some things happening in the helper classes that are getting in the way of having a clean trace here.",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 42
+      },
+      "revId": "9a9a81327750307917430da0ac1944ee73b3af6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2dcb8ba9_a4bdc474",
+        "filename": "src/tests/capture_tests/expected/CapturedTest_MultiFrame_ES3_Vulkan_shared.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-15T21:55:41Z",
+      "side": 1,
+      "message": "Added a TODO to investigate missing framebuffers.",
+      "parentUuid": "ffd4a8d1_4f9429f2",
       "range": {
         "startLine": 8,
         "startChar": 0,
