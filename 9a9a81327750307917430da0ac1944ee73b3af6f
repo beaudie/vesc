@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0e9b90d_d20e4b27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-06-15T21:30:09Z",
+      "side": 1,
+      "message": "Roman, looks good for starters.  It think we can enhance it further so the code in our tests matches what shows up in the trace (move away from some of the helpers deleting things per frame).",
+      "revId": "9a9a81327750307917430da0ac1944ee73b3af6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f500d9e6_fb301218",
+        "filename": "src/tests/capture_tests/CapturedTest.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-06-15T21:30:09Z",
+      "side": 1,
+      "message": "Would be good to do some of these things in Setup too in the future.",
+      "range": {
+        "startLine": 68,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 4
+      },
+      "revId": "9a9a81327750307917430da0ac1944ee73b3af6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4b0a923_ec6f2f7c",
+        "filename": "src/tests/capture_tests/expected/CapturedTest_MultiFrame_ES3_Vulkan_001.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-06-15T21:30:09Z",
+      "side": 1,
+      "message": "These calls aren\u0027t in your frames, where are they coming from?  We don\u0027t want these deleted so they\u0027ll show up in Reset.",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 38
+      },
+      "revId": "9a9a81327750307917430da0ac1944ee73b3af6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffd4a8d1_4f9429f2",
+        "filename": "src/tests/capture_tests/expected/CapturedTest_MultiFrame_ES3_Vulkan_shared.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-06-15T21:30:09Z",
+      "side": 1,
+      "message": "This is weird, there should be some framebuffers genned in Setup to match your calls in `testSetUp`.  I think there are some things happening in the helper classes that are getting in the way of having a clean trace here.",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 42
+      },
+      "revId": "9a9a81327750307917430da0ac1944ee73b3af6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
