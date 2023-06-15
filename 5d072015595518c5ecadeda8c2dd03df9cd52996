@@ -16,6 +16,24 @@
       "message": "The added input attachments to support gl_LastFragData[dynamic_index] is causing a crash on Pixel4. I found out `out` variables can only have const indices, but there is no spec disallowing it for `inout`. EXT_draw_buffers adds support for indexing gl_FragData, but it doesn\u0027t specify whether dynamic indices are allowed, though ES 100 says supporting dynamic indices (in general) is optional.\n\nI\u0027m going to just simplify this by disallowing dynamic indexing of both `inout` and `gl_LastFragData` variables.",
       "revId": "5d072015595518c5ecadeda8c2dd03df9cd52996",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "437498ba_675f6274",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-06-15T17:36:46Z",
+      "side": 1,
+      "message": "\u003e out variables can only have const indices\n\ni think we ran into this issue with `gl_FragData` which is why i believe we fixed it to const. are you sure this is not an issue with `gl_FragData` like how it is with `gl_LastFragData`?",
+      "parentUuid": "4dd32199_59ff858e",
+      "revId": "5d072015595518c5ecadeda8c2dd03df9cd52996",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
