@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cb7112c_ae4ed0ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-06-15T08:35:11Z",
+      "side": 1,
+      "message": "This change combines the infrastructure implemented for EGL_ANGLE_iosurface_client_buffer and EGL_ANGLE_metal_texture_client_buffer to support passing IOSurface objects to eglCreateImageKHR on the Metal renderer.",
+      "revId": "8cda41ca4266fbd31cbfa381e090c9ae578ba509",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
