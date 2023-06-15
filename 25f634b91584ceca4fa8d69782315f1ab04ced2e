@@ -143,6 +143,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "961beaf5_e5d5c5ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-06-15T11:25:08Z",
+      "side": 1,
+      "message": "OK, so if the input file is different, but produces the same output, this saves you from doing \"gclient sync\", hooray!\n\nHowever, if someone does code generation and produces incorrect output, and presubmit passes locally but fails on the bots, this is a problem.\n1) Not giving the error locally adds a delay\n2) People are usually confused and don\u0027t know what to do when presubmit passes locally but fails on the bots. The usual reaction I see (when we had different behavior on local Windows vs bot\u0027s Linux) is: \"bot is broken, please fix\".",
+      "parentUuid": "5676de4f_8f0d38bc",
+      "revId": "25f634b91584ceca4fa8d69782315f1ab04ced2e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3ae7c3d7_48de5626",
