@@ -34,6 +34,24 @@
       "parentUuid": "2e59dd09_32f5f465",
       "revId": "f741acfbe1aef1138a5115146579d5ccc4ae8893",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "076e07fb_87fdcdc7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-16T23:05:09Z",
+      "side": 1,
+      "message": "Yes you are right. Buy location I mean the spot among the SPIR-V instructions where the transformer needs to something. The non-semantic instruction is indeed how the compiler tells the transformer where that spot is.",
+      "parentUuid": "9ababeea_f37d82a9",
+      "revId": "f741acfbe1aef1138a5115146579d5ccc4ae8893",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
