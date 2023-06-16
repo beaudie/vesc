@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "033b20a2_74ab5e2a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-16T20:10:57Z",
+      "side": 1,
+      "message": "Less eye-bleed when looking at GLSL in RenderDoc with this change",
+      "revId": "bd3bb870e14e96b119e73e6a2b035c50f5abcd6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
