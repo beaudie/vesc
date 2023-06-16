@@ -68,6 +68,24 @@
       "parentUuid": "52a7a1df_ac18f0aa",
       "revId": "8cda41ca4266fbd31cbfa381e090c9ae578ba509",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33047e7a_192ce030",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-06-16T14:16:26Z",
+      "side": 1,
+      "message": "Ideally it\u0027s a new extension spec but we have a prescedent of adding EGL image support to the \"client_buffer\" extensions.\n\nYou can pull from `EGL_ANGLE_d3d_texture_client_buffer` as an example. It has the line:\n```References the EGL_ANGLE_device_d3d and EGL_KHR_image_base extensions.```",
+      "parentUuid": "6756c8fa_f204ec86",
+      "revId": "8cda41ca4266fbd31cbfa381e090c9ae578ba509",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
