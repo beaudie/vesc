@@ -39,6 +39,30 @@
       },
       "revId": "61ec852344ca42cebd60e83420864317429c43b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bafd1eb_2b3a667a",
+        "filename": "src/libANGLE/renderer/metal/mtl_state_cache.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-06-16T15:28:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e3838a8_f773b78c",
+      "range": {
+        "startLine": 278,
+        "startChar": 47,
+        "endLine": 278,
+        "endChar": 80
+      },
+      "revId": "61ec852344ca42cebd60e83420864317429c43b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
