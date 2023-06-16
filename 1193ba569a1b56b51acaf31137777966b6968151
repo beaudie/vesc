@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb698008_9f8ea913",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-16T13:39:56Z",
+      "side": 1,
+      "message": "Looks like only a unittest is failing with this, which I believe can be removed instead.",
+      "revId": "1193ba569a1b56b51acaf31137777966b6968151",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
