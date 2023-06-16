@@ -16,6 +16,52 @@
       "message": "Bots are green, PTAL",
       "revId": "0eccd5f20a68b68fe1c92d7442153d90127f8c25",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c65329a_4d043552",
+        "filename": "src/compiler/translator/tree_ops/vulkan/EmulateFramebufferFetch.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-06-16T15:59:59Z",
+      "side": 1,
+      "message": "are these needed? do we have usecase?",
+      "range": {
+        "startLine": 129,
+        "startChar": 8,
+        "endLine": 134,
+        "endChar": 18
+      },
+      "revId": "0eccd5f20a68b68fe1c92d7442153d90127f8c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fd56363_074b2ee6",
+        "filename": "src/compiler/translator/tree_ops/vulkan/EmulateFramebufferFetch.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-06-16T15:59:59Z",
+      "side": 1,
+      "message": "i see this done in other traversers as well but what is the value add especially in release builds? why not `ASSERT(compiler-\u003evalidateAST(root));` and just `return true`?",
+      "range": {
+        "startLine": 288,
+        "startChar": 21,
+        "endLine": 288,
+        "endChar": 32
+      },
+      "revId": "0eccd5f20a68b68fe1c92d7442153d90127f8c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
