@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8157570_b4e3bf08",
+        "filename": "src/compiler/translator/tree_ops/vulkan/EmulateFramebufferFetch.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-06-16T16:04:07Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "aab1485c_5721c4e3",
+      "range": {
+        "startLine": 129,
+        "startChar": 8,
+        "endLine": 134,
+        "endChar": 18
+      },
+      "revId": "0eccd5f20a68b68fe1c92d7442153d90127f8c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4fd56363_074b2ee6",
@@ -102,6 +126,30 @@
       "side": 1,
       "message": "This is a common pattern in the translator. `validateAST` automatically skips validation in release builds.",
       "parentUuid": "4fd56363_074b2ee6",
+      "range": {
+        "startLine": 288,
+        "startChar": 21,
+        "endLine": 288,
+        "endChar": 32
+      },
+      "revId": "0eccd5f20a68b68fe1c92d7442153d90127f8c25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bd2c222_30882351",
+        "filename": "src/compiler/translator/tree_ops/vulkan/EmulateFramebufferFetch.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-06-16T16:04:07Z",
+      "side": 1,
+      "message": "\u003e validateAST automatically skips validation in release builds\n\nah, yes.",
+      "parentUuid": "035185f3_53aa9e69",
       "range": {
         "startLine": 288,
         "startChar": 21,
