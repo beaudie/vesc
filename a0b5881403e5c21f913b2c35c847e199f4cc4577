@@ -39,6 +39,30 @@
       },
       "revId": "a0b5881403e5c21f913b2c35c847e199f4cc4577",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04a37b70_924a1910",
+        "filename": "src/libANGLE/renderer/vulkan/spv_utils.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-16T15:33:04Z",
+      "side": 1,
+      "message": "Just similarity with `AssignOutputLocations`. I made the other one look like this too",
+      "parentUuid": "12010e2c_8603b542",
+      "range": {
+        "startLine": 287,
+        "startChar": 3,
+        "endLine": 287,
+        "endChar": 87
+      },
+      "revId": "a0b5881403e5c21f913b2c35c847e199f4cc4577",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
