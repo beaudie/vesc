@@ -16,6 +16,29 @@
       "message": "PTAL",
       "revId": "61ec852344ca42cebd60e83420864317429c43b5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e3838a8_f773b78c",
+        "filename": "src/libANGLE/renderer/metal/mtl_state_cache.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-06-16T15:11:02Z",
+      "side": 1,
+      "message": "nit: to make it consistent which the term being used in other places such as RenderPassDesc\u0027s `convertToMetalDesc`, maybe we should name this RenderPipelineDesc\u0027s `createMetalDesc`?",
+      "range": {
+        "startLine": 278,
+        "startChar": 47,
+        "endLine": 278,
+        "endChar": 80
+      },
+      "revId": "61ec852344ca42cebd60e83420864317429c43b5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
