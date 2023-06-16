@@ -16,6 +16,23 @@
       "message": "Swapping reviewers as Cody is out",
       "revId": "73a21ec8f267d99e44ac0cf3a2b68564daa1ad94",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "494f0687_b4789677",
+        "filename": "src/tests/gl_tests/FramebufferFetchTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-06-16T19:45:10Z",
+      "side": 1,
+      "message": "nit: if we want to check `gl_LastFragData` is not clobbered by a write to `gl_FragData`, why not just checkout `gl_FragData[1] - gl_LastFragData[1] \u003d\u003d u_color`?\n\nJust curious what is the benefit of `addLastFragData()` here?",
+      "revId": "73a21ec8f267d99e44ac0cf3a2b68564daa1ad94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
