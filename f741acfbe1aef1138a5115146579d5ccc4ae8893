@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e59dd09_32f5f465",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-06-16T23:01:38Z",
+      "side": 1,
+      "message": "would you mind explaining what does \"location\" mean, and where is the corresponding \"location marking\" change in this CL?",
+      "revId": "f741acfbe1aef1138a5115146579d5ccc4ae8893",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
