@@ -60,12 +60,14 @@ constexpr char kSupportPath[] = "src/tests/deqp_support/";
 
 #define GLES_CTS_DIR(PATH) "external/openglcts/data/mustpass/gles/" PATH
 #define GL_CTS_DIR(PATH) "external/openglcts/data/mustpass/gl/" PATH
+#define EGL_CTS_DIR(PATH) "external/openglcts/data/mustpass/egl/" PATH
 
 const char *gCaseListFiles[] = {
     GLES_CTS_DIR("aosp_mustpass/main/gles2-master.txt"),
     GLES_CTS_DIR("aosp_mustpass/main/gles3-master.txt"),
     GLES_CTS_DIR("aosp_mustpass/main/gles31-master.txt"),
-    "/android/cts/main/egl-master.txt",
+    EGL_CTS_DIR("aosp_mustpass/main/egl-master.txt"),
+    //"/android/cts/main/egl-master.txt",
     GLES_CTS_DIR("khronos_mustpass/main/gles2-khr-master.txt"),
     GLES_CTS_DIR("khronos_mustpass/main/gles3-khr-master.txt"),
     GLES_CTS_DIR("khronos_mustpass/main/gles31-khr-master.txt"),
@@ -140,8 +142,8 @@ constexpr bool kEnableRenderDocCapture = false;
 
 const APIInfo *gInitAPI = nullptr;
 dEQPOptions gOptions    = {
-       kDefaultPreRotation,      // preRotation
-       kEnableRenderDocCapture,  // enableRenderDocCapture
+    kDefaultPreRotation,      // preRotation
+    kEnableRenderDocCapture,  // enableRenderDocCapture
 };
 
 constexpr const char gdEQPEGLConfigNameString[] = "--deqp-gl-config-name=";
@@ -201,6 +203,7 @@ Optional<std::string> FindFileFromPath(const char *dirPath, const char *filePath
     std::stringstream strstr;
     strstr << dirPath << filePath;
     std::string path = strstr.str();
+    // std::cout << "Yuxin Debug FindFileFromPath path: " << path << std::endl;
 
     constexpr size_t kMaxFoundPathLen = 1000;
     char foundPath[kMaxFoundPathLen];
@@ -262,10 +265,12 @@ dEQPCaseList::dEQPCaseList(size_t testModuleIndex) : mTestModuleIndex(testModule
 
 void dEQPCaseList::initialize()
 {
+    // INFO() << "Yuxin Debug dEQPCaseList::initialize()";
     if (mInitialized)
     {
         return;
     }
+    INFO() << "Yuxin Debug dEQPCaseList::initialize()";
 
     mInitialized = true;
 
@@ -313,6 +318,8 @@ void dEQPCaseList::initialize()
         Die();
     }
 
+    INFO() << "Yuxin Debug dEQPCaseList::initialize() caseListPath is: "
+           << caseListPath.valueOr("empty") << std::endl;
     std::ifstream caseListStream(caseListPath.value());
     if (caseListStream.fail())
     {
@@ -326,6 +333,8 @@ void dEQPCaseList::initialize()
         std::getline(caseListStream, inString);
 
         std::string testName = TrimString(inString, kWhitespaceASCII);
+        // std::cout<< "testName: " << testName << std::endl;
+        INFO() << "Yuxin Debug dEQPCaseList::initialize() testName: " << testName;
         if (testName.empty())
             continue;
         int expectation = testSuite->getTestExpectation(testName);
@@ -756,6 +765,7 @@ size_t GetTestModuleIndex()
 
 void RegisterGLCTSTests()
 {
+    INFO() << "Yuxin Debug RegisterGLCTSTests()";
     size_t testModuleIndex = GetTestModuleIndex();
 
     const dEQPCaseList &caseList = dEQP::GetCaseList(testModuleIndex);
@@ -771,6 +781,7 @@ void RegisterGLCTSTests()
         ASSERT(pos != std::string::npos);
         std::string moduleName = testCaseName.substr(0, pos);
         std::string testName   = testCaseName.substr(pos + 1);
+        INFO() << "Yuxin Debug RegisterTest: " << testName;
         testing::RegisterTest(moduleName.c_str(), testName.c_str(), nullptr, nullptr, __FILE__,
                               __LINE__, factory);
     }

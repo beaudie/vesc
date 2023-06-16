@@ -1052,6 +1052,7 @@ TestSuite::TestSuite(int *argc, char **argv, std::function<void()> registerTests
         InitCrashHandler(&mCrashCallback);
     }
 
+    INFO() << "Yuxin Debug registerTestsCalback()";
     registerTestsCallback();
 
     std::string envShardIndex = angle::GetEnvironmentVar("GTEST_SHARD_INDEX");

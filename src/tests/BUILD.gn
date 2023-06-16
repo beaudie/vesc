@@ -1484,7 +1484,9 @@ if (build_angle_deqp_tests && !is_fuchsia) {
     }
   }
 
-  _android_mustpass = "$deqp_path/android/cts/main"
+  # _android_mustpass = "$deqp_path/android/cts/main"
+  _android_mustpass =
+      "$deqp_path/external/openglcts/data/mustpass/egl/aosp_mustpass/main"
   _aosp_mustpass =
       "$deqp_path/external/openglcts/data/mustpass/gles/aosp_mustpass/main"
   _khronos_gl_mustpass =
