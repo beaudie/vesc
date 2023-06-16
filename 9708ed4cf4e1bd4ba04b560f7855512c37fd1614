@@ -69,6 +69,24 @@
       "parentUuid": "65a79ed8_156293a4",
       "revId": "9708ed4cf4e1bd4ba04b560f7855512c37fd1614",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c201fe75_e8417332",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557258
+      },
+      "writtenOn": "2023-06-16T00:19:24Z",
+      "side": 1,
+      "message": "\u003e It may be that there\u0027s something in Qt\u0027s native window handling that I missed, though.\n\nAfter tracing the initialization code, it turns out that the display context yielded by Qt at the time of libEGL initialization is the one corresponding to the whole screen, and GetWindowThreadProcessId says it was created by CSRSS. So that\u0027s why ANGLE tries to initialize the DXGI swapchain.",
+      "parentUuid": "4146ffc8_9e2213cd",
+      "revId": "9708ed4cf4e1bd4ba04b560f7855512c37fd1614",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
