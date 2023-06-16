@@ -105,6 +105,24 @@
       "parentUuid": "c201fe75_e8417332",
       "revId": "9708ed4cf4e1bd4ba04b560f7855512c37fd1614",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d46128df_ec1a6944",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557258
+      },
+      "writtenOn": "2023-06-16T19:33:09Z",
+      "side": 1,
+      "message": "\u003e if we had a way of detecting that we could use it in the mUseDXGISwapChains check\n\nThe corresponding display context query in Qt is `GetDC(nullptr)`, perhaps I can check that in ANGLE and if the HDC handles match, set mUseDXGISwapChains accordingly?",
+      "parentUuid": "3920e714_bb859f6d",
+      "revId": "9708ed4cf4e1bd4ba04b560f7855512c37fd1614",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
