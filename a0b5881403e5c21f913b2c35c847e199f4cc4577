@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b53cc0e4_f921146f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-06-16T18:20:46Z",
+      "side": 1,
+      "message": "I have the similar feeling... It is not easy to understand the entire picture of shader compilation process. It might be easier with a few shader code compilation examples, but that is our part to do the learning in spare time / projects :p",
+      "parentUuid": "c667d35f_7c70a291",
+      "revId": "a0b5881403e5c21f913b2c35c847e199f4cc4577",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "12010e2c_8603b542",
