@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4167f394_0c4dfcbd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-16T18:28:56Z",
+      "side": 1,
+      "message": "Swapping reviewers as Cody is out",
+      "revId": "73a21ec8f267d99e44ac0cf3a2b68564daa1ad94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
