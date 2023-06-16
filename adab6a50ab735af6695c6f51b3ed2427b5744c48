@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a859f26_bf199cb7",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4214,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-16T20:14:03Z",
+      "side": 1,
+      "message": "Thanks. Could you please do something similar to `CopySubImageAlpha` above, where the backbuffer is initialized to some color before the copy (glCopyTexSubImage3DOES), and then a shader is used to verify the copy worked fine (remember to reclear the buffer to another color before the draw).",
+      "revId": "adab6a50ab735af6695c6f51b3ed2427b5744c48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
