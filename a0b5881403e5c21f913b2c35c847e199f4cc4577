@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "08e1e5f8_59bc2135",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-16T18:24:59Z",
+      "side": 1,
+      "message": "Yeah I realize it\u0027s not an easy review. The core of the idea is quite simple; each interface variable that needs attention was previously identified by a string: it\u0027s name. Now it\u0027s identified by the SPIR-V ID the compiler assigned to it. Most of the code is just switching from names to ids. Some code is added to the compiler to communicate that ID to the backend, some code is removed from the backend that used to figure those IDs out.\n\nOnly place where there was some nuance is that `name`s are mostly unique across shader stages (because if they are the same, they get linked), but ids are scoped to the shader stage.",
+      "parentUuid": "b53cc0e4_f921146f",
+      "revId": "a0b5881403e5c21f913b2c35c847e199f4cc4577",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "12010e2c_8603b542",
