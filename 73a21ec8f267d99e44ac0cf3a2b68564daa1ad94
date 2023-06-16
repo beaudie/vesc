@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4443cc49_3b2861eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-16T20:10:07Z",
+      "side": 1,
+      "message": "Thanks for the reviews!",
+      "revId": "73a21ec8f267d99e44ac0cf3a2b68564daa1ad94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "494f0687_b4789677",
@@ -31,6 +48,24 @@
       "writtenOn": "2023-06-16T19:45:10Z",
       "side": 1,
       "message": "nit: if we want to check `gl_LastFragData` is not clobbered by a write to `gl_FragData`, why not just checkout `gl_FragData[1] - gl_LastFragData[1] \u003d\u003d u_color`?\n\nJust curious what is the benefit of `addLastFragData()` here?",
+      "revId": "73a21ec8f267d99e44ac0cf3a2b68564daa1ad94",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de286528_61feed8b",
+        "filename": "src/tests/gl_tests/FramebufferFetchTest.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-16T20:10:07Z",
+      "side": 1,
+      "message": "It\u0027s testing more things. The same shader is exercising passing `gl_FragData` to `inout`.\n\nIt\u0027s not as useful in the ES 100 variant, but in the ES 300 variant it makes sure that the translation is not using the shader\u0027s initial value of `o_colorN`, in which case the output would be `2*last` instead of `last+uniform`.",
+      "parentUuid": "494f0687_b4789677",
       "revId": "73a21ec8f267d99e44ac0cf3a2b68564daa1ad94",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
