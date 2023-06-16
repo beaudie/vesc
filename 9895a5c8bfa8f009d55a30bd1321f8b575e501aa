@@ -50,6 +50,23 @@
       "message": "Thanks, Geoff! Vasiliy, could you take a look too? I just want to make extra-sure that we\u0027ve all validated this way of measuring this now :).",
       "revId": "9895a5c8bfa8f009d55a30bd1321f8b575e501aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4677fc3_06c0ca42",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1357502
+      },
+      "writtenOn": "2023-06-16T13:14:10Z",
+      "side": 1,
+      "message": "lgtm, thanks.",
+      "revId": "9895a5c8bfa8f009d55a30bd1321f8b575e501aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
