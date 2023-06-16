@@ -50,6 +50,24 @@
       "message": "This looks good to me. I\u0027d like to see the spec updated though. You can pull language from EGL_ANGLE_metal_texture_client_buffer.txt and EGL_ANGLE_d3d_texture_client_buffer.txt.",
       "revId": "8cda41ca4266fbd31cbfa381e090c9ae578ba509",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6756c8fa_f204ec86",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-06-16T01:25:02Z",
+      "side": 1,
+      "message": "I know I need to update the extension spec, but I was unsure which extension to update? I hope I don\u0027t need to create a new extension.\n\nEGL_ANGLE_iosurface_client_buffer feels like the right extension to update, but it\u0027s written against the EGL 1.4 spec and I can find no language for eglCreateImage in the 1.4 spec.\n\nI could add it to the EGL_ANGLE_metal_texture_client_buffer spec, since it\u0027s using most of the machinery implemented in that spec?\n\nWhat do you think?",
+      "parentUuid": "52a7a1df_ac18f0aa",
+      "revId": "8cda41ca4266fbd31cbfa381e090c9ae578ba509",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
