@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca42b9d2_a5d8c7b1",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 1358,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-16T18:17:42Z",
+      "side": 1,
+      "message": "The perf counter test failures are either showing serious perf problems we need to address, or they are not taking some ANGLE feature into account.\n\nThey\u0027d be worth investigating.",
+      "revId": "f45433803b71f41771e9319d68d7e6242882ba89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
