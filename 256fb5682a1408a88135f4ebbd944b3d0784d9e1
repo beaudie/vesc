@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "24d0cc82_3ad78708",
+        "filename": "src/compiler/translator/OutputSPIRV.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-18T14:36:17Z",
+      "side": 1,
+      "message": "Oops, yes",
+      "parentUuid": "deb581ad_c7535313",
+      "revId": "256fb5682a1408a88135f4ebbd944b3d0784d9e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a612d1b7_768df49a",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-06-16T23:30:58Z",
       "side": 1,
       "message": "why it is set to empty?",
+      "revId": "256fb5682a1408a88135f4ebbd944b3d0784d9e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a917199_c82f10a7",
+        "filename": "src/compiler/translator/OutputSPIRV.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5683,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-18T14:36:17Z",
+      "side": 1,
+      "message": "Because this is the \"post-visit\" of the function, i.e. after this returns we are not processing this function anymore. Technically there\u0027s no problem leaving it referring to the last-visited function, but I reset it just to avoid future mistakes.",
+      "parentUuid": "a612d1b7_768df49a",
       "revId": "256fb5682a1408a88135f4ebbd944b3d0784d9e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
