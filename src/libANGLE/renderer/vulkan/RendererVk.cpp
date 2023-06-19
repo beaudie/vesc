@@ -2601,6 +2601,14 @@ void RendererVk::queryDeviceExtensionFeatures(const vk::ExtensionNameList &devic
 void RendererVk::enableDeviceExtensionsNotPromoted(
     const vk::ExtensionNameList &deviceExtensionNames)
 {
+#if defined(ANGLE_PLATFORM_WINDOWS)
+    if (getFeatures().supportsFullScreenExclusive.enabled &&
+        getFeatures().forceDisableFullScreenExclusive.enabled)
+    {
+        mEnabledDeviceExtensions.push_back(VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME);
+    }
+#endif
+
     if (mFeatures.supportsSharedPresentableImageExtension.enabled)
     {
         mEnabledDeviceExtensions.push_back(VK_KHR_SHARED_PRESENTABLE_IMAGE_EXTENSION_NAME);
@@ -3982,6 +3990,15 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     ANGLE_FEATURE_CONDITION(
         &mFeatures, supportsExternalMemoryFd,
         ExtensionFound(VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME, deviceExtensionNames));
+
+#if defined(ANGLE_PLATFORM_WINDOWS)
+    ANGLE_FEATURE_CONDITION(
+        &mFeatures, supportsFullScreenExclusive,
+        ExtensionFound(VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME, deviceExtensionNames));
+
+    ANGLE_FEATURE_CONDITION(&mFeatures, forceDisableFullScreenExclusive,
+                            isAMD && mPhysicalDeviceProperties.driverVersion < 0x800106);
+#endif
 
     ANGLE_FEATURE_CONDITION(
         &mFeatures, supportsExternalMemoryFuchsia,

@@ -1546,6 +1546,23 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     swapchainInfo.clipped     = VK_TRUE;
     swapchainInfo.oldSwapchain = lastSwapchain;
 
+#if defined(ANGLE_PLATFORM_WINDOWS)
+    VkSurfaceFullScreenExclusiveInfoEXT fullscreen = {};
+    fullscreen.sType               = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_INFO_EXT;
+    fullscreen.fullScreenExclusive = VK_FULL_SCREEN_EXCLUSIVE_DISALLOWED_EXT;
+
+    VkSurfaceFullScreenExclusiveWin32InfoEXT fullscreenWin32 = {};
+    fullscreenWin32.sType    = VK_STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_WIN32_INFO_EXT;
+    fullscreenWin32.hmonitor = MonitorFromWindow((HWND)mNativeWindowType, MONITOR_DEFAULTTONEAREST);
+
+    if (renderer->getFeatures().supportsFullScreenExclusive.enabled &&
+        renderer->getFeatures().forceDisableFullScreenExclusive.enabled)
+    {
+        vk::AddToPNextChain(&swapchainInfo, &fullscreen);
+        vk::AddToPNextChain(&swapchainInfo, &fullscreenWin32);
+    }
+#endif
+
     if (context->getFeatures().supportsSwapchainMaintenance1.enabled)
     {
         swapchainInfo.flags |= VK_SWAPCHAIN_CREATE_DEFERRED_MEMORY_ALLOCATION_BIT_EXT;
