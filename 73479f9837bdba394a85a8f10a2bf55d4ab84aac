@@ -16,6 +16,23 @@
       "message": "Updated with the formatted chunks I mentioned earlier.",
       "revId": "73479f9837bdba394a85a8f10a2bf55d4ab84aac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "efb28870_e6851dfa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557258
+      },
+      "writtenOn": "2023-06-19T13:22:54Z",
+      "side": 1,
+      "message": "Is this ready for merging?",
+      "revId": "73479f9837bdba394a85a8f10a2bf55d4ab84aac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
