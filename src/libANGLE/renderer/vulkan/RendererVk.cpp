@@ -4509,7 +4509,8 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
                                 mProtectedMemoryFeatures.protectedMemory == VK_TRUE);
 
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsGraphicsPipelineLibrary,
-                            mGraphicsPipelineLibraryFeatures.graphicsPipelineLibrary == VK_TRUE);
+                            mGraphicsPipelineLibraryFeatures.graphicsPipelineLibrary == VK_TRUE &&
+                                (!isNvidia || nvidiaVersion.major >= 531));
 
     // The following drivers are known to key the pipeline cache blobs with vertex input and
     // fragment output state, causing draw-time pipeline creation to miss the cache regardless of
