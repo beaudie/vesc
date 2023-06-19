@@ -69,6 +69,24 @@
       "parentUuid": "a612d1b7_768df49a",
       "revId": "256fb5682a1408a88135f4ebbd944b3d0784d9e1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da600c6b_50820825",
+        "filename": "src/compiler/translator/OutputSPIRV.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5683,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-06-19T22:53:32Z",
+      "side": 1,
+      "message": "got it, thanks!",
+      "parentUuid": "1a917199_c82f10a7",
+      "revId": "256fb5682a1408a88135f4ebbd944b3d0784d9e1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
