@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6178576d_e2e8ed3f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-19T19:44:58Z",
+      "side": 1,
+      "message": "A little too late to measure, but this reduces the SPIR-V binary size by ~13% on average in Genshin Impact.",
+      "revId": "b37df0c7292373784310a1eb4edaa491084ad3c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
