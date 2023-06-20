@@ -176,7 +176,7 @@ egl::ContextMutex *AllocateOrUseContextMutex(egl::ContextMutex *sharedContextMut
         ASSERT(sharedContextMutex->isReferenced());
         return sharedContextMutex;
     }
-    return new egl::TypedContextMutex<ContextMutexTypeNormal>(kContextMutexPriorityNormal);
+    return new egl::ContextMutex();
 }
 
 template <typename T>
@@ -9585,16 +9585,6 @@ void Context::getFramebufferPixelLocalStorageParameterivRobust(GLint plane,
             memcpy(params, valueui, sizeof(valueui));
             break;
         }
-    }
-}
-
-void Context::ensureContextMutexShared()
-{
-    if (mState.mContextMutex.getRoot()->getPriority() < kContextMutexPriorityShared)
-    {
-        egl::ContextMutex::Merge(
-            &mState.mContextMutex,
-            new egl::TypedContextMutex<ContextMutexTypeShared>(kContextMutexPriorityShared));
     }
 }
 
