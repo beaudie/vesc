@@ -66,6 +66,7 @@ VkResult InitAllocator(VkPhysicalDevice physicalDevice,
     }
 
     VmaAllocatorCreateInfo allocatorInfo      = {};
+    allocatorInfo.flags                       = VMA_ALLOCATOR_CREATE_EXT_MEMORY_BUDGET_BIT;
     allocatorInfo.physicalDevice              = physicalDevice;
     allocatorInfo.device                      = device;
     allocatorInfo.instance                    = instance;
@@ -134,6 +135,33 @@ VkResult CreateBuffer(VmaAllocator allocator,
     *pMemoryTypeIndexOut = allocationInfo.memoryType;
 
     return result;
+}
+
+void GetMemoryBudget(VmaAllocator allocator, VmaBudget *budget)
+{
+    vmaGetBudget(allocator, budget);
+}
+
+void GetTotalAllocatedAndUsedMemory(VmaAllocator allocator,
+                                    uint64_t *allocatedMem,
+                                    uint64_t *usedMem)
+
+{
+    // See GrVkMemoryAllocatorImpl::totalAllocatedAndUsedMemory() in skia for
+    // reference.
+    VmaBudget budget[VK_MAX_MEMORY_HEAPS];
+    vmaGetBudget(allocator, budget);
+    const VkPhysicalDeviceMemoryProperties *pPhysicalDeviceMemoryProperties;
+    vmaGetMemoryProperties(allocator, &pPhysicalDeviceMemoryProperties);
+    uint64_t total_allocated_memory = 0, total_used_memory = 0;
+    for (uint32_t i = 0; i < pPhysicalDeviceMemoryProperties->memoryHeapCount; ++i)
+    {
+        total_allocated_memory += budget[i].blockBytes;
+        total_used_memory += budget[i].allocationBytes;
+    }
+
+    *allocatedMem = total_allocated_memory;
+    *usedMem      = total_used_memory;
 }
 
 VkResult AllocateAndBindMemoryForImage(VmaAllocator allocator,

@@ -293,6 +293,12 @@ void MemoryAllocationTracker::onMemoryAllocImpl(vk::MemoryAllocationType allocTy
 
         resetPendingMemoryAlloc();
     }
+
+    uint64_t memResAlloc;
+    uint64_t memResUsed;
+    vma::GetTotalAllocatedAndUsedMemory(mRenderer->getAllocator().getHandle(), &memResAlloc,
+                                        &memResUsed);
+    WARN() << "BUDGET: Allocated: " << memResAlloc << " | Used: " << memResUsed;
 }
 
 void MemoryAllocationTracker::onMemoryDeallocImpl(vk::MemoryAllocationType allocType,
@@ -360,6 +366,12 @@ void MemoryAllocationTracker::onMemoryDeallocImpl(vk::MemoryAllocationType alloc
         mActivePerHeapMemoryAllocationsSize[allocTypeIndex][memoryHeapIndex].fetch_add(
             -size, std::memory_order_relaxed);
     }
+
+    uint64_t memResAlloc;
+    uint64_t memResUsed;
+    vma::GetTotalAllocatedAndUsedMemory(mRenderer->getAllocator().getHandle(), &memResAlloc,
+                                        &memResUsed);
+    WARN() << "BUDGET: Allocated: " << memResAlloc << " | Used: " << memResUsed;
 }
 
 VkDeviceSize MemoryAllocationTracker::getActiveMemoryAllocationsSize(uint32_t allocTypeIndex) const

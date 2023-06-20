@@ -18,6 +18,8 @@ VK_DEFINE_HANDLE(VmaPool)
 VK_DEFINE_NON_DISPATCHABLE_HANDLE(VmaVirtualAllocation)
 VK_DEFINE_HANDLE(VmaVirtualBlock)
 
+typedef struct VmaBudget VmaBudget;
+
 namespace vma
 {
 typedef VkFlags VirtualBlockCreateFlags;
@@ -72,6 +74,12 @@ VkResult CreateBuffer(VmaAllocator allocator,
                       uint32_t *pMemoryTypeIndexOut,
                       VkBuffer *pBuffer,
                       VmaAllocation *pAllocation);
+
+void GetMemoryBudget(VmaAllocator allocator, VmaBudget *budget);
+
+void GetTotalAllocatedAndUsedMemory(VmaAllocator allocator,
+                                    uint64_t *allocatedMem,
+                                    uint64_t *usedMem);
 
 VkResult AllocateAndBindMemoryForImage(VmaAllocator allocator,
                                        VkImage *pImage,
