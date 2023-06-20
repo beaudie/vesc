@@ -506,6 +506,12 @@ if (build_angle_trace_tests) {
           "Set arm_control_flow_integrity = \"none\" in your GN args to disable CFI (http://crbug.com/1441148)")
     }
 
+    if (is_android) {
+      assert(
+          !is_official_build,
+          "is_official_build not supported by ANGLE for Android (https://anglebug.com/7381)")
+    }
+
     if (is_ios) {
       # shared libraries are hidden inside ios_framework_bundle, but we include headers from them
       check_includes = false
