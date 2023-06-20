@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "998950a1_bd91e6bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-06-20T15:21:10Z",
+      "side": 1,
+      "message": "This CL updates the Mali G710 End-To-End test expectations to match the results of the latest 43.0 version driver.  Also added are the DEQP expectations files for the same driver.",
+      "revId": "554c162b0411a6f560ed359e7fcc678143b57642",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
