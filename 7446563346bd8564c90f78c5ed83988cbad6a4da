@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6100248a_f501ca20",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-06-20T10:00:28Z",
+      "side": 1,
+      "message": "I think Apple doesn\u0027t support Vulkan, so I don\u0027t understand the purpose for this.",
+      "revId": "7446563346bd8564c90f78c5ed83988cbad6a4da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
