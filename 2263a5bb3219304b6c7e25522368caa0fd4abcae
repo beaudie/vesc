@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "77d80b4d_0b9ca493",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-06-20T13:33:25Z",
+      "side": 1,
+      "message": "Sure, I can do something like that. Still need to check the length[] array in case string[0] is not null terminated though.",
+      "parentUuid": "8a4870e7_b415a39b",
+      "revId": "2263a5bb3219304b6c7e25522368caa0fd4abcae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "585b5e7a_c4162986",
         "filename": "src/libANGLE/Shader.cpp",
         "patchSetId": 3
@@ -31,6 +49,30 @@
       "writtenOn": "2023-06-20T13:27:26Z",
       "side": 1,
       "message": "1? It\u0027s not very clear to me that `reserve()` adds 1 for the terminating `\u0027\\0\u0027`.",
+      "range": {
+        "startLine": 191,
+        "startChar": 25,
+        "endLine": 191,
+        "endChar": 26
+      },
+      "revId": "2263a5bb3219304b6c7e25522368caa0fd4abcae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "854c435a_2117c883",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-06-20T13:33:25Z",
+      "side": 1,
+      "message": "`reserve()` only allocates storage, doesn\u0027t define the string length or contents. And since std::string constructs with no memory defined and no length, it is just a no-op.",
+      "parentUuid": "585b5e7a_c4162986",
       "range": {
         "startLine": 191,
         "startChar": 25,
