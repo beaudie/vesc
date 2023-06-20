@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "498edad5_85a79795",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 1323,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-06-20T17:23:43Z",
+      "side": 1,
+      "message": "These DrawBuffersTests are failing because `VK_EXT_primitives_generated_query` has been enabled but its dependent extension `VK_EXT_transform_feedback` has not (the tests disable that feature explicitly).  If in `DrawBuffersTest.cpp::ANGLE_INSTANTIATE_TEST()` I add `.disable(Feature::SupportsPrimitivesGeneratedQuery` to the parameters the tests all pass indicating an ANGLE issue.  Earlier drivers do not support `VK_EXT_primitives_generated_query` so the error was avoided.",
+      "parentUuid": "6dc56e46_88ce36b4",
+      "revId": "554c162b0411a6f560ed359e7fcc678143b57642",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5fac57d4_8534e91d",
         "filename": "src/tests/angle_end2end_tests_expectations.txt",
         "patchSetId": 1
