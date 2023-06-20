@@ -1135,8 +1135,7 @@ Error Display::initialize()
     if (kIsSharedContextMutexEnabled)
     {
         ASSERT(mManagersMutex == nullptr);
-        mManagersMutex =
-            new TypedContextMutex<gl::ContextMutexTypeShared>(gl::kContextMutexPriorityShared);
+        mManagersMutex = new ContextMutex();
         mManagersMutex->addRef();
     }
 
@@ -1605,7 +1604,6 @@ Error Display::createContext(const Config *configuration,
         ASSERT(mManagersMutex != nullptr);
         if (shareContext != nullptr)
         {
-            shareContext->ensureContextMutexShared();
             sharedContextMutex = shareContext->getContextMutex().getRoot();
         }
         else if (shareTextures != nullptr || shareSemaphores != nullptr)
