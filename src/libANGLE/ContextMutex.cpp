@@ -50,24 +50,8 @@ void ScopedContextMutexAddRefLock::lock(ContextMutex *mutex)
 }
 
 // ContextMutex
-ContextMutex::ContextMutex(uint32_t priority)
-    : mRoot(this),
-      mOwnerThreadId(angle::InvalidThreadId()),
-      mLockLevel(0),
-      mRefCount(0),
-      mPriority(priority),
-      mRank(0)
-{
-    ASSERT(priority != 0);
-}
-
 ContextMutex::ContextMutex(ContextMutex *root)
-    : mRoot(this),
-      mOwnerThreadId(angle::InvalidThreadId()),
-      mLockLevel(0),
-      mRefCount(0),
-      mPriority(0),
-      mRank(0)
+    : mRoot(this), mOwnerThreadId(angle::InvalidThreadId()), mLockLevel(0), mRefCount(0), mRank(0)
 {
     if (root != nullptr)
     {
@@ -153,18 +137,16 @@ void ContextMutex::Merge(ContextMutex *lockedMutex, ContextMutex *otherMutex)
     ContextMutex *oldRoot = otherLockedRoot;
     ContextMutex *newRoot = lockedRoot;
 
-    // Priority has precedence over Rank.
-    if (oldRoot->mPriority > newRoot->mPriority ||
-        (oldRoot->mPriority == newRoot->mPriority && oldRoot->mRank > newRoot->mRank))
+    if (oldRoot->mRank > newRoot->mRank)
     {
         std::swap(oldRoot, newRoot);
     }
-    if (oldRoot->mRank >= newRoot->mRank)
+    else if (oldRoot->mRank == newRoot->mRank)
     {
-        newRoot->mRank = oldRoot->mRank + 1;
+        ++newRoot->mRank;
     }
 
-    ASSERT(newRoot->isReferenced() || newRoot->mPriority > oldRoot->mPriority);
+    ASSERT(newRoot->isReferenced());
 
     // Update the structure
     for (ContextMutex *const leaf : oldRoot->mLeaves)
@@ -235,20 +217,26 @@ void ContextMutex::release(UnlockBehaviour unlockBehaviour)
     }
 }
 
-// TypedContextMutex
-template <class Mutex>
-TypedContextMutex<Mutex>::TypedContextMutex(uint32_t priority)
-    : ContextMutex(priority)
-{}
+bool ContextMutex::try_lock()
+{
+    return getRoot()->doTryLock();
+}
 
-template <class Mutex>
-TypedContextMutex<Mutex>::TypedContextMutex(ContextMutex *root)
-    : ContextMutex(root)
-{}
+void ContextMutex::lock()
+{
+    getRoot()->doLock();
+}
+
+void ContextMutex::unlock()
+{
+    ContextMutex *const root = getRoot();
+    // "root" is currently locked so "root->getRoot()" will return stable result.
+    ASSERT(root == root->getRoot());
+    root->doUnlock();
+}
 
 #if defined(ANGLE_ENABLE_CONTEXT_MUTEX_RECURSION)
-template <class Mutex>
-bool TypedContextMutex<Mutex>::doTryLock()
+bool ContextMutex::doTryLock()
 {
     const angle::ThreadId threadId = angle::GetCurrentThreadId();
     if (ANGLE_UNLIKELY(!mMutex.try_lock()))
@@ -276,8 +264,7 @@ bool TypedContextMutex<Mutex>::doTryLock()
     return true;
 }
 
-template <class Mutex>
-void TypedContextMutex<Mutex>::doLock()
+void ContextMutex::doLock()
 {
     const angle::ThreadId threadId = angle::GetCurrentThreadId();
     if (ANGLE_UNLIKELY(!mMutex.try_lock()))
@@ -307,8 +294,7 @@ void TypedContextMutex<Mutex>::doLock()
     }
 }
 
-template <class Mutex>
-void TypedContextMutex<Mutex>::doUnlock()
+void ContextMutex::doUnlock()
 {
     ASSERT(mOwnerThreadId.load(std::memory_order_relaxed) == angle::GetCurrentThreadId());
     ASSERT(mLockLevel > 0);
@@ -319,8 +305,7 @@ void TypedContextMutex<Mutex>::doUnlock()
     }
 }
 #else
-template <class Mutex>
-bool TypedContextMutex<Mutex>::doTryLock()
+bool ContextMutex::doTryLock()
 {
     angle::ThreadId currentThreadId;
     ASSERT(!CheckThreadIdCurrent(mOwnerThreadId, &currentThreadId));
@@ -339,8 +324,7 @@ bool TypedContextMutex<Mutex>::doTryLock()
     return false;
 }
 
-template <class Mutex>
-void TypedContextMutex<Mutex>::doLock()
+void ContextMutex::doLock()
 {
     angle::ThreadId currentThreadId;
     ASSERT(!CheckThreadIdCurrent(mOwnerThreadId, &currentThreadId));
@@ -358,17 +342,12 @@ void TypedContextMutex<Mutex>::doLock()
     }
 }
 
-template <class Mutex>
-void TypedContextMutex<Mutex>::doUnlock()
+void ContextMutex::doUnlock()
 {
     ASSERT(
         TryUpdateThreadId(&mOwnerThreadId, angle::GetCurrentThreadId(), angle::InvalidThreadId()));
     mMutex.unlock();
 }
 #endif
-
-// TypedContextMutex
-template class TypedContextMutex<angle::FastMutex1>;
-template class TypedContextMutex<std::mutex>;
 
 }  // namespace egl

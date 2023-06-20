@@ -10,6 +10,7 @@
 
 #include <atomic>
 
+#include "common/FastMutex.h"
 #include "common/debug.h"
 
 namespace gl
@@ -25,12 +26,13 @@ constexpr bool kIsContextMutexEnabled = true;
 constexpr bool kIsContextMutexEnabled = false;
 #endif
 
-class ContextMutex : angle::NonCopyable
+using ContextMutexType = angle::FastMutex1;
+
+class ContextMutex final : angle::NonCopyable
 {
   public:
-    explicit ContextMutex(uint32_t priority);
     explicit ContextMutex(ContextMutex *root = nullptr);
-    virtual ~ContextMutex();
+    ~ContextMutex();
 
     // Merges mutexes so they work as one.
     // At the end, only single "root" mutex will be locked.
@@ -53,21 +55,13 @@ class ContextMutex : angle::NonCopyable
     ANGLE_INLINE void releaseAndUnlock() { release(UnlockBehaviour::kUnlock); }
     ANGLE_INLINE bool isReferenced() const { return mRefCount > 0; }
 
-    ANGLE_INLINE uint32_t getPriority() const { return mPriority; }
+    bool try_lock();
+    void lock();
+    void unlock();
 
-    ANGLE_INLINE bool try_lock() { return getRoot()->doTryLock(); }
-    ANGLE_INLINE void lock() { getRoot()->doLock(); }
-    ANGLE_INLINE void unlock()
-    {
-        ContextMutex *const root = getRoot();
-        // "root" is currently locked so "root->getRoot()" will return stable result.
-        ASSERT(root == root->getRoot());
-        root->doUnlock();
-    }
-
-    virtual bool doTryLock() = 0;
-    virtual void doLock()    = 0;
-    virtual void doUnlock()  = 0;
+    bool doTryLock();
+    void doLock();
+    void doUnlock();
 
   private:
     enum class UnlockBehaviour
@@ -137,6 +131,7 @@ class ContextMutex : angle::NonCopyable
     // - minumum number of mutexes to reach mOldRoots size of N => 2^(N+1).
 
     std::atomic<ContextMutex *> mRoot;
+    ContextMutexType mMutex;
     // Used when ASSERT() and/or recursion are/is enabled.
     std::atomic<angle::ThreadId> mOwnerThreadId;
     // Used only when recursion is enabled.
@@ -145,7 +140,6 @@ class ContextMutex : angle::NonCopyable
 
     std::set<ContextMutex *> mLeaves;
     std::vector<ContextMutex *> mOldRoots;
-    const uint32_t mPriority;
     uint32_t mRank;
 };
 
@@ -212,26 +206,6 @@ class [[nodiscard]] ScopedContextMutexLock final
 
   private:
     ContextMutex *mMutex = nullptr;
-};
-
-template <class Mutex>
-class TypedContextMutex final : public ContextMutex
-{
-  public:
-    explicit TypedContextMutex(uint32_t priority);
-    explicit TypedContextMutex(ContextMutex *root = nullptr);
-
-    // Note: most of the code here may be refactored to the base class, or most of the state
-    // variables moved to this implementation. On practice, such refactoring results in worse
-    // runtime performance.
-
-    // ContextMutex
-    bool doTryLock() override;
-    void doLock() override;
-    void doUnlock() override;
-
-  private:
-    Mutex mMutex;
 };
 
 }  // namespace egl
