@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4d76e632_aae98eaf",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 1323,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-20T17:38:28Z",
+      "side": 1,
+      "message": "Just replied to other comment before seeing this one. The correct thing to do here is to add `.disable(Feature::SupportsPrimitivesGeneratedQuery)` instead of suppressing these tests.",
+      "parentUuid": "498edad5_85a79795",
+      "revId": "554c162b0411a6f560ed359e7fcc678143b57642",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5fac57d4_8534e91d",
         "filename": "src/tests/angle_end2end_tests_expectations.txt",
         "patchSetId": 1
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "I see the same Validation errors in these tests as well and assume it is the same issue as the DrawBufferTest failures.\n\n```\nERR: RendererVk.cpp:778 (DebugUtilsMessenger): [ VUID-vkCreateDevice-ppEnabledExtensionNames-01387 ] Validation Error: [ VUID-vkCreateDevice-ppEnabledExtensionNames-01387 ] Object 0: handle \u003d 0x731bb25570, type \u003d VK_OBJECT_TYPE_INSTANCE; | MessageID \u003d 0x12537a2c | Missing extension required by the device extension VK_EXT_primitives_generated_query: VK_EXT_transform_feedback. The Vulkan spec states: All required device extensions for each extension in the VkDeviceCreateInfo::ppEnabledExtensionNames list must also be present in that list (https://www.khronos.org/registry/vulkan/specs/1.3-extensions/html/vkspec.html#VUID-vkCreateDevice-ppEnabledExtensionNames-01387)\n```",
       "parentUuid": "5fac57d4_8534e91d",
+      "revId": "554c162b0411a6f560ed359e7fcc678143b57642",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "515354cb_37b501ee",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 1391,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-20T17:38:28Z",
+      "side": 1,
+      "message": "Ah yes, I\u0027ve seen that with a recent run on Nvidia too. I\u0027m sure it\u0027s only these variants of the tests: `_EmulateTransformFeedback_NoSupportsTransformFeedbackExtension_NoSupportsGeometryStreamsCapability`. They specifically disable VK_EXT_transform_feedback, but don\u0027t care of the dependency of the other ext.\n\nCould you please instead add this `.disable(Feature::SupportsPrimitivesGeneratedQuery)` where there is `.disable(Feature::SupportsTransformFeedbackExtension)` in the end2end tests? That should get the tests to pass. I\u0027ll eventually fix things so we don\u0027t have to manually add these dependencies.\n\nIf not, please restrict the failures to `... : */*_EmulateTransformFeedback_NoSupportsTransformFeedbackExtension_NoSupportsGeometryStreamsCapability`, and you won\u0027t have to specifically name the individual tests.",
+      "parentUuid": "ab1f7d2b_610cc4cd",
       "revId": "554c162b0411a6f560ed359e7fcc678143b57642",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
