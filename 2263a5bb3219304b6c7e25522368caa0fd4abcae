@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "65c873e4_7b4453b1",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-06-20T13:38:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77d80b4d_0b9ca493",
+      "revId": "2263a5bb3219304b6c7e25522368caa0fd4abcae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "585b5e7a_c4162986",
@@ -115,6 +133,30 @@
       "side": 1,
       "message": "No I know, what I\u0027m saying is that you are reserving memory for sum(all string lengths), but not accounting for `\u0027\\0\u0027`. If `reserve` also doesn\u0027t account for it, you\u0027re going to end up with one reallocation just for the last `\u0027\\0\u0027` when concatenating the last `string`.",
       "parentUuid": "854c435a_2117c883",
+      "range": {
+        "startLine": 191,
+        "startChar": 25,
+        "endLine": 191,
+        "endChar": 26
+      },
+      "revId": "2263a5bb3219304b6c7e25522368caa0fd4abcae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "626c5591_692cc904",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-06-20T13:38:42Z",
+      "side": 1,
+      "message": "Oh, I see, gotcha. I can do that.",
+      "parentUuid": "342502ae_293eb22d",
       "range": {
         "startLine": 191,
         "startChar": 25,
