@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ac1c55b_d199c1ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-20T20:59:57Z",
+      "side": 1,
+      "message": "Let me +2 this already, it\u0027s trivial",
+      "revId": "660ba701e4bc4ba71106b57cd0a17e176b43b209",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
