@@ -61,12 +61,6 @@ static constexpr Version ES_3_0 = Version(3, 0);
 static constexpr Version ES_3_1 = Version(3, 1);
 static constexpr Version ES_3_2 = Version(3, 2);
 
-static constexpr uint32_t kContextMutexPriorityNormal = 1;
-static constexpr uint32_t kContextMutexPriorityShared = 2;
-
-using ContextMutexTypeNormal = angle::FastMutex1;
-using ContextMutexTypeShared = std::mutex;
-
 template <typename T>
 using BufferBindingMap     = angle::PackedEnumMap<BufferBinding, T>;
 using BoundBufferMap       = BufferBindingMap<BindingPointer<Buffer>>;
@@ -1503,7 +1497,7 @@ class State : angle::NonCopyable
     bool mIsDebugContext;
 
     egl::ShareGroup *mShareGroup;
-    mutable egl::TypedContextMutex<ContextMutexTypeNormal> mContextMutex;
+    mutable egl::ContextMutex mContextMutex;
 
     // Resource managers.
     BufferManager *mBufferManager;
