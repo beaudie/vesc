@@ -16,6 +16,24 @@
       "message": "I think Apple doesn\u0027t support Vulkan, so I don\u0027t understand the purpose for this.",
       "revId": "7446563346bd8564c90f78c5ed83988cbad6a4da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e6b07ee_8100e037",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-06-20T10:06:47Z",
+      "side": 1,
+      "message": "It\u0027s for MoltenVK, which implements Vulkan on Metal.",
+      "parentUuid": "6100248a_f501ca20",
+      "revId": "7446563346bd8564c90f78c5ed83988cbad6a4da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
