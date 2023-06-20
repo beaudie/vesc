@@ -16,6 +16,23 @@
       "message": "Blindly upgrading Shabi\u0027s +1 to +2.",
       "revId": "90988c7b48609764f02833f48594c9f2af7e6a5a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "514f5fc5_7387ef16",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-06-20T15:01:09Z",
+      "side": 1,
+      "message": "Additional note, it appears this bug exists in the open source amdvlk driver as well (which I suspect the Windows proprietary driver shares code with):\n\nhttps://github.com/GPUOpen-Drivers/xgl/issues/170",
+      "revId": "90988c7b48609764f02833f48594c9f2af7e6a5a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
