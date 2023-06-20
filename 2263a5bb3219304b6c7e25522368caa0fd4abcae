@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a4870e7_b415a39b",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-20T13:27:26Z",
+      "side": 1,
+      "message": "Since it\u0027s extremely common to for count to be 1, maybe add a fast path for that?\n\n```\nif (count \u003d\u003d 1)\n{\n    return string[0];\n}\n```",
+      "revId": "2263a5bb3219304b6c7e25522368caa0fd4abcae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "585b5e7a_c4162986",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-20T13:27:26Z",
+      "side": 1,
+      "message": "1? It\u0027s not very clear to me that `reserve()` adds 1 for the terminating `\u0027\\0\u0027`.",
+      "range": {
+        "startLine": 191,
+        "startChar": 25,
+        "endLine": 191,
+        "endChar": 26
+      },
+      "revId": "2263a5bb3219304b6c7e25522368caa0fd4abcae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
