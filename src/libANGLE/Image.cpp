@@ -498,8 +498,7 @@ Error Image::initialize(const Display *display, const gl::Context *context)
         }
         else
         {
-            mContextMutex =
-                new TypedContextMutex<gl::ContextMutexTypeNormal>(gl::kContextMutexPriorityNormal);
+            mContextMutex = new ContextMutex();
         }
         mContextMutex->addRef();
     }

@@ -735,8 +735,6 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     // Warning! Do not store pointer of this reference, use getRoot() instead.
     egl::ContextMutex &getContextMutex() const { return mState.mContextMutex; }
-    // "ContextMutex" MUST be locked during this call.
-    void ensureContextMutexShared();
 
     bool supportsGeometryOrTesselation() const;
     void dirtyAllState();
