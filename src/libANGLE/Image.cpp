@@ -325,8 +325,7 @@ Image::Image(rx::EGLImplFactory *factory,
         }
         else
         {
-            mContextMutex =
-                new TypedContextMutex<gl::ContextMutexTypeNormal>(gl::kContextMutexPriorityNormal);
+            mContextMutex = new ContextMutex();
         }
         mContextMutex->addRef();
     }
