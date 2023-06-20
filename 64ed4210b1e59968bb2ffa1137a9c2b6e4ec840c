@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df7e4063_95ccf860",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-06-20T10:05:39Z",
+      "side": 1,
+      "message": "Not really familiar with this, deferring to Shabi.",
+      "revId": "64ed4210b1e59968bb2ffa1137a9c2b6e4ec840c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
