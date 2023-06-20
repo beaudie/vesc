@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6a121ef_a2b8db67",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 1321,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-20T13:33:23Z",
+      "side": 1,
+      "message": "Please assign this to the same issue.\n\nI should probably make it an error to omit the issue number...",
+      "revId": "940f2ca95ff4f7f0592a7aaa5506b69d9880797d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e86c691_08622089",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 2613,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-20T13:33:23Z",
+      "side": 1,
+      "message": "nit: please move to the bottom of the function. Also, don\u0027t forget to update the comment above this function!",
+      "revId": "940f2ca95ff4f7f0592a7aaa5506b69d9880797d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
