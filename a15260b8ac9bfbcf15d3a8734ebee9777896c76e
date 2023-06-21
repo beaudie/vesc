@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1570b75_aa752df3",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 10607,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-21T17:34:44Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "0d23be42_9e572539",
+      "revId": "a15260b8ac9bfbcf15d3a8734ebee9777896c76e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "467cb66e_e1927b13",
@@ -73,6 +91,30 @@
       "side": 1,
       "message": "Added a comment. It\u0027s validating that if ValidateDrawStates returns an error string, the error code must not be GL_NO_ERROR (and vice-versa).",
       "parentUuid": "467cb66e_e1927b13",
+      "range": {
+        "startLine": 10609,
+        "startChar": 49,
+        "endLine": 10609,
+        "endChar": 50
+      },
+      "revId": "a15260b8ac9bfbcf15d3a8734ebee9777896c76e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70968da4_3854e887",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 10609,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-21T17:34:44Z",
+      "side": 1,
+      "message": "Ack, I thought no-error would be kInvalidPointer (or rather, kInvalidPointer would be 0)",
+      "parentUuid": "f0a03a57_c58e2133",
       "range": {
         "startLine": 10609,
         "startChar": 49,
