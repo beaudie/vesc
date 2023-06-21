@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0470c2cc_508885f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1403119
+      },
+      "writtenOn": "2023-06-21T01:41:44Z",
+      "side": 1,
+      "message": "This cl causes undefined symbol linking error: https://bugs.chromium.org/p/chromium/issues/detail?id\u003d1456291.",
+      "revId": "46ff02f8a2b11829760c7ee4b7e53b565694198b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
