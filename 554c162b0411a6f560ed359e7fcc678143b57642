@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad9873ce_2972de9d",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 1323,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-06-21T00:50:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d76e632_aae98eaf",
+      "revId": "554c162b0411a6f560ed359e7fcc678143b57642",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5fac57d4_8534e91d",
@@ -120,6 +138,24 @@
       "side": 1,
       "message": "Ah yes, I\u0027ve seen that with a recent run on Nvidia too. I\u0027m sure it\u0027s only these variants of the tests: `_EmulateTransformFeedback_NoSupportsTransformFeedbackExtension_NoSupportsGeometryStreamsCapability`. They specifically disable VK_EXT_transform_feedback, but don\u0027t care of the dependency of the other ext.\n\nCould you please instead add this `.disable(Feature::SupportsPrimitivesGeneratedQuery)` where there is `.disable(Feature::SupportsTransformFeedbackExtension)` in the end2end tests? That should get the tests to pass. I\u0027ll eventually fix things so we don\u0027t have to manually add these dependencies.\n\nIf not, please restrict the failures to `... : */*_EmulateTransformFeedback_NoSupportsTransformFeedbackExtension_NoSupportsGeometryStreamsCapability`, and you won\u0027t have to specifically name the individual tests.",
       "parentUuid": "ab1f7d2b_610cc4cd",
+      "revId": "554c162b0411a6f560ed359e7fcc678143b57642",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49a4f1da_d174f96f",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 1391,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-06-21T00:50:51Z",
+      "side": 1,
+      "message": "I made the mods to the tests and updated the E2E expectation file.  For some reason `git cl format` insisted on realigning some source lines in `TransformFeedbackTest.cpp` that I didn\u0027t touch. If this is a problem please let me know how to upload without the changes and I\u0027ll fix it then.",
+      "parentUuid": "515354cb_37b501ee",
       "revId": "554c162b0411a6f560ed359e7fcc678143b57642",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
