@@ -105,6 +105,24 @@
       "parentUuid": "5228ffc6_33c37702",
       "revId": "b52a5f651d73382d890c43fb8291130a253a00f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "326e41d5_46dd8f83",
+        "filename": "src/tests/gl_tests/GetImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1177,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2023-06-21T15:51:27Z",
+      "side": 1,
+      "message": "We already have a test that verifies that paletted textures upload and render correctly: PalettedTextureTest.PalettedTextureSampling/* .",
+      "parentUuid": "ac095ee2_fda6bca1",
+      "revId": "b52a5f651d73382d890c43fb8291130a253a00f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
