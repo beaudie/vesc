@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6777e223_ce6a0b11",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1609,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-06-21T18:59:49Z",
+      "side": 1,
+      "message": "Thanks! Updated the definition.",
+      "parentUuid": "350aa057_415e8c60",
+      "revId": "24a955e120e8ae43f1e0d5eea20fd137ca2e79fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "509480cd_764ec421",
@@ -41,6 +59,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7196358a_3d286b33",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-06-21T18:59:49Z",
+      "side": 1,
+      "message": "Removed. Check added in `finishOneCommandBatchAndCleanup()`.",
+      "parentUuid": "509480cd_764ec421",
+      "range": {
+        "startLine": 472,
+        "startChar": 44,
+        "endLine": 472,
+        "endChar": 61
+      },
+      "revId": "24a955e120e8ae43f1e0d5eea20fd137ca2e79fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5f6af332_b4d57221",
@@ -54,6 +96,30 @@
       "writtenOn": "2023-06-21T15:44:26Z",
       "side": 1,
       "message": "You might as well just move this to the call site and remove `finishOneCommandBatchAndCleanup`, especially with that function returning the bool itself.",
+      "range": {
+        "startLine": 5707,
+        "startChar": 0,
+        "endLine": 5714,
+        "endChar": 5
+      },
+      "revId": "24a955e120e8ae43f1e0d5eea20fd137ca2e79fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b7d613b_9e07ad9e",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5714,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-06-21T18:59:49Z",
+      "side": 1,
+      "message": "Moved to `finishOneCommandBatchAndCleanup()`.",
+      "parentUuid": "5f6af332_b4d57221",
       "range": {
         "startLine": 5707,
         "startChar": 0,
