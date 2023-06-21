@@ -69,6 +69,24 @@
       "parentUuid": "a397d47e_e4186e10",
       "revId": "b52a5f651d73382d890c43fb8291130a253a00f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5228ffc6_33c37702",
+        "filename": "src/tests/gl_tests/GetImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1177,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2023-06-21T15:36:25Z",
+      "side": 1,
+      "message": "Yeah I\u0027ll do it shortly. The way I\u0027d test would be to take a bunch of samples after the first paletted upload, from the R8G8B8A8_UNORM readback data, and compare them for equality",
+      "parentUuid": "00f7ecc5_87a91052",
+      "revId": "b52a5f651d73382d890c43fb8291130a253a00f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
