@@ -195,6 +195,24 @@
       "parentUuid": "29966b78_16e0d803",
       "revId": "b52a5f651d73382d890c43fb8291130a253a00f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad9b92b2_02e8450d",
+        "filename": "src/tests/gl_tests/GetImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1177,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-21T16:46:30Z",
+      "side": 1,
+      "message": "Oh right, I didn\u0027t notice one of the readbacks is from a render. Test is good 👍\n\n(also didn\u0027t realize it\u0027s GLES1 so you aren\u0027t reading back from the texture itself anyway)",
+      "parentUuid": "05c819b0_dd8916de",
+      "revId": "b52a5f651d73382d890c43fb8291130a253a00f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
