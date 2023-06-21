@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "350aa057_415e8c60",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1609,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-21T15:44:26Z",
+      "side": 1,
+      "message": "Ref: suggest:\n\n```\nangle::Result CommandQueue::finishOneCommandBatchAndCleanup(Context *context, uint64_t timeout, bool *anyFinished)\n{\n    std::lock_guard\u003cstd::mutex\u003e lock(mMutex);\n    *anyFinished \u003d !mInFlightCommands.empty();\n    if (*anyFinished)\n    {\n        return finishOneCommandBatchAndCleanupImpl(context, timeout);\n    }\n    return angle::Result::Continue;\n}\n```\n\nSince `finishOneCommandBatchAndCleanupImpl` expects non-empty `mInFlightCommands`, there is a race condition if another thread cleans up the commands in between `isInFlightCommandsEmpty()` and `finishOneCommandBatchAndCleanup()`. With the above, the check is done atomically with the clean up itself.",
+      "revId": "24a955e120e8ae43f1e0d5eea20fd137ca2e79fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "509480cd_764ec421",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-21T15:44:26Z",
+      "side": 1,
+      "message": "This needs to be protected by mutex. See Ref for suggestion.",
+      "range": {
+        "startLine": 472,
+        "startChar": 44,
+        "endLine": 472,
+        "endChar": 61
+      },
+      "revId": "24a955e120e8ae43f1e0d5eea20fd137ca2e79fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f6af332_b4d57221",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5714,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-21T15:44:26Z",
+      "side": 1,
+      "message": "You might as well just move this to the call site and remove `finishOneCommandBatchAndCleanup`, especially with that function returning the bool itself.",
+      "range": {
+        "startLine": 5707,
+        "startChar": 0,
+        "endLine": 5714,
+        "endChar": 5
+      },
+      "revId": "24a955e120e8ae43f1e0d5eea20fd137ca2e79fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
