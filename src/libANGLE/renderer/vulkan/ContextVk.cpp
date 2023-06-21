@@ -5307,8 +5307,6 @@ angle::Result ContextVk::invalidateProgramExecutableHelper(const gl::Context *co
 angle::Result ContextVk::syncState(const gl::Context *context,
                                    const gl::State::DirtyBits &dirtyBits,
                                    const gl::State::DirtyBits &bitMask,
-                                   const gl::State::ExtendedDirtyBits &extendedDirtyBits,
-                                   const gl::State::ExtendedDirtyBits &extendedBitMask,
                                    gl::Command command)
 {
     const gl::State &glState                       = context->getState();
@@ -5724,102 +5722,83 @@ angle::Result ContextVk::syncState(const gl::Context *context,
             }
             case gl::State::DIRTY_BIT_PROVOKING_VERTEX:
                 break;
-            case gl::State::DIRTY_BIT_EXTENDED:
-            {
-                for (auto extendedIter    = extendedDirtyBits.begin(),
-                          extendedEndIter = extendedDirtyBits.end();
-                     extendedIter != extendedEndIter; ++extendedIter)
-                {
-                    const size_t extendedDirtyBit = *extendedIter;
-                    switch (extendedDirtyBit)
-                    {
-                        case gl::State::EXTENDED_DIRTY_BIT_CLIP_CONTROL:
-                            updateViewport(vk::GetImpl(glState.getDrawFramebuffer()),
-                                           glState.getViewport(), glState.getNearPlane(),
-                                           glState.getFarPlane());
-                            // Since we are flipping the y coordinate, update front face state
-                            updateFrontFace();
-                            updateScissor(glState);
+            case gl::State::DIRTY_BIT_CLIP_CONTROL:
+                updateViewport(vk::GetImpl(glState.getDrawFramebuffer()), glState.getViewport(),
+                               glState.getNearPlane(), glState.getFarPlane());
+                // Since we are flipping the y coordinate, update front face state
+                updateFrontFace();
+                updateScissor(glState);
 
-                            // If VK_EXT_depth_clip_control is not enabled, there's nothing needed
-                            // for depth correction for EXT_clip_control.
-                            // glState will be used to toggle control path of depth correction code
-                            // in SPIR-V tranform options.
-                            if (getFeatures().supportsDepthClipControl.enabled)
-                            {
-                                mGraphicsPipelineDesc->updateDepthClipControl(
-                                    &mGraphicsPipelineTransition,
-                                    !glState.isClipDepthModeZeroToOne());
-                            }
-                            else
-                            {
-                                invalidateGraphicsDriverUniforms();
-                            }
-                            break;
-                        case gl::State::EXTENDED_DIRTY_BIT_CLIP_DISTANCES:
-                            invalidateGraphicsDriverUniforms();
-                            break;
-                        case gl::State::EXTENDED_DIRTY_BIT_DEPTH_CLAMP_ENABLED:
-                            // TODO(https://anglebug.com/7713): Use EDS3
-                            mGraphicsPipelineDesc->updateDepthClampEnabled(
-                                &mGraphicsPipelineTransition, glState.isDepthClampEnabled());
-                            break;
-                        case gl::State::EXTENDED_DIRTY_BIT_MIPMAP_GENERATION_HINT:
-                            break;
-                        case gl::State::EXTENDED_DIRTY_BIT_POLYGON_MODE:
-                            // TODO(https://anglebug.com/7713): Use EDS3
-                            mGraphicsPipelineDesc->updatePolygonMode(&mGraphicsPipelineTransition,
-                                                                     glState.getPolygonMode());
-                            // When polygon mode is changed, depth bias might need to be toggled.
-                            static_assert(
-                                gl::State::EXTENDED_DIRTY_BIT_POLYGON_OFFSET_LINE_ENABLED >
-                                    gl::State::EXTENDED_DIRTY_BIT_POLYGON_MODE,
-                                "Dirty bit order");
-                            extendedIter.setLaterBit(
-                                gl::State::EXTENDED_DIRTY_BIT_POLYGON_OFFSET_LINE_ENABLED);
-                            break;
-                        case gl::State::EXTENDED_DIRTY_BIT_POLYGON_OFFSET_POINT_ENABLED:
-                        case gl::State::EXTENDED_DIRTY_BIT_POLYGON_OFFSET_LINE_ENABLED:
-                            if (mRenderer->useDepthBiasEnableDynamicState())
-                            {
-                                mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_DEPTH_BIAS_ENABLE);
-                            }
-                            else
-                            {
-                                mGraphicsPipelineDesc->updatePolygonOffsetEnabled(
-                                    &mGraphicsPipelineTransition, glState.isPolygonOffsetEnabled());
-                            }
-                            break;
-                        case gl::State::EXTENDED_DIRTY_BIT_SHADER_DERIVATIVE_HINT:
-                            break;
-                        case gl::State::EXTENDED_DIRTY_BIT_LOGIC_OP_ENABLED:
-                            mGraphicsPipelineDesc->updateLogicOpEnabled(
-                                &mGraphicsPipelineTransition, glState.isLogicOpEnabled());
-                            break;
-                        case gl::State::EXTENDED_DIRTY_BIT_LOGIC_OP:
-                            if (mRenderer->useLogicOpDynamicState())
-                            {
-                                mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_LOGIC_OP);
-                            }
-                            else
-                            {
-                                mGraphicsPipelineDesc->updateLogicOp(
-                                    &mGraphicsPipelineTransition,
-                                    gl_vk::GetLogicOp(gl::ToGLenum(glState.getLogicOp())));
-                            }
-                            break;
-                        case gl::State::EXTENDED_DIRTY_BIT_SHADING_RATE:
-                            if (getFeatures().supportsFragmentShadingRate.enabled)
-                            {
-                                mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_FRAGMENT_SHADING_RATE);
-                            }
-                            break;
-                        default:
-                            UNREACHABLE();
-                    }
+                // If VK_EXT_depth_clip_control is not enabled, there's nothing needed
+                // for depth correction for EXT_clip_control.
+                // glState will be used to toggle control path of depth correction code
+                // in SPIR-V tranform options.
+                if (getFeatures().supportsDepthClipControl.enabled)
+                {
+                    mGraphicsPipelineDesc->updateDepthClipControl(
+                        &mGraphicsPipelineTransition, !glState.isClipDepthModeZeroToOne());
+                }
+                else
+                {
+                    invalidateGraphicsDriverUniforms();
                 }
                 break;
-            }
+            case gl::State::DIRTY_BIT_CLIP_DISTANCES:
+                invalidateGraphicsDriverUniforms();
+                break;
+            case gl::State::DIRTY_BIT_DEPTH_CLAMP_ENABLED:
+                // TODO(https://anglebug.com/7713): Use EDS3
+                mGraphicsPipelineDesc->updateDepthClampEnabled(&mGraphicsPipelineTransition,
+                                                               glState.isDepthClampEnabled());
+                break;
+            case gl::State::DIRTY_BIT_MIPMAP_GENERATION_HINT:
+                break;
+            case gl::State::DIRTY_BIT_POLYGON_MODE:
+                // TODO(https://anglebug.com/7713): Use EDS3
+                mGraphicsPipelineDesc->updatePolygonMode(&mGraphicsPipelineTransition,
+                                                         glState.getPolygonMode());
+                // When polygon mode is changed, depth bias might need to be toggled.
+                static_assert(gl::State::DIRTY_BIT_POLYGON_OFFSET_LINE_ENABLED >
+                                  gl::State::DIRTY_BIT_POLYGON_MODE,
+                              "Dirty bit order");
+                iter.setLaterBit(gl::State::DIRTY_BIT_POLYGON_OFFSET_LINE_ENABLED);
+                break;
+            case gl::State::DIRTY_BIT_POLYGON_OFFSET_POINT_ENABLED:
+            case gl::State::DIRTY_BIT_POLYGON_OFFSET_LINE_ENABLED:
+                if (mRenderer->useDepthBiasEnableDynamicState())
+                {
+                    mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_DEPTH_BIAS_ENABLE);
+                }
+                else
+                {
+                    mGraphicsPipelineDesc->updatePolygonOffsetEnabled(
+                        &mGraphicsPipelineTransition, glState.isPolygonOffsetEnabled());
+                }
+                break;
+            case gl::State::DIRTY_BIT_SHADER_DERIVATIVE_HINT:
+                break;
+            case gl::State::DIRTY_BIT_LOGIC_OP_ENABLED:
+                mGraphicsPipelineDesc->updateLogicOpEnabled(&mGraphicsPipelineTransition,
+                                                            glState.isLogicOpEnabled());
+                break;
+            case gl::State::DIRTY_BIT_LOGIC_OP:
+                if (mRenderer->useLogicOpDynamicState())
+                {
+                    mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_LOGIC_OP);
+                }
+                else
+                {
+                    mGraphicsPipelineDesc->updateLogicOp(
+                        &mGraphicsPipelineTransition,
+                        gl_vk::GetLogicOp(gl::ToGLenum(glState.getLogicOp())));
+                }
+                break;
+            case gl::State::DIRTY_BIT_SHADING_RATE:
+                if (getFeatures().supportsFragmentShadingRate.enabled)
+                {
+                    mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_FRAGMENT_SHADING_RATE);
+                }
+                break;
             case gl::State::DIRTY_BIT_PATCH_VERTICES:
                 mGraphicsPipelineDesc->updatePatchVertices(&mGraphicsPipelineTransition,
                                                            glState.getPatchVertices());
