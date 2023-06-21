@@ -1039,7 +1039,6 @@ LIBGLESV2_EXPORT_INCLUDES = """
 """
 
 LIBEGL_EXPORT_INCLUDES_AND_PREAMBLE = """
-#include "anglebase/no_destructor.h"
 #include "common/system_utils.h"
 
 #include <memory>
@@ -1056,6 +1055,34 @@ namespace
 #if defined(ANGLE_USE_EGL_LOADER)
 bool gLoaded = false;
 void *gEntryPointsLib = nullptr;
+
+// Ensure that gEntryPointsLib handle is not leaked on libEGL shared library
+// unload.
+class EnsureEntryPointsUnloaded final
+{
+  public:
+    ~EnsureEntryPointsUnloaded()
+    {
+        if (gLoaded)
+        {
+            angle::CloseSystemLibrary(gEntryPointsLib);
+            gEntryPointsLib = nullptr;
+            gLoaded         = false;
+        }
+    }
+};
+
+#    if defined(__clang__)
+#        pragma clang diagnostic push
+#        pragma clang diagnostic ignored "-Wexit-time-destructors"
+#        pragma clang diagnostic ignored "-Wglobal-constructors"
+#    endif
+
+static EnsureEntryPointsUnloaded sUnload;
+
+#    if defined(__clang__)
+#        pragma clang diagnostic pop
+#    endif
 
 GenericProc KHRONOS_APIENTRY GlobalLoad(const char *symbol)
 {
