@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58bbdc62_635a82ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-06-21T01:34:35Z",
+      "side": 1,
+      "message": "I\u0027m on vacation, and so I\u0027ll let Shabi +2.  Thanks!",
+      "revId": "8bf30d2d64d40c389d82101efdd4b8155fcebdde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "467d0ebf_c8ecbee3",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 1366,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-06-21T01:34:35Z",
+      "side": 1,
+      "message": "I think it\u0027s supposed to be \"SKIP\"",
+      "range": {
+        "startLine": 1366,
+        "startChar": 66,
+        "endLine": 1366,
+        "endChar": 70
+      },
+      "revId": "8bf30d2d64d40c389d82101efdd4b8155fcebdde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
