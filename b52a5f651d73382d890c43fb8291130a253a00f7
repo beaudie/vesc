@@ -159,6 +159,24 @@
       "parentUuid": "2476c9f2_deb2bb61",
       "revId": "b52a5f651d73382d890c43fb8291130a253a00f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29966b78_16e0d803",
+        "filename": "src/tests/gl_tests/GetImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1177,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2023-06-21T16:30:57Z",
+      "side": 1,
+      "message": "\u003e It verifies upload and render, but not upload and readback.\n\nThe current test verifies that. It builds upon the assumption that upload and render of paletted textures (tested by PalettedTextureSampling) and glReadPixel work. It draws a palette textured quad, takes a number of random samples within the framebuffer using glReadPixel, then reads back the texture, recompresses it, and repeats the upload, draw, gather samples process, and then expects the collected samples to be equal. So if readback was to return just zeros, the test would fail, because the second samples would be zeros.",
+      "parentUuid": "743cf306_8f0b61b3",
+      "revId": "b52a5f651d73382d890c43fb8291130a253a00f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
