@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b10d161_4b04b3d1",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1613,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-06-21T21:01:51Z",
+      "side": 1,
+      "message": "Updated.",
+      "parentUuid": "ad508786_a6e83f38",
+      "range": {
+        "startLine": 1613,
+        "startChar": 5,
+        "endLine": 1613,
+        "endChar": 16
+      },
+      "revId": "fe361a749e5072c8c65503c43e420ef19d254322",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f8c5a8bb_c3a29cc0",
@@ -88,6 +112,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "28b55a3b_b14e261f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 5762,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-06-21T21:01:51Z",
+      "side": 1,
+      "message": "Added a variable to count the cleaned batches, and moved the log to after the `do...while`.",
+      "parentUuid": "f8c5a8bb_c3a29cc0",
+      "range": {
+        "startLine": 5762,
+        "startChar": 27,
+        "endLine": 5762,
+        "endChar": 40
+      },
+      "revId": "fe361a749e5072c8c65503c43e420ef19d254322",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b2f8176b_a19dfa98",
@@ -101,6 +149,30 @@
       "writtenOn": "2023-06-21T19:47:25Z",
       "side": 1,
       "message": "nit: Also a log message here will be useful for diganosis as well.\nINFO\u003c\u003c\" Removed DEVICE_LOCAL bit and allocation still fail/succeed\"",
+      "range": {
+        "startLine": 5775,
+        "startChar": 4,
+        "endLine": 5775,
+        "endChar": 5
+      },
+      "revId": "fe361a749e5072c8c65503c43e420ef19d254322",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d86e2649_ac8633d2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 5775,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-06-21T21:01:51Z",
+      "side": 1,
+      "message": "Added.",
+      "parentUuid": "b2f8176b_a19dfa98",
       "range": {
         "startLine": 5775,
         "startChar": 4,

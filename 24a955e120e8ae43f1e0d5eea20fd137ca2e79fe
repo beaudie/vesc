@@ -152,6 +152,30 @@
       },
       "revId": "24a955e120e8ae43f1e0d5eea20fd137ca2e79fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe01a519_ddde6c0c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5714,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-06-21T21:01:51Z",
+      "side": 1,
+      "message": "`RendererVk::finishOneCommandBatchAndCleanup()` was used since `allocateAndBindMemory()` doesn\u0027t have direct access to the renderer\u0027s command queue object.\n\nI have updated the code so if `finishOneCommandBatchAndCleanup()` returns `angle::Result::Stop`, `allocateAndBindMemory()` will return `VK_ERROR_OUT_OF_DEVICE_MEMORY`.",
+      "parentUuid": "f82765e1_354ea8c0",
+      "range": {
+        "startLine": 5707,
+        "startChar": 0,
+        "endLine": 5714,
+        "endChar": 5
+      },
+      "revId": "24a955e120e8ae43f1e0d5eea20fd137ca2e79fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
