@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3d619f8_c37d81bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-06-21T19:47:25Z",
+      "side": 1,
+      "message": "Thanks for the test. Good to go once bots are green and a few nits.",
+      "revId": "fe361a749e5072c8c65503c43e420ef19d254322",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3dcede61_e03ef8d9",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1613,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-06-21T19:47:25Z",
+      "side": 1,
+      "message": "nit: This is not any finished, it is \"anyCommand\". Or just do `if(!mInFlightCommands.empty())` to avoid hassle of picking the name string.",
+      "range": {
+        "startLine": 1613,
+        "startChar": 5,
+        "endLine": 1613,
+        "endChar": 16
+      },
+      "revId": "fe361a749e5072c8c65503c43e420ef19d254322",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8c5a8bb_c3a29cc0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 5762,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-06-21T19:47:25Z",
+      "side": 1,
+      "message": "nit: also mention that we did wait for command to finish, something like this: \"Waited one command to finish and ... \" Or even better, you can add a variable `int batchesWaitedAndCleaned \u003d 0;` and increment every time you call finishOneCommandBatchAndCleanup. Then at line 5766 you log the message along with information of how many command waited and allocation is succeed or still failing.\nIf(batchesWaitedAndCleaned\u003e0)\n{\nINFO()\u003c\u003c\"Initial allocation failed. Waited  n commands to finish and allocation succeed/failed...\";\n}",
+      "range": {
+        "startLine": 5762,
+        "startChar": 27,
+        "endLine": 5762,
+        "endChar": 40
+      },
+      "revId": "fe361a749e5072c8c65503c43e420ef19d254322",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2f8176b_a19dfa98",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 5775,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-06-21T19:47:25Z",
+      "side": 1,
+      "message": "nit: Also a log message here will be useful for diganosis as well.\nINFO\u003c\u003c\" Removed DEVICE_LOCAL bit and allocation still fail/succeed\"",
+      "range": {
+        "startLine": 5775,
+        "startChar": 4,
+        "endLine": 5775,
+        "endChar": 5
+      },
+      "revId": "fe361a749e5072c8c65503c43e420ef19d254322",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
