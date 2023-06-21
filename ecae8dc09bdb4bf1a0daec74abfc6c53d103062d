@@ -63,6 +63,30 @@
       },
       "revId": "ecae8dc09bdb4bf1a0daec74abfc6c53d103062d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d9ed7bc_aed92be5",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-21T13:09:00Z",
+      "side": 1,
+      "message": "Thank you. If you can\u0027t get around to it, it\u0027s ok we can land this as-is too.",
+      "parentUuid": "4cb8f10f_b5ffa691",
+      "range": {
+        "startLine": 843,
+        "startChar": 0,
+        "endLine": 855,
+        "endChar": 98
+      },
+      "revId": "ecae8dc09bdb4bf1a0daec74abfc6c53d103062d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
