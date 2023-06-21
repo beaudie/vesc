@@ -151,6 +151,8 @@ class Library : angle::NonCopyable
         }
     }
 
+    bool isOpen() const { return mLibraryHandle != nullptr; }
+
     void *getSymbol(const char *symbolName) { return GetLibrarySymbol(mLibraryHandle, symbolName); }
 
     void *getNative() const { return mLibraryHandle; }

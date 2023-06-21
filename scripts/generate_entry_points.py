@@ -1039,7 +1039,6 @@ LIBGLESV2_EXPORT_INCLUDES = """
 """
 
 LIBEGL_EXPORT_INCLUDES_AND_PREAMBLE = """
-#include "anglebase/no_destructor.h"
 #include "common/system_utils.h"
 
 #include <memory>
@@ -1054,27 +1053,37 @@ LIBEGL_EXPORT_INCLUDES_AND_PREAMBLE = """
 namespace
 {
 #if defined(ANGLE_USE_EGL_LOADER)
-bool gLoaded = false;
-void *gEntryPointsLib = nullptr;
+
+// We need to use angle::Library here even though it has a global constructor
+// and destructor, because otherwise we will leak the entry points library
+// handle on libEGL unload.
+#    if defined(__clang__)
+#        pragma clang diagnostic push
+#        pragma clang diagnostic ignored "-Wexit-time-destructors"
+#        pragma clang diagnostic ignored "-Wglobal-constructors"
+#    endif
+angle::Library gEntryPointsLib;
+#    if defined(__clang__)
+#        pragma clang diagnostic pop
+#    endif
 
 GenericProc KHRONOS_APIENTRY GlobalLoad(const char *symbol)
 {
-    return reinterpret_cast<GenericProc>(angle::GetLibrarySymbol(gEntryPointsLib, symbol));
+    return reinterpret_cast<GenericProc>(gEntryPointsLib.getSymbol(symbol));
 }
 
 void EnsureEGLLoaded()
 {
-    if (gLoaded)
+    if (gEntryPointsLib.isOpen())
     {
         return;
     }
 
     std::string errorOut;
-    gEntryPointsLib = OpenSystemLibraryAndGetError(ANGLE_DISPATCH_LIBRARY, angle::SearchType::ModuleDir, &errorOut);
-    if (gEntryPointsLib)
+    if (gEntryPointsLib.openAndGetError(ANGLE_DISPATCH_LIBRARY, angle::SearchType::ModuleDir,
+                                        &errorOut))
     {
         LoadLibEGL_EGL(GlobalLoad);
-        gLoaded = true;
     }
     else
     {
