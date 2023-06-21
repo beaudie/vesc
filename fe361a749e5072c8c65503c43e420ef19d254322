@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ad508786_a6e83f38",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1613,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-21T20:10:04Z",
+      "side": 1,
+      "message": "It\u0027s setting up the return value at the same time. Also fine to do `*anyFinished \u003d false` and `*anyFinished \u003d true` inside the `if` :shrug:",
+      "parentUuid": "3dcede61_e03ef8d9",
+      "range": {
+        "startLine": 1613,
+        "startChar": 5,
+        "endLine": 1613,
+        "endChar": 16
+      },
+      "revId": "fe361a749e5072c8c65503c43e420ef19d254322",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f8c5a8bb_c3a29cc0",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 9

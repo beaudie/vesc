@@ -128,6 +128,30 @@
       },
       "revId": "24a955e120e8ae43f1e0d5eea20fd137ca2e79fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f82765e1_354ea8c0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5714,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-21T20:10:04Z",
+      "side": 1,
+      "message": "Thanks, but please remove `RendererVk::finishOneCommandBatchAndCleanup` altogether.\n\nAt the call site, please don\u0027t swallow the result; if it\u0027s `angle::Result::Stop`, return `VK_ERROR_OUT_OF_DEVICE_MEMORY`",
+      "parentUuid": "3b7d613b_9e07ad9e",
+      "range": {
+        "startLine": 5707,
+        "startChar": 0,
+        "endLine": 5714,
+        "endChar": 5
+      },
+      "revId": "24a955e120e8ae43f1e0d5eea20fd137ca2e79fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
