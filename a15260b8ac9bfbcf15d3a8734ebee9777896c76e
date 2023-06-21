@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "363836df_2747161b",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 10607,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-21T16:54:01Z",
+      "side": 1,
+      "message": "I didn\u0027t quite understand the comment above. Since this is unconditionally setting `mCached`, why not just pass it to `ValidateDrawStates`?",
+      "revId": "a15260b8ac9bfbcf15d3a8734ebee9777896c76e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "467cb66e_e1927b13",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 10609,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-21T16:54:01Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be `kInvalidPointer`? Unclear what\u0027s being validated here.",
+      "range": {
+        "startLine": 10609,
+        "startChar": 49,
+        "endLine": 10609,
+        "endChar": 50
+      },
+      "revId": "a15260b8ac9bfbcf15d3a8734ebee9777896c76e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22d751be_ba983ae7",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-21T16:54:01Z",
+      "side": 1,
+      "message": "Also `ASSERT(mCachedBasicDrawStatesErrorCode !\u003d GL_NO_ERROR);`?",
+      "revId": "a15260b8ac9bfbcf15d3a8734ebee9777896c76e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
