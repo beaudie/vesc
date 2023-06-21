@@ -1109,8 +1109,6 @@ angle::Result ContextMtl::popDebugGroup(const gl::Context *context)
 angle::Result ContextMtl::syncState(const gl::Context *context,
                                     const gl::State::DirtyBits &dirtyBits,
                                     const gl::State::DirtyBits &bitMask,
-                                    const gl::State::ExtendedDirtyBits &extendedDirtyBits,
-                                    const gl::State::ExtendedDirtyBits &extendedBitMask,
                                     gl::Command command)
 {
     const gl::State &glState = context->getState();
@@ -1340,8 +1338,22 @@ angle::Result ContextMtl::syncState(const gl::Context *context,
             }
             case gl::State::DIRTY_BIT_PROVOKING_VERTEX:
                 break;
-            case gl::State::DIRTY_BIT_EXTENDED:
-                updateExtendedState(glState, extendedDirtyBits);
+            case gl::State::DIRTY_BIT_CLIP_CONTROL:
+                updateFrontFace(glState);
+                invalidateDriverUniforms();
+                break;
+            case gl::State::DIRTY_BIT_CLIP_DISTANCES:
+                invalidateDriverUniforms();
+                break;
+            case gl::State::DIRTY_BIT_DEPTH_CLAMP_ENABLED:
+                mDirtyBits.set(DIRTY_BIT_DEPTH_CLIP_MODE);
+                break;
+            case gl::State::DIRTY_BIT_POLYGON_MODE:
+                mDirtyBits.set(DIRTY_BIT_FILL_MODE);
+                mDirtyBits.set(DIRTY_BIT_DEPTH_BIAS);
+                break;
+            case gl::State::DIRTY_BIT_POLYGON_OFFSET_LINE_ENABLED:
+                mDirtyBits.set(DIRTY_BIT_DEPTH_BIAS);
                 break;
             case gl::State::DIRTY_BIT_SAMPLE_SHADING:
                 // Nothing to do until OES_sample_shading is implemented.
@@ -1356,36 +1368,6 @@ angle::Result ContextMtl::syncState(const gl::Context *context,
     }
 
     return angle::Result::Continue;
-}
-
-void ContextMtl::updateExtendedState(const gl::State &glState,
-                                     const gl::State::ExtendedDirtyBits &extendedDirtyBits)
-{
-    for (size_t extendedDirtyBit : extendedDirtyBits)
-    {
-        switch (extendedDirtyBit)
-        {
-            case gl::State::EXTENDED_DIRTY_BIT_CLIP_CONTROL:
-                updateFrontFace(glState);
-                invalidateDriverUniforms();
-                break;
-            case gl::State::EXTENDED_DIRTY_BIT_CLIP_DISTANCES:
-                invalidateDriverUniforms();
-                break;
-            case gl::State::EXTENDED_DIRTY_BIT_DEPTH_CLAMP_ENABLED:
-                mDirtyBits.set(DIRTY_BIT_DEPTH_CLIP_MODE);
-                break;
-            case gl::State::EXTENDED_DIRTY_BIT_POLYGON_MODE:
-                mDirtyBits.set(DIRTY_BIT_FILL_MODE);
-                mDirtyBits.set(DIRTY_BIT_DEPTH_BIAS);
-                break;
-            case gl::State::EXTENDED_DIRTY_BIT_POLYGON_OFFSET_LINE_ENABLED:
-                mDirtyBits.set(DIRTY_BIT_DEPTH_BIAS);
-                break;
-            default:
-                break;
-        }
-    }
 }
 
 // Disjoint timer queries

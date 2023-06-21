@@ -878,8 +878,7 @@ void State::setDepthClamp(bool enabled)
     if (mRasterizer.depthClamp != enabled)
     {
         mRasterizer.depthClamp = enabled;
-        mDirtyBits.set(DIRTY_BIT_EXTENDED);
-        mExtendedDirtyBits.set(EXTENDED_DIRTY_BIT_DEPTH_CLAMP_ENABLED);
+        mDirtyBits.set(DIRTY_BIT_DEPTH_CLAMP_ENABLED);
     }
 }
 
@@ -928,8 +927,7 @@ void State::setClipControl(ClipOrigin origin, ClipDepthMode depth)
 
     if (updated)
     {
-        mDirtyBits.set(DIRTY_BIT_EXTENDED);
-        mExtendedDirtyBits.set(EXTENDED_DIRTY_BIT_CLIP_CONTROL);
+        mDirtyBits.set(DIRTY_BIT_CLIP_CONTROL);
     }
 }
 
@@ -1145,8 +1143,7 @@ void State::setPolygonMode(PolygonMode mode)
     if (mRasterizer.polygonMode != mode)
     {
         mRasterizer.polygonMode = mode;
-        mDirtyBits.set(DIRTY_BIT_EXTENDED);
-        mExtendedDirtyBits.set(EXTENDED_DIRTY_BIT_POLYGON_MODE);
+        mDirtyBits.set(DIRTY_BIT_POLYGON_MODE);
     }
 }
 
@@ -1155,8 +1152,7 @@ void State::setPolygonOffsetPoint(bool enabled)
     if (mRasterizer.polygonOffsetPoint != enabled)
     {
         mRasterizer.polygonOffsetPoint = enabled;
-        mDirtyBits.set(DIRTY_BIT_EXTENDED);
-        mExtendedDirtyBits.set(EXTENDED_DIRTY_BIT_POLYGON_OFFSET_POINT_ENABLED);
+        mDirtyBits.set(DIRTY_BIT_POLYGON_OFFSET_POINT_ENABLED);
     }
 }
 
@@ -1165,8 +1161,7 @@ void State::setPolygonOffsetLine(bool enabled)
     if (mRasterizer.polygonOffsetLine != enabled)
     {
         mRasterizer.polygonOffsetLine = enabled;
-        mDirtyBits.set(DIRTY_BIT_EXTENDED);
-        mExtendedDirtyBits.set(EXTENDED_DIRTY_BIT_POLYGON_OFFSET_LINE_ENABLED);
+        mDirtyBits.set(DIRTY_BIT_POLYGON_OFFSET_LINE_ENABLED);
     }
 }
 
@@ -1320,8 +1315,7 @@ void State::setClipDistanceEnable(int idx, bool enable)
         mClipDistancesEnabled.reset(idx);
     }
 
-    mDirtyBits.set(DIRTY_BIT_EXTENDED);
-    mExtendedDirtyBits.set(EXTENDED_DIRTY_BIT_CLIP_DISTANCES);
+    mDirtyBits.set(DIRTY_BIT_CLIP_DISTANCES);
 }
 
 void State::setEnableFeature(GLenum feature, bool enabled)
@@ -1672,8 +1666,7 @@ void State::setLineWidth(GLfloat width)
 void State::setGenerateMipmapHint(GLenum hint)
 {
     mGenerateMipmapHint = hint;
-    mDirtyBits.set(DIRTY_BIT_EXTENDED);
-    mExtendedDirtyBits.set(EXTENDED_DIRTY_BIT_MIPMAP_GENERATION_HINT);
+    mDirtyBits.set(DIRTY_BIT_MIPMAP_GENERATION_HINT);
 }
 
 GLenum State::getGenerateMipmapHint() const
@@ -1696,11 +1689,10 @@ GLenum State::getTextureFilteringHint() const
 void State::setFragmentShaderDerivativeHint(GLenum hint)
 {
     mFragmentShaderDerivativeHint = hint;
-    mDirtyBits.set(DIRTY_BIT_EXTENDED);
-    mExtendedDirtyBits.set(EXTENDED_DIRTY_BIT_SHADER_DERIVATIVE_HINT);
-    // TODO: Propagate the hint to shader translator so we can write
-    // ddx, ddx_coarse, or ddx_fine depending on the hint.
-    // Ignore for now. It is valid for implementations to ignore hint.
+    mDirtyBits.set(DIRTY_BIT_SHADER_DERIVATIVE_HINT);
+    // Note: This hint could be propagated to shader translator so we can write ddx, ddx_coarse, or
+    // ddx_fine depending on the hint.  Ignore for now. It is valid for implementations to ignore
+    // the hint.
 }
 
 void State::setViewportParams(GLint x, GLint y, GLsizei width, GLsizei height)
@@ -2486,8 +2478,7 @@ void State::setPixelLocalStorageActivePlanes(GLsizei n)
 void State::setShadingRate(GLenum rate)
 {
     mShadingRate = FromGLenum<ShadingRate>(rate);
-    mDirtyBits.set(DIRTY_BIT_EXTENDED);
-    mExtendedDirtyBits.set(EXTENDED_DIRTY_BIT_SHADING_RATE);
+    mDirtyBits.set(DIRTY_BIT_SHADING_RATE);
 }
 
 void State::getBooleanv(GLenum pname, GLboolean *params) const
@@ -3942,8 +3933,7 @@ void State::setLogicOpEnabled(bool enabled)
     if (mLogicOpEnabled != enabled)
     {
         mLogicOpEnabled = enabled;
-        mDirtyBits.set(DIRTY_BIT_EXTENDED);
-        mExtendedDirtyBits.set(EXTENDED_DIRTY_BIT_LOGIC_OP_ENABLED);
+        mDirtyBits.set(DIRTY_BIT_LOGIC_OP_ENABLED);
     }
 }
 
@@ -3952,8 +3942,7 @@ void State::setLogicOp(LogicalOperation opcode)
     if (mLogicOp != opcode)
     {
         mLogicOp = opcode;
-        mDirtyBits.set(DIRTY_BIT_EXTENDED);
-        mExtendedDirtyBits.set(EXTENDED_DIRTY_BIT_LOGIC_OP);
+        mDirtyBits.set(DIRTY_BIT_LOGIC_OP);
     }
 }
 

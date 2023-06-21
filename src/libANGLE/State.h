@@ -728,32 +728,20 @@ class State : angle::NonCopyable
         DIRTY_BIT_PROVOKING_VERTEX,
         DIRTY_BIT_SAMPLE_SHADING,
         DIRTY_BIT_PATCH_VERTICES,
-        DIRTY_BIT_EXTENDED,  // clip distances, mipmap generation hint, derivative hint,
-                             // EXT_clip_control, EXT_depth_clamp
+        DIRTY_BIT_CLIP_CONTROL,                  // EXT_clip_control
+        DIRTY_BIT_CLIP_DISTANCES,                // clip distances
+        DIRTY_BIT_DEPTH_CLAMP_ENABLED,           // EXT_depth_clamp
+        DIRTY_BIT_MIPMAP_GENERATION_HINT,        // mipmap generation hint
+        DIRTY_BIT_POLYGON_MODE,                  // NV_polygon_mode
+        DIRTY_BIT_POLYGON_OFFSET_POINT_ENABLED,  // NV_polygon_mode
+        DIRTY_BIT_POLYGON_OFFSET_LINE_ENABLED,   // NV_polygon_mode
+        DIRTY_BIT_SHADER_DERIVATIVE_HINT,        // shader derivative hint
+        DIRTY_BIT_SHADING_RATE,                  // QCOM_shading_rate
+        DIRTY_BIT_LOGIC_OP_ENABLED,              // ANGLE_logic_op
+        DIRTY_BIT_LOGIC_OP,                      // ANGLE_logic_op
         DIRTY_BIT_INVALID,
         DIRTY_BIT_MAX = DIRTY_BIT_INVALID,
     };
-
-    static_assert(DIRTY_BIT_MAX <= 64, "State dirty bits must be capped at 64");
-
-    enum ExtendedDirtyBitType
-    {
-        EXTENDED_DIRTY_BIT_CLIP_CONTROL,                  // EXT_clip_control
-        EXTENDED_DIRTY_BIT_CLIP_DISTANCES,                // clip distances
-        EXTENDED_DIRTY_BIT_DEPTH_CLAMP_ENABLED,           // EXT_depth_clamp
-        EXTENDED_DIRTY_BIT_MIPMAP_GENERATION_HINT,        // mipmap generation hint
-        EXTENDED_DIRTY_BIT_POLYGON_MODE,                  // NV_polygon_mode
-        EXTENDED_DIRTY_BIT_POLYGON_OFFSET_POINT_ENABLED,  // NV_polygon_mode
-        EXTENDED_DIRTY_BIT_POLYGON_OFFSET_LINE_ENABLED,   // NV_polygon_mode
-        EXTENDED_DIRTY_BIT_SHADER_DERIVATIVE_HINT,        // shader derivative hint
-        EXTENDED_DIRTY_BIT_SHADING_RATE,                  // QCOM_shading_rate
-        EXTENDED_DIRTY_BIT_LOGIC_OP_ENABLED,              // ANGLE_logic_op
-        EXTENDED_DIRTY_BIT_LOGIC_OP,                      // ANGLE_logic_op
-        EXTENDED_DIRTY_BIT_INVALID,
-        EXTENDED_DIRTY_BIT_MAX = EXTENDED_DIRTY_BIT_INVALID,
-    };
-
-    static_assert(EXTENDED_DIRTY_BIT_MAX <= 32, "State extended dirty bits must be capped at 32");
 
     // TODO(jmadill): Consider storing dirty objects in a list instead of by binding.
     enum DirtyObjectType
@@ -782,14 +770,8 @@ class State : angle::NonCopyable
     void setAllDirtyBits()
     {
         mDirtyBits.set();
-        mExtendedDirtyBits.set();
         mDirtyCurrentValues.set();
     }
-
-    using ExtendedDirtyBits = angle::BitSet32<EXTENDED_DIRTY_BIT_MAX>;
-    const ExtendedDirtyBits &getExtendedDirtyBits() const { return mExtendedDirtyBits; }
-    void clearExtendedDirtyBits() { mExtendedDirtyBits.reset(); }
-    void clearExtendedDirtyBits(const ExtendedDirtyBits &bitset) { mExtendedDirtyBits &= ~bitset; }
 
     using DirtyObjects = angle::BitSet<DIRTY_OBJECT_MAX>;
     void clearDirtyObjects() { mDirtyObjects.reset(); }
@@ -1226,7 +1208,6 @@ class State : angle::NonCopyable
     GLES1State mGLES1State;
 
     DirtyBits mDirtyBits;
-    mutable ExtendedDirtyBits mExtendedDirtyBits;
     DirtyObjects mDirtyObjects;
     mutable AttributesMask mDirtyCurrentValues;
     ActiveTextureMask mDirtyActiveTextures;

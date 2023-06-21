@@ -1222,8 +1222,7 @@ void StateManagerGL::setClipControl(gl::ClipOrigin origin, gl::ClipDepthMode dep
     ASSERT(mFunctions->clipControl);
     mFunctions->clipControl(ToGLenum(mClipOrigin), ToGLenum(mClipDepthMode));
 
-    mLocalDirtyBits.set(gl::State::DIRTY_BIT_EXTENDED);
-    mLocalExtendedDirtyBits.set(gl::State::EXTENDED_DIRTY_BIT_CLIP_CONTROL);
+    mLocalDirtyBits.set(gl::State::DIRTY_BIT_CLIP_CONTROL);
 }
 
 void StateManagerGL::setBlendEnabled(bool enabled)
@@ -1729,8 +1728,7 @@ void StateManagerGL::setPolygonMode(gl::PolygonMode mode)
             mFunctions->polygonModeNV(GL_FRONT_AND_BACK, ToGLenum(mPolygonMode));
         }
 
-        mLocalDirtyBits.set(gl::State::DIRTY_BIT_EXTENDED);
-        mLocalExtendedDirtyBits.set(gl::State::EXTENDED_DIRTY_BIT_POLYGON_MODE);
+        mLocalDirtyBits.set(gl::State::DIRTY_BIT_POLYGON_MODE);
     }
 }
 
@@ -1748,8 +1746,7 @@ void StateManagerGL::setPolygonOffsetPointEnabled(bool enabled)
             mFunctions->disable(GL_POLYGON_OFFSET_POINT_NV);
         }
 
-        mLocalDirtyBits.set(gl::State::DIRTY_BIT_EXTENDED);
-        mLocalExtendedDirtyBits.set(gl::State::EXTENDED_DIRTY_BIT_POLYGON_OFFSET_POINT_ENABLED);
+        mLocalDirtyBits.set(gl::State::DIRTY_BIT_POLYGON_OFFSET_POINT_ENABLED);
     }
 }
 
@@ -1767,8 +1764,7 @@ void StateManagerGL::setPolygonOffsetLineEnabled(bool enabled)
             mFunctions->disable(GL_POLYGON_OFFSET_LINE_NV);
         }
 
-        mLocalDirtyBits.set(gl::State::DIRTY_BIT_EXTENDED);
-        mLocalExtendedDirtyBits.set(gl::State::EXTENDED_DIRTY_BIT_POLYGON_OFFSET_LINE_ENABLED);
+        mLocalDirtyBits.set(gl::State::DIRTY_BIT_POLYGON_OFFSET_LINE_ENABLED);
     }
 }
 
@@ -1828,8 +1824,7 @@ void StateManagerGL::setDepthClampEnabled(bool enabled)
             mFunctions->disable(GL_DEPTH_CLAMP_EXT);
         }
 
-        mLocalDirtyBits.set(gl::State::DIRTY_BIT_EXTENDED);
-        mLocalExtendedDirtyBits.set(gl::State::EXTENDED_DIRTY_BIT_DEPTH_CLAMP_ENABLED);
+        mLocalDirtyBits.set(gl::State::DIRTY_BIT_DEPTH_CLAMP_ENABLED);
     }
 }
 
@@ -1963,9 +1958,7 @@ void StateManagerGL::setClearStencil(GLint clearStencil)
 
 angle::Result StateManagerGL::syncState(const gl::Context *context,
                                         const gl::State::DirtyBits &glDirtyBits,
-                                        const gl::State::DirtyBits &bitMask,
-                                        const gl::State::ExtendedDirtyBits &extendedDirtyBits,
-                                        const gl::State::ExtendedDirtyBits &extendedBitMask)
+                                        const gl::State::DirtyBits &bitMask)
 {
     const gl::State &state = context->getState();
 
@@ -2351,60 +2344,44 @@ angle::Result StateManagerGL::syncState(const gl::Context *context,
             case gl::State::DIRTY_BIT_PROVOKING_VERTEX:
                 setProvokingVertex(ToGLenum(state.getProvokingVertex()));
                 break;
-            case gl::State::DIRTY_BIT_EXTENDED:
-            {
-                const gl::State::ExtendedDirtyBits glAndLocalExtendedDirtyBits =
-                    extendedDirtyBits | mLocalExtendedDirtyBits;
-                for (size_t extendedDirtyBit : glAndLocalExtendedDirtyBits)
+            case gl::State::DIRTY_BIT_CLIP_CONTROL:
+                setClipControl(state.getClipOrigin(), state.getClipDepthMode());
+                break;
+            case gl::State::DIRTY_BIT_CLIP_DISTANCES:
+                setClipDistancesEnable(state.getEnabledClipDistances());
+                if (mFeatures.emulateClipDistanceState.enabled)
                 {
-                    switch (extendedDirtyBit)
-                    {
-                        case gl::State::EXTENDED_DIRTY_BIT_CLIP_CONTROL:
-                            setClipControl(state.getClipOrigin(), state.getClipDepthMode());
-                            break;
-                        case gl::State::EXTENDED_DIRTY_BIT_CLIP_DISTANCES:
-                            setClipDistancesEnable(state.getEnabledClipDistances());
-                            if (mFeatures.emulateClipDistanceState.enabled)
-                            {
-                                updateEmulatedClipDistanceState(state.getProgramExecutable(),
-                                                                state.getProgram(),
-                                                                state.getEnabledClipDistances());
-                            }
-                            break;
-                        case gl::State::EXTENDED_DIRTY_BIT_DEPTH_CLAMP_ENABLED:
-                            setDepthClampEnabled(state.isDepthClampEnabled());
-                            break;
-                        case gl::State::EXTENDED_DIRTY_BIT_LOGIC_OP_ENABLED:
-                            setLogicOpEnabled(state.isLogicOpEnabled());
-                            break;
-                        case gl::State::EXTENDED_DIRTY_BIT_LOGIC_OP:
-                            setLogicOp(state.getLogicOp());
-                            break;
-                        case gl::State::EXTENDED_DIRTY_BIT_MIPMAP_GENERATION_HINT:
-                            break;
-                        case gl::State::EXTENDED_DIRTY_BIT_POLYGON_MODE:
-                            setPolygonMode(state.getPolygonMode());
-                            break;
-                        case gl::State::EXTENDED_DIRTY_BIT_POLYGON_OFFSET_POINT_ENABLED:
-                            setPolygonOffsetPointEnabled(state.isPolygonOffsetPointEnabled());
-                            break;
-                        case gl::State::EXTENDED_DIRTY_BIT_POLYGON_OFFSET_LINE_ENABLED:
-                            setPolygonOffsetLineEnabled(state.isPolygonOffsetLineEnabled());
-                            break;
-                        case gl::State::EXTENDED_DIRTY_BIT_SHADER_DERIVATIVE_HINT:
-                            // These hints aren't forwarded to GL yet.
-                            break;
-                        case gl::State::EXTENDED_DIRTY_BIT_SHADING_RATE:
-                            // Unimplemented extensions.
-                            break;
-                        default:
-                            UNREACHABLE();
-                            break;
-                    }
-                    mLocalExtendedDirtyBits &= ~extendedDirtyBits;
+                    updateEmulatedClipDistanceState(state.getProgramExecutable(),
+                                                    state.getProgram(),
+                                                    state.getEnabledClipDistances());
                 }
                 break;
-            }
+            case gl::State::DIRTY_BIT_DEPTH_CLAMP_ENABLED:
+                setDepthClampEnabled(state.isDepthClampEnabled());
+                break;
+            case gl::State::DIRTY_BIT_LOGIC_OP_ENABLED:
+                setLogicOpEnabled(state.isLogicOpEnabled());
+                break;
+            case gl::State::DIRTY_BIT_LOGIC_OP:
+                setLogicOp(state.getLogicOp());
+                break;
+            case gl::State::DIRTY_BIT_MIPMAP_GENERATION_HINT:
+                break;
+            case gl::State::DIRTY_BIT_POLYGON_MODE:
+                setPolygonMode(state.getPolygonMode());
+                break;
+            case gl::State::DIRTY_BIT_POLYGON_OFFSET_POINT_ENABLED:
+                setPolygonOffsetPointEnabled(state.isPolygonOffsetPointEnabled());
+                break;
+            case gl::State::DIRTY_BIT_POLYGON_OFFSET_LINE_ENABLED:
+                setPolygonOffsetLineEnabled(state.isPolygonOffsetLineEnabled());
+                break;
+            case gl::State::DIRTY_BIT_SHADER_DERIVATIVE_HINT:
+                // These hints aren't forwarded to GL yet.
+                break;
+            case gl::State::DIRTY_BIT_SHADING_RATE:
+                // Unimplemented extensions.
+                break;
             case gl::State::DIRTY_BIT_SAMPLE_SHADING:
                 // Nothing to do until OES_sample_shading is implemented.
                 break;
@@ -2628,8 +2605,7 @@ void StateManagerGL::setClipDistancesEnable(const gl::State::ClipDistanceEnableB
     }
 
     mEnabledClipDistances = enables;
-    mLocalDirtyBits.set(gl::State::DIRTY_BIT_EXTENDED);
-    mLocalExtendedDirtyBits.set(gl::State::EXTENDED_DIRTY_BIT_CLIP_DISTANCES);
+    mLocalDirtyBits.set(gl::State::DIRTY_BIT_CLIP_DISTANCES);
 }
 
 void StateManagerGL::setLogicOpEnabled(bool enabled)
@@ -2649,8 +2625,7 @@ void StateManagerGL::setLogicOpEnabled(bool enabled)
         mFunctions->disable(GL_COLOR_LOGIC_OP);
     }
 
-    mLocalDirtyBits.set(gl::State::DIRTY_BIT_EXTENDED);
-    mLocalExtendedDirtyBits.set(gl::State::EXTENDED_DIRTY_BIT_LOGIC_OP_ENABLED);
+    mLocalDirtyBits.set(gl::State::DIRTY_BIT_LOGIC_OP_ENABLED);
 }
 
 void StateManagerGL::setLogicOp(gl::LogicalOperation opcode)
@@ -2663,8 +2638,7 @@ void StateManagerGL::setLogicOp(gl::LogicalOperation opcode)
 
     mFunctions->logicOp(ToGLenum(opcode));
 
-    mLocalDirtyBits.set(gl::State::DIRTY_BIT_EXTENDED);
-    mLocalExtendedDirtyBits.set(gl::State::EXTENDED_DIRTY_BIT_LOGIC_OP_ENABLED);
+    mLocalDirtyBits.set(gl::State::DIRTY_BIT_LOGIC_OP_ENABLED);
 }
 
 void StateManagerGL::setTextureCubemapSeamlessEnabled(bool enabled)
@@ -2919,8 +2893,7 @@ void StateManagerGL::syncFromNativeContext(const gl::Extensions &extensions,
         {
             mClipOrigin    = gl::FromGLenum<gl::ClipOrigin>(state->clipOrigin);
             mClipDepthMode = gl::FromGLenum<gl::ClipDepthMode>(state->clipDepthMode);
-            mLocalDirtyBits.set(gl::State::DIRTY_BIT_EXTENDED);
-            mLocalExtendedDirtyBits.set(gl::State::EXTENDED_DIRTY_BIT_CLIP_CONTROL);
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_CLIP_CONTROL);
         }
     }
 
@@ -3051,8 +3024,7 @@ void StateManagerGL::syncFromNativeContext(const gl::Extensions &extensions,
         if (mDepthClampEnabled != state->enableDepthClamp)
         {
             mDepthClampEnabled = state->enableDepthClamp;
-            mLocalDirtyBits.set(gl::State::DIRTY_BIT_EXTENDED);
-            mLocalExtendedDirtyBits.set(gl::State::EXTENDED_DIRTY_BIT_DEPTH_CLAMP_ENABLED);
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_DEPTH_CLAMP_ENABLED);
         }
     }
 
@@ -3079,8 +3051,7 @@ void StateManagerGL::syncFromNativeContext(const gl::Extensions &extensions,
         if (mPolygonMode != gl::FromGLenum<gl::PolygonMode>(state->polygonMode))
         {
             mPolygonMode = gl::FromGLenum<gl::PolygonMode>(state->polygonMode);
-            mLocalDirtyBits.set(gl::State::DIRTY_BIT_EXTENDED);
-            mLocalExtendedDirtyBits.set(gl::State::EXTENDED_DIRTY_BIT_POLYGON_MODE);
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_POLYGON_MODE);
         }
 
         if (extensions.polygonModeNV)
@@ -3089,9 +3060,7 @@ void StateManagerGL::syncFromNativeContext(const gl::Extensions &extensions,
             if (mPolygonOffsetPointEnabled != state->enablePolygonOffsetPoint)
             {
                 mPolygonOffsetPointEnabled = state->enablePolygonOffsetPoint;
-                mLocalDirtyBits.set(gl::State::DIRTY_BIT_EXTENDED);
-                mLocalExtendedDirtyBits.set(
-                    gl::State::EXTENDED_DIRTY_BIT_POLYGON_OFFSET_POINT_ENABLED);
+                mLocalDirtyBits.set(gl::State::DIRTY_BIT_POLYGON_OFFSET_POINT_ENABLED);
             }
         }
 
@@ -3099,8 +3068,7 @@ void StateManagerGL::syncFromNativeContext(const gl::Extensions &extensions,
         if (mPolygonOffsetLineEnabled != state->enablePolygonOffsetLine)
         {
             mPolygonOffsetLineEnabled = state->enablePolygonOffsetLine;
-            mLocalDirtyBits.set(gl::State::DIRTY_BIT_EXTENDED);
-            mLocalExtendedDirtyBits.set(gl::State::EXTENDED_DIRTY_BIT_POLYGON_OFFSET_LINE_ENABLED);
+            mLocalDirtyBits.set(gl::State::DIRTY_BIT_POLYGON_OFFSET_LINE_ENABLED);
         }
     }
 

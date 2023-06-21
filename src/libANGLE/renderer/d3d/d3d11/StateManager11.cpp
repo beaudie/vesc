@@ -930,7 +930,6 @@ angle::Result StateManager11::updateStateForCompute(const gl::Context *context,
 
 void StateManager11::syncState(const gl::Context *context,
                                const gl::State::DirtyBits &dirtyBits,
-                               const gl::State::ExtendedDirtyBits &extendedDirtyBits,
                                gl::Command command)
 {
     if (!dirtyBits.any())
@@ -1196,46 +1195,35 @@ void StateManager11::syncState(const gl::Context *context,
             case gl::State::DIRTY_BIT_PROVOKING_VERTEX:
                 invalidateShaders();
                 break;
-            case gl::State::DIRTY_BIT_EXTENDED:
-            {
-                for (size_t extendedDirtyBit : extendedDirtyBits)
+            case gl::State::DIRTY_BIT_CLIP_CONTROL:
+                checkPresentPath(context);
+                break;
+            case gl::State::DIRTY_BIT_CLIP_DISTANCES:
+                if (mShaderConstants.onClipDistancesEnabledChange(
+                        state.getEnabledClipDistances().bits()))
                 {
-                    switch (extendedDirtyBit)
-                    {
-                        case gl::State::EXTENDED_DIRTY_BIT_CLIP_CONTROL:
-                            checkPresentPath(context);
-                            break;
-                        case gl::State::EXTENDED_DIRTY_BIT_CLIP_DISTANCES:
-                            if (mShaderConstants.onClipDistancesEnabledChange(
-                                    state.getEnabledClipDistances().bits()))
-                            {
-                                mInternalDirtyBits.set(DIRTY_BIT_DRIVER_UNIFORMS);
-                            }
-                            break;
-                        case gl::State::EXTENDED_DIRTY_BIT_DEPTH_CLAMP_ENABLED:
-                            if (state.getRasterizerState().depthClamp != mCurRasterState.depthClamp)
-                            {
-                                mInternalDirtyBits.set(DIRTY_BIT_RASTERIZER_STATE);
-                            }
-                            break;
-                        case gl::State::EXTENDED_DIRTY_BIT_POLYGON_MODE:
-                            if (state.getRasterizerState().polygonMode !=
-                                mCurRasterState.polygonMode)
-                            {
-                                mInternalDirtyBits.set(DIRTY_BIT_RASTERIZER_STATE);
-                            }
-                            break;
-                        case gl::State::EXTENDED_DIRTY_BIT_POLYGON_OFFSET_LINE_ENABLED:
-                            if (state.getRasterizerState().polygonOffsetLine !=
-                                mCurRasterState.polygonOffsetLine)
-                            {
-                                mInternalDirtyBits.set(DIRTY_BIT_RASTERIZER_STATE);
-                            }
-                            break;
-                    }
+                    mInternalDirtyBits.set(DIRTY_BIT_DRIVER_UNIFORMS);
                 }
                 break;
-            }
+            case gl::State::DIRTY_BIT_DEPTH_CLAMP_ENABLED:
+                if (state.getRasterizerState().depthClamp != mCurRasterState.depthClamp)
+                {
+                    mInternalDirtyBits.set(DIRTY_BIT_RASTERIZER_STATE);
+                }
+                break;
+            case gl::State::DIRTY_BIT_POLYGON_MODE:
+                if (state.getRasterizerState().polygonMode != mCurRasterState.polygonMode)
+                {
+                    mInternalDirtyBits.set(DIRTY_BIT_RASTERIZER_STATE);
+                }
+                break;
+            case gl::State::DIRTY_BIT_POLYGON_OFFSET_LINE_ENABLED:
+                if (state.getRasterizerState().polygonOffsetLine !=
+                    mCurRasterState.polygonOffsetLine)
+                {
+                    mInternalDirtyBits.set(DIRTY_BIT_RASTERIZER_STATE);
+                }
+                break;
             default:
                 break;
         }
