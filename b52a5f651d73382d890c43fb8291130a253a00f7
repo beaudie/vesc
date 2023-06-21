@@ -33,6 +33,24 @@
       "message": "Do we also have a test to check that the readback is correct by itself? Like a test that uploads a fixed paletted texture and on readback ensures the colors are right.",
       "revId": "b52a5f651d73382d890c43fb8291130a253a00f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a397d47e_e4186e10",
+        "filename": "src/tests/gl_tests/GetImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1177,
+      "author": {
+        "id": 1533513
+      },
+      "writtenOn": "2023-06-21T15:30:11Z",
+      "side": 1,
+      "message": "No, we don\u0027t",
+      "parentUuid": "0b859b09_294416cb",
+      "revId": "b52a5f651d73382d890c43fb8291130a253a00f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
