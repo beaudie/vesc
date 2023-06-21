@@ -10476,7 +10476,8 @@ StateCache::StateCache()
     : mCachedHasAnyEnabledClientAttrib(false),
       mCachedNonInstancedVertexElementLimit(0),
       mCachedInstancedVertexElementLimit(0),
-      mCachedBasicDrawStatesError(kInvalidPointer),
+      mCachedBasicDrawStatesErrorString(kInvalidPointer),
+      mCachedBasicDrawStatesErrorCode(GL_NO_ERROR),
       mCachedBasicDrawElementsError(kInvalidPointer),
       mCachedProgramPipelineError(kInvalidPointer),
       mCachedTransformFeedbackActiveUnpaused(false),
@@ -10579,7 +10580,8 @@ void StateCache::updateVertexElementLimitsImpl(Context *context)
 
 void StateCache::updateBasicDrawStatesError()
 {
-    mCachedBasicDrawStatesError = kInvalidPointer;
+    mCachedBasicDrawStatesErrorString = kInvalidPointer;
+    mCachedBasicDrawStatesErrorCode   = GL_NO_ERROR;
 }
 
 void StateCache::updateProgramPipelineError()
@@ -10594,9 +10596,11 @@ void StateCache::updateBasicDrawElementsError()
 
 intptr_t StateCache::getBasicDrawStatesErrorImpl(const Context *context) const
 {
-    ASSERT(mCachedBasicDrawStatesError == kInvalidPointer);
-    mCachedBasicDrawStatesError = reinterpret_cast<intptr_t>(ValidateDrawStates(context));
-    return mCachedBasicDrawStatesError;
+    ASSERT(mCachedBasicDrawStatesErrorString == kInvalidPointer);
+    ASSERT(mCachedBasicDrawStatesErrorCode == GL_NO_ERROR);
+    mCachedBasicDrawStatesErrorString =
+        reinterpret_cast<intptr_t>(ValidateDrawStates(context, &mCachedBasicDrawStatesErrorCode));
+    return mCachedBasicDrawStatesErrorString;
 }
 
 intptr_t StateCache::getProgramPipelineErrorImpl(const Context *context) const
