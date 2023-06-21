@@ -5435,7 +5435,6 @@ void WriteDescriptorDescBuilder::updateWriteDesc(uint32_t bindingIndex,
 
 void WriteDescriptorDescBuilder::updateShaderBuffers(
     gl::ShaderBitSet shaderTypes,
-    ShaderVariableType variableType,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
     const std::vector<gl::InterfaceBlock> &blocks,
     VkDescriptorType descriptorType)
@@ -5471,7 +5470,7 @@ void WriteDescriptorDescBuilder::updateAtomicCounters(
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
     const std::vector<gl::AtomicCounterBuffer> &atomicCounterBuffers)
 {
-    if (atomicCounterBuffers.empty() || !variableInfoMap.hasAtomicCounterInfo())
+    if (atomicCounterBuffers.empty())
     {
         return;
     }
@@ -5479,7 +5478,8 @@ void WriteDescriptorDescBuilder::updateAtomicCounters(
     static_assert(!IsDynamicDescriptor(kStorageBufferDescriptorType),
                   "This method needs an update to handle dynamic descriptors");
 
-    uint32_t binding = variableInfoMap.getAtomicCounterBufferBinding(0);
+    uint32_t binding = variableInfoMap.getAtomicCounterBufferBinding(
+        atomicCounterBuffers[0].getFirstActiveShaderType(), 0);
 
     updateWriteDesc(binding, kStorageBufferDescriptorType,
                     gl::IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFER_BINDINGS);
@@ -5537,7 +5537,8 @@ void WriteDescriptorDescBuilder::updateInputAttachments(
     const uint32_t baseUniformIndex              = executable.getFragmentInoutRange().low();
     const gl::LinkedUniform &baseInputAttachment = uniforms.at(baseUniformIndex);
 
-    const ShaderInterfaceVariableInfo &baseInfo = variableInfoMap.getFramebufferFetchInfo();
+    const ShaderInterfaceVariableInfo &baseInfo = variableInfoMap.getVariableById(
+        gl::ShaderType::Fragment, uniforms[0].getId(gl::ShaderType::Fragment));
 
     uint32_t baseBinding = baseInfo.binding - baseInputAttachment.location;
 
@@ -5598,8 +5599,8 @@ void WriteDescriptorDescBuilder::updateTransformFeedbackWrite(
     const gl::ProgramExecutable &executable)
 {
     uint32_t xfbBufferCount = static_cast<uint32_t>(executable.getTransformFeedbackBufferCount());
-    updateWriteDesc(variableInfoMap.getXfbBufferBinding(0), VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
-                    xfbBufferCount);
+    updateWriteDesc(variableInfoMap.getEmulatedXfbBufferBinding(0),
+                    VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, xfbBufferCount);
 }
 
 void WriteDescriptorDescBuilder::streamOut(std::ostream &ostr) const
@@ -5770,7 +5771,7 @@ void DescriptorSetDescBuilder::updateTransformFeedbackBuffer(
     VkDeviceSize bufferOffset,
     VkDeviceSize bufferRange)
 {
-    uint32_t baseBinding = variableInfoMap.getXfbBufferBinding(0);
+    const uint32_t baseBinding = variableInfoMap.getEmulatedXfbBufferBinding(0);
 
     RendererVk *renderer = context->getRenderer();
     VkDeviceSize offsetAlignment =
@@ -6037,7 +6038,6 @@ template <typename CommandBufferT>
 void DescriptorSetDescBuilder::updateOneShaderBuffer(
     ContextVk *contextVk,
     CommandBufferT *commandBufferHelper,
-    ShaderVariableType variableType,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
     const gl::BufferVector &buffers,
     const std::vector<gl::InterfaceBlock> &blocks,
@@ -6080,14 +6080,17 @@ void DescriptorSetDescBuilder::updateOneShaderBuffer(
     BufferVk *bufferVk         = vk::GetImpl(bufferBinding.get());
     BufferHelper &bufferHelper = bufferVk->getBuffer();
 
-    if (variableType == ShaderVariableType::UniformBuffer)
+    const bool isUniformBuffer = descriptorType == VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER ||
+                                 descriptorType == VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
+    if (isUniformBuffer)
     {
         commandBufferHelper->bufferRead(contextVk, VK_ACCESS_UNIFORM_READ_BIT,
                                         block.activeShaders(), &bufferHelper);
     }
     else
     {
-        ASSERT(variableType == ShaderVariableType::ShaderStorageBuffer);
+        ASSERT(descriptorType == VK_DESCRIPTOR_TYPE_STORAGE_BUFFER ||
+               descriptorType == VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC);
         if (block.isReadOnly)
         {
             // Avoid unnecessary barriers for readonly SSBOs by making sure the buffers are
@@ -6133,7 +6136,6 @@ template <typename CommandBufferT>
 void DescriptorSetDescBuilder::updateShaderBuffers(
     ContextVk *contextVk,
     CommandBufferT *commandBufferHelper,
-    ShaderVariableType variableType,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
     const gl::BufferVector &buffers,
     const std::vector<gl::InterfaceBlock> &blocks,
@@ -6145,9 +6147,9 @@ void DescriptorSetDescBuilder::updateShaderBuffers(
     // Now that we have the proper array elements counts, initialize the info structures.
     for (uint32_t blockIndex = 0; blockIndex < blocks.size(); ++blockIndex)
     {
-        updateOneShaderBuffer(contextVk, commandBufferHelper, variableType, variableInfoMap,
-                              buffers, blocks, blockIndex, descriptorType, maxBoundBufferRange,
-                              emptyBuffer, writeDescriptorDescs);
+        updateOneShaderBuffer(contextVk, commandBufferHelper, variableInfoMap, buffers, blocks,
+                              blockIndex, descriptorType, maxBoundBufferRange, emptyBuffer,
+                              writeDescriptorDescs);
     }
 }
 
@@ -6166,12 +6168,13 @@ void DescriptorSetDescBuilder::updateAtomicCounters(
     static_assert(!IsDynamicDescriptor(kStorageBufferDescriptorType),
                   "This method needs an update to handle dynamic descriptors");
 
-    if (!variableInfoMap.hasAtomicCounterInfo())
+    if (atomicCounterBuffers.empty())
     {
         return;
     }
 
-    uint32_t binding       = variableInfoMap.getAtomicCounterBufferBinding(0);
+    uint32_t binding = variableInfoMap.getAtomicCounterBufferBinding(
+        atomicCounterBuffers[0].getFirstActiveShaderType(), 0);
     uint32_t baseInfoIndex = writeDescriptorDescs[binding].descriptorInfoIndex;
 
     // Bind the empty buffer to every array slot that's unused.
@@ -6229,7 +6232,6 @@ void DescriptorSetDescBuilder::updateAtomicCounters(
 template void DescriptorSetDescBuilder::updateOneShaderBuffer<vk::RenderPassCommandBufferHelper>(
     ContextVk *contextVk,
     RenderPassCommandBufferHelper *commandBufferHelper,
-    ShaderVariableType variableType,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
     const gl::BufferVector &buffers,
     const std::vector<gl::InterfaceBlock> &blocks,
@@ -6242,7 +6244,6 @@ template void DescriptorSetDescBuilder::updateOneShaderBuffer<vk::RenderPassComm
 template void DescriptorSetDescBuilder::updateOneShaderBuffer<OutsideRenderPassCommandBufferHelper>(
     ContextVk *contextVk,
     OutsideRenderPassCommandBufferHelper *commandBufferHelper,
-    ShaderVariableType variableType,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
     const gl::BufferVector &buffers,
     const std::vector<gl::InterfaceBlock> &blocks,
@@ -6255,7 +6256,6 @@ template void DescriptorSetDescBuilder::updateOneShaderBuffer<OutsideRenderPassC
 template void DescriptorSetDescBuilder::updateShaderBuffers<OutsideRenderPassCommandBufferHelper>(
     ContextVk *contextVk,
     OutsideRenderPassCommandBufferHelper *commandBufferHelper,
-    ShaderVariableType variableType,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
     const gl::BufferVector &buffers,
     const std::vector<gl::InterfaceBlock> &blocks,
@@ -6267,7 +6267,6 @@ template void DescriptorSetDescBuilder::updateShaderBuffers<OutsideRenderPassCom
 template void DescriptorSetDescBuilder::updateShaderBuffers<RenderPassCommandBufferHelper>(
     ContextVk *contextVk,
     RenderPassCommandBufferHelper *commandBufferHelper,
-    ShaderVariableType variableType,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
     const gl::BufferVector &buffers,
     const std::vector<gl::InterfaceBlock> &blocks,
@@ -6412,7 +6411,8 @@ angle::Result DescriptorSetDescBuilder::updateInputAttachments(
     const uint32_t baseUniformIndex              = executable.getFragmentInoutRange().low();
     const gl::LinkedUniform &baseInputAttachment = uniforms.at(baseUniformIndex);
 
-    const ShaderInterfaceVariableInfo &baseInfo = variableInfoMap.getFramebufferFetchInfo();
+    const ShaderInterfaceVariableInfo &baseInfo = variableInfoMap.getVariableById(
+        gl::ShaderType::Fragment, uniforms[0].getId(gl::ShaderType::Fragment));
 
     uint32_t baseBinding = baseInfo.binding - baseInputAttachment.location;
 
