@@ -92,21 +92,21 @@ ANGLE_INLINE bool Context::noopMultiDraw(GLsizei drawcount) const
 
 ANGLE_INLINE angle::Result Context::syncAllDirtyBits(Command command)
 {
-    const State::DirtyBits &dirtyBits = mState.getDirtyBits();
+    const state::DirtyBits &dirtyBits = mState.getDirtyBits();
     ANGLE_TRY(mImplementation->syncState(this, dirtyBits, mAllDirtyBits, command));
     mState.clearDirtyBits();
     return angle::Result::Continue;
 }
 
-ANGLE_INLINE angle::Result Context::syncDirtyBits(const State::DirtyBits &bitMask, Command command)
+ANGLE_INLINE angle::Result Context::syncDirtyBits(const state::DirtyBits &bitMask, Command command)
 {
-    const State::DirtyBits &dirtyBits = (mState.getDirtyBits() & bitMask);
+    const state::DirtyBits &dirtyBits = (mState.getDirtyBits() & bitMask);
     ANGLE_TRY(mImplementation->syncState(this, dirtyBits, bitMask, command));
     mState.clearDirtyBits(dirtyBits);
     return angle::Result::Continue;
 }
 
-ANGLE_INLINE angle::Result Context::syncDirtyObjects(const State::DirtyObjects &objectMask,
+ANGLE_INLINE angle::Result Context::syncDirtyObjects(const state::DirtyObjects &objectMask,
                                                      Command command)
 {
     return mState.syncDirtyObjects(this, objectMask, command);

@@ -51,13 +51,13 @@ bool GetAlternativeQueryType(QueryType type, QueryType *alternativeType)
 
 // Mapping from a buffer binding type to a dirty bit type.
 constexpr angle::PackedEnumMap<BufferBinding, size_t> kBufferBindingDirtyBits = {{
-    {BufferBinding::AtomicCounter, State::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING},
-    {BufferBinding::DispatchIndirect, State::DIRTY_BIT_DISPATCH_INDIRECT_BUFFER_BINDING},
-    {BufferBinding::DrawIndirect, State::DIRTY_BIT_DRAW_INDIRECT_BUFFER_BINDING},
-    {BufferBinding::PixelPack, State::DIRTY_BIT_PACK_BUFFER_BINDING},
-    {BufferBinding::PixelUnpack, State::DIRTY_BIT_UNPACK_BUFFER_BINDING},
-    {BufferBinding::ShaderStorage, State::DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING},
-    {BufferBinding::Uniform, State::DIRTY_BIT_UNIFORM_BUFFER_BINDINGS},
+    {BufferBinding::AtomicCounter, state::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING},
+    {BufferBinding::DispatchIndirect, state::DIRTY_BIT_DISPATCH_INDIRECT_BUFFER_BINDING},
+    {BufferBinding::DrawIndirect, state::DIRTY_BIT_DRAW_INDIRECT_BUFFER_BINDING},
+    {BufferBinding::PixelPack, state::DIRTY_BIT_PACK_BUFFER_BINDING},
+    {BufferBinding::PixelUnpack, state::DIRTY_BIT_UNPACK_BUFFER_BINDING},
+    {BufferBinding::ShaderStorage, state::DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING},
+    {BufferBinding::Uniform, state::DIRTY_BIT_UNIFORM_BUFFER_BINDINGS},
 }};
 
 // Returns a buffer binding function depending on if a dirty bit is set.
@@ -268,7 +268,7 @@ void State::setGenericBufferBinding<BufferBinding::ElementArray>(const Context *
     }
     mVertexArray->mDirtyBits.set(VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER);
     mVertexArray->mIndexRangeCache.invalidate();
-    mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
+    mDirtyObjects.set(state::DIRTY_OBJECT_VERTEX_ARRAY);
 }
 
 const angle::PackedEnumMap<BufferBinding, State::BufferBindingSetter> State::kBufferSetters = {{
@@ -694,12 +694,12 @@ ANGLE_INLINE void State::updateActiveTextureStateOnSync(const Context *context,
         mActiveTexturesCache.set(textureIndex, texture);
     }
 
-    mDirtyBits.set(DIRTY_BIT_TEXTURE_BINDINGS);
+    mDirtyBits.set(state::DIRTY_BIT_TEXTURE_BINDINGS);
 }
 
 ANGLE_INLINE void State::setActiveTextureDirty(size_t textureIndex, Texture *texture)
 {
-    mDirtyObjects.set(DIRTY_OBJECT_ACTIVE_TEXTURES);
+    mDirtyObjects.set(state::DIRTY_OBJECT_ACTIVE_TEXTURES);
     mDirtyActiveTextures.set(textureIndex);
 
     if (!texture)
@@ -714,7 +714,7 @@ ANGLE_INLINE void State::setActiveTextureDirty(size_t textureIndex, Texture *tex
 
     if (mRobustResourceInit && texture->initState() == InitState::MayNeedInit)
     {
-        mDirtyObjects.set(DIRTY_OBJECT_TEXTURES_INIT);
+        mDirtyObjects.set(state::DIRTY_OBJECT_TEXTURES_INIT);
     }
 
     // This cache is updated immediately because we use the cache in the validation layer.
@@ -780,19 +780,19 @@ void State::setColorClearValue(float red, float green, float blue, float alpha)
     mColorClearValue.green = green;
     mColorClearValue.blue  = blue;
     mColorClearValue.alpha = alpha;
-    mDirtyBits.set(DIRTY_BIT_CLEAR_COLOR);
+    mDirtyBits.set(state::DIRTY_BIT_CLEAR_COLOR);
 }
 
 void State::setDepthClearValue(float depth)
 {
     mDepthClearValue = depth;
-    mDirtyBits.set(DIRTY_BIT_CLEAR_DEPTH);
+    mDirtyBits.set(state::DIRTY_BIT_CLEAR_DEPTH);
 }
 
 void State::setStencilClearValue(int stencil)
 {
     mStencilClearValue = stencil;
-    mDirtyBits.set(DIRTY_BIT_CLEAR_STENCIL);
+    mDirtyBits.set(state::DIRTY_BIT_CLEAR_STENCIL);
 }
 
 void State::setColorMask(bool red, bool green, bool blue, bool alpha)
@@ -803,13 +803,13 @@ void State::setColorMask(bool red, bool green, bool blue, bool alpha)
     mBlendState.colorMaskAlpha = alpha;
 
     mBlendStateExt.setColorMask(red, green, blue, alpha);
-    mDirtyBits.set(DIRTY_BIT_COLOR_MASK);
+    mDirtyBits.set(state::DIRTY_BIT_COLOR_MASK);
 }
 
 void State::setColorMaskIndexed(bool red, bool green, bool blue, bool alpha, GLuint index)
 {
     mBlendStateExt.setColorMaskIndexed(index, red, green, blue, alpha);
-    mDirtyBits.set(DIRTY_BIT_COLOR_MASK);
+    mDirtyBits.set(state::DIRTY_BIT_COLOR_MASK);
 }
 
 bool State::allActiveDrawBufferChannelsMasked() const
@@ -833,7 +833,7 @@ void State::setDepthMask(bool mask)
     if (mDepthStencil.depthMask != mask)
     {
         mDepthStencil.depthMask = mask;
-        mDirtyBits.set(DIRTY_BIT_DEPTH_MASK);
+        mDirtyBits.set(state::DIRTY_BIT_DEPTH_MASK);
     }
 }
 
@@ -842,7 +842,7 @@ void State::setRasterizerDiscard(bool enabled)
     if (mRasterizer.rasterizerDiscard != enabled)
     {
         mRasterizer.rasterizerDiscard = enabled;
-        mDirtyBits.set(DIRTY_BIT_RASTERIZER_DISCARD_ENABLED);
+        mDirtyBits.set(state::DIRTY_BIT_RASTERIZER_DISCARD_ENABLED);
     }
 }
 
@@ -851,7 +851,7 @@ void State::setCullFace(bool enabled)
     if (mRasterizer.cullFace != enabled)
     {
         mRasterizer.cullFace = enabled;
-        mDirtyBits.set(DIRTY_BIT_CULL_FACE_ENABLED);
+        mDirtyBits.set(state::DIRTY_BIT_CULL_FACE_ENABLED);
     }
 }
 
@@ -860,7 +860,7 @@ void State::setCullMode(CullFaceMode mode)
     if (mRasterizer.cullMode != mode)
     {
         mRasterizer.cullMode = mode;
-        mDirtyBits.set(DIRTY_BIT_CULL_FACE);
+        mDirtyBits.set(state::DIRTY_BIT_CULL_FACE);
     }
 }
 
@@ -869,7 +869,7 @@ void State::setFrontFace(GLenum front)
     if (mRasterizer.frontFace != front)
     {
         mRasterizer.frontFace = front;
-        mDirtyBits.set(DIRTY_BIT_FRONT_FACE);
+        mDirtyBits.set(state::DIRTY_BIT_FRONT_FACE);
     }
 }
 
@@ -878,7 +878,7 @@ void State::setDepthClamp(bool enabled)
     if (mRasterizer.depthClamp != enabled)
     {
         mRasterizer.depthClamp = enabled;
-        mDirtyBits.set(DIRTY_BIT_DEPTH_CLAMP_ENABLED);
+        mDirtyBits.set(state::DIRTY_BIT_DEPTH_CLAMP_ENABLED);
     }
 }
 
@@ -887,7 +887,7 @@ void State::setDepthTest(bool enabled)
     if (mDepthStencil.depthTest != enabled)
     {
         mDepthStencil.depthTest = enabled;
-        mDirtyBits.set(DIRTY_BIT_DEPTH_TEST_ENABLED);
+        mDirtyBits.set(state::DIRTY_BIT_DEPTH_TEST_ENABLED);
     }
 }
 
@@ -896,7 +896,7 @@ void State::setDepthFunc(GLenum depthFunc)
     if (mDepthStencil.depthFunc != depthFunc)
     {
         mDepthStencil.depthFunc = depthFunc;
-        mDirtyBits.set(DIRTY_BIT_DEPTH_FUNC);
+        mDirtyBits.set(state::DIRTY_BIT_DEPTH_FUNC);
     }
 }
 
@@ -906,7 +906,7 @@ void State::setDepthRange(float zNear, float zFar)
     {
         mNearZ = zNear;
         mFarZ  = zFar;
-        mDirtyBits.set(DIRTY_BIT_DEPTH_RANGE);
+        mDirtyBits.set(state::DIRTY_BIT_DEPTH_RANGE);
     }
 }
 
@@ -927,7 +927,7 @@ void State::setClipControl(ClipOrigin origin, ClipDepthMode depth)
 
     if (updated)
     {
-        mDirtyBits.set(DIRTY_BIT_CLIP_CONTROL);
+        mDirtyBits.set(state::DIRTY_BIT_CLIP_CONTROL);
     }
 }
 
@@ -939,7 +939,7 @@ void State::setBlend(bool enabled)
 
         mSetBlendIndexedInvoked = false;
         mBlendStateExt.setEnabled(enabled);
-        mDirtyBits.set(DIRTY_BIT_BLEND_ENABLED);
+        mDirtyBits.set(state::DIRTY_BIT_BLEND_ENABLED);
     }
 }
 
@@ -947,7 +947,7 @@ void State::setBlendIndexed(bool enabled, GLuint index)
 {
     mSetBlendIndexedInvoked = true;
     mBlendStateExt.setEnabledIndexed(index, enabled);
-    mDirtyBits.set(DIRTY_BIT_BLEND_ENABLED);
+    mDirtyBits.set(state::DIRTY_BIT_BLEND_ENABLED);
 }
 
 void State::setBlendFactors(GLenum sourceRGB, GLenum destRGB, GLenum sourceAlpha, GLenum destAlpha)
@@ -987,7 +987,7 @@ void State::setBlendFactors(GLenum sourceRGB, GLenum destRGB, GLenum sourceAlpha
 
     mSetBlendFactorsIndexedInvoked = false;
     mBlendStateExt.setFactors(sourceRGB, destRGB, sourceAlpha, destAlpha);
-    mDirtyBits.set(DIRTY_BIT_BLEND_FUNCS);
+    mDirtyBits.set(state::DIRTY_BIT_BLEND_FUNCS);
 }
 
 void State::setBlendFactorsIndexed(GLenum sourceRGB,
@@ -1004,7 +1004,7 @@ void State::setBlendFactorsIndexed(GLenum sourceRGB,
 
     mSetBlendFactorsIndexedInvoked = true;
     mBlendStateExt.setFactorsIndexed(index, sourceRGB, destRGB, sourceAlpha, destAlpha);
-    mDirtyBits.set(DIRTY_BIT_BLEND_FUNCS);
+    mDirtyBits.set(state::DIRTY_BIT_BLEND_FUNCS);
 }
 
 void State::setBlendColor(float red, float green, float blue, float alpha)
@@ -1030,7 +1030,7 @@ void State::setBlendColor(float red, float green, float blue, float alpha)
         mBlendColor.green = green;
         mBlendColor.blue  = blue;
         mBlendColor.alpha = alpha;
-        mDirtyBits.set(DIRTY_BIT_BLEND_COLOR);
+        mDirtyBits.set(state::DIRTY_BIT_BLEND_COLOR);
     }
 }
 
@@ -1044,7 +1044,7 @@ void State::setBlendEquation(GLenum rgbEquation, GLenum alphaEquation)
 
         mSetBlendEquationsIndexedInvoked = false;
         mBlendStateExt.setEquations(rgbEquation, alphaEquation);
-        mDirtyBits.set(DIRTY_BIT_BLEND_EQUATIONS);
+        mDirtyBits.set(state::DIRTY_BIT_BLEND_EQUATIONS);
     }
 }
 
@@ -1052,7 +1052,7 @@ void State::setBlendEquationIndexed(GLenum rgbEquation, GLenum alphaEquation, GL
 {
     mSetBlendEquationsIndexedInvoked = true;
     mBlendStateExt.setEquationsIndexed(index, rgbEquation, alphaEquation);
-    mDirtyBits.set(DIRTY_BIT_BLEND_EQUATIONS);
+    mDirtyBits.set(state::DIRTY_BIT_BLEND_EQUATIONS);
 }
 
 void State::setStencilTest(bool enabled)
@@ -1060,7 +1060,7 @@ void State::setStencilTest(bool enabled)
     if (mDepthStencil.stencilTest != enabled)
     {
         mDepthStencil.stencilTest = enabled;
-        mDirtyBits.set(DIRTY_BIT_STENCIL_TEST_ENABLED);
+        mDirtyBits.set(state::DIRTY_BIT_STENCIL_TEST_ENABLED);
     }
 }
 
@@ -1072,7 +1072,7 @@ void State::setStencilParams(GLenum stencilFunc, GLint stencilRef, GLuint stenci
         mDepthStencil.stencilFunc = stencilFunc;
         mStencilRef               = stencilRef;
         mDepthStencil.stencilMask = stencilMask;
-        mDirtyBits.set(DIRTY_BIT_STENCIL_FUNCS_FRONT);
+        mDirtyBits.set(state::DIRTY_BIT_STENCIL_FUNCS_FRONT);
     }
 }
 
@@ -1086,7 +1086,7 @@ void State::setStencilBackParams(GLenum stencilBackFunc,
         mDepthStencil.stencilBackFunc = stencilBackFunc;
         mStencilBackRef               = stencilBackRef;
         mDepthStencil.stencilBackMask = stencilBackMask;
-        mDirtyBits.set(DIRTY_BIT_STENCIL_FUNCS_BACK);
+        mDirtyBits.set(state::DIRTY_BIT_STENCIL_FUNCS_BACK);
     }
 }
 
@@ -1095,7 +1095,7 @@ void State::setStencilWritemask(GLuint stencilWritemask)
     if (mDepthStencil.stencilWritemask != stencilWritemask)
     {
         mDepthStencil.stencilWritemask = stencilWritemask;
-        mDirtyBits.set(DIRTY_BIT_STENCIL_WRITEMASK_FRONT);
+        mDirtyBits.set(state::DIRTY_BIT_STENCIL_WRITEMASK_FRONT);
     }
 }
 
@@ -1104,7 +1104,7 @@ void State::setStencilBackWritemask(GLuint stencilBackWritemask)
     if (mDepthStencil.stencilBackWritemask != stencilBackWritemask)
     {
         mDepthStencil.stencilBackWritemask = stencilBackWritemask;
-        mDirtyBits.set(DIRTY_BIT_STENCIL_WRITEMASK_BACK);
+        mDirtyBits.set(state::DIRTY_BIT_STENCIL_WRITEMASK_BACK);
     }
 }
 
@@ -1119,7 +1119,7 @@ void State::setStencilOperations(GLenum stencilFail,
         mDepthStencil.stencilFail          = stencilFail;
         mDepthStencil.stencilPassDepthFail = stencilPassDepthFail;
         mDepthStencil.stencilPassDepthPass = stencilPassDepthPass;
-        mDirtyBits.set(DIRTY_BIT_STENCIL_OPS_FRONT);
+        mDirtyBits.set(state::DIRTY_BIT_STENCIL_OPS_FRONT);
     }
 }
 
@@ -1134,7 +1134,7 @@ void State::setStencilBackOperations(GLenum stencilBackFail,
         mDepthStencil.stencilBackFail          = stencilBackFail;
         mDepthStencil.stencilBackPassDepthFail = stencilBackPassDepthFail;
         mDepthStencil.stencilBackPassDepthPass = stencilBackPassDepthPass;
-        mDirtyBits.set(DIRTY_BIT_STENCIL_OPS_BACK);
+        mDirtyBits.set(state::DIRTY_BIT_STENCIL_OPS_BACK);
     }
 }
 
@@ -1143,7 +1143,7 @@ void State::setPolygonMode(PolygonMode mode)
     if (mRasterizer.polygonMode != mode)
     {
         mRasterizer.polygonMode = mode;
-        mDirtyBits.set(DIRTY_BIT_POLYGON_MODE);
+        mDirtyBits.set(state::DIRTY_BIT_POLYGON_MODE);
     }
 }
 
@@ -1152,7 +1152,7 @@ void State::setPolygonOffsetPoint(bool enabled)
     if (mRasterizer.polygonOffsetPoint != enabled)
     {
         mRasterizer.polygonOffsetPoint = enabled;
-        mDirtyBits.set(DIRTY_BIT_POLYGON_OFFSET_POINT_ENABLED);
+        mDirtyBits.set(state::DIRTY_BIT_POLYGON_OFFSET_POINT_ENABLED);
     }
 }
 
@@ -1161,7 +1161,7 @@ void State::setPolygonOffsetLine(bool enabled)
     if (mRasterizer.polygonOffsetLine != enabled)
     {
         mRasterizer.polygonOffsetLine = enabled;
-        mDirtyBits.set(DIRTY_BIT_POLYGON_OFFSET_LINE_ENABLED);
+        mDirtyBits.set(state::DIRTY_BIT_POLYGON_OFFSET_LINE_ENABLED);
     }
 }
 
@@ -1170,7 +1170,7 @@ void State::setPolygonOffsetFill(bool enabled)
     if (mRasterizer.polygonOffsetFill != enabled)
     {
         mRasterizer.polygonOffsetFill = enabled;
-        mDirtyBits.set(DIRTY_BIT_POLYGON_OFFSET_FILL_ENABLED);
+        mDirtyBits.set(state::DIRTY_BIT_POLYGON_OFFSET_FILL_ENABLED);
     }
 }
 
@@ -1180,7 +1180,7 @@ void State::setPolygonOffsetParams(GLfloat factor, GLfloat units, GLfloat clamp)
     mRasterizer.polygonOffsetFactor = factor != factor ? 0.0f : factor;
     mRasterizer.polygonOffsetUnits  = units != units ? 0.0f : units;
     mRasterizer.polygonOffsetClamp  = clamp != clamp ? 0.0f : clamp;
-    mDirtyBits.set(DIRTY_BIT_POLYGON_OFFSET);
+    mDirtyBits.set(state::DIRTY_BIT_POLYGON_OFFSET);
 }
 
 void State::setSampleAlphaToCoverage(bool enabled)
@@ -1188,7 +1188,7 @@ void State::setSampleAlphaToCoverage(bool enabled)
     if (mSampleAlphaToCoverage != enabled)
     {
         mSampleAlphaToCoverage = enabled;
-        mDirtyBits.set(DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED);
+        mDirtyBits.set(state::DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE_ENABLED);
     }
 }
 
@@ -1197,7 +1197,7 @@ void State::setSampleCoverage(bool enabled)
     if (mSampleCoverage != enabled)
     {
         mSampleCoverage = enabled;
-        mDirtyBits.set(DIRTY_BIT_SAMPLE_COVERAGE_ENABLED);
+        mDirtyBits.set(state::DIRTY_BIT_SAMPLE_COVERAGE_ENABLED);
     }
 }
 
@@ -1205,7 +1205,7 @@ void State::setSampleCoverageParams(GLclampf value, bool invert)
 {
     mSampleCoverageValue  = value;
     mSampleCoverageInvert = invert;
-    mDirtyBits.set(DIRTY_BIT_SAMPLE_COVERAGE);
+    mDirtyBits.set(state::DIRTY_BIT_SAMPLE_COVERAGE);
 }
 
 void State::setSampleMaskEnabled(bool enabled)
@@ -1213,7 +1213,7 @@ void State::setSampleMaskEnabled(bool enabled)
     if (mSampleMask != enabled)
     {
         mSampleMask = enabled;
-        mDirtyBits.set(DIRTY_BIT_SAMPLE_MASK_ENABLED);
+        mDirtyBits.set(state::DIRTY_BIT_SAMPLE_MASK_ENABLED);
     }
 }
 
@@ -1222,7 +1222,7 @@ void State::setSampleMaskParams(GLuint maskNumber, GLbitfield mask)
     ASSERT(maskNumber < mMaxSampleMaskWords);
     mSampleMaskValues[maskNumber] = mask;
     // TODO(jmadill): Use a child dirty bit if we ever use more than two words.
-    mDirtyBits.set(DIRTY_BIT_SAMPLE_MASK);
+    mDirtyBits.set(state::DIRTY_BIT_SAMPLE_MASK);
 }
 
 void State::setSampleAlphaToOne(bool enabled)
@@ -1230,7 +1230,7 @@ void State::setSampleAlphaToOne(bool enabled)
     if (mSampleAlphaToOne != enabled)
     {
         mSampleAlphaToOne = enabled;
-        mDirtyBits.set(DIRTY_BIT_SAMPLE_ALPHA_TO_ONE);
+        mDirtyBits.set(state::DIRTY_BIT_SAMPLE_ALPHA_TO_ONE);
     }
 }
 
@@ -1239,7 +1239,7 @@ void State::setMultisampling(bool enabled)
     if (mMultiSampling != enabled)
     {
         mMultiSampling = enabled;
-        mDirtyBits.set(DIRTY_BIT_MULTISAMPLING);
+        mDirtyBits.set(state::DIRTY_BIT_MULTISAMPLING);
     }
 }
 
@@ -1249,7 +1249,7 @@ void State::setSampleShading(bool enabled)
     {
         mIsSampleShadingEnabled = enabled;
         mMinSampleShading       = (enabled) ? 1.0f : mMinSampleShading;
-        mDirtyBits.set(DIRTY_BIT_SAMPLE_SHADING);
+        mDirtyBits.set(state::DIRTY_BIT_SAMPLE_SHADING);
     }
 }
 
@@ -1260,7 +1260,7 @@ void State::setMinSampleShading(float value)
     if (mMinSampleShading != value)
     {
         mMinSampleShading = value;
-        mDirtyBits.set(DIRTY_BIT_SAMPLE_SHADING);
+        mDirtyBits.set(state::DIRTY_BIT_SAMPLE_SHADING);
     }
 }
 
@@ -1269,7 +1269,7 @@ void State::setScissorTest(bool enabled)
     if (mScissorTest != enabled)
     {
         mScissorTest = enabled;
-        mDirtyBits.set(DIRTY_BIT_SCISSOR_TEST_ENABLED);
+        mDirtyBits.set(state::DIRTY_BIT_SCISSOR_TEST_ENABLED);
     }
 }
 
@@ -1282,7 +1282,7 @@ void State::setScissorParams(GLint x, GLint y, GLsizei width, GLsizei height)
         mScissor.y      = y;
         mScissor.width  = width;
         mScissor.height = height;
-        mDirtyBits.set(DIRTY_BIT_SCISSOR);
+        mDirtyBits.set(state::DIRTY_BIT_SCISSOR);
     }
 }
 
@@ -1291,7 +1291,7 @@ void State::setDither(bool enabled)
     if (mRasterizer.dither != enabled)
     {
         mRasterizer.dither = enabled;
-        mDirtyBits.set(DIRTY_BIT_DITHER_ENABLED);
+        mDirtyBits.set(state::DIRTY_BIT_DITHER_ENABLED);
     }
 }
 
@@ -1300,7 +1300,7 @@ void State::setPrimitiveRestart(bool enabled)
     if (mPrimitiveRestart != enabled)
     {
         mPrimitiveRestart = enabled;
-        mDirtyBits.set(DIRTY_BIT_PRIMITIVE_RESTART_ENABLED);
+        mDirtyBits.set(state::DIRTY_BIT_PRIMITIVE_RESTART_ENABLED);
     }
 }
 
@@ -1315,7 +1315,7 @@ void State::setClipDistanceEnable(int idx, bool enable)
         mClipDistancesEnabled.reset(idx);
     }
 
-    mDirtyBits.set(DIRTY_BIT_CLIP_DISTANCES);
+    mDirtyBits.set(state::DIRTY_BIT_CLIP_DISTANCES);
 }
 
 void State::setEnableFeature(GLenum feature, bool enabled)
@@ -1660,13 +1660,13 @@ bool State::getEnableFeatureIndexed(GLenum feature, GLuint index) const
 void State::setLineWidth(GLfloat width)
 {
     mLineWidth = width;
-    mDirtyBits.set(DIRTY_BIT_LINE_WIDTH);
+    mDirtyBits.set(state::DIRTY_BIT_LINE_WIDTH);
 }
 
 void State::setGenerateMipmapHint(GLenum hint)
 {
     mGenerateMipmapHint = hint;
-    mDirtyBits.set(DIRTY_BIT_MIPMAP_GENERATION_HINT);
+    mDirtyBits.set(state::DIRTY_BIT_MIPMAP_GENERATION_HINT);
 }
 
 GLenum State::getGenerateMipmapHint() const
@@ -1689,7 +1689,7 @@ GLenum State::getTextureFilteringHint() const
 void State::setFragmentShaderDerivativeHint(GLenum hint)
 {
     mFragmentShaderDerivativeHint = hint;
-    mDirtyBits.set(DIRTY_BIT_SHADER_DERIVATIVE_HINT);
+    mDirtyBits.set(state::DIRTY_BIT_SHADER_DERIVATIVE_HINT);
     // Note: This hint could be propagated to shader translator so we can write ddx, ddx_coarse, or
     // ddx_fine depending on the hint.  Ignore for now. It is valid for implementations to ignore
     // the hint.
@@ -1710,7 +1710,7 @@ void State::setViewportParams(GLint x, GLint y, GLsizei width, GLsizei height)
         mViewport.y      = y;
         mViewport.width  = width;
         mViewport.height = height;
-        mDirtyBits.set(DIRTY_BIT_VIEWPORT);
+        mDirtyBits.set(state::DIRTY_BIT_VIEWPORT);
     }
 }
 
@@ -1729,7 +1729,7 @@ void State::setSamplerTexture(const Context *context, TextureType type, Texture 
 
     mSamplerTextures[type][mActiveSampler].set(context, texture);
 
-    mDirtyBits.set(DIRTY_BIT_TEXTURE_BINDINGS);
+    mDirtyBits.set(state::DIRTY_BIT_TEXTURE_BINDINGS);
 }
 
 Texture *State::getTargetTexture(TextureType type) const
@@ -1795,7 +1795,7 @@ void State::detachTexture(Context *context, const TextureMap &zeroTextures, Text
 
     if (mReadFramebuffer && mReadFramebuffer->detachTexture(context, texture))
     {
-        mDirtyObjects.set(DIRTY_OBJECT_READ_FRAMEBUFFER);
+        mDirtyObjects.set(state::DIRTY_OBJECT_READ_FRAMEBUFFER);
     }
 
     if (mDrawFramebuffer && mDrawFramebuffer->detachTexture(context, texture))
@@ -1817,7 +1817,7 @@ void State::initializeZeroTextures(const Context *context, const TextureMap &zer
 
 void State::invalidateTextureBindings(TextureType type)
 {
-    mDirtyBits.set(DIRTY_BIT_TEXTURE_BINDINGS);
+    mDirtyBits.set(state::DIRTY_BIT_TEXTURE_BINDINGS);
 }
 
 void State::setSamplerBinding(const Context *context, GLuint textureUnit, Sampler *sampler)
@@ -1828,7 +1828,7 @@ void State::setSamplerBinding(const Context *context, GLuint textureUnit, Sample
     }
 
     mSamplers[textureUnit].set(context, sampler);
-    mDirtyBits.set(DIRTY_BIT_SAMPLER_BINDINGS);
+    mDirtyBits.set(state::DIRTY_BIT_SAMPLER_BINDINGS);
     // This is overly conservative as it assumes the sampler has never been bound.
     setSamplerDirty(textureUnit);
     onActiveTextureChange(context, textureUnit);
@@ -1852,7 +1852,7 @@ void State::detachSampler(const Context *context, SamplerID sampler)
 void State::setRenderbufferBinding(const Context *context, Renderbuffer *renderbuffer)
 {
     mRenderbuffer.set(context, renderbuffer);
-    mDirtyBits.set(DIRTY_BIT_RENDERBUFFER_BINDING);
+    mDirtyBits.set(state::DIRTY_BIT_RENDERBUFFER_BINDING);
 }
 
 void State::detachRenderbuffer(Context *context, RenderbufferID renderbuffer)
@@ -1877,7 +1877,7 @@ void State::detachRenderbuffer(Context *context, RenderbufferID renderbuffer)
 
     if (readFramebuffer && readFramebuffer->detachRenderbuffer(context, renderbuffer))
     {
-        mDirtyObjects.set(DIRTY_OBJECT_READ_FRAMEBUFFER);
+        mDirtyObjects.set(state::DIRTY_OBJECT_READ_FRAMEBUFFER);
     }
 
     if (drawFramebuffer && drawFramebuffer != readFramebuffer)
@@ -1895,11 +1895,11 @@ void State::setReadFramebufferBinding(Framebuffer *framebuffer)
         return;
 
     mReadFramebuffer = framebuffer;
-    mDirtyBits.set(DIRTY_BIT_READ_FRAMEBUFFER_BINDING);
+    mDirtyBits.set(state::DIRTY_BIT_READ_FRAMEBUFFER_BINDING);
 
     if (mReadFramebuffer && mReadFramebuffer->hasAnyDirtyBit())
     {
-        mDirtyObjects.set(DIRTY_OBJECT_READ_FRAMEBUFFER);
+        mDirtyObjects.set(state::DIRTY_OBJECT_READ_FRAMEBUFFER);
     }
 }
 
@@ -1909,7 +1909,7 @@ void State::setDrawFramebufferBinding(Framebuffer *framebuffer)
         return;
 
     mDrawFramebuffer = framebuffer;
-    mDirtyBits.set(DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING);
+    mDirtyBits.set(state::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING);
 
     if (mDrawFramebuffer)
     {
@@ -1918,12 +1918,12 @@ void State::setDrawFramebufferBinding(Framebuffer *framebuffer)
 
         if (mDrawFramebuffer->hasAnyDirtyBit())
         {
-            mDirtyObjects.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
+            mDirtyObjects.set(state::DIRTY_OBJECT_DRAW_FRAMEBUFFER);
         }
 
         if (mRobustResourceInit && mDrawFramebuffer->hasResourceThatNeedsInit())
         {
-            mDirtyObjects.set(DIRTY_OBJECT_DRAW_ATTACHMENTS);
+            mDirtyObjects.set(state::DIRTY_OBJECT_DRAW_ATTACHMENTS);
         }
     }
 }
@@ -1987,11 +1987,11 @@ void State::setVertexArrayBinding(const Context *context, VertexArray *vertexArr
     }
 
     mVertexArray = vertexArray;
-    mDirtyBits.set(DIRTY_BIT_VERTEX_ARRAY_BINDING);
+    mDirtyBits.set(state::DIRTY_BIT_VERTEX_ARRAY_BINDING);
 
     if (mVertexArray && mVertexArray->hasAnyDirtyBit())
     {
-        mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
+        mDirtyObjects.set(state::DIRTY_OBJECT_VERTEX_ARRAY);
     }
 }
 
@@ -2001,8 +2001,8 @@ bool State::removeVertexArrayBinding(const Context *context, VertexArrayID verte
     {
         mVertexArray->onBindingChanged(context, -1);
         mVertexArray = nullptr;
-        mDirtyBits.set(DIRTY_BIT_VERTEX_ARRAY_BINDING);
-        mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
+        mDirtyBits.set(state::DIRTY_BIT_VERTEX_ARRAY_BINDING);
+        mDirtyObjects.set(state::DIRTY_OBJECT_VERTEX_ARRAY);
         return true;
     }
 
@@ -2022,7 +2022,7 @@ void State::bindVertexBuffer(const Context *context,
                              GLsizei stride)
 {
     getVertexArray()->bindVertexBuffer(context, bindingIndex, boundBuffer, offset, stride);
-    mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
+    mDirtyObjects.set(state::DIRTY_OBJECT_VERTEX_ARRAY);
 }
 
 void State::setVertexAttribFormat(GLuint attribIndex,
@@ -2034,13 +2034,13 @@ void State::setVertexAttribFormat(GLuint attribIndex,
 {
     getVertexArray()->setVertexAttribFormat(attribIndex, size, type, normalized, pureInteger,
                                             relativeOffset);
-    mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
+    mDirtyObjects.set(state::DIRTY_OBJECT_VERTEX_ARRAY);
 }
 
 void State::setVertexBindingDivisor(const Context *context, GLuint bindingIndex, GLuint divisor)
 {
     getVertexArray()->setVertexBindingDivisor(context, bindingIndex, divisor);
-    mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
+    mDirtyObjects.set(state::DIRTY_OBJECT_VERTEX_ARRAY);
 }
 
 angle::Result State::setProgram(const Context *context, Program *newProgram)
@@ -2079,7 +2079,7 @@ angle::Result State::setProgram(const Context *context, Program *newProgram)
         // Note that rendering is undefined if glUseProgram(0) is called. But ANGLE will generate
         // an error if the app tries to draw in this case.
 
-        mDirtyBits.set(DIRTY_BIT_PROGRAM_BINDING);
+        mDirtyBits.set(state::DIRTY_BIT_PROGRAM_BINDING);
     }
 
     return angle::Result::Continue;
@@ -2095,7 +2095,7 @@ void State::setTransformFeedbackBinding(const Context *context,
     mTransformFeedback.set(context, transformFeedback);
     if (mTransformFeedback.get())
         mTransformFeedback->onBindingChanged(context, true);
-    mDirtyBits.set(DIRTY_BIT_TRANSFORM_FEEDBACK_BINDING);
+    mDirtyBits.set(state::DIRTY_BIT_TRANSFORM_FEEDBACK_BINDING);
 }
 
 bool State::removeTransformFeedbackBinding(const Context *context,
@@ -2125,7 +2125,7 @@ angle::Result State::setProgramPipelineBinding(const Context *context, ProgramPi
     }
 
     mProgramPipeline.set(context, pipeline);
-    mDirtyBits.set(DIRTY_BIT_PROGRAM_BINDING);
+    mDirtyBits.set(state::DIRTY_BIT_PROGRAM_BINDING);
 
     // A bound Program always overrides the ProgramPipeline, so only update the
     // current ProgramExecutable if there isn't currently a Program bound.
@@ -2285,7 +2285,7 @@ angle::Result State::detachBuffer(Context *context, const Buffer *buffer)
 
     if (mVertexArray && mVertexArray->detachBuffer(context, bufferID))
     {
-        mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
+        mDirtyObjects.set(state::DIRTY_OBJECT_VERTEX_ARRAY);
         context->getStateCache().onVertexArrayStateChange(context);
     }
 
@@ -2330,14 +2330,14 @@ angle::Result State::detachBuffer(Context *context, const Buffer *buffer)
 void State::setEnableVertexAttribArray(unsigned int attribNum, bool enabled)
 {
     getVertexArray()->enableAttribute(attribNum, enabled);
-    mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
+    mDirtyObjects.set(state::DIRTY_OBJECT_VERTEX_ARRAY);
 }
 
 void State::setVertexAttribf(GLuint index, const GLfloat values[4])
 {
     ASSERT(static_cast<size_t>(index) < mVertexAttribCurrentValues.size());
     mVertexAttribCurrentValues[index].setFloatValues(values);
-    mDirtyBits.set(DIRTY_BIT_CURRENT_VALUES);
+    mDirtyBits.set(state::DIRTY_BIT_CURRENT_VALUES);
     mDirtyCurrentValues.set(index);
     SetComponentTypeMask(ComponentType::Float, index, &mCurrentValuesTypeMask);
 }
@@ -2346,7 +2346,7 @@ void State::setVertexAttribu(GLuint index, const GLuint values[4])
 {
     ASSERT(static_cast<size_t>(index) < mVertexAttribCurrentValues.size());
     mVertexAttribCurrentValues[index].setUnsignedIntValues(values);
-    mDirtyBits.set(DIRTY_BIT_CURRENT_VALUES);
+    mDirtyBits.set(state::DIRTY_BIT_CURRENT_VALUES);
     mDirtyCurrentValues.set(index);
     SetComponentTypeMask(ComponentType::UnsignedInt, index, &mCurrentValuesTypeMask);
 }
@@ -2355,7 +2355,7 @@ void State::setVertexAttribi(GLuint index, const GLint values[4])
 {
     ASSERT(static_cast<size_t>(index) < mVertexAttribCurrentValues.size());
     mVertexAttribCurrentValues[index].setIntValues(values);
-    mDirtyBits.set(DIRTY_BIT_CURRENT_VALUES);
+    mDirtyBits.set(state::DIRTY_BIT_CURRENT_VALUES);
     mDirtyCurrentValues.set(index);
     SetComponentTypeMask(ComponentType::Int, index, &mCurrentValuesTypeMask);
 }
@@ -2363,7 +2363,7 @@ void State::setVertexAttribi(GLuint index, const GLint values[4])
 void State::setVertexAttribDivisor(const Context *context, GLuint index, GLuint divisor)
 {
     getVertexArray()->setVertexAttribDivisor(context, index, divisor);
-    mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
+    mDirtyObjects.set(state::DIRTY_OBJECT_VERTEX_ARRAY);
 }
 
 const void *State::getVertexAttribPointer(unsigned int attribNum) const
@@ -2374,67 +2374,67 @@ const void *State::getVertexAttribPointer(unsigned int attribNum) const
 void State::setPackAlignment(GLint alignment)
 {
     mPack.alignment = alignment;
-    mDirtyBits.set(DIRTY_BIT_PACK_STATE);
+    mDirtyBits.set(state::DIRTY_BIT_PACK_STATE);
 }
 
 void State::setPackReverseRowOrder(bool reverseRowOrder)
 {
     mPack.reverseRowOrder = reverseRowOrder;
-    mDirtyBits.set(DIRTY_BIT_PACK_STATE);
+    mDirtyBits.set(state::DIRTY_BIT_PACK_STATE);
 }
 
 void State::setPackRowLength(GLint rowLength)
 {
     mPack.rowLength = rowLength;
-    mDirtyBits.set(DIRTY_BIT_PACK_STATE);
+    mDirtyBits.set(state::DIRTY_BIT_PACK_STATE);
 }
 
 void State::setPackSkipRows(GLint skipRows)
 {
     mPack.skipRows = skipRows;
-    mDirtyBits.set(DIRTY_BIT_PACK_STATE);
+    mDirtyBits.set(state::DIRTY_BIT_PACK_STATE);
 }
 
 void State::setPackSkipPixels(GLint skipPixels)
 {
     mPack.skipPixels = skipPixels;
-    mDirtyBits.set(DIRTY_BIT_PACK_STATE);
+    mDirtyBits.set(state::DIRTY_BIT_PACK_STATE);
 }
 
 void State::setUnpackAlignment(GLint alignment)
 {
     mUnpack.alignment = alignment;
-    mDirtyBits.set(DIRTY_BIT_UNPACK_STATE);
+    mDirtyBits.set(state::DIRTY_BIT_UNPACK_STATE);
 }
 
 void State::setUnpackRowLength(GLint rowLength)
 {
     mUnpack.rowLength = rowLength;
-    mDirtyBits.set(DIRTY_BIT_UNPACK_STATE);
+    mDirtyBits.set(state::DIRTY_BIT_UNPACK_STATE);
 }
 
 void State::setUnpackImageHeight(GLint imageHeight)
 {
     mUnpack.imageHeight = imageHeight;
-    mDirtyBits.set(DIRTY_BIT_UNPACK_STATE);
+    mDirtyBits.set(state::DIRTY_BIT_UNPACK_STATE);
 }
 
 void State::setUnpackSkipImages(GLint skipImages)
 {
     mUnpack.skipImages = skipImages;
-    mDirtyBits.set(DIRTY_BIT_UNPACK_STATE);
+    mDirtyBits.set(state::DIRTY_BIT_UNPACK_STATE);
 }
 
 void State::setUnpackSkipRows(GLint skipRows)
 {
     mUnpack.skipRows = skipRows;
-    mDirtyBits.set(DIRTY_BIT_UNPACK_STATE);
+    mDirtyBits.set(state::DIRTY_BIT_UNPACK_STATE);
 }
 
 void State::setUnpackSkipPixels(GLint skipPixels)
 {
     mUnpack.skipPixels = skipPixels;
-    mDirtyBits.set(DIRTY_BIT_UNPACK_STATE);
+    mDirtyBits.set(state::DIRTY_BIT_UNPACK_STATE);
 }
 
 void State::setCoverageModulation(GLenum components)
@@ -2442,7 +2442,7 @@ void State::setCoverageModulation(GLenum components)
     if (mCoverageModulation != components)
     {
         mCoverageModulation = components;
-        mDirtyBits.set(DIRTY_BIT_COVERAGE_MODULATION);
+        mDirtyBits.set(state::DIRTY_BIT_COVERAGE_MODULATION);
     }
 }
 
@@ -2451,7 +2451,7 @@ void State::setFramebufferSRGB(bool sRGB)
     if (mFramebufferSRGB != sRGB)
     {
         mFramebufferSRGB = sRGB;
-        mDirtyBits.set(DIRTY_BIT_FRAMEBUFFER_SRGB_WRITE_CONTROL_MODE);
+        mDirtyBits.set(state::DIRTY_BIT_FRAMEBUFFER_SRGB_WRITE_CONTROL_MODE);
         setDrawFramebufferDirty();
     }
 }
@@ -2466,7 +2466,7 @@ void State::setPatchVertices(GLuint value)
     if (mPatchVertices != value)
     {
         mPatchVertices = value;
-        mDirtyBits.set(DIRTY_BIT_PATCH_VERTICES);
+        mDirtyBits.set(state::DIRTY_BIT_PATCH_VERTICES);
     }
 }
 
@@ -2478,7 +2478,7 @@ void State::setPixelLocalStorageActivePlanes(GLsizei n)
 void State::setShadingRate(GLenum rate)
 {
     mShadingRate = FromGLenum<ShadingRate>(rate);
-    mDirtyBits.set(DIRTY_BIT_SHADING_RATE);
+    mDirtyBits.set(state::DIRTY_BIT_SHADING_RATE);
 }
 
 void State::getBooleanv(GLenum pname, GLboolean *params) const
@@ -3634,31 +3634,31 @@ angle::Result State::syncProgramPipelineObject(const Context *context, Command c
 
 angle::Result State::syncDirtyObject(const Context *context, GLenum target)
 {
-    DirtyObjects localSet;
+    state::DirtyObjects localSet;
 
     switch (target)
     {
         case GL_READ_FRAMEBUFFER:
-            localSet.set(DIRTY_OBJECT_READ_FRAMEBUFFER);
+            localSet.set(state::DIRTY_OBJECT_READ_FRAMEBUFFER);
             break;
         case GL_DRAW_FRAMEBUFFER:
-            localSet.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
+            localSet.set(state::DIRTY_OBJECT_DRAW_FRAMEBUFFER);
             break;
         case GL_FRAMEBUFFER:
-            localSet.set(DIRTY_OBJECT_READ_FRAMEBUFFER);
-            localSet.set(DIRTY_OBJECT_DRAW_FRAMEBUFFER);
+            localSet.set(state::DIRTY_OBJECT_READ_FRAMEBUFFER);
+            localSet.set(state::DIRTY_OBJECT_DRAW_FRAMEBUFFER);
             break;
         case GL_VERTEX_ARRAY:
-            localSet.set(DIRTY_OBJECT_VERTEX_ARRAY);
+            localSet.set(state::DIRTY_OBJECT_VERTEX_ARRAY);
             break;
         case GL_TEXTURE:
-            localSet.set(DIRTY_OBJECT_TEXTURES);
+            localSet.set(state::DIRTY_OBJECT_TEXTURES);
             break;
         case GL_SAMPLER:
-            localSet.set(DIRTY_OBJECT_SAMPLERS);
+            localSet.set(state::DIRTY_OBJECT_SAMPLERS);
             break;
         case GL_PROGRAM:
-            localSet.set(DIRTY_OBJECT_PROGRAM);
+            localSet.set(state::DIRTY_OBJECT_PROGRAM);
             break;
     }
 
@@ -3670,20 +3670,20 @@ void State::setObjectDirty(GLenum target)
     switch (target)
     {
         case GL_READ_FRAMEBUFFER:
-            mDirtyObjects.set(DIRTY_OBJECT_READ_FRAMEBUFFER);
+            mDirtyObjects.set(state::DIRTY_OBJECT_READ_FRAMEBUFFER);
             break;
         case GL_DRAW_FRAMEBUFFER:
             setDrawFramebufferDirty();
             break;
         case GL_FRAMEBUFFER:
-            mDirtyObjects.set(DIRTY_OBJECT_READ_FRAMEBUFFER);
+            mDirtyObjects.set(state::DIRTY_OBJECT_READ_FRAMEBUFFER);
             setDrawFramebufferDirty();
             break;
         case GL_VERTEX_ARRAY:
-            mDirtyObjects.set(DIRTY_OBJECT_VERTEX_ARRAY);
+            mDirtyObjects.set(state::DIRTY_OBJECT_VERTEX_ARRAY);
             break;
         case GL_PROGRAM:
-            mDirtyObjects.set(DIRTY_OBJECT_PROGRAM);
+            mDirtyObjects.set(state::DIRTY_OBJECT_PROGRAM);
             break;
         default:
             break;
@@ -3705,11 +3705,11 @@ angle::Result State::onProgramExecutableChange(const Context *context, Program *
         mExecutable = &program->getExecutable();
     }
 
-    mDirtyBits.set(DIRTY_BIT_PROGRAM_EXECUTABLE);
+    mDirtyBits.set(state::DIRTY_BIT_PROGRAM_EXECUTABLE);
 
     if (program->hasAnyDirtyBit())
     {
-        mDirtyObjects.set(DIRTY_OBJECT_PROGRAM);
+        mDirtyObjects.set(state::DIRTY_OBJECT_PROGRAM);
     }
 
     // Set any bound textures.
@@ -3740,7 +3740,7 @@ angle::Result State::onProgramExecutableChange(const Context *context, Program *
 
         if (mRobustResourceInit && image->initState() == InitState::MayNeedInit)
         {
-            mDirtyObjects.set(DIRTY_OBJECT_IMAGES_INIT);
+            mDirtyObjects.set(state::DIRTY_OBJECT_IMAGES_INIT);
         }
     }
 
@@ -3749,11 +3749,11 @@ angle::Result State::onProgramExecutableChange(const Context *context, Program *
 
 angle::Result State::onProgramPipelineExecutableChange(const Context *context)
 {
-    mDirtyBits.set(DIRTY_BIT_PROGRAM_EXECUTABLE);
+    mDirtyBits.set(state::DIRTY_BIT_PROGRAM_EXECUTABLE);
 
     if (!mProgramPipeline->isLinked())
     {
-        mDirtyObjects.set(DIRTY_OBJECT_PROGRAM_PIPELINE_OBJECT);
+        mDirtyObjects.set(state::DIRTY_OBJECT_PROGRAM_PIPELINE_OBJECT);
     }
 
     // Set any bound textures.
@@ -3785,7 +3785,7 @@ angle::Result State::onProgramPipelineExecutableChange(const Context *context)
 
         if (mRobustResourceInit && image->initState() == InitState::MayNeedInit)
         {
-            mDirtyObjects.set(DIRTY_OBJECT_IMAGES_INIT);
+            mDirtyObjects.set(state::DIRTY_OBJECT_IMAGES_INIT);
         }
     }
 
@@ -3794,13 +3794,13 @@ angle::Result State::onProgramPipelineExecutableChange(const Context *context)
 
 void State::setTextureDirty(size_t textureUnitIndex)
 {
-    mDirtyObjects.set(DIRTY_OBJECT_TEXTURES);
+    mDirtyObjects.set(state::DIRTY_OBJECT_TEXTURES);
     mDirtyTextures.set(textureUnitIndex);
 }
 
 void State::setSamplerDirty(size_t samplerIndex)
 {
-    mDirtyObjects.set(DIRTY_OBJECT_SAMPLERS);
+    mDirtyObjects.set(state::DIRTY_OBJECT_SAMPLERS);
     mDirtySamplers.set(samplerIndex);
 }
 
@@ -3827,7 +3827,7 @@ void State::setImageUnit(const Context *context,
     imageUnit.layer   = layer;
     imageUnit.access  = access;
     imageUnit.format  = format;
-    mDirtyBits.set(DIRTY_BIT_IMAGE_BINDINGS);
+    mDirtyBits.set(state::DIRTY_BIT_IMAGE_BINDINGS);
 
     onImageStateChange(context, unit);
 }
@@ -3872,12 +3872,12 @@ void State::onImageStateChange(const Context *context, size_t unit)
         if (image.texture->hasAnyDirtyBit())
         {
             mDirtyImages.set(unit);
-            mDirtyObjects.set(DIRTY_OBJECT_IMAGES);
+            mDirtyObjects.set(state::DIRTY_OBJECT_IMAGES);
         }
 
         if (mRobustResourceInit && image.texture->initState() == InitState::MayNeedInit)
         {
-            mDirtyObjects.set(DIRTY_OBJECT_IMAGES_INIT);
+            mDirtyObjects.set(state::DIRTY_OBJECT_IMAGES_INIT);
         }
 
         mExecutable->onStateChange(angle::SubjectMessage::ProgramTextureOrImageBindingChanged);
@@ -3897,17 +3897,17 @@ void State::onUniformBufferStateChange(size_t uniformBufferIndex)
     // So that program object syncState will get triggered and process the program's dirty bits
     setObjectDirty(GL_PROGRAM);
     // This could be represented by a different dirty bit. Using the same one keeps it simple.
-    mDirtyBits.set(DIRTY_BIT_UNIFORM_BUFFER_BINDINGS);
+    mDirtyBits.set(state::DIRTY_BIT_UNIFORM_BUFFER_BINDINGS);
 }
 
 void State::onAtomicCounterBufferStateChange(size_t atomicCounterBufferIndex)
 {
-    mDirtyBits.set(DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING);
+    mDirtyBits.set(state::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING);
 }
 
 void State::onShaderStorageBufferStateChange(size_t shaderStorageBufferIndex)
 {
-    mDirtyBits.set(DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING);
+    mDirtyBits.set(state::DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING);
 }
 
 AttributesMask State::getAndResetDirtyCurrentValues() const
@@ -3933,7 +3933,7 @@ void State::setLogicOpEnabled(bool enabled)
     if (mLogicOpEnabled != enabled)
     {
         mLogicOpEnabled = enabled;
-        mDirtyBits.set(DIRTY_BIT_LOGIC_OP_ENABLED);
+        mDirtyBits.set(state::DIRTY_BIT_LOGIC_OP_ENABLED);
     }
 }
 
@@ -3942,10 +3942,10 @@ void State::setLogicOp(LogicalOperation opcode)
     if (mLogicOp != opcode)
     {
         mLogicOp = opcode;
-        mDirtyBits.set(DIRTY_BIT_LOGIC_OP);
+        mDirtyBits.set(state::DIRTY_BIT_LOGIC_OP);
     }
 }
 
-constexpr State::DirtyObjectHandler State::kDirtyObjectHandlers[DIRTY_OBJECT_MAX];
+constexpr State::DirtyObjectHandler State::kDirtyObjectHandlers[state::DIRTY_OBJECT_MAX];
 
 }  // namespace gl
