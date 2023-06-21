@@ -87,6 +87,24 @@
       "parentUuid": "00f7ecc5_87a91052",
       "revId": "b52a5f651d73382d890c43fb8291130a253a00f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac095ee2_fda6bca1",
+        "filename": "src/tests/gl_tests/GetImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1177,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-21T15:48:00Z",
+      "side": 1,
+      "message": "What if they are all wrong? Isn\u0027t it better to handcraft a paletted texture that will give out known colors and make sure each color is correct? Like a 2Nx2M texture with red/green/blue/yellow in each NxN block, and then the readback would verify each NxM has the right color.",
+      "parentUuid": "5228ffc6_33c37702",
+      "revId": "b52a5f651d73382d890c43fb8291130a253a00f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
