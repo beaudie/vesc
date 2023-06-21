@@ -158,6 +158,24 @@
       "parentUuid": "515354cb_37b501ee",
       "revId": "554c162b0411a6f560ed359e7fcc678143b57642",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f19d989_5a998c0c",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 1391,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-21T02:53:07Z",
+      "side": 1,
+      "message": "Thanks. The format changes are not a problem\n\n(if you are interested, it\u0027s because `git cl format` runs `clang-format` on modified files, so when `clang-format` gets updated and changes its output, old files get updated when some other change happens to touch them)",
+      "parentUuid": "49a4f1da_d174f96f",
+      "revId": "554c162b0411a6f560ed359e7fcc678143b57642",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4eee118_9248796f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-21T02:53:07Z",
+      "side": 1,
+      "message": "Thanks! One more clean up and we could land this.",
+      "revId": "ecae8dc09bdb4bf1a0daec74abfc6c53d103062d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cd1e041_cce21d80",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-21T02:53:07Z",
+      "side": 1,
+      "message": "VK_EXT_transform_feedback doesn\u0027t support capturing array elements, and we have a waiver for it.\n\nThe expectations have gotten duplicated all over, would you mind collapsing that?\n\nRight now we have:\n\n```\n// Pixel 6 expectations\n6917 PIXEL6 VULKAN : dEQP-GLES3.functional.transform_feedback.array_element*separate*float \u003d FAIL\n6917 PIXEL6 VULKAN : dEQP-GLES3.functional.transform_feedback.array_element*separate*int \u003d FAIL\n6917 PIXEL6 VULKAN : dEQP-GLES3.functional.transform_feedback.array_element*separate*mat2 \u003d FAIL\n6917 PIXEL6 VULKAN : dEQP-GLES3.functional.transform_feedback.array_element*separate*vec2 \u003d FAIL\n6917 PIXEL6 VULKAN : dEQP-GLES3.functional.transform_feedback.array_element*separate*vec3 \u003d FAIL\n6917 PIXEL6 VULKAN : dEQP-GLES3.functional.transform_feedback.array_element*separate*vec4 \u003d FAIL\n6917 PIXEL6 VULKAN : dEQP-GLES3.functional.transform_feedback.array_element*interleaved*float \u003d FAIL\n6917 PIXEL6 VULKAN : dEQP-GLES3.functional.transform_feedback.array_element*interleaved*int \u003d FAIL\n6917 PIXEL6 VULKAN : dEQP-GLES3.functional.transform_feedback.array_element*interleaved*vec2 \u003d FAIL\n6917 PIXEL6 VULKAN : dEQP-GLES3.functional.transform_feedback.array_element*interleaved*vec3 \u003d FAIL\n6917 PIXEL6 VULKAN : dEQP-GLES3.functional.transform_feedback.array_element*interleaved*vec4 \u003d FAIL\n6917 PIXEL6 VULKAN : dEQP-GLES3.functional.transform_feedback.array_element*interleaved*mat2* \u003d FAIL\n\n// A little over half of the following fail in a non-clear manner:\n6917 PIXEL6 VULKAN : dEQP-GLES3.functional.transform_feedback.random.interleaved.* \u003d FAIL\n6917 PIXEL6 VULKAN : dEQP-GLES3.functional.transform_feedback.random.separate.* \u003d FAIL\n```\n\nand\n\n```\n8157 GALAXYS23 VULKAN : dEQP-GLES3.functional.transform_feedback.array_element.interleaved.* \u003d SKIP\n8157 GALAXYS23 VULKAN : dEQP-GLES3.functional.transform_feedback.array_element.separate.* \u003d SKIP\n8157 GALAXYS23 VULKAN : dEQP-GLES3.functional.transform_feedback.random.* \u003d SKIP\n```\n\nand what you\u0027ve added here.\n\nWe can collapse them all to:\n\n```\n4140 SWIFTSHADER : dEQP-GLES3.functional.transform_feedback.array_element.interleaved.* \u003d PASS\n4140 SWIFTSHADER : dEQP-GLES3.functional.transform_feedback.array_element.separate.* \u003d PASS\n4140 SWIFTSHADER : dEQP-GLES3.functional.transform_feedback.random.* \u003d PASS\n\n4140 VULKAN : dEQP-GLES3.functional.transform_feedback.array_element.interleaved.* \u003d FAIL\n4140 VULKAN : dEQP-GLES3.functional.transform_feedback.array_element.separate.* \u003d FAIL\n4140 VULKAN : dEQP-GLES3.functional.transform_feedback.random.* \u003d FAIL\n```",
+      "range": {
+        "startLine": 843,
+        "startChar": 0,
+        "endLine": 855,
+        "endChar": 98
+      },
+      "revId": "ecae8dc09bdb4bf1a0daec74abfc6c53d103062d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
