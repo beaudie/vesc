@@ -51,6 +51,24 @@
       "parentUuid": "0b859b09_294416cb",
       "revId": "b52a5f651d73382d890c43fb8291130a253a00f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00f7ecc5_87a91052",
+        "filename": "src/tests/gl_tests/GetImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1177,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-21T15:33:44Z",
+      "side": 1,
+      "message": "Ack, would be good to have one. Because `readback` and `reacback2` could be equally garbage, lol",
+      "parentUuid": "a397d47e_e4186e10",
+      "revId": "b52a5f651d73382d890c43fb8291130a253a00f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
