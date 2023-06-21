@@ -16,6 +16,24 @@
       "message": "Note: we don\u0027t support CQ+1 on branches",
       "revId": "3c16507e12103b3709ce42f137ebb1bd4f79e162",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "360484e7_6b42e8b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1379689
+      },
+      "writtenOn": "2023-06-21T18:16:04Z",
+      "side": 1,
+      "message": "I see.\nManually verified the change on chromebook with Mali-G72",
+      "parentUuid": "e1e98493_44f78867",
+      "revId": "3c16507e12103b3709ce42f137ebb1bd4f79e162",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
