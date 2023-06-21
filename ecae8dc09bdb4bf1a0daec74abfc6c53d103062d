@@ -39,6 +39,30 @@
       },
       "revId": "ecae8dc09bdb4bf1a0daec74abfc6c53d103062d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cb8f10f_b5ffa691",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-06-21T04:22:17Z",
+      "side": 1,
+      "message": "I am on vacation starting tomorrow, but I\u0027ll try to get something together by Friday when Mike gets back.  Thanks for your attention.",
+      "parentUuid": "3cd1e041_cce21d80",
+      "range": {
+        "startLine": 843,
+        "startChar": 0,
+        "endLine": 855,
+        "endChar": 98
+      },
+      "revId": "ecae8dc09bdb4bf1a0daec74abfc6c53d103062d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
