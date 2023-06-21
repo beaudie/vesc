@@ -277,8 +277,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     // State sync with dirty bits.
     angle::Result syncState(const gl::Context *context,
-                            const gl::State::DirtyBits &dirtyBits,
-                            const gl::State::DirtyBits &bitMask,
+                            const gl::state::DirtyBits &dirtyBits,
+                            const gl::state::DirtyBits &bitMask,
                             gl::Command command) override;
 
     // Disjoint timer queries
@@ -1584,7 +1584,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // A mix of per-frame and per-run counters.
     angle::PerfMonitorCounterGroups mPerfMonitorCounters;
 
-    gl::State::DirtyBits mPipelineDirtyBitsMask;
+    gl::state::DirtyBits mPipelineDirtyBitsMask;
 
     egl::ContextPriority mInitialContextPriority;
     egl::ContextPriority mContextPriority;
