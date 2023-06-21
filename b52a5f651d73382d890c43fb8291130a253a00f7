@@ -16,6 +16,23 @@
       "message": "This is a followup to https://chromium-review.googlesource.com/c/angle/angle/+/4178311/6..9/src/tests/gl_tests/gles1/PalettedTextureTest.cpp#b61",
       "revId": "b52a5f651d73382d890c43fb8291130a253a00f7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b859b09_294416cb",
+        "filename": "src/tests/gl_tests/GetImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1177,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-21T13:20:10Z",
+      "side": 1,
+      "message": "Do we also have a test to check that the readback is correct by itself? Like a test that uploads a fixed paletted texture and on readback ensures the colors are right.",
+      "revId": "b52a5f651d73382d890c43fb8291130a253a00f7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
