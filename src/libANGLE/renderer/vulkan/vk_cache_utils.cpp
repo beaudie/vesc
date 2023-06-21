@@ -5451,8 +5451,9 @@ void WriteDescriptorDescBuilder::updateShaderBuffers(
             continue;
         }
 
+        const gl::ShaderType firstShaderType = block.getFirstActiveShaderType();
         const ShaderInterfaceVariableInfo &info =
-            variableInfoMap.getIndexedVariableInfo(variableType, blockIndex);
+            variableInfoMap.getVariableById(firstShaderType, block.getId(firstShaderType));
 
         if (block.isArray && block.arrayElement > 0)
         {
@@ -5507,8 +5508,9 @@ void WriteDescriptorDescBuilder::updateImages(gl::ShaderBitSet shaderTypes,
             continue;
         }
 
+        const gl::ShaderType firstShaderType = imageUniform.getFirstActiveShaderType();
         const ShaderInterfaceVariableInfo &info =
-            variableInfoMap.getIndexedVariableInfo(ShaderVariableType::Image, imageIndex);
+            variableInfoMap.getVariableById(firstShaderType, imageUniform.getId(firstShaderType));
 
         uint32_t arraySize       = static_cast<uint32_t>(imageBinding.boundImageUnits.size());
         uint32_t descriptorCount = arraySize * gl::ArraySizeProduct(imageUniform.outerArraySizes);
@@ -5565,8 +5567,9 @@ void WriteDescriptorDescBuilder::updateExecutableActiveTextures(
             continue;
         }
 
+        const gl::ShaderType firstShaderType = samplerUniform.getFirstActiveShaderType();
         const ShaderInterfaceVariableInfo &info =
-            variableInfoMap.getIndexedVariableInfo(ShaderVariableType::Texture, samplerIndex);
+            variableInfoMap.getVariableById(firstShaderType, samplerUniform.getId(firstShaderType));
 
         uint32_t arraySize       = static_cast<uint32_t>(samplerBinding.boundTextureUnits.size());
         uint32_t descriptorCount = arraySize * gl::ArraySizeProduct(samplerUniform.outerArraySizes);
@@ -5852,8 +5855,9 @@ void UpdatePreCacheActiveTextures(const gl::ProgramExecutable &executable,
             continue;
         }
 
+        const gl::ShaderType firstShaderType = samplerUniform.getFirstActiveShaderType();
         const ShaderInterfaceVariableInfo &info =
-            variableInfoMap.getIndexedVariableInfo(ShaderVariableType::Texture, samplerIndex);
+            variableInfoMap.getVariableById(firstShaderType, samplerUniform.getId(firstShaderType));
 
         for (uint32_t arrayElement = 0; arrayElement < arraySize; ++arrayElement)
         {
@@ -5927,8 +5931,9 @@ angle::Result DescriptorSetDescBuilder::updateFullActiveTextures(
             continue;
         }
 
+        const gl::ShaderType firstShaderType = samplerUniform.getFirstActiveShaderType();
         const ShaderInterfaceVariableInfo &info =
-            variableInfoMap.getIndexedVariableInfo(ShaderVariableType::Texture, samplerIndex);
+            variableInfoMap.getVariableById(firstShaderType, samplerUniform.getId(firstShaderType));
 
         uint32_t arraySize        = static_cast<uint32_t>(samplerBinding.boundTextureUnits.size());
         bool isSamplerExternalY2Y = samplerBinding.samplerType == GL_SAMPLER_EXTERNAL_2D_Y2Y_EXT;
@@ -6048,8 +6053,10 @@ void DescriptorSetDescBuilder::updateOneShaderBuffer(
         return;
     }
 
+    const gl::ShaderType firstShaderType = block.getFirstActiveShaderType();
     const ShaderInterfaceVariableInfo &info =
-        variableInfoMap.getIndexedVariableInfo(variableType, blockIndex);
+        variableInfoMap.getVariableById(firstShaderType, block.getId(firstShaderType));
+
     uint32_t binding       = info.binding;
     uint32_t arrayElement  = block.isArray ? block.arrayElement : 0;
     uint32_t infoDescIndex = writeDescriptorDescs[binding].descriptorInfoIndex + arrayElement;
@@ -6317,8 +6324,10 @@ angle::Result DescriptorSetDescBuilder::updateImages(
             continue;
         }
 
+        const gl::ShaderType firstShaderType = imageUniform.getFirstActiveShaderType();
         const ShaderInterfaceVariableInfo &info =
-            variableInfoMap.getIndexedVariableInfo(ShaderVariableType::Image, imageIndex);
+            variableInfoMap.getVariableById(firstShaderType, imageUniform.getId(firstShaderType));
+
         uint32_t arraySize = static_cast<uint32_t>(imageBinding.boundImageUnits.size());
 
         // Texture buffers use buffer views, so they are especially handled.
