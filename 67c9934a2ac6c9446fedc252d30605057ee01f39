@@ -16,6 +16,24 @@
       "message": "I think the iterator of bits in bitSetArray is more expensive than plain BitSet. Even though I like the simplicity here, but performance is critical here since this get called a lot. Maybe you can check with assembler to verify.",
       "revId": "67c9934a2ac6c9446fedc252d30605057ee01f39",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b361bcd_f7ac42a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-21T21:11:10Z",
+      "side": 1,
+      "message": "I\u0027ll do that. The key is that the array size is 2 and that gives the optimizer a lot of opportunities. If it\u0027s not doing a good job, I could specialize the iterator functions for N\u003d\u003d2.",
+      "parentUuid": "3a4b0f69_63b3ae91",
+      "revId": "67c9934a2ac6c9446fedc252d30605057ee01f39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
