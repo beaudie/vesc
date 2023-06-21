@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0d23be42_9e572539",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 10607,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-06-21T17:20:28Z",
+      "side": 1,
+      "message": "ValidateDrawStates sometimes calls into context and invalidates cached draw validation (including mCachedBasicDrawStatesErrorCode). This resets the value of mCachedBasicDrawStatesErrorCode while it is being passed by reference to ValidateDrawStates.",
+      "parentUuid": "363836df_2747161b",
+      "revId": "a15260b8ac9bfbcf15d3a8734ebee9777896c76e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "467cb66e_e1927b13",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 3
@@ -31,6 +49,30 @@
       "writtenOn": "2023-06-21T16:54:01Z",
       "side": 1,
       "message": "Shouldn\u0027t this be `kInvalidPointer`? Unclear what\u0027s being validated here.",
+      "range": {
+        "startLine": 10609,
+        "startChar": 49,
+        "endLine": 10609,
+        "endChar": 50
+      },
+      "revId": "a15260b8ac9bfbcf15d3a8734ebee9777896c76e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0a03a57_c58e2133",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 10609,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-06-21T17:20:28Z",
+      "side": 1,
+      "message": "Added a comment. It\u0027s validating that if ValidateDrawStates returns an error string, the error code must not be GL_NO_ERROR (and vice-versa).",
+      "parentUuid": "467cb66e_e1927b13",
       "range": {
         "startLine": 10609,
         "startChar": 49,
@@ -54,6 +96,24 @@
       "writtenOn": "2023-06-21T16:54:01Z",
       "side": 1,
       "message": "Also `ASSERT(mCachedBasicDrawStatesErrorCode !\u003d GL_NO_ERROR);`?",
+      "revId": "a15260b8ac9bfbcf15d3a8734ebee9777896c76e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffa7b8de_308e475d",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-06-21T17:20:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "22d751be_ba983ae7",
       "revId": "a15260b8ac9bfbcf15d3a8734ebee9777896c76e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
