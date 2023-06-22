@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe269d9c_14eb84a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-06-22T16:54:58Z",
+      "side": 1,
+      "message": "LGTM for the mLibVulkanLibrary change.",
+      "revId": "f40403e3a9ceeae5f6cbb9defa29d991d8373fbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8359df13_eaaa0441",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1445,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-06-22T16:54:58Z",
+      "side": 1,
+      "message": "This and mAllocator.release call() down at line 1455 is odd. It should be a nop to call release after destroy. Can\u0027t you just do `ASSERT(!mAllocator.valid());` in RendererVk::~RendererVk() (and similary for mPipelineCache)?",
+      "range": {
+        "startLine": 1445,
+        "startChar": 4,
+        "endLine": 1445,
+        "endChar": 29
+      },
+      "revId": "f40403e3a9ceeae5f6cbb9defa29d991d8373fbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
