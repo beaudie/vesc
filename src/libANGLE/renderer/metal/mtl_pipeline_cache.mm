@@ -173,6 +173,28 @@ angle::Result CreateComputePipelineState(
 
 }  // namespace
 
+void resetVertexShader(AutoObjCPtr<id<MTLFunction>> &shader)
+{
+    shader = nullptr;
+}
+
+void resetFragmentShader(AutoObjCPtr<id<MTLFunction>> &shader)
+{
+    shader = nullptr;
+}
+
+void resetComputeShader(AutoObjCPtr<id<MTLFunction>> &shader)
+{
+    shader = nullptr;
+}
+
+PipelineKey::~PipelineKey()
+{
+    resetVertexShader(vertexShader);
+    resetVertexShader(fragmentShader);
+    resetVertexShader(computeShader);
+}
+
 bool PipelineKey::isRenderPipeline() const
 {
     if (vertexShader)
@@ -215,6 +237,22 @@ size_t PipelineKey::hash() const
     {
         return angle::HashMultiple(computeShader.get());
     }
+}
+
+void resetRenderPipeline(AutoObjCPtr<id<MTLRenderPipelineState>> &pipeline)
+{
+    pipeline = nullptr;
+}
+
+void resetComputePipeline(AutoObjCPtr<id<MTLComputePipelineState>> &pipeline)
+{
+    pipeline = nullptr;
+}
+
+PipelineCache::PipelineVariant::~PipelineVariant()
+{
+    resetRenderPipeline(renderPipeline);
+    resetComputePipeline(computePipeline);
 }
 
 PipelineCache::PipelineCache() : mPipelineCache(kMaxPipelines) {}

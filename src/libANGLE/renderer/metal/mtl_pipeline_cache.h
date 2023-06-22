@@ -27,6 +27,8 @@ struct PipelineKey
 
     AutoObjCPtr<id<MTLFunction>> computeShader;
 
+    ~PipelineKey();
+
     bool isRenderPipeline() const;
 
     bool operator==(const PipelineKey &rhs) const;
@@ -76,6 +78,8 @@ class PipelineCache : angle::NonCopyable
     {
         AutoObjCPtr<id<MTLRenderPipelineState>> renderPipeline;
         AutoObjCPtr<id<MTLComputePipelineState>> computePipeline;
+
+        ~PipelineVariant();
     };
 
     using RenderPipelineMap = angle::base::HashingMRUCache<PipelineKey, PipelineVariant>;
