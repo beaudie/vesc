@@ -171,6 +171,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb8b4240_4224e21b",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 3395,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-22T19:11:42Z",
+      "side": 1,
+      "message": "IIUC Shabi took care of this in https://crrev.com/c/4571701\n\nSo unless I\u0027m missing something the only remaining follow up on this is the potential consistency improvement switching mContentsObservers to subject/observer - but Charlie pointed out it is trickier than just calling onStateChange for the data change as that would likely cause CPU overhead because this path isn\u0027t needed most of the time.",
+      "parentUuid": "6ce55fc2_7b3fabd7",
+      "range": {
+        "startLine": 3386,
+        "startChar": 0,
+        "endLine": 3395,
+        "endChar": 99
+      },
+      "revId": "7689c6364eaf2689791620c271c6568b306b508a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c733e15c_0cca4498",
