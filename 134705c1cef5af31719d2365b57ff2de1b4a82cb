@@ -16,6 +16,24 @@
       "message": "I have a patch here [1] that addresses the issue. But there are some problems with some tests (see https://bugs.chromium.org/p/chromium/issues/detail?id\u003d1424910#c24). Given scissors are not explicitly supported on Metal when resolve is done, there must be an intermediate texture so that we don\u0027t overwrite previous content. \n\nBut.. given I don\u0027t currently have time for that now (plus I\u0027m starting my holidays very soon)\n\n[1] https://chromium-review.googlesource.com/c/angle/angle/+/4594319",
       "revId": "134705c1cef5af31719d2365b57ff2de1b4a82cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a9fa8f1_fa404602",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1228974
+      },
+      "writtenOn": "2023-06-22T08:57:39Z",
+      "side": 1,
+      "message": "But.. given I don\u0027t currently have time for that now (plus I\u0027m starting my holidays very soon), it\u0027s better to disable this extension.",
+      "parentUuid": "acaf2f4e_e2a125e5",
+      "revId": "134705c1cef5af31719d2365b57ff2de1b4a82cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
