@@ -1412,17 +1412,7 @@ RendererVk::RendererVk()
     ASSERT(IsLittleEndian());
 }
 
-RendererVk::~RendererVk()
-{
-    mAllocator.release();
-    mPipelineCache.release();
-    ASSERT(!hasSharedGarbage());
-
-    if (mLibVulkanLibrary)
-    {
-        angle::CloseSystemLibrary(mLibVulkanLibrary);
-    }
-}
+RendererVk::~RendererVk() {}
 
 bool RendererVk::hasSharedGarbage()
 {
@@ -1452,6 +1442,7 @@ void RendererVk::onDestroy(vk::Context *context)
     }
 
     mPipelineCache.destroy(mDevice);
+    mPipelineCache.release();
     mSamplerCache.destroy(this);
     mYuvConversionCache.destroy(this);
     mVkFormatDescriptorCountMap.clear();
@@ -1461,6 +1452,7 @@ void RendererVk::onDestroy(vk::Context *context)
 
     mImageMemorySuballocator.destroy(this);
     mAllocator.destroy();
+    mAllocator.release();
 
     // When the renderer is being destroyed, it is possible to check if all the allocated memory
     // throughout the execution has been freed.
@@ -1496,6 +1488,14 @@ void RendererVk::onDestroy(vk::Context *context)
 
     mEnabledInstanceExtensions.clear();
     mEnabledDeviceExtensions.clear();
+
+    ASSERT(!hasSharedGarbage());
+
+    if (mLibVulkanLibrary)
+    {
+        angle::CloseSystemLibrary(mLibVulkanLibrary);
+        mLibVulkanLibrary = nullptr;
+    }
 }
 
 void RendererVk::notifyDeviceLost()
