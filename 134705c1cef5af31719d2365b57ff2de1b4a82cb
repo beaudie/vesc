@@ -103,6 +103,24 @@
       "parentUuid": "9d7e7415_f180e9f2",
       "revId": "134705c1cef5af31719d2365b57ff2de1b4a82cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49f57818_eee4b762",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-06-22T17:26:07Z",
+      "side": 1,
+      "message": "Correct - early on in the merging of the direct-to-Metal compiler, we found that if EXT_multisampled_render_to_texture was exposed, WebGL\u0027s back buffer didn\u0027t initialize. For this reason the extension was turned off on macOS, and the same bugs are likely affecting iOS.",
+      "parentUuid": "3743f0d8_beb37024",
+      "revId": "134705c1cef5af31719d2365b57ff2de1b4a82cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
