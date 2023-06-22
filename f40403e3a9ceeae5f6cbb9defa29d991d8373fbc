@@ -39,6 +39,30 @@
       },
       "revId": "f40403e3a9ceeae5f6cbb9defa29d991d8373fbc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84836d2a_a6bbedf0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1445,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-06-22T17:10:01Z",
+      "side": 1,
+      "message": "Yep, my source indexing was pointing to the wrong declarations for the PipelineCache class (I was looking at the PipelineCache VkPipelineCache.cpp in SwiftShader, oops), so it looks both of the release() calls are redundant with destroy().",
+      "parentUuid": "8359df13_eaaa0441",
+      "range": {
+        "startLine": 1445,
+        "startChar": 4,
+        "endLine": 1445,
+        "endChar": 29
+      },
+      "revId": "f40403e3a9ceeae5f6cbb9defa29d991d8373fbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
