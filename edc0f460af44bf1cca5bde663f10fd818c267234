@@ -16,6 +16,24 @@
       "message": "Suggest this instead:\n\n```\nif (getEGLWindow()-\u003eisFeatureEnabled(Feature::EmulateDithering) ||\n    getEGLWindow()-\u003eisFeatureEnabled(Feature::SupportsLegacyDithering))\n```",
       "revId": "edc0f460af44bf1cca5bde663f10fd818c267234",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7335f21_613c4fad",
+        "filename": "src/tests/gl_tests/SixteenBppTextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-22T13:09:53Z",
+      "side": 1,
+      "message": "Good idea, done",
+      "parentUuid": "ec18056c_e6ba1720",
+      "revId": "edc0f460af44bf1cca5bde663f10fd818c267234",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
