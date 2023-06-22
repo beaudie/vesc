@@ -11,7 +11,6 @@
 #include "common/debug.h"
 #include "common/utilities.h"
 #include "libANGLE/Context.h"
-#include "libANGLE/Display.h"
 #include "libANGLE/Renderbuffer.h"
 #include "libANGLE/Texture.h"
 #include "libANGLE/angletypes.h"
@@ -312,7 +311,7 @@ Image::Image(rx::EGLImplFactory *factory,
     : mState(id, target, buffer, attribs),
       mImplementation(factory->createImage(mState, context, target, attribs)),
       mOrphanedAndNeedsInit(false),
-      mSharedContextMutex(nullptr)
+      mContextMutex(nullptr)
 {
     ASSERT(mImplementation != nullptr);
     ASSERT(buffer != nullptr);
@@ -353,10 +352,10 @@ Image::~Image()
 {
     SafeDelete(mImplementation);
 
-    if (mSharedContextMutex != nullptr)
+    if (mContextMutex != nullptr)
     {
-        mSharedContextMutex->release();
-        mSharedContextMutex = nullptr;
+        mContextMutex->release();
+        mContextMutex = nullptr;
     }
 }
 
@@ -494,14 +493,15 @@ Error Image::initialize(const Display *display, const gl::Context *context)
     {
         if (context != nullptr)
         {
-            ASSERT(context->isSharedContextMutexActive());
-            mSharedContextMutex = context->getContextMutex();
+            mContextMutex = context->getContextMutex().getRoot();
+            ASSERT(mContextMutex->isReferenced());
         }
         else
         {
-            mSharedContextMutex = display->getSharedContextMutexManager()->create();
+            mContextMutex =
+                new TypedContextMutex<gl::ContextMutexTypeNormal>(gl::kContextMutexPriorityNormal);
         }
-        mSharedContextMutex->addRef();
+        mContextMutex->addRef();
     }
 
     if (IsExternalImageTarget(mState.target))
