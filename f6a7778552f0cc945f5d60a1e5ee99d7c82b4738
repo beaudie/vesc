@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "834f2e48_33ba8acf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557258
+      },
+      "writtenOn": "2023-06-22T18:04:39Z",
+      "side": 1,
+      "message": "Hi all, these patches are being upstreamed from our own fork of ANGLE. Please see the attached invent.kde.org URLs for reference.",
+      "revId": "f6a7778552f0cc945f5d60a1e5ee99d7c82b4738",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
