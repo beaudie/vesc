@@ -13,6 +13,7 @@
 #include <memory>
 
 #include "common/Color.h"
+#include "common/FastMutex.h"
 #include "common/angleutils.h"
 #include "common/bitset_utils.h"
 #include "libANGLE/Debug.h"
@@ -24,6 +25,7 @@
 #include "libANGLE/RefCountObject.h"
 #include "libANGLE/Renderbuffer.h"
 #include "libANGLE/Sampler.h"
+#include "libANGLE/SharedContextMutex.h"
 #include "libANGLE/Texture.h"
 #include "libANGLE/TransformFeedback.h"
 #include "libANGLE/Version.h"
@@ -33,8 +35,6 @@
 namespace egl
 {
 class ShareGroup;
-class ContextMutex;
-class SingleContextMutex;
 }  // namespace egl
 
 namespace gl
@@ -60,6 +60,12 @@ static constexpr Version ES_2_0 = Version(2, 0);
 static constexpr Version ES_3_0 = Version(3, 0);
 static constexpr Version ES_3_1 = Version(3, 1);
 static constexpr Version ES_3_2 = Version(3, 2);
+
+static constexpr uint32_t kContextMutexPriorityNormal = 1;
+static constexpr uint32_t kContextMutexPriorityShared = 2;
+
+using ContextMutexTypeNormal = angle::FastMutex1;
+using ContextMutexTypeShared = std::mutex;
 
 template <typename T>
 using BufferBindingMap     = angle::PackedEnumMap<BufferBinding, T>;
@@ -740,8 +746,7 @@ class State : angle::NonCopyable
           egl::ShareGroup *shareGroup,
           TextureManager *shareTextures,
           SemaphoreManager *shareSemaphores,
-          egl::ContextMutex *sharedContextMutex,
-          egl::SingleContextMutex *singleContextMutex,
+          egl::ContextMutex *contextMutex,
           const OverlayType *overlay,
           const EGLenum clientType,
           const Version &clientVersion,
@@ -1498,10 +1503,7 @@ class State : angle::NonCopyable
     bool mIsDebugContext;
 
     egl::ShareGroup *mShareGroup;
-    egl::ContextMutex *const mSharedContextMutex;
-    egl::SingleContextMutex *const mSingleContextMutex;
-    std::atomic<egl::ContextMutex *> mContextMutex;  // Simple pointer without reference counting
-    bool mIsSharedContextMutexActive;
+    mutable egl::TypedContextMutex<ContextMutexTypeNormal> mContextMutex;
 
     // Resource managers.
     BufferManager *mBufferManager;

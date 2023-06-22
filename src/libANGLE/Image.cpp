@@ -310,20 +310,17 @@ Image::Image(rx::EGLImplFactory *factory,
              const AttributeMap &attribs)
     : mState(id, target, buffer, attribs),
       mImplementation(factory->createImage(mState, context, target, attribs)),
-      mOrphanedAndNeedsInit(false)
+      mOrphanedAndNeedsInit(false),
+      mContextMutex(nullptr)
 {
     ASSERT(mImplementation != nullptr);
     ASSERT(buffer != nullptr);
 
     if (kIsSharedContextMutexEnabled && context != nullptr)
     {
-        ASSERT(context->isSharedContextMutexActive());
-        mSharedContextMutex = context->getContextMutex();
-        mSharedContextMutex->addRef();
-    }
-    else
-    {
-        mSharedContextMutex = nullptr;
+        mContextMutex = context->getContextMutex().getRoot();
+        ASSERT(mContextMutex->isReferenced());
+        mContextMutex->addRef();
     }
 
     mState.source->addImageSource(this);
@@ -362,10 +359,10 @@ Image::~Image()
 {
     SafeDelete(mImplementation);
 
-    if (mSharedContextMutex != nullptr)
+    if (mContextMutex != nullptr)
     {
-        mSharedContextMutex->release();
-        mSharedContextMutex = nullptr;
+        mContextMutex->release();
+        mContextMutex = nullptr;
     }
 }
 
