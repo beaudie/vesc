@@ -68,6 +68,23 @@
       "message": "Also please reference the bug that was previously referenced in the comment above this code.",
       "revId": "134705c1cef5af31719d2365b57ff2de1b4a82cb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d7e7415_f180e9f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-06-22T16:29:36Z",
+      "side": 1,
+      "message": "This extension is not fully implemented yet. But is is used extensively by chrome and at least the part that was partially implemented is what chrome only needs.\n\nMaybe we could create a separate extension (subset of EXT_multisample_render_to_texture) to be used exclusively by chrome?",
+      "revId": "134705c1cef5af31719d2365b57ff2de1b4a82cb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
