@@ -1674,6 +1674,14 @@ angle::Result RendererVk::enableInstanceExtensions(
         }
     }
 
+    // On macOS, there is no native Vulkan driver, so we need to enable the
+    // portability enumeration extension to allow use of MoltenVK.
+    if (IsMac() &&
+        ExtensionFound(VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME, instanceExtensionNames))
+    {
+        mEnabledInstanceExtensions.push_back(VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME);
+    }
+
     // Verify the required extensions are in the extension names set. Fail if not.
     std::sort(mEnabledInstanceExtensions.begin(), mEnabledInstanceExtensions.end(), StrLess);
     ANGLE_VK_TRY(displayVk,
@@ -1787,6 +1795,11 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     instanceInfo.sType                = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
     instanceInfo.flags                = 0;
     instanceInfo.pApplicationInfo     = &mApplicationInfo;
+
+    // On macOS, there is no native Vulkan driver, so we need to enable the
+    // portability enumeration extension to allow use of MoltenVK.
+    if (IsMac())
+        instanceInfo.flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
 
     // Enable requested layers and extensions.
     instanceInfo.enabledExtensionCount = static_cast<uint32_t>(mEnabledInstanceExtensions.size());
