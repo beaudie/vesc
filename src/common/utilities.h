@@ -312,9 +312,10 @@ bool IsQueryEntryPoint(EntryPoint entryPoint);
 
 void writeFile(const char *path, const void *data, size_t size);
 
-#if defined(ANGLE_PLATFORM_WINDOWS)
-void ScheduleYield();
-#endif
+ANGLE_INLINE void ScheduleYield()
+{
+    std::this_thread::yield();
+}
 
 // Get the underlying type. Useful for indexing into arrays with enum values by avoiding the clutter
 // of the extraneous static_cast<>() calls.
