@@ -56,7 +56,8 @@ ANGLE_INLINE void Spinlock::lock() noexcept
         while (mLock.load(std::memory_order_relaxed) != 0)
         {
             // Optimization for simultaneous multithreading.
-            ANGLE_SMT_PAUSE();
+            // ANGLE_SMT_PAUSE();
+            std::this_thread::yield();
         }
     }
 }
