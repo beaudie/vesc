@@ -3420,11 +3420,18 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
         mDefaultUniformBufferSize, getPhysicalDeviceProperties().limits.maxUniformBufferRange);
 
     // Initialize the vulkan pipeline cache.
-    bool success = false;
     {
         std::unique_lock<std::mutex> lock(mPipelineCacheMutex);
-        ANGLE_TRY(initPipelineCache(displayVk, &mPipelineCache, &success));
-        ANGLE_TRY(getPipelineCacheSize(displayVk, &mPipelineCacheSizeAtLastSync));
+        bool loadedFromBlobCache = false;
+        ANGLE_TRY(initPipelineCache(displayVk, &mPipelineCache, &loadedFromBlobCache));
+        if (loadedFromBlobCache)
+        {
+            ANGLE_TRY(getPipelineCacheSize(displayVk, &mPipelineCacheSizeAtLastSync));
+        }
+        else
+        {
+            mPipelineCacheSizeAtLastSync = 0;
+        }
     }
 
     // Track the set of supported pipeline stages.  This is used when issuing image layout
@@ -4787,17 +4794,23 @@ angle::Result RendererVk::getPipelineCache(vk::PipelineCacheAccess *pipelineCach
     {
         // We should now recreate the pipeline cache with the blob cache pipeline data.
         vk::PipelineCache pCache;
-        bool success = false;
-        ANGLE_TRY(initPipelineCache(displayVk, &pCache, &success));
-        if (success)
+        bool loadedFromBlobCache = false;
+        ANGLE_TRY(initPipelineCache(displayVk, &pCache, &loadedFromBlobCache));
+
+        // Merge the newly created pipeline cache into the existing one.
+        mPipelineCache.merge(mDevice, 1, pCache.ptr());
+
+        if (loadedFromBlobCache)
         {
-            // Merge the newly created pipeline cache into the existing one.
-            mPipelineCache.merge(mDevice, 1, pCache.ptr());
+            ANGLE_TRY(getPipelineCacheSize(displayVk, &mPipelineCacheSizeAtLastSync));
         }
+        else
+        {
+            mPipelineCacheSizeAtLastSync = 0;
+        }
+
         mPipelineCacheInitialized = true;
         pCache.destroy(mDevice);
-
-        ANGLE_TRY(getPipelineCacheSize(displayVk, &mPipelineCacheSizeAtLastSync));
     }
 
     pipelineCacheOut->init(&mPipelineCache, &mPipelineCacheMutex);
