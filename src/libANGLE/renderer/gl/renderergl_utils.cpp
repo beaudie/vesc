@@ -2465,6 +2465,24 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
     // EXT_shader_pixel_local_storage
     ANGLE_FEATURE_CONDITION(features, supportsShaderPixelLocalStorageEXT,
                             functions->hasGLESExtension("GL_EXT_shader_pixel_local_storage"));
+<<<<<<< HEAD   (1505f3 Roll vulkan-deps from 3f9a78474605 to c943ccc4d398 (5 revisi)
+=======
+
+    // https://crbug.com/1356053
+    ANGLE_FEATURE_CONDITION(features, bindCompleteFramebufferForTimerQueries, isMali);
+
+    // https://crbug.com/1434317
+    ANGLE_FEATURE_CONDITION(features, disableClipControl, IsMaliG72OrG76(functions));
+
+    // http://anglebug.com/8172
+    ANGLE_FEATURE_CONDITION(features, disableBaseInstanceVertex, IsMaliValhall(functions));
+
+    // http://crbug.com/1420130
+    ANGLE_FEATURE_CONDITION(features, scalarizeVecAndMatConstructorArgs, isMali);
+
+    // http://crbug.com/1456243
+    ANGLE_FEATURE_CONDITION(features, ensureNonEmptyBufferIsBoundForDraw, IsApple() || IsAndroid());
+>>>>>>> CHANGE (4e6124 GL: Ensure all instanced attributes have a buffer with data)
 }
 
 void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFeatures *features)

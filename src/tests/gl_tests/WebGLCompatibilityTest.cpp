@@ -5803,6 +5803,122 @@ TEST_P(WebGL2CompatibilityTest, HalfFloatOesType)
     }
 }
 
+<<<<<<< HEAD   (1505f3 Roll vulkan-deps from 3f9a78474605 to c943ccc4d398 (5 revisi)
+=======
+// Test that unsigned integer samplers work with stencil textures.
+TEST_P(WebGL2CompatibilityTest, StencilTexturingStencil8)
+{
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_OES_texture_stencil8"));
+
+    const uint8_t stencilValue = 42;
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_STENCIL_INDEX8, 1, 1, 0, GL_STENCIL_INDEX, GL_UNSIGNED_BYTE,
+                 &stencilValue);
+    ASSERT_GL_NO_ERROR();
+
+    constexpr char kFS[] = R"(#version 300 es
+out mediump vec4 color;
+uniform mediump usampler2D tex;
+void main() {
+    color = vec4(vec3(texture(tex, vec2(0.0, 0.0))) / 255.0, 1.0);
+})";
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFS);
+
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, GLColor(42, 0, 0, 255), 1);
+}
+
+// Test that unsigned integer samplers work with combined depth/stencil textures.
+TEST_P(WebGL2CompatibilityTest, StencilTexturingCombined)
+{
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_ANGLE_stencil_texturing"));
+
+    const uint32_t stencilValue = 42;
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_STENCIL_TEXTURE_MODE_ANGLE, GL_STENCIL_INDEX);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, 1, 1, 0, GL_DEPTH_STENCIL,
+                 GL_UNSIGNED_INT_24_8, &stencilValue);
+    ASSERT_GL_NO_ERROR();
+
+    constexpr char kFS[] = R"(#version 300 es
+out mediump vec4 color;
+uniform mediump usampler2D tex;
+void main() {
+    color = vec4(vec3(texture(tex, vec2(0.0, 0.0))) / 255.0, 1.0);
+})";
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), kFS);
+
+    drawQuad(program, essl3_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+    EXPECT_PIXEL_COLOR_NEAR(0, 0, GLColor(42, 0, 0, 255), 1);
+}
+
+// Regression test for syncing internal state for TexImage calls while there is an incomplete
+// framebuffer bound
+TEST_P(WebGL2CompatibilityTest, TexImageSyncWithIncompleteFramebufferBug)
+{
+    glColorMask(false, true, false, false);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glViewport(100, 128, 65, 65537);
+
+    GLFramebuffer fb1;
+    glBindFramebuffer(GL_FRAMEBUFFER, fb1);
+
+    GLRenderbuffer rb;
+    glBindRenderbuffer(GL_RENDERBUFFER, rb);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_RG8UI, 1304, 2041);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rb);
+
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, 8, 8, 0, GL_RED_EXT, GL_UNSIGNED_BYTE, nullptr);
+}
+
+// Test that "depth_unchanged" layout qualifier is rejected for WebGL contexts.
+TEST_P(WebGL2CompatibilityTest, FragDepthLayoutUnchanged)
+{
+    ANGLE_SKIP_TEST_IF(!EnsureGLExtensionEnabled("GL_EXT_conservative_depth"));
+
+    constexpr char kFS[] = R"(#version 300 es
+#extension GL_EXT_conservative_depth: enable
+out highp vec4 color;
+layout (depth_unchanged) out highp float gl_FragDepth;
+void main() {
+    color = vec4(0.0, 0.0, 0.0, 1.0);
+    gl_FragDepth = 1.0;
+})";
+
+    GLProgram prg;
+    prg.makeRaster(essl3_shaders::vs::Simple(), kFS);
+    EXPECT_FALSE(prg.valid());
+}
+
+// Test for a mishandling of instanced vertex attributes with zero-sized buffers bound on Apple
+// OpenGL drivers.
+TEST_P(WebGL2CompatibilityTest, DrawWithZeroSizedBuffer)
+{
+    ANGLE_GL_PROGRAM(program, essl3_shaders::vs::Simple(), essl3_shaders::fs::Red());
+    glUseProgram(program);
+
+    GLBuffer buffer;
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+
+    GLint posLocation = glGetAttribLocation(program, essl3_shaders::PositionAttrib());
+    glEnableVertexAttribArray(posLocation);
+
+    glVertexAttribDivisor(posLocation, 1);
+    glVertexAttribPointer(posLocation, 1, GL_UNSIGNED_BYTE, GL_FALSE, 9,
+                          reinterpret_cast<void *>(0x41424344));
+
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+}
+
+>>>>>>> CHANGE (4e6124 GL: Ensure all instanced attributes have a buffer with data)
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(WebGLCompatibilityTest);
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(WebGL2CompatibilityTest);
