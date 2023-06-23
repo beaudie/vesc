@@ -5402,15 +5402,15 @@ RenderPassPerfCounters &RenderPassHelper::getPerfCounters()
     return mPerfCounters;
 }
 
-// WriteDescriptorDescBuilder implementation.
-void WriteDescriptorDescBuilder::updateWriteDesc(uint32_t bindingIndex,
-                                                 VkDescriptorType descriptorType,
-                                                 uint32_t descriptorCount)
+// WriteDescriptorDescs implementation.
+void WriteDescriptorDescs::updateWriteDesc(uint32_t bindingIndex,
+                                           VkDescriptorType descriptorType,
+                                           uint32_t descriptorCount)
 {
     if (hasWriteDescAtIndex(bindingIndex))
     {
-        uint32_t infoIndex          = getInfoDescIndex(bindingIndex);
-        uint32_t oldDescriptorCount = getDescriptorSetCount(bindingIndex);
+        uint32_t infoIndex          = mDescs[bindingIndex].descriptorInfoIndex;
+        uint32_t oldDescriptorCount = mDescs[bindingIndex].descriptorCount;
         if (descriptorCount != oldDescriptorCount)
         {
             ASSERT(infoIndex + oldDescriptorCount == mCurrentInfoIndex);
@@ -5432,7 +5432,7 @@ void WriteDescriptorDescBuilder::updateWriteDesc(uint32_t bindingIndex,
     }
 }
 
-void WriteDescriptorDescBuilder::updateShaderBuffers(
+void WriteDescriptorDescs::updateShaderBuffers(
     gl::ShaderBitSet shaderTypes,
     ShaderVariableType variableType,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
@@ -5465,7 +5465,7 @@ void WriteDescriptorDescBuilder::updateShaderBuffers(
     }
 }
 
-void WriteDescriptorDescBuilder::updateAtomicCounters(
+void WriteDescriptorDescs::updateAtomicCounters(
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
     const std::vector<gl::AtomicCounterBuffer> &atomicCounterBuffers)
 {
@@ -5483,9 +5483,9 @@ void WriteDescriptorDescBuilder::updateAtomicCounters(
                     gl::IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFER_BINDINGS);
 }
 
-void WriteDescriptorDescBuilder::updateImages(gl::ShaderBitSet shaderTypes,
-                                              const gl::ProgramExecutable &executable,
-                                              const ShaderInterfaceVariableInfoMap &variableInfoMap)
+void WriteDescriptorDescs::updateImages(gl::ShaderBitSet shaderTypes,
+                                        const gl::ProgramExecutable &executable,
+                                        const ShaderInterfaceVariableInfoMap &variableInfoMap)
 {
     const std::vector<gl::ImageBinding> &imageBindings = executable.getImageBindings();
     const std::vector<gl::LinkedUniform> &uniforms     = executable.getUniforms();
@@ -5519,7 +5519,7 @@ void WriteDescriptorDescBuilder::updateImages(gl::ShaderBitSet shaderTypes,
     }
 }
 
-void WriteDescriptorDescBuilder::updateInputAttachments(
+void WriteDescriptorDescs::updateInputAttachments(
     const gl::ProgramExecutable &executable,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
     FramebufferVk *framebufferVk)
@@ -5545,7 +5545,7 @@ void WriteDescriptorDescBuilder::updateInputAttachments(
     }
 }
 
-void WriteDescriptorDescBuilder::updateExecutableActiveTextures(
+void WriteDescriptorDescs::updateExecutableActiveTextures(
     gl::ShaderBitSet shaderTypes,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
     const gl::ProgramExecutable &executable)
@@ -5577,7 +5577,7 @@ void WriteDescriptorDescBuilder::updateExecutableActiveTextures(
     }
 }
 
-void WriteDescriptorDescBuilder::updateDefaultUniform(
+void WriteDescriptorDescs::updateDefaultUniform(
     gl::ShaderBitSet shaderTypes,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
     const gl::ProgramExecutable &executable)
@@ -5589,7 +5589,7 @@ void WriteDescriptorDescBuilder::updateDefaultUniform(
     }
 }
 
-void WriteDescriptorDescBuilder::updateTransformFeedbackWrite(
+void WriteDescriptorDescs::updateTransformFeedbackWrite(
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
     const gl::ProgramExecutable &executable)
 {
@@ -5598,20 +5598,20 @@ void WriteDescriptorDescBuilder::updateTransformFeedbackWrite(
                     xfbBufferCount);
 }
 
-void WriteDescriptorDescBuilder::updateDynamicDescriptorsCount()
+void WriteDescriptorDescs::updateDynamicDescriptorsCount()
 {
-    mDescs.mDynamicDescriptorSetCount = 0;
+    mDynamicDescriptorSetCount = 0;
     for (uint32_t index = 0; index < mDescs.size(); ++index)
     {
         const WriteDescriptorDesc &writeDesc = mDescs[index];
         if (IsDynamicDescriptor(static_cast<VkDescriptorType>(writeDesc.descriptorType)))
         {
-            mDescs.mDynamicDescriptorSetCount += writeDesc.descriptorCount;
+            mDynamicDescriptorSetCount += writeDesc.descriptorCount;
         }
     }
 }
 
-void WriteDescriptorDescBuilder::streamOut(std::ostream &ostr) const
+void WriteDescriptorDescs::streamOut(std::ostream &ostr) const
 {
     ostr << mDescs.size() << " write descriptor descs:\n";
 
@@ -5844,9 +5844,9 @@ void UpdatePreCacheActiveTextures(const gl::ProgramExecutable &executable,
                                   const gl::SamplerBindingVector &samplers,
                                   DescriptorSetDesc *desc)
 {
-    desc->resize(executableVk.getTextureWriteDescriptorDescBuilder().getDescriptorCount());
+    desc->resize(executableVk.getTextureWriteDescriptorDescs().getTotalDescriptorCount());
     const WriteDescriptorDescs &writeDescriptorDescs =
-        executableVk.getTextureWriteDescriptorDescBuilder().getDescs();
+        executableVk.getTextureWriteDescriptorDescs();
 
     const ShaderInterfaceVariableInfoMap &variableInfoMap = executableVk.getVariableInfoMap();
     const std::vector<gl::LinkedUniform> &uniforms        = executable.getUniforms();

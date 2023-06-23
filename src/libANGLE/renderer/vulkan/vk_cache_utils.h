@@ -1533,44 +1533,11 @@ struct DescriptorDescHandles
 class WriteDescriptorDescs
 {
   public:
-    WriteDescriptorDesc &operator[](uint32_t key) { return mWriteDescs[key]; }
-    const WriteDescriptorDesc &operator[](uint32_t key) const { return mWriteDescs[key]; }
-
-    size_t size() const { return mWriteDescs.size(); }
-    void clear()
-    {
-        mWriteDescs.clear();
-        mDynamicDescriptorSetCount = 0;
-    }
-    size_t getDynamicDescriptorSetCount() const { return mDynamicDescriptorSetCount; }
-
-  private:
-    friend class WriteDescriptorDescBuilder;
-    angle::FastMap<WriteDescriptorDesc, kFastDescriptorSetDescLimit> mWriteDescs;
-    size_t mDynamicDescriptorSetCount = 0;
-};
-
-class WriteDescriptorDescBuilder
-{
-  public:
     void reset()
     {
         mDescs.clear();
-        mCurrentInfoIndex = 0;
-    }
-
-    uint32_t getDescriptorSetCount(uint32_t bindingIndex) const
-    {
-        ASSERT(hasWriteDescAtIndex(bindingIndex));
-        return mDescs[bindingIndex].descriptorCount;
-    }
-
-    bool empty() const { return mDescs.size() == 0; }
-
-    // Returns the info desc offset.
-    uint32_t getInfoDescIndex(uint32_t bindingIndex) const
-    {
-        return mDescs[bindingIndex].descriptorInfoIndex;
+        mDynamicDescriptorSetCount = 0;
+        mCurrentInfoIndex          = 0;
     }
 
     void updateShaderBuffers(gl::ShaderBitSet shaderTypes,
@@ -1601,9 +1568,18 @@ class WriteDescriptorDescBuilder
     void updateTransformFeedbackWrite(const ShaderInterfaceVariableInfoMap &variableInfoMap,
                                       const gl::ProgramExecutable &executable);
 
-    const WriteDescriptorDescs &getDescs() const { return mDescs; }
-    size_t getDescriptorCount() const { return mCurrentInfoIndex; }
     void updateDynamicDescriptorsCount();
+
+    size_t size() const { return mDescs.size(); }
+    bool empty() const { return mDescs.size() == 0; }
+
+    const WriteDescriptorDesc &operator[](uint32_t bindingIndex) const
+    {
+        return mDescs[bindingIndex];
+    }
+
+    size_t getTotalDescriptorCount() const { return mCurrentInfoIndex; }
+    size_t getDynamicDescriptorSetCount() const { return mDynamicDescriptorSetCount; }
 
     void streamOut(std::ostream &os) const;
 
@@ -1625,8 +1601,9 @@ class WriteDescriptorDescBuilder
                          uint32_t descriptorCount);
 
     // After a preliminary minimum size, use heap memory.
-    WriteDescriptorDescs mDescs;
-    uint32_t mCurrentInfoIndex = 0;
+    angle::FastMap<WriteDescriptorDesc, kFastDescriptorSetDescLimit> mDescs;
+    size_t mDynamicDescriptorSetCount = 0;
+    uint32_t mCurrentInfoIndex        = 0;
 };
 
 class DescriptorSetDesc
