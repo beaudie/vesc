@@ -2573,7 +2573,14 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
     ANGLE_FEATURE_CONDITION(features, disableBaseInstanceVertex, IsMaliValhall(functions));
 
     // http://crbug.com/1420130
+<<<<<<< HEAD   (af01fe M115: Translator: Limit variable sizes vs uint overflow)
     ANGLE_FEATURE_CONDITION(features, scalarizeVecAndMatConstructorArgs, IsMali(functions));
+=======
+    ANGLE_FEATURE_CONDITION(features, scalarizeVecAndMatConstructorArgs, isMali);
+
+    // http://crbug.com/1456243
+    ANGLE_FEATURE_CONDITION(features, ensureNonEmptyBufferIsBoundForDraw, IsApple() || IsAndroid());
+>>>>>>> CHANGE (4e6124 GL: Ensure all instanced attributes have a buffer with data)
 }
 
 void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFeatures *features)
