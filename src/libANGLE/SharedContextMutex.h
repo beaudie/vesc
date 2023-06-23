@@ -26,7 +26,7 @@ constexpr bool kIsSharedContextMutexEnabled = true;
 constexpr bool kIsSharedContextMutexEnabled = false;
 #endif
 
-using ContextMutexType = angle::Spinlock;
+using ContextMutexType = std::mutex;
 
 class ContextMutex final : angle::NonCopyable
 {
