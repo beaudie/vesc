@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99baabea_4c622b06",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-06-23T13:18:31Z",
+      "side": 1,
+      "message": "Hmm,not sure what to make of those webgl_conformance test failures. Nothing in the context-attributes-alpha-depth-stencil-antialias test uses DiscardFramebufferEXT/InvalidateFramebuffer...",
+      "revId": "c71efd7cee0fec3fc60a00571e995293df13ec0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
