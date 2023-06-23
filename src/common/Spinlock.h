@@ -12,13 +12,14 @@
 
 #include <atomic>
 
-// TODO(jplate) Add pause for ARM, http://anglebug.com:6067
 #if defined(_MSC_VER) && (defined(_M_IX86) || defined(_M_X64))
 extern "C" void _mm_pause();
 #    pragma intrinsic(_mm_pause)
 #    define ANGLE_SMT_PAUSE() _mm_pause()
 #elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
 #    define ANGLE_SMT_PAUSE() __asm__ __volatile__("pause;")
+#elif defined(_M_ARM) || defined(_M_ARM64) || defined(__arm__) || defined(__aarch64__)
+#    define ANGLE_SMT_PAUSE() __yield()
 #else
 #    define ANGLE_SMT_PAUSE() static_cast<void>(0)
 #endif
