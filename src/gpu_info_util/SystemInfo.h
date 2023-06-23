@@ -145,6 +145,70 @@ bool IsVivante(VendorID vendorId);
 bool IsApple(VendorID vendorId);
 bool IsMicrosoft(VendorID vendorId);
 
+// Platform detection helpers
+inline constexpr bool IsWindows()
+{
+#if defined(ANGLE_PLATFORM_WINDOWS)
+    return true;
+#else
+    return false;
+#endif
+}
+
+inline constexpr bool IsLinux()
+{
+#if defined(ANGLE_PLATFORM_LINUX)
+    return true;
+#else
+    return false;
+#endif
+}
+
+inline constexpr bool IsChromeOS()
+{
+#if defined(ANGLE_PLATFORM_CHROMEOS)
+    return true;
+#else
+    return false;
+#endif
+}
+
+inline constexpr bool IsApple()
+{
+#if defined(ANGLE_PLATFORM_APPLE)
+    return true;
+#else
+    return false;
+#endif
+}
+
+inline constexpr bool IsMac()
+{
+#if defined(ANGLE_PLATFORM_APPLE) && defined(ANGLE_PLATFORM_MACOS)
+    return true;
+#else
+    return false;
+#endif
+}
+
+inline constexpr bool IsFuchsia()
+{
+#if defined(ANGLE_PLATFORM_FUCHSIA)
+    return true;
+#else
+    return false;
+#endif
+}
+
+inline constexpr bool IsIOS()
+{
+#if ANGLE_PLATFORM_IOS_FAMILY
+    return true;
+#else
+    return false;
+#endif
+}
+
 // Returns a readable vendor name given the VendorID
 std::string VendorName(VendorID vendor);
 
