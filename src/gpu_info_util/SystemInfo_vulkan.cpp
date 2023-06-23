@@ -22,6 +22,18 @@
 
 namespace angle
 {
+namespace
+{
+inline constexpr bool IsMac()
+{
+#if defined(ANGLE_PLATFORM_MACOS)
+    return true;
+#else
+    return false;
+#endif
+}
+}  // namespace
+
 class VulkanLibrary final : NonCopyable
 {
   public:
@@ -61,6 +73,8 @@ class VulkanLibrary final : NonCopyable
             instanceVersion = VK_API_VERSION_1_0;
         }
 #endif  // VK_VERSION_1_1
+        const char *pMacOSInstanceExtensions[] = {VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME,
+                                                  nullptr};
 
         // Create a Vulkan instance:
         VkApplicationInfo appInfo;
@@ -81,6 +95,15 @@ class VulkanLibrary final : NonCopyable
         createInstanceInfo.ppEnabledLayerNames     = nullptr;
         createInstanceInfo.enabledExtensionCount   = 0;
         createInstanceInfo.ppEnabledExtensionNames = nullptr;
+
+        if (IsMac())
+        {
+            // On macOS, there is no native Vulkan driver, so we need to enable
+            // the portability enumeration extension to allow use of MoltenVK.
+            createInstanceInfo.flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
+            createInstanceInfo.enabledExtensionCount   = 1;
+            createInstanceInfo.ppEnabledExtensionNames = pMacOSInstanceExtensions;
+        }
 
         auto pfnCreateInstance = getProc<PFN_vkCreateInstance>("vkCreateInstance");
         if (!pfnCreateInstance ||
