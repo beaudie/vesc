@@ -10,6 +10,7 @@
 
 #include <atomic>
 
+#include "common/FastMutex.h"
 #include "common/Spinlock.h"
 #include "common/debug.h"
 
@@ -26,7 +27,8 @@ constexpr bool kIsSharedContextMutexEnabled = true;
 constexpr bool kIsSharedContextMutexEnabled = false;
 #endif
 
-using ContextMutexType = angle::Spinlock;
+using ContextMutexType = std::mutex;
+// Force rebuild v5
 
 class ContextMutex final : angle::NonCopyable
 {
