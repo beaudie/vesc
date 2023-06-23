@@ -2572,8 +2572,13 @@ void InitializeFeatures(const FunctionsGL *functions, angle::FeaturesGL *feature
     // http://anglebug.com/8172
     ANGLE_FEATURE_CONDITION(features, disableBaseInstanceVertex, IsMaliValhall(functions));
 
+<<<<<<< HEAD
     // http://crbug.com/1420130
     ANGLE_FEATURE_CONDITION(features, scalarizeVecAndMatConstructorArgs, isMali);
+=======
+    // http://crbug.com/1456243
+    ANGLE_FEATURE_CONDITION(features, ensureNonEmptyBufferIsBoundForDraw, IsApple() || IsAndroid());
+>>>>>>> 24b619b2f (GL: Ensure all instanced attributes have a buffer with data)
 }
 
 void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFeatures *features)
