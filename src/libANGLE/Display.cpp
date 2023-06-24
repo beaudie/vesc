@@ -1064,6 +1064,7 @@ Error Display::initialize()
     {
         // Log extended error message here
         ERR() << "ANGLE Display::initialize error " << error.getID() << ": " << error.getMessage();
+        mImplementation->terminate();
         return error;
     }
 
