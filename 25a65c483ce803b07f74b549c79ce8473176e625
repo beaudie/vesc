@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c33513a1_d420698c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-06-24T19:33:24Z",
+      "side": 1,
+      "message": "It still worked, but mostly by luck because the chunk keys were basically:\n\n0: \"chunkkey\\0\"\n1: \"chunkkey\\1\\0\"\n2: \"chunkkey\\2\\0\"\n3: \"chunkkey\\3\\0\"",
+      "parentUuid": "e8e76885_44d4ea1d",
+      "revId": "25a65c483ce803b07f74b549c79ce8473176e625",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "653e9588_ea59d6b4",
