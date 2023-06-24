@@ -16,6 +16,24 @@
       "message": "Access to this mutex is on the hot path, and I\u0027d prefer not to turn it into a function call to work around a bug in a 4 year old compiler.\n\nIf possible, I\u0027d suggest raising the minimum requirements for gcc version for Krita instead.",
       "revId": "62f4863800f0a568009afa0b31de3f1d1278f29f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be766904_bf729f3a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1557258
+      },
+      "writtenOn": "2023-06-24T21:27:53Z",
+      "side": 1,
+      "message": "We\u0027re unfortunately locked to the minimum supported LTS\u0027s GCC version. For 20.04 (which we use for packaging the AppImages) it\u0027s GCC 9, and for 18.04 it\u0027s even older, hence the need.\n\nSince the price is already being paid for Apple platforms, would it be OK with you if I kept the extern definition and added GCC \u003c 9.1 to the #ifdef instead?",
+      "parentUuid": "cd19696a_ee8a5cfb",
+      "revId": "62f4863800f0a568009afa0b31de3f1d1278f29f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
