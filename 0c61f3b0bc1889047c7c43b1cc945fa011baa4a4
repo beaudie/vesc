@@ -70,6 +70,30 @@
       },
       "revId": "0c61f3b0bc1889047c7c43b1cc945fa011baa4a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11c00c2d_9f58bfbb",
+        "filename": "src/gpu_info_util/SystemInfo_vulkan.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-24T19:32:47Z",
+      "side": 1,
+      "message": "Steven\u0027s done the right thing here, we avoid #ifdefs all over. That said, we already have an `IsMac()` that is differently defined by the way. Can we use that instead?",
+      "parentUuid": "ebde8f33_ca3edf26",
+      "range": {
+        "startLine": 99,
+        "startChar": 12,
+        "endLine": 99,
+        "endChar": 17
+      },
+      "revId": "0c61f3b0bc1889047c7c43b1cc945fa011baa4a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
