@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3944c1f_7d20d97b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4788,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-24T19:39:39Z",
+      "side": 1,
+      "message": "Why not keep this under `if (loadedFromBlobCache)`? There\u0027s nothing to merge if the loaded cache is empty.",
+      "revId": "dc9668fdaeb6fa47cb1249dfb47387e0acfe1708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9326ee6f_c1b0f442",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4796,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-24T19:39:39Z",
+      "side": 1,
+      "message": "Isn\u0027t this already zero? Or if there was already something in the cache, and nothing to load and merge into it, this is causing a resync for no reason.\n\nDouble check, but you might be able to just drop the `else` (from here and the other chunk)",
+      "revId": "dc9668fdaeb6fa47cb1249dfb47387e0acfe1708",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
