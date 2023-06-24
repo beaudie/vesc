@@ -33,6 +33,24 @@
       "message": "Thanks. Could you please do something similar to `CopySubImageAlpha` above, where the backbuffer is initialized to some color before the copy (glCopyTexSubImage3DOES), and then a shader is used to verify the copy worked fine (remember to reclear the buffer to another color before the draw).",
       "revId": "adab6a50ab735af6695c6f51b3ed2427b5744c48",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ae9c005_befca89e",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4214,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-06-24T02:24:39Z",
+      "side": 1,
+      "message": "Thanks. I couldn\u0027t find the shader functions to draw with the 2D array texture (e.g., `texture2DArrayLod()`). I checked out the spec for the extension: https://registry.khronos.org/OpenGL/extensions/OES/OES_texture_3D.txt\n\nIt seems that this extension only adds support for 3D textures. Therefore, I think the validation should fail for 2D arrays. Is it correct? If so, this can be achieved by updating `ValidTexture3DDestinationTarget()` to check the version.",
+      "parentUuid": "3a859f26_bf199cb7",
+      "revId": "adab6a50ab735af6695c6f51b3ed2427b5744c48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
