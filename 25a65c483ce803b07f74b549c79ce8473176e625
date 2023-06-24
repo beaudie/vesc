@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8e76885_44d4ea1d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-24T19:28:29Z",
+      "side": 1,
+      "message": "What was the side effect of this?",
+      "revId": "25a65c483ce803b07f74b549c79ce8473176e625",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "653e9588_ea59d6b4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 965,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-24T19:28:29Z",
+      "side": 1,
+      "message": "Per our style:\n\n```suggestion\n    hashStream \u003c\u003c std::hex \u003c\u003c static_cast\u003cuint32_t\u003e(chunkIndex);\n```",
+      "range": {
+        "startLine": 965,
+        "startChar": 30,
+        "endLine": 965,
+        "endChar": 38
+      },
+      "revId": "25a65c483ce803b07f74b549c79ce8473176e625",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
