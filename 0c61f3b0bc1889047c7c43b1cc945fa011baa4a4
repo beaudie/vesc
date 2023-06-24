@@ -94,6 +94,30 @@
       },
       "revId": "0c61f3b0bc1889047c7c43b1cc945fa011baa4a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd69f58b_6b964bc1",
+        "filename": "src/gpu_info_util/SystemInfo_vulkan.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-06-24T19:34:56Z",
+      "side": 1,
+      "message": "I was concerned about using rx::IsMac in here because it\u0027s in the backend namespace and I\u0027d have to modify the .gn files to make this source file depend on that header (which didn\u0027t seem correct). Maybe those Is* flags should be moved to some other more broadly usable header?",
+      "parentUuid": "11c00c2d_9f58bfbb",
+      "range": {
+        "startLine": 99,
+        "startChar": 12,
+        "endLine": 99,
+        "endChar": 17
+      },
+      "revId": "0c61f3b0bc1889047c7c43b1cc945fa011baa4a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
