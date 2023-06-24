@@ -1315,6 +1315,9 @@ Error Display::terminate(Thread *thread, TerminateReason terminateReason)
     mSingleThreadPool.reset();
     mMultiThreadPool.reset();
 
+    mFeatures.clear();
+    mFrontendFeatures.reset();
+
     mDeviceLost = false;
 
     mInitialized = false;
