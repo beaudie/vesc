@@ -111,6 +111,30 @@
       },
       "revId": "ecae8dc09bdb4bf1a0daec74abfc6c53d103062d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ed2b1d5_96bf7198",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-06-26T17:29:03Z",
+      "side": 1,
+      "message": "It seems that the six lines above overlap since a couple of configs have (I guess?) VULKAN \u0026\u0026 SWIFTSHADER active simultaneously. Tests throw these errors:\n```\nFailed to load test expectations.\n Line 824 and 828 : two entries\u0027 configs overlap\n Line 825 and 829 : two entries\u0027 configs overlap\n Line 826 and 830 : two entries\u0027 configs overlap\n```",
+      "parentUuid": "35855e9e_fc9c1c29",
+      "range": {
+        "startLine": 843,
+        "startChar": 0,
+        "endLine": 855,
+        "endChar": 98
+      },
+      "revId": "ecae8dc09bdb4bf1a0daec74abfc6c53d103062d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
