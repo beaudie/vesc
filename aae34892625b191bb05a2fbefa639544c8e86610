@@ -33,6 +33,24 @@
       "message": "Okay, so... I\u0027ve so far found three different places with their own definitions of these platform detection functions and with multiple different naming schemes:\n\n- driver_utils.h -- in the rx namespace, used by all the driver backends\n\n- GPUTestConfig.cpp -- has its own definitions all in the source file, many different naming schemes there (\"IsWin()\" vs \"IsWindows()\" and a bunch of helpers for specific Windows versions)\n\n- angle_test_instantiate -- in the angle namespace, causes compile errors if we throw new definitions into SystemInfo.h, and the naming is inconsistent with the driver_utils ones. e.g. \"IsOSX()\" instead of \"IsMac()\". Additionally, the \"IsApple()\" in angle_test_instantiate does *not* do the same as rx::IsApple does! It is instead part of a family of functions checking the GPU vendor ID.\n\nAnd none of these are currently appropriate for use in SystemInfo_vulkan. I think what we probably need is a separate CL to consolidate all these into a common header (and source file, for the ones like IsWindows7() that need runtime detections). Once we have a common place for all the platform detection, we can include that into the multiple different places that require it, and maybe add some \"using IsApple \u003d angle::IsApple\" or similar in e.g. driver_utils to minimize the code changes throughout the backends.",
       "revId": "aae34892625b191bb05a2fbefa639544c8e86610",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b0f14f9_399b684d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-06-26T20:35:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7e9b7bf_5a3fd99d",
+      "revId": "aae34892625b191bb05a2fbefa639544c8e86610",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

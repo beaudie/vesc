@@ -168,6 +168,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "971b0871_398ca90a",
+        "filename": "src/gpu_info_util/SystemInfo_vulkan.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-06-26T20:35:30Z",
+      "side": 1,
+      "message": "Per discussion elsewhere, this will be fixed in a followup commit unifying all the platform detection helper functions.",
+      "parentUuid": "ee32b109_1e0738c9",
+      "range": {
+        "startLine": 99,
+        "startChar": 12,
+        "endLine": 99,
+        "endChar": 17
+      },
+      "revId": "0c61f3b0bc1889047c7c43b1cc945fa011baa4a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b5e2d9fb_9bed7d94",
@@ -203,6 +227,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f952c6d_d0f3be8a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1801,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-06-26T20:35:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c9b095b_1ed6dfc5",
+      "revId": "0c61f3b0bc1889047c7c43b1cc945fa011baa4a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b64e98a2_bc8b832a",
@@ -234,6 +276,24 @@
       "side": 1,
       "message": "We can\u0027t get to the renderer\u0027s enabled instance extensions (or feature flags) from SystemInfo_vulkan though, can we?",
       "parentUuid": "b64e98a2_bc8b832a",
+      "revId": "0c61f3b0bc1889047c7c43b1cc945fa011baa4a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d604736_3ddde79f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1802,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-06-26T20:35:30Z",
+      "side": 1,
+      "message": "Did this by duplicating the instance extension enumeration here.",
+      "parentUuid": "bc4b9545_73ba1c24",
       "revId": "0c61f3b0bc1889047c7c43b1cc945fa011baa4a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
