@@ -88,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b5c14ff_292e41ab",
+        "filename": "src/tests/test_expectations/GPUTestConfig.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-06-26T23:26:45Z",
+      "side": 1,
+      "message": "We discussed elsewhere and agreed that it\u0027s fine to disambiguate the IsApple functions by renaming IsApple -\u003e IsAppleGPU where appropriate.",
+      "parentUuid": "b55ed990_ce67bcc6",
+      "revId": "3bfb21a752dfc5a570f179f0e8b116aae2a48d6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "677f100f_606b1d98",

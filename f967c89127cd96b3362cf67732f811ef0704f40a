@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c013f22c_5fe8e4d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-06-26T23:26:45Z",
+      "side": 1,
+      "message": "Okay, I have eliminated uses of versionhelpers.h and added some more helper functions to platform_helpers.h.\n\nUWP apps don\u0027t support the VerifyVersionInfoW() API, so I\u0027ve copied a hack that was around in driver_utils before, which just treats a UWP app as being Windows 10.\n\nLet\u0027s see how the trybots feel about this one...",
+      "revId": "f967c89127cd96b3362cf67732f811ef0704f40a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
