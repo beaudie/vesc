@@ -118,6 +118,64 @@
       },
       "revId": "0c61f3b0bc1889047c7c43b1cc945fa011baa4a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8aec6387_98e55bfa",
+        "filename": "src/gpu_info_util/SystemInfo_vulkan.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-26T16:22:03Z",
+      "side": 1,
+      "message": "Ack, we have a lot of helpers like that duplicated under `gpu_info_util`, it\u0027s fine to that for `IsMac()` too. Could you please add `IsMac()` under `SystemInfo.h` and define in `SystemInfo.cpp` similar to other `Is*` functions?\n\nAnd please take the implementation from the other `IsMac()` definition.",
+      "parentUuid": "dd69f58b_6b964bc1",
+      "range": {
+        "startLine": 99,
+        "startChar": 12,
+        "endLine": 99,
+        "endChar": 17
+      },
+      "revId": "0c61f3b0bc1889047c7c43b1cc945fa011baa4a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5e2d9fb_9bed7d94",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1801,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-26T16:22:03Z",
+      "side": 1,
+      "message": "`{}` per our style.",
+      "revId": "0c61f3b0bc1889047c7c43b1cc945fa011baa4a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b64e98a2_bc8b832a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1802,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-26T16:22:03Z",
+      "side": 1,
+      "message": "This needs the presence of `VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME` too.\n\nBest add a feature that gets initialized in `enableInstanceExtensions()` based on which the extension is added or not, and the flag is added or not.",
+      "revId": "0c61f3b0bc1889047c7c43b1cc945fa011baa4a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
