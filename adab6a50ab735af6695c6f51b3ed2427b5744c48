@@ -69,6 +69,24 @@
       "parentUuid": "7ae9c005_befca89e",
       "revId": "adab6a50ab735af6695c6f51b3ed2427b5744c48",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cb2356b_53885581",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4214,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-06-26T17:37:44Z",
+      "side": 1,
+      "message": "Thanks. I have updated the code. The test has also been updated to expect a GL error when 2D texture array is used in `glTexImage3D()` for ES2.",
+      "parentUuid": "96a04a77_9a8a1124",
+      "revId": "adab6a50ab735af6695c6f51b3ed2427b5744c48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
