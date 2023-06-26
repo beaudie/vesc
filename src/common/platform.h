@@ -189,4 +189,6 @@
 #    define ANGLE_IS_32_BIT_CPU 1
 #endif
 
+#include "platform_helpers.h"
+
 #endif  // COMMON_PLATFORM_H_
