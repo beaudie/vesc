@@ -16,6 +16,23 @@
       "message": "Hmm,not sure what to make of those webgl_conformance test failures. Nothing in the context-attributes-alpha-depth-stencil-antialias test uses DiscardFramebufferEXT/InvalidateFramebuffer...",
       "revId": "c71efd7cee0fec3fc60a00571e995293df13ec0d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ef72928_6bbb9523",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-26T16:16:26Z",
+      "side": 1,
+      "message": "FYI, Geoff\u0027s out until July 10. I don\u0027t know if there\u0027s anyone with d3d/ expertise to look at this.",
+      "revId": "c71efd7cee0fec3fc60a00571e995293df13ec0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
