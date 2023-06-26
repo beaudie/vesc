@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14d5fdfe_8b3ea681",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-06-26T20:15:32Z",
+      "side": 1,
+      "message": "Alright, a followup commit will clean up the IsApple/IsMac/whatever definitions.",
+      "revId": "f0c38cecc9389a6fadf4e5d7fe50b7e21ce24df0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
