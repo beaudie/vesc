@@ -17,6 +17,10 @@
 #include "common/string_utils.h"
 #include "common/system_utils.h"
 
+#ifdef ANGLE_PLATFORM_WINDOWS
+#    include <versionhelpers.h>
+#endif
+
 namespace angle
 {
 namespace

@@ -1,0 +1,96 @@
+//
+// Copyright 2023 The ANGLE Project Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+//
+
+// PlatformHelpers.h: common platform detection helper functions
+
+#ifndef COMMON_PLATFORM_HELPERS_H_
+#define COMMON_PLATFORM_HELPERS_H_
+
+namespace angle
+{
+
+inline constexpr bool IsAndroid()
+{
+#if defined(ANGLE_PLATFORM_ANDROID)
+    return true;
+#else
+    return false;
+#endif
+}
+
+inline constexpr bool IsApple()
+{
+#if defined(ANGLE_PLATFORM_APPLE)
+    return true;
+#else
+    return false;
+#endif
+}
+
+inline constexpr bool IsChromeOS()
+{
+#if defined(ANGLE_PLATFORM_CHROMEOS)
+    return true;
+#else
+    return false;
+#endif
+}
+
+inline constexpr bool IsFuchsia()
+{
+#if defined(ANGLE_PLATFORM_FUCHSIA)
+    return true;
+#else
+    return false;
+#endif
+}
+
+inline constexpr bool IsIOS()
+{
+#if ANGLE_PLATFORM_IOS_FAMILY
+    return true;
+#else
+    return false;
+#endif
+}
+
+inline constexpr bool IsLinux()
+{
+#if defined(ANGLE_PLATFORM_LINUX)
+    return true;
+#else
+    return false;
+#endif
+}
+
+inline constexpr bool IsMac()
+{
+#if defined(ANGLE_PLATFORM_APPLE) && defined(ANGLE_PLATFORM_MACOS)
+    return true;
+#else
+    return false;
+#endif
+}
+
+inline constexpr bool IsWindows()
+{
+#if defined(ANGLE_PLATFORM_WINDOWS)
+    return true;
+#else
+    return false;
+#endif
+}
+
+// Windows version helpers
+bool IsWindowsXP();
+bool IsWindowsVista();
+bool IsWindows7();
+bool IsWindows8();
+bool IsWindows10();
+
+}  // namespace angle
+
+#endif  // COMMON_PLATFORM_HELPERS_H_
