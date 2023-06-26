@@ -1021,26 +1021,26 @@ angle::Result TextureGL::copySubTextureHelper(const gl::Context *context,
 
     const gl::InternalFormat &sourceFormatInfo = *sourceImageDesc.format.info;
     GLenum sourceFormat                        = sourceFormatInfo.format;
-    bool sourceFormatContainSupersetOfDestFormat =
-        (sourceFormat == destFormat.format && sourceFormat != GL_BGRA_EXT) ||
-        (sourceFormat == GL_RGBA && destFormat.format == GL_RGB);
+    // bool sourceFormatContainSupersetOfDestFormat =
+    //     (sourceFormat == destFormat.format && sourceFormat != GL_BGRA_EXT) ||
+    //     (sourceFormat == GL_RGBA && destFormat.format == GL_RGB);
 
     GLenum sourceComponentType = sourceFormatInfo.componentType;
     GLenum destComponentType   = destFormat.componentType;
     bool destSRGB              = destFormat.colorEncoding == GL_SRGB;
-    if (!unpackFlipY && unpackPremultiplyAlpha == unpackUnmultiplyAlpha && !needsLumaWorkaround &&
-        sourceFormatContainSupersetOfDestFormat && sourceComponentType == destComponentType &&
-        !destSRGB && sourceGL->getType() == gl::TextureType::_2D)
-    {
-        bool copySucceeded = false;
-        ANGLE_TRY(blitter->copyTexSubImage(context, sourceGL, sourceLevel, this, target, level,
-                                           sourceArea, destOffset, &copySucceeded));
-        if (copySucceeded)
-        {
-            contextGL->markWorkSubmitted();
-            return angle::Result::Continue;
-        }
-    }
+    // if (!unpackFlipY && unpackPremultiplyAlpha == unpackUnmultiplyAlpha && !needsLumaWorkaround &&
+    //     sourceFormatContainSupersetOfDestFormat && sourceComponentType == destComponentType &&
+    //     !destSRGB && sourceGL->getType() == gl::TextureType::_2D)
+    // {
+    //     bool copySucceeded = false;
+    //     ANGLE_TRY(blitter->copyTexSubImage(context, sourceGL, sourceLevel, this, target, level,
+    //                                        sourceArea, destOffset, &copySucceeded));
+    //     if (copySucceeded)
+    //     {
+    //         contextGL->markWorkSubmitted();
+    //         return angle::Result::Continue;
+    //     }
+    // }
 
     // Check if the destination is renderable and copy on the GPU
     const LevelInfoGL &destLevelInfo = getLevelInfo(target, level);
