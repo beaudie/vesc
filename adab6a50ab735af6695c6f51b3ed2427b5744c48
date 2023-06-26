@@ -51,6 +51,24 @@
       "parentUuid": "3a859f26_bf199cb7",
       "revId": "adab6a50ab735af6695c6f51b3ed2427b5744c48",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96a04a77_9a8a1124",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4214,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-26T15:21:21Z",
+      "side": 1,
+      "message": "You\u0027re right, it looks like `GL_TEXTURE_2D_ARRAY` is not coming from any (GLES) extension, so yes looks like these should fail validation.\n\nCorrespondingly, there\u0027s no GLSL function in ES 100 to read from that (in ES 300+, they all use `texture()`).",
+      "parentUuid": "7ae9c005_befca89e",
+      "revId": "adab6a50ab735af6695c6f51b3ed2427b5744c48",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
