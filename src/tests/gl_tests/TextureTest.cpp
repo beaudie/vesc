@@ -3136,7 +3136,7 @@ TEST_P(Texture2DTestES3, TexImageWithDepthPBO)
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_storage"));
 
     // http://anglebug.com/5315
-    ANGLE_SKIP_TEST_IF(IsOpenGL() && IsOSX());
+    ANGLE_SKIP_TEST_IF(IsOpenGL() && IsMac());
 
     constexpr GLsizei kSize = 4;
 
@@ -3288,7 +3288,7 @@ TEST_P(Texture2DTestES3, TexImageWithStencilPBO)
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_storage"));
 
     // http://anglebug.com/5315
-    ANGLE_SKIP_TEST_IF(IsOpenGL() && IsOSX());
+    ANGLE_SKIP_TEST_IF(IsOpenGL() && IsMac());
 
     constexpr GLsizei kSize = 4;
 
@@ -3360,7 +3360,7 @@ TEST_P(Texture2DTestES3, TexImageWithDepthStencilPBO)
     ANGLE_SKIP_TEST_IF(IsVulkan() && IsAndroid());
 
     // http://anglebug.com/5315
-    ANGLE_SKIP_TEST_IF(IsOpenGL() && IsOSX());
+    ANGLE_SKIP_TEST_IF(IsOpenGL() && IsMac());
 
     constexpr GLsizei kSize = 4;
 
@@ -4386,10 +4386,10 @@ TEST_P(Texture2DTestES3, FramebufferTextureChangingBaselevel)
 TEST_P(Texture2DBaseMaxTestES3, ExtendMipChainAfterRedefine)
 {
     // http://anglebug.com/4699
-    ANGLE_SKIP_TEST_IF(IsOpenGL() && IsIntel() && IsOSX());
+    ANGLE_SKIP_TEST_IF(IsOpenGL() && IsIntel() && IsMac());
 
     // http://anglebug.com/5153
-    ANGLE_SKIP_TEST_IF(IsOpenGL() && IsNVIDIA() && IsOSX());
+    ANGLE_SKIP_TEST_IF(IsOpenGL() && IsNVIDIA() && IsMac());
 
     GLFramebuffer framebuffer;
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
@@ -4460,7 +4460,7 @@ void Texture2DBaseMaxTestES3::testPingPongBaseLevel(bool immutable)
     ANGLE_SKIP_TEST_IF(IsOpenGL() && IsAMD() && IsWindows());
 
     // http://anglebug.com/4701
-    ANGLE_SKIP_TEST_IF(IsOpenGL() && IsIntel() && IsOSX());
+    ANGLE_SKIP_TEST_IF(IsOpenGL() && IsIntel() && IsMac());
 
     initTest(immutable);
 
@@ -4646,7 +4646,7 @@ TEST_P(Texture2DBaseMaxTestES3, RedefineEveryLevelToAnotherFormat)
 TEST_P(Texture2DBaseMaxTestES3, GenerateMipmapAfterRebase)
 {
     // http://anglebug.com/5880
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsARM64() && IsDesktopOpenGL());
+    ANGLE_SKIP_TEST_IF(IsMac() && IsARM64() && IsDesktopOpenGL());
 
     testGenerateMipmapAfterRebase(false);
 }
@@ -4658,7 +4658,7 @@ TEST_P(Texture2DBaseMaxTestES3, GenerateMipmapAfterRebaseImmutable)
     // http://anglebug.com/5798
     ANGLE_SKIP_TEST_IF(IsOpenGL() && IsNVIDIA());
     // http://anglebug.com/5880
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsARM64() && IsDesktopOpenGL());
+    ANGLE_SKIP_TEST_IF(IsMac() && IsARM64() && IsDesktopOpenGL());
 
     testGenerateMipmapAfterRebase(true);
 }
@@ -4773,7 +4773,7 @@ TEST_P(Texture2DBaseMaxTestES3, GenerateMipmapAfterRedefineAndRebase)
     ANGLE_SKIP_TEST_IF(IsNVIDIAShield());
 
     // TODO(anglebug.com/5360): Failing on ARM-based Apple DTKs.
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsARM64() && IsDesktopOpenGL());
+    ANGLE_SKIP_TEST_IF(IsMac() && IsARM64() && IsDesktopOpenGL());
 
     initTest(false);
 
@@ -4966,7 +4966,7 @@ TEST_P(Texture2DBaseMaxTestES3, RedefineMutableToImmutable)
     ANGLE_SKIP_TEST_IF(IsD3D());
 
     // http://anglebug.com/4701
-    ANGLE_SKIP_TEST_IF(IsOpenGL() && IsIntel() && IsOSX());
+    ANGLE_SKIP_TEST_IF(IsOpenGL() && IsIntel() && IsMac());
 
     constexpr uint32_t kBaseLevel          = 1;
     const GLColor kNewMipColors[kMipCount] = {
@@ -6558,7 +6558,7 @@ TEST_P(Texture2DTest, CopyAfterCompressed)
 // ES 3.0.4 table 3.24
 TEST_P(Texture2DUnsignedIntegerAlpha1TestES3, TextureRGB8UIImplicitAlpha1)
 {
-    ANGLE_SKIP_TEST_IF(IsIntel() && IsOSX());
+    ANGLE_SKIP_TEST_IF(IsIntel() && IsMac());
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
@@ -6576,7 +6576,7 @@ TEST_P(Texture2DUnsignedIntegerAlpha1TestES3, TextureRGB8UIImplicitAlpha1)
 // ES 3.0.4 table 3.24
 TEST_P(Texture2DIntegerAlpha1TestES3, TextureRGB8IImplicitAlpha1)
 {
-    ANGLE_SKIP_TEST_IF(IsIntel() && IsOSX());
+    ANGLE_SKIP_TEST_IF(IsIntel() && IsMac());
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
@@ -6595,7 +6595,7 @@ TEST_P(Texture2DIntegerAlpha1TestES3, TextureRGB8IImplicitAlpha1)
 // ES 3.0.4 table 3.24
 TEST_P(Texture2DUnsignedIntegerAlpha1TestES3, TextureRGB16UIImplicitAlpha1)
 {
-    ANGLE_SKIP_TEST_IF(IsIntel() && IsOSX());
+    ANGLE_SKIP_TEST_IF(IsIntel() && IsMac());
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
@@ -6613,7 +6613,7 @@ TEST_P(Texture2DUnsignedIntegerAlpha1TestES3, TextureRGB16UIImplicitAlpha1)
 // ES 3.0.4 table 3.24
 TEST_P(Texture2DIntegerAlpha1TestES3, TextureRGB16IImplicitAlpha1)
 {
-    ANGLE_SKIP_TEST_IF(IsIntel() && IsOSX());
+    ANGLE_SKIP_TEST_IF(IsIntel() && IsMac());
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
@@ -6631,7 +6631,7 @@ TEST_P(Texture2DIntegerAlpha1TestES3, TextureRGB16IImplicitAlpha1)
 // ES 3.0.4 table 3.24
 TEST_P(Texture2DUnsignedIntegerAlpha1TestES3, TextureRGB32UIImplicitAlpha1)
 {
-    ANGLE_SKIP_TEST_IF(IsIntel() && IsOSX());
+    ANGLE_SKIP_TEST_IF(IsIntel() && IsMac());
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
@@ -6649,7 +6649,7 @@ TEST_P(Texture2DUnsignedIntegerAlpha1TestES3, TextureRGB32UIImplicitAlpha1)
 // ES 3.0.4 table 3.24
 TEST_P(Texture2DIntegerAlpha1TestES3, TextureRGB32IImplicitAlpha1)
 {
-    ANGLE_SKIP_TEST_IF(IsIntel() && IsOSX());
+    ANGLE_SKIP_TEST_IF(IsIntel() && IsMac());
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
@@ -6697,7 +6697,7 @@ TEST_P(Texture2DTestES3, TextureRGB9E5ImplicitAlpha1)
 TEST_P(Texture2DTestES3, TextureCOMPRESSEDRGB8ETC2ImplicitAlpha1)
 {
     // ETC texture formats are not supported on Mac OpenGL. http://anglebug.com/3853
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsDesktopOpenGL());
+    ANGLE_SKIP_TEST_IF(IsMac() && IsDesktopOpenGL());
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
@@ -6714,7 +6714,7 @@ TEST_P(Texture2DTestES3, TextureCOMPRESSEDRGB8ETC2ImplicitAlpha1)
 TEST_P(Texture2DTestES3, TextureCOMPRESSEDSRGB8ETC2ImplicitAlpha1)
 {
     // ETC texture formats are not supported on Mac OpenGL. http://anglebug.com/3853
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsDesktopOpenGL());
+    ANGLE_SKIP_TEST_IF(IsMac() && IsDesktopOpenGL());
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, mTexture2D);
@@ -8691,7 +8691,7 @@ TEST_P(Texture2DNorm16TestES3, TextureNorm16RGBA16SNORMTextureTest)
 TEST_P(Texture2DNorm16TestES3, TextureNorm16R16RenderTest)
 {
     // http://anglebug.com/5153
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsOpenGL() && IsNVIDIA());
+    ANGLE_SKIP_TEST_IF(IsMac() && IsOpenGL() && IsNVIDIA());
 
     testNorm16RenderAndReadPixels(GL_R16_EXT, GL_RED, GL_UNSIGNED_SHORT);
 }
@@ -8699,7 +8699,7 @@ TEST_P(Texture2DNorm16TestES3, TextureNorm16R16RenderTest)
 TEST_P(Texture2DNorm16TestES3, TextureNorm16RG16RenderTest)
 {
     // http://anglebug.com/5153
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsOpenGL() && IsNVIDIA());
+    ANGLE_SKIP_TEST_IF(IsMac() && IsOpenGL() && IsNVIDIA());
 
     testNorm16RenderAndReadPixels(GL_RG16_EXT, GL_RG, GL_UNSIGNED_SHORT);
 }
@@ -8707,7 +8707,7 @@ TEST_P(Texture2DNorm16TestES3, TextureNorm16RG16RenderTest)
 TEST_P(Texture2DNorm16TestES3, TextureNorm16RGBA16RenderTest)
 {
     // http://anglebug.com/5153
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsOpenGL() && IsNVIDIA());
+    ANGLE_SKIP_TEST_IF(IsMac() && IsOpenGL() && IsNVIDIA());
 
     testNorm16RenderAndReadPixels(GL_RGBA16_EXT, GL_RGBA, GL_UNSIGNED_SHORT);
 }
@@ -9179,7 +9179,7 @@ TEST_P(Texture2DFloatTestES2, TextureHalfFloatSampleLegacyTest)
 TEST_P(Texture2DFloatTestES3, TextureFloatLinearTest)
 {
     // TODO(anglebug.com/5360): Failing on ARM-based Apple DTKs.
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsARM64() && (IsDesktopOpenGL()));
+    ANGLE_SKIP_TEST_IF(IsMac() && IsARM64() && (IsDesktopOpenGL()));
 
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_texture_float_linear"));
 
@@ -9190,7 +9190,7 @@ TEST_P(Texture2DFloatTestES3, TextureFloatLinearTest)
 TEST_P(Texture2DFloatTestES2, TextureFloatLinearTest)
 {
     // TODO(anglebug.com/5360): Failing on ARM-based Apple DTKs.
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsARM64() && (IsDesktopOpenGL()));
+    ANGLE_SKIP_TEST_IF(IsMac() && IsARM64() && (IsDesktopOpenGL()));
 
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_texture_float_linear"));
 
@@ -9218,7 +9218,7 @@ TEST_P(Texture2DFloatTestES2, TextureHalfFloatLinearTest)
 TEST_P(Texture2DFloatTestES3, TextureFloatLinearLegacyTest)
 {
     // TODO(anglebug.com/5360): Failing on ARM-based Apple DTKs.
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsARM64() && (IsDesktopOpenGL()));
+    ANGLE_SKIP_TEST_IF(IsMac() && IsARM64() && (IsDesktopOpenGL()));
 
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_texture_float"));
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_texture_float_linear"));
@@ -9238,7 +9238,7 @@ TEST_P(Texture2DFloatTestES3, TextureFloatLinearLegacyTest)
 TEST_P(Texture2DFloatTestES2, TextureFloatLinearLegacyTest)
 {
     // TODO(anglebug.com/5360): Failing on ARM-based Apple DTKs.
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsARM64() && (IsDesktopOpenGL()));
+    ANGLE_SKIP_TEST_IF(IsMac() && IsARM64() && (IsDesktopOpenGL()));
 
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_texture_float"));
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_OES_texture_float_linear"));
@@ -9399,7 +9399,7 @@ TEST_P(Texture2DTestES3, UnpackOverlappingRowsFromUnpackBuffer)
     ANGLE_SKIP_TEST_IF(IsD3D11());
 
     // Incorrect rendering results seen on OSX AMD.
-    ANGLE_SKIP_TEST_IF(IsOpenGL() && IsOSX() && IsAMD());
+    ANGLE_SKIP_TEST_IF(IsOpenGL() && IsMac() && IsAMD());
 
     const GLuint width            = 8u;
     const GLuint height           = 8u;
@@ -10027,7 +10027,7 @@ TEST_P(Texture2DTestES3, SingleTextureMultipleSamplers)
 TEST_P(TextureCubeTestES3, SpecifyAndSampleFromBaseLevel1)
 {
     // Check http://anglebug.com/2155.
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsNVIDIA());
+    ANGLE_SKIP_TEST_IF(IsMac() && IsNVIDIA());
 
     constexpr char kVS[] =
         R"(#version 300 es
@@ -10087,7 +10087,7 @@ TEST_P(TextureCubeTestES3, SpecifyAndSampleFromBaseLevel1)
 TEST_P(TextureCubeTestES3, CubeMapPixelUnpackBuffer)
 {
     // Check http://anglebug.com/2155.
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsNVIDIA());
+    ANGLE_SKIP_TEST_IF(IsMac() && IsNVIDIA());
 
     constexpr char kVS[] =
         R"(#version 300 es
@@ -10840,7 +10840,7 @@ TEST_P(Texture2DIntegerTestES3, IntegerTextureNonZeroBaseLevel)
 TEST_P(TextureCubeIntegerTestES3, IntegerCubeTextureNonZeroBaseLevel)
 {
     // All output checks returned black, rather than the texture color.
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsOpenGL());
+    ANGLE_SKIP_TEST_IF(IsMac() && IsOpenGL());
 
     glActiveTexture(GL_TEXTURE0);
 
@@ -10946,7 +10946,7 @@ TEST_P(Texture2DIntegerProjectiveOffsetTestES3, NonZeroBaseLevel)
 TEST_P(Texture2DArrayIntegerTestES3, NonZeroBaseLevel)
 {
     // Test fail: http://anglebug.com/5959
-    ANGLE_SKIP_TEST_IF(IsIntel() && IsOSX() && IsOpenGL());
+    ANGLE_SKIP_TEST_IF(IsIntel() && IsMac() && IsOpenGL());
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D_ARRAY, m2DArrayTexture);
@@ -10997,7 +10997,7 @@ TEST_P(Texture3DIntegerTestES3, NonZeroBaseLevel)
 void PBOCompressedTextureTest::runCompressedSubImage()
 {
     // ETC texture formats are not supported on Mac OpenGL. http://anglebug.com/3853
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsDesktopOpenGL());
+    ANGLE_SKIP_TEST_IF(IsMac() && IsDesktopOpenGL());
     // http://anglebug.com/4115
     ANGLE_SKIP_TEST_IF(IsAMD() && IsWindows() && IsDesktopOpenGL());
     ANGLE_SKIP_TEST_IF(IsIntel() && IsWindows() && IsDesktopOpenGL());
@@ -11154,7 +11154,7 @@ void main()
 TEST_P(ETC1CompressedTextureTest, ETC1CompressedSubImage)
 {
     // ETC texture formats are not supported on Mac OpenGL. http://anglebug.com/3853
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsDesktopOpenGL());
+    ANGLE_SKIP_TEST_IF(IsMac() && IsDesktopOpenGL());
 
     ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3 &&
                        !IsGLExtensionEnabled("GL_EXT_texture_storage"));
@@ -11199,7 +11199,7 @@ TEST_P(ETC1CompressedTextureTest, ETC1CompressedSubImage)
 TEST_P(ETC1CompressedTextureTest, ETC1CompressedImageNPOT)
 {
     // ETC texture formats are not supported on Mac OpenGL. http://anglebug.com/3853
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsDesktopOpenGL());
+    ANGLE_SKIP_TEST_IF(IsMac() && IsDesktopOpenGL());
 
     ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3);
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_compressed_ETC1_RGB8_sub_texture"));
@@ -11250,7 +11250,7 @@ TEST_P(ETC1CompressedTextureTest, ETC1CompressedImageNPOT)
 TEST_P(ETC1CompressedTextureTest, ETC1CompressedImageDraws)
 {
     // ETC texture formats are not supported on Mac OpenGL. http://anglebug.com/3853
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsDesktopOpenGL());
+    ANGLE_SKIP_TEST_IF(IsMac() && IsDesktopOpenGL());
 
     ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3);
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_compressed_ETC1_RGB8_sub_texture"));
@@ -11334,7 +11334,7 @@ TEST_P(ETC1CompressedTextureTest, ETC1CompressedImageDraws)
 TEST_P(ETC1CompressedTextureTest, ETC1ShrinkThenGrowMaxLevels)
 {
     // ETC texture formats are not supported on Mac OpenGL. http://anglebug.com/3853
-    ANGLE_SKIP_TEST_IF(IsOSX() && IsDesktopOpenGL());
+    ANGLE_SKIP_TEST_IF(IsMac() && IsDesktopOpenGL());
 
     ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3);
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_compressed_ETC1_RGB8_sub_texture"));
