@@ -16,6 +16,24 @@
       "message": "Good fix... that\u0027s been broken for... a long time?",
       "revId": "7169dc5fe003094c8438c7a3ceeab9792fe46918",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e16a62d_a81fc4f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-06-26T17:42:44Z",
+      "side": 1,
+      "message": "It seems that `mode` was not being used since the trace names were simplified.",
+      "parentUuid": "563c60bf_5b609a62",
+      "revId": "7169dc5fe003094c8438c7a3ceeab9792fe46918",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
