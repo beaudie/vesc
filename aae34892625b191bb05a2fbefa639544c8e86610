@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7e9b7bf_5a3fd99d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-06-26T17:33:14Z",
+      "side": 1,
+      "message": "Don\u0027t submit yet, reworking a bit of this. There\u0027s conflicts now between the definitions of the platform checks in SystemInfo.h and src/tests/test_utils/angle_test_instantiate.h... I think perhaps the ones in angle test_utils can mostly be dropped in favor of the ones being added to SystemInfo.",
+      "revId": "aae34892625b191bb05a2fbefa639544c8e86610",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
