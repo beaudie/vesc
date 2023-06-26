@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "22f6e370_6a7f9852",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-06-26T17:42:35Z",
+      "side": 1,
+      "message": "You are right. Removed.",
+      "parentUuid": "32539e30_6d7ff531",
+      "range": {
+        "startLine": 173,
+        "startChar": 4,
+        "endLine": 173,
+        "endChar": 66
+      },
+      "revId": "bf49d864b7c83669daba13bd73bb9fe209f8f596",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7799c6dd_995c5ecf",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-06-26T13:25:11Z",
       "side": 1,
       "message": "Is the code below guaranteed to always update all elements? If not, we might end up with values that were previously zero-initialized and now carried over from previous state.",
+      "range": {
+        "startLine": 5847,
+        "startChar": 10,
+        "endLine": 5847,
+        "endChar": 16
+      },
+      "revId": "bf49d864b7c83669daba13bd73bb9fe209f8f596",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86fea184_da900310",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 5847,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-06-26T17:42:35Z",
+      "side": 1,
+      "message": "Right, most of the bot failures I have seen was due to this and I have looked all of the use of updateInfoDesc and ensure all data member been set.",
+      "parentUuid": "7799c6dd_995c5ecf",
       "range": {
         "startLine": 5847,
         "startChar": 10,
