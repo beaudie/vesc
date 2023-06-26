@@ -9,6 +9,7 @@
 #ifndef LIBANGLE_RENDERER_DRIVER_UTILS_H_
 #define LIBANGLE_RENDERER_DRIVER_UTILS_H_
 
+#include "common/PlatformHelpers.h"
 #include "common/platform.h"
 #include "libANGLE/angletypes.h"
 
@@ -207,67 +208,37 @@ using ARMDriverVersion = MajorMinorPatchVersion;
 ARMDriverVersion ParseARMDriverVersion(uint32_t driverVersion);
 
 // Platform helpers
-inline bool IsWindows()
+inline constexpr bool IsAndroid()
 {
-#if defined(ANGLE_PLATFORM_WINDOWS)
-    return true;
-#else
-    return false;
-#endif
+    return angle::IsAndroid();
 }
-
-inline bool IsLinux()
+inline constexpr bool IsApple()
 {
-#if defined(ANGLE_PLATFORM_LINUX)
-    return true;
-#else
-    return false;
-#endif
+    return angle::IsApple();
 }
-
-inline bool IsChromeOS()
+inline constexpr bool IsChromeOS()
 {
-#if defined(ANGLE_PLATFORM_CHROMEOS)
-    return true;
-#else
-    return false;
-#endif
+    return angle::IsChromeOS();
 }
-
-inline bool IsApple()
+inline constexpr bool IsFuchsia()
 {
-#if defined(ANGLE_PLATFORM_APPLE)
-    return true;
-#else
-    return false;
-#endif
+    return angle::IsFuchsia();
 }
-
-inline bool IsMac()
+inline constexpr bool IsIOS()
 {
-#if defined(ANGLE_PLATFORM_APPLE) && defined(ANGLE_PLATFORM_MACOS)
-    return true;
-#else
-    return false;
-#endif
+    return angle::IsIOS();
 }
-
-inline bool IsFuchsia()
+inline constexpr bool IsLinux()
 {
-#if defined(ANGLE_PLATFORM_FUCHSIA)
-    return true;
-#else
-    return false;
-#endif
+    return angle::IsLinux();
 }
-
-inline bool IsIOS()
+inline constexpr bool IsMac()
 {
-#if ANGLE_PLATFORM_IOS_FAMILY
-    return true;
-#else
-    return false;
-#endif
+    return angle::IsMac();
+}
+inline constexpr bool IsWindows()
+{
+    return angle::IsWindows();
 }
 
 bool IsWayland();
@@ -280,15 +251,6 @@ OSVersion GetMacOSVersion();
 OSVersion GetiOSVersion();
 
 OSVersion GetLinuxOSVersion();
-
-inline bool IsAndroid()
-{
-#if defined(ANGLE_PLATFORM_ANDROID)
-    return true;
-#else
-    return false;
-#endif
-}
 
 int GetAndroidSDKVersion();
 
