@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c79514e_2c81738a",
+        "filename": "src/gpu_info_util/SystemInfo_vulkan.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-26T20:29:33Z",
+      "side": 1,
+      "message": "super nit: we do the sorting in the Vulkan backend because do numerous look ups. In this case, you might as well not sort it and do a linear scan.\n\nNo big deal",
+      "revId": "14e99e1258c1a0dc8d5d8cf57996f9780004f692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbb6c044_0277da5d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1682,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-26T20:29:33Z",
+      "side": 1,
+      "message": "Please use `ANGLE_FEATURE_CONDITION` and move up to where the rest of the features are enabled.\n\nIf you\u0027re interested, `ANGLE_FEATURE_CONDITION` does other things too, like remember the stringized condition to report to chrome://gpu and such things.",
+      "range": {
+        "startLine": 1679,
+        "startChar": 0,
+        "endLine": 1682,
+        "endChar": 70
+      },
+      "revId": "14e99e1258c1a0dc8d5d8cf57996f9780004f692",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
