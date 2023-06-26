@@ -25,6 +25,10 @@ class Spinlock
     void unlock() noexcept;
 
   private:
+    template <int kNumSpins, class DoPred>
+    bool doSpinWait(DoPred &&doPred) noexcept;
+
+  private:
     std::atomic_int mLock;
 };
 
@@ -41,12 +45,35 @@ ANGLE_INLINE void Spinlock::lock() noexcept
 {
     while (mLock.exchange(1, std::memory_order_acquire) != 0)
     {
-        // Relaxed wait to prevent unnecessary cache misses.
-        while (mLock.load(std::memory_order_relaxed) != 0)
+#if defined(ANGLE_PLATFORM_ANDROID)
+        using micro = std::chrono::microseconds;
+        while (!doSpinWait<1000>([]() { std::this_thread::yield(); }) &&
+               !doSpinWait<20>([]() { std::this_thread::sleep_for(micro(1)); }) &&
+               !doSpinWait<2>([]() { std::this_thread::sleep_for(micro(1000)); }) &&
+               !doSpinWait<20>([]() { std::this_thread::sleep_for(micro(1)); }))
         {
-            std::this_thread::yield();
+        }
+#else
+        while (!doSpinWait<1>([]() { std::this_thread::yield(); }))
+        {
+        }
+#endif
+    }
+}
+
+template <int kNumSpins, class DoPred>
+ANGLE_INLINE bool Spinlock::doSpinWait(DoPred &&doPred) noexcept
+{
+    for (int i = 0; i < kNumSpins; ++i)
+    {
+        doPred();
+        // Relaxed wait to prevent unnecessary cache misses.
+        if (mLock.load(std::memory_order_relaxed) == 0)
+        {
+            return true;
         }
     }
+    return false;
 }
 
 ANGLE_INLINE void Spinlock::unlock() noexcept
