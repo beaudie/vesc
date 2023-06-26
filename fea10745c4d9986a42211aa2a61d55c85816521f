@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a56f71a1_a23dcc94",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-06-26T17:56:14Z",
+      "side": 1,
+      "message": "lgtm+2\n\nThe contract should be carefully documented in DisplayImpl.h. Intuitively I would not assume it is necessary to call terminate() if initialize() fails.\n\n+syoussefi as FYI.",
+      "revId": "fea10745c4d9986a42211aa2a61d55c85816521f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
