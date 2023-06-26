@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc8c75ea_77696ee7",
+        "filename": "src/libANGLE/renderer/driver_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-06-26T20:14:28Z",
+      "side": 1,
+      "message": "Resolved by disambiguating the IsApple(uint32_t) -\u003e IsAppleGPU(uint32_t)",
+      "parentUuid": "7fe15664_0ee28a30",
+      "revId": "3bfb21a752dfc5a570f179f0e8b116aae2a48d6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3dfe60a9_fe018c11",
