@@ -63,6 +63,30 @@
       },
       "revId": "8bf30d2d64d40c389d82101efdd4b8155fcebdde",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae2bdfab_d2c189f0",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 1366,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-06-26T16:31:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af5584cc_fb009e60",
+      "range": {
+        "startLine": 1366,
+        "startChar": 66,
+        "endLine": 1366,
+        "endChar": 70
+      },
+      "revId": "8bf30d2d64d40c389d82101efdd4b8155fcebdde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
