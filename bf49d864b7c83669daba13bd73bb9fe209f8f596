@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5a6905e4_1db2b560",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-06-26T18:44:52Z",
+      "side": 1,
+      "message": "My worry mainly is performance. The \u003d\u003d operator in FastVector is doing a for loop of each element and then we will end up with element wise comparison. I think memcmp is cheapest way to compare the array of elements (which is it was using before this CL).",
+      "parentUuid": "91efedac_45412d7b",
+      "range": {
+        "startLine": 173,
+        "startChar": 4,
+        "endLine": 173,
+        "endChar": 66
+      },
+      "revId": "bf49d864b7c83669daba13bd73bb9fe209f8f596",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7799c6dd_995c5ecf",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 14
