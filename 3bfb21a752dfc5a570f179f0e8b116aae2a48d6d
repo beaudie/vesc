@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fe15664_0ee28a30",
+        "filename": "src/libANGLE/renderer/driver_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-06-26T19:19:18Z",
+      "side": 1,
+      "message": "I\u0027m not happy with these. I tried just doing an \"using angle::IsAndroid\" etc, which worked for most of these.\n\nBut there were complications with \"using angle::IsApple\" because we have a different \"IsApple\" defined in driver_util which takes a uint32_t vendor ID, and the compiler rejected the \"using\" because of that.",
+      "revId": "3bfb21a752dfc5a570f179f0e8b116aae2a48d6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3dfe60a9_fe018c11",
+        "filename": "src/tests/test_expectations/GPUTestConfig.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-06-26T19:19:18Z",
+      "side": 1,
+      "message": "I could move all these IsMac* functions into the new PlatformHelpers but they\u0027re only being used in this source file so maybe we can skip on that for now.",
+      "revId": "3bfb21a752dfc5a570f179f0e8b116aae2a48d6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b55ed990_ce67bcc6",
+        "filename": "src/tests/test_expectations/GPUTestConfig.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-06-26T19:19:18Z",
+      "side": 1,
+      "message": "Not happy with this function either, because we ambiguously use \"IsApple\" to mean \"is an Apple-vended OS\" or \"is an Apple GPU\".",
+      "revId": "3bfb21a752dfc5a570f179f0e8b116aae2a48d6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "677f100f_606b1d98",
+        "filename": "src/tests/test_utils/angle_test_instantiate.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-06-26T19:19:18Z",
+      "side": 1,
+      "message": "Probably could move this into PlatformHelpers.h as well, but the comment around it in angle_test_instantiate.cpp makes me think it\u0027s an oddball one.",
+      "revId": "3bfb21a752dfc5a570f179f0e8b116aae2a48d6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
