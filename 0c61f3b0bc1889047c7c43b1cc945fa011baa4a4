@@ -146,6 +146,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ee32b109_1e0738c9",
+        "filename": "src/gpu_info_util/SystemInfo_vulkan.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-06-26T16:53:31Z",
+      "side": 1,
+      "message": "Okay, thanks for the pointer. I think I might need to change it further anyway: MoltenVK is supported on iOS and macOS, though I have never tested it on the iOS side. It\u0027s possible someone else may want it though, so I\u0027m going to change the detection to IsApple() in the appropriate spots.",
+      "parentUuid": "8aec6387_98e55bfa",
+      "range": {
+        "startLine": 99,
+        "startChar": 12,
+        "endLine": 99,
+        "endChar": 17
+      },
+      "revId": "0c61f3b0bc1889047c7c43b1cc945fa011baa4a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b5e2d9fb_9bed7d94",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
@@ -163,6 +187,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4c9b095b_1ed6dfc5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1801,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-06-26T16:53:31Z",
+      "side": 1,
+      "message": "Will do.",
+      "parentUuid": "b5e2d9fb_9bed7d94",
+      "revId": "0c61f3b0bc1889047c7c43b1cc945fa011baa4a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b64e98a2_bc8b832a",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
@@ -174,6 +216,24 @@
       "writtenOn": "2023-06-26T16:22:03Z",
       "side": 1,
       "message": "This needs the presence of `VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME` too.\n\nBest add a feature that gets initialized in `enableInstanceExtensions()` based on which the extension is added or not, and the flag is added or not.",
+      "revId": "0c61f3b0bc1889047c7c43b1cc945fa011baa4a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc4b9545_73ba1c24",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1802,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-06-26T16:53:31Z",
+      "side": 1,
+      "message": "We can\u0027t get to the renderer\u0027s enabled instance extensions (or feature flags) from SystemInfo_vulkan though, can we?",
+      "parentUuid": "b64e98a2_bc8b832a",
       "revId": "0c61f3b0bc1889047c7c43b1cc945fa011baa4a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
