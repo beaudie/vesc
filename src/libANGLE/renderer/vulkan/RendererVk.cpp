@@ -1955,7 +1955,7 @@ angle::Result RendererVk::initializeMemoryAllocator(DisplayVk *displayVk)
     // This number matches Chromium and was picked by looking at memory usage of
     // Android apps. The allocator will start making blocks at 1/8 the max size
     // and builds up block size as needed before capping at the max set here.
-    mPreferredLargeHeapBlockSize = 4 * 1024 * 1024;
+    mPreferredLargeHeapBlockSize = 1 * 1024 * 1024;
 
     // Create VMA allocator
     ANGLE_VK_TRY(displayVk,
