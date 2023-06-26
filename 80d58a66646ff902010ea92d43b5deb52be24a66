@@ -16,6 +16,24 @@
       "message": "LGTM. Could you also run asphalt_9 on pixel 7 before and after the CL to ensure no perf regressions?",
       "revId": "80d58a66646ff902010ea92d43b5deb52be24a66",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12ff1beb_7a9ac68e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-26T15:36:58Z",
+      "side": 1,
+      "message": "Verified on Pixel 6 that there\u0027s no measurable difference. That\u0027s expected since the map that\u0027s replacing the removed map is not practically identical (both are now arrays indexed by an int). The map being removed was previously an optimization because the other map was string-based.",
+      "parentUuid": "5804ffe3_8f8edbb2",
+      "revId": "80d58a66646ff902010ea92d43b5deb52be24a66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
