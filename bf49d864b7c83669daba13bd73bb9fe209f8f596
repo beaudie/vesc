@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "91efedac_45412d7b",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-06-26T18:40:17Z",
+      "side": 1,
+      "message": "Looks like still using memcmp elsewhere, why not add operator\u003d\u003d to DescriptorInfoDesc instead?",
+      "parentUuid": "22f6e370_6a7f9852",
+      "range": {
+        "startLine": 173,
+        "startChar": 4,
+        "endLine": 173,
+        "endChar": 66
+      },
+      "revId": "bf49d864b7c83669daba13bd73bb9fe209f8f596",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7799c6dd_995c5ecf",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 14
