@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32afeddc_d2dc1ab4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-26T20:25:31Z",
+      "side": 1,
+      "message": "(Would have been nice to have the rename done in a separate CL to reduce review noise)",
+      "revId": "b9e5156a25af0989e8576400b11fb1729d7d3030",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

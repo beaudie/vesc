@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d48453b_a3ecc8e0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 5901,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-26T20:25:31Z",
+      "side": 0,
+      "message": "Was this a bug? Why is `infoIndex` different now?",
+      "range": {
+        "startLine": 5901,
+        "startChar": 55,
+        "endLine": 5901,
+        "endChar": 66
+      },
+      "revId": "2283d2d0e36a069a2d4a3f16efaef1ba6249dad2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
