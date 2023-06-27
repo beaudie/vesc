@@ -16,6 +16,24 @@
       "message": "You may need to enable this for Qualcomm too! Not sure what the deal with the d3d failure is.",
       "revId": "8726268e6cac7e89f19ccd9b8c1a74a7b68aeb29",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3910f63f_4b62d90b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-27T19:17:53Z",
+      "side": 1,
+      "message": "Probably best to just skip the 2 failing tests for now.",
+      "parentUuid": "c460dfc8_a009f0bb",
+      "revId": "8726268e6cac7e89f19ccd9b8c1a74a7b68aeb29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
