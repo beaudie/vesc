@@ -16,6 +16,24 @@
       "message": "I am not 100% sure whether this is needed, adding Cody and Ian to review",
       "revId": "cd1d8124678a33f41535c7425783255806677dd4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f98d0aa_5d1b63f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-06-27T05:07:07Z",
+      "side": 1,
+      "message": "In AOSP it looks like we get this permission from here:\nhttps://cs.android.com/android/platform/superproject/+/master:frameworks/base/data/etc/privapp-permissions-platform.xml;l\u003d28-30\n\nDetails on why this isn\u0027t working for Oppo are here:\nhttps://buganizer.corp.google.com/issues/242671681#comment119\n\nI\u0027d like to test this with a downstream change to remove other methods that allow priv-app permissions.\n\nI agree we need a universal solution that provides the permission regardless of where ANGLE lands on the device.",
+      "parentUuid": "b06def53_001e29ac",
+      "revId": "cd1d8124678a33f41535c7425783255806677dd4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
