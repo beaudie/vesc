@@ -13,6 +13,7 @@
 
 #include "common/vulkan/vk_headers.h"
 #include "libANGLE/renderer/renderer_utils.h"
+#include "libANGLE/renderer/vulkan/MemoryTracking.h"
 #include "libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.h"
 #include "libANGLE/trace.h"
 
@@ -143,7 +144,9 @@ class CommandPool final : public WrappedObject<CommandPool, VkCommandPool>
                             uint32_t commandBufferCount,
                             const VkCommandBuffer *commandBuffers);
 
-    VkResult init(VkDevice device, const VkCommandPoolCreateInfo &createInfo);
+    VkResult init(VkDevice device,
+                  const VkCommandPoolCreateInfo &createInfo,
+                  const VkAllocationCallbacks *callbacks);
 };
 
 class Pipeline final : public WrappedObject<Pipeline, VkPipeline>
@@ -154,10 +157,12 @@ class Pipeline final : public WrappedObject<Pipeline, VkPipeline>
 
     VkResult initGraphics(VkDevice device,
                           const VkGraphicsPipelineCreateInfo &createInfo,
-                          const PipelineCache &pipelineCacheVk);
+                          const PipelineCache &pipelineCacheVk,
+                          const VkAllocationCallbacks *callbacks);
     VkResult initCompute(VkDevice device,
                          const VkComputePipelineCreateInfo &createInfo,
-                         const PipelineCache &pipelineCacheVk);
+                         const PipelineCache &pipelineCacheVk,
+                         const VkAllocationCallbacks *callbacks);
 };
 
 namespace priv
@@ -414,7 +419,9 @@ class Image final : public WrappedObject<Image, VkImage>
     // Called on shutdown when the helper class *does* own the handle to the image resource.
     void destroy(VkDevice device);
 
-    VkResult init(VkDevice device, const VkImageCreateInfo &createInfo);
+    VkResult init(VkDevice device,
+                  const VkImageCreateInfo &createInfo,
+                  const VkAllocationCallbacks *callbacks);
 
     void getMemoryRequirements(VkDevice device, VkMemoryRequirements *requirementsOut) const;
     VkResult bindMemory(VkDevice device, const DeviceMemory &deviceMemory);
@@ -436,7 +443,9 @@ class ImageView final : public WrappedObject<ImageView, VkImageView>
     ImageView() = default;
     void destroy(VkDevice device);
 
-    VkResult init(VkDevice device, const VkImageViewCreateInfo &createInfo);
+    VkResult init(VkDevice device,
+                  const VkImageViewCreateInfo &createInfo,
+                  const VkAllocationCallbacks *callbacks);
 };
 
 class Semaphore final : public WrappedObject<Semaphore, VkSemaphore>
@@ -445,7 +454,7 @@ class Semaphore final : public WrappedObject<Semaphore, VkSemaphore>
     Semaphore() = default;
     void destroy(VkDevice device);
 
-    VkResult init(VkDevice device);
+    VkResult init(VkDevice device, const VkAllocationCallbacks *callbacks);
     VkResult importFd(VkDevice device, const VkImportSemaphoreFdInfoKHR &importFdInfo) const;
 };
 
@@ -458,7 +467,9 @@ class Framebuffer final : public WrappedObject<Framebuffer, VkFramebuffer>
     // Use this method only in necessary cases. (RenderPass)
     void setHandle(VkFramebuffer handle);
 
-    VkResult init(VkDevice device, const VkFramebufferCreateInfo &createInfo);
+    VkResult init(VkDevice device,
+                  const VkFramebufferCreateInfo &createInfo,
+                  const VkAllocationCallbacks *callbacks);
 };
 
 class DeviceMemory final : public WrappedObject<DeviceMemory, VkDeviceMemory>
@@ -467,7 +478,9 @@ class DeviceMemory final : public WrappedObject<DeviceMemory, VkDeviceMemory>
     DeviceMemory() = default;
     void destroy(VkDevice device);
 
-    VkResult allocate(VkDevice device, const VkMemoryAllocateInfo &allocInfo);
+    VkResult allocate(VkDevice device,
+                      const VkMemoryAllocateInfo &allocInfo,
+                      const VkAllocationCallbacks *callbacks);
     VkResult map(VkDevice device,
                  VkDeviceSize offset,
                  VkDeviceSize size,
@@ -488,7 +501,8 @@ class Allocator : public WrappedObject<Allocator, VmaAllocator>
                   VkDevice device,
                   VkInstance instance,
                   uint32_t apiVersion,
-                  VkDeviceSize preferredLargeHeapBlockSize);
+                  VkDeviceSize preferredLargeHeapBlockSize,
+                  VkAllocationCallbacks *callbacks);
 
     // Initializes the buffer handle and memory allocation.
     VkResult createBuffer(const VkBufferCreateInfo &bufferCreateInfo,
@@ -532,8 +546,12 @@ class RenderPass final : public WrappedObject<RenderPass, VkRenderPass>
     RenderPass() = default;
     void destroy(VkDevice device);
 
-    VkResult init(VkDevice device, const VkRenderPassCreateInfo &createInfo);
-    VkResult init2(VkDevice device, const VkRenderPassCreateInfo2 &createInfo);
+    VkResult init(VkDevice device,
+                  const VkRenderPassCreateInfo &createInfo,
+                  const VkAllocationCallbacks *callbacks);
+    VkResult init2(VkDevice device,
+                   const VkRenderPassCreateInfo2 &,
+                   const VkAllocationCallbacks *callbacks);
 };
 
 enum class StagingUsage
@@ -549,7 +567,9 @@ class Buffer final : public WrappedObject<Buffer, VkBuffer>
     Buffer() = default;
     void destroy(VkDevice device);
 
-    VkResult init(VkDevice device, const VkBufferCreateInfo &createInfo);
+    VkResult init(VkDevice device,
+                  const VkBufferCreateInfo &createInfo,
+                  const VkAllocationCallbacks *callbacks);
     VkResult bindMemory(VkDevice device, const DeviceMemory &deviceMemory, VkDeviceSize offset);
     void getMemoryRequirements(VkDevice device, VkMemoryRequirements *memoryRequirementsOut);
 
@@ -563,7 +583,9 @@ class BufferView final : public WrappedObject<BufferView, VkBufferView>
     BufferView() = default;
     void destroy(VkDevice device);
 
-    VkResult init(VkDevice device, const VkBufferViewCreateInfo &createInfo);
+    VkResult init(VkDevice device,
+                  const VkBufferViewCreateInfo &createInfo,
+                  const VkAllocationCallbacks *callbacks);
 };
 
 class ShaderModule final : public WrappedObject<ShaderModule, VkShaderModule>
@@ -572,7 +594,9 @@ class ShaderModule final : public WrappedObject<ShaderModule, VkShaderModule>
     ShaderModule() = default;
     void destroy(VkDevice device);
 
-    VkResult init(VkDevice device, const VkShaderModuleCreateInfo &createInfo);
+    VkResult init(VkDevice device,
+                  const VkShaderModuleCreateInfo &createInfo,
+                  const VkAllocationCallbacks *callbacks);
 };
 
 class PipelineLayout final : public WrappedObject<PipelineLayout, VkPipelineLayout>
@@ -581,7 +605,9 @@ class PipelineLayout final : public WrappedObject<PipelineLayout, VkPipelineLayo
     PipelineLayout() = default;
     void destroy(VkDevice device);
 
-    VkResult init(VkDevice device, const VkPipelineLayoutCreateInfo &createInfo);
+    VkResult init(VkDevice device,
+                  const VkPipelineLayoutCreateInfo &createInfo,
+                  const VkAllocationCallbacks *callbacks);
 };
 
 class PipelineCache final : public WrappedObject<PipelineCache, VkPipelineCache>
@@ -590,7 +616,9 @@ class PipelineCache final : public WrappedObject<PipelineCache, VkPipelineCache>
     PipelineCache() = default;
     void destroy(VkDevice device);
 
-    VkResult init(VkDevice device, const VkPipelineCacheCreateInfo &createInfo);
+    VkResult init(VkDevice device,
+                  const VkPipelineCacheCreateInfo &createInfo,
+                  const VkAllocationCallbacks *callbacks);
     VkResult getCacheData(VkDevice device, size_t *cacheSize, void *cacheData) const;
     VkResult merge(VkDevice device, uint32_t srcCacheCount, const VkPipelineCache *srcCaches) const;
 };
@@ -601,7 +629,9 @@ class DescriptorSetLayout final : public WrappedObject<DescriptorSetLayout, VkDe
     DescriptorSetLayout() = default;
     void destroy(VkDevice device);
 
-    VkResult init(VkDevice device, const VkDescriptorSetLayoutCreateInfo &createInfo);
+    VkResult init(VkDevice device,
+                  const VkDescriptorSetLayoutCreateInfo &createInfo,
+                  const VkAllocationCallbacks *callbacks);
 };
 
 class DescriptorPool final : public WrappedObject<DescriptorPool, VkDescriptorPool>
@@ -610,7 +640,9 @@ class DescriptorPool final : public WrappedObject<DescriptorPool, VkDescriptorPo
     DescriptorPool() = default;
     void destroy(VkDevice device);
 
-    VkResult init(VkDevice device, const VkDescriptorPoolCreateInfo &createInfo);
+    VkResult init(VkDevice device,
+                  const VkDescriptorPoolCreateInfo &createInfo,
+                  const VkAllocationCallbacks *callbacks);
 
     VkResult allocateDescriptorSets(VkDevice device,
                                     const VkDescriptorSetAllocateInfo &allocInfo,
@@ -625,7 +657,9 @@ class Sampler final : public WrappedObject<Sampler, VkSampler>
   public:
     Sampler() = default;
     void destroy(VkDevice device);
-    VkResult init(VkDevice device, const VkSamplerCreateInfo &createInfo);
+    VkResult init(VkDevice device,
+                  const VkSamplerCreateInfo &createInfo,
+                  const VkAllocationCallbacks *callbacks);
 };
 
 class SamplerYcbcrConversion final
@@ -634,7 +668,9 @@ class SamplerYcbcrConversion final
   public:
     SamplerYcbcrConversion() = default;
     void destroy(VkDevice device);
-    VkResult init(VkDevice device, const VkSamplerYcbcrConversionCreateInfo &createInfo);
+    VkResult init(VkDevice device,
+                  const VkSamplerYcbcrConversionCreateInfo &createInfo,
+                  const VkAllocationCallbacks *callbacks);
 };
 
 class Event final : public WrappedObject<Event, VkEvent>
@@ -644,7 +680,9 @@ class Event final : public WrappedObject<Event, VkEvent>
     void destroy(VkDevice device);
     using WrappedObject::operator=;
 
-    VkResult init(VkDevice device, const VkEventCreateInfo &createInfo);
+    VkResult init(VkDevice device,
+                  const VkEventCreateInfo &createInfo,
+                  const VkAllocationCallbacks *callbacks);
     VkResult getStatus(VkDevice device) const;
     VkResult set(VkDevice device) const;
     VkResult reset(VkDevice device) const;
@@ -657,7 +695,9 @@ class Fence final : public WrappedObject<Fence, VkFence>
     void destroy(VkDevice device);
     using WrappedObject::operator=;
 
-    VkResult init(VkDevice device, const VkFenceCreateInfo &createInfo);
+    VkResult init(VkDevice device,
+                  const VkFenceCreateInfo &createInfo,
+                  const VkAllocationCallbacks *callbacks);
     VkResult reset(VkDevice device);
     VkResult getStatus(VkDevice device) const;
     VkResult wait(VkDevice device, uint64_t timeout) const;
@@ -671,7 +711,9 @@ class QueryPool final : public WrappedObject<QueryPool, VkQueryPool>
     QueryPool() = default;
     void destroy(VkDevice device);
 
-    VkResult init(VkDevice device, const VkQueryPoolCreateInfo &createInfo);
+    VkResult init(VkDevice device,
+                  const VkQueryPoolCreateInfo &createInfo,
+                  const VkAllocationCallbacks *callbacks);
     VkResult getResults(VkDevice device,
                         uint32_t firstQuery,
                         uint32_t queryCount,
@@ -702,7 +744,10 @@ ANGLE_INLINE void CommandPool::destroy(VkDevice device)
 {
     if (valid())
     {
-        vkDestroyCommandPool(device, mHandle, nullptr);
+        WARN() << "CommandPool::destroy";
+        MemoryAllocationCallback memTest;
+        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+        vkDestroyCommandPool(device, mHandle, &memACB);
         mHandle = VK_NULL_HANDLE;
     }
 }
@@ -721,10 +766,13 @@ ANGLE_INLINE void CommandPool::freeCommandBuffers(VkDevice device,
     vkFreeCommandBuffers(device, mHandle, commandBufferCount, commandBuffers);
 }
 
-ANGLE_INLINE VkResult CommandPool::init(VkDevice device, const VkCommandPoolCreateInfo &createInfo)
+ANGLE_INLINE VkResult CommandPool::init(VkDevice device,
+                                        const VkCommandPoolCreateInfo &createInfo,
+                                        const VkAllocationCallbacks *callbacks)
 {
     ASSERT(!valid());
-    return vkCreateCommandPool(device, &createInfo, nullptr, &mHandle);
+    WARN() << "CommandPool::init";
+    return vkCreateCommandPool(device, &createInfo, callbacks, &mHandle);
 }
 
 namespace priv
@@ -1358,15 +1406,21 @@ ANGLE_INLINE void Image::destroy(VkDevice device)
 {
     if (valid())
     {
-        vkDestroyImage(device, mHandle, nullptr);
+        WARN() << "Image::destroy";
+        MemoryAllocationCallback memTest;
+        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+        vkDestroyImage(device, mHandle, &memACB);
         mHandle = VK_NULL_HANDLE;
     }
 }
 
-ANGLE_INLINE VkResult Image::init(VkDevice device, const VkImageCreateInfo &createInfo)
+ANGLE_INLINE VkResult Image::init(VkDevice device,
+                                  const VkImageCreateInfo &createInfo,
+                                  const VkAllocationCallbacks *callbacks)
 {
     ASSERT(!valid());
-    return vkCreateImage(device, &createInfo, nullptr, &mHandle);
+    WARN() << "Image::init";
+    return vkCreateImage(device, &createInfo, callbacks, &mHandle);
 }
 
 ANGLE_INLINE void Image::getMemoryRequirements(VkDevice device,
@@ -1407,14 +1461,20 @@ ANGLE_INLINE void ImageView::destroy(VkDevice device)
 {
     if (valid())
     {
-        vkDestroyImageView(device, mHandle, nullptr);
+        WARN() << "ImageView::destroy";
+        MemoryAllocationCallback memTest;
+        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+        vkDestroyImageView(device, mHandle, &memACB);
         mHandle = VK_NULL_HANDLE;
     }
 }
 
-ANGLE_INLINE VkResult ImageView::init(VkDevice device, const VkImageViewCreateInfo &createInfo)
+ANGLE_INLINE VkResult ImageView::init(VkDevice device,
+                                      const VkImageViewCreateInfo &createInfo,
+                                      const VkAllocationCallbacks *callbacks)
 {
-    return vkCreateImageView(device, &createInfo, nullptr, &mHandle);
+    WARN() << "ImageView::init";
+    return vkCreateImageView(device, &createInfo, callbacks, &mHandle);
 }
 
 // Semaphore implementation.
@@ -1422,12 +1482,15 @@ ANGLE_INLINE void Semaphore::destroy(VkDevice device)
 {
     if (valid())
     {
-        vkDestroySemaphore(device, mHandle, nullptr);
+        WARN() << "Semaphore::destroy";
+        MemoryAllocationCallback memTest;
+        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+        vkDestroySemaphore(device, mHandle, &memACB);
         mHandle = VK_NULL_HANDLE;
     }
 }
 
-ANGLE_INLINE VkResult Semaphore::init(VkDevice device)
+ANGLE_INLINE VkResult Semaphore::init(VkDevice device, const VkAllocationCallbacks *callbacks)
 {
     ASSERT(!valid());
 
@@ -1435,7 +1498,8 @@ ANGLE_INLINE VkResult Semaphore::init(VkDevice device)
     semaphoreInfo.sType                 = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
     semaphoreInfo.flags                 = 0;
 
-    return vkCreateSemaphore(device, &semaphoreInfo, nullptr, &mHandle);
+    WARN() << "Semaphore::init";
+    return vkCreateSemaphore(device, &semaphoreInfo, callbacks, &mHandle);
 }
 
 ANGLE_INLINE VkResult Semaphore::importFd(VkDevice device,
@@ -1450,15 +1514,21 @@ ANGLE_INLINE void Framebuffer::destroy(VkDevice device)
 {
     if (valid())
     {
-        vkDestroyFramebuffer(device, mHandle, nullptr);
+        WARN() << "Framebuffer::destroy";
+        MemoryAllocationCallback memTest;
+        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+        vkDestroyFramebuffer(device, mHandle, &memACB);
         mHandle = VK_NULL_HANDLE;
     }
 }
 
-ANGLE_INLINE VkResult Framebuffer::init(VkDevice device, const VkFramebufferCreateInfo &createInfo)
+ANGLE_INLINE VkResult Framebuffer::init(VkDevice device,
+                                        const VkFramebufferCreateInfo &createInfo,
+                                        const VkAllocationCallbacks *callbacks)
 {
     ASSERT(!valid());
-    return vkCreateFramebuffer(device, &createInfo, nullptr, &mHandle);
+    WARN() << "Framebuffer::init";
+    return vkCreateFramebuffer(device, &createInfo, callbacks, &mHandle);
 }
 
 ANGLE_INLINE void Framebuffer::setHandle(VkFramebuffer handle)
@@ -1471,15 +1541,21 @@ ANGLE_INLINE void DeviceMemory::destroy(VkDevice device)
 {
     if (valid())
     {
-        vkFreeMemory(device, mHandle, nullptr);
+        WARN() << "DeviceMemory::destroy";
+        MemoryAllocationCallback memTest;
+        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+        vkFreeMemory(device, mHandle, &memACB);
         mHandle = VK_NULL_HANDLE;
     }
 }
 
-ANGLE_INLINE VkResult DeviceMemory::allocate(VkDevice device, const VkMemoryAllocateInfo &allocInfo)
+ANGLE_INLINE VkResult DeviceMemory::allocate(VkDevice device,
+                                             const VkMemoryAllocateInfo &allocInfo,
+                                             const VkAllocationCallbacks *callbacks)
 {
     ASSERT(!valid());
-    return vkAllocateMemory(device, &allocInfo, nullptr, &mHandle);
+    WARN() << "DeviceMemory::allocate";
+    return vkAllocateMemory(device, &allocInfo, callbacks, &mHandle);
 }
 
 ANGLE_INLINE VkResult DeviceMemory::map(VkDevice device,
@@ -1522,11 +1598,12 @@ ANGLE_INLINE VkResult Allocator::init(VkPhysicalDevice physicalDevice,
                                       VkDevice device,
                                       VkInstance instance,
                                       uint32_t apiVersion,
-                                      VkDeviceSize preferredLargeHeapBlockSize)
+                                      VkDeviceSize preferredLargeHeapBlockSize,
+                                      VkAllocationCallbacks *callbacks)
 {
     ASSERT(!valid());
     return vma::InitAllocator(physicalDevice, device, instance, apiVersion,
-                              preferredLargeHeapBlockSize, &mHandle);
+                              preferredLargeHeapBlockSize, callbacks, &mHandle);
 }
 
 ANGLE_INLINE VkResult Allocator::createBuffer(const VkBufferCreateInfo &bufferCreateInfo,
@@ -1620,21 +1697,30 @@ ANGLE_INLINE void RenderPass::destroy(VkDevice device)
 {
     if (valid())
     {
-        vkDestroyRenderPass(device, mHandle, nullptr);
+        WARN() << "RenderPass::destroy";
+        MemoryAllocationCallback memTest;
+        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+        vkDestroyRenderPass(device, mHandle, &memACB);
         mHandle = VK_NULL_HANDLE;
     }
 }
 
-ANGLE_INLINE VkResult RenderPass::init(VkDevice device, const VkRenderPassCreateInfo &createInfo)
+ANGLE_INLINE VkResult RenderPass::init(VkDevice device,
+                                       const VkRenderPassCreateInfo &createInfo,
+                                       const VkAllocationCallbacks *callbacks)
 {
     ASSERT(!valid());
-    return vkCreateRenderPass(device, &createInfo, nullptr, &mHandle);
+    WARN() << "RenderPass::init";
+    return vkCreateRenderPass(device, &createInfo, callbacks, &mHandle);
 }
 
-ANGLE_INLINE VkResult RenderPass::init2(VkDevice device, const VkRenderPassCreateInfo2 &createInfo)
+ANGLE_INLINE VkResult RenderPass::init2(VkDevice device,
+                                        const VkRenderPassCreateInfo2 &createInfo,
+                                        const VkAllocationCallbacks *callbacks)
 {
     ASSERT(!valid());
-    return vkCreateRenderPass2KHR(device, &createInfo, nullptr, &mHandle);
+    WARN() << "RenderPass::init2";
+    return vkCreateRenderPass2KHR(device, &createInfo, callbacks, &mHandle);
 }
 
 // Buffer implementation.
@@ -1642,15 +1728,21 @@ ANGLE_INLINE void Buffer::destroy(VkDevice device)
 {
     if (valid())
     {
-        vkDestroyBuffer(device, mHandle, nullptr);
+        WARN() << "Buffer::destroy";
+        MemoryAllocationCallback memTest;
+        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+        vkDestroyBuffer(device, mHandle, &memACB);
         mHandle = VK_NULL_HANDLE;
     }
 }
 
-ANGLE_INLINE VkResult Buffer::init(VkDevice device, const VkBufferCreateInfo &createInfo)
+ANGLE_INLINE VkResult Buffer::init(VkDevice device,
+                                   const VkBufferCreateInfo &createInfo,
+                                   const VkAllocationCallbacks *callbacks)
 {
     ASSERT(!valid());
-    return vkCreateBuffer(device, &createInfo, nullptr, &mHandle);
+    WARN() << "Buffer::init";
+    return vkCreateBuffer(device, &createInfo, callbacks, &mHandle);
 }
 
 ANGLE_INLINE VkResult Buffer::bindMemory(VkDevice device,
@@ -1673,15 +1765,21 @@ ANGLE_INLINE void BufferView::destroy(VkDevice device)
 {
     if (valid())
     {
-        vkDestroyBufferView(device, mHandle, nullptr);
+        WARN() << "BufferView::destroy";
+        MemoryAllocationCallback memTest;
+        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+        vkDestroyBufferView(device, mHandle, &memACB);
         mHandle = VK_NULL_HANDLE;
     }
 }
 
-ANGLE_INLINE VkResult BufferView::init(VkDevice device, const VkBufferViewCreateInfo &createInfo)
+ANGLE_INLINE VkResult BufferView::init(VkDevice device,
+                                       const VkBufferViewCreateInfo &createInfo,
+                                       const VkAllocationCallbacks *callbacks)
 {
     ASSERT(!valid());
-    return vkCreateBufferView(device, &createInfo, nullptr, &mHandle);
+    WARN() << "BufferView::init";
+    return vkCreateBufferView(device, &createInfo, callbacks, &mHandle);
 }
 
 // ShaderModule implementation.
@@ -1689,16 +1787,21 @@ ANGLE_INLINE void ShaderModule::destroy(VkDevice device)
 {
     if (mHandle != VK_NULL_HANDLE)
     {
-        vkDestroyShaderModule(device, mHandle, nullptr);
+        WARN() << "ShaderModule::destroy";
+        MemoryAllocationCallback memTest;
+        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+        vkDestroyShaderModule(device, mHandle, &memACB);
         mHandle = VK_NULL_HANDLE;
     }
 }
 
 ANGLE_INLINE VkResult ShaderModule::init(VkDevice device,
-                                         const VkShaderModuleCreateInfo &createInfo)
+                                         const VkShaderModuleCreateInfo &createInfo,
+                                         const VkAllocationCallbacks *callbacks)
 {
     ASSERT(!valid());
-    return vkCreateShaderModule(device, &createInfo, nullptr, &mHandle);
+    WARN() << "ShaderModule::init";
+    return vkCreateShaderModule(device, &createInfo, callbacks, &mHandle);
 }
 
 // PipelineLayout implementation.
@@ -1706,16 +1809,21 @@ ANGLE_INLINE void PipelineLayout::destroy(VkDevice device)
 {
     if (valid())
     {
-        vkDestroyPipelineLayout(device, mHandle, nullptr);
+        WARN() << "PipelineLayout::destroy";
+        MemoryAllocationCallback memTest;
+        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+        vkDestroyPipelineLayout(device, mHandle, &memACB);
         mHandle = VK_NULL_HANDLE;
     }
 }
 
 ANGLE_INLINE VkResult PipelineLayout::init(VkDevice device,
-                                           const VkPipelineLayoutCreateInfo &createInfo)
+                                           const VkPipelineLayoutCreateInfo &createInfo,
+                                           const VkAllocationCallbacks *callbacks)
 {
     ASSERT(!valid());
-    return vkCreatePipelineLayout(device, &createInfo, nullptr, &mHandle);
+    WARN() << "PipelineLayout::init";
+    return vkCreatePipelineLayout(device, &createInfo, callbacks, &mHandle);
 }
 
 // PipelineCache implementation.
@@ -1723,18 +1831,24 @@ ANGLE_INLINE void PipelineCache::destroy(VkDevice device)
 {
     if (valid())
     {
-        vkDestroyPipelineCache(device, mHandle, nullptr);
+        WARN() << "PipelineCache::destroy";
+        MemoryAllocationCallback memTest;
+        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+        vkDestroyPipelineCache(device, mHandle, &memACB);
         mHandle = VK_NULL_HANDLE;
     }
 }
 
 ANGLE_INLINE VkResult PipelineCache::init(VkDevice device,
-                                          const VkPipelineCacheCreateInfo &createInfo)
+                                          const VkPipelineCacheCreateInfo &createInfo,
+                                          const VkAllocationCallbacks *callbacks)
 {
     ASSERT(!valid());
     // Note: if we are concerned with memory usage of this cache, we should give it custom
     // allocators.  Also, failure of this function is of little importance.
-    return vkCreatePipelineCache(device, &createInfo, nullptr, &mHandle);
+
+    WARN() << "PipelineCache::init";
+    return vkCreatePipelineCache(device, &createInfo, callbacks, &mHandle);
 }
 
 ANGLE_INLINE VkResult PipelineCache::merge(VkDevice device,
@@ -1765,26 +1879,33 @@ ANGLE_INLINE void Pipeline::destroy(VkDevice device)
 {
     if (valid())
     {
-        vkDestroyPipeline(device, mHandle, nullptr);
+        WARN() << "Pipeline::destroy";
+        MemoryAllocationCallback memTest;
+        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+        vkDestroyPipeline(device, mHandle, &memACB);
         mHandle = VK_NULL_HANDLE;
     }
 }
 
 ANGLE_INLINE VkResult Pipeline::initGraphics(VkDevice device,
                                              const VkGraphicsPipelineCreateInfo &createInfo,
-                                             const PipelineCache &pipelineCacheVk)
+                                             const PipelineCache &pipelineCacheVk,
+                                             const VkAllocationCallbacks *callbacks)
 {
     ASSERT(!valid());
-    return vkCreateGraphicsPipelines(device, pipelineCacheVk.getHandle(), 1, &createInfo, nullptr,
+    WARN() << "Pipeline::initGraphics";
+    return vkCreateGraphicsPipelines(device, pipelineCacheVk.getHandle(), 1, &createInfo, callbacks,
                                      &mHandle);
 }
 
 ANGLE_INLINE VkResult Pipeline::initCompute(VkDevice device,
                                             const VkComputePipelineCreateInfo &createInfo,
-                                            const PipelineCache &pipelineCacheVk)
+                                            const PipelineCache &pipelineCacheVk,
+                                            const VkAllocationCallbacks *callbacks)
 {
     ASSERT(!valid());
-    return vkCreateComputePipelines(device, pipelineCacheVk.getHandle(), 1, &createInfo, nullptr,
+    WARN() << "Pipeline::initCompute";
+    return vkCreateComputePipelines(device, pipelineCacheVk.getHandle(), 1, &createInfo, callbacks,
                                     &mHandle);
 }
 
@@ -1793,16 +1914,21 @@ ANGLE_INLINE void DescriptorSetLayout::destroy(VkDevice device)
 {
     if (valid())
     {
-        vkDestroyDescriptorSetLayout(device, mHandle, nullptr);
+        WARN() << "DescriptorSetLayout::destroy";
+        MemoryAllocationCallback memTest;
+        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+        vkDestroyDescriptorSetLayout(device, mHandle, &memACB);
         mHandle = VK_NULL_HANDLE;
     }
 }
 
 ANGLE_INLINE VkResult DescriptorSetLayout::init(VkDevice device,
-                                                const VkDescriptorSetLayoutCreateInfo &createInfo)
+                                                const VkDescriptorSetLayoutCreateInfo &createInfo,
+                                                const VkAllocationCallbacks *callbacks)
 {
     ASSERT(!valid());
-    return vkCreateDescriptorSetLayout(device, &createInfo, nullptr, &mHandle);
+    WARN() << "DescriptorSetLayout::init";
+    return vkCreateDescriptorSetLayout(device, &createInfo, callbacks, &mHandle);
 }
 
 // DescriptorPool implementation.
@@ -1810,16 +1936,21 @@ ANGLE_INLINE void DescriptorPool::destroy(VkDevice device)
 {
     if (valid())
     {
-        vkDestroyDescriptorPool(device, mHandle, nullptr);
+        WARN() << "DescriptorPool::destroy";
+        MemoryAllocationCallback memTest;
+        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+        vkDestroyDescriptorPool(device, mHandle, &memACB);
         mHandle = VK_NULL_HANDLE;
     }
 }
 
 ANGLE_INLINE VkResult DescriptorPool::init(VkDevice device,
-                                           const VkDescriptorPoolCreateInfo &createInfo)
+                                           const VkDescriptorPoolCreateInfo &createInfo,
+                                           const VkAllocationCallbacks *callbacks)
 {
     ASSERT(!valid());
-    return vkCreateDescriptorPool(device, &createInfo, nullptr, &mHandle);
+    WARN() << "DescriptorPool::init";
+    return vkCreateDescriptorPool(device, &createInfo, callbacks, &mHandle);
 }
 
 ANGLE_INLINE VkResult
@@ -1845,15 +1976,21 @@ ANGLE_INLINE void Sampler::destroy(VkDevice device)
 {
     if (valid())
     {
-        vkDestroySampler(device, mHandle, nullptr);
+        WARN() << "Sampler::destroy";
+        MemoryAllocationCallback memTest;
+        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+        vkDestroySampler(device, mHandle, &memACB);
         mHandle = VK_NULL_HANDLE;
     }
 }
 
-ANGLE_INLINE VkResult Sampler::init(VkDevice device, const VkSamplerCreateInfo &createInfo)
+ANGLE_INLINE VkResult Sampler::init(VkDevice device,
+                                    const VkSamplerCreateInfo &createInfo,
+                                    const VkAllocationCallbacks *callbacks)
 {
     ASSERT(!valid());
-    return vkCreateSampler(device, &createInfo, nullptr, &mHandle);
+    WARN() << "Sampler::init";
+    return vkCreateSampler(device, &createInfo, callbacks, &mHandle);
 }
 
 // SamplerYuvConversion implementation.
@@ -1861,16 +1998,22 @@ ANGLE_INLINE void SamplerYcbcrConversion::destroy(VkDevice device)
 {
     if (valid())
     {
-        vkDestroySamplerYcbcrConversionKHR(device, mHandle, nullptr);
+        WARN() << "SamplerYcbcrConversion::destroy";
+        MemoryAllocationCallback memTest;
+        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+        vkDestroySamplerYcbcrConversionKHR(device, mHandle, &memACB);
         mHandle = VK_NULL_HANDLE;
     }
 }
 
 ANGLE_INLINE VkResult
-SamplerYcbcrConversion::init(VkDevice device, const VkSamplerYcbcrConversionCreateInfo &createInfo)
+SamplerYcbcrConversion::init(VkDevice device,
+                             const VkSamplerYcbcrConversionCreateInfo &createInfo,
+                             const VkAllocationCallbacks *callbacks)
 {
     ASSERT(!valid());
-    return vkCreateSamplerYcbcrConversionKHR(device, &createInfo, nullptr, &mHandle);
+    WARN() << "SamplerYcbcrConversion::init";
+    return vkCreateSamplerYcbcrConversionKHR(device, &createInfo, callbacks, &mHandle);
 }
 
 // Event implementation.
@@ -1878,15 +2021,21 @@ ANGLE_INLINE void Event::destroy(VkDevice device)
 {
     if (valid())
     {
-        vkDestroyEvent(device, mHandle, nullptr);
+        WARN() << "Event::destroy";
+        MemoryAllocationCallback memTest;
+        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+        vkDestroyEvent(device, mHandle, &memACB);
         mHandle = VK_NULL_HANDLE;
     }
 }
 
-ANGLE_INLINE VkResult Event::init(VkDevice device, const VkEventCreateInfo &createInfo)
+ANGLE_INLINE VkResult Event::init(VkDevice device,
+                                  const VkEventCreateInfo &createInfo,
+                                  const VkAllocationCallbacks *callbacks)
 {
     ASSERT(!valid());
-    return vkCreateEvent(device, &createInfo, nullptr, &mHandle);
+    WARN() << "Event::init";
+    return vkCreateEvent(device, &createInfo, callbacks, &mHandle);
 }
 
 ANGLE_INLINE VkResult Event::getStatus(VkDevice device) const
@@ -1912,15 +2061,21 @@ ANGLE_INLINE void Fence::destroy(VkDevice device)
 {
     if (valid())
     {
-        vkDestroyFence(device, mHandle, nullptr);
+        WARN() << "Fence::destroy";
+        MemoryAllocationCallback memTest;
+        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+        vkDestroyFence(device, mHandle, &memACB);
         mHandle = VK_NULL_HANDLE;
     }
 }
 
-ANGLE_INLINE VkResult Fence::init(VkDevice device, const VkFenceCreateInfo &createInfo)
+ANGLE_INLINE VkResult Fence::init(VkDevice device,
+                                  const VkFenceCreateInfo &createInfo,
+                                  const VkAllocationCallbacks *callbacks)
 {
     ASSERT(!valid());
-    return vkCreateFence(device, &createInfo, nullptr, &mHandle);
+    WARN() << "Fence::init";
+    return vkCreateFence(device, &createInfo, callbacks, &mHandle);
 }
 
 ANGLE_INLINE VkResult Fence::reset(VkDevice device)
@@ -1961,15 +2116,21 @@ ANGLE_INLINE void QueryPool::destroy(VkDevice device)
 {
     if (valid())
     {
-        vkDestroyQueryPool(device, mHandle, nullptr);
+        WARN() << "QueryPool::destroy";
+        MemoryAllocationCallback memTest;
+        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+        vkDestroyQueryPool(device, mHandle, &memACB);
         mHandle = VK_NULL_HANDLE;
     }
 }
 
-ANGLE_INLINE VkResult QueryPool::init(VkDevice device, const VkQueryPoolCreateInfo &createInfo)
+ANGLE_INLINE VkResult QueryPool::init(VkDevice device,
+                                      const VkQueryPoolCreateInfo &createInfo,
+                                      const VkAllocationCallbacks *callbacks)
 {
     ASSERT(!valid());
-    return vkCreateQueryPool(device, &createInfo, nullptr, &mHandle);
+    WARN() << "QueryPool::init";
+    return vkCreateQueryPool(device, &createInfo, callbacks, &mHandle);
 }
 
 ANGLE_INLINE VkResult QueryPool::getResults(VkDevice device,

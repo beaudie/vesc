@@ -64,7 +64,7 @@ class SharedFence final
     SharedFence &operator=(SharedFence &&other);
 
     // Initialize it with a new vkFence either from recycler or create a new one.
-    VkResult init(VkDevice device, FenceRecycler *recycler);
+    VkResult init(VkDevice device, FenceRecycler *recycler, const VkAllocationCallbacks *callbacks);
     // Destroy it immediately (will not recycle).
     void destroy(VkDevice device);
     // Release the vkFence (to recycler)

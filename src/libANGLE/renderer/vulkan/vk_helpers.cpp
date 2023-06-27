@@ -3328,7 +3328,8 @@ angle::Result BufferPool::allocateNewBuffer(Context *context, VkDeviceSize sizeI
     allocator.getMemoryTypeProperties(mMemoryTypeIndex, &memoryPropertyFlags);
 
     DeviceScoped<Buffer> buffer(renderer->getDevice());
-    ANGLE_VK_TRY(context, buffer.get().init(context->getDevice(), createInfo));
+    VkAllocationCallbacks *callbacks = renderer->getMemoryAllocationTracker()->getCallbacks();
+    ANGLE_VK_TRY(context, buffer.get().init(context->getDevice(), createInfo, callbacks));
 
     DeviceScoped<DeviceMemory> deviceMemory(renderer->getDevice());
     VkMemoryPropertyFlags memoryPropertyFlagsOut;
@@ -3390,7 +3391,9 @@ angle::Result BufferPool::allocateBuffer(Context *context,
         allocator.getMemoryTypeProperties(mMemoryTypeIndex, &memoryPropertyFlags);
 
         DeviceScoped<Buffer> buffer(context->getDevice());
-        ANGLE_VK_TRY(context, buffer.get().init(context->getDevice(), createInfo));
+        VkAllocationCallbacks *callbacks =
+            context->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+        ANGLE_VK_TRY(context, buffer.get().init(context->getDevice(), createInfo, callbacks));
 
         DeviceScoped<DeviceMemory> deviceMemory(context->getDevice());
         VkMemoryPropertyFlags memoryPropertyFlagsOut;
@@ -3567,7 +3570,10 @@ angle::Result DescriptorPoolHelper::init(Context *context,
     mValidDescriptorSets = 0;
     mFreeDescriptorSets  = maxSets;
 
-    ANGLE_VK_TRY(context, mDescriptorPool.init(renderer->getDevice(), descriptorPoolInfo));
+    VkAllocationCallbacks *callbacks =
+        context->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+    ANGLE_VK_TRY(context,
+                 mDescriptorPool.init(renderer->getDevice(), descriptorPoolInfo, callbacks));
 
     return angle::Result::Continue;
 }
@@ -4060,7 +4066,9 @@ angle::Result DynamicQueryPool::allocatePoolImpl(ContextVk *contextVk,
         queryPoolInfo.pipelineStatistics = VK_QUERY_PIPELINE_STATISTIC_CLIPPING_INVOCATIONS_BIT;
     }
 
-    ANGLE_VK_TRY(contextVk, poolToAllocate.init(contextVk->getDevice(), queryPoolInfo));
+    VkAllocationCallbacks *callbacks =
+        contextVk->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+    ANGLE_VK_TRY(contextVk, poolToAllocate.init(contextVk->getDevice(), queryPoolInfo, callbacks));
     return angle::Result::Continue;
 }
 
@@ -4726,7 +4734,8 @@ angle::Result BufferHelper::init(Context *context,
 
     // Allocate buffer object
     DeviceScoped<Buffer> buffer(renderer->getDevice());
-    ANGLE_VK_TRY(context, buffer.get().init(context->getDevice(), *createInfo));
+    VkAllocationCallbacks *callbacks = renderer->getMemoryAllocationTracker()->getCallbacks();
+    ANGLE_VK_TRY(context, buffer.get().init(context->getDevice(), *createInfo, callbacks));
 
     DeviceScoped<DeviceMemory> deviceMemory(renderer->getDevice());
     VkMemoryPropertyFlags memoryPropertyFlagsOut;
@@ -4774,7 +4783,9 @@ angle::Result BufferHelper::initExternal(ContextVk *contextVk,
     modifiedCreateInfo.pNext = &externCreateInfo;
 
     DeviceScoped<Buffer> buffer(renderer->getDevice());
-    ANGLE_VK_TRY(contextVk, buffer.get().init(renderer->getDevice(), modifiedCreateInfo));
+    VkAllocationCallbacks *callbacks = renderer->getMemoryAllocationTracker()->getCallbacks();
+    ANGLE_VK_TRY(contextVk,
+                 buffer.get().init(renderer->getDevice(), modifiedCreateInfo, callbacks));
 
     DeviceScoped<DeviceMemory> deviceMemory(renderer->getDevice());
     VkMemoryPropertyFlags memoryPropertyFlagsOut;
@@ -5001,7 +5012,9 @@ const Buffer &BufferHelper::getBufferForVertexArray(ContextVk *contextVk,
         createInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
         createInfo.queueFamilyIndexCount = 0;
         createInfo.pQueueFamilyIndices   = nullptr;
-        mBufferForVertexArray.init(contextVk->getDevice(), createInfo);
+        VkAllocationCallbacks *callbacks =
+            contextVk->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+        mBufferForVertexArray.init(contextVk->getDevice(), createInfo, callbacks);
 
         VkMemoryRequirements memoryRequirements;
         mBufferForVertexArray.getMemoryRequirements(contextVk->getDevice(), &memoryRequirements);
@@ -5597,7 +5610,9 @@ angle::Result ImageHelper::initExternal(Context *context,
     mLastNonShaderReadOnlyLayout = ImageLayout::Undefined;
     mCurrentShaderReadStageMask  = 0;
 
-    ANGLE_VK_TRY(context, mImage.init(context->getDevice(), imageInfo));
+    VkAllocationCallbacks *callbacks =
+        context->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+    ANGLE_VK_TRY(context, mImage.init(context->getDevice(), imageInfo, callbacks));
 
     // Find the image formats in pNext chain in imageInfo.
     deriveImageViewFormatFromCreateInfoPNext(imageInfo, mViewFormats);
@@ -6119,7 +6134,9 @@ angle::Result ImageHelper::initLayerImageViewImpl(Context *context,
             viewInfo.format = VK_FORMAT_UNDEFINED;
         }
     }
-    ANGLE_VK_TRY(context, imageViewOut->init(context->getDevice(), viewInfo));
+    VkAllocationCallbacks *callbacks =
+        context->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+    ANGLE_VK_TRY(context, imageViewOut->init(context->getDevice(), viewInfo, callbacks));
     return angle::Result::Continue;
 }
 
@@ -6273,7 +6290,9 @@ angle::Result ImageHelper::initStaging(Context *context,
     imageInfo.pQueueFamilyIndices   = nullptr;
     imageInfo.initialLayout         = getCurrentLayout(context);
 
-    ANGLE_VK_TRY(context, mImage.init(context->getDevice(), imageInfo));
+    VkAllocationCallbacks *callbacks =
+        context->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+    ANGLE_VK_TRY(context, mImage.init(context->getDevice(), imageInfo, callbacks));
 
     mVkImageCreateInfo               = imageInfo;
     mVkImageCreateInfo.pNext         = nullptr;
@@ -10649,7 +10668,9 @@ angle::Result BufferViewHelper::getView(Context *context,
     viewCreateInfo.range                  = size;
 
     BufferView view;
-    ANGLE_VK_TRY(context, view.init(context->getDevice(), viewCreateInfo));
+    VkAllocationCallbacks *callbacks =
+        context->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+    ANGLE_VK_TRY(context, view.init(context->getDevice(), viewCreateInfo, callbacks));
 
     // Cache the view
     auto insertIter = mViews.insert({viewVkFormat, std::move(view)});
