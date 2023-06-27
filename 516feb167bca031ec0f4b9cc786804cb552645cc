@@ -22,6 +22,30 @@
       },
       "revId": "516feb167bca031ec0f4b9cc786804cb552645cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cd8e885_74363cfa",
+        "filename": "src/common/Spinlock.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-27T16:49:06Z",
+      "side": 1,
+      "message": "I did not check. I assumed `int` should be fastest integer on the platform, so i tried `int`, saw improvement and that\u0027s it. Did not think about `unsigned int`.\n\nI checked in godbolt: `atomic_uint/atomic_int` generates identical code - it uses `ldar/stlr` instructions.\n\nIn contrast, `atomic_bool` generates `ldarb/stlrb` instructions.",
+      "parentUuid": "af4cf7cf_68aaf9a8",
+      "range": {
+        "startLine": 48,
+        "startChar": 9,
+        "endLine": 48,
+        "endChar": 19
+      },
+      "revId": "516feb167bca031ec0f4b9cc786804cb552645cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
