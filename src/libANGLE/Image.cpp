@@ -316,7 +316,7 @@ Image::Image(rx::EGLImplFactory *factory,
     ASSERT(mImplementation != nullptr);
     ASSERT(buffer != nullptr);
 
-    if (kIsSharedContextMutexEnabled && context != nullptr)
+    if (kIsContextMutexEnabled && context != nullptr)
     {
         mContextMutex = context->getContextMutex().getRoot();
         ASSERT(mContextMutex->isReferenced());
