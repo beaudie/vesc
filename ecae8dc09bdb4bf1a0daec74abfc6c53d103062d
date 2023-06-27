@@ -159,6 +159,30 @@
       },
       "revId": "ecae8dc09bdb4bf1a0daec74abfc6c53d103062d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a233723d_89ca79d7",
+        "filename": "src/tests/deqp_support/deqp_gles3_test_expectations.txt",
+        "patchSetId": 3
+      },
+      "lineNbr": 855,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-27T02:34:52Z",
+      "side": 1,
+      "message": "Ugh, it\u0027s complicated; the expectations parser is stripping the expectations to include only the platform that match the running one, then drops them from the config. The config doesn\u0027t even make it to the part that calculates \"overlap\" (that part sees an empty set for all expectations that reach it).\n\nThat could be worked around by using:\n\n```\n4140 SWIFTSHADER : dEQP-GLES3.functional.transform_feedback.* \u003d PASS\n```\n\n(because now the lines are not identical), but then you get an error saying that the later expectations don\u0027t do anything. It\u0027s trying to be too smart for its own good.\n\nThe logic could be reworked to make this better, but I have some rather urgent stuff on my plate. In the meantime, I removed the swiftshader expectations. The tests are waived anyway.",
+      "parentUuid": "8477430e_2caac64c",
+      "range": {
+        "startLine": 843,
+        "startChar": 0,
+        "endLine": 855,
+        "endChar": 98
+      },
+      "revId": "ecae8dc09bdb4bf1a0daec74abfc6c53d103062d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
