@@ -214,7 +214,8 @@ angle::Result SemaphoreVk::importOpaqueFd(ContextVk *contextVk, GLint fd)
 
     if (!mSemaphore.valid())
     {
-        mSemaphore.init(renderer->getDevice());
+        VkAllocationCallbacks *callbacks = renderer->getMemoryAllocationTracker()->getCallbacks();
+        mSemaphore.init(renderer->getDevice(), callbacks);
     }
 
     ASSERT(mSemaphore.valid());
@@ -237,7 +238,8 @@ angle::Result SemaphoreVk::importZirconEvent(ContextVk *contextVk, GLuint handle
 
     if (!mSemaphore.valid())
     {
-        mSemaphore.init(renderer->getDevice());
+        VkAllocationCallbacks *callbacks = renderer->getMemoryAllocationTracker()->getCallbacks();
+        mSemaphore.init(renderer->getDevice(), callbacks);
     }
 
     ASSERT(mSemaphore.valid());
