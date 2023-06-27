@@ -192,6 +192,10 @@ class alignas(4) RenderPassDesc final
         return static_cast<gl::SrgbWriteControlMode>(mSrgbWriteControl);
     }
 
+    bool isDitherEnabled() const { return mDitherEnabled; }
+
+    void setDither(bool enabled);
+
     // Get the number of attachments in the Vulkan render pass, i.e. after removing disabled
     // color attachments.
     size_t attachmentCount() const;
@@ -236,8 +240,11 @@ class alignas(4) RenderPassDesc final
     uint8_t mUnresolveDepth : 1;
     uint8_t mUnresolveStencil : 1;
 
+    // Dithering
+    uint8_t mDitherEnabled : 1;
+
     // Available space for expansion.
-    uint8_t mPadding1 : 2;
+    uint8_t mPadding1 : 1;
     uint8_t mPadding2;
 
     // Whether each color attachment has a corresponding resolve attachment.  Color resolve
@@ -855,6 +862,9 @@ class GraphicsPipelineDesc final
 
     void updateEmulatedDitherControl(GraphicsPipelineTransitionBits *transition, uint16_t value);
     uint32_t getEmulatedDitherControl() const { return mShaders.shaders.emulatedDitherControl; }
+
+    void updateDither(bool enabled) { mSharedNonVertexInput.renderPass.setDither(enabled); }
+    bool isDitherEnabled() const { return mSharedNonVertexInput.renderPass.isDitherEnabled(); }
 
     void updateNonZeroStencilWriteMaskWorkaround(GraphicsPipelineTransitionBits *transition,
                                                  bool enabled);
