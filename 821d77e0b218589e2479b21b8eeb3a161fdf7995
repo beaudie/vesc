@@ -22,6 +22,30 @@
       },
       "revId": "821d77e0b218589e2479b21b8eeb3a161fdf7995",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6649c69_2a35f9f5",
+        "filename": "src/common/Spinlock.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-27T17:27:39Z",
+      "side": 1,
+      "message": "\u003e Not questioning your result here, but this change effectively changed spinlock to mutex lock, right? \n\nI do not think so. Performance of `Spinlock` (when no contention) is a lot faster than `std::mutex`. This change only affects waiting when lock is failed (when there is contention). `Spinlock` is still spins, but now uses `std::this_thread::yield()` in the loop instead of `ANGLE_SMT_PAUSE()`. Number of spins on Windows on my laptop is around 7000 spins/ms. On Android 1000-2000 spins/ms. I think this resolution is good enough.\n\n\u003e Maybe you should check the usage of spinlock and change that to use mutex instead of spinlock.\n\nActually we already using `std::mutex` and trying to use `Spinlock`.\n\nCurrently we are using `SingleContextMutex` (not actual mutex) and `SharedContextMutex\u003cstd::mutex\u003e`. However, changing Context mutex from `SingleContextMutex` to `SharedContextMutex\u003cstd::mutex\u003e` is not 100% safe. Therefore, I preparing changes that will remove `SingleContextMutex`. New solution will use `TypedContextMutex\u003cangle::Spinlock\u003e` and `TypedContextMutex\u003cstd::mutex\u003e` instead.\n\nNext step is try to remove `TypedContextMutex\u003cstd::mutex\u003e` and only use `TypedContextMutex\u003cangle::Spinlock\u003e` because overhead of `Spinlock` when there is no contention is a lot less (28.312ms vs 12.196ms for 1000\u0027000 `glGetError()` calls on S906B). However, after I did this - mentioned tests started to fail (TIMEOUT).\n\nAfter investigation I concluded that `ANGLE_SMT_PAUSE()` does absolutely nothing useful. But `std::this_thread::yield()` in contrast, slows down waiting thread instead of blocking useful worker threads.\n\nI do not understand what is the point of `ANGLE_SMT_PAUSE()`?\nIn my understanding it should do same thing what `std::this_thread::yield()` does, but perhaps with less overhead.",
+      "parentUuid": "e61a294f_debae46e",
+      "range": {
+        "startLine": 47,
+        "startChar": 30,
+        "endLine": 47,
+        "endChar": 35
+      },
+      "revId": "821d77e0b218589e2479b21b8eeb3a161fdf7995",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
