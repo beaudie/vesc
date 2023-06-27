@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "192758c1_366317ed",
+        "filename": "src/common/platform_helpers.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-27T02:33:35Z",
+      "side": 1,
+      "message": "Don\u0027t mean to be annoying, but it\u0027s \"triplet\" 😄",
+      "range": {
+        "startLine": 91,
+        "startChar": 14,
+        "endLine": 91,
+        "endChar": 20
+      },
+      "revId": "893c7882c3893638efb5df64e99bcb18ecbb9f0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f235f3f_52c5c256",
+        "filename": "src/common/platform_helpers.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-27T02:33:35Z",
+      "side": 1,
+      "message": "These can be in the .cpp, can\u0027t they?",
+      "range": {
+        "startLine": 114,
+        "startChar": 0,
+        "endLine": 119,
+        "endChar": 82
+      },
+      "revId": "893c7882c3893638efb5df64e99bcb18ecbb9f0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a89589c3_0401dcbe",
+        "filename": "src/common/platform_helpers.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-27T02:33:35Z",
+      "side": 1,
+      "message": "Same with these helpers",
+      "range": {
+        "startLine": 122,
+        "startChar": 0,
+        "endLine": 123,
+        "endChar": 83
+      },
+      "revId": "893c7882c3893638efb5df64e99bcb18ecbb9f0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
