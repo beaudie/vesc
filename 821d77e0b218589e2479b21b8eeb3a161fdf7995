@@ -70,6 +70,30 @@
       },
       "revId": "821d77e0b218589e2479b21b8eeb3a161fdf7995",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96abc43d_03beb51f",
+        "filename": "src/common/Spinlock.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-27T21:54:01Z",
+      "side": 1,
+      "message": "ANGLE_SMT_PAUSE() is a hint to the CPU that this is a busy loop, so that it can continue its busy loop but save power. It has nothing to do with the OS scheduler.\n\nI was just looking at this again the other day: https://www.realworldtech.com/forum/?threadid\u003d189711\u0026curpostid\u003d189723 which doesn\u0027t particularly put spinlock-in-user-space in a good light. It\u0027s probably still fine for ANGLE\u0027s particular use case, but that\u0027s to be seen.\n\nI\u0027m not sure yield() is always a good idea though, it behaves very differently between Linux and windows for example. I\u0027m sorry I\u0027ve been slow to get to anglebug.com/8224, but would you give me a few days to take care of that, and we can see how the numbers look like when we don\u0027t actually take the lock half of the times?",
+      "parentUuid": "ccf64b71_c250b0c9",
+      "range": {
+        "startLine": 47,
+        "startChar": 30,
+        "endLine": 47,
+        "endChar": 35
+      },
+      "revId": "821d77e0b218589e2479b21b8eeb3a161fdf7995",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
