@@ -359,7 +359,9 @@ angle::Result NewSemaphore(vk::Context *context,
 {
     if (semaphoreRecycler->empty())
     {
-        ANGLE_VK_TRY(context, semaphoreOut->init(context->getDevice()));
+        VkAllocationCallbacks *callbacks =
+            context->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+        ANGLE_VK_TRY(context, semaphoreOut->init(context->getDevice(), callbacks));
     }
     else
     {
@@ -863,7 +865,8 @@ void SwapchainCleanupData::waitFences(VkDevice device, uint64_t timeout) const
 
 void SwapchainCleanupData::destroy(VkDevice device,
                                    vk::Recycler<vk::Fence> *fenceRecycler,
-                                   vk::Recycler<vk::Semaphore> *semaphoreRecycler)
+                                   vk::Recycler<vk::Semaphore> *semaphoreRecycler,
+                                   const VkAllocationCallbacks *callbacks)
 {
     for (vk::Fence &fence : fences)
     {
@@ -879,7 +882,7 @@ void SwapchainCleanupData::destroy(VkDevice device,
 
     if (swapchain)
     {
-        vkDestroySwapchainKHR(device, swapchain, nullptr);
+        vkDestroySwapchainKHR(device, swapchain, callbacks);
         swapchain = VK_NULL_HANDLE;
     }
 }
@@ -912,7 +915,8 @@ ImagePresentOperation &ImagePresentOperation::operator=(ImagePresentOperation &&
 
 void ImagePresentOperation::destroy(VkDevice device,
                                     vk::Recycler<vk::Fence> *fenceRecycler,
-                                    vk::Recycler<vk::Semaphore> *semaphoreRecycler)
+                                    vk::Recycler<vk::Semaphore> *semaphoreRecycler,
+                                    const VkAllocationCallbacks *callbacks)
 {
     // fence is only used when VK_EXT_swapchain_maintenance1 is supported.
     if (fence.valid())
@@ -926,7 +930,7 @@ void ImagePresentOperation::destroy(VkDevice device,
     // Destroy old swapchains (relevant only when VK_EXT_swapchain_maintenance1 is not supported).
     for (SwapchainCleanupData &oldSwapchain : oldSwapchains)
     {
-        oldSwapchain.destroy(device, fenceRecycler, semaphoreRecycler);
+        oldSwapchain.destroy(device, fenceRecycler, semaphoreRecycler, callbacks);
     }
     oldSwapchains.clear();
 }
@@ -1008,13 +1012,15 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
         mLockBufferHelper.destroy(renderer);
     }
 
+    VkAllocationCallbacks *callbacks = renderer->getMemoryAllocationTracker()->getCallbacks();
     for (impl::ImagePresentOperation &presentOperation : mPresentHistory)
     {
         if (presentOperation.fence.valid())
         {
             (void)presentOperation.fence.wait(device, renderer->getMaxFenceWaitTimeNs());
         }
-        presentOperation.destroy(device, &mPresentFenceRecycler, &mPresentSemaphoreRecycler);
+        presentOperation.destroy(device, &mPresentFenceRecycler, &mPresentSemaphoreRecycler,
+                                 callbacks);
     }
     mPresentHistory.clear();
 
@@ -1022,7 +1028,7 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
 
     if (mSwapchain)
     {
-        vkDestroySwapchainKHR(device, mSwapchain, nullptr);
+        vkDestroySwapchainKHR(device, mSwapchain, callbacks);
         mSwapchain = VK_NULL_HANDLE;
     }
 
@@ -1033,7 +1039,7 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
     for (SwapchainCleanupData &oldSwapchain : mOldSwapchains)
     {
         oldSwapchain.waitFences(device, renderer->getMaxFenceWaitTimeNs());
-        oldSwapchain.destroy(device, &mPresentFenceRecycler, &mPresentSemaphoreRecycler);
+        oldSwapchain.destroy(device, &mPresentFenceRecycler, &mPresentSemaphoreRecycler, callbacks);
     }
     mOldSwapchains.clear();
 
@@ -1312,9 +1318,10 @@ angle::Result WindowSurfaceVk::initializeImpl(DisplayVk *displayVk)
     ANGLE_TRY(createSwapChain(displayVk, extents, VK_NULL_HANDLE));
 
     // Create the semaphores that will be used for vkAcquireNextImageKHR.
+    VkAllocationCallbacks *callbacks = renderer->getMemoryAllocationTracker()->getCallbacks();
     for (vk::Semaphore &semaphore : mAcquireOperation.unlockedTryAcquireData.acquireImageSemaphores)
     {
-        ANGLE_VK_TRY(displayVk, semaphore.init(displayVk->getDevice()));
+        ANGLE_VK_TRY(displayVk, semaphore.init(displayVk->getDevice(), callbacks));
     }
 
     VkResult vkResult = acquireNextSwapchainImage(displayVk);
@@ -1399,6 +1406,8 @@ angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk, const gl:
     static constexpr size_t kMaxOldSwapchains = 5;
     if (mOldSwapchains.size() > kMaxOldSwapchains)
     {
+        VkAllocationCallbacks *callbacks =
+            contextVk->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
         mUse.merge(contextVk->getSubmittedResourceUse());
         ANGLE_TRY(finish(contextVk));
         for (SwapchainCleanupData &oldSwapchain : mOldSwapchains)
@@ -1406,7 +1415,7 @@ angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk, const gl:
             oldSwapchain.waitFences(contextVk->getDevice(),
                                     contextVk->getRenderer()->getMaxFenceWaitTimeNs());
             oldSwapchain.destroy(contextVk->getDevice(), &mPresentFenceRecycler,
-                                 &mPresentSemaphoreRecycler);
+                                 &mPresentSemaphoreRecycler, callbacks);
         }
         mOldSwapchains.clear();
     }
@@ -1448,7 +1457,9 @@ angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk, const gl:
     // If the most recent swapchain was never used, destroy it right now.
     if (swapchainToDestroy)
     {
-        vkDestroySwapchainKHR(contextVk->getDevice(), swapchainToDestroy, nullptr);
+        VkAllocationCallbacks *callbacks =
+            contextVk->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+        vkDestroySwapchainKHR(contextVk->getDevice(), swapchainToDestroy, callbacks);
     }
 
     return result;
@@ -1636,7 +1647,10 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     // TODO: Once EGL_SWAP_BEHAVIOR_PRESERVED_BIT is supported, the contents of the old swapchain
     // need to carry over to the new one.  http://anglebug.com/2942
     VkSwapchainKHR newSwapChain = VK_NULL_HANDLE;
-    ANGLE_VK_TRY(context, vkCreateSwapchainKHR(device, &swapchainInfo, nullptr, &newSwapChain));
+    VkAllocationCallbacks *callbacks =
+        context->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+    WARN() << "Swapchain creation";
+    ANGLE_VK_TRY(context, vkCreateSwapchainKHR(device, &swapchainInfo, callbacks, &newSwapChain));
     mSwapchain            = newSwapChain;
     mSwapchainPresentMode = mDesiredSwapchainPresentMode;
 
@@ -2327,7 +2341,10 @@ angle::Result WindowSurfaceVk::cleanUpPresentHistory(vk::Context *context)
             ANGLE_VK_TRY(context, result);
         }
 
-        presentOperation.destroy(device, &mPresentFenceRecycler, &mPresentSemaphoreRecycler);
+        VkAllocationCallbacks *callbacks =
+            context->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+        presentOperation.destroy(device, &mPresentFenceRecycler, &mPresentSemaphoreRecycler,
+                                 callbacks);
         mPresentHistory.pop_front();
     }
 
@@ -2374,7 +2391,9 @@ angle::Result WindowSurfaceVk::cleanUpOldSwapchains(vk::Context *context)
             break;
         }
         ANGLE_VK_TRY(context, result);
-        oldSwapchain.destroy(device, &mPresentFenceRecycler, &mPresentSemaphoreRecycler);
+        VkAllocationCallbacks *callbacks =
+            context->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+        oldSwapchain.destroy(device, &mPresentFenceRecycler, &mPresentSemaphoreRecycler, callbacks);
         mOldSwapchains.pop_front();
     }
 
@@ -2916,6 +2935,8 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(
     framebufferInfo.height          = static_cast<uint32_t>(rotatedExtents.height);
     framebufferInfo.layers          = 1;
 
+    VkAllocationCallbacks *callbacks =
+        contextVk->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
     if (isMultiSampled())
     {
         const vk::ImageView *imageView = nullptr;
@@ -2933,13 +2954,14 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(
                 gl::SrgbWriteControlMode::Default, &imageView));
             imageViews[attachmentCount] = imageView->getHandle();
 
-            ANGLE_VK_TRY(contextVk, swapchainImage.framebufferResolveMS.init(contextVk->getDevice(),
-                                                                             framebufferInfo));
+            ANGLE_VK_TRY(contextVk, swapchainImage.framebufferResolveMS.init(
+                                        contextVk->getDevice(), framebufferInfo, callbacks));
         }
         else
         {
             // If multisampled, there is only a single color image and framebuffer.
-            ANGLE_VK_TRY(contextVk, mFramebufferMS.init(contextVk->getDevice(), framebufferInfo));
+            ANGLE_VK_TRY(contextVk,
+                         mFramebufferMS.init(contextVk->getDevice(), framebufferInfo, callbacks));
         }
     }
     else
@@ -2955,13 +2977,13 @@ angle::Result WindowSurfaceVk::getCurrentFramebuffer(
 
         if (fetchMode == FramebufferFetchMode::Enabled)
         {
-            ANGLE_VK_TRY(contextVk, swapchainImage.fetchFramebuffer.init(contextVk->getDevice(),
-                                                                         framebufferInfo));
+            ANGLE_VK_TRY(contextVk, swapchainImage.fetchFramebuffer.init(
+                                        contextVk->getDevice(), framebufferInfo, callbacks));
         }
         else
         {
-            ANGLE_VK_TRY(contextVk,
-                         swapchainImage.framebuffer.init(contextVk->getDevice(), framebufferInfo));
+            ANGLE_VK_TRY(contextVk, swapchainImage.framebuffer.init(contextVk->getDevice(),
+                                                                    framebufferInfo, callbacks));
         }
     }
 

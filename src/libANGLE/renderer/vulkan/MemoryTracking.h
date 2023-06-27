@@ -62,6 +62,11 @@ constexpr const char *kMemoryAllocationTypeMessage[] = {
 constexpr const uint32_t kMemoryAllocationTypeCount =
     static_cast<uint32_t>(MemoryAllocationType::EnumCount);
 
+constexpr uint32_t kVkSystemAllocationScopeSize       = 5;
+constexpr const char *kSystemAllocationScopeMessage[] = {
+    "Command", "Object", "Cache", "Device", "Instance", "Invalid",
+};
+
 // Used to select the severity for memory allocation logs.
 enum class MemoryLogSeverity
 {
@@ -121,6 +126,92 @@ class MemoryReport final : angle::NonCopyable
     VkDeviceSize mMaxTotalImportedMemory;
     angle::HashMap<uint64_t, int> mUniqueIDCounts;
 };
+
+class MemoryAllocationCallback
+{
+  public:
+    MemoryAllocationCallback()
+    {
+        mCallbacks.pUserData             = (void *)this;
+        mCallbacks.pfnAllocation         = &onAlloc;
+        mCallbacks.pfnReallocation       = &onRealloc;
+        mCallbacks.pfnFree               = &onFree;
+        mCallbacks.pfnInternalAllocation = &onInternalAlloc;
+        mCallbacks.pfnInternalFree       = &onInternalFree;
+
+        for (uint32_t i = 0; i < kVkSystemAllocationScopeSize; i++)
+        {
+            mSystemAllocationSize[i] = 0;
+        }
+    }
+
+    // TODO: The following will be removed in favor of the cleaner version.
+    operator VkAllocationCallbacks() const
+    {
+        VkAllocationCallbacks callback;
+
+        callback.pUserData =
+            (void *)this;  // TODO: Can be the class related to that Vulkan object type.
+        callback.pfnAllocation         = &onAlloc;
+        callback.pfnReallocation       = &onRealloc;
+        callback.pfnFree               = &onFree;
+        callback.pfnInternalAllocation = &onInternalAlloc;
+        callback.pfnInternalFree       = &onInternalFree;
+
+        return callback;
+    }
+
+    VkAllocationCallbacks *getCallbacks() { return &mCallbacks; }
+
+    void printSystemAllocationData();
+
+  private:
+    void recordAlloc(size_t size,
+                     size_t alignment,
+                     VkSystemAllocationScope allocationScope,
+                     void *pMemory);
+
+    void recordRealloc(void *pOriginal,
+                       size_t size,
+                       size_t alignment,
+                       VkSystemAllocationScope allocationScope,
+                       void *pMemory);
+
+    void recordFree(void *pMemory);
+
+    // Functions that will be called if an allocation callback is used in a Vulkan API call.
+    VKAPI_ATTR static void *VKAPI_CALL onAlloc(void *pUserData,
+                                               size_t size,
+                                               size_t alignment,
+                                               VkSystemAllocationScope allocationScope);
+    VKAPI_ATTR static void *VKAPI_CALL onRealloc(void *pUserData,
+                                                 void *pOriginal,
+                                                 size_t size,
+                                                 size_t alignment,
+                                                 VkSystemAllocationScope allocationScope);
+    VKAPI_ATTR static void VKAPI_CALL onFree(void *pUserData, void *pMemory);
+    VKAPI_ATTR static void VKAPI_CALL onInternalAlloc(void *pUserData,
+                                                      size_t size,
+                                                      VkInternalAllocationType allocationType,
+                                                      VkSystemAllocationScope allocationScope);
+    VKAPI_ATTR static void VKAPI_CALL onInternalFree(void *pUserData,
+                                                     size_t size,
+                                                     VkInternalAllocationType allocationType,
+                                                     VkSystemAllocationScope allocationScope);
+
+    // Implementation of CPU allocations used in allocation callbacks.
+    static void *allocateImpl(size_t alignedSize, size_t alignment);
+    static void *reallocateImpl(void *pOriginal, size_t alignedSize, size_t alignment);
+    static void freeImpl(void *pMemory);
+
+    // Keeping track of the system allocations.
+    std::mutex mMutex;
+    VkAllocationCallbacks mCallbacks;
+    using SizeScopePair = std::pair<VkDeviceSize, VkSystemAllocationScope>;
+    std::unordered_map<void *, SizeScopePair> mMemoryPropertyMap;
+
+    std::array<VkDeviceSize, kVkSystemAllocationScopeSize> mSystemAllocationSize;
+};
 }  // namespace vk
 
 // Memory tracker for allocations and deallocations, which is used in RendererVk.
@@ -170,6 +261,9 @@ class MemoryAllocationTracker : angle::NonCopyable
                                VkDeviceSize size,
                                uint32_t memoryTypeIndex);
 
+    vk::MemoryAllocationCallback *getAllocationCallback() { return &mAllocationCallbacks; }
+    VkAllocationCallbacks *getCallbacks();
+
   private:
     // Pointer to parent renderer object.
     RendererVk *const mRenderer;
@@ -205,6 +299,9 @@ class MemoryAllocationTracker : angle::NonCopyable
     uint64_t mMemoryAllocationID;
     using MemoryAllocInfoMap = angle::HashMap<vk::MemoryAllocInfoMapKey, vk::MemoryAllocationInfo>;
     std::unordered_map<angle::BacktraceInfo, MemoryAllocInfoMap> mMemoryAllocationRecord;
+
+    // Allocation callback object.
+    vk::MemoryAllocationCallback mAllocationCallbacks;
 };
 }  // namespace rx
 
