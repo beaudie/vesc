@@ -802,6 +802,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                mShareGroupVk->getContextCount() == 1;
     }
 
+    gl::ShaderBitSet getShaderStagesUsed() const { return mShaderStagesUsed; }
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
@@ -1574,6 +1576,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     std::vector<VkPipelineStageFlags> mWaitSemaphoreStageMasks;
     // Whether this context has wait semaphores (flushed and unflushed) that must be submitted.
     bool mHasWaitSemaphoresPendingSubmission;
+    // All the accumulated shader stages that has been used until the next command submission
+    gl::ShaderBitSet mShaderStagesUsed;
 
     // Hold information from the last gpu clock sync for future gpu-to-cpu timestamp conversions.
     GpuClockSyncInfo mGpuClockSync;

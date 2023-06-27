@@ -3587,6 +3587,8 @@ angle::Result ContextVk::submitCommands(const vk::Semaphore *signalSemaphore,
     mLastSubmittedQueueSerial = mLastFlushedQueueSerial;
     mSubmittedResourceUse.setQueueSerial(mLastSubmittedQueueSerial);
 
+    mShaderStagesUsed = mState.getProgramExecutable()->getLinkedShaderStages();
+
     // Now that we have submitted commands, some of pending garbage may no longer pending
     // and should be moved to garbage list.
     mRenderer->cleanupPendingSubmissionGarbage();
@@ -5627,6 +5629,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 static_assert(
                     gl::state::DIRTY_BIT_PROGRAM_EXECUTABLE > gl::state::DIRTY_BIT_PROGRAM_BINDING,
                     "Dirty bit order");
+                mShaderStagesUsed |= programExecutable->getLinkedShaderStages();
                 iter.setLaterBit(gl::state::DIRTY_BIT_PROGRAM_EXECUTABLE);
                 break;
             case gl::state::DIRTY_BIT_PROGRAM_EXECUTABLE:
