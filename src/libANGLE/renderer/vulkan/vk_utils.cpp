@@ -108,7 +108,8 @@ angle::Result FindAndAllocateCompatibleMemory(vk::Context *context,
     RendererVk *renderer = context->getRenderer();
     renderer->getMemoryAllocationTracker()->setPendingMemoryAlloc(
         memoryAllocationType, allocInfo.allocationSize, *memoryTypeIndexOut);
-    ANGLE_VK_TRY(context, deviceMemoryOut->allocate(device, allocInfo));
+    VkAllocationCallbacks *callbacks = renderer->getMemoryAllocationTracker()->getCallbacks();
+    ANGLE_VK_TRY(context, deviceMemoryOut->allocate(device, allocInfo, callbacks));
 
     renderer->onMemoryAlloc(memoryAllocationType, allocInfo.allocationSize, *memoryTypeIndexOut,
                             deviceMemoryOut->getHandle());
@@ -644,7 +645,9 @@ angle::Result InitShaderModule(Context *context,
     createInfo.codeSize                 = shaderCodeSize;
     createInfo.pCode                    = shaderCode;
 
-    ANGLE_VK_TRY(context, shaderModule->init(context->getDevice(), createInfo));
+    VkAllocationCallbacks *callbacks =
+        context->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+    ANGLE_VK_TRY(context, shaderModule->init(context->getDevice(), createInfo, callbacks));
     return angle::Result::Continue;
 }
 
@@ -699,65 +702,68 @@ void GarbageObject::destroy(RendererVk *renderer)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "GarbageObject::destroy");
     VkDevice device = renderer->getDevice();
+    // MemoryAllocationCallback memTest;
+    // VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+    VkAllocationCallbacks *callbacks = renderer->getMemoryAllocationTracker()->getCallbacks();
     switch (mHandleType)
     {
         case HandleType::Semaphore:
-            vkDestroySemaphore(device, (VkSemaphore)mHandle, nullptr);
+            vkDestroySemaphore(device, (VkSemaphore)mHandle, callbacks);
             break;
         case HandleType::CommandBuffer:
             // Command buffers are pool allocated.
             UNREACHABLE();
             break;
         case HandleType::Event:
-            vkDestroyEvent(device, (VkEvent)mHandle, nullptr);
+            vkDestroyEvent(device, (VkEvent)mHandle, callbacks);
             break;
         case HandleType::Fence:
-            vkDestroyFence(device, (VkFence)mHandle, nullptr);
+            vkDestroyFence(device, (VkFence)mHandle, callbacks);
             break;
         case HandleType::DeviceMemory:
-            vkFreeMemory(device, (VkDeviceMemory)mHandle, nullptr);
+            vkFreeMemory(device, (VkDeviceMemory)mHandle, callbacks);
             break;
         case HandleType::Buffer:
-            vkDestroyBuffer(device, (VkBuffer)mHandle, nullptr);
+            vkDestroyBuffer(device, (VkBuffer)mHandle, callbacks);
             break;
         case HandleType::BufferView:
-            vkDestroyBufferView(device, (VkBufferView)mHandle, nullptr);
+            vkDestroyBufferView(device, (VkBufferView)mHandle, callbacks);
             break;
         case HandleType::Image:
-            vkDestroyImage(device, (VkImage)mHandle, nullptr);
+            vkDestroyImage(device, (VkImage)mHandle, callbacks);
             break;
         case HandleType::ImageView:
-            vkDestroyImageView(device, (VkImageView)mHandle, nullptr);
+            vkDestroyImageView(device, (VkImageView)mHandle, callbacks);
             break;
         case HandleType::ShaderModule:
-            vkDestroyShaderModule(device, (VkShaderModule)mHandle, nullptr);
+            vkDestroyShaderModule(device, (VkShaderModule)mHandle, callbacks);
             break;
         case HandleType::PipelineLayout:
-            vkDestroyPipelineLayout(device, (VkPipelineLayout)mHandle, nullptr);
+            vkDestroyPipelineLayout(device, (VkPipelineLayout)mHandle, callbacks);
             break;
         case HandleType::RenderPass:
-            vkDestroyRenderPass(device, (VkRenderPass)mHandle, nullptr);
+            vkDestroyRenderPass(device, (VkRenderPass)mHandle, callbacks);
             break;
         case HandleType::Pipeline:
-            vkDestroyPipeline(device, (VkPipeline)mHandle, nullptr);
+            vkDestroyPipeline(device, (VkPipeline)mHandle, callbacks);
             break;
         case HandleType::DescriptorSetLayout:
-            vkDestroyDescriptorSetLayout(device, (VkDescriptorSetLayout)mHandle, nullptr);
+            vkDestroyDescriptorSetLayout(device, (VkDescriptorSetLayout)mHandle, callbacks);
             break;
         case HandleType::Sampler:
-            vkDestroySampler(device, (VkSampler)mHandle, nullptr);
+            vkDestroySampler(device, (VkSampler)mHandle, callbacks);
             break;
         case HandleType::DescriptorPool:
-            vkDestroyDescriptorPool(device, (VkDescriptorPool)mHandle, nullptr);
+            vkDestroyDescriptorPool(device, (VkDescriptorPool)mHandle, callbacks);
             break;
         case HandleType::Framebuffer:
-            vkDestroyFramebuffer(device, (VkFramebuffer)mHandle, nullptr);
+            vkDestroyFramebuffer(device, (VkFramebuffer)mHandle, callbacks);
             break;
         case HandleType::CommandPool:
-            vkDestroyCommandPool(device, (VkCommandPool)mHandle, nullptr);
+            vkDestroyCommandPool(device, (VkCommandPool)mHandle, callbacks);
             break;
         case HandleType::QueryPool:
-            vkDestroyQueryPool(device, (VkQueryPool)mHandle, nullptr);
+            vkDestroyQueryPool(device, (VkQueryPool)mHandle, callbacks);
             break;
         case HandleType::Allocation:
             vma::FreeMemory(renderer->getAllocator().getHandle(), (VmaAllocation)mHandle);

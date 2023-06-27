@@ -48,12 +48,12 @@ TEST_P(VulkanSharedFenceTest, InitReleaseInit)
     {
         rx::vk::SharedFence fence;
 
-        VkResult result = fence.init(device, &recycler);
+        VkResult result = fence.init(device, &recycler, nullptr);
         ASSERT_EQ(result, VK_SUCCESS);
 
         fence.release();
 
-        result = fence.init(device, &recycler);
+        result = fence.init(device, &recycler, nullptr);
         ASSERT_EQ(result, VK_SUCCESS);
     }
     recycler.destroy(contextVk);
@@ -71,12 +71,12 @@ TEST_P(VulkanSharedFenceTest, InitDestroyInit)
     {
         rx::vk::SharedFence fence;
 
-        VkResult result = fence.init(device, &recycler);
+        VkResult result = fence.init(device, &recycler, nullptr);
         ASSERT_EQ(result, VK_SUCCESS);
 
         fence.destroy(device);
 
-        result = fence.init(device, &recycler);
+        result = fence.init(device, &recycler, nullptr);
         ASSERT_EQ(result, VK_SUCCESS);
     }
     recycler.destroy(contextVk);

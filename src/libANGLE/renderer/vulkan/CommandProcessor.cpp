@@ -69,7 +69,9 @@ SharedFence::~SharedFence()
     release();
 }
 
-VkResult SharedFence::init(VkDevice device, FenceRecycler *recycler)
+VkResult SharedFence::init(VkDevice device,
+                           FenceRecycler *recycler,
+                           const VkAllocationCallbacks *callbacks)
 {
     ASSERT(mRecycler == nullptr && mRefCountedFence == nullptr);
     Fence fence;
@@ -81,7 +83,7 @@ VkResult SharedFence::init(VkDevice device, FenceRecycler *recycler)
         VkFenceCreateInfo fenceCreateInfo = {};
         fenceCreateInfo.sType             = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
         fenceCreateInfo.flags             = 0;
-        VkResult result                   = fence.init(device, fenceCreateInfo);
+        VkResult result                   = fence.init(device, fenceCreateInfo, callbacks);
         if (result != VK_SUCCESS)
         {
             return result;
@@ -1348,8 +1350,9 @@ angle::Result CommandQueue::submitCommands(Context *context,
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "CommandQueue::submitCommands");
     std::unique_lock<std::mutex> lock(mMutex);
-    RendererVk *renderer = context->getRenderer();
-    VkDevice device      = renderer->getDevice();
+    RendererVk *renderer             = context->getRenderer();
+    VkDevice device                  = renderer->getDevice();
+    VkAllocationCallbacks *callbacks = renderer->getMemoryAllocationTracker()->getCallbacks();
 
     ++mPerfCounters.commandQueueSubmitCallsTotal;
     ++mPerfCounters.commandQueueSubmitCallsPerFrame;
@@ -1403,7 +1406,8 @@ angle::Result CommandQueue::submitCommands(Context *context,
 
         if (!externalFence)
         {
-            ANGLE_VK_TRY(context, batch.fence.init(context->getDevice(), &mFenceRecycler));
+            ANGLE_VK_TRY(context,
+                         batch.fence.init(context->getDevice(), &mFenceRecycler, callbacks));
         }
         else
         {
@@ -1440,7 +1444,9 @@ angle::Result CommandQueue::queueSubmitOneOff(Context *context,
     batch.queueSerial    = submitQueueSerial;
     batch.protectionType = protectionType;
 
-    ANGLE_VK_TRY(context, batch.fence.init(context->getDevice(), &mFenceRecycler));
+    VkAllocationCallbacks *callbacks =
+        context->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+    ANGLE_VK_TRY(context, batch.fence.init(context->getDevice(), &mFenceRecycler, callbacks));
 
     VkSubmitInfo submitInfo = {};
     submitInfo.sType        = VK_STRUCTURE_TYPE_SUBMIT_INFO;

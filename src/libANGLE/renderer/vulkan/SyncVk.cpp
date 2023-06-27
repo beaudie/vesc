@@ -222,13 +222,15 @@ ExternalFence::~ExternalFence()
     }
 }
 
-VkResult ExternalFence::init(VkDevice device, const VkFenceCreateInfo &createInfo)
+VkResult ExternalFence::init(VkDevice device,
+                             const VkFenceCreateInfo &createInfo,
+                             const VkAllocationCallbacks *callbacks)
 {
     ASSERT(device != VK_NULL_HANDLE);
     ASSERT(mFenceFdStatus == VK_INCOMPLETE && mFenceFd == kInvalidFenceFd);
     ASSERT(mDevice == VK_NULL_HANDLE);
     mDevice = device;
-    return mFence.init(device, createInfo);
+    return mFence.init(device, createInfo, callbacks);
 }
 
 void ExternalFence::init(int fenceFd)
@@ -308,7 +310,8 @@ angle::Result SyncHelperNativeFence::initializeWithFd(ContextVk *contextVk, int 
     fenceCreateInfo.pNext             = &exportCreateInfo;
 
     // Initialize/create a VkFence handle
-    ANGLE_VK_TRY(contextVk, mExternalFence->init(device, fenceCreateInfo));
+    VkAllocationCallbacks *callbacks = renderer->getMemoryAllocationTracker()->getCallbacks();
+    ANGLE_VK_TRY(contextVk, mExternalFence->init(device, fenceCreateInfo, callbacks));
 
     // invalid FD provided by application - create one with fence.
     /*
@@ -382,7 +385,8 @@ angle::Result SyncHelperNativeFence::serverWait(ContextVk *contextVk)
     DeviceScoped<Semaphore> waitSemaphore(device);
     // Wait semaphore for next vkQueueSubmit().
     // Create a Semaphore with imported fenceFd.
-    ANGLE_VK_TRY(contextVk, waitSemaphore.get().init(device));
+    VkAllocationCallbacks *callbacks = renderer->getMemoryAllocationTracker()->getCallbacks();
+    ANGLE_VK_TRY(contextVk, waitSemaphore.get().init(device, callbacks));
 
     VkImportSemaphoreFdInfoKHR importFdInfo = {};
     importFdInfo.sType                      = VK_STRUCTURE_TYPE_IMPORT_SEMAPHORE_FD_INFO_KHR;

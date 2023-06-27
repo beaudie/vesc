@@ -33,7 +33,9 @@ class ExternalFence final : angle::NonCopyable
     ExternalFence();
     ~ExternalFence();
 
-    VkResult init(VkDevice device, const VkFenceCreateInfo &createInfo);
+    VkResult init(VkDevice device,
+                  const VkFenceCreateInfo &createInfo,
+                  const VkAllocationCallbacks *callbacks);
     void init(int fenceFd);
 
     VkFence getHandle() const { return mFence.getHandle(); }
