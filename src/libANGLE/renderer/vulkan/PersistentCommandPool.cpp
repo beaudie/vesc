@@ -8,6 +8,7 @@
 //
 
 #include "libANGLE/renderer/vulkan/PersistentCommandPool.h"
+#include "libANGLE/renderer/vulkan/RendererVk.h"
 
 namespace rx
 {
@@ -43,7 +44,9 @@ angle::Result PersistentCommandPool::init(Context *context,
     }
     commandPoolInfo.queueFamilyIndex = queueFamilyIndex;
 
-    ANGLE_VK_TRY(context, mCommandPool.init(context->getDevice(), commandPoolInfo));
+    VkAllocationCallbacks *callbacks =
+        context->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+    ANGLE_VK_TRY(context, mCommandPool.init(context->getDevice(), commandPoolInfo, callbacks));
 
     for (uint32_t i = 0; i < kInitBufferNum; i++)
     {

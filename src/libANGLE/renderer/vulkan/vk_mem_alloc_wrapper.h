@@ -79,6 +79,7 @@ VkResult InitAllocator(VkPhysicalDevice physicalDevice,
                        VkInstance instance,
                        uint32_t apiVersion,
                        VkDeviceSize preferredLargeHeapBlockSize,
+                       VkAllocationCallbacks *callbacks,
                        VmaAllocator *pAllocator);
 
 void DestroyAllocator(VmaAllocator allocator);

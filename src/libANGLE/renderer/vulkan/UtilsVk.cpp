@@ -1774,9 +1774,11 @@ angle::Result UtilsVk::ensureSamplersInitialized(ContextVk *contextVk)
     samplerInfo.borderColor             = VK_BORDER_COLOR_INT_TRANSPARENT_BLACK;
     samplerInfo.unnormalizedCoordinates = VK_FALSE;
 
+    VkAllocationCallbacks *callbacks =
+        contextVk->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
     if (!mPointSampler.valid())
     {
-        ANGLE_VK_TRY(contextVk, mPointSampler.init(contextVk->getDevice(), samplerInfo));
+        ANGLE_VK_TRY(contextVk, mPointSampler.init(contextVk->getDevice(), samplerInfo, callbacks));
     }
 
     samplerInfo.magFilter = VK_FILTER_LINEAR;
@@ -1784,7 +1786,8 @@ angle::Result UtilsVk::ensureSamplersInitialized(ContextVk *contextVk)
 
     if (!mLinearSampler.valid())
     {
-        ANGLE_VK_TRY(contextVk, mLinearSampler.init(contextVk->getDevice(), samplerInfo));
+        ANGLE_VK_TRY(contextVk,
+                     mLinearSampler.init(contextVk->getDevice(), samplerInfo, callbacks));
     }
 
     return angle::Result::Continue;
@@ -2364,8 +2367,10 @@ angle::Result UtilsVk::startRenderPass(ContextVk *contextVk,
     framebufferInfo.layers          = 1;
 
     vk::MaybeImagelessFramebuffer framebuffer = {};
-    ANGLE_VK_TRY(contextVk,
-                 framebuffer.getFramebuffer().init(contextVk->getDevice(), framebufferInfo));
+    VkAllocationCallbacks *callbacks =
+        contextVk->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+    ANGLE_VK_TRY(contextVk, framebuffer.getFramebuffer().init(contextVk->getDevice(),
+                                                              framebufferInfo, callbacks));
 
     vk::AttachmentOpsArray renderPassAttachmentOps;
     vk::PackedClearValuesArray clearValues;
