@@ -74,7 +74,7 @@ namespace rx
 {
 namespace vk
 {
-SyncHelper::SyncHelper() {}
+SyncHelper::SyncHelper() : mSrcPipelineStageMask(0) {}
 
 SyncHelper::~SyncHelper() {}
 
@@ -83,6 +83,9 @@ void SyncHelper::releaseToRenderer(RendererVk *renderer) {}
 angle::Result SyncHelper::initialize(ContextVk *contextVk, bool isEGLSyncObject)
 {
     ASSERT(!mUse.valid());
+    mSrcPipelineStageMask = gl_vk::GetPipelineStageFlags(contextVk->getShaderStagesUsed());
+    // Always assume transfer stage is used.
+    mSrcPipelineStageMask |= VK_PIPELINE_STAGE_TRANSFER_BIT;
     return contextVk->onSyncObjectInit(this, isEGLSyncObject);
 }
 
@@ -137,14 +140,22 @@ angle::Result SyncHelper::serverWait(ContextVk *contextVk)
     // Submit commands if it was deferred on the context that issued the sync object
     ANGLE_TRY(submitSyncIfDeferred(contextVk, RenderPassClosureReason::SyncObjectClientWait));
 
-    // Every resource already tracks its usage and issues the appropriate barriers, so there's
-    // really nothing to do here.  An execution barrier is issued to strictly satisfy what the
-    // application asked for.
-    vk::OutsideRenderPassCommandBuffer *commandBuffer;
-    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer({}, &commandBuffer));
-    commandBuffer->pipelineBarrier(VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
-                                   VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, 0, 0, nullptr, 0, nullptr, 0,
-                                   nullptr);
+    RendererVk *renderer = contextVk->getRenderer();
+    if (!renderer->hasResourceUseFinished(mUse))
+    {
+        // Every resource already tracks its usage and issues the appropriate barriers, so there's
+        // really nothing to do here. An execution barrier is issued to strictly satisfy what the
+        // application asked for.
+        vk::OutsideRenderPassCommandBuffer *commandBuffer;
+        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer({}, &commandBuffer));
+        VkPipelineStageFlags dstPipelineStageMask =
+            gl_vk::GetPipelineStageFlags(contextVk->getShaderStagesUsed());
+        // Always assume transfer stage is used.
+        dstPipelineStageMask |= VK_PIPELINE_STAGE_TRANSFER_BIT;
+        commandBuffer->pipelineBarrier(mSrcPipelineStageMask, dstPipelineStageMask, 0, 0, nullptr,
+                                       0, nullptr, 0, nullptr);
+    }
+
     return angle::Result::Continue;
 }
 
