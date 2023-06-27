@@ -489,7 +489,7 @@ rx::ImageImpl *Image::getImplementation() const
 
 Error Image::initialize(const Display *display, const gl::Context *context)
 {
-    if (kIsSharedContextMutexEnabled)
+    if (kIsContextMutexEnabled)
     {
         if (context != nullptr)
         {
