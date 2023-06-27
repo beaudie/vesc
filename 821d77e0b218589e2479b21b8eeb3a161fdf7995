@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e61a294f_debae46e",
+        "filename": "src/common/Spinlock.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-06-27T16:56:00Z",
+      "side": 1,
+      "message": "Not questioning your result here, but this change effectively changed spinlock to mutex lock, right? Maybe you should check the usage of spinlock and change that to use mutex instead of spinlock.",
+      "range": {
+        "startLine": 47,
+        "startChar": 30,
+        "endLine": 47,
+        "endChar": 35
+      },
+      "revId": "821d77e0b218589e2479b21b8eeb3a161fdf7995",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
