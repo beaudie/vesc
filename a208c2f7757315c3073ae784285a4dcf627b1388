@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73827c44_4701cd90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-27T17:41:12Z",
+      "side": 1,
+      "message": "IMO, after my changes to `Spinlock` and your future changes with removing lock from state-set APIs, it should be safe to sue `Spinlock` in all cases.",
+      "revId": "a208c2f7757315c3073ae784285a4dcf627b1388",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
