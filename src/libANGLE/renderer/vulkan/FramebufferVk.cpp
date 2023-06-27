@@ -2237,6 +2237,8 @@ void FramebufferVk::updateRenderPassDesc(ContextVk *contextVk)
 
     mCurrentFramebufferDesc.updateUnresolveMask({});
     mRenderPassDesc.setWriteControlMode(mCurrentFramebufferDesc.getWriteControlMode());
+
+    updateDither(contextVk);
 }
 
 angle::Result FramebufferVk::getAttachmentsAndRenderTargets(
@@ -3311,5 +3313,16 @@ void FramebufferVk::switchToFramebufferFetchMode(ContextVk *contextVk, bool hasF
         ASSERT(hasFramebufferFetch);
         releaseCurrentFramebuffer(contextVk);
     }
+}
+
+bool FramebufferVk::updateDither(ContextVk *contextVk)
+{
+    if (mRenderPassDesc.isDitherEnabled() != contextVk->isDitherEnabled())
+    {
+        mRenderPassDesc.setDither(contextVk->isDitherEnabled());
+        return true;
+    }
+
+    return false;
 }
 }  // namespace rx
