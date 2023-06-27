@@ -16,6 +16,63 @@
       "message": "I checked the minimum GCC versions against the commits mentioned in the original bug report (https://gcc.gnu.org/bugzilla/show_bug.cgi?id\u003d64697, the Krita/ANGLE one was closed as a duplicate of it).\n\nThis bug was fixed in 12.1, and backported to 10.4+ and 11.3+.",
       "revId": "a98fb14eabece4838ea9705cb23ee6e04c277c83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99d6e8de_449a50c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-27T02:39:51Z",
+      "side": 1,
+      "message": "Thanks, a few minor tweaks and this is good to go",
+      "revId": "a98fb14eabece4838ea9705cb23ee6e04c277c83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca31d76f_ae99a470",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 937,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-27T02:39:51Z",
+      "side": 1,
+      "message": "nit: not sure what you mean by \"context virtual call\". How about `ANGLE_USE_STATIC_THREAD_LOCAL_VARIABLES`?",
+      "range": {
+        "startLine": 937,
+        "startChar": 16,
+        "endLine": 937,
+        "endChar": 46
+      },
+      "revId": "a98fb14eabece4838ea9705cb23ee6e04c277c83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e526cfd_8cfa99b9",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 939,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-27T02:39:51Z",
+      "side": 1,
+      "message": "Suggest moving this to `src/common/platform.h`",
+      "revId": "a98fb14eabece4838ea9705cb23ee6e04c277c83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
