@@ -46,6 +46,30 @@
       },
       "revId": "821d77e0b218589e2479b21b8eeb3a161fdf7995",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccf64b71_c250b0c9",
+        "filename": "src/common/Spinlock.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-06-27T21:33:22Z",
+      "side": 1,
+      "message": "I think spinLock means keep CPU core busy and not intentionally let scheduler try to swap out the calling thread (like what mutex does). Or in other word, spinlock means to tell scheduler that I am still busy. Calling yield violates this, since it tells scheduler that I am willing to yield. That is why I am not fan of this change, But what you try to do with SingleContextMutex and SharedContextMutex transition is fine, maybe you should wrap it in a separate function that calls yield instead of using spinLock.",
+      "parentUuid": "c6649c69_2a35f9f5",
+      "range": {
+        "startLine": 47,
+        "startChar": 30,
+        "endLine": 47,
+        "endChar": 35
+      },
+      "revId": "821d77e0b218589e2479b21b8eeb3a161fdf7995",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
