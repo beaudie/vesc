@@ -26,7 +26,11 @@ using GLDelete = decltype(glDeleteBuffers);
 class GLWrapper : angle::NonCopyable
 {
   public:
-    GLWrapper(GLGen *genFunc, GLDelete *deleteFunc) : mGenFunc(genFunc), mDeleteFunc(deleteFunc) {}
+    GLWrapper(GLGen *genFunc, GLDelete *deleteFunc) : mGenFunc(genFunc), mDeleteFunc(deleteFunc)
+    {
+        (*mGenFunc)(1, &mHandle);
+    }
+
     ~GLWrapper()
     {
         if (mHandle)
@@ -62,21 +66,12 @@ class GLWrapper : angle::NonCopyable
         }
     }
 
-    GLuint get()
-    {
-        if (!mHandle)
-        {
-            (*mGenFunc)(1, &mHandle);
-        }
-        return mHandle;
-    }
     GLuint get() const
     {
         ASSERT(mHandle);
         return mHandle;
     }
 
-    operator GLuint() { return get(); }
     operator GLuint() const { return get(); }
 
   private:
