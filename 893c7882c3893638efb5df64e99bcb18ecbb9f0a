@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "deb367c7_e5b91aec",
+        "filename": "src/common/platform_helpers.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-06-27T03:40:06Z",
+      "side": 1,
+      "message": "Are tuples \"tuplets\" too? 😄",
+      "parentUuid": "192758c1_366317ed",
+      "range": {
+        "startLine": 91,
+        "startChar": 14,
+        "endLine": 91,
+        "endChar": 20
+      },
+      "revId": "893c7882c3893638efb5df64e99bcb18ecbb9f0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6f235f3f_52c5c256",
         "filename": "src/common/platform_helpers.h",
         "patchSetId": 16
@@ -37,6 +61,30 @@
       "writtenOn": "2023-06-27T02:33:35Z",
       "side": 1,
       "message": "These can be in the .cpp, can\u0027t they?",
+      "range": {
+        "startLine": 114,
+        "startChar": 0,
+        "endLine": 119,
+        "endChar": 82
+      },
+      "revId": "893c7882c3893638efb5df64e99bcb18ecbb9f0a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe4ffd59_6bf656fe",
+        "filename": "src/common/platform_helpers.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-06-27T03:40:06Z",
+      "side": 1,
+      "message": "I suppose, I was debating whether or not the IsWindowsVersionOrLater/IsWindowsVersionInRange should be exposed interfaces or not. I\u0027ll move them to the .cpp.",
+      "parentUuid": "6f235f3f_52c5c256",
       "range": {
         "startLine": 114,
         "startChar": 0,
