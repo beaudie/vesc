@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccb44ec5_54417eef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557258
+      },
+      "writtenOn": "2023-06-27T01:16:45Z",
+      "side": 1,
+      "message": "I checked the minimum GCC versions against the commits mentioned in the original bug report (https://gcc.gnu.org/bugzilla/show_bug.cgi?id\u003d64697, the Krita/ANGLE one was closed as a duplicate of it).\n\nThis bug was fixed in 12.1, and backported to 10.4+ and 11.3+.",
+      "revId": "a98fb14eabece4838ea9705cb23ee6e04c277c83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
