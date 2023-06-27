@@ -154,7 +154,7 @@ deps = {
     'condition': 'not build_with_chromium',
   },
 
-  'buildtools/linux64': {
+  'third_party/linux64': {
     'packages': [
       {
         'package': 'gn/gn/linux-${{arch}}',
@@ -165,7 +165,7 @@ deps = {
     'condition': 'not build_with_chromium and host_os == "linux"',
   },
 
-  'buildtools/mac': {
+  'third_party/mac': {
     'packages': [
       {
         'package': 'gn/gn/mac-${{arch}}',
@@ -176,22 +176,22 @@ deps = {
     'condition': 'not build_with_chromium and host_os == "mac"',
   },
 
-  'buildtools/third_party/libc++/trunk': {
+  'third_party/libc++/trunk': {
     'url': '{chromium_git}/external/github.com/llvm/llvm-project/libcxx.git@745104ff4a78628aba4dfe9f8bafbade1c169c71',
     'condition': 'not build_with_chromium',
   },
 
-  'buildtools/third_party/libc++abi/trunk': {
+  'third_party/libc++abi/trunk': {
     'url': '{chromium_git}/external/github.com/llvm/llvm-project/libcxxabi.git@8d21803b9076b16d46c32e2f10da191ee758520c',
     'condition': 'not build_with_chromium',
   },
 
-  'buildtools/third_party/libunwind/trunk': {
+  'third_party/libunwind/trunk': {
     'url': '{chromium_git}/external/github.com/llvm/llvm-project/libunwind.git@b5a43ecdac82a248f8a700a68c722b4d98708377',
     'condition': 'not build_with_chromium',
   },
 
-  'buildtools/win': {
+  'third_party/win': {
     'packages': [
       {
         'package': 'gn/gn/windows-amd64',
@@ -4986,6 +4986,7 @@ hooks = [
                 '--no_auth',
                 '--bucket', 'chromium-clang-format',
                 '-s', 'buildtools/win/clang-format.exe.sha1',
+		'-s', 'third_party/win/clang-format.exe',
     ],
   },
   {
@@ -4999,7 +5000,7 @@ hooks = [
                 '--no_auth',
                 '--bucket', 'chromium-clang-format',
                 '-s', 'buildtools/mac/clang-format.x64.sha1',
-                '-o', 'buildtools/mac/clang-format',
+                '-o', 'third_party/mac/clang-format',
     ],
   },
   {
@@ -5013,7 +5014,7 @@ hooks = [
                 '--no_auth',
                 '--bucket', 'chromium-clang-format',
                 '-s', 'buildtools/mac/clang-format.arm64.sha1',
-                '-o', 'buildtools/mac/clang-format',
+                '-o', 'third_party/mac/clang-format',
     ],
   },
   {
@@ -5027,6 +5028,7 @@ hooks = [
                 '--no_auth',
                 '--bucket', 'chromium-clang-format',
                 '-s', 'buildtools/linux64/clang-format.sha1',
+		'-o', 'third_party/linux64/clang-format',
     ],
   },
   {
