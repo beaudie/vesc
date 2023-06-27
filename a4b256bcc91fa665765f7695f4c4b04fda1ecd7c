@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "544d00ab_0925fa0a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-27T17:38:47Z",
+      "side": 1,
+      "message": "Alternatively, we may use `FastMutex1` instead:\n4401941: Implement \"Fast Mutex\" classes. | https://chromium-review.googlesource.com/c/angle/angle/+/4401941",
+      "revId": "a4b256bcc91fa665765f7695f4c4b04fda1ecd7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
