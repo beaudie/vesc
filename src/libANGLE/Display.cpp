@@ -1112,7 +1112,7 @@ Error Display::initialize()
     mSingleThreadPool = angle::WorkerThreadPool::Create(1, ANGLEPlatformCurrent());
     mMultiThreadPool  = angle::WorkerThreadPool::Create(0, ANGLEPlatformCurrent());
 
-    if (kIsSharedContextMutexEnabled)
+    if (kIsContextMutexEnabled)
     {
         ASSERT(mManagersMutex == nullptr);
         mManagersMutex =
@@ -1580,7 +1580,7 @@ Error Display::createContext(const Config *configuration,
 
     ScopedContextMutexLock mutexLock;
     ContextMutex *sharedContextMutex = nullptr;
-    if (kIsSharedContextMutexEnabled)
+    if (kIsContextMutexEnabled)
     {
         ASSERT(mManagersMutex != nullptr);
         if (shareContext != nullptr)
