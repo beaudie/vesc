@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "065b5dfb_647f131e",
+        "filename": "src/tests/test_expectations/GPUTestConfig.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-06-27T15:06:27Z",
+      "side": 1,
+      "message": "Alright, that can happen in a followup commit later.",
+      "parentUuid": "76ba05fb_51eeb3f8",
+      "revId": "3bfb21a752dfc5a570f179f0e8b116aae2a48d6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b55ed990_ce67bcc6",

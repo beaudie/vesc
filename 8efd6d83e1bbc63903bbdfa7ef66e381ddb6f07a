@@ -16,6 +16,24 @@
       "message": "Please resolve comment chains to make state of the CL clear.",
       "revId": "8efd6d83e1bbc63903bbdfa7ef66e381ddb6f07a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90aea09a_a2c5497e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-06-27T15:06:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef9522a0_e5e1266f",
+      "revId": "8efd6d83e1bbc63903bbdfa7ef66e381ddb6f07a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
