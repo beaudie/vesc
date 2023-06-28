@@ -52,6 +52,24 @@
       "parentUuid": "ff56d2cb_bf91ebf1",
       "revId": "0c1b3609d78f7766ce738c6f99b07bd139f00da5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e61f9ba9_ae58b899",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-06-28T19:35:49Z",
+      "side": 0,
+      "message": "MultithreadingTest.cpp has the test coverage you mentioned. Also asphalt_9 will render incorrect if we has the bug.",
+      "parentUuid": "ecd10241_3c85f5d5",
+      "revId": "0c1b3609d78f7766ce738c6f99b07bd139f00da5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
