@@ -16,6 +16,23 @@
       "message": "This change is almost entirely a mechanical code shuffle. The goal is to follow up with a change that removes the share group lock from entry points that solely interact with `LocalState`.",
       "revId": "673b5597b53de5b1e3241e00df297859fa8e3b1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fdf6a74_e176b5fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-06-28T21:28:56Z",
+      "side": 1,
+      "message": "I did not read every line of this huge diff, but overall looks good to me.",
+      "revId": "673b5597b53de5b1e3241e00df297859fa8e3b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
