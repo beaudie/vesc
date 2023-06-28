@@ -118,6 +118,30 @@
       },
       "revId": "821d77e0b218589e2479b21b8eeb3a161fdf7995",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4363b57_8dcfa83c",
+        "filename": "src/common/Spinlock.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-28T01:49:04Z",
+      "side": 1,
+      "message": "Yes I agree that if we want yield(), it should be in a separate class. I still think it\u0027s worth waiting for the lockless state setting entry points changes to come about and re-evaluate which option is better.",
+      "parentUuid": "18d9e735_0d2dc8e8",
+      "range": {
+        "startLine": 47,
+        "startChar": 30,
+        "endLine": 47,
+        "endChar": 35
+      },
+      "revId": "821d77e0b218589e2479b21b8eeb3a161fdf7995",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
