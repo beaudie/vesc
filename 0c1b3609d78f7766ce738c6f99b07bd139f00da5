@@ -16,6 +16,24 @@
       "message": "This looks like a bug. In this scenario:\n\n- Context/Thread 1 draws to X\n- Context/Thread 1 inserts fence -\u003e this is deferred to avoid breaking the render pass\n- Context/Thread 2 does server wait -\u003e this should flush the work of context 1\n- Context/Thread 2 samples from X\n\nWith `submitSyncIfDeferred` removed, context 2 samples from X before context 1 flushes the draw.\n\nCould you please add a test for this? There are similar tests in MultithreadingTest.cpp that do upload/draw or sample/sample with glWaitSync in between, but I see draw/sample is missing.",
       "revId": "0c1b3609d78f7766ce738c6f99b07bd139f00da5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff56d2cb_bf91ebf1",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-06-28T19:24:58Z",
+      "side": 0,
+      "message": "getStatus calls submitSyncIfDeferred.",
+      "parentUuid": "09491c72_a2f01df9",
+      "revId": "0c1b3609d78f7766ce738c6f99b07bd139f00da5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
