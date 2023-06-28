@@ -94,6 +94,30 @@
       },
       "revId": "821d77e0b218589e2479b21b8eeb3a161fdf7995",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18d9e735_0d2dc8e8",
+        "filename": "src/common/Spinlock.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-06-28T00:02:57Z",
+      "side": 1,
+      "message": "Right, my point is exactly this: the spinlock is supposed to tell scheduler that \"I am busy\", but calling yield is doing the opposite. Maybe we should rename spinLock to \"FastLock\" or other names, then this CL itself will be less controversial, and we can focus on SingleContextMutex to SharedContextMutex transition, which is what actually matters.",
+      "parentUuid": "96abc43d_03beb51f",
+      "range": {
+        "startLine": 47,
+        "startChar": 30,
+        "endLine": 47,
+        "endChar": 35
+      },
+      "revId": "821d77e0b218589e2479b21b8eeb3a161fdf7995",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
