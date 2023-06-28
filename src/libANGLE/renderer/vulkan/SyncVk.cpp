@@ -74,7 +74,7 @@ namespace rx
 {
 namespace vk
 {
-SyncHelper::SyncHelper() {}
+SyncHelper::SyncHelper() : mSrcPipelineStageMask(0) {}
 
 SyncHelper::~SyncHelper() {}
 
@@ -83,7 +83,7 @@ void SyncHelper::releaseToRenderer(RendererVk *renderer) {}
 angle::Result SyncHelper::initialize(ContextVk *contextVk, bool isEGLSyncObject)
 {
     ASSERT(!mUse.valid());
-    return contextVk->onSyncObjectInit(this, isEGLSyncObject);
+    return contextVk->onSyncObjectInit(this, &mSrcPipelineStageMask, isEGLSyncObject);
 }
 
 angle::Result SyncHelper::clientWait(Context *context,
@@ -137,7 +137,7 @@ angle::Result SyncHelper::serverWait(ContextVk *contextVk)
     // If already signaled, no need to wait
     bool alreadySignaled = false;
     ANGLE_TRY(getStatus(contextVk, contextVk, &alreadySignaled));
-    if (alreadySignaled)
+    if (alreadySignaled || !mSrcPipelineStageMask)
     {
         return angle::Result::Continue;
     }
@@ -147,9 +147,9 @@ angle::Result SyncHelper::serverWait(ContextVk *contextVk)
     // application asked for.
     vk::OutsideRenderPassCommandBuffer *commandBuffer;
     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer({}, &commandBuffer));
-    commandBuffer->pipelineBarrier(VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
-                                   VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, 0, 0, nullptr, 0, nullptr, 0,
-                                   nullptr);
+    commandBuffer->pipelineBarrier(mSrcPipelineStageMask, VK_PIPELINE_STAGE_ALL_COMMANDS_BIT, 0, 0,
+                                   nullptr, 0, nullptr, 0, nullptr);
+
     return angle::Result::Continue;
 }
 

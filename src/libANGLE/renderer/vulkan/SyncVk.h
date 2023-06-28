@@ -99,6 +99,8 @@ class SyncHelper final : public vk::Resource, public SyncHelperInterface
 
   private:
     angle::Result submitSyncIfDeferred(ContextVk *contextVk, RenderPassClosureReason reason);
+    // For proper serverWait
+    VkPipelineStageFlags mSrcPipelineStageMask;
 };
 
 // Implementation of sync types: EGLSync(EGL_SYNC_ANDROID_NATIVE_FENCE_ANDROID).
