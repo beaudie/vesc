@@ -108,6 +108,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9a1154f4_de1821fc",
+        "filename": "src/common/FastMutex.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-06-28T18:55:59Z",
+      "side": 1,
+      "message": "Your spin-wait-with-yield approach should probably be using an architectural yield (ANGLE_SMT_PAUSE) rather than OS scheduler yield (std::this_thread::yield) -- otherwise you aren\u0027t spinning as I think you\u0027re intending to.\n\nAlso I don\u0027t know what platform you\u0027ve tuned these sleep times on, but I think you probably need more generalized numbers for it. I don\u0027t understand the choice of {20 loops @ 1us, 2 loops @ 1000us, 20 loops @ 1us}.\n\nAnd those sleep durations will work fine on non-Windows platforms, but they are too small for std::this_thread::sleep_for on Windows.\n\nOn Microsoft\u0027s STL std::this_thread::sleep_for is implemented with Sleep():\n\nhttps://github.com/microsoft/STL/blob/40640c6df9754ea031f8df7c720b89714d19df97/stl/src/cthread.cpp#L75-L82\n\nAnd on libc++, it\u0027s the same:\n\nhttps://github.com/llvm/llvm-project/blob/d7d4aa539c0d2f80c080a3b1e0fa45a78d5e9bfc/libcxx/src/support/win32/thread_win32.cpp#L243-L249\n\nThis means that std::this_thread::sleep_for has a minimum sleep duration of 1ms, but it\u0027s not a very punctual 1ms sleep either.\n\nYou *can* get pretty close to 0.5ms precision with a waitable timer with the flag CREATE_WAITABLE_TIMER_HIGH_RESOLUTION but it\u0027s still not great. I have some tests illustrating the behavior here:\n\nhttps://github.com/tycho/scratch/blob/f31479dc622d1f280e14da1911a34d334c4ef1a2/README.md\n\nThe \"precise_sleep\" results are using the waitable timer API, and you can see that it does a much better job for sub-millisecond sleep durations, but it\u0027s still not as good as clock_nanosleep on Linux for example.\n\nSo all that to say: keep in mind that when you request even a sleep of 1 microsecond on Windows, you\u0027ll get around 1300-1400 microseconds (1.3-1.4ms!) instead.",
+      "parentUuid": "0f38719c_ca99fad0",
+      "revId": "5be760f05a9cc18c504db14e08c2ed1d12dff74c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e831dab9_b1a1ec12",
         "filename": "src/common/FastMutex.cpp",
         "patchSetId": 9
