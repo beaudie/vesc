@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be1c83dd_5ee45ad9",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-28T18:54:42Z",
+      "side": 1,
+      "message": "nit: TBH I\u0027m not sure we even need this. I added it to be sure, but I haven\u0027t thought through when it might be necessary.",
+      "revId": "997492c04f889ded21649d778691843be395223a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
