@@ -63,14 +63,17 @@ constexpr char kSupportPath[] = "src/tests/deqp_support/";
 #define EGL_CTS_DIR(PATH) "external/openglcts/data/mustpass/egl/" PATH
 
 const char *gCaseListFiles[] = {
+    EGL_CTS_DIR("aosp_mustpass/main/egl-master.txt"),
     GLES_CTS_DIR("aosp_mustpass/main/gles2-master.txt"),
     GLES_CTS_DIR("aosp_mustpass/main/gles3-master.txt"),
     GLES_CTS_DIR("aosp_mustpass/main/gles31-master.txt"),
-    EGL_CTS_DIR("aosp_mustpass/main/egl-master.txt"),
     GLES_CTS_DIR("khronos_mustpass/main/gles2-khr-master.txt"),
     GLES_CTS_DIR("khronos_mustpass/main/gles3-khr-master.txt"),
     GLES_CTS_DIR("khronos_mustpass/main/gles31-khr-master.txt"),
     GLES_CTS_DIR("khronos_mustpass/main/gles32-khr-master.txt"),
+    GLES_CTS_DIR("khronos_mustpass_noctx/main/gles2-khr-noctx-master.txt"),
+    GLES_CTS_DIR("khronos_mustpass_noctx/main/gles32-khr-noctx-master.txt"),
+    GLES_CTS_DIR("khronos_mustpass_single/main/gles32-khr-single.txt"),
     GLES_CTS_DIR("aosp_mustpass/main/gles3-rotate-landscape.txt"),
     GLES_CTS_DIR("aosp_mustpass/main/gles3-rotate-reverse-portrait.txt"),
     GLES_CTS_DIR("aosp_mustpass/main/gles3-rotate-reverse-landscape.txt"),
