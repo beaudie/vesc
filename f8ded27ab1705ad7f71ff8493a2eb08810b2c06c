@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "434aad5b_2810db4b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-06-28T23:42:31Z",
+      "side": 1,
+      "message": "I am also not 100% sure if this pipelineBarrier is required, but I a am a bit paranoid to remove it completely, since any bug arise from  it will be very hard to debug. We do allow driver to do out of order execution between two submissions, there is no barrier against that. So in theory it is still possible that the wait context might get executed before sync context finishes execution, but not sure if it occurs what damage could be since we do have memory barriers issued for resources. Anyway, this CL just try to reduce the barrier by only add pipeline stages that could possibly used, which appears enough for asphalt_9 to reduce it to minimum (it only uses transfer in one context and then in another context it try to waitSync).",
+      "revId": "f8ded27ab1705ad7f71ff8493a2eb08810b2c06c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
