@@ -7644,8 +7644,24 @@ angle::Result ContextVk::syncExternalMemory()
     return angle::Result::Continue;
 }
 
-angle::Result ContextVk::onSyncObjectInit(vk::SyncHelper *syncHelper, bool isEGLSyncObject)
+angle::Result ContextVk::onSyncObjectInit(vk::SyncHelper *syncHelper,
+                                          VkPipelineStageFlags *pipelineStageMask,
+                                          bool isEGLSyncObject)
 {
+    // Set pipelineStageMask for the sync object so that serverWait can properly wait for these
+    // stages to complete.
+    *pipelineStageMask = 0;
+    if (!mOutsideRenderPassCommands->empty())
+    {
+        *pipelineStageMask |= VK_PIPELINE_STAGE_TRANSFER_BIT |
+                              VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT |
+                              VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT;
+    }
+    if (!mRenderPassCommands->empty())
+    {
+        *pipelineStageMask |= VK_PIPELINE_STAGE_ALL_GRAPHICS_BIT;
+    }
+
     // Submit the commands:
     //
     // - This breaks the current render pass to ensure the proper ordering of the sync object in the
