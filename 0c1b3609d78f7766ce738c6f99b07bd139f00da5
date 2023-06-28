@@ -34,6 +34,24 @@
       "parentUuid": "09491c72_a2f01df9",
       "revId": "0c1b3609d78f7766ce738c6f99b07bd139f00da5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecd10241_3c85f5d5",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-28T19:29:39Z",
+      "side": 0,
+      "message": "Acknowledged. Would still be good to have that extra coverage if you can get around to it,",
+      "parentUuid": "ff56d2cb_bf91ebf1",
+      "revId": "0c1b3609d78f7766ce738c6f99b07bd139f00da5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
