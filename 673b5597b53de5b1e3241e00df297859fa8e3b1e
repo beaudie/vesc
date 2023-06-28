@@ -33,6 +33,23 @@
       "message": "I did not read every line of this huge diff, but overall looks good to me.",
       "revId": "673b5597b53de5b1e3241e00df297859fa8e3b1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "174de376_c3a34b28",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-06-28T21:31:11Z",
+      "side": 1,
+      "message": "Does the localState dirty bits and state dirty bits ever overlap? if not, mayebe you can also split the dirty bits into two different domain as well. Then you can fit each domain into 64 bit BitSet and get rid of extended dirty bits which you try to achieve in the other CL, but this will split them in different way).",
+      "revId": "673b5597b53de5b1e3241e00df297859fa8e3b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
