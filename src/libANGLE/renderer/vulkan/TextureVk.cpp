@@ -3225,8 +3225,126 @@ vk::BufferHelper *TextureVk::getPossiblyEmulatedTextureBuffer(vk::Context *conte
     return &bufferVk->getBuffer();
 }
 
+GLenum patchBufferFormatForSampler(GLenum bufferFormat, gl::SamplerFormat samplerFormat)
+{
+    switch (samplerFormat)
+    {
+        case gl::SamplerFormat::Float:
+            switch (bufferFormat)
+            {
+                case GL_R8I:
+                case GL_R8UI:
+                    return GL_R8;
+                case GL_R16I:
+                case GL_R16UI:
+                    return GL_R16F;
+                case GL_R32I:
+                case GL_R32UI:
+                    return GL_R32F;
+                case GL_RG8I:
+                case GL_RG8UI:
+                    return GL_RG8;
+                case GL_RG16I:
+                case GL_RG16UI:
+                    return GL_RG16F;
+                case GL_RG32I:
+                case GL_RG32UI:
+                    return GL_RG32F;
+                case GL_RGB32I:
+                case GL_RGB32UI:
+                    return GL_RGB32F;
+                case GL_RGBA8I:
+                case GL_RGBA8UI:
+                    return GL_RGBA8;
+                case GL_RGBA16I:
+                case GL_RGBA16UI:
+                    return GL_RGBA16F;
+                case GL_RGBA32I:
+                case GL_RGBA32UI:
+                    return GL_RGBA32F;
+                default:
+                    return bufferFormat;
+            }
+        case gl::SamplerFormat::Unsigned:
+            switch (bufferFormat)
+            {
+                case GL_R8:
+                case GL_R8I:
+                    return GL_R8UI;
+                case GL_R16F:
+                case GL_R16I:
+                    return GL_R16UI;
+                case GL_R32F:
+                case GL_R32I:
+                    return GL_R32UI;
+                case GL_RG8:
+                case GL_RG8I:
+                    return GL_RG8UI;
+                case GL_RG16F:
+                case GL_RG16I:
+                    return GL_RG16UI;
+                case GL_RG32F:
+                case GL_RG32I:
+                    return GL_RG32UI;
+                case GL_RGB32F:
+                case GL_RGB32I:
+                    return GL_RGB32UI;
+                case GL_RGBA8:
+                case GL_RGBA8I:
+                    return GL_RGBA8UI;
+                case GL_RGBA16F:
+                case GL_RGBA16I:
+                    return GL_RGBA16UI;
+                case GL_RGBA32F:
+                case GL_RGBA32I:
+                    return GL_RGBA32UI;
+                default:
+                    return bufferFormat;
+            }
+        case gl::SamplerFormat::Signed:
+            switch (bufferFormat)
+            {
+                case GL_R8:
+                case GL_R8UI:
+                    return GL_R8I;
+                case GL_R16F:
+                case GL_R16UI:
+                    return GL_R16I;
+                case GL_R32F:
+                case GL_R32UI:
+                    return GL_R32I;
+                case GL_RG8:
+                case GL_RG8UI:
+                    return GL_RG8I;
+                case GL_RG16F:
+                case GL_RG16UI:
+                    return GL_RG16I;
+                case GL_RG32F:
+                case GL_RG32UI:
+                    return GL_RG32I;
+                case GL_RGB32F:
+                case GL_RGB32UI:
+                    return GL_RGB32I;
+                case GL_RGBA8:
+                case GL_RGBA8UI:
+                    return GL_RGBA8I;
+                case GL_RGBA16F:
+                case GL_RGBA16UI:
+                    return GL_RGBA16I;
+                case GL_RGBA32F:
+                case GL_RGBA32UI:
+                    return GL_RGBA32I;
+                default:
+                    return bufferFormat;
+            }
+        default:
+            return bufferFormat;
+    }
+}
+
 angle::Result TextureVk::getBufferViewAndRecordUse(vk::Context *context,
                                                    const vk::Format *imageUniformFormat,
+                                                   gl::SamplerFormat samplerFormat,
                                                    bool isImage,
                                                    const vk::BufferView **viewOut)
 {
@@ -3237,7 +3355,10 @@ angle::Result TextureVk::getBufferViewAndRecordUse(vk::Context *context,
     // Use the format specified by glTexBuffer if no format specified by the shader.
     if (imageUniformFormat == nullptr)
     {
-        imageUniformFormat = &getBaseLevelFormat(renderer);
+        const gl::ImageDesc &baseLevelDesc = mState.getBaseLevelDesc();
+        GLenum baseFormat                  = baseLevelDesc.format.info->sizedInternalFormat;
+        GLenum patchedFormat               = patchBufferFormatForSampler(baseFormat, samplerFormat);
+        imageUniformFormat                 = &renderer->getFormat(patchedFormat);
     }
 
     if (isImage)

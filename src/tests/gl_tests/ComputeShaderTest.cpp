@@ -5390,6 +5390,55 @@ TEST_P(ComputeShaderTest, AtomicOpPreviousValueAssignedToSSBO)
     }
 }
 
+// Test workaround in Vulkan backend for mismatched texture buffer and sampler formats
+TEST_P(ComputeShaderTest, TexBufferFormatMismatch)
+{
+    ANGLE_SKIP_TEST_IF(!IsVulkan());
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_texture_buffer"));
+
+    GLBuffer inBuf;
+    glBindBuffer(GL_ARRAY_BUFFER, inBuf);
+    std::array<GLubyte, 32> inData{0};
+    glBufferData(GL_ARRAY_BUFFER, inData.size(), inData.data(), GL_DYNAMIC_DRAW);
+
+    GLTexture inTex;
+    glBindTexture(GL_TEXTURE_BUFFER, inTex);
+
+    GLTexture outTex;
+    glBindTexture(GL_TEXTURE_2D, outTex);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_R32UI, inData.size(), 1);
+    glBindImageTexture(0, outTex, 0, GL_FALSE, 0, GL_READ_WRITE, GL_R32F);
+
+    for (auto samplerType : {"samplerBuffer", "usamplerBuffer", "isamplerBuffer"})
+    {
+        std::stringstream csStream;
+        csStream << R"(#version 310 es
+#extension GL_EXT_texture_buffer : require
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1 ) in;
+uniform writeonly layout(r32ui,binding=0) highp uimage2D outImage;
+uniform highp )" << samplerType
+                 << R"( inBuffer;
+void main()
+{
+    uint u = uint(texelFetch(inBuffer, int(gl_GlobalInvocationID.x)).x);
+    imageStore(outImage, ivec2(gl_GlobalInvocationID.x, 0), uvec4(u, 0, 0, 0));
+})";
+        ANGLE_GL_COMPUTE_PROGRAM(program, csStream.str().c_str());
+        glUseProgram(program);
+        for (auto format :
+             {GL_R8,     GL_R16F,    GL_R32F,    GL_R8I,     GL_R16I,     GL_R32I,
+              GL_R8UI,   GL_R16UI,   GL_R32UI,   GL_RG8,     GL_RG16F,    GL_RG32F,
+              GL_RG8I,   GL_RG16I,   GL_RG32I,   GL_RG8UI,   GL_RG16UI,   GL_RG32UI,
+              GL_RGB32F, GL_RGB32I,  GL_RGB32UI, GL_RGBA8,   GL_RGBA16F,  GL_RGBA32F,
+              GL_RGBA8I, GL_RGBA16I, GL_RGBA32I, GL_RGBA8UI, GL_RGBA16UI, GL_RGBA32UI})
+        {
+            glTexBufferEXT(GL_TEXTURE_BUFFER, format, inBuf);
+            glDispatchCompute(1, 1, 1);
+            ASSERT_GL_NO_ERROR();
+        }
+    }
+}
+
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(ComputeShaderTest);
 ANGLE_INSTANTIATE_TEST_ES31(ComputeShaderTest);
 
