@@ -200,7 +200,8 @@ class WarmUpTask : public vk::Context, public LinkSubTask
         ContextVk *contextVk = vk::GetImpl(context);
 
         // Clean up garbage first, it's done no matter what may fail below.
-        mCompatibleRenderPass.destroy(contextVk->getDevice());
+        ANGLE_DEFINE_CALLBACKS(callbacksRenderPass, contextVk->getRenderer(), RenderPass);
+        mCompatibleRenderPass.destroy(contextVk->getDevice(), callbacksRenderPass);
 
         // Forward any errors
         if (mErrorCode != VK_SUCCESS)
