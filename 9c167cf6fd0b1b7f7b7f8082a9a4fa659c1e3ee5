@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7cb7a43_9ded0fde",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-29T14:00:50Z",
+      "side": 1,
+      "message": "Thanks a lot for the fix!",
+      "revId": "9c167cf6fd0b1b7f7b7f8082a9a4fa659c1e3ee5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08a6dab1_0b56c75b",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2302,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-29T14:00:50Z",
+      "side": 1,
+      "message": "Hah, didn\u0027t realize we can finally do this",
+      "revId": "9c167cf6fd0b1b7f7b7f8082a9a4fa659c1e3ee5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
