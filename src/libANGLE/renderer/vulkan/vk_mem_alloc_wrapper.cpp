@@ -27,6 +27,7 @@ VkResult InitAllocator(VkPhysicalDevice physicalDevice,
                        VkInstance instance,
                        uint32_t apiVersion,
                        VkDeviceSize preferredLargeHeapBlockSize,
+                       VkAllocationCallbacks *callbacks,
                        VmaAllocator *pAllocator)
 {
     VmaVulkanFunctions funcs                  = {};
@@ -72,6 +73,7 @@ VkResult InitAllocator(VkPhysicalDevice physicalDevice,
     allocatorInfo.pVulkanFunctions            = &funcs;
     allocatorInfo.vulkanApiVersion            = apiVersion;
     allocatorInfo.preferredLargeHeapBlockSize = preferredLargeHeapBlockSize;
+    allocatorInfo.pAllocationCallbacks        = callbacks;
 
     return vmaCreateAllocator(&allocatorInfo, pAllocator);
 }

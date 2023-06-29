@@ -26,8 +26,11 @@ void OverlayVk::onDestroy(const gl::Context *context)
     RendererVk *renderer = vk::GetImpl(context)->getRenderer();
     VkDevice device      = renderer->getDevice();
 
+    VkAllocationCallbacks *callbacks =
+        renderer->getMemoryAllocationTracker()->getAllocationCallback(
+            vk::MemoryAllocationCallbackType::ImageView);
     mFontImage.destroy(renderer);
-    mFontImageView.destroy(device);
+    mFontImageView.destroy(device, callbacks);
 }
 
 angle::Result OverlayVk::createFont(ContextVk *contextVk)

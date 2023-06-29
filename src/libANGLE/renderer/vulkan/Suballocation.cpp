@@ -79,9 +79,16 @@ void BufferBlock::destroy(RendererVk *renderer)
     renderer->onMemoryDealloc(mMemoryAllocationType, mAllocatedBufferSize, mMemoryTypeIndex,
                               mDeviceMemory.getHandle());
 
+    VkAllocationCallbacks *callbacksBuffer =
+        renderer->getMemoryAllocationTracker()->getAllocationCallback(
+            MemoryAllocationCallbackType::Buffer);
+    VkAllocationCallbacks *callbacksDeviceMemory =
+        renderer->getMemoryAllocationTracker()->getAllocationCallback(
+            MemoryAllocationCallbackType::DeviceMemory);
+
     mVirtualBlock.destroy(device);
-    mBuffer.destroy(device);
-    mDeviceMemory.destroy(device);
+    mBuffer.destroy(device, callbacksBuffer);
+    mDeviceMemory.destroy(device, callbacksDeviceMemory);
 }
 
 angle::Result BufferBlock::init(Context *context,
@@ -187,7 +194,10 @@ bool SharedBufferSuballocationGarbage::destroyIfComplete(RendererVk *renderer)
 {
     if (renderer->hasResourceUseFinished(mLifetime))
     {
-        mBuffer.destroy(renderer->getDevice());
+        VkAllocationCallbacks *callbacksBuffer =
+            renderer->getMemoryAllocationTracker()->getAllocationCallback(
+                MemoryAllocationCallbackType::Buffer);
+        mBuffer.destroy(renderer->getDevice(), callbacksBuffer);
         mSuballocation.destroy(renderer);
         return true;
     }

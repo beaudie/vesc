@@ -44,16 +44,19 @@ angle::Result SecondaryCommandPool::init(Context *context,
     {
         poolInfo.flags |= VK_COMMAND_POOL_CREATE_PROTECTED_BIT;
     }
-    ANGLE_VK_TRY(context, mCommandPool.init(context->getDevice(), poolInfo));
+    VkAllocationCallbacks *callbacks =
+        context->getRenderer()->getMemoryAllocationTracker()->getAllocationCallback(
+            vk::MemoryAllocationCallbackType::CommandPool);
+    ANGLE_VK_TRY(context, mCommandPool.init(context->getDevice(), poolInfo, callbacks));
     return angle::Result::Continue;
 }
 
-void SecondaryCommandPool::destroy(VkDevice device)
+void SecondaryCommandPool::destroy(VkDevice device, VkAllocationCallbacks *callbacks)
 {
     // Command buffers will be destroyed with the Pool. Avoid possible slowdown during cleanup.
     mCollectedBuffers.clear();
     mCollectedBuffersOverflow.clear();
-    mCommandPool.destroy(device);
+    mCommandPool.destroy(device, callbacks);
 }
 
 angle::Result SecondaryCommandPool::allocate(Context *context, VulkanSecondaryCommandBuffer *buffer)

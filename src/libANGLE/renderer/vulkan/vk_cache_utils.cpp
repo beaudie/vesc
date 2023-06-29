@@ -966,7 +966,10 @@ angle::Result CreateRenderPass1(Context *context,
     }
 
     // Initialize the render pass.
-    ANGLE_VK_TRY(context, renderPass->init(context->getDevice(), createInfo1));
+    VkAllocationCallbacks *callbacks =
+        context->getRenderer()->getMemoryAllocationTracker()->getAllocationCallback(
+            vk::MemoryAllocationCallbackType::RenderPass);
+    ANGLE_VK_TRY(context, renderPass->init(context->getDevice(), createInfo1, callbacks));
 
     return angle::Result::Continue;
 }
@@ -1462,8 +1465,11 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
     }
     else
     {
-        ANGLE_VK_TRY(contextVk,
-                     renderPassHelper->getRenderPass().init2(contextVk->getDevice(), createInfo));
+        VkAllocationCallbacks *callbacks =
+            contextVk->getRenderer()->getMemoryAllocationTracker()->getAllocationCallback(
+                vk::MemoryAllocationCallbackType::RenderPass);
+        ANGLE_VK_TRY(contextVk, renderPassHelper->getRenderPass().init2(contextVk->getDevice(),
+                                                                        createInfo, callbacks));
     }
 
     // Calculate perf counters associated with this render pass, such as load/store ops, unresolve
@@ -4684,10 +4690,10 @@ PipelineHelper::PipelineHelper() = default;
 
 PipelineHelper::~PipelineHelper() = default;
 
-void PipelineHelper::destroy(VkDevice device)
+void PipelineHelper::destroy(VkDevice device, VkAllocationCallbacks *callbacks)
 {
-    mPipeline.destroy(device);
-    mLinkedPipelineToRelease.destroy(device);
+    mPipeline.destroy(device, callbacks);
+    mLinkedPipelineToRelease.destroy(device, callbacks);
 
     // If there is a pending task, wait for it before destruction.
     if (mMonolithicPipelineCreationTask.isValid())
@@ -4695,7 +4701,7 @@ void PipelineHelper::destroy(VkDevice device)
         if (mMonolithicPipelineCreationTask.isPosted())
         {
             mMonolithicPipelineCreationTask.wait();
-            mMonolithicPipelineCreationTask.getTask()->getPipeline().destroy(device);
+            mMonolithicPipelineCreationTask.getTask()->getPipeline().destroy(device, callbacks);
         }
         mMonolithicPipelineCreationTask.reset();
     }
@@ -4815,13 +4821,19 @@ FramebufferHelper &FramebufferHelper::operator=(FramebufferHelper &&other)
 angle::Result FramebufferHelper::init(ContextVk *contextVk,
                                       const VkFramebufferCreateInfo &createInfo)
 {
-    ANGLE_VK_TRY(contextVk, mFramebuffer.init(contextVk->getDevice(), createInfo));
+    VkAllocationCallbacks *callbacks =
+        contextVk->getRenderer()->getMemoryAllocationTracker()->getAllocationCallback(
+            vk::MemoryAllocationCallbackType::Framebuffer);
+    ANGLE_VK_TRY(contextVk, mFramebuffer.init(contextVk->getDevice(), createInfo, callbacks));
     return angle::Result::Continue;
 }
 
 void FramebufferHelper::destroy(RendererVk *rendererVk)
 {
-    mFramebuffer.destroy(rendererVk->getDevice());
+    VkAllocationCallbacks *callbacksFramebuffer =
+        rendererVk->getMemoryAllocationTracker()->getAllocationCallback(
+            vk::MemoryAllocationCallbackType::Framebuffer);
+    mFramebuffer.destroy(rendererVk->getDevice(), callbacksFramebuffer);
 }
 
 void FramebufferHelper::release(ContextVk *contextVk)
@@ -5094,7 +5106,11 @@ angle::Result YcbcrConversionDesc::init(Context *context,
     ASSERT(mIsExternalFormat == 0);
 #endif  // VK_USE_PLATFORM_ANDROID_KHR
 
-    ANGLE_VK_TRY(context, conversionOut->init(context->getDevice(), samplerYcbcrConversionInfo));
+    VkAllocationCallbacks *callbacks =
+        context->getRenderer()->getMemoryAllocationTracker()->getAllocationCallback(
+            vk::MemoryAllocationCallbackType::SamplerYcbcrConversion);
+    ANGLE_VK_TRY(context,
+                 conversionOut->init(context->getDevice(), samplerYcbcrConversionInfo, callbacks));
     return angle::Result::Continue;
 }
 
@@ -5339,7 +5355,11 @@ angle::Result SamplerDesc::init(ContextVk *contextVk, Sampler *sampler) const
 
         vk::AddToPNextChain(&createInfo, &customBorderColorInfo);
     }
-    ANGLE_VK_TRY(contextVk, sampler->init(contextVk->getDevice(), createInfo));
+
+    VkAllocationCallbacks *callbacks =
+        contextVk->getRenderer()->getMemoryAllocationTracker()->getAllocationCallback(
+            vk::MemoryAllocationCallbackType::Sampler);
+    ANGLE_VK_TRY(contextVk, sampler->init(contextVk->getDevice(), createInfo, callbacks));
 
     return angle::Result::Continue;
 }
@@ -5390,9 +5410,9 @@ RenderPassHelper &RenderPassHelper::operator=(RenderPassHelper &&other)
     return *this;
 }
 
-void RenderPassHelper::destroy(VkDevice device)
+void RenderPassHelper::destroy(VkDevice device, VkAllocationCallbacks *callbacks)
 {
-    mRenderPass.destroy(device);
+    mRenderPass.destroy(device, callbacks);
 }
 
 void RenderPassHelper::release(ContextVk *contextVk)
@@ -6601,8 +6621,10 @@ VkResult PipelineCacheAccess::createGraphicsPipeline(vk::Context *context,
                                                      vk::Pipeline *pipelineOut)
 {
     std::unique_lock<std::mutex> lock = getLock();
-
-    return pipelineOut->initGraphics(context->getDevice(), createInfo, *mPipelineCache);
+    VkAllocationCallbacks *callbacks =
+        context->getRenderer()->getMemoryAllocationTracker()->getAllocationCallback(
+            vk::MemoryAllocationCallbackType::Pipeline);
+    return pipelineOut->initGraphics(context->getDevice(), createInfo, *mPipelineCache, callbacks);
 }
 
 VkResult PipelineCacheAccess::createComputePipeline(vk::Context *context,
@@ -6610,8 +6632,10 @@ VkResult PipelineCacheAccess::createComputePipeline(vk::Context *context,
                                                     vk::Pipeline *pipelineOut)
 {
     std::unique_lock<std::mutex> lock = getLock();
-
-    return pipelineOut->initCompute(context->getDevice(), createInfo, *mPipelineCache);
+    VkAllocationCallbacks *callbacks =
+        context->getRenderer()->getMemoryAllocationTracker()->getAllocationCallback(
+            vk::MemoryAllocationCallbackType::Pipeline);
+    return pipelineOut->initCompute(context->getDevice(), createInfo, *mPipelineCache, callbacks);
 }
 
 void PipelineCacheAccess::merge(RendererVk *renderer, const vk::PipelineCache &pipelineCache)
@@ -6694,7 +6718,9 @@ void RenderPassCache::destroy(ContextVk *contextVk)
                                    mRenderPassWithOpsCacheStats);
 
     VkDevice device = renderer->getDevice();
-
+    VkAllocationCallbacks *callbacks =
+        renderer->getMemoryAllocationTracker()->getAllocationCallback(
+            vk::MemoryAllocationCallbackType::RenderPass);
     // Make sure there are no jobs referencing the render pass cache.
     contextVk->getShareGroup()->waitForCurrentMonolithicPipelineCreationTask();
 
@@ -6702,7 +6728,7 @@ void RenderPassCache::destroy(ContextVk *contextVk)
     {
         for (auto &innerIt : outerIt.second)
         {
-            innerIt.second.destroy(device);
+            innerIt.second.destroy(device, callbacks);
         }
     }
     mPayload.clear();
@@ -6820,11 +6846,13 @@ void GraphicsPipelineCache<Hash>::destroy(ContextVk *contextVk)
     accumulateCacheStats(contextVk->getRenderer());
 
     VkDevice device = contextVk->getDevice();
-
+    VkAllocationCallbacks *callbacks =
+        contextVk->getRenderer()->getMemoryAllocationTracker()->getAllocationCallback(
+            vk::MemoryAllocationCallbackType::Pipeline);
     for (auto &item : mPayload)
     {
         vk::PipelineHelper &pipeline = item.second;
-        pipeline.destroy(device);
+        pipeline.destroy(device, callbacks);
     }
 
     mPayload.clear();
@@ -7057,12 +7085,14 @@ void DescriptorSetLayoutCache::destroy(RendererVk *rendererVk)
     rendererVk->accumulateCacheStats(VulkanCacheType::DescriptorSetLayout, mCacheStats);
 
     VkDevice device = rendererVk->getDevice();
-
+    VkAllocationCallbacks *callbacks =
+        rendererVk->getMemoryAllocationTracker()->getAllocationCallback(
+            vk::MemoryAllocationCallbackType::DescriptorSetLayout);
     for (auto &item : mPayload)
     {
         vk::RefCountedDescriptorSetLayout &layout = item.second;
         ASSERT(!layout.isReferenced());
-        layout.get().destroy(device);
+        layout.get().destroy(device, callbacks);
     }
 
     mPayload.clear();
@@ -7095,7 +7125,10 @@ angle::Result DescriptorSetLayoutCache::getDescriptorSetLayout(
     createInfo.pBindings    = bindingVector.data();
 
     vk::DescriptorSetLayout newLayout;
-    ANGLE_VK_TRY(context, newLayout.init(context->getDevice(), createInfo));
+    VkAllocationCallbacks *callbacks =
+        context->getRenderer()->getMemoryAllocationTracker()->getAllocationCallback(
+            vk::MemoryAllocationCallbackType::DescriptorSetLayout);
+    ANGLE_VK_TRY(context, newLayout.init(context->getDevice(), createInfo, callbacks));
 
     auto insertedItem =
         mPayload.emplace(desc, vk::RefCountedDescriptorSetLayout(std::move(newLayout)));
@@ -7118,11 +7151,13 @@ void PipelineLayoutCache::destroy(RendererVk *rendererVk)
     accumulateCacheStats(rendererVk);
 
     VkDevice device = rendererVk->getDevice();
-
+    VkAllocationCallbacks *callbacks =
+        rendererVk->getMemoryAllocationTracker()->getAllocationCallback(
+            vk::MemoryAllocationCallbackType::PipelineLayout);
     for (auto &item : mPayload)
     {
         vk::RefCountedPipelineLayout &layout = item.second;
-        layout.get().destroy(device);
+        layout.get().destroy(device, callbacks);
     }
 
     mPayload.clear();
@@ -7177,7 +7212,10 @@ angle::Result PipelineLayoutCache::getPipelineLayout(
     }
 
     vk::PipelineLayout newLayout;
-    ANGLE_VK_TRY(context, newLayout.init(context->getDevice(), createInfo));
+    VkAllocationCallbacks *callbacks =
+        context->getRenderer()->getMemoryAllocationTracker()->getAllocationCallback(
+            vk::MemoryAllocationCallbackType::PipelineLayout);
+    ANGLE_VK_TRY(context, newLayout.init(context->getDevice(), createInfo, callbacks));
 
     auto insertedItem = mPayload.emplace(desc, vk::RefCountedPipelineLayout(std::move(newLayout)));
     vk::RefCountedPipelineLayout &insertedLayout = insertedItem.first->second;
@@ -7199,11 +7237,13 @@ void SamplerYcbcrConversionCache::destroy(RendererVk *rendererVk)
     rendererVk->accumulateCacheStats(VulkanCacheType::SamplerYcbcrConversion, mCacheStats);
 
     VkDevice device = rendererVk->getDevice();
-
+    VkAllocationCallbacks *callbacks =
+        rendererVk->getMemoryAllocationTracker()->getAllocationCallback(
+            vk::MemoryAllocationCallbackType::ImageView);
     for (auto &iter : mExternalFormatPayload)
     {
         vk::SamplerYcbcrConversion &samplerYcbcrConversion = iter.second;
-        samplerYcbcrConversion.destroy(device);
+        samplerYcbcrConversion.destroy(device, callbacks);
 
         rendererVk->onDeallocateHandle(vk::HandleType::SamplerYcbcrConversion);
     }
@@ -7211,7 +7251,7 @@ void SamplerYcbcrConversionCache::destroy(RendererVk *rendererVk)
     for (auto &iter : mVkFormatPayload)
     {
         vk::SamplerYcbcrConversion &samplerYcbcrConversion = iter.second;
-        samplerYcbcrConversion.destroy(device);
+        samplerYcbcrConversion.destroy(device, callbacks);
 
         rendererVk->onDeallocateHandle(vk::HandleType::SamplerYcbcrConversion);
     }
@@ -7268,12 +7308,15 @@ void SamplerCache::destroy(RendererVk *rendererVk)
     rendererVk->accumulateCacheStats(VulkanCacheType::Sampler, mCacheStats);
 
     VkDevice device = rendererVk->getDevice();
+    VkAllocationCallbacks *callbacks =
+        rendererVk->getMemoryAllocationTracker()->getAllocationCallback(
+            vk::MemoryAllocationCallbackType::Sampler);
 
     for (auto &iter : mPayload)
     {
         vk::RefCountedSampler &sampler = iter.second;
         ASSERT(!sampler.isReferenced());
-        sampler.get().get().destroy(device);
+        sampler.get().get().destroy(device, callbacks);
 
         rendererVk->onDeallocateHandle(vk::HandleType::Sampler);
     }

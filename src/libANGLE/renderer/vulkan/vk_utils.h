@@ -587,6 +587,29 @@ class [[nodiscard]] DeviceScoped final : angle::NonCopyable
     T mVar;
 };
 
+// Helper class to handle RAII patterns for initialization. Requires that T have a destroy method
+// that takes a VkDevice and returns void.
+template <typename T>
+class [[nodiscard]] DeviceScopedCallback final : angle::NonCopyable
+{
+  public:
+    DeviceScopedCallback(VkDevice device) : mDevice(device), mCallbacks(nullptr) {}
+    DeviceScopedCallback(VkDevice device, VkAllocationCallbacks *callbacks)
+        : mDevice(device), mCallbacks(callbacks)
+    {}
+    ~DeviceScopedCallback() { mVar.destroy(mDevice, mCallbacks); }
+
+    const T &get() const { return mVar; }
+    T &get() { return mVar; }
+
+    T &&release() { return std::move(mVar); }
+
+  private:
+    VkDevice mDevice;
+    VkAllocationCallbacks *mCallbacks;
+    T mVar;
+};
+
 template <typename T>
 class [[nodiscard]] AllocatorScoped final : angle::NonCopyable
 {
@@ -868,6 +891,15 @@ class Recycler final : angle::NonCopyable
         for (T &object : mObjectFreeList)
         {
             object.destroy(device);
+        }
+        mObjectFreeList.clear();
+    }
+
+    void destroy(VkDevice device, VkAllocationCallbacks *callbacks)
+    {
+        for (T &object : mObjectFreeList)
+        {
+            object.destroy(device, callbacks);
         }
         mObjectFreeList.clear();
     }

@@ -1351,14 +1351,14 @@ void OneOffCommandPool::init(vk::ProtectionType protectionType)
     mProtectionType = protectionType;
 }
 
-void OneOffCommandPool::destroy(VkDevice device)
+void OneOffCommandPool::destroy(VkDevice device, VkAllocationCallbacks *callbacks)
 {
     std::unique_lock<std::mutex> lock(mMutex);
     for (PendingOneOffCommands &pending : mPendingCommands)
     {
         pending.commandBuffer.releaseHandle();
     }
-    mCommandPool.destroy(device);
+    mCommandPool.destroy(device, callbacks);
     mProtectionType = vk::ProtectionType::InvalidEnum;
 }
 
@@ -1388,7 +1388,10 @@ angle::Result OneOffCommandPool::getCommandBuffer(vk::Context *context,
             {
                 createInfo.flags |= VK_COMMAND_POOL_CREATE_PROTECTED_BIT;
             }
-            ANGLE_VK_TRY(context, mCommandPool.init(context->getDevice(), createInfo));
+            VkAllocationCallbacks *callbacks =
+                context->getRenderer()->getMemoryAllocationTracker()->getAllocationCallback(
+                    vk::MemoryAllocationCallbackType::CommandPool);
+            ANGLE_VK_TRY(context, mCommandPool.init(context->getDevice(), createInfo, callbacks));
         }
 
         VkCommandBufferAllocateInfo allocInfo = {};
@@ -1478,7 +1481,6 @@ void RendererVk::onDestroy(vk::Context *context)
     {
         handleDeviceLost();
     }
-
     mCommandProcessor.destroy(context);
     mCommandQueue.destroy(context);
 
@@ -1487,12 +1489,16 @@ void RendererVk::onDestroy(vk::Context *context)
     ASSERT(!hasSharedGarbage());
     ASSERT(mOrphanedBufferBlocks.empty());
 
+    VkAllocationCallbacks *callbacksPool = mMemoryAllocationTracker.getAllocationCallback(
+        vk::MemoryAllocationCallbackType::CommandPool);
     for (OneOffCommandPool &oneOffCommandPool : mOneOffCommandPoolMap)
     {
-        oneOffCommandPool.destroy(mDevice);
+        oneOffCommandPool.destroy(mDevice, callbacksPool);
     }
 
-    mPipelineCache.destroy(mDevice);
+    VkAllocationCallbacks *callbacksPipelineCache = mMemoryAllocationTracker.getAllocationCallback(
+        vk::MemoryAllocationCallbackType::PipelineCache);
+    mPipelineCache.destroy(mDevice, callbacksPipelineCache);
     mSamplerCache.destroy(this);
     mYuvConversionCache.destroy(this);
     mVkFormatDescriptorCountMap.clear();
@@ -1503,28 +1509,34 @@ void RendererVk::onDestroy(vk::Context *context)
     mImageMemorySuballocator.destroy(this);
     mAllocator.destroy();
 
-    // When the renderer is being destroyed, it is possible to check if all the allocated memory
-    // throughout the execution has been freed.
-    mMemoryAllocationTracker.onDestroy();
-
     if (mDevice)
     {
-        vkDestroyDevice(mDevice, nullptr);
+        VkAllocationCallbacks *callbacks = mMemoryAllocationTracker.getAllocationCallback(
+            vk::MemoryAllocationCallbackType::Device);
+        vkDestroyDevice(mDevice, callbacks);
         mDevice = VK_NULL_HANDLE;
     }
 
     if (mDebugUtilsMessenger)
     {
-        vkDestroyDebugUtilsMessengerEXT(mInstance, mDebugUtilsMessenger, nullptr);
+        VkAllocationCallbacks *callbacks = mMemoryAllocationTracker.getAllocationCallback(
+            vk::MemoryAllocationCallbackType::DebugUtils);
+        vkDestroyDebugUtilsMessengerEXT(mInstance, mDebugUtilsMessenger, callbacks);
     }
 
     logCacheStats();
 
     if (mInstance)
     {
-        vkDestroyInstance(mInstance, nullptr);
+        VkAllocationCallbacks *callbacks = mMemoryAllocationTracker.getAllocationCallback(
+            vk::MemoryAllocationCallbackType::Instance);
+        vkDestroyInstance(mInstance, callbacks);
         mInstance = VK_NULL_HANDLE;
     }
+
+    // When the renderer is being destroyed, it is possible to check if all the allocated memory
+    // throughout the execution has been freed.
+    mMemoryAllocationTracker.onDestroy();
 
     if (mCompressEvent)
     {
@@ -1883,7 +1895,10 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
 
     {
         ANGLE_SCOPED_DISABLE_MSAN();
-        ANGLE_VK_TRY(displayVk, vkCreateInstance(&instanceInfo, nullptr, &mInstance));
+        WARN() << "Instance creation";
+        VkAllocationCallbacks *callbacksInstance = mMemoryAllocationTracker.getAllocationCallback(
+            vk::MemoryAllocationCallbackType::Instance);
+        ANGLE_VK_TRY(displayVk, vkCreateInstance(&instanceInfo, callbacksInstance, &mInstance));
 #if defined(ANGLE_SHARED_LIBVULKAN)
         // Load volk if we are linking dynamically
         volkLoadInstance(mInstance);
@@ -1917,8 +1932,11 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
         messengerInfo.pfnUserCallback = &DebugUtilsMessenger;
         messengerInfo.pUserData       = this;
 
-        ANGLE_VK_TRY(displayVk, vkCreateDebugUtilsMessengerEXT(mInstance, &messengerInfo, nullptr,
-                                                               &mDebugUtilsMessenger));
+        VkAllocationCallbacks *callbacksDebugUtils = mMemoryAllocationTracker.getAllocationCallback(
+            vk::MemoryAllocationCallbackType::DebugUtils);
+        ANGLE_VK_TRY(displayVk,
+                     vkCreateDebugUtilsMessengerEXT(mInstance, &messengerInfo, callbacksDebugUtils,
+                                                    &mDebugUtilsMessenger));
     }
 
     if (isVulkan11Instance() ||
@@ -2030,9 +2048,12 @@ angle::Result RendererVk::initializeMemoryAllocator(DisplayVk *displayVk)
     mPreferredLargeHeapBlockSize = 4 * 1024 * 1024;
 
     // Create VMA allocator
+    //    VkAllocationCallbacks *callbacks = mMemoryAllocationTracker.getCallbacks();
+    VkAllocationCallbacks *callbacksAllocator =
+        mMemoryAllocationTracker.getAllocationCallback(vk::MemoryAllocationCallbackType::Allocator);
     ANGLE_VK_TRY(displayVk,
                  mAllocator.init(mPhysicalDevice, mDevice, mInstance, mApplicationInfo.apiVersion,
-                                 mPreferredLargeHeapBlockSize));
+                                 mPreferredLargeHeapBlockSize, callbacksAllocator));
 
     // Figure out the alignment for default buffer allocations
     VkBufferCreateInfo createInfo    = {};
@@ -2044,8 +2065,10 @@ angle::Result RendererVk::initializeMemoryAllocator(DisplayVk *displayVk)
     createInfo.queueFamilyIndexCount = 0;
     createInfo.pQueueFamilyIndices   = nullptr;
 
-    vk::DeviceScoped<vk::Buffer> tempBuffer(mDevice);
-    tempBuffer.get().init(mDevice, createInfo);
+    VkAllocationCallbacks *callbacksBuffer =
+        mMemoryAllocationTracker.getAllocationCallback(vk::MemoryAllocationCallbackType::Buffer);
+    vk::DeviceScopedCallback<vk::Buffer> tempBuffer(mDevice, callbacksBuffer);
+    tempBuffer.get().init(mDevice, createInfo, callbacksBuffer);
 
     VkMemoryRequirements defaultBufferMemoryRequirements;
     tempBuffer.get().getMemoryRequirements(mDevice, &defaultBufferMemoryRequirements);
@@ -3473,7 +3496,10 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     // may also generate messages.
     initializeValidationMessageSuppressions();
 
-    ANGLE_VK_TRY(displayVk, vkCreateDevice(mPhysicalDevice, &createInfo, nullptr, &mDevice));
+    WARN() << "Device creation";
+    VkAllocationCallbacks *callbacks =
+        mMemoryAllocationTracker.getAllocationCallback(vk::MemoryAllocationCallbackType::Device);
+    ANGLE_VK_TRY(displayVk, vkCreateDevice(mPhysicalDevice, &createInfo, callbacks, &mDevice));
 #if defined(ANGLE_SHARED_LIBVULKAN)
     // Load volk if we are loading dynamically
     volkLoadDevice(mDevice);
@@ -4891,7 +4917,9 @@ angle::Result RendererVk::initPipelineCache(DisplayVk *display,
         pipelineCacheCreateInfo.flags |= VK_PIPELINE_CACHE_CREATE_EXTERNALLY_SYNCHRONIZED_BIT_EXT;
     }
 
-    ANGLE_VK_TRY(display, pipelineCache->init(mDevice, pipelineCacheCreateInfo));
+    VkAllocationCallbacks *callbacks = mMemoryAllocationTracker.getAllocationCallback(
+        vk::MemoryAllocationCallbackType::PipelineCache);
+    ANGLE_VK_TRY(display, pipelineCache->init(mDevice, pipelineCacheCreateInfo, callbacks));
 
     return angle::Result::Continue;
 }
@@ -4918,8 +4946,10 @@ angle::Result RendererVk::getPipelineCache(vk::PipelineCacheAccess *pipelineCach
             ANGLE_TRY(getPipelineCacheSize(displayVk, &mPipelineCacheSizeAtLastSync));
         }
 
-        mPipelineCacheInitialized = true;
-        pCache.destroy(mDevice);
+        mPipelineCacheInitialized        = true;
+        VkAllocationCallbacks *callbacks = mMemoryAllocationTracker.getAllocationCallback(
+            vk::MemoryAllocationCallbackType::PipelineCache);
+        pCache.destroy(mDevice, callbacks);
     }
 
     pipelineCacheOut->init(&mPipelineCache, &mPipelineCacheMutex);
@@ -5542,7 +5572,9 @@ angle::Result RendererVk::submitPriorityDependency(vk::Context *context,
                                                    SerialIndex index)
 {
     vk::RendererScoped<vk::ReleasableResource<vk::Semaphore>> semaphore(this);
-    ANGLE_VK_TRY(context, semaphore.get().get().init(mDevice));
+    VkAllocationCallbacks *callbacks =
+        mMemoryAllocationTracker.getAllocationCallback(vk::MemoryAllocationCallbackType::Semaphore);
+    ANGLE_VK_TRY(context, semaphore.get().get().init(mDevice, callbacks));
 
     // First, submit already flushed commands / wait semaphores into the source Priority VkQueue.
     // Commands that are in the Secondary Command Buffers will be flushed into the new VkQueue.
