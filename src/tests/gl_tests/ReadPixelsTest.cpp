@@ -401,9 +401,6 @@ TEST_P(ReadPixelsPBOTest, ArrayBufferTarget)
 // Test that using a PBO does not overwrite existing data.
 TEST_P(ReadPixelsPBOTest, ExistingDataPreserved)
 {
-    // TODO(geofflang): Figure out why this fails on AMD OpenGL (http://anglebug.com/1291)
-    ANGLE_SKIP_TEST_IF(IsAMD() && IsOpenGL());
-
     // Clear backbuffer to red
     glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -420,7 +417,8 @@ TEST_P(ReadPixelsPBOTest, ExistingDataPreserved)
 
     // Read 16x16 region from green backbuffer to PBO at offset 16
     glReadPixels(0, 0, 16, 16, GL_RGBA, GL_UNSIGNED_BYTE, reinterpret_cast<void *>(16));
-    void *mappedPtr    = glMapBufferRange(GL_PIXEL_PACK_BUFFER, 0, 32, GL_MAP_READ_BIT);
+    void *mappedPtr =
+        glMapBufferRange(GL_PIXEL_PACK_BUFFER, 0, 17 * sizeof(GLColor), GL_MAP_READ_BIT);
     GLColor *dataColor = static_cast<GLColor *>(mappedPtr);
     EXPECT_GL_NO_ERROR();
 

@@ -9317,6 +9317,31 @@ angle::Result ImageHelper::readPixelsForCompressedGetImage(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+angle::Result ImageHelper::readPixelsWithCompute(ContextVk *contextVk,
+                                                 ImageHelper *src,
+                                                 const PackPixelsParams &packPixelsParams,
+                                                 const VkOffset3D &srcOffset,
+                                                 const VkExtent3D &srcExtent,
+                                                 ptrdiff_t pixelsOffset,
+                                                 const VkImageSubresourceLayers &srcSubresource)
+{
+    UtilsVk::CopyImageToBufferParameters params = {};
+    params.srcOffset[0]                         = srcOffset.x;
+    params.srcOffset[1]                         = srcOffset.y;
+    params.srcLayer                             = srcOffset.z;
+    params.srcMip                               = LevelIndex(srcSubresource.mipLevel);
+    params.size[0]                              = srcExtent.width;
+    params.size[1]                              = srcExtent.height;
+    params.outputOffset                         = packPixelsParams.offset + pixelsOffset;
+    params.outputPitch                          = packPixelsParams.outputPitch;
+    params.reverseRowOrder                      = packPixelsParams.reverseRowOrder;
+    params.outputFormat                         = packPixelsParams.destFormat;
+
+    BufferHelper &packBuffer = GetImpl(packPixelsParams.packBuffer)->getBuffer();
+
+    return contextVk->getUtils().copyImageToBuffer(contextVk, &packBuffer, src, params);
+}
+
 bool ImageHelper::canCopyWithTransformForReadPixels(const PackPixelsParams &packPixelsParams,
                                                     const angle::Format *readFormat)
 {
@@ -9336,6 +9361,34 @@ bool ImageHelper::canCopyWithTransformForReadPixels(const PackPixelsParams &pack
     // Don't allow copies from emulated formats for simplicity.
     return !hasEmulatedImageFormat() && isSameFormatCopy && !needsTransformation &&
            isPitchMultipleOfTexelSize;
+}
+
+bool ImageHelper::canCopyWithComputeForReadPixels(const PackPixelsParams &packPixelsParams,
+                                                  const angle::Format *readFormat,
+                                                  ptrdiff_t pixelsOffset)
+{
+    ASSERT(mActualFormatID != angle::FormatID::NONE && mIntendedFormatID != angle::FormatID::NONE);
+    const angle::Format *writeFormat = packPixelsParams.destFormat;
+
+    // For now, only float formats are supported with 4-byte 4-channel normalized pixels for output.
+    const bool isFloat =
+        !readFormat->isSint() && !readFormat->isUint() && !readFormat->hasDepthOrStencilBits();
+    const bool isFourByteOutput   = writeFormat->pixelBytes == 4 && writeFormat->channelCount == 4;
+    const bool isNormalizedOutput = writeFormat->isUnorm() || writeFormat->isSnorm();
+
+    // Disallow rotation.
+    const bool needsTransformation = packPixelsParams.rotation != SurfaceRotation::Identity;
+
+    // Disallow copies when the output pitch cannot be correctly specified in Vulkan.
+    const bool isPitchMultipleOfTexelSize =
+        packPixelsParams.outputPitch % readFormat->pixelBytes == 0;
+
+    // Disallow copies when the output offset is not aligned to uint32_t
+    const bool isOffsetMultipleOfUint =
+        (packPixelsParams.offset + pixelsOffset) % readFormat->pixelBytes == 0;
+
+    return isFloat && isFourByteOutput && isNormalizedOutput && !needsTransformation &&
+           isPitchMultipleOfTexelSize && isOffsetMultipleOfUint;
 }
 
 angle::Result ImageHelper::readPixels(ContextVk *contextVk,
@@ -9537,33 +9590,40 @@ angle::Result ImageHelper::readPixelsImpl(ContextVk *contextVk,
     }
 
     // If PBO and if possible, copy directly on the GPU.
-    if (packPixelsParams.packBuffer &&
-        canCopyWithTransformForReadPixels(packPixelsParams, readFormat))
+    if (packPixelsParams.packBuffer)
     {
-        BufferHelper &packBuffer      = GetImpl(packPixelsParams.packBuffer)->getBuffer();
-        VkDeviceSize packBufferOffset = packBuffer.getOffset();
+        const ptrdiff_t pixelsOffset = reinterpret_cast<ptrdiff_t>(pixels);
+        if (canCopyWithTransformForReadPixels(packPixelsParams, readFormat))
+        {
+            BufferHelper &packBuffer      = GetImpl(packPixelsParams.packBuffer)->getBuffer();
+            VkDeviceSize packBufferOffset = packBuffer.getOffset();
 
-        CommandBufferAccess copyAccess;
-        copyAccess.onBufferTransferWrite(&packBuffer);
-        copyAccess.onImageTransferRead(copyAspectFlags, src);
+            CommandBufferAccess copyAccess;
+            copyAccess.onBufferTransferWrite(&packBuffer);
+            copyAccess.onImageTransferRead(copyAspectFlags, src);
 
-        OutsideRenderPassCommandBuffer *copyCommandBuffer;
-        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(copyAccess, &copyCommandBuffer));
+            OutsideRenderPassCommandBuffer *copyCommandBuffer;
+            ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(copyAccess, &copyCommandBuffer));
 
-        ASSERT(packPixelsParams.outputPitch % readFormat->pixelBytes == 0);
+            ASSERT(packPixelsParams.outputPitch % readFormat->pixelBytes == 0);
 
-        VkBufferImageCopy region = {};
-        region.bufferImageHeight = srcExtent.height;
-        region.bufferOffset =
-            packBufferOffset + packPixelsParams.offset + reinterpret_cast<ptrdiff_t>(pixels);
-        region.bufferRowLength  = packPixelsParams.outputPitch / readFormat->pixelBytes;
-        region.imageExtent      = srcExtent;
-        region.imageOffset      = srcOffset;
-        region.imageSubresource = srcSubresource;
+            VkBufferImageCopy region = {};
+            region.bufferImageHeight = srcExtent.height;
+            region.bufferOffset      = packBufferOffset + packPixelsParams.offset + pixelsOffset;
+            region.bufferRowLength   = packPixelsParams.outputPitch / readFormat->pixelBytes;
+            region.imageExtent       = srcExtent;
+            region.imageOffset       = srcOffset;
+            region.imageSubresource  = srcSubresource;
 
-        copyCommandBuffer->copyImageToBuffer(src->getImage(), src->getCurrentLayout(contextVk),
-                                             packBuffer.getBuffer().getHandle(), 1, &region);
-        return angle::Result::Continue;
+            copyCommandBuffer->copyImageToBuffer(src->getImage(), src->getCurrentLayout(contextVk),
+                                                 packBuffer.getBuffer().getHandle(), 1, &region);
+            return angle::Result::Continue;
+        }
+        if (canCopyWithComputeForReadPixels(packPixelsParams, readFormat, pixelsOffset))
+        {
+            return readPixelsWithCompute(contextVk, src, packPixelsParams, srcOffset, srcExtent,
+                                         pixelsOffset, srcSubresource);
+        }
     }
 
     RendererScoped<vk::BufferHelper> readBuffer(renderer);
@@ -9650,7 +9710,7 @@ angle::Result ImageHelper::packReadPixelBuffer(ContextVk *contextVk,
         ANGLE_TRY(packBufferVk->mapImpl(contextVk, GL_MAP_WRITE_BIT, &mapPtr));
         uint8_t *dst = static_cast<uint8_t *>(mapPtr) + reinterpret_cast<ptrdiff_t>(pixels);
         PackPixels(packPixelsParams, aspectFormat, area.width * aspectFormat.pixelBytes,
-                   readPixelBuffer, static_cast<uint8_t *>(dst));
+                   readPixelBuffer, dst);
         ANGLE_TRY(packBufferVk->unmapImpl(contextVk));
     }
     else
