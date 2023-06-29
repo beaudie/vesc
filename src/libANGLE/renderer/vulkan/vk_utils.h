@@ -588,6 +588,29 @@ class [[nodiscard]] DeviceScoped final : angle::NonCopyable
     T mVar;
 };
 
+// Helper class to handle RAII patterns for initialization. It is similar to DeviceScoped, but also
+// uses an allocation callback for its construction and destruction.
+template <typename T>
+class [[nodiscard]] DeviceScopedCallback final : angle::NonCopyable
+{
+  public:
+    DeviceScopedCallback(VkDevice device) : mDevice(device), mCallbacks(nullptr) {}
+    DeviceScopedCallback(VkDevice device, VkAllocationCallbacks *callbacks)
+        : mDevice(device), mCallbacks(callbacks)
+    {}
+    ~DeviceScopedCallback() { mVar.destroy(mDevice, mCallbacks); }
+
+    const T &get() const { return mVar; }
+    T &get() { return mVar; }
+
+    T &&release() { return std::move(mVar); }
+
+  private:
+    VkDevice mDevice;
+    VkAllocationCallbacks *mCallbacks;
+    T mVar;
+};
+
 template <typename T>
 class [[nodiscard]] AllocatorScoped final : angle::NonCopyable
 {
@@ -903,6 +926,15 @@ class Recycler final : angle::NonCopyable
         for (T &object : mObjectFreeList)
         {
             object.destroy(device);
+        }
+        mObjectFreeList.clear();
+    }
+
+    void destroy(VkDevice device, VkAllocationCallbacks *callbacks)
+    {
+        for (T &object : mObjectFreeList)
+        {
+            object.destroy(device, callbacks);
         }
         mObjectFreeList.clear();
     }
@@ -1350,6 +1382,20 @@ enum class RenderPassClosureReason
 #define ANGLE_VK_UNREACHABLE(context) \
     UNREACHABLE();                    \
     ANGLE_VK_CHECK(context, false, VK_ERROR_FEATURE_NOT_PRESENT)
+
+#ifdef ANGLE_ENABLE_MEMORY_ALLOC_CALLBACKS
+#    define ANGLE_DEFINE_CALLBACKS(callbacks, renderer, callbackType)        \
+        ASSERT(rx::vk::MemoryAllocationCallbackType::callbackType <          \
+               rx::vk::MemoryAllocationCallbackType::EnumCount);             \
+        VkAllocationCallbacks *callbacks =                                   \
+            (renderer)->getMemoryAllocationTracker()->getAllocationCallback( \
+                rx::vk::MemoryAllocationCallbackType::callbackType)
+#else
+#    define ANGLE_DEFINE_CALLBACKS(callbacks, renderer, callbackType) \
+        ASSERT(rx::vk::MemoryAllocationCallbackType::callbackType <   \
+               rx::vk::MemoryAllocationCallbackType::EnumCount);      \
+        VkAllocationCallbacks *callbacks = nullptr
+#endif
 
 // NVIDIA uses special formatting for the driver version:
 // Major: 10
