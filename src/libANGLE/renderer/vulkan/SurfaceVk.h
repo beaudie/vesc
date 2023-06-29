@@ -145,7 +145,8 @@ struct SwapchainCleanupData : angle::NonCopyable
     void waitFences(VkDevice device, uint64_t timeout) const;
     void destroy(VkDevice device,
                  vk::Recycler<vk::Fence> *fenceRecycler,
-                 vk::Recycler<vk::Semaphore> *semaphoreRecycler);
+                 vk::Recycler<vk::Semaphore> *semaphoreRecycler,
+                 const VkAllocationCallbacks *callbacks);
 
     // The swapchain to be destroyed.
     VkSwapchainKHR swapchain = VK_NULL_HANDLE;
@@ -174,7 +175,8 @@ struct ImagePresentOperation : angle::NonCopyable
 
     void destroy(VkDevice device,
                  vk::Recycler<vk::Fence> *fenceRecycler,
-                 vk::Recycler<vk::Semaphore> *semaphoreRecycler);
+                 vk::Recycler<vk::Semaphore> *semaphoreRecycler,
+                 const VkAllocationCallbacks *callbacks);
 
     // fence is only used when VK_EXT_swapchain_maintenance1 is supported.
     vk::Fence fence;
