@@ -401,9 +401,6 @@ TEST_P(ReadPixelsPBOTest, ArrayBufferTarget)
 // Test that using a PBO does not overwrite existing data.
 TEST_P(ReadPixelsPBOTest, ExistingDataPreserved)
 {
-    // TODO(geofflang): Figure out why this fails on AMD OpenGL (http://anglebug.com/1291)
-    ANGLE_SKIP_TEST_IF(IsAMD() && IsOpenGL());
-
     // Clear backbuffer to red
     glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -420,7 +417,8 @@ TEST_P(ReadPixelsPBOTest, ExistingDataPreserved)
 
     // Read 16x16 region from green backbuffer to PBO at offset 16
     glReadPixels(0, 0, 16, 16, GL_RGBA, GL_UNSIGNED_BYTE, reinterpret_cast<void *>(16));
-    void *mappedPtr    = glMapBufferRange(GL_PIXEL_PACK_BUFFER, 0, 32, GL_MAP_READ_BIT);
+    void *mappedPtr =
+        glMapBufferRange(GL_PIXEL_PACK_BUFFER, 0, 17 * sizeof(GLColor), GL_MAP_READ_BIT);
     GLColor *dataColor = static_cast<GLColor *>(mappedPtr);
     EXPECT_GL_NO_ERROR();
 
@@ -781,7 +779,7 @@ TEST_P(ReadPixelsMultisampleTest, BasicClear)
 class ReadPixelsTextureTest : public ANGLETest<>
 {
   public:
-    ReadPixelsTextureTest() : mFBO(0), mTexture(0)
+    ReadPixelsTextureTest() : mFBO(0), mTextureRGBA(0), mTextureBGRA(0)
     {
         setWindowWidth(32);
         setWindowHeight(32);
@@ -793,7 +791,8 @@ class ReadPixelsTextureTest : public ANGLETest<>
 
     void testSetUp() override
     {
-        glGenTextures(1, &mTexture);
+        glGenTextures(1, &mTextureRGBA);
+        glGenTextures(1, &mTextureBGRA);
         glGenFramebuffers(1, &mFBO);
         glBindFramebuffer(GL_FRAMEBUFFER, mFBO);
     }
@@ -801,32 +800,68 @@ class ReadPixelsTextureTest : public ANGLETest<>
     void testTearDown() override
     {
         glDeleteFramebuffers(1, &mFBO);
-        glDeleteTextures(1, &mTexture);
+        glDeleteTextures(1, &mTextureRGBA);
+        glDeleteTextures(1, &mTextureBGRA);
     }
 
-    void initTexture(GLenum textureTarget,
-                     GLint levels,
-                     GLint attachmentLevel,
-                     GLint attachmentLayer)
+    void initTextureRGBA(GLenum textureTarget,
+                         GLint levels,
+                         GLint attachmentLevel,
+                         GLint attachmentLayer)
     {
-        glBindTexture(textureTarget, mTexture);
+        glBindTexture(textureTarget, mTextureRGBA);
         glTexStorage3D(textureTarget, levels, GL_RGBA8, 4, 4, 4);
-        glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, mTexture, attachmentLevel,
-                                  attachmentLayer);
-        initializeTextureData(textureTarget, levels);
+        glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, mTextureRGBA,
+                                  attachmentLevel, attachmentLayer);
+        ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+        ASSERT_GL_NO_ERROR();
+        initializeTextureData(textureTarget, levels, GL_RGBA);
+    }
+
+    void initTextureBGRA(GLenum textureTarget,
+                         GLint levels,
+                         GLint attachmentLevel,
+                         GLint attachmentLayer)
+    {
+        glBindTexture(textureTarget, mTextureBGRA);
+        for (GLint level = 0; level < levels; ++level)
+        {
+            glTexImage3D(textureTarget, level, GL_BGRA_EXT, 4 >> level, 4 >> level,
+                         textureTarget == GL_TEXTURE_3D ? 4 >> level : 4, 0, GL_BGRA_EXT,
+                         GL_UNSIGNED_BYTE, nullptr);
+        }
+        glTexParameteri(textureTarget, GL_TEXTURE_BASE_LEVEL, 0);
+        glTexParameteri(textureTarget, GL_TEXTURE_MAX_LEVEL, levels - 1);
+        glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, mTextureBGRA,
+                                  attachmentLevel, attachmentLayer);
+        ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+        ASSERT_GL_NO_ERROR();
+        initializeTextureData(textureTarget, levels, GL_BGRA_EXT);
     }
 
     void testRead(GLenum textureTarget, GLint levels, GLint attachmentLevel, GLint attachmentLayer)
     {
-        initTexture(textureTarget, levels, attachmentLevel, attachmentLayer);
+        initTextureRGBA(textureTarget, levels, attachmentLevel, attachmentLayer);
         verifyColor(attachmentLevel, attachmentLayer);
+
+        // Skip BGRA test on GL/Nvidia, leading to internal incomplete framebuffer error.
+        // http://anglebug.com/8239
+        ANGLE_SKIP_TEST_IF(IsNVIDIA() && IsOpenGL());
+
+        if (IsGLExtensionEnabled("GL_EXT_texture_format_BGRA8888"))
+        {
+            initTextureBGRA(textureTarget, levels, attachmentLevel, attachmentLayer);
+            verifyColor(attachmentLevel, attachmentLayer);
+        }
     }
 
     void initPBO()
     {
+        // Create a buffer big enough to hold mip 0 + allow some offset during readback.
         glGenBuffers(1, &mBuffer);
         glBindBuffer(GL_PIXEL_PACK_BUFFER, mBuffer);
-        glBufferData(GL_PIXEL_PACK_BUFFER, sizeof(angle::GLColor), nullptr, GL_STREAM_COPY);
+        glBufferData(GL_PIXEL_PACK_BUFFER, sizeof(angle::GLColor) * 16 * 2, nullptr,
+                     GL_STREAM_COPY);
         ASSERT_GL_NO_ERROR();
     }
 
@@ -836,8 +871,18 @@ class ReadPixelsTextureTest : public ANGLETest<>
                      GLint attachmentLayer)
     {
         initPBO();
-        initTexture(textureTarget, levels, attachmentLevel, attachmentLayer);
+        initTextureRGBA(textureTarget, levels, attachmentLevel, attachmentLayer);
         verifyPBO(attachmentLevel, attachmentLayer);
+
+        // Skip BGRA test on GL/Nvidia, leading to internal incomplete framebuffer error.
+        // http://anglebug.com/8239
+        ANGLE_SKIP_TEST_IF(IsNVIDIA() && IsOpenGL());
+
+        if (IsGLExtensionEnabled("GL_EXT_texture_format_BGRA8888"))
+        {
+            initTextureBGRA(textureTarget, levels, attachmentLevel, attachmentLayer);
+            verifyPBO(attachmentLevel, attachmentLayer);
+        }
     }
 
     // Give each {level,layer} pair a (probably) unique color via random.
@@ -849,26 +894,31 @@ class ReadPixelsTextureTest : public ANGLETest<>
 
     void verifyColor(GLint level, GLint layer)
     {
-        angle::GLColor colorValue(getColorValue(level, layer));
-        EXPECT_PIXEL_COLOR_EQ(0, 0, colorValue);
+        const angle::GLColor colorValue(getColorValue(level, layer));
+        const GLint size = 4 >> level;
+        EXPECT_PIXEL_RECT_EQ(0, 0, size, size, colorValue);
     }
 
     void verifyPBO(GLint level, GLint layer)
     {
-        glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+        const GLint size     = 4 >> level;
+        const GLsizei offset = 4 * (level + layer);
+        glReadPixels(0, 0, size, size, GL_RGBA, GL_UNSIGNED_BYTE, reinterpret_cast<void *>(offset));
 
-        angle::GLColor expectedColor(getColorValue(level, layer));
-        void *mapPointer =
-            glMapBufferRange(GL_PIXEL_PACK_BUFFER, 0, sizeof(angle::GLColor), GL_MAP_READ_BIT);
+        const std::vector<angle::GLColor> expectedColor(size * size, getColorValue(level, layer));
+        std::vector<angle::GLColor> actualColor(size * size);
+
+        void *mapPointer = glMapBufferRange(GL_PIXEL_PACK_BUFFER, offset,
+                                            sizeof(angle::GLColor) * size * size, GL_MAP_READ_BIT);
         ASSERT_NE(nullptr, mapPointer);
-        angle::GLColor actualColor;
-        memcpy(&actualColor, mapPointer, sizeof(angle::GLColor));
+        memcpy(actualColor.data(), mapPointer, sizeof(angle::GLColor) * size * size);
         glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+
         ASSERT_GL_NO_ERROR();
         EXPECT_EQ(expectedColor, actualColor);
     }
 
-    void initializeTextureData(GLenum textureTarget, GLint levels)
+    void initializeTextureData(GLenum textureTarget, GLint levels, GLenum format)
     {
         for (GLint level = 0; level < levels; ++level)
         {
@@ -882,18 +932,28 @@ class ReadPixelsTextureTest : public ANGLETest<>
             {
                 GLuint colorValue = getColorValue(level, layer);
                 size_t offset     = (layer * layerSize);
+
+                if (format == GL_BGRA_EXT)
+                {
+                    const GLuint rb = colorValue & 0x00FF00FF;
+                    const GLuint br = (rb & 0xFF) << 16 | rb >> 16;
+                    const GLuint ga = colorValue & 0xFF00FF00;
+                    colorValue      = ga | br;
+                }
+
                 std::fill(textureData.begin() + offset, textureData.begin() + offset + layerSize,
                           colorValue);
             }
 
-            glTexSubImage3D(textureTarget, level, 0, 0, 0, mipSize, mipSize, layers, GL_RGBA,
+            glTexSubImage3D(textureTarget, level, 0, 0, 0, mipSize, mipSize, layers, format,
                             GL_UNSIGNED_BYTE, textureData.data());
         }
     }
 
     angle::RNG mRNG;
     GLuint mFBO;
-    GLuint mTexture;
+    GLuint mTextureRGBA;
+    GLuint mTextureBGRA;
     GLuint mBuffer;
 };
 
