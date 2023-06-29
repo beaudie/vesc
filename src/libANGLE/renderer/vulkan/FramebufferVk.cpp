@@ -1582,8 +1582,11 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
                                                           &params);
 
                 // Create depth- and stencil-only views for reading.
-                vk::DeviceScoped<vk::ImageView> depthView(contextVk->getDevice());
-                vk::DeviceScoped<vk::ImageView> stencilView(contextVk->getDevice());
+                ANGLE_DEFINE_CALLBACKS(callbacksImageView, renderer, ImageView);
+                vk::DeviceScopedCallback<vk::ImageView> depthView(contextVk->getDevice(),
+                                                                  callbacksImageView);
+                vk::DeviceScopedCallback<vk::ImageView> stencilView(contextVk->getDevice(),
+                                                                    callbacksImageView);
 
                 vk::LevelIndex levelIndex =
                     depthStencilImage->toVkLevel(readRenderTarget->getLevelIndex());

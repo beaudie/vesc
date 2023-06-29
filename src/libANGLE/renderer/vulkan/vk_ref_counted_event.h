@@ -110,7 +110,7 @@ class RefCountedEvent final
 
     // Destroy the event and mHandle. Caller must ensure there is no outstanding reference to the
     // mHandle.
-    void destroy(VkDevice device);
+    void destroy(VkDevice device, VkAllocationCallbacks *callbacks);
 
     bool valid() const { return mHandle != nullptr; }
 
@@ -254,10 +254,10 @@ class RefCountedEventRecycler final
         return true;
     }
 
-    void destroy(VkDevice device)
+    void destroy(VkDevice device, VkAllocationCallbacks *callbacks)
     {
         std::lock_guard<angle::SimpleMutex> lock(mMutex);
-        mFreeStack.destroy(device);
+        mFreeStack.destroy(device, callbacks);
     }
 
   private:

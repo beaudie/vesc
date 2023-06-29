@@ -27,7 +27,7 @@ class PersistentCommandPool final
     PersistentCommandPool();
     ~PersistentCommandPool();
 
-    void destroy(VkDevice device);
+    void destroy(VkDevice device, VkAllocationCallbacks *callbacks);
     angle::Result init(Context *context, ProtectionType protectionType, uint32_t queueFamilyIndex);
 
     angle::Result allocate(Context *context, PrimaryCommandBuffer *commandBufferOut);

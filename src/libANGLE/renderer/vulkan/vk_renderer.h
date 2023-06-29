@@ -122,7 +122,7 @@ class OneOffCommandPool : angle::NonCopyable
                                    vk::PrimaryCommandBuffer *commandBufferOut);
     void releaseCommandBuffer(const QueueSerial &submitQueueSerial,
                               vk::PrimaryCommandBuffer &&primary);
-    void destroy(VkDevice device);
+    void destroy(VkDevice device, VkAllocationCallbacks *callbacks);
 
   private:
     vk::ProtectionType mProtectionType;
@@ -1180,7 +1180,10 @@ void DestroyGarbage(Renderer *renderer, ArgT object, ArgsT... objectsIn)
 {
     if (object->valid())
     {
-        object->destroy(renderer->getDevice());
+        object->destroy(
+            renderer->getDevice(),
+            renderer->getMemoryAllocationTracker()->getAllocationCallbacks()->getAllocationCallback(
+                object->getCallbackType()));
     }
     DestroyGarbage(renderer, objectsIn...);
 }

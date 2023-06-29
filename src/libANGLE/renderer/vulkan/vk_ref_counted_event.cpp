@@ -36,13 +36,15 @@ bool RefCountedEvent::init(Context *context, ImageLayout layout)
         createInfo.flags = context->getFeatures().supportsSynchronization2.enabled
                                ? VK_EVENT_CREATE_DEVICE_ONLY_BIT_KHR
                                : 0;
-        VkResult result  = mHandle->get().event.init(context->getDevice(), createInfo);
+        ANGLE_DEFINE_CALLBACKS(callbacksEvent, context->getRenderer(), Event);
+        VkResult result =
+            mHandle->get().event.init(context->getDevice(), createInfo, callbacksEvent);
         if (result != VK_SUCCESS)
         {
             WARN() << "event.init failed. Clean up garbage and retry again";
             // Proactively clean up garbage and retry
             context->getRefCountedEventsGarbageRecycler()->cleanup(context->getRenderer());
-            result = mHandle->get().event.init(context->getDevice(), createInfo);
+            result = mHandle->get().event.init(context->getDevice(), createInfo, callbacksEvent);
             if (result != VK_SUCCESS)
             {
                 // Drivers usually can allocate huge amount of VkEvents, and we should never use
@@ -87,6 +89,7 @@ void RefCountedEvent::releaseImpl(Renderer *renderer, RecyclerT *recycler)
     // expected only called under context share lock.
     ASSERT(std::this_thread::get_id() != renderer->getCommandProcessorThreadId());
 
+    ANGLE_DEFINE_CALLBACKS(callbacksEvent, renderer, Event);
     const bool isLastReference = mHandle->getAndReleaseRef() == 1;
     if (isLastReference)
     {
@@ -97,7 +100,7 @@ void RefCountedEvent::releaseImpl(Renderer *renderer, RecyclerT *recycler)
         ASSERT(recycler != nullptr);
         // TODO: Disable recycler and immediately destroy the event for now until I figure out
         // SYNC-vkCmdSetEvent-missingbarrier-reset.
-        destroy(renderer->getDevice());
+        destroy(renderer->getDevice(), callbacksEvent);
         ASSERT(mHandle == nullptr);
     }
     else
@@ -106,11 +109,11 @@ void RefCountedEvent::releaseImpl(Renderer *renderer, RecyclerT *recycler)
     }
 }
 
-void RefCountedEvent::destroy(VkDevice device)
+void RefCountedEvent::destroy(VkDevice device, VkAllocationCallbacks *callbacks)
 {
     ASSERT(mHandle != nullptr);
     ASSERT(!mHandle->isReferenced());
-    mHandle->get().event.destroy(device);
+    mHandle->get().event.destroy(device, callbacks);
     SafeDelete(mHandle);
 }
 
@@ -159,7 +162,8 @@ void RefCountedEventsGarbageRecycler::destroy(Renderer *renderer)
         mGarbageQueue.pop();
     }
 
-    mFreeStack.destroy(renderer->getDevice());
+    ANGLE_DEFINE_CALLBACKS(callbacksEvent, renderer, Event);
+    mFreeStack.destroy(renderer->getDevice(), callbacksEvent);
 }
 
 void RefCountedEventsGarbageRecycler::cleanup(Renderer *renderer)
@@ -167,7 +171,8 @@ void RefCountedEventsGarbageRecycler::cleanup(Renderer *renderer)
     // Destroy free stack first. The garbage clean up process will add more events to the free
     // stack. If everything is stable between each frame, grabage should release enough events to
     // recycler for next frame's needs.
-    mFreeStack.destroy(renderer->getDevice());
+    ANGLE_DEFINE_CALLBACKS(callbacksEvent, renderer, Event);
+    mFreeStack.destroy(renderer->getDevice(), callbacksEvent);
 
     while (!mGarbageQueue.empty())
     {

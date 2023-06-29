@@ -8,6 +8,7 @@
 //
 
 #include "libANGLE/renderer/vulkan/PersistentCommandPool.h"
+#include "libANGLE/renderer/vulkan/vk_renderer.h"
 
 namespace rx
 {
@@ -43,7 +44,9 @@ angle::Result PersistentCommandPool::init(Context *context,
     }
     commandPoolInfo.queueFamilyIndex = queueFamilyIndex;
 
-    ANGLE_VK_TRY(context, mCommandPool.init(context->getDevice(), commandPoolInfo));
+    ANGLE_DEFINE_CALLBACKS(callbacksImageView, context->getRenderer(), CommandPool);
+    ANGLE_VK_TRY(context,
+                 mCommandPool.init(context->getDevice(), commandPoolInfo, callbacksImageView));
 
     for (uint32_t i = 0; i < kInitBufferNum; i++)
     {
@@ -53,7 +56,7 @@ angle::Result PersistentCommandPool::init(Context *context,
     return angle::Result::Continue;
 }
 
-void PersistentCommandPool::destroy(VkDevice device)
+void PersistentCommandPool::destroy(VkDevice device, VkAllocationCallbacks *callbacks)
 {
     if (!valid())
         return;
@@ -66,7 +69,7 @@ void PersistentCommandPool::destroy(VkDevice device)
     }
     mFreeBuffers.clear();
 
-    mCommandPool.destroy(device);
+    mCommandPool.destroy(device, callbacks);
 }
 
 angle::Result PersistentCommandPool::allocate(Context *context,
