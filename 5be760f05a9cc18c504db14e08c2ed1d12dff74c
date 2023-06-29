@@ -126,6 +126,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f0eaf5ce_4e7e04dc",
+        "filename": "src/common/FastMutex.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-29T11:14:22Z",
+      "side": 1,
+      "message": "\u003e Your spin-wait-with-yield approach should probably be using an architectural yield (ANGLE_SMT_PAUSE) rather than OS scheduler yield (std::this_thread::yield) -- otherwise you aren\u0027t spinning as I think you\u0027re intending to.\n\n`ANGLE_SMT_PAUSE` will cause performance problems. My intention is to give priority to threads that a currently acquired the lock. So this is not an actual spinlock.\nDetails here:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/4645491\n\n\u003e Also I don\u0027t know what platform you\u0027ve tuned these sleep times on, but I think you probably need more generalized numbers for it. I don\u0027t understand the choice of {20 loops @ 1us, 2 loops @ 1000us, 20 loops @ 1us}.\n\nI tuned for Android. I\u0027m going to add `#ifdef` and use `std::this_thread::yield` for other platforms.\n\nReason for numbers is based on timings. Commit message here has more information:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/4650351\nI\u0027m going to move logic of the above CL into this CL.\n\n\u003e This means that std::this_thread::sleep_for has a minimum sleep duration of 1ms, but it\u0027s not a very punctual 1ms sleep either.\n\nI already know this, just did not updated the CL. When I originally designed this CL I only considered Andorid and did not check Windows. I will use `std::this_thread::yield` for other platforms.\n\nReason for 1ms sleem is that if we already waited 2-4ms before, then we might as well just sleep 1ms and save CPU power...\n\n\u003e So all that to say: keep in mind that when you request even a sleep of 1 microsecond on Windows, you\u0027ll get around 1300-1400 microseconds (1.3-1.4ms!) instead.\n\nYes. I know this by now...\nBut thanks for the information!",
+      "parentUuid": "9a1154f4_de1821fc",
+      "revId": "5be760f05a9cc18c504db14e08c2ed1d12dff74c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e831dab9_b1a1ec12",
         "filename": "src/common/FastMutex.cpp",
         "patchSetId": 9
