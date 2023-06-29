@@ -1495,8 +1495,11 @@ angle::Result FramebufferVk::blit(const gl::Context *context,
             AdjustBlitResolveParametersForPreRotation(rotation, srcFramebufferRotation, &params);
 
             // Create depth- and stencil-only views for reading.
-            vk::DeviceScoped<vk::ImageView> depthView(contextVk->getDevice());
-            vk::DeviceScoped<vk::ImageView> stencilView(contextVk->getDevice());
+            ANGLE_DEFINE_CALLBACKS(callbacksImageView, renderer, ImageView);
+            vk::DeviceScopedCallback<vk::ImageView> depthView(contextVk->getDevice(),
+                                                              callbacksImageView);
+            vk::DeviceScopedCallback<vk::ImageView> stencilView(contextVk->getDevice(),
+                                                                callbacksImageView);
 
             vk::ImageHelper *depthStencilImage = &readRenderTarget->getImageForCopy();
             vk::LevelIndex levelIndex =
