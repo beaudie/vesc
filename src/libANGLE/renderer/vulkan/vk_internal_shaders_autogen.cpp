@@ -412,71 +412,71 @@ ShaderLibrary::ShaderLibrary() {}
 
 ShaderLibrary::~ShaderLibrary() {}
 
-void ShaderLibrary::destroy(VkDevice device)
+void ShaderLibrary::destroy(VkDevice device, VkAllocationCallbacks *callbacks)
 {
     for (RefCounted<ShaderModule> &shader : mBlit3DSrc_frag_shaders)
     {
-        shader.get().destroy(device);
+        shader.get().destroy(device, callbacks);
     }
     for (RefCounted<ShaderModule> &shader : mBlitResolve_frag_shaders)
     {
-        shader.get().destroy(device);
+        shader.get().destroy(device, callbacks);
     }
     for (RefCounted<ShaderModule> &shader : mBlitResolveStencilNoExport_comp_shaders)
     {
-        shader.get().destroy(device);
+        shader.get().destroy(device, callbacks);
     }
     for (RefCounted<ShaderModule> &shader : mConvertIndex_comp_shaders)
     {
-        shader.get().destroy(device);
+        shader.get().destroy(device, callbacks);
     }
     for (RefCounted<ShaderModule> &shader : mConvertIndexIndirectLineLoop_comp_shaders)
     {
-        shader.get().destroy(device);
+        shader.get().destroy(device, callbacks);
     }
     for (RefCounted<ShaderModule> &shader : mConvertIndirectLineLoop_comp_shaders)
     {
-        shader.get().destroy(device);
+        shader.get().destroy(device, callbacks);
     }
     for (RefCounted<ShaderModule> &shader : mConvertVertex_comp_shaders)
     {
-        shader.get().destroy(device);
+        shader.get().destroy(device, callbacks);
     }
     for (RefCounted<ShaderModule> &shader : mCopyImageToBuffer_comp_shaders)
     {
-        shader.get().destroy(device);
+        shader.get().destroy(device, callbacks);
     }
     for (RefCounted<ShaderModule> &shader : mEtcToBc_comp_shaders)
     {
-        shader.get().destroy(device);
+        shader.get().destroy(device, callbacks);
     }
     for (RefCounted<ShaderModule> &shader : mExportStencil_frag_shaders)
     {
-        shader.get().destroy(device);
+        shader.get().destroy(device, callbacks);
     }
     for (RefCounted<ShaderModule> &shader : mFullScreenTri_vert_shaders)
     {
-        shader.get().destroy(device);
+        shader.get().destroy(device, callbacks);
     }
     for (RefCounted<ShaderModule> &shader : mGenerateMipmap_comp_shaders)
     {
-        shader.get().destroy(device);
+        shader.get().destroy(device, callbacks);
     }
     for (RefCounted<ShaderModule> &shader : mImageClear_frag_shaders)
     {
-        shader.get().destroy(device);
+        shader.get().destroy(device, callbacks);
     }
     for (RefCounted<ShaderModule> &shader : mImageCopy_frag_shaders)
     {
-        shader.get().destroy(device);
+        shader.get().destroy(device, callbacks);
     }
     for (RefCounted<ShaderModule> &shader : mOverlayDraw_frag_shaders)
     {
-        shader.get().destroy(device);
+        shader.get().destroy(device, callbacks);
     }
     for (RefCounted<ShaderModule> &shader : mOverlayDraw_vert_shaders)
     {
-        shader.get().destroy(device);
+        shader.get().destroy(device, callbacks);
     }
 }
 

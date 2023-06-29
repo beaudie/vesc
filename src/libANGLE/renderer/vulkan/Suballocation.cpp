@@ -80,8 +80,12 @@ void BufferBlock::destroy(Renderer *renderer)
                               mDeviceMemory.getHandle());
 
     mVirtualBlock.destroy(device);
-    mBuffer.destroy(device);
-    mDeviceMemory.destroy(device);
+
+    ANGLE_DEFINE_CALLBACKS(callbacksBuffer, renderer, Buffer);
+    mBuffer.destroy(device, callbacksBuffer);
+
+    ANGLE_DEFINE_CALLBACKS(callbacksDeviceMemory, renderer, DeviceMemory);
+    mDeviceMemory.destroy(device, callbacksDeviceMemory);
 }
 
 VkResult BufferBlock::init(Context *context,
@@ -187,7 +191,8 @@ bool BufferSuballocationGarbage::destroyIfComplete(Renderer *renderer)
 {
     if (renderer->hasResourceUseFinished(mLifetime))
     {
-        mBuffer.destroy(renderer->getDevice());
+        ANGLE_DEFINE_CALLBACKS(callbacksBuffer, renderer, Buffer);
+        mBuffer.destroy(renderer->getDevice(), callbacksBuffer);
         mSuballocation.destroy(renderer);
         return true;
     }

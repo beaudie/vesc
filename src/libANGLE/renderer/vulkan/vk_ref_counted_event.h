@@ -151,7 +151,7 @@ class RefCountedEvent final
 
     // Destroy the event and mHandle. Caller must ensure there is no outstanding reference to the
     // mHandle.
-    void destroy(VkDevice device);
+    void destroy(VkDevice device, VkAllocationCallbacks *callbacks);
 
     bool valid() const { return mHandle != nullptr; }
 
@@ -278,7 +278,7 @@ class RefCountedEventRecycler final
         ASSERT(mEventsToReuse.empty());
     }
 
-    void destroy(VkDevice device);
+    void destroy(VkDevice device, VkAllocationCallbacks *callbacks);
 
     // Add single event to the toReset list
     void recycle(RefCountedEvent &&garbageObject)

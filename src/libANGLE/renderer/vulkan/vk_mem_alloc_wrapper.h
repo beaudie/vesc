@@ -50,11 +50,31 @@ typedef struct StatInfo
     VkDeviceSize unusedRangeSizeMax;
 } StatInfo;
 
+typedef struct DeviceMemoryCallbacks
+{
+    /// Optional, can be null.
+    VKAPI_ATTR void VKAPI_PTR (*pfnAllocate)(VmaAllocator allocator,
+                                             uint32_t memoryType,
+                                             VkDeviceMemory memory,
+                                             VkDeviceSize size,
+                                             void *pUserData);
+    /// Optional, can be null.
+    VKAPI_ATTR void VKAPI_PTR (*pfnFree)(VmaAllocator allocator,
+                                         uint32_t memoryType,
+                                         VkDeviceMemory memory,
+                                         VkDeviceSize size,
+                                         void *pUserData);
+    /// Optional, can be null.
+    void *pUserData;
+} DeviceMemoryCallbacks;
+
 VkResult InitAllocator(VkPhysicalDevice physicalDevice,
                        VkDevice device,
                        VkInstance instance,
                        uint32_t apiVersion,
                        VkDeviceSize preferredLargeHeapBlockSize,
+                       VkAllocationCallbacks *callbacks,
+                       DeviceMemoryCallbacks *deviceMemoryCallbacks,
                        VmaAllocator *pAllocator);
 
 void DestroyAllocator(VmaAllocator allocator);

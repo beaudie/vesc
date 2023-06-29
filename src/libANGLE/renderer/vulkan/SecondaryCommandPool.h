@@ -32,7 +32,7 @@ class SecondaryCommandPool final : angle::NonCopyable
     ~SecondaryCommandPool();
 
     angle::Result init(Context *context, uint32_t queueFamilyIndex, ProtectionType protectionType);
-    void destroy(VkDevice device);
+    void destroy(VkDevice device, VkAllocationCallbacks *callbacks);
 
     bool valid() const { return mCommandPool.valid(); }
 

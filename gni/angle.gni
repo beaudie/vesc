@@ -268,6 +268,9 @@ declare_args() {
   # Disabled by default.
   angle_enable_memory_alloc_logging = false
 
+  # Enable memory allocation callbacks. This feature is for debugging only.
+  angle_enable_memory_alloc_callbacks = false
+
   # Disable the layers in ubsan builds because of really slow builds.
   # Vulkan Validation Layers require Android NDK API level 26, i.e. Oreo, due to
   # Vulkan Validation Layers compatibility issues, see http://crrev/c/1405714.
