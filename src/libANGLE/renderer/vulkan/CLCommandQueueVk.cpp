@@ -92,8 +92,9 @@ CLCommandQueueVk::~CLCommandQueueVk()
     }
 
     // Recycle the current command buffers
+    ANGLE_DEFINE_CALLBACKS(callbacksCommandPool, mContext->getRenderer(), CommandPool);
     mContext->getRenderer()->recycleOutsideRenderPassCommandBufferHelper(&mComputePassCommands);
-    mCommandPool.outsideRenderPassPool.destroy(vkDevice);
+    mCommandPool.outsideRenderPassPool.destroy(vkDevice, callbacksCommandPool);
 }
 
 angle::Result CLCommandQueueVk::setProperty(cl::CommandQueueProperties properties, cl_bool enable)
