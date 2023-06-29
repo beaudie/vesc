@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7584180_4eb4f7b3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1390,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-29T14:13:02Z",
+      "side": 1,
+      "message": "Only enable this for the last subpass. If MSRTT emulation is enabled, the first subpass is effectively a LOAD_OP, we don\u0027t want dithering there.",
+      "revId": "287724d777f42d3ce383fedbe1ed4779f97c7c39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed391953_0b1a86fb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-29T14:13:02Z",
+      "side": 1,
+      "message": "Prefer `mDitherDisabled` to improve readability of the rest of the code",
+      "range": {
+        "startLine": 244,
+        "startChar": 12,
+        "endLine": 244,
+        "endChar": 27
+      },
+      "revId": "287724d777f42d3ce383fedbe1ed4779f97c7c39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c044c6b_852a9784",
+        "filename": "src/tests/gl_tests/SixteenBppTextureTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 688,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-29T14:13:02Z",
+      "side": 1,
+      "message": "Please add a similar check at the end to make sure dither is still _enabled_ after switching to `anotherFbo`.",
+      "revId": "287724d777f42d3ce383fedbe1ed4779f97c7c39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
