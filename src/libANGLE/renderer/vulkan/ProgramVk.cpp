@@ -68,7 +68,8 @@ class LinkTask final : public vk::Context, public angle::Closure
             from.pipelineCreationTotalCacheMissesDurationNs;
 
         // Clean up garbage and forward any errors
-        mCompatibleRenderPass.destroy(contextVk->getDevice());
+        ANGLE_DEFINE_CALLBACKS(callbacksRenderPass, contextVk->getRenderer(), RenderPass);
+        mCompatibleRenderPass.destroy(contextVk->getDevice(), callbacksRenderPass);
         if (mErrorCode != VK_SUCCESS)
         {
             contextVk->handleError(mErrorCode, mErrorFile, mErrorFunction, mErrorLine);

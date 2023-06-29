@@ -34,6 +34,7 @@
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
 #include "libANGLE/renderer/vulkan/vk_internal_shaders_autogen.h"
 #include "libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.h"
+#include "libANGLE/renderer/vulkan/vk_utils.h"
 
 namespace angle
 {
@@ -114,15 +115,18 @@ void CollectGarbage(std::vector<vk::GarbageObject> *garbageOut, ArgT object, Arg
 }
 
 // Recursive function to process variable arguments for garbage destroy
-inline void DestroyGarbage(VkDevice device) {}
+inline void DestroyGarbage(VkDevice device, vk::MemoryAllocationCallback *callbackObject) {}
 template <typename ArgT, typename... ArgsT>
-void DestroyGarbage(VkDevice device, ArgT object, ArgsT... objectsIn)
+void DestroyGarbage(VkDevice device,
+                    vk::MemoryAllocationCallback *callbackObject,
+                    ArgT object,
+                    ArgsT... objectsIn)
 {
     if (object->valid())
     {
-        object->destroy(device);
+        object->destroy(device, callbackObject->getAllocationCallback(object->getCallbackType()));
     }
-    DestroyGarbage(device, objectsIn...);
+    DestroyGarbage(device, callbackObject, objectsIn...);
 }
 
 class WaitableCompressEvent
@@ -151,7 +155,7 @@ class OneOffCommandPool : angle::NonCopyable
                                    vk::PrimaryCommandBuffer *commandBufferOut);
     void releaseCommandBuffer(const QueueSerial &submitQueueSerial,
                               vk::PrimaryCommandBuffer &&primary);
-    void destroy(VkDevice device);
+    void destroy(VkDevice device, VkAllocationCallbacks *callbacks);
 
   private:
     vk::ProtectionType mProtectionType;
@@ -316,7 +320,8 @@ class RendererVk : angle::NonCopyable
     {
         if (hasResourceUseFinished(use))
         {
-            DestroyGarbage(mDevice, garbageIn...);
+            DestroyGarbage(mDevice, mMemoryAllocationTracker.getAllocationCallbacks(),
+                           garbageIn...);
         }
         else
         {
@@ -376,7 +381,8 @@ class RendererVk : angle::NonCopyable
             // mSuballocationGarbageDestroyed is atomic, so we dont need mGarbageMutex to
             // protect it.
             mSuballocationGarbageDestroyed += suballocation.getSize();
-            buffer.destroy(mDevice);
+            ANGLE_DEFINE_CALLBACKS(callbacksBuffer, this, Buffer);
+            buffer.destroy(mDevice, callbacksBuffer);
             suballocation.destroy(this);
         }
         else
