@@ -297,7 +297,8 @@ class WarmUpGraphicsTask : public WarmUpTaskCommon
         {
             mergeProgramExecutablePipelineCacheToRenderer();
 
-            mCompatibleRenderPass->get().destroy(getDevice());
+            ANGLE_DEFINE_CALLBACKS(callbacksRenderPass, contextVk->getRenderer(), RenderPass);
+            mCompatibleRenderPass->get().destroy(getDevice(), callbacksRenderPass);
             SafeDelete(mCompatibleRenderPass);
         }
     }
@@ -363,6 +364,8 @@ angle::Result LinkTaskVk::linkImpl(const gl::ProgramLinkedResources &resources,
         vk::RenderPass compatibleRenderPass;
 
         WarmUpTaskCommon prepForWarmUpContext(mRenderer);
+        // TODO?
+        // ANGLE_DEFINE_CALLBACKS(callbacksRenderPass, mRenderer, RenderPass);
         ANGLE_TRY(executableVk->prepareForWarmUpPipelineCache(
             &prepForWarmUpContext, mPipelineRobustness, mPipelineProtectedAccess, &isCompute,
             &surfaceRotationVariations, &graphicsPipelineDesc, &compatibleRenderPass));
