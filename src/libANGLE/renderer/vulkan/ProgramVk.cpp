@@ -96,7 +96,8 @@ class LinkTaskVk final : public vk::Context, public LinkTask
         ProgramExecutableVk *executableVk = vk::GetImpl(mExecutable);
 
         // Clean up garbage first, it's done no matter what may fail below.
-        mCompatibleRenderPass.destroy(contextVk->getDevice());
+        ANGLE_DEFINE_CALLBACKS(callbacksRenderPass, contextVk->getRenderer(), RenderPass);
+        mCompatibleRenderPass.destroy(contextVk->getDevice(), callbacksRenderPass);
 
         ANGLE_TRY(executableVk->initializeDescriptorPools(contextVk,
                                                           &contextVk->getDescriptorSetLayoutCache(),
