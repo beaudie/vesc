@@ -210,7 +210,7 @@ class ShaderLibrary final : angle::NonCopyable
     ShaderLibrary();
     ~ShaderLibrary();
 
-    void destroy(VkDevice device);
+    void destroy(VkDevice device, VkAllocationCallbacks *callbacks);
 
     angle::Result getBlitResolve_frag(Context *context,
                                       uint32_t shaderFlags,

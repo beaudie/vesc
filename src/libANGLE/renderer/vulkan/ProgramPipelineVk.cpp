@@ -104,7 +104,8 @@ angle::Result ProgramPipelineVk::link(const gl::Context *glContext,
         contextVk, mState.getExecutable(), contextVk->pipelineRobustness(),
         contextVk->pipelineProtectedAccess(), &temporaryCompatibleRenderPass);
 
-    temporaryCompatibleRenderPass.destroy(contextVk->getDevice());
+    ANGLE_DEFINE_CALLBACKS(callbacksRenderPass, contextVk->getRenderer(), RenderPass);
+    temporaryCompatibleRenderPass.destroy(contextVk->getDevice(), callbacksRenderPass);
     return result;
 }  // namespace rx
 

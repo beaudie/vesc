@@ -95,7 +95,8 @@ class LinkTaskVk final : public vk::Context, public angle::Closure
     angle::Result getResult(ContextVk *contextVk)
     {
         // Clean up garbage first, it's not no matter what may fail below.
-        mCompatibleRenderPass.destroy(contextVk->getDevice());
+        ANGLE_DEFINE_CALLBACKS(callbacksRenderPass, contextVk->getRenderer(), RenderPass);
+        mCompatibleRenderPass.destroy(contextVk->getDevice(), callbacksRenderPass);
 
         ANGLE_TRY(mExecutable->initializeDescriptorPools(contextVk,
                                                          &contextVk->getDescriptorSetLayoutCache(),
