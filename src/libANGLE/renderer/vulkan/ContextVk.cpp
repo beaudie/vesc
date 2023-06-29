@@ -3703,9 +3703,11 @@ angle::Result ContextVk::synchronizeCpuGpuTime()
 
     VkDevice device = getDevice();
     vk::DeviceScoped<vk::Event> cpuReady(device), gpuReady(device), gpuDone(device);
-    ANGLE_VK_TRY(this, cpuReady.get().init(device, eventCreateInfo));
-    ANGLE_VK_TRY(this, gpuReady.get().init(device, eventCreateInfo));
-    ANGLE_VK_TRY(this, gpuDone.get().init(device, eventCreateInfo));
+    VkAllocationCallbacks *callbacks = mRenderer->getMemoryAllocationTracker()->getCallbacks();
+    VkAllocationCallbacks callback   = vk::MemoryAllocationCallback::BuildCallbackEvent(callbacks);
+    ANGLE_VK_TRY(this, cpuReady.get().init(device, eventCreateInfo, &callback));
+    ANGLE_VK_TRY(this, gpuReady.get().init(device, eventCreateInfo, &callback));
+    ANGLE_VK_TRY(this, gpuDone.get().init(device, eventCreateInfo, &callback));
 
     constexpr uint32_t kRetries = 10;
 
@@ -8497,7 +8499,11 @@ angle::Result ContextVk::ensureInterfacePipelineCache()
                 VK_PIPELINE_CACHE_CREATE_EXTERNALLY_SYNCHRONIZED_BIT_EXT;
         }
 
-        ANGLE_VK_TRY(this, mInterfacePipelinesCache.init(getDevice(), pipelineCacheCreateInfo));
+        VkAllocationCallbacks *callbacks = mRenderer->getMemoryAllocationTracker()->getCallbacks();
+        VkAllocationCallbacks callback =
+            vk::MemoryAllocationCallback::BuildCallbackPipelineCache(callbacks);
+        ANGLE_VK_TRY(
+            this, mInterfacePipelinesCache.init(getDevice(), pipelineCacheCreateInfo, &callback));
     }
 
     return angle::Result::Continue;

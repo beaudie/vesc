@@ -509,7 +509,12 @@ angle::Result ProgramExecutableVk::initializePipelineCache(ContextVk *contextVk,
         pipelineCacheCreateInfo.flags |= VK_PIPELINE_CACHE_CREATE_EXTERNALLY_SYNCHRONIZED_BIT_EXT;
     }
 
-    ANGLE_VK_TRY(contextVk, mPipelineCache.init(contextVk->getDevice(), pipelineCacheCreateInfo));
+    VkAllocationCallbacks *callbacks =
+        contextVk->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+    VkAllocationCallbacks callback =
+        vk::MemoryAllocationCallback::BuildCallbackPipelineCache(callbacks);
+    ANGLE_VK_TRY(contextVk,
+                 mPipelineCache.init(contextVk->getDevice(), pipelineCacheCreateInfo, &callback));
 
     // Merge the pipeline cache into RendererVk's.
     if (contextVk->getFeatures().mergeProgramPipelineCachesToGlobalCache.enabled)
@@ -533,8 +538,12 @@ angle::Result ProgramExecutableVk::ensurePipelineCacheInitialized(ContextVk *con
                 VK_PIPELINE_CACHE_CREATE_EXTERNALLY_SYNCHRONIZED_BIT_EXT;
         }
 
-        ANGLE_VK_TRY(contextVk,
-                     mPipelineCache.init(contextVk->getDevice(), pipelineCacheCreateInfo));
+        VkAllocationCallbacks *callbacks =
+            contextVk->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+        VkAllocationCallbacks callback =
+            vk::MemoryAllocationCallback::BuildCallbackPipelineCache(callbacks);
+        ANGLE_VK_TRY(contextVk, mPipelineCache.init(contextVk->getDevice(), pipelineCacheCreateInfo,
+                                                    &callback));
     }
 
     return angle::Result::Continue;
