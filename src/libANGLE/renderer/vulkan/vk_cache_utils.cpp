@@ -966,7 +966,11 @@ angle::Result CreateRenderPass1(Context *context,
     }
 
     // Initialize the render pass.
-    ANGLE_VK_TRY(context, renderPass->init(context->getDevice(), createInfo1));
+    VkAllocationCallbacks *callbacks =
+        context->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+    VkAllocationCallbacks callback =
+        vk::MemoryAllocationCallback::BuildCallbackRenderPass(callbacks);
+    ANGLE_VK_TRY(context, renderPass->init(context->getDevice(), createInfo1, &callback));
 
     return angle::Result::Continue;
 }
@@ -1457,8 +1461,12 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
     }
     else
     {
-        ANGLE_VK_TRY(contextVk,
-                     renderPassHelper->getRenderPass().init2(contextVk->getDevice(), createInfo));
+        VkAllocationCallbacks *callbacks =
+            contextVk->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+        VkAllocationCallbacks callback =
+            vk::MemoryAllocationCallback::BuildCallbackRenderPass(callbacks);
+        ANGLE_VK_TRY(contextVk, renderPassHelper->getRenderPass().init2(contextVk->getDevice(),
+                                                                        createInfo, &callback));
     }
 
     // Calculate perf counters associated with this render pass, such as load/store ops, unresolve
@@ -4797,7 +4805,11 @@ FramebufferHelper &FramebufferHelper::operator=(FramebufferHelper &&other)
 angle::Result FramebufferHelper::init(ContextVk *contextVk,
                                       const VkFramebufferCreateInfo &createInfo)
 {
-    ANGLE_VK_TRY(contextVk, mFramebuffer.init(contextVk->getDevice(), createInfo));
+    VkAllocationCallbacks *callbacks =
+        contextVk->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+    VkAllocationCallbacks callback =
+        vk::MemoryAllocationCallback::BuildCallbackFramebuffer(callbacks);
+    ANGLE_VK_TRY(contextVk, mFramebuffer.init(contextVk->getDevice(), createInfo, &callback));
     return angle::Result::Continue;
 }
 
@@ -5076,7 +5088,12 @@ angle::Result YcbcrConversionDesc::init(Context *context,
     ASSERT(mIsExternalFormat == 0);
 #endif  // VK_USE_PLATFORM_ANDROID_KHR
 
-    ANGLE_VK_TRY(context, conversionOut->init(context->getDevice(), samplerYcbcrConversionInfo));
+    VkAllocationCallbacks *callbacks =
+        context->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+    VkAllocationCallbacks callback =
+        vk::MemoryAllocationCallback::BuildCallbackSamplerYcbcrConversion(callbacks);
+    ANGLE_VK_TRY(context,
+                 conversionOut->init(context->getDevice(), samplerYcbcrConversionInfo, &callback));
     return angle::Result::Continue;
 }
 
@@ -5321,7 +5338,11 @@ angle::Result SamplerDesc::init(ContextVk *contextVk, Sampler *sampler) const
 
         vk::AddToPNextChain(&createInfo, &customBorderColorInfo);
     }
-    ANGLE_VK_TRY(contextVk, sampler->init(contextVk->getDevice(), createInfo));
+
+    VkAllocationCallbacks *callbacks =
+        contextVk->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+    VkAllocationCallbacks callback = vk::MemoryAllocationCallback::BuildCallbackSampler(callbacks);
+    ANGLE_VK_TRY(contextVk, sampler->init(contextVk->getDevice(), createInfo, &callback));
 
     return angle::Result::Continue;
 }
@@ -6566,8 +6587,10 @@ VkResult PipelineCacheAccess::createGraphicsPipeline(vk::Context *context,
                                                      vk::Pipeline *pipelineOut)
 {
     std::unique_lock<std::mutex> lock = getLock();
-
-    return pipelineOut->initGraphics(context->getDevice(), createInfo, *mPipelineCache);
+    VkAllocationCallbacks *callbacks =
+        context->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+    VkAllocationCallbacks callback = vk::MemoryAllocationCallback::BuildCallbackPipeline(callbacks);
+    return pipelineOut->initGraphics(context->getDevice(), createInfo, *mPipelineCache, &callback);
 }
 
 VkResult PipelineCacheAccess::createComputePipeline(vk::Context *context,
@@ -6575,8 +6598,10 @@ VkResult PipelineCacheAccess::createComputePipeline(vk::Context *context,
                                                     vk::Pipeline *pipelineOut)
 {
     std::unique_lock<std::mutex> lock = getLock();
-
-    return pipelineOut->initCompute(context->getDevice(), createInfo, *mPipelineCache);
+    VkAllocationCallbacks *callbacks =
+        context->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+    VkAllocationCallbacks callback = vk::MemoryAllocationCallback::BuildCallbackPipeline(callbacks);
+    return pipelineOut->initCompute(context->getDevice(), createInfo, *mPipelineCache, &callback);
 }
 
 void PipelineCacheAccess::merge(RendererVk *renderer, const vk::PipelineCache &pipelineCache)
@@ -7060,7 +7085,11 @@ angle::Result DescriptorSetLayoutCache::getDescriptorSetLayout(
     createInfo.pBindings    = bindingVector.data();
 
     vk::DescriptorSetLayout newLayout;
-    ANGLE_VK_TRY(context, newLayout.init(context->getDevice(), createInfo));
+    VkAllocationCallbacks *callbacks =
+        context->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+    VkAllocationCallbacks callback =
+        vk::MemoryAllocationCallback::BuildCallbackDescriptorSetLayout(callbacks);
+    ANGLE_VK_TRY(context, newLayout.init(context->getDevice(), createInfo, &callback));
 
     auto insertedItem =
         mPayload.emplace(desc, vk::RefCountedDescriptorSetLayout(std::move(newLayout)));
@@ -7142,7 +7171,11 @@ angle::Result PipelineLayoutCache::getPipelineLayout(
     }
 
     vk::PipelineLayout newLayout;
-    ANGLE_VK_TRY(context, newLayout.init(context->getDevice(), createInfo));
+    VkAllocationCallbacks *callbacks =
+        context->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+    VkAllocationCallbacks callback =
+        vk::MemoryAllocationCallback::BuildCallbackDescriptorSetLayout(callbacks);
+    ANGLE_VK_TRY(context, newLayout.init(context->getDevice(), createInfo, &callback));
 
     auto insertedItem = mPayload.emplace(desc, vk::RefCountedPipelineLayout(std::move(newLayout)));
     vk::RefCountedPipelineLayout &insertedLayout = insertedItem.first->second;
