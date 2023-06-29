@@ -618,7 +618,8 @@ void MemoryReport::logMemoryReportStats() const
     }
 }
 
-void MemoryAllocationCallback::recordAlloc(size_t size,
+void MemoryAllocationCallback::recordAlloc(MemoryCallbackInfo *callbackInfo,
+                                           size_t size,
                                            size_t alignment,
                                            VkSystemAllocationScope allocationScope,
                                            void *pMemory)
@@ -629,11 +630,13 @@ void MemoryAllocationCallback::recordAlloc(size_t size,
     SizeScopePair sizeScope(size, allocationScope);
     mMemoryPropertyMap.insert(std::make_pair(pMemory, sizeScope));
 
-    WARN() << "onAlloc(): " << alignment << " | " << size << " --> "
-           << kSystemAllocationScopeMessage[allocationScope];
+    //    WARN() << "onAlloc(): " << callbackInfo->label << " | " << alignment << " | " << size << "
+    //    --> "
+    //           << kSystemAllocationScopeMessage[allocationScope];
 }
 
-void MemoryAllocationCallback::recordRealloc(void *pOriginal,
+void MemoryAllocationCallback::recordRealloc(MemoryCallbackInfo *callbackInfo,
+                                             void *pOriginal,
                                              size_t size,
                                              size_t alignment,
                                              VkSystemAllocationScope allocationScope,
@@ -659,11 +662,11 @@ void MemoryAllocationCallback::recordRealloc(void *pOriginal,
         mMemoryPropertyMap.insert(std::make_pair(pMemory, sizeScope));
     }
 
-    WARN() << "onRealloc(): " << alignment << " | " << size << " --> "
-           << kSystemAllocationScopeMessage[allocationScope];
+    //    WARN() << "onRealloc(): " << callbackInfo->label << " | " << alignment << " | " << size
+    //           << " --> " << kSystemAllocationScopeMessage[allocationScope];
 }
 
-void MemoryAllocationCallback::recordFree(void *pMemory)
+void MemoryAllocationCallback::recordFree(MemoryCallbackInfo *callbackInfo, void *pMemory)
 {
     std::unique_lock<std::mutex> lock(mMutex);
     if (pMemory != nullptr && !mMemoryPropertyMap.empty() &&
@@ -674,17 +677,18 @@ void MemoryAllocationCallback::recordFree(void *pMemory)
         VkSystemAllocationScope allocationScope = sizeScope.second;
 
         mSystemAllocationSize[allocationScope] -= size;
-        WARN() << "onFree(): " << size << " --> " << kSystemAllocationScopeMessage[allocationScope];
+        //        WARN() << "onFree(): " << callbackInfo->label << " | " << size << " --> "
+        //               << kSystemAllocationScopeMessage[allocationScope];
 
         mMemoryPropertyMap.erase(pMemory);
     }
     else if (pMemory == nullptr)
     {
-        WARN() << "onFree(): nullptr";
+        //        WARN() << "onFree(): " << callbackInfo->label << " | nullptr";
     }
     else
     {
-        WARN() << "onFree(): Unknown";
+        //        WARN() << "onFree(): " << callbackInfo->label << " | Unknown";
     }
 }
 
@@ -704,6 +708,7 @@ MemoryAllocationCallback::onAlloc(void *pUserData,
                                   size_t alignment,
                                   VkSystemAllocationScope allocationScope)
 {
+    ASSERT(pUserData);
     size_t alignedSize    = roundUp(size, alignment);
     void *allocatedMemory = allocateImpl(alignedSize, alignment);
 
@@ -712,8 +717,12 @@ MemoryAllocationCallback::onAlloc(void *pUserData,
         FATAL() << "ALLOCATION FAILED";
     }
 
-    static_cast<MemoryAllocationCallback *>(pUserData)->recordAlloc(
-        alignedSize, alignment, allocationScope, allocatedMemory);
+    auto callbackInfo = static_cast<MemoryCallbackInfo *>(pUserData);
+    auto callbackFn   = static_cast<MemoryAllocationCallback *>(callbackInfo->pfnCallback);
+
+    WARN() << "pUserData is " << pUserData << " | Callback is " << callbackFn;
+
+    callbackFn->recordAlloc(callbackInfo, alignedSize, alignment, allocationScope, allocatedMemory);
 
     return allocatedMemory;
 }
@@ -725,6 +734,7 @@ MemoryAllocationCallback::onRealloc(void *pUserData,
                                     size_t alignment,
                                     VkSystemAllocationScope allocationScope)
 {
+    ASSERT(pUserData);
     size_t alignedSize      = roundUp(size, alignment);
     void *reallocatedMemory = reallocateImpl(pOriginal, alignedSize, alignment);
 
@@ -734,15 +744,24 @@ MemoryAllocationCallback::onRealloc(void *pUserData,
     }
 
     // TODO: Is pOriginal nullptr here?
-    static_cast<MemoryAllocationCallback *>(pUserData)->recordRealloc(
-        pOriginal, alignedSize, alignment, allocationScope, reallocatedMemory);
+    ASSERT(pOriginal);
+
+    auto callbackInfo = static_cast<MemoryCallbackInfo *>(pUserData);
+    auto callbackFn   = static_cast<MemoryAllocationCallback *>(callbackInfo->pfnCallback);
+
+    callbackFn->recordRealloc(callbackInfo, pOriginal, alignedSize, alignment, allocationScope,
+                              reallocatedMemory);
 
     return reallocatedMemory;
 }
 
 VKAPI_ATTR void VKAPI_CALL MemoryAllocationCallback::onFree(void *pUserData, void *pMemory)
 {
-    static_cast<MemoryAllocationCallback *>(pUserData)->recordFree(pMemory);
+    ASSERT(pUserData);
+    auto callbackInfo = static_cast<MemoryCallbackInfo *>(pUserData);
+    auto callbackFn   = static_cast<MemoryAllocationCallback *>(callbackInfo->pfnCallback);
+
+    callbackFn->recordFree(callbackInfo, pMemory);  // TODO: Can be moved after freeImpl()?
     freeImpl(pMemory);
 }
 

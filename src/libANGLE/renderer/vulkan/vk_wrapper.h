@@ -743,9 +743,21 @@ ANGLE_INLINE void CommandPool::destroy(VkDevice device)
     if (valid())
     {
         WARN() << "CommandPool::destroy";
-        MemoryAllocationCallback memTest;
-        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
-        vkDestroyCommandPool(device, mHandle, &memACB);
+        if (kMemoryCallbackEnabled)
+        {
+            MemoryAllocationCallback memTest;
+            VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+            MemoryCallbackInfo callbackInfo;
+            //            callbackInfo.label       = "CommandPool";
+            callbackInfo.pfnCallback = memACB.pUserData;
+
+            memACB.pUserData = (void *)&callbackInfo;
+            vkDestroyCommandPool(device, mHandle, &memACB);
+        }
+        else
+        {
+            vkDestroyCommandPool(device, mHandle, nullptr);
+        }
         mHandle = VK_NULL_HANDLE;
     }
 }
@@ -770,7 +782,17 @@ ANGLE_INLINE VkResult CommandPool::init(VkDevice device,
 {
     ASSERT(!valid());
     WARN() << "CommandPool::init";
-    return vkCreateCommandPool(device, &createInfo, callbacks, &mHandle);
+    if (kMemoryCallbackEnabled && callbacks)
+    {
+        VkAllocationCallbacks callback = *callbacks;
+        MemoryCallbackInfo callbackInfo;
+        //        callbackInfo.label       = "CommandPool";
+        callbackInfo.pfnCallback = callbacks->pUserData;
+
+        callback.pUserData = (void *)&callbackInfo;
+        return vkCreateCommandPool(device, &createInfo, &callback, &mHandle);
+    }
+    return vkCreateCommandPool(device, &createInfo, nullptr, &mHandle);
 }
 
 namespace priv
@@ -1405,9 +1427,21 @@ ANGLE_INLINE void Image::destroy(VkDevice device)
     if (valid())
     {
         WARN() << "Image::destroy";
-        MemoryAllocationCallback memTest;
-        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
-        vkDestroyImage(device, mHandle, &memACB);
+        if (kMemoryCallbackEnabled)
+        {
+            MemoryAllocationCallback memTest;
+            VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+            MemoryCallbackInfo callbackInfo;
+            //            callbackInfo.label       = "Image";
+            callbackInfo.pfnCallback = memACB.pUserData;
+
+            memACB.pUserData = (void *)&callbackInfo;
+            vkDestroyImage(device, mHandle, &memACB);
+        }
+        else
+        {
+            vkDestroyImage(device, mHandle, nullptr);
+        }
         mHandle = VK_NULL_HANDLE;
     }
 }
@@ -1418,7 +1452,17 @@ ANGLE_INLINE VkResult Image::init(VkDevice device,
 {
     ASSERT(!valid());
     WARN() << "Image::init";
-    return vkCreateImage(device, &createInfo, callbacks, &mHandle);
+    if (kMemoryCallbackEnabled && callbacks)
+    {
+        VkAllocationCallbacks callback = *callbacks;
+        MemoryCallbackInfo callbackInfo;
+        //        callbackInfo.label       = "Image";
+        callbackInfo.pfnCallback = callbacks->pUserData;
+
+        callback.pUserData = (void *)&callbackInfo;
+        return vkCreateImage(device, &createInfo, &callback, &mHandle);
+    }
+    return vkCreateImage(device, &createInfo, nullptr, &mHandle);
 }
 
 ANGLE_INLINE void Image::getMemoryRequirements(VkDevice device,
@@ -1460,9 +1504,21 @@ ANGLE_INLINE void ImageView::destroy(VkDevice device)
     if (valid())
     {
         WARN() << "ImageView::destroy";
-        MemoryAllocationCallback memTest;
-        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
-        vkDestroyImageView(device, mHandle, &memACB);
+        if (kMemoryCallbackEnabled)
+        {
+            MemoryAllocationCallback memTest;
+            VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+            MemoryCallbackInfo callbackInfo;
+            //            callbackInfo.label       = "ImageView";
+            callbackInfo.pfnCallback = memACB.pUserData;
+
+            memACB.pUserData = (void *)&callbackInfo;
+            vkDestroyImageView(device, mHandle, &memACB);
+        }
+        else
+        {
+            vkDestroyImageView(device, mHandle, nullptr);
+        }
         mHandle = VK_NULL_HANDLE;
     }
 }
@@ -1472,7 +1528,17 @@ ANGLE_INLINE VkResult ImageView::init(VkDevice device,
                                       const VkAllocationCallbacks *callbacks)
 {
     WARN() << "ImageView::init";
-    return vkCreateImageView(device, &createInfo, callbacks, &mHandle);
+    if (kMemoryCallbackEnabled && callbacks)
+    {
+        VkAllocationCallbacks callback = *callbacks;
+        MemoryCallbackInfo callbackInfo;
+        //        callbackInfo.label       = "ImageView";
+        callbackInfo.pfnCallback = callbacks->pUserData;
+
+        callback.pUserData = (void *)&callbackInfo;
+        return vkCreateImageView(device, &createInfo, &callback, &mHandle);
+    }
+    return vkCreateImageView(device, &createInfo, nullptr, &mHandle);
 }
 
 // Semaphore implementation.
@@ -1481,9 +1547,21 @@ ANGLE_INLINE void Semaphore::destroy(VkDevice device)
     if (valid())
     {
         WARN() << "Semaphore::destroy";
-        MemoryAllocationCallback memTest;
-        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
-        vkDestroySemaphore(device, mHandle, &memACB);
+        if (kMemoryCallbackEnabled)
+        {
+            MemoryAllocationCallback memTest;
+            VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+            MemoryCallbackInfo callbackInfo;
+            //            callbackInfo.label       = "Semaphore";
+            callbackInfo.pfnCallback = memACB.pUserData;
+
+            memACB.pUserData = (void *)&callbackInfo;
+            vkDestroySemaphore(device, mHandle, &memACB);
+        }
+        else
+        {
+            vkDestroySemaphore(device, mHandle, nullptr);
+        }
         mHandle = VK_NULL_HANDLE;
     }
 }
@@ -1497,7 +1575,17 @@ ANGLE_INLINE VkResult Semaphore::init(VkDevice device, const VkAllocationCallbac
     semaphoreInfo.flags                 = 0;
 
     WARN() << "Semaphore::init";
-    return vkCreateSemaphore(device, &semaphoreInfo, callbacks, &mHandle);
+    if (kMemoryCallbackEnabled && callbacks)
+    {
+        VkAllocationCallbacks callback = *callbacks;
+        MemoryCallbackInfo callbackInfo;
+        //        callbackInfo.label       = "Semaphore";
+        callbackInfo.pfnCallback = callbacks->pUserData;
+
+        callback.pUserData = (void *)&callbackInfo;
+        return vkCreateSemaphore(device, &semaphoreInfo, &callback, &mHandle);
+    }
+    return vkCreateSemaphore(device, &semaphoreInfo, nullptr, &mHandle);
 }
 
 ANGLE_INLINE VkResult Semaphore::importFd(VkDevice device,
@@ -1513,9 +1601,20 @@ ANGLE_INLINE void Framebuffer::destroy(VkDevice device)
     if (valid())
     {
         WARN() << "Framebuffer::destroy";
-        MemoryAllocationCallback memTest;
-        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
-        vkDestroyFramebuffer(device, mHandle, &memACB);
+        if (kMemoryCallbackEnabled)
+        {
+            MemoryAllocationCallback memTest;
+            VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+            MemoryCallbackInfo callbackInfo;
+            //            callbackInfo.label       = "Framebuffer";
+            callbackInfo.pfnCallback = memACB.pUserData;
+
+            memACB.pUserData = (void *)&callbackInfo;
+        }
+        else
+        {
+            vkDestroyFramebuffer(device, mHandle, nullptr);
+        }
         mHandle = VK_NULL_HANDLE;
     }
 }
@@ -1526,7 +1625,17 @@ ANGLE_INLINE VkResult Framebuffer::init(VkDevice device,
 {
     ASSERT(!valid());
     WARN() << "Framebuffer::init";
-    return vkCreateFramebuffer(device, &createInfo, callbacks, &mHandle);
+    if (kMemoryCallbackEnabled && callbacks)
+    {
+        VkAllocationCallbacks callback = *callbacks;
+        MemoryCallbackInfo callbackInfo;
+        //        callbackInfo.label       = "Framebuffer";
+        callbackInfo.pfnCallback = callbacks->pUserData;
+
+        callback.pUserData = (void *)&callbackInfo;
+        return vkCreateFramebuffer(device, &createInfo, &callback, &mHandle);
+    }
+    return vkCreateFramebuffer(device, &createInfo, nullptr, &mHandle);
 }
 
 ANGLE_INLINE void Framebuffer::setHandle(VkFramebuffer handle)
@@ -1540,9 +1649,21 @@ ANGLE_INLINE void DeviceMemory::destroy(VkDevice device)
     if (valid())
     {
         WARN() << "DeviceMemory::destroy";
-        MemoryAllocationCallback memTest;
-        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
-        vkFreeMemory(device, mHandle, &memACB);
+        if (kMemoryCallbackEnabled)
+        {
+            MemoryAllocationCallback memTest;
+            VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+            MemoryCallbackInfo callbackInfo;
+            //            callbackInfo.label       = "DeviceMemory";
+            callbackInfo.pfnCallback = memACB.pUserData;
+
+            memACB.pUserData = (void *)&callbackInfo;
+            vkFreeMemory(device, mHandle, &memACB);
+        }
+        else
+        {
+            vkFreeMemory(device, mHandle, nullptr);
+        }
         mHandle = VK_NULL_HANDLE;
     }
 }
@@ -1553,7 +1674,17 @@ ANGLE_INLINE VkResult DeviceMemory::allocate(VkDevice device,
 {
     ASSERT(!valid());
     WARN() << "DeviceMemory::allocate";
-    return vkAllocateMemory(device, &allocInfo, callbacks, &mHandle);
+    if (kMemoryCallbackEnabled && callbacks)
+    {
+        VkAllocationCallbacks callback = *callbacks;
+        MemoryCallbackInfo callbackInfo;
+        //        callbackInfo.label       = "CommandPool";
+        callbackInfo.pfnCallback = callbacks->pUserData;
+
+        callback.pUserData = (void *)&callbackInfo;
+        return vkAllocateMemory(device, &allocInfo, &callback, &mHandle);
+    }
+    return vkAllocateMemory(device, &allocInfo, nullptr, &mHandle);
 }
 
 ANGLE_INLINE VkResult DeviceMemory::map(VkDevice device,
@@ -1600,8 +1731,20 @@ ANGLE_INLINE VkResult Allocator::init(VkPhysicalDevice physicalDevice,
                                       VkAllocationCallbacks *callbacks)
 {
     ASSERT(!valid());
+    if (kMemoryCallbackEnabled && callbacks)
+    {
+        VkAllocationCallbacks callback = *callbacks;
+        MemoryCallbackInfo callbackInfo;
+        //        callbackInfo.label       = "VMAAllocator";
+        callbackInfo.pfnCallback = callbacks->pUserData;
+
+        callback.pUserData = (void *)&callbackInfo;
+
+        return vma::InitAllocator(physicalDevice, device, instance, apiVersion,
+                                  preferredLargeHeapBlockSize, &callback, &mHandle);
+    }
     return vma::InitAllocator(physicalDevice, device, instance, apiVersion,
-                              preferredLargeHeapBlockSize, callbacks, &mHandle);
+                              preferredLargeHeapBlockSize, nullptr, &mHandle);
 }
 
 ANGLE_INLINE VkResult Allocator::createBuffer(const VkBufferCreateInfo &bufferCreateInfo,
@@ -1696,9 +1839,21 @@ ANGLE_INLINE void RenderPass::destroy(VkDevice device)
     if (valid())
     {
         WARN() << "RenderPass::destroy";
-        MemoryAllocationCallback memTest;
-        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
-        vkDestroyRenderPass(device, mHandle, &memACB);
+        if (kMemoryCallbackEnabled)
+        {
+            MemoryAllocationCallback memTest;
+            VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+            MemoryCallbackInfo callbackInfo;
+            //            callbackInfo.label       = "RenderPass";
+            callbackInfo.pfnCallback = memACB.pUserData;
+
+            memACB.pUserData = (void *)&callbackInfo;
+            vkDestroyRenderPass(device, mHandle, &memACB);
+        }
+        else
+        {
+            vkDestroyRenderPass(device, mHandle, nullptr);
+        }
         mHandle = VK_NULL_HANDLE;
     }
 }
@@ -1709,7 +1864,17 @@ ANGLE_INLINE VkResult RenderPass::init(VkDevice device,
 {
     ASSERT(!valid());
     WARN() << "RenderPass::init";
-    return vkCreateRenderPass(device, &createInfo, callbacks, &mHandle);
+    if (kMemoryCallbackEnabled && callbacks)
+    {
+        VkAllocationCallbacks callback = *callbacks;
+        MemoryCallbackInfo callbackInfo;
+        //        callbackInfo.label       = "RenderPass";
+        callbackInfo.pfnCallback = callbacks->pUserData;
+
+        callback.pUserData = (void *)&callbackInfo;
+        return vkCreateRenderPass(device, &createInfo, &callback, &mHandle);
+    }
+    return vkCreateRenderPass(device, &createInfo, nullptr, &mHandle);
 }
 
 ANGLE_INLINE VkResult RenderPass::init2(VkDevice device,
@@ -1718,7 +1883,17 @@ ANGLE_INLINE VkResult RenderPass::init2(VkDevice device,
 {
     ASSERT(!valid());
     WARN() << "RenderPass::init2";
-    return vkCreateRenderPass2KHR(device, &createInfo, callbacks, &mHandle);
+    if (kMemoryCallbackEnabled && callbacks)
+    {
+        VkAllocationCallbacks callback = *callbacks;
+        MemoryCallbackInfo callbackInfo;
+        //        callbackInfo.label       = "RenderPass2";
+        callbackInfo.pfnCallback = callbacks->pUserData;
+
+        callback.pUserData = (void *)&callbackInfo;
+        return vkCreateRenderPass2KHR(device, &createInfo, &callback, &mHandle);
+    }
+    return vkCreateRenderPass2KHR(device, &createInfo, nullptr, &mHandle);
 }
 
 // Buffer implementation.
@@ -1727,9 +1902,21 @@ ANGLE_INLINE void Buffer::destroy(VkDevice device)
     if (valid())
     {
         WARN() << "Buffer::destroy";
-        MemoryAllocationCallback memTest;
-        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
-        vkDestroyBuffer(device, mHandle, &memACB);
+        if (kMemoryCallbackEnabled)
+        {
+            MemoryAllocationCallback memTest;
+            VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+            MemoryCallbackInfo callbackInfo;
+            //            callbackInfo.label       = "Buffer";
+            callbackInfo.pfnCallback = memACB.pUserData;
+
+            memACB.pUserData = (void *)&callbackInfo;
+            vkDestroyBuffer(device, mHandle, &memACB);
+        }
+        else
+        {
+            vkDestroyBuffer(device, mHandle, nullptr);
+        }
         mHandle = VK_NULL_HANDLE;
     }
 }
@@ -1740,7 +1927,17 @@ ANGLE_INLINE VkResult Buffer::init(VkDevice device,
 {
     ASSERT(!valid());
     WARN() << "Buffer::init";
-    return vkCreateBuffer(device, &createInfo, callbacks, &mHandle);
+    if (kMemoryCallbackEnabled && callbacks)
+    {
+        VkAllocationCallbacks callback = *callbacks;
+        MemoryCallbackInfo callbackInfo;
+        //        callbackInfo.label       = "Buffer";
+        callbackInfo.pfnCallback = callbacks->pUserData;
+
+        callback.pUserData = (void *)&callbackInfo;
+        return vkCreateBuffer(device, &createInfo, &callback, &mHandle);
+    }
+    return vkCreateBuffer(device, &createInfo, nullptr, &mHandle);
 }
 
 ANGLE_INLINE VkResult Buffer::bindMemory(VkDevice device,
@@ -1764,9 +1961,21 @@ ANGLE_INLINE void BufferView::destroy(VkDevice device)
     if (valid())
     {
         WARN() << "BufferView::destroy";
-        MemoryAllocationCallback memTest;
-        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
-        vkDestroyBufferView(device, mHandle, &memACB);
+        if (kMemoryCallbackEnabled)
+        {
+            MemoryAllocationCallback memTest;
+            VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+            MemoryCallbackInfo callbackInfo;
+            //            callbackInfo.label       = "BufferView";
+            callbackInfo.pfnCallback = memACB.pUserData;
+
+            memACB.pUserData = (void *)&callbackInfo;
+            vkDestroyBufferView(device, mHandle, &memACB);
+        }
+        else
+        {
+            vkDestroyBufferView(device, mHandle, nullptr);
+        }
         mHandle = VK_NULL_HANDLE;
     }
 }
@@ -1777,7 +1986,17 @@ ANGLE_INLINE VkResult BufferView::init(VkDevice device,
 {
     ASSERT(!valid());
     WARN() << "BufferView::init";
-    return vkCreateBufferView(device, &createInfo, callbacks, &mHandle);
+    if (kMemoryCallbackEnabled && callbacks)
+    {
+        VkAllocationCallbacks callback = *callbacks;
+        MemoryCallbackInfo callbackInfo;
+        //        callbackInfo.label       = "BufferView";
+        callbackInfo.pfnCallback = callbacks->pUserData;
+
+        callback.pUserData = (void *)&callbackInfo;
+        return vkCreateBufferView(device, &createInfo, &callback, &mHandle);
+    }
+    return vkCreateBufferView(device, &createInfo, nullptr, &mHandle);
 }
 
 // ShaderModule implementation.
@@ -1786,9 +2005,21 @@ ANGLE_INLINE void ShaderModule::destroy(VkDevice device)
     if (mHandle != VK_NULL_HANDLE)
     {
         WARN() << "ShaderModule::destroy";
-        MemoryAllocationCallback memTest;
-        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
-        vkDestroyShaderModule(device, mHandle, &memACB);
+        if (kMemoryCallbackEnabled)
+        {
+            MemoryAllocationCallback memTest;
+            VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+            MemoryCallbackInfo callbackInfo;
+            //            callbackInfo.label       = "ShaderModule";
+            callbackInfo.pfnCallback = memACB.pUserData;
+
+            memACB.pUserData = (void *)&callbackInfo;
+            vkDestroyShaderModule(device, mHandle, &memACB);
+        }
+        else
+        {
+            vkDestroyShaderModule(device, mHandle, nullptr);
+        }
         mHandle = VK_NULL_HANDLE;
     }
 }
@@ -1799,7 +2030,17 @@ ANGLE_INLINE VkResult ShaderModule::init(VkDevice device,
 {
     ASSERT(!valid());
     WARN() << "ShaderModule::init";
-    return vkCreateShaderModule(device, &createInfo, callbacks, &mHandle);
+    if (kMemoryCallbackEnabled && callbacks)
+    {
+        VkAllocationCallbacks callback = *callbacks;
+        MemoryCallbackInfo callbackInfo;
+        //        callbackInfo.label       = "ShaderModule";
+        callbackInfo.pfnCallback = callbacks->pUserData;
+
+        callback.pUserData = (void *)&callbackInfo;
+        return vkCreateShaderModule(device, &createInfo, &callback, &mHandle);
+    }
+    return vkCreateShaderModule(device, &createInfo, nullptr, &mHandle);
 }
 
 // PipelineLayout implementation.
@@ -1808,9 +2049,21 @@ ANGLE_INLINE void PipelineLayout::destroy(VkDevice device)
     if (valid())
     {
         WARN() << "PipelineLayout::destroy";
-        MemoryAllocationCallback memTest;
-        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
-        vkDestroyPipelineLayout(device, mHandle, &memACB);
+        if (kMemoryCallbackEnabled)
+        {
+            MemoryAllocationCallback memTest;
+            VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+            MemoryCallbackInfo callbackInfo;
+            //            callbackInfo.label       = "PipelineLayout";
+            callbackInfo.pfnCallback = memACB.pUserData;
+
+            memACB.pUserData = (void *)&callbackInfo;
+            vkDestroyPipelineLayout(device, mHandle, &memACB);
+        }
+        else
+        {
+            vkDestroyPipelineLayout(device, mHandle, nullptr);
+        }
         mHandle = VK_NULL_HANDLE;
     }
 }
@@ -1821,7 +2074,17 @@ ANGLE_INLINE VkResult PipelineLayout::init(VkDevice device,
 {
     ASSERT(!valid());
     WARN() << "PipelineLayout::init";
-    return vkCreatePipelineLayout(device, &createInfo, callbacks, &mHandle);
+    if (kMemoryCallbackEnabled && callbacks)
+    {
+        VkAllocationCallbacks callback = *callbacks;
+        MemoryCallbackInfo callbackInfo;
+        //        callbackInfo.label       = "PipelineLayout";
+        callbackInfo.pfnCallback = callbacks->pUserData;
+
+        callback.pUserData = (void *)&callbackInfo;
+        return vkCreatePipelineLayout(device, &createInfo, &callback, &mHandle);
+    }
+    return vkCreatePipelineLayout(device, &createInfo, nullptr, &mHandle);
 }
 
 // PipelineCache implementation.
@@ -1830,9 +2093,20 @@ ANGLE_INLINE void PipelineCache::destroy(VkDevice device)
     if (valid())
     {
         WARN() << "PipelineCache::destroy";
-        MemoryAllocationCallback memTest;
-        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
-        vkDestroyPipelineCache(device, mHandle, &memACB);
+        if (kMemoryCallbackEnabled)
+        {
+            MemoryAllocationCallback memTest;
+            VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+            MemoryCallbackInfo callbackInfo;
+            //            callbackInfo.label       = "PipelineCache";
+            callbackInfo.pfnCallback = memACB.pUserData;
+
+            memACB.pUserData = (void *)&callbackInfo;
+        }
+        else
+        {
+            vkDestroyPipelineCache(device, mHandle, nullptr);
+        }
         mHandle = VK_NULL_HANDLE;
     }
 }
@@ -1846,7 +2120,17 @@ ANGLE_INLINE VkResult PipelineCache::init(VkDevice device,
     // allocators.  Also, failure of this function is of little importance.
 
     WARN() << "PipelineCache::init";
-    return vkCreatePipelineCache(device, &createInfo, callbacks, &mHandle);
+    if (kMemoryCallbackEnabled && callbacks)
+    {
+        VkAllocationCallbacks callback = *callbacks;
+        MemoryCallbackInfo callbackInfo;
+        //        callbackInfo.label       = "PipelineCache";
+        callbackInfo.pfnCallback = callbacks->pUserData;
+
+        callback.pUserData = (void *)&callbackInfo;
+        return vkCreatePipelineCache(device, &createInfo, &callback, &mHandle);
+    }
+    return vkCreatePipelineCache(device, &createInfo, nullptr, &mHandle);
 }
 
 ANGLE_INLINE VkResult PipelineCache::merge(VkDevice device,
@@ -1878,9 +2162,21 @@ ANGLE_INLINE void Pipeline::destroy(VkDevice device)
     if (valid())
     {
         WARN() << "Pipeline::destroy";
-        MemoryAllocationCallback memTest;
-        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
-        vkDestroyPipeline(device, mHandle, &memACB);
+        if (kMemoryCallbackEnabled)
+        {
+            MemoryAllocationCallback memTest;
+            VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+            MemoryCallbackInfo callbackInfo;
+            //            callbackInfo.label       = "Pipeline";
+            callbackInfo.pfnCallback = memACB.pUserData;
+
+            memACB.pUserData = (void *)&callbackInfo;
+            vkDestroyPipeline(device, mHandle, &memACB);
+        }
+        else
+        {
+            vkDestroyPipeline(device, mHandle, nullptr);
+        }
         mHandle = VK_NULL_HANDLE;
     }
 }
@@ -1892,7 +2188,18 @@ ANGLE_INLINE VkResult Pipeline::initGraphics(VkDevice device,
 {
     ASSERT(!valid());
     WARN() << "Pipeline::initGraphics";
-    return vkCreateGraphicsPipelines(device, pipelineCacheVk.getHandle(), 1, &createInfo, callbacks,
+    if (kMemoryCallbackEnabled && callbacks)
+    {
+        VkAllocationCallbacks callback = *callbacks;
+        MemoryCallbackInfo callbackInfo;
+        //        callbackInfo.label       = "PipelineGraphics";
+        callbackInfo.pfnCallback = callbacks->pUserData;
+
+        callback.pUserData = (void *)&callbackInfo;
+        return vkCreateGraphicsPipelines(device, pipelineCacheVk.getHandle(), 1, &createInfo,
+                                         &callback, &mHandle);
+    }
+    return vkCreateGraphicsPipelines(device, pipelineCacheVk.getHandle(), 1, &createInfo, nullptr,
                                      &mHandle);
 }
 
@@ -1903,7 +2210,18 @@ ANGLE_INLINE VkResult Pipeline::initCompute(VkDevice device,
 {
     ASSERT(!valid());
     WARN() << "Pipeline::initCompute";
-    return vkCreateComputePipelines(device, pipelineCacheVk.getHandle(), 1, &createInfo, callbacks,
+    if (kMemoryCallbackEnabled && callbacks)
+    {
+        VkAllocationCallbacks callback = *callbacks;
+        MemoryCallbackInfo callbackInfo;
+        //        callbackInfo.label       = "PipelineCompute";
+        callbackInfo.pfnCallback = callbacks->pUserData;
+
+        callback.pUserData = (void *)&callbackInfo;
+        return vkCreateComputePipelines(device, pipelineCacheVk.getHandle(), 1, &createInfo,
+                                        &callback, &mHandle);
+    }
+    return vkCreateComputePipelines(device, pipelineCacheVk.getHandle(), 1, &createInfo, nullptr,
                                     &mHandle);
 }
 
@@ -1913,9 +2231,20 @@ ANGLE_INLINE void DescriptorSetLayout::destroy(VkDevice device)
     if (valid())
     {
         WARN() << "DescriptorSetLayout::destroy";
-        MemoryAllocationCallback memTest;
-        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
-        vkDestroyDescriptorSetLayout(device, mHandle, &memACB);
+        if (kMemoryCallbackEnabled)
+        {
+            MemoryAllocationCallback memTest;
+            VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+            MemoryCallbackInfo callbackInfo;
+            //            callbackInfo.label       = "DescriptorSetLayout";
+            callbackInfo.pfnCallback = memACB.pUserData;
+
+            memACB.pUserData = (void *)&callbackInfo;
+        }
+        else
+        {
+            vkDestroyDescriptorSetLayout(device, mHandle, nullptr);
+        }
         mHandle = VK_NULL_HANDLE;
     }
 }
@@ -1926,7 +2255,17 @@ ANGLE_INLINE VkResult DescriptorSetLayout::init(VkDevice device,
 {
     ASSERT(!valid());
     WARN() << "DescriptorSetLayout::init";
-    return vkCreateDescriptorSetLayout(device, &createInfo, callbacks, &mHandle);
+    if (kMemoryCallbackEnabled && callbacks)
+    {
+        VkAllocationCallbacks callback = *callbacks;
+        MemoryCallbackInfo callbackInfo;
+        //        callbackInfo.label       = "DescriptorSetLayout";
+        callbackInfo.pfnCallback = callbacks->pUserData;
+
+        callback.pUserData = (void *)&callbackInfo;
+        return vkCreateDescriptorSetLayout(device, &createInfo, &callback, &mHandle);
+    }
+    return vkCreateDescriptorSetLayout(device, &createInfo, nullptr, &mHandle);
 }
 
 // DescriptorPool implementation.
@@ -1935,9 +2274,21 @@ ANGLE_INLINE void DescriptorPool::destroy(VkDevice device)
     if (valid())
     {
         WARN() << "DescriptorPool::destroy";
-        MemoryAllocationCallback memTest;
-        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
-        vkDestroyDescriptorPool(device, mHandle, &memACB);
+        if (kMemoryCallbackEnabled)
+        {
+            MemoryAllocationCallback memTest;
+            VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+            MemoryCallbackInfo callbackInfo;
+            //            callbackInfo.label       = "DescriptorPool";
+            callbackInfo.pfnCallback = memACB.pUserData;
+
+            memACB.pUserData = (void *)&callbackInfo;
+            vkDestroyDescriptorPool(device, mHandle, &memACB);
+        }
+        else
+        {
+            vkDestroyDescriptorPool(device, mHandle, nullptr);
+        }
         mHandle = VK_NULL_HANDLE;
     }
 }
@@ -1948,7 +2299,17 @@ ANGLE_INLINE VkResult DescriptorPool::init(VkDevice device,
 {
     ASSERT(!valid());
     WARN() << "DescriptorPool::init";
-    return vkCreateDescriptorPool(device, &createInfo, callbacks, &mHandle);
+    if (kMemoryCallbackEnabled && callbacks)
+    {
+        VkAllocationCallbacks callback = *callbacks;
+        MemoryCallbackInfo callbackInfo;
+        //        callbackInfo.label       = "DescriptorPool";
+        callbackInfo.pfnCallback = callbacks->pUserData;
+
+        callback.pUserData = (void *)&callbackInfo;
+        return vkCreateDescriptorPool(device, &createInfo, &callback, &mHandle);
+    }
+    return vkCreateDescriptorPool(device, &createInfo, nullptr, &mHandle);
 }
 
 ANGLE_INLINE VkResult
@@ -1975,9 +2336,21 @@ ANGLE_INLINE void Sampler::destroy(VkDevice device)
     if (valid())
     {
         WARN() << "Sampler::destroy";
-        MemoryAllocationCallback memTest;
-        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
-        vkDestroySampler(device, mHandle, &memACB);
+        if (kMemoryCallbackEnabled)
+        {
+            MemoryAllocationCallback memTest;
+            VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+            MemoryCallbackInfo callbackInfo;
+            //            callbackInfo.label       = "Sampler";
+            callbackInfo.pfnCallback = memACB.pUserData;
+
+            memACB.pUserData = (void *)&callbackInfo;
+            vkDestroySampler(device, mHandle, &memACB);
+        }
+        else
+        {
+            vkDestroySampler(device, mHandle, nullptr);
+        }
         mHandle = VK_NULL_HANDLE;
     }
 }
@@ -1988,7 +2361,17 @@ ANGLE_INLINE VkResult Sampler::init(VkDevice device,
 {
     ASSERT(!valid());
     WARN() << "Sampler::init";
-    return vkCreateSampler(device, &createInfo, callbacks, &mHandle);
+    if (kMemoryCallbackEnabled && callbacks)
+    {
+        VkAllocationCallbacks callback = *callbacks;
+        MemoryCallbackInfo callbackInfo;
+        //        callbackInfo.label       = "Sampler";
+        callbackInfo.pfnCallback = callbacks->pUserData;
+
+        callback.pUserData = (void *)&callbackInfo;
+        return vkCreateSampler(device, &createInfo, &callback, &mHandle);
+    }
+    return vkCreateSampler(device, &createInfo, nullptr, &mHandle);
 }
 
 // SamplerYuvConversion implementation.
@@ -1999,7 +2382,21 @@ ANGLE_INLINE void SamplerYcbcrConversion::destroy(VkDevice device)
         WARN() << "SamplerYcbcrConversion::destroy";
         MemoryAllocationCallback memTest;
         VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
-        vkDestroySamplerYcbcrConversion(device, mHandle, &memACB);
+        if (kMemoryCallbackEnabled)
+        {
+            MemoryAllocationCallback memTest;
+            VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+            MemoryCallbackInfo callbackInfo;
+            //            callbackInfo.label       = "SamplerYcbcrConversion";
+            callbackInfo.pfnCallback = memACB.pUserData;
+
+            memACB.pUserData = (void *)&callbackInfo;
+            vkDestroySamplerYcbcrConversion(device, mHandle, &memACB);
+        }
+        else
+        {
+            vkDestroySamplerYcbcrConversion(device, mHandle, nullptr);
+        }
         mHandle = VK_NULL_HANDLE;
     }
 }
@@ -2011,7 +2408,17 @@ SamplerYcbcrConversion::init(VkDevice device,
 {
     ASSERT(!valid());
     WARN() << "SamplerYcbcrConversion::init";
-    return vkCreateSamplerYcbcrConversion(device, &createInfo, callbacks, &mHandle);
+    if (kMemoryCallbackEnabled && callbacks)
+    {
+        VkAllocationCallbacks callback = *callbacks;
+        MemoryCallbackInfo callbackInfo;
+        //        callbackInfo.label       = "SamplerYcbcrConversion";
+        callbackInfo.pfnCallback = callbacks->pUserData;
+
+        callback.pUserData = (void *)&callbackInfo;
+        return vkCreateSamplerYcbcrConversion(device, &createInfo, &callback, &mHandle);
+    }
+    return vkCreateSamplerYcbcrConversion(device, &createInfo, nullptr, &mHandle);
 }
 
 // Event implementation.
@@ -2020,9 +2427,21 @@ ANGLE_INLINE void Event::destroy(VkDevice device)
     if (valid())
     {
         WARN() << "Event::destroy";
-        MemoryAllocationCallback memTest;
-        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
-        vkDestroyEvent(device, mHandle, &memACB);
+        if (kMemoryCallbackEnabled)
+        {
+            MemoryAllocationCallback memTest;
+            VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+            MemoryCallbackInfo callbackInfo;
+            //            callbackInfo.label       = "Event";
+            callbackInfo.pfnCallback = memACB.pUserData;
+
+            memACB.pUserData = (void *)&callbackInfo;
+            vkDestroyEvent(device, mHandle, &memACB);
+        }
+        else
+        {
+            vkDestroyEvent(device, mHandle, nullptr);
+        }
         mHandle = VK_NULL_HANDLE;
     }
 }
@@ -2033,7 +2452,17 @@ ANGLE_INLINE VkResult Event::init(VkDevice device,
 {
     ASSERT(!valid());
     WARN() << "Event::init";
-    return vkCreateEvent(device, &createInfo, callbacks, &mHandle);
+    if (kMemoryCallbackEnabled && callbacks)
+    {
+        VkAllocationCallbacks callback = *callbacks;
+        MemoryCallbackInfo callbackInfo;
+        //        callbackInfo.label       = "Event";
+        callbackInfo.pfnCallback = callbacks->pUserData;
+
+        callback.pUserData = (void *)&callbackInfo;
+        return vkCreateEvent(device, &createInfo, &callback, &mHandle);
+    }
+    return vkCreateEvent(device, &createInfo, nullptr, &mHandle);
 }
 
 ANGLE_INLINE VkResult Event::getStatus(VkDevice device) const
@@ -2109,9 +2538,21 @@ ANGLE_INLINE void QueryPool::destroy(VkDevice device)
     if (valid())
     {
         WARN() << "QueryPool::destroy";
-        MemoryAllocationCallback memTest;
-        VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
-        vkDestroyQueryPool(device, mHandle, &memACB);
+        if (kMemoryCallbackEnabled)
+        {
+            MemoryAllocationCallback memTest;
+            VkAllocationCallbacks memACB = (VkAllocationCallbacks)memTest;
+            MemoryCallbackInfo callbackInfo;
+            //            callbackInfo.label       = "QueryPool";
+            callbackInfo.pfnCallback = memACB.pUserData;
+
+            memACB.pUserData = (void *)&callbackInfo;
+            vkDestroyQueryPool(device, mHandle, &memACB);
+        }
+        else
+        {
+            vkDestroyQueryPool(device, mHandle, nullptr);
+        }
         mHandle = VK_NULL_HANDLE;
     }
 }
@@ -2122,7 +2563,17 @@ ANGLE_INLINE VkResult QueryPool::init(VkDevice device,
 {
     ASSERT(!valid());
     WARN() << "QueryPool::init";
-    return vkCreateQueryPool(device, &createInfo, callbacks, &mHandle);
+    if (kMemoryCallbackEnabled && callbacks)
+    {
+        VkAllocationCallbacks callback = *callbacks;
+        MemoryCallbackInfo callbackInfo;
+        //        callbackInfo.label       = "QueryPool";
+        callbackInfo.pfnCallback = callbacks->pUserData;
+
+        callback.pUserData = (void *)&callbackInfo;
+        return vkCreateQueryPool(device, &createInfo, &callback, &mHandle);
+    }
+    return vkCreateQueryPool(device, &createInfo, nullptr, &mHandle);
 }
 
 ANGLE_INLINE VkResult QueryPool::getResults(VkDevice device,

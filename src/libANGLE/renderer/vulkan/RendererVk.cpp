@@ -1504,20 +1504,60 @@ void RendererVk::onDestroy(vk::Context *context)
 
     if (mDevice)
     {
-        vkDestroyDevice(mDevice, callbacks);
+        if (kMemoryCallbackEnabled)
+        {
+            VkAllocationCallbacks callback = *callbacks;
+            vk::MemoryCallbackInfo callbackInfo;
+            //            callbackInfo.label       = "Device";
+            callbackInfo.pfnCallback = callbacks->pUserData;
+
+            callback.pUserData = (void *)&callbackInfo;
+
+            vkDestroyDevice(mDevice, &callback);
+        }
+        else
+        {
+            vkDestroyDevice(mDevice, nullptr);
+        }
         mDevice = VK_NULL_HANDLE;
     }
 
     if (mDebugUtilsMessenger)
     {
-        vkDestroyDebugUtilsMessengerEXT(mInstance, mDebugUtilsMessenger, callbacks);
+        if (kMemoryCallbackEnabled)
+        {
+            VkAllocationCallbacks callback = *callbacks;
+            vk::MemoryCallbackInfo callbackInfo;
+            //            callbackInfo.label       = "DebugUtilsMessenger";
+            callbackInfo.pfnCallback = callbacks->pUserData;
+
+            callback.pUserData = (void *)&callbackInfo;
+            vkDestroyDebugUtilsMessengerEXT(mInstance, mDebugUtilsMessenger, &callback);
+        }
+        else
+        {
+            vkDestroyDebugUtilsMessengerEXT(mInstance, mDebugUtilsMessenger, nullptr);
+        }
     }
 
     logCacheStats();
 
     if (mInstance)
     {
-        vkDestroyInstance(mInstance, callbacks);
+        if (kMemoryCallbackEnabled)
+        {
+            VkAllocationCallbacks callback = *callbacks;
+            vk::MemoryCallbackInfo callbackInfo;
+            //            callbackInfo.label       = "Instance";
+            callbackInfo.pfnCallback = callbacks->pUserData;
+
+            callback.pUserData = (void *)&callbackInfo;
+            vkDestroyInstance(mInstance, &callback);
+        }
+        else
+        {
+            vkDestroyInstance(mInstance, nullptr);
+        }
         mInstance = VK_NULL_HANDLE;
     }
 
@@ -1830,9 +1870,6 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
         instanceInfo.flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
     }
 
-    // Callbacks used for Vulkan calls
-    VkAllocationCallbacks *callbacks = mMemoryAllocationTracker.getCallbacks();
-
     // http://anglebug.com/7050 - Shader validation caching is broken on Android
     VkValidationFeaturesEXT validationFeatures       = {};
     VkValidationFeatureDisableEXT disabledFeatures[] = {
@@ -1849,7 +1886,21 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     {
         ANGLE_SCOPED_DISABLE_MSAN();
         WARN() << "Instance creation";
-        ANGLE_VK_TRY(displayVk, vkCreateInstance(&instanceInfo, callbacks, &mInstance));
+        if (kMemoryCallbackEnabled)
+        {
+            VkAllocationCallbacks *callbacks = mMemoryAllocationTracker.getCallbacks();
+            VkAllocationCallbacks callback   = *callbacks;
+            vk::MemoryCallbackInfo callbackInfo;
+            //            callbackInfo.label       = "Instance";
+            callbackInfo.pfnCallback = callbacks->pUserData;
+
+            callback.pUserData = (void *)&callbackInfo;
+            ANGLE_VK_TRY(displayVk, vkCreateInstance(&instanceInfo, &callback, &mInstance));
+        }
+        else
+        {
+            ANGLE_VK_TRY(displayVk, vkCreateInstance(&instanceInfo, nullptr, &mInstance));
+        }
 #if defined(ANGLE_SHARED_LIBVULKAN)
         // Load volk if we are linking dynamically
         volkLoadInstance(mInstance);
@@ -1883,8 +1934,24 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
         messengerInfo.pfnUserCallback = &DebugUtilsMessenger;
         messengerInfo.pUserData       = this;
 
-        ANGLE_VK_TRY(displayVk, vkCreateDebugUtilsMessengerEXT(mInstance, &messengerInfo, callbacks,
-                                                               &mDebugUtilsMessenger));
+        if (kMemoryCallbackEnabled)
+        {
+            VkAllocationCallbacks *callbacks = mMemoryAllocationTracker.getCallbacks();
+            VkAllocationCallbacks callback   = *callbacks;
+            vk::MemoryCallbackInfo callbackInfo;
+            //            callbackInfo.label       = "DebugUtilsMessenger";
+            callbackInfo.pfnCallback = callbacks->pUserData;
+
+            callback.pUserData = (void *)&callbackInfo;
+            ANGLE_VK_TRY(displayVk,
+                         vkCreateDebugUtilsMessengerEXT(mInstance, &messengerInfo, &callback,
+                                                        &mDebugUtilsMessenger));
+        }
+        else
+        {
+            ANGLE_VK_TRY(displayVk, vkCreateDebugUtilsMessengerEXT(mInstance, &messengerInfo,
+                                                                   nullptr, &mDebugUtilsMessenger));
+        }
     }
 
     uint32_t physicalDeviceCount = 0;
@@ -3396,8 +3463,22 @@ angle::Result RendererVk::createDeviceAndQueue(DisplayVk *displayVk, uint32_t qu
     initializeValidationMessageSuppressions();
 
     WARN() << "Device creation";
-    VkAllocationCallbacks *callbacks = mMemoryAllocationTracker.getCallbacks();
-    ANGLE_VK_TRY(displayVk, vkCreateDevice(mPhysicalDevice, &createInfo, callbacks, &mDevice));
+    if (kMemoryCallbackEnabled)
+    {
+        VkAllocationCallbacks *callbacks = mMemoryAllocationTracker.getCallbacks();
+
+        VkAllocationCallbacks callback = *callbacks;
+        vk::MemoryCallbackInfo callbackInfo;
+        //        callbackInfo.label       = "Device";
+        callbackInfo.pfnCallback = callbacks->pUserData;
+
+        callback.pUserData = (void *)&callbackInfo;
+        ANGLE_VK_TRY(displayVk, vkCreateDevice(mPhysicalDevice, &createInfo, &callback, &mDevice));
+    }
+    else
+    {
+        ANGLE_VK_TRY(displayVk, vkCreateDevice(mPhysicalDevice, &createInfo, nullptr, &mDevice));
+    }
 #if defined(ANGLE_SHARED_LIBVULKAN)
     // Load volk if we are loading dynamically
     volkLoadDevice(mDevice);

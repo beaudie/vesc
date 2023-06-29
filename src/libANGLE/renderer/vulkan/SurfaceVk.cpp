@@ -908,7 +908,20 @@ void SwapchainCleanupData::destroy(VkDevice device,
 
     if (swapchain)
     {
-        vkDestroySwapchainKHR(device, swapchain, callbacks);
+        if (kMemoryCallbackEnabled)
+        {
+            VkAllocationCallbacks callback = *callbacks;
+            vk::MemoryCallbackInfo callbackInfo;
+            //            callbackInfo.label       = "SwapchainKHR";
+            callbackInfo.pfnCallback = callbacks->pUserData;
+
+            callback.pUserData = (void *)&callbackInfo;
+            vkDestroySwapchainKHR(device, swapchain, &callback);
+        }
+        else
+        {
+            vkDestroySwapchainKHR(device, swapchain, nullptr);
+        }
         swapchain = VK_NULL_HANDLE;
     }
 }
@@ -1054,7 +1067,20 @@ void WindowSurfaceVk::destroy(const egl::Display *display)
 
     if (mSwapchain)
     {
-        vkDestroySwapchainKHR(device, mSwapchain, callbacks);
+        if (kMemoryCallbackEnabled)
+        {
+            VkAllocationCallbacks callback = *callbacks;
+            vk::MemoryCallbackInfo callbackInfo;
+            //            callbackInfo.label       = "SwapchainKHR";
+            callbackInfo.pfnCallback = callbacks->pUserData;
+
+            callback.pUserData = (void *)&callbackInfo;
+            vkDestroySwapchainKHR(device, mSwapchain, &callback);
+        }
+        else
+        {
+            vkDestroySwapchainKHR(device, mSwapchain, nullptr);
+        }
         mSwapchain = VK_NULL_HANDLE;
     }
 
@@ -1485,9 +1511,22 @@ angle::Result WindowSurfaceVk::recreateSwapchain(ContextVk *contextVk, const gl:
     // If the most recent swapchain was never used, destroy it right now.
     if (swapchainToDestroy)
     {
-        VkAllocationCallbacks *callbacks =
-            contextVk->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
-        vkDestroySwapchainKHR(contextVk->getDevice(), swapchainToDestroy, callbacks);
+        if (kMemoryCallbackEnabled)
+        {
+            VkAllocationCallbacks *callbacks =
+                contextVk->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+            VkAllocationCallbacks callback = *callbacks;
+            vk::MemoryCallbackInfo callbackInfo;
+            //            callbackInfo.label       = "SwapchainKHR";
+            callbackInfo.pfnCallback = callbacks->pUserData;
+
+            callback.pUserData = (void *)&callbackInfo;
+            vkDestroySwapchainKHR(contextVk->getDevice(), swapchainToDestroy, &callback);
+        }
+        else
+        {
+            vkDestroySwapchainKHR(contextVk->getDevice(), swapchainToDestroy, nullptr);
+        }
     }
 
     return result;
@@ -1675,10 +1714,26 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
     // TODO: Once EGL_SWAP_BEHAVIOR_PRESERVED_BIT is supported, the contents of the old swapchain
     // need to carry over to the new one.  http://anglebug.com/2942
     VkSwapchainKHR newSwapChain = VK_NULL_HANDLE;
-    VkAllocationCallbacks *callbacks =
-        context->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
     WARN() << "Swapchain creation";
-    ANGLE_VK_TRY(context, vkCreateSwapchainKHR(device, &swapchainInfo, callbacks, &newSwapChain));
+
+    if (kMemoryCallbackEnabled)
+    {
+        VkAllocationCallbacks *callbacks =
+            context->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+        vk::MemoryAllocationCallback memTest;
+        VkAllocationCallbacks callback = *callbacks;
+        vk::MemoryCallbackInfo callbackInfo;
+        //        callbackInfo.label       = "SwapchainKHR";
+        callbackInfo.pfnCallback = callbacks->pUserData;
+
+        callback.pUserData = (void *)&callbackInfo;
+        ANGLE_VK_TRY(context,
+                     vkCreateSwapchainKHR(device, &swapchainInfo, &callback, &newSwapChain));
+    }
+    else
+    {
+        ANGLE_VK_TRY(context, vkCreateSwapchainKHR(device, &swapchainInfo, nullptr, &newSwapChain));
+    }
     mSwapchain            = newSwapChain;
     mSwapchainPresentMode = mDesiredSwapchainPresentMode;
 

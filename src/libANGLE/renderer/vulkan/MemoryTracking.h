@@ -18,6 +18,8 @@
 #include "common/backtrace_utils.h"
 #include "common/vulkan/vk_headers.h"
 
+constexpr bool kMemoryCallbackEnabled = true;
+
 namespace rx
 {
 class RendererVk;
@@ -127,6 +129,12 @@ class MemoryReport final : angle::NonCopyable
     angle::HashMap<uint64_t, int> mUniqueIDCounts;
 };
 
+struct MemoryCallbackInfo
+{
+    void *pfnCallback;
+    //    std::string label;
+};
+
 class MemoryAllocationCallback
 {
   public:
@@ -166,18 +174,20 @@ class MemoryAllocationCallback
     void printSystemAllocationData();
 
   private:
-    void recordAlloc(size_t size,
+    void recordAlloc(MemoryCallbackInfo *callbackInfo,
+                     size_t size,
                      size_t alignment,
                      VkSystemAllocationScope allocationScope,
                      void *pMemory);
 
-    void recordRealloc(void *pOriginal,
+    void recordRealloc(MemoryCallbackInfo *callbackInfo,
+                       void *pOriginal,
                        size_t size,
                        size_t alignment,
                        VkSystemAllocationScope allocationScope,
                        void *pMemory);
 
-    void recordFree(void *pMemory);
+    void recordFree(MemoryCallbackInfo *callbackInfo, void *pMemory);
 
     // Functions that will be called if an allocation callback is used in a Vulkan API call.
     VKAPI_ATTR static void *VKAPI_CALL onAlloc(void *pUserData,
@@ -210,7 +220,7 @@ class MemoryAllocationCallback
     using SizeScopePair = std::pair<VkDeviceSize, VkSystemAllocationScope>;
     std::unordered_map<void *, SizeScopePair> mMemoryPropertyMap;
 
-    std::array<VkDeviceSize, kVkSystemAllocationScopeSize> mSystemAllocationSize;
+    std::array<std::atomic<VkDeviceSize>, kVkSystemAllocationScopeSize> mSystemAllocationSize;
 };
 }  // namespace vk
 
