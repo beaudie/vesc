@@ -1328,14 +1328,14 @@ void OneOffCommandPool::init(vk::ProtectionType protectionType)
     mProtectionType = protectionType;
 }
 
-void OneOffCommandPool::destroy(VkDevice device)
+void OneOffCommandPool::destroy(VkDevice device, VkAllocationCallbacks *callbacks)
 {
     std::unique_lock<std::mutex> lock(mMutex);
     for (PendingOneOffCommands &pending : mPendingCommands)
     {
         pending.commandBuffer.releaseHandle();
     }
-    mCommandPool.destroy(device);
+    mCommandPool.destroy(device, callbacks);
     mProtectionType = vk::ProtectionType::InvalidEnum;
 }
 
@@ -1365,7 +1365,9 @@ angle::Result OneOffCommandPool::getCommandBuffer(vk::Context *context,
             {
                 createInfo.flags |= VK_COMMAND_POOL_CREATE_PROTECTED_BIT;
             }
-            ANGLE_VK_TRY(context, mCommandPool.init(context->getDevice(), createInfo));
+            ANGLE_DEFINE_CALLBACKS(callbacksCommandPool, context->getRenderer(), CommandPool);
+            ANGLE_VK_TRY(context,
+                         mCommandPool.init(context->getDevice(), createInfo, callbacksCommandPool));
         }
 
         VkCommandBufferAllocateInfo allocInfo = {};
@@ -1450,7 +1452,6 @@ void RendererVk::onDestroy(vk::Context *context)
     {
         handleDeviceLost();
     }
-
     mCommandProcessor.destroy(context);
     mCommandQueue.destroy(context);
 
@@ -1459,12 +1460,14 @@ void RendererVk::onDestroy(vk::Context *context)
     ASSERT(!hasSharedGarbage());
     ASSERT(mOrphanedBufferBlockList.empty());
 
+    ANGLE_DEFINE_CALLBACKS(callbacksCommandPool, this, CommandPool);
     for (OneOffCommandPool &oneOffCommandPool : mOneOffCommandPoolMap)
     {
-        oneOffCommandPool.destroy(mDevice);
+        oneOffCommandPool.destroy(mDevice, callbacksCommandPool);
     }
 
-    mPipelineCache.destroy(mDevice);
+    ANGLE_DEFINE_CALLBACKS(callbacksPipelineCache, this, PipelineCache);
+    mPipelineCache.destroy(mDevice, callbacksPipelineCache);
     mSamplerCache.destroy(this);
     mYuvConversionCache.destroy(this);
     mVkFormatDescriptorCountMap.clear();
@@ -1475,28 +1478,31 @@ void RendererVk::onDestroy(vk::Context *context)
     mImageMemorySuballocator.destroy(this);
     mAllocator.destroy();
 
-    // When the renderer is being destroyed, it is possible to check if all the allocated memory
-    // throughout the execution has been freed.
-    mMemoryAllocationTracker.onDestroy();
-
     if (mDevice)
     {
-        vkDestroyDevice(mDevice, nullptr);
+        ANGLE_DEFINE_CALLBACKS(callbacksDevice, this, Device);
+        vkDestroyDevice(mDevice, callbacksDevice);
         mDevice = VK_NULL_HANDLE;
     }
 
     if (mDebugUtilsMessenger)
     {
-        vkDestroyDebugUtilsMessengerEXT(mInstance, mDebugUtilsMessenger, nullptr);
+        ANGLE_DEFINE_CALLBACKS(callbacksDebugUtils, this, DebugUtils);
+        vkDestroyDebugUtilsMessengerEXT(mInstance, mDebugUtilsMessenger, callbacksDebugUtils);
     }
 
     logCacheStats();
 
     if (mInstance)
     {
-        vkDestroyInstance(mInstance, nullptr);
+        ANGLE_DEFINE_CALLBACKS(callbacksInstance, this, Instance);
+        vkDestroyInstance(mInstance, callbacksInstance);
         mInstance = VK_NULL_HANDLE;
     }
+
+    // When the renderer is being destroyed, it is possible to check if all the allocated memory
+    // throughout the execution has been freed.
+    mMemoryAllocationTracker.onDestroy();
 
     if (mCompressEvent)
     {
@@ -1822,7 +1828,8 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
 
     {
         ANGLE_SCOPED_DISABLE_MSAN();
-        ANGLE_VK_TRY(displayVk, vkCreateInstance(&instanceInfo, nullptr, &mInstance));
+        ANGLE_DEFINE_CALLBACKS(callbacksInstance, this, Instance);
+        ANGLE_VK_TRY(displayVk, vkCreateInstance(&instanceInfo, callbacksInstance, &mInstance));
 #if defined(ANGLE_SHARED_LIBVULKAN)
         // Load volk if we are linking dynamically
         volkLoadInstance(mInstance);
@@ -1856,8 +1863,10 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
         messengerInfo.pfnUserCallback = &DebugUtilsMessenger;
         messengerInfo.pUserData       = this;
 
-        ANGLE_VK_TRY(displayVk, vkCreateDebugUtilsMessengerEXT(mInstance, &messengerInfo, nullptr,
-                                                               &mDebugUtilsMessenger));
+        ANGLE_DEFINE_CALLBACKS(callbacksDebugUtils, this, DebugUtils);
+        ANGLE_VK_TRY(displayVk,
+                     vkCreateDebugUtilsMessengerEXT(mInstance, &messengerInfo, callbacksDebugUtils,
+                                                    &mDebugUtilsMessenger));
     }
 
     uint32_t physicalDeviceCount = 0;
@@ -1963,9 +1972,12 @@ angle::Result RendererVk::initializeMemoryAllocator(DisplayVk *displayVk)
     mPreferredLargeHeapBlockSize = 4 * 1024 * 1024;
 
     // Create VMA allocator
-    ANGLE_VK_TRY(displayVk,
-                 mAllocator.init(mPhysicalDevice, mDevice, mInstance, mApplicationInfo.apiVersion,
-                                 mPreferredLargeHeapBlockSize));
+    ANGLE_DEFINE_CALLBACKS(callbacksAllocator, this, Allocator);
+    auto deviceMemoryCallbacks = mMemoryAllocationTracker.getDeviceMemoryCallback();
+    ANGLE_VK_TRY(
+        displayVk,
+        mAllocator.init(mPhysicalDevice, mDevice, mInstance, mApplicationInfo.apiVersion,
+                        mPreferredLargeHeapBlockSize, callbacksAllocator, deviceMemoryCallbacks));
 
     // Figure out the alignment for default buffer allocations
     VkBufferCreateInfo createInfo    = {};
@@ -1977,8 +1989,9 @@ angle::Result RendererVk::initializeMemoryAllocator(DisplayVk *displayVk)
     createInfo.queueFamilyIndexCount = 0;
     createInfo.pQueueFamilyIndices   = nullptr;
 
-    vk::DeviceScoped<vk::Buffer> tempBuffer(mDevice);
-    tempBuffer.get().init(mDevice, createInfo);
+    ANGLE_DEFINE_CALLBACKS(callbacksBuffer, this, Buffer);
+    vk::DeviceScopedCallback<vk::Buffer> tempBuffer(mDevice, callbacksBuffer);
+    tempBuffer.get().init(mDevice, createInfo, callbacksBuffer);
 
     VkMemoryRequirements defaultBufferMemoryRequirements;
     tempBuffer.get().getMemoryRequirements(mDevice, &defaultBufferMemoryRequirements);
@@ -3397,7 +3410,9 @@ angle::Result RendererVk::createDeviceAndQueue(DisplayVk *displayVk, uint32_t qu
     // may also generate messages.
     initializeValidationMessageSuppressions();
 
-    ANGLE_VK_TRY(displayVk, vkCreateDevice(mPhysicalDevice, &createInfo, nullptr, &mDevice));
+    ANGLE_DEFINE_CALLBACKS(callbacksDevice, this, Device);
+    ANGLE_VK_TRY(displayVk,
+                 vkCreateDevice(mPhysicalDevice, &createInfo, callbacksDevice, &mDevice));
 #if defined(ANGLE_SHARED_LIBVULKAN)
     // Load volk if we are loading dynamically
     volkLoadDevice(mDevice);
@@ -4866,7 +4881,9 @@ angle::Result RendererVk::initPipelineCache(DisplayVk *display,
         pipelineCacheCreateInfo.flags |= VK_PIPELINE_CACHE_CREATE_EXTERNALLY_SYNCHRONIZED_BIT_EXT;
     }
 
-    ANGLE_VK_TRY(display, pipelineCache->init(mDevice, pipelineCacheCreateInfo));
+    ANGLE_DEFINE_CALLBACKS(callbacksPipelineCache, this, PipelineCache);
+    ANGLE_VK_TRY(display,
+                 pipelineCache->init(mDevice, pipelineCacheCreateInfo, callbacksPipelineCache));
 
     return angle::Result::Continue;
 }
@@ -4894,7 +4911,8 @@ angle::Result RendererVk::getPipelineCache(vk::PipelineCacheAccess *pipelineCach
         }
 
         mPipelineCacheInitialized = true;
-        pCache.destroy(mDevice);
+        ANGLE_DEFINE_CALLBACKS(callbacksPipelineCache, this, PipelineCache);
+        pCache.destroy(mDevice, callbacksPipelineCache);
     }
 
     pipelineCacheOut->init(&mPipelineCache, &mPipelineCacheMutex);
@@ -5431,7 +5449,8 @@ angle::Result RendererVk::submitPriorityDependency(vk::Context *context,
                                                    SerialIndex index)
 {
     vk::RendererScoped<vk::ReleasableResource<vk::Semaphore>> semaphore(this);
-    ANGLE_VK_TRY(context, semaphore.get().get().init(mDevice));
+    ANGLE_DEFINE_CALLBACKS(callbacksSemaphore, this, Semaphore);
+    ANGLE_VK_TRY(context, semaphore.get().get().init(mDevice, callbacksSemaphore));
 
     // First, submit already flushed commands / wait semaphores into the source Priority VkQueue.
     // Commands that are in the Secondary Command Buffers will be flushed into the new VkQueue.

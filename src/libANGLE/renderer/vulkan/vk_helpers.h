@@ -364,8 +364,10 @@ class DynamicallyGrowingPool : angle::NonCopyable
   protected:
     angle::Result initEntryPool(Context *contextVk, uint32_t poolSize);
 
-    virtual void destroyPoolImpl(VkDevice device, Pool &poolToDestroy) = 0;
-    void destroyEntryPool(VkDevice device);
+    virtual void destroyPoolImpl(VkDevice device,
+                                 Pool &poolToDestroy,
+                                 VkAllocationCallbacks *callbacks) = 0;
+    void destroyEntryPool(VkDevice device, VkAllocationCallbacks *callbacks);
 
     // Checks to see if any pool is already free, in which case it sets it as current pool and
     // returns true.
@@ -442,7 +444,7 @@ class DynamicQueryPool final : public DynamicallyGrowingPool<QueryPool>
     ~DynamicQueryPool() override;
 
     angle::Result init(ContextVk *contextVk, VkQueryType type, uint32_t poolSize);
-    void destroy(VkDevice device);
+    void destroy(VkDevice device, VkAllocationCallbacks *callbacks);
 
     angle::Result allocateQuery(ContextVk *contextVk, QueryHelper *queryOut, uint32_t queryCount);
     void freeQuery(ContextVk *contextVk, QueryHelper *query);
@@ -453,7 +455,9 @@ class DynamicQueryPool final : public DynamicallyGrowingPool<QueryPool>
     angle::Result allocatePoolImpl(ContextVk *contextVk,
                                    QueryPool &poolToAllocate,
                                    uint32_t entriesToAllocate) override;
-    void destroyPoolImpl(VkDevice device, QueryPool &poolToDestroy) override;
+    void destroyPoolImpl(VkDevice device,
+                         QueryPool &poolToDestroy,
+                         VkAllocationCallbacks *callbacks) override;
 
     // Information required to create new query pools
     VkQueryType mQueryType;
@@ -2928,7 +2932,7 @@ class ImageViewHelper final : angle::NonCopyable
     ~ImageViewHelper();
 
     void init(RendererVk *renderer);
-    void destroy(VkDevice device);
+    void destroy(VkDevice device, VkAllocationCallbacks *callbacks);
 
     const ImageView &getLinearReadImageView() const
     {
@@ -3206,7 +3210,7 @@ class BufferViewHelper final : public Resource
     void init(RendererVk *renderer, VkDeviceSize offset, VkDeviceSize size);
     bool isInitialized() const { return mInitialized; }
     void release(ContextVk *contextVk);
-    void destroy(VkDevice device);
+    void destroy(VkDevice device, VkAllocationCallbacks *callbacks);
 
     angle::Result getView(Context *context,
                           const BufferHelper &buffer,
