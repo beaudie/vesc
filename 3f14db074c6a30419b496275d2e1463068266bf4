@@ -16,6 +16,24 @@
       "message": "Shabi: would you potentially be able to review this?",
       "revId": "3f14db074c6a30419b496275d2e1463068266bf4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fa649a6_a068a3e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-29T18:23:52Z",
+      "side": 1,
+      "message": "LGTM",
+      "parentUuid": "b5b8095e_4d89fcb8",
+      "revId": "3f14db074c6a30419b496275d2e1463068266bf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
