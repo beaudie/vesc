@@ -984,7 +984,8 @@ angle::Result CreateRenderPass1(Context *context,
     }
 
     // Initialize the render pass.
-    ANGLE_VK_TRY(context, renderPass->init(context->getDevice(), createInfo1));
+    ANGLE_DEFINE_CALLBACKS(callbacksRenderPass, context->getRenderer(), RenderPass);
+    ANGLE_VK_TRY(context, renderPass->init(context->getDevice(), createInfo1, callbacksRenderPass));
 
     return angle::Result::Continue;
 }
@@ -4425,10 +4426,10 @@ PipelineHelper::PipelineHelper() = default;
 
 PipelineHelper::~PipelineHelper() = default;
 
-void PipelineHelper::destroy(VkDevice device)
+void PipelineHelper::destroy(VkDevice device, VkAllocationCallbacks *callbacks)
 {
-    mPipeline.destroy(device);
-    mLinkedPipelineToRelease.destroy(device);
+    mPipeline.destroy(device, callbacks);
+    mLinkedPipelineToRelease.destroy(device, callbacks);
 
     // If there is a pending task, wait for it before destruction.
     if (mMonolithicPipelineCreationTask.isValid())
@@ -4436,7 +4437,7 @@ void PipelineHelper::destroy(VkDevice device)
         if (mMonolithicPipelineCreationTask.isPosted())
         {
             mMonolithicPipelineCreationTask.wait();
-            mMonolithicPipelineCreationTask.getTask()->getPipeline().destroy(device);
+            mMonolithicPipelineCreationTask.getTask()->getPipeline().destroy(device, callbacks);
         }
         mMonolithicPipelineCreationTask.reset();
     }
@@ -4556,13 +4557,16 @@ FramebufferHelper &FramebufferHelper::operator=(FramebufferHelper &&other)
 angle::Result FramebufferHelper::init(ContextVk *contextVk,
                                       const VkFramebufferCreateInfo &createInfo)
 {
-    ANGLE_VK_TRY(contextVk, mFramebuffer.init(contextVk->getDevice(), createInfo));
+    ANGLE_DEFINE_CALLBACKS(callbacksFramebuffer, contextVk->getRenderer(), Framebuffer);
+    ANGLE_VK_TRY(contextVk,
+                 mFramebuffer.init(contextVk->getDevice(), createInfo, callbacksFramebuffer));
     return angle::Result::Continue;
 }
 
 void FramebufferHelper::destroy(Renderer *renderer)
 {
-    mFramebuffer.destroy(renderer->getDevice());
+    ANGLE_DEFINE_CALLBACKS(callbacksFramebuffer, renderer, Framebuffer);
+    mFramebuffer.destroy(renderer->getDevice(), callbacksFramebuffer);
 }
 
 void FramebufferHelper::release(ContextVk *contextVk)
@@ -4844,7 +4848,9 @@ angle::Result YcbcrConversionDesc::init(Context *context,
     ASSERT(mIsExternalFormat == 0);
 #endif  // VK_USE_PLATFORM_ANDROID_KHR
 
-    ANGLE_VK_TRY(context, conversionOut->init(context->getDevice(), samplerYcbcrConversionInfo));
+    ANGLE_DEFINE_CALLBACKS(callbacksSamplerYcbcr, context->getRenderer(), SamplerYcbcrConversion);
+    ANGLE_VK_TRY(context, conversionOut->init(context->getDevice(), samplerYcbcrConversionInfo,
+                                              callbacksSamplerYcbcr));
     return angle::Result::Continue;
 }
 
@@ -5075,7 +5081,9 @@ angle::Result SamplerDesc::init(ContextVk *contextVk, Sampler *sampler) const
 
         vk::AddToPNextChain(&createInfo, &customBorderColorInfo);
     }
-    ANGLE_VK_TRY(contextVk, sampler->init(contextVk->getDevice(), createInfo));
+
+    ANGLE_DEFINE_CALLBACKS(callbacksSampler, contextVk->getRenderer(), Sampler);
+    ANGLE_VK_TRY(contextVk, sampler->init(contextVk->getDevice(), createInfo, callbacksSampler));
 
     return angle::Result::Continue;
 }
@@ -5126,9 +5134,9 @@ RenderPassHelper &RenderPassHelper::operator=(RenderPassHelper &&other)
     return *this;
 }
 
-void RenderPassHelper::destroy(VkDevice device)
+void RenderPassHelper::destroy(VkDevice device, VkAllocationCallbacks *callbacks)
 {
-    mRenderPass.destroy(device);
+    mRenderPass.destroy(device, callbacks);
 }
 
 void RenderPassHelper::release(ContextVk *contextVk)
@@ -6342,8 +6350,9 @@ VkResult PipelineCacheAccess::createGraphicsPipeline(vk::Context *context,
                                                      vk::Pipeline *pipelineOut)
 {
     std::unique_lock<std::mutex> lock = getLock();
-
-    return pipelineOut->initGraphics(context->getDevice(), createInfo, *mPipelineCache);
+    ANGLE_DEFINE_CALLBACKS(callbacksPipeline, context->getRenderer(), Pipeline);
+    return pipelineOut->initGraphics(context->getDevice(), createInfo, *mPipelineCache,
+                                     callbacksPipeline);
 }
 
 VkResult PipelineCacheAccess::createComputePipeline(vk::Context *context,
@@ -6351,8 +6360,9 @@ VkResult PipelineCacheAccess::createComputePipeline(vk::Context *context,
                                                     vk::Pipeline *pipelineOut)
 {
     std::unique_lock<std::mutex> lock = getLock();
-
-    return pipelineOut->initCompute(context->getDevice(), createInfo, *mPipelineCache);
+    ANGLE_DEFINE_CALLBACKS(callbacksPipeline, context->getRenderer(), Pipeline);
+    return pipelineOut->initCompute(context->getDevice(), createInfo, *mPipelineCache,
+                                    callbacksPipeline);
 }
 
 void PipelineCacheAccess::merge(Renderer *renderer, const vk::PipelineCache &pipelineCache)
@@ -6538,7 +6548,7 @@ void RenderPassCache::destroy(ContextVk *contextVk)
                                    mRenderPassWithOpsCacheStats);
 
     VkDevice device = renderer->getDevice();
-
+    ANGLE_DEFINE_CALLBACKS(callbacksRenderPass, renderer, RenderPass);
     // Make sure there are no jobs referencing the render pass cache.
     contextVk->getShareGroup()->waitForCurrentMonolithicPipelineCreationTask();
 
@@ -6546,7 +6556,7 @@ void RenderPassCache::destroy(ContextVk *contextVk)
     {
         for (auto &innerIt : outerIt.second)
         {
-            innerIt.second.destroy(device);
+            innerIt.second.destroy(device, callbacksRenderPass);
         }
     }
     mPayload.clear();
@@ -7074,7 +7084,9 @@ angle::Result RenderPassCache::MakeRenderPass(vk::Context *context,
     }
     else
     {
-        ANGLE_VK_TRY(context, renderPass->init2(context->getDevice(), createInfo));
+        ANGLE_DEFINE_CALLBACKS(callbacksRenderPass, context->getRenderer(), RenderPass);
+        ANGLE_VK_TRY(context,
+                     renderPass->init2(context->getDevice(), createInfo, callbacksRenderPass));
     }
 
     if (renderPassCounters != nullptr)
@@ -7101,11 +7113,11 @@ void GraphicsPipelineCache<Hash>::destroy(ContextVk *contextVk)
     accumulateCacheStats(contextVk->getRenderer());
 
     VkDevice device = contextVk->getDevice();
-
+    ANGLE_DEFINE_CALLBACKS(callbacksPipeline, contextVk->getRenderer(), Pipeline);
     for (auto &item : mPayload)
     {
         vk::PipelineHelper &pipeline = item.second;
-        pipeline.destroy(device);
+        pipeline.destroy(device, callbacksPipeline);
     }
 
     mPayload.clear();
@@ -7338,12 +7350,12 @@ void DescriptorSetLayoutCache::destroy(vk::Renderer *renderer)
     renderer->accumulateCacheStats(VulkanCacheType::DescriptorSetLayout, mCacheStats);
 
     VkDevice device = renderer->getDevice();
-
+    ANGLE_DEFINE_CALLBACKS(callbacksDescSetLayout, renderer, DescriptorSetLayout);
     for (auto &item : mPayload)
     {
         vk::RefCountedDescriptorSetLayout &layout = item.second;
         ASSERT(!layout.isReferenced());
-        layout.get().destroy(device);
+        layout.get().destroy(device, callbacksDescSetLayout);
     }
 
     mPayload.clear();
@@ -7379,7 +7391,8 @@ angle::Result DescriptorSetLayoutCache::getDescriptorSetLayout(
     createInfo.pBindings    = bindingVector.data();
 
     vk::DescriptorSetLayout newLayout;
-    ANGLE_VK_TRY(context, newLayout.init(context->getDevice(), createInfo));
+    ANGLE_DEFINE_CALLBACKS(callbacksDescSetLayout, context->getRenderer(), DescriptorSetLayout);
+    ANGLE_VK_TRY(context, newLayout.init(context->getDevice(), createInfo, callbacksDescSetLayout));
 
     auto insertedItem = mPayload.emplace(desc, std::move(newLayout));
     vk::RefCountedDescriptorSetLayout &insertedLayout = insertedItem.first->second;
@@ -7401,11 +7414,11 @@ void PipelineLayoutCache::destroy(vk::Renderer *renderer)
     accumulateCacheStats(renderer);
 
     VkDevice device = renderer->getDevice();
-
+    ANGLE_DEFINE_CALLBACKS(callbacksPipelineLayout, renderer, PipelineLayout);
     for (auto &item : mPayload)
     {
         vk::RefCountedPipelineLayout &layout = item.second;
-        layout.get().destroy(device);
+        layout.get().destroy(device, callbacksPipelineLayout);
     }
 
     mPayload.clear();
@@ -7463,7 +7476,9 @@ angle::Result PipelineLayoutCache::getPipelineLayout(
     }
 
     vk::PipelineLayout newLayout;
-    ANGLE_VK_TRY(context, newLayout.init(context->getDevice(), createInfo));
+    ANGLE_DEFINE_CALLBACKS(callbacksPipelineLayout, context->getRenderer(), PipelineLayout);
+    ANGLE_VK_TRY(context,
+                 newLayout.init(context->getDevice(), createInfo, callbacksPipelineLayout));
 
     auto insertedItem                            = mPayload.emplace(desc, std::move(newLayout));
     vk::RefCountedPipelineLayout &insertedLayout = insertedItem.first->second;
@@ -7485,11 +7500,11 @@ void SamplerYcbcrConversionCache::destroy(vk::Renderer *renderer)
     renderer->accumulateCacheStats(VulkanCacheType::SamplerYcbcrConversion, mCacheStats);
 
     VkDevice device = renderer->getDevice();
-
+    ANGLE_DEFINE_CALLBACKS(callbacksSamplerYcbcr, renderer, SamplerYcbcrConversion);
     for (auto &iter : mExternalFormatPayload)
     {
         vk::SamplerYcbcrConversion &samplerYcbcrConversion = iter.second;
-        samplerYcbcrConversion.destroy(device);
+        samplerYcbcrConversion.destroy(device, callbacksSamplerYcbcr);
 
         renderer->onDeallocateHandle(vk::HandleType::SamplerYcbcrConversion);
     }
@@ -7497,7 +7512,7 @@ void SamplerYcbcrConversionCache::destroy(vk::Renderer *renderer)
     for (auto &iter : mVkFormatPayload)
     {
         vk::SamplerYcbcrConversion &samplerYcbcrConversion = iter.second;
-        samplerYcbcrConversion.destroy(device);
+        samplerYcbcrConversion.destroy(device, callbacksSamplerYcbcr);
 
         renderer->onDeallocateHandle(vk::HandleType::SamplerYcbcrConversion);
     }
@@ -7554,12 +7569,13 @@ void SamplerCache::destroy(vk::Renderer *renderer)
     renderer->accumulateCacheStats(VulkanCacheType::Sampler, mCacheStats);
 
     VkDevice device = renderer->getDevice();
+    ANGLE_DEFINE_CALLBACKS(callbacksSampler, renderer, Sampler);
 
     for (auto &iter : mPayload)
     {
         vk::RefCountedSampler &sampler = iter.second;
         ASSERT(!sampler.isReferenced());
-        sampler.get().get().destroy(device);
+        sampler.get().get().destroy(device, callbacksSampler);
 
         renderer->onDeallocateHandle(vk::HandleType::Sampler);
     }
