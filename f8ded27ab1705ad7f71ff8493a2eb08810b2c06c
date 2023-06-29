@@ -33,6 +33,24 @@
       "message": "I\u0027m not sure this is actually correct. Take this scenario:\n\n1. Context 1 do X\n2. Context 1 insert fence\n3. Context 2 server wait \u003c-- will barrier against X according to the above\n\nNow imagine after step 2 there\u0027s a command buffer flush. Now at step 3 server wait doesn\u0027t issue a barrier anymore. But the fact that Context 1\u0027s commands are pending or not have no bearings on the barriers needed for Context 2.",
       "revId": "f8ded27ab1705ad7f71ff8493a2eb08810b2c06c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2805fd2e_3cf778aa",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7663,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-06-29T19:54:34Z",
+      "side": 1,
+      "message": "Agree, taking this CL back.",
+      "parentUuid": "aa705396_802564f7",
+      "revId": "f8ded27ab1705ad7f71ff8493a2eb08810b2c06c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
