@@ -44,7 +44,11 @@ angle::Result SecondaryCommandPool::init(Context *context,
     {
         poolInfo.flags |= VK_COMMAND_POOL_CREATE_PROTECTED_BIT;
     }
-    ANGLE_VK_TRY(context, mCommandPool.init(context->getDevice(), poolInfo));
+    VkAllocationCallbacks *callbacks =
+        context->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+    VkAllocationCallbacks callback =
+        vk::MemoryAllocationCallback::BuildCallbackCommandPool(callbacks);
+    ANGLE_VK_TRY(context, mCommandPool.init(context->getDevice(), poolInfo, &callback));
     return angle::Result::Continue;
 }
 

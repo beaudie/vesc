@@ -1674,9 +1674,13 @@ angle::Result UtilsVk::ensureSamplersInitialized(ContextVk *contextVk)
     samplerInfo.borderColor             = VK_BORDER_COLOR_INT_TRANSPARENT_BLACK;
     samplerInfo.unnormalizedCoordinates = VK_FALSE;
 
+    VkAllocationCallbacks *callbacks =
+        contextVk->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
     if (!mPointSampler.valid())
     {
-        ANGLE_VK_TRY(contextVk, mPointSampler.init(contextVk->getDevice(), samplerInfo));
+        VkAllocationCallbacks callback =
+            vk::MemoryAllocationCallback::BuildCallbackSampler(callbacks);
+        ANGLE_VK_TRY(contextVk, mPointSampler.init(contextVk->getDevice(), samplerInfo, &callback));
     }
 
     samplerInfo.magFilter = VK_FILTER_LINEAR;
@@ -1684,7 +1688,10 @@ angle::Result UtilsVk::ensureSamplersInitialized(ContextVk *contextVk)
 
     if (!mLinearSampler.valid())
     {
-        ANGLE_VK_TRY(contextVk, mLinearSampler.init(contextVk->getDevice(), samplerInfo));
+        VkAllocationCallbacks callback =
+            vk::MemoryAllocationCallback::BuildCallbackSampler(callbacks);
+        ANGLE_VK_TRY(contextVk,
+                     mLinearSampler.init(contextVk->getDevice(), samplerInfo, &callback));
     }
 
     return angle::Result::Continue;
@@ -2249,8 +2256,12 @@ angle::Result UtilsVk::startRenderPass(ContextVk *contextVk,
     framebufferInfo.layers          = 1;
 
     vk::MaybeImagelessFramebuffer framebuffer = {};
-    ANGLE_VK_TRY(contextVk,
-                 framebuffer.getFramebuffer().init(contextVk->getDevice(), framebufferInfo));
+    VkAllocationCallbacks *callbacks =
+        contextVk->getRenderer()->getMemoryAllocationTracker()->getCallbacks();
+    VkAllocationCallbacks callback =
+        vk::MemoryAllocationCallback::BuildCallbackFramebuffer(callbacks);
+    ANGLE_VK_TRY(contextVk, framebuffer.getFramebuffer().init(contextVk->getDevice(),
+                                                              framebufferInfo, &callback));
 
     vk::AttachmentOpsArray renderPassAttachmentOps;
     vk::PackedClearValuesArray clearValues;
