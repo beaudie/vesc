@@ -1078,9 +1078,12 @@ void CommandQueue::destroy(Context *context)
         }
     }
 
+    VkAllocationCallbacks *callbacks =
+        renderer->getMemoryAllocationTracker()->getAllocationCallback(
+            MemoryAllocationCallbackType::CommandPool);
     for (PersistentCommandPool &commandPool : mPrimaryCommandPoolMap)
     {
-        commandPool.destroy(renderer->getDevice());
+        commandPool.destroy(renderer->getDevice(), callbacks);
     }
 
     mFenceRecycler.destroy(context);

@@ -99,7 +99,10 @@ angle::Result ProgramPipelineVk::link(const gl::Context *glContext,
         contextVk, mState.getExecutable(), contextVk->pipelineRobustness(),
         contextVk->pipelineProtectedAccess(), &temporaryCompatibleRenderPass);
 
-    temporaryCompatibleRenderPass.destroy(contextVk->getDevice());
+    VkAllocationCallbacks *callbacks =
+        contextVk->getRenderer()->getMemoryAllocationTracker()->getAllocationCallback(
+            vk::MemoryAllocationCallbackType::RenderPass);
+    temporaryCompatibleRenderPass.destroy(contextVk->getDevice(), callbacks);
     return result;
 }  // namespace rx
 

@@ -390,10 +390,12 @@ angle::Result ProgramInfo::initProgram(vk::Context *context,
 void ProgramInfo::release(ContextVk *contextVk)
 {
     mProgramHelper.release(contextVk);
-
+    VkAllocationCallbacks *callbacks =
+        contextVk->getRenderer()->getMemoryAllocationTracker()->getAllocationCallback(
+            vk::MemoryAllocationCallbackType::ShaderModule);
     for (vk::RefCounted<vk::ShaderModule> &shader : mShaders)
     {
-        shader.get().destroy(contextVk->getDevice());
+        shader.get().destroy(contextVk->getDevice(), callbacks);
     }
 }
 
@@ -471,7 +473,10 @@ void ProgramExecutableVk::reset(ContextVk *contextVk)
 
     if (mPipelineCache.valid())
     {
-        mPipelineCache.destroy(contextVk->getDevice());
+        VkAllocationCallbacks *callbacks =
+            contextVk->getRenderer()->getMemoryAllocationTracker()->getAllocationCallback(
+                vk::MemoryAllocationCallbackType::PipelineCache);
+        mPipelineCache.destroy(contextVk->getDevice(), callbacks);
     }
 }
 
@@ -505,7 +510,11 @@ angle::Result ProgramExecutableVk::initializePipelineCache(vk::Context *context,
         pipelineCacheCreateInfo.flags |= VK_PIPELINE_CACHE_CREATE_EXTERNALLY_SYNCHRONIZED_BIT_EXT;
     }
 
-    ANGLE_VK_TRY(context, mPipelineCache.init(context->getDevice(), pipelineCacheCreateInfo));
+    VkAllocationCallbacks *callbacks =
+        context->getRenderer()->getMemoryAllocationTracker()->getAllocationCallback(
+            vk::MemoryAllocationCallbackType::PipelineCache);
+    ANGLE_VK_TRY(context,
+                 mPipelineCache.init(context->getDevice(), pipelineCacheCreateInfo, callbacks));
 
     // Merge the pipeline cache into RendererVk's.
     if (context->getFeatures().mergeProgramPipelineCachesToGlobalCache.enabled)
@@ -529,7 +538,11 @@ angle::Result ProgramExecutableVk::ensurePipelineCacheInitialized(vk::Context *c
                 VK_PIPELINE_CACHE_CREATE_EXTERNALLY_SYNCHRONIZED_BIT_EXT;
         }
 
-        ANGLE_VK_TRY(context, mPipelineCache.init(context->getDevice(), pipelineCacheCreateInfo));
+        VkAllocationCallbacks *callbacks =
+            context->getRenderer()->getMemoryAllocationTracker()->getAllocationCallback(
+                vk::MemoryAllocationCallbackType::PipelineCache);
+        ANGLE_VK_TRY(context,
+                     mPipelineCache.init(context->getDevice(), pipelineCacheCreateInfo, callbacks));
     }
 
     return angle::Result::Continue;
