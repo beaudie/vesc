@@ -1280,13 +1280,13 @@ void UtilsVk::destroy(ContextVk *contextVk)
         mImageCopyWithSamplerPipelineLayouts[samplerDesc].reset();
         mImageCopyWithSamplerDescriptorPools[samplerDesc].destroy(renderer);
     }
-
+    ANGLE_DEFINE_CALLBACKS(callbacksPipeline, renderer, Pipeline);
     for (ComputeShaderProgramAndPipelines &programAndPipelines : mConvertIndex)
     {
         programAndPipelines.program.destroy(renderer);
         for (vk::PipelineHelper &pipeline : programAndPipelines.pipelines)
         {
-            pipeline.destroy(device);
+            pipeline.destroy(device, callbacksPipeline);
         }
     }
     for (ComputeShaderProgramAndPipelines &programAndPipelines : mConvertIndirectLineLoop)
@@ -1294,7 +1294,7 @@ void UtilsVk::destroy(ContextVk *contextVk)
         programAndPipelines.program.destroy(renderer);
         for (vk::PipelineHelper &pipeline : programAndPipelines.pipelines)
         {
-            pipeline.destroy(device);
+            pipeline.destroy(device, callbacksPipeline);
         }
     }
     for (ComputeShaderProgramAndPipelines &programAndPipelines : mConvertIndexIndirectLineLoop)
@@ -1302,7 +1302,7 @@ void UtilsVk::destroy(ContextVk *contextVk)
         programAndPipelines.program.destroy(renderer);
         for (vk::PipelineHelper &pipeline : programAndPipelines.pipelines)
         {
-            pipeline.destroy(device);
+            pipeline.destroy(device, callbacksPipeline);
         }
     }
     for (ComputeShaderProgramAndPipelines &programAndPipelines : mConvertVertex)
@@ -1310,7 +1310,7 @@ void UtilsVk::destroy(ContextVk *contextVk)
         programAndPipelines.program.destroy(renderer);
         for (vk::PipelineHelper &pipeline : programAndPipelines.pipelines)
         {
-            pipeline.destroy(device);
+            pipeline.destroy(device, callbacksPipeline);
         }
     }
     mImageClearVSOnly.program.destroy(renderer);
@@ -1339,7 +1339,7 @@ void UtilsVk::destroy(ContextVk *contextVk)
         programAndPipelines.program.destroy(renderer);
         for (vk::PipelineHelper &pipeline : programAndPipelines.pipelines)
         {
-            pipeline.destroy(device);
+            pipeline.destroy(device, callbacksPipeline);
         }
     }
     for (GraphicsShaderProgramAndPipelines &programAndPipelines : mBlitResolve)
@@ -1357,7 +1357,7 @@ void UtilsVk::destroy(ContextVk *contextVk)
         programAndPipelines.program.destroy(renderer);
         for (vk::PipelineHelper &pipeline : programAndPipelines.pipelines)
         {
-            pipeline.destroy(device);
+            pipeline.destroy(device, callbacksPipeline);
         }
     }
     mExportStencil.program.destroy(renderer);
@@ -1369,7 +1369,7 @@ void UtilsVk::destroy(ContextVk *contextVk)
         programAndPipelines.program.destroy(renderer);
         for (vk::PipelineHelper &pipeline : programAndPipelines.pipelines)
         {
-            pipeline.destroy(device);
+            pipeline.destroy(device, callbacksPipeline);
         }
     }
     for (ComputeShaderProgramAndPipelines &programAndPipelines : mEtcToBc)
@@ -1377,7 +1377,7 @@ void UtilsVk::destroy(ContextVk *contextVk)
         programAndPipelines.program.destroy(renderer);
         for (vk::PipelineHelper &pipeline : programAndPipelines.pipelines)
         {
-            pipeline.destroy(device);
+            pipeline.destroy(device, callbacksPipeline);
         }
     }
     for (auto &programIter : mUnresolve)
@@ -1388,15 +1388,17 @@ void UtilsVk::destroy(ContextVk *contextVk)
     }
     mUnresolve.clear();
 
+    ANGLE_DEFINE_CALLBACKS(callbacksShader, renderer, ShaderModule);
     for (auto &shaderIter : mUnresolveFragShaders)
     {
         vk::RefCounted<vk::ShaderModule> &shader = shaderIter.second;
-        shader.get().destroy(device);
+        shader.get().destroy(device, callbacksShader);
     }
     mUnresolveFragShaders.clear();
 
-    mPointSampler.destroy(device);
-    mLinearSampler.destroy(device);
+    ANGLE_DEFINE_CALLBACKS(callbacksSampler, renderer, Sampler);
+    mPointSampler.destroy(device, callbacksSampler);
+    mLinearSampler.destroy(device, callbacksSampler);
 }
 
 angle::Result UtilsVk::ensureResourcesInitialized(ContextVk *contextVk,
@@ -1778,9 +1780,12 @@ angle::Result UtilsVk::ensureSamplersInitialized(ContextVk *contextVk)
     samplerInfo.borderColor             = VK_BORDER_COLOR_INT_TRANSPARENT_BLACK;
     samplerInfo.unnormalizedCoordinates = VK_FALSE;
 
+    ANGLE_DEFINE_CALLBACKS(callbacksPipeline, contextVk->getRenderer(), Sampler);
+
     if (!mPointSampler.valid())
     {
-        ANGLE_VK_TRY(contextVk, mPointSampler.init(contextVk->getDevice(), samplerInfo));
+        ANGLE_VK_TRY(contextVk,
+                     mPointSampler.init(contextVk->getDevice(), samplerInfo, callbacksPipeline));
     }
 
     samplerInfo.magFilter = VK_FILTER_LINEAR;
@@ -1788,7 +1793,8 @@ angle::Result UtilsVk::ensureSamplersInitialized(ContextVk *contextVk)
 
     if (!mLinearSampler.valid())
     {
-        ANGLE_VK_TRY(contextVk, mLinearSampler.init(contextVk->getDevice(), samplerInfo));
+        ANGLE_VK_TRY(contextVk,
+                     mLinearSampler.init(contextVk->getDevice(), samplerInfo, callbacksPipeline));
     }
 
     return angle::Result::Continue;
@@ -2368,8 +2374,9 @@ angle::Result UtilsVk::startRenderPass(ContextVk *contextVk,
     framebufferInfo.layers          = 1;
 
     vk::MaybeImagelessFramebuffer framebuffer = {};
-    ANGLE_VK_TRY(contextVk,
-                 framebuffer.getFramebuffer().init(contextVk->getDevice(), framebufferInfo));
+    ANGLE_DEFINE_CALLBACKS(callbacksFramebuffer, contextVk->getRenderer(), Framebuffer);
+    ANGLE_VK_TRY(contextVk, framebuffer.getFramebuffer().init(
+                                contextVk->getDevice(), framebufferInfo, callbacksFramebuffer));
 
     vk::AttachmentOpsArray renderPassAttachmentOps;
     vk::PackedClearValuesArray clearValues;
@@ -2563,7 +2570,8 @@ angle::Result UtilsVk::clearImage(ContextVk *contextVk,
         return angle::Result::Continue;
     }
 
-    vk::DeviceScoped<vk::ImageView> destView(contextVk->getDevice());
+    ANGLE_DEFINE_CALLBACKS(callbacksImageView, contextVk->getRenderer(), ImageView);
+    vk::DeviceScopedCallback<vk::ImageView> destView(contextVk->getDevice(), callbacksImageView);
     const gl::TextureType destViewType = vk::Get2DTextureType(1, dst->getSamples());
 
     ANGLE_TRY(dst->initLayerImageView(
@@ -3621,7 +3629,8 @@ angle::Result UtilsVk::copyImageToBuffer(ContextVk *contextVk,
         textureType = gl::TextureType::_2D;
     }
 
-    vk::DeviceScoped<vk::ImageView> srcView(contextVk->getDevice());
+    ANGLE_DEFINE_CALLBACKS(callbacksImageView, contextVk->getRenderer(), ImageView);
+    vk::DeviceScopedCallback<vk::ImageView> srcView(contextVk->getDevice(), callbacksImageView);
     ANGLE_TRY(src->initLayerImageView(contextVk, textureType, src->getAspectFlags(), swizzle,
                                       &srcView.get(), params.srcMip, 1,
                                       textureType == gl::TextureType::_2D ? params.srcLayer : 0, 1,
@@ -3854,9 +3863,11 @@ angle::Result UtilsVk::transCodeEtcToBc(ContextVk *contextVk,
     writeDescriptorSet[1].pImageInfo      = &imageInfo;
     writeDescriptorSet[1].descriptorCount = 1;
     // Due to limitation VUID-VkImageViewCreateInfo-image-07072, we have to copy layer by layer.
+    ANGLE_DEFINE_CALLBACKS(callbacksImageView, contextVk->getRenderer(), ImageView);
     for (uint32_t i = 0; i < copyRegion->imageSubresource.layerCount; ++i)
     {
-        vk::DeviceScoped<vk::ImageView> scopedImageView(contextVk->getDevice());
+        vk::DeviceScopedCallback<vk::ImageView> scopedImageView(contextVk->getDevice(),
+                                                                callbacksImageView);
         ANGLE_TRY(dstImage->initReinterpretedLayerImageView(
             contextVk, gl::TextureType::_2D, VK_IMAGE_ASPECT_COLOR_BIT, gl::SwizzleState(),
             &scopedImageView.get(), dstLevel, 1, copyRegion->imageSubresource.baseArrayLayer + i, 1,
@@ -3975,8 +3986,9 @@ angle::Result UtilsVk::unresolve(ContextVk *contextVk,
     gl::DrawBuffersArray<vk::ImageHelper *> colorSrc         = {};
     gl::DrawBuffersArray<const vk::ImageView *> colorSrcView = {};
 
-    vk::DeviceScoped<vk::ImageView> depthView(contextVk->getDevice());
-    vk::DeviceScoped<vk::ImageView> stencilView(contextVk->getDevice());
+    ANGLE_DEFINE_CALLBACKS(callbacksImageView, contextVk->getRenderer(), ImageView);
+    vk::DeviceScopedCallback<vk::ImageView> depthView(contextVk->getDevice(), callbacksImageView);
+    vk::DeviceScopedCallback<vk::ImageView> stencilView(contextVk->getDevice(), callbacksImageView);
 
     const vk::ImageView *depthSrcView   = nullptr;
     const vk::ImageView *stencilSrcView = nullptr;
