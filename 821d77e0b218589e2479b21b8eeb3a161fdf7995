@@ -142,6 +142,30 @@
       },
       "revId": "821d77e0b218589e2479b21b8eeb3a161fdf7995",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f089745_8c1a236d",
+        "filename": "src/common/Spinlock.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-06-29T17:39:18Z",
+      "side": 1,
+      "message": "\u003e I think spinLock means keep CPU core busy and not intentionally let scheduler try to swap out the calling thread (like what mutex does). Or in other word, spinlock means to tell scheduler that I am still busy.\n\nI see. I was thinking that spinlock is a lock that simply spins regardless if it let cheduler to swap out the spinning thread...\n\n\u003e I was just looking at this again the other day: https://www.realworldtech.com/forum/?threadid\u003d189711\u0026curpostid\u003d189723 which doesn\u0027t particularly put spinlock-in-user-space in a good light. It\u0027s probably still fine for ANGLE\u0027s particular use case, but that\u0027s to be seen.\n\nRead the post by Linus Torvalds.\nFrom what I understand, current `Spinlock` is the wort possible lock from the latency stand point, and caused a problem mentioned: \"busy-looping while somebody else has been scheduled out\".\nHe also says that using `sched_yield()` will not fix everything and may cause \"scheduling storms\". But at least it is batter, than busy spinning.\n\n\u003e I\u0027m not sure yield() is always a good idea though, it behaves very differently between Linux and windows for example.\n\nI only checked `yield()` on windows in end2end tests and on Android in my test app. At least `yield()` did not cause severe performance problems. I did not tried in Linux though. I will also check Linux.\n\n\u003e I\u0027m sorry I\u0027ve been slow to get to anglebug.com/8224, but would you give me a few days to take care of that, and we can see how the numbers look like when we don\u0027t actually take the lock half of the times?\n\nIt is OK, take your time.\n\n\u003eMaybe we should rename spinLock to \"FastLock\" or other names, then this CL itself will be less controversial, and we can focus on SingleContextMutex to SharedContextMutex transition, which is what actually matters.\n\nI already has similar CL with `FastMutex`:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/4401941\nI used `Spinlock` here because we was discussing to using it. I also suggested `FastMutex`  instead, but it was ignored.\nI guess I will base removal of SingleContextMutex on `FastMutex1` then...\n\n\u003e Yes I agree that if we want yield(), it should be in a separate class. I still think it\u0027s worth waiting for the lockless state setting entry points changes to come about and re-evaluate which option is better.\n\nRemoval of SingleContextMutex it is more about safety then performance regression. So I think we should apply this change eventually. But for that we need the most efficient replacement for SingleContextMutex.\n\nOnly possible performance benefit is that there is not need to switch to `std::mutex` when Contexts use EGLImage. However, if we decide to switch to `std::mutex` then we may use `Spinlock` instead of `SingleContextMutex`, since there will be no real concurrencly (except when switching the mutex type).\n\nAnyway, I will update CLs to use `FastMutex1` and leave `Spinlock` alone.\nAfter performance testing with lockless state setting entry points we will have more information to decide what to do with mutexes.",
+      "parentUuid": "d4363b57_8dcfa83c",
+      "range": {
+        "startLine": 47,
+        "startChar": 30,
+        "endLine": 47,
+        "endChar": 35
+      },
+      "revId": "821d77e0b218589e2479b21b8eeb3a161fdf7995",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
