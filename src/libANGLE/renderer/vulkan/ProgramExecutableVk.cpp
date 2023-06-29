@@ -409,10 +409,10 @@ angle::Result ProgramInfo::initProgram(vk::Context *context,
 void ProgramInfo::release(ContextVk *contextVk)
 {
     mProgramHelper.release(contextVk);
-
+    ANGLE_DEFINE_CALLBACKS(callbacksShader, contextVk->getRenderer(), ShaderModule);
     for (vk::RefCounted<vk::ShaderModule> &shader : mShaders)
     {
-        shader.get().destroy(contextVk->getDevice());
+        shader.get().destroy(contextVk->getDevice(), callbacksShader);
     }
 }
 
@@ -497,7 +497,8 @@ void ProgramExecutableVk::reset(ContextVk *contextVk)
 
     if (mPipelineCache.valid())
     {
-        mPipelineCache.destroy(contextVk->getDevice());
+        ANGLE_DEFINE_CALLBACKS(callbacksPipelineCache, contextVk->getRenderer(), PipelineCache);
+        mPipelineCache.destroy(contextVk->getDevice(), callbacksPipelineCache);
     }
 }
 
@@ -532,7 +533,9 @@ angle::Result ProgramExecutableVk::initializePipelineCache(vk::Context *context,
         pipelineCacheCreateInfo.flags |= VK_PIPELINE_CACHE_CREATE_EXTERNALLY_SYNCHRONIZED_BIT_EXT;
     }
 
-    ANGLE_VK_TRY(context, mPipelineCache.init(context->getDevice(), pipelineCacheCreateInfo));
+    ANGLE_DEFINE_CALLBACKS(callbacksPipelineCache, context->getRenderer(), PipelineCache);
+    ANGLE_VK_TRY(context, mPipelineCache.init(context->getDevice(), pipelineCacheCreateInfo,
+                                              callbacksPipelineCache));
 
     // Merge the pipeline cache into Renderer's.
     if (context->getFeatures().mergeProgramPipelineCachesToGlobalCache.enabled)
@@ -556,7 +559,9 @@ angle::Result ProgramExecutableVk::ensurePipelineCacheInitialized(vk::Context *c
                 VK_PIPELINE_CACHE_CREATE_EXTERNALLY_SYNCHRONIZED_BIT_EXT;
         }
 
-        ANGLE_VK_TRY(context, mPipelineCache.init(context->getDevice(), pipelineCacheCreateInfo));
+        ANGLE_DEFINE_CALLBACKS(callbacksPipelineCache, context->getRenderer(), PipelineCache);
+        ANGLE_VK_TRY(context, mPipelineCache.init(context->getDevice(), pipelineCacheCreateInfo,
+                                                  callbacksPipelineCache));
     }
 
     return angle::Result::Continue;

@@ -213,7 +213,8 @@ class WarmUpTaskCommon : public vk::Context, public LinkSubTask
         ContextVk *contextVk = vk::GetImpl(context);
 
         // Clean up temporary object first, it's done no matter what may fail below.
-        mCompatibleRenderPass.reset(contextVk->getDevice());
+        ANGLE_DEFINE_CALLBACKS(callbacksRenderPass, contextVk->getRenderer(), RenderPass);
+        mCompatibleRenderPass.reset(contextVk->getDevice(), callbacksRenderPass);
 
         // Forward any errors
         if (mErrorCode != VK_SUCCESS)
@@ -365,7 +366,9 @@ angle::Result LinkTaskVk::linkImpl(const gl::ProgramLinkedResources &resources,
         }
 
         SharedRenderPass sharedRenderPass;
-        sharedRenderPass.set(mRenderer->getDevice(), std::move(compatibleRenderPass));
+        ANGLE_DEFINE_CALLBACKS(callbacksRenderPass, mRenderer, RenderPass);
+        sharedRenderPass.set(mRenderer->getDevice(), std::move(compatibleRenderPass),
+                             callbacksRenderPass);
 
         // Only build the shaders subset of the pipeline if VK_EXT_graphics_pipeline_library is
         // supported.
@@ -381,7 +384,7 @@ angle::Result LinkTaskVk::linkImpl(const gl::ProgramLinkedResources &resources,
                 sharedRenderPass, subset, surfaceRotation, graphicsPipelineDesc));
         }
 
-        sharedRenderPass.reset(mRenderer->getDevice());
+        sharedRenderPass.reset(mRenderer->getDevice(), callbacksRenderPass);
     }
 
     return angle::Result::Continue;

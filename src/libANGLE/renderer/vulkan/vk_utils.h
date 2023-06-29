@@ -576,6 +576,29 @@ class [[nodiscard]] DeviceScoped final : angle::NonCopyable
     T mVar;
 };
 
+// Helper class to handle RAII patterns for initialization. It is similar to DeviceScoped, but also
+// uses an allocation callback for its construction and destruction.
+template <typename T>
+class [[nodiscard]] DeviceScopedCallback final : angle::NonCopyable
+{
+  public:
+    DeviceScopedCallback(VkDevice device) : mDevice(device), mCallbacks(nullptr) {}
+    DeviceScopedCallback(VkDevice device, VkAllocationCallbacks *callbacks)
+        : mDevice(device), mCallbacks(callbacks)
+    {}
+    ~DeviceScopedCallback() { mVar.destroy(mDevice, mCallbacks); }
+
+    const T &get() const { return mVar; }
+    T &get() { return mVar; }
+
+    T &&release() { return std::move(mVar); }
+
+  private:
+    VkDevice mDevice;
+    VkAllocationCallbacks *mCallbacks;
+    T mVar;
+};
+
 template <typename T>
 class [[nodiscard]] AllocatorScoped final : angle::NonCopyable
 {
@@ -884,12 +907,15 @@ class AtomicShared final
         return *this;
     }
 
-    void set(VkDevice device, T &&newObject)
+    void set(VkDevice device, T &&newObject, VkAllocationCallbacks *callback)
     {
-        update(device, new AtomicRefCounted<T>(std::move(newObject)));
+        update(device, new AtomicRefCounted<T>(std::move(newObject)), callback);
     }
 
-    void reset(VkDevice device) { update(device, nullptr); }
+    void reset(VkDevice device, VkAllocationCallbacks *callback)
+    {
+        update(device, nullptr, callback);
+    }
 
     bool isReferenced() const { return mRefCounted->isReferenced(); }
 
@@ -900,14 +926,14 @@ class AtomicShared final
     }
 
   private:
-    void update(VkDevice device, AtomicRefCounted<T> *refCounted)
+    void update(VkDevice device, AtomicRefCounted<T> *refCounted, VkAllocationCallbacks *callback)
     {
         if (mRefCounted)
         {
             mRefCounted->releaseRef();
             if (!mRefCounted->isReferenced())
             {
-                mRefCounted->get().destroy(device);
+                mRefCounted->get().destroy(device, callback);
                 SafeDelete(mRefCounted);
             }
         }
@@ -948,6 +974,15 @@ class Recycler final : angle::NonCopyable
         for (T &object : mObjectFreeList)
         {
             object.destroy(device);
+        }
+        mObjectFreeList.clear();
+    }
+
+    void destroy(VkDevice device, VkAllocationCallbacks *callbacks)
+    {
+        for (T &object : mObjectFreeList)
+        {
+            object.destroy(device, callbacks);
         }
         mObjectFreeList.clear();
     }
@@ -1420,6 +1455,20 @@ enum class SyncFenceScope
     } while (0)
 
 #define VK_RESULT_CHECK(test, error) VK_RESULT_TRY((test) ? VK_SUCCESS : (error))
+
+#ifdef ANGLE_ENABLE_MEMORY_ALLOC_CALLBACKS
+#    define ANGLE_DEFINE_CALLBACKS(callbacks, renderer, callbackType)        \
+        ASSERT(rx::vk::MemoryAllocationCallbackType::callbackType <          \
+               rx::vk::MemoryAllocationCallbackType::EnumCount);             \
+        VkAllocationCallbacks *callbacks =                                   \
+            (renderer)->getMemoryAllocationTracker()->getAllocationCallback( \
+                rx::vk::MemoryAllocationCallbackType::callbackType)
+#else
+#    define ANGLE_DEFINE_CALLBACKS(callbacks, renderer, callbackType) \
+        ASSERT(rx::vk::MemoryAllocationCallbackType::callbackType <   \
+               rx::vk::MemoryAllocationCallbackType::EnumCount);      \
+        VkAllocationCallbacks *callbacks = nullptr
+#endif
 
 // NVIDIA uses special formatting for the driver version:
 // Major: 10

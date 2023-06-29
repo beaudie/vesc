@@ -138,7 +138,8 @@ angle::Result ProgramPipelineVk::link(const gl::Context *glContext,
             }
         }
 
-        compatibleRenderPass.destroy(contextVk->getDevice());
+        ANGLE_DEFINE_CALLBACKS(callbacksRenderPass, contextVk->getRenderer(), RenderPass);
+        compatibleRenderPass.destroy(contextVk->getDevice(), callbacksRenderPass);
     }
 
     return result;
