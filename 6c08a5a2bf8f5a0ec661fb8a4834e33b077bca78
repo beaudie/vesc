@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b2e4f90c_cc18f3f9",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/CopyImageToBuffer.comp",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1473373
+      },
+      "writtenOn": "2023-06-29T22:53:57Z",
+      "side": 1,
+      "message": "trivial: missing space between \"is\" and \"used\"",
+      "revId": "6c08a5a2bf8f5a0ec661fb8a4834e33b077bca78",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
