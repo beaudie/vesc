@@ -50,6 +50,24 @@
       "message": "Does the localState dirty bits and state dirty bits ever overlap? if not, mayebe you can also split the dirty bits into two different domain as well. Then you can fit each domain into 64 bit BitSet and get rid of extended dirty bits which you try to achieve in the other CL, but this will split them in different way).",
       "revId": "673b5597b53de5b1e3241e00df297859fa8e3b1e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93594213_3d2a8353",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-29T01:34:20Z",
+      "side": 1,
+      "message": "The dirty state is not entirely separate; `setFramebufferSRGB` for example sets some objects dirty. But the dirty bits themselves may be disjoint (but I haven\u0027t verified). Maybe an experiment for another time?\n\nThe thing that makes it less straightforward is that the extended dirty bits are only processed if the main dirty bits say they are dirty. But if we make the split like you suggest both dirty bits have to always be processed in practice. The added complexity is indeed similar to my other change.",
+      "parentUuid": "174de376_c3a34b28",
+      "revId": "673b5597b53de5b1e3241e00df297859fa8e3b1e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
