@@ -1271,9 +1271,10 @@ void ContextVk::onDestroy(const gl::Context *context)
         defaultBuffer.destroy(mRenderer);
     }
 
+    ANGLE_DEFINE_CALLBACKS(callbacksQueryPool, mRenderer, QueryPool);
     for (vk::DynamicQueryPool &queryPool : mQueryPools)
     {
-        queryPool.destroy(device);
+        queryPool.destroy(device, callbacksQueryPool);
     }
 
     // Recycle current command buffers.
@@ -1289,13 +1290,15 @@ void ContextVk::onDestroy(const gl::Context *context)
     mRenderer->recycleOutsideRenderPassCommandBufferHelper(&mOutsideRenderPassCommands);
     mRenderer->recycleRenderPassCommandBufferHelper(&mRenderPassCommands);
 
-    mInterfacePipelinesCache.destroy(device);
+    ANGLE_DEFINE_CALLBACKS(callbacksPipelineCache, mRenderer, PipelineCache);
+    mInterfacePipelinesCache.destroy(device, callbacksPipelineCache);
 
     mUtils.destroy(this);
 
+    ANGLE_DEFINE_CALLBACKS(callbacksShader, mRenderer, ShaderModule);
     mRenderPassCache.destroy(this);
-    mShaderLibrary.destroy(device);
-    mGpuEventQueryPool.destroy(device);
+    mShaderLibrary.destroy(device, callbacksShader);
+    mGpuEventQueryPool.destroy(device, callbacksQueryPool);
 
     // Must retire all Vulkan secondary command buffers before destroying the pools.
     if ((!vk::OutsideRenderPassCommandBuffer::ExecutesInline() ||
@@ -1307,8 +1310,9 @@ void ContextVk::onDestroy(const gl::Context *context)
         (void)mRenderer->retireFinishedCommands(this);
     }
 
-    mCommandPools.outsideRenderPassPool.destroy(device);
-    mCommandPools.renderPassPool.destroy(device);
+    ANGLE_DEFINE_CALLBACKS(callbacksCommandPool, mRenderer, CommandPool);
+    mCommandPools.outsideRenderPassPool.destroy(device, callbacksCommandPool);
+    mCommandPools.renderPassPool.destroy(device, callbacksCommandPool);
 
     ASSERT(mCurrentGarbage.empty());
 
@@ -3788,10 +3792,13 @@ angle::Result ContextVk::synchronizeCpuGpuTime()
     eventCreateInfo.flags             = 0;
 
     VkDevice device = getDevice();
-    vk::DeviceScoped<vk::Event> cpuReady(device), gpuReady(device), gpuDone(device);
-    ANGLE_VK_TRY(this, cpuReady.get().init(device, eventCreateInfo));
-    ANGLE_VK_TRY(this, gpuReady.get().init(device, eventCreateInfo));
-    ANGLE_VK_TRY(this, gpuDone.get().init(device, eventCreateInfo));
+    ANGLE_DEFINE_CALLBACKS(callbacksEvent, mRenderer, Event);
+
+    vk::DeviceScopedCallback<vk::Event> cpuReady(device, callbacksEvent),
+        gpuReady(device, callbacksEvent), gpuDone(device, callbacksEvent);
+    ANGLE_VK_TRY(this, cpuReady.get().init(device, eventCreateInfo, callbacksEvent));
+    ANGLE_VK_TRY(this, gpuReady.get().init(device, eventCreateInfo, callbacksEvent));
+    ANGLE_VK_TRY(this, gpuDone.get().init(device, eventCreateInfo, callbacksEvent));
 
     constexpr uint32_t kRetries = 10;
 
@@ -7779,7 +7786,8 @@ angle::Result ContextVk::getTimestamp(uint64_t *timestampOut)
 
     // Create a query used to receive the GPU timestamp
     VkDevice device = getDevice();
-    vk::DeviceScoped<vk::DynamicQueryPool> timestampQueryPool(device);
+    ANGLE_DEFINE_CALLBACKS(callbacksQueryPool, mRenderer, QueryPool);
+    vk::DeviceScopedCallback<vk::DynamicQueryPool> timestampQueryPool(device, callbacksQueryPool);
     vk::QueryHelper timestampQuery;
     ANGLE_TRY(timestampQueryPool.get().init(this, VK_QUERY_TYPE_TIMESTAMP, 1));
     ANGLE_TRY(timestampQueryPool.get().allocateQuery(this, &timestampQuery, 1));
@@ -8998,7 +9006,9 @@ angle::Result ContextVk::ensureInterfacePipelineCache()
         VkPipelineCacheCreateInfo pipelineCacheCreateInfo = {};
         pipelineCacheCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
 
-        ANGLE_VK_TRY(this, mInterfacePipelinesCache.init(getDevice(), pipelineCacheCreateInfo));
+        ANGLE_DEFINE_CALLBACKS(callbacksPipelineCache, mRenderer, PipelineCache);
+        ANGLE_VK_TRY(this, mInterfacePipelinesCache.init(getDevice(), pipelineCacheCreateInfo,
+                                                         callbacksPipelineCache));
     }
 
     return angle::Result::Continue;

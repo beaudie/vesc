@@ -1417,7 +1417,7 @@ class PipelineHelper final : public Resource
     inline explicit PipelineHelper(Pipeline &&pipeline, CacheLookUpFeedback feedback);
     PipelineHelper &operator=(PipelineHelper &&other);
 
-    void destroy(VkDevice device);
+    void destroy(VkDevice device, VkAllocationCallbacks *callbacks);
     void release(Context *context);
 
     bool valid() const { return mPipeline.valid(); }
@@ -2046,7 +2046,7 @@ class RenderPassHelper final : angle::NonCopyable
     RenderPassHelper(RenderPassHelper &&other);
     RenderPassHelper &operator=(RenderPassHelper &&other);
 
-    void destroy(VkDevice device);
+    void destroy(VkDevice device, VkAllocationCallbacks *callbacks);
     void release(ContextVk *contextVk);
 
     const RenderPass &getRenderPass() const;

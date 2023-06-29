@@ -451,7 +451,8 @@ class ProgramExecutableVk::WarmUpGraphicsTask : public WarmUpTaskCommon
         {
             mergeProgramExecutablePipelineCacheToRenderer();
 
-            mCompatibleRenderPass->get().destroy(getDevice());
+            ANGLE_DEFINE_CALLBACKS(callbacksRenderPass, mRenderer, RenderPass);
+            mCompatibleRenderPass->get().destroy(getDevice(), callbacksRenderPass);
             SafeDelete(mCompatibleRenderPass);
         }
     }
@@ -588,10 +589,10 @@ angle::Result ProgramInfo::initProgram(vk::Context *context,
 void ProgramInfo::release(ContextVk *contextVk)
 {
     mProgramHelper.release(contextVk);
-
+    ANGLE_DEFINE_CALLBACKS(callbacksShader, contextVk->getRenderer(), ShaderModule);
     for (vk::RefCounted<vk::ShaderModule> &shader : mShaders)
     {
-        shader.get().destroy(contextVk->getDevice());
+        shader.get().destroy(contextVk->getDevice(), callbacksShader);
     }
 }
 
@@ -677,7 +678,8 @@ void ProgramExecutableVk::reset(ContextVk *contextVk)
 
     if (mPipelineCache.valid())
     {
-        mPipelineCache.destroy(contextVk->getDevice());
+        ANGLE_DEFINE_CALLBACKS(callbacksPipelineCache, contextVk->getRenderer(), PipelineCache);
+        mPipelineCache.destroy(contextVk->getDevice(), callbacksPipelineCache);
     }
 }
 
@@ -707,7 +709,9 @@ angle::Result ProgramExecutableVk::initializePipelineCache(vk::Context *context,
     pipelineCacheCreateInfo.initialDataSize = dataSize;
     pipelineCacheCreateInfo.pInitialData    = dataPointer;
 
-    ANGLE_VK_TRY(context, mPipelineCache.init(context->getDevice(), pipelineCacheCreateInfo));
+    ANGLE_DEFINE_CALLBACKS(callbacksPipelineCache, context->getRenderer(), PipelineCache);
+    ANGLE_VK_TRY(context, mPipelineCache.init(context->getDevice(), pipelineCacheCreateInfo,
+                                              callbacksPipelineCache));
 
     // Merge the pipeline cache into Renderer's.
     if (context->getFeatures().mergeProgramPipelineCachesToGlobalCache.enabled)
@@ -725,7 +729,9 @@ angle::Result ProgramExecutableVk::ensurePipelineCacheInitialized(vk::Context *c
         VkPipelineCacheCreateInfo pipelineCacheCreateInfo = {};
         pipelineCacheCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
 
-        ANGLE_VK_TRY(context, mPipelineCache.init(context->getDevice(), pipelineCacheCreateInfo));
+        ANGLE_DEFINE_CALLBACKS(callbacksPipelineCache, context->getRenderer(), PipelineCache);
+        ANGLE_VK_TRY(context, mPipelineCache.init(context->getDevice(), pipelineCacheCreateInfo,
+                                                  callbacksPipelineCache));
     }
 
     return angle::Result::Continue;

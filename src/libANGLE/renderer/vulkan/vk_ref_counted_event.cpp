@@ -17,11 +17,13 @@ namespace vk
 {
 namespace
 {
-void DestroyRefCountedEvents(VkDevice device, RefCountedEventCollector &events)
+void DestroyRefCountedEvents(VkDevice device,
+                             RefCountedEventCollector &events,
+                             VkAllocationCallbacks *callbacks)
 {
     while (!events.empty())
     {
-        events.back().destroy(device);
+        events.back().destroy(device, callbacks);
         events.pop_back();
     }
 }
@@ -48,13 +50,15 @@ bool RefCountedEvent::init(Context *context, ImageLayout layout)
         createInfo.flags = context->getFeatures().supportsSynchronization2.enabled
                                ? VK_EVENT_CREATE_DEVICE_ONLY_BIT_KHR
                                : 0;
-        VkResult result  = mHandle->get().event.init(context->getDevice(), createInfo);
+        ANGLE_DEFINE_CALLBACKS(callbacksEvent, context->getRenderer(), Event);
+        VkResult result =
+            mHandle->get().event.init(context->getDevice(), createInfo, callbacksEvent);
         if (result != VK_SUCCESS)
         {
             WARN() << "event.init failed. Clean up garbage and retry again";
             // Proactively clean up garbage and retry
             context->getRefCountedEventsGarbageRecycler()->cleanup(context->getRenderer());
-            result = mHandle->get().event.init(context->getDevice(), createInfo);
+            result = mHandle->get().event.init(context->getDevice(), createInfo, callbacksEvent);
             if (result != VK_SUCCESS)
             {
                 // Drivers usually can allocate huge amount of VkEvents, and we should never use
@@ -115,11 +119,11 @@ void RefCountedEvent::releaseImpl(Renderer *renderer, RecyclerT *recycler)
     }
 }
 
-void RefCountedEvent::destroy(VkDevice device)
+void RefCountedEvent::destroy(VkDevice device, VkAllocationCallbacks *callbacks)
 {
     ASSERT(mHandle != nullptr);
     ASSERT(!mHandle->isReferenced());
-    mHandle->get().event.destroy(device);
+    mHandle->get().event.destroy(device, callbacks);
     SafeDelete(mHandle);
 }
 
@@ -166,13 +170,13 @@ bool RefCountedEventsGarbage::moveIfComplete(Renderer *renderer,
 }
 
 // RefCountedEventRecycler implementation.
-void RefCountedEventRecycler::destroy(VkDevice device)
+void RefCountedEventRecycler::destroy(VkDevice device, VkAllocationCallbacks *callbacks)
 {
     std::lock_guard<angle::SimpleMutex> lock(mMutex);
 
     while (!mEventsToReset.empty())
     {
-        DestroyRefCountedEvents(device, mEventsToReset.back());
+        DestroyRefCountedEvents(device, mEventsToReset.back(), callbacks);
         mEventsToReset.pop_back();
     }
 
@@ -180,7 +184,7 @@ void RefCountedEventRecycler::destroy(VkDevice device)
 
     while (!mEventsToReuse.empty())
     {
-        DestroyRefCountedEvents(device, mEventsToReuse.back());
+        DestroyRefCountedEvents(device, mEventsToReuse.back(), callbacks);
         mEventsToReuse.pop_back();
     }
 }
@@ -253,10 +257,11 @@ RefCountedEventsGarbageRecycler::~RefCountedEventsGarbageRecycler()
 void RefCountedEventsGarbageRecycler::destroy(Renderer *renderer)
 {
     VkDevice device = renderer->getDevice();
-    DestroyRefCountedEvents(device, mEventsToReset);
+    ANGLE_DEFINE_CALLBACKS(callbacksEvent, renderer, Event);
+    DestroyRefCountedEvents(device, mEventsToReset, callbacksEvent);
     ASSERT(mGarbageQueue.empty());
     ASSERT(mGarbageCount == 0);
-    mEventsToReuse.destroy(device);
+    mEventsToReuse.destroy(device, callbacksEvent);
 }
 
 void RefCountedEventsGarbageRecycler::cleanup(Renderer *renderer)
