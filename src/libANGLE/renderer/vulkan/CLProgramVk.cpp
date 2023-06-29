@@ -392,7 +392,7 @@ CLProgramVk::~CLProgramVk()
         pool.reset();
     }
     mPoolBinding.reset();
-    mShader.get().destroy(mContext->getDevice());
+    mShader.get().destroy(mContext->getDevice(), nullptr);
     mMetaDescriptorPool.destroy(mContext->getRenderer());
     mDescSetLayoutCache.destroy(mContext->getRenderer());
     mPipelineLayoutCache.destroy(mContext->getRenderer());
@@ -912,7 +912,7 @@ bool CLProgramVk::buildInternal(const cl::DevicePtrs &devices,
             if (mShader.get().valid())
             {
                 // User is recompiling program, we need to recreate the shader module
-                mShader.get().destroy(mContext->getDevice());
+                mShader.get().destroy(mContext->getDevice(), nullptr);
             }
             // Strip SPIR-V binary if Vk implementation does not support non-semantic info
             angle::spirv::Blob spvBlob =
