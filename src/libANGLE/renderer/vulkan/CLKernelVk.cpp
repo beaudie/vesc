@@ -41,9 +41,10 @@ CLKernelVk::~CLKernelVk()
     }
 
     mPipelineLayout.reset();
+    ANGLE_DEFINE_CALLBACKS(callbacksPipeline, mContext->getRenderer(), Pipeline);
     for (auto &pipelineHelper : mComputePipelineCache)
     {
-        pipelineHelper.destroy(mContext->getDevice());
+        pipelineHelper.destroy(mContext->getDevice(), callbacksPipeline);
     }
     mShaderProgramHelper.destroy(mContext->getRenderer());
 }
