@@ -106,7 +106,7 @@ ShaderLibrary::~ShaderLibrary()
 {{
 }}
 
-void ShaderLibrary::destroy(VkDevice device)
+void ShaderLibrary::destroy(VkDevice device, VkAllocationCallbacks *callbacks)
 {{
     {shader_destroy_calls}
 }}
@@ -146,7 +146,7 @@ class ShaderLibrary final : angle::NonCopyable
     ShaderLibrary();
     ~ShaderLibrary();
 
-    void destroy(VkDevice device);
+    void destroy(VkDevice device, VkAllocationCallbacks *callbacks);
 
     {shader_get_functions_h}
 
@@ -673,7 +673,7 @@ def get_destroy_call(shader_and_variation):
     table_name = get_variation_table_name(shader_file, 'm')
 
     destroy = 'for (RefCounted<ShaderModule> &shader : %s)\n' % table_name
-    destroy += '{\nshader.get().destroy(device);\n}'
+    destroy += '{\nshader.get().destroy(device, callbacks);\n}'
     return destroy
 
 

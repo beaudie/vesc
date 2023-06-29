@@ -119,15 +119,18 @@ void CollectGarbage(std::vector<vk::GarbageObject> *garbageOut, ArgT object, Arg
 }
 
 // Recursive function to process variable arguments for garbage destroy
-inline void DestroyGarbage(VkDevice device) {}
+inline void DestroyGarbage(VkDevice device, vk::MemoryAllocationCallback *callbackObject) {}
 template <typename ArgT, typename... ArgsT>
-void DestroyGarbage(VkDevice device, ArgT object, ArgsT... objectsIn)
+void DestroyGarbage(VkDevice device,
+                    vk::MemoryAllocationCallback *callbackObject,
+                    ArgT object,
+                    ArgsT... objectsIn)
 {
     if (object->valid())
     {
-        object->destroy(device);
+        object->destroy(device, callbackObject->getAllocationCallback(object->getCallbackType()));
     }
-    DestroyGarbage(device, objectsIn...);
+    DestroyGarbage(device, callbackObject, objectsIn...);
 }
 
 class WaitableCompressEvent
@@ -156,7 +159,7 @@ class OneOffCommandPool : angle::NonCopyable
                                    vk::PrimaryCommandBuffer *commandBufferOut);
     void releaseCommandBuffer(const QueueSerial &submitQueueSerial,
                               vk::PrimaryCommandBuffer &&primary);
-    void destroy(VkDevice device);
+    void destroy(VkDevice device, VkAllocationCallbacks *callbacks);
 
   private:
     vk::ProtectionType mProtectionType;
@@ -323,7 +326,8 @@ class RendererVk : angle::NonCopyable
     {
         if (hasResourceUseFinished(use))
         {
-            DestroyGarbage(mDevice, garbageIn...);
+            DestroyGarbage(mDevice, mMemoryAllocationTracker.getAllocationCallbacks(),
+                           garbageIn...);
         }
         else
         {

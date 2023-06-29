@@ -1083,9 +1083,10 @@ void CommandQueue::destroy(Context *context)
         }
     }
 
+    ANGLE_DEFINE_CALLBACKS(callbacksCommandPool, renderer, CommandPool);
     for (PersistentCommandPool &commandPool : mPrimaryCommandPoolMap)
     {
-        commandPool.destroy(renderer->getDevice());
+        commandPool.destroy(renderer->getDevice(), callbacksCommandPool);
     }
 
     mFenceRecycler.destroy(context);

@@ -513,10 +513,11 @@ angle::Result SyncHelperNativeFence::serverWait(ContextVk *contextVk)
     }
 
     VkDevice device = renderer->getDevice();
-    DeviceScoped<Semaphore> waitSemaphore(device);
+    ANGLE_DEFINE_CALLBACKS(callbacksSemaphore, contextVk->getRenderer(), Semaphore);
+    DeviceScopedCallback<Semaphore> waitSemaphore(device, callbacksSemaphore);
     // Wait semaphore for next vkQueueSubmit().
     // Create a Semaphore with imported fenceFd.
-    ANGLE_VK_TRY(contextVk, waitSemaphore.get().init(device));
+    ANGLE_VK_TRY(contextVk, waitSemaphore.get().init(device, callbacksSemaphore));
 
     VkImportSemaphoreFdInfoKHR importFdInfo = {};
     importFdInfo.sType                      = VK_STRUCTURE_TYPE_IMPORT_SEMAPHORE_FD_INFO_KHR;
