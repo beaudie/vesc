@@ -4202,7 +4202,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // ARM does buffer copy on geometry pipeline, which may create a GPU pipeline bubble that
     // prevents vertex shader to overlap with fragment shader. For now we always choose CPU to do
     // copy on ARM. This may need to test with future ARM GPU architecture as well.
-    ANGLE_FEATURE_CONDITION(&mFeatures, preferCPUForBufferSubData, isARM);
+    ANGLE_FEATURE_CONDITION(&mFeatures, preferCPUForBufferSubData, /*isARM*/ false);
 
     // On android, we usually are GPU limited, we try to use CPU to do data copy when other
     // conditions are the same. Set to zero will use GPU to do copy. This is subject to further
@@ -4695,7 +4695,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // Flushing mutable texture is disabled for discrete GPUs to mitigate possible VRAM OOM.
     ANGLE_FEATURE_CONDITION(
         &mFeatures, mutableMipmapTextureUpload,
-        canPreferDeviceLocalMemoryHostVisible(mPhysicalDeviceProperties.deviceType));
+        /*canPreferDeviceLocalMemoryHostVisible(mPhysicalDeviceProperties.deviceType)*/ false);
 
     // Allow passthrough of EGL colorspace attributes on Android platform and for vendors that
     // are known to support wide color gamut.

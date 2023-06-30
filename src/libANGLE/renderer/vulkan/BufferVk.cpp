@@ -46,8 +46,8 @@ constexpr VkMemoryPropertyFlags kDeviceLocalHostCoherentFlags =
 constexpr VkMemoryPropertyFlags kHostCachedFlags =
     (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT |
      VK_MEMORY_PROPERTY_HOST_CACHED_BIT);
-constexpr VkMemoryPropertyFlags kHostUncachedFlags =
-    (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+// constexpr VkMemoryPropertyFlags kHostUncachedFlags =
+//     (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
 // Vertex attribute buffers are used as storage buffers for conversion in compute, where access to
 // the buffer is made in 4-byte chunks.  Assume the size of the buffer is 4k+n where n is in [0, 3).
@@ -85,7 +85,7 @@ VkMemoryPropertyFlags GetPreferredMemoryType(RendererVk *renderer,
         case gl::BufferUsage::StreamDraw:
             // For non-static usage where the CPU performs a write-only access, request
             // a host uncached memory
-            return kHostUncachedFlags;
+            return kHostCachedFlags;
         case gl::BufferUsage::DynamicCopy:
         case gl::BufferUsage::DynamicRead:
         case gl::BufferUsage::StreamCopy:
@@ -566,7 +566,9 @@ angle::Result BufferVk::mapRange(const gl::Context *context,
                                  GLbitfield access,
                                  void **mapPtr)
 {
-    ANGLE_TRACE_EVENT0("gpu.angle", "BufferVk::mapRange");
+    char string[50];
+    snprintf(string, 50, "BufferVk::mapRange_%d_%u", (int)length, (unsigned int)access);
+    ANGLE_TRACE_EVENT0("gpu.angle", string);
     return mapRangeImpl(vk::GetImpl(context), offset, length, access, mapPtr);
 }
 
@@ -581,6 +583,7 @@ angle::Result BufferVk::ghostMappedBuffer(ContextVk *contextVk,
                                           GLbitfield access,
                                           void **mapPtr)
 {
+    ANGLE_TRACE_EVENT0("gpu.angle", "ghostMappedBuffer");
     // We shouldn't get here if it is external memory
     ASSERT(!isExternalBuffer());
 
@@ -602,27 +605,27 @@ angle::Result BufferVk::ghostMappedBuffer(ContextVk *contextVk,
 
     ASSERT(src.isCoherent());
     ASSERT(mBuffer.isCoherent());
-
-    // No need to copy over [offset, offset + length), just around it
-    if ((access & GL_MAP_INVALIDATE_RANGE_BIT) != 0)
-    {
-        if (offset != 0)
+    /*
+        // No need to copy over [offset, offset + length), just around it
+        if ((access & GL_MAP_INVALIDATE_RANGE_BIT) != 0)
         {
-            memcpy(dstMapPtr, srcMapPtr, static_cast<size_t>(offset));
+            if (offset != 0)
+            {
+                memcpy(dstMapPtr, srcMapPtr, static_cast<size_t>(offset));
+            }
+            size_t totalSize      = static_cast<size_t>(mState.getSize());
+            size_t remainingStart = static_cast<size_t>(offset + length);
+            size_t remainingSize  = totalSize - remainingStart;
+            if (remainingSize != 0)
+            {
+                memcpy(dstMapPtr + remainingStart, srcMapPtr + remainingStart, remainingSize);
+            }
         }
-        size_t totalSize      = static_cast<size_t>(mState.getSize());
-        size_t remainingStart = static_cast<size_t>(offset + length);
-        size_t remainingSize  = totalSize - remainingStart;
-        if (remainingSize != 0)
+        else
         {
-            memcpy(dstMapPtr + remainingStart, srcMapPtr + remainingStart, remainingSize);
+            memcpy(dstMapPtr, srcMapPtr, static_cast<size_t>(mState.getSize()));
         }
-    }
-    else
-    {
-        memcpy(dstMapPtr, srcMapPtr, static_cast<size_t>(mState.getSize()));
-    }
-
+    */
     src.releaseBufferAndDescriptorSetCache(contextVk);
 
     // Return the already mapped pointer with the offset adjustment to avoid the call to unmap().
@@ -850,6 +853,7 @@ angle::Result BufferVk::directUpdate(ContextVk *contextVk,
                                      size_t size,
                                      size_t offset)
 {
+    ANGLE_TRACE_EVENT0("gpu.angle", "directUpdate");
     RendererVk *renderer      = contextVk->getRenderer();
     uint8_t *srcPointerMapped = nullptr;
     const uint8_t *srcPointer = nullptr;
@@ -899,6 +903,7 @@ angle::Result BufferVk::stagedUpdate(ContextVk *contextVk,
                                      size_t size,
                                      size_t offset)
 {
+    ANGLE_TRACE_EVENT0("gpu.angle", "stagedUpdate");
     // If data is coming from a CPU pointer, stage it in a temporary staging buffer.
     // Otherwise, do a GPU copy directly from the given buffer.
     if (dataSource.data != nullptr)
@@ -946,6 +951,7 @@ angle::Result BufferVk::acquireAndUpdate(ContextVk *contextVk,
                                          size_t updateOffset,
                                          BufferUpdateType updateType)
 {
+    ANGLE_TRACE_EVENT0("gpu.angle", "acquireAndUpdate");
     // We shouldn't get here if this is external memory
     ASSERT(!isExternalBuffer());
     // If StorageRedefined, we cannot use mState.getSize() to allocate a new buffer.

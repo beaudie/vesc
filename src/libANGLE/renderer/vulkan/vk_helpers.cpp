@@ -4875,7 +4875,7 @@ angle::Result BufferHelper::allocateForVertexConversion(ContextVk *contextVk,
     size_t sizeToAllocate = roundUp(size, alignment);
 
     return initSuballocation(contextVk, memoryTypeIndex, sizeToAllocate, alignment,
-                             BufferUsageType::Static);
+                             BufferUsageType::Dynamic);
 }
 
 angle::Result BufferHelper::allocateForCopyImage(ContextVk *contextVk,

@@ -1181,6 +1181,7 @@ angle::Result CommandQueue::finishResourceUse(Context *context,
                                               const ResourceUse &use,
                                               uint64_t timeout)
 {
+    ANGLE_TRACE_EVENT0("gpu.angle", "finishResourceUse");
     VkDevice device = context->getDevice();
 
     {
@@ -1245,6 +1246,7 @@ angle::Result CommandQueue::waitForResourceUseToFinishWithUserTimeout(Context *c
         return angle::Result::Continue;
     }
 
+    ANGLE_TRACE_EVENT0("gpu.angle", "waitForResourceUseToFinishWithUserTimeout");
     VkDevice device      = context->getDevice();
     size_t finishedCount = 0;
     {

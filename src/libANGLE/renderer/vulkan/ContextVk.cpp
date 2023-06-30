@@ -483,7 +483,7 @@ vk::ImageLayout GetImageReadLayout(TextureVk *textureVk,
     return kShaderReadOnlyImageLayouts[firstShader];
 }
 
-angle::Result SwitchToReadOnlyDepthStencilFeedbackLoopMode(ContextVk *contextVk,
+/*angle::Result SwitchToReadOnlyDepthStencilFeedbackLoopMode(ContextVk *contextVk,
                                                            TextureVk *texture,
                                                            FramebufferVk *drawFramebuffer,
                                                            bool isStencilTexture)
@@ -529,7 +529,7 @@ angle::Result SwitchToReadOnlyDepthStencilFeedbackLoopMode(ContextVk *contextVk,
     }
 
     return angle::Result::Continue;
-}
+}*/
 
 vk::ImageLayout GetImageWriteLayoutAndSubresource(const gl::ImageUnit &imageUnit,
                                                   vk::ImageHelper &image,
@@ -7000,16 +7000,16 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context, gl::Co
             continue;
         }
 
-        if (!isIncompleteTexture && texture->isDepthOrStencil())
-        {
-            const bool isStencilTexture = IsStencilSamplerBinding(*executable, textureUnit);
-            if (shouldSwitchToReadOnlyDepthStencilFeedbackLoopMode(texture, command,
-                                                                   isStencilTexture))
-            {
-                ANGLE_TRY(SwitchToReadOnlyDepthStencilFeedbackLoopMode(
-                    this, textureVk, getDrawFramebuffer(), isStencilTexture));
-            }
-        }
+        /*        if (!isIncompleteTexture && texture->isDepthOrStencil())
+                {
+                    const bool isStencilTexture = IsStencilSamplerBinding(*executable, textureUnit);
+                    if (shouldSwitchToReadOnlyDepthStencilFeedbackLoopMode(texture, command,
+                                                                           isStencilTexture))
+                    {
+                        ANGLE_TRY(SwitchToReadOnlyDepthStencilFeedbackLoopMode(
+                            this, textureVk, getDrawFramebuffer(), isStencilTexture));
+                    }
+                }*/
 
         gl::Sampler *sampler = mState.getSampler(static_cast<uint32_t>(textureUnit));
         const gl::SamplerState &samplerState =
