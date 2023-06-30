@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c49d245a_4f02b2a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-06-30T22:38:38Z",
+      "side": 1,
+      "message": "Shabi, Charlie: do you think you could review this while Geoff\u0027s out?\n\nQuyen: FYI - any comments welcome.",
+      "revId": "b4dc02c916eaa661346c4ce3e2f1766a893da3e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
