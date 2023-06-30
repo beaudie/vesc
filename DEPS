@@ -43,7 +43,7 @@ vars = {
   'checkout_angle_mesa': False,
 
   # Version of Chromium our Chromium-based DEPS are mirrored from.
-  'chromium_revision': '14fa1a826dad66a9768abc9e4c540c335fcc8b9f',
+  'chromium_revision': '917b9763fc16c1ede405b94accb2c7c7cd3772c5',
   # We never want to checkout chromium,
   # but need a dummy DEPS entry for the autoroller
   'dummy_checkout_chromium': False,
@@ -88,16 +88,16 @@ vars = {
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling catapult
   # and whatever else without interference from each other.
-  'catapult_revision': '143fef4b4133aa4ca6792ff40ea5fe91dc9d0bcb',
+  'catapult_revision': 'e3d814300844462a3816093399463121f75e2363',
 
   # the commit queue can handle CLs rolling Fuchsia sdk
   # and whatever else without interference from each other.
-  'fuchsia_version': 'version:13.20230622.3.1',
+  'fuchsia_version': 'version:13.20230628.0.1',
 
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling luci-go
   # and whatever else without interference from each other.
-  'luci_go': 'git_revision:39f255d5875293d3e1d978888b819ac124a8b0cc',
+  'luci_go': 'git_revision:58e1fcab6ced4d330cfd46287e00aa14fbd46dc6',
 
   # Three lines of non-changing comments so that
   # the commit queue can handle CLs rolling android_sdk_build-tools_version
@@ -408,7 +408,7 @@ deps = {
   },
 
   'third_party/flatbuffers/src': {
-    'url': '{chromium_git}/external/github.com/google/flatbuffers.git@13fc75cb6b7b44793f3f5b4ba025ff403d012c9f',
+    'url': '{chromium_git}/external/github.com/google/flatbuffers.git@28861d1d7d5ec6ce34d4bbdc10bec4aace341167',
     'condition': 'checkout_android and not build_with_chromium',
   },
 
