@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed059aff_38dfbaf6",
+        "filename": "src/common/CompiledShaderState.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-06-30T17:25:23Z",
+      "side": 0,
+      "message": "Please change comment to \"OVR_multiview\" rather than deleting it.",
+      "revId": "20cc4a9bc250a009a88b3491083a86ca6d85b79b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec07ba1a_1339ff75",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-06-30T17:25:23Z",
+      "side": 0,
+      "message": "Same here, please keep the comment as \"OVR_multiview\".",
+      "revId": "20cc4a9bc250a009a88b3491083a86ca6d85b79b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
