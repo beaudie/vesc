@@ -16,6 +16,23 @@
       "message": "Only skimmed this so please don\u0027t consider mine a review. Out of curiosity how did you test this?",
       "revId": "6e779090c15dd3c8bfda430016ac35cf08e2b13f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bed4ef22_543d1c1f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-06-30T17:26:02Z",
+      "side": 1,
+      "message": "Also - thanks for picking up this significant cleanup which was left behind.",
+      "revId": "6e779090c15dd3c8bfda430016ac35cf08e2b13f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
