@@ -110,6 +110,30 @@
       },
       "revId": "2fc3e6556ea293284239adf9d3245480eabdfb86",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78503e55_6340fcf2",
+        "filename": "src/libANGLE/GlobalMutex.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-06-30T14:24:48Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "eef89b72_7d64567f",
+      "range": {
+        "startLine": 146,
+        "startChar": 71,
+        "endLine": 146,
+        "endChar": 72
+      },
+      "revId": "2fc3e6556ea293284239adf9d3245480eabdfb86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
