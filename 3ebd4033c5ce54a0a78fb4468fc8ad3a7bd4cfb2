@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a89a6bdf_4911eef8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-06-30T19:57:10Z",
+      "side": 1,
+      "message": "Thanks Quyen for looking into this. I think this is likely not the best fix since as you have found the other backends (D3D11, Vulkan) are affected too. It seems likely that something\u0027s wrong in the validation - GL_LINES_ADJACENCY was introduced in GLES 3.2 and WebGL doesn\u0027t support that feature level.\n\nI\u0027m looking into this now so it\u0027s OK if you don\u0027t pursue this further.",
+      "revId": "3ebd4033c5ce54a0a78fb4468fc8ad3a7bd4cfb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c68325a4_c320a086",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 6
+      },
+      "lineNbr": 1932,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-06-30T19:57:10Z",
+      "side": 1,
+      "message": "If we were to go in the direction of silently no-op\u0027ing these draw calls, this should be ANGLE_UNLIKELY; but I think instead this should crash here and throughout. ASSERT might not even be good enough, but not sure there\u0027s a CHECK analogue in ANGLE.",
+      "revId": "3ebd4033c5ce54a0a78fb4468fc8ad3a7bd4cfb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
