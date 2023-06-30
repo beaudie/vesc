@@ -16,6 +16,23 @@
       "message": "Shabi, Charlie: do you think you could review this while Geoff\u0027s out?\n\nQuyen: FYI - any comments welcome.",
       "revId": "b4dc02c916eaa661346c4ce3e2f1766a893da3e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7b5b872_7984803f",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1932,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-06-30T22:40:27Z",
+      "side": 1,
+      "message": "Would consider using FATAL() for this based on severity and yuxinhu@\u0027s feedback. Let me know what you think.",
+      "revId": "b4dc02c916eaa661346c4ce3e2f1766a893da3e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
