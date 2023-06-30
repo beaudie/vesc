@@ -1249,6 +1249,66 @@ TEST_P(SimpleOperationTest, PrimitiveModeNegativeTest)
     EXPECT_GL_ERROR(GL_INVALID_ENUM);
 }
 
+// Tests that using GL_LINES_ADJACENCY should not crash the app even if the backend doesn't support
+// LinesAdjacent mode.
+// This is to verify that the crash in crbug:1457840 won't happen.
+TEST_P(SimpleOperationTest, PrimitiveModeLinesAdjacentNegativeTest)
+{
+    // TODO (http://anglebug.com/8240)
+    ANGLE_SKIP_TEST_IF(IsVulkan());
+    // TODO (http://anglebug.com/8241)
+    ANGLE_SKIP_TEST_IF(IsD3D9() || IsD3D11());
+
+    ANGLE_GL_PROGRAM(program, kBasicVertexShader, kGreenFragmentShader);
+    glUseProgram(program);
+
+    GLint positionLocation = glGetAttribLocation(program, "position");
+    ASSERT_NE(-1, positionLocation);
+
+    setupQuadVertexBuffer(0.5f, 1.0f);
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(positionLocation);
+
+    {
+        // Tests that TRIANGLES works.
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        ASSERT_GL_NO_ERROR();
+        EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+    }
+
+    {
+        // Drawing with GL_LINES_ADJACENCY won't crash even if the backend doesn't support it.
+        glDrawArrays(GL_LINES_ADJACENCY, 0, 6);
+
+        if (IsGLExtensionEnabled("GL_ANGLE_instanced_arrays"))
+        {
+            glDrawArraysInstancedANGLE(GL_LINES_ADJACENCY, 0, 6, 2);
+        }
+    }
+
+    // Indexed draws with GL_LINES_ADJACENCY
+    setupIndexedQuadVertexBuffer(0.5f, 1.0f);
+    setupIndexedQuadIndexBuffer();
+
+    {
+        // Tests that TRIANGLES works.
+        glClear(GL_COLOR_BUFFER_BIT);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, nullptr);
+        ASSERT_GL_NO_ERROR();
+        EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+    }
+
+    {
+        // Indexed drawing with GL_LINES_ADJACENCY won't crash even if the backend doesn't support
+        // it.
+        glDrawElements(GL_LINES_ADJACENCY, 6, GL_UNSIGNED_SHORT, nullptr);
+        if (IsGLExtensionEnabled("GL_ANGLE_instanced_arrays"))
+        {
+            glDrawElementsInstancedANGLE(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, nullptr, 1);
+        }
+    }
+}
+
 // Verify we don't crash when attempting to draw using GL_TRIANGLES without a program bound.
 TEST_P(SimpleOperationTest31, DrawTrianglesWithoutProgramBound)
 {
