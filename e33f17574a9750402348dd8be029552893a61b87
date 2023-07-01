@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c881f10_cd572221",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557258
+      },
+      "writtenOn": "2023-07-01T22:08:32Z",
+      "side": 1,
+      "message": "Hi all. As promised to Oliver, here I\u0027m submitting the first batch of the original Qt Oy patches that they used to ship for their fork of ANGLE. We\u0027re using these in our own Krita binaries, as shown here:\n\nhttps://invent.kde.org/graphics/krita/-/blob/master/3rdparty/ext_googleangle\n\nLet me know what you think.",
+      "revId": "e33f17574a9750402348dd8be029552893a61b87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
