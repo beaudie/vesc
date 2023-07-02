@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b81c0497_5037437c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-07-02T05:05:31Z",
+      "side": 1,
+      "message": "I like what this does and agree it\u0027s necessary. However, this implementation is Windows-specific. Would be nice if it could be made to apply to dlclose() as well, but I don\u0027t know how that could be made to happen without use of a global destructor (and global destructors are banned per Chromium policy from what I understand).",
+      "revId": "119eaa0f3008e2652ecdae8ba1ae8387420aa9a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
