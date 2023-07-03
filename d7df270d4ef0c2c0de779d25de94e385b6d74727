@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8c3e780_8a124602",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-07-03T19:48:45Z",
+      "side": 1,
+      "message": "Ah, sorry, this isn\u0027t ready yet.\nroll_chromium_deps.py just uploads without running additional steps.",
+      "revId": "d7df270d4ef0c2c0de779d25de94e385b6d74727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
