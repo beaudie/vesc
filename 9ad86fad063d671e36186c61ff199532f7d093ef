@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6bef4d0_53c79aec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-07-03T18:14:25Z",
+      "side": 1,
+      "message": "You can see the banding clearly in the screenshots, but let\u0027s go ahead and land it.  We\u0027ve confirmed the trace looks good on devices that support VK_EXT_legacy_dithering.",
+      "revId": "9ad86fad063d671e36186c61ff199532f7d093ef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
