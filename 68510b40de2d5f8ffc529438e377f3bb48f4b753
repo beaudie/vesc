@@ -16,6 +16,23 @@
       "message": "Landing this in order to unblock the vulkan-deps-into-ANGLE AutoRoller",
       "revId": "68510b40de2d5f8ffc529438e377f3bb48f4b753",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a691ff76_4c6812bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-07-03T22:03:27Z",
+      "side": 1,
+      "message": "Let\u0027s ask the Rubber Stamper to approve this CL",
+      "revId": "68510b40de2d5f8ffc529438e377f3bb48f4b753",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
