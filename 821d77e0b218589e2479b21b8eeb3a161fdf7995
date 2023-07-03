@@ -166,6 +166,30 @@
       },
       "revId": "821d77e0b218589e2479b21b8eeb3a161fdf7995",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60c2fa13_afa809b1",
+        "filename": "src/common/Spinlock.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-07-03T18:52:18Z",
+      "side": 1,
+      "message": "\u003e I did not tried in Linux though. I will also check Linux.\n\nChecked on VM with 16 CPUs (real CPU is 8/16). Test is end2end SwiftShader.\n\nRunning on 16 processes many tests timeout no matter what mutex is used (even `std::mutex`.\n\nIf run 8 processes:\n- `Spinlock` with `ANGLE_SMT_PAUSE` - one time out of 4 attempts I got timeout\n- `Spinlock` with `yield()` - no timeout but maybe just a lucky run.\n\nAt the end. I did not see much difference between `ANGLE_SMT_PAUSE` and `std::this_thread::yield()`. I guess the problem is that I tested on the VM.",
+      "parentUuid": "4f089745_8c1a236d",
+      "range": {
+        "startLine": 47,
+        "startChar": 30,
+        "endLine": 47,
+        "endChar": 35
+      },
+      "revId": "821d77e0b218589e2479b21b8eeb3a161fdf7995",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
