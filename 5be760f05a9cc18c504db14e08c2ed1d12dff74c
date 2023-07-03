@@ -144,6 +144,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "518dc4b6_3e9700a7",
+        "filename": "src/common/FastMutex.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-07-03T18:58:47Z",
+      "side": 1,
+      "message": "\u003e nit: you may get better perf using two specialized functions (doSpinWaitWithYield/Sleep) and avoiding lambdas\u0027 type erasure overhead (assuming the compiler is not inlining it all).\n\nI tied as you say and got better performance. I can\u0027t explain why, because in my tests `wait()` method does not even called and it is not inline. I also tried other variations, but the current one is the fastest.",
+      "parentUuid": "f0eaf5ce_4e7e04dc",
+      "revId": "5be760f05a9cc18c504db14e08c2ed1d12dff74c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e831dab9_b1a1ec12",
         "filename": "src/common/FastMutex.cpp",
         "patchSetId": 9
