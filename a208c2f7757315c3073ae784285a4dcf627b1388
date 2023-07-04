@@ -16,6 +16,24 @@
       "message": "IMO, after my changes to `Spinlock` and your future changes with removing lock from state-set APIs, it should be safe to sue `Spinlock` in all cases.",
       "revId": "a208c2f7757315c3073ae784285a4dcf627b1388",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8949aa13_31797b7e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-07-04T10:29:57Z",
+      "side": 1,
+      "message": "Now above is true for `FastMutex1`.",
+      "parentUuid": "73827c44_4701cd90",
+      "revId": "a208c2f7757315c3073ae784285a4dcf627b1388",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
