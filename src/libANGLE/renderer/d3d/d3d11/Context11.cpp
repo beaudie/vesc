@@ -70,14 +70,14 @@ bool DrawCallHasStreamingElementArray(const gl::Context *context, gl::DrawElemen
     gl::Buffer *elementArrayBuffer = glState.getVertexArray()->getElementArrayBuffer();
 
     bool primitiveRestartWorkaround =
-        UsePrimitiveRestartWorkaround(glState.isPrimitiveRestartEnabled(), srcType);
+        UsePrimitiveRestartWorkaround(glState.getLocalState().isPrimitiveRestartEnabled(), srcType);
     const gl::DrawElementsType dstType =
         (srcType == gl::DrawElementsType::UnsignedInt || primitiveRestartWorkaround)
             ? gl::DrawElementsType::UnsignedInt
             : gl::DrawElementsType::UnsignedShort;
 
     // Not clear where the offset comes from here.
-    switch (ClassifyIndexStorage(glState, elementArrayBuffer, srcType, dstType, 0))
+    switch (ClassifyIndexStorage(elementArrayBuffer, srcType, dstType, 0))
     {
         case IndexStorageType::Dynamic:
             return true;

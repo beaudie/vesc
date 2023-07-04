@@ -1051,7 +1051,9 @@ angle::Result GetVertexRangeInfo(const gl::Context *context,
     return angle::Result::Continue;
 }
 
-gl::Rectangle ClipRectToScissor(const gl::State &glState, const gl::Rectangle &rect, bool invertY)
+gl::Rectangle ClipRectToScissor(const gl::LocalState &state,
+                                const gl::Rectangle &rect,
+                                bool invertY)
 {
     // If the scissor test isn't enabled, assume it has infinite size.  Its intersection with the
     // rect would be the rect itself.
@@ -1060,13 +1062,13 @@ gl::Rectangle ClipRectToScissor(const gl::State &glState, const gl::Rectangle &r
     // unnecessary pipeline creations if two otherwise identical pipelines are used on framebuffers
     // with different sizes.  If such usage is observed in an application, we should investigate
     // possible optimizations.
-    if (!glState.isScissorTestEnabled())
+    if (!state.isScissorTestEnabled())
     {
         return rect;
     }
 
     gl::Rectangle clippedRect;
-    if (!gl::ClipRectangle(glState.getScissor(), rect, &clippedRect))
+    if (!gl::ClipRectangle(state.getScissor(), rect, &clippedRect))
     {
         return gl::Rectangle();
     }

@@ -218,9 +218,8 @@ angle::Result VertexArray11::updateElementArrayStorage(const gl::Context *contex
 
     unsigned int offset = static_cast<unsigned int>(reinterpret_cast<uintptr_t>(indices));
 
-    mCurrentElementArrayStorage =
-        ClassifyIndexStorage(context->getState(), mState.getElementArrayBuffer(), indexType,
-                             mCachedDestinationIndexType, offset);
+    mCurrentElementArrayStorage = ClassifyIndexStorage(mState.getElementArrayBuffer(), indexType,
+                                                       mCachedDestinationIndexType, offset);
 
     return angle::Result::Continue;
 }

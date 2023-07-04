@@ -1146,7 +1146,7 @@ ProgramTransformOptions ProgramExecutableVk::getTransformOptions(
     const bool isMultisampled      = drawFrameBuffer->getSamples() > 1;
     transformOptions.multiSampleFramebufferFetch = hasFramebufferFetch && isMultisampled;
     transformOptions.enableSampleShading =
-        contextVk->getState().isSampleShadingEnabled() && isMultisampled;
+        contextVk->getState().getLocalState().isSampleShadingEnabled() && isMultisampled;
 
     return transformOptions;
 }

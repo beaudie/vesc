@@ -475,7 +475,8 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
                                        const VkClearColorValue &clearColorValue,
                                        const VkClearDepthStencilValue &clearDepthStencilValue)
 {
-    ContextVk *contextVk = vk::GetImpl(context);
+    ContextVk *contextVk     = vk::GetImpl(context);
+    const gl::State &glState = contextVk->getState();
 
     const gl::Rectangle scissoredRenderArea = getRotatedScissoredRenderArea(contextVk);
     ASSERT(scissoredRenderArea.width != 0 && scissoredRenderArea.height != 0);
@@ -492,12 +493,12 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,
     ASSERT(clearColor || clearDepth || clearStencil);
 
     const uint8_t stencilMask =
-        static_cast<uint8_t>(contextVk->getState().getDepthStencilState().stencilWritemask);
+        static_cast<uint8_t>(glState.getLocalState().getDepthStencilState().stencilWritemask);
 
     // The front-end should ensure we don't attempt to clear color if all channels are masked.
     ASSERT(!clearColor || colorMasks != 0);
     // The front-end should ensure we don't attempt to clear depth if depth write is disabled.
-    ASSERT(!clearDepth || contextVk->getState().getDepthStencilState().depthMask);
+    ASSERT(!clearDepth || glState.getLocalState().getDepthStencilState().depthMask);
     // The front-end should ensure we don't attempt to clear stencil if all bits are masked.
     ASSERT(!clearStencil || stencilMask != 0);
 
@@ -1779,6 +1780,8 @@ angle::Result FramebufferVk::invalidateImpl(ContextVk *contextVk,
     // to invalidate the D/S of FBO 2 since it would be the currently active renderpass.
     if (contextVk->hasStartedRenderPassWithQueueSerial(mLastRenderPassQueueSerial))
     {
+        const gl::LocalState &state = contextVk->getState().getLocalState();
+
         // Mark the invalidated attachments in the render pass for loadOp and storeOp determination
         // at its end.
         vk::PackedAttachmentIndex colorIndexVk(0);
@@ -1788,14 +1791,14 @@ angle::Result FramebufferVk::invalidateImpl(ContextVk *contextVk,
                 invalidateColorBuffers.test(colorIndexGL))
             {
                 contextVk->getStartedRenderPassCommands().invalidateRenderPassColorAttachment(
-                    contextVk->getState(), colorIndexGL, colorIndexVk, invalidateArea);
+                    state, colorIndexGL, colorIndexVk, invalidateArea);
             }
             ++colorIndexVk;
         }
 
         if (depthStencilRenderTarget)
         {
-            const gl::DepthStencilState &dsState = contextVk->getState().getDepthStencilState();
+            const gl::DepthStencilState &dsState = state.getDepthStencilState();
             if (invalidateDepthBuffer)
             {
                 contextVk->getStartedRenderPassCommands().invalidateRenderPassDepthAttachment(
@@ -3207,7 +3210,8 @@ gl::Rectangle FramebufferVk::getRotatedScissoredRenderArea(ContextVk *contextVk)
 {
     const gl::Rectangle renderArea = getNonRotatedCompleteRenderArea();
     bool invertViewport            = contextVk->isViewportFlipEnabledForDrawFBO();
-    gl::Rectangle scissoredArea    = ClipRectToScissor(contextVk->getState(), renderArea, false);
+    gl::Rectangle scissoredArea =
+        ClipRectToScissor(contextVk->getState().getLocalState(), renderArea, false);
     gl::Rectangle rotatedScissoredArea;
     RotateRectangle(contextVk->getRotationDrawFramebuffer(), invertViewport, renderArea.width,
                     renderArea.height, scissoredArea, &rotatedScissoredArea);

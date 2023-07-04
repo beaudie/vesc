@@ -108,7 +108,7 @@ bool GeneratePixelLocalStorageActiveError(const Context *context, angle::EntryPo
 ANGLE_INLINE bool ValidatePixelLocalStorageInactive(const Context *context,
                                                     angle::EntryPoint entryPoint)
 {
-    return context->getState().getPixelLocalStorageActivePlanes() == 0 ||
+    return context->getState().getLocalState().getPixelLocalStorageActivePlanes() == 0 ||
            GeneratePixelLocalStorageActiveError(context, entryPoint);
 }
 }  // namespace gl

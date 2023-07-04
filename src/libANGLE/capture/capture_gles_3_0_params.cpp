@@ -709,7 +709,7 @@ void CaptureTexImage3D_pixels(const State &glState,
     }
 
     const gl::InternalFormat &internalFormatInfo = gl::GetInternalFormatInfo(format, type);
-    const gl::PixelUnpackState &unpack           = glState.getUnpackState();
+    const gl::PixelUnpackState &unpack           = glState.getLocalState().getUnpackState();
 
     const Extents size(width, height, depth);
 

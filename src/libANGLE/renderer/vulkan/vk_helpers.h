@@ -1503,7 +1503,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
 
     void endTransformFeedback();
 
-    void invalidateRenderPassColorAttachment(const gl::State &state,
+    void invalidateRenderPassColorAttachment(const gl::LocalState &state,
                                              size_t colorIndexGL,
                                              PackedAttachmentIndex attachmentIndex,
                                              const gl::Rectangle &invalidateArea);

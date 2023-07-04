@@ -270,7 +270,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // isYFlipEnabledForDrawFBO indicates the rendered image is upside-down.
     ANGLE_INLINE bool isYFlipEnabledForDrawFBO() const
     {
-        return mState.getClipOrigin() == gl::ClipOrigin::UpperLeft
+        return mState.getLocalState().getClipOrigin() == gl::ClipOrigin::UpperLeft
                    ? !isViewportFlipEnabledForDrawFBO()
                    : isViewportFlipEnabledForDrawFBO();
     }
@@ -500,7 +500,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     bool emulateSeamfulCubeMapSampling() const { return mEmulateSeamfulCubeMapSampling; }
 
-    const gl::Debug &getDebug() const { return mState.getDebug(); }
+    const gl::Debug &getDebug() const { return mState.getLocalState().getDebug(); }
     const gl::OverlayType *getOverlay() const { return mState.getOverlay(); }
 
     angle::Result onBufferReleaseToExternal(const vk::BufferHelper &buffer);

@@ -713,7 +713,7 @@ void CaptureTexImage2D_pixels(const State &glState,
     }
 
     const gl::InternalFormat &internalFormatInfo = gl::GetInternalFormatInfo(format, type);
-    const gl::PixelUnpackState &unpack           = glState.getUnpackState();
+    const gl::PixelUnpackState &unpack           = glState.getLocalState().getUnpackState();
 
     GLuint srcRowPitch = 0;
     (void)internalFormatInfo.computeRowPitch(type, width, unpack.alignment, unpack.rowLength,

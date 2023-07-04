@@ -512,21 +512,23 @@ angle::Result FramebufferGL::invalidateSub(const gl::Context *context,
 
 angle::Result FramebufferGL::clear(const gl::Context *context, GLbitfield mask)
 {
-    ContextGL *contextGL         = GetImplAs<ContextGL>(context);
+    ContextGL *contextGL        = GetImplAs<ContextGL>(context);
+    const gl::LocalState &state = context->getState().getLocalState();
+
     const FunctionsGL *functions = GetFunctionsGL(context);
     StateManagerGL *stateManager = GetStateManagerGL(context);
 
     syncClearState(context, mask);
     stateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
 
-    if (!RequiresMultiviewClear(mState, context->getState().isScissorTestEnabled()))
+    if (!RequiresMultiviewClear(mState, state.isScissorTestEnabled()))
     {
         functions->clear(mask);
     }
     else
     {
         ClearMultiviewGL *multiviewClearer = GetMultiviewClearer(context);
-        multiviewClearer->clearMultiviewFBO(mState, context->getState().getScissor(),
+        multiviewClearer->clearMultiviewFBO(mState, state.getScissor(),
                                             ClearMultiviewGL::ClearCommandType::Clear, mask,
                                             GL_NONE, 0, nullptr, 0.0f, 0);
     }
@@ -540,21 +542,23 @@ angle::Result FramebufferGL::clearBufferfv(const gl::Context *context,
                                            GLint drawbuffer,
                                            const GLfloat *values)
 {
-    ContextGL *contextGL         = GetImplAs<ContextGL>(context);
+    ContextGL *contextGL        = GetImplAs<ContextGL>(context);
+    const gl::LocalState &state = context->getState().getLocalState();
+
     const FunctionsGL *functions = GetFunctionsGL(context);
     StateManagerGL *stateManager = GetStateManagerGL(context);
 
     syncClearBufferState(context, buffer, drawbuffer);
     stateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
 
-    if (!RequiresMultiviewClear(mState, context->getState().isScissorTestEnabled()))
+    if (!RequiresMultiviewClear(mState, state.isScissorTestEnabled()))
     {
         functions->clearBufferfv(buffer, drawbuffer, values);
     }
     else
     {
         ClearMultiviewGL *multiviewClearer = GetMultiviewClearer(context);
-        multiviewClearer->clearMultiviewFBO(mState, context->getState().getScissor(),
+        multiviewClearer->clearMultiviewFBO(mState, state.getScissor(),
                                             ClearMultiviewGL::ClearCommandType::ClearBufferfv,
                                             static_cast<GLbitfield>(0u), buffer, drawbuffer,
                                             reinterpret_cast<const uint8_t *>(values), 0.0f, 0);
@@ -569,21 +573,23 @@ angle::Result FramebufferGL::clearBufferuiv(const gl::Context *context,
                                             GLint drawbuffer,
                                             const GLuint *values)
 {
-    ContextGL *contextGL         = GetImplAs<ContextGL>(context);
+    ContextGL *contextGL        = GetImplAs<ContextGL>(context);
+    const gl::LocalState &state = context->getState().getLocalState();
+
     const FunctionsGL *functions = GetFunctionsGL(context);
     StateManagerGL *stateManager = GetStateManagerGL(context);
 
     syncClearBufferState(context, buffer, drawbuffer);
     stateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
 
-    if (!RequiresMultiviewClear(mState, context->getState().isScissorTestEnabled()))
+    if (!RequiresMultiviewClear(mState, state.isScissorTestEnabled()))
     {
         functions->clearBufferuiv(buffer, drawbuffer, values);
     }
     else
     {
         ClearMultiviewGL *multiviewClearer = GetMultiviewClearer(context);
-        multiviewClearer->clearMultiviewFBO(mState, context->getState().getScissor(),
+        multiviewClearer->clearMultiviewFBO(mState, state.getScissor(),
                                             ClearMultiviewGL::ClearCommandType::ClearBufferuiv,
                                             static_cast<GLbitfield>(0u), buffer, drawbuffer,
                                             reinterpret_cast<const uint8_t *>(values), 0.0f, 0);
@@ -598,21 +604,23 @@ angle::Result FramebufferGL::clearBufferiv(const gl::Context *context,
                                            GLint drawbuffer,
                                            const GLint *values)
 {
-    ContextGL *contextGL         = GetImplAs<ContextGL>(context);
+    ContextGL *contextGL        = GetImplAs<ContextGL>(context);
+    const gl::LocalState &state = context->getState().getLocalState();
+
     const FunctionsGL *functions = GetFunctionsGL(context);
     StateManagerGL *stateManager = GetStateManagerGL(context);
 
     syncClearBufferState(context, buffer, drawbuffer);
     stateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
 
-    if (!RequiresMultiviewClear(mState, context->getState().isScissorTestEnabled()))
+    if (!RequiresMultiviewClear(mState, state.isScissorTestEnabled()))
     {
         functions->clearBufferiv(buffer, drawbuffer, values);
     }
     else
     {
         ClearMultiviewGL *multiviewClearer = GetMultiviewClearer(context);
-        multiviewClearer->clearMultiviewFBO(mState, context->getState().getScissor(),
+        multiviewClearer->clearMultiviewFBO(mState, state.getScissor(),
                                             ClearMultiviewGL::ClearCommandType::ClearBufferiv,
                                             static_cast<GLbitfield>(0u), buffer, drawbuffer,
                                             reinterpret_cast<const uint8_t *>(values), 0.0f, 0);
@@ -628,24 +636,25 @@ angle::Result FramebufferGL::clearBufferfi(const gl::Context *context,
                                            GLfloat depth,
                                            GLint stencil)
 {
-    ContextGL *contextGL         = GetImplAs<ContextGL>(context);
+    ContextGL *contextGL        = GetImplAs<ContextGL>(context);
+    const gl::LocalState &state = context->getState().getLocalState();
+
     const FunctionsGL *functions = GetFunctionsGL(context);
     StateManagerGL *stateManager = GetStateManagerGL(context);
 
     syncClearBufferState(context, buffer, drawbuffer);
     stateManager->bindFramebuffer(GL_FRAMEBUFFER, mFramebufferID);
 
-    if (!RequiresMultiviewClear(mState, context->getState().isScissorTestEnabled()))
+    if (!RequiresMultiviewClear(mState, state.isScissorTestEnabled()))
     {
         functions->clearBufferfi(buffer, drawbuffer, depth, stencil);
     }
     else
     {
         ClearMultiviewGL *multiviewClearer = GetMultiviewClearer(context);
-        multiviewClearer->clearMultiviewFBO(mState, context->getState().getScissor(),
-                                            ClearMultiviewGL::ClearCommandType::ClearBufferfi,
-                                            static_cast<GLbitfield>(0u), buffer, drawbuffer,
-                                            nullptr, depth, stencil);
+        multiviewClearer->clearMultiviewFBO(
+            mState, state.getScissor(), ClearMultiviewGL::ClearCommandType::ClearBufferfi,
+            static_cast<GLbitfield>(0u), buffer, drawbuffer, nullptr, depth, stencil);
     }
 
     contextGL->markWorkSubmitted();
@@ -1398,7 +1407,7 @@ void FramebufferGL::syncClearState(const gl::Context *context, GLbitfield mask)
     const angle::FeaturesGL &features = GetFeaturesGL(context);
 
     // Clip origin must not affect scissor box but some drivers flip it for clear ops.
-    if (context->getState().isScissorTestEnabled())
+    if (context->getState().getLocalState().isScissorTestEnabled())
     {
         stateManager->setClipControl(ClipOrigin::LowerLeft, ClipDepthMode::NegativeOneToOne);
     }
@@ -1432,7 +1441,7 @@ void FramebufferGL::syncClearBufferState(const gl::Context *context,
     const angle::FeaturesGL &features = GetFeaturesGL(context);
 
     // Clip origin must not affect scissor box but some drivers flip it for clear ops.
-    if (context->getState().isScissorTestEnabled())
+    if (context->getState().getLocalState().isScissorTestEnabled())
     {
         stateManager->setClipControl(ClipOrigin::LowerLeft, ClipDepthMode::NegativeOneToOne);
     }

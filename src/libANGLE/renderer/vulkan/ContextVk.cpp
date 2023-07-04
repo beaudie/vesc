@@ -180,9 +180,9 @@ bool CanMultiDrawIndirectUseCmd(ContextVk *contextVk,
     return canMultiDrawIndirectUseCmd;
 }
 
-uint32_t GetCoverageSampleCount(const gl::State &glState, GLint samples)
+uint32_t GetCoverageSampleCount(const gl::LocalState &state, GLint samples)
 {
-    ASSERT(glState.isSampleCoverageEnabled());
+    ASSERT(state.isSampleCoverageEnabled());
 
     // Get a fraction of the samples based on the coverage parameters.
     // There are multiple ways to obtain an integer value from a float -
@@ -196,16 +196,18 @@ uint32_t GetCoverageSampleCount(const gl::State &glState, GLint samples)
     // play well with all vendors.
     //
     // We are going with truncation for expediency.
-    return static_cast<uint32_t>(glState.getSampleCoverageValue() * samples);
+    return static_cast<uint32_t>(state.getSampleCoverageValue() * samples);
 }
 
-void ApplySampleCoverage(const gl::State &glState, uint32_t coverageSampleCount, uint32_t *maskOut)
+void ApplySampleCoverage(const gl::LocalState &state,
+                         uint32_t coverageSampleCount,
+                         uint32_t *maskOut)
 {
-    ASSERT(glState.isSampleCoverageEnabled());
+    ASSERT(state.isSampleCoverageEnabled());
 
     uint32_t coverageMask = angle::BitMask<uint32_t>(coverageSampleCount);
 
-    if (glState.getSampleCoverageInvert())
+    if (state.getSampleCoverageInvert())
     {
         coverageMask = ~coverageMask;
     }
@@ -253,7 +255,7 @@ EventName GetTraceEventName(const char *title, uint64_t counter)
     return buf;
 }
 
-vk::ResourceAccess GetColorAccess(const gl::State &state,
+vk::ResourceAccess GetColorAccess(const gl::LocalState &state,
                                   const gl::FramebufferState &framebufferState,
                                   const gl::DrawBufferMask &emulatedAlphaMask,
                                   bool hasFramebufferFetch,
@@ -729,7 +731,7 @@ void DumpPipelineCacheGraph(ContextVk *contextVk, const std::ostringstream &grap
     out << "}\n";
 }
 
-bool BlendModeSupportsDither(const gl::State &state, size_t colorIndex)
+bool BlendModeSupportsDither(const gl::LocalState &state, size_t colorIndex)
 {
     // Specific combinations of color blend modes are known to work with our dithering emulation.
     // Note we specifically don't check alpha blend, as dither isn't applied to alpha.
@@ -2318,7 +2320,7 @@ angle::Result ContextVk::updateRenderPassDepthFeedbackLoopModeImpl(
         return angle::Result::Continue;
     }
 
-    const gl::DepthStencilState &dsState = mState.getDepthStencilState();
+    const gl::DepthStencilState &dsState = mState.getLocalState().getDepthStencilState();
     vk::ResourceAccess depthAccess       = GetDepthAccess(dsState, depthReason);
     vk::ResourceAccess stencilAccess     = GetStencilAccess(dsState, stencilReason);
 
@@ -2439,9 +2441,10 @@ angle::Result ContextVk::handleDirtyGraphicsColorAccess(DirtyBits::Iterator *dir
     {
         if (framebufferState.getEnabledDrawBuffers().test(colorIndexGL))
         {
-            vk::ResourceAccess colorAccess = GetColorAccess(
-                mState, framebufferState, drawFramebufferVk->getEmulatedAlphaAttachmentMask(),
-                executable->usesFramebufferFetch(), colorIndexGL);
+            vk::ResourceAccess colorAccess =
+                GetColorAccess(mState.getLocalState(), framebufferState,
+                               drawFramebufferVk->getEmulatedAlphaAttachmentMask(),
+                               executable->usesFramebufferFetch(), colorIndexGL);
             mRenderPassCommands->onColorAccess(colorIndexVk, colorAccess);
         }
         ++colorIndexVk;
@@ -2461,7 +2464,7 @@ angle::Result ContextVk::handleDirtyGraphicsDepthStencilAccess(
     }
 
     // Update depth/stencil attachment accesses
-    const gl::DepthStencilState &dsState = mState.getDepthStencilState();
+    const gl::DepthStencilState &dsState = mState.getLocalState().getDepthStencilState();
     vk::ResourceAccess depthAccess = GetDepthAccess(dsState, UpdateDepthFeedbackLoopReason::Draw);
     vk::ResourceAccess stencilAccess =
         GetStencilAccess(dsState, UpdateDepthFeedbackLoopReason::Draw);
@@ -3061,8 +3064,9 @@ angle::Result ContextVk::handleDirtyGraphicsDynamicLineWidth(DirtyBits::Iterator
 {
     // Clamp line width to min/max allowed values. It's not invalid GL to
     // provide out-of-range line widths, but it _is_ invalid Vulkan.
-    const float lineWidth = gl::clamp(mState.getLineWidth(), mState.getCaps().minAliasedLineWidth,
-                                      mState.getCaps().maxAliasedLineWidth);
+    const gl::LocalState &state = mState.getLocalState();
+    const float lineWidth = gl::clamp(state.getLineWidth(), state.getCaps().minAliasedLineWidth,
+                                      state.getCaps().maxAliasedLineWidth);
     mRenderPassCommandBuffer->setLineWidth(lineWidth);
     return angle::Result::Continue;
 }
@@ -3070,7 +3074,7 @@ angle::Result ContextVk::handleDirtyGraphicsDynamicLineWidth(DirtyBits::Iterator
 angle::Result ContextVk::handleDirtyGraphicsDynamicDepthBias(DirtyBits::Iterator *dirtyBitsIterator,
                                                              DirtyBits dirtyBitMask)
 {
-    const gl::RasterizerState &rasterState = mState.getRasterizerState();
+    const gl::RasterizerState &rasterState = mState.getLocalState().getRasterizerState();
 
     float depthBiasConstantFactor = rasterState.polygonOffsetUnits;
     if (getFeatures().doubleDepthBiasConstantFactor.enabled)
@@ -3088,7 +3092,7 @@ angle::Result ContextVk::handleDirtyGraphicsDynamicBlendConstants(
     DirtyBits::Iterator *dirtyBitsIterator,
     DirtyBits dirtyBitMask)
 {
-    const gl::ColorF &color = mState.getBlendColor();
+    const gl::ColorF &color = mState.getLocalState().getBlendColor();
     mRenderPassCommandBuffer->setBlendConstants(color.data());
     return angle::Result::Continue;
 }
@@ -3097,7 +3101,7 @@ angle::Result ContextVk::handleDirtyGraphicsDynamicStencilCompareMask(
     DirtyBits::Iterator *dirtyBitsIterator,
     DirtyBits dirtyBitMask)
 {
-    const gl::DepthStencilState &depthStencilState = mState.getDepthStencilState();
+    const gl::DepthStencilState &depthStencilState = mState.getLocalState().getDepthStencilState();
     mRenderPassCommandBuffer->setStencilCompareMask(depthStencilState.stencilMask,
                                                     depthStencilState.stencilBackMask);
     return angle::Result::Continue;
@@ -3107,7 +3111,7 @@ angle::Result ContextVk::handleDirtyGraphicsDynamicStencilWriteMask(
     DirtyBits::Iterator *dirtyBitsIterator,
     DirtyBits dirtyBitMask)
 {
-    const gl::DepthStencilState &depthStencilState = mState.getDepthStencilState();
+    const gl::DepthStencilState &depthStencilState = mState.getLocalState().getDepthStencilState();
     const gl::Framebuffer *drawFramebuffer         = mState.getDrawFramebuffer();
     uint32_t frontWritemask                        = 0;
     uint32_t backWritemask                         = 0;
@@ -3126,15 +3130,15 @@ angle::Result ContextVk::handleDirtyGraphicsDynamicStencilReference(
     DirtyBits::Iterator *dirtyBitsIterator,
     DirtyBits dirtyBitMask)
 {
-    mRenderPassCommandBuffer->setStencilReference(mState.getStencilRef(),
-                                                  mState.getStencilBackRef());
+    const gl::LocalState &state = mState.getLocalState();
+    mRenderPassCommandBuffer->setStencilReference(state.getStencilRef(), state.getStencilBackRef());
     return angle::Result::Continue;
 }
 
 angle::Result ContextVk::handleDirtyGraphicsDynamicCullMode(DirtyBits::Iterator *dirtyBitsIterator,
                                                             DirtyBits dirtyBitMask)
 {
-    const gl::RasterizerState &rasterState = mState.getRasterizerState();
+    const gl::RasterizerState &rasterState = mState.getLocalState().getRasterizerState();
     mRenderPassCommandBuffer->setCullMode(gl_vk::GetCullMode(rasterState));
     return angle::Result::Continue;
 }
@@ -3142,7 +3146,7 @@ angle::Result ContextVk::handleDirtyGraphicsDynamicCullMode(DirtyBits::Iterator 
 angle::Result ContextVk::handleDirtyGraphicsDynamicFrontFace(DirtyBits::Iterator *dirtyBitsIterator,
                                                              DirtyBits dirtyBitMask)
 {
-    const gl::RasterizerState &rasterState = mState.getRasterizerState();
+    const gl::RasterizerState &rasterState = mState.getLocalState().getRasterizerState();
     mRenderPassCommandBuffer->setFrontFace(
         gl_vk::GetFrontFace(rasterState.frontFace, isYFlipEnabledForDrawFBO()));
     return angle::Result::Continue;
@@ -3152,7 +3156,7 @@ angle::Result ContextVk::handleDirtyGraphicsDynamicDepthTestEnable(
     DirtyBits::Iterator *dirtyBitsIterator,
     DirtyBits dirtyBitMask)
 {
-    const gl::DepthStencilState depthStencilState = mState.getDepthStencilState();
+    const gl::DepthStencilState depthStencilState = mState.getLocalState().getDepthStencilState();
     gl::Framebuffer *drawFramebuffer              = mState.getDrawFramebuffer();
 
     // Only enable the depth test if the draw framebuffer has a depth buffer.
@@ -3165,7 +3169,7 @@ angle::Result ContextVk::handleDirtyGraphicsDynamicDepthWriteEnable(
     DirtyBits::Iterator *dirtyBitsIterator,
     DirtyBits dirtyBitMask)
 {
-    const gl::DepthStencilState depthStencilState = mState.getDepthStencilState();
+    const gl::DepthStencilState depthStencilState = mState.getLocalState().getDepthStencilState();
     gl::Framebuffer *drawFramebuffer              = mState.getDrawFramebuffer();
 
     // Only enable the depth write if the draw framebuffer has a depth buffer.
@@ -3179,7 +3183,7 @@ angle::Result ContextVk::handleDirtyGraphicsDynamicDepthCompareOp(
     DirtyBits::Iterator *dirtyBitsIterator,
     DirtyBits dirtyBitMask)
 {
-    const gl::DepthStencilState depthStencilState = mState.getDepthStencilState();
+    const gl::DepthStencilState depthStencilState = mState.getLocalState().getDepthStencilState();
     mRenderPassCommandBuffer->setDepthCompareOp(gl_vk::GetCompareOp(depthStencilState.depthFunc));
     return angle::Result::Continue;
 }
@@ -3188,7 +3192,7 @@ angle::Result ContextVk::handleDirtyGraphicsDynamicStencilTestEnable(
     DirtyBits::Iterator *dirtyBitsIterator,
     DirtyBits dirtyBitMask)
 {
-    const gl::DepthStencilState depthStencilState = mState.getDepthStencilState();
+    const gl::DepthStencilState depthStencilState = mState.getLocalState().getDepthStencilState();
     gl::Framebuffer *drawFramebuffer              = mState.getDrawFramebuffer();
 
     // Only enable the stencil test if the draw framebuffer has a stencil buffer.
@@ -3200,7 +3204,7 @@ angle::Result ContextVk::handleDirtyGraphicsDynamicStencilTestEnable(
 angle::Result ContextVk::handleDirtyGraphicsDynamicStencilOp(DirtyBits::Iterator *dirtyBitsIterator,
                                                              DirtyBits dirtyBitMask)
 {
-    const gl::DepthStencilState depthStencilState = mState.getDepthStencilState();
+    const gl::DepthStencilState depthStencilState = mState.getLocalState().getDepthStencilState();
     mRenderPassCommandBuffer->setStencilOp(
         VK_STENCIL_FACE_FRONT_BIT, gl_vk::GetStencilOp(depthStencilState.stencilFail),
         gl_vk::GetStencilOp(depthStencilState.stencilPassDepthPass),
@@ -3221,7 +3225,7 @@ angle::Result ContextVk::handleDirtyGraphicsDynamicRasterizerDiscardEnable(
     const bool isEmulatingRasterizerDiscard =
         isEmulatingRasterizerDiscardDuringPrimitivesGeneratedQuery(
             mState.isQueryActive(gl::QueryType::PrimitivesGenerated));
-    const bool isRasterizerDiscardEnabled = mState.isRasterizerDiscardEnabled();
+    const bool isRasterizerDiscardEnabled = mState.getLocalState().isRasterizerDiscardEnabled();
 
     mRenderPassCommandBuffer->setRasterizerDiscardEnable(isRasterizerDiscardEnabled &&
                                                          !isEmulatingRasterizerDiscard);
@@ -3232,14 +3236,15 @@ angle::Result ContextVk::handleDirtyGraphicsDynamicDepthBiasEnable(
     DirtyBits::Iterator *dirtyBitsIterator,
     DirtyBits dirtyBitMask)
 {
-    mRenderPassCommandBuffer->setDepthBiasEnable(mState.isPolygonOffsetEnabled());
+    mRenderPassCommandBuffer->setDepthBiasEnable(mState.getLocalState().isPolygonOffsetEnabled());
     return angle::Result::Continue;
 }
 
 angle::Result ContextVk::handleDirtyGraphicsDynamicLogicOp(DirtyBits::Iterator *dirtyBitsIterator,
                                                            DirtyBits dirtyBitMask)
 {
-    mRenderPassCommandBuffer->setLogicOp(gl_vk::GetLogicOp(gl::ToGLenum(mState.getLogicOp())));
+    mRenderPassCommandBuffer->setLogicOp(
+        gl_vk::GetLogicOp(gl::ToGLenum(mState.getLocalState().getLogicOp())));
     return angle::Result::Continue;
 }
 
@@ -3247,7 +3252,8 @@ angle::Result ContextVk::handleDirtyGraphicsDynamicPrimitiveRestartEnable(
     DirtyBits::Iterator *dirtyBitsIterator,
     DirtyBits dirtyBitMask)
 {
-    mRenderPassCommandBuffer->setPrimitiveRestartEnable(mState.isPrimitiveRestartEnabled());
+    mRenderPassCommandBuffer->setPrimitiveRestartEnable(
+        mState.getLocalState().isPrimitiveRestartEnabled());
     return angle::Result::Continue;
 }
 
@@ -3255,7 +3261,7 @@ angle::Result ContextVk::handleDirtyGraphicsDynamicFragmentShadingRate(
     DirtyBits::Iterator *dirtyBitsIterator,
     DirtyBits dirtyBitMask)
 {
-    gl::ShadingRate shadingRate = getState().getShadingRate();
+    gl::ShadingRate shadingRate = mState.getLocalState().getShadingRate();
     if (shadingRate == gl::ShadingRate::Undefined)
     {
         // Shading rate has not been set. Since this is dynamic state, set it to 1x1
@@ -4450,6 +4456,8 @@ angle::Result ContextVk::optimizeRenderPassForPresent(VkFramebuffer framebufferH
         return angle::Result::Continue;
     }
 
+    const gl::LocalState &state = mState.getLocalState();
+
     // EGL1.5 spec: The contents of ancillary buffers are always undefined after calling
     // eglSwapBuffers
     FramebufferVk *drawFramebufferVk         = getDrawFramebuffer();
@@ -4457,7 +4465,7 @@ angle::Result ContextVk::optimizeRenderPassForPresent(VkFramebuffer framebufferH
     if (depthStencilRenderTarget != nullptr)
     {
         // Change depth/stencil attachment storeOp to DONT_CARE
-        const gl::DepthStencilState &dsState = mState.getDepthStencilState();
+        const gl::DepthStencilState &dsState = state.getDepthStencilState();
         mRenderPassCommands->invalidateRenderPassDepthAttachment(
             dsState, mRenderPassCommands->getRenderArea());
         mRenderPassCommands->invalidateRenderPassStencilAttachment(
@@ -4506,7 +4514,7 @@ angle::Result ContextVk::optimizeRenderPassForPresent(VkFramebuffer framebufferH
         if (presentMode != vk::PresentMode::SharedDemandRefreshKHR)
         {
             commandBufferHelper.invalidateRenderPassColorAttachment(
-                mState, 0, vk::PackedAttachmentIndex(0), invalidateArea);
+                state, 0, vk::PackedAttachmentIndex(0), invalidateArea);
         }
 
         ANGLE_TRY(
@@ -4764,7 +4772,7 @@ SurfaceRotation ContextVk::getSurfaceRotationImpl(const gl::Framebuffer *framebu
 
 void ContextVk::updateColorMasks()
 {
-    const gl::BlendStateExt &blendStateExt = mState.getBlendStateExt();
+    const gl::BlendStateExt &blendStateExt = mState.getLocalState().getBlendStateExt();
 
     mClearColorMasks = blendStateExt.getColorMaskBits();
 
@@ -4794,7 +4802,7 @@ void ContextVk::updateMissingOutputsMask()
 
 void ContextVk::updateBlendFuncsAndEquations()
 {
-    const gl::BlendStateExt &blendStateExt = mState.getBlendStateExt();
+    const gl::BlendStateExt &blendStateExt = mState.getLocalState().getBlendStateExt();
 
     FramebufferVk *framebufferVk              = vk::GetImpl(mState.getDrawFramebuffer());
     mCachedDrawFramebufferColorAttachmentMask = framebufferVk->getState().getEnabledDrawBuffers();
@@ -4809,7 +4817,9 @@ void ContextVk::updateBlendFuncsAndEquations()
 void ContextVk::updateSampleMaskWithRasterizationSamples(const uint32_t rasterizationSamples)
 {
     static_assert(sizeof(uint32_t) == sizeof(GLbitfield), "Vulkan assumes 32-bit sample masks");
-    ASSERT(mState.getMaxSampleMaskWords() == 1);
+
+    const gl::LocalState &state = mState.getLocalState();
+    ASSERT(state.getMaxSampleMaskWords() == 1);
 
     uint32_t mask = std::numeric_limits<uint16_t>::max();
 
@@ -4818,17 +4828,16 @@ void ContextVk::updateSampleMaskWithRasterizationSamples(const uint32_t rasteriz
     // where 1x multisampling is disallowed.
     if (rasterizationSamples > 1)
     {
-        if (mState.isSampleMaskEnabled())
+        if (state.isSampleMaskEnabled())
         {
-            mask = mState.getSampleMaskWord(0) & angle::BitMask<uint32_t>(rasterizationSamples);
+            mask = state.getSampleMaskWord(0) & angle::BitMask<uint32_t>(rasterizationSamples);
         }
 
         // If sample coverage is enabled, emulate it by generating and applying a mask on top of the
         // sample mask.
-        if (mState.isSampleCoverageEnabled())
+        if (state.isSampleCoverageEnabled())
         {
-            ApplySampleCoverage(mState, GetCoverageSampleCount(mState, rasterizationSamples),
-                                &mask);
+            ApplySampleCoverage(state, GetCoverageSampleCount(state, rasterizationSamples), &mask);
         }
     }
 
@@ -4842,7 +4851,7 @@ void ContextVk::updateAlphaToCoverageWithRasterizationSamples(const uint32_t ras
     // where 1x multisampling is disallowed.
     mGraphicsPipelineDesc->updateAlphaToCoverageEnable(
         &mGraphicsPipelineTransition,
-        mState.isSampleAlphaToCoverageEnabled() && rasterizationSamples > 1);
+        mState.getLocalState().isSampleAlphaToCoverageEnabled() && rasterizationSamples > 1);
 }
 
 void ContextVk::updateFrameBufferFetchSamples(const uint32_t prevSamples, const uint32_t curSamples)
@@ -4915,7 +4924,7 @@ void ContextVk::updateViewport(FramebufferVk *framebufferVk,
         rotatedRect, nearPlane, farPlane, invertViewport,
         // If clip space origin is upper left, viewport origin's y value will be offset by the
         // height of the viewport when clip space is mapped into screen space.
-        mState.getClipOrigin() == gl::ClipOrigin::UpperLeft,
+        mState.getLocalState().getClipOrigin() == gl::ClipOrigin::UpperLeft,
         // If the surface is rotated 90/270 degrees, use the framebuffer's width instead of the
         // height for calculating the final viewport.
         isRotatedAspectRatioForDrawFBO() ? fbDimensions.width : fbDimensions.height, &mViewport);
@@ -4934,8 +4943,9 @@ void ContextVk::updateFrontFace()
     }
     else
     {
-        mGraphicsPipelineDesc->updateFrontFace(
-            &mGraphicsPipelineTransition, mState.getRasterizerState(), isYFlipEnabledForDrawFBO());
+        mGraphicsPipelineDesc->updateFrontFace(&mGraphicsPipelineTransition,
+                                               mState.getLocalState().getRasterizerState(),
+                                               isYFlipEnabledForDrawFBO());
     }
 }
 
@@ -4954,18 +4964,19 @@ void ContextVk::updateDepthRange(float nearPlane, float farPlane)
 
 void ContextVk::updateScissor(const gl::State &glState)
 {
+    const gl::LocalState &state  = glState.getLocalState();
     FramebufferVk *framebufferVk = vk::GetImpl(glState.getDrawFramebuffer());
     gl::Rectangle renderArea     = framebufferVk->getNonRotatedCompleteRenderArea();
 
     // Clip the render area to the viewport.
     gl::Rectangle viewportClippedRenderArea;
-    if (!gl::ClipRectangle(renderArea, getCorrectedViewport(glState.getViewport()),
+    if (!gl::ClipRectangle(renderArea, getCorrectedViewport(state.getViewport()),
                            &viewportClippedRenderArea))
     {
         viewportClippedRenderArea = gl::Rectangle();
     }
 
-    gl::Rectangle scissoredArea = ClipRectToScissor(getState(), viewportClippedRenderArea, false);
+    gl::Rectangle scissoredArea = ClipRectToScissor(state, viewportClippedRenderArea, false);
     gl::Rectangle rotatedScissoredArea;
     RotateRectangle(getRotationDrawFramebuffer(), isViewportFlipEnabledForDrawFBO(),
                     renderArea.width, renderArea.height, scissoredArea, &rotatedScissoredArea);
@@ -4993,7 +5004,7 @@ void ContextVk::updateDepthStencil(const gl::State &glState)
 
 void ContextVk::updateDepthTestEnabled(const gl::State &glState)
 {
-    const gl::DepthStencilState depthStencilState = glState.getDepthStencilState();
+    const gl::DepthStencilState depthStencilState = glState.getLocalState().getDepthStencilState();
     gl::Framebuffer *drawFramebuffer              = glState.getDrawFramebuffer();
 
     if (mRenderer->useDepthTestEnableDynamicState())
@@ -5009,7 +5020,7 @@ void ContextVk::updateDepthTestEnabled(const gl::State &glState)
 
 void ContextVk::updateDepthWriteEnabled(const gl::State &glState)
 {
-    const gl::DepthStencilState depthStencilState = glState.getDepthStencilState();
+    const gl::DepthStencilState depthStencilState = glState.getLocalState().getDepthStencilState();
     gl::Framebuffer *drawFramebuffer              = glState.getDrawFramebuffer();
 
     if (mRenderer->useDepthWriteEnableDynamicState())
@@ -5032,13 +5043,13 @@ void ContextVk::updateDepthFunc(const gl::State &glState)
     else
     {
         mGraphicsPipelineDesc->updateDepthFunc(&mGraphicsPipelineTransition,
-                                               glState.getDepthStencilState());
+                                               glState.getLocalState().getDepthStencilState());
     }
 }
 
 void ContextVk::updateStencilTestEnabled(const gl::State &glState)
 {
-    const gl::DepthStencilState depthStencilState = glState.getDepthStencilState();
+    const gl::DepthStencilState depthStencilState = glState.getLocalState().getDepthStencilState();
     gl::Framebuffer *drawFramebuffer              = glState.getDrawFramebuffer();
 
     if (mRenderer->useStencilTestEnableDynamicState())
@@ -5056,9 +5067,9 @@ void ContextVk::updateStencilTestEnabled(const gl::State &glState)
 // rasterization feature.
 void ContextVk::updateSampleShadingWithRasterizationSamples(const uint32_t rasterizationSamples)
 {
-    bool sampleShadingEnable =
-        (rasterizationSamples <= 1 ? false : mState.isSampleShadingEnabled());
-    float minSampleShading = mState.getMinSampleShading();
+    const gl::LocalState &state = mState.getLocalState();
+    bool sampleShadingEnable = (rasterizationSamples <= 1 ? false : state.isSampleShadingEnabled());
+    float minSampleShading   = state.getMinSampleShading();
 
     // If sample shading is not enabled, check if it should be implicitly enabled according to the
     // program.  Normally the driver should do this, but some drivers don't.
@@ -5111,7 +5122,7 @@ void ContextVk::updateRasterizerDiscardEnabled(bool isPrimitivesGeneratedQueryAc
     }
     else
     {
-        const bool isRasterizerDiscardEnabled = mState.isRasterizerDiscardEnabled();
+        const bool isRasterizerDiscardEnabled = mState.getLocalState().isRasterizerDiscardEnabled();
 
         mGraphicsPipelineDesc->updateRasterizerDiscardEnabled(
             &mGraphicsPipelineTransition,
@@ -5150,6 +5161,7 @@ void ContextVk::updateDither()
         return;
     }
 
+    const gl::LocalState &state  = mState.getLocalState();
     FramebufferVk *framebufferVk = vk::GetImpl(mState.getDrawFramebuffer());
 
     // Dithering in OpenGL is vaguely defined, to the extent that no dithering is also a valid
@@ -5166,7 +5178,7 @@ void ContextVk::updateDither()
     // - 11: Dither for RGB565
     //
     uint16_t ditherControl = 0;
-    if (mState.isDitherEnabled())
+    if (state.isDitherEnabled())
     {
         const gl::DrawBufferMask attachmentMask =
             framebufferVk->getState().getColorAttachmentsMask();
@@ -5176,8 +5188,8 @@ void ContextVk::updateDither()
             // As dithering is emulated in the fragment shader itself, there are a number of
             // situations that can lead to incorrect blending.  We only allow blending with specific
             // combinations know to not interfere with dithering.
-            if (mState.isBlendEnabledIndexed(static_cast<GLuint>(colorIndex)) &&
-                !BlendModeSupportsDither(mState, colorIndex))
+            if (state.isBlendEnabledIndexed(static_cast<GLuint>(colorIndex)) &&
+                !BlendModeSupportsDither(state, colorIndex))
             {
                 continue;
             }
@@ -5229,7 +5241,7 @@ void ContextVk::updateStencilWriteWorkaround()
     // coverage broken.  When the program has discard, or when alpha to coverage is enabled, these
     // optimizations are disabled by specifying a non-zero static state for stencil write mask.
     const bool programHasDiscard        = mState.getProgramExecutable()->hasDiscard();
-    const bool isAlphaToCoverageEnabled = mState.isSampleAlphaToCoverageEnabled();
+    const bool isAlphaToCoverageEnabled = mState.getLocalState().isSampleAlphaToCoverageEnabled();
 
     mGraphicsPipelineDesc->updateNonZeroStencilWriteMaskWorkaround(
         &mGraphicsPipelineTransition, programHasDiscard || isAlphaToCoverageEnabled);
@@ -5307,6 +5319,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                                    gl::Command command)
 {
     const gl::State &glState                       = context->getState();
+    const gl::LocalState &state                    = glState.getLocalState();
     const gl::ProgramExecutable *programExecutable = glState.getProgramExecutable();
 
     if ((dirtyBits & mPipelineDirtyBitsMask).any() &&
@@ -5330,18 +5343,18 @@ angle::Result ContextVk::syncState(const gl::Context *context,
             case gl::state::DIRTY_BIT_VIEWPORT:
             {
                 FramebufferVk *framebufferVk = vk::GetImpl(glState.getDrawFramebuffer());
-                updateViewport(framebufferVk, glState.getViewport(), glState.getNearPlane(),
-                               glState.getFarPlane());
+                updateViewport(framebufferVk, state.getViewport(), state.getNearPlane(),
+                               state.getFarPlane());
                 // Update the scissor, which will be constrained to the viewport
                 updateScissor(glState);
                 break;
             }
             case gl::state::DIRTY_BIT_DEPTH_RANGE:
-                updateDepthRange(glState.getNearPlane(), glState.getFarPlane());
+                updateDepthRange(state.getNearPlane(), state.getFarPlane());
                 break;
             case gl::state::DIRTY_BIT_BLEND_ENABLED:
                 mGraphicsPipelineDesc->updateBlendEnabled(
-                    &mGraphicsPipelineTransition, glState.getBlendStateExt().getEnabledMask());
+                    &mGraphicsPipelineTransition, state.getBlendStateExt().getEnabledMask());
                 updateDither();
                 break;
             case gl::state::DIRTY_BIT_BLEND_COLOR:
@@ -5349,12 +5362,12 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 break;
             case gl::state::DIRTY_BIT_BLEND_FUNCS:
                 mGraphicsPipelineDesc->updateBlendFuncs(
-                    &mGraphicsPipelineTransition, glState.getBlendStateExt(),
+                    &mGraphicsPipelineTransition, state.getBlendStateExt(),
                     drawFramebufferVk->getState().getColorAttachmentsMask());
                 break;
             case gl::state::DIRTY_BIT_BLEND_EQUATIONS:
                 mGraphicsPipelineDesc->updateBlendEquations(
-                    &mGraphicsPipelineTransition, glState.getBlendStateExt(),
+                    &mGraphicsPipelineTransition, state.getBlendStateExt(),
                     drawFramebufferVk->getState().getColorAttachmentsMask());
                 updateAdvancedBlendEquations(programExecutable);
                 break;
@@ -5406,7 +5419,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 else
                 {
                     mGraphicsPipelineDesc->updateStencilFrontFuncs(&mGraphicsPipelineTransition,
-                                                                   glState.getDepthStencilState());
+                                                                   state.getDepthStencilState());
                 }
                 mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_STENCIL_COMPARE_MASK);
                 mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_STENCIL_REFERENCE);
@@ -5420,7 +5433,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 else
                 {
                     mGraphicsPipelineDesc->updateStencilBackFuncs(&mGraphicsPipelineTransition,
-                                                                  glState.getDepthStencilState());
+                                                                  state.getDepthStencilState());
                 }
                 mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_STENCIL_COMPARE_MASK);
                 mGraphicsDirtyBits.set(DIRTY_BIT_DYNAMIC_STENCIL_REFERENCE);
@@ -5434,7 +5447,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 else
                 {
                     mGraphicsPipelineDesc->updateStencilFrontOps(&mGraphicsPipelineTransition,
-                                                                 glState.getDepthStencilState());
+                                                                 state.getDepthStencilState());
                 }
                 onDepthStencilAccessChange();
                 break;
@@ -5446,7 +5459,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 else
                 {
                     mGraphicsPipelineDesc->updateStencilBackOps(&mGraphicsPipelineTransition,
-                                                                glState.getDepthStencilState());
+                                                                state.getDepthStencilState());
                 }
                 onDepthStencilAccessChange();
                 break;
@@ -5464,7 +5477,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 else
                 {
                     mGraphicsPipelineDesc->updateCullMode(&mGraphicsPipelineTransition,
-                                                          glState.getRasterizerState());
+                                                          state.getRasterizerState());
                 }
                 break;
             case gl::state::DIRTY_BIT_FRONT_FACE:
@@ -5478,7 +5491,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 else
                 {
                     mGraphicsPipelineDesc->updatePolygonOffsetEnabled(
-                        &mGraphicsPipelineTransition, glState.isPolygonOffsetEnabled());
+                        &mGraphicsPipelineTransition, state.isPolygonOffsetEnabled());
                 }
                 break;
             case gl::state::DIRTY_BIT_POLYGON_OFFSET:
@@ -5500,7 +5513,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 else
                 {
                     mGraphicsPipelineDesc->updatePrimitiveRestartEnabled(
-                        &mGraphicsPipelineTransition, glState.isPrimitiveRestartEnabled());
+                        &mGraphicsPipelineTransition, state.isPrimitiveRestartEnabled());
                 }
                 // Additionally set the index buffer dirty if conversion from uint8 might have been
                 // necessary.  Otherwise if primitive restart is enabled and the index buffer is
@@ -5512,17 +5525,17 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 }
                 break;
             case gl::state::DIRTY_BIT_CLEAR_COLOR:
-                mClearColorValue.color.float32[0] = glState.getColorClearValue().red;
-                mClearColorValue.color.float32[1] = glState.getColorClearValue().green;
-                mClearColorValue.color.float32[2] = glState.getColorClearValue().blue;
-                mClearColorValue.color.float32[3] = glState.getColorClearValue().alpha;
+                mClearColorValue.color.float32[0] = state.getColorClearValue().red;
+                mClearColorValue.color.float32[1] = state.getColorClearValue().green;
+                mClearColorValue.color.float32[2] = state.getColorClearValue().blue;
+                mClearColorValue.color.float32[3] = state.getColorClearValue().alpha;
                 break;
             case gl::state::DIRTY_BIT_CLEAR_DEPTH:
-                mClearDepthStencilValue.depthStencil.depth = glState.getDepthClearValue();
+                mClearDepthStencilValue.depthStencil.depth = state.getDepthClearValue();
                 break;
             case gl::state::DIRTY_BIT_CLEAR_STENCIL:
                 mClearDepthStencilValue.depthStencil.stencil =
-                    static_cast<uint32_t>(glState.getStencilClearValue());
+                    static_cast<uint32_t>(state.getStencilClearValue());
                 break;
             case gl::state::DIRTY_BIT_UNPACK_STATE:
                 // This is a no-op, it's only important to use the right unpack state when we do
@@ -5579,8 +5592,8 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 drawFramebufferVk->setReadOnlyStencilFeedbackLoopMode(false);
                 updateFlipViewportDrawFramebuffer(glState);
                 updateSurfaceRotationDrawFramebuffer(glState, context->getCurrentDrawSurface());
-                updateViewport(drawFramebufferVk, glState.getViewport(), glState.getNearPlane(),
-                               glState.getFarPlane());
+                updateViewport(drawFramebufferVk, state.getViewport(), state.getNearPlane(),
+                               state.getFarPlane());
                 updateColorMasks();
                 updateMissingOutputsMask();
                 updateRasterizationSamples(drawFramebufferVk->getSamples());
@@ -5597,7 +5610,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 gl::DrawBufferMask newColorAttachmentMask =
                     drawFramebufferVk->getState().getColorAttachmentsMask();
                 mGraphicsPipelineDesc->resetBlendFuncsAndEquations(
-                    &mGraphicsPipelineTransition, glState.getBlendStateExt(),
+                    &mGraphicsPipelineTransition, state.getBlendStateExt(),
                     mCachedDrawFramebufferColorAttachmentMask, newColorAttachmentMask);
                 mCachedDrawFramebufferColorAttachmentMask = newColorAttachmentMask;
 
@@ -5703,7 +5716,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 // http://anglebug.com/7657
                 mGraphicsPipelineDesc->updateAlphaToOneEnable(
                     &mGraphicsPipelineTransition,
-                    glState.isMultisamplingEnabled() && glState.isSampleAlphaToOneEnabled());
+                    state.isMultisamplingEnabled() && state.isSampleAlphaToOneEnabled());
                 break;
             case gl::state::DIRTY_BIT_SAMPLE_SHADING:
                 updateSampleShadingWithRasterizationSamples(drawFramebufferVk->getSamples());
@@ -5714,7 +5727,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 break;
             case gl::state::DIRTY_BIT_CURRENT_VALUES:
             {
-                invalidateDefaultAttributes(glState.getAndResetDirtyCurrentValues());
+                invalidateDefaultAttributes(state.getAndResetDirtyCurrentValues());
                 break;
             }
             case gl::state::DIRTY_BIT_PROVOKING_VERTEX:
@@ -5730,8 +5743,8 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                     {
                         case gl::state::EXTENDED_DIRTY_BIT_CLIP_CONTROL:
                             updateViewport(vk::GetImpl(glState.getDrawFramebuffer()),
-                                           glState.getViewport(), glState.getNearPlane(),
-                                           glState.getFarPlane());
+                                           state.getViewport(), state.getNearPlane(),
+                                           state.getFarPlane());
                             // Since we are flipping the y coordinate, update front face state
                             updateFrontFace();
                             updateScissor(glState);
@@ -5744,7 +5757,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                             {
                                 mGraphicsPipelineDesc->updateDepthClipControl(
                                     &mGraphicsPipelineTransition,
-                                    !glState.isClipDepthModeZeroToOne());
+                                    !state.isClipDepthModeZeroToOne());
                             }
                             else
                             {
@@ -5757,14 +5770,14 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                         case gl::state::EXTENDED_DIRTY_BIT_DEPTH_CLAMP_ENABLED:
                             // TODO(https://anglebug.com/7713): Use EDS3
                             mGraphicsPipelineDesc->updateDepthClampEnabled(
-                                &mGraphicsPipelineTransition, glState.isDepthClampEnabled());
+                                &mGraphicsPipelineTransition, state.isDepthClampEnabled());
                             break;
                         case gl::state::EXTENDED_DIRTY_BIT_MIPMAP_GENERATION_HINT:
                             break;
                         case gl::state::EXTENDED_DIRTY_BIT_POLYGON_MODE:
                             // TODO(https://anglebug.com/7713): Use EDS3
                             mGraphicsPipelineDesc->updatePolygonMode(&mGraphicsPipelineTransition,
-                                                                     glState.getPolygonMode());
+                                                                     state.getPolygonMode());
                             // When polygon mode is changed, depth bias might need to be toggled.
                             static_assert(
                                 gl::state::EXTENDED_DIRTY_BIT_POLYGON_OFFSET_LINE_ENABLED >
@@ -5782,14 +5795,14 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                             else
                             {
                                 mGraphicsPipelineDesc->updatePolygonOffsetEnabled(
-                                    &mGraphicsPipelineTransition, glState.isPolygonOffsetEnabled());
+                                    &mGraphicsPipelineTransition, state.isPolygonOffsetEnabled());
                             }
                             break;
                         case gl::state::EXTENDED_DIRTY_BIT_SHADER_DERIVATIVE_HINT:
                             break;
                         case gl::state::EXTENDED_DIRTY_BIT_LOGIC_OP_ENABLED:
                             mGraphicsPipelineDesc->updateLogicOpEnabled(
-                                &mGraphicsPipelineTransition, glState.isLogicOpEnabled());
+                                &mGraphicsPipelineTransition, state.isLogicOpEnabled());
                             break;
                         case gl::state::EXTENDED_DIRTY_BIT_LOGIC_OP:
                             if (mRenderer->useLogicOpDynamicState())
@@ -5800,7 +5813,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                             {
                                 mGraphicsPipelineDesc->updateLogicOp(
                                     &mGraphicsPipelineTransition,
-                                    gl_vk::GetLogicOp(gl::ToGLenum(glState.getLogicOp())));
+                                    gl_vk::GetLogicOp(gl::ToGLenum(state.getLogicOp())));
                             }
                             break;
                         case gl::state::EXTENDED_DIRTY_BIT_SHADING_RATE:
@@ -5817,7 +5830,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
             }
             case gl::state::DIRTY_BIT_PATCH_VERTICES:
                 mGraphicsPipelineDesc->updatePatchVertices(&mGraphicsPipelineTransition,
-                                                           glState.getPatchVertices());
+                                                           state.getPatchVertices());
                 break;
             default:
                 UNREACHABLE();
@@ -6852,16 +6865,17 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(DirtyBits::Iterator *
     GraphicsDriverUniforms *driverUniforms = &driverUniformsExt.common;
     uint32_t driverUniformSize             = getDriverUniformSize(PipelineType::Graphics);
 
-    const float depthRangeNear = mState.getNearPlane();
-    const float depthRangeFar  = mState.getFarPlane();
-    const uint32_t numSamples  = drawFramebufferVk->getSamples();
+    const gl::LocalState &state = mState.getLocalState();
+    const float depthRangeNear  = state.getNearPlane();
+    const float depthRangeFar   = state.getFarPlane();
+    const uint32_t numSamples   = drawFramebufferVk->getSamples();
 
     uint32_t advancedBlendEquation = 0;
     if (getFeatures().emulateAdvancedBlendEquations.enabled)
     {
         // Pass the advanced blend equation to shader as-is.  If the equation is not one of the
         // advanced ones, 0 is expected.
-        const gl::BlendStateExt &blendStateExt = mState.getBlendStateExt();
+        const gl::BlendStateExt &blendStateExt = state.getBlendStateExt();
         if (blendStateExt.getUsesAdvancedBlendEquationMask().test(0))
         {
             advancedBlendEquation = static_cast<uint32_t>(gl::FromGLenum<gl::BlendEquationType>(
@@ -6870,9 +6884,9 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(DirtyBits::Iterator *
     }
 
     const uint32_t swapXY               = IsRotatedAspectRatio(mCurrentRotationDrawFramebuffer);
-    const uint32_t enabledClipDistances = mState.getEnabledClipDistances().bits();
+    const uint32_t enabledClipDistances = state.getEnabledClipDistances().bits();
     const uint32_t transformDepth =
-        getFeatures().supportsDepthClipControl.enabled ? 0 : !mState.isClipDepthModeZeroToOne();
+        getFeatures().supportsDepthClipControl.enabled ? 0 : !state.isClipDepthModeZeroToOne();
 
     static_assert(angle::BitMask<uint32_t>(gl::IMPLEMENTATION_MAX_CLIP_DISTANCES) <=
                       sh::vk::kDriverUniformsMiscEnabledClipPlanesMask,
@@ -7073,8 +7087,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context, gl::Co
 template <typename CommandBufferHelperT>
 angle::Result ContextVk::updateActiveImages(CommandBufferHelperT *commandBufferHelper)
 {
-    const gl::State &glState                = mState;
-    const gl::ProgramExecutable *executable = glState.getProgramExecutable();
+    const gl::ProgramExecutable *executable = mState.getProgramExecutable();
     ASSERT(executable);
 
     mActiveImages.fill(nullptr);
@@ -7093,7 +7106,7 @@ angle::Result ContextVk::updateActiveImages(CommandBufferHelperT *commandBufferH
 
     for (size_t imageUnitIndex : activeImages)
     {
-        const gl::ImageUnit &imageUnit = glState.getImageUnit(imageUnitIndex);
+        const gl::ImageUnit &imageUnit = mState.getImageUnit(imageUnitIndex);
         const gl::Texture *texture     = imageUnit.texture.get();
         if (texture == nullptr)
         {
@@ -7989,7 +8002,8 @@ bool ContextVk::doesPrimitivesGeneratedQuerySupportRasterizerDiscard() const
 bool ContextVk::isEmulatingRasterizerDiscardDuringPrimitivesGeneratedQuery(
     bool isPrimitivesGeneratedQueryActive) const
 {
-    return isPrimitivesGeneratedQueryActive && mState.isRasterizerDiscardEnabled() &&
+    return isPrimitivesGeneratedQueryActive &&
+           mState.getLocalState().isRasterizerDiscardEnabled() &&
            !doesPrimitivesGeneratedQuerySupportRasterizerDiscard();
 }
 
@@ -8057,14 +8071,15 @@ bool ContextVk::shouldSwitchToReadOnlyDepthStencilFeedbackLoopMode(gl::Texture *
         return false;
     }
 
+    const gl::LocalState &state = mState.getLocalState();
     if (isStencilTexture)
     {
         // Switch to read-only stencil feedback loop if not already
-        return !mState.isStencilWriteEnabled() &&
+        return !state.isStencilWriteEnabled() &&
                !drawFramebufferVk->isReadOnlyStencilFeedbackLoopMode();
     }
     // Switch to read-only depth feedback loop if not already
-    return !mState.isDepthWriteEnabled() && !drawFramebufferVk->isReadOnlyDepthFeedbackLoopMode();
+    return !state.isDepthWriteEnabled() && !drawFramebufferVk->isReadOnlyDepthFeedbackLoopMode();
 }
 
 angle::Result ContextVk::onResourceAccess(const vk::CommandBufferAccess &access)

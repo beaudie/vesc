@@ -121,7 +121,8 @@ bool NeedToInvertDepthRange(float near, float far)
 
 bool IsTransformFeedbackOnly(const gl::State &glState)
 {
-    return glState.isTransformFeedbackActiveUnpaused() && glState.isRasterizerDiscardEnabled();
+    return glState.isTransformFeedbackActiveUnpaused() &&
+           glState.getLocalState().isRasterizerDiscardEnabled();
 }
 
 std::string ConvertMarkerToString(GLsizei length, const char *marker)
@@ -452,7 +453,7 @@ angle::Result ContextMtl::drawArraysImpl(const gl::Context *context,
     {
         return angle::Result::Continue;
     }
-    if (requiresIndexRewrite(context->getState(), mode))
+    if (requiresIndexRewrite(mState.getLocalState(), mode))
     {
         return drawArraysProvokingVertexImpl(context, mode, first, count, instances, baseInstance);
     }
@@ -546,7 +547,7 @@ angle::Result ContextMtl::drawTriFanElements(const gl::Context *context,
         mtl::BufferRef genIdxBuffer;
         uint32_t genIdxBufferOffset;
         uint32_t genIndicesCount;
-        bool primitiveRestart = getState().isPrimitiveRestartEnabled();
+        bool primitiveRestart = mState.getLocalState().isPrimitiveRestartEnabled();
         ANGLE_TRY(AllocateTriangleFanBufferFromPool(this, count, &mTriFanIndexBuffer, &genIdxBuffer,
                                                     &genIdxBufferOffset, &genIndicesCount));
 
@@ -614,7 +615,7 @@ angle::Result ContextMtl::drawLineLoopElements(const gl::Context *context,
 {
     if (count >= 2)
     {
-        bool primitiveRestart = getState().isPrimitiveRestartEnabled();
+        bool primitiveRestart = mState.getLocalState().isPrimitiveRestartEnabled();
         if (instances <= 1 && !primitiveRestart && baseVertex == 0 && baseInstance == 0)
         {
             // Non instanced draw and no primitive restart, just use faster version.
@@ -800,13 +801,14 @@ angle::Result ContextMtl::drawElementsImpl(const gl::Context *context,
 
     size_t provokingVertexAdditionalOffset = 0;
 
-    if (requiresIndexRewrite(context->getState(), mode))
+    const gl::LocalState &state = mState.getLocalState();
+    if (requiresIndexRewrite(state, mode))
     {
         size_t outIndexCount      = 0;
         gl::PrimitiveMode newMode = gl::PrimitiveMode::InvalidEnum;
         drawIdxBuffer             = mProvokingVertexHelper.preconditionIndexBuffer(
             mtl::GetImpl(context), idxBuffer, count, convertedOffset,
-            mState.isPrimitiveRestartEnabled(), mode, convertedType, outIndexCount,
+            state.isPrimitiveRestartEnabled(), mode, convertedType, outIndexCount,
             provokingVertexAdditionalOffset, newMode);
         if (!drawIdxBuffer)
         {
@@ -1113,7 +1115,8 @@ angle::Result ContextMtl::syncState(const gl::Context *context,
                                     const gl::state::ExtendedDirtyBits extendedBitMask,
                                     gl::Command command)
 {
-    const gl::State &glState = context->getState();
+    const gl::State &glState    = context->getState();
+    const gl::LocalState &state = glState.getLocalState();
 
     // Metal's blend state is set at once, while ANGLE tracks separate dirty
     // bits: ENABLED, FUNCS, and EQUATIONS. Merge all three of them to the first one.
@@ -1141,24 +1144,24 @@ angle::Result ContextMtl::syncState(const gl::Context *context,
             case gl::state::DIRTY_BIT_VIEWPORT:
             {
                 FramebufferMtl *framebufferMtl = mtl::GetImpl(glState.getDrawFramebuffer());
-                updateViewport(framebufferMtl, glState.getViewport(), glState.getNearPlane(),
-                               glState.getFarPlane());
+                updateViewport(framebufferMtl, state.getViewport(), state.getNearPlane(),
+                               state.getFarPlane());
                 // Update the scissor, which will be constrained to the viewport
                 updateScissor(glState);
                 break;
             }
             case gl::state::DIRTY_BIT_DEPTH_RANGE:
-                updateDepthRange(glState.getNearPlane(), glState.getFarPlane());
+                updateDepthRange(state.getNearPlane(), state.getFarPlane());
                 break;
             case gl::state::DIRTY_BIT_BLEND_COLOR:
                 mDirtyBits.set(DIRTY_BIT_BLEND_COLOR);
                 break;
             case gl::state::DIRTY_BIT_BLEND_ENABLED:
-                updateBlendDescArray(glState.getBlendStateExt());
+                updateBlendDescArray(state.getBlendStateExt());
                 break;
             case gl::state::DIRTY_BIT_COLOR_MASK:
             {
-                const gl::BlendStateExt &blendStateExt = glState.getBlendStateExt();
+                const gl::BlendStateExt &blendStateExt = state.getBlendStateExt();
                 size_t i                               = 0;
                 for (; i < blendStateExt.getDrawBufferCount(); i++)
                 {
@@ -1194,47 +1197,47 @@ angle::Result ContextMtl::syncState(const gl::Context *context,
                 // NOTE(hqle): 3.1 MSAA support
                 break;
             case gl::state::DIRTY_BIT_DEPTH_TEST_ENABLED:
-                mDepthStencilDesc.updateDepthTestEnabled(glState.getDepthStencilState());
+                mDepthStencilDesc.updateDepthTestEnabled(state.getDepthStencilState());
                 mDirtyBits.set(DIRTY_BIT_DEPTH_STENCIL_DESC);
                 break;
             case gl::state::DIRTY_BIT_DEPTH_FUNC:
-                mDepthStencilDesc.updateDepthCompareFunc(glState.getDepthStencilState());
+                mDepthStencilDesc.updateDepthCompareFunc(state.getDepthStencilState());
                 mDirtyBits.set(DIRTY_BIT_DEPTH_STENCIL_DESC);
                 break;
             case gl::state::DIRTY_BIT_DEPTH_MASK:
-                mDepthStencilDesc.updateDepthWriteEnabled(glState.getDepthStencilState());
+                mDepthStencilDesc.updateDepthWriteEnabled(state.getDepthStencilState());
                 mDirtyBits.set(DIRTY_BIT_DEPTH_STENCIL_DESC);
                 break;
             case gl::state::DIRTY_BIT_STENCIL_TEST_ENABLED:
-                mDepthStencilDesc.updateStencilTestEnabled(glState.getDepthStencilState());
+                mDepthStencilDesc.updateStencilTestEnabled(state.getDepthStencilState());
                 mDirtyBits.set(DIRTY_BIT_DEPTH_STENCIL_DESC);
                 break;
             case gl::state::DIRTY_BIT_STENCIL_FUNCS_FRONT:
-                mDepthStencilDesc.updateStencilFrontFuncs(glState.getDepthStencilState());
-                mStencilRefFront = glState.getStencilRef();  // clamped on the frontend
+                mDepthStencilDesc.updateStencilFrontFuncs(state.getDepthStencilState());
+                mStencilRefFront = state.getStencilRef();  // clamped on the frontend
                 mDirtyBits.set(DIRTY_BIT_DEPTH_STENCIL_DESC);
                 mDirtyBits.set(DIRTY_BIT_STENCIL_REF);
                 break;
             case gl::state::DIRTY_BIT_STENCIL_FUNCS_BACK:
-                mDepthStencilDesc.updateStencilBackFuncs(glState.getDepthStencilState());
-                mStencilRefBack = glState.getStencilBackRef();  // clamped on the frontend
+                mDepthStencilDesc.updateStencilBackFuncs(state.getDepthStencilState());
+                mStencilRefBack = state.getStencilBackRef();  // clamped on the frontend
                 mDirtyBits.set(DIRTY_BIT_DEPTH_STENCIL_DESC);
                 mDirtyBits.set(DIRTY_BIT_STENCIL_REF);
                 break;
             case gl::state::DIRTY_BIT_STENCIL_OPS_FRONT:
-                mDepthStencilDesc.updateStencilFrontOps(glState.getDepthStencilState());
+                mDepthStencilDesc.updateStencilFrontOps(state.getDepthStencilState());
                 mDirtyBits.set(DIRTY_BIT_DEPTH_STENCIL_DESC);
                 break;
             case gl::state::DIRTY_BIT_STENCIL_OPS_BACK:
-                mDepthStencilDesc.updateStencilBackOps(glState.getDepthStencilState());
+                mDepthStencilDesc.updateStencilBackOps(state.getDepthStencilState());
                 mDirtyBits.set(DIRTY_BIT_DEPTH_STENCIL_DESC);
                 break;
             case gl::state::DIRTY_BIT_STENCIL_WRITEMASK_FRONT:
-                mDepthStencilDesc.updateStencilFrontWriteMask(glState.getDepthStencilState());
+                mDepthStencilDesc.updateStencilFrontWriteMask(state.getDepthStencilState());
                 mDirtyBits.set(DIRTY_BIT_DEPTH_STENCIL_DESC);
                 break;
             case gl::state::DIRTY_BIT_STENCIL_WRITEMASK_BACK:
-                mDepthStencilDesc.updateStencilBackWriteMask(glState.getDepthStencilState());
+                mDepthStencilDesc.updateStencilBackWriteMask(state.getDepthStencilState());
                 mDirtyBits.set(DIRTY_BIT_DEPTH_STENCIL_DESC);
                 break;
             case gl::state::DIRTY_BIT_CULL_FACE_ENABLED:
@@ -1259,13 +1262,13 @@ angle::Result ContextMtl::syncState(const gl::Context *context,
                 break;
             case gl::state::DIRTY_BIT_CLEAR_COLOR:
                 mClearColor = mtl::ClearColorValue(
-                    glState.getColorClearValue().red, glState.getColorClearValue().green,
-                    glState.getColorClearValue().blue, glState.getColorClearValue().alpha);
+                    state.getColorClearValue().red, state.getColorClearValue().green,
+                    state.getColorClearValue().blue, state.getColorClearValue().alpha);
                 break;
             case gl::state::DIRTY_BIT_CLEAR_DEPTH:
                 break;
             case gl::state::DIRTY_BIT_CLEAR_STENCIL:
-                mClearStencil = glState.getStencilClearValue() & mtl::kStencilMaskAll;
+                mClearStencil = state.getStencilClearValue() & mtl::kStencilMaskAll;
                 break;
             case gl::state::DIRTY_BIT_UNPACK_STATE:
                 // This is a no-op, its only important to use the right unpack state when we do
@@ -1335,7 +1338,7 @@ angle::Result ContextMtl::syncState(const gl::Context *context,
                 break;
             case gl::state::DIRTY_BIT_CURRENT_VALUES:
             {
-                invalidateDefaultAttributes(glState.getAndResetDirtyCurrentValues());
+                invalidateDefaultAttributes(state.getAndResetDirtyCurrentValues());
                 break;
             }
             case gl::state::DIRTY_BIT_PROVOKING_VERTEX:
@@ -1722,7 +1725,7 @@ const mtl::WriteMaskArray &ContextMtl::getWriteMaskArray() const
 }
 float ContextMtl::getClearDepthValue() const
 {
-    return getState().getDepthClearValue();
+    return mState.getLocalState().getDepthClearValue();
 }
 uint32_t ContextMtl::getClearStencilValue() const
 {
@@ -1730,12 +1733,12 @@ uint32_t ContextMtl::getClearStencilValue() const
 }
 uint32_t ContextMtl::getStencilMask() const
 {
-    return getState().getDepthStencilState().stencilWritemask & mtl::kStencilMaskAll;
+    return mState.getLocalState().getDepthStencilState().stencilWritemask & mtl::kStencilMaskAll;
 }
 
 bool ContextMtl::getDepthMask() const
 {
-    return getState().getDepthStencilState().depthMask;
+    return mState.getLocalState().getDepthStencilState().depthMask;
 }
 
 const mtl::Format &ContextMtl::getPixelFormat(angle::FormatID angleFormatId) const
@@ -2119,6 +2122,7 @@ void ContextMtl::updateBlendDescArray(const gl::BlendStateExt &blendStateExt)
 
 void ContextMtl::updateScissor(const gl::State &glState)
 {
+    const gl::LocalState &state    = glState.getLocalState();
     FramebufferMtl *framebufferMtl = mtl::GetImpl(glState.getDrawFramebuffer());
     gl::Rectangle renderArea       = framebufferMtl->getCompleteRenderArea();
 
@@ -2127,12 +2131,12 @@ void ContextMtl::updateScissor(const gl::State &glState)
 
     // Clip the render area to the viewport.
     gl::Rectangle viewportClippedRenderArea;
-    if (!gl::ClipRectangle(renderArea, glState.getViewport(), &viewportClippedRenderArea))
+    if (!gl::ClipRectangle(renderArea, state.getViewport(), &viewportClippedRenderArea))
     {
         viewportClippedRenderArea = gl::Rectangle();
     }
 
-    gl::Rectangle scissoredArea = ClipRectToScissor(getState(), viewportClippedRenderArea, false);
+    gl::Rectangle scissoredArea = ClipRectToScissor(state, viewportClippedRenderArea, false);
     if (framebufferMtl->flipY())
     {
         scissoredArea.y = renderArea.height - scissoredArea.y - scissoredArea.height;
@@ -2147,7 +2151,7 @@ void ContextMtl::updateScissor(const gl::State &glState)
 
 void ContextMtl::updateCullMode(const gl::State &glState)
 {
-    const gl::RasterizerState &rasterState = glState.getRasterizerState();
+    const gl::RasterizerState &rasterState = glState.getLocalState().getRasterizerState();
 
     mCullAllPolygons = false;
     if (!rasterState.cullFace)
@@ -2179,8 +2183,9 @@ void ContextMtl::updateCullMode(const gl::State &glState)
 void ContextMtl::updateFrontFace(const gl::State &glState)
 {
     FramebufferMtl *framebufferMtl = mtl::GetImpl(glState.getDrawFramebuffer());
-    const bool upperLeftOrigin     = mState.getClipOrigin() == gl::ClipOrigin::UpperLeft;
-    mWinding = mtl::GetFrontfaceWinding(glState.getRasterizerState().frontFace,
+    const bool upperLeftOrigin =
+        mState.getLocalState().getClipOrigin() == gl::ClipOrigin::UpperLeft;
+    mWinding = mtl::GetFrontfaceWinding(glState.getLocalState().getRasterizerState().frontFace,
                                         framebufferMtl->flipY() == upperLeftOrigin);
     mDirtyBits.set(DIRTY_BIT_WINDING);
 }
@@ -2189,17 +2194,16 @@ void ContextMtl::updateFrontFace(const gl::State &glState)
 // Provkoing vertex mode is 'last'
 // Program has at least one 'flat' attribute
 // PrimitiveMode is not POINTS.
-bool ContextMtl::requiresIndexRewrite(const gl::State &state, gl::PrimitiveMode mode)
+bool ContextMtl::requiresIndexRewrite(const gl::LocalState &state, gl::PrimitiveMode mode)
 {
     return mode != gl::PrimitiveMode::Points && mProgram->hasFlatAttribute() &&
-           (state.getProvokingVertex() == gl::ProvokingVertexConvention::LastVertexConvention);
+           (state.getLocalState().getProvokingVertex() ==
+            gl::ProvokingVertexConvention::LastVertexConvention);
 }
 
 void ContextMtl::updateDrawFrameBufferBinding(const gl::Context *context)
 {
-    const gl::State &glState = getState();
-
-    mDrawFramebuffer = mtl::GetImpl(glState.getDrawFramebuffer());
+    mDrawFramebuffer = mtl::GetImpl(mState.getDrawFramebuffer());
 
     mDrawFramebuffer->onStartedDrawingToFrameBuffer(context);
 
@@ -2210,11 +2214,11 @@ void ContextMtl::onDrawFrameBufferChangedState(const gl::Context *context,
                                                FramebufferMtl *framebuffer,
                                                bool renderPassChanged)
 {
-    const gl::State &glState = getState();
+    const gl::State &glState    = getState();
+    const gl::LocalState &state = glState.getLocalState();
     ASSERT(framebuffer == mtl::GetImpl(glState.getDrawFramebuffer()));
 
-    updateViewport(framebuffer, glState.getViewport(), glState.getNearPlane(),
-                   glState.getFarPlane());
+    updateViewport(framebuffer, state.getViewport(), state.getNearPlane(), state.getFarPlane());
     updateFrontFace(glState);
     updateScissor(glState);
 
@@ -2375,9 +2379,8 @@ void ContextMtl::updateVertexArray(const gl::Context *context)
 
 angle::Result ContextMtl::updateDefaultAttribute(size_t attribIndex)
 {
-    const gl::State &glState = mState;
     const gl::VertexAttribCurrentValueData &defaultValue =
-        glState.getVertexAttribCurrentValues()[attribIndex];
+        mState.getVertexAttribCurrentValues()[attribIndex];
 
     constexpr size_t kDefaultGLAttributeValueSize =
         sizeof(gl::VertexAttribCurrentValueData::Values);

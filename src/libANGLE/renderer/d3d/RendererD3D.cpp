@@ -170,12 +170,12 @@ const angle::FeaturesD3D &RendererD3D::getFeatures() const
     return mFeatures;
 }
 
-unsigned int GetBlendSampleMask(const gl::State &glState, int samples)
+unsigned int GetBlendSampleMask(const gl::LocalState &state, int samples)
 {
     unsigned int mask = 0;
-    if (glState.isSampleCoverageEnabled())
+    if (state.isSampleCoverageEnabled())
     {
-        GLfloat coverageValue = glState.getSampleCoverageValue();
+        GLfloat coverageValue = state.getSampleCoverageValue();
         if (coverageValue != 0)
         {
             float threshold = 0.5f;
@@ -192,7 +192,7 @@ unsigned int GetBlendSampleMask(const gl::State &glState, int samples)
             }
         }
 
-        bool coverageInvert = glState.getSampleCoverageInvert();
+        bool coverageInvert = state.getSampleCoverageInvert();
         if (coverageInvert)
         {
             mask = ~mask;
@@ -203,9 +203,9 @@ unsigned int GetBlendSampleMask(const gl::State &glState, int samples)
         mask = 0xFFFFFFFF;
     }
 
-    if (glState.isSampleMaskEnabled())
+    if (state.isSampleMaskEnabled())
     {
-        mask &= glState.getSampleMaskWord(0);
+        mask &= state.getSampleMaskWord(0);
     }
 
     return mask;

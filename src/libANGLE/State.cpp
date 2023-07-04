@@ -3124,7 +3124,7 @@ void State::getBooleanv(GLenum pname, GLboolean *params) const
             *params = getCurrentTransformFeedback()->isPaused() ? GL_TRUE : GL_FALSE;
             break;
         default:
-            mLocalState.getBooleanv(pname, params);
+            getLocalState().getBooleanv(pname, params);
     }
 }
 
@@ -3385,7 +3385,7 @@ angle::Result State::getIntegerv(const Context *context, GLenum pname, GLint *pa
         }
 
         default:
-            mLocalState.getIntegerv(pname, params);
+            getLocalState().getIntegerv(pname, params);
             break;
     }
 
@@ -3474,7 +3474,7 @@ void State::getIntegeri_v(const Context *context, GLenum target, GLuint index, G
             *data = mImageUnits[index].format;
             break;
         default:
-            mLocalState.getIntegeri_v(target, index, data);
+            getLocalState().getIntegeri_v(target, index, data);
             break;
     }
 }
@@ -3530,7 +3530,7 @@ void State::getBooleani_v(GLenum target, GLuint index, GLboolean *data) const
             *data = mImageUnits[index].layered;
             break;
         default:
-            mLocalState.getBooleani_v(target, index, data);
+            getLocalState().getBooleani_v(target, index, data);
             break;
     }
 }
@@ -4015,6 +4015,27 @@ void State::initializeForCapture(const Context *context)
     // nothing in the context is modified in a non-compatible way during capture.
     Context *mutableContext = const_cast<Context *>(context);
     initialize(mutableContext);
+}
+
+bool State::isAccessedByCurrentContext() const
+{
+    Context *currentContext = nullptr;
+#if defined(ANGLE_USE_ANDROID_TLS_SLOT)
+    if (angle::gUseAndroidOpenGLTlsSlot)
+    {
+        currentContext =
+            static_cast<Context *>(ANGLE_ANDROID_GET_GL_TLS()[angle::kAndroidOpenGLTlsSlot]);
+    }
+    else
+#endif
+    {
+#if defined(ANGLE_PLATFORM_APPLE) || defined(ANGLE_USE_STATIC_THREAD_LOCAL_VARIABLES)
+        currentContext = GetCurrentValidContextTLS();
+#else
+        currentContext = gCurrentValidContext;
+#endif
+    }
+    return &currentContext->getState() == this;
 }
 
 constexpr State::DirtyObjectHandler State::kDirtyObjectHandlers[state::DIRTY_OBJECT_MAX];

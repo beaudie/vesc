@@ -40,7 +40,7 @@ class StateManager9 final : angle::NonCopyable
 
     void initialize();
 
-    void syncState(const gl::State &state,
+    void syncState(const gl::State &glState,
                    const gl::state::DirtyBits &dirtyBits,
                    const gl::state::ExtendedDirtyBits &extendedDirtyBits);
 

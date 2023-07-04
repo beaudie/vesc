@@ -32,7 +32,7 @@ namespace gl
 {
 struct FormatType;
 struct InternalFormat;
-class State;
+class LocalState;
 }  // namespace gl
 
 namespace egl
@@ -274,7 +274,9 @@ angle::Result GetVertexRangeInfo(const gl::Context *context,
                                  GLint *startVertexOut,
                                  size_t *vertexCountOut);
 
-gl::Rectangle ClipRectToScissor(const gl::State &glState, const gl::Rectangle &rect, bool invertY);
+gl::Rectangle ClipRectToScissor(const gl::LocalState &state,
+                                const gl::Rectangle &rect,
+                                bool invertY);
 
 // Helper method to intialize a FeatureSet with overrides from the DisplayState
 void ApplyFeatureOverrides(angle::FeatureSetBase *features, const egl::DisplayState &state);

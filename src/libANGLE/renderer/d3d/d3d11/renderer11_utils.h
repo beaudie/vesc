@@ -450,8 +450,7 @@ enum class IndexStorageType
     Invalid,
 };
 
-IndexStorageType ClassifyIndexStorage(const gl::State &glState,
-                                      const gl::Buffer *elementArrayBuffer,
+IndexStorageType ClassifyIndexStorage(const gl::Buffer *elementArrayBuffer,
                                       gl::DrawElementsType elementType,
                                       gl::DrawElementsType destElementType,
                                       unsigned int offset);

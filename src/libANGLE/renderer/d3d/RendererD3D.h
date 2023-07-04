@@ -450,7 +450,7 @@ class RendererD3D : public BufferFactoryD3D
                               gl::Limitations *outLimitations,
                               ShPixelLocalStorageOptions *outPLSOptions) const = 0;
 
-    bool skipDraw(const gl::State &glState, gl::PrimitiveMode drawMode);
+    bool skipDraw(const gl::LocalState &state, gl::PrimitiveMode drawMode);
 
     egl::Display *mDisplay;
 

@@ -112,10 +112,12 @@ void StateManager9::updateStencilSizeIfChanged(bool depthStencilInitialized,
     }
 }
 
-void StateManager9::syncState(const gl::State &state,
+void StateManager9::syncState(const gl::State &glState,
                               const gl::state::DirtyBits &dirtyBits,
                               const gl::state::ExtendedDirtyBits &extendedDirtyBits)
 {
+    const gl::LocalState &state = glState.getLocalState();
+
     if (!dirtyBits.any())
     {
         return;
@@ -325,14 +327,15 @@ void StateManager9::syncState(const gl::State &state,
 
 void StateManager9::setBlendDepthRasterStates(const gl::State &glState, unsigned int sampleMask)
 {
+    const gl::LocalState &state        = glState.getLocalState();
     const gl::Framebuffer *framebuffer = glState.getDrawFramebuffer();
 
-    const gl::BlendState &blendState       = glState.getBlendState();
-    const gl::ColorF &blendColor           = glState.getBlendColor();
-    const gl::RasterizerState &rasterState = glState.getRasterizerState();
+    const gl::BlendState &blendState       = state.getBlendState();
+    const gl::ColorF &blendColor           = state.getBlendColor();
+    const gl::RasterizerState &rasterState = state.getRasterizerState();
 
-    const auto &depthStencilState = glState.getDepthStencilState();
-    bool frontFaceCCW             = (glState.getRasterizerState().frontFace == GL_CCW);
+    const auto &depthStencilState = state.getDepthStencilState();
+    bool frontFaceCCW             = (state.getRasterizerState().frontFace == GL_CCW);
     unsigned int maxStencil       = (1 << mCurStencilSize) - 1;
 
     // All the depth stencil states depends on the front face ccw variable
@@ -356,7 +359,7 @@ void StateManager9::setBlendDepthRasterStates(const gl::State &glState, unsigned
                 setBlendFuncsEquations(blendState);
                 break;
             case DIRTY_BIT_SAMPLE_ALPHA_TO_COVERAGE:
-                setSampleAlphaToCoverage(glState.isSampleAlphaToCoverageEnabled());
+                setSampleAlphaToCoverage(state.isSampleAlphaToCoverageEnabled());
                 break;
             case DIRTY_BIT_COLOR_MASK:
                 setColorMask(framebuffer, blendState.colorMaskRed, blendState.colorMaskBlue,
@@ -383,11 +386,11 @@ void StateManager9::setBlendDepthRasterStates(const gl::State &glState, unsigned
                 break;
             case DIRTY_BIT_STENCIL_FUNCS_FRONT:
                 setStencilFuncsFront(depthStencilState.stencilFunc, depthStencilState.stencilMask,
-                                     glState.getStencilRef(), frontFaceCCW, maxStencil);
+                                     state.getStencilRef(), frontFaceCCW, maxStencil);
                 break;
             case DIRTY_BIT_STENCIL_FUNCS_BACK:
                 setStencilFuncsBack(depthStencilState.stencilBackFunc,
-                                    depthStencilState.stencilBackMask, glState.getStencilBackRef(),
+                                    depthStencilState.stencilBackMask, state.getStencilBackRef(),
                                     frontFaceCCW, maxStencil);
                 break;
             case DIRTY_BIT_STENCIL_WRITEMASK_FRONT:

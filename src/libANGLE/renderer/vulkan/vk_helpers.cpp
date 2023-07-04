@@ -2535,7 +2535,7 @@ void RenderPassCommandBufferHelper::endTransformFeedback()
 }
 
 void RenderPassCommandBufferHelper::invalidateRenderPassColorAttachment(
-    const gl::State &state,
+    const gl::LocalState &state,
     size_t colorIndexGL,
     PackedAttachmentIndex attachmentIndex,
     const gl::Rectangle &invalidateArea)
@@ -4426,8 +4426,9 @@ angle::Result LineLoopHelper::getIndexBufferForElementArrayBuffer(ContextVk *con
                                                                   BufferHelper **bufferOut,
                                                                   uint32_t *indexCountOut)
 {
-    if (glIndexType == gl::DrawElementsType::UnsignedByte ||
-        contextVk->getState().isPrimitiveRestartEnabled())
+    const bool isPrimitiveRestartEnabled =
+        contextVk->getState().getLocalState().isPrimitiveRestartEnabled();
+    if (glIndexType == gl::DrawElementsType::UnsignedByte || isPrimitiveRestartEnabled)
     {
         ANGLE_TRACE_EVENT0("gpu.angle", "LineLoopHelper::getIndexBufferForElementArrayBuffer");
 
@@ -4481,10 +4482,12 @@ angle::Result LineLoopHelper::streamIndices(ContextVk *contextVk,
                                             BufferHelper **bufferOut,
                                             uint32_t *indexCountOut)
 {
+    const bool isPrimitiveRestartEnabled =
+        contextVk->getState().getLocalState().isPrimitiveRestartEnabled();
     size_t unitSize = contextVk->getVkIndexTypeSize(glIndexType);
 
     uint32_t numOutIndices = indexCount + 1;
-    if (contextVk->getState().isPrimitiveRestartEnabled())
+    if (isPrimitiveRestartEnabled)
     {
         numOutIndices = GetLineLoopWithRestartIndexCount(glIndexType, indexCount, srcPtr);
     }
@@ -4494,7 +4497,7 @@ angle::Result LineLoopHelper::streamIndices(ContextVk *contextVk,
                                                               MemoryHostVisibility::Visible));
     uint8_t *indices = mDynamicIndexBuffer.getMappedMemory();
 
-    if (contextVk->getState().isPrimitiveRestartEnabled())
+    if (isPrimitiveRestartEnabled)
     {
         HandlePrimitiveRestart(contextVk, glIndexType, indexCount, srcPtr, indices);
     }
@@ -4535,10 +4538,12 @@ angle::Result LineLoopHelper::streamIndicesIndirect(ContextVk *contextVk,
                                                     BufferHelper **indexBufferOut,
                                                     BufferHelper **indirectBufferOut)
 {
+    const bool isPrimitiveRestartEnabled =
+        contextVk->getState().getLocalState().isPrimitiveRestartEnabled();
     size_t unitSize      = contextVk->getVkIndexTypeSize(glIndexType);
     size_t allocateBytes = static_cast<size_t>(indexBuffer->getSize() + unitSize);
 
-    if (contextVk->getState().isPrimitiveRestartEnabled())
+    if (isPrimitiveRestartEnabled)
     {
         // If primitive restart, new index buffer is 135% the size of the original index buffer. The
         // smallest lineloop with primitive restart is 3 indices (point 1, point 2 and restart

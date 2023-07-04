@@ -1967,7 +1967,8 @@ angle::Result StateManagerGL::syncState(const gl::Context *context,
                                         const gl::state::ExtendedDirtyBits &extendedDirtyBits,
                                         const gl::state::ExtendedDirtyBits &extendedBitMask)
 {
-    const gl::State &state = context->getState();
+    const gl::State &glState    = context->getState();
+    const gl::LocalState &state = glState.getLocalState();
 
     const gl::state::DirtyBits glAndLocalDirtyBits = (glDirtyBits | mLocalDirtyBits) & bitMask;
     if (!glAndLocalDirtyBits.any())
@@ -2024,7 +2025,7 @@ angle::Result StateManagerGL::syncState(const gl::Context *context,
             }
             case gl::state::DIRTY_BIT_COLOR_MASK:
             {
-                const gl::Framebuffer *framebuffer = state.getDrawFramebuffer();
+                const gl::Framebuffer *framebuffer = glState.getDrawFramebuffer();
                 const FramebufferGL *framebufferGL = GetImplAs<FramebufferGL>(framebuffer);
                 const bool disableAlphaWrite =
                     framebufferGL->hasEmulatedAlphaChannelTextureAttachment();
@@ -2132,21 +2133,21 @@ angle::Result StateManagerGL::syncState(const gl::Context *context,
                 break;
             case gl::state::DIRTY_BIT_UNPACK_BUFFER_BINDING:
                 ANGLE_TRY(setPixelUnpackBuffer(
-                    context, state.getTargetBuffer(gl::BufferBinding::PixelUnpack)));
+                    context, glState.getTargetBuffer(gl::BufferBinding::PixelUnpack)));
                 break;
             case gl::state::DIRTY_BIT_PACK_STATE:
                 ANGLE_TRY(setPixelPackState(context, state.getPackState()));
                 break;
             case gl::state::DIRTY_BIT_PACK_BUFFER_BINDING:
-                ANGLE_TRY(setPixelPackBuffer(context,
-                                             state.getTargetBuffer(gl::BufferBinding::PixelPack)));
+                ANGLE_TRY(setPixelPackBuffer(
+                    context, glState.getTargetBuffer(gl::BufferBinding::PixelPack)));
                 break;
             case gl::state::DIRTY_BIT_DITHER_ENABLED:
                 setDitherEnabled(state.isDitherEnabled());
                 break;
             case gl::state::DIRTY_BIT_READ_FRAMEBUFFER_BINDING:
             {
-                gl::Framebuffer *framebuffer = state.getReadFramebuffer();
+                gl::Framebuffer *framebuffer = glState.getReadFramebuffer();
 
                 // Necessary for an Intel TexImage workaround.
                 if (!framebuffer)
@@ -2160,7 +2161,7 @@ angle::Result StateManagerGL::syncState(const gl::Context *context,
             }
             case gl::state::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING:
             {
-                gl::Framebuffer *framebuffer = state.getDrawFramebuffer();
+                gl::Framebuffer *framebuffer = glState.getDrawFramebuffer();
 
                 // Necessary for an Intel TexImage workaround.
                 if (!framebuffer)
@@ -2171,7 +2172,7 @@ angle::Result StateManagerGL::syncState(const gl::Context *context,
                     mHasSeparateFramebufferBindings ? GL_DRAW_FRAMEBUFFER : GL_FRAMEBUFFER,
                     framebufferGL->getFramebufferID());
 
-                const gl::Program *program = state.getProgram();
+                const gl::Program *program = glState.getProgram();
                 if (program)
                 {
                     updateMultiviewBaseViewLayerIndexUniform(program, framebufferGL->getState());
@@ -2190,11 +2191,12 @@ angle::Result StateManagerGL::syncState(const gl::Context *context,
                 break;
             case gl::state::DIRTY_BIT_VERTEX_ARRAY_BINDING:
             {
-                VertexArrayGL *vaoGL = GetImplAs<VertexArrayGL>(state.getVertexArray());
+                VertexArrayGL *vaoGL = GetImplAs<VertexArrayGL>(glState.getVertexArray());
                 bindVertexArray(vaoGL->getVertexArrayID(), vaoGL->getNativeState());
 
-                ANGLE_TRY(propagateProgramToVAO(context, state.getProgram(),
-                                                GetImplAs<VertexArrayGL>(state.getVertexArray())));
+                ANGLE_TRY(
+                    propagateProgramToVAO(context, glState.getProgram(),
+                                          GetImplAs<VertexArrayGL>(glState.getVertexArray())));
 
                 if (mFeatures.syncVertexArraysToDefault.enabled)
                 {
@@ -2231,7 +2233,7 @@ angle::Result StateManagerGL::syncState(const gl::Context *context,
                 break;
             case gl::state::DIRTY_BIT_PROGRAM_BINDING:
             {
-                gl::Program *program = state.getProgram();
+                gl::Program *program = glState.getProgram();
                 if (program != nullptr)
                 {
                     useProgram(GetImplAs<ProgramGL>(program)->getProgramID());
@@ -2240,8 +2242,8 @@ angle::Result StateManagerGL::syncState(const gl::Context *context,
             }
             case gl::state::DIRTY_BIT_PROGRAM_EXECUTABLE:
             {
-                const gl::Program *program              = state.getProgram();
-                const gl::ProgramExecutable *executable = state.getProgramExecutable();
+                const gl::Program *program              = glState.getProgram();
+                const gl::ProgramExecutable *executable = glState.getProgramExecutable();
 
                 if (program && executable)
                 {
@@ -2270,7 +2272,7 @@ angle::Result StateManagerGL::syncState(const gl::Context *context,
                     if (mIsMultiviewEnabled && program->usesMultiview())
                     {
                         updateMultiviewBaseViewLayerIndexUniform(
-                            program, state.getDrawFramebuffer()->getImplementation()->getState());
+                            program, glState.getDrawFramebuffer()->getImplementation()->getState());
                     }
 
                     if (mFeatures.emulateClipDistanceState.enabled)
@@ -2284,7 +2286,7 @@ angle::Result StateManagerGL::syncState(const gl::Context *context,
                     !program->getExecutable().hasLinkedShaderStage(gl::ShaderType::Compute))
                 {
                     ANGLE_TRY(propagateProgramToVAO(
-                        context, program, GetImplAs<VertexArrayGL>(state.getVertexArray())));
+                        context, program, GetImplAs<VertexArrayGL>(glState.getVertexArray())));
                 }
                 break;
             }
@@ -2321,7 +2323,7 @@ angle::Result StateManagerGL::syncState(const gl::Context *context,
             case gl::state::DIRTY_BIT_FRAMEBUFFER_SRGB_WRITE_CONTROL_MODE:
                 setFramebufferSRGBEnabledForFramebuffer(
                     context, state.getFramebufferSRGB(),
-                    GetImplAs<FramebufferGL>(state.getDrawFramebuffer()));
+                    GetImplAs<FramebufferGL>(glState.getDrawFramebuffer()));
                 break;
             case gl::state::DIRTY_BIT_SAMPLE_MASK_ENABLED:
                 setSampleMaskEnabled(state.isSampleMaskEnabled());
@@ -2338,7 +2340,7 @@ angle::Result StateManagerGL::syncState(const gl::Context *context,
             case gl::state::DIRTY_BIT_CURRENT_VALUES:
             {
                 gl::AttributesMask combinedMask =
-                    (state.getAndResetDirtyCurrentValues() | mLocalDirtyCurrentValues);
+                    state.getAndResetDirtyCurrentValues() | mLocalDirtyCurrentValues;
                 mLocalDirtyCurrentValues.reset();
 
                 for (auto attribIndex : combinedMask)
@@ -2366,8 +2368,8 @@ angle::Result StateManagerGL::syncState(const gl::Context *context,
                             setClipDistancesEnable(state.getEnabledClipDistances());
                             if (mFeatures.emulateClipDistanceState.enabled)
                             {
-                                updateEmulatedClipDistanceState(state.getProgramExecutable(),
-                                                                state.getProgram(),
+                                updateEmulatedClipDistanceState(glState.getProgramExecutable(),
+                                                                glState.getProgram(),
                                                                 state.getEnabledClipDistances());
                             }
                             break;

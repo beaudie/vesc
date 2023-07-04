@@ -270,6 +270,7 @@ ANGLE_INLINE angle::Result ContextGL::setDrawElementsState(const gl::Context *co
                                                            const void **outIndices)
 {
     const gl::State &glState                = context->getState();
+    const gl::LocalState &state             = glState.getLocalState();
     const gl::ProgramExecutable *executable = getState().getProgramExecutable();
     const gl::VertexArray *vao              = glState.getVertexArray();
     const gl::StateCache &stateCache        = context->getStateCache();
@@ -288,14 +289,14 @@ ANGLE_INLINE angle::Result ContextGL::setDrawElementsState(const gl::Context *co
         const VertexArrayGL *vaoGL = GetImplAs<VertexArrayGL>(vao);
         ANGLE_TRY(vaoGL->syncDrawElementsState(context, executable->getActiveAttribLocationsMask(),
                                                count, type, indices, instanceCount,
-                                               glState.isPrimitiveRestartEnabled(), outIndices));
+                                               state.isPrimitiveRestartEnabled(), outIndices));
     }
     else
     {
         *outIndices = indices;
     }
 
-    if (glState.isPrimitiveRestartEnabled() && features.emulatePrimitiveRestartFixedIndex.enabled)
+    if (state.isPrimitiveRestartEnabled() && features.emulatePrimitiveRestartFixedIndex.enabled)
     {
         StateManagerGL *stateManager = getStateManager();
 
@@ -1094,7 +1095,7 @@ angle::Result ContextGL::drawPixelLocalStorageEXTDisable(gl::Context *context,
     ASSERT(getNativePixelLocalStorageOptions().type ==
            ShPixelLocalStorageType::PixelLocalStorageEXT);
 
-    GLsizei n = context->getState().getPixelLocalStorageActivePlanes();
+    GLsizei n = context->getState().getLocalState().getPixelLocalStorageActivePlanes();
 
     PLSProgramKeyBuilder b;
     for (GLsizei i = n - 1; i >= 0; --i)

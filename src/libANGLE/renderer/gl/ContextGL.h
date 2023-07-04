@@ -288,7 +288,7 @@ class ContextGL : public ContextImpl
 
     void markWorkSubmitted();
 
-    const gl::Debug &getDebug() const { return mState.getDebug(); }
+    const gl::Debug &getDebug() const { return mState.getLocalState().getDebug(); }
 
     angle::Result drawPixelLocalStorageEXTEnable(gl::Context *,
                                                  GLsizei n,

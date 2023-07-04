@@ -851,7 +851,7 @@ bool ValidateES3TexImageParametersBase(const Context *context,
         }
         else
         {
-            const auto &unpack   = context->getState().getUnpackState();
+            const auto &unpack   = context->getState().getLocalState().getUnpackState();
             GLint dataStoreWidth = unpack.rowLength ? unpack.rowLength : width;
             if (unpack.skipPixels + width > dataStoreWidth)
             {
@@ -5292,7 +5292,7 @@ bool ValidateDrawBufferIndexIfActivePLS(const Context *context,
                                         GLuint drawBufferIdx,
                                         const char *argumentName)
 {
-    int numPLSPlanes = context->getState().getPixelLocalStorageActivePlanes();
+    int numPLSPlanes = context->getState().getLocalState().getPixelLocalStorageActivePlanes();
     if (numPLSPlanes != 0)
     {
         // INVALID_OPERATION is generated ... if any of the following are true:

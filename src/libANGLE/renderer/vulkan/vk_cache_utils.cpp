@@ -5269,7 +5269,7 @@ angle::Result SamplerDesc::init(ContextVk *contextVk, Sampler *sampler) const
     // with the hint enabled, and then the hint gets disabled, the next render will do so with the
     // hint enabled.
     VkSamplerFilteringPrecisionGOOGLE filteringInfo = {};
-    GLenum hint = contextVk->getState().getTextureFilteringHint();
+    GLenum hint = contextVk->getState().getLocalState().getTextureFilteringHint();
     if (hint == GL_NICEST)
     {
         ASSERT(extensions.textureFilteringHintCHROMIUM);
