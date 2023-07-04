@@ -6028,20 +6028,6 @@ void Context::blendFuncSeparatei(GLuint buf,
     }
 }
 
-void Context::colorMask(GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha)
-{
-    mState.setColorMask(ConvertToBool(red), ConvertToBool(green), ConvertToBool(blue),
-                        ConvertToBool(alpha));
-    mStateCache.onColorMaskChange(this);
-}
-
-void Context::colorMaski(GLuint index, GLboolean r, GLboolean g, GLboolean b, GLboolean a)
-{
-    mState.setColorMaskIndexed(ConvertToBool(r), ConvertToBool(g), ConvertToBool(b),
-                               ConvertToBool(a), index);
-    mStateCache.onColorMaskChange(this);
-}
-
 void Context::cullFace(CullFaceMode mode)
 {
     mState.setCullMode(mode);
@@ -6050,11 +6036,6 @@ void Context::cullFace(CullFaceMode mode)
 void Context::depthFunc(GLenum func)
 {
     mState.setDepthFunc(func);
-}
-
-void Context::depthMask(GLboolean flag)
-{
-    mState.setDepthMask(ConvertToBool(flag));
 }
 
 void Context::depthRangef(GLfloat zNear, GLfloat zFar)
@@ -10737,7 +10718,7 @@ void StateCache::onShaderStorageBufferStateChange(Context *context)
     updateBasicDrawStatesError();
 }
 
-void StateCache::onColorMaskChange(Context *context)
+void StateCache::onLocalStateColorMaskChange(Context *context)
 {
     updateBasicDrawStatesError();
 }
