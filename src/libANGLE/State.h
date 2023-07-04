@@ -256,10 +256,12 @@ class LocalState : angle::NonCopyable
     const BlendStateExt &getBlendStateExt() const { return mBlendStateExt; }
     const DepthStencilState &getDepthStencilState() const { return mDepthStencil; }
 
-    // Clear behavior setters & state parameter block generation function
-    void setColorClearValue(float red, float green, float blue, float alpha);
-    void setDepthClearValue(float depth);
-    void setStencilClearValue(int stencil);
+    // Clear values
+    void clearColor(float red, float green, float blue, float alpha);
+    void clearColorx(GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha);
+    void clearDepthf(float depth);
+    void clearDepthx(GLfixed depth);
+    void clearStencil(int stencil);
 
     const ColorF &getColorClearValue() const { return mColorClearValue; }
     float getDepthClearValue() const { return mDepthClearValue; }
@@ -727,7 +729,6 @@ class LocalState : angle::NonCopyable
 
     Debug mDebug;
 
-    // TODO: have a local dirty bits, and another in State. Merge them when processing.
     state::DirtyBits mDirtyBits;
     state::ExtendedDirtyBits mExtendedDirtyBits;
     state::DirtyObjects mDirtyObjects;
@@ -1244,12 +1245,6 @@ class State : angle::NonCopyable
     {
         return mLocalState.getDepthStencilState();
     }
-    void setColorClearValue(float red, float green, float blue, float alpha)
-    {
-        mLocalState.setColorClearValue(red, green, blue, alpha);
-    }
-    void setDepthClearValue(float depth) { mLocalState.setDepthClearValue(depth); }
-    void setStencilClearValue(int stencil) { mLocalState.setStencilClearValue(stencil); }
     const ColorF &getColorClearValue() const { return mLocalState.getColorClearValue(); }
     float getDepthClearValue() const { return mLocalState.getDepthClearValue(); }
     int getStencilClearValue() const { return mLocalState.getStencilClearValue(); }
@@ -1592,6 +1587,12 @@ class State : angle::NonCopyable
 
   private:
     friend class Context;
+
+    // Used only by the entry points to set local state without holding the share group lock.
+    //
+    // TODO: Add getMutableGLES1() and remove context lock from GLES1 setters similarly.
+    // http://anglebug.com/8224
+    LocalState *getMutableLocalState() { return &mLocalState; }
 
     void unsetActiveTextures(const ActiveTextureMask &textureMask);
     void setActiveTextureDirty(size_t textureIndex, Texture *texture);

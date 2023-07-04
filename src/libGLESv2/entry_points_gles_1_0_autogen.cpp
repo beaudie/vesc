@@ -85,7 +85,6 @@ void GL_APIENTRY GL_ClearColorx(GLfixed red, GLfixed green, GLfixed blue, GLfixe
 
     if (context)
     {
-        SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              (ValidatePixelLocalStorageInactive(context, angle::EntryPoint::GLClearColorx) &&
@@ -93,7 +92,7 @@ void GL_APIENTRY GL_ClearColorx(GLfixed red, GLfixed green, GLfixed blue, GLfixe
                                   alpha)));
         if (isCallValid)
         {
-            context->clearColorx(red, green, blue, alpha);
+            context->getMutableLocalState()->clearColorx(red, green, blue, alpha);
         }
         ANGLE_CAPTURE_GL(ClearColorx, isCallValid, context, red, green, blue, alpha);
     }
@@ -111,14 +110,13 @@ void GL_APIENTRY GL_ClearDepthx(GLfixed depth)
 
     if (context)
     {
-        SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              (ValidatePixelLocalStorageInactive(context, angle::EntryPoint::GLClearDepthx) &&
               ValidateClearDepthx(context, angle::EntryPoint::GLClearDepthx, depth)));
         if (isCallValid)
         {
-            context->clearDepthx(depth);
+            context->getMutableLocalState()->clearDepthx(depth);
         }
         ANGLE_CAPTURE_GL(ClearDepthx, isCallValid, context, depth);
     }
