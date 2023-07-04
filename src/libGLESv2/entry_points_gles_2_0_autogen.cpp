@@ -485,7 +485,6 @@ void GL_APIENTRY GL_ClearColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat
 
     if (context)
     {
-        SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              (ValidatePixelLocalStorageInactive(context, angle::EntryPoint::GLClearColor) &&
@@ -493,7 +492,7 @@ void GL_APIENTRY GL_ClearColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat
                                  alpha)));
         if (isCallValid)
         {
-            context->clearColor(red, green, blue, alpha);
+            context->getMutableLocalState()->clearColor(red, green, blue, alpha);
         }
         ANGLE_CAPTURE_GL(ClearColor, isCallValid, context, red, green, blue, alpha);
     }
@@ -511,14 +510,13 @@ void GL_APIENTRY GL_ClearDepthf(GLfloat d)
 
     if (context)
     {
-        SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              (ValidatePixelLocalStorageInactive(context, angle::EntryPoint::GLClearDepthf) &&
               ValidateClearDepthf(context, angle::EntryPoint::GLClearDepthf, d)));
         if (isCallValid)
         {
-            context->clearDepthf(d);
+            context->getMutableLocalState()->clearDepthf(d);
         }
         ANGLE_CAPTURE_GL(ClearDepthf, isCallValid, context, d);
     }
@@ -536,14 +534,13 @@ void GL_APIENTRY GL_ClearStencil(GLint s)
 
     if (context)
     {
-        SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              (ValidatePixelLocalStorageInactive(context, angle::EntryPoint::GLClearStencil) &&
               ValidateClearStencil(context, angle::EntryPoint::GLClearStencil, s)));
         if (isCallValid)
         {
-            context->clearStencil(s);
+            context->getMutableLocalState()->clearStencil(s);
         }
         ANGLE_CAPTURE_GL(ClearStencil, isCallValid, context, s);
     }

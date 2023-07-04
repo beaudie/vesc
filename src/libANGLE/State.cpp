@@ -399,7 +399,7 @@ void LocalState::initialize(Context *context)
 {
     mBlendStateExt = BlendStateExt(mCaps.maxDrawBuffers);
 
-    setColorClearValue(0.0f, 0.0f, 0.0f, 0.0f);
+    clearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
     mDepthClearValue   = 1.0f;
     mStencilClearValue = 0;
@@ -484,7 +484,7 @@ void LocalState::reset()
     mClipDistancesEnabled.reset();
 }
 
-void LocalState::setColorClearValue(float red, float green, float blue, float alpha)
+void LocalState::clearColor(float red, float green, float blue, float alpha)
 {
     mColorClearValue.red   = red;
     mColorClearValue.green = green;
@@ -493,13 +493,24 @@ void LocalState::setColorClearValue(float red, float green, float blue, float al
     mDirtyBits.set(state::DIRTY_BIT_CLEAR_COLOR);
 }
 
-void LocalState::setDepthClearValue(float depth)
+void LocalState::clearColorx(GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha)
 {
-    mDepthClearValue = depth;
+    clearColor(ConvertFixedToFloat(red), ConvertFixedToFloat(green), ConvertFixedToFloat(blue),
+               ConvertFixedToFloat(alpha));
+}
+
+void LocalState::clearDepthf(float depth)
+{
+    mDepthClearValue = clamp01(depth);
     mDirtyBits.set(state::DIRTY_BIT_CLEAR_DEPTH);
 }
 
-void LocalState::setStencilClearValue(int stencil)
+void LocalState::clearDepthx(GLfixed depth)
+{
+    clearDepthf(ConvertFixedToFloat(depth));
+}
+
+void LocalState::clearStencil(int stencil)
 {
     mStencilClearValue = stencil;
     mDirtyBits.set(state::DIRTY_BIT_CLEAR_STENCIL);
