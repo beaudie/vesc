@@ -128,15 +128,22 @@ PLS_ALLOW_WILDCARDS = [
 # These are the entry points which purely set state in the current context with
 # no interaction with the other contexts, including through shared resources.
 # As a result, they don't require the share group lock.
-CONTEXT_LOCAL_LIST = [
-    'glClearColor',
-    'glClearDepthf',
-    'glClearStencil',
+#
+# Each entry point is potentially associated with a function that invalidates
+# the state cache in the context.  This cache is also accessed only by the
+# owning context.
+CONTEXT_LOCAL_LIST = {
+    'glClearColor': None,
+    'glClearDepthf': None,
+    'glClearStencil': None,
+    'glColorMask': 'onLocalStateColorMaskChange',
+    'glColorMaski': 'onLocalStateColorMaskChange',
+    'glDepthMask': None,
     # GLES1 entry points
-    'glClearColorx',
-    'glClearDepthx',
-]
-CONTEXT_LOCAL_WILDCARDS = []
+    'glClearColorx': None,
+    'glClearDepthx': None,
+}
+CONTEXT_LOCAL_WILDCARDS = dict()
 
 TEMPLATE_ENTRY_POINT_HEADER = """\
 // GENERATED FILE - DO NOT EDIT.
@@ -289,6 +296,7 @@ void GL_APIENTRY GL_{name}({params})
         if (isCallValid)
         {{
             context->getMutableLocalState()->{name_lower_no_suffix}({internal_params});
+            {notify_context_call}
         }}
         ANGLE_CAPTURE_GL({name}, isCallValid, {gl_capture_params});
     }}
@@ -1416,12 +1424,29 @@ def is_aliasing_excepted(api, cmd_name):
 
 def is_allowed_with_active_pixel_local_storage(name):
     return name in PLS_ALLOW_LIST or any(
-        [fnmatch.fnmatchcase(name, x) for x in PLS_ALLOW_WILDCARDS])
+        [fnmatch.fnmatchcase(name, entry) for entry in PLS_ALLOW_WILDCARDS])
 
 
-def is_context_local_state_command(name):
+def is_context_local_state_command(api, name):
+    name = strip_suffix(api, name)
     return name in CONTEXT_LOCAL_LIST or any(
-        [fnmatch.fnmatchcase(name, x) for x in CONTEXT_LOCAL_WILDCARDS])
+        [fnmatch.fnmatchcase(name, entry) for entry in CONTEXT_LOCAL_WILDCARDS])
+
+
+def get_context_local_state_command_context_notification(api, name):
+
+    def make_context_notification_call(call):
+        return '' if call is None else 'context->' + call + '();'
+
+    name = strip_suffix(api, name)
+    if name in CONTEXT_LOCAL_LIST:
+        return make_context_notification_call(CONTEXT_LOCAL_LIST[name])
+
+    for entry, call in CONTEXT_LOCAL_WILDCARDS.items():
+        if fnmatch.fnmatchcase(name, entry):
+            return make_context_notification_call(call)
+
+    return ''
 
 
 def get_validation_expression(cmd_name, entry_point_name, internal_params):
@@ -1669,7 +1694,7 @@ def get_def_template(api, cmd_name, return_type, has_errcode_ret):
             return TEMPLATE_EGL_ENTRY_POINT_NO_RETURN
         elif api == apis.CL:
             return TEMPLATE_CL_ENTRY_POINT_NO_RETURN
-        elif is_context_local_state_command(cmd_name):
+        elif is_context_local_state_command(api, cmd_name):
             return TEMPLATE_GLES_LOCAL_STATE_ENTRY_POINT_NO_RETURN
         else:
             return TEMPLATE_GLES_ENTRY_POINT_NO_RETURN
@@ -1767,6 +1792,8 @@ def format_entry_point_def(api, command_node, cmd_name, proto, params, cmd_packe
             get_egl_entry_point_labeled_object(ep_to_object, cmd_name, params, packed_enums),
         "context_lock":
             get_context_lock(api, cmd_name),
+        "notify_context_call":
+            get_context_local_state_command_context_notification(api, cmd_name),
         "preamble":
             get_preamble(api, cmd_name, params),
         "epilog":
@@ -2173,7 +2200,7 @@ def get_decls(api,
 
         # Don't generate Context::entryPoint declarations for entry points that
         # directly access the context local state.
-        if is_context_local_state_command(cmd_name):
+        if is_context_local_state_command(api, cmd_name):
             continue
 
         param_text = ["".join(param.itertext()) for param in command.findall('param')]

@@ -516,28 +516,39 @@ void LocalState::clearStencil(int stencil)
     mDirtyBits.set(state::DIRTY_BIT_CLEAR_STENCIL);
 }
 
-void LocalState::setColorMask(bool red, bool green, bool blue, bool alpha)
+void LocalState::colorMask(GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha)
 {
-    mBlendState.colorMaskRed   = red;
-    mBlendState.colorMaskGreen = green;
-    mBlendState.colorMaskBlue  = blue;
-    mBlendState.colorMaskAlpha = alpha;
+    const bool redBool   = ConvertToBool(red);
+    const bool greenBool = ConvertToBool(green);
+    const bool blueBool  = ConvertToBool(blue);
+    const bool alphaBool = ConvertToBool(alpha);
 
-    mBlendStateExt.setColorMask(red, green, blue, alpha);
+    mBlendState.colorMaskRed   = redBool;
+    mBlendState.colorMaskGreen = greenBool;
+    mBlendState.colorMaskBlue  = blueBool;
+    mBlendState.colorMaskAlpha = alphaBool;
+
+    mBlendStateExt.setColorMask(redBool, greenBool, blueBool, alphaBool);
     mDirtyBits.set(state::DIRTY_BIT_COLOR_MASK);
 }
 
-void LocalState::setColorMaskIndexed(bool red, bool green, bool blue, bool alpha, GLuint index)
+void LocalState::colorMaski(GLuint index,
+                            GLboolean red,
+                            GLboolean green,
+                            GLboolean blue,
+                            GLboolean alpha)
 {
-    mBlendStateExt.setColorMaskIndexed(index, red, green, blue, alpha);
+    mBlendStateExt.setColorMaskIndexed(index, ConvertToBool(red), ConvertToBool(green),
+                                       ConvertToBool(blue), ConvertToBool(alpha));
     mDirtyBits.set(state::DIRTY_BIT_COLOR_MASK);
 }
 
-void LocalState::setDepthMask(bool mask)
+void LocalState::depthMask(GLboolean mask)
 {
-    if (mDepthStencil.depthMask != mask)
+    const bool maskBool = ConvertToBool(mask);
+    if (mDepthStencil.depthMask != maskBool)
     {
-        mDepthStencil.depthMask = mask;
+        mDepthStencil.depthMask = maskBool;
         mDirtyBits.set(state::DIRTY_BIT_DEPTH_MASK);
     }
 }

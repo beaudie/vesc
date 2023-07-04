@@ -560,14 +560,14 @@ void GL_APIENTRY GL_ColorMask(GLboolean red, GLboolean green, GLboolean blue, GL
 
     if (context)
     {
-        SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid =
             (context->skipValidation() ||
              (ValidatePixelLocalStorageInactive(context, angle::EntryPoint::GLColorMask) &&
               ValidateColorMask(context, angle::EntryPoint::GLColorMask, red, green, blue, alpha)));
         if (isCallValid)
         {
-            context->colorMask(red, green, blue, alpha);
+            context->getMutableLocalState()->colorMask(red, green, blue, alpha);
+            context->onLocalStateColorMaskChange();
         }
         ANGLE_CAPTURE_GL(ColorMask, isCallValid, context, red, green, blue, alpha);
     }
@@ -1049,12 +1049,11 @@ void GL_APIENTRY GL_DepthMask(GLboolean flag)
 
     if (context)
     {
-        SCOPED_SHARE_CONTEXT_LOCK(context);
         bool isCallValid = (context->skipValidation() ||
                             ValidateDepthMask(context, angle::EntryPoint::GLDepthMask, flag));
         if (isCallValid)
         {
-            context->depthMask(flag);
+            context->getMutableLocalState()->depthMask(flag);
         }
         ANGLE_CAPTURE_GL(DepthMask, isCallValid, context, flag);
     }

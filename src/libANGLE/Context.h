@@ -162,7 +162,7 @@ class StateCache final : angle::NonCopyable
     // 11. onQueryChange.
     // 12. onActiveTransformFeedbackChange.
     // 13. onUniformBufferStateChange.
-    // 14. onColorMaskChange.
+    // 14. onLocalStateColorMaskChange.
     // 15. onBufferBindingChange.
     // 16. onBlendFuncIndexedChange.
     intptr_t getBasicDrawStatesErrorString(const Context *context) const
@@ -283,7 +283,7 @@ class StateCache final : angle::NonCopyable
     void onUniformBufferStateChange(Context *context);
     void onAtomicCounterBufferStateChange(Context *context);
     void onShaderStorageBufferStateChange(Context *context);
-    void onColorMaskChange(Context *context);
+    void onLocalStateColorMaskChange(Context *context);
     void onBufferBindingChange(Context *context);
     void onBlendFuncIndexedChange(Context *context);
     void onBlendEquationChange(Context *context);
@@ -560,6 +560,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     // To be used **only** directly by the entry points.
     LocalState *getMutableLocalState() { return mState.getMutableLocalState(); }
+    void onLocalStateColorMaskChange() { mStateCache.onLocalStateColorMaskChange(this); }
 
     bool skipValidation() const
     {
