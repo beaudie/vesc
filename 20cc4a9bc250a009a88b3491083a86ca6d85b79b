@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "41514d17_647e37e5",
+        "filename": "src/common/CompiledShaderState.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-07-04T11:01:34Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "ed059aff_38dfbaf6",
+      "revId": "20cc4a9bc250a009a88b3491083a86ca6d85b79b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ec07ba1a_1339ff75",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-06-30T17:25:23Z",
       "side": 0,
       "message": "Same here, please keep the comment as \"OVR_multiview\".",
+      "revId": "20cc4a9bc250a009a88b3491083a86ca6d85b79b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab2a80a7_bdc4ac1f",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-07-04T11:01:34Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "ec07ba1a_1339ff75",
       "revId": "20cc4a9bc250a009a88b3491083a86ca6d85b79b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
