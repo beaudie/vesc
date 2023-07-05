@@ -5,16 +5,17 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// context_local_call_autogen.h:
+// context_local_call_gles_autogen.h:
 //   Helpers that set/get state that is entirely locally accessed by the context.
 
-#ifndef LIBANGLE_CONTEXT_LOCAL_CALL_AUTOGEN_H_
-#define LIBANGLE_CONTEXT_LOCAL_CALL_AUTOGEN_H_
+#ifndef LIBANGLE_CONTEXT_LOCAL_CALL_gles_AUTOGEN_H_
+#define LIBANGLE_CONTEXT_LOCAL_CALL_gles_AUTOGEN_H_
 
 #include "libANGLE/Context.h"
 
 namespace gl
 {
+void ContextLocalActiveTexture(Context *context, GLenum texture);
 void ContextLocalClearColor(Context *context,
                             GLfloat red,
                             GLfloat green,
@@ -27,9 +28,46 @@ void ContextLocalColorMask(Context *context,
                            GLboolean green,
                            GLboolean blue,
                            GLboolean alpha);
+void ContextLocalCullFace(Context *context, CullFaceMode modePacked);
+void ContextLocalDepthFunc(Context *context, GLenum func);
 void ContextLocalDepthMask(Context *context, GLboolean flag);
+void ContextLocalDepthRangef(Context *context, GLfloat n, GLfloat f);
 void ContextLocalDisable(Context *context, GLenum cap);
 void ContextLocalEnable(Context *context, GLenum cap);
+void ContextLocalFrontFace(Context *context, GLenum mode);
+void ContextLocalLineWidth(Context *context, GLfloat width);
+void ContextLocalPolygonOffset(Context *context, GLfloat factor, GLfloat units);
+void ContextLocalSampleCoverage(Context *context, GLfloat value, GLboolean invert);
+void ContextLocalScissor(Context *context, GLint x, GLint y, GLsizei width, GLsizei height);
+void ContextLocalVertexAttrib1f(Context *context, GLuint index, GLfloat x);
+void ContextLocalVertexAttrib1fv(Context *context, GLuint index, const GLfloat *v);
+void ContextLocalVertexAttrib2f(Context *context, GLuint index, GLfloat x, GLfloat y);
+void ContextLocalVertexAttrib2fv(Context *context, GLuint index, const GLfloat *v);
+void ContextLocalVertexAttrib3f(Context *context, GLuint index, GLfloat x, GLfloat y, GLfloat z);
+void ContextLocalVertexAttrib3fv(Context *context, GLuint index, const GLfloat *v);
+void ContextLocalVertexAttrib4f(Context *context,
+                                GLuint index,
+                                GLfloat x,
+                                GLfloat y,
+                                GLfloat z,
+                                GLfloat w);
+void ContextLocalVertexAttrib4fv(Context *context, GLuint index, const GLfloat *v);
+void ContextLocalViewport(Context *context, GLint x, GLint y, GLsizei width, GLsizei height);
+void ContextLocalVertexAttribI4i(Context *context,
+                                 GLuint index,
+                                 GLint x,
+                                 GLint y,
+                                 GLint z,
+                                 GLint w);
+void ContextLocalVertexAttribI4iv(Context *context, GLuint index, const GLint *v);
+void ContextLocalVertexAttribI4ui(Context *context,
+                                  GLuint index,
+                                  GLuint x,
+                                  GLuint y,
+                                  GLuint z,
+                                  GLuint w);
+void ContextLocalVertexAttribI4uiv(Context *context, GLuint index, const GLuint *v);
+void ContextLocalSampleMaski(Context *context, GLuint maskNumber, GLbitfield mask);
 void ContextLocalColorMaski(Context *context,
                             GLuint index,
                             GLboolean r,
@@ -38,12 +76,27 @@ void ContextLocalColorMaski(Context *context,
                             GLboolean a);
 void ContextLocalDisablei(Context *context, GLenum target, GLuint index);
 void ContextLocalEnablei(Context *context, GLenum target, GLuint index);
+void ContextLocalMinSampleShading(Context *context, GLfloat value);
+void ContextLocalPrimitiveBoundingBox(Context *context,
+                                      GLfloat minX,
+                                      GLfloat minY,
+                                      GLfloat minZ,
+                                      GLfloat minW,
+                                      GLfloat maxX,
+                                      GLfloat maxY,
+                                      GLfloat maxZ,
+                                      GLfloat maxW);
 void ContextLocalClearColorx(Context *context,
                              GLfixed red,
                              GLfixed green,
                              GLfixed blue,
                              GLfixed alpha);
 void ContextLocalClearDepthx(Context *context, GLfixed depth);
+void ContextLocalDepthRangex(Context *context, GLfixed n, GLfixed f);
+void ContextLocalLineWidthx(Context *context, GLfixed width);
+void ContextLocalLogicOp(Context *context, LogicalOperation opcodePacked);
+void ContextLocalPolygonOffsetx(Context *context, GLfixed factor, GLfixed units);
+void ContextLocalSampleCoveragex(Context *context, GLclampx value, GLboolean invert);
 
 // GL_AMD_performance_monitor
 
@@ -68,6 +121,7 @@ void ContextLocalClearDepthx(Context *context, GLfixed depth);
 // GL_ANGLE_instanced_arrays
 
 // GL_ANGLE_logic_op
+void ContextLocalLogicOpANGLE(Context *context, LogicalOperation opcodePacked);
 
 // GL_ANGLE_memory_object_flags
 
@@ -78,10 +132,12 @@ void ContextLocalClearDepthx(Context *context, GLfixed depth);
 // GL_ANGLE_pack_reverse_row_order
 
 // GL_ANGLE_polygon_mode
+void ContextLocalPolygonMode(Context *context, GLenum face, PolygonMode modePacked);
 
 // GL_ANGLE_program_binary
 
 // GL_ANGLE_provoking_vertex
+void ContextLocalProvokingVertex(Context *context, ProvokingVertexConvention provokeModePacked);
 
 // GL_ANGLE_renderability_validation
 
@@ -124,6 +180,7 @@ void ContextLocalClearDepthx(Context *context, GLfixed depth);
 // GL_CHROMIUM_copy_texture
 
 // GL_CHROMIUM_framebuffer_mixed_samples
+void ContextLocalCoverageModulation(Context *context, GLenum components);
 
 // GL_CHROMIUM_lose_context
 
@@ -142,6 +199,7 @@ void ContextLocalClearDepthx(Context *context, GLfixed depth);
 // GL_EXT_buffer_storage
 
 // GL_EXT_clip_control
+void ContextLocalClipControl(Context *context, ClipOrigin originPacked, ClipDepthMode depthPacked);
 
 // GL_EXT_clip_cull_distance
 
@@ -166,14 +224,6 @@ void ContextLocalClearDepthx(Context *context, GLfixed depth);
 // GL_EXT_draw_buffers
 
 // GL_EXT_draw_buffers_indexed
-void ContextLocalColorMaski(Context *context,
-                            GLuint index,
-                            GLboolean r,
-                            GLboolean g,
-                            GLboolean b,
-                            GLboolean a);
-void ContextLocalDisablei(Context *context, GLenum target, GLuint index);
-void ContextLocalEnablei(Context *context, GLenum target, GLuint index);
 
 // GL_EXT_draw_elements_base_vertex
 
@@ -202,6 +252,7 @@ void ContextLocalEnablei(Context *context, GLenum target, GLuint index);
 // GL_EXT_occlusion_query_boolean
 
 // GL_EXT_polygon_offset_clamp
+void ContextLocalPolygonOffsetClamp(Context *context, GLfloat factor, GLfloat units, GLfloat clamp);
 
 // GL_EXT_primitive_bounding_box
 
@@ -310,6 +361,7 @@ void ContextLocalEnablei(Context *context, GLenum target, GLuint index);
 // GL_NV_pixel_buffer_object
 
 // GL_NV_polygon_mode
+void ContextLocalPolygonModeNV(Context *context, GLenum face, PolygonMode modePacked);
 
 // GL_NV_read_depth
 
@@ -340,14 +392,6 @@ void ContextLocalEnablei(Context *context, GLenum target, GLuint index);
 // GL_OES_depth_texture
 
 // GL_OES_draw_buffers_indexed
-void ContextLocalColorMaski(Context *context,
-                            GLuint index,
-                            GLboolean r,
-                            GLboolean g,
-                            GLboolean b,
-                            GLboolean a);
-void ContextLocalDisablei(Context *context, GLenum target, GLuint index);
-void ContextLocalEnablei(Context *context, GLenum target, GLuint index);
 
 // GL_OES_draw_elements_base_vertex
 
@@ -432,44 +476,7 @@ void ContextLocalEnablei(Context *context, GLenum target, GLuint index);
 // GL_QCOM_render_shared_exponent
 
 // GL_QCOM_shading_rate
-
-// GL 1.0
-
-// GL 1.1
-
-// GL 1.2
-
-// GL 1.3
-
-// GL 1.4
-
-// GL 1.5
-
-// GL 2.0
-
-// GL 2.1
-
-// GL 3.0
-
-// GL 3.1
-
-// GL 3.2
-
-// GL 3.3
-
-// GL 4.0
-
-// GL 4.1
-
-// GL 4.2
-
-// GL 4.3
-
-// GL 4.4
-
-// GL 4.5
-
-// GL 4.6
+void ContextLocalShadingRate(Context *context, GLenum rate);
 }  // namespace gl
 
-#endif  // LIBANGLE_CONTEXT_LOCAL_CALL_AUTOGEN_H_
+#endif  // LIBANGLE_CONTEXT_LOCAL_CALL_gles_AUTOGEN_H_
