@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4490203_19760683",
+        "filename": "src/compiler/translator/ExtensionBehavior.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-05T20:56:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "26d4f581_f874f0e0",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 42
+      },
+      "revId": "23a9578b21f17de075a9422ac9706b3e53e4c2d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1122fe94_e0c68d5e",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-07-05T20:43:40Z",
       "side": 1,
       "message": "Same for these",
+      "range": {
+        "startLine": 17752,
+        "startChar": 0,
+        "endLine": 17752,
+        "endChar": 51
+      },
+      "revId": "23a9578b21f17de075a9422ac9706b3e53e4c2d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b8df28e_a5b9362f",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 17752,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-05T20:56:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1122fe94_e0c68d5e",
       "range": {
         "startLine": 17752,
         "startChar": 0,
