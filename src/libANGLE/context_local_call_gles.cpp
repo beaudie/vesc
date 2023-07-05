@@ -571,4 +571,13 @@ void ContextLocalHint(Context *context, GLenum target, GLenum mode)
     }
 }
 
+GLboolean ContextLocalIsEnabled(Context *context, GLenum cap)
+{
+    return context->localState().getEnableFeature(cap);
+}
+
+GLboolean ContextLocalIsEnabledi(Context *context, GLenum target, GLuint index)
+{
+    return context->localState().getEnableFeatureIndexed(target, index);
+}
 }  // namespace gl

@@ -7268,16 +7268,6 @@ GLboolean Context::isBuffer(BufferID buffer) const
     return ConvertToGLBoolean(getBuffer(buffer));
 }
 
-GLboolean Context::isEnabled(GLenum cap) const
-{
-    return mState.getEnableFeature(cap);
-}
-
-GLboolean Context::isEnabledi(GLenum target, GLuint index) const
-{
-    return mState.getEnableFeatureIndexed(target, index);
-}
-
 GLboolean Context::isFramebuffer(FramebufferID framebuffer) const
 {
     if (framebuffer.value == 0)
@@ -9027,7 +9017,7 @@ void Context::beginPixelLocalStorage(GLsizei n, const GLenum loadops[])
     PixelLocalStorage &pls = framebuffer->getPixelLocalStorage(this);
 
     pls.begin(this, n, loadops);
-    mState.setPixelLocalStorageActivePlanes(n);
+    getMutableLocalState()->setPixelLocalStorageActivePlanes(n);
 }
 
 void Context::endPixelLocalStorage(GLsizei n, const GLenum storeops[])
@@ -9037,7 +9027,7 @@ void Context::endPixelLocalStorage(GLsizei n, const GLenum storeops[])
     PixelLocalStorage &pls = framebuffer->getPixelLocalStorage(this);
 
     pls.end(this, storeops);
-    mState.setPixelLocalStorageActivePlanes(0);
+    getMutableLocalState()->setPixelLocalStorageActivePlanes(0);
 }
 
 void Context::endPixelLocalStorageWithStoreOpsStore()
