@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c6985f8_9127bfde",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-07-05T17:22:32Z",
+      "side": 1,
+      "message": "Dry-run failures look like flakes to me.\nIan, PTAL.",
+      "revId": "292d73b2775fba4ed1913ea823b36bb4f52f2052",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c46a528e_27d39a95",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-07-05T17:22:32Z",
+      "side": 1,
+      "message": "Roman, would it be possible to search all folders in build-tools, so that we don\u0027t have to update here each time android_sdk is updated?",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 0
+      },
+      "revId": "292d73b2775fba4ed1913ea823b36bb4f52f2052",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
