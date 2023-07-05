@@ -1325,10 +1325,6 @@ class State : angle::NonCopyable
     bool getFramebufferSRGB() const { return mLocalState.getFramebufferSRGB(); }
     void setPatchVertices(GLuint value) { mLocalState.setPatchVertices(value); }
     GLuint getPatchVertices() const { return mLocalState.getPatchVertices(); }
-    void setPixelLocalStorageActivePlanes(GLsizei n)
-    {
-        mLocalState.setPixelLocalStorageActivePlanes(n);
-    }
     GLsizei getPixelLocalStorageActivePlanes() const
     {
         return mLocalState.getPixelLocalStorageActivePlanes();
@@ -1395,6 +1391,7 @@ class State : angle::NonCopyable
     {
         return mLocalState.getEnableFeatureIndexed(feature, index);
     }
+    const LocalState &localState() const { return mLocalState; }
     const GLES1State &gles1() const { return mLocalState.gles1(); }
 
     // Used by the capture/replay tool to create state.
