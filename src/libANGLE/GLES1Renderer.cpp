@@ -286,6 +286,8 @@ angle::Result GLES1Renderer::prepareForDraw(PrimitiveMode mode, Context *context
 
     if (gles1State.isDirty(GLES1State::DIRTY_GLES1_LOGIC_OP) && hasLogicOpANGLE)
     {
+        // Note: ContextLocalEnable(GL_COLOR_LOGIC_OP) is not used because that entry point
+        // implementation forwards logicOp back to GLES1State.
         context->setLogicOpEnabled(gles1State.mLogicOpEnabled);
         context->setLogicOp(gles1State.mLogicOp);
     }
