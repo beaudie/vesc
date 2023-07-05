@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "8636c2d4a669b818bbcd1466697b1ba2b7d2b1e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4715a6ac_590cfc94",
+        "filename": "src/libANGLE/renderer/gl/BlitGL.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 896,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-05T23:09:39Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this happen too in the error path?",
+      "revId": "8636c2d4a669b818bbcd1466697b1ba2b7d2b1e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
