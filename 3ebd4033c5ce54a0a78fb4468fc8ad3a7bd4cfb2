@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac0fa867_2584aad2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-07-05T22:29:18Z",
+      "side": 1,
+      "message": "For anyone viewing this CL, the follow-up was https://chromium-review.googlesource.com/c/angle/angle/+/4661672 .",
+      "revId": "3ebd4033c5ce54a0a78fb4468fc8ad3a7bd4cfb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c68325a4_c320a086",
