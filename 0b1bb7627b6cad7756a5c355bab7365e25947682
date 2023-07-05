@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2276411a_990b5669",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-07-05T18:27:27Z",
+      "side": 1,
+      "message": "`StateCache::onColorMaskChange()` calls `StateCache::updateBasicDrawStatesError()` that updates:\n- `mCachedBasicDrawStatesErrorString`\n- `mCachedBasicDrawStatesErrorCode`\n\nThe `StateCache::updateBasicDrawStatesError()` is called from many places, including from `Context::onSubjectStateChange()`, therefore it might be called from other threads.",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 34
+      },
+      "revId": "0b1bb7627b6cad7756a5c355bab7365e25947682",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
