@@ -16,6 +16,23 @@
       "message": "Suppression per request from Shabi",
       "revId": "a5104815bf953e0f8447d7179ff4ab0c2f034c15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8674904_1bae87d6",
+        "filename": "src/tests/deqp_support/deqp_egl_test_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-05T23:40:33Z",
+      "side": 1,
+      "message": "There is a similar suppression already on line 109. Could you please move this next to it and make it specific to MAC METAL? And please change the other suppression to MAC METAL too (remove AMD, I see it failing on INTEL too). You could probably use the same bug tag as the other one.",
+      "revId": "a5104815bf953e0f8447d7179ff4ab0c2f034c15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
