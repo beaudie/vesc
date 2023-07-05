@@ -11,6 +11,7 @@
 # The path of all the files added to angle_code_affecting_program_serialize
 # must be relative to angle_root.
 
+import("compiler.gni")
 import("libANGLE/renderer/d3d/d3d_backend.gni")
 import("libANGLE/renderer/gl/gl_backend.gni")
 import("libANGLE/renderer/metal/metal_backend.gni")
@@ -22,6 +23,9 @@ angle_code_affecting_program_serialize = libangle_common_sources
 angle_code_affecting_program_serialize += libangle_headers
 angle_code_affecting_program_serialize += libangle_sources
 angle_code_affecting_program_serialize += libangle_includes
+angle_code_affecting_program_serialize += angle_translator_sources
+angle_code_affecting_program_serialize += angle_preprocessor_sources
+angle_code_affecting_program_serialize += angle_translator_exported_headers
 
 vulkan_backend_dir = "libANGLE/renderer/vulkan/"
 angle_code_affecting_program_serialize +=
@@ -55,4 +59,47 @@ angle_code_affecting_program_serialize +=
 
 if (angle_has_frame_capture) {
   angle_code_affecting_program_serialize += libangle_capture_sources
+}
+
+if (angle_enable_glsl || angle_enable_essl || use_fuzzing_engine ||
+    angle_enable_vulkan) {
+  angle_code_affecting_program_serialize += angle_translator_glsl_base_sources
+}
+
+if (angle_enable_glsl || angle_enable_vulkan || use_fuzzing_engine) {
+  angle_code_affecting_program_serialize +=
+      angle_translator_glsl_and_vulkan_base_sources
+}
+
+if (angle_enable_essl || use_fuzzing_engine) {
+  angle_code_affecting_program_serialize += angle_translator_essl_sources
+}
+
+if (angle_enable_glsl || use_fuzzing_engine) {
+  angle_code_affecting_program_serialize += angle_translator_glsl_sources
+
+  if (is_apple) {
+    angle_code_affecting_program_serialize +=
+        angle_translator_glsl_apple_sources
+  }
+}
+
+if (angle_enable_hlsl || use_fuzzing_engine) {
+  angle_code_affecting_program_serialize += angle_translator_hlsl_sources
+}
+
+if (angle_enable_vulkan || use_fuzzing_engine) {
+  angle_code_affecting_program_serialize += angle_translator_lib_vulkan_sources
+}
+
+if (angle_enable_desktop_glsl) {
+  angle_code_affecting_program_serialize +=
+      angle_translator_glsl_symbol_table_sources
+} else {
+  angle_code_affecting_program_serialize +=
+      angle_translator_essl_symbol_table_sources
+}
+
+if (angle_enable_metal) {
+  angle_code_affecting_program_serialize += angle_translator_lib_metal_sources
 }
