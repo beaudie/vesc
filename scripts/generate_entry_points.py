@@ -155,6 +155,8 @@ CONTEXT_LOCAL_LIST = [
     'glEnablei',
     'glFrontFace',
     'glHint',
+    'glIsEnabled',
+    'glIsEnabledi',
     'glLineWidth',
     'glLogicOpANGLE',
     'glMinSampleShading',
