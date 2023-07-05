@@ -16,6 +16,24 @@
       "message": "Please add the top comment to the new expectations files for future:\n\n```\n// Copyright 2023 The ANGLE Project Authors. All rights reserved.\n// Use of this source code is governed by a BSD-style license that can be\n// found in the LICENSE file.\n\n// See README.md for format.\n```",
       "revId": "306290280ae3b3f5e907230cd8dc54e5cd5b39cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c163d9e_d3f6ce00",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-07-05T22:39:03Z",
+      "side": 1,
+      "message": "Thank you for catching this!",
+      "parentUuid": "60372493_b470271b",
+      "revId": "306290280ae3b3f5e907230cd8dc54e5cd5b39cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
