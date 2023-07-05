@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d340e8e_530dcdab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-05T03:17:10Z",
+      "side": 1,
+      "message": "Using these three functions as a starting point. Unfortunately I can\u0027t find a bullet-proof solution to ensure what I claim is \ncontext-local is actually context-local (see doc I just shared with you). Open to ideas.",
+      "revId": "858adb786de5723109aaf453efa4dc8b78150b80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
