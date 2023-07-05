@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f276190_d2330378",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-07-05T20:43:40Z",
+      "side": 1,
+      "message": "We started isolating extensions based on shader version because there are broken apps out there. That change landed here:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/4304907\n\nI\u0027m not super comfortable with this change, but we want the app to work.  Let\u0027s revert it when we can.",
+      "revId": "23a9578b21f17de075a9422ac9706b3e53e4c2d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26d4f581_f874f0e0",
+        "filename": "src/compiler/translator/ExtensionBehavior.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-07-05T20:43:40Z",
+      "side": 1,
+      "message": "Can you tag this with a bug entry so we can circle back and remove this when the app updates?",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 19,
+        "endChar": 42
+      },
+      "revId": "23a9578b21f17de075a9422ac9706b3e53e4c2d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1122fe94_e0c68d5e",
+        "filename": "src/tests/gl_tests/GLSLTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 17752,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-07-05T20:43:40Z",
+      "side": 1,
+      "message": "Same for these",
+      "range": {
+        "startLine": 17752,
+        "startChar": 0,
+        "endLine": 17752,
+        "endChar": 51
+      },
+      "revId": "23a9578b21f17de075a9422ac9706b3e53e4c2d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
