@@ -134,6 +134,30 @@
       },
       "revId": "858adb786de5723109aaf453efa4dc8b78150b80",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "832ac801_e14e20ba",
+        "filename": "src/libGLESv2/entry_points_gles_1_0_autogen.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-07-05T18:42:01Z",
+      "side": 1,
+      "message": "We can live with this vulnerability for now, knowing that it will be addressed in near future is what I am saying. But I am also okay if you want to take new form and possibly has to revert back in future.",
+      "parentUuid": "3ce25093_4c0c0d57",
+      "range": {
+        "startLine": 82,
+        "startChar": 4,
+        "endLine": 82,
+        "endChar": 46
+      },
+      "revId": "858adb786de5723109aaf453efa4dc8b78150b80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
