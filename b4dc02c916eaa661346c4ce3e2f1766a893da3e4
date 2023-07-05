@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "40130230_d45614bd",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1932,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-07-05T18:19:09Z",
+      "side": 1,
+      "message": "This one was caught by an external security researcher (using a fuzzer, it looks like). If it ever happens again that an invalid primitive type makes it through validation it\u0027ll be another security bug, so defense in depth seems warranted here. I\u0027ve changed these to FATAL() using an inline helper.",
+      "parentUuid": "3dc35ca3_74f27398",
+      "revId": "b4dc02c916eaa661346c4ce3e2f1766a893da3e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "de2ddd73_f5a45dfb",
@@ -66,6 +84,30 @@
       "writtenOn": "2023-07-04T10:08:17Z",
       "side": 1,
       "message": "Why not use the GL symbols directly?",
+      "range": {
+        "startLine": 1337,
+        "startChar": 0,
+        "endLine": 1341,
+        "endChar": 47
+      },
+      "revId": "b4dc02c916eaa661346c4ce3e2f1766a893da3e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1408f40b_fad473fa",
+        "filename": "src/tests/gl_tests/SimpleOperationTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1341,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-07-05T18:19:09Z",
+      "side": 1,
+      "message": "Thanks, I didn\u0027t try that - wasn\u0027t sure which version of the GLES headers was included in these tests. Done.",
+      "parentUuid": "de2ddd73_f5a45dfb",
       "range": {
         "startLine": 1337,
         "startChar": 0,
