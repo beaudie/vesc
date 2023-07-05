@@ -22,6 +22,30 @@
       },
       "revId": "0b1bb7627b6cad7756a5c355bab7365e25947682",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d93d0129_8f7df589",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-05T18:50:38Z",
+      "side": 1,
+      "message": "Oof, that\u0027s right. Too many entry points call that, so let me make it safe.",
+      "parentUuid": "2276411a_990b5669",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 34
+      },
+      "revId": "0b1bb7627b6cad7756a5c355bab7365e25947682",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
