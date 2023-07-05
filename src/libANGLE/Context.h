@@ -155,7 +155,7 @@ class StateCache final : angle::NonCopyable
     // 4. onVertexArrayStateChange.
     // 5. onVertexArrayBufferStateChange.
     // 6. onDrawFramebufferChange.
-    // 7. onContextCapChange.
+    // 7. onContextLocalCapChange.
     // 8. onStencilStateChange.
     // 9. onDefaultVertexAttributeChange.
     // 10. onActiveTextureChange.
@@ -275,7 +275,6 @@ class StateCache final : angle::NonCopyable
     void onVertexArrayBufferStateChange(Context *context);
     void onGLES1ClientStateChange(Context *context);
     void onDrawFramebufferChange(Context *context);
-    void onContextCapChange(Context *context);
     void onStencilStateChange(Context *context);
     void onDefaultVertexAttributeChange(Context *context);
     void onActiveTextureChange(Context *context);
@@ -284,10 +283,15 @@ class StateCache final : angle::NonCopyable
     void onUniformBufferStateChange(Context *context);
     void onAtomicCounterBufferStateChange(Context *context);
     void onShaderStorageBufferStateChange(Context *context);
-    void onContextLocalColorMaskChange(Context *context);
     void onBufferBindingChange(Context *context);
     void onBlendFuncIndexedChange(Context *context);
     void onBlendEquationChange(Context *context);
+    // The following state change notifications are only called from context-local state change
+    // functions.  They only affect the draw validation cache which is also context-local (i.e. not
+    // accessed by other contexts in the share group).  Note that context-local state change
+    // functions are called without holding the share group lock.
+    void onContextLocalCapChange(Context *context);
+    void onContextLocalColorMaskChange(Context *context);
 
   private:
     // Cache update functions.
@@ -569,6 +573,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     // To be used **only** directly by the entry points.
     LocalState *getMutableLocalState() { return mState.getMutableLocalState(); }
+    void onContextLocalCapChange() { mStateCache.onContextLocalCapChange(this); }
     void onContextLocalColorMaskChange() { mStateCache.onContextLocalColorMaskChange(this); }
 
     bool skipValidation() const
@@ -703,7 +708,7 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     bool isDestroyed() const { return mIsDestroyed; }
     void setIsDestroyed() { mIsDestroyed = true; }
 
-    void setLogicOpEnabled(bool enabled) { mState.setLogicOpEnabled(enabled); }
+    void setLogicOpEnabled(bool enabled);
     void setLogicOp(LogicalOperation opcode) { mState.setLogicOp(opcode); }
 
     // Needed by capture serialization logic that works with a "const" Context pointer.
