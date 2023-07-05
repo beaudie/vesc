@@ -458,17 +458,9 @@ class LocalState : angle::NonCopyable
     void setFramebufferSRGB(bool sRGB);
     bool getFramebufferSRGB() const { return mFramebufferSRGB; }
 
-    // GL_KHR_parallel_shader_compile
-    void setMaxShaderCompilerThreads(GLuint count);
-    GLuint getMaxShaderCompilerThreads() const { return mMaxShaderCompilerThreads; }
-
     // GL_EXT_tessellation_shader
     void setPatchVertices(GLuint value);
     GLuint getPatchVertices() const { return mPatchVertices; }
-
-    // GL_ANGLE_shader_pixel_local_storage
-    void setPixelLocalStorageActivePlanes(GLsizei n);
-    GLsizei getPixelLocalStorageActivePlanes() const { return mPixelLocalStorageActivePlanes; }
 
     // Line width state setter
     void setLineWidth(GLfloat width);
@@ -678,17 +670,11 @@ class LocalState : angle::NonCopyable
     bool mLogicOpEnabled;
     LogicalOperation mLogicOp;
 
-    // GL_KHR_parallel_shader_compile
-    GLuint mMaxShaderCompilerThreads;
-
     // GL_APPLE_clip_distance / GL_EXT_clip_cull_distance / GL_ANGLE_clip_cull_distance
     ClipDistanceEnableBits mClipDistancesEnabled;
 
     // GL_EXT_tessellation_shader
     GLuint mPatchVertices;
-
-    // GL_ANGLE_shader_pixel_local_storage
-    GLsizei mPixelLocalStorageActivePlanes;
 
     // GLES1 emulation: state specific to GLES1
     GLES1State mGLES1State;
@@ -1235,6 +1221,14 @@ class State : angle::NonCopyable
 
     bool hasDisplayTextureShareGroup() const { return mDisplayTextureShareGroup; }
 
+    // GL_ANGLE_shader_pixel_local_storage
+    void setPixelLocalStorageActivePlanes(GLsizei n);
+    GLsizei getPixelLocalStorageActivePlanes() const { return mPixelLocalStorageActivePlanes; }
+
+    // GL_KHR_parallel_shader_compile
+    void setMaxShaderCompilerThreads(GLuint count);
+    GLuint getMaxShaderCompilerThreads() const { return mMaxShaderCompilerThreads; }
+
     // Convenience functions that forward to context-local state.
     const RasterizerState &getRasterizerState() const { return mLocalState.getRasterizerState(); }
     const BlendState &getBlendState() const { return mLocalState.getBlendState(); }
@@ -1326,21 +1320,8 @@ class State : angle::NonCopyable
     PixelUnpackState &getUnpackState() { return mLocalState.getUnpackState(); }
     GLenum getCoverageModulation() const { return mLocalState.getCoverageModulation(); }
     bool getFramebufferSRGB() const { return mLocalState.getFramebufferSRGB(); }
-    void setMaxShaderCompilerThreads(GLuint count)
-    {
-        mLocalState.setMaxShaderCompilerThreads(count);
-    }
-    GLuint getMaxShaderCompilerThreads() const { return mLocalState.getMaxShaderCompilerThreads(); }
     void setPatchVertices(GLuint value) { mLocalState.setPatchVertices(value); }
     GLuint getPatchVertices() const { return mLocalState.getPatchVertices(); }
-    void setPixelLocalStorageActivePlanes(GLsizei n)
-    {
-        mLocalState.setPixelLocalStorageActivePlanes(n);
-    }
-    GLsizei getPixelLocalStorageActivePlanes() const
-    {
-        return mLocalState.getPixelLocalStorageActivePlanes();
-    }
     float getLineWidth() const { return mLocalState.getLineWidth(); }
     unsigned int getActiveSampler() const { return mLocalState.getActiveSampler(); }
     GLenum getGenerateMipmapHint() const { return mLocalState.getGenerateMipmapHint(); }
@@ -1566,6 +1547,12 @@ class State : angle::NonCopyable
     BindingPointer<TransformFeedback> mTransformFeedback;
 
     bool mDisplayTextureShareGroup;
+
+    // GL_ANGLE_shader_pixel_local_storage
+    GLsizei mPixelLocalStorageActivePlanes;
+
+    // GL_KHR_parallel_shader_compile
+    GLuint mMaxShaderCompilerThreads;
 
     // The Overlay object, used by the backend to render the overlay.
     const OverlayType *mOverlay;

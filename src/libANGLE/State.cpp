@@ -368,9 +368,7 @@ LocalState::LocalState(const EGLenum clientType,
       mTextureRectangleEnabled(true),
       mLogicOpEnabled(false),
       mLogicOp(LogicalOperation::Copy),
-      mMaxShaderCompilerThreads(std::numeric_limits<GLuint>::max()),
       mPatchVertices(3),
-      mPixelLocalStorageActivePlanes(0),
       mNoSimultaneousConstantColorAndAlphaBlendFunc(false),
       mSetBlendIndexedInvoked(false),
       mSetBlendFactorsIndexedInvoked(false),
@@ -1129,11 +1127,6 @@ void LocalState::setFramebufferSRGB(bool sRGB)
     }
 }
 
-void LocalState::setMaxShaderCompilerThreads(GLuint count)
-{
-    mMaxShaderCompilerThreads = count;
-}
-
 void LocalState::setPatchVertices(GLuint value)
 {
     if (mPatchVertices != value)
@@ -1141,11 +1134,6 @@ void LocalState::setPatchVertices(GLuint value)
         mPatchVertices = value;
         mDirtyBits.set(state::DIRTY_BIT_PATCH_VERTICES);
     }
-}
-
-void LocalState::setPixelLocalStorageActivePlanes(GLsizei n)
-{
-    mPixelLocalStorageActivePlanes = n;
 }
 
 void LocalState::setLineWidth(GLfloat width)
@@ -2086,11 +2074,6 @@ void LocalState::getIntegerv(GLenum pname, GLint *params) const
             *params = ToGLenum(mShadingRate);
             break;
 
-        // GL_ANGLE_shader_pixel_local_storage
-        case GL_PIXEL_LOCAL_STORAGE_ACTIVE_PLANES_ANGLE:
-            *params = mPixelLocalStorageActivePlanes;
-            break;
-
         // GL_ARM_shader_framebuffer_fetch
         case GL_FETCH_PER_SAMPLE_ARM:
             *params = mFetchPerSample ? 1 : 0;
@@ -2218,6 +2201,8 @@ State::State(const State *shareContextState,
       mExecutable(nullptr),
       mVertexArray(nullptr),
       mDisplayTextureShareGroup(shareTextures != nullptr),
+      mPixelLocalStorageActivePlanes(0),
+      mMaxShaderCompilerThreads(std::numeric_limits<GLuint>::max()),
       mOverlay(overlay),
       mLocalState(clientType,
                   clientVersion,
@@ -3383,6 +3368,10 @@ angle::Result State::getIntegerv(const Context *context, GLenum pname, GLint *pa
             }
             break;
         }
+        // GL_ANGLE_shader_pixel_local_storage
+        case GL_PIXEL_LOCAL_STORAGE_ACTIVE_PLANES_ANGLE:
+            *params = mPixelLocalStorageActivePlanes;
+            break;
 
         default:
             mLocalState.getIntegerv(pname, params);
@@ -3927,6 +3916,16 @@ void State::setImageUnit(const Context *context,
     mDirtyBits.set(state::DIRTY_BIT_IMAGE_BINDINGS);
 
     onImageStateChange(context, unit);
+}
+
+void State::setPixelLocalStorageActivePlanes(GLsizei n)
+{
+    mPixelLocalStorageActivePlanes = n;
+}
+
+void State::setMaxShaderCompilerThreads(GLuint count)
+{
+    mMaxShaderCompilerThreads = count;
 }
 
 // Handle a dirty texture event.
