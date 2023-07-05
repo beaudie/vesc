@@ -38,6 +38,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "496ba653_816c4251",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-05T14:42:06Z",
+      "side": 1,
+      "message": "Yes, something like. It\u0027s a big surgery, so I need to think it through. Geoff\u0027s the most familiar with the front-end architecture and details but he\u0027s on vacation. I need to consult with him too.\n\n(thanks for the idea)",
+      "parentUuid": "1756daa7_7a8985cc",
+      "revId": "858adb786de5723109aaf453efa4dc8b78150b80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "3ea42832_eaec3d9e",
         "filename": "src/libANGLE/context_local_call.cpp",
         "patchSetId": 3
@@ -49,6 +67,24 @@
       "writtenOn": "2023-07-05T11:29:28Z",
       "side": 1,
       "message": "Converting this to header and making functions `ANGLE_INLINE` may improve performance. I can experiment with this in a follow up.",
+      "revId": "858adb786de5723109aaf453efa4dc8b78150b80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f350d321_30c6882c",
+        "filename": "src/libANGLE/context_local_call.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-05T14:42:06Z",
+      "side": 1,
+      "message": "Maybe. As it stands, this is equivalent to what we had before, where the functions were in Context.cpp.",
+      "parentUuid": "3ea42832_eaec3d9e",
       "revId": "858adb786de5723109aaf453efa4dc8b78150b80",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
