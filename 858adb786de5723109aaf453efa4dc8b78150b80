@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "1756daa7_7a8985cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-07-05T12:32:07Z",
+      "side": 1,
+      "message": "Looked though the document.\n\nWhat if we split Context in 3 parts with multiple base classes:\n- `LocalContext` base: contains only local state, implements APIs that only access local state.\n- `SharedContext` base: contains rest of the state, implements `ObserverInterface`.\n- `Context` final class: implements rest of the APIs (may use local/shared states).\n\nEntry points will access `LocalContext` without lock or `Context` with lock.\nOther Contexts/threads may only use pointer to `SharedContext` and not to `Context`.\n\nI think this is similar what you was suggesting in \"Enforcing Context-Local Access By the Compiler\", but this is without wrappers and so should not affect performance.",
+      "parentUuid": "0d340e8e_530dcdab",
+      "revId": "858adb786de5723109aaf453efa4dc8b78150b80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "3ea42832_eaec3d9e",
         "filename": "src/libANGLE/context_local_call.cpp",
         "patchSetId": 3
