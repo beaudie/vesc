@@ -106,6 +106,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "91b1fcfb_1c99d9a6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 9556,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-07-06T17:48:36Z",
+      "side": 1,
+      "message": "Thank you Shabi.",
+      "parentUuid": "ff52d4ce_9d1c8e83",
+      "revId": "a02c7684f8f59f90dd041d7bfc50339be7402d92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fc30bcb0_a875c339",
