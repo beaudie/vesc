@@ -52,6 +52,24 @@
       "parentUuid": "beb36294_180bbfe3",
       "revId": "213223f39f0c81157611e8d3aa7241a87661b896",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8b7bc63_e8cd372c",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 9020,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-06T16:40:30Z",
+      "side": 1,
+      "message": "The conundrum is this:\n\nThe `mPixelLocalStorageActivePlanes` state _is_ context-local, but it\u0027s not set with a context-local entry point (it\u0027s set with `glBegin/EndPixelLocalStorage`). So you could think we could put this in State instead of LocalState\n\nHowever, `glGetIntegerv(GL_PIXEL_LOCAL_STORAGE_ACTIVE_PLANES_ANGLE)` (which reads that value) _is_ context-local and I\u0027d like to avoid special casing `glGetIntegerv` for `GL_PIXEL_LOCAL_STORAGE_ACTIVE_PLANES_ANGLE`.\n\nI ended up making this change because `Context::begin/endPixelLocalStorage` are in the end just one step after the entry point, and I can\u0027t see a way to avoid getMutableLocalState() here.\n\nThat said, I shouldn\u0027t be putting this change here. I do plan on making `glGetIntegerv` lockless, and this change belongs there.",
+      "parentUuid": "b52d3911_2ae06ae8",
+      "revId": "213223f39f0c81157611e8d3aa7241a87661b896",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
