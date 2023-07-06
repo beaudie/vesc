@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "000e8ad5_0e992ef6",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 10126,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-06T14:23:16Z",
+      "side": 1,
+      "message": "It\u0027s kind of a special case here. What I really want to do is call ContextLocalEnable(...), but for logic-op in particular that gets forwarded back to GLES1. I briefly considered adding a glEnableLogicOpANGLE entry point just to make that possible, but that didn\u0027t seem worth it.\n\nSo this is supposed to be sort of an entry point, but I agree it\u0027s weird. How about I explain here that this is a \"hidden\" entry point to help with GLES1 (which is an internal implementation)?",
+      "parentUuid": "a0b3f168_5c313023",
+      "range": {
+        "startLine": 10126,
+        "startChar": 4,
+        "endLine": 10126,
+        "endChar": 26
+      },
+      "revId": "63b377883e05157c8bd65d1cb4ae2485fa472907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c6114803_8c5336e7",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 4
@@ -61,6 +85,30 @@
       "writtenOn": "2023-07-06T11:50:51Z",
       "side": 1,
       "message": "Original implementation of `setLogicOpEnabled()` did not call `onContextLocalCapChange()`. This call is an error?",
+      "range": {
+        "startLine": 10127,
+        "startChar": 4,
+        "endLine": 10127,
+        "endChar": 30
+      },
+      "revId": "63b377883e05157c8bd65d1cb4ae2485fa472907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7acc5f03_3b2989f4",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 10127,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-06T14:23:16Z",
+      "side": 1,
+      "message": "It might not be needed, but since all `glEnable(...)` calls do that, and technically this call is the equivalent of `glEnable(GL_COLOR_LOGIC_OP)` I added it here.",
+      "parentUuid": "c6114803_8c5336e7",
       "range": {
         "startLine": 10127,
         "startChar": 4,
