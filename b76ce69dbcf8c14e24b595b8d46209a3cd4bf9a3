@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89169972_127d96e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-06T20:47:15Z",
+      "side": 1,
+      "message": "Ok this is as far as I\u0027m going in this direction. @Igor, hopefully this is enough to let you continue with your experiments.\n\nI hate how wishy-washy the safety of this turned out. Hopefully the context split works out and we can fix that. This works in the meantime and at least now we know what part of the context we can really split.",
+      "revId": "b76ce69dbcf8c14e24b595b8d46209a3cd4bf9a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
