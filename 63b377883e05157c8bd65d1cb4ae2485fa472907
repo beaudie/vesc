@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a0b3f168_5c313023",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 10126,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-07-06T12:12:32Z",
+      "side": 1,
+      "message": "\u003e Maybe extend comment by adding: \"... or GLES1 contexts.\"\n\nMore correct would be:\n```\nTo be used **only** directly by the `ContexLocal*` functions or GLES1 contexts.\n```\nBecause future CLs call `ContexLocal*` functions not only from entry points.\n\nOr maybe just write: \"use only from Context\u0027s current thread\".",
+      "parentUuid": "9674e1fd_302670e9",
+      "range": {
+        "startLine": 10126,
+        "startChar": 4,
+        "endLine": 10126,
+        "endChar": 26
+      },
+      "revId": "63b377883e05157c8bd65d1cb4ae2485fa472907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c6114803_8c5336e7",
         "filename": "src/libANGLE/Context.cpp",
         "patchSetId": 4
