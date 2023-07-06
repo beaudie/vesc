@@ -34,6 +34,24 @@
       "parentUuid": "7468cc35_6aa0d0e9",
       "revId": "213223f39f0c81157611e8d3aa7241a87661b896",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b52d3911_2ae06ae8",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 9020,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-07-06T16:31:21Z",
+      "side": 1,
+      "message": "I\u0027m still do not unintended the reason to change exactly these two methods.\nWhy not also `endPixelLocalStorageWithStoreOpsStore()` or any other method?\n\nAlso you wrote in other CL comment:\n\u003e My main concern is to discourage calls to getMutableLocalState() in general because \"the dev knows it\u0027s the current context\"\n\nSo why need to violate this rule in this CL?",
+      "parentUuid": "beb36294_180bbfe3",
+      "revId": "213223f39f0c81157611e8d3aa7241a87661b896",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
