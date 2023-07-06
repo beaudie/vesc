@@ -3325,7 +3325,6 @@ void main()
 }
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(ShaderStorageBufferTest31);
-ANGLE_INSTANTIATE_TEST_ES31_AND(ShaderStorageBufferTest31,
-                                ES31_VULKAN().enable(Feature::PreferCPUForBufferSubData));
+ANGLE_INSTANTIATE_TEST_ES31(ShaderStorageBufferTest31);
 
 }  // namespace

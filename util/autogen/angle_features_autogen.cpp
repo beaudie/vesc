@@ -209,7 +209,6 @@ constexpr PackedEnumMap<Feature, const char *> kFeatureNames = {{
     {Feature::PreemptivelyStartProvokingVertexCommandBuffer, "preemptivelyStartProvokingVertexCommandBuffer"},
     {Feature::PreferAggregateBarrierCalls, "preferAggregateBarrierCalls"},
     {Feature::PreferCpuForBuffersubdata, "preferCpuForBuffersubdata"},
-    {Feature::PreferCPUForBufferSubData, "preferCPUForBufferSubData"},
     {Feature::PreferDeviceLocalMemoryHostVisible, "preferDeviceLocalMemoryHostVisible"},
     {Feature::PreferDrawClearOverVkCmdClearAttachments, "preferDrawClearOverVkCmdClearAttachments"},
     {Feature::PreferDriverUniformOverSpecConst, "preferDriverUniformOverSpecConst"},

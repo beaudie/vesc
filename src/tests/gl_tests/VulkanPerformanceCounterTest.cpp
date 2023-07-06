@@ -395,10 +395,6 @@ class VulkanPerformanceCounterTest : public ANGLETest<>
     {
         return isFeatureEnabled(Feature::HasEffectivePipelineCacheSerialization);
     }
-    bool hasPreferCPUForBufferSubData() const
-    {
-        return isFeatureEnabled(Feature::PreferCPUForBufferSubData);
-    }
     bool hasPreferSubmitAtFBOBoundary() const
     {
         return isFeatureEnabled(Feature::PreferSubmitAtFBOBoundary);
@@ -5060,11 +5056,7 @@ void VulkanPerformanceCounterTest::partialBufferUpdateShouldNotBreakRenderPass(B
 {
     ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled(kPerfMonitorExtensionName));
 
-    uint64_t expectedRenderPassCount = getPerfCounters().renderPasses + 1;
-    if (!hasPreferCPUForBufferSubData())
-    {
-        ++expectedRenderPassCount;
-    }
+    uint64_t expectedRenderPassCount = getPerfCounters().renderPasses + 2;
 
     const std::array<GLColor, 4> kInitialData = {GLColor::red, GLColor::green, GLColor::blue,
                                                  GLColor::yellow};

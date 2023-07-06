@@ -357,13 +357,6 @@ struct FeaturesVk : FeatureSetBase
         &members,
     };
 
-    FeatureInfo preferCPUForBufferSubData = {
-        "preferCPUForBufferSubData",
-        FeatureCategory::VulkanFeatures,
-        "Prefer use CPU to do bufferSubData instead of staged update.",
-        &members, "http://issuetracker.google.com/200067929"
-    };
-
     FeatureInfo persistentlyMappedBuffers = {
         "persistentlyMappedBuffers",
         FeatureCategory::VulkanFeatures,

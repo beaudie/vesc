@@ -2271,12 +2271,10 @@ GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(BufferSubDataTest);
 ANGLE_INSTANTIATE_TEST_COMBINE_1(BufferSubDataTest,
                                  BufferSubDataTestPrint,
                                  testing::Bool(),
-                                 ANGLE_ALL_TEST_PLATFORMS_ES3,
-                                 ES3_VULKAN().enable(Feature::PreferCPUForBufferSubData));
+                                 ANGLE_ALL_TEST_PLATFORMS_ES3);
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(BufferDataTestES3);
 ANGLE_INSTANTIATE_TEST_ES3_AND(BufferDataTestES3,
-                               ES3_VULKAN().enable(Feature::PreferCPUForBufferSubData),
                                ES3_METAL().enable(Feature::ForceBufferGPUStorage));
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(BufferStorageTestES3);

@@ -371,14 +371,6 @@
             ]
         },
         {
-            "name": "prefer_CPU_for_buffer_sub_data",
-            "category": "Features",
-            "description": [
-                "Prefer use CPU to do bufferSubData instead of staged update."
-            ],
-            "issue": "http://issuetracker.google.com/200067929"
-        },
-        {
             "name": "persistently_mapped_buffers",
             "category": "Features",
             "description": [

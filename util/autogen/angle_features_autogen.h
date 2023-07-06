@@ -209,7 +209,6 @@ enum class Feature
     PreemptivelyStartProvokingVertexCommandBuffer,
     PreferAggregateBarrierCalls,
     PreferCpuForBuffersubdata,
-    PreferCPUForBufferSubData,
     PreferDeviceLocalMemoryHostVisible,
     PreferDrawClearOverVkCmdClearAttachments,
     PreferDriverUniformOverSpecConst,

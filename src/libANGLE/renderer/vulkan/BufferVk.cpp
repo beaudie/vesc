@@ -130,8 +130,7 @@ bool ShouldAllocateNewMemoryForUpdate(ContextVk *contextVk, size_t subDataSize, 
 {
     // A sub data update with size > 50% of buffer size meets the threshold
     // to acquire a new BufferHelper from the pool.
-    return contextVk->getRenderer()->getFeatures().preferCPUForBufferSubData.enabled ||
-           subDataSize > (bufferSize / 2);
+    return subDataSize > (bufferSize / 2);
 }
 
 bool ShouldUseCPUToCopyData(ContextVk *contextVk,
@@ -148,12 +147,10 @@ bool ShouldUseCPUToCopyData(ContextVk *contextVk,
         return false;
     }
 
-    // For some GPUs (e.g. ARM) we always prefer using CPU to do copy instead of using the GPU to
-    // avoid pipeline bubbles. If the GPU is currently busy and data copy size is less than certain
+    // If the GPU is currently busy and data copy size is less than certain
     // threshold, we choose to use CPU to do the copy over GPU to achieve better parallelism.
-    return renderer->getFeatures().preferCPUForBufferSubData.enabled ||
-           (renderer->isCommandQueueBusy() &&
-            copySize < renderer->getMaxCopyBytesUsingCPUWhenPreservingBufferData());
+    return renderer->isCommandQueueBusy() &&
+           copySize < renderer->getMaxCopyBytesUsingCPUWhenPreservingBufferData();
 }
 
 bool RenderPassUsesBufferForReadOnly(ContextVk *contextVk, const vk::BufferHelper &buffer)
@@ -179,8 +176,7 @@ bool ShouldAvoidRenderPassBreakOnUpdate(ContextVk *contextVk,
     // would outweight the cost of breaking the render pass.  A value of 1KB is temporary chosen as
     // a heuristic, and can be adjusted when such a situation is encountered.
     constexpr size_t kPreferDuplicateOverRenderPassBreakMaxBufferSize = 1024;
-    if (!contextVk->getFeatures().preferCPUForBufferSubData.enabled ||
-        bufferSize > kPreferDuplicateOverRenderPassBreakMaxBufferSize)
+    if (bufferSize > kPreferDuplicateOverRenderPassBreakMaxBufferSize)
     {
         return false;
     }
@@ -1073,7 +1069,6 @@ angle::Result BufferVk::setDataImpl(ContextVk *contextVk,
         // - If the buffer is used read-only in the current render pass.  In this case, acquiring a
         //   new buffer is preferred to avoid breaking the render pass.
         // - The update modifies a significant portion of the buffer
-        // - The preferCPUForBufferSubData feature is enabled.
         //
         const bool canAcquireAndUpdate = !isExternalBuffer() &&
                                          updateType != BufferUpdateType::StorageRedefined &&
