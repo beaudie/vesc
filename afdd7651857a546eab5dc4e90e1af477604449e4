@@ -46,6 +46,30 @@
       },
       "revId": "afdd7651857a546eab5dc4e90e1af477604449e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f058823a_08873f9d",
+        "filename": "src/libANGLE/GLES1Renderer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-07-06T16:29:25Z",
+      "side": 1,
+      "message": "I think that I understand this.\n\nHowever `Context::prepareForDraw()` is technically not an entry point, but rather method that is very close to it. So for me it is not clear where to draw the line...\n\nAnother example is method `Context::hint()` that calls to `getMutableGLES1State()`.\nThe correct way is to make `ContextLocalHint()` function, like in the case of all other entry points. But in this case `Context::hint()` was updated directly and I do not understand what is the difference. Why not add `glHint()` to `CONTEXT_LOCAL_LIST()`?",
+      "parentUuid": "27e9616a_a318711b",
+      "range": {
+        "startLine": 90,
+        "startChar": 44,
+        "endLine": 90,
+        "endChar": 66
+      },
+      "revId": "afdd7651857a546eab5dc4e90e1af477604449e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
