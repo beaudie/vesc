@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4c754274_23b820bc",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-06T01:16:02Z",
+      "side": 1,
+      "message": "Nice catch, this was left-over from a first implementation that didn\u0027t use swizzle to reverse the R and B channels.\n\nUnfortunately this means that copy to snorm is absolutely untested, so let me see about adding a test.",
+      "parentUuid": "524d1499_86501530",
+      "revId": "a02c7684f8f59f90dd041d7bfc50339be7402d92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9e968d52_a60bde63",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 7
@@ -48,6 +66,24 @@
       "writtenOn": "2023-07-06T00:17:29Z",
       "side": 1,
       "message": "What is the reason that onImageTransferRead needs to be restricted to `isMultisampled`, too?",
+      "revId": "a02c7684f8f59f90dd041d7bfc50339be7402d92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff52d4ce_9d1c8e83",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 9556,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-06T01:16:02Z",
+      "side": 1,
+      "message": "Both vkCmdCopyImageToBuffer and vkCmdResolveImage use the image as \"transfer\". Previously, we relied on this fact and proactively got the command buffer with that layout transition (per the lines above that are removed). But this was not really great, because we were forced to predict the next usage at every step (see the removed lines at the end of this block, they were priming the command buffer with the layout transition needed for when the resolved image is going to be used.\n\nThis had already bitrotted when the transfer-based PBO implementation was added. See the first PBO path below where the command buffer was _again_ retrieved with different barriers. And the idea that the image is always going to be transfer-read from is now wrong with the compute-based copy. The latter was causing a double image layout transition (whatever-\u003etransfer then immediately transfer-\u003ecompute) which was tripping up ARM.\n\nSo I changed all these to a better design where every piece that needs a command buffer declares what it needs just before it uses it. Multisample resolve does its own barrier, transfer-based PBO does its own, compute-based PBO does its own and the final transfer-back-to-CPU also does its own.\n\nTL;DR, onImageTransferRead` is not being _restricted_ to multisample resolve, it was done in two places before (line 9472 and line 0528) and it\u0027s still done in two places (this line and line 9655)",
+      "parentUuid": "9e968d52_a60bde63",
       "revId": "a02c7684f8f59f90dd041d7bfc50339be7402d92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -65,6 +101,24 @@
       "writtenOn": "2023-07-06T00:17:29Z",
       "side": 1,
       "message": "Where does this magic number 4 come from?",
+      "revId": "a02c7684f8f59f90dd041d7bfc50339be7402d92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f175e6cf_0a2a6340",
+        "filename": "src/tests/gl_tests/ReadPixelsTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 898,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-06T01:16:02Z",
+      "side": 1,
+      "message": "See initTextureRGBA and initTextureBGRA, the rest of this class uses the fixed 4x4x4 size everywhere. I\u0027ll turn it into a named constant.",
+      "parentUuid": "fc30bcb0_a875c339",
       "revId": "a02c7684f8f59f90dd041d7bfc50339be7402d92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
