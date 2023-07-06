@@ -16,6 +16,57 @@
       "message": "Swapping reviewers as Roman is out",
       "revId": "a02c7684f8f59f90dd041d7bfc50339be7402d92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "524d1499_86501530",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-07-06T00:17:29Z",
+      "side": 1,
+      "message": "The PushConstants in CopyImageToBuffer.comp does not have `reverseRB`, is this expected?",
+      "revId": "a02c7684f8f59f90dd041d7bfc50339be7402d92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e968d52_a60bde63",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 9556,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-07-06T00:17:29Z",
+      "side": 1,
+      "message": "What is the reason that onImageTransferRead needs to be restricted to `isMultisampled`, too?",
+      "revId": "a02c7684f8f59f90dd041d7bfc50339be7402d92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc30bcb0_a875c339",
+        "filename": "src/tests/gl_tests/ReadPixelsTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 898,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-07-06T00:17:29Z",
+      "side": 1,
+      "message": "Where does this magic number 4 come from?",
+      "revId": "a02c7684f8f59f90dd041d7bfc50339be7402d92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
