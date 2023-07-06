@@ -22,6 +22,30 @@
       },
       "revId": "893d7c08c468ebcd4124a73e1bc0784c9734ad3d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02eb9e96_4a597afa",
+        "filename": "src/libGLESv2/entry_points_gles_2_0_autogen.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2578,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-06T20:27:31Z",
+      "side": 1,
+      "message": "Seems simple enough?\n\n```\nANGLE_INLINE bool ValidatePixelLocalStorageInactive(const Context *context,\n                                                    angle::EntryPoint entryPoint)\n{\n    return context-\u003egetState().getPixelLocalStorageActivePlanes() \u003d\u003d 0 ||\n           GeneratePixelLocalStorageActiveError(context, entryPoint);\n}\n```\n\nand `GeneratePixelLocalStorageActiveError` is:\n\n```\nbool GeneratePixelLocalStorageActiveError(const Context *context, angle::EntryPoint entryPoint)\n{\n    ASSERT(context-\u003egetState().getPixelLocalStorageActivePlanes() !\u003d 0);\n    context-\u003evalidationError(entryPoint, GL_INVALID_OPERATION, err::kPLSActive);\n    return false;\n}\n```",
+      "parentUuid": "1555ec68_44fd2370",
+      "range": {
+        "startLine": 2578,
+        "startChar": 14,
+        "endLine": 2578,
+        "endChar": 47
+      },
+      "revId": "893d7c08c468ebcd4124a73e1bc0784c9734ad3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
