@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6df10b6f_bc823d1f",
+        "filename": "src/libANGLE/GLES1Renderer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-07-06T12:45:31Z",
+      "side": 1,
+      "message": "Why not call `context-\u003egetMutableGLES1State()`?\n\nThis is confusing...",
+      "range": {
+        "startLine": 90,
+        "startChar": 44,
+        "endLine": 90,
+        "endChar": 66
+      },
+      "revId": "afdd7651857a546eab5dc4e90e1af477604449e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
