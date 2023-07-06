@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "45241ae0_0849c209",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-06T01:58:10Z",
+      "side": 1,
+      "message": "Turns out glReadPixels doesn\u0027t accept SNORM unless the actual format is SNORM. I managed to figure out one case where the transform path isn\u0027t taken for SNORM-\u003eSNORM copy but the compute path is, which requires exposing GL_ANGLE_pack_reverse_row_order.\n\nI put the test in this CL, and the follow up CL will enable the extension to exercise it. I kept that a separate CL in case it turned out to be problematic.",
+      "parentUuid": "4c754274_23b820bc",
+      "revId": "a02c7684f8f59f90dd041d7bfc50339be7402d92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9e968d52_a60bde63",
@@ -119,6 +137,24 @@
       "side": 1,
       "message": "See initTextureRGBA and initTextureBGRA, the rest of this class uses the fixed 4x4x4 size everywhere. I\u0027ll turn it into a named constant.",
       "parentUuid": "fc30bcb0_a875c339",
+      "revId": "a02c7684f8f59f90dd041d7bfc50339be7402d92",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b02d1a93_9289223b",
+        "filename": "src/tests/gl_tests/ReadPixelsTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 898,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-06T01:58:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f175e6cf_0a2a6340",
       "revId": "a02c7684f8f59f90dd041d7bfc50339be7402d92",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
