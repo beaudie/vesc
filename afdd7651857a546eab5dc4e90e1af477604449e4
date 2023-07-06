@@ -22,6 +22,30 @@
       },
       "revId": "afdd7651857a546eab5dc4e90e1af477604449e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27e9616a_a318711b",
+        "filename": "src/libANGLE/GLES1Renderer.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-06T14:24:32Z",
+      "side": 1,
+      "message": "The main purpose is to contain the places that call getMutableGLES1State() to entry points as much as possible.",
+      "parentUuid": "6df10b6f_bc823d1f",
+      "range": {
+        "startLine": 90,
+        "startChar": 44,
+        "endLine": 90,
+        "endChar": 66
+      },
+      "revId": "afdd7651857a546eab5dc4e90e1af477604449e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
