@@ -1320,7 +1320,6 @@ class State : angle::NonCopyable
     PixelUnpackState &getUnpackState() { return mLocalState.getUnpackState(); }
     GLenum getCoverageModulation() const { return mLocalState.getCoverageModulation(); }
     bool getFramebufferSRGB() const { return mLocalState.getFramebufferSRGB(); }
-    void setPatchVertices(GLuint value) { mLocalState.setPatchVertices(value); }
     GLuint getPatchVertices() const { return mLocalState.getPatchVertices(); }
     float getLineWidth() const { return mLocalState.getLineWidth(); }
     unsigned int getActiveSampler() const { return mLocalState.getActiveSampler(); }
