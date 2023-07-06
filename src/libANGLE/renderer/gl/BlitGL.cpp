@@ -886,8 +886,12 @@ angle::Result BlitGL::copyTexSubImage(const gl::Context *context,
     mFunctions->copyTexSubImage2D(ToGLenum(destTarget), static_cast<GLint>(destLevel), destOffset.x,
                                   destOffset.y, sourceArea.x, sourceArea.y, sourceArea.width,
                                   sourceArea.height);
-    const bool copySucceeded =
-        !IsError(CheckError(context, "copyTexSubImage2D", __FILE__, __FUNCTION__, __LINE__));
+    // Use getError to retrieve the error directly instead of using CheckError so that we don't
+    // propagate the error to the client.
+    const bool copySucceeded = mFunctions->getError() != GL_NO_ERROR;
+    // If copyTexSubImage2D fails, check for other errors such as GL_CONTEXT_LOST which will be
+    // generated repeatedly and return an error if that's the case.
+    ANGLE_TRY(CheckError(context, "copyTexSubImage2D", __FILE__, __FUNCTION__, __LINE__));
 
     ANGLE_TRY(UnbindAttachment(context, mFunctions, GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0));
     *copySucceededOut = copySucceeded;
