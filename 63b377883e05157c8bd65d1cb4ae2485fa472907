@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9674e1fd_302670e9",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 10126,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-07-06T11:50:51Z",
+      "side": 1,
+      "message": "Technically this violates the comment:\n\u003e To be used **only** directly by the entry points.\n\nMaybe extend comment by adding: \"... or GLES1 contexts.\"\nAnd after that, remove this method and then use `getMutableLocalState()` from `GLES1Renderer::prepareForDraw()` instead.",
+      "range": {
+        "startLine": 10126,
+        "startChar": 4,
+        "endLine": 10126,
+        "endChar": 26
+      },
+      "revId": "63b377883e05157c8bd65d1cb4ae2485fa472907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6114803_8c5336e7",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 10127,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-07-06T11:50:51Z",
+      "side": 1,
+      "message": "Original implementation of `setLogicOpEnabled()` did not call `onContextLocalCapChange()`. This call is an error?",
+      "range": {
+        "startLine": 10127,
+        "startChar": 4,
+        "endLine": 10127,
+        "endChar": 30
+      },
+      "revId": "63b377883e05157c8bd65d1cb4ae2485fa472907",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
