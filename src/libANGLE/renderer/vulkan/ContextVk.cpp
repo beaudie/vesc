@@ -6795,6 +6795,10 @@ angle::Result ContextVk::handleDirtyGraphicsDriverUniforms(DirtyBits::Iterator *
 
     static_assert(gl::IMPLEMENTATION_MAX_2D_TEXTURE_SIZE <= 0xFFFF,
                   "Not enough bits for render area");
+    static_assert(gl::IMPLEMENTATION_MAX_FRAMEBUFFER_WIDTH <= 0xFFFF,
+                  "Not enough bits for render area");
+    static_assert(gl::IMPLEMENTATION_MAX_FRAMEBUFFER_HEIGHT <= 0xFFFF,
+                  "Not enough bits for render area");
     uint16_t renderAreaWidth, renderAreaHeight;
     SetBitField(renderAreaWidth, drawFramebufferVk->getState().getDimensions().width);
     SetBitField(renderAreaHeight, drawFramebufferVk->getState().getDimensions().height);
