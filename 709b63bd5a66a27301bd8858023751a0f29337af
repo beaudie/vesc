@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00246c8a_edd4e636",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1128437
+      },
+      "writtenOn": "2023-07-06T22:52:03Z",
+      "side": 1,
+      "message": "PTAL - apologies for a 3rd attempt on this - the only way to test is to disable pixel test suppressions in a Chromium CQ dry run after the ANGLE fix lands\n\nP.S. I\u0027m using this CL for testing: https://chromium-review.googlesource.com/c/chromium/src/+/4666233",
+      "revId": "709b63bd5a66a27301bd8858023751a0f29337af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
