@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc491a1f_6d082a1c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-06T18:14:54Z",
+      "side": 1,
+      "message": "@Igor, you know what, I ended up moving the PLS state out of LocalState here. The glGet* functions are not easily made lockless (because they serve a lot of state, half are context-local, half are not). The cost of checking whether the lock is needed is probably higher than the cost of actually taking the lock!",
+      "revId": "0f215f11d89ae59d0f5df6ae255685cdf96847e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
