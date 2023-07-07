@@ -16,6 +16,29 @@
       "message": "PTAL - apologies for a 3rd attempt on this - the only way to test is to disable pixel test suppressions in a Chromium CQ dry run after the ANGLE fix lands\n\nP.S. I\u0027m using this CL for testing: https://chromium-review.googlesource.com/c/chromium/src/+/4666233",
       "revId": "709b63bd5a66a27301bd8858023751a0f29337af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f521732_f7f83dbf",
+        "filename": "src/libANGLE/renderer/gl/BlitGL.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 894,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-07T01:41:25Z",
+      "side": 1,
+      "message": "Are you strictly relying on this function failing with a single error? And so a second error would mean something else went wrong?\n\nThe spec has this:\n\n\u003e To allow for distributed implementations, there may be several flag-code pairs. In this case, after a call to GetError returns a value other than NO_ERROR each subsequent call returns the non-zero code of a distinct flag-code pair (in unspecified order), until all non-NO_ERROR codes have been returned. When there are no more non-NO_ERROR error codes, all flags are reset.\n\nwhich sounds like the first error you get might be the GL_CONTEXT_LOST error and the second error (in CheckError) the more benign one. I don\u0027t know the GL backend enough to know if that\u0027s ok.\n\nIt sounds to me like a more robust solution would be something like:\n\n```\nloop while getError() returns something\n  if (error \u003d\u003d THE_ONE_WE_EXPECT)\n    ignore_it\n  else\n    ANGLE_TRY()\n```",
+      "range": {
+        "startLine": 891,
+        "startChar": 0,
+        "endLine": 894,
+        "endChar": 90
+      },
+      "revId": "709b63bd5a66a27301bd8858023751a0f29337af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
