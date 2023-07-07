@@ -16,6 +16,23 @@
       "message": "Thanks!",
       "revId": "d2d44dda1caa8e2a3ed5a8cfef02f9ee7f95c8af",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ac5bc9f_7407bb5b",
+        "filename": "src/tests/deqp_support/deqp_egl_test_expectations.txt",
+        "patchSetId": 4
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-07T01:28:28Z",
+      "side": 1,
+      "message": "Looks like the depth_stencil_clear variation of this also fails: https://ci.chromium.org/ui/p/angle/builders/try/mac-test/13763/overview\n\nThere are sweeping suppressions for these everywhere in this file:\n\n```\n2382 WIN : dEQP-EGL.functional.native_color_mapping.native_window.* \u003d SKIP\n1340 WIN : dEQP-EGL.functional.native_coord_mapping.native_window.* \u003d FAIL\n\n2546 LINUX : dEQP-EGL.functional.native_color_mapping.native_window.* \u003d FAIL\n2546 LINUX : dEQP-EGL.functional.native_coord_mapping.native_window.* \u003d FAIL\n\n2546 MAC : dEQP-EGL.functional.native_color_mapping.native_window.* \u003d FAIL\n2546 MAC : dEQP-EGL.functional.native_coord_mapping.native_window.* \u003d FAIL\n\n6533 ANDROID VULKAN : dEQP-EGL.functional.native_color_mapping.native_window.* \u003d SKIP\n6533 ANDROID VULKAN : dEQP-EGL.functional.native_coord_mapping.native_window.* \u003d SKIP\n6533 PIXEL4ORXL GLES : dEQP-EGL.functional.native_color_mapping.native_window.* \u003d SKIP\n6533 PIXEL4ORXL GLES : dEQP-EGL.functional.native_coord_mapping.native_window.* \u003d SKIP\n```\n\nWe should probably just consolidate all of those into:\n\n```\n1340 WIN : dEQP-EGL.functional.native_color_mapping.native_window.* \u003d SKIP\n1340 WIN : dEQP-EGL.functional.native_coord_mapping.native_window.* \u003d SKIP\n```",
+      "revId": "d2d44dda1caa8e2a3ed5a8cfef02f9ee7f95c8af",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
