@@ -16,6 +16,142 @@
       "message": "The README.angle files seem to follow the README.chromium format, so this CL updates both README.angle and README.chromium files for the new Shipped field that is being added to README.chromium files.\n\nDocs: https://source.chromium.org/chromium/chromium/src/+/main:docs/adding_to_third_party.md\n\nRelevant notes:\n* Shipped Your README.chromium should also specify whether your third party dependency will be shipped as part of a final binary. The \"Shipped\" field replaces the now deprecated special value of \"NOT_SHIPPED\" which was previously allowed in the \"License File\" field. This use is no longer supported and if your third party dependency includes a license you should also use the \"Licence File\" field to reference it, regardless of whether it is shipped or not.\n* If the library will never be shipped as a part of Chrome (e.g. build-time tools, testing tools), make sure to set the \"Shipped\" field to \"no\" so that the license is not included in about:credits page (more on this below).\n\nPlease have a look and confirm/comment on the Shipped values being set here.",
       "revId": "e5000e14c513eaba2dc9ab2018d5954a53436117",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8576568_4af9f68d",
+        "filename": "src/tests/test_utils/third_party/README.angle",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-07T04:33:04Z",
+      "side": 1,
+      "message": "No, built for tests",
+      "revId": "e5000e14c513eaba2dc9ab2018d5954a53436117",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf7f0484_b0b5c9be",
+        "filename": "src/third_party/ceval/README.chromium",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-07T04:33:04Z",
+      "side": 1,
+      "message": "No, built for the capture tool (not shipped)",
+      "revId": "e5000e14c513eaba2dc9ab2018d5954a53436117",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fbe5dd41_0790c291",
+        "filename": "third_party/VK-GL-CTS/README.angle",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-07T04:33:04Z",
+      "side": 1,
+      "message": "No, this is a test suite",
+      "revId": "e5000e14c513eaba2dc9ab2018d5954a53436117",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52e1b1eb_67581be3",
+        "filename": "third_party/astc-encoder/README.angle",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-07T04:33:04Z",
+      "side": 1,
+      "message": "This should actually be yes. We do ship this on BattleStar and other Android emulators.",
+      "revId": "e5000e14c513eaba2dc9ab2018d5954a53436117",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fa51ba2_1a7ac8d2",
+        "filename": "third_party/libpng/README.angle",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-07T04:33:04Z",
+      "side": 1,
+      "message": "No, only used by tests",
+      "revId": "e5000e14c513eaba2dc9ab2018d5954a53436117",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc7e8809_4a3ff625",
+        "filename": "third_party/rapidjson/README.chromium",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-07T04:33:04Z",
+      "side": 1,
+      "message": "No, built for the capture tool (not shipped) and some tests",
+      "revId": "e5000e14c513eaba2dc9ab2018d5954a53436117",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52eabe5d_6d22a85c",
+        "filename": "util/android/third_party/README.angle",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-07T04:33:04Z",
+      "side": 1,
+      "message": "No, used only for tests",
+      "revId": "e5000e14c513eaba2dc9ab2018d5954a53436117",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f90fc7e_2b7b199a",
+        "filename": "util/windows/third_party/StackWalker/README.chromium",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-07T04:33:04Z",
+      "side": 1,
+      "message": "No, used only for tests",
+      "revId": "e5000e14c513eaba2dc9ab2018d5954a53436117",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
