@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c62f0a27_8e4b8aa6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1544922
+      },
+      "writtenOn": "2023-07-07T04:13:35Z",
+      "side": 1,
+      "message": "The README.angle files seem to follow the README.chromium format, so this CL updates both README.angle and README.chromium files for the new Shipped field that is being added to README.chromium files.\n\nDocs: https://source.chromium.org/chromium/chromium/src/+/main:docs/adding_to_third_party.md\n\nRelevant notes:\n* Shipped Your README.chromium should also specify whether your third party dependency will be shipped as part of a final binary. The \"Shipped\" field replaces the now deprecated special value of \"NOT_SHIPPED\" which was previously allowed in the \"License File\" field. This use is no longer supported and if your third party dependency includes a license you should also use the \"Licence File\" field to reference it, regardless of whether it is shipped or not.\n* If the library will never be shipped as a part of Chrome (e.g. build-time tools, testing tools), make sure to set the \"Shipped\" field to \"no\" so that the license is not included in about:credits page (more on this below).\n\nPlease have a look and confirm/comment on the Shipped values being set here.",
+      "revId": "e5000e14c513eaba2dc9ab2018d5954a53436117",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
