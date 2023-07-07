@@ -39,6 +39,30 @@
       },
       "revId": "292d73b2775fba4ed1913ea823b36bb4f52f2052",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "462027c0_ca5c11c0",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-07-07T15:44:41Z",
+      "side": 1,
+      "message": "yeah catapult just grabs the last entry:\nhttps://crsrc.org/c/third_party/catapult/devil/devil/android/sdk/build_tools.py;drc\u003d8a3feaaaab63b383fb6b138be2986e9ad6dcaca2;l\u003d61\n\nnot sure why Jamie didn\u0027t do the same here. I\u0027ll add that",
+      "parentUuid": "c46a528e_27d39a95",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 0
+      },
+      "revId": "292d73b2775fba4ed1913ea823b36bb4f52f2052",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
