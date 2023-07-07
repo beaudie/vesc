@@ -16,6 +16,24 @@
       "message": "Ok this is as far as I\u0027m going in this direction. @Igor, hopefully this is enough to let you continue with your experiments.\n\nI hate how wishy-washy the safety of this turned out. Hopefully the context split works out and we can fix that. This works in the meantime and at least now we know what part of the context we can really split.",
       "revId": "b76ce69dbcf8c14e24b595b8d46209a3cd4bf9a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d6eccef_388742ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-07-07T13:28:28Z",
+      "side": 1,
+      "message": "\u003e Ok this is as far as I\u0027m going in this direction. @Igor, hopefully this is enough to let you continue with your experiments.\n\nI already done what I can (on review):\n- Updated `FastMutex1` - to use instead of `Spinlock`.\n- Replaced `SingleContextMutex` with `TypedContextMutex\u003cFastMutex1\u003e` - main reason is to make switching to shared mutex safe, and allow using `FastMutex1` instead of `std::mutex` when `EGLImage` is used by non shared contexts (Chromium regression)\n- Experiment - use `FastMutex1` in all cases - even for shared contexts.\n\nI have tired to investigate chromium tests, but they are in HTML. I can\u0027t say what will happen on GLES side just looking at the source code). I need to build Chromium and run tests locally. I have never done this and afraid that I do not have time to invest in such thing on my own without external support.\n\nUnfortunately, I\u0027m currently occupied with other tasks and can\u0027t actively participate in contributing into this repository for some time.\n\n\u003e I hate how wishy-washy the safety of this turned out. Hopefully the context split works out and we can fix that. This works in the meantime and at least now we know what part of the context we can really split.\n\nI hope everything will work out at the end.",
+      "parentUuid": "89169972_127d96e6",
+      "revId": "b76ce69dbcf8c14e24b595b8d46209a3cd4bf9a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
