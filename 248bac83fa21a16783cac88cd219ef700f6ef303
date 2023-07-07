@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "03efed1c_ce578955",
+        "filename": "src/libANGLE/Constants.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-07-07T20:34:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc270454_54658aa3",
+      "range": {
+        "startLine": 67,
+        "startChar": 35,
+        "endLine": 67,
+        "endChar": 40
+      },
+      "revId": "248bac83fa21a16783cac88cd219ef700f6ef303",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cba47a9e_aa36996a",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-07-07T01:36:09Z",
       "side": 1,
       "message": "You can remove this now!",
+      "range": {
+        "startLine": 6796,
+        "startChar": 0,
+        "endLine": 6797,
+        "endChar": 53
+      },
+      "revId": "248bac83fa21a16783cac88cd219ef700f6ef303",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2882d62_158a8305",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6797,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-07-07T20:34:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cba47a9e_aa36996a",
       "range": {
         "startLine": 6796,
         "startChar": 0,
