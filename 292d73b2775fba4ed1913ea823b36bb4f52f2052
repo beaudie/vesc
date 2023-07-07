@@ -63,6 +63,30 @@
       },
       "revId": "292d73b2775fba4ed1913ea823b36bb4f52f2052",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c387653b_3e25fa98",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-07-07T16:07:07Z",
+      "side": 1,
+      "message": "https://crrev.com/c/4672808",
+      "parentUuid": "462027c0_ca5c11c0",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 0
+      },
+      "revId": "292d73b2775fba4ed1913ea823b36bb4f52f2052",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
