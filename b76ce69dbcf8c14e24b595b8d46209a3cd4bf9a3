@@ -34,6 +34,24 @@
       "parentUuid": "89169972_127d96e6",
       "revId": "b76ce69dbcf8c14e24b595b8d46209a3cd4bf9a3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8541cd67_e577af8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-07T13:40:10Z",
+      "side": 1,
+      "message": "Ok thanks for all the help and changes! Do you prefer if I took your changes and continued with the experimentation + land them? Or do you still rather drive them until submission?",
+      "parentUuid": "4d6eccef_388742ef",
+      "revId": "b76ce69dbcf8c14e24b595b8d46209a3cd4bf9a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
