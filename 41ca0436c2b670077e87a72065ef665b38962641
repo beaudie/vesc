@@ -39,6 +39,30 @@
       },
       "revId": "41ca0436c2b670077e87a72065ef665b38962641",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76c8f8d2_806054b1",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-07-07T20:26:05Z",
+      "side": 1,
+      "message": "Seems like it, 1k+ hits on https://source.corp.google.com/search?q\u003dS4M_VDD_CPUCL0\nvs just a couple of files on https://source.corp.google.com/search?q\u003dS2M_VDD_CPUCL0\n(and the doc that you showed me)",
+      "parentUuid": "e25806f7_251e491e",
+      "range": {
+        "startLine": 497,
+        "startChar": 16,
+        "endLine": 497,
+        "endChar": 30
+      },
+      "revId": "41ca0436c2b670077e87a72065ef665b38962641",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
