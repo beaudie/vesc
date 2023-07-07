@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f3afc7e_b04b2d0c",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-07-07T15:21:29Z",
+      "side": 1,
+      "message": "Could you update this docstring as well (might be easier if inlined)",
+      "range": {
+        "startLine": 35,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 88
+      },
+      "revId": "251615b77b4433227f4a6649231fe40c54cfc2a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f99b9fa4_35dc18ae",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 1564,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-07-07T15:21:29Z",
+      "side": 1,
+      "message": "ALIASING_EXCEPTIONS seems to be used exactly once. WDYT about inlining the list here or at least putting it right next to the function?",
+      "range": {
+        "startLine": 1564,
+        "startChar": 44,
+        "endLine": 1564,
+        "endChar": 63
+      },
+      "revId": "251615b77b4433227f4a6649231fe40c54cfc2a3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
