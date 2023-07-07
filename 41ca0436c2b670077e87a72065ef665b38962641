@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fefe7da4_ffb9cb23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-07-07T20:18:53Z",
+      "side": 1,
+      "message": "Good catch Roman",
+      "revId": "41ca0436c2b670077e87a72065ef665b38962641",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e25806f7_251e491e",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-07-07T20:18:53Z",
+      "side": 1,
+      "message": "I see the rail named both ways, but far more hits on `S4M_VDD_CPUCL0`, including in the comment above.  Propagation of a copy/paste error?",
+      "range": {
+        "startLine": 497,
+        "startChar": 16,
+        "endLine": 497,
+        "endChar": 30
+      },
+      "revId": "41ca0436c2b670077e87a72065ef665b38962641",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
