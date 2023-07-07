@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "60b2ff3b_ee95ff6b",
+        "filename": "src/tests/test_utils/third_party/README.angle",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1544922
+      },
+      "writtenOn": "2023-07-07T04:50:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8576568_4af9f68d",
+      "revId": "e5000e14c513eaba2dc9ab2018d5954a53436117",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf7f0484_b0b5c9be",
@@ -48,6 +66,24 @@
       "writtenOn": "2023-07-07T04:33:04Z",
       "side": 1,
       "message": "No, built for the capture tool (not shipped)",
+      "revId": "e5000e14c513eaba2dc9ab2018d5954a53436117",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ed1529e_d4bf122f",
+        "filename": "src/third_party/ceval/README.chromium",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1544922
+      },
+      "writtenOn": "2023-07-07T04:50:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf7f0484_b0b5c9be",
       "revId": "e5000e14c513eaba2dc9ab2018d5954a53436117",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -69,6 +105,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e04087c0_4ae85043",
+        "filename": "third_party/VK-GL-CTS/README.angle",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1544922
+      },
+      "writtenOn": "2023-07-07T04:50:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fbe5dd41_0790c291",
+      "revId": "e5000e14c513eaba2dc9ab2018d5954a53436117",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "52e1b1eb_67581be3",
@@ -82,6 +136,24 @@
       "writtenOn": "2023-07-07T04:33:04Z",
       "side": 1,
       "message": "This should actually be yes. We do ship this on BattleStar and other Android emulators.",
+      "revId": "e5000e14c513eaba2dc9ab2018d5954a53436117",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aefc67d8_ffb2caf5",
+        "filename": "third_party/astc-encoder/README.angle",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1544922
+      },
+      "writtenOn": "2023-07-07T04:50:27Z",
+      "side": 1,
+      "message": "Done, and added relative path to license file too.",
+      "parentUuid": "52e1b1eb_67581be3",
       "revId": "e5000e14c513eaba2dc9ab2018d5954a53436117",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -103,6 +175,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc4d1715_b84642a4",
+        "filename": "third_party/libpng/README.angle",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1544922
+      },
+      "writtenOn": "2023-07-07T04:50:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4fa51ba2_1a7ac8d2",
+      "revId": "e5000e14c513eaba2dc9ab2018d5954a53436117",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cc7e8809_4a3ff625",
@@ -116,6 +206,24 @@
       "writtenOn": "2023-07-07T04:33:04Z",
       "side": 1,
       "message": "No, built for the capture tool (not shipped) and some tests",
+      "revId": "e5000e14c513eaba2dc9ab2018d5954a53436117",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "747ed412_341f0eb3",
+        "filename": "third_party/rapidjson/README.chromium",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1544922
+      },
+      "writtenOn": "2023-07-07T04:50:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cc7e8809_4a3ff625",
       "revId": "e5000e14c513eaba2dc9ab2018d5954a53436117",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -137,6 +245,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b24c39cf_2eea966b",
+        "filename": "util/android/third_party/README.angle",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1544922
+      },
+      "writtenOn": "2023-07-07T04:50:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "52eabe5d_6d22a85c",
+      "revId": "e5000e14c513eaba2dc9ab2018d5954a53436117",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2f90fc7e_2b7b199a",
@@ -150,6 +276,24 @@
       "writtenOn": "2023-07-07T04:33:04Z",
       "side": 1,
       "message": "No, used only for tests",
+      "revId": "e5000e14c513eaba2dc9ab2018d5954a53436117",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b08c7b95_463cc39d",
+        "filename": "util/windows/third_party/StackWalker/README.chromium",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1544922
+      },
+      "writtenOn": "2023-07-07T04:50:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f90fc7e_2b7b199a",
       "revId": "e5000e14c513eaba2dc9ab2018d5954a53436117",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
