@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0087d19_6e88a4da",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-07-07T22:47:01Z",
+      "side": 1,
+      "message": "Can you also add the following line?\n```\nBug: b/242671681\n```",
+      "revId": "cd1d8124678a33f41535c7425783255806677dd4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "b06def53_001e29ac",
@@ -32,6 +49,23 @@
       "side": 1,
       "message": "In AOSP it looks like we get this permission from here:\nhttps://cs.android.com/android/platform/superproject/+/master:frameworks/base/data/etc/privapp-permissions-platform.xml;l\u003d28-30\n\nDetails on why this isn\u0027t working for Oppo are here:\nhttps://buganizer.corp.google.com/issues/242671681#comment119\n\nI\u0027d like to test this with a downstream change to remove other methods that allow priv-app permissions.\n\nI agree we need a universal solution that provides the permission regardless of where ANGLE lands on the device.",
       "parentUuid": "b06def53_001e29ac",
+      "revId": "cd1d8124678a33f41535c7425783255806677dd4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0220b63_b9acb5ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-07-07T22:47:01Z",
+      "side": 1,
+      "message": "Apologies for the delay here.\n\nWe were able to verify this patch allows us to remove the other priv-app permissions listed in the platform.  Device still boots and allowlist is still populated.",
       "revId": "cd1d8124678a33f41535c7425783255806677dd4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
