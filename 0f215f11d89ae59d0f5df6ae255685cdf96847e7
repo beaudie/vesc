@@ -74,6 +74,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "38841388_91a2a6a0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-07-07T13:01:05Z",
+      "side": 1,
+      "message": "I also agree with revert.\n\nRules as I see them:\n1. if state is ever accessed without a lock - it must be context-local.\n2. context-local state must only be accessed by the current thread.\n\nConverting context-local state into shared will technically violate rule #1 and make confusion (shared state accessed without lock in validation?). Accessing context-local state with the lock is fine.",
+      "parentUuid": "c7241131_71883a68",
+      "range": {
+        "startLine": 19,
+        "startChar": 37,
+        "endLine": 21,
+        "endChar": 13
+      },
+      "revId": "0f215f11d89ae59d0f5df6ae255685cdf96847e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "dc491a1f_6d082a1c",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
