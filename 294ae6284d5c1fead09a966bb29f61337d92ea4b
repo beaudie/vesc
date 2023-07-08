@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b944a63_4268e64d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-08T02:00:09Z",
+      "side": 1,
+      "message": "grepping for EGL_GL_COLORSPACE, I see we have a few tests, but they all use EGL_GL_COLORSPACE_SRGB or EGL_GL_COLORSPACE_LINEAR. Are these formats too weird to have tests for? If not, care to add some maybe?\n\nThis is probably the 10th time someone has tweaked this mapping, and it\u0027s obviously just not tested.",
+      "revId": "294ae6284d5c1fead09a966bb29f61337d92ea4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
