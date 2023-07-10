@@ -2433,6 +2433,12 @@ bool ValidateClearBufferiv(const Context *context,
                 context->validationError(entryPoint, GL_INVALID_VALUE, kIndexExceedsMaxDrawBuffer);
                 return false;
             }
+            if (static_cast<size_t>(drawbuffer) >=
+                context->getState().getDrawFramebuffer()->getDrawbufferStateCount())
+            {
+                // Clearing a non-existent draw buffer is a no-op.
+                break;
+            }
             if (context->getExtensions().webglCompatibilityANGLE)
             {
                 constexpr GLenum validComponentTypes[] = {GL_INT};
@@ -2480,6 +2486,12 @@ bool ValidateClearBufferuiv(const Context *context,
                 context->validationError(entryPoint, GL_INVALID_VALUE, kIndexExceedsMaxDrawBuffer);
                 return false;
             }
+            if (static_cast<size_t>(drawbuffer) >=
+                context->getState().getDrawFramebuffer()->getDrawbufferStateCount())
+            {
+                // Clearing a non-existent draw buffer is a no-op.
+                break;
+            }
             if (context->getExtensions().webglCompatibilityANGLE)
             {
                 constexpr GLenum validComponentTypes[] = {GL_UNSIGNED_INT};
@@ -2517,6 +2529,12 @@ bool ValidateClearBufferfv(const Context *context,
             {
                 context->validationError(entryPoint, GL_INVALID_VALUE, kIndexExceedsMaxDrawBuffer);
                 return false;
+            }
+            if (static_cast<size_t>(drawbuffer) >=
+                context->getState().getDrawFramebuffer()->getDrawbufferStateCount())
+            {
+                // Clearing a non-existent draw buffer is a no-op.
+                break;
             }
             if (context->getExtensions().webglCompatibilityANGLE)
             {
