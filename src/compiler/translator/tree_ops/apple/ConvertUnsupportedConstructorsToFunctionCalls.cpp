@@ -252,7 +252,7 @@ class Rebuild : public TIntermRebuild
         {
             TIntermTyped &arg = *arguments[i]->getAsTyped();
             TType *argType    = new TType(arg.getBasicType(), arg.getPrecision(), EvqParamIn,
-                                       arg.getNominalSize(), arg.getSecondarySize());
+                                          arg.getNominalSize(), arg.getSecondarySize());
             TVariable *var    = CreateTempVariable(&mSymbolTable, argType);
             function->addParameter(var);
         }
