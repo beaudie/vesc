@@ -191,6 +191,21 @@ deps = {
     'condition': 'not build_with_chromium',
   },
 
+  'third_party/libc++/trunk': {
+    'url': '{chromium_git}/external/github.com/llvm/llvm-project/libcxx.git@84fb809dd6dae36d556dc0bb702c6cc2ce9d4b80',
+    'condition': 'not build_with_chromium',
+  },
+
+  'third_party/libc++abi/trunk': {
+    'url': '{chromium_git}/external/github.com/llvm/llvm-project/libcxxabi.git@8d21803b9076b16d46c32e2f10da191ee758520c',
+    'condition': 'not build_with_chromium',
+  },
+
+  'third_party/libunwind/trunk': {
+    'url': '{chromium_git}/external/github.com/llvm/llvm-project/libunwind.git@f1c687e0aaf0d70b9a53a150e9be5cb63af9215f',
+    'condition': 'not build_with_chromium',
+  },
+
   'buildtools/win': {
     'packages': [
       {
