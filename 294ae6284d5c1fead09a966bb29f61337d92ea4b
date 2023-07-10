@@ -16,6 +16,24 @@
       "message": "grepping for EGL_GL_COLORSPACE, I see we have a few tests, but they all use EGL_GL_COLORSPACE_SRGB or EGL_GL_COLORSPACE_LINEAR. Are these formats too weird to have tests for? If not, care to add some maybe?\n\nThis is probably the 10th time someone has tweaked this mapping, and it\u0027s obviously just not tested.",
       "revId": "294ae6284d5c1fead09a966bb29f61337d92ea4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd3bc48d_4cf0cdae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1379716
+      },
+      "writtenOn": "2023-07-10T22:38:22Z",
+      "side": 1,
+      "message": "I\u0027m not sure if there is a good way to test this particular change in ANGLE\u0027s test framework. The `MapEglColorSpaceToVkColorSpace()` function is used with the attribs `eglCreateWindowSurface()` for setting the underlying Android swapchain\u0027s color space.\n\nWith the Android CTS test case, the test has access to both ends of the surface/swapchain (the producer EGL context with `eglCreateWindowSurface(colorspace \u003d P3)` renders and calls `eglSwapBuffers()` and then the consumer has access to the AHB and colorspace info via the framework).\n\nAre you potentially referring to the image tests?",
+      "parentUuid": "5b944a63_4268e64d",
+      "revId": "294ae6284d5c1fead09a966bb29f61337d92ea4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
