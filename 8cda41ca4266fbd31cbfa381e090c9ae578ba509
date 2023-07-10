@@ -103,6 +103,24 @@
       "message": "Just curious, is there any problem with creating MTLTexture from IOSurface and just use EGL_ANGLE_metal_texture_client_buffer to import the MTLTexture?",
       "revId": "8cda41ca4266fbd31cbfa381e090c9ae578ba509",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0e813f1_91197121",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-07-10T03:47:45Z",
+      "side": 1,
+      "message": "No reason. I\u0027m happy to close this change if you\u0027d rather not take it.",
+      "parentUuid": "67c90416_86ce0327",
+      "revId": "8cda41ca4266fbd31cbfa381e090c9ae578ba509",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
