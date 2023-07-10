@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "403c8bc9_84da7387",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1237795
+      },
+      "writtenOn": "2023-07-10T22:48:18Z",
+      "side": 1,
+      "message": "Context: https://groups.google.com/a/google.com/g/lexan/c/iP3QCCMD_sA/m/Kov1uKt3AwAJ\nWe are moving these three repos to be under third_party instead of under buildtools/\n\nAdding the new third_party paths first, then making the necessary changes in chromium/src to get build files workin with the new paths, then coming back to angle/angle to remove the old buildtools/third_party/lib*/trunk/ paths.",
+      "revId": "66b3a494764438330b5240cd6376b9840c88ae22",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
