@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb471076_32e51d8b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-07-10T12:34:55Z",
+      "side": 1,
+      "message": "Solti, this test started failing on your wrangling shift\nhttps://ci.chromium.org/ui/p/chromium/builders/ci/ios-angle-intel/43310/overview\nPlease monitor these bots on you next shifts either via\nhttps://ci.chromium.org/p/chromium/g/chromium.angle/console or\nhttps://sheriff-o-matic.appspot.com/angle\nPer https://chromium.googlesource.com/angle/angle/+/refs/heads/main/infra/ANGLEWrangling.md",
+      "revId": "2d7aee6dbb70e0865ec7331af4deda5b3001c3a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
