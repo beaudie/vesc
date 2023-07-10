@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "290c01e6_0b75f7f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1228344
+      },
+      "writtenOn": "2023-07-10T11:43:18Z",
+      "side": 1,
+      "message": "Since @ahijazi@chromium.org is back from OOO, I took a another look.\nThis patch LGTM % updating the hash, and this [comment](https://chromium-review.googlesource.com/c/angle/angle/+/4608402/comment/744f2a65_40c3db55/). Otherwise, I have nothing else to add.\n\nToday, Angle is used as a shared library for every platforms, except Mac. See [discussion](https://docs.google.com/document/d/1nkpcI4uIdwubO6iE8zj1jeJDXvm2gq4-NUc2bwjOOgk/edit?disco\u003dAAAA00gAM_Q)\nIt will at some point be statically linked. If this isn\u0027t going to happen to far away in the future, we can add support for MiraclePtr now in parallel. Does it sounds reasonable to you @syoussefi@chromium.org?",
+      "revId": "0eae190a1dad933c4e8515165cdff0be5f65f815",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "333368ab_5b7759fa",
+        "filename": "DEPS",
+        "patchSetId": 4
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1228344
+      },
+      "writtenOn": "2023-07-10T11:43:18Z",
+      "side": 1,
+      "message": "@yukishiino@chromium.org completed moving the allocator shim into PA last week:\nhttps://chromium-review.googlesource.com/c/chromium/src/+/4648411\n\nBefore landing this patch, please update the hash to the latest versions, so that we don\u0027t need to do it separately.",
+      "range": {
+        "startLine": 91,
+        "startChar": 32,
+        "endLine": 91,
+        "endChar": 72
+      },
+      "revId": "0eae190a1dad933c4e8515165cdff0be5f65f815",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
