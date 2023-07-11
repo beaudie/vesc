@@ -16,6 +16,41 @@
       "message": "I like what this does and agree it\u0027s necessary. However, this implementation is Windows-specific. Would be nice if it could be made to apply to dlclose() as well, but I don\u0027t know how that could be made to happen without use of a global destructor (and global destructors are banned per Chromium policy from what I understand).",
       "revId": "119eaa0f3008e2652ecdae8ba1ae8387420aa9a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b75fad21_f4304a39",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-07-11T17:43:26Z",
+      "side": 1,
+      "message": "It could be added behind a build flag.",
+      "parentUuid": "b81c0497_5037437c",
+      "revId": "119eaa0f3008e2652ecdae8ba1ae8387420aa9a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b027d6dd_53e3dcbf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-07-11T17:43:26Z",
+      "side": 1,
+      "message": "I\u0027d like to propose a small refactor to make display destruction nicer:\n\n - Have std::unique_ptr to the displays in ANGLEPlatformDisplayMap and DevicePlatformDisplayMap\n - Remove the logic where ~Display removes itself from the global map. Nothing deletes a display currently so this code is unused.\n - Simply clear the maps in the DLL unloading.",
+      "revId": "119eaa0f3008e2652ecdae8ba1ae8387420aa9a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
