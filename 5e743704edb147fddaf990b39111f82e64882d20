@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8851d1d8_fc533cd4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-11T14:01:33Z",
+      "side": 1,
+      "message": "Could you please open an issue (at anglebug.com/new if open source, or issuetracker.google.com if you are working for a partner company) and describe the problem? We require a `Bug:` tag anyway before the change can be landed. That would be in the form of:\n\n```\nBug: angleproject:NNNN\n```\n\nor\n\n```\nBug: b/NNNNNNNNN\n```\n\nFor anglebug.com and Buganizer bugs respectively",
+      "revId": "5e743704edb147fddaf990b39111f82e64882d20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60b6c7a2_17b1e432",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-11T14:01:33Z",
+      "side": 1,
+      "message": "Thank you for the contribution! A couple of high-level notes:\n\n* Could you please add a few tests that exercise this path? Is that blocked on YUV rendering?\n* How about leaving ImageCopy.frag as it was, and add an ImageYUVCopy.frag specifically that needs all these special-case code. A lot of what\u0027s in ImageCopy.frag doesn\u0027t apply to YUV; for example the image can only be 2D (right?), a lot of the push constants don\u0027t apply etc.",
+      "revId": "5e743704edb147fddaf990b39111f82e64882d20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54d94ba5_9041b308",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-11T14:01:33Z",
+      "side": 1,
+      "message": "Per our style, we generally avoid function overloading. You can simply drop this variant and pass in the pipelineLayout everywhere, or maybe call the other function `setupGraphicsProgramWithLayout`",
+      "range": {
+        "startLine": 554,
+        "startChar": 18,
+        "endLine": 554,
+        "endChar": 38
+      },
+      "revId": "5e743704edb147fddaf990b39111f82e64882d20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d401bc6_2c40f7bc",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-11T14:01:33Z",
+      "side": 1,
+      "message": "Same here (about overloading)",
+      "range": {
+        "startLine": 632,
+        "startChar": 18,
+        "endLine": 632,
+        "endChar": 39
+      },
+      "revId": "5e743704edb147fddaf990b39111f82e64882d20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
