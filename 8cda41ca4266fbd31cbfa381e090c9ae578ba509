@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "17bef7d5_70b96b13",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-07-11T00:16:30Z",
+      "side": 1,
+      "message": "This should be angleproject:8209.",
+      "revId": "8cda41ca4266fbd31cbfa381e090c9ae578ba509",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "5cb7112c_ae4ed0ee",
@@ -119,6 +136,24 @@
       "side": 1,
       "message": "No reason. I\u0027m happy to close this change if you\u0027d rather not take it.",
       "parentUuid": "67c90416_86ce0327",
+      "revId": "8cda41ca4266fbd31cbfa381e090c9ae578ba509",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1365efcc_cf49e4b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-07-11T00:16:30Z",
+      "side": 1,
+      "message": "We\u0027d like to upstream this change if WebKit needs to use this new importing path.\n\nIf so - could you update `extensions/EGL_ANGLE_iosurface_client_buffer.txt` and describe that `eglCreateImageKHR` supports wrapping IOSurfaces as well, like Geoff points out in `EGL_ANGLE_d3d_texture_client_buffer`?",
+      "parentUuid": "b0e813f1_91197121",
       "revId": "8cda41ca4266fbd31cbfa381e090c9ae578ba509",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
