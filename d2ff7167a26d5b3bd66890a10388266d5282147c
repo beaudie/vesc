@@ -16,6 +16,23 @@
       "message": "Brian, PTAL.",
       "revId": "d2ff7167a26d5b3bd66890a10388266d5282147c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85ed1af1_4d53a6a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-07-11T11:40:23Z",
+      "side": 1,
+      "message": "https://ci.chromium.org/ui/p/angle/builders/try/mac-exp-test/36/overview is green, submitting.\nThanks for +2, Brian!",
+      "revId": "d2ff7167a26d5b3bd66890a10388266d5282147c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
