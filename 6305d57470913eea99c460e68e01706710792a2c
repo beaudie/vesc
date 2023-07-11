@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7242603_d31ee9b8",
+        "filename": "src/compiler.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-07-11T11:47:53Z",
+      "side": 1,
+      "message": "I\u0027m curious why this name has GLSL, while the file is used in TranslatorMetalDirect.\nDoes it mean we\u0027re translating GLSL to Metal?\nBut I think translations to HLSL, ESSL, Vulkan are in their own group?\nOr it this code shared between GLSL and Metal on Apple?",
+      "range": {
+        "startLine": 271,
+        "startChar": 17,
+        "endLine": 271,
+        "endChar": 27
+      },
+      "revId": "6305d57470913eea99c460e68e01706710792a2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
