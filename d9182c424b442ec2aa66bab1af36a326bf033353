@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d73bf57_08151d60",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-11T23:17:49Z",
+      "side": 1,
+      "message": "My tries show no perf difference, but the numbers are also a big noisy. If this works out, the state can be moved to ErrorSet, mutex added to it for it to become thread-safe and then validation for lockless entry points can become safe.",
+      "revId": "d9182c424b442ec2aa66bab1af36a326bf033353",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
