@@ -6,6 +6,7 @@
 
 #include "compiler/translator/ParseContext.h"
 
+#include <android/log.h>
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -7768,6 +7769,10 @@ int PaParseStrings(size_t count,
     if (glslang_initialize(context))
         return 1;
 
+    for (uint32_t i = 0; i < count; i++)
+    {
+        __android_log_print(ANDROID_LOG_INFO, "ANGLE", "%s", string[i]);
+    }
     int error = glslang_scan(count, string, length, context);
     if (!error)
         error = glslang_parse(context);
