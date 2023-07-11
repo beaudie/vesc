@@ -694,7 +694,89 @@ class UniformTestES3 : public ANGLETest<>
     }
 
     GLuint mProgram;
+
+  public:
+    void parseNumberTestVerifyResult();
+    void parseNumberTestBase(const char *fragmentShader,
+                             const std::string &uniformName,
+                             const GLuint &uniformValue);
 };
+
+void UniformTestES3::parseNumberTestVerifyResult()
+{
+    std::vector<GLColor> fbData(getWindowWidth() * getWindowHeight());
+    glReadPixels(0, 0, getWindowWidth(), getWindowHeight(), GL_RGBA, GL_UNSIGNED_BYTE,
+                 fbData.data());
+    ASSERT_GL_NO_ERROR();
+
+    for (int y = 0; y < getWindowHeight(); y++)
+    {
+        for (int x = 0; x < getWindowWidth(); x++)
+        {
+            EXPECT_EQ(GLColor::green, fbData[y * getWindowWidth() + x]);
+        }
+    }
+}
+
+void UniformTestES3::parseNumberTestBase(const char *fragmentShader,
+                                         const std::string &uniformName,
+                                         const GLuint &uniformValue)
+{
+    constexpr char kVertexShader[] =
+        "#version 300 es\n"
+        "in vec4 vPosition;\n"
+        "void main()\n"
+        "{\n"
+        "    gl_Position = vPosition;\n"
+        "}\n";
+    ANGLE_GL_PROGRAM(program, kVertexShader, fragmentShader);
+    ASSERT_GL_NO_ERROR();
+
+    glUseProgram(program.get());
+    ASSERT_GL_NO_ERROR();
+    GLint uniformLocation = glGetUniformLocation(program.get(), uniformName.c_str());
+    ASSERT_NE(uniformLocation, -1);
+    glUniform1ui(uniformLocation, uniformValue);
+    ASSERT_GL_NO_ERROR();
+    glUseProgram(0);
+
+    glUseProgram(program.get());
+    const std::vector<float> positions = {-1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f};
+
+    // Setup vao
+    GLBuffer vertexBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer.get());
+    glBufferData(GL_ARRAY_BUFFER, sizeof(positions[0]) * positions.size(), positions.data(),
+                 GL_STATIC_DRAW);
+
+    GLuint vao;
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+    GLint vertexPosLocation = glGetAttribLocation(program.get(), "vPosition");
+    ASSERT_NE(vertexPosLocation, -1);
+    glEnableVertexAttribArray(vertexPosLocation);
+    glVertexAttribPointer(vertexPosLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glBindVertexArray(0);
+
+    // setup index buffer
+    const std::vector<uint32_t> indices = {0, 1, 2, 3};
+    GLBuffer indexBuffer;
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer.get());
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices[0]) * indices.size(), indices.data(),
+                 GL_STATIC_DRAW);
+    ASSERT_GL_NO_ERROR();
+
+    // draw and verify results
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer.get());  // question, why this line is needed?
+    glDrawElements(GL_TRIANGLE_STRIP, indices.size(), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    parseNumberTestVerifyResult();
+}
 
 // Test that we can get and set an array of matrices uniform.
 TEST_P(UniformTestES3, MatrixArrayUniformStateQuery)
@@ -1151,6 +1233,189 @@ TEST_P(UniformTestES3, BooleanUniformAsIfAndForCondition)
     drawQuad(program.get(), essl3_shaders::PositionAttrib(), 0.0f);
     ASSERT_GL_NO_ERROR();
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
+// Add comment on what the test does later
+TEST_P(UniformTestES3, ParseNumberTestUnsignedIntAboveSignedRangeBase16)
+{
+    constexpr char kFragmentShaderUnsignedIntAboveSignedRangeBase16[] =
+        "#version 300 es\n"
+        "precision highp float;\n"
+        "out vec4 my_FragColor;\n"
+        "uniform uint expected;\n"
+        "void main()\n"
+        "{\n"
+        "    uint i        = 0xc0000000u;\n"
+        "    float correct = (i == expected) ? 1.0 : 0.0;\n"
+        "    my_FragColor = vec4(0.0, correct, 0.0, 1.0);\n"
+        "}\n";
+
+    parseNumberTestBase(kFragmentShaderUnsignedIntAboveSignedRangeBase16, "expected", 3221225472u);
+}
+
+// Add comment on what the test does later
+TEST_P(UniformTestES3, ParseNumberTestUnsignedIntAboveSignedRangeBase8)
+{
+    constexpr char kFragmentShaderUnsignedIntAboveSignedRangeBase8[] =
+        "#version 300 es\n"
+        "precision highp float;\n"
+        "out vec4 my_FragColor;\n"
+        "uniform uint expected;\n"
+        "void main()\n"
+        "{\n"
+        "    uint i        = 030000000000u;\n"
+        "    float correct = (i == expected) ? 1.0 : 0.0;\n"
+        "    my_FragColor = vec4(0.0, correct, 0.0, 1.0);\n"
+        "}\n";
+
+    parseNumberTestBase(kFragmentShaderUnsignedIntAboveSignedRangeBase8, "expected", 3221225472u);
+}
+
+// Add comment on what the test does later
+TEST_P(UniformTestES3, ParseNumberTestUnsignedIntAboveSignedRangeDecimal)
+{
+    constexpr char kFragmentShaderUnsignedIntAboveSignedRangeDecimal[] =
+        "#version 300 es\n"
+        "precision highp float;\n"
+        "out vec4 my_FragColor;\n"
+        "uniform uint expected;\n"
+        "void main()\n"
+        "{\n"
+        "    uint i        = 3221225472u;\n"
+        "    float correct = (i == expected) ? 1.0 : 0.0;\n"
+        "    my_FragColor = vec4(0.0, correct, 0.0, 1.0);\n"
+        "}\n";
+
+    parseNumberTestBase(kFragmentShaderUnsignedIntAboveSignedRangeDecimal, "expected", 3221225472u);
+}
+
+// Add comment on what the test does later
+TEST_P(UniformTestES3, ParseNumberTestUnsignedIntMaxValueBase16)
+{
+    constexpr char kFragmentShaderUnsignedIntMaxValueBase16[] =
+        "#version 300 es\n"
+        "precision highp float;\n"
+        "out vec4 my_FragColor;\n"
+        "uniform uint expected;\n"
+        "void main()\n"
+        "{\n"
+        "    uint i        = 0xffffffffu;\n"
+        "    float correct = (i == expected) ? 1.0 : 0.0;\n"
+        "    my_FragColor = vec4(0.0, correct, 0.0, 1.0);\n"
+        "}\n";
+
+    parseNumberTestBase(kFragmentShaderUnsignedIntMaxValueBase16, "expected", 4294967295u);
+}
+
+// Add comment on what the test does later
+TEST_P(UniformTestES3, ParseNumberTestUnsignedIntMaxValueBase8)
+{
+    constexpr char kFragmentShaderUnsignedIntMaxValueBase8[] =
+        "#version 300 es\n"
+        "precision highp float;\n"
+        "out vec4 my_FragColor;\n"
+        "uniform uint expected;\n"
+        "void main()\n"
+        "{\n"
+        "    uint i        = 037777777777u;\n"
+        "    float correct = (i == expected) ? 1.0 : 0.0;\n"
+        "    my_FragColor = vec4(0.0, correct, 0.0, 1.0);\n"
+        "}\n";
+
+    parseNumberTestBase(kFragmentShaderUnsignedIntMaxValueBase8, "expected", 4294967295u);
+}
+
+// Add comment on what the test does later
+TEST_P(UniformTestES3, ParseNumberTestUnsignedIntMaxValueDecimal)
+{
+    constexpr char kFragmentShaderUnsignedIntMaxValueDecimal[] =
+        "#version 300 es\n"
+        "precision highp float;\n"
+        "out vec4 my_FragColor;\n"
+        "uniform uint expected;\n"
+        "void main()\n"
+        "{\n"
+        "    uint i        = 4294967295u;\n"
+        "    float correct = (i == expected) ? 1.0 : 0.0;\n"
+        "    my_FragColor = vec4(0.0, correct, 0.0, 1.0);\n"
+        "}\n";
+
+    parseNumberTestBase(kFragmentShaderUnsignedIntMaxValueDecimal, "expected", 4294967295u);
+}
+
+// Add a comment on what the test does later
+TEST_P(UniformTestES3, ParseNumberTestUnsignedIntNegativeValueAsUint)
+{
+    constexpr char kFragmentShaderUnsignedIntNegativeValueAsUint[] =
+        "#version 300 es\n"
+        "precision highp float;\n"
+        "out vec4 my_FragColor;\n"
+        "uniform uint expected;\n"
+        "void main()\n"
+        "{\n"
+        "    uint i        = -1u;\n"
+        "    float correct = (i == expected) ? 1.0 : 0.0;\n"
+        "    my_FragColor = vec4(0.0, correct, 0.0, 1.0);\n"
+        "}\n";
+
+    parseNumberTestBase(kFragmentShaderUnsignedIntNegativeValueAsUint, "expected", 0xffffffffu);
+}
+
+// Add comment on what the test does later
+TEST_P(UniformTestES3, ParseNumberTestUnsignedIntSmallestValueAboveSignedRangeBase16)
+{
+    constexpr char kFragmentShaderUnsignedIntSmallestValueAboveSignedRangeBase16[] =
+        "#version 300 es\n"
+        "precision highp float;\n"
+        "out vec4 my_FragColor;\n"
+        "uniform uint expected;\n"
+        "void main()\n"
+        "{\n"
+        "    uint i        = 0x80000000u;\n"
+        "    float correct = (i == expected) ? 1.0 : 0.0;\n"
+        "    my_FragColor = vec4(0.0, correct, 0.0, 1.0);\n"
+        "}\n";
+
+    parseNumberTestBase(kFragmentShaderUnsignedIntSmallestValueAboveSignedRangeBase16, "expected",
+                        2147483648u);
+}
+
+// Add comment on what the test does later
+TEST_P(UniformTestES3, ParseNumberTestUnsignedIntSmallestValueAboveSignedRangeBase8)
+{
+    constexpr char kFragmentShaderUnsignedIntSmallestValueAboveSignedRangeBase8[] =
+        "#version 300 es\n"
+        "precision highp float;\n"
+        "out vec4 my_FragColor;\n"
+        "uniform uint expected;\n"
+        "void main()\n"
+        "{\n"
+        "    uint i        = 020000000000u;\n"
+        "    float correct = (i == expected) ? 1.0 : 0.0;\n"
+        "    my_FragColor = vec4(0.0, correct, 0.0, 1.0);\n"
+        "}\n";
+
+    parseNumberTestBase(kFragmentShaderUnsignedIntSmallestValueAboveSignedRangeBase8, "expected",
+                        2147483648u);
+}
+
+// Add comment on what the test does later
+TEST_P(UniformTestES3, ParseNumberTestUnsignedIntSmallestValueAboveSignedRangeDecimal)
+{
+    const char kFragmentShaderUnsignedIntSmallestValueAboveSignedRangeDecimal[] =
+        "#version 300 es\n"
+        "precision highp float;\n"
+        "out vec4 my_FragColor;\n"
+        "uniform uint expected;\n"
+        "void main()\n"
+        "{\n"
+        "    uint i        = 2147483648u;\n"
+        "    float correct = (i == expected) ? 1.0 : 0.0;\n"
+        "    my_FragColor = vec4(0.0, correct, 0.0, 1.0);\n"
+        "}\n";
+
+    parseNumberTestBase(kFragmentShaderUnsignedIntSmallestValueAboveSignedRangeDecimal, "expected",
+                        2147483648u);
 }
 
 class UniformTestES31 : public ANGLETest<>
