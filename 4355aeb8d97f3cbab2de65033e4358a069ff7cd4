@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "33f967a8_4f82a0d8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-07-11T12:31:24Z",
+      "side": 1,
+      "message": "So that we don\u0027t forget to do this, could you please open a bug and block it on the driver upgrade bug?",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 61
+      },
+      "revId": "4355aeb8d97f3cbab2de65033e4358a069ff7cd4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "621e43cb_0d6419cb",
@@ -14,6 +37,23 @@
       "writtenOn": "2023-07-10T18:55:05Z",
       "side": 1,
       "message": "leaving +2 to Yuly",
+      "revId": "4355aeb8d97f3cbab2de65033e4358a069ff7cd4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13a442ac_c2791a98",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-07-11T12:31:24Z",
+      "side": 1,
+      "message": "Note that this CL also adds the new test suites on ASAN and TSAN.\nI\u0027m OK with that, since the runtime is quite fast ~30 seconds.",
       "revId": "4355aeb8d97f3cbab2de65033e4358a069ff7cd4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
