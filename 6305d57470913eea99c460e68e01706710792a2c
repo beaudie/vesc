@@ -46,6 +46,30 @@
       },
       "revId": "6305d57470913eea99c460e68e01706710792a2c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a59c82a4_79ba5388",
+        "filename": "src/compiler.gni",
+        "patchSetId": 2
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-11T14:10:11Z",
+      "side": 1,
+      "message": "No actually you\u0027re right this is a bug, this is not going to build with a metal-only build. I\u0027m following up right now.",
+      "parentUuid": "d5cba2b2_8103ddb6",
+      "range": {
+        "startLine": 271,
+        "startChar": 17,
+        "endLine": 271,
+        "endChar": 27
+      },
+      "revId": "6305d57470913eea99c460e68e01706710792a2c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
