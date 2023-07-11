@@ -8066,12 +8066,21 @@ bool ContextVk::shouldSwitchToReadOnlyDepthStencilFeedbackLoopMode(gl::Texture *
 
     if (isStencilTexture)
     {
+        if (mState.isStencilWriteEnabled())
+        {
+            drawFramebufferVk->setStencilFeedbackLoopMode(true);
+        }
         // Switch to read-only stencil feedback loop if not already
-        return !mState.isStencilWriteEnabled() &&
+        return !mState.isStencilWriteEnabled() && !drawFramebufferVk->isStencilFeedbackLoopMode() &&
                !drawFramebufferVk->isReadOnlyStencilFeedbackLoopMode();
     }
     // Switch to read-only depth feedback loop if not already
-    return !mState.isDepthWriteEnabled() && !drawFramebufferVk->isReadOnlyDepthFeedbackLoopMode();
+    if (mState.isDepthWriteEnabled())
+    {
+        drawFramebufferVk->setDepthFeedbackLoopMode(true);
+    }
+    return !mState.isDepthWriteEnabled() && !drawFramebufferVk->isDepthFeedbackLoopMode() &&
+           !drawFramebufferVk->isReadOnlyDepthFeedbackLoopMode();
 }
 
 angle::Result ContextVk::onResourceAccess(const vk::CommandBufferAccess &access)
