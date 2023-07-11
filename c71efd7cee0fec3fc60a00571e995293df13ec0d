@@ -33,6 +33,46 @@
       "message": "FYI, Geoff\u0027s out until July 10. I don\u0027t know if there\u0027s anyone with d3d/ expertise to look at this.",
       "revId": "c71efd7cee0fec3fc60a00571e995293df13ec0d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23c48854_69ff0b55",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-07-11T15:07:22Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "c71efd7cee0fec3fc60a00571e995293df13ec0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c01ae081_7a4e0b16",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Framebuffer11.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-07-11T15:07:22Z",
+      "side": 1,
+      "message": "nit: Could do attachment-\u003egetDepthSize() \u003e 0 ||attachment-\u003egetStencilSize() \u003e 0. A bit more concise.",
+      "range": {
+        "startLine": 251,
+        "startChar": 8,
+        "endLine": 252,
+        "endChar": 40
+      },
+      "revId": "c71efd7cee0fec3fc60a00571e995293df13ec0d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
