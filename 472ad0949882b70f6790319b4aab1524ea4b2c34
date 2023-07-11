@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61dd05bc_72d3a059",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557258
+      },
+      "writtenOn": "2023-07-11T16:36:36Z",
+      "side": 1,
+      "message": "Ping for re-submission, the base change was just merged.",
+      "revId": "472ad0949882b70f6790319b4aab1524ea4b2c34",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
