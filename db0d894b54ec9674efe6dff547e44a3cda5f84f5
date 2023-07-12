@@ -52,6 +52,24 @@
       "parentUuid": "decb335d_61237a7d",
       "revId": "db0d894b54ec9674efe6dff547e44a3cda5f84f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "330d35a3_48620901",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-12T16:50:47Z",
+      "side": 1,
+      "message": "I guess one ugly thing about it would be the fact that State (private) is a member of ShareGroupAccessibleState",
+      "parentUuid": "67260c3b_d1ce01d3",
+      "revId": "db0d894b54ec9674efe6dff547e44a3cda5f84f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
