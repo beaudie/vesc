@@ -57,6 +57,24 @@
       "parentUuid": "a71c353e_d01f61d2",
       "revId": "7e9078d546e021f6d1c9192d70ee40f3c46aa5c1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a4ea19f_6b9e12ad",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-12T19:23:44Z",
+      "side": 1,
+      "message": "Ack. If you can write a perf counter test for the reset bug too, it\u0027d be great.",
+      "parentUuid": "3ee490d3_67e6ee4e",
+      "revId": "7e9078d546e021f6d1c9192d70ee40f3c46aa5c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
