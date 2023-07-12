@@ -70,6 +70,24 @@
       "parentUuid": "67260c3b_d1ce01d3",
       "revId": "db0d894b54ec9674efe6dff547e44a3cda5f84f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "faef13f1_d3f768cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-07-12T17:05:29Z",
+      "side": 1,
+      "message": "\u003e Calling it PrivateContext makes it match \"context-private entry point\" used elsewhere\n\nI mean if you do it, you would do the similar renaming to other places as well.\n\n\n\u003e one ugly thing about it would be the fact that State (private) is a member of ShareGroupAccessibleState\n\nIs that because of right now backend only get ShareGroupAccessibleState? You could pass both state separate instead of have one point to the other, right?",
+      "parentUuid": "330d35a3_48620901",
+      "revId": "db0d894b54ec9674efe6dff547e44a3cda5f84f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
