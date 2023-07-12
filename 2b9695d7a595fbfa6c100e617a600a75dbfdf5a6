@@ -16,6 +16,24 @@
       "message": "Can we add a link to the corresponding spec content?",
       "revId": "2b9695d7a595fbfa6c100e617a600a75dbfdf5a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfc96e4e_182c35d6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-07-12T21:57:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5b29261_4c18f35e",
+      "revId": "2b9695d7a595fbfa6c100e617a600a75dbfdf5a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
