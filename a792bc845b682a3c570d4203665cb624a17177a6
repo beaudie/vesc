@@ -16,6 +16,24 @@
       "message": "Status just became Merge Conflict, shall I do a rebase/resubmit myself?",
       "revId": "a792bc845b682a3c570d4203665cb624a17177a6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08857548_93b73e56",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-07-12T13:42:17Z",
+      "side": 1,
+      "message": "If you have time to rebase, that would be helpful.  I haven\u0027t landed this yet because our AOSP roller is broken at the moment, and I don\u0027t want to introduce a change to the script until it is working.  It should be fixed today.",
+      "parentUuid": "6457e94c_85d71d30",
+      "revId": "a792bc845b682a3c570d4203665cb624a17177a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
