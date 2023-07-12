@@ -111,6 +111,30 @@
       },
       "revId": "862364fd11b0f838ce381aabb669ac081be8f200",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "947c9a3b_a2a156ee",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 823,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-07-12T17:55:35Z",
+      "side": 1,
+      "message": "Strange as it is, it was definitely not noise.\n\nTest results on S906B from different test batches:\n\n```\natomic_bool    atomic_int\n14.322         13.894\n14.258         13.839\n14.268         13.821\n14.292         13.884\n14.270         13.862\n14.296         13.809\n14.341         13.870\n14.302         13.895\n14.298         13.854\n```\n\nI did not test other devices much (G991U, G9906B), but they had way worse noise and results were back and forth, so I assumed that there is no difference.",
+      "parentUuid": "852c0220_e541e35b",
+      "range": {
+        "startLine": 823,
+        "startChar": 9,
+        "endLine": 823,
+        "endChar": 19
+      },
+      "revId": "862364fd11b0f838ce381aabb669ac081be8f200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
