@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4ea928e_eb840333",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 8070,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-12T01:48:05Z",
+      "side": 1,
+      "message": "We should add a new macro like WARN_ONCE() to make sure these messages don\u0027t end up spamming the logs.",
+      "range": {
+        "startLine": 8070,
+        "startChar": 12,
+        "endLine": 8070,
+        "endChar": 22
+      },
+      "revId": "7e9078d546e021f6d1c9192d70ee40f3c46aa5c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a71c353e_d01f61d2",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-12T01:48:05Z",
+      "side": 1,
+      "message": "Feedback loop depends on the texture state, it feels wrong to cache it in the framebuffer object. Why not have it be a property of ContextVk?\n\nAlso, no one is ever resetting this to false!",
+      "revId": "7e9078d546e021f6d1c9192d70ee40f3c46aa5c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
