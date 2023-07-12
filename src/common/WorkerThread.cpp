@@ -9,6 +9,11 @@
 //
 
 #include "common/WorkerThread.h"
+#include "libANGLE/features.h"
+
+#ifndef ANGLE_ENABLED
+#    error "ANGLE_ENABLED Not defined"
+#endif
 
 // Controls if our threading code uses std::async or falls back to single-threaded operations.
 // Note that we can't easily use std::async in UWPs due to UWP threading restrictions.
@@ -217,7 +222,6 @@ bool AsyncWorkerPool::isAsync()
 #endif  // (ANGLE_STD_ASYNC_WORKERS == ANGLE_ENABLED)
 
 #if (ANGLE_DELEGATE_WORKERS == ANGLE_ENABLED)
-
 class DelegateWorkerPool final : public WorkerThreadPool
 {
   public:
