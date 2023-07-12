@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c74b92a7_fd57dcb2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-07-12T17:12:39Z",
+      "side": 1,
+      "message": "LGTM.",
+      "revId": "862364fd11b0f838ce381aabb669ac081be8f200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82b1852f_66646318",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 823,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-07-12T17:12:39Z",
+      "side": 1,
+      "message": "I thought there is also std::atomic_bool, is there other reason you want to use int now?",
+      "range": {
+        "startLine": 823,
+        "startChar": 9,
+        "endLine": 823,
+        "endChar": 19
+      },
+      "revId": "862364fd11b0f838ce381aabb669ac081be8f200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
