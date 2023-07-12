@@ -802,6 +802,11 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                mShareGroupVk->getContextCount() == 1;
     }
 
+    vk::RenderPassUsageFlags getDepthStencilAttachmentFlags() const
+    {
+        return mDepthStencilAttachmentFlags;
+    }
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
@@ -1294,9 +1299,10 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         DirtyBits dirtyBitMask,
         UpdateDepthFeedbackLoopReason depthReason,
         UpdateDepthFeedbackLoopReason stencilReason);
-    bool shouldSwitchToReadOnlyDepthStencilFeedbackLoopMode(gl::Texture *texture,
-                                                            gl::Command command,
-                                                            bool isStencilTexture) const;
+    angle::Result updateReadOnlyDepthStencilFeedbackLoopMode(gl::Texture *texture,
+                                                             gl::Command command,
+                                                             FramebufferVk *drawFramebuffer,
+                                                             bool isStencilTexture);
 
     angle::Result onResourceAccess(const vk::CommandBufferAccess &access);
     angle::Result flushCommandBuffersIfNecessary(const vk::CommandBufferAccess &access);
@@ -1361,6 +1367,11 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // mCurrentWindowSurface->getPreTransform().
     SurfaceRotation mCurrentRotationDrawFramebuffer;
     SurfaceRotation mCurrentRotationReadFramebuffer;
+
+    // Tracks if we are in depth/stencil *read-only* feedback loop.  This is specially allowed as
+    // both usages (attachment and texture) are read-only.  When switching away from read-only
+    // feedback loop, the render pass is broken is to accommodate the new writable layout.
+    vk::RenderPassUsageFlags mDepthStencilAttachmentFlags;
 
     // Keep a cached pipeline description structure that can be used to query the pipeline cache.
     // Kept in a pointer so allocations can be aligned, and structs can be portably packed.
