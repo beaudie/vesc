@@ -496,6 +496,7 @@ angle::Result SwitchToReadOnlyDepthStencilFeedbackLoopMode(ContextVk *contextVk,
         const vk::RenderPassUsage readOnlyAttachmentUsage =
             isStencilTexture ? vk::RenderPassUsage::StencilReadOnlyAttachment
                              : vk::RenderPassUsage::DepthReadOnlyAttachment;
+        vk::RenderPassCommandBufferHelper *renderPass = &contextVk->getStartedRenderPassCommands();
 
         // If render pass not yet writing to depthStencil attachment, no need to flush.
         if (!texture->getImage().hasRenderPassUsageFlag(readOnlyAttachmentUsage) &&
@@ -510,13 +511,13 @@ angle::Result SwitchToReadOnlyDepthStencilFeedbackLoopMode(ContextVk *contextVk,
         {
             if (isStencilTexture)
             {
-                drawFramebuffer->updateRenderPassStencilReadOnlyMode(
-                    contextVk, &contextVk->getStartedRenderPassCommands());
+                renderPass->updateStencilReadOnlyMode(
+                    contextVk, drawFramebuffer->isReadOnlyDepthFeedbackLoopMode());
             }
             else
             {
-                drawFramebuffer->updateRenderPassDepthReadOnlyMode(
-                    contextVk, &contextVk->getStartedRenderPassCommands());
+                renderPass->updateDepthReadOnlyMode(
+                    contextVk, drawFramebuffer->isReadOnlyStencilFeedbackLoopMode());
             }
         }
     }
@@ -2470,8 +2471,10 @@ angle::Result ContextVk::handleDirtyGraphicsDepthStencilAccess(
     mRenderPassCommands->onDepthAccess(depthAccess);
     mRenderPassCommands->onStencilAccess(stencilAccess);
 
-    drawFramebufferVk->updateRenderPassDepthReadOnlyMode(this, mRenderPassCommands);
-    drawFramebufferVk->updateRenderPassStencilReadOnlyMode(this, mRenderPassCommands);
+    mRenderPassCommands->updateDepthReadOnlyMode(
+        this, drawFramebufferVk->isReadOnlyDepthFeedbackLoopMode());
+    mRenderPassCommands->updateStencilReadOnlyMode(
+        this, drawFramebufferVk->isReadOnlyStencilFeedbackLoopMode());
 
     return angle::Result::Continue;
 }
