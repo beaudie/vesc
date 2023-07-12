@@ -39,6 +39,24 @@
       "message": "Feedback loop depends on the texture state, it feels wrong to cache it in the framebuffer object. Why not have it be a property of ContextVk?\n\nAlso, no one is ever resetting this to false!",
       "revId": "7e9078d546e021f6d1c9192d70ee40f3c46aa5c1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ee490d3_67e6ee4e",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-07-12T18:10:26Z",
+      "side": 1,
+      "message": "\u003e Feedback loop depends on the texture state, it feels wrong to cache it in the framebuffer object.\n\nI agree. In this CL I am trying to mirror mReadOnlyDepthFeedbackLoopMode in the the current implementation. I do want to to clean this up in the next follow up CL (will send out soon).\n\n\n\u003e Also, no one is ever resetting this to false!\nFixed.",
+      "parentUuid": "a71c353e_d01f61d2",
+      "revId": "7e9078d546e021f6d1c9192d70ee40f3c46aa5c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
