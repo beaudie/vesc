@@ -39,6 +39,30 @@
       },
       "revId": "862364fd11b0f838ce381aabb669ac081be8f200",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bee59e8_3ff4afeb",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 823,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-12T17:15:44Z",
+      "side": 1,
+      "message": "I did that based on Igor\u0027s findings in https://chromium-review.googlesource.com/c/angle/angle/+/4632728",
+      "parentUuid": "82b1852f_66646318",
+      "range": {
+        "startLine": 823,
+        "startChar": 9,
+        "endLine": 823,
+        "endChar": 19
+      },
+      "revId": "862364fd11b0f838ce381aabb669ac081be8f200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
