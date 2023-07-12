@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "814f7c4a_be6b89d1",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-12T18:49:21Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "d2202845_211d2d49",
+      "range": {
+        "startLine": 121,
+        "startChar": 6,
+        "endLine": 121,
+        "endChar": 23
+      },
+      "revId": "d63dabb5b7ddf2844cdeb5b1a617327d94e1ed57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ab72022c_a63bc316",
@@ -126,6 +150,30 @@
       "side": 1,
       "message": "onX is fairly common for callback naming. The caller doesn\u0027t necessarily know what needs to happen but wants to communicate what did happen. The reaction to the change can stay as an implementation detail.\n\nGenerally, yes, 100% agree that method names should represent what they do.",
       "parentUuid": "65a5c890_5a4f3526",
+      "range": {
+        "startLine": 127,
+        "startChar": 8,
+        "endLine": 132,
+        "endChar": 30
+      },
+      "revId": "d63dabb5b7ddf2844cdeb5b1a617327d94e1ed57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4ae7d3c_dece06fc",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-12T18:49:21Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "7e0ecc79_626c920c",
       "range": {
         "startLine": 127,
         "startChar": 8,
