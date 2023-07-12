@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8d03b77_35302a34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-07-12T16:58:19Z",
+      "side": 1,
+      "message": "LGTM other than two naming suggestions",
+      "revId": "d63dabb5b7ddf2844cdeb5b1a617327d94e1ed57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2202845_211d2d49",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-07-12T16:58:19Z",
+      "side": 1,
+      "message": "Also similar to my suggestion in other CL: IMO, we should rename StateCache at line 148 to SharedStateCache and keep this one as StateCache (or ContextStateCache if you prefer, but may looks redundant when all access is from context.",
+      "range": {
+        "startLine": 121,
+        "startChar": 6,
+        "endLine": 121,
+        "endChar": 23
+      },
+      "revId": "d63dabb5b7ddf2844cdeb5b1a617327d94e1ed57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab72022c_a63bc316",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-07-12T16:58:19Z",
+      "side": 1,
+      "message": "I guess this is done this way mainly because you inherit from previous code. But why not just one API: invalidateCachedBasicDrawStates? The API should describe what it does instead of who the caller is.",
+      "range": {
+        "startLine": 127,
+        "startChar": 8,
+        "endLine": 132,
+        "endChar": 30
+      },
+      "revId": "d63dabb5b7ddf2844cdeb5b1a617327d94e1ed57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
