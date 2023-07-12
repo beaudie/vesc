@@ -46,6 +46,30 @@
       },
       "revId": "f9eec3d44e7a5fb5124885a70d71adbf1185fb8f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f61e702c_0f564680",
+        "filename": "src/libANGLE/Debug.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-07-12T20:01:39Z",
+      "side": 1,
+      "message": "The error would still be generated but no debug message.\n\nChrome would be ok with this. It specifically checks for context loss.",
+      "parentUuid": "23dd575d_a941a96e",
+      "range": {
+        "startLine": 298,
+        "startChar": 4,
+        "endLine": 298,
+        "endChar": 45
+      },
+      "revId": "f9eec3d44e7a5fb5124885a70d71adbf1185fb8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
