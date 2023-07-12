@@ -63,6 +63,30 @@
       },
       "revId": "862364fd11b0f838ce381aabb669ac081be8f200",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "852c0220_e541e35b",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 823,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-07-12T17:36:21Z",
+      "side": 1,
+      "message": "That is a bit surprised, this sounds like missing compiler optimization or measurment noise. Especially here, I expect all usage of mSkipValidation will be simple load/store a bool or int, not even involve `acquire` since relaxed memory order is used. You can double check with assembly if you are interested.",
+      "parentUuid": "0bee59e8_3ff4afeb",
+      "range": {
+        "startLine": 823,
+        "startChar": 9,
+        "endLine": 823,
+        "endChar": 19
+      },
+      "revId": "862364fd11b0f838ce381aabb669ac081be8f200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
