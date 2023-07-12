@@ -2037,6 +2037,42 @@ void RenderPassCommandBufferHelper::updateStartedRenderPassWithStencilMode(bool 
                                                 RenderPassUsage::StencilReadOnlyAttachment);
 }
 
+void RenderPassCommandBufferHelper::updateDepthReadOnlyMode(ContextVk *contextVk,
+                                                            bool readOnlyDepthMode)
+{
+    const bool readOnlyMode = mDepthStencilAttachmentIndex != kAttachmentIndexInvalid &&
+                              mDepthResolveAttachment.getImage() == nullptr &&
+                              (readOnlyDepthMode || !hasDepthWriteOrClear());
+
+    updateStartedRenderPassWithDepthStencilMode(readOnlyMode,
+                                                RenderPassUsage::DepthReadOnlyAttachment);
+}
+
+void RenderPassCommandBufferHelper::updateStencilReadOnlyMode(ContextVk *contextVk,
+                                                              bool readOnlyStencilMode)
+{
+    const bool readOnlyMode = mDepthStencilAttachmentIndex != kAttachmentIndexInvalid &&
+                              mStencilResolveAttachment.getImage() == nullptr &&
+                              (readOnlyStencilMode || !hasStencilWriteOrClear());
+
+    updateStartedRenderPassWithDepthStencilMode(readOnlyMode,
+                                                RenderPassUsage::StencilReadOnlyAttachment);
+}
+
+void RenderPassCommandBufferHelper::updateDepthStencilReadOnlyMode(ContextVk *contextVk,
+                                                                   VkImageAspectFlags dsAspectFlags,
+                                                                   FramebufferVk *framebufferVk)
+{
+    if ((dsAspectFlags & VK_IMAGE_ASPECT_DEPTH_BIT) != 0)
+    {
+        updateDepthReadOnlyMode(contextVk, framebufferVk->isReadOnlyDepthFeedbackLoopMode());
+    }
+    if ((dsAspectFlags & VK_IMAGE_ASPECT_STENCIL_BIT) != 0)
+    {
+        updateStencilReadOnlyMode(contextVk, framebufferVk->isReadOnlyStencilFeedbackLoopMode());
+    }
+}
+
 void RenderPassCommandBufferHelper::updateStartedRenderPassWithDepthStencilMode(
     bool readOnlyDepthStencilMode,
     RenderPassUsage readOnlyAttachmentUsage)
