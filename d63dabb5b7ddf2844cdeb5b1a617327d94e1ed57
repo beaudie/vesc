@@ -62,6 +62,30 @@
       },
       "revId": "d63dabb5b7ddf2844cdeb5b1a617327d94e1ed57",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba85e3b6_a8fbeeb3",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-12T17:06:18Z",
+      "side": 1,
+      "message": "Quite the opposite actually, in general we do `onWhatHappened()`, and the caller doesn\u0027t have to know what to do in that case.\n\nSee for example `onDrawFramebufferRenderPassDescChange`, `onHostVisibleBufferWrite`, `onBeginTransformFeedback`, `onColorAccessChange`, etc in ContextVk.",
+      "parentUuid": "ab72022c_a63bc316",
+      "range": {
+        "startLine": 127,
+        "startChar": 8,
+        "endLine": 132,
+        "endChar": 30
+      },
+      "revId": "d63dabb5b7ddf2844cdeb5b1a617327d94e1ed57",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
