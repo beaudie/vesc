@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c68d4fec_3b4e72f2",
+        "filename": "src/libANGLE/Debug.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-07-12T18:14:19Z",
+      "side": 1,
+      "message": "This worries me. If the user queries for the size of a message and then queries the message itself but a message is inserted between those times, it could cause issues.\n\nI think we want an invariant that messages cannot be inserted by other threads and remove the lock from Debug. I suspect this is already the case. Context loss is the only case I know of of errors being injected into other contexts.",
+      "range": {
+        "startLine": 298,
+        "startChar": 4,
+        "endLine": 298,
+        "endChar": 45
+      },
+      "revId": "f9eec3d44e7a5fb5124885a70d71adbf1185fb8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
