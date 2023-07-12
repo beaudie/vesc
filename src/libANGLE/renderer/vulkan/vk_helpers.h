@@ -1587,6 +1587,12 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     }
     void addCommandDiagnostics(ContextVk *contextVk);
 
+    void updateDepthReadOnlyMode(ContextVk *contextVk, bool readOnlyDepthMode);
+    void updateStencilReadOnlyMode(ContextVk *contextVk, bool readOnlyStencilMode);
+    void updateDepthStencilReadOnlyMode(ContextVk *contextVk,
+                                        VkImageAspectFlags dsAspectFlags,
+                                        FramebufferVk *framebufferVk);
+
   private:
     uint32_t getSubpassCommandBufferCount() const { return mCurrentSubpassCommandBufferIndex + 1; }
 
