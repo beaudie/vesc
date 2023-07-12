@@ -5302,24 +5302,53 @@ angle::Result SamplerDesc::init(ContextVk *contextVk, Sampler *sampler) const
         createInfo.addressModeV == VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER ||
         createInfo.addressModeW == VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER)
     {
-        ASSERT((contextVk->getRenderer()->getFeatures().supportsCustomBorderColor.enabled));
-        customBorderColorInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CUSTOM_BORDER_COLOR_CREATE_INFO_EXT;
-
-        customBorderColorInfo.customBorderColor.float32[0] = mBorderColor.red;
-        customBorderColorInfo.customBorderColor.float32[1] = mBorderColor.green;
-        customBorderColorInfo.customBorderColor.float32[2] = mBorderColor.blue;
-        customBorderColorInfo.customBorderColor.float32[3] = mBorderColor.alpha;
-
-        if (mBorderColorType == static_cast<uint32_t>(angle::ColorGeneric::Type::Float))
+        bool borderColorIsFloat =
+            mBorderColorType == static_cast<uint32_t>(angle::ColorGeneric::Type::Float);
+        bool borderColorIsOpaque      = mBorderColor.alpha == 1.0;
+        bool borderColorIsTransparent = mBorderColor.alpha == 0.0;
+        bool borderColorIsBlack =
+            mBorderColor.red == 0.0 && mBorderColor.green == 0.0 && mBorderColor.blue == 0.0;
+        if (borderColorIsBlack && (borderColorIsOpaque || borderColorIsTransparent))
         {
-            createInfo.borderColor = VK_BORDER_COLOR_FLOAT_CUSTOM_EXT;
+            // This is a special case intended to be used by UtilsVk::copyImage to implement robust
+            // buffer access behavior. All other border color values are only supported with a GL
+            // extension that is only exposed when the supportsCustomBorderColor feature is
+            // available.
+            if (borderColorIsFloat)
+            {
+                createInfo.borderColor = borderColorIsTransparent
+                                             ? VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK
+                                             : VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK;
+            }
+            else
+            {
+                createInfo.borderColor = borderColorIsTransparent
+                                             ? VK_BORDER_COLOR_INT_TRANSPARENT_BLACK
+                                             : VK_BORDER_COLOR_INT_OPAQUE_BLACK;
+            }
         }
         else
         {
-            createInfo.borderColor = VK_BORDER_COLOR_INT_CUSTOM_EXT;
-        }
+            ASSERT((contextVk->getRenderer()->getFeatures().supportsCustomBorderColor.enabled));
+            customBorderColorInfo.sType =
+                VK_STRUCTURE_TYPE_SAMPLER_CUSTOM_BORDER_COLOR_CREATE_INFO_EXT;
 
-        vk::AddToPNextChain(&createInfo, &customBorderColorInfo);
+            customBorderColorInfo.customBorderColor.float32[0] = mBorderColor.red;
+            customBorderColorInfo.customBorderColor.float32[1] = mBorderColor.green;
+            customBorderColorInfo.customBorderColor.float32[2] = mBorderColor.blue;
+            customBorderColorInfo.customBorderColor.float32[3] = mBorderColor.alpha;
+
+            if (borderColorIsFloat)
+            {
+                createInfo.borderColor = VK_BORDER_COLOR_FLOAT_CUSTOM_EXT;
+            }
+            else
+            {
+                createInfo.borderColor = VK_BORDER_COLOR_INT_CUSTOM_EXT;
+            }
+
+            vk::AddToPNextChain(&createInfo, &customBorderColorInfo);
+        }
     }
     ANGLE_VK_TRY(contextVk, sampler->init(contextVk->getDevice(), createInfo));
 
