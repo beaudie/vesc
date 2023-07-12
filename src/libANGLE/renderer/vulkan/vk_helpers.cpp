@@ -2025,57 +2025,54 @@ void RenderPassCommandBufferHelper::onStencilAccess(ResourceAccess access)
     mStencilAttachment.onAccess(access, getRenderPassWriteCommandCount());
 }
 
-void RenderPassCommandBufferHelper::updateDepthReadOnlyMode(ContextVk *contextVk,
-                                                            const FramebufferVk &framebufferVk)
+void RenderPassCommandBufferHelper::updateDepthReadOnlyMode(RenderPassUsageFlags dsUsageFlags)
 {
     ASSERT(mRenderPassStarted);
     const bool readOnlyMode =
         mDepthStencilAttachmentIndex != kAttachmentIndexInvalid &&
         mDepthResolveAttachment.getImage() == nullptr &&
-        (framebufferVk.isReadOnlyDepthFeedbackLoopMode() || !hasDepthWriteOrClear());
+        (dsUsageFlags[RenderPassUsage::DepthReadOnlyAttachment] || !hasDepthWriteOrClear());
 
     // If readOnlyMode is false, we are switching out of read only mode due to depth/stencil write.
     // We must not be in the read only feedback loop mode because the logic in
     // DIRTY_BIT_READ_ONLY_DEPTH_FEEDBACK_LOOP_MODE should ensure we end the previous renderpass and
     // a new renderpass will start with feedback loop disabled.
-    ASSERT(readOnlyMode || !framebufferVk.isReadOnlyDepthFeedbackLoopMode());
+    ASSERT(readOnlyMode || !dsUsageFlags[RenderPassUsage::DepthReadOnlyAttachment]);
 
     updateStartedRenderPassWithDepthStencilMode(readOnlyMode,
                                                 RenderPassUsage::DepthReadOnlyAttachment);
 }
 
-void RenderPassCommandBufferHelper::updateStencilReadOnlyMode(ContextVk *contextVk,
-                                                              const FramebufferVk &framebufferVk)
+void RenderPassCommandBufferHelper::updateStencilReadOnlyMode(RenderPassUsageFlags dsUsageFlags)
 {
     ASSERT(mRenderPassStarted);
     const bool readOnlyMode =
         mDepthStencilAttachmentIndex != kAttachmentIndexInvalid &&
         mStencilResolveAttachment.getImage() == nullptr &&
-        (framebufferVk.isReadOnlyStencilFeedbackLoopMode() || !hasStencilWriteOrClear());
+        (dsUsageFlags[RenderPassUsage::StencilReadOnlyAttachment] || !hasStencilWriteOrClear());
 
     // If readOnlyMode is false, we are switching out of read only mode due to depth/stencil write.
     // We must not be in the read only feedback loop mode because the logic in
     // DIRTY_BIT_READ_ONLY_DEPTH_FEEDBACK_LOOP_MODE should ensure we end the previous renderpass and
     // a new renderpass will start with feedback loop disabled.
-    ASSERT(readOnlyMode || !framebufferVk.isReadOnlyStencilFeedbackLoopMode());
+    ASSERT(readOnlyMode || !dsUsageFlags[RenderPassUsage::StencilReadOnlyAttachment]);
 
     updateStartedRenderPassWithDepthStencilMode(readOnlyMode,
                                                 RenderPassUsage::StencilReadOnlyAttachment);
 }
 
 void RenderPassCommandBufferHelper::updateDepthStencilReadOnlyMode(
-    ContextVk *contextVk,
-    VkImageAspectFlags dsAspectFlags,
-    const FramebufferVk &framebufferVk)
+    RenderPassUsageFlags dsUsageFlags,
+    VkImageAspectFlags dsAspectFlags)
 {
     ASSERT(mRenderPassStarted);
     if ((dsAspectFlags & VK_IMAGE_ASPECT_DEPTH_BIT) != 0)
     {
-        updateDepthReadOnlyMode(contextVk, framebufferVk);
+        updateDepthReadOnlyMode(dsUsageFlags);
     }
     if ((dsAspectFlags & VK_IMAGE_ASPECT_STENCIL_BIT) != 0)
     {
-        updateStencilReadOnlyMode(contextVk, framebufferVk);
+        updateStencilReadOnlyMode(dsUsageFlags);
     }
 }
 
@@ -2099,8 +2096,23 @@ void RenderPassCommandBufferHelper::updateStartedRenderPassWithDepthStencilMode(
             depthStencilImage->clearRenderPassUsageFlag(readOnlyAttachmentUsage);
         }
     }
-
     // The depth/stencil resolve image is never in read-only mode
+}
+
+bool RenderPassCommandBufferHelper::isReadOnlyDepthMode() const
+{
+    ASSERT(mRenderPassStarted);
+    ASSERT(mDepthAttachment.valid());
+    return mDepthAttachment.getImage().hasRenderPassUsageFlag(
+        RenderPassUsage::DepthReadOnlyAttachment);
+}
+
+bool RenderPassCommandBufferHelper::isReadOnlyStencilMode() const
+{
+    ASSERT(mRenderPassStarted);
+    ASSERT(mStencilAttachment.valid());
+    return mStencilAttachment.getImage().hasRenderPassUsageFlag(
+        RenderPassUsage::StencilReadOnlyAttachment);
 }
 
 void RenderPassCommandBufferHelper::finalizeColorImageLayout(

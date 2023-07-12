@@ -1006,7 +1006,9 @@ class RenderPassAttachment final
     bool hasAnyAccess() const { return mAccess != ResourceAccess::Unused; }
     bool hasWriteAccess() const { return HasResourceWriteAccess(mAccess); }
 
+    bool valid() const { return mImage != nullptr; }
     ImageHelper *getImage() { return mImage; }
+    const ImageHelper &getImage() const { return *mImage; }
 
     bool hasImage(const ImageHelper *image, UniqueSerial imageSiblingSerial) const
     {
@@ -1101,6 +1103,10 @@ enum class RenderPassUsage
     // Right now it is only tracked for depth stencil attachment
     DepthReadOnlyAttachment,
     StencilReadOnlyAttachment,
+    // This is special case of RenderTargetAttachment where the render target access is formed
+    // feedback loop. Right now it is only tracked for depth stencil attachment
+    DepthFeedbackLoop,
+    StencilFeedbackLoop,
     // Attached to the texture sampler of the current renderpass commands
     ColorTextureSampler,
     DepthTextureSampler,
@@ -1584,11 +1590,13 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     }
     void addCommandDiagnostics(ContextVk *contextVk);
 
-    void updateDepthReadOnlyMode(ContextVk *contextVk, const FramebufferVk &framebufferVk);
-    void updateStencilReadOnlyMode(ContextVk *contextVk, const FramebufferVk &framebufferVk);
-    void updateDepthStencilReadOnlyMode(ContextVk *contextVk,
-                                        VkImageAspectFlags dsAspectFlags,
-                                        const FramebufferVk &framebufferVk);
+    // Readonly depth stencil mode and feedback loop mode
+    void updateDepthReadOnlyMode(RenderPassUsageFlags dsUsageFlags);
+    void updateStencilReadOnlyMode(RenderPassUsageFlags dsUsageFlags);
+    void updateDepthStencilReadOnlyMode(RenderPassUsageFlags dsUsageFlags,
+                                        VkImageAspectFlags dsAspectFlags);
+    bool isReadOnlyDepthMode() const;
+    bool isReadOnlyStencilMode() const;
 
   private:
     uint32_t getSubpassCommandBufferCount() const { return mCurrentSubpassCommandBufferIndex + 1; }
