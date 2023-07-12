@@ -130,10 +130,14 @@ class Debug : angle::NonCopyable
     bool mOutputEnabled;
     GLDEBUGPROCKHR mCallbackFunction;
     const void *mCallbackUserParam;
-    mutable std::deque<Message> mMessages;
-    GLuint mMaxLoggedMessages;
     bool mOutputSynchronous;
     std::vector<Group> mGroups;
+
+    // Mutex that protects mMessages and mMaxLoggedMessages.  The rest of the above is only ever
+    // accessed by the owning context.
+    mutable std::mutex mMutex;
+    mutable std::deque<Message> mMessages;
+    GLuint mMaxLoggedMessages;
 };
 }  // namespace gl
 
