@@ -2323,10 +2323,8 @@ angle::Result ContextVk::updateRenderPassDepthFeedbackLoopModeImpl(
     vk::ResourceAccess depthAccess       = GetDepthAccess(dsState, depthReason);
     vk::ResourceAccess stencilAccess     = GetStencilAccess(dsState, stencilReason);
 
-    if ((HasResourceWriteAccess(depthAccess) &&
-         drawFramebufferVk->isReadOnlyDepthFeedbackLoopMode()) ||
-        (HasResourceWriteAccess(stencilAccess) &&
-         drawFramebufferVk->isReadOnlyStencilFeedbackLoopMode()))
+    if ((HasResourceWriteAccess(depthAccess) && mRenderPassCommands->isReadOnlyDepthMode()) ||
+        (HasResourceWriteAccess(stencilAccess) && mRenderPassCommands->isReadOnlyStencilMode()))
     {
         // If we are switching out of read only mode and we are in feedback loop, we must end
         // render pass here. Otherwise, updating it to writeable layout will produce a writable

@@ -1584,11 +1584,14 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
     }
     void addCommandDiagnostics(ContextVk *contextVk);
 
+    // Readonly depth stencil mode and feedback loop mode
     void updateDepthReadOnlyMode(ContextVk *contextVk, const FramebufferVk &framebufferVk);
     void updateStencilReadOnlyMode(ContextVk *contextVk, const FramebufferVk &framebufferVk);
     void updateDepthStencilReadOnlyMode(ContextVk *contextVk,
                                         VkImageAspectFlags dsAspectFlags,
                                         const FramebufferVk &framebufferVk);
+    bool isReadOnlyDepthMode() const;
+    bool isReadOnlyStencilMode() const;
 
   private:
     uint32_t getSubpassCommandBufferCount() const { return mCurrentSubpassCommandBufferIndex + 1; }

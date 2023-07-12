@@ -2099,8 +2099,23 @@ void RenderPassCommandBufferHelper::updateStartedRenderPassWithDepthStencilMode(
             depthStencilImage->clearRenderPassUsageFlag(readOnlyAttachmentUsage);
         }
     }
-
     // The depth/stencil resolve image is never in read-only mode
+}
+
+bool RenderPassCommandBufferHelper::isReadOnlyDepthMode() const
+{
+    ASSERT(mRenderPassStarted);
+    ImageHelper *depthStencilImage = mDepthAttachment.getImage();
+    ASSERT(depthStencilImage != nullptr);
+    return depthStencilImage->hasRenderPassUsageFlag(RenderPassUsage::DepthReadOnlyAttachment);
+}
+
+bool RenderPassCommandBufferHelper::isReadOnlyStencilMode() const
+{
+    ASSERT(mRenderPassStarted);
+    ImageHelper *depthStencilImage = mStencilAttachment.getImage();
+    ASSERT(depthStencilImage != nullptr);
+    return depthStencilImage->hasRenderPassUsageFlag(RenderPassUsage::StencilReadOnlyAttachment);
 }
 
 void RenderPassCommandBufferHelper::finalizeColorImageLayout(
