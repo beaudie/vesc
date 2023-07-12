@@ -34,6 +34,24 @@
       "parentUuid": "4a7f4e18_1efeef49",
       "revId": "db0d894b54ec9674efe6dff547e44a3cda5f84f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67260c3b_d1ce01d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-12T16:49:53Z",
+      "side": 1,
+      "message": "Calling it PrivateContext makes it match \"context-private entry point\" used elsewhere. But I can also see ShareGroupAccessibleState being a useful name. I can go either way.",
+      "parentUuid": "decb335d_61237a7d",
+      "revId": "db0d894b54ec9674efe6dff547e44a3cda5f84f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
