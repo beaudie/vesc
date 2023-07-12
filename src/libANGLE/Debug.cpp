@@ -93,10 +93,10 @@ Debug::Debug(bool initialDebugState)
     : mOutputEnabled(initialDebugState),
       mCallbackFunction(nullptr),
       mCallbackUserParam(nullptr),
-      mMessages(),
-      mMaxLoggedMessages(0),
       mOutputSynchronous(false),
-      mGroups()
+      mGroups(),
+      mMessages(),
+      mMaxLoggedMessages(0)
 {
     pushDefaultGroup();
 }
@@ -105,6 +105,7 @@ Debug::~Debug() {}
 
 void Debug::setMaxLoggedMessages(GLuint maxLoggedMessages)
 {
+    std::lock_guard<std::mutex> lock(mMutex);
     mMaxLoggedMessages = maxLoggedMessages;
 }
 
@@ -201,6 +202,7 @@ void Debug::insertMessage(GLenum source,
 
     if (mCallbackFunction != nullptr)
     {
+        // Note: Per GL_KHR_debug, the callback must be thread safe.
         // TODO(geofflang) Check the synchronous flag and potentially flush messages from another
         // thread.
         mCallbackFunction(source, type, id, severity, static_cast<GLsizei>(message.length()),
@@ -208,6 +210,7 @@ void Debug::insertMessage(GLenum source,
     }
     else
     {
+        std::lock_guard<std::mutex> lock(mMutex);
         if (mMessages.size() >= mMaxLoggedMessages)
         {
             // Drop messages over the limit
@@ -234,6 +237,8 @@ size_t Debug::getMessages(GLuint count,
                           GLsizei *lengths,
                           GLchar *messageLog)
 {
+    std::lock_guard<std::mutex> lock(mMutex);
+
     size_t messageCount       = 0;
     size_t messageStringIndex = 0;
     while (messageCount <= count && !mMessages.empty())
@@ -290,11 +295,13 @@ size_t Debug::getMessages(GLuint count,
 
 size_t Debug::getNextMessageLength() const
 {
+    std::lock_guard<std::mutex> lock(mMutex);
     return mMessages.empty() ? 0 : mMessages.front().message.length() + 1;
 }
 
 size_t Debug::getMessageCount() const
 {
+    std::lock_guard<std::mutex> lock(mMutex);
     return mMessages.size();
 }
 
@@ -499,6 +506,7 @@ void Debug::insertMessage(EGLenum error,
     // TODO(geofflang): Lock before checking the callback. http://anglebug.com/2464
     if (mCallback && isMessageTypeEnabled(messageType))
     {
+        // Note: Per EGL_KHR_debug, the callback must be thread safe.
         mCallback(error, command, egl::ToEGLenum(messageType), threadLabel, objectLabel,
                   message.c_str());
     }
