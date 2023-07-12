@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "d5004ce2_0f2218a0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1550632
+      },
+      "writtenOn": "2023-07-12T07:12:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8851d1d8_fc533cd4",
+      "revId": "5e743704edb147fddaf990b39111f82e64882d20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "60b6c7a2_17b1e432",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -58,6 +76,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcbdd160_bcc53283",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1550632
+      },
+      "writtenOn": "2023-07-12T07:12:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "54d94ba5_9041b308",
+      "range": {
+        "startLine": 554,
+        "startChar": 18,
+        "endLine": 554,
+        "endChar": 38
+      },
+      "revId": "5e743704edb147fddaf990b39111f82e64882d20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3d401bc6_2c40f7bc",
@@ -71,6 +113,30 @@
       "writtenOn": "2023-07-11T14:01:33Z",
       "side": 1,
       "message": "Same here (about overloading)",
+      "range": {
+        "startLine": 632,
+        "startChar": 18,
+        "endLine": 632,
+        "endChar": 39
+      },
+      "revId": "5e743704edb147fddaf990b39111f82e64882d20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08bde369_d93e3b6d",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 632,
+      "author": {
+        "id": 1550632
+      },
+      "writtenOn": "2023-07-12T07:12:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d401bc6_2c40f7bc",
       "range": {
         "startLine": 632,
         "startChar": 18,

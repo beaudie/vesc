@@ -16,6 +16,24 @@
       "message": "nit: please keep this, even if unused currently. It would at least let this enum show all functionality in UtilsVk",
       "revId": "7bcd88cc1c7c6f3871f3527bfb44af1da05768a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70bba169_2ee9f15d",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1550632
+      },
+      "writtenOn": "2023-07-12T07:12:33Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "2cebc4d1_8c2e4037",
+      "revId": "7bcd88cc1c7c6f3871f3527bfb44af1da05768a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
