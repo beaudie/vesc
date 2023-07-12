@@ -2044,42 +2044,40 @@ void RenderPassCommandBufferHelper::onStencilAccess(ResourceAccess access)
     mStencilAttachment.onAccess(access, getRenderPassWriteCommandCount());
 }
 
-void RenderPassCommandBufferHelper::updateDepthReadOnlyMode(ContextVk *contextVk,
-                                                            const FramebufferVk &framebufferVk)
+void RenderPassCommandBufferHelper::updateDepthReadOnlyMode(RenderPassUsageFlags dsUsageFlags)
 {
     ASSERT(mRenderPassStarted);
-    const bool readOnlyMode =
-        GetReadOnlyMode(mDepthStencilAttachmentIndex, &mDepthResolveAttachment,
-                        hasDepthWriteOrClear(), framebufferVk.isReadOnlyDepthFeedbackLoopMode());
+    const bool readOnlyMode = GetReadOnlyMode(
+        mDepthStencilAttachmentIndex, &mDepthResolveAttachment, hasDepthWriteOrClear(),
+        dsUsageFlags.test(RenderPassUsage::DepthReadOnlyAttachment));
 
     updateStartedRenderPassWithDepthStencilMode(readOnlyMode,
                                                 RenderPassUsage::DepthReadOnlyAttachment);
 }
 
-void RenderPassCommandBufferHelper::updateStencilReadOnlyMode(ContextVk *contextVk,
-                                                              const FramebufferVk &framebufferVk)
+void RenderPassCommandBufferHelper::updateStencilReadOnlyMode(RenderPassUsageFlags dsUsageFlags)
 {
     ASSERT(mRenderPassStarted);
-    const bool readOnlyMode = GetReadOnlyMode(mDepthStencilAttachmentIndex,
-                                              &mStencilResolveAttachment, hasStencilWriteOrClear(),
-                                              framebufferVk.isReadOnlyStencilFeedbackLoopMode());
+    const bool readOnlyMode = GetReadOnlyMode(
+        mDepthStencilAttachmentIndex, &mStencilResolveAttachment, hasStencilWriteOrClear(),
+        dsUsageFlags.test(RenderPassUsage::StencilReadOnlyAttachment));
+
     updateStartedRenderPassWithDepthStencilMode(readOnlyMode,
                                                 RenderPassUsage::StencilReadOnlyAttachment);
 }
 
 void RenderPassCommandBufferHelper::updateDepthStencilReadOnlyMode(
-    ContextVk *contextVk,
-    VkImageAspectFlags dsAspectFlags,
-    const FramebufferVk &framebufferVk)
+    RenderPassUsageFlags dsUsageFlags,
+    VkImageAspectFlags dsAspectFlags)
 {
     ASSERT(mRenderPassStarted);
     if ((dsAspectFlags & VK_IMAGE_ASPECT_DEPTH_BIT) != 0)
     {
-        updateDepthReadOnlyMode(contextVk, framebufferVk);
+        updateDepthReadOnlyMode(dsUsageFlags);
     }
     if ((dsAspectFlags & VK_IMAGE_ASPECT_STENCIL_BIT) != 0)
     {
-        updateStencilReadOnlyMode(contextVk, framebufferVk);
+        updateStencilReadOnlyMode(dsUsageFlags);
     }
 }
 
@@ -2103,7 +2101,6 @@ void RenderPassCommandBufferHelper::updateStartedRenderPassWithDepthStencilMode(
             depthStencilImage->clearRenderPassUsageFlag(readOnlyAttachmentUsage);
         }
     }
-
     // The depth/stencil resolve image is never in read-only mode
 }
 
