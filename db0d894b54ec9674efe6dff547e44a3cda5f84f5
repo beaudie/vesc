@@ -16,6 +16,24 @@
       "message": "Just a local-\u003eprivate rename",
       "revId": "db0d894b54ec9674efe6dff547e44a3cda5f84f5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "decb335d_61237a7d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-07-12T16:47:51Z",
+      "side": 1,
+      "message": "The other option is rename the rest of state to something like \"SharedState\", or something prefixed with Shared and revert this context local to context. The reason is that context state by definition is context local or context private. The other way around makes more sense (even though bigger change, but this is here permanently, so worth it IMO).",
+      "parentUuid": "4a7f4e18_1efeef49",
+      "revId": "db0d894b54ec9674efe6dff547e44a3cda5f84f5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
