@@ -7,8 +7,6 @@
 
 #version 450 core
 
-#extension GL_EXT_samplerless_texture_functions : require
-
 #define MAKE_SRC_RESOURCE(prefix, type) prefix ## type
 
 #if SrcIsFloat
@@ -25,11 +23,11 @@
 #endif
 
 #if SrcIs2D
-#define SRC_RESOURCE_NAME texture2D
+#define SRC_RESOURCE_NAME sampler2D
 #elif SrcIs2DArray
-#define SRC_RESOURCE_NAME texture2DArray
+#define SRC_RESOURCE_NAME sampler2DArray
 #elif SrcIs3D
-#define SRC_RESOURCE_NAME texture3D
+#define SRC_RESOURCE_NAME sampler3D
 #else
 #error "Not all source types are accounted for"
 #endif
@@ -132,9 +130,12 @@ void main()
     }
 
 #if SrcIs2D
-    SrcType srcValue = texelFetch(src, params.srcOffset + srcSubImageCoords, params.srcMip);
+    SrcType srcValue = texture(
+        src, vec2(params.srcOffset + srcSubImageCoords) / textureSize(src, 0), params.srcMip);
 #elif SrcIs2DArray || SrcIs3D
-    SrcType srcValue = texelFetch(src, ivec3(params.srcOffset + srcSubImageCoords, params.srcLayer), params.srcMip);
+    SrcType srcValue = texture(
+        src, vec3(params.srcOffset + srcSubImageCoords, params.srcLayer) / textureSize(src, 0),
+        params.srcMip);
 #else
 #error "Not all source types are accounted for"
 #endif
