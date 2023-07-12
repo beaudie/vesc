@@ -22,6 +22,30 @@
       },
       "revId": "f9eec3d44e7a5fb5124885a70d71adbf1185fb8f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23dd575d_a941a96e",
+        "filename": "src/libANGLE/Debug.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-12T18:19:45Z",
+      "side": 1,
+      "message": "This is an existing problem, isn\u0027t it?\n\nBut I didn\u0027t quite understand, are you suggesting we remove the message that\u0027s generated from context-loss (and thus ensure mMessages is not accessed by other threads)? Does anyone rely on that context-loss message? (Chrome?)",
+      "parentUuid": "c68d4fec_3b4e72f2",
+      "range": {
+        "startLine": 298,
+        "startChar": 4,
+        "endLine": 298,
+        "endChar": 45
+      },
+      "revId": "f9eec3d44e7a5fb5124885a70d71adbf1185fb8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
