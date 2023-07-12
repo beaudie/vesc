@@ -87,6 +87,30 @@
       },
       "revId": "862364fd11b0f838ce381aabb669ac081be8f200",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67cfc97c_7f74d632",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 823,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-07-12T17:51:37Z",
+      "side": 1,
+      "message": "Good to know that make it bool actually costing us.",
+      "parentUuid": "852c0220_e541e35b",
+      "range": {
+        "startLine": 823,
+        "startChar": 9,
+        "endLine": 823,
+        "endChar": 19
+      },
+      "revId": "862364fd11b0f838ce381aabb669ac081be8f200",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
