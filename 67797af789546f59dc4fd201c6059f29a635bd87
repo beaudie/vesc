@@ -33,6 +33,24 @@
       "message": "The fix has nothing to do with WebGL though, does it? Can the test be moved to somewhere more generic?",
       "revId": "67797af789546f59dc4fd201c6059f29a635bd87",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38c67d35_9db4a9c4",
+        "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4447,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-07-13T15:46:10Z",
+      "side": 1,
+      "message": "The assertion happens inside `getDrawBuffer` called by `ValidateWebGLFramebufferAttachmentClearType`.",
+      "parentUuid": "2ede49d2_58f5eef0",
+      "revId": "67797af789546f59dc4fd201c6059f29a635bd87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
