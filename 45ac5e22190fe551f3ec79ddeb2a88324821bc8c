@@ -16,6 +16,24 @@
       "message": "Looks like it\u0027s already updated in Chromium.\nAre you going to update Skia and Dawn as well?",
       "revId": "45ac5e22190fe551f3ec79ddeb2a88324821bc8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "069c3ec8_bd1a4e51",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-13T15:22:29Z",
+      "side": 1,
+      "message": "I did that for ANGLE, Chromium and Dawn. I recall Skia devs saying they use VMA through Chromium? Anyway @brianosman@google.com to check if you need an identical change in Skia",
+      "parentUuid": "40738e7d_f7053982",
+      "revId": "45ac5e22190fe551f3ec79ddeb2a88324821bc8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
