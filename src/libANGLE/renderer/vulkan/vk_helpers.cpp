@@ -1260,9 +1260,9 @@ void RenderPassAttachment::finalizeLoadStore(Context *context,
 {
     if (mAspect != VK_IMAGE_ASPECT_COLOR_BIT)
     {
-        const RenderPassUsage readOnlyAttachmentUsage =
-            mAspect == VK_IMAGE_ASPECT_STENCIL_BIT ? RenderPassUsage::StencilReadOnlyAttachment
-                                                   : RenderPassUsage::DepthReadOnlyAttachment;
+        const RenderPassUsage readOnlyAttachmentUsage = mAspect == VK_IMAGE_ASPECT_STENCIL_BIT
+                                                            ? RenderPassUsage::StencilReadOnly
+                                                            : RenderPassUsage::DepthReadOnly;
         // Ensure we don't write to a read-only attachment. (ReadOnly -> !Write)
         ASSERT(!mImage->hasRenderPassUsageFlag(readOnlyAttachmentUsage) ||
                !HasResourceWriteAccess(mAccess));
@@ -1897,6 +1897,7 @@ angle::Result RenderPassCommandBufferHelper::reset(
     mDepthResolveAttachment.reset();
     mStencilAttachment.reset();
     mStencilResolveAttachment.reset();
+    mDepthStencilFlags.reset();
 
     mRenderPassStarted                 = false;
     mValidTransformFeedbackBufferCount = 0;
@@ -2018,27 +2019,38 @@ void RenderPassCommandBufferHelper::onColorAccess(PackedAttachmentIndex packedAt
 void RenderPassCommandBufferHelper::onDepthAccess(ResourceAccess access)
 {
     mDepthAttachment.onAccess(access, getRenderPassWriteCommandCount());
+    if (mDepthAttachment.hasWriteAccess())
+    {
+        mDepthStencilFlags.set(RenderPassUsage::DepthWrite);
+    }
 }
 
 void RenderPassCommandBufferHelper::onStencilAccess(ResourceAccess access)
 {
     mStencilAttachment.onAccess(access, getRenderPassWriteCommandCount());
+    if (mStencilAttachment.hasWriteAccess())
+    {
+        mDepthStencilFlags.set(RenderPassUsage::StencilWrite);
+    }
 }
 
 void RenderPassCommandBufferHelper::updateDepthReadOnlyMode(RenderPassUsageFlags dsUsageFlags)
 {
     ASSERT(mRenderPassStarted);
     updateStartedRenderPassWithDepthStencilMode(&mDepthResolveAttachment, hasDepthWriteOrClear(),
-                                                dsUsageFlags,
-                                                RenderPassUsage::DepthReadOnlyAttachment);
+                                                dsUsageFlags, RenderPassUsage::DepthReadOnly);
 }
 
 void RenderPassCommandBufferHelper::updateStencilReadOnlyMode(RenderPassUsageFlags dsUsageFlags)
 {
     ASSERT(mRenderPassStarted);
+    if (mDepthStencilAttachmentIndex != kAttachmentIndexInvalid &&
+        mStencilResolveAttachment.getImage() == nullptr)
+    {
+    }
     updateStartedRenderPassWithDepthStencilMode(&mStencilResolveAttachment,
                                                 hasStencilWriteOrClear(), dsUsageFlags,
-                                                RenderPassUsage::StencilReadOnlyAttachment);
+                                                RenderPassUsage::StencilReadOnly);
 }
 
 void RenderPassCommandBufferHelper::updateDepthStencilReadOnlyMode(
@@ -2201,9 +2213,9 @@ void RenderPassCommandBufferHelper::finalizeDepthStencilImageLayout(Context *con
         depthStencilImage->usedByCurrentRenderPassAsAttachmentAndSampler(
             RenderPassUsage::StencilTextureSampler);
     const bool isReadOnlyDepth =
-        depthStencilImage->hasRenderPassUsageFlag(RenderPassUsage::DepthReadOnlyAttachment);
+        depthStencilImage->hasRenderPassUsageFlag(RenderPassUsage::DepthReadOnly);
     const bool isReadOnlyStencil =
-        depthStencilImage->hasRenderPassUsageFlag(RenderPassUsage::StencilReadOnlyAttachment);
+        depthStencilImage->hasRenderPassUsageFlag(RenderPassUsage::StencilReadOnly);
 
     if (isDepthAttachmentAndSampler || isStencilAttachmentAndSampler)
     {
@@ -2270,10 +2282,8 @@ void RenderPassCommandBufferHelper::finalizeDepthStencilResolveImageLayout(Conte
     updateImageLayoutAndBarrier(context, depthStencilResolveImage, aspectFlags, imageLayout);
 
     // The resolve image can never be read-only.
-    ASSERT(!depthStencilResolveImage->hasRenderPassUsageFlag(
-        RenderPassUsage::DepthReadOnlyAttachment));
-    ASSERT(!depthStencilResolveImage->hasRenderPassUsageFlag(
-        RenderPassUsage::StencilReadOnlyAttachment));
+    ASSERT(!depthStencilResolveImage->hasRenderPassUsageFlag(RenderPassUsage::DepthReadOnly));
+    ASSERT(!depthStencilResolveImage->hasRenderPassUsageFlag(RenderPassUsage::StencilReadOnly));
     ASSERT(mDepthStencilAttachmentIndex != kAttachmentIndexInvalid);
     const PackedAttachmentOpsDesc &dsOps = mAttachmentOps[mDepthStencilAttachmentIndex];
 
@@ -2379,16 +2389,14 @@ void RenderPassCommandBufferHelper::finalizeDepthStencilLoadStore(Context *conte
     // If the image is being written to, mark its contents defined.
     // This has to be done after storeOp has been finalized.
     ASSERT(mDepthAttachment.getImage() == mStencilAttachment.getImage());
-    if (!mDepthAttachment.getImage()->hasRenderPassUsageFlag(
-            RenderPassUsage::DepthReadOnlyAttachment))
+    if (!mDepthAttachment.getImage()->hasRenderPassUsageFlag(RenderPassUsage::DepthReadOnly))
     {
         if (depthStoreOp == RenderPassStoreOp::Store)
         {
             mDepthAttachment.restoreContent();
         }
     }
-    if (!mStencilAttachment.getImage()->hasRenderPassUsageFlag(
-            RenderPassUsage::StencilReadOnlyAttachment))
+    if (!mStencilAttachment.getImage()->hasRenderPassUsageFlag(RenderPassUsage::StencilReadOnly))
     {
         if (stencilStoreOp == RenderPassStoreOp::Store)
         {
@@ -2445,6 +2453,20 @@ angle::Result RenderPassCommandBufferHelper::beginRenderPass(
     mClearValues                 = clearValues;
     mQueueSerial                 = queueSerial;
     *commandBufferOut            = &getCommandBuffer();
+
+    if (depthStencilAttachmentIndex != kAttachmentIndexInvalid)
+    {
+        if (renderPassAttachmentOps[depthStencilAttachmentIndex].loadOp ==
+            VK_ATTACHMENT_LOAD_OP_CLEAR)
+        {
+            mDepthStencilFlags.set(RenderPassUsage::StencilWrite);
+        }
+        if (renderPassAttachmentOps[depthStencilAttachmentIndex].stencilLoadOp ==
+            VK_ATTACHMENT_LOAD_OP_CLEAR)
+        {
+            mDepthStencilFlags.set(RenderPassUsage::StencilWrite);
+        }
+    }
 
     mRenderPassStarted = true;
     mCounter++;

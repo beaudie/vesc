@@ -1691,11 +1691,15 @@ TEST_P(VulkanPerformanceCounterTest, DepthFeedbackLoopUsesSingleRenderPass)
     uint64_t actualRenderPassCount = getPerfCounters().renderPasses;
     EXPECT_EQ(expectedRenderPassCount, actualRenderPassCount);
 
-    // Do a final write to depth to make sure we can switch out of read-only mode.
+    // Clear depth buffer should get out of render pass that had feedback loop.
     glBindTexture(GL_TEXTURE_2D, 0);
     glDepthMask(GL_TRUE);
+    glClear(GL_DEPTH_BUFFER_BIT);
     glDrawArrays(GL_TRIANGLES, 0, 6);
     ASSERT_GL_NO_ERROR();
+    expectedRenderPassCount++;
+    actualRenderPassCount = getPerfCounters().renderPasses;
+    EXPECT_EQ(expectedRenderPassCount, actualRenderPassCount);
 }
 
 // Tests that invalidate followed by masked draws results in no load and store.
