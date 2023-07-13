@@ -16,6 +16,23 @@
       "message": "In `DirtyObjectType`, we previously wanted to sync textures before framebuffers (because it makes more sense), but met with the problem that syncing textures flushes clears and then we can\u0027t pick them up for LOAD_OP_CLEAR when syncing the framebuffer.\n\nWe ended up having to sync framebuffers first, then in `TextureVk::getAttachmentRenderTarget` we effectively have to do half of what syncState does: we make sure the texture is ready for use, but it\u0027s not initialized.\n\nIt looks like your change can break deferred clears in this case:\n\n- Create texture, clear it (maybe through temp framebuffer, maybe robust init)\n  * The clear gets deferred\n- Create framebuffer, attach to texture\n- Draw\n  * Should use LOAD_OP_CLEAR\n  * But will clear outside RP and LOAD_OP_LOAD\n\nIt\u0027s a bit of a weird scenario because the texture should already have a deferred clear, but apps do all sorts of crazy things. If you can avoid the sync, we won\u0027t have to worry about something like that.\n\nIf the framebuffer status path ends up calling `TextureGL::getAttachmentRenderTarget`, you can play the same trick.",
       "revId": "423be4c2e5a28d4d23855f6bc76384d4b4ac3a11",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1f10397_100a66f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-07-13T13:44:30Z",
+      "side": 1,
+      "message": "Seems OK to me, but I\u0027ll trust Shabi\u0027s opinion more than mine.",
+      "revId": "423be4c2e5a28d4d23855f6bc76384d4b4ac3a11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
