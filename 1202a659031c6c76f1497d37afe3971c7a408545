@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef05b450_fb5deda8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-07-13T20:56:42Z",
+      "side": 1,
+      "message": "LGTM, +syoussefi as FYI because he\u0027s doing some global validation changes.",
+      "revId": "1202a659031c6c76f1497d37afe3971c7a408545",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
