@@ -1296,10 +1296,10 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // Update read-only depth feedback loop mode.  Typically called from
     // handleDirtyGraphicsReadOnlyDepthFeedbackLoopMode, but can be called from UtilsVk in functions
     // that don't necessarily break the render pass.
+    void updateDepthStencilBits(UpdateDepthFeedbackLoopReason depthReason,
+                                UpdateDepthFeedbackLoopReason stencilReason);
     angle::Result switchOutReadOnlyDepthStencilMode(DirtyBits::Iterator *dirtyBitsIterator,
-                                                    DirtyBits dirtyBitMask,
-                                                    UpdateDepthFeedbackLoopReason depthReason,
-                                                    UpdateDepthFeedbackLoopReason stencilReason);
+                                                    DirtyBits dirtyBitMask);
     angle::Result switchToReadOnlyDepthStencilMode(gl::Texture *texture,
                                                    gl::Command command,
                                                    FramebufferVk *drawFramebuffer,

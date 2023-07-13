@@ -1097,10 +1097,13 @@ enum class RenderPassUsage
     // Attached to the render taget of the current renderpass commands. It could be read/write or
     // read only access.
     RenderTargetAttachment,
+    // RenderPass writes to the buffer.
+    DepthWrite,
+    StencilWrite,
     // This is special case of RenderTargetAttachment where the render target access is read only.
     // Right now it is only tracked for depth stencil attachment
-    DepthReadOnlyAttachment,
-    StencilReadOnlyAttachment,
+    DepthReadOnly,
+    StencilReadOnly,
     // This is special case of RenderTargetAttachment where the render target access is formed
     // feedback loop. Right now it is only tracked for depth stencil attachment
     DepthFeedbackLoop,
@@ -1114,8 +1117,10 @@ enum class RenderPassUsage
     EnumCount = InvalidEnum,
 };
 using RenderPassUsageFlags = angle::PackedEnumBitSet<RenderPassUsage, uint16_t>;
-constexpr RenderPassUsageFlags kDepthStencilReadOnlyBits = RenderPassUsageFlags(
-    {RenderPassUsage::DepthReadOnlyAttachment, RenderPassUsage::StencilReadOnlyAttachment});
+constexpr RenderPassUsageFlags kDepthStencilWriteBits =
+    RenderPassUsageFlags({RenderPassUsage::DepthWrite, RenderPassUsage::StencilWrite});
+constexpr RenderPassUsageFlags kDepthStencilReadOnlyBits =
+    RenderPassUsageFlags({RenderPassUsage::DepthReadOnly, RenderPassUsage::StencilReadOnly});
 constexpr RenderPassUsageFlags kDepthStencilFeedbackModeBits = RenderPassUsageFlags(
     {RenderPassUsage::DepthFeedbackLoop, RenderPassUsage::StencilFeedbackLoop});
 
@@ -1562,21 +1567,19 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
 
     bool hasDepthWriteOrClear() const
     {
-        return mDepthAttachment.hasWriteAccess() ||
-               mAttachmentOps[mDepthStencilAttachmentIndex].loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR;
+        return mDepthStencilFlags.test(RenderPassUsage::DepthWrite);
     }
 
     bool hasStencilWriteOrClear() const
     {
-        return mStencilAttachment.hasWriteAccess() ||
-               mAttachmentOps[mDepthStencilAttachmentIndex].stencilLoadOp ==
-                   VK_ATTACHMENT_LOAD_OP_CLEAR;
+        return mDepthStencilFlags.test(RenderPassUsage::StencilWrite);
     }
 
     bool hasDepthStencilWriteOrClear() const
     {
-        return hasDepthWriteOrClear() || hasStencilWriteOrClear();
+        return (mDepthStencilFlags & kDepthStencilWriteBits).any();
     }
+    vk::RenderPassUsageFlags getDepthStencilFlags() const { return mDepthStencilFlags; }
 
     const RenderPassDesc &getRenderPassDesc() const { return mRenderPassDesc; }
     const AttachmentOpsArray &getAttachmentOps() const { return mAttachmentOps; }
@@ -1662,6 +1665,7 @@ class RenderPassCommandBufferHelper final : public CommandBufferHelperCommon
 
     // Keep track of the depth/stencil attachment index
     PackedAttachmentIndex mDepthStencilAttachmentIndex;
+    RenderPassUsageFlags mDepthStencilFlags;
 
     // Array size of mColorAttachments
     PackedAttachmentCount mColorAttachmentsCount;

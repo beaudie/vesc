@@ -355,10 +355,9 @@ vk::ImageLayout GetDepthStencilAttachmentImageReadLayout(const vk::ImageHelper &
     const bool isStencilTexture =
         image.hasRenderPassUsageFlag(vk::RenderPassUsage::StencilTextureSampler);
 
-    const bool isDepthReadOnlyAttachment =
-        image.hasRenderPassUsageFlag(vk::RenderPassUsage::DepthReadOnlyAttachment);
-    const bool isStencilReadOnlyAttachment =
-        image.hasRenderPassUsageFlag(vk::RenderPassUsage::StencilReadOnlyAttachment);
+    const bool isDepthReadOnly = image.hasRenderPassUsageFlag(vk::RenderPassUsage::DepthReadOnly);
+    const bool isStencilReadOnly =
+        image.hasRenderPassUsageFlag(vk::RenderPassUsage::StencilReadOnly);
 
     const bool isFS = firstShader == gl::ShaderType::Fragment;
 
@@ -367,16 +366,15 @@ vk::ImageLayout GetDepthStencilAttachmentImageReadLayout(const vk::ImageHelper &
 
     // Check for feedback loop; this is when depth or stencil is both bound as a texture and is used
     // in a non-read-only way as attachment.
-    if ((isDepthTexture && !isDepthReadOnlyAttachment) ||
-        (isStencilTexture && !isStencilReadOnlyAttachment))
+    if ((isDepthTexture && !isDepthReadOnly) || (isStencilTexture && !isStencilReadOnly))
     {
         return isFS ? vk::ImageLayout::DepthStencilFragmentShaderFeedback
                     : vk::ImageLayout::DepthStencilAllShadersFeedback;
     }
 
-    if (isDepthReadOnlyAttachment)
+    if (isDepthReadOnly)
     {
-        if (isStencilReadOnlyAttachment)
+        if (isStencilReadOnly)
         {
             // Depth read + stencil read
             return isFS ? vk::ImageLayout::DepthReadStencilReadFragmentShaderRead
@@ -391,7 +389,7 @@ vk::ImageLayout GetDepthStencilAttachmentImageReadLayout(const vk::ImageHelper &
     }
     else
     {
-        if (isStencilReadOnlyAttachment)
+        if (isStencilReadOnly)
         {
             // Depth write + stencil read
             return isFS ? vk::ImageLayout::DepthWriteStencilReadFragmentShaderStencilRead
@@ -2256,14 +2254,29 @@ angle::Result ContextVk::updateRenderPassDepthFeedbackLoopMode(
     UpdateDepthFeedbackLoopReason depthReason,
     UpdateDepthFeedbackLoopReason stencilReason)
 {
-    return switchOutReadOnlyDepthStencilMode(nullptr, {}, depthReason, stencilReason);
+    updateDepthStencilBits(depthReason, stencilReason);
+    return switchOutReadOnlyDepthStencilMode(nullptr, {});
 }
 
-angle::Result ContextVk::switchOutReadOnlyDepthStencilMode(
-    DirtyBits::Iterator *dirtyBitsIterator,
-    DirtyBits dirtyBitMask,
-    UpdateDepthFeedbackLoopReason depthReason,
-    UpdateDepthFeedbackLoopReason stencilReason)
+void ContextVk::updateDepthStencilBits(UpdateDepthFeedbackLoopReason depthReason,
+                                       UpdateDepthFeedbackLoopReason stencilReason)
+{
+    const gl::DepthStencilState &dsState = mState.getDepthStencilState();
+    vk::ResourceAccess depthAccess       = GetDepthAccess(dsState, depthReason);
+    vk::ResourceAccess stencilAccess     = GetStencilAccess(dsState, stencilReason);
+
+    if (HasResourceWriteAccess(depthAccess))
+    {
+        mDepthStencilAttachmentFlags.set(vk::RenderPassUsage::DepthWrite);
+    }
+    if (HasResourceWriteAccess(stencilAccess))
+    {
+        mDepthStencilAttachmentFlags.set(vk::RenderPassUsage::StencilWrite);
+    }
+}
+
+angle::Result ContextVk::switchOutReadOnlyDepthStencilMode(DirtyBits::Iterator *dirtyBitsIterator,
+                                                           DirtyBits dirtyBitMask)
 {
     FramebufferVk *drawFramebufferVk = getDrawFramebuffer();
     if (!hasActiveRenderPass() || drawFramebufferVk->getDepthStencilRenderTarget() == nullptr)
@@ -2271,14 +2284,8 @@ angle::Result ContextVk::switchOutReadOnlyDepthStencilMode(
         return angle::Result::Continue;
     }
 
-    const gl::DepthStencilState &dsState = mState.getDepthStencilState();
-    vk::ResourceAccess depthAccess       = GetDepthAccess(dsState, depthReason);
-    vk::ResourceAccess stencilAccess     = GetStencilAccess(dsState, stencilReason);
-
-    if ((HasResourceWriteAccess(depthAccess) &&
-         mDepthStencilAttachmentFlags[vk::RenderPassUsage::DepthReadOnlyAttachment]) ||
-        (HasResourceWriteAccess(stencilAccess) &&
-         mDepthStencilAttachmentFlags[vk::RenderPassUsage::StencilReadOnlyAttachment]))
+    if ((mDepthStencilAttachmentFlags & vk::kDepthStencilWriteBits).any() &&
+        (mRenderPassCommands->getDepthStencilFlags() & vk::kDepthStencilWriteBits).none())
     {
         // We should not in the actual feedback mode
         ASSERT((mDepthStencilAttachmentFlags & vk::kDepthStencilFeedbackModeBits).none());
@@ -2298,8 +2305,6 @@ angle::Result ContextVk::switchOutReadOnlyDepthStencilMode(
             ANGLE_TRY(flushCommandsAndEndRenderPass(
                 RenderPassClosureReason::DepthStencilWriteAfterFeedbackLoop));
         }
-        // Clear read-only depth/stencil feedback mode.
-        mDepthStencilAttachmentFlags &= ~vk::kDepthStencilReadOnlyBits;
     }
 
     return angle::Result::Continue;
@@ -2309,9 +2314,9 @@ angle::Result ContextVk::handleDirtyGraphicsReadOnlyDepthFeedbackLoopMode(
     DirtyBits::Iterator *dirtyBitsIterator,
     DirtyBits dirtyBitMask)
 {
-    return switchOutReadOnlyDepthStencilMode(dirtyBitsIterator, dirtyBitMask,
-                                             UpdateDepthFeedbackLoopReason::Draw,
-                                             UpdateDepthFeedbackLoopReason::Draw);
+    updateDepthStencilBits(UpdateDepthFeedbackLoopReason::Draw,
+                           UpdateDepthFeedbackLoopReason::Draw);
+    return switchOutReadOnlyDepthStencilMode(dirtyBitsIterator, dirtyBitMask);
 }
 
 angle::Result ContextVk::handleDirtyAnySamplePassedQueryEnd(DirtyBits::Iterator *dirtyBitsIterator,
@@ -8032,7 +8037,7 @@ angle::Result ContextVk::switchToReadOnlyDepthStencilMode(gl::Texture *texture,
         else if (!mDepthStencilAttachmentFlags[vk::RenderPassUsage::StencilFeedbackLoop])
         {
             // If we are not in the actual feedback loop mode, switch to read-only stencil mode
-            mDepthStencilAttachmentFlags.set(vk::RenderPassUsage::StencilReadOnlyAttachment);
+            mDepthStencilAttachmentFlags.set(vk::RenderPassUsage::StencilReadOnly);
         }
     }
 
@@ -8046,7 +8051,7 @@ angle::Result ContextVk::switchToReadOnlyDepthStencilMode(gl::Texture *texture,
     else if (!mDepthStencilAttachmentFlags[vk::RenderPassUsage::DepthFeedbackLoop])
     {
         // If we are not in the actual feedback loop mode, switch to read-only depth mode
-        mDepthStencilAttachmentFlags.set(vk::RenderPassUsage::DepthReadOnlyAttachment);
+        mDepthStencilAttachmentFlags.set(vk::RenderPassUsage::DepthReadOnly);
     }
 
     if ((mDepthStencilAttachmentFlags & vk::kDepthStencilReadOnlyBits).none())
@@ -8054,13 +8059,14 @@ angle::Result ContextVk::switchToReadOnlyDepthStencilMode(gl::Texture *texture,
         return angle::Result::Continue;
     }
 
+    // Switch to depth stencil read only mode
     // Special handling for deferred clears.
     ANGLE_TRY(drawFramebuffer->flushDeferredClears(this));
     if (hasActiveRenderPass())
     {
         const vk::RenderPassUsage readOnlyAttachmentUsage =
-            isStencilTexture ? vk::RenderPassUsage::StencilReadOnlyAttachment
-                             : vk::RenderPassUsage::DepthReadOnlyAttachment;
+            isStencilTexture ? vk::RenderPassUsage::StencilReadOnly
+                             : vk::RenderPassUsage::DepthReadOnly;
         TextureVk *textureVk = vk::GetImpl(texture);
 
         // If render pass not yet writing to depthStencil attachment, no need to flush.
