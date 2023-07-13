@@ -22,6 +22,30 @@
       },
       "revId": "21c7927e922c8a2ea52c86d9a461627466bb4823",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b173e3a6_4660a26c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-13T18:54:16Z",
+      "side": 1,
+      "message": "Never mind, it\u0027s removed in the next CL. And looks like depth and stencil _are_ separately tracked.",
+      "parentUuid": "c5fe6572_a4527888",
+      "range": {
+        "startLine": 983,
+        "startChar": 18,
+        "endLine": 983,
+        "endChar": 33
+      },
+      "revId": "21c7927e922c8a2ea52c86d9a461627466bb4823",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
