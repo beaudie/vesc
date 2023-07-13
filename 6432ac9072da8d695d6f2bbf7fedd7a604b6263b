@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68c4d213_5b473dce",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-07-13T21:51:00Z",
+      "side": 1,
+      "message": "The related Metal feature is `has_shader_stencil_output` that does require MSL 2.1. FWIW, it is always disabled on Intel, meaning that another path is used there.\n\n- Which platforms are known to fail stencil blits with MSL 2.0?\n- Are there other tests that fail with MSL 2.0 but pass with MSL 2.1?\n- Could it be that precompiled MSL 2.0 shaders are somehow used with MSL 2.1 codepath?",
+      "revId": "6432ac9072da8d695d6f2bbf7fedd7a604b6263b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
