@@ -39,6 +39,30 @@
       },
       "revId": "2e5806b31f69a3ae09e441ee2191d95b49e7f56f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78b500d6_2a45ada6",
+        "filename": "src/libANGLE/renderer/metal/mtl_render_utils.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-07-13T20:25:22Z",
+      "side": 1,
+      "message": "I don\u0027t remember any such rule but I re-added the \"specialized\" part of the name for clarity.",
+      "parentUuid": "09f9b0c0_771e797c",
+      "range": {
+        "startLine": 529,
+        "startChar": 14,
+        "endLine": 529,
+        "endChar": 44
+      },
+      "revId": "2e5806b31f69a3ae09e441ee2191d95b49e7f56f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
