@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5fe6572_a4527888",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 983,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-13T18:49:36Z",
+      "side": 1,
+      "message": "nit: `GetReadOnlyDepthStencilMode`?\n\nI\u0027m not sure it matters for your work here, but FYI we use mixed read-only and write layouts for depth/stencil now! Might want to design around supporting read-only feedback loop of depth while stencil is being written and vice versa.",
+      "range": {
+        "startLine": 983,
+        "startChar": 18,
+        "endLine": 983,
+        "endChar": 33
+      },
+      "revId": "21c7927e922c8a2ea52c86d9a461627466bb4823",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
