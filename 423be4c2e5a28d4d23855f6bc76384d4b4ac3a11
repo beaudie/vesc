@@ -33,6 +33,24 @@
       "message": "Seems OK to me, but I\u0027ll trust Shabi\u0027s opinion more than mine.",
       "revId": "423be4c2e5a28d4d23855f6bc76384d4b4ac3a11",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a2b07db_bbbbddbe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-07-13T14:45:13Z",
+      "side": 1,
+      "message": "Talked with Shabi about this:\n\nThis change is scoped to the GL backend (only GL sets shouldSyncStateBeforeCheckStatus) so it\u0027s safe but there is a larger issue that we should fix. Some parts of texture syncing need to happen before framebuffer sync and other parts afterwards. I\u0027ll look into making that split later.",
+      "parentUuid": "8436ec32_b6a4d4f2",
+      "revId": "423be4c2e5a28d4d23855f6bc76384d4b4ac3a11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
