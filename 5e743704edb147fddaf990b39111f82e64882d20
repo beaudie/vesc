@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e74673b_5d8e590b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1550632
+      },
+      "writtenOn": "2023-07-13T04:10:12Z",
+      "side": 1,
+      "message": "\u003e Could you please add a few tests that exercise this path? Is that blocked on YUV rendering?\n\nTesting this would require somehow obtaining an YCbCr DMA-BUF and importing it with EGL_EXT_image_dma_buf_import_modifiers, which I don\u0027t think is possible with the current testing infrastructure, and furthermore the only way to obtain an YCbCr DMA-BUF on desktop Linux that I know of is from a hardware accelerated video decoder like VA-API or V4L2 m2m (but maybe we can use YUV rendering for that if it ever becomes available).\n\n\u003e How about leaving ImageCopy.frag as it was, and add an ImageYUVCopy.frag specifically that needs all these special-case code. A lot of what\u0027s in ImageCopy.frag doesn\u0027t apply to YUV; for example the image can only be 2D (right?), a lot of the push constants don\u0027t apply etc.\n\nThis would probably involve either trying to plumb the push constant size through or creating another `ensureImageCopyResourcesInitialized`, among other complexities of trying to use 2 different shaders for `UtilsVk::copyImage` that increases codebase complexity without enough justifications just for a more specialized YCbCr copy shader. If this ever actually results in a visible performance regression this can be revisited.",
+      "parentUuid": "6d33d7c0_c99c02fd",
+      "revId": "5e743704edb147fddaf990b39111f82e64882d20",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "54d94ba5_9041b308",
