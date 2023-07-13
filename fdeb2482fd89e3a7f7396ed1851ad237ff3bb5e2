@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "610b193b_45c5f19b",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 5535,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-13T18:58:31Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be read-only by default?",
+      "range": {
+        "startLine": 5535,
+        "startChar": 53,
+        "endLine": 5535,
+        "endChar": 96
+      },
+      "revId": "fdeb2482fd89e3a7f7396ed1851ad237ff3bb5e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
