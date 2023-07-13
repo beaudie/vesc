@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d7eef9a_a825a841",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-07-13T18:13:43Z",
+      "side": 1,
+      "message": "LGTM. Awesome!",
+      "revId": "2e5806b31f69a3ae09e441ee2191d95b49e7f56f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09f9b0c0_771e797c",
+        "filename": "src/libANGLE/renderer/metal/mtl_render_utils.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-07-13T18:13:43Z",
+      "side": 1,
+      "message": "nit: I remember there was a rule in ANGLE that we shouldn\u0027t overload a function\u0027s name. So different function with different args should have different name, Is it not the case anymore?",
+      "range": {
+        "startLine": 529,
+        "startChar": 14,
+        "endLine": 529,
+        "endChar": 44
+      },
+      "revId": "2e5806b31f69a3ae09e441ee2191d95b49e7f56f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
