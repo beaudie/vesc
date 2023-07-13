@@ -33,6 +33,24 @@
       "message": "lgtm",
       "revId": "be3d75cd05abb0e2632dcc69c210888d97361cb4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "352957a3_f652cd18",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-07-13T20:50:08Z",
+      "side": 1,
+      "message": "Done. Put a note in the README.md.\n\nPlease give the CL a +2 if you think the change is correct",
+      "parentUuid": "5e0d8c5b_4c15ad32",
+      "revId": "be3d75cd05abb0e2632dcc69c210888d97361cb4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
