@@ -51,6 +51,24 @@
       "parentUuid": "2ede49d2_58f5eef0",
       "revId": "67797af789546f59dc4fd201c6059f29a635bd87",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12710a29_1315751c",
+        "filename": "src/tests/gl_tests/WebGLCompatibilityTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4447,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-13T16:03:46Z",
+      "side": 1,
+      "message": "Ack. Duplicating it in ClearTest.cpp would also be good.",
+      "parentUuid": "38c67d35_9db4a9c4",
+      "revId": "67797af789546f59dc4fd201c6059f29a635bd87",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
