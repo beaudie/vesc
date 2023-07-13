@@ -16,6 +16,24 @@
       "message": "Curious, how do we test this, is there any test exist for these error handling?",
       "revId": "6de6ee70de0cad076caf0b2f4cb82c1511f4233a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0134eb7e_790653d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-13T16:50:32Z",
+      "side": 1,
+      "message": "It\u0027s a bit hard to trigger it. You\u0027d have to create a situation where a context causes another context to fail, and that can only happen AFAICT in the backend. In those cases, possible errors are OOM and context loss.\n\nThat said, I just realized I shouldn\u0027t have actually removed the mutex. I\u0027ll put it back.",
+      "parentUuid": "3b33e612_d5c77a8e",
+      "revId": "6de6ee70de0cad076caf0b2f4cb82c1511f4233a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
