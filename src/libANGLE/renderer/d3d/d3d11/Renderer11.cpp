@@ -3553,42 +3553,108 @@ angle::Result Renderer11::readFromAttachment(const gl::Context *context,
     }
 
     gl::Extents safeSize(safeArea.width, safeArea.height, 1);
-    TextureHelper11 stagingHelper;
-    ANGLE_TRY(createStagingTexture(context, textureHelper.getTextureType(),
-                                   textureHelper.getFormatSet(), safeSize, StagingAccess::READ,
-                                   &stagingHelper));
-    stagingHelper.setInternalName("readFromAttachment::stagingHelper");
 
     TextureHelper11 resolvedTextureHelper;
 
     // "srcTexture" usually points to the source texture.
     // For 2D multisampled textures, it points to the multisampled resolve texture.
     const TextureHelper11 *srcTexture = &textureHelper;
+    bool multiplanar_copy             = false;
 
-    if (textureHelper.is2D() && textureHelper.getSampleCount() > 1)
+    if (textureHelper.is2D())
     {
-        D3D11_TEXTURE2D_DESC resolveDesc;
-        resolveDesc.Width              = static_cast<UINT>(texSize.width);
-        resolveDesc.Height             = static_cast<UINT>(texSize.height);
-        resolveDesc.MipLevels          = 1;
-        resolveDesc.ArraySize          = 1;
-        resolveDesc.Format             = textureHelper.getFormat();
-        resolveDesc.SampleDesc.Count   = 1;
-        resolveDesc.SampleDesc.Quality = 0;
-        resolveDesc.Usage              = D3D11_USAGE_DEFAULT;
-        resolveDesc.BindFlags          = 0;
-        resolveDesc.CPUAccessFlags     = 0;
-        resolveDesc.MiscFlags          = 0;
+        if (textureHelper.getFormat() == DXGI_FORMAT_NV12 ||
+            textureHelper.getFormat() == DXGI_FORMAT_P010 ||
+            textureHelper.getFormat() == DXGI_FORMAT_P016)
+        {
 
-        ANGLE_TRY(allocateTexture(GetImplAs<Context11>(context), resolveDesc,
-                                  textureHelper.getFormatSet(), &resolvedTextureHelper));
-        resolvedTextureHelper.setInternalName("readFromAttachment::resolvedTextureHelper");
+            D3D11_TEXTURE2D_DESC resolveDesc;
+            resolveDesc.Width              = static_cast<UINT>(safeSize.width);
+            resolveDesc.Height             = static_cast<UINT>(safeSize.height);
+            resolveDesc.MipLevels          = 1;
+            resolveDesc.ArraySize          = 1;
+            resolveDesc.Format             = textureHelper.getFormatSet().srvFormat;
+            resolveDesc.SampleDesc.Count   = 1;
+            resolveDesc.SampleDesc.Quality = 0;
+            resolveDesc.Usage              = D3D11_USAGE_DEFAULT;
+            resolveDesc.BindFlags          = D3D11_BIND_RENDER_TARGET;
+            resolveDesc.CPUAccessFlags     = 0;
+            resolveDesc.MiscFlags          = 0;
 
-        mDeviceContext->ResolveSubresource(resolvedTextureHelper.get(), 0, textureHelper.get(),
-                                           sourceSubResource, textureHelper.getFormat());
+            GLenum internalFormat = textureHelper.getFormatSet().internalFormat;
+            ANGLE_TRY(allocateTexture(GetImplAs<Context11>(context), resolveDesc,
+                                      d3d11::Format::Get(internalFormat, mRenderer11DeviceCaps),
+                                      &resolvedTextureHelper));
+            resolvedTextureHelper.setInternalName("readFromAttachment::resolvedTextureHelper");
 
-        sourceSubResource = 0;
-        srcTexture        = &resolvedTextureHelper;
+            Context11 *context11 = GetImplAs<Context11>(context);
+            d3d11::RenderTargetView rtv;
+            D3D11_RENDER_TARGET_VIEW_DESC rtvDesc;
+            rtvDesc.Format             = textureHelper.getFormatSet().rtvFormat;
+            rtvDesc.ViewDimension      = D3D11_RTV_DIMENSION_TEXTURE2D;
+            rtvDesc.Texture2D.MipSlice = 0;
+
+            ANGLE_TRY(allocateResource(context11, rtvDesc, resolvedTextureHelper.get(), &rtv));
+            rtv.setInternalName("getAttachmentRenderTarget.RTV");
+
+            d3d11::SharedSRV srv;
+            D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+            srvDesc.Format                    = textureHelper.getFormatSet().srvFormat;
+            srvDesc.ViewDimension             = D3D11_SRV_DIMENSION_TEXTURE2D;
+            srvDesc.Texture2D.MostDetailedMip = 0;
+            srvDesc.Texture2D.MipLevels       = 1;
+
+            ANGLE_TRY(allocateResource(context11, srvDesc, textureHelper.get(), &srv));
+            srv.setInternalName("getAttachmentRenderTarget.SRV");
+
+            gl::Box srcGlBox(safeArea.x, safeArea.y, 0, safeArea.width, safeArea.height, 1);
+            gl::Box destGlBox(0, 0, 0, safeSize.width, safeSize.height, 1);
+
+            // Perform a copy to resolveTexture as we cannot read directly from NV12 d3d11 textures.
+            ANGLE_TRY(mBlit->copyTexture(
+                context, srv, srcGlBox, safeSize, internalFormat, rtv, destGlBox, safeSize, nullptr,
+                gl::GetUnsizedFormat(internalFormat), GL_NONE, GL_NEAREST, false, false, false));
+            multiplanar_copy = true;
+
+            // Update safeArea based on the destination.
+            safeArea.x      = destGlBox.x;
+            safeArea.y      = destGlBox.y;
+            safeArea.width  = destGlBox.width;
+            safeArea.height = destGlBox.height;
+
+            sourceSubResource = 0;
+            srcTexture        = &resolvedTextureHelper;
+        }
+        else
+        {
+            if (textureHelper.getSampleCount() > 1)
+            {
+
+                D3D11_TEXTURE2D_DESC resolveDesc;
+                resolveDesc.Width              = static_cast<UINT>(texSize.width);
+                resolveDesc.Height             = static_cast<UINT>(texSize.height);
+                resolveDesc.MipLevels          = 1;
+                resolveDesc.ArraySize          = 1;
+                resolveDesc.Format             = textureHelper.getFormat();
+                resolveDesc.SampleDesc.Count   = 1;
+                resolveDesc.SampleDesc.Quality = 0;
+                resolveDesc.Usage              = D3D11_USAGE_DEFAULT;
+                resolveDesc.BindFlags          = 0;
+                resolveDesc.CPUAccessFlags     = 0;
+                resolveDesc.MiscFlags          = 0;
+
+                ANGLE_TRY(allocateTexture(GetImplAs<Context11>(context), resolveDesc,
+                                          textureHelper.getFormatSet(), &resolvedTextureHelper));
+                resolvedTextureHelper.setInternalName("readFromAttachment::resolvedTextureHelper");
+
+                mDeviceContext->ResolveSubresource(resolvedTextureHelper.get(), 0,
+                                                   textureHelper.get(), sourceSubResource,
+                                                   textureHelper.getFormat());
+
+                sourceSubResource = 0;
+                srcTexture        = &resolvedTextureHelper;
+            }
+        }
     }
 
     D3D11_BOX srcBox;
@@ -3604,6 +3670,13 @@ angle::Result Renderer11::readFromAttachment(const gl::Context *context,
         srcBox.front = static_cast<UINT>(srcAttachment.layer());
     }
     srcBox.back = srcBox.front + 1;
+
+    TextureHelper11 stagingHelper;
+    ANGLE_TRY(createStagingTexture(
+        context, textureHelper.getTextureType(),
+        multiplanar_copy ? resolvedTextureHelper.getFormatSet() : textureHelper.getFormatSet(),
+        safeSize, StagingAccess::READ, &stagingHelper));
+    stagingHelper.setInternalName("readFromAttachment::stagingHelper");
 
     mDeviceContext->CopySubresourceRegion(stagingHelper.get(), 0, 0, 0, 0, srcTexture->get(),
                                           sourceSubResource, &srcBox);

@@ -34,11 +34,68 @@ egl::Error ExternalImageSiblingImpl11::initialize(const egl::Display *display)
     ID3D11Texture2D *texture =
         d3d11::DynamicCastComObject<ID3D11Texture2D>(static_cast<IUnknown *>(mBuffer));
     ASSERT(texture != nullptr);
-    // TextureHelper11 will release texture on destruction.
-    mTexture.set(texture, d3d11::Format::Get(angleFormat->glInternalFormat,
-                                             mRenderer->getRenderer11DeviceCaps()));
+
     D3D11_TEXTURE2D_DESC textureDesc = {};
-    mTexture.getDesc(&textureDesc);
+    texture->GetDesc(&textureDesc);
+
+    if (textureDesc.Format == DXGI_FORMAT_NV12 || textureDesc.Format == DXGI_FORMAT_P010 ||
+        textureDesc.Format == DXGI_FORMAT_P016)
+    {
+        if (!mAttribs.contains(EGL_D3D11_TEXTURE_PLANE_ANGLE))
+        {
+            return egl::EglBadParameter()
+                   << "EGL_D3D11_TEXTURE_PLANE_ANGLE must be specified for YUV textures.";
+        }
+
+        static const d3d11::Format nv12_plane0_info(
+            GL_R8, angle::FormatID::R8_UNORM, DXGI_FORMAT_NV12, DXGI_FORMAT_R8_UNORM,
+            DXGI_FORMAT_UNKNOWN, DXGI_FORMAT_R8_UNORM, DXGI_FORMAT_UNKNOWN, DXGI_FORMAT_R8_UNORM,
+            DXGI_FORMAT_UNKNOWN, DXGI_FORMAT_R8_TYPELESS, GL_RGBA8, nullptr);
+
+        static const d3d11::Format nv12_plane1_info(
+            GL_RG8, angle::FormatID::R8G8_UNORM, DXGI_FORMAT_NV12, DXGI_FORMAT_R8G8_UNORM,
+            DXGI_FORMAT_UNKNOWN, DXGI_FORMAT_R8G8_UNORM, DXGI_FORMAT_UNKNOWN,
+            DXGI_FORMAT_R8G8_UNORM, DXGI_FORMAT_UNKNOWN, DXGI_FORMAT_R8G8_TYPELESS, GL_RGBA8,
+            nullptr);
+
+        const bool isP010 = (textureDesc.Format == DXGI_FORMAT_P010);
+
+        static const d3d11::Format p01x_plane0_info(
+            GL_R16_EXT, angle::FormatID::R16_UNORM, isP010 ? DXGI_FORMAT_P010 : DXGI_FORMAT_P016,
+            DXGI_FORMAT_R16_UNORM, DXGI_FORMAT_UNKNOWN, DXGI_FORMAT_R16_UNORM, DXGI_FORMAT_UNKNOWN,
+            DXGI_FORMAT_R16_UNORM, DXGI_FORMAT_UNKNOWN, DXGI_FORMAT_R16_TYPELESS, GL_RGBA16_EXT,
+            nullptr);
+
+        static const d3d11::Format p01x_plane1_info(
+            GL_RG16_EXT, angle::FormatID::R16G16_UNORM,
+            isP010 ? DXGI_FORMAT_P010 : DXGI_FORMAT_P016, DXGI_FORMAT_R16G16_UNORM,
+            DXGI_FORMAT_UNKNOWN, DXGI_FORMAT_R16G16_UNORM, DXGI_FORMAT_UNKNOWN,
+            DXGI_FORMAT_R16G16_UNORM, DXGI_FORMAT_UNKNOWN, DXGI_FORMAT_R16G16_TYPELESS,
+            GL_RGBA16_EXT, nullptr);
+
+        EGLint plane = mAttribs.getAsInt(EGL_D3D11_TEXTURE_PLANE_ANGLE);
+        // P010 and P016 have the same memory layout, SRV/RTV format, etc.
+        const bool isNV12 = (textureDesc.Format == DXGI_FORMAT_NV12);
+
+        if (plane == 0)
+        {
+            mTexture.set(texture, isNV12 ? nv12_plane0_info : p01x_plane0_info);
+        }
+        else if (plane == 1)
+        {
+            mTexture.set(texture, isNV12 ? nv12_plane1_info : p01x_plane1_info);
+        }
+        else
+        {
+            return egl::EglBadParameter() << "Invalid client buffer texture plane: " << plane;
+        }
+    }
+    else
+    {
+        // TextureHelper11 will release texture on destruction.
+        mTexture.set(texture, d3d11::Format::Get(angleFormat->glInternalFormat,
+                                                 mRenderer->getRenderer11DeviceCaps()));
+    }
 
     IDXGIResource *resource = d3d11::DynamicCastComObject<IDXGIResource>(mTexture.get());
     ASSERT(resource != nullptr);
