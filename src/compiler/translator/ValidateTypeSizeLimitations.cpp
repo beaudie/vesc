@@ -105,6 +105,9 @@ class ValidateTypeSizeLimitationsTraverser : public TIntermTraverser
                     return false;
                 }
                 mTotalPrivateVariablesSize += layoutEncoder.getCurrentOffset();
+
+                // Ensure compilation fails even if mTotalPrivateVariablesSize overflows later
+                validateTotalPrivateVariableSize();
             }
         }
 
