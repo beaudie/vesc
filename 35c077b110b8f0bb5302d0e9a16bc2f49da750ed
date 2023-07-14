@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40b6f83f_8ba6cfa1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-07-14T16:24:18Z",
+      "side": 1,
+      "message": "np.\nI\u0027ve also confirmed that Chromium bots are happy with the removal:\nhttps://chromium-review.googlesource.com/c/chromium/src/+/4684232",
+      "revId": "35c077b110b8f0bb5302d0e9a16bc2f49da750ed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
