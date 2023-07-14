@@ -16,6 +16,23 @@
       "message": "I\u0027m worried this is covering up another bug. I wouldn\u0027t expect that the copy region exceeds the size of the image. Do you have a test case?",
       "revId": "c39c13ace047c8dba2d3ae8dd8d1bb6ac59c3091",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "056ca694_a8f63ec8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557258
+      },
+      "writtenOn": "2023-07-14T19:41:44Z",
+      "side": 1,
+      "message": "Let\u0027s see if Oliver recalls the particular bug here. Original changeset: https://codereview.qt-project.org/c/qt/qtbase/+/233385/17#message-a0ec886bf064fdbf9e1fcd6b45e139cb4e298b97",
+      "revId": "c39c13ace047c8dba2d3ae8dd8d1bb6ac59c3091",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
