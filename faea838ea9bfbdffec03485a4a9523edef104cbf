@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae6bd622_4d061baa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-14T03:12:12Z",
+      "side": 1,
+      "message": "PTAL again. dEQP had some tests that used a shader with `int z[100][101][102]` so I had to bump up the limit. Technically 4MB is enough, but we use a std140 encoder to get the size of that which gives 16MB. They are both equally crazy large so doesn\u0027t really matter IMO.\n\nFWIW, the test only calls `length()` on `z`, so it\u0027s not actually using that much memory but we don\u0027t DCE at the moment to know that.",
+      "revId": "faea838ea9bfbdffec03485a4a9523edef104cbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
