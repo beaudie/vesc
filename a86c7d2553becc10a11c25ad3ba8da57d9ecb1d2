@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4781995e_848c4c44",
+        "filename": "src/compiler/translator/ValidateTypeSizeLimitations.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1545138
+      },
+      "writtenOn": "2023-07-14T17:58:35Z",
+      "side": 1,
+      "message": "I think this can still overflow. Maybe add a check before the addition?\n\n```\nif (mTotalPrivateVariableSize + layoutEncoder.getCurrentOffset() \u003c mTotalPrivateVariableSize) {\n    error(...);\n    return false;\n}\n```\n\nor use a CheckedNumeric type to ensure the value doesn\u0027t overflow?",
+      "revId": "a86c7d2553becc10a11c25ad3ba8da57d9ecb1d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
