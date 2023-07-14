@@ -27,6 +27,39 @@ ExternalImageSiblingImpl11::~ExternalImageSiblingImpl11() {}
 
 egl::Error ExternalImageSiblingImpl11::initialize(const egl::Display *display)
 {
+
+    static const d3d11::Format nv12Plane0Info(
+        GL_R8, angle::FormatID::R8_UNORM, DXGI_FORMAT_NV12, DXGI_FORMAT_R8_UNORM,
+        DXGI_FORMAT_UNKNOWN, DXGI_FORMAT_R8_UNORM, DXGI_FORMAT_UNKNOWN, DXGI_FORMAT_R8_UNORM,
+        DXGI_FORMAT_UNKNOWN, DXGI_FORMAT_R8_TYPELESS, GL_RGBA8, nullptr);
+
+    static const d3d11::Format nv12Plane1Info(
+        GL_RG8, angle::FormatID::R8G8_UNORM, DXGI_FORMAT_NV12, DXGI_FORMAT_R8G8_UNORM,
+        DXGI_FORMAT_UNKNOWN, DXGI_FORMAT_R8G8_UNORM, DXGI_FORMAT_UNKNOWN, DXGI_FORMAT_R8G8_UNORM,
+        DXGI_FORMAT_UNKNOWN, DXGI_FORMAT_R8G8_TYPELESS, GL_RGBA8, nullptr);
+
+    static const d3d11::Format p010Plane0Info(
+        GL_R16_EXT, angle::FormatID::R16_UNORM, DXGI_FORMAT_P010, DXGI_FORMAT_R16_UNORM,
+        DXGI_FORMAT_UNKNOWN, DXGI_FORMAT_R16_UNORM, DXGI_FORMAT_UNKNOWN, DXGI_FORMAT_R16_UNORM,
+        DXGI_FORMAT_UNKNOWN, DXGI_FORMAT_R16_TYPELESS, GL_RGBA16_EXT, nullptr);
+
+    static const d3d11::Format p010Plane1Info(
+        GL_RG16_EXT, angle::FormatID::R16G16_UNORM, DXGI_FORMAT_P010, DXGI_FORMAT_R16G16_UNORM,
+        DXGI_FORMAT_UNKNOWN, DXGI_FORMAT_R16G16_UNORM, DXGI_FORMAT_UNKNOWN,
+        DXGI_FORMAT_R16G16_UNORM, DXGI_FORMAT_UNKNOWN, DXGI_FORMAT_R16G16_TYPELESS, GL_RGBA16_EXT,
+        nullptr);
+
+    static const d3d11::Format p016Plane0Info(
+        GL_R16_EXT, angle::FormatID::R16_UNORM, DXGI_FORMAT_P016, DXGI_FORMAT_R16_UNORM,
+        DXGI_FORMAT_UNKNOWN, DXGI_FORMAT_R16_UNORM, DXGI_FORMAT_UNKNOWN, DXGI_FORMAT_R16_UNORM,
+        DXGI_FORMAT_UNKNOWN, DXGI_FORMAT_R16_TYPELESS, GL_RGBA16_EXT, nullptr);
+
+    static const d3d11::Format p016Plane1Info(
+        GL_RG16_EXT, angle::FormatID::R16G16_UNORM, DXGI_FORMAT_P016, DXGI_FORMAT_R16G16_UNORM,
+        DXGI_FORMAT_UNKNOWN, DXGI_FORMAT_R16G16_UNORM, DXGI_FORMAT_UNKNOWN,
+        DXGI_FORMAT_R16G16_UNORM, DXGI_FORMAT_UNKNOWN, DXGI_FORMAT_R16G16_TYPELESS, GL_RGBA16_EXT,
+        nullptr);
+
     const angle::Format *angleFormat = nullptr;
     ANGLE_TRY(mRenderer->getD3DTextureInfo(nullptr, static_cast<IUnknown *>(mBuffer), mAttribs,
                                            &mWidth, &mHeight, &mSamples, &mFormat, &angleFormat,
@@ -34,11 +67,43 @@ egl::Error ExternalImageSiblingImpl11::initialize(const egl::Display *display)
     ID3D11Texture2D *texture =
         d3d11::DynamicCastComObject<ID3D11Texture2D>(static_cast<IUnknown *>(mBuffer));
     ASSERT(texture != nullptr);
-    // TextureHelper11 will release texture on destruction.
-    mTexture.set(texture, d3d11::Format::Get(angleFormat->glInternalFormat,
-                                             mRenderer->getRenderer11DeviceCaps()));
+
     D3D11_TEXTURE2D_DESC textureDesc = {};
-    mTexture.getDesc(&textureDesc);
+    texture->GetDesc(&textureDesc);
+
+    if (textureDesc.Format == DXGI_FORMAT_NV12 || textureDesc.Format == DXGI_FORMAT_P010 ||
+        textureDesc.Format == DXGI_FORMAT_P016)
+    {
+        if (!mAttribs.contains(EGL_D3D11_TEXTURE_PLANE_ANGLE))
+        {
+            return egl::EglBadParameter()
+                   << "EGL_D3D11_TEXTURE_PLANE_ANGLE must be specified for YUV textures.";
+        }
+
+        EGLint plane      = mAttribs.getAsInt(EGL_D3D11_TEXTURE_PLANE_ANGLE);
+        const bool isNV12 = (textureDesc.Format == DXGI_FORMAT_NV12);
+        const bool isP010 = (textureDesc.Format == DXGI_FORMAT_P010);
+        if (plane == 0)
+        {
+            const auto &format = isNV12 ? nv12Plane0Info : isP010 ? p010Plane0Info : p016Plane0Info;
+            mTexture.set(texture, format);
+        }
+        else if (plane == 1)
+        {
+            const auto &format = isNV12 ? nv12Plane1Info : isP010 ? p010Plane1Info : p016Plane1Info;
+            mTexture.set(texture, format);
+        }
+        else
+        {
+            return egl::EglBadParameter() << "Invalid client buffer texture plane: " << plane;
+        }
+    }
+    else
+    {
+        // TextureHelper11 will release texture on destruction.
+        mTexture.set(texture, d3d11::Format::Get(angleFormat->glInternalFormat,
+                                                 mRenderer->getRenderer11DeviceCaps()));
+    }
 
     IDXGIResource *resource = d3d11::DynamicCastComObject<IDXGIResource>(mTexture.get());
     ASSERT(resource != nullptr);
