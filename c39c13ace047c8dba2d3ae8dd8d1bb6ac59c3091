@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8699679_3617b676",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-07-14T18:23:24Z",
+      "side": 1,
+      "message": "I\u0027m worried this is covering up another bug. I wouldn\u0027t expect that the copy region exceeds the size of the image. Do you have a test case?",
+      "revId": "c39c13ace047c8dba2d3ae8dd8d1bb6ac59c3091",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
