@@ -16,6 +16,24 @@
       "message": "Please make this conditional to the feature. If dither is being emulated, there\u0027s no reason to duplicate the render passes",
       "revId": "c87dcf4cbe7c36d5c036d0b96e4b2d19639b2edf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "daaaff3a_5f9f74f1",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3265,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-07-14T19:21:56Z",
+      "side": 1,
+      "message": "Hmm right, thanks, added the check. Does this mean I should call those variables and functions \"LegacyDither\" instead of just \"Dither\" so that it\u0027s clear it only gets updated for legacy_dithering?",
+      "parentUuid": "e779fa70_fd7e9fe6",
+      "revId": "c87dcf4cbe7c36d5c036d0b96e4b2d19639b2edf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
