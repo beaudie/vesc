@@ -3303,13 +3303,6 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
     {
         mImageCreateFlags |= VK_IMAGE_CREATE_PROTECTED_BIT;
     }
-    if (mOwnsImage && samples == 1 &&
-        contextVk->getFeatures().supportsMultisampledRenderToSingleSampled.enabled)
-    {
-        // Conservatively add the MSRTSS flag, because any texture might end up as an MSRTT
-        // attachment.
-        mImageCreateFlags |= VK_IMAGE_CREATE_MULTISAMPLED_RENDER_TO_SINGLE_SAMPLED_BIT_EXT;
-    }
 
     if (renderer->getFeatures().supportsComputeTranscodeEtcToBc.enabled &&
         IsETCFormat(intendedImageFormatID) && IsBCFormat(actualImageFormatID))
@@ -3318,6 +3311,40 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
                              VK_IMAGE_CREATE_EXTENDED_USAGE_BIT |
                              VK_IMAGE_CREATE_BLOCK_TEXEL_VIEW_COMPATIBLE_BIT;
         mImageUsageFlags |= VK_IMAGE_USAGE_STORAGE_BIT;
+    }
+
+    if (mOwnsImage && samples == 1 &&
+        contextVk->getFeatures().supportsMultisampledRenderToSingleSampled.enabled)
+    {
+        // Verify support for this image format after adding MSRTSS flag
+        VkPhysicalDeviceImageFormatInfo2 imageFormatInfo = {};
+        imageFormatInfo.sType  = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2;
+        imageFormatInfo.format = rx::vk::GetVkFormatFromFormatID(actualImageFormatID);
+        imageFormatInfo.type   = gl_vk::GetImageType(mState.getType());
+        imageFormatInfo.tiling = mImage->getTilingMode();
+        imageFormatInfo.usage  = mImageUsageFlags;
+        imageFormatInfo.flags =
+            mImageCreateFlags | VK_IMAGE_CREATE_MULTISAMPLED_RENDER_TO_SINGLE_SAMPLED_BIT_EXT;
+
+        VkImageFormatProperties imageFormatProperties                            = {};
+        VkSamplerYcbcrConversionImageFormatProperties ycbcrImageFormatProperties = {};
+        ycbcrImageFormatProperties.sType =
+            VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_IMAGE_FORMAT_PROPERTIES;
+
+        VkImageFormatProperties2 imageFormatProperties2 = {};
+        imageFormatProperties2.sType                 = VK_STRUCTURE_TYPE_IMAGE_FORMAT_PROPERTIES_2;
+        imageFormatProperties2.pNext                 = &ycbcrImageFormatProperties;
+        imageFormatProperties2.imageFormatProperties = imageFormatProperties;
+
+        VkResult result = vkGetPhysicalDeviceImageFormatProperties2(
+            renderer->getPhysicalDevice(), &imageFormatInfo, &imageFormatProperties2);
+
+        if (result == VK_SUCCESS)
+        {
+            // If supported by format add the MSRTSS flag because any texture might end up as an
+            // MSRTT attachment.
+            mImageCreateFlags |= VK_IMAGE_CREATE_MULTISAMPLED_RENDER_TO_SINGLE_SAMPLED_BIT_EXT;
+        }
     }
 
     ANGLE_TRY(mImage->initExternal(
