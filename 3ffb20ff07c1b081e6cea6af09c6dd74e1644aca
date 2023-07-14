@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19d479f5_230afa6a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-14T16:10:19Z",
+      "side": 1,
+      "message": "Pre-approval just in case I\u0027m not around later today",
+      "revId": "3ffb20ff07c1b081e6cea6af09c6dd74e1644aca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
