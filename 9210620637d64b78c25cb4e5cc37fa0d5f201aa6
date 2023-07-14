@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "960bfd29_6f5cf7d3",
+        "filename": "infra/specs/angle.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 4594,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-07-14T13:06:20Z",
+      "side": 1,
+      "message": "This would be upgraded to 13.4.1 when Chromium (testing) rolls into ANGLE with the changed mixin.\nWould be better to:\n1. Land Chromium CL\n2. Roll into ANGLE (not immediately, takes a while for https://chromium.googlesource.com/chromium/src/testing/ to pick up the Chromium change)\n3. Trigger a tryjob on 13.4.1 before switching the CI",
+      "range": {
+        "startLine": 4594,
+        "startChar": 21,
+        "endLine": 4594,
+        "endChar": 31
+      },
+      "revId": "9210620637d64b78c25cb4e5cc37fa0d5f201aa6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
