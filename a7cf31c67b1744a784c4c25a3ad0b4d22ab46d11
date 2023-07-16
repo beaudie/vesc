@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d688aa61_3b4cf494",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1550632
+      },
+      "writtenOn": "2023-07-16T07:24:11Z",
+      "side": 1,
+      "message": "There doesn\u0027t seem to be any objections for merging this. Can somebody submit this to CQ?",
+      "revId": "a7cf31c67b1744a784c4c25a3ad0b4d22ab46d11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dbf80fba_a1d506c7",
