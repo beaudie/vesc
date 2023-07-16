@@ -69,6 +69,23 @@
       "message": "LGTM, you may want to ping Chris directly to look at it",
       "revId": "294ae6284d5c1fead09a966bb29f61337d92ea4b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "594041e1_ae22d748",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1298072
+      },
+      "writtenOn": "2023-07-16T22:47:00Z",
+      "side": 1,
+      "message": "Looks OK. Second adding proper test coverage for this in the platform.",
+      "revId": "294ae6284d5c1fead09a966bb29f61337d92ea4b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
