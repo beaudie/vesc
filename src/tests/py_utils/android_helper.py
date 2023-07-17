@@ -213,11 +213,18 @@ def _GetDeviceApkPath():
 def _CompareHashes(local_path, device_path):
     if device_path.startswith('/data'):
         # Use run-as for files that reside on /data, which aren't accessible without root
-        device_hash = _AdbShell('run-as ' + TEST_PACKAGE_NAME + ' sha256sum -b ' + device_path +
-                                ' 2> /dev/null || true').decode().strip()
+        cmd_prefix = 'run-as ' + TEST_PACKAGE_NAME + ' '
     else:
-        device_hash = _AdbShell('sha256sum -b ' + device_path +
-                                ' 2> /dev/null || true').decode().strip()
+        cmd_prefix = ''
+
+    if local_path.endswith('.gz'):
+        # The last 8 bytes of gzip contain CRC-32 and the initial file size and the preceding
+        # bytes should be affected by changes in the middle if we happen to run into a collision
+        cmd = 'tail -c 4096 ' + device_path + ' | sha256sum -b 2> /dev/null || true'
+    else:
+        cmd = 'sha256sum -b ' + device_path + ' 2> /dev/null || true'
+
+    device_hash = _AdbShell(cmd_prefix + cmd).decode().strip()
     if not device_hash:
         logging.debug('_CompareHashes: File not found on device')
         return False  # file not on device
@@ -225,6 +232,10 @@ def _CompareHashes(local_path, device_path):
     h = hashlib.sha256()
     try:
         with open(local_path, 'rb') as f:
+            if local_path.endswith('.gz'):
+                offset = os.path.getsize(local_path) - 4096
+                if offset > 0:
+                    f.seek(offset)
             for data in iter(lambda: f.read(65536), b''):
                 h.update(data)
     except Exception as e:
