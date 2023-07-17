@@ -52,6 +52,24 @@
       "parentUuid": "3e39478b_dc8eb8a8",
       "revId": "a86c7d2553becc10a11c25ad3ba8da57d9ecb1d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "538f389d_2957c2ce",
+        "filename": "src/compiler/translator/ValidateTypeSizeLimitations.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-17T14:10:25Z",
+      "side": 1,
+      "message": "It can still overflow, but isn\u0027t it already safe? If the size being added (`layoutEncoder.getCurrentOffset()`) is large, compilation fails in the previous if. If it\u0027s not large, this summation can\u0027t overflow before `validateTotalPrivateVariableSize()` fails compilation. In the end, this could overflow as much as it wants, compilation has already failed.\n\nBut ok, I\u0027ll change it to checked math.",
+      "parentUuid": "585b0ca1_5cdd2531",
+      "revId": "a86c7d2553becc10a11c25ad3ba8da57d9ecb1d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
