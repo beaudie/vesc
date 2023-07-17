@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "589a5aca_733b19e6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-07-17T16:45:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21cb6140_13c1ea40",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 33
+      },
+      "revId": "b9f640586247359e25ae911b553c2597df1e97fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd0e5cf7_c3b98455",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-07-17T16:12:03Z",
       "side": 1,
       "message": "Is there a more generic power bug we could tag instead of the dithering bug?  This is part of a larger arc of work IMO.",
+      "range": {
+        "startLine": 11,
+        "startChar": 7,
+        "endLine": 11,
+        "endChar": 16
+      },
+      "revId": "b9f640586247359e25ae911b553c2597df1e97fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "182d5c5a_657c9e40",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-07-17T16:45:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd0e5cf7_c3b98455",
       "range": {
         "startLine": 11,
         "startChar": 7,
