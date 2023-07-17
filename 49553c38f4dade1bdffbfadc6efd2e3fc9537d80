@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74bc4cb3_9010089f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-17T20:46:06Z",
+      "side": 1,
+      "message": "In preparation for changing the type of the context held by the share group.",
+      "revId": "49553c38f4dade1bdffbfadc6efd2e3fc9537d80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
