@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "950ffba7_c40f6634",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/ExternalImageSiblingImpl11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1511477
+      },
+      "writtenOn": "2023-07-17T19:59:46Z",
+      "side": 1,
+      "message": "That sounds good. Done.",
+      "parentUuid": "695d48b9_72c2cf8d",
+      "range": {
+        "startLine": 31,
+        "startChar": 4,
+        "endLine": 31,
+        "endChar": 17
+      },
+      "revId": "ac520ec7767779a480b2428c6630549cf5bb7dd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "da1e1996_9b749af8",
@@ -71,6 +95,30 @@
       "writtenOn": "2023-07-17T17:50:19Z",
       "side": 1,
       "message": "Small worries that using an ID for another format will cause issues. Possibly because only an ID is stored somewhere and then the format is looked up again by ID.\n\nThe test coverage look good but it\u0027s something to remember.",
+      "range": {
+        "startLine": 32,
+        "startChar": 15,
+        "endLine": 32,
+        "endChar": 40
+      },
+      "revId": "ac520ec7767779a480b2428c6630549cf5bb7dd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb64b2b7_383eb649",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/ExternalImageSiblingImpl11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1511477
+      },
+      "writtenOn": "2023-07-17T19:59:46Z",
+      "side": 1,
+      "message": "Yeah this could be an issue with mapping. I\u0027ll keep this in mind going forward.",
+      "parentUuid": "da1e1996_9b749af8",
       "range": {
         "startLine": 32,
         "startChar": 15,
@@ -98,6 +146,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8fa5e89_5fdaec90",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/ExternalImageSiblingImpl11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1511477
+      },
+      "writtenOn": "2023-07-17T19:59:46Z",
+      "side": 1,
+      "message": "That looks much better. Updated to switch.",
+      "parentUuid": "a85ba3ff_d9b0d2be",
+      "revId": "ac520ec7767779a480b2428c6630549cf5bb7dd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5abfb92c_3b1cb4c5",
@@ -121,6 +187,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "54551cb3_ed8d0a38",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3584,
+      "author": {
+        "id": 1511477
+      },
+      "writtenOn": "2023-07-17T19:59:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5abfb92c_3b1cb4c5",
+      "range": {
+        "startLine": 3582,
+        "startChar": 12,
+        "endLine": 3584,
+        "endChar": 57
+      },
+      "revId": "ac520ec7767779a480b2428c6630549cf5bb7dd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9939386b_9a5cd7f4",
@@ -134,6 +224,30 @@
       "writtenOn": "2023-07-17T17:47:50Z",
       "side": 1,
       "message": "I think you can use `srcTexture-\u003egetFormatSet()`, so you don\u0027t need `isMultiPlanarCopy`",
+      "range": {
+        "startLine": 3694,
+        "startChar": 8,
+        "endLine": 3694,
+        "endChar": 99
+      },
+      "revId": "ac520ec7767779a480b2428c6630549cf5bb7dd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02a7341a_131bcdb1",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3694,
+      "author": {
+        "id": 1511477
+      },
+      "writtenOn": "2023-07-17T19:59:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9939386b_9a5cd7f4",
       "range": {
         "startLine": 3694,
         "startChar": 8,
