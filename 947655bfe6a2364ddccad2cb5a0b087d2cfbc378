@@ -35,6 +35,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee37ebdc_458ab1b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-07-17T19:38:23Z",
+      "side": 1,
+      "message": "Shabi, Mark is on vacation this week.  I\u0027ll see if I can help.",
+      "revId": "947655bfe6a2364ddccad2cb5a0b087d2cfbc378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "545a081a_16c0d020",
@@ -54,6 +71,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5779c652_118b4a56",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3317,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-07-17T19:38:23Z",
+      "side": 1,
+      "message": "Is what you\u0027re suggesting to change the above 2 lines into the following?:\n\n\u003e  if ((mImageUsageFlags \u0026 (VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT)) !\u003d 0 \u0026\u0026\n\u003e      mOwnsImage \u0026\u0026 samples \u003d\u003d 1 \u0026\u0026\n\u003e      contextVk-\u003egetFeatures().supportsMultisampledRenderToSingleSampled.enabled)",
+      "parentUuid": "545a081a_16c0d020",
+      "revId": "947655bfe6a2364ddccad2cb5a0b087d2cfbc378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6947e335_7f13618a",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 1
@@ -65,6 +100,30 @@
       "writtenOn": "2023-07-17T14:45:01Z",
       "side": 1,
       "message": "nit: A helper `formatSupportsMultisampledRenderToSingleSampled()` would be nice",
+      "range": {
+        "startLine": 3316,
+        "startChar": 0,
+        "endLine": 3340,
+        "endChar": 86
+      },
+      "revId": "947655bfe6a2364ddccad2cb5a0b087d2cfbc378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "388f2057_42858c16",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3340,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-07-17T19:38:23Z",
+      "side": 1,
+      "message": "So, turn all of the new code above into a helper with that name?",
+      "parentUuid": "6947e335_7f13618a",
       "range": {
         "startLine": 3316,
         "startChar": 0,
