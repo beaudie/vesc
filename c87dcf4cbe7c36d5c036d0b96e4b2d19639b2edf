@@ -34,6 +34,24 @@
       "parentUuid": "e779fa70_fd7e9fe6",
       "revId": "c87dcf4cbe7c36d5c036d0b96e4b2d19639b2edf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09981800_cebf754b",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3265,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-17T14:11:33Z",
+      "side": 1,
+      "message": "Sure, that sounds good",
+      "parentUuid": "daaaff3a_5f9f74f1",
+      "revId": "c87dcf4cbe7c36d5c036d0b96e4b2d19639b2edf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
