@@ -33,6 +33,23 @@
       "message": "Let\u0027s see if Oliver recalls the particular bug here. Original changeset: https://codereview.qt-project.org/c/qt/qtbase/+/233385/17#message-a0ec886bf064fdbf9e1fcd6b45e139cb4e298b97",
       "revId": "c39c13ace047c8dba2d3ae8dd8d1bb6ac59c3091",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "171716d5_564253cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1383473
+      },
+      "writtenOn": "2023-07-17T05:32:56Z",
+      "side": 1,
+      "message": "Unfortunately I do not recall the details. \n\nWhen I updated to a more recent ANGLE version in Qt I ran into crashes when the window size was reduced. If it was a general thing I guess someone would have noticed. So I guess it might have been specific to Qt\u0027s usage of ANGLE, so maybe not relevant for upstream. \n\nBut that\u0027s just a guess right now",
+      "revId": "c39c13ace047c8dba2d3ae8dd8d1bb6ac59c3091",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
