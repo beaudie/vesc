@@ -16,6 +16,24 @@
       "message": "The related Metal feature is `has_shader_stencil_output` that does require MSL 2.1. FWIW, it is always disabled on Intel, meaning that another path is used there.\n\n- Which platforms are known to fail stencil blits with MSL 2.0?\n- Are there other tests that fail with MSL 2.0 but pass with MSL 2.1?\n- Could it be that precompiled MSL 2.0 shaders are somehow used with MSL 2.1 codepath?",
       "revId": "6432ac9072da8d695d6f2bbf7fedd7a604b6263b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cab8562b_970fd0c3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-07-17T18:27:42Z",
+      "side": 1,
+      "message": "I experimented a bit. If I \"emulate\" a MSL 2.0 setup by turning off `has_shader_stencil_output` and only shipping the 2.0 shaders [0], things look to be in good shape. The fact that we disable `has_shader_stencil_output` on a large population (intel) is a bit concerning, the errors are cryptic.\n\nI\u0027d love to just ship one set of shaders, they are about 300kb per config. It could be 2.0 and we take the hit of not having extra fast stencil blits on M1 hardware or 2.1 and we lose support for 10.13.\n\nIf we really don\u0027t want to make that tradeoff, we can compile just the 2.1 stencil blit shaders separately but we\u0027ll diverge from how WebKit builds ANGLE.\n\nI think my preference is still dropping 2.0 right now.\n\n[0] https://chromium-review.googlesource.com/c/angle/angle/+/4690062",
+      "parentUuid": "68c4d213_5b473dce",
+      "revId": "6432ac9072da8d695d6f2bbf7fedd7a604b6263b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
