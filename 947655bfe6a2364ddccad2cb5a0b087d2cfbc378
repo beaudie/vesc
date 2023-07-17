@@ -89,6 +89,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f946e0a0_c875a3e5",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3317,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-17T19:41:08Z",
+      "side": 1,
+      "message": "Yeap! No reason to try to add MSRTSS if not an attachment",
+      "parentUuid": "5779c652_118b4a56",
+      "revId": "947655bfe6a2364ddccad2cb5a0b087d2cfbc378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6947e335_7f13618a",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 1
@@ -124,6 +142,30 @@
       "side": 1,
       "message": "So, turn all of the new code above into a helper with that name?",
       "parentUuid": "6947e335_7f13618a",
+      "range": {
+        "startLine": 3316,
+        "startChar": 0,
+        "endLine": 3340,
+        "endChar": 86
+      },
+      "revId": "947655bfe6a2364ddccad2cb5a0b087d2cfbc378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "440f8d19_f23a69bc",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3340,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-17T19:41:08Z",
+      "side": 1,
+      "message": "Yeap. It would return a bool, which would replace the condition for adding MSRTSS in the code prior to this change.",
+      "parentUuid": "388f2057_42858c16",
       "range": {
         "startLine": 3316,
         "startChar": 0,
