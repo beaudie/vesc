@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3364fe9d_bfebf633",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-07-17T18:38:09Z",
+      "side": 1,
+      "message": "LGTM if https://ci.chromium.org/ui/p/angle/builders/try/mac-exp-test/38/overview is green",
+      "revId": "6e46cef16ab250d0da79017ca94aba9f8ac9ff4e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
