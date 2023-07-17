@@ -32,10 +32,8 @@
 #    include "libANGLE/renderer/metal/shaders/mtl_internal_shaders_src_autogen.h"
 #elif defined(ANGLE_PLATFORM_MACOS)
 #    include "libANGLE/renderer/metal/shaders/mtl_internal_shaders_2_0_macos_autogen.h"
-#    include "libANGLE/renderer/metal/shaders/mtl_internal_shaders_2_1_macos_autogen.h"
 #else
 #    include "libANGLE/renderer/metal/shaders/mtl_internal_shaders_2_0_ios_autogen.h"
-#    include "libANGLE/renderer/metal/shaders/mtl_internal_shaders_2_1_ios_autogen.h"
 #endif
 
 #include "EGL/eglext.h"
@@ -1355,21 +1353,8 @@ angle::Result DisplayMtl::initializeShaderLibrary()
     mDefaultShaders = mtl::CreateShaderLibrary(getMetalDevice(), gDefaultMetallibSrc,
                                                std::size(gDefaultMetallibSrc), &err);
 #else
-    const uint8_t *metalLibData = nullptr;
-    size_t metalLibDataSize     = 0;
-    if (ANGLE_APPLE_AVAILABLE_XCI(10.14, 13.1, 12.0))
-    {
-        metalLibData     = gDefaultMetallib_2_1;
-        metalLibDataSize = std::size(gDefaultMetallib_2_1);
-    }
-    else
-    {
-        metalLibData     = gDefaultMetallib_2_0;
-        metalLibDataSize = std::size(gDefaultMetallib_2_0);
-    }
-
-    mDefaultShaders =
-        mtl::CreateShaderLibraryFromBinary(getMetalDevice(), metalLibData, metalLibDataSize, &err);
+    mDefaultShaders = mtl::CreateShaderLibraryFromBinary(getMetalDevice(), gDefaultMetallib_2_0,
+                                                         std::size(gDefaultMetallib_2_0), &err);
 #endif
 
     if (err)
