@@ -1468,6 +1468,8 @@ angle::Result TextureVk::setStorageExternalMemory(const gl::Context *context,
     setImageHelper(contextVk, new vk::ImageHelper(), gl::TextureType::InvalidEnum, format, 0, 0,
                    true, {});
 
+    mImage->setTilingMode(gl_vk::GetTilingMode(mState.getTilingMode()));
+
     ANGLE_TRY(memoryObjectVk->createImage(contextVk, type, levels, internalFormat, size, offset,
                                           mImage, createFlags, usageFlags, imageCreateInfoPNext));
     mImageUsageFlags  = usageFlags;

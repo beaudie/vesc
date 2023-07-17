@@ -7899,6 +7899,27 @@ bool ValidateTexParameterBase(const Context *context,
             }
             break;
 
+        case GL_TEXTURE_TILING_EXT:
+            if (!context->getExtensions().memoryObjectEXT)
+            {
+                context->validationError(entryPoint, GL_INVALID_ENUM,
+                                         kInvalidMemoryObjectParameter);
+                return false;
+            }
+            switch (ConvertToGLenum(params[0]))
+            {
+                case GL_OPTIMAL_TILING_EXT:
+                case GL_LINEAR_TILING_EXT:
+                    break;
+
+                default:
+                    context->validationError(
+                        entryPoint, GL_INVALID_OPERATION,
+                        "Texture Tilling Mode must be OPTIMAL_TILING_EXT or LINEAR_TILING_EXT");
+                    return false;
+            }
+            break;
+
         default:
             ANGLE_VALIDATION_ERRORF(GL_INVALID_ENUM, kEnumNotSupported, pname);
             return false;
