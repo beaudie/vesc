@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ae8fe63_0315d8d4",
+        "filename": "src/libANGLE/renderer/vulkan/ShareGroupVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-07-17T23:32:58Z",
+      "side": 1,
+      "message": "const ContextVk *",
+      "range": {
+        "startLine": 59,
+        "startChar": 8,
+        "endLine": 59,
+        "endChar": 17
+      },
+      "revId": "344a383a17b5872a0ca4be9cb80826481ac52960",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
