@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "35875692_4aa0a520",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1550632
+      },
+      "writtenOn": "2023-07-17T16:02:25Z",
+      "side": 1,
+      "message": "Seems like this is caused by differing out of bounds texture access behavior when switching from `texelFetch` to `texture`. For `texelFetch` with robust buffer access enabled all out of bound texture access should always return black pixels but with `texture` it\u0027s using whatever default that came from hardware since I did not set the wrap mode explicitly. I\u0027ll try fixing this tomorrow (which is probably 8 hours from now).",
+      "parentUuid": "dac2c5f0_7b1b4b63",
+      "revId": "a7cf31c67b1744a784c4c25a3ad0b4d22ab46d11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dbf80fba_a1d506c7",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
         "patchSetId": 4
