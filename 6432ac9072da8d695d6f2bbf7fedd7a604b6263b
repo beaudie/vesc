@@ -34,6 +34,24 @@
       "parentUuid": "68c4d213_5b473dce",
       "revId": "6432ac9072da8d695d6f2bbf7fedd7a604b6263b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24db4232_9f848dac",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-17T18:36:23Z",
+      "side": 1,
+      "message": "FWIW, in the Vulkan backend stencil blit goes through a double-copy without VK_EXT_shader_stencil_export (i.e. pretty much everywhere except on AMD and descendant hardware), and no one seems to actually use it in the wild.\n\nIOW, slightly-slower-stencil-blit is likely not a big deal. You would take a hit if you are emulating MSRTT though.",
+      "parentUuid": "cab8562b_970fd0c3",
+      "revId": "6432ac9072da8d695d6f2bbf7fedd7a604b6263b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
