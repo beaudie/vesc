@@ -1178,6 +1178,8 @@ void GetExtentsAndLayerCount(gl::TextureType textureType,
 
 vk::LevelIndex GetLevelIndex(gl::LevelIndex levelGL, gl::LevelIndex baseLevel);
 
+VkImageTiling GetTilingMode(gl::TilingMode tilingMode);
+
 }  // namespace gl_vk
 
 namespace vk_gl
