@@ -70,6 +70,24 @@
       "parentUuid": "585b0ca1_5cdd2531",
       "revId": "a86c7d2553becc10a11c25ad3ba8da57d9ecb1d2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1156e059_68f9a0d4",
+        "filename": "src/compiler/translator/ValidateTypeSizeLimitations.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-17T14:33:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "538f389d_2957c2ce",
+      "revId": "a86c7d2553becc10a11c25ad3ba8da57d9ecb1d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
