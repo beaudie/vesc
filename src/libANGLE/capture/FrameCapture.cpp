@@ -923,12 +923,17 @@ void SaveBinaryData(bool compression,
                     const std::string &outDir,
                     gl::ContextID contextId,
                     const std::string &captureLabel,
-                    const std::vector<uint8_t> &binaryData)
+                    std::vector<uint8_t> &binaryData)
 {
     std::string binaryDataFileName = GetBinaryDataFilePath(compression, captureLabel);
     std::string dataFilepath       = outDir + binaryDataFileName;
 
     SaveFileHelper saveData(dataFilepath);
+
+    // Add hash of the entire data at the end to ensure tail is different if file changed.
+    size_t initialSize = binaryData.size();
+    binaryData.resize(initialSize + angle::base::kSHA1Length);
+    angle::base::SHA1HashBytes(binaryData.data(), initialSize, binaryData.data() + initialSize);
 
     if (compression)
     {
