@@ -52,6 +52,24 @@
       "parentUuid": "069c3ec8_bd1a4e51",
       "revId": "45ac5e22190fe551f3ec79ddeb2a88324821bc8c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2188ec77_81fea6c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-17T14:33:14Z",
+      "side": 1,
+      "message": "I added a commit to our VMA clone repo that adds the shipped flag, so if Skia wants that in its README.chromium, it needs to roll VMA forward (in that branch, not actually getting anything new from VMA itself).\n\nSince you\u0027re using VMA from Chromium (which is actually what ANGLE does too), you don\u0027t really need this from Chromium\u0027s perspective as I understand it. Still a harmless change TBH.",
+      "parentUuid": "5128c29a_ae03fbdb",
+      "revId": "45ac5e22190fe551f3ec79ddeb2a88324821bc8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
