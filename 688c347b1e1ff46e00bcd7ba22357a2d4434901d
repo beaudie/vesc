@@ -33,6 +33,24 @@
       "message": "To retain all the other properties of type (like precision), you can do:\n\n```\nTType *outputType \u003d new TType(type);\nif (type.getQualifier() \u003d\u003d EvqFragData \u0026\u0026 mHasGLSecondaryFragData)\n{\n    outputType-\u003esetArraySize(0, mResources.MaxDualSourceDrawBuffers);\n}\n```",
       "revId": "688c347b1e1ff46e00bcd7ba22357a2d4434901d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5717101_aa773213",
+        "filename": "src/compiler/translator/tree_ops/spirv/EmulateFragColorData.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-07-17T16:12:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e9cf3170_8362cd47",
+      "revId": "688c347b1e1ff46e00bcd7ba22357a2d4434901d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
