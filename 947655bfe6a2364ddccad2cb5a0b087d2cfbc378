@@ -16,6 +16,63 @@
       "message": "LGTM, thanks for the fix!",
       "revId": "947655bfe6a2364ddccad2cb5a0b087d2cfbc378",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57bb9ab9_60f0ab8b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-17T14:45:01Z",
+      "side": 1,
+      "message": "Thanks for the fix. It\u0027s a bit of an awkward situation because if any of the renderable formats fail here then technically we are not supporting GL_EXT_multisampled_render_to_texture correctly.\n\nWith the additional condition I mentioned in another comment, we should practically never hit this new path. Could you please add a comment that if we do ever fail that check, that we should use the emulation path for that texture instead of ignoring MSRTT?",
+      "revId": "947655bfe6a2364ddccad2cb5a0b087d2cfbc378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "545a081a_16c0d020",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3317,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-17T14:45:01Z",
+      "side": 1,
+      "message": "While you\u0027re here, could you also check that `(mImageUsageFlags \u0026 (VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT)) !\u003d 0`? If the format is not renderable, there\u0027s no need to check this.\n\nIncidentally, that would also rather obviate this check right now. Not sure what\u0027s supposed to happen with YUV rendering in the future.",
+      "revId": "947655bfe6a2364ddccad2cb5a0b087d2cfbc378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6947e335_7f13618a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3340,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-17T14:45:01Z",
+      "side": 1,
+      "message": "nit: A helper `formatSupportsMultisampledRenderToSingleSampled()` would be nice",
+      "range": {
+        "startLine": 3316,
+        "startChar": 0,
+        "endLine": 3340,
+        "endChar": 86
+      },
+      "revId": "947655bfe6a2364ddccad2cb5a0b087d2cfbc378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
