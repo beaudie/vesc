@@ -71,23 +71,25 @@ class UpdateDescriptorSetsBuilder final : angle::NonCopyable
 class ShareGroupVk : public ShareGroupImpl
 {
   public:
-    ShareGroupVk();
+    ShareGroupVk(const egl::ShareGroupState &state);
     void onDestroy(const egl::Display *display) override;
 
+    void onContextAdd() override;
+
     FramebufferCache &getFramebufferCache() { return mFramebufferCache; }
+
+    bool hasAnyContextWithRobustness() const { return mState.hasAnyContextWithRobustness(); }
 
     // PipelineLayoutCache and DescriptorSetLayoutCache can be shared between multiple threads
     // accessing them via shared contexts. The ShareGroup locks around gl entrypoints ensuring
     // synchronous update to the caches.
     PipelineLayoutCache &getPipelineLayoutCache() { return mPipelineLayoutCache; }
     DescriptorSetLayoutCache &getDescriptorSetLayoutCache() { return mDescriptorSetLayoutCache; }
-    const ContextVkSet &getContexts() const { return mContexts; }
+    const egl::ContextMap &getContexts() const { return mState.getContexts(); }
     vk::MetaDescriptorPool &getMetaDescriptorPool(DescriptorSetIndex descriptorSetIndex)
     {
         return mMetaDescriptorPools[descriptorSetIndex];
     }
-
-    size_t getContextCount() const { return mContexts.size(); }
 
     // Used to flush the mutable textures more often.
     angle::Result onMutableTextureUpload(ContextVk *contextVk, TextureVk *newTexture);
@@ -101,9 +103,6 @@ class ShareGroupVk : public ShareGroupImpl
 
     void calculateTotalBufferCount(size_t *bufferCount, VkDeviceSize *totalSize) const;
     void logBufferPools() const;
-
-    void addContext(ContextVk *contextVk);
-    void removeContext(ContextVk *contextVk);
 
     // Temporary workaround until VkSemaphore(s) will be used between different priorities.
     angle::Result unifyContextsPriority(ContextVk *newContextVk);
