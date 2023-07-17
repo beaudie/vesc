@@ -18,6 +18,69 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d16ba1c5_db9ebb9c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-07-17T17:50:19Z",
+      "side": 1,
+      "message": "LGTM with some small refactorings",
+      "revId": "ac520ec7767779a480b2428c6630549cf5bb7dd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "695d48b9_72c2cf8d",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/ExternalImageSiblingImpl11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-07-17T17:50:19Z",
+      "side": 1,
+      "message": "These can be `static constexpr`.\n\nCan they be refactored into a getter in formatutils11? Something like `GetYUVPlaneFormat(DXGI_FORMAT format, int plane)`",
+      "range": {
+        "startLine": 31,
+        "startChar": 4,
+        "endLine": 31,
+        "endChar": 17
+      },
+      "revId": "ac520ec7767779a480b2428c6630549cf5bb7dd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da1e1996_9b749af8",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/ExternalImageSiblingImpl11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-07-17T17:50:19Z",
+      "side": 1,
+      "message": "Small worries that using an ID for another format will cause issues. Possibly because only an ID is stored somewhere and then the format is looked up again by ID.\n\nThe test coverage look good but it\u0027s something to remember.",
+      "range": {
+        "startLine": 32,
+        "startChar": 15,
+        "endLine": 32,
+        "endChar": 40
+      },
+      "revId": "ac520ec7767779a480b2428c6630549cf5bb7dd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a85ba3ff_d9b0d2be",
@@ -31,6 +94,29 @@
       "writtenOn": "2023-07-17T17:47:50Z",
       "side": 1,
       "message": "nit: Maybe inverting this would be a bit more readable, i.e:\n\n```\nswitch(format) {\ncase NV12:\n  const auto\u0026 format \u003d plane \u003d\u003d 0 ? NV12_plane0 : NV12_plane1;\n  ...\n}\n```",
+      "revId": "ac520ec7767779a480b2428c6630549cf5bb7dd7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5abfb92c_3b1cb4c5",
+        "filename": "src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3584,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-07-17T17:50:19Z",
+      "side": 1,
+      "message": "This check is used a couple times. Can you refactor it to a helper in formatutils11.h?",
+      "range": {
+        "startLine": 3582,
+        "startChar": 12,
+        "endLine": 3584,
+        "endChar": 57
+      },
       "revId": "ac520ec7767779a480b2428c6630549cf5bb7dd7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
