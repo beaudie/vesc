@@ -51,6 +51,24 @@
       "message": "I\u0027d like to propose a small refactor to make display destruction nicer:\n\n - Have std::unique_ptr to the displays in ANGLEPlatformDisplayMap and DevicePlatformDisplayMap\n - Remove the logic where ~Display removes itself from the global map. Nothing deletes a display currently so this code is unused.\n - Simply clear the maps in the DLL unloading.",
       "revId": "119eaa0f3008e2652ecdae8ba1ae8387420aa9a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22553df4_3d42e0e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557258
+      },
+      "writtenOn": "2023-07-18T18:25:54Z",
+      "side": 1,
+      "message": "It is a good idea, though it\u0027s at present blocked by Id65d75575f2f582450b1cc45dc6b1f2bf3bc5289 and I129fe603df2fd475ae1b0e35b63d4d0171bbae09 (unique_ptrs are not trivially destructible, and this is needed for the backing store). I\u0027ll see if I can do something about it.",
+      "parentUuid": "b027d6dd_53e3dcbf",
+      "revId": "119eaa0f3008e2652ecdae8ba1ae8387420aa9a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
