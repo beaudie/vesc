@@ -55,6 +55,24 @@ class ClearTestBase : public ANGLETest<>
     std::vector<GLuint> mTextures;
 };
 
+class ClearTestMSAA : public ANGLETest<>
+{
+  protected:
+    ClearTestMSAA()
+    {
+        setWindowWidth(128);
+        setWindowHeight(128);
+        setConfigRedBits(8);
+        setConfigGreenBits(8);
+        setConfigBlueBits(8);
+        setConfigAlphaBits(8);
+        setConfigDepthBits(24);
+        setConfigStencilBits(8);
+        setSamples(4);
+        setMultisampleEnabled(true);
+    }
+};
+
 class ClearTest : public ClearTestBase
 {};
 
@@ -2846,6 +2864,27 @@ TEST_P(ClearTestES3, StencilScissoredClearThenFullClear)
 //
 // Tests that clear of the default framebuffer applies to the window.
 TEST_P(ClearTest, DISABLED_ClearReachesWindow)
+{
+    ANGLE_GL_PROGRAM(blueProgram, essl1_shaders::vs::Simple(), essl1_shaders::fs::Blue());
+
+    // Draw blue.
+    drawQuad(blueProgram, essl1_shaders::PositionAttrib(), 0.5f);
+    swapBuffers();
+
+    // Use glClear to clear to red.  Regression test for the Vulkan backend where this clear
+    // remained "deferred" and didn't make it to the window on swap.
+    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    swapBuffers();
+
+    // Wait for visual verification.
+    angle::Sleep(2000);
+}
+
+// This is a test that must be verified visually.
+//
+// Tests that clear of the default framebuffer with multisample applies to the window.
+TEST_P(ClearTestMSAA, DISABLED_ClearMSAAReachesWindow)
 {
     ANGLE_GL_PROGRAM(blueProgram, essl1_shaders::vs::Simple(), essl1_shaders::fs::Blue());
 
