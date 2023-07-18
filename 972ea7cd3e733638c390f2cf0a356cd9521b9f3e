@@ -46,6 +46,30 @@
       },
       "revId": "972ea7cd3e733638c390f2cf0a356cd9521b9f3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "463e552e_c7160a6e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-07-18T14:53:06Z",
+      "side": 1,
+      "message": "side note though: sha(data) is much, much faster than gzip(data), so this wouldn\u0027t have made much of a difference with compression on.",
+      "parentUuid": "a1e664fb_9201f41e",
+      "range": {
+        "startLine": 20,
+        "startChar": 43,
+        "endLine": 21,
+        "endChar": 16
+      },
+      "revId": "972ea7cd3e733638c390f2cf0a356cd9521b9f3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
