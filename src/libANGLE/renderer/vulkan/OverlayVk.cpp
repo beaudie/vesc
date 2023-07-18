@@ -21,7 +21,7 @@ namespace rx
 OverlayVk::OverlayVk(const gl::OverlayState &state) : OverlayImpl(state) {}
 OverlayVk::~OverlayVk() = default;
 
-void OverlayVk::onDestroy(const gl::Context *context)
+void OverlayVk::onDestroy(const gl::SharedContext *context)
 {
     RendererVk *renderer = vk::GetImpl(context)->getRenderer();
     VkDevice device      = renderer->getDevice();

@@ -814,6 +814,48 @@ void UpdateBuffersWithSharedCacheKey(const gl::BufferVector &buffers,
 }
 }  // anonymous namespace
 
+SharedContextVk::SharedContextVk(const gl::State &state,
+                                 gl::ErrorSet *errorSet,
+                                 RendererVk *renderer)
+    : SharedContextImpl(state, errorSet), vk::Context(renderer)
+{}
+
+SharedContextVk::~SharedContextVk() = default;
+
+void SharedContextVk::handleError(VkResult errorCode,
+                                  const char *file,
+                                  const char *function,
+                                  unsigned int line)
+{
+    ASSERT(errorCode != VK_SUCCESS);
+
+    const GLenum glErrorCode = DefaultGLErrorCode(errorCode);
+
+    std::stringstream errorStream;
+    errorStream << "Internal Vulkan error (" << errorCode << "): " << VulkanResultString(errorCode)
+                << ".";
+
+    mRenderer->getMemoryAllocationTracker()->logMemoryStatsOnError();
+
+    if (errorCode == VK_ERROR_DEVICE_LOST)
+    {
+        WARN() << errorStream.str();
+        handleDeviceLost();
+    }
+
+    mErrors->handleError(glErrorCode, errorStream.str().c_str(), file, function, line);
+}
+
+void SharedContextVk::handleDeviceLost()
+{
+    vk::SecondaryCommandBufferCollector collector;
+    (void)mOutsideRenderPassCommands->reset(this, &collector);
+    (void)mRenderPassCommands->reset(this, &collector);
+    collector.retireCommandBuffers();
+
+    mRenderer->notifyDeviceLost();
+}
+
 void ContextVk::flushDescriptorSetUpdates()
 {
     mPerfCounters.writeDescriptorSets +=
@@ -841,9 +883,12 @@ ANGLE_INLINE void ContextVk::onRenderPassFinished(RenderPassClosureReason reason
 }
 
 // ContextVk implementation.
-ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk *renderer)
-    : ContextImpl(state, errorSet),
+ContextVk::ContextVk(const gl::State &state,
+                     gl::ErrorSet *errorSet,
+                     RendererVk *renderer)
+    : ContextImpl(state),
       vk::Context(renderer),
+      mShared(shatedState, errorSet, renderer),
       mGraphicsDirtyBitHandlers{},
       mComputeDirtyBitHandlers{},
       mRenderPassCommandBuffer(nullptr),
@@ -1213,7 +1258,7 @@ ContextVk::~ContextVk()
     }
 }
 
-void ContextVk::onDestroy(const gl::Context *context)
+void ContextVk::onDestroy(const gl::SharedContext *context)
 {
     // This will not destroy any resources. It will release them to be collected after finish.
     mIncompleteTextures.onDestroy(context);
@@ -3892,16 +3937,6 @@ void ContextVk::clearAllGarbage()
         garbage.destroy(mRenderer);
     }
     mCurrentGarbage.clear();
-}
-
-void ContextVk::handleDeviceLost()
-{
-    vk::SecondaryCommandBufferCollector collector;
-    (void)mOutsideRenderPassCommands->reset(this, &collector);
-    (void)mRenderPassCommands->reset(this, &collector);
-    collector.retireCommandBuffers();
-
-    mRenderer->notifyDeviceLost();
 }
 
 angle::Result ContextVk::drawArrays(const gl::Context *context,
@@ -6903,23 +6938,7 @@ void ContextVk::handleError(VkResult errorCode,
                             const char *function,
                             unsigned int line)
 {
-    ASSERT(errorCode != VK_SUCCESS);
-
-    GLenum glErrorCode = DefaultGLErrorCode(errorCode);
-
-    std::stringstream errorStream;
-    errorStream << "Internal Vulkan error (" << errorCode << "): " << VulkanResultString(errorCode)
-                << ".";
-
-    getRenderer()->getMemoryAllocationTracker()->logMemoryStatsOnError();
-
-    if (errorCode == VK_ERROR_DEVICE_LOST)
-    {
-        WARN() << errorStream.str();
-        handleDeviceLost();
-    }
-
-    mErrors->handleError(glErrorCode, errorStream.str().c_str(), file, function, line);
+    mShared.handleError(errorCode, file, function, line);
 }
 
 angle::Result ContextVk::updateActiveTextures(const gl::Context *context, gl::Command command)

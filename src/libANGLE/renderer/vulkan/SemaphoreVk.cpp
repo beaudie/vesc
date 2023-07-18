@@ -21,7 +21,7 @@ SemaphoreVk::SemaphoreVk() = default;
 
 SemaphoreVk::~SemaphoreVk() = default;
 
-void SemaphoreVk::onDestroy(const gl::Context *context)
+void SemaphoreVk::onDestroy(const gl::SharedContext *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
     contextVk->addGarbage(&mSemaphore);

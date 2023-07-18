@@ -20,7 +20,7 @@ SamplerVk::SamplerVk(const gl::SamplerState &state) : SamplerImpl(state) {}
 
 SamplerVk::~SamplerVk() = default;
 
-void SamplerVk::onDestroy(const gl::Context *context)
+void SamplerVk::onDestroy(const gl::SharedContext *context)
 {
     mSampler.reset();
 }

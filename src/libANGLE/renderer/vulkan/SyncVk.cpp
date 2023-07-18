@@ -443,7 +443,7 @@ SyncVk::SyncVk() : SyncImpl() {}
 
 SyncVk::~SyncVk() {}
 
-void SyncVk::onDestroy(const gl::Context *context)
+void SyncVk::onDestroy(const gl::SharedContext *context)
 {
     mSyncHelper.releaseToRenderer(vk::GetImpl(context)->getRenderer());
 }

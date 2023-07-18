@@ -186,7 +186,7 @@ VertexArrayVk::VertexArrayVk(ContextVk *contextVk, const gl::VertexArrayState &s
 
 VertexArrayVk::~VertexArrayVk() {}
 
-void VertexArrayVk::destroy(const gl::Context *context)
+void VertexArrayVk::destroy(const gl::SharedContext *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
 

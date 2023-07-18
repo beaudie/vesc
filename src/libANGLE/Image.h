@@ -61,7 +61,7 @@ class ImageSibling : public gl::FramebufferAttachmentObject
     void setTargetImage(const gl::Context *context, egl::Image *imageTarget);
 
     // Orphan all EGL image sources and targets
-    angle::Result orphanImages(const gl::Context *context,
+    angle::Result orphanImages(const gl::SharedContext *context,
                                RefCountObjectReleaser<Image> *outReleaseImage);
 
     void notifySiblings(angle::SubjectMessage message);
@@ -109,8 +109,8 @@ class ExternalImageSibling : public ImageSibling
     bool isCubeMap() const;
     bool hasProtectedContent() const override;
 
-    void onAttach(const gl::Context *context, rx::UniqueSerial framebufferSerial) override;
-    void onDetach(const gl::Context *context, rx::UniqueSerial framebufferSerial) override;
+    void onAttach(const gl::SharedContext *context, rx::UniqueSerial framebufferSerial) override;
+    void onDetach(const gl::SharedContext *context, rx::UniqueSerial framebufferSerial) override;
     GLuint getId() const override;
 
     gl::InitState initState(GLenum binding, const gl::ImageIndex &imageIndex) const override;
@@ -213,7 +213,7 @@ class Image final : public RefCountObject, public LabeledObject
 
     // Called from ImageSibling only to notify the image that a sibling (source or target) has
     // been respecified and state tracking should be updated.
-    angle::Result orphanSibling(const gl::Context *context, ImageSibling *sibling);
+    angle::Result orphanSibling(const gl::SharedContext *context, ImageSibling *sibling);
 
     void notifySiblings(const ImageSibling *notifier, angle::SubjectMessage message);
 

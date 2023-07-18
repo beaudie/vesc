@@ -6554,7 +6554,7 @@ void RecordBindTextureTypeError(const Context *context,
                                 angle::EntryPoint entryPoint,
                                 TextureType target)
 {
-    ASSERT(!context->getStateCache().isValidBindTextureType(target));
+    ASSERT(!context->getPrivateStateCache().isValidBindTextureType(target));
 
     switch (target)
     {

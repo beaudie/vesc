@@ -59,10 +59,17 @@ bool AllocationTrackerNULL::updateMemoryAllocation(size_t oldSize, size_t newSiz
     return true;
 }
 
+SharedContextNULL::SharedContextNULL(const gl::ShareGroupAccessibleState &state,
+                                     gl::ErrorSet *errorSet)
+    : SharedContextImpl(state, errorSet)
+{}
+
+SharedContextNULL::~SharedContextNULL() = default;
+
 ContextNULL::ContextNULL(const gl::State &state,
                          gl::ErrorSet *errorSet,
                          AllocationTrackerNULL *allocationTracker)
-    : ContextImpl(state, errorSet), mAllocationTracker(allocationTracker)
+    : ContextImpl(state), mShared(state.shareGroupAccessibleState(), errorSet), mAllocationTracker(allocationTracker)
 {
     ASSERT(mAllocationTracker != nullptr);
 

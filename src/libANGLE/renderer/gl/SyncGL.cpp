@@ -26,7 +26,7 @@ SyncGL::~SyncGL()
     ASSERT(mSyncObject == 0);
 }
 
-void SyncGL::onDestroy(const gl::Context *context)
+void SyncGL::onDestroy(const gl::SharedContext *context)
 {
     ASSERT(mSyncObject != 0);
     mFunctions->deleteSync(mSyncObject);

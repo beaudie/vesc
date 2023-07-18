@@ -213,7 +213,7 @@ class IncompleteTextureSet final : angle::NonCopyable
     IncompleteTextureSet();
     ~IncompleteTextureSet();
 
-    void onDestroy(const gl::Context *context);
+    void onDestroy(const gl::SharedContext *context);
 
     angle::Result getIncompleteTexture(const gl::Context *context,
                                        gl::TextureType type,

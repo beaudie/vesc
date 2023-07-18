@@ -18,9 +18,9 @@
 
 namespace gl
 {
-
 struct Caps;
 class Context;
+class SharedContext;
 class Texture;
 
 // Holds the configuration of an ANGLE_shader_pixel_local_storage plane.
@@ -132,7 +132,7 @@ class PixelLocalStorage
     virtual ~PixelLocalStorage();
 
     // Called when the owning framebuffer is being destroyed.
-    void onFramebufferDestroyed(const Context *);
+    void onFramebufferDestroyed(const SharedContext *);
 
     // Deletes any GL objects that have been allocated for pixel local storage. These can't be
     // cleaned up in the destructor because they require a non-const Context object.

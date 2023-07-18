@@ -106,7 +106,7 @@ class FramebufferD3D : public FramebufferImpl
         return mColorAttachmentsForRenderMask;
     }
 
-    void destroy(const gl::Context *context) override;
+    void destroy(const gl::SharedContext *context) override;
 
   private:
     virtual angle::Result clearImpl(const gl::Context *context,

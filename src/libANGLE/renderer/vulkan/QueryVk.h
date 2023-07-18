@@ -23,7 +23,7 @@ class QueryVk : public QueryImpl
     QueryVk(gl::QueryType type);
     ~QueryVk() override;
 
-    void onDestroy(const gl::Context *context) override;
+    void onDestroy(const gl::SharedContext *context) override;
 
     angle::Result begin(const gl::Context *context) override;
     angle::Result end(const gl::Context *context) override;

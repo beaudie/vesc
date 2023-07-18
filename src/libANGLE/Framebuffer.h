@@ -42,6 +42,7 @@ namespace gl
 {
 struct Caps;
 class Context;
+class SharedContext;
 struct Extensions;
 class Framebuffer;
 class ImageIndex;
@@ -198,18 +199,18 @@ class Framebuffer final : public angle::ObserverInterface,
 {
   public:
     // Constructor to build default framebuffers.
-    Framebuffer(const Context *context, rx::GLImplFactory *factory);
+    Framebuffer(const SharedContext *context, rx::GLImplFactory *factory);
     // Constructor to build application-defined framebuffers
-    Framebuffer(const Context *context, rx::GLImplFactory *factory, FramebufferID id);
+    Framebuffer(const SharedContext *context, rx::GLImplFactory *factory, FramebufferID id);
 
     ~Framebuffer() override;
-    void onDestroy(const Context *context);
+    void onDestroy(const SharedContext *context);
 
     egl::Error setSurfaces(const Context *context,
                            egl::Surface *surface,
                            egl::Surface *readSurface);
     void setReadSurface(const Context *context, egl::Surface *readSurface);
-    egl::Error unsetSurfaces(const Context *context);
+    egl::Error unsetSurfaces(const SharedContext *context);
     angle::Result setLabel(const Context *context, const std::string &label) override;
     const std::string &getLabel() const override;
 

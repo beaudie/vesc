@@ -34,7 +34,7 @@ class TransformFeedbackVk : public TransformFeedbackImpl, public angle::Observer
   public:
     TransformFeedbackVk(const gl::TransformFeedbackState &state);
     ~TransformFeedbackVk() override;
-    void onDestroy(const gl::Context *context) override;
+    void onDestroy(const gl::SharedContext *context) override;
 
     angle::Result begin(const gl::Context *context, gl::PrimitiveMode primitiveMode) override;
     angle::Result end(const gl::Context *context) override;

@@ -65,7 +65,7 @@ class VertexArrayState final : angle::NonCopyable
         return mVertexAttributes[attribIndex].bindingIndex;
     }
 
-    void setAttribBinding(const Context *context, size_t attribIndex, GLuint newBindingIndex);
+    void setAttribBinding(const SharedContext *context, size_t attribIndex, GLuint newBindingIndex);
 
     // Extra validation performed on the Vertex Array.
     bool hasEnabledNullPointerClientArray() const;
@@ -100,7 +100,7 @@ class VertexArrayState final : angle::NonCopyable
     VertexArrayBufferBindingMask mBufferBindingMask;
 
     // This is a performance optimization for buffer binding. Allows element array buffer updates.
-    friend class State;
+    friend class ShareGroupAccessibleState;
 
     // From the GLES 3.1 spec:
     // When a generic attribute array is sourced from client memory, the vertex attribute binding
@@ -212,7 +212,7 @@ class VertexArray final : public angle::ObserverInterface,
                 size_t maxAttribs,
                 size_t maxAttribBindings);
 
-    void onDestroy(const Context *context);
+    void onDestroy(const SharedContext *context);
 
     VertexArrayID id() const { return mId; }
 
@@ -227,12 +227,12 @@ class VertexArray final : public angle::ObserverInterface,
     }
 
     // Returns true if the function finds and detaches a bound buffer.
-    bool detachBuffer(const Context *context, BufferID bufferID);
+    bool detachBuffer(const SharedContext *context, BufferID bufferID);
 
-    void setVertexAttribDivisor(const Context *context, size_t index, GLuint divisor);
+    void setVertexAttribDivisor(const SharedContext *context, size_t index, GLuint divisor);
     void enableAttribute(size_t attribIndex, bool enabledState);
 
-    void setVertexAttribPointer(const Context *context,
+    void setVertexAttribPointer(const SharedContext *context,
                                 size_t attribIndex,
                                 Buffer *boundBuffer,
                                 GLint size,
@@ -241,7 +241,7 @@ class VertexArray final : public angle::ObserverInterface,
                                 GLsizei stride,
                                 const void *pointer);
 
-    void setVertexAttribIPointer(const Context *context,
+    void setVertexAttribIPointer(const SharedContext *context,
                                  size_t attribIndex,
                                  Buffer *boundBuffer,
                                  GLint size,
@@ -255,13 +255,15 @@ class VertexArray final : public angle::ObserverInterface,
                                bool normalized,
                                bool pureInteger,
                                GLuint relativeOffset);
-    void bindVertexBuffer(const Context *context,
+    void bindVertexBuffer(const SharedContext *context,
                           size_t bindingIndex,
                           Buffer *boundBuffer,
                           GLintptr offset,
                           GLsizei stride);
-    void setVertexAttribBinding(const Context *context, size_t attribIndex, GLuint bindingIndex);
-    void setVertexBindingDivisor(const Context *context, size_t bindingIndex, GLuint divisor);
+    void setVertexAttribBinding(const SharedContext *context,
+                                size_t attribIndex,
+                                GLuint bindingIndex);
+    void setVertexBindingDivisor(const SharedContext *context, size_t bindingIndex, GLuint divisor);
 
     Buffer *getElementArrayBuffer() const { return mState.getElementArrayBuffer(); }
     size_t getMaxAttribs() const { return mState.getMaxAttribs(); }
@@ -311,7 +313,7 @@ class VertexArray final : public angle::ObserverInterface,
     ComponentTypeMask getAttributesTypeMask() const { return mState.mVertexAttributesTypeMask; }
     AttributesMask getAttributesMask() const { return mState.mEnabledAttributesMask; }
 
-    void onBindingChanged(const Context *context, int incr);
+    void onBindingChanged(const SharedContext *context, int incr);
     bool hasTransformFeedbackBindingConflict(const Context *context) const;
 
     ANGLE_INLINE angle::Result getIndexRange(const Context *context,
@@ -338,7 +340,7 @@ class VertexArray final : public angle::ObserverInterface,
     ~VertexArray() override;
 
     // This is a performance optimization for buffer binding. Allows element array buffer updates.
-    friend class State;
+    friend class ShareGroupAccessibleState;
 
     void setDirtyAttribBit(size_t attribIndex, DirtyAttribBitType dirtyAttribBit);
     void setDirtyBindingBit(size_t bindingIndex, DirtyBindingBitType dirtyBindingBit);
@@ -362,7 +364,7 @@ class VertexArray final : public angle::ObserverInterface,
                                     const void *indices,
                                     IndexRange *indexRangeOut) const;
 
-    void setVertexAttribPointerImpl(const Context *context,
+    void setVertexAttribPointerImpl(const SharedContext *context,
                                     ComponentType componentType,
                                     bool pureInteger,
                                     size_t attribIndex,
@@ -381,7 +383,7 @@ class VertexArray final : public angle::ObserverInterface,
                                    bool pureInteger,
                                    GLuint relativeOffset);
 
-    DirtyBindingBits bindVertexBufferImpl(const Context *context,
+    DirtyBindingBits bindVertexBufferImpl(const SharedContext *context,
                                           size_t bindingIndex,
                                           Buffer *boundBuffer,
                                           GLintptr offset,

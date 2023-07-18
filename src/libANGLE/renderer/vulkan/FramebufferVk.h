@@ -31,7 +31,7 @@ class FramebufferVk : public FramebufferImpl
   public:
     FramebufferVk(RendererVk *renderer, const gl::FramebufferState &state);
     ~FramebufferVk() override;
-    void destroy(const gl::Context *context) override;
+    void destroy(const gl::SharedContext *context) override;
 
     angle::Result discard(const gl::Context *context,
                           size_t count,

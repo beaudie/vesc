@@ -28,7 +28,7 @@ class VertexArrayMtl : public VertexArrayImpl
     VertexArrayMtl(const gl::VertexArrayState &state, ContextMtl *context);
     ~VertexArrayMtl() override;
 
-    void destroy(const gl::Context *context) override;
+    void destroy(const gl::SharedContext *context) override;
 
     angle::Result syncState(const gl::Context *context,
                             const gl::VertexArray::DirtyBits &dirtyBits,

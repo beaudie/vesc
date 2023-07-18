@@ -30,7 +30,9 @@
 namespace rx
 {
 
-Context9::Context9(const gl::State &state, gl::ErrorSet *errorSet, Renderer9 *renderer)
+Context9::Context9(const gl::State &state,
+                   gl::ErrorSet *errorSet,
+                   Renderer9 *renderer)
     : ContextD3D(state, errorSet), mRenderer(renderer)
 {}
 
@@ -41,7 +43,7 @@ angle::Result Context9::initialize()
     return angle::Result::Continue;
 }
 
-void Context9::onDestroy(const gl::Context *context)
+void Context9::onDestroy(const gl::SharedContext *context)
 {
     mIncompleteTextures.onDestroy(context);
 }
@@ -528,7 +530,7 @@ void Context9::handleResult(HRESULT hr,
     std::stringstream errorStream;
     errorStream << "Internal D3D9 error: " << gl::FmtHR(hr) << ": " << message;
 
-    mErrors->handleError(glErrorCode, errorStream.str().c_str(), file, function, line);
+    mShared.getErrors()->handleError(glErrorCode, errorStream.str().c_str(), file, function, line);
 }
 
 angle::ImageLoadContext Context9::getImageLoadContext() const

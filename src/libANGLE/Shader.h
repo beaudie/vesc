@@ -49,6 +49,7 @@ namespace gl
 {
 class CompileTask;
 class Context;
+class SharedContext;
 class ShaderProgramManager;
 class State;
 class BinaryInputStream;
@@ -169,7 +170,7 @@ class Shader final : angle::NonCopyable, public LabeledObject
            ShaderType type,
            ShaderProgramID handle);
 
-    void onDestroy(const Context *context);
+    void onDestroy(const SharedContext *context);
 
     angle::Result setLabel(const Context *context, const std::string &label) override;
     const std::string &getLabel() const override;
@@ -209,7 +210,7 @@ class Shader final : angle::NonCopyable, public LabeledObject
     bool isCompleted();
 
     void addRef();
-    void release(const Context *context);
+    void release(const SharedContext *context);
     unsigned int getRefCount() const;
     bool isFlaggedForDeletion() const;
     void flagForDeletion();

@@ -29,7 +29,7 @@ class VertexArrayGL : public VertexArrayImpl
     VertexArrayGL(const gl::VertexArrayState &data, GLuint id, VertexArrayStateGL *sharedState);
     ~VertexArrayGL() override;
 
-    void destroy(const gl::Context *context) override;
+    void destroy(const gl::SharedContext *context) override;
 
     angle::Result syncClientSideData(const gl::Context *context,
                                      const gl::AttributesMask &activeAttributesMask,

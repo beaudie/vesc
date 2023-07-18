@@ -62,11 +62,13 @@ constexpr angle::PackedEnumMap<BufferBinding, size_t> kBufferBindingDirtyBits = 
 
 // Returns a buffer binding function depending on if a dirty bit is set.
 template <BufferBinding Target>
-constexpr std::pair<BufferBinding, State::BufferBindingSetter> GetBufferBindingSetter()
+constexpr std::pair<BufferBinding, ShareGroupAccessibleState::BufferBindingSetter>
+GetBufferBindingSetter()
 {
-    return std::make_pair(Target, kBufferBindingDirtyBits[Target] != 0
-                                      ? &State::setGenericBufferBindingWithBit<Target>
-                                      : &State::setGenericBufferBinding<Target>);
+    return std::make_pair(Target,
+                          kBufferBindingDirtyBits[Target] != 0
+                              ? &ShareGroupAccessibleState::setGenericBufferBindingWithBit<Target>
+                              : &ShareGroupAccessibleState::setGenericBufferBinding<Target>);
 }
 
 template <typename T>
@@ -115,11 +117,8 @@ bool IsTextureCompatibleWithSampler(TextureType texture, TextureType sampler)
     return false;
 }
 
-uint32_t gIDCounter = 1;
-}  // namespace
-
 template <typename BindingT, typename... ArgsT>
-ANGLE_INLINE void UpdateNonTFBufferBindingWebGL(const Context *context,
+ANGLE_INLINE void UpdateNonTFBufferBindingWebGL(const SharedContext *context,
                                                 BindingT *binding,
                                                 Buffer *buffer,
                                                 ArgsT... args)
@@ -139,19 +138,19 @@ ANGLE_INLINE void UpdateNonTFBufferBindingWebGL(const Context *context,
 }
 
 template <typename BindingT, typename... ArgsT>
-void UpdateTFBufferBindingWebGL(const Context *context,
+void UpdateTFBufferBindingWebGL(const SharedContext *context,
                                 BindingT *binding,
                                 bool indexed,
                                 ArgsT... args)
 {
     if (binding->get())
-        (*binding)->onTFBindingChanged(context, false, indexed);
+        (*binding)->onTFBindingChanged(false, indexed);
     binding->set(context, args...);
     if (binding->get())
-        (*binding)->onTFBindingChanged(context, true, indexed);
+        (*binding)->onTFBindingChanged(true, indexed);
 }
 
-void UpdateBufferBinding(const Context *context,
+void UpdateBufferBinding(const SharedContext *context,
                          BindingPointer<Buffer> *binding,
                          Buffer *buffer,
                          BufferBinding target)
@@ -173,7 +172,7 @@ void UpdateBufferBinding(const Context *context,
     }
 }
 
-void UpdateIndexedBufferBinding(const Context *context,
+void UpdateIndexedBufferBinding(const SharedContext *context,
                                 OffsetBindingPointer<Buffer> *binding,
                                 Buffer *buffer,
                                 BufferBinding target,
@@ -197,95 +196,8 @@ void UpdateIndexedBufferBinding(const Context *context,
     }
 }
 
-// These template functions must be defined before they are instantiated in kBufferSetters.
-template <BufferBinding Target>
-void State::setGenericBufferBindingWithBit(const Context *context, Buffer *buffer)
-{
-    if (context->isWebGL())
-    {
-        UpdateNonTFBufferBindingWebGL(context, &mBoundBuffers[Target], buffer);
-    }
-    else
-    {
-        mBoundBuffers[Target].set(context, buffer);
-    }
-    mDirtyBits.set(kBufferBindingDirtyBits[Target]);
-}
-
-template <BufferBinding Target>
-void State::setGenericBufferBinding(const Context *context, Buffer *buffer)
-{
-    if (context->isWebGL())
-    {
-        UpdateNonTFBufferBindingWebGL(context, &mBoundBuffers[Target], buffer);
-    }
-    else
-    {
-        mBoundBuffers[Target].set(context, buffer);
-    }
-}
-
-template <>
-void State::setGenericBufferBinding<BufferBinding::TransformFeedback>(const Context *context,
-                                                                      Buffer *buffer)
-{
-    if (context->isWebGL())
-    {
-        UpdateTFBufferBindingWebGL(context, &mBoundBuffers[BufferBinding::TransformFeedback], false,
-                                   buffer);
-    }
-    else
-    {
-        mBoundBuffers[BufferBinding::TransformFeedback].set(context, buffer);
-    }
-}
-
-template <>
-void State::setGenericBufferBinding<BufferBinding::ElementArray>(const Context *context,
-                                                                 Buffer *buffer)
-{
-    Buffer *oldBuffer = mVertexArray->mState.mElementArrayBuffer.get();
-    if (oldBuffer)
-    {
-        oldBuffer->removeObserver(&mVertexArray->mState.mElementArrayBuffer);
-        oldBuffer->removeContentsObserver(mVertexArray, kElementArrayBufferIndex);
-        if (context->isWebGL())
-        {
-            oldBuffer->onNonTFBindingChanged(-1);
-        }
-        oldBuffer->release(context);
-    }
-    mVertexArray->mState.mElementArrayBuffer.assign(buffer);
-    if (buffer)
-    {
-        buffer->addObserver(&mVertexArray->mState.mElementArrayBuffer);
-        buffer->addContentsObserver(mVertexArray, kElementArrayBufferIndex);
-        if (context->isWebGL())
-        {
-            buffer->onNonTFBindingChanged(1);
-        }
-        buffer->addRef();
-    }
-    mVertexArray->mDirtyBits.set(VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER);
-    mVertexArray->mIndexRangeCache.invalidate();
-    mDirtyObjects.set(state::DIRTY_OBJECT_VERTEX_ARRAY);
-}
-
-const angle::PackedEnumMap<BufferBinding, State::BufferBindingSetter> State::kBufferSetters = {{
-    GetBufferBindingSetter<BufferBinding::Array>(),
-    GetBufferBindingSetter<BufferBinding::AtomicCounter>(),
-    GetBufferBindingSetter<BufferBinding::CopyRead>(),
-    GetBufferBindingSetter<BufferBinding::CopyWrite>(),
-    GetBufferBindingSetter<BufferBinding::DispatchIndirect>(),
-    GetBufferBindingSetter<BufferBinding::DrawIndirect>(),
-    GetBufferBindingSetter<BufferBinding::ElementArray>(),
-    GetBufferBindingSetter<BufferBinding::PixelPack>(),
-    GetBufferBindingSetter<BufferBinding::PixelUnpack>(),
-    GetBufferBindingSetter<BufferBinding::ShaderStorage>(),
-    GetBufferBindingSetter<BufferBinding::Texture>(),
-    GetBufferBindingSetter<BufferBinding::TransformFeedback>(),
-    GetBufferBindingSetter<BufferBinding::Uniform>(),
-}};
+uint32_t gIDCounter = 1;
+}  // namespace
 
 ActiveTexturesCache::ActiveTexturesCache() : mTextures{} {}
 
@@ -340,6 +252,7 @@ PrivateState::PrivateState(const EGLenum clientType,
     : mClientType(clientType),
       mProfileMask(profileMask),
       mClientVersion(clientVersion),
+      mIsDebugContext(debug),
       mDepthClearValue(0),
       mStencilClearValue(0),
       mScissorTest(false),
@@ -394,7 +307,7 @@ PrivateState::PrivateState(const EGLenum clientType,
 
 PrivateState::~PrivateState() = default;
 
-void PrivateState::initialize(Context *context)
+void PrivateState::initialize()
 {
     mBlendStateExt = BlendStateExt(mCaps.maxDrawBuffers);
 
@@ -459,17 +372,19 @@ void PrivateState::initialize(Context *context)
     mPrimitiveRestart = false;
 
     mNoSimultaneousConstantColorAndAlphaBlendFunc =
-        context->getLimitations().noSimultaneousConstantColorAndAlphaBlendFunc ||
-        context->getExtensions().webglCompatibilityANGLE;
+        mLimitations.noSimultaneousConstantColorAndAlphaBlendFunc ||
+        mExtensions.webglCompatibilityANGLE;
 
-    mNoUnclampedBlendColor = context->getLimitations().noUnclampedBlendColor;
+    mNoUnclampedBlendColor = mLimitations.noUnclampedBlendColor;
 
     // GLES1 emulation: Initialize state for GLES1 if version applies
     // TODO(http://anglebug.com/3745): When on desktop client only do this in compatibility profile
-    if (context->getClientVersion() < Version(2, 0) || mClientType == EGL_OPENGL_API)
+    if (isGLES1() || mClientType == EGL_OPENGL_API)
     {
-        mGLES1State.initialize(context, this);
+        mGLES1State.initialize(this);
     }
+
+    mDebug.setMaxLoggedMessages(getCaps().maxDebugLoggedMessages);
 }
 
 void PrivateState::initializeForCapture(const Context *context)
@@ -1551,9 +1466,9 @@ bool PrivateState::getEnableFeature(GLenum feature) const
         case GL_TEXTURE_COORD_ARRAY:
             return mGLES1State.mTexCoordArrayEnabled[mGLES1State.mClientActiveTexture];
         case GL_TEXTURE_2D:
-            return mGLES1State.isTextureTargetEnabled(getActiveSampler(), TextureType::_2D);
+            return mGLES1State.isTextureTargetEnabled(mActiveSampler, TextureType::_2D);
         case GL_TEXTURE_CUBE_MAP:
-            return mGLES1State.isTextureTargetEnabled(getActiveSampler(), TextureType::CubeMap);
+            return mGLES1State.isTextureTargetEnabled(mActiveSampler, TextureType::CubeMap);
         case GL_LIGHTING:
             return mGLES1State.mLightingEnabled;
         case GL_LIGHT0:
@@ -2095,6 +2010,32 @@ void PrivateState::getIntegerv(GLenum pname, GLint *params) const
             *params = mCaps.fragmentShaderFramebufferFetchMRT ? 1 : 0;
             break;
 
+        case GL_DEBUG_LOGGED_MESSAGES:
+            *params = static_cast<GLint>(mDebug.getMessageCount());
+            break;
+        case GL_DEBUG_NEXT_LOGGED_MESSAGE_LENGTH:
+            *params = static_cast<GLint>(mDebug.getNextMessageLength());
+            break;
+        case GL_DEBUG_GROUP_STACK_DEPTH:
+            *params = static_cast<GLint>(mDebug.getGroupStackDepth());
+            break;
+
+        default:
+            UNREACHABLE();
+            break;
+    }
+}
+
+void PrivateState::getPointerv(GLenum pname, void **params) const
+{
+    switch (pname)
+    {
+        case GL_DEBUG_CALLBACK_FUNCTION:
+            *params = reinterpret_cast<void *>(getDebug().getCallback());
+            break;
+        case GL_DEBUG_CALLBACK_USER_PARAM:
+            *params = const_cast<void *>(getDebug().getUserParam());
+            break;
         default:
             UNREACHABLE();
             break;
@@ -2160,97 +2101,65 @@ void PrivateState::getBooleani_v(GLenum target, GLuint index, GLboolean *data) c
     }
 }
 
-State::State(const State *shareContextState,
-             egl::ShareGroup *shareGroup,
-             TextureManager *shareTextures,
-             SemaphoreManager *shareSemaphores,
-             egl::ContextMutex *sharedContextMutex,
-             egl::SingleContextMutex *singleContextMutex,
-             const OverlayType *overlay,
-             const EGLenum clientType,
-             const Version &clientVersion,
-             EGLint profileMask,
-             bool debug,
-             bool bindGeneratesResourceCHROMIUM,
-             bool clientArraysEnabled,
-             bool robustResourceInit,
-             bool programBinaryCacheEnabled,
-             EGLenum contextPriority,
-             bool hasRobustAccess,
-             bool hasProtectedContent)
+ShareGroupAccessibleState::ShareGroupAccessibleState(egl::ShareGroup *shareGroup,
+                                                     const EGLenum clientType,
+                                                     const Version &clientVersion,
+                                                     EGLint profileMask,
+                                                     bool robustResourceInit,
+                                                     const Caps &caps,
+                                                     const Extensions &extensions,
+                                                     const Limitations &limitations,
+                                                     EGLenum contextPriority,
+                                                     bool hasRobustAccess,
+                                                     bool hasProtectedContent,
+                                                     bool displayTextureShareGroup)
     : mID({gIDCounter++}),
+      mClientType(clientType),
+      mProfileMask(profileMask),
+      mClientVersion(clientVersion),
+      mRobustResourceInit(robustResourceInit),
+      mShareGroup(shareGroup),
+      mCaps(caps),
+      mExtensions(extensions),
+      mLimitations(limitations),
       mContextPriority(contextPriority),
       mHasRobustAccess(hasRobustAccess),
       mHasProtectedContent(hasProtectedContent),
-      mIsDebugContext(debug),
-      mShareGroup(shareGroup),
-      mSharedContextMutex(sharedContextMutex),
-      mSingleContextMutex(singleContextMutex),
-      mContextMutex(singleContextMutex == nullptr ? sharedContextMutex : singleContextMutex),
-      mIsSharedContextMutexActive(singleContextMutex == nullptr),
-      mBufferManager(AllocateOrGetSharedResourceManager(shareContextState, &State::mBufferManager)),
-      mShaderProgramManager(
-          AllocateOrGetSharedResourceManager(shareContextState, &State::mShaderProgramManager)),
-      mTextureManager(AllocateOrGetSharedResourceManager(shareContextState,
-                                                         &State::mTextureManager,
-                                                         shareTextures)),
-      mRenderbufferManager(
-          AllocateOrGetSharedResourceManager(shareContextState, &State::mRenderbufferManager)),
-      mSamplerManager(
-          AllocateOrGetSharedResourceManager(shareContextState, &State::mSamplerManager)),
-      mSyncManager(AllocateOrGetSharedResourceManager(shareContextState, &State::mSyncManager)),
-      mFramebufferManager(new FramebufferManager()),
-      mProgramPipelineManager(new ProgramPipelineManager()),
-      mMemoryObjectManager(
-          AllocateOrGetSharedResourceManager(shareContextState, &State::mMemoryObjectManager)),
-      mSemaphoreManager(AllocateOrGetSharedResourceManager(shareContextState,
-                                                           &State::mSemaphoreManager,
-                                                           shareSemaphores)),
       mReadFramebuffer(nullptr),
       mDrawFramebuffer(nullptr),
       mProgram(nullptr),
       mExecutable(nullptr),
       mVertexArray(nullptr),
-      mDisplayTextureShareGroup(shareTextures != nullptr),
-      mMaxShaderCompilerThreads(std::numeric_limits<GLuint>::max()),
-      mOverlay(overlay),
-      mPrivateState(clientType,
-                    clientVersion,
-                    profileMask,
-                    debug,
-                    bindGeneratesResourceCHROMIUM,
-                    clientArraysEnabled,
-                    robustResourceInit,
-                    programBinaryCacheEnabled)
+      mDisplayTextureShareGroup(displayTextureShareGroup)
 {}
 
-State::~State() {}
+ShareGroupAccessibleState::~ShareGroupAccessibleState() = default;
 
-void State::initialize(Context *context)
+void ShareGroupAccessibleState::initialize(SharedContext *context,
+                                           const Extensions &nativeExtensions,
+                                           ShPixelLocalStorageType pixelLocalStorageType)
 {
-    const Extensions &nativeExtensions = context->getImplementation()->getNativeExtensions();
-    const Version &clientVersion       = context->getClientVersion();
-
-    mPrivateState.initialize(context);
+    const bool isES3  = mClientVersion >= ES_3_0;
+    const bool isES31 = mClientVersion >= ES_3_1;
 
     mUniformBuffers.resize(getCaps().maxUniformBufferBindings);
 
     mSamplerTextures[TextureType::_2D].resize(getCaps().maxCombinedTextureImageUnits);
     mSamplerTextures[TextureType::CubeMap].resize(getCaps().maxCombinedTextureImageUnits);
-    if (clientVersion >= Version(3, 0) || nativeExtensions.texture3DOES)
+    if (isES3 || nativeExtensions.texture3DOES)
     {
         mSamplerTextures[TextureType::_3D].resize(getCaps().maxCombinedTextureImageUnits);
     }
-    if (clientVersion >= Version(3, 0))
+    if (isES3)
     {
         mSamplerTextures[TextureType::_2DArray].resize(getCaps().maxCombinedTextureImageUnits);
     }
-    if (clientVersion >= Version(3, 1) || nativeExtensions.textureMultisampleANGLE)
+    if (isES31 || nativeExtensions.textureMultisampleANGLE)
     {
         mSamplerTextures[TextureType::_2DMultisample].resize(
             getCaps().maxCombinedTextureImageUnits);
     }
-    if (clientVersion >= Version(3, 1))
+    if (isES31)
     {
         mSamplerTextures[TextureType::_2DMultisampleArray].resize(
             getCaps().maxCombinedTextureImageUnits);
@@ -2258,17 +2167,15 @@ void State::initialize(Context *context)
         mAtomicCounterBuffers.resize(getCaps().maxAtomicCounterBufferBindings);
         mShaderStorageBuffers.resize(getCaps().maxShaderStorageBufferBindings);
     }
-    if (clientVersion >= Version(3, 1) ||
-        (context->getImplementation()->getNativePixelLocalStorageOptions().type ==
-         ShPixelLocalStorageType::ImageLoadStore))
+    if (isES31 || pixelLocalStorageType == ShPixelLocalStorageType::ImageLoadStore)
     {
         mImageUnits.resize(getCaps().maxImageUnits);
     }
-    if (clientVersion >= Version(3, 1) || nativeExtensions.textureCubeMapArrayAny())
+    if (isES31 || nativeExtensions.textureCubeMapArrayAny())
     {
         mSamplerTextures[TextureType::CubeMapArray].resize(getCaps().maxCombinedTextureImageUnits);
     }
-    if (clientVersion >= Version(3, 1) || nativeExtensions.textureCubeMapArrayAny())
+    if (isES31 || nativeExtensions.textureCubeMapArrayAny())
     {
         mSamplerTextures[TextureType::Buffer].resize(getCaps().maxCombinedTextureImageUnits);
     }
@@ -2303,12 +2210,12 @@ void State::initialize(Context *context)
 
     mReadFramebuffer = nullptr;
     mDrawFramebuffer = nullptr;
-
-    getDebug().setMaxLoggedMessages(getCaps().maxDebugLoggedMessages);
 }
 
-void State::reset(const Context *context)
+void ShareGroupAccessibleState::reset(const Context *context)
 {
+    const SharedContext *sharedContext = context->asSharedContext();
+
     // Force a sync so clear doesn't end up dereferencing stale pointers.
     (void)syncActiveTextures(context, Command::Other);
     mActiveTexturesCache.clear();
@@ -2317,17 +2224,17 @@ void State::reset(const Context *context)
     {
         for (BindingPointer<Texture> &texBinding : bindingVec)
         {
-            texBinding.set(context, nullptr);
+            texBinding.set(sharedContext, nullptr);
         }
     }
     for (size_t samplerIdx = 0; samplerIdx < mSamplers.size(); samplerIdx++)
     {
-        mSamplers[samplerIdx].set(context, nullptr);
+        mSamplers[samplerIdx].set(sharedContext, nullptr);
     }
 
     for (ImageUnit &imageUnit : mImageUnits)
     {
-        imageUnit.texture.set(context, nullptr);
+        imageUnit.texture.set(sharedContext, nullptr);
         imageUnit.level   = 0;
         imageUnit.layered = false;
         imageUnit.layer   = 0;
@@ -2335,56 +2242,55 @@ void State::reset(const Context *context)
         imageUnit.format  = GL_R32UI;
     }
 
-    mRenderbuffer.set(context, nullptr);
+    mRenderbuffer.set(sharedContext, nullptr);
 
     for (BufferBinding type : angle::AllEnums<BufferBinding>())
     {
-        UpdateBufferBinding(context, &mBoundBuffers[type], nullptr, type);
+        UpdateBufferBinding(sharedContext, &mBoundBuffers[type], nullptr, type);
     }
 
     if (mProgram)
     {
-        mProgram->release(context);
+        mProgram->release(sharedContext);
     }
     mProgram = nullptr;
-    mProgramPipeline.set(context, nullptr);
+    mProgramPipeline.set(sharedContext, nullptr);
     mExecutable = nullptr;
 
     if (mTransformFeedback.get())
     {
-        mTransformFeedback->onBindingChanged(context, false);
+        mTransformFeedback->onBindingChanged(false);
     }
-    mTransformFeedback.set(context, nullptr);
+    mTransformFeedback.set(sharedContext, nullptr);
 
     for (QueryType type : angle::AllEnums<QueryType>())
     {
-        mActiveQueries[type].set(context, nullptr);
+        mActiveQueries[type].set(sharedContext, nullptr);
     }
 
     for (OffsetBindingPointer<Buffer> &buf : mUniformBuffers)
     {
-        UpdateIndexedBufferBinding(context, &buf, nullptr, BufferBinding::Uniform, 0, 0);
+        UpdateIndexedBufferBinding(sharedContext, &buf, nullptr, BufferBinding::Uniform, 0, 0);
     }
     mBoundUniformBuffersMask.reset();
 
     for (OffsetBindingPointer<Buffer> &buf : mAtomicCounterBuffers)
     {
-        UpdateIndexedBufferBinding(context, &buf, nullptr, BufferBinding::AtomicCounter, 0, 0);
+        UpdateIndexedBufferBinding(sharedContext, &buf, nullptr, BufferBinding::AtomicCounter, 0,
+                                   0);
     }
     mBoundAtomicCounterBuffersMask.reset();
 
     for (OffsetBindingPointer<Buffer> &buf : mShaderStorageBuffers)
     {
-        UpdateIndexedBufferBinding(context, &buf, nullptr, BufferBinding::ShaderStorage, 0, 0);
+        UpdateIndexedBufferBinding(sharedContext, &buf, nullptr, BufferBinding::ShaderStorage, 0,
+                                   0);
     }
     mBoundShaderStorageBuffersMask.reset();
-
-    mPrivateState.reset();
-
-    setAllDirtyBits();
 }
 
-ANGLE_INLINE void State::unsetActiveTextures(const ActiveTextureMask &textureMask)
+ANGLE_INLINE void ShareGroupAccessibleState::unsetActiveTextures(
+    const ActiveTextureMask &textureMask)
 {
     // Unset any relevant bound textures.
     for (size_t textureIndex : textureMask)
@@ -2394,10 +2300,11 @@ ANGLE_INLINE void State::unsetActiveTextures(const ActiveTextureMask &textureMas
     }
 }
 
-ANGLE_INLINE void State::updateActiveTextureStateOnSync(const Context *context,
-                                                        size_t textureIndex,
-                                                        const Sampler *sampler,
-                                                        Texture *texture)
+ANGLE_INLINE void ShareGroupAccessibleState::updateActiveTextureStateOnSync(
+    const SharedContext *context,
+    size_t textureIndex,
+    const Sampler *sampler,
+    Texture *texture)
 {
     if (!texture || !texture->isSamplerComplete(context, sampler))
     {
@@ -2411,7 +2318,8 @@ ANGLE_INLINE void State::updateActiveTextureStateOnSync(const Context *context,
     mDirtyBits.set(state::DIRTY_BIT_TEXTURE_BINDINGS);
 }
 
-ANGLE_INLINE void State::setActiveTextureDirty(size_t textureIndex, Texture *texture)
+ANGLE_INLINE void ShareGroupAccessibleState::setActiveTextureDirty(size_t textureIndex,
+                                                                   Texture *texture)
 {
     mDirtyObjects.set(state::DIRTY_OBJECT_ACTIVE_TEXTURES);
     mDirtyActiveTextures.set(textureIndex);
@@ -2457,58 +2365,71 @@ ANGLE_INLINE void State::setActiveTextureDirty(size_t textureIndex, Texture *tex
     }
 }
 
-ANGLE_INLINE void State::updateTextureBinding(const Context *context,
-                                              size_t textureIndex,
-                                              Texture *texture)
+ANGLE_INLINE void ShareGroupAccessibleState::updateTextureBinding(const SharedContext *context,
+                                                                  size_t textureIndex,
+                                                                  Texture *texture)
 {
     mCompleteTextureBindings[textureIndex].bind(texture);
     mActiveTexturesCache.reset(textureIndex);
     setActiveTextureDirty(textureIndex, texture);
 }
 
-bool State::allActiveDrawBufferChannelsMasked() const
+// TODO(http://anglebug.com/3889): Remove this helper function after blink and chromium part
+// refactor done.
+Texture *ShareGroupAccessibleState::getTextureForActiveSampler(TextureType type, size_t index)
 {
-    // Compare current color mask with all-disabled color mask, while ignoring disabled draw
-    // buffers.
-    return (getBlendStateExt().compareColorMask(0) & mDrawFramebuffer->getDrawBufferMask()).none();
-}
-
-bool State::anyActiveDrawBufferChannelMasked() const
-{
-    // Compare current color mask with all-enabled color mask, while ignoring disabled draw
-    // buffers.
-    return (getBlendStateExt().compareColorMask(getBlendStateExt().getAllColorMaskBits()) &
-            mDrawFramebuffer->getDrawBufferMask())
-        .any();
-}
-
-void State::setSamplerTexture(const Context *context, TextureType type, Texture *texture)
-{
-    if (mExecutable && mExecutable->getActiveSamplersMask()[getActiveSampler()] &&
-        IsTextureCompatibleWithSampler(type,
-                                       mExecutable->getActiveSamplerTypes()[getActiveSampler()]))
+    if (type != TextureType::VideoImage)
     {
-        updateTextureBinding(context, getActiveSampler(), texture);
+        return mSamplerTextures[type][index].get();
     }
 
-    mSamplerTextures[type][getActiveSampler()].set(context, texture);
+    ASSERT(type == TextureType::VideoImage);
+
+    Texture *candidateTexture = mSamplerTextures[type][index].get();
+    if (candidateTexture->getWidth(TextureTarget::VideoImage, 0) == 0 ||
+        candidateTexture->getHeight(TextureTarget::VideoImage, 0) == 0 ||
+        candidateTexture->getDepth(TextureTarget::VideoImage, 0) == 0)
+    {
+        return mSamplerTextures[TextureType::_2D][index].get();
+    }
+
+    return mSamplerTextures[type][index].get();
+}
+
+void ShareGroupAccessibleState::setSamplerTexture(const SharedContext *context,
+                                                  TextureType type,
+                                                  Texture *texture,
+                                                  unsigned int activeSampler)
+{
+    if (mExecutable && mExecutable->getActiveSamplersMask()[activeSampler] &&
+        IsTextureCompatibleWithSampler(type, mExecutable->getActiveSamplerTypes()[activeSampler]))
+    {
+        updateTextureBinding(context, activeSampler, texture);
+    }
+
+    mSamplerTextures[type][activeSampler].set(context, texture);
 
     mDirtyBits.set(state::DIRTY_BIT_TEXTURE_BINDINGS);
 }
 
-Texture *State::getTargetTexture(TextureType type) const
+Texture *ShareGroupAccessibleState::getTargetTexture(TextureType type, uint32_t activeSampler) const
 {
-    return getSamplerTexture(getActiveSampler(), type);
+    return getSamplerTexture(activeSampler, type);
 }
 
-TextureID State::getSamplerTextureId(unsigned int sampler, TextureType type) const
+TextureID ShareGroupAccessibleState::getSamplerTextureId(unsigned int sampler,
+                                                         TextureType type) const
 {
     ASSERT(sampler < mSamplerTextures[type].size());
     return mSamplerTextures[type][sampler].id();
 }
 
-void State::detachTexture(Context *context, const TextureMap &zeroTextures, TextureID texture)
+void ShareGroupAccessibleState::detachTexture(Context *context,
+                                              const TextureMap &zeroTextures,
+                                              TextureID texture)
 {
+    SharedContext *sharedContext = context->asSharedContext();
+
     // Textures have a detach method on State rather than a simple
     // removeBinding, because the zero/null texture objects are managed
     // separately, and don't have to go through the Context's maps or
@@ -2532,9 +2453,9 @@ void State::detachTexture(Context *context, const TextureMap &zeroTextures, Text
                 ASSERT(zeroTexture != nullptr);
                 if (mCompleteTextureBindings[bindingIndex].getSubject() == binding.get())
                 {
-                    updateTextureBinding(context, bindingIndex, zeroTexture);
+                    updateTextureBinding(sharedContext, bindingIndex, zeroTexture);
                 }
-                binding.set(context, zeroTexture);
+                binding.set(sharedContext, zeroTexture);
             }
         }
     }
@@ -2543,7 +2464,7 @@ void State::detachTexture(Context *context, const TextureMap &zeroTextures, Text
     {
         if (bindingImageUnit.texture.id() == texture)
         {
-            bindingImageUnit.texture.set(context, nullptr);
+            bindingImageUnit.texture.set(sharedContext, nullptr);
             bindingImageUnit.level   = 0;
             bindingImageUnit.layered = false;
             bindingImageUnit.layer   = 0;
@@ -2568,7 +2489,8 @@ void State::detachTexture(Context *context, const TextureMap &zeroTextures, Text
     }
 }
 
-void State::initializeZeroTextures(const Context *context, const TextureMap &zeroTextures)
+void ShareGroupAccessibleState::initializeZeroTextures(const SharedContext *context,
+                                                       const TextureMap &zeroTextures)
 {
     for (TextureType type : angle::AllEnums<TextureType>())
     {
@@ -2579,12 +2501,14 @@ void State::initializeZeroTextures(const Context *context, const TextureMap &zer
     }
 }
 
-void State::invalidateTextureBindings(TextureType type)
+void ShareGroupAccessibleState::invalidateTextureBindings(TextureType type)
 {
     mDirtyBits.set(state::DIRTY_BIT_TEXTURE_BINDINGS);
 }
 
-void State::setSamplerBinding(const Context *context, GLuint textureUnit, Sampler *sampler)
+void ShareGroupAccessibleState::setSamplerBinding(const SharedContext *context,
+                                                  GLuint textureUnit,
+                                                  Sampler *sampler)
 {
     if (mSamplers[textureUnit].get() == sampler)
     {
@@ -2598,7 +2522,7 @@ void State::setSamplerBinding(const Context *context, GLuint textureUnit, Sample
     onActiveTextureChange(context, textureUnit);
 }
 
-void State::detachSampler(const Context *context, SamplerID sampler)
+void ShareGroupAccessibleState::detachSampler(const SharedContext *context, SamplerID sampler)
 {
     // [OpenGL ES 3.0.2] section 3.8.2 pages 123-124:
     // If a sampler object that is currently bound to one or more texture units is
@@ -2613,21 +2537,24 @@ void State::detachSampler(const Context *context, SamplerID sampler)
     }
 }
 
-void State::setRenderbufferBinding(const Context *context, Renderbuffer *renderbuffer)
+void ShareGroupAccessibleState::setRenderbufferBinding(const SharedContext *context,
+                                                       Renderbuffer *renderbuffer)
 {
     mRenderbuffer.set(context, renderbuffer);
     mDirtyBits.set(state::DIRTY_BIT_RENDERBUFFER_BINDING);
 }
 
-void State::detachRenderbuffer(Context *context, RenderbufferID renderbuffer)
+void ShareGroupAccessibleState::detachRenderbuffer(Context *context, RenderbufferID renderbuffer)
 {
+    SharedContext *sharedContext = context->asSharedContext();
+
     // [OpenGL ES 2.0.24] section 4.4 page 109:
     // If a renderbuffer that is currently bound to RENDERBUFFER is deleted, it is as though
     // BindRenderbuffer had been executed with the target RENDERBUFFER and name of zero.
 
     if (mRenderbuffer.id() == renderbuffer)
     {
-        setRenderbufferBinding(context, nullptr);
+        setRenderbufferBinding(sharedContext, nullptr);
     }
 
     // [OpenGL ES 2.0.24] section 4.4 page 111:
@@ -2653,7 +2580,7 @@ void State::detachRenderbuffer(Context *context, RenderbufferID renderbuffer)
     }
 }
 
-void State::setReadFramebufferBinding(Framebuffer *framebuffer)
+void ShareGroupAccessibleState::setReadFramebufferBinding(Framebuffer *framebuffer)
 {
     if (mReadFramebuffer == framebuffer)
         return;
@@ -2667,7 +2594,8 @@ void State::setReadFramebufferBinding(Framebuffer *framebuffer)
     }
 }
 
-void State::setDrawFramebufferBinding(Framebuffer *framebuffer)
+void ShareGroupAccessibleState::setDrawFramebufferBinding(Framebuffer *framebuffer,
+                                                          bool framebufferSRGB)
 {
     if (mDrawFramebuffer == framebuffer)
         return;
@@ -2677,8 +2605,8 @@ void State::setDrawFramebufferBinding(Framebuffer *framebuffer)
 
     if (mDrawFramebuffer)
     {
-        mDrawFramebuffer->setWriteControlMode(getFramebufferSRGB() ? SrgbWriteControlMode::Default
-                                                                   : SrgbWriteControlMode::Linear);
+        mDrawFramebuffer->setWriteControlMode(framebufferSRGB ? SrgbWriteControlMode::Default
+                                                              : SrgbWriteControlMode::Linear);
 
         if (mDrawFramebuffer->hasAnyDirtyBit())
         {
@@ -2692,7 +2620,7 @@ void State::setDrawFramebufferBinding(Framebuffer *framebuffer)
     }
 }
 
-Framebuffer *State::getTargetFramebuffer(GLenum target) const
+Framebuffer *ShareGroupAccessibleState::getTargetFramebuffer(GLenum target) const
 {
     switch (target)
     {
@@ -2707,12 +2635,7 @@ Framebuffer *State::getTargetFramebuffer(GLenum target) const
     }
 }
 
-Framebuffer *State::getDefaultFramebuffer() const
-{
-    return mFramebufferManager->getDefaultFramebuffer();
-}
-
-bool State::removeReadFramebufferBinding(FramebufferID framebuffer)
+bool ShareGroupAccessibleState::removeReadFramebufferBinding(FramebufferID framebuffer)
 {
     if (mReadFramebuffer != nullptr && mReadFramebuffer->id() == framebuffer)
     {
@@ -2723,18 +2646,20 @@ bool State::removeReadFramebufferBinding(FramebufferID framebuffer)
     return false;
 }
 
-bool State::removeDrawFramebufferBinding(FramebufferID framebuffer)
+bool ShareGroupAccessibleState::removeDrawFramebufferBinding(FramebufferID framebuffer,
+                                                             bool framebufferSRGB)
 {
     if (mReadFramebuffer != nullptr && mDrawFramebuffer->id() == framebuffer)
     {
-        setDrawFramebufferBinding(nullptr);
+        setDrawFramebufferBinding(nullptr, framebufferSRGB);
         return true;
     }
 
     return false;
 }
 
-void State::setVertexArrayBinding(const Context *context, VertexArray *vertexArray)
+void ShareGroupAccessibleState::setVertexArrayBinding(const SharedContext *context,
+                                                      VertexArray *vertexArray)
 {
     if (mVertexArray == vertexArray)
     {
@@ -2759,7 +2684,8 @@ void State::setVertexArrayBinding(const Context *context, VertexArray *vertexArr
     }
 }
 
-bool State::removeVertexArrayBinding(const Context *context, VertexArrayID vertexArray)
+bool ShareGroupAccessibleState::removeVertexArrayBinding(const SharedContext *context,
+                                                         VertexArrayID vertexArray)
 {
     if (mVertexArray && mVertexArray->id().value == vertexArray.value)
     {
@@ -2773,41 +2699,44 @@ bool State::removeVertexArrayBinding(const Context *context, VertexArrayID verte
     return false;
 }
 
-VertexArrayID State::getVertexArrayId() const
+VertexArrayID ShareGroupAccessibleState::getVertexArrayId() const
 {
     ASSERT(mVertexArray != nullptr);
     return mVertexArray->id();
 }
 
-void State::bindVertexBuffer(const Context *context,
-                             GLuint bindingIndex,
-                             Buffer *boundBuffer,
-                             GLintptr offset,
-                             GLsizei stride)
+void ShareGroupAccessibleState::bindVertexBuffer(const SharedContext *context,
+                                                 GLuint bindingIndex,
+                                                 Buffer *boundBuffer,
+                                                 GLintptr offset,
+                                                 GLsizei stride)
 {
     getVertexArray()->bindVertexBuffer(context, bindingIndex, boundBuffer, offset, stride);
     mDirtyObjects.set(state::DIRTY_OBJECT_VERTEX_ARRAY);
 }
 
-void State::setVertexAttribFormat(GLuint attribIndex,
-                                  GLint size,
-                                  VertexAttribType type,
-                                  bool normalized,
-                                  bool pureInteger,
-                                  GLuint relativeOffset)
+void ShareGroupAccessibleState::setVertexAttribFormat(GLuint attribIndex,
+                                                      GLint size,
+                                                      VertexAttribType type,
+                                                      bool normalized,
+                                                      bool pureInteger,
+                                                      GLuint relativeOffset)
 {
     getVertexArray()->setVertexAttribFormat(attribIndex, size, type, normalized, pureInteger,
                                             relativeOffset);
     mDirtyObjects.set(state::DIRTY_OBJECT_VERTEX_ARRAY);
 }
 
-void State::setVertexBindingDivisor(const Context *context, GLuint bindingIndex, GLuint divisor)
+void ShareGroupAccessibleState::setVertexBindingDivisor(const SharedContext *context,
+                                                        GLuint bindingIndex,
+                                                        GLuint divisor)
 {
     getVertexArray()->setVertexBindingDivisor(context, bindingIndex, divisor);
     mDirtyObjects.set(state::DIRTY_OBJECT_VERTEX_ARRAY);
 }
 
-angle::Result State::setProgram(const Context *context, Program *newProgram)
+angle::Result ShareGroupAccessibleState::setProgram(const SharedContext *context,
+                                                    Program *newProgram)
 {
     if (newProgram && !newProgram->isLinked())
     {
@@ -2849,26 +2778,27 @@ angle::Result State::setProgram(const Context *context, Program *newProgram)
     return angle::Result::Continue;
 }
 
-void State::setTransformFeedbackBinding(const Context *context,
-                                        TransformFeedback *transformFeedback)
+void ShareGroupAccessibleState::setTransformFeedbackBinding(const SharedContext *context,
+                                                            TransformFeedback *transformFeedback)
 {
     if (transformFeedback == mTransformFeedback.get())
         return;
     if (mTransformFeedback.get())
-        mTransformFeedback->onBindingChanged(context, false);
+        mTransformFeedback->onBindingChanged(false);
     mTransformFeedback.set(context, transformFeedback);
     if (mTransformFeedback.get())
-        mTransformFeedback->onBindingChanged(context, true);
+        mTransformFeedback->onBindingChanged(true);
     mDirtyBits.set(state::DIRTY_BIT_TRANSFORM_FEEDBACK_BINDING);
 }
 
-bool State::removeTransformFeedbackBinding(const Context *context,
-                                           TransformFeedbackID transformFeedback)
+bool ShareGroupAccessibleState::removeTransformFeedbackBinding(
+    const SharedContext *context,
+    TransformFeedbackID transformFeedback)
 {
     if (mTransformFeedback.id() == transformFeedback)
     {
         if (mTransformFeedback.get())
-            mTransformFeedback->onBindingChanged(context, false);
+            mTransformFeedback->onBindingChanged(false);
         mTransformFeedback.set(context, nullptr);
         return true;
     }
@@ -2876,7 +2806,8 @@ bool State::removeTransformFeedbackBinding(const Context *context,
     return false;
 }
 
-angle::Result State::setProgramPipelineBinding(const Context *context, ProgramPipeline *pipeline)
+angle::Result ShareGroupAccessibleState::setProgramPipelineBinding(const SharedContext *context,
+                                                                   ProgramPipeline *pipeline)
 {
     if (mProgramPipeline.get() == pipeline)
     {
@@ -2909,7 +2840,8 @@ angle::Result State::setProgramPipelineBinding(const Context *context, ProgramPi
     return angle::Result::Continue;
 }
 
-void State::detachProgramPipeline(const Context *context, ProgramPipelineID pipeline)
+void ShareGroupAccessibleState::detachProgramPipeline(const SharedContext *context,
+                                                      ProgramPipelineID pipeline)
 {
     mProgramPipeline.set(context, nullptr);
 
@@ -2921,7 +2853,7 @@ void State::detachProgramPipeline(const Context *context, ProgramPipelineID pipe
     }
 }
 
-bool State::isQueryActive(QueryType type) const
+bool ShareGroupAccessibleState::isQueryActive(QueryType type) const
 {
     const Query *query = mActiveQueries[type].get();
     if (query != nullptr)
@@ -2939,7 +2871,7 @@ bool State::isQueryActive(QueryType type) const
     return false;
 }
 
-bool State::isQueryActive(Query *query) const
+bool ShareGroupAccessibleState::isQueryActive(Query *query) const
 {
     for (auto &queryPointer : mActiveQueries)
     {
@@ -2952,12 +2884,14 @@ bool State::isQueryActive(Query *query) const
     return false;
 }
 
-void State::setActiveQuery(const Context *context, QueryType type, Query *query)
+void ShareGroupAccessibleState::setActiveQuery(const SharedContext *context,
+                                               QueryType type,
+                                               Query *query)
 {
     mActiveQueries[type].set(context, query);
 }
 
-QueryID State::getActiveQueryId(QueryType type) const
+QueryID ShareGroupAccessibleState::getActiveQueryId(QueryType type) const
 {
     const Query *query = getActiveQuery(type);
     if (query)
@@ -2967,17 +2901,17 @@ QueryID State::getActiveQueryId(QueryType type) const
     return {0};
 }
 
-Query *State::getActiveQuery(QueryType type) const
+Query *ShareGroupAccessibleState::getActiveQuery(QueryType type) const
 {
     return mActiveQueries[type].get();
 }
 
-angle::Result State::setIndexedBufferBinding(const Context *context,
-                                             BufferBinding target,
-                                             GLuint index,
-                                             Buffer *buffer,
-                                             GLintptr offset,
-                                             GLsizeiptr size)
+angle::Result ShareGroupAccessibleState::setIndexedBufferBinding(const SharedContext *context,
+                                                                 BufferBinding target,
+                                                                 GLuint index,
+                                                                 Buffer *buffer,
+                                                                 GLintptr offset,
+                                                                 GLsizeiptr size)
 {
     setBufferBinding(context, target, buffer);
 
@@ -3011,25 +2945,28 @@ angle::Result State::setIndexedBufferBinding(const Context *context,
     return angle::Result::Continue;
 }
 
-const OffsetBindingPointer<Buffer> &State::getIndexedUniformBuffer(size_t index) const
+const OffsetBindingPointer<Buffer> &ShareGroupAccessibleState::getIndexedUniformBuffer(
+    size_t index) const
 {
     ASSERT(index < mUniformBuffers.size());
     return mUniformBuffers[index];
 }
 
-const OffsetBindingPointer<Buffer> &State::getIndexedAtomicCounterBuffer(size_t index) const
+const OffsetBindingPointer<Buffer> &ShareGroupAccessibleState::getIndexedAtomicCounterBuffer(
+    size_t index) const
 {
     ASSERT(index < mAtomicCounterBuffers.size());
     return mAtomicCounterBuffers[index];
 }
 
-const OffsetBindingPointer<Buffer> &State::getIndexedShaderStorageBuffer(size_t index) const
+const OffsetBindingPointer<Buffer> &ShareGroupAccessibleState::getIndexedShaderStorageBuffer(
+    size_t index) const
 {
     ASSERT(index < mShaderStorageBuffers.size());
     return mShaderStorageBuffers[index];
 }
 
-angle::Result State::detachBuffer(Context *context, const Buffer *buffer)
+angle::Result ShareGroupAccessibleState::detachBuffer(SharedContext *context, const Buffer *buffer)
 {
     BufferID bufferID = buffer->id();
     for (gl::BufferBinding target : angle::AllEnums<BufferBinding>())
@@ -3044,13 +2981,13 @@ angle::Result State::detachBuffer(Context *context, const Buffer *buffer)
     if (curTransformFeedback)
     {
         ANGLE_TRY(curTransformFeedback->detachBuffer(context, bufferID));
-        context->getStateCache().onActiveTransformFeedbackChange(context);
+        context->onActiveTransformFeedbackChange();
     }
 
     if (mVertexArray && mVertexArray->detachBuffer(context, bufferID))
     {
         mDirtyObjects.set(state::DIRTY_OBJECT_VERTEX_ARRAY);
-        context->getStateCache().onVertexArrayStateChange(context);
+        context->onVertexArrayStateChange();
     }
 
     for (size_t uniformBufferIndex : mBoundUniformBuffersMask)
@@ -3091,24 +3028,582 @@ angle::Result State::detachBuffer(Context *context, const Buffer *buffer)
     return angle::Result::Continue;
 }
 
-void State::setEnableVertexAttribArray(unsigned int attribNum, bool enabled)
+void ShareGroupAccessibleState::setEnableVertexAttribArray(unsigned int attribNum, bool enabled)
 {
     getVertexArray()->enableAttribute(attribNum, enabled);
     mDirtyObjects.set(state::DIRTY_OBJECT_VERTEX_ARRAY);
 }
 
-void State::setVertexAttribDivisor(const Context *context, GLuint index, GLuint divisor)
+void ShareGroupAccessibleState::setVertexAttribDivisor(const SharedContext *context,
+                                                       GLuint index,
+                                                       GLuint divisor)
 {
     getVertexArray()->setVertexAttribDivisor(context, index, divisor);
     mDirtyObjects.set(state::DIRTY_OBJECT_VERTEX_ARRAY);
 }
 
-const void *State::getVertexAttribPointer(unsigned int attribNum) const
+const void *ShareGroupAccessibleState::getVertexAttribPointer(unsigned int attribNum) const
 {
     return getVertexArray()->getVertexAttribute(attribNum).pointer;
 }
 
-void State::getBooleanv(GLenum pname, GLboolean *params) const
+angle::Result ShareGroupAccessibleState::onProgramExecutableChange(const SharedContext *context,
+                                                                   Program *program)
+{
+    // OpenGL Spec:
+    // "If LinkProgram or ProgramBinary successfully re-links a program object
+    //  that was already in use as a result of a previous call to UseProgram, then the
+    //  generated executable code will be installed as part of the current rendering state."
+    ASSERT(program->isLinked());
+
+    // If this Program is currently active, we need to update the State's pointer to the current
+    // ProgramExecutable if we just changed it.
+    if (mProgram == program)
+    {
+        mExecutable = &program->getExecutable();
+    }
+
+    mDirtyBits.set(state::DIRTY_BIT_PROGRAM_EXECUTABLE);
+
+    if (program->hasAnyDirtyBit())
+    {
+        mDirtyObjects.set(state::DIRTY_OBJECT_PROGRAM);
+    }
+
+    // Set any bound textures.
+    const ProgramExecutable &executable        = program->getExecutable();
+    const ActiveTextureTypeArray &textureTypes = executable.getActiveSamplerTypes();
+    for (size_t textureIndex : executable.getActiveSamplersMask())
+    {
+        TextureType type = textureTypes[textureIndex];
+
+        // This can happen if there is a conflicting texture type.
+        if (type == TextureType::InvalidEnum)
+            continue;
+
+        Texture *texture = getTextureForActiveSampler(type, textureIndex);
+        updateTextureBinding(context, textureIndex, texture);
+    }
+
+    for (size_t imageUnitIndex : executable.getActiveImagesMask())
+    {
+        Texture *image = mImageUnits[imageUnitIndex].texture.get();
+        if (!image)
+            continue;
+
+        if (image->hasAnyDirtyBit())
+        {
+            ANGLE_TRY(image->syncState(context->getUnsafeContext(), Command::Other));
+        }
+
+        if (isRobustResourceInitEnabled() && image->initState() == InitState::MayNeedInit)
+        {
+            mDirtyObjects.set(state::DIRTY_OBJECT_IMAGES_INIT);
+        }
+    }
+
+    return angle::Result::Continue;
+}
+
+angle::Result ShareGroupAccessibleState::onProgramPipelineExecutableChange(
+    const SharedContext *context)
+{
+    mDirtyBits.set(state::DIRTY_BIT_PROGRAM_EXECUTABLE);
+
+    if (!mProgramPipeline->isLinked())
+    {
+        mDirtyObjects.set(state::DIRTY_OBJECT_PROGRAM_PIPELINE_OBJECT);
+    }
+
+    // Set any bound textures.
+    const ProgramExecutable &executable        = mProgramPipeline->getExecutable();
+    const ActiveTextureTypeArray &textureTypes = executable.getActiveSamplerTypes();
+
+    for (size_t textureIndex : executable.getActiveSamplersMask())
+    {
+        TextureType type = textureTypes[textureIndex];
+
+        // This can happen if there is a conflicting texture type.
+        if (type == TextureType::InvalidEnum)
+            continue;
+
+        Texture *texture = getTextureForActiveSampler(type, textureIndex);
+        updateTextureBinding(context, textureIndex, texture);
+    }
+
+    for (size_t imageUnitIndex : executable.getActiveImagesMask())
+    {
+        Texture *image = mImageUnits[imageUnitIndex].texture.get();
+        if (!image)
+            continue;
+
+        if (image->hasAnyDirtyBit())
+        {
+            ANGLE_TRY(image->syncState(context->getUnsafeContext(), Command::Other));
+        }
+
+        if (isRobustResourceInitEnabled() && image->initState() == InitState::MayNeedInit)
+        {
+            mDirtyObjects.set(state::DIRTY_OBJECT_IMAGES_INIT);
+        }
+    }
+
+    return angle::Result::Continue;
+}
+
+void ShareGroupAccessibleState::setObjectDirty(GLenum target)
+{
+    switch (target)
+    {
+        case GL_READ_FRAMEBUFFER:
+            mDirtyObjects.set(state::DIRTY_OBJECT_READ_FRAMEBUFFER);
+            break;
+        case GL_DRAW_FRAMEBUFFER:
+            setDrawFramebufferDirty();
+            break;
+        case GL_FRAMEBUFFER:
+            mDirtyObjects.set(state::DIRTY_OBJECT_READ_FRAMEBUFFER);
+            setDrawFramebufferDirty();
+            break;
+        case GL_VERTEX_ARRAY:
+            mDirtyObjects.set(state::DIRTY_OBJECT_VERTEX_ARRAY);
+            break;
+        case GL_PROGRAM:
+            mDirtyObjects.set(state::DIRTY_OBJECT_PROGRAM);
+            break;
+        default:
+            break;
+    }
+}
+
+void ShareGroupAccessibleState::setTextureDirty(size_t textureUnitIndex)
+{
+    mDirtyObjects.set(state::DIRTY_OBJECT_TEXTURES);
+    mDirtyTextures.set(textureUnitIndex);
+}
+
+void ShareGroupAccessibleState::setSamplerDirty(size_t samplerIndex)
+{
+    mDirtyObjects.set(state::DIRTY_OBJECT_SAMPLERS);
+    mDirtySamplers.set(samplerIndex);
+}
+
+void ShareGroupAccessibleState::setImageUnit(const SharedContext *context,
+                                             size_t unit,
+                                             Texture *texture,
+                                             GLint level,
+                                             GLboolean layered,
+                                             GLint layer,
+                                             GLenum access,
+                                             GLenum format)
+{
+    ASSERT(!mImageUnits.empty());
+
+    ImageUnit &imageUnit = mImageUnits[unit];
+
+    if (texture)
+    {
+        texture->onBindAsImageTexture();
+    }
+    imageUnit.texture.set(context, texture);
+    imageUnit.level   = level;
+    imageUnit.layered = layered;
+    imageUnit.layer   = layer;
+    imageUnit.access  = access;
+    imageUnit.format  = format;
+    mDirtyBits.set(state::DIRTY_BIT_IMAGE_BINDINGS);
+
+    onImageStateChange(unit);
+}
+
+// Handle a dirty texture event.
+void ShareGroupAccessibleState::onActiveTextureChange(const SharedContext *context,
+                                                      size_t textureUnit)
+{
+    if (mExecutable)
+    {
+        TextureType type       = mExecutable->getActiveSamplerTypes()[textureUnit];
+        Texture *activeTexture = (type != TextureType::InvalidEnum)
+                                     ? getTextureForActiveSampler(type, textureUnit)
+                                     : nullptr;
+        updateTextureBinding(context, textureUnit, activeTexture);
+
+        mExecutable->onStateChange(angle::SubjectMessage::ProgramTextureOrImageBindingChanged);
+    }
+}
+
+void ShareGroupAccessibleState::onActiveTextureStateChange(size_t textureUnit)
+{
+    if (mExecutable)
+    {
+        TextureType type       = mExecutable->getActiveSamplerTypes()[textureUnit];
+        Texture *activeTexture = (type != TextureType::InvalidEnum)
+                                     ? getTextureForActiveSampler(type, textureUnit)
+                                     : nullptr;
+        setActiveTextureDirty(textureUnit, activeTexture);
+    }
+}
+
+void ShareGroupAccessibleState::onImageStateChange(size_t unit)
+{
+    if (mExecutable)
+    {
+        const ImageUnit &image = mImageUnits[unit];
+
+        // Have nothing to do here if no texture bound
+        if (!image.texture.get())
+            return;
+
+        if (image.texture->hasAnyDirtyBit())
+        {
+            mDirtyImages.set(unit);
+            mDirtyObjects.set(state::DIRTY_OBJECT_IMAGES);
+        }
+
+        if (isRobustResourceInitEnabled() && image.texture->initState() == InitState::MayNeedInit)
+        {
+            mDirtyObjects.set(state::DIRTY_OBJECT_IMAGES_INIT);
+        }
+
+        mExecutable->onStateChange(angle::SubjectMessage::ProgramTextureOrImageBindingChanged);
+    }
+}
+
+void ShareGroupAccessibleState::onUniformBufferStateChange(size_t uniformBufferIndex)
+{
+    if (mProgram)
+    {
+        mProgram->onUniformBufferStateChange(uniformBufferIndex);
+    }
+    else if (mProgramPipeline.get())
+    {
+        mProgramPipeline->onUniformBufferStateChange(uniformBufferIndex);
+    }
+    // So that program object syncState will get triggered and process the program's dirty bits
+    setObjectDirty(GL_PROGRAM);
+    // This could be represented by a different dirty bit. Using the same one keeps it simple.
+    mDirtyBits.set(state::DIRTY_BIT_UNIFORM_BUFFER_BINDINGS);
+}
+
+void ShareGroupAccessibleState::onAtomicCounterBufferStateChange(size_t atomicCounterBufferIndex)
+{
+    mDirtyBits.set(state::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING);
+}
+
+void ShareGroupAccessibleState::onShaderStorageBufferStateChange(size_t shaderStorageBufferIndex)
+{
+    mDirtyBits.set(state::DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING);
+}
+
+// These template functions must be defined before they are instantiated in kBufferSetters.
+template <BufferBinding Target>
+void ShareGroupAccessibleState::setGenericBufferBindingWithBit(const SharedContext *context,
+                                                               Buffer *buffer)
+{
+    if (context->isWebGL())
+    {
+        UpdateNonTFBufferBindingWebGL(context, &mBoundBuffers[Target], buffer);
+    }
+    else
+    {
+        mBoundBuffers[Target].set(context, buffer);
+    }
+    mDirtyBits.set(kBufferBindingDirtyBits[Target]);
+}
+
+template <BufferBinding Target>
+void ShareGroupAccessibleState::setGenericBufferBinding(const SharedContext *context,
+                                                        Buffer *buffer)
+{
+    if (context->isWebGL())
+    {
+        UpdateNonTFBufferBindingWebGL(context, &mBoundBuffers[Target], buffer);
+    }
+    else
+    {
+        mBoundBuffers[Target].set(context, buffer);
+    }
+}
+
+template <>
+void ShareGroupAccessibleState::setGenericBufferBinding<BufferBinding::TransformFeedback>(
+    const SharedContext *context,
+    Buffer *buffer)
+{
+    if (context->isWebGL())
+    {
+        UpdateTFBufferBindingWebGL(context, &mBoundBuffers[BufferBinding::TransformFeedback], false,
+                                   buffer);
+    }
+    else
+    {
+        mBoundBuffers[BufferBinding::TransformFeedback].set(context, buffer);
+    }
+}
+
+template <>
+void ShareGroupAccessibleState::setGenericBufferBinding<BufferBinding::ElementArray>(
+    const SharedContext *context,
+    Buffer *buffer)
+{
+    Buffer *oldBuffer = mVertexArray->mState.mElementArrayBuffer.get();
+    if (oldBuffer)
+    {
+        oldBuffer->removeObserver(&mVertexArray->mState.mElementArrayBuffer);
+        oldBuffer->removeContentsObserver(mVertexArray, kElementArrayBufferIndex);
+        if (context->isWebGL())
+        {
+            oldBuffer->onNonTFBindingChanged(-1);
+        }
+        oldBuffer->release(context);
+    }
+    mVertexArray->mState.mElementArrayBuffer.assign(buffer);
+    if (buffer)
+    {
+        buffer->addObserver(&mVertexArray->mState.mElementArrayBuffer);
+        buffer->addContentsObserver(mVertexArray, kElementArrayBufferIndex);
+        if (context->isWebGL())
+        {
+            buffer->onNonTFBindingChanged(1);
+        }
+        buffer->addRef();
+    }
+    mVertexArray->mDirtyBits.set(VertexArray::DIRTY_BIT_ELEMENT_ARRAY_BUFFER);
+    mVertexArray->mIndexRangeCache.invalidate();
+    mDirtyObjects.set(state::DIRTY_OBJECT_VERTEX_ARRAY);
+}
+
+const angle::PackedEnumMap<BufferBinding, ShareGroupAccessibleState::BufferBindingSetter>
+    ShareGroupAccessibleState::kBufferSetters = {{
+        GetBufferBindingSetter<BufferBinding::Array>(),
+        GetBufferBindingSetter<BufferBinding::AtomicCounter>(),
+        GetBufferBindingSetter<BufferBinding::CopyRead>(),
+        GetBufferBindingSetter<BufferBinding::CopyWrite>(),
+        GetBufferBindingSetter<BufferBinding::DispatchIndirect>(),
+        GetBufferBindingSetter<BufferBinding::DrawIndirect>(),
+        GetBufferBindingSetter<BufferBinding::ElementArray>(),
+        GetBufferBindingSetter<BufferBinding::PixelPack>(),
+        GetBufferBindingSetter<BufferBinding::PixelUnpack>(),
+        GetBufferBindingSetter<BufferBinding::ShaderStorage>(),
+        GetBufferBindingSetter<BufferBinding::Texture>(),
+        GetBufferBindingSetter<BufferBinding::TransformFeedback>(),
+        GetBufferBindingSetter<BufferBinding::Uniform>(),
+    }};
+
+angle::Result ShareGroupAccessibleState::syncActiveTextures(const Context *context, Command command)
+{
+    if (mDirtyActiveTextures.none())
+    {
+        return angle::Result::Continue;
+    }
+
+    for (size_t textureUnit : mDirtyActiveTextures)
+    {
+        if (mExecutable)
+        {
+            TextureType type       = mExecutable->getActiveSamplerTypes()[textureUnit];
+            Texture *activeTexture = (type != TextureType::InvalidEnum)
+                                         ? getTextureForActiveSampler(type, textureUnit)
+                                         : nullptr;
+            const Sampler *sampler = mSamplers[textureUnit].get();
+
+            updateActiveTextureStateOnSync(context->asSharedContext(), textureUnit, sampler,
+                                           activeTexture);
+        }
+    }
+
+    mDirtyActiveTextures.reset();
+    return angle::Result::Continue;
+}
+
+angle::Result ShareGroupAccessibleState::syncTexturesInit(const Context *context, Command command)
+{
+    ASSERT(isRobustResourceInitEnabled());
+
+    if (!mProgram)
+        return angle::Result::Continue;
+
+    for (size_t textureUnitIndex : mExecutable->getActiveSamplersMask())
+    {
+        Texture *texture = mActiveTexturesCache[textureUnitIndex];
+        if (texture)
+        {
+            ANGLE_TRY(texture->ensureInitialized(context));
+        }
+    }
+    return angle::Result::Continue;
+}
+
+angle::Result ShareGroupAccessibleState::syncImagesInit(const Context *context, Command command)
+{
+    ASSERT(isRobustResourceInitEnabled());
+    ASSERT(mExecutable);
+    for (size_t imageUnitIndex : mExecutable->getActiveImagesMask())
+    {
+        Texture *texture = mImageUnits[imageUnitIndex].texture.get();
+        if (texture)
+        {
+            ANGLE_TRY(texture->ensureInitialized(context));
+        }
+    }
+    return angle::Result::Continue;
+}
+
+angle::Result ShareGroupAccessibleState::syncReadAttachments(const Context *context,
+                                                             Command command)
+{
+    ASSERT(mReadFramebuffer);
+    ASSERT(isRobustResourceInitEnabled());
+    return mReadFramebuffer->ensureReadAttachmentsInitialized(context);
+}
+
+angle::Result ShareGroupAccessibleState::syncDrawAttachments(const Context *context,
+                                                             Command command)
+{
+    ASSERT(mDrawFramebuffer);
+    ASSERT(isRobustResourceInitEnabled());
+    return mDrawFramebuffer->ensureDrawAttachmentsInitialized(context);
+}
+
+angle::Result ShareGroupAccessibleState::syncReadFramebuffer(const Context *context,
+                                                             Command command)
+{
+    ASSERT(mReadFramebuffer);
+    return mReadFramebuffer->syncState(context, GL_READ_FRAMEBUFFER, command);
+}
+
+angle::Result ShareGroupAccessibleState::syncDrawFramebuffer(const Context *context,
+                                                             Command command)
+{
+    ASSERT(mDrawFramebuffer);
+    mDrawFramebuffer->setWriteControlMode(context->getState().getFramebufferSRGB()
+                                              ? SrgbWriteControlMode::Default
+                                              : SrgbWriteControlMode::Linear);
+    return mDrawFramebuffer->syncState(context, GL_DRAW_FRAMEBUFFER, command);
+}
+
+angle::Result ShareGroupAccessibleState::syncTextures(const Context *context, Command command)
+{
+    if (mDirtyTextures.none())
+        return angle::Result::Continue;
+
+    for (size_t textureIndex : mDirtyTextures)
+    {
+        Texture *texture = mActiveTexturesCache[textureIndex];
+        if (texture && texture->hasAnyDirtyBit())
+        {
+            ANGLE_TRY(texture->syncState(context, Command::Other));
+        }
+    }
+
+    mDirtyTextures.reset();
+    return angle::Result::Continue;
+}
+
+angle::Result ShareGroupAccessibleState::syncImages(const Context *context, Command command)
+{
+    if (mDirtyImages.none())
+        return angle::Result::Continue;
+
+    for (size_t imageUnitIndex : mDirtyImages)
+    {
+        Texture *texture = mImageUnits[imageUnitIndex].texture.get();
+        if (texture && texture->hasAnyDirtyBit())
+        {
+            ANGLE_TRY(texture->syncState(context, Command::Other));
+        }
+    }
+
+    mDirtyImages.reset();
+    return angle::Result::Continue;
+}
+
+angle::Result ShareGroupAccessibleState::syncSamplers(const Context *context, Command command)
+{
+    if (mDirtySamplers.none())
+        return angle::Result::Continue;
+
+    for (size_t samplerIndex : mDirtySamplers)
+    {
+        BindingPointer<Sampler> &sampler = mSamplers[samplerIndex];
+        if (sampler.get() && sampler->isDirty())
+        {
+            ANGLE_TRY(sampler->syncState(context));
+        }
+    }
+
+    mDirtySamplers.reset();
+
+    return angle::Result::Continue;
+}
+
+angle::Result ShareGroupAccessibleState::syncVertexArray(const Context *context, Command command)
+{
+    ASSERT(mVertexArray);
+    return mVertexArray->syncState(context);
+}
+
+angle::Result ShareGroupAccessibleState::syncProgram(const Context *context, Command command)
+{
+    // There may not be a program if the calling application only uses program pipelines.
+    if (mProgram)
+    {
+        return mProgram->syncState(context);
+    }
+    else if (mProgramPipeline.get())
+    {
+        return mProgramPipeline->syncState(context);
+    }
+    return angle::Result::Continue;
+}
+
+angle::Result ShareGroupAccessibleState::syncProgramPipelineObject(const Context *context,
+                                                                   Command command)
+{
+    // If a ProgramPipeline is bound, ensure it is linked.
+    if (mProgramPipeline.get())
+    {
+        mProgramPipeline->resolveLink(context);
+    }
+    return angle::Result::Continue;
+}
+
+angle::Result ShareGroupAccessibleState::syncDirtyObject(const Context *context,
+                                                         PrivateState *privateState,
+                                                         GLenum target)
+{
+    state::DirtyObjects localSet;
+
+    switch (target)
+    {
+        case GL_READ_FRAMEBUFFER:
+            localSet.set(state::DIRTY_OBJECT_READ_FRAMEBUFFER);
+            break;
+        case GL_DRAW_FRAMEBUFFER:
+            localSet.set(state::DIRTY_OBJECT_DRAW_FRAMEBUFFER);
+            break;
+        case GL_FRAMEBUFFER:
+            localSet.set(state::DIRTY_OBJECT_READ_FRAMEBUFFER);
+            localSet.set(state::DIRTY_OBJECT_DRAW_FRAMEBUFFER);
+            break;
+        case GL_VERTEX_ARRAY:
+            localSet.set(state::DIRTY_OBJECT_VERTEX_ARRAY);
+            break;
+        case GL_TEXTURE:
+            localSet.set(state::DIRTY_OBJECT_TEXTURES);
+            break;
+        case GL_SAMPLER:
+            localSet.set(state::DIRTY_OBJECT_SAMPLERS);
+            break;
+        case GL_PROGRAM:
+            localSet.set(state::DIRTY_OBJECT_PROGRAM);
+            break;
+    }
+
+    return syncDirtyObjects(context, localSet, privateState, Command::Other);
+}
+
+bool ShareGroupAccessibleState::getBooleanv(GLenum pname, GLboolean *params) const
 {
     switch (pname)
     {
@@ -3119,11 +3614,15 @@ void State::getBooleanv(GLenum pname, GLboolean *params) const
             *params = getCurrentTransformFeedback()->isPaused() ? GL_TRUE : GL_FALSE;
             break;
         default:
-            mPrivateState.getBooleanv(pname, params);
+            return false;
     }
+    return true;
 }
 
-angle::Result State::getIntegerv(const Context *context, GLenum pname, GLint *params) const
+bool ShareGroupAccessibleState::getIntegerv(const Context *context,
+                                            GLenum pname,
+                                            GLint *params,
+                                            unsigned int activeSampler) const
 {
     if (pname >= GL_DRAW_BUFFER0_EXT && pname <= GL_DRAW_BUFFER15_EXT)
     {
@@ -3136,7 +3635,7 @@ angle::Result State::getIntegerv(const Context *context, GLenum pname, GLint *pa
         *params = drawBuffer < framebuffer->getDrawbufferStateCount()
                       ? framebuffer->getDrawBufferState(drawBuffer)
                       : GL_NONE;
-        return angle::Result::Continue;
+        return true;
     }
 
     switch (pname)
@@ -3271,47 +3770,46 @@ angle::Result State::getIntegerv(const Context *context, GLenum pname, GLint *pa
         }
         break;
         case GL_TEXTURE_BINDING_2D:
-            ASSERT(static_cast<GLint>(getActiveSampler()) < getCaps().maxCombinedTextureImageUnits);
-            *params = getSamplerTextureId(getActiveSampler(), TextureType::_2D).value;
+            ASSERT(static_cast<GLint>(activeSampler) < getCaps().maxCombinedTextureImageUnits);
+            *params = getSamplerTextureId(activeSampler, TextureType::_2D).value;
             break;
         case GL_TEXTURE_BINDING_RECTANGLE_ANGLE:
-            ASSERT(static_cast<GLint>(getActiveSampler()) < getCaps().maxCombinedTextureImageUnits);
-            *params = getSamplerTextureId(getActiveSampler(), TextureType::Rectangle).value;
+            ASSERT(static_cast<GLint>(activeSampler) < getCaps().maxCombinedTextureImageUnits);
+            *params = getSamplerTextureId(activeSampler, TextureType::Rectangle).value;
             break;
         case GL_TEXTURE_BINDING_CUBE_MAP:
-            ASSERT(static_cast<GLint>(getActiveSampler()) < getCaps().maxCombinedTextureImageUnits);
-            *params = getSamplerTextureId(getActiveSampler(), TextureType::CubeMap).value;
+            ASSERT(static_cast<GLint>(activeSampler) < getCaps().maxCombinedTextureImageUnits);
+            *params = getSamplerTextureId(activeSampler, TextureType::CubeMap).value;
             break;
         case GL_TEXTURE_BINDING_3D:
-            ASSERT(static_cast<GLint>(getActiveSampler()) < getCaps().maxCombinedTextureImageUnits);
-            *params = getSamplerTextureId(getActiveSampler(), TextureType::_3D).value;
+            ASSERT(static_cast<GLint>(activeSampler) < getCaps().maxCombinedTextureImageUnits);
+            *params = getSamplerTextureId(activeSampler, TextureType::_3D).value;
             break;
         case GL_TEXTURE_BINDING_2D_ARRAY:
-            ASSERT(static_cast<GLint>(getActiveSampler()) < getCaps().maxCombinedTextureImageUnits);
-            *params = getSamplerTextureId(getActiveSampler(), TextureType::_2DArray).value;
+            ASSERT(static_cast<GLint>(activeSampler) < getCaps().maxCombinedTextureImageUnits);
+            *params = getSamplerTextureId(activeSampler, TextureType::_2DArray).value;
             break;
         case GL_TEXTURE_BINDING_2D_MULTISAMPLE:
-            ASSERT(static_cast<GLint>(getActiveSampler()) < getCaps().maxCombinedTextureImageUnits);
-            *params = getSamplerTextureId(getActiveSampler(), TextureType::_2DMultisample).value;
+            ASSERT(static_cast<GLint>(activeSampler) < getCaps().maxCombinedTextureImageUnits);
+            *params = getSamplerTextureId(activeSampler, TextureType::_2DMultisample).value;
             break;
         case GL_TEXTURE_BINDING_2D_MULTISAMPLE_ARRAY:
-            ASSERT(static_cast<GLint>(getActiveSampler()) < getCaps().maxCombinedTextureImageUnits);
-            *params =
-                getSamplerTextureId(getActiveSampler(), TextureType::_2DMultisampleArray).value;
+            ASSERT(static_cast<GLint>(activeSampler) < getCaps().maxCombinedTextureImageUnits);
+            *params = getSamplerTextureId(activeSampler, TextureType::_2DMultisampleArray).value;
             break;
         case GL_TEXTURE_BINDING_CUBE_MAP_ARRAY:
-            ASSERT(static_cast<GLint>(getActiveSampler()) < getCaps().maxCombinedTextureImageUnits);
-            *params = getSamplerTextureId(getActiveSampler(), TextureType::CubeMapArray).value;
+            ASSERT(static_cast<GLint>(activeSampler) < getCaps().maxCombinedTextureImageUnits);
+            *params = getSamplerTextureId(activeSampler, TextureType::CubeMapArray).value;
             break;
         case GL_TEXTURE_BINDING_EXTERNAL_OES:
-            ASSERT(static_cast<GLint>(getActiveSampler()) < getCaps().maxCombinedTextureImageUnits);
-            *params = getSamplerTextureId(getActiveSampler(), TextureType::External).value;
+            ASSERT(static_cast<GLint>(activeSampler) < getCaps().maxCombinedTextureImageUnits);
+            *params = getSamplerTextureId(activeSampler, TextureType::External).value;
             break;
 
         // GL_OES_texture_buffer
         case GL_TEXTURE_BINDING_BUFFER:
-            ASSERT(static_cast<GLint>(getActiveSampler()) < getCaps().maxCombinedTextureImageUnits);
-            *params = getSamplerTextureId(getActiveSampler(), TextureType::Buffer).value;
+            ASSERT(static_cast<GLint>(activeSampler) < getCaps().maxCombinedTextureImageUnits);
+            *params = getSamplerTextureId(activeSampler, TextureType::Buffer).value;
             break;
         case GL_TEXTURE_BUFFER_BINDING:
             *params = mBoundBuffers[BufferBinding::Texture].id().value;
@@ -3343,17 +3841,8 @@ angle::Result State::getIntegerv(const Context *context, GLenum pname, GLint *pa
             *params = mReadFramebuffer->getReadBufferState();
             break;
         case GL_SAMPLER_BINDING:
-            ASSERT(static_cast<GLint>(getActiveSampler()) < getCaps().maxCombinedTextureImageUnits);
-            *params = getSamplerId(getActiveSampler()).value;
-            break;
-        case GL_DEBUG_LOGGED_MESSAGES:
-            *params = static_cast<GLint>(getDebug().getMessageCount());
-            break;
-        case GL_DEBUG_NEXT_LOGGED_MESSAGE_LENGTH:
-            *params = static_cast<GLint>(getDebug().getNextMessageLength());
-            break;
-        case GL_DEBUG_GROUP_STACK_DEPTH:
-            *params = static_cast<GLint>(getDebug().getGroupStackDepth());
+            ASSERT(static_cast<GLint>(activeSampler) < getCaps().maxCombinedTextureImageUnits);
+            *params = getSamplerId(activeSampler).value;
             break;
         case GL_ATOMIC_COUNTER_BUFFER_BINDING:
             *params = mBoundBuffers[BufferBinding::AtomicCounter].id().value;
@@ -3380,23 +3869,18 @@ angle::Result State::getIntegerv(const Context *context, GLenum pname, GLint *pa
         }
 
         default:
-            mPrivateState.getIntegerv(pname, params);
-            break;
+            return false;
     }
 
-    return angle::Result::Continue;
+    return true;
 }
 
-void State::getPointerv(const Context *context, GLenum pname, void **params) const
+bool ShareGroupAccessibleState::getPointerv(const Context *context,
+                                            GLenum pname,
+                                            void **params) const
 {
     switch (pname)
     {
-        case GL_DEBUG_CALLBACK_FUNCTION:
-            *params = reinterpret_cast<void *>(getDebug().getCallback());
-            break;
-        case GL_DEBUG_CALLBACK_USER_PARAM:
-            *params = const_cast<void *>(getDebug().getUserParam());
-            break;
         case GL_VERTEX_ARRAY_POINTER:
         case GL_NORMAL_ARRAY_POINTER:
         case GL_COLOR_ARRAY_POINTER:
@@ -3405,14 +3889,14 @@ void State::getPointerv(const Context *context, GLenum pname, void **params) con
             QueryVertexAttribPointerv(getVertexArray()->getVertexAttribute(
                                           context->vertexArrayIndex(ParamToVertexArrayType(pname))),
                                       GL_VERTEX_ATTRIB_ARRAY_POINTER, params);
-            return;
-        default:
-            UNREACHABLE();
             break;
+        default:
+            return false;
     }
+    return true;
 }
 
-void State::getIntegeri_v(const Context *context, GLenum target, GLuint index, GLint *data) const
+bool ShareGroupAccessibleState::getIntegeri_v(GLenum target, GLuint index, GLint *data) const
 {
     switch (target)
     {
@@ -3469,12 +3953,13 @@ void State::getIntegeri_v(const Context *context, GLenum target, GLuint index, G
             *data = mImageUnits[index].format;
             break;
         default:
-            mPrivateState.getIntegeri_v(target, index, data);
-            break;
+            return false;
     }
+
+    return true;
 }
 
-void State::getInteger64i_v(GLenum target, GLuint index, GLint64 *data) const
+void ShareGroupAccessibleState::getInteger64i_v(GLenum target, GLuint index, GLint64 *data) const
 {
     switch (target)
     {
@@ -3516,7 +4001,7 @@ void State::getInteger64i_v(GLenum target, GLuint index, GLint64 *data) const
     }
 }
 
-void State::getBooleani_v(GLenum target, GLuint index, GLboolean *data) const
+bool ShareGroupAccessibleState::getBooleani_v(GLenum target, GLuint index, GLboolean *data) const
 {
     switch (target)
     {
@@ -3525,486 +4010,169 @@ void State::getBooleani_v(GLenum target, GLuint index, GLboolean *data) const
             *data = mImageUnits[index].layered;
             break;
         default:
-            mPrivateState.getBooleani_v(target, index, data);
-            break;
+            return false;
+    }
+
+    return true;
+}
+
+State::State(const State *shareContextState,
+             egl::ShareGroup *shareGroup,
+             TextureManager *shareTextures,
+             SemaphoreManager *shareSemaphores,
+             egl::ContextMutex *sharedContextMutex,
+             egl::SingleContextMutex *singleContextMutex,
+             const OverlayType *overlay,
+             const EGLenum clientType,
+             const Version &clientVersion,
+             EGLint profileMask,
+             bool debug,
+             bool bindGeneratesResourceCHROMIUM,
+             bool clientArraysEnabled,
+             bool robustResourceInit,
+             bool programBinaryCacheEnabled,
+             EGLenum contextPriority,
+             bool hasRobustAccess,
+             bool hasProtectedContent)
+    : mSharedContextMutex(sharedContextMutex),
+      mSingleContextMutex(singleContextMutex),
+      mContextMutex(singleContextMutex == nullptr ? sharedContextMutex : singleContextMutex),
+      mIsSharedContextMutexActive(singleContextMutex == nullptr),
+      mBufferManager(AllocateOrGetSharedResourceManager(shareContextState, &State::mBufferManager)),
+      mShaderProgramManager(
+          AllocateOrGetSharedResourceManager(shareContextState, &State::mShaderProgramManager)),
+      mTextureManager(AllocateOrGetSharedResourceManager(shareContextState,
+                                                         &State::mTextureManager,
+                                                         shareTextures)),
+      mRenderbufferManager(
+          AllocateOrGetSharedResourceManager(shareContextState, &State::mRenderbufferManager)),
+      mSamplerManager(
+          AllocateOrGetSharedResourceManager(shareContextState, &State::mSamplerManager)),
+      mSyncManager(AllocateOrGetSharedResourceManager(shareContextState, &State::mSyncManager)),
+      mFramebufferManager(new FramebufferManager()),
+      mProgramPipelineManager(new ProgramPipelineManager()),
+      mMemoryObjectManager(
+          AllocateOrGetSharedResourceManager(shareContextState, &State::mMemoryObjectManager)),
+      mSemaphoreManager(AllocateOrGetSharedResourceManager(shareContextState,
+                                                           &State::mSemaphoreManager,
+                                                           shareSemaphores)),
+      mMaxShaderCompilerThreads(std::numeric_limits<GLuint>::max()),
+      mOverlay(overlay),
+      mPrivateState(clientType,
+                    clientVersion,
+                    profileMask,
+                    debug,
+                    bindGeneratesResourceCHROMIUM,
+                    clientArraysEnabled,
+                    robustResourceInit,
+                    programBinaryCacheEnabled),
+      mShareGroupAccessibleState(shareGroup,
+                                 clientType,
+                                 clientVersion,
+                                 profileMask,
+                                 robustResourceInit,
+                                 mPrivateState.getCaps(),
+                                 mPrivateState.getExtensions(),
+                                 mPrivateState.getLimitations(),
+                                 contextPriority,
+                                 hasRobustAccess,
+                                 hasProtectedContent,
+                                 shareTextures != nullptr)
+{}
+
+State::~State() {}
+
+void State::initialize(Context *context)
+{
+    const Extensions &nativeExtensions = context->getImplementation()->getNativeExtensions();
+    const ShPixelLocalStorageType pixelLocalStorageType =
+        context->getImplementation()->getNativePixelLocalStorageOptions().type;
+
+    mPrivateState.initialize();
+    mShareGroupAccessibleState.initialize(context->asSharedContext(), nativeExtensions,
+                                          pixelLocalStorageType);
+}
+
+void State::reset(const Context *context)
+{
+    mPrivateState.reset();
+    mShareGroupAccessibleState.reset(context);
+
+    setAllDirtyBits();
+}
+
+bool State::allActiveDrawBufferChannelsMasked() const
+{
+    // Compare current color mask with all-disabled color mask, while ignoring disabled draw
+    // buffers.
+    return (getBlendStateExt().compareColorMask(0) &
+            mShareGroupAccessibleState.getDrawFramebuffer()->getDrawBufferMask())
+        .none();
+}
+
+bool State::anyActiveDrawBufferChannelMasked() const
+{
+    // Compare current color mask with all-enabled color mask, while ignoring disabled draw
+    // buffers.
+    return (getBlendStateExt().compareColorMask(getBlendStateExt().getAllColorMaskBits()) &
+            mShareGroupAccessibleState.getDrawFramebuffer()->getDrawBufferMask())
+        .any();
+}
+
+Framebuffer *State::getDefaultFramebuffer() const
+{
+    return mFramebufferManager->getDefaultFramebuffer();
+}
+
+void State::getBooleanv(GLenum pname, GLboolean *params) const
+{
+    if (!mShareGroupAccessibleState.getBooleanv(pname, params))
+    {
+        mPrivateState.getBooleanv(pname, params);
     }
 }
 
-// TODO(http://anglebug.com/3889): Remove this helper function after blink and chromium part
-// refactor done.
-Texture *State::getTextureForActiveSampler(TextureType type, size_t index)
+void State::getIntegerv(const Context *context, GLenum pname, GLint *params) const
 {
-    if (type != TextureType::VideoImage)
+    if (!mShareGroupAccessibleState.getIntegerv(context, pname, params,
+                                                mPrivateState.getActiveSampler()))
     {
-        return mSamplerTextures[type][index].get();
-    }
-
-    ASSERT(type == TextureType::VideoImage);
-
-    Texture *candidateTexture = mSamplerTextures[type][index].get();
-    if (candidateTexture->getWidth(TextureTarget::VideoImage, 0) == 0 ||
-        candidateTexture->getHeight(TextureTarget::VideoImage, 0) == 0 ||
-        candidateTexture->getDepth(TextureTarget::VideoImage, 0) == 0)
-    {
-        return mSamplerTextures[TextureType::_2D][index].get();
-    }
-
-    return mSamplerTextures[type][index].get();
-}
-
-angle::Result State::syncActiveTextures(const Context *context, Command command)
-{
-    if (mDirtyActiveTextures.none())
-    {
-        return angle::Result::Continue;
-    }
-
-    for (size_t textureUnit : mDirtyActiveTextures)
-    {
-        if (mExecutable)
-        {
-            TextureType type       = mExecutable->getActiveSamplerTypes()[textureUnit];
-            Texture *activeTexture = (type != TextureType::InvalidEnum)
-                                         ? getTextureForActiveSampler(type, textureUnit)
-                                         : nullptr;
-            const Sampler *sampler = mSamplers[textureUnit].get();
-
-            updateActiveTextureStateOnSync(context, textureUnit, sampler, activeTexture);
-        }
-    }
-
-    mDirtyActiveTextures.reset();
-    return angle::Result::Continue;
-}
-
-angle::Result State::syncTexturesInit(const Context *context, Command command)
-{
-    ASSERT(isRobustResourceInitEnabled());
-
-    if (!mProgram)
-        return angle::Result::Continue;
-
-    for (size_t textureUnitIndex : mExecutable->getActiveSamplersMask())
-    {
-        Texture *texture = mActiveTexturesCache[textureUnitIndex];
-        if (texture)
-        {
-            ANGLE_TRY(texture->ensureInitialized(context));
-        }
-    }
-    return angle::Result::Continue;
-}
-
-angle::Result State::syncImagesInit(const Context *context, Command command)
-{
-    ASSERT(isRobustResourceInitEnabled());
-    ASSERT(mExecutable);
-    for (size_t imageUnitIndex : mExecutable->getActiveImagesMask())
-    {
-        Texture *texture = mImageUnits[imageUnitIndex].texture.get();
-        if (texture)
-        {
-            ANGLE_TRY(texture->ensureInitialized(context));
-        }
-    }
-    return angle::Result::Continue;
-}
-
-angle::Result State::syncReadAttachments(const Context *context, Command command)
-{
-    ASSERT(mReadFramebuffer);
-    ASSERT(isRobustResourceInitEnabled());
-    return mReadFramebuffer->ensureReadAttachmentsInitialized(context);
-}
-
-angle::Result State::syncDrawAttachments(const Context *context, Command command)
-{
-    ASSERT(mDrawFramebuffer);
-    ASSERT(isRobustResourceInitEnabled());
-    return mDrawFramebuffer->ensureDrawAttachmentsInitialized(context);
-}
-
-angle::Result State::syncReadFramebuffer(const Context *context, Command command)
-{
-    ASSERT(mReadFramebuffer);
-    return mReadFramebuffer->syncState(context, GL_READ_FRAMEBUFFER, command);
-}
-
-angle::Result State::syncDrawFramebuffer(const Context *context, Command command)
-{
-    ASSERT(mDrawFramebuffer);
-    mDrawFramebuffer->setWriteControlMode(context->getState().getFramebufferSRGB()
-                                              ? SrgbWriteControlMode::Default
-                                              : SrgbWriteControlMode::Linear);
-    return mDrawFramebuffer->syncState(context, GL_DRAW_FRAMEBUFFER, command);
-}
-
-angle::Result State::syncTextures(const Context *context, Command command)
-{
-    if (mDirtyTextures.none())
-        return angle::Result::Continue;
-
-    for (size_t textureIndex : mDirtyTextures)
-    {
-        Texture *texture = mActiveTexturesCache[textureIndex];
-        if (texture && texture->hasAnyDirtyBit())
-        {
-            ANGLE_TRY(texture->syncState(context, Command::Other));
-        }
-    }
-
-    mDirtyTextures.reset();
-    return angle::Result::Continue;
-}
-
-angle::Result State::syncImages(const Context *context, Command command)
-{
-    if (mDirtyImages.none())
-        return angle::Result::Continue;
-
-    for (size_t imageUnitIndex : mDirtyImages)
-    {
-        Texture *texture = mImageUnits[imageUnitIndex].texture.get();
-        if (texture && texture->hasAnyDirtyBit())
-        {
-            ANGLE_TRY(texture->syncState(context, Command::Other));
-        }
-    }
-
-    mDirtyImages.reset();
-    return angle::Result::Continue;
-}
-
-angle::Result State::syncSamplers(const Context *context, Command command)
-{
-    if (mDirtySamplers.none())
-        return angle::Result::Continue;
-
-    for (size_t samplerIndex : mDirtySamplers)
-    {
-        BindingPointer<Sampler> &sampler = mSamplers[samplerIndex];
-        if (sampler.get() && sampler->isDirty())
-        {
-            ANGLE_TRY(sampler->syncState(context));
-        }
-    }
-
-    mDirtySamplers.reset();
-
-    return angle::Result::Continue;
-}
-
-angle::Result State::syncVertexArray(const Context *context, Command command)
-{
-    ASSERT(mVertexArray);
-    return mVertexArray->syncState(context);
-}
-
-angle::Result State::syncProgram(const Context *context, Command command)
-{
-    // There may not be a program if the calling application only uses program pipelines.
-    if (mProgram)
-    {
-        return mProgram->syncState(context);
-    }
-    else if (mProgramPipeline.get())
-    {
-        return mProgramPipeline->syncState(context);
-    }
-    return angle::Result::Continue;
-}
-
-angle::Result State::syncProgramPipelineObject(const Context *context, Command command)
-{
-    // If a ProgramPipeline is bound, ensure it is linked.
-    if (mProgramPipeline.get())
-    {
-        mProgramPipeline->resolveLink(context);
-    }
-    return angle::Result::Continue;
-}
-
-angle::Result State::syncDirtyObject(const Context *context, GLenum target)
-{
-    state::DirtyObjects localSet;
-
-    switch (target)
-    {
-        case GL_READ_FRAMEBUFFER:
-            localSet.set(state::DIRTY_OBJECT_READ_FRAMEBUFFER);
-            break;
-        case GL_DRAW_FRAMEBUFFER:
-            localSet.set(state::DIRTY_OBJECT_DRAW_FRAMEBUFFER);
-            break;
-        case GL_FRAMEBUFFER:
-            localSet.set(state::DIRTY_OBJECT_READ_FRAMEBUFFER);
-            localSet.set(state::DIRTY_OBJECT_DRAW_FRAMEBUFFER);
-            break;
-        case GL_VERTEX_ARRAY:
-            localSet.set(state::DIRTY_OBJECT_VERTEX_ARRAY);
-            break;
-        case GL_TEXTURE:
-            localSet.set(state::DIRTY_OBJECT_TEXTURES);
-            break;
-        case GL_SAMPLER:
-            localSet.set(state::DIRTY_OBJECT_SAMPLERS);
-            break;
-        case GL_PROGRAM:
-            localSet.set(state::DIRTY_OBJECT_PROGRAM);
-            break;
-    }
-
-    return syncDirtyObjects(context, localSet, Command::Other);
-}
-
-void State::setObjectDirty(GLenum target)
-{
-    switch (target)
-    {
-        case GL_READ_FRAMEBUFFER:
-            mDirtyObjects.set(state::DIRTY_OBJECT_READ_FRAMEBUFFER);
-            break;
-        case GL_DRAW_FRAMEBUFFER:
-            setDrawFramebufferDirty();
-            break;
-        case GL_FRAMEBUFFER:
-            mDirtyObjects.set(state::DIRTY_OBJECT_READ_FRAMEBUFFER);
-            setDrawFramebufferDirty();
-            break;
-        case GL_VERTEX_ARRAY:
-            mDirtyObjects.set(state::DIRTY_OBJECT_VERTEX_ARRAY);
-            break;
-        case GL_PROGRAM:
-            mDirtyObjects.set(state::DIRTY_OBJECT_PROGRAM);
-            break;
-        default:
-            break;
+        mPrivateState.getIntegerv(pname, params);
     }
 }
 
-angle::Result State::onProgramExecutableChange(const Context *context, Program *program)
+void State::getPointerv(const Context *context, GLenum pname, void **params) const
 {
-    // OpenGL Spec:
-    // "If LinkProgram or ProgramBinary successfully re-links a program object
-    //  that was already in use as a result of a previous call to UseProgram, then the
-    //  generated executable code will be installed as part of the current rendering state."
-    ASSERT(program->isLinked());
-
-    // If this Program is currently active, we need to update the State's pointer to the current
-    // ProgramExecutable if we just changed it.
-    if (mProgram == program)
+    if (!mShareGroupAccessibleState.getPointerv(context, pname, params))
     {
-        mExecutable = &program->getExecutable();
+        mPrivateState.getPointerv(pname, params);
     }
-
-    mDirtyBits.set(state::DIRTY_BIT_PROGRAM_EXECUTABLE);
-
-    if (program->hasAnyDirtyBit())
-    {
-        mDirtyObjects.set(state::DIRTY_OBJECT_PROGRAM);
-    }
-
-    // Set any bound textures.
-    const ProgramExecutable &executable        = program->getExecutable();
-    const ActiveTextureTypeArray &textureTypes = executable.getActiveSamplerTypes();
-    for (size_t textureIndex : executable.getActiveSamplersMask())
-    {
-        TextureType type = textureTypes[textureIndex];
-
-        // This can happen if there is a conflicting texture type.
-        if (type == TextureType::InvalidEnum)
-            continue;
-
-        Texture *texture = getTextureForActiveSampler(type, textureIndex);
-        updateTextureBinding(context, textureIndex, texture);
-    }
-
-    for (size_t imageUnitIndex : executable.getActiveImagesMask())
-    {
-        Texture *image = mImageUnits[imageUnitIndex].texture.get();
-        if (!image)
-            continue;
-
-        if (image->hasAnyDirtyBit())
-        {
-            ANGLE_TRY(image->syncState(context, Command::Other));
-        }
-
-        if (isRobustResourceInitEnabled() && image->initState() == InitState::MayNeedInit)
-        {
-            mDirtyObjects.set(state::DIRTY_OBJECT_IMAGES_INIT);
-        }
-    }
-
-    return angle::Result::Continue;
 }
 
-angle::Result State::onProgramPipelineExecutableChange(const Context *context)
+void State::getIntegeri_v(GLenum target, GLuint index, GLint *data) const
 {
-    mDirtyBits.set(state::DIRTY_BIT_PROGRAM_EXECUTABLE);
-
-    if (!mProgramPipeline->isLinked())
+    if (!mShareGroupAccessibleState.getIntegeri_v(target, index, data))
     {
-        mDirtyObjects.set(state::DIRTY_OBJECT_PROGRAM_PIPELINE_OBJECT);
+        mPrivateState.getIntegeri_v(target, index, data);
     }
-
-    // Set any bound textures.
-    const ProgramExecutable &executable        = mProgramPipeline->getExecutable();
-    const ActiveTextureTypeArray &textureTypes = executable.getActiveSamplerTypes();
-
-    for (size_t textureIndex : executable.getActiveSamplersMask())
-    {
-        TextureType type = textureTypes[textureIndex];
-
-        // This can happen if there is a conflicting texture type.
-        if (type == TextureType::InvalidEnum)
-            continue;
-
-        Texture *texture = getTextureForActiveSampler(type, textureIndex);
-        updateTextureBinding(context, textureIndex, texture);
-    }
-
-    for (size_t imageUnitIndex : executable.getActiveImagesMask())
-    {
-        Texture *image = mImageUnits[imageUnitIndex].texture.get();
-        if (!image)
-            continue;
-
-        if (image->hasAnyDirtyBit())
-        {
-            ANGLE_TRY(image->syncState(context, Command::Other));
-        }
-
-        if (isRobustResourceInitEnabled() && image->initState() == InitState::MayNeedInit)
-        {
-            mDirtyObjects.set(state::DIRTY_OBJECT_IMAGES_INIT);
-        }
-    }
-
-    return angle::Result::Continue;
 }
 
-void State::setTextureDirty(size_t textureUnitIndex)
+void State::getInteger64i_v(GLenum target, GLuint index, GLint64 *data) const
 {
-    mDirtyObjects.set(state::DIRTY_OBJECT_TEXTURES);
-    mDirtyTextures.set(textureUnitIndex);
+    mShareGroupAccessibleState.getInteger64i_v(target, index, data);
 }
 
-void State::setSamplerDirty(size_t samplerIndex)
+void State::getBooleani_v(GLenum target, GLuint index, GLboolean *data) const
 {
-    mDirtyObjects.set(state::DIRTY_OBJECT_SAMPLERS);
-    mDirtySamplers.set(samplerIndex);
-}
-
-void State::setImageUnit(const Context *context,
-                         size_t unit,
-                         Texture *texture,
-                         GLint level,
-                         GLboolean layered,
-                         GLint layer,
-                         GLenum access,
-                         GLenum format)
-{
-    ASSERT(!mImageUnits.empty());
-
-    ImageUnit &imageUnit = mImageUnits[unit];
-
-    if (texture)
+    if (!mShareGroupAccessibleState.getBooleani_v(target, index, data))
     {
-        texture->onBindAsImageTexture();
+        mPrivateState.getBooleani_v(target, index, data);
     }
-    imageUnit.texture.set(context, texture);
-    imageUnit.level   = level;
-    imageUnit.layered = layered;
-    imageUnit.layer   = layer;
-    imageUnit.access  = access;
-    imageUnit.format  = format;
-    mDirtyBits.set(state::DIRTY_BIT_IMAGE_BINDINGS);
-
-    onImageStateChange(context, unit);
 }
 
 void State::setMaxShaderCompilerThreads(GLuint count)
 {
     mMaxShaderCompilerThreads = count;
-}
-
-// Handle a dirty texture event.
-void State::onActiveTextureChange(const Context *context, size_t textureUnit)
-{
-    if (mExecutable)
-    {
-        TextureType type       = mExecutable->getActiveSamplerTypes()[textureUnit];
-        Texture *activeTexture = (type != TextureType::InvalidEnum)
-                                     ? getTextureForActiveSampler(type, textureUnit)
-                                     : nullptr;
-        updateTextureBinding(context, textureUnit, activeTexture);
-
-        mExecutable->onStateChange(angle::SubjectMessage::ProgramTextureOrImageBindingChanged);
-    }
-}
-
-void State::onActiveTextureStateChange(const Context *context, size_t textureUnit)
-{
-    if (mExecutable)
-    {
-        TextureType type       = mExecutable->getActiveSamplerTypes()[textureUnit];
-        Texture *activeTexture = (type != TextureType::InvalidEnum)
-                                     ? getTextureForActiveSampler(type, textureUnit)
-                                     : nullptr;
-        setActiveTextureDirty(textureUnit, activeTexture);
-    }
-}
-
-void State::onImageStateChange(const Context *context, size_t unit)
-{
-    if (mExecutable)
-    {
-        const ImageUnit &image = mImageUnits[unit];
-
-        // Have nothing to do here if no texture bound
-        if (!image.texture.get())
-            return;
-
-        if (image.texture->hasAnyDirtyBit())
-        {
-            mDirtyImages.set(unit);
-            mDirtyObjects.set(state::DIRTY_OBJECT_IMAGES);
-        }
-
-        if (isRobustResourceInitEnabled() && image.texture->initState() == InitState::MayNeedInit)
-        {
-            mDirtyObjects.set(state::DIRTY_OBJECT_IMAGES_INIT);
-        }
-
-        mExecutable->onStateChange(angle::SubjectMessage::ProgramTextureOrImageBindingChanged);
-    }
-}
-
-void State::onUniformBufferStateChange(size_t uniformBufferIndex)
-{
-    if (mProgram)
-    {
-        mProgram->onUniformBufferStateChange(uniformBufferIndex);
-    }
-    else if (mProgramPipeline.get())
-    {
-        mProgramPipeline->onUniformBufferStateChange(uniformBufferIndex);
-    }
-    // So that program object syncState will get triggered and process the program's dirty bits
-    setObjectDirty(GL_PROGRAM);
-    // This could be represented by a different dirty bit. Using the same one keeps it simple.
-    mDirtyBits.set(state::DIRTY_BIT_UNIFORM_BUFFER_BINDINGS);
-}
-
-void State::onAtomicCounterBufferStateChange(size_t atomicCounterBufferIndex)
-{
-    mDirtyBits.set(state::DIRTY_BIT_ATOMIC_COUNTER_BUFFER_BINDING);
-}
-
-void State::onShaderStorageBufferStateChange(size_t shaderStorageBufferIndex)
-{
-    mDirtyBits.set(state::DIRTY_BIT_SHADER_STORAGE_BUFFER_BINDING);
 }
 
 void State::initializeForCapture(const Context *context)
@@ -4017,6 +4185,7 @@ void State::initializeForCapture(const Context *context)
     initialize(mutableContext);
 }
 
-constexpr State::DirtyObjectHandler State::kDirtyObjectHandlers[state::DIRTY_OBJECT_MAX];
+constexpr ShareGroupAccessibleState::DirtyObjectHandler
+    ShareGroupAccessibleState::kDirtyObjectHandlers[state::DIRTY_OBJECT_MAX];
 
 }  // namespace gl

@@ -23,7 +23,7 @@ class VertexArray11 : public VertexArrayImpl
   public:
     VertexArray11(const gl::VertexArrayState &data);
     ~VertexArray11() override;
-    void destroy(const gl::Context *context) override;
+    void destroy(const gl::SharedContext *context) override;
 
     // Does not apply any state updates - these are done in syncStateForDraw which as access to
     // the draw call parameters.

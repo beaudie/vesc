@@ -61,7 +61,7 @@ class BufferVk : public BufferImpl
   public:
     BufferVk(const gl::BufferState &state);
     ~BufferVk() override;
-    void destroy(const gl::Context *context) override;
+    void destroy(const gl::SharedContext *context) override;
 
     angle::Result setExternalBufferData(const gl::Context *context,
                                         gl::BufferBinding target,

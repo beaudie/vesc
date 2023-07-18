@@ -274,7 +274,7 @@ Compiler::Compiler(rx::GLImplFactory *implFactory, const State &state, egl::Disp
 
 Compiler::~Compiler() = default;
 
-void Compiler::onDestroy(const Context *context)
+void Compiler::onDestroy(const SharedContext *context)
 {
     std::lock_guard<std::mutex> lock(context->getDisplay()->getDisplayGlobalMutex());
     for (auto &pool : mPools)

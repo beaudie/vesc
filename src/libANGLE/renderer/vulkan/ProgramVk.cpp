@@ -140,7 +140,7 @@ ProgramVk::ProgramVk(const gl::ProgramState &state) : ProgramImpl(state) {}
 
 ProgramVk::~ProgramVk() = default;
 
-void ProgramVk::destroy(const gl::Context *context)
+void ProgramVk::destroy(const gl::SharedContext *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
     reset(contextVk);

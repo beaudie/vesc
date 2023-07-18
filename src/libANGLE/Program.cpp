@@ -979,9 +979,9 @@ Program::~Program()
     ASSERT(!mProgram);
 }
 
-void Program::onDestroy(const Context *context)
+void Program::onDestroy(const SharedContext *context)
 {
-    resolveLink(context);
+    resolveLink(context->getUnsafeContext());
     for (ShaderType shaderType : AllShaderTypes())
     {
         if (mState.mAttachedShaders[shaderType])
@@ -1038,7 +1038,7 @@ void Program::detachShader(const Context *context, Shader *shader)
     ASSERT(shaderType != ShaderType::InvalidEnum);
 
     ASSERT(mState.mAttachedShaders[shaderType] == shader);
-    shader->release(context);
+    shader->release(context->asSharedContext());
     mState.mAttachedShaders[shaderType] = nullptr;
 }
 
@@ -1620,7 +1620,7 @@ bool Program::isSeparable() const
     return mState.mSeparable;
 }
 
-void Program::deleteSelf(const Context *context)
+void Program::deleteSelf(const SharedContext *context)
 {
     ASSERT(mRefCount == 0 && mDeleteStatus);
     mResourceManager->deleteProgram(context, mHandle);

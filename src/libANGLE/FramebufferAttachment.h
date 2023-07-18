@@ -55,7 +55,7 @@ class FramebufferAttachment final
   public:
     FramebufferAttachment();
 
-    FramebufferAttachment(const Context *context,
+    FramebufferAttachment(const SharedContext *context,
                           GLenum type,
                           GLenum binding,
                           const ImageIndex &textureIndex,
@@ -67,8 +67,8 @@ class FramebufferAttachment final
 
     ~FramebufferAttachment();
 
-    void detach(const Context *context, rx::UniqueSerial framebufferSerial);
-    void attach(const Context *context,
+    void detach(const SharedContext *context, rx::UniqueSerial framebufferSerial);
+    void attach(const SharedContext *context,
                 GLenum type,
                 GLenum binding,
                 const ImageIndex &textureIndex,
@@ -231,9 +231,9 @@ class FramebufferAttachmentObject : public angle::Subject, public angle::Observe
     virtual bool hasFrontBufferUsage() const                                               = 0;
     virtual bool hasProtectedContent() const                                               = 0;
 
-    virtual void onAttach(const Context *context, rx::UniqueSerial framebufferSerial) = 0;
-    virtual void onDetach(const Context *context, rx::UniqueSerial framebufferSerial) = 0;
-    virtual GLuint getId() const                                                      = 0;
+    virtual void onAttach(const SharedContext *context, rx::UniqueSerial framebufferSerial) = 0;
+    virtual void onDetach(const SharedContext *context, rx::UniqueSerial framebufferSerial) = 0;
+    virtual GLuint getId() const                                                            = 0;
 
     // These are used for robust resource initialization.
     virtual InitState initState(GLenum binding, const ImageIndex &imageIndex) const = 0;
