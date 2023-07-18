@@ -31,7 +31,7 @@ class FramebufferMtl : public FramebufferImpl
   public:
     explicit FramebufferMtl(const gl::FramebufferState &state, ContextMtl *context, bool flipY);
     ~FramebufferMtl() override;
-    void destroy(const gl::Context *context) override;
+    void destroy(const gl::SharedContext *context) override;
 
     angle::Result discard(const gl::Context *context,
                           size_t count,

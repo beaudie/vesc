@@ -784,7 +784,7 @@ angle::Result TextureD3D::releaseTexStorage(const gl::Context *context,
     return err;
 }
 
-void TextureD3D::onDestroy(const gl::Context *context)
+void TextureD3D::onDestroy(const gl::SharedContext *context)
 {
     (void)releaseTexStorage(context, gl::TexLevelMask());
 }
@@ -927,7 +927,7 @@ TextureD3D_2D::TextureD3D_2D(const gl::TextureState &state, RendererD3D *rendere
     }
 }
 
-void TextureD3D_2D::onDestroy(const gl::Context *context)
+void TextureD3D_2D::onDestroy(const gl::SharedContext *context)
 {
     // Delete the Images before the TextureStorage. Images might be relying on the TextureStorage
     // for some of their data. If TextureStorage is deleted before the Images, then their data will
@@ -1754,7 +1754,7 @@ TextureD3D_Cube::TextureD3D_Cube(const gl::TextureState &state, RendererD3D *ren
     }
 }
 
-void TextureD3D_Cube::onDestroy(const gl::Context *context)
+void TextureD3D_Cube::onDestroy(const gl::SharedContext *context)
 {
     // Delete the Images before the TextureStorage. Images might be relying on the TextureStorage
     // for some of their data. If TextureStorage is deleted before the Images, then their data will
@@ -2484,7 +2484,7 @@ TextureD3D_3D::TextureD3D_3D(const gl::TextureState &state, RendererD3D *rendere
     }
 }
 
-void TextureD3D_3D::onDestroy(const gl::Context *context)
+void TextureD3D_3D::onDestroy(const gl::SharedContext *context)
 {
     // Delete the Images before the TextureStorage. Images might be relying on the TextureStorage
     // for some of their data. If TextureStorage is deleted before the Images, then their data will
@@ -3173,7 +3173,7 @@ TextureD3D_2DArray::TextureD3D_2DArray(const gl::TextureState &state, RendererD3
     }
 }
 
-void TextureD3D_2DArray::onDestroy(const gl::Context *context)
+void TextureD3D_2DArray::onDestroy(const gl::SharedContext *context)
 {
     // Delete the Images before the TextureStorage. Images might be relying on the TextureStorage
     // for some of their data. If TextureStorage is deleted before the Images, then their data will

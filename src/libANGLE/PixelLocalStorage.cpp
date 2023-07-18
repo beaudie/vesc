@@ -462,8 +462,7 @@ namespace
 {
 bool AllPlanesDeinitialized(
     const angle::FixedVector<PixelLocalStoragePlane, IMPLEMENTATION_MAX_PIXEL_LOCAL_STORAGE_PLANES>
-        &planes,
-    const Context *context)
+        &planes)
 {
     for (const PixelLocalStoragePlane &plane : planes)
     {
@@ -476,7 +475,7 @@ bool AllPlanesDeinitialized(
 }
 }  // namespace
 
-void PixelLocalStorage::onFramebufferDestroyed(const Context *context)
+void PixelLocalStorage::onFramebufferDestroyed(const SharedContext *context)
 {
     if (context->getRefCount() == 0)
     {
@@ -490,7 +489,7 @@ void PixelLocalStorage::onFramebufferDestroyed(const Context *context)
         }
     }
     // Call deleteContextObjects() when a Framebuffer is destroyed outside of context teardown!
-    ASSERT(AllPlanesDeinitialized(mPlanes, context));
+    ASSERT(AllPlanesDeinitialized(mPlanes));
 }
 
 void PixelLocalStorage::deleteContextObjects(Context *context)
@@ -760,7 +759,7 @@ class PixelLocalStorageImageLoadStore : public PixelLocalStorage
                                       binding.layer, binding.access, binding.format);
 
             // BindingPointers have to be explicitly cleaned up.
-            binding.texture.set(context, nullptr);
+            binding.texture.set(context->asSharedContext(), nullptr);
         }
         mSavedImageBindings.clear();
 

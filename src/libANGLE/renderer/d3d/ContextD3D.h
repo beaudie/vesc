@@ -13,11 +13,28 @@
 
 namespace rx
 {
+class SharedContextD3D : public SharedContextImpl
+{
+  public:
+    SharedContextD3D(const gl::ShareGroupAccessibleState &state, gl::ErrorSet *errorSet)
+        : SharedContextImpl(state, errorSet)
+    {}
+    ~SharedContextD3D() override {}
+};
+
 class ContextD3D : public ContextImpl, public d3d::Context
 {
   public:
-    ContextD3D(const gl::State &state, gl::ErrorSet *errorSet) : ContextImpl(state, errorSet) {}
+    ContextD3D(const gl::State &state,
+               const gl::ShareGroupAccessibleState &sharedState,
+               const gl::ShareGroupAccessibleState &sharedState,
+               gl::ErrorSet *errorSet)
+        : ContextImpl(state), mShared(sharedState, errorSet)
+    {}
     ~ContextD3D() override {}
+
+  protected:
+    SharedContextD3D mShared;
 };
 }  // namespace rx
 

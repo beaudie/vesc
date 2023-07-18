@@ -93,7 +93,7 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
     Error setPresentationTime(EGLnsecsANDROID time);
     Error querySurfacePointerANGLE(EGLint attribute, void **value);
     Error bindTexImage(gl::Context *context, gl::Texture *texture, EGLint buffer);
-    Error releaseTexImage(const gl::Context *context, EGLint buffer);
+    Error releaseTexImage(const gl::SharedContext *context, EGLint buffer);
 
     Error getSyncValues(EGLuint64KHR *ust, EGLuint64KHR *msc, EGLuint64KHR *sbc);
     Error getMscRate(EGLint *numerator, EGLint *denominator);
@@ -171,8 +171,8 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
     bool isExternalImageWithoutIndividualSync() const override;
     bool hasFrontBufferUsage() const override;
 
-    void onAttach(const gl::Context *context, rx::UniqueSerial framebufferSerial) override {}
-    void onDetach(const gl::Context *context, rx::UniqueSerial framebufferSerial) override {}
+    void onAttach(const gl::SharedContext *context, rx::UniqueSerial framebufferSerial) override {}
+    void onDetach(const gl::SharedContext *context, rx::UniqueSerial framebufferSerial) override {}
     SurfaceID id() const { return mState.id; }
     GLuint getId() const override;
 
@@ -240,7 +240,7 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
 
     // ANGLE-only method, used internally
     friend class gl::Texture;
-    Error releaseTexImageFromTexture(const gl::Context *context);
+    Error releaseTexImageFromTexture(const gl::SharedContext *context);
 
     SurfaceState mState;
     rx::SurfaceImpl *mImplementation;

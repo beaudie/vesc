@@ -20,7 +20,7 @@ Semaphore::Semaphore(rx::GLImplFactory *factory, SemaphoreID id)
 
 Semaphore::~Semaphore() {}
 
-void Semaphore::onDestroy(const Context *context)
+void Semaphore::onDestroy(const SharedContext *context)
 {
     mImplementation->onDestroy(context);
 }

@@ -124,7 +124,7 @@ VertexArrayGL::VertexArrayGL(const gl::VertexArrayState &state,
 
 VertexArrayGL::~VertexArrayGL() {}
 
-void VertexArrayGL::destroy(const gl::Context *context)
+void VertexArrayGL::destroy(const gl::SharedContext *context)
 {
     StateManagerGL *stateManager = GetStateManagerGL(context);
 

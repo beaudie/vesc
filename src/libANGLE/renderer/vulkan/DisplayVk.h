@@ -64,6 +64,7 @@ class DisplayVk : public DisplayImpl, public vk::Context
                            const egl::AttributeMap &attribs) override;
 
     ContextImpl *createContext(const gl::State &state,
+                               const gl::ShareGroupAccessibleState &sharedState,
                                gl::ErrorSet *errorSet,
                                const egl::Config *configuration,
                                const gl::Context *shareContext,

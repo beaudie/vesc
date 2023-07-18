@@ -46,7 +46,7 @@ BufferGL::~BufferGL()
     ASSERT(mBufferID == 0);
 }
 
-void BufferGL::destroy(const gl::Context *context)
+void BufferGL::destroy(const gl::SharedContext *context)
 {
     StateManagerGL *stateManager = GetStateManagerGL(context);
     stateManager->deleteBuffer(mBufferID);

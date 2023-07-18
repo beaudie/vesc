@@ -56,7 +56,7 @@ FramebufferAttachment::FramebufferAttachment()
       mRenderToTextureSamples(kDefaultRenderToTextureSamples)
 {}
 
-FramebufferAttachment::FramebufferAttachment(const Context *context,
+FramebufferAttachment::FramebufferAttachment(const SharedContext *context,
                                              GLenum type,
                                              GLenum binding,
                                              const ImageIndex &textureIndex,
@@ -91,7 +91,7 @@ FramebufferAttachment::~FramebufferAttachment()
     ASSERT(!isAttached());
 }
 
-void FramebufferAttachment::detach(const Context *context, rx::UniqueSerial framebufferSerial)
+void FramebufferAttachment::detach(const SharedContext *context, rx::UniqueSerial framebufferSerial)
 {
     mType = GL_NONE;
     if (mResource != nullptr)
@@ -107,7 +107,7 @@ void FramebufferAttachment::detach(const Context *context, rx::UniqueSerial fram
     mTarget = Target();
 }
 
-void FramebufferAttachment::attach(const Context *context,
+void FramebufferAttachment::attach(const SharedContext *context,
                                    GLenum type,
                                    GLenum binding,
                                    const ImageIndex &textureIndex,

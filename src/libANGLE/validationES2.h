@@ -142,7 +142,7 @@ ANGLE_INLINE bool ValidateBindTexture(const Context *context,
                                       TextureType target,
                                       TextureID texture)
 {
-    if (!context->getStateCache().isValidBindTextureType(target))
+    if (!context->getPrivateStateCache().isValidBindTextureType(target))
     {
         RecordBindTextureTypeError(context, entryPoint, target);
         return false;

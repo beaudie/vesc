@@ -24,7 +24,7 @@ class SamplerMtl : public SamplerImpl
     SamplerMtl(const gl::SamplerState &state);
     ~SamplerMtl() override;
 
-    void onDestroy(const gl::Context *context) override;
+    void onDestroy(const gl::SharedContext *context) override;
     angle::Result syncState(const gl::Context *context, const bool dirty) override;
     const mtl::AutoObjCPtr<id<MTLSamplerState>> &getSampler(ContextMtl *contextMtl);
 

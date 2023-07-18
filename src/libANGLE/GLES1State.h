@@ -170,7 +170,7 @@ class GLES1State final : angle::NonCopyable
     GLES1State();
     ~GLES1State();
 
-    void initialize(const Context *context, const PrivateState *state);
+    void initialize(const PrivateState *state);
 
     void setAlphaTestParameters(AlphaTestFunc func, GLfloat ref);
     const AlphaTestParameters &getAlphaTestParameters() const;
@@ -239,7 +239,7 @@ class GLES1State final : angle::NonCopyable
     const PointParameters &pointParameters() const;
 
     AttributesMask getVertexArraysAttributeMask() const;
-    AttributesMask getActiveAttributesMask() const;
+    static AttributesMask GetActiveAttributesMask();
 
     bool shouldHandleDirtyProgram();
 

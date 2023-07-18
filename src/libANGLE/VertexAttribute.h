@@ -41,7 +41,7 @@ class VertexBinding final : angle::NonCopyable
 
     const BindingPointer<Buffer> &getBuffer() const { return mBuffer; }
 
-    ANGLE_INLINE void setBuffer(const gl::Context *context, Buffer *bufferIn)
+    ANGLE_INLINE void setBuffer(const SharedContext *context, Buffer *bufferIn)
     {
         mBuffer.set(context, bufferIn);
     }

@@ -202,7 +202,7 @@ VertexArrayMtl::VertexArrayMtl(const gl::VertexArrayState &state, ContextMtl *co
 }
 VertexArrayMtl::~VertexArrayMtl() {}
 
-void VertexArrayMtl::destroy(const gl::Context *context)
+void VertexArrayMtl::destroy(const gl::SharedContext *context)
 {
     ContextMtl *contextMtl = mtl::GetImpl(context);
 

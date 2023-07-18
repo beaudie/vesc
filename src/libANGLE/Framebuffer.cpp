@@ -791,7 +791,7 @@ bool FramebufferState::isBoundAsDrawFramebuffer(const Context *context) const
 
 const FramebufferID Framebuffer::kDefaultDrawFramebufferHandle = {0};
 
-Framebuffer::Framebuffer(const Context *context, rx::GLImplFactory *factory)
+Framebuffer::Framebuffer(const SharedContext *context, rx::GLImplFactory *factory)
     : mState(context->getShareGroup()->generateFramebufferSerial()),
       mImpl(factory->createFramebuffer(mState)),
       mCachedStatus(FramebufferStatus::Incomplete(GL_FRAMEBUFFER_UNDEFINED_OES,
@@ -803,7 +803,7 @@ Framebuffer::Framebuffer(const Context *context, rx::GLImplFactory *factory)
     SetComponentTypeMask(getDrawbufferWriteType(0), 0, &mState.mDrawBufferTypeMask);
 }
 
-Framebuffer::Framebuffer(const Context *context, rx::GLImplFactory *factory, FramebufferID id)
+Framebuffer::Framebuffer(const SharedContext *context, rx::GLImplFactory *factory, FramebufferID id)
     : mState(context->getCaps(), id, context->getShareGroup()->generateFramebufferSerial()),
       mImpl(factory->createFramebuffer(mState)),
       mCachedStatus(),
@@ -830,7 +830,7 @@ Framebuffer::~Framebuffer()
     SafeDelete(mImpl);
 }
 
-void Framebuffer::onDestroy(const Context *context)
+void Framebuffer::onDestroy(const SharedContext *context)
 {
     if (isDefault())
     {
@@ -927,7 +927,7 @@ void Framebuffer::setReadSurface(const Context *context, egl::Surface *readSurfa
 
     // updateAttachment() without mState.mResourceNeedsInit.set()
     mState.mDefaultFramebufferReadAttachment.attach(
-        context, GL_FRAMEBUFFER_DEFAULT, GL_BACK, ImageIndex(), readSurface,
+        context->asSharedContext(), GL_FRAMEBUFFER_DEFAULT, GL_BACK, ImageIndex(), readSurface,
         FramebufferAttachment::kDefaultNumViews, FramebufferAttachment::kDefaultBaseViewIndex,
         false, FramebufferAttachment::kDefaultRenderToTextureSamples, mState.mFramebufferSerial);
 
@@ -937,7 +937,7 @@ void Framebuffer::setReadSurface(const Context *context, egl::Surface *readSurfa
     }
 }
 
-egl::Error Framebuffer::unsetSurfaces(const Context *context)
+egl::Error Framebuffer::unsetSurfaces(const SharedContext *context)
 {
     // This has to be a default framebuffer.
     ASSERT(isDefault());
@@ -962,7 +962,8 @@ egl::Error Framebuffer::unsetSurfaces(const Context *context)
             mDirtyBits.set(DIRTY_BIT_STENCIL_ATTACHMENT);
         }
 
-        ANGLE_TRY(surface->getImplementation()->detachFromFramebuffer(context, this));
+        ANGLE_TRY(
+            surface->getImplementation()->detachFromFramebuffer(context->getUnsafeContext(), this));
 
         ASSERT(mCachedStatus.value().status == GL_FRAMEBUFFER_COMPLETE);
         mCachedStatus = FramebufferStatus::Incomplete(GL_FRAMEBUFFER_UNDEFINED_OES,
@@ -1944,20 +1945,20 @@ void Framebuffer::setAttachment(const Context *context,
         case GL_DEPTH_STENCIL:
         case GL_DEPTH_STENCIL_ATTACHMENT:
             mState.mWebGLDepthStencilAttachment.attach(
-                context, type, binding, textureIndex, resource, numViews, baseViewIndex,
-                isMultiview, samples, mState.mFramebufferSerial);
+                context->asSharedContext(), type, binding, textureIndex, resource, numViews,
+                baseViewIndex, isMultiview, samples, mState.mFramebufferSerial);
             break;
         case GL_DEPTH:
         case GL_DEPTH_ATTACHMENT:
-            mState.mWebGLDepthAttachment.attach(context, type, binding, textureIndex, resource,
-                                                numViews, baseViewIndex, isMultiview, samples,
-                                                mState.mFramebufferSerial);
+            mState.mWebGLDepthAttachment.attach(context->asSharedContext(), type, binding,
+                                                textureIndex, resource, numViews, baseViewIndex,
+                                                isMultiview, samples, mState.mFramebufferSerial);
             break;
         case GL_STENCIL:
         case GL_STENCIL_ATTACHMENT:
-            mState.mWebGLStencilAttachment.attach(context, type, binding, textureIndex, resource,
-                                                  numViews, baseViewIndex, isMultiview, samples,
-                                                  mState.mFramebufferSerial);
+            mState.mWebGLStencilAttachment.attach(context->asSharedContext(), type, binding,
+                                                  textureIndex, resource, numViews, baseViewIndex,
+                                                  isMultiview, samples, mState.mFramebufferSerial);
             break;
         default:
             setAttachmentImpl(context, type, binding, textureIndex, resource, numViews,
@@ -2144,8 +2145,8 @@ void Framebuffer::updateAttachment(const Context *context,
                                    bool isMultiview,
                                    GLsizei samples)
 {
-    attachment->attach(context, type, binding, textureIndex, resource, numViews, baseViewIndex,
-                       isMultiview, samples, mState.mFramebufferSerial);
+    attachment->attach(context->asSharedContext(), type, binding, textureIndex, resource, numViews,
+                       baseViewIndex, isMultiview, samples, mState.mFramebufferSerial);
     mDirtyBits.set(dirtyBit);
     mState.mResourceNeedsInit.set(dirtyBit, attachment->initState() == InitState::MayNeedInit);
     onDirtyBinding->bind(resource);
@@ -2279,7 +2280,7 @@ bool Framebuffer::formsRenderingFeedbackLoopWith(const Context *context) const
         unsigned int uintIndex = static_cast<unsigned int>(textureIndex);
         Texture *texture       = glState.getSamplerTexture(uintIndex, textureTypes[textureIndex]);
         const Sampler *sampler = glState.getSampler(uintIndex);
-        if (texture && texture->isSamplerComplete(context, sampler) &&
+        if (texture && texture->isSamplerComplete(context->asSharedContext(), sampler) &&
             texture->isBoundToFramebuffer(mState.mFramebufferSerial))
         {
             // Check for level overlap.

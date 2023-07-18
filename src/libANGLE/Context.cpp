@@ -598,6 +598,178 @@ extern void SetCurrentValidContext(Context *context)
 #endif
 }
 
+SharedContext::SharedContext(egl::Display *display,
+                             ShareGroupAccessibleState &state,
+                             Context *unsafeContext)
+    : mState(state),
+      mUnsafeContext(unsafeContext),
+      mDisplay(display),
+      mVertexArrayObserverBinding(this, kVertexArraySubjectIndex),
+      mDrawFramebufferObserverBinding(this, kDrawFramebufferSubjectIndex),
+      mReadFramebufferObserverBinding(this, kReadFramebufferSubjectIndex),
+      mProgramPipelineObserverBinding(this, kProgramPipelineSubjectIndex),
+      mRefCount(0)
+{
+    for (angle::SubjectIndex uboIndex = kUniformBuffer0SubjectIndex;
+         uboIndex < kUniformBufferMaxSubjectIndex; ++uboIndex)
+    {
+        mUniformBufferObserverBindings.emplace_back(this, uboIndex);
+    }
+
+    for (angle::SubjectIndex acbIndex = kAtomicCounterBuffer0SubjectIndex;
+         acbIndex < kAtomicCounterBufferMaxSubjectIndex; ++acbIndex)
+    {
+        mAtomicCounterBufferObserverBindings.emplace_back(this, acbIndex);
+    }
+
+    for (angle::SubjectIndex ssboIndex = kShaderStorageBuffer0SubjectIndex;
+         ssboIndex < kShaderStorageBufferMaxSubjectIndex; ++ssboIndex)
+    {
+        mShaderStorageBufferObserverBindings.emplace_back(this, ssboIndex);
+    }
+
+    for (angle::SubjectIndex samplerIndex = kSampler0SubjectIndex;
+         samplerIndex < kSamplerMaxSubjectIndex; ++samplerIndex)
+    {
+        mSamplerObserverBindings.emplace_back(this, samplerIndex);
+    }
+
+    for (angle::SubjectIndex imageIndex = kImage0SubjectIndex; imageIndex < kImageMaxSubjectIndex;
+         ++imageIndex)
+    {
+        mImageObserverBindings.emplace_back(this, imageIndex);
+    }
+}
+
+SharedContext::~SharedContext() = default;
+
+void SharedContext::initialize(rx::SharedContextImpl *impl)
+{
+    ASSERT(impl != nullptr);
+    mImplementation = impl;
+}
+
+void SharedContext::initializeStateCache()
+{
+    mStateCache.initialize(mState);
+}
+
+void SharedContext::onDestroy(const egl::Display *display)
+{
+    mState.mShareGroup->release(display);
+}
+
+void SharedContext::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message)
+{
+    switch (index)
+    {
+        case kVertexArraySubjectIndex:
+            switch (message)
+            {
+                case angle::SubjectMessage::ContentsChanged:
+                    mState.setObjectDirty(GL_VERTEX_ARRAY);
+                    mStateCache.onVertexArrayBufferContentsChange(mState);
+                    break;
+                case angle::SubjectMessage::SubjectMapped:
+                case angle::SubjectMessage::SubjectUnmapped:
+                case angle::SubjectMessage::BindingChanged:
+                    mStateCache.onVertexArrayBufferStateChange(mState);
+                    break;
+                default:
+                    break;
+            }
+            break;
+
+        case kReadFramebufferSubjectIndex:
+            switch (message)
+            {
+                case angle::SubjectMessage::DirtyBitsFlagged:
+                    mState.setReadFramebufferDirty();
+                    break;
+                case angle::SubjectMessage::SurfaceChanged:
+                    mState.setReadFramebufferBindingDirty();
+                    break;
+                default:
+                    UNREACHABLE();
+                    break;
+            }
+            break;
+
+        case kDrawFramebufferSubjectIndex:
+            switch (message)
+            {
+                case angle::SubjectMessage::DirtyBitsFlagged:
+                    mState.setDrawFramebufferDirty();
+                    mStateCache.onDrawFramebufferChange(mState);
+                    break;
+                case angle::SubjectMessage::SurfaceChanged:
+                    mState.setDrawFramebufferBindingDirty();
+                    break;
+                default:
+                    UNREACHABLE();
+                    break;
+            }
+            break;
+
+        case kProgramPipelineSubjectIndex:
+            switch (message)
+            {
+                case angle::SubjectMessage::SubjectChanged:
+                    ANGLE_CONTEXT_TRY(mState.onProgramPipelineExecutableChange(this));
+                    onProgramExecutableChange();
+                    break;
+                case angle::SubjectMessage::ProgramRelinked:
+                    ANGLE_CONTEXT_TRY(mState.mProgramPipeline->link(getUnsafeContext()));
+                    break;
+                default:
+                    UNREACHABLE();
+                    break;
+            }
+            break;
+
+        default:
+            if (index < kTextureMaxSubjectIndex)
+            {
+                if (message != angle::SubjectMessage::ContentsChanged &&
+                    message != angle::SubjectMessage::BindingChanged)
+                {
+                    mState.onActiveTextureStateChange(index);
+                    mStateCache.onActiveTextureChange(mState);
+                }
+            }
+            else if (index < kImageMaxSubjectIndex)
+            {
+                mState.onImageStateChange(index - kImage0SubjectIndex);
+                if (message == angle::SubjectMessage::ContentsChanged)
+                {
+                    mState.mDirtyBits.set(state::DirtyBitType::DIRTY_BIT_IMAGE_BINDINGS);
+                }
+            }
+            else if (index < kUniformBufferMaxSubjectIndex)
+            {
+                mState.onUniformBufferStateChange(index - kUniformBuffer0SubjectIndex);
+                mStateCache.onUniformBufferStateChange(mState);
+            }
+            else if (index < kAtomicCounterBufferMaxSubjectIndex)
+            {
+                mState.onAtomicCounterBufferStateChange(index - kAtomicCounterBuffer0SubjectIndex);
+                mStateCache.onAtomicCounterBufferStateChange(mState);
+            }
+            else if (index < kShaderStorageBufferMaxSubjectIndex)
+            {
+                mState.onShaderStorageBufferStateChange(index - kShaderStorageBuffer0SubjectIndex);
+                mStateCache.onShaderStorageBufferStateChange(mState);
+            }
+            else
+            {
+                ASSERT(index < kSamplerMaxSubjectIndex);
+                mState.setSamplerDirty(index - kSampler0SubjectIndex);
+                mState.onActiveTextureStateChange(index - kSampler0SubjectIndex);
+            }
+            break;
+    }
+}
+
 Context::Context(egl::Display *display,
                  const egl::Config *config,
                  const Context *shareContext,
@@ -628,12 +800,14 @@ Context::Context(egl::Display *display,
              GetContextPriority(attribs),
              GetRobustAccess(attribs),
              GetProtectedContent(attribs)),
-      mShared(shareContext != nullptr || shareTextures != nullptr || shareSemaphores != nullptr),
+      mShared(display, mState.mShareGroupAccessibleState, this),
+      mIsShared(shareContext != nullptr || shareTextures != nullptr || shareSemaphores != nullptr),
       mDisplayTextureShareGroup(shareTextures != nullptr),
       mDisplaySemaphoreShareGroup(shareSemaphores != nullptr),
       mErrors(&mState.getDebug(), display->getFrontendFeatures(), attribs),
-      mImplementation(display->getImplementation()
-                          ->createContext(mState, &mErrors, config, shareContext, attribs)),
+      mImplementation(
+          display->getImplementation()
+              ->createContext(mState, mShared.getState(), &mErrors, config, shareContext, attribs)),
       mLabel(nullptr),
       mCompiler(),
       mConfig(config),
@@ -643,52 +817,16 @@ Context::Context(egl::Display *display,
       mCurrentReadSurface(static_cast<egl::Surface *>(EGL_NO_SURFACE)),
       mDisplay(display),
       mWebGLContext(GetWebGLContext(attribs)),
-      mBufferAccessValidationEnabled(false),
       mExtensionsEnabled(GetExtensionsEnabled(attribs, mWebGLContext)),
       mMemoryProgramCache(memoryProgramCache),
       mMemoryShaderCache(memoryShaderCache),
-      mVertexArrayObserverBinding(this, kVertexArraySubjectIndex),
-      mDrawFramebufferObserverBinding(this, kDrawFramebufferSubjectIndex),
-      mReadFramebufferObserverBinding(this, kReadFramebufferSubjectIndex),
-      mProgramPipelineObserverBinding(this, kProgramPipelineSubjectIndex),
       mFrameCapture(new angle::FrameCapture),
-      mRefCount(0),
       mOverlay(mImplementation.get()),
       mIsExternal(GetIsExternal(attribs)),
       mSaveAndRestoreState(GetSaveAndRestoreState(attribs)),
       mIsDestroyed(false)
 {
     ASSERT(mState.mSharedContextMutex != nullptr || mState.mSingleContextMutex != nullptr);
-
-    for (angle::SubjectIndex uboIndex = kUniformBuffer0SubjectIndex;
-         uboIndex < kUniformBufferMaxSubjectIndex; ++uboIndex)
-    {
-        mUniformBufferObserverBindings.emplace_back(this, uboIndex);
-    }
-
-    for (angle::SubjectIndex acbIndex = kAtomicCounterBuffer0SubjectIndex;
-         acbIndex < kAtomicCounterBufferMaxSubjectIndex; ++acbIndex)
-    {
-        mAtomicCounterBufferObserverBindings.emplace_back(this, acbIndex);
-    }
-
-    for (angle::SubjectIndex ssboIndex = kShaderStorageBuffer0SubjectIndex;
-         ssboIndex < kShaderStorageBufferMaxSubjectIndex; ++ssboIndex)
-    {
-        mShaderStorageBufferObserverBindings.emplace_back(this, ssboIndex);
-    }
-
-    for (angle::SubjectIndex samplerIndex = kSampler0SubjectIndex;
-         samplerIndex < kSamplerMaxSubjectIndex; ++samplerIndex)
-    {
-        mSamplerObserverBindings.emplace_back(this, samplerIndex);
-    }
-
-    for (angle::SubjectIndex imageIndex = kImage0SubjectIndex; imageIndex < kImageMaxSubjectIndex;
-         ++imageIndex)
-    {
-        mImageObserverBindings.emplace_back(this, imageIndex);
-    }
 
     // Implementations now require the display to be set at context creation.
     ASSERT(mDisplay);
@@ -698,7 +836,13 @@ egl::Error Context::initialize()
 {
     if (!mImplementation)
         return egl::Error(EGL_NOT_INITIALIZED, "native context creation failed");
+    mShared.initialize(mImplementation->getSharedContext());
     return egl::NoError();
+}
+
+void SharedContext::initializeZeroTextures(const TextureMap &zeroTextures)
+{
+    mState.initializeZeroTextures(this, zeroTextures);
 }
 
 void Context::initializeDefaultResources()
@@ -709,7 +853,7 @@ void Context::initializeDefaultResources()
 
     mState.initialize(this);
 
-    mDefaultFramebuffer = std::make_unique<Framebuffer>(this, mImplementation.get());
+    mDefaultFramebuffer = std::make_unique<Framebuffer>(asSharedContext(), mImplementation.get());
 
     mFenceNVHandleAllocator.setBaseHandle(0);
 
@@ -720,33 +864,34 @@ void Context::initializeDefaultResources()
     // objects all of whose names are 0.
 
     Texture *zeroTexture2D = new Texture(mImplementation.get(), {0}, TextureType::_2D);
-    mZeroTextures[TextureType::_2D].set(this, zeroTexture2D);
+    mZeroTextures[TextureType::_2D].set(asSharedContext(), zeroTexture2D);
 
     Texture *zeroTextureCube = new Texture(mImplementation.get(), {0}, TextureType::CubeMap);
-    mZeroTextures[TextureType::CubeMap].set(this, zeroTextureCube);
+    mZeroTextures[TextureType::CubeMap].set(asSharedContext(), zeroTextureCube);
 
     if (getClientVersion() >= Version(3, 0) || mSupportedExtensions.texture3DOES)
     {
         Texture *zeroTexture3D = new Texture(mImplementation.get(), {0}, TextureType::_3D);
-        mZeroTextures[TextureType::_3D].set(this, zeroTexture3D);
+        mZeroTextures[TextureType::_3D].set(asSharedContext(), zeroTexture3D);
     }
     if (getClientVersion() >= Version(3, 0))
     {
         Texture *zeroTexture2DArray =
             new Texture(mImplementation.get(), {0}, TextureType::_2DArray);
-        mZeroTextures[TextureType::_2DArray].set(this, zeroTexture2DArray);
+        mZeroTextures[TextureType::_2DArray].set(asSharedContext(), zeroTexture2DArray);
     }
     if (getClientVersion() >= Version(3, 1) || mSupportedExtensions.textureMultisampleANGLE)
     {
         Texture *zeroTexture2DMultisample =
             new Texture(mImplementation.get(), {0}, TextureType::_2DMultisample);
-        mZeroTextures[TextureType::_2DMultisample].set(this, zeroTexture2DMultisample);
+        mZeroTextures[TextureType::_2DMultisample].set(asSharedContext(), zeroTexture2DMultisample);
     }
     if (getClientVersion() >= Version(3, 1))
     {
         Texture *zeroTexture2DMultisampleArray =
             new Texture(mImplementation.get(), {0}, TextureType::_2DMultisampleArray);
-        mZeroTextures[TextureType::_2DMultisampleArray].set(this, zeroTexture2DMultisampleArray);
+        mZeroTextures[TextureType::_2DMultisampleArray].set(asSharedContext(),
+                                                            zeroTexture2DMultisampleArray);
 
         for (int i = 0; i < mState.getCaps().maxAtomicCounterBufferBindings; i++)
         {
@@ -764,21 +909,21 @@ void Context::initializeDefaultResources()
     {
         Texture *zeroTextureCubeMapArray =
             new Texture(mImplementation.get(), {0}, TextureType::CubeMapArray);
-        mZeroTextures[TextureType::CubeMapArray].set(this, zeroTextureCubeMapArray);
+        mZeroTextures[TextureType::CubeMapArray].set(asSharedContext(), zeroTextureCubeMapArray);
     }
 
     if ((getClientType() != EGL_OPENGL_API && getClientVersion() >= Version(3, 2)) ||
         mSupportedExtensions.textureBufferAny())
     {
         Texture *zeroTextureBuffer = new Texture(mImplementation.get(), {0}, TextureType::Buffer);
-        mZeroTextures[TextureType::Buffer].set(this, zeroTextureBuffer);
+        mZeroTextures[TextureType::Buffer].set(asSharedContext(), zeroTextureBuffer);
     }
 
     if (mSupportedExtensions.textureRectangleANGLE)
     {
         Texture *zeroTextureRectangle =
             new Texture(mImplementation.get(), {0}, TextureType::Rectangle);
-        mZeroTextures[TextureType::Rectangle].set(this, zeroTextureRectangle);
+        mZeroTextures[TextureType::Rectangle].set(asSharedContext(), zeroTextureRectangle);
     }
 
     if (mSupportedExtensions.EGLImageExternalOES ||
@@ -786,7 +931,7 @@ void Context::initializeDefaultResources()
     {
         Texture *zeroTextureExternal =
             new Texture(mImplementation.get(), {0}, TextureType::External);
-        mZeroTextures[TextureType::External].set(this, zeroTextureExternal);
+        mZeroTextures[TextureType::External].set(asSharedContext(), zeroTextureExternal);
     }
 
     // This may change native TEXTURE_2D, TEXTURE_EXTERNAL_OES and TEXTURE_RECTANGLE,
@@ -796,10 +941,10 @@ void Context::initializeDefaultResources()
     {
         Texture *zeroTextureVideoImage =
             new Texture(mImplementation.get(), {0}, TextureType::VideoImage);
-        mZeroTextures[TextureType::VideoImage].set(this, zeroTextureVideoImage);
+        mZeroTextures[TextureType::VideoImage].set(asSharedContext(), zeroTextureVideoImage);
     }
 
-    mState.initializeZeroTextures(this, mZeroTextures);
+    mShared.initializeZeroTextures(mZeroTextures);
 
     ANGLE_CONTEXT_TRY(mImplementation->initialize());
 
@@ -860,7 +1005,7 @@ egl::Error Context::onDestroy(const egl::Display *display)
 
     // eglDestoryContext() must have been called for this Context and there must not be any Threads
     // that still have it current.
-    ASSERT(mIsDestroyed == true && mRefCount == 0);
+    ASSERT(mIsDestroyed == true && mShared.getRefCount() == 0);
 
     // Dump frame capture if enabled.
     getShareGroup()->getFrameCaptureShared()->onDestroyContext(this);
@@ -875,14 +1020,14 @@ egl::Error Context::onDestroy(const egl::Display *display)
 
     ANGLE_TRY(unMakeCurrent(display));
 
-    mDefaultFramebuffer->onDestroy(this);
+    mDefaultFramebuffer->onDestroy(asSharedContext());
     mDefaultFramebuffer.reset();
 
     for (auto fence : mFenceNVMap)
     {
         if (fence.second)
         {
-            fence.second->onDestroy(this);
+            fence.second->onDestroy(asSharedContext());
         }
         SafeDelete(fence.second);
     }
@@ -892,7 +1037,7 @@ egl::Error Context::onDestroy(const egl::Display *display)
     {
         if (query.second != nullptr)
         {
-            query.second->release(this);
+            query.second->release(asSharedContext());
         }
     }
     mQueryMap.clear();
@@ -901,7 +1046,7 @@ egl::Error Context::onDestroy(const egl::Display *display)
     {
         if (vertexArray.second)
         {
-            vertexArray.second->onDestroy(this);
+            vertexArray.second->onDestroy(asSharedContext());
         }
     }
     mVertexArrayMap.clear();
@@ -910,7 +1055,7 @@ egl::Error Context::onDestroy(const egl::Display *display)
     {
         if (transformFeedback.second != nullptr)
         {
-            transformFeedback.second->release(this);
+            transformFeedback.second->release(asSharedContext());
         }
     }
     mTransformFeedbackMap.clear();
@@ -919,32 +1064,31 @@ egl::Error Context::onDestroy(const egl::Display *display)
     {
         if (zeroTexture.get() != nullptr)
         {
-            zeroTexture.set(this, nullptr);
+            zeroTexture.set(asSharedContext(), nullptr);
         }
     }
 
     releaseShaderCompiler();
 
-    mState.reset(this);
+    // Backend requires implementation to be destroyed first to close down all the objects
+    mImplementation->onDestroy(asSharedContext());
 
-    mState.mBufferManager->release(this);
+    mState.reset(this);
+    mShared.onDestroy(display);
+
+    mState.mBufferManager->release(asSharedContext());
     // mProgramPipelineManager must be before mShaderProgramManager to give each
     // PPO the chance to release any references they have to the Programs that
     // are bound to them before the Programs are released()'ed.
-    mState.mProgramPipelineManager->release(this);
-    mState.mShaderProgramManager->release(this);
-    mState.mTextureManager->release(this);
-    mState.mRenderbufferManager->release(this);
-    mState.mSamplerManager->release(this);
-    mState.mSyncManager->release(this);
-    mState.mFramebufferManager->release(this);
-    mState.mMemoryObjectManager->release(this);
-    mState.mSemaphoreManager->release(this);
-
-    mImplementation->onDestroy(this);
-
-    // Backend requires implementation to be destroyed first to close down all the objects
-    mState.mShareGroup->release(display);
+    mState.mProgramPipelineManager->release(asSharedContext());
+    mState.mShaderProgramManager->release(asSharedContext());
+    mState.mTextureManager->release(asSharedContext());
+    mState.mRenderbufferManager->release(asSharedContext());
+    mState.mSamplerManager->release(asSharedContext());
+    mState.mSyncManager->release(asSharedContext());
+    mState.mFramebufferManager->release(asSharedContext());
+    mState.mMemoryObjectManager->release(asSharedContext());
+    mState.mSemaphoreManager->release(asSharedContext());
 
     if (mState.mSharedContextMutex != nullptr)
     {
@@ -960,7 +1104,7 @@ egl::Error Context::onDestroy(const egl::Display *display)
     return egl::NoError();
 }
 
-Context::~Context() {}
+Context::~Context() = default;
 
 void Context::setLabel(EGLLabelKHR label)
 {
@@ -1162,17 +1306,17 @@ void Context::deleteBuffer(BufferID bufferName)
         detachBuffer(buffer);
     }
 
-    mState.mBufferManager->deleteObject(this, bufferName);
+    mState.mBufferManager->deleteObject(asSharedContext(), bufferName);
 }
 
 void Context::deleteShader(ShaderProgramID shader)
 {
-    mState.mShaderProgramManager->deleteShader(this, shader);
+    mState.mShaderProgramManager->deleteShader(asSharedContext(), shader);
 }
 
 void Context::deleteProgram(ShaderProgramID program)
 {
-    mState.mShaderProgramManager->deleteProgram(this, program);
+    mState.mShaderProgramManager->deleteProgram(asSharedContext(), program);
 }
 
 void Context::deleteTexture(TextureID textureID)
@@ -1206,7 +1350,7 @@ void Context::deleteTexture(TextureID textureID)
         detachTexture(textureID);
     }
 
-    mState.mTextureManager->deleteObject(this, textureID);
+    mState.mTextureManager->deleteObject(asSharedContext(), textureID);
 }
 
 void Context::deleteRenderbuffer(RenderbufferID renderbuffer)
@@ -1216,7 +1360,7 @@ void Context::deleteRenderbuffer(RenderbufferID renderbuffer)
         detachRenderbuffer(renderbuffer);
     }
 
-    mState.mRenderbufferManager->deleteObject(this, renderbuffer);
+    mState.mRenderbufferManager->deleteObject(asSharedContext(), renderbuffer);
 }
 
 void Context::deleteSync(SyncID syncPacked)
@@ -1225,7 +1369,7 @@ void Context::deleteSync(SyncID syncPacked)
     // wait commands finish. However, since the name becomes invalid, we cannot query the fence,
     // and since our API is currently designed for being called from a single thread, we can delete
     // the fence immediately.
-    mState.mSyncManager->deleteObject(this, syncPacked);
+    mState.mSyncManager->deleteObject(asSharedContext(), syncPacked);
 }
 
 void Context::deleteProgramPipeline(ProgramPipelineID pipelineID)
@@ -1236,17 +1380,17 @@ void Context::deleteProgramPipeline(ProgramPipelineID pipelineID)
         detachProgramPipeline(pipelineID);
     }
 
-    mState.mProgramPipelineManager->deleteObject(this, pipelineID);
+    mState.mProgramPipelineManager->deleteObject(asSharedContext(), pipelineID);
 }
 
 void Context::deleteMemoryObject(MemoryObjectID memoryObject)
 {
-    mState.mMemoryObjectManager->deleteMemoryObject(this, memoryObject);
+    mState.mMemoryObjectManager->deleteMemoryObject(asSharedContext(), memoryObject);
 }
 
 void Context::deleteSemaphore(SemaphoreID semaphore)
 {
-    mState.mSemaphoreManager->deleteSemaphore(this, semaphore);
+    mState.mSemaphoreManager->deleteSemaphore(asSharedContext(), semaphore);
 }
 
 // GL_CHROMIUM_lose_context
@@ -1269,7 +1413,7 @@ void Context::deleteFramebuffer(FramebufferID framebufferID)
         detachFramebuffer(framebufferID);
     }
 
-    mState.mFramebufferManager->deleteObject(this, framebufferID);
+    mState.mFramebufferManager->deleteObject(asSharedContext(), framebufferID);
 
     // Delete the pixel local storage GL objects after the framebuffer, in order to avoid any
     // potential trickyness with orphaning.
@@ -1291,7 +1435,7 @@ void Context::deleteFencesNV(GLsizei n, const FenceNVID *fences)
             mFenceNVHandleAllocator.release(fence.value);
             if (fenceObject)
             {
-                fenceObject->onDestroy(this);
+                fenceObject->onDestroy(asSharedContext());
             }
             delete fenceObject;
         }
@@ -1445,6 +1589,12 @@ GLboolean Context::isSampler(SamplerID samplerName) const
     return mState.mSamplerManager->isSampler(samplerName);
 }
 
+void SharedContext::bindTexture(TextureType target, Texture *texture, unsigned int activeSampler)
+{
+    mState.setSamplerTexture(this, target, texture, activeSampler);
+    mStateCache.onActiveTextureChange(mState);
+}
+
 void Context::bindTexture(TextureType target, TextureID handle)
 {
     // Some apps enable KHR_create_context_no_error but pass in an invalid texture type.
@@ -1472,33 +1622,56 @@ void Context::bindTexture(TextureType target, TextureID handle)
         return;
     }
 
-    mState.setSamplerTexture(this, target, texture);
-    mStateCache.onActiveTextureChange(this);
+    mShared.bindTexture(target, texture, mState.getActiveSampler());
+}
+
+void SharedContext::bindReadFramebuffer(Framebuffer *framebuffer)
+{
+    mState.setReadFramebufferBinding(framebuffer);
+    mReadFramebufferObserverBinding.bind(framebuffer);
 }
 
 void Context::bindReadFramebuffer(FramebufferID framebufferHandle)
 {
     Framebuffer *framebuffer = mState.mFramebufferManager->checkFramebufferAllocation(
-        mImplementation.get(), this, framebufferHandle);
-    mState.setReadFramebufferBinding(framebuffer);
-    mReadFramebufferObserverBinding.bind(framebuffer);
+        mImplementation.get(), asSharedContext(), framebufferHandle);
+    mShared.bindReadFramebuffer(framebuffer);
+}
+
+void SharedContext::bindDrawFramebuffer(Framebuffer *framebuffer, bool framebufferSRGB)
+{
+    mState.setDrawFramebufferBinding(framebuffer, framebufferSRGB);
+    mDrawFramebufferObserverBinding.bind(framebuffer);
+    mStateCache.onDrawFramebufferChange(mState);
 }
 
 void Context::bindDrawFramebuffer(FramebufferID framebufferHandle)
 {
     Framebuffer *framebuffer = mState.mFramebufferManager->checkFramebufferAllocation(
-        mImplementation.get(), this, framebufferHandle);
-    mState.setDrawFramebufferBinding(framebuffer);
-    mDrawFramebufferObserverBinding.bind(framebuffer);
-    mStateCache.onDrawFramebufferChange(this);
+        mImplementation.get(), asSharedContext(), framebufferHandle);
+    mShared.bindDrawFramebuffer(framebuffer, mState.getFramebufferSRGB());
+}
+
+void SharedContext::bindVertexArray(VertexArray *vertexArray)
+{
+    mState.setVertexArrayBinding(this, vertexArray);
+    mVertexArrayObserverBinding.bind(vertexArray);
+    mStateCache.onVertexArrayBindingChange(mState);
 }
 
 void Context::bindVertexArray(VertexArrayID vertexArrayHandle)
 {
     VertexArray *vertexArray = checkVertexArrayAllocation(vertexArrayHandle);
-    mState.setVertexArrayBinding(this, vertexArray);
-    mVertexArrayObserverBinding.bind(vertexArray);
-    mStateCache.onVertexArrayBindingChange(this);
+    mShared.bindVertexArray(vertexArray);
+}
+
+void SharedContext::bindVertexBuffer(GLuint bindingIndex,
+                                     Buffer *boundBuffer,
+                                     GLintptr offset,
+                                     GLsizei stride)
+{
+    mState.bindVertexBuffer(this, bindingIndex, boundBuffer, offset, stride);
+    mStateCache.onVertexArrayStateChange(mState);
 }
 
 void Context::bindVertexBuffer(GLuint bindingIndex,
@@ -1508,8 +1681,14 @@ void Context::bindVertexBuffer(GLuint bindingIndex,
 {
     Buffer *buffer =
         mState.mBufferManager->checkBufferAllocation(mImplementation.get(), bufferHandle);
-    mState.bindVertexBuffer(this, bindingIndex, buffer, offset, stride);
-    mStateCache.onVertexArrayStateChange(this);
+    mShared.bindVertexBuffer(bindingIndex, buffer, offset, stride);
+}
+
+void SharedContext::bindSampler(GLuint textureUnit, Sampler *sampler)
+{
+    mState.setSamplerBinding(this, textureUnit, sampler);
+    mSamplerObserverBindings[textureUnit].bind(sampler);
+    mStateCache.onActiveTextureChange(mState);
 }
 
 void Context::bindSampler(GLuint textureUnit, SamplerID samplerHandle)
@@ -1524,9 +1703,19 @@ void Context::bindSampler(GLuint textureUnit, SamplerID samplerHandle)
         return;
     }
 
-    mState.setSamplerBinding(this, textureUnit, sampler);
-    mSamplerObserverBindings[textureUnit].bind(sampler);
-    mStateCache.onActiveTextureChange(this);
+    mShared.bindSampler(textureUnit, sampler);
+}
+
+void SharedContext::bindImageTexture(GLuint unit,
+                                     Texture *texture,
+                                     GLint level,
+                                     GLboolean layered,
+                                     GLint layer,
+                                     GLenum access,
+                                     GLenum format)
+{
+    mState.setImageUnit(this, unit, texture, level, layered, layer, access, format);
+    mImageObserverBindings[unit].bind(texture);
 }
 
 void Context::bindImageTexture(GLuint unit,
@@ -1538,14 +1727,13 @@ void Context::bindImageTexture(GLuint unit,
                                GLenum format)
 {
     Texture *tex = mState.mTextureManager->getTexture(texture);
-    mState.setImageUnit(this, unit, tex, level, layered, layer, access, format);
-    mImageObserverBindings[unit].bind(tex);
+    mShared.bindImageTexture(unit, tex, level, layered, layer, access, format);
 }
 
 void Context::useProgram(ShaderProgramID program)
 {
-    ANGLE_CONTEXT_TRY(mState.setProgram(this, getProgramResolveLink(program)));
-    mStateCache.onProgramExecutableChange(this);
+    ANGLE_CONTEXT_TRY(mState.setProgram(asSharedContext(), getProgramResolveLink(program)));
+    mShared.onProgramExecutableChange();
 }
 
 void Context::useProgramStages(ProgramPipelineID pipeline,
@@ -1561,22 +1749,33 @@ void Context::useProgramStages(ProgramPipelineID pipeline,
     ANGLE_CONTEXT_TRY(programPipeline->useProgramStages(this, stages, shaderProgram));
 }
 
+void SharedContext::bindTransformFeedback(GLenum target, TransformFeedback *transformFeedback)
+{
+    mState.setTransformFeedbackBinding(this, transformFeedback);
+    mStateCache.onActiveTransformFeedbackChange(mState);
+}
+
 void Context::bindTransformFeedback(GLenum target, TransformFeedbackID transformFeedbackHandle)
 {
     ASSERT(target == GL_TRANSFORM_FEEDBACK);
     TransformFeedback *transformFeedback =
         checkTransformFeedbackAllocation(transformFeedbackHandle);
-    mState.setTransformFeedbackBinding(this, transformFeedback);
-    mStateCache.onActiveTransformFeedbackChange(this);
+    mShared.bindTransformFeedback(target, transformFeedback);
+}
+
+angle::Result SharedContext::bindProgramPipeline(ProgramPipeline *pipeline)
+{
+    ANGLE_TRY(mState.setProgramPipelineBinding(this, pipeline));
+    mStateCache.onProgramExecutableChange(mState);
+    mProgramPipelineObserverBinding.bind(pipeline);
+    return angle::Result::Continue;
 }
 
 void Context::bindProgramPipeline(ProgramPipelineID pipelineHandle)
 {
     ProgramPipeline *pipeline = mState.mProgramPipelineManager->checkProgramPipelineAllocation(
         mImplementation.get(), pipelineHandle);
-    ANGLE_CONTEXT_TRY(mState.setProgramPipelineBinding(this, pipeline));
-    mStateCache.onProgramExecutableChange(this);
-    mProgramPipelineObserverBinding.bind(pipeline);
+    ANGLE_CONTEXT_TRY(mShared.bindProgramPipeline(pipeline));
 }
 
 void Context::beginQuery(QueryType target, QueryID query)
@@ -1588,8 +1787,8 @@ void Context::beginQuery(QueryType target, QueryID query)
     ANGLE_CONTEXT_TRY(queryObject->begin(this));
 
     // set query as active for specified target only if begin succeeded
-    mState.setActiveQuery(this, target, queryObject);
-    mStateCache.onQueryChange(this);
+    mState.setActiveQuery(asSharedContext(), target, queryObject);
+    mShared.onQueryChange();
 }
 
 void Context::endQuery(QueryType target)
@@ -1601,8 +1800,8 @@ void Context::endQuery(QueryType target)
     (void)(queryObject->end(this));
 
     // Always unbind the query, even if there was an error. This may delete the query object.
-    mState.setActiveQuery(this, target, nullptr);
-    mStateCache.onQueryChange(this);
+    mState.setActiveQuery(asSharedContext(), target, nullptr);
+    mShared.onQueryChange();
 }
 
 void Context::queryCounter(QueryID id, QueryType target)
@@ -1771,7 +1970,7 @@ Compiler *Context::getCompiler() const
 {
     if (mCompiler.get() == nullptr)
     {
-        mCompiler.set(this, new Compiler(mImplementation.get(), mState, mDisplay));
+        mCompiler.set(asSharedContext(), new Compiler(mImplementation.get(), mState, mDisplay));
     }
     return mCompiler.get();
 }
@@ -2396,7 +2595,7 @@ void Context::getIntegervImpl(GLenum pname, GLint *params) const
             break;
 
         default:
-            ANGLE_CONTEXT_TRY(mState.getIntegerv(this, pname, params));
+            mState.getIntegerv(this, pname, params);
             break;
     }
 }
@@ -2479,7 +2678,7 @@ void Context::getIntegeri_v(GLenum target, GLuint index, GLint *data)
                 *data = mState.getCaps().maxComputeWorkGroupSize[index];
                 break;
             default:
-                mState.getIntegeri_v(this, target, index, data);
+                mState.getIntegeri_v(target, index, data);
         }
     }
     else
@@ -3107,7 +3306,7 @@ VertexArray *Context::checkVertexArrayAllocation(VertexArrayID vertexArrayHandle
         vertexArray = new VertexArray(mImplementation.get(), vertexArrayHandle,
                                       mState.getCaps().maxVertexAttributes,
                                       mState.getCaps().maxVertexAttribBindings);
-        vertexArray->setBufferAccessValidationEnabled(mBufferAccessValidationEnabled);
+        vertexArray->setBufferAccessValidationEnabled(mShared.isBufferAccessValidationEnabled());
 
         mVertexArrayMap.assign(vertexArrayHandle, vertexArray);
     }
@@ -3143,17 +3342,22 @@ bool Context::isTransformFeedbackGenerated(TransformFeedbackID transformFeedback
     return mTransformFeedbackMap.contains(transformFeedback);
 }
 
-void Context::detachTexture(TextureID texture)
+void SharedContext::detachTexture(Texture *texture)
 {
-    // The State cannot unbind image observers itself, they are owned by the Context
-    Texture *tex = mState.mTextureManager->getTexture(texture);
     for (auto &imageBinding : mImageObserverBindings)
     {
-        if (imageBinding.getSubject() == tex)
+        if (imageBinding.getSubject() == texture)
         {
             imageBinding.reset();
         }
     }
+}
+
+void Context::detachTexture(TextureID texture)
+{
+    // The State cannot unbind image observers itself, they are owned by the Context
+    Texture *tex = mState.mTextureManager->getTexture(texture);
+    mShared.detachTexture(tex);
 
     // Simple pass-through to State's detachTexture method, as textures do not require
     // allocation map management either here or in the resource manager at detach time.
@@ -3172,7 +3376,7 @@ void Context::detachBuffer(Buffer *buffer)
     // Attachments to unbound container objects, such as
     // deletion of a buffer attached to a vertex array object which is not bound to the context,
     // are not affected and continue to act as references on the deleted object
-    ANGLE_CONTEXT_TRY(mState.detachBuffer(this, buffer));
+    ANGLE_CONTEXT_TRY(mState.detachBuffer(asSharedContext(), buffer));
 }
 
 void Context::detachFramebuffer(FramebufferID framebuffer)
@@ -3211,7 +3415,7 @@ void Context::detachVertexArray(VertexArrayID vertexArray)
     // [OpenGL ES 3.0.2] section 2.10 page 43:
     // If a vertex array object that is currently bound is deleted, the binding
     // for that object reverts to zero and the default vertex array becomes current.
-    if (mState.removeVertexArrayBinding(this, vertexArray))
+    if (mState.removeVertexArrayBinding(asSharedContext(), vertexArray))
     {
         bindVertexArray({0});
     }
@@ -3226,27 +3430,27 @@ void Context::detachTransformFeedback(TransformFeedbackID transformFeedback)
     // The OpenGL specification doesn't mention what should happen when the currently bound
     // transform feedback object is deleted. Since it is a container object, we treat it like
     // VAOs and FBOs and set the current bound transform feedback back to 0.
-    if (mState.removeTransformFeedbackBinding(this, transformFeedback))
+    if (mState.removeTransformFeedbackBinding(asSharedContext(), transformFeedback))
     {
         bindTransformFeedback(GL_TRANSFORM_FEEDBACK, {0});
-        mStateCache.onActiveTransformFeedbackChange(this);
+        mShared.onActiveTransformFeedbackChange();
     }
 }
 
 void Context::detachSampler(SamplerID sampler)
 {
-    mState.detachSampler(this, sampler);
+    mState.detachSampler(asSharedContext(), sampler);
 }
 
 void Context::detachProgramPipeline(ProgramPipelineID pipeline)
 {
-    mState.detachProgramPipeline(this, pipeline);
+    mState.detachProgramPipeline(asSharedContext(), pipeline);
 }
 
 void Context::vertexAttribDivisor(GLuint index, GLuint divisor)
 {
-    mState.setVertexAttribDivisor(this, index, divisor);
-    mStateCache.onVertexArrayStateChange(this);
+    mState.setVertexAttribDivisor(asSharedContext(), index, divisor);
+    mShared.onVertexArrayStateChange();
 }
 
 void Context::samplerParameteri(SamplerID sampler, GLenum pname, GLint param)
@@ -3658,7 +3862,7 @@ void Context::beginTransformFeedback(PrimitiveMode primitiveMode)
 
     // TODO: http://anglebug.com/7232: Handle PPOs
     ANGLE_CONTEXT_TRY(transformFeedback->begin(this, primitiveMode, mState.getProgram()));
-    mStateCache.onActiveTransformFeedbackChange(this);
+    mShared.onActiveTransformFeedbackChange();
 }
 
 bool Context::hasActiveTransformFeedback(ShaderProgramID program) const
@@ -4518,20 +4722,17 @@ void Context::updateCaps()
         mCopyImageDirtyObjects.set(state::DIRTY_OBJECT_READ_ATTACHMENTS);
     }
 
-    // We need to validate buffer bounds if we are in a WebGL or robust access context and the
-    // back-end does not support robust buffer access behaviour.
-    mBufferAccessValidationEnabled = (!mSupportedExtensions.robustBufferAccessBehaviorKHR &&
-                                      (mState.isWebGL() || mState.hasRobustAccess()));
+    // Reinitialize state cache after extension changes.
+    mShared.initializeStateCache();
+    mPrivateStateCache.initialize(getPrivateState());
 
-    // Cache this in the VertexArrays. They need to check it in state change notifications.
+    // Cache isBufferAccessValidationEnabled() from ShareGroupAccessibleStateCache in the
+    // VertexArrays.  They need to check it in state change notifications.
     for (auto vaoIter : mVertexArrayMap)
     {
         VertexArray *vao = vaoIter.second;
-        vao->setBufferAccessValidationEnabled(mBufferAccessValidationEnabled);
+        vao->setBufferAccessValidationEnabled(mShared.isBufferAccessValidationEnabled());
     }
-
-    // Reinitialize state cache after extension changes.
-    mStateCache.initialize(this);
 }
 
 bool Context::noopDrawInstanced(PrimitiveMode mode, GLsizei count, GLsizei instanceCount) const
@@ -5232,7 +5433,7 @@ void Context::drawBuffers(GLsizei n, const GLenum *bufs)
     ASSERT(framebuffer);
     framebuffer->setDrawBuffers(n, bufs);
     mState.setDrawFramebufferDirty();
-    mStateCache.onDrawFramebufferChange(this);
+    mShared.onDrawFramebufferChange();
 }
 
 void Context::readBuffer(GLenum mode)
@@ -5870,13 +6071,13 @@ void Context::blendBarrier()
 void Context::disableVertexAttribArray(GLuint index)
 {
     mState.setEnableVertexAttribArray(index, false);
-    mStateCache.onVertexArrayStateChange(this);
+    mShared.onVertexArrayStateChange();
 }
 
 void Context::enableVertexAttribArray(GLuint index)
 {
     mState.setEnableVertexAttribArray(index, true);
-    mStateCache.onVertexArrayStateChange(this);
+    mShared.onVertexArrayStateChange();
 }
 
 void Context::vertexAttribPointer(GLuint index,
@@ -5886,9 +6087,10 @@ void Context::vertexAttribPointer(GLuint index,
                                   GLsizei stride,
                                   const void *ptr)
 {
-    mState.setVertexAttribPointer(this, index, mState.getTargetBuffer(BufferBinding::Array), size,
-                                  type, ConvertToBool(normalized), stride, ptr);
-    mStateCache.onVertexArrayStateChange(this);
+    mState.setVertexAttribPointer(asSharedContext(), index,
+                                  mState.getTargetBuffer(BufferBinding::Array), size, type,
+                                  ConvertToBool(normalized), stride, ptr);
+    mShared.onVertexArrayStateChange();
 }
 
 void Context::vertexAttribFormat(GLuint attribIndex,
@@ -5899,7 +6101,7 @@ void Context::vertexAttribFormat(GLuint attribIndex,
 {
     mState.setVertexAttribFormat(attribIndex, size, type, ConvertToBool(normalized), false,
                                  relativeOffset);
-    mStateCache.onVertexArrayFormatChange(this);
+    mShared.onVertexArrayFormatChange();
 }
 
 void Context::vertexAttribIFormat(GLuint attribIndex,
@@ -5908,19 +6110,19 @@ void Context::vertexAttribIFormat(GLuint attribIndex,
                                   GLuint relativeOffset)
 {
     mState.setVertexAttribFormat(attribIndex, size, type, false, true, relativeOffset);
-    mStateCache.onVertexArrayFormatChange(this);
+    mShared.onVertexArrayFormatChange();
 }
 
 void Context::vertexAttribBinding(GLuint attribIndex, GLuint bindingIndex)
 {
-    mState.setVertexAttribBinding(this, attribIndex, bindingIndex);
-    mStateCache.onVertexArrayStateChange(this);
+    mState.setVertexAttribBinding(asSharedContext(), attribIndex, bindingIndex);
+    mShared.onVertexArrayStateChange();
 }
 
 void Context::vertexBindingDivisor(GLuint bindingIndex, GLuint divisor)
 {
-    mState.setVertexBindingDivisor(this, bindingIndex, divisor);
-    mStateCache.onVertexArrayFormatChange(this);
+    mState.setVertexBindingDivisor(asSharedContext(), bindingIndex, divisor);
+    mShared.onVertexArrayFormatChange();
 }
 
 void Context::vertexAttribIPointer(GLuint index,
@@ -5929,9 +6131,10 @@ void Context::vertexAttribIPointer(GLuint index,
                                    GLsizei stride,
                                    const void *pointer)
 {
-    mState.setVertexAttribIPointer(this, index, mState.getTargetBuffer(BufferBinding::Array), size,
-                                   type, stride, pointer);
-    mStateCache.onVertexArrayStateChange(this);
+    mState.setVertexAttribIPointer(asSharedContext(), index,
+                                   mState.getTargetBuffer(BufferBinding::Array), size, type, stride,
+                                   pointer);
+    mShared.onVertexArrayStateChange();
 }
 
 void Context::getVertexAttribivImpl(GLuint index, GLenum pname, GLint *params) const
@@ -6180,6 +6383,35 @@ void Context::bindBufferBase(BufferBinding target, GLuint index, BufferID buffer
     bindBufferRange(target, index, buffer, 0, 0);
 }
 
+angle::Result SharedContext::bindBufferRange(BufferBinding target,
+                                             GLuint index,
+                                             Buffer *buffer,
+                                             GLintptr offset,
+                                             GLsizeiptr size)
+{
+    ANGLE_TRY(mState.setIndexedBufferBinding(this, target, index, buffer, offset, size));
+    if (target == BufferBinding::Uniform)
+    {
+        mUniformBufferObserverBindings[index].bind(buffer);
+        mStateCache.onUniformBufferStateChange(mState);
+    }
+    else if (target == BufferBinding::AtomicCounter)
+    {
+        mAtomicCounterBufferObserverBindings[index].bind(buffer);
+        mStateCache.onAtomicCounterBufferStateChange(mState);
+    }
+    else if (target == BufferBinding::ShaderStorage)
+    {
+        mShaderStorageBufferObserverBindings[index].bind(buffer);
+        mStateCache.onShaderStorageBufferStateChange(mState);
+    }
+    else
+    {
+        mStateCache.onBufferBindingChange(mState);
+    }
+    return angle::Result::Continue;
+}
+
 void Context::bindBufferRange(BufferBinding target,
                               GLuint index,
                               BufferID buffer,
@@ -6187,26 +6419,7 @@ void Context::bindBufferRange(BufferBinding target,
                               GLsizeiptr size)
 {
     Buffer *object = mState.mBufferManager->checkBufferAllocation(mImplementation.get(), buffer);
-    ANGLE_CONTEXT_TRY(mState.setIndexedBufferBinding(this, target, index, object, offset, size));
-    if (target == BufferBinding::Uniform)
-    {
-        mUniformBufferObserverBindings[index].bind(object);
-        mStateCache.onUniformBufferStateChange(this);
-    }
-    else if (target == BufferBinding::AtomicCounter)
-    {
-        mAtomicCounterBufferObserverBindings[index].bind(object);
-        mStateCache.onAtomicCounterBufferStateChange(this);
-    }
-    else if (target == BufferBinding::ShaderStorage)
-    {
-        mShaderStorageBufferObserverBindings[index].bind(object);
-        mStateCache.onShaderStorageBufferStateChange(this);
-    }
-    else
-    {
-        mStateCache.onBufferBindingChange(this);
-    }
+    ANGLE_CONTEXT_TRY(mShared.bindBufferRange(target, index, object, offset, size));
 }
 
 void Context::bindFramebuffer(GLenum target, FramebufferID framebuffer)
@@ -6227,7 +6440,7 @@ void Context::bindRenderbuffer(GLenum target, RenderbufferID renderbuffer)
     ASSERT(target == GL_RENDERBUFFER);
     Renderbuffer *object = mState.mRenderbufferManager->checkRenderbufferAllocation(
         mImplementation.get(), renderbuffer);
-    mState.setRenderbufferBinding(this, object);
+    mState.setRenderbufferBinding(asSharedContext(), object);
 }
 
 void Context::texStorage2DMultisample(TextureType target,
@@ -7249,7 +7462,7 @@ void Context::linkProgram(ShaderProgramID program)
 
 void Context::releaseShaderCompiler()
 {
-    mCompiler.set(this, nullptr);
+    mCompiler.set(asSharedContext(), nullptr);
 }
 
 void Context::shaderBinary(GLsizei n,
@@ -7340,8 +7553,8 @@ void Context::setUniform1iImpl(Program *program,
 
 void Context::onSamplerUniformChange(size_t textureUnitIndex)
 {
-    mState.onActiveTextureChange(this, textureUnitIndex);
-    mStateCache.onActiveTextureChange(this);
+    mState.onActiveTextureChange(asSharedContext(), textureUnitIndex);
+    mShared.onActiveTextureChange();
 }
 
 void Context::uniform1i(UniformLocation location, GLint x)
@@ -7592,7 +7805,7 @@ void Context::deleteQueries(GLsizei n, const QueryID *ids)
             mQueryHandleAllocator.release(query.value);
             if (queryObject)
             {
-                queryObject->release(this);
+                queryObject->release(asSharedContext());
             }
         }
     }
@@ -7676,7 +7889,7 @@ void Context::deleteVertexArrays(GLsizei n, const VertexArrayID *arrays)
                 if (vertexArrayObject != nullptr)
                 {
                     detachVertexArray(vertexArray);
-                    vertexArrayObject->onDestroy(this);
+                    vertexArrayObject->onDestroy(asSharedContext());
                 }
 
                 mVertexArrayHandleAllocator.release(vertexArray.value);
@@ -7710,7 +7923,7 @@ void Context::endTransformFeedback()
 {
     TransformFeedback *transformFeedback = mState.getCurrentTransformFeedback();
     ANGLE_CONTEXT_TRY(transformFeedback->end(this));
-    mStateCache.onActiveTransformFeedbackChange(this);
+    mShared.onActiveTransformFeedbackChange();
 }
 
 void Context::transformFeedbackVaryings(ShaderProgramID program,
@@ -7752,7 +7965,7 @@ void Context::deleteTransformFeedbacks(GLsizei n, const TransformFeedbackID *ids
             if (transformFeedbackObject != nullptr)
             {
                 detachTransformFeedback(transformFeedback);
-                transformFeedbackObject->release(this);
+                transformFeedbackObject->release(asSharedContext());
             }
 
             mTransformFeedbackHandleAllocator.release(transformFeedback.value);
@@ -7787,14 +8000,14 @@ void Context::pauseTransformFeedback()
 {
     TransformFeedback *transformFeedback = mState.getCurrentTransformFeedback();
     ANGLE_CONTEXT_TRY(transformFeedback->pause(this));
-    mStateCache.onActiveTransformFeedbackChange(this);
+    mShared.onActiveTransformFeedbackChange();
 }
 
 void Context::resumeTransformFeedback()
 {
     TransformFeedback *transformFeedback = mState.getCurrentTransformFeedback();
     ANGLE_CONTEXT_TRY(transformFeedback->resume(this));
-    mStateCache.onActiveTransformFeedbackChange(this);
+    mShared.onActiveTransformFeedbackChange();
 }
 
 void Context::getUniformuiv(ShaderProgramID program, UniformLocation location, GLuint *params)
@@ -7901,7 +8114,7 @@ void Context::uniformBlockBinding(ShaderProgramID program,
     if (programObject->isInUse())
     {
         mState.setObjectDirty(GL_PROGRAM);
-        mStateCache.onUniformBufferStateChange(this);
+        mShared.onUniformBufferStateChange();
     }
 }
 
@@ -7996,7 +8209,7 @@ void Context::deleteSamplers(GLsizei count, const SamplerID *samplers)
             detachSampler(sampler);
         }
 
-        mState.mSamplerManager->deleteObject(this, sampler);
+        mState.mSamplerManager->deleteObject(asSharedContext(), sampler);
     }
 }
 
@@ -8342,11 +8555,6 @@ void Context::programUniformMatrix4x3fv(ShaderProgramID program,
     Program *programObject = getProgramResolveLink(program);
     ASSERT(programObject);
     programObject->setUniformMatrix4x3fv(location, count, transpose, value);
-}
-
-bool Context::isCurrentTransformFeedback(const TransformFeedback *tf) const
-{
-    return mState.isCurrentTransformFeedback(tf);
 }
 
 void Context::genProgramPipelines(GLsizei count, ProgramPipelineID *pipelines)
@@ -9377,117 +9585,6 @@ std::shared_ptr<angle::WorkerThreadPool> Context::getWorkerThreadPool() const
     return mDisplay->getMultiThreadPool();
 }
 
-void Context::onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message)
-{
-    switch (index)
-    {
-        case kVertexArraySubjectIndex:
-            switch (message)
-            {
-                case angle::SubjectMessage::ContentsChanged:
-                    mState.setObjectDirty(GL_VERTEX_ARRAY);
-                    mStateCache.onVertexArrayBufferContentsChange(this);
-                    break;
-                case angle::SubjectMessage::SubjectMapped:
-                case angle::SubjectMessage::SubjectUnmapped:
-                case angle::SubjectMessage::BindingChanged:
-                    mStateCache.onVertexArrayBufferStateChange(this);
-                    break;
-                default:
-                    break;
-            }
-            break;
-
-        case kReadFramebufferSubjectIndex:
-            switch (message)
-            {
-                case angle::SubjectMessage::DirtyBitsFlagged:
-                    mState.setReadFramebufferDirty();
-                    break;
-                case angle::SubjectMessage::SurfaceChanged:
-                    mState.setReadFramebufferBindingDirty();
-                    break;
-                default:
-                    UNREACHABLE();
-                    break;
-            }
-            break;
-
-        case kDrawFramebufferSubjectIndex:
-            switch (message)
-            {
-                case angle::SubjectMessage::DirtyBitsFlagged:
-                    mState.setDrawFramebufferDirty();
-                    mStateCache.onDrawFramebufferChange(this);
-                    break;
-                case angle::SubjectMessage::SurfaceChanged:
-                    mState.setDrawFramebufferBindingDirty();
-                    break;
-                default:
-                    UNREACHABLE();
-                    break;
-            }
-            break;
-
-        case kProgramPipelineSubjectIndex:
-            switch (message)
-            {
-                case angle::SubjectMessage::SubjectChanged:
-                    ANGLE_CONTEXT_TRY(mState.onProgramPipelineExecutableChange(this));
-                    mStateCache.onProgramExecutableChange(this);
-                    break;
-                case angle::SubjectMessage::ProgramRelinked:
-                    ANGLE_CONTEXT_TRY(mState.mProgramPipeline->link(this));
-                    break;
-                default:
-                    UNREACHABLE();
-                    break;
-            }
-            break;
-
-        default:
-            if (index < kTextureMaxSubjectIndex)
-            {
-                if (message != angle::SubjectMessage::ContentsChanged &&
-                    message != angle::SubjectMessage::BindingChanged)
-                {
-                    mState.onActiveTextureStateChange(this, index);
-                    mStateCache.onActiveTextureChange(this);
-                }
-            }
-            else if (index < kImageMaxSubjectIndex)
-            {
-                mState.onImageStateChange(this, index - kImage0SubjectIndex);
-                if (message == angle::SubjectMessage::ContentsChanged)
-                {
-                    mState.mDirtyBits.set(state::DirtyBitType::DIRTY_BIT_IMAGE_BINDINGS);
-                }
-            }
-            else if (index < kUniformBufferMaxSubjectIndex)
-            {
-                mState.onUniformBufferStateChange(index - kUniformBuffer0SubjectIndex);
-                mStateCache.onUniformBufferStateChange(this);
-            }
-            else if (index < kAtomicCounterBufferMaxSubjectIndex)
-            {
-                mState.onAtomicCounterBufferStateChange(index - kAtomicCounterBuffer0SubjectIndex);
-                mStateCache.onAtomicCounterBufferStateChange(this);
-            }
-            else if (index < kShaderStorageBufferMaxSubjectIndex)
-            {
-                mState.onShaderStorageBufferStateChange(index - kShaderStorageBuffer0SubjectIndex);
-                mStateCache.onShaderStorageBufferStateChange(this);
-            }
-            else
-            {
-                ASSERT(index < kSamplerMaxSubjectIndex);
-                mState.setSamplerDirty(index - kSampler0SubjectIndex);
-                mState.onActiveTextureStateChange(this, index - kSampler0SubjectIndex);
-            }
-            break;
-    }
-}
-
 angle::Result Context::onProgramLink(Program *programObject)
 {
     // Don't parallel link a program which is active in any GL contexts. With this assumption, we
@@ -9502,10 +9599,10 @@ angle::Result Context::onProgramLink(Program *programObject)
         programObject->resolveLink(this);
         if (programObject->isLinked())
         {
-            ANGLE_TRY(mState.onProgramExecutableChange(this, programObject));
+            ANGLE_TRY(mState.onProgramExecutableChange(asSharedContext(), programObject));
             programObject->onStateChange(angle::SubjectMessage::ProgramRelinked);
         }
-        mStateCache.onProgramExecutableChange(this);
+        mShared.onProgramExecutableChange();
     }
 
     return angle::Result::Continue;
@@ -9556,17 +9653,15 @@ egl::Error Context::unsetDefaultFramebuffer()
         // Remove the default framebuffer
         if (defaultFramebuffer == mState.getReadFramebuffer())
         {
-            mState.setReadFramebufferBinding(nullptr);
-            mReadFramebufferObserverBinding.bind(nullptr);
+            mShared.bindReadFramebuffer(nullptr);
         }
 
         if (defaultFramebuffer == mState.getDrawFramebuffer())
         {
-            mState.setDrawFramebufferBinding(nullptr);
-            mDrawFramebufferObserverBinding.bind(nullptr);
+            mShared.bindDrawFramebuffer(nullptr, mState.getFramebufferSRGB());
         }
 
-        ANGLE_TRY(defaultFramebuffer->unsetSurfaces(this));
+        ANGLE_TRY(defaultFramebuffer->unsetSurfaces(asSharedContext()));
         mState.mFramebufferManager->setDefaultFramebuffer(nullptr);
     }
 
@@ -10073,8 +10168,8 @@ GLenum ErrorSet::getGraphicsResetStatus(rx::ContextImpl *contextImpl)
     return ToGLenum(mResetStatus);
 }
 
-// StateCache implementation.
-StateCache::StateCache()
+// ShareGroupAccessibleStateCache implementation.
+ShareGroupAccessibleStateCache::ShareGroupAccessibleStateCache()
     : mCachedHasAnyEnabledClientAttrib(false),
       mCachedNonInstancedVertexElementLimit(0),
       mCachedInstancedVertexElementLimit(0),
@@ -10083,38 +10178,41 @@ StateCache::StateCache()
       mCachedBasicDrawElementsError(kInvalidPointer),
       mCachedProgramPipelineError(kInvalidPointer),
       mCachedTransformFeedbackActiveUnpaused(false),
+      mCachedBufferAccessValidationEnabled(false),
       mCachedCanDraw(false)
 {
     mCachedValidDrawModes.fill(false);
 }
 
-StateCache::~StateCache() = default;
+ShareGroupAccessibleStateCache::~ShareGroupAccessibleStateCache() = default;
 
-ANGLE_INLINE void StateCache::updateVertexElementLimits(Context *context)
+ANGLE_INLINE void ShareGroupAccessibleStateCache::updateVertexElementLimits(
+    const ShareGroupAccessibleState &state)
 {
-    if (context->isBufferAccessValidationEnabled())
+    if (isBufferAccessValidationEnabled())
     {
-        updateVertexElementLimitsImpl(context);
+        updateVertexElementLimitsImpl(state);
     }
 }
 
-void StateCache::initialize(Context *context)
+void ShareGroupAccessibleStateCache::initialize(const ShareGroupAccessibleState &state)
 {
-    updateValidDrawModes(context);
-    updateValidBindTextureTypes(context);
-    updateValidDrawElementsTypes(context);
+    updateValidDrawModes(state);
     updateBasicDrawStatesError();
     updateBasicDrawElementsError();
-    updateVertexAttribTypesValidation(context);
-    updateCanDraw(context);
+    updateCanDraw(state);
+
+    // We need to validate buffer bounds if we are in a WebGL or robust access context and the
+    // back-end does not support robust buffer access behaviour.
+    mCachedBufferAccessValidationEnabled = !state.getExtensions().robustBufferAccessBehaviorKHR &&
+                                           (state.isWebGL() || state.hasRobustAccess());
 }
 
-void StateCache::updateActiveAttribsMask(Context *context)
+void ShareGroupAccessibleStateCache::updateActiveAttribsMask(const ShareGroupAccessibleState &state)
 {
-    bool isGLES1         = context->isGLES1();
-    const State &glState = context->getState();
+    const bool isGLES1 = state.isGLES1();
 
-    if (!isGLES1 && !glState.getProgramExecutable())
+    if (!isGLES1 && !state.getProgramExecutable())
     {
         mCachedActiveBufferedAttribsMask = AttributesMask();
         mCachedActiveClientAttribsMask   = AttributesMask();
@@ -10122,11 +10220,11 @@ void StateCache::updateActiveAttribsMask(Context *context)
         return;
     }
 
-    AttributesMask activeAttribs =
-        isGLES1 ? glState.gles1().getActiveAttributesMask()
-                : glState.getProgramExecutable()->getActiveAttribLocationsMask();
+    const AttributesMask activeAttribs =
+        isGLES1 ? GLES1State::GetActiveAttributesMask()
+                : state.getProgramExecutable()->getActiveAttribLocationsMask();
 
-    const VertexArray *vao = glState.getVertexArray();
+    const VertexArray *vao = state.getVertexArray();
     ASSERT(vao);
 
     const AttributesMask &clientAttribs  = vao->getClientAttribsMask();
@@ -10139,11 +10237,12 @@ void StateCache::updateActiveAttribsMask(Context *context)
     mCachedHasAnyEnabledClientAttrib = (clientAttribs & enabledAttribs).any();
 }
 
-void StateCache::updateVertexElementLimitsImpl(Context *context)
+void ShareGroupAccessibleStateCache::updateVertexElementLimitsImpl(
+    const ShareGroupAccessibleState &state)
 {
-    ASSERT(context->isBufferAccessValidationEnabled());
+    ASSERT(isBufferAccessValidationEnabled());
 
-    const VertexArray *vao = context->getState().getVertexArray();
+    const VertexArray *vao = state.getVertexArray();
 
     mCachedNonInstancedVertexElementLimit = std::numeric_limits<GLint64>::max();
     mCachedInstancedVertexElementLimit    = std::numeric_limits<GLint64>::max();
@@ -10163,8 +10262,8 @@ void StateCache::updateVertexElementLimitsImpl(Context *context)
         const VertexAttribute &attrib = vertexAttribs[attributeIndex];
 
         const VertexBinding &binding = vertexBindings[attrib.bindingIndex];
-        ASSERT(context->isGLES1() ||
-               context->getState().getProgramExecutable()->isAttribLocationActive(attributeIndex));
+        ASSERT(state.isGLES1() ||
+               state.getProgramExecutable()->isAttribLocationActive(attributeIndex));
 
         GLint64 limit = attrib.getCachedElementLimit();
         if (binding.getDivisor() > 0)
@@ -10180,24 +10279,25 @@ void StateCache::updateVertexElementLimitsImpl(Context *context)
     }
 }
 
-void StateCache::updateBasicDrawStatesError()
+void ShareGroupAccessibleStateCache::updateBasicDrawStatesError()
 {
     mCachedBasicDrawStatesErrorString = kInvalidPointer;
     mCachedBasicDrawStatesErrorCode   = GL_NO_ERROR;
 }
 
-void StateCache::updateProgramPipelineError()
+void ShareGroupAccessibleStateCache::updateProgramPipelineError()
 {
     mCachedProgramPipelineError = kInvalidPointer;
 }
 
-void StateCache::updateBasicDrawElementsError()
+void ShareGroupAccessibleStateCache::updateBasicDrawElementsError()
 {
     mCachedBasicDrawElementsError = kInvalidPointer;
 }
 
-intptr_t StateCache::getBasicDrawStatesErrorImpl(const Context *context,
-                                                 const PrivateStateCache *privateStateCache) const
+intptr_t ShareGroupAccessibleStateCache::getBasicDrawStatesErrorImpl(
+    const Context *context,
+    const PrivateStateCache *privateStateCache) const
 {
     ASSERT(mCachedBasicDrawStatesErrorString == kInvalidPointer ||
            !privateStateCache->isCachedBasicDrawStatesErrorValid());
@@ -10220,114 +10320,125 @@ intptr_t StateCache::getBasicDrawStatesErrorImpl(const Context *context,
     return mCachedBasicDrawStatesErrorString;
 }
 
-intptr_t StateCache::getProgramPipelineErrorImpl(const Context *context) const
+intptr_t ShareGroupAccessibleStateCache::getProgramPipelineErrorImpl(const Context *context) const
 {
     ASSERT(mCachedProgramPipelineError == kInvalidPointer);
     mCachedProgramPipelineError = reinterpret_cast<intptr_t>(ValidateProgramPipeline(context));
     return mCachedProgramPipelineError;
 }
 
-intptr_t StateCache::getBasicDrawElementsErrorImpl(const Context *context) const
+intptr_t ShareGroupAccessibleStateCache::getBasicDrawElementsErrorImpl(const Context *context) const
 {
     ASSERT(mCachedBasicDrawElementsError == kInvalidPointer);
     mCachedBasicDrawElementsError = reinterpret_cast<intptr_t>(ValidateDrawElementsStates(context));
     return mCachedBasicDrawElementsError;
 }
 
-void StateCache::onVertexArrayBindingChange(Context *context)
+void ShareGroupAccessibleStateCache::onVertexArrayBindingChange(
+    const ShareGroupAccessibleState &state)
 {
-    updateActiveAttribsMask(context);
-    updateVertexElementLimits(context);
+    updateActiveAttribsMask(state);
+    updateVertexElementLimits(state);
     updateBasicDrawStatesError();
     updateBasicDrawElementsError();
 }
 
-void StateCache::onProgramExecutableChange(Context *context)
+void ShareGroupAccessibleStateCache::onProgramExecutableChange(
+    const ShareGroupAccessibleState &state)
 {
-    updateActiveAttribsMask(context);
-    updateVertexElementLimits(context);
+    updateActiveAttribsMask(state);
+    updateVertexElementLimits(state);
     updateBasicDrawStatesError();
     updateProgramPipelineError();
-    updateValidDrawModes(context);
-    updateActiveShaderStorageBufferIndices(context);
-    updateActiveImageUnitIndices(context);
-    updateCanDraw(context);
+    updateValidDrawModes(state);
+    updateActiveShaderStorageBufferIndices(state);
+    updateActiveImageUnitIndices(state);
+    updateCanDraw(state);
 }
 
-void StateCache::onVertexArrayFormatChange(Context *context)
+void ShareGroupAccessibleStateCache::onVertexArrayFormatChange(
+    const ShareGroupAccessibleState &state)
 {
-    updateVertexElementLimits(context);
+    updateVertexElementLimits(state);
 }
 
-void StateCache::onVertexArrayBufferContentsChange(Context *context)
+void ShareGroupAccessibleStateCache::onVertexArrayBufferContentsChange(
+    const ShareGroupAccessibleState &state)
 {
-    updateVertexElementLimits(context);
+    updateVertexElementLimits(state);
     updateBasicDrawStatesError();
 }
 
-void StateCache::onVertexArrayStateChange(Context *context)
+void ShareGroupAccessibleStateCache::onVertexArrayStateChange(
+    const ShareGroupAccessibleState &state)
 {
-    updateActiveAttribsMask(context);
-    updateVertexElementLimits(context);
-    updateBasicDrawStatesError();
-    updateBasicDrawElementsError();
-}
-
-void StateCache::onVertexArrayBufferStateChange(Context *context)
-{
+    updateActiveAttribsMask(state);
+    updateVertexElementLimits(state);
     updateBasicDrawStatesError();
     updateBasicDrawElementsError();
 }
 
-void StateCache::onGLES1ClientStateChange(Context *context)
+void ShareGroupAccessibleStateCache::onVertexArrayBufferStateChange(
+    const ShareGroupAccessibleState &state)
 {
-    updateActiveAttribsMask(context);
-}
-
-void StateCache::onDrawFramebufferChange(Context *context)
-{
-    updateBasicDrawStatesError();
-}
-
-void StateCache::onActiveTextureChange(Context *context)
-{
-    updateBasicDrawStatesError();
-}
-
-void StateCache::onQueryChange(Context *context)
-{
-    updateBasicDrawStatesError();
-}
-
-void StateCache::onActiveTransformFeedbackChange(Context *context)
-{
-    updateTransformFeedbackActiveUnpaused(context);
     updateBasicDrawStatesError();
     updateBasicDrawElementsError();
-    updateValidDrawModes(context);
 }
 
-void StateCache::onUniformBufferStateChange(Context *context)
+void ShareGroupAccessibleStateCache::onGLES1ClientStateChange(
+    const ShareGroupAccessibleState &state)
+{
+    updateActiveAttribsMask(state);
+}
+
+void ShareGroupAccessibleStateCache::onDrawFramebufferChange(const ShareGroupAccessibleState &state)
 {
     updateBasicDrawStatesError();
 }
 
-void StateCache::onAtomicCounterBufferStateChange(Context *context)
+void ShareGroupAccessibleStateCache::onActiveTextureChange(const ShareGroupAccessibleState &state)
 {
     updateBasicDrawStatesError();
 }
 
-void StateCache::onShaderStorageBufferStateChange(Context *context)
+void ShareGroupAccessibleStateCache::onQueryChange(const ShareGroupAccessibleState &state)
 {
     updateBasicDrawStatesError();
 }
 
-void StateCache::setValidDrawModes(bool pointsOK,
-                                   bool linesOK,
-                                   bool trisOK,
-                                   bool lineAdjOK,
-                                   bool triAdjOK,
-                                   bool patchOK)
+void ShareGroupAccessibleStateCache::onActiveTransformFeedbackChange(
+    const ShareGroupAccessibleState &state)
+{
+    updateTransformFeedbackActiveUnpaused(state);
+    updateBasicDrawStatesError();
+    updateBasicDrawElementsError();
+    updateValidDrawModes(state);
+}
+
+void ShareGroupAccessibleStateCache::onUniformBufferStateChange(
+    const ShareGroupAccessibleState &state)
+{
+    updateBasicDrawStatesError();
+}
+
+void ShareGroupAccessibleStateCache::onAtomicCounterBufferStateChange(
+    const ShareGroupAccessibleState &state)
+{
+    updateBasicDrawStatesError();
+}
+
+void ShareGroupAccessibleStateCache::onShaderStorageBufferStateChange(
+    const ShareGroupAccessibleState &state)
+{
+    updateBasicDrawStatesError();
+}
+
+void ShareGroupAccessibleStateCache::setValidDrawModes(bool pointsOK,
+                                                       bool linesOK,
+                                                       bool trisOK,
+                                                       bool lineAdjOK,
+                                                       bool triAdjOK,
+                                                       bool patchOK)
 {
     mCachedValidDrawModes[PrimitiveMode::Points]                 = pointsOK;
     mCachedValidDrawModes[PrimitiveMode::Lines]                  = linesOK;
@@ -10343,11 +10454,9 @@ void StateCache::setValidDrawModes(bool pointsOK,
     mCachedValidDrawModes[PrimitiveMode::Patches]                = patchOK;
 }
 
-void StateCache::updateValidDrawModes(Context *context)
+void ShareGroupAccessibleStateCache::updateValidDrawModes(const ShareGroupAccessibleState &state)
 {
-    const State &state = context->getState();
-
-    const ProgramExecutable *programExecutable = context->getState().getProgramExecutable();
+    const ProgramExecutable *programExecutable = state.getProgramExecutable();
 
     // If tessellation is active primitive mode must be GL_PATCHES.
     if (programExecutable && programExecutable->hasLinkedTessellationShader())
@@ -10368,8 +10477,8 @@ void StateCache::updateValidDrawModes(Context *context)
         // DrawElements, DrawElementsInstanced, and DrawRangeElements while transform feedback is
         // active and not paused, regardless of mode. Any primitive type may be used while transform
         // feedback is paused.
-        if (!context->getExtensions().geometryShaderAny() &&
-            !context->getExtensions().tessellationShaderEXT && context->getClientVersion() < ES_3_2)
+        if (!state.getExtensions().geometryShaderAny() &&
+            !state.getExtensions().tessellationShaderEXT && state.getClientVersion() < ES_3_2)
         {
             mCachedValidDrawModes.fill(false);
             mCachedValidDrawModes[curTransformFeedback->getPrimitiveMode()] = true;
@@ -10379,8 +10488,8 @@ void StateCache::updateValidDrawModes(Context *context)
 
     if (!programExecutable || !programExecutable->hasLinkedShaderStage(ShaderType::Geometry))
     {
-        bool adjacencyOK =
-            (context->getExtensions().geometryShaderAny() || context->getClientVersion() >= ES_3_2);
+        const bool adjacencyOK =
+            state.getExtensions().geometryShaderAny() || state.getClientVersion() >= ES_3_2;
 
         // All draw modes are valid, since drawing without a program does not generate an error and
         // operations requiring a GS will trigger other validation errors.
@@ -10399,11 +10508,75 @@ void StateCache::updateValidDrawModes(Context *context)
     setValidDrawModes(pointsOK, linesOK, trisOK, lineAdjOK, triAdjOK, false);
 }
 
-void StateCache::updateValidBindTextureTypes(Context *context)
+void ShareGroupAccessibleStateCache::updateTransformFeedbackActiveUnpaused(
+    const ShareGroupAccessibleState &state)
 {
-    const Extensions &exts = context->getExtensions();
-    bool isGLES3           = context->getClientMajorVersion() >= 3;
-    bool isGLES31          = context->getClientVersion() >= Version(3, 1);
+    TransformFeedback *xfb                 = state.getCurrentTransformFeedback();
+    mCachedTransformFeedbackActiveUnpaused = xfb && xfb->isActive() && !xfb->isPaused();
+}
+
+void ShareGroupAccessibleStateCache::updateActiveShaderStorageBufferIndices(
+    const ShareGroupAccessibleState &state)
+{
+    mCachedActiveShaderStorageBufferIndices.reset();
+    const ProgramExecutable *executable = state.getProgramExecutable();
+    if (executable)
+    {
+        for (const InterfaceBlock &block : executable->getShaderStorageBlocks())
+        {
+            mCachedActiveShaderStorageBufferIndices.set(block.binding);
+        }
+    }
+}
+
+void ShareGroupAccessibleStateCache::updateActiveImageUnitIndices(
+    const ShareGroupAccessibleState &state)
+{
+    mCachedActiveImageUnitIndices.reset();
+    const ProgramExecutable *executable = state.getProgramExecutable();
+    if (executable)
+    {
+        for (const ImageBinding &imageBinding : executable->getImageBindings())
+        {
+            for (GLuint binding : imageBinding.boundImageUnits)
+            {
+                mCachedActiveImageUnitIndices.set(binding);
+            }
+        }
+    }
+}
+
+void ShareGroupAccessibleStateCache::updateCanDraw(const ShareGroupAccessibleState &state)
+{
+    mCachedCanDraw = state.isGLES1() || (state.getProgramExecutable() &&
+                                         state.getProgramExecutable()->hasVertexShader());
+}
+
+bool ShareGroupAccessibleStateCache::isCurrentContext(
+    const Context *context,
+    const PrivateStateCache *privateStateCache) const
+{
+    // Ensure that the state cache is not queried by any context other than the one that owns it.
+    return &context->getStateCache() == this &&
+           &context->getPrivateStateCache() == privateStateCache;
+}
+
+PrivateStateCache::PrivateStateCache() : mIsCachedBasicDrawStatesErrorValid(true) {}
+
+PrivateStateCache::~PrivateStateCache() = default;
+
+void PrivateStateCache::initialize(const PrivateState &state)
+{
+    updateValidBindTextureTypes(state);
+    updateValidDrawElementsTypes(state);
+    updateVertexAttribTypesValidation(state);
+}
+
+void PrivateStateCache::updateValidBindTextureTypes(const PrivateState &state)
+{
+    const Extensions &exts = state.getExtensions();
+    bool isGLES3           = state.getClientMajorVersion() >= 3;
+    bool isGLES31          = state.getClientVersion() >= Version(3, 1);
 
     mCachedValidBindTextureTypes = {{
         {TextureType::_2D, true},
@@ -10420,10 +10593,10 @@ void StateCache::updateValidBindTextureTypes(Context *context)
     }};
 }
 
-void StateCache::updateValidDrawElementsTypes(Context *context)
+void PrivateStateCache::updateValidDrawElementsTypes(const PrivateState &state)
 {
     bool supportsUint =
-        (context->getClientMajorVersion() >= 3 || context->getExtensions().elementIndexUintOES);
+        state.getClientMajorVersion() >= 3 || state.getExtensions().elementIndexUintOES;
 
     mCachedValidDrawElementsTypes = {{
         {DrawElementsType::UnsignedByte, true},
@@ -10432,23 +10605,17 @@ void StateCache::updateValidDrawElementsTypes(Context *context)
     }};
 }
 
-void StateCache::updateTransformFeedbackActiveUnpaused(Context *context)
+void PrivateStateCache::updateVertexAttribTypesValidation(const PrivateState &state)
 {
-    TransformFeedback *xfb                 = context->getState().getCurrentTransformFeedback();
-    mCachedTransformFeedbackActiveUnpaused = xfb && xfb->isActive() && !xfb->isPaused();
-}
-
-void StateCache::updateVertexAttribTypesValidation(Context *context)
-{
-    VertexAttribTypeCase halfFloatValidity = (context->getExtensions().vertexHalfFloatOES)
+    VertexAttribTypeCase halfFloatValidity = state.getExtensions().vertexHalfFloatOES
                                                  ? VertexAttribTypeCase::Valid
                                                  : VertexAttribTypeCase::Invalid;
 
-    VertexAttribTypeCase vertexType1010102Validity = (context->getExtensions().vertexType1010102OES)
+    VertexAttribTypeCase vertexType1010102Validity = state.getExtensions().vertexType1010102OES
                                                          ? VertexAttribTypeCase::ValidSize3or4
                                                          : VertexAttribTypeCase::Invalid;
 
-    if (context->getClientMajorVersion() <= 2)
+    if (state.getClientMajorVersion() <= 2)
     {
         mCachedVertexAttribTypesValidation = {{
             {VertexAttribType::Byte, VertexAttribTypeCase::Valid},
@@ -10490,51 +10657,4 @@ void StateCache::updateVertexAttribTypesValidation(Context *context)
     }
 }
 
-void StateCache::updateActiveShaderStorageBufferIndices(Context *context)
-{
-    mCachedActiveShaderStorageBufferIndices.reset();
-    const ProgramExecutable *executable = context->getState().getProgramExecutable();
-    if (executable)
-    {
-        for (const InterfaceBlock &block : executable->getShaderStorageBlocks())
-        {
-            mCachedActiveShaderStorageBufferIndices.set(block.binding);
-        }
-    }
-}
-
-void StateCache::updateActiveImageUnitIndices(Context *context)
-{
-    mCachedActiveImageUnitIndices.reset();
-    const ProgramExecutable *executable = context->getState().getProgramExecutable();
-    if (executable)
-    {
-        for (const ImageBinding &imageBinding : executable->getImageBindings())
-        {
-            for (GLuint binding : imageBinding.boundImageUnits)
-            {
-                mCachedActiveImageUnitIndices.set(binding);
-            }
-        }
-    }
-}
-
-void StateCache::updateCanDraw(Context *context)
-{
-    mCachedCanDraw =
-        (context->isGLES1() || (context->getState().getProgramExecutable() &&
-                                context->getState().getProgramExecutable()->hasVertexShader()));
-}
-
-bool StateCache::isCurrentContext(const Context *context,
-                                  const PrivateStateCache *privateStateCache) const
-{
-    // Ensure that the state cache is not queried by any context other than the one that owns it.
-    return &context->getStateCache() == this &&
-           &context->getPrivateStateCache() == privateStateCache;
-}
-
-PrivateStateCache::PrivateStateCache() : mIsCachedBasicDrawStatesErrorValid(true) {}
-
-PrivateStateCache::~PrivateStateCache() = default;
 }  // namespace gl

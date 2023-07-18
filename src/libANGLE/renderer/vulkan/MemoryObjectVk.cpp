@@ -80,7 +80,7 @@ MemoryObjectVk::MemoryObjectVk() {}
 
 MemoryObjectVk::~MemoryObjectVk() = default;
 
-void MemoryObjectVk::onDestroy(const gl::Context *context)
+void MemoryObjectVk::onDestroy(const gl::SharedContext *context)
 {
     if (mFd != kInvalidFd)
     {

@@ -21,7 +21,7 @@ class SyncGL : public SyncImpl
     explicit SyncGL(const FunctionsGL *functions);
     ~SyncGL() override;
 
-    void onDestroy(const gl::Context *context) override;
+    void onDestroy(const gl::SharedContext *context) override;
 
     angle::Result set(const gl::Context *context, GLenum condition, GLbitfield flags) override;
     angle::Result clientWait(const gl::Context *context,

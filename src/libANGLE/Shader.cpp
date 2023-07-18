@@ -150,7 +150,7 @@ Shader::Shader(ShaderProgramManager *manager,
     ASSERT(mImplementation);
 }
 
-void Shader::onDestroy(const gl::Context *context)
+void Shader::onDestroy(const SharedContext *context)
 {
     resolveCompile(context);
     mImplementation->destroy();
@@ -610,7 +610,7 @@ void Shader::addRef()
     mRefCount++;
 }
 
-void Shader::release(const Context *context)
+void Shader::release(const SharedContext *context)
 {
     mRefCount--;
 

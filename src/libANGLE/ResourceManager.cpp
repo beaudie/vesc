@@ -49,7 +49,7 @@ void ResourceManagerBase::addRef()
     mRefCount++;
 }
 
-void ResourceManagerBase::release(const Context *context)
+void ResourceManagerBase::release(const SharedContext *context)
 {
     if (--mRefCount == 0)
     {
@@ -65,7 +65,7 @@ TypedResourceManager<ResourceType, ImplT, IDType>::~TypedResourceManager()
 }
 
 template <typename ResourceType, typename ImplT, typename IDType>
-void TypedResourceManager<ResourceType, ImplT, IDType>::reset(const Context *context)
+void TypedResourceManager<ResourceType, ImplT, IDType>::reset(const SharedContext *context)
 {
     this->mHandleAllocator.reset();
     for (const auto &resource : mObjectMap)
@@ -79,7 +79,7 @@ void TypedResourceManager<ResourceType, ImplT, IDType>::reset(const Context *con
 }
 
 template <typename ResourceType, typename ImplT, typename IDType>
-void TypedResourceManager<ResourceType, ImplT, IDType>::deleteObject(const Context *context,
+void TypedResourceManager<ResourceType, ImplT, IDType>::deleteObject(const SharedContext *context,
                                                                      IDType handle)
 {
     ResourceType *resource = nullptr;
@@ -117,7 +117,7 @@ Buffer *BufferManager::AllocateNewObject(rx::GLImplFactory *factory, BufferID ha
 }
 
 // static
-void BufferManager::DeleteObject(const Context *context, Buffer *buffer)
+void BufferManager::DeleteObject(const SharedContext *context, Buffer *buffer)
 {
     buffer->release(context);
 }
@@ -142,7 +142,7 @@ ShaderProgramManager::~ShaderProgramManager()
     ASSERT(mShaders.empty());
 }
 
-void ShaderProgramManager::reset(const Context *context)
+void ShaderProgramManager::reset(const SharedContext *context)
 {
     while (!mPrograms.empty())
     {
@@ -166,7 +166,7 @@ ShaderProgramID ShaderProgramManager::createShader(rx::GLImplFactory *factory,
     return handle;
 }
 
-void ShaderProgramManager::deleteShader(const Context *context, ShaderProgramID shader)
+void ShaderProgramManager::deleteShader(const SharedContext *context, ShaderProgramID shader)
 {
     deleteObject(context, &mShaders, shader);
 }
@@ -183,13 +183,13 @@ ShaderProgramID ShaderProgramManager::createProgram(rx::GLImplFactory *factory)
     return handle;
 }
 
-void ShaderProgramManager::deleteProgram(const gl::Context *context, ShaderProgramID program)
+void ShaderProgramManager::deleteProgram(const gl::SharedContext *context, ShaderProgramID program)
 {
     deleteObject(context, &mPrograms, program);
 }
 
 template <typename ObjectType, typename IDType>
-void ShaderProgramManager::deleteObject(const Context *context,
+void ShaderProgramManager::deleteObject(const SharedContext *context,
                                         ResourceMap<ObjectType, IDType> *objectMap,
                                         IDType id)
 {
@@ -226,7 +226,7 @@ Texture *TextureManager::AllocateNewObject(rx::GLImplFactory *factory,
 }
 
 // static
-void TextureManager::DeleteObject(const Context *context, Texture *texture)
+void TextureManager::DeleteObject(const SharedContext *context, Texture *texture)
 {
     texture->release(context);
 }
@@ -268,7 +268,7 @@ Renderbuffer *RenderbufferManager::AllocateNewObject(rx::GLImplFactory *factory,
 }
 
 // static
-void RenderbufferManager::DeleteObject(const Context *context, Renderbuffer *renderbuffer)
+void RenderbufferManager::DeleteObject(const SharedContext *context, Renderbuffer *renderbuffer)
 {
     renderbuffer->release(context);
 }
@@ -296,7 +296,7 @@ Sampler *SamplerManager::AllocateNewObject(rx::GLImplFactory *factory, SamplerID
 }
 
 // static
-void SamplerManager::DeleteObject(const Context *context, Sampler *sampler)
+void SamplerManager::DeleteObject(const SharedContext *context, Sampler *sampler)
 {
     sampler->release(context);
 }
@@ -321,7 +321,7 @@ bool SamplerManager::isSampler(SamplerID sampler) const
 SyncManager::~SyncManager() = default;
 
 // static
-void SyncManager::DeleteObject(const Context *context, Sync *sync)
+void SyncManager::DeleteObject(const SharedContext *context, Sync *sync)
 {
     sync->release(context);
 }
@@ -347,7 +347,7 @@ FramebufferManager::~FramebufferManager() = default;
 // static
 Framebuffer *FramebufferManager::AllocateNewObject(rx::GLImplFactory *factory,
                                                    FramebufferID handle,
-                                                   const Context *context)
+                                                   const SharedContext *context)
 {
     // Make sure the caller isn't using a reserved handle.
     ASSERT(handle != Framebuffer::kDefaultDrawFramebufferHandle);
@@ -355,7 +355,7 @@ Framebuffer *FramebufferManager::AllocateNewObject(rx::GLImplFactory *factory,
 }
 
 // static
-void FramebufferManager::DeleteObject(const Context *context, Framebuffer *framebuffer)
+void FramebufferManager::DeleteObject(const SharedContext *context, Framebuffer *framebuffer)
 {
     framebuffer->onDestroy(context);
     delete framebuffer;
@@ -407,7 +407,7 @@ ProgramPipeline *ProgramPipelineManager::AllocateNewObject(rx::GLImplFactory *fa
 }
 
 // static
-void ProgramPipelineManager::DeleteObject(const Context *context, ProgramPipeline *pipeline)
+void ProgramPipelineManager::DeleteObject(const SharedContext *context, ProgramPipeline *pipeline)
 {
     pipeline->release(context);
 }
@@ -431,7 +431,7 @@ MemoryObjectManager::~MemoryObjectManager()
     ASSERT(mMemoryObjects.empty());
 }
 
-void MemoryObjectManager::reset(const Context *context)
+void MemoryObjectManager::reset(const SharedContext *context)
 {
     while (!mMemoryObjects.empty())
     {
@@ -449,7 +449,7 @@ MemoryObjectID MemoryObjectManager::createMemoryObject(rx::GLImplFactory *factor
     return handle;
 }
 
-void MemoryObjectManager::deleteMemoryObject(const Context *context, MemoryObjectID handle)
+void MemoryObjectManager::deleteMemoryObject(const SharedContext *context, MemoryObjectID handle)
 {
     MemoryObject *memoryObject = nullptr;
     if (!mMemoryObjects.erase(handle, &memoryObject))
@@ -480,7 +480,7 @@ SemaphoreManager::~SemaphoreManager()
     ASSERT(mSemaphores.empty());
 }
 
-void SemaphoreManager::reset(const Context *context)
+void SemaphoreManager::reset(const SharedContext *context)
 {
     while (!mSemaphores.empty())
     {
@@ -498,7 +498,7 @@ SemaphoreID SemaphoreManager::createSemaphore(rx::GLImplFactory *factory)
     return handle;
 }
 
-void SemaphoreManager::deleteSemaphore(const Context *context, SemaphoreID handle)
+void SemaphoreManager::deleteSemaphore(const SharedContext *context, SemaphoreID handle)
 {
     Semaphore *semaphore = nullptr;
     if (!mSemaphores.erase(handle, &semaphore))

@@ -20,11 +20,14 @@ class Renderer9;
 class Context9 : public ContextD3D
 {
   public:
-    Context9(const gl::State &state, gl::ErrorSet *errorSet, Renderer9 *renderer);
+    Context9(const gl::State &state,
+             const gl::ShareGroupAccessibleState &sharedState,
+             gl::ErrorSet *errorSet,
+             Renderer9 *renderer);
     ~Context9() override;
 
     angle::Result initialize() override;
-    void onDestroy(const gl::Context *context) override;
+    void onDestroy(const gl::SharedContext *context) override;
 
     // Shader creation
     CompilerImpl *createCompiler() override;

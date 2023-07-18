@@ -94,7 +94,7 @@ TransformFeedback::TransformFeedback(rx::GLImplFactory *implFactory,
     ASSERT(mImplementation != nullptr);
 }
 
-void TransformFeedback::onDestroy(const Context *context)
+void TransformFeedback::onDestroy(const SharedContext *context)
 {
     ASSERT(!context || !context->isCurrentTransformFeedback(this));
     if (mState.mProgram)
@@ -153,7 +153,8 @@ angle::Result TransformFeedback::begin(const Context *context,
     // In one of the angle_unittests - "TransformFeedbackTest.SideEffectsOfStartAndStop"
     // there is a code path where <context> is a nullptr, account for that possiblity.
     const ProgramExecutable *programExecutable =
-        context ? context->getState().getLinkedProgramExecutable(context) : nullptr;
+        context ? context->asSharedContext()->getState().getLinkedProgramExecutable(context)
+                : nullptr;
     if (programExecutable)
     {
         // Compute the number of vertices we can draw before overflowing the bound buffers.
@@ -185,7 +186,7 @@ angle::Result TransformFeedback::end(const Context *context)
     mState.mVertexCapacity = 0;
     if (mState.mProgram)
     {
-        mState.mProgram->release(context);
+        mState.mProgram->release(context->asSharedContext());
         mState.mProgram = nullptr;
     }
     return angle::Result::Continue;
@@ -245,7 +246,7 @@ void TransformFeedback::bindProgram(const Context *context, Program *program)
     {
         if (mState.mProgram != nullptr)
         {
-            mState.mProgram->release(context);
+            mState.mProgram->release(context->asSharedContext());
         }
         mState.mProgram = program;
         if (mState.mProgram != nullptr)
@@ -260,7 +261,7 @@ bool TransformFeedback::hasBoundProgram(ShaderProgramID program) const
     return mState.mProgram != nullptr && mState.mProgram->id().value == program.value;
 }
 
-angle::Result TransformFeedback::detachBuffer(const Context *context, BufferID bufferID)
+angle::Result TransformFeedback::detachBuffer(const SharedContext *context, BufferID bufferID)
 {
     bool isBound = context->isCurrentTransformFeedback(this);
     for (size_t index = 0; index < mState.mIndexedBuffers.size(); index++)
@@ -269,18 +270,18 @@ angle::Result TransformFeedback::detachBuffer(const Context *context, BufferID b
         {
             if (isBound)
             {
-                mState.mIndexedBuffers[index]->onTFBindingChanged(context, false, true);
+                mState.mIndexedBuffers[index]->onTFBindingChanged(false, true);
             }
             mState.mIndexedBuffers[index].set(context, nullptr, 0, 0);
-            ANGLE_TRY(
-                mImplementation->bindIndexedBuffer(context, index, mState.mIndexedBuffers[index]));
+            ANGLE_TRY(mImplementation->bindIndexedBuffer(context->getUnsafeContext(), index,
+                                                         mState.mIndexedBuffers[index]));
         }
     }
 
     return angle::Result::Continue;
 }
 
-angle::Result TransformFeedback::bindIndexedBuffer(const Context *context,
+angle::Result TransformFeedback::bindIndexedBuffer(const SharedContext *context,
                                                    size_t index,
                                                    Buffer *buffer,
                                                    size_t offset,
@@ -290,15 +291,16 @@ angle::Result TransformFeedback::bindIndexedBuffer(const Context *context,
     bool isBound = context && context->isCurrentTransformFeedback(this);
     if (isBound && mState.mIndexedBuffers[index].get())
     {
-        mState.mIndexedBuffers[index]->onTFBindingChanged(context, false, true);
+        mState.mIndexedBuffers[index]->onTFBindingChanged(false, true);
     }
     mState.mIndexedBuffers[index].set(context, buffer, offset, size);
     if (isBound && buffer)
     {
-        buffer->onTFBindingChanged(context, true, true);
+        buffer->onTFBindingChanged(true, true);
     }
 
-    return mImplementation->bindIndexedBuffer(context, index, mState.mIndexedBuffers[index]);
+    return mImplementation->bindIndexedBuffer(context->getUnsafeContext(), index,
+                                              mState.mIndexedBuffers[index]);
 }
 
 const OffsetBindingPointer<Buffer> &TransformFeedback::getIndexedBuffer(size_t index) const
@@ -329,13 +331,13 @@ rx::TransformFeedbackImpl *TransformFeedback::getImplementation() const
     return mImplementation;
 }
 
-void TransformFeedback::onBindingChanged(const Context *context, bool bound)
+void TransformFeedback::onBindingChanged(bool bound)
 {
     for (auto &buffer : mState.mIndexedBuffers)
     {
         if (buffer.get())
         {
-            buffer->onTFBindingChanged(context, bound, true);
+            buffer->onTFBindingChanged(bound, true);
         }
     }
 }

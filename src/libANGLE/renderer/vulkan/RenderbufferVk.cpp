@@ -32,7 +32,7 @@ RenderbufferVk::RenderbufferVk(const gl::RenderbufferState &state)
 
 RenderbufferVk::~RenderbufferVk() {}
 
-void RenderbufferVk::onDestroy(const gl::Context *context)
+void RenderbufferVk::onDestroy(const gl::SharedContext *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
     releaseAndDeleteImage(contextVk);

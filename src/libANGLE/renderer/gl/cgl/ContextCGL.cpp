@@ -53,7 +53,7 @@ egl::Error ContextCGL::reacquireHighPowerGPU(gl::Context *context)
     return egl::NoError();
 }
 
-void ContextCGL::onDestroy(const gl::Context *context)
+void ContextCGL::onDestroy(const gl::SharedContext *context)
 {
     if (mUsesDiscreteGpu && !mReleasedDiscreteGpu)
     {

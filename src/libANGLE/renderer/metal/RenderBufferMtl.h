@@ -23,7 +23,7 @@ class RenderbufferMtl : public RenderbufferImpl
     RenderbufferMtl(const gl::RenderbufferState &state);
     ~RenderbufferMtl() override;
 
-    void onDestroy(const gl::Context *context) override;
+    void onDestroy(const gl::SharedContext *context) override;
 
     angle::Result setStorage(const gl::Context *context,
                              GLenum internalformat,

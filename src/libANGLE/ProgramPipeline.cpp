@@ -158,7 +158,7 @@ ProgramPipeline::~ProgramPipeline()
     mProgramPipelineImpl.reset(nullptr);
 }
 
-void ProgramPipeline::onDestroy(const Context *context)
+void ProgramPipeline::onDestroy(const SharedContext *context)
 {
     for (Program *program : mState.mPrograms)
     {
