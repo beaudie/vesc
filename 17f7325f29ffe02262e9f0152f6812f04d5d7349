@@ -16,6 +16,24 @@
       "message": "Please add a comment that this path is only used by UtilsVk. Because otherwise CLAMP_TO_BORDER is supposed to be only available with a GL extension that is exposed only with the `supportsCustomBorderColor` feature.",
       "revId": "17f7325f29ffe02262e9f0152f6812f04d5d7349",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29c95b0c_9b93dcb0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5305,
+      "author": {
+        "id": 1550632
+      },
+      "writtenOn": "2023-07-18T15:58:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93f1692b_82546041",
+      "revId": "17f7325f29ffe02262e9f0152f6812f04d5d7349",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
