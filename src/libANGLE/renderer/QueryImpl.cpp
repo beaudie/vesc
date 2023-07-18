@@ -11,7 +11,7 @@
 namespace rx
 {
 
-void QueryImpl::onDestroy(const gl::Context *context) {}
+void QueryImpl::onDestroy(const gl::SharedContext *context) {}
 
 angle::Result QueryImpl::onLabelUpdate(const gl::Context *context)
 {

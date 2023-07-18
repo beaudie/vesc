@@ -65,7 +65,7 @@ class TextureGL : public TextureImpl
     TextureGL(const gl::TextureState &state, GLuint id);
     ~TextureGL() override;
 
-    void onDestroy(const gl::Context *context) override;
+    void onDestroy(const gl::SharedContext *context) override;
 
     angle::Result setImage(const gl::Context *context,
                            const gl::ImageIndex &index,

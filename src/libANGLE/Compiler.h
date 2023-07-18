@@ -33,7 +33,7 @@ class Compiler final : public RefCountObjectNoID
   public:
     Compiler(rx::GLImplFactory *implFactory, const State &data, egl::Display *display);
 
-    void onDestroy(const Context *context) override;
+    void onDestroy(const SharedContext *context) override;
 
     ShCompilerInstance getInstance(ShaderType shaderType);
     void putInstance(ShCompilerInstance &&instance);

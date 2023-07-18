@@ -118,7 +118,7 @@ class ProgramMtl : public ProgramImpl
     ProgramMtl(const gl::ProgramState &state);
     ~ProgramMtl() override;
 
-    void destroy(const gl::Context *context) override;
+    void destroy(const gl::SharedContext *context) override;
 
     std::unique_ptr<LinkEvent> load(const gl::Context *context,
                                     gl::BinaryInputStream *stream,

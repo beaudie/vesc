@@ -92,7 +92,7 @@ class Buffer final : public RefCountObject<BufferID>,
   public:
     Buffer(rx::GLImplFactory *factory, BufferID id);
     ~Buffer() override;
-    void onDestroy(const Context *context) override;
+    void onDestroy(const SharedContext *context) override;
 
     angle::Result setLabel(const Context *context, const std::string &label) override;
     const std::string &getLabel() const override;
@@ -179,7 +179,7 @@ class Buffer final : public RefCountObject<BufferID>,
     }
 
     bool isDoubleBoundForTransformFeedback() const;
-    void onTFBindingChanged(const Context *context, bool bound, bool indexed);
+    void onTFBindingChanged(bool bound, bool indexed);
     void onNonTFBindingChanged(int incr) { mState.mBindingCount += incr; }
     angle::Result getSubData(const gl::Context *context,
                              GLintptr offset,

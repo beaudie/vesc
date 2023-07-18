@@ -334,12 +334,13 @@ void DisplayVk::initSupportedSurfaceFormatColorspaces()
 }
 
 ContextImpl *DisplayVk::createContext(const gl::State &state,
+                                      const gl::ShareGroupAccessibleState &sharedState,
                                       gl::ErrorSet *errorSet,
                                       const egl::Config *configuration,
                                       const gl::Context *shareContext,
                                       const egl::AttributeMap &attribs)
 {
-    return new ContextVk(state, errorSet, mRenderer);
+    return new ContextVk(state, sharedState, errorSet, mRenderer);
 }
 
 StreamProducerImpl *DisplayVk::createStreamProducerD3DTexture(

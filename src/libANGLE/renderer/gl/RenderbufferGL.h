@@ -34,7 +34,7 @@ class RenderbufferGL : public RenderbufferImpl
     RenderbufferGL(const gl::RenderbufferState &state, GLuint id);
     ~RenderbufferGL() override;
 
-    void onDestroy(const gl::Context *context) override;
+    void onDestroy(const gl::SharedContext *context) override;
 
     angle::Result setStorage(const gl::Context *context,
                              GLenum internalformat,

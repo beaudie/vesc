@@ -41,7 +41,7 @@ TransformFeedbackVk::TransformFeedbackVk(const gl::TransformFeedbackState &state
 
 TransformFeedbackVk::~TransformFeedbackVk() {}
 
-void TransformFeedbackVk::onDestroy(const gl::Context *context)
+void TransformFeedbackVk::onDestroy(const gl::SharedContext *context)
 {
     ContextVk *contextVk   = vk::GetImpl(context);
     RendererVk *rendererVk = contextVk->getRenderer();

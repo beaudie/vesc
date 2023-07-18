@@ -21,7 +21,7 @@ RenderbufferMtl::RenderbufferMtl(const gl::RenderbufferState &state) : Renderbuf
 
 RenderbufferMtl::~RenderbufferMtl() {}
 
-void RenderbufferMtl::onDestroy(const gl::Context *context)
+void RenderbufferMtl::onDestroy(const gl::SharedContext *context)
 {
     releaseTexture();
 }
@@ -219,4 +219,4 @@ angle::Result RenderbufferMtl::initializeContents(const gl::Context *context,
             context, mTexture, mFormat,
             mtl::ImageNativeIndex::FromBaseZeroGLIndex(gl::ImageIndex::Make2D(0)));
 }
-}
+}  // namespace rx

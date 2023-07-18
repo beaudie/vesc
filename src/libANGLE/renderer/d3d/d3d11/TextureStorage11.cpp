@@ -1074,7 +1074,7 @@ void TextureStorage11_2D::onLabelUpdate()
     }
 }
 
-angle::Result TextureStorage11_2D::onDestroy(const gl::Context *context)
+angle::Result TextureStorage11_2D::onDestroy(const gl::SharedContext *context)
 {
     for (unsigned i = 0; i < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS; i++)
     {
@@ -1671,7 +1671,7 @@ TextureStorage11_External::TextureStorage11_External(
     mHasKeyedMutex = (desc.MiscFlags & D3D11_RESOURCE_MISC_SHARED_KEYEDMUTEX) != 0;
 }
 
-angle::Result TextureStorage11_External::onDestroy(const gl::Context *context)
+angle::Result TextureStorage11_External::onDestroy(const gl::SharedContext *context)
 {
     if (mHasKeyedMutex)
     {
@@ -1909,7 +1909,7 @@ TextureStorage11_EGLImage::TextureStorage11_EGLImage(Renderer11 *renderer,
 
 TextureStorage11_EGLImage::~TextureStorage11_EGLImage() {}
 
-angle::Result TextureStorage11_EGLImage::onDestroy(const gl::Context *context)
+angle::Result TextureStorage11_EGLImage::onDestroy(const gl::SharedContext *context)
 {
     if (mAssociatedImage != nullptr)
     {
@@ -2230,7 +2230,7 @@ TextureStorage11_Cube::TextureStorage11_Cube(Renderer11 *renderer,
     ASSERT(!mUseLevelZeroTexture || mRenderer->getFeatures().zeroMaxLodWorkaround.enabled);
 }
 
-angle::Result TextureStorage11_Cube::onDestroy(const gl::Context *context)
+angle::Result TextureStorage11_Cube::onDestroy(const gl::SharedContext *context)
 {
     for (unsigned int level = 0; level < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS; level++)
     {
@@ -2944,7 +2944,7 @@ TextureStorage11_3D::TextureStorage11_3D(Renderer11 *renderer,
     mTextureDepth  = depth;
 }
 
-angle::Result TextureStorage11_3D::onDestroy(const gl::Context *context)
+angle::Result TextureStorage11_3D::onDestroy(const gl::SharedContext *context)
 {
     for (unsigned i = 0; i < gl::IMPLEMENTATION_MAX_TEXTURE_LEVELS; i++)
     {
@@ -3321,7 +3321,7 @@ TextureStorage11_2DArray::TextureStorage11_2DArray(Renderer11 *renderer,
     mTextureDepth  = depth;
 }
 
-angle::Result TextureStorage11_2DArray::onDestroy(const gl::Context *context)
+angle::Result TextureStorage11_2DArray::onDestroy(const gl::SharedContext *context)
 {
     for (auto iter : mAssociatedImages)
     {
@@ -3775,7 +3775,7 @@ TextureStorage11_2DMultisample::TextureStorage11_2DMultisample(Renderer11 *rende
     mFixedSampleLocations = fixedSampleLocations;
 }
 
-angle::Result TextureStorage11_2DMultisample::onDestroy(const gl::Context *context)
+angle::Result TextureStorage11_2DMultisample::onDestroy(const gl::SharedContext *context)
 {
     mRenderTarget.reset();
     return angle::Result::Continue;
@@ -3997,7 +3997,7 @@ TextureStorage11_2DMultisampleArray::TextureStorage11_2DMultisampleArray(Rendere
     mFixedSampleLocations = fixedSampleLocations;
 }
 
-angle::Result TextureStorage11_2DMultisampleArray::onDestroy(const gl::Context *context)
+angle::Result TextureStorage11_2DMultisampleArray::onDestroy(const gl::SharedContext *context)
 {
     return angle::Result::Continue;
 }

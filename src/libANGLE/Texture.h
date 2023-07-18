@@ -46,6 +46,7 @@ class Framebuffer;
 class MemoryObject;
 class Sampler;
 class State;
+class ShareGroupAccessibleState;
 class Texture;
 
 constexpr GLuint kInitialMaxLevel = 1000;
@@ -192,9 +193,10 @@ class TextureState final : private angle::NonCopyable
     friend class Texture;
     friend bool operator==(const TextureState &a, const TextureState &b);
 
-    bool computeSamplerCompleteness(const SamplerState &samplerState, const State &state) const;
+    bool computeSamplerCompleteness(const SamplerState &samplerState,
+                                    const ShareGroupAccessibleState &state) const;
     bool computeSamplerCompletenessForCopyImage(const SamplerState &samplerState,
-                                                const State &state) const;
+                                                const ShareGroupAccessibleState &state) const;
 
     bool computeMipmapCompleteness() const;
     bool computeLevelCompleteness(TextureTarget target, size_t level) const;
@@ -287,7 +289,7 @@ class Texture final : public RefCountObject<TextureID>,
     Texture(rx::GLImplFactory *factory, TextureID id, TextureType type);
     ~Texture() override;
 
-    void onDestroy(const Context *context) override;
+    void onDestroy(const SharedContext *context) override;
 
     angle::Result setLabel(const Context *context, const std::string &label) override;
 
@@ -546,8 +548,8 @@ class Texture final : public RefCountObject<TextureID>,
 
     void signalDirtyStorage(InitState initState);
 
-    bool isSamplerComplete(const Context *context, const Sampler *optionalSampler);
-    bool isSamplerCompleteForCopyImage(const Context *context,
+    bool isSamplerComplete(const SharedContext *context, const Sampler *optionalSampler);
+    bool isSamplerCompleteForCopyImage(const SharedContext *context,
                                        const Sampler *optionalSampler) const;
 
     GLenum getImplementationColorReadFormat(const Context *context) const;
@@ -592,8 +594,8 @@ class Texture final : public RefCountObject<TextureID>,
     void setGenerateMipmapHint(GLenum generate);
     GLenum getGenerateMipmapHint() const;
 
-    void onAttach(const Context *context, rx::UniqueSerial framebufferSerial) override;
-    void onDetach(const Context *context, rx::UniqueSerial framebufferSerial) override;
+    void onAttach(const SharedContext *context, rx::UniqueSerial framebufferSerial) override;
+    void onDetach(const SharedContext *context, rx::UniqueSerial framebufferSerial) override;
 
     // Used specifically for FramebufferAttachmentObject.
     GLuint getId() const override;
@@ -682,7 +684,7 @@ class Texture final : public RefCountObject<TextureID>,
     // ANGLE-only method, used internally
     friend class egl::Surface;
     angle::Result bindTexImageFromSurface(Context *context, egl::Surface *surface);
-    angle::Result releaseTexImageFromSurface(const Context *context);
+    angle::Result releaseTexImageFromSurface(const SharedContext *context);
 
     // ANGLE-only methods, used internally
     friend class egl::Stream;

@@ -24,7 +24,7 @@ class BufferGL : public BufferImpl
     BufferGL(const gl::BufferState &state, GLuint buffer);
     ~BufferGL() override;
 
-    void destroy(const gl::Context *context) override;
+    void destroy(const gl::SharedContext *context) override;
 
     angle::Result setData(const gl::Context *context,
                           gl::BufferBinding target,

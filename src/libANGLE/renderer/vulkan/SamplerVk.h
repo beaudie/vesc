@@ -23,7 +23,7 @@ class SamplerVk : public SamplerImpl
     SamplerVk(const gl::SamplerState &state);
     ~SamplerVk() override;
 
-    void onDestroy(const gl::Context *context) override;
+    void onDestroy(const gl::SharedContext *context) override;
     angle::Result syncState(const gl::Context *context, const bool dirty) override;
 
     const vk::SamplerHelper &getSampler() const

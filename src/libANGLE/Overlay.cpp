@@ -48,7 +48,7 @@ void Overlay::init()
     enableOverlayWidgetsFromEnvironment();
 }
 
-void Overlay::destroy(const gl::Context *context)
+void Overlay::destroy(const gl::SharedContext *context)
 {
     ASSERT(mImplementation);
     mImplementation->onDestroy(context);

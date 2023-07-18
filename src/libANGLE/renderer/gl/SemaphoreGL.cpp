@@ -53,7 +53,7 @@ SemaphoreGL::~SemaphoreGL()
     ASSERT(mSemaphoreID == 0);
 }
 
-void SemaphoreGL::onDestroy(const gl::Context *context)
+void SemaphoreGL::onDestroy(const gl::SharedContext *context)
 {
     const FunctionsGL *functions = GetFunctionsGL(context);
     functions->deleteSemaphoresEXT(1, &mSemaphoreID);

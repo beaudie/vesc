@@ -21,7 +21,7 @@ class SemaphoreVk : public SemaphoreImpl
     SemaphoreVk();
     ~SemaphoreVk() override;
 
-    void onDestroy(const gl::Context *context) override;
+    void onDestroy(const gl::SharedContext *context) override;
 
     angle::Result importFd(gl::Context *context, gl::HandleType handleType, GLint fd) override;
 

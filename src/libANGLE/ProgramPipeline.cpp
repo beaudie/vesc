@@ -62,7 +62,7 @@ void ProgramPipelineState::useProgramStage(const Context *context,
     Program *oldProgram = mPrograms[shaderType];
     if (oldProgram)
     {
-        oldProgram->release(context);
+        oldProgram->release(context->asSharedContext());
     }
 
     // If program refers to a program object with a valid shader attached for the indicated shader
@@ -158,7 +158,7 @@ ProgramPipeline::~ProgramPipeline()
     mProgramPipelineImpl.reset(nullptr);
 }
 
-void ProgramPipeline::onDestroy(const Context *context)
+void ProgramPipeline::onDestroy(const SharedContext *context)
 {
     for (Program *program : mState.mPrograms)
     {

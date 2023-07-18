@@ -25,7 +25,7 @@ class ProgramPipelineVk : public ProgramPipelineImpl
     ProgramPipelineVk(const gl::ProgramPipelineState &state);
     ~ProgramPipelineVk() override;
 
-    void destroy(const gl::Context *context) override;
+    void destroy(const gl::SharedContext *context) override;
     void reset(ContextVk *contextVk);
 
     const ProgramExecutableVk &getExecutable() const { return mExecutable; }

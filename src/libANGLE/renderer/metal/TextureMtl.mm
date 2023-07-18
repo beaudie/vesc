@@ -628,7 +628,7 @@ TextureMtl::TextureMtl(const gl::TextureState &state) : TextureImpl(state) {}
 
 TextureMtl::~TextureMtl() = default;
 
-void TextureMtl::onDestroy(const gl::Context *context)
+void TextureMtl::onDestroy(const gl::SharedContext *context)
 {
     releaseTexture(true);
     mBoundSurface = nullptr;

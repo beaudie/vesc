@@ -66,15 +66,62 @@ enum class UpdateDepthFeedbackLoopReason
     Clear,
 };
 
+class SharedContextVk : public SharedContextImpl, public vk::Context
+{
+  public:
+    SharedContextVk(const gl::ShareGroupAccessibleState &state,
+                    gl::ErrorSet *errorSet,
+                    RendererVk *renderer);
+    ~SharedContextVk() override;
+
+    void handleError(VkResult errorCode,
+                     const char *file,
+                     const char *function,
+                     unsigned int line) override;
+    void handleDeviceLost();
+
+  private:
+    // We use a single pool for recording commands. We also keep a free list for pool recycling.
+    vk::SecondaryCommandPools mCommandPools;
+
+    // Per context queue serial
+    SerialIndex mCurrentQueueSerialIndex;
+    QueueSerial mLastFlushedQueueSerial;
+    QueueSerial mLastSubmittedQueueSerial;
+    // All submitted queue serials over the life time of this context.
+    vk::ResourceUse mSubmittedResourceUse;
+    // Current active transform feedback buffer queue serial. Invalid if TF not active.
+    QueueSerial mCurrentTransformFeedbackQueueSerial;
+
+    // The garbage list for single context use objects. The list will be GPU tracked by next
+    // submission queueSerial. Note: Resource based shared object should always be added to
+    // renderer's mSharedGarbage.
+    vk::GarbageList mCurrentGarbage;
+
+    RenderPassCache mRenderPassCache;
+
+    vk::OutsideRenderPassCommandBufferHelper *mOutsideRenderPassCommands;
+    vk::RenderPassCommandBufferHelper *mRenderPassCommands;
+
+    // Allocators for the render pass command buffers. They are utilized only when shared ring
+    // buffer allocators are being used.
+    vk::SecondaryCommandMemoryAllocator mOutsideRenderPassCommandsAllocator;
+    vk::SecondaryCommandMemoryAllocator mRenderPassCommandsAllocator;
+};
+
 class ContextVk : public ContextImpl, public vk::Context, public MultisampleTextureInitializer
 {
   public:
-    ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk *renderer);
+    ContextVk(const gl::State &state,
+              const gl::ShareGroupAccessibleState &sharedState,
+              gl::ErrorSet *errorSet,
+              RendererVk *renderer);
     ~ContextVk() override;
 
     angle::Result initialize() override;
+    SharedContextImpl *getSharedContext() { return &mShared; }
 
-    void onDestroy(const gl::Context *context) override;
+    void onDestroy(const gl::SharedContext *context) override;
 
     // Flush and finish.
     angle::Result flush(const gl::Context *context) override;
@@ -1251,7 +1298,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                     const EventName &name);
     angle::Result checkCompletedGpuEvents();
     void flushGpuEvents(double nextSyncGpuTimestampS, double nextSyncCpuTimestampS);
-    void handleDeviceLost();
     bool shouldEmulateSeamfulCubeMapSampling() const;
     void clearAllGarbage();
     void dumpCommandStreamDiagnostics();
@@ -1350,6 +1396,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     void generateRenderPassCommandsQueueSerial(QueueSerial *queueSerialOut);
 
     angle::Result ensureInterfacePipelineCache();
+
+    // The portion of ContextVk that may be accessed by other contexts in the share group.
+    SharedContextVk mShared;
 
     std::array<GraphicsDirtyBitHandler, DIRTY_BIT_MAX> mGraphicsDirtyBitHandlers;
     std::array<ComputeDirtyBitHandler, DIRTY_BIT_MAX> mComputeDirtyBitHandlers;
@@ -1496,33 +1545,6 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // in-flight buffer or not that we need to release at submission time.
     gl::AttribArray<vk::DynamicBuffer> mStreamedVertexBuffers;
     gl::AttributesMask mHasInFlightStreamedVertexBuffers;
-
-    // We use a single pool for recording commands. We also keep a free list for pool recycling.
-    vk::SecondaryCommandPools mCommandPools;
-
-    // Per context queue serial
-    SerialIndex mCurrentQueueSerialIndex;
-    QueueSerial mLastFlushedQueueSerial;
-    QueueSerial mLastSubmittedQueueSerial;
-    // All submitted queue serials over the life time of this context.
-    vk::ResourceUse mSubmittedResourceUse;
-    // Current active transform feedback buffer queue serial. Invalid if TF not active.
-    QueueSerial mCurrentTransformFeedbackQueueSerial;
-
-    // The garbage list for single context use objects. The list will be GPU tracked by next
-    // submission queueSerial. Note: Resource based shared object should always be added to
-    // renderer's mSharedGarbage.
-    vk::GarbageList mCurrentGarbage;
-
-    RenderPassCache mRenderPassCache;
-
-    vk::OutsideRenderPassCommandBufferHelper *mOutsideRenderPassCommands;
-    vk::RenderPassCommandBufferHelper *mRenderPassCommands;
-
-    // Allocators for the render pass command buffers. They are utilized only when shared ring
-    // buffer allocators are being used.
-    vk::SecondaryCommandMemoryAllocator mOutsideRenderPassCommandsAllocator;
-    vk::SecondaryCommandMemoryAllocator mRenderPassCommandsAllocator;
 
     // The following is used when creating debug-util markers for graphics debuggers (e.g. AGI).  A
     // given gl{Begin|End}Query command may result in commands being submitted to the outside or

@@ -25,7 +25,7 @@ class OverlayVk : public OverlayImpl
     OverlayVk(const gl::OverlayState &state);
     ~OverlayVk() override;
 
-    void onDestroy(const gl::Context *context) override;
+    void onDestroy(const gl::SharedContext *context) override;
 
     angle::Result onPresent(ContextVk *contextVk,
                             vk::ImageHelper *imageToPresent,

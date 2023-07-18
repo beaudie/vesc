@@ -49,6 +49,7 @@ class BinaryInputStream;
 class BinaryOutputStream;
 struct Caps;
 class Context;
+class SharedContext;
 struct Extensions;
 class Framebuffer;
 class ProgramExecutable;
@@ -429,7 +430,7 @@ class Program final : public LabeledObject, public angle::Subject
 {
   public:
     Program(rx::GLImplFactory *factory, ShaderProgramManager *manager, ShaderProgramID handle);
-    void onDestroy(const Context *context);
+    void onDestroy(const SharedContext *context);
 
     ShaderProgramID id() const;
 
@@ -665,7 +666,7 @@ class Program final : public LabeledObject, public angle::Subject
         mRefCount++;
     }
 
-    ANGLE_INLINE void release(const Context *context)
+    ANGLE_INLINE void release(const SharedContext *context)
     {
         ASSERT(!mLinkingState);
         mRefCount--;
@@ -798,7 +799,7 @@ class Program final : public LabeledObject, public angle::Subject
     angle::Result deserialize(const Context *context, BinaryInputStream &stream, InfoLog &infoLog);
 
     void unlink();
-    void deleteSelf(const Context *context);
+    void deleteSelf(const SharedContext *context);
 
     angle::Result linkImpl(const Context *context);
 

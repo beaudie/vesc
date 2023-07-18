@@ -36,10 +36,32 @@ class RenderTargetMtl;
 class WindowSurfaceMtl;
 class TransformFeedbackMtl;
 
+class SharedContextMtl : public SharedContextImpl, public mtl::Context
+{
+  public:
+    SharedContextMtl(const gl::ShareGroupAccessibleState &state,
+                     gl::ErrorSet *errorSet,
+                     DisplayMtl *display);
+    ~SharedContextMtl() override;
+
+    // override mtl::ErrorHandler
+    void handleError(GLenum error,
+                     const char *message,
+                     const char *file,
+                     const char *function,
+                     unsigned int line) override;
+    void handleError(NSError *error,
+                     const char *message,
+                     const char *file,
+                     const char *function,
+                     unsigned int line) override;
+};
+
 class ContextMtl : public ContextImpl, public mtl::Context
 {
   public:
     ContextMtl(const gl::State &state,
+               const gl::ShareGroupAccessibleState &sharedState,
                gl::ErrorSet *errorSet,
                const egl::AttributeMap &attribs,
                DisplayMtl *display);
@@ -47,7 +69,7 @@ class ContextMtl : public ContextImpl, public mtl::Context
 
     angle::Result initialize() override;
 
-    void onDestroy(const gl::Context *context) override;
+    void onDestroy(const gl::SharedContext *context) override;
 
     // Flush and finish.
     angle::Result flush(const gl::Context *context) override;
@@ -279,8 +301,6 @@ class ContextMtl : public ContextImpl, public mtl::Context
                      const char *file,
                      const char *function,
                      unsigned int line) override;
-
-    using ContextImpl::handleError;
 
     void invalidateState(const gl::Context *context);
     void invalidateDefaultAttribute(size_t attribIndex);
@@ -577,6 +597,8 @@ class ContextMtl : public ContextImpl, public mtl::Context
     {
         uint8_t values[sizeof(float) * 4];
     };
+
+    SharedContextMtl mShared;
 
     mtl::OcclusionQueryPool mOcclusionQueryPool;
 

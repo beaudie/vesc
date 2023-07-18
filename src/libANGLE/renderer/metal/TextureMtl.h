@@ -36,7 +36,7 @@ class TextureMtl : public TextureImpl
     // Texture  view
     TextureMtl(const TextureMtl &mtl, GLenum format);
     ~TextureMtl() override;
-    void onDestroy(const gl::Context *context) override;
+    void onDestroy(const gl::SharedContext *context) override;
 
     angle::Result setImage(const gl::Context *context,
                            const gl::ImageIndex &index,

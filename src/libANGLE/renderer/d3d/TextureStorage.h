@@ -43,7 +43,7 @@ class TextureStorage : public angle::Subject
     TextureStorage(const std::string &label) : mKHRDebugLabel(label) {}
     ~TextureStorage() override {}
 
-    virtual angle::Result onDestroy(const gl::Context *context);
+    virtual angle::Result onDestroy(const gl::SharedContext *context);
 
     virtual int getTopLevel() const                   = 0;
     virtual bool isRenderTarget() const               = 0;
@@ -96,7 +96,7 @@ class TextureStorage : public angle::Subject
     std::string mKHRDebugLabel;
 };
 
-inline angle::Result TextureStorage::onDestroy(const gl::Context *context)
+inline angle::Result TextureStorage::onDestroy(const gl::SharedContext *context)
 {
     return angle::Result::Continue;
 }

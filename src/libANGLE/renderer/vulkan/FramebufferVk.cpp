@@ -326,7 +326,7 @@ FramebufferVk::FramebufferVk(RendererVk *renderer, const gl::FramebufferState &s
 
 FramebufferVk::~FramebufferVk() = default;
 
-void FramebufferVk::destroy(const gl::Context *context)
+void FramebufferVk::destroy(const gl::SharedContext *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
     releaseCurrentFramebuffer(contextVk);

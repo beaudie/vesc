@@ -30,7 +30,7 @@ class MemoryObject final : public RefCountObject<MemoryObjectID>
     MemoryObject(rx::GLImplFactory *factory, MemoryObjectID id);
     ~MemoryObject() override;
 
-    void onDestroy(const Context *context) override;
+    void onDestroy(const SharedContext *context) override;
 
     rx::MemoryObjectImpl *getImplementation() const { return mImplementation.get(); }
 

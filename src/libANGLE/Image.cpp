@@ -46,11 +46,6 @@ gl::ImageIndex GetImageIndex(EGLenum eglTarget, const egl::AttributeMap &attribs
     }
 }
 
-const Display *DisplayFromContext(const gl::Context *context)
-{
-    return (context ? context->getDisplay() : nullptr);
-}
-
 angle::SubjectIndex kExternalImageImplSubjectIndex = 0;
 }  // anonymous namespace
 
@@ -68,11 +63,11 @@ ImageSibling::~ImageSibling()
 void ImageSibling::setTargetImage(const gl::Context *context, egl::Image *imageTarget)
 {
     ASSERT(imageTarget != nullptr);
-    mTargetOf.set(DisplayFromContext(context), imageTarget);
+    mTargetOf.set(context ? context->getDisplay() : nullptr, imageTarget);
     imageTarget->addTargetSibling(this);
 }
 
-angle::Result ImageSibling::orphanImages(const gl::Context *context,
+angle::Result ImageSibling::orphanImages(const gl::SharedContext *context,
                                          RefCountObjectReleaser<Image> *outReleaseImage)
 {
     ASSERT(outReleaseImage != nullptr);
@@ -83,7 +78,7 @@ angle::Result ImageSibling::orphanImages(const gl::Context *context,
         ASSERT(mSourcesOf.empty());
 
         ANGLE_TRY(mTargetOf->orphanSibling(context, this));
-        *outReleaseImage = mTargetOf.set(DisplayFromContext(context), nullptr);
+        *outReleaseImage = mTargetOf.set(context ? context->getDisplay() : nullptr, nullptr);
     }
     else
     {
@@ -242,10 +237,12 @@ bool ExternalImageSibling::hasProtectedContent() const
     return mImplementation->hasProtectedContent();
 }
 
-void ExternalImageSibling::onAttach(const gl::Context *context, rx::UniqueSerial framebufferSerial)
+void ExternalImageSibling::onAttach(const gl::SharedContext *context,
+                                    rx::UniqueSerial framebufferSerial)
 {}
 
-void ExternalImageSibling::onDetach(const gl::Context *context, rx::UniqueSerial framebufferSerial)
+void ExternalImageSibling::onDetach(const gl::SharedContext *context,
+                                    rx::UniqueSerial framebufferSerial)
 {}
 
 GLuint ExternalImageSibling::getId() const
@@ -383,12 +380,12 @@ void Image::addTargetSibling(ImageSibling *sibling)
     mState.targets.insert(sibling);
 }
 
-angle::Result Image::orphanSibling(const gl::Context *context, ImageSibling *sibling)
+angle::Result Image::orphanSibling(const gl::SharedContext *context, ImageSibling *sibling)
 {
     ASSERT(sibling != nullptr);
 
     // notify impl
-    ANGLE_TRY(mImplementation->orphan(context, sibling));
+    ANGLE_TRY(mImplementation->orphan(context->getUnsafeContext(), sibling));
 
     if (mState.source == sibling)
     {
