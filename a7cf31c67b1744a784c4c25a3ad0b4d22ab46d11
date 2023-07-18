@@ -146,6 +146,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "655cf61e_7c3194ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-18T13:58:49Z",
+      "side": 1,
+      "message": "On the _GL_ side, it\u0027s fine if there\u0027s OOB access. We can choose how to translate it though, like I said for example with clipping it to in-bounds-copy + vkCmdClearAttachments for the areas outside.\n\nNow that I think about it, we can also just use LOAD_OP_CLEAR and do the copy to the region inside bounds.",
+      "parentUuid": "2cd1d570_f0fe5edc",
+      "revId": "a7cf31c67b1744a784c4c25a3ad0b4d22ab46d11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dbf80fba_a1d506c7",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
         "patchSetId": 4
