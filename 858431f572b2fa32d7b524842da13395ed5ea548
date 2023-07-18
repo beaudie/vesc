@@ -16,6 +16,23 @@
       "message": "Thanks. In the future, please upload the original CL once, then the modified version. That helps reviews see the diff.\n\nPlease the docs at: https://chromium.googlesource.com/angle/angle/+/main/doc/ContributingCode.md#relanding-a-reverted-cl",
       "revId": "858431f572b2fa32d7b524842da13395ed5ea548",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b75ef9c_de33e4bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1550632
+      },
+      "writtenOn": "2023-07-18T08:11:25Z",
+      "side": 1,
+      "message": "Can somebody submit this to CQ?",
+      "revId": "858431f572b2fa32d7b524842da13395ed5ea548",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
