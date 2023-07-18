@@ -429,7 +429,7 @@ FramebufferGL::~FramebufferGL()
     ASSERT(mFramebufferID == 0);
 }
 
-void FramebufferGL::destroy(const gl::Context *context)
+void FramebufferGL::destroy(const gl::SharedContext *context)
 {
     if (mFramebufferID)
     {

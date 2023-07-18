@@ -31,7 +31,7 @@ class OverlayImpl : angle::NonCopyable
     OverlayImpl(const gl::OverlayState &state) : mState(state) {}
     virtual ~OverlayImpl() {}
 
-    virtual void onDestroy(const gl::Context *context) {}
+    virtual void onDestroy(const gl::SharedContext *context) {}
 
   protected:
     const gl::OverlayState &mState;

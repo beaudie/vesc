@@ -27,7 +27,7 @@ class MemoryObjectImpl : angle::NonCopyable
   public:
     virtual ~MemoryObjectImpl() {}
 
-    virtual void onDestroy(const gl::Context *context) = 0;
+    virtual void onDestroy(const gl::SharedContext *context) = 0;
 
     virtual angle::Result setDedicatedMemory(const gl::Context *context, bool dedicatedMemory) = 0;
     virtual angle::Result setProtectedMemory(const gl::Context *context, bool protectedMemory) = 0;

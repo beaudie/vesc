@@ -28,15 +28,36 @@ struct Workarounds;
 
 namespace rx
 {
+class SharedContextImpl : angle::NonCopyable
+{
+  public:
+    SharedContextImpl(const gl::ShareGroupAccessibleState &state, gl::ErrorSet *errorSet);
+    ~SharedContextImpl();
+
+    const gl::ShareGroupAccessibleState &getState() const { return mState; }
+
+    gl::ErrorSet *getErrors() { return mErrors; }
+    void handleError(GLenum errorCode,
+                     const char *message,
+                     const char *file,
+                     const char *function,
+                     unsigned int line);
+
+  protected:
+    const gl::ShareGroupAccessibleState &mState;
+    gl::ErrorSet *mErrors;
+};
+
 class ContextImpl : public GLImplFactory
 {
   public:
     ContextImpl(const gl::State &state, gl::ErrorSet *errorSet);
     ~ContextImpl() override;
 
-    virtual void onDestroy(const gl::Context *context) {}
+    virtual void onDestroy(const gl::SharedContext *context) {}
 
-    virtual angle::Result initialize() = 0;
+    virtual angle::Result initialize()            = 0;
+    virtual SharedContextImpl *getSharedContext() = 0;
 
     // Flush and finish.
     virtual angle::Result flush(const gl::Context *context)  = 0;
@@ -245,12 +266,6 @@ class ContextImpl : public GLImplFactory
     // on draw calls we can store the refreshed shaders in the cache.
     void setMemoryProgramCache(gl::MemoryProgramCache *memoryProgramCache);
 
-    void handleError(GLenum errorCode,
-                     const char *message,
-                     const char *file,
-                     const char *function,
-                     unsigned int line);
-
     virtual egl::ContextPriority getContextPriority() const;
 
     // EGL_ANGLE_power_preference implementation.
@@ -286,7 +301,6 @@ class ContextImpl : public GLImplFactory
   protected:
     const gl::State &mState;
     gl::MemoryProgramCache *mMemoryProgramCache;
-    gl::ErrorSet *mErrors;
 };
 
 }  // namespace rx

@@ -22,11 +22,14 @@ class Renderer11;
 class Context11 : public ContextD3D, public MultisampleTextureInitializer
 {
   public:
-    Context11(const gl::State &state, gl::ErrorSet *errorSet, Renderer11 *renderer);
+    Context11(const gl::State &state,
+              const gl::ShareGroupAccessibleState &sharedState,
+              gl::ErrorSet *errorSet,
+              Renderer11 *renderer);
     ~Context11() override;
 
     angle::Result initialize() override;
-    void onDestroy(const gl::Context *context) override;
+    void onDestroy(const gl::SharedContext *context) override;
 
     // Shader creation
     CompilerImpl *createCompiler() override;

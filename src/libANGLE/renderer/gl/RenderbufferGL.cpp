@@ -32,7 +32,7 @@ RenderbufferGL::~RenderbufferGL()
     ASSERT(mRenderbufferID == 0);
 }
 
-void RenderbufferGL::onDestroy(const gl::Context *context)
+void RenderbufferGL::onDestroy(const gl::SharedContext *context)
 {
     StateManagerGL *stateManager = GetStateManagerGL(context);
     stateManager->deleteRenderbuffer(mRenderbufferID);

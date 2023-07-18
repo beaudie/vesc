@@ -108,7 +108,7 @@ Renderbuffer::Renderbuffer(rx::GLImplFactory *implFactory, RenderbufferID id)
     mImplObserverBinding.bind(mImplementation.get());
 }
 
-void Renderbuffer::onDestroy(const Context *context)
+void Renderbuffer::onDestroy(const SharedContext *context)
 {
     egl::RefCountObjectReleaser<egl::Image> releaseImage;
     (void)orphanImages(context, &releaseImage);

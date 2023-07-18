@@ -338,7 +338,7 @@ TextureVk::TextureVk(const gl::TextureState &state, RendererVk *renderer)
 
 TextureVk::~TextureVk() = default;
 
-void TextureVk::onDestroy(const gl::Context *context)
+void TextureVk::onDestroy(const gl::SharedContext *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
 

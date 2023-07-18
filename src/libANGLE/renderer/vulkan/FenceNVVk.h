@@ -21,7 +21,7 @@ class FenceNVVk : public FenceNVImpl
     FenceNVVk();
     ~FenceNVVk() override;
 
-    void onDestroy(const gl::Context *context) override;
+    void onDestroy(const gl::SharedContext *context) override;
     angle::Result set(const gl::Context *context, GLenum condition) override;
     angle::Result test(const gl::Context *context, GLboolean *outFinished) override;
     angle::Result finish(const gl::Context *context) override;

@@ -52,6 +52,7 @@ struct FrontendFeatures;
 namespace rx
 {
 class ContextImpl;
+class SharedContextImpl;
 class EGLImplFactory;
 }  // namespace rx
 
@@ -159,13 +160,15 @@ enum class VertexAttribTypeCase
     ValidSize3or4  = 3,
 };
 
-// Part of StateCache (see below) that is private to the context and is inaccessible to other
+// Part of state cache (see below) that is private to the context and is inaccessible to other
 // contexts.
 class PrivateStateCache final : angle::NonCopyable
 {
   public:
     PrivateStateCache();
     ~PrivateStateCache();
+
+    void initialize(const PrivateState &state);
 
     void onCapChange() { mIsCachedBasicDrawStatesErrorValid = false; }
     void onColorMaskChange() { mIsCachedBasicDrawStatesErrorValid = false; }
@@ -177,24 +180,67 @@ class PrivateStateCache final : angle::NonCopyable
     bool isCachedBasicDrawStatesErrorValid() const { return mIsCachedBasicDrawStatesErrorValid; }
     void setCachedBasicDrawStatesErrorValid() const { mIsCachedBasicDrawStatesErrorValid = true; }
 
+    bool isValidBindTextureType(TextureType type) const
+    {
+        return mCachedValidBindTextureTypes[type];
+    }
+    bool isValidDrawElementsType(DrawElementsType type) const
+    {
+        return mCachedValidDrawElementsTypes[type];
+    }
+    VertexAttribTypeCase getVertexAttribTypeValidation(VertexAttribType type) const
+    {
+        return mCachedVertexAttribTypesValidation[type];
+    }
+    VertexAttribTypeCase getIntegerVertexAttribTypeValidation(VertexAttribType type) const
+    {
+        return mCachedIntegerVertexAttribTypesValidation[type];
+    }
+
   private:
-    // StateCache::mCachedBasicDrawStatesError* may be invalidated through numerous calls (see the
-    // comment on getBasicDrawStatesErrorString), some of which may originate from other contexts
-    // (through the observer interface).  However, ContextPrivate* helpers may also need to
-    // invalidate the draw states, but they are called without holding the share group lock.  The
-    // following tracks whether StateCache::mCachedBasicDrawStatesError* values are valid and is
-    // accessed only by the context itself.
+    void updateValidBindTextureTypes(const PrivateState &state);
+    void updateValidDrawElementsTypes(const PrivateState &state);
+    void updateVertexAttribTypesValidation(const PrivateState &state);
+
+    // The following cannot change except on Context/Extension init.
+    angle::PackedEnumMap<TextureType, bool, angle::EnumSize<TextureType>() + 1>
+        mCachedValidBindTextureTypes;
+    angle::PackedEnumMap<DrawElementsType, bool, angle::EnumSize<DrawElementsType>() + 1>
+        mCachedValidDrawElementsTypes;
+    angle::PackedEnumMap<VertexAttribType,
+                         VertexAttribTypeCase,
+                         angle::EnumSize<VertexAttribType>() + 1>
+        mCachedVertexAttribTypesValidation;
+    angle::PackedEnumMap<VertexAttribType,
+                         VertexAttribTypeCase,
+                         angle::EnumSize<VertexAttribType>() + 1>
+        mCachedIntegerVertexAttribTypesValidation;
+
+    // ShareGroupAccessibleStateCache::mCachedBasicDrawStatesError* may be invalidated through
+    // numerous calls (see the comment on getBasicDrawStatesErrorString), some of which may
+    // originate from other contexts (through the observer interface).  However, ContextPrivate*
+    // helpers may also need to invalidate the draw states, but they are called without holding the
+    // share group lock.  The following tracks whether
+    // ShareGroupAccessibleStateCache::mCachedBasicDrawStatesError* values are valid and is accessed
+    // only by the context itself.
     mutable bool mIsCachedBasicDrawStatesErrorValid;
 };
 
 // Helper class for managing cache variables and state changes.
-class StateCache final : angle::NonCopyable
+// Part of state cache that is accessible by other contexts in the share group.
+//
+// TODO: bunch of `updateX` functions can be moved to private; they don't look at anything other
+// then extensions.
+// TODO: for the remaining, have to make sure that only current context can call them.  That is
+// because they access both share group accessible and private state (i.e. extensions).  Can pass in
+// context and ASSERT it's that context's ShareGroupAccessibleStateCache.
+class ShareGroupAccessibleStateCache final : angle::NonCopyable
 {
   public:
-    StateCache();
-    ~StateCache();
+    ShareGroupAccessibleStateCache();
+    ~ShareGroupAccessibleStateCache();
 
-    void initialize(Context *context);
+    void initialize(const ShareGroupAccessibleState &state);
 
     // Places that can trigger updateActiveAttribsMask:
     // 1. onVertexArrayBindingChange.
@@ -298,34 +344,11 @@ class StateCache final : angle::NonCopyable
         return mCachedValidDrawModes[primitiveMode];
     }
 
-    // Cannot change except on Context/Extension init.
-    bool isValidBindTextureType(TextureType type) const
-    {
-        return mCachedValidBindTextureTypes[type];
-    }
-
-    // Cannot change except on Context/Extension init.
-    bool isValidDrawElementsType(DrawElementsType type) const
-    {
-        return mCachedValidDrawElementsTypes[type];
-    }
-
     // Places that can trigger updateTransformFeedbackActiveUnpaused:
     // 1. onActiveTransformFeedbackChange.
     bool isTransformFeedbackActiveUnpaused() const
     {
         return mCachedTransformFeedbackActiveUnpaused;
-    }
-
-    // Cannot change except on Context/Extension init.
-    VertexAttribTypeCase getVertexAttribTypeValidation(VertexAttribType type) const
-    {
-        return mCachedVertexAttribTypesValidation[type];
-    }
-
-    VertexAttribTypeCase getIntegerVertexAttribTypeValidation(VertexAttribType type) const
-    {
-        return mCachedIntegerVertexAttribTypesValidation[type];
     }
 
     // Places that can trigger updateActiveShaderStorageBufferIndices:
@@ -343,41 +366,40 @@ class StateCache final : angle::NonCopyable
     // 1. onProgramExecutableChange.
     bool getCanDraw() const { return mCachedCanDraw; }
 
+    bool isBufferAccessValidationEnabled() const { return mCachedBufferAccessValidationEnabled; }
+
     // State change notifications.
-    void onVertexArrayBindingChange(Context *context);
-    void onProgramExecutableChange(Context *context);
-    void onVertexArrayFormatChange(Context *context);
-    void onVertexArrayBufferContentsChange(Context *context);
-    void onVertexArrayStateChange(Context *context);
-    void onVertexArrayBufferStateChange(Context *context);
-    void onGLES1ClientStateChange(Context *context);
-    void onDrawFramebufferChange(Context *context);
-    void onActiveTextureChange(Context *context);
-    void onQueryChange(Context *context);
-    void onActiveTransformFeedbackChange(Context *context);
-    void onUniformBufferStateChange(Context *context);
-    void onAtomicCounterBufferStateChange(Context *context);
-    void onShaderStorageBufferStateChange(Context *context);
-    void onBufferBindingChange(Context *context);
+    void onVertexArrayBindingChange(const ShareGroupAccessibleState &state);
+    void onProgramExecutableChange(const ShareGroupAccessibleState &state);
+    void onVertexArrayFormatChange(const ShareGroupAccessibleState &state);
+    void onVertexArrayBufferContentsChange(const ShareGroupAccessibleState &state);
+    void onVertexArrayStateChange(const ShareGroupAccessibleState &state);
+    void onVertexArrayBufferStateChange(const ShareGroupAccessibleState &state);
+    void onGLES1ClientStateChange(const ShareGroupAccessibleState &state);
+    void onDrawFramebufferChange(const ShareGroupAccessibleState &state);
+    void onActiveTextureChange(const ShareGroupAccessibleState &state);
+    void onQueryChange(const ShareGroupAccessibleState &state);
+    void onActiveTransformFeedbackChange(const ShareGroupAccessibleState &state);
+    void onUniformBufferStateChange(const ShareGroupAccessibleState &state);
+    void onAtomicCounterBufferStateChange(const ShareGroupAccessibleState &state);
+    void onShaderStorageBufferStateChange(const ShareGroupAccessibleState &state);
+    void onBufferBindingChange(const ShareGroupAccessibleState &state);
 
   private:
     bool isCurrentContext(const Context *context, const PrivateStateCache *privateStateCache) const;
 
     // Cache update functions.
-    void updateActiveAttribsMask(Context *context);
-    void updateVertexElementLimits(Context *context);
-    void updateVertexElementLimitsImpl(Context *context);
-    void updateValidDrawModes(Context *context);
-    void updateValidBindTextureTypes(Context *context);
-    void updateValidDrawElementsTypes(Context *context);
+    void updateActiveAttribsMask(const ShareGroupAccessibleState &state);
+    void updateVertexElementLimits(const ShareGroupAccessibleState &state);
+    void updateVertexElementLimitsImpl(const ShareGroupAccessibleState &state);
+    void updateValidDrawModes(const ShareGroupAccessibleState &state);
     void updateBasicDrawStatesError();
     void updateProgramPipelineError();
     void updateBasicDrawElementsError();
-    void updateTransformFeedbackActiveUnpaused(Context *context);
-    void updateVertexAttribTypesValidation(Context *context);
-    void updateActiveShaderStorageBufferIndices(Context *context);
-    void updateActiveImageUnitIndices(Context *context);
-    void updateCanDraw(Context *context);
+    void updateTransformFeedbackActiveUnpaused(const ShareGroupAccessibleState &state);
+    void updateActiveShaderStorageBufferIndices(const ShareGroupAccessibleState &state);
+    void updateActiveImageUnitIndices(const ShareGroupAccessibleState &state);
+    void updateCanDraw(const ShareGroupAccessibleState &state);
 
     void setValidDrawModes(bool pointsOK,
                            bool linesOK,
@@ -402,34 +424,21 @@ class StateCache final : angle::NonCopyable
     mutable intptr_t mCachedBasicDrawStatesErrorString;
     mutable GLenum mCachedBasicDrawStatesErrorCode;
     mutable intptr_t mCachedBasicDrawElementsError;
-    // mCachedProgramPipelineError checks only the
-    // current-program-exists subset of mCachedBasicDrawStatesError.
-    // Therefore, mCachedProgramPipelineError follows
-    // mCachedBasicDrawStatesError in that if mCachedBasicDrawStatesError is
-    // no-error, so is mCachedProgramPipelineError.  Otherwise, if
-    // mCachedBasicDrawStatesError is in error, the state of
-    // mCachedProgramPipelineError can be no-error or also in error, or
-    // unknown due to early exiting.
+    // mCachedProgramPipelineError checks only the current-program-exists subset of
+    // mCachedBasicDrawStatesError.
+    // Therefore, mCachedProgramPipelineError follows mCachedBasicDrawStatesError in that if
+    // mCachedBasicDrawStatesError is no-error, so is mCachedProgramPipelineError.  Otherwise, if
+    // mCachedBasicDrawStatesError is in error, the state of mCachedProgramPipelineError can be
+    // no-error or also in error, or unknown due to early exiting.
     mutable intptr_t mCachedProgramPipelineError;
     bool mCachedTransformFeedbackActiveUnpaused;
     StorageBuffersMask mCachedActiveShaderStorageBufferIndices;
     ImageUnitMask mCachedActiveImageUnitIndices;
+    bool mCachedBufferAccessValidationEnabled;
 
     // Reserve an extra slot at the end of these maps for invalid enum.
     angle::PackedEnumMap<PrimitiveMode, bool, angle::EnumSize<PrimitiveMode>() + 1>
         mCachedValidDrawModes;
-    angle::PackedEnumMap<TextureType, bool, angle::EnumSize<TextureType>() + 1>
-        mCachedValidBindTextureTypes;
-    angle::PackedEnumMap<DrawElementsType, bool, angle::EnumSize<DrawElementsType>() + 1>
-        mCachedValidDrawElementsTypes;
-    angle::PackedEnumMap<VertexAttribType,
-                         VertexAttribTypeCase,
-                         angle::EnumSize<VertexAttribType>() + 1>
-        mCachedVertexAttribTypesValidation;
-    angle::PackedEnumMap<VertexAttribType,
-                         VertexAttribTypeCase,
-                         angle::EnumSize<VertexAttribType>() + 1>
-        mCachedIntegerVertexAttribTypesValidation;
 
     bool mCachedCanDraw;
 };
@@ -438,7 +447,94 @@ using VertexArrayMap       = ResourceMap<VertexArray, VertexArrayID>;
 using QueryMap             = ResourceMap<Query, QueryID>;
 using TransformFeedbackMap = ResourceMap<TransformFeedback, TransformFeedbackID>;
 
-class Context final : public egl::LabeledObject, angle::NonCopyable, public angle::ObserverInterface
+// A part of the Context that is accessible by the share group, either directly through ShareGroup
+// or indirectly through the observer interface.
+class SharedContext final : angle::NonCopyable, public angle::ObserverInterface
+{
+  public:
+    SharedContext(ShareGroupAccessibleState &state, Context *unsafeContext);
+    ~SharedContext() override;
+
+    void initialize(rx::SharedContextImpl *impl);
+    void initializeStateCache(const Extensions &extensions);
+
+    Context *getUnsafeContext() { return mUnsafeContext; }
+    const Context *getUnsafeContext() const { return mUnsafeContext; }
+
+    const ShareGroupAccessibleState &getState() const { return mState; }
+    const Version &getClientVersion() const { return mState.getClientVersion(); }
+
+    void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
+
+    bool isWebGL() const { return mState.isWebGL(); }
+    bool isWebGL1() const { return mState.isWebGL1(); }
+    bool isBufferAccessValidationEnabled() const
+    {
+        return mStateCache.isBufferAccessValidationEnabled();
+    }
+
+    const ShareGroupAccessibleStateCache &getStateCache() const { return mStateCache; }
+    ShareGroupAccessibleStateCache &getStateCache() { return mStateCache; }
+
+    bool isCurrentVertexArray(const VertexArray *va) const
+    {
+        return mState.isCurrentVertexArray(va);
+    }
+    bool isCurrentTransformFeedback(const TransformFeedback *tf) const
+    {
+        return mState.isCurrentTransformFeedback(tf);
+    }
+
+    void onProgramExecutableChange() { mStateCache.onProgramExecutableChange(mState); }
+    void onActiveTransformFeedbackChange() { mStateCache.onActiveTransformFeedbackChange(mState); }
+    void onVertexArrayStateChange() { mStateCache.onVertexArrayStateChange(mState); }
+
+  private:
+    // TODO: put State here, remove PrivateState from State, and put it in Context.
+    // TODO: how to deal with multiplexed APIs that forward to private state automatically on
+    // "default"? Maybe have it like return a bool?
+    //
+    // TODO: alternatively, can put whatever's in State in SharedState, then have State be
+    // {`PrivateState x; SharedState y; }.  Then make SharedContext have a pointer to SharedState
+    // only. That's just simpler.
+
+    // TODO: put state cache here, keep private state cache in Context
+    // TODO: have an implementation pointer, but that should just point to a member of Context, no
+    // need for another allocation (otherwise adds an unnecessary level of indirection everywhere).
+    // TODO: when to initialize it to be safe?
+    // TODO: if initialized after mImplementation, can query from mImplementation.  That means
+    // createContext() cannot use the SharedContext though...
+    // TODO: or, send the pointer to the impl pointer to createContext, so it can be filled during
+    // creation.  Ugly, but works.  Could contain ugliness to have the factory create the context,
+    // query its shared context and assign back to the param; doesn't leak to backends.
+
+    ShareGroupAccessibleState &mState;
+    ShareGroupAccessibleStateCache mStateCache;
+
+    // TODO: remove when call sites of getUnsafeContext() have been fixed.  Note that the current
+    // use of Context is not unsafe per se, it's just that the compiler is not enforcing the fact
+    // that other contexts in the share group are not accessing PrivateState from other threads.
+    //
+    // getUnsafeContext() exists to allow the Context/SharedContext split be done in smaller steps.
+    //
+    // http://anglebug.com/8224
+    Context *mUnsafeContext;
+
+    rx::SharedContextImpl *mImplementation;
+
+    // Binding to container objects that use dependent state updates.
+    angle::ObserverBinding mVertexArrayObserverBinding;
+    angle::ObserverBinding mDrawFramebufferObserverBinding;
+    angle::ObserverBinding mReadFramebufferObserverBinding;
+    angle::ObserverBinding mProgramPipelineObserverBinding;
+    std::vector<angle::ObserverBinding> mUniformBufferObserverBindings;
+    std::vector<angle::ObserverBinding> mAtomicCounterBufferObserverBindings;
+    std::vector<angle::ObserverBinding> mShaderStorageBufferObserverBindings;
+    std::vector<angle::ObserverBinding> mSamplerObserverBindings;
+    std::vector<angle::ObserverBinding> mImageObserverBindings;
+};
+
+class Context final : public egl::LabeledObject, angle::NonCopyable
 {
   public:
     Context(egl::Display *display,
@@ -461,6 +557,9 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     egl::Error onDestroy(const egl::Display *display);
     ~Context() override;
+
+    SharedContext *asSharedContext() { return &mShared; }
+    const SharedContext *asSharedContext() const { return &mShared; }
 
     void setLabel(EGLLabelKHR label) override;
     EGLLabelKHR getLabel() const override;
@@ -599,16 +698,14 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
 
     bool isRobustResourceInitEnabled() const { return mState.isRobustResourceInitEnabled(); }
 
-    bool isCurrentTransformFeedback(const TransformFeedback *tf) const;
-
-    bool isCurrentVertexArray(const VertexArray *va) const
+    bool isCurrentTransformFeedback(const TransformFeedback *tf) const
     {
-        return mState.isCurrentVertexArray(va);
+        return mShared.isCurrentTransformFeedback(tf);
     }
 
-    ANGLE_INLINE bool isShared() const { return mShared; }
+    ANGLE_INLINE bool isShared() const { return mIsShared; }
     // Once a context is setShared() it cannot be undone
-    void setShared() { mShared = true; }
+    void setShared() { mIsShared = true; }
 
     const State &getState() const { return mState; }
     const PrivateState &getPrivateState() const { return mState.privateState(); }
@@ -685,17 +782,13 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     // Generic multithread pool.
     std::shared_ptr<angle::WorkerThreadPool> getWorkerThreadPool() const;
 
-    const StateCache &getStateCache() const { return mStateCache; }
-    StateCache &getStateCache() { return mStateCache; }
+    const ShareGroupAccessibleStateCache &getStateCache() const { return mShared.getStateCache(); }
+    ShareGroupAccessibleStateCache &getStateCache() { return mShared.getStateCache(); }
 
     const PrivateStateCache &getPrivateStateCache() const { return mPrivateStateCache; }
     PrivateStateCache *getMutablePrivateStateCache() { return &mPrivateStateCache; }
 
-    void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;
-
     void onSamplerUniformChange(size_t textureUnitIndex);
-
-    bool isBufferAccessValidationEnabled() const { return mBufferAccessValidationEnabled; }
 
     const angle::FrontendFeatures &getFrontendFeatures() const;
 
@@ -849,7 +942,9 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
                                             MultisamplingMode mode);
 
     State mState;
-    bool mShared;
+    SharedContext mShared;
+
+    bool mIsShared;
     bool mDisplayTextureShareGroup;
     bool mDisplaySemaphoreShareGroup;
 
@@ -904,14 +999,12 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     egl::Surface *mCurrentReadSurface;
     egl::Display *mDisplay;
     const bool mWebGLContext;
-    bool mBufferAccessValidationEnabled;
     const bool mExtensionsEnabled;
     MemoryProgramCache *mMemoryProgramCache;
     MemoryShaderCache *mMemoryShaderCache;
 
     state::DirtyObjects mDrawDirtyObjects;
 
-    StateCache mStateCache;
     PrivateStateCache mPrivateStateCache;
 
     state::DirtyObjects mTexImageDirtyObjects;
@@ -922,17 +1015,6 @@ class Context final : public egl::LabeledObject, angle::NonCopyable, public angl
     state::DirtyBits mCopyImageDirtyBits;
     state::DirtyObjects mCopyImageDirtyObjects;
     state::DirtyObjects mPixelLocalStorageEXTEnableDisableDirtyObjects;
-
-    // Binding to container objects that use dependent state updates.
-    angle::ObserverBinding mVertexArrayObserverBinding;
-    angle::ObserverBinding mDrawFramebufferObserverBinding;
-    angle::ObserverBinding mReadFramebufferObserverBinding;
-    angle::ObserverBinding mProgramPipelineObserverBinding;
-    std::vector<angle::ObserverBinding> mUniformBufferObserverBindings;
-    std::vector<angle::ObserverBinding> mAtomicCounterBufferObserverBindings;
-    std::vector<angle::ObserverBinding> mShaderStorageBufferObserverBindings;
-    std::vector<angle::ObserverBinding> mSamplerObserverBindings;
-    std::vector<angle::ObserverBinding> mImageObserverBindings;
 
     // Not really a property of context state. The size and contexts change per-api-call.
     mutable Optional<angle::ScratchBuffer> mScratchBuffer;

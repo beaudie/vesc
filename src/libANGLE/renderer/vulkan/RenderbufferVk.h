@@ -23,7 +23,7 @@ class RenderbufferVk : public RenderbufferImpl, public angle::ObserverInterface
     RenderbufferVk(const gl::RenderbufferState &state);
     ~RenderbufferVk() override;
 
-    void onDestroy(const gl::Context *context) override;
+    void onDestroy(const gl::SharedContext *context) override;
 
     angle::Result setStorage(const gl::Context *context,
                              GLenum internalformat,

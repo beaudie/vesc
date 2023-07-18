@@ -80,7 +80,7 @@ void FramebufferMtl::reset()
     mReadPixelBuffer = nullptr;
 }
 
-void FramebufferMtl::destroy(const gl::Context *context)
+void FramebufferMtl::destroy(const gl::SharedContext *context)
 {
     reset();
 }

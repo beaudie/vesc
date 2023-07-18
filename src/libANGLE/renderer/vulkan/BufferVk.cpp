@@ -293,7 +293,7 @@ BufferVk::BufferVk(const gl::BufferState &state)
 
 BufferVk::~BufferVk() {}
 
-void BufferVk::destroy(const gl::Context *context)
+void BufferVk::destroy(const gl::SharedContext *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
 

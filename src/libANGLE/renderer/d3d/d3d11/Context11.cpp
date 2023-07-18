@@ -115,8 +115,11 @@ angle::Result ReadbackIndirectBuffer(const gl::Context *context,
 }
 }  // anonymous namespace
 
-Context11::Context11(const gl::State &state, gl::ErrorSet *errorSet, Renderer11 *renderer)
-    : ContextD3D(state, errorSet),
+Context11::Context11(const gl::State &state,
+                     const gl::ShareGroupAccessibleState &sharedState,
+                     gl::ErrorSet *errorSet,
+                     Renderer11 *renderer)
+    : ContextD3D(state, sharedState, errorSet),
       mRenderer(renderer),
       mDisjointQueryStarted(false),
       mDisjoint(false),
@@ -130,7 +133,7 @@ angle::Result Context11::initialize()
     return angle::Result::Continue;
 }
 
-void Context11::onDestroy(const gl::Context *context)
+void Context11::onDestroy(const gl::SharedContext *context)
 {
     mIncompleteTextures.onDestroy(context);
 }
@@ -1115,7 +1118,7 @@ void Context11::handleResult(HRESULT hr,
 
     errorStream << ": " << message;
 
-    mErrors->handleError(glErrorCode, errorStream.str().c_str(), file, function, line);
+    mShared.getErrors()->handleError(glErrorCode, errorStream.str().c_str(), file, function, line);
 }
 
 angle::ImageLoadContext Context11::getImageLoadContext() const

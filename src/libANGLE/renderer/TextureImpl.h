@@ -44,7 +44,7 @@ class TextureImpl : public FramebufferAttachmentObjectImpl
     TextureImpl(const gl::TextureState &state);
     ~TextureImpl() override;
 
-    virtual void onDestroy(const gl::Context *context);
+    virtual void onDestroy(const gl::SharedContext *context);
 
     virtual angle::Result setImage(const gl::Context *context,
                                    const gl::ImageIndex &index,

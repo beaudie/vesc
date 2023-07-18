@@ -26,7 +26,7 @@ class ContextCGL : public ContextGL
                const std::shared_ptr<RendererGL> &renderer,
                bool usesDiscreteGPU);
 
-    void onDestroy(const gl::Context *context) override;
+    void onDestroy(const gl::SharedContext *context) override;
 
     egl::Error releaseHighPowerGPU(gl::Context *context) override;
     egl::Error reacquireHighPowerGPU(gl::Context *context) override;

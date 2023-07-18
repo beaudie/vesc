@@ -33,7 +33,7 @@ class FramebufferImpl : angle::NonCopyable
   public:
     explicit FramebufferImpl(const gl::FramebufferState &state) : mState(state) {}
     virtual ~FramebufferImpl() {}
-    virtual void destroy(const gl::Context *context) {}
+    virtual void destroy(const gl::SharedContext *context) {}
 
     virtual angle::Result discard(const gl::Context *context,
                                   size_t count,

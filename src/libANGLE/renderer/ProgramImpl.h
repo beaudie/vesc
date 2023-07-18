@@ -73,7 +73,7 @@ class ProgramImpl : angle::NonCopyable
   public:
     ProgramImpl(const gl::ProgramState &state) : mState(state) {}
     virtual ~ProgramImpl() {}
-    virtual void destroy(const gl::Context *context) {}
+    virtual void destroy(const gl::SharedContext *context) {}
 
     virtual std::unique_ptr<LinkEvent> load(const gl::Context *context,
                                             gl::BinaryInputStream *stream,

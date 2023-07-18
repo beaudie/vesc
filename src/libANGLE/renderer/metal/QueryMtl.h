@@ -69,7 +69,7 @@ class QueryMtl : public QueryImpl
     QueryMtl(gl::QueryType type);
     ~QueryMtl() override;
 
-    void onDestroy(const gl::Context *context) override;
+    void onDestroy(const gl::SharedContext *context) override;
 
     angle::Result begin(const gl::Context *context) override;
     angle::Result end(const gl::Context *context) override;

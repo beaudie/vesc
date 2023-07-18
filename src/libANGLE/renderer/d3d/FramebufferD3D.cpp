@@ -391,7 +391,7 @@ const gl::AttachmentList &FramebufferD3D::getColorAttachmentsForRender(const gl:
     return mColorAttachmentsForRender.value();
 }
 
-void FramebufferD3D::destroy(const gl::Context *context)
+void FramebufferD3D::destroy(const gl::SharedContext *context)
 {
     if (mMockAttachment.isAttached())
     {

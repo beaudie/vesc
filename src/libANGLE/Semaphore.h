@@ -33,7 +33,7 @@ class Semaphore final : public RefCountObject<SemaphoreID>
     Semaphore(rx::GLImplFactory *factory, SemaphoreID id);
     ~Semaphore() override;
 
-    void onDestroy(const Context *context) override;
+    void onDestroy(const SharedContext *context) override;
 
     rx::SemaphoreImpl *getImplementation() const { return mImplementation.get(); }
 

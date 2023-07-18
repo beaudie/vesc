@@ -19,7 +19,7 @@ class MemoryObjectGL : public MemoryObjectImpl
     MemoryObjectGL(GLuint memoryObject);
     ~MemoryObjectGL() override;
 
-    void onDestroy(const gl::Context *context) override;
+    void onDestroy(const gl::SharedContext *context) override;
 
     angle::Result setDedicatedMemory(const gl::Context *context, bool dedicatedMemory) override;
     angle::Result setProtectedMemory(const gl::Context *context, bool protectedMemory) override;

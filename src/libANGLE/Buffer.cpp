@@ -55,7 +55,7 @@ Buffer::~Buffer()
     SafeDelete(mImpl);
 }
 
-void Buffer::onDestroy(const Context *context)
+void Buffer::onDestroy(const SharedContext *context)
 {
     mContentsObservers.clear();
 
@@ -371,7 +371,7 @@ bool Buffer::isDoubleBoundForTransformFeedback() const
     return mState.mTransformFeedbackIndexedBindingCount > 1;
 }
 
-void Buffer::onTFBindingChanged(const Context *context, bool bound, bool indexed)
+void Buffer::onTFBindingChanged(bool bound, bool indexed)
 {
     ASSERT(bound || mState.mBindingCount > 0);
     mState.mBindingCount += bound ? 1 : -1;

@@ -102,7 +102,7 @@ BufferMtl::BufferMtl(const gl::BufferState &state) : BufferImpl(state) {}
 
 BufferMtl::~BufferMtl() {}
 
-void BufferMtl::destroy(const gl::Context *context)
+void BufferMtl::destroy(const gl::SharedContext *context)
 {
     ContextMtl *contextMtl = mtl::GetImpl(context);
     mShadowCopy.clear();

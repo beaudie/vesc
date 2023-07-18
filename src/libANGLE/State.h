@@ -213,7 +213,7 @@ using DirtyObjects = angle::BitSet<DIRTY_OBJECT_MAX>;
 
 // This class represents the portion of the GL context's state that is purely private to the
 // context. Manipulating this state does not affect the other contexts in any way, nor do operations
-// in other contexts affect this.
+// in other contexts affect this.  Access to this class does not require holding any locks.
 //
 // Note that "currently bound X" states do not belong here because unbinding most objects could lead
 // to object destruction which in turn may trigger a notification to an observer that may affect
@@ -231,7 +231,7 @@ class PrivateState : angle::NonCopyable
                  bool programBinaryCacheEnabled);
     ~PrivateState();
 
-    void initialize(Context *context);
+    void initialize();
     void initializeForCapture(const Context *context);
 
     void reset();
@@ -241,6 +241,7 @@ class PrivateState : angle::NonCopyable
     const Version &getClientVersion() const { return mClientVersion; }
     GLint getClientMajorVersion() const { return mClientVersion.major; }
     GLint getClientMinorVersion() const { return mClientVersion.minor; }
+    bool isDebugContext() const { return mIsDebugContext; }
 
     bool isWebGL() const { return getExtensions().webglCompatibilityANGLE; }
     bool isWebGL1() const { return isWebGL() && getClientVersion().major == 2; }
@@ -570,6 +571,7 @@ class PrivateState : angle::NonCopyable
     void getBooleanv(GLenum pname, GLboolean *params) const;
     void getFloatv(GLenum pname, GLfloat *params) const;
     void getIntegerv(GLenum pname, GLint *params) const;
+    void getPointerv(GLenum pname, void **params) const;
     void getIntegeri_v(GLenum target, GLuint index, GLint *data) const;
     void getBooleani_v(GLenum target, GLuint index, GLboolean *data) const;
 
@@ -594,7 +596,7 @@ class PrivateState : angle::NonCopyable
     }
 
     const state::DirtyObjects &getDirtyObjects() const { return mDirtyObjects; }
-    void clearDirtyObjects() { mDirtyObjects.reset(); }
+    void clearDirtyObjects(const state::DirtyObjects &bitset) { mDirtyObjects &= ~bitset; }
 
   private:
     bool hasConstantColor(GLenum sourceRGB, GLenum destRGB) const;
@@ -603,6 +605,7 @@ class PrivateState : angle::NonCopyable
     const EGLenum mClientType;
     const EGLint mProfileMask;
     const Version mClientVersion;
+    const bool mIsDebugContext;
 
     // Caps to use for validation
     Caps mCaps;
@@ -732,71 +735,65 @@ class PrivateState : angle::NonCopyable
     mutable AttributesMask mDirtyCurrentValues;
 };
 
-// This class represents all of the GL context's state.
-class State : angle::NonCopyable
+// This class represents the portion of the GL context's state that can be accessed or affected by
+// other contexts in the share group.
+class ShareGroupAccessibleState : angle::NonCopyable
 {
   public:
-    State(const State *shareContextState,
-          egl::ShareGroup *shareGroup,
-          TextureManager *shareTextures,
-          SemaphoreManager *shareSemaphores,
-          egl::ContextMutex *sharedContextMutex,
-          egl::SingleContextMutex *singleContextMutex,
-          const OverlayType *overlay,
-          const EGLenum clientType,
-          const Version &clientVersion,
-          EGLint profileMask,
-          bool debug,
-          bool bindGeneratesResourceCHROMIUM,
-          bool clientArraysEnabled,
-          bool robustResourceInit,
-          bool programBinaryCacheEnabled,
-          EGLenum contextPriority,
-          bool hasRobustAccess,
-          bool hasProtectedContent);
-    ~State();
+    ShareGroupAccessibleState(egl::ShareGroup *shareGroup,
+                              const EGLenum clientType,
+                              const Version &clientVersion,
+                              EGLint profileMask,
+                              bool robustResourceInit,
+                              const Caps &caps,
+                              const Extensions &extensions,
+                              const Limitations &limitations,
+                              EGLenum contextPriority,
+                              bool hasRobustAccess,
+                              bool hasProtectedContent,
+                              bool displayTextureShareGroup);
+    ~ShareGroupAccessibleState();
 
-    void initialize(Context *context);
-    void reset(const Context *context);
+    void initialize(SharedContext *context,
+                    const Extensions &nativeExtensions,
+                    ShPixelLocalStorageType pixelLocalStorageType);
 
-    // Getters
+    void reset(const SharedContext *context);
+
+    EGLenum getClientType() const { return mClientType; }
+    EGLint getProfileMask() const { return mProfileMask; }
+    const Version &getClientVersion() const { return mClientVersion; }
+    bool isRobustResourceInitEnabled() const { return mRobustResourceInit; }
+
+    bool isWebGL() const { return getExtensions().webglCompatibilityANGLE; }
+    bool isWebGL1() const { return isWebGL() && getClientVersion().major == 2; }
+    bool isGLES1() const { return getClientVersion() < ES_2_0; }
+
+    const Caps &getCaps() const { return mCaps; }
+    const Extensions &getExtensions() const { return mExtensions; }
+    const Limitations &getLimitations() const { return mLimitations; }
+
     ContextID getContextID() const { return mID; }
-    EGLenum getClientType() const { return mPrivateState.getClientType(); }
-    EGLint getProfileMask() const { return mPrivateState.getProfileMask(); }
     EGLenum getContextPriority() const { return mContextPriority; }
     bool hasRobustAccess() const { return mHasRobustAccess; }
     bool hasProtectedContent() const { return mHasProtectedContent; }
-    bool isDebugContext() const { return mIsDebugContext; }
-    GLint getClientMajorVersion() const { return mPrivateState.getClientMajorVersion(); }
-    GLint getClientMinorVersion() const { return mPrivateState.getClientMinorVersion(); }
-    const Version &getClientVersion() const { return mPrivateState.getClientVersion(); }
     egl::ShareGroup *getShareGroup() const { return mShareGroup; }
 
-    bool isWebGL() const { return mPrivateState.isWebGL(); }
-    bool isWebGL1() const { return mPrivateState.isWebGL1(); }
-    bool isGLES1() const { return mPrivateState.isGLES1(); }
-
-    const Caps &getCaps() const { return mPrivateState.getCaps(); }
-    const TextureCapsMap &getTextureCaps() const { return mPrivateState.getTextureCaps(); }
-    const Extensions &getExtensions() const { return mPrivateState.getExtensions(); }
-    const Limitations &getLimitations() const { return mPrivateState.getLimitations(); }
-
-    Caps *getMutableCaps() { return mPrivateState.getMutableCaps(); }
-    TextureCapsMap *getMutableTextureCaps() { return mPrivateState.getMutableTextureCaps(); }
-    Extensions *getMutableExtensions() { return mPrivateState.getMutableExtensions(); }
-    Limitations *getMutableLimitations() { return mPrivateState.getMutableLimitations(); }
-
-    const TextureCaps &getTextureCap(GLenum internalFormat) const
-    {
-        return getTextureCaps().get(internalFormat);
-    }
-
-    bool allActiveDrawBufferChannelsMasked() const;
-    bool anyActiveDrawBufferChannelMasked() const;
+    void unsetActiveTextures(const ActiveTextureMask &textureMask);
+    void setActiveTextureDirty(size_t textureIndex, Texture *texture);
+    void updateTextureBinding(const SharedContext *context, size_t textureIndex, Texture *texture);
+    void updateActiveTextureStateOnSync(const SharedContext *context,
+                                        size_t textureIndex,
+                                        const Sampler *sampler,
+                                        Texture *texture);
+    Texture *getTextureForActiveSampler(TextureType type, size_t index);
 
     // Texture binding & active texture unit manipulation
-    void setSamplerTexture(const Context *context, TextureType type, Texture *texture);
-    Texture *getTargetTexture(TextureType type) const;
+    void setSamplerTexture(const SharedContext *context,
+                           TextureType type,
+                           Texture *texture,
+                           unsigned int activeSampler);
+    Texture *getTargetTexture(TextureType type, unsigned int activeSampler) const;
 
     Texture *getSamplerTexture(unsigned int sampler, TextureType type) const
     {
@@ -805,13 +802,12 @@ class State : angle::NonCopyable
     }
 
     TextureID getSamplerTextureId(unsigned int sampler, TextureType type) const;
-    void detachTexture(Context *context, const TextureMap &zeroTextures, TextureID texture);
-    void initializeZeroTextures(const Context *context, const TextureMap &zeroTextures);
+    void initializeZeroTextures(const SharedContext *context, const TextureMap &zeroTextures);
 
     void invalidateTextureBindings(TextureType type);
 
     // Sampler object binding manipulation
-    void setSamplerBinding(const Context *context, GLuint textureUnit, Sampler *sampler);
+    void setSamplerBinding(const SharedContext *context, GLuint textureUnit, Sampler *sampler);
     SamplerID getSamplerId(GLuint textureUnit) const
     {
         ASSERT(textureUnit < mSamplers.size());
@@ -822,28 +818,21 @@ class State : angle::NonCopyable
 
     const SamplerBindingVector &getSamplers() const { return mSamplers; }
 
-    void detachSampler(const Context *context, SamplerID sampler);
+    void detachSampler(const SharedContext *context, SamplerID sampler);
 
     // Renderbuffer binding manipulation
-    void setRenderbufferBinding(const Context *context, Renderbuffer *renderbuffer);
+    void setRenderbufferBinding(const SharedContext *context, Renderbuffer *renderbuffer);
     RenderbufferID getRenderbufferId() const { return mRenderbuffer.id(); }
     Renderbuffer *getCurrentRenderbuffer() const { return mRenderbuffer.get(); }
-    void detachRenderbuffer(Context *context, RenderbufferID renderbuffer);
 
     // Framebuffer binding manipulation
-    void setReadFramebufferBinding(Framebuffer *framebuffer);
-    void setDrawFramebufferBinding(Framebuffer *framebuffer);
     Framebuffer *getTargetFramebuffer(GLenum target) const;
     Framebuffer *getReadFramebuffer() const { return mReadFramebuffer; }
     Framebuffer *getDrawFramebuffer() const { return mDrawFramebuffer; }
-    Framebuffer *getDefaultFramebuffer() const;
-
-    bool removeReadFramebufferBinding(FramebufferID framebuffer);
-    bool removeDrawFramebufferBinding(FramebufferID framebuffer);
 
     // Vertex array object binding manipulation
-    void setVertexArrayBinding(const Context *context, VertexArray *vertexArray);
-    bool removeVertexArrayBinding(const Context *context, VertexArrayID vertexArray);
+    void setVertexArrayBinding(const SharedContext *context, VertexArray *vertexArray);
+    bool removeVertexArrayBinding(const SharedContext *context, VertexArrayID vertexArray);
     VertexArrayID getVertexArrayId() const;
 
     VertexArray *getVertexArray() const
@@ -855,6 +844,7 @@ class State : angle::NonCopyable
     // If both a Program and a ProgramPipeline are bound, the Program will
     // always override the ProgramPipeline.
     ProgramExecutable *getProgramExecutable() const { return mExecutable; }
+    // TODO: Either take SharedContext, or make private: http://anglebug.com/8224
     ProgramExecutable *getLinkedProgramExecutable(const Context *context) const
     {
         if (mProgram)
@@ -869,7 +859,7 @@ class State : angle::NonCopyable
     }
 
     // Program binding manipulation
-    angle::Result setProgram(const Context *context, Program *newProgram);
+    angle::Result setProgram(const SharedContext *context, Program *newProgram);
 
     Program *getProgram() const
     {
@@ -877,6 +867,7 @@ class State : angle::NonCopyable
         return mProgram;
     }
 
+    // TODO: Either take SharedContext, or make private: http://anglebug.com/8224
     Program *getLinkedProgram(const Context *context) const
     {
         if (mProgram)
@@ -888,6 +879,7 @@ class State : angle::NonCopyable
 
     ProgramPipeline *getProgramPipeline() const { return mProgramPipeline.get(); }
 
+    // TODO: Either take SharedContext, or make private: http://anglebug.com/8224
     ProgramPipeline *getLinkedProgramPipeline(const Context *context) const
     {
         if (mProgramPipeline.get())
@@ -898,7 +890,8 @@ class State : angle::NonCopyable
     }
 
     // Transform feedback object (not buffer) binding manipulation
-    void setTransformFeedbackBinding(const Context *context, TransformFeedback *transformFeedback);
+    void setTransformFeedbackBinding(const SharedContext *context,
+                                     TransformFeedback *transformFeedback);
     TransformFeedback *getCurrentTransformFeedback() const { return mTransformFeedback.get(); }
 
     ANGLE_INLINE bool isTransformFeedbackActive() const
@@ -913,22 +906,25 @@ class State : angle::NonCopyable
                !curTransformFeedback->isPaused();
     }
 
-    bool removeTransformFeedbackBinding(const Context *context,
+    bool removeTransformFeedbackBinding(const SharedContext *context,
                                         TransformFeedbackID transformFeedback);
 
     // Query binding manipulation
     bool isQueryActive(QueryType type) const;
     bool isQueryActive(Query *query) const;
-    void setActiveQuery(const Context *context, QueryType type, Query *query);
+    void setActiveQuery(const SharedContext *context, QueryType type, Query *query);
     QueryID getActiveQueryId(QueryType type) const;
     Query *getActiveQuery(QueryType type) const;
 
     // Program Pipeline binding manipulation
-    angle::Result setProgramPipelineBinding(const Context *context, ProgramPipeline *pipeline);
-    void detachProgramPipeline(const Context *context, ProgramPipelineID pipeline);
+    angle::Result setProgramPipelineBinding(const SharedContext *context,
+                                            ProgramPipeline *pipeline);
+    void detachProgramPipeline(const SharedContext *context, ProgramPipelineID pipeline);
 
     //// Typed buffer binding point manipulation ////
-    ANGLE_INLINE void setBufferBinding(const Context *context, BufferBinding target, Buffer *buffer)
+    ANGLE_INLINE void setBufferBinding(const SharedContext *context,
+                                       BufferBinding target,
+                                       Buffer *buffer)
     {
         (this->*(kBufferSetters[target]))(context, buffer);
     }
@@ -946,7 +942,7 @@ class State : angle::NonCopyable
 
     ANGLE_INLINE Buffer *getArrayBuffer() const { return getTargetBuffer(BufferBinding::Array); }
 
-    angle::Result setIndexedBufferBinding(const Context *context,
+    angle::Result setIndexedBufferBinding(const SharedContext *context,
                                           BufferBinding target,
                                           GLuint index,
                                           Buffer *buffer,
@@ -981,12 +977,12 @@ class State : angle::NonCopyable
     }
 
     // Detach a buffer from all bindings
-    angle::Result detachBuffer(Context *context, const Buffer *buffer);
+    angle::Result detachBuffer(SharedContext *context, const Buffer *buffer);
 
     // Vertex attrib manipulation
     void setEnableVertexAttribArray(unsigned int attribNum, bool enabled);
 
-    ANGLE_INLINE void setVertexAttribPointer(const Context *context,
+    ANGLE_INLINE void setVertexAttribPointer(const SharedContext *context,
                                              unsigned int attribNum,
                                              Buffer *boundBuffer,
                                              GLint size,
@@ -1000,7 +996,7 @@ class State : angle::NonCopyable
         mDirtyObjects.set(state::DIRTY_OBJECT_VERTEX_ARRAY);
     }
 
-    ANGLE_INLINE void setVertexAttribIPointer(const Context *context,
+    ANGLE_INLINE void setVertexAttribIPointer(const SharedContext *context,
                                               unsigned int attribNum,
                                               Buffer *boundBuffer,
                                               GLint size,
@@ -1013,10 +1009,10 @@ class State : angle::NonCopyable
         mDirtyObjects.set(state::DIRTY_OBJECT_VERTEX_ARRAY);
     }
 
-    void setVertexAttribDivisor(const Context *context, GLuint index, GLuint divisor);
+    void setVertexAttribDivisor(const SharedContext *context, GLuint index, GLuint divisor);
     const void *getVertexAttribPointer(unsigned int attribNum) const;
 
-    void bindVertexBuffer(const Context *context,
+    void bindVertexBuffer(const SharedContext *context,
                           GLuint bindingIndex,
                           Buffer *boundBuffer,
                           GLintptr offset,
@@ -1028,22 +1024,15 @@ class State : angle::NonCopyable
                                bool pureInteger,
                                GLuint relativeOffset);
 
-    void setVertexAttribBinding(const Context *context, GLuint attribIndex, GLuint bindingIndex)
+    void setVertexAttribBinding(const SharedContext *context,
+                                GLuint attribIndex,
+                                GLuint bindingIndex)
     {
         mVertexArray->setVertexAttribBinding(context, attribIndex, bindingIndex);
         mDirtyObjects.set(state::DIRTY_OBJECT_VERTEX_ARRAY);
     }
 
-    void setVertexBindingDivisor(const Context *context, GLuint bindingIndex, GLuint divisor);
-
-    // State query functions
-    void getBooleanv(GLenum pname, GLboolean *params) const;
-    void getFloatv(GLenum pname, GLfloat *params) const { mPrivateState.getFloatv(pname, params); }
-    angle::Result getIntegerv(const Context *context, GLenum pname, GLint *params) const;
-    void getPointerv(const Context *context, GLenum pname, void **params) const;
-    void getIntegeri_v(const Context *context, GLenum target, GLuint index, GLint *data) const;
-    void getInteger64i_v(GLenum target, GLuint index, GLint64 *data) const;
-    void getBooleani_v(GLenum target, GLuint index, GLboolean *data) const;
+    void setVertexBindingDivisor(const SharedContext *context, GLuint bindingIndex, GLuint divisor);
 
     bool isDrawFramebufferBindingDirty() const
     {
@@ -1051,56 +1040,10 @@ class State : angle::NonCopyable
     }
 
     // Sets the dirty bit for the program executable.
-    angle::Result onProgramExecutableChange(const Context *context, Program *program);
+    angle::Result onProgramExecutableChange(const SharedContext *context, Program *program);
     // Sets the dirty bit for the program pipeline executable.
-    angle::Result onProgramPipelineExecutableChange(const Context *context);
+    angle::Result onProgramPipelineExecutableChange(const SharedContext *context);
 
-    const state::DirtyBits getDirtyBits() const
-    {
-        return mDirtyBits | mPrivateState.getDirtyBits();
-    }
-    void clearDirtyBits()
-    {
-        mDirtyBits.reset();
-        mPrivateState.clearDirtyBits();
-    }
-    void clearDirtyBits(const state::DirtyBits &bitset)
-    {
-        mDirtyBits &= ~bitset;
-        mPrivateState.clearDirtyBits(bitset);
-    }
-    void setAllDirtyBits()
-    {
-        mDirtyBits.set();
-        mExtendedDirtyBits.set();
-        mPrivateState.setAllDirtyBits();
-    }
-
-    const state::ExtendedDirtyBits getExtendedDirtyBits() const
-    {
-        return mExtendedDirtyBits | mPrivateState.getExtendedDirtyBits();
-    }
-    void clearExtendedDirtyBits()
-    {
-        mExtendedDirtyBits.reset();
-        mPrivateState.clearExtendedDirtyBits();
-    }
-    void clearExtendedDirtyBits(const state::ExtendedDirtyBits &bitset)
-    {
-        mExtendedDirtyBits &= ~bitset;
-        mPrivateState.clearExtendedDirtyBits(bitset);
-    }
-
-    void clearDirtyObjects()
-    {
-        mDirtyObjects.reset();
-        mPrivateState.clearDirtyObjects();
-    }
-    void setAllDirtyObjects() { mDirtyObjects.set(); }
-    angle::Result syncDirtyObjects(const Context *context,
-                                   const state::DirtyObjects &bitset,
-                                   Command command);
-    angle::Result syncDirtyObject(const Context *context, GLenum target);
     void setObjectDirty(GLenum target);
     void setTextureDirty(size_t textureUnitIndex);
     void setSamplerDirty(size_t samplerIndex);
@@ -1117,7 +1060,7 @@ class State : angle::NonCopyable
         mDirtyObjects.set(state::DIRTY_OBJECT_DRAW_ATTACHMENTS);
     }
 
-    void setImageUnit(const Context *context,
+    void setImageUnit(const SharedContext *context,
                       size_t unit,
                       Texture *texture,
                       GLint level,
@@ -1130,12 +1073,12 @@ class State : angle::NonCopyable
     const ActiveTexturesCache &getActiveTexturesCache() const { return mActiveTexturesCache; }
 
     // "onActiveTextureChange" is called when a texture binding changes.
-    void onActiveTextureChange(const Context *context, size_t textureUnit);
+    void onActiveTextureChange(const SharedContext *context, size_t textureUnit);
 
     // "onActiveTextureStateChange" is called when the Texture changed but the binding did not.
-    void onActiveTextureStateChange(const Context *context, size_t textureUnit);
+    void onActiveTextureStateChange(size_t textureUnit);
 
-    void onImageStateChange(const Context *context, size_t unit);
+    void onImageStateChange(size_t unit);
 
     void onUniformBufferStateChange(size_t uniformBufferIndex);
     void onAtomicCounterBufferStateChange(size_t atomicCounterBufferIndex);
@@ -1150,12 +1093,13 @@ class State : angle::NonCopyable
     // Helpers for setting bound buffers. They should all have the same signature.
     // Not meant to be called externally. Used for local helpers in State.cpp.
     template <BufferBinding Target>
-    void setGenericBufferBindingWithBit(const Context *context, Buffer *buffer);
+    void setGenericBufferBindingWithBit(const SharedContext *context, Buffer *buffer);
 
     template <BufferBinding Target>
-    void setGenericBufferBinding(const Context *context, Buffer *buffer);
+    void setGenericBufferBinding(const SharedContext *context, Buffer *buffer);
 
-    using BufferBindingSetter = void (State::*)(const Context *, Buffer *);
+    using BufferBindingSetter = void (ShareGroupAccessibleState::*)(const SharedContext *,
+                                                                    Buffer *);
 
     ANGLE_INLINE bool validateSamplerFormats() const
     {
@@ -1171,47 +1115,6 @@ class State : angle::NonCopyable
     ANGLE_INLINE void setDrawFramebufferBindingDirty()
     {
         mDirtyBits.set(state::DIRTY_BIT_DRAW_FRAMEBUFFER_BINDING);
-    }
-
-    const OverlayType *getOverlay() const { return mOverlay; }
-
-    // Not for general use.
-    const BufferManager &getBufferManagerForCapture() const { return *mBufferManager; }
-    const BoundBufferMap &getBoundBuffersForCapture() const { return mBoundBuffers; }
-    const TextureManager &getTextureManagerForCapture() const { return *mTextureManager; }
-    const TextureBindingMap &getBoundTexturesForCapture() const { return mSamplerTextures; }
-    const RenderbufferManager &getRenderbufferManagerForCapture() const
-    {
-        return *mRenderbufferManager;
-    }
-    const FramebufferManager &getFramebufferManagerForCapture() const
-    {
-        return *mFramebufferManager;
-    }
-    const ShaderProgramManager &getShaderProgramManagerForCapture() const
-    {
-        return *mShaderProgramManager;
-    }
-    const SyncManager &getSyncManagerForCapture() const { return *mSyncManager; }
-    const SamplerManager &getSamplerManagerForCapture() const { return *mSamplerManager; }
-    const ProgramPipelineManager *getProgramPipelineManagerForCapture() const
-    {
-        return mProgramPipelineManager;
-    }
-    const SamplerBindingVector &getSamplerBindingsForCapture() const { return mSamplers; }
-    const ActiveQueryMap &getActiveQueriesForCapture() const { return mActiveQueries; }
-    void initializeForCapture(const Context *context);
-
-    bool hasConstantAlphaBlendFunc() const
-    {
-        return (getBlendFuncConstantAlphaDrawBuffers() & getBlendStateExt().getEnabledMask()).any();
-    }
-
-    bool hasSimultaneousConstantColorAndAlphaBlendFunc() const
-    {
-        return (getBlendFuncConstantColorDrawBuffers() & getBlendStateExt().getEnabledMask())
-                   .any() &&
-               hasConstantAlphaBlendFunc();
     }
 
     const BufferVector &getOffsetBindingPointerUniformBuffers() const { return mUniformBuffers; }
@@ -1234,6 +1137,660 @@ class State : angle::NonCopyable
     const std::vector<ImageUnit> &getImageUnits() const { return mImageUnits; }
 
     bool hasDisplayTextureShareGroup() const { return mDisplayTextureShareGroup; }
+
+    const state::DirtyBits getDirtyBits() const { return mDirtyBits; }
+    void clearDirtyBits() { mDirtyBits.reset(); }
+    void clearDirtyBits(const state::DirtyBits &bitset) { mDirtyBits &= ~bitset; }
+    void setAllDirtyBits()
+    {
+        mDirtyBits.set();
+        mExtendedDirtyBits.set();
+    }
+
+    const state::ExtendedDirtyBits getExtendedDirtyBits() const { return mExtendedDirtyBits; }
+    void clearExtendedDirtyBits() { mExtendedDirtyBits.reset(); }
+    void clearExtendedDirtyBits(const state::ExtendedDirtyBits &bitset)
+    {
+        mExtendedDirtyBits &= ~bitset;
+    }
+
+    const state::DirtyObjects &getDirtyObjects() const { return mDirtyObjects; }
+    void clearDirtyObjects(const state::DirtyObjects &bitset) { mDirtyObjects &= ~bitset; }
+    void setAllDirtyObjects() { mDirtyObjects.set(); }
+
+    // Not for general use.
+    const BoundBufferMap &getBoundBuffersForCapture() const { return mBoundBuffers; }
+    const TextureBindingMap &getBoundTexturesForCapture() const { return mSamplerTextures; }
+    const SamplerBindingVector &getSamplerBindingsForCapture() const { return mSamplers; }
+    const ActiveQueryMap &getActiveQueriesForCapture() const { return mActiveQueries; }
+
+  private:
+    // The following functions operate on members of this class, but are only ever called from the
+    // current context (and need the Context, or private state, etc).  They are therefore called
+    // privately from the State class.  The State class is not expected to access the members of
+    // this class otherwise.
+    friend class State;
+    void detachTexture(Context *context, const TextureMap &zeroTextures, TextureID texture);
+    void detachRenderbuffer(Context *context, RenderbufferID renderbuffer);
+    void setReadFramebufferBinding(Framebuffer *framebuffer);
+    void setDrawFramebufferBinding(Framebuffer *framebuffer, bool framebufferSRGB);
+    bool removeReadFramebufferBinding(FramebufferID framebuffer);
+    bool removeDrawFramebufferBinding(FramebufferID framebuffer, bool framebufferSRGB);
+    // State query functions.  They return false if the state is not in ShareGroupAccessibleState,
+    // and that the query should be made to PrivateState instead.
+    bool getBooleanv(GLenum pname, GLboolean *params) const;
+    bool getIntegerv(const Context *context,
+                     GLenum pname,
+                     GLint *params,
+                     unsigned int activeSampler) const;
+    bool getPointerv(const Context *context, GLenum pname, void **params) const;
+    bool getIntegeri_v(GLenum target, GLuint index, GLint *data) const;
+    void getInteger64i_v(GLenum target, GLuint index, GLint64 *data) const;
+    bool getBooleani_v(GLenum target, GLuint index, GLboolean *data) const;
+    // Other functions that are only called by State.  Keeping them private limits the scope of what
+    // the contexts in a share group can do to each other.
+    const ActiveTextureMask &getDirtyActiveTextures() const { return mDirtyActiveTextures; }
+    void clearDirtyActiveTextures() { mDirtyActiveTextures.reset(); }
+
+    ContextID mID;
+
+    // Duplicate state from PrivateState used by SharedContext.
+    const EGLenum mClientType;
+    const EGLint mProfileMask;
+    const Version mClientVersion;
+    const bool mRobustResourceInit;
+
+    egl::ShareGroup *mShareGroup;
+
+    // The following are references to state from PrivateState for access by SharedContext.  They
+    // are immutable except when an extension is enabled/disabled with ANGLE_request_extension.
+    // PrivateState is not visible to other contexts, and the ANGLE_request_extension entry points
+    // as well as any that access ShareGroupAccessibleState are called under the share group lock.
+    // Therefore, there is no race condition.
+    const Caps &mCaps;
+    const Extensions &mExtensions;
+    const Limitations &mLimitations;
+
+    const EGLenum mContextPriority;
+    const bool mHasRobustAccess;
+    const bool mHasProtectedContent;
+
+    Framebuffer *mReadFramebuffer;
+    Framebuffer *mDrawFramebuffer;
+    BindingPointer<Renderbuffer> mRenderbuffer;
+    Program *mProgram;
+    BindingPointer<ProgramPipeline> mProgramPipeline;
+    ProgramExecutable *mExecutable;
+
+    VertexArray *mVertexArray;
+
+    TextureBindingMap mSamplerTextures;
+
+    // Active Textures Cache
+    // ---------------------
+    // The active textures cache gives ANGLE components access to a complete array of textures
+    // on a draw call. gl::State implements angle::Observer and watches gl::Texture for state
+    // changes via the onSubjectStateChange method above. We update the cache before draws.
+    // See Observer.h and the design doc linked there for more info on Subject/Observer events.
+    //
+    // On state change events (re-binding textures, samplers, programs etc) we clear the cache
+    // and flag dirty bits. nullptr indicates unbound or incomplete.
+    ActiveTexturesCache mActiveTexturesCache;
+    std::vector<angle::ObserverBinding> mCompleteTextureBindings;
+
+    ActiveTextureMask mTexturesIncompatibleWithSamplers;
+
+    SamplerBindingVector mSamplers;
+
+    // It would be nice to merge the image and observer binding. Same for textures.
+    std::vector<ImageUnit> mImageUnits;
+
+    ActiveQueryMap mActiveQueries;
+
+    // Stores the currently bound buffer for each binding point. It has an entry for the element
+    // array buffer but it should not be used. Instead this bind point is owned by the current
+    // vertex array object.
+    BoundBufferMap mBoundBuffers;
+
+    BufferVector mUniformBuffers;
+    BufferVector mAtomicCounterBuffers;
+    BufferVector mShaderStorageBuffers;
+
+    angle::BitSet<gl::IMPLEMENTATION_MAX_UNIFORM_BUFFER_BINDINGS> mBoundUniformBuffersMask;
+    angle::BitSet<gl::IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFER_BINDINGS>
+        mBoundAtomicCounterBuffersMask;
+    angle::BitSet<gl::IMPLEMENTATION_MAX_SHADER_STORAGE_BUFFER_BINDINGS>
+        mBoundShaderStorageBuffersMask;
+
+    BindingPointer<TransformFeedback> mTransformFeedback;
+
+    bool mDisplayTextureShareGroup;
+
+    // Dispatch table for buffer update functions.
+    static const angle::PackedEnumMap<BufferBinding, BufferBindingSetter> kBufferSetters;
+
+    state::DirtyBits mDirtyBits;
+    state::ExtendedDirtyBits mExtendedDirtyBits;
+    state::DirtyObjects mDirtyObjects;
+    ActiveTextureMask mDirtyActiveTextures;
+    ActiveTextureMask mDirtyTextures;
+    ActiveTextureMask mDirtySamplers;
+    ImageUnitMask mDirtyImages;
+};
+
+// This class represents all of the GL context's state.
+class State : angle::NonCopyable
+{
+  public:
+    State(const State *shareContextState,
+          egl::ShareGroup *shareGroup,
+          TextureManager *shareTextures,
+          SemaphoreManager *shareSemaphores,
+          egl::ContextMutex *sharedContextMutex,
+          egl::SingleContextMutex *singleContextMutex,
+          const OverlayType *overlay,
+          const EGLenum clientType,
+          const Version &clientVersion,
+          EGLint profileMask,
+          bool debug,
+          bool bindGeneratesResourceCHROMIUM,
+          bool clientArraysEnabled,
+          bool robustResourceInit,
+          bool programBinaryCacheEnabled,
+          EGLenum contextPriority,
+          bool hasRobustAccess,
+          bool hasProtectedContent);
+    ~State();
+
+    void initialize(Context *context);
+    void reset(const Context *context);
+
+    // Getters
+    ContextID getContextID() const { return mShareGroupAccessibleState.getContextID(); }
+    EGLenum getClientType() const { return mPrivateState.getClientType(); }
+    EGLint getProfileMask() const { return mPrivateState.getProfileMask(); }
+    EGLenum getContextPriority() const { return mShareGroupAccessibleState.getContextPriority(); }
+    bool hasRobustAccess() const { return mShareGroupAccessibleState.hasRobustAccess(); }
+    bool hasProtectedContent() const { return mShareGroupAccessibleState.hasProtectedContent(); }
+    bool isDebugContext() const { return mPrivateState.isDebugContext(); }
+    GLint getClientMajorVersion() const { return mPrivateState.getClientMajorVersion(); }
+    GLint getClientMinorVersion() const { return mPrivateState.getClientMinorVersion(); }
+    const Version &getClientVersion() const { return mPrivateState.getClientVersion(); }
+    egl::ShareGroup *getShareGroup() const { return mShareGroupAccessibleState.getShareGroup(); }
+
+    bool isWebGL() const { return mPrivateState.isWebGL(); }
+    bool isWebGL1() const { return mPrivateState.isWebGL1(); }
+    bool isGLES1() const { return mPrivateState.isGLES1(); }
+
+    const Caps &getCaps() const { return mPrivateState.getCaps(); }
+    const TextureCapsMap &getTextureCaps() const { return mPrivateState.getTextureCaps(); }
+    const Extensions &getExtensions() const { return mPrivateState.getExtensions(); }
+    const Limitations &getLimitations() const { return mPrivateState.getLimitations(); }
+
+    Caps *getMutableCaps() { return mPrivateState.getMutableCaps(); }
+    TextureCapsMap *getMutableTextureCaps() { return mPrivateState.getMutableTextureCaps(); }
+    Extensions *getMutableExtensions() { return mPrivateState.getMutableExtensions(); }
+    Limitations *getMutableLimitations() { return mPrivateState.getMutableLimitations(); }
+
+    const TextureCaps &getTextureCap(GLenum internalFormat) const
+    {
+        return getTextureCaps().get(internalFormat);
+    }
+
+    bool allActiveDrawBufferChannelsMasked() const;
+    bool anyActiveDrawBufferChannelMasked() const;
+
+    // Texture binding & active texture unit manipulation
+    void setSamplerTexture(const SharedContext *context, TextureType type, Texture *texture)
+    {
+        mShareGroupAccessibleState.setSamplerTexture(context, type, texture,
+                                                     mPrivateState.getActiveSampler());
+    }
+    Texture *getTargetTexture(TextureType type) const
+    {
+        return mShareGroupAccessibleState.getTargetTexture(type, mPrivateState.getActiveSampler());
+    }
+    Texture *getSamplerTexture(unsigned int sampler, TextureType type) const
+    {
+        return mShareGroupAccessibleState.getSamplerTexture(sampler, type);
+    }
+    void detachTexture(Context *context, const TextureMap &zeroTextures, TextureID texture)
+    {
+        mShareGroupAccessibleState.detachTexture(context, zeroTextures, texture);
+    }
+    void initializeZeroTextures(const SharedContext *context, const TextureMap &zeroTextures)
+    {
+        mShareGroupAccessibleState.initializeZeroTextures(context, zeroTextures);
+    }
+    void invalidateTextureBindings(TextureType type)
+    {
+        mShareGroupAccessibleState.invalidateTextureBindings(type);
+    }
+
+    // Sampler object binding manipulation
+    void setSamplerBinding(const SharedContext *context, GLuint textureUnit, Sampler *sampler)
+    {
+        mShareGroupAccessibleState.setSamplerBinding(context, textureUnit, sampler);
+    }
+    SamplerID getSamplerId(GLuint textureUnit) const
+    {
+        return mShareGroupAccessibleState.getSamplerId(textureUnit);
+    }
+    Sampler *getSampler(GLuint textureUnit) const
+    {
+        return mShareGroupAccessibleState.getSampler(textureUnit);
+    }
+    const SamplerBindingVector &getSamplers() const
+    {
+        return mShareGroupAccessibleState.getSamplers();
+    }
+    void detachSampler(const SharedContext *context, SamplerID sampler)
+    {
+        mShareGroupAccessibleState.detachSampler(context, sampler);
+    }
+
+    // Renderbuffer binding manipulation
+    void setRenderbufferBinding(const SharedContext *context, Renderbuffer *renderbuffer)
+    {
+        mShareGroupAccessibleState.setRenderbufferBinding(context, renderbuffer);
+    }
+    RenderbufferID getRenderbufferId() const
+    {
+        return mShareGroupAccessibleState.getRenderbufferId();
+    }
+    Renderbuffer *getCurrentRenderbuffer() const
+    {
+        return mShareGroupAccessibleState.getCurrentRenderbuffer();
+    }
+    void detachRenderbuffer(Context *context, RenderbufferID renderbuffer)
+    {
+        mShareGroupAccessibleState.detachRenderbuffer(context, renderbuffer);
+    }
+
+    // Framebuffer binding manipulation
+    void setReadFramebufferBinding(Framebuffer *framebuffer)
+    {
+        mShareGroupAccessibleState.setReadFramebufferBinding(framebuffer);
+    }
+    void setDrawFramebufferBinding(Framebuffer *framebuffer)
+    {
+        mShareGroupAccessibleState.setDrawFramebufferBinding(framebuffer, getFramebufferSRGB());
+    }
+    Framebuffer *getTargetFramebuffer(GLenum target) const
+    {
+        return mShareGroupAccessibleState.getTargetFramebuffer(target);
+    }
+    Framebuffer *getReadFramebuffer() const
+    {
+        return mShareGroupAccessibleState.getReadFramebuffer();
+    }
+    Framebuffer *getDrawFramebuffer() const
+    {
+        return mShareGroupAccessibleState.getDrawFramebuffer();
+    }
+
+    bool removeReadFramebufferBinding(FramebufferID framebuffer)
+    {
+        return mShareGroupAccessibleState.removeReadFramebufferBinding(framebuffer);
+    }
+    bool removeDrawFramebufferBinding(FramebufferID framebuffer)
+    {
+        return mShareGroupAccessibleState.removeDrawFramebufferBinding(framebuffer,
+                                                                       getFramebufferSRGB());
+    }
+
+    // Vertex array object binding manipulation
+    void setVertexArrayBinding(const SharedContext *context, VertexArray *vertexArray)
+    {
+        mShareGroupAccessibleState.setVertexArrayBinding(context, vertexArray);
+    }
+    bool removeVertexArrayBinding(const SharedContext *context, VertexArrayID vertexArray)
+    {
+        return mShareGroupAccessibleState.removeVertexArrayBinding(context, vertexArray);
+    }
+    VertexArrayID getVertexArrayId() const { return mShareGroupAccessibleState.getVertexArrayId(); }
+    VertexArray *getVertexArray() const { return mShareGroupAccessibleState.getVertexArray(); }
+
+    ProgramExecutable *getProgramExecutable() const
+    {
+        return mShareGroupAccessibleState.getProgramExecutable();
+    }
+    ProgramExecutable *getLinkedProgramExecutable(const Context *context) const
+    {
+        return mShareGroupAccessibleState.getLinkedProgramExecutable(context);
+    }
+
+    // Program binding manipulation
+    angle::Result setProgram(const SharedContext *context, Program *newProgram)
+    {
+        return mShareGroupAccessibleState.setProgram(context, newProgram);
+    }
+    Program *getProgram() const { return mShareGroupAccessibleState.getProgram(); }
+    Program *getLinkedProgram(const Context *context) const
+    {
+        return mShareGroupAccessibleState.getLinkedProgram(context);
+    }
+    ProgramPipeline *getProgramPipeline() const
+    {
+        return mShareGroupAccessibleState.getProgramPipeline();
+    }
+    ProgramPipeline *getLinkedProgramPipeline(const Context *context) const
+    {
+        return mShareGroupAccessibleState.getLinkedProgramPipeline(context);
+    }
+
+    // Transform feedback object (not buffer) binding manipulation
+    void setTransformFeedbackBinding(const SharedContext *context,
+                                     TransformFeedback *transformFeedback)
+    {
+        mShareGroupAccessibleState.setTransformFeedbackBinding(context, transformFeedback);
+    }
+    TransformFeedback *getCurrentTransformFeedback() const
+    {
+        return mShareGroupAccessibleState.getCurrentTransformFeedback();
+    }
+    ANGLE_INLINE bool isTransformFeedbackActive() const
+    {
+        return mShareGroupAccessibleState.isTransformFeedbackActive();
+    }
+    ANGLE_INLINE bool isTransformFeedbackActiveUnpaused() const
+    {
+        return mShareGroupAccessibleState.isTransformFeedbackActiveUnpaused();
+    }
+    bool removeTransformFeedbackBinding(const SharedContext *context,
+                                        TransformFeedbackID transformFeedback)
+    {
+        return mShareGroupAccessibleState.removeTransformFeedbackBinding(context,
+                                                                         transformFeedback);
+    }
+
+    // Query binding manipulation
+    bool isQueryActive(QueryType type) const
+    {
+        return mShareGroupAccessibleState.isQueryActive(type);
+    }
+    bool isQueryActive(Query *query) const
+    {
+        return mShareGroupAccessibleState.isQueryActive(query);
+    }
+    void setActiveQuery(const SharedContext *context, QueryType type, Query *query)
+    {
+        mShareGroupAccessibleState.setActiveQuery(context, type, query);
+    }
+    QueryID getActiveQueryId(QueryType type) const
+    {
+        return mShareGroupAccessibleState.getActiveQueryId(type);
+    }
+    Query *getActiveQuery(QueryType type) const
+    {
+        return mShareGroupAccessibleState.getActiveQuery(type);
+    }
+
+    // Program Pipeline binding manipulation
+    angle::Result setProgramPipelineBinding(const SharedContext *context, ProgramPipeline *pipeline)
+    {
+        return mShareGroupAccessibleState.setProgramPipelineBinding(context, pipeline);
+    }
+    void detachProgramPipeline(const SharedContext *context, ProgramPipelineID pipeline)
+    {
+        mShareGroupAccessibleState.detachProgramPipeline(context, pipeline);
+    }
+
+    // Typed buffer binding point manipulation
+    ANGLE_INLINE void setBufferBinding(const SharedContext *context,
+                                       BufferBinding target,
+                                       Buffer *buffer)
+    {
+        mShareGroupAccessibleState.setBufferBinding(context, target, buffer);
+    }
+    ANGLE_INLINE Buffer *getTargetBuffer(BufferBinding target) const
+    {
+        return mShareGroupAccessibleState.getTargetBuffer(target);
+    }
+    ANGLE_INLINE Buffer *getArrayBuffer() const
+    {
+        return mShareGroupAccessibleState.getArrayBuffer();
+    }
+    angle::Result setIndexedBufferBinding(const SharedContext *context,
+                                          BufferBinding target,
+                                          GLuint index,
+                                          Buffer *buffer,
+                                          GLintptr offset,
+                                          GLsizeiptr size)
+    {
+        return mShareGroupAccessibleState.setIndexedBufferBinding(context, target, index, buffer,
+                                                                  offset, size);
+    }
+    size_t getAtomicCounterBufferCount() const
+    {
+        return mShareGroupAccessibleState.getAtomicCounterBufferCount();
+    }
+    ANGLE_INLINE bool hasValidAtomicCounterBuffer() const
+    {
+        return mShareGroupAccessibleState.hasValidAtomicCounterBuffer();
+    }
+    const OffsetBindingPointer<Buffer> &getIndexedUniformBuffer(size_t index) const
+    {
+        return mShareGroupAccessibleState.getIndexedUniformBuffer(index);
+    }
+    const OffsetBindingPointer<Buffer> &getIndexedAtomicCounterBuffer(size_t index) const
+    {
+        return mShareGroupAccessibleState.getIndexedAtomicCounterBuffer(index);
+    }
+    const OffsetBindingPointer<Buffer> &getIndexedShaderStorageBuffer(size_t index) const
+    {
+        return mShareGroupAccessibleState.getIndexedShaderStorageBuffer(index);
+    }
+    const angle::BitSet<gl::IMPLEMENTATION_MAX_UNIFORM_BUFFER_BINDINGS> &getUniformBuffersMask()
+        const
+    {
+        return mShareGroupAccessibleState.getUniformBuffersMask();
+    }
+    const angle::BitSet<gl::IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFER_BINDINGS> &
+    getAtomicCounterBuffersMask() const
+    {
+        return mShareGroupAccessibleState.getAtomicCounterBuffersMask();
+    }
+    const angle::BitSet<gl::IMPLEMENTATION_MAX_SHADER_STORAGE_BUFFER_BINDINGS> &
+    getShaderStorageBuffersMask() const
+    {
+        return mShareGroupAccessibleState.getShaderStorageBuffersMask();
+    }
+
+    // Detach a buffer from all bindings
+    angle::Result detachBuffer(SharedContext *context, const Buffer *buffer)
+    {
+        return mShareGroupAccessibleState.detachBuffer(context, buffer);
+    }
+
+    // Vertex attrib manipulation
+    void setEnableVertexAttribArray(unsigned int attribNum, bool enabled)
+    {
+        mShareGroupAccessibleState.setEnableVertexAttribArray(attribNum, enabled);
+    }
+    ANGLE_INLINE void setVertexAttribPointer(const SharedContext *context,
+                                             unsigned int attribNum,
+                                             Buffer *boundBuffer,
+                                             GLint size,
+                                             VertexAttribType type,
+                                             bool normalized,
+                                             GLsizei stride,
+                                             const void *pointer)
+    {
+        mShareGroupAccessibleState.setVertexAttribPointer(context, attribNum, boundBuffer, size,
+                                                          type, normalized, stride, pointer);
+    }
+    ANGLE_INLINE void setVertexAttribIPointer(const SharedContext *context,
+                                              unsigned int attribNum,
+                                              Buffer *boundBuffer,
+                                              GLint size,
+                                              VertexAttribType type,
+                                              GLsizei stride,
+                                              const void *pointer)
+    {
+        mShareGroupAccessibleState.setVertexAttribIPointer(context, attribNum, boundBuffer, size,
+                                                           type, stride, pointer);
+    }
+    void setVertexAttribDivisor(const SharedContext *context, GLuint index, GLuint divisor)
+    {
+        mShareGroupAccessibleState.setVertexAttribDivisor(context, index, divisor);
+    }
+    const void *getVertexAttribPointer(unsigned int attribNum) const
+    {
+        return mShareGroupAccessibleState.getVertexAttribPointer(attribNum);
+    }
+    void bindVertexBuffer(const SharedContext *context,
+                          GLuint bindingIndex,
+                          Buffer *boundBuffer,
+                          GLintptr offset,
+                          GLsizei stride)
+    {
+        mShareGroupAccessibleState.bindVertexBuffer(context, bindingIndex, boundBuffer, offset,
+                                                    stride);
+    }
+    void setVertexAttribFormat(GLuint attribIndex,
+                               GLint size,
+                               VertexAttribType type,
+                               bool normalized,
+                               bool pureInteger,
+                               GLuint relativeOffset)
+    {
+        mShareGroupAccessibleState.setVertexAttribFormat(attribIndex, size, type, normalized,
+                                                         pureInteger, relativeOffset);
+    }
+    void setVertexAttribBinding(const SharedContext *context,
+                                GLuint attribIndex,
+                                GLuint bindingIndex)
+    {
+        mShareGroupAccessibleState.setVertexAttribBinding(context, attribIndex, bindingIndex);
+    }
+    void setVertexBindingDivisor(const SharedContext *context, GLuint bindingIndex, GLuint divisor)
+    {
+        mShareGroupAccessibleState.setVertexBindingDivisor(context, bindingIndex, divisor);
+    }
+    bool isDrawFramebufferBindingDirty() const
+    {
+        return mShareGroupAccessibleState.isDrawFramebufferBindingDirty();
+    }
+    angle::Result onProgramExecutableChange(const SharedContext *context, Program *program)
+    {
+        return mShareGroupAccessibleState.onProgramExecutableChange(context, program);
+    }
+    angle::Result onProgramPipelineExecutableChange(const SharedContext *context)
+    {
+        return mShareGroupAccessibleState.onProgramPipelineExecutableChange(context);
+    }
+
+    Framebuffer *getDefaultFramebuffer() const;
+
+    void getBooleanv(GLenum pname, GLboolean *params) const;
+    void getFloatv(GLenum pname, GLfloat *params) const { mPrivateState.getFloatv(pname, params); }
+    void getIntegerv(const Context *context, GLenum pname, GLint *params) const;
+    void getPointerv(const Context *context, GLenum pname, void **params) const;
+    void getIntegeri_v(GLenum target, GLuint index, GLint *data) const;
+    void getInteger64i_v(GLenum target, GLuint index, GLint64 *data) const;
+    void getBooleani_v(GLenum target, GLuint index, GLboolean *data) const;
+
+    const state::DirtyBits getDirtyBits() const
+    {
+        return mShareGroupAccessibleState.getDirtyBits() | mPrivateState.getDirtyBits();
+    }
+    void clearDirtyBits()
+    {
+        mShareGroupAccessibleState.clearDirtyBits();
+        mPrivateState.clearDirtyBits();
+    }
+    void clearDirtyBits(const state::DirtyBits &bitset)
+    {
+        mShareGroupAccessibleState.clearDirtyBits(bitset);
+        mPrivateState.clearDirtyBits(bitset);
+    }
+    void setAllDirtyBits()
+    {
+        mShareGroupAccessibleState.setAllDirtyBits();
+        mPrivateState.setAllDirtyBits();
+    }
+
+    const state::ExtendedDirtyBits getExtendedDirtyBits() const
+    {
+        return mShareGroupAccessibleState.getExtendedDirtyBits() |
+               mPrivateState.getExtendedDirtyBits();
+    }
+    void clearExtendedDirtyBits()
+    {
+        mShareGroupAccessibleState.clearExtendedDirtyBits();
+        mPrivateState.clearExtendedDirtyBits();
+    }
+    void clearExtendedDirtyBits(const state::ExtendedDirtyBits &bitset)
+    {
+        mShareGroupAccessibleState.clearExtendedDirtyBits(bitset);
+        mPrivateState.clearExtendedDirtyBits(bitset);
+    }
+
+    void clearDirtyObjects(const state::DirtyObjects &bitset)
+    {
+        mShareGroupAccessibleState.clearDirtyObjects(bitset);
+        mPrivateState.clearDirtyObjects(bitset);
+    }
+    void setAllDirtyObjects() { mShareGroupAccessibleState.setAllDirtyObjects(); }
+    angle::Result syncDirtyObjects(const Context *context,
+                                   const state::DirtyObjects &bitset,
+                                   Command command);
+    angle::Result syncDirtyObject(const Context *context, GLenum target);
+    void setObjectDirty(GLenum target);
+
+    const OverlayType *getOverlay() const { return mOverlay; }
+
+    // Not for general use.
+    const BufferManager &getBufferManagerForCapture() const { return *mBufferManager; }
+    const TextureManager &getTextureManagerForCapture() const { return *mTextureManager; }
+    const RenderbufferManager &getRenderbufferManagerForCapture() const
+    {
+        return *mRenderbufferManager;
+    }
+    const FramebufferManager &getFramebufferManagerForCapture() const
+    {
+        return *mFramebufferManager;
+    }
+    const ShaderProgramManager &getShaderProgramManagerForCapture() const
+    {
+        return *mShaderProgramManager;
+    }
+    const SyncManager &getSyncManagerForCapture() const { return *mSyncManager; }
+    const SamplerManager &getSamplerManagerForCapture() const { return *mSamplerManager; }
+    const ProgramPipelineManager *getProgramPipelineManagerForCapture() const
+    {
+        return mProgramPipelineManager;
+    }
+    const BoundBufferMap &getBoundBuffersForCapture() const
+    {
+        return mShareGroupAccessibleState.getBoundBuffersForCapture();
+    }
+    const TextureBindingMap &getBoundTexturesForCapture() const
+    {
+        return mShareGroupAccessibleState.getBoundTexturesForCapture();
+    }
+    const SamplerBindingVector &getSamplerBindingsForCapture() const
+    {
+        return mShareGroupAccessibleState.getSamplerBindingsForCapture();
+    }
+    const ActiveQueryMap &getActiveQueriesForCapture() const
+    {
+        return mShareGroupAccessibleState.getActiveQueriesForCapture();
+    }
+    void initializeForCapture(const Context *context);
+
+    bool hasConstantAlphaBlendFunc() const
+    {
+        return (getBlendFuncConstantAlphaDrawBuffers() & getBlendStateExt().getEnabledMask()).any();
+    }
+
+    bool hasSimultaneousConstantColorAndAlphaBlendFunc() const
+    {
+        return (getBlendFuncConstantColorDrawBuffers() & getBlendStateExt().getEnabledMask())
+                   .any() &&
+               hasConstantAlphaBlendFunc();
+    }
 
     // GL_KHR_parallel_shader_compile
     void setMaxShaderCompilerThreads(GLuint count);
@@ -1414,15 +1971,6 @@ class State : angle::NonCopyable
     PrivateState *getMutablePrivateState() { return &mPrivateState; }
     GLES1State *getMutableGLES1State() { return mPrivateState.getMutableGLES1State(); }
 
-    void unsetActiveTextures(const ActiveTextureMask &textureMask);
-    void setActiveTextureDirty(size_t textureIndex, Texture *texture);
-    void updateTextureBinding(const Context *context, size_t textureIndex, Texture *texture);
-    void updateActiveTextureStateOnSync(const Context *context,
-                                        size_t textureIndex,
-                                        const Sampler *sampler,
-                                        Texture *texture);
-    Texture *getTextureForActiveSampler(TextureType type, size_t index);
-
     // Functions to synchronize dirty states
     angle::Result syncActiveTextures(const Context *context, Command command);
     angle::Result syncTexturesInit(const Context *context, Command command);
@@ -1487,17 +2035,6 @@ class State : angle::NonCopyable
     static_assert(state::DIRTY_OBJECT_PROGRAM_PIPELINE_OBJECT == 12,
                   "check DIRTY_OBJECT_PROGRAM_PIPELINE_OBJECT index");
 
-    // Dispatch table for buffer update functions.
-    static const angle::PackedEnumMap<BufferBinding, BufferBindingSetter> kBufferSetters;
-
-    ContextID mID;
-
-    EGLenum mContextPriority;
-    bool mHasRobustAccess;
-    bool mHasProtectedContent;
-    bool mIsDebugContext;
-
-    egl::ShareGroup *mShareGroup;
     egl::ContextMutex *const mSharedContextMutex;
     egl::SingleContextMutex *const mSingleContextMutex;
     std::atomic<egl::ContextMutex *> mContextMutex;  // Simple pointer without reference counting
@@ -1515,90 +2052,29 @@ class State : angle::NonCopyable
     MemoryObjectManager *mMemoryObjectManager;
     SemaphoreManager *mSemaphoreManager;
 
-    Framebuffer *mReadFramebuffer;
-    Framebuffer *mDrawFramebuffer;
-    BindingPointer<Renderbuffer> mRenderbuffer;
-    Program *mProgram;
-    BindingPointer<ProgramPipeline> mProgramPipeline;
-    ProgramExecutable *mExecutable;
-
-    VertexArray *mVertexArray;
-
-    TextureBindingMap mSamplerTextures;
-
-    // Active Textures Cache
-    // ---------------------
-    // The active textures cache gives ANGLE components access to a complete array of textures
-    // on a draw call. gl::State implements angle::Observer and watches gl::Texture for state
-    // changes via the onSubjectStateChange method above. We update the cache before draws.
-    // See Observer.h and the design doc linked there for more info on Subject/Observer events.
-    //
-    // On state change events (re-binding textures, samplers, programs etc) we clear the cache
-    // and flag dirty bits. nullptr indicates unbound or incomplete.
-    ActiveTexturesCache mActiveTexturesCache;
-    std::vector<angle::ObserverBinding> mCompleteTextureBindings;
-
-    ActiveTextureMask mTexturesIncompatibleWithSamplers;
-
-    SamplerBindingVector mSamplers;
-
-    // It would be nice to merge the image and observer binding. Same for textures.
-    std::vector<ImageUnit> mImageUnits;
-
-    ActiveQueryMap mActiveQueries;
-
-    // Stores the currently bound buffer for each binding point. It has an entry for the element
-    // array buffer but it should not be used. Instead this bind point is owned by the current
-    // vertex array object.
-    BoundBufferMap mBoundBuffers;
-
-    BufferVector mUniformBuffers;
-    BufferVector mAtomicCounterBuffers;
-    BufferVector mShaderStorageBuffers;
-
-    angle::BitSet<gl::IMPLEMENTATION_MAX_UNIFORM_BUFFER_BINDINGS> mBoundUniformBuffersMask;
-    angle::BitSet<gl::IMPLEMENTATION_MAX_ATOMIC_COUNTER_BUFFER_BINDINGS>
-        mBoundAtomicCounterBuffersMask;
-    angle::BitSet<gl::IMPLEMENTATION_MAX_SHADER_STORAGE_BUFFER_BINDINGS>
-        mBoundShaderStorageBuffersMask;
-
-    BindingPointer<TransformFeedback> mTransformFeedback;
-
-    bool mDisplayTextureShareGroup;
-
     // GL_KHR_parallel_shader_compile
     GLuint mMaxShaderCompilerThreads;
 
     // The Overlay object, used by the backend to render the overlay.
     const OverlayType *mOverlay;
 
-    state::DirtyBits mDirtyBits;
-    state::ExtendedDirtyBits mExtendedDirtyBits;
-    state::DirtyObjects mDirtyObjects;
-    ActiveTextureMask mDirtyActiveTextures;
-    ActiveTextureMask mDirtyTextures;
-    ActiveTextureMask mDirtySamplers;
-    ImageUnitMask mDirtyImages;
-
     PrivateState mPrivateState;
+    ShareGroupAccessibleState mShareGroupAccessibleState;
 };
 
 ANGLE_INLINE angle::Result State::syncDirtyObjects(const Context *context,
                                                    const state::DirtyObjects &bitset,
                                                    Command command)
 {
-    // Accumulate any dirty objects that might have been set due to context-private state changes.
-    mDirtyObjects |= mPrivateState.getDirtyObjects();
-    mPrivateState.clearDirtyObjects();
-
-    const state::DirtyObjects &dirtyObjects = mDirtyObjects & bitset;
+    const state::DirtyObjects &dirtyObjects =
+        (mShareGroupAccessibleState.getDirtyObjects() | mPrivateState.getDirtyObjects()) & bitset;
 
     for (size_t dirtyObject : dirtyObjects)
     {
         ANGLE_TRY((this->*kDirtyObjectHandlers[dirtyObject])(context, command));
     }
 
-    mDirtyObjects &= ~dirtyObjects;
+    clearDirtyObjects(dirtyObjects);
     return angle::Result::Continue;
 }
 

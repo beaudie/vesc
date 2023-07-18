@@ -791,7 +791,7 @@ bool FramebufferState::isBoundAsDrawFramebuffer(const Context *context) const
 
 const FramebufferID Framebuffer::kDefaultDrawFramebufferHandle = {0};
 
-Framebuffer::Framebuffer(const Context *context, rx::GLImplFactory *factory)
+Framebuffer::Framebuffer(const SharedContext *context, rx::GLImplFactory *factory)
     : mState(context->getShareGroup()->generateFramebufferSerial()),
       mImpl(factory->createFramebuffer(mState)),
       mCachedStatus(FramebufferStatus::Incomplete(GL_FRAMEBUFFER_UNDEFINED_OES,
@@ -803,7 +803,7 @@ Framebuffer::Framebuffer(const Context *context, rx::GLImplFactory *factory)
     SetComponentTypeMask(getDrawbufferWriteType(0), 0, &mState.mDrawBufferTypeMask);
 }
 
-Framebuffer::Framebuffer(const Context *context, rx::GLImplFactory *factory, FramebufferID id)
+Framebuffer::Framebuffer(const SharedContext *context, rx::GLImplFactory *factory, FramebufferID id)
     : mState(context->getCaps(), id, context->getShareGroup()->generateFramebufferSerial()),
       mImpl(factory->createFramebuffer(mState)),
       mCachedStatus(),
@@ -830,7 +830,7 @@ Framebuffer::~Framebuffer()
     SafeDelete(mImpl);
 }
 
-void Framebuffer::onDestroy(const Context *context)
+void Framebuffer::onDestroy(const SharedContext *context)
 {
     if (isDefault())
     {
