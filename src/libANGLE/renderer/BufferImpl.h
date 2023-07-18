@@ -33,7 +33,7 @@ class BufferImpl : public angle::Subject
   public:
     BufferImpl(const gl::BufferState &state) : mState(state) {}
     ~BufferImpl() override {}
-    virtual void destroy(const gl::Context *context) {}
+    virtual void destroy(const gl::SharedContext *context) {}
 
     virtual angle::Result setDataWithUsageFlags(const gl::Context *context,
                                                 gl::BufferBinding target,

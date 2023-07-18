@@ -39,7 +39,7 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
   public:
     TextureVk(const gl::TextureState &state, RendererVk *renderer);
     ~TextureVk() override;
-    void onDestroy(const gl::Context *context) override;
+    void onDestroy(const gl::SharedContext *context) override;
 
     angle::Result setImage(const gl::Context *context,
                            const gl::ImageIndex &index,

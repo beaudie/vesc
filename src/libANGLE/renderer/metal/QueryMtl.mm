@@ -17,7 +17,7 @@ QueryMtl::QueryMtl(gl::QueryType type) : QueryImpl(type) {}
 
 QueryMtl::~QueryMtl() {}
 
-void QueryMtl::onDestroy(const gl::Context *context)
+void QueryMtl::onDestroy(const gl::SharedContext *context)
 {
     ContextMtl *contextMtl = mtl::GetImpl(context);
     if (!getAllocatedVisibilityOffsets().empty())

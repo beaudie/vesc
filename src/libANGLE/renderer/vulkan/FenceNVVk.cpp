@@ -21,7 +21,7 @@ FenceNVVk::FenceNVVk() : FenceNVImpl() {}
 
 FenceNVVk::~FenceNVVk() {}
 
-void FenceNVVk::onDestroy(const gl::Context *context)
+void FenceNVVk::onDestroy(const gl::SharedContext *context)
 {
     mFenceSync.releaseToRenderer(vk::GetImpl(context)->getRenderer());
 }

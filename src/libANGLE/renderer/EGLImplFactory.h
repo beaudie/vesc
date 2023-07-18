@@ -27,6 +27,7 @@ namespace gl
 class Context;
 class ErrorSet;
 class State;
+class ShareGroupAccessibleState;
 }  // namespace gl
 
 namespace rx
@@ -63,6 +64,7 @@ class EGLImplFactory : angle::NonCopyable
                                    const egl::AttributeMap &attribs) = 0;
 
     virtual ContextImpl *createContext(const gl::State &state,
+                                       const gl::ShareGroupAccessibleState &sharedState,
                                        gl::ErrorSet *errorSet,
                                        const egl::Config *configuration,
                                        const gl::Context *shareContext,

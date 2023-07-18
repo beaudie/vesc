@@ -23,7 +23,7 @@ MemoryObjectGL::~MemoryObjectGL()
     ASSERT(mMemoryObject == 0);
 }
 
-void MemoryObjectGL::onDestroy(const gl::Context *context)
+void MemoryObjectGL::onDestroy(const gl::SharedContext *context)
 {
     const FunctionsGL *functions = GetFunctionsGL(context);
     functions->deleteMemoryObjectsEXT(1, &mMemoryObject);

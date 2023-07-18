@@ -659,7 +659,7 @@ IncompleteTextureSet::IncompleteTextureSet() : mIncompleteTextureBufferAttachmen
 
 IncompleteTextureSet::~IncompleteTextureSet() {}
 
-void IncompleteTextureSet::onDestroy(const gl::Context *context)
+void IncompleteTextureSet::onDestroy(const gl::SharedContext *context)
 {
     // Clear incomplete textures.
     for (auto &incompleteTextures : mIncompleteTextures)

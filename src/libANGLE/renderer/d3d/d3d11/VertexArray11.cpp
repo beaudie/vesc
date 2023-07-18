@@ -30,7 +30,7 @@ VertexArray11::VertexArray11(const gl::VertexArrayState &data)
 
 VertexArray11::~VertexArray11() {}
 
-void VertexArray11::destroy(const gl::Context *context) {}
+void VertexArray11::destroy(const gl::SharedContext *context) {}
 
 // As VertexAttribPointer can modify both attribute and binding, we should also set other attributes
 // that are also using this binding dirty.

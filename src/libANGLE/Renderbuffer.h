@@ -75,7 +75,7 @@ class Renderbuffer final : public RefCountObject<RenderbufferID>,
     Renderbuffer(rx::GLImplFactory *implFactory, RenderbufferID id);
     ~Renderbuffer() override;
 
-    void onDestroy(const Context *context) override;
+    void onDestroy(const SharedContext *context) override;
 
     angle::Result setLabel(const Context *context, const std::string &label) override;
     const std::string &getLabel() const override;

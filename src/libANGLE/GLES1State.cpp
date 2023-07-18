@@ -92,11 +92,11 @@ GLES1State::GLES1State()
 GLES1State::~GLES1State() = default;
 
 // Taken from the GLES 1.x spec which specifies all initial state values.
-void GLES1State::initialize(const Context *context, const PrivateState *state)
+void GLES1State::initialize(const PrivateState *state)
 {
     mGLState = state;
 
-    const Caps &caps = context->getCaps();
+    const Caps &caps = state->getCaps();
 
     mTexUnitEnables.resize(caps.maxMultitextureUnits);
     for (auto &enables : mTexUnitEnables)
@@ -569,7 +569,8 @@ AttributesMask GLES1State::getVertexArraysAttributeMask() const
     return attribsMask;
 }
 
-AttributesMask GLES1State::getActiveAttributesMask() const
+// static
+AttributesMask GLES1State::GetActiveAttributesMask()
 {
     // The program always has 8 attributes enabled.
     return AttributesMask(0xFF);

@@ -183,7 +183,7 @@ ANGLE_INLINE void Context::bindBuffer(BufferBinding target, BufferID buffer)
         return;
     }
 
-    mState.setBufferBinding(this, target, bufferObject);
+    mState.setBufferBinding(asSharedContext(), target, bufferObject);
     mStateCache.onBufferBindingChange(this);
 }
 

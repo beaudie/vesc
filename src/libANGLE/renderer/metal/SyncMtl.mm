@@ -157,7 +157,7 @@ FenceNVMtl::FenceNVMtl() : FenceNVImpl() {}
 
 FenceNVMtl::~FenceNVMtl() {}
 
-void FenceNVMtl::onDestroy(const gl::Context *context)
+void FenceNVMtl::onDestroy(const gl::SharedContext *context)
 {
     mSync.onDestroy();
 }
@@ -202,7 +202,7 @@ SyncMtl::SyncMtl() : SyncImpl() {}
 
 SyncMtl::~SyncMtl() {}
 
-void SyncMtl::onDestroy(const gl::Context *context)
+void SyncMtl::onDestroy(const gl::SharedContext *context)
 {
     mSync.onDestroy();
 }

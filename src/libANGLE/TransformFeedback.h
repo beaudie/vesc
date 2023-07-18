@@ -27,6 +27,7 @@ namespace gl
 class Buffer;
 struct Caps;
 class Context;
+class SharedContext;
 class Program;
 
 class TransformFeedbackState final : angle::NonCopyable
@@ -62,7 +63,7 @@ class TransformFeedback final : public RefCountObject<TransformFeedbackID>, publ
   public:
     TransformFeedback(rx::GLImplFactory *implFactory, TransformFeedbackID id, const Caps &caps);
     ~TransformFeedback() override;
-    void onDestroy(const Context *context) override;
+    void onDestroy(const SharedContext *context) override;
 
     angle::Result setLabel(const Context *context, const std::string &label) override;
     const std::string &getLabel() const override;
@@ -87,7 +88,7 @@ class TransformFeedback final : public RefCountObject<TransformFeedbackID>, publ
 
     bool hasBoundProgram(ShaderProgramID program) const;
 
-    angle::Result bindIndexedBuffer(const Context *context,
+    angle::Result bindIndexedBuffer(const SharedContext *context,
                                     size_t index,
                                     Buffer *buffer,
                                     size_t offset,
@@ -102,11 +103,11 @@ class TransformFeedback final : public RefCountObject<TransformFeedbackID>, publ
     // Returns true if any buffer bound to this object is also bound to another target.
     bool buffersBoundForOtherUseInWebGL() const;
 
-    angle::Result detachBuffer(const Context *context, BufferID bufferID);
+    angle::Result detachBuffer(const SharedContext *context, BufferID bufferID);
 
     rx::TransformFeedbackImpl *getImplementation() const;
 
-    void onBindingChanged(const Context *context, bool bound);
+    void onBindingChanged(bool bound);
 
   private:
     void bindProgram(const Context *context, Program *program);

@@ -22,7 +22,7 @@ SamplerMtl::SamplerMtl(const gl::SamplerState &state) : SamplerImpl(state) {}
 
 SamplerMtl::~SamplerMtl() = default;
 
-void SamplerMtl::onDestroy(const gl::Context *context)
+void SamplerMtl::onDestroy(const gl::SharedContext *context)
 {
     mSamplerState = nil;
 }

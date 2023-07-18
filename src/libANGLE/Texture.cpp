@@ -309,7 +309,7 @@ SamplerFormat TextureState::computeRequiredSamplerFormat(const SamplerState &sam
 }
 
 bool TextureState::computeSamplerCompleteness(const SamplerState &samplerState,
-                                              const State &state) const
+                                              const ShareGroupAccessibleState &state) const
 {
     // Buffer textures cannot be incomplete.
     if (mType == TextureType::Buffer)
@@ -387,8 +387,9 @@ bool TextureState::computeSamplerCompleteness(const SamplerState &samplerState,
 // CopyImageSubData has more lax rules for texture completeness: format-based completeness rules are
 // ignored, so a texture can still be considered complete even if it violates format-specific
 // conditions
-bool TextureState::computeSamplerCompletenessForCopyImage(const SamplerState &samplerState,
-                                                          const State &state) const
+bool TextureState::computeSamplerCompletenessForCopyImage(
+    const SamplerState &samplerState,
+    const ShareGroupAccessibleState &state) const
 {
     // Buffer textures cannot be incomplete.
     if (mType == TextureType::Buffer)
@@ -787,7 +788,7 @@ Texture::Texture(rx::GLImplFactory *factory, TextureID id, TextureType type)
     mDirtyBits.set(DIRTY_BIT_IMPLEMENTATION);
 }
 
-void Texture::onDestroy(const Context *context)
+void Texture::onDestroy(const SharedContext *context)
 {
     onStateChange(angle::SubjectMessage::TextureIDDeleted);
 
@@ -2210,16 +2211,16 @@ rx::FramebufferAttachmentObjectImpl *Texture::getAttachmentImpl() const
     return mTexture;
 }
 
-bool Texture::isSamplerComplete(const Context *context, const Sampler *optionalSampler)
+bool Texture::isSamplerComplete(const SharedContext *context, const Sampler *optionalSampler)
 {
-    const auto &samplerState =
+    const SamplerState &samplerState =
         optionalSampler ? optionalSampler->getSamplerState() : mState.mSamplerState;
-    const auto &contextState = context->getState();
+    const ShareGroupAccessibleState &contextState = context->getState();
 
     if (contextState.getContextID() != mCompletenessCache.context ||
         !mCompletenessCache.samplerState.sameCompleteness(samplerState))
     {
-        mCompletenessCache.context      = context->getState().getContextID();
+        mCompletenessCache.context      = contextState.getContextID();
         mCompletenessCache.samplerState = samplerState;
         mCompletenessCache.samplerComplete =
             mState.computeSamplerCompleteness(samplerState, contextState);
@@ -2229,7 +2230,7 @@ bool Texture::isSamplerComplete(const Context *context, const Sampler *optionalS
 }
 
 // CopyImageSubData requires that we ignore format-based completeness rules
-bool Texture::isSamplerCompleteForCopyImage(const Context *context,
+bool Texture::isSamplerCompleteForCopyImage(const SharedContext *context,
                                             const Sampler *optionalSampler) const
 {
     const gl::SamplerState &samplerState =

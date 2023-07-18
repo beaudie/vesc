@@ -27,7 +27,7 @@ RenderbufferD3D::~RenderbufferD3D()
     mImage = nullptr;
 }
 
-void RenderbufferD3D::onDestroy(const gl::Context *context)
+void RenderbufferD3D::onDestroy(const gl::SharedContext *context)
 {
     SafeDelete(mRenderTarget);
 }

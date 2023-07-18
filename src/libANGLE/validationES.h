@@ -754,8 +754,9 @@ ANGLE_INLINE bool ValidateFloatVertexFormat(const Context *context,
                                             GLint size,
                                             VertexAttribType type)
 {
-    return ValidateVertexFormat(context, entryPoint, index, size,
-                                context->getStateCache().getVertexAttribTypeValidation(type));
+    return ValidateVertexFormat(
+        context, entryPoint, index, size,
+        context->getPrivateStateCache().getVertexAttribTypeValidation(type));
 }
 
 ANGLE_INLINE bool ValidateIntegerVertexFormat(const Context *context,
@@ -766,7 +767,7 @@ ANGLE_INLINE bool ValidateIntegerVertexFormat(const Context *context,
 {
     return ValidateVertexFormat(
         context, entryPoint, index, size,
-        context->getStateCache().getIntegerVertexAttribTypeValidation(type));
+        context->getPrivateStateCache().getIntegerVertexAttribTypeValidation(type));
 }
 
 bool ValidateWebGLFramebufferAttachmentClearType(const Context *context,
@@ -1099,7 +1100,7 @@ ANGLE_INLINE bool ValidateDrawElementsBase(const Context *context,
                                            PrimitiveMode mode,
                                            DrawElementsType type)
 {
-    if (!context->getStateCache().isValidDrawElementsType(type))
+    if (!context->getPrivateStateCache().isValidDrawElementsType(type))
     {
         if (type == DrawElementsType::UnsignedInt)
         {

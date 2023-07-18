@@ -27,7 +27,7 @@ class RenderbufferD3D : public RenderbufferImpl
     RenderbufferD3D(const gl::RenderbufferState &state, RendererD3D *renderer);
     ~RenderbufferD3D() override;
 
-    void onDestroy(const gl::Context *context) override;
+    void onDestroy(const gl::SharedContext *context) override;
 
     angle::Result setStorage(const gl::Context *context,
                              GLenum internalformat,

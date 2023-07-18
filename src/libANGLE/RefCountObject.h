@@ -168,12 +168,12 @@ class BindingPointer
 
 namespace gl
 {
-class Context;
+class SharedContext;
 
 template <class ObjectType>
 class BindingPointer;
 
-using RefCountObjectNoID = angle::RefCountObject<Context, angle::Result>;
+using RefCountObjectNoID = angle::RefCountObject<SharedContext, angle::Result>;
 
 template <typename IDType>
 class RefCountObject : public gl::RefCountObjectNoID
@@ -194,15 +194,15 @@ class RefCountObject : public gl::RefCountObjectNoID
 };
 
 template <class ObjectType>
-class BindingPointer : public angle::BindingPointer<ObjectType, Context>
+class BindingPointer : public angle::BindingPointer<ObjectType, SharedContext>
 {
   public:
-    using ContextType = typename angle::BindingPointer<ObjectType, Context>::ContextType;
-    using ErrorType   = typename angle::BindingPointer<ObjectType, Context>::ErrorType;
+    using ContextType = typename angle::BindingPointer<ObjectType, SharedContext>::ContextType;
+    using ErrorType   = typename angle::BindingPointer<ObjectType, SharedContext>::ErrorType;
 
     BindingPointer() {}
 
-    BindingPointer(ObjectType *object) : angle::BindingPointer<ObjectType, Context>(object) {}
+    BindingPointer(ObjectType *object) : angle::BindingPointer<ObjectType, SharedContext>(object) {}
 
     typename ResourceTypeToID<ObjectType>::IDType id() const
     {
@@ -281,7 +281,7 @@ class SubjectBindingPointer : protected BindingPointer<SubjectT>, public angle::
     SubjectBindingPointer(const SubjectBindingPointer &other)            = default;
     SubjectBindingPointer &operator=(const SubjectBindingPointer &other) = default;
 
-    void bind(const Context *context, SubjectT *subject)
+    void bind(const SharedContext *context, SubjectT *subject)
     {
         // AddRef first in case subject == get()
         if (subject)
@@ -302,7 +302,7 @@ class SubjectBindingPointer : protected BindingPointer<SubjectT>, public angle::
     using BindingPointer<SubjectT>::get;
     using BindingPointer<SubjectT>::operator->;
 
-    friend class State;
+    friend class ShareGroupAccessibleState;
 };
 }  // namespace gl
 

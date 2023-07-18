@@ -57,7 +57,7 @@ AttributesMask VertexArrayState::getBindingToAttributesMask(GLuint bindingIndex)
 }
 
 // Set an attribute using a new binding.
-void VertexArrayState::setAttribBinding(const Context *context,
+void VertexArrayState::setAttribBinding(const SharedContext *context,
                                         size_t attribIndex,
                                         GLuint newBindingIndex)
 {
@@ -123,7 +123,7 @@ VertexArray::VertexArray(rx::GLImplFactory *factory,
     mVertexArray->setContentsObservers(&mContentsObservers);
 }
 
-void VertexArray::onDestroy(const Context *context)
+void VertexArray::onDestroy(const SharedContext *context)
 {
     bool isBound = context->isCurrentVertexArray(this);
     for (size_t bindingIndex : mState.mBufferBindingMask)
@@ -183,7 +183,7 @@ const std::string &VertexArray::getLabel() const
     return mState.mLabel;
 }
 
-bool VertexArray::detachBuffer(const Context *context, BufferID bufferID)
+bool VertexArray::detachBuffer(const SharedContext *context, BufferID bufferID)
 {
     bool isBound           = context->isCurrentVertexArray(this);
     bool anyBufferDetached = false;
@@ -337,7 +337,7 @@ ANGLE_INLINE void VertexArray::updateCachedTransformFeedbackBindingValidation(si
     mCachedTransformFeedbackConflictedBindingsMask.set(bindingIndex, hasConflict);
 }
 
-VertexArray::DirtyBindingBits VertexArray::bindVertexBufferImpl(const Context *context,
+VertexArray::DirtyBindingBits VertexArray::bindVertexBufferImpl(const SharedContext *context,
                                                                 size_t bindingIndex,
                                                                 Buffer *boundBuffer,
                                                                 GLintptr offset,
@@ -411,7 +411,7 @@ VertexArray::DirtyBindingBits VertexArray::bindVertexBufferImpl(const Context *c
     return dirtyBindingBits;
 }
 
-void VertexArray::bindVertexBuffer(const Context *context,
+void VertexArray::bindVertexBuffer(const SharedContext *context,
                                    size_t bindingIndex,
                                    Buffer *boundBuffer,
                                    GLintptr offset,
@@ -426,7 +426,7 @@ void VertexArray::bindVertexBuffer(const Context *context,
     }
 }
 
-void VertexArray::setVertexAttribBinding(const Context *context,
+void VertexArray::setVertexAttribBinding(const SharedContext *context,
                                          size_t attribIndex,
                                          GLuint bindingIndex)
 {
@@ -449,7 +449,7 @@ void VertexArray::setVertexAttribBinding(const Context *context,
     mState.mClientMemoryAttribsMask.set(attribIndex, !hasBuffer);
 }
 
-void VertexArray::setVertexBindingDivisor(const Context *context,
+void VertexArray::setVertexBindingDivisor(const SharedContext *context,
                                           size_t bindingIndex,
                                           GLuint divisor)
 {
@@ -514,7 +514,9 @@ void VertexArray::setVertexAttribFormat(size_t attribIndex,
     attrib.updateCachedElementLimit(mState.mVertexBindings[attrib.bindingIndex]);
 }
 
-void VertexArray::setVertexAttribDivisor(const Context *context, size_t attribIndex, GLuint divisor)
+void VertexArray::setVertexAttribDivisor(const SharedContext *context,
+                                         size_t attribIndex,
+                                         GLuint divisor)
 {
     ASSERT(attribIndex < getMaxAttribs());
 
@@ -555,7 +557,7 @@ void VertexArray::enableAttribute(size_t attribIndex, bool enabledState)
                                              mState.mCachedMutableOrImpersistentArrayBuffers;
 }
 
-ANGLE_INLINE void VertexArray::setVertexAttribPointerImpl(const Context *context,
+ANGLE_INLINE void VertexArray::setVertexAttribPointerImpl(const SharedContext *context,
                                                           ComponentType componentType,
                                                           bool pureInteger,
                                                           size_t attribIndex,
@@ -616,7 +618,7 @@ ANGLE_INLINE void VertexArray::setVertexAttribPointerImpl(const Context *context
                                                    boundBuffer == nullptr && pointer == nullptr);
 }
 
-void VertexArray::setVertexAttribPointer(const Context *context,
+void VertexArray::setVertexAttribPointer(const SharedContext *context,
                                          size_t attribIndex,
                                          Buffer *boundBuffer,
                                          GLint size,
@@ -629,7 +631,7 @@ void VertexArray::setVertexAttribPointer(const Context *context,
                                type, normalized, stride, pointer);
 }
 
-void VertexArray::setVertexAttribIPointer(const Context *context,
+void VertexArray::setVertexAttribIPointer(const SharedContext *context,
                                           size_t attribIndex,
                                           Buffer *boundBuffer,
                                           GLint size,
@@ -710,7 +712,7 @@ void VertexArray::onUnbind(const Context *context)
     }
 }
 
-void VertexArray::onBindingChanged(const Context *context, int incr)
+void VertexArray::onBindingChanged(const SharedContext *context, int incr)
 {
     // When vertex array gets unbound, we remove it from bound buffers' observer list so that when
     // buffer changes, it wont has to loop over all these non-current vertex arrays and set dirty
