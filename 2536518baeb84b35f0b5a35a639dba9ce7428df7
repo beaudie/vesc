@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27ccc0be_7dcbc6d4",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-07-18T14:57:52Z",
+      "side": 1,
+      "message": "Okay, I thought this would go away too without the additional hash in the gz file.  Can you help me understand what this is doing?  Also, if the code needs to stay, let\u0027s move 4096 to a constant because I presume it will need to match the one above?",
+      "range": {
+        "startLine": 235,
+        "startChar": 0,
+        "endLine": 238,
+        "endChar": 34
+      },
+      "revId": "2536518baeb84b35f0b5a35a639dba9ce7428df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
