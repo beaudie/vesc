@@ -128,6 +128,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2cd1d570_f0fe5edc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1550632
+      },
+      "writtenOn": "2023-07-18T13:45:05Z",
+      "side": 1,
+      "message": "\u003e I didn\u0027t really debug the failures in PS#4, if the problems were not so much out of bounds access, but rather at-the-border access, then this change was probably enough to fix it:\n\nActually [this](https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/tests/gl_tests/RobustResourceInitTest.cpp;l\u003d909-967;drc\u003d113f847be69f3e813e55e6c3678a79e7483052e2) seems to be testing robust image access behavior with out of bound access.",
+      "parentUuid": "9928a2b9_89cf328c",
+      "revId": "a7cf31c67b1744a784c4c25a3ad0b4d22ab46d11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dbf80fba_a1d506c7",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
         "patchSetId": 4
