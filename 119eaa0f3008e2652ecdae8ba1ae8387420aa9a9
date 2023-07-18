@@ -69,6 +69,24 @@
       "parentUuid": "b027d6dd_53e3dcbf",
       "revId": "119eaa0f3008e2652ecdae8ba1ae8387420aa9a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "295b9025_a8ea7897",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1557258
+      },
+      "writtenOn": "2023-07-18T20:52:04Z",
+      "side": 1,
+      "message": "I think I found a way, let me know if it\u0027s OK, as it reverts some optimizations performed in those changesets.",
+      "parentUuid": "22553df4_3d42e0e3",
+      "revId": "119eaa0f3008e2652ecdae8ba1ae8387420aa9a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
