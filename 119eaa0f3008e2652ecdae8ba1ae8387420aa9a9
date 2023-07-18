@@ -87,6 +87,24 @@
       "parentUuid": "22553df4_3d42e0e3",
       "revId": "119eaa0f3008e2652ecdae8ba1ae8387420aa9a9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41ff4d2a_aeda8e9c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-07-18T20:52:37Z",
+      "side": 1,
+      "message": "Ok, that\u0027s a pain. At least let\u0027s remove the code from Display destructor and just iterate and delete the displays in the cleanup code.",
+      "parentUuid": "22553df4_3d42e0e3",
+      "revId": "119eaa0f3008e2652ecdae8ba1ae8387420aa9a9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
