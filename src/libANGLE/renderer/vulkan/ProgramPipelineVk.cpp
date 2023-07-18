@@ -18,7 +18,7 @@ ProgramPipelineVk::ProgramPipelineVk(const gl::ProgramPipelineState &state)
 
 ProgramPipelineVk::~ProgramPipelineVk() {}
 
-void ProgramPipelineVk::destroy(const gl::Context *context)
+void ProgramPipelineVk::destroy(const gl::SharedContext *context)
 {
     ContextVk *contextVk = vk::GetImpl(context);
     reset(contextVk);

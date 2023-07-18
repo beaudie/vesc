@@ -27,7 +27,7 @@ FenceNV::~FenceNV()
     SafeDelete(mFence);
 }
 
-void FenceNV::onDestroy(const gl::Context *context)
+void FenceNV::onDestroy(const SharedContext *context)
 {
     mFence->onDestroy(context);
 }
@@ -71,7 +71,7 @@ Sync::Sync(rx::GLImplFactory *factory, SyncID id)
       mFlags(0)
 {}
 
-void Sync::onDestroy(const Context *context)
+void Sync::onDestroy(const SharedContext *context)
 {
     ASSERT(mFence);
     mFence->onDestroy(context);

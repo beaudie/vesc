@@ -77,7 +77,7 @@ ANGLE_INLINE void MarkShaderStorageUsage(const Context *context)
 //  have a valid primitive for this mode (0 for points, 0-1 for lines, 0-2 for tris).
 ANGLE_INLINE bool Context::noopDraw(PrimitiveMode mode, GLsizei count) const
 {
-    if (!mStateCache.getCanDraw())
+    if (!getStateCache().getCanDraw())
     {
         return true;
     }
@@ -87,7 +87,7 @@ ANGLE_INLINE bool Context::noopDraw(PrimitiveMode mode, GLsizei count) const
 
 ANGLE_INLINE bool Context::noopMultiDraw(GLsizei drawcount) const
 {
-    return drawcount == 0 || !mStateCache.getCanDraw();
+    return drawcount == 0 || !getStateCache().getCanDraw();
 }
 
 ANGLE_INLINE angle::Result Context::syncAllDirtyBits(Command command)
@@ -166,12 +166,6 @@ ANGLE_INLINE void Context::drawElements(PrimitiveMode mode,
     ANGLE_CONTEXT_TRY(mImplementation->drawElements(this, mode, count, type, indices));
 }
 
-ANGLE_INLINE void StateCache::onBufferBindingChange(Context *context)
-{
-    updateBasicDrawStatesError();
-    updateBasicDrawElementsError();
-}
-
 ANGLE_INLINE void Context::bindBuffer(BufferBinding target, BufferID buffer)
 {
     Buffer *bufferObject =
@@ -183,8 +177,8 @@ ANGLE_INLINE void Context::bindBuffer(BufferBinding target, BufferID buffer)
         return;
     }
 
-    mState.setBufferBinding(this, target, bufferObject);
-    mStateCache.onBufferBindingChange(this);
+    mState.setBufferBinding(asSharedContext(), target, bufferObject);
+    mShared.onBufferBindingChange();
 }
 
 }  // namespace gl

@@ -1249,6 +1249,7 @@ using UniqueObjectPointer = std::unique_ptr<ObjT, DestroyThenDelete<ObjT, Contex
 namespace gl
 {
 class State;
+class ShareGroupAccessibleState;
 }  // namespace gl
 
 #endif  // LIBANGLE_ANGLETYPES_H_

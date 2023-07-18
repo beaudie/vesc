@@ -36,12 +36,18 @@
 
 namespace rx
 {
+SharedContextGL::SharedContextGL(const gl::ShareGroupAccessibleState &state, gl::ErrorSet *errorSet)
+    : SharedContextImpl(state)
+{}
+
+SharedContextGL::~SharedContextGL() = default;
 
 ContextGL::ContextGL(const gl::State &state,
                      gl::ErrorSet *errorSet,
                      const std::shared_ptr<RendererGL> &renderer,
                      RobustnessVideoMemoryPurgeStatus robustnessVideoMemoryPurgeStatus)
-    : ContextImpl(state, errorSet),
+    : ContextImpl(state),
+      mShared(state.shareGroupAccessibleState(), errorSet),
       mRenderer(renderer),
       mRobustnessVideoMemoryPurgeStatus(robustnessVideoMemoryPurgeStatus)
 {}

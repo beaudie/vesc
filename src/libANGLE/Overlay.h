@@ -60,7 +60,7 @@ class Overlay : angle::NonCopyable
     ~Overlay();
 
     void init();
-    void destroy(const gl::Context *context);
+    void destroy(const gl::SharedContext *context);
 
     void onSwap() const;
 

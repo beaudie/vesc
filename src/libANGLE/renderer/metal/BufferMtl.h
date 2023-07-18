@@ -116,7 +116,7 @@ class BufferMtl : public BufferImpl, public BufferHolderMtl
   public:
     BufferMtl(const gl::BufferState &state);
     ~BufferMtl() override;
-    void destroy(const gl::Context *context) override;
+    void destroy(const gl::SharedContext *context) override;
 
     angle::Result setData(const gl::Context *context,
                           gl::BufferBinding target,

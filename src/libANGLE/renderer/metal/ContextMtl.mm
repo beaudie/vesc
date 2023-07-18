@@ -204,12 +204,45 @@ GLint GetOwnershipIdentity(const egl::AttributeMap &attribs)
 
 }  // namespace
 
+SharedContextMtl::SharedContextMtl(const gl::ShareGroupAccessibleState &state,
+                                   gl::ErrorSet *errorSet,
+                                   DisplayMtl *display)
+    : SharedContextImpl(state, errorSet), mtl::Context(display)
+{}
+
+SharedContextMtl::~SharedContextMtl() = default;
+
+// override mtl::ErrorHandler
+void SharedContextMtl::handleError(GLenum glErrorCode,
+                                   const char *message,
+                                   const char *file,
+                                   const char *function,
+                                   unsigned int line)
+{
+    mErrors->handleError(glErrorCode, message, file, function, line);
+}
+
+void SharedContextMtl::handleError(NSError *nserror,
+                                   const char *message,
+                                   const char *file,
+                                   const char *function,
+                                   unsigned int line)
+{
+    if (!nserror)
+    {
+        return;
+    }
+
+    mErrors->handleError(GL_INVALID_OPERATION, message, file, function, line);
+}
+
 ContextMtl::ContextMtl(const gl::State &state,
                        gl::ErrorSet *errorSet,
                        const egl::AttributeMap &attribs,
                        DisplayMtl *display)
-    : ContextImpl(state, errorSet),
+    : ContextImpl(state),
       mtl::Context(display),
+      mShared(state.shareGroupAccessibleState(), errorSet, display),
       mCmdBuffer(&display->cmdQueue()),
       mRenderEncoder(&mCmdBuffer, mOcclusionQueryPool),
       mBlitEncoder(&mCmdBuffer),
@@ -250,7 +283,7 @@ angle::Result ContextMtl::initialize()
     return angle::Result::Continue;
 }
 
-void ContextMtl::onDestroy(const gl::Context *context)
+void ContextMtl::onDestroy(const gl::SharedContext *context)
 {
     mTriFanIndexBuffer.destroy(this);
     mLineLoopIndexBuffer.destroy(this);
@@ -1631,7 +1664,7 @@ void ContextMtl::handleError(GLenum glErrorCode,
                              const char *function,
                              unsigned int line)
 {
-    mErrors->handleError(glErrorCode, message, file, function, line);
+    mShared.handleError(glErrorCode, message, file, function, line);
 }
 
 void ContextMtl::handleError(NSError *nserror,
@@ -1640,12 +1673,7 @@ void ContextMtl::handleError(NSError *nserror,
                              const char *function,
                              unsigned int line)
 {
-    if (!nserror)
-    {
-        return;
-    }
-
-    mErrors->handleError(GL_INVALID_OPERATION, message, file, function, line);
+    mShared.handleError(nserror, message, file, function, line);
 }
 
 void ContextMtl::invalidateState(const gl::Context *context)

@@ -14,9 +14,25 @@
 
 namespace rx
 {
-ContextImpl::ContextImpl(const gl::State &state, gl::ErrorSet *errorSet)
-    : mState(state), mMemoryProgramCache(nullptr), mErrors(errorSet)
+SharedContextImpl::SharedContextImpl(const gl::ShareGroupAccessibleState &state,
+                                     gl::ErrorSet *errorSet)
+    : mState(state), mErrors(errorSet)
 {}
+
+SharedContextImpl::~SharedContextImpl() {}
+
+void SharedContextImpl::handleError(GLenum errorCode,
+                                    const char *message,
+                                    const char *file,
+                                    const char *function,
+                                    unsigned int line)
+{
+    std::stringstream errorStream;
+    errorStream << "Internal error: " << gl::FmtHex(errorCode) << ": " << message;
+    mErrors->handleError(errorCode, errorStream.str().c_str(), file, function, line);
+}
+
+ContextImpl::ContextImpl(const gl::State &state) : mState(state), mMemoryProgramCache(nullptr) {}
 
 ContextImpl::~ContextImpl() {}
 
@@ -38,17 +54,6 @@ angle::Result ContextImpl::handleNoopDrawEvent()
 void ContextImpl::setMemoryProgramCache(gl::MemoryProgramCache *memoryProgramCache)
 {
     mMemoryProgramCache = memoryProgramCache;
-}
-
-void ContextImpl::handleError(GLenum errorCode,
-                              const char *message,
-                              const char *file,
-                              const char *function,
-                              unsigned int line)
-{
-    std::stringstream errorStream;
-    errorStream << "Internal error: " << gl::FmtHex(errorCode) << ": " << message;
-    mErrors->handleError(errorCode, errorStream.str().c_str(), file, function, line);
 }
 
 egl::ContextPriority ContextImpl::getContextPriority() const

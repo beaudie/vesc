@@ -30,6 +30,13 @@ class AllocationTrackerNULL : angle::NonCopyable
     const size_t mMaxBytes;
 };
 
+class SharedContextNULL : public SharedContextImpl
+{
+  public:
+    SharedContextNULL(const gl::ShareGroupAccessibleState &state, gl::ErrorSet *errorSet);
+    ~SharedContextNULL() override;
+};
+
 class ContextNULL : public ContextImpl
 {
   public:
@@ -265,6 +272,8 @@ class ContextNULL : public ContextImpl
                      unsigned int line);
 
   private:
+    SharedContextNULL mShared;
+
     gl::Caps mCaps;
     gl::TextureCapsMap mTextureCaps;
     gl::Extensions mExtensions;

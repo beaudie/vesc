@@ -24,7 +24,7 @@ class Context9 : public ContextD3D
     ~Context9() override;
 
     angle::Result initialize() override;
-    void onDestroy(const gl::Context *context) override;
+    void onDestroy(const gl::SharedContext *context) override;
 
     // Shader creation
     CompilerImpl *createCompiler() override;

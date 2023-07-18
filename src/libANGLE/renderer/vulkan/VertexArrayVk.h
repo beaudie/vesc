@@ -31,7 +31,7 @@ class VertexArrayVk : public VertexArrayImpl
     VertexArrayVk(ContextVk *contextVk, const gl::VertexArrayState &state);
     ~VertexArrayVk() override;
 
-    void destroy(const gl::Context *context) override;
+    void destroy(const gl::SharedContext *context) override;
 
     angle::Result syncState(const gl::Context *context,
                             const gl::VertexArray::DirtyBits &dirtyBits,

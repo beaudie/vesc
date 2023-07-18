@@ -123,7 +123,7 @@ VertexArray::VertexArray(rx::GLImplFactory *factory,
     mVertexArray->setContentsObservers(&mContentsObservers);
 }
 
-void VertexArray::onDestroy(const Context *context)
+void VertexArray::onDestroy(const SharedContext *context)
 {
     bool isBound = context->isCurrentVertexArray(this);
     for (size_t bindingIndex : mState.mBufferBindingMask)
@@ -710,7 +710,7 @@ void VertexArray::onUnbind(const Context *context)
     }
 }
 
-void VertexArray::onBindingChanged(const Context *context, int incr)
+void VertexArray::onBindingChanged(const SharedContext *context, int incr)
 {
     // When vertex array gets unbound, we remove it from bound buffers' observer list so that when
     // buffer changes, it wont has to loop over all these non-current vertex arrays and set dirty

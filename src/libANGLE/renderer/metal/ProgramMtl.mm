@@ -497,7 +497,7 @@ ProgramMtl::ProgramMtl(const gl::ProgramState &state)
 
 ProgramMtl::~ProgramMtl() {}
 
-void ProgramMtl::destroy(const gl::Context *context)
+void ProgramMtl::destroy(const gl::SharedContext *context)
 {
     auto contextMtl = mtl::GetImpl(context);
     if (mAuxBufferPool)

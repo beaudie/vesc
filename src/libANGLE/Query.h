@@ -32,7 +32,7 @@ class Query final : public RefCountObject<QueryID>, public LabeledObject
   public:
     Query(rx::GLImplFactory *factory, QueryType type, QueryID id);
     ~Query() override;
-    void onDestroy(const Context *context) override;
+    void onDestroy(const SharedContext *context) override;
 
     angle::Result setLabel(const Context *context, const std::string &label) override;
     const std::string &getLabel() const override;

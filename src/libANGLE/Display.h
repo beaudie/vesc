@@ -58,6 +58,7 @@ class Surface;
 class Sync;
 class Thread;
 
+using ContextMap = angle::HashMap<GLuint, gl::Context *>;
 using SurfaceMap = angle::HashMap<GLuint, Surface *>;
 using ThreadSet  = angle::HashSet<Thread *>;
 

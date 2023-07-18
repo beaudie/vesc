@@ -309,7 +309,7 @@ SamplerFormat TextureState::computeRequiredSamplerFormat(const SamplerState &sam
 }
 
 bool TextureState::computeSamplerCompleteness(const SamplerState &samplerState,
-                                              const State &state) const
+                                              const ShareGroupAccessibleState &state) const
 {
     // Buffer textures cannot be incomplete.
     if (mType == TextureType::Buffer)
@@ -387,8 +387,9 @@ bool TextureState::computeSamplerCompleteness(const SamplerState &samplerState,
 // CopyImageSubData has more lax rules for texture completeness: format-based completeness rules are
 // ignored, so a texture can still be considered complete even if it violates format-specific
 // conditions
-bool TextureState::computeSamplerCompletenessForCopyImage(const SamplerState &samplerState,
-                                                          const State &state) const
+bool TextureState::computeSamplerCompletenessForCopyImage(
+    const SamplerState &samplerState,
+    const ShareGroupAccessibleState &state) const
 {
     // Buffer textures cannot be incomplete.
     if (mType == TextureType::Buffer)
@@ -787,7 +788,7 @@ Texture::Texture(rx::GLImplFactory *factory, TextureID id, TextureType type)
     mDirtyBits.set(DIRTY_BIT_IMPLEMENTATION);
 }
 
-void Texture::onDestroy(const Context *context)
+void Texture::onDestroy(const SharedContext *context)
 {
     onStateChange(angle::SubjectMessage::TextureIDDeleted);
 
@@ -1265,7 +1266,7 @@ angle::Result Texture::setImage(Context *context,
     ANGLE_TRY(releaseTexImageInternal(context));
 
     egl::RefCountObjectReleaser<egl::Image> releaseImage;
-    ANGLE_TRY(orphanImages(context, &releaseImage));
+    ANGLE_TRY(orphanImages(context->asSharedContext(), &releaseImage));
 
     ImageIndex index = ImageIndex::MakeFromTarget(target, level, size.depth);
 
@@ -1322,7 +1323,7 @@ angle::Result Texture::setCompressedImage(Context *context,
     ANGLE_TRY(releaseTexImageInternal(context));
 
     egl::RefCountObjectReleaser<egl::Image> releaseImage;
-    ANGLE_TRY(orphanImages(context, &releaseImage));
+    ANGLE_TRY(orphanImages(context->asSharedContext(), &releaseImage));
 
     ImageIndex index = ImageIndex::MakeFromTarget(target, level, size.depth);
 
@@ -1373,7 +1374,7 @@ angle::Result Texture::copyImage(Context *context,
     ANGLE_TRY(releaseTexImageInternal(context));
 
     egl::RefCountObjectReleaser<egl::Image> releaseImage;
-    ANGLE_TRY(orphanImages(context, &releaseImage));
+    ANGLE_TRY(orphanImages(context->asSharedContext(), &releaseImage));
 
     ImageIndex index = ImageIndex::MakeFromTarget(target, level, 1);
 
@@ -1541,7 +1542,7 @@ angle::Result Texture::copyTexture(Context *context,
     ANGLE_TRY(releaseTexImageInternal(context));
 
     egl::RefCountObjectReleaser<egl::Image> releaseImage;
-    ANGLE_TRY(orphanImages(context, &releaseImage));
+    ANGLE_TRY(orphanImages(context->asSharedContext(), &releaseImage));
 
     // Initialize source texture.
     // Note: we don't have a way to notify which portions of the image changed currently.
@@ -1600,7 +1601,7 @@ angle::Result Texture::copyCompressedTexture(Context *context, const Texture *so
     ANGLE_TRY(releaseTexImageInternal(context));
 
     egl::RefCountObjectReleaser<egl::Image> releaseImage;
-    ANGLE_TRY(orphanImages(context, &releaseImage));
+    ANGLE_TRY(orphanImages(context->asSharedContext(), &releaseImage));
 
     ANGLE_TRY(mTexture->copyCompressedTexture(context, source));
 
@@ -1624,7 +1625,7 @@ angle::Result Texture::setStorage(Context *context,
     ANGLE_TRY(releaseTexImageInternal(context));
 
     egl::RefCountObjectReleaser<egl::Image> releaseImage;
-    ANGLE_TRY(orphanImages(context, &releaseImage));
+    ANGLE_TRY(orphanImages(context->asSharedContext(), &releaseImage));
 
     mState.mImmutableFormat = true;
     mState.mImmutableLevels = static_cast<GLuint>(levels);
@@ -1661,7 +1662,7 @@ angle::Result Texture::setImageExternal(Context *context,
     ANGLE_TRY(releaseTexImageInternal(context));
 
     egl::RefCountObjectReleaser<egl::Image> releaseImage;
-    ANGLE_TRY(orphanImages(context, &releaseImage));
+    ANGLE_TRY(orphanImages(context->asSharedContext(), &releaseImage));
 
     ImageIndex index = ImageIndex::MakeFromTarget(target, level, size.depth);
 
@@ -1690,7 +1691,7 @@ angle::Result Texture::setStorageMultisample(Context *context,
     ANGLE_TRY(releaseTexImageInternal(context));
 
     egl::RefCountObjectReleaser<egl::Image> releaseImage;
-    ANGLE_TRY(orphanImages(context, &releaseImage));
+    ANGLE_TRY(orphanImages(context->asSharedContext(), &releaseImage));
 
     // Potentially adjust "samples" to a supported value
     const TextureCaps &formatCaps = context->getTextureCaps().get(internalFormat);
@@ -1727,7 +1728,7 @@ angle::Result Texture::setStorageExternalMemory(Context *context,
     ANGLE_TRY(releaseTexImageInternal(context));
 
     egl::RefCountObjectReleaser<egl::Image> releaseImage;
-    ANGLE_TRY(orphanImages(context, &releaseImage));
+    ANGLE_TRY(orphanImages(context->asSharedContext(), &releaseImage));
 
     ANGLE_TRY(mTexture->setStorageExternalMemory(context, type, levels, internalFormat, size,
                                                  memoryObject, offset, createFlags, usageFlags,
@@ -1761,7 +1762,7 @@ angle::Result Texture::generateMipmap(Context *context)
     egl::RefCountObjectReleaser<egl::Image> releaseImage;
     if (!isMipmapComplete())
     {
-        ANGLE_TRY(orphanImages(context, &releaseImage));
+        ANGLE_TRY(orphanImages(context->asSharedContext(), &releaseImage));
     }
 
     const GLuint baseLevel = mState.getEffectiveBaseLevel();
@@ -1819,7 +1820,7 @@ angle::Result Texture::bindTexImageFromSurface(Context *context, egl::Surface *s
 
     if (mBoundSurface)
     {
-        ANGLE_TRY(releaseTexImageFromSurface(context));
+        ANGLE_TRY(releaseTexImageFromSurface(context->asSharedContext()));
     }
 
     mBoundSurface = surface;
@@ -1837,11 +1838,11 @@ angle::Result Texture::bindTexImageFromSurface(Context *context, egl::Surface *s
     return angle::Result::Continue;
 }
 
-angle::Result Texture::releaseTexImageFromSurface(const Context *context)
+angle::Result Texture::releaseTexImageFromSurface(const ShareContext *context)
 {
     ASSERT(mBoundSurface);
     mBoundSurface = nullptr;
-    ANGLE_TRY(mTexture->releaseTexImage(context));
+    ANGLE_TRY(mTexture->releaseTexImage(context->getUnsafeContext()));
 
     // Erase the image info for level 0
     ASSERT(mState.mType == TextureType::_2D || mState.mType == TextureType::Rectangle);
@@ -1908,7 +1909,7 @@ angle::Result Texture::releaseTexImageInternal(Context *context)
         }
 
         // Then, call the same method as from the surface
-        ANGLE_TRY(releaseTexImageFromSurface(context));
+        ANGLE_TRY(releaseTexImageFromSurface(context->asSharedContext()));
     }
     return angle::Result::Continue;
 }
@@ -1924,7 +1925,7 @@ angle::Result Texture::setEGLImageTargetImpl(Context *context,
     ANGLE_TRY(releaseTexImageInternal(context));
 
     egl::RefCountObjectReleaser<egl::Image> releaseImage;
-    ANGLE_TRY(orphanImages(context, &releaseImage));
+    ANGLE_TRY(orphanImages(context->asSharedContext(), &releaseImage));
 
     setTargetImage(context, imageTarget);
 
@@ -2163,7 +2164,7 @@ const OffsetBindingPointer<Buffer> &Texture::getBuffer() const
     return mState.mBuffer;
 }
 
-void Texture::onAttach(const Context *context, rx::UniqueSerial framebufferSerial)
+void Texture::onAttach(const SharedContext *context, rx::UniqueSerial framebufferSerial)
 {
     addRef();
 
@@ -2177,7 +2178,7 @@ void Texture::onAttach(const Context *context, rx::UniqueSerial framebufferSeria
     }
 }
 
-void Texture::onDetach(const Context *context, rx::UniqueSerial framebufferSerial)
+void Texture::onDetach(const SharedContext *context, rx::UniqueSerial framebufferSerial)
 {
     // Erase first instance. If there are multiple bindings, leave the others.
     ASSERT(isBoundToFramebuffer(framebufferSerial));
@@ -2210,16 +2211,16 @@ rx::FramebufferAttachmentObjectImpl *Texture::getAttachmentImpl() const
     return mTexture;
 }
 
-bool Texture::isSamplerComplete(const Context *context, const Sampler *optionalSampler)
+bool Texture::isSamplerComplete(const SharedContext *context, const Sampler *optionalSampler)
 {
-    const auto &samplerState =
+    const SamplerState &samplerState =
         optionalSampler ? optionalSampler->getSamplerState() : mState.mSamplerState;
-    const auto &contextState = context->getState();
+    const ShareGroupAccessibleState &contextState = context->getState();
 
     if (contextState.getContextID() != mCompletenessCache.context ||
         !mCompletenessCache.samplerState.sameCompleteness(samplerState))
     {
-        mCompletenessCache.context      = context->getState().getContextID();
+        mCompletenessCache.context      = contextState.getContextID();
         mCompletenessCache.samplerState = samplerState;
         mCompletenessCache.samplerComplete =
             mState.computeSamplerCompleteness(samplerState, contextState);
@@ -2229,7 +2230,7 @@ bool Texture::isSamplerComplete(const Context *context, const Sampler *optionalS
 }
 
 // CopyImageSubData requires that we ignore format-based completeness rules
-bool Texture::isSamplerCompleteForCopyImage(const Context *context,
+bool Texture::isSamplerCompleteForCopyImage(const SharedContext *context,
                                             const Sampler *optionalSampler) const
 {
     const gl::SamplerState &samplerState =

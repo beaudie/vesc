@@ -37,6 +37,13 @@ enum class RobustnessVideoMemoryPurgeStatus
     REQUESTED     = 1,
 };
 
+class SharedContextGL : public SharedContextImpl
+{
+  public:
+    SharedContextGL(const gl::ShareGroupAccessibleState &state, gl::ErrorSet *errorSet);
+    ~SharedContextGL() override;
+};
+
 class ContextGL : public ContextImpl
 {
   public:
@@ -320,6 +327,8 @@ class ContextGL : public ContextImpl
     void resetDrawStateForPixelLocalStorageEXT(const gl::Context *context);
 
   protected:
+    SharedContextGL mShared;
+
     std::shared_ptr<RendererGL> mRenderer;
 
     RobustnessVideoMemoryPurgeStatus mRobustnessVideoMemoryPurgeStatus;

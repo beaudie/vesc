@@ -108,7 +108,7 @@ Renderbuffer::Renderbuffer(rx::GLImplFactory *implFactory, RenderbufferID id)
     mImplObserverBinding.bind(mImplementation.get());
 }
 
-void Renderbuffer::onDestroy(const Context *context)
+void Renderbuffer::onDestroy(const SharedContext *context)
 {
     egl::RefCountObjectReleaser<egl::Image> releaseImage;
     (void)orphanImages(context, &releaseImage);
@@ -144,7 +144,7 @@ angle::Result Renderbuffer::setStorage(const Context *context,
 {
 
     egl::RefCountObjectReleaser<egl::Image> releaseImage;
-    ANGLE_TRY(orphanImages(context, &releaseImage));
+    ANGLE_TRY(orphanImages(context->asSharedContext(), &releaseImage));
 
     ANGLE_TRY(mImplementation->setStorage(context, internalformat, width, height));
 
@@ -163,7 +163,7 @@ angle::Result Renderbuffer::setStorageMultisample(const Context *context,
                                                   MultisamplingMode mode)
 {
     egl::RefCountObjectReleaser<egl::Image> releaseImage;
-    ANGLE_TRY(orphanImages(context, &releaseImage));
+    ANGLE_TRY(orphanImages(context->asSharedContext(), &releaseImage));
 
     // Potentially adjust "samplesIn" to a supported value
     const TextureCaps &formatCaps = context->getTextureCaps().get(internalformat);
@@ -182,7 +182,7 @@ angle::Result Renderbuffer::setStorageMultisample(const Context *context,
 angle::Result Renderbuffer::setStorageEGLImageTarget(const Context *context, egl::Image *image)
 {
     egl::RefCountObjectReleaser<egl::Image> releaseImage;
-    ANGLE_TRY(orphanImages(context, &releaseImage));
+    ANGLE_TRY(orphanImages(context->asSharedContext(), &releaseImage));
 
     ANGLE_TRY(mImplementation->setStorageEGLImageTarget(context, image));
 
@@ -323,12 +323,12 @@ GLint Renderbuffer::getMemorySize() const
     return size.ValueOrDefault(std::numeric_limits<GLint>::max());
 }
 
-void Renderbuffer::onAttach(const Context *context, rx::UniqueSerial framebufferSerial)
+void Renderbuffer::onAttach(const SharedContext *context, rx::UniqueSerial framebufferSerial)
 {
     addRef();
 }
 
-void Renderbuffer::onDetach(const Context *context, rx::UniqueSerial framebufferSerial)
+void Renderbuffer::onDetach(const SharedContext *context, rx::UniqueSerial framebufferSerial)
 {
     release(context);
 }

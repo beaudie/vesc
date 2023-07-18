@@ -565,11 +565,11 @@ Error Surface::bindTexImage(gl::Context *context, gl::Texture *texture, EGLint b
     return NoError();
 }
 
-Error Surface::releaseTexImage(const gl::Context *context, EGLint buffer)
+Error Surface::releaseTexImage(const gl::SharedContext *context, EGLint buffer)
 {
     ASSERT(context);
 
-    ANGLE_TRY(mImplementation->releaseTexImage(context, buffer));
+    ANGLE_TRY(mImplementation->releaseTexImage(context->getUnsafeContext(), buffer));
 
     ASSERT(mTexture);
     ANGLE_TRY(ResultToEGL(mTexture->releaseTexImageFromSurface(context)));
@@ -587,7 +587,7 @@ Error Surface::getMscRate(EGLint *numerator, EGLint *denominator)
     return mImplementation->getMscRate(numerator, denominator);
 }
 
-Error Surface::releaseTexImageFromTexture(const gl::Context *context)
+Error Surface::releaseTexImageFromTexture(const gl::SharedContext *context)
 {
     ASSERT(mTexture);
     mTexture = nullptr;

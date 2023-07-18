@@ -28,7 +28,7 @@ class ShareGroupImpl;
 
 namespace egl
 {
-using ContextMap = angle::HashMap<GLuint, gl::Context *>;
+using SharedContextMap = angle::HashMap<GLuint, gl::SharedContext *>;
 
 class ShareGroupState final : angle::NonCopyable
 {
@@ -36,9 +36,9 @@ class ShareGroupState final : angle::NonCopyable
     ShareGroupState();
     ~ShareGroupState();
 
-    const ContextMap &getContexts() const { return mContexts; }
-    void addSharedContext(gl::Context *context);
-    void removeSharedContext(gl::Context *context);
+    const SharedContextMap &getContexts() const { return mContexts; }
+    void addSharedContext(gl::SharedContext *context);
+    void removeSharedContext(gl::SharedContext *context);
 
     bool hasAnyContextWithRobustness() const { return mAnyContextWithRobustness; }
     bool hasAnyContextWithDisplayTextureShareGroup() const
@@ -48,7 +48,7 @@ class ShareGroupState final : angle::NonCopyable
 
   private:
     // The list of contexts within the share group
-    ContextMap mContexts;
+    SharedContextMap mContexts;
 
     // Whether any context in the share group has robustness enabled.  If any context in the share
     // group is robust, any program created in any context of the share group must have robustness
@@ -78,9 +78,9 @@ class ShareGroup final : angle::NonCopyable
 
     void finishAllContexts();
 
-    const ContextMap &getContexts() const { return mState.getContexts(); }
-    void addSharedContext(gl::Context *context);
-    void removeSharedContext(gl::Context *context);
+    const SharedContextMap &getContexts() const { return mState.getContexts(); }
+    void addSharedContext(gl::SharedContext *context);
+    void removeSharedContext(gl::SharedContext *context);
 
   protected:
     ~ShareGroup();

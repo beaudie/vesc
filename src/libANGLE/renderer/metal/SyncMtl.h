@@ -114,7 +114,7 @@ class FenceNVMtl : public FenceNVImpl
   public:
     FenceNVMtl();
     ~FenceNVMtl() override;
-    void onDestroy(const gl::Context *context) override;
+    void onDestroy(const gl::SharedContext *context) override;
     angle::Result set(const gl::Context *context, GLenum condition) override;
     angle::Result test(const gl::Context *context, GLboolean *outFinished) override;
     angle::Result finish(const gl::Context *context) override;
@@ -129,7 +129,7 @@ class SyncMtl : public SyncImpl
     SyncMtl();
     ~SyncMtl() override;
 
-    void onDestroy(const gl::Context *context) override;
+    void onDestroy(const gl::SharedContext *context) override;
 
     angle::Result set(const gl::Context *context, GLenum condition, GLbitfield flags) override;
     angle::Result clientWait(const gl::Context *context,

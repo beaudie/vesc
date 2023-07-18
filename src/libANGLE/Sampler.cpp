@@ -28,7 +28,7 @@ Sampler::~Sampler()
     SafeDelete(mSampler);
 }
 
-void Sampler::onDestroy(const Context *context)
+void Sampler::onDestroy(const SharedContext *context)
 {
     if (mSampler)
     {

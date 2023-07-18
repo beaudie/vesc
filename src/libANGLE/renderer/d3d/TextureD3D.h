@@ -36,7 +36,7 @@ class TextureD3D : public TextureImpl, public angle::ObserverInterface
     TextureD3D(const gl::TextureState &data, RendererD3D *renderer);
     ~TextureD3D() override;
 
-    void onDestroy(const gl::Context *context) override;
+    void onDestroy(const gl::SharedContext *context) override;
 
     angle::Result getNativeTexture(const gl::Context *context, TextureStorage **outStorage);
 
@@ -226,7 +226,7 @@ class TextureD3D_2D : public TextureD3D
     TextureD3D_2D(const gl::TextureState &data, RendererD3D *renderer);
     ~TextureD3D_2D() override;
 
-    void onDestroy(const gl::Context *context) override;
+    void onDestroy(const gl::SharedContext *context) override;
 
     ImageD3D *getImage(int level, int layer) const;
     ImageD3D *getImage(const gl::ImageIndex &index) const override;
@@ -361,7 +361,7 @@ class TextureD3D_Cube : public TextureD3D
     TextureD3D_Cube(const gl::TextureState &data, RendererD3D *renderer);
     ~TextureD3D_Cube() override;
 
-    void onDestroy(const gl::Context *context) override;
+    void onDestroy(const gl::SharedContext *context) override;
 
     ImageD3D *getImage(int level, int layer) const;
     ImageD3D *getImage(const gl::ImageIndex &index) const override;
@@ -492,7 +492,7 @@ class TextureD3D_3D : public TextureD3D
     TextureD3D_3D(const gl::TextureState &data, RendererD3D *renderer);
     ~TextureD3D_3D() override;
 
-    void onDestroy(const gl::Context *context) override;
+    void onDestroy(const gl::SharedContext *context) override;
 
     ImageD3D *getImage(int level, int layer) const;
     ImageD3D *getImage(const gl::ImageIndex &index) const override;
@@ -625,7 +625,7 @@ class TextureD3D_2DArray : public TextureD3D
     TextureD3D_2DArray(const gl::TextureState &data, RendererD3D *renderer);
     ~TextureD3D_2DArray() override;
 
-    void onDestroy(const gl::Context *context) override;
+    void onDestroy(const gl::SharedContext *context) override;
 
     virtual ImageD3D *getImage(int level, int layer) const;
     ImageD3D *getImage(const gl::ImageIndex &index) const override;

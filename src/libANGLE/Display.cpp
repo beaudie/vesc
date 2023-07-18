@@ -1799,7 +1799,7 @@ Error Display::releaseContextImpl(gl::Context *context, ContextMap *contexts)
             // If this is the last context using the global share group, destroy the global
             // texture manager so that the textures can be destroyed while a context still
             // exists
-            mTextureManager->release(context);
+            mTextureManager->release(context->asSharedContext());
             mTextureManager = nullptr;
         }
         mGlobalTextureShareGroupUsers--;
@@ -1813,7 +1813,7 @@ Error Display::releaseContextImpl(gl::Context *context, ContextMap *contexts)
             // If this is the last context using the global share group, destroy the global
             // semaphore manager so that the semaphores can be destroyed while a context still
             // exists
-            mSemaphoreManager->release(context);
+            mSemaphoreManager->release(context->asSharedContext());
             mSemaphoreManager = nullptr;
         }
         mGlobalSemaphoreShareGroupUsers--;

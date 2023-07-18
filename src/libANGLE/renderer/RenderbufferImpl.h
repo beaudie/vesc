@@ -34,7 +34,7 @@ class RenderbufferImpl : public FramebufferAttachmentObjectImpl
   public:
     RenderbufferImpl(const gl::RenderbufferState &state) : mState(state) {}
     ~RenderbufferImpl() override {}
-    virtual void onDestroy(const gl::Context *context) {}
+    virtual void onDestroy(const gl::SharedContext *context) {}
 
     virtual angle::Result setStorage(const gl::Context *context,
                                      GLenum internalformat,
