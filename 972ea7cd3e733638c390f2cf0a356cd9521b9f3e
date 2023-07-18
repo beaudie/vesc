@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52145b6d_a1c00647",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-07-18T14:39:55Z",
+      "side": 1,
+      "message": "Can we leave this off until we need it?  Saving the gzip is already an incredibly expensive part of the capture.",
+      "range": {
+        "startLine": 20,
+        "startChar": 43,
+        "endLine": 21,
+        "endChar": 16
+      },
+      "revId": "972ea7cd3e733638c390f2cf0a356cd9521b9f3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
