@@ -92,6 +92,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "336a5e3f_f0b07dda",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-18T13:30:26Z",
+      "side": 1,
+      "message": "Ok let\u0027s see what the bots think. We only use `VK_BORDER_COLOR_FLOAT_CUSTOM_EXT` FYI, so without the `VK_EXT_custom_border_color` extension I don\u0027t think your change would work.\n\nYou could fiddle with `SamplerDesc::init` so it sets `createInfo.borderColor` to one of the predefined ones based on the border color. Alternatively, if sampling is really being done outside the texture bounds, it\u0027s probably better to clip the copy area to within the bounds, and issue `vkCmdClearAttachments` for the area outside the source bounds.\n\n---\n\nI didn\u0027t really debug the failures in PS#4, if the problems were not so much out of bounds access, but rather at-the-border access, then this change was probably enough to fix it:\n\n```\n    samplerState.setMinFilter(GL_NEAREST);\n    samplerState.setMagFilter(GL_NEAREST);\n```",
+      "parentUuid": "48d1092c_bbf2b5b4",
+      "revId": "a7cf31c67b1744a784c4c25a3ad0b4d22ab46d11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dbf80fba_a1d506c7",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
         "patchSetId": 4
