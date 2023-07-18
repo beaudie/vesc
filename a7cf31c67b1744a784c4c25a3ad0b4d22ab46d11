@@ -110,6 +110,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9928a2b9_89cf328c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1550632
+      },
+      "writtenOn": "2023-07-18T13:41:26Z",
+      "side": 1,
+      "message": "From the test logs:\n```\nRendererVk.cpp:778 (DebugUtilsMessenger): [ VUID-VkDescriptorSetLayoutBinding-pImmutableSamplers-04009 ] Validation Error: [ VUID-VkDescriptorSetLayoutBinding-pImmutableSamplers-04009 ] Object 0: handle \u003d 0x7fc7f30, type \u003d VK_OBJECT_TYPE_DEVICE; | MessageID \u003d 0xf17061bd | vkCreateDescriptorSetLayout(): pBindings[0].pImmutableSamplers[0] has VkSampler VkNonDispatchableHandle 0xb2df680000000dbb[] presented as immutable has a custom border color The Vulkan spec states: The sampler objects indicated by pImmutableSamplers must not have a borderColor with one of the values VK_BORDER_COLOR_FLOAT_CUSTOM_EXT or VK_BORDER_COLOR_INT_CUSTOM_EXT (https://www.khronos.org/registry/vulkan/specs/1.3-extensions/html/vkspec.html#VUID-VkDescriptorSetLayoutBinding-pImmutableSamplers-04009)\n                            Object: 0x7fc7f30 (type \u003d Device(3))\n\nERR: RendererVk.cpp:778 (DebugUtilsMessenger): [ VUID-VkDescriptorSetLayoutBinding-pImmutableSamplers-04009 ] Validation Error: [ VUID-VkDescriptorSetLayoutBinding-pImmutableSamplers-04009 ] Object 0: handle \u003d 0x7fc7f30, type \u003d VK_OBJECT_TYPE_DEVICE; | MessageID \u003d 0xf17061bd | vkCreateDescriptorSetLayout(): pBindings[0].pImmutableSamplers[0] has VkSampler VkNonDispatchableHandle 0xb2df680000000dbb[] presented as immutable has a custom border color The Vulkan spec states: The sampler objects indicated by pImmutableSamplers must not have a borderColor with one of the values VK_BORDER_COLOR_FLOAT_CUSTOM_EXT or VK_BORDER_COLOR_INT_CUSTOM_EXT (https://www.khronos.org/registry/vulkan/specs/1.3-extensions/html/vkspec.html#VUID-VkDescriptorSetLayoutBinding-pImmutableSamplers-04009)\n                            Object: 0x7fc7f30 (type \u003d Device(3))\n```\n\nI guess making `SamplerDesc::init` special case opaque black is still going to be necessary in the end.",
+      "parentUuid": "336a5e3f_f0b07dda",
+      "revId": "a7cf31c67b1744a784c4c25a3ad0b4d22ab46d11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dbf80fba_a1d506c7",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
         "patchSetId": 4
