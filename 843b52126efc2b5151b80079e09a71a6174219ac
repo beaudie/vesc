@@ -33,6 +33,24 @@
       "message": "Could you please move this to MultisampleTest.cpp? Then you don\u0027t need to create a new suite for it.",
       "revId": "843b52126efc2b5151b80079e09a71a6174219ac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5d225d6_ff6fe1bc",
+        "filename": "src/tests/gl_tests/ClearTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2887,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-07-18T20:15:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c89c6c00_cd8cbcae",
+      "revId": "843b52126efc2b5151b80079e09a71a6174219ac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
