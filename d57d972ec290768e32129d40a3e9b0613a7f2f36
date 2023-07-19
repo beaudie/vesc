@@ -16,6 +16,24 @@
       "message": "I suggest capping `mNativeCaps.maxAliasedPointSize` in `vk_caps_utils.cpp` too (same with `mNativeCaps.maxAliasedLineWidth` while you\u0027re at it).\n\nOtherwise, the test will fail if a driver advertises INT_MAX or something for these values.",
       "revId": "d57d972ec290768e32129d40a3e9b0613a7f2f36",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8af174da_b1cdd1c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-07-19T00:55:08Z",
+      "side": 1,
+      "message": "\u003e the test will fail if a driver advertises INT_MAX or something for these values\n\ndid you have an upper cap in mind for `maxAliasedPointSize` or `maxAliasedLineWidth`?",
+      "parentUuid": "99fcaa8d_ccc3b21f",
+      "revId": "d57d972ec290768e32129d40a3e9b0613a7f2f36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
