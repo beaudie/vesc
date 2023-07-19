@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9a34d1e6_cfb047f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-19T17:48:19Z",
+      "side": 1,
+      "message": "Ah ok, yes I know what the problem is. We had this fixed for line width in the past:\n\n```\nangle::Result ContextVk::handleDirtyGraphicsDynamicLineWidth(DirtyBits::Iterator *dirtyBitsIterator,\n                                                             DirtyBits dirtyBitMask)\n{\n    // Clamp line width to min/max allowed values. It\u0027s not invalid GL to\n    // provide out-of-range line widths, but it _is_ invalid Vulkan.\n    const float lineWidth \u003d gl::clamp(mState.getLineWidth(), mState.getCaps().minAliasedLineWidth,\n                                      mState.getCaps().maxAliasedLineWidth);\n    mRenderPassCommandBuffer-\u003esetLineWidth(lineWidth);\n    return angle::Result::Continue;\n}\n```\n\nBut unfortunately pointSize is not configured similarly. We _could_ enable the `clampPointSize` feature unconditionally, but ... that\u0027s probably not worth it.\n\nSo you could just drop this change, or limit it to line width only + a comment on what needs to be done if point size ever needs clamping.",
+      "parentUuid": "28ae6ecf_3faf5375",
+      "revId": "ea09bc4d5568103f6da0ccbe6fac00490f92f1ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c9f8e6cb_d94640f5",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 1
