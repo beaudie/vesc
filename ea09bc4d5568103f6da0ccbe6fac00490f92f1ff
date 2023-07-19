@@ -91,6 +91,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1381e514_72c3cbff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-19T18:07:31Z",
+      "side": 1,
+      "message": "Hmm... ok, let\u0027s not get bogged down on limiting point size. Sorry for the waste of time. :P",
+      "parentUuid": "dba3f851_5c79453a",
+      "revId": "ea09bc4d5568103f6da0ccbe6fac00490f92f1ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c9f8e6cb_d94640f5",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 1
