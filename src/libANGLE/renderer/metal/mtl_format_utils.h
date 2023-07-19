@@ -190,8 +190,7 @@ class FormatTable final : angle::NonCopyable
 
     void setCompressedFormatCaps(MTLPixelFormat formatId, bool filterable);
 
-    void adjustFormatCapsForDevice(const mtl::ContextDevice &device,
-                                   MTLPixelFormat id,
+    void adjustFormatCapsForDevice(MTLPixelFormat id,
                                    bool supportsiOS2,
                                    bool supportsiOS4);
 
