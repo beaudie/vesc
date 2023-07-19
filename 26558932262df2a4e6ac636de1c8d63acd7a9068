@@ -16,6 +16,24 @@
       "message": "I just noticed, `imageInfo.sampler` is not initialized. Could also be why it wasn\u0027t working for non-YUV.\n\nThat said, I prefer this version.",
       "revId": "26558932262df2a4e6ac636de1c8d63acd7a9068",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb4b33bd_da883904",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 3269,
+      "author": {
+        "id": 1550632
+      },
+      "writtenOn": "2023-07-19T13:02:31Z",
+      "side": 1,
+      "message": "Once a sampler is bound to the descriptor set layout at creation time it\u0027s no longer necessary to specify it in imageInfo.",
+      "parentUuid": "50e9eba7_6f4175b9",
+      "revId": "26558932262df2a4e6ac636de1c8d63acd7a9068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
