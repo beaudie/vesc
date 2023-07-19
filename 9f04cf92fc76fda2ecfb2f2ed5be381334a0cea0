@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdd95c70_eb21a93a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2023-07-19T20:25:26Z",
+      "side": 1,
+      "message": "ping\n\nNote that this will be triggered by https://crrev.com/c/4505495.",
+      "revId": "9f04cf92fc76fda2ecfb2f2ed5be381334a0cea0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
