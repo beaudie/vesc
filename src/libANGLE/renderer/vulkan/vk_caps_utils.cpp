@@ -536,6 +536,13 @@ void RendererVk::ensureCapsInitialized() const
         mNativeCaps.maxAliasedLineWidth = 1.0f;
     }
 
+    // Some drivers support large values for max point size and max line width causing
+    // failures in some end2end tests, cap these values to avoid such failures.
+    // (For details refer -> https://chromium-review.googlesource.com/c/angle/angle/+/4697681)
+    // Data from angle traces suggests 255 would be a sufficient upper limit.
+    mNativeCaps.maxAliasedPointSize = std::min(255.0f, mNativeCaps.maxAliasedPointSize);
+    mNativeCaps.maxAliasedLineWidth = std::min(255.0f, mNativeCaps.maxAliasedLineWidth);
+
     mNativeCaps.maxDrawBuffers =
         std::min(limitsVk.maxColorAttachments, limitsVk.maxFragmentOutputAttachments);
     mNativeCaps.maxFramebufferWidth  = LimitToInt(limitsVk.maxFramebufferWidth);
