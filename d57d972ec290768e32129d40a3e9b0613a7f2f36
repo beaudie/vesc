@@ -52,6 +52,24 @@
       "parentUuid": "8af174da_b1cdd1c7",
       "revId": "d57d972ec290768e32129d40a3e9b0613a7f2f36",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba559112_6b499142",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-07-19T13:18:17Z",
+      "side": 1,
+      "message": "\u003e 10 as max line width and 2047 as max point size\n\ni uploaded this change because AMD reported max value for both as ~8100\n\nyou can check the vulkan limit listing here -\n\n1. max point size list -\u003e https://www.vulkan.gpuinfo.org/displaydevicelimit.php?name\u003dpointSizeRange[1]\u0026platform\u003dall\n2. max line width list -\u003e https://www.vulkan.gpuinfo.org/displaydevicelimit.php?name\u003dlineWidthRange[1]\u0026platform\u003dall\n\ndo you have some data showing 255 is good enough? if we cap max value to 255 i dont think change will be needed",
+      "parentUuid": "c65616ce_7cba84d7",
+      "revId": "d57d972ec290768e32129d40a3e9b0613a7f2f36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
