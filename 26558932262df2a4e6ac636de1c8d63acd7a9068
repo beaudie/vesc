@@ -70,6 +70,24 @@
       "parentUuid": "eb714139_5e3ac761",
       "revId": "26558932262df2a4e6ac636de1c8d63acd7a9068",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0b6758b_2051655a",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 3269,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-19T13:27:54Z",
+      "side": 1,
+      "message": "It did until patchset 11, didn\u0027t it? From patchset 1:\n\n```\n    VkDescriptorImageInfo imageInfo \u003d {};\n    imageInfo.imageView             \u003d srcView-\u003egetHandle();\n    imageInfo.imageLayout           \u003d src-\u003egetCurrentLayout(contextVk);\n\n    VkWriteDescriptorSet writeInfo \u003d {};\n    writeInfo.sType                \u003d VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;\n    writeInfo.dstSet               \u003d descriptorSet;\n    writeInfo.dstBinding           \u003d kImageCopySourceBinding;\n    writeInfo.descriptorCount      \u003d 1;\n    writeInfo.descriptorType       \u003d VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;\n    writeInfo.pImageInfo           \u003d \u0026imageInfo;\n```\n\nI was saying that could be why the tests kept failing.",
+      "parentUuid": "810ad76e_d7b88496",
+      "revId": "26558932262df2a4e6ac636de1c8d63acd7a9068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
