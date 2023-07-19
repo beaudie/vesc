@@ -16,6 +16,46 @@
       "message": "PTAL",
       "revId": "ea09bc4d5568103f6da0ccbe6fac00490f92f1ff",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8af0fa2_77babdc2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-19T16:58:01Z",
+      "side": 1,
+      "message": "LGTM, not sure what the failures are about (probably something simple)",
+      "revId": "ea09bc4d5568103f6da0ccbe6fac00490f92f1ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9f8e6cb_d94640f5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-19T16:58:01Z",
+      "side": 1,
+      "message": "You can keep this 2047",
+      "range": {
+        "startLine": 543,
+        "startChar": 47,
+        "endLine": 543,
+        "endChar": 53
+      },
+      "revId": "ea09bc4d5568103f6da0ccbe6fac00490f92f1ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
