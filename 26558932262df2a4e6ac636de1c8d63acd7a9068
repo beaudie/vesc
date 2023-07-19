@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50e9eba7_6f4175b9",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 3269,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-19T12:57:56Z",
+      "side": 1,
+      "message": "I just noticed, `imageInfo.sampler` is not initialized. Could also be why it wasn\u0027t working for non-YUV.\n\nThat said, I prefer this version.",
+      "revId": "26558932262df2a4e6ac636de1c8d63acd7a9068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
