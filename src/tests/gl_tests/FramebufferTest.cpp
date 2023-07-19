@@ -1218,6 +1218,123 @@ TEST_P(FramebufferTest_ES3, RenderSharedExponent)
     EXPECT_PIXEL_COLOR32F_EQ(0, 0, kFloatRed);
 }
 
+// Test glReadPixel from signed normalized color buffer with RGBA and UNSIGNED_BYTE type should pass
+TEST_P(FramebufferTest_ES3, ReadPixelSnorm8)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_EXT_render_snorm"));
+
+    constexpr uint GRADIENT_HEIGHT = 3;
+    constexpr uint GRADIENT_WIDTH  = 7;
+
+    struct PackedPixelsBufferProperties
+    {
+        int elementsInGroup;       // number of elements in a group
+        int rowLength;             // number of groups in the row
+        int alignment;             // alignment (in bytes)
+        int elementSize;           // size of an element (in bytes)
+        int elementsInRow;         // row size (in elements)
+        int elementsInRowNoAlign;  // row size (in elements) without alignment
+        int rowCount;              // number of rows in 2D image
+        int imagesCount;           // number of 2D images in 3D image
+        int skipPixels;            // (UN)PACK_SKIP_PIXELS
+        int skipRows;              // (UN)PACK_SKIP_ROWS
+        int skipImages;            // (UN)PACK_SKIP_IMAGES
+        int swapBytes;
+        int lsbFirst;
+    };
+    PackedPixelsBufferProperties initialPackProperties;
+    initialPackProperties.skipPixels = 0;
+    initialPackProperties.skipRows   = 0;
+    initialPackProperties.rowLength  = 0;
+    initialPackProperties.alignment  = 4;
+    initialPackProperties.rowCount   = 0;
+    initialPackProperties.skipImages = 0;
+    initialPackProperties.lsbFirst   = 0;
+    initialPackProperties.swapBytes  = 0;
+
+    PackedPixelsBufferProperties initialUnpackProperties;
+    initialUnpackProperties.skipPixels = 0;
+    initialUnpackProperties.skipRows   = 0;
+    initialUnpackProperties.rowLength  = 0;
+    initialUnpackProperties.alignment  = 4;
+    initialUnpackProperties.rowCount   = 0;
+    initialUnpackProperties.skipImages = 0;
+    initialUnpackProperties.lsbFirst   = 0;
+    initialUnpackProperties.swapBytes  = 0;
+
+    glPixelStorei(GL_PACK_ROW_LENGTH, initialPackProperties.rowLength);
+    glPixelStorei(GL_PACK_SKIP_ROWS, initialPackProperties.skipRows);
+    glPixelStorei(GL_PACK_SKIP_PIXELS, initialPackProperties.skipPixels);
+    glPixelStorei(GL_PACK_ALIGNMENT, initialPackProperties.alignment);
+
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, initialUnpackProperties.rowLength);
+    glPixelStorei(GL_UNPACK_SKIP_ROWS, initialUnpackProperties.skipRows);
+    glPixelStorei(GL_UNPACK_SKIP_PIXELS, initialUnpackProperties.skipPixels);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, initialUnpackProperties.alignment);
+    glPixelStorei(GL_UNPACK_IMAGE_HEIGHT, initialUnpackProperties.rowCount);
+    glPixelStorei(GL_UNPACK_SKIP_IMAGES, initialUnpackProperties.skipImages);
+
+    // create grdient
+    int elementsInGroup = 1;
+    int rowCount        = GRADIENT_HEIGHT;
+    int rowLength       = GRADIENT_WIDTH;
+
+    int elementSize          = sizeof(GLbyte);
+    int elementsInRowNoAlign = elementsInGroup * rowLength;
+    int elementsInRow        = elementsInRowNoAlign;
+    int skipImages           = 0;
+    int depth                = 1 + skipImages;
+
+    std::size_t bufferSize = elementSize * elementsInRow * rowCount * depth;
+    std::vector<GLbyte> gradients;
+    gradients.resize(bufferSize);
+
+    GLbyte *data = reinterpret_cast<GLbyte *>(gradients[0]);
+
+    std::size_t dataToSkip    = skipImages * rowCount * elementsInRow;
+    const GLbyte defaultValue = static_cast<GLbyte>(0.5 * std::numeric_limits<GLbyte>::max());
+    std::fill(data, data + dataToSkip, defaultValue);
+
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture);
+    ASSERT_GL_NO_ERROR();
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_R8_SNORM, GRADIENT_WIDTH, GRADIENT_HEIGHT, 0, GL_RED, GL_BYTE,
+                 &gradients[0]);
+    ASSERT_GL_NO_ERROR();
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    ASSERT_GL_NO_ERROR();
+
+    elementsInGroup      = 4;
+    elementsInRowNoAlign = elementsInGroup * rowLength;
+    int outputBufferSize =
+        sizeof(GLubyte) * elementsInRowNoAlign * rowCount * (skipImages + 1) * (skipImages + 1);
+
+    const GLubyte defaultFillValue = 0xaa;
+    std::vector<GLbyte> outputBuffer;
+    outputBuffer.resize(static_cast<std::size_t>(outputBufferSize));
+    std::fill(outputBuffer.begin(), outputBuffer.end(), defaultFillValue);
+
+    GLBuffer packPBO;
+    glBindBuffer(GL_PIXEL_PACK_BUFFER, packPBO);
+    glBufferData(GL_PIXEL_PACK_BUFFER, outputBufferSize, &outputBuffer[0], GL_STATIC_READ);
+
+    glReadBuffer(GL_COLOR_ATTACHMENT0);
+    ASSERT_GL_NO_ERROR();
+
+    glReadPixels(0, 0, GRADIENT_WIDTH, GRADIENT_HEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+    ASSERT_GL_NO_ERROR();
+
+    GLvoid *mappedData =
+        glMapBufferRange(GL_PIXEL_PACK_BUFFER, 0, outputBufferSize, GL_MAP_READ_BIT);
+    std::memcpy(&outputBuffer[0], mappedData, outputBufferSize);
+    glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+
+    glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+}
+
 // Test that R8_SNORM, RG8_SNORM, and RGBA8_SNORM are renderable with the extension.
 TEST_P(FramebufferTest_ES3, RenderSnorm8)
 {
