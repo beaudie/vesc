@@ -34,6 +34,24 @@
       "parentUuid": "50e9eba7_6f4175b9",
       "revId": "26558932262df2a4e6ac636de1c8d63acd7a9068",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb714139_5e3ac761",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 3269,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-19T13:16:28Z",
+      "side": 1,
+      "message": "I thought that\u0027s just for for immutable samplers (YUV)?",
+      "parentUuid": "fb4b33bd_da883904",
+      "revId": "26558932262df2a4e6ac636de1c8d63acd7a9068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
