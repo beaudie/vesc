@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dba3f851_5c79453a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-07-19T17:59:05Z",
+      "side": 1,
+      "message": "\u003e We had this fixed for line width in the past ... limit it to line width only + a comment on what needs to be done if point size ever needs clamping\n\nsay we clamp the max point size to 2047 this way, wouldn\u0027t a negative test that renders a much larger point expecting it to be discarded, since the center lies outside the viewport, always fail? am i missing something?",
+      "parentUuid": "9a34d1e6_cfb047f0",
+      "revId": "ea09bc4d5568103f6da0ccbe6fac00490f92f1ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c9f8e6cb_d94640f5",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 1
