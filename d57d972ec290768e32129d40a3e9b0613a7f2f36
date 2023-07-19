@@ -70,6 +70,24 @@
       "parentUuid": "c65616ce_7cba84d7",
       "revId": "d57d972ec290768e32129d40a3e9b0613a7f2f36",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10205423_0ec865c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-19T13:35:14Z",
+      "side": 1,
+      "message": "The change is still good, because from the outside the test should not assume a cap, so thanks for that fix.\n\n\u003e do you have some data showing 255 is good enough?\n\nNo, but an app drawing lines with a width of 255 is a bit crazy? 😄 I see a lot of devices supporting smaller limits, so the app should never assume anything more is available. I\u0027d say in the absence of a real use case, that\u0027s fine.\n\nI grepped through our traces, there are 19404 instances of line width 1, 240 instances of line width 2, 3604 instances of 1.something and 29 instances of 0.something.\n\nI think 255 is pretty safe",
+      "parentUuid": "ba559112_6b499142",
+      "revId": "d57d972ec290768e32129d40a3e9b0613a7f2f36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
