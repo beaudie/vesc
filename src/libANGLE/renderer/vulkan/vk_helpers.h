@@ -756,7 +756,8 @@ class BufferHelper : public ReadWriteResource
                                     uint32_t memoryTypeIndex,
                                     size_t size,
                                     size_t alignment,
-                                    BufferUsageType usageType);
+                                    BufferUsageType usageType,
+                                    bool isCopy);
 
     // Helper functions to initialize a buffer for a specific usage
     // Suballocate a buffer with alignment good for shader storage or copyBuffer .
@@ -913,7 +914,8 @@ class BufferPool : angle::NonCopyable
     angle::Result allocateBuffer(Context *context,
                                  VkDeviceSize sizeInBytes,
                                  VkDeviceSize alignment,
-                                 BufferSuballocation *suballocation);
+                                 BufferSuballocation *suballocation,
+                                 bool isCopy);
 
     // Frees resources immediately, or orphan the non-empty BufferBlocks if allowed. If orphan is
     // not allowed, it will assert if BufferBlock is still not empty.
@@ -944,7 +946,8 @@ class BufferPool : angle::NonCopyable
     size_t mNumberOfNewBuffersNeededSinceLastPrune;
     // max size to go down the suballocation code path. Any allocation greater or equal this size
     // will call into vulkan directly to allocate a dedicated VkDeviceMemory.
-    static constexpr size_t kMaxBufferSizeForSuballocation = 4 * 1024 * 1024;
+    static constexpr size_t kMaxBufferSizeForSuballocation     = 4 * 1024 * 1024;
+    static constexpr size_t kMaxBufferSizeForCopySuballocation = 1 * 1024 * 1024;
 };
 using BufferPoolPointerArray = std::array<std::unique_ptr<BufferPool>, VK_MAX_MEMORY_TYPES>;
 
