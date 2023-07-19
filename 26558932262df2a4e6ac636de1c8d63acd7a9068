@@ -52,6 +52,24 @@
       "parentUuid": "fb4b33bd_da883904",
       "revId": "26558932262df2a4e6ac636de1c8d63acd7a9068",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "810ad76e_d7b88496",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 3269,
+      "author": {
+        "id": 1550632
+      },
+      "writtenOn": "2023-07-19T13:17:23Z",
+      "side": 1,
+      "message": "Yes, but the non-YUV path does not use any samplers at all.",
+      "parentUuid": "eb714139_5e3ac761",
+      "revId": "26558932262df2a4e6ac636de1c8d63acd7a9068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
