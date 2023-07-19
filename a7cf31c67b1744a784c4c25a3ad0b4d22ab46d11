@@ -200,6 +200,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "faebae0b_bc3c31b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1550632
+      },
+      "writtenOn": "2023-07-19T02:00:59Z",
+      "side": 1,
+      "message": "Apparently this was caused by `AdjustBorderColor` setting alpha to 1 for opaque formats. Can you retry running the tests?",
+      "parentUuid": "bcd3c325_4708b2b0",
+      "revId": "a7cf31c67b1744a784c4c25a3ad0b4d22ab46d11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "dbf80fba_a1d506c7",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.h",
         "patchSetId": 4
