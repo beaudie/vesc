@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "28ae6ecf_3faf5375",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-07-19T17:23:23Z",
+      "side": 1,
+      "message": "i believe the problem here is precisely why the test \"PointSizeAboveMaxIsClamped\" was introduced 😊\n\nvulkan implementations that support much larger point sizes will have no issues rendering a point of size 5000 even because they are unaware of the artificial cap we applied in ANGLE.\n\nthe failing tests (both end2end and deqp) check for that specific clamping behavior which we of course fail. any ideas?",
+      "parentUuid": "d8af0fa2_77babdc2",
+      "revId": "ea09bc4d5568103f6da0ccbe6fac00490f92f1ff",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c9f8e6cb_d94640f5",
         "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
         "patchSetId": 1
