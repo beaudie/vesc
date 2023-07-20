@@ -214,20 +214,22 @@ class FramebufferVk : public FramebufferImpl
                             const VkClearColorValue &clearColorValue,
                             const VkClearDepthStencilValue &clearDepthStencilValue);
 
-    void mergeClearsWithDeferredClears(gl::DrawBufferMask clearColorBuffers,
-                                       bool clearDepth,
-                                       bool clearStencil,
-                                       const VkClearColorValue &clearColorValue,
-                                       const VkClearDepthStencilValue &clearDepthStencilValue);
-    angle::Result clearWithDraw(ContextVk *contextVk,
-                                const gl::Rectangle &clearArea,
-                                gl::DrawBufferMask clearColorBuffers,
-                                bool clearDepth,
-                                bool clearStencil,
-                                gl::BlendStateExt::ColorMaskStorage::Type colorMasks,
-                                uint8_t stencilMask,
-                                const VkClearColorValue &clearColorValue,
-                                const VkClearDepthStencilValue &clearDepthStencilValue);
+    void mergeClearsWithDeferredClears(
+        gl::DrawBufferMask clearColorBuffers,
+        bool clearDepth,
+        bool clearStencil,
+        const gl::DrawBuffersArray<VkClearColorValue> &adjustedClearColorValues,
+        const VkClearDepthStencilValue &clearDepthStencilValue);
+    angle::Result clearWithDraw(
+        ContextVk *contextVk,
+        const gl::Rectangle &clearArea,
+        gl::DrawBufferMask clearColorBuffers,
+        bool clearDepth,
+        bool clearStencil,
+        gl::BlendStateExt::ColorMaskStorage::Type colorMasks,
+        uint8_t stencilMask,
+        const gl::DrawBuffersArray<VkClearColorValue> &adjustedClearColorValues,
+        const VkClearDepthStencilValue &clearDepthStencilValue);
     void restageDeferredClears(ContextVk *contextVk);
     void restageDeferredClearsForReadFramebuffer(ContextVk *contextVk);
     void restageDeferredClearsImpl(ContextVk *contextVk);
