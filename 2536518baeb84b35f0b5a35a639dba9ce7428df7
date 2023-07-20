@@ -46,6 +46,30 @@
       },
       "revId": "2536518baeb84b35f0b5a35a639dba9ce7428df7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2cec76e_ee26e375",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-07-20T16:54:35Z",
+      "side": 1,
+      "message": "As discussed offline, moved the python hash calculation to a helper to clarify the first part.\nRegarding tail errors, switched to using `test -f` as discussed offline (though still need `|| true` in the end to ignore the final return code)",
+      "parentUuid": "92b90b1a_82546433",
+      "range": {
+        "startLine": 235,
+        "startChar": 0,
+        "endLine": 238,
+        "endChar": 34
+      },
+      "revId": "2536518baeb84b35f0b5a35a639dba9ce7428df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
