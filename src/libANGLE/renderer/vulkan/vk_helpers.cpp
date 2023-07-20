@@ -2635,6 +2635,35 @@ void RenderPassCommandBufferHelper::invalidateRenderPassStencilAttachment(
                                   getRenderPassWriteCommandCount());
 }
 
+VkClearColorValue adjustFloatClearColorPrecision(const VkClearColorValue &color)
+{
+    // truncate(float(x) / float((1 << sourceBits) - 1) * float((1 << targetBits) - 1) + 0.5f)
+    // formula reference: https://threadlocalmutex.com/?p=48
+    float floatClearColor0 = color.float32[0];
+    floatClearColor0       = floor((floatClearColor0 * 31.0f) + 0.5f);
+    floatClearColor0       = floatClearColor0 / 31.0f;
+
+    float floatClearColor1 = color.float32[1];
+    floatClearColor1       = floor((floatClearColor1 * 31.0f) + 0.5f);
+    floatClearColor1       = floatClearColor1 / 31.0f;
+
+    float floatClearColor2 = color.float32[2];
+    floatClearColor2       = floor((floatClearColor2 * 31.0f) + 0.5f);
+    floatClearColor2       = floatClearColor2 / 31.0f;
+
+    float floatClearColor3 = color.float32[3];
+    floatClearColor3       = floor((floatClearColor3 * 1.0f) + 0.5f);
+    floatClearColor3       = floatClearColor3 / 1.0f;
+
+    VkClearColorValue adjustedClearColor = color;
+    adjustedClearColor.float32[0]        = floatClearColor0;
+    adjustedClearColor.float32[1]        = floatClearColor1;
+    adjustedClearColor.float32[2]        = floatClearColor2;
+    adjustedClearColor.float32[3]        = floatClearColor3;
+
+    return adjustedClearColor;
+}
+
 angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
                                                             CommandsState *commandsState,
                                                             const RenderPass *renderPass)
@@ -2645,6 +2674,28 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
 
     // Commands that are added to primary before beginRenderPass command
     executeBarriers(context->getRenderer()->getFeatures(), commandsState);
+
+    // Temporary workaround for https://issuetracker.google.com/292282210 to avoid dithering
+    // being automatically applied
+    if (context->getRenderer()->getFeatures().adjustClearColorPrecision.enabled)
+    {
+        for (uint32_t i = 0; i < mRenderPassDesc.attachmentCount(); ++i)
+        {
+            if (mRenderPassDesc.isColorAttachmentEnabled(i) &&
+                mRenderPassDesc[i] == angle::FormatID::R5G5B5A1_UNORM)
+            {
+                PackedAttachmentIndex attachmentIndex = PackedAttachmentIndex(i);
+                if (mAttachmentOps[attachmentIndex].loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR)
+                {
+                    VkClearValue attachmentClearValue = mClearValues[attachmentIndex];
+                    attachmentClearValue.color =
+                        adjustFloatClearColorPrecision(attachmentClearValue.color);
+                    mClearValues.store(attachmentIndex, VK_IMAGE_ASPECT_COLOR_BIT,
+                                       attachmentClearValue);
+                }
+            }
+        }
+    }
 
     ASSERT(renderPass != nullptr);
     VkRenderPassBeginInfo beginInfo    = {};
@@ -8818,6 +8869,15 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
 
             if (IsClearOfAllChannels(update.updateSource))
             {
+                if (renderer->getFeatures().adjustClearColorPrecision.enabled)
+                {
+                    if (mActualFormatID == angle::FormatID::R5G5B5A1_UNORM)
+                    {
+                        update.data.clear.value.color =
+                            adjustFloatClearColorPrecision(update.data.clear.value.color);
+                    }
+                }
+
                 clear(contextVk, update.data.clear.aspectFlags, update.data.clear.value,
                       updateMipLevelVk, updateBaseLayer, updateLayerCount,
                       &commandBuffer->getCommandBuffer());
