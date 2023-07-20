@@ -2635,6 +2635,42 @@ void RenderPassCommandBufferHelper::invalidateRenderPassStencilAttachment(
                                   getRenderPassWriteCommandCount());
 }
 
+VkClearColorValue adjustFloatClearColorPrecision(const VkClearColorValue &color,
+                                                 const angle::Format &colorFormat)
+{
+    // truncate(float(x) / float((1 << sourceBits) - 1) * float((1 << targetBits) - 1) + 0.5f)
+    // formula reference: https://threadlocalmutex.com/?p=48
+    // sourceBits == 8 in this function
+
+    float floatClearColorRed = color.float32[0];
+    GLuint targetRedBits     = colorFormat.redBits;
+    floatClearColorRed       = floor(floatClearColorRed * ((1 << targetRedBits) - 1) + 0.5f);
+    floatClearColorRed       = floatClearColorRed / ((1 << targetRedBits) - 1);
+
+    float floatClearColorGreen = color.float32[1];
+    GLuint targetGreenBits     = colorFormat.greenBits;
+    floatClearColorGreen       = floor(floatClearColorGreen * ((1 << targetGreenBits) - 1) + 0.5f);
+    floatClearColorGreen       = floatClearColorGreen / ((1 << targetGreenBits) - 1);
+
+    float floatClearColorBlue = color.float32[2];
+    GLuint targetBlueBits     = colorFormat.blueBits;
+    floatClearColorBlue       = floor(floatClearColorBlue * ((1 << targetBlueBits) - 1) + 0.5f);
+    floatClearColorBlue       = floatClearColorBlue / ((1 << targetBlueBits) - 1);
+
+    float floatClearColorAlpha = color.float32[3];
+    GLuint targetAlphaBits     = colorFormat.alphaBits;
+    floatClearColorAlpha       = floor(floatClearColorAlpha * ((1 << targetAlphaBits) - 1) + 0.5f);
+    floatClearColorAlpha       = floatClearColorAlpha / ((1 << targetAlphaBits) - 1);
+
+    VkClearColorValue adjustedClearColor = color;
+    adjustedClearColor.float32[0]        = floatClearColorRed;
+    adjustedClearColor.float32[1]        = floatClearColorGreen;
+    adjustedClearColor.float32[2]        = floatClearColorBlue;
+    adjustedClearColor.float32[3]        = floatClearColorAlpha;
+
+    return adjustedClearColor;
+}
+
 angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
                                                             CommandsState *commandsState,
                                                             const RenderPass *renderPass)
@@ -2645,6 +2681,28 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
 
     // Commands that are added to primary before beginRenderPass command
     executeBarriers(context->getRenderer()->getFeatures(), commandsState);
+
+    // Temporary workaround for https://issuetracker.google.com/292282210 to avoid dithering
+    // being automatically applied
+    if (context->getRenderer()->getFeatures().adjustClearColorPrecision.enabled)
+    {
+        for (uint32_t i = 0; i < mRenderPassDesc.attachmentCount(); ++i)
+        {
+            if (mRenderPassDesc.isColorAttachmentEnabled(i) &&
+                mRenderPassDesc[i] == angle::FormatID::R5G5B5A1_UNORM)
+            {
+                PackedAttachmentIndex attachmentIndex = PackedAttachmentIndex(i);
+                if (mAttachmentOps[attachmentIndex].loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR)
+                {
+                    VkClearValue attachmentClearValue = mClearValues[attachmentIndex];
+                    attachmentClearValue.color        = adjustFloatClearColorPrecision(
+                        attachmentClearValue.color, angle::Format::Get(mRenderPassDesc[i]));
+                    mClearValues.store(attachmentIndex, VK_IMAGE_ASPECT_COLOR_BIT,
+                                       attachmentClearValue);
+                }
+            }
+        }
+    }
 
     ASSERT(renderPass != nullptr);
     VkRenderPassBeginInfo beginInfo    = {};
@@ -8818,6 +8876,15 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
 
             if (IsClearOfAllChannels(update.updateSource))
             {
+                if (renderer->getFeatures().adjustClearColorPrecision.enabled)
+                {
+                    if (mActualFormatID == angle::FormatID::R5G5B5A1_UNORM)
+                    {
+                        update.data.clear.value.color = adjustFloatClearColorPrecision(
+                            update.data.clear.value.color, angle::Format::Get(mActualFormatID));
+                    }
+                }
+
                 clear(contextVk, update.data.clear.aspectFlags, update.data.clear.value,
                       updateMipLevelVk, updateBaseLayer, updateLayerCount,
                       &commandBuffer->getCommandBuffer());
