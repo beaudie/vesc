@@ -22,6 +22,30 @@
       },
       "revId": "2536518baeb84b35f0b5a35a639dba9ce7428df7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92b90b1a_82546433",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-07-20T15:11:26Z",
+      "side": 1,
+      "message": "btw, local testing shows some errors on a clean device:\n```\nI09:08:52.828029Z Syncing 1945_air_force trace (1/238)\ntail: /sdcard/chromium_tests_root/src/tests/restricted_traces/1945_air_force/1945_air_force.angledata.gz: No such file or directory\ntail: /sdcard/chromium_tests_root/gen/tracegz_1945_air_force.gz: No such file or directory\nI09:08:54.146275Z Syncing 20_minutes_till_dawn trace (2/238)\ntail: /sdcard/chromium_tests_root/src/tests/restricted_traces/20_minutes_till_dawn/20_minutes_till_dawn.angledata.gz: No such file or directory\ntail: /sdcard/chromium_tests_root/gen/tracegz_20_minutes_till_dawn.gz: No such file or directory\nI09:08:54.823966Z Syncing 2_3_4_player_mini_games trace (3/238)\ntail: /sdcard/chromium_tests_root/src/tests/restricted_traces/2_3_4_player_mini_games/2_3_4_player_mini_games.angledata.gz: No such file or directory\ntail: /sdcard/chromium_tests_root/gen/tracegz_2_3_4_player_mini_games.gz: No such file or directory\n...\n```",
+      "parentUuid": "27ccc0be_7dcbc6d4",
+      "range": {
+        "startLine": 235,
+        "startChar": 0,
+        "endLine": 238,
+        "endChar": 34
+      },
+      "revId": "2536518baeb84b35f0b5a35a639dba9ce7428df7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
