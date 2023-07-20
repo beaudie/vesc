@@ -298,6 +298,9 @@ ANGLEPerfTest::ANGLEPerfTest(const std::string &name,
 
 ANGLEPerfTest::~ANGLEPerfTest() {}
 
+#include <sys/socket.h>
+#include <sys/un.h>
+
 void ANGLEPerfTest::run()
 {
     printf("running test name: \"%s\", backend: \"%s\", story: \"%s\"\n", mName.c_str(),
@@ -327,18 +330,46 @@ void ANGLEPerfTest::run()
         printf("Test Trials: %d\n", static_cast<int>(numTrials));
     }
 
-    for (uint32_t trial = 0; trial < numTrials; ++trial)
-    {
-        runTrial(mTrialTimeLimitSeconds, mStepsToRun, RunTrialPolicy::RunContinuously);
-        processResults();
-        if (gVerboseLogging)
-        {
-            double trialTime = mTrialTimer.getElapsedWallClockTime();
-            printf("Trial %d time: %.2lf seconds.\n", trial + 1, trialTime);
+    unlink("/data/user/0/com.android.angle.test/sock");
 
-            double secondsPerStep      = trialTime / static_cast<double>(mTrialNumStepsPerformed);
-            double secondsPerIteration = secondsPerStep / static_cast<double>(mIterationsPerStep);
-            mTestTrialResults.push_back(secondsPerIteration * 1000.0);
+    sockaddr_un address;
+    address.sun_family = AF_UNIX;
+    strcpy(address.sun_path, "/data/user/0/com.android.angle.test/sock");
+    int fd = socket(AF_UNIX, SOCK_STREAM, 0);
+    bind(fd, (sockaddr *)(&address), sizeof(address));
+    listen(fd, 100);
+
+    while (true)
+    {
+        int session_fd = accept(fd, 0, 0);
+        {
+            char buf[100];
+            int n  = (int)recv(session_fd, buf, 100, 0);
+            buf[n] = 0;
+            if (buf[0] == 'q')
+                break;
+        }
+
+        for (uint32_t trial = 0; trial < numTrials; ++trial)
+        {
+            runTrial(mTrialTimeLimitSeconds, mStepsToRun, RunTrialPolicy::RunContinuously);
+            processResults();
+            if (gVerboseLogging)
+            {
+                double trialTime = mTrialTimer.getElapsedWallClockTime();
+                printf("Trial %d time: %.2lf seconds.\n", trial + 1, trialTime);
+
+                double secondsPerStep = trialTime / static_cast<double>(mTrialNumStepsPerformed);
+                double secondsPerIteration =
+                    secondsPerStep / static_cast<double>(mIterationsPerStep);
+                mTestTrialResults.push_back(secondsPerIteration * 1000.0);
+            }
+        }
+
+        {
+            char send_buf[] = "done\n";
+            send(session_fd, send_buf, strlen(send_buf) * sizeof(char), 0);
+            close(session_fd);
         }
     }
 
