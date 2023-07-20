@@ -50,6 +50,7 @@ int gFixedTestTimeWithWarmup       = 0;
 const char *gTraceInterpreter      = nullptr;
 const char *gPrintExtensionsToFile = nullptr;
 const char *gRequestedExtensions   = nullptr;
+bool gControlSocket                = false;
 
 // Default to three warmup trials. There's no science to this. More than two was experimentally
 // helpful on a Windows NVIDIA setup when testing with Vulkan and native trace tests.
@@ -71,6 +72,7 @@ bool PerfTestArg(int *argc, char **argv, int argIndex)
            ParseFlag("--verbose-logging", argc, argv, argIndex, &gVerboseLogging) ||
            ParseFlag("--no-warmup", argc, argv, argIndex, &gNoWarmup) ||
            ParseFlag("--no-finish", argc, argv, argIndex, &gNoFinish) ||
+           ParseFlag("--control-socket", argc, argv, argIndex, &gControlSocket) ||
            ParseCStringArg("--trace-file", argc, argv, argIndex, &gTraceFile) ||
            ParseCStringArg("--perf-counters", argc, argv, argIndex, &gPerfCounters) ||
            ParseIntArg("--steps-per-trial", argc, argv, argIndex, &gStepsPerTrial) ||

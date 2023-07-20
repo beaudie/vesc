@@ -11,6 +11,8 @@
 
 #if defined(ANGLE_PLATFORM_ANDROID)
 #    include <android/log.h>
+#    include <sys/socket.h>
+#    include <sys/un.h>
 #endif
 #include "ANGLEPerfTestArgs.h"
 #include "common/base/anglebase/trace_event/trace_event.h"
@@ -248,6 +250,26 @@ int EstimateStepsToRun(double trialTime, int stepsPerformed, int stepAlignment)
 
     return stepsToRun;
 }
+
+int InitControlSocket()
+{
+#if defined(ANGLE_PLATFORM_ANDROID)
+    const char *socket_path = "/data/user/0/com.android.angle.test/control.sock";
+    unlink(socket_path);
+
+    sockaddr_un address;
+    address.sun_family = AF_UNIX;
+    strcpy(address.sun_path, socket_path);
+    int fd = socket(AF_UNIX, SOCK_STREAM, 0);
+    bind(fd, (sockaddr *)(&address), sizeof(address));
+    listen(fd, 1);
+
+    return fd;
+#else
+    return 0;
+#endif
+}
+
 }  // anonymous namespace
 
 TraceEvent::TraceEvent(char phaseIn,
@@ -277,7 +299,8 @@ ANGLEPerfTest::ANGLEPerfTest(const std::string &name,
       mTrialNumStepsPerformed(0),
       mTotalNumStepsPerformed(0),
       mIterationsPerStep(iterationsPerStep),
-      mRunning(true)
+      mRunning(true),
+      mControlSocket(-1)
 {
     if (mStory == "")
     {
@@ -327,18 +350,15 @@ void ANGLEPerfTest::run()
         printf("Test Trials: %d\n", static_cast<int>(numTrials));
     }
 
-    for (uint32_t trial = 0; trial < numTrials; ++trial)
+    if (gControlSocket)
     {
-        runTrial(mTrialTimeLimitSeconds, mStepsToRun, RunTrialPolicy::RunContinuously);
-        processResults();
-        if (gVerboseLogging)
+        runMainTrialsWithControlSocket();
+    }
+    else
+    {
+        for (uint32_t trial = 0; trial < numTrials; ++trial)
         {
-            double trialTime = mTrialTimer.getElapsedWallClockTime();
-            printf("Trial %d time: %.2lf seconds.\n", trial + 1, trialTime);
-
-            double secondsPerStep      = trialTime / static_cast<double>(mTrialNumStepsPerformed);
-            double secondsPerIteration = secondsPerStep / static_cast<double>(mIterationsPerStep);
-            mTestTrialResults.push_back(secondsPerIteration * 1000.0);
+            runMainTrial(trial);
         }
     }
 
@@ -436,6 +456,57 @@ void ANGLEPerfTest::runTrial(double maxRunTime, int maxStepsToRun, RunTrialPolic
     finishTest();
     mTrialTimer.stop();
     computeGPUTime();
+}
+
+void ANGLEPerfTest::runMainTrial(int trial)
+{
+    runTrial(mTrialTimeLimitSeconds, mStepsToRun, RunTrialPolicy::RunContinuously);
+    processResults();
+    if (gVerboseLogging)
+    {
+        double trialTime = mTrialTimer.getElapsedWallClockTime();
+        printf("Trial %d time: %.2lf seconds.\n", trial + 1, trialTime);
+
+        double secondsPerStep      = trialTime / static_cast<double>(mTrialNumStepsPerformed);
+        double secondsPerIteration = secondsPerStep / static_cast<double>(mIterationsPerStep);
+        mTestTrialResults.push_back(secondsPerIteration * 1000.0);
+    }
+}
+
+void ANGLEPerfTest::runMainTrialsWithControlSocket()
+{
+#if defined(ANGLE_PLATFORM_ANDROID)
+    const int buf_size = 100;
+    char buf[buf_size];
+    for (uint32_t trial = 0;; ++trial)
+    {
+        int fd = accept(mControlSocket, 0, 0);
+
+        int n  = (int)recv(fd, buf, buf_size, 0);
+        buf[n] = 0;
+        if (strncmp(buf, "quit", 4) == 0)
+        {
+            close(fd);
+            break;
+        }
+        if (strncmp(buf, "ping", 5) == 0)
+        {
+            --trial;
+            snprintf(buf, buf_size, "pong\n");
+            send(fd, buf, strlen(buf) * sizeof(char), 0);
+            close(fd);
+            continue;
+        }
+
+        runMainTrial(trial);
+
+        snprintf(buf, buf_size, "done %d\n", trial);
+        send(fd, buf, strlen(buf) * sizeof(char), 0);
+        close(fd);
+    }
+#else
+    UNREACHABLE();
+#endif
 }
 
 void ANGLEPerfTest::SetUp() {}
@@ -1003,6 +1074,8 @@ void ANGLERenderTest::SetUp()
         EnableDebugCallback(&PerfTestDebugCallback, this);
     }
 #endif
+
+    mControlSocket = InitControlSocket();
 
     initializeBenchmark();
 
