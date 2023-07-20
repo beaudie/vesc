@@ -16,6 +16,29 @@
       "message": "PTAL. We were hitting the assert in the wild. I think this will be more defensive against bad drivers.",
       "revId": "97058a5fddc4a001bcfbe911f3674fbb2afbe578",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abfbe390_0415c5ca",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2037,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-20T20:51:36Z",
+      "side": 1,
+      "message": "WARN()? ERR() fails tests I think, not sure what effect it has on Chrome",
+      "range": {
+        "startLine": 2037,
+        "startChar": 12,
+        "endLine": 2037,
+        "endChar": 15
+      },
+      "revId": "97058a5fddc4a001bcfbe911f3674fbb2afbe578",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
