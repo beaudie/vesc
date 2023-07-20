@@ -1634,6 +1634,11 @@ ANGLE_INLINE VkResult RenderPass::init(VkDevice device, const VkRenderPassCreate
 ANGLE_INLINE VkResult RenderPass::init2(VkDevice device, const VkRenderPassCreateInfo2 &createInfo)
 {
     ASSERT(!valid());
+    const VkSubpassDescription2 *subPassDescription2 = createInfo.pSubpasses;
+    const VkSubpassDescriptionFlags flags            = subPassDescription2->flags;
+    INFO() << "ANGLE Debug RenderPass::init2 VkSubpassDescriptionFlags bit "
+              "VK_SUBPASS_DESCRIPTION_ENABLE_LEGACY_DITHERING_BIT_EXT is: "
+           << (flags & VK_SUBPASS_DESCRIPTION_ENABLE_LEGACY_DITHERING_BIT_EXT);
     return vkCreateRenderPass2KHR(device, &createInfo, nullptr, &mHandle);
 }
 
