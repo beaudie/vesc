@@ -3262,6 +3262,10 @@ void FramebufferVk::switchToFramebufferFetchMode(ContextVk *contextVk, bool hasF
 
 bool FramebufferVk::updateLegacyDither(ContextVk *contextVk)
 {
+    INFO() << "Yuxin Debug updateLegacyDithers, contextVk::isDitherEnabled: "
+           << contextVk->isDitherEnabled();
+    INFO() << "Yuxin Debug updateLegacyDithers, mRenderPassDesc.isLegacyDitherEnabled: "
+           << mRenderPassDesc.isLegacyDitherEnabled();
     if (contextVk->getFeatures().supportsLegacyDithering.enabled &&
         mRenderPassDesc.isLegacyDitherEnabled() != contextVk->isDitherEnabled())
     {

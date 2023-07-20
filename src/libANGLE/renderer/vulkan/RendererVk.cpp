@@ -4435,6 +4435,10 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // The VK_EXT_legacy_dithering extension enables dithering support without emulation
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsLegacyDithering,
                             mDitheringFeatures.legacyDithering == VK_TRUE);
+    // false);
+
+    INFO() << "Yuxin Debug supportsLegacyDithering enabled: "
+           << mFeatures.supportsLegacyDithering.enabled;
 
     // Applications on Android have come to rely on hardware dithering, and visually regress without
     // it.  On desktop GPUs, OpenGL's dithering is a no-op.  The following setting mimics that
@@ -4442,6 +4446,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // (which would require Chromium and Capture/Replay test expectations updates).
     ANGLE_FEATURE_CONDITION(&mFeatures, emulateDithering,
                             IsAndroid() && !mFeatures.supportsLegacyDithering.enabled);
+    // false);
+
+    INFO() << "Yuxin Debug emulateDithering enabled: " << mFeatures.emulateDithering.enabled;
 
     // http://anglebug.com/6872
     // On ARM hardware, framebuffer-fetch-like behavior on Vulkan is already coherent, so we can

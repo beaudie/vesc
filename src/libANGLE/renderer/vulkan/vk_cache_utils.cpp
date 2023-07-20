@@ -1385,8 +1385,12 @@ angle::Result InitializeRenderPassFromDesc(ContextVk *contextVk,
         }
     }
 
+    INFO() << "Yuxin Debug InitializeRenderPassFromDesc: desc.isLegacyDitherEnabled(): "
+           << desc.isLegacyDitherEnabled();
+
     if (contextVk->getFeatures().supportsLegacyDithering.enabled && desc.isLegacyDitherEnabled())
     {
+        INFO() << "Yuxin Debug VK_SUBPASS_DESCRIPTION_ENABLE_LEGACY_DITHERING_BIT_EXT flag added";
         subpassDesc.back().flags |= VK_SUBPASS_DESCRIPTION_ENABLE_LEGACY_DITHERING_BIT_EXT;
     }
 

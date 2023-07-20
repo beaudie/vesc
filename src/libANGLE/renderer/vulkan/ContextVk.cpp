@@ -5101,10 +5101,16 @@ void ContextVk::updateDither()
         {
             onRenderPassFinished(RenderPassClosureReason::LegacyDithering);
         }
+        else
+        {
+            INFO() << "Yuxin Debug ContextVk::updateDither() framebufferVk did not update legacy "
+                      "dither";
+        }
     }
 
     if (!getFeatures().emulateDithering.enabled)
     {
+        INFO() << "Yuxin Debug ContextVk::updateDither() no emulateDithering";
         return;
     }
 
@@ -5126,6 +5132,7 @@ void ContextVk::updateDither()
     uint16_t ditherControl = 0;
     if (mState.isDitherEnabled())
     {
+        INFO() << "Yuxin Debug ContextVk updateDither() mState.isDitherEnabled";
         const gl::DrawBufferMask attachmentMask =
             framebufferVk->getState().getColorAttachmentsMask();
 
@@ -5169,6 +5176,7 @@ void ContextVk::updateDither()
 
     if (ditherControl != mGraphicsPipelineDesc->getEmulatedDitherControl())
     {
+        INFO() << "Yuxin Debug ContextVk::updateDither() updateEmulateDitherControl";
         mGraphicsPipelineDesc->updateEmulatedDitherControl(&mGraphicsPipelineTransition,
                                                            ditherControl);
         invalidateCurrentGraphicsPipeline();
