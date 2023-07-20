@@ -103,6 +103,8 @@ class ANGLEPerfTest : public testing::Test, angle::NonCopyable
     int getNumStepsPerformed() const { return mTrialNumStepsPerformed; }
 
     void runTrial(double maxRunTime, int maxStepsToRun, RunTrialPolicy runPolicy);
+    void runMainTrial(int trial);
+    void runMainTrialsWithControlSocket();
 
     // Overriden in trace perf tests.
     virtual void saveScreenshot(const std::string &screenshotName) {}
@@ -155,6 +157,7 @@ class ANGLEPerfTest : public testing::Test, angle::NonCopyable
     };
     std::map<GLuint, CounterInfo> mPerfCounterInfo;
     std::vector<uint64_t> mProcessMemoryUsageKBSamples;
+    int mControlSocket;
 };
 
 enum class SurfaceType
