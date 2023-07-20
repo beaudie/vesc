@@ -3778,6 +3778,129 @@ void main()
     EXPECT_PIXEL_RECT_EQ(0, 0, kSize, kSize, GLColor::green);
 }
 
+// Test that texture with internal format GL_RGB5_A1 works properly
+TEST_P(FramebufferTest_ES31, TextureFormat_GL_RGB5_A1_ColorMasks)
+{
+    constexpr int kSize  = 32;
+    GLint maxDrawBuffers = 0;
+    glGetIntegerv(GL_MAX_DRAW_BUFFERS, &maxDrawBuffers);
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    std::vector<GLenum> bufs(maxDrawBuffers);
+    for (int i = 0; i < maxDrawBuffers; ++i)
+    {
+        bufs[i] = GL_COLOR_ATTACHMENT0 + i;
+    }
+
+    // Specifies a list of color buffers to be drawn into
+    glDrawBuffers(maxDrawBuffers, &bufs[0]);
+    glDisable(GL_DITHER);
+
+    GLTexture textures[maxDrawBuffers];
+    std::vector<unsigned char> pixelData(kSize * kSize * 4, 255);
+    for (int i = 0; i < maxDrawBuffers; ++i)
+    {
+        glBindTexture(GL_TEXTURE_2D, textures[i]);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB5_A1, kSize, kSize, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                     pixelData.data());
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, textures[i],
+                               0);
+    }
+
+    // Clear all buffers
+    angle::Vector4 clearColor(0.15f, 0.3f, 0.45f, 0.6f);
+    for (int i = 0; i < maxDrawBuffers; ++i)
+    {
+        glClearBufferfv(GL_COLOR, i, clearColor.data());
+    }
+
+    // Set color masks
+    for (int i = 0; i < maxDrawBuffers; ++i)
+    {
+        if (i % 4 == 0)
+        {
+            glColorMaski(i, GL_TRUE, GL_FALSE, GL_FALSE, GL_FALSE);
+        }
+
+        if (i % 4 == 1)
+        {
+            glColorMaski(i, GL_FALSE, GL_TRUE, GL_FALSE, GL_FALSE);
+        }
+
+        if (i % 4 == 2)
+        {
+            glColorMaski(i, GL_FALSE, GL_FALSE, GL_TRUE, GL_FALSE);
+        }
+
+        if (i % 4 == 3)
+        {
+            glColorMaski(i, GL_FALSE, GL_FALSE, GL_FALSE, GL_TRUE);
+        }
+    }
+
+    // Clear buffers again
+    clearColor = {0.85f, 0.85f, 0.85f, 0.85f};
+    for (int i = 0; i < maxDrawBuffers; ++i)
+    {
+        glClearBufferfv(GL_COLOR, i, &clearColor[0]);
+    }
+
+    std::vector<int> bits     = {0, 0, 0, 0};
+    std::vector<uint> epsilon = {0, 0, 0, 0};
+    for (int i = 0; i < 4; ++i)
+    {
+        glGetIntegerv(GL_RED_BITS + i, bits.data() + i);
+        epsilon[i] =
+            std::min(255u, static_cast<unsigned int>(
+                               ceil(1.0 + 255.0 * (1.0 / pow(2.0, static_cast<double>(bits[i]))))));
+
+        ASSERT(epsilon[i] >= 0 && epsilon[i] <= 255u);
+    }
+
+    // Read and Verify
+    for (int i = 0; i < maxDrawBuffers; ++i)
+    {
+        std::vector<uint> expected = {
+            static_cast<unsigned int>(0.15f * 255), static_cast<unsigned int>(0.30f * 255),
+            static_cast<unsigned int>(0.45f * 255), static_cast<unsigned int>(0.60f * 255)};
+
+        expected[i % 4] = static_cast<unsigned int>(0.85f * 255);
+
+        std::vector<GLColor> rendered(kSize * kSize, GLColor::black);
+        glReadBuffer(GL_COLOR_ATTACHMENT0 + i);
+        glReadPixels(0, 0, kSize, kSize, GL_RGBA, GL_UNSIGNED_BYTE, rendered.data());
+
+        for (int y = 0; y < kSize; ++y)
+        {
+            for (int x = 0; x < kSize; ++x)
+            {
+                GLColor readBackData = rendered[y * kSize + x];
+
+                bool exactMatch = readBackData.R == expected[0] && readBackData.G == expected[1] &&
+                                  readBackData.B == expected[2] && readBackData.A == expected[3];
+
+                bool matchWithinEpsilon =
+                    abs(static_cast<int>(readBackData.R) - static_cast<int>(expected[0])) <=
+                        static_cast<int>(epsilon[0]) &&
+                    abs(static_cast<int>(readBackData.G) - static_cast<int>(expected[1])) <=
+                        static_cast<int>(epsilon[1]) &&
+                    abs(static_cast<int>(readBackData.B) - static_cast<int>(expected[2])) <=
+                        static_cast<int>(epsilon[2]) &&
+                    abs(static_cast<int>(readBackData.A) - static_cast<int>(expected[3])) <=
+                        static_cast<int>(epsilon[3]);
+                ASSERT(exactMatch || matchWithinEpsilon);
+            }
+        }
+    }
+
+    // Set the framebuffer color mask back to default values
+    for (int i = 0; i < maxDrawBuffers; ++i)
+    {
+        glColorMaski(i, GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    }
+}
+
 // Validates both MESA and standard functions can be used on OpenGL ES >=3.1
 TEST_P(FramebufferTest_ES31, ValidateFramebufferFlipYMesaExtension)
 {
