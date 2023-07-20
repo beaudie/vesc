@@ -2635,6 +2635,33 @@ void RenderPassCommandBufferHelper::invalidateRenderPassStencilAttachment(
                                   getRenderPassWriteCommandCount());
 }
 
+VkClearColorValue adjustFloatClearColorPrecision(const VkClearColorValue &color)
+{
+    float floatClearColor0 = color.float32[0];
+    floatClearColor0       = floor((floatClearColor0 * 31.0f) + 0.5f);
+    floatClearColor0       = floatClearColor0 / 31.0f;
+
+    float floatClearColor1 = color.float32[1];
+    floatClearColor1       = floor((floatClearColor1 * 31.0f) + 0.5f);
+    floatClearColor1       = floatClearColor1 / 31.0f;
+
+    float floatClearColor2 = color.float32[2];
+    floatClearColor2       = floor((floatClearColor2 * 31.0f) + 0.5f);
+    floatClearColor2       = floatClearColor2 / 31.0f;
+
+    float floatClearColor3 = color.float32[3];
+    floatClearColor3       = floor((floatClearColor3 * 1.0f) + 0.5f);
+    floatClearColor3       = floatClearColor3 / 1.0f;
+
+    VkClearColorValue adjustedClearColor = color;
+    adjustedClearColor.float32[0]        = floatClearColor0;
+    adjustedClearColor.float32[1]        = floatClearColor1;
+    adjustedClearColor.float32[2]        = floatClearColor2;
+    adjustedClearColor.float32[3]        = floatClearColor3;
+
+    return adjustedClearColor;
+}
+
 angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
                                                             CommandsState *commandsState,
                                                             const RenderPass *renderPass)
@@ -2645,6 +2672,27 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
 
     // Commands that are added to primary before beginRenderPass command
     executeBarriers(context->getRenderer()->getFeatures(), commandsState);
+
+    for (uint32_t i = 0; i < mRenderPassDesc.attachmentCount(); ++i)
+    {
+        if (mRenderPassDesc.isColorAttachmentEnabled(i))
+        {
+            PackedAttachmentIndex attachmentIndex = PackedAttachmentIndex(i);
+            if (mAttachmentOps[attachmentIndex].loadOp == VK_ATTACHMENT_LOAD_OP_CLEAR)
+            {
+                VkClearValue adjustedClearValue = mClearValues[attachmentIndex];
+                const VkClearColorValue adjustedClearColor =
+                    adjustFloatClearColorPrecision(mClearValues[attachmentIndex].color);
+                adjustedClearValue.color = adjustedClearColor;
+                mClearValues.store(attachmentIndex, VK_IMAGE_ASPECT_COLOR_BIT, adjustedClearValue);
+                //                INFO() << "Yuxin Debug flushToPrimary: mClearValues: "
+                //                       << mClearValues[attachmentIndex].color.float32[0] << ", "
+                //                       << mClearValues[attachmentIndex].color.float32[1] << ", "
+                //                       << mClearValues[attachmentIndex].color.float32[2] << ", "
+                //                       << mClearValues[attachmentIndex].color.float32[3] << ", ";
+            }
+        }
+    }
 
     ASSERT(renderPass != nullptr);
     VkRenderPassBeginInfo beginInfo    = {};
@@ -8818,6 +8866,11 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
 
             if (IsClearOfAllChannels(update.updateSource))
             {
+                // truncate(float(x) / float((1 << sourceBits) - 1) * float((1 << targetBits) - 1) +
+                // 0.5f)
+                update.data.clear.value.color =
+                    adjustFloatClearColorPrecision(update.data.clear.value.color);
+
                 clear(contextVk, update.data.clear.aspectFlags, update.data.clear.value,
                       updateMipLevelVk, updateBaseLayer, updateLayerCount,
                       &commandBuffer->getCommandBuffer());
