@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc9b5d0b_50525b3d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-07-21T21:26:45Z",
+      "side": 1,
+      "message": "Can you migrate this (in some form) into comments in the code?",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 20
+      },
+      "revId": "dc1ba272c95b1b2fd457929d4b88c3979db7299f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1293757_bc9c1a28",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-07-21T21:26:45Z",
+      "side": 1,
+      "message": "+2 for time zone friendly reviews, but could use some clarification, documentation, maybe a full working example",
+      "revId": "dc1ba272c95b1b2fd457929d4b88c3979db7299f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "254a1377_c641921f",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-07-21T21:26:45Z",
+      "side": 1,
+      "message": "Is the idea that \"ping\" will be sent across the socket before this function is invoked, so it will just ACK on first loop?\n\nSome general comments here will help readability and maintenance.",
+      "range": {
+        "startLine": 492,
+        "startChar": 0,
+        "endLine": 492,
+        "endChar": 41
+      },
+      "revId": "dc1ba272c95b1b2fd457929d4b88c3979db7299f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "681be9b7_a2d15f4d",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-07-21T21:26:45Z",
+      "side": 1,
+      "message": "Should there be a block watching for \"run\" command in your example?",
+      "revId": "dc1ba272c95b1b2fd457929d4b88c3979db7299f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
