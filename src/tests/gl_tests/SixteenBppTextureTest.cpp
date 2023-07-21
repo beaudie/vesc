@@ -713,6 +713,52 @@ TEST_P(SixteenBppTextureDitheringTestES3, RGB565)
     bandingTestWithSwitch(GL_RGB565, Gradient::GreenBlue);
 }
 
+// Test draw-based clear
+TEST_P(SixteenBppTextureDitheringTestES3, DrawBasedClear)
+{
+    GLFramebuffer fbo;
+    int w = getWindowWidth();
+    int h = getWindowHeight();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    GLTexture tex;
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA4, w, h);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+
+    std::vector<GLenum> bufs = {GL_COLOR_ATTACHMENT0};
+    glDrawBuffers(1, &bufs[0]);
+
+    angle::Vector4 clearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClearBufferfv(GL_COLOR, 0, clearColor.data());
+
+    glColorMask(GL_FALSE, GL_FALSE, GL_TRUE, GL_FALSE);
+    clearColor = {1.0f, 1.0f, 0.2345f, 1.0f};
+    glClearBufferfv(GL_COLOR, 0, clearColor.data());
+
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    ASSERT_GL_NO_ERROR();
+
+    uint32_t pixelCount = w * h;
+    std::vector<uint32_t> pixelData(pixelCount);
+    glReadBuffer(GL_COLOR_ATTACHMENT0);
+    glReadPixels(0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, pixelData.data());
+
+    bool allSamePixels = true;
+    for (size_t i = 1; i < pixelData.size(); ++i)
+    {
+        if (pixelData[i - 1] != pixelData[i])
+        {
+            printf("i=%zu pixel[i-1]=%X pixel[i]=%X\n", i, pixelData[i - 1], pixelData[i]);
+            allSamePixels = false;
+            break;
+        }
+    }
+
+    EXPECT_TRUE(allSamePixels);
+}
+
 ANGLE_INSTANTIATE_TEST_ES2(SixteenBppTextureTest);
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(SixteenBppTextureTestES3);
