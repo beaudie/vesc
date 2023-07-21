@@ -16,6 +16,23 @@
       "message": "I also did some manual testing. I didn\u0027t see any flickering or corruption.",
       "revId": "301ba4230aaf4c7799154af18fba4b4db545a5e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b9bd58d_e33b5fa0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1115588
+      },
+      "writtenOn": "2023-07-21T16:50:50Z",
+      "side": 1,
+      "message": "lgtm\n\nI feel like @ccameron knows these issues on macOS best?",
+      "revId": "301ba4230aaf4c7799154af18fba4b4db545a5e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
