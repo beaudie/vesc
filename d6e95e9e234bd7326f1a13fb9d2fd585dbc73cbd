@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f144abde_46ac6ed6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-21T13:35:03Z",
+      "side": 1,
+      "message": "Ideally, you could write this script in python and commit it to ANGLE. Then everyone can use it.",
+      "range": {
+        "startLine": 18,
+        "startChar": 58,
+        "endLine": 18,
+        "endChar": 71
+      },
+      "revId": "d6e95e9e234bd7326f1a13fb9d2fd585dbc73cbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a233397a_e5cf8857",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-21T13:35:03Z",
+      "side": 1,
+      "message": "👍",
+      "revId": "d6e95e9e234bd7326f1a13fb9d2fd585dbc73cbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d17d3ab8_c308fb04",
+        "filename": "src/tests/perf_tests/ANGLEPerfTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1078,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-21T13:35:03Z",
+      "side": 1,
+      "message": "Surround with `if (gControlSocket)`",
+      "revId": "d6e95e9e234bd7326f1a13fb9d2fd585dbc73cbd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
