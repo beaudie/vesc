@@ -16,6 +16,24 @@
       "message": "I\u0027m already rolling https://chromium-review.googlesource.com/c/angle/angle/+/4707721",
       "revId": "9edcb300cab91126873461682e7d9ddece5aac55",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a3d5cc3_d7d555ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-07-21T17:57:12Z",
+      "side": 1,
+      "message": "I see. Thank you Yuly!",
+      "parentUuid": "910ba274_b960155a",
+      "revId": "9edcb300cab91126873461682e7d9ddece5aac55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
