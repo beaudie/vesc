@@ -33,6 +33,23 @@
       "message": "lgtm\n\nI feel like @ccameron knows these issues on macOS best?",
       "revId": "301ba4230aaf4c7799154af18fba4b4db545a5e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8ced4be_415b00ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-07-21T23:01:07Z",
+      "side": 1,
+      "message": "lgtm\n\n+enga, sunnyps and junov too in case they can think of any potential interop bugs that could show up here. Hopefully we\u0027re waiting on MTLSharedEvents in all of the needed places; WebGPU -\u003e compositor (currently Ganesh on top of ANGLE/Metal), Canvas 2D \u003c-\u003e WebGL, etc.",
+      "revId": "301ba4230aaf4c7799154af18fba4b4db545a5e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
