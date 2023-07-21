@@ -43,7 +43,7 @@ vars = {
   'checkout_angle_mesa': False,
 
   # Version of Chromium our Chromium-based DEPS are mirrored from.
-  'chromium_revision': 'e3bcada48f45ef4d02b4cbb80843180935842733',
+  'chromium_revision': '09e99945f9a70b70a11d48ace5241ec9d219f510',
   # We never want to checkout chromium,
   # but need a dummy DEPS entry for the autoroller
   'dummy_checkout_chromium': False,
@@ -140,12 +140,12 @@ vars = {
 deps = {
 
   'build': {
-    'url': '{chromium_git}/chromium/src/build.git@00557a04e481e4d74bba57e7350aaee9fdf7842a',
+    'url': '{chromium_git}/chromium/src/build.git@76d3034c73319fd4536bd3804e1f44499b972d9a',
     'condition': 'not build_with_chromium',
   },
 
   'buildtools': {
-    'url': '{chromium_git}/chromium/src/buildtools.git@1cc82962cb50a35f6008b25a165782c568edac27',
+    'url': '{chromium_git}/chromium/src/buildtools.git@ca163845c76db63454f99436f6cd2bf03739dc24',
     'condition': 'not build_with_chromium',
   },
 
@@ -203,12 +203,12 @@ deps = {
   },
 
   'testing': {
-    'url': '{chromium_git}/chromium/src/testing@454f446791a984cb117cd23b03f21d24b075d912',
+    'url': '{chromium_git}/chromium/src/testing@1f5c4581adccfbe46ba735be3577628088c68524',
     'condition': 'not build_with_chromium',
   },
 
   'third_party/abseil-cpp': {
-    'url': '{chromium_git}/chromium/src/third_party/abseil-cpp@f317d5122341dcf199fafbf70ed96cd39e71d0e3',
+    'url': '{chromium_git}/chromium/src/third_party/abseil-cpp@9544eb36c91f7981a9eccc8c84e42866b9071412',
     'condition': 'not build_with_chromium',
   },
 
@@ -648,7 +648,7 @@ deps = {
   },
 
   'third_party/zlib': {
-    'url': '{chromium_git}/chromium/src/third_party/zlib@61dc0bd13fb4a4de7a97ec4a8f43e82632b24eee',
+    'url': '{chromium_git}/chromium/src/third_party/zlib@d3b3d64f7daa4fa830c7ccaeb0c56590c022efcd',
     'condition': 'not build_with_chromium',
   },
 
@@ -689,7 +689,7 @@ deps = {
   },
 
   'tools/mb': {
-    'url': '{chromium_git}/chromium/src/tools/mb@b559f90fa307c23871407e36a985fe556a6ea5c0',
+    'url': '{chromium_git}/chromium/src/tools/mb@0a7e1f1b7a9f5981d14bd0fe25a518a0d335d4bd',
     'condition': 'not build_with_chromium',
   },
 
