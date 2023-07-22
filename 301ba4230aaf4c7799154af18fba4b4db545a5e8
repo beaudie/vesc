@@ -68,6 +68,23 @@
       "parentUuid": "d8ced4be_415b00ce",
       "revId": "301ba4230aaf4c7799154af18fba4b4db545a5e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7b1d6b5_2bc48b31",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002358
+      },
+      "writtenOn": "2023-07-22T08:43:12Z",
+      "side": 1,
+      "message": "I agree that this waitUntilScheduled shouldn\u0027t be needed.\n\nThe following comes with the caveat that I may not understand the situation:\n\nThe last time I tired to convince myself of the correctness of the synchronization of IOSurfaceImageBacking, I wasn\u0027t able to. Because of that, I worry that we may happen to be relying on this waitUntilScheduled. I wrote up the level of synchronization that I believe is needed [here](https://docs.google.com/document/d/1FgkO1vpHKfHsxzZ6OT3r6HnSu0lpumINHB4m-8xxyW4/edit#bookmark\u003did.o2bqel5jjgw).",
+      "revId": "301ba4230aaf4c7799154af18fba4b4db545a5e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
