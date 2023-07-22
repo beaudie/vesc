@@ -50,6 +50,24 @@
       "message": "lgtm\n\n+enga, sunnyps and junov too in case they can think of any potential interop bugs that could show up here. Hopefully we\u0027re waiting on MTLSharedEvents in all of the needed places; WebGPU -\u003e compositor (currently Ganesh on top of ANGLE/Metal), Canvas 2D \u003c-\u003e WebGL, etc.",
       "revId": "301ba4230aaf4c7799154af18fba4b4db545a5e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7119ed1f_71528eef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-07-22T06:40:56Z",
+      "side": 1,
+      "message": "I think the flush here was added by me. It\u0027s because the eglBindTexImage spec says:\n\u003e If display and surface are the display and surface for the calling thread\u0027s current context, eglBindTexImage performs an implicit glFlush\n\nBut I think this is not necessary.",
+      "parentUuid": "d8ced4be_415b00ce",
+      "revId": "301ba4230aaf4c7799154af18fba4b4db545a5e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
