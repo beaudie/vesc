@@ -1050,6 +1050,8 @@ b/273271471 WIN INTEL VULKAN : ShaderAlgorithmTest.rgb_to_hsl_vertex_shader/* = 
 7495 WIN GLES : EGLMultiContextTest.ReuseUnterminatedDisplay/* = SKIP
 7495 OpenGL : EGLContextSharingTestNoFixture.InactiveThreadDoesntPreventCleanup/* = SKIP
 7495 WIN GLES : EGLContextSharingTestNoFixture.InactiveThreadDoesntPreventCleanup/* = SKIP
+6723 GLES : EGLContextSharingTestNoFixture.CleanupOfCurrentContextMarkedForDestroy/* = SKIP
+6723 OpenGL : EGLContextSharingTestNoFixture.CleanupOfCurrentContextMarkedForDestroy/* = SKIP
 
 // GL, GLES seem to ignore mapped texture buffer updates
 8128 WIN OpenGL : RGBTextureBufferTestES31.*/* = SKIP
