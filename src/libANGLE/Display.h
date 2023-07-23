@@ -101,6 +101,7 @@ class Display final : public LabeledObject,
     {
         Api,
         InternalCleanup,
+        ThreadCleanup,
         NoActiveThreads,
 
         InvalidEnum,

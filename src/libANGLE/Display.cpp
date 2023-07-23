@@ -1143,12 +1143,30 @@ Error Display::terminate(Thread *thread, TerminateReason terminateReason)
         }
     }
 
-    // All subsequent calls assume the display to be valid and terminated by app.
-    // If it is not terminated or if it isn't even initialized, early return.
-    if (!mTerminatedByApi || !mInitialized)
+    if (!mInitialized)
+    {
+        // If display isn't even initialized, early return.
+        return NoError();
+    }
+
+    // During thread cleanup, if thread's current context has been marked for destroy, release the
+    // context.
+    gl::Context *currentContext                 = thread->getContext();
+    const bool currentContextIsMarkedForDestroy = currentContext && currentContext->isDestroyed();
+    if (terminateReason == TerminateReason::ThreadCleanup && currentContextIsMarkedForDestroy)
+    {
+        currentContext->release();
+        Error error = releaseContext(currentContext, thread);
+        ASSERT(!error.isError());
+    }
+
+    // If app hasn't terminated the display, early return.
+    if (!mTerminatedByApi)
     {
         return NoError();
     }
+
+    // Code below assumes the display to be valid and terminated by app.
 
     // EGL 1.5 Specification
     // 3.2 Initialization
@@ -1292,7 +1310,7 @@ void Display::threadCleanup(Thread *thread)
     const bool noActiveThreads = mActiveThreads.size() == 0;
 
     (void)terminate(thread, noActiveThreads ? TerminateReason::NoActiveThreads
-                                            : TerminateReason::InternalCleanup);
+                                            : TerminateReason::ThreadCleanup);
 
     // This "thread" is no longer active, reset its cached context
     thread->setCurrent(nullptr);
@@ -1774,9 +1792,11 @@ void Display::destroyStreamImpl(Stream *stream, StreamSet *streams)
 }
 
 // releaseContext must be called with the context being deleted as current.
-// To do that we can only call this in two places, Display::makeCurrent at the point where this
-// context is being made uncurrent and in Display::destroyContext where we make the context current
-// as part of destruction.
+// To do that we can only call this in three places -
+// 1. Display::makeCurrent at the point where this context is being made uncurrent.
+// 2. Display::destroyContext where we make the context current as part of destruction.
+// 3. Display::threadCleanup via Display::terminate where a thread is exiting and
+//    the thread's current context is marked for destroy.
 Error Display::releaseContext(gl::Context *context, Thread *thread)
 {
     return releaseContextImpl(context, &mState.contextMap);
