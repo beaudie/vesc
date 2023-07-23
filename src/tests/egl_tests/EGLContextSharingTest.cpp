@@ -1284,6 +1284,100 @@ TEST_P(EGLContextSharingTestNoFixture, SwapBuffersShared)
     ASSERT_EGL_SUCCESS();
 }
 
+// Test cleanup of current context marked for destroy on thread exit.
+TEST_P(EGLContextSharingTestNoFixture, CleanupOfCurrentContextMarkedForDestroy)
+{
+    EGLint dispattrs[] = {EGL_PLATFORM_ANGLE_TYPE_ANGLE, GetParam().getRenderer(),
+                          EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE, GetParam().getDeviceType(),
+                          EGL_NONE};
+
+    // Synchronization tools to ensure the two threads are interleaved as designed by this test.
+    std::mutex mutex;
+    std::condition_variable condVar;
+
+    enum class Step
+    {
+        Start,
+        Thread0MakeCurrent,
+        Thread1DestroyContext,
+        Thread0Render,
+        Finish,
+        Abort,
+    };
+    Step currentStep = Step::Start;
+
+    std::thread thread0 = std::thread([&]() {
+        ThreadSynchronization<Step> threadSynchronization(&currentStep, &mutex, &condVar);
+
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Start));
+
+        mDisplay = eglGetPlatformDisplayEXT(
+            EGL_PLATFORM_ANGLE_ANGLE, reinterpret_cast<void *>(EGL_DEFAULT_DISPLAY), dispattrs);
+        EXPECT_TRUE(mDisplay != EGL_NO_DISPLAY);
+        EXPECT_EGL_TRUE(eglInitialize(mDisplay, nullptr, nullptr));
+
+        EGLContext ctx;
+        EGLSurface srf;
+        EGLConfig config = EGL_NO_CONFIG_KHR;
+        EXPECT_TRUE(chooseConfig(&config));
+        EXPECT_TRUE(createContext(config, &ctx));
+
+        EXPECT_TRUE(createPbufferSurface(mDisplay, config, 1280, 720, &srf));
+        ASSERT_EGL_SUCCESS() << "eglCreatePbufferSurface failed.";
+
+        EXPECT_EGL_TRUE(eglMakeCurrent(mDisplay, srf, srf, ctx));
+
+        threadSynchronization.nextStep(Step::Thread0MakeCurrent);
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Thread1DestroyContext));
+
+        // Clear and read back to make sure thread uses context and surface.
+        glClearColor(1.0, 0.0, 0.0, 1.0);
+        glClear(GL_COLOR_BUFFER_BIT);
+        EXPECT_PIXEL_EQ(0, 0, 255, 0, 0, 255);
+        threadSynchronization.nextStep(Step::Thread0Render);
+
+        // Wait a little to simulate an active and alive thread.
+        angle::Sleep(100);
+
+        EXPECT_TRUE(eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
+        eglTerminate(mDisplay);
+        EXPECT_EGL_SUCCESS();
+        threadSynchronization.nextStep(Step::Finish);
+    });
+
+    std::thread thread1 = std::thread([&]() {
+        ThreadSynchronization<Step> threadSynchronization(&currentStep, &mutex, &condVar);
+
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Thread0MakeCurrent));
+
+        EGLContext ctx;
+        EGLSurface srf;
+        EGLConfig config = EGL_NO_CONFIG_KHR;
+        EXPECT_TRUE(chooseConfig(&config));
+        EXPECT_TRUE(createContext(config, &ctx));
+
+        EXPECT_TRUE(createPbufferSurface(mDisplay, config, 1280, 720, &srf));
+        ASSERT_EGL_SUCCESS() << "eglCreatePbufferSurface failed.";
+
+        EXPECT_EGL_TRUE(eglMakeCurrent(mDisplay, srf, srf, ctx));
+
+        // Clear and read back to make sure thread uses context and surface.
+        glClearColor(1.0, 0.0, 0.0, 1.0);
+        glClear(GL_COLOR_BUFFER_BIT);
+        EXPECT_PIXEL_EQ(0, 0, 255, 0, 0, 255);
+
+        EXPECT_EGL_TRUE(eglDestroyContext(mDisplay, ctx));
+
+        threadSynchronization.nextStep(Step::Thread1DestroyContext);
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Thread0Render));
+    });
+
+    thread1.join();
+    thread0.join();
+
+    ASSERT_NE(currentStep, Step::Abort);
+}
+
 class EGLContextSharingTestNoSyncTextureUploads : public EGLContextSharingTest
 {};
 
