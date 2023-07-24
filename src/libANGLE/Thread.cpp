@@ -28,8 +28,12 @@ void PthreadKeyDestructorCallback(void *ptr)
     for (egl::Display *display : displays)
     {
         ASSERT(display);
-        // Perform necessary cleanup.
-        display->threadCleanup(thread);
+        const egl::Display *threadDisplay = thread->getDisplay();
+        if (threadDisplay == nullptr || threadDisplay == display)
+        {
+            // Perform necessary cleanup.
+            display->threadCleanup(thread);
+        }
     }
 }
 }  // namespace angle
