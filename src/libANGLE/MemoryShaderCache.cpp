@@ -42,7 +42,9 @@ angle::Result MemoryShaderCache::getShader(const Context *context,
     }
 
     angle::MemoryBuffer uncompressedData;
-    switch (mBlobCache.getAndDecompress(context->getScratchBuffer(), shaderHash, &uncompressedData))
+    size_t compressedSize = 0;
+    switch (mBlobCache.getAndDecompress(context->getScratchBuffer(), shaderHash, &uncompressedData,
+                                        &compressedSize))
     {
         case egl::BlobCache::GetAndDecompressResult::DecompressFailure:
             ANGLE_PERF_WARNING(context->getState().getDebug(), GL_DEBUG_SEVERITY_LOW,
@@ -53,8 +55,24 @@ angle::Result MemoryShaderCache::getShader(const Context *context,
             return angle::Result::Incomplete;
 
         case egl::BlobCache::GetAndDecompressResult::GetSuccess:
-            angle::Result result = shader->loadBinary(context, uncompressedData.data(),
-                                                      static_cast<int>(uncompressedData.size()));
+            angle::Result result;
+            if (uncompressedData.empty())
+            {
+                // use scratch buffer directly
+                angle::MemoryBuffer *scratchMemory;
+                if (!context->getScratchBuffer()->get(compressedSize, &scratchMemory))
+                {
+                    ERR() << "Failed to allocate memory for binary blob";
+                    return angle::Result::Incomplete;
+                }
+                result = shader->loadBinary(context, scratchMemory->data(),
+                                            static_cast<int>(compressedSize));
+            }
+            else
+            {
+                result = shader->loadBinary(context, uncompressedData.data(),
+                                            static_cast<int>(uncompressedData.size()));
+            }
 
             {
                 std::scoped_lock<std::mutex> lock(mHistogramMutex);
@@ -90,18 +108,32 @@ angle::Result MemoryShaderCache::putShader(const Context *context,
     angle::MemoryBuffer serializedShader;
     ANGLE_TRY(shader->serialize(nullptr, &serializedShader));
 
-    size_t compressedSize;
-    if (!mBlobCache.compressAndPut(shaderHash, std::move(serializedShader), &compressedSize))
+    if (kDisableCacheCompression)
     {
-        ANGLE_PERF_WARNING(context->getState().getDebug(), GL_DEBUG_SEVERITY_LOW,
-                           "Error compressing shader binary data for insertion into cache.");
-        return angle::Result::Incomplete;
-    }
+        size_t compressedSize = serializedShader.size();
+        mBlobCache.put(shaderHash, std::move(serializedShader));
 
+        {
+            std::scoped_lock<std::mutex> lock(mHistogramMutex);
+            ANGLE_HISTOGRAM_COUNTS("GPU.ANGLE.ShaderCache.ShaderBinarySizeBytes",
+                                   static_cast<int>(compressedSize));
+        }
+    }
+    else
     {
-        std::scoped_lock<std::mutex> lock(mHistogramMutex);
-        ANGLE_HISTOGRAM_COUNTS("GPU.ANGLE.ShaderCache.ShaderBinarySizeBytes",
-                               static_cast<int>(compressedSize));
+        size_t compressedSize;
+        if (!mBlobCache.compressAndPut(shaderHash, std::move(serializedShader), &compressedSize))
+        {
+            ANGLE_PERF_WARNING(context->getState().getDebug(), GL_DEBUG_SEVERITY_LOW,
+                               "Error compressing shader binary data for insertion into cache.");
+            return angle::Result::Incomplete;
+        }
+
+        {
+            std::scoped_lock<std::mutex> lock(mHistogramMutex);
+            ANGLE_HISTOGRAM_COUNTS("GPU.ANGLE.ShaderCache.ShaderBinarySizeBytes",
+                                   static_cast<int>(compressedSize));
+        }
     }
 
     return angle::Result::Continue;

@@ -32,6 +32,8 @@ static constexpr size_t kBlobCacheKeyLength = angle::base::kSHA1Length;
 using BlobCacheKey                          = std::array<uint8_t, kBlobCacheKeyLength>;
 }  // namespace egl
 
+static constexpr bool kDisableCacheCompression = false;
+
 namespace std
 {
 template <>
@@ -129,10 +131,10 @@ class BlobCache final : angle::NonCopyable
         NotFound,
         DecompressFailure,
     };
-    [[nodiscard]] GetAndDecompressResult getAndDecompress(
-        angle::ScratchBuffer *scratchBuffer,
-        const BlobCache::Key &key,
-        angle::MemoryBuffer *uncompressedValueOut);
+    [[nodiscard]] GetAndDecompressResult getAndDecompress(angle::ScratchBuffer *scratchBuffer,
+                                                          const BlobCache::Key &key,
+                                                          angle::MemoryBuffer *uncompressedValueOut,
+                                                          size_t *compressedSizeOut);
 
     // Evict a blob from the binary cache.
     void remove(const BlobCache::Key &key);

@@ -92,7 +92,9 @@ LinkedUniform::LinkedUniform(const LinkedUniform &uniform)
       blockInfo(uniform.blockInfo),
       outerArraySizes(uniform.outerArraySizes),
       outerArrayOffset(uniform.outerArrayOffset)
-{}
+{
+    ALOG("\t\tLinkedUniform(const LinkedUniform &uniform)");
+}
 
 LinkedUniform &LinkedUniform::operator=(const LinkedUniform &uniform)
 {

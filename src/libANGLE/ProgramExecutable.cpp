@@ -155,6 +155,7 @@ RangeUI AddUniforms(const ShaderMap<Program *> &programs,
                     std::vector<LinkedUniform> &outputUniforms,
                     const std::function<RangeUI(const ProgramState &)> &getRange)
 {
+    WARN() << "AddUniforms enter";
     unsigned int startRange = static_cast<unsigned int>(outputUniforms.size());
     for (ShaderType shaderType : activeShaders)
     {
@@ -165,6 +166,7 @@ RangeUI AddUniforms(const ShaderMap<Program *> &programs,
         outputUniforms.insert(outputUniforms.end(), programUniforms.begin() + uniformRange.low(),
                               programUniforms.begin() + uniformRange.high());
     }
+    WARN() << "AddUniforms exit";
     return RangeUI(startRange, static_cast<unsigned int>(outputUniforms.size()));
 }
 
@@ -364,6 +366,7 @@ void ProgramExecutable::load(bool isSeparable, gl::BinaryInputStream *stream)
 
     size_t uniformCount = stream->readInt<size_t>();
     ASSERT(getUniforms().empty());
+    WARN() << "mUniforms.push enter uniformCount:" << uniformCount;
     for (size_t uniformIndex = 0; uniformIndex < uniformCount; ++uniformIndex)
     {
         LinkedUniform uniform;
@@ -387,6 +390,7 @@ void ProgramExecutable::load(bool isSeparable, gl::BinaryInputStream *stream)
 
         mUniforms.push_back(uniform);
     }
+    WARN() << "mUniforms.push exit";
 
     size_t uniformBlockCount = stream->readInt<size_t>();
     ASSERT(getUniformBlocks().empty());
@@ -541,6 +545,8 @@ void ProgramExecutable::load(bool isSeparable, gl::BinaryInputStream *stream)
             {
                 LoadShaderVar(stream, &variable);
             }
+            ALOG("calling mLinkedUniforms[%d].resize(%zu)", ToUnderlying(shaderType),
+                 stream->readInt<size_t>());
             mLinkedUniforms[shaderType].resize(stream->readInt<size_t>());
             for (sh::ShaderVariable &variable : mLinkedUniforms[shaderType])
             {

@@ -26,6 +26,7 @@ bool CompressBlobCacheData(const size_t cacheSize,
                            const uint8_t *cacheData,
                            angle::MemoryBuffer *compressedData)
 {
+    ALOG("CompressBlobCacheData");
     uLong uncompressedSize       = static_cast<uLong>(cacheSize);
     uLong expectedCompressedSize = zlib_internal::GzipExpectedCompressedSize(uncompressedSize);
 
@@ -58,6 +59,7 @@ bool DecompressBlobCacheData(const uint8_t *compressedData,
                              const size_t compressedSize,
                              angle::MemoryBuffer *uncompressedData)
 {
+    ALOG("DecompressBlobCacheData");
     // Call zlib function to decompress.
     uint32_t uncompressedSize =
         zlib_internal::GetGzipUncompressedSize(compressedData, compressedSize);
@@ -71,7 +73,7 @@ bool DecompressBlobCacheData(const uint8_t *compressedData,
 
     uLong destLen = uncompressedSize;
     int zResult   = zlib_internal::GzipUncompressHelper(
-          uncompressedData->data(), &destLen, compressedData, static_cast<uLong>(compressedSize));
+        uncompressedData->data(), &destLen, compressedData, static_cast<uLong>(compressedSize));
 
     if (zResult != Z_OK)
     {
@@ -216,25 +218,27 @@ bool BlobCache::getAt(size_t index, const BlobCache::Key **keyOut, BlobCache::Va
 BlobCache::GetAndDecompressResult BlobCache::getAndDecompress(
     angle::ScratchBuffer *scratchBuffer,
     const BlobCache::Key &key,
-    angle::MemoryBuffer *uncompressedValueOut)
+    angle::MemoryBuffer *uncompressedValueOut,
+    size_t *compressedSize)
 {
     ASSERT(uncompressedValueOut);
 
     Value compressedValue;
-    size_t compressedSize;
-    if (!get(scratchBuffer, key, &compressedValue, &compressedSize))
+    if (!get(scratchBuffer, key, &compressedValue, compressedSize))
     {
         return GetAndDecompressResult::NotFound;
     }
 
+    if (!kDisableCacheCompression)
     {
         // This needs to be locked because `DecompressBlobCacheData` is reading shared memory from
         // `compressedValue.data()`.
         std::scoped_lock<std::mutex> lock(mBlobCacheMutex);
-        if (!DecompressBlobCacheData(compressedValue.data(), compressedSize, uncompressedValueOut))
+        if (!DecompressBlobCacheData(compressedValue.data(), *compressedSize, uncompressedValueOut))
         {
             return GetAndDecompressResult::DecompressFailure;
         }
+        ALOG("getAndDecompress: %zu / %zu", *compressedSize, uncompressedValueOut->size());
     }
 
     return GetAndDecompressResult::GetSuccess;

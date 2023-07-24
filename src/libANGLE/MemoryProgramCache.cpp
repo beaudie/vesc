@@ -125,7 +125,9 @@ angle::Result MemoryProgramCache::getProgram(const Context *context,
     ComputeHash(context, program, hashOut);
 
     angle::MemoryBuffer uncompressedData;
-    switch (mBlobCache.getAndDecompress(context->getScratchBuffer(), *hashOut, &uncompressedData))
+    size_t compressedSize = 0;
+    switch (mBlobCache.getAndDecompress(context->getScratchBuffer(), *hashOut, &uncompressedData,
+                                        &compressedSize))
     {
         case egl::BlobCache::GetAndDecompressResult::NotFound:
             return angle::Result::Incomplete;
@@ -136,9 +138,26 @@ angle::Result MemoryProgramCache::getProgram(const Context *context,
             return angle::Result::Incomplete;
 
         case egl::BlobCache::GetAndDecompressResult::GetSuccess:
-            angle::Result result =
-                program->loadBinary(context, GL_PROGRAM_BINARY_ANGLE, uncompressedData.data(),
-                                    static_cast<int>(uncompressedData.size()));
+            angle::Result result;
+            if (uncompressedData.empty())
+            {
+                // use scratch buffer directly
+                angle::MemoryBuffer *scratchMemory;
+                if (!context->getScratchBuffer()->get(compressedSize, &scratchMemory))
+                {
+                    ERR() << "Failed to allocate memory for binary blob";
+                    return angle::Result::Incomplete;
+                }
+                result =
+                    program->loadBinary(context, GL_PROGRAM_BINARY_ANGLE, scratchMemory->data(),
+                                        static_cast<int>(compressedSize));
+            }
+            else
+            {
+                result =
+                    program->loadBinary(context, GL_PROGRAM_BINARY_ANGLE, uncompressedData.data(),
+                                        static_cast<int>(uncompressedData.size()));
+            }
             ANGLE_TRY(result);
 
             if (result == angle::Result::Continue)
@@ -181,26 +200,45 @@ angle::Result MemoryProgramCache::putProgram(const egl::BlobCache::Key &programH
     angle::MemoryBuffer serializedProgram;
     ANGLE_TRY(program->serialize(context, &serializedProgram));
 
-    angle::MemoryBuffer compressedData;
-    if (!egl::CompressBlobCacheData(serializedProgram.size(), serializedProgram.data(),
-                                    &compressedData))
+    if (kDisableCacheCompression)
     {
-        ANGLE_PERF_WARNING(context->getState().getDebug(), GL_DEBUG_SEVERITY_LOW,
-                           "Error compressing binary data.");
-        return angle::Result::Incomplete;
+        ALOG("calling putProgram");
+        /*{
+            std::scoped_lock<std::mutex> lock(mBlobCache.getMutex());
+            // TODO: http://anglebug.com/7568
+            // This was a workaround for Chrome until it added support for EGL_ANDROID_blob_cache,
+            // tracked by http://anglebug.com/2516. This issue has since been closed, but removing
+        this still causes a test failure. auto *platform = ANGLEPlatformCurrent();
+            platform->cacheProgram(platform, programHash, serializedProgram.size(),
+                                   serializedProgram.data());
+        }*/
+        mBlobCache.put(programHash, std::move(serializedProgram));
+    }
+    else
+    {
+        angle::MemoryBuffer compressedData;
+        if (!egl::CompressBlobCacheData(serializedProgram.size(), serializedProgram.data(),
+                                        &compressedData))
+        {
+            ANGLE_PERF_WARNING(context->getState().getDebug(), GL_DEBUG_SEVERITY_LOW,
+                               "Error compressing binary data.");
+            return angle::Result::Incomplete;
+        }
+
+        {
+            std::scoped_lock<std::mutex> lock(mBlobCache.getMutex());
+            // TODO: http://anglebug.com/7568
+            // This was a workaround for Chrome until it added support for EGL_ANDROID_blob_cache,
+            // tracked by http://anglebug.com/2516. This issue has since been closed, but removing
+            // this still causes a test failure.
+            auto *platform = ANGLEPlatformCurrent();
+            platform->cacheProgram(platform, programHash, compressedData.size(),
+                                   compressedData.data());
+        }
+
+        mBlobCache.put(programHash, std::move(compressedData));
     }
 
-    {
-        std::scoped_lock<std::mutex> lock(mBlobCache.getMutex());
-        // TODO: http://anglebug.com/7568
-        // This was a workaround for Chrome until it added support for EGL_ANDROID_blob_cache,
-        // tracked by http://anglebug.com/2516. This issue has since been closed, but removing this
-        // still causes a test failure.
-        auto *platform = ANGLEPlatformCurrent();
-        platform->cacheProgram(platform, programHash, compressedData.size(), compressedData.data());
-    }
-
-    mBlobCache.put(programHash, std::move(compressedData));
     return angle::Result::Continue;
 }
 

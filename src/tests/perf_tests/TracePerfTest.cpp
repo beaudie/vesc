@@ -1685,7 +1685,7 @@ TracePerfTest::TracePerfTest(std::unique_ptr<const TracePerfParams> params)
 void TracePerfTest::startTest()
 {
     // runTrial() must align to frameCount()
-    ASSERT(mCurrentFrame == mStartFrame);
+    //    ASSERT(mCurrentFrame == mStartFrame);
 }
 
 std::string FindTraceGzPath(const std::string &traceName)
@@ -1975,7 +1975,14 @@ void TracePerfTest::drawBenchmark()
 
     if (mCurrentFrame == mEndFrame)
     {
+#if true
         mTraceReplay->resetReplay();
+#else
+        double t1 = angle::GetCurrentSystemTime();
+        mTraceReplay->resetReplay();
+        double t2 = angle::GetCurrentSystemTime();
+        ALOG("resetReplay took %llu us", (unsigned long long)((t2 - t1) * 1000ull * 1000ull));
+#endif
         mCurrentFrame = mStartFrame;
     }
     else

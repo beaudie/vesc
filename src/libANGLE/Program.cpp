@@ -33,6 +33,7 @@
 #include "libANGLE/queryconversions.h"
 #include "libANGLE/renderer/GLImplFactory.h"
 #include "libANGLE/renderer/ProgramImpl.h"
+#include "libANGLE/trace.h"
 #include "platform/PlatformMethods.h"
 #include "platform/autogen/FrontendFeatures_autogen.h"
 
@@ -1151,6 +1152,7 @@ angle::Result Program::linkImpl(const Context *context)
         }
     }
 
+    ALOG("program cache miss");
     // Cache load failed, fall through to normal linking.
     unlink();
     InfoLog &infoLog = mState.mExecutable->getInfoLog();
