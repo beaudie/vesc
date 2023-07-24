@@ -16,6 +16,40 @@
       "message": "I haven\u0027t looked at this closely yet, but Igor\u0027s touching this area at the same time. PTAL Igor",
       "revId": "843421ce2841756ce47de62d64442b659a76e808",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3f23fc7_d4c6d3dc",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1154,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-07-24T18:08:36Z",
+      "side": 1,
+      "message": "`currentContext` may be from different Display.",
+      "revId": "843421ce2841756ce47de62d64442b659a76e808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "543cb194_e75535ff",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1159,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-07-24T18:08:36Z",
+      "side": 1,
+      "message": "Skipped `unMakeCurrent()` call.\n\nI\u0027m not sure, but maybe also need to call `mImplementation-\u003emakeCurrent()`.\n\nI think it is better to use `Display::makeCurrent()` method line in my CL to avoid possible errors and no need to duplicate the logic.",
+      "revId": "843421ce2841756ce47de62d64442b659a76e808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
