@@ -34,6 +34,24 @@
       "parentUuid": "3605691b_195eb90d",
       "revId": "202885a7ccea7fdf33761b0fed63cb82fc50b509",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "216ad2d6_e2f78fb7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-07-24T22:51:47Z",
+      "side": 1,
+      "message": "Also note that if I add:\n```\nwtu.checkCanvas(gl, black);\n```\nafter the newly-added clear shown in my previous message, it will fail on the draw test. I think the checkCanvas is basically flushing and doing a ReadPixels to confirm the FBO contents, which also causes Chrome to discard the depth+stencil, so the depth+stencil tests are being done against invalidated data:\n\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/platform/graphics/gpu/drawing_buffer.cc;l\u003d1581",
+      "parentUuid": "acd0a61d_5ed955c7",
+      "revId": "202885a7ccea7fdf33761b0fed63cb82fc50b509",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
