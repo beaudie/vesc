@@ -103,6 +103,23 @@
       "parentUuid": "d7b1d6b5_2bc48b31",
       "revId": "301ba4230aaf4c7799154af18fba4b4db545a5e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50c1ea31_3e43a39d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-07-24T14:36:31Z",
+      "side": 1,
+      "message": "Chrome branched last week it\u0027s a good time to merge a more risky CL like this.",
+      "revId": "301ba4230aaf4c7799154af18fba4b4db545a5e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
