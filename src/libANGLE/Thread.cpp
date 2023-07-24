@@ -110,7 +110,6 @@ void Thread::setCurrent(gl::Context *context)
     if (mContext)
     {
         ASSERT(mContext->getDisplay());
-        mContext->getDisplay()->addActiveThread(this);
     }
 }
 

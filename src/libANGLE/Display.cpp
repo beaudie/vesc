@@ -875,7 +875,6 @@ Display::Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDe
       mGlobalTextureShareGroupUsers(0),
       mGlobalSemaphoreShareGroupUsers(0),
       mTerminatedByApi(false),
-      mActiveThreads(),
       mSingleThreadPool(nullptr),
       mMultiThreadPool(nullptr)
 {}
@@ -1135,12 +1134,6 @@ Error Display::terminate(Thread *thread, TerminateReason terminateReason)
     if (terminateReason == TerminateReason::Api)
     {
         mTerminatedByApi = true;
-
-        // Remove thread from active thread set if there is no context current.
-        if (thread->getContext() == nullptr)
-        {
-            mActiveThreads.erase(thread);
-        }
     }
 
     // All subsequent calls assume the display to be valid and terminated by app.
@@ -1184,17 +1177,8 @@ Error Display::terminate(Thread *thread, TerminateReason terminateReason)
     {
         if (context.second->getRefCount() > 0)
         {
-            if (terminateReason == TerminateReason::NoActiveThreads)
-            {
-                ASSERT(mTerminatedByApi);
-                context.second->release();
-                (void)context.second->unMakeCurrent(this);
-            }
-            else
-            {
-                contextsStillCurrent.emplace(context);
-                continue;
-            }
+            contextsStillCurrent.emplace(context);
+            continue;
         }
 
         // Add context that is not current to mInvalidContextSet for cleanup.
@@ -1286,21 +1270,21 @@ Error Display::releaseThread()
     return destroyInvalidEglObjects();
 }
 
-void Display::addActiveThread(Thread *thread)
-{
-    mActiveThreads.insert(thread);
-}
-
 void Display::threadCleanup(Thread *thread)
 {
-    mActiveThreads.erase(thread);
-    const bool noActiveThreads = mActiveThreads.size() == 0;
+    gl::Context *previousContext = thread->getContext();
+    // The previous Context may have been created with a different Display.
+    if (previousContext != nullptr && previousContext->getDisplay() == this)
+    {
+        // Unmake Context from current in order to:
+        // - destroy Context if it was already marked for destruction;
+        // - invalidate Context if Display was already terminated by app;
+        // - perform Display termination when no active threads (and current Contexts).
+        (void)makeCurrent(thread, previousContext, nullptr, nullptr, nullptr);
+    }
 
-    (void)terminate(thread, noActiveThreads ? TerminateReason::NoActiveThreads
-                                            : TerminateReason::InternalCleanup);
-
-    // This "thread" is no longer active, reset its cached context
-    thread->setCurrent(nullptr);
+    // Release any invalid objects in case if Display was not terminated.
+    (void)releaseThread();
 }
 
 std::vector<const Config *> Display::getConfigs(const egl::AttributeMap &attribs) const
