@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbdfbc0d_132ff78b",
+        "filename": "src/libANGLE/renderer/gl/egl/ContextEGL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-24T19:11:32Z",
+      "side": 1,
+      "message": "As far as I can make it, this flag is always set when creating external contexts, so the fact that this is now conditional is a no-op.\n\nThe change in Chromium that uses the new entry points would simultaneously drop usage of this flag, which means make current no longer syncs. I would then follow up with a change in ANGLE that removes this entirely.",
+      "range": {
+        "startLine": 33,
+        "startChar": 21,
+        "endLine": 33,
+        "endChar": 40
+      },
+      "revId": "0dc71038fef0bc7f1446f56467d6af1f7b298bcf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
