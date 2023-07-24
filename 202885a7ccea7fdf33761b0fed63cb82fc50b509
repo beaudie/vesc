@@ -16,6 +16,24 @@
       "message": "@kbr@chromium.org Any idea why these WebGL conformance failures happen? It doesn\u0027t appear that the test in question uses framebuffer invalidate/discard so I don\u0027t know where the failure is coming from.\n\nThis is the source I\u0027m looking at, maybe it\u0027s not the right one?\n\nhttps://github.com/KhronosGroup/WebGL/blob/main/conformance-suites/1.0.0/conformance/context-attributes-alpha-depth-stencil-antialias.html",
       "revId": "202885a7ccea7fdf33761b0fed63cb82fc50b509",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "acd0a61d_5ed955c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-07-24T22:45:04Z",
+      "side": 1,
+      "message": "Might be a test bug. If I modify the test and run that, it reliably works with this:\n\n```\ndiff --git a/sdk/tests/conformance/context/context-attributes-alpha-depth-stencil-antialias.html b/sdk/tests/conformance/context/context-attributes-alpha-depth-stencil-antialias.html\nindex 40f46a744..b3e8291d4 100644\n--- a/sdk/tests/conformance/context/context-attributes-alpha-depth-stencil-antialias.html\n+++ b/sdk/tests/conformance/context/context-attributes-alpha-depth-stencil-antialias.html\n@@ -146,6 +146,7 @@ function checkDraw(hasAlpha, hasStencil, hasDepth, hasAntialias)\n {\n     let red \u003d [255, 0, 0, 255 ];\n     let black \u003d [0, 0, 0, hasAlpha ? 0 : 255 ];\n+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);\n     debug(`Testing that stencil ${ hasStencil ? \u0027affects\u0027: \u0027does not affect\u0027} the rendering.`);\n     gl.stencilFunc(gl.NEVER, 1, 1);\n     gl.stencilOp(gl.KEEP, gl.KEEP, gl.KEEP);\n```\n\nChrome\u0027s implicit framebuffer discard causes it to fail sporadically without that extra clear (I think it does depth/stencil tests against the invalidated framebuffer).\n\nIt looks like there are several other setups that fail the context-attributes-alpha-depth-stencil-antialias test, and those would probably pass with the above test change:\n\nhttps://chromium.googlesource.com/chromium/src/+/main/content/test/gpu/gpu_tests/test_expectations/webgl_conformance_expectations.txt",
+      "parentUuid": "3605691b_195eb90d",
+      "revId": "202885a7ccea7fdf33761b0fed63cb82fc50b509",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
