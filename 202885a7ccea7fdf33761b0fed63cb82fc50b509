@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3605691b_195eb90d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-07-24T19:35:11Z",
+      "side": 1,
+      "message": "@kbr@chromium.org Any idea why these WebGL conformance failures happen? It doesn\u0027t appear that the test in question uses framebuffer invalidate/discard so I don\u0027t know where the failure is coming from.\n\nThis is the source I\u0027m looking at, maybe it\u0027s not the right one?\n\nhttps://github.com/KhronosGroup/WebGL/blob/main/conformance-suites/1.0.0/conformance/context-attributes-alpha-depth-stencil-antialias.html",
+      "revId": "202885a7ccea7fdf33761b0fed63cb82fc50b509",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
