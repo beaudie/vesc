@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee5c0e5c_35a9670d",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1154,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-07-24T21:24:14Z",
+      "side": 1,
+      "message": "On android platform there should be a single display (other than end2end tests)\n\nnevertheless even if there are multiple displays, if `currentContext` was from a different display then we should not have entered this display\u0027s terminate call at all, implying this should be handled before entering this call.\n\nWIP change is here\n-\u003e https://chromium-review.googlesource.com/c/angle/angle/+/4713166\nneeds to test a bit more",
+      "parentUuid": "e3f23fc7_d4c6d3dc",
+      "revId": "843421ce2841756ce47de62d64442b659a76e808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "543cb194_e75535ff",
@@ -48,6 +66,24 @@
       "writtenOn": "2023-07-24T18:08:36Z",
       "side": 1,
       "message": "Skipped `unMakeCurrent()` call.\n\nI\u0027m not sure, but maybe also need to call `mImplementation-\u003emakeCurrent()`.\n\nI think it is better to use `Display::makeCurrent()` method line in my CL to avoid possible errors and no need to duplicate the logic.",
+      "revId": "843421ce2841756ce47de62d64442b659a76e808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c3b8919_bc68dfd9",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1159,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-07-24T21:24:14Z",
+      "side": 1,
+      "message": "`releaseContext` should handle that part",
+      "parentUuid": "543cb194_e75535ff",
       "revId": "843421ce2841756ce47de62d64442b659a76e808",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
