@@ -71,6 +71,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1ca09a6_cc3dfa83",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1154,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-07-25T17:06:39Z",
+      "side": 1,
+      "message": "for closure -\n\n\u003e My 2 CLs works for all platforms\n\nandroid is the only platform where threadcleanup should be enabled, please refer to discussion and decision in original change\n\n\u003e and does not assume anything (like releaseContext() should handle unMakeCurrent())\n\nthis is not an assumption, it is by design that `releaseContext` does what it does. the note above the method makes the intent clear",
+      "parentUuid": "3d6ead3f_e35dc816",
+      "revId": "843421ce2841756ce47de62d64442b659a76e808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "543cb194_e75535ff",
