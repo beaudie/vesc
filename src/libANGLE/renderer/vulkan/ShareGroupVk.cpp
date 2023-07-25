@@ -36,7 +36,7 @@ constexpr size_t kDescriptorWriteInfosInitialSize =
 constexpr size_t kDescriptorBufferViewsInitialSize = 0;
 
 constexpr VkDeviceSize kMaxStaticBufferSizeToUseBuddyAlgorithm  = 256;
-constexpr VkDeviceSize kMaxDynamicBufferSizeToUseBuddyAlgorithm = 4096;
+constexpr VkDeviceSize kMaxDynamicBufferSizeToUseBuddyAlgorithm = 16 * 1024;
 
 // How often monolithic pipelines should be created, if preferMonolithicPipelinesOverLibraries is
 // enabled.  Pipeline creation is typically O(hundreds of microseconds).  A value of 2ms is chosen

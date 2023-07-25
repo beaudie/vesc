@@ -4931,7 +4931,7 @@ angle::Result BufferHelper::allocateForCopyImage(ContextVk *contextVk,
     size_t stagingAlignment = static_cast<size_t>(renderer->getStagingBufferAlignment());
 
     ANGLE_TRY(initSuballocation(contextVk, memoryTypeIndex, allocationSize, stagingAlignment,
-                                BufferUsageType::Static));
+                                BufferUsageType::Dynamic));
 
     *offset  = roundUp(getOffset(), static_cast<VkDeviceSize>(imageCopyAlignment));
     *dataPtr = getMappedMemory() + (*offset) - getOffset();
