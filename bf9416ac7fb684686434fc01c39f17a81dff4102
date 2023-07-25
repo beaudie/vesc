@@ -51,6 +51,24 @@
       "parentUuid": "6a3b3884_95350669",
       "revId": "bf9416ac7fb684686434fc01c39f17a81dff4102",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f82b294_e37dd2ce",
+        "filename": "src/libANGLE/Thread.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-07-25T17:07:09Z",
+      "side": 1,
+      "message": "\u003e Why need to call threadCleanup() when no Context is current, but do not need when Context from some other Display is Current?\n\nthis change was in response to your comment [1] about the currentcontext not being from this display and has nothing to do with any other change\n\n\u003e I think that we need to call threadCleanup() for all Displays to cleanup from any previous use by these Displays.\n\nthere can only be 1 current context on a thread associated with a given display, any subsequent makecurrent calls will trigger an unmakecurrent on previous bound context\n\n\n\u003e I still think that my 2 CLs simpler and handle more cases. I do not know why you decided to rewrite what I originally proposed? Something was originally wrong with my CLs?\n\n1. it is not necessary for terminate to have been called during threadcleanup in which case your change will not cleanup a destroyed context\n2. calling releasethread when the app hasnt even terminated the display seems strange and confusing\n3. not clear what \"more cases\" are you trying to fix\n\n\"simpler\" is subjective. Given the timeline constraints and internal validation requirements the goal was to have a targeted change with minimal code change and maximum code reuse that fixes the issue at hand. I honestly do not know what your change is trying to fix given the lack of test cases.\n\ndue to bandwidth constraints i need to switch gears to other issues but if you want to sync about co-ordinating better please reach out to me via internal channels and will be happy to chat\n\n[1] - https://chromium-review.googlesource.com/c/angle/angle/+/4708978/5#message-190d38c90a38cfc2f03a227b7f329af079178089",
+      "parentUuid": "4f082c2c_d0b00b28",
+      "revId": "bf9416ac7fb684686434fc01c39f17a81dff4102",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
