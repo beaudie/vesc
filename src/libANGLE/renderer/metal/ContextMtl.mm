@@ -1828,13 +1828,12 @@ void ContextMtl::flushCommandBufferIfNeeded()
 {
     if (mRenderPassesSinceFlush >= mtl::kMaxRenderPassesPerCommandBuffer)
     {
-        // WaitUntilScheduled here is intended to help the CPU-GPU pipeline and
-        // helps to keep the number of inflight render passes in the system to a
-        // minimum.
-        flushCommandBuffer(mtl::WaitUntilScheduled);
+        // Ensure that we don't accumulate too manu unflushed render passes. Don't wait until they
+        // are submitted, other components handle backpressure so don't create uneccessary CPU/GPU
+        // synchronization.
+        flushCommandBuffer(mtl::NoWait);
     }
-
-    if (mCmdBuffer.needsFlushForDrawCallLimits())
+    else if (mCmdBuffer.needsFlushForDrawCallLimits())
     {
         flushCommandBuffer(mtl::NoWait);
     }
