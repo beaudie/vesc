@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d6ead3f_e35dc816",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1154,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-07-25T11:25:40Z",
+      "side": 1,
+      "message": "\u003e On android platform there should be a single display (other than end2end tests)\n\nMy 2 CLs works for all platforms and does not assume anything (like `releaseContext()` should handle `unMakeCurrent()`). First CL changes `makeCurrent()` behavior to handle `terminate()` and second uses same methods that would be called from `eglReleaseThread()`. To understand seconds CL does not need to know internal details - it is simpler and less likely to cause problems.",
+      "parentUuid": "ee5c0e5c_35a9670d",
+      "revId": "843421ce2841756ce47de62d64442b659a76e808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "543cb194_e75535ff",
