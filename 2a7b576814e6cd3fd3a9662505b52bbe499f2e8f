@@ -16,6 +16,24 @@
       "message": "Please put a summary of the CL description here too, so readers would know why Nvidia\u003c520 is being excluded.",
       "revId": "2a7b576814e6cd3fd3a9662505b52bbe499f2e8f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0feb8b59_43ad334c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4617,
+      "author": {
+        "id": 1377582
+      },
+      "writtenOn": "2023-07-25T19:08:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "825f50a6_9de7a045",
+      "revId": "2a7b576814e6cd3fd3a9662505b52bbe499f2e8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
