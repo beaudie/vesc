@@ -16,6 +16,24 @@
       "message": "https://chromium-review.googlesource.com/c/angle/angle/+/4708978",
       "revId": "721b88fd06a4982a9d290e5236676c7efc3fb359",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2e41d68_f4759929",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-07-25T17:14:30Z",
+      "side": 1,
+      "message": "Compared to you CL, this once is less complex: removes `NoActiveThreads` enum and `mActiveThreads` member, uses existing methods instead of adding new logic.\n\nAdditionally, it calls `releaseThread()` to immediately cleanup invalid objects. I added this so `threadCleanup()` works the same way as `eglReleaseThread()`.\n\nAs the result, behavior of this CL is the same as if the application called `eglReleaseThread()` at thread termination.",
+      "parentUuid": "e68cb3e2_306b704e",
+      "revId": "721b88fd06a4982a9d290e5236676c7efc3fb359",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
