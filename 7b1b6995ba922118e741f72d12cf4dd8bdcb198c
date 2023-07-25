@@ -50,6 +50,24 @@
       "message": "manu -\u003e many",
       "revId": "7b1b6995ba922118e741f72d12cf4dd8bdcb198c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76d275d4_dfe30025",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 1832,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-07-25T20:51:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7bfc2b61_1dbc9fcc",
+      "revId": "7b1b6995ba922118e741f72d12cf4dd8bdcb198c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
