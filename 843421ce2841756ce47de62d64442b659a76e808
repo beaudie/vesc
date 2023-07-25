@@ -89,6 +89,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "675b7d66_eee3e695",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1154,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-07-25T17:36:23Z",
+      "side": 1,
+      "message": "\u003ethis is not an assumption, it is by design that releaseContext does what it does. the note above the method makes the intent clear\n\nThan why we have this code?\n```\n        auto error \u003d previousContext-\u003eunMakeCurrent(this);\n        if (previousContext-\u003egetRefCount() \u003d\u003d 0 \u0026\u0026 previousContext-\u003eisDestroyed())\n        {\n            // The previous Context may have been created with a different Display.\n            Display *previousDisplay \u003d previousContext-\u003egetDisplay();\n            ANGLE_TRY(previousDisplay-\u003ereleaseContext(previousContext, thread));\n        }\n```\nWhy not just call `unMakeCurrent()` in `else`?\n\nBefore this CL, `releaseContext()` was always called after `unMakeCurrent()` but now it is allowed to call it right away. For me this is assuming internal details, like that `Context::onDestroy()` calls `unMakeCurrent()`.",
+      "parentUuid": "c1ca09a6_cc3dfa83",
+      "revId": "843421ce2841756ce47de62d64442b659a76e808",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "543cb194_e75535ff",
