@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9780260_d0c6bed4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-07-25T19:42:01Z",
+      "side": 1,
+      "message": "PTAL! \n\nThe original issue that added this flush was https://bugs.webkit.org/show_bug.cgi?id\u003d234008 and I agree that we want to flush at some frequency, but probably not with WaitUntilScheduled. The test case provided is not very representative of rasterization work, so we were flushing many times per frame with WaitUntilScheduled.\n\nDan and Kimmo: If you have an opinions about iOS here, I\u0027ll make any change. I just can\u0027t test it locally.",
+      "revId": "7b1b6995ba922118e741f72d12cf4dd8bdcb198c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
