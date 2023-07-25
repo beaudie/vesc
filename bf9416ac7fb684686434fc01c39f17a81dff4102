@@ -33,6 +33,24 @@
       "message": "Looks strange.\n\nWhy need to call `threadCleanup()` when no Context is current, but do **not** need when Context from some other Display is Current?\n\nI think that we need to call `threadCleanup()` for all Displays to cleanup from any previous use by these Displays.\n\nI still think that my 2 CLs simpler and handle more cases. I do not know why you decided to rewrite what I originally proposed? Something was originally wrong with my CLs?",
       "revId": "bf9416ac7fb684686434fc01c39f17a81dff4102",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f082c2c_d0b00b28",
+        "filename": "src/libANGLE/Thread.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-07-25T11:39:54Z",
+      "side": 1,
+      "message": "In any case I still want to submit:\n4708328: Perform Display terminate(InternalCleanup) from makeCurrent() | https://chromium-review.googlesource.com/c/angle/angle/+/4708328\n\n... because it handles different problem.\n\nHowever, if above CL lends, yours:\n4708978: Clean up current context marked for destroy during thread exit | https://chromium-review.googlesource.com/c/angle/angle/+/4708978\n\n... will look overly complicated and everything in `Display::threadCleanup()` can be replaced with `makeCurrent(context, nullptr, nullptr, nullptr)`.\nResult will be almost the same, except that Context will be also unmade from current when thread terminates. I think it is better to do this rather than keep Context current to a terminated thread. Need to check spec. about this.",
+      "parentUuid": "6a3b3884_95350669",
+      "revId": "bf9416ac7fb684686434fc01c39f17a81dff4102",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
