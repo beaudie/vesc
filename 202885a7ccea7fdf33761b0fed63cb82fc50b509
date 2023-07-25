@@ -52,6 +52,24 @@
       "parentUuid": "acd0a61d_5ed955c7",
       "revId": "202885a7ccea7fdf33761b0fed63cb82fc50b509",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28b43eae_ea1300ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-07-25T01:29:20Z",
+      "side": 1,
+      "message": "Thanks Steven for pointing this out. I\u0027m almost certain that the Blink-side WebGL code is in error, and that it needs to be changed to only call glDiscardFramebuffer when passing the current frame to the compositor - not during WebGL API calls like glReadPixels. Filed crbug.com/1467393 . I\u0027ll fix this ASAP but please feel free to suppress the failure if this is blocking you. Sorry about this longstanding bug.",
+      "parentUuid": "216ad2d6_e2f78fb7",
+      "revId": "202885a7ccea7fdf33761b0fed63cb82fc50b509",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
