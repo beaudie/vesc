@@ -221,6 +221,10 @@ class ProgramExecutable final : public angle::Subject
     {
         return mSecondaryOutputLocations;
     }
+    const std::vector<LinkedUniform> &getUniformBlockUniforms() const
+    {
+        return mUniformBlockUniforms;
+    }
     const std::vector<LinkedUniform> &getUniforms() const { return mUniforms; }
     const std::vector<InterfaceBlock> &getUniformBlocks() const { return mUniformBlocks; }
     const UniformBlockBindingMask &getActiveUniformBlockBindings() const
@@ -268,8 +272,10 @@ class ProgramExecutable final : public angle::Subject
     }
     const LinkedUniform &getUniformByIndex(GLuint index) const
     {
-        ASSERT(index < static_cast<size_t>(mUniforms.size()));
-        return mUniforms[index];
+        ASSERT(index < static_cast<size_t>(mUniforms.size() + mUniformBlockUniforms.size()));
+        return index < static_cast<size_t>(mUniforms.size())
+                   ? mUniforms[index]
+                   : mUniformBlockUniforms[index - mUniforms.size()];
     }
 
     ANGLE_INLINE GLuint getActiveUniformBlockCount() const
@@ -470,6 +476,8 @@ class ProgramExecutable final : public angle::Subject
     RangeUI mImageUniformRange;
     RangeUI mAtomicCounterUniformRange;
     std::vector<InterfaceBlock> mUniformBlocks;
+    // Lao: hack
+    std::vector<LinkedUniform> mUniformBlockUniforms;
 
     // For faster iteration on the blocks currently being bound.
     UniformBlockBindingMask mActiveUniformBlockBindings;

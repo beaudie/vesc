@@ -851,7 +851,12 @@ Shader *ProgramState::getAttachedShader(ShaderType shaderType) const
 
 GLuint ProgramState::getUniformIndexFromName(const std::string &name) const
 {
-    return GetResourceIndexFromName(mExecutable->mUniforms, name);
+    GLuint index = GetResourceIndexFromName(mExecutable->mUniforms, name);
+    if (index == GL_INVALID_INDEX)
+    {
+        index = GetResourceIndexFromName(mExecutable->mUniformBlockUniforms, name);
+    }
+    return index;
 }
 
 GLuint ProgramState::getBufferVariableIndexFromName(const std::string &name) const
@@ -1168,7 +1173,7 @@ angle::Result Program::linkImpl(const Context *context)
     LinkingVariables linkingVariables(context, mState);
     ProgramLinkedResources &resources = linkingState->resources;
 
-    resources.init(&mState.mExecutable->mUniformBlocks, &mState.mExecutable->mUniforms,
+    resources.init(&mState.mExecutable->mUniformBlocks, &mState.mExecutable->mUniformBlockUniforms,
                    &mState.mExecutable->mShaderStorageBlocks, &mState.mBufferVariables,
                    &mState.mExecutable->mAtomicCounterBuffers);
 
@@ -2089,8 +2094,13 @@ void Program::getActiveUniform(GLuint index,
     if (mLinked)
     {
         // index must be smaller than getActiveUniformCount()
-        ASSERT(index < mState.mExecutable->getUniforms().size());
-        const LinkedUniform &uniform = mState.mExecutable->getUniforms()[index];
+        ASSERT(index < mState.mExecutable->getUniforms().size() +
+                           mState.mExecutable->getUniformBlockUniforms().size());
+        const LinkedUniform &uniform =
+            index < mState.mExecutable->getUniforms().size()
+                ? mState.mExecutable->getUniforms()[index]
+                : mState.mExecutable
+                      ->getUniformBlockUniforms()[index - mState.mExecutable->getUniforms().size()];
 
         if (bufsize > 0)
         {
@@ -2123,7 +2133,8 @@ GLint Program::getActiveUniformCount() const
     ASSERT(!mLinkingState);
     if (mLinked)
     {
-        return static_cast<GLint>(mState.mExecutable->getUniforms().size());
+        return static_cast<GLint>(mState.mExecutable->getUniforms().size() +
+                                  mState.mExecutable->getUniformBlockUniforms().size());
     }
     else
     {
@@ -2145,6 +2156,19 @@ GLint Program::getActiveUniformMaxLength() const
     if (mLinked)
     {
         for (const LinkedUniform &uniform : mState.mExecutable->getUniforms())
+        {
+            if (!uniform.name.empty())
+            {
+                size_t length = uniform.name.length() + 1u;
+                if (uniform.isArray())
+                {
+                    length += 3;  // Counting in "[0]".
+                }
+                maxLength = std::max(length, maxLength);
+            }
+        }
+
+        for (const LinkedUniform &uniform : mState.mExecutable->getUniformBlockUniforms())
         {
             if (!uniform.name.empty())
             {
