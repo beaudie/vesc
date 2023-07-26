@@ -781,6 +781,8 @@ class GraphicsPipelineDesc final
     // RenderPass description.
     const RenderPassDesc &getRenderPassDesc() const { return mSharedNonVertexInput.renderPass; }
 
+    RenderPassDesc getRenderPassDescCopy() const { return mSharedNonVertexInput.renderPass; }
+
     void setRenderPassDesc(const RenderPassDesc &renderPassDesc);
     void updateRenderPassDesc(GraphicsPipelineTransitionBits *transition,
                               const RenderPassDesc &renderPassDesc);

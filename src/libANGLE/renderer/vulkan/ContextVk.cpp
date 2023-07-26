@@ -5100,6 +5100,17 @@ void ContextVk::updateDither()
 
             onRenderPassFinished(RenderPassClosureReason::LegacyDithering);
         }
+
+        // update GraphicsPipelineDesc renderpass legacy dithering bit
+        if (isDitherEnabled() != mGraphicsPipelineDesc->isLegacyDitherEnabled())
+        {
+            vk::RenderPassDesc graphicsPipelineRenderPassDesc =
+                mGraphicsPipelineDesc->getRenderPassDescCopy();
+            graphicsPipelineRenderPassDesc.setLegacyDither(isDitherEnabled());
+            mGraphicsPipelineDesc->updateRenderPassDesc(&mGraphicsPipelineTransition,
+                                                        graphicsPipelineRenderPassDesc);
+            invalidateCurrentGraphicsPipeline();
+        }
     }
 
     if (!getFeatures().emulateDithering.enabled)
