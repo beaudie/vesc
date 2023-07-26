@@ -258,6 +258,10 @@ class ProgramState final : angle::NonCopyable
     {
         return mExecutable->getSecondaryOutputLocations();
     }
+    const std::vector<LinkedUniform> &getUniformBlockUniforms() const
+    {
+        return mExecutable->getUniformBlockUniforms();
+    }
     const std::vector<LinkedUniform> &getUniforms() const { return mExecutable->getUniforms(); }
     const std::vector<VariableLocation> &getUniformLocations() const { return mUniformLocations; }
     const std::vector<InterfaceBlock> &getUniformBlocks() const

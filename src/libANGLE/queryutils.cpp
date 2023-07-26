@@ -841,7 +841,8 @@ GLint QueryProgramInterfaceActiveResources(const Program *program, GLenum progra
             return clampCast<GLint>(program->getState().getOutputVariables().size());
 
         case GL_UNIFORM:
-            return clampCast<GLint>(program->getState().getUniforms().size());
+            return clampCast<GLint>(program->getState().getUniforms().size() +
+                                    program->getState().getUniformBlockUniforms().size());
 
         case GL_UNIFORM_BLOCK:
             return clampCast<GLint>(program->getState().getUniformBlocks().size());
@@ -889,7 +890,9 @@ GLint QueryProgramInterfaceMaxNameLength(const Program *program, GLenum programI
             break;
 
         case GL_UNIFORM:
-            maxNameLength = FindMaxSize(program->getState().getUniforms(), &LinkedUniform::name);
+            maxNameLength = std::max(
+                FindMaxSize(program->getState().getUniforms(), &LinkedUniform::name),
+                FindMaxSize(program->getState().getUniformBlockUniforms(), &LinkedUniform::name));
             break;
 
         case GL_UNIFORM_BLOCK:

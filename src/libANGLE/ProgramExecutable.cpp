@@ -280,6 +280,7 @@ void ProgramExecutable::reset(bool clearInfoLog)
     mTransformFeedbackStrides.clear();
     mUniforms.clear();
     mUniformBlocks.clear();
+    mUniformBlockUniforms.clear();
     mActiveUniformBlockBindings.reset();
     mShaderStorageBlocks.clear();
     mAtomicCounterBuffers.clear();
@@ -368,6 +369,31 @@ void ProgramExecutable::load(bool isSeparable, gl::BinaryInputStream *stream)
     for (size_t uniformIndex = 0; uniformIndex < uniformCount; ++uniformIndex)
     {
         LinkedUniform &uniform = mUniforms[uniformIndex];
+        LoadShaderVar(stream, &uniform);
+
+        uniform.bufferIndex = stream->readInt<int>();
+        LoadBlockMemberInfo(stream, &uniform.blockInfo);
+
+        stream->readIntVector<unsigned int>(&uniform.outerArraySizes);
+        uniform.outerArrayOffset = stream->readInt<unsigned int>();
+
+        uniform.typeInfo = &GetUniformTypeInfo(uniform.type);
+
+        // Active shader info
+        for (ShaderType shaderType : gl::AllShaderTypes())
+        {
+            const bool isActive = stream->readBool();
+            const uint32_t id   = stream->readInt<uint32_t>();
+            uniform.setActive(shaderType, isActive, id);
+        }
+    }
+
+    size_t uniformBlockuniformCount = stream->readInt<size_t>();
+    ASSERT(mUniformBlockUniforms.empty());
+    mUniformBlockUniforms.resize(uniformBlockuniformCount);
+    for (size_t uniformIndex = 0; uniformIndex < uniformBlockuniformCount; ++uniformIndex)
+    {
+        LinkedUniform &uniform = mUniformBlockUniforms[uniformIndex];
         LoadShaderVar(stream, &uniform);
 
         uniform.bufferIndex = stream->readInt<int>();
@@ -600,6 +626,25 @@ void ProgramExecutable::save(bool isSeparable, gl::BinaryOutputStream *stream) c
 
     stream->writeInt(getUniforms().size());
     for (const LinkedUniform &uniform : getUniforms())
+    {
+        WriteShaderVar(stream, uniform);
+
+        stream->writeInt(uniform.bufferIndex);
+        WriteBlockMemberInfo(stream, uniform.blockInfo);
+
+        stream->writeIntVector(uniform.outerArraySizes);
+        stream->writeInt(uniform.outerArrayOffset);
+
+        // Active shader info
+        for (ShaderType shaderType : gl::AllShaderTypes())
+        {
+            stream->writeBool(uniform.isActive(shaderType));
+            stream->writeInt(uniform.isActive(shaderType) ? uniform.getIds()[shaderType] : 0);
+        }
+    }
+
+    stream->writeInt(mUniformBlockUniforms.size());
+    for (const LinkedUniform &uniform : mUniformBlockUniforms)
     {
         WriteShaderVar(stream, uniform);
 
