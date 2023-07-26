@@ -106,6 +106,24 @@
       "parentUuid": "1f0282da_45dd3c53",
       "revId": "202885a7ccea7fdf33761b0fed63cb82fc50b509",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6964f4d_ea49380b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-26T22:46:51Z",
+      "side": 1,
+      "message": "Need to wait for it to also roll into ANGLE: https://autoroll.skia.org/r/chromium-angle-autoroll",
+      "parentUuid": "1f057f2b_7da1b44c",
+      "revId": "202885a7ccea7fdf33761b0fed63cb82fc50b509",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
