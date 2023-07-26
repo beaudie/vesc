@@ -88,6 +88,24 @@
       "parentUuid": "28b43eae_ea1300ec",
       "revId": "202885a7ccea7fdf33761b0fed63cb82fc50b509",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f057f2b_7da1b44c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-07-26T22:26:39Z",
+      "side": 1,
+      "message": "Related change in Blink has been submitted:\n\nhttps://chromium-review.googlesource.com/c/chromium/src/+/4718426\n\nShould be good to try to submit this again.",
+      "parentUuid": "1f0282da_45dd3c53",
+      "revId": "202885a7ccea7fdf33761b0fed63cb82fc50b509",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
