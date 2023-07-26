@@ -4025,6 +4025,13 @@ void GraphicsPipelineDesc::updateEmulatedDitherControl(GraphicsPipelineTransitio
     transition->set(ANGLE_GET_TRANSITION_BIT(mShaders.shaders.emulatedDitherControl));
 }
 
+void GraphicsPipelineDesc::updateLegacyDither(GraphicsPipelineTransitionBits *transition,
+                                              const bool isLegacyDitheringEnabled)
+{
+    mSharedNonVertexInput.renderPass.setLegacyDither(isLegacyDitheringEnabled);
+    transition->set(ANGLE_GET_TRANSITION_BIT(mSharedNonVertexInput.renderPass));
+}
+
 void GraphicsPipelineDesc::updateNonZeroStencilWriteMaskWorkaround(
     GraphicsPipelineTransitionBits *transition,
     bool enabled)
