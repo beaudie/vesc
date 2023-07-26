@@ -280,6 +280,7 @@ void ProgramExecutable::reset(bool clearInfoLog)
     mTransformFeedbackStrides.clear();
     mUniforms.clear();
     mUniformBlocks.clear();
+    mUniforms_UniformBlocks.clear();
     mActiveUniformBlockBindings.reset();
     mShaderStorageBlocks.clear();
     mAtomicCounterBuffers.clear();

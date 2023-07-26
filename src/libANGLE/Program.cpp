@@ -1168,7 +1168,8 @@ angle::Result Program::linkImpl(const Context *context)
     LinkingVariables linkingVariables(context, mState);
     ProgramLinkedResources &resources = linkingState->resources;
 
-    resources.init(&mState.mExecutable->mUniformBlocks, &mState.mExecutable->mUniforms,
+    resources.init(&mState.mExecutable->mUniformBlocks,
+                   &mState.mExecutable->mUniforms_UniformBlocks,
                    &mState.mExecutable->mShaderStorageBlocks, &mState.mBufferVariables,
                    &mState.mExecutable->mAtomicCounterBuffers);
 

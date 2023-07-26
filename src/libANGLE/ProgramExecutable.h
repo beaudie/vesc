@@ -470,6 +470,8 @@ class ProgramExecutable final : public angle::Subject
     RangeUI mImageUniformRange;
     RangeUI mAtomicCounterUniformRange;
     std::vector<InterfaceBlock> mUniformBlocks;
+    // Lao: hack
+    std::vector<LinkedUniform> mUniforms_UniformBlocks;
 
     // For faster iteration on the blocks currently being bound.
     UniformBlockBindingMask mActiveUniformBlockBindings;
