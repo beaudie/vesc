@@ -393,15 +393,15 @@ class FramebufferTest_ES3 : public ANGLETest<>
     {
         setWindowWidth(kWidth);
         setWindowHeight(kHeight);
-        setConfigRedBits(8);
-        setConfigGreenBits(8);
-        setConfigBlueBits(8);
-        setConfigAlphaBits(8);
-        setConfigDepthBits(24);
-        setConfigStencilBits(8);
+        setConfigRedBits(5);
+        setConfigGreenBits(6);
+        setConfigBlueBits(5);
+        setConfigAlphaBits(0);
+        setConfigDepthBits(0);
+        setConfigStencilBits(0);
     }
 
-    static constexpr GLsizei kWidth  = 64;
+    static constexpr GLsizei kWidth  = 256;
     static constexpr GLsizei kHeight = 256;
 };
 
@@ -441,6 +441,129 @@ TEST_P(FramebufferTest_ES3, SubInvalidateIncomplete)
 
     glInvalidateSubFramebuffer(GL_FRAMEBUFFER, 1, attachments.data(), 5, 5, 10, 10);
     EXPECT_GL_NO_ERROR();
+}
+
+// repro dEQP-GLES3.functional.dither.disabled.gradient* failures
+TEST_P(FramebufferTest_ES3, RGB565DisableDithering)
+{
+    //    GLFramebuffer framebuffer;
+    //
+    //    GLTexture texture;
+    //    glBindTexture(GL_TEXTURE_2D, texture);
+    //    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGB565, 256, 256);
+    //
+    //    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.get());
+    //    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+
+    constexpr char kVS[] = {
+        R"(#version 300 es
+        in highp vec4 a_position;
+        in mediump vec4 a_color;
+        out mediump vec4 v_color;
+        void main()
+        {
+        gl_Position = a_position;
+        v_color = a_color;
+        })",
+    };
+
+    constexpr char kFS[] = {
+        R"(#version 300 es
+            in mediump vec4 v_color;
+            layout(location = 0) out mediump vec4 o_color;
+            void main()
+            {
+                o_color = v_color;
+            })",
+    };
+
+    ANGLE_GL_PROGRAM(program, kVS, kFS);
+
+    glUseProgram(program.get());
+
+    // disable dithering
+    glEnable(GL_DITHER);
+    glDisable(GL_DITHER);
+
+    // setup quad data
+    const std::vector<float> positions = {-1.0f, -1.0f, 0.0f, 1.0f, -1.0f, 1.0f, 0.0f, 1.0f,
+                                          1.0f,  -1.0f, 0.0f, 1.0f, 1.0f,  1.0f, 0.0f, 1.0f};
+
+    const std::vector<float> color0 = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+                                       0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f};
+
+    GLBuffer vertexBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer.get());
+    glBufferData(GL_ARRAY_BUFFER, sizeof(positions[0]) * positions.size(), positions.data(),
+                 GL_STATIC_DRAW);
+
+    GLBuffer colorBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, colorBuffer.get());
+    glBufferData(GL_ARRAY_BUFFER, sizeof(color0[0]) * color0.size(), color0.data(), GL_STATIC_DRAW);
+
+    GLint vertexPosLocation = glGetAttribLocation(program, "a_position");
+    ASSERT_NE(vertexPosLocation, -1);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer.get());
+    glEnableVertexAttribArray(vertexPosLocation);
+    glVertexAttribPointer(vertexPosLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+    GLint vertexColorLocation = glGetAttribLocation(program, "a_color");
+    ASSERT_NE(vertexColorLocation, -1);
+    glBindBuffer(GL_ARRAY_BUFFER, colorBuffer.get());
+    glEnableVertexAttribArray(vertexColorLocation);
+    glVertexAttribPointer(vertexColorLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+    const std::vector<uint8_t> indices = {0, 2, 1, 1, 2, 3};
+
+    GLBuffer indexBuffer;
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer.get());
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices[0]) * indices.size(), indices.data(),
+                 GL_STATIC_DRAW);
+    ASSERT_GL_NO_ERROR();
+
+    // draw and verify results
+    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_BYTE, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    const int kWidth  = getWindowWidth();
+    const int kHeight = getWindowHeight();
+    std::vector<GLColor> pixelData(kWidth * kHeight);
+    glReadPixels(0, 0, kWidth, kHeight, GL_RGBA, GL_UNSIGNED_BYTE, pixelData.data());
+
+    // validate that when disabling dithering, the color selection must be coordinate-independent
+    const int increasingDirectionSize = kWidth;
+    const int constantDirectionSize   = kHeight;
+
+    for (int incrPos = 0; incrPos < increasingDirectionSize; incrPos++)
+    {
+        bool colorHasChanged = false;
+
+        GLColor prevConstantDirectionPixel;
+
+        for (int constPos = 0; constPos < constantDirectionSize; constPos++)
+        {
+            const int x = incrPos;
+            const int y = constPos;
+
+            const int currentPixelLoc = y * kWidth + x;
+            GLColor currentPixel      = pixelData[currentPixelLoc];
+
+            if (constPos > 0 && currentPixel != prevConstantDirectionPixel)
+            {
+                if (colorHasChanged)
+                {
+                    ASSERT(false);
+                }
+                else
+                {
+                    colorHasChanged = true;
+                }
+            }
+
+            prevConstantDirectionPixel = currentPixel;
+        }
+    }
 }
 
 // Test that subinvalidate with no prior command works.  Regression test for the Vulkan backend that
