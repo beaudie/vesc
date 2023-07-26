@@ -883,6 +883,9 @@ class GraphicsPipelineDesc final
         return mSharedNonVertexInput.renderPass.isLegacyDitherEnabled();
     }
 
+    void updateLegacyDither(GraphicsPipelineTransitionBits *transition,
+                            const bool isLegacyDitheringEnabled);
+
     void updateNonZeroStencilWriteMaskWorkaround(GraphicsPipelineTransitionBits *transition,
                                                  bool enabled);
 
