@@ -16,6 +16,23 @@
       "message": "I code searched and not seeing any pointers to uniforms or varying etc that being used that would require destructor being virtual, and bots seems happy as well.",
       "revId": "c9863bca80f01fefadbe6cb84d900c8fedb79d06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1e412e4_0d5b275a",
+        "filename": "src/libANGLE/Uniform.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-26T21:16:27Z",
+      "side": 1,
+      "message": "While it looks harmless for _some_ of these classes, it doesn\u0027t look correct for ShaderVariableBuffer (and consequently ActiveVariable). If an `ActiveVariable *` is deleted that happens to point to an `InterfaceBlock`, the strings in this class and the vector in `ShaderVariableBuffer` will leak.",
+      "revId": "c9863bca80f01fefadbe6cb84d900c8fedb79d06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
