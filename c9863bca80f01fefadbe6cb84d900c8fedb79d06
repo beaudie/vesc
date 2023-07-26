@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "911c1dc3_5d8f3bfc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-07-26T21:02:02Z",
+      "side": 1,
+      "message": "I code searched and not seeing any pointers to uniforms or varying etc that being used that would require destructor being virtual, and bots seems happy as well.",
+      "revId": "c9863bca80f01fefadbe6cb84d900c8fedb79d06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
