@@ -25,7 +25,7 @@ struct ActiveVariable
 {
     ActiveVariable();
     ActiveVariable(const ActiveVariable &rhs);
-    virtual ~ActiveVariable();
+    ~ActiveVariable();
 
     ActiveVariable &operator=(const ActiveVariable &rhs);
 
@@ -68,7 +68,7 @@ struct LinkedUniform : public sh::ShaderVariable, public ActiveVariable
     LinkedUniform(const sh::ShaderVariable &uniform);
     LinkedUniform(const LinkedUniform &uniform);
     LinkedUniform &operator=(const LinkedUniform &uniform);
-    ~LinkedUniform() override;
+    ~LinkedUniform();
 
     bool isSampler() const { return typeInfo->isSampler; }
     bool isImage() const { return typeInfo->isImageType; }
@@ -96,7 +96,7 @@ struct BufferVariable : public sh::ShaderVariable, public ActiveVariable
                    const std::vector<unsigned int> &arraySizes,
                    const int bufferIndex,
                    const sh::BlockMemberInfo &blockInfo);
-    ~BufferVariable() override;
+    ~BufferVariable();
 
     int bufferIndex;
     sh::BlockMemberInfo blockInfo;
@@ -110,7 +110,7 @@ struct ShaderVariableBuffer : public ActiveVariable
 {
     ShaderVariableBuffer();
     ShaderVariableBuffer(const ShaderVariableBuffer &other);
-    ~ShaderVariableBuffer() override;
+    ~ShaderVariableBuffer();
     int numActiveVariables() const;
 
     int binding;
