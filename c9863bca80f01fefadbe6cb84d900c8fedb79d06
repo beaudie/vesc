@@ -69,6 +69,24 @@
       "parentUuid": "0b591530_038a6f16",
       "revId": "c9863bca80f01fefadbe6cb84d900c8fedb79d06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dd3a5f9_39edb2c3",
+        "filename": "src/libANGLE/Uniform.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-07-26T23:00:37Z",
+      "side": 1,
+      "message": "Turn these inheritances to composition is a separate thing, but we should not use virtual if not needed. Otherwise, you could argue all other classes should make destructor virtual as well with the same safety concern, right?\nI searched all pointer usages, only very few places use pointers of these subclasses and only in the load/store code, so should be safe unless I miss anything",
+      "parentUuid": "0b116a26_e7d93d71",
+      "revId": "c9863bca80f01fefadbe6cb84d900c8fedb79d06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
