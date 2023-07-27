@@ -16,6 +16,24 @@
       "message": "This 3-commit range appears to have broken Android\u0027s testDrawingHardwareBitmapNotLeaking:\nhttps://chromium.googlesource.com/angle/angle.git/+log/58cb5c8396a3..8aa3ca9d177c\n\nThis CL seems like most likely candidate. I kicked off a roll with the other 2 commits https://r.android.com/2679396 to confirm",
       "revId": "8aa3ca9d177c0ed54926b769de7d0bce0f8482d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96fdf61f_d70661a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-07-27T18:34:20Z",
+      "side": 1,
+      "message": "Failing 3-commit roll: https://r.android.com/2678955",
+      "parentUuid": "22ba7ab4_58b692a5",
+      "revId": "8aa3ca9d177c0ed54926b769de7d0bce0f8482d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
