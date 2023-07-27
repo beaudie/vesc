@@ -160,6 +160,24 @@
       "parentUuid": "8df77308_3dc80eec",
       "revId": "202885a7ccea7fdf33761b0fed63cb82fc50b509",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd50432e_3fc22d80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-07-27T22:19:52Z",
+      "side": 1,
+      "message": "It did not; Roman and others (thanks!) resolved build failures and got a succesful roll into ANGLE in https://chromium-review.googlesource.com/c/angle/angle/+/4724521 . CQ\u0027ing this; it should succeed now.",
+      "parentUuid": "19be571a_5c64cb69",
+      "revId": "202885a7ccea7fdf33761b0fed63cb82fc50b509",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
