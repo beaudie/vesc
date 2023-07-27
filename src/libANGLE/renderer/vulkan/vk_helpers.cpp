@@ -3326,8 +3326,11 @@ void BufferPool::pruneEmptyBuffers(RendererVk *renderer)
     mNumberOfNewBuffersNeededSinceLastPrune = 0;
 }
 
-angle::Result BufferPool::allocateNewBuffer(Context *context, VkDeviceSize sizeInBytes)
+angle::Result BufferPool::allocateNewBuffer(Context *context,
+                                            VkDeviceSize sizeInBytes,
+                                            bool *suballocationSuccess)
 {
+    *suballocationSuccess      = false;
     RendererVk *renderer       = context->getRenderer();
     const Allocator &allocator = renderer->getAllocator();
 
@@ -3366,10 +3369,22 @@ angle::Result BufferPool::allocateNewBuffer(Context *context, VkDeviceSize sizeI
     VkMemoryPropertyFlags memoryPropertyFlagsOut;
     VkDeviceSize sizeOut;
     uint32_t memoryTypeIndex;
+    VkResult result;
     ANGLE_TRY(AllocateBufferMemory(context, MemoryAllocationType::Buffer, memoryPropertyFlags,
                                    &memoryPropertyFlagsOut, nullptr, &buffer.get(),
-                                   &memoryTypeIndex, &deviceMemory.get(), &sizeOut));
+                                   &memoryTypeIndex, &deviceMemory.get(), &sizeOut, &result));
+
+    if (result != VK_SUCCESS)
+    {
+        WARN() << "Failed to allocate memory for suballocation buffer.";
+        // Free the buffer created above.
+        buffer.get().destroy(context->getDevice());
+
+        return angle::Result::Continue;
+    }
+
     ASSERT(sizeOut >= mSize);
+    *suballocationSuccess = true;
 
     // Allocate bufferBlock
     std::unique_ptr<BufferBlock> block = std::make_unique<BufferBlock>();
@@ -3428,9 +3443,11 @@ angle::Result BufferPool::allocateBuffer(Context *context,
         VkMemoryPropertyFlags memoryPropertyFlagsOut;
         VkDeviceSize sizeOut;
         uint32_t memoryTypeIndex;
+        VkResult result;
         ANGLE_TRY(AllocateBufferMemory(context, MemoryAllocationType::Buffer, memoryPropertyFlags,
                                        &memoryPropertyFlagsOut, nullptr, &buffer.get(),
-                                       &memoryTypeIndex, &deviceMemory.get(), &sizeOut));
+                                       &memoryTypeIndex, &deviceMemory.get(), &sizeOut, &result));
+        ANGLE_VK_CHECK(context, result == VK_SUCCESS, result);
         ASSERT(sizeOut >= alignedSize);
 
         suballocation->initWithEntireBuffer(context, buffer.get(), MemoryAllocationType::Buffer,
@@ -3487,15 +3504,68 @@ angle::Result BufferPool::allocateBuffer(Context *context,
     }
 
     // Failed to allocate from empty buffer. Now try to allocate a new buffer.
-    ANGLE_TRY(allocateNewBuffer(context, alignedSize));
+    // TODO: Make sure that if suballocation is not possible, we can still allocate using the
+    // traditional method, with a perf warning, of course.
+    bool suballocationSuccess = false;
+    ANGLE_TRY(allocateNewBuffer(context, alignedSize, &suballocationSuccess));
 
-    // Sub-allocate from the bufferBlock.
-    std::unique_ptr<BufferBlock> &block = mBufferBlocks.back();
-    ANGLE_VK_CHECK(context,
-                   block->allocate(alignedSize, alignment, &allocation, &offset) == VK_SUCCESS,
-                   VK_ERROR_OUT_OF_DEVICE_MEMORY);
-    suballocation->init(block.get(), allocation, offset, alignedSize);
-    mNumberOfNewBuffersNeededSinceLastPrune++;
+    if (suballocationSuccess)
+    {
+        // Sub-allocate from the bufferBlock.
+        std::unique_ptr<BufferBlock> &block = mBufferBlocks.back();
+        ANGLE_VK_CHECK(context,
+                       block->allocate(alignedSize, alignment, &allocation, &offset) == VK_SUCCESS,
+                       VK_ERROR_OUT_OF_DEVICE_MEMORY);
+        suballocation->init(block.get(), allocation, offset, alignedSize);
+        mNumberOfNewBuffersNeededSinceLastPrune++;
+    }
+    else
+    {
+        // Suballocation has been unsuccessful. Try allocating without it.
+        WARN() << "Allocating buffer suboptimally";
+        VkDeviceSize heapSize =
+            context->getRenderer()->getMemoryProperties().getHeapSizeForMemoryType(
+                mMemoryTypeIndex);
+        // First ensure we are not exceeding the heapSize to avoid the validation error.
+        ANGLE_VK_CHECK(context, sizeInBytes <= heapSize, VK_ERROR_OUT_OF_DEVICE_MEMORY);
+
+        // Allocate buffer
+        VkBufferCreateInfo createInfo    = {};
+        createInfo.sType                 = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+        createInfo.flags                 = 0;
+        createInfo.size                  = alignedSize;
+        createInfo.usage                 = mUsage;
+        createInfo.sharingMode           = VK_SHARING_MODE_EXCLUSIVE;
+        createInfo.queueFamilyIndexCount = 0;
+        createInfo.pQueueFamilyIndices   = nullptr;
+
+        VkMemoryPropertyFlags memoryPropertyFlags;
+        const Allocator &allocator = context->getRenderer()->getAllocator();
+        allocator.getMemoryTypeProperties(mMemoryTypeIndex, &memoryPropertyFlags);
+
+        DeviceScoped<Buffer> buffer(context->getDevice());
+        ANGLE_VK_TRY(context, buffer.get().init(context->getDevice(), createInfo));
+
+        DeviceScoped<DeviceMemory> deviceMemory(context->getDevice());
+        VkMemoryPropertyFlags memoryPropertyFlagsOut;
+        VkDeviceSize sizeOut;
+        uint32_t memoryTypeIndex;
+        VkResult result;
+        ANGLE_TRY(AllocateBufferMemory(context, MemoryAllocationType::Buffer, memoryPropertyFlags,
+                                       &memoryPropertyFlagsOut, nullptr, &buffer.get(),
+                                       &memoryTypeIndex, &deviceMemory.get(), &sizeOut, &result));
+        ANGLE_VK_CHECK(context, result == VK_SUCCESS, result);
+        ASSERT(sizeOut >= alignedSize);
+
+        suballocation->initWithEntireBuffer(context, buffer.get(), MemoryAllocationType::Buffer,
+                                            memoryTypeIndex, deviceMemory.get(),
+                                            memoryPropertyFlagsOut, alignedSize, sizeOut);
+        if (mHostVisible)
+        {
+            ANGLE_VK_TRY(context, suballocation->map(context));
+        }
+        return angle::Result::Continue;
+    }
 
     return angle::Result::Continue;
 }
@@ -4764,9 +4834,11 @@ angle::Result BufferHelper::init(Context *context,
     VkMemoryPropertyFlags memoryPropertyFlagsOut;
     VkDeviceSize sizeOut;
     uint32_t bufferMemoryTypeIndex;
+    VkResult result;
     ANGLE_TRY(AllocateBufferMemory(context, MemoryAllocationType::Buffer, requiredFlags,
                                    &memoryPropertyFlagsOut, nullptr, &buffer.get(),
-                                   &bufferMemoryTypeIndex, &deviceMemory.get(), &sizeOut));
+                                   &bufferMemoryTypeIndex, &deviceMemory.get(), &sizeOut, &result));
+    ANGLE_VK_CHECK(context, result == VK_SUCCESS, result);
     ASSERT(sizeOut >= createInfo->size);
 
     mSuballocation.initWithEntireBuffer(context, buffer.get(), MemoryAllocationType::Buffer,
@@ -5977,9 +6049,11 @@ angle::Result ImageHelper::initMemory(Context *context,
     }
     else
     {
+        VkResult result;
         ANGLE_TRY(AllocateImageMemory(context, mMemoryAllocationType, flags, &flags, nullptr,
-                                      &mImage, &mMemoryTypeIndex, &mDeviceMemory,
-                                      &mAllocationSize));
+                                      &mImage, &mMemoryTypeIndex, &mDeviceMemory, &mAllocationSize,
+                                      &result));
+        ANGLE_VK_CHECK(context, result == VK_SUCCESS, result);
     }
     mCurrentQueueFamilyIndex = renderer->getQueueFamilyIndex();
 
@@ -6020,12 +6094,14 @@ angle::Result ImageHelper::initExternalMemory(Context *context,
 
     for (uint32_t memoryPlane = 0; memoryPlane < extraAllocationInfoCount; ++memoryPlane)
     {
+        VkResult result;
         bindImagePlaneMemoryInfo.planeAspect = kMemoryPlaneAspects[memoryPlane];
 
         ANGLE_TRY(AllocateImageMemoryWithRequirements(
             context, mMemoryAllocationType, flags, memoryRequirements,
             extraAllocationInfo[memoryPlane], bindImagePlaneMemoryInfoPtr, &mImage,
-            &mMemoryTypeIndex, &mDeviceMemory));
+            &mMemoryTypeIndex, &mDeviceMemory, &result));
+        ANGLE_VK_CHECK(context, result == VK_SUCCESS, result);
     }
     mCurrentQueueFamilyIndex = currentQueueFamilyIndex;
 

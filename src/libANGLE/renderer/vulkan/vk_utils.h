@@ -522,7 +522,8 @@ angle::Result AllocateBufferMemory(Context *context,
                                    Buffer *buffer,
                                    uint32_t *memoryTypeIndexOut,
                                    DeviceMemory *deviceMemoryOut,
-                                   VkDeviceSize *sizeOut);
+                                   VkDeviceSize *sizeOut,
+                                   VkResult *resultOut);
 
 angle::Result AllocateImageMemory(Context *context,
                                   vk::MemoryAllocationType memoryAllocationType,
@@ -532,7 +533,8 @@ angle::Result AllocateImageMemory(Context *context,
                                   Image *image,
                                   uint32_t *memoryTypeIndexOut,
                                   DeviceMemory *deviceMemoryOut,
-                                  VkDeviceSize *sizeOut);
+                                  VkDeviceSize *sizeOut,
+                                  VkResult *resultOut);
 
 angle::Result AllocateImageMemoryWithRequirements(
     Context *context,
@@ -543,7 +545,8 @@ angle::Result AllocateImageMemoryWithRequirements(
     const VkBindImagePlaneMemoryInfoKHR *extraBindInfo,
     Image *image,
     uint32_t *memoryTypeIndexOut,
-    DeviceMemory *deviceMemoryOut);
+    DeviceMemory *deviceMemoryOut,
+    VkResult *resultOut);
 
 angle::Result AllocateBufferMemoryWithRequirements(Context *context,
                                                    MemoryAllocationType memoryAllocationType,
@@ -553,7 +556,8 @@ angle::Result AllocateBufferMemoryWithRequirements(Context *context,
                                                    Buffer *buffer,
                                                    VkMemoryPropertyFlags *memoryPropertyFlagsOut,
                                                    uint32_t *memoryTypeIndexOut,
-                                                   DeviceMemory *deviceMemoryOut);
+                                                   DeviceMemory *deviceMemoryOut,
+                                                   VkResult *resultOut);
 
 angle::Result InitShaderModule(Context *context,
                                ShaderModule *shaderModule,

@@ -928,7 +928,9 @@ class BufferPool : angle::NonCopyable
     VkDeviceSize getMemorySize() const { return mTotalMemorySize; }
 
   private:
-    angle::Result allocateNewBuffer(Context *context, VkDeviceSize sizeInBytes);
+    angle::Result allocateNewBuffer(Context *context,
+                                    VkDeviceSize sizeInBytes,
+                                    bool *suballocationSuccess);
     VkDeviceSize getTotalEmptyMemorySize() const;
 
     vma::VirtualBlockCreateFlags mVirtualBlockCreateFlags;
