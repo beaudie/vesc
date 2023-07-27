@@ -88,6 +88,24 @@
       "parentUuid": "4885f572_452079c0",
       "revId": "8aa3ca9d177c0ed54926b769de7d0bce0f8482d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bac62ee6_52550477",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-07-27T19:02:33Z",
+      "side": 1,
+      "message": "Looking at the test, it seems to run this code:\nhttps://cs.android.com/android/platform/superproject/main/+/main:cts/tests/tests/graphics/src/android/graphics/cts/BitmapTest.java;drc\u003da05cc6ec106efaea62960df04f6400d1142cd0d5;l\u003d2356\n\na whole bunch of times:\nhttps://cs.android.com/android/platform/superproject/main/+/refs/heads/main:cts/tests/tests/graphics/src/android/graphics/cts/BitmapTest.java;drc\u003d902d155711160b922cb33db921515d6396aa91dc;l\u003d2292\n\nSo one possibility would be introducing slowness that translates into timeout. But I still need to verify that it\u0027s due to this CL.",
+      "parentUuid": "fecd2526_1986914a",
+      "revId": "8aa3ca9d177c0ed54926b769de7d0bce0f8482d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
