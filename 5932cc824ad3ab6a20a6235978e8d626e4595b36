@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b6658f2_543429f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-07-27T17:42:58Z",
+      "side": 1,
+      "message": "Thank you Cody!\n\nThe Android CTS dEQP tests are still running, I will post the test results here when they finish.",
+      "revId": "5932cc824ad3ab6a20a6235978e8d626e4595b36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c883dc8_c8a73646",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-07-27T17:42:58Z",
+      "side": 1,
+      "message": "Shall we add at `IsAndroid()` check at the beginning of the function?\n\n``` \nif (!IsAndroid())\n{\n    return false;\n}\n```",
+      "revId": "5932cc824ad3ab6a20a6235978e8d626e4595b36",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
