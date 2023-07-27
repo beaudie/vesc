@@ -34,6 +34,24 @@
       "parentUuid": "22ba7ab4_58b692a5",
       "revId": "8aa3ca9d177c0ed54926b769de7d0bce0f8482d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf677b5d_3f528e9a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-07-27T18:43:29Z",
+      "side": 1,
+      "message": "Unfortunately I do not have access to see the details of failed test.\nCould you provide some details?",
+      "parentUuid": "96fdf61f_d70661a0",
+      "revId": "8aa3ca9d177c0ed54926b769de7d0bce0f8482d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
