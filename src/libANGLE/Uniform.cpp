@@ -5,6 +5,7 @@
 //
 
 #include "libANGLE/Uniform.h"
+#include "libANGLE/ProgramLinkedResources.h"
 
 #include <cstring>
 
@@ -86,6 +87,7 @@ LinkedUniform::LinkedUniform(GLenum typeIn,
 {
     staticUse                     = false;
     active                        = false;
+    isStruct                      = false;
     rasterOrdered                 = false;
     readonly                      = false;
     writeonly                     = false;
@@ -96,7 +98,7 @@ LinkedUniform::LinkedUniform(GLenum typeIn,
     outerArrayOffset              = 0;
     imageUnitFormat               = GL_NONE;
     ASSERT(!isArrayOfArrays());
-    ASSERT(!isArray() || !isStruct());
+    ASSERT(!isArray() || !isStruct);
 }
 
 LinkedUniform::LinkedUniform(const LinkedUniform &uniform)
@@ -107,7 +109,7 @@ LinkedUniform::LinkedUniform(const LinkedUniform &uniform)
       arraySizes(uniform.arraySizes),
       staticUse(uniform.staticUse),
       active(uniform.active),
-      fields(uniform.fields),
+      isStruct(uniform.isStruct),
       location(uniform.location),
       binding(uniform.binding),
       imageUnitFormat(uniform.imageUnitFormat),
@@ -123,9 +125,38 @@ LinkedUniform::LinkedUniform(const LinkedUniform &uniform)
       typeInfo(uniform.typeInfo),
       bufferIndex(uniform.bufferIndex),
       blockInfo(uniform.blockInfo),
-      outerArraySizes(uniform.outerArraySizes),
+      outerArraySizeProduct(uniform.outerArraySizeProduct),
       outerArrayOffset(uniform.outerArrayOffset)
 {}
+
+LinkedUniform::LinkedUniform(const UsedUniform &uniform)
+    : type(uniform.type),
+      precision(uniform.precision),
+      name(uniform.name),
+      mappedName(uniform.mappedName),
+      arraySizes(uniform.arraySizes),
+      staticUse(uniform.staticUse),
+      active(uniform.active),
+      isStruct(uniform.isStruct()),
+      location(uniform.location),
+      binding(uniform.binding),
+      imageUnitFormat(uniform.imageUnitFormat),
+      offset(uniform.offset),
+      rasterOrdered(uniform.rasterOrdered),
+      readonly(uniform.readonly),
+      writeonly(uniform.writeonly),
+      isFragmentInOut(uniform.isFragmentInOut),
+      texelFetchStaticUse(uniform.texelFetchStaticUse),
+      id(uniform.id),
+      flattenedOffsetInParentArrays(uniform.getFlattenedOffsetInParentArrays()),
+      typeInfo(uniform.typeInfo),
+      bufferIndex(uniform.bufferIndex),
+      blockInfo(uniform.blockInfo),
+      outerArrayOffset(uniform.outerArrayOffset)
+{
+    activeVariable        = uniform;
+    outerArraySizeProduct = ArraySizeProduct(uniform.arraySizes);
+}
 
 LinkedUniform &LinkedUniform::operator=(const LinkedUniform &uniform)
 {
@@ -136,7 +167,7 @@ LinkedUniform &LinkedUniform::operator=(const LinkedUniform &uniform)
     arraySizes                    = uniform.arraySizes;
     staticUse                     = uniform.staticUse;
     active                        = uniform.active;
-    fields                        = uniform.fields;
+    isStruct                      = uniform.isStruct;
     flattenedOffsetInParentArrays = uniform.flattenedOffsetInParentArrays;
     location                      = uniform.location;
     binding                       = uniform.binding;
@@ -152,7 +183,7 @@ LinkedUniform &LinkedUniform::operator=(const LinkedUniform &uniform)
     typeInfo                      = uniform.typeInfo;
     bufferIndex                   = uniform.bufferIndex;
     blockInfo                     = uniform.blockInfo;
-    outerArraySizes               = uniform.outerArraySizes;
+    outerArraySizeProduct         = uniform.outerArraySizeProduct;
     outerArrayOffset              = uniform.outerArrayOffset;
     return *this;
 }
