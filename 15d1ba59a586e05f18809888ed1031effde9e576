@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30f0f7d4_038f5905",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-07-28T16:38:49Z",
+      "side": 1,
+      "message": "I usually do this on the roll, so that I can test if there are other issues.",
+      "revId": "15d1ba59a586e05f18809888ed1031effde9e576",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
