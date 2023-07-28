@@ -20,6 +20,7 @@
 namespace gl
 {
 struct UniformTypeInfo;
+struct LinkedUniformHelper;
 
 struct ActiveVariable
 {
@@ -45,7 +46,7 @@ struct ActiveVariable
     ShaderBitSet activeShaders() const { return mActiveUseBits; }
     GLuint activeShaderCount() const { return static_cast<GLuint>(mActiveUseBits.count()); }
 
-  private:
+    // private:
     ShaderBitSet mActiveUseBits;
     // The id of a linked variable in each shader stage.  This id originates from
     // sh::ShaderVariable::id or sh::InterfaceBlock::id
@@ -66,6 +67,7 @@ struct LinkedUniform final
                   const int bufferIndexIn,
                   const sh::BlockMemberInfo &blockInfoIn);
     LinkedUniform(const LinkedUniform &uniform);
+    LinkedUniform(const LinkedUniformHelper &uniform);
     LinkedUniform &operator=(const LinkedUniform &uniform);
     ~LinkedUniform();
 

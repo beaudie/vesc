@@ -5,6 +5,7 @@
 //
 
 #include "libANGLE/Uniform.h"
+#include "libANGLE/ProgramLinkedResources.h"
 
 #include <cstring>
 
@@ -126,6 +127,35 @@ LinkedUniform::LinkedUniform(const LinkedUniform &uniform)
       outerArraySizes(uniform.outerArraySizes),
       outerArrayOffset(uniform.outerArrayOffset)
 {}
+
+LinkedUniform::LinkedUniform(const LinkedUniformHelper &uniform)
+    : type(uniform.type),
+      precision(uniform.precision),
+      name(uniform.name),
+      mappedName(uniform.mappedName),
+      arraySizes(uniform.arraySizes),
+      staticUse(uniform.staticUse),
+      active(uniform.active),
+      fields(uniform.fields),
+      location(uniform.location),
+      binding(uniform.binding),
+      imageUnitFormat(uniform.imageUnitFormat),
+      offset(uniform.offset),
+      rasterOrdered(uniform.rasterOrdered),
+      readonly(uniform.readonly),
+      writeonly(uniform.writeonly),
+      isFragmentInOut(uniform.isFragmentInOut),
+      texelFetchStaticUse(uniform.texelFetchStaticUse),
+      id(uniform.id),
+      flattenedOffsetInParentArrays(uniform.getFlattenedOffsetInParentArrays()),
+      typeInfo(uniform.typeInfo),
+      bufferIndex(uniform.bufferIndex),
+      blockInfo(uniform.blockInfo),
+      outerArraySizes(uniform.outerArraySizes),
+      outerArrayOffset(uniform.outerArrayOffset)
+{
+    activeVariable = uniform;
+}
 
 LinkedUniform &LinkedUniform::operator=(const LinkedUniform &uniform)
 {
