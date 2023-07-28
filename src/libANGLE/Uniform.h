@@ -20,6 +20,7 @@
 namespace gl
 {
 struct UniformTypeInfo;
+struct UsedUniform;
 
 struct ActiveVariable
 {
@@ -66,6 +67,7 @@ struct LinkedUniform
                   const int bufferIndexIn,
                   const sh::BlockMemberInfo &blockInfoIn);
     LinkedUniform(const LinkedUniform &other);
+    LinkedUniform(const UsedUniform &usedUniform);
     LinkedUniform &operator=(const LinkedUniform &other);
     ~LinkedUniform();
 
@@ -92,7 +94,7 @@ struct LinkedUniform
         // generated for each array element when dealing with an array of arrays or an array of
         // structs.
         ASSERT(!isArrayOfArrays());
-        ASSERT(!isStruct() || !isArray());
+        ASSERT(!isStruct || !isArray());
 
         // GLES 3.1 Nov 2016 page 82.
         if (isArray())
@@ -104,7 +106,6 @@ struct LinkedUniform
 
     unsigned int getExternalSize() const;
 
-    bool isStruct() const { return !fields.empty(); }
     // All of the shader's variables are described using nested data
     // structures. This is needed in order to disambiguate similar looking
     // types, such as two structs containing the same fields, but in
@@ -121,7 +122,6 @@ struct LinkedUniform
                               std::string *originalFullName) const;
     bool isBuiltIn() const { return gl::IsBuiltInName(name); }
 
-    bool isEmulatedBuiltIn() const { return isBuiltIn() && name != mappedName; }
     // Offset of this variable in parent arrays. In case the parent is an array of arrays, the
     // offset is outerArrayElement * innerArraySize + innerArrayElement.
     // For example, if there's a variable declared as size 3 array of size 4 array of int:
@@ -163,6 +163,7 @@ struct LinkedUniform
     GLenum type;
     GLenum precision;
     std::string name;
+    // Only used by GL backend
     std::string mappedName;
 
     // Used to make an array type. Outermost array size is stored at the end of the vector.
@@ -174,7 +175,8 @@ struct LinkedUniform
     // All active variables are statically used, but not all statically used variables are
     // necessarily active. GLES 3.0.5 section 2.12.6. GLES 3.1 section 7.3.1.
     bool active;
-    std::vector<sh::ShaderVariable> fields;
+
+    bool isStruct;
 
     // VariableWithLocation
     int location;
@@ -207,7 +209,7 @@ struct LinkedUniform
     // Identifies the containing buffer backed resource -- interface block or atomic counter buffer.
     int bufferIndex;
     sh::BlockMemberInfo blockInfo;
-    std::vector<unsigned int> outerArraySizes;
+    unsigned int outerArraySizeProduct;
     unsigned int outerArrayOffset;
 };
 
