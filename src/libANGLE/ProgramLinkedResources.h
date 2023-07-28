@@ -14,6 +14,7 @@
 #include "angle_gl.h"
 #include "common/PackedEnums.h"
 #include "common/angleutils.h"
+#include "libANGLE/Uniform.h"
 #include "libANGLE/VaryingPacking.h"
 
 #include <functional>
@@ -37,18 +38,64 @@ class Context;
 class InfoLog;
 struct InterfaceBlock;
 enum class LinkMismatchError;
-struct LinkedUniform;
 class ProgramState;
 class ProgramPipelineState;
 class ProgramBindings;
 class ProgramAliasedBindings;
 class Shader;
 struct ShaderVariableBuffer;
-struct UnusedUniform;
 struct VariableLocation;
 
 using AtomicCounterBuffer = ShaderVariableBuffer;
 using ShaderUniform       = std::pair<ShaderType, const sh::ShaderVariable *>;
+
+// The link operation is responsible for finishing the link of uniform and interface blocks.
+// This way it can filter out unreferenced resources and still have access to the info.
+// TODO(jmadill): Integrate uniform linking/filtering as well as interface blocks.
+struct UnusedUniform
+{
+    UnusedUniform(std::string name,
+                  bool isSampler,
+                  bool isImage,
+                  bool isAtomicCounter,
+                  bool isFragmentInOut)
+    {
+        this->name            = name;
+        this->isSampler       = isSampler;
+        this->isImage         = isImage;
+        this->isAtomicCounter = isAtomicCounter;
+        this->isFragmentInOut = isFragmentInOut;
+    }
+
+    std::string name;
+    bool isSampler;
+    bool isImage;
+    bool isAtomicCounter;
+    bool isFragmentInOut;
+};
+
+struct UsedUniform : public LinkedUniform
+{
+    UsedUniform();
+    UsedUniform(GLenum type,
+                GLenum precision,
+                const std::string &name,
+                const std::vector<unsigned int> &arraySizes,
+                const int binding,
+                const int offset,
+                const int location,
+                const int bufferIndex,
+                const sh::BlockMemberInfo &blockInfo);
+    UsedUniform(const UsedUniform &other);
+    UsedUniform &operator=(const UsedUniform &other);
+    ~UsedUniform();
+
+    bool isEmulatedBuiltIn() const { return isBuiltIn() && name != mappedName; }
+    bool isStruct() const { return !fields.empty(); }
+
+    std::vector<sh::ShaderVariable> fields;
+    std::vector<unsigned int> outerArraySizes;
+};
 
 class UniformLinker final : angle::NonCopyable
 {
@@ -73,10 +120,10 @@ class UniformLinker final : angle::NonCopyable
                                            InfoLog &infoLog) const;
     bool flattenUniformsAndCheckCapsForShader(ShaderType shaderType,
                                               const Caps &caps,
-                                              std::vector<LinkedUniform> &samplerUniforms,
-                                              std::vector<LinkedUniform> &imageUniforms,
-                                              std::vector<LinkedUniform> &atomicCounterUniforms,
-                                              std::vector<LinkedUniform> &inputAttachmentUniforms,
+                                              std::vector<UsedUniform> &samplerUniforms,
+                                              std::vector<UsedUniform> &imageUniforms,
+                                              std::vector<UsedUniform> &atomicCounterUniforms,
+                                              std::vector<UsedUniform> &inputAttachmentUniforms,
                                               std::vector<UnusedUniform> &unusedUniforms,
                                               InfoLog &infoLog);
 
@@ -93,7 +140,7 @@ class UniformLinker final : angle::NonCopyable
 
     ShaderBitSet mActiveShaderStages;
     const ShaderMap<std::vector<sh::ShaderVariable>> &mShaderUniforms;
-    std::vector<LinkedUniform> mUniforms;
+    std::vector<UsedUniform> mUniforms;
     std::vector<UnusedUniform> mUnusedUniforms;
     std::vector<VariableLocation> mUniformLocations;
 };
@@ -203,31 +250,6 @@ class AtomicCounterBufferLinker final : angle::NonCopyable
 
   private:
     std::vector<AtomicCounterBuffer> *mAtomicCounterBuffersOut = nullptr;
-};
-
-// The link operation is responsible for finishing the link of uniform and interface blocks.
-// This way it can filter out unreferenced resources and still have access to the info.
-// TODO(jmadill): Integrate uniform linking/filtering as well as interface blocks.
-struct UnusedUniform
-{
-    UnusedUniform(std::string name,
-                  bool isSampler,
-                  bool isImage,
-                  bool isAtomicCounter,
-                  bool isFragmentInOut)
-    {
-        this->name            = name;
-        this->isSampler       = isSampler;
-        this->isImage         = isImage;
-        this->isAtomicCounter = isAtomicCounter;
-        this->isFragmentInOut = isFragmentInOut;
-    }
-
-    std::string name;
-    bool isSampler;
-    bool isImage;
-    bool isAtomicCounter;
-    bool isFragmentInOut;
 };
 
 struct ProgramLinkedResources
