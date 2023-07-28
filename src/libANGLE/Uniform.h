@@ -45,7 +45,7 @@ struct ActiveVariable
     ShaderBitSet activeShaders() const { return mActiveUseBits; }
     GLuint activeShaderCount() const { return static_cast<GLuint>(mActiveUseBits.count()); }
 
-  private:
+    // private:
     ShaderBitSet mActiveUseBits;
     // The id of a linked variable in each shader stage.  This id originates from
     // sh::ShaderVariable::id or sh::InterfaceBlock::id

@@ -14,6 +14,7 @@
 #include "angle_gl.h"
 #include "common/PackedEnums.h"
 #include "common/angleutils.h"
+#include "libANGLE/Uniform.h"
 #include "libANGLE/VaryingPacking.h"
 
 #include <functional>
@@ -50,6 +51,41 @@ struct VariableLocation;
 using AtomicCounterBuffer = ShaderVariableBuffer;
 using ShaderUniform       = std::pair<ShaderType, const sh::ShaderVariable *>;
 
+// Helper struct representing a single shader uniform
+struct LinkedUniformHelper : public sh::ShaderVariable, public ActiveVariable
+{
+    LinkedUniformHelper();
+    LinkedUniformHelper(GLenum type,
+                        GLenum precision,
+                        const std::string &name,
+                        const std::vector<unsigned int> &arraySizes,
+                        const int binding,
+                        const int offset,
+                        const int location,
+                        const int bufferIndex,
+                        const sh::BlockMemberInfo &blockInfo);
+    LinkedUniformHelper(const sh::ShaderVariable &uniform);
+    LinkedUniformHelper(const LinkedUniformHelper &uniform);
+    LinkedUniformHelper &operator=(const LinkedUniformHelper &uniform);
+    ~LinkedUniformHelper() override;
+
+    bool isSampler() const { return typeInfo->isSampler; }
+    bool isImage() const { return typeInfo->isImageType; }
+    bool isAtomicCounter() const { return IsAtomicCounterType(type); }
+    bool isInDefaultBlock() const { return bufferIndex == -1; }
+    bool isField() const { return name.find('.') != std::string::npos; }
+    size_t getElementSize() const { return typeInfo->externalSize; }
+    size_t getElementComponents() const { return typeInfo->componentCount; }
+
+    const UniformTypeInfo *typeInfo;
+
+    // Identifies the containing buffer backed resource -- interface block or atomic counter buffer.
+    int bufferIndex;
+    sh::BlockMemberInfo blockInfo;
+    std::vector<unsigned int> outerArraySizes;
+    unsigned int outerArrayOffset;
+};
+
 class UniformLinker final : angle::NonCopyable
 {
   public:
@@ -71,14 +107,15 @@ class UniformLinker final : angle::NonCopyable
                                            bool extendLinkedUniforms,
                                            std::map<std::string, ShaderUniform> *linkedUniforms,
                                            InfoLog &infoLog) const;
-    bool flattenUniformsAndCheckCapsForShader(ShaderType shaderType,
-                                              const Caps &caps,
-                                              std::vector<LinkedUniform> &samplerUniforms,
-                                              std::vector<LinkedUniform> &imageUniforms,
-                                              std::vector<LinkedUniform> &atomicCounterUniforms,
-                                              std::vector<LinkedUniform> &inputAttachmentUniforms,
-                                              std::vector<UnusedUniform> &unusedUniforms,
-                                              InfoLog &infoLog);
+    bool flattenUniformsAndCheckCapsForShader(
+        ShaderType shaderType,
+        const Caps &caps,
+        std::vector<LinkedUniformHelper> &samplerUniforms,
+        std::vector<LinkedUniformHelper> &imageUniforms,
+        std::vector<LinkedUniformHelper> &atomicCounterUniforms,
+        std::vector<LinkedUniformHelper> &inputAttachmentUniforms,
+        std::vector<UnusedUniform> &unusedUniforms,
+        InfoLog &infoLog);
 
     bool flattenUniformsAndCheckCaps(const Caps &caps, InfoLog &infoLog);
     bool checkMaxCombinedAtomicCounters(const Caps &caps, InfoLog &infoLog);
@@ -93,7 +130,7 @@ class UniformLinker final : angle::NonCopyable
 
     ShaderBitSet mActiveShaderStages;
     const ShaderMap<std::vector<sh::ShaderVariable>> &mShaderUniforms;
-    std::vector<LinkedUniform> mUniforms;
+    std::vector<LinkedUniformHelper> mUniforms;
     std::vector<UnusedUniform> mUnusedUniforms;
     std::vector<VariableLocation> mUniformLocations;
 };
