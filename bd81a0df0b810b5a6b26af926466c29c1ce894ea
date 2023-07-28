@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99cf56f7_142c827a",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4536,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-28T01:42:45Z",
+      "side": 1,
+      "message": "Suggest caching this at the top of this function to discourage multiple IsPixel() calls (which will eventually happen with copy-paste).",
+      "revId": "bd81a0df0b810b5a6b26af926466c29c1ce894ea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
