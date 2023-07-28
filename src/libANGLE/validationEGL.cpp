@@ -3312,7 +3312,7 @@ bool ValidateMakeCurrent(const ValidationContext *val,
         ANGLE_VALIDATION_TRY(ValidateContext(val, display, contextID));
     }
 
-    if (display->isInitialized() && display->isDeviceLost())
+    if (display->isInitialized() && display->isDeviceLost() && !noContext)
     {
         val->setError(EGL_CONTEXT_LOST);
         return false;
@@ -4891,7 +4891,22 @@ bool ValidateDestroyContext(const ValidationContext *val,
                             const Display *display,
                             gl::ContextID contextID)
 {
-    ANGLE_VALIDATION_TRY(ValidateContext(val, display, contextID));
+    if (display->isDeviceLost())
+    {
+        if (!display->isValidContext(contextID))
+        {
+            if (val)
+            {
+                val->setError(EGL_BAD_CONTEXT);
+            }
+            return false;
+        }
+        return true;
+    }
+    else
+    {
+        ANGLE_VALIDATION_TRY(ValidateContext(val, display, contextID));
+    }
     return true;
 }
 

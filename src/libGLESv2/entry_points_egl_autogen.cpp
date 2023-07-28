@@ -246,8 +246,7 @@ EGLBoolean EGLAPIENTRY EGL_DestroyContext(EGLDisplay dpy, EGLContext ctx)
 
         {
             ANGLE_EGL_SCOPED_CONTEXT_LOCK(DestroyContext, thread, dpyPacked, ctxPacked);
-            ANGLE_EGL_VALIDATE(thread, DestroyContext, GetDisplayIfValid(dpyPacked), EGLBoolean,
-                               dpyPacked, ctxPacked);
+            ANGLE_EGL_VALIDATE(thread, DestroyContext, dpyPacked, EGLBoolean, dpyPacked, ctxPacked);
 
             returnValue = DestroyContext(thread, dpyPacked, ctxPacked);
         }
