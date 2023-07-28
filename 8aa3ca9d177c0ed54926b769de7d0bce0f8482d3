@@ -106,6 +106,24 @@
       "parentUuid": "fecd2526_1986914a",
       "revId": "8aa3ca9d177c0ed54926b769de7d0bce0f8482d3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b737e32e_5082b9db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-07-28T13:29:56Z",
+      "side": 1,
+      "message": "I build `testDrawingHardwareBitmapNotLeaking` test locally and run on **G996B** and **S906B** devices. \n\nI was able to confirm the problem on **G996B** device - test completely freezes. Without this CL test finished in **9 seconds**.\n\nInterestingly, **S906B** works the same with and without this CL.\n\nWill investigate the root cause.",
+      "parentUuid": "bac62ee6_52550477",
+      "revId": "8aa3ca9d177c0ed54926b769de7d0bce0f8482d3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
