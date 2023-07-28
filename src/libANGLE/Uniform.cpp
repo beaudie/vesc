@@ -5,6 +5,7 @@
 //
 
 #include "libANGLE/Uniform.h"
+#include "libANGLE/ProgramLinkedResources.h"
 
 #include <cstring>
 
@@ -86,6 +87,7 @@ LinkedUniform::LinkedUniform(GLenum typeIn,
 {
     staticUse                     = false;
     active                        = false;
+    isStruct                      = false;
     rasterOrdered                 = false;
     readonly                      = false;
     writeonly                     = false;
@@ -96,7 +98,7 @@ LinkedUniform::LinkedUniform(GLenum typeIn,
     outerArrayOffset              = 0;
     imageUnitFormat               = GL_NONE;
     ASSERT(!isArrayOfArrays());
-    ASSERT(!isArray() || !isStruct());
+    ASSERT(!isArray() || !isStruct);
 }
 
 LinkedUniform::LinkedUniform(const LinkedUniform &uniform)
@@ -107,7 +109,7 @@ LinkedUniform::LinkedUniform(const LinkedUniform &uniform)
       arraySizes(uniform.arraySizes),
       staticUse(uniform.staticUse),
       active(uniform.active),
-      fields(uniform.fields),
+      isStruct(uniform.isStruct),
       location(uniform.location),
       binding(uniform.binding),
       imageUnitFormat(uniform.imageUnitFormat),
@@ -127,6 +129,11 @@ LinkedUniform::LinkedUniform(const LinkedUniform &uniform)
       outerArrayOffset(uniform.outerArrayOffset)
 {}
 
+LinkedUniform::LinkedUniform(const UsedUniform &uniform)
+{
+    *this = *(const LinkedUniform *)&uniform;
+}
+
 LinkedUniform &LinkedUniform::operator=(const LinkedUniform &uniform)
 {
     type                          = uniform.type;
@@ -136,7 +143,7 @@ LinkedUniform &LinkedUniform::operator=(const LinkedUniform &uniform)
     arraySizes                    = uniform.arraySizes;
     staticUse                     = uniform.staticUse;
     active                        = uniform.active;
-    fields                        = uniform.fields;
+    isStruct                      = uniform.isStruct;
     flattenedOffsetInParentArrays = uniform.flattenedOffsetInParentArrays;
     location                      = uniform.location;
     binding                       = uniform.binding;

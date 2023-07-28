@@ -374,14 +374,8 @@ void ProgramExecutable::load(bool isSeparable, gl::BinaryInputStream *stream)
         stream->readString(&uniform.name);
         stream->readString(&uniform.mappedName);
         stream->readIntVector<unsigned int>(&uniform.arraySizes);
-        uniform.staticUse   = stream->readBool();
-        uniform.active      = stream->readBool();
-        size_t elementCount = stream->readInt<size_t>();
-        uniform.fields.resize(elementCount);
-        for (sh::ShaderVariable &variable : uniform.fields)
-        {
-            LoadShaderVar(stream, &variable);
-        }
+        uniform.staticUse           = stream->readBool();
+        uniform.active              = stream->readBool();
         uniform.location            = stream->readInt<int>();
         uniform.binding             = stream->readInt<int>();
         uniform.imageUnitFormat     = stream->readInt<GLenum>();
@@ -632,11 +626,6 @@ void ProgramExecutable::save(bool isSeparable, gl::BinaryOutputStream *stream) c
         stream->writeIntVector(uniform.arraySizes);
         stream->writeBool(uniform.staticUse);
         stream->writeBool(uniform.active);
-        stream->writeInt<size_t>(uniform.fields.size());
-        for (const sh::ShaderVariable &shaderVariable : uniform.fields)
-        {
-            WriteShaderVar(stream, shaderVariable);
-        }
         stream->writeInt(uniform.location);
         stream->writeInt(uniform.binding);
         stream->writeInt(uniform.imageUnitFormat);
