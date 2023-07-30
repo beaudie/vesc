@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55db44be_4bd5a49e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-07-30T06:58:13Z",
+      "side": 1,
+      "message": "Geoff, Shabi: please review. Only tested on macOS, but it works well there. This mechanism was already useful to eliminate multiple possible root causes of poor performance of the Metal backend.",
+      "revId": "9153eee990347471d74ff35905dd91c40e0079f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
