@@ -17,6 +17,8 @@ class TranslatorESSL : public TCompiler
   public:
     TranslatorESSL(sh::GLenum type, ShShaderSpec spec);
 
+    const char *getTranslatedShaderSuffix() const override;
+
   protected:
     void initBuiltInFunctionEmulator(BuiltInFunctionEmulator *emu,
                                      const ShCompileOptions &compileOptions) override;

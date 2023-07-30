@@ -185,6 +185,8 @@ class TranslatorMSL : public TCompiler
 
     TranslatorMetalReflection *getTranslatorMetalReflection() { return &translatorMetalReflection; }
 
+    const char *getTranslatedShaderSuffix() const override;
+
   protected:
     bool translate(TIntermBlock *root,
                    const ShCompileOptions &compileOptions,

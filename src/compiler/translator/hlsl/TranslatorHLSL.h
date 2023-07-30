@@ -31,6 +31,8 @@ class TranslatorHLSL : public TCompiler
     unsigned int getImage2DRegisterIndex() const;
     const std::set<std::string> *getUsedImage2DFunctionNames() const;
 
+    const char *getTranslatedShaderSuffix() const override;
+
   protected:
     [[nodiscard]] bool translate(TIntermBlock *root,
                                  const ShCompileOptions &compileOptions,

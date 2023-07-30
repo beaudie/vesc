@@ -750,6 +750,11 @@ TranslatorSPIRV::TranslatorSPIRV(sh::GLenum type, ShShaderSpec spec)
     : TCompiler(type, spec, SH_SPIRV_VULKAN_OUTPUT), mFirstUnusedSpirvId(0)
 {}
 
+const char *TranslatorSPIRV::getTranslatedShaderSuffix() const
+{
+    return "spirv";
+}
+
 bool TranslatorSPIRV::translateImpl(TIntermBlock *root,
                                     const ShCompileOptions &compileOptions,
                                     PerformanceDiagnostics * /*perfDiagnostics*/,

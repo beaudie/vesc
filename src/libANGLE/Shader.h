@@ -328,6 +328,8 @@ class Shader final : angle::NonCopyable, public LabeledObject
 
     GLuint mCurrentMaxComputeWorkGroupInvocations;
     unsigned int mMaxComputeSharedMemory;
+
+    const char *mTranslatedShaderFilenameSuffix;
 };
 
 const char *GetShaderTypeString(ShaderType type);

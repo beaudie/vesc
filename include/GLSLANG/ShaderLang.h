@@ -26,7 +26,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 337
+#define ANGLE_SH_VERSION 338
 
 enum ShShaderSpec
 {
@@ -907,6 +907,10 @@ GLenum GetTessGenPointMode(const ShHandle handle);
 // Returns the blend equation list supported in the fragment shader.  This is a bitset of
 // gl::BlendEquationType, and can only include bits from KHR_blend_equation_advanced.
 uint32_t GetAdvancedBlendEquations(const ShHandle handle);
+
+// Return the filename suffix for the translated shaders. Used by ANGLE if writing
+// translated shaders to disk or reading them from disk.
+const char *GetTranslatedShaderFilenameSuffix(const ShHandle handle);
 
 //
 // Helper function to identify specs that are based on the WebGL spec.
