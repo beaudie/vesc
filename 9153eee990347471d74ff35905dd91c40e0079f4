@@ -16,6 +16,69 @@
       "message": "Geoff, Shabi: please review. Only tested on macOS, but it works well there. This mechanism was already useful to eliminate multiple possible root causes of poor performance of the Metal backend.",
       "revId": "9153eee990347471d74ff35905dd91c40e0079f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69f87e2d_31dbd2e9",
+        "filename": "doc/ShaderSubstitution.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-30T14:23:59Z",
+      "side": 1,
+      "message": "Suggest `/path/to/angle_shaders`, it\u0027s the typical way of not assuming where users want to put put the directory. And then you don\u0027t have to say `non-Android` above :)",
+      "range": {
+        "startLine": 27,
+        "startChar": 10,
+        "endLine": 27,
+        "endChar": 30
+      },
+      "revId": "9153eee990347471d74ff35905dd91c40e0079f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2988a18a_4f5905e2",
+        "filename": "doc/ShaderSubstitution.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-30T14:23:59Z",
+      "side": 1,
+      "message": "Is there a `$HOME` that could be used to make these copy-pastable?",
+      "range": {
+        "startLine": 84,
+        "startChar": 9,
+        "endLine": 84,
+        "endChar": 26
+      },
+      "revId": "9153eee990347471d74ff35905dd91c40e0079f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82097b7b_ff9a4782",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-07-30T14:23:59Z",
+      "side": 1,
+      "message": "This is not being serialized/deserialized, this feature probably doesn\u0027t interact well with caching.\n\nWhy not keep it simple and use `.translated` as suffix? I doubt anyone would want to deal with multiple backends at the same time (they could always use multiple directories if needed).",
+      "revId": "9153eee990347471d74ff35905dd91c40e0079f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
