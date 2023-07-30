@@ -28,6 +28,8 @@ class TranslatorSPIRV final : public TCompiler
 
     void assignSpirvId(TSymbolUniqueId uniqueId, uint32_t spirvId);
 
+    const char *getTranslatedShaderSuffix() const override;
+
   protected:
     [[nodiscard]] bool translate(TIntermBlock *root,
                                  const ShCompileOptions &compileOptions,

@@ -23,6 +23,13 @@ TranslatorESSL::TranslatorESSL(sh::GLenum type, ShShaderSpec spec)
     : TCompiler(type, spec, SH_ESSL_OUTPUT)
 {}
 
+const char *TranslatorESSL::getTranslatedShaderSuffix() const
+{
+    // Avoid collisions with the .essl files written for the frontend
+    // shaders in Shader.cpp.
+    return "translated_essl";
+}
+
 void TranslatorESSL::initBuiltInFunctionEmulator(BuiltInFunctionEmulator *emu,
                                                  const ShCompileOptions &compileOptions)
 {

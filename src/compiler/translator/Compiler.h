@@ -227,6 +227,9 @@ class TCompiler : public TShHandleBase
 
     bool hasClipDistance() const { return mClipDistanceUsed; }
 
+    // For dumping translated shaders to disk or reading them from disk.
+    virtual const char *getTranslatedShaderSuffix() const = 0;
+
   protected:
     // Add emulated functions to the built-in function emulator.
     virtual void initBuiltInFunctionEmulator(BuiltInFunctionEmulator *emu,

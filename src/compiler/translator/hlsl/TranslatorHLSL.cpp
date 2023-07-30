@@ -309,4 +309,9 @@ bool TranslatorHLSL::shouldUniformBlockUseStructuredBuffer(
            uniformBlockIter->second;
 }
 
+const char *TranslatorHLSL::getTranslatedShaderSuffix() const
+{
+    return "hlsl";
+}
+
 }  // namespace sh

@@ -22,6 +22,11 @@ TranslatorGLSL::TranslatorGLSL(sh::GLenum type, ShShaderSpec spec, ShShaderOutpu
     : TCompiler(type, spec, output)
 {}
 
+const char *TranslatorGLSL::getTranslatedShaderSuffix() const
+{
+    return "glsl";
+}
+
 void TranslatorGLSL::initBuiltInFunctionEmulator(BuiltInFunctionEmulator *emu,
                                                  const ShCompileOptions &compileOptions)
 {

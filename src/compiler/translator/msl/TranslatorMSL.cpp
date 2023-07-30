@@ -810,6 +810,11 @@ TranslatorMSL::TranslatorMSL(sh::GLenum type, ShShaderSpec spec, ShShaderOutput 
     : TCompiler(type, spec, output)
 {}
 
+const char *TranslatorMSL::getTranslatedShaderSuffix() const
+{
+    return "msl";
+}
+
 [[nodiscard]] bool TranslatorMSL::insertRasterizationDiscardLogic(TIntermBlock &root)
 {
     // This transformation leaves the tree in an inconsistent state by using a variable that's

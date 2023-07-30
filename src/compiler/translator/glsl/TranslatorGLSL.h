@@ -17,6 +17,8 @@ class TranslatorGLSL : public TCompiler
   public:
     TranslatorGLSL(sh::GLenum type, ShShaderSpec spec, ShShaderOutput output);
 
+    const char *getTranslatedShaderSuffix() const override;
+
   protected:
     void initBuiltInFunctionEmulator(BuiltInFunctionEmulator *emu,
                                      const ShCompileOptions &compileOptions) override;
