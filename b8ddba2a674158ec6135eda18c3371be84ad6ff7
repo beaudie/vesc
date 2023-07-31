@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0120a01b_2fb64cf0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-07-31T22:37:35Z",
+      "side": 1,
+      "message": "This change might break the Chromium bot: https://chromium-review.googlesource.com/c/chromium/src/+/4735732.\n\nError:\n\n```\nERROR aura_unittests[3074:3074]: [gl_display.cc(795)] eglInitialize SwANGLE failed with error EGL_NOT_INITIALIZED\nERROR aura_unittests[3074:3074]: [gl_display.cc(829)] Initialization of all EGL display types failed.\nERROR aura_unittests[3074:3074]: [gl_ozone_egl.cc(26)] GLDisplayEGL::Initialize failed.\nERROR aura_unittests[3074:3074]: [angle_platform_impl.cc(44)] RendererVk.cpp:188 (VerifyExtensionsPresent): Extension not supported: VK_KHR_display\n```\n\nCould you please take a look and revert/fix the error? Thank you.",
+      "revId": "b8ddba2a674158ec6135eda18c3371be84ad6ff7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
