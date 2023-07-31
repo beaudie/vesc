@@ -145,6 +145,24 @@
       "parentUuid": "82097b7b_ff9a4782",
       "revId": "9153eee990347471d74ff35905dd91c40e0079f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e47ac2d_80022c63",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-07-31T19:24:19Z",
+      "side": 1,
+      "message": "Chatted with Geoff and he also prefers `.translated` - thanks for this suggestion, making the change now.",
+      "parentUuid": "c29093ea_92a5e729",
+      "revId": "9153eee990347471d74ff35905dd91c40e0079f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
