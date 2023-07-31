@@ -722,7 +722,8 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
         {
             BufferVk *bufferVk                  = vk::GetImpl(bufferGL);
             const angle::Format &intendedFormat = vertexFormat.getIntendedFormat();
-            bool bindingIsAligned               = BindingIsAligned(
+            size_t numVertices    = GetVertexCount(bufferVk, binding, intendedFormat.pixelBytes);
+            bool bindingIsAligned = BindingIsAligned(
                 binding, intendedFormat, intendedFormat.channelCount, attrib.relativeOffset);
 
             if (renderer->getFeatures().compressVertexData.enabled &&
@@ -733,7 +734,8 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
             }
 
             bool needsConversion =
-                vertexFormat.getVertexLoadRequiresConversion(compressed) || !bindingIsAligned;
+                numVertices > 0 &&
+                (vertexFormat.getVertexLoadRequiresConversion(compressed) || !bindingIsAligned);
 
             if (needsConversion)
             {
@@ -796,7 +798,7 @@ angle::Result VertexArrayVk::syncDirtyAttrib(ContextVk *contextVk,
             }
             else
             {
-                if (bufferVk->getSize() == 0)
+                if (numVertices == 0)
                 {
                     vk::BufferHelper &emptyBuffer = contextVk->getEmptyBuffer();
 
