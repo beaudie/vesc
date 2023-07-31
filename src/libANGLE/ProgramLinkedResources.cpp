@@ -460,6 +460,7 @@ class FlattenUniformVisitor : public sh::VariableNameVisitor
             linkedUniform.id                  = variable.id;
             linkedUniform.imageUnitFormat     = variable.imageUnitFormat;
             linkedUniform.isFragmentInOut     = variable.isFragmentInOut;
+            ASSERT(!variable.isFragmentInOut);
             if (variable.hasParentArrayIndex())
             {
                 linkedUniform.setParentArrayIndex(variable.parentArrayIndex());
