@@ -310,7 +310,7 @@ constexpr SymbolRule kRules[] = {{
 }};
 
 // Flat array of all mangled names.
-constexpr const char *kMangledNames[] = {{
+constexpr char kMangledNames[][{longest_mangled_name}] = {{
 {mangled_names_array}
 }};
 
@@ -2152,6 +2152,8 @@ def generate_files(essl_only, args, functions_txt_filename, variables_json_filen
             '\n'.join(variables.declare_member_variables),
         'init_member_variables':
             '\n'.join(variables.init_member_variables),
+        'longest_mangled_name':
+            max([len(n) for n in mangled_builtins.get_names()]) - 1,
         'mangled_names_array':
             ',\n'.join(mangled_builtins.get_names()),
         'mangled_offsets_array':
