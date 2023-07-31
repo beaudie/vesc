@@ -198,6 +198,10 @@ class SharedContextMutex final : public ContextMutex
 
   private:
     Mutex mMutex;
+    // Used when ASSERT() and/or recursion are/is enabled.
+    std::atomic<angle::ThreadId> mOwnerThreadId;
+    // Used only when recursion is enabled.
+    uint32_t mLockLevel;
 
     // mRoot and mLeaves tree structure details:
     // - used to implement primary functionality of this class;
@@ -253,9 +257,6 @@ class SharedContextMutex final : public ContextMutex
     // - no mOldRoots grows at all;
     // - minumum number of mutexes to reach mOldRoots size of N => 2^(N+1).
     uint32_t mRank;
-
-    // Only used when ASSERT() is enabled.
-    std::atomic<angle::ThreadId> mOwnerThreadId;
 };
 
 class ContextMutexManager
