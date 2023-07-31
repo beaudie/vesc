@@ -163,6 +163,24 @@
       "parentUuid": "c29093ea_92a5e729",
       "revId": "9153eee990347471d74ff35905dd91c40e0079f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f8b6282_11bef9b6",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-07-31T19:45:54Z",
+      "side": 1,
+      "message": "Done, thanks again, the CL\u0027s much much simpler now.",
+      "parentUuid": "2e47ac2d_80022c63",
+      "revId": "9153eee990347471d74ff35905dd91c40e0079f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
