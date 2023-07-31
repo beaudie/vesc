@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "41cdb756_d9ec8fa7",
+        "filename": "doc/ShaderSubstitution.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-07-31T18:44:58Z",
+      "side": 1,
+      "message": "Thanks for the suggestion; done. The non-Android mention is still needed because of the `setprop` that\u0027s necessary and differing paths on the SD card; I expanded it out a bit and asked others explicitly for help on the docs.",
+      "parentUuid": "69f87e2d_31dbd2e9",
+      "range": {
+        "startLine": 27,
+        "startChar": 10,
+        "endLine": 27,
+        "endChar": 30
+      },
+      "revId": "9153eee990347471d74ff35905dd91c40e0079f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2988a18a_4f5905e2",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c4c480b_94b457da",
+        "filename": "doc/ShaderSubstitution.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-07-31T18:44:58Z",
+      "side": 1,
+      "message": "Yes, good idea, thanks - done.",
+      "parentUuid": "2988a18a_4f5905e2",
+      "range": {
+        "startLine": 84,
+        "startChar": 9,
+        "endLine": 84,
+        "endChar": 26
+      },
+      "revId": "9153eee990347471d74ff35905dd91c40e0079f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "82097b7b_ff9a4782",
@@ -77,6 +125,24 @@
       "writtenOn": "2023-07-30T14:23:59Z",
       "side": 1,
       "message": "This is not being serialized/deserialized, this feature probably doesn\u0027t interact well with caching.\n\nWhy not keep it simple and use `.translated` as suffix? I doubt anyone would want to deal with multiple backends at the same time (they could always use multiple directories if needed).",
+      "revId": "9153eee990347471d74ff35905dd91c40e0079f4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c29093ea_92a5e729",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-07-31T18:44:58Z",
+      "side": 1,
+      "message": "I was imagining that folks might want to run the translated shaders through native toolchains as they iterated on them, and having accurate filename suffixes would make that easier - but it would definitely be simpler to just use a constant. Would your preference be for me to change this to `.translated`?",
+      "parentUuid": "82097b7b_ff9a4782",
       "revId": "9153eee990347471d74ff35905dd91c40e0079f4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
