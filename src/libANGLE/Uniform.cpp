@@ -43,7 +43,23 @@ void ActiveVariable::unionReferencesWith(const ActiveVariable &other)
 }
 
 LinkedUniform::LinkedUniform()
-    : typeInfo(nullptr),
+    : type(GL_NONE),
+      precision(0),
+      staticUse(false),
+      active(false),
+      isRowMajorLayout(false),
+      location(-1),
+      binding(-1),
+      imageUnitFormat(GL_NONE),
+      offset(-1),
+      rasterOrdered(false),
+      readonly(false),
+      writeonly(false),
+      isFragmentInOut(false),
+      texelFetchStaticUse(false),
+      id(0),
+      flattenedOffsetInParentArrays(-1),
+      typeInfo(nullptr),
       bufferIndex(-1),
       blockInfo(sh::kDefaultBlockMemberInfo),
       outerArrayOffset(0)
@@ -58,35 +74,46 @@ LinkedUniform::LinkedUniform(GLenum typeIn,
                              const int locationIn,
                              const int bufferIndexIn,
                              const sh::BlockMemberInfo &blockInfoIn)
-    : typeInfo(&GetUniformTypeInfo(typeIn)),
+    : type(typeIn),
+      precision(precisionIn),
+      name(nameIn),
+      arraySizes(arraySizesIn),
+      location(locationIn),
+      binding(bindingIn),
+      offset(offsetIn),
+      typeInfo(&GetUniformTypeInfo(typeIn)),
       bufferIndex(bufferIndexIn),
       blockInfo(blockInfoIn),
       outerArrayOffset(0)
-{
-    type       = typeIn;
-    precision  = precisionIn;
-    name       = nameIn;
-    arraySizes = arraySizesIn;
-    binding    = bindingIn;
-    offset     = offsetIn;
-    location   = locationIn;
-    ASSERT(!isArrayOfArrays());
-    ASSERT(!isArray() || !isStruct());
-}
-
-LinkedUniform::LinkedUniform(const sh::ShaderVariable &uniform)
-    : sh::ShaderVariable(uniform),
-      typeInfo(&GetUniformTypeInfo(type)),
-      bufferIndex(-1),
-      blockInfo(sh::kDefaultBlockMemberInfo)
 {
     ASSERT(!isArrayOfArrays());
     ASSERT(!isArray() || !isStruct());
 }
 
 LinkedUniform::LinkedUniform(const LinkedUniform &uniform)
-    : sh::ShaderVariable(uniform),
-      ActiveVariable(uniform),
+    : type(uniform.type),
+      precision(uniform.precision),
+      name(uniform.name),
+      mappedName(uniform.mappedName),
+      arraySizes(uniform.arraySizes),
+      staticUse(uniform.staticUse),
+      active(uniform.active),
+      fields(uniform.fields),
+      structOrBlockName(uniform.structOrBlockName),
+      mappedStructOrBlockName(uniform.mappedStructOrBlockName),
+      isRowMajorLayout(uniform.isRowMajorLayout),
+      location(uniform.location),
+      binding(uniform.binding),
+      imageUnitFormat(uniform.imageUnitFormat),
+      offset(uniform.offset),
+      rasterOrdered(uniform.rasterOrdered),
+      readonly(uniform.readonly),
+      writeonly(uniform.writeonly),
+      isFragmentInOut(uniform.isFragmentInOut),
+      texelFetchStaticUse(uniform.texelFetchStaticUse),
+      id(uniform.id),
+      flattenedOffsetInParentArrays(uniform.flattenedOffsetInParentArrays),
+      activeVariable(uniform.activeVariable),
       typeInfo(uniform.typeInfo),
       bufferIndex(uniform.bufferIndex),
       blockInfo(uniform.blockInfo),
@@ -96,13 +123,34 @@ LinkedUniform::LinkedUniform(const LinkedUniform &uniform)
 
 LinkedUniform &LinkedUniform::operator=(const LinkedUniform &uniform)
 {
-    sh::ShaderVariable::operator=(uniform);
-    ActiveVariable::operator=(uniform);
-    typeInfo         = uniform.typeInfo;
-    bufferIndex      = uniform.bufferIndex;
-    blockInfo        = uniform.blockInfo;
-    outerArraySizes  = uniform.outerArraySizes;
-    outerArrayOffset = uniform.outerArrayOffset;
+    type                          = uniform.type;
+    precision                     = uniform.precision;
+    name                          = uniform.name;
+    mappedName                    = uniform.mappedName;
+    arraySizes                    = uniform.arraySizes;
+    staticUse                     = uniform.staticUse;
+    active                        = uniform.active;
+    fields                        = uniform.fields;
+    structOrBlockName             = uniform.structOrBlockName;
+    mappedStructOrBlockName       = uniform.mappedStructOrBlockName;
+    isRowMajorLayout              = uniform.isRowMajorLayout;
+    flattenedOffsetInParentArrays = uniform.flattenedOffsetInParentArrays;
+    location                      = uniform.location;
+    binding                       = uniform.binding;
+    imageUnitFormat               = uniform.imageUnitFormat;
+    offset                        = uniform.offset;
+    rasterOrdered                 = uniform.rasterOrdered;
+    readonly                      = uniform.readonly;
+    writeonly                     = uniform.writeonly;
+    isFragmentInOut               = uniform.isFragmentInOut;
+    texelFetchStaticUse           = uniform.texelFetchStaticUse;
+    id                            = uniform.id;
+    activeVariable                = uniform.activeVariable;
+    typeInfo                      = uniform.typeInfo;
+    bufferIndex                   = uniform.bufferIndex;
+    blockInfo                     = uniform.blockInfo;
+    outerArraySizes               = uniform.outerArraySizes;
+    outerArrayOffset              = uniform.outerArrayOffset;
     return *this;
 }
 
