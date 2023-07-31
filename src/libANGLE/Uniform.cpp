@@ -47,7 +47,6 @@ LinkedUniform::LinkedUniform()
       precision(0),
       staticUse(false),
       active(false),
-      isRowMajorLayout(false),
       location(-1),
       binding(-1),
       imageUnitFormat(GL_NONE),
@@ -93,7 +92,6 @@ LinkedUniform::LinkedUniform(GLenum typeIn,
     id                            = 0;
     flattenedOffsetInParentArrays = -1;
     outerArrayOffset              = 0;
-    isRowMajorLayout              = false;
     ASSERT(!isArrayOfArrays());
     ASSERT(!isArray() || !isStruct());
 }
@@ -107,9 +105,6 @@ LinkedUniform::LinkedUniform(const LinkedUniform &uniform)
       staticUse(uniform.staticUse),
       active(uniform.active),
       fields(uniform.fields),
-      structOrBlockName(uniform.structOrBlockName),
-      mappedStructOrBlockName(uniform.mappedStructOrBlockName),
-      isRowMajorLayout(uniform.isRowMajorLayout),
       location(uniform.location),
       binding(uniform.binding),
       imageUnitFormat(uniform.imageUnitFormat),
@@ -139,9 +134,6 @@ LinkedUniform &LinkedUniform::operator=(const LinkedUniform &uniform)
     staticUse                     = uniform.staticUse;
     active                        = uniform.active;
     fields                        = uniform.fields;
-    structOrBlockName             = uniform.structOrBlockName;
-    mappedStructOrBlockName       = uniform.mappedStructOrBlockName;
-    isRowMajorLayout              = uniform.isRowMajorLayout;
     flattenedOffsetInParentArrays = uniform.flattenedOffsetInParentArrays;
     location                      = uniform.location;
     binding                       = uniform.binding;

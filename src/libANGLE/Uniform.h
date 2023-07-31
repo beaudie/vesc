@@ -175,14 +175,6 @@ struct LinkedUniform final
     // necessarily active. GLES 3.0.5 section 2.12.6. GLES 3.1 section 7.3.1.
     bool active;
     std::vector<sh::ShaderVariable> fields;
-    // structOrBlockName is used for:
-    // - varyings of struct type, in which case it contains the struct name.
-    // - shader I/O blocks, in which case it contains the block name.
-    std::string structOrBlockName;
-    std::string mappedStructOrBlockName;
-
-    // Only applies to interface block fields. Kept here for simplicity.
-    bool isRowMajorLayout;
 
     // VariableWithLocation
     int location;

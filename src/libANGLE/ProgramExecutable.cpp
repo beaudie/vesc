@@ -382,9 +382,6 @@ void ProgramExecutable::load(bool isSeparable, gl::BinaryInputStream *stream)
         {
             LoadShaderVar(stream, &variable);
         }
-        stream->readString(&uniform.structOrBlockName);
-        stream->readString(&uniform.mappedStructOrBlockName);
-        uniform.isRowMajorLayout    = stream->readBool();
         uniform.location            = stream->readInt<int>();
         uniform.binding             = stream->readInt<int>();
         uniform.imageUnitFormat     = stream->readInt<GLenum>();
@@ -640,9 +637,6 @@ void ProgramExecutable::save(bool isSeparable, gl::BinaryOutputStream *stream) c
         {
             WriteShaderVar(stream, shaderVariable);
         }
-        stream->writeString(uniform.structOrBlockName);
-        stream->writeString(uniform.mappedStructOrBlockName);
-        stream->writeBool(uniform.isRowMajorLayout);
         stream->writeInt(uniform.location);
         stream->writeInt(uniform.binding);
         stream->writeInt(uniform.imageUnitFormat);
