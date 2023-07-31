@@ -53,7 +53,7 @@ struct ActiveVariable
 };
 
 // Helper struct representing a single shader uniform
-struct LinkedUniform : public sh::ShaderVariable, public ActiveVariable
+struct LinkedUniform final
 {
     LinkedUniform();
     LinkedUniform(GLenum type,
@@ -65,18 +65,150 @@ struct LinkedUniform : public sh::ShaderVariable, public ActiveVariable
                   const int location,
                   const int bufferIndex,
                   const sh::BlockMemberInfo &blockInfo);
-    LinkedUniform(const sh::ShaderVariable &uniform);
     LinkedUniform(const LinkedUniform &uniform);
     LinkedUniform &operator=(const LinkedUniform &uniform);
-    ~LinkedUniform() override;
+    ~LinkedUniform();
 
     bool isSampler() const { return typeInfo->isSampler; }
     bool isImage() const { return typeInfo->isImageType; }
     bool isAtomicCounter() const { return IsAtomicCounterType(type); }
     bool isInDefaultBlock() const { return bufferIndex == -1; }
-    bool isField() const { return name.find('.') != std::string::npos; }
     size_t getElementSize() const { return typeInfo->externalSize; }
     size_t getElementComponents() const { return typeInfo->componentCount; }
+
+    bool isArrayOfArrays() const { return arraySizes.size() >= 2u; }
+    bool isArray() const { return !arraySizes.empty(); }
+    unsigned int getArraySizeProduct() const { return gl::ArraySizeProduct(arraySizes); }
+    // Array size 0 means not an array when passed to or returned from these functions.
+    // Note that setArraySize() is deprecated and should not be used inside ANGLE.
+    unsigned int getOutermostArraySize() const { return isArray() ? arraySizes.back() : 0; }
+    // This function should only be used with variables that are of a basic type or an array of a
+    // basic type. Shader interface variables that are enumerated according to rules in GLES 3.1
+    // spec section 7.3.1.1 page 77 are fine. For those variables the return value should match the
+    // ARRAY_SIZE value that can be queried through the API.
+    unsigned int getBasicTypeElementCount() const
+    {
+        // GLES 3.1 Nov 2016 section 7.3.1.1 page 77 specifies that a separate entry should be
+        // generated for each array element when dealing with an array of arrays or an array of
+        // structs.
+        ASSERT(!isArrayOfArrays());
+        ASSERT(!isStruct() || !isArray());
+
+        // GLES 3.1 Nov 2016 page 82.
+        if (isArray())
+        {
+            return getOutermostArraySize();
+        }
+        return 1u;
+    }
+
+    unsigned int getExternalSize() const;
+
+    bool isStruct() const { return !fields.empty(); }
+    // All of the shader's variables are described using nested data
+    // structures. This is needed in order to disambiguate similar looking
+    // types, such as two structs containing the same fields, but in
+    // different orders. "findInfoByMappedName" provides an easy query for
+    // users to dive into the data structure and fetch the unique variable
+    // instance corresponding to a dereferencing chain of the top-level
+    // variable.
+    // Given a mapped name like 'a[0].b.c[0]', return the ShaderVariable
+    // that defines 'c' in |leafVar|, and the original name 'A[0].B.C[0]'
+    // in |originalName|, based on the assumption that |this| defines 'a'.
+    // If no match is found, return false.
+    bool findInfoByMappedName(const std::string &mappedFullName,
+                              const sh::ShaderVariable **leafVar,
+                              std::string *originalFullName) const;
+    bool isBuiltIn() const { return gl::IsBuiltInName(name); }
+
+    bool isEmulatedBuiltIn() const { return isBuiltIn() && name != mappedName; }
+    // Offset of this variable in parent arrays. In case the parent is an array of arrays, the
+    // offset is outerArrayElement * innerArraySize + innerArrayElement.
+    // For example, if there's a variable declared as size 3 array of size 4 array of int:
+    //   int a[3][4];
+    // then the flattenedOffsetInParentArrays of a[2] would be 2.
+    // and flattenedOffsetInParentArrays of a[2][1] would be 2*4 + 1 = 9.
+    int parentArrayIndex() const
+    {
+        return hasParentArrayIndex() ? flattenedOffsetInParentArrays : 0;
+    }
+    int getFlattenedOffsetInParentArrays() const { return flattenedOffsetInParentArrays; }
+    void setParentArrayIndex(int indexIn) { flattenedOffsetInParentArrays = indexIn; }
+
+    bool hasParentArrayIndex() const { return flattenedOffsetInParentArrays != -1; }
+    // InterfaceBlockField
+    // Decide whether two InterfaceBlock fields are the same at shader
+    // link time, assuming they are from consecutive shader stages.
+    // See GLSL ES Spec 3.00.3, sec 4.3.7.
+    bool isSameInterfaceBlockFieldAtLinkTime(const sh::ShaderVariable &other) const;
+
+    bool isSameVariableAtLinkTime(const sh::ShaderVariable &other,
+                                  bool matchPrecision,
+                                  bool matchName) const;
+
+    ShaderType getFirstActiveShaderType() const
+    {
+        return activeVariable.getFirstActiveShaderType();
+    }
+    void setActive(ShaderType shaderType, bool used, uint32_t _id)
+    {
+        activeVariable.setActive(shaderType, used, _id);
+    }
+    bool isActive(ShaderType shaderType) const { return activeVariable.isActive(shaderType); }
+    const ShaderMap<uint32_t> &getIds() const { return activeVariable.getIds(); }
+    uint32_t getId(ShaderType shaderType) const { return activeVariable.getId(shaderType); }
+    ShaderBitSet activeShaders() const { return activeVariable.activeShaders(); }
+    GLuint activeShaderCount() const { return activeVariable.activeShaderCount(); }
+
+    GLenum type;
+    GLenum precision;
+    std::string name;
+    std::string mappedName;
+
+    // Used to make an array type. Outermost array size is stored at the end of the vector.
+    std::vector<unsigned int> arraySizes;
+
+    // Static use means that the variable is accessed somewhere in the shader source.
+    bool staticUse;
+    // A variable is active unless the compiler determined that it is not accessed by the shader.
+    // All active variables are statically used, but not all statically used variables are
+    // necessarily active. GLES 3.0.5 section 2.12.6. GLES 3.1 section 7.3.1.
+    bool active;
+    std::vector<sh::ShaderVariable> fields;
+    // structOrBlockName is used for:
+    // - varyings of struct type, in which case it contains the struct name.
+    // - shader I/O blocks, in which case it contains the block name.
+    std::string structOrBlockName;
+    std::string mappedStructOrBlockName;
+
+    // Only applies to interface block fields. Kept here for simplicity.
+    bool isRowMajorLayout;
+
+    // VariableWithLocation
+    int location;
+
+    // Uniform
+    int binding;
+    GLenum imageUnitFormat;
+    int offset;
+    bool rasterOrdered;
+    bool readonly;
+    bool writeonly;
+
+    // From EXT_shader_framebuffer_fetch / KHR_blend_equation_advanced
+    bool isFragmentInOut;
+
+    // If the variable is a sampler that has ever been statically used with texelFetch
+    bool texelFetchStaticUse;
+
+    // Id of the variable in the shader.  Currently used by the SPIR-V output to communicate the
+    // SPIR-V id of the variable.  This value is only set for variables that the SPIR-V transformer
+    // needs to know about, i.e. active variables, excluding non-zero array elements etc.
+    uint32_t id;
+
+    int flattenedOffsetInParentArrays;
+
+    ActiveVariable activeVariable;
 
     const UniformTypeInfo *typeInfo;
 
