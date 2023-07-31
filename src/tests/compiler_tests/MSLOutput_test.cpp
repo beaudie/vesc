@@ -637,3 +637,81 @@ TEST_F(MSLOutputTest, AnonymousStruct)
     // When WebKit build is able to run the tests, this should be changed to something else.
     //    ASSERT_TRUE(foundInCode(SH_MSL_METAL_OUTPUT, "__unnamed"));
 }
+
+
+TEST_F(MSLOutputTest, GlobalLoweringSimple)
+{
+    const std::string &shaderString =
+        R"(#version 300 es
+        precision mediump float;
+
+        float uf;
+        out vec4 my_FragColor;
+
+        void main()
+        {
+            uf = 1.0f;
+            my_FragColor = vec4(uf, 0.0, 0.0, 1.0);
+        })";
+    compile(shaderString);
+}
+
+TEST_F(MSLOutputTest, GlobalLoweringNoLower)
+{
+    const std::string &shaderString =
+        R"(#version 300 es
+        precision mediump float;
+
+        float uf;
+        out vec4 my_FragColor;
+        void modifyGlobal()
+        {
+            uf = 1.0f;
+        }
+        void main()
+        {
+            my_FragColor = vec4(uf, 0.0, 0.0, 1.0);
+        })";
+    compile(shaderString);
+}
+
+TEST_F(MSLOutputTest, GlobalLoweringInitializer)
+{
+    const std::string &shaderString =
+        R"(#version 300 es
+        precision mediump float;
+
+        float uf = 1.0f;
+        out vec4 my_FragColor;
+        
+        void main()
+        {
+            uf += 1.0;
+            my_FragColor = vec4(uf, 0.0, 0.0, 1.0);
+        })";
+    compile(shaderString);
+}
+
+
+TEST_F(MSLOutputTest, GlobalLoweringInitializerNotLowered)
+{
+    const std::string &shaderString =
+        R"(#version 300 es
+        precision mediump float;
+
+        float uf = 1.0f;
+        out vec4 my_FragColor;
+        
+        void modifyGlobal()
+        {
+            uf =+ 1.0f;
+        }
+        void main()
+        {
+            my_FragColor = vec4(uf, 0.0, 0.0, 1.0);
+        })";
+    compile(shaderString);
+}
+
+
+

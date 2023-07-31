@@ -195,6 +195,7 @@ angle::Result FormatTable::initialize(const DisplayMtl *display)
         const auto formatId = static_cast<angle::FormatID>(i);
 
         mPixelFormatTable[i].init(display, formatId);
+        adjustFormatCapsForDevice(mNativePixelFormatCapsTable[PixelFormatTable[i].metalFormat], display->supportsAppleGPUFamily(2), display->supportsAppleGPUFamily(4));
         mPixelFormatTable[i].caps = &mNativePixelFormatCapsTable[mPixelFormatTable[i].metalFormat];
 
         if (mPixelFormatTable[i].actualFormatId != mPixelFormatTable[i].intendedFormatId)
@@ -302,8 +303,7 @@ void FormatTable::setCompressedFormatCaps(MTLPixelFormat formatId, bool filterab
     setFormatCaps(formatId, filterable, false, false, false, false, false, false);
 }
 
-void FormatTable::adjustFormatCapsForDevice(const mtl::ContextDevice &device,
-                                            MTLPixelFormat id,
+void FormatTable::adjustFormatCapsForDevice(MTLPixelFormat id,
                                             bool supportsiOS2,
                                             bool supportsiOS4)
 {

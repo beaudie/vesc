@@ -287,8 +287,11 @@ void Trace(LogSeverity severity, const char *message)
                 default:
                     UNREACHABLE();
             }
+#pragma clang diagnostic push 
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
             os_log_with_type(OS_LOG_DEFAULT, apple_log_type, "ANGLE: %s: %s\n",
                              LogSeverityName(severity), str.c_str());
+#pragma clang diagnostic pop
         }
 #else
         // Note: we use fprintf because <iostream> includes static initializers.
