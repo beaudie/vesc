@@ -16,6 +16,24 @@
       "message": "yuxinhu@: I\u0027m not an ANGLE committer. Would you be able to help me submit this CL?",
       "revId": "f60b560d5205eb9a0f6d60e920dbc14c6a71d5ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45efa69e_a38c30b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-07-31T21:03:00Z",
+      "side": 1,
+      "message": "Sure I will help to merge the change.",
+      "parentUuid": "f487df46_5c1ba281",
+      "revId": "f60b560d5205eb9a0f6d60e920dbc14c6a71d5ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
