@@ -52,6 +52,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c72b2bea_9addf5cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-07-31T19:02:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57bb9ab9_60f0ab8b",
+      "revId": "947655bfe6a2364ddccad2cb5a0b087d2cfbc378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "545a081a_16c0d020",
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "Yeap! No reason to try to add MSRTSS if not an attachment",
       "parentUuid": "5779c652_118b4a56",
+      "revId": "947655bfe6a2364ddccad2cb5a0b087d2cfbc378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2919c103_5cb3a6a6",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3317,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-07-31T19:02:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f946e0a0_c875a3e5",
       "revId": "947655bfe6a2364ddccad2cb5a0b087d2cfbc378",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -166,6 +202,30 @@
       "side": 1,
       "message": "Yeap. It would return a bool, which would replace the condition for adding MSRTSS in the code prior to this change.",
       "parentUuid": "388f2057_42858c16",
+      "range": {
+        "startLine": 3316,
+        "startChar": 0,
+        "endLine": 3340,
+        "endChar": 86
+      },
+      "revId": "947655bfe6a2364ddccad2cb5a0b087d2cfbc378",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84c9672e_939d66b5",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3340,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-07-31T19:02:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "440f8d19_f23a69bc",
       "range": {
         "startLine": 3316,
         "startChar": 0,
