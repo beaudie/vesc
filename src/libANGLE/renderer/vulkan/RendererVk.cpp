@@ -1912,13 +1912,27 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     std::vector<VkPhysicalDevice> physicalDevices(physicalDeviceCount);
     ANGLE_VK_TRY(displayVk, vkEnumeratePhysicalDevices(mInstance, &physicalDeviceCount,
                                                        physicalDevices.data()));
+#if defined(ANGLE_PLATFORM_LINUX)
+    uint32_t drmRenderNodeDeviceIdHigh =
+        static_cast<uint32_t>(attribs.get(EGL_PLATFORM_ANGLE_DEVICE_ID_HIGH_ANGLE, 0));
+    uint32_t drmRenderNodeDeviceIdLow =
+        static_cast<uint32_t>(attribs.get(EGL_PLATFORM_ANGLE_DEVICE_ID_LOW_ANGLE, 0));
+    dev_t drmRenderNodeDeviceId = static_cast<dev_t>(
+        angle::GetSystemDeviceIdFromParts(drmRenderNodeDeviceIdHigh, drmRenderNodeDeviceIdLow));
+#else
     uint32_t preferredVendorId =
         static_cast<uint32_t>(attribs.get(EGL_PLATFORM_ANGLE_DEVICE_ID_HIGH_ANGLE, 0));
     uint32_t preferredDeviceId =
         static_cast<uint32_t>(attribs.get(EGL_PLATFORM_ANGLE_DEVICE_ID_LOW_ANGLE, 0));
-    ChoosePhysicalDevice(vkGetPhysicalDeviceProperties, physicalDevices, mEnabledICD,
-                         preferredVendorId, preferredDeviceId, &mPhysicalDevice,
-                         &mPhysicalDeviceProperties);
+#endif
+    ChoosePhysicalDevice(vkGetPhysicalDeviceProperties2KHR, vkEnumerateDeviceExtensionProperties,
+                         physicalDevices, mEnabledICD,
+#if defined(ANGLE_PLATFORM_LINUX)
+                         drmRenderNodeDeviceId,
+#else
+                         preferredVendorId, preferredDeviceId,
+#endif
+                         &mPhysicalDevice, &mPhysicalDeviceProperties);
 
     // The device version that is assumed by ANGLE is the minimum of the actual device version and
     // the highest it's allowed to use.

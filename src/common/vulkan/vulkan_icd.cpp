@@ -18,6 +18,10 @@
 
 #include "common/vulkan/vk_google_filtering_precision.h"
 
+#if defined(ANGLE_PLATFORM_LINUX)
+#    include <sys/sysmacros.h>
+#endif
+
 namespace
 {
 void ResetEnvironmentVar(const char *variableName, const Optional<std::string> &value)
@@ -265,53 +269,110 @@ bool ScopedVkLoaderEnvironment::setCustomExtensionsEnvironment()
                                               strstr.str().c_str());
 }
 
-void ChoosePhysicalDevice(PFN_vkGetPhysicalDeviceProperties pGetPhysicalDeviceProperties,
-                          const std::vector<VkPhysicalDevice> &physicalDevices,
-                          vk::ICD preferredICD,
-                          uint32_t preferredVendorID,
-                          uint32_t preferredDeviceID,
-                          VkPhysicalDevice *physicalDeviceOut,
-                          VkPhysicalDeviceProperties *physicalDevicePropertiesOut)
+void ChoosePhysicalDevice(
+    PFN_vkGetPhysicalDeviceProperties2KHR pGetPhysicalDeviceProperties2KHR,
+    PFN_vkEnumerateDeviceExtensionProperties pEnumerateDeviceExtensionProperties,
+    const std::vector<VkPhysicalDevice> &physicalDevices,
+    vk::ICD preferredICD,
+#if defined(ANGLE_PLATFORM_LINUX)
+    dev_t drmRenderNodeDeviceId,
+#else
+    uint32_t preferredVendorID,
+    uint32_t preferredDeviceID,
+#endif
+    VkPhysicalDevice *physicalDeviceOut,
+    VkPhysicalDeviceProperties *physicalDevicePropertiesOut)
 {
     ASSERT(!physicalDevices.empty());
 
     ICDFilterFunc filter = GetFilterForICD(preferredICD);
 
+#if defined(ANGLE_PLATFORM_LINUX)
+    const bool shouldChooseByID = (drmRenderNodeDeviceId != 0);
+#else
     const bool shouldChooseByID = (preferredVendorID != 0 || preferredDeviceID != 0);
+#endif
 
     for (const VkPhysicalDevice &physicalDevice : physicalDevices)
     {
-        pGetPhysicalDeviceProperties(physicalDevice, physicalDevicePropertiesOut);
-        if (filter(*physicalDevicePropertiesOut))
+        VkPhysicalDeviceProperties2KHR physicalDeviceProperties2;
+        physicalDeviceProperties2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2_KHR;
+        physicalDeviceProperties2.pNext = nullptr;
+
+#if defined(ANGLE_PLATFORM_LINUX)
+        VkPhysicalDeviceDrmPropertiesEXT drmProperties;
+        if (shouldChooseByID)
         {
-            *physicalDeviceOut = physicalDevice;
+            uint32_t extensionCount;
+            pEnumerateDeviceExtensionProperties(physicalDevice, nullptr, &extensionCount, nullptr);
+            std::vector<VkExtensionProperties> extensionProperties(extensionCount);
+            pEnumerateDeviceExtensionProperties(physicalDevice, nullptr, &extensionCount,
+                                                extensionProperties.data());
+            bool isPhysicalDeviceDrmAvailable = false;
+            for (const auto &extension : extensionProperties)
+            {
+                if (strcmp(extension.extensionName, VK_EXT_PHYSICAL_DEVICE_DRM_EXTENSION_NAME) == 0)
+                {
+                    isPhysicalDeviceDrmAvailable = true;
+                    break;
+                }
+            }
+            if (isPhysicalDeviceDrmAvailable)
+            {
+                drmProperties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DRM_PROPERTIES_EXT;
+                drmProperties.pNext = nullptr;
+                physicalDeviceProperties2.pNext = &drmProperties;
+            }
+            else
+            {
+                continue;
+            }
+        }
+#endif
+        pGetPhysicalDeviceProperties2KHR(physicalDevice, &physicalDeviceProperties2);
+        if (filter(physicalDeviceProperties2.properties))
+        {
+            *physicalDeviceOut           = physicalDevice;
+            *physicalDevicePropertiesOut = physicalDeviceProperties2.properties;
             return;
         }
 
         if (shouldChooseByID)
         {
+#if defined(ANGLE_PLATFORM_LINUX)
+            if (drmProperties.hasRender == VK_TRUE &&
+                drmProperties.renderMajor == major(drmRenderNodeDeviceId) &&
+                drmProperties.renderMinor == minor(drmRenderNodeDeviceId))
+            {
+                *physicalDeviceOut           = physicalDevice;
+                *physicalDevicePropertiesOut = physicalDeviceProperties2.properties;
+                return;
+            }
+#else
             // NOTE: If the system has multiple GPUs with the same vendor and
             // device IDs, this will arbitrarily select one of them.
             bool matchVendorID = true;
             bool matchDeviceID = true;
 
             if (preferredVendorID != 0 &&
-                preferredVendorID != physicalDevicePropertiesOut->vendorID)
+                preferredVendorID != physicalDeviceProperties2.properties.vendorID)
             {
                 matchVendorID = false;
             }
 
             if (preferredDeviceID != 0 &&
-                preferredDeviceID != physicalDevicePropertiesOut->deviceID)
+                preferredDeviceID != physicalDeviceProperties2.properties.deviceID)
             {
                 matchDeviceID = false;
             }
 
             if (matchVendorID && matchDeviceID)
             {
-                *physicalDeviceOut = physicalDevice;
+                *physicalDeviceOut           = physicalDevice;
+                *physicalDevicePropertiesOut = physicalDeviceProperties2.properties;
                 return;
             }
+#endif
         }
     }
 
@@ -319,18 +380,23 @@ void ChoosePhysicalDevice(PFN_vkGetPhysicalDeviceProperties pGetPhysicalDevicePr
     VkPhysicalDeviceProperties integratedDeviceProperties;
     for (const VkPhysicalDevice &physicalDevice : physicalDevices)
     {
-        pGetPhysicalDeviceProperties(physicalDevice, physicalDevicePropertiesOut);
+        VkPhysicalDeviceProperties2KHR physicalDeviceProperties2;
+        physicalDeviceProperties2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2_KHR;
+        physicalDeviceProperties2.pNext = nullptr;
+        pGetPhysicalDeviceProperties2KHR(physicalDevice, &physicalDeviceProperties2);
         // If discrete GPU exists, uses it by default.
-        if (physicalDevicePropertiesOut->deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
+        if (physicalDeviceProperties2.properties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU)
         {
-            *physicalDeviceOut = physicalDevice;
+            *physicalDeviceOut           = physicalDevice;
+            *physicalDevicePropertiesOut = physicalDeviceProperties2.properties;
             return;
         }
-        if (physicalDevicePropertiesOut->deviceType == VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU &&
+        if (physicalDeviceProperties2.properties.deviceType ==
+                VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU &&
             !integratedDevice.valid())
         {
             integratedDevice           = physicalDevice;
-            integratedDeviceProperties = *physicalDevicePropertiesOut;
+            integratedDeviceProperties = physicalDeviceProperties2.properties;
             continue;
         }
     }
@@ -346,7 +412,11 @@ void ChoosePhysicalDevice(PFN_vkGetPhysicalDeviceProperties pGetPhysicalDevicePr
     WARN() << "Preferred device ICD not found. Using default physicalDevice instead.";
     // Fallback to the first device.
     *physicalDeviceOut = physicalDevices[0];
-    pGetPhysicalDeviceProperties(*physicalDeviceOut, physicalDevicePropertiesOut);
+    VkPhysicalDeviceProperties2KHR physicalDeviceProperties2;
+    physicalDeviceProperties2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2_KHR;
+    physicalDeviceProperties2.pNext = nullptr;
+    pGetPhysicalDeviceProperties2KHR(*physicalDeviceOut, &physicalDeviceProperties2);
+    *physicalDevicePropertiesOut = physicalDeviceProperties2.properties;
 }
 
 }  // namespace vk
