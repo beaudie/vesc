@@ -34,6 +34,24 @@
       "parentUuid": "6fc9142d_a228c324",
       "revId": "50341d5ec4618b13e1cbfeb88ae826f4fa513a7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9811538d_849db520",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-01T18:08:00Z",
+      "side": 1,
+      "message": "Like, I wonder what happens if we _don\u0027t_ take the sharegroup lock for getBufferAge, and instead return an age of 0 if ANI is needed. I do recall some test bugs which expected age to be always set, but we could fix (deqp) test bugs if we have to.\n\nNeither Chromium, nor any app we have traces of use EGL_BUFFER_AGE. I\u0027d lean on hurting EGL_BUFFER_AGE instead of the sharegroup lock if we have to choose.",
+      "parentUuid": "19ef5dd0_99996b8e",
+      "revId": "50341d5ec4618b13e1cbfeb88ae826f4fa513a7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
