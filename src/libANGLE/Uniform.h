@@ -81,32 +81,14 @@ struct LinkedUniform
     bool isStruct() const { return flagBits.isStruct; }
     bool isTexelFetchStaticUse() const { return flagBits.texelFetchStaticUse; }
     bool isFragmentInOut() const { return flagBits.isFragmentInOut; }
+    bool isFragmentInOut() const { return flagBits.isFragmentInOut; }
+    bool isStruct() const { return flagBits.isStruct; }
+    bool isTexelFetchStaticUse() const { return flagBits.texelFetchStaticUse; }
+    bool isArrayOfArrays() const { return flagBits.isArrayOfArrays; }
+    bool isArray() const { return flagBits.isArray; }
 
-    bool isArrayOfArrays() const { return arraySizes.size() >= 2u; }
-    bool isArray() const { return !arraySizes.empty(); }
-    unsigned int getArraySizeProduct() const { return gl::ArraySizeProduct(arraySizes); }
-    // Array size 0 means not an array when passed to or returned from these functions.
-    // Note that setArraySize() is deprecated and should not be used inside ANGLE.
-    unsigned int getOutermostArraySize() const { return isArray() ? arraySizes.back() : 0; }
-    // This function should only be used with variables that are of a basic type or an array of a
-    // basic type. Shader interface variables that are enumerated according to rules in GLES 3.1
-    // spec section 7.3.1.1 page 77 are fine. For those variables the return value should match the
-    // ARRAY_SIZE value that can be queried through the API.
-    unsigned int getBasicTypeElementCount() const
-    {
-        // GLES 3.1 Nov 2016 section 7.3.1.1 page 77 specifies that a separate entry should be
-        // generated for each array element when dealing with an array of arrays or an array of
-        // structs.
-        ASSERT(!isArrayOfArrays());
-        ASSERT(!isStruct() || !isArray());
-
-        // GLES 3.1 Nov 2016 page 82.
-        if (isArray())
-        {
-            return getOutermostArraySize();
-        }
-        return 1u;
-    }
+    unsigned int getArraySizeProduct() const { return arraySizeProduct; }
+    unsigned int getBasicTypeElementCount() const { return basicTypeElementCount; }
 
     unsigned int getExternalSize() const;
 
@@ -170,9 +152,6 @@ struct LinkedUniform
     // Only used by GL backend
     std::string mappedName;
 
-    // Used to make an array type. Outermost array size is stored at the end of the vector.
-    std::vector<unsigned int> arraySizes;
-
     union
     {
         struct
@@ -195,8 +174,11 @@ struct LinkedUniform
             // If the variable is a sampler that has ever been statically used with texelFetch
             uint32_t texelFetchStaticUse : 1;
 
+            uint32_t isArrayOfArrays : 1;
+            uint32_t isArray : 1;
+
             // extra padding to make it a uint32_t
-            uint32_t padding : 24;
+            uint32_t padding : 22;
         } flagBits;
         uint32_t flagBitsAsUInt;
     };
@@ -225,6 +207,9 @@ struct LinkedUniform
     sh::BlockMemberInfo blockInfo;
     unsigned int outerArraySizeProduct;
     unsigned int outerArrayOffset;
+    unsigned int basicTypeElementCount;
+    unsigned int arraySizeProduct;
+    unsigned int arraySize0;
 };
 
 struct BufferVariable : public sh::ShaderVariable, public ActiveVariable

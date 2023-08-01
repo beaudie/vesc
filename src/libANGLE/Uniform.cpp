@@ -72,7 +72,6 @@ LinkedUniform::LinkedUniform(GLenum typeIn,
     : type(typeIn),
       precision(precisionIn),
       name(nameIn),
-      arraySizes(arraySizesIn),
       location(locationIn),
       binding(bindingIn),
       offset(offsetIn),
@@ -86,6 +85,8 @@ LinkedUniform::LinkedUniform(GLenum typeIn,
     outerArraySizeProduct         = 1;
     outerArrayOffset              = 0;
     imageUnitFormat               = GL_NONE;
+    basicTypeElementCount         = 1u;
+    arraySizeProduct              = 1u;
     ASSERT(!isArrayOfArrays());
     ASSERT(!isArray() || !isStruct());
 }
@@ -101,7 +102,6 @@ LinkedUniform::LinkedUniform(const UsedUniform &usedUniform)
     precision  = usedUniform.precision;
     name       = usedUniform.name;
     mappedName = usedUniform.mappedName;
-    arraySizes = usedUniform.arraySizes;
 
     flagBits.staticUse           = usedUniform.staticUse;
     flagBits.active              = usedUniform.active;
@@ -111,6 +111,8 @@ LinkedUniform::LinkedUniform(const UsedUniform &usedUniform)
     flagBits.writeonly           = usedUniform.writeonly;
     flagBits.isFragmentInOut     = usedUniform.isFragmentInOut;
     flagBits.texelFetchStaticUse = usedUniform.texelFetchStaticUse;
+    flagBits.isArrayOfArrays     = usedUniform.isArrayOfArrays();
+    flagBits.isArray             = usedUniform.isArray();
 
     flattenedOffsetInParentArrays = usedUniform.getFlattenedOffsetInParentArrays();
     location                      = usedUniform.location;
@@ -124,6 +126,8 @@ LinkedUniform::LinkedUniform(const UsedUniform &usedUniform)
     blockInfo                     = usedUniform.blockInfo;
     outerArraySizeProduct         = ArraySizeProduct(usedUniform.outerArraySizes);
     outerArrayOffset              = usedUniform.outerArrayOffset;
+    basicTypeElementCount         = usedUniform.getBasicTypeElementCount();
+    arraySizeProduct              = usedUniform.getArraySizeProduct();
 }
 
 LinkedUniform &LinkedUniform::operator=(const LinkedUniform &other)
@@ -132,7 +136,6 @@ LinkedUniform &LinkedUniform::operator=(const LinkedUniform &other)
     precision                     = other.precision;
     name                          = other.name;
     mappedName                    = other.mappedName;
-    arraySizes                    = other.arraySizes;
     flagBitsAsUInt                = other.flagBitsAsUInt;
     location                      = other.location;
     binding                       = other.binding;
@@ -146,6 +149,8 @@ LinkedUniform &LinkedUniform::operator=(const LinkedUniform &other)
     blockInfo                     = other.blockInfo;
     outerArraySizeProduct         = other.outerArraySizeProduct;
     outerArrayOffset              = other.outerArrayOffset;
+    basicTypeElementCount         = other.basicTypeElementCount;
+    arraySizeProduct              = other.arraySizeProduct;
 
     return *this;
 }

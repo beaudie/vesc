@@ -102,6 +102,32 @@ struct UsedUniform : public sh::ShaderVariable
         activeVariable.setActive(shaderType, used, _id);
     }
 
+    bool isArrayOfArrays() const { return arraySizes.size() >= 2u; }
+    bool isArray() const { return !arraySizes.empty(); }
+    unsigned int getArraySizeProduct() const { return gl::ArraySizeProduct(arraySizes); }
+    // Array size 0 means not an array when passed to or returned from these functions.
+    // Note that setArraySize() is deprecated and should not be used inside ANGLE.
+    unsigned int getOutermostArraySize() const { return isArray() ? arraySizes.back() : 0; }
+    // This function should only be used with variables that are of a basic type or an array of a
+    // basic type. Shader interface variables that are enumerated according to rules in GLES 3.1
+    // spec section 7.3.1.1 page 77 are fine. For those variables the return value should match the
+    // ARRAY_SIZE value that can be queried through the API.
+    unsigned int getBasicTypeElementCount() const
+    {
+        // GLES 3.1 Nov 2016 section 7.3.1.1 page 77 specifies that a separate entry should be
+        // generated for each array element when dealing with an array of arrays or an array of
+        // structs.
+        ASSERT(!isArrayOfArrays());
+        ASSERT(!isStruct() || !isArray());
+
+        // GLES 3.1 Nov 2016 page 82.
+        if (isArray())
+        {
+            return getOutermostArraySize();
+        }
+        return 1u;
+    }
+
     ActiveVariable activeVariable;
     const UniformTypeInfo *typeInfo;
 
