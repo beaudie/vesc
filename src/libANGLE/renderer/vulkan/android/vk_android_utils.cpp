@@ -32,14 +32,18 @@ angle::Result GetClientBufferMemoryRequirements(ContextVk *contextVk,
                ->getAHBFunctions()
                .valid());
 
-    // Get Android Buffer Properties
-    VkAndroidHardwareBufferFormatPropertiesANDROID bufferFormatProperties = {};
-    bufferFormatProperties.sType =
-        VK_STRUCTURE_TYPE_ANDROID_HARDWARE_BUFFER_FORMAT_PROPERTIES_ANDROID;
+    AHardwareBuffer_Desc aHardwareBufferDescription = {};
+    AHardwareBuffer_describe(hardwareBuffer, &aHardwareBufferDescription);
+    if (aHardwareBufferDescription.format != AHARDWAREBUFFER_FORMAT_BLOB)
+    {
+        ERR() << "Trying to import non-BLOB AHB as client buffer.";
+        return angle::Result::Stop;
+    }
 
+    // Get Android Buffer Properties
     VkAndroidHardwareBufferPropertiesANDROID bufferProperties = {};
     bufferProperties.sType = VK_STRUCTURE_TYPE_ANDROID_HARDWARE_BUFFER_PROPERTIES_ANDROID;
-    bufferProperties.pNext = &bufferFormatProperties;
+    bufferProperties.pNext = nullptr;
 
     VkDevice device = contextVk->getRenderer()->getDevice();
     ANGLE_VK_TRY(contextVk, vkGetAndroidHardwareBufferPropertiesANDROID(device, hardwareBuffer,
