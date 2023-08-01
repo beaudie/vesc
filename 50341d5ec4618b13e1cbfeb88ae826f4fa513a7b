@@ -52,6 +52,24 @@
       "parentUuid": "19ef5dd0_99996b8e",
       "revId": "50341d5ec4618b13e1cbfeb88ae826f4fa513a7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9934eb72_22b66eb8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-08-01T18:11:18Z",
+      "side": 1,
+      "message": "It is slightly different deadlock.\n\nIn the future I want to try and make change that will perform almost all (except initial) ANI calls before/after swap without the lock. Initial ANI calls should not cause recursion. But for this change at least 4 swapchain images is required, because ANI near the swap will be for the next frame (so -1 frame of lag in the worst case).\n\n\u003e Like, I wonder what happens if we don\u0027t take the sharegroup lock for getBufferAge, and instead return an age of 0 if ANI is needed. I do recall some test bugs which expected age to be always set, but we could fix (deqp) test bugs if we have to.\n\nI was thinking about that. However if skip ANI in getBufferAge it may still happen in the next GLES call if it will use the Windows Surface. I can try to see what will happen.\n\n---\n\nNot related to this deadlock, but rather to the old one. Android platform\u0027s change by Yiwei:\n```\nswapchain: avoid redundant disconnect/connect for new surface\n```\nit looks like it will skip `connect/disconnect` calls only for the initial Swapchain creation. Recreate of the Swapchain will still call `connect/disconnect` and may cause the deadlock. Unfortunately this is hard to fix without mutex unlock and not breaking \"asyncCommandQueue\".\n\nOne idea that I just come up with: if need to recreate a Swapchain inside GLES calls - use temporary off-screen image instead to render the frame, then perform Recreate + ANI without the lock just before the swap and then blit to the image inside the swap. Next frame will be rendered as usual.\n\n\u003e  I hope we can figure out a way to avoid this.\n\nI also hope so.",
+      "parentUuid": "6fc9142d_a228c324",
+      "revId": "50341d5ec4618b13e1cbfeb88ae826f4fa513a7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
