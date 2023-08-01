@@ -373,7 +373,6 @@ void ProgramExecutable::load(bool isSeparable, gl::BinaryInputStream *stream)
         uniform.precision = stream->readInt<GLenum>();
         stream->readString(&uniform.name);
         stream->readString(&uniform.mappedName);
-        stream->readIntVector<unsigned int>(&uniform.arraySizes);
         uniform.flagBitsAsUInt  = stream->readInt<unsigned int>();
         uniform.location        = stream->readInt<int>();
         uniform.binding         = stream->readInt<int>();
@@ -617,7 +616,6 @@ void ProgramExecutable::save(bool isSeparable, gl::BinaryOutputStream *stream) c
         stream->writeInt(uniform.precision);
         stream->writeString(uniform.name);
         stream->writeString(uniform.mappedName);
-        stream->writeIntVector(uniform.arraySizes);
         stream->writeInt(uniform.flagBitsAsUInt);
         stream->writeInt(uniform.location);
         stream->writeInt(uniform.binding);
@@ -1606,9 +1604,9 @@ void ProgramExecutable::linkSamplerAndImageBindings(GLuint *combinedImageUniform
 
     // Note that uniform block uniforms are not yet appended to this list.
     ASSERT(mUniforms.empty() || highIter->isAtomicCounter() || highIter->isImage() ||
-           highIter->isSampler() || highIter->isInDefaultBlock() || highIter->isFragmentInOut);
+           highIter->isSampler() || highIter->isInDefaultBlock() || highIter->isFragmentInOut());
 
-    for (; lowIter != mUniforms.rend() && lowIter->isFragmentInOut; ++lowIter)
+    for (; lowIter != mUniforms.rend() && lowIter->isFragmentInOut(); ++lowIter)
     {
         --low;
     }
@@ -1644,7 +1642,7 @@ void ProgramExecutable::linkSamplerAndImageBindings(GLuint *combinedImageUniform
         // unbound image array) should be bound to unit zero.
         auto &imageUniform      = mUniforms[imageIndex];
         TextureType textureType = ImageTypeToTextureType(imageUniform.type);
-        const GLuint arraySize  = imageUniform.isArray() ? imageUniform.arraySizes[0] : 1u;
+        const GLuint arraySize  = imageUniform.isArray() ? imageUniform.arraySize0 : 1u;
 
         if (imageUniform.binding == -1)
         {
