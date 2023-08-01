@@ -169,14 +169,30 @@ struct LinkedUniform
     // Used to make an array type. Outermost array size is stored at the end of the vector.
     std::vector<unsigned int> arraySizes;
 
-    // Static use means that the variable is accessed somewhere in the shader source.
-    bool staticUse;
-    // A variable is active unless the compiler determined that it is not accessed by the shader.
-    // All active variables are statically used, but not all statically used variables are
-    // necessarily active. GLES 3.0.5 section 2.12.6. GLES 3.1 section 7.3.1.
-    bool active;
+    union
+    {
+        struct
+        {
+            // Static use means that the variable is accessed somewhere in the shader source.
+            uint32_t staticUse;
+            // A variable is active unless the compiler determined that it is not accessed by the
+            // shader. All active variables are statically used, but not all statically used
+            // variables are necessarily active. GLES 3.0.5 section 2.12.6. GLES 3.1 section 7.3.1.
+            uint32_t active;
 
-    bool isStruct;
+            uint32_t isStruct;
+            uint32_t rasterOrdered;
+            uint32_t readonly;
+            uint32_t writeonly;
+
+            // From EXT_shader_framebuffer_fetch / KHR_blend_equation_advanced
+            uint32_t isFragmentInOut;
+
+            // If the variable is a sampler that has ever been statically used with texelFetch
+            uint32_t texelFetchStaticUse;
+        };
+        uint32_t flagBitsAsUint;
+    };
 
     // VariableWithLocation
     int location;
@@ -185,15 +201,6 @@ struct LinkedUniform
     int binding;
     GLenum imageUnitFormat;
     int offset;
-    bool rasterOrdered;
-    bool readonly;
-    bool writeonly;
-
-    // From EXT_shader_framebuffer_fetch / KHR_blend_equation_advanced
-    bool isFragmentInOut;
-
-    // If the variable is a sampler that has ever been statically used with texelFetch
-    bool texelFetchStaticUse;
 
     // Id of the variable in the shader.  Currently used by the SPIR-V output to communicate the
     // SPIR-V id of the variable.  This value is only set for variables that the SPIR-V transformer
