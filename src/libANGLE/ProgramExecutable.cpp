@@ -374,17 +374,11 @@ void ProgramExecutable::load(bool isSeparable, gl::BinaryInputStream *stream)
         stream->readString(&uniform.name);
         stream->readString(&uniform.mappedName);
         stream->readIntVector<unsigned int>(&uniform.arraySizes);
-        uniform.staticUse           = stream->readBool();
-        uniform.active              = stream->readBool();
-        uniform.location            = stream->readInt<int>();
-        uniform.binding             = stream->readInt<int>();
-        uniform.imageUnitFormat     = stream->readInt<GLenum>();
-        uniform.offset              = stream->readInt<int>();
-        uniform.rasterOrdered       = stream->readBool();
-        uniform.readonly            = stream->readBool();
-        uniform.writeonly           = stream->readBool();
-        uniform.isFragmentInOut     = stream->readBool();
-        uniform.texelFetchStaticUse = stream->readBool();
+        uniform.flagBitsAsUInt  = stream->readInt<unsigned int>();
+        uniform.location        = stream->readInt<int>();
+        uniform.binding         = stream->readInt<int>();
+        uniform.imageUnitFormat = stream->readInt<GLenum>();
+        uniform.offset          = stream->readInt<int>();
         uniform.setParentArrayIndex(stream->readInt<int>());
         uniform.id = stream->readInt<uint32_t>();
 
@@ -624,17 +618,11 @@ void ProgramExecutable::save(bool isSeparable, gl::BinaryOutputStream *stream) c
         stream->writeString(uniform.name);
         stream->writeString(uniform.mappedName);
         stream->writeIntVector(uniform.arraySizes);
-        stream->writeBool(uniform.staticUse);
-        stream->writeBool(uniform.active);
+        stream->writeInt(uniform.flagBitsAsUInt);
         stream->writeInt(uniform.location);
         stream->writeInt(uniform.binding);
         stream->writeInt(uniform.imageUnitFormat);
         stream->writeInt(uniform.offset);
-        stream->writeBool(uniform.rasterOrdered);
-        stream->writeBool(uniform.readonly);
-        stream->writeBool(uniform.writeonly);
-        stream->writeBool(uniform.isFragmentInOut);
-        stream->writeBool(uniform.texelFetchStaticUse);
         stream->writeInt(uniform.getFlattenedOffsetInParentArrays());
         stream->writeInt(uniform.id);
 
