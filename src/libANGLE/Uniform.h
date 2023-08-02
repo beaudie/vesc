@@ -19,6 +19,8 @@
 
 namespace gl
 {
+class BinaryInputStream;
+class BinaryOutputStream;
 struct UniformTypeInfo;
 struct UsedUniform;
 
@@ -73,14 +75,14 @@ struct LinkedUniform
 
     bool isSampler() const { return typeInfo->isSampler; }
     bool isImage() const { return typeInfo->isImageType; }
-    bool isAtomicCounter() const { return IsAtomicCounterType(type); }
-    bool isInDefaultBlock() const { return bufferIndex == -1; }
+    bool isAtomicCounter() const { return IsAtomicCounterType(mFixedSizeData.type); }
+    bool isInDefaultBlock() const { return mFixedSizeData.bufferIndex == -1; }
     size_t getElementSize() const { return typeInfo->externalSize; }
     size_t getElementComponents() const { return typeInfo->componentCount; }
 
-    bool isStruct() const { return flagBits.isStruct; }
-    bool isTexelFetchStaticUse() const { return flagBits.texelFetchStaticUse; }
-    bool isFragmentInOut() const { return flagBits.isFragmentInOut; }
+    bool isStruct() const { return mFixedSizeData.flagBits.isStruct; }
+    bool isTexelFetchStaticUse() const { return mFixedSizeData.flagBits.texelFetchStaticUse; }
+    bool isFragmentInOut() const { return mFixedSizeData.flagBits.isFragmentInOut; }
 
     bool isArrayOfArrays() const { return arraySizes.size() >= 2u; }
     bool isArray() const { return !arraySizes.empty(); }
@@ -108,7 +110,16 @@ struct LinkedUniform
         return 1u;
     }
 
+    GLenum getType() const { return mFixedSizeData.type; }
     unsigned int getExternalSize() const;
+    unsigned int getOuterArrayOffset() const { return mFixedSizeData.outerArrayOffset; }
+    unsigned int getOuterArraySizeProduct() const { return mFixedSizeData.outerArraySizeProduct; }
+    int getBinding() const { return mFixedSizeData.binding; }
+    int getOffset() const { return mFixedSizeData.offset; }
+    const sh::BlockMemberInfo &getBlockInfo() const { return mFixedSizeData.blockInfo; }
+    int getBufferIndex() const { return mFixedSizeData.bufferIndex; }
+    int getLocation() const { return mFixedSizeData.location; }
+    GLenum getImageUnitFormat() const { return mFixedSizeData.imageUnitFormat; }
 
     // All of the shader's variables are described using nested data
     // structures. This is needed in order to disambiguate similar looking
@@ -134,12 +145,18 @@ struct LinkedUniform
     // and flattenedOffsetInParentArrays of a[2][1] would be 2*4 + 1 = 9.
     int parentArrayIndex() const
     {
-        return hasParentArrayIndex() ? flattenedOffsetInParentArrays : 0;
+        return hasParentArrayIndex() ? mFixedSizeData.flattenedOffsetInParentArrays : 0;
     }
-    int getFlattenedOffsetInParentArrays() const { return flattenedOffsetInParentArrays; }
-    void setParentArrayIndex(int indexIn) { flattenedOffsetInParentArrays = indexIn; }
+    int getFlattenedOffsetInParentArrays() const
+    {
+        return mFixedSizeData.flattenedOffsetInParentArrays;
+    }
+    void setParentArrayIndex(int indexIn)
+    {
+        mFixedSizeData.flattenedOffsetInParentArrays = indexIn;
+    }
 
-    bool hasParentArrayIndex() const { return flattenedOffsetInParentArrays != -1; }
+    bool hasParentArrayIndex() const { return mFixedSizeData.flattenedOffsetInParentArrays != -1; }
     // InterfaceBlockField
     // Decide whether two InterfaceBlock fields are the same at shader
     // link time, assuming they are from consecutive shader stages.
@@ -164,8 +181,9 @@ struct LinkedUniform
     ShaderBitSet activeShaders() const { return activeVariable.activeShaders(); }
     GLuint activeShaderCount() const { return activeVariable.activeShaderCount(); }
 
-    GLenum type;
-    GLenum precision;
+    void save(BinaryOutputStream *stream) const;
+    void load(BinaryInputStream *stream);
+
     std::string name;
     // Only used by GL backend
     std::string mappedName;
@@ -173,59 +191,73 @@ struct LinkedUniform
     // Used to make an array type. Outermost array size is stored at the end of the vector.
     std::vector<unsigned int> arraySizes;
 
-    union
-    {
-        struct
-        {
-            // Static use means that the variable is accessed somewhere in the shader source.
-            uint32_t staticUse : 1;
-            // A variable is active unless the compiler determined that it is not accessed by the
-            // shader. All active variables are statically used, but not all statically used
-            // variables are necessarily active. GLES 3.0.5 section 2.12.6. GLES 3.1 section 7.3.1.
-            uint32_t active : 1;
-
-            uint32_t isStruct : 1;
-            uint32_t rasterOrdered : 1;
-            uint32_t readonly : 1;
-            uint32_t writeonly : 1;
-
-            // From EXT_shader_framebuffer_fetch / KHR_blend_equation_advanced
-            uint32_t isFragmentInOut : 1;
-
-            // If the variable is a sampler that has ever been statically used with texelFetch
-            uint32_t texelFetchStaticUse : 1;
-
-            // extra padding to make it a uint32_t
-            uint32_t padding : 24;
-        } flagBits;
-
-        uint32_t flagBitsAsUInt;
-    };
-
-    // VariableWithLocation
-    int location;
-
-    // Uniform
-    int binding;
-    GLenum imageUnitFormat;
-    int offset;
-
-    // Id of the variable in the shader.  Currently used by the SPIR-V output to communicate the
-    // SPIR-V id of the variable.  This value is only set for variables that the SPIR-V transformer
-    // needs to know about, i.e. active variables, excluding non-zero array elements etc.
-    uint32_t id;
-
-    int flattenedOffsetInParentArrays;
-
     ActiveVariable activeVariable;
 
     const UniformTypeInfo *typeInfo;
 
-    // Identifies the containing buffer backed resource -- interface block or atomic counter buffer.
-    int bufferIndex;
-    sh::BlockMemberInfo blockInfo;
-    unsigned int outerArraySizeProduct;
-    unsigned int outerArrayOffset;
+  private:
+    friend class ProgramExecutable;
+    // The fixed size data structure that can initialize with memcpy. Do not put any std::vector or
+    // objects with virtual functions in it.
+    struct
+    {
+        GLenum type;
+        GLenum precision;
+
+        union
+        {
+            struct
+            {
+                // Static use means that the variable is accessed somewhere in the shader source.
+                uint32_t staticUse : 1;
+                // A variable is active unless the compiler determined that it is not accessed by
+                // the shader. All active variables are statically used, but not all statically used
+                // variables are necessarily active. GLES 3.0.5 section 2.12.6. GLES 3.1
+                // section 7.3.1.
+                uint32_t active : 1;
+
+                uint32_t isStruct : 1;
+                uint32_t rasterOrdered : 1;
+                uint32_t readonly : 1;
+                uint32_t writeonly : 1;
+
+                // From EXT_shader_framebuffer_fetch / KHR_blend_equation_advanced
+                uint32_t isFragmentInOut : 1;
+
+                // If the variable is a sampler that has ever been statically used with texelFetch
+                uint32_t texelFetchStaticUse : 1;
+
+                // extra padding to make it a uint32_t
+                uint32_t padding : 24;
+            } flagBits;
+
+            uint32_t flagBitsAsUInt;
+        };
+
+        // VariableWithLocation
+        int location;
+
+        // Uniform
+        int binding;
+        GLenum imageUnitFormat;
+        int offset;
+
+        // Id of the variable in the shader.  Currently used by the SPIR-V output to communicate the
+        // SPIR-V id of the variable.  This value is only set for variables that the SPIR-V
+        // transformer needs to know about, i.e. active variables, excluding non-zero array elements
+        // etc.
+        uint32_t id;
+
+        int flattenedOffsetInParentArrays;
+
+        // Identifies the containing buffer backed resource -- interface block or atomic counter
+        // buffer.
+        int bufferIndex;
+
+        sh::BlockMemberInfo blockInfo;
+        unsigned int outerArraySizeProduct;
+        unsigned int outerArrayOffset;
+    } mFixedSizeData;
 };
 
 struct BufferVariable : public sh::ShaderVariable, public ActiveVariable

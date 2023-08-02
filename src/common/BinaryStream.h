@@ -129,6 +129,12 @@ class BinaryInputStream : angle::NonCopyable
         return f;
     }
 
+    template <typename T>
+    void read(T *v)
+    {
+        read(v, 1);
+    }
+
     void skip(size_t length)
     {
         angle::CheckedNumeric<size_t> checkedOffset(mOffset);
@@ -165,8 +171,6 @@ class BinaryInputStream : angle::NonCopyable
     template <typename T>
     void read(T *v, size_t num)
     {
-        static_assert(std::is_fundamental<T>::value, "T must be a fundamental type.");
-
         angle::CheckedNumeric<size_t> checkedLength(num);
         checkedLength *= sizeof(T);
         if (!checkedLength.IsValid())
@@ -186,12 +190,6 @@ class BinaryInputStream : angle::NonCopyable
 
         memcpy(v, mData + mOffset, checkedLength.ValueOrDie());
         mOffset = checkedOffset.ValueOrDie();
-    }
-
-    template <typename T>
-    void read(T *v)
-    {
-        read(v, 1);
     }
 };
 
@@ -267,6 +265,12 @@ class BinaryOutputStream : angle::NonCopyable
 
     void writeFloat(float value) { write(&value, 1); }
 
+    template <typename T>
+    void write(const T &v)
+    {
+        write(&v, 1);
+    }
+
     size_t length() const { return mData.size(); }
 
     const void *data() const { return mData.size() ? &mData[0] : nullptr; }
@@ -277,7 +281,6 @@ class BinaryOutputStream : angle::NonCopyable
     template <typename T>
     void write(const T *v, size_t num)
     {
-        static_assert(std::is_fundamental<T>::value, "T must be a fundamental type.");
         const char *asBytes = reinterpret_cast<const char *>(v);
         mData.insert(mData.end(), asBytes, asBytes + num * sizeof(T));
     }
