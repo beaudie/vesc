@@ -5806,6 +5806,29 @@ ImageMemorySuballocator::~ImageMemorySuballocator() {}
 
 void ImageMemorySuballocator::destroy(RendererVk *renderer) {}
 
+uint32_t ImageMemorySuballocator::getMemoryTypeBitsExcludingHostVisible(
+    RendererVk *renderer,
+    uint32_t availableMemoryTypeBits)
+{
+    const MemoryProperties &memoryProperties = renderer->getMemoryProperties();
+    ASSERT(memoryProperties.getMemoryTypeCount() <= 32);
+    uint32_t memoryTypeBitsOut = availableMemoryTypeBits;
+
+    // For best allocation results, we will remove the memory type indices that include the
+    // host-visible flag bit.
+    for (size_t memoryIndex : angle::BitSet32<32>(availableMemoryTypeBits))
+    {
+        VkMemoryPropertyFlags propertyFlags =
+            memoryProperties.getMemoryType(static_cast<uint32_t>(memoryIndex)).propertyFlags;
+        if ((propertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) != 0)
+        {
+            memoryTypeBitsOut &= ~(1 << memoryIndex);
+        }
+    }
+
+    return memoryTypeBitsOut;
+}
+
 VkResult ImageMemorySuballocator::allocateAndBindMemory(Context *context,
                                                         Image *image,
                                                         const VkImageCreateInfo *imageCreateInfo,
@@ -5827,6 +5850,9 @@ VkResult ImageMemorySuballocator::allocateAndBindMemory(Context *context,
     bool allocateDedicatedMemory =
         memoryRequirements.size >= kImageSizeThresholdForDedicatedMemoryAllocation;
 
+    uint32_t memoryTypeBits =
+        getMemoryTypeBitsExcludingHostVisible(renderer, memoryRequirements.memoryTypeBits);
+
     // Allocate and bind memory for the image. Try allocating on the device first. If unsuccessful,
     // it is possible to retry allocation after cleaning the garbage.
     VkResult result;
@@ -5836,7 +5862,7 @@ VkResult ImageMemorySuballocator::allocateAndBindMemory(Context *context,
     do
     {
         result = vma::AllocateAndBindMemoryForImage(
-            allocator.getHandle(), &image->mHandle, requiredFlags, preferredFlags,
+            allocator.getHandle(), &image->mHandle, requiredFlags, preferredFlags, memoryTypeBits,
             allocateDedicatedMemory, &allocationOut->mHandle, memoryTypeIndexOut, sizeOut);
 
         if (result != VK_SUCCESS)
@@ -5863,12 +5889,13 @@ VkResult ImageMemorySuballocator::allocateAndBindMemory(Context *context,
     }
 
     // If there is still no space for the new allocation, the allocation may still be made outside
-    // the device, although it will result in performance penalty.
+    // the device from all other memory types, although it will result in performance penalty.
     if (result != VK_SUCCESS)
     {
         requiredFlags &= (~VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-        result = vma::AllocateAndBindMemoryForImage(
-            allocator.getHandle(), &image->mHandle, requiredFlags, preferredFlags,
+        memoryTypeBits = memoryRequirements.memoryTypeBits;
+        result         = vma::AllocateAndBindMemoryForImage(
+            allocator.getHandle(), &image->mHandle, requiredFlags, preferredFlags, memoryTypeBits,
             allocateDedicatedMemory, &allocationOut->mHandle, memoryTypeIndexOut, sizeOut);
 
         INFO()

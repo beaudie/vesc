@@ -94,6 +94,9 @@ class ImageMemorySuballocator : angle::NonCopyable
                                               VkDeviceSize size,
                                               int value,
                                               VkMemoryPropertyFlags flags);
+
+    uint32_t getMemoryTypeBitsExcludingHostVisible(RendererVk *renderer,
+                                                   uint32_t availableMemoryTypeBits);
 };
 }  // namespace vk
 
