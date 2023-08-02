@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f73581b9_fe56ed27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-08-02T04:08:34Z",
+      "side": 1,
+      "message": "I feel that this change should be made to iPhoneOS too. It\u0027s been a long time since I analysed the issue in bug 234008, but there shouldn\u0027t be a different between metal on macOS and iPhoneOS WRT to this issue.",
+      "parentUuid": "a9780260_d0c6bed4",
+      "revId": "7b1b6995ba922118e741f72d12cf4dd8bdcb198c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7bfc2b61_1dbc9fcc",
