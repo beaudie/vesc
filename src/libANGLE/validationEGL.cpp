@@ -3299,30 +3299,37 @@ bool ValidateMakeCurrent(const ValidationContext *val,
         return false;
     }
 
-    if (!noDraw)
-    {
-        ANGLE_VALIDATION_TRY(ValidateSurface(val, display, drawSurfaceID));
-    }
-
     const Surface *drawSurface = GetSurfaceIfValid(display, drawSurfaceID);
     const Surface *readSurface = GetSurfaceIfValid(display, readSurfaceID);
     const gl::Context *context = GetContextIfValid(display, contextID);
+
+    if (!noContext && context->getRefCount() > 0 && context != val->eglThread->getContext())
+    {
+        val->setError(EGL_BAD_ACCESS);
+        return false;
+    }
 
     if (!noRead)
     {
         ANGLE_VALIDATION_TRY(ValidateSurface(val, display, readSurfaceID));
         ANGLE_VALIDATION_TRY(ValidateCompatibleSurface(val, display, context, readSurface));
+        if (readSurface->getRefCount() > 0 &&
+            readSurface != val->eglThread->getCurrentReadSurface())
+        {
+            val->setError(EGL_BAD_ACCESS);
+            return false;
+        }
     }
 
-    if (drawSurface != readSurface)
+    if (drawSurface != readSurface && !noDraw)
     {
-        if (drawSurface)
+        ANGLE_VALIDATION_TRY(ValidateSurface(val, display, drawSurfaceID));
+        ANGLE_VALIDATION_TRY(ValidateCompatibleSurface(val, display, context, drawSurface));
+        if (drawSurface->getRefCount() > 0 &&
+            drawSurface != val->eglThread->getCurrentDrawSurface())
         {
-            ANGLE_VALIDATION_TRY(ValidateCompatibleSurface(val, display, context, drawSurface));
-        }
-        if (readSurface)
-        {
-            ANGLE_VALIDATION_TRY(ValidateCompatibleSurface(val, display, context, readSurface));
+            val->setError(EGL_BAD_ACCESS);
+            return false;
         }
     }
     return true;
