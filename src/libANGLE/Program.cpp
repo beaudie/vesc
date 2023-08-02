@@ -1295,6 +1295,15 @@ angle::Result Program::linkImpl(const Context *context)
         mLinkingState->linkedExecutable = mState.mExecutable;
     }
 
+    // Debug: Try to catch tests that uses complex shaders
+    const std::vector<LinkedUniform> &uniforms = mState.mExecutable->getUniforms();
+    for (const LinkedUniform &uniform : uniforms)
+    {
+        ASSERT(!uniform.isStruct());
+        ASSERT(!uniform.isArrayOfArrays());
+        ASSERT(!uniform.isArray());
+    }
+
     return angle::Result::Continue;
 }
 
