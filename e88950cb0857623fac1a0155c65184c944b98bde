@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bac9af7b_f0aca8f4",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-02T15:42:07Z",
+      "side": 1,
+      "message": "Its is done bellow at line 406 to 410.",
+      "parentUuid": "4d9d5c42_153a5743",
+      "revId": "e88950cb0857623fac1a0155c65184c944b98bde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6da8680f_2f9d958f",
@@ -35,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad229dea_5f0bf376",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-02T15:42:07Z",
+      "side": 1,
+      "message": "Its done bellow at line 659 to 662",
+      "parentUuid": "6da8680f_2f9d958f",
+      "revId": "e88950cb0857623fac1a0155c65184c944b98bde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "59afa03b_1fc9c052",
@@ -48,6 +84,24 @@
       "writtenOn": "2023-08-02T02:40:38Z",
       "side": 1,
       "message": "Given then lengthy duplicate comments, I suggest adding a generic:\n\n```\n// Functions mirroring ShaderVariable; See ShaderVars.h for more info.\n```\n\nand removing the comments. You could leave a short comment where useful (like `// 0 if not array` for `getOutermostArraySize()`, or `// Outermost array size is stored at the end of the vector` for `arraySizes`.\n\n(and below the same for the variables)",
+      "revId": "e88950cb0857623fac1a0155c65184c944b98bde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc804aa7_af41ff5b",
+        "filename": "src/libANGLE/Uniform.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-02T15:42:07Z",
+      "side": 1,
+      "message": "Good idea. Done.",
+      "parentUuid": "59afa03b_1fc9c052",
       "revId": "e88950cb0857623fac1a0155c65184c944b98bde",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
