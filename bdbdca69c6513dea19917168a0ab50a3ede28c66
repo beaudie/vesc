@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2a24a16_3da5c817",
+        "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1375,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-02T18:23:10Z",
+      "side": 0,
+      "message": "Oof, thanks for fixing this. There are many places that operate on the assumption that the surface is current only on one thread!",
+      "revId": "bdbdca69c6513dea19917168a0ab50a3ede28c66",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

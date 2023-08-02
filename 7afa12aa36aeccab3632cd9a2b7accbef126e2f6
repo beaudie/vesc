@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85ecc5ee_20ef20f8",
+        "filename": "src/libANGLE/Surface.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-02T18:23:10Z",
+      "side": 1,
+      "message": "super nit: Suggest `isReferenced()`, the actual ref count doesn\u0027t matter",
+      "revId": "7afa12aa36aeccab3632cd9a2b7accbef126e2f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f2efdfd_8ed6f366",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1296,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-02T18:23:10Z",
+      "side": 1,
+      "message": "```suggestion\n        val-\u003esetError(EGL_BAD_ACCESS, \"Surface can only be current on one thread\");\n```",
+      "revId": "7afa12aa36aeccab3632cd9a2b7accbef126e2f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
