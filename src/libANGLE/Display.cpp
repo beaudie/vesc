@@ -909,7 +909,6 @@ Display::Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDe
       mGlobalTextureShareGroupUsers(0),
       mGlobalSemaphoreShareGroupUsers(0),
       mTerminatedByApi(false),
-      mActiveThreads(),
       mSingleThreadPool(nullptr),
       mMultiThreadPool(nullptr)
 {}
@@ -1172,12 +1171,6 @@ Error Display::terminate(Thread *thread, TerminateReason terminateReason)
     if (terminateReason == TerminateReason::Api)
     {
         mTerminatedByApi = true;
-
-        // Remove thread from active thread set if there is no context current.
-        if (thread->getContext() == nullptr)
-        {
-            mActiveThreads.erase(thread);
-        }
     }
 
     // All subsequent calls assume the display to be valid and terminated by app.
@@ -1221,17 +1214,8 @@ Error Display::terminate(Thread *thread, TerminateReason terminateReason)
     {
         if (context.second->getRefCount() > 0)
         {
-            if (terminateReason == TerminateReason::NoActiveThreads)
-            {
-                ASSERT(mTerminatedByApi);
-                context.second->release();
-                (void)context.second->unMakeCurrent(this);
-            }
-            else
-            {
-                contextsStillCurrent.emplace(context);
-                continue;
-            }
+            contextsStillCurrent.emplace(context);
+            continue;
         }
 
         // Add context that is not current to mInvalidContextSet for cleanup.
@@ -1321,23 +1305,6 @@ Error Display::releaseThread()
     }
     ANGLE_TRY(mImplementation->releaseThread());
     return destroyInvalidEglObjects();
-}
-
-void Display::addActiveThread(Thread *thread)
-{
-    mActiveThreads.insert(thread);
-}
-
-void Display::threadCleanup(Thread *thread)
-{
-    mActiveThreads.erase(thread);
-    const bool noActiveThreads = mActiveThreads.size() == 0;
-
-    (void)terminate(thread, noActiveThreads ? TerminateReason::NoActiveThreads
-                                            : TerminateReason::InternalCleanup);
-
-    // This "thread" is no longer active, reset its cached context
-    thread->setCurrent(nullptr);
 }
 
 std::vector<const Config *> Display::getConfigs(const egl::AttributeMap &attribs) const
