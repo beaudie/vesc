@@ -535,7 +535,7 @@ void ProgramVk::setUniformMatrixfv(GLint location,
         }
 
         SetFloatUniformMatrixGLSL<cols, rows>::Run(
-            locationInfo.arrayIndex, linkedUniform.getArraySizeProduct(), count, transpose, value,
+            locationInfo.arrayIndex, linkedUniform.getArraySize(), count, transpose, value,
             uniformBlock.uniformData.data() + layoutInfo.offset);
 
         mExecutable.mDefaultUniformBlocksDirty.set(shaderType);
