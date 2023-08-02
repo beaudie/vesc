@@ -28,7 +28,7 @@ struct ActiveVariable
 {
     ActiveVariable();
     ActiveVariable(const ActiveVariable &rhs);
-    virtual ~ActiveVariable();
+    ~ActiveVariable();
 
     ActiveVariable &operator=(const ActiveVariable &rhs);
 
@@ -203,7 +203,7 @@ struct LinkedUniform
     } mFixedSizeData;
 };
 
-struct BufferVariable : public sh::ShaderVariable, public ActiveVariable
+struct BufferVariable : public sh::ShaderVariable
 {
     BufferVariable();
     BufferVariable(GLenum type,
@@ -212,8 +212,17 @@ struct BufferVariable : public sh::ShaderVariable, public ActiveVariable
                    const std::vector<unsigned int> &arraySizes,
                    const int bufferIndex,
                    const sh::BlockMemberInfo &blockInfo);
-    ~BufferVariable() override;
+    ~BufferVariable();
 
+    void setActive(ShaderType shaderType, bool used, uint32_t _id)
+    {
+        activeVariable.setActive(shaderType, used, _id);
+    }
+    bool isActive(ShaderType shaderType) const { return activeVariable.isActive(shaderType); }
+    uint32_t getId(ShaderType shaderType) const { return activeVariable.getId(shaderType); }
+    ShaderBitSet activeShaders() const { return activeVariable.activeShaders(); }
+
+    ActiveVariable activeVariable;
     int bufferIndex;
     sh::BlockMemberInfo blockInfo;
 
@@ -222,13 +231,31 @@ struct BufferVariable : public sh::ShaderVariable, public ActiveVariable
 
 // Parent struct for atomic counter, uniform block, and shader storage block buffer, which all
 // contain a group of shader variables, and have a GL buffer backed.
-struct ShaderVariableBuffer : public ActiveVariable
+struct ShaderVariableBuffer
 {
     ShaderVariableBuffer();
     ShaderVariableBuffer(const ShaderVariableBuffer &other);
-    ~ShaderVariableBuffer() override;
+    ~ShaderVariableBuffer();
+
+    ShaderType getFirstActiveShaderType() const
+    {
+        return activeVariable.getFirstActiveShaderType();
+    }
+    void setActive(ShaderType shaderType, bool used, uint32_t _id)
+    {
+        activeVariable.setActive(shaderType, used, _id);
+    }
+    void unionReferencesWith(const ActiveVariable &other)
+    {
+        activeVariable.unionReferencesWith(other);
+    }
+    bool isActive(ShaderType shaderType) const { return activeVariable.isActive(shaderType); }
+    const ShaderMap<uint32_t> &getIds() const { return activeVariable.getIds(); }
+    uint32_t getId(ShaderType shaderType) const { return activeVariable.getId(shaderType); }
+    ShaderBitSet activeShaders() const { return activeVariable.activeShaders(); }
     int numActiveVariables() const;
 
+    ActiveVariable activeVariable;
     int binding;
     unsigned int dataSize;
     std::vector<unsigned int> memberIndexes;
