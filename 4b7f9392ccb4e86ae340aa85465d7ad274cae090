@@ -22,6 +22,30 @@
       },
       "revId": "4b7f9392ccb4e86ae340aa85465d7ad274cae090",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0158595_7780ff92",
+        "filename": "src/libANGLE/Uniform.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-02T18:37:27Z",
+      "side": 1,
+      "message": "The access to these will change again in next CL https://chromium-review.googlesource.com/c/angle/angle/+/4740298, so it is better to change access via API and then we can reorganize the structure without touching other code. Feel free to suggest a better name if you  have any.",
+      "parentUuid": "270fe30c_9a092f42",
+      "range": {
+        "startLine": 200,
+        "startChar": 10,
+        "endLine": 200,
+        "endChar": 18
+      },
+      "revId": "4b7f9392ccb4e86ae340aa85465d7ad274cae090",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
