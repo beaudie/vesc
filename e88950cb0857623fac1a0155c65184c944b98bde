@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63bc1737_82802807",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-02T02:47:45Z",
+      "side": 0,
+      "message": "isStruct is not serialized\n\n---\n\nThis is obviously too easy a mistake to make, and the tests didn\u0027t catch either this or the one in the previous CL. Could you please add a save/load test which involves uniforms? (ProgramBinaryTest.cpp has the infra for this)",
+      "revId": "e88950cb0857623fac1a0155c65184c944b98bde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ba273b1_fc9e6384",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-02T02:47:45Z",
+      "side": 0,
+      "message": "ditto",
+      "revId": "e88950cb0857623fac1a0155c65184c944b98bde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
