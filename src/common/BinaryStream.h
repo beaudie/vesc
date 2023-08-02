@@ -129,6 +129,25 @@ class BinaryInputStream : angle::NonCopyable
         return f;
     }
 
+    template <typename T>
+    void readStructWithFundamentalTypes(T *v)
+    {
+        static_assert((sizeof(T) & 0x3) == 0,
+                      "T should be 4 bytes aligned for better performance.");
+
+        angle::CheckedNumeric<size_t> checkedOffset(mOffset);
+        checkedOffset += sizeof(T);
+
+        if (!checkedOffset.IsValid() || checkedOffset.ValueOrDie() > mLength)
+        {
+            mError = true;
+            return;
+        }
+
+        memcpy(v, mData + mOffset, sizeof(T));
+        mOffset = checkedOffset.ValueOrDie();
+    }
+
     void skip(size_t length)
     {
         angle::CheckedNumeric<size_t> checkedOffset(mOffset);
@@ -266,6 +285,15 @@ class BinaryOutputStream : angle::NonCopyable
     }
 
     void writeFloat(float value) { write(&value, 1); }
+
+    template <typename T>
+    void writeStructWithFundamentalTypes(const T &v)
+    {
+        static_assert((sizeof(T) & 0x3) == 0,
+                      "T should be 4 bytes aligned for better performance.");
+        const char *asBytes = reinterpret_cast<const char *>(&v);
+        mData.insert(mData.end(), asBytes, asBytes + sizeof(T));
+    }
 
     size_t length() const { return mData.size(); }
 
