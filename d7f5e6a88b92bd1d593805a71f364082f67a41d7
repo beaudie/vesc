@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9cd837d_fb430e88",
+        "filename": "samples/hello_triangle/HelloTriangle.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-08-02T22:11:14Z",
+      "side": 1,
+      "message": "Modified from the original 130.",
+      "range": {
+        "startLine": 120,
+        "startChar": 19,
+        "endLine": 120,
+        "endChar": 21
+      },
+      "revId": "d7f5e6a88b92bd1d593805a71f364082f67a41d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
