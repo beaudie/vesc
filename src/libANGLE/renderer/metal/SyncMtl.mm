@@ -104,6 +104,7 @@ angle::Result Sync::clientWait(ContextMtl *contextMtl,
 
     if (timeout == 0)
     {
+        fprintf(stderr, "Sync::clientWait: timeout == 0\n");
         *outResult = GL_TIMEOUT_EXPIRED;
 
         return angle::Result::Continue;
@@ -122,9 +123,20 @@ angle::Result Sync::clientWait(ContextMtl *contextMtl,
                                         cvRef->notify_one();
                                       }];
 
+    // Passing EGL_FOREVER_KHR overflows std::chrono::nanoseconds.
+    const uint64_t nanosecondsPerDay = 86400000000000;
+    if (timeout > nanosecondsPerDay)
+    {
+        timeout = nanosecondsPerDay;
+    }
+
     if (!mCv->wait_for(lg, std::chrono::nanoseconds(timeout),
                        [this] { return mMetalSharedEvent.get().signaledValue >= mSignalValue; }))
     {
+        fprintf(stderr,
+                "Sync::clientWait: timeout of %llu ns expired: shared event signaledValue = %llu, "
+                "mSignalValue = %llu\n",
+                timeout, mMetalSharedEvent.get().signaledValue, mSignalValue);
         *outResult = GL_TIMEOUT_EXPIRED;
         return angle::Result::Incomplete;
     }
