@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "270fe30c_9a092f42",
+        "filename": "src/libANGLE/Uniform.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-02T03:43:50Z",
+      "side": 1,
+      "message": "If you don\u0027t name this, the members can be accessed directly. Then you won\u0027t need helpers like `isTexelFetchStaticUse()`.\n\nSounds weird now that I\u0027m saying it, but pretty sure I\u0027ve seen that in the past, at least in C.",
+      "range": {
+        "startLine": 200,
+        "startChar": 10,
+        "endLine": 200,
+        "endChar": 18
+      },
+      "revId": "4b7f9392ccb4e86ae340aa85465d7ad274cae090",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
