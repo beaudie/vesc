@@ -105,6 +105,24 @@
       "parentUuid": "9dd3a5f9_39edb2c3",
       "revId": "c9863bca80f01fefadbe6cb84d900c8fedb79d06",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ef98590_457e6614",
+        "filename": "src/libANGLE/Uniform.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-02T23:49:20Z",
+      "side": 1,
+      "message": "Now made it composite instead of subclass, so overrride is now safely removed.",
+      "parentUuid": "7f23dd0c_41da7047",
+      "revId": "c9863bca80f01fefadbe6cb84d900c8fedb79d06",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
