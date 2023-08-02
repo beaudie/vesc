@@ -1330,6 +1330,13 @@ void Program::resolveLinkImpl(const Context *context)
     // Must be called after markUnusedUniformLocations.
     postResolveLink(context);
 
+    const std::vector<LinkedUniform> &uniforms = mState.mExecutable->getUniforms();
+    for (const LinkedUniform &uniform : uniforms)
+    {
+        ASSERT(!uniform.isStruct());
+        ASSERT(!uniform.isArrayOfArrays());
+    }
+
     if (linkingState->linkingFromBinary)
     {
         // All internal Program state is already loaded from the binary.
