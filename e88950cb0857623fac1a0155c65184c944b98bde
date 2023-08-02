@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6af811c9_29d1cde4",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-02T20:50:22Z",
+      "side": 0,
+      "message": "It turns out uniform.isStruct is always false due to uniform flatten. So it is impossible to write a test to cover this. In this CL, I have added load/save of isStruct, but I can look to remove it (or keep it but assert it is false, since it is harmless to keep once turn into bitfield.) in the follow up CL.\n\nOne thing to note is that by end of this serials of CL, all these are load/saved using single memcpy of entire simple structure, so it should be more robust.",
+      "parentUuid": "63bc1737_82802807",
+      "revId": "e88950cb0857623fac1a0155c65184c944b98bde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ba273b1_fc9e6384",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-08-02T02:47:45Z",
       "side": 0,
       "message": "ditto",
+      "revId": "e88950cb0857623fac1a0155c65184c944b98bde",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a6b6e9d_e5c844bc",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-02T20:50:22Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "5ba273b1_fc9e6384",
       "revId": "e88950cb0857623fac1a0155c65184c944b98bde",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
