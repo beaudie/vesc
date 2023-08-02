@@ -223,7 +223,7 @@ int SampleApplication::run()
     }
 
     // Disable vsync
-    if (!mGLWindow->setSwapInterval(0))
+    if (!mGLWindow->setSwapInterval(1))
     {
         return -1;
     }
