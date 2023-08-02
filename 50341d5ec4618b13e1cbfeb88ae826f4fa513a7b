@@ -124,6 +124,24 @@
       "parentUuid": "51018947_a11bbed6",
       "revId": "50341d5ec4618b13e1cbfeb88ae826f4fa513a7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3877b5cd_1f9077ad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-08-02T10:22:08Z",
+      "side": 1,
+      "message": "To clarify.\n\nUsing off-screen buffer when need to recreate a Swapchain is for connect/disconnect problem (not for this one). We can\u0027t do this for all frames - this will impact the performance.\n\nFor this problem (ANI call), I want to move all ANI calls before/after swap without the lock. But this will require at least 4 Swapchain images.\n\nAt the end, I think we can move all usage of the Swapchain outside of the lock. It will require 4 Swapchain images and temporary off-screen buffer for the special cases. I hope these changes will be relatively straightforward.",
+      "parentUuid": "47de9792_e807eb7f",
+      "revId": "50341d5ec4618b13e1cbfeb88ae826f4fa513a7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
