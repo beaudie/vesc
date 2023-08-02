@@ -227,6 +227,7 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
         ASSERT(mRefCount > 0);
         mRefCount--;
     }
+    size_t getRefCount() const { return mRefCount; }
 
   protected:
     Surface(EGLint surfaceType,
