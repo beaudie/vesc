@@ -104,6 +104,23 @@
       "message": "Well that was simple",
       "revId": "0db140067f33894aed54fec08d9a146e9459ad7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8157a81d_97430ce5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-08-03T20:56:15Z",
+      "side": 1,
+      "message": "This change seems only removing the ANGLE binaries to be built in /vendor.\n\nCan you point me where is the change that build ANGLE binaries in /system/${LIB} ?",
+      "revId": "0db140067f33894aed54fec08d9a146e9459ad7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
