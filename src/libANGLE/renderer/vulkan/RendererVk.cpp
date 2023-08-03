@@ -3911,9 +3911,10 @@ bool RendererVk::canPreferDeviceLocalMemoryHostVisible(VkPhysicalDeviceType devi
 void RendererVk::initFeatures(DisplayVk *displayVk,
                               const vk::ExtensionNameList &deviceExtensionNames)
 {
+    ApplyFeatureOverrides(&mFeatures, displayVk->getState());
+
     if (displayVk->getState().featuresAllDisabled)
     {
-        ApplyFeatureOverrides(&mFeatures, displayVk->getState());
         return;
     }
 
@@ -4833,8 +4834,6 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     ANGLE_FEATURE_CONDITION(&mFeatures, supportsTimelineSemaphore,
                             mTimelineSemaphoreFeatures.timelineSemaphore == VK_TRUE);
 
-    ApplyFeatureOverrides(&mFeatures, displayVk->getState());
-
     // Disable memory report feature overrides if extension is not supported.
     if ((mFeatures.logMemoryReportCallbacks.enabled || mFeatures.logMemoryReportStats.enabled) &&
         !mMemoryReportFeatures.deviceMemoryReport)
@@ -4844,12 +4843,12 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
         if (getFeatures().logMemoryReportStats.enabled)
         {
             WARN() << "\tlogMemoryReportStats";
-            ANGLE_FEATURE_CONDITION(&mFeatures, logMemoryReportStats, false);
+            mFeatures.logMemoryReportStats.applyOverride(false);
         }
         if (getFeatures().logMemoryReportCallbacks.enabled)
         {
             WARN() << "\tlogMemoryReportCallbacks";
-            ANGLE_FEATURE_CONDITION(&mFeatures, logMemoryReportCallbacks, false);
+            mFeatures.logMemoryReportCallbacks.applyOverride(false);
         }
     }
 }
