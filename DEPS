@@ -1016,7 +1016,7 @@ deps = {
   'src/tests/restricted_traces/blade_and_soul_revolution': {
       'packages': [
         {
-            'package': 'angle/traces/blade_and_soul_revolution',
+            'package': 'experimental/google.com/cnorthrop/angle/traces/blade_and_soul_revolution',
             'version': 'version:1',
         },
       ],
