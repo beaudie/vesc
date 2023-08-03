@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "039ef504_86d9d66a",
+        "filename": "scripts/roll_chromium_deps.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-08-03T19:59:28Z",
+      "side": 1,
+      "message": "Any .gitignore entries needed for this? Similarly to https://crrev.com/c/4570960",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 32
+      },
+      "revId": "70f3267e07e6d44509a47b88324d53368bb2ec52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
