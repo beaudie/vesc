@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d49391da_f832c90f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5855,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-03T23:00:31Z",
+      "side": 1,
+      "message": "If the function is unable to find a memory type index that exactly matches these bits, it returns 0, which is interpreted in VMA as all memory type indices. We could also opt to remove the indices with the host-visible bit entirely if this bit is never used to allocate textures.",
+      "parentUuid": "57c59e5f_2bef5267",
+      "range": {
+        "startLine": 5855,
+        "startChar": 30,
+        "endLine": 5855,
+        "endChar": 51
+      },
+      "revId": "9e781544cdfab236b1c829e42bb78a0152f3042d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7baca76c_5095f53c",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 2
@@ -37,6 +61,30 @@
       "writtenOn": "2023-08-03T22:39:31Z",
       "side": 1,
       "message": "Will this ever allocate anything if you use memoryTypeBits\u003d0? My understanding is that line 5899 will always return failure. \n\nMy suggestion is you remove host visible at line 5821, but use original memoryRequirements here.",
+      "range": {
+        "startLine": 5898,
+        "startChar": 8,
+        "endLine": 5898,
+        "endChar": 27
+      },
+      "revId": "9e781544cdfab236b1c829e42bb78a0152f3042d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8515f6d4_4a56195c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5898,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-03T23:00:31Z",
+      "side": 1,
+      "message": "In `vma::VmaAllocationCreateInfo`, `memoryTypeBits \u003d 0` is equivalent to `UINT32_MAX` (all memory types are accepted).",
+      "parentUuid": "7baca76c_5095f53c",
       "range": {
         "startLine": 5898,
         "startChar": 8,
