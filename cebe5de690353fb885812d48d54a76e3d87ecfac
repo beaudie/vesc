@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "503821ae_56470b46",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-03T14:06:04Z",
+      "side": 1,
+      "message": "super nit: no need for parentheses!",
+      "range": {
+        "startLine": 442,
+        "startChar": 32,
+        "endLine": 442,
+        "endChar": 33
+      },
+      "revId": "cebe5de690353fb885812d48d54a76e3d87ecfac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3485ad82_602b1293",
+        "filename": "src/libANGLE/Uniform.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-03T14:06:04Z",
+      "side": 1,
+      "message": "Maybe a warning here that these should be memcpy-able?\n\nIt\u0027s small change already, but I suggest splitting the change that moves activeVariable to mFixedSizeData; so it can be easily reverted in case it confuses any *SAN runs or anything.",
+      "revId": "cebe5de690353fb885812d48d54a76e3d87ecfac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
