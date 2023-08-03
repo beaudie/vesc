@@ -1208,6 +1208,38 @@ angle::Result CommandQueue::finishResourceUse(Context *context,
     return angle::Result::Continue;
 }
 
+angle::Result CommandQueue::finishResourceUseOnContextDestroy(Context *context,
+                                                              const ResourceUse &use,
+                                                              uint64_t timeout,
+                                                              bool isDeviceLost)
+{
+    VkDevice device = context->getDevice();
+
+    {
+        std::unique_lock<std::mutex> lock(mMutex);
+        while (!mInFlightCommands.empty() && !hasResourceUseFinished(use))
+        {
+            bool finished;
+            ANGLE_TRY(checkOneCommandBatchOnContextDestroy(context, &finished, isDeviceLost));
+            if (!finished)
+            {
+                ANGLE_VK_TRY(context,
+                             mInFlightCommands.front().waitFenceUnlocked(device, timeout, &lock));
+            }
+        }
+        // Check the rest of the commands in case they are also finished.
+        ANGLE_TRY(checkCompletedCommandsLocked(context));
+    }
+    ASSERT(hasResourceUseFinished(use));
+
+    if (!mFinishedCommandBatches.empty())
+    {
+        ANGLE_TRY(retireFinishedCommandsAndCleanupGarbage(context));
+    }
+
+    return angle::Result::Continue;
+}
+
 angle::Result CommandQueue::finishQueueSerial(Context *context,
                                               const QueueSerial &queueSerial,
                                               uint64_t timeout)
@@ -1578,6 +1610,7 @@ angle::Result CommandQueue::checkOneCommandBatch(Context *context, bool *finishe
 
     CommandBatch &batch = mInFlightCommands.front();
     *finished           = false;
+
     if (batch.hasFence())
     {
         VkResult status = batch.getFenceStatus(context->getDevice());
@@ -1592,6 +1625,38 @@ angle::Result CommandQueue::checkOneCommandBatch(Context *context, bool *finishe
     mLastCompletedSerials.setQueueSerial(batch.queueSerial);
 
     // Move command batch to mFinishedCommandBatches.
+    if (mFinishedCommandBatches.full())
+    {
+        ANGLE_TRY(retireFinishedCommandsLocked(context));
+    }
+    mFinishedCommandBatches.push(std::move(batch));
+    mInFlightCommands.pop();
+    *finished = true;
+
+    return angle::Result::Continue;
+}
+
+angle::Result CommandQueue::checkOneCommandBatchOnContextDestroy(Context *context,
+                                                                 bool *finished,
+                                                                 bool isDeviceLost)
+{
+    ASSERT(!mInFlightCommands.empty());
+
+    CommandBatch &batch = mInFlightCommands.front();
+    *finished           = false;
+
+    if (batch.hasFence() && !isDeviceLost)
+    {
+        VkResult status = batch.getFenceStatus(context->getDevice());
+        if (status == VK_NOT_READY)
+        {
+            return angle::Result::Continue;
+        }
+        ANGLE_VK_TRY(context, status);
+    }
+
+    mLastCompletedSerials.setQueueSerial(batch.queueSerial);
+
     if (mFinishedCommandBatches.full())
     {
         ANGLE_TRY(retireFinishedCommandsLocked(context));

@@ -1222,7 +1222,12 @@ void ContextVk::onDestroy(const gl::Context *context)
     (void)finishImpl(RenderPassClosureReason::ContextDestruction);
 
     // Everything must be finished
+
+    // const bool contextLost = getRenderer()->isDeviceLost();
+    // if (!contextLost)
+    //{
     ASSERT(mRenderer->hasResourceUseFinished(mSubmittedResourceUse));
+    //}
 
     VkDevice device = getDevice();
 
@@ -7241,7 +7246,10 @@ angle::Result ContextVk::finishImpl(RenderPassClosureReason renderPassClosureRea
     // You must have to wait for all queue indices ever used to finish. Just wait for
     // mLastSubmittedQueueSerial (which only contains current index) to finish is not enough, if it
     // has ever became unCurrent and then Current again.
-    ANGLE_TRY(mRenderer->finishResourceUse(this, mSubmittedResourceUse));
+
+    const bool isDeviceLost = getRenderer()->isDeviceLost();
+    ANGLE_TRY(
+        mRenderer->finishResourceUseOnContextDestroy(this, mSubmittedResourceUse, isDeviceLost));
 
     clearAllGarbage();
 
