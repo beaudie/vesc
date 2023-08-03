@@ -1578,6 +1578,7 @@ angle::Result CommandQueue::checkOneCommandBatch(Context *context, bool *finishe
 
     CommandBatch &batch = mInFlightCommands.front();
     *finished           = false;
+
     if (batch.hasFence())
     {
         VkResult status = batch.getFenceStatus(context->getDevice());
