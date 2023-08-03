@@ -96,7 +96,8 @@ class ShareGroupVk : public ShareGroupImpl
     vk::BufferPool *getDefaultBufferPool(RendererVk *renderer,
                                          VkDeviceSize size,
                                          uint32_t memoryTypeIndex,
-                                         BufferUsageType usageType);
+                                         BufferUsageType usageType,
+                                         bool isCopy);
     void pruneDefaultBufferPools(RendererVk *renderer);
     bool isDueForBufferPoolPrune(RendererVk *renderer);
 
@@ -149,7 +150,8 @@ class ShareGroupVk : public ShareGroupImpl
     {
         Buddy       = 0,
         General     = 1,
-        InvalidEnum = 2,
+        GeneralCopy = 2,
+        InvalidEnum = 3,
         EnumCount   = InvalidEnum,
     };
     angle::PackedEnumMap<SuballocationAlgorithm, vk::BufferPoolPointerArray> mDefaultBufferPools;

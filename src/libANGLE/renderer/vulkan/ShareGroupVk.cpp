@@ -396,7 +396,8 @@ uint32_t UpdateDescriptorSetsBuilder::flushDescriptorSetUpdates(VkDevice device)
 vk::BufferPool *ShareGroupVk::getDefaultBufferPool(RendererVk *renderer,
                                                    VkDeviceSize size,
                                                    uint32_t memoryTypeIndex,
-                                                   BufferUsageType usageType)
+                                                   BufferUsageType usageType,
+                                                   bool isCopy)
 {
     // First pick allocation algorithm. Buddy algorithm is faster, but waste more memory
     // due to power of two alignment. For smaller size allocation we always use buddy algorithm
@@ -415,7 +416,7 @@ vk::BufferPool *ShareGroupVk::getDefaultBufferPool(RendererVk *renderer,
         allocator.getMemoryTypeProperties(memoryTypeIndex, &memoryPropertyFlags);
 
         std::unique_ptr<vk::BufferPool> pool  = std::make_unique<vk::BufferPool>();
-        vma::VirtualBlockCreateFlags vmaFlags = algorithm == SuballocationAlgorithm::Buddy
+        vma::VirtualBlockCreateFlags vmaFlags = (algorithm == SuballocationAlgorithm::Buddy)
                                                     ? vma::VirtualBlockCreateFlagBits::BUDDY
                                                     : vma::VirtualBlockCreateFlagBits::GENERAL;
         pool->initWithFlags(renderer, vmaFlags, usageFlags, 0, memoryTypeIndex,
