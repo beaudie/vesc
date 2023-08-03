@@ -74,6 +74,24 @@
       "parentUuid": "850d30ff_27168351",
       "revId": "92be0141320fe1de68903ba5c4409c32b1bfe887",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04ea9436_c6a22cd9",
+        "filename": "src/libANGLE/renderer/vulkan/android/vk_android_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2023-08-03T16:29:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfb65250_aaedeae4",
+      "revId": "92be0141320fe1de68903ba5c4409c32b1bfe887",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
