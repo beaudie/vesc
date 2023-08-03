@@ -1222,7 +1222,12 @@ void ContextVk::onDestroy(const gl::Context *context)
     (void)finishImpl(RenderPassClosureReason::ContextDestruction);
 
     // Everything must be finished
-    ASSERT(mRenderer->hasResourceUseFinished(mSubmittedResourceUse));
+
+    const bool contextLost = getRenderer()->isDeviceLost();
+    if (!contextLost)
+    {
+        ASSERT(mRenderer->hasResourceUseFinished(mSubmittedResourceUse));
+    }
 
     VkDevice device = getDevice();
 
