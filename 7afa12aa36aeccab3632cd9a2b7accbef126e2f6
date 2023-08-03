@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae8733de_926b36e4",
+        "filename": "src/libANGLE/Surface.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-08-03T11:05:37Z",
+      "side": 1,
+      "message": "Thanks. Done.\n\nAlso replaced `Context`\u0027s `getRefCount()` for consistency.",
+      "parentUuid": "85ecc5ee_20ef20f8",
+      "revId": "7afa12aa36aeccab3632cd9a2b7accbef126e2f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5f2efdfd_8ed6f366",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-08-02T18:23:10Z",
       "side": 1,
       "message": "```suggestion\n        val-\u003esetError(EGL_BAD_ACCESS, \"Surface can only be current on one thread\");\n```",
+      "revId": "7afa12aa36aeccab3632cd9a2b7accbef126e2f6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc729b4f_de28fae7",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1296,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-08-03T11:05:37Z",
+      "side": 1,
+      "message": "Done.\n\nAdded similar message for the `Context` case.",
+      "parentUuid": "5f2efdfd_8ed6f366",
       "revId": "7afa12aa36aeccab3632cd9a2b7accbef126e2f6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
