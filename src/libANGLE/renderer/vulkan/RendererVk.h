@@ -502,6 +502,7 @@ class RendererVk : angle::NonCopyable
 
     void handleDeviceLost();
     angle::Result finishResourceUse(vk::Context *context, const vk::ResourceUse &use);
+
     angle::Result finishQueueSerial(vk::Context *context, const QueueSerial &queueSerial);
     angle::Result waitForResourceUseToFinishWithUserTimeout(vk::Context *context,
                                                             const vk::ResourceUse &use,
