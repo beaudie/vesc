@@ -22,6 +22,30 @@
       },
       "revId": "70f3267e07e6d44509a47b88324d53368bb2ec52",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5341a530_7c39beed",
+        "filename": "scripts/roll_chromium_deps.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1237795
+      },
+      "writtenOn": "2023-08-03T21:21:35Z",
+      "side": 1,
+      "message": "ah good catch, thx! previously failed runs are passing now.",
+      "parentUuid": "039ef504_86d9d66a",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 69,
+        "endChar": 32
+      },
+      "revId": "70f3267e07e6d44509a47b88324d53368bb2ec52",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
