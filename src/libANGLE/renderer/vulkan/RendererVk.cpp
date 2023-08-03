@@ -5554,6 +5554,12 @@ angle::Result RendererVk::finishResourceUse(vk::Context *context, const vk::Reso
     return mCommandQueue.finishResourceUse(context, use, getMaxFenceWaitTimeNs());
 }
 
+angle::Result RendererVk::finishResourceUseOnContextDestroy(vk::Context *context,
+                                                            const vk::ResourceUse &use)
+{
+    return mCommandQueue.finishResourceUseOnContextDestroy(context, use, getMaxFenceWaitTimeNs());
+}
+
 angle::Result RendererVk::finishQueueSerial(vk::Context *context, const QueueSerial &queueSerial)
 {
     ASSERT(queueSerial.valid());

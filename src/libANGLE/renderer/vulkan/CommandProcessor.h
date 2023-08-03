@@ -388,6 +388,9 @@ class CommandQueue : angle::NonCopyable
 
     // Wait until the desired serial has been completed.
     angle::Result finishResourceUse(Context *context, const ResourceUse &use, uint64_t timeout);
+    angle::Result finishResourceUseOnContextDestroy(Context *context,
+                                                    const ResourceUse &use,
+                                                    uint64_t timeout);
     angle::Result finishQueueSerial(Context *context,
                                     const QueueSerial &queueSerial,
                                     uint64_t timeout);
@@ -477,6 +480,7 @@ class CommandQueue : angle::NonCopyable
     // Check the first command buffer in mInFlightCommands and update mLastCompletedSerials if
     // finished
     angle::Result checkOneCommandBatch(Context *context, bool *finished);
+    angle::Result checkOneCommandBatchOnContextDestroy(Context *context, bool *finished);
     // Similar to checkOneCommandBatch, except we will wait for it to finish
     angle::Result finishOneCommandBatchAndCleanupImpl(Context *context, uint64_t timeout);
     // Walk mFinishedCommands, reset and recycle all command buffers.

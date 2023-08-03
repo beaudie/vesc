@@ -1215,6 +1215,7 @@ ContextVk::~ContextVk()
 
 void ContextVk::onDestroy(const gl::Context *context)
 {
+    INFO() << "Yuxin Debug ContextVk::onDestroy() is called";
     // This will not destroy any resources. It will release them to be collected after finish.
     mIncompleteTextures.onDestroy(context);
 
@@ -1222,7 +1223,12 @@ void ContextVk::onDestroy(const gl::Context *context)
     (void)finishImpl(RenderPassClosureReason::ContextDestruction);
 
     // Everything must be finished
+
+    // const bool contextLost = getRenderer()->isDeviceLost();
+    // if (!contextLost)
+    //{
     ASSERT(mRenderer->hasResourceUseFinished(mSubmittedResourceUse));
+    //}
 
     VkDevice device = getDevice();
 
@@ -7241,8 +7247,13 @@ angle::Result ContextVk::finishImpl(RenderPassClosureReason renderPassClosureRea
     // You must have to wait for all queue indices ever used to finish. Just wait for
     // mLastSubmittedQueueSerial (which only contains current index) to finish is not enough, if it
     // has ever became unCurrent and then Current again.
-    ANGLE_TRY(mRenderer->finishResourceUse(this, mSubmittedResourceUse));
 
+    INFO() << "Yuxin Debug ContextVk reached line 7251";
+
+    // ANGLE_TRY(mRenderer->finishResourceUse(this, mSubmittedResourceUse));
+    ANGLE_TRY(mRenderer->finishResourceUseOnContextDestroy(this, mSubmittedResourceUse));
+
+    INFO() << "Yuxin Debug ContextVk reached line 7252";
     clearAllGarbage();
 
     if (mGpuEventsEnabled)
@@ -7250,6 +7261,7 @@ angle::Result ContextVk::finishImpl(RenderPassClosureReason renderPassClosureRea
         // This loop should in practice execute once since the queue is already idle.
         while (mInFlightGpuEventQueries.size() > 0)
         {
+            INFO() << "Yuxin Debug ContextVk reached line 7260";
             ANGLE_TRY(checkCompletedGpuEvents());
         }
         // Recalculate the CPU/GPU time difference to account for clock drifting.  Avoid
