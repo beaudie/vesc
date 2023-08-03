@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa2d7d2d_6f667b5e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-08-03T18:26:19Z",
+      "side": 1,
+      "message": "In another paragraph please mention the bug fix to the computation of whether to use fast math.",
+      "revId": "f6651ba2e651e8e6580acde5fdf1df94e302669b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30673970_9b0049ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-08-03T18:26:19Z",
+      "side": 1,
+      "message": "Nice clean update - lgtm+2",
+      "revId": "f6651ba2e651e8e6580acde5fdf1df94e302669b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
