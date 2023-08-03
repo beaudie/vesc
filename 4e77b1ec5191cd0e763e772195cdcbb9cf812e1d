@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e749f19_a971b65b",
+        "filename": ".gitignore",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-08-03T22:04:04Z",
+      "side": 1,
+      "message": "Swap with line above to sort?",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 26
+      },
+      "revId": "4e77b1ec5191cd0e763e772195cdcbb9cf812e1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
