@@ -3392,14 +3392,17 @@ angle::Result BufferPool::allocateNewBuffer(Context *context, VkDeviceSize sizeI
 angle::Result BufferPool::allocateBuffer(Context *context,
                                          VkDeviceSize sizeInBytes,
                                          VkDeviceSize alignment,
-                                         BufferSuballocation *suballocation)
+                                         BufferSuballocation *suballocation,
+                                         BufferAllocationType allocType)
 {
     ASSERT(alignment);
     VmaVirtualAllocation allocation;
     VkDeviceSize offset;
     VkDeviceSize alignedSize = roundUp(sizeInBytes, alignment);
 
-    if (alignedSize >= kMaxBufferSizeForSuballocation)
+    if ((alignedSize >= kMaxBufferSizeForSuballocation) ||
+        (allocType == BufferAllocationType::CopyImage &&
+         alignedSize >= kMaxCopyImageStagingBufferSizeForSuballocation))
     {
         VkDeviceSize heapSize =
             context->getRenderer()->getMemoryProperties().getHeapSizeForMemoryType(
@@ -4832,7 +4835,8 @@ angle::Result BufferHelper::initSuballocation(ContextVk *contextVk,
                                               uint32_t memoryTypeIndex,
                                               size_t size,
                                               size_t alignment,
-                                              BufferUsageType usageType)
+                                              BufferUsageType usageType,
+                                              BufferAllocationType allocType)
 {
     RendererVk *renderer = contextVk->getRenderer();
 
@@ -4848,7 +4852,7 @@ angle::Result BufferHelper::initSuballocation(ContextVk *contextVk,
     }
 
     vk::BufferPool *pool = contextVk->getDefaultBufferPool(size, memoryTypeIndex, usageType);
-    ANGLE_TRY(pool->allocateBuffer(contextVk, size, alignment, &mSuballocation));
+    ANGLE_TRY(pool->allocateBuffer(contextVk, size, alignment, &mSuballocation, allocType));
 
     if (renderer->getFeatures().allocateNonZeroMemory.enabled)
     {
@@ -4867,7 +4871,8 @@ angle::Result BufferHelper::allocateForCopyBuffer(ContextVk *contextVk,
     RendererVk *renderer     = contextVk->getRenderer();
     uint32_t memoryTypeIndex = renderer->getStagingBufferMemoryTypeIndex(coherency);
     size_t alignment         = renderer->getStagingBufferAlignment();
-    return initSuballocation(contextVk, memoryTypeIndex, size, alignment, BufferUsageType::Dynamic);
+    return initSuballocation(contextVk, memoryTypeIndex, size, alignment, BufferUsageType::Dynamic,
+                             BufferAllocationType::CopyBuffer);
 }
 
 angle::Result BufferHelper::allocateForVertexConversion(ContextVk *contextVk,
@@ -4907,7 +4912,7 @@ angle::Result BufferHelper::allocateForVertexConversion(ContextVk *contextVk,
     size_t sizeToAllocate = roundUp(size, alignment);
 
     return initSuballocation(contextVk, memoryTypeIndex, sizeToAllocate, alignment,
-                             BufferUsageType::Static);
+                             BufferUsageType::Static, BufferAllocationType::Vertex);
 }
 
 angle::Result BufferHelper::allocateForCopyImage(ContextVk *contextVk,
@@ -4931,7 +4936,7 @@ angle::Result BufferHelper::allocateForCopyImage(ContextVk *contextVk,
     size_t stagingAlignment = static_cast<size_t>(renderer->getStagingBufferAlignment());
 
     ANGLE_TRY(initSuballocation(contextVk, memoryTypeIndex, allocationSize, stagingAlignment,
-                                BufferUsageType::Static));
+                                BufferUsageType::Static, BufferAllocationType::CopyImage));
 
     *offset  = roundUp(getOffset(), static_cast<VkDeviceSize>(imageCopyAlignment));
     *dataPtr = getMappedMemory() + (*offset) - getOffset();
