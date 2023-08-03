@@ -5545,13 +5545,15 @@ void RendererVk::handleDeviceLost()
     }
 }
 
-angle::Result RendererVk::finishResourceUse(vk::Context *context, const vk::ResourceUse &use)
+angle::Result RendererVk::finishResourceUse(vk::Context *context,
+                                            const vk::ResourceUse &use,
+                                            const bool isDeviceLost)
 {
     if (isAsyncCommandQueueEnabled())
     {
         ANGLE_TRY(mCommandProcessor.waitForResourceUseToBeSubmitted(context, use));
     }
-    return mCommandQueue.finishResourceUse(context, use, getMaxFenceWaitTimeNs());
+    return mCommandQueue.finishResourceUse(context, use, getMaxFenceWaitTimeNs(), isDeviceLost);
 }
 
 angle::Result RendererVk::finishQueueSerial(vk::Context *context, const QueueSerial &queueSerial)
