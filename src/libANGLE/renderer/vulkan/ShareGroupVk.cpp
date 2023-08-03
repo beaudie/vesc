@@ -401,7 +401,8 @@ uint32_t UpdateDescriptorSetsBuilder::flushDescriptorSetUpdates(VkDevice device)
 vk::BufferPool *ShareGroupVk::getDefaultBufferPool(RendererVk *renderer,
                                                    VkDeviceSize size,
                                                    uint32_t memoryTypeIndex,
-                                                   BufferUsageType usageType)
+                                                   BufferUsageType usageType,
+                                                   BufferAllocationType allocType)
 {
 #if ANGLE_VMA_VERSION < 3000000
     // First pick allocation algorithm. Buddy algorithm is faster, but waste more memory
@@ -409,18 +410,20 @@ vk::BufferPool *ShareGroupVk::getDefaultBufferPool(RendererVk *renderer,
     // since align to power of two does not waste too much memory. For dynamic usage, the size
     // threshold for buddy algorithm is relaxed since the performance is more important.
     SuballocationAlgorithm algorithm      = size <= mSizeLimitForBuddyAlgorithm[usageType]
-                                                ? SuballocationAlgorithm::Buddy
-                                                : SuballocationAlgorithm::General;
-    vma::VirtualBlockCreateFlags vmaFlags = algorithm == SuballocationAlgorithm::Buddy
+                                                ? SuballocationPool::Buddy
+                                                : SuballocationPool::General;
+    vma::VirtualBlockCreateFlags vmaFlags = algorithm == SuballocationPool::Buddy
                                                 ? vma::VirtualBlockCreateFlagBits::BUDDY
                                                 : vma::VirtualBlockCreateFlagBits::GENERAL;
 #else
     // For VMA 3.0, the general allocation algorithm is used.
-    SuballocationAlgorithm algorithm      = SuballocationAlgorithm::General;
+    SuballocationPool suballocPool        = (allocType == BufferAllocationType::CopyImage)
+                                                ? SuballocationPool::StagingBuffer
+                                                : SuballocationPool::General;
     vma::VirtualBlockCreateFlags vmaFlags = vma::VirtualBlockCreateFlagBits::GENERAL;
 #endif  // ANGLE_VMA_VERSION < 3000000
 
-    if (!mDefaultBufferPools[algorithm][memoryTypeIndex])
+    if (!mDefaultBufferPools[suballocPool][memoryTypeIndex])
     {
         const vk::Allocator &allocator = renderer->getAllocator();
         VkBufferUsageFlags usageFlags  = GetDefaultBufferUsageFlags(renderer);
@@ -431,10 +434,10 @@ vk::BufferPool *ShareGroupVk::getDefaultBufferPool(RendererVk *renderer,
         std::unique_ptr<vk::BufferPool> pool = std::make_unique<vk::BufferPool>();
         pool->initWithFlags(renderer, vmaFlags, usageFlags, 0, memoryTypeIndex,
                             memoryPropertyFlags);
-        mDefaultBufferPools[algorithm][memoryTypeIndex] = std::move(pool);
+        mDefaultBufferPools[suballocPool][memoryTypeIndex] = std::move(pool);
     }
 
-    return mDefaultBufferPools[algorithm][memoryTypeIndex].get();
+    return mDefaultBufferPools[suballocPool][memoryTypeIndex].get();
 }
 
 void ShareGroupVk::pruneDefaultBufferPools(RendererVk *renderer)

@@ -4865,7 +4865,8 @@ VkResult BufferHelper::initSuballocation(ContextVk *contextVk,
                                          uint32_t memoryTypeIndex,
                                          size_t size,
                                          size_t alignment,
-                                         BufferUsageType usageType)
+                                         BufferUsageType usageType,
+                                         BufferAllocationType allocType)
 {
     RendererVk *renderer = contextVk->getRenderer();
 
@@ -4880,7 +4881,8 @@ VkResult BufferHelper::initSuballocation(ContextVk *contextVk,
         size += maxVertexAttribStride;
     }
 
-    vk::BufferPool *pool = contextVk->getDefaultBufferPool(size, memoryTypeIndex, usageType);
+    vk::BufferPool *pool =
+        contextVk->getDefaultBufferPool(size, memoryTypeIndex, usageType, allocType);
     VK_RESULT_TRY(pool->allocateBuffer(contextVk, size, alignment, &mSuballocation));
 
     contextVk->getPerfCounters().bufferSuballocationCalls++;

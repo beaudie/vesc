@@ -757,7 +757,8 @@ class BufferHelper : public ReadWriteResource
                                uint32_t memoryTypeIndex,
                                size_t size,
                                size_t alignment,
-                               BufferUsageType usageType);
+                               BufferUsageType usageType,
+                               BufferAllocationType allocType);
 
     void destroy(RendererVk *renderer);
     void release(RendererVk *renderer);

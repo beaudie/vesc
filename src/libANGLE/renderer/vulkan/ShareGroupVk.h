@@ -96,7 +96,8 @@ class ShareGroupVk : public ShareGroupImpl
     vk::BufferPool *getDefaultBufferPool(RendererVk *renderer,
                                          VkDeviceSize size,
                                          uint32_t memoryTypeIndex,
-                                         BufferUsageType usageType);
+                                         BufferUsageType usageType,
+                                         BufferAllocationType allocType);
     void pruneDefaultBufferPools(RendererVk *renderer);
     bool isDueForBufferPoolPrune(RendererVk *renderer);
 
@@ -146,7 +147,7 @@ class ShareGroupVk : public ShareGroupImpl
 
 // The per shared group buffer pools that all buffers should sub-allocate from.
 #if ANGLE_VMA_VERSION < 3000000
-    enum class SuballocationAlgorithm : uint8_t{
+    enum class SuballocationPool : uint8_t{
         Buddy       = 0,
         General     = 1,
         InvalidEnum = 2,
@@ -154,14 +155,15 @@ class ShareGroupVk : public ShareGroupImpl
     };
     angle::PackedEnumMap<BufferUsageType, size_t> mSizeLimitForBuddyAlgorithm;
 #else
-    enum class SuballocationAlgorithm : uint8_t
+    enum class SuballocationPool : uint8_t
     {
-        General     = 0,
-        InvalidEnum = 1,
-        EnumCount   = InvalidEnum,
+        General       = 0,
+        StagingBuffer = 1,
+        InvalidEnum   = 2,
+        EnumCount     = InvalidEnum,
     };
 #endif
-    angle::PackedEnumMap<SuballocationAlgorithm, vk::BufferPoolPointerArray> mDefaultBufferPools;
+    angle::PackedEnumMap<SuballocationPool, vk::BufferPoolPointerArray> mDefaultBufferPools;
 
     // The system time when last pruneEmptyBuffer gets called.
     double mLastPruneTime;

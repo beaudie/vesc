@@ -723,9 +723,11 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     vk::BufferPool *getDefaultBufferPool(VkDeviceSize size,
                                          uint32_t memoryTypeIndex,
-                                         BufferUsageType usageType)
+                                         BufferUsageType usageType,
+                                         BufferAllocationType allocType)
     {
-        return mShareGroupVk->getDefaultBufferPool(mRenderer, size, memoryTypeIndex, usageType);
+        return mShareGroupVk->getDefaultBufferPool(mRenderer, size, memoryTypeIndex, usageType,
+                                                   allocType);
     }
 
     angle::Result allocateStreamedVertexBuffer(size_t attribIndex,
@@ -815,7 +817,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                        uint32_t memoryTypeIndex,
                                        size_t allocationSize,
                                        size_t alignment,
-                                       BufferUsageType bufferUsageType);
+                                       BufferUsageType bufferUsageType,
+                                       BufferAllocationType allocType);
     angle::Result initImageAllocation(vk::ImageHelper *imageHelper,
                                       bool hasProtectedContent,
                                       const vk::MemoryProperties &memoryProperties,

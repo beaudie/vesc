@@ -6948,10 +6948,11 @@ angle::Result ContextVk::initBufferAllocation(vk::BufferHelper *bufferHelper,
                                               uint32_t memoryTypeIndex,
                                               size_t allocationSize,
                                               size_t alignment,
-                                              BufferUsageType bufferUsageType)
+                                              BufferUsageType bufferUsageType,
+                                              BufferAllocationType allocType)
 {
     VkResult result = bufferHelper->initSuballocation(this, memoryTypeIndex, allocationSize,
-                                                      alignment, bufferUsageType);
+                                                      alignment, bufferUsageType, allocType);
     if (ANGLE_LIKELY(result == VK_SUCCESS))
     {
         if (mRenderer->getFeatures().allocateNonZeroMemory.enabled)
@@ -6979,7 +6980,7 @@ angle::Result ContextVk::initBufferAllocation(vk::BufferHelper *bufferHelper,
         {
             batchesWaitedAndCleaned++;
             result = bufferHelper->initSuballocation(this, memoryTypeIndex, allocationSize,
-                                                     alignment, bufferUsageType);
+                                                     alignment, bufferUsageType, allocType);
         }
     } while (result != VK_SUCCESS && anyBatchCleaned);
 
@@ -6997,7 +6998,7 @@ angle::Result ContextVk::initBufferAllocation(vk::BufferHelper *bufferHelper,
         ANGLE_TRY(finishImpl(RenderPassClosureReason::OutOfMemory));
         INFO() << "Context flushed due to out-of-memory error.";
         result = bufferHelper->initSuballocation(this, memoryTypeIndex, allocationSize, alignment,
-                                                 bufferUsageType);
+                                                 bufferUsageType, allocType);
     }
 
     // If the allocation continues to fail despite all the fallback options, the error must be
@@ -7149,7 +7150,7 @@ angle::Result ContextVk::initBufferForBufferCopy(vk::BufferHelper *bufferHelper,
     uint32_t memoryTypeIndex = mRenderer->getStagingBufferMemoryTypeIndex(coherency);
     size_t alignment         = mRenderer->getStagingBufferAlignment();
     return initBufferAllocation(bufferHelper, memoryTypeIndex, size, alignment,
-                                BufferUsageType::Dynamic);
+                                BufferUsageType::Dynamic, BufferAllocationType::CopyBuffer);
 }
 
 angle::Result ContextVk::initBufferForImageCopy(vk::BufferHelper *bufferHelper,
@@ -7171,7 +7172,7 @@ angle::Result ContextVk::initBufferForImageCopy(vk::BufferHelper *bufferHelper,
     size_t stagingAlignment = static_cast<size_t>(mRenderer->getStagingBufferAlignment());
 
     ANGLE_TRY(initBufferAllocation(bufferHelper, memoryTypeIndex, allocationSize, stagingAlignment,
-                                   BufferUsageType::Static));
+                                   BufferUsageType::Dynamic, BufferAllocationType::CopyImage));
 
     *offset  = roundUp(bufferHelper->getOffset(), static_cast<VkDeviceSize>(imageCopyAlignment));
     *dataPtr = bufferHelper->getMappedMemory() + (*offset) - bufferHelper->getOffset();
@@ -7214,7 +7215,7 @@ angle::Result ContextVk::initBufferForVertexConversion(vk::BufferHelper *bufferH
     size_t sizeToAllocate = roundUp(size, alignment);
 
     return initBufferAllocation(bufferHelper, memoryTypeIndex, sizeToAllocate, alignment,
-                                BufferUsageType::Static);
+                                BufferUsageType::Static, BufferAllocationType::Vertex);
 }
 
 angle::Result ContextVk::updateActiveTextures(const gl::Context *context, gl::Command command)
