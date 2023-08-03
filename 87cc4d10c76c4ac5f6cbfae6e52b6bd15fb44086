@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f070e59d_210c2f2c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-08-03T14:45:35Z",
+      "side": 1,
+      "message": "LGTM. I like that this funnels all the the deferred termination logic to makeCurrent.",
+      "revId": "87cc4d10c76c4ac5f6cbfae6e52b6bd15fb44086",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
