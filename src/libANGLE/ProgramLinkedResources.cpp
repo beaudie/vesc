@@ -49,6 +49,24 @@ void SetActive(std::vector<VarT> *list,
     }
 }
 
+template <typename VarT>
+void SetActive(std::vector<VarT> *list,
+               std::vector<std::string> *nameList,
+               const std::string &name,
+               ShaderType shaderType,
+               bool active,
+               uint32_t id)
+{
+    for (GLint index = 0; index < static_cast<GLint>(nameList->size()); index++)
+    {
+        if ((*nameList)[index] == name)
+        {
+            (*list)[index].setActive(shaderType, active, id);
+            return;
+        }
+    }
+}
+
 // GLSL ES Spec 3.00.3, section 4.3.5.
 LinkMismatchError LinkValidateUniforms(const sh::ShaderVariable &uniform1,
                                        const sh::ShaderVariable &uniform2,
@@ -240,23 +258,26 @@ class UniformBlockEncodingVisitor : public sh::VariableNameVisitor
 
         if (mBlockIndex == -1)
         {
-            SetActive(mUniformsOut, nameWithArrayIndex, mShaderType, variable.active, variable.id);
+            SetActive(mUniformsOut, mUniformNamesOut, nameWithArrayIndex, mShaderType,
+                      variable.active, variable.id);
             return;
         }
 
-        LinkedUniform newUniform(variable.type, variable.precision, nameWithArrayIndex,
-                                 variable.arraySizes, -1, -1, -1, mBlockIndex, variableInfo);
+        LinkedUniform newUniform(variable.type, variable.precision, variable.arraySizes, -1, -1, -1,
+                                 mBlockIndex, variableInfo);
         newUniform.mappedName = mappedNameWithArrayIndex;
         newUniform.setActive(mShaderType, variable.active, variable.id);
 
         // Since block uniforms have no location, we don't need to store them in the uniform
         // locations list.
         mUniformsOut->push_back(newUniform);
+        mUniformNamesOut->push_back(nameWithArrayIndex);
     }
 
   private:
     const GetBlockMemberInfoFunc &mGetMemberInfo;
     std::vector<LinkedUniform> *mUniformsOut;
+    std::vector<std::string> *mUniformNamesOut;
     const ShaderType mShaderType;
     const int mBlockIndex;
 };
@@ -934,12 +955,16 @@ UniformLinker::UniformLinker(const ShaderBitSet &activeShaderStages,
 UniformLinker::~UniformLinker() = default;
 
 void UniformLinker::getResults(std::vector<LinkedUniform> *uniforms,
+                               std::vector<std::string> *uniformNames,
                                std::vector<UnusedUniform> *unusedUniformsOutOrNull,
                                std::vector<VariableLocation> *uniformLocationsOutOrNull)
 {
+    uniforms->reserve(mUniforms.size());
+    uniformNames->reserve(mUniforms.size());
     for (const UsedUniform &usedUniform : mUniforms)
     {
         uniforms->emplace_back(usedUniform);
+        uniformNames->emplace_back(usedUniform.name);
     }
 
     if (unusedUniformsOutOrNull)

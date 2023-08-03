@@ -124,6 +124,7 @@ class UniformLinker final : angle::NonCopyable
               const ProgramAliasedBindings &uniformLocationBindings);
 
     void getResults(std::vector<LinkedUniform> *uniforms,
+                    std::vector<std::string> *uniformNames,
                     std::vector<UnusedUniform> *unusedUniformsOutOrNull,
                     std::vector<VariableLocation> *uniformLocationsOutOrNull);
 
