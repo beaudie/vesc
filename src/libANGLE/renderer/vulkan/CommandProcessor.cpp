@@ -1179,7 +1179,8 @@ angle::Result CommandQueue::postSubmitCheck(Context *context)
 
 angle::Result CommandQueue::finishResourceUse(Context *context,
                                               const ResourceUse &use,
-                                              uint64_t timeout)
+                                              uint64_t timeout,
+                                              const bool isDeviceLost)
 {
     VkDevice device = context->getDevice();
 
@@ -1572,13 +1573,15 @@ angle::Result CommandQueue::retireFinishedCommandsAndCleanupGarbage(Context *con
 }
 
 // CommandQueue private API implementation. These are called by public API, so lock already held.
-angle::Result CommandQueue::checkOneCommandBatch(Context *context, bool *finished)
+angle::Result CommandQueue::checkOneCommandBatch(Context *context,
+                                                 bool *finished,
+                                                 const bool isDeviceLost)
 {
     ASSERT(!mInFlightCommands.empty());
 
     CommandBatch &batch = mInFlightCommands.front();
     *finished           = false;
-    if (batch.hasFence())
+    if (batch.hasFence() && !isDeviceLost)
     {
         VkResult status = batch.getFenceStatus(context->getDevice());
         if (status == VK_NOT_READY)

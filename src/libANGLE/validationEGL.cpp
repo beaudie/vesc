@@ -3326,7 +3326,7 @@ bool ValidateMakeCurrent(const ValidationContext *val,
         ANGLE_VALIDATION_TRY(ValidateContext(val, display, contextID));
     }
 
-    if (display->isInitialized() && display->isDeviceLost())
+    if (display->isInitialized() && display->isDeviceLost() && !noContext)
     {
         val->setError(EGL_CONTEXT_LOST);
         return false;
