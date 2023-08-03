@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57c59e5f_2bef5267",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5855,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-03T22:39:31Z",
+      "side": 1,
+      "message": "Why not just change to getMemoryTypeBitsExcludesHostVisible() and remove memoryTypeBits that has host visible bit in it? My worry is that it is a bit too restrictive here by require exact match of requiredFlags|preferredFlags.",
+      "range": {
+        "startLine": 5855,
+        "startChar": 30,
+        "endLine": 5855,
+        "endChar": 51
+      },
+      "revId": "9e781544cdfab236b1c829e42bb78a0152f3042d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7baca76c_5095f53c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5898,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-03T22:39:31Z",
+      "side": 1,
+      "message": "Will this ever allocate anything if you use memoryTypeBits\u003d0? My understanding is that line 5899 will always return failure. \n\nMy suggestion is you remove host visible at line 5821, but use original memoryRequirements here.",
+      "range": {
+        "startLine": 5898,
+        "startChar": 8,
+        "endLine": 5898,
+        "endChar": 27
+      },
+      "revId": "9e781544cdfab236b1c829e42bb78a0152f3042d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
