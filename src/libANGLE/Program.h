@@ -261,6 +261,10 @@ class ProgramState final : angle::NonCopyable
         return mExecutable->getSecondaryOutputLocations();
     }
     const std::vector<LinkedUniform> &getUniforms() const { return mExecutable->getUniforms(); }
+    const std::vector<std::string> &getUniformNames() const
+    {
+        return mExecutable->getUniformNames();
+    }
     const std::vector<VariableLocation> &getUniformLocations() const { return mUniformLocations; }
     const std::vector<InterfaceBlock> &getUniformBlocks() const
     {
@@ -531,6 +535,10 @@ class Program final : public LabeledObject, public angle::Subject
     {
         ASSERT(!mLinkingState);
         return mState.mExecutable->getUniformByIndex(index);
+    }
+    const std::string &getUniformNameByIndex(GLuint index) const
+    {
+        return mState.getUniformNames()[index];
     }
 
     const BufferVariable &getBufferVariableByIndex(GLuint index) const;
