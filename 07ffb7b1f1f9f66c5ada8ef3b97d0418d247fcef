@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11586d33_7a042e40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-08-03T18:35:29Z",
+      "side": 1,
+      "message": "Quick one-shot patch...",
+      "revId": "07ffb7b1f1f9f66c5ada8ef3b97d0418d247fcef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f46e2077_fe8cb9ec",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-08-03T18:35:29Z",
+      "side": 1,
+      "message": "Note: The change is removing redundancy because \"metal\" is already checked on this line.",
+      "revId": "07ffb7b1f1f9f66c5ada8ef3b97d0418d247fcef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
