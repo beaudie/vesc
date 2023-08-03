@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da4cf668_86226ca6",
+        "filename": "src/libANGLE/Uniform.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-08-03T12:54:49Z",
+      "side": 1,
+      "message": "Can\u0027t find where `isStruct` is set to anything but false, am I missing something?",
+      "range": {
+        "startLine": 51,
+        "startChar": 6,
+        "endLine": 51,
+        "endChar": 14
+      },
+      "revId": "2a6a365433c295478176d3e015ed89c780dfea5c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
