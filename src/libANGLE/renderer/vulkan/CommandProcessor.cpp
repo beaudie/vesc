@@ -1578,7 +1578,11 @@ angle::Result CommandQueue::checkOneCommandBatch(Context *context, bool *finishe
 
     CommandBatch &batch = mInFlightCommands.front();
     *finished           = false;
-    if (batch.hasFence())
+
+    // If the device is lost, we assume all of the commands have finished,
+    // so that we can properly clean up resource before destroying the context.
+    const bool isDeviceLost = context->getRenderer()->isDeviceLost();
+    if (batch.hasFence() && !isDeviceLost)
     {
         VkResult status = batch.getFenceStatus(context->getDevice());
         if (status == VK_NOT_READY)
