@@ -222,6 +222,7 @@ class ProgramExecutable final : public angle::Subject
         return mSecondaryOutputLocations;
     }
     const std::vector<LinkedUniform> &getUniforms() const { return mUniforms; }
+    const std::vector<std::string> &getUniformNames() const { return mUniformNames; }
     const std::vector<InterfaceBlock> &getUniformBlocks() const { return mUniformBlocks; }
     const UniformBlockBindingMask &getActiveUniformBlockBindings() const
     {
@@ -270,6 +271,11 @@ class ProgramExecutable final : public angle::Subject
     {
         ASSERT(index < static_cast<size_t>(mUniforms.size()));
         return mUniforms[index];
+    }
+    const std::string &getUniformNameByIndex(GLuint index) const
+    {
+        ASSERT(index < static_cast<size_t>(mUniforms.size()));
+        return mUniformNames[index];
     }
 
     ANGLE_INLINE GLuint getActiveUniformBlockCount() const
@@ -465,6 +471,7 @@ class ProgramExecutable final : public angle::Subject
     // inner array of an array of arrays. Names and mapped names of uniforms that are arrays include
     // [0] in the end. This makes implementation of queries simpler.
     std::vector<LinkedUniform> mUniforms;
+    std::vector<std::string> mUniformNames;
     RangeUI mDefaultUniformRange;
     RangeUI mSamplerUniformRange;
     RangeUI mImageUniformRange;

@@ -181,6 +181,38 @@ void AppendActiveBlocks(ShaderType shaderType,
         }
     }
 }
+
+void SaveUniforms(BinaryOutputStream *stream,
+                  const std::vector<LinkedUniform> &uniforms,
+                  const std::vector<std::string> &uniformNames)
+{
+    stream->writeInt(uniforms.size());
+    for (const LinkedUniform &uniform : uniforms)
+    {
+        uniform.save(stream);
+    }
+    for (const std::string &name : uniformNames)
+    {
+        stream->writeString(name);
+    }
+}
+void LoadUniforms(BinaryInputStream *stream,
+                  std::vector<LinkedUniform> *uniforms,
+                  std::vector<std::string> *uniformNames)
+{
+    size_t uniformCount = stream->readInt<size_t>();
+    ASSERT(uniforms->empty());
+    uniforms->resize(uniformCount);
+    for (size_t uniformIndex = 0; uniformIndex < uniformCount; ++uniformIndex)
+    {
+        (*uniforms)[uniformIndex].load(stream);
+    }
+    uniformNames->resize(uniformCount);
+    for (size_t uniformIndex = 0; uniformIndex < uniformCount; ++uniformIndex)
+    {
+        stream->readString(&(*uniformNames)[uniformIndex]);
+    }
+}
 }  // anonymous namespace
 
 ProgramExecutable::ProgramExecutable()
@@ -237,6 +269,7 @@ ProgramExecutable::ProgramExecutable(const ProgramExecutable &other)
       mTransformFeedbackStrides(other.mTransformFeedbackStrides),
       mTransformFeedbackBufferMode(other.mTransformFeedbackBufferMode),
       mUniforms(other.mUniforms),
+      mUniformNames(other.mUniformNames),
       mDefaultUniformRange(other.mDefaultUniformRange),
       mSamplerUniformRange(other.mSamplerUniformRange),
       mImageUniformRange(other.mImageUniformRange),
@@ -279,6 +312,7 @@ void ProgramExecutable::reset(bool clearInfoLog)
     mLinkedTransformFeedbackVaryings.clear();
     mTransformFeedbackStrides.clear();
     mUniforms.clear();
+    mUniformNames.clear();
     mUniformBlocks.clear();
     mActiveUniformBlockBindings.reset();
     mShaderStorageBlocks.clear();
@@ -362,13 +396,7 @@ void ProgramExecutable::load(bool isSeparable, gl::BinaryInputStream *stream)
         attrib.location = stream->readInt<int>();
     }
 
-    size_t uniformCount = stream->readInt<size_t>();
-    ASSERT(getUniforms().empty());
-    mUniforms.resize(uniformCount);
-    for (size_t uniformIndex = 0; uniformIndex < uniformCount; ++uniformIndex)
-    {
-        mUniforms[uniformIndex].load(stream);
-    }
+    LoadUniforms(stream, &mUniforms, &mUniformNames);
 
     size_t uniformBlockCount = stream->readInt<size_t>();
     ASSERT(getUniformBlocks().empty());
@@ -581,11 +609,7 @@ void ProgramExecutable::save(bool isSeparable, gl::BinaryOutputStream *stream) c
         stream->writeInt(attrib.location);
     }
 
-    stream->writeInt(getUniforms().size());
-    for (const LinkedUniform &uniform : getUniforms())
-    {
-        uniform.save(stream);
-    }
+    SaveUniforms(stream, mUniforms, mUniformNames);
 
     stream->writeInt(getUniformBlocks().size());
     for (const InterfaceBlock &uniformBlock : getUniformBlocks())
@@ -1527,7 +1551,8 @@ bool ProgramExecutable::linkUniforms(
         return false;
     }
 
-    linker.getResults(&mUniforms, unusedUniformsOutOrNull, uniformLocationsOutOrNull);
+    linker.getResults(&mUniforms, &mUniformNames, unusedUniformsOutOrNull,
+                      uniformLocationsOutOrNull);
 
     linkSamplerAndImageBindings(combinedImageUniformsCountOut);
 
