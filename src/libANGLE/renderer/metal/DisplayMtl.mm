@@ -133,6 +133,7 @@ angle::Result DisplayMtl::initializeImpl(egl::Display *display)
 
         mCapsInitialized = false;
 
+        ApplyFeatureOverrides(&mFeatures, getState());
         if (!mState.featuresAllDisabled)
         {
             initializeFeatures();
@@ -1337,8 +1338,6 @@ void DisplayMtl::initializeFeatures()
 
     // anglebug.com/8258 Builtin shaders currently require MSL 2.1
     ANGLE_FEATURE_CONDITION((&mFeatures), requireMsl21, true);
-
-    ApplyFeatureOverrides(&mFeatures, getState());
 }
 
 angle::Result DisplayMtl::initializeShaderLibrary()
