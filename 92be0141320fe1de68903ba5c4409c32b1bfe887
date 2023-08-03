@@ -134,6 +134,24 @@
       "parentUuid": "04ea9436_c6a22cd9",
       "revId": "92be0141320fe1de68903ba5c4409c32b1bfe887",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4f20f85_47382960",
+        "filename": "src/libANGLE/renderer/vulkan/android/vk_android_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2023-08-03T16:57:40Z",
+      "side": 1,
+      "message": "@syoussefi@chromium.org, if I understand this correctly, GetClientBufferMemoryRequirements is only meant for BLOB case.  This extra check is for cases somehow this function is called with non-BLOB.  non-BLOB case should use `HardwareBufferImageSiblingVkAndroid`.\n\nIf this is right, How can the error message be improved to better help developers find the `HardwareBufferImageSiblingVkAndroid`?",
+      "parentUuid": "f9a07d03_513fa29c",
+      "revId": "92be0141320fe1de68903ba5c4409c32b1bfe887",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
