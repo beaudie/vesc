@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b374fe8_d9b2540d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-03T20:42:50Z",
+      "side": 1,
+      "message": "Note - system already includes these shared objects without subdirs:\n```\n# ls /system/lib64/ | grep -E \"EGL|GLES\"                                                                                                                                        \nlibEGL.so\nlibGLESv1_CM.so\nlibGLESv2.so\nlibGLESv3.so\n```",
+      "range": {
+        "startLine": 12,
+        "startChar": 16,
+        "endLine": 13,
+        "endChar": 27
+      },
+      "revId": "0db140067f33894aed54fec08d9a146e9459ad7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "dffe5d76_20453341",
@@ -14,6 +37,23 @@
       "writtenOn": "2023-08-03T20:03:11Z",
       "side": 1,
       "message": "ptal",
+      "revId": "0db140067f33894aed54fec08d9a146e9459ad7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ab03572_c35c626a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-03T20:42:50Z",
+      "side": 1,
+      "message": "Well that was simple",
       "revId": "0db140067f33894aed54fec08d9a146e9459ad7b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
