@@ -2997,7 +2997,10 @@ def get_egl_entry_point_labeled_object(ep_to_object, cmd_stripped, params, packe
     # For entry points not listed in the JSON file, they default to an EGLDisplay or nothing.
     if cmd_stripped not in ep_to_object:
         if display_param:
-            return "GetDisplayIfValid(%s)" % display_param
+            if (cmd_stripped == "eglDestroyContext"):
+                return display_param
+            else:
+                return "GetDisplayIfValid(%s)" % display_param
         return "nullptr"
 
     # We first handle a few special cases for certain type categories.
