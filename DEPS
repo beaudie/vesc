@@ -1017,7 +1017,7 @@ deps = {
       'packages': [
         {
             'package': 'angle/traces/blade_and_soul_revolution',
-            'version': 'version:1',
+            'version': 'version:2',
         },
       ],
       'dep_type': 'cipd',
