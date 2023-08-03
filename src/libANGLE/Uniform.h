@@ -65,7 +65,6 @@ struct LinkedUniform
     LinkedUniform();
     LinkedUniform(GLenum typeIn,
                   GLenum precisionIn,
-                  const std::string &nameIn,
                   const std::vector<unsigned int> &arraySizesIn,
                   const int bindingIn,
                   const int offsetIn,
@@ -120,7 +119,7 @@ struct LinkedUniform
     bool findInfoByMappedName(const std::string &mappedFullName,
                               const sh::ShaderVariable **leafVar,
                               std::string *originalFullName) const;
-    bool isBuiltIn() const { return gl::IsBuiltInName(name); }
+    bool isBuiltIn() const { return mFixedSizeData.flagBits.isBuiltIn; }
 
     int parentArrayIndex() const
     {
@@ -158,10 +157,6 @@ struct LinkedUniform
     void save(BinaryOutputStream *stream) const;
     void load(BinaryInputStream *stream);
 
-    std::string name;
-    // Only used by GL backend
-    std::string mappedName;
-
     const UniformTypeInfo *typeInfo;
 
   private:
@@ -196,6 +191,7 @@ struct LinkedUniform
                 uint32_t isFragmentInOut : 1;
                 uint32_t texelFetchStaticUse : 1;
                 uint32_t isArray : 1;
+                uint32_t isBuiltIn : 1;
                 // Since we always flatten the uniform structure and arrays into one dimensional
                 // array, these should always false. They can be removed, but I keep it here for now
                 // just in case we need it in future.

@@ -490,12 +490,14 @@ angle::Result MTLGetMSL(const gl::Context *glContext,
     for (uint32_t textureIndex = 0; textureIndex < samplerBindings.size(); ++textureIndex)
     {
         const gl::SamplerBinding &samplerBinding = samplerBindings[textureIndex];
-        uint32_t uniformIndex = programState.getUniformIndexFromSamplerIndex(textureIndex);
-        const gl::LinkedUniform &samplerUniform = uniforms[uniformIndex];
-        bool isSamplerInStruct        = samplerUniform.name.find('.') != std::string::npos;
+        uint32_t uniformIndex          = programState.getUniformIndexFromSamplerIndex(textureIndex);
+        const std::string &uniformName = programState.getUniformNameByIndex(uniformIndex);
+        const std::string &uniformMappedName =
+            programState.getUniformMappedNameByIndex(uniformIndex);
+        bool isSamplerInStruct        = uniformName.find('.') != std::string::npos;
         std::string mappedSamplerName = isSamplerInStruct
-                                            ? MSLGetMappedSamplerName(samplerUniform.name)
-                                            : MSLGetMappedSamplerName(samplerUniform.mappedName);
+                                            ? MSLGetMappedSamplerName(uniformName)
+                                            : MSLGetMappedSamplerName(uniformMappedName);
         // These need to be prefixed later seperately
         if (isSamplerInStruct)
             structSamplers.insert(mappedSamplerName);
