@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "17cdea79_a1d7a823",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-03T20:37:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "503821ae_56470b46",
+      "range": {
+        "startLine": 442,
+        "startChar": 32,
+        "endLine": 442,
+        "endChar": 33
+      },
+      "revId": "cebe5de690353fb885812d48d54a76e3d87ecfac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3485ad82_602b1293",
@@ -54,6 +78,24 @@
       "writtenOn": "2023-08-03T14:06:04Z",
       "side": 1,
       "message": "Maybe a warning here that these should be memcpy-able?\n\nIt\u0027s small change already, but I suggest splitting the change that moves activeVariable to mFixedSizeData; so it can be easily reverted in case it confuses any *SAN runs or anything.",
+      "revId": "cebe5de690353fb885812d48d54a76e3d87ecfac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4195552_a6e97268",
+        "filename": "src/libANGLE/Uniform.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-03T20:37:39Z",
+      "side": 1,
+      "message": "Added comment for the warnning. Too much work to split into two CLs. Will deal with this in case of regression which is highly unlikely.",
+      "parentUuid": "3485ad82_602b1293",
       "revId": "cebe5de690353fb885812d48d54a76e3d87ecfac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
