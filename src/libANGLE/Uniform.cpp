@@ -55,23 +55,28 @@ LinkedUniform::LinkedUniform(GLenum typeIn,
                              const int bufferIndexIn,
                              const sh::BlockMemberInfo &blockInfoIn)
 {
-    type                          = typeIn;
-    precision                     = precisionIn;
-    imageUnitFormat               = GL_NONE;
-    location                      = locationIn;
-    binding                       = bindingIn;
-    offset                        = offsetIn;
-    bufferIndex                   = bufferIndexIn;
-    blockInfo                     = blockInfoIn;
-    id                            = 0;
-    flattenedOffsetInParentArrays = -1;
-    outerArraySizeProduct         = 1;
-    outerArrayOffset              = 0;
-    arraySize                     = arraySizesIn.empty() ? 1 : arraySizesIn[0];
+    type                  = typeIn;
+    precision             = precisionIn;
+    imageUnitFormat       = GL_NONE;
+    location              = locationIn;
+    binding               = bindingIn;
+    offset                = offsetIn;
+    bufferIndex           = bufferIndexIn;
+    blockInfo             = blockInfoIn;
+    id                    = 0;
+    parentArrayIndex      = 0;
+    outerArraySizeProduct = 1;
+    outerArrayOffset      = 0;
+    arraySize             = arraySizesIn.empty() ? 1 : arraySizesIn[0];
 
-    flagBitsAsUInt   = 0;
+    flagBitsAsUInt16 = 0;
     flagBits.isArray = !arraySizesIn.empty();
     ASSERT(arraySizesIn.size() <= 1);
+    // Ensure input data does not exceeds 16 bit
+    ASSERT(locationIn == location);
+    ASSERT(bufferIndexIn == bufferIndex);
+    ASSERT(offsetIn == offset);
+    ASSERT(bindingIn == binding);
 }
 
 LinkedUniform::LinkedUniform(const LinkedUniform &other)
@@ -84,23 +89,23 @@ LinkedUniform::LinkedUniform(const UsedUniform &usedUniform)
     ASSERT(!usedUniform.isArrayOfArrays());
     ASSERT(!usedUniform.isStruct());
 
-    type                          = usedUniform.type;
-    precision                     = usedUniform.precision;
-    imageUnitFormat               = usedUniform.imageUnitFormat;
-    location                      = usedUniform.location;
-    binding                       = usedUniform.binding;
-    offset                        = usedUniform.offset;
-    bufferIndex                   = usedUniform.bufferIndex;
-    blockInfo                     = usedUniform.blockInfo;
-    id                            = usedUniform.id;
-    flattenedOffsetInParentArrays = usedUniform.getFlattenedOffsetInParentArrays();
-    outerArraySizeProduct         = ArraySizeProduct(usedUniform.outerArraySizes);
-    outerArrayOffset              = usedUniform.outerArrayOffset;
-    arraySize                     = usedUniform.isArray() ? usedUniform.getArraySizeProduct() : 1u;
+    type                  = usedUniform.type;
+    precision             = usedUniform.precision;
+    imageUnitFormat       = usedUniform.imageUnitFormat;
+    location              = usedUniform.location;
+    binding               = usedUniform.binding;
+    offset                = usedUniform.offset;
+    bufferIndex           = usedUniform.bufferIndex;
+    blockInfo             = usedUniform.blockInfo;
+    id                    = usedUniform.id;
+    parentArrayIndex      = usedUniform.parentArrayIndex();
+    outerArraySizeProduct = ArraySizeProduct(usedUniform.outerArraySizes);
+    outerArrayOffset      = usedUniform.outerArrayOffset;
+    arraySize             = usedUniform.isArray() ? usedUniform.getArraySizeProduct() : 1u;
 
     activeVariable = usedUniform.activeVariable;
 
-    flagBitsAsUInt               = 0;
+    flagBitsAsUInt16             = 0;
     flagBits.staticUse           = usedUniform.staticUse;
     flagBits.active              = usedUniform.active;
     flagBits.rasterOrdered       = usedUniform.rasterOrdered;
@@ -109,6 +114,17 @@ LinkedUniform::LinkedUniform(const UsedUniform &usedUniform)
     flagBits.isFragmentInOut     = usedUniform.isFragmentInOut;
     flagBits.texelFetchStaticUse = usedUniform.texelFetchStaticUse;
     flagBits.isArray             = usedUniform.isArray();
+
+    // Ensure input data does not exceeds 16 bit
+    ASSERT(location == usedUniform.location);
+    ASSERT(bufferIndex == usedUniform.bufferIndex);
+    ASSERT(offset == usedUniform.offset);
+    ASSERT(binding == usedUniform.binding);
+    ASSERT(id == usedUniform.id);
+    ASSERT(parentArrayIndex == usedUniform.parentArrayIndex());
+    ASSERT(outerArraySizeProduct == ArraySizeProduct(usedUniform.outerArraySizes));
+    ASSERT(outerArrayOffset == usedUniform.outerArrayOffset);
+    ASSERT(!usedUniform.isArray() || arraySize == usedUniform.getArraySizeProduct());
 }
 
 LinkedUniform::~LinkedUniform() {}
