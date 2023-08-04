@@ -189,6 +189,30 @@
       },
       "revId": "9e781544cdfab236b1c829e42bb78a0152f3042d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6457395_6c68e359",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5898,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-04T00:49:08Z",
+      "side": 1,
+      "message": "Actually I think you are right, 0 means no restriction other than what required by image. VMA is calling image-\u003egetMemoryRequirements again in their code. So 0 is just fine.",
+      "parentUuid": "e89bbd9b_650b789f",
+      "range": {
+        "startLine": 5898,
+        "startChar": 8,
+        "endLine": 5898,
+        "endChar": 27
+      },
+      "revId": "9e781544cdfab236b1c829e42bb78a0152f3042d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
