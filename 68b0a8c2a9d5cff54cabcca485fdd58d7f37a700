@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c0f7e29_dd890d0a",
+        "filename": "DEPS",
+        "patchSetId": 2
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1237795
+      },
+      "writtenOn": "2023-08-04T16:19:43Z",
+      "side": 0,
+      "message": "This deps is no longer used.\nhttps://chromium-review.googlesource.com/c/chromium/src/+/4316345/1#message-ce3190d1e0cb6922bf2d86ad41f0c5dc213388eb\n\nIt was removed from chromium/src awhile ago the repo itself has not been updated in two years.\nhttps://chromium.googlesource.com/external/gob/android/platform/frameworks/support/browser/",
+      "range": {
+        "startLine": 286,
+        "startChar": 2,
+        "endLine": 286,
+        "endChar": 51
+      },
+      "revId": "68b0a8c2a9d5cff54cabcca485fdd58d7f37a700",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7633fccc_f1bc4a00",
+        "filename": "DEPS",
+        "patchSetId": 3
+      },
+      "lineNbr": 646,
+      "author": {
+        "id": 1237795
+      },
+      "writtenOn": "2023-08-04T16:19:43Z",
+      "side": 0,
+      "message": "git modules needs commit hashes",
+      "range": {
+        "startLine": 646,
+        "startChar": 80,
+        "endLine": 646,
+        "endChar": 95
+      },
+      "revId": "68b0a8c2a9d5cff54cabcca485fdd58d7f37a700",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
