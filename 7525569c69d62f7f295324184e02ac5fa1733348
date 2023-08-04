@@ -16,6 +16,29 @@
       "message": "Thanks",
       "revId": "7525569c69d62f7f295324184e02ac5fa1733348",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fff6833c_d6008aee",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 5900,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-04T17:56:22Z",
+      "side": 1,
+      "message": "Also just noticed this, not directly related to this CL: It is odd to remove bits from requiredFlags. As the name indicates, requiredFlags is the bits are *required*. If we can remove the bits, it means the bit is not required. If device local is not required, then we should not set the bit in requiredFlags.",
+      "range": {
+        "startLine": 5900,
+        "startChar": 0,
+        "endLine": 5900,
+        "endChar": 64
+      },
+      "revId": "7525569c69d62f7f295324184e02ac5fa1733348",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
