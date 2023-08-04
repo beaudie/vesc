@@ -200,10 +200,10 @@ void SaveUniforms(BinaryOutputStream *stream,
                   const std::vector<std::string> &uniformMappedNames)
 {
     stream->writeInt(uniforms.size());
-    for (const LinkedUniform &uniform : uniforms)
-    {
-        uniform.save(stream);
-    }
+    // LinkedUniform is a simple structure with fundamental data types, we can just do bulk save
+    // for performance.
+    stream->writeBytes(reinterpret_cast<const unsigned char *>(uniforms.data()),
+                       sizeof(LinkedUniform) * uniforms.size());
     for (const std::string &name : uniformNames)
     {
         stream->writeString(name);
@@ -221,10 +221,16 @@ void LoadUniforms(BinaryInputStream *stream,
     size_t uniformCount = stream->readInt<size_t>();
     ASSERT(uniforms->empty());
     uniforms->resize(uniformCount);
+    // LinkedUniform is a simple structure with fundamental data types, we can just do bulk load
+    // for performance.
+    stream->readBytes(reinterpret_cast<unsigned char *>(uniforms->data()),
+                      sizeof(LinkedUniform) * uniforms->size());
     for (size_t uniformIndex = 0; uniformIndex < uniformCount; ++uniformIndex)
     {
-        (*uniforms)[uniformIndex].load(stream);
+        (*uniforms)[uniformIndex].typeInfo =
+            &GetUniformTypeInfo((*uniforms)[uniformIndex].getType());
     }
+
     uniformNames->resize(uniformCount);
     for (size_t uniformIndex = 0; uniformIndex < uniformCount; ++uniformIndex)
     {
