@@ -5859,11 +5859,14 @@ VkResult ImageMemorySuballocator::allocateAndBindMemory(Context *context,
     bool allocateDedicatedMemory =
         memoryRequirements.size >= kImageSizeThresholdForDedicatedMemoryAllocation;
 
-    // Avoid device-local and host-visible combinations if possible.
-    uint32_t memoryTypeBits = memoryRequirements.memoryTypeBits;
-    if (requiredFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
+    // Avoid device-local and host-visible combinations if possible. If we prefer to allocate on a
+    // device-local memory, we add the related bit to the local required flags to prioritize it.
+    VkMemoryPropertyFlags localRequiredFlags = requiredFlags;
+    uint32_t memoryTypeBits                  = memoryRequirements.memoryTypeBits;
+    if (preferredFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)
     {
-        memoryTypeBits = GetMemoryTypeBitsExcludingHostVisible(renderer, requiredFlags,
+        localRequiredFlags |= VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+        memoryTypeBits = GetMemoryTypeBitsExcludingHostVisible(renderer, localRequiredFlags,
                                                                memoryRequirements.memoryTypeBits);
     }
 
@@ -5876,8 +5879,9 @@ VkResult ImageMemorySuballocator::allocateAndBindMemory(Context *context,
     do
     {
         result = vma::AllocateAndBindMemoryForImage(
-            allocator.getHandle(), &image->mHandle, requiredFlags, preferredFlags, memoryTypeBits,
-            allocateDedicatedMemory, &allocationOut->mHandle, memoryTypeIndexOut, sizeOut);
+            allocator.getHandle(), &image->mHandle, localRequiredFlags, preferredFlags,
+            memoryTypeBits, allocateDedicatedMemory, &allocationOut->mHandle, memoryTypeIndexOut,
+            sizeOut);
 
         if (result != VK_SUCCESS)
         {
@@ -5906,7 +5910,6 @@ VkResult ImageMemorySuballocator::allocateAndBindMemory(Context *context,
     // the device from all other memory types, although it will result in performance penalty.
     if (result != VK_SUCCESS)
     {
-        requiredFlags &= (~VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
         memoryTypeBits = memoryRequirements.memoryTypeBits;
         result         = vma::AllocateAndBindMemoryForImage(
             allocator.getHandle(), &image->mHandle, requiredFlags, preferredFlags, memoryTypeBits,
