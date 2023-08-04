@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72fb9b9c_c892adc7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-04T21:55:23Z",
+      "side": 1,
+      "message": "In the last patch, there were failures due to the `BindingsBenchmark` perf test. It was originally using a type index with the host-visible bit. However, after this change, it tried allocating from an index with the protected bit, although it was not required. which led to VVL errors. I added an update to ignore that bit if it is not required. The test is now using the device-local-only type index.",
+      "revId": "27ff04311a868704ec9332cb2a0b3aa61e925f55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

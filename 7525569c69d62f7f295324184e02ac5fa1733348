@@ -87,6 +87,30 @@
       },
       "revId": "7525569c69d62f7f295324184e02ac5fa1733348",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "012e0daa_b666df2b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 5900,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-04T21:55:23Z",
+      "side": 1,
+      "message": "Thanks. I will do it in a follow-up CL.",
+      "parentUuid": "267cdb55_d9401f03",
+      "range": {
+        "startLine": 5900,
+        "startChar": 0,
+        "endLine": 5900,
+        "endChar": 64
+      },
+      "revId": "7525569c69d62f7f295324184e02ac5fa1733348",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
