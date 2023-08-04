@@ -42,7 +42,7 @@ class WindowSurfaceVkWayland : public WindowSurfaceVk
                                             FramebufferAttachmentRenderTarget **rtOut) override;
 
   private:
-    angle::Result createSurfaceVk(vk::Context *context, gl::Extents *extentsOut) override;
+    angle::Result createSurfaceVk(vk::Context *context) override;
     angle::Result getCurrentWindowSize(vk::Context *context, gl::Extents *extentsOut) override;
 
     wl_display *mWaylandDisplay;

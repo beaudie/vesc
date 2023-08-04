@@ -648,7 +648,7 @@ class RefCounted : angle::NonCopyable
   public:
     RefCounted() : mRefCount(0) {}
     explicit RefCounted(T &&newObject) : mRefCount(0), mObject(std::move(newObject)) {}
-    ~RefCounted() { ASSERT(mRefCount == 0 && !mObject.valid()); }
+    ~RefCounted() { assertNoReference(); }
 
     RefCounted(RefCounted &&copy) : mRefCount(copy.mRefCount), mObject(std::move(copy.mObject))
     {
@@ -680,10 +680,28 @@ class RefCounted : angle::NonCopyable
     T &get() { return mObject; }
     const T &get() const { return mObject; }
 
-    // A debug function to validate that the reference count is as expected used for assertions.
+    // A debug function to validate that the reference count is as expected (used for assertions).
     bool isRefCountAsExpected(uint32_t expectedRefCount) { return mRefCount == expectedRefCount; }
 
   private:
+    template <
+        typename T2                                                                         = T,
+        std::enable_if_t<!std::is_pointer<T2>::value && !std::is_integral<T2>::value, bool> = true>
+    void assertNoReference()
+    {
+        ASSERT(mRefCount == 0 && !mObject.valid());
+    }
+    template <typename T2 = T, std::enable_if_t<std::is_pointer<T2>::value, bool> = true>
+    void assertNoReference()
+    {
+        ASSERT(mRefCount == 0 && mObject == nullptr);
+    }
+    template <typename T2 = T, std::enable_if_t<std::is_integral<T2>::value, bool> = true>
+    void assertNoReference()
+    {
+        ASSERT(mRefCount == 0 && mObject == 0);
+    }
+
     uint32_t mRefCount;
     T mObject;
 };

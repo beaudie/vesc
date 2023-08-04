@@ -332,23 +332,8 @@ constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
     // being accessed. http://anglebug.com/6725
     {
         "SYNC-HAZARD-READ-AFTER-WRITE",
-        "vkCmdDrawIndexed: Hazard READ_AFTER_WRITE for vertex",
+        "Hazard READ_AFTER_WRITE for vertex",
         "usage: SYNC_VERTEX_ATTRIBUTE_INPUT_VERTEX_ATTRIBUTE_READ",
-    },
-    {
-        "SYNC-HAZARD-READ-AFTER-WRITE",
-        "vkCmdDrawIndexedIndirect: Hazard READ_AFTER_WRITE for vertex",
-        "usage: SYNC_VERTEX_ATTRIBUTE_INPUT_VERTEX_ATTRIBUTE_READ",
-    },
-    {
-        "SYNC-HAZARD-READ-AFTER-WRITE",
-        "vkCmdDrawIndirect: Hazard READ_AFTER_WRITE for vertex",
-        "usage: SYNC_VERTEX_ATTRIBUTE_INPUT_VERTEX_ATTRIBUTE_READ",
-    },
-    {
-        "SYNC-HAZARD-READ-AFTER-WRITE",
-        "vkCmdDrawIndexedIndirect: Hazard READ_AFTER_WRITE for index",
-        "usage: SYNC_INDEX_INPUT_INDEX_READ",
     },
     {
         "SYNC-HAZARD-WRITE-AFTER-READ",

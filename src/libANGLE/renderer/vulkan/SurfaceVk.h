@@ -294,6 +294,7 @@ class WindowSurfaceVk : public SurfaceVk
 
     egl::Error initialize(const egl::Display *display) override;
 
+    egl::Error makeCurrent(const gl::Context *context) override;
     egl::Error unMakeCurrent(const gl::Context *context) override;
 
     angle::Result getAttachmentRenderTarget(const gl::Context *context,
@@ -323,8 +324,6 @@ class WindowSurfaceVk : public SurfaceVk
     // width and height can change with client window resizing
     EGLint getWidth() const override;
     EGLint getHeight() const override;
-    EGLint getRotatedWidth() const;
-    EGLint getRotatedHeight() const;
     // Note: windows cannot be resized on Android.  The approach requires
     // calling vkGetPhysicalDeviceSurfaceCapabilitiesKHR.  However, that is
     // expensive; and there are troublesome timing issues for other parts of
@@ -421,14 +420,14 @@ class WindowSurfaceVk : public SurfaceVk
     VkBool32 mSupportsProtectedSwapchain;
 
   private:
-    virtual angle::Result createSurfaceVk(vk::Context *context, gl::Extents *extentsOut)      = 0;
+    virtual angle::Result createSurfaceVk(vk::Context *context) = 0;
+    virtual void destroySurfaceVk(vk::Context *context);
     virtual angle::Result getCurrentWindowSize(vk::Context *context, gl::Extents *extentsOut) = 0;
 
     angle::Result initializeImpl(DisplayVk *displayVk);
-    angle::Result recreateSwapchain(ContextVk *contextVk, const gl::Extents &extents);
-    angle::Result createSwapChain(vk::Context *context,
-                                  const gl::Extents &extents,
-                                  VkSwapchainKHR oldSwapchain);
+    angle::Result initializeOnFirstMakeCurrent(DisplayVk *displayVk);
+    angle::Result recreateSwapchain(ContextVk *contextVk);
+    angle::Result createSwapchain(vk::Context *context, VkSwapchainKHR oldSwapchain);
     angle::Result queryAndAdjustSurfaceCaps(ContextVk *contextVk,
                                             VkSurfaceCapabilitiesKHR *surfaceCaps);
     angle::Result checkForOutOfDateSwapchain(ContextVk *contextVk,
@@ -495,6 +494,7 @@ class WindowSurfaceVk : public SurfaceVk
     VkSurfaceTransformFlagBitsKHR mPreTransform;
     VkSurfaceTransformFlagBitsKHR mEmulatedPreTransform;
     VkCompositeAlphaFlagBitsKHR mCompositeAlpha;
+    gl::Extents mSurfaceSize;
 
     // Present modes that are compatible with the current mode.  If mDesiredSwapchainPresentMode is
     // in this list, mode switch can happen without the need to recreate the swapchain.  Fast
