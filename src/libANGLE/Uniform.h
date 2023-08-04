@@ -88,26 +88,21 @@ struct LinkedUniform
     bool isFragmentInOut() const { return flagBits.isFragmentInOut; }
 
     bool isArray() const { return flagBits.isArray; }
-    unsigned int getBasicTypeElementCount() const
+    uint16_t getBasicTypeElementCount() const
     {
         ASSERT(flagBits.isArray || arraySize == 1u);
         return arraySize;
     }
 
     GLenum getType() const { return type; }
-    unsigned int getOuterArrayOffset() const { return outerArrayOffset; }
-    unsigned int getOuterArraySizeProduct() const { return outerArraySizeProduct; }
-    int getBinding() const { return binding; }
-    int getOffset() const { return offset; }
+    uint16_t getOuterArrayOffset() const { return outerArrayOffset; }
+    uint16_t getOuterArraySizeProduct() const { return outerArraySizeProduct; }
+    int16_t getBinding() const { return binding; }
+    int16_t getOffset() const { return offset; }
     const sh::BlockMemberInfo &getBlockInfo() const { return blockInfo; }
-    int getBufferIndex() const { return bufferIndex; }
-    int getLocation() const { return location; }
+    int16_t getBufferIndex() const { return bufferIndex; }
+    int16_t getLocation() const { return location; }
     GLenum getImageUnitFormat() const { return imageUnitFormat; }
-
-    int parentArrayIndex() const
-    {
-        return flattenedOffsetInParentArrays != -1 ? flattenedOffsetInParentArrays : 0;
-    }
 
     ShaderType getFirstActiveShaderType() const
     {
@@ -129,32 +124,35 @@ struct LinkedUniform
     GLenum type;
     GLenum precision;
     GLenum imageUnitFormat;
-    int location;
-    int binding;
-    int offset;
-    uint32_t id;
-    int flattenedOffsetInParentArrays;
-    int bufferIndex;
-    unsigned int outerArraySizeProduct;
-    unsigned int outerArrayOffset;
-    unsigned int arraySize;
 
+    // maxUniformVectorsCount is 4K due to we clamp maxUniformBlockSize to 64KB. All of these
+    // variable should be enough to pack into 16 bits to reduce the size of mUniforms.
+    int16_t location;
+    int16_t binding;
+    int16_t offset;
+    uint16_t id;
+    int16_t bufferIndex;
+    uint16_t outerArraySizeProduct;
+    uint16_t outerArrayOffset;
+    uint16_t arraySize;
+
+    uint16_t parentArrayIndex;
     union
     {
         struct
         {
-            uint32_t staticUse : 1;
-            uint32_t active : 1;
-            uint32_t rasterOrdered : 1;
-            uint32_t readonly : 1;
-            uint32_t writeonly : 1;
-            uint32_t isFragmentInOut : 1;
-            uint32_t texelFetchStaticUse : 1;
-            uint32_t isArray : 1;
-            uint32_t padding : 24;
+            uint16_t staticUse : 1;
+            uint16_t active : 1;
+            uint16_t rasterOrdered : 1;
+            uint16_t readonly : 1;
+            uint16_t writeonly : 1;
+            uint16_t isFragmentInOut : 1;
+            uint16_t texelFetchStaticUse : 1;
+            uint16_t isArray : 1;
+            uint16_t padding : 8;
         } flagBits;
 
-        uint32_t flagBitsAsUInt;
+        uint16_t flagBitsAsUInt16;
     };
 };
 
