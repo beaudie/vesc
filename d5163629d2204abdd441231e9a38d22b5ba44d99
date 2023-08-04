@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0eefa406_28c64f6a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-08-04T00:17:07Z",
+      "side": 1,
+      "message": "Some kind of weird infra failure on that mac-angle-chromium trybot.",
+      "revId": "d5163629d2204abdd441231e9a38d22b5ba44d99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
