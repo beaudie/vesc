@@ -38,6 +38,9 @@ DisplayImpl *CreateVulkanSimpleDisplay(const egl::DisplayState &state);
 
 bool IsVulkanHeadlessDisplayAvailable();
 DisplayImpl *CreateVulkanHeadlessDisplay(const egl::DisplayState &state);
+
+bool IsVulkanSurfacelessDisplayAvailable();
+DisplayImpl *CreateVulkanSurfacelessDisplay(const egl::DisplayState &state);
 #endif  // defined(ANGLE_PLATFORM_LINUX)
 
 #if defined(ANGLE_PLATFORM_ANDROID)
