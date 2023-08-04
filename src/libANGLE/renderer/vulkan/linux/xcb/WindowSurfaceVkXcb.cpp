@@ -20,7 +20,7 @@ WindowSurfaceVkXcb::WindowSurfaceVkXcb(const egl::SurfaceState &surfaceState,
     : WindowSurfaceVk(surfaceState, window), mXcbConnection(conn)
 {}
 
-angle::Result WindowSurfaceVkXcb::createSurfaceVk(vk::Context *context, gl::Extents *extentsOut)
+angle::Result WindowSurfaceVkXcb::createSurfaceVk(vk::Context *context)
 {
     VkXcbSurfaceCreateInfoKHR createInfo = {};
 
@@ -31,7 +31,7 @@ angle::Result WindowSurfaceVkXcb::createSurfaceVk(vk::Context *context, gl::Exte
     ANGLE_VK_TRY(context, vkCreateXcbSurfaceKHR(context->getRenderer()->getInstance(), &createInfo,
                                                 nullptr, &mSurface));
 
-    return getCurrentWindowSize(context, extentsOut);
+    return angle::Result::Continue;
 }
 
 angle::Result WindowSurfaceVkXcb::getCurrentWindowSize(vk::Context *context,
