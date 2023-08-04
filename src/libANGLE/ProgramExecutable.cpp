@@ -1658,9 +1658,9 @@ void ProgramExecutable::linkSamplerAndImageBindings(GLuint *combinedImageUniform
         {
             // The arrays of arrays are flattened to arrays, it needs to record the array offset for
             // the correct binding image unit.
-            mImageBindings.emplace_back(ImageBinding(
-                imageUniform.getBinding() + imageUniform.parentArrayIndex() * arraySize,
-                imageUniform.getBasicTypeElementCount(), textureType));
+            mImageBindings.emplace_back(
+                ImageBinding(imageUniform.getBinding() + imageUniform.parentArrayIndex * arraySize,
+                             imageUniform.getBasicTypeElementCount(), textureType));
         }
 
         *combinedImageUniforms += imageUniform.activeShaderCount() * arraySize;
@@ -1703,14 +1703,14 @@ bool ProgramExecutable::linkAtomicCounterBuffers(const Context *context, InfoLog
         uniform.blockInfo.isRowMajorMatrix = false;
 
         bool found = false;
-        for (unsigned int bufferIndex = 0; bufferIndex < getActiveAtomicCounterBufferCount();
+        for (uint16_t bufferIndex = 0; bufferIndex < getActiveAtomicCounterBufferCount();
              ++bufferIndex)
         {
             auto &buffer = mAtomicCounterBuffers[bufferIndex];
             if (buffer.binding == uniform.getBinding())
             {
                 buffer.memberIndexes.push_back(index);
-                uniform.bufferIndex = bufferIndex;
+                uniform.bufferIndex = static_cast<int16_t>(bufferIndex);
                 found               = true;
                 buffer.unionReferencesWith(uniform.activeVariable);
                 break;
@@ -1723,7 +1723,7 @@ bool ProgramExecutable::linkAtomicCounterBuffers(const Context *context, InfoLog
             atomicCounterBuffer.memberIndexes.push_back(index);
             atomicCounterBuffer.unionReferencesWith(uniform.activeVariable);
             mAtomicCounterBuffers.push_back(atomicCounterBuffer);
-            uniform.bufferIndex = static_cast<int>(getActiveAtomicCounterBufferCount() - 1);
+            uniform.bufferIndex = static_cast<int16_t>(getActiveAtomicCounterBufferCount() - 1);
         }
     }
 
