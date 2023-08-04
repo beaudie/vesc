@@ -30,6 +30,7 @@ FunctionsEGLDL::~FunctionsEGLDL() {}
 
 egl::Error FunctionsEGLDL::initialize(EGLAttrib platformType,
                                       EGLNativeDisplayType nativeDisplay,
+                                      const egl::AttributeMap &displayAttributes,
                                       const char *libName,
                                       void *eglHandle)
 {
@@ -57,7 +58,7 @@ egl::Error FunctionsEGLDL::initialize(EGLAttrib platformType,
         return egl::EglNotInitialized() << "Could not find eglGetProcAddress";
     }
 
-    return FunctionsEGL::initialize(platformType, nativeDisplay);
+    return FunctionsEGL::initialize(platformType, nativeDisplay, displayAttributes);
 }
 
 void *FunctionsEGLDL::getProcAddress(const char *name) const
