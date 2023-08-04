@@ -1912,13 +1912,15 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     std::vector<VkPhysicalDevice> physicalDevices(physicalDeviceCount);
     ANGLE_VK_TRY(displayVk, vkEnumeratePhysicalDevices(mInstance, &physicalDeviceCount,
                                                        physicalDevices.data()));
-    uint32_t preferredVendorId =
+    uint32_t systemDeviceIDHigh =
         static_cast<uint32_t>(attribs.get(EGL_PLATFORM_ANGLE_DEVICE_ID_HIGH_ANGLE, 0));
-    uint32_t preferredDeviceId =
+    uint32_t systemDeviceIDLow =
         static_cast<uint32_t>(attribs.get(EGL_PLATFORM_ANGLE_DEVICE_ID_LOW_ANGLE, 0));
-    ChoosePhysicalDevice(vkGetPhysicalDeviceProperties, physicalDevices, mEnabledICD,
-                         preferredVendorId, preferredDeviceId, &mPhysicalDevice,
-                         &mPhysicalDeviceProperties);
+    uint64_t systemDeviceID =
+        angle::GetSystemDeviceIdFromParts(systemDeviceIDHigh, systemDeviceIDLow);
+    ChoosePhysicalDevice(vkGetPhysicalDeviceProperties, vkGetPhysicalDeviceProperties2KHR,
+                         vkEnumerateDeviceExtensionProperties, physicalDevices, mEnabledICD,
+                         systemDeviceID, &mPhysicalDevice, &mPhysicalDeviceProperties);
 
     // The device version that is assumed by ANGLE is the minimum of the actual device version and
     // the highest it's allowed to use.
