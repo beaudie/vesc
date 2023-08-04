@@ -2129,8 +2129,7 @@ static ClientExtensions GenerateClientExtensions()
 #endif
 
 #if defined(ANGLE_ENABLE_VULKAN)
-    extensions.platformANGLEVulkan   = true;
-    extensions.platformANGLEDeviceId = true;
+    extensions.platformANGLEVulkan = true;
 #endif
 
 #if defined(ANGLE_ENABLE_SWIFTSHADER)
@@ -2160,6 +2159,10 @@ static ClientExtensions GenerateClientExtensions()
 
 #if defined(ANGLE_ENABLE_METAL)
     extensions.displayPowerPreferenceANGLE = true;
+#endif
+
+#if defined(ANGLE_PLATFORM_LINUX) && (defined(ANGLE_ENABLE_OPENGL) || defined(ANGLE_ENABLE_VULKAN))
+    extensions.platformANGLEDeviceId = true;
 #endif
 
     extensions.clientGetAllProcAddresses = true;
