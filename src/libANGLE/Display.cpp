@@ -534,12 +534,12 @@ rx::DisplayImpl *CreateDisplayFromAttribs(EGLAttrib displayType,
             {
                 impl = rx::CreateVulkanHeadlessDisplay(state);
             }
-            else
-            {
-                // Not supported creation type on vulkan display, fail display creation.
-                impl = nullptr;
-            }
 #        endif
+            // Fallback to "offscreen" display if no other Display implementation is supported.
+            if (!impl && rx::IsVulkanOffscreenDisplayAvailable())
+            {
+                impl = rx::CreateVulkanOffscreenDisplay(state);
+            }
             break;
 #    elif defined(ANGLE_PLATFORM_ANDROID)
             if (rx::IsVulkanAndroidDisplayAvailable())
