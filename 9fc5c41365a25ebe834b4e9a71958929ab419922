@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7893c85_c0f0eb87",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2023-08-04T20:10:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "71d84430_8a468048",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 23
+      },
+      "revId": "9fc5c41365a25ebe834b4e9a71958929ab419922",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e37f39df_8c915d5f",
@@ -37,6 +61,24 @@
       "writtenOn": "2023-08-04T19:58:19Z",
       "side": 1,
       "message": "can you add a simple sanity test?",
+      "revId": "9fc5c41365a25ebe834b4e9a71958929ab419922",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fbb5bbb5_3b32ab4c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2023-08-04T20:10:25Z",
+      "side": 1,
+      "message": "The initial test we used was quite involved. \nCreate VkImage\nexport as FD\nCreate gl Context\nCreate gl Texture\nupload fd as memory for texture\nAngle checks required mem vs the mam of the FD. That\u0027s were the error comes from.\nTo catch differences in tilingMode, would probably need similar what vulkan calculates for each case OPTIMAL vs TILING, otherwise you would be guessing the padding or compression. I\u0027m not sure if host memory is supported or not.",
+      "parentUuid": "e37f39df_8c915d5f",
       "revId": "9fc5c41365a25ebe834b4e9a71958929ab419922",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
