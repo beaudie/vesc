@@ -29,8 +29,7 @@ WindowSurfaceVkMac::~WindowSurfaceVkMac()
     [mMetalLayer release];
 }
 
-angle::Result WindowSurfaceVkMac::createSurfaceVk(vk::Context *context, gl::Extents *extentsOut)
-    API_AVAILABLE(macosx(10.11))
+angle::Result WindowSurfaceVkMac::createSurfaceVk(vk::Context *context) API_AVAILABLE(macosx(10.11))
 {
     mMetalDevice = MTLCreateSystemDefaultDevice();
 
@@ -56,7 +55,7 @@ angle::Result WindowSurfaceVkMac::createSurfaceVk(vk::Context *context, gl::Exte
     ANGLE_VK_TRY(context, vkCreateMetalSurfaceEXT(context->getRenderer()->getInstance(),
                                                   &createInfo, nullptr, &mSurface));
 
-    return getCurrentWindowSize(context, extentsOut);
+    return angle::Result::Continue;
 }
 
 angle::Result WindowSurfaceVkMac::getCurrentWindowSize(vk::Context *context,
