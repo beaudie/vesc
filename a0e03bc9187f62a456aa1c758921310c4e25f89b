@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a54907e2_a7835f90",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 5855,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-04T01:33:30Z",
+      "side": 1,
+      "message": "if(requiredFlagBits \u0026 DEVICE_LOCAL)\n{\n    // Try to avoid deviceLocal and host visible combinations.\n    uint32_t memoryTypeBits \u003d\n        GetMemoryTypeBitsExcludingHostVisible(renderer, memoryRequirements.memoryTypeBits);\n}",
+      "range": {
+        "startLine": 5853,
+        "startChar": 4,
+        "endLine": 5855,
+        "endChar": 0
+      },
+      "revId": "a0e03bc9187f62a456aa1c758921310c4e25f89b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
