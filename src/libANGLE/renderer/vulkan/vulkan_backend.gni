@@ -154,6 +154,8 @@ if (is_linux || is_chromeos) {
     "linux/headless/DisplayVkHeadless.h",
     "linux/headless/WindowSurfaceVkHeadless.cpp",
     "linux/headless/WindowSurfaceVkHeadless.h",
+    "linux/surfaceless/DisplayVkSurfaceless.cpp",
+    "linux/surfaceless/DisplayVkSurfaceless.h",
   ]
 }
 
