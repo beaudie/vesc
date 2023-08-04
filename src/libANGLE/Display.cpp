@@ -2141,6 +2141,10 @@ static ClientExtensions GenerateClientExtensions()
     extensions.displayPowerPreferenceANGLE = true;
 #endif
 
+#if defined(ANGLE_PLATFORM_LINUX) && defined(ANGLE_ENABLE_OPENGL)
+    extensions.platformANGLEDeviceId = true;
+#endif
+
     extensions.clientGetAllProcAddresses = true;
     extensions.debug                     = true;
     extensions.featureControlANGLE       = true;
