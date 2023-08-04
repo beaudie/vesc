@@ -1658,9 +1658,9 @@ void ProgramExecutable::linkSamplerAndImageBindings(GLuint *combinedImageUniform
         {
             // The arrays of arrays are flattened to arrays, it needs to record the array offset for
             // the correct binding image unit.
-            mImageBindings.emplace_back(ImageBinding(
-                imageUniform.getBinding() + imageUniform.parentArrayIndex() * arraySize,
-                imageUniform.getBasicTypeElementCount(), textureType));
+            mImageBindings.emplace_back(
+                ImageBinding(imageUniform.getBinding() + imageUniform.parentArrayIndex * arraySize,
+                             imageUniform.getBasicTypeElementCount(), textureType));
         }
 
         *combinedImageUniforms += imageUniform.activeShaderCount() * arraySize;
