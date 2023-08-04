@@ -1264,7 +1264,7 @@ void ProgramMtl::setUniformImpl(GLint location, GLsizei count, const T *v, GLenu
         return;
     }
 
-    if (linkedUniform.typeInfo->type == entryPointType)
+    if (linkedUniform.type == entryPointType)
     {
         for (gl::ShaderType shaderType : gl::kAllGLES2ShaderTypes)
         {
@@ -1277,9 +1277,9 @@ void ProgramMtl::setUniformImpl(GLint location, GLsizei count, const T *v, GLenu
                 continue;
             }
 
-            const GLint componentCount    = (GLint)linkedUniform.typeInfo->componentCount;
-            const GLint baseComponentSize = (GLint)mtl::GetMetalSizeForGLType(
-                gl::VariableComponentType(linkedUniform.typeInfo->type));
+            const GLint componentCount = (GLint)linkedUniform.getElementComponents();
+            const GLint baseComponentSize =
+                (GLint)mtl::GetMetalSizeForGLType(gl::VariableComponentType(linkedUniform.type));
             UpdateDefaultUniformBlockWithElementSize(count, locationInfo.arrayIndex, componentCount,
                                                      v, baseComponentSize, layoutInfo,
                                                      &uniformBlock.uniformData);
@@ -1299,9 +1299,9 @@ void ProgramMtl::setUniformImpl(GLint location, GLsizei count, const T *v, GLenu
                 continue;
             }
 
-            const GLint componentCount = linkedUniform.typeInfo->componentCount;
+            const GLint componentCount = linkedUniform.getElementComponents();
 
-            ASSERT(linkedUniform.typeInfo->type == gl::VariableBoolVectorType(entryPointType));
+            ASSERT(linkedUniform.type == gl::VariableBoolVectorType(entryPointType));
 
             GLint initialArrayOffset =
                 locationInfo.arrayIndex * layoutInfo.arrayStride + layoutInfo.offset;
@@ -1337,10 +1337,11 @@ void ProgramMtl::getUniformImpl(GLint location, T *v, GLenum entryPointType) con
     const DefaultUniformBlock &uniformBlock = mDefaultUniformBlocks[shaderType];
     const sh::BlockMemberInfo &layoutInfo   = uniformBlock.uniformLayout[location];
 
-    ASSERT(linkedUniform.typeInfo->componentType == entryPointType ||
-           linkedUniform.typeInfo->componentType == gl::VariableBoolVectorType(entryPointType));
+    ASSERT(gl::GetUniformTypeInfo(linkedUniform.type).componentType == entryPointType ||
+           gl::GetUniformTypeInfo(linkedUniform.type).componentType ==
+               gl::VariableBoolVectorType(entryPointType));
     const GLint baseComponentSize =
-        (GLint)mtl::GetMetalSizeForGLType(gl::VariableComponentType(linkedUniform.typeInfo->type));
+        (GLint)mtl::GetMetalSizeForGLType(gl::VariableComponentType(linkedUniform.type));
 
     if (gl::IsMatrixType(linkedUniform.getType()))
     {
@@ -1355,9 +1356,9 @@ void ProgramMtl::getUniformImpl(GLint location, T *v, GLenum entryPointType) con
     {
         bool bVals[4] = {0};
         ReadFromDefaultUniformBlockWithElementSize(
-            linkedUniform.typeInfo->componentCount, locationInfo.arrayIndex, bVals,
-            baseComponentSize, layoutInfo, &uniformBlock.uniformData);
-        for (int bCol = 0; bCol < linkedUniform.typeInfo->componentCount; ++bCol)
+            linkedUniform.getElementComponents(), locationInfo.arrayIndex, bVals, baseComponentSize,
+            layoutInfo, &uniformBlock.uniformData);
+        for (int bCol = 0; bCol < linkedUniform.getElementComponents(); ++bCol)
         {
             unsigned int data = bVals[bCol];
             *(v + bCol)       = static_cast<T>(data);
@@ -1367,7 +1368,7 @@ void ProgramMtl::getUniformImpl(GLint location, T *v, GLenum entryPointType) con
     {
 
         assert(baseComponentSize == sizeof(T));
-        ReadFromDefaultUniformBlockWithElementSize(linkedUniform.typeInfo->componentCount,
+        ReadFromDefaultUniformBlockWithElementSize(linkedUniform.getElementComponents(),
                                                    locationInfo.arrayIndex, v, baseComponentSize,
                                                    layoutInfo, &uniformBlock.uniformData);
     }
