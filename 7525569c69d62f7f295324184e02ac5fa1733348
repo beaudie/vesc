@@ -63,6 +63,30 @@
       },
       "revId": "7525569c69d62f7f295324184e02ac5fa1733348",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "267cdb55_d9401f03",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 5900,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-04T20:49:42Z",
+      "side": 1,
+      "message": "Understood. What I am saying is that the API contract is broken here: at line 5835, caller passed in requiredFlags with DEICE_LOCAL_BIT, but we allocated memory without the bit, that is wrong. The correct way to do this is have the caller set DEICE_LOCAL_BIT in the preferredFlags and leave requiredFlags being 0, since it does not require to be device local. Then at line 5869, you can restrict it to DEVICE_LOCAL (you can either use a localRequiredFlags, or use memoryTypeBits to restrict it to device local), and if it failed, you try garbage clean up and then once come to here, you restrict it to exclude device local. That way it should still do what you want, but consistent to the API. You can do with a follow up CL since it is not directly tie to this CL.",
+      "parentUuid": "6d99fee0_d47b6666",
+      "range": {
+        "startLine": 5900,
+        "startChar": 0,
+        "endLine": 5900,
+        "endChar": 64
+      },
+      "revId": "7525569c69d62f7f295324184e02ac5fa1733348",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
