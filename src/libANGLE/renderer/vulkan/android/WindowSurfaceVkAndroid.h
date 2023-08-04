@@ -21,7 +21,8 @@ class WindowSurfaceVkAndroid : public WindowSurfaceVk
     WindowSurfaceVkAndroid(const egl::SurfaceState &surfaceState, EGLNativeWindowType window);
 
   private:
-    angle::Result createSurfaceVk(vk::Context *context, gl::Extents *extentsOut) override;
+    angle::Result createSurfaceVk(vk::Context *context) override;
+    void destroySurfaceVk(vk::Context *context) override;
     angle::Result getCurrentWindowSize(vk::Context *context, gl::Extents *extentsOut) override;
 };
 
