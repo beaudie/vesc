@@ -27,11 +27,14 @@ if (angle_has_build) {
 }
 
 declare_args() {
-  # Use the PCI lib to collect GPU information on Linux.
+  # Use libdrm to collect GPU information on Linux.
+  use_libdrm = is_linux && angle_has_build
+
+  # Use the PCI lib to collect GPU information on Linux as a fallback.
   use_libpci = (is_linux || is_chromeos) && (angle_use_x11 || use_ozone) &&
                angle_has_build
 
-  # Enable using Vulkan to collect system info as a fallback.
+  # Enable using Vulkan to collect system info as another fallback.
   angle_enable_vulkan_system_info = false
 
   # Link in system libGL, to work with apitrace.  See doc/DebuggingTips.md.
@@ -658,6 +661,18 @@ angle_static_library("angle_gpu_info_util") {
     sources += libangle_gpu_info_util_libpci_sources
     defines += [ "GPU_INFO_USE_LIBPCI" ]
     libs += [ "pci" ]
+  }
+
+  if (use_libdrm) {
+    sources += libangle_gpu_info_util_libdrm_sources
+    defines += [ "GPU_INFO_USE_LIBDRM" ]
+
+    # When build_with_chromium=true we need to include "//build/config/linux/libdrm" while it's beneficial to be more specific with standalone ANGLE, especially when it comes to including it as a dependency in other projects (such as Dawn).
+    if (build_with_chromium) {
+      deps += [ "//build/config/linux/libdrm" ]
+    } else {
+      deps += [ "src/third_party/libdrm" ]
+    }
   }
 
   if (is_apple) {
