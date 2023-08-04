@@ -93,6 +93,30 @@
       },
       "revId": "9e781544cdfab236b1c829e42bb78a0152f3042d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc8a0649_48c2c3ea",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5898,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-04T00:12:46Z",
+      "side": 1,
+      "message": "Right, but isn\u0027t that violates the memoryRequirements returned from line 5851?\n    image-\u003egetMemoryRequirements(renderer-\u003egetDevice(), \u0026memoryRequirements);",
+      "parentUuid": "8515f6d4_4a56195c",
+      "range": {
+        "startLine": 5898,
+        "startChar": 8,
+        "endLine": 5898,
+        "endChar": 27
+      },
+      "revId": "9e781544cdfab236b1c829e42bb78a0152f3042d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
