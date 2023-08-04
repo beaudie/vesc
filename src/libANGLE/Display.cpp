@@ -438,6 +438,11 @@ rx::DisplayImpl *CreateDisplayFromAttribs(EGLAttrib displayType,
                 break;
             }
 #        endif
+            if (platformType == EGL_PLATFORM_SURFACELESS_MESA)
+            {
+                impl = new rx::DisplayEGL(state);
+                break;
+            }
             break;
 
 #    elif defined(ANGLE_PLATFORM_ANDROID)
@@ -484,6 +489,11 @@ rx::DisplayImpl *CreateDisplayFromAttribs(EGLAttrib displayType,
                     break;
                 }
 #        endif
+                if (platformType == EGL_PLATFORM_SURFACELESS_MESA)
+                {
+                    impl = new rx::DisplayEGL(state);
+                    break;
+                }
             }
 #    elif defined(ANGLE_PLATFORM_ANDROID)
             impl = new rx::DisplayAndroid(state);
@@ -535,18 +545,21 @@ rx::DisplayImpl *CreateDisplayFromAttribs(EGLAttrib displayType,
                 rx::IsVulkanSimpleDisplayAvailable())
             {
                 impl = rx::CreateVulkanSimpleDisplay(state);
+                break;
             }
-            else if (platformType == EGL_PLATFORM_VULKAN_DISPLAY_MODE_HEADLESS_ANGLE &&
-                     rx::IsVulkanHeadlessDisplayAvailable())
+            if (platformType == EGL_PLATFORM_VULKAN_DISPLAY_MODE_HEADLESS_ANGLE &&
+                rx::IsVulkanHeadlessDisplayAvailable())
             {
                 impl = rx::CreateVulkanHeadlessDisplay(state);
-            }
-            else
-            {
-                // Not supported creation type on vulkan display, fail display creation.
-                impl = nullptr;
+                break;
             }
 #        endif
+            if (platformType == EGL_PLATFORM_SURFACELESS_MESA &&
+                rx::IsVulkanSurfacelessDisplayAvailable())
+            {
+                impl = rx::CreateVulkanSurfacelessDisplay(state);
+                break;
+            }
             break;
 #    elif defined(ANGLE_PLATFORM_ANDROID)
             if (rx::IsVulkanAndroidDisplayAvailable())
@@ -2095,6 +2108,10 @@ static ClientExtensions GenerateClientExtensions()
 
 #if defined(ANGLE_USE_WAYLAND)
     extensions.platformWaylandEXT = true;
+#endif
+
+#if defined(ANGLE_PLATFORM_LINUX) && (defined(ANGLE_ENABLE_OPENGL) || defined(ANGLE_ENABLE_VULKAN))
+    extensions.platformSurfacelessMESA = true;
 #endif
 
 #if defined(ANGLE_ENABLE_D3D11)
