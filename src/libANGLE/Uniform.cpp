@@ -64,14 +64,19 @@ LinkedUniform::LinkedUniform(GLenum typeIn,
     bufferIndex                   = bufferIndexIn;
     blockInfo                     = blockInfoIn;
     id                            = 0;
-    flattenedOffsetInParentArrays = -1;
+    flattenedOffsetInParentArrays = 0;
     outerArraySizeProduct         = 1;
     outerArrayOffset              = 0;
     arraySize                     = arraySizesIn.empty() ? 1 : arraySizesIn[0];
 
-    flagBitsAsUInt   = 0;
+    flagBitsAsUInt16 = 0;
     flagBits.isArray = !arraySizesIn.empty();
     ASSERT(arraySizesIn.size() <= 1);
+    // Ensure input data does not exceeds 16 bit
+    ASSERT(locationIn == location);
+    ASSERT(bufferIndexIn == bufferIndex);
+    ASSERT(offsetIn == offset);
+    ASSERT(bindingIn == binding);
 }
 
 LinkedUniform::LinkedUniform(const LinkedUniform &other)
@@ -100,7 +105,7 @@ LinkedUniform::LinkedUniform(const UsedUniform &usedUniform)
 
     activeVariable = usedUniform.activeVariable;
 
-    flagBitsAsUInt               = 0;
+    flagBitsAsUInt16             = 0;
     flagBits.staticUse           = usedUniform.staticUse;
     flagBits.active              = usedUniform.active;
     flagBits.rasterOrdered       = usedUniform.rasterOrdered;
@@ -109,6 +114,17 @@ LinkedUniform::LinkedUniform(const UsedUniform &usedUniform)
     flagBits.isFragmentInOut     = usedUniform.isFragmentInOut;
     flagBits.texelFetchStaticUse = usedUniform.texelFetchStaticUse;
     flagBits.isArray             = usedUniform.isArray();
+
+    // Ensure input data does not exceeds 16 bit
+    ASSERT(location == usedUniform.location);
+    ASSERT(bufferIndex == usedUniform.bufferIndex);
+    ASSERT(offset == usedUniform.offset);
+    ASSERT(binding == usedUniform.binding);
+    ASSERT(id == usedUniform.id);
+    ASSERT(flattenedOffsetInParentArrays == usedUniform.getFlattenedOffsetInParentArrays());
+    ASSERT(outerArraySizeProduct == ArraySizeProduct(usedUniform.outerArraySizes));
+    ASSERT(outerArrayOffset == usedUniform.outerArrayOffset);
+    ASSERT(!usedUniform.isArray() || arraySize == usedUniform.getArraySizeProduct());
 }
 
 LinkedUniform::~LinkedUniform() {}
