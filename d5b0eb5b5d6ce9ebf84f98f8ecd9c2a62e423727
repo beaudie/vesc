@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66252985_d1411751",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-08-04T16:21:30Z",
+      "side": 1,
+      "message": "-\u003e Yuxin\n\nhttps://rotations.corp.google.com/rotation/5080504293392384",
+      "revId": "d5b0eb5b5d6ce9ebf84f98f8ecd9c2a62e423727",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
