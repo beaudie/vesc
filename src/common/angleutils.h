@@ -401,6 +401,15 @@ class ConditionalMutex final : angle::NonCopyable
     bool mUseMutex;
 };
 
+// Helper macro that casts to a bitfield type then verifies no bits were dropped.
+#define SetBitField(lhs, rhs)                                                         \
+    do                                                                                \
+    {                                                                                 \
+        auto ANGLE_LOCAL_VAR = rhs;                                                   \
+        lhs = static_cast<typename std::decay<decltype(lhs)>::type>(ANGLE_LOCAL_VAR); \
+        ASSERT(static_cast<decltype(ANGLE_LOCAL_VAR)>(lhs) == ANGLE_LOCAL_VAR);       \
+    } while (0)
+
 // snprintf is not defined with MSVC prior to to msvc14
 #if defined(_MSC_VER) && _MSC_VER < 1900
 #    define snprintf _snprintf
