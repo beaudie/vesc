@@ -151,6 +151,37 @@ const char *DisplayVkAndroid::getWSIExtension() const
     return VK_KHR_ANDROID_SURFACE_EXTENSION_NAME;
 }
 
+VkSurfaceKHR *DisplayVkAndroid::onSurfaceCreate(EGLNativeWindowType nativeWindow)
+{
+    std::lock_guard<std::mutex> lock(mSurfaceMapMutex);
+
+    vk::RefCounted<VkSurfaceKHR> &surface = mSurfaceMap[nativeWindow];
+    if (!surface.isReferenced())
+    {
+        surface.get() = VK_NULL_HANDLE;
+    }
+
+    surface.addRef();
+    return &surface.get();
+}
+
+bool DisplayVkAndroid::onSurfaceDestroy(EGLNativeWindowType nativeWindow)
+{
+    std::lock_guard<std::mutex> lock(mSurfaceMapMutex);
+
+    vk::RefCounted<VkSurfaceKHR> &surface = mSurfaceMap[nativeWindow];
+    surface.releaseRef();
+
+    bool shouldRelease = !surface.isReferenced();
+    if (shouldRelease)
+    {
+        surface.get() = VK_NULL_HANDLE;
+        mSurfaceMap.erase(nativeWindow);
+    }
+
+    return shouldRelease;
+}
+
 bool IsVulkanAndroidDisplayAvailable()
 {
     return true;
