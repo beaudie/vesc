@@ -436,7 +436,7 @@ deps = {
   },
 
   # We use the upstream/main branch.
-  'third_party/libdrm': {
+  'third_party/libdrm/src': {
     'url': '{chromium_git}/chromiumos/third_party/libdrm@474894ed17a037a464e5bd845a0765a50f647898',
     'condition': 'checkout_angle_mesa',
   },
