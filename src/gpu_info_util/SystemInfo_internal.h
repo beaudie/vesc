@@ -19,6 +19,8 @@ namespace angle
 bool GetPCIDevicesWithLibPCI(std::vector<GPUDeviceInfo> *devices);
 // Defined in SystemInfo_x11 when GPU_INFO_USE_X11 is defined.
 bool GetNvidiaDriverVersionWithXNVCtrl(std::string *version);
+// Defined in SystemInfo_libdrm when GPU_INFO_USE_LIBDRM is defined.
+bool GetDevicesWithLibDRM(std::vector<GPUDeviceInfo> *devices);
 
 // Target specific helper functions that can be compiled on all targets
 // Live in SystemInfo.cpp
