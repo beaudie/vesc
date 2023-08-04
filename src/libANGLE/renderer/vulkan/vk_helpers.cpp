@@ -1254,6 +1254,7 @@ void RenderPassAttachment::onRenderAreaGrowth(ContextVk *contextVk,
 void RenderPassAttachment::finalizeLoadStore(Context *context,
                                              uint32_t currentCmdCount,
                                              bool hasUnresolveAttachment,
+                                             bool hasResolveAttachment,
                                              RenderPassLoadOp *loadOp,
                                              RenderPassStoreOp *storeOp,
                                              bool *isInvalidatedOut)
@@ -1334,12 +1335,17 @@ void RenderPassAttachment::finalizeLoadStore(Context *context,
 
     if (mAccess == ResourceAccess::Unused || (mAccess == ResourceAccess::ReadOnly && notLoaded))
     {
-        if (*storeOp == RenderPassStoreOp::DontCare)
+        // If we are loading or clearing the attachment, but the attachment has not been used,
+        // and the data has also not been stored back into attachment, then just skip the
+        // load/clear op. If loadOp/storeOp=None is supported, prefer that to reduce the amount
+        // of synchronization; DontCare is a write operation, while None is not.
+        //
+        // Don't optimize away a Clear loadOp if there is a resolve attachment. Although the
+        // storeOp=DontCare the clear needs to be resolved into the resolve attachment.
+        bool loadOpIsClearWithResolveAttachment =
+            hasResolveAttachment && *loadOp == RenderPassLoadOp::Clear;
+        if (*storeOp == RenderPassStoreOp::DontCare && !loadOpIsClearWithResolveAttachment)
         {
-            // If we are loading or clearing the attachment, but the attachment has not been used,
-            // and the data has also not been stored back into attachment, then just skip the
-            // load/clear op. If loadOp/storeOp=None is supported, prefer that to reduce the amount
-            // of synchronization; DontCare is a write operation, while None is not.
             if (supportsLoadStoreOpNone && !isInvalidated(currentCmdCount))
             {
                 *loadOp  = RenderPassLoadOp::None;
@@ -2158,9 +2164,9 @@ void RenderPassCommandBufferHelper::finalizeColorImageLoadStore(
     bool isInvalidated       = false;
 
     RenderPassAttachment &colorAttachment = mColorAttachments[packedAttachmentIndex];
-    colorAttachment.finalizeLoadStore(context, currentCmdCount,
-                                      mRenderPassDesc.getColorUnresolveAttachmentMask().any(),
-                                      &loadOp, &storeOp, &isInvalidated);
+    colorAttachment.finalizeLoadStore(
+        context, currentCmdCount, mRenderPassDesc.getColorUnresolveAttachmentMask().any(),
+        mRenderPassDesc.getColorResolveAttachmentMask().any(), &loadOp, &storeOp, &isInvalidated);
 
     if (isInvalidated)
     {
@@ -2344,13 +2350,14 @@ void RenderPassCommandBufferHelper::finalizeDepthStencilLoadStore(Context *conte
     uint32_t currentCmdCount  = getRenderPassWriteCommandCount();
     bool isDepthInvalidated   = false;
     bool isStencilInvalidated = false;
+    bool hasResolveAttachment = mRenderPassDesc.hasDepthStencilResolveAttachment();
 
-    mDepthAttachment.finalizeLoadStore(context, currentCmdCount,
-                                       mRenderPassDesc.hasDepthUnresolveAttachment(), &depthLoadOp,
-                                       &depthStoreOp, &isDepthInvalidated);
-    mStencilAttachment.finalizeLoadStore(context, currentCmdCount,
-                                         mRenderPassDesc.hasStencilUnresolveAttachment(),
-                                         &stencilLoadOp, &stencilStoreOp, &isStencilInvalidated);
+    mDepthAttachment.finalizeLoadStore(
+        context, currentCmdCount, mRenderPassDesc.hasDepthUnresolveAttachment(),
+        hasResolveAttachment, &depthLoadOp, &depthStoreOp, &isDepthInvalidated);
+    mStencilAttachment.finalizeLoadStore(
+        context, currentCmdCount, mRenderPassDesc.hasStencilUnresolveAttachment(),
+        hasResolveAttachment, &stencilLoadOp, &stencilStoreOp, &isStencilInvalidated);
 
     const bool disableMixedDepthStencilLoadOpNoneAndLoad =
         context->getRenderer()->getFeatures().disallowMixedDepthStencilLoadOpNoneAndLoad.enabled;
