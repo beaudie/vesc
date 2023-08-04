@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15a4aa85_c802e86c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5809,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-04T00:42:15Z",
+      "side": 1,
+      "message": "This function is not using ImageMemorySuballocator class, it can be moved to anonymous name space.",
+      "range": {
+        "startLine": 5809,
+        "startChar": 34,
+        "endLine": 5809,
+        "endChar": 71
+      },
+      "revId": "3a045dbbdb1b0adb504da49bf2de1a210b19aef2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
