@@ -24,7 +24,7 @@ class WindowSurfaceVkFuchsia : public WindowSurfaceVk
     static bool isValidNativeWindow(EGLNativeWindowType window);
 
   private:
-    angle::Result createSurfaceVk(vk::Context *context, gl::Extents *extentsOut) override;
+    angle::Result createSurfaceVk(vk::Context *context) override;
     angle::Result getCurrentWindowSize(vk::Context *context, gl::Extents *extentsOut) override;
 };
 
