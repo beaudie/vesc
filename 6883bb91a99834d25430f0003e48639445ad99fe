@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7670adf_8e414ce2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2023-08-04T15:12:24Z",
+      "side": 1,
+      "message": "This was missing from GL_EXT_memory_objects\nThe TilingMode is needed to properly calculate the size of imported memory.\n\nPasses on local testing",
+      "revId": "6883bb91a99834d25430f0003e48639445ad99fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
