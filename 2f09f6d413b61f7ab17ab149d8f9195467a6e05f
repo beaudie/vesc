@@ -33,6 +33,23 @@
       "message": "I\u0027ve built M116 manually with this patch, so can confirm it builds.\n\nNot 100% sure it has the same effect on M116 as on top-of-tree. Will update the bug.",
       "revId": "2f09f6d413b61f7ab17ab149d8f9195467a6e05f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84080fa0_2c5b6d78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-08-05T08:07:52Z",
+      "side": 1,
+      "message": "At this point I\u0027m sure this cherry-pick has the same performance improvement for the test case as it did on ToT.",
+      "revId": "2f09f6d413b61f7ab17ab149d8f9195467a6e05f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
