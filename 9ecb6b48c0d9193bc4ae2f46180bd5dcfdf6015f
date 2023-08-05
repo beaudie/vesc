@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3a7c139_a8f6c7ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-08-05T09:01:59Z",
+      "side": 1,
+      "message": "This change makes the associated Shadertoy from the bug report run at 60 FPS, identical to OpenGL.",
+      "revId": "9ecb6b48c0d9193bc4ae2f46180bd5dcfdf6015f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
