@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d99c289_63c6b9b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-08-05T00:35:36Z",
+      "side": 1,
+      "message": "Geoff, Alexey: PTAL and compare to https://chromium-review.googlesource.com/c/angle/angle/+/4742579 .\n\nShabi: FYI. Any comments welcome.",
+      "revId": "2f09f6d413b61f7ab17ab149d8f9195467a6e05f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
