@@ -33,6 +33,24 @@
       "message": "I think this CL can be reduced to just three line changes (and same thing at line 1977 for color).\n\n// Has a resolve attachment means there will be read from the attachment.\nonDepthAccess(ResourceAccess::Read);\nonStencilAccess(ResourceAccess::Read);",
       "revId": "daa68e4ca7d070d0a9c003665b6e40e3e545721b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efbbeec0_7e27941a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2014,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-08-05T01:31:44Z",
+      "side": 1,
+      "message": "@cclao@google.com no draw happens to the attachment. the sequence is pretty much -\n- bind fb with msrtt texture\n- clear\n- readpixels",
+      "parentUuid": "85d52d64_e2791eb4",
+      "revId": "daa68e4ca7d070d0a9c003665b6e40e3e545721b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
