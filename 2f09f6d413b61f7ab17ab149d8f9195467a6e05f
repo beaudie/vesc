@@ -16,6 +16,23 @@
       "message": "Geoff, Alexey: PTAL and compare to https://chromium-review.googlesource.com/c/angle/angle/+/4742579 .\n\nShabi: FYI. Any comments welcome.",
       "revId": "2f09f6d413b61f7ab17ab149d8f9195467a6e05f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f95c93d_1cb93b6f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-08-05T07:59:23Z",
+      "side": 1,
+      "message": "I\u0027ve built M116 manually with this patch, so can confirm it builds.\n\nNot 100% sure it has the same effect on M116 as on top-of-tree. Will update the bug.",
+      "revId": "2f09f6d413b61f7ab17ab149d8f9195467a6e05f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
