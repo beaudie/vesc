@@ -94,6 +94,30 @@
       },
       "revId": "fcb75e9325ebca83cd2458d5e5d1ffdfbc1185f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6af11336_539fa2cf",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2792,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-07T17:41:54Z",
+      "side": 1,
+      "message": "VK_EXT_multisampled_render_to_single_sampled?\n\nSpeaking of, in the meeting we figured out there is a test suppression for Pixel 4 already? If so, please remove that with this fix.",
+      "parentUuid": "3c5739de_680f20e5",
+      "range": {
+        "startLine": 2792,
+        "startChar": 18,
+        "endLine": 2792,
+        "endChar": 51
+      },
+      "revId": "fcb75e9325ebca83cd2458d5e5d1ffdfbc1185f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
