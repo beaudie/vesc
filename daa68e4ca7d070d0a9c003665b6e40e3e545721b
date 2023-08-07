@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d7528392_934a6bd5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1346,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-08-07T17:13:19Z",
+      "side": 1,
+      "message": "\u003e it wouldn\u0027t if the resolve attachment is coming from glBlitFramebuffer\n\nah, Ack.\n\ngiven `None` was also a possibility i just changed this condition to be explicit - `Load || Clear`",
+      "parentUuid": "2de80842_bc17ddef",
+      "revId": "daa68e4ca7d070d0a9c003665b6e40e3e545721b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "85d52d64_e2791eb4",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 1
