@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "183b6946_5c64baf6",
+        "filename": "src/libANGLE/Uniform.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-07T19:27:01Z",
+      "side": 1,
+      "message": "There is a performance cost here that when we resize the uniform, it will memset first and then overwrite it with real value, so we end up writing twice. I can add a comment in the other constructors to alert that every data member should be initialized.",
+      "parentUuid": "0d3563c5_ad6dcbe0",
+      "revId": "f5c11c80ddaed66bdea17af627cdcd34a746aab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9eff3481_8fc82a57",
         "filename": "src/libANGLE/Uniform.h",
         "patchSetId": 8
@@ -31,6 +49,24 @@
       "writtenOn": "2023-08-07T18:11:00Z",
       "side": 1,
       "message": "What is the reason we do not want to protect these members with `private` scope?",
+      "revId": "f5c11c80ddaed66bdea17af627cdcd34a746aab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "214fdf52_5808dcbb",
+        "filename": "src/libANGLE/Uniform.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-07T19:27:01Z",
+      "side": 1,
+      "message": "Mainly because before my series of CLs, these are public and I made them private to ensure I catch every access to it and change them to use the get API. Now everything is memcpy, so no more real needs to keep them private. But I could still keep them private. I just thought better to revert them back to what it was since this is a struct.",
+      "parentUuid": "9eff3481_8fc82a57",
       "revId": "f5c11c80ddaed66bdea17af627cdcd34a746aab8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
