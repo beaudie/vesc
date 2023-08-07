@@ -176,6 +176,24 @@
       "parentUuid": "dd746a67_bc8b7c62",
       "revId": "daa68e4ca7d070d0a9c003665b6e40e3e545721b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20c60e59_30635923",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2014,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-07T17:34:30Z",
+      "side": 1,
+      "message": "It\u0027s not just depth/stencil FWIW.\n\nWe have this issue where attachments can be LOAD_OP_CLEAR but also Unused. While that\u0027s strange on its own, pretty sure changing that breaks some optimizations.",
+      "parentUuid": "60044153_e47c6267",
+      "revId": "daa68e4ca7d070d0a9c003665b6e40e3e545721b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
