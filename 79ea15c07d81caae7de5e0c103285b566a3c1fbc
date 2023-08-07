@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "617a9178_72d6a45c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-07T14:19:17Z",
+      "side": 1,
+      "message": "LGTM with lots of nits!",
+      "revId": "79ea15c07d81caae7de5e0c103285b566a3c1fbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1f241af_6cae0f66",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 869,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-07T14:19:17Z",
+      "side": 1,
+      "message": "nit: `BitSet`, it will automatically choose the underlying size based on number of bits.",
+      "range": {
+        "startLine": 869,
+        "startChar": 37,
+        "endLine": 869,
+        "endChar": 45
+      },
+      "revId": "79ea15c07d81caae7de5e0c103285b566a3c1fbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "297df0e5_29fe4cab",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-07T14:19:17Z",
+      "side": 1,
+      "message": "nit: explicit cast to bool ((x \u0026 y) !\u003d 0)",
+      "range": {
+        "startLine": 873,
+        "startChar": 12,
+        "endLine": 873,
+        "endChar": 63
+      },
+      "revId": "79ea15c07d81caae7de5e0c103285b566a3c1fbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb107755_863db300",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 875,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-07T14:19:17Z",
+      "side": 1,
+      "message": "nit: use `angle::Bit`. Or turn `memoryTypeBitsOut` to `angle::BitSet` and use `reset()`",
+      "range": {
+        "startLine": 875,
+        "startChar": 34,
+        "endLine": 875,
+        "endChar": 52
+      },
+      "revId": "79ea15c07d81caae7de5e0c103285b566a3c1fbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85d3e860_7e2a53ae",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 881,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-07T14:19:17Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 881,
+        "startChar": 12,
+        "endLine": 881,
+        "endChar": 78
+      },
+      "revId": "79ea15c07d81caae7de5e0c103285b566a3c1fbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "712a5471_9c23efd0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 883,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-07T14:19:17Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 883,
+        "startChar": 34,
+        "endLine": 883,
+        "endChar": 52
+      },
+      "revId": "79ea15c07d81caae7de5e0c103285b566a3c1fbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a802bb3_332f90b8",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 5864,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-07T14:19:17Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 5864,
+        "startChar": 8,
+        "endLine": 5864,
+        "endChar": 59
+      },
+      "revId": "79ea15c07d81caae7de5e0c103285b566a3c1fbc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
