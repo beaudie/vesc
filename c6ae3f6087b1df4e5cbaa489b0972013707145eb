@@ -22,6 +22,30 @@
       },
       "revId": "c6ae3f6087b1df4e5cbaa489b0972013707145eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b40162a5_eb24853f",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-07T16:13:38Z",
+      "side": 1,
+      "message": "Ugh, it\u0027s a pointer :/\n\nHaving LinkedUniform deal with this detail is probably cleaner:\n\n```\n(*uniforms)[uniformIndex].onLoad();\n```",
+      "parentUuid": "dab75f47_c11ad9e1",
+      "range": {
+        "startLine": 233,
+        "startChar": 0,
+        "endLine": 237,
+        "endChar": 9
+      },
+      "revId": "c6ae3f6087b1df4e5cbaa489b0972013707145eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
