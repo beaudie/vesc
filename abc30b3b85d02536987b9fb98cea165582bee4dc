@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6989603d_2eeeb4e3",
+        "filename": "src/libANGLE/Uniform.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-07T16:44:24Z",
+      "side": 1,
+      "message": "Please use `SetBitField` now for all of these; that `ASSERT`s that there is no truncation.",
+      "revId": "abc30b3b85d02536987b9fb98cea165582bee4dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53e1d77c_ea21709a",
+        "filename": "src/libANGLE/Uniform.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-07T16:44:24Z",
+      "side": 1,
+      "message": "No need for these if you use `SetBitField`",
+      "revId": "abc30b3b85d02536987b9fb98cea165582bee4dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e53ba6e_755d9370",
+        "filename": "src/libANGLE/Uniform.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-07T16:44:24Z",
+      "side": 1,
+      "message": "FWIW, I think these can be uint16_t too. I have yet to seen a GL enum that takes more than 16 bits",
+      "range": {
+        "startLine": 124,
+        "startChar": 0,
+        "endLine": 126,
+        "endChar": 27
+      },
+      "revId": "abc30b3b85d02536987b9fb98cea165582bee4dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f796d529_c270e419",
+        "filename": "src/libANGLE/Uniform.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-07T16:44:24Z",
+      "side": 1,
+      "message": "`maxUniformBlockSize` is unfortunately not the right value. That\u0027s the max size for UBOs. For uniforms, the limits are `MAX_\u003cstage\u003e_UNIFORM_COMPONENTS`. I don\u0027t see a cap for that.\n\nYou could add a cap though, I don\u0027t think that\u0027s a problem.",
+      "revId": "abc30b3b85d02536987b9fb98cea165582bee4dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0fae4bf_909253fc",
+        "filename": "src/libANGLE/Uniform.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-07T16:44:24Z",
+      "side": 1,
+      "message": "Assuming a reasonable cap (that\u0027s not too close to 64KB), the SPIR-V id is _probably_ ok to be limited to 16 bits, but only because the ids are pre-allocated and shouldn\u0027t be affected by ids allocated for the logic of the shader. Not sure if that\u0027s true for built-ins though...\n\nMaybe keep this uint32_t?",
+      "revId": "abc30b3b85d02536987b9fb98cea165582bee4dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
