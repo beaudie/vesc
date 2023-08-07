@@ -83,6 +83,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "b15981eb_854060e7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-08-07T17:24:14Z",
+      "side": 1,
+      "message": "\u003e Angle checks required mem vs the mam of the FD. That\u0027s were the error comes from\n\nwe dont need to do all that. just a sanity check of create vkimage, fill it with some color, export as FD, import FD as texture using extension then sample from it and verify pixel has expected color. would that be possible?",
+      "parentUuid": "fbb5bbb5_3b32ab4c",
+      "revId": "9fc5c41365a25ebe834b4e9a71958929ab419922",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "fbe50474_ce28cb3b",
