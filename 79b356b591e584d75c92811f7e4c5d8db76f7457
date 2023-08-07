@@ -16,6 +16,24 @@
       "message": "Please check with the `UniformsBenchmark` perf test. Especially the `null` variants are helpful.\n\nIf there\u0027s any regression, we could probably expose the array itself as `extern` and have the function be inlined. Alternatively, you could cache the type info as copy instead of pointer",
       "revId": "79b356b591e584d75c92811f7e4c5d8db76f7457",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "879a653d_f60405e7",
+        "filename": "src/libANGLE/Uniform.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-07T23:56:33Z",
+      "side": 1,
+      "message": "No regression on both pixel 7 pro and glinux workstation.",
+      "parentUuid": "3dc81a9e_afec4ad0",
+      "revId": "79b356b591e584d75c92811f7e4c5d8db76f7457",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
