@@ -33,6 +33,23 @@
       "message": "LGTM but will watch the rollers to make sure all our infra is set up well.",
       "revId": "b59e78dbf2bfb37884fabfbfbd2c3e9dc758db3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc3fca26_a33e5002",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1237795
+      },
+      "writtenOn": "2023-08-07T17:26:27Z",
+      "side": 1,
+      "message": "thanks, Jonah! i can\u0027t CQ+2, could you also help with that?",
+      "revId": "b59e78dbf2bfb37884fabfbfbd2c3e9dc758db3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
