@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2aab19fb_a9dbbb94",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-07T14:47:59Z",
+      "side": 1,
+      "message": "Nice, hopefully this one will stick!",
+      "revId": "206874d463ef4761ba5ea0f25e8a27fef264fe6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "172a213b_28528fb3",
+        "filename": "gni/angle.gni",
+        "patchSetId": 5
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-07T14:47:59Z",
+      "side": 1,
+      "message": "Suggest adding a define to BUILD.gn for this similar to `headless` and `simple`, like `ANGLE_VULKAN_DISPLAY_MODE_OFFSCREEN` + add a gn assert that all possible values are handled. I\u0027d rather we don\u0027t let any random string be valid.",
+      "range": {
+        "startLine": 61,
+        "startChar": 33,
+        "endLine": 61,
+        "endChar": 42
+      },
+      "revId": "206874d463ef4761ba5ea0f25e8a27fef264fe6c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
