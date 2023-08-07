@@ -158,6 +158,24 @@
       "parentUuid": "efbbeec0_7e27941a",
       "revId": "daa68e4ca7d070d0a9c003665b6e40e3e545721b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60044153_e47c6267",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2014,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-07T17:31:57Z",
+      "side": 1,
+      "message": "Even if there is no draw, this should still get called ( since it is called when RP starts). So this should still work, right?",
+      "parentUuid": "dd746a67_bc8b7c62",
+      "revId": "daa68e4ca7d070d0a9c003665b6e40e3e545721b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

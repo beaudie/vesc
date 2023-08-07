@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "497e2b32_98d7d356",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2792,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-07T17:31:57Z",
+      "side": 1,
+      "message": "Is AHB required? from description sounds the bug can be exposed without use AHB. The advantage of not using AHB is that then it will also test on non-android platforms.\n\nSomehow the test is passing even without fix on pixel device. resolve attachment is null. Not exactly sure whats going on here. Could it that missing a MSAA attachment?",
+      "range": {
+        "startLine": 2792,
+        "startChar": 18,
+        "endLine": 2792,
+        "endChar": 51
+      },
+      "revId": "fcb75e9325ebca83cd2458d5e5d1ffdfbc1185f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
