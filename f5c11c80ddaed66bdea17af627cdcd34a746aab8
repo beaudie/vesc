@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d3563c5_ad6dcbe0",
+        "filename": "src/libANGLE/Uniform.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-07T16:17:52Z",
+      "side": 1,
+      "message": "I\u0027d still keep a `memset(0)` here, wouldn\u0027t love to get back a security issue because of this at some point.",
+      "revId": "f5c11c80ddaed66bdea17af627cdcd34a746aab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
