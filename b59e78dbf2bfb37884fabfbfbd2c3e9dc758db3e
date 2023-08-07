@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4a0c741_8fef1ad5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1237795
+      },
+      "writtenOn": "2023-08-07T14:56:12Z",
+      "side": 1,
+      "message": "adding new angle oncall",
+      "revId": "b59e78dbf2bfb37884fabfbfbd2c3e9dc758db3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
