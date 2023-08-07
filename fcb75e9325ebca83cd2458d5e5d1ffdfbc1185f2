@@ -166,6 +166,30 @@
       },
       "revId": "fcb75e9325ebca83cd2458d5e5d1ffdfbc1185f2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec7533ee_db5a4fc6",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2792,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-07T18:00:01Z",
+      "side": 1,
+      "message": "With this supportsMultisampledRenderToSingleSampled disabled, the test gets skipped:\nTest skipped: !EnsureGLExtensionEnabled(\"GL_EXT_multisampled_render_to_texture\").\n\nI am +2 for the CL now, but would still like to figure out why the test is exposing the same bug on pixel.",
+      "parentUuid": "39cd2d9d_c70c195a",
+      "range": {
+        "startLine": 2792,
+        "startChar": 18,
+        "endLine": 2792,
+        "endChar": 51
+      },
+      "revId": "fcb75e9325ebca83cd2458d5e5d1ffdfbc1185f2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
