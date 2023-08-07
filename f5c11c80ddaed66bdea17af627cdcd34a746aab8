@@ -16,6 +16,23 @@
       "message": "I\u0027d still keep a `memset(0)` here, wouldn\u0027t love to get back a security issue because of this at some point.",
       "revId": "f5c11c80ddaed66bdea17af627cdcd34a746aab8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9eff3481_8fc82a57",
+        "filename": "src/libANGLE/Uniform.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-08-07T18:11:00Z",
+      "side": 1,
+      "message": "What is the reason we do not want to protect these members with `private` scope?",
+      "revId": "f5c11c80ddaed66bdea17af627cdcd34a746aab8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
