@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4881feac_8cb0effc",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1346,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-07T16:55:03Z",
+      "side": 1,
+      "message": "I\u0027d change `\u003d\u003d Clear` to `!\u003d DontCare` (or \u003d\u003d Clear || Load). If somehow we get into a situation where the attachment is loaded, discarded but resolved, it\u0027d be the same bug.",
+      "revId": "daa68e4ca7d070d0a9c003665b6e40e3e545721b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "85d52d64_e2791eb4",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 1
