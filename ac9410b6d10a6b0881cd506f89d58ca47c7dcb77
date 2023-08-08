@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddad9e7e_da88f5f9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 6920,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-08-08T22:39:55Z",
+      "side": 1,
+      "message": "\u003e Done",
+      "parentUuid": "46f57950_f07ba159",
+      "revId": "ac9410b6d10a6b0881cd506f89d58ca47c7dcb77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0af802e1_14e9de04",
@@ -71,6 +89,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d98c0523_5c099256",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 7246,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-08-08T22:39:55Z",
+      "side": 1,
+      "message": "CQ passed, I have removed the condition check on `RenderPassClosureReason::ContextDestruction`, and only do the deviceLost check in `checkOneCommandBatch()`.",
+      "parentUuid": "4ee5a693_ea97d173",
+      "revId": "ac9410b6d10a6b0881cd506f89d58ca47c7dcb77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c5b5f3de_385c0840",
@@ -84,6 +120,30 @@
       "writtenOn": "2023-08-08T17:54:32Z",
       "side": 1,
       "message": "nits: per our style, don\u0027t use default values. Also, `bool` as parameter is generally bad for readability, don\u0027t hesitate to add an `enum class` specifically for this.",
+      "range": {
+        "startLine": 506,
+        "startChar": 36,
+        "endLine": 506,
+        "endChar": 68
+      },
+      "revId": "ac9410b6d10a6b0881cd506f89d58ca47c7dcb77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f77b88a9_e56d291b",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-08-08T22:39:55Z",
+      "side": 1,
+      "message": "I removed the parameter `isDeviceLost` from the function signature, per suggestion in https://chromium-review.googlesource.com/c/angle/angle/+/4728466/comment/0af802e1_14e9de04/.",
+      "parentUuid": "c5b5f3de_385c0840",
       "range": {
         "startLine": 506,
         "startChar": 36,
