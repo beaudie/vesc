@@ -16,6 +16,23 @@
       "message": "Yikes, good catch. lgtm",
       "revId": "e87905edf861f1ce389a6c3f4a64cbda8e8a3007",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a24090b_fed1804a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-08-08T14:51:02Z",
+      "side": 1,
+      "message": "There are all std::array of AutoObjCPtr which is a class so it should be initialized during array construction.\n\nLGTM anyways for being explicit about it.",
+      "revId": "e87905edf861f1ce389a6c3f4a64cbda8e8a3007",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
