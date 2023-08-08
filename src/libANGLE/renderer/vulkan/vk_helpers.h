@@ -258,11 +258,17 @@ class DynamicDescriptorPool final : angle::NonCopyable
     template <typename Accumulator>
     void accumulateDescriptorCacheStats(VulkanCacheType cacheType, Accumulator *accum) const
     {
+        std::unique_lock<std::mutex> lock(mMutex);
         accum->accumulateCacheStats(cacheType, mCacheStats);
     }
-    void resetDescriptorCacheStats() { mCacheStats.resetHitAndMissCount(); }
+    void resetDescriptorCacheStats()
+    {
+        std::unique_lock<std::mutex> lock(mMutex);
+        mCacheStats.resetHitAndMissCount();
+    }
     size_t getTotalCacheKeySizeBytes() const
     {
+        std::unique_lock<std::mutex> lock(mMutex);
         return mDescriptorSetCache.getTotalCacheKeySizeBytes();
     }
 
@@ -278,6 +284,10 @@ class DynamicDescriptorPool final : angle::NonCopyable
   private:
     angle::Result allocateNewPool(Context *context);
 
+    // destroyCachedDescriptorSet can be called from garbage clean up thread while context main
+    // thread calling other APIs of this class. This lock should be used to ensure thread safety
+    // while access this object.
+    mutable std::mutex mMutex;
     static constexpr uint32_t kMaxSetsPerPoolMax = 512;
     static uint32_t mMaxSetsPerPool;
     static uint32_t mMaxSetsPerPoolMultiplier;
