@@ -258,16 +258,19 @@ class DynamicDescriptorPool final : angle::NonCopyable
     template <typename Accumulator>
     void accumulateDescriptorCacheStats(VulkanCacheType cacheType, Accumulator *accum) const
     {
+        std::lock_guard<std::recursive_mutex> lock(mMutex);
         accum->accumulateCacheStats(cacheType, mCacheStats);
     }
-    void resetDescriptorCacheStats() { mCacheStats.resetHitAndMissCount(); }
+    void resetDescriptorCacheStats()
+    {
+        std::lock_guard<std::recursive_mutex> lock(mMutex);
+        mCacheStats.resetHitAndMissCount();
+    }
     size_t getTotalCacheKeySizeBytes() const
     {
+        std::lock_guard<std::recursive_mutex> lock(mMutex);
         return mDescriptorSetCache.getTotalCacheKeySizeBytes();
     }
-
-    // Release the pool if it is no longer been used and contains no valid descriptorSet.
-    void checkAndReleaseUnusedPool(RendererVk *renderer, RefCountedDescriptorPoolHelper *pool);
 
     // For testing only!
     static uint32_t GetMaxSetsPerPoolForTesting();
@@ -277,7 +280,13 @@ class DynamicDescriptorPool final : angle::NonCopyable
 
   private:
     angle::Result allocateNewPool(Context *context);
+    // Release the pool if it is no longer been used and contains no valid descriptorSet.
+    void checkAndReleaseUnusedPool(RendererVk *renderer, RefCountedDescriptorPoolHelper *pool);
 
+    // destroyCachedDescriptorSet can be called from garbage clean up thread while context main
+    // thread calling other APIs of this class. This lock should be used to ensure thread safety
+    // while access this object.
+    mutable std::recursive_mutex mMutex;
     static constexpr uint32_t kMaxSetsPerPoolMax = 512;
     static uint32_t mMaxSetsPerPool;
     static uint32_t mMaxSetsPerPoolMultiplier;

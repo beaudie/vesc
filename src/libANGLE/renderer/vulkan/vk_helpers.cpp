@@ -3718,6 +3718,7 @@ angle::Result DynamicDescriptorPool::init(Context *context,
 
 void DynamicDescriptorPool::destroy(RendererVk *renderer)
 {
+    std::lock_guard<std::recursive_mutex> lock(mMutex);
     for (std::unique_ptr<RefCountedDescriptorPoolHelper> &pool : mDescriptorPools)
     {
         ASSERT(!pool->isReferenced());
@@ -3738,6 +3739,7 @@ angle::Result DynamicDescriptorPool::allocateDescriptorSet(
 {
     ASSERT(!mDescriptorPools.empty());
     ASSERT(descriptorSetLayout.getHandle() == mCachedDescriptorSetLayout);
+    std::lock_guard<std::recursive_mutex> lock(mMutex);
 
     // First try to allocate from the same pool
     if (bindingOut->valid() &&
@@ -3790,6 +3792,7 @@ angle::Result DynamicDescriptorPool::getOrAllocateDescriptorSet(
     VkDescriptorSet *descriptorSetOut,
     SharedDescriptorSetCacheKey *newSharedCacheKeyOut)
 {
+    std::lock_guard<std::recursive_mutex> lock(mMutex);
     // First scan the descriptorSet cache.
     vk::RefCountedDescriptorPoolHelper *poolOut;
     if (mDescriptorSetCache.getDescriptorSet(desc, descriptorSetOut, &poolOut))
@@ -3857,6 +3860,7 @@ angle::Result DynamicDescriptorPool::allocateNewPool(Context *context)
 void DynamicDescriptorPool::releaseCachedDescriptorSet(ContextVk *contextVk,
                                                        const DescriptorSetDesc &desc)
 {
+    std::lock_guard<std::recursive_mutex> lock(mMutex);
     VkDescriptorSet descriptorSet;
     RefCountedDescriptorPoolHelper *poolOut;
     if (mDescriptorSetCache.getDescriptorSet(desc, &descriptorSet, &poolOut))
@@ -3875,6 +3879,8 @@ void DynamicDescriptorPool::releaseCachedDescriptorSet(ContextVk *contextVk,
 void DynamicDescriptorPool::destroyCachedDescriptorSet(RendererVk *renderer,
                                                        const DescriptorSetDesc &desc)
 {
+    // This can be called from asynchronous garbage clean up thread.
+    std::lock_guard<std::recursive_mutex> lock(mMutex);
     VkDescriptorSet descriptorSet;
     RefCountedDescriptorPoolHelper *poolOut;
     if (mDescriptorSetCache.getDescriptorSet(desc, &descriptorSet, &poolOut))
