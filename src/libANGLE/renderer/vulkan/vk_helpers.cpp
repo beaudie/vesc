@@ -3455,7 +3455,7 @@ angle::Result DynamicDescriptorPool::allocateNewPool(Context *context)
     return mDescriptorPools[mCurrentPoolIndex]->get().init(context, mPoolSizes, mMaxSetsPerPool);
 }
 
-void DynamicDescriptorPool::releaseCachedDescriptorSet(ContextVk *contextVk,
+void DynamicDescriptorPool::releaseCachedDescriptorSet(RendererVk *renderer,
                                                        const DescriptorSetDesc &desc)
 {
     VkDescriptorSet descriptorSet;
@@ -3470,7 +3470,7 @@ void DynamicDescriptorPool::releaseCachedDescriptorSet(ContextVk *contextVk,
         DescriptorSetHelper descriptorSetHelper(descriptorSet);
         contextVk->retainResource(&descriptorSetHelper);
         poolOut->get().addGarbage(std::move(descriptorSetHelper));
-        checkAndReleaseUnusedPool(contextVk->getRenderer(), poolOut);
+        checkAndReleaseUnusedPool(renderer, poolOut);
     }
 }
 
@@ -4716,7 +4716,17 @@ void BufferHelper::release(RendererVk *renderer)
 
     if (mSuballocation.valid())
     {
+<<<<<<< HEAD   (55e2b6 [M108-LTS] Vulkan: Don't close render pass if rebind to same)
         renderer->collectSuballocationGarbage(mReadOnlyUse, std::move(mSuballocation),
+=======
+        if (!mSuballocation.isSuballocated())
+        {
+            // Destroy cacheKeys now to avoid getting into situation that having to destroy
+            // descriptorSet from garbage collection thread.
+            mSuballocation.getBufferBlock()->releaseAllCachedDescriptorSetCacheKeys(renderer);
+        }
+        renderer->collectSuballocationGarbage(mUse, std::move(mSuballocation),
+>>>>>>> CHANGE (7c6911 Vulkan: Fix data race with DynamicDescriptorPool)
                                               std::move(mBufferForVertexArray));
         if (mReadWriteUse.isCurrentlyInUse(renderer->getLastCompletedQueueSerial()))
         {
@@ -4727,17 +4737,25 @@ void BufferHelper::release(RendererVk *renderer)
     ASSERT(!mBufferForVertexArray.valid());
 }
 
-void BufferHelper::releaseBufferAndDescriptorSetCache(ContextVk *contextVk)
+void BufferHelper::releaseBufferAndDescriptorSetCache(RendererVk *renderer)
 {
+<<<<<<< HEAD   (55e2b6 [M108-LTS] Vulkan: Don't close render pass if rebind to same)
     RendererVk *renderer = contextVk->getRenderer();
 
     if (mReadOnlyUse.isCurrentlyInUse(renderer->getLastCompletedQueueSerial()))
+=======
+    if (renderer->hasResourceUseFinished(getResourceUse()))
+>>>>>>> CHANGE (7c6911 Vulkan: Fix data race with DynamicDescriptorPool)
     {
         mDescriptorSetCacheManager.releaseKeys(contextVk);
     }
     else
     {
+<<<<<<< HEAD   (55e2b6 [M108-LTS] Vulkan: Don't close render pass if rebind to same)
         mDescriptorSetCacheManager.destroyKeys(renderer);
+=======
+        mDescriptorSetCacheManager.releaseKeys(renderer);
+>>>>>>> CHANGE (7c6911 Vulkan: Fix data race with DynamicDescriptorPool)
     }
 
     release(renderer);

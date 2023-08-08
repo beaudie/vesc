@@ -286,7 +286,7 @@ void BufferVk::release(ContextVk *contextVk)
     RendererVk *renderer = contextVk->getRenderer();
     if (mBuffer.valid())
     {
-        mBuffer.releaseBufferAndDescriptorSetCache(contextVk);
+        mBuffer.releaseBufferAndDescriptorSetCache(renderer);
     }
     if (mStagingBuffer.valid())
     {
@@ -628,7 +628,7 @@ angle::Result BufferVk::ghostMappedBuffer(ContextVk *contextVk,
         memcpy(dstMapPtr, srcMapPtr, static_cast<size_t>(mState.getSize()));
     }
 
-    src.releaseBufferAndDescriptorSetCache(contextVk);
+    src.releaseBufferAndDescriptorSetCache(contextVk->getRenderer());
 
     // Return the already mapped pointer with the offset adjustment to avoid the call to unmap().
     *mapPtr = dstMapPtr + offset;
@@ -965,7 +965,11 @@ angle::Result BufferVk::acquireAndUpdate(ContextVk *contextVk,
 
     if (src.valid())
     {
+<<<<<<< HEAD   (55e2b6 [M108-LTS] Vulkan: Don't close render pass if rebind to same)
         src.releaseBufferAndDescriptorSetCache(contextVk);
+=======
+        prevBuffer.releaseBufferAndDescriptorSetCache(contextVk->getRenderer());
+>>>>>>> CHANGE (7c6911 Vulkan: Fix data race with DynamicDescriptorPool)
     }
 
     return angle::Result::Continue;
@@ -1072,7 +1076,7 @@ angle::Result BufferVk::acquireBufferHelper(ContextVk *contextVk, size_t sizeInB
 
     if (mBuffer.valid())
     {
-        mBuffer.releaseBufferAndDescriptorSetCache(contextVk);
+        mBuffer.releaseBufferAndDescriptorSetCache(renderer);
     }
 
     // Allocate the buffer directly
