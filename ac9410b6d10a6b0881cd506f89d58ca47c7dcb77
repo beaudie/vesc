@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2aeea9c4_832552be",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 6920,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-08T17:54:32Z",
+      "side": 1,
+      "message": "nit: You can add a case for `VK_ERROR_DEVICE_LOST` in `DefaultGLErrorCode` instead",
+      "revId": "ac9410b6d10a6b0881cd506f89d58ca47c7dcb77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0af802e1_14e9de04",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 7246,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-08T17:54:32Z",
+      "side": 1,
+      "message": "Does this check matter? Why not always check device lost? If device lost can be taken into account unconditionally, you don\u0027t have to pass this bool around a lot, it can be taken from the Renderer in CommandProcessor.cpp directly.\n\n`RenderPassClosureReason` is really a debug/perf analysis thing, I\u0027d rather we don\u0027t let logic depend on it.",
+      "revId": "ac9410b6d10a6b0881cd506f89d58ca47c7dcb77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5b5f3de_385c0840",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-08T17:54:32Z",
+      "side": 1,
+      "message": "nits: per our style, don\u0027t use default values. Also, `bool` as parameter is generally bad for readability, don\u0027t hesitate to add an `enum class` specifically for this.",
+      "range": {
+        "startLine": 506,
+        "startChar": 36,
+        "endLine": 506,
+        "endChar": 68
+      },
+      "revId": "ac9410b6d10a6b0881cd506f89d58ca47c7dcb77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cefb1c98_6db9f1d8",
+        "filename": "src/libANGLE/validationEGL.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 3333,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-08T17:54:32Z",
+      "side": 1,
+      "message": "nit: please remove this, it looks like a personal task item",
+      "range": {
+        "startLine": 3332,
+        "startChar": 0,
+        "endLine": 3333,
+        "endChar": 71
+      },
+      "revId": "ac9410b6d10a6b0881cd506f89d58ca47c7dcb77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a611c6a6_c57eaf1d",
+        "filename": "src/tests/egl_tests/EGLRobustnessTest.cpp",
+        "patchSetId": 14
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-08T17:54:32Z",
+      "side": 1,
+      "message": "nit: please use a new `enum class` for this.",
+      "range": {
+        "startLine": 249,
+        "startChar": 46,
+        "endLine": 249,
+        "endChar": 50
+      },
+      "revId": "ac9410b6d10a6b0881cd506f89d58ca47c7dcb77",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
