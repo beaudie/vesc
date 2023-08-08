@@ -3422,6 +3422,45 @@ void main() {
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
+// Calling BufferData and use it in a loop to force descriptorSet creation and destroy.
+TEST_P(UniformBufferTest, BufferDataInLoop)
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // Use large buffer size to get around suballocation, so that we will gets a new buffer with
+    // bufferData call.
+    static constexpr size_t kBufferSize = 4 * 1024 * 1024;
+    std::array<float, kBufferSize / (sizeof(float))> floatData;
+    floatData[0] = 0.5f;
+    floatData[1] = 0.75f;
+    floatData[2] = 0.25f;
+    floatData[3] = 1.0f;
+
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, getWindowWidth(), getWindowHeight());
+
+    GLFramebuffer fbo;
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    for (int loop = 0; loop < 10; loop++)
+    {
+        // Switch FBO to get around deferred flush
+        glBindFramebuffer(GL_FRAMEBUFFER, (loop & 0x1) == 0 ? 0 : fbo);
+        glBindBuffer(GL_UNIFORM_BUFFER, mUniformBuffer);
+        glBufferData(GL_UNIFORM_BUFFER, kBufferSize, floatData.data(), GL_STATIC_DRAW);
+
+        glBindBufferBase(GL_UNIFORM_BUFFER, 0, mUniformBuffer);
+        glUniformBlockBinding(mProgram, mUniformBufferIndex, 0);
+        drawQuad(mProgram, essl3_shaders::PositionAttrib(), 0.5f);
+        glFlush();
+    }
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_NEAR(0, 0, 128, 191, 64, 255, 1);
+}
+
 class WebGL2UniformBufferTest : public UniformBufferTest
 {
   protected:
