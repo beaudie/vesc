@@ -3790,6 +3790,7 @@ angle::Result DynamicDescriptorPool::getOrAllocateDescriptorSet(
     VkDescriptorSet *descriptorSetOut,
     SharedDescriptorSetCacheKey *newSharedCacheKeyOut)
 {
+    std::unique_lock<std::mutex> lock(mMutex);
     // First scan the descriptorSet cache.
     vk::RefCountedDescriptorPoolHelper *poolOut;
     if (mDescriptorSetCache.getDescriptorSet(desc, descriptorSetOut, &poolOut))
@@ -3857,6 +3858,7 @@ angle::Result DynamicDescriptorPool::allocateNewPool(Context *context)
 void DynamicDescriptorPool::releaseCachedDescriptorSet(ContextVk *contextVk,
                                                        const DescriptorSetDesc &desc)
 {
+    std::unique_lock<std::mutex> lock(mMutex);
     VkDescriptorSet descriptorSet;
     RefCountedDescriptorPoolHelper *poolOut;
     if (mDescriptorSetCache.getDescriptorSet(desc, &descriptorSet, &poolOut))
@@ -3875,6 +3877,8 @@ void DynamicDescriptorPool::releaseCachedDescriptorSet(ContextVk *contextVk,
 void DynamicDescriptorPool::destroyCachedDescriptorSet(RendererVk *renderer,
                                                        const DescriptorSetDesc &desc)
 {
+    // This can be called from asynchronous garbage clean up thread.
+    std::unique_lock<std::mutex> lock(mMutex);
     VkDescriptorSet descriptorSet;
     RefCountedDescriptorPoolHelper *poolOut;
     if (mDescriptorSetCache.getDescriptorSet(desc, &descriptorSet, &poolOut))
