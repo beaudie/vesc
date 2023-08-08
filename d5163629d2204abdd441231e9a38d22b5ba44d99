@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19ac8cd9_a79d3f34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-08-08T14:58:39Z",
+      "side": 1,
+      "message": "I think this change is dangerous because it depends on members of the features struct being left uninitialized to be overridable. Most backends initialize every feature and would be unable to have anything overiden, special-casing the frontend features is bug prone.\n\nThere is also definitely a conflation between features meaning a hardware capability and policy. It\u0027s still useful to be able to emulate a missing hardware feature though.\n\nThe best way forward is to never have features depend on other features during initialization.",
+      "revId": "d5163629d2204abdd441231e9a38d22b5ba44d99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "be481d1d_221712f2",
