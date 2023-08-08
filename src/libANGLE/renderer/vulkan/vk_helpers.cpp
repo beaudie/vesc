@@ -5072,6 +5072,12 @@ void BufferHelper::release(RendererVk *renderer)
 
     if (mSuballocation.valid())
     {
+        if (!mSuballocation.isSuballocated())
+        {
+            // Destroy cacheKeys now to avoid getting into situation that having to destroy
+            // descriptorSet from garbage collection thread.
+            mSuballocation.getBufferBlock()->destroyAllCachedDescriptorSetCacheKeys(renderer);
+        }
         renderer->collectSuballocationGarbage(mUse, std::move(mSuballocation),
                                               std::move(mBufferForVertexArray));
     }
