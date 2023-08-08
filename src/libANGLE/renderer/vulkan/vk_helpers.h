@@ -252,7 +252,7 @@ class DynamicDescriptorPool final : angle::NonCopyable
                                              VkDescriptorSet *descriptorSetOut,
                                              SharedDescriptorSetCacheKey *sharedCacheKeyOut);
 
-    void releaseCachedDescriptorSet(ContextVk *contextVk, const DescriptorSetDesc &desc);
+    void releaseCachedDescriptorSet(RendererVk *renderer, const DescriptorSetDesc &desc);
     void destroyCachedDescriptorSet(RendererVk *renderer, const DescriptorSetDesc &desc);
 
     template <typename Accumulator>
