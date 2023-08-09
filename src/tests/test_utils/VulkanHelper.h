@@ -144,10 +144,11 @@ class VulkanHelper
 
     uint32_t mGraphicsQueueFamilyIndex = UINT32_MAX;
 
-    bool mHasExternalMemoryFd         = false;
-    bool mHasExternalMemoryFuchsia    = false;
-    bool mHasExternalSemaphoreFd      = false;
-    bool mHasExternalSemaphoreFuchsia = false;
+    bool mHasExternalMemoryFd                                         = false;
+    bool mHasExternalMemoryFuchsia                                    = false;
+    bool mHasExternalSemaphoreFd                                      = false;
+    bool mHasExternalSemaphoreFuchsia                                 = false;
+    PFN_vkGetPhysicalDeviceProperties2 vkGetPhysicalDeviceProperties2 = nullptr;
     PFN_vkGetPhysicalDeviceImageFormatProperties2 vkGetPhysicalDeviceImageFormatProperties2 =
         nullptr;
     PFN_vkGetMemoryFdKHR vkGetMemoryFdKHR       = nullptr;

@@ -273,7 +273,8 @@ void VulkanHelper::initialize(bool useSwiftshader, bool enableValidationLayers)
     ASSERT(physicalDevices.size() > 0);
 
     VkPhysicalDeviceProperties physicalDeviceProperties;
-    ChoosePhysicalDevice(vkGetPhysicalDeviceProperties, physicalDevices, icd, 0, 0,
+    ChoosePhysicalDevice(vkGetPhysicalDeviceProperties, vkGetPhysicalDeviceProperties2,
+                         vkEnumerateDeviceExtensionProperties, physicalDevices, icd, 0,
                          &mPhysicalDevice, &physicalDeviceProperties);
 
     vkGetPhysicalDeviceMemoryProperties(mPhysicalDevice, &mMemoryProperties);
@@ -463,6 +464,10 @@ void VulkanHelper::initializeFromANGLE()
     };
     vkResult = vkCreateCommandPool(mDevice, &commandPoolCreateInfo, nullptr, &mCommandPool);
     ASSERT(vkResult == VK_SUCCESS);
+
+    vkGetPhysicalDeviceProperties2 = reinterpret_cast<PFN_vkGetPhysicalDeviceProperties2>(
+        vkGetInstanceProcAddr(mInstance, "vkGetPhysicalDeviceProperties2"));
+    ASSERT(vkGetPhysicalDeviceProperties2);
 
     vkGetPhysicalDeviceImageFormatProperties2 =
         reinterpret_cast<PFN_vkGetPhysicalDeviceImageFormatProperties2>(

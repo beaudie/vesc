@@ -15,6 +15,7 @@
 #include <string>
 #include <vector>
 
+#include "libANGLE/AttributeMap.h"
 #include "libANGLE/Error.h"
 
 namespace rx
@@ -33,7 +34,9 @@ class FunctionsEGL
     std::string vendorString;
     std::string versionString;
 
-    egl::Error initialize(EGLAttrib platformType, EGLNativeDisplayType nativeDisplay);
+    egl::Error initialize(EGLAttrib platformType,
+                          EGLNativeDisplayType nativeDisplay,
+                          const egl::AttributeMap &displayAttributes);
     egl::Error terminate();
 
     virtual void *getProcAddress(const char *name) const = 0;
@@ -130,7 +133,7 @@ class FunctionsEGL
     EGLDisplay getPlatformDisplay(EGLAttrib platformType, EGLNativeDisplayType nativeDisplay);
 
     // Fallback mechanism for creating a display from a native device object.
-    EGLDisplay getNativeDisplay(int *major, int *minor);
+    EGLDisplay getNativeDisplay(int *major, int *minor, uint64_t systemDeviceID = 0);
 
     struct EGLDispatchTable;
     EGLDispatchTable *mFnPtrs;
