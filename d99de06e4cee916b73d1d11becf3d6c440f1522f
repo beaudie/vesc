@@ -39,6 +39,30 @@
       },
       "revId": "d99de06e4cee916b73d1d11becf3d6c440f1522f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "339a66d0_472cad5f",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1585,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-08-09T21:43:04Z",
+      "side": 1,
+      "message": "Thank you for pointing out the function, I have added a call to `RendererVk::handleDeviceLost()` in `ContextVk::onDestroy()` if the context lost happened, and removed the isDeviceLost check in `CommandQueue::checkOneCommandBatch()`.",
+      "parentUuid": "4a722afc_6c51b4d3",
+      "range": {
+        "startLine": 1585,
+        "startChar": 25,
+        "endLine": 1585,
+        "endChar": 41
+      },
+      "revId": "d99de06e4cee916b73d1d11becf3d6c440f1522f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
