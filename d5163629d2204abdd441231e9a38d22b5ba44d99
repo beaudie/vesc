@@ -53,6 +53,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c3a4940_f6f06787",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-08-09T15:18:31Z",
+      "side": 1,
+      "message": "I need to make some test changes before submitting this.\n\nFirst, I need to test something similar to the example in the commit message: if you disable \"allowX\" then \"supportsX\" should be disabled as well. The challenge is to find an appropriate dependency chain like that which doesn\u0027t depend on driver support (i.e. the test should have the same result regardless of drivers).\n\nAnd I noticed that EGLFeatureControlTest has a failure on Windows/NVIDIA with a recent driver supporting VK_EXT_graphics_pipeline_library. The failure is now actually a test error. It uses an Enable override for the wildcard \"prefer*\", and verifies that no other features change unexpectedly. The failure happens because there are some features that may change depending on the state of \"preferMonolithicPipelinesOverLibraries\": mergeProgramPipelineCachesToGlobalCache and syncMonolithicPipelinesToBlobCache. These only change state if the driver supports GPL, which is (I think) why we don\u0027t see it fail on the bots.\n\nSo I\u0027ll try to figure out some decent tests shortly.",
+      "revId": "d5163629d2204abdd441231e9a38d22b5ba44d99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "be481d1d_221712f2",
@@ -66,6 +83,30 @@
       "writtenOn": "2023-08-07T14:24:27Z",
       "side": 1,
       "message": "nit: please move these two lines inside `initializeFeatures()`, like in Vulkan",
+      "range": {
+        "startLine": 135,
+        "startChar": 0,
+        "endLine": 137,
+        "endChar": 40
+      },
+      "revId": "d5163629d2204abdd441231e9a38d22b5ba44d99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce6c7e99_61247c7d",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-08-09T15:18:31Z",
+      "side": 1,
+      "message": "Will do.",
+      "parentUuid": "be481d1d_221712f2",
       "range": {
         "startLine": 135,
         "startChar": 0,
