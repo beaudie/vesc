@@ -226,16 +226,12 @@ class UniformBlockEncodingVisitor : public sh::VariableNameVisitor
     UniformBlockEncodingVisitor(const GetBlockMemberInfoFunc &getMemberInfo,
                                 const std::string &namePrefix,
                                 const std::string &mappedNamePrefix,
-                                std::vector<LinkedUniform> *uniformsOut,
-                                std::vector<std::string> *uniformNamesOut,
-                                std::vector<std::string> *uniformMappedNamesOut,
+                                std::vector<UsedUniform> *uniformsOut,
                                 ShaderType shaderType,
                                 int blockIndex)
         : sh::VariableNameVisitor(namePrefix, mappedNamePrefix),
           mGetMemberInfo(getMemberInfo),
           mUniformsOut(uniformsOut),
-          mUniformNamesOut(uniformNamesOut),
-          mUniformMappedNamesOut(uniformMappedNamesOut),
           mShaderType(shaderType),
           mBlockIndex(blockIndex)
     {}
@@ -262,27 +258,24 @@ class UniformBlockEncodingVisitor : public sh::VariableNameVisitor
 
         if (mBlockIndex == -1)
         {
-            SetActive(mUniformsOut, mUniformNamesOut, nameWithArrayIndex, mShaderType,
-                      variable.active, variable.id);
+            SetActive(mUniformsOut, nameWithArrayIndex, mShaderType, variable.active, variable.id);
             return;
         }
 
-        LinkedUniform newUniform(variable.type, variable.precision, variable.arraySizes, -1, -1, -1,
-                                 mBlockIndex, variableInfo);
+        UsedUniform newUniform(variable.type, variable.precision, nameWithArrayIndex,
+                               variable.arraySizes, -1, -1, -1, mBlockIndex, variableInfo);
+        newUniform.mappedName = mappedNameWithArrayIndex;
+        newUniform.active     = true;
         newUniform.setActive(mShaderType, variable.active, variable.id);
 
         // Since block uniforms have no location, we don't need to store them in the uniform
         // locations list.
         mUniformsOut->push_back(newUniform);
-        mUniformNamesOut->push_back(nameWithArrayIndex);
-        mUniformMappedNamesOut->push_back(mappedNameWithArrayIndex);
     }
 
   private:
     const GetBlockMemberInfoFunc &mGetMemberInfo;
-    std::vector<LinkedUniform> *mUniformsOut;
-    std::vector<std::string> *mUniformNamesOut;
-    std::vector<std::string> *mUniformMappedNamesOut;
+    std::vector<UsedUniform> *mUniformsOut;
     const ShaderType mShaderType;
     const int mBlockIndex;
 };
@@ -1530,15 +1523,11 @@ UniformBlockLinker::UniformBlockLinker() = default;
 UniformBlockLinker::~UniformBlockLinker() {}
 
 void UniformBlockLinker::init(std::vector<InterfaceBlock> *blocksOut,
-                              std::vector<LinkedUniform> *uniformsOut,
-                              std::vector<std::string> *uniformNamesOut,
-                              std::vector<std::string> *uniformMappedNamesOut,
+                              std::vector<UsedUniform> *uniformsOut,
                               std::vector<std::string> *unusedInterfaceBlocksOut)
 {
     InterfaceBlockLinker::init(blocksOut, unusedInterfaceBlocksOut);
-    mUniformsOut           = uniformsOut;
-    mUniformNamesOut       = uniformNamesOut;
-    mUniformMappedNamesOut = uniformMappedNamesOut;
+    mUniformsOut = uniformsOut;
 }
 
 size_t UniformBlockLinker::getCurrentBlockMemberIndex() const
@@ -1554,8 +1543,7 @@ sh::ShaderVariableVisitor *UniformBlockLinker::getVisitor(
     int blockIndex) const
 {
     return new UniformBlockEncodingVisitor(getMemberInfo, namePrefix, mappedNamePrefix,
-                                           mUniformsOut, mUniformNamesOut, mUniformMappedNamesOut,
-                                           shaderType, blockIndex);
+                                           mUniformsOut, shaderType, blockIndex);
 }
 
 // ShaderStorageBlockLinker implementation.
@@ -1645,18 +1633,29 @@ LinkingVariables::LinkingVariables(const ProgramPipelineState &state)
 LinkingVariables::~LinkingVariables() = default;
 
 void ProgramLinkedResources::init(std::vector<InterfaceBlock> *uniformBlocksOut,
-                                  std::vector<LinkedUniform> *uniformsOut,
-                                  std::vector<std::string> *uniformNamesOut,
-                                  std::vector<std::string> *uniformMappedNamesOut,
                                   std::vector<InterfaceBlock> *shaderStorageBlocksOut,
                                   std::vector<BufferVariable> *bufferVariablesOut,
                                   std::vector<AtomicCounterBuffer> *atomicCounterBuffersOut)
 {
-    uniformBlockLinker.init(uniformBlocksOut, uniformsOut, uniformNamesOut, uniformMappedNamesOut,
-                            &unusedInterfaceBlocks);
+    uniformBlockLinker.init(uniformBlocksOut, &mUniforms, &unusedInterfaceBlocks);
     shaderStorageBlockLinker.init(shaderStorageBlocksOut, bufferVariablesOut,
                                   &unusedInterfaceBlocks);
     atomicCounterBufferLinker.init(atomicCounterBuffersOut);
+}
+
+void ProgramLinkedResources::getResultLinkedUniforms(std::vector<LinkedUniform> *uniforms,
+                                                     std::vector<std::string> *uniformNames,
+                                                     std::vector<std::string> *uniformMappedNames)
+{
+    uniforms->reserve(uniforms->size() + mUniforms.size());
+    uniformNames->reserve(uniformNames->size() + mUniforms.size());
+    uniformMappedNames->reserve(uniformMappedNames->size() + mUniforms.size());
+    for (const UsedUniform &usedUniform : mUniforms)
+    {
+        uniforms->emplace_back(usedUniform);
+        uniformNames->emplace_back(usedUniform.name);
+        uniformMappedNames->emplace_back(usedUniform.mappedName);
+    }
 }
 
 void ProgramLinkedResourcesLinker::linkResources(const Context *context,

@@ -1194,10 +1194,8 @@ angle::Result Program::linkImpl(const Context *context)
     LinkingVariables linkingVariables(context, mState);
     ProgramLinkedResources &resources = linkingState->resources;
 
-    resources.init(&mState.mExecutable->mUniformBlocks, &mState.mExecutable->mUniforms,
-                   &mState.mExecutable->mUniformNames, &mState.mExecutable->mUniformMappedNames,
-                   &mState.mExecutable->mShaderStorageBlocks, &mState.mBufferVariables,
-                   &mState.mExecutable->mAtomicCounterBuffers);
+    resources.init(&mState.mExecutable->mUniformBlocks, &mState.mExecutable->mShaderStorageBlocks,
+                   &mState.mBufferVariables, &mState.mExecutable->mAtomicCounterBuffers);
 
     // TODO: Fix incomplete linking. http://anglebug.com/6358
     updateLinkedShaderStages();
@@ -1312,6 +1310,9 @@ angle::Result Program::linkImpl(const Context *context)
     mLinkingState->linkingFromBinary = false;
     mLinkingState->programHash       = programHash;
     mLinkingState->linkEvent         = mProgram->link(context, resources, infoLog, mergedVaryings);
+    resources.getResultLinkedUniforms(&mState.mExecutable->mUniforms,
+                                      &mState.mExecutable->mUniformNames,
+                                      &mState.mExecutable->mUniformMappedNames);
 
     // Must be after mProgram->link() to avoid misleading the linker about output variables.
     mState.updateProgramInterfaceInputs(context);
