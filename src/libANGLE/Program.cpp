@@ -1194,10 +1194,8 @@ angle::Result Program::linkImpl(const Context *context)
     LinkingVariables linkingVariables(context, mState);
     ProgramLinkedResources &resources = linkingState->resources;
 
-    resources.init(&mState.mExecutable->mUniformBlocks, &mState.mExecutable->mUniforms,
-                   &mState.mExecutable->mUniformNames, &mState.mExecutable->mUniformMappedNames,
-                   &mState.mExecutable->mShaderStorageBlocks, &mState.mBufferVariables,
-                   &mState.mExecutable->mAtomicCounterBuffers);
+    resources.init(&mState.mExecutable->mUniformBlocks, &mState.mExecutable->mShaderStorageBlocks,
+                   &mState.mBufferVariables, &mState.mExecutable->mAtomicCounterBuffers);
 
     // TODO: Fix incomplete linking. http://anglebug.com/6358
     updateLinkedShaderStages();
@@ -1348,6 +1346,11 @@ void Program::resolveLinkImpl(const Context *context)
     // According to GLES 3.0/3.1 spec for LinkProgram and UseProgram,
     // Only successfully linked program can replace the executables.
     ASSERT(mLinked);
+
+    // Now merge in uniforms generated from uniform blocks.
+    linkingState->resources.mergeLinkedUniforms(&mState.mExecutable->mUniforms,
+                                                &mState.mExecutable->mUniformNames,
+                                                &mState.mExecutable->mUniformMappedNames);
 
     // Mark implementation-specific unreferenced uniforms as ignored.
     std::vector<ImageBinding> *imageBindings = getExecutable().getImageBindings();
