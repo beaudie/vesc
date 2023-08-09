@@ -57,13 +57,15 @@ class [[nodiscard]] ScopedVkLoaderEnvironment : angle::NonCopyable
     Optional<std::string> mPreviousNoDeviceSelectEnv;
 };
 
-void ChoosePhysicalDevice(PFN_vkGetPhysicalDeviceProperties pGetPhysicalDeviceProperties,
-                          const std::vector<VkPhysicalDevice> &physicalDevices,
-                          vk::ICD preferredICD,
-                          uint32_t preferredVendorID,
-                          uint32_t preferredDeviceID,
-                          VkPhysicalDevice *physicalDeviceOut,
-                          VkPhysicalDeviceProperties *physicalDevicePropertiesOut);
+void ChoosePhysicalDevice(
+    PFN_vkGetPhysicalDeviceProperties pGetPhysicalDeviceProperties,
+    PFN_vkGetPhysicalDeviceProperties2KHR pGetPhysicalDeviceProperties2KHR,
+    PFN_vkEnumerateDeviceExtensionProperties pEnumerateDeviceExtensionProperties,
+    const std::vector<VkPhysicalDevice> &physicalDevices,
+    vk::ICD preferredICD,
+    uint64_t systemDeviceID,
+    VkPhysicalDevice *physicalDeviceOut,
+    VkPhysicalDeviceProperties *physicalDevicePropertiesOut);
 
 }  // namespace vk
 
