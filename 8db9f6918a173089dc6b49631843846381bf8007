@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4eb3e596_f9c53783",
+        "filename": "src/tests/egl_tests/EGLFeatureControlTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-09T19:22:44Z",
+      "side": 1,
+      "message": "To fix the build: Use `angle::ToLower` and compare for equality.",
+      "range": {
+        "startLine": 328,
+        "startChar": 16,
+        "endLine": 328,
+        "endChar": 23
+      },
+      "revId": "8db9f6918a173089dc6b49631843846381bf8007",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
