@@ -1250,6 +1250,13 @@ struct FeaturesVk : FeatureSetBase
         &members,
     };
 
+    FeatureInfo enableParallelCompileAndLink = {
+        "enableParallelCompileAndLink",
+        FeatureCategory::VulkanFeatures,
+        "Expose the GL_KHR_parallel_shader_compile extension",
+        &members, "http://anglebug.com/8297"
+    };
+
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
