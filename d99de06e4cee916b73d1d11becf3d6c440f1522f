@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a722afc_6c51b4d3",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1585,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-09T00:04:37Z",
+      "side": 1,
+      "message": "Is this needed? I thought RendererVk::handleDeviceLost() already handles this?",
+      "range": {
+        "startLine": 1585,
+        "startChar": 25,
+        "endLine": 1585,
+        "endChar": 41
+      },
+      "revId": "d99de06e4cee916b73d1d11becf3d6c440f1522f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
