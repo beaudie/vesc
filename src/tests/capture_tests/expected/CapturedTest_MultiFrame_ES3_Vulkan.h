@@ -15,6 +15,7 @@ void ResetReplayContextShared(void);
 void ResetReplayContext1(void);
 void ReplayFrame4(void);
 void SetupReplayContextShared(void);
+void SetupInactiveReplayContextShared(void);
 void InitReplay(void);
 
 // Global variables

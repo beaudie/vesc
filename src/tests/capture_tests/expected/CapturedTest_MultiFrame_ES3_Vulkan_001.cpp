@@ -98,6 +98,7 @@ void SetupReplay(void)
 {
     InitReplay();
     SetupReplayContextShared();
+    if (gReplayResourceMode == angle::ReplayResourceMode::Full) SetupInactiveReplayContextShared();
     SetCurrentContextID(1);
     SetupReplayContext1();
 

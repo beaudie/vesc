@@ -1753,6 +1753,7 @@ void TracePerfTest::initializeBenchmark()
     mEndFrame   = traceInfo.frameEnd;
     mTraceReplay->setValidateSerializedStateCallback(ValidateSerializedState);
     mTraceReplay->setBinaryDataDir(testDataDir);
+    mTraceReplay->setReplayResourceMode(gFullReplay);
 
     if (gMinimizeGPUWork)
     {

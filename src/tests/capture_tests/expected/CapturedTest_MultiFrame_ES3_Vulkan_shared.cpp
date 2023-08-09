@@ -9,5 +9,9 @@ void SetupReplayContextShared(void)
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 }
 
+void SetupInactiveReplayContextShared(void)
+{
+}
+
 // Public Functions
 
