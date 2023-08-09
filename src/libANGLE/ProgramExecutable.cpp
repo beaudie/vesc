@@ -1573,7 +1573,8 @@ bool ProgramExecutable::linkUniforms(
     InfoLog &infoLog,
     const ProgramAliasedBindings &uniformLocationBindings,
     GLuint *combinedImageUniformsCountOut,
-    std::vector<UnusedUniform> *unusedUniformsOutOrNull,
+    std::vector<UsedUniform> *usedUniformsOut,
+    std::vector<UnusedUniform> *unusedUniformsOut,
     std::vector<VariableLocation> *uniformLocationsOutOrNull)
 {
     UniformLinker linker(mLinkedShaderStages, shaderUniforms);
@@ -1582,8 +1583,7 @@ bool ProgramExecutable::linkUniforms(
         return false;
     }
 
-    linker.getResults(&mUniforms, &mUniformNames, &mUniformMappedNames, unusedUniformsOutOrNull,
-                      uniformLocationsOutOrNull);
+    linker.getResults(usedUniformsOut, unusedUniformsOut, uniformLocationsOutOrNull);
 
     linkSamplerAndImageBindings(combinedImageUniformsCountOut);
 

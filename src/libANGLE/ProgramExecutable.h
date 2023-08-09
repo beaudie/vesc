@@ -364,7 +364,8 @@ class ProgramExecutable final : public angle::Subject
                       InfoLog &infoLog,
                       const ProgramAliasedBindings &uniformLocationBindings,
                       GLuint *combinedImageUniformsCount,
-                      std::vector<UnusedUniform> *unusedUniforms,
+                      std::vector<UsedUniform> *usedUniformsOut,
+                      std::vector<UnusedUniform> *unusedUniformsOut,
                       std::vector<VariableLocation> *uniformLocationsOutOrNull);
 
     void copyInputsFromProgram(const ProgramState &programState);

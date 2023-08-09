@@ -825,7 +825,8 @@ class Program final : public LabeledObject, public angle::Subject
     bool linkVaryings(const Context *context, InfoLog &infoLog) const;
 
     bool linkUniforms(const Context *context,
-                      std::vector<UnusedUniform> *unusedUniformsOutOrNull,
+                      std::vector<UsedUniform> *usedUniformsOut,
+                      std::vector<UnusedUniform> *unusedUniformsOut,
                       GLuint *combinedImageUniformsOut,
                       InfoLog &infoLog);
 
