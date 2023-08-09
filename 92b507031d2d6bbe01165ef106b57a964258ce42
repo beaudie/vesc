@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78a40a53_d5784338",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-08-09T21:39:50Z",
+      "side": 1,
+      "message": "Would you please add more details to how the data race condition can happen?\n\nReading the description now, my understanding is:\n\n1. If buffer is not being suballocated, no data race condition can happen.\n\n2. If buffer is being suballocated, shared group owns bufferBlocks, and when the shared group pool destroys bufferBlocks, there will be data race condition, because in some scenario, the context in main thread will access the bufferBlocks at the same time. What is an example scenario?",
+      "revId": "92b507031d2d6bbe01165ef106b57a964258ce42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55bac4c8_f4686072",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 6513,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-08-09T21:39:50Z",
+      "side": 1,
+      "message": "Now that `ReleaseCachedObject(ContextVk*)` is `UNREACHABLE`, do we still need to keep this function `releaseKeys(ContextVk *contextVk)` in `SharedCacheKeyManager`?",
+      "revId": "92b507031d2d6bbe01165ef106b57a964258ce42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c12f21a_1f7d8eca",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 6527,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-08-09T21:39:50Z",
+      "side": 1,
+      "message": "nit: is it a typo? `releaseRef` --\u003e `releaseKeys`",
+      "revId": "92b507031d2d6bbe01165ef106b57a964258ce42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "526d3404_40454917",
+        "filename": "src/tests/gl_tests/TransformFeedbackTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 4395,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-08-09T21:39:50Z",
+      "side": 1,
+      "message": "Which part of this CL does this test try to verify?",
+      "revId": "92b507031d2d6bbe01165ef106b57a964258ce42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "39035a6e_37952741",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3465,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-08-09T21:39:50Z",
+      "side": 1,
+      "message": "Are there any asserts / checks in this test to make sure the cached bufferblocks are destroyed properly?",
+      "revId": "92b507031d2d6bbe01165ef106b57a964258ce42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
