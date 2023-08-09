@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b18ea82_b80b18ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1161379
+      },
+      "writtenOn": "2023-08-09T09:09:20Z",
+      "side": 1,
+      "message": "This generates duplicate entry in codesearch?https://chromium.slack.com/archives/CGGPN5GDT/p1691571749405639",
+      "revId": "3dbfa314790dc08792e8765eb219b14624a9909e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
