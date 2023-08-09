@@ -69,16 +69,26 @@ bool GetPCIDevicesWithLibPCI(std::vector<GPUDeviceInfo> *devices)
 }
 #endif
 
+#if !defined(GPU_INFO_USE_LIBDRM)
+bool GetDevicesWithLibDRM(std::vector<GPUDeviceInfo> *devices)
+{
+    return false;
+}
+#endif
+
 bool GetSystemInfo(SystemInfo *info)
 {
-    if (!GetPCIDevicesWithLibPCI(&(info->gpus)))
+    if (!GetDevicesWithLibDRM(&(info->gpus)))
     {
+        if (!GetPCIDevicesWithLibPCI(&(info->gpus)))
+        {
 #if defined(ANGLE_USE_VULKAN_SYSTEM_INFO)
-        // Try vulkan backend to get GPU info
-        return GetSystemInfoVulkan(info);
+            // Try vulkan backend to get GPU info
+            return GetSystemInfoVulkan(info);
 #else
-        return false;
+            return false;
 #endif  // defined(ANGLE_HAS_VULKAN_SYSTEM_INFO)
+        }
     }
 
     if (info->gpus.size() == 0)
