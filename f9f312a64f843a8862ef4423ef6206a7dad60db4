@@ -16,6 +16,24 @@
       "message": "Why do we need to remove the `emulateTransformFeedback`?\n\nThe `EmulateTransformFeedback` feature is not implicitly enabled with `SupportsTransformFeebackExtension` feature disabled, it still depends on `mPhysicalDeviceFeatures.vertexPipelineStoresAndAtomics`:\n\n```\nANGLE_FEATURE_CONDITION(\u0026mFeatures, emulateTransformFeedback,\n                            (!mFeatures.supportsTransformFeedbackExtension.enabled \u0026\u0026\n                             mPhysicalDeviceFeatures.vertexPipelineStoresAndAtomics \u003d\u003d VK_TRUE));\n```",
       "revId": "f9f312a64f843a8862ef4423ef6206a7dad60db4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41e4d433_a1e14f40",
+        "filename": "src/tests/gl_tests/TransformFeedbackTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4401,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-09T21:25:33Z",
+      "side": 0,
+      "message": "Good catch, these configs are supposed to enable emulation for testing!",
+      "parentUuid": "937a619c_c9df8e00",
+      "revId": "f9f312a64f843a8862ef4423ef6206a7dad60db4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
