@@ -12,9 +12,14 @@
 
 #include "common/platform.h"
 #include "common/string_utils.h"
+#include "gpu_info_util/SystemInfo.h"
 #include "libANGLE/renderer/driver_utils.h"
 #include "libANGLE/renderer/gl/FunctionsGL.h"
 #include "libANGLE/renderer/gl/egl/functionsegl_typedefs.h"
+
+#if defined(ANGLE_PLATFORM_LINUX)
+#    include <sys/stat.h>
+#endif
 
 namespace
 {
@@ -188,7 +193,9 @@ FunctionsEGL::~FunctionsEGL()
     SafeDelete(mFnPtrs);
 }
 
-egl::Error FunctionsEGL::initialize(EGLAttrib platformType, EGLNativeDisplayType nativeDisplay)
+egl::Error FunctionsEGL::initialize(EGLAttrib platformType,
+                                    EGLNativeDisplayType nativeDisplay,
+                                    const egl::AttributeMap &displayAttributes)
 {
 #define ANGLE_GET_PROC_OR_WARNING(MEMBER, NAME)                \
     do                                                         \
@@ -231,20 +238,37 @@ egl::Error FunctionsEGL::initialize(EGLAttrib platformType, EGLNativeDisplayType
     ANGLE_GET_PROC_OR_ERROR(&mFnPtrs->surfaceAttribPtr, eglSurfaceAttrib);
     ANGLE_GET_PROC_OR_ERROR(&mFnPtrs->swapIntervalPtr, eglSwapInterval);
 
-    if (IsValidPlatformTypeForPlatformDisplayConnection(platformType))
+    uint32_t systemDeviceIDHigh =
+        static_cast<uint32_t>(displayAttributes.get(EGL_PLATFORM_ANGLE_DEVICE_ID_HIGH_ANGLE, 0));
+    uint32_t systemDeviceIDLow =
+        static_cast<uint32_t>(displayAttributes.get(EGL_PLATFORM_ANGLE_DEVICE_ID_LOW_ANGLE, 0));
+    uint64_t systemDeviceID =
+        angle::GetSystemDeviceIdFromParts(systemDeviceIDHigh, systemDeviceIDLow);
+
+    if (systemDeviceID != 0)
     {
-        mEGLDisplay = getPlatformDisplay(platformType, nativeDisplay);
-    }
-    else
-    {
-        mEGLDisplay = mFnPtrs->getDisplayPtr(nativeDisplay);
+        // If a native device ID was provided, try looking for that specific device first.
+        mEGLDisplay = getNativeDisplay(&minorVersion, &majorVersion, systemDeviceID);
     }
 
-    if (mEGLDisplay != EGL_NO_DISPLAY &&
-        mFnPtrs->initializePtr(mEGLDisplay, &majorVersion, &minorVersion) != EGL_TRUE)
+    if (mEGLDisplay == EGL_NO_DISPLAY)
     {
-        mEGLDisplay = EGL_NO_DISPLAY;
+        if (IsValidPlatformTypeForPlatformDisplayConnection(platformType))
+        {
+            mEGLDisplay = getPlatformDisplay(platformType, nativeDisplay);
+        }
+        else
+        {
+            mEGLDisplay = mFnPtrs->getDisplayPtr(nativeDisplay);
+        }
+
+        if (mEGLDisplay != EGL_NO_DISPLAY &&
+            mFnPtrs->initializePtr(mEGLDisplay, &majorVersion, &minorVersion) != EGL_TRUE)
+        {
+            mEGLDisplay = EGL_NO_DISPLAY;
+        }
     }
+
     if (mEGLDisplay == EGL_NO_DISPLAY)
     {
         // If no display was available, try to fallback to the first available
@@ -408,7 +432,7 @@ EGLDisplay FunctionsEGL::getPlatformDisplay(EGLAttrib platformType,
                                     reinterpret_cast<void *>(nativeDisplay), nullptr);
 }
 
-EGLDisplay FunctionsEGL::getNativeDisplay(int *major, int *minor)
+EGLDisplay FunctionsEGL::getNativeDisplay(int *major, int *minor, uint64_t systemDeviceID)
 {
     // We haven't queried extensions yet since some platforms require a display
     // to do so. We'll query them now since we need some for this fallback, and
@@ -420,10 +444,11 @@ EGLDisplay FunctionsEGL::getNativeDisplay(int *major, int *minor)
     }
     angle::SplitStringAlongWhitespace(extensions, &mExtensions);
 
-    // This fallback mechanism makes use of:
+    // This function makes use of:
     // - EGL_EXT_device_enumeration or EGL_EXT_device_base for eglQueryDevicesEXT
     // - EGL_EXT_platform_base for eglGetPlatformDisplayEXT
     // - EGL_EXT_platform_device for EGL_PLATFORM_DEVICE_EXT
+    // - EGL_EXT_device_query for eglQueryDeviceStringEXT if systemDeviceID is non-zero
     PFNEGLQUERYDEVICESEXTPROC queryDevices;
     PFNEGLGETPLATFORMDISPLAYEXTPROC getPlatformDisplay;
     bool hasQueryDevicesEXT =
@@ -440,6 +465,20 @@ EGLDisplay FunctionsEGL::getNativeDisplay(int *major, int *minor)
         return EGL_NO_DISPLAY;
     }
 
+    PFNEGLQUERYDEVICESTRINGEXTPROC queryDeviceString = nullptr;
+    if (systemDeviceID != 0)
+    {
+        bool hasQueryDeviceStringEXT = hasExtension("EGL_EXT_device_query");
+        if (!hasQueryDeviceStringEXT)
+        {
+            return EGL_NO_DISPLAY;
+        }
+        if (!SetPtr(&queryDeviceString, getProcAddress("eglQueryDeviceStringEXT")))
+        {
+            return EGL_NO_DISPLAY;
+        }
+    }
+
     // Get a list of native device objects.
     const EGLint kMaxDevices = 32;
     EGLDeviceEXT eglDevices[kMaxDevices];
@@ -452,6 +491,24 @@ EGLDisplay FunctionsEGL::getNativeDisplay(int *major, int *minor)
     // Look for the first native device that gives us a valid display.
     for (EGLint i = 0; i < numDevices; i++)
     {
+        if (systemDeviceID != 0)
+        {
+#if defined(ANGLE_PLATFORM_LINUX)
+            // We are looking for a specific DRM device.
+            const char *renderNodePath =
+                queryDeviceString(eglDevices[i], EGL_DRM_RENDER_NODE_FILE_EXT);
+            if (!renderNodePath)
+                continue;
+            struct stat sb;
+            if (stat(renderNodePath, &sb) < 0)
+                continue;
+            if (sb.st_rdev != systemDeviceID)
+                continue;
+#else
+            // The other EGL using platform (Android) does not have a concept of a system device ID.
+            continue;
+#endif
+        }
         EGLDisplay display = getPlatformDisplay(EGL_PLATFORM_DEVICE_EXT, eglDevices[i], nullptr);
         if (mFnPtrs->getErrorPtr() != EGL_SUCCESS)
         {
