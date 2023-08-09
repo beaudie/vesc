@@ -41,7 +41,7 @@ vars = {
   # build ARC++ support libraries.
   'checkout_android_native_support': 'checkout_android or checkout_chromeos',
 
-  # Check out Mesa and libdrm in ANGLE's third_party folder.
+  # Check out Mesa in ANGLE's third_party folder.
   'checkout_angle_mesa': False,
 
   # Version of Chromium our Chromium-based DEPS are mirrored from.
@@ -444,7 +444,7 @@ deps = {
   # We use the upstream/main branch.
   'third_party/libdrm': {
     'url': '{chromium_git}/chromiumos/third_party/libdrm@474894ed17a037a464e5bd845a0765a50f647898',
-    'condition': 'checkout_angle_mesa',
+    'condition': 'not build_with_chromium',
   },
 
   # libjpeg_turbo is used by glmark2.
