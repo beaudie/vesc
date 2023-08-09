@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8e419faa_87be24db",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-09T23:37:54Z",
+      "side": 1,
+      "message": "It is the opposite. #2 case will not have race because share group owns the buffer pool as well as descriptorSet pools. They only destroy with share group lock, so no race. #1 case is where the race could occur, since the buffer itself gets orphaned and then clean up thread may comes in and destroy the buffer which end up calling into descriptorSet cache code, all while the context thread is doing cache lookup.\n\nSo the fix is essentially for #1 case, we will release descriptorSet cache earlier, at the time the buffer is released, which we still had the shared group lock. Thus avoids this problem.",
+      "parentUuid": "78a40a53_d5784338",
+      "revId": "92b507031d2d6bbe01165ef106b57a964258ce42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "55bac4c8_f4686072",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 9
@@ -31,6 +49,24 @@
       "writtenOn": "2023-08-09T21:39:50Z",
       "side": 1,
       "message": "Now that `ReleaseCachedObject(ContextVk*)` is `UNREACHABLE`, do we still need to keep this function `releaseKeys(ContextVk *contextVk)` in `SharedCacheKeyManager`?",
+      "revId": "92b507031d2d6bbe01165ef106b57a964258ce42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f26c914_3a7198ea",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 6513,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-09T23:37:54Z",
+      "side": 1,
+      "message": "Yea, otherwise compiler will complain when it instantiate the template. The main reason we end up with two different APIs here is because FramebufferCache and DescriptorSetCache requires different argument. In future we could clean up and make them take same argument, then we can delete the unreachable version (which is actually not been used).",
+      "parentUuid": "55bac4c8_f4686072",
       "revId": "92b507031d2d6bbe01165ef106b57a964258ce42",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -54,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6d93954a_6a0900de",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 6527,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-09T23:37:54Z",
+      "side": 1,
+      "message": "Yes it is typo. Will fix.",
+      "parentUuid": "8c12f21a_1f7d8eca",
+      "revId": "92b507031d2d6bbe01165ef106b57a964258ce42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "526d3404_40454917",
         "filename": "src/tests/gl_tests/TransformFeedbackTest.cpp",
         "patchSetId": 9
@@ -71,6 +125,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5cdeed54_359cda5f",
+        "filename": "src/tests/gl_tests/TransformFeedbackTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 4395,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-09T23:37:54Z",
+      "side": 1,
+      "message": "This test ported from the webGL code in the bug (with some modification). It does not reproduce this bug, but I figured just check it in as well.",
+      "parentUuid": "526d3404_40454917",
+      "revId": "92b507031d2d6bbe01165ef106b57a964258ce42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "39035a6e_37952741",
         "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
         "patchSetId": 9
@@ -82,6 +154,24 @@
       "writtenOn": "2023-08-09T21:39:50Z",
       "side": 1,
       "message": "Are there any asserts / checks in this test to make sure the cached bufferblocks are destroyed properly?",
+      "revId": "92b507031d2d6bbe01165ef106b57a964258ce42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be3b088a_86b12ef5",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3465,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-09T23:37:54Z",
+      "side": 1,
+      "message": "Context tear down has the assertions. That is ANGLE implementation detail, we can\u0027t assert/test here in the test.",
+      "parentUuid": "39035a6e_37952741",
       "revId": "92b507031d2d6bbe01165ef106b57a964258ce42",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
