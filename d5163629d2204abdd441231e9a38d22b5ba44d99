@@ -115,6 +115,30 @@
       },
       "revId": "d5163629d2204abdd441231e9a38d22b5ba44d99",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36bd73ce_242f9819",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-08-09T19:01:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce6c7e99_61247c7d",
+      "range": {
+        "startLine": 135,
+        "startChar": 0,
+        "endLine": 137,
+        "endChar": 40
+      },
+      "revId": "d5163629d2204abdd441231e9a38d22b5ba44d99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
