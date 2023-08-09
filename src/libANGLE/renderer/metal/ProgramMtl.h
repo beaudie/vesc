@@ -132,7 +132,15 @@ class ProgramMtl : public ProgramImpl
     std::unique_ptr<LinkEvent> link(const gl::Context *context,
                                     const gl::ProgramLinkedResources &resources,
                                     gl::InfoLog &infoLog,
+<<<<<<< HEAD
                                     const gl::ProgramMergedVaryings &mergedVaryings) override;
+||||||| parent of 10f54902e (Vulkan: Move SPIR-V set up to link job)
+                                    const gl::ProgramMergedVaryings &mergedVaryings,
+                                    gl::ScopedShaderLinkLocks *shaderLocks) override;
+=======
+                                    gl::ProgramMergedVaryings &&mergedVaryings,
+                                    gl::ScopedShaderLinkLocks *shaderLocks) override;
+>>>>>>> 10f54902e (Vulkan: Move SPIR-V set up to link job)
     GLboolean validate(const gl::Caps &caps, gl::InfoLog *infoLog) override;
 
     void setUniform1fv(GLint location, GLsizei count, const GLfloat *v) override;

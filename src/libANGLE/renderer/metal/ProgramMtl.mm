@@ -659,7 +659,15 @@ void ProgramMtl::onLink(const gl::ShaderMap<ShaderImpl *> &shaders)
 std::unique_ptr<LinkEvent> ProgramMtl::link(const gl::Context *context,
                                             const gl::ProgramLinkedResources &resources,
                                             gl::InfoLog &infoLog,
+<<<<<<< HEAD
                                             const gl::ProgramMergedVaryings &mergedVaryings)
+||||||| parent of 10f54902e (Vulkan: Move SPIR-V set up to link job)
+                                            const gl::ProgramMergedVaryings &mergedVaryings,
+                                            gl::ScopedShaderLinkLocks *shaderLocks)
+=======
+                                            gl::ProgramMergedVaryings &&mergedVaryings,
+                                            gl::ScopedShaderLinkLocks *shaderLocks)
+>>>>>>> 10f54902e (Vulkan: Move SPIR-V set up to link job)
 {
     ContextMtl *contextMtl = mtl::GetImpl(context);
 
