@@ -34,6 +34,24 @@
       "parentUuid": "8847a680_eec61f32",
       "revId": "10fd7d1c3b14fb971e17aef40d2575a94e4cf1db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49fa37b7_d2a63045",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-09T17:21:28Z",
+      "side": 1,
+      "message": "Yea, looks like ActiveVariable is not aligned causing some gaps there. But thanks Geoff for quick turn around on this to get roller unblocked.",
+      "parentUuid": "4e49a771_a48e771e",
+      "revId": "10fd7d1c3b14fb971e17aef40d2575a94e4cf1db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
