@@ -52,6 +52,24 @@
       "parentUuid": "41e4d433_a1e14f40",
       "revId": "f9f312a64f843a8862ef4423ef6206a7dad60db4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f05c0787_e848a229",
+        "filename": "src/tests/gl_tests/TransformFeedbackTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4401,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-10T01:37:34Z",
+      "side": 0,
+      "message": "Hmm, you\u0027re right, I\u0027m still not used to the overrides working correctly ^^\n\n\u003e Would it not be better if they are skipped in that scenario?\n\nYes, they are indeed skipped.",
+      "parentUuid": "2ce7b58c_31c290e1",
+      "revId": "f9f312a64f843a8862ef4423ef6206a7dad60db4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
