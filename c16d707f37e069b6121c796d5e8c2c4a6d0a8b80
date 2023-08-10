@@ -46,6 +46,30 @@
       },
       "revId": "c16d707f37e069b6121c796d5e8c2c4a6d0a8b80",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1658ff5_9bcf006d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5923,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-10T20:04:04Z",
+      "side": 1,
+      "message": "Ok, I think it\u0027s still simpler to go with `preferredFlags` here. The logic is simple too: try to get what\u0027s preferred, if not fall back to what\u0027s required.\n\nIf ever needed, we can add an intermediate step that also tries preferred minus device local, but at least today that\u0027s never needed.",
+      "parentUuid": "2a5c7730_c945a175",
+      "range": {
+        "startLine": 5923,
+        "startChar": 52,
+        "endLine": 5923,
+        "endChar": 70
+      },
+      "revId": "c16d707f37e069b6121c796d5e8c2c4a6d0a8b80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
