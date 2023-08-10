@@ -70,6 +70,30 @@
       },
       "revId": "c16d707f37e069b6121c796d5e8c2c4a6d0a8b80",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1aa7ac9_2966741d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5923,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-10T21:17:37Z",
+      "side": 1,
+      "message": "I see. It has been updated. Thanks.",
+      "parentUuid": "b1658ff5_9bcf006d",
+      "range": {
+        "startLine": 5923,
+        "startChar": 52,
+        "endLine": 5923,
+        "endChar": 70
+      },
+      "revId": "c16d707f37e069b6121c796d5e8c2c4a6d0a8b80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
