@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e90f908_07a4e0ef",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5923,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-10T19:25:28Z",
+      "side": 1,
+      "message": "Isn\u0027t it simpler to just send `preferredFlags` here? Do we have a case where `localRequiredFlags` and `preferredFlags` is different?",
+      "range": {
+        "startLine": 5923,
+        "startChar": 52,
+        "endLine": 5923,
+        "endChar": 70
+      },
+      "revId": "c16d707f37e069b6121c796d5e8c2c4a6d0a8b80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
