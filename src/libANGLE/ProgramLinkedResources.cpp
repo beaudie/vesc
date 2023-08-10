@@ -267,6 +267,11 @@ class UniformBlockEncodingVisitor : public sh::VariableNameVisitor
             return;
         }
 
+        if (!variable.active)
+        {
+            return;
+        }
+
         LinkedUniform newUniform(variable.type, variable.precision, variable.arraySizes, -1, -1, -1,
                                  mBlockIndex, variableInfo);
         newUniform.setActive(mShaderType, variable.active, variable.id);
