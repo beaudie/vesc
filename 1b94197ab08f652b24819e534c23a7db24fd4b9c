@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "795faffd_3fa2e947",
+        "filename": "src/libANGLE/renderer/metal/ProgramMtl.mm",
+        "patchSetId": 7
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-08-10T15:20:26Z",
+      "side": 1,
+      "message": "It\u0027s been cleaned up a bit in a follow up patch: https://chromium-review.googlesource.com/c/angle/angle/+/4754018",
+      "parentUuid": "5d711d6e_c50b17d0",
+      "revId": "1b94197ab08f652b24819e534c23a7db24fd4b9c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f5eba7f5_f3ff3f7c",
         "filename": "src/libANGLE/renderer/metal/mtl_utils.mm",
         "patchSetId": 7
