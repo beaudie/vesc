@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3e16cca9_de90a332",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-08-10T05:31:55Z",
+      "side": 1,
+      "message": "Got it, thank you for the explanation!\n\nWould it be better to reword the CL description as:\n\n```\nRight now DynamicDescriptorPool::destroyCachedDescriptorSet can be\ncalled from garbage clean up thread, while simultaneously accessed by cache look up from the context main thread, and data race will happen and cause bugs. This can\nonly happen when the buffer is not being suballocated. In this case,\nsuballocation owns the bufferBlock and bufferBlock gets destroyed when\nsuballocation is destroyed from garbage collection thread. If buffer is\nsuballocated, the shared group owns pool which owns bufferBlocks and\nthey get destroyed from shared group with the share group lock. This CL avoids the data race problem by releasing the shared cacheKey when the buffer is released, while we still had the shared group lock.\n```",
+      "parentUuid": "8e419faa_87be24db",
+      "revId": "92b507031d2d6bbe01165ef106b57a964258ce42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "55bac4c8_f4686072",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 9
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "Yea, otherwise compiler will complain when it instantiate the template. The main reason we end up with two different APIs here is because FramebufferCache and DescriptorSetCache requires different argument. In future we could clean up and make them take same argument, then we can delete the unreachable version (which is actually not been used).",
       "parentUuid": "55bac4c8_f4686072",
+      "revId": "92b507031d2d6bbe01165ef106b57a964258ce42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cde971c2_38fcad09",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 6513,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-08-10T05:31:55Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "6f26c914_3a7198ea",
       "revId": "92b507031d2d6bbe01165ef106b57a964258ce42",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -141,6 +177,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "caa5cbe6_a23182f6",
+        "filename": "src/tests/gl_tests/TransformFeedbackTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 4395,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-08-10T05:31:55Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "5cdeed54_359cda5f",
+      "revId": "92b507031d2d6bbe01165ef106b57a964258ce42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "39035a6e_37952741",
@@ -172,6 +226,24 @@
       "side": 1,
       "message": "Context tear down has the assertions. That is ANGLE implementation detail, we can\u0027t assert/test here in the test.",
       "parentUuid": "39035a6e_37952741",
+      "revId": "92b507031d2d6bbe01165ef106b57a964258ce42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e51da8ed_c0c6a15a",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 3465,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-08-10T05:31:55Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "be3b088a_86b12ef5",
       "revId": "92b507031d2d6bbe01165ef106b57a964258ce42",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
