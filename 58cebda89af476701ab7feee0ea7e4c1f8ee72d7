@@ -22,6 +22,30 @@
       },
       "revId": "58cebda89af476701ab7feee0ea7e4c1f8ee72d7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2677d14_3d25930a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6455,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-10T19:08:03Z",
+      "side": 1,
+      "message": "`InitializeRenderPassFromDesc` was an anonymous-namespace function. I moved it here to expose it to other files. It\u0027s static in the class purely for scoping :shrug:\n\nSo there\u0027s actually something in this change I was meaning to point out. Because the warm up may now be done in a thread, and because creating pipelines needs a compatible render pass, and because RenderPassCache is not thread-safe, I opted to have the link job create a temp render pass that is _not_ cached and garbage collect it right after the link is done.\n\nI doubt it makes _that_ big a difference, it\u0027s a one time thing (one per program), and the cost should be negligible compared to the actual pipeline creation. For another, one day when we can use VK_KHR_dynamic_rendering it\u0027ll not matter because there won\u0027t be render passes anymore.",
+      "parentUuid": "ae8ae4cf_8be8fdd6",
+      "range": {
+        "startLine": 6455,
+        "startChar": 31,
+        "endLine": 6455,
+        "endChar": 45
+      },
+      "revId": "58cebda89af476701ab7feee0ea7e4c1f8ee72d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
