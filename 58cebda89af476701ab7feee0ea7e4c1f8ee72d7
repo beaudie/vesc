@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae8ae4cf_8be8fdd6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 6455,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-10T16:05:51Z",
+      "side": 1,
+      "message": "This doesn\u0027t look like anything to do with render pass cache, why not make it a standalone utility function like InitializeRenderPassFromDesc? Is there any real change other than name change and made it static member function?",
+      "range": {
+        "startLine": 6455,
+        "startChar": 31,
+        "endLine": 6455,
+        "endChar": 45
+      },
+      "revId": "58cebda89af476701ab7feee0ea7e4c1f8ee72d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
