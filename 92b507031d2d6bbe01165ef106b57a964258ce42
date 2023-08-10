@@ -56,6 +56,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c9381ab4_91beb111",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-10T15:39:41Z",
+      "side": 1,
+      "message": "Do we have the same problem with images?",
+      "revId": "92b507031d2d6bbe01165ef106b57a964258ce42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "55bac4c8_f4686072",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 9
