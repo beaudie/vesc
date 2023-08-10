@@ -423,6 +423,8 @@ angle_translator_lib_msl_sources = [
   "src/compiler/translator/tree_ops/msl/NameEmbeddedUniformStructsMetal.h",
   "src/compiler/translator/tree_ops/msl/ReduceInterfaceBlocks.cpp",
   "src/compiler/translator/tree_ops/msl/ReduceInterfaceBlocks.h",
+  "src/compiler/translator/tree_ops/msl/RescopeGlobalVariables.cpp",
+  "src/compiler/translator/tree_ops/msl/RescopeGlobalVariables.h",
   "src/compiler/translator/tree_ops/msl/RewriteCaseDeclarations.cpp",
   "src/compiler/translator/tree_ops/msl/RewriteCaseDeclarations.h",
   "src/compiler/translator/tree_ops/msl/RewriteInterpolants.cpp",
