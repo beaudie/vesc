@@ -96,9 +96,10 @@ TOutputGLSLBase::TOutputGLSLBase(TCompiler *compiler,
       // If pixel local storage introduces new fragment outputs, we are now required to specify a
       // location for _all_ fragment outputs, including previously valid outputs that had an
       // implicit location of zero.
-      mAlwaysSpecifyFragOutLocation(compiler->hasPixelLocalStorageUniforms() &&
-                                    compileOptions.pls.type ==
-                                        ShPixelLocalStorageType::FramebufferFetch),
+      mAlwaysSpecifyFragOutLocation(
+          compileOptions.explicitFragmentLocations ||
+          (compiler->hasPixelLocalStorageUniforms() &&
+           compileOptions.pls.type == ShPixelLocalStorageType::FramebufferFetch)),
       mCompileOptions(compileOptions)
 {}
 

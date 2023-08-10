@@ -26,7 +26,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 337
+#define ANGLE_SH_VERSION 338
 
 enum ShShaderSpec
 {
@@ -429,6 +429,9 @@ struct ShCompileOptions
 
     // Use fragment shaders to compute and set coverage mask based on the alpha value
     uint64_t emulateAlphaToCoverage : 1;
+
+    // Always write explicit location layout qualifiers for fragment outputs.
+    uint64_t explicitFragmentLocations : 1;
 
     ShCompileOptionsMetal metal;
     ShPixelLocalStorageOptions pls;
