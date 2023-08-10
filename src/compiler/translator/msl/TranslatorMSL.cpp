@@ -35,6 +35,7 @@
 #include "compiler/translator/tree_ops/msl/IntroduceVertexIndexID.h"
 #include "compiler/translator/tree_ops/msl/NameEmbeddedUniformStructsMetal.h"
 #include "compiler/translator/tree_ops/msl/ReduceInterfaceBlocks.h"
+#include "compiler/translator/tree_ops/msl/RescopeGlobalVariables.h"
 #include "compiler/translator/tree_ops/msl/RewriteCaseDeclarations.h"
 #include "compiler/translator/tree_ops/msl/RewriteInterpolants.h"
 #include "compiler/translator/tree_ops/msl/RewriteOutArgs.h"
