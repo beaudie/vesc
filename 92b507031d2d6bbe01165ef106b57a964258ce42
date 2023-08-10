@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "634f1fab_54326e72",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-10T15:51:20Z",
+      "side": 1,
+      "message": "Thanks.",
+      "parentUuid": "3e16cca9_de90a332",
+      "revId": "92b507031d2d6bbe01165ef106b57a964258ce42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c9381ab4_91beb111",
@@ -67,6 +85,24 @@
       "writtenOn": "2023-08-10T15:39:41Z",
       "side": 1,
       "message": "Do we have the same problem with images?",
+      "revId": "92b507031d2d6bbe01165ef106b57a964258ce42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c8920de_fc4f1889",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-10T15:51:20Z",
+      "side": 1,
+      "message": "No. Images already handled exactly this way - caches are released from TextureVk code.",
+      "parentUuid": "c9381ab4_91beb111",
       "revId": "92b507031d2d6bbe01165ef106b57a964258ce42",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -155,6 +191,24 @@
       "side": 1,
       "message": "Yes it is typo. Will fix.",
       "parentUuid": "8c12f21a_1f7d8eca",
+      "revId": "92b507031d2d6bbe01165ef106b57a964258ce42",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa40f844_b4b5e40f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 6527,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-10T15:51:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d93954a_6a0900de",
       "revId": "92b507031d2d6bbe01165ef106b57a964258ce42",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
