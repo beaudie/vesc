@@ -46,6 +46,7 @@
 #include "compiler/translator/tree_ops/RemoveDynamicIndexing.h"
 #include "compiler/translator/tree_ops/RemoveInvariantDeclaration.h"
 #include "compiler/translator/tree_ops/RemoveUnreferencedVariables.h"
+#include "compiler/translator/tree_ops/RescopeGlobalVariables.h"
 #include "compiler/translator/tree_ops/RewritePixelLocalStorage.h"
 #include "compiler/translator/tree_ops/SeparateDeclarations.h"
 #include "compiler/translator/tree_ops/SimplifyLoopConditions.h"
@@ -809,35 +810,6 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
     }
     mValidateASTOptions.validateNoStatementsAfterBranch = true;
 
-    // We need to generate globals early if we have non constant initializers enabled
-    bool initializeLocalsAndGlobals =
-        compileOptions.initializeUninitializedLocals && !IsOutputHLSL(getOutputType());
-    bool canUseLoopsToInitialize       = !compileOptions.dontUseLoopsToInitializeVariables;
-    bool highPrecisionSupported        = isHighPrecisionSupported();
-    bool enableNonConstantInitializers = IsExtensionEnabled(
-        mExtensionBehavior, TExtension::EXT_shader_non_constant_global_initializers);
-    // forceDeferGlobalInitializers is needed for MSL
-    // to convert a non-const global. For example:
-    //
-    //    int someGlobal = 123;
-    //
-    // to
-    //
-    //    int someGlobal;
-    //    void main() {
-    //        someGlobal = 123;
-    //
-    // This is because MSL doesn't allow statically initialized globals.
-    bool forceDeferGlobalInitializers = getOutputType() == SH_MSL_METAL_OUTPUT;
-
-    if (enableNonConstantInitializers &&
-        !DeferGlobalInitializers(this, root, initializeLocalsAndGlobals, canUseLoopsToInitialize,
-                                 highPrecisionSupported, forceDeferGlobalInitializers,
-                                 &mSymbolTable))
-    {
-        return false;
-    }
-
     // Create the function DAG and check there is no recursion
     if (!initCallDag(root))
     {
@@ -1017,6 +989,12 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
     {
         return false;
     }
+
+    if (!RescopeGlobalVariables(*this, *root))
+    {
+        return false;
+    }
+
     mValidateASTOptions.validateMultiDeclarations = true;
 
     if (!SplitSequenceOperator(this, root, IntermNodePatternMatcher::kArrayLengthMethod,
@@ -1127,6 +1105,27 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
         }
         mGLPositionInitialized = true;
     }
+
+    // We need to generate globals early if we have non constant initializers enabled
+    bool initializeLocalsAndGlobals =
+        compileOptions.initializeUninitializedLocals && !IsOutputHLSL(getOutputType());
+    bool canUseLoopsToInitialize       = !compileOptions.dontUseLoopsToInitializeVariables;
+    bool highPrecisionSupported        = isHighPrecisionSupported();
+    bool enableNonConstantInitializers = IsExtensionEnabled(
+        mExtensionBehavior, TExtension::EXT_shader_non_constant_global_initializers);
+    // forceDeferGlobalInitializers is needed for MSL
+    // to convert a non-const global. For example:
+    //
+    //    int someGlobal = 123;
+    //
+    // to
+    //
+    //    int someGlobal;
+    //    void main() {
+    //        someGlobal = 123;
+    //
+    // This is because MSL doesn't allow statically initialized globals.
+    bool forceDeferGlobalInitializers = getOutputType() == SH_MSL_METAL_OUTPUT;
 
     // DeferGlobalInitializers needs to be run before other AST transformations that generate new
     // statements from expressions. But it's fine to run DeferGlobalInitializers after the above
