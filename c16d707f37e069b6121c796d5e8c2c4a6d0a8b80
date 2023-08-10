@@ -22,6 +22,30 @@
       },
       "revId": "c16d707f37e069b6121c796d5e8c2c4a6d0a8b80",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a5c7730_c945a175",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5923,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-10T20:00:51Z",
+      "side": 1,
+      "message": "Currently, `localRequiredFlags` is the same as `preferredFlags`. Right now, `allocateAndBindMemory()` is only used in `initMemory()`, and its input `requiredFlags` is the same as `preferredFlags` without the device-local bit. However, if I understand correctly, in theory, `preferredFlags` does not have to include the required bits. For example, `preferredFlags` could only contain the device-local bit here, and this function, as it is, should still work the same way.",
+      "parentUuid": "5e90f908_07a4e0ef",
+      "range": {
+        "startLine": 5923,
+        "startChar": 52,
+        "endLine": 5923,
+        "endChar": 70
+      },
+      "revId": "c16d707f37e069b6121c796d5e8c2c4a6d0a8b80",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
