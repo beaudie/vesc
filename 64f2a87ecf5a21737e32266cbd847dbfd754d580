@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "598240db_d13d556b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2023-08-11T20:16:08Z",
+      "side": 1,
+      "message": "The test skips, but there must be some contention with another test/thread. validation is catching a Multithread error.",
+      "revId": "64f2a87ecf5a21737e32266cbd847dbfd754d580",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
