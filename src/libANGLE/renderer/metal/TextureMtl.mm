@@ -853,7 +853,7 @@ angle::Result TextureMtl::ensureImageCreated(const gl::Context *context,
     {
         // Image at this level hasn't been defined yet. We need to define it:
         const gl::ImageDesc &desc = mState.getImageDesc(index);
-        ANGLE_TRY(redefineImage(context, index, mFormat, desc.size));
+        ANGLE_TRY(redefineImage(context, index, mFormat, desc.size, false));
     }
     return angle::Result::Continue;
 }
@@ -1109,7 +1109,7 @@ angle::Result TextureMtl::copyImage(const gl::Context *context,
         colorReadRT.duplicateFrom(*srcReadRT);
     }
 
-    ANGLE_TRY(redefineImage(context, index, mtlFormat, newImageSize));
+    ANGLE_TRY(redefineImage(context, index, mtlFormat, newImageSize, true));
 
     gl::Extents fbSize = source->getReadColorAttachment()->getSize();
     gl::Rectangle fbRect(0, 0, fbSize.width, fbSize.height);
@@ -1157,7 +1157,7 @@ angle::Result TextureMtl::copyTexture(const gl::Context *context,
         angle::Format::InternalFormatToID(internalFormatInfo.sizedInternalFormat);
     const mtl::Format &mtlFormat = contextMtl->getPixelFormat(angleFormatId);
 
-    ANGLE_TRY(redefineImage(context, index, mtlFormat, sourceImageDesc.size));
+    ANGLE_TRY(redefineImage(context, index, mtlFormat, sourceImageDesc.size, true));
 
     return copySubTextureImpl(
         context, index, gl::Offset(0, 0, 0), internalFormatInfo, sourceLevel,
@@ -1629,7 +1629,8 @@ angle::Result TextureMtl::bindToShaderImage(const gl::Context *context,
 angle::Result TextureMtl::redefineImage(const gl::Context *context,
                                         const gl::ImageIndex &index,
                                         const mtl::Format &mtlFormat,
-                                        const gl::Extents &size)
+                                        const gl::Extents &size,
+                                        bool willImmediatelyReplaceContents)
 {
     bool imageWithinLevelRange = false;
     if (isIndexWithinMinMaxLevels(index) && mNativeTexture && mNativeTexture->valid())
@@ -1696,8 +1697,14 @@ angle::Result TextureMtl::redefineImage(const gl::Context *context,
         }
     }
 
-    // Make sure emulated channels are properly initialized
-    ANGLE_TRY(checkForEmulatedChannels(context, mtlFormat, imageDef.image));
+    // Make sure emulated channels are properly initialized, unless
+    // we're guaranteed to completely redefine the image's contents
+    // immediately afterward as in the case of TexImage2D and
+    // CopyTexImage2D, for example.
+    if (!willImmediatelyReplaceContents)
+    {
+        ANGLE_TRY(checkForEmulatedChannels(context, mtlFormat, imageDef.image));
+    }
 
     // Tell context to rebind textures
     contextMtl->invalidateCurrentTextures();
@@ -1742,7 +1749,7 @@ angle::Result TextureMtl::setImageImpl(const gl::Context *context,
         angle::Format::InternalFormatToID(dstFormatInfo.sizedInternalFormat);
     const mtl::Format &mtlFormat = contextMtl->getPixelFormat(angleFormatId);
 
-    ANGLE_TRY(redefineImage(context, index, mtlFormat, size));
+    ANGLE_TRY(redefineImage(context, index, mtlFormat, size, true));
 
     // Early-out on empty textures, don't create a zero-sized storage.
     if (size.empty())
