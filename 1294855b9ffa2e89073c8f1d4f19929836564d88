@@ -33,6 +33,23 @@
       "message": "Skipping initialization of the emulated color channels clearly isn\u0027t correct. Suggestions on how to speed this up are welcome. I\u0027d want to render to or clear the channels of that texture, masking out the channels to be preserved.",
       "revId": "1294855b9ffa2e89073c8f1d4f19929836564d88",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51efeb63_0d5dd95c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-11T14:30:16Z",
+      "side": 1,
+      "message": "This is why a middle layer like mesa\u0027s Gallium would have been useful. This issue is solved in vulkan/:\n\n- Instead of clearing the image right away, \"stage\" a clear update to it the same way you would stage a data upload: https://source.chromium.org/chromium/chromium/src/+/refs/heads/main:third_party/angle/src/libANGLE/renderer/vulkan/vk_helpers.cpp;l\u003d8186;drc\u003d6222306b2a03f893aa538a6cd30fdad1288fca58\n- When flushing staged updates, check and remove any updates that are overriden by a later update: https://source.chromium.org/chromium/chromium/src/+/refs/heads/main:third_party/angle/src/libANGLE/renderer/vulkan/vk_helpers.cpp;l\u003d8911;drc\u003d6222306b2a03f893aa538a6cd30fdad1288fca58\n- Clear the image as part of flushing staged updates: https://source.chromium.org/chromium/chromium/src/+/refs/heads/main:third_party/angle/src/libANGLE/renderer/vulkan/vk_helpers.cpp;l\u003d8599;drc\u003d6222306b2a03f893aa538a6cd30fdad1288fca58 (see that `if` and the next)\n- Beware of invalidating images with emulated format\n\nIf you want to open yourself to a world of hurt (but also performance), you should also implement what we call deferred clears. Basically when a clear happens (glClear*):\n\n- Stage the clear as an update to the image if possible: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/FramebufferVk.cpp;l\u003d449;drc\u003d430a4f559cbc2bcd5d026e8b36ee46ddd80e9651 (many paths!)\n- When syncing the framebuffer, try to pick up the clear (if it\u0027s the only update to the image) for use as loadOp later: https://source.chromium.org/chromium/chromium/src/+/refs/heads/main:third_party/angle/src/libANGLE/renderer/vulkan/FramebufferVk.cpp;l\u003d1887;drc\u003d6222306b2a03f893aa538a6cd30fdad1288fca58 (see how mDeferredClears gets filled)\n- Remember to:\n  * Flush the deferred clears if you can\u0027t start a render pass; like if the next command is a blit\n  * There a million other nuances for which we have added tests, so beware of many little failures\n  * If a render pass can be started, use the clear with loadOp: https://source.chromium.org/chromium/chromium/src/+/refs/heads/main:third_party/angle/src/libANGLE/renderer/vulkan/FramebufferVk.cpp;l\u003d2855;drc\u003d6222306b2a03f893aa538a6cd30fdad1288fca58",
+      "revId": "1294855b9ffa2e89073c8f1d4f19929836564d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
