@@ -16,6 +16,23 @@
       "message": "Geoff: PTAL.",
       "revId": "b76ddb5fa073cde28520f2ead5d7966611340bc2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "428b1900_e9c650bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-08-11T22:14:24Z",
+      "side": 1,
+      "message": "Test flake is crbug.com/1459413 .",
+      "revId": "b76ddb5fa073cde28520f2ead5d7966611340bc2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
