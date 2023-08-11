@@ -719,13 +719,14 @@ GLint GetCommonVariableProperty(const T &var, GLenum prop)
 
 GLint GetInputResourceProperty(const Program *program, GLuint index, GLenum prop)
 {
-    const sh::ShaderVariable &variable = program->getInputResource(index);
+    const ProgramInput &variable = program->getInputResource(index);
 
     switch (prop)
     {
         case GL_TYPE:
+            return clampCast<GLint>(variable.type);
         case GL_ARRAY_SIZE:
-            return GetCommonVariableProperty(variable, prop);
+            return clampCast<GLint>(variable.arraySize);
 
         case GL_NAME_LENGTH:
             return clampCast<GLint>(program->getInputResourceName(index).size() + 1u);
