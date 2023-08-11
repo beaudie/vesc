@@ -719,13 +719,13 @@ GLint GetCommonVariableProperty(const T &var, GLenum prop)
 
 GLint GetInputResourceProperty(const Program *program, GLuint index, GLenum prop)
 {
-    const sh::ShaderVariable &variable = program->getInputResource(index);
+    const ProgramInput &variable = program->getInputResource(index);
 
     switch (prop)
     {
         case GL_TYPE:
-        case GL_ARRAY_SIZE:
-            return GetCommonVariableProperty(variable, prop);
+            //        case GL_ARRAY_SIZE:
+            //            return GetCommonVariableProperty(variable, prop);
 
         case GL_NAME_LENGTH:
             return clampCast<GLint>(program->getInputResourceName(index).size() + 1u);
@@ -750,8 +750,8 @@ GLint GetInputResourceProperty(const Program *program, GLuint index, GLenum prop
         case GL_REFERENCED_BY_TESS_EVALUATION_SHADER_EXT:
             return program->getState().getFirstAttachedShaderStageType() ==
                    ShaderType::TessEvaluation;
-        case GL_IS_PER_PATCH_EXT:
-            return variable.isPatch;
+            //        case GL_IS_PER_PATCH_EXT:
+            //            return variable.isPatch;
 
         default:
             UNREACHABLE();

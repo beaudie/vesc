@@ -290,7 +290,7 @@ std::unique_ptr<LinkEvent> ProgramGL::link(const gl::Context *context,
         }
 
         // Bind attribute locations to match the GL layer.
-        for (const sh::ShaderVariable &attribute : mState.getProgramInputs())
+        for (const gl::ProgramInput &attribute : mState.getProgramInputs())
         {
             if (!attribute.active || attribute.isBuiltIn())
             {

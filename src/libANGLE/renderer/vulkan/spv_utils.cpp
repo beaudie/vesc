@@ -283,7 +283,7 @@ void AssignAttributeLocations(const gl::ProgramExecutable &programExecutable,
     bool hasAliasingAttributes = false;
 
     // Assign attribute locations for the vertex shader.
-    for (const sh::ShaderVariable &attribute : programExecutable.getProgramInputs())
+    for (const gl::ProgramInput &attribute : programExecutable.getProgramInputs())
     {
         ASSERT(attribute.active);
 
