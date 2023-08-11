@@ -137,6 +137,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "35f30f6c_634ea344",
+        "filename": "src/libANGLE/Uniform.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-11T18:25:59Z",
+      "side": 1,
+      "message": "MAX_\u003cstage\u003e_UNIFORM_COMPONENTS can be quite large though based on GPUInfo, I am afraid to cap them into smaller value. And isn\u0027t that the limit needs to be combined stage component not exceeding 64K? I just not sure whats the right way to limit it here.",
+      "parentUuid": "f796d529_c270e419",
+      "revId": "abc30b3b85d02536987b9fb98cea165582bee4dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d0fae4bf_909253fc",
         "filename": "src/libANGLE/Uniform.h",
         "patchSetId": 8
