@@ -3407,7 +3407,7 @@ void GenerateLinkedProgram(const gl::Context *context,
 
     // Force the attributes to be bound the same way as in the existing program.
     // This can affect attributes that are optimized out in some implementations.
-    for (const sh::ShaderVariable &attrib : program->getState().getProgramInputs())
+    for (const gl::ProgramInput &attrib : program->getState().getProgramInputs())
     {
         if (gl::IsBuiltInName(attrib.name))
         {
