@@ -18,7 +18,17 @@ namespace
 class ComputeShaderTest : public ANGLETest<>
 {
   protected:
-    ComputeShaderTest() {}
+    static constexpr int kWidth  = 16;
+    static constexpr int kHeight = 16;
+    ComputeShaderTest()
+    {
+        setWindowWidth(kWidth);
+        setWindowHeight(kHeight);
+        setConfigRedBits(8);
+        setConfigGreenBits(8);
+        setConfigBlueBits(8);
+        setConfigAlphaBits(8);
+    }
 
     void createMockOutputImage(GLuint texture, GLenum internalFormat, GLint width, GLint height)
     {
@@ -5394,6 +5404,147 @@ TEST_P(ComputeShaderTest, AtomicOpPreviousValueAssignedToSSBO)
     {
         EXPECT_EQ(results[index], 0);
     }
+}
+// Test run out of Queue Serial without renderpass
+TEST_P(ComputeShaderTest, TestFlushOutsideRenderPassCommands)
+{
+    constexpr char kCSSource[] = R"(#version 310 es
+    shared int wg;
+    layout(binding = 0, std430) buffer Storage0 {
+      int inner[16];
+    } buf;
+
+    layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+    void main() {
+      wg = 0;
+      atomicExchange(wg, YYY);
+      barrier();
+      buf.inner[gl_WorkGroupID.x] = atomicAdd(wg, 1);
+    })";
+
+    const int dispatchSize = 16;
+
+    // define compute shader output buffer
+    const int outputBufferSizeInBytes   = dispatchSize * sizeof(int32_t);
+    const int outputBufferElementsCount = dispatchSize;
+    std::vector<int32_t> minusOnes(outputBufferElementsCount, -1);
+    GLBuffer resultBuffer;
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, resultBuffer);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, outputBufferSizeInBytes, &minusOnes[0], GL_STATIC_DRAW);
+    ASSERT_GL_NO_ERROR();
+
+    for (int i = 0; i < 100; i++)
+    {
+        std::string program(kCSSource);
+        size_t loc = program.find("YYY");
+        ASSERT(loc != std::string::npos);
+        program.replace(loc, 3, std::to_string(i + 5));
+
+        ANGLE_GL_COMPUTE_PROGRAM(csProgram, program.c_str());
+        glUseProgram(csProgram);
+        ASSERT_GL_NO_ERROR();
+
+        // Bind storage buffer to compute shader binding locations
+        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, resultBuffer);
+
+        glDispatchCompute(dispatchSize, 1, 1);
+        ASSERT_GL_NO_ERROR();
+
+        glMemoryBarrier(GL_BUFFER_UPDATE_BARRIER_BIT);
+        ASSERT_GL_NO_ERROR();
+    }
+}
+
+// Test run out of Queue Serial with renderpass.
+TEST_P(ComputeShaderTest, TestFlushOutsideRenderPassCommandsOutOfReservedQueueSerial)
+{
+    constexpr char kCSSource[] = R"(#version 310 es
+    shared int wg;
+    layout(binding = 0, std430) buffer Storage0 {
+      int inner[16];
+    } buf;
+
+    layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+    void main() {
+      wg = 0;
+      atomicExchange(wg, YYY);
+      barrier();
+      buf.inner[gl_WorkGroupID.x] = atomicAdd(wg, 1);
+    })";
+
+    const int dispatchSize = 16;
+
+    // define compute shader output buffer
+    const int outputBufferSizeInBytes   = dispatchSize * sizeof(int32_t);
+    const int outputBufferElementsCount = dispatchSize;
+    std::vector<int32_t> minusOnes(outputBufferElementsCount, -1);
+    GLBuffer resultBuffer;
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, resultBuffer);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, outputBufferSizeInBytes, &minusOnes[0], GL_STATIC_DRAW);
+    ASSERT_GL_NO_ERROR();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    // Clear to blue
+    glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    EXPECT_GL_NO_ERROR();
+
+    glViewport(0, 0, kWidth, kHeight);
+    glEnable(GL_SCISSOR_TEST);
+    glScissor(0, 0, kWidth / 2, kHeight / 2);
+
+    ANGLE_GL_PROGRAM(red, essl31_shaders::vs::Passthrough(), essl31_shaders::fs::Red());
+    EXPECT_GL_NO_ERROR();
+    glUseProgram(red.get());
+    drawQuad(red, essl31_shaders::PositionAttrib(), 0.5f, 1.0f, true);
+
+    EXPECT_GL_NO_ERROR();
+
+    for (int i = 0; i < 4; i++)
+    {
+        std::string program(kCSSource);
+        size_t loc = program.find("YYY");
+        ASSERT(loc != std::string::npos);
+        program.replace(loc, 3, std::to_string(i + 5));
+
+        ANGLE_GL_COMPUTE_PROGRAM(csProgram, program.c_str());
+        glUseProgram(csProgram);
+        ASSERT_GL_NO_ERROR();
+
+        // Bind storage buffer to compute shader binding locations
+        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, resultBuffer);
+
+        glDispatchCompute(dispatchSize, 1, 1);
+        ASSERT_GL_NO_ERROR();
+
+        glMemoryBarrier(GL_BUFFER_UPDATE_BARRIER_BIT);
+        ASSERT_GL_NO_ERROR();
+
+        glDispatchCompute(dispatchSize, 1, 1);
+        ASSERT_GL_NO_ERROR();
+
+        glMemoryBarrier(GL_BUFFER_UPDATE_BARRIER_BIT);
+        ASSERT_GL_NO_ERROR();
+
+        glDispatchCompute(dispatchSize, 1, 1);
+        ASSERT_GL_NO_ERROR();
+
+        glMemoryBarrier(GL_BUFFER_UPDATE_BARRIER_BIT);
+        ASSERT_GL_NO_ERROR();
+
+        glDispatchCompute(dispatchSize, 1, 1);
+        ASSERT_GL_NO_ERROR();
+
+        glMemoryBarrier(GL_BUFFER_UPDATE_BARRIER_BIT);
+        ASSERT_GL_NO_ERROR();
+
+        glDispatchCompute(dispatchSize, 1, 1);
+        ASSERT_GL_NO_ERROR();
+
+        glMemoryBarrier(GL_BUFFER_UPDATE_BARRIER_BIT);
+        ASSERT_GL_NO_ERROR();
+    }
+    swapBuffers();
 }
 
 class StorageImageRenderProgramTest : public ANGLETest<>
