@@ -437,10 +437,10 @@ angle::Result VertexArrayMtl::setupDraw(const gl::Context *glContext,
                 // Use default attribute
                 // Need to find the attribute having the exact binding location = v in the program
                 // inputs list to retrieve its coresponding data type:
-                const std::vector<sh::ShaderVariable> &programInputs =
+                const std::vector<gl::ProgramInput> &programInputs =
                     programState.getProgramInputs();
-                std::vector<sh::ShaderVariable>::const_iterator attribInfoIte = std::find_if(
-                    begin(programInputs), end(programInputs), [v](const sh::ShaderVariable &sv) {
+                std::vector<gl::ProgramInput>::const_iterator attribInfoIte = std::find_if(
+                    begin(programInputs), end(programInputs), [v](const gl::ProgramInput &sv) {
                         return static_cast<uint32_t>(sv.location) == v;
                     });
 

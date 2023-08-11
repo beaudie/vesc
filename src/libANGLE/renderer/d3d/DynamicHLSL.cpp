@@ -181,7 +181,7 @@ DynamicHLSL::DynamicHLSL(RendererD3D *const renderer) : mRenderer(renderer) {}
 std::string DynamicHLSL::generateVertexShaderForInputLayout(
     const std::string &sourceShader,
     const InputLayout &inputLayout,
-    const std::vector<sh::ShaderVariable> &shaderAttributes,
+    const std::vector<gl::ProgramInput> &shaderAttributes,
     const std::vector<rx::ShaderStorageBlock> &shaderStorageBlocks,
     size_t baseUAVRegister) const
 {
@@ -217,7 +217,7 @@ std::string DynamicHLSL::generateVertexShaderForInputLayout(
 
     for (size_t attributeIndex = 0; attributeIndex < shaderAttributes.size(); ++attributeIndex)
     {
-        const sh::ShaderVariable &shaderAttribute = shaderAttributes[attributeIndex];
+        const gl::ProgramInput &shaderAttribute = shaderAttributes[attributeIndex];
         if (!shaderAttribute.name.empty())
         {
             ASSERT(inputIndex < MAX_VERTEX_ATTRIBS);

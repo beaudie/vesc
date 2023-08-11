@@ -194,6 +194,49 @@ void AppendActiveBlocks(ShaderType shaderType,
     }
 }
 
+void SaveProgramInputs(BinaryOutputStream *stream, const std::vector<ProgramInput> &programInputs)
+{
+    stream->writeInt(programInputs.size());
+    for (const ProgramInput &attrib : programInputs)
+    {
+        stream->writeString(attrib.name);
+        stream->writeString(attrib.mappedName);
+        stream->writeInt(attrib.type);
+        stream->writeInt(attrib.location);
+        stream->writeEnum(attrib.interpolation);
+        stream->writeBool(attrib.active);
+        stream->writeBool(attrib.isPatch);
+        stream->writeBool(attrib.hasImplicitLocation);
+        stream->writeBool(attrib._isArray);
+        stream->writeInt(attrib.id);
+        stream->writeInt(attrib.arraySize);
+    }
+}
+void LoadProgramInputs(BinaryInputStream *stream, std::vector<ProgramInput> *programInputs)
+{
+    size_t attribCount = stream->readInt<size_t>();
+    ASSERT(programInputs->empty());
+    if (attribCount > 0)
+    {
+        programInputs->resize(attribCount);
+        for (size_t attribIndex = 0; attribIndex < attribCount; ++attribIndex)
+        {
+            ProgramInput &attrib = (*programInputs)[attribIndex];
+            stream->readString(&attrib.name);
+            stream->readString(&attrib.mappedName);
+            attrib.type                = stream->readInt<GLenum>();
+            attrib.location            = stream->readInt<int>();
+            attrib.interpolation       = stream->readEnum<sh::InterpolationType>();
+            attrib.active              = stream->readBool();
+            attrib.isPatch             = stream->readBool();
+            attrib.hasImplicitLocation = stream->readBool();
+            attrib._isArray            = stream->readBool();
+            attrib.id                  = stream->readInt<uint32_t>();
+            attrib.arraySize           = stream->readInt<int32_t>();
+        }
+    }
+}
+
 void SaveUniforms(BinaryOutputStream *stream,
                   const std::vector<LinkedUniform> &uniforms,
                   const std::vector<std::string> &uniformNames,
@@ -417,16 +460,7 @@ void ProgramExecutable::load(bool isSeparable, gl::BinaryInputStream *stream)
     mTessGenVertexOrder        = stream->readInt<GLenum>();
     mTessGenPointMode          = stream->readInt<GLenum>();
 
-    size_t attribCount = stream->readInt<size_t>();
-    ASSERT(mProgramInputs.empty());
-    mProgramInputs.resize(attribCount);
-    for (size_t attribIndex = 0; attribIndex < attribCount; ++attribIndex)
-    {
-        sh::ShaderVariable &attrib = mProgramInputs[attribIndex];
-        LoadShaderVar(stream, &attrib);
-        attrib.location = stream->readInt<int>();
-    }
-
+    LoadProgramInputs(stream, &mProgramInputs);
     LoadUniforms(stream, &mUniforms, &mUniformNames, &mUniformMappedNames);
 
     size_t uniformBlockCount = stream->readInt<size_t>();
@@ -633,13 +667,7 @@ void ProgramExecutable::save(bool isSeparable, gl::BinaryOutputStream *stream) c
     stream->writeInt(mTessGenVertexOrder);
     stream->writeInt(mTessGenPointMode);
 
-    stream->writeInt(getProgramInputs().size());
-    for (const sh::ShaderVariable &attrib : getProgramInputs())
-    {
-        WriteShaderVar(stream, attrib);
-        stream->writeInt(attrib.location);
-    }
-
+    SaveProgramInputs(stream, mProgramInputs);
     SaveUniforms(stream, mUniforms, mUniformNames, mUniformMappedNames);
 
     stream->writeInt(getUniformBlocks().size());

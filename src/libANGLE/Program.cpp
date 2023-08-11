@@ -327,6 +327,55 @@ void InitShaderStorageBlockLinker(const Context *context,
         }
     }
 }
+
+template <typename T>
+GLuint GetResourceMaxNameSize(const T &resource, GLint max)
+{
+    if (resource.isArray())
+    {
+        return std::max(max, clampCast<GLint>((resource.name + "[0]").size()));
+    }
+    else
+    {
+        return std::max(max, clampCast<GLint>((resource.name).size()));
+    }
+}
+
+template <typename T>
+GLuint GetResourceLocation(const GLchar *name, const T &variable)
+{
+    if (variable.isBuiltIn())
+    {
+        return GL_INVALID_INDEX;
+    }
+
+    GLint location = variable.location;
+    if (variable.isArray())
+    {
+        size_t nameLengthWithoutArrayIndexOut;
+        size_t arrayIndex = ParseArrayIndex(name, &nameLengthWithoutArrayIndexOut);
+        // The 'name' string may not contain the array notation "[0]"
+        if (arrayIndex != GL_INVALID_INDEX)
+        {
+            location += arrayIndex;
+        }
+    }
+
+    return location;
+}
+
+template <typename T>
+const std::string GetResourceName(const T &resource)
+{
+    std::string resourceName = resource.name;
+
+    if (resource.isArray())
+    {
+        resourceName += "[0]";
+    }
+
+    return resourceName;
+}
 }  // anonymous namespace
 
 const char *GetLinkMismatchErrorString(LinkMismatchError linkError)
@@ -379,7 +428,8 @@ const char *GetLinkMismatchErrorString(LinkMismatchError linkError)
     }
 }
 
-void UpdateInterfaceVariable(std::vector<sh::ShaderVariable> *block, const sh::ShaderVariable &var)
+template <typename T>
+void UpdateInterfaceVariable(std::vector<T> *block, const sh::ShaderVariable &var)
 {
     if (!var.isStruct())
     {
@@ -660,6 +710,50 @@ void LoadBlockMemberInfo(BinaryInputStream *stream, sh::BlockMemberInfo *var)
     var->topLevelArrayStride = stream->readInt<int>();
 }
 
+// ProgramInput implementation.
+ProgramInput::ProgramInput() {}
+
+ProgramInput::ProgramInput(const sh::ShaderVariable &var)
+{
+    ASSERT(!var.isStruct());
+
+    name                = var.name;
+    mappedName          = var.mappedName;
+    type                = var.type;
+    location            = var.hasImplicitLocation ? -1 : var.location;
+    interpolation       = var.interpolation;
+    active              = var.active;
+    isPatch             = var.isPatch;
+    hasImplicitLocation = var.hasImplicitLocation;
+    _isArray            = var.isArray();
+    id                  = var.id;
+    arraySize           = var.getBasicTypeElementCount();
+}
+
+ProgramInput::ProgramInput(const ProgramInput &other)
+{
+    *this = other;
+}
+
+ProgramInput &ProgramInput::operator=(const ProgramInput &rhs)
+{
+    if (this != &rhs)
+    {
+        name                = rhs.name;
+        mappedName          = rhs.mappedName;
+        type                = rhs.type;
+        location            = rhs.location;
+        interpolation       = rhs.interpolation;
+        active              = rhs.active;
+        isPatch             = rhs.isPatch;
+        hasImplicitLocation = rhs.hasImplicitLocation;
+        _isArray            = rhs._isArray;
+        id                  = rhs.id;
+        arraySize           = rhs.arraySize;
+    }
+    return *this;
+}
+
 // VariableLocation implementation.
 VariableLocation::VariableLocation() : arrayIndex(0), index(kUnused), ignored(false) {}
 
@@ -935,7 +1029,7 @@ GLuint ProgramState::getImageIndexFromUniformIndex(GLuint uniformIndex) const
 
 GLuint ProgramState::getAttributeLocation(const std::string &name) const
 {
-    for (const sh::ShaderVariable &attribute : mExecutable->mProgramInputs)
+    for (const ProgramInput &attribute : mExecutable->mProgramInputs)
     {
         if (attribute.name == name)
         {
@@ -1731,7 +1825,7 @@ void Program::getActiveAttribute(GLuint index,
     }
 
     ASSERT(index < mState.mExecutable->getProgramInputs().size());
-    const sh::ShaderVariable &attrib = mState.mExecutable->getProgramInputs()[index];
+    const ProgramInput &attrib = mState.mExecutable->getProgramInputs()[index];
 
     if (bufsize > 0)
     {
@@ -1764,7 +1858,7 @@ GLint Program::getActiveAttributeMaxLength() const
 
     size_t maxLength = 0;
 
-    for (const sh::ShaderVariable &attrib : mState.mExecutable->getProgramInputs())
+    for (const ProgramInput &attrib : mState.mExecutable->getProgramInputs())
     {
         maxLength = std::max(attrib.name.length() + 1, maxLength);
     }
@@ -1772,7 +1866,7 @@ GLint Program::getActiveAttributeMaxLength() const
     return static_cast<GLint>(maxLength);
 }
 
-const std::vector<sh::ShaderVariable> &Program::getAttributes() const
+const std::vector<ProgramInput> &Program::getAttributes() const
 {
     ASSERT(!mLinkingState);
     return mState.mExecutable->getProgramInputs();
@@ -1835,7 +1929,7 @@ GLenum Program::getTessGenVertexOrder() const
     return mState.mExecutable->mTessGenVertexOrder;
 }
 
-const sh::ShaderVariable &Program::getInputResource(size_t index) const
+const ProgramInput &Program::getInputResource(size_t index) const
 {
     ASSERT(!mLinkingState);
     ASSERT(index < mState.mExecutable->getProgramInputs().size());
@@ -1849,7 +1943,7 @@ GLuint Program::getInputResourceIndex(const GLchar *name) const
 
     for (size_t index = 0; index < mState.mExecutable->getProgramInputs().size(); index++)
     {
-        sh::ShaderVariable resource = getInputResource(index);
+        ProgramInput resource = getInputResource(index);
         if (resource.name == nameString)
         {
             return static_cast<GLuint>(index);
@@ -1859,25 +1953,13 @@ GLuint Program::getInputResourceIndex(const GLchar *name) const
     return GL_INVALID_INDEX;
 }
 
-GLuint Program::getResourceMaxNameSize(const sh::ShaderVariable &resource, GLint max) const
-{
-    if (resource.isArray())
-    {
-        return std::max(max, clampCast<GLint>((resource.name + "[0]").size()));
-    }
-    else
-    {
-        return std::max(max, clampCast<GLint>((resource.name).size()));
-    }
-}
-
 GLuint Program::getInputResourceMaxNameSize() const
 {
     GLint max = 0;
 
-    for (const sh::ShaderVariable &resource : mState.mExecutable->getProgramInputs())
+    for (const ProgramInput &resource : mState.mExecutable->getProgramInputs())
     {
-        max = getResourceMaxNameSize(resource, max);
+        max = GetResourceMaxNameSize(resource, max);
     }
 
     return max;
@@ -1889,32 +1971,10 @@ GLuint Program::getOutputResourceMaxNameSize() const
 
     for (const sh::ShaderVariable &resource : mState.mExecutable->getOutputVariables())
     {
-        max = getResourceMaxNameSize(resource, max);
+        max = GetResourceMaxNameSize(resource, max);
     }
 
     return max;
-}
-
-GLuint Program::getResourceLocation(const GLchar *name, const sh::ShaderVariable &variable) const
-{
-    if (variable.isBuiltIn())
-    {
-        return GL_INVALID_INDEX;
-    }
-
-    GLint location = variable.location;
-    if (variable.isArray())
-    {
-        size_t nameLengthWithoutArrayIndexOut;
-        size_t arrayIndex = ParseArrayIndex(name, &nameLengthWithoutArrayIndexOut);
-        // The 'name' string may not contain the array notation "[0]"
-        if (arrayIndex != GL_INVALID_INDEX)
-        {
-            location += arrayIndex;
-        }
-    }
-
-    return location;
 }
 
 GLuint Program::getInputResourceLocation(const GLchar *name) const
@@ -1925,9 +1985,9 @@ GLuint Program::getInputResourceLocation(const GLchar *name) const
         return index;
     }
 
-    const sh::ShaderVariable &variable = getInputResource(index);
+    const ProgramInput &variable = getInputResource(index);
 
-    return getResourceLocation(name, variable);
+    return GetResourceLocation(name, variable);
 }
 
 GLuint Program::getOutputResourceLocation(const GLchar *name) const
@@ -1940,7 +2000,7 @@ GLuint Program::getOutputResourceLocation(const GLchar *name) const
 
     const sh::ShaderVariable &variable = getOutputResource(index);
 
-    return getResourceLocation(name, variable);
+    return GetResourceLocation(name, variable);
 }
 
 GLuint Program::getOutputResourceIndex(const GLchar *name) const
@@ -2029,24 +2089,12 @@ void Program::getBufferVariableResourceName(GLuint index,
     getResourceName(mState.mBufferVariables[index].name, bufSize, length, name);
 }
 
-const std::string Program::getResourceName(const sh::ShaderVariable &resource) const
-{
-    std::string resourceName = resource.name;
-
-    if (resource.isArray())
-    {
-        resourceName += "[0]";
-    }
-
-    return resourceName;
-}
-
 const std::string Program::getInputResourceName(GLuint index) const
 {
     ASSERT(!mLinkingState);
-    const sh::ShaderVariable &resource = getInputResource(index);
+    const ProgramInput &resource = getInputResource(index);
 
-    return getResourceName(resource);
+    return GetResourceName(resource);
 }
 
 const std::string Program::getOutputResourceName(GLuint index) const
@@ -2054,7 +2102,7 @@ const std::string Program::getOutputResourceName(GLuint index) const
     ASSERT(!mLinkingState);
     const sh::ShaderVariable &resource = getOutputResource(index);
 
-    return getResourceName(resource);
+    return GetResourceName(resource);
 }
 
 const sh::ShaderVariable &Program::getOutputResource(size_t index) const
@@ -3171,32 +3219,34 @@ bool Program::linkAttributes(const Context *context, InfoLog &infoLog)
         return true;
     }
 
+    // In GLSL ES 3.00.6, aliasing checks should be done with all declared attributes -
+    // see GLSL ES 3.00.6 section 12.46. Inactive attributes will be pruned after
+    // aliasing checks.
+    // In GLSL ES 1.00.17 we only do aliasing checks for active attributes.
     shaderVersion = vertexShader->getShaderVersion(context);
-    if (shaderVersion >= 300)
-    {
-        // In GLSL ES 3.00.6, aliasing checks should be done with all declared attributes -
-        // see GLSL ES 3.00.6 section 12.46. Inactive attributes will be pruned after
-        // aliasing checks.
-        mState.mExecutable->mProgramInputs = vertexShader->getAllAttributes(context);
-    }
-    else
-    {
-        // In GLSL ES 1.00.17 we only do aliasing checks for active attributes.
-        mState.mExecutable->mProgramInputs = vertexShader->getActiveAttributes(context);
-    }
+    const std::vector<sh::ShaderVariable> &shaderAttributes =
+        shaderVersion >= 300 ? vertexShader->getAllAttributes(context)
+                             : vertexShader->getActiveAttributes(context);
+
+    ASSERT(mState.mExecutable->mProgramInputs.empty());
+    mState.mExecutable->mProgramInputs.reserve(shaderAttributes.size());
 
     GLuint maxAttribs = static_cast<GLuint>(caps.maxVertexAttributes);
-    std::vector<sh::ShaderVariable *> usedAttribMap(maxAttribs, nullptr);
+    std::vector<ProgramInput *> usedAttribMap(maxAttribs, nullptr);
 
-    // Assign locations to attributes that have a binding location and check for attribute aliasing.
-    for (sh::ShaderVariable &attribute : mState.mExecutable->mProgramInputs)
+    for (const sh::ShaderVariable &shaderAttribute : shaderAttributes)
     {
         // GLSL ES 3.10 January 2016 section 4.3.4: Vertex shader inputs can't be arrays or
         // structures, so we don't need to worry about adjusting their names or generating entries
         // for each member/element (unlike uniforms for example).
-        ASSERT(!attribute.isArray() && !attribute.isStruct());
+        ASSERT(!shaderAttribute.isArray() && !shaderAttribute.isStruct());
 
-        int bindingLocation = mAttributeBindings.getBinding(attribute);
+        mState.mExecutable->mProgramInputs.emplace_back(shaderAttribute);
+
+        // Assign locations to attributes that have a binding location and check for attribute
+        // aliasing.
+        ProgramInput &attribute = mState.mExecutable->mProgramInputs.back();
+        int bindingLocation     = mAttributeBindings.getBinding(attribute);
         if (attribute.location == -1 && bindingLocation != -1)
         {
             attribute.location = bindingLocation;
@@ -3217,8 +3267,8 @@ bool Program::linkAttributes(const Context *context, InfoLog &infoLog)
 
             for (int reg = 0; reg < regs; reg++)
             {
-                const int regLocation               = attribute.location + reg;
-                sh::ShaderVariable *linkedAttribute = usedAttribMap[regLocation];
+                const int regLocation         = attribute.location + reg;
+                ProgramInput *linkedAttribute = usedAttribMap[regLocation];
 
                 // In GLSL ES 3.00.6 and in WebGL, attribute aliasing produces a link error.
                 // In non-WebGL GLSL ES 1.00.17, attribute aliasing is allowed with some
@@ -3245,7 +3295,7 @@ bool Program::linkAttributes(const Context *context, InfoLog &infoLog)
     }
 
     // Assign locations to attributes that don't have a binding location.
-    for (sh::ShaderVariable &attribute : mState.mExecutable->mProgramInputs)
+    for (ProgramInput &attribute : mState.mExecutable->mProgramInputs)
     {
         // Not set by glBindAttribLocation or by location layout qualifier
         if (attribute.location == -1)
@@ -3284,7 +3334,7 @@ bool Program::linkAttributes(const Context *context, InfoLog &infoLog)
         }
     }
 
-    for (const sh::ShaderVariable &attribute : mState.mExecutable->getProgramInputs())
+    for (const ProgramInput &attribute : mState.mExecutable->getProgramInputs())
     {
         ASSERT(attribute.active);
         ASSERT(attribute.location != -1);
