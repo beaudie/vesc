@@ -679,7 +679,7 @@ void ProgramMtl::linkUpdateHasFlatAttributes(const gl::Context *context)
     const auto &programInputs = mState.getProgramInputs();
     for (auto &attribute : programInputs)
     {
-        if (attribute.interpolation == sh::INTERPOLATION_FLAT)
+        if (attribute.getInterpolation() == sh::INTERPOLATION_FLAT)
         {
             mProgramHasFlatAttributes = true;
             return;
@@ -690,7 +690,7 @@ void ProgramMtl::linkUpdateHasFlatAttributes(const gl::Context *context)
         mState.getAttachedShader(gl::ShaderType::Vertex)->getOutputVaryings(context);
     for (auto &attribute : flatVaryings)
     {
-        if (attribute.interpolation == sh::INTERPOLATION_FLAT)
+        if (attribute.getInterpolation() == sh::INTERPOLATION_FLAT)
         {
             mProgramHasFlatAttributes = true;
             return;
