@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6090bf13_2d780c1f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-08-11T07:37:48Z",
+      "side": 1,
+      "message": "Geoff, Jonah: would you please review? I\u0027m not 100% sure the carve-out I added to redefineImage is fully correct, and the unilateral disabling of staging buffers for textures on Intel was unfortunate - but both of these are needed to make Zoom perform acceptably on the Metal backend.\n\nAll: any suggestions are welcome, and if you have other ideas about how to address these hot paths better, please feel free to put up a different CL. Thanks.",
+      "revId": "1294855b9ffa2e89073c8f1d4f19929836564d88",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
