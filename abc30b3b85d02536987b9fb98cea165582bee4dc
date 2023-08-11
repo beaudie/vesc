@@ -155,6 +155,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c53f0c96_8d971020",
+        "filename": "src/libANGLE/Uniform.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-11T18:58:11Z",
+      "side": 1,
+      "message": "I\u0027m not too worried about capping them; the minimum required value is like 1K, and there\u0027s already a similar limit for uniform blocks at 16KB or 64KB. There\u0027s also `MAX_UNIFORM_LOCATIONS` that puts a cap on the total:\n\n\u003e The explicitly defined locations and the generated locations must be in the range of 0 to the value of MAX_UNIFORM_LOCATIONS minus one.\n\nBy the way, there\u0027s apparently also `MAX_COMBINED_\u003cstage\u003e_UNIFORM_COMPONENTS`, but we probably don\u0027t need to limit that, because LinkedUniforms don\u0027t contain individual uniforms inside a UBO, right?",
+      "parentUuid": "35f30f6c_634ea344",
+      "revId": "abc30b3b85d02536987b9fb98cea165582bee4dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d0fae4bf_909253fc",
         "filename": "src/libANGLE/Uniform.h",
         "patchSetId": 8
