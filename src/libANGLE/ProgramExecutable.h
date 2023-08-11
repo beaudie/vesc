@@ -60,6 +60,24 @@ struct ImageBinding
     std::vector<GLuint> boundImageUnits;
 };
 
+struct ProgramInput
+{
+    ProgramInput();
+    ProgramInput(const sh::ShaderVariable &var);
+    ProgramInput(const ProgramInput &other);
+    ProgramInput &operator=(const ProgramInput &rhs);
+
+    bool isBuiltIn() const { return IsBuiltInName(name); }
+
+    std::string name;
+    std::string mappedName;
+
+    GLenum type;
+    int location;
+    bool active;
+    uint32_t id;
+};
+
 // A varying with transform feedback enabled. If it's an array, either the whole array or one of its
 // elements specified by 'arrayIndex' can set to be enabled.
 struct TransformFeedbackVarying : public sh::ShaderVariable
@@ -214,7 +232,7 @@ class ProgramExecutable final : public angle::Subject
     void updateCanDrawWith();
     bool hasVertexShader() const { return mCanDrawWith; }
 
-    const std::vector<sh::ShaderVariable> &getProgramInputs() const { return mProgramInputs; }
+    const std::vector<ProgramInput> &getProgramInputs() const { return mProgramInputs; }
     const std::vector<sh::ShaderVariable> &getOutputVariables() const { return mOutputVariables; }
     const std::vector<VariableLocation> &getOutputLocations() const { return mOutputLocations; }
     const std::vector<VariableLocation> &getSecondaryOutputLocations() const
@@ -454,7 +472,7 @@ class ProgramExecutable final : public angle::Subject
     std::vector<VariableLocation> mSecondaryOutputLocations;
     bool mYUVOutput;
     // Vertex attributes, Fragment input varyings, etc.
-    std::vector<sh::ShaderVariable> mProgramInputs;
+    std::vector<ProgramInput> mProgramInputs;
     std::vector<TransformFeedbackVarying> mLinkedTransformFeedbackVaryings;
     // The size of the data written to each transform feedback buffer per vertex.
     std::vector<GLsizei> mTransformFeedbackStrides;
