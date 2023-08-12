@@ -16,6 +16,24 @@
       "message": "Thanks Shabi for your recommendations. Geoff and I discussed this and it looks like less involved optimizations can still improve the behavior a good amount. Let\u0027s see how this rewritten patch looks on the trybots.",
       "revId": "4b801e293f524474fbfe71193c168a00323b7990",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2f94350_1fbc8a6a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-12T00:22:25Z",
+      "side": 1,
+      "message": "Right, I just wanted to point out what the long term all-encompassing improvement would look like.",
+      "parentUuid": "95c4a2ec_4fda578c",
+      "revId": "4b801e293f524474fbfe71193c168a00323b7990",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
