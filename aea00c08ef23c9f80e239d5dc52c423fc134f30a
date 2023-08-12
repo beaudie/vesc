@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53f362d1_c1c5064c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-08-12T03:37:53Z",
+      "side": 1,
+      "message": "PTAL - the renderability carve-out fixed the WebGL test failures.",
+      "revId": "aea00c08ef23c9f80e239d5dc52c423fc134f30a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
