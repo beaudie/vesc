@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fa071fcf_5968e9af",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-14T17:46:24Z",
+      "side": 1,
+      "message": "Unfortunately it can\u0027t. The cache key for example depends on shader info. The `dumpProgramInfo` right below too.\n\nRegarding where it lives, I\u0027m not sure that helps actually. What you\u0027d want is for RAII to take care of unlocking the locks after the job _ends_, rather than _destructed_. That\u0027s why the backend\u0027s `operator()` calls all `std::move` this to a local variable. If you pass it as part of `ProgramLinkedResources`, and assuming `ProgramLinkedResources` is moved to the job, RAII still only unlocks the shaders after the link job is destroyed. And if we have to `std::move` it out of `ProgramLinkedResources`, then it doesn\u0027t feel like there\u0027s much encapsulation going on.",
+      "parentUuid": "1f691bd4_4c04a16a",
+      "range": {
+        "startLine": 1128,
+        "startChar": 33,
+        "endLine": 1128,
+        "endChar": 45
+      },
+      "revId": "e9aa368a309b293320e60a89cbe5bf11a981aafb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "479d8dfe_81d5be79",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 4
@@ -37,6 +61,30 @@
       "writtenOn": "2023-08-14T17:23:34Z",
       "side": 1,
       "message": "This is a bit counter intuitive when I read this: It sounds like lock is declared here, but actually lock is in the shader and this just try to manage it. It will be more readable to just call shader-\u003eonProgramLinkBegin and have onProgramLinkBegin return the std::unqiue_ptr\u003cShaderLinkLock\u003e (or ScopedShaderLinkLock) here (to make more clear, you can name it retrieveScopedSHaderLinkLock).",
+      "range": {
+        "startLine": 1122,
+        "startChar": 4,
+        "endLine": 1131,
+        "endChar": 5
+      },
+      "revId": "e9aa368a309b293320e60a89cbe5bf11a981aafb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb326198_3d68e2d9",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-14T17:46:24Z",
+      "side": 1,
+      "message": "That works, left-over from previous attempt",
+      "parentUuid": "479d8dfe_81d5be79",
       "range": {
         "startLine": 1122,
         "startChar": 4,
