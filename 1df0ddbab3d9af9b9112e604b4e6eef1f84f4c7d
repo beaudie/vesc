@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f56ccb1b_de1f48bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-14T18:26:11Z",
+      "side": 1,
+      "message": "As promised. There is still _something_ small done in a job, but that\u0027ll end up getting removed when the job management is moved to the front-end.",
+      "revId": "1df0ddbab3d9af9b9112e604b4e6eef1f84f4c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
