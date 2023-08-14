@@ -16,6 +16,24 @@
       "message": "Could you clarify what happens (should happen?) when running the trace for more than one loop?",
       "revId": "ab39a8b41f41e197044d3047e39957e45710a0dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f84ffaf9_57cde0b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-14T14:32:51Z",
+      "side": 1,
+      "message": "A screenshot will be taken for every frame rendered.\n\nIn the command I put in the CL message, the trace is actually 100 frames, but I told it to run 200 (two loops), so I got 200 screenshots.",
+      "parentUuid": "748eaa7e_95692f95",
+      "revId": "ab39a8b41f41e197044d3047e39957e45710a0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
