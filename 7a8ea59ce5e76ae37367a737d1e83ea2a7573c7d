@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99dddfd1_d3730fe6",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-14T18:41:29Z",
+      "side": 1,
+      "message": "nit: by using `sizeof(*var.memberIndexes.data())`, you can make this code resilient to type changes.\n\n(same below)",
+      "range": {
+        "startLine": 457,
+        "startChar": 34,
+        "endLine": 457,
+        "endChar": 46
+      },
+      "revId": "7a8ea59ce5e76ae37367a737d1e83ea2a7573c7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
