@@ -7792,6 +7792,10 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
     ANGLE_TRY(mRenderer->flushOutsideRPCommands(this, getProtectionType(), mContextPriority,
                                                 &mOutsideRenderPassCommands));
 
+    // Make sure appropriate dirty bits are set, in case another thread makes a submission before
+    // the next dispatch call.
+    mComputeDirtyBits |= mNewComputeCommandBufferDirtyBits;
+
     if (mRenderPassCommands->started() && mOutsideRenderPassSerialFactory.empty())
     {
         ANGLE_VK_PERF_WARNING(
@@ -7808,10 +7812,6 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
     // generate a new queueSerial for outsideCommandBuffer since we just flushed
     // outsideRenderPassCommands.
     generateOutsideRenderPassCommandsQueueSerial();
-
-    // Make sure appropriate dirty bits are set, in case another thread makes a submission before
-    // the next dispatch call.
-    mComputeDirtyBits |= mNewComputeCommandBufferDirtyBits;
 
     mHasAnyCommandsPendingSubmission = true;
 
