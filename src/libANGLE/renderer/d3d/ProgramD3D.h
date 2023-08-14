@@ -531,7 +531,7 @@ class ProgramD3D : public ProgramImpl
 
     void reset();
     void initializeUniformBlocks();
-    void initializeShaderStorageBlocks(const gl::Context *context);
+    void initializeShaderStorageBlocks();
 
     void updateCachedInputLayoutFromShader(const gl::Context *context);
     void updateCachedOutputLayoutFromShader();
@@ -540,7 +540,7 @@ class ProgramD3D : public ProgramImpl
     void updateCachedPixelExecutableIndex();
     void updateCachedComputeExecutableIndex();
 
-    void linkResources(const gl::Context *context, const gl::ProgramLinkedResources &resources);
+    void linkResources(const gl::ProgramLinkedResources &resources);
 
     RendererD3D *mRenderer;
     DynamicHLSL *mDynamicHLSL;

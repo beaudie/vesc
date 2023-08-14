@@ -2128,7 +2128,7 @@ std::unique_ptr<LinkEvent> ProgramD3D::link(const gl::Context *context,
 
         mShaderUniformsDirty.set(gl::ShaderType::Compute);
 
-        linkResources(context, resources);
+        linkResources(resources);
 
         for (const sh::ShaderVariable &uniform : computeShader->getUniforms(context))
         {
@@ -2235,7 +2235,7 @@ std::unique_ptr<LinkEvent> ProgramD3D::link(const gl::Context *context,
 
         gatherTransformFeedbackVaryings(varyingPacking, builtins[gl::ShaderType::Vertex]);
 
-        linkResources(context, resources);
+        linkResources(resources);
 
         if (mState.getAttachedShader(gl::ShaderType::Vertex))
         {
@@ -2252,7 +2252,7 @@ GLboolean ProgramD3D::validate(const gl::Caps & /*caps*/, gl::InfoLog * /*infoLo
     return GL_TRUE;
 }
 
-void ProgramD3D::initializeShaderStorageBlocks(const gl::Context *context)
+void ProgramD3D::initializeShaderStorageBlocks()
 {
     if (mState.getShaderStorageBlocks().empty())
     {
@@ -2296,7 +2296,7 @@ void ProgramD3D::initializeShaderStorageBlocks(const gl::Context *context)
             continue;
         }
         ShaderD3D *shaderD3D = SafeGetImplAs<ShaderD3D>(shader);
-        for (const sh::InterfaceBlock &ssbo : shader->getShaderStorageBlocks(context))
+        for (const sh::InterfaceBlock &ssbo : shader->getShaderStorageBlocksCompiled())
         {
             if (!ssbo.active)
             {
@@ -3443,16 +3443,15 @@ void ProgramD3D::updateCachedComputeExecutableIndex()
     }
 }
 
-void ProgramD3D::linkResources(const gl::Context *context,
-                               const gl::ProgramLinkedResources &resources)
+void ProgramD3D::linkResources(const gl::ProgramLinkedResources &resources)
 {
     HLSLBlockLayoutEncoderFactory hlslEncoderFactory;
     gl::ProgramLinkedResourcesLinker linker(&hlslEncoderFactory);
 
-    linker.linkResources(context, mState, resources);
+    linker.linkResources(mState, resources);
 
     initializeUniformBlocks();
-    initializeShaderStorageBlocks(context);
+    initializeShaderStorageBlocks();
 }
 
 }  // namespace rx

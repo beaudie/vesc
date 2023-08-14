@@ -11000,6 +11000,8 @@ angle::Result MetaDescriptorPool::bindCachedDescriptorPool(
     DescriptorSetLayoutCache *descriptorSetLayoutCache,
     DescriptorPoolPointer *descriptorPoolOut)
 {
+    std::unique_lock<std::mutex> lock(mMutex);
+
     auto cacheIter = mPayload.find(descriptorSetLayoutDesc);
     if (cacheIter != mPayload.end())
     {
@@ -11008,7 +11010,7 @@ angle::Result MetaDescriptorPool::bindCachedDescriptorPool(
         return angle::Result::Continue;
     }
 
-    BindingPointer<DescriptorSetLayout> descriptorSetLayout;
+    AtomicBindingPointer<DescriptorSetLayout> descriptorSetLayout;
     ANGLE_TRY(descriptorSetLayoutCache->getDescriptorSetLayout(context, descriptorSetLayoutDesc,
                                                                &descriptorSetLayout));
 

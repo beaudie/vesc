@@ -655,7 +655,7 @@ std::unique_ptr<LinkEvent> ProgramMtl::link(const gl::Context *context,
 
     // Link resources before calling GetShaderSource to make sure they are ready for the set/binding
     // assignment done in that function.
-    linkResources(context, resources);
+    linkResources(resources);
 
     reset(contextMtl);
     ANGLE_PARALLEL_LINK_TRY(initDefaultUniformBlocks(context));
@@ -834,13 +834,12 @@ mtl::BufferPool *ProgramMtl::getBufferPool(ContextMtl *context)
     }
     return mAuxBufferPool;
 }
-void ProgramMtl::linkResources(const gl::Context *context,
-                               const gl::ProgramLinkedResources &resources)
+void ProgramMtl::linkResources(const gl::ProgramLinkedResources &resources)
 {
     Std140BlockLayoutEncoderFactory std140EncoderFactory;
     gl::ProgramLinkedResourcesLinker linker(&std140EncoderFactory);
 
-    linker.linkResources(context, mState, resources);
+    linker.linkResources(mState, resources);
 }
 
 angle::Result ProgramMtl::initDefaultUniformBlocks(const gl::Context *glContext)

@@ -7085,8 +7085,11 @@ void DescriptorSetLayoutCache::destroy(RendererVk *rendererVk)
 angle::Result DescriptorSetLayoutCache::getDescriptorSetLayout(
     vk::Context *context,
     const vk::DescriptorSetLayoutDesc &desc,
-    vk::BindingPointer<vk::DescriptorSetLayout> *descriptorSetLayoutOut)
+    vk::AtomicBindingPointer<vk::DescriptorSetLayout> *descriptorSetLayoutOut)
 {
+    // Note: this function may be called without holding the share group lock.
+    std::unique_lock<std::mutex> lock(mMutex);
+
     auto iter = mPayload.find(desc);
     if (iter != mPayload.end())
     {
@@ -7111,8 +7114,7 @@ angle::Result DescriptorSetLayoutCache::getDescriptorSetLayout(
     vk::DescriptorSetLayout newLayout;
     ANGLE_VK_TRY(context, newLayout.init(context->getDevice(), createInfo));
 
-    auto insertedItem =
-        mPayload.emplace(desc, vk::RefCountedDescriptorSetLayout(std::move(newLayout)));
+    auto insertedItem = mPayload.emplace(desc, std::move(newLayout));
     vk::RefCountedDescriptorSetLayout &insertedLayout = insertedItem.first->second;
     descriptorSetLayoutOut->set(&insertedLayout);
 
@@ -7146,8 +7148,11 @@ angle::Result PipelineLayoutCache::getPipelineLayout(
     vk::Context *context,
     const vk::PipelineLayoutDesc &desc,
     const vk::DescriptorSetLayoutPointerArray &descriptorSetLayouts,
-    vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut)
+    vk::AtomicBindingPointer<vk::PipelineLayout> *pipelineLayoutOut)
 {
+    // Note: this function may be called without holding the share group lock.
+    std::unique_lock<std::mutex> lock(mMutex);
+
     auto iter = mPayload.find(desc);
     if (iter != mPayload.end())
     {
@@ -7160,7 +7165,7 @@ angle::Result PipelineLayoutCache::getPipelineLayout(
     mCacheStats.missAndIncrementSize();
     // Note this does not handle gaps in descriptor set layouts gracefully.
     angle::FixedVector<VkDescriptorSetLayout, vk::kMaxDescriptorSetLayouts> setLayoutHandles;
-    for (const vk::BindingPointer<vk::DescriptorSetLayout> &layoutPtr : descriptorSetLayouts)
+    for (const vk::AtomicBindingPointer<vk::DescriptorSetLayout> &layoutPtr : descriptorSetLayouts)
     {
         if (layoutPtr.valid())
         {
@@ -7193,7 +7198,7 @@ angle::Result PipelineLayoutCache::getPipelineLayout(
     vk::PipelineLayout newLayout;
     ANGLE_VK_TRY(context, newLayout.init(context->getDevice(), createInfo));
 
-    auto insertedItem = mPayload.emplace(desc, vk::RefCountedPipelineLayout(std::move(newLayout)));
+    auto insertedItem                            = mPayload.emplace(desc, std::move(newLayout));
     vk::RefCountedPipelineLayout &insertedLayout = insertedItem.first->second;
     pipelineLayoutOut->set(&insertedLayout);
 

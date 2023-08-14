@@ -134,7 +134,6 @@ class ProgramVk : public ProgramImpl
 
     template <typename T>
     void setUniformImpl(GLint location, GLsizei count, const T *v, GLenum entryPointType);
-    void linkResources(const gl::Context *context, const gl::ProgramLinkedResources &resources);
 
     angle::Result createGraphicsPipelineWithDefaultState(const gl::Context *context,
                                                          vk::PipelineCacheAccess *pipelineCache);
