@@ -1367,8 +1367,7 @@ angle::Result ContextVk::initialize()
     initIndexTypeMap();
 
     mGraphicsPipelineDesc.reset(new vk::GraphicsPipelineDesc());
-    mGraphicsPipelineDesc->initDefaults(this, vk::GraphicsPipelineSubset::Complete,
-                                        pipelineRobustness(), pipelineProtectedAccess());
+    mGraphicsPipelineDesc->initDefaults(this, vk::GraphicsPipelineSubset::Complete);
 
     // Initialize current value/default attribute buffers.
     for (vk::DynamicBuffer &buffer : mStreamedVertexBuffers)
@@ -2457,8 +2456,7 @@ angle::Result ContextVk::handleDirtyComputePipelineDesc()
         ProgramExecutableVk *executableVk         = getExecutable();
         ASSERT(executableVk);
         ANGLE_TRY(executableVk->getOrCreateComputePipeline(
-            this, &pipelineCache, PipelineSource::Draw, glExecutable, pipelineRobustness(),
-            pipelineProtectedAccess(), &mCurrentComputePipeline));
+            this, &pipelineCache, PipelineSource::Draw, glExecutable, &mCurrentComputePipeline));
     }
 
     ASSERT(mComputeDirtyBits.test(DIRTY_BIT_PIPELINE_BINDING));
@@ -8494,11 +8492,11 @@ vk::ComputePipelineFlags ContextVk::getComputePipelineFlags() const
 {
     vk::ComputePipelineFlags pipelineFlags = {};
 
-    if (pipelineRobustness() == vk::PipelineRobustness::Robust)
+    if (shouldUsePipelineRobustness())
     {
         pipelineFlags.set(vk::ComputePipelineFlag::Robust);
     }
-    if (pipelineProtectedAccess() == vk::PipelineProtectedAccess::Protected)
+    if (shouldRestrictPipelineToProtectedAccess())
     {
         pipelineFlags.set(vk::ComputePipelineFlag::Protected);
     }
