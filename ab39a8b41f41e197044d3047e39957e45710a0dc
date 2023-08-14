@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "748eaa7e_95692f95",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-08-14T14:19:52Z",
+      "side": 1,
+      "message": "Could you clarify what happens (should happen?) when running the trace for more than one loop?",
+      "revId": "ab39a8b41f41e197044d3047e39957e45710a0dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
