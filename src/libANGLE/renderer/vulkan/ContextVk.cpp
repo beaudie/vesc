@@ -7790,6 +7790,12 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
     ANGLE_TRY(mRenderer->flushOutsideRPCommands(this, getProtectionType(), mContextPriority,
                                                 &mOutsideRenderPassCommands));
 
+    // Make sure appropriate dirty bits are set, in case another thread makes a submission before
+    // the next dispatch call.
+    mComputeDirtyBits |= mNewComputeCommandBufferDirtyBits;
+    mHasAnyCommandsPendingSubmission = true;
+    mPerfCounters.flushedOutsideRenderPassCommandBuffers++;
+
     if (mRenderPassCommands->started() && mOutsideRenderPassSerialFactory.empty())
     {
         ANGLE_VK_PERF_WARNING(
@@ -7801,19 +7807,14 @@ angle::Result ContextVk::flushOutsideRenderPassCommands()
         return flushCommandsAndEndRenderPass(
             RenderPassClosureReason::OutOfReservedQueueSerialForOutsideCommands);
     }
+    else
+    {
+        // Since queueSerial is used to decide if a resource is being used or not, we have to
+        // generate a new queueSerial for outsideCommandBuffer since we just flushed
+        // outsideRenderPassCommands.
+        generateOutsideRenderPassCommandsQueueSerial();
+    }
 
-    // Since queueSerial is used to decide if a resource is being used or not, we have to
-    // generate a new queueSerial for outsideCommandBuffer since we just flushed
-    // outsideRenderPassCommands.
-    generateOutsideRenderPassCommandsQueueSerial();
-
-    // Make sure appropriate dirty bits are set, in case another thread makes a submission before
-    // the next dispatch call.
-    mComputeDirtyBits |= mNewComputeCommandBufferDirtyBits;
-
-    mHasAnyCommandsPendingSubmission = true;
-
-    mPerfCounters.flushedOutsideRenderPassCommandBuffers++;
     return angle::Result::Continue;
 }
 
