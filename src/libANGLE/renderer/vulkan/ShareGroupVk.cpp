@@ -35,9 +35,6 @@ constexpr size_t kDescriptorWriteInfosInitialSize =
     kDescriptorBufferInfosInitialSize + kDescriptorImageInfosInitialSize;
 constexpr size_t kDescriptorBufferViewsInitialSize = 0;
 
-constexpr VkDeviceSize kMaxStaticBufferSizeToUseBuddyAlgorithm  = 256;
-constexpr VkDeviceSize kMaxDynamicBufferSizeToUseBuddyAlgorithm = 4096;
-
 // How often monolithic pipelines should be created, if preferMonolithicPipelinesOverLibraries is
 // enabled.  Pipeline creation is typically O(hundreds of microseconds).  A value of 2ms is chosen
 // arbitrarily; it ensures that there is always at most a single pipeline job in progress, while
@@ -77,9 +74,6 @@ ShareGroupVk::ShareGroupVk(const egl::ShareGroupState &state)
       mLastMonolithicPipelineJobTime(0)
 {
     mLastPruneTime = angle::GetCurrentSystemTime();
-    mSizeLimitForBuddyAlgorithm[BufferUsageType::Dynamic] =
-        kMaxDynamicBufferSizeToUseBuddyAlgorithm;
-    mSizeLimitForBuddyAlgorithm[BufferUsageType::Static] = kMaxStaticBufferSizeToUseBuddyAlgorithm;
 }
 
 void ShareGroupVk::onContextAdd()
@@ -398,14 +392,8 @@ vk::BufferPool *ShareGroupVk::getDefaultBufferPool(RendererVk *renderer,
                                                    uint32_t memoryTypeIndex,
                                                    BufferUsageType usageType)
 {
-    // First pick allocation algorithm. Buddy algorithm is faster, but waste more memory
-    // due to power of two alignment. For smaller size allocation we always use buddy algorithm
-    // since align to power of two does not waste too much memory. For dynamic usage, the size
-    // threshold for buddy algorithm is relaxed since the performance is more important.
-    SuballocationAlgorithm algorithm = size <= mSizeLimitForBuddyAlgorithm[usageType]
-                                           ? SuballocationAlgorithm::Buddy
-                                           : SuballocationAlgorithm::General;
-
+    // The general allocation algorithm is used.
+    SuballocationAlgorithm algorithm = SuballocationAlgorithm::General;
     if (!mDefaultBufferPools[algorithm][memoryTypeIndex])
     {
         const vk::Allocator &allocator = renderer->getAllocator();
@@ -415,9 +403,7 @@ vk::BufferPool *ShareGroupVk::getDefaultBufferPool(RendererVk *renderer,
         allocator.getMemoryTypeProperties(memoryTypeIndex, &memoryPropertyFlags);
 
         std::unique_ptr<vk::BufferPool> pool  = std::make_unique<vk::BufferPool>();
-        vma::VirtualBlockCreateFlags vmaFlags = algorithm == SuballocationAlgorithm::Buddy
-                                                    ? vma::VirtualBlockCreateFlagBits::BUDDY
-                                                    : vma::VirtualBlockCreateFlagBits::GENERAL;
+        vma::VirtualBlockCreateFlags vmaFlags = vma::VirtualBlockCreateFlagBits::GENERAL;
         pool->initWithFlags(renderer, vmaFlags, usageFlags, 0, memoryTypeIndex,
                             memoryPropertyFlags);
         mDefaultBufferPools[algorithm][memoryTypeIndex] = std::move(pool);

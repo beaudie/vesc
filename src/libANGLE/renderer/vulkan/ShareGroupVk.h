@@ -147,13 +147,11 @@ class ShareGroupVk : public ShareGroupImpl
     // The per shared group buffer pools that all buffers should sub-allocate from.
     enum class SuballocationAlgorithm : uint8_t
     {
-        Buddy       = 0,
-        General     = 1,
-        InvalidEnum = 2,
+        General     = 0,
+        InvalidEnum = 1,
         EnumCount   = InvalidEnum,
     };
     angle::PackedEnumMap<SuballocationAlgorithm, vk::BufferPoolPointerArray> mDefaultBufferPools;
-    angle::PackedEnumMap<BufferUsageType, size_t> mSizeLimitForBuddyAlgorithm;
 
     // The system time when last pruneEmptyBuffer gets called.
     double mLastPruneTime;
