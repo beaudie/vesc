@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f691bd4_4c04a16a",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-14T17:23:34Z",
+      "side": 1,
+      "message": "Can this lock taken after cache lookup? This really only need it before you starts async linking job, right? You can\u0027t recompile while it is still here.\n\nWhat I am thinking the cleaner way maybe move this `ScopedShaderLinkLocks shaderLocks` into `ProgramLinkedResources` structure and then pass around this ProgramLinkedResources object instead of the shaderLocks. That way it gives you better encapsulation for the linker and flexibility to add more stuff into it in the future. (ProgramLinkedResources might change to ProgramLinkerResources as well).",
+      "range": {
+        "startLine": 1128,
+        "startChar": 33,
+        "endLine": 1128,
+        "endChar": 45
+      },
+      "revId": "e9aa368a309b293320e60a89cbe5bf11a981aafb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "479d8dfe_81d5be79",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1131,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-14T17:23:34Z",
+      "side": 1,
+      "message": "This is a bit counter intuitive when I read this: It sounds like lock is declared here, but actually lock is in the shader and this just try to manage it. It will be more readable to just call shader-\u003eonProgramLinkBegin and have onProgramLinkBegin return the std::unqiue_ptr\u003cShaderLinkLock\u003e (or ScopedShaderLinkLock) here (to make more clear, you can name it retrieveScopedSHaderLinkLock).",
+      "range": {
+        "startLine": 1122,
+        "startChar": 4,
+        "endLine": 1131,
+        "endChar": 5
+      },
+      "revId": "e9aa368a309b293320e60a89cbe5bf11a981aafb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
