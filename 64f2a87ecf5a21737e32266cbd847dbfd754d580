@@ -16,6 +16,23 @@
       "message": "The test skips, but there must be some contention with another test/thread. validation is catching a Multithread error.",
       "revId": "64f2a87ecf5a21737e32266cbd847dbfd754d580",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36407963_d45c22ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2023-08-14T19:29:26Z",
+      "side": 1,
+      "message": "@Shahbaz,\nThe test skips because the pixel4 must not support exporting a FD.\nHowever, this seems to trigger another error about multiple threads using a Queue.\n\nHave you seen this. It doesn\u0027t seem to be the test. \n\n[ RUN      ] VulkanImageTest.PreInitializedOnGLImportLinearTiling/ES2_Vulkan_AsyncCommandQueue\n../../src/tests/gl_tests/VulkanImageTest.cpp:999: Skipped\nTest skipped: !helper.canCreateImageOpaqueFd(VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_TYPE_2D, VK_IMAGE_TILING_LINEAR, 0, kDefaultImageUsageFlags) || !helper.canCreateSemaphoreOpaqueFd().\n\n../../src/tests/test_utils/ANGLETest.cpp:65: Failure\nRendererVk.cpp:797 (DebugUtilsMessenger): [ UNASSIGNED-Threading-MultipleThreads ] Validation Error: [ UNASSIGNED-Threading-MultipleThreads ] Object 0: handle \u003d 0x6f18b93dd0, type \u003d VK_OBJECT_TYPE_QUEUE; | MessageID \u003d 0x141cb623 | THREADING ERROR : vkDeviceWaitIdle(): object of type VkQueue is simultaneously used in thread 474963127488 and thread 475006512320\n                            Object: 0x6f18b93dd0 (type \u003d Queue(4))\n\nERR: RendererVk.cpp:797 (DebugUtilsMessenger): [ UNASSIGNED-Threading-MultipleThreads ] Validation Error: [ UNASSIGNED-Threading-MultipleThreads ] Object 0: handle \u003d 0x6f18b93dd0, type \u003d VK_OBJECT_TYPE_QUEUE; | MessageID \u003d 0x141cb623 | THREADING ERROR : vkDeviceWaitIdle(): object of type VkQueue is simultaneously used in thread 474963127488 and thread 475006512320\n                            Object: 0x6f18b93dd0 (type \u003d Queue(4))\n\n[  FAILED  ] VulkanImageTest.PreInitializedOnGLImportLinearTiling/ES2_Vulkan_AsyncCommandQueue, where GetParam() \u003d ES2_Vulkan_AsyncCommandQueue (30 ms)",
+      "revId": "64f2a87ecf5a21737e32266cbd847dbfd754d580",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
