@@ -296,9 +296,11 @@ struct ProgramLinkedResources
 
 struct LinkingVariables final : private angle::NonCopyable
 {
-    LinkingVariables(const Context *context, const ProgramState &state);
-    LinkingVariables(const ProgramPipelineState &state);
+    LinkingVariables();
     ~LinkingVariables();
+
+    void initForProgram(const ProgramState &state);
+    void initForProgramPipeline(const ProgramPipelineState &state);
 
     ShaderMap<std::vector<sh::ShaderVariable>> outputVaryings;
     ShaderMap<std::vector<sh::ShaderVariable>> inputVaryings;
@@ -324,8 +326,7 @@ class ProgramLinkedResourcesLinker final : angle::NonCopyable
         : mCustomEncoderFactory(customEncoderFactory)
     {}
 
-    void linkResources(const Context *context,
-                       const ProgramState &programState,
+    void linkResources(const ProgramState &programState,
                        const ProgramLinkedResources &resources) const;
 
   private:
