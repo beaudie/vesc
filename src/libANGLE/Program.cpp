@@ -518,6 +518,7 @@ void LoadInterfaceBlock(BinaryInputStream *stream, InterfaceBlock *block)
 // Saves the linking context for later use in resolveLink().
 struct Program::LinkingState
 {
+    LinkingVariables linkingVariables;
     ProgramLinkedResources resources;
     egl::BlobCache::Key programHash;
     std::unique_ptr<rx::LinkEvent> linkEvent;
@@ -1198,11 +1199,24 @@ angle::Result Program::linkImpl(const Context *context, ScopedShaderLinkLocks *s
     bool result = linkValidateShaders(context, infoLog);
     ASSERT(result);
 
+    // Make sure no compile jobs are pending.
+    // TODO: move this to the link job itself.  http://anglebug.com/8297
+    const ProgramExecutable &programExecutable = mState.getExecutable();
+    for (const ShaderType shaderType : programExecutable.getLinkedShaderStages())
+    {
+        Shader *shader = mState.getAttachedShader(shaderType);
+        if (shader)
+        {
+            shader->resolveCompile(context);
+        }
+    }
+
     std::unique_ptr<LinkingState> linkingState(new LinkingState());
     ProgramMergedVaryings mergedVaryings;
-    LinkingVariables linkingVariables(context, mState);
-    ProgramLinkedResources &resources = linkingState->resources;
+    LinkingVariables &linkingVariables = linkingState->linkingVariables;
+    ProgramLinkedResources &resources  = linkingState->resources;
 
+    linkingVariables.initForProgram(mState);
     resources.init(&mState.mExecutable->mUniformBlocks, &mState.mExecutable->mUniforms,
                    &mState.mExecutable->mUniformNames, &mState.mExecutable->mUniformMappedNames,
                    &mState.mExecutable->mShaderStorageBlocks, &mState.mBufferVariables,
