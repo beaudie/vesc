@@ -229,6 +229,7 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                     const BindPipelineParams *params =
                         getParamPtr<BindPipelineParams>(currentCommand);
                     vkCmdBindPipeline(cmdBuffer, VK_PIPELINE_BIND_POINT_COMPUTE, params->pipeline);
+                    primary->setBindComputePipeline(true);
                     break;
                 }
                 case CommandID::BindDescriptorSets:
@@ -376,6 +377,7 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                 }
                 case CommandID::Dispatch:
                 {
+                    ASSERT(primary->getBindComputePipeline());
                     const DispatchParams *params = getParamPtr<DispatchParams>(currentCommand);
                     vkCmdDispatch(cmdBuffer, params->groupCountX, params->groupCountY,
                                   params->groupCountZ);
@@ -383,6 +385,7 @@ void SecondaryCommandBuffer::executeCommands(PrimaryCommandBuffer *primary)
                 }
                 case CommandID::DispatchIndirect:
                 {
+                    ASSERT(primary->getBindComputePipeline());
                     const DispatchIndirectParams *params =
                         getParamPtr<DispatchIndirectParams>(currentCommand);
                     vkCmdDispatchIndirect(cmdBuffer, params->buffer, params->offset);
