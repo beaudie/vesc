@@ -167,9 +167,14 @@ class ProgramExecutableVk
                                              vk::PipelineHelper **pipelineOut);
 
     const vk::PipelineLayout &getPipelineLayout() const { return mPipelineLayout.get(); }
-    angle::Result createPipelineLayout(ContextVk *contextVk,
-                                       const gl::ProgramExecutable &glExecutable,
-                                       gl::ActiveTextureArray<TextureVk *> *activeTextures);
+    void resetLayout(ContextVk *contextVk);
+    angle::Result createPipelineLayout(
+        vk::Context *context,
+        const gl::ProgramExecutable &glExecutable,
+        PipelineLayoutCache *pipelineLayoutCache,
+        DescriptorSetLayoutCache *descriptorSetLayoutCache,
+        vk::DescriptorSetArray<vk::MetaDescriptorPool> *metaDescriptorPools,
+        gl::ActiveTextureArray<TextureVk *> *activeTextures);
 
     angle::Result updateTexturesDescriptorSet(vk::Context *context,
                                               const gl::ProgramExecutable &executable,
@@ -308,7 +313,7 @@ class ProgramExecutableVk
     void addInputAttachmentDescriptorSetDesc(const gl::ProgramExecutable &executable,
                                              vk::DescriptorSetLayoutDesc *descOut);
     angle::Result addTextureDescriptorSetDesc(
-        ContextVk *contextVk,
+        vk::Context *context,
         const gl::ProgramExecutable &executable,
         const gl::ActiveTextureArray<TextureVk *> *activeTextures,
         vk::DescriptorSetLayoutDesc *descOut);
@@ -396,8 +401,7 @@ class ProgramExecutableVk
                                           const std::vector<uint8_t> &pipelineData);
     angle::Result ensurePipelineCacheInitialized(vk::Context *context);
 
-    void resetLayout(ContextVk *contextVk);
-    void initializeWriteDescriptorDesc(ContextVk *contextVk,
+    void initializeWriteDescriptorDesc(vk::Context *context,
                                        const gl::ProgramExecutable &glExecutable);
 
     // Descriptor sets and pools for shader resources for this program.

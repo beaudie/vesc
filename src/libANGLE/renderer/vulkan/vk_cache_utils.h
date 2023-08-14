@@ -2486,6 +2486,7 @@ class DescriptorSetLayoutCache final : angle::NonCopyable
         vk::BindingPointer<vk::DescriptorSetLayout> *descriptorSetLayoutOut);
 
   private:
+    mutable std::mutex mMutex;
     std::unordered_map<vk::DescriptorSetLayoutDesc, vk::RefCountedDescriptorSetLayout> mPayload;
     CacheStats mCacheStats;
 };
@@ -2504,6 +2505,7 @@ class PipelineLayoutCache final : public HasCacheStats<VulkanCacheType::Pipeline
                                     vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut);
 
   private:
+    mutable std::mutex mMutex;
     std::unordered_map<vk::PipelineLayoutDesc, vk::RefCountedPipelineLayout> mPayload;
 };
 

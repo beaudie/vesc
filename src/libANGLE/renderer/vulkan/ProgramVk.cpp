@@ -46,6 +46,9 @@ class LinkTaskVk final : public vk::Context, public angle::Closure
 {
   public:
     LinkTaskVk(RendererVk *renderer,
+               PipelineLayoutCache &pipelineLayoutCache,
+               DescriptorSetLayoutCache &descriptorSetLayoutCache,
+               vk::DescriptorSetArray<vk::MetaDescriptorPool> &metaDescriptorPools,
                const gl::ProgramState &state,
                const gl::ProgramExecutable &glExecutable,
                ProgramExecutableVk *executable,
@@ -61,7 +64,10 @@ class LinkTaskVk final : public vk::Context, public angle::Closure
           mMergedVaryings(std::move(mergedVaryings)),
           mIsGLES1(isGLES1),
           mPipelineRobustness(pipelineRobustness),
-          mPipelineProtectedAccess(pipelineProtectedAccess)
+          mPipelineProtectedAccess(pipelineProtectedAccess),
+          mPipelineLayoutCache(pipelineLayoutCache),
+          mDescriptorSetLayoutCache(descriptorSetLayoutCache),
+          mMetaDescriptorPools(metaDescriptorPools)
     {
         mShaderLocks.swap(*shaderLocks);
     }
@@ -125,6 +131,11 @@ class LinkTaskVk final : public vk::Context, public angle::Closure
     const vk::PipelineRobustness mPipelineRobustness;
     const vk::PipelineProtectedAccess mPipelineProtectedAccess;
 
+    // Helpers that are interally thread-safe
+    PipelineLayoutCache &mPipelineLayoutCache;
+    DescriptorSetLayoutCache &mDescriptorSetLayoutCache;
+    vk::DescriptorSetArray<vk::MetaDescriptorPool> &mMetaDescriptorPools;
+
     // Temporary objects to clean up at the end
     vk::RenderPass mCompatibleRenderPass;
 
@@ -157,6 +168,10 @@ angle::Result LinkTaskVk::linkImpl()
                                        mIsGLES1));
 
     ANGLE_TRY(initDefaultUniformBlocks());
+
+    ANGLE_TRY(mExecutable->createPipelineLayout(this, mGlExecutable, &mPipelineLayoutCache,
+                                                &mDescriptorSetLayoutCache, &mMetaDescriptorPools,
+                                                nullptr));
 
     // Warm up the pipeline cache by creating a few placeholder pipelines.  This is not done for
     // separable programs, and is deferred to when the program pipeline is finalized.
@@ -454,15 +469,13 @@ std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
     SpvAssignAllLocations(options, mState, resources, &mSpvProgramInterfaceInfo,
                           &mExecutable.mVariableInfoMap);
 
-    angle::Result status = mExecutable.createPipelineLayout(contextVk, programExecutable, nullptr);
-    if (status != angle::Result::Continue)
-    {
-        return std::make_unique<LinkEventDone>(status);
-    }
+    mExecutable.resetLayout(contextVk);
 
     std::shared_ptr<LinkTaskVk> linkTask = std::make_shared<LinkTaskVk>(
-        contextVk->getRenderer(), mState, programExecutable, &mExecutable, shaderLocks,
-        std::move(mergedVaryings), context->getState().isGLES1(), contextVk->pipelineRobustness(),
+        contextVk->getRenderer(), contextVk->getPipelineLayoutCache(),
+        contextVk->getDescriptorSetLayoutCache(), contextVk->getMetaDescriptorPools(), mState,
+        programExecutable, &mExecutable, shaderLocks, std::move(mergedVaryings),
+        context->getState().isGLES1(), contextVk->pipelineRobustness(),
         contextVk->pipelineProtectedAccess());
     return std::make_unique<LinkEventVulkan>(context->getShaderCompileThreadPool(), linkTask);
 }
