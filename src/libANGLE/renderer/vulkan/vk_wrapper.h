@@ -395,6 +395,9 @@ class CommandBuffer : public WrappedObject<CommandBuffer, VkCommandBuffer>
     void beginDebugUtilsLabelEXT(const VkDebugUtilsLabelEXT &labelInfo);
     void endDebugUtilsLabelEXT();
     void insertDebugUtilsLabelEXT(const VkDebugUtilsLabelEXT &labelInfo);
+
+  private:
+    bool mBindComputePipline = false;
 };
 }  // namespace priv
 
@@ -762,18 +765,21 @@ ANGLE_INLINE void CommandBuffer::blitImage(const Image &srcImage,
 ANGLE_INLINE VkResult CommandBuffer::begin(const VkCommandBufferBeginInfo &info)
 {
     ASSERT(valid());
+    mBindComputePipline = false;
     return vkBeginCommandBuffer(mHandle, &info);
 }
 
 ANGLE_INLINE VkResult CommandBuffer::end()
 {
     ASSERT(valid());
+    mBindComputePipline = false;
     return vkEndCommandBuffer(mHandle);
 }
 
 ANGLE_INLINE VkResult CommandBuffer::reset()
 {
     ASSERT(valid());
+    mBindComputePipline = false;
     return vkResetCommandBuffer(mHandle, 0);
 }
 
@@ -1229,13 +1235,13 @@ ANGLE_INLINE void CommandBuffer::dispatch(uint32_t groupCountX,
                                           uint32_t groupCountY,
                                           uint32_t groupCountZ)
 {
-    ASSERT(valid());
+    ASSERT(valid() && mBindComputePipline);
     vkCmdDispatch(mHandle, groupCountX, groupCountY, groupCountZ);
 }
 
 ANGLE_INLINE void CommandBuffer::dispatchIndirect(const Buffer &buffer, VkDeviceSize offset)
 {
-    ASSERT(valid());
+    ASSERT(valid() && mBindComputePipline);
     vkCmdDispatchIndirect(mHandle, buffer.getHandle(), offset);
 }
 
@@ -1243,6 +1249,10 @@ ANGLE_INLINE void CommandBuffer::bindPipeline(VkPipelineBindPoint pipelineBindPo
                                               const Pipeline &pipeline)
 {
     ASSERT(valid() && pipeline.valid());
+    if (pipelineBindPoint == VK_PIPELINE_BIND_POINT_COMPUTE)
+    {
+        mBindComputePipline = true;
+    }
     vkCmdBindPipeline(mHandle, pipelineBindPoint, pipeline.getHandle());
 }
 
