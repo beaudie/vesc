@@ -158,6 +158,8 @@ angle::Result LinkTaskVk::linkImpl()
 
     ANGLE_TRY(initDefaultUniformBlocks());
 
+    ANGLE_TRY(mExecutable.createPipelineLayout(this, mGlExecutable, nullptr));
+
     // Warm up the pipeline cache by creating a few placeholder pipelines.  This is not done for
     // separable programs, and is deferred to when the program pipeline is finalized.
     //
@@ -454,11 +456,7 @@ std::unique_ptr<LinkEvent> ProgramVk::link(const gl::Context *context,
     SpvAssignAllLocations(options, mState, resources, &mSpvProgramInterfaceInfo,
                           &mExecutable.mVariableInfoMap);
 
-    angle::Result status = mExecutable.createPipelineLayout(contextVk, programExecutable, nullptr);
-    if (status != angle::Result::Continue)
-    {
-        return std::make_unique<LinkEventDone>(status);
-    }
+    mExecutable.resetLayout(contextVk);
 
     std::shared_ptr<LinkTaskVk> linkTask = std::make_shared<LinkTaskVk>(
         contextVk->getRenderer(), mState, programExecutable, &mExecutable, shaderLocks,

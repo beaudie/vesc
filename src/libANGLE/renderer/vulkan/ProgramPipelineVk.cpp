@@ -92,6 +92,7 @@ angle::Result ProgramPipelineVk::link(const gl::Context *glContext,
         mExecutable.resolvePrecisionMismatch(mergedVaryings);
     }
 
+    mExecutable.resetLayout(contextVk);
     ANGLE_TRY(mExecutable.createPipelineLayout(contextVk, mState.getExecutable(), nullptr));
 
     vk::RenderPass temporaryCompatibleRenderPass;

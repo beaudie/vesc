@@ -7087,6 +7087,9 @@ angle::Result DescriptorSetLayoutCache::getDescriptorSetLayout(
     const vk::DescriptorSetLayoutDesc &desc,
     vk::BindingPointer<vk::DescriptorSetLayout> *descriptorSetLayoutOut)
 {
+    // Note: this function may be called without holding the share group lock.
+    std::unique_lock<std::mutex> lock(mMutex);
+
     auto iter = mPayload.find(desc);
     if (iter != mPayload.end())
     {
@@ -7148,6 +7151,9 @@ angle::Result PipelineLayoutCache::getPipelineLayout(
     const vk::DescriptorSetLayoutPointerArray &descriptorSetLayouts,
     vk::BindingPointer<vk::PipelineLayout> *pipelineLayoutOut)
 {
+    // Note: this function may be called without holding the share group lock.
+    std::unique_lock<std::mutex> lock(mMutex);
+
     auto iter = mPayload.find(desc);
     if (iter != mPayload.end())
     {
