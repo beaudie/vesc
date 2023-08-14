@@ -1659,8 +1659,7 @@ void ProgramLinkedResources::init(std::vector<InterfaceBlock> *uniformBlocksOut,
     atomicCounterBufferLinker.init(atomicCounterBuffersOut);
 }
 
-void ProgramLinkedResourcesLinker::linkResources(const Context *context,
-                                                 const ProgramState &programState,
+void ProgramLinkedResourcesLinker::linkResources(const ProgramState &programState,
                                                  const ProgramLinkedResources &resources) const
 {
     // Gather uniform interface block info.
@@ -1670,7 +1669,7 @@ void ProgramLinkedResourcesLinker::linkResources(const Context *context,
         Shader *shader = programState.getAttachedShader(shaderType);
         if (shader)
         {
-            uniformBlockInfo.getShaderBlockInfo(shader->getUniformBlocks(context));
+            uniformBlockInfo.getShaderBlockInfo(shader->getUniformBlocksCompiled());
         }
     }
 
@@ -1695,7 +1694,7 @@ void ProgramLinkedResourcesLinker::linkResources(const Context *context,
         Shader *shader = programState.getAttachedShader(shaderType);
         if (shader)
         {
-            shaderStorageBlockInfo.getShaderBlockInfo(shader->getShaderStorageBlocks(context));
+            shaderStorageBlockInfo.getShaderBlockInfo(shader->getShaderStorageBlocksCompiled());
         }
     }
     auto getShaderStorageBlockSize = [&shaderStorageBlockInfo](const std::string &name,

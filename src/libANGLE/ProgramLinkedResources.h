@@ -324,8 +324,7 @@ class ProgramLinkedResourcesLinker final : angle::NonCopyable
         : mCustomEncoderFactory(customEncoderFactory)
     {}
 
-    void linkResources(const Context *context,
-                       const ProgramState &programState,
+    void linkResources(const ProgramState &programState,
                        const ProgramLinkedResources &resources) const;
 
   private:

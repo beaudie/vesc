@@ -1206,6 +1206,18 @@ angle::Result Program::linkImpl(const Context *context, ScopedShaderLinkLocks *s
     bool result = linkValidateShaders(context, infoLog);
     ASSERT(result);
 
+    // Make sure no compile jobs are pending.
+    // TODO: move this to the link job itself.  http://anglebug.com/8297
+    const ProgramExecutable &programExecutable = mState.getExecutable();
+    for (const ShaderType shaderType : programExecutable.getLinkedShaderStages())
+    {
+        Shader *shader = mState.getAttachedShader(shaderType);
+        if (shader)
+        {
+            shader->resolveCompile(context);
+        }
+    }
+
     std::unique_ptr<LinkingState> linkingState(new LinkingState());
     ProgramMergedVaryings mergedVaryings;
     LinkingVariables linkingVariables(context, mState);

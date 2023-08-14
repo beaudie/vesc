@@ -266,7 +266,7 @@ class ProgramMtl : public ProgramImpl
 
     void linkUpdateHasFlatAttributes(const gl::Context *context);
 
-    void linkResources(const gl::Context *context, const gl::ProgramLinkedResources &resources);
+    void linkResources(const gl::ProgramLinkedResources &resources);
     std::unique_ptr<LinkEvent> compileMslShaderLibs(const gl::Context *context,
                                                     gl::InfoLog &infoLog,
                                                     gl::ScopedShaderLinkLocks *shaderLocks);
