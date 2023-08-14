@@ -30,7 +30,15 @@ def AddCommonParserArgs(parser):
         '--suite',
         help='Test suite to run.',
         required=True,
-        choices=['angle_end2end_tests', 'angle_perftests', 'angle_trace_tests'])
+        choices=[
+            'angle_end2end_tests',
+            'angle_perftests',
+            'angle_trace_tests',
+            'angle_deqp_gles31_tests',
+            'angle_deqp_khr_gles2_tests',
+            'angle_deqp_khr_single_gles32_tests',
+            # TODO: add other deqp suites
+        ])
     parser.add_argument('-l', '--log', help='Logging level.', default='info')
     parser.add_argument('--list-tests', help='List tests.', action='store_true')
     parser.add_argument(
@@ -55,6 +63,10 @@ def RunAndroidTestSuite(args, extra_args):
         return rc
 
     tests = angle_test_util.GetTestsFromOutput(output)
+    if not tests:
+        logging.fatal('Could not find test list from test output:\n%s' % output)
+        return 1
+
     if args.filter:
         tests = angle_test_util.FilterTests(tests, args.filter)
 
