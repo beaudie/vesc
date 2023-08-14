@@ -3377,7 +3377,8 @@ angle::Result TextureVk::getBufferViewAndRecordUse(vk::Context *context,
             getRGBAConversionBufferHelper(renderer, imageUniformFormat->getIntendedFormatID());
         const vk::Format *format = &renderer->getFormat(
             GetRGBAEmulationDstFormat(imageUniformFormat->getIntendedFormatID()));
-
+        WARN() << "TextureVk::getBufferViewAndRecordUse NeedsRGBAEmulation "
+               << static_cast<int>(format->getIntendedFormatID());
         return mBufferViews.getView(context, *conversionBufferHelper,
                                     conversionBufferHelper->getOffset(), *format, viewOut);
     }

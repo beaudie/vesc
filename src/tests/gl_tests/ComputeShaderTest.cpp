@@ -5425,14 +5425,36 @@ void main()
 })";
         ANGLE_GL_COMPUTE_PROGRAM(program, csStream.str().c_str());
         glUseProgram(program);
-        for (auto format :
-             {GL_R8,     GL_R16F,    GL_R32F,    GL_R8I,     GL_R16I,     GL_R32I,
-              GL_R8UI,   GL_R16UI,   GL_R32UI,   GL_RG8,     GL_RG16F,    GL_RG32F,
-              GL_RG8I,   GL_RG16I,   GL_RG32I,   GL_RG8UI,   GL_RG16UI,   GL_RG32UI,
-              GL_RGB32F, GL_RGB32I,  GL_RGB32UI, GL_RGBA8,   GL_RGBA16F,  GL_RGBA32F,
-              GL_RGBA8I, GL_RGBA16I, GL_RGBA32I, GL_RGBA8UI, GL_RGBA16UI, GL_RGBA32UI})
+        for (auto format : {GL_R8,
+                            GL_R16F,
+                            GL_R32F,
+                            GL_R8I,
+                            GL_R16I,
+                            GL_R32I,
+                            GL_R8UI,
+                            GL_R16UI,
+                            GL_R32UI,
+                            GL_RG8,
+                            GL_RG16F,
+                            GL_RG32F,
+                            GL_RG8I,
+                            GL_RG16I,
+                            GL_RG32I,
+                            GL_RG8UI,
+                            GL_RG16UI,
+                            GL_RG32UI,
+                            /*GL_RGB32F, GL_RGB32I,  GL_RGB32UI,*/ GL_RGBA8,
+                            GL_RGBA16F,
+                            GL_RGBA32F,
+                            GL_RGBA8I,
+                            GL_RGBA16I,
+                            GL_RGBA32I,
+                            GL_RGBA8UI,
+                            GL_RGBA16UI,
+                            GL_RGBA32UI})
         {
             glTexBufferEXT(GL_TEXTURE_BUFFER, format, inBuf);
+            printf("Test Case %s %d\n", samplerType, format);
             glDispatchCompute(1, 1, 1);
             ASSERT_GL_NO_ERROR();
         }

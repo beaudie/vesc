@@ -10743,6 +10743,9 @@ angle::Result BufferViewHelper::getView(Context *context,
     viewCreateInfo.range                  = size;
 
     BufferView view;
+    WARN() << "format: " << static_cast<int>(viewVkFormat) << "\n";
+    WARN() << "offset: " << mOffset << " + " << bufferOffset << "\n";
+    WARN() << "range:  " << size << "\n";
     ANGLE_VK_TRY(context, view.init(context->getDevice(), viewCreateInfo));
 
     // Cache the view
