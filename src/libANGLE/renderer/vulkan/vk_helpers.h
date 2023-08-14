@@ -295,8 +295,8 @@ class DynamicDescriptorPool final : angle::NonCopyable
     CacheStats mCacheStats;
 };
 
-using RefCountedDescriptorPool = RefCounted<DynamicDescriptorPool>;
-using DescriptorPoolPointer    = BindingPointer<DynamicDescriptorPool>;
+using RefCountedDescriptorPool = AtomicRefCounted<DynamicDescriptorPool>;
+using DescriptorPoolPointer    = AtomicBindingPointer<DynamicDescriptorPool>;
 
 // Maps from a descriptor set layout (represented by DescriptorSetLayoutDesc) to a set of
 // DynamicDescriptorPools. The purpose of the class is so multiple GL Programs can share descriptor
@@ -318,6 +318,7 @@ class MetaDescriptorPool final : angle::NonCopyable
     template <typename Accumulator>
     void accumulateDescriptorCacheStats(VulkanCacheType cacheType, Accumulator *accum) const
     {
+        std::unique_lock<std::mutex> lock(mMutex);
         for (const auto &iter : mPayload)
         {
             const vk::RefCountedDescriptorPool &pool = iter.second;
@@ -327,6 +328,7 @@ class MetaDescriptorPool final : angle::NonCopyable
 
     void resetDescriptorCacheStats()
     {
+        std::unique_lock<std::mutex> lock(mMutex);
         for (auto &iter : mPayload)
         {
             vk::RefCountedDescriptorPool &pool = iter.second;
@@ -336,6 +338,7 @@ class MetaDescriptorPool final : angle::NonCopyable
 
     size_t getTotalCacheKeySizeBytes() const
     {
+        std::unique_lock<std::mutex> lock(mMutex);
         size_t totalSize = 0;
 
         for (const auto &iter : mPayload)
@@ -348,6 +351,8 @@ class MetaDescriptorPool final : angle::NonCopyable
     }
 
   private:
+    // Note: mPayload may be called without holding the share group lock, during program link.
+    mutable std::mutex mMutex;
     std::unordered_map<DescriptorSetLayoutDesc, RefCountedDescriptorPool> mPayload;
 };
 
