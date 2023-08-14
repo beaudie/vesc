@@ -5433,6 +5433,7 @@ void main()
               GL_RGBA8I, GL_RGBA16I, GL_RGBA32I, GL_RGBA8UI, GL_RGBA16UI, GL_RGBA32UI})
         {
             glTexBufferEXT(GL_TEXTURE_BUFFER, format, inBuf);
+            printf("Test Case %s %d\n", samplerType, format);
             glDispatchCompute(1, 1, 1);
             ASSERT_GL_NO_ERROR();
         }
