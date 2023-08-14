@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3b5d2cd7_d5d3882d",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-14T18:16:55Z",
+      "side": 1,
+      "message": "Right now yes. Today, we have:\n\n- glCompileShader(VS): reset shader info on main thread, start a compile job\n- glCompileShader(FS): ... same ...\n- glLinkProgram:\n  * Wait for shaders to finish\n  * Do a lot of the link on the main thread\n  * Do backend-specific link in a job\n\nThe wait in glLinkProgram is obviously terrible, and the second part (link in the main thread) also only works because of the share group lock.\n\nHowever, I want to change things to look like this:\n\n- glCompileShader(VS): start a job that does _everything_\n- glCompileShader(FS): ... same ...\n- glLinkProgram: start a job that:\n  * Waits for the shader jobs\n  * Does everything about the link\n\nSo eventually everything happens between the compile and link jobs, without involvement from the main thread. In that case, the share group lock does not exist to protect anything.\n\nAlso part of the plan is to make the job creation be done entirely in the frontend (because now all the link can be done in the job). That means that the `ScopedShaderLinkLocks` don\u0027t even get passed around, they\u0027d just end up being local this function!",
+      "parentUuid": "9574c798_d0bd2578",
+      "range": {
+        "startLine": 1128,
+        "startChar": 33,
+        "endLine": 1128,
+        "endChar": 45
+      },
+      "revId": "e9aa368a309b293320e60a89cbe5bf11a981aafb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "479d8dfe_81d5be79",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 4
