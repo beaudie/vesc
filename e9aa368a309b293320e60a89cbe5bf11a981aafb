@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9574c798_d0bd2578",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-14T18:07:29Z",
+      "side": 1,
+      "message": "\u003e The cache key for example depends on shader info. The dumpProgramInfo right below too.\n\n\nBut that is protected by shared lock, right? You can\u0027t bake any information that resulted from linking into hash key anyway, and that will also consistent with the lock here.",
+      "parentUuid": "fa071fcf_5968e9af",
+      "range": {
+        "startLine": 1128,
+        "startChar": 33,
+        "endLine": 1128,
+        "endChar": 45
+      },
+      "revId": "e9aa368a309b293320e60a89cbe5bf11a981aafb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "479d8dfe_81d5be79",
         "filename": "src/libANGLE/Program.cpp",
         "patchSetId": 4
