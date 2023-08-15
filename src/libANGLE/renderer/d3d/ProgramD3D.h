@@ -151,7 +151,7 @@ class ProgramD3DMetadata final : angle::NonCopyable
     ~ProgramD3DMetadata();
 
     int getRendererMajorShaderModel() const;
-    bool usesBroadcast(const gl::State &data) const;
+    bool usesBroadcast(const gl::Version &clientVersion) const;
     bool usesSecondaryColor() const;
     bool usesPointCoord() const;
     bool usesFragCoord() const;
@@ -215,7 +215,8 @@ class ProgramD3D : public ProgramImpl
 
     bool usesPointSize() const { return mUsesPointSize; }
     bool usesPointSpriteEmulation() const;
-    bool usesGeometryShader(const gl::State &state, gl::PrimitiveMode drawMode) const;
+    bool usesGeometryShader(const gl::ProvokingVertexConvention provokingVertex,
+                            gl::PrimitiveMode drawMode) const;
     bool usesGeometryShaderForPointSpriteEmulation() const;
     bool usesGetDimensionsIgnoresBaseLevel() const;
     bool usesInstancedPointSpriteEmulation() const;
@@ -230,16 +231,17 @@ class ProgramD3D : public ProgramImpl
     angle::Result getVertexExecutableForCachedInputLayout(d3d::Context *context,
                                                           ShaderExecutableD3D **outExectuable,
                                                           gl::InfoLog *infoLog);
-    angle::Result getGeometryExecutableForPrimitiveType(d3d::Context *errContext,
-                                                        const gl::State &state,
-                                                        gl::PrimitiveMode drawMode,
-                                                        ShaderExecutableD3D **outExecutable,
-                                                        gl::InfoLog *infoLog);
+    angle::Result getGeometryExecutableForPrimitiveType(
+        d3d::Context *errContext,
+        const gl::Caps &caps,
+        gl::ProvokingVertexConvention provokingVertex,
+        gl::PrimitiveMode drawMode,
+        ShaderExecutableD3D **outExecutable,
+        gl::InfoLog *infoLog);
     angle::Result getPixelExecutableForCachedOutputLayout(d3d::Context *context,
                                                           ShaderExecutableD3D **outExectuable,
                                                           gl::InfoLog *infoLog);
-    angle::Result getComputeExecutableForImage2DBindLayout(const gl::Context *glContext,
-                                                           d3d::Context *context,
+    angle::Result getComputeExecutableForImage2DBindLayout(d3d::Context *context,
                                                            ShaderExecutableD3D **outExecutable,
                                                            gl::InfoLog *infoLog);
     std::unique_ptr<LinkEvent> link(const gl::Context *context,
@@ -469,7 +471,7 @@ class ProgramD3D : public ProgramImpl
 
     void initializeUniformStorage(const gl::ShaderBitSet &availableShaderStages);
 
-    void defineUniformsAndAssignRegisters(const gl::Context *context);
+    void defineUniformsAndAssignRegisters();
     void defineUniformBase(const gl::Shader *shader,
                            const sh::ShaderVariable &uniform,
                            D3DUniformMap *uniformMap);
@@ -527,13 +529,13 @@ class ProgramD3D : public ProgramImpl
     D3DUniform *getD3DUniformFromLocation(GLint location);
     const D3DUniform *getD3DUniformFromLocation(GLint location) const;
 
-    void initAttribLocationsToD3DSemantic(const gl::Context *context);
+    void initAttribLocationsToD3DSemantic();
 
     void reset();
     void initializeUniformBlocks();
     void initializeShaderStorageBlocks();
 
-    void updateCachedInputLayoutFromShader(const gl::Context *context);
+    void updateCachedInputLayoutFromShader();
     void updateCachedOutputLayoutFromShader();
     void updateCachedImage2DBindLayoutFromShader(gl::ShaderType shaderType);
     void updateCachedVertexExecutableIndex();
