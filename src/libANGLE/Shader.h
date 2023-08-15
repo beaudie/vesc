@@ -216,6 +216,11 @@ class Shader final : angle::NonCopyable, public LabeledObject
     int getTranslatedSourceLength(const Context *context);
     int getTranslatedSourceWithDebugInfoLength(const Context *context);
     const std::string &getTranslatedSource(const Context *context);
+    const std::string &getTranslatedSourceCompiled()
+    {
+        ASSERT(!mState.compilePending());
+        return mState.getTranslatedSource();
+    }
     void getTranslatedSource(const Context *context,
                              GLsizei bufSize,
                              GLsizei *length,

@@ -563,8 +563,7 @@ void DynamicHLSL::generateVaryingLinkHLSL(const VaryingPacking &varyingPacking,
     hlslStream << "};\n";
 }
 
-void DynamicHLSL::generateShaderLinkHLSL(const gl::Context *context,
-                                         const gl::Caps &caps,
+void DynamicHLSL::generateShaderLinkHLSL(const gl::Caps &caps,
                                          const gl::ProgramState &programData,
                                          const ProgramD3DMetadata &programMetadata,
                                          const VaryingPacking &varyingPacking,
@@ -871,7 +870,7 @@ void DynamicHLSL::generateShaderLinkHLSL(const gl::Context *context,
 
     if (vertexShaderGL)
     {
-        std::string vertexSource = vertexShaderGL->getTranslatedSource(context);
+        std::string vertexSource = vertexShaderGL->getTranslatedSourceCompiled();
         angle::ReplaceSubstring(&vertexSource, std::string(MAIN_PROLOGUE_STUB_STRING),
                                 "    initAttributes(input);\n");
         angle::ReplaceSubstring(&vertexSource, std::string(VERTEX_OUTPUT_STUB_STRING),
@@ -1164,7 +1163,7 @@ void DynamicHLSL::generateShaderLinkHLSL(const gl::Context *context,
 
     if (fragmentShaderGL)
     {
-        std::string pixelSource = fragmentShaderGL->getTranslatedSource(context);
+        std::string pixelSource = fragmentShaderGL->getTranslatedSourceCompiled();
 
         std::ostringstream pixelMainParametersStream;
         pixelMainParametersStream << "PS_INPUT input";
@@ -1492,7 +1491,8 @@ void DynamicHLSL::GenerateAttributeConversionHLSL(angle::FormatID vertexFormatID
     outStream << "input." << DecorateVariable(shaderAttrib.name);
 }
 
-void DynamicHLSL::getPixelShaderOutputKey(const gl::State &data,
+void DynamicHLSL::getPixelShaderOutputKey(const gl::Caps &caps,
+                                          const gl::Version &clientVersion,
                                           const gl::ProgramState &programData,
                                           const ProgramD3DMetadata &metadata,
                                           std::vector<PixelShaderOutputVariable> *outPixelShaderKey)
@@ -1500,11 +1500,10 @@ void DynamicHLSL::getPixelShaderOutputKey(const gl::State &data,
     // Two cases when writing to gl_FragColor and using ESSL 1.0:
     // - with a 3.0 context, the output color is copied to channel 0
     // - with a 2.0 context, the output color is broadcast to all channels
-    bool broadcast = metadata.usesBroadcast(data);
-    const unsigned int numRenderTargets =
-        (broadcast || metadata.usesMultipleFragmentOuts()
-             ? static_cast<unsigned int>(data.getCaps().maxDrawBuffers)
-             : 1);
+    bool broadcast                      = metadata.usesBroadcast(clientVersion);
+    const unsigned int numRenderTargets = (broadcast || metadata.usesMultipleFragmentOuts()
+                                               ? static_cast<unsigned int>(caps.maxDrawBuffers)
+                                               : 1);
 
     if (!metadata.usesCustomOutVars())
     {
@@ -1523,8 +1522,8 @@ void DynamicHLSL::getPixelShaderOutputKey(const gl::State &data,
 
         if (metadata.usesSecondaryColor())
         {
-            for (unsigned int secondaryIndex = 0;
-                 secondaryIndex < data.getCaps().maxDualSourceDrawBuffers; secondaryIndex++)
+            for (unsigned int secondaryIndex = 0; secondaryIndex < caps.maxDualSourceDrawBuffers;
+                 secondaryIndex++)
             {
                 PixelShaderOutputVariable outputKeyVariable;
                 outputKeyVariable.type           = GL_FLOAT_VEC4;
