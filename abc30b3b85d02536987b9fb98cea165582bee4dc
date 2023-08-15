@@ -171,6 +171,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "11902c8a_2405b1e2",
+        "filename": "src/libANGLE/Uniform.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-15T18:09:26Z",
+      "side": 1,
+      "message": "Talked offline, the uniform component count is capped to `0x10000` in `vk_caps_utils.cpp` right now.",
+      "parentUuid": "c53f0c96_8d971020",
+      "revId": "abc30b3b85d02536987b9fb98cea165582bee4dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d0fae4bf_909253fc",
