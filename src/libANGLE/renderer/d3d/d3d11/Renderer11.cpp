@@ -1831,8 +1831,8 @@ angle::Result Renderer11::drawWithGeometryShaderAndTransformFeedback(Context11 *
 
     // Retrieve the geometry shader.
     rx::ShaderExecutableD3D *geometryExe = nullptr;
-    ANGLE_TRY(programD3D->getGeometryExecutableForPrimitiveType(context11, glState, mode,
-                                                                &geometryExe, nullptr));
+    ANGLE_TRY(programD3D->getGeometryExecutableForPrimitiveType(
+        context11, glState.getCaps(), glState.getProvokingVertex(), mode, &geometryExe, nullptr));
 
     mStateManager.setGeometryShader(&GetAs<ShaderExecutable11>(geometryExe)->getGeometryShader());
 
@@ -1874,7 +1874,7 @@ angle::Result Renderer11::drawArrays(const gl::Context *context,
     {
         ANGLE_TRY(markTransformFeedbackUsage(context));
 
-        if (programD3D->usesGeometryShader(glState, mode))
+        if (programD3D->usesGeometryShader(glState.getProvokingVertex(), mode))
         {
             return drawWithGeometryShaderAndTransformFeedback(
                 GetImplAs<Context11>(context), mode, adjustedInstanceCount, clampedVertexCount);
