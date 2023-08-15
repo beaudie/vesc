@@ -77,8 +77,7 @@ class LinkTaskVk final : public vk::Context, public angle::Closure
           mPipelineLayoutCache(pipelineLayoutCache),
           mDescriptorSetLayoutCache(descriptorSetLayoutCache),
           mMetaDescriptorPools(metaDescriptorPools)
-    {
-    }
+    {}
 
     void operator()() override
     {
