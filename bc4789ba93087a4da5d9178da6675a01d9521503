@@ -16,6 +16,23 @@
       "message": "syoussefi@ I\u0027m not familiar with Angle. I was hoping to do this roll of `googletest` for the latest `README.chromium` changes, but this CL fails different presubmits. I followed the instructions in the `DEPS` file for `googletest` - do you have any ideas on what\u0027s causing these failures?",
       "revId": "bc4789ba93087a4da5d9178da6675a01d9521503",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24279423_86ada2c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-08-15T13:52:41Z",
+      "side": 1,
+      "message": "The problem is that TSAN and ASAN tests got 50% slower with the new googletest.\nWould it be possible to bisect GTest and see where it regressed?",
+      "revId": "bc4789ba93087a4da5d9178da6675a01d9521503",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
