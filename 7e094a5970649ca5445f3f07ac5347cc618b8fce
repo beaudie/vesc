@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3480bd8f_2347f033",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-08-15T21:12:51Z",
+      "side": 1,
+      "message": "Here\u0027s a summary of the generated code changes:\n\nin `tracename_shared.cpp`:\n All of the shaders are now defined at the top of the file.\n There is a new function following SetupReplayContextShared(void) named\n     SetupInactiveReplayContextShared(void) containing the setup for the resources\n     not needed in the trace itself.\nin `tracename_001.cpp`:\n  The `SetupReplay()` function now looks like this:\n```\nvoid SetupReplay(void)\n{\n    InitReplay();\n    SetupReplayContextShared();\n    if (gReplayResourceMode \u003d\u003d angle::ReplayResourceMode::Full) SetupInactiveReplayContextShared();\n    SetCurrentContextID(2);\n    SetupReplayContext2();\n}\n```",
+      "revId": "7e094a5970649ca5445f3f07ac5347cc618b8fce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
