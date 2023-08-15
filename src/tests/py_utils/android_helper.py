@@ -487,13 +487,61 @@ def RunSmokeTest():
     logging.info('Smoke test passed')
 
 
-def RunTests(test_suite, args, stdoutfile=None, log_output=True):
+def _CollectSystemMetrics(system_metrics, done_event):
+    # Wait until test starts (post-warmup)
+    p = subprocess.Popen(['adb', 'logcat', '*:S', 'ANGLE:I'], stdout=subprocess.PIPE)
+    while p.returncode == None:
+        line = p.stdout.readline().decode()
+        if 'running test name' in line:
+            p.kill()
+            break
+        p.poll()
+
+    p_thermal = subprocess.Popen(['adb', 'logcat', '*:S', 'pixel-thermal:I'],
+                                 stdout=subprocess.PIPE)
+    os.set_blocking(p_thermal.stdout.fileno(), False)
+
+    t_interval = 5.0
+    t_ref = time.time()
+    data = []
+    while True:
+        energy_value = _AdbShell('cat /sys/bus/iio/devices/iio:device*/energy_value').decode()
+        data.append({'t': time.time(), 'energy_value': energy_value})
+        while time.time() - t_ref < t_interval:
+            time.sleep(0.02)
+            thermal = p_thermal.stdout.readline().decode()
+            if thermal:
+                if 'pixel-thermal: VIRTUAL-SKIN:' in thermal:
+                    data.append({'t': time.time(), 'virtual_skin': thermal})
+                if 'power_budget' in thermal:
+                    data.append({'t': time.time(), 'power_budget': thermal})
+            if done_event.is_set():
+                p_thermal.kill()
+                with open(system_metrics, 'w') as f:
+                    json.dump(data, f, indent=2)
+                    f.write('\n')
+                return
+        t_ref += t_interval
+
+
+def RunTests(test_suite, args, stdoutfile=None, log_output=True, system_metrics=None):
     _EnsureTestSuite(test_suite)
 
     args = args[:]
     test_output_path = _RemoveFlag(args, '--isolated-script-test-output')
     perf_output_path = _RemoveFlag(args, '--isolated-script-test-perf-output')
     test_output_dir = _RemoveFlag(args, '--render-test-output-dir')
+
+    if system_metrics:
+        _AdbRun(['logcat', '-c'])
+        done_event = threading.Event()
+        power_thread = threading.Thread(
+            target=_CollectSystemMetrics, args=(
+                system_metrics,
+                done_event,
+            ))
+        power_thread.daemon = True
+        power_thread.start()
 
     result = 0
     output = b''
@@ -551,6 +599,10 @@ def RunTests(test_suite, args, stdoutfile=None, log_output=True):
     except Exception as e:
         logging.exception(e)
         result = 1
+
+    if system_metrics:
+        done_event.set()
+        power_thread.join(timeout=2)
 
     return result, output.decode(), output_json
 

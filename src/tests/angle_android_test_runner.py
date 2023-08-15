@@ -40,6 +40,7 @@ def AddCommonParserArgs(parser):
         '--gtest_filter',
         type=str,
         help='Test filter.')
+    parser.add_argument('--system-metrics', type=str, help='File to log system metrics to.')
 
 
 def RunAndroidTestSuite(args, extra_args):
@@ -71,7 +72,8 @@ def RunAndroidTestSuite(args, extra_args):
             return 0
 
     flags = ['--gtest_filter=' + args.filter] if args.filter else []
-    return android_helper.RunTests(args.suite, flags + extra_args)[0]
+    return android_helper.RunTests(
+        args.suite, flags + extra_args, system_metrics=args.system_metrics)[0]
 
 
 def main():
