@@ -39,6 +39,30 @@
       },
       "revId": "55b61cbcd391a14a1a7ef9bd1814ef536c974bee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23a0c0c1_7ecb38cb",
+        "filename": "scripts/angle_trace_bundle.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-08-15T19:58:30Z",
+      "side": 1,
+      "message": "angle_trace_perf_tests is the \"always safe\" build target\n\nangle_trace_tests is the test suite name\n\nWe had to do this split for traces outside of the APK to work http://b/294861737#comment2\n\nIf we resolve this somehow I can update references to angle_trace_perf_tests.",
+      "parentUuid": "567e0802_a99101ed",
+      "range": {
+        "startLine": 17,
+        "startChar": 32,
+        "endLine": 17,
+        "endChar": 54
+      },
+      "revId": "55b61cbcd391a14a1a7ef9bd1814ef536c974bee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
