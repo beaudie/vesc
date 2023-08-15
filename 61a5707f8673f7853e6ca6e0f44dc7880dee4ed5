@@ -22,6 +22,30 @@
       },
       "revId": "61a5707f8673f7853e6ca6e0f44dc7880dee4ed5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "967fd398_e2a14bb4",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-15T20:35:39Z",
+      "side": 1,
+      "message": "Thanks for catching this. Addressed in the next CL.\nhttps://chromium-review.googlesource.com/c/angle/angle/+/4754133",
+      "parentUuid": "d054014f_0336f902",
+      "range": {
+        "startLine": 474,
+        "startChar": 33,
+        "endLine": 474,
+        "endChar": 45
+      },
+      "revId": "61a5707f8673f7853e6ca6e0f44dc7880dee4ed5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
