@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a6ea847_ef180ee7",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-15T17:22:48Z",
+      "side": 1,
+      "message": "nit: there\u0027s an `unused` bit above you could use.",
+      "revId": "c9a05fbe00e3609b2594bec4504d4d2d1bf34f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca9291f5_2ff0d864",
+        "filename": "include/platform/gl_features.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 748,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-15T17:22:48Z",
+      "side": 1,
+      "message": "Please also add the `\"issue\"` field",
+      "revId": "c9a05fbe00e3609b2594bec4504d4d2d1bf34f8c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
