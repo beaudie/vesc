@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32362ca0_97cf7883",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-08-15T14:39:26Z",
+      "side": 1,
+      "message": "Could there be value to explicitly unlocking here? As far as I remember, the link tasks are only destructed in Program::resolveLink so there is a potential dead lock if the user links a program and never checks the results. Any shader operation would hang.",
+      "range": {
+        "startLine": 575,
+        "startChar": 49,
+        "endLine": 575,
+        "endChar": 50
+      },
+      "revId": "31a3f22275e2512a6948fd08410591a5cfb9d3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
