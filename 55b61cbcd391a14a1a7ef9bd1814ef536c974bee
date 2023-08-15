@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c9d7d97_b4302302",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-15T18:46:05Z",
+      "side": 1,
+      "message": "LGTM, will rely on Yuxin\u0027s results to say if this works.",
+      "revId": "55b61cbcd391a14a1a7ef9bd1814ef536c974bee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "567e0802_a99101ed",
+        "filename": "scripts/angle_trace_bundle.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-15T18:46:05Z",
+      "side": 1,
+      "message": "Confusion between this and the list in AddCommonParserArgs (`angle_trace_tests`).  Can we use one or the other?  I filed this last week: b/294861737",
+      "range": {
+        "startLine": 17,
+        "startChar": 32,
+        "endLine": 17,
+        "endChar": 54
+      },
+      "revId": "55b61cbcd391a14a1a7ef9bd1814ef536c974bee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
