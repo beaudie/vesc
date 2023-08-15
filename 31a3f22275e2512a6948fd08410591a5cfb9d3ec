@@ -22,6 +22,30 @@
       },
       "revId": "31a3f22275e2512a6948fd08410591a5cfb9d3ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0974db7_6302be4d",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 575,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-15T15:03:21Z",
+      "side": 1,
+      "message": "That\u0027s exactly why the link job\u0027s `operator()` do the unlock, so we don\u0027t have to wait for the main thread. Indeed, unlock at resolve time would lead to a deadlock (but only if shader is recompiled).\n\nThere\u0027s a bit of duplicate logic there in every backend for that. Eventually, when I can make the front-end handle the jobs and locks, the unlock logic would be centralized.",
+      "parentUuid": "32362ca0_97cf7883",
+      "range": {
+        "startLine": 575,
+        "startChar": 49,
+        "endLine": 575,
+        "endChar": 50
+      },
+      "revId": "31a3f22275e2512a6948fd08410591a5cfb9d3ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
