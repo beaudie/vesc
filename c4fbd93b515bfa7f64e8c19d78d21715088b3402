@@ -1,5 +1,23 @@
 {
-  "comments": [],
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e0e1781_c59d99e3",
+        "filename": "src/libANGLE/renderer/vulkan/SecondaryCommandBuffer.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-15T02:28:04Z",
+      "side": 1,
+      "message": "You can remove all changes from vk_wrapper.h. It\u0027s enough to have a local `bool hasBoundComputePipeline \u003d false` at the beginning of this function, set it to `true` here and `ASSERT` it where you have below.",
+      "revId": "c4fbd93b515bfa7f64e8c19d78d21715088b3402",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ],
   "submitRequirementResults": [
     {
       "submitRequirement": {
