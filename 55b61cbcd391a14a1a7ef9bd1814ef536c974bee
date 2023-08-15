@@ -70,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19c5d6f5_dd6ede04",
+        "filename": "scripts/angle_deqp_bundle.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-08-15T23:19:45Z",
+      "side": 1,
+      "message": "Acknowledged. Thank you for the explanations.",
+      "parentUuid": "8749fd1d_4b5dcc14",
+      "revId": "55b61cbcd391a14a1a7ef9bd1814ef536c974bee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0cd9558b_6d436fd7",
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "Did you mean to rename the function as well? Looks like you only changed the vars which doesn\u0027t seem to make it more clear IMO",
       "parentUuid": "0cd9558b_6d436fd7",
+      "revId": "55b61cbcd391a14a1a7ef9bd1814ef536c974bee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e514812_0beb4d78",
+        "filename": "scripts/angle_deqp_bundle.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-08-15T23:19:45Z",
+      "side": 1,
+      "message": "I didn\u0027t mean to rename the function. But after your comment now I think renaming the function and parameters to `createAndAddScriptToZip(fzip, scriptPath, scriptContents)` is clearer. Does that sound better to you?\n\nWhen I first read line 91, it was not clear to me how `run_tests.sh` maps to `path`, as the former is more like a file name than a path name to me. I also thought `run_tests.sh` is an existing script, and later I realized it is a script we want to create on fly by filling it with `contents`. Thus I proposed to change the function parameter names.",
+      "parentUuid": "eedbec1d_a64fc576",
       "revId": "55b61cbcd391a14a1a7ef9bd1814ef536c974bee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
