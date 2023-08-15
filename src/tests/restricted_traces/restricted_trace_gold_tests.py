@@ -11,6 +11,7 @@
 
 import argparse
 import contextlib
+import hashlib
 import json
 import logging
 import os
@@ -359,6 +360,14 @@ def _run_tests(args, tests, extra_flags, env, screenshot_dir, results, test_resu
 
         if args.isolated_script_test_filter:
             traces = angle_test_util.FilterTests(traces, args.isolated_script_test_filter)
+
+        # https://anglebug.com/8307: temporary hash check
+        for trace in traces:
+            angledata = os.path.join(angle_path_util.ANGLE_ROOT_DIR, 'src', 'tests',
+                                     'restricted_traces', trace, trace + '.angledata.gz')
+            with open(angledata, 'rb') as f:
+                logging.info('%s.angledata.gz hash: %s', trace,
+                             hashlib.sha256(f.read()).hexdigest())
 
         batches = _get_batches(traces, args.batch_size)
 
