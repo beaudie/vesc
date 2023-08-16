@@ -1,0 +1,199 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3347fb17_32497ad0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-16T14:53:34Z",
+      "side": 1,
+      "message": "Mark, this direction looks good to me.  A couple pieces of feedback and some nits.",
+      "revId": "e2f180abb15dce6c75b2973b2e47ad02b22c12de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "779573d6_03a3597b",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1701,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-16T14:53:34Z",
+      "side": 1,
+      "message": "nit: This would be a bit more readable as:\n```\nif (call.isActive \u0026\u0026 replayFunc \u003d\u003d ReplayFunc::SetupInactive ||\n    !call.isActive \u0026\u0026 replayFunc \u003d\u003d ReplayFunc::Setup)\n```",
+      "range": {
+        "startLine": 1700,
+        "startChar": 7,
+        "endLine": 1701,
+        "endChar": 73
+      },
+      "revId": "e2f180abb15dce6c75b2973b2e47ad02b22c12de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "475a827b_a7c6da4a",
+        "filename": "src/tests/capture_tests/expected/CapturedTest_MultiFrame_ES3_Vulkan.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-16T14:53:34Z",
+      "side": 1,
+      "message": "nit: Can we rename this to `SetupReplayContextSharedInactive` so the unique identifier is at the end?",
+      "range": {
+        "startLine": 18,
+        "startChar": 5,
+        "endLine": 18,
+        "endChar": 37
+      },
+      "revId": "e2f180abb15dce6c75b2973b2e47ad02b22c12de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13ce04e3_532d8a0e",
+        "filename": "src/tests/capture_tests/expected/CapturedTest_MultiFrame_ES3_Vulkan_001.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-16T14:53:34Z",
+      "side": 1,
+      "message": "nit: Let\u0027s format this like normal code.",
+      "range": {
+        "startLine": 101,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 99
+      },
+      "revId": "e2f180abb15dce6c75b2973b2e47ad02b22c12de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f7d084f_062f3c8f",
+        "filename": "src/tests/capture_tests/expected/CapturedTest_MultiFrame_ES3_Vulkan_shared.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-16T14:53:34Z",
+      "side": 1,
+      "message": "Can you add an inactive shader/program so this gets populated?",
+      "revId": "e2f180abb15dce6c75b2973b2e47ad02b22c12de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77d209c9_a3b13166",
+        "filename": "util/capture/frame_capture_test_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-16T14:53:34Z",
+      "side": 1,
+      "message": "nit: should be okay without the extra parentheses",
+      "range": {
+        "startLine": 56,
+        "startChar": 13,
+        "endLine": 56,
+        "endChar": 27
+      },
+      "revId": "e2f180abb15dce6c75b2973b2e47ad02b22c12de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f718978d_b712c552",
+        "filename": "util/capture/trace_fixture.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-16T14:53:34Z",
+      "side": 1,
+      "message": "Maybe we should pass the replay mode as a parameter to SetupReplay?",
+      "range": {
+        "startLine": 56,
+        "startChar": 24,
+        "endLine": 56,
+        "endChar": 35
+      },
+      "revId": "e2f180abb15dce6c75b2973b2e47ad02b22c12de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f34a6a3_59f83732",
+        "filename": "util/capture/trace_fixture.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-16T14:53:34Z",
+      "side": 1,
+      "message": "Do we need to include this here?  I don\u0027t see similar entries like `SetBinaryDataDir` in this header.",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 92
+      },
+      "revId": "e2f180abb15dce6c75b2973b2e47ad02b22c12de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a87020d8_3d2808e2",
+        "filename": "util/capture/trace_interface.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-16T14:53:34Z",
+      "side": 1,
+      "message": "nit: alphabetize for consistency",
+      "range": {
+        "startLine": 65,
+        "startChar": 17,
+        "endLine": 65,
+        "endChar": 38
+      },
+      "revId": "e2f180abb15dce6c75b2973b2e47ad02b22c12de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
