@@ -34,6 +34,8 @@ void ReplayFrame1(void)
     glClear(GL_COLOR_BUFFER_BIT);
     glReadPixels(0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, (void *)gReadBuffer);
     glGetError();
+    SetTextureID(3);
+    glBindTexture(GL_TEXTURE_2D, gTextureMap[3]);
 }
 
 void ReplayFrame2(void)
@@ -81,6 +83,8 @@ void ReplayFrame3(void)
 
 void ResetReplayContextShared(void)
 {
+    UpdateResourceIDBuffer(0, gTextureMap[3]);
+    glDeleteTextures(1, gResourceIDBuffer);
 }
 
 void ResetReplayContext1(void)

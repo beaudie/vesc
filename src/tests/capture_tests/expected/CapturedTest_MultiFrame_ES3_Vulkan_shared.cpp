@@ -18,6 +18,9 @@ void SetupReplayContextShared(void)
 
 void SetupReplayContextSharedInactive(void)
 {
+    glGenTextures(1, (GLuint *)gReadBuffer);
+    UpdateTextureID(2, 0);
+    glBindTexture(GL_TEXTURE_2D, gTextureMap[2]);
     CreateShader(GL_VERTEX_SHADER, 2);
     glShaderSource(gShaderProgramMap[2], 1, glShaderSource_string_2, 0);
     glCompileShader(gShaderProgramMap[2]);

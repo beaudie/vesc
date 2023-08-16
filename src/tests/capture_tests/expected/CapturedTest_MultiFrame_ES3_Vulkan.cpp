@@ -26,11 +26,11 @@ void InitReplay(void)
     // maxShaderProgram = 5
     // maxSurface = 1
     // maxSync = 0
-    // maxTexture = 0
+    // maxTexture = 3
     // maxTransformFeedback = 0
     // maxVertexArray = 0
     // maxegl_Sync = 0
-    InitializeReplay4("CapturedTest_MultiFrame_ES3_Vulkan.angledata", 0, 32, 1, 1, 1, 1, 0, 2, 0, 0, 0, 0, 0, 0, 0, 5, 1, 0, 0, 0, 0, 0);
+    InitializeReplay4("CapturedTest_MultiFrame_ES3_Vulkan.angledata", 0, 32, 1, 1, 1, 1, 0, 2, 0, 0, 0, 0, 0, 0, 0, 5, 1, 0, 3, 0, 0, 0);
 }
 
 // Public Functions

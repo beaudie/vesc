@@ -51,6 +51,11 @@ void main(void) {
         glCompileShader(inactiveShader);
         glAttachShader(inactiveProgram, inactiveShader);
 
+        glGenTextures(1, &textureNeverBound);
+        glGenTextures(1, &textureBoundBeforeCapture);
+        glBindTexture(GL_TEXTURE_2D, textureBoundBeforeCapture);
+        glGenTextures(1, &textureBoundDuringCapture);
+
         ASSERT_GL_NO_ERROR();
     }
 
@@ -74,6 +79,9 @@ void main(void) {
 
     GLuint inactiveProgram;
     GLuint inactiveShader;
+    GLuint textureNeverBound;
+    GLuint textureBoundBeforeCapture;
+    GLuint textureBoundDuringCapture;
 };
 
 void CapturedTest::frame1()
@@ -81,6 +89,7 @@ void CapturedTest::frame1()
     glClearColor(0.25f, 0.5f, 0.5f, 0.5f);
     glClear(GL_COLOR_BUFFER_BIT);
     EXPECT_PIXEL_NEAR(0, 0, 64, 128, 128, 128, 1.0);
+    glBindTexture(GL_TEXTURE_2D, textureBoundDuringCapture);
 }
 
 void CapturedTest::frame2()
