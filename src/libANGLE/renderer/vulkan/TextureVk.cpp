@@ -673,21 +673,44 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
             const uint8_t *source =
                 static_cast<const uint8_t *>(mapPtr) + reinterpret_cast<ptrdiff_t>(pixels);
 
+            VkResult result;
             ANGLE_TRY(mImage->stageSubresourceUpdateImpl(
                 contextVk, getNativeImageIndex(index),
                 gl::Extents(area.width, area.height, area.depth),
                 gl::Offset(area.x, area.y, area.z), formatInfo, unpack, type, source, vkFormat,
-                getRequiredImageAccess(), inputRowPitch, inputDepthPitch, inputSkipBytes));
+                getRequiredImageAccess(), inputRowPitch, inputDepthPitch, inputSkipBytes, &result));
+            if (result != VK_SUCCESS)
+            {
+                ANGLE_TRY(contextVk->onOutOfMemory());
+                ANGLE_TRY(mImage->stageSubresourceUpdateImpl(
+                    contextVk, getNativeImageIndex(index),
+                    gl::Extents(area.width, area.height, area.depth),
+                    gl::Offset(area.x, area.y, area.z), formatInfo, unpack, type, source, vkFormat,
+                    getRequiredImageAccess(), inputRowPitch, inputDepthPitch, inputSkipBytes,
+                    &result));
+            }
+            ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
 
             ANGLE_TRY(unpackBufferVk->unmapImpl(contextVk));
         }
     }
     else if (pixels)
     {
+        VkResult result;
         ANGLE_TRY(mImage->stageSubresourceUpdate(
             contextVk, getNativeImageIndex(index), gl::Extents(area.width, area.height, area.depth),
             gl::Offset(area.x, area.y, area.z), formatInfo, unpack, type, pixels, vkFormat,
-            getRequiredImageAccess()));
+            getRequiredImageAccess(), &result));
+        if (result != VK_SUCCESS)
+        {
+            ANGLE_TRY(contextVk->onOutOfMemory());
+            ANGLE_TRY(mImage->stageSubresourceUpdate(
+                contextVk, getNativeImageIndex(index),
+                gl::Extents(area.width, area.height, area.depth),
+                gl::Offset(area.x, area.y, area.z), formatInfo, unpack, type, pixels, vkFormat,
+                getRequiredImageAccess(), &result));
+        }
+        ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
     }
 
     // If we used context's staging buffer, flush out the updates
@@ -946,10 +969,20 @@ angle::Result TextureVk::copySubImageImpl(const gl::Context *context,
                           "Texture copied on CPU due to format restrictions");
 
     // Do a CPU readback that does the conversion, and then stage the change to the pixel buffer.
+    VkResult result;
     ANGLE_TRY(mImage->stageSubresourceUpdateFromFramebuffer(
         context, offsetImageIndex, clippedSourceArea, modifiedDestOffset,
         gl::Extents(clippedSourceArea.width, clippedSourceArea.height, 1), internalFormat,
-        getRequiredImageAccess(), framebufferVk));
+        getRequiredImageAccess(), framebufferVk, &result));
+    if (result != VK_SUCCESS)
+    {
+        ANGLE_TRY(contextVk->onOutOfMemory());
+        ANGLE_TRY(mImage->stageSubresourceUpdateFromFramebuffer(
+            context, offsetImageIndex, clippedSourceArea, modifiedDestOffset,
+            gl::Extents(clippedSourceArea.width, clippedSourceArea.height, 1), internalFormat,
+            getRequiredImageAccess(), framebufferVk, &result));
+    }
+    ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
 
     // Flush out staged update if possible
     if (!shouldUpdateBeStaged(gl::LevelIndex(index.getLevelIndex()), dstActualFormatID))
@@ -1049,9 +1082,18 @@ angle::Result TextureVk::copySubTextureImpl(ContextVk *contextVk,
         offsetImageIndex.getLevelIndex(), stagingBaseLayer, stagingLayerCount);
 
     uint8_t *destData = nullptr;
+    VkResult result;
     ANGLE_TRY(mImage->stageSubresourceUpdateAndGetData(contextVk, destinationAllocationSize,
                                                        stagingIndex, stagingExtents, stagingOffset,
-                                                       &destData, dstFormatID));
+                                                       &destData, dstFormatID, &result));
+    if (result != VK_SUCCESS)
+    {
+        ANGLE_TRY(contextVk->onOutOfMemory());
+        ANGLE_TRY(mImage->stageSubresourceUpdateAndGetData(
+            contextVk, destinationAllocationSize, stagingIndex, stagingExtents, stagingOffset,
+            &destData, dstFormatID, &result));
+    }
+    ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
 
     // Source and dst data is tightly packed
     GLuint srcDataRowPitch = sourceBox.width * srcTextureFormat.pixelBytes;
@@ -1179,11 +1221,22 @@ angle::Result TextureVk::copySubImageImplWithTransfer(ContextVk *contextVk,
         std::unique_ptr<vk::RefCounted<vk::ImageHelper>> stagingImage;
         stagingImage = std::make_unique<vk::RefCounted<vk::ImageHelper>>();
 
+        VkResult result;
         ANGLE_TRY(stagingImage->get().init2DStaging(
             contextVk, mState.hasProtectedContent(), renderer->getMemoryProperties(),
             gl::Extents(sourceBox.width, sourceBox.height, 1), dstFormat.getIntendedFormatID(),
             dstFormat.getActualImageFormatID(getRequiredImageAccess()), kTransferImageFlags,
-            layerCount));
+            layerCount, &result));
+        if (result != VK_SUCCESS)
+        {
+            ANGLE_TRY(contextVk->onOutOfMemory());
+            ANGLE_TRY(stagingImage->get().init2DStaging(
+                contextVk, mState.hasProtectedContent(), renderer->getMemoryProperties(),
+                gl::Extents(sourceBox.width, sourceBox.height, 1), dstFormat.getIntendedFormatID(),
+                dstFormat.getActualImageFormatID(getRequiredImageAccess()), kTransferImageFlags,
+                layerCount, &result));
+        }
+        ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
 
         access.onImageTransferWrite(gl::LevelIndex(0), 1, 0, layerCount, VK_IMAGE_ASPECT_COLOR_BIT,
                                     &stagingImage->get());
@@ -1338,11 +1391,22 @@ angle::Result TextureVk::copySubImageImplWithDraw(ContextVk *contextVk,
         std::unique_ptr<vk::RefCounted<vk::ImageHelper>> stagingImage;
         stagingImage = std::make_unique<vk::RefCounted<vk::ImageHelper>>();
 
+        VkResult result;
         ANGLE_TRY(stagingImage->get().init2DStaging(
             contextVk, mState.hasProtectedContent(), renderer->getMemoryProperties(),
             gl::Extents(sourceBox.width, sourceBox.height, 1), dstFormat.getIntendedFormatID(),
             dstFormat.getActualImageFormatID(getRequiredImageAccess()), kDrawStagingImageFlags,
-            layerCount));
+            layerCount, &result));
+        if (result != VK_SUCCESS)
+        {
+            ANGLE_TRY(contextVk->onOutOfMemory());
+            ANGLE_TRY(stagingImage->get().init2DStaging(
+                contextVk, mState.hasProtectedContent(), renderer->getMemoryProperties(),
+                gl::Extents(sourceBox.width, sourceBox.height, 1), dstFormat.getIntendedFormatID(),
+                dstFormat.getActualImageFormatID(getRequiredImageAccess()), kDrawStagingImageFlags,
+                layerCount, &result));
+        }
+        ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
 
         params.dstOffset[0] = 0;
         params.dstOffset[1] = 0;
@@ -1840,8 +1904,17 @@ angle::Result TextureVk::copyImageDataToBufferAndGetData(ContextVk *contextVk,
         modifiedSourceArea.depth = 1;
     }
 
+    VkResult result;
     ANGLE_TRY(mImage->copyImageDataToBuffer(contextVk, sourceLevelGL, layerCount, 0,
-                                            modifiedSourceArea, copyBuffer, outDataPtr));
+                                            modifiedSourceArea, copyBuffer, outDataPtr, &result));
+    if (result != VK_SUCCESS)
+    {
+        ANGLE_TRY(contextVk->onOutOfMemory());
+        ANGLE_TRY(mImage->copyImageDataToBuffer(contextVk, sourceLevelGL, layerCount, 0,
+                                                modifiedSourceArea, copyBuffer, outDataPtr,
+                                                &result));
+    }
+    ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
 
     // Explicitly finish. If new use cases arise where we don't want to block we can change this.
     ANGLE_TRY(contextVk->finishImpl(reason));
@@ -2179,11 +2252,22 @@ angle::Result TextureVk::copyAndStageImageData(ContextVk *contextVk,
     const uint32_t levelCount = srcImage->getLevelCount();
     const uint32_t layerCount = srcImage->getLayerCount();
 
+    VkResult result;
     ANGLE_TRY(stagingImage->get().initStaging(
         contextVk, mState.hasProtectedContent(), renderer->getMemoryProperties(),
         srcImage->getType(), srcImage->getExtents(), srcImage->getIntendedFormatID(),
         srcImage->getActualFormatID(), srcImage->getSamples(), kTransferImageFlags, levelCount,
-        layerCount));
+        layerCount, &result));
+    if (result != VK_SUCCESS)
+    {
+        ANGLE_TRY(contextVk->onOutOfMemory());
+        ANGLE_TRY(stagingImage->get().initStaging(
+            contextVk, mState.hasProtectedContent(), renderer->getMemoryProperties(),
+            srcImage->getType(), srcImage->getExtents(), srcImage->getIntendedFormatID(),
+            srcImage->getActualFormatID(), srcImage->getSamples(), kTransferImageFlags, levelCount,
+            layerCount, &result));
+    }
+    ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
 
     // Copy the src image wholly into the staging image
     const VkImageAspectFlags aspectFlags = srcImage->getAspectFlags();
@@ -2294,8 +2378,16 @@ angle::Result TextureVk::reinitImageAsRenderable(ContextVk *contextVk,
         vk::RendererScoped<vk::BufferHelper> bufferHelper(renderer);
         vk::BufferHelper *srcBuffer = &bufferHelper.get();
         uint8_t *srcData            = nullptr;
+        VkResult result;
         ANGLE_TRY(mImage->copyImageDataToBuffer(contextVk, levelGL, layerCount, 0, sourceBox,
-                                                srcBuffer, &srcData));
+                                                srcBuffer, &srcData, &result));
+        if (result != VK_SUCCESS)
+        {
+            ANGLE_TRY(contextVk->onOutOfMemory());
+            ANGLE_TRY(mImage->copyImageDataToBuffer(contextVk, levelGL, layerCount, 0, sourceBox,
+                                                    srcBuffer, &srcData, &result));
+        }
+        ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
 
         // Explicitly finish. If new use cases arise where we don't want to block we can change
         // this.
@@ -2308,7 +2400,15 @@ angle::Result TextureVk::reinitImageAsRenderable(ContextVk *contextVk,
         uint8_t *dstData = nullptr;
         ANGLE_TRY(mImage->stageSubresourceUpdateAndGetData(
             contextVk, dstBufferSize, index, mImage->getLevelExtents(levelVk), gl::kOffsetZero,
-            &dstData, dstFormat.id));
+            &dstData, dstFormat.id, &result));
+        if (result != VK_SUCCESS)
+        {
+            ANGLE_TRY(contextVk->onOutOfMemory());
+            ANGLE_TRY(mImage->stageSubresourceUpdateAndGetData(
+                contextVk, dstBufferSize, index, mImage->getLevelExtents(levelVk), gl::kOffsetZero,
+                &dstData, dstFormat.id, &result));
+        }
+        ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
 
         // Source and destination data is tightly packed
         GLuint srcDataRowPitch = sourceBox.width * srcFormat.pixelBytes;
@@ -2480,9 +2580,18 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
         bool useRobustInit = false;
 
         // Create the implicit multisampled image.
+        VkResult result;
         ANGLE_TRY(multisampledImage->initImplicitMultisampledRenderToTexture(
             contextVk, mState.hasProtectedContent(), renderer->getMemoryProperties(),
-            mState.getType(), samples, *mImage, useRobustInit));
+            mState.getType(), samples, *mImage, useRobustInit, &result));
+        if (result != VK_SUCCESS)
+        {
+            ANGLE_TRY(contextVk->onOutOfMemory());
+            ANGLE_TRY(multisampledImage->initImplicitMultisampledRenderToTexture(
+                contextVk, mState.hasProtectedContent(), renderer->getMemoryProperties(),
+                mState.getType(), samples, *mImage, useRobustInit, &result));
+        }
+        ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
     }
 
     GLuint layerIndex = 0, layerCount = 0, imageLayerCount = 0;
@@ -2896,8 +3005,16 @@ angle::Result TextureVk::convertBufferToRGBA(ContextVk *contextVk, size_t &conve
     vk::BufferHelper *conversionBufferHelper = conversion->data.get();
     if (!conversionBufferHelper->valid())
     {
+        VkResult result;
         ANGLE_TRY(conversionBufferHelper->allocateForVertexConversion(
-            contextVk, conversionBufferSize, vk::MemoryHostVisibility::NonVisible));
+            contextVk, conversionBufferSize, vk::MemoryHostVisibility::NonVisible, &result));
+        if (result != VK_SUCCESS)
+        {
+            ANGLE_TRY(contextVk->onOutOfMemory());
+            ANGLE_TRY(conversionBufferHelper->allocateForVertexConversion(
+                contextVk, conversionBufferSize, vk::MemoryHostVisibility::NonVisible, &result));
+        }
+        ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
     }
 
     if (conversion->dirty)
@@ -3032,9 +3149,19 @@ angle::Result TextureVk::initializeContents(const gl::Context *context,
     ASSERT(mImage);
     // Note that we cannot ensure the image is initialized because we might be calling subImage
     // on a non-complete cube map.
-    return mImage->stageRobustResourceClearWithFormat(
+    VkResult result;
+    ANGLE_TRY(mImage->stageRobustResourceClearWithFormat(
         contextVk, imageIndex, desc.size, format.getIntendedFormat(),
-        format.getActualImageFormat(getRequiredImageAccess()));
+        format.getActualImageFormat(getRequiredImageAccess()), &result));
+    if (result != VK_SUCCESS)
+    {
+        ANGLE_TRY(contextVk->onOutOfMemory());
+        ANGLE_TRY(mImage->stageRobustResourceClearWithFormat(
+            contextVk, imageIndex, desc.size, format.getIntendedFormat(),
+            format.getActualImageFormat(getRequiredImageAccess()), &result));
+    }
+    ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
+    return angle::Result::Continue;
 }
 
 angle::Result TextureVk::initializeContentsWithBlack(const gl::Context *context,
@@ -3052,9 +3179,19 @@ angle::Result TextureVk::initializeContentsWithBlack(const gl::Context *context,
     ASSERT(mImage);
     // Note that we cannot ensure the image is initialized because we might be calling subImage
     // on a non-complete cube map.
-    return mImage->stageResourceClearWithFormat(
+    VkResult result;
+    ANGLE_TRY(mImage->stageResourceClearWithFormat(
         contextVk, imageIndex, desc.size, format.getIntendedFormat(),
-        format.getActualImageFormat(getRequiredImageAccess()), clearValue);
+        format.getActualImageFormat(getRequiredImageAccess()), clearValue, &result));
+    if (result != VK_SUCCESS)
+    {
+        ANGLE_TRY(contextVk->onOutOfMemory());
+        ANGLE_TRY(mImage->stageResourceClearWithFormat(
+            contextVk, imageIndex, desc.size, format.getIntendedFormat(),
+            format.getActualImageFormat(getRequiredImageAccess()), clearValue, &result));
+    }
+    ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
+    return angle::Result::Continue;
 }
 
 void TextureVk::releaseOwnershipOfImage(const gl::Context *context)
@@ -3348,9 +3485,18 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
         flags |= VK_MEMORY_PROPERTY_PROTECTED_BIT;
     }
 
+    VkResult result;
     ANGLE_TRY(mImage->initMemory(contextVk, mState.hasProtectedContent(),
                                  renderer->getMemoryProperties(), flags,
-                                 vk::MemoryAllocationType::TextureImage));
+                                 vk::MemoryAllocationType::TextureImage, &result));
+    if (result != VK_SUCCESS)
+    {
+        ANGLE_TRY(contextVk->onOutOfMemory());
+        ANGLE_TRY(mImage->initMemory(contextVk, mState.hasProtectedContent(),
+                                     renderer->getMemoryProperties(), flags,
+                                     vk::MemoryAllocationType::TextureImage, &result));
+    }
+    ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
 
     const uint32_t viewLevelCount =
         mState.getImmutableFormat() ? getMipLevelCount(ImageMipLevels::EnabledLevels) : levelCount;
@@ -3537,10 +3683,20 @@ angle::Result TextureVk::generateMipmapLevelsWithCPU(ContextVk *contextVk,
         gl::Extents mipLevelExtents(static_cast<int>(mipWidth), static_cast<int>(mipHeight),
                                     static_cast<int>(mipDepth));
 
+        VkResult result;
         ANGLE_TRY(mImage->stageSubresourceUpdateAndGetData(
             contextVk, mipAllocationSize,
             gl::ImageIndex::MakeFromType(mState.getType(), currentMipLevel.get(), layer),
-            mipLevelExtents, gl::Offset(), &destData, sourceFormat.id));
+            mipLevelExtents, gl::Offset(), &destData, sourceFormat.id, &result));
+        if (result != VK_SUCCESS)
+        {
+            ANGLE_TRY(contextVk->onOutOfMemory());
+            ANGLE_TRY(mImage->stageSubresourceUpdateAndGetData(
+                contextVk, mipAllocationSize,
+                gl::ImageIndex::MakeFromType(mState.getType(), currentMipLevel.get(), layer),
+                mipLevelExtents, gl::Offset(), &destData, sourceFormat.id, &result));
+        }
+        ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
 
         // Generate the mipmap into that new buffer
         sourceFormat.mipGenerationFunction(
@@ -3630,8 +3786,18 @@ angle::Result TextureVk::getTexImage(const gl::Context *context,
             break;
     }
 
-    return mImage->readPixelsForGetImage(contextVk, packState, packBuffer, gl::LevelIndex(level),
-                                         layer, layerCount, format, type, pixels);
+    VkResult result;
+    ANGLE_TRY(mImage->readPixelsForGetImage(contextVk, packState, packBuffer, gl::LevelIndex(level),
+                                            layer, layerCount, format, type, pixels, &result));
+    if (result != VK_SUCCESS)
+    {
+        ANGLE_TRY(contextVk->onOutOfMemory());
+        ANGLE_TRY(mImage->readPixelsForGetImage(contextVk, packState, packBuffer,
+                                                gl::LevelIndex(level), layer, layerCount, format,
+                                                type, pixels, &result));
+    }
+    ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
+    return angle::Result::Continue;
 }
 
 angle::Result TextureVk::getCompressedTexImage(const gl::Context *context,
@@ -3670,8 +3836,19 @@ angle::Result TextureVk::getCompressedTexImage(const gl::Context *context,
             break;
     }
 
-    return mImage->readPixelsForCompressedGetImage(
-        contextVk, packState, packBuffer, gl::LevelIndex(level), layer, layerCount, pixels);
+    VkResult result;
+    ANGLE_TRY(mImage->readPixelsForCompressedGetImage(contextVk, packState, packBuffer,
+                                                      gl::LevelIndex(level), layer, layerCount,
+                                                      pixels, &result));
+    if (result != VK_SUCCESS)
+    {
+        ANGLE_TRY(contextVk->onOutOfMemory());
+        ANGLE_TRY(mImage->readPixelsForCompressedGetImage(contextVk, packState, packBuffer,
+                                                          gl::LevelIndex(level), layer, layerCount,
+                                                          pixels, &result));
+    }
+    ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
+    return angle::Result::Continue;
 }
 
 const vk::Format &TextureVk::getBaseLevelFormat(RendererVk *renderer) const
@@ -3866,8 +4043,16 @@ angle::Result TextureVk::ensureRenderable(ContextVk *contextVk,
         {
             // First try to convert any staged buffer updates from old format to new format using
             // CPU.
+            VkResult result;
             ANGLE_TRY(mImage->reformatStagedBufferUpdates(contextVk, previousActualFormatID,
-                                                          actualFormatID));
+                                                          actualFormatID, &result));
+            if (result != VK_SUCCESS)
+            {
+                ANGLE_TRY(contextVk->onOutOfMemory());
+                ANGLE_TRY(mImage->reformatStagedBufferUpdates(contextVk, previousActualFormatID,
+                                                              actualFormatID, &result));
+            }
+            ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
         }
     }
 

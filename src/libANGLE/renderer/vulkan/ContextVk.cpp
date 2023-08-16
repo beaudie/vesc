@@ -1435,7 +1435,15 @@ angle::Result ContextVk::initialize()
     emptyBufferInfo.queueFamilyIndexCount       = 0;
     emptyBufferInfo.pQueueFamilyIndices         = nullptr;
     constexpr VkMemoryPropertyFlags kMemoryType = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-    ANGLE_TRY(mEmptyBuffer.init(this, emptyBufferInfo, kMemoryType));
+
+    VkResult result;
+    ANGLE_TRY(mEmptyBuffer.init(this, emptyBufferInfo, kMemoryType, &result));
+    if (result != VK_SUCCESS)
+    {
+        ANGLE_TRY(onOutOfMemory());
+        ANGLE_TRY(mEmptyBuffer.init(this, emptyBufferInfo, kMemoryType, &result));
+    }
+    ANGLE_VK_CHECK(this, result == VK_SUCCESS, result);
 
     // If the share group has one context and is about to add the second one, the first context's
     // mutable textures should be flushed.
@@ -7272,6 +7280,15 @@ angle::Result ContextVk::finishImpl(RenderPassClosureReason renderPassClosureRea
         }
     }
 
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::onOutOfMemory()
+{
+    // If a memory allocation continues to fail despite attempts to provide the memory, we can try
+    // flushing the context.
+    ANGLE_TRY(flushImpl(nullptr, nullptr, RenderPassClosureReason::OutOfMemory));
+    INFO() << "Context flushed due to out-of-memory error.";
     return angle::Result::Continue;
 }
 

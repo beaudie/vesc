@@ -219,8 +219,18 @@ angle::Result VertexArrayVk::convertIndexBufferGPU(ContextVk *contextVk,
     size_t srcDataSize         = static_cast<size_t>(bufferVk->getSize()) - offsetIntoSrcData;
 
     // Allocate buffer for results
+    VkResult result;
     ANGLE_TRY(mTranslatedByteIndexData.allocateForVertexConversion(
-        contextVk, sizeof(GLushort) * srcDataSize, vk::MemoryHostVisibility::NonVisible));
+        contextVk, sizeof(GLushort) * srcDataSize, vk::MemoryHostVisibility::NonVisible, &result));
+    if (result != VK_SUCCESS)
+    {
+        ANGLE_TRY(contextVk->onOutOfMemory());
+        ANGLE_TRY(mTranslatedByteIndexData.allocateForVertexConversion(
+            contextVk, sizeof(GLushort) * srcDataSize, vk::MemoryHostVisibility::NonVisible,
+            &result));
+    }
+    ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
+
     mCurrentElementArrayBuffer = &mTranslatedByteIndexData;
 
     vk::BufferHelper *dst = &mTranslatedByteIndexData;
@@ -248,12 +258,30 @@ angle::Result VertexArrayVk::convertIndexBufferIndirectGPU(ContextVk *contextVk,
     vk::BufferHelper *srcIndexBuf = mCurrentElementArrayBuffer;
 
     // Allocate buffer for results
+    VkResult result;
     ANGLE_TRY(mTranslatedByteIndexData.allocateForVertexConversion(
-        contextVk, sizeof(GLushort) * srcDataSize, vk::MemoryHostVisibility::NonVisible));
-    vk::BufferHelper *dstIndexBuf = &mTranslatedByteIndexData;
+        contextVk, sizeof(GLushort) * srcDataSize, vk::MemoryHostVisibility::NonVisible, &result));
+    if (result != VK_SUCCESS)
+    {
+        ANGLE_TRY(contextVk->onOutOfMemory());
+        ANGLE_TRY(mTranslatedByteIndexData.allocateForVertexConversion(
+            contextVk, sizeof(GLushort) * srcDataSize, vk::MemoryHostVisibility::NonVisible,
+            &result));
+    }
+    ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
 
+    vk::BufferHelper *dstIndexBuf = &mTranslatedByteIndexData;
     ANGLE_TRY(mTranslatedByteIndirectData.allocateForVertexConversion(
-        contextVk, sizeof(VkDrawIndexedIndirectCommand), vk::MemoryHostVisibility::NonVisible));
+        contextVk, sizeof(VkDrawIndexedIndirectCommand), vk::MemoryHostVisibility::NonVisible,
+        &result));
+    if (result != VK_SUCCESS)
+    {
+        ANGLE_TRY(contextVk->onOutOfMemory());
+        ANGLE_TRY(mTranslatedByteIndirectData.allocateForVertexConversion(
+            contextVk, sizeof(VkDrawIndexedIndirectCommand), vk::MemoryHostVisibility::NonVisible,
+            &result));
+    }
+    ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
     vk::BufferHelper *dstIndirectBuf = &mTranslatedByteIndirectData;
 
     // Save new element array buffer
@@ -280,9 +308,18 @@ angle::Result VertexArrayVk::handleLineLoopIndexIndirect(ContextVk *contextVk,
                                                          VkDeviceSize indirectBufferOffset,
                                                          vk::BufferHelper **indirectBufferOut)
 {
+    VkResult result;
     ANGLE_TRY(mLineLoopHelper.streamIndicesIndirect(
         contextVk, glIndexType, mCurrentElementArrayBuffer, srcIndirectBuf, indirectBufferOffset,
-        &mCurrentElementArrayBuffer, indirectBufferOut));
+        &mCurrentElementArrayBuffer, indirectBufferOut, &result));
+    if (result != VK_SUCCESS)
+    {
+        ANGLE_TRY(contextVk->onOutOfMemory());
+        ANGLE_TRY(mLineLoopHelper.streamIndicesIndirect(
+            contextVk, glIndexType, mCurrentElementArrayBuffer, srcIndirectBuf,
+            indirectBufferOffset, &mCurrentElementArrayBuffer, indirectBufferOut, &result));
+    }
+    ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
 
     return angle::Result::Continue;
 }
@@ -313,9 +350,19 @@ angle::Result VertexArrayVk::handleLineLoopIndirectDraw(const gl::Context *conte
             maxVertexCount = vertexCount;
         }
     }
+
+    VkResult result;
     ANGLE_TRY(mLineLoopHelper.streamArrayIndirect(contextVk, maxVertexCount + 1, indirectBufferVk,
                                                   indirectBufferOffset, &mCurrentElementArrayBuffer,
-                                                  indirectBufferOut));
+                                                  indirectBufferOut, &result));
+    if (result != VK_SUCCESS)
+    {
+        ANGLE_TRY(contextVk->onOutOfMemory());
+        ANGLE_TRY(mLineLoopHelper.streamArrayIndirect(
+            contextVk, maxVertexCount + 1, indirectBufferVk, indirectBufferOffset,
+            &mCurrentElementArrayBuffer, indirectBufferOut, &result));
+    }
+    ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
 
     return angle::Result::Continue;
 }
@@ -355,11 +402,25 @@ angle::Result VertexArrayVk::convertIndexBufferCPU(ContextVk *contextVk,
         if (mCachedStreamIndexBuffers.size() < kMaxCachedStreamIndexBuffers)
         {
             std::unique_ptr<vk::BufferHelper> buffer = std::make_unique<vk::BufferHelper>();
-            ANGLE_TRY(buffer->initSuballocation(
-                contextVk,
-                renderer->getVertexConversionBufferMemoryTypeIndex(
-                    vk::MemoryHostVisibility::Visible),
-                amount, renderer->getVertexConversionBufferAlignment(), BufferUsageType::Static));
+            VkResult result;
+            ANGLE_TRY(buffer->initSuballocation(contextVk,
+                                                renderer->getVertexConversionBufferMemoryTypeIndex(
+                                                    vk::MemoryHostVisibility::Visible),
+                                                amount,
+                                                renderer->getVertexConversionBufferAlignment(),
+                                                BufferUsageType::Static, &result));
+            if (result != VK_SUCCESS)
+            {
+                ANGLE_TRY(contextVk->onOutOfMemory());
+                ANGLE_TRY(buffer->initSuballocation(
+                    contextVk,
+                    renderer->getVertexConversionBufferMemoryTypeIndex(
+                        vk::MemoryHostVisibility::Visible),
+                    amount, renderer->getVertexConversionBufferAlignment(), BufferUsageType::Static,
+                    &result));
+            }
+            ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
+
             memcpy(buffer->getMappedMemory(), sourcePointer, amount);
             ANGLE_TRY(buffer->flush(renderer));
 
@@ -371,8 +432,16 @@ angle::Result VertexArrayVk::convertIndexBufferCPU(ContextVk *contextVk,
         }
     }
 
-    ANGLE_TRY(mStreamedIndexData.allocateForVertexConversion(contextVk, amount,
-                                                             vk::MemoryHostVisibility::Visible));
+    VkResult result;
+    ANGLE_TRY(mStreamedIndexData.allocateForVertexConversion(
+        contextVk, amount, vk::MemoryHostVisibility::Visible, &result));
+    if (result != VK_SUCCESS)
+    {
+        ANGLE_TRY(contextVk->onOutOfMemory());
+        ANGLE_TRY(mStreamedIndexData.allocateForVertexConversion(
+            contextVk, amount, vk::MemoryHostVisibility::Visible, &result));
+    }
+    ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
     GLubyte *dst = mStreamedIndexData.getMappedMemory();
 
     *bindingDirty              = BufferBindingDirty::Yes;
@@ -450,8 +519,17 @@ angle::Result VertexArrayVk::convertVertexBufferGPU(ContextVk *contextVk,
 
     // Allocate buffer for results
     vk::BufferHelper *dstBuffer = conversion->data.get();
-    ANGLE_TRY(dstBuffer->allocateForVertexConversion(contextVk, numVertices * dstFormatSize,
-                                                     vk::MemoryHostVisibility::NonVisible));
+
+    VkResult result;
+    ANGLE_TRY(dstBuffer->allocateForVertexConversion(
+        contextVk, numVertices * dstFormatSize, vk::MemoryHostVisibility::NonVisible, &result));
+    if (result != VK_SUCCESS)
+    {
+        ANGLE_TRY(contextVk->onOutOfMemory());
+        ANGLE_TRY(dstBuffer->allocateForVertexConversion(
+            contextVk, numVertices * dstFormatSize, vk::MemoryHostVisibility::NonVisible, &result));
+    }
+    ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
 
     ASSERT(conversion->dirty);
     conversion->dirty = false;
@@ -500,8 +578,16 @@ angle::Result VertexArrayVk::convertVertexBufferCPU(ContextVk *contextVk,
 
     vk::BufferHelper *dstBufferHelper = conversion->data.get();
     // Allocate buffer for results
-    ANGLE_TRY(dstBufferHelper->allocateForVertexConversion(contextVk, numVertices * dstFormatSize,
-                                                           vk::MemoryHostVisibility::Visible));
+    VkResult result;
+    ANGLE_TRY(dstBufferHelper->allocateForVertexConversion(
+        contextVk, numVertices * dstFormatSize, vk::MemoryHostVisibility::Visible, &result));
+    if (result != VK_SUCCESS)
+    {
+        ANGLE_TRY(contextVk->onOutOfMemory());
+        ANGLE_TRY(dstBufferHelper->allocateForVertexConversion(
+            contextVk, numVertices * dstFormatSize, vk::MemoryHostVisibility::Visible, &result));
+    }
+    ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
 
     ANGLE_TRY(StreamVertexData(contextVk, dstBufferHelper, srcBytes, numVertices * dstFormatSize, 0,
                                numVertices, binding.getStride(),
@@ -1042,6 +1128,7 @@ angle::Result VertexArrayVk::handleLineLoop(ContextVk *contextVk,
                                             const void *indices,
                                             uint32_t *indexCountOut)
 {
+    VkResult result;
     if (indexTypeOrInvalid != gl::DrawElementsType::InvalidEnum)
     {
         // Handle GL_LINE_LOOP drawElements.
@@ -1051,10 +1138,19 @@ angle::Result VertexArrayVk::handleLineLoop(ContextVk *contextVk,
 
             if (!elementArrayBuffer)
             {
-                ANGLE_TRY(
-                    mLineLoopHelper.streamIndices(contextVk, indexTypeOrInvalid, vertexOrIndexCount,
-                                                  reinterpret_cast<const uint8_t *>(indices),
-                                                  &mCurrentElementArrayBuffer, indexCountOut));
+                ANGLE_TRY(mLineLoopHelper.streamIndices(
+                    contextVk, indexTypeOrInvalid, vertexOrIndexCount,
+                    reinterpret_cast<const uint8_t *>(indices), &mCurrentElementArrayBuffer,
+                    indexCountOut, &result));
+                if (result != VK_SUCCESS)
+                {
+                    ANGLE_TRY(contextVk->onOutOfMemory());
+                    ANGLE_TRY(mLineLoopHelper.streamIndices(
+                        contextVk, indexTypeOrInvalid, vertexOrIndexCount,
+                        reinterpret_cast<const uint8_t *>(indices), &mCurrentElementArrayBuffer,
+                        indexCountOut, &result));
+                }
+                ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
             }
             else
             {
@@ -1063,7 +1159,15 @@ angle::Result VertexArrayVk::handleLineLoop(ContextVk *contextVk,
                 BufferVk *elementArrayBufferVk = vk::GetImpl(elementArrayBuffer);
                 ANGLE_TRY(mLineLoopHelper.getIndexBufferForElementArrayBuffer(
                     contextVk, elementArrayBufferVk, indexTypeOrInvalid, vertexOrIndexCount, offset,
-                    &mCurrentElementArrayBuffer, indexCountOut));
+                    &mCurrentElementArrayBuffer, indexCountOut, &result));
+                if (result != VK_SUCCESS)
+                {
+                    ANGLE_TRY(contextVk->onOutOfMemory());
+                    ANGLE_TRY(mLineLoopHelper.getIndexBufferForElementArrayBuffer(
+                        contextVk, elementArrayBufferVk, indexTypeOrInvalid, vertexOrIndexCount,
+                        offset, &mCurrentElementArrayBuffer, indexCountOut, &result));
+                }
+                ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
             }
         }
 
@@ -1084,7 +1188,14 @@ angle::Result VertexArrayVk::handleLineLoop(ContextVk *contextVk,
         mLineLoopBufferFirstIndex != firstVertex || mLineLoopBufferLastIndex != lastVertex)
     {
         ANGLE_TRY(mLineLoopHelper.getIndexBufferForDrawArrays(
-            contextVk, clampedVertexCount, firstVertex, &mCurrentElementArrayBuffer));
+            contextVk, clampedVertexCount, firstVertex, &mCurrentElementArrayBuffer, &result));
+        if (result != VK_SUCCESS)
+        {
+            ANGLE_TRY(contextVk->onOutOfMemory());
+            ANGLE_TRY(mLineLoopHelper.getIndexBufferForDrawArrays(
+                contextVk, clampedVertexCount, firstVertex, &mCurrentElementArrayBuffer, &result));
+        }
+        ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
 
         mLineLoopBufferFirstIndex = firstVertex;
         mLineLoopBufferLastIndex  = lastVertex;

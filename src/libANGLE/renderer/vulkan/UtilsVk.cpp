@@ -2932,10 +2932,20 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
     uint32_t bufferRowLengthInUints = UnsignedCeilDivide(params.blitArea.width, sizeof(uint32_t));
     VkDeviceSize bufferSize = bufferRowLengthInUints * sizeof(uint32_t) * params.blitArea.height;
 
+    VkResult result;
     ANGLE_TRY(blitBuffer.get().initSuballocation(
         contextVk, contextVk->getRenderer()->getDeviceLocalMemoryTypeIndex(),
         static_cast<size_t>(bufferSize), contextVk->getRenderer()->getDefaultBufferAlignment(),
-        BufferUsageType::Static));
+        BufferUsageType::Static, &result));
+    if (result != VK_SUCCESS)
+    {
+        ANGLE_TRY(contextVk->onOutOfMemory());
+        ANGLE_TRY(blitBuffer.get().initSuballocation(
+            contextVk, contextVk->getRenderer()->getDeviceLocalMemoryTypeIndex(),
+            static_cast<size_t>(bufferSize), contextVk->getRenderer()->getDefaultBufferAlignment(),
+            BufferUsageType::Static, &result));
+    }
+    ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
 
     BlitResolveStencilNoExportShaderParams shaderParams;
     // Note: adjustments made for pre-rotatation in FramebufferVk::blit() affect these
@@ -3380,12 +3390,30 @@ angle::Result UtilsVk::copyImageBits(ContextVk *contextVk,
     bufferInfo.queueFamilyIndexCount = 0;
     bufferInfo.pQueueFamilyIndices   = nullptr;
 
-    ANGLE_TRY(srcBuffer.get().init(contextVk, bufferInfo, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
+    VkResult result;
+
+    ANGLE_TRY(
+        srcBuffer.get().init(contextVk, bufferInfo, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &result));
+    if (result != VK_SUCCESS)
+    {
+        ANGLE_TRY(contextVk->onOutOfMemory());
+        ANGLE_TRY(srcBuffer.get().init(contextVk, bufferInfo, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+                                       &result));
+    }
+    ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
 
     bufferInfo.size  = dstBufferSize;
     bufferInfo.usage = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
 
-    ANGLE_TRY(dstBuffer.get().init(contextVk, bufferInfo, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
+    ANGLE_TRY(
+        dstBuffer.get().init(contextVk, bufferInfo, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &result));
+    if (result != VK_SUCCESS)
+    {
+        ANGLE_TRY(contextVk->onOutOfMemory());
+        ANGLE_TRY(dstBuffer.get().init(contextVk, bufferInfo, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+                                       &result));
+    }
+    ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
 
     bool isSrc3D = src->getType() == VK_IMAGE_TYPE_3D;
     bool isDst3D = dst->getType() == VK_IMAGE_TYPE_3D;
