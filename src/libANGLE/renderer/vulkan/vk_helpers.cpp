@@ -3374,9 +3374,23 @@ angle::Result BufferPool::allocateNewBuffer(Context *context, VkDeviceSize sizeI
     VkMemoryPropertyFlags memoryPropertyFlagsOut;
     VkDeviceSize sizeOut;
     uint32_t memoryTypeIndex;
-    ANGLE_TRY(AllocateBufferMemory(context, MemoryAllocationType::Buffer, memoryPropertyFlags,
-                                   &memoryPropertyFlagsOut, nullptr, &buffer.get(),
-                                   &memoryTypeIndex, &deviceMemory.get(), &sizeOut));
+
+    VkResult result;
+    bool isContextFinished = false;
+    do
+    {
+        ANGLE_TRY(AllocateBufferMemory(context, MemoryAllocationType::Buffer, memoryPropertyFlags,
+                                       &memoryPropertyFlagsOut, nullptr, &buffer.get(),
+                                       &memoryTypeIndex, &deviceMemory.get(), &sizeOut, &result));
+        if (result == VK_SUCCESS || isContextFinished)
+        {
+            break;
+        }
+
+        ANGLE_TRY(context->onOutOfMemory());
+        isContextFinished = true;
+    } while (result != VK_SUCCESS);
+    ANGLE_VK_CHECK(context, result == VK_SUCCESS, result);
     ASSERT(sizeOut >= mSize);
 
     // Allocate bufferBlock
@@ -3436,9 +3450,24 @@ angle::Result BufferPool::allocateBuffer(Context *context,
         VkMemoryPropertyFlags memoryPropertyFlagsOut;
         VkDeviceSize sizeOut;
         uint32_t memoryTypeIndex;
-        ANGLE_TRY(AllocateBufferMemory(context, MemoryAllocationType::Buffer, memoryPropertyFlags,
-                                       &memoryPropertyFlagsOut, nullptr, &buffer.get(),
-                                       &memoryTypeIndex, &deviceMemory.get(), &sizeOut));
+
+        VkResult result;
+        bool isContextFinished = false;
+        do
+        {
+            ANGLE_TRY(AllocateBufferMemory(
+                context, MemoryAllocationType::Buffer, memoryPropertyFlags, &memoryPropertyFlagsOut,
+                nullptr, &buffer.get(), &memoryTypeIndex, &deviceMemory.get(), &sizeOut, &result));
+            if (result == VK_SUCCESS || isContextFinished)
+            {
+                break;
+            }
+
+            ANGLE_TRY(context->onOutOfMemory());
+            isContextFinished = true;
+        } while (result != VK_SUCCESS);
+        ANGLE_VK_CHECK(context, result == VK_SUCCESS, result);
+
         ASSERT(sizeOut >= alignedSize);
 
         suballocation->initWithEntireBuffer(context, buffer.get(), MemoryAllocationType::Buffer,
@@ -4772,9 +4801,24 @@ angle::Result BufferHelper::init(Context *context,
     VkMemoryPropertyFlags memoryPropertyFlagsOut;
     VkDeviceSize sizeOut;
     uint32_t bufferMemoryTypeIndex;
-    ANGLE_TRY(AllocateBufferMemory(context, MemoryAllocationType::Buffer, requiredFlags,
-                                   &memoryPropertyFlagsOut, nullptr, &buffer.get(),
-                                   &bufferMemoryTypeIndex, &deviceMemory.get(), &sizeOut));
+
+    VkResult result;
+    bool isContextFinished = false;
+    do
+    {
+        ANGLE_TRY(AllocateBufferMemory(
+            context, MemoryAllocationType::Buffer, requiredFlags, &memoryPropertyFlagsOut, nullptr,
+            &buffer.get(), &bufferMemoryTypeIndex, &deviceMemory.get(), &sizeOut, &result));
+        if (result == VK_SUCCESS || isContextFinished)
+        {
+            break;
+        }
+
+        ANGLE_TRY(context->onOutOfMemory());
+        isContextFinished = true;
+    } while (result != VK_SUCCESS);
+    ANGLE_VK_CHECK(context, result == VK_SUCCESS, result);
+
     ASSERT(sizeOut >= createInfo->size);
 
     mSuballocation.initWithEntireBuffer(context, buffer.get(), MemoryAllocationType::Buffer,
@@ -4820,9 +4864,23 @@ angle::Result BufferHelper::initExternal(ContextVk *contextVk,
     VkMemoryPropertyFlags memoryPropertyFlagsOut;
     VkDeviceSize allocatedSize = 0;
     uint32_t memoryTypeIndex;
-    ANGLE_TRY(InitAndroidExternalMemory(contextVk, clientBuffer, memoryProperties, &buffer.get(),
-                                        &memoryPropertyFlagsOut, &memoryTypeIndex,
-                                        &deviceMemory.get(), &allocatedSize));
+
+    VkResult result;
+    bool isContextFinished = false;
+    do
+    {
+        ANGLE_TRY(InitAndroidExternalMemory(
+            contextVk, clientBuffer, memoryProperties, &buffer.get(), &memoryPropertyFlagsOut,
+            &memoryTypeIndex, &deviceMemory.get(), &allocatedSize, &result));
+        if (result == VK_SUCCESS || isContextFinished)
+        {
+            break;
+        }
+
+        ANGLE_TRY(contextVk->onOutOfMemory());
+        isContextFinished = true;
+    } while (result != VK_SUCCESS);
+    ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
 
     mSuballocation.initWithEntireBuffer(
         contextVk, buffer.get(), MemoryAllocationType::BufferExternal, memoryTypeIndex,
@@ -5978,23 +6036,38 @@ angle::Result ImageHelper::initMemory(Context *context,
 
     // To allocate memory here, if possible, we use the image memory suballocator which uses VMA.
     RendererVk *renderer = context->getRenderer();
-    if (renderer->getFeatures().useVmaForImageSuballocation.enabled)
+
+    VkResult result;
+    bool isContextFinished = false;
+    do
     {
-        // While it may be preferable to allocate the image on the device, it should also be
-        // possible to allocate on other memory types if the device is out of memory.
-        VkMemoryPropertyFlags requiredFlags  = flags & (~VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-        VkMemoryPropertyFlags preferredFlags = flags;
-        ANGLE_VK_TRY(context, renderer->getImageMemorySuballocator().allocateAndBindMemory(
-                                  context, &mImage, &mVkImageCreateInfo, requiredFlags,
-                                  preferredFlags, mMemoryAllocationType, &mVmaAllocation, &flags,
-                                  &mMemoryTypeIndex, &mAllocationSize));
-    }
-    else
-    {
-        ANGLE_TRY(AllocateImageMemory(context, mMemoryAllocationType, flags, &flags, nullptr,
-                                      &mImage, &mMemoryTypeIndex, &mDeviceMemory,
-                                      &mAllocationSize));
-    }
+        if (renderer->getFeatures().useVmaForImageSuballocation.enabled)
+        {
+            // While it may be preferable to allocate the image on the device, it should also be
+            // possible to allocate on other memory types if the device is out of memory.
+            VkMemoryPropertyFlags requiredFlags  = flags & (~VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+            VkMemoryPropertyFlags preferredFlags = flags;
+            result = renderer->getImageMemorySuballocator().allocateAndBindMemory(
+                context, &mImage, &mVkImageCreateInfo, requiredFlags, preferredFlags,
+                mMemoryAllocationType, &mVmaAllocation, &flags, &mMemoryTypeIndex,
+                &mAllocationSize);
+        }
+        else
+        {
+            ANGLE_TRY(AllocateImageMemory(context, mMemoryAllocationType, flags, &flags, nullptr,
+                                          &mImage, &mMemoryTypeIndex, &mDeviceMemory,
+                                          &mAllocationSize, &result));
+        }
+        if (result == VK_SUCCESS || isContextFinished)
+        {
+            break;
+        }
+
+        ANGLE_TRY(context->onOutOfMemory());
+        isContextFinished = true;
+    } while (result != VK_SUCCESS);
+
+    ANGLE_VK_CHECK(context, result == VK_SUCCESS, result);
     mCurrentQueueFamilyIndex = renderer->getQueueFamilyIndex();
 
     if (renderer->getFeatures().allocateNonZeroMemory.enabled)
@@ -6036,10 +6109,23 @@ angle::Result ImageHelper::initExternalMemory(Context *context,
     {
         bindImagePlaneMemoryInfo.planeAspect = kMemoryPlaneAspects[memoryPlane];
 
-        ANGLE_TRY(AllocateImageMemoryWithRequirements(
-            context, mMemoryAllocationType, flags, memoryRequirements,
-            extraAllocationInfo[memoryPlane], bindImagePlaneMemoryInfoPtr, &mImage,
-            &mMemoryTypeIndex, &mDeviceMemory));
+        VkResult result;
+        bool isContextFinished = false;
+        do
+        {
+            ANGLE_TRY(AllocateImageMemoryWithRequirements(
+                context, mMemoryAllocationType, flags, memoryRequirements,
+                extraAllocationInfo[memoryPlane], bindImagePlaneMemoryInfoPtr, &mImage,
+                &mMemoryTypeIndex, &mDeviceMemory, &result));
+            if (result == VK_SUCCESS || isContextFinished)
+            {
+                break;
+            }
+
+            ANGLE_TRY(context->onOutOfMemory());
+            isContextFinished = true;
+        } while (result != VK_SUCCESS);
+        ANGLE_VK_CHECK(context, result == VK_SUCCESS, result);
     }
     mCurrentQueueFamilyIndex = currentQueueFamilyIndex;
 
