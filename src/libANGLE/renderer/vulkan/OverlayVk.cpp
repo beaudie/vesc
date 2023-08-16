@@ -43,8 +43,16 @@ angle::Result OverlayVk::createFont(ContextVk *contextVk)
 
     vk::RendererScoped<vk::BufferHelper> fontDataBuffer(renderer);
 
+    VkResult result;
     ANGLE_TRY(fontDataBuffer.get().init(contextVk, bufferCreateInfo,
-                                        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT));
+                                        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, &result));
+    if (result != VK_SUCCESS)
+    {
+        ANGLE_TRY(contextVk->onOutOfMemory());
+        ANGLE_TRY(fontDataBuffer.get().init(contextVk, bufferCreateInfo,
+                                            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, &result));
+    }
+    ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
 
     uint8_t *mappedFontData;
     ANGLE_TRY(fontDataBuffer.get().map(contextVk, &mappedFontData));
@@ -65,9 +73,19 @@ angle::Result OverlayVk::createFont(ContextVk *contextVk)
         renderer->getFormat(angle::FormatID::R8_UNORM), 1,
         VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, gl::LevelIndex(0),
         gl::overlay::kFontMipCount, gl::overlay::kFontCharacters, kNoRobustInit, false));
+
     ANGLE_TRY(mFontImage.initMemory(contextVk, false, renderer->getMemoryProperties(),
                                     VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-                                    vk::MemoryAllocationType::FontImage));
+                                    vk::MemoryAllocationType::FontImage, &result));
+    if (result != VK_SUCCESS)
+    {
+        ANGLE_TRY(contextVk->onOutOfMemory());
+        ANGLE_TRY(mFontImage.initMemory(contextVk, false, renderer->getMemoryProperties(),
+                                        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+                                        vk::MemoryAllocationType::FontImage, &result));
+    }
+    ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
+
     ANGLE_TRY(mFontImage.initImageView(
         contextVk, gl::TextureType::_2DArray, VK_IMAGE_ASPECT_COLOR_BIT, gl::SwizzleState(),
         &mFontImageView, vk::LevelIndex(0), gl::overlay::kFontMipCount,
@@ -134,10 +152,26 @@ angle::Result OverlayVk::onPresent(ContextVk *contextVk,
     VkBufferCreateInfo graphBufferCreateInfo = textBufferCreateInfo;
     graphBufferCreateInfo.size               = mState.getGraphWidgetsBufferSize();
 
+    VkResult result;
     ANGLE_TRY(textDataBuffer.get().init(contextVk, textBufferCreateInfo,
-                                        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT));
+                                        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, &result));
+    if (result != VK_SUCCESS)
+    {
+        ANGLE_TRY(contextVk->onOutOfMemory());
+        ANGLE_TRY(textDataBuffer.get().init(contextVk, textBufferCreateInfo,
+                                            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, &result));
+    }
+    ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
+
     ANGLE_TRY(graphDataBuffer.get().init(contextVk, graphBufferCreateInfo,
-                                         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT));
+                                         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, &result));
+    if (result != VK_SUCCESS)
+    {
+        ANGLE_TRY(contextVk->onOutOfMemory());
+        ANGLE_TRY(graphDataBuffer.get().init(contextVk, graphBufferCreateInfo,
+                                             VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, &result));
+    }
+    ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
 
     uint8_t *textData;
     uint8_t *graphData;
