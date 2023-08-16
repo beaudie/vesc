@@ -339,7 +339,17 @@ angle::Result BufferVk::setExternalBufferData(const gl::Context *context,
     createInfo.queueFamilyIndexCount = 0;
     createInfo.pQueueFamilyIndices   = nullptr;
 
-    return mBuffer.initExternal(contextVk, memoryPropertyFlags, createInfo, clientBuffer);
+    VkResult result;
+    ANGLE_TRY(
+        mBuffer.initExternal(contextVk, memoryPropertyFlags, createInfo, clientBuffer, &result));
+    if (result != VK_SUCCESS)
+    {
+        ANGLE_TRY(contextVk->onOutOfMemory());
+        ANGLE_TRY(mBuffer.initExternal(contextVk, memoryPropertyFlags, createInfo, clientBuffer,
+                                       &result));
+    }
+    ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
+    return angle::Result::Continue;
 }
 
 angle::Result BufferVk::setDataWithUsageFlags(const gl::Context *context,
@@ -506,8 +516,17 @@ angle::Result BufferVk::allocStagingBuffer(ContextVk *contextVk,
         mStagingBuffer.release(contextVk->getRenderer());
     }
 
-    ANGLE_TRY(
-        mStagingBuffer.allocateForCopyBuffer(contextVk, static_cast<size_t>(size), coherency));
+    VkResult result;
+    ANGLE_TRY(mStagingBuffer.allocateForCopyBuffer(contextVk, static_cast<size_t>(size), coherency,
+                                                   &result));
+    if (result != VK_SUCCESS)
+    {
+        ANGLE_TRY(contextVk->onOutOfMemory());
+        ANGLE_TRY(mStagingBuffer.allocateForCopyBuffer(contextVk, static_cast<size_t>(size),
+                                                       coherency, &result));
+    }
+    ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
+
     *mapPtr                = mStagingBuffer.getMappedMemory();
     mIsStagingBufferMapped = true;
 
@@ -1155,7 +1174,16 @@ angle::Result BufferVk::acquireBufferHelper(ContextVk *contextVk,
     }
 
     // Allocate the buffer directly
-    ANGLE_TRY(mBuffer.initSuballocation(contextVk, mMemoryTypeIndex, size, alignment, usageType));
+    VkResult result;
+    ANGLE_TRY(mBuffer.initSuballocation(contextVk, mMemoryTypeIndex, size, alignment, usageType,
+                                        &result));
+    if (result != VK_SUCCESS)
+    {
+        ANGLE_TRY(contextVk->onOutOfMemory());
+        ANGLE_TRY(mBuffer.initSuballocation(contextVk, mMemoryTypeIndex, size, alignment, usageType,
+                                            &result));
+    }
+    ANGLE_VK_CHECK(contextVk, result == VK_SUCCESS, result);
 
     // Tell the observers (front end) that a new buffer was created, so the necessary
     // dirty bits can be set. This allows the buffer views pointing to the old buffer to
