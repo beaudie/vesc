@@ -5248,9 +5248,10 @@ void WriteDescriptorDescs::updateExecutableActiveTextures(
 
         uint32_t arraySize       = static_cast<uint32_t>(samplerBinding.boundTextureUnits.size());
         uint32_t descriptorCount = arraySize * samplerUniform.getOuterArraySizeProduct();
-        VkDescriptorType descriptorType = (samplerBinding.textureType == gl::TextureType::Buffer)
-                                              ? VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER
-                                              : VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+        VkDescriptorType descriptorType =
+            (samplerBinding.getTextureType() == gl::TextureType::Buffer)
+                ? VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER
+                : VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
 
         updateWriteDesc(info.binding, descriptorType, descriptorCount);
     }
@@ -5533,8 +5534,9 @@ void UpdatePreCacheActiveTextures(const gl::ProgramExecutable &executable,
     for (uint32_t samplerIndex = 0; samplerIndex < samplerBindings.size(); ++samplerIndex)
     {
         const gl::SamplerBinding &samplerBinding = samplerBindings[samplerIndex];
-        uint32_t arraySize        = static_cast<uint32_t>(samplerBinding.boundTextureUnits.size());
-        bool isSamplerExternalY2Y = samplerBinding.samplerType == GL_SAMPLER_EXTERNAL_2D_Y2Y_EXT;
+        uint32_t arraySize = static_cast<uint32_t>(samplerBinding.boundTextureUnits.size());
+        bool isSamplerExternalY2Y =
+            samplerBinding.getSamplerType() == GL_SAMPLER_EXTERNAL_2D_Y2Y_EXT;
 
         uint32_t uniformIndex = executable.getUniformIndexFromSamplerIndex(samplerIndex);
         const gl::LinkedUniform &samplerUniform = uniforms[uniformIndex];
@@ -5624,8 +5626,9 @@ angle::Result DescriptorSetDescBuilder::updateFullActiveTextures(
         const ShaderInterfaceVariableInfo &info =
             variableInfoMap.getVariableById(firstShaderType, samplerUniform.getId(firstShaderType));
 
-        uint32_t arraySize        = static_cast<uint32_t>(samplerBinding.boundTextureUnits.size());
-        bool isSamplerExternalY2Y = samplerBinding.samplerType == GL_SAMPLER_EXTERNAL_2D_Y2Y_EXT;
+        uint32_t arraySize = static_cast<uint32_t>(samplerBinding.boundTextureUnits.size());
+        bool isSamplerExternalY2Y =
+            samplerBinding.getSamplerType() == GL_SAMPLER_EXTERNAL_2D_Y2Y_EXT;
 
         for (uint32_t arrayElement = 0; arrayElement < arraySize; ++arrayElement)
         {

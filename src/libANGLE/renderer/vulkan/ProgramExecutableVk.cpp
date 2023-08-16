@@ -1027,7 +1027,7 @@ angle::Result ProgramExecutableVk::addTextureDescriptorSetDesc(
             // In the case of samplerExternal2DY2YEXT, we need
             // samplerYcbcrConversion object with IDENTITY conversion model
             bool isSamplerExternalY2Y =
-                samplerBinding.samplerType == GL_SAMPLER_EXTERNAL_2D_Y2Y_EXT;
+                samplerBinding.getSamplerType() == GL_SAMPLER_EXTERNAL_2D_Y2Y_EXT;
 
             // Always take the texture's sampler, that's only way to get to yuv conversion for
             // externalFormat
@@ -1068,9 +1068,10 @@ angle::Result ProgramExecutableVk::addTextureDescriptorSetDesc(
         }
         else
         {
-            const VkDescriptorType descType = samplerBinding.textureType == gl::TextureType::Buffer
-                                                  ? VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER
-                                                  : VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+            const VkDescriptorType descType =
+                samplerBinding.getTextureType() == gl::TextureType::Buffer
+                    ? VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER
+                    : VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
             descOut->update(info.binding, descType, arraySize, activeStages, nullptr);
         }
     }

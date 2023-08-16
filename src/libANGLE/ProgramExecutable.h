@@ -32,12 +32,21 @@ struct SamplerBinding
     SamplerBinding(const SamplerBinding &other);
     ~SamplerBinding();
 
-    // Necessary for retrieving active textures from the GL state.
-    TextureType textureType;
+    TextureType getTextureType() const { return mPODStruct.textureType; }
+    GLenum getSamplerType() const { return mPODStruct.samplerType; }
+    SamplerFormat getFormat() const { return mPODStruct.format; }
 
-    GLenum samplerType;
+    struct PODStruct
+    {
+        // Necessary for retrieving active textures from the GL state.
+        TextureType textureType;
 
-    SamplerFormat format;
+        GLenum samplerType;
+
+        SamplerFormat format;
+    } mPODStruct;
+    static_assert(std::is_trivially_copyable<PODStruct>(),
+                  "SamplerBinding::PODStruct should be trivial copyable so that we can memcpy");
 
     // List of all textures bound to this sampler, of type textureType.
     // Cropped by the amount of unused elements reported by the driver.

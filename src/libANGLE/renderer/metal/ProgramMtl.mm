@@ -1715,7 +1715,7 @@ angle::Result ProgramMtl::updateTextures(const gl::Context *glContext,
                 continue;
             }
 
-            gl::TextureType textureType = samplerBinding.textureType;
+            gl::TextureType textureType = samplerBinding.getTextureType();
 
             for (uint32_t arrayElement = 0; arrayElement < samplerBinding.boundTextureUnits.size();
                  ++arrayElement)
@@ -1732,7 +1732,7 @@ angle::Result ProgramMtl::updateTextures(const gl::Context *glContext,
                 const gl::SamplerState *samplerState =
                     sampler ? &sampler->getSamplerState() : &texture->getSamplerState();
                 TextureMtl *textureMtl = mtl::GetImpl(texture);
-                if (samplerBinding.format == gl::SamplerFormat::Shadow)
+                if (samplerBinding.getFormat() == gl::SamplerFormat::Shadow)
                 {
                     hasDepthSampler                  = true;
                     mShadowCompareModes[textureSlot] = mtl::MslGetShaderShadowCompareMode(

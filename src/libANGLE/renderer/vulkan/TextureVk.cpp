@@ -3415,7 +3415,7 @@ angle::Result TextureVk::getBufferViewAndRecordUse(vk::Context *context,
     if (samplerBinding)
     {
         imageUniformFormat =
-            AdjustViewFormatForSampler(renderer, imageUniformFormat, samplerBinding->format);
+            AdjustViewFormatForSampler(renderer, imageUniformFormat, samplerBinding->getFormat());
     }
 
     // Create a view for the required format.
