@@ -136,6 +136,14 @@ angle::Result FindAndAllocateCompatibleMemory(vk::Context *context,
                << ((result == VK_SUCCESS) ? "SUCCESS" : "FAIL");
     }
 
+    if (result != VK_SUCCESS)
+    {
+        ANGLE_TRY(context->onOutOfMemory());
+        result = deviceMemoryOut->allocate(device, allocInfo);
+        INFO() << "Allocation failed. Freed the pending garbage by finishing the context"
+               << " | Allocation result: " << ((result == VK_SUCCESS) ? "SUCCESS" : "FAIL");
+    }
+
     ANGLE_VK_CHECK(context, result == VK_SUCCESS, result);
 
     renderer->onMemoryAlloc(memoryAllocationType, allocInfo.allocationSize, *memoryTypeIndexOut,
@@ -396,6 +404,11 @@ VkImageAspectFlags GetFormatAspectFlags(const angle::Format &format)
 Context::Context(RendererVk *renderer) : mRenderer(renderer), mPerfCounters{} {}
 
 Context::~Context() {}
+
+angle::Result Context::onOutOfMemory()
+{
+    return angle::Result::Continue;
+}
 
 VkDevice Context::getDevice() const
 {

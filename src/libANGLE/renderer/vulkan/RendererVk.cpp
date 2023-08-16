@@ -51,7 +51,7 @@ constexpr bool kExposeNonConformantExtensionsAndVersions = false;
 #if defined(ANGLE_ENABLE_CRC_FOR_PIPELINE_CACHE)
 constexpr bool kEnableCRCForPipelineCache = true;
 #else
-constexpr bool kEnableCRCForPipelineCache                = false;
+constexpr bool kEnableCRCForPipelineCache = false;
 #endif
 }  // anonymous namespace
 
@@ -5955,6 +5955,19 @@ VkResult ImageMemorySuballocator::allocateAndBindMemory(Context *context,
         INFO() << "Initial allocation failed. Waited for " << batchesWaitedAndCleaned
                << " commands to finish and free garbage | Allocation result: "
                << ((result == VK_SUCCESS) ? "SUCCESS" : "FAIL");
+    }
+
+    if (result != VK_SUCCESS)
+    {
+        if (context->onOutOfMemory() == angle::Result::Stop)
+        {
+            return VK_ERROR_OUT_OF_DEVICE_MEMORY;
+        }
+        result = vma::AllocateAndBindMemoryForImage(
+            allocator.getHandle(), &image->mHandle, preferredFlags, preferredFlags, memoryTypeBits,
+            allocateDedicatedMemory, &allocationOut->mHandle, memoryTypeIndexOut, sizeOut);
+        INFO() << "Allocation failed. Freed the pending garbage by finishing the context"
+               << " | Allocation result: " << ((result == VK_SUCCESS) ? "SUCCESS" : "FAIL");
     }
 
     // If there is still no space for the new allocation, the allocation may still be made outside

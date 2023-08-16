@@ -7275,6 +7275,11 @@ angle::Result ContextVk::finishImpl(RenderPassClosureReason renderPassClosureRea
     return angle::Result::Continue;
 }
 
+angle::Result ContextVk::onOutOfMemory()
+{
+    return finishImpl(RenderPassClosureReason::OutOfMemory);
+}
+
 void ContextVk::addWaitSemaphore(VkSemaphore semaphore, VkPipelineStageFlags stageMask)
 {
     mWaitSemaphores.push_back(semaphore);

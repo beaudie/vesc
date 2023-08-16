@@ -279,6 +279,9 @@ class Context : angle::NonCopyable
                              const char *file,
                              const char *function,
                              unsigned int line) = 0;
+
+    virtual angle::Result onOutOfMemory();
+
     VkDevice getDevice() const;
     RendererVk *getRenderer() const { return mRenderer; }
     const angle::FeaturesVk &getFeatures() const;
@@ -296,12 +299,12 @@ class RenderPassDesc;
 #if ANGLE_USE_CUSTOM_VULKAN_OUTSIDE_RENDER_PASS_CMD_BUFFERS
 using OutsideRenderPassCommandBuffer = priv::SecondaryCommandBuffer;
 #else
-using OutsideRenderPassCommandBuffer         = VulkanSecondaryCommandBuffer;
+using OutsideRenderPassCommandBuffer = VulkanSecondaryCommandBuffer;
 #endif
 #if ANGLE_USE_CUSTOM_VULKAN_RENDER_PASS_CMD_BUFFERS
 using RenderPassCommandBuffer = priv::SecondaryCommandBuffer;
 #else
-using RenderPassCommandBuffer                = VulkanSecondaryCommandBuffer;
+using RenderPassCommandBuffer = VulkanSecondaryCommandBuffer;
 #endif
 
 struct SecondaryCommandPools
@@ -1285,6 +1288,9 @@ enum class RenderPassClosureReason
     // LegacyDithering requires updating the render pass
     LegacyDithering,
 
+    // In case of OOM, pending garbage needs to be freed.
+    OutOfMemory,
+
     InvalidEnum,
     EnumCount = InvalidEnum,
 };
@@ -1322,12 +1328,12 @@ enum class RenderPassClosureReason
 #define ANGLE_VK_VERSION_MAJOR_NVIDIA(version) (((uint32_t)(version) >> 22) & 0x3ff)
 #define ANGLE_VK_VERSION_MINOR_NVIDIA(version) (((uint32_t)(version) >> 14) & 0xff)
 #define ANGLE_VK_VERSION_SUB_MINOR_NVIDIA(version) (((uint32_t)(version) >> 6) & 0xff)
-#define ANGLE_VK_VERSION_PATCH_NVIDIA(version) ((uint32_t)(version)&0x3f)
+#define ANGLE_VK_VERSION_PATCH_NVIDIA(version) ((uint32_t)(version) & 0x3f)
 
 // Similarly for Intel on Windows:
 // Major: 18
 // Minor: 14
 #define ANGLE_VK_VERSION_MAJOR_WIN_INTEL(version) (((uint32_t)(version) >> 14) & 0x3ffff)
-#define ANGLE_VK_VERSION_MINOR_WIN_INTEL(version) ((uint32_t)(version)&0x3fff)
+#define ANGLE_VK_VERSION_MINOR_WIN_INTEL(version) ((uint32_t)(version) & 0x3fff)
 
 #endif  // LIBANGLE_RENDERER_VULKAN_VK_UTILS_H_
