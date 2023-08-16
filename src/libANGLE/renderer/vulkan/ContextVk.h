@@ -467,6 +467,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                             const vk::SharedExternalFence *externalFence,
                             RenderPassClosureReason renderPassClosureReason);
     angle::Result finishImpl(RenderPassClosureReason renderPassClosureReason);
+    angle::Result onOutOfMemory();
 
     void addWaitSemaphore(VkSemaphore semaphore, VkPipelineStageFlags stageMask);
 
@@ -807,6 +808,17 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     }
 
     bool isDitherEnabled() { return mState.isDitherEnabled(); }
+
+    angle::Result initBufferSuballocaton(vk::BufferHelper *bufferHelper,
+                                         uint32_t memoryTypeIndex,
+                                         size_t allocationSize,
+                                         size_t alignment,
+                                         BufferUsageType bufferUsageType);
+    angle::Result initImageAllocation(vk::ImageHelper *imageHelper,
+                                      bool hasProtectedContent,
+                                      const vk::MemoryProperties &memoryProperties,
+                                      VkMemoryPropertyFlags flags,
+                                      vk::MemoryAllocationType allocationType);
 
   private:
     // Dirty bits.

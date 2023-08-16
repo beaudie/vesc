@@ -159,6 +159,13 @@ egl::Error IOSurfaceSurfaceVkMac::bindTexImage(const gl::Context *context,
                                                gl::Texture *texture,
                                                EGLint buffer)
 {
+    return angle::ToEGL(bindTexImageImpl(context, texture, buffer), EGL_BAD_SURFACE);
+}
+
+angle::Result IOSurfaceSurfaceVkMac::bindTexImageImpl(const gl::Context *context,
+                                                      gl::Texture *texture,
+                                                      EGLint buffer)
+{
     IOSurfaceLock(mIOSurface, 0, nullptr);
 
     ContextVk *contextVk = vk::GetImpl(context);
@@ -189,10 +196,15 @@ egl::Error IOSurfaceSurfaceVkMac::bindTexImage(const gl::Context *context,
 
     IOSurfaceUnlock(mIOSurface, 0, nullptr);
 
-    return angle::ToEGL(result, EGL_BAD_SURFACE);
+    return result;
 }
 
 egl::Error IOSurfaceSurfaceVkMac::releaseTexImage(const gl::Context *context, EGLint buffer)
+{
+    return angle::ToEGL(releaseTexImageImpl(context, buffer), EGL_BAD_SURFACE);
+}
+
+angle::Result IOSurfaceSurfaceVkMac::releaseTexImageImpl(const gl::Context *context, EGLint buffer)
 {
     ASSERT(context != nullptr);
     ContextVk *contextVk = vk::GetImpl(context);
@@ -201,7 +213,7 @@ egl::Error IOSurfaceSurfaceVkMac::releaseTexImage(const gl::Context *context, EG
 
     if (result != angle::Result::Continue)
     {
-        return angle::ToEGL(result, EGL_BAD_SURFACE);
+        return result;
     }
 
     gl::Rectangle bounds(0, 0, mWidth, mHeight);
@@ -222,7 +234,7 @@ egl::Error IOSurfaceSurfaceVkMac::releaseTexImage(const gl::Context *context, EG
 
     IOSurfaceUnlock(mIOSurface, 0, nullptr);
 
-    return angle::ToEGL(result, EGL_BAD_SURFACE);
+    return result;
 }
 
 // static
