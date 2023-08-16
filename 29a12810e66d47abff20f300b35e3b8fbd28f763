@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e853ca0_44bc5ef9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-16T17:46:04Z",
+      "side": 1,
+      "message": "I think it\u0027s safe to move the link in d3d/ to jobs after this.",
+      "revId": "29a12810e66d47abff20f300b35e3b8fbd28f763",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
