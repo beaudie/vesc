@@ -3943,6 +3943,8 @@ void CaptureShareGroupMidExecutionSetup(
             continue;
         }
 
+        size_t textureSetupStart = setupCalls->size();
+
         // Track this as a starting resource that may need to be restored.
         TrackedResource &trackedTextures =
             resourceTracker->getTrackedResource(context->id(), ResourceIDType::Texture);
@@ -4273,6 +4275,13 @@ void CaptureShareGroupMidExecutionSetup(
                 }
             }
         }
+
+        size_t textureSetupEnd = setupCalls->size();
+
+        // Mark the range of calls used to setup this texture
+        frameCaptureShared->markResourceSetupCallsInactive(
+            setupCalls, ResourceIDType::Texture, id.value,
+            gl::Range<size_t>(textureSetupStart, textureSetupEnd));
     }
 
     // Capture Renderbuffers.
@@ -7764,6 +7773,26 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
                 MarkResourceIDActive(ResourceIDType::ShaderProgram, shaderProgramID.value,
                                      shareGroupSetupCalls, resourceIDToSetupCalls);
             }
+        }
+    }
+
+    std::vector<gl::TextureID> textureIDs;
+    for (const ParamCapture &param : call.params.getParamCaptures())
+    {
+        // Check for Textures:
+        if (param.type == ParamType::TTextureID)
+        {
+            textureIDs.push_back(param.value.TextureIDVal);
+        }
+    }
+
+    for (auto &item : textureIDs)
+    {
+        if (isCaptureActive())
+        {
+            // Track that this call referenced a Texture, setting it active for Setup
+            MarkResourceIDActive(ResourceIDType::Texture, item.value, shareGroupSetupCalls,
+                                 resourceIDToSetupCalls);
         }
     }
 }
