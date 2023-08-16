@@ -908,13 +908,13 @@ Optional<GLuint> ProgramState::getSamplerIndex(UniformLocation location) const
 
 bool ProgramState::isSamplerUniformIndex(GLuint index) const
 {
-    return mExecutable->mSamplerUniformRange.contains(index);
+    return mExecutable->mBasicDataTypeStruct.samplerUniformRange.contains(index);
 }
 
 GLuint ProgramState::getSamplerIndexFromUniformIndex(GLuint uniformIndex) const
 {
     ASSERT(isSamplerUniformIndex(uniformIndex));
-    return uniformIndex - mExecutable->mSamplerUniformRange.low();
+    return uniformIndex - mExecutable->mBasicDataTypeStruct.samplerUniformRange.low();
 }
 
 GLuint ProgramState::getUniformIndexFromSamplerIndex(GLuint samplerIndex) const
@@ -924,13 +924,13 @@ GLuint ProgramState::getUniformIndexFromSamplerIndex(GLuint samplerIndex) const
 
 bool ProgramState::isImageUniformIndex(GLuint index) const
 {
-    return mExecutable->mImageUniformRange.contains(index);
+    return mExecutable->mBasicDataTypeStruct.imageUniformRange.contains(index);
 }
 
 GLuint ProgramState::getImageIndexFromUniformIndex(GLuint uniformIndex) const
 {
     ASSERT(isImageUniformIndex(uniformIndex));
-    return uniformIndex - mExecutable->mImageUniformRange.low();
+    return uniformIndex - mExecutable->mBasicDataTypeStruct.imageUniformRange.low();
 }
 
 GLuint ProgramState::getAttributeLocation(const std::string &name) const
@@ -1288,8 +1288,9 @@ angle::Result Program::linkImpl(const Context *context, ScopedShaderLinkLocks *s
         gl::Shader *vertexShader = mState.mAttachedShaders[ShaderType::Vertex];
         if (vertexShader)
         {
-            mState.mNumViews                     = vertexShader->getNumViews(context);
-            mState.mExecutable->mHasClipDistance = vertexShader->hasClipDistance();
+            mState.mNumViews = vertexShader->getNumViews(context);
+            mState.mExecutable->mBasicDataTypeStruct.hasClipDistance =
+                vertexShader->hasClipDistance();
             mState.mSpecConstUsageBits |= vertexShader->getSpecConstUsageBits();
         }
 
@@ -1306,10 +1307,10 @@ angle::Result Program::linkImpl(const Context *context, ScopedShaderLinkLocks *s
                 return angle::Result::Continue;
             }
 
-            mState.mExecutable->mHasDiscard = fragmentShader->hasDiscard();
-            mState.mExecutable->mEnablesPerSampleShading =
+            mState.mExecutable->mBasicDataTypeStruct.hasDiscard = fragmentShader->hasDiscard();
+            mState.mExecutable->mBasicDataTypeStruct.enablesPerSampleShading =
                 fragmentShader->enablesPerSampleShading();
-            mState.mExecutable->mAdvancedBlendEquations =
+            mState.mExecutable->mBasicDataTypeStruct.advancedBlendEquations =
                 fragmentShader->getAdvancedBlendEquations();
             mState.mSpecConstUsageBits |= fragmentShader->getSpecConstUsageBits();
         }
@@ -1809,31 +1810,31 @@ GLint Program::getGeometryShaderMaxVertices() const
 GLint Program::getTessControlShaderVertices() const
 {
     ASSERT(!mLinkingState && mState.mExecutable);
-    return mState.mExecutable->mTessControlShaderVertices;
+    return mState.mExecutable->mBasicDataTypeStruct.tessControlShaderVertices;
 }
 
 GLenum Program::getTessGenMode() const
 {
     ASSERT(!mLinkingState && mState.mExecutable);
-    return mState.mExecutable->mTessGenMode;
+    return mState.mExecutable->mBasicDataTypeStruct.tessGenMode;
 }
 
 GLenum Program::getTessGenPointMode() const
 {
     ASSERT(!mLinkingState && mState.mExecutable);
-    return mState.mExecutable->mTessGenPointMode;
+    return mState.mExecutable->mBasicDataTypeStruct.tessGenPointMode;
 }
 
 GLenum Program::getTessGenSpacing() const
 {
     ASSERT(!mLinkingState && mState.mExecutable);
-    return mState.mExecutable->mTessGenSpacing;
+    return mState.mExecutable->mBasicDataTypeStruct.tessGenSpacing;
 }
 
 GLenum Program::getTessGenVertexOrder() const
 {
     ASSERT(!mLinkingState && mState.mExecutable);
-    return mState.mExecutable->mTessGenVertexOrder;
+    return mState.mExecutable->mBasicDataTypeStruct.tessGenVertexOrder;
 }
 
 const sh::ShaderVariable &Program::getInputResource(size_t index) const
@@ -2740,7 +2741,7 @@ void Program::setTransformFeedbackVaryings(GLsizei count,
         mState.mTransformFeedbackVaryingNames[i] = varyings[i];
     }
 
-    mState.mExecutable->mTransformFeedbackBufferMode = bufferMode;
+    mState.mExecutable->mBasicDataTypeStruct.transformFeedbackBufferMode = bufferMode;
 }
 
 void Program::getTransformFeedbackVarying(GLuint index,
@@ -2939,10 +2940,13 @@ bool Program::linkValidateShaders(const Context *context, InfoLog &infoLog)
                 return false;
             }
 
-            mState.mExecutable->mGeometryShaderInputPrimitiveType  = inputPrimitive.value();
-            mState.mExecutable->mGeometryShaderOutputPrimitiveType = outputPrimitive.value();
-            mState.mExecutable->mGeometryShaderMaxVertices         = maxVertices.value();
-            mState.mExecutable->mGeometryShaderInvocations =
+            mState.mExecutable->mBasicDataTypeStruct.geometryShaderInputPrimitiveType =
+                inputPrimitive.value();
+            mState.mExecutable->mBasicDataTypeStruct.geometryShaderOutputPrimitiveType =
+                outputPrimitive.value();
+            mState.mExecutable->mBasicDataTypeStruct.geometryShaderMaxVertices =
+                maxVertices.value();
+            mState.mExecutable->mBasicDataTypeStruct.geometryShaderInvocations =
                 geometryShader->getGeometryShaderInvocations(context);
         }
 
@@ -2965,7 +2969,7 @@ bool Program::linkValidateShaders(const Context *context, InfoLog &infoLog)
                 return false;
             }
 
-            mState.mExecutable->mTessControlShaderVertices = tcsShaderVertices;
+            mState.mExecutable->mBasicDataTypeStruct.tessControlShaderVertices = tcsShaderVertices;
         }
 
         Shader *tessEvaluationShader = shaders[ShaderType::TessEvaluation];
@@ -2988,11 +2992,12 @@ bool Program::linkValidateShaders(const Context *context, InfoLog &infoLog)
                 return false;
             }
 
-            mState.mExecutable->mTessGenMode    = tesPrimitiveMode;
-            mState.mExecutable->mTessGenSpacing = tessEvaluationShader->getTessGenSpacing(context);
-            mState.mExecutable->mTessGenVertexOrder =
+            mState.mExecutable->mBasicDataTypeStruct.tessGenMode = tesPrimitiveMode;
+            mState.mExecutable->mBasicDataTypeStruct.tessGenSpacing =
+                tessEvaluationShader->getTessGenSpacing(context);
+            mState.mExecutable->mBasicDataTypeStruct.tessGenVertexOrder =
                 tessEvaluationShader->getTessGenVertexOrder(context);
-            mState.mExecutable->mTessGenPointMode =
+            mState.mExecutable->mBasicDataTypeStruct.tessGenPointMode =
                 tessEvaluationShader->getTessGenPointMode(context);
         }
     }
@@ -3264,8 +3269,8 @@ bool Program::linkAttributes(const Context *context, InfoLog &infoLog)
         }
     }
 
-    ASSERT(mState.mExecutable->mAttributesTypeMask.none());
-    ASSERT(mState.mExecutable->mAttributesMask.none());
+    ASSERT(mState.mExecutable->mBasicDataTypeStruct.attributesTypeMask.none());
+    ASSERT(mState.mExecutable->mBasicDataTypeStruct.attributesMask.none());
 
     // Prune inactive attributes. This step is only needed on shaderVersion >= 300 since on earlier
     // shader versions we're only processing active attributes to begin with.
@@ -3297,16 +3302,16 @@ bool Program::linkAttributes(const Context *context, InfoLog &infoLog)
             // Built-in active program inputs don't have a bound attribute.
             if (!attribute.isBuiltIn())
             {
-                mState.mExecutable->mActiveAttribLocationsMask.set(location);
-                mState.mExecutable->mMaxActiveAttribLocation =
-                    std::max(mState.mExecutable->mMaxActiveAttribLocation, location + 1);
+                mState.mExecutable->mBasicDataTypeStruct.activeAttribLocationsMask.set(location);
+                mState.mExecutable->mBasicDataTypeStruct.maxActiveAttribLocation = std::max(
+                    mState.mExecutable->mBasicDataTypeStruct.maxActiveAttribLocation, location + 1);
 
                 ComponentType componentType =
                     GLenumToComponentType(VariableComponentType(attribute.type));
 
                 SetComponentTypeMask(componentType, location,
-                                     &mState.mExecutable->mAttributesTypeMask);
-                mState.mExecutable->mAttributesMask.set(location);
+                                     &mState.mExecutable->mBasicDataTypeStruct.attributesTypeMask);
+                mState.mExecutable->mBasicDataTypeStruct.attributesMask.set(location);
 
                 location++;
             }

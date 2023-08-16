@@ -270,12 +270,16 @@ void ProgramPipeline::updateExecutableAttributes()
         return;
     }
 
-    const ProgramExecutable &vertexExecutable      = vertexProgram->getExecutable();
-    mState.mExecutable->mActiveAttribLocationsMask = vertexExecutable.mActiveAttribLocationsMask;
-    mState.mExecutable->mMaxActiveAttribLocation   = vertexExecutable.mMaxActiveAttribLocation;
-    mState.mExecutable->mAttributesTypeMask        = vertexExecutable.mAttributesTypeMask;
-    mState.mExecutable->mAttributesMask            = vertexExecutable.mAttributesMask;
-    mState.mExecutable->mProgramInputs             = vertexExecutable.mProgramInputs;
+    const ProgramExecutable &vertexExecutable = vertexProgram->getExecutable();
+    mState.mExecutable->mBasicDataTypeStruct.activeAttribLocationsMask =
+        vertexExecutable.mBasicDataTypeStruct.activeAttribLocationsMask;
+    mState.mExecutable->mBasicDataTypeStruct.maxActiveAttribLocation =
+        vertexExecutable.mBasicDataTypeStruct.maxActiveAttribLocation;
+    mState.mExecutable->mBasicDataTypeStruct.attributesTypeMask =
+        vertexExecutable.mBasicDataTypeStruct.attributesTypeMask;
+    mState.mExecutable->mBasicDataTypeStruct.attributesMask =
+        vertexExecutable.mBasicDataTypeStruct.attributesMask;
+    mState.mExecutable->mProgramInputs = vertexExecutable.mProgramInputs;
 }
 
 void ProgramPipeline::updateTransformFeedbackMembers()
@@ -359,12 +363,14 @@ void ProgramPipeline::updateExecutableGeometryProperties()
     }
 
     const ProgramExecutable &geometryExecutable = geometryProgram->getExecutable();
-    mState.mExecutable->mGeometryShaderInputPrimitiveType =
-        geometryExecutable.mGeometryShaderInputPrimitiveType;
-    mState.mExecutable->mGeometryShaderOutputPrimitiveType =
-        geometryExecutable.mGeometryShaderOutputPrimitiveType;
-    mState.mExecutable->mGeometryShaderInvocations = geometryExecutable.mGeometryShaderInvocations;
-    mState.mExecutable->mGeometryShaderMaxVertices = geometryExecutable.mGeometryShaderMaxVertices;
+    mState.mExecutable->mBasicDataTypeStruct.geometryShaderInputPrimitiveType =
+        geometryExecutable.mBasicDataTypeStruct.geometryShaderInputPrimitiveType;
+    mState.mExecutable->mBasicDataTypeStruct.geometryShaderOutputPrimitiveType =
+        geometryExecutable.mBasicDataTypeStruct.geometryShaderOutputPrimitiveType;
+    mState.mExecutable->mBasicDataTypeStruct.geometryShaderInvocations =
+        geometryExecutable.mBasicDataTypeStruct.geometryShaderInvocations;
+    mState.mExecutable->mBasicDataTypeStruct.geometryShaderMaxVertices =
+        geometryExecutable.mBasicDataTypeStruct.geometryShaderMaxVertices;
 }
 
 void ProgramPipeline::updateExecutableTessellationProperties()
@@ -375,17 +381,21 @@ void ProgramPipeline::updateExecutableTessellationProperties()
     if (tessControlProgram)
     {
         const ProgramExecutable &tessControlExecutable = tessControlProgram->getExecutable();
-        mState.mExecutable->mTessControlShaderVertices =
-            tessControlExecutable.mTessControlShaderVertices;
+        mState.mExecutable->mBasicDataTypeStruct.tessControlShaderVertices =
+            tessControlExecutable.mBasicDataTypeStruct.tessControlShaderVertices;
     }
 
     if (tessEvalProgram)
     {
         const ProgramExecutable &tessEvalExecutable = tessEvalProgram->getExecutable();
-        mState.mExecutable->mTessGenMode            = tessEvalExecutable.mTessGenMode;
-        mState.mExecutable->mTessGenSpacing         = tessEvalExecutable.mTessGenSpacing;
-        mState.mExecutable->mTessGenVertexOrder     = tessEvalExecutable.mTessGenVertexOrder;
-        mState.mExecutable->mTessGenPointMode       = tessEvalExecutable.mTessGenPointMode;
+        mState.mExecutable->mBasicDataTypeStruct.tessGenMode =
+            tessEvalExecutable.mBasicDataTypeStruct.tessGenMode;
+        mState.mExecutable->mBasicDataTypeStruct.tessGenSpacing =
+            tessEvalExecutable.mBasicDataTypeStruct.tessGenSpacing;
+        mState.mExecutable->mBasicDataTypeStruct.tessGenVertexOrder =
+            tessEvalExecutable.mBasicDataTypeStruct.tessGenVertexOrder;
+        mState.mExecutable->mBasicDataTypeStruct.tessGenPointMode =
+            tessEvalExecutable.mBasicDataTypeStruct.tessGenPointMode;
     }
 }
 
@@ -398,10 +408,13 @@ void ProgramPipeline::updateFragmentInoutRangeAndEnablesPerSampleShading()
         return;
     }
 
-    const ProgramExecutable &fragmentExecutable  = fragmentProgram->getExecutable();
-    mState.mExecutable->mFragmentInoutRange      = fragmentExecutable.mFragmentInoutRange;
-    mState.mExecutable->mHasDiscard              = fragmentExecutable.mHasDiscard;
-    mState.mExecutable->mEnablesPerSampleShading = fragmentExecutable.mEnablesPerSampleShading;
+    const ProgramExecutable &fragmentExecutable = fragmentProgram->getExecutable();
+    mState.mExecutable->mBasicDataTypeStruct.fragmentInoutRange =
+        fragmentExecutable.mBasicDataTypeStruct.fragmentInoutRange;
+    mState.mExecutable->mBasicDataTypeStruct.hasDiscard =
+        fragmentExecutable.mBasicDataTypeStruct.hasDiscard;
+    mState.mExecutable->mBasicDataTypeStruct.enablesPerSampleShading =
+        fragmentExecutable.mBasicDataTypeStruct.enablesPerSampleShading;
 }
 
 void ProgramPipeline::updateLinkedVaryings()
