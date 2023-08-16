@@ -51,6 +51,9 @@ class IOSurfaceSurfaceVkMac : public OffscreenSurfaceVk
   private:
     int computeAlignment() const;
 
+    angle::Result bindTexImageImpl(const gl::Context *context, gl::Texture *texture, EGLint buffer);
+    angle::Result releaseTexImageImpl(const gl::Context *context, EGLint buffer);
+
     IOSurfaceRef mIOSurface;
 
     int mPlane;

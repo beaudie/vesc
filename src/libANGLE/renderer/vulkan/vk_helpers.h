@@ -90,7 +90,8 @@ class DynamicBuffer : angle::NonCopyable
     angle::Result allocate(Context *context,
                            size_t sizeInBytes,
                            BufferHelper **bufferHelperOut,
-                           bool *newBufferAllocatedOut);
+                           bool *newBufferAllocatedOut,
+                           bool *isOutOfMemoryOutOut);
 
     // This releases resources when they might currently be in use.
     void release(RendererVk *renderer);
@@ -124,7 +125,7 @@ class DynamicBuffer : angle::NonCopyable
 
   private:
     void reset();
-    angle::Result allocateNewBuffer(Context *context);
+    angle::Result allocateNewBuffer(Context *context, bool *isOutOfMemoryOutOut);
 
     VkBufferUsageFlags mUsage;
     bool mHostVisible;
@@ -748,33 +749,39 @@ class BufferHelper : public ReadWriteResource
 
     angle::Result init(vk::Context *context,
                        const VkBufferCreateInfo &createInfo,
-                       VkMemoryPropertyFlags memoryPropertyFlags);
+                       VkMemoryPropertyFlags memoryPropertyFlags,
+                       bool *isOutOfMemoryOutOut);
     angle::Result initExternal(ContextVk *contextVk,
                                VkMemoryPropertyFlags memoryProperties,
                                const VkBufferCreateInfo &requestedCreateInfo,
-                               GLeglClientBufferEXT clientBuffer);
+                               GLeglClientBufferEXT clientBuffer,
+                               bool *isOutOfMemoryOutOut);
     angle::Result initSuballocation(ContextVk *contextVk,
                                     uint32_t memoryTypeIndex,
                                     size_t size,
                                     size_t alignment,
-                                    BufferUsageType usageType);
+                                    BufferUsageType usageType,
+                                    bool *isOutOfMemoryOutOut);
 
     // Helper functions to initialize a buffer for a specific usage
     // Suballocate a buffer with alignment good for shader storage or copyBuffer .
     angle::Result allocateForVertexConversion(ContextVk *contextVk,
                                               size_t size,
-                                              MemoryHostVisibility hostVisibility);
+                                              MemoryHostVisibility hostVisibility,
+                                              bool *isOutOfMemoryOutOut);
     // Suballocate a host visible buffer with alignment good for copyBuffer .
     angle::Result allocateForCopyBuffer(ContextVk *contextVk,
                                         size_t size,
-                                        MemoryCoherency coherency);
+                                        MemoryCoherency coherency,
+                                        bool *isOutOfMemoryOutOut);
     // Suballocate a host visible buffer with alignment good for copyImage .
     angle::Result allocateForCopyImage(ContextVk *contextVk,
                                        size_t size,
                                        MemoryCoherency coherency,
                                        angle::FormatID formatId,
                                        VkDeviceSize *offset,
-                                       uint8_t **dataPtr);
+                                       uint8_t **dataPtr,
+                                       bool *isOutOfMemoryOutOut);
 
     void destroy(RendererVk *renderer);
     void release(RendererVk *renderer);
@@ -914,7 +921,8 @@ class BufferPool : angle::NonCopyable
     angle::Result allocateBuffer(Context *context,
                                  VkDeviceSize sizeInBytes,
                                  VkDeviceSize alignment,
-                                 BufferSuballocation *suballocation);
+                                 BufferSuballocation *suballocation,
+                                 bool *isOutOfMemoryOutOut);
 
     // Frees resources immediately, or orphan the non-empty BufferBlocks if allowed. If orphan is
     // not allowed, it will assert if BufferBlock is still not empty.
@@ -929,7 +937,9 @@ class BufferPool : angle::NonCopyable
     VkDeviceSize getMemorySize() const { return mTotalMemorySize; }
 
   private:
-    angle::Result allocateNewBuffer(Context *context, VkDeviceSize sizeInBytes);
+    angle::Result allocateNewBuffer(Context *context,
+                                    VkDeviceSize sizeInBytes,
+                                    bool *isOutOfMemoryOutOut);
     VkDeviceSize getTotalEmptyMemorySize() const;
 
     vma::VirtualBlockCreateFlags mVirtualBlockCreateFlags;
@@ -1893,7 +1903,8 @@ class ImageHelper final : public Resource, public angle::Subject
                              bool hasProtectedContent,
                              const MemoryProperties &memoryProperties,
                              VkMemoryPropertyFlags flags,
-                             vk::MemoryAllocationType);
+                             MemoryAllocationType,
+                             bool *isOutOfMemoryOut);
     angle::Result initExternalMemory(Context *context,
                                      const MemoryProperties &memoryProperties,
                                      const VkMemoryRequirements &memoryRequirements,
@@ -1946,7 +1957,8 @@ class ImageHelper final : public Resource, public angle::Subject
                                 angle::FormatID intendedFormatID,
                                 angle::FormatID actualFormatID,
                                 VkImageUsageFlags usage,
-                                uint32_t layerCount);
+                                uint32_t layerCount,
+                                bool *isOutOfMemoryOutOut);
     // Create an image for staging purposes.  Used by:
     //
     // - TextureVk::copyAndStageImageData
@@ -1961,7 +1973,8 @@ class ImageHelper final : public Resource, public angle::Subject
                               GLint samples,
                               VkImageUsageFlags usage,
                               uint32_t mipLevels,
-                              uint32_t layerCount);
+                              uint32_t layerCount,
+                              bool *isOutOfMemoryOutOut);
     // Create a multisampled image for use as the implicit image in multisampled render to texture
     // rendering.  If LAZILY_ALLOCATED memory is available, it will prefer that.
     angle::Result initImplicitMultisampledRenderToTexture(Context *context,
@@ -1970,7 +1983,8 @@ class ImageHelper final : public Resource, public angle::Subject
                                                           gl::TextureType textureType,
                                                           GLint samples,
                                                           const ImageHelper &resolveImage,
-                                                          bool isRobustResourceInitEnabled);
+                                                          bool isRobustResourceInitEnabled,
+                                                          bool *isOutOfMemoryOutOut);
 
     // Helper for initExternal and users to automatically derive the appropriate VkImageCreateInfo
     // pNext chain based on the given parameters, and adjust create flags.  In some cases, these
@@ -2171,7 +2185,8 @@ class ImageHelper final : public Resource, public angle::Subject
                                              ImageAccess access,
                                              const GLuint inputRowPitch,
                                              const GLuint inputDepthPitch,
-                                             const GLuint inputSkipBytes);
+                                             const GLuint inputSkipBytes,
+                                             bool *isOutOfMemoryOutOut);
 
     angle::Result stageSubresourceUpdate(ContextVk *contextVk,
                                          const gl::ImageIndex &index,
@@ -2182,7 +2197,8 @@ class ImageHelper final : public Resource, public angle::Subject
                                          GLenum type,
                                          const uint8_t *pixels,
                                          const Format &vkFormat,
-                                         ImageAccess access);
+                                         ImageAccess access,
+                                         bool *isOutOfMemoryOutOut);
 
     angle::Result stageSubresourceUpdateAndGetData(ContextVk *contextVk,
                                                    size_t allocationSize,
@@ -2190,7 +2206,8 @@ class ImageHelper final : public Resource, public angle::Subject
                                                    const gl::Extents &glExtents,
                                                    const gl::Offset &offset,
                                                    uint8_t **destData,
-                                                   angle::FormatID formatID);
+                                                   angle::FormatID formatID,
+                                                   bool *isOutOfMemoryOutOut);
 
     angle::Result stageSubresourceUpdateFromFramebuffer(const gl::Context *context,
                                                         const gl::ImageIndex &index,
@@ -2199,7 +2216,8 @@ class ImageHelper final : public Resource, public angle::Subject
                                                         const gl::Extents &dstExtent,
                                                         const gl::InternalFormat &formatInfo,
                                                         ImageAccess access,
-                                                        FramebufferVk *framebufferVk);
+                                                        FramebufferVk *framebufferVk,
+                                                        bool *isOutOfMemoryOutOut);
 
     void stageSubresourceUpdateFromImage(RefCounted<ImageHelper> *image,
                                          const gl::ImageIndex &index,
@@ -2223,7 +2241,8 @@ class ImageHelper final : public Resource, public angle::Subject
                                                      const gl::ImageIndex &index,
                                                      const gl::Extents &glExtents,
                                                      const angle::Format &intendedFormat,
-                                                     const angle::Format &imageFormat);
+                                                     const angle::Format &imageFormat,
+                                                     bool *isOutOfMemoryOutOut);
     void stageRobustResourceClear(const gl::ImageIndex &index);
 
     angle::Result stageResourceClearWithFormat(ContextVk *contextVk,
@@ -2231,7 +2250,8 @@ class ImageHelper final : public Resource, public angle::Subject
                                                const gl::Extents &glExtents,
                                                const angle::Format &intendedFormat,
                                                const angle::Format &imageFormat,
-                                               const VkClearValue &clearValue);
+                                               const VkClearValue &clearValue,
+                                               bool *isOutOfMemoryOutOut);
 
     // Stage the currently allocated image as updates to base level and on, making this !valid().
     // This is used for:
@@ -2347,7 +2367,8 @@ class ImageHelper final : public Resource, public angle::Subject
                                         uint32_t baseLayer,
                                         const gl::Box &sourceArea,
                                         BufferHelper *dstBuffer,
-                                        uint8_t **outDataPtr);
+                                        uint8_t **outDataPtr,
+                                        bool *isOutOfMemoryOutOut);
 
     angle::Result copySurfaceImageToBuffer(DisplayVk *displayVk,
                                            gl::LevelIndex sourceLevelGL,
@@ -2381,7 +2402,8 @@ class ImageHelper final : public Resource, public angle::Subject
                                         uint32_t layerCount,
                                         GLenum format,
                                         GLenum type,
-                                        void *pixels);
+                                        void *pixels,
+                                        bool *isOutOfMemoryOutOut);
 
     angle::Result readPixelsForCompressedGetImage(ContextVk *contextVk,
                                                   const gl::PixelPackState &packState,
@@ -2389,7 +2411,8 @@ class ImageHelper final : public Resource, public angle::Subject
                                                   gl::LevelIndex levelGL,
                                                   uint32_t layer,
                                                   uint32_t layerCount,
-                                                  void *pixels);
+                                                  void *pixels,
+                                                  bool *isOutOfMemoryOutOut);
 
     angle::Result readPixelsWithCompute(ContextVk *contextVk,
                                         ImageHelper *src,
@@ -2405,7 +2428,8 @@ class ImageHelper final : public Resource, public angle::Subject
                              VkImageAspectFlagBits copyAspectFlags,
                              gl::LevelIndex levelGL,
                              uint32_t layer,
-                             void *pixels);
+                             void *pixels,
+                             bool *isOutOfMemoryOutOut);
 
     angle::Result CalculateBufferInfo(ContextVk *contextVk,
                                       const gl::Extents &glExtents,
@@ -2476,7 +2500,8 @@ class ImageHelper final : public Resource, public angle::Subject
                                           uint32_t layerCount);
     angle::Result reformatStagedBufferUpdates(ContextVk *contextVk,
                                               angle::FormatID srcFormatID,
-                                              angle::FormatID dstFormatID);
+                                              angle::FormatID dstFormatID,
+                                              bool *isOutOfMemoryOutOut);
     bool hasStagedImageUpdatesWithMismatchedFormat(gl::LevelIndex levelStart,
                                                    gl::LevelIndex levelEnd,
                                                    angle::FormatID formatID) const;
@@ -2726,7 +2751,8 @@ class ImageHelper final : public Resource, public angle::Subject
                                  VkImageAspectFlagBits copyAspectFlags,
                                  gl::LevelIndex levelGL,
                                  uint32_t layer,
-                                 void *pixels);
+                                 void *pixels,
+                                 bool *isOutOfMemoryOutOut);
 
     angle::Result packReadPixelBuffer(ContextVk *contextVk,
                                       const gl::Rectangle &area,
@@ -2757,6 +2783,27 @@ class ImageHelper final : public Resource, public angle::Subject
                                                     : srcDataFormatID;
         return actualFormatLinear == srcDataFormatIDLinear;
     }
+
+    // Class to help destroy image in case of failure, including OOM.
+    class ScopedDestroyImageHelperOnFailure
+    {
+      public:
+        ScopedDestroyImageHelperOnFailure(RendererVk *renderer, ImageHelper *imageHelper)
+            : mRenderer(renderer), mImageHelper(imageHelper)
+        {}
+        ~ScopedDestroyImageHelperOnFailure()
+        {
+            if (mImageHelper)
+            {
+                mImageHelper->destroy(mRenderer);
+            }
+        }
+        void onSuccess() { mImageHelper = nullptr; }
+
+      private:
+        RendererVk *mRenderer;
+        ImageHelper *mImageHelper;
+    };
 
     // Vulkan objects.
     Image mImage;
@@ -3434,7 +3481,8 @@ class LineLoopHelper final : angle::NonCopyable
     angle::Result getIndexBufferForDrawArrays(ContextVk *contextVk,
                                               uint32_t clampedVertexCount,
                                               GLint firstVertex,
-                                              BufferHelper **bufferOut);
+                                              BufferHelper **bufferOut,
+                                              bool *isOutOfMemoryOutOut);
 
     angle::Result getIndexBufferForElementArrayBuffer(ContextVk *contextVk,
                                                       BufferVk *elementArrayBufferVk,
@@ -3442,14 +3490,16 @@ class LineLoopHelper final : angle::NonCopyable
                                                       int indexCount,
                                                       intptr_t elementArrayOffset,
                                                       BufferHelper **bufferOut,
-                                                      uint32_t *indexCountOut);
+                                                      uint32_t *indexCountOut,
+                                                      bool *isOutOfMemoryOutOut);
 
     angle::Result streamIndices(ContextVk *contextVk,
                                 gl::DrawElementsType glIndexType,
                                 GLsizei indexCount,
                                 const uint8_t *srcPtr,
                                 BufferHelper **bufferOut,
-                                uint32_t *indexCountOut);
+                                uint32_t *indexCountOut,
+                                bool *isOutOfMemoryOutOut);
 
     angle::Result streamIndicesIndirect(ContextVk *contextVk,
                                         gl::DrawElementsType glIndexType,
@@ -3457,14 +3507,16 @@ class LineLoopHelper final : angle::NonCopyable
                                         BufferHelper *indirectBuffer,
                                         VkDeviceSize indirectBufferOffset,
                                         BufferHelper **indexBufferOut,
-                                        BufferHelper **indirectBufferOut);
+                                        BufferHelper **indirectBufferOut,
+                                        bool *isOutOfMemoryOutOut);
 
     angle::Result streamArrayIndirect(ContextVk *contextVk,
                                       size_t vertexCount,
                                       BufferHelper *arrayIndirectBuffer,
                                       VkDeviceSize arrayIndirectBufferOffset,
                                       BufferHelper **indexBufferOut,
-                                      BufferHelper **indexIndirectBufferOut);
+                                      BufferHelper **indexIndirectBufferOut,
+                                      bool *isOutOfMemoryOutOut);
 
     void release(ContextVk *contextVk);
     void destroy(RendererVk *renderer);

@@ -250,7 +250,8 @@ class ProgramExecutableVk : public ProgramExecutableImpl
                                  vk::BufferHelper *emptyBuffer,
                                  vk::DynamicBuffer *defaultUniformStorage,
                                  bool isTransformFeedbackActiveUnpaused,
-                                 TransformFeedbackVk *transformFeedbackVk);
+                                 TransformFeedbackVk *transformFeedbackVk,
+                                 bool *isOutOfMemoryOut);
     void onProgramBind();
 
     const ShaderInterfaceVariableInfoMap &getVariableInfoMap() const { return mVariableInfoMap; }
