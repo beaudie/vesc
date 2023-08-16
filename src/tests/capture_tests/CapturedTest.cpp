@@ -44,13 +44,54 @@ void main(void) {
    gl_Position = vec4(0.5, 0.5, 0.5, 1.0);
 })";
 
-        inactiveProgram            = glCreateProgram();
-        inactiveShader             = glCreateShader(GL_VERTEX_SHADER);
-        const char *sourceArray[1] = {kInactiveVS};
-        glShaderSource(inactiveShader, 1, sourceArray, 0);
+        constexpr char kActiveVS[] = R"(attribute vec4 a_position;
+attribute vec2 a_texCoord;
+varying vec2 v_texCoord;
+void main()
+{
+    gl_Position = a_position;
+    v_texCoord = a_texCoord;
+})";
+
+        constexpr char kActiveFS[] = R"(precision mediump float;
+varying vec2 v_texCoord;
+uniform sampler2D s_texture;
+void main()
+{
+    gl_FragColor = texture2D(s_texture, v_texCoord);
+})";
+
+        // Create shader that is unused during capture
+        inactiveProgram                    = glCreateProgram();
+        inactiveShader                     = glCreateShader(GL_VERTEX_SHADER);
+        const char *inactiveSourceArray[1] = {kInactiveVS};
+        glShaderSource(inactiveShader, 1, inactiveSourceArray, 0);
         glCompileShader(inactiveShader);
         glAttachShader(inactiveProgram, inactiveShader);
 
+        // Create Shader Program before capture begins to use during capture
+        activeProgram    = glCreateProgram();
+        activeVertShader = glCreateShader(GL_VERTEX_SHADER);
+        activeFragShader = glCreateShader(GL_FRAGMENT_SHADER);
+        glGenTextures(1, &textureNeverBound);
+        glGenTextures(1, &textureBoundBeforeCapture);
+        glGenTextures(1, &textureBoundDuringCapture);
+        const char *activeVsSourceArray[1] = {kActiveVS};
+        glShaderSource(activeVertShader, 1, activeVsSourceArray, 0);
+        glCompileShader(activeVertShader);
+        glAttachShader(activeProgram, activeVertShader);
+        const char *activeFsSourceArray[1] = {kActiveFS};
+        glShaderSource(activeFragShader, 1, activeFsSourceArray, 0);
+        glCompileShader(activeFragShader);
+        glAttachShader(activeProgram, activeFragShader);
+        glLinkProgram(activeProgram);
+
+        // Get the sampler location
+        mSamplerLoc = glGetUniformLocation(activeProgram, "s_texture");
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+        // Bind the texture object before capture begins
+        glBindTexture(GL_TEXTURE_2D, textureBoundBeforeCapture);
         ASSERT_GL_NO_ERROR();
     }
 
@@ -64,7 +105,10 @@ void main(void) {
         }
 
         glDeleteProgram(inactiveProgram);
+        glDeleteProgram(activeProgram);
         glDeleteShader(inactiveShader);
+        glDeleteShader(activeVertShader);
+        glDeleteShader(activeFragShader);
     }
 
     void frame1();
@@ -74,6 +118,15 @@ void main(void) {
 
     GLuint inactiveProgram;
     GLuint inactiveShader;
+
+    GLuint activeProgram;
+    GLuint activeVertShader;
+    GLuint activeFragShader;
+
+    GLuint textureNeverBound;
+    GLuint textureBoundBeforeCapture;
+    GLuint textureBoundDuringCapture;
+    GLint mSamplerLoc;
 };
 
 void CapturedTest::frame1()
@@ -114,6 +167,29 @@ void main(void) {
 
     glDrawArrays(GL_TRIANGLES, 0, 3);
     EXPECT_GL_NO_ERROR();
+
+    // Draw using texture bound before capture begins
+    const size_t width                 = 2;
+    const size_t height                = 2;
+    GLubyte pixels[width * height * 3] = {
+        255, 0,   0,    // Red
+        0,   255, 0,    // Green
+        0,   0,   255,  // Blue
+        255, 255, 0,    // Yellow
+    };
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, pixels);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    GLushort indices[] = {0, 1, 2, 0, 2, 3};
+    glClear(GL_COLOR_BUFFER_BIT);
+    glUseProgram(activeProgram);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), 0);
+    glUniform1i(mSamplerLoc, 0);
+
+    // Draw without binding texture during capture
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices);
 
     // Note: RAII destructors called here causing additional GL calls.
 }
