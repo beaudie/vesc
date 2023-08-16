@@ -39,6 +39,30 @@
       },
       "revId": "4f04326bb5737f1fd64dd62ead447661c0c09d7c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed796c02_82c0fc21",
+        "filename": "src/libANGLE/renderer/vulkan/ShareGroupVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-16T20:24:24Z",
+      "side": 1,
+      "message": "I agree. I have removed `ANGLE_VMA_VERSION` entirely, along with the related parameters in the build files.",
+      "parentUuid": "10266c72_02064e94",
+      "range": {
+        "startLine": 148,
+        "startChar": 0,
+        "endLine": 156,
+        "endChar": 5
+      },
+      "revId": "4f04326bb5737f1fd64dd62ead447661c0c09d7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
