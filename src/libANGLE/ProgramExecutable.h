@@ -128,40 +128,63 @@ class ProgramExecutable final : public angle::Subject
     std::string getInfoLogString() const;
     void resetInfoLog() { mInfoLog.reset(); }
 
-    void resetLinkedShaderStages() { mLinkedShaderStages.reset(); }
-    const ShaderBitSet getLinkedShaderStages() const { return mLinkedShaderStages; }
+    void resetLinkedShaderStages() { mBasicDataTypeStruct.linkedShaderStages.reset(); }
+    const ShaderBitSet getLinkedShaderStages() const
+    {
+        return mBasicDataTypeStruct.linkedShaderStages;
+    }
     void setLinkedShaderStages(ShaderType shaderType)
     {
-        mLinkedShaderStages.set(shaderType);
+        mBasicDataTypeStruct.linkedShaderStages.set(shaderType);
         updateCanDrawWith();
     }
     bool hasLinkedShaderStage(ShaderType shaderType) const
     {
         ASSERT(shaderType != ShaderType::InvalidEnum);
-        return mLinkedShaderStages[shaderType];
+        return mBasicDataTypeStruct.linkedShaderStages[shaderType];
     }
-    size_t getLinkedShaderStageCount() const { return mLinkedShaderStages.count(); }
+    size_t getLinkedShaderStageCount() const
+    {
+        return mBasicDataTypeStruct.linkedShaderStages.count();
+    }
     bool hasLinkedGraphicsShader() const
     {
-        return mLinkedShaderStages.any() &&
-               mLinkedShaderStages != gl::ShaderBitSet{gl::ShaderType::Compute};
+        return mBasicDataTypeStruct.linkedShaderStages.any() &&
+               mBasicDataTypeStruct.linkedShaderStages != gl::ShaderBitSet{gl::ShaderType::Compute};
     }
     bool hasLinkedTessellationShader() const
     {
-        return mLinkedShaderStages[ShaderType::TessEvaluation];
+        return mBasicDataTypeStruct.linkedShaderStages[ShaderType::TessEvaluation];
     }
 
-    ShaderType getLinkedTransformFeedbackStage() const;
+    ShaderType getLinkedTransformFeedbackStage() const
+    {
+        return GetLastPreFragmentStage(mBasicDataTypeStruct.linkedShaderStages);
+    }
 
     const AttributesMask &getActiveAttribLocationsMask() const
     {
-        return mActiveAttribLocationsMask;
+        return mBasicDataTypeStruct.activeAttribLocationsMask;
     }
-    bool isAttribLocationActive(size_t attribLocation) const;
-    AttributesMask getNonBuiltinAttribLocationsMask() const { return mAttributesMask; }
-    unsigned int getMaxActiveAttribLocation() const { return mMaxActiveAttribLocation; }
-    ComponentTypeMask getAttributesTypeMask() const { return mAttributesTypeMask; }
-    AttributesMask getAttributesMask() const;
+    bool isAttribLocationActive(size_t attribLocation) const
+    {
+        ASSERT(attribLocation < mBasicDataTypeStruct.activeAttribLocationsMask.size());
+        return mBasicDataTypeStruct.activeAttribLocationsMask[attribLocation];
+    }
+
+    AttributesMask getNonBuiltinAttribLocationsMask() const
+    {
+        return mBasicDataTypeStruct.attributesMask;
+    }
+    unsigned int getMaxActiveAttribLocation() const
+    {
+        return mBasicDataTypeStruct.maxActiveAttribLocation;
+    }
+    ComponentTypeMask getAttributesTypeMask() const
+    {
+        return mBasicDataTypeStruct.attributesTypeMask;
+    }
+    AttributesMask getAttributesMask() const { return mBasicDataTypeStruct.attributesMask; }
 
     const ActiveTextureMask &getActiveSamplersMask() const { return mActiveSamplersMask; }
     void setActiveTextureMask(ActiveTextureMask mask) { mActiveSamplersMask = mask; }
@@ -196,17 +219,20 @@ class ProgramExecutable final : public angle::Subject
 
     void updateActiveSamplers(const ProgramState &programState);
 
-    bool hasDefaultUniforms() const;
-    bool hasTextures() const;
-    bool hasUniformBuffers() const;
-    bool hasStorageBuffers() const;
-    bool hasAtomicCounterBuffers() const;
-    bool hasImages() const;
+    bool hasDefaultUniforms() const { return !getDefaultUniformRange().empty(); }
+    bool hasTextures() const { return !getSamplerBindings().empty(); }
+    bool hasUniformBuffers() const { return !mUniformBlocks.empty(); }
+    bool hasStorageBuffers() const { return !mShaderStorageBlocks.empty(); }
+    bool hasAtomicCounterBuffers() const { return !mAtomicCounterBuffers.empty(); }
+    bool hasImages() const { return !mImageBindings.empty(); }
     bool hasTransformFeedbackOutput() const
     {
         return !getLinkedTransformFeedbackVaryings().empty();
     }
-    bool usesFramebufferFetch() const;
+    bool usesFramebufferFetch() const
+    {
+        return (mBasicDataTypeStruct.fragmentInoutRange.length() > 0);
+    }
 
     // Count the number of uniform and storage buffer declarations, counting arrays as one.
     size_t getTransformFeedbackBufferCount() const { return mTransformFeedbackStrides.size(); }
@@ -232,20 +258,35 @@ class ProgramExecutable final : public angle::Subject
     const std::vector<SamplerBinding> &getSamplerBindings() const { return mSamplerBindings; }
     const std::vector<ImageBinding> &getImageBindings() const { return mImageBindings; }
     std::vector<ImageBinding> *getImageBindings() { return &mImageBindings; }
-    const RangeUI &getDefaultUniformRange() const { return mDefaultUniformRange; }
-    const RangeUI &getSamplerUniformRange() const { return mSamplerUniformRange; }
-    const RangeUI &getImageUniformRange() const { return mImageUniformRange; }
-    const RangeUI &getAtomicCounterUniformRange() const { return mAtomicCounterUniformRange; }
-    const RangeUI &getFragmentInoutRange() const { return mFragmentInoutRange; }
-    bool hasClipDistance() const { return mHasClipDistance; }
-    bool hasDiscard() const { return mHasDiscard; }
-    bool enablesPerSampleShading() const { return mEnablesPerSampleShading; }
-    BlendEquationBitSet getAdvancedBlendEquations() const { return mAdvancedBlendEquations; }
+    const RangeUI &getDefaultUniformRange() const
+    {
+        return mBasicDataTypeStruct.defaultUniformRange;
+    }
+    const RangeUI &getSamplerUniformRange() const
+    {
+        return mBasicDataTypeStruct.samplerUniformRange;
+    }
+    const RangeUI &getImageUniformRange() const { return mBasicDataTypeStruct.imageUniformRange; }
+    const RangeUI &getAtomicCounterUniformRange() const
+    {
+        return mBasicDataTypeStruct.atomicCounterUniformRange;
+    }
+    const RangeUI &getFragmentInoutRange() const { return mBasicDataTypeStruct.fragmentInoutRange; }
+    bool hasClipDistance() const { return mBasicDataTypeStruct.hasClipDistance; }
+    bool hasDiscard() const { return mBasicDataTypeStruct.hasDiscard; }
+    bool enablesPerSampleShading() const { return mBasicDataTypeStruct.enablesPerSampleShading; }
+    BlendEquationBitSet getAdvancedBlendEquations() const
+    {
+        return mBasicDataTypeStruct.advancedBlendEquations;
+    }
     const std::vector<TransformFeedbackVarying> &getLinkedTransformFeedbackVaryings() const
     {
         return mLinkedTransformFeedbackVaryings;
     }
-    GLint getTransformFeedbackBufferMode() const { return mTransformFeedbackBufferMode; }
+    GLint getTransformFeedbackBufferMode() const
+    {
+        return mBasicDataTypeStruct.transformFeedbackBufferMode;
+    }
     GLuint getUniformBlockBinding(GLuint uniformBlockIndex) const
     {
         ASSERT(uniformBlockIndex < mUniformBlocks.size());
@@ -295,9 +336,17 @@ class ProgramExecutable final : public angle::Subject
         return static_cast<GLuint>(shaderStorageBlocksSize);
     }
 
-    GLuint getUniformIndexFromImageIndex(GLuint imageIndex) const;
+    GLuint getUniformIndexFromImageIndex(GLuint imageIndex) const
+    {
+        ASSERT(imageIndex < mBasicDataTypeStruct.imageUniformRange.length());
+        return imageIndex + mBasicDataTypeStruct.imageUniformRange.low();
+    }
 
-    GLuint getUniformIndexFromSamplerIndex(GLuint samplerIndex) const;
+    GLuint getUniformIndexFromSamplerIndex(GLuint samplerIndex) const
+    {
+        ASSERT(samplerIndex < mBasicDataTypeStruct.samplerUniformRange.length());
+        return samplerIndex + mBasicDataTypeStruct.samplerUniformRange.low();
+    }
 
     void saveLinkedStateInfo(const Context *context, const ProgramState &state);
     const std::vector<sh::ShaderVariable> &getLinkedOutputVaryings(ShaderType shaderType) const
@@ -324,23 +373,29 @@ class ProgramExecutable final : public angle::Subject
         return mLinkedShaderVersions[shaderType];
     }
 
-    bool isYUVOutput() const;
+    bool isYUVOutput() const { return mBasicDataTypeStruct.hasYUVOutput; }
 
     PrimitiveMode getGeometryShaderInputPrimitiveType() const
     {
-        return mGeometryShaderInputPrimitiveType;
+        return mBasicDataTypeStruct.geometryShaderInputPrimitiveType;
     }
 
     PrimitiveMode getGeometryShaderOutputPrimitiveType() const
     {
-        return mGeometryShaderOutputPrimitiveType;
+        return mBasicDataTypeStruct.geometryShaderOutputPrimitiveType;
     }
 
-    int getGeometryShaderInvocations() const { return mGeometryShaderInvocations; }
+    int getGeometryShaderInvocations() const
+    {
+        return mBasicDataTypeStruct.geometryShaderInvocations;
+    }
 
-    int getGeometryShaderMaxVertices() const { return mGeometryShaderMaxVertices; }
+    int getGeometryShaderMaxVertices() const
+    {
+        return mBasicDataTypeStruct.geometryShaderMaxVertices;
+    }
 
-    GLenum getTessGenMode() const { return mTessGenMode; }
+    GLenum getTessGenMode() const { return mBasicDataTypeStruct.tessGenMode; }
 
     void resetCachedValidateSamplersResult() { mCachedValidateSamplersResult.reset(); }
     bool validateSamplers(InfoLog *infoLog, const Caps &caps) const
@@ -356,8 +411,14 @@ class ProgramExecutable final : public angle::Subject
         return validateSamplersImpl(infoLog, caps);
     }
 
-    ComponentTypeMask getFragmentOutputsTypeMask() const { return mDrawBufferTypeMask; }
-    DrawBufferMask getActiveOutputVariablesMask() const { return mActiveOutputVariablesMask; }
+    ComponentTypeMask getFragmentOutputsTypeMask() const
+    {
+        return mBasicDataTypeStruct.drawBufferTypeMask;
+    }
+    DrawBufferMask getActiveOutputVariablesMask() const
+    {
+        return mBasicDataTypeStruct.activeOutputVariablesMask;
+    }
 
     bool linkUniforms(const Context *context,
                       const ShaderMap<std::vector<sh::ShaderVariable>> &shaderUniforms,
@@ -423,13 +484,51 @@ class ProgramExecutable final : public angle::Subject
 
     InfoLog mInfoLog;
 
-    ShaderBitSet mLinkedShaderStages;
+    // This struct must only contains basic data types so that entire struct can be memcpy.
+    struct
+    {
+        ShaderBitSet linkedShaderStages;
 
-    angle::BitSet<MAX_VERTEX_ATTRIBS> mActiveAttribLocationsMask;
-    unsigned int mMaxActiveAttribLocation;
-    ComponentTypeMask mAttributesTypeMask;
-    // mAttributesMask is identical to mActiveAttribLocationsMask with built-in attributes removed.
-    AttributesMask mAttributesMask;
+        angle::BitSet<MAX_VERTEX_ATTRIBS> activeAttribLocationsMask;
+        unsigned int maxActiveAttribLocation;
+        ComponentTypeMask attributesTypeMask;
+        // attributesMask is identical to mActiveAttribLocationsMask with built-in attributes
+        // removed.
+        AttributesMask attributesMask;
+
+        DrawBufferMask activeOutputVariablesMask;
+
+        ComponentTypeMask drawBufferTypeMask;
+
+        RangeUI defaultUniformRange;
+        RangeUI samplerUniformRange;
+        RangeUI imageUniformRange;
+        RangeUI atomicCounterUniformRange;
+        RangeUI fragmentInoutRange;
+
+        bool hasClipDistance;
+        bool hasDiscard;
+        bool hasYUVOutput;
+        bool enablesPerSampleShading;
+
+        // KHR_blend_equation_advanced supported equation list
+        BlendEquationBitSet advancedBlendEquations;
+
+        // GL_EXT_geometry_shader.
+        PrimitiveMode geometryShaderInputPrimitiveType;
+        PrimitiveMode geometryShaderOutputPrimitiveType;
+        int geometryShaderInvocations;
+        int geometryShaderMaxVertices;
+
+        // GL_EXT_tessellation_shader
+        int tessControlShaderVertices;
+        GLenum tessGenMode;
+        GLenum tessGenSpacing;
+        GLenum tessGenVertexOrder;
+        GLenum tessGenPointMode;
+
+        GLenum transformFeedbackBufferMode;
+    } mBasicDataTypeStruct;
 
     // Cached mask of active samplers and sampler types.
     ActiveTextureMask mActiveSamplersMask;
@@ -449,16 +548,13 @@ class ProgramExecutable final : public angle::Subject
     // to uniforms.
     std::vector<sh::ShaderVariable> mOutputVariables;
     std::vector<VariableLocation> mOutputLocations;
-    DrawBufferMask mActiveOutputVariablesMask;
     // EXT_blend_func_extended secondary outputs (ones with index 1)
     std::vector<VariableLocation> mSecondaryOutputLocations;
-    bool mYUVOutput;
     // Vertex attributes, Fragment input varyings, etc.
     std::vector<sh::ShaderVariable> mProgramInputs;
     std::vector<TransformFeedbackVarying> mLinkedTransformFeedbackVaryings;
     // The size of the data written to each transform feedback buffer per vertex.
     std::vector<GLsizei> mTransformFeedbackStrides;
-    GLenum mTransformFeedbackBufferMode;
     // Uniforms are sorted in order:
     //  1. Non-opaque uniforms
     //  2. Sampler uniforms
@@ -475,10 +571,6 @@ class ProgramExecutable final : public angle::Subject
     std::vector<std::string> mUniformNames;
     // Only used by GL and D3D backend
     std::vector<std::string> mUniformMappedNames;
-    RangeUI mDefaultUniformRange;
-    RangeUI mSamplerUniformRange;
-    RangeUI mImageUniformRange;
-    RangeUI mAtomicCounterUniformRange;
     std::vector<InterfaceBlock> mUniformBlocks;
 
     // For faster iteration on the blocks currently being bound.
@@ -486,14 +578,6 @@ class ProgramExecutable final : public angle::Subject
 
     std::vector<AtomicCounterBuffer> mAtomicCounterBuffers;
     std::vector<InterfaceBlock> mShaderStorageBlocks;
-
-    RangeUI mFragmentInoutRange;
-    bool mHasClipDistance;
-    bool mHasDiscard;
-    bool mEnablesPerSampleShading;
-
-    // KHR_blend_equation_advanced supported equation list
-    BlendEquationBitSet mAdvancedBlendEquations;
 
     // An array of the samplers that are used by the program
     std::vector<SamplerBinding> mSamplerBindings;
@@ -508,22 +592,8 @@ class ProgramExecutable final : public angle::Subject
 
     ShaderMap<int> mLinkedShaderVersions;
 
-    // GL_EXT_geometry_shader.
-    PrimitiveMode mGeometryShaderInputPrimitiveType;
-    PrimitiveMode mGeometryShaderOutputPrimitiveType;
-    int mGeometryShaderInvocations;
-    int mGeometryShaderMaxVertices;
-
-    // GL_EXT_tessellation_shader
-    int mTessControlShaderVertices;
-    GLenum mTessGenMode;
-    GLenum mTessGenSpacing;
-    GLenum mTessGenVertexOrder;
-    GLenum mTessGenPointMode;
-
     // Fragment output variable base types: FLOAT, INT, or UINT.  Ordered by location.
     std::vector<GLenum> mOutputVariableTypes;
-    ComponentTypeMask mDrawBufferTypeMask;
 
     // Cache for sampler validation
     mutable Optional<bool> mCachedValidateSamplersResult;
