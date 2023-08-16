@@ -37,6 +37,9 @@ constexpr VkClearColorValue kEmulatedInitColorValue = {{0, 0, 0, 1.0f}};
 // We are fine with these values for emulated depth/stencil textures too.
 constexpr VkClearDepthStencilValue kRobustInitDepthStencilValue = {1.0f, 0};
 
+// Maximum amount of pending submission suballocation garbage before it should be submitted.
+constexpr VkDeviceSize kPendingSuballocationGarbageLimit = 1 * 1024 * 1024 * 1024;
+
 constexpr VkImageAspectFlags kDepthStencilAspects =
     VK_IMAGE_ASPECT_STENCIL_BIT | VK_IMAGE_ASPECT_DEPTH_BIT;
 
@@ -4853,6 +4856,12 @@ angle::Result BufferHelper::initSuballocation(ContextVk *contextVk,
         const VkDeviceSize maxVertexAttribStride = renderer->getMaxVertexAttribStride();
         ASSERT(maxVertexAttribStride);
         size += maxVertexAttribStride;
+    }
+
+    // If too much pending suballocation garbage has accumulated, we should flush and free them.
+    if (renderer->getPendingSuballocationGarbageSizeInBytes() >= kPendingSuballocationGarbageLimit)
+    {
+        ANGLE_TRY(contextVk->finishImpl(RenderPassClosureReason::AccumulatedTooMuchGarbageMemory));
     }
 
     vk::BufferPool *pool = contextVk->getDefaultBufferPool(size, memoryTypeIndex, usageType);

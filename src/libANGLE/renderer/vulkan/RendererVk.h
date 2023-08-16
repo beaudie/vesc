@@ -389,6 +389,7 @@ class RendererVk : angle::NonCopyable
             }
             else
             {
+                mPendingSuballocationGarbageSizeInBytes += suballocation.getSize();
                 mPendingSubmissionSuballocationGarbage.emplace(use, std::move(suballocation),
                                                                std::move(buffer));
             }
@@ -643,6 +644,10 @@ class RendererVk : angle::NonCopyable
     {
         std::unique_lock<std::mutex> lock(mGarbageMutex);
         return mPendingSubmissionGarbage.size();
+    }
+    VkDeviceSize getPendingSuballocationGarbageSizeInBytes() const
+    {
+        return mPendingSuballocationGarbageSizeInBytes;
     }
 
     ANGLE_INLINE VkFilter getPreferredFilterForYUV(VkFilter defaultFilter)
@@ -948,6 +953,8 @@ class RendererVk : angle::NonCopyable
     vk::SharedBufferSuballocationGarbageList mPendingSubmissionSuballocationGarbage;
     // Total suballocation garbage size in bytes.
     VkDeviceSize mSuballocationGarbageSizeInBytes;
+    // Total pending suballocation garbage size in bytes.
+    VkDeviceSize mPendingSuballocationGarbageSizeInBytes;
 
     // Total bytes of suballocation that been destroyed since last prune call. This can be
     // accessed without mGarbageMutex, thus needs to be atomic to avoid tsan complain.

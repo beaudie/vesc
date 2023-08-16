@@ -3467,9 +3467,49 @@ TEST_P(UniformBufferTest, BufferDataInLoop)
 }
 
 // Calling BufferData and use it in a loop many times to force descriptorSet creation and destroy.
+// We should be able to complete the test without any issues, such as running out of memory.
+TEST_P(UniformBufferTest, BufferDataInLoopManyTimesSingleFBO)
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // Use large buffer size to get around suballocation, so that we will gets a new buffer with
+    // bufferData call.
+    static constexpr size_t kBufferSize = 4 * 1024 * 1024;
+    std::vector<float> floatData;
+    floatData.resize(kBufferSize / (sizeof(float)), 0.0f);
+    floatData[0] = 0.5f;
+    floatData[1] = 0.75f;
+    floatData[2] = 0.25f;
+    floatData[3] = 1.0f;
+
+    GLTexture texture;
+    GLFramebuffer fbo;
+
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, 256, 256);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+    EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+
+    for (int loop = 0; loop < 2000; loop++)
+    {
+        glBindBuffer(GL_UNIFORM_BUFFER, mUniformBuffer);
+        glBufferData(GL_UNIFORM_BUFFER, kBufferSize, floatData.data(), GL_STATIC_DRAW);
+
+        glBindBufferBase(GL_UNIFORM_BUFFER, 0, mUniformBuffer);
+        glUniformBlockBinding(mProgram, mUniformBufferIndex, 0);
+        drawQuad(mProgram, essl3_shaders::PositionAttrib(), 0.5f);
+        glFlush();
+    }
+    ASSERT_GL_NO_ERROR();
+    EXPECT_PIXEL_NEAR(0, 0, 128, 191, 64, 255, 1);
+}
+
+// Calling BufferData and use it in a loop many times to force descriptorSet creation and destroy.
 // Even without glFlush() after the draw, we should be able to complete the test without any issues,
 // such as running out of memory.
-TEST_P(UniformBufferTest, BufferDataInLoopManyTimes)
+TEST_P(UniformBufferTest, BufferDataInLoopManyTimesTwoFBOsNoFlush)
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
