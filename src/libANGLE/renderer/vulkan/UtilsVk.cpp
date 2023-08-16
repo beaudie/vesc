@@ -2932,10 +2932,12 @@ angle::Result UtilsVk::stencilBlitResolveNoShaderExport(ContextVk *contextVk,
     uint32_t bufferRowLengthInUints = UnsignedCeilDivide(params.blitArea.width, sizeof(uint32_t));
     VkDeviceSize bufferSize = bufferRowLengthInUints * sizeof(uint32_t) * params.blitArea.height;
 
-    ANGLE_TRY(blitBuffer.get().initSuballocation(
-        contextVk, contextVk->getRenderer()->getDeviceLocalMemoryTypeIndex(),
-        static_cast<size_t>(bufferSize), contextVk->getRenderer()->getDefaultBufferAlignment(),
-        BufferUsageType::Static));
+    ANGLE_VK_TRY_ALLOC(
+        contextVk,
+        blitBuffer.get().initSuballocation(
+            contextVk, contextVk->getRenderer()->getDeviceLocalMemoryTypeIndex(),
+            static_cast<size_t>(bufferSize), contextVk->getRenderer()->getDefaultBufferAlignment(),
+            BufferUsageType::Static));
 
     BlitResolveStencilNoExportShaderParams shaderParams;
     // Note: adjustments made for pre-rotatation in FramebufferVk::blit() affect these
@@ -3380,12 +3382,14 @@ angle::Result UtilsVk::copyImageBits(ContextVk *contextVk,
     bufferInfo.queueFamilyIndexCount = 0;
     bufferInfo.pQueueFamilyIndices   = nullptr;
 
-    ANGLE_TRY(srcBuffer.get().init(contextVk, bufferInfo, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
+    ANGLE_VK_TRY_ALLOC(contextVk, srcBuffer.get().init(contextVk, bufferInfo,
+                                                       VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
 
     bufferInfo.size  = dstBufferSize;
     bufferInfo.usage = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
 
-    ANGLE_TRY(dstBuffer.get().init(contextVk, bufferInfo, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
+    ANGLE_VK_TRY_ALLOC(contextVk, dstBuffer.get().init(contextVk, bufferInfo,
+                                                       VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
 
     bool isSrc3D = src->getType() == VK_IMAGE_TYPE_3D;
     bool isDst3D = dst->getType() == VK_IMAGE_TYPE_3D;

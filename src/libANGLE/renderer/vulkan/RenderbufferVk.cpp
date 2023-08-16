@@ -132,8 +132,10 @@ angle::Result RenderbufferVk::setStorageImpl(const gl::Context *context,
                                    gl::LevelIndex(0), 1, 1, robustInit, false));
 
     VkMemoryPropertyFlags flags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-    ANGLE_TRY(mImage->initMemory(contextVk, false, renderer->getMemoryProperties(), flags,
-                                 vk::MemoryAllocationType::RenderBufferStorageImage));
+    ANGLE_VK_TRY_ALLOC_IMAGE(
+        contextVk,
+        mImage->initMemory(contextVk, false, renderer->getMemoryProperties(), flags,
+                           oomExcludedFlags, vk::MemoryAllocationType::RenderBufferStorageImage));
 
     // If multisampled render to texture, an implicit multisampled image is created which is used as
     // the color or depth/stencil attachment.  At the end of the render pass, this image is
@@ -142,9 +144,10 @@ angle::Result RenderbufferVk::setStorageImpl(const gl::Context *context,
     {
         mMultisampledImageViews.init(renderer);
 
-        ANGLE_TRY(mMultisampledImage.initImplicitMultisampledRenderToTexture(
-            contextVk, false, renderer->getMemoryProperties(), gl::TextureType::_2D, samples,
-            *mImage, robustInit));
+        ANGLE_VK_TRY_ALLOC_IMAGE(
+            contextVk, mMultisampledImage.initImplicitMultisampledRenderToTexture(
+                           contextVk, false, renderer->getMemoryProperties(), gl::TextureType::_2D,
+                           samples, *mImage, robustInit, oomExcludedFlags));
 
         mRenderTarget.init(&mMultisampledImage, &mMultisampledImageViews, mImage, &mImageViews,
                            mImageSiblingSerial, gl::LevelIndex(0), 0, 1,
@@ -384,8 +387,10 @@ angle::Result RenderbufferVk::getRenderbufferImage(const gl::Context *context,
     gl::MaybeOverrideLuminance(format, type, getColorReadFormat(context),
                                getColorReadType(context));
 
-    return mImage->readPixelsForGetImage(contextVk, packState, packBuffer, gl::LevelIndex(0), 0, 0,
-                                         format, type, pixels);
+    ANGLE_VK_TRY_ALLOC_IMAGE(contextVk, mImage->readPixelsForGetImage(
+                                            contextVk, packState, packBuffer, gl::LevelIndex(0), 0,
+                                            0, format, type, pixels, oomExcludedFlags));
+    return angle::Result::Continue;
 }
 
 angle::Result RenderbufferVk::ensureImageInitialized(const gl::Context *context)

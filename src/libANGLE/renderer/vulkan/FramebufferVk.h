@@ -92,12 +92,13 @@ class FramebufferVk : public FramebufferImpl
     RenderTargetVk *getDepthStencilRenderTarget() const;
 
     // Internal helper function for readPixels operations.
-    angle::Result readPixelsImpl(ContextVk *contextVk,
-                                 const gl::Rectangle &area,
-                                 const PackPixelsParams &packPixelsParams,
-                                 VkImageAspectFlagBits copyAspectFlags,
-                                 RenderTargetVk *renderTarget,
-                                 void *pixels);
+    VkResult readPixelsImpl(ContextVk *contextVk,
+                            const gl::Rectangle &area,
+                            const PackPixelsParams &packPixelsParams,
+                            VkImageAspectFlagBits copyAspectFlags,
+                            RenderTargetVk *renderTarget,
+                            VkMemoryPropertyFlags oomExcludedFlags,
+                            void *pixels);
 
     gl::Extents getReadImageExtents() const;
     gl::Rectangle getNonRotatedCompleteRenderArea() const;

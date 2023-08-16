@@ -872,9 +872,10 @@ angle::Result FramebufferVk::readPixels(const gl::Context *context,
         params.reverseRowOrder = !params.reverseRowOrder;
     }
 
-    ANGLE_TRY(readPixelsImpl(contextVk, params.area, params, getReadPixelsAspectFlags(format),
-                             getReadPixelsRenderTarget(format),
-                             static_cast<uint8_t *>(pixels) + outputSkipBytes));
+    ANGLE_VK_TRY_ALLOC_IMAGE(
+        contextVk, readPixelsImpl(contextVk, params.area, params, getReadPixelsAspectFlags(format),
+                                  getReadPixelsRenderTarget(format), oomExcludedFlags,
+                                  static_cast<uint8_t *>(pixels) + outputSkipBytes));
     return angle::Result::Continue;
 }
 
@@ -3126,18 +3127,21 @@ const gl::DrawBufferMask &FramebufferVk::getEmulatedAlphaAttachmentMask() const
     return mEmulatedAlphaAttachmentMask;
 }
 
-angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
-                                            const gl::Rectangle &area,
-                                            const PackPixelsParams &packPixelsParams,
-                                            VkImageAspectFlagBits copyAspectFlags,
-                                            RenderTargetVk *renderTarget,
-                                            void *pixels)
+VkResult FramebufferVk::readPixelsImpl(ContextVk *contextVk,
+                                       const gl::Rectangle &area,
+                                       const PackPixelsParams &packPixelsParams,
+                                       VkImageAspectFlagBits copyAspectFlags,
+                                       RenderTargetVk *renderTarget,
+                                       VkMemoryPropertyFlags oomExcludedFlags,
+                                       void *pixels)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "FramebufferVk::readPixelsImpl");
     gl::LevelIndex levelGL = renderTarget->getLevelIndex();
     uint32_t layer         = renderTarget->getLayerIndex();
-    return renderTarget->getImageForCopy().readPixels(contextVk, area, packPixelsParams,
-                                                      copyAspectFlags, levelGL, layer, pixels);
+    ANGLE_VK_RESULT(renderTarget->getImageForCopy().readPixels(contextVk, area, packPixelsParams,
+                                                               copyAspectFlags, levelGL, layer,
+                                                               pixels, oomExcludedFlags));
+    return VK_SUCCESS;
 }
 
 gl::Extents FramebufferVk::getReadImageExtents() const
