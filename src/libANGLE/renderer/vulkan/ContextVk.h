@@ -461,6 +461,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                             const vk::SharedExternalFence *externalFence,
                             RenderPassClosureReason renderPassClosureReason);
     angle::Result finishImpl(RenderPassClosureReason renderPassClosureReason);
+    angle::Result onOutOfMemory() override;
 
     void addWaitSemaphore(VkSemaphore semaphore, VkPipelineStageFlags stageMask);
 
