@@ -872,10 +872,9 @@ angle::Result FramebufferVk::readPixels(const gl::Context *context,
         params.reverseRowOrder = !params.reverseRowOrder;
     }
 
-    ANGLE_TRY(readPixelsImpl(contextVk, params.area, params, getReadPixelsAspectFlags(format),
-                             getReadPixelsRenderTarget(format),
-                             static_cast<uint8_t *>(pixels) + outputSkipBytes));
-    return angle::Result::Continue;
+    return readPixelsImpl(contextVk, params.area, params, getReadPixelsAspectFlags(format),
+                          getReadPixelsRenderTarget(format),
+                          static_cast<uint8_t *>(pixels) + outputSkipBytes);
 }
 
 RenderTargetVk *FramebufferVk::getDepthStencilRenderTarget() const

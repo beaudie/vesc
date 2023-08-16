@@ -3509,9 +3509,9 @@ angle::Result TextureVk::initImage(ContextVk *contextVk,
         flags |= VK_MEMORY_PROPERTY_PROTECTED_BIT;
     }
 
-    ANGLE_TRY(mImage->initMemory(contextVk, mState.hasProtectedContent(),
-                                 renderer->getMemoryProperties(), flags,
-                                 vk::MemoryAllocationType::TextureImage));
+    ANGLE_TRY(contextVk->initImageAllocation(mImage, mState.hasProtectedContent(),
+                                             renderer->getMemoryProperties(), flags,
+                                             vk::MemoryAllocationType::TextureImage));
 
     const uint32_t viewLevelCount =
         mState.getImmutableFormat() ? getMipLevelCount(ImageMipLevels::EnabledLevels) : levelCount;
@@ -3791,8 +3791,9 @@ angle::Result TextureVk::getTexImage(const gl::Context *context,
             break;
     }
 
-    return mImage->readPixelsForGetImage(contextVk, packState, packBuffer, gl::LevelIndex(level),
-                                         layer, layerCount, format, type, pixels);
+    ANGLE_TRY(mImage->readPixelsForGetImage(contextVk, packState, packBuffer, gl::LevelIndex(level),
+                                            layer, layerCount, format, type, pixels));
+    return angle::Result::Continue;
 }
 
 angle::Result TextureVk::getCompressedTexImage(const gl::Context *context,

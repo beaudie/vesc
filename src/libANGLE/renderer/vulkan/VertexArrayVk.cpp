@@ -280,11 +280,9 @@ angle::Result VertexArrayVk::handleLineLoopIndexIndirect(ContextVk *contextVk,
                                                          VkDeviceSize indirectBufferOffset,
                                                          vk::BufferHelper **indirectBufferOut)
 {
-    ANGLE_TRY(mLineLoopHelper.streamIndicesIndirect(
-        contextVk, glIndexType, mCurrentElementArrayBuffer, srcIndirectBuf, indirectBufferOffset,
-        &mCurrentElementArrayBuffer, indirectBufferOut));
-
-    return angle::Result::Continue;
+    return mLineLoopHelper.streamIndicesIndirect(contextVk, glIndexType, mCurrentElementArrayBuffer,
+                                                 srcIndirectBuf, indirectBufferOffset,
+                                                 &mCurrentElementArrayBuffer, indirectBufferOut);
 }
 
 angle::Result VertexArrayVk::handleLineLoopIndirectDraw(const gl::Context *context,
@@ -313,11 +311,10 @@ angle::Result VertexArrayVk::handleLineLoopIndirectDraw(const gl::Context *conte
             maxVertexCount = vertexCount;
         }
     }
-    ANGLE_TRY(mLineLoopHelper.streamArrayIndirect(contextVk, maxVertexCount + 1, indirectBufferVk,
-                                                  indirectBufferOffset, &mCurrentElementArrayBuffer,
-                                                  indirectBufferOut));
 
-    return angle::Result::Continue;
+    return mLineLoopHelper.streamArrayIndirect(contextVk, maxVertexCount + 1, indirectBufferVk,
+                                               indirectBufferOffset, &mCurrentElementArrayBuffer,
+                                               indirectBufferOut);
 }
 
 angle::Result VertexArrayVk::convertIndexBufferCPU(ContextVk *contextVk,
@@ -355,8 +352,8 @@ angle::Result VertexArrayVk::convertIndexBufferCPU(ContextVk *contextVk,
         if (mCachedStreamIndexBuffers.size() < kMaxCachedStreamIndexBuffers)
         {
             std::unique_ptr<vk::BufferHelper> buffer = std::make_unique<vk::BufferHelper>();
-            ANGLE_TRY(buffer->initSuballocation(
-                contextVk,
+            ANGLE_TRY(contextVk->initBufferSuballocaton(
+                buffer.get(),
                 renderer->getVertexConversionBufferMemoryTypeIndex(
                     vk::MemoryHostVisibility::Visible),
                 amount, renderer->getVertexConversionBufferAlignment(), BufferUsageType::Static));

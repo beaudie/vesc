@@ -753,11 +753,11 @@ class BufferHelper : public ReadWriteResource
                                VkMemoryPropertyFlags memoryProperties,
                                const VkBufferCreateInfo &requestedCreateInfo,
                                GLeglClientBufferEXT clientBuffer);
-    angle::Result initSuballocation(ContextVk *contextVk,
-                                    uint32_t memoryTypeIndex,
-                                    size_t size,
-                                    size_t alignment,
-                                    BufferUsageType usageType);
+    VkResult initSuballocation(ContextVk *contextVk,
+                               uint32_t memoryTypeIndex,
+                               size_t size,
+                               size_t alignment,
+                               BufferUsageType usageType);
 
     // Helper functions to initialize a buffer for a specific usage
     // Suballocate a buffer with alignment good for shader storage or copyBuffer .
@@ -911,10 +911,10 @@ class BufferPool : angle::NonCopyable
                        uint32_t memoryTypeIndex,
                        VkMemoryPropertyFlags memoryProperty);
 
-    angle::Result allocateBuffer(Context *context,
-                                 VkDeviceSize sizeInBytes,
-                                 VkDeviceSize alignment,
-                                 BufferSuballocation *suballocation);
+    VkResult allocateBuffer(Context *context,
+                            VkDeviceSize sizeInBytes,
+                            VkDeviceSize alignment,
+                            BufferSuballocation *suballocation);
 
     // Frees resources immediately, or orphan the non-empty BufferBlocks if allowed. If orphan is
     // not allowed, it will assert if BufferBlock is still not empty.
@@ -929,7 +929,7 @@ class BufferPool : angle::NonCopyable
     VkDeviceSize getMemorySize() const { return mTotalMemorySize; }
 
   private:
-    angle::Result allocateNewBuffer(Context *context, VkDeviceSize sizeInBytes);
+    VkResult allocateNewBuffer(Context *context, VkDeviceSize sizeInBytes);
     VkDeviceSize getTotalEmptyMemorySize() const;
 
     vma::VirtualBlockCreateFlags mVirtualBlockCreateFlags;
@@ -1889,11 +1889,12 @@ class ImageHelper final : public Resource, public angle::Subject
                                uint32_t layerCount,
                                bool isRobustResourceInitEnabled,
                                bool hasProtectedContent);
-    angle::Result initMemory(Context *context,
-                             bool hasProtectedContent,
-                             const MemoryProperties &memoryProperties,
-                             VkMemoryPropertyFlags flags,
-                             vk::MemoryAllocationType);
+    VkResult initMemory(Context *context,
+                        bool hasProtectedContent,
+                        const MemoryProperties &memoryProperties,
+                        VkMemoryPropertyFlags flags,
+                        VkMemoryPropertyFlags oomExcludedFlags,
+                        MemoryAllocationType allocationType);
     angle::Result initExternalMemory(Context *context,
                                      const MemoryProperties &memoryProperties,
                                      const VkMemoryRequirements &memoryRequirements,

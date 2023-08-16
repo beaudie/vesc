@@ -6933,6 +6933,122 @@ void ContextVk::handleError(VkResult errorCode,
     mErrors->handleError(glErrorCode, errorStream.str().c_str(), file, function, line);
 }
 
+angle::Result ContextVk::initBufferSuballocaton(vk::BufferHelper *bufferHelper,
+                                                uint32_t memoryTypeIndex,
+                                                size_t allocationSize,
+                                                size_t alignment,
+                                                BufferUsageType bufferUsageType)
+{
+    VkResult result = bufferHelper->initSuballocation(this, memoryTypeIndex, allocationSize,
+                                                      alignment, bufferUsageType);
+    if (ANGLE_LIKELY(result == VK_SUCCESS))
+    {
+        return angle::Result::Continue;
+    }
+
+    // If the error is not OOM, we should stop and handle the error. In case of OOM, we can try
+    // other options.
+    bool shouldTryFallback = (result == VK_ERROR_OUT_OF_DEVICE_MEMORY);
+    ANGLE_VK_CHECK(this, shouldTryFallback, result);
+
+    // If memory allocation fails, it is possible to retry the allocation after waiting for
+    // submitted commands to finish and cleaning the garbage.
+    bool anyBatchCleaned             = false;
+    uint32_t batchesWaitedAndCleaned = 0;
+    do
+    {
+        ANGLE_TRY(mRenderer->finishOneCommandBatchAndCleanup(this, &anyBatchCleaned));
+        if (anyBatchCleaned)
+        {
+            batchesWaitedAndCleaned++;
+            result = bufferHelper->initSuballocation(this, memoryTypeIndex, allocationSize,
+                                                     alignment, bufferUsageType);
+        }
+    } while (result != VK_SUCCESS && anyBatchCleaned);
+
+    if (batchesWaitedAndCleaned > 0)
+    {
+        INFO() << "Initial allocation failed. Waited for " << batchesWaitedAndCleaned
+               << " commands to finish and free garbage | Allocation result: "
+               << ((result == VK_SUCCESS) ? "SUCCESS" : "FAIL");
+    }
+
+    // If memory allocation fails, it is possible retry after flushing the context and cleaning all
+    // the garbage.
+    if (result != VK_SUCCESS)
+    {
+        ANGLE_TRY(onOutOfMemory());
+        result = bufferHelper->initSuballocation(this, memoryTypeIndex, allocationSize, alignment,
+                                                 bufferUsageType);
+    }
+
+    ANGLE_VK_CHECK(this, result == VK_SUCCESS, result);
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::initImageAllocation(vk::ImageHelper *imageHelper,
+                                             bool hasProtectedContent,
+                                             const vk::MemoryProperties &memoryProperties,
+                                             VkMemoryPropertyFlags flags,
+                                             vk::MemoryAllocationType allocationType)
+{
+    VkMemoryPropertyFlags oomExcludedFlags = 0;
+    VkResult result = imageHelper->initMemory(this, hasProtectedContent, memoryProperties, flags,
+                                              oomExcludedFlags, allocationType);
+    if (ANGLE_LIKELY(result == VK_SUCCESS))
+    {
+        return angle::Result::Continue;
+    }
+
+    // If the error is not OOM, we should stop and handle the error. In case of OOM, we can try
+    // other options.
+    bool shouldTryFallback = (result == VK_ERROR_OUT_OF_DEVICE_MEMORY);
+    ANGLE_VK_CHECK(this, shouldTryFallback, result);
+
+    // If memory allocation fails, it is possible to retry the allocation after waiting for
+    // submitted commands to finish and cleaning the garbage.
+    bool anyBatchCleaned             = false;
+    uint32_t batchesWaitedAndCleaned = 0;
+    do
+    {
+        ANGLE_TRY(mRenderer->finishOneCommandBatchAndCleanup(this, &anyBatchCleaned));
+        if (anyBatchCleaned)
+        {
+            batchesWaitedAndCleaned++;
+            result = imageHelper->initMemory(this, hasProtectedContent, memoryProperties, flags,
+                                             oomExcludedFlags, allocationType);
+        }
+    } while (result != VK_SUCCESS && anyBatchCleaned);
+
+    if (batchesWaitedAndCleaned > 0)
+    {
+        INFO() << "Initial allocation failed. Waited for " << batchesWaitedAndCleaned
+               << " commands to finish and free garbage | Allocation result: "
+               << ((result == VK_SUCCESS) ? "SUCCESS" : "FAIL");
+    }
+
+    // If memory allocation fails, it is possible retry after flushing the context and cleaning all
+    // the garbage.
+    if (result != VK_SUCCESS)
+    {
+        ANGLE_TRY(onOutOfMemory());
+        result = imageHelper->initMemory(this, hasProtectedContent, memoryProperties, flags,
+                                         oomExcludedFlags, allocationType);
+    }
+
+    // If there is still no space for the new allocation, the allocation may still be made outside
+    // the device from all other memory types, although it will result in performance penalty.
+    if (result != VK_SUCCESS)
+    {
+        oomExcludedFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+        result = imageHelper->initMemory(this, hasProtectedContent, memoryProperties, flags,
+                                         oomExcludedFlags, allocationType);
+    }
+
+    ANGLE_VK_CHECK(this, result == VK_SUCCESS, result);
+    return angle::Result::Continue;
+}
+
 angle::Result ContextVk::updateActiveTextures(const gl::Context *context, gl::Command command)
 {
     const gl::ProgramExecutable *executable = mState.getProgramExecutable();
@@ -7275,6 +7391,15 @@ angle::Result ContextVk::finishImpl(RenderPassClosureReason renderPassClosureRea
         }
     }
 
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::onOutOfMemory()
+{
+    // If a memory allocation continues to fail despite attempts to provide the memory, we can try
+    // flushing the context and cleaning all the garbage.
+    ANGLE_TRY(finishImpl(RenderPassClosureReason::OutOfMemory));
+    INFO() << "Context flushed due to out-of-memory error.";
     return angle::Result::Continue;
 }
 
