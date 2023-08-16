@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a11b5ae_e2ea5192",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2023-08-16T22:43:18Z",
+      "side": 1,
+      "message": "linux swiftshader times out on same test - added to expectations",
+      "revId": "cdda3e101419b634f812847fda8b6616ec5362da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
