@@ -1323,6 +1323,7 @@ enum class RenderPassClosureReason
 
     // In case of memory budget issues, pending garbage needs to be freed.
     OutOfMemory,
+    ExcessivePendingGarbage,
 
     InvalidEnum,
     EnumCount = InvalidEnum,
