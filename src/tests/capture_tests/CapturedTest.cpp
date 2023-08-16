@@ -44,13 +44,56 @@ void main(void) {
    gl_Position = vec4(0.5, 0.5, 0.5, 1.0);
 })";
 
-        inactiveProgram            = glCreateProgram();
-        inactiveShader             = glCreateShader(GL_VERTEX_SHADER);
-        const char *sourceArray[1] = {kInactiveVS};
-        glShaderSource(inactiveShader, 1, sourceArray, 0);
+        constexpr char kActiveVS[] = R"(attribute vec4 a_position;
+attribute vec2 a_texCoord;
+varying vec2 v_texCoord;
+void main()
+{
+    gl_Position = a_position;
+    v_texCoord = a_texCoord;
+})";
+
+        constexpr char kActiveFS[] = R"(precision mediump float;
+varying vec2 v_texCoord;
+uniform sampler2D s_texture;
+void main()
+{
+    gl_FragColor = texture2D(s_texture, v_texCoord);
+})";
+
+        // Create shader that is unused during capture
+        inactiveProgram                    = glCreateProgram();
+        inactiveShader                     = glCreateShader(GL_VERTEX_SHADER);
+        const char *inactiveSourceArray[1] = {kInactiveVS};
+        glShaderSource(inactiveShader, 1, inactiveSourceArray, 0);
         glCompileShader(inactiveShader);
         glAttachShader(inactiveProgram, inactiveShader);
 
+        // Create Shader Program before capture begins to use during capture
+        activeProgram    = glCreateProgram();
+        activeVertShader = glCreateShader(GL_VERTEX_SHADER);
+        activeFragShader = glCreateShader(GL_FRAGMENT_SHADER);
+        glGenTextures(1, &textureNeverBound);
+        glGenTextures(1, &textureBoundBeforeCapture);
+        glGenTextures(1, &textureBoundDuringCapture);
+        const char *activeVsSourceArray[1] = {kActiveVS};
+        glShaderSource(activeVertShader, 1, activeVsSourceArray, 0);
+        glCompileShader(activeVertShader);
+        glAttachShader(activeProgram, activeVertShader);
+        const char *activeFsSourceArray[1] = {kActiveFS};
+        glShaderSource(activeFragShader, 1, activeFsSourceArray, 0);
+        glCompileShader(activeFragShader);
+        glAttachShader(activeProgram, activeFragShader);
+        glLinkProgram(activeProgram);
+
+        // Get the attr/sampler locations
+        mPositionLoc = glGetAttribLocation(activeProgram, "a_position");
+        mTexCoordLoc = glGetAttribLocation(activeProgram, "a_texCoord");
+        mSamplerLoc  = glGetUniformLocation(activeProgram, "s_texture");
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+        // Bind the texture object before capture begins
+        glBindTexture(GL_TEXTURE_2D, textureBoundBeforeCapture);
         ASSERT_GL_NO_ERROR();
     }
 
@@ -64,7 +107,10 @@ void main(void) {
         }
 
         glDeleteProgram(inactiveProgram);
+        glDeleteProgram(activeProgram);
         glDeleteShader(inactiveShader);
+        glDeleteShader(activeVertShader);
+        glDeleteShader(activeFragShader);
     }
 
     void frame1();
@@ -74,6 +120,18 @@ void main(void) {
 
     GLuint inactiveProgram;
     GLuint inactiveShader;
+
+    GLuint activeProgram;
+    GLuint activeVertShader;
+    GLuint activeFragShader;
+
+    GLuint textureNeverBound;
+    GLuint textureBoundBeforeCapture;
+    GLuint textureBoundDuringCapture;
+
+    GLuint mPositionLoc;
+    GLuint mTexCoordLoc;
+    GLint mSamplerLoc;
 };
 
 void CapturedTest::frame1()
@@ -81,6 +139,44 @@ void CapturedTest::frame1()
     glClearColor(0.25f, 0.5f, 0.5f, 0.5f);
     glClear(GL_COLOR_BUFFER_BIT);
     EXPECT_PIXEL_NEAR(0, 0, 64, 128, 128, 128, 1.0);
+
+    // Load the texture: 2x2 Image, 3 bytes per pixel (R, G, B)
+    const size_t width                 = 2;
+    const size_t height                = 2;
+    GLubyte pixels[width * height * 3] = {
+        255, 0,   0,    // Red
+        0,   255, 0,    // Green
+        0,   0,   255,  // Blue
+        255, 255, 0,    // Yellow
+    };
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, pixels);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    GLfloat vertices[] = {
+        -0.5f, 0.5f,  0.0f,  // Position 0
+        0.0f,  0.0f,         // TexCoord 0
+        -0.5f, -0.5f, 0.0f,  // Position 1
+        0.0f,  1.0f,         // TexCoord 1
+        0.5f,  -0.5f, 0.0f,  // Position 2
+        1.0f,  1.0f,         // TexCoord 2
+        0.5f,  0.5f,  0.0f,  // Position 3
+        1.0f,  0.0f          // TexCoord 3
+    };
+    GLushort indices[] = {0, 1, 2, 0, 2, 3};
+
+    glClear(GL_COLOR_BUFFER_BIT);
+    glUseProgram(activeProgram);
+    glVertexAttribPointer(mPositionLoc, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), vertices);
+    glVertexAttribPointer(mTexCoordLoc, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), vertices + 3);
+    glEnableVertexAttribArray(mPositionLoc);
+    glEnableVertexAttribArray(mTexCoordLoc);
+    glUniform1i(mSamplerLoc, 0);
+
+    // Draw without binding texture during capture
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices);
+    glDeleteVertexArrays(1, &mPositionLoc);
+    glDeleteVertexArrays(1, &mTexCoordLoc);
 }
 
 void CapturedTest::frame2()
