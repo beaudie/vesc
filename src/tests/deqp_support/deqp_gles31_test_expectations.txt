@@ -199,7 +199,7 @@ b/266710445 WIN OPENGL NVIDIA : dEQP-GLES31.functional.image_load_store.buffer.a
 ////
 
 // Seem to trigger LowMemoryKiller when run in a certain sequence
-5185 VULKAN ANDROID : dEQP-GLES31.functional.atomic_counter.* = SKIP
+//5185 VULKAN ANDROID : dEQP-GLES31.functional.atomic_counter.* = SKIP
 
 // Frambuffer without attachments still fail on Pixel 4. Rendering is crossing over the default framebuffer size
 3579 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.fbo.no_attachments.* = SKIP
@@ -447,7 +447,7 @@ b/224537784 PIXEL4ORXL VULKAN : dEQP-GLES31.functional.debug.error_groups.case_9
 
 // Geometry shader support:
 // This fails on pre-release Android T drivers as of 3/25/22:
-5430 PIXEL6 VULKAN : dEQP-GLES31.functional.geometry_shading.query.primitives_generated_* = FAIL
+//5430 PIXEL6 VULKAN : dEQP-GLES31.functional.geometry_shading.query.primitives_generated_* = FAIL
 
 // ASAN Test bugs
 6678 ASAN : dEQP-GLES31.functional.ssbo.array_length.* = SKIP
