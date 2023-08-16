@@ -51,7 +51,7 @@ constexpr bool kExposeNonConformantExtensionsAndVersions = false;
 #if defined(ANGLE_ENABLE_CRC_FOR_PIPELINE_CACHE)
 constexpr bool kEnableCRCForPipelineCache = true;
 #else
-constexpr bool kEnableCRCForPipelineCache                = false;
+constexpr bool kEnableCRCForPipelineCache = false;
 #endif
 }  // anonymous namespace
 
@@ -1437,6 +1437,7 @@ RendererVk::RendererVk()
       mDevice(VK_NULL_HANDLE),
       mDeviceLost(false),
       mSuballocationGarbageSizeInBytes(0),
+      mPendingSuballocationGarbageSizeInBytes(0),
       mSuballocationGarbageDestroyed(0),
       mSuballocationGarbageSizeInBytesCachedAtomic(0),
       mCoherentStagingBufferMemoryTypeIndex(kInvalidMemoryTypeIndex),
@@ -1996,6 +1997,9 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     // per-heap memory allocation trackers for MemoryAllocationType objects here, after
     // mMemoryProperties has been set up.
     mMemoryAllocationTracker.initMemoryTrackers();
+
+    // Determine the threshold for pending suballocation garbage size.
+    findMaxPendingSuballocationGarbageSize();
 
     // If only one queue family, go ahead and initialize the device. If there is more than one
     // queue, we'll have to wait until we see a WindowSurface to know which supports present.
@@ -3536,6 +3540,28 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     mMemoryAllocationTracker.onDeviceInit();
 
     return angle::Result::Continue;
+}
+
+void RendererVk::findMaxPendingSuballocationGarbageSize()
+{
+    // To find the threshold, we want the memory heap that has the largest size among other heaps.
+    VkPhysicalDeviceMemoryProperties memoryProperties;
+    vkGetPhysicalDeviceMemoryProperties(mPhysicalDevice, &memoryProperties);
+    ASSERT(memoryProperties.memoryHeapCount > 0);
+
+    VkDeviceSize maxHeapSize = memoryProperties.memoryHeaps[0].size;
+    for (size_t i = 0; i < memoryProperties.memoryHeapCount; i++)
+    {
+        VkDeviceSize heapSize = memoryProperties.memoryHeaps[i].size;
+        if (maxHeapSize < heapSize)
+        {
+            maxHeapSize = heapSize;
+        }
+    }
+
+    // The limit is capped to 1GB.
+    constexpr VkDeviceSize kMaxPendingGarbageSize = 1 * 1024 * 1024 * 1024;
+    mPendingSuballocationGarbageSizeLimit         = std::min(maxHeapSize, kMaxPendingGarbageSize);
 }
 
 void RendererVk::initializeValidationMessageSuppressions()
@@ -5358,6 +5384,7 @@ void RendererVk::cleanupPendingSubmissionGarbage()
             mPendingSubmissionSuballocationGarbage.front();
         if (suballocationGarbage.hasResourceUseSubmitted(this))
         {
+            mPendingSuballocationGarbageSizeInBytes -= suballocationGarbage.getSize();
             mSuballocationGarbageSizeInBytes += suballocationGarbage.getSize();
             mSuballocationGarbage.push(std::move(suballocationGarbage));
         }
