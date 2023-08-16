@@ -316,6 +316,7 @@ void BufferVk::release(ContextVk *contextVk)
     {
         buffer.data->release(renderer);
     }
+    ASSERT(contextVk->checkAndFlushSuballocationGarbage() == angle::Result::Continue);
     mVertexConversionBuffers.clear();
 }
 
@@ -503,7 +504,10 @@ angle::Result BufferVk::allocStagingBuffer(ContextVk *contextVk,
             mIsStagingBufferMapped = true;
             return angle::Result::Continue;
         }
-        mStagingBuffer.release(contextVk->getRenderer());
+
+        RendererVk *renderer = contextVk->getRenderer();
+        mStagingBuffer.release(renderer);
+        ANGLE_TRY(contextVk->checkAndFlushSuballocationGarbage());
     }
 
     ANGLE_TRY(
@@ -624,6 +628,7 @@ angle::Result BufferVk::ghostMappedBuffer(ContextVk *contextVk,
     }
 
     src.releaseBufferAndDescriptorSetCache(contextVk->getRenderer());
+    ANGLE_TRY(contextVk->checkAndFlushSuballocationGarbage());
 
     // Return the already mapped pointer with the offset adjustment to avoid the call to unmap().
     *mapPtr = dstMapPtr + offset;
@@ -1030,6 +1035,7 @@ angle::Result BufferVk::acquireAndUpdate(ContextVk *contextVk,
     if (prevBuffer.valid())
     {
         prevBuffer.releaseBufferAndDescriptorSetCache(contextVk->getRenderer());
+        ANGLE_TRY(contextVk->checkAndFlushSuballocationGarbage());
     }
 
     return angle::Result::Continue;
@@ -1152,6 +1158,7 @@ angle::Result BufferVk::acquireBufferHelper(ContextVk *contextVk,
     if (mBuffer.valid())
     {
         mBuffer.releaseBufferAndDescriptorSetCache(renderer);
+        ANGLE_TRY(contextVk->checkAndFlushSuballocationGarbage());
     }
 
     // Allocate the buffer directly
