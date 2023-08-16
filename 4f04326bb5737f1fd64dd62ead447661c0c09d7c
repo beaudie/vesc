@@ -16,6 +16,29 @@
       "message": "New VMA branch: [angle-vma-3.0](https://chromium.googlesource.com/external/github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator/+/refs/heads/angle-vma-3.0)",
       "revId": "4f04326bb5737f1fd64dd62ead447661c0c09d7c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10266c72_02064e94",
+        "filename": "src/libANGLE/renderer/vulkan/ShareGroupVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-16T15:42:36Z",
+      "side": 1,
+      "message": "Can we just delete this? If any regression is found we can always revert if needed.",
+      "range": {
+        "startLine": 148,
+        "startChar": 0,
+        "endLine": 156,
+        "endChar": 5
+      },
+      "revId": "4f04326bb5737f1fd64dd62ead447661c0c09d7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
