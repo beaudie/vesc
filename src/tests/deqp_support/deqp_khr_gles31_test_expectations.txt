@@ -95,7 +95,7 @@
 ////
 
 // New test in VK-GL-CTS roll 2022-08-19
-7592 ANDROID VULKAN : KHR-GLES31.core.shader_atomic_counters.negative-large-offset = FAIL
+//7592 ANDROID VULKAN : KHR-GLES31.core.shader_atomic_counters.negative-large-offset = FAIL
 
 // Pixel 4 expectations.
 5990 PIXEL4ORXL VULKAN : KHR-GLES31.core.compute_shader.built-in-variables = SKIP
