@@ -2695,7 +2695,8 @@ void Program::bindUniformBlock(UniformBlockIndex uniformBlockIndex, GLuint unifo
 {
     ASSERT(!mLinkingState);
 
-    if (mState.mExecutable->mActiveUniformBlockBindings[uniformBlockIndex.value])
+    if (mState.mExecutable->mBasicDataTypeStruct
+            .activeUniformBlockBindings[uniformBlockIndex.value])
     {
         GLuint previousBinding =
             mState.mExecutable->mUniformBlocks[uniformBlockIndex.value].binding;
@@ -2712,8 +2713,8 @@ void Program::bindUniformBlock(UniformBlockIndex uniformBlockIndex, GLuint unifo
         mUniformBlockBindingMasks.resize(uniformBlockBinding + 1, UniformBlockBindingMask());
     }
     mUniformBlockBindingMasks[uniformBlockBinding].set(uniformBlockIndex.value);
-    mState.mExecutable->mActiveUniformBlockBindings.set(uniformBlockIndex.value,
-                                                        uniformBlockBinding != 0);
+    mState.mExecutable->mBasicDataTypeStruct.activeUniformBlockBindings.set(
+        uniformBlockIndex.value, uniformBlockBinding != 0);
 
     mDirtyBits.set(DIRTY_BIT_UNIFORM_BLOCK_BINDING_0 + uniformBlockIndex.value);
 }
@@ -3772,8 +3773,6 @@ angle::Result Program::deserialize(const Context *context,
     {
         mState.mExecutable->updateTransformFeedbackStrides();
     }
-
-    mState.mExecutable->updateCanDrawWith();
 
     if (context->getShareGroup()->getFrameCaptureShared()->enabled())
     {
