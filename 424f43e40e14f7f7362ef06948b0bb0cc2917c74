@@ -34,6 +34,24 @@
       "parentUuid": "d2b01ca1_220856ea",
       "revId": "424f43e40e14f7f7362ef06948b0bb0cc2917c74",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5651c31b_ac9cc347",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1018,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-08-16T19:42:29Z",
+      "side": 1,
+      "message": "Interestingly, I don\u0027t see this warning in any logcat in \"angle_deqp_egl_vulkan_tests on Android device Pixel 6\" in the tryjob https://ci.chromium.org/ui/p/angle/builders/try/android-arm64-test/15097/overview.\nWhy AOSP and ANGLE CQ run dEQP differently?",
+      "parentUuid": "d2b01ca1_220856ea",
+      "revId": "424f43e40e14f7f7362ef06948b0bb0cc2917c74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
