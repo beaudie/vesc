@@ -1623,7 +1623,8 @@ angle::Result ProgramExecutableVk::updateUniforms(
     vk::BufferHelper *emptyBuffer,
     vk::DynamicBuffer *defaultUniformStorage,
     bool isTransformFeedbackActiveUnpaused,
-    TransformFeedbackVk *transformFeedbackVk)
+    TransformFeedbackVk *transformFeedbackVk,
+    bool *isOutOfMemoryOut)
 {
     ASSERT(hasDirtyUniforms());
 
@@ -1647,8 +1648,10 @@ angle::Result ProgramExecutableVk::updateUniforms(
         setAllDefaultUniformsDirty();
 
         requiredSpace = calcUniformUpdateRequiredSpace(context, &offsets);
-        ANGLE_TRY(defaultUniformStorage->allocate(context, requiredSpace, &defaultUniformBuffer,
-                                                  &anyNewBufferAllocated));
+        ANGLE_TRY_MAY_OOM(
+            context, isOutOfMemoryOut,
+            defaultUniformStorage->allocate(context, requiredSpace, &defaultUniformBuffer,
+                                            &anyNewBufferAllocated, isOutOfMemoryOut));
     }
 
     ASSERT(defaultUniformBuffer);
