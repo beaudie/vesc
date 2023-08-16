@@ -1435,7 +1435,7 @@ angle::Result ContextVk::initialize()
     emptyBufferInfo.queueFamilyIndexCount       = 0;
     emptyBufferInfo.pQueueFamilyIndices         = nullptr;
     constexpr VkMemoryPropertyFlags kMemoryType = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
-    ANGLE_TRY(mEmptyBuffer.init(this, emptyBufferInfo, kMemoryType));
+    ANGLE_VK_TRY_ALLOC(this, mEmptyBuffer.init(this, emptyBufferInfo, kMemoryType, &isOutOfMemory));
 
     // If the share group has one context and is about to add the second one, the first context's
     // mutable textures should be flushed.
@@ -2994,10 +2994,11 @@ angle::Result ContextVk::handleDirtyUniformsImpl(vk::CommandBufferHelperCommon *
     ProgramExecutableVk *programExecutableVk = getExecutable();
     TransformFeedbackVk *transformFeedbackVk =
         vk::SafeGetImpl(mState.getCurrentTransformFeedback());
-    ANGLE_TRY(programExecutableVk->updateUniforms(
-        this, mShareGroupVk->getUpdateDescriptorSetsBuilder(), commandBufferHelper, &mEmptyBuffer,
-        *mState.getProgramExecutable(), &mDefaultUniformStorage,
-        mState.isTransformFeedbackActiveUnpaused(), transformFeedbackVk));
+    ANGLE_VK_TRY_ALLOC(
+        this, programExecutableVk->updateUniforms(
+                  this, mShareGroupVk->getUpdateDescriptorSetsBuilder(), commandBufferHelper,
+                  &mEmptyBuffer, *mState.getProgramExecutable(), &mDefaultUniformStorage,
+                  mState.isTransformFeedbackActiveUnpaused(), transformFeedbackVk, &isOutOfMemory));
 
     return angle::Result::Continue;
 }
@@ -7282,6 +7283,22 @@ angle::Result ContextVk::finishImpl(RenderPassClosureReason renderPassClosureRea
         }
     }
 
+    return angle::Result::Continue;
+}
+
+angle::Result ContextVk::onOutOfMemory()
+{
+    // If a memory allocation continues to fail despite attempts to provide the memory, we can try
+    // flushing the context. For async command queues, we use finish instead.
+    if (getFeatures().asyncCommandQueue.enabled)
+    {
+        ANGLE_TRY(finishImpl(RenderPassClosureReason::OutOfMemory));
+    }
+    else
+    {
+        ANGLE_TRY(flushImpl(nullptr, nullptr, RenderPassClosureReason::OutOfMemory));
+    }
+    INFO() << "Context flushed due to out-of-memory error.";
     return angle::Result::Continue;
 }
 

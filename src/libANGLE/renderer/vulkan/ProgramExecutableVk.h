@@ -258,7 +258,8 @@ class ProgramExecutableVk : public ProgramExecutableImpl
                                  const gl::ProgramExecutable &glExecutable,
                                  vk::DynamicBuffer *defaultUniformStorage,
                                  bool isTransformFeedbackActiveUnpaused,
-                                 TransformFeedbackVk *transformFeedbackVk);
+                                 TransformFeedbackVk *transformFeedbackVk,
+                                 bool *isOutOfMemoryOut);
     void onProgramBind(const gl::ProgramExecutable &glExecutable);
 
     const ShaderInterfaceVariableInfoMap &getVariableInfoMap() const { return mVariableInfoMap; }

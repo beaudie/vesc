@@ -339,7 +339,9 @@ angle::Result BufferVk::setExternalBufferData(const gl::Context *context,
     createInfo.queueFamilyIndexCount = 0;
     createInfo.pQueueFamilyIndices   = nullptr;
 
-    return mBuffer.initExternal(contextVk, memoryPropertyFlags, createInfo, clientBuffer);
+    ANGLE_VK_TRY_ALLOC(contextVk, mBuffer.initExternal(contextVk, memoryPropertyFlags, createInfo,
+                                                       clientBuffer, &isOutOfMemory));
+    return angle::Result::Continue;
 }
 
 angle::Result BufferVk::setDataWithUsageFlags(const gl::Context *context,
@@ -506,8 +508,9 @@ angle::Result BufferVk::allocStagingBuffer(ContextVk *contextVk,
         mStagingBuffer.release(contextVk->getRenderer());
     }
 
-    ANGLE_TRY(
-        mStagingBuffer.allocateForCopyBuffer(contextVk, static_cast<size_t>(size), coherency));
+    ANGLE_VK_TRY_ALLOC(contextVk,
+                       mStagingBuffer.allocateForCopyBuffer(contextVk, static_cast<size_t>(size),
+                                                            coherency, &isOutOfMemory));
     *mapPtr                = mStagingBuffer.getMappedMemory();
     mIsStagingBufferMapped = true;
 
@@ -1155,7 +1158,8 @@ angle::Result BufferVk::acquireBufferHelper(ContextVk *contextVk,
     }
 
     // Allocate the buffer directly
-    ANGLE_TRY(mBuffer.initSuballocation(contextVk, mMemoryTypeIndex, size, alignment, usageType));
+    ANGLE_VK_TRY_ALLOC(contextVk, mBuffer.initSuballocation(contextVk, mMemoryTypeIndex, size,
+                                                            alignment, usageType, &isOutOfMemory));
 
     // Tell the observers (front end) that a new buffer was created, so the necessary
     // dirty bits can be set. This allows the buffer views pointing to the old buffer to

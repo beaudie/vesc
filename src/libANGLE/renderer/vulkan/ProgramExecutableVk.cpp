@@ -1641,7 +1641,8 @@ angle::Result ProgramExecutableVk::updateUniforms(
     const gl::ProgramExecutable &glExecutable,
     vk::DynamicBuffer *defaultUniformStorage,
     bool isTransformFeedbackActiveUnpaused,
-    TransformFeedbackVk *transformFeedbackVk)
+    TransformFeedbackVk *transformFeedbackVk,
+    bool *isOutOfMemoryOut)
 {
     ASSERT(hasDirtyUniforms());
 
@@ -1665,8 +1666,11 @@ angle::Result ProgramExecutableVk::updateUniforms(
         setAllDefaultUniformsDirty(glExecutable);
 
         requiredSpace = calcUniformUpdateRequiredSpace(context, glExecutable, &offsets);
-        ANGLE_TRY(defaultUniformStorage->allocate(context, requiredSpace, &defaultUniformBuffer,
-                                                  &anyNewBufferAllocated));
+
+        ANGLE_TRY_MAY_OOM(
+            context, isOutOfMemoryOut,
+            defaultUniformStorage->allocate(context, requiredSpace, &defaultUniformBuffer,
+                                            &anyNewBufferAllocated, isOutOfMemoryOut));
     }
 
     ASSERT(defaultUniformBuffer);

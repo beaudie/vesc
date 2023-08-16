@@ -523,7 +523,8 @@ angle::Result AllocateBufferMemory(Context *context,
                                    Buffer *buffer,
                                    uint32_t *memoryTypeIndexOut,
                                    DeviceMemory *deviceMemoryOut,
-                                   VkDeviceSize *sizeOut);
+                                   VkDeviceSize *sizeOut,
+                                   bool *isOutOfMemoryOut);
 
 angle::Result AllocateImageMemory(Context *context,
                                   vk::MemoryAllocationType memoryAllocationType,
@@ -533,7 +534,8 @@ angle::Result AllocateImageMemory(Context *context,
                                   Image *image,
                                   uint32_t *memoryTypeIndexOut,
                                   DeviceMemory *deviceMemoryOut,
-                                  VkDeviceSize *sizeOut);
+                                  VkDeviceSize *sizeOut,
+                                  bool *isOutOfMemoryOut);
 
 angle::Result AllocateImageMemoryWithRequirements(
     Context *context,
@@ -544,7 +546,8 @@ angle::Result AllocateImageMemoryWithRequirements(
     const VkBindImagePlaneMemoryInfoKHR *extraBindInfo,
     Image *image,
     uint32_t *memoryTypeIndexOut,
-    DeviceMemory *deviceMemoryOut);
+    DeviceMemory *deviceMemoryOut,
+    bool *isOutOfMemoryOut);
 
 angle::Result AllocateBufferMemoryWithRequirements(Context *context,
                                                    MemoryAllocationType memoryAllocationType,
@@ -554,7 +557,8 @@ angle::Result AllocateBufferMemoryWithRequirements(Context *context,
                                                    Buffer *buffer,
                                                    VkMemoryPropertyFlags *memoryPropertyFlagsOut,
                                                    uint32_t *memoryTypeIndexOut,
-                                                   DeviceMemory *deviceMemoryOut);
+                                                   DeviceMemory *deviceMemoryOut,
+                                                   bool *isOutOfMemoryOut);
 
 angle::Result InitShaderModule(Context *context,
                                ShaderModule *shaderModule,
@@ -1322,6 +1326,9 @@ enum class RenderPassClosureReason
     // LegacyDithering requires updating the render pass
     LegacyDithering,
 
+    // In case of memory budget issues, pending garbage needs to be freed.
+    OutOfMemory,
+
     InvalidEnum,
     EnumCount = InvalidEnum,
 };
@@ -1350,6 +1357,35 @@ enum class RenderPassClosureReason
 #define ANGLE_VK_UNREACHABLE(context) \
     UNREACHABLE();                    \
     ANGLE_VK_CHECK(context, false, VK_ERROR_FEATURE_NOT_PRESENT)
+
+// In the following macro, "command" is expected to take a "bool*" as its last argument (i.e.,
+// "&isOutOfMemory"). It is used to evaluate the allocation's success. If the first try fails
+// due to OOM, onOutOfMemory() is called and the allocation is retried.
+#define ANGLE_VK_TRY_ALLOC(contextVk, command)                                        \
+    do                                                                                \
+    {                                                                                 \
+        bool isOutOfMemory = false;                                                   \
+        ANGLE_TRY(command);                                                           \
+                                                                                      \
+        if (ANGLE_UNLIKELY(isOutOfMemory))                                            \
+        {                                                                             \
+            ANGLE_TRY((contextVk)->onOutOfMemory());                                  \
+            ANGLE_TRY(command);                                                       \
+            ANGLE_VK_CHECK(contextVk, !isOutOfMemory, VK_ERROR_OUT_OF_DEVICE_MEMORY); \
+        }                                                                             \
+    } while (0)
+
+// This will return from the function if the allocation is unsuccessful due to OOM.
+#define ANGLE_TRY_MAY_OOM(context, isOutOfMemoryPtr, command) \
+    do                                                        \
+    {                                                         \
+        ANGLE_TRY(command);                                   \
+                                                              \
+        if (ANGLE_UNLIKELY(*isOutOfMemoryPtr))                \
+        {                                                     \
+            return angle::Result::Continue;                   \
+        }                                                     \
+    } while (0)
 
 // NVIDIA uses special formatting for the driver version:
 // Major: 10
