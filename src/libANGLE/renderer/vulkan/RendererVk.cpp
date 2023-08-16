@@ -1437,6 +1437,7 @@ RendererVk::RendererVk()
       mDevice(VK_NULL_HANDLE),
       mDeviceLost(false),
       mSuballocationGarbageSizeInBytes(0),
+      mPendingSuballocationGarbageSizeInBytes(0),
       mSuballocationGarbageDestroyed(0),
       mSuballocationGarbageSizeInBytesCachedAtomic(0),
       mCoherentStagingBufferMemoryTypeIndex(kInvalidMemoryTypeIndex),
@@ -5352,10 +5353,12 @@ void RendererVk::cleanupPendingSubmissionGarbage()
     }
 
     vk::SharedBufferSuballocationGarbageList pendingSuballocationGarbage;
+    VkDeviceSize pendingSuballocationGarbageSize = 0;
     while (!mPendingSubmissionSuballocationGarbage.empty())
     {
         vk::SharedBufferSuballocationGarbage &suballocationGarbage =
             mPendingSubmissionSuballocationGarbage.front();
+        mPendingSuballocationGarbageSizeInBytes -= suballocationGarbage.getSize();
         if (suballocationGarbage.hasResourceUseSubmitted(this))
         {
             mSuballocationGarbageSizeInBytes += suballocationGarbage.getSize();
@@ -5363,12 +5366,14 @@ void RendererVk::cleanupPendingSubmissionGarbage()
         }
         else
         {
+            pendingSuballocationGarbageSize += suballocationGarbage.getSize();
             pendingSuballocationGarbage.push(std::move(suballocationGarbage));
         }
         mPendingSubmissionSuballocationGarbage.pop();
     }
     if (!pendingSuballocationGarbage.empty())
     {
+        mPendingSuballocationGarbageSizeInBytes += pendingSuballocationGarbageSize;
         mPendingSubmissionSuballocationGarbage = std::move(pendingSuballocationGarbage);
     }
 }
