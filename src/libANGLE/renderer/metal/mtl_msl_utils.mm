@@ -112,15 +112,14 @@ static std::string MSLGetMappedSamplerName(const std::string &originalName)
     return samplerName;
 }
 
-void MSLGetShaderSource(const gl::Context *context,
-                        const gl::ProgramState &programState,
+void MSLGetShaderSource(const gl::ProgramState &programState,
                         const gl::ProgramLinkedResources &resources,
                         gl::ShaderMap<std::string> *shaderSourcesOut)
 {
     for (const gl::ShaderType shaderType : gl::AllShaderTypes())
     {
         gl::Shader *glShader            = programState.getAttachedShader(shaderType);
-        (*shaderSourcesOut)[shaderType] = glShader ? glShader->getTranslatedSource(context) : "";
+        (*shaderSourcesOut)[shaderType] = glShader ? glShader->getTranslatedSourceCompiled() : "";
     }
 }
 
@@ -462,7 +461,7 @@ void GenerateTransformFeedbackEmulationOutputs(
     *vertexShader = SubstituteTransformFeedbackMarkers(*vertexShader, xfbBindings, xfbOut);
 }
 
-angle::Result MTLGetMSL(const gl::Context *glContext,
+angle::Result MTLGetMSL(Context *context,
                         const gl::ProgramState &programState,
                         const gl::Caps &glCaps,
                         const gl::ShaderMap<std::string> &shaderSources,
@@ -524,10 +523,9 @@ angle::Result MTLGetMSL(const gl::Context *glContext,
         else
         {
             ASSERT(type == gl::ShaderType::Fragment);
-            ContextMtl *contextMtl = mtl::GetImpl(glContext);
             bool defineAlpha0 =
-                contextMtl->getDisplay()->getFeatures().emulateAlphaToCoverage.enabled ||
-                contextMtl->getDisplay()->getFeatures().generateShareableShaders.enabled;
+                context->getDisplay()->getFeatures().emulateAlphaToCoverage.enabled ||
+                context->getDisplay()->getFeatures().generateShareableShaders.enabled;
             source = UpdateFragmentShaderOutputs(shaderSources[type], programState, defineAlpha0);
         }
         (*mslShaderInfoOut)[type].metalShaderSource =

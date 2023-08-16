@@ -36,12 +36,11 @@ struct TranslatedShaderInfo
     bool hasUBOArgumentBuffer;
     bool hasInvariant;
 };
-void MSLGetShaderSource(const gl::Context *context,
-                        const gl::ProgramState &programState,
+void MSLGetShaderSource(const gl::ProgramState &programState,
                         const gl::ProgramLinkedResources &resources,
                         gl::ShaderMap<std::string> *shaderSourcesOut);
 
-angle::Result MTLGetMSL(const gl::Context *glContext,
+angle::Result MTLGetMSL(Context *context,
                         const gl::ProgramState &programState,
                         const gl::Caps &glCaps,
                         const gl::ShaderMap<std::string> &shaderSources,
