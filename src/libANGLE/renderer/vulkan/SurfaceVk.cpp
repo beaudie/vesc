@@ -217,7 +217,8 @@ angle::Result LockSurfaceImpl(DisplayVk *displayVk,
                               EGLint usageHint,
                               bool preservePixels,
                               uint8_t **bufferPtrOut,
-                              EGLint *bufferPitchOut)
+                              EGLint *bufferPitchOut,
+                              VkResult *resultOut)
 {
     const gl::InternalFormat &internalFormat =
         gl::GetSizedInternalFormatInfo(image->getActualFormat().glInternalFormat);
@@ -243,7 +244,11 @@ angle::Result LockSurfaceImpl(DisplayVk *displayVk,
         VkMemoryPropertyFlags memoryFlags =
             VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
 
-        ANGLE_TRY(lockBufferHelper.init(displayVk, bufferCreateInfo, memoryFlags));
+        ANGLE_TRY(lockBufferHelper.init(displayVk, bufferCreateInfo, memoryFlags, resultOut));
+        if (*resultOut != VK_SUCCESS)
+        {
+            return angle::Result::Continue;
+        }
 
         uint8_t *bufferPtr = nullptr;
         ANGLE_TRY(lockBufferHelper.map(displayVk, &bufferPtr));
@@ -578,8 +583,10 @@ angle::Result OffscreenSurfaceVk::AttachmentImage::initialize(DisplayVk *display
     {
         flags |= VK_MEMORY_PROPERTY_PROTECTED_BIT;
     }
-    ANGLE_TRY(image.initMemory(displayVk, hasProtectedContent, renderer->getMemoryProperties(),
-                               flags, vk::MemoryAllocationType::OffscreenSurfaceAttachmentImage));
+    ANGLE_VK_TRY_ALLOC(
+        displayVk, result,
+        image.initMemory(displayVk, hasProtectedContent, renderer->getMemoryProperties(), flags,
+                         vk::MemoryAllocationType::OffscreenSurfaceAttachmentImage, &result));
 
     imageViews.init(renderer);
 
@@ -789,9 +796,13 @@ egl::Error OffscreenSurfaceVk::lockSurface(const egl::Display *display,
     vk::ImageHelper *image = &mColorAttachment.image;
     ASSERT(image->valid());
 
-    angle::Result result =
-        LockSurfaceImpl(vk::GetImpl(display), image, mLockBufferHelper, getWidth(), getHeight(),
-                        usageHint, preservePixels, bufferPtrOut, bufferPitchOut);
+    angle::Result result;
+    DisplayVk *displayVk = vk::GetImpl(display);
+    ANGLE_VK_TRY_ALLOC_NO_RETURN(
+        displayVk, allocResult,
+        LockSurfaceImpl(displayVk, image, mLockBufferHelper, getWidth(), getHeight(), usageHint,
+                        preservePixels, bufferPtrOut, bufferPitchOut, &allocResult),
+        result);
     return angle::ToEGL(result, EGL_BAD_ACCESS);
 }
 
@@ -1685,9 +1696,11 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
         ANGLE_TRY(mColorImageMS.initMSAASwapchain(
             context, gl::TextureType::_2D, vkExtents, Is90DegreeRotation(getPreTransform()), format,
             samples, usage, gl::LevelIndex(0), 1, 1, robustInit, mState.hasProtectedContent()));
-        ANGLE_TRY(mColorImageMS.initMemory(
-            context, mState.hasProtectedContent(), renderer->getMemoryProperties(),
-            VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vk::MemoryAllocationType::SwapchainMSAAImage));
+        ANGLE_VK_TRY_ALLOC(context, result,
+                           mColorImageMS.initMemory(
+                               context, mState.hasProtectedContent(),
+                               renderer->getMemoryProperties(), VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+                               vk::MemoryAllocationType::SwapchainMSAAImage, &result));
 
         // Initialize the color render target with the multisampled targets.  If not multisampled,
         // the render target will be updated to refer to a swapchain image on every acquire.
@@ -1719,10 +1732,11 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
         ANGLE_TRY(mDepthStencilImage.init(context, gl::TextureType::_2D, vkExtents, dsFormat,
                                           samples, dsUsage, gl::LevelIndex(0), 1, 1, robustInit,
                                           mState.hasProtectedContent()));
-        ANGLE_TRY(mDepthStencilImage.initMemory(
-            context, mState.hasProtectedContent(), renderer->getMemoryProperties(),
-            VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-            vk::MemoryAllocationType::SwapchainDepthStencilImage));
+        ANGLE_VK_TRY_ALLOC(context, result,
+                           mDepthStencilImage.initMemory(
+                               context, mState.hasProtectedContent(),
+                               renderer->getMemoryProperties(), VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+                               vk::MemoryAllocationType::SwapchainDepthStencilImage, &result));
 
         mDepthStencilRenderTarget.init(&mDepthStencilImage, &mDepthStencilImageViews, nullptr,
                                        nullptr, {}, gl::LevelIndex(0), 0, 1,
@@ -3192,9 +3206,13 @@ egl::Error WindowSurfaceVk::lockSurface(const egl::Display *display,
     image = mSwapchainImages[mCurrentSwapchainImageIndex].image.get();
     ASSERT(image->valid());
 
-    angle::Result result =
-        LockSurfaceImpl(vk::GetImpl(display), image, mLockBufferHelper, getWidth(), getHeight(),
-                        usageHint, preservePixels, bufferPtrOut, bufferPitchOut);
+    angle::Result result;
+    DisplayVk *displayVk = vk::GetImpl(display);
+    ANGLE_VK_TRY_ALLOC_NO_RETURN(
+        displayVk, allocResult,
+        LockSurfaceImpl(displayVk, image, mLockBufferHelper, getWidth(), getHeight(), usageHint,
+                        preservePixels, bufferPtrOut, bufferPitchOut, &allocResult),
+        result);
     return angle::ToEGL(result, EGL_BAD_ACCESS);
 }
 
