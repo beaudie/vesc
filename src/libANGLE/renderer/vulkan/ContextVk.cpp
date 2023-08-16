@@ -7275,6 +7275,15 @@ angle::Result ContextVk::finishImpl(RenderPassClosureReason renderPassClosureRea
     return angle::Result::Continue;
 }
 
+angle::Result ContextVk::onOutOfMemory()
+{
+    // If a memory allocation continues to fail despite attempts to provide the memory, we can try
+    // flushing the context.
+    ANGLE_TRY(flushImpl(nullptr, nullptr, RenderPassClosureReason::OutOfMemory));
+    INFO() << "Context flushed due to out-of-memory error.";
+    return angle::Result::Continue;
+}
+
 void ContextVk::addWaitSemaphore(VkSemaphore semaphore, VkPipelineStageFlags stageMask)
 {
     mWaitSemaphores.push_back(semaphore);

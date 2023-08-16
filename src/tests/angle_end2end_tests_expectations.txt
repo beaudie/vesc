@@ -1189,6 +1189,7 @@ b/273271471 WIN INTEL VULKAN : ShaderAlgorithmTest.rgb_to_hsl_vertex_shader/* = 
 
 // Skip device OOM tests for Linux/NVIDIA.
 8236 LINUX NVIDIA : VulkanMemoryTest.* = SKIP
+8236 LINUX NVIDIA : UniformBufferTest.BufferDataInLoopManyTimes/* = SKIP
 
 // SSBO Alias Overwrite
 5990 PIXEL4ORXL VULKAN : ComputeShaderTest.SSBOAliasOverWrite/* = SKIP
