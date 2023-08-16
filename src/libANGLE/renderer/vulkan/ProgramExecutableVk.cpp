@@ -1616,14 +1616,13 @@ void ProgramExecutableVk::setAllDefaultUniformsDirty()
     }
 }
 
-angle::Result ProgramExecutableVk::updateUniforms(
-    vk::Context *context,
-    UpdateDescriptorSetsBuilder *updateBuilder,
-    vk::CommandBufferHelperCommon *commandBufferHelper,
-    vk::BufferHelper *emptyBuffer,
-    vk::DynamicBuffer *defaultUniformStorage,
-    bool isTransformFeedbackActiveUnpaused,
-    TransformFeedbackVk *transformFeedbackVk)
+VkResult ProgramExecutableVk::updateUniforms(vk::Context *context,
+                                             UpdateDescriptorSetsBuilder *updateBuilder,
+                                             vk::CommandBufferHelperCommon *commandBufferHelper,
+                                             vk::BufferHelper *emptyBuffer,
+                                             vk::DynamicBuffer *defaultUniformStorage,
+                                             bool isTransformFeedbackActiveUnpaused,
+                                             TransformFeedbackVk *transformFeedbackVk)
 {
     ASSERT(hasDirtyUniforms());
 
@@ -1647,8 +1646,8 @@ angle::Result ProgramExecutableVk::updateUniforms(
         setAllDefaultUniformsDirty();
 
         requiredSpace = calcUniformUpdateRequiredSpace(context, &offsets);
-        ANGLE_TRY(defaultUniformStorage->allocate(context, requiredSpace, &defaultUniformBuffer,
-                                                  &anyNewBufferAllocated));
+        ANGLE_VK_RESULT(defaultUniformStorage->allocate(
+            context, requiredSpace, &defaultUniformBuffer, &anyNewBufferAllocated));
     }
 
     ASSERT(defaultUniformBuffer);
@@ -1667,7 +1666,7 @@ angle::Result ProgramExecutableVk::updateUniforms(
         }
         ++offsetIndex;
     }
-    ANGLE_TRY(defaultUniformBuffer->flush(context->getRenderer()));
+    ANGLE_VK_TRY_CONTINUE(defaultUniformBuffer->flush(context->getRenderer()));
 
     // Because the uniform buffers are per context, we can't rely on dynamicBuffer's allocate
     // function to tell us if you have got a new buffer or not. Other program's use of the buffer
@@ -1691,9 +1690,9 @@ angle::Result ProgramExecutableVk::updateUniforms(
             mExecutable->hasTransformFeedbackOutput() ? transformFeedbackVk : nullptr);
 
         vk::SharedDescriptorSetCacheKey newSharedCacheKey;
-        ANGLE_TRY(updateUniformsAndXfbDescriptorSet(context, updateBuilder, writeDescriptorDescs,
-                                                    commandBufferHelper, defaultUniformBuffer,
-                                                    &uniformsAndXfbDesc, &newSharedCacheKey));
+        ANGLE_VK_TRY_CONTINUE(updateUniformsAndXfbDescriptorSet(
+            context, updateBuilder, writeDescriptorDescs, commandBufferHelper, defaultUniformBuffer,
+            &uniformsAndXfbDesc, &newSharedCacheKey));
         if (newSharedCacheKey)
         {
             defaultUniformBuffer->getBufferBlock()->onNewDescriptorSet(newSharedCacheKey);
@@ -1705,7 +1704,7 @@ angle::Result ProgramExecutableVk::updateUniforms(
         }
     }
 
-    return angle::Result::Continue;
+    return VK_SUCCESS;
 }
 
 size_t ProgramExecutableVk::calcUniformUpdateRequiredSpace(

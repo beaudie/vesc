@@ -87,10 +87,10 @@ class DynamicBuffer : angle::NonCopyable
     // internally may trigger a new buffer to be created (which is returned in the optional
     // parameter `newBufferAllocatedOut`). The new region will be in the returned buffer at given
     // offset.
-    angle::Result allocate(Context *context,
-                           size_t sizeInBytes,
-                           BufferHelper **bufferHelperOut,
-                           bool *newBufferAllocatedOut);
+    VkResult allocate(Context *context,
+                      size_t sizeInBytes,
+                      BufferHelper **bufferHelperOut,
+                      bool *newBufferAllocatedOut);
 
     // This releases resources when they might currently be in use.
     void release(RendererVk *renderer);
@@ -124,7 +124,7 @@ class DynamicBuffer : angle::NonCopyable
 
   private:
     void reset();
-    angle::Result allocateNewBuffer(Context *context);
+    VkResult allocateNewBuffer(Context *context);
 
     VkBufferUsageFlags mUsage;
     bool mHostVisible;
@@ -746,35 +746,33 @@ class BufferHelper : public ReadWriteResource
     BufferHelper(BufferHelper &&other);
     BufferHelper &operator=(BufferHelper &&other);
 
-    angle::Result init(vk::Context *context,
-                       const VkBufferCreateInfo &createInfo,
-                       VkMemoryPropertyFlags memoryPropertyFlags);
-    angle::Result initExternal(ContextVk *contextVk,
-                               VkMemoryPropertyFlags memoryProperties,
-                               const VkBufferCreateInfo &requestedCreateInfo,
-                               GLeglClientBufferEXT clientBuffer);
-    angle::Result initSuballocation(ContextVk *contextVk,
-                                    uint32_t memoryTypeIndex,
-                                    size_t size,
-                                    size_t alignment,
-                                    BufferUsageType usageType);
+    VkResult init(vk::Context *context,
+                  const VkBufferCreateInfo &createInfo,
+                  VkMemoryPropertyFlags memoryPropertyFlags);
+    VkResult initExternal(ContextVk *contextVk,
+                          VkMemoryPropertyFlags memoryProperties,
+                          const VkBufferCreateInfo &requestedCreateInfo,
+                          GLeglClientBufferEXT clientBuffer);
+    VkResult initSuballocation(ContextVk *contextVk,
+                               uint32_t memoryTypeIndex,
+                               size_t size,
+                               size_t alignment,
+                               BufferUsageType usageType);
 
     // Helper functions to initialize a buffer for a specific usage
     // Suballocate a buffer with alignment good for shader storage or copyBuffer .
-    angle::Result allocateForVertexConversion(ContextVk *contextVk,
-                                              size_t size,
-                                              MemoryHostVisibility hostVisibility);
+    VkResult allocateForVertexConversion(ContextVk *contextVk,
+                                         size_t size,
+                                         MemoryHostVisibility hostVisibility);
     // Suballocate a host visible buffer with alignment good for copyBuffer .
-    angle::Result allocateForCopyBuffer(ContextVk *contextVk,
-                                        size_t size,
-                                        MemoryCoherency coherency);
+    VkResult allocateForCopyBuffer(ContextVk *contextVk, size_t size, MemoryCoherency coherency);
     // Suballocate a host visible buffer with alignment good for copyImage .
-    angle::Result allocateForCopyImage(ContextVk *contextVk,
-                                       size_t size,
-                                       MemoryCoherency coherency,
-                                       angle::FormatID formatId,
-                                       VkDeviceSize *offset,
-                                       uint8_t **dataPtr);
+    VkResult allocateForCopyImage(ContextVk *contextVk,
+                                  size_t size,
+                                  MemoryCoherency coherency,
+                                  angle::FormatID formatId,
+                                  VkDeviceSize *offset,
+                                  uint8_t **dataPtr);
 
     void destroy(RendererVk *renderer);
     void release(RendererVk *renderer);
@@ -911,10 +909,10 @@ class BufferPool : angle::NonCopyable
                        uint32_t memoryTypeIndex,
                        VkMemoryPropertyFlags memoryProperty);
 
-    angle::Result allocateBuffer(Context *context,
-                                 VkDeviceSize sizeInBytes,
-                                 VkDeviceSize alignment,
-                                 BufferSuballocation *suballocation);
+    VkResult allocateBuffer(Context *context,
+                            VkDeviceSize sizeInBytes,
+                            VkDeviceSize alignment,
+                            BufferSuballocation *suballocation);
 
     // Frees resources immediately, or orphan the non-empty BufferBlocks if allowed. If orphan is
     // not allowed, it will assert if BufferBlock is still not empty.
@@ -929,7 +927,7 @@ class BufferPool : angle::NonCopyable
     VkDeviceSize getMemorySize() const { return mTotalMemorySize; }
 
   private:
-    angle::Result allocateNewBuffer(Context *context, VkDeviceSize sizeInBytes);
+    VkResult allocateNewBuffer(Context *context, VkDeviceSize sizeInBytes);
     VkDeviceSize getTotalEmptyMemorySize() const;
 
     vma::VirtualBlockCreateFlags mVirtualBlockCreateFlags;
@@ -1889,11 +1887,12 @@ class ImageHelper final : public Resource, public angle::Subject
                                uint32_t layerCount,
                                bool isRobustResourceInitEnabled,
                                bool hasProtectedContent);
-    angle::Result initMemory(Context *context,
-                             bool hasProtectedContent,
-                             const MemoryProperties &memoryProperties,
-                             VkMemoryPropertyFlags flags,
-                             vk::MemoryAllocationType);
+    VkResult initMemory(Context *context,
+                        bool hasProtectedContent,
+                        const MemoryProperties &memoryProperties,
+                        VkMemoryPropertyFlags flags,
+                        VkMemoryPropertyFlags oomExcludedFlags,
+                        MemoryAllocationType allocationType);
     angle::Result initExternalMemory(Context *context,
                                      const MemoryProperties &memoryProperties,
                                      const VkMemoryRequirements &memoryRequirements,
@@ -1939,38 +1938,41 @@ class ImageHelper final : public Resource, public angle::Subject
     // - TextureVk::copySubImageImplWithDraw
     // - FramebufferVk::readPixelsImpl
     //
-    angle::Result init2DStaging(Context *context,
-                                bool hasProtectedContent,
-                                const MemoryProperties &memoryProperties,
-                                const gl::Extents &glExtents,
-                                angle::FormatID intendedFormatID,
-                                angle::FormatID actualFormatID,
-                                VkImageUsageFlags usage,
-                                uint32_t layerCount);
+    VkResult init2DStaging(Context *context,
+                           bool hasProtectedContent,
+                           const MemoryProperties &memoryProperties,
+                           const gl::Extents &glExtents,
+                           angle::FormatID intendedFormatID,
+                           angle::FormatID actualFormatID,
+                           VkImageUsageFlags usage,
+                           uint32_t layerCount,
+                           VkMemoryPropertyFlags oomExcludedFlags);
     // Create an image for staging purposes.  Used by:
     //
     // - TextureVk::copyAndStageImageData
     //
-    angle::Result initStaging(Context *context,
-                              bool hasProtectedContent,
-                              const MemoryProperties &memoryProperties,
-                              VkImageType imageType,
-                              const VkExtent3D &extents,
-                              angle::FormatID intendedFormatID,
-                              angle::FormatID actualFormatID,
-                              GLint samples,
-                              VkImageUsageFlags usage,
-                              uint32_t mipLevels,
-                              uint32_t layerCount);
+    VkResult initStaging(Context *context,
+                         bool hasProtectedContent,
+                         const MemoryProperties &memoryProperties,
+                         VkImageType imageType,
+                         const VkExtent3D &extents,
+                         angle::FormatID intendedFormatID,
+                         angle::FormatID actualFormatID,
+                         GLint samples,
+                         VkImageUsageFlags usage,
+                         uint32_t mipLevels,
+                         uint32_t layerCount,
+                         VkMemoryPropertyFlags oomExcludedFlags);
     // Create a multisampled image for use as the implicit image in multisampled render to texture
     // rendering.  If LAZILY_ALLOCATED memory is available, it will prefer that.
-    angle::Result initImplicitMultisampledRenderToTexture(Context *context,
-                                                          bool hasProtectedContent,
-                                                          const MemoryProperties &memoryProperties,
-                                                          gl::TextureType textureType,
-                                                          GLint samples,
-                                                          const ImageHelper &resolveImage,
-                                                          bool isRobustResourceInitEnabled);
+    VkResult initImplicitMultisampledRenderToTexture(Context *context,
+                                                     bool hasProtectedContent,
+                                                     const MemoryProperties &memoryProperties,
+                                                     gl::TextureType textureType,
+                                                     GLint samples,
+                                                     const ImageHelper &resolveImage,
+                                                     bool isRobustResourceInitEnabled,
+                                                     VkMemoryPropertyFlags oomExcludedFlags);
 
     // Helper for initExternal and users to automatically derive the appropriate VkImageCreateInfo
     // pNext chain based on the given parameters, and adjust create flags.  In some cases, these
@@ -2159,47 +2161,48 @@ class ImageHelper final : public Resource, public angle::Subject
                              gl::LevelIndex levelGLStart,
                              gl::LevelIndex levelGLEnd);
 
-    angle::Result stageSubresourceUpdateImpl(ContextVk *contextVk,
-                                             const gl::ImageIndex &index,
-                                             const gl::Extents &glExtents,
-                                             const gl::Offset &offset,
-                                             const gl::InternalFormat &formatInfo,
-                                             const gl::PixelUnpackState &unpack,
-                                             GLenum type,
-                                             const uint8_t *pixels,
-                                             const Format &vkFormat,
-                                             ImageAccess access,
-                                             const GLuint inputRowPitch,
-                                             const GLuint inputDepthPitch,
-                                             const GLuint inputSkipBytes);
+    VkResult stageSubresourceUpdateImpl(ContextVk *contextVk,
+                                        const gl::ImageIndex &index,
+                                        const gl::Extents &glExtents,
+                                        const gl::Offset &offset,
+                                        const gl::InternalFormat &formatInfo,
+                                        const gl::PixelUnpackState &unpack,
+                                        GLenum type,
+                                        const uint8_t *pixels,
+                                        const Format &vkFormat,
+                                        ImageAccess access,
+                                        const GLuint inputRowPitch,
+                                        const GLuint inputDepthPitch,
+                                        const GLuint inputSkipBytes);
 
-    angle::Result stageSubresourceUpdate(ContextVk *contextVk,
-                                         const gl::ImageIndex &index,
-                                         const gl::Extents &glExtents,
-                                         const gl::Offset &offset,
-                                         const gl::InternalFormat &formatInfo,
-                                         const gl::PixelUnpackState &unpack,
-                                         GLenum type,
-                                         const uint8_t *pixels,
-                                         const Format &vkFormat,
-                                         ImageAccess access);
+    VkResult stageSubresourceUpdate(ContextVk *contextVk,
+                                    const gl::ImageIndex &index,
+                                    const gl::Extents &glExtents,
+                                    const gl::Offset &offset,
+                                    const gl::InternalFormat &formatInfo,
+                                    const gl::PixelUnpackState &unpack,
+                                    GLenum type,
+                                    const uint8_t *pixels,
+                                    const Format &vkFormat,
+                                    ImageAccess access);
 
-    angle::Result stageSubresourceUpdateAndGetData(ContextVk *contextVk,
-                                                   size_t allocationSize,
-                                                   const gl::ImageIndex &imageIndex,
-                                                   const gl::Extents &glExtents,
-                                                   const gl::Offset &offset,
-                                                   uint8_t **destData,
-                                                   angle::FormatID formatID);
+    VkResult stageSubresourceUpdateAndGetData(ContextVk *contextVk,
+                                              size_t allocationSize,
+                                              const gl::ImageIndex &imageIndex,
+                                              const gl::Extents &glExtents,
+                                              const gl::Offset &offset,
+                                              uint8_t **destData,
+                                              angle::FormatID formatID);
 
-    angle::Result stageSubresourceUpdateFromFramebuffer(const gl::Context *context,
-                                                        const gl::ImageIndex &index,
-                                                        const gl::Rectangle &sourceArea,
-                                                        const gl::Offset &dstOffset,
-                                                        const gl::Extents &dstExtent,
-                                                        const gl::InternalFormat &formatInfo,
-                                                        ImageAccess access,
-                                                        FramebufferVk *framebufferVk);
+    VkResult stageSubresourceUpdateFromFramebuffer(const gl::Context *context,
+                                                   const gl::ImageIndex &index,
+                                                   const gl::Rectangle &sourceArea,
+                                                   const gl::Offset &dstOffset,
+                                                   const gl::Extents &dstExtent,
+                                                   const gl::InternalFormat &formatInfo,
+                                                   ImageAccess access,
+                                                   FramebufferVk *framebufferVk,
+                                                   VkMemoryPropertyFlags oomExcludedFlags);
 
     void stageSubresourceUpdateFromImage(RefCounted<ImageHelper> *image,
                                          const gl::ImageIndex &index,
@@ -2219,19 +2222,19 @@ class ImageHelper final : public Resource, public angle::Subject
                     const VkClearValue &clearValue);
 
     // Stage a clear based on robust resource init.
-    angle::Result stageRobustResourceClearWithFormat(ContextVk *contextVk,
-                                                     const gl::ImageIndex &index,
-                                                     const gl::Extents &glExtents,
-                                                     const angle::Format &intendedFormat,
-                                                     const angle::Format &imageFormat);
+    VkResult stageRobustResourceClearWithFormat(ContextVk *contextVk,
+                                                const gl::ImageIndex &index,
+                                                const gl::Extents &glExtents,
+                                                const angle::Format &intendedFormat,
+                                                const angle::Format &imageFormat);
     void stageRobustResourceClear(const gl::ImageIndex &index);
 
-    angle::Result stageResourceClearWithFormat(ContextVk *contextVk,
-                                               const gl::ImageIndex &index,
-                                               const gl::Extents &glExtents,
-                                               const angle::Format &intendedFormat,
-                                               const angle::Format &imageFormat,
-                                               const VkClearValue &clearValue);
+    VkResult stageResourceClearWithFormat(ContextVk *contextVk,
+                                          const gl::ImageIndex &index,
+                                          const gl::Extents &glExtents,
+                                          const angle::Format &intendedFormat,
+                                          const angle::Format &imageFormat,
+                                          const VkClearValue &clearValue);
 
     // Stage the currently allocated image as updates to base level and on, making this !valid().
     // This is used for:
@@ -2341,13 +2344,13 @@ class ImageHelper final : public Resource, public angle::Subject
     LevelIndex toVkLevel(gl::LevelIndex levelIndexGL) const;
     gl::LevelIndex toGLLevel(LevelIndex levelIndexVk) const;
 
-    angle::Result copyImageDataToBuffer(ContextVk *contextVk,
-                                        gl::LevelIndex sourceLevelGL,
-                                        uint32_t layerCount,
-                                        uint32_t baseLayer,
-                                        const gl::Box &sourceArea,
-                                        BufferHelper *dstBuffer,
-                                        uint8_t **outDataPtr);
+    VkResult copyImageDataToBuffer(ContextVk *contextVk,
+                                   gl::LevelIndex sourceLevelGL,
+                                   uint32_t layerCount,
+                                   uint32_t baseLayer,
+                                   const gl::Box &sourceArea,
+                                   BufferHelper *dstBuffer,
+                                   uint8_t **outDataPtr);
 
     angle::Result copySurfaceImageToBuffer(DisplayVk *displayVk,
                                            gl::LevelIndex sourceLevelGL,
@@ -2373,23 +2376,25 @@ class ImageHelper final : public Resource, public angle::Subject
                                              PackPixelsParams *paramsOut,
                                              GLuint *skipBytesOut);
 
-    angle::Result readPixelsForGetImage(ContextVk *contextVk,
-                                        const gl::PixelPackState &packState,
-                                        gl::Buffer *packBuffer,
-                                        gl::LevelIndex levelGL,
-                                        uint32_t layer,
-                                        uint32_t layerCount,
-                                        GLenum format,
-                                        GLenum type,
-                                        void *pixels);
+    VkResult readPixelsForGetImage(ContextVk *contextVk,
+                                   const gl::PixelPackState &packState,
+                                   gl::Buffer *packBuffer,
+                                   gl::LevelIndex levelGL,
+                                   uint32_t layer,
+                                   uint32_t layerCount,
+                                   GLenum format,
+                                   GLenum type,
+                                   void *pixels,
+                                   VkMemoryPropertyFlags oomExcludedFlags);
 
-    angle::Result readPixelsForCompressedGetImage(ContextVk *contextVk,
-                                                  const gl::PixelPackState &packState,
-                                                  gl::Buffer *packBuffer,
-                                                  gl::LevelIndex levelGL,
-                                                  uint32_t layer,
-                                                  uint32_t layerCount,
-                                                  void *pixels);
+    VkResult readPixelsForCompressedGetImage(ContextVk *contextVk,
+                                             const gl::PixelPackState &packState,
+                                             gl::Buffer *packBuffer,
+                                             gl::LevelIndex levelGL,
+                                             uint32_t layer,
+                                             uint32_t layerCount,
+                                             void *pixels,
+                                             VkMemoryPropertyFlags oomExcludedFlags);
 
     angle::Result readPixelsWithCompute(ContextVk *contextVk,
                                         ImageHelper *src,
@@ -2399,13 +2404,14 @@ class ImageHelper final : public Resource, public angle::Subject
                                         ptrdiff_t pixelsOffset,
                                         const VkImageSubresourceLayers &srcSubresource);
 
-    angle::Result readPixels(ContextVk *contextVk,
-                             const gl::Rectangle &area,
-                             const PackPixelsParams &packPixelsParams,
-                             VkImageAspectFlagBits copyAspectFlags,
-                             gl::LevelIndex levelGL,
-                             uint32_t layer,
-                             void *pixels);
+    VkResult readPixels(ContextVk *contextVk,
+                        const gl::Rectangle &area,
+                        const PackPixelsParams &packPixelsParams,
+                        VkImageAspectFlagBits copyAspectFlags,
+                        gl::LevelIndex levelGL,
+                        uint32_t layer,
+                        void *pixels,
+                        VkMemoryPropertyFlags oomExcludedFlags);
 
     angle::Result CalculateBufferInfo(ContextVk *contextVk,
                                       const gl::Extents &glExtents,
@@ -2474,9 +2480,9 @@ class ImageHelper final : public Resource, public angle::Subject
     void restoreSubresourceStencilContent(gl::LevelIndex level,
                                           uint32_t layerIndex,
                                           uint32_t layerCount);
-    angle::Result reformatStagedBufferUpdates(ContextVk *contextVk,
-                                              angle::FormatID srcFormatID,
-                                              angle::FormatID dstFormatID);
+    VkResult reformatStagedBufferUpdates(ContextVk *contextVk,
+                                         angle::FormatID srcFormatID,
+                                         angle::FormatID dstFormatID);
     bool hasStagedImageUpdatesWithMismatchedFormat(gl::LevelIndex levelStart,
                                                    gl::LevelIndex levelEnd,
                                                    angle::FormatID formatID) const;
@@ -2720,13 +2726,14 @@ class ImageHelper final : public Resource, public angle::Subject
                                          VkImageUsageFlags usageFlags,
                                          gl::YuvSamplingMode yuvSamplingMode) const;
 
-    angle::Result readPixelsImpl(ContextVk *contextVk,
-                                 const gl::Rectangle &area,
-                                 const PackPixelsParams &packPixelsParams,
-                                 VkImageAspectFlagBits copyAspectFlags,
-                                 gl::LevelIndex levelGL,
-                                 uint32_t layer,
-                                 void *pixels);
+    VkResult readPixelsImpl(ContextVk *contextVk,
+                            const gl::Rectangle &area,
+                            const PackPixelsParams &packPixelsParams,
+                            VkImageAspectFlagBits copyAspectFlags,
+                            gl::LevelIndex levelGL,
+                            uint32_t layer,
+                            void *pixels,
+                            VkMemoryPropertyFlags oomExcludedFlags);
 
     angle::Result packReadPixelBuffer(ContextVk *contextVk,
                                       const gl::Rectangle &area,
@@ -2757,6 +2764,27 @@ class ImageHelper final : public Resource, public angle::Subject
                                                     : srcDataFormatID;
         return actualFormatLinear == srcDataFormatIDLinear;
     }
+
+    // Class to help destroy image in case of failure, including OOM.
+    class ScopedDestroyImageHelperOnFailure
+    {
+      public:
+        ScopedDestroyImageHelperOnFailure(RendererVk *renderer, ImageHelper *imageHelper)
+            : mRenderer(renderer), mImageHelper(imageHelper)
+        {}
+        ~ScopedDestroyImageHelperOnFailure()
+        {
+            if (mImageHelper)
+            {
+                mImageHelper->destroy(mRenderer);
+            }
+        }
+        void onSuccess() { mImageHelper = nullptr; }
+
+      private:
+        RendererVk *mRenderer;
+        ImageHelper *mImageHelper;
+    };
 
     // Vulkan objects.
     Image mImage;
@@ -3431,40 +3459,40 @@ class LineLoopHelper final : angle::NonCopyable
     LineLoopHelper(RendererVk *renderer);
     ~LineLoopHelper();
 
-    angle::Result getIndexBufferForDrawArrays(ContextVk *contextVk,
-                                              uint32_t clampedVertexCount,
-                                              GLint firstVertex,
-                                              BufferHelper **bufferOut);
+    VkResult getIndexBufferForDrawArrays(ContextVk *contextVk,
+                                         uint32_t clampedVertexCount,
+                                         GLint firstVertex,
+                                         BufferHelper **bufferOut);
 
-    angle::Result getIndexBufferForElementArrayBuffer(ContextVk *contextVk,
-                                                      BufferVk *elementArrayBufferVk,
-                                                      gl::DrawElementsType glIndexType,
-                                                      int indexCount,
-                                                      intptr_t elementArrayOffset,
-                                                      BufferHelper **bufferOut,
-                                                      uint32_t *indexCountOut);
+    VkResult getIndexBufferForElementArrayBuffer(ContextVk *contextVk,
+                                                 BufferVk *elementArrayBufferVk,
+                                                 gl::DrawElementsType glIndexType,
+                                                 int indexCount,
+                                                 intptr_t elementArrayOffset,
+                                                 BufferHelper **bufferOut,
+                                                 uint32_t *indexCountOut);
 
-    angle::Result streamIndices(ContextVk *contextVk,
-                                gl::DrawElementsType glIndexType,
-                                GLsizei indexCount,
-                                const uint8_t *srcPtr,
-                                BufferHelper **bufferOut,
-                                uint32_t *indexCountOut);
+    VkResult streamIndices(ContextVk *contextVk,
+                           gl::DrawElementsType glIndexType,
+                           GLsizei indexCount,
+                           const uint8_t *srcPtr,
+                           BufferHelper **bufferOut,
+                           uint32_t *indexCountOut);
 
-    angle::Result streamIndicesIndirect(ContextVk *contextVk,
-                                        gl::DrawElementsType glIndexType,
-                                        BufferHelper *indexBuffer,
-                                        BufferHelper *indirectBuffer,
-                                        VkDeviceSize indirectBufferOffset,
-                                        BufferHelper **indexBufferOut,
-                                        BufferHelper **indirectBufferOut);
+    VkResult streamIndicesIndirect(ContextVk *contextVk,
+                                   gl::DrawElementsType glIndexType,
+                                   BufferHelper *indexBuffer,
+                                   BufferHelper *indirectBuffer,
+                                   VkDeviceSize indirectBufferOffset,
+                                   BufferHelper **indexBufferOut,
+                                   BufferHelper **indirectBufferOut);
 
-    angle::Result streamArrayIndirect(ContextVk *contextVk,
-                                      size_t vertexCount,
-                                      BufferHelper *arrayIndirectBuffer,
-                                      VkDeviceSize arrayIndirectBufferOffset,
-                                      BufferHelper **indexBufferOut,
-                                      BufferHelper **indexIndirectBufferOut);
+    VkResult streamArrayIndirect(ContextVk *contextVk,
+                                 size_t vertexCount,
+                                 BufferHelper *arrayIndirectBuffer,
+                                 VkDeviceSize arrayIndirectBufferOffset,
+                                 BufferHelper **indexBufferOut,
+                                 BufferHelper **indexIndirectBufferOut);
 
     void release(ContextVk *contextVk);
     void destroy(RendererVk *renderer);

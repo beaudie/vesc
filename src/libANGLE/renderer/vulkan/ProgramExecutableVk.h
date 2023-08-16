@@ -244,13 +244,13 @@ class ProgramExecutableVk : public ProgramExecutableImpl
     bool hasDirtyUniforms() const { return mDefaultUniformBlocksDirty.any(); }
 
     void setAllDefaultUniformsDirty();
-    angle::Result updateUniforms(vk::Context *context,
-                                 UpdateDescriptorSetsBuilder *updateBuilder,
-                                 vk::CommandBufferHelperCommon *commandBufferHelper,
-                                 vk::BufferHelper *emptyBuffer,
-                                 vk::DynamicBuffer *defaultUniformStorage,
-                                 bool isTransformFeedbackActiveUnpaused,
-                                 TransformFeedbackVk *transformFeedbackVk);
+    VkResult updateUniforms(vk::Context *context,
+                            UpdateDescriptorSetsBuilder *updateBuilder,
+                            vk::CommandBufferHelperCommon *commandBufferHelper,
+                            vk::BufferHelper *emptyBuffer,
+                            vk::DynamicBuffer *defaultUniformStorage,
+                            bool isTransformFeedbackActiveUnpaused,
+                            TransformFeedbackVk *transformFeedbackVk);
     void onProgramBind();
 
     const ShaderInterfaceVariableInfoMap &getVariableInfoMap() const { return mVariableInfoMap; }

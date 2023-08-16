@@ -5895,9 +5895,10 @@ VkResult ImageMemorySuballocator::allocateAndBindMemory(Context *context,
     bool allocateDedicatedMemory =
         memoryRequirements.size >= kImageSizeThresholdForDedicatedMemoryAllocation;
 
-    // Avoid device-local and host-visible combinations if possible. Here, the device-local bit is
-    // included in "preferredFlags", which is also expected to contain the required flags.
-    ASSERT((preferredFlags & ~VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT) == requiredFlags);
+    // Avoid device-local and host-visible combinations if possible. Here, "preferredFlags" is
+    // expected to be the same as "requiredFlags" except in the device-local bit.
+    ASSERT((preferredFlags & ~VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT) ==
+           (requiredFlags & ~VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
 
     uint32_t memoryTypeBits = memoryRequirements.memoryTypeBits;
     if ((preferredFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT) != 0)
@@ -5920,12 +5921,9 @@ VkResult ImageMemorySuballocator::allocateAndBindMemory(Context *context,
 
         if (result != VK_SUCCESS)
         {
-            // If there is an error in command batch finish, a device OOM error will be returned.
-            if (renderer->finishOneCommandBatchAndCleanup(context, &anyBatchCleaned) ==
-                angle::Result::Stop)
-            {
-                return VK_ERROR_OUT_OF_DEVICE_MEMORY;
-            }
+            // If there is an error in command batch finish, an error will be returned.
+            ANGLE_VK_TRY_CONTINUE(
+                renderer->finishOneCommandBatchAndCleanup(context, &anyBatchCleaned));
 
             if (anyBatchCleaned)
             {
@@ -5943,7 +5941,7 @@ VkResult ImageMemorySuballocator::allocateAndBindMemory(Context *context,
 
     // If there is still no space for the new allocation, the allocation may still be made outside
     // the device from all other memory types, although it will result in performance penalty.
-    if (result != VK_SUCCESS)
+    if (result != VK_SUCCESS && (requiredFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT) == 0)
     {
         memoryTypeBits = memoryRequirements.memoryTypeBits;
         result         = vma::AllocateAndBindMemoryForImage(
