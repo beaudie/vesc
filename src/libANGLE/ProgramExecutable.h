@@ -32,12 +32,19 @@ struct SamplerBinding
     SamplerBinding(const SamplerBinding &other);
     ~SamplerBinding();
 
-    // Necessary for retrieving active textures from the GL state.
-    TextureType textureType;
+    TextureType getTextureType() const { return basicDataTypeStruct.textureType; }
+    GLenum getSamplerType() const { return basicDataTypeStruct.samplerType; }
+    SamplerFormat getFormat() const { return basicDataTypeStruct.format; }
 
-    GLenum samplerType;
+    struct
+    {
+        // Necessary for retrieving active textures from the GL state.
+        TextureType textureType;
 
-    SamplerFormat format;
+        GLenum samplerType;
+
+        SamplerFormat format;
+    } basicDataTypeStruct;
 
     // List of all textures bound to this sampler, of type textureType.
     // Cropped by the amount of unused elements reported by the driver.

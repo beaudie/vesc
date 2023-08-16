@@ -242,6 +242,33 @@ void LoadUniforms(BinaryInputStream *stream,
         }
     }
 }
+
+void SaveSamplerBindings(BinaryOutputStream *stream,
+                         const std::vector<SamplerBinding> &samplerBindings)
+{
+    stream->writeInt(samplerBindings.size());
+    for (const auto &samplerBinding : samplerBindings)
+    {
+        stream->writeBytes(
+            reinterpret_cast<const unsigned char *>(&samplerBinding.basicDataTypeStruct),
+            sizeof(samplerBinding.basicDataTypeStruct));
+        stream->writeInt(samplerBinding.boundTextureUnits.size());
+    }
+}
+void LoadSamplerBindings(BinaryInputStream *stream, std::vector<SamplerBinding> *samplerBindings)
+{
+    size_t samplerCount = stream->readInt<size_t>();
+    ASSERT(samplerBindings->empty());
+    samplerBindings->resize(samplerCount);
+    for (size_t samplerIndex = 0; samplerIndex < samplerCount; ++samplerIndex)
+    {
+        SamplerBinding &samplerBinding = (*samplerBindings)[samplerIndex];
+        stream->readBytes(reinterpret_cast<unsigned char *>(&samplerBinding.basicDataTypeStruct),
+                          sizeof(samplerBinding.basicDataTypeStruct));
+        size_t bindingCount = stream->readInt<size_t>();
+        samplerBinding.boundTextureUnits.resize(bindingCount, 0);
+    }
+}
 }  // anonymous namespace
 
 ProgramExecutable::ProgramExecutable()
@@ -534,18 +561,7 @@ void ProgramExecutable::load(bool isSeparable, gl::BinaryInputStream *stream)
     unsigned int samplerRangeHigh = stream->readInt<unsigned int>();
     mSamplerUniformRange          = RangeUI(samplerRangeLow, samplerRangeHigh);
 
-    size_t samplerCount = stream->readInt<size_t>();
-    ASSERT(mSamplerBindings.empty());
-    mSamplerBindings.resize(samplerCount);
-    for (size_t samplerIndex = 0; samplerIndex < samplerCount; ++samplerIndex)
-    {
-        SamplerBinding &samplerBinding = mSamplerBindings[samplerIndex];
-        samplerBinding.textureType     = stream->readEnum<TextureType>();
-        samplerBinding.samplerType     = stream->readInt<GLenum>();
-        samplerBinding.format          = stream->readEnum<SamplerFormat>();
-        size_t bindingCount            = stream->readInt<size_t>();
-        samplerBinding.boundTextureUnits.resize(bindingCount, 0);
-    }
+    LoadSamplerBindings(stream, &mSamplerBindings);
 
     unsigned int imageRangeLow  = stream->readInt<unsigned int>();
     unsigned int imageRangeHigh = stream->readInt<unsigned int>();
@@ -717,14 +733,7 @@ void ProgramExecutable::save(bool isSeparable, gl::BinaryOutputStream *stream) c
     stream->writeInt(getSamplerUniformRange().low());
     stream->writeInt(getSamplerUniformRange().high());
 
-    stream->writeInt(getSamplerBindings().size());
-    for (const auto &samplerBinding : getSamplerBindings())
-    {
-        stream->writeEnum(samplerBinding.textureType);
-        stream->writeInt(samplerBinding.samplerType);
-        stream->writeEnum(samplerBinding.format);
-        stream->writeInt(samplerBinding.boundTextureUnits.size());
-    }
+    SaveSamplerBindings(stream, mSamplerBindings);
 
     stream->writeInt(getImageUniformRange().low());
     stream->writeInt(getImageUniformRange().high());
@@ -852,9 +861,9 @@ void ProgramExecutable::setActive(size_t textureUnit,
                                   const gl::LinkedUniform &samplerUniform)
 {
     mActiveSamplersMask.set(textureUnit);
-    mActiveSamplerTypes[textureUnit]      = samplerBinding.textureType;
-    mActiveSamplerYUV[textureUnit]        = IsSamplerYUVType(samplerBinding.samplerType);
-    mActiveSamplerFormats[textureUnit]    = samplerBinding.format;
+    mActiveSamplerTypes[textureUnit]      = samplerBinding.getTextureType();
+    mActiveSamplerYUV[textureUnit]        = IsSamplerYUVType(samplerBinding.getSamplerType());
+    mActiveSamplerFormats[textureUnit]    = samplerBinding.getFormat();
     mActiveSamplerShaderBits[textureUnit] = samplerUniform.activeShaders();
 }
 
@@ -897,14 +906,14 @@ void ProgramExecutable::updateActiveSamplers(const ProgramState &programState)
             }
             else
             {
-                if (mActiveSamplerTypes[textureUnit] != samplerBinding.textureType ||
+                if (mActiveSamplerTypes[textureUnit] != samplerBinding.getTextureType() ||
                     mActiveSamplerYUV.test(textureUnit) !=
-                        IsSamplerYUVType(samplerBinding.samplerType))
+                        IsSamplerYUVType(samplerBinding.getSamplerType()))
                 {
                     hasSamplerTypeConflict(textureUnit);
                 }
 
-                if (mActiveSamplerFormats[textureUnit] != samplerBinding.format)
+                if (mActiveSamplerFormats[textureUnit] != samplerBinding.getFormat())
                 {
                     hasSamplerFormatConflict(textureUnit);
                 }
@@ -960,21 +969,21 @@ void ProgramExecutable::setSamplerUniformTextureTypeAndFormat(
             if (!foundBinding)
             {
                 foundBinding          = true;
-                foundType             = binding.textureType;
-                foundYUV              = IsSamplerYUVType(binding.samplerType);
-                foundFormat           = binding.format;
+                foundType             = binding.getTextureType();
+                foundYUV              = IsSamplerYUVType(binding.getSamplerType());
+                foundFormat           = binding.getFormat();
                 uint32_t uniformIndex = getUniformIndexFromSamplerIndex(samplerIndex);
                 setActive(textureUnit, binding, mUniforms[uniformIndex]);
             }
             else
             {
-                if (foundType != binding.textureType ||
-                    foundYUV != IsSamplerYUVType(binding.samplerType))
+                if (foundType != binding.getTextureType() ||
+                    foundYUV != IsSamplerYUVType(binding.getSamplerType()))
                 {
                     hasSamplerTypeConflict(textureUnit);
                 }
 
-                if (foundFormat != binding.format)
+                if (foundFormat != binding.getFormat())
                 {
                     hasSamplerFormatConflict(textureUnit);
                 }
@@ -1205,6 +1214,7 @@ void ProgramExecutable::gatherTransformFeedbackVaryings(
 {
     // Gather the linked varyings that are used for transform feedback, they should all exist.
     mLinkedTransformFeedbackVaryings.clear();
+    mLinkedTransformFeedbackVaryings.reserve(varyings.size());
     for (const std::string &tfVaryingName : transformFeedbackVaryingNames)
     {
         std::vector<unsigned int> subscripts;
@@ -1639,6 +1649,7 @@ void ProgramExecutable::linkSamplerAndImageBindings(GLuint *combinedImageUniform
     mImageUniformRange     = RangeUI(low, high);
     *combinedImageUniforms = 0u;
     // If uniform is a image type, insert it into the mImageBindings array.
+    mImageBindings.reserve(mImageUniformRange.length());
     for (unsigned int imageIndex : mImageUniformRange)
     {
         // ES3.1 (section 7.6.1) and GLSL ES3.1 (section 4.4.5), Uniform*i{v} commands
@@ -1677,6 +1688,7 @@ void ProgramExecutable::linkSamplerAndImageBindings(GLuint *combinedImageUniform
     mSamplerUniformRange = RangeUI(low, high);
 
     // If uniform is a sampler type, insert it into the mSamplerBindings array.
+    mSamplerBindings.reserve(mSamplerUniformRange.length());
     for (unsigned int samplerIndex : mSamplerUniformRange)
     {
         const auto &samplerUniform = mUniforms[samplerIndex];

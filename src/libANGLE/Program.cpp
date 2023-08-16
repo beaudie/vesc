@@ -676,9 +676,7 @@ SamplerBinding::SamplerBinding(TextureType textureTypeIn,
                                GLenum samplerTypeIn,
                                SamplerFormat formatIn,
                                size_t elementCount)
-    : textureType(textureTypeIn),
-      samplerType(samplerTypeIn),
-      format(formatIn),
+    : basicDataTypeStruct{textureTypeIn, samplerTypeIn, formatIn},
       boundTextureUnits(elementCount, 0)
 {}
 
@@ -3406,13 +3404,13 @@ void Program::updateSamplerUniform(Context *context,
         }
         else
         {
-            if (newSamplerType != samplerBinding.textureType ||
-                newSamplerYUV != IsSamplerYUVType(samplerBinding.samplerType))
+            if (newSamplerType != samplerBinding.getTextureType() ||
+                newSamplerYUV != IsSamplerYUVType(samplerBinding.getSamplerType()))
             {
                 mState.mExecutable->hasSamplerTypeConflict(newTextureUnit);
             }
 
-            if (newSamplerFormat != samplerBinding.format)
+            if (newSamplerFormat != samplerBinding.getFormat())
             {
                 mState.mExecutable->hasSamplerFormatConflict(newTextureUnit);
             }
