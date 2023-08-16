@@ -1778,8 +1778,10 @@ angle::Result ProgramExecutableVk::updateUniforms(
         setAllDefaultUniformsDirty(glExecutable);
 
         requiredSpace = calcUniformUpdateRequiredSpace(context, glExecutable, &offsets);
-        ANGLE_TRY(defaultUniformStorage->allocate(context, requiredSpace, &defaultUniformBuffer,
-                                                  &anyNewBufferAllocated));
+        ANGLE_VK_TRY_ALLOC(
+            context, result,
+            defaultUniformStorage->allocate(context, requiredSpace, &defaultUniformBuffer,
+                                            &anyNewBufferAllocated, &result));
     }
 
     ASSERT(defaultUniformBuffer);
