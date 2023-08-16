@@ -16,6 +16,24 @@
       "message": "I\u0027m getting a ton of this warning when I try to roll this into AOSP.\nhttps://android-review.googlesource.com/c/platform/external/angle/+/2711894\nSome dEQP cases time out, could it be because of this?\nhttps://storage.googleapis.com/android-build/builds/git_main-linux-oriole-trunk_staging-userdebug/P61238474/3bbaebd952c537f73e1fb637e2ec929ba4f09981bf6f2351b8c7a26a59288463/0/invocations/I91600010188191513/git_main/P61238474/angle_deqp_git_main_presubmit_shard_02/inv_33974515595600072/subprocess-dEQP-EGL.functional.get_frame_timestamps%23rgb888_no_depth_stencil-19061FDF60091F-logcat-on-failure_18253774470475334237.txt?GoogleAccessId\u003dgcs-sign@android-builds-project.google.com.iam.gserviceaccount.com\u0026Expires\u003d1692212799\u0026Signature\u003dOSWZNZettcJ4tXLmU02aIRKqPdS4a0h0lJD7UWVT7iK%2BUdu1lIdhVRhPbxmkvhdZ3zV6wb/n%2BKbnzCDl3ww28xpZi4cowc3gt09gjOTcn5/32TmuthYnqpBlMqahp8607FBELlIR1Wj5aDuO1ykn7ASl/OktR%2BCI0ksumca9fHNNGqHyYNIwn5VtivxzHHK1ycpEGRf4oqyz8jmZoMwJTK%2BH8xSX9UYaGvztCQpV/3QqpC7Ntd31IkBGDEfqtiybNZP%2BbUSCfiKL4%2BCWC6mEItHNnXrRVv41UsghQTZsQvqPA7FW1W5PPZci9uFb2fQfY7vZeceddSyxqW8xJcjv6Q%3D%3D",
       "revId": "424f43e40e14f7f7362ef06948b0bb0cc2917c74",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd20e45d_eca5f8f4",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1018,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-16T19:41:00Z",
+      "side": 1,
+      "message": "For posterity: https://chromium-review.googlesource.com/c/angle/angle/+/4785947",
+      "parentUuid": "d2b01ca1_220856ea",
+      "revId": "424f43e40e14f7f7362ef06948b0bb0cc2917c74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
