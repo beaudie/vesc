@@ -3575,6 +3575,19 @@ angle::Result ContextVk::onCopyUpdate(VkDeviceSize size, bool *commandBufferWasF
     return angle::Result::Continue;
 }
 
+angle::Result ContextVk::checkAndFlushExcessivePendingGarbage()
+{
+    // If too much pending suballocation garbage has accumulated, we should flush them.
+    if (mRenderer->getPendingSuballocationGarbageSizeInBytes() >=
+        mRenderer->getPendingSuballocationGarbageSizeLimit())
+    {
+        ANGLE_TRY(flushImpl(nullptr, nullptr, RenderPassClosureReason::ExcessivePendingGarbage));
+        INFO() << "Context flushed due to excessive pending garbage.";
+    }
+
+    return angle::Result::Continue;
+}
+
 angle::Result ContextVk::synchronizeCpuGpuTime()
 {
     ASSERT(mGpuEventsEnabled);
