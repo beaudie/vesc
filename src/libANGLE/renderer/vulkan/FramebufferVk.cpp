@@ -3136,8 +3136,11 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
     ANGLE_TRACE_EVENT0("gpu.angle", "FramebufferVk::readPixelsImpl");
     gl::LevelIndex levelGL = renderTarget->getLevelIndex();
     uint32_t layer         = renderTarget->getLayerIndex();
-    return renderTarget->getImageForCopy().readPixels(contextVk, area, packPixelsParams,
-                                                      copyAspectFlags, levelGL, layer, pixels);
+    ANGLE_VK_TRY_ALLOC(
+        contextVk, result,
+        renderTarget->getImageForCopy().readPixels(
+            contextVk, area, packPixelsParams, copyAspectFlags, levelGL, layer, pixels, &result));
+    return angle::Result::Continue;
 }
 
 gl::Extents FramebufferVk::getReadImageExtents() const

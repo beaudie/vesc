@@ -181,11 +181,15 @@ egl::Error IOSurfaceSurfaceVkMac::bindTexImage(const gl::Context *context,
     const vk::Format &format =
         renderer->getFormat(kIOSurfaceFormats[mFormatIndex].nativeSizedInternalFormat);
 
-    angle::Result result = mColorAttachment.image.stageSubresourceUpdate(
-        contextVk, gl::ImageIndex::Make2D(0),
-        gl::Extents(static_cast<int>(width), pixelUnpack.imageHeight, 1), gl::Offset(),
-        internalFormatInfo, pixelUnpack, kIOSurfaceFormats[mFormatIndex].type,
-        reinterpret_cast<uint8_t *>(source), format, vk::ImageAccess::Renderable);
+    angle::Result result;
+    ANGLE_VK_TRY_ALLOC_NO_RETURN(
+        contextVk, allocResult,
+        mColorAttachment.image.stageSubresourceUpdate(
+            contextVk, gl::ImageIndex::Make2D(0),
+            gl::Extents(static_cast<int>(width), pixelUnpack.imageHeight, 1), gl::Offset(),
+            internalFormatInfo, pixelUnpack, kIOSurfaceFormats[mFormatIndex].type,
+            reinterpret_cast<uint8_t *>(source), format, vk::ImageAccess::Renderable, &allocResult),
+        result);
 
     IOSurfaceUnlock(mIOSurface, 0, nullptr);
 

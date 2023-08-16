@@ -461,6 +461,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                             const vk::SharedExternalFence *externalFence,
                             RenderPassClosureReason renderPassClosureReason);
     angle::Result finishImpl(RenderPassClosureReason renderPassClosureReason);
+    angle::Result onOutOfMemory() override;
 
     void addWaitSemaphore(VkSemaphore semaphore, VkPipelineStageFlags stageMask);
 
@@ -730,8 +731,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                                vk::BufferHelper **vertexBufferOut)
     {
         bool newBufferOut;
-        ANGLE_TRY(mStreamedVertexBuffers[attribIndex].allocate(this, bytesToAllocate,
-                                                               vertexBufferOut, &newBufferOut));
+        ANGLE_VK_TRY_ALLOC(this, result,
+                           mStreamedVertexBuffers[attribIndex].allocate(
+                               this, bytesToAllocate, vertexBufferOut, &newBufferOut, &result));
         if (newBufferOut)
         {
             mHasInFlightStreamedVertexBuffers.set(attribIndex);
