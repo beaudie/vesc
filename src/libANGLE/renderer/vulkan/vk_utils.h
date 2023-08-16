@@ -1292,7 +1292,8 @@ enum class RenderPassClosureReason
     // LegacyDithering requires updating the render pass
     LegacyDithering,
 
-    // In case of OOM, pending garbage needs to be freed.
+    // In case of memory budget issues, pending garbage needs to be freed.
+    AccumulatedTooMuchGarbageMemory,
     OutOfMemory,
 
     InvalidEnum,

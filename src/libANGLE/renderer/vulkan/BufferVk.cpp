@@ -503,7 +503,16 @@ angle::Result BufferVk::allocStagingBuffer(ContextVk *contextVk,
             mIsStagingBufferMapped = true;
             return angle::Result::Continue;
         }
-        mStagingBuffer.release(contextVk->getRenderer());
+
+        RendererVk *renderer = contextVk->getRenderer();
+        mStagingBuffer.release(renderer);
+        // If too much pending suballocation garbage has accumulated, we should flush and free them.
+        if (renderer->getPendingSuballocationGarbageSizeInBytes() >=
+            renderer->getPendingSuballocationGarbageSizeLimit())
+        {
+            ANGLE_TRY(
+                contextVk->finishImpl(RenderPassClosureReason::AccumulatedTooMuchGarbageMemory));
+        }
     }
 
     ANGLE_TRY(
@@ -1152,6 +1161,13 @@ angle::Result BufferVk::acquireBufferHelper(ContextVk *contextVk,
     if (mBuffer.valid())
     {
         mBuffer.releaseBufferAndDescriptorSetCache(renderer);
+        // If too much pending suballocation garbage has accumulated, we should flush and free them.
+        if (renderer->getPendingSuballocationGarbageSizeInBytes() >=
+            renderer->getPendingSuballocationGarbageSizeLimit())
+        {
+            ANGLE_TRY(
+                contextVk->finishImpl(RenderPassClosureReason::AccumulatedTooMuchGarbageMemory));
+        }
     }
 
     // Allocate the buffer directly
