@@ -1704,6 +1704,7 @@ void WriteCppReplayFunctionWithParts(const gl::ContextID contextID,
 
     for (const CallCapture &call : calls)
     {
+
         // Process active calls for Setup and inactive calls for SetupInactive
         if ((call.isActive && replayFunc != ReplayFunc::SetupInactive) ||
             (!call.isActive && replayFunc == ReplayFunc::SetupInactive))
@@ -3943,6 +3944,8 @@ void CaptureShareGroupMidExecutionSetup(
             continue;
         }
 
+        size_t textureSetupStart = setupCalls->size();
+
         // Track this as a starting resource that may need to be restored.
         TrackedResource &trackedTextures =
             resourceTracker->getTrackedResource(context->id(), ResourceIDType::Texture);
@@ -4273,6 +4276,13 @@ void CaptureShareGroupMidExecutionSetup(
                 }
             }
         }
+
+        size_t textureSetupEnd = setupCalls->size();
+
+        // Mark the range of calls used to setup this texture
+        frameCaptureShared->markResourceSetupCallsInactive(
+            setupCalls, ResourceIDType::Texture, id.value,
+            gl::Range<size_t>(textureSetupStart, textureSetupEnd));
     }
 
     // Capture Renderbuffers.
@@ -4757,6 +4767,13 @@ void CaptureMidExecutionSetup(const gl::Context *context,
                 cap(CaptureBindTexture(replayState, true, textureType, apiTextureID));
                 replayState.setSamplerTexture(context, textureType,
                                               apiBindings[bindingIndex].get());
+            }
+
+            // Set this texture as active so it will be generated in Setup
+            if (apiTextureID.value)
+            {
+                MarkResourceIDActive(ResourceIDType::Texture, apiTextureID.value,
+                                     shareGroupSetupCalls, resourceIDToSetupCalls);
             }
         }
     }
@@ -7752,9 +7769,11 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
     updateReadBufferSize(call.params.getReadBufferSize());
 
     std::vector<gl::ShaderProgramID> shaderProgramIDs;
-    if (FindShaderProgramIDsInCall(call, shaderProgramIDs))
+    std::vector<gl::TextureID> textureIDs;
+    ResourceIDs resourceIDs;
+    if (FindResourceIDsInCall(call, resourceIDs))
     {
-        for (gl::ShaderProgramID shaderProgramID : shaderProgramIDs)
+        for (gl::ShaderProgramID shaderProgramID : resourceIDs.shaderProgramIDs)
         {
             mResourceTracker.onShaderProgramAccess(shaderProgramID);
 
@@ -7763,6 +7782,16 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
                 // Track that this call referenced a ShaderProgram, setting it active for Setup
                 MarkResourceIDActive(ResourceIDType::ShaderProgram, shaderProgramID.value,
                                      shareGroupSetupCalls, resourceIDToSetupCalls);
+            }
+        }
+
+        for (gl::TextureID &textureID : resourceIDs.textureIDs)
+        {
+            if (isCaptureActive())
+            {
+                // Track that this call referenced a Texture, setting it active for Setup
+                MarkResourceIDActive(ResourceIDType::Texture, textureID.value, shareGroupSetupCalls,
+                                     resourceIDToSetupCalls);
             }
         }
     }

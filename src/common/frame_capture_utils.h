@@ -112,6 +112,14 @@ struct CallCapture
     bool isActive = true;
 };
 
+struct ResourceIDs
+{
+    ResourceIDs();
+    ~ResourceIDs();
+    std::vector<gl::ShaderProgramID> shaderProgramIDs;
+    std::vector<gl::TextureID> textureIDs;
+};
+
 template <typename T>
 void ParamBuffer::addValueParam(const char *paramName, ParamType paramType, T paramValue)
 {
@@ -394,7 +402,7 @@ inline std::ostream &operator<<(std::ostream &os, const FmtPointerIndex &fmt)
     return os;
 }
 
-bool FindShaderProgramIDsInCall(const CallCapture &call, std::vector<gl::ShaderProgramID> &idsOut);
+bool FindResourceIDsInCall(const CallCapture &call, ResourceIDs &resourceIDs);
 }  // namespace angle
 
 #endif  // COMMON_FRAME_CAPTURE_UTILS_H_

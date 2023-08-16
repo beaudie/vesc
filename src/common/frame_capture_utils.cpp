@@ -174,6 +174,9 @@ const char *CallCapture::name() const
     }
 }
 
+ResourceIDs::ResourceIDs()  = default;
+ResourceIDs::~ResourceIDs() = default;
+
 template <>
 void WriteParamValueReplay<ParamType::TGLboolean>(std::ostream &os,
                                                   const CallCapture &call,
@@ -435,11 +438,12 @@ void WriteParamValueReplay<ParamType::TUniformLocation>(std::ostream &os,
     os << "gUniformLocations[";
 
     // Find the program from the call parameters.
-    std::vector<gl::ShaderProgramID> programIDs;
-    if (FindShaderProgramIDsInCall(call, programIDs))
+    ResourceIDs resourceIDs;
+    FindResourceIDsInCall(call, resourceIDs);
+    if (!resourceIDs.shaderProgramIDs.empty())
     {
-        ASSERT(programIDs.size() == 1);
-        os << programIDs[0].value;
+        ASSERT(resourceIDs.shaderProgramIDs.size() == 1);
+        os << resourceIDs.shaderProgramIDs[0].value;
     }
     else
     {
@@ -612,17 +616,20 @@ void WriteParamValueReplay<ParamType::TEGLTimeKHR>(std::ostream &os,
     os << value << "ul";
 }
 
-bool FindShaderProgramIDsInCall(const CallCapture &call, std::vector<gl::ShaderProgramID> &idsOut)
+bool FindResourceIDsInCall(const CallCapture &call, ResourceIDs &resourceIDsOut)
 {
     for (const ParamCapture &param : call.params.getParamCaptures())
     {
-        // Only checking for programs right now, but could be expanded to all ResourceTypes
         if (param.type == ParamType::TShaderProgramID)
         {
-            idsOut.push_back(param.value.ShaderProgramIDVal);
+            resourceIDsOut.shaderProgramIDs.push_back(param.value.ShaderProgramIDVal);
+        }
+        else if (param.type == ParamType::TTextureID)
+        {
+            resourceIDsOut.textureIDs.push_back(param.value.TextureIDVal);
         }
     }
 
-    return !idsOut.empty();
+    return !(resourceIDsOut.shaderProgramIDs.empty() && resourceIDsOut.textureIDs.empty());
 }
 }  // namespace angle
