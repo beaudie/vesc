@@ -812,6 +812,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     bool isDitherEnabled() { return mState.isDitherEnabled(); }
 
+    // In the event of collecting too much garbage, we should flush the garbage so it can be freed.
+    angle::Result checkAndFlushExcessivePendingGarbage();
+
   private:
     // Dirty bits.
     enum DirtyBitType : size_t
