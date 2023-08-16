@@ -276,7 +276,7 @@ void LoadUniforms(BinaryInputStream *stream,
 ProgramExecutable::PODStruct::PODStruct()                       = default;
 ProgramExecutable::PODStruct::PODStruct(const PODStruct &other) = default;
 
-ProgramExecutable::ProgramExecutable() : mActiveSamplerRefCounts{}, mCanDrawWith(false)
+ProgramExecutable::ProgramExecutable() : mActiveSamplerRefCounts{}
 {
     reset(true);
 }
@@ -291,7 +291,6 @@ ProgramExecutable::ProgramExecutable(const ProgramExecutable &other)
       mActiveSamplerShaderBits(other.mActiveSamplerShaderBits),
       mActiveImagesMask(other.mActiveImagesMask),
       mActiveImageShaderBits(other.mActiveImageShaderBits),
-      mCanDrawWith(other.mCanDrawWith),
       mOutputVariables(other.mOutputVariables),
       mOutputLocations(other.mOutputLocations),
       mSecondaryOutputLocations(other.mSecondaryOutputLocations),
@@ -302,7 +301,6 @@ ProgramExecutable::ProgramExecutable(const ProgramExecutable &other)
       mUniformNames(other.mUniformNames),
       mUniformMappedNames(other.mUniformMappedNames),
       mUniformBlocks(other.mUniformBlocks),
-      mActiveUniformBlockBindings(other.mActiveUniformBlockBindings),
       mAtomicCounterBuffers(other.mAtomicCounterBuffers),
       mShaderStorageBlocks(other.mShaderStorageBlocks)
 {
@@ -339,7 +337,6 @@ void ProgramExecutable::reset(bool clearInfoLog)
     mUniformNames.clear();
     mUniformMappedNames.clear();
     mUniformBlocks.clear();
-    mActiveUniformBlockBindings.reset();
     mShaderStorageBlocks.clear();
     mAtomicCounterBuffers.clear();
     mOutputVariables.clear();
@@ -372,8 +369,8 @@ void ProgramExecutable::load(bool isSeparable, gl::BinaryInputStream *stream)
     {
         InterfaceBlock &uniformBlock = mUniformBlocks[uniformBlockIndex];
         LoadInterfaceBlock(stream, &uniformBlock);
-
-        mActiveUniformBlockBindings.set(uniformBlockIndex, uniformBlock.binding != 0);
+        ASSERT(mPODStruct.activeUniformBlockBindings.test(uniformBlockIndex) ==
+               (uniformBlock.binding != 0));
     }
 
     size_t shaderStorageBlockCount = stream->readInt<size_t>();
@@ -504,7 +501,6 @@ void ProgramExecutable::load(bool isSeparable, gl::BinaryInputStream *stream)
             {
                 LoadShInterfaceBlock(stream, &shaderStorageBlock);
             }
-            mLinkedShaderVersions[shaderType] = stream->readInt<int>();
         }
     }
 }
@@ -627,7 +623,6 @@ void ProgramExecutable::save(bool isSeparable, gl::BinaryOutputStream *stream) c
             {
                 WriteShInterfaceBlock(stream, shaderStorageBlock);
             }
-            stream->writeInt(mLinkedShaderVersions[shaderType]);
         }
     }
 }
@@ -783,22 +778,17 @@ void ProgramExecutable::setSamplerUniformTextureTypeAndFormat(
     }
 }
 
-void ProgramExecutable::updateCanDrawWith()
-{
-    mCanDrawWith = hasLinkedShaderStage(ShaderType::Vertex);
-}
-
 void ProgramExecutable::saveLinkedStateInfo(const Context *context, const ProgramState &state)
 {
     for (ShaderType shaderType : getLinkedShaderStages())
     {
         Shader *shader = state.getAttachedShader(shaderType);
         ASSERT(shader);
-        mLinkedOutputVaryings[shaderType] = shader->getOutputVaryings(context);
-        mLinkedInputVaryings[shaderType]  = shader->getInputVaryings(context);
-        mLinkedShaderVersions[shaderType] = shader->getShaderVersion(context);
-        mLinkedUniforms[shaderType]       = shader->getUniforms(context);
-        mLinkedUniformBlocks[shaderType]  = shader->getUniformBlocks(context);
+        mPODStruct.linkedShaderVersions[shaderType] = shader->getShaderVersion(context);
+        mLinkedOutputVaryings[shaderType]           = shader->getOutputVaryings(context);
+        mLinkedInputVaryings[shaderType]            = shader->getInputVaryings(context);
+        mLinkedUniforms[shaderType]                 = shader->getUniforms(context);
+        mLinkedUniformBlocks[shaderType]            = shader->getUniformBlocks(context);
     }
 }
 
