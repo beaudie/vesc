@@ -5895,9 +5895,10 @@ VkResult ImageMemorySuballocator::allocateAndBindMemory(Context *context,
     bool allocateDedicatedMemory =
         memoryRequirements.size >= kImageSizeThresholdForDedicatedMemoryAllocation;
 
-    // Avoid device-local and host-visible combinations if possible. Here, the device-local bit is
-    // included in "preferredFlags", which is also expected to contain the required flags.
-    ASSERT((preferredFlags & ~VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT) == requiredFlags);
+    // Avoid device-local and host-visible combinations if possible. Here, "preferredFlags" is
+    // expected to be the same as "requiredFlags" except in the device-local bit.
+    ASSERT((preferredFlags & ~VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT) ==
+           (requiredFlags & ~VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
 
     uint32_t memoryTypeBits = memoryRequirements.memoryTypeBits;
     if ((preferredFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT) != 0)
@@ -5906,44 +5907,15 @@ VkResult ImageMemorySuballocator::allocateAndBindMemory(Context *context,
                                                                memoryRequirements.memoryTypeBits);
     }
 
-    // Allocate and bind memory for the image. Try allocating on the device first. If unsuccessful,
-    // it is possible to retry allocation after cleaning the garbage.
-    VkResult result;
-    bool anyBatchCleaned             = false;
-    uint32_t batchesWaitedAndCleaned = 0;
+    // Allocate and bind memory for the image. Try allocating on the device first.
+    VkResult result = vma::AllocateAndBindMemoryForImage(
+        allocator.getHandle(), &image->mHandle, preferredFlags, preferredFlags, memoryTypeBits,
+        allocateDedicatedMemory, &allocationOut->mHandle, memoryTypeIndexOut, sizeOut);
 
-    do
-    {
-        result = vma::AllocateAndBindMemoryForImage(
-            allocator.getHandle(), &image->mHandle, preferredFlags, preferredFlags, memoryTypeBits,
-            allocateDedicatedMemory, &allocationOut->mHandle, memoryTypeIndexOut, sizeOut);
-
-        if (result != VK_SUCCESS)
-        {
-            // If there is an error in command batch finish, a device OOM error will be returned.
-            if (renderer->finishOneCommandBatchAndCleanup(context, &anyBatchCleaned) ==
-                angle::Result::Stop)
-            {
-                return VK_ERROR_OUT_OF_DEVICE_MEMORY;
-            }
-
-            if (anyBatchCleaned)
-            {
-                batchesWaitedAndCleaned++;
-            }
-        }
-    } while (result != VK_SUCCESS && anyBatchCleaned);
-
-    if (batchesWaitedAndCleaned > 0)
-    {
-        INFO() << "Initial allocation failed. Waited for " << batchesWaitedAndCleaned
-               << " commands to finish and free garbage | Allocation result: "
-               << ((result == VK_SUCCESS) ? "SUCCESS" : "FAIL");
-    }
-
-    // If there is still no space for the new allocation, the allocation may still be made outside
-    // the device from all other memory types, although it will result in performance penalty.
-    if (result != VK_SUCCESS)
+    // If there is no space for the new allocation and other fallbacks have proved ineffective, the
+    // allocation may still be made outside the device from all other memory types, although it will
+    // result in performance penalty.
+    if (result != VK_SUCCESS && (requiredFlags & VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT) == 0)
     {
         memoryTypeBits = memoryRequirements.memoryTypeBits;
         result         = vma::AllocateAndBindMemoryForImage(

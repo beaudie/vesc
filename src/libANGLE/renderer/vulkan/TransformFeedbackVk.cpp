@@ -113,10 +113,12 @@ angle::Result TransformFeedbackVk::begin(const gl::Context *context,
             if (mCounterBufferHandles[bufferIndex] == VK_NULL_HANDLE)
             {
                 vk::BufferHelper &bufferHelper = mCounterBufferHelpers[bufferIndex];
-                ANGLE_TRY(bufferHelper.initSuballocation(
-                    contextVk, contextVk->getRenderer()->getDeviceLocalMemoryTypeIndex(), 16,
-                    contextVk->getRenderer()->getDefaultBufferAlignment(),
-                    BufferUsageType::Static));
+                ANGLE_VK_TRY_ALLOC(
+                    contextVk,
+                    bufferHelper.initSuballocation(
+                        contextVk, contextVk->getRenderer()->getDeviceLocalMemoryTypeIndex(), 16,
+                        contextVk->getRenderer()->getDefaultBufferAlignment(),
+                        BufferUsageType::Static));
                 mCounterBufferHandles[bufferIndex] = bufferHelper.getBuffer().getHandle();
                 mCounterBufferOffsets[bufferIndex] = bufferHelper.getOffset();
             }

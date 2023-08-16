@@ -515,46 +515,45 @@ angle::Result InitMappableAllocation(Context *context,
                                      int value,
                                      VkMemoryPropertyFlags memoryPropertyFlags);
 
-angle::Result AllocateBufferMemory(Context *context,
-                                   vk::MemoryAllocationType memoryAllocationType,
-                                   VkMemoryPropertyFlags requestedMemoryPropertyFlags,
-                                   VkMemoryPropertyFlags *memoryPropertyFlagsOut,
-                                   const void *extraAllocationInfo,
-                                   Buffer *buffer,
-                                   uint32_t *memoryTypeIndexOut,
-                                   DeviceMemory *deviceMemoryOut,
-                                   VkDeviceSize *sizeOut);
+VkResult AllocateBufferMemory(Context *context,
+                              vk::MemoryAllocationType memoryAllocationType,
+                              VkMemoryPropertyFlags requestedMemoryPropertyFlags,
+                              VkMemoryPropertyFlags *memoryPropertyFlagsOut,
+                              const void *extraAllocationInfo,
+                              Buffer *buffer,
+                              uint32_t *memoryTypeIndexOut,
+                              DeviceMemory *deviceMemoryOut,
+                              VkDeviceSize *sizeOut);
 
-angle::Result AllocateImageMemory(Context *context,
-                                  vk::MemoryAllocationType memoryAllocationType,
-                                  VkMemoryPropertyFlags memoryPropertyFlags,
-                                  VkMemoryPropertyFlags *memoryPropertyFlagsOut,
-                                  const void *extraAllocationInfo,
-                                  Image *image,
-                                  uint32_t *memoryTypeIndexOut,
-                                  DeviceMemory *deviceMemoryOut,
-                                  VkDeviceSize *sizeOut);
+VkResult AllocateImageMemory(Context *context,
+                             vk::MemoryAllocationType memoryAllocationType,
+                             VkMemoryPropertyFlags memoryPropertyFlags,
+                             VkMemoryPropertyFlags *memoryPropertyFlagsOut,
+                             const void *extraAllocationInfo,
+                             Image *image,
+                             uint32_t *memoryTypeIndexOut,
+                             DeviceMemory *deviceMemoryOut,
+                             VkDeviceSize *sizeOut);
 
-angle::Result AllocateImageMemoryWithRequirements(
-    Context *context,
-    vk::MemoryAllocationType memoryAllocationType,
-    VkMemoryPropertyFlags memoryPropertyFlags,
-    const VkMemoryRequirements &memoryRequirements,
-    const void *extraAllocationInfo,
-    const VkBindImagePlaneMemoryInfoKHR *extraBindInfo,
-    Image *image,
-    uint32_t *memoryTypeIndexOut,
-    DeviceMemory *deviceMemoryOut);
+VkResult AllocateImageMemoryWithRequirements(Context *context,
+                                             vk::MemoryAllocationType memoryAllocationType,
+                                             VkMemoryPropertyFlags memoryPropertyFlags,
+                                             const VkMemoryRequirements &memoryRequirements,
+                                             const void *extraAllocationInfo,
+                                             const VkBindImagePlaneMemoryInfoKHR *extraBindInfo,
+                                             Image *image,
+                                             uint32_t *memoryTypeIndexOut,
+                                             DeviceMemory *deviceMemoryOut);
 
-angle::Result AllocateBufferMemoryWithRequirements(Context *context,
-                                                   MemoryAllocationType memoryAllocationType,
-                                                   VkMemoryPropertyFlags memoryPropertyFlags,
-                                                   const VkMemoryRequirements &memoryRequirements,
-                                                   const void *extraAllocationInfo,
-                                                   Buffer *buffer,
-                                                   VkMemoryPropertyFlags *memoryPropertyFlagsOut,
-                                                   uint32_t *memoryTypeIndexOut,
-                                                   DeviceMemory *deviceMemoryOut);
+VkResult AllocateBufferMemoryWithRequirements(Context *context,
+                                              MemoryAllocationType memoryAllocationType,
+                                              VkMemoryPropertyFlags memoryPropertyFlags,
+                                              const VkMemoryRequirements &memoryRequirements,
+                                              const void *extraAllocationInfo,
+                                              Buffer *buffer,
+                                              VkMemoryPropertyFlags *memoryPropertyFlagsOut,
+                                              uint32_t *memoryTypeIndexOut,
+                                              DeviceMemory *deviceMemoryOut);
 
 angle::Result InitShaderModule(Context *context,
                                ShaderModule *shaderModule,
@@ -1322,21 +1321,30 @@ enum class RenderPassClosureReason
     // LegacyDithering requires updating the render pass
     LegacyDithering,
 
+    // In case of memory budget issues, pending garbage needs to be freed.
+    OutOfMemory,
+
     InvalidEnum,
     EnumCount = InvalidEnum,
 };
 
 }  // namespace rx
 
-#define ANGLE_VK_TRY(context, command)                                                   \
-    do                                                                                   \
-    {                                                                                    \
-        auto ANGLE_LOCAL_VAR = command;                                                  \
-        if (ANGLE_UNLIKELY(ANGLE_LOCAL_VAR != VK_SUCCESS))                               \
-        {                                                                                \
-            (context)->handleError(ANGLE_LOCAL_VAR, __FILE__, ANGLE_FUNCTION, __LINE__); \
-            return angle::Result::Stop;                                                  \
-        }                                                                                \
+#define ANGLE_VK_ERROR(context, error)                                       \
+    do                                                                       \
+    {                                                                        \
+        (context)->handleError((error), __FILE__, ANGLE_FUNCTION, __LINE__); \
+        return angle::Result::Stop;                                          \
+    } while (0)
+
+#define ANGLE_VK_TRY(context, command)                     \
+    do                                                     \
+    {                                                      \
+        auto ANGLE_LOCAL_VAR = command;                    \
+        if (ANGLE_UNLIKELY(ANGLE_LOCAL_VAR != VK_SUCCESS)) \
+        {                                                  \
+            ANGLE_VK_ERROR(context, ANGLE_LOCAL_VAR);      \
+        }                                                  \
     } while (0)
 
 #define ANGLE_VK_CHECK(context, test, error) ANGLE_VK_TRY(context, test ? VK_SUCCESS : error)
@@ -1344,12 +1352,170 @@ enum class RenderPassClosureReason
 #define ANGLE_VK_CHECK_MATH(context, result) \
     ANGLE_VK_CHECK(context, result, VK_ERROR_VALIDATION_FAILED_EXT)
 
-#define ANGLE_VK_CHECK_ALLOC(context, result) \
-    ANGLE_VK_CHECK(context, result, VK_ERROR_OUT_OF_HOST_MEMORY)
-
 #define ANGLE_VK_UNREACHABLE(context) \
     UNREACHABLE();                    \
     ANGLE_VK_CHECK(context, false, VK_ERROR_FEATURE_NOT_PRESENT)
+
+// Returns VkResult if necessary to be passed up to the error handler.
+#define ANGLE_VK_RESULT(command)                           \
+    do                                                     \
+    {                                                      \
+        auto ANGLE_LOCAL_VAR = command;                    \
+        if (ANGLE_UNLIKELY(ANGLE_LOCAL_VAR != VK_SUCCESS)) \
+        {                                                  \
+            return ANGLE_LOCAL_VAR;                        \
+        }                                                  \
+    } while (0)
+
+#define ANGLE_VK_RESULT_CHECK(test, error) ANGLE_VK_RESULT((test) ? VK_SUCCESS : (error))
+
+#define ANGLE_VK_RESULT_CHECK_MATH(result) \
+    ANGLE_VK_RESULT_CHECK(result, VK_ERROR_VALIDATION_FAILED_EXT)
+
+#define ANGLE_VK_RESULT_CHECK_ALLOC(result) \
+    ANGLE_VK_RESULT_CHECK(result, VK_ERROR_OUT_OF_HOST_MEMORY)
+
+#define ANGLE_VK_RESULT_UNREACHABLE() \
+    UNREACHABLE();                    \
+    ANGLE_VK_RESULT_CHECK(false, VK_ERROR_FEATURE_NOT_PRESENT)
+
+// The following macro is used for angle::Result functions used inside functions returning VkResult.
+// This way, it is ensured that there is no error and it is safe to continue execution.
+// TODO(b/280304441): It is best that the VkResult from inside those functions is returned instead
+// of angle::Result::Stop, and ANGLE_VK_TRY_CONTINUE be replaced with ANGLE_VK_RESULT.
+#define ANGLE_VK_TRY_CONTINUE(command)                                  \
+    do                                                                  \
+    {                                                                   \
+        auto ANGLE_LOCAL_VAR = (command);                               \
+        if (ANGLE_UNLIKELY(ANGLE_LOCAL_VAR != angle::Result::Continue)) \
+        {                                                               \
+            ASSERT(false);                                              \
+            return VK_ERROR_UNKNOWN;                                    \
+        }                                                               \
+    } while (0)
+
+// If memory allocation fails, it is possible to retry the allocation after cleaning the garbage
+// from the finished commands.
+#define ANGLE_VK_TRY_FALLBACK_CLEANUP_GARBAGE(contextVk, command, result) \
+    do                                                                    \
+    {                                                                     \
+        (contextVk)->getRenderer()->cleanupGarbage();                     \
+        result = (command);                                               \
+    } while (0)
+
+// If memory allocation fails, it is possible to retry the allocation after waiting for submitted
+// commands to finish and cleaning the garbage.
+#define ANGLE_VK_TRY_FALLBACK_FINISH_COMMAND_BATCHES(contextVk, command, result)          \
+    do                                                                                    \
+    {                                                                                     \
+        bool anyBatchCleaned             = false;                                         \
+        uint32_t batchesWaitedAndCleaned = 0;                                             \
+        do                                                                                \
+        {                                                                                 \
+            ANGLE_TRY((contextVk)->getRenderer()->finishOneCommandBatchAndCleanup(        \
+                contextVk, &anyBatchCleaned));                                            \
+            if (anyBatchCleaned)                                                          \
+            {                                                                             \
+                batchesWaitedAndCleaned++;                                                \
+                result = (command);                                                       \
+            }                                                                             \
+        } while (result != VK_SUCCESS && anyBatchCleaned);                                \
+                                                                                          \
+        if (batchesWaitedAndCleaned > 0)                                                  \
+        {                                                                                 \
+            INFO() << "Initial allocation failed. Waited for " << batchesWaitedAndCleaned \
+                   << " commands to finish and free garbage | Allocation result: "        \
+                   << ((result == VK_SUCCESS) ? "SUCCESS" : "FAIL");                      \
+        }                                                                                 \
+    } while (0)
+
+// If memory allocation fails, it is possible retry after flushing the context and cleaning all the
+// garbage.
+#define ANGLE_VK_TRY_FALLBACK_FLUSH_CONTEXT(contextVk, command, result) \
+    do                                                                  \
+    {                                                                   \
+        ANGLE_TRY((contextVk)->onOutOfMemory());                        \
+        result = (command);                                             \
+    } while (0)
+
+// The following macro evaluates the allocation's success. In case of failure, it uses the following
+// fallbacks:
+// - It finishes submitted commands and retries the allocation.
+// - It flushes the context and cleans all the garbage.
+#define ANGLE_VK_TRY_ALLOC(contextVk, command)                                                    \
+    do                                                                                            \
+    {                                                                                             \
+        VkResult ANGLE_LOCAL_RESULT = (command);                                                  \
+        if (ANGLE_LIKELY(ANGLE_LOCAL_RESULT == VK_SUCCESS))                                       \
+        {                                                                                         \
+            break;                                                                                \
+        }                                                                                         \
+        if (ANGLE_LOCAL_RESULT != VK_ERROR_OUT_OF_DEVICE_MEMORY)                                  \
+        {                                                                                         \
+            ANGLE_VK_ERROR(contextVk, ANGLE_LOCAL_RESULT);                                        \
+        }                                                                                         \
+                                                                                                  \
+        ANGLE_VK_TRY_FALLBACK_CLEANUP_GARBAGE(contextVk, command, ANGLE_LOCAL_RESULT);            \
+                                                                                                  \
+        if (ANGLE_LOCAL_RESULT != VK_SUCCESS)                                                     \
+        {                                                                                         \
+            ANGLE_VK_TRY_FALLBACK_FINISH_COMMAND_BATCHES(contextVk, command, ANGLE_LOCAL_RESULT); \
+        }                                                                                         \
+                                                                                                  \
+        if (ANGLE_LOCAL_RESULT != VK_SUCCESS)                                                     \
+        {                                                                                         \
+            ANGLE_VK_TRY_FALLBACK_FLUSH_CONTEXT(contextVk, command, ANGLE_LOCAL_RESULT);          \
+        }                                                                                         \
+                                                                                                  \
+        if (ANGLE_LOCAL_RESULT == VK_SUCCESS)                                                     \
+        {                                                                                         \
+            break;                                                                                \
+        }                                                                                         \
+        ANGLE_VK_ERROR(contextVk, ANGLE_LOCAL_RESULT);                                            \
+    } while (0)
+
+// Similar to ANGLE_VK_TRY_ALLOC, but also defines an input arg (oomExcludedFlags) to filter the
+// required device-local memory bit in case of persisting OOM despite the fallbacks, allowing the
+// allocation to occur on the system memory.
+#define ANGLE_VK_TRY_ALLOC_IMAGE(contextVk, command)                                              \
+    do                                                                                            \
+    {                                                                                             \
+        VkMemoryPropertyFlags oomExcludedFlags = 0;                                               \
+        auto ANGLE_LOCAL_RESULT                = (command);                                       \
+                                                                                                  \
+        if (ANGLE_LIKELY(ANGLE_LOCAL_RESULT == VK_SUCCESS))                                       \
+        {                                                                                         \
+            break;                                                                                \
+        }                                                                                         \
+        if (ANGLE_LOCAL_RESULT != VK_ERROR_OUT_OF_DEVICE_MEMORY)                                  \
+        {                                                                                         \
+            ANGLE_VK_ERROR(contextVk, ANGLE_LOCAL_RESULT);                                        \
+        }                                                                                         \
+                                                                                                  \
+        ANGLE_VK_TRY_FALLBACK_CLEANUP_GARBAGE(contextVk, command, ANGLE_LOCAL_RESULT);            \
+                                                                                                  \
+        if (ANGLE_LOCAL_RESULT != VK_SUCCESS)                                                     \
+        {                                                                                         \
+            ANGLE_VK_TRY_FALLBACK_FINISH_COMMAND_BATCHES(contextVk, command, ANGLE_LOCAL_RESULT); \
+        }                                                                                         \
+                                                                                                  \
+        if (ANGLE_LOCAL_RESULT != VK_SUCCESS)                                                     \
+        {                                                                                         \
+            ANGLE_VK_TRY_FALLBACK_FLUSH_CONTEXT(contextVk, command, ANGLE_LOCAL_RESULT);          \
+        }                                                                                         \
+                                                                                                  \
+        if (ANGLE_LOCAL_RESULT != VK_SUCCESS)                                                     \
+        {                                                                                         \
+            oomExcludedFlags   = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;                             \
+            ANGLE_LOCAL_RESULT = (command);                                                       \
+        }                                                                                         \
+                                                                                                  \
+        if (ANGLE_LOCAL_RESULT == VK_SUCCESS)                                                     \
+        {                                                                                         \
+            break;                                                                                \
+        }                                                                                         \
+        ANGLE_VK_ERROR(contextVk, ANGLE_LOCAL_RESULT);                                            \
+    } while (0)
 
 // NVIDIA uses special formatting for the driver version:
 // Major: 10

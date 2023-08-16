@@ -38,6 +38,9 @@ constexpr uint32_t kSurfaceSizedBySwapchain = 0xFFFFFFFFu;
 // supported and fence is used instead of queueSerial.
 constexpr uint32_t kInvalidImageIndex = std::numeric_limits<uint32_t>::max();
 
+// Currently there is no OOM-related fallbacks for allocations in DisplayVk objects.
+constexpr VkMemoryPropertyFlags kDisplayOOMExcludedFlags = 0;
+
 GLint GetSampleCount(const egl::Config *config)
 {
     GLint samples = 1;
@@ -245,7 +248,8 @@ angle::Result LockSurfaceImpl(DisplayVk *displayVk,
         VkMemoryPropertyFlags memoryFlags =
             VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
 
-        ANGLE_TRY(lockBufferHelper.init(displayVk, bufferCreateInfo, memoryFlags));
+        VkResult result = lockBufferHelper.init(displayVk, bufferCreateInfo, memoryFlags);
+        ANGLE_VK_CHECK(displayVk, result == VK_SUCCESS, result);
 
         uint8_t *bufferPtr = nullptr;
         ANGLE_TRY(lockBufferHelper.map(displayVk, &bufferPtr));
@@ -580,8 +584,10 @@ angle::Result OffscreenSurfaceVk::AttachmentImage::initialize(DisplayVk *display
     {
         flags |= VK_MEMORY_PROPERTY_PROTECTED_BIT;
     }
-    ANGLE_TRY(image.initMemory(displayVk, hasProtectedContent, renderer->getMemoryProperties(),
-                               flags, vk::MemoryAllocationType::OffscreenSurfaceAttachmentImage));
+    VkResult result = image.initMemory(
+        displayVk, hasProtectedContent, renderer->getMemoryProperties(), flags,
+        kDisplayOOMExcludedFlags, vk::MemoryAllocationType::OffscreenSurfaceAttachmentImage);
+    ANGLE_VK_CHECK(displayVk, result == VK_SUCCESS, result);
 
     imageViews.init(renderer);
 
@@ -1687,9 +1693,12 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
         ANGLE_TRY(mColorImageMS.initMSAASwapchain(
             context, gl::TextureType::_2D, vkExtents, Is90DegreeRotation(getPreTransform()), format,
             samples, usage, gl::LevelIndex(0), 1, 1, robustInit, mState.hasProtectedContent()));
-        ANGLE_TRY(mColorImageMS.initMemory(
+
+        VkResult result = mColorImageMS.initMemory(
             context, mState.hasProtectedContent(), renderer->getMemoryProperties(),
-            VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vk::MemoryAllocationType::SwapchainMSAAImage));
+            VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, kDisplayOOMExcludedFlags,
+            vk::MemoryAllocationType::SwapchainMSAAImage);
+        ANGLE_VK_CHECK(context, result = VK_SUCCESS, result);
 
         // Initialize the color render target with the multisampled targets.  If not multisampled,
         // the render target will be updated to refer to a swapchain image on every acquire.
@@ -1721,10 +1730,12 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
         ANGLE_TRY(mDepthStencilImage.init(context, gl::TextureType::_2D, vkExtents, dsFormat,
                                           samples, dsUsage, gl::LevelIndex(0), 1, 1, robustInit,
                                           mState.hasProtectedContent()));
-        ANGLE_TRY(mDepthStencilImage.initMemory(
+
+        VkResult result = mDepthStencilImage.initMemory(
             context, mState.hasProtectedContent(), renderer->getMemoryProperties(),
-            VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-            vk::MemoryAllocationType::SwapchainDepthStencilImage));
+            VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, kDisplayOOMExcludedFlags,
+            vk::MemoryAllocationType::SwapchainDepthStencilImage);
+        ANGLE_VK_CHECK(context, result == VK_SUCCESS, result);
 
         mDepthStencilRenderTarget.init(&mDepthStencilImage, &mDepthStencilImageViews, nullptr,
                                        nullptr, {}, gl::LevelIndex(0), 0, 1,
