@@ -22,6 +22,7 @@
 #include "libANGLE/renderer/vulkan/RendererVk.h"
 #include "libANGLE/renderer/vulkan/ShareGroupVk.h"
 #include "libANGLE/renderer/vulkan/vk_helpers.h"
+#include "libANGLE/renderer/vulkan/vk_utils.h"
 
 namespace angle
 {
@@ -467,6 +468,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                             const vk::SharedExternalFence *externalFence,
                             RenderPassClosureReason renderPassClosureReason);
     angle::Result finishImpl(RenderPassClosureReason renderPassClosureReason);
+    angle::Result onOutOfMemory();
 
     void addWaitSemaphore(VkSemaphore semaphore, VkPipelineStageFlags stageMask);
 
@@ -732,8 +734,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
                                                vk::BufferHelper **vertexBufferOut)
     {
         bool newBufferOut;
-        ANGLE_TRY(mStreamedVertexBuffers[attribIndex].allocate(this, bytesToAllocate,
-                                                               vertexBufferOut, &newBufferOut));
+        ANGLE_VK_TRY_ALLOC(this, mStreamedVertexBuffers[attribIndex].allocate(
+                                     this, bytesToAllocate, vertexBufferOut, &newBufferOut));
         if (newBufferOut)
         {
             mHasInFlightStreamedVertexBuffers.set(attribIndex);

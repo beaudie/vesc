@@ -25,14 +25,14 @@ class RendererVk;
 
 namespace vk
 {
-angle::Result InitAndroidExternalMemory(ContextVk *contextVk,
-                                        EGLClientBuffer clientBuffer,
-                                        VkMemoryPropertyFlags memoryProperties,
-                                        Buffer *buffer,
-                                        VkMemoryPropertyFlags *memoryPropertyFlagsOut,
-                                        uint32_t *memoryTypeIndexOut,
-                                        DeviceMemory *deviceMemoryOut,
-                                        VkDeviceSize *sizeOut);
+VkResult InitAndroidExternalMemory(ContextVk *contextVk,
+                                   EGLClientBuffer clientBuffer,
+                                   VkMemoryPropertyFlags memoryProperties,
+                                   Buffer *buffer,
+                                   VkMemoryPropertyFlags *memoryPropertyFlagsOut,
+                                   uint32_t *memoryTypeIndexOut,
+                                   DeviceMemory *deviceMemoryOut,
+                                   VkDeviceSize *sizeOut);
 
 void ReleaseAndroidExternalMemory(RendererVk *rendererVk, EGLClientBuffer clientBuffer);
 }  // namespace vk

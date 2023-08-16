@@ -61,14 +61,14 @@ angle::Result GetClientBufferMemoryRequirements(ContextVk *contextVk,
 #endif
 }
 
-angle::Result InitAndroidExternalMemory(ContextVk *contextVk,
-                                        EGLClientBuffer clientBuffer,
-                                        VkMemoryPropertyFlags memoryProperties,
-                                        Buffer *buffer,
-                                        VkMemoryPropertyFlags *memoryPropertyFlagsOut,
-                                        uint32_t *memoryTypeIndexOut,
-                                        DeviceMemory *deviceMemoryOut,
-                                        VkDeviceSize *sizeOut)
+VkResult InitAndroidExternalMemory(ContextVk *contextVk,
+                                   EGLClientBuffer clientBuffer,
+                                   VkMemoryPropertyFlags memoryProperties,
+                                   Buffer *buffer,
+                                   VkMemoryPropertyFlags *memoryPropertyFlagsOut,
+                                   uint32_t *memoryTypeIndexOut,
+                                   DeviceMemory *deviceMemoryOut,
+                                   VkDeviceSize *sizeOut)
 {
 #if defined(ANGLE_PLATFORM_ANDROID)
     const AHBFunctions &functions =
@@ -79,7 +79,7 @@ angle::Result InitAndroidExternalMemory(ContextVk *contextVk,
         angle::android::ClientBufferToAHardwareBuffer(clientBuffer);
 
     VkMemoryRequirements externalMemoryRequirements = {};
-    ANGLE_TRY(
+    ANGLE_VK_TRY_CONTINUE(
         GetClientBufferMemoryRequirements(contextVk, hardwareBuffer, externalMemoryRequirements));
 
     // Import Vulkan DeviceMemory from Android Hardware Buffer.
@@ -87,7 +87,7 @@ angle::Result InitAndroidExternalMemory(ContextVk *contextVk,
     importHardwareBufferInfo.sType  = VK_STRUCTURE_TYPE_IMPORT_ANDROID_HARDWARE_BUFFER_INFO_ANDROID;
     importHardwareBufferInfo.buffer = hardwareBuffer;
 
-    ANGLE_TRY(AllocateBufferMemoryWithRequirements(
+    ANGLE_VK_RESULT(AllocateBufferMemoryWithRequirements(
         contextVk, MemoryAllocationType::BufferExternal, memoryProperties,
         externalMemoryRequirements, &importHardwareBufferInfo, buffer, memoryPropertyFlagsOut,
         memoryTypeIndexOut, deviceMemoryOut));
@@ -95,10 +95,10 @@ angle::Result InitAndroidExternalMemory(ContextVk *contextVk,
 
     functions.acquire(hardwareBuffer);
 
-    return angle::Result::Continue;
+    return VK_SUCCESS;
 #else
-    ANGLE_VK_UNREACHABLE(contextVk);
-    return angle::Result::Stop;
+    ANGLE_VK_RESULT_UNREACHABLE();
+    return VK_ERROR_FEATURE_NOT_PRESENT;
 #endif
 }
 
