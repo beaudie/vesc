@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a87ac12f_00ed08af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-17T17:21:49Z",
+      "side": 1,
+      "message": "LGTM - thanks for thinking about this, Roman.",
+      "revId": "3ec51ff99fee93f01834b349f5286ccbc263fdc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
