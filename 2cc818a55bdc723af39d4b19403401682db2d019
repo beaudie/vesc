@@ -90,6 +90,24 @@
       "message": "Please add a static_assert that `is_trivially_copyable\u003cRangeUI\u003e` holds, to make sure RangeUI remains mempcy-able.",
       "revId": "2cc818a55bdc723af39d4b19403401682db2d019",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50bcefb2_76351b56",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-17T17:32:20Z",
+      "side": 1,
+      "message": "Thanks, I was looking for exact this, didn\u0027t know it actually exist.",
+      "parentUuid": "41dd9482_e83cde8d",
+      "revId": "2cc818a55bdc723af39d4b19403401682db2d019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
