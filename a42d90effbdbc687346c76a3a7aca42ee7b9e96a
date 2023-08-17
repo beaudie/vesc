@@ -93,6 +93,30 @@
       },
       "revId": "a42d90effbdbc687346c76a3a7aca42ee7b9e96a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e3cc9cd_c9e1813a",
+        "filename": "util/capture/trace_interface.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-17T21:42:30Z",
+      "side": 1,
+      "message": "Prefer the enum for easier to understand code, and we may split this up farther in the future (i.e. only trim textures).\n\nMaybe `Active` and `All`?",
+      "parentUuid": "6d67e3b0_32971d3c",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 9
+      },
+      "revId": "a42d90effbdbc687346c76a3a7aca42ee7b9e96a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
