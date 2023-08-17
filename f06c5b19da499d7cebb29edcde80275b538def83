@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1753f00_e9cfbc6f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-17T17:45:26Z",
+      "side": 1,
+      "message": "Nice work Mark!",
+      "revId": "f06c5b19da499d7cebb29edcde80275b538def83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecd49d33_6bed0661",
+        "filename": "src/tests/perf_tests/README.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-17T17:45:26Z",
+      "side": 1,
+      "message": "Can you also document `--full-replay` here?",
+      "revId": "f06c5b19da499d7cebb29edcde80275b538def83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
