@@ -3,6 +3,109 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "13cb0467_4907d358",
+        "filename": "src/compiler/translator/tree_ops/RescopeGlobalVariables.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-17T02:07:29Z",
+      "side": 1,
+      "message": "Suggest `TFunction`, that\u0027s the unchanging constant (not that `TIntermFunctionDefinition *` changes in this traversal, but in general it\u0027s a \"reference\" to the `TFunction`, and itself is replaceable)",
+      "range": {
+        "startLine": 25,
+        "startChar": 16,
+        "endLine": 25,
+        "endChar": 41
+      },
+      "revId": "97a4d4e3af24b6a31bc9e625b0de87f1acb7e476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee1e76b0_e143f3fe",
+        "filename": "src/compiler/translator/tree_ops/RescopeGlobalVariables.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-17T02:07:29Z",
+      "side": 1,
+      "message": "Shouldn\u0027t need this, nor `mCurrentBlockStack`. Aren\u0027t we only interested in the global variable? The \"block\" for all the global variables is `root`!",
+      "revId": "97a4d4e3af24b6a31bc9e625b0de87f1acb7e476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "286fa5d3_0ea5297e",
+        "filename": "src/compiler/translator/tree_ops/RescopeGlobalVariables.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-17T02:07:29Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 31,
+        "startChar": 4,
+        "endLine": 31,
+        "endChar": 29
+      },
+      "revId": "97a4d4e3af24b6a31bc9e625b0de87f1acb7e476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82b61c04_53ff895c",
+        "filename": "src/compiler/translator/tree_ops/RescopeGlobalVariables.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-17T02:07:29Z",
+      "side": 1,
+      "message": "Per ANGLE\u0027s style, move these to the end of the class:\n\n```\nclass X\n{\npublic:\n functions...\nprivate:\n functions...\n variables...\n}\n```",
+      "revId": "97a4d4e3af24b6a31bc9e625b0de87f1acb7e476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f184ef6_31d82156",
+        "filename": "src/compiler/translator/tree_ops/RescopeGlobalVariables.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-17T02:07:29Z",
+      "side": 1,
+      "message": "You probably want `true, false, true` here. So you can visit before and after the function declaration. You could probably get away with just pre-visit (i.e. `true, false, false`), if you also take advantage of `mInGlobalScope`.",
+      "range": {
+        "startLine": 35,
+        "startChar": 59,
+        "endLine": 35,
+        "endChar": 70
+      },
+      "revId": "97a4d4e3af24b6a31bc9e625b0de87f1acb7e476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "62f324fe_cd87b33e",
         "filename": "src/compiler/translator/tree_ops/RescopeGlobalVariables.cpp",
         "patchSetId": 4
@@ -20,6 +123,64 @@
         "endLine": 51,
         "endChar": 20
       },
+      "revId": "97a4d4e3af24b6a31bc9e625b0de87f1acb7e476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "724da219_68c33126",
+        "filename": "src/compiler/translator/tree_ops/RescopeGlobalVariables.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-17T02:07:29Z",
+      "side": 1,
+      "message": "Ok this can be easy if you just do it in a separate loop (untested code):\n\n```\nstd::set\u003cTIntermDeclaration *\u003e movedDeclarations;\nfor (auto\u0026 pair : mGlobalVarsNeedRescope)\n{\n    if (pair.second.functions.size() \u003d\u003d 1)\n    {\n       ...\n       movedDeclarations.insert(pair.second.declaration);\n    }\n}\n\n// Remove the global declarations that have been moved.\nTIntermSequence *original \u003d root-\u003egetSequence();\nTIntermSequence replacement;\n\nfor (TIntermNode *node : *original)\n{\n    if (movedDeclarations.find(node-\u003egetAsDeclarationNode()) \u003d\u003d movedDeclarations.end())\n    {\n        replacement.push_back(node);\n    }\n}\n\n*original \u003d std::move(replacement);\n```",
+      "parentUuid": "62f324fe_cd87b33e",
+      "range": {
+        "startLine": 50,
+        "startChar": 15,
+        "endLine": 51,
+        "endChar": 20
+      },
+      "revId": "97a4d4e3af24b6a31bc9e625b0de87f1acb7e476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1737dbd_272d28bc",
+        "filename": "src/compiler/translator/tree_ops/RescopeGlobalVariables.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-17T02:07:29Z",
+      "side": 1,
+      "message": "nit: please move these files to `tree_ops/msl`, they won\u0027t be used by any other backend, will they?",
+      "revId": "97a4d4e3af24b6a31bc9e625b0de87f1acb7e476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12d6d1f8_0f9c8429",
+        "filename": "src/tests/compiler_tests/MSLOutput_test.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-17T02:07:29Z",
+      "side": 1,
+      "message": "Make sure to add tests where the global declaration being moved (or not) is declared *in between* some functions.",
       "revId": "97a4d4e3af24b6a31bc9e625b0de87f1acb7e476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
