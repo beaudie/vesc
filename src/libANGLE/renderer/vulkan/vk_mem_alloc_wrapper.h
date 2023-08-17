@@ -26,7 +26,6 @@ typedef enum VirtualBlockCreateFlagBits
 {
     GENERAL = 0x00000000,
     LINEAR  = 0x00000001,
-    BUDDY   = 0x00000002
 } VirtualBlockCreateFlagBits;
 #else
 typedef enum VirtualBlockCreateFlagBits
@@ -63,9 +62,6 @@ void DestroyAllocator(VmaAllocator allocator);
 
 VkResult CreatePool(VmaAllocator allocator,
                     uint32_t memoryTypeIndex,
-#if ANGLE_VMA_VERSION < 3000000
-                    bool buddyAlgorithm,
-#endif  // ANGLE_VMA_VERSION < 3000000
                     VkDeviceSize blockSize,
                     VmaPool *pPool);
 void DestroyPool(VmaAllocator allocator, VmaPool pool);
