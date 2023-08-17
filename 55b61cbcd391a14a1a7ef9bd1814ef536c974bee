@@ -204,6 +204,30 @@
       },
       "revId": "55b61cbcd391a14a1a7ef9bd1814ef536c974bee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f28dd3b_61593883",
+        "filename": "scripts/angle_trace_bundle.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-08-17T15:15:27Z",
+      "side": 1,
+      "message": "I changed this line again :) Replaced with a note. It\u0027s taken care of by the isolate which the script already calls with `angle_trace_perf_tests`.",
+      "parentUuid": "23a0c0c1_7ecb38cb",
+      "range": {
+        "startLine": 17,
+        "startChar": 32,
+        "endLine": 17,
+        "endChar": 54
+      },
+      "revId": "55b61cbcd391a14a1a7ef9bd1814ef536c974bee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
