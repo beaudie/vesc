@@ -39,6 +39,30 @@
       },
       "revId": "58d8ee58c277766905c484ea1999faf93519c1c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96be0b75_0a68e78f",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-08-17T20:08:58Z",
+      "side": 1,
+      "message": "If it goes first then it fails first and we get the \"tracegz\" error instead of the custom error handling I\u0027m adding here.",
+      "parentUuid": "d3082984_ed05cd5a",
+      "range": {
+        "startLine": 331,
+        "startChar": 7,
+        "endLine": 332,
+        "endChar": 31
+      },
+      "revId": "58d8ee58c277766905c484ea1999faf93519c1c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
