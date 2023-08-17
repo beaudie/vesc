@@ -691,20 +691,14 @@ egl::ConfigSet DisplayEGL::generateConfigs()
 
         config.surfaceType = fixSurfaceType(config.surfaceType);
 
-        if (config.colorBufferType == EGL_RGB_BUFFER)
+        config.renderTargetFormat = gl::GetConfigColorBufferFormat(&config);
+        if (config.renderTargetFormat == GL_NONE)
         {
-            config.renderTargetFormat = gl::GetConfigColorBufferFormat(&config);
-            if (config.renderTargetFormat == GL_NONE)
-            {
-                ERR() << "RGBA(" << config.redSize << "," << config.greenSize << ","
-                      << config.blueSize << "," << config.alphaSize << ") not handled";
-                continue;
-            }
-        }
-        else
-        {
+            ERR() << "RGBA(" << config.redSize << "," << config.greenSize << "," << config.blueSize
+                  << "," << config.alphaSize << ") not handled";
             continue;
         }
+
         config.depthStencilFormat = gl::GetConfigDepthStencilBufferFormat(&config);
 
         config.matchNativePixmap  = EGL_NONE;
