@@ -141,6 +141,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "598684dc_893a0423",
+        "filename": "scripts/angle_deqp_bundle.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-08-17T15:14:06Z",
+      "side": 1,
+      "message": "Ok I see now what confused you. I rearranged the code a bit - inlined in this script and tried to clarify in the trace bundle. Hopefully that makes it a bit more clear.",
+      "parentUuid": "1e514812_0beb4d78",
+      "revId": "55b61cbcd391a14a1a7ef9bd1814ef536c974bee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "567e0802_a99101ed",
