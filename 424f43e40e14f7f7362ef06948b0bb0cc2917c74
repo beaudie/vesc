@@ -52,6 +52,24 @@
       "parentUuid": "d2b01ca1_220856ea",
       "revId": "424f43e40e14f7f7362ef06948b0bb0cc2917c74",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "383a61ca_22cb25eb",
+        "filename": "src/libANGLE/Shader.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1018,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-17T01:50:44Z",
+      "side": 1,
+      "message": "TBH, without parallel link (which is disabled on Vulkan), this log shouldn\u0027t happen at all. Is AOSP somehow running ANGLE/gl instead of ANGLE/Vulkan?",
+      "parentUuid": "5651c31b_ac9cc347",
+      "revId": "424f43e40e14f7f7362ef06948b0bb0cc2917c74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
