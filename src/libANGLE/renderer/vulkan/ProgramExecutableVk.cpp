@@ -318,13 +318,19 @@ void ShaderInfo::load(gl::BinaryInputStream *stream)
 {
     clear();
 
+    // Read in shader code sizes for all shader types
+    gl::ShaderMap<uint32_t> blobSizeInBytes;
+    stream->readBytes(reinterpret_cast<uint8_t *>(blobSizeInBytes.data()),
+                      blobSizeInBytes.size() * sizeof(uint32_t));
     // Read in shader codes for all shader types
     for (gl::ShaderType shaderType : gl::AllShaderTypes())
     {
-        angle::spirv::Blob *spirvBlob = &mSpirvBlobs[shaderType];
-
-        // Read the SPIR-V
-        stream->readIntVector<uint32_t>(spirvBlob);
+        if (blobSizeInBytes[shaderType] > 0)
+        {
+            // Read the SPIR-V
+            stream->readBytes(reinterpret_cast<uint8_t *>(mSpirvBlobs[shaderType].data()),
+                              blobSizeInBytes[shaderType]);
+        }
     }
 
     mIsInitialized = true;
@@ -334,13 +340,27 @@ void ShaderInfo::save(gl::BinaryOutputStream *stream)
 {
     ASSERT(valid());
 
+    // Write out shader codes size for all shader types
+    gl::ShaderMap<uint32_t> blobSizeInBytes;
+    for (gl::ShaderType shaderType : gl::AllShaderTypes())
+    {
+        blobSizeInBytes[shaderType] = static_cast<uint32_t>(
+            mSpirvBlobs[shaderType].size() * sizeof(*mSpirvBlobs[shaderType].data()));
+    }
+    stream->writeBytes(reinterpret_cast<uint8_t *>(blobSizeInBytes.data()),
+                       blobSizeInBytes.size() * sizeof(uint32_t));
+
     // Write out shader codes for all shader types
     for (gl::ShaderType shaderType : gl::AllShaderTypes())
     {
-        const angle::spirv::Blob &spirvBlob = mSpirvBlobs[shaderType];
+        if (blobSizeInBytes[shaderType] > 0)
+        {
+            const angle::spirv::Blob &spirvBlob = mSpirvBlobs[shaderType];
 
-        // Write the SPIR-V
-        stream->writeIntVector(spirvBlob);
+            // Write the SPIR-V
+            stream->writeBytes(reinterpret_cast<const unsigned char *>(spirvBlob.data()),
+                               blobSizeInBytes[shaderType]);
+        }
     }
 }
 
