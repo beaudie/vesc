@@ -9299,7 +9299,17 @@ Program *Context::getProgramNoResolveLink(ShaderProgramID handle) const
     return mState.mShaderProgramManager->getProgram(handle);
 }
 
-Shader *Context::getShader(ShaderProgramID handle) const
+Shader *Context::getShaderResolveCompile(ShaderProgramID handle) const
+{
+    Shader *shader = getShaderNoResolveCompile(handle);
+    if (shader)
+    {
+        shader->resolveCompile(this);
+    }
+    return shader;
+}
+
+Shader *Context::getShaderNoResolveCompile(ShaderProgramID handle) const
 {
     return mState.mShaderProgramManager->getShader(handle);
 }

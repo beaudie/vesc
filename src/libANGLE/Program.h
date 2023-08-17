@@ -15,6 +15,7 @@
 
 #include <array>
 #include <map>
+#include <memory>
 #include <set>
 #include <sstream>
 #include <string>
@@ -48,6 +49,7 @@ class Buffer;
 class BinaryInputStream;
 class BinaryOutputStream;
 struct Caps;
+struct CompiledShaderState;
 class Context;
 struct Extensions;
 class Framebuffer;
@@ -223,7 +225,7 @@ class ProgramState final : angle::NonCopyable
     const std::string &getLabel();
 
     Shader *getAttachedShader(ShaderType shaderType) const;
-    const gl::ShaderMap<Shader *> &getAttachedShaders() const { return mAttachedShaders; }
+    const ShaderMap<std::shared_ptr<CompiledShaderState>> &getAttachedShaders() const { return mAttachedShaders; }
     const std::vector<std::string> &getTransformFeedbackVaryingNames() const
     {
         return mTransformFeedbackVaryingNames;
@@ -384,7 +386,7 @@ class ProgramState final : angle::NonCopyable
 
     sh::WorkGroupSize mComputeShaderLocalSize;
 
-    ShaderMap<Shader *> mAttachedShaders;
+    ShaderMap<std::shared_ptr<CompiledShaderState>> mAttachedShaders;
 
     uint32_t mLocationsUsedForXfbExtension;
     std::vector<std::string> mTransformFeedbackVaryingNames;
@@ -914,6 +916,8 @@ class Program final : public LabeledObject, public angle::Subject
 
     ShaderProgramManager *mResourceManager;
     const ShaderProgramID mHandle;
+
+    ShaderMap<ShaderProgramID> mAttachedShaderHandles;
 
     DirtyBits mDirtyBits;
 

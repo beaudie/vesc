@@ -1189,6 +1189,18 @@ angle::Result Program::linkImpl(const Context *context)
     unlink();
     InfoLog &infoLog = mState.mExecutable->getInfoLog();
 
+    // Make sure no compile jobs are pending.
+    // TODO: move this to the link job itself.  http://anglebug.com/8297
+    const ProgramExecutable &programExecutable = mState.getExecutable();
+    for (const ShaderType shaderType : programExecutable.getLinkedShaderStages())
+    {
+        Shader *shader = mState.getAttachedShader(shaderType);
+        if (shader)
+        {
+            shader->resolveCompile(context);
+        }
+    }
+
     // Re-link shaders after the unlink call.
     bool result = linkValidateShaders(context, infoLog);
     ASSERT(result);
@@ -1671,11 +1683,11 @@ void Program::getAttachedShaders(GLsizei maxCount, GLsizei *count, ShaderProgram
     ASSERT(!mLinkingState);
     int total = 0;
 
-    for (const Shader *shader : mState.mAttachedShaders)
+    for (const ShaderProgramID shader : mState.mAttachedShaderHandles)
     {
-        if (shader && (total < maxCount))
+        if (GetIDValue(shader) != 0 && total < maxCount)
         {
-            shaders[total] = shader->getHandle();
+            shaders[total] = shader;
             ++total;
         }
     }
