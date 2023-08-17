@@ -22,6 +22,30 @@
       },
       "revId": "434c692879f665c1f3e48b389bfba23d6ee3df19",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f2c8aa3_ef1c79fd",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1490,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-17T17:44:48Z",
+      "side": 1,
+      "message": "I\u0027ll look into it. I can\u0027t move the pipeline layout because the warm up depends on it, but probably can do for desc sets.",
+      "parentUuid": "459f3d15_a12c81d3",
+      "range": {
+        "startLine": 1480,
+        "startChar": 4,
+        "endLine": 1490,
+        "endChar": 0
+      },
+      "revId": "434c692879f665c1f3e48b389bfba23d6ee3df19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
