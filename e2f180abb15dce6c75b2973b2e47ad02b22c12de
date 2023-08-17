@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b0ab93c_a1b1b5d7",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1701,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-08-17T17:28:17Z",
+      "side": 1,
+      "message": "Active calls are used with ReplayFuncs other than Setup, and some of the parenthesis are necessary but will fix the rest.",
+      "parentUuid": "779573d6_03a3597b",
+      "range": {
+        "startLine": 1700,
+        "startChar": 7,
+        "endLine": 1701,
+        "endChar": 73
+      },
+      "revId": "e2f180abb15dce6c75b2973b2e47ad02b22c12de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "475a827b_a7c6da4a",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-08-16T14:53:34Z",
       "side": 1,
       "message": "nit: Can we rename this to `SetupReplayContextSharedInactive` so the unique identifier is at the end?",
+      "range": {
+        "startLine": 18,
+        "startChar": 5,
+        "endLine": 18,
+        "endChar": 37
+      },
+      "revId": "e2f180abb15dce6c75b2973b2e47ad02b22c12de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d129c42_6adab9d6",
+        "filename": "src/tests/capture_tests/expected/CapturedTest_MultiFrame_ES3_Vulkan.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-08-17T17:28:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "475a827b_a7c6da4a",
       "range": {
         "startLine": 18,
         "startChar": 5,
@@ -87,6 +135,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "86b93462_052d5dad",
+        "filename": "src/tests/capture_tests/expected/CapturedTest_MultiFrame_ES3_Vulkan_001.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-08-17T17:28:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13ce04e3_532d8a0e",
+      "range": {
+        "startLine": 101,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 99
+      },
+      "revId": "e2f180abb15dce6c75b2973b2e47ad02b22c12de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9f7d084f_062f3c8f",
@@ -104,6 +176,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "16f2044d_d11ab6e5",
+        "filename": "src/tests/capture_tests/expected/CapturedTest_MultiFrame_ES3_Vulkan_shared.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-08-17T17:28:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f7d084f_062f3c8f",
+      "revId": "e2f180abb15dce6c75b2973b2e47ad02b22c12de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "77d209c9_a3b13166",
@@ -117,6 +207,30 @@
       "writtenOn": "2023-08-16T14:53:34Z",
       "side": 1,
       "message": "nit: should be okay without the extra parentheses",
+      "range": {
+        "startLine": 56,
+        "startChar": 13,
+        "endLine": 56,
+        "endChar": 27
+      },
+      "revId": "e2f180abb15dce6c75b2973b2e47ad02b22c12de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bf60ae3_906efaa0",
+        "filename": "util/capture/frame_capture_test_utils.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-08-17T17:28:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77d209c9_a3b13166",
       "range": {
         "startLine": 56,
         "startChar": 13,
@@ -152,6 +266,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c898d05d_25d7008c",
+        "filename": "util/capture/trace_fixture.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-08-17T17:28:17Z",
+      "side": 1,
+      "message": "We\u0027d need an overloaded version then, yes?  For backwards compatibilitiy?",
+      "parentUuid": "f718978d_b712c552",
+      "range": {
+        "startLine": 56,
+        "startChar": 24,
+        "endLine": 56,
+        "endChar": 35
+      },
+      "revId": "e2f180abb15dce6c75b2973b2e47ad02b22c12de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4f34a6a3_59f83732",
         "filename": "util/capture/trace_fixture.h",
         "patchSetId": 3
@@ -163,6 +301,30 @@
       "writtenOn": "2023-08-16T14:53:34Z",
       "side": 1,
       "message": "Do we need to include this here?  I don\u0027t see similar entries like `SetBinaryDataDir` in this header.",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 92
+      },
+      "revId": "e2f180abb15dce6c75b2973b2e47ad02b22c12de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ce77f70_4d04b9d2",
+        "filename": "util/capture/trace_fixture.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-08-17T17:28:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f34a6a3_59f83732",
       "range": {
         "startLine": 60,
         "startChar": 0,
@@ -186,6 +348,30 @@
       "writtenOn": "2023-08-16T14:53:34Z",
       "side": 1,
       "message": "nit: alphabetize for consistency",
+      "range": {
+        "startLine": 65,
+        "startChar": 17,
+        "endLine": 65,
+        "endChar": 38
+      },
+      "revId": "e2f180abb15dce6c75b2973b2e47ad02b22c12de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45b5b4f8_db76614a",
+        "filename": "util/capture/trace_interface.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-08-17T17:28:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a87020d8_3d2808e2",
       "range": {
         "startLine": 65,
         "startChar": 17,
