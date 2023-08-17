@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "972bc881_380836cf",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 911,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-17T22:11:28Z",
+      "side": 1,
+      "message": "Thanks a lot for the information. This turns out is a POD style struct. But according to https://en.cppreference.com/w/cpp/language/classes#Trivially_copyable_class , \"the usage of the POD property is deprecated. User codes should expect or require the trivial or standard-layout property, or both of them.\", so I am using is_standard_layout here and named it mPODStruct. This looks like exactly what I want here.",
+      "parentUuid": "166bb1d8_58b6f28b",
+      "range": {
+        "startLine": 911,
+        "startChar": 25,
+        "endLine": 911,
+        "endChar": 44
+      },
+      "revId": "2cc818a55bdc723af39d4b19403401682db2d019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b08d0ec1_91987d6a",
@@ -58,6 +82,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5833896f_e304b800",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 306,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-17T22:11:28Z",
+      "side": 1,
+      "message": "Replaced this entire block of code with memset, since most of it is just setting to 0.",
+      "parentUuid": "b08d0ec1_91987d6a",
+      "revId": "2cc818a55bdc723af39d4b19403401682db2d019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0ca72c5f_7a4216aa",
@@ -71,6 +113,24 @@
       "writtenOn": "2023-08-17T17:23:43Z",
       "side": 1,
       "message": "super nit: move up to match the header declaration.\n\nAlso looks like `transformFeedbackBufferMode` was not reset before, so you can fix that now too.",
+      "revId": "2cc818a55bdc723af39d4b19403401682db2d019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6035e415_54b710c1",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-17T22:11:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ca72c5f_7a4216aa",
       "revId": "2cc818a55bdc723af39d4b19403401682db2d019",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -106,6 +166,24 @@
       "side": 1,
       "message": "Thanks, I was looking for exact this, didn\u0027t know it actually exist.",
       "parentUuid": "41dd9482_e83cde8d",
+      "revId": "2cc818a55bdc723af39d4b19403401682db2d019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22532c59_19dfcfd3",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-17T22:11:28Z",
+      "side": 1,
+      "message": "Added is_trivially_copyable for RangeUI.\nAlso added is_standard_layout for this entire data structure and named nPODStruct",
+      "parentUuid": "50bcefb2_76351b56",
       "revId": "2cc818a55bdc723af39d4b19403401682db2d019",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
