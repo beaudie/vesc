@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "89624850_30b64f09",
+        "filename": "src/tests/perf_tests/ANGLEPerfTestArgs.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-08-17T20:28:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b34e127_45498161",
+      "range": {
+        "startLine": 108,
+        "startChar": 22,
+        "endLine": 108,
+        "endChar": 35
+      },
+      "revId": "f06c5b19da499d7cebb29edcde80275b538def83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ecd49d33_6bed0661",
@@ -82,6 +106,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "99a0928d_ee3ab2ca",
+        "filename": "src/tests/perf_tests/README.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-08-17T20:28:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ecd49d33_6bed0661",
+      "revId": "f06c5b19da499d7cebb29edcde80275b538def83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "21c56a20_6426e38a",
@@ -95,6 +137,30 @@
       "writtenOn": "2023-08-17T18:18:29Z",
       "side": 1,
       "message": "Is this change accidental?",
+      "range": {
+        "startLine": 270,
+        "startChar": 3,
+        "endLine": 270,
+        "endChar": 21
+      },
+      "revId": "f06c5b19da499d7cebb29edcde80275b538def83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9ca45ce_e348036c",
+        "filename": "util/capture/trace_fixture.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-08-17T20:28:27Z",
+      "side": 1,
+      "message": "No, `git cl format` makes that change.",
+      "parentUuid": "21c56a20_6426e38a",
       "range": {
         "startLine": 270,
         "startChar": 3,
