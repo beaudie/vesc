@@ -76,7 +76,7 @@ void MemoryProgramCache::ComputeHash(const Context *context,
     BinaryOutputStream hashStream;
     for (ShaderType shaderType : AllShaderTypes())
     {
-        Shader *shader = program->getAttachedShader(shaderType);
+        Shader *shader = program->getAttachedShader(context, shaderType);
         if (shader)
         {
             shader->writeShaderKey(&hashStream);

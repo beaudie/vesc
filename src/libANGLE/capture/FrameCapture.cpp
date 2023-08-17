@@ -1805,12 +1805,12 @@ void WriteShareGroupCppSetupReplay(ReplayWriter &replayWriter,
     replayWriter.saveSetupFile();
 }
 
-ProgramSources GetAttachedProgramSources(const gl::Program *program)
+ProgramSources GetAttachedProgramSources(const gl::Context *context, const gl::Program *program)
 {
     ProgramSources sources;
     for (gl::ShaderType shaderType : gl::AllShaderTypes())
     {
-        const gl::Shader *shader = program->getAttachedShader(shaderType);
+        const gl::Shader *shader = program->getAttachedShader(context, shaderType);
         if (shader)
         {
             sources[shaderType] = shader->getSourceString();
@@ -3454,7 +3454,7 @@ void GenerateLinkedProgram(const gl::Context *context,
     // SetupReplayContextShared() are consistent with the ShaderProgramID handles used by the app.
     for (gl::ShaderType shaderType : program->getExecutable().getLinkedShaderStages())
     {
-        gl::Shader *attachedShader = program->getAttachedShader(shaderType);
+        gl::Shader *attachedShader = program->getAttachedShader(context, shaderType);
         if (attachedShader == nullptr)
         {
             Capture(setupCalls,
@@ -7357,7 +7357,7 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
             gl::ShaderProgramID shaderID =
                 call.params.getParam("shaderPacked", ParamType::TShaderProgramID, 0)
                     .value.ShaderProgramIDVal;
-            const gl::Shader *shader = context->getShader(shaderID);
+            const gl::Shader *shader = context->getShaderNoResolveCompile(shaderID);
             // Shaders compiled for ProgramBinary will not have a shader created
             if (shader)
             {
@@ -7374,9 +7374,9 @@ void FrameCaptureShared::maybeCapturePreCallUpdates(
                     .value.ShaderProgramIDVal;
             const gl::Program *program = context->getProgramResolveLink(programID);
             // Programs linked in support of ProgramBinary will not have attached shaders
-            if (program->getState().hasAttachedShader())
+            if (program->getState().hasAnyAttachedShader())
             {
-                setProgramSources(programID, GetAttachedProgramSources(program));
+                setProgramSources(programID, GetAttachedProgramSources(context, program));
             }
             break;
         }
