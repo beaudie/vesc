@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9e3f211_00c516c3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-08-17T21:10:52Z",
+      "side": 1,
+      "message": "Could you mention that we\u0027re adding inactive resources but not using the flag in capture_tests? which I think is causing the shift in ids",
+      "range": {
+        "startLine": 15,
+        "startChar": 4,
+        "endLine": 15,
+        "endChar": 50
+      },
+      "revId": "a42d90effbdbc687346c76a3a7aca42ee7b9e96a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d46ad8dc_d96065e7",
+        "filename": "util/capture/trace_interface.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-08-17T21:10:52Z",
+      "side": 1,
+      "message": "Could we also rename to something-inactive here?\n\nDo we need this enum or could it be just a bool like `includeInactiveResources` which would match the flag nicely?",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 9
+      },
+      "revId": "a42d90effbdbc687346c76a3a7aca42ee7b9e96a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
