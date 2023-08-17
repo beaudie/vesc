@@ -16,6 +16,24 @@
       "message": "Please remember you can use rubber stamper for expectation changes.",
       "revId": "a76fbc4384d4ea6222e96a220b2cfe02490bd807",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e8efbcc_1a08c1e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-08-17T18:26:47Z",
+      "side": 1,
+      "message": "got it, thank you Yuly.",
+      "parentUuid": "fa0df952_7f8ab417",
+      "revId": "a76fbc4384d4ea6222e96a220b2cfe02490bd807",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
