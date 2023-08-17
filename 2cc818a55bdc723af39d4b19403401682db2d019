@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72038a10_f9c6dc0f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-08-17T14:14:10Z",
+      "side": 1,
+      "message": "I only glanced over quickly, looks like one of those changes that are easier to make than review.",
+      "revId": "2cc818a55bdc723af39d4b19403401682db2d019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "166bb1d8_58b6f28b",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 911,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-08-17T14:14:10Z",
+      "side": 1,
+      "message": "Probably too late for this but it just crossed my mind IIUC this is normally called POD type so maybe naming could be based on that",
+      "range": {
+        "startLine": 911,
+        "startChar": 25,
+        "endLine": 911,
+        "endChar": 44
+      },
+      "revId": "2cc818a55bdc723af39d4b19403401682db2d019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
