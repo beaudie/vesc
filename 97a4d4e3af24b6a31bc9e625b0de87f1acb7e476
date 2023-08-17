@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "76883ecf_eb8ea0de",
+        "filename": "src/compiler/translator/tree_ops/RescopeGlobalVariables.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2023-08-17T18:28:15Z",
+      "side": 1,
+      "message": "I think I need the TIntermFunctionDefinition to get the body for modification",
+      "parentUuid": "13cb0467_4907d358",
+      "range": {
+        "startLine": 25,
+        "startChar": 16,
+        "endLine": 25,
+        "endChar": 41
+      },
+      "revId": "97a4d4e3af24b6a31bc9e625b0de87f1acb7e476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ee1e76b0_e143f3fe",
@@ -37,6 +61,24 @@
       "writtenOn": "2023-08-17T02:07:29Z",
       "side": 1,
       "message": "Shouldn\u0027t need this, nor `mCurrentBlockStack`. Aren\u0027t we only interested in the global variable? The \"block\" for all the global variables is `root`!",
+      "revId": "97a4d4e3af24b6a31bc9e625b0de87f1acb7e476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "790c729c_0417dbc9",
+        "filename": "src/compiler/translator/tree_ops/RescopeGlobalVariables.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2023-08-17T18:28:15Z",
+      "side": 1,
+      "message": "Removed, just double checked, you\u0027re right!",
+      "parentUuid": "ee1e76b0_e143f3fe",
       "revId": "97a4d4e3af24b6a31bc9e625b0de87f1acb7e476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -64,6 +106,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d1c4e6a_8d20c52f",
+        "filename": "src/compiler/translator/tree_ops/RescopeGlobalVariables.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2023-08-17T18:28:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "286fa5d3_0ea5297e",
+      "range": {
+        "startLine": 31,
+        "startChar": 4,
+        "endLine": 31,
+        "endChar": 29
+      },
+      "revId": "97a4d4e3af24b6a31bc9e625b0de87f1acb7e476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "82b61c04_53ff895c",
@@ -81,6 +147,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "289d0f08_87971682",
+        "filename": "src/compiler/translator/tree_ops/RescopeGlobalVariables.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2023-08-17T18:28:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82b61c04_53ff895c",
+      "revId": "97a4d4e3af24b6a31bc9e625b0de87f1acb7e476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1f184ef6_31d82156",
@@ -94,6 +178,30 @@
       "writtenOn": "2023-08-17T02:07:29Z",
       "side": 1,
       "message": "You probably want `true, false, true` here. So you can visit before and after the function declaration. You could probably get away with just pre-visit (i.e. `true, false, false`), if you also take advantage of `mInGlobalScope`.",
+      "range": {
+        "startLine": 35,
+        "startChar": 59,
+        "endLine": 35,
+        "endChar": 70
+      },
+      "revId": "97a4d4e3af24b6a31bc9e625b0de87f1acb7e476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2844b303_1ea8bdb0",
+        "filename": "src/compiler/translator/tree_ops/RescopeGlobalVariables.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2023-08-17T18:28:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f184ef6_31d82156",
       "range": {
         "startLine": 35,
         "startChar": 59,
@@ -151,6 +259,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "329ba649_9842cee0",
+        "filename": "src/compiler/translator/tree_ops/RescopeGlobalVariables.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2023-08-17T18:28:15Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "724da219_68c33126",
+      "range": {
+        "startLine": 50,
+        "startChar": 15,
+        "endLine": 51,
+        "endChar": 20
+      },
+      "revId": "97a4d4e3af24b6a31bc9e625b0de87f1acb7e476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e1737dbd_272d28bc",
@@ -168,6 +300,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "258d8a7d_ac52d6f7",
+        "filename": "src/compiler/translator/tree_ops/RescopeGlobalVariables.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2023-08-17T18:28:15Z",
+      "side": 1,
+      "message": "It has to be done before DeferGlobalInitializers, so it will be done in shared code in Compiler.cpp, that\u0027s why",
+      "parentUuid": "e1737dbd_272d28bc",
+      "revId": "97a4d4e3af24b6a31bc9e625b0de87f1acb7e476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "12d6d1f8_0f9c8429",
@@ -181,6 +331,24 @@
       "writtenOn": "2023-08-17T02:07:29Z",
       "side": 1,
       "message": "Make sure to add tests where the global declaration being moved (or not) is declared *in between* some functions.",
+      "revId": "97a4d4e3af24b6a31bc9e625b0de87f1acb7e476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc1101c1_94ae26c2",
+        "filename": "src/tests/compiler_tests/MSLOutput_test.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2023-08-17T18:28:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "12d6d1f8_0f9c8429",
       "revId": "97a4d4e3af24b6a31bc9e625b0de87f1acb7e476",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
