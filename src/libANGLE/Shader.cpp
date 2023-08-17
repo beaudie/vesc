@@ -127,7 +127,7 @@ struct Shader::CompilingState
     ShCompilerInstance shCompilerInstance;
 };
 
-ShaderState::ShaderState(ShaderType shaderType) : mCompiledShaderState(shaderType) {}
+ShaderState::ShaderState(ShaderType shaderType) : mType(shaderType) {}
 
 ShaderState::~ShaderState() {}
 
@@ -140,7 +140,6 @@ Shader::Shader(ShaderProgramManager *manager,
       mImplementation(implFactory->createShader(mState)),
       mRendererLimitations(rendererLimitations),
       mHandle(handle),
-      mType(type),
       mRefCount(0),
       mDeleteStatus(false),
       mResourceManager(manager),
@@ -304,12 +303,12 @@ int Shader::getTranslatedSourceLength(const Context *context)
 {
     resolveCompile(context);
 
-    if (mState.getTranslatedSource().empty())
+    if (mState.mCompiledState->translatedSource.empty())
     {
         return 0;
     }
 
-    return (static_cast<int>(mState.getTranslatedSource().length()) + 1);
+    return static_cast<int>(mState.mCompiledState->translatedSource.length()) + 1;
 }
 
 int Shader::getTranslatedSourceWithDebugInfoLength(const Context *context)
@@ -363,13 +362,7 @@ void Shader::getTranslatedSource(const Context *context,
 const std::string &Shader::getTranslatedSource(const Context *context)
 {
     resolveCompile(context);
-    return mState.getTranslatedSource();
-}
-
-const sh::BinaryBlob &Shader::getCompiledBinary(const Context *context)
-{
-    resolveCompile(context);
-    return mState.getCompiledBinary();
+    return mState.mCompiledState->translatedSource;
 }
 
 size_t Shader::getSourceHash() const
@@ -391,32 +384,11 @@ void Shader::compile(const Context *context)
 {
     resolveCompile(context);
 
-    mState.mCompiledShaderState.translatedSource.clear();
-    mState.mCompiledShaderState.compiledBinary.clear();
+    // Create a new compiled shader state.  If any programs are currently linking using this shader,
+    // they would use the old compiled state, and this shader is free to recompile in the meantime.
+    mState.mCompiledState = std::make_shared<CompiledShaderState>(mState.mType);
+
     mInfoLog.clear();
-    mState.mCompiledShaderState.shaderVersion = 100;
-    mState.mCompiledShaderState.inputVaryings.clear();
-    mState.mCompiledShaderState.outputVaryings.clear();
-    mState.mCompiledShaderState.uniforms.clear();
-    mState.mCompiledShaderState.uniformBlocks.clear();
-    mState.mCompiledShaderState.shaderStorageBlocks.clear();
-    mState.mCompiledShaderState.activeAttributes.clear();
-    mState.mCompiledShaderState.activeOutputVariables.clear();
-    mState.mCompiledShaderState.numViews = -1;
-    mState.mCompiledShaderState.geometryShaderInputPrimitiveType.reset();
-    mState.mCompiledShaderState.geometryShaderOutputPrimitiveType.reset();
-    mState.mCompiledShaderState.geometryShaderMaxVertices.reset();
-    mState.mCompiledShaderState.geometryShaderInvocations = 1;
-    mState.mCompiledShaderState.tessControlShaderVertices = 0;
-    mState.mCompiledShaderState.tessGenMode               = 0;
-    mState.mCompiledShaderState.tessGenSpacing            = 0;
-    mState.mCompiledShaderState.tessGenVertexOrder        = 0;
-    mState.mCompiledShaderState.tessGenPointMode          = 0;
-    mState.mCompiledShaderState.advancedBlendEquations.reset();
-    mState.mCompiledShaderState.hasClipDistance         = false;
-    mState.mCompiledShaderState.hasDiscard              = false;
-    mState.mCompiledShaderState.enablesPerSampleShading = false;
-    mState.mCompiledShaderState.specConstUsageBits.reset();
 
     mCurrentMaxComputeWorkGroupInvocations =
         static_cast<GLuint>(context->getCaps().maxComputeWorkGroupInvocations);
@@ -460,7 +432,7 @@ void Shader::compile(const Context *context)
     mBoundCompiler.set(context, context->getCompiler());
 
     ASSERT(mBoundCompiler.get());
-    ShCompilerInstance compilerInstance = mBoundCompiler->getInstance(mType);
+    ShCompilerInstance compilerInstance = mBoundCompiler->getInstance(mState.mType);
     ShHandle compilerHandle             = compilerInstance.getHandle();
     ASSERT(compilerHandle);
 
@@ -519,7 +491,7 @@ void Shader::resolveCompile(const Context *context)
 
     const ShShaderOutput outputType = mCompilingState->shCompilerInstance.getShaderOutputType();
     bool isBinaryOutput             = outputType == SH_SPIRV_VULKAN_OUTPUT;
-    mState.mCompiledShaderState.buildCompiledShaderState(compilerHandle, isBinaryOutput);
+    mState.mCompiledState->buildCompiledShaderState(compilerHandle, isBinaryOutput);
 
     const angle::FrontendFeatures &frontendFeatures = context->getFrontendFeatures();
     bool substitutedTranslatedShader                = false;
@@ -541,8 +513,8 @@ void Shader::resolveCompile(const Context *context)
             std::string substituteShader;
             if (angle::ReadFileToString(substituteShaderPath, &substituteShader))
             {
-                mState.mCompiledShaderState.translatedSource = std::move(substituteShader);
-                substitutedTranslatedShader                  = true;
+                mState.mCompiledState->translatedSource = std::move(substituteShader);
+                substitutedTranslatedShader             = true;
                 INFO() << "Trasnslated shader substitute found, loading from "
                        << substituteShaderPath;
             }
@@ -561,7 +533,7 @@ void Shader::resolveCompile(const Context *context)
         {
             std::string dumpFile = GetShaderDumpFilePath(mState.mSourceHash, suffix);
 
-            const std::string &translatedSource = mState.mCompiledShaderState.translatedSource;
+            const std::string &translatedSource = mState.mCompiledState->translatedSource;
             writeFile(dumpFile.c_str(), translatedSource.c_str(), translatedSource.length());
             INFO() << "Dumped translated source: " << dumpFile;
         }
@@ -594,19 +566,19 @@ void Shader::resolveCompile(const Context *context)
             shaderStream << std::endl;
         }
         shaderStream << "\n\n";
-        shaderStream << mState.mCompiledShaderState.translatedSource;
-        mState.mCompiledShaderState.translatedSource = shaderStream.str();
+        shaderStream << mState.mCompiledState->translatedSource;
+        mState.mCompiledState->translatedSource = shaderStream.str();
     }
 #endif  // !defined(NDEBUG)
 
     // Validation checks for compute shaders
-    if (mState.mCompiledShaderState.shaderType == ShaderType::Compute &&
-        mState.mCompiledShaderState.localSize.isDeclared())
+    if (mState.mCompiledState->shaderType == ShaderType::Compute &&
+        mState.mCompiledState->localSize.isDeclared())
     {
         angle::CheckedNumeric<uint32_t> checked_local_size_product(
-            mState.mCompiledShaderState.localSize[0]);
-        checked_local_size_product *= mState.mCompiledShaderState.localSize[1];
-        checked_local_size_product *= mState.mCompiledShaderState.localSize[2];
+            mState.mCompiledState->localSize[0]);
+        checked_local_size_product *= mState.mCompiledState->localSize[1];
+        checked_local_size_product *= mState.mCompiledState->localSize[2];
 
         if (!checked_local_size_product.IsValid())
         {
@@ -634,8 +606,8 @@ void Shader::resolveCompile(const Context *context)
         return;
     }
 
-    ASSERT(!mState.mCompiledShaderState.translatedSource.empty() ||
-           !mState.mCompiledShaderState.compiledBinary.empty());
+    ASSERT(!mState.mCompiledState->translatedSource.empty() ||
+           !mState.mCompiledState->compiledBinary.empty());
 
     bool success          = mCompilingState->compileEvent->postTranslate(&mInfoLog);
     mState.mCompileStatus = success ? CompileStatus::COMPILED : CompileStatus::NOT_COMPILED;
@@ -693,186 +665,12 @@ bool Shader::isCompleted()
     return (!mState.compilePending() || mCompilingState->compileEvent->isReady());
 }
 
-int Shader::getShaderVersion(const Context *context)
-{
-    resolveCompile(context);
-    return mState.mCompiledShaderState.shaderVersion;
-}
-
-const std::vector<sh::ShaderVariable> &Shader::getInputVaryings(const Context *context)
-{
-    resolveCompile(context);
-    return mState.getInputVaryings();
-}
-
-const std::vector<sh::ShaderVariable> &Shader::getOutputVaryings(const Context *context)
-{
-    resolveCompile(context);
-    return mState.getOutputVaryings();
-}
-
-const std::vector<sh::ShaderVariable> &Shader::getUniforms(const Context *context)
-{
-    resolveCompile(context);
-    return mState.getUniforms();
-}
-
-const std::vector<sh::InterfaceBlock> &Shader::getUniformBlocks(const Context *context)
-{
-    resolveCompile(context);
-    return mState.getUniformBlocks();
-}
-
-const std::vector<sh::InterfaceBlock> &Shader::getShaderStorageBlocks(const Context *context)
-{
-    resolveCompile(context);
-    return mState.getShaderStorageBlocks();
-}
-
-const std::vector<sh::ShaderVariable> &Shader::getActiveAttributes(const Context *context)
-{
-    resolveCompile(context);
-    return mState.getActiveAttributes();
-}
-
-const std::vector<sh::ShaderVariable> &Shader::getAllAttributes(const Context *context)
-{
-    resolveCompile(context);
-    return mState.getAllAttributes();
-}
-
-const std::vector<sh::ShaderVariable> &Shader::getActiveOutputVariables(const Context *context)
-{
-    resolveCompile(context);
-    return mState.getActiveOutputVariables();
-}
-
-std::string Shader::getTransformFeedbackVaryingMappedName(const Context *context,
-                                                          const std::string &tfVaryingName)
-{
-    ASSERT(mState.getShaderType() != ShaderType::Fragment &&
-           mState.getShaderType() != ShaderType::Compute);
-    const auto &varyings = getOutputVaryings(context);
-    auto bracketPos      = tfVaryingName.find("[");
-    if (bracketPos != std::string::npos)
-    {
-        auto tfVaryingBaseName = tfVaryingName.substr(0, bracketPos);
-        for (const auto &varying : varyings)
-        {
-            if (varying.name == tfVaryingBaseName)
-            {
-                std::string mappedNameWithArrayIndex =
-                    varying.mappedName + tfVaryingName.substr(bracketPos);
-                return mappedNameWithArrayIndex;
-            }
-        }
-    }
-    else
-    {
-        for (const auto &varying : varyings)
-        {
-            if (varying.name == tfVaryingName)
-            {
-                return varying.mappedName;
-            }
-            else if (varying.isStruct())
-            {
-                GLuint fieldIndex = 0;
-                const auto *field = varying.findField(tfVaryingName, &fieldIndex);
-                if (field == nullptr)
-                {
-                    continue;
-                }
-                ASSERT(field != nullptr && !field->isStruct() &&
-                       (!field->isArray() || varying.isShaderIOBlock));
-                std::string mappedName;
-                // If it's an I/O block without an instance name, don't include the block name.
-                if (!varying.isShaderIOBlock || !varying.name.empty())
-                {
-                    mappedName = varying.isShaderIOBlock ? varying.mappedStructOrBlockName
-                                                         : varying.mappedName;
-                    mappedName += '.';
-                }
-                return mappedName + field->mappedName;
-            }
-        }
-    }
-    UNREACHABLE();
-    return std::string();
-}
-
-const sh::WorkGroupSize &Shader::getWorkGroupSize(const Context *context)
-{
-    resolveCompile(context);
-    return mState.mCompiledShaderState.localSize;
-}
-
-int Shader::getNumViews(const Context *context)
-{
-    resolveCompile(context);
-    return mState.mCompiledShaderState.numViews;
-}
-
-Optional<PrimitiveMode> Shader::getGeometryShaderInputPrimitiveType(const Context *context)
-{
-    resolveCompile(context);
-    return mState.mCompiledShaderState.geometryShaderInputPrimitiveType;
-}
-
-Optional<PrimitiveMode> Shader::getGeometryShaderOutputPrimitiveType(const Context *context)
-{
-    resolveCompile(context);
-    return mState.mCompiledShaderState.geometryShaderOutputPrimitiveType;
-}
-
-int Shader::getGeometryShaderInvocations(const Context *context)
-{
-    resolveCompile(context);
-    return mState.mCompiledShaderState.geometryShaderInvocations;
-}
-
-Optional<GLint> Shader::getGeometryShaderMaxVertices(const Context *context)
-{
-    resolveCompile(context);
-    return mState.mCompiledShaderState.geometryShaderMaxVertices;
-}
-
-int Shader::getTessControlShaderVertices(const Context *context)
-{
-    resolveCompile(context);
-    return mState.mCompiledShaderState.tessControlShaderVertices;
-}
-
-GLenum Shader::getTessGenMode(const Context *context)
-{
-    resolveCompile(context);
-    return mState.mCompiledShaderState.tessGenMode;
-}
-
-GLenum Shader::getTessGenSpacing(const Context *context)
-{
-    resolveCompile(context);
-    return mState.mCompiledShaderState.tessGenSpacing;
-}
-
-GLenum Shader::getTessGenVertexOrder(const Context *context)
-{
-    resolveCompile(context);
-    return mState.mCompiledShaderState.tessGenVertexOrder;
-}
-
-GLenum Shader::getTessGenPointMode(const Context *context)
-{
-    resolveCompile(context);
-    return mState.mCompiledShaderState.tessGenPointMode;
-}
-
 angle::Result Shader::serialize(const Context *context, angle::MemoryBuffer *binaryOut) const
 {
     BinaryOutputStream stream;
 
     stream.writeInt(kShaderCacheIdentifier);
-    mState.mCompiledShaderState.serialize(stream);
+    mState.mCompiledState->serialize(stream);
 
     ASSERT(binaryOut);
     if (!binaryOut->resize(stream.length()))
@@ -892,7 +690,7 @@ angle::Result Shader::serialize(const Context *context, angle::MemoryBuffer *bin
 
 angle::Result Shader::deserialize(BinaryInputStream &stream)
 {
-    mState.mCompiledShaderState.deserialize(stream);
+    mState.mCompiledState->deserialize(stream);
 
     if (stream.error())
     {
@@ -933,7 +731,7 @@ angle::Result Shader::loadBinaryImpl(const Context *context,
 
         gl::ShaderType shaderType;
         stream.readEnum(&shaderType);
-        ASSERT(mType == shaderType);
+        ASSERT(mState.mType == shaderType);
 
         // Get fields needed to generate the key for memory caches.
         ShShaderOutput outputType;
@@ -979,7 +777,7 @@ void Shader::setShaderKey(const Context *context,
     BinaryOutputStream hashStream;
 
     // Start with the shader type and source.
-    hashStream.writeEnum(mType);
+    hashStream.writeEnum(mState.mType);
     hashStream.writeString(mState.getSource());
 
     // Include the shader program version hash.
