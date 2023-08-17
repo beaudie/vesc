@@ -63,6 +63,30 @@
       },
       "revId": "4f04326bb5737f1fd64dd62ead447661c0c09d7c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ceed4a4_3e235fd7",
+        "filename": "src/libANGLE/renderer/vulkan/ShareGroupVk.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-17T18:34:08Z",
+      "side": 1,
+      "message": "This change currently results in Chromium try tests to fail. I will move this change to a follow-up CL.",
+      "parentUuid": "ed796c02_82c0fc21",
+      "range": {
+        "startLine": 148,
+        "startChar": 0,
+        "endLine": 156,
+        "endChar": 5
+      },
+      "revId": "4f04326bb5737f1fd64dd62ead447661c0c09d7c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

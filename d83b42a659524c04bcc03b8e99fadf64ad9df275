@@ -39,6 +39,30 @@
       },
       "revId": "d83b42a659524c04bcc03b8e99fadf64ad9df275",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15a7370e_3efc9a1a",
+        "filename": "src/libANGLE/renderer/vulkan/ShareGroupVk.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-17T18:34:08Z",
+      "side": 1,
+      "message": "Thanks. I have added this change to the follow-up CL.",
+      "parentUuid": "594ad77c_0652109b",
+      "range": {
+        "startLine": 147,
+        "startChar": 3,
+        "endLine": 153,
+        "endChar": 6
+      },
+      "revId": "d83b42a659524c04bcc03b8e99fadf64ad9df275",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
