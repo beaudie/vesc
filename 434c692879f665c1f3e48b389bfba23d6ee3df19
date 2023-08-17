@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "459f3d15_a12c81d3",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1490,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-17T17:18:52Z",
+      "side": 1,
+      "message": "The work deferred here is not significant, but cost of lock will be taken for every cache look up at draw time. Can this deferred to after program finished linking, and control comes back to context? From what I read, there is no dependency on this being set before link. Then you don\u0027t need the lock for the pools. I think you already did this for switchToFramebufferFetchMode call, basically similar idea.",
+      "range": {
+        "startLine": 1480,
+        "startChar": 4,
+        "endLine": 1490,
+        "endChar": 0
+      },
+      "revId": "434c692879f665c1f3e48b389bfba23d6ee3df19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
