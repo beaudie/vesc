@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1f7d380e_53cc20ed",
+        "filename": "src/tests/perf_tests/ANGLEPerfTestArgs.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-08-17T18:18:29Z",
+      "side": 1,
+      "message": "Without context users would probably expect \"full replay\" to be just running replay normally? Should this be named with \"inactive\" in it given that it enables inactive resources, or maybe something else that is more intuitive without knowing the context of this work?",
+      "range": {
+        "startLine": 108,
+        "startChar": 22,
+        "endLine": 108,
+        "endChar": 35
+      },
+      "revId": "f06c5b19da499d7cebb29edcde80275b538def83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ecd49d33_6bed0661",
         "filename": "src/tests/perf_tests/README.md",
         "patchSetId": 5
@@ -31,6 +54,29 @@
       "writtenOn": "2023-08-17T17:45:26Z",
       "side": 1,
       "message": "Can you also document `--full-replay` here?",
+      "revId": "f06c5b19da499d7cebb29edcde80275b538def83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21c56a20_6426e38a",
+        "filename": "util/capture/trace_fixture.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-08-17T18:18:29Z",
+      "side": 1,
+      "message": "Is this change accidental?",
+      "range": {
+        "startLine": 270,
+        "startChar": 3,
+        "endLine": 270,
+        "endChar": 21
+      },
       "revId": "f06c5b19da499d7cebb29edcde80275b538def83",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
