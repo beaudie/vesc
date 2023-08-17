@@ -16,6 +16,24 @@
       "message": "I\u0027m checking in https://android-review.googlesource.com/c/platform/external/angle/+/2715573 whether it\u0027s really your CL that introduced the timeout.",
       "revId": "011100bc3b1a17d40b0eb177dfbdddbbbf0eaccf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bc8a12c_28400626",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-17T16:22:32Z",
+      "side": 1,
+      "message": "Thanks. Feel free to CQ+2 once you confirm",
+      "parentUuid": "fed92379_5dabada6",
+      "revId": "011100bc3b1a17d40b0eb177dfbdddbbbf0eaccf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
