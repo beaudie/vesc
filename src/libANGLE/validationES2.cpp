@@ -2153,7 +2153,7 @@ static bool ValidateObjectIdentifierAndName(const Context *context,
             return true;
 
         case GL_SHADER:
-            if (context->getShader({name}) == nullptr)
+            if (context->getShaderNoResolveCompile({name}) == nullptr)
             {
                 ANGLE_VALIDATION_ERROR(GL_INVALID_VALUE, kInvalidShaderName);
                 return false;
@@ -3760,7 +3760,7 @@ bool ValidateAttachShader(const Context *context,
         return false;
     }
 
-    if (programObject->getAttachedShader(shaderObject->getType()))
+    if (programObject->getAttachedShader(context, shaderObject->getType()))
     {
         ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kShaderAttachmentHasShader);
         return false;
@@ -4192,7 +4192,7 @@ bool ValidateDeleteProgram(const Context *context,
 
     if (!context->getProgramResolveLink(program))
     {
-        if (context->getShader(program))
+        if (context->getShaderNoResolveCompile(program))
         {
             ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExpectedProgramName);
             return false;
@@ -4216,7 +4216,7 @@ bool ValidateDeleteShader(const Context *context,
         return false;
     }
 
-    if (!context->getShader(shader))
+    if (!context->getShaderNoResolveCompile(shader))
     {
         if (context->getProgramResolveLink(shader))
         {
@@ -4283,7 +4283,8 @@ bool ValidateDetachShader(const Context *context,
         return false;
     }
 
-    const Shader *attachedShader = programObject->getAttachedShader(shaderObject->getType());
+    const Shader *attachedShader =
+        programObject->getAttachedShader(context, shaderObject->getType());
     if (attachedShader != shaderObject)
     {
         ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kShaderToDetachMustBeAttached);
@@ -6000,7 +6001,7 @@ bool ValidateUseProgram(const Context *context,
         if (!programObject)
         {
             // ES 3.1.0 section 7.3 page 72
-            if (context->getShader(program))
+            if (context->getShaderNoResolveCompile(program))
             {
                 ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kExpectedProgramName);
                 return false;
@@ -6162,7 +6163,7 @@ bool ValidateGetTranslatedShaderSourceANGLE(const Context *context,
         return false;
     }
 
-    Shader *shaderObject = context->getShader(shader);
+    Shader *shaderObject = context->getShaderNoResolveCompile(shader);
 
     if (!shaderObject)
     {

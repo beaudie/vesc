@@ -15,6 +15,7 @@
 
 #include <array>
 #include <map>
+#include <memory>
 #include <set>
 #include <sstream>
 #include <string>
@@ -222,8 +223,11 @@ class ProgramState final : angle::NonCopyable
 
     const std::string &getLabel();
 
-    Shader *getAttachedShader(ShaderType shaderType) const;
-    const gl::ShaderMap<Shader *> &getAttachedShaders() const { return mAttachedShaders; }
+    SharedCompiledShaderState getAttachedShader(ShaderType shaderType) const;
+    const ShaderMap<SharedCompiledShaderState> &getAttachedShaders() const
+    {
+        return mAttachedShaders;
+    }
     const std::vector<std::string> &getTransformFeedbackVaryingNames() const
     {
         return mTransformFeedbackVaryingNames;
@@ -325,7 +329,7 @@ class ProgramState final : angle::NonCopyable
     int getNumViews() const { return mNumViews; }
     bool usesMultiview() const { return mNumViews != -1; }
 
-    bool hasAttachedShader() const;
+    bool hasAnyAttachedShader() const;
 
     ShaderType getFirstAttachedShaderStageType() const;
     ShaderType getLastAttachedShaderStageType() const;
@@ -374,8 +378,8 @@ class ProgramState final : angle::NonCopyable
     friend class Program;
 
     void updateActiveSamplers();
-    void updateProgramInterfaceInputs(const Context *context);
-    void updateProgramInterfaceOutputs(const Context *context);
+    void updateProgramInterfaceInputs();
+    void updateProgramInterfaceOutputs();
 
     // Scans the sampler bindings for type conflicts with sampler 'textureUnitIndex'.
     void setSamplerUniformTextureTypeAndFormat(size_t textureUnitIndex);
@@ -384,7 +388,7 @@ class ProgramState final : angle::NonCopyable
 
     sh::WorkGroupSize mComputeShaderLocalSize;
 
-    ShaderMap<Shader *> mAttachedShaders;
+    ShaderMap<SharedCompiledShaderState> mAttachedShaders;
 
     uint32_t mLocationsUsedForXfbExtension;
     std::vector<std::string> mTransformFeedbackVaryingNames;
@@ -456,7 +460,7 @@ class Program final : public LabeledObject, public angle::Subject
     void detachShader(const Context *context, Shader *shader);
     int getAttachedShadersCount() const;
 
-    Shader *getAttachedShader(ShaderType shaderType) const;
+    Shader *getAttachedShader(const Context *context, ShaderType shaderType) const;
 
     void bindAttributeLocation(GLuint index, const char *name);
     void bindUniformLocation(UniformLocation location, const char *name);
@@ -819,7 +823,7 @@ class Program final : public LabeledObject, public angle::Subject
 
     bool linkValidateShaders(const Context *context, InfoLog &infoLog);
     bool linkAttributes(const Context *context, InfoLog &infoLog);
-    bool linkVaryings(const Context *context, InfoLog &infoLog) const;
+    bool linkVaryings(InfoLog &infoLog) const;
 
     bool linkUniforms(const Context *context,
                       std::vector<UnusedUniform> *unusedUniformsOutOrNull,
@@ -889,7 +893,7 @@ class Program final : public LabeledObject, public angle::Subject
                                  GLboolean transpose,
                                  const UniformT *v);
 
-    void dumpProgramInfo() const;
+    void dumpProgramInfo(const Context *context) const;
 
     rx::UniqueSerial mSerial;
     ProgramState mState;
@@ -911,6 +915,8 @@ class Program final : public LabeledObject, public angle::Subject
 
     ShaderProgramManager *mResourceManager;
     const ShaderProgramID mHandle;
+
+    ShaderMap<ShaderProgramID> mAttachedShaderHandles;
 
     DirtyBits mDirtyBits;
 
