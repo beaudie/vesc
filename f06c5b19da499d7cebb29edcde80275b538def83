@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8b34e127_45498161",
+        "filename": "src/tests/perf_tests/ANGLEPerfTestArgs.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-17T18:42:31Z",
+      "side": 1,
+      "message": "I\u0027ve struggled with this a bit too.  Initially was thinking full would be the default, and you\u0027d specify `--trimmed`.\n\nPerhaps `--include-inactive-resources`?",
+      "parentUuid": "1f7d380e_53cc20ed",
+      "range": {
+        "startLine": 108,
+        "startChar": 22,
+        "endLine": 108,
+        "endChar": 35
+      },
+      "revId": "f06c5b19da499d7cebb29edcde80275b538def83",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ecd49d33_6bed0661",
         "filename": "src/tests/perf_tests/README.md",
         "patchSetId": 5
