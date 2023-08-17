@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f4bbb75_15703de0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5964,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-17T16:11:27Z",
+      "side": 1,
+      "message": "This creates a situation that low level code call into higher level code which will end up call finishImpl, which does lots of things. The worry here is that if finishImpl end up getting into this function (which right now I don\u0027t think it will, but a risk), you may end up with a hang.\n\nI would personally feel more comfortable to deal with this in higher code, like BufferHelper/ImageHelper at least.",
+      "range": {
+        "startLine": 5964,
+        "startChar": 12,
+        "endLine": 5964,
+        "endChar": 37
+      },
+      "revId": "973fe8b98ae8d91f369bb28b78271a1bf8ac45c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b261da4_8fbeacca",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3471,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-17T16:11:27Z",
+      "side": 1,
+      "message": "// Calling BufferData and draw with it in a loop without glFlush() should \n// still work. Driver is supposedly to issue flush if needed.",
+      "range": {
+        "startLine": 3469,
+        "startChar": 3,
+        "endLine": 3471,
+        "endChar": 33
+      },
+      "revId": "973fe8b98ae8d91f369bb28b78271a1bf8ac45c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed6f56ea_d73da73b",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3477,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-17T16:11:27Z",
+      "side": 1,
+      "message": "You should remove this comment, it does not apply to this test.",
+      "range": {
+        "startLine": 3476,
+        "startChar": 4,
+        "endLine": 3477,
+        "endChar": 23
+      },
+      "revId": "973fe8b98ae8d91f369bb28b78271a1bf8ac45c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9206dee3_dc96cbea",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3502,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-17T16:11:27Z",
+      "side": 1,
+      "message": "You can remove this as well (and line 3486 to 3496), no need to ping-pong FBOs for this purpose.",
+      "range": {
+        "startLine": 3500,
+        "startChar": 8,
+        "endLine": 3502,
+        "endChar": 51
+      },
+      "revId": "973fe8b98ae8d91f369bb28b78271a1bf8ac45c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
