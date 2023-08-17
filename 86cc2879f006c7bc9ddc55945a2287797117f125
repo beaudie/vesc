@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7aa78b29_a047c902",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 537,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-17T17:27:09Z",
+      "side": 1,
+      "message": "Similar static_assert here for ShaderMap\u003cint\u003e as RangeUI in the previous change.",
+      "revId": "86cc2879f006c7bc9ddc55945a2287797117f125",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
