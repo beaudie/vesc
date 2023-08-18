@@ -1405,6 +1405,11 @@ if (build_angle_deqp_tests && !is_fuchsia) {
       "${angle_root}:libANGLE_config",
     ]
     sources = deqp_libtester_sources
+    if (is_win) {
+      sources += deqp_libtester_sources_win32
+    } else {
+      sources += deqp_libtester_sources_non_win32
+    }
     if (is_android) {
       libs = [ "log" ]
     }

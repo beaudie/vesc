@@ -21,23 +21,15 @@
 #ifndef TCU_ANGLE_WIN32_NATIVE_DISPLAY_FACTORY_H_
 #define TCU_ANGLE_WIN32_NATIVE_DISPLAY_FACTORY_H_
 
+#include "EGL/eglplatform.h"
 #include "egluNativeDisplay.hpp"
 #include "eglwDefs.hpp"
+#include "eglwLibrary.hpp"
+#include "tcuANGLENativeDisplay.h"
 #include "tcuDefs.hpp"
 
 namespace tcu
 {
-
-class EventState
-{
-  public:
-    EventState() : mQuit(false) {}
-    bool quitSignaled() const { return mQuit; };
-    void signalQuitEvent() { mQuit = true; };
-
-  private:
-    bool mQuit;
-};
 
 class ANGLENativeDisplayFactory : public eglu::NativeDisplayFactory
 {

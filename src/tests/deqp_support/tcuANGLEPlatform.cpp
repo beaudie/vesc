@@ -19,6 +19,7 @@
  */
 
 #include "tcuANGLEPlatform.h"
+#include "tcuANGLENativeDisplay.h"
 
 #include "egluGLContextFactory.hpp"
 #include "gluPlatform.hpp"
