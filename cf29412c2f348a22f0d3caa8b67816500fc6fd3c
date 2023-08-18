@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecdabef3_4b00ed73",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2023-08-18T17:23:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2257eb75_abdb621e",
+      "revId": "cf29412c2f348a22f0d3caa8b67816500fc6fd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd739719_14221ae9",
@@ -48,6 +66,30 @@
       "writtenOn": "2023-08-18T14:56:15Z",
       "side": 1,
       "message": "Rather than a silent default, can we have an explicit block of accepted passthrough values?  The the default fall through can be an error condition (UNREACHABLE).  Same for each of the below.",
+      "range": {
+        "startLine": 332,
+        "startChar": 0,
+        "endLine": 332,
+        "endChar": 36
+      },
+      "revId": "cf29412c2f348a22f0d3caa8b67816500fc6fd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbb7df85_7bac07e7",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2023-08-18T17:23:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd739719_14221ae9",
       "range": {
         "startLine": 332,
         "startChar": 0,
@@ -81,6 +123,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "daff3e8f_f78cb2fb",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2023-08-18T17:23:13Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "adabf175_bb47e794",
+      "range": {
+        "startLine": 192,
+        "startChar": 0,
+        "endLine": 192,
+        "endChar": 72
+      },
+      "revId": "cf29412c2f348a22f0d3caa8b67816500fc6fd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "af451e30_c1026d6f",
@@ -94,6 +160,24 @@
       "writtenOn": "2023-08-18T14:56:15Z",
       "side": 1,
       "message": "Can you explain the format selections for each of the below?  Just a mention of the spec would be fine.",
+      "revId": "cf29412c2f348a22f0d3caa8b67816500fc6fd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99d072f5_eb407b18",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 11707,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2023-08-18T17:23:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af451e30_c1026d6f",
       "revId": "cf29412c2f348a22f0d3caa8b67816500fc6fd3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
