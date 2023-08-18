@@ -23,21 +23,10 @@
 
 #include "egluNativeDisplay.hpp"
 #include "eglwDefs.hpp"
-#include "tcuDefs.hpp"
+#include "tcuANGLENativeDisplay.h"
 
 namespace tcu
 {
-
-class EventState
-{
-  public:
-    EventState() : mQuit(false) {}
-    bool quitSignaled() const { return mQuit; };
-    void signalQuitEvent() { mQuit = true; };
-
-  private:
-    bool mQuit;
-};
 
 class ANGLENativeDisplayFactory : public eglu::NativeDisplayFactory
 {
