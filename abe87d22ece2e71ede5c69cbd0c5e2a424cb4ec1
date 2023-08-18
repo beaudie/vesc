@@ -16,6 +16,24 @@
       "message": "Let\u0027s see if it passes after https://chromium-review.googlesource.com/c/angle/angle/+/4787411 landed.\n\nBut note that we have 2 builders that start goma manually - win-trace and linux-trace. So they will keep using Goma even after this lands.",
       "revId": "abe87d22ece2e71ede5c69cbd0c5e2a424cb4ec1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aacebb57_e97454bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1161379
+      },
+      "writtenOn": "2023-08-18T08:07:19Z",
+      "side": 1,
+      "message": "Hmm, I see. But why those builders have separated builds?",
+      "parentUuid": "042c9496_7c52d35f",
+      "revId": "abe87d22ece2e71ede5c69cbd0c5e2a424cb4ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
