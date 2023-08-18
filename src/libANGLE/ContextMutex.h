@@ -8,8 +8,7 @@
 #ifndef LIBANGLE_CONTEXT_MUTEX_H_
 #define LIBANGLE_CONTEXT_MUTEX_H_
 
-#include <atomic>
-
+#include "common/FastMutex.h"
 #include "common/debug.h"
 
 namespace gl
@@ -25,8 +24,7 @@ constexpr bool kIsContextMutexEnabled = true;
 constexpr bool kIsContextMutexEnabled = false;
 #endif
 
-// Use standard mutex for now
-using ContextMutexType = std::mutex;
+using ContextMutexType = angle::FastMutex3;
 
 class ContextMutex final : angle::NonCopyable
 {
