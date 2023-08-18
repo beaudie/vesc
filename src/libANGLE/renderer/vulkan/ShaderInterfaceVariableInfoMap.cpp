@@ -121,8 +121,8 @@ void ShaderInterfaceVariableInfoMap::save(gl::BinaryOutputStream *stream)
 }
 void ShaderInterfaceVariableInfoMap::load(gl::BinaryInputStream *stream)
 {
-    ShaderInterfaceVariableInfoMap::VariableInfoArray data;
-    gl::ShaderMap<ShaderInterfaceVariableInfoMap::IdToIndexMap> idToIndexMap;
+    VariableInfoArray data;
+    gl::ShaderMap<IdToIndexMap> idToIndexMap;
     gl::ShaderMap<gl::PerVertexMemberBitSet> inputPerVertexActiveMembers;
     gl::ShaderMap<gl::PerVertexMemberBitSet> outputPerVertexActiveMembers;
 
