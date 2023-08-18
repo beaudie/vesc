@@ -105,6 +105,8 @@ class ShaderInterfaceVariableInfoMap final : angle::NonCopyable
     // emulation is needed.
     bool mHasAliasingAttributes = false;
 };
+static_assert(std::is_standard_layout<ShaderInterfaceVariableInfo>(),
+              "ShaderInterfaceVariableInfo must be a standard layout struct so that we can memcpy");
 
 ANGLE_INLINE const ShaderInterfaceVariableInfo &
 ShaderInterfaceVariableInfoMap::getDefaultUniformInfo(gl::ShaderType shaderType) const
