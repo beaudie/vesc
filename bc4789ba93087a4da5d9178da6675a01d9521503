@@ -87,6 +87,23 @@
       "parentUuid": "9ffc8eda_c011ea17",
       "revId": "bc4789ba93087a4da5d9178da6675a01d9521503",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0b30a2b_e9cc4e6d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-08-18T13:11:10Z",
+      "side": 1,
+      "message": "Let\u0027s see if the slowdown is actually due to the shader link CL.",
+      "revId": "bc4789ba93087a4da5d9178da6675a01d9521503",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
