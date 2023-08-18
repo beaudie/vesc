@@ -103,6 +103,8 @@ struct DefaultUniformBlock final : private angle::NonCopyable
     // to a setUniform method. They are arranged in uniform location order.
     std::vector<sh::BlockMemberInfo> uniformLayout;
 };
+static_assert(std::is_trivially_copyable<sh::BlockMemberInfo>(),
+              "BlockMemberInfo must be memcpy-able");
 
 // Performance and resource counters.
 using DescriptorSetCountList   = angle::PackedEnumMap<DescriptorSetIndex, uint32_t>;
