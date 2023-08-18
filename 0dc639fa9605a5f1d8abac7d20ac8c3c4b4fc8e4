@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e2d5b23_8b67449c",
+        "filename": "util/capture/frame_capture_test_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-18T21:58:57Z",
+      "side": 1,
+      "message": "This looks like a change we\u0027d like to keep after (someday) removing the temporary code below, if you want to split it up to easily revert later.",
+      "range": {
+        "startLine": 230,
+        "startChar": 0,
+        "endLine": 234,
+        "endChar": 9
+      },
+      "revId": "0dc639fa9605a5f1d8abac7d20ac8c3c4b4fc8e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
