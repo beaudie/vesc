@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be17ac62_809e1cae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-08-18T06:11:23Z",
+      "side": 1,
+      "message": "Geoff: FYI. Submitting since rubber-stamper approved it and since there is no branch CQ for ANGLE.",
+      "revId": "33ed0ee182e135f204c1b8ad08dc329b2e43192c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
