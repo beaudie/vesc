@@ -104,6 +104,24 @@
       "message": "Let\u0027s see if the slowdown is actually due to the shader link CL.",
       "revId": "bc4789ba93087a4da5d9178da6675a01d9521503",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7e8d085_85e167f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-08-18T13:54:05Z",
+      "side": 1,
+      "message": "No, still slow.\n106m 28s without shard #4 in https://ci.chromium.org/ui/p/angle/builders/try/win-asan-test/13829/overview\nvs 89m 39s - 10m 22s \u003d 79m 17s in https://ci.chromium.org/ui/p/angle/builders/ci/win-asan-test/4442/overview.\nSo 34% slower.",
+      "parentUuid": "a0b30a2b_e9cc4e6d",
+      "revId": "bc4789ba93087a4da5d9178da6675a01d9521503",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
