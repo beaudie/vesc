@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e4cbb6a_6fcd8147",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-08-18T14:03:16Z",
+      "side": 1,
+      "message": "So, this can\u0027t be tested by CQ, as these configurations are always read from HEAD by buildbucket.\nSo, I\u0027ve tried this with LED, editing job JSON and removing \"$build/goma\" property.\nlinux-test looks OK, though I didn\u0027t think of trying this on another CL that would actually run tests, will do it later.\nhttps://luci-milo.appspot.com/raw/build/logs.chromium.org/angle/led/ynovikov_google.com/6f48e5ce4bd04eb915df1ac3aa966fac1b3b766e487072676bb9fcda7f4b6fb8/+/build.proto\n\nBut, like I expected in https://chromium-review.googlesource.com/c/angle/angle/+/4787412/8#message-e05448a44064de3b8e65bfeb520d884185a1ec77, win-trace can\u0027t use goma after this CL:\nhttps://luci-milo.appspot.com/raw/build/logs.chromium.org/angle/led/ynovikov_google.com/0cb97a7e784d276472570937ea340dcfd90c577571f4b8318429cb4a109f508d/+/build.proto\nhttps://logs.chromium.org/logs/angle/led/ynovikov_google.com/0cb97a7e784d276472570937ea340dcfd90c577571f4b8318429cb4a109f508d/+/u/preprocess_for_goma/start_goma/stdout\ncompiler proxy (pid\u003d5688) status: http://127.0.0.1:8088 running: access to backend servers was blocked:403\n\nI\u0027m OK with partially landing this, keeping this property on *-trace builders, if you\u0027d like.",
+      "revId": "7b83544c38ee84c4b40a16eea548ec24e59e4a8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
