@@ -505,7 +505,6 @@ std::unique_ptr<rx::LinkEvent> ProgramExecutableVk::load(ContextVk *contextVk,
                                                          gl::BinaryInputStream *stream)
 {
     mVariableInfoMap.load(stream);
-
     mOriginalShaderInfo.load(stream);
 
     // Deserializes the uniformLayout data of mDefaultUniformBlocks
@@ -520,13 +519,12 @@ std::unique_ptr<rx::LinkEvent> ProgramExecutableVk::load(ContextVk *contextVk,
         }
     }
 
-    gl::ShaderMap<size_t> requiredBufferSize;
-    requiredBufferSize.fill(0);
     // Deserializes required uniform block memory sizes
-    for (gl::ShaderType shaderType : gl::AllShaderTypes())
-    {
-        requiredBufferSize[shaderType] = stream->readInt<size_t>();
-    }
+    gl::ShaderMap<size_t> requiredBufferSize;
+    static_assert(std::is_trivially_copyable<gl::ShaderMap<size_t>>(),
+                  "ShaderMap<size_t> should be trivial copyable so that we can memcpy");
+    stream->readBytes(reinterpret_cast<uint8_t *>(requiredBufferSize.data()),
+                      requiredBufferSize.size() * sizeof(size_t));
 
     if (!isSeparable)
     {
@@ -581,10 +579,13 @@ void ProgramExecutableVk::save(ContextVk *contextVk,
     }
 
     // Serializes required uniform block memory sizes
+    gl::ShaderMap<size_t> requiredBufferSize;
     for (gl::ShaderType shaderType : gl::AllShaderTypes())
     {
-        stream->writeInt(mDefaultUniformBlocks[shaderType]->uniformData.size());
+        requiredBufferSize[shaderType] = mDefaultUniformBlocks[shaderType]->uniformData.size();
     }
+    stream->writeBytes(reinterpret_cast<const uint8_t *>(requiredBufferSize.data()),
+                       requiredBufferSize.size() * sizeof(size_t));
 
     // Compress and save mPipelineCache.  Separable programs don't warm up the cache, while program
     // pipelines do.  However, currently ANGLE doesn't sync program pipelines to cache.  ANGLE could
