@@ -2282,7 +2282,7 @@ deps = {
   'src/tests/restricted_traces/octopath_traveler': {
       'packages': [
         {
-            'package': 'angle/traces/octopath_traveler',
+            'package': 'experimental/google.com/cnorthrop/angle/traces/octopath_traveler',
             'version': 'version:1',
         },
       ],
