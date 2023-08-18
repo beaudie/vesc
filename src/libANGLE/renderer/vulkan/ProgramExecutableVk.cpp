@@ -23,6 +23,18 @@ namespace rx
 {
 namespace
 {
+ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
+struct SerializedHeader
+{
+    gl::ShaderMap<uint32_t> uniformBlockLayoutSizes;
+    gl::ShaderMap<size_t> uniformBlockDataSizes;
+    uint32_t pipelineDataSize;
+    bool pipelineCompressionEnabled;
+    uint8_t paddings[3];
+};
+static_assert(std::is_trivially_copyable<SerializedHeader>(), "must be memcpy-able");
+ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
+
 uint8_t GetGraphicsProgramIndex(ProgramTransformOptions transformOptions)
 {
     return gl::bitCast<uint8_t, ProgramTransformOptions>(transformOptions);
@@ -454,6 +466,12 @@ void ProgramExecutableVk::reset(ContextVk *contextVk)
 {
     resetLayout(contextVk);
 
+    for (gl::ShaderType shaderType : gl::AllShaderTypes())
+    {
+        mDefaultUniformBlocks[shaderType]->uniformLayout.clear();
+        mDefaultUniformBlocks[shaderType]->uniformData.clear();
+    }
+
     if (mPipelineCache.valid())
     {
         mPipelineCache.destroy(contextVk->getDevice());
@@ -526,52 +544,42 @@ std::unique_ptr<rx::LinkEvent> ProgramExecutableVk::load(ContextVk *contextVk,
                                                          gl::BinaryInputStream *stream)
 {
     mVariableInfoMap.load(stream);
-
     mOriginalShaderInfo.load(stream);
+
+    SerializedHeader header;
+    stream->readBytes(reinterpret_cast<uint8_t *>(&header), sizeof(header));
 
     // Deserializes the uniformLayout data of mDefaultUniformBlocks
     for (gl::ShaderType shaderType : gl::AllShaderTypes())
     {
-        const size_t uniformCount = stream->readInt<size_t>();
-        for (unsigned int uniformIndex = 0; uniformIndex < uniformCount; ++uniformIndex)
+        ASSERT(mDefaultUniformBlocks[shaderType]->uniformLayout.empty());
+        if (header.uniformBlockLayoutSizes[shaderType] > 0)
         {
-            sh::BlockMemberInfo blockInfo;
-            gl::LoadBlockMemberInfo(stream, &blockInfo);
-            mDefaultUniformBlocks[shaderType]->uniformLayout.push_back(blockInfo);
+            mDefaultUniformBlocks[shaderType]->uniformLayout.resize(
+                header.uniformBlockLayoutSizes[shaderType]);
+            stream->readBytes(
+                reinterpret_cast<uint8_t *>(
+                    mDefaultUniformBlocks[shaderType]->uniformLayout.data()),
+                header.uniformBlockLayoutSizes[shaderType] * sizeof(sh::BlockMemberInfo));
         }
     }
 
-    gl::ShaderMap<size_t> requiredBufferSize;
-    requiredBufferSize.fill(0);
-    // Deserializes required uniform block memory sizes
-    for (gl::ShaderType shaderType : gl::AllShaderTypes())
+    if (!isSeparable && header.pipelineDataSize > 0)
     {
-        requiredBufferSize[shaderType] = stream->readInt<size_t>();
-    }
-
-    if (!isSeparable)
-    {
-        size_t compressedPipelineDataSize = 0;
-        stream->readInt<size_t>(&compressedPipelineDataSize);
-
-        std::vector<uint8_t> compressedPipelineData(compressedPipelineDataSize);
-        if (compressedPipelineDataSize > 0)
+        std::vector<uint8_t> compressedPipelineData(header.pipelineDataSize);
+        stream->readBytes(compressedPipelineData.data(), header.pipelineDataSize);
+        // Initialize the pipeline cache based on cached data.
+        angle::Result status = initializePipelineCache(contextVk, header.pipelineCompressionEnabled,
+                                                       compressedPipelineData);
+        if (status != angle::Result::Continue)
         {
-            bool compressedData = false;
-            stream->readBool(&compressedData);
-            stream->readBytes(compressedPipelineData.data(), compressedPipelineDataSize);
-            // Initialize the pipeline cache based on cached data.
-            angle::Result status =
-                initializePipelineCache(contextVk, compressedData, compressedPipelineData);
-            if (status != angle::Result::Continue)
-            {
-                return std::make_unique<LinkEventDone>(status);
-            }
+            return std::make_unique<LinkEventDone>(status);
         }
     }
 
     // Initialize and resize the mDefaultUniformBlocks' memory
-    angle::Result status = resizeUniformBlockMemory(contextVk, glExecutable, requiredBufferSize);
+    angle::Result status =
+        resizeUniformBlockMemory(contextVk, glExecutable, header.uniformBlockDataSizes);
     if (status != angle::Result::Continue)
     {
         return std::make_unique<LinkEventDone>(status);
@@ -588,40 +596,48 @@ void ProgramExecutableVk::save(ContextVk *contextVk,
     mVariableInfoMap.save(stream);
     mOriginalShaderInfo.save(stream);
 
-    // Serializes the uniformLayout data of mDefaultUniformBlocks
-    for (gl::ShaderType shaderType : gl::AllShaderTypes())
-    {
-        const size_t uniformCount = mDefaultUniformBlocks[shaderType]->uniformLayout.size();
-        stream->writeInt(uniformCount);
-        for (unsigned int uniformIndex = 0; uniformIndex < uniformCount; ++uniformIndex)
-        {
-            sh::BlockMemberInfo &blockInfo =
-                mDefaultUniformBlocks[shaderType]->uniformLayout[uniformIndex];
-            gl::WriteBlockMemberInfo(stream, blockInfo);
-        }
-    }
-
-    // Serializes required uniform block memory sizes
-    for (gl::ShaderType shaderType : gl::AllShaderTypes())
-    {
-        stream->writeInt(mDefaultUniformBlocks[shaderType]->uniformData.size());
-    }
-
     // Compress and save mPipelineCache.  Separable programs don't warm up the cache, while program
     // pipelines do.  However, currently ANGLE doesn't sync program pipelines to cache.  ANGLE could
     // potentially use VK_EXT_graphics_pipeline_library to create separate pipelines for
     // pre-rasterization and fragment subsets, but currently those subsets are bundled together.
+    angle::MemoryBuffer cacheData;
     if (!isSeparable)
     {
-        angle::MemoryBuffer cacheData;
-
         GetPipelineCacheData(contextVk, mPipelineCache, &cacheData);
-        stream->writeInt(cacheData.size());
-        if (cacheData.size() > 0)
+    }
+
+    // Serialize the header info
+    SerializedHeader header;
+    for (gl::ShaderType shaderType : gl::AllShaderTypes())
+    {
+        header.uniformBlockLayoutSizes[shaderType] =
+            static_cast<uint32_t>(mDefaultUniformBlocks[shaderType]->uniformLayout.size());
+        header.uniformBlockDataSizes[shaderType] =
+            mDefaultUniformBlocks[shaderType]->uniformData.size();
+    }
+    header.pipelineDataSize = static_cast<uint32_t>(cacheData.size());
+    header.pipelineCompressionEnabled =
+        contextVk->getFeatures().enablePipelineCacheDataCompression.enabled;
+    stream->writeBytes(reinterpret_cast<const uint8_t *>(&header), sizeof(header));
+
+    // Serializes the uniformLayout data of mDefaultUniformBlocks
+    for (gl::ShaderType shaderType : gl::AllShaderTypes())
+    {
+        if (header.uniformBlockLayoutSizes[shaderType] > 0)
         {
-            stream->writeBool(contextVk->getFeatures().enablePipelineCacheDataCompression.enabled);
-            stream->writeBytes(cacheData.data(), cacheData.size());
+            ASSERT(header.uniformBlockLayoutSizes[shaderType] ==
+                   mDefaultUniformBlocks[shaderType]->uniformLayout.size());
+            stream->writeBytes(
+                reinterpret_cast<const uint8_t *>(
+                    mDefaultUniformBlocks[shaderType]->uniformLayout.data()),
+                header.uniformBlockLayoutSizes[shaderType] * sizeof(sh::BlockMemberInfo));
         }
+    }
+
+    // Serializes the pipeline cache data
+    if (!isSeparable && cacheData.size() > 0)
+    {
+        stream->writeBytes(cacheData.data(), cacheData.size());
     }
 }
 
