@@ -208,22 +208,26 @@ uint8_t *TraceLibrary::LoadBinaryData(const char *fileName)
             exit(1);
         }
 
-        std::vector<uint8_t> compressedData(size);
-        (void)fread(compressedData.data(), 1, size, fp);
-
-        uint32_t uncompressedSize =
-            zlib_internal::GetGzipUncompressedSize(compressedData.data(), compressedData.size());
-
-        mBinaryData.resize(uncompressedSize + 1);  // +1 to make sure .data() is valid
-        uLong destLen = uncompressedSize;
-        int zResult =
-            zlib_internal::GzipUncompressHelper(mBinaryData.data(), &destLen, compressedData.data(),
-                                                static_cast<uLong>(compressedData.size()));
-
-        if (zResult != Z_OK)
+        for (int i = 0; i < 20; i++)
         {
-            std::cerr << "Failure to decompressed binary data: " << zResult << "\n";
-            exit(1);
+            std::vector<uint8_t> compressedData(size);
+            fseek(fp, 0, SEEK_SET);
+            (void)fread(compressedData.data(), 1, size, fp);
+
+            uint32_t uncompressedSize = zlib_internal::GetGzipUncompressedSize(
+                compressedData.data(), compressedData.size());
+
+            mBinaryData.resize(uncompressedSize + 1);  // +1 to make sure .data() is valid
+            uLong destLen = uncompressedSize;
+            int zResult   = zlib_internal::GzipUncompressHelper(
+                mBinaryData.data(), &destLen, compressedData.data(),
+                static_cast<uLong>(compressedData.size()));
+
+            if (zResult != Z_OK)
+            {
+                std::cerr << "Failure to decompressed binary data: " << zResult << "\n";
+                exit(1);
+            }
         }
     }
     else
