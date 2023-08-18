@@ -2036,6 +2036,8 @@ deqp_framework_platform_sources = [
 ]
 
 deqp_libtester_sources = [
+  # TODO(jmadill): integrate with dEQP
+  "$angle_root/third_party/renderdoc/src/renderdoc_app.h",
   "$deqp_path/execserver/xsDefs.cpp",
   "$deqp_path/execserver/xsDefs.hpp",
   "$deqp_path/execserver/xsExecutionServer.cpp",
@@ -2080,13 +2082,17 @@ deqp_libtester_sources = [
   "$deqp_path/executor/xeTestResultParser.hpp",
   "$deqp_path/executor/xeXMLWriter.cpp",
   "$deqp_path/executor/xeXMLWriter.hpp",
+  "deqp_support/tcuANGLENativeDisplay.cpp",
+  "deqp_support/tcuANGLENativeDisplay.h",
   "deqp_support/tcuANGLENativeDisplayFactory.cpp",
   "deqp_support/tcuANGLENativeDisplayFactory.h",
-
-  # TODO(jmadill): integrate with dEQP
-  "$angle_root/third_party/renderdoc/src/renderdoc_app.h",
   "deqp_support/tcuRandomOrderExecutor.cpp",
   "deqp_support/tcuRandomOrderExecutor.h",
   "test_utils/RenderDoc.cpp",
   "test_utils/RenderDoc.h",
+]
+
+deqp_libtester_sources_android = [
+  "deqp_support/android/tcuANGLENativeWindowFactoryAndroid.cpp",
+  "deqp_support/android/tcuANGLENativeWindowFactoryAndroid.h",
 ]
