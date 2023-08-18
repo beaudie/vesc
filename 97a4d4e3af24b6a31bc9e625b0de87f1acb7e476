@@ -320,6 +320,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6845e940_5f894f7e",
+        "filename": "src/compiler/translator/tree_ops/RescopeGlobalVariables.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-18T00:10:37Z",
+      "side": 1,
+      "message": "That\u0027s ok, you can still move it. See how `ScalarizeVecAndMatConstructorArgs` is under `tree_ops/glsl/`, and also called from `Compiler.cpp`.",
+      "parentUuid": "258d8a7d_ac52d6f7",
+      "revId": "97a4d4e3af24b6a31bc9e625b0de87f1acb7e476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "12d6d1f8_0f9c8429",
         "filename": "src/tests/compiler_tests/MSLOutput_test.cpp",
         "patchSetId": 4

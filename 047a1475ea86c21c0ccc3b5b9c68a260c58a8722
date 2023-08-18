@@ -16,6 +16,29 @@
       "message": "PTAL, seems to fix the framerate issue on https://www.oooceanworld.com/testgame/testurp20210323/ at least locally on my M1",
       "revId": "047a1475ea86c21c0ccc3b5b9c68a260c58a8722",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b647d73_bc894381",
+        "filename": "src/compiler/translator/tree_ops/RescopeGlobalVariables.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-18T00:10:37Z",
+      "side": 1,
+      "message": "nit: just `insert` at index 0 and let std::vector deal with it?",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 56,
+        "endChar": 59
+      },
+      "revId": "047a1475ea86c21c0ccc3b5b9c68a260c58a8722",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
