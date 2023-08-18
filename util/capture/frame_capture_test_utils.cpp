@@ -12,6 +12,7 @@
 #include "common/frame_capture_utils.h"
 #include "common/string_utils.h"
 
+#include <anglebase/sha1.h>
 #include <rapidjson/document.h>
 #include <rapidjson/istreamwrapper.h>
 #include <fstream>
@@ -209,7 +210,24 @@ uint8_t *TraceLibrary::LoadBinaryData(const char *fileName)
         }
 
         std::vector<uint8_t> compressedData(size);
-        (void)fread(compressedData.data(), 1, size, fp);
+        fseek(fp, 0, SEEK_SET);
+        size_t n = fread(compressedData.data(), 1, size, fp);
+        if (n != (size_t)size)
+        {
+            FATAL() << "fread failed: " << n << "!=" << size;
+        }
+
+        unsigned char hash[angle::base::kSHA1Length];
+        angle::base::SHA1HashBytes(compressedData.data(), size, hash);
+        std::ostringstream os;
+
+        static constexpr char kASCII[] = "0123456789abcdef";
+        for (size_t i = 0; i < angle::base::kSHA1Length; ++i)
+        {
+            os << kASCII[hash[i] >> 4] << kASCII[hash[i] & 0xf];
+        }
+
+        std::cout << "sha1: " << os.str() << " size " << size << " of " << fileName << std::endl;
 
         uint32_t uncompressedSize =
             zlib_internal::GetGzipUncompressedSize(compressedData.data(), compressedData.size());
