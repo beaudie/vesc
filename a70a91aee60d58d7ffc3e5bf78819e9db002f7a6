@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecfa7156_77ddbb2b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3392,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-18T16:05:45Z",
+      "side": 1,
+      "message": "Doesn\u0027t this loop just run 2 iterations max? It\u0027s clearer IMO if you unroll it, and remove `isContextFinished`.",
+      "revId": "a70a91aee60d58d7ffc3e5bf78819e9db002f7a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdd2d1d8_a08f35a0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3468,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-18T16:05:45Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "a70a91aee60d58d7ffc3e5bf78819e9db002f7a6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
