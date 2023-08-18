@@ -34,6 +34,24 @@
       "parentUuid": "fed92379_5dabada6",
       "revId": "011100bc3b1a17d40b0eb177dfbdddbbbf0eaccf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "600b5659_67a9d7ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-08-18T10:29:01Z",
+      "side": 1,
+      "message": "https://android-review.googlesource.com/c/platform/external/angle/+/2716093 confirms that https://chromium-review.googlesource.com/c/angle/angle/+/4776338 breaks AOSP.\nhttps://android-review.googlesource.com/c/platform/external/angle/+/2716034\nconfirms that this revert fixes it.",
+      "parentUuid": "3bc8a12c_28400626",
+      "revId": "011100bc3b1a17d40b0eb177dfbdddbbbf0eaccf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
