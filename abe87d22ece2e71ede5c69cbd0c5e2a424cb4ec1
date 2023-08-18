@@ -34,6 +34,24 @@
       "parentUuid": "042c9496_7c52d35f",
       "revId": "abe87d22ece2e71ede5c69cbd0c5e2a424cb4ec1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f02b6f2_cb8c96fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-08-18T12:39:31Z",
+      "side": 1,
+      "message": "See the workflow of these tests here:\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/tests/capture_replay_tests.py;l\u003d11;drc\u003df382b244cdbcb5a7714b3e493fdabc2cf1c2bf7d\nBasically, they:\n1. Build other tests\n2. Run them, which produces source code artifacts in addition to test results\n3. Build the code artifacts from step 2\n4. Run them\n5. Compare results from step 2 and 4\nI think it was too complicated to write a special recipe for that in anglebug.com/5530, so we have Python doing GN build with Goma instead.",
+      "parentUuid": "aacebb57_e97454bd",
+      "revId": "abe87d22ece2e71ede5c69cbd0c5e2a424cb4ec1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
