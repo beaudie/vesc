@@ -225,7 +225,7 @@ def get_test_time():
     # Pull the results from the device and parse
     result = run_adb_command('shell cat /sdcard/Download/out.txt | grep -v Error | grep -v Frame')
 
-    measured_time = ''
+    measured_time = None
 
     for line in result.stdout.splitlines():
         logging.debug('Checking line: %s' % line)
@@ -242,6 +242,12 @@ def get_test_time():
             logging.debug('Skipping test due to missing extension: %s' % missing_ext)
             measured_time = missing_ext
             break
+
+    if measured_time is None:
+        if '[  PASSED  ]' in result.stdout:
+            measured_time = 'missing'
+        else:
+            measured_time = 'crashed'
 
     return measured_time
 
@@ -364,7 +370,7 @@ def get_cpu_time():
             cpu_time = line.split()[-2]
             break
 
-    return cpu_time
+    return cpu_time or '0'
 
 
 def get_frame_count():
@@ -699,7 +705,11 @@ def run_traces(args):
 
                 if len(wall_times[test]) == 0:
                     wall_times[test] = defaultdict(list)
-                wall_times[test][renderer].append(safe_cast_float(wall_time))
+                try:
+                    wt = safe_cast_float(wall_time)
+                except ValueError:  # e.g. 'crashed'
+                    wt = -1
+                wall_times[test][renderer].append(wt)
 
                 if len(gpu_times[test]) == 0:
                     gpu_times[test] = defaultdict(list)
