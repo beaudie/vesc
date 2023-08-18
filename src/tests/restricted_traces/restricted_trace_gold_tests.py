@@ -370,10 +370,10 @@ def _run_tests(args, tests, extra_flags, env, screenshot_dir, results, test_resu
             traces = angle_test_util.FilterTests(traces, args.isolated_script_test_filter)
 
         # https://anglebug.com/8307: temporary hash check
-        for trace in traces:
-            angledata = os.path.join(angle_path_util.ANGLE_ROOT_DIR, 'src', 'tests',
-                                     'restricted_traces', trace, trace + '.angledata.gz')
-            logging.info('%s.angledata.gz hash: %s', trace, sha256(angledata))
+        # for trace in traces:
+        #     angledata = os.path.join(angle_path_util.ANGLE_ROOT_DIR, 'src', 'tests',
+        #                              'restricted_traces', trace, trace + '.angledata.gz')
+        #     logging.info('%s.angledata.gz hash: %s', trace, sha256(angledata))
 
         batches = _get_batches(traces, args.batch_size)
 
