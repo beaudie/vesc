@@ -135,6 +135,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7612409f_26c193e9",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-18T00:12:20Z",
+      "side": 1,
+      "message": "Handle transformFeedbackBufferMode in the next CL, since I dont want to make any behavior change in this big diff.",
+      "parentUuid": "6035e415_54b710c1",
+      "revId": "2cc818a55bdc723af39d4b19403401682db2d019",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "41dd9482_e83cde8d",
