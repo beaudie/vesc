@@ -33,6 +33,69 @@
       "message": "Please add an early out for when the sampler format and the intended format match. Then, given that the required formats for buffer views are limited (as you\u0027ve listed here), you can add `UNREACHABLE()` in the default cases so we can catch bugs.",
       "revId": "cf29412c2f348a22f0d3caa8b67816500fc6fd3c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd739719_14221ae9",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-18T14:56:15Z",
+      "side": 1,
+      "message": "Rather than a silent default, can we have an explicit block of accepted passthrough values?  The the default fall through can be an error condition (UNREACHABLE).  Same for each of the below.",
+      "range": {
+        "startLine": 332,
+        "startChar": 0,
+        "endLine": 332,
+        "endChar": 36
+      },
+      "revId": "cf29412c2f348a22f0d3caa8b67816500fc6fd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "adabf175_bb47e794",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-18T14:56:15Z",
+      "side": 1,
+      "message": "Good find, known bug",
+      "range": {
+        "startLine": 192,
+        "startChar": 0,
+        "endLine": 192,
+        "endChar": 72
+      },
+      "revId": "cf29412c2f348a22f0d3caa8b67816500fc6fd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af451e30_c1026d6f",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 11707,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-18T14:56:15Z",
+      "side": 1,
+      "message": "Can you explain the format selections for each of the below?  Just a mention of the spec would be fine.",
+      "revId": "cf29412c2f348a22f0d3caa8b67816500fc6fd3c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
