@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ebb2ffc6_56049be0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5964,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-19T00:19:53Z",
+      "side": 1,
+      "message": "Thanks! It makes sense. In the other CL, I have currently added the flush calls to `BufferVk` after the release calls.\n\nAfter the next CL, the `onOutOfMemory()` function will no longer get called for the added test, and merely flushing the pending garbages more often seems to be working well in this scenario.\n\nTherefore, I have decoupled the two CLs, and will prioritize the other CL first (https://crrev.com/c/4787950).",
+      "parentUuid": "a4a96325_bdd9d7a4",
+      "range": {
+        "startLine": 5964,
+        "startChar": 12,
+        "endLine": 5964,
+        "endChar": 37
+      },
+      "revId": "973fe8b98ae8d91f369bb28b78271a1bf8ac45c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3b261da4_8fbeacca",
         "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
         "patchSetId": 2
@@ -85,6 +109,30 @@
       "writtenOn": "2023-08-17T16:11:27Z",
       "side": 1,
       "message": "// Calling BufferData and draw with it in a loop without glFlush() should \n// still work. Driver is supposedly to issue flush if needed.",
+      "range": {
+        "startLine": 3469,
+        "startChar": 3,
+        "endLine": 3471,
+        "endChar": 33
+      },
+      "revId": "973fe8b98ae8d91f369bb28b78271a1bf8ac45c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6803ed2_112575bb",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3471,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-19T00:19:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b261da4_8fbeacca",
       "range": {
         "startLine": 3469,
         "startChar": 3,
@@ -118,6 +166,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "97461823_5c172fa1",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3477,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-19T00:19:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ed6f56ea_d73da73b",
+      "range": {
+        "startLine": 3476,
+        "startChar": 4,
+        "endLine": 3477,
+        "endChar": 23
+      },
+      "revId": "973fe8b98ae8d91f369bb28b78271a1bf8ac45c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9206dee3_dc96cbea",
@@ -131,6 +203,30 @@
       "writtenOn": "2023-08-17T16:11:27Z",
       "side": 1,
       "message": "You can remove this as well (and line 3486 to 3496), no need to ping-pong FBOs for this purpose.",
+      "range": {
+        "startLine": 3500,
+        "startChar": 8,
+        "endLine": 3502,
+        "endChar": 51
+      },
+      "revId": "973fe8b98ae8d91f369bb28b78271a1bf8ac45c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec6a96b8_ac3d8ded",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3502,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-19T00:19:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9206dee3_dc96cbea",
       "range": {
         "startLine": 3500,
         "startChar": 8,
