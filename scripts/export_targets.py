@@ -279,8 +279,9 @@ IGNORED_INCLUDE_PREFIXES = {
 
 IGNORED_DIRECTORIES = {
     '//buildtools/third_party/libc++',
-    '//third_party/libc++/src',
     '//third_party/abseil-cpp',
+    '//third_party/gn/libdrm',
+    '//third_party/libc++/src',
     '//third_party/SwiftShader',
 }
 

@@ -22,6 +22,7 @@ class FunctionsEGLDL : public FunctionsEGL
 
     egl::Error initialize(EGLAttrib platformType,
                           EGLNativeDisplayType nativeDisplay,
+                          const egl::AttributeMap &displayAttributes,
                           const char *libName,
                           void *eglHandle);
     void *getProcAddress(const char *name) const override;
