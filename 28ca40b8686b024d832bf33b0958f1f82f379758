@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6244375_bf938150",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5376,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-19T00:17:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "41d78e10_2a8558a9",
+      "range": {
+        "startLine": 5376,
+        "startChar": 8,
+        "endLine": 5376,
+        "endChar": 47
+      },
+      "revId": "28ca40b8686b024d832bf33b0958f1f82f379758",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "50757bc7_ac0c5208",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a0fb3e1_3473d295",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-19T00:17:44Z",
+      "side": 1,
+      "message": "Updated to a size determined by the available heap sizes. It is set when initializing the renderer (`findMaxPendingSuballocationGarbageSize()`).",
+      "parentUuid": "50757bc7_ac0c5208",
+      "range": {
+        "startLine": 41,
+        "startChar": 23,
+        "endLine": 41,
+        "endChar": 56
+      },
+      "revId": "28ca40b8686b024d832bf33b0958f1f82f379758",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ebecf97b_6c2b3664",
@@ -60,6 +108,30 @@
       "writtenOn": "2023-08-17T16:23:43Z",
       "side": 1,
       "message": "This check should do at the point when pending garbage is generated (from BufferHelper::release).",
+      "range": {
+        "startLine": 4861,
+        "startChar": 3,
+        "endLine": 4865,
+        "endChar": 5
+      },
+      "revId": "28ca40b8686b024d832bf33b0958f1f82f379758",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14a9a258_d7f2f582",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4865,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-19T00:17:44Z",
+      "side": 1,
+      "message": "I have added this code to `ContextVk::checkPendingGarbageSize()`, which is called in `rx::BufferVk` functions after the buffer `release()` calls.",
+      "parentUuid": "ebecf97b_6c2b3664",
       "range": {
         "startLine": 4861,
         "startChar": 3,
