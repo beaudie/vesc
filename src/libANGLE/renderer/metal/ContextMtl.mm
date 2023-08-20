@@ -1414,12 +1414,12 @@ angle::Result ContextMtl::onMakeCurrent(const gl::Context *context)
 }
 angle::Result ContextMtl::onUnMakeCurrent(const gl::Context *context)
 {
-    flushCommandBuffer(mtl::WaitUntilScheduled);
+    //    flushCommandBuffer(mtl::WaitUntilScheduled);
     // Note: this 2nd flush is needed because if there is a query in progress
     // then during flush, new command buffers are allocated that also need
     // to be flushed. This is a temporary fix and we should probably refactor
     // this later. See TODO(anglebug.com/7138)
-    flushCommandBuffer(mtl::WaitUntilScheduled);
+    //    flushCommandBuffer(mtl::WaitUntilScheduled);
     gl::Query *query = mState.getActiveQuery(gl::QueryType::TimeElapsed);
     if (query)
     {
