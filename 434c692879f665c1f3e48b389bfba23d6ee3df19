@@ -46,6 +46,30 @@
       },
       "revId": "434c692879f665c1f3e48b389bfba23d6ee3df19",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bdabab9c_9d709015",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1490,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-20T00:39:05Z",
+      "side": 1,
+      "message": "Oh right, the pipeline and desc set _layouts_ need to be made atomic, but the desc set bindings themselves shouldn\u0027t need it. I haven\u0027t done it yet, but will do",
+      "parentUuid": "5f2c8aa3_ef1c79fd",
+      "range": {
+        "startLine": 1480,
+        "startChar": 4,
+        "endLine": 1490,
+        "endChar": 0
+      },
+      "revId": "434c692879f665c1f3e48b389bfba23d6ee3df19",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
