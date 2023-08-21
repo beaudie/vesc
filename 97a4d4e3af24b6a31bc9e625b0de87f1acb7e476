@@ -336,6 +336,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5991bd5b_59a327ab",
+        "filename": "src/compiler/translator/tree_ops/RescopeGlobalVariables.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2023-08-21T19:23:42Z",
+      "side": 1,
+      "message": "It ended up being a wild goose chase to get the dependencies right because we compile translator_gl_d3d_only but ANGLE_ENABLE_METAL is still defined.\nInstead I added an flag to ShCompileOptions so this will only be used on the Mtl backend anyway.",
+      "parentUuid": "6845e940_5f894f7e",
+      "revId": "97a4d4e3af24b6a31bc9e625b0de87f1acb7e476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "12d6d1f8_0f9c8429",

@@ -39,6 +39,30 @@
       },
       "revId": "047a1475ea86c21c0ccc3b5b9c68a260c58a8722",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6859323_a0213a22",
+        "filename": "src/compiler/translator/tree_ops/RescopeGlobalVariables.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2023-08-21T19:23:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b647d73_bc894381",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 56,
+        "endChar": 59
+      },
+      "revId": "047a1475ea86c21c0ccc3b5b9c68a260c58a8722",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
