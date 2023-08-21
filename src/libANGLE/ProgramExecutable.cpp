@@ -231,21 +231,16 @@ void SaveUniforms(BinaryOutputStream *stream,
                   const std::vector<std::string> &uniformMappedNames,
                   const std::vector<VariableLocation> &uniformLocations)
 {
-    stream->writeInt(uniforms.size());
-    if (uniforms.size() > 0)
+    stream->writeVector(uniforms);
+    ASSERT(uniforms.size() == sizeof(uniformNames));
+    ASSERT(uniforms.size() == sizeof(uniformMappedNames));
+    for (const std::string &name : uniformNames)
     {
-        // LinkedUniform is a simple structure with fundamental data types, we can just do bulk save
-        // for performance.
-        stream->writeBytes(reinterpret_cast<const uint8_t *>(uniforms.data()),
-                           sizeof(LinkedUniform) * uniforms.size());
-        for (const std::string &name : uniformNames)
-        {
-            stream->writeString(name);
-        }
-        for (const std::string &name : uniformMappedNames)
-        {
-            stream->writeString(name);
-        }
+        stream->writeString(name);
+    }
+    for (const std::string &name : uniformMappedNames)
+    {
+        stream->writeString(name);
     }
 
     stream->writeInt(uniformLocations.size());
@@ -263,21 +258,16 @@ void LoadUniforms(BinaryInputStream *stream,
                   std::vector<VariableLocation> *uniformLocations)
 {
     ASSERT(uniforms->empty());
-    size_t uniformCount = stream->readInt<size_t>();
-    if (uniformCount > 0)
+    stream->readVector(uniforms);
+    if (!uniforms->empty())
     {
-        uniforms->resize(uniformCount);
-        // LinkedUniform is a simple structure with fundamental data types, we can just do bulk load
-        // for performance.
-        stream->readBytes(reinterpret_cast<uint8_t *>(uniforms->data()),
-                          sizeof(LinkedUniform) * uniforms->size());
-        uniformNames->resize(uniformCount);
-        for (size_t uniformIndex = 0; uniformIndex < uniformCount; ++uniformIndex)
+        uniformNames->resize(uniforms->size());
+        for (size_t uniformIndex = 0; uniformIndex < uniforms->size(); ++uniformIndex)
         {
             stream->readString(&(*uniformNames)[uniformIndex]);
         }
-        uniformMappedNames->resize(uniformCount);
-        for (size_t uniformIndex = 0; uniformIndex < uniformCount; ++uniformIndex)
+        uniformMappedNames->resize(uniforms->size());
+        for (size_t uniformIndex = 0; uniformIndex < uniforms->size(); ++uniformIndex)
         {
             stream->readString(&(*uniformMappedNames)[uniformIndex]);
         }
@@ -300,9 +290,7 @@ void SaveSamplerBindings(BinaryOutputStream *stream,
                          const std::vector<SamplerBinding> &samplerBindings,
                          const std::vector<GLuint> &samplerBoundTextureUnits)
 {
-    stream->writeInt(samplerBindings.size());
-    stream->writeBytes(reinterpret_cast<const uint8_t *>(samplerBindings.data()),
-                       sizeof(*samplerBindings.data()) * samplerBindings.size());
+    stream->writeVector(samplerBindings);
     stream->writeInt(samplerBoundTextureUnits.size());
 }
 void LoadSamplerBindings(BinaryInputStream *stream,
@@ -310,13 +298,7 @@ void LoadSamplerBindings(BinaryInputStream *stream,
                          std::vector<GLuint> *samplerBoundTextureUnits)
 {
     ASSERT(samplerBindings->empty());
-    size_t samplerBindingCount = stream->readInt<size_t>();
-    if (samplerBindingCount > 0)
-    {
-        samplerBindings->resize(samplerBindingCount);
-        stream->readBytes(reinterpret_cast<uint8_t *>(samplerBindings->data()),
-                          sizeof(*samplerBindings->data()) * samplerBindingCount);
-    }
+    stream->readVector(samplerBindings);
 
     ASSERT(samplerBoundTextureUnits->empty());
     size_t boundTextureUnitsCount = stream->readInt<size_t>();

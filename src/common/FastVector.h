@@ -154,6 +154,7 @@ class FastVector final
 
     void resize(size_type count);
     void resize(size_type count, const value_type &value);
+    void resizeAndCopy(const uint8_t *data, size_type count);
 
     // Only for use with non trivially constructible types.
     // When increasing size, new elements may have previous values. Use with caution in cases when
@@ -480,6 +481,16 @@ ANGLE_INLINE void FastVector<T, N, Storage>::resize_down(size_type count)
 }
 
 template <class T, size_t N, class Storage>
+void FastVector<T, N, Storage>::resizeAndCopy(const uint8_t *data, size_type count)
+{
+    static_assert(std::is_trivially_copyable<value_type>(),
+                  "This is a special method for trivially copyable types. "
+                  "Please use regular resize(count) method.");
+    resize_impl(count);
+    std::memcpy(mData, data, count * sizeof(value_type));
+}
+
+template <class T, size_t N, class Storage>
 void FastVector<T, N, Storage>::resize_impl(size_type count)
 {
     if (count > mSize)
@@ -613,6 +624,8 @@ class FastMap final
     }
 
     void clear() { mData.clear(); }
+
+    void resizeAndCopy(const uint8_t *data, size_type count) { mData.resizeAndCopy(data, count); }
 
     bool empty() const { return mData.empty(); }
     size_t size() const { return mData.size(); }
