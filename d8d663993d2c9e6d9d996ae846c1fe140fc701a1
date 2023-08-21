@@ -22,6 +22,30 @@
       },
       "revId": "d8d663993d2c9e6d9d996ae846c1fe140fc701a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05c527e5_dcea3549",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-08-21T15:52:53Z",
+      "side": 1,
+      "message": "So I can\u0027t decide if I want to add more markers (as code+logcat noise adds up) but I am trying to make it more clear that this marker is post-setup with this change: https://crrev.com/c/4799388",
+      "parentUuid": "cb70bc2a_b6a6f181",
+      "range": {
+        "startLine": 495,
+        "startChar": 12,
+        "endLine": 495,
+        "endChar": 29
+      },
+      "revId": "d8d663993d2c9e6d9d996ae846c1fe140fc701a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
