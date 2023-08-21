@@ -119,9 +119,6 @@ class BitSetT final
     constexpr explicit BitSetT(BitsT value);
     constexpr explicit BitSetT(std::initializer_list<ParamT> init);
 
-    constexpr BitSetT(const BitSetT &other);
-    constexpr BitSetT &operator=(const BitSetT &other);
-
     constexpr bool operator==(const BitSetT &other) const;
     constexpr bool operator!=(const BitSetT &other) const;
 
@@ -202,17 +199,6 @@ constexpr BitSetT<N, BitsT, ParamT>::BitSetT(std::initializer_list<ParamT> init)
         mBits |= Bit<BitsT>(element);
     }
     ASSERT(mBits == (mBits & Mask(N).bits()));
-}
-
-template <size_t N, typename BitsT, typename ParamT>
-constexpr BitSetT<N, BitsT, ParamT>::BitSetT(const BitSetT &other) : mBits(other.mBits)
-{}
-
-template <size_t N, typename BitsT, typename ParamT>
-constexpr BitSetT<N, BitsT, ParamT> &BitSetT<N, BitsT, ParamT>::operator=(const BitSetT &other)
-{
-    mBits = other.mBits;
-    return *this;
 }
 
 template <size_t N, typename BitsT, typename ParamT>
@@ -470,6 +456,7 @@ using BitSet16 = BitSetT<N, uint16_t>;
 
 template <size_t N>
 using BitSet32 = BitSetT<N, uint32_t>;
+static_assert(std::is_trivially_copyable<BitSet32<32>>(), "must be memcpy-able");
 
 template <size_t N>
 using BitSet64 = BitSetT<N, uint64_t>;
