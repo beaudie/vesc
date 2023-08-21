@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "155552ea_369d294b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-08-21T11:53:40Z",
+      "side": 1,
+      "message": "Shabi or Roman, PTAL.",
+      "revId": "e2c7c7ff6a06d56e2df1bb179e4b42af2d5cd00a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
