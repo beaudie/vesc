@@ -16,6 +16,29 @@
       "message": "After some experiment I think in order to achieve different behaviors on different platform, I need to create these sets of classes for each platform:\n\n```\nNativeDisplayFactory : public eglu::NativeDisplayFactory\n\nNativeDisplay : public eglu::NativeDisplay\n\nNativeWindowFactory : public eglu::NativeWindowFactory\n\nNativeWindow : public eglu::NativeWindow\n```\n\nJust because the constructor of these `eglu::Native*` classes take different const `Capability` constructor parameters.\n\nThe amount of duplicated code is an overkill comparing to define a different `Capability` parameter using #ifdef.",
       "revId": "76554a14d8d70bd34324adc5d73d75770a47d6b0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29306a88_684c06e4",
+        "filename": "src/tests/deqp_support/tcuANGLENativeDisplayFactory.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-08-21T22:36:45Z",
+      "side": 1,
+      "message": "Maybe just #if/#endif around this line to avoid duplication? I don\u0027t think you even need a comment, blame layer will have the context. Maybe rearrange the order so that it\u0027s at the end or beginning of the list so that it\u0027s a bit less messy",
+      "range": {
+        "startLine": 94,
+        "startChar": 8,
+        "endLine": 94,
+        "endChar": 59
+      },
+      "revId": "76554a14d8d70bd34324adc5d73d75770a47d6b0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
