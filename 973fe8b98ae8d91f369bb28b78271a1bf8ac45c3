@@ -96,6 +96,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "45688f5e_063e9289",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5964,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-21T21:08:29Z",
+      "side": 1,
+      "message": "As it was discussed in the other CL, we will still need this CL in case we run out of memory regardless of the flushing threshold.",
+      "parentUuid": "ebb2ffc6_56049be0",
+      "range": {
+        "startLine": 5964,
+        "startChar": 12,
+        "endLine": 5964,
+        "endChar": 37
+      },
+      "revId": "973fe8b98ae8d91f369bb28b78271a1bf8ac45c3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3b261da4_8fbeacca",
