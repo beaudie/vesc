@@ -170,8 +170,7 @@ class PrivateStateCache final : angle::NonCopyable
     void onCapChange() { mIsCachedBasicDrawStatesErrorValid = false; }
     void onColorMaskChange() { mIsCachedBasicDrawStatesErrorValid = false; }
     void onDefaultVertexAttributeChange() { mIsCachedBasicDrawStatesErrorValid = false; }
-    void onBlendFuncIndexedChange() { mIsCachedBasicDrawStatesErrorValid = false; }
-    void onBlendEquationChange() { mIsCachedBasicDrawStatesErrorValid = false; }
+    void onBlendFuncOrEquationChange() { mIsCachedBasicDrawStatesErrorValid = false; }
     void onStencilStateChange() { mIsCachedBasicDrawStatesErrorValid = false; }
 
     bool isCachedBasicDrawStatesErrorValid() const { return mIsCachedBasicDrawStatesErrorValid; }
@@ -237,8 +236,7 @@ class StateCache final : angle::NonCopyable
     // 2. onStencilStateChange.
     // 3. onDefaultVertexAttributeChange.
     // 4. onColorMaskChange.
-    // 5. onBlendFuncIndexedChange.
-    // 6. onBlendEquationChange.
+    // 5. onBlendFuncOrEquationChange.
     intptr_t getBasicDrawStatesErrorString(const Context *context,
                                            const PrivateStateCache *privateStateCache) const
     {
