@@ -96,6 +96,14 @@ def AutodetectGoma():
             pass
     return False
 
+def AutodetectReclient():
+    for p in psutil.process_iter():
+        try:
+            if winext('reproxy', 'exe') == p.name():
+                return True
+        except:
+            pass
+    return False
 
 class SubProcess():
 
@@ -148,6 +156,7 @@ class ChildProcessesManager():
         self._gn_path = self._GetGnAbsolutePaths()
         self._ninja_path = self._GetNinjaAbsolutePaths()
         self._use_goma = AutodetectGoma()
+        self._use_reclient =  AutodetectReclient()
         self._logger = logger
         self._ninja_lock = ninja_lock
         self.runtimes = {}
@@ -217,6 +226,8 @@ class ChildProcessesManager():
             gn_args.append(('use_goma', 'true'))
             if self._args.goma_dir:
                 gn_args.append(('goma_dir', '"%s"' % self._args.goma_dir))
+        if self._use_reclient:
+            gn_args.append(('use_remoteexec', 'true'))
         if not self._args.debug:
             gn_args.append(('is_debug', 'false'))
             gn_args.append(('symbol_level', '1'))
@@ -232,7 +243,7 @@ class ChildProcessesManager():
         cmd = [self._ninja_path]
 
         # This code is taken from depot_tools/autoninja.py
-        if self._use_goma:
+        if self._use_goma or self._use_reclient:
             num_cores = multiprocessing.cpu_count()
             cmd.append('-j')
             core_multiplier = 40
