@@ -144,6 +144,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "78b39e73_6289f784",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3563,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-21T18:41:41Z",
+      "side": 1,
+      "message": "Here is what I am thinking: there will be two paths trigger this:\n\n1) When allocation failed, the call unwind to Buffer/Image and then we realize there are pending garbages, and we can issue a flushImpl call and try allocation again.\n\n2) When we accumulate excessive garbage that could gets recycled if we flush them, we should do that. This is precaution approach and also for performance reasons.\n\nWe need both, and this CL is handling #2). You will need another CL to handle #1).\n\nAnd by doing this, you can also moving the existing allocation failure logic all the way back to one place, at the higher level call stack where you trigger flushImpl.\n\nWith just this CL, no matter how you pick the threshold, I think you will still end up OOM, depends on which heap you try to allocate.",
+      "parentUuid": "bbdd2155_aa51a6fa",
+      "range": {
+        "startLine": 3560,
+        "startChar": 3,
+        "endLine": 3563,
+        "endChar": 69
+      },
+      "revId": "626c2685a5f3740fe1ae32b675a8f56f465c3abc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c591334a_8f15ad48",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 5
