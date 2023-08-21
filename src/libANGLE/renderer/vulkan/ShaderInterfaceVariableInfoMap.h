@@ -32,7 +32,8 @@ class ShaderInterfaceVariableInfoMap final : angle::NonCopyable
   public:
     // For each interface variable, a ShaderInterfaceVariableInfo is created.  These are stored in a
     // flat array.
-    using VariableInfoArray = std::vector<ShaderInterfaceVariableInfo>;
+    using VariableInfoArray    = std::vector<ShaderInterfaceVariableInfo>;
+    using XFBVariableInfoArray = std::vector<XFBVariableInfoPtr>;
 
     // Each interface variable has an associted SPIR-V id (which is different per shader type).
     // The following map is from a SPIR-V id to its associated info in VariableInfoArray.
@@ -62,6 +63,7 @@ class ShaderInterfaceVariableInfoMap final : angle::NonCopyable
     void setOutputPerVertexActiveMembers(gl::ShaderType shaderType,
                                          gl::PerVertexMemberBitSet activeMembers);
     ShaderInterfaceVariableInfo &getMutable(gl::ShaderType shaderType, uint32_t id);
+    XFBVariableInfoPtr &getXFBMutable(gl::ShaderType shaderType, uint32_t id);
 
     const ShaderInterfaceVariableInfo &getDefaultUniformInfo(gl::ShaderType shaderType) const;
     const ShaderInterfaceVariableInfo &getAtomicCounterInfo(gl::ShaderType shaderType) const;
@@ -78,6 +80,12 @@ class ShaderInterfaceVariableInfoMap final : angle::NonCopyable
                                                        uint32_t id) const;
     const VariableInfoArray &getData() const { return mData; }
     const gl::ShaderMap<IdToIndexMap> &getIdToIndexMap() const { return mIdToIndexMap; }
+    const XFBVariableInfoPtr &getXFBDataForVariableInfo(
+        const ShaderInterfaceVariableInfo *info) const
+    {
+        size_t index = info - mData.data();
+        return index < mXFBData.size() ? mXFBData[index] : kDummyXFBVariableInfoNullptr;
+    }
     const gl::ShaderMap<gl::PerVertexMemberBitSet> &getInputPerVertexActiveMembers() const
     {
         return mInputPerVertexActiveMembers;
@@ -95,6 +103,8 @@ class ShaderInterfaceVariableInfoMap final : angle::NonCopyable
     const VariableIndex &getVariableIndex(gl::ShaderType shaderType, uint32_t id) const;
 
     VariableInfoArray mData;
+    // Transformfeedback array will be empty if no XFB is used.
+    XFBVariableInfoArray mXFBData;
     gl::ShaderMap<IdToIndexMap> mIdToIndexMap;
 
     // Active members of `in gl_PerVertex` and `out gl_PerVertex`
@@ -104,6 +114,7 @@ class ShaderInterfaceVariableInfoMap final : angle::NonCopyable
     // Whether the vertex shader has aliasing attributes.  Used by the SPIR-V transformer to tell if
     // emulation is needed.
     bool mHasAliasingAttributes = false;
+    XFBVariableInfoPtr kDummyXFBVariableInfoNullptr;
 };
 
 ANGLE_INLINE const ShaderInterfaceVariableInfo &
