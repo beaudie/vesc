@@ -233,7 +233,7 @@ void SaveUniforms(BinaryOutputStream *stream,
     {
         // LinkedUniform is a simple structure with fundamental data types, we can just do bulk save
         // for performance.
-        stream->writeBytes(reinterpret_cast<const unsigned char *>(uniforms.data()),
+        stream->writeBytes(reinterpret_cast<const uint8_t *>(uniforms.data()),
                            sizeof(LinkedUniform) * uniforms.size());
         for (const std::string &name : uniformNames)
         {
@@ -257,7 +257,7 @@ void LoadUniforms(BinaryInputStream *stream,
         uniforms->resize(uniformCount);
         // LinkedUniform is a simple structure with fundamental data types, we can just do bulk load
         // for performance.
-        stream->readBytes(reinterpret_cast<unsigned char *>(uniforms->data()),
+        stream->readBytes(reinterpret_cast<uint8_t *>(uniforms->data()),
                           sizeof(LinkedUniform) * uniforms->size());
         uniformNames->resize(uniformCount);
         for (size_t uniformIndex = 0; uniformIndex < uniformCount; ++uniformIndex)
@@ -269,6 +269,36 @@ void LoadUniforms(BinaryInputStream *stream,
         {
             stream->readString(&(*uniformMappedNames)[uniformIndex]);
         }
+    }
+}
+
+void SaveSamplerBindings(BinaryOutputStream *stream,
+                         const std::vector<SamplerBinding> &samplerBindings,
+                         const std::vector<GLuint> &samplerBoundTextureUnits)
+{
+    stream->writeInt(samplerBindings.size());
+    stream->writeBytes(reinterpret_cast<const uint8_t *>(samplerBindings.data()),
+                       sizeof(SamplerBinding) * samplerBindings.size());
+    stream->writeInt(samplerBoundTextureUnits.size());
+}
+void LoadSamplerBindings(BinaryInputStream *stream,
+                         std::vector<SamplerBinding> *samplerBindings,
+                         std::vector<GLuint> *samplerBoundTextureUnits)
+{
+    ASSERT(samplerBindings->empty());
+    size_t samplerBindingCount = stream->readInt<size_t>();
+    if (samplerBindingCount > 0)
+    {
+        samplerBindings->resize(samplerBindingCount);
+        stream->readBytes(reinterpret_cast<uint8_t *>(samplerBindings->data()),
+                          sizeof(SamplerBinding) * samplerBindingCount);
+    }
+
+    ASSERT(samplerBoundTextureUnits->empty());
+    size_t boundTextureUnitsCount = stream->readInt<size_t>();
+    if (boundTextureUnitsCount > 0)
+    {
+        samplerBoundTextureUnits->resize(boundTextureUnitsCount, 0);
     }
 }
 }  // anonymous namespace
@@ -478,18 +508,7 @@ void ProgramExecutable::load(bool isSeparable, gl::BinaryInputStream *stream)
         stream->readBool(&locationData.ignored);
     }
 
-    size_t samplerCount = stream->readInt<size_t>();
-    ASSERT(mSamplerBindings.empty());
-    mSamplerBindings.resize(samplerCount);
-    for (size_t samplerIndex = 0; samplerIndex < samplerCount; ++samplerIndex)
-    {
-        SamplerBinding &samplerBinding = mSamplerBindings[samplerIndex];
-        samplerBinding.textureType     = stream->readEnum<TextureType>();
-        samplerBinding.samplerType     = stream->readInt<GLenum>();
-        samplerBinding.format          = stream->readEnum<SamplerFormat>();
-        size_t bindingCount            = stream->readInt<size_t>();
-        samplerBinding.boundTextureUnits.resize(bindingCount, 0);
-    }
+    LoadSamplerBindings(stream, &mSamplerBindings, &mSamplerBoundTextureUnits);
 
     size_t imageBindingCount = stream->readInt<size_t>();
     ASSERT(mImageBindings.empty());
@@ -608,14 +627,7 @@ void ProgramExecutable::save(bool isSeparable, gl::BinaryOutputStream *stream) c
         stream->writeBool(outputVar.ignored);
     }
 
-    stream->writeInt(getSamplerBindings().size());
-    for (const auto &samplerBinding : getSamplerBindings())
-    {
-        stream->writeEnum(samplerBinding.textureType);
-        stream->writeInt(samplerBinding.samplerType);
-        stream->writeEnum(samplerBinding.format);
-        stream->writeInt(samplerBinding.boundTextureUnits.size());
-    }
+    SaveSamplerBindings(stream, mSamplerBindings, mSamplerBoundTextureUnits);
 
     stream->writeInt(getImageBindings().size());
     for (const auto &imageBinding : getImageBindings())
@@ -714,8 +726,10 @@ void ProgramExecutable::updateActiveSamplers(const ProgramState &programState)
     {
         const SamplerBinding &samplerBinding = samplerBindings[samplerIndex];
 
-        for (GLint textureUnit : samplerBinding.boundTextureUnits)
+        for (uint16_t index = 0; index < samplerBinding.textureUnitsCount; index++)
         {
+            GLint textureUnit =
+                mSamplerBoundTextureUnits[samplerBinding.textureUnitsStartIndex + index];
             if (++mActiveSamplerRefCounts[textureUnit] == 1)
             {
                 uint32_t uniformIndex = programState.getUniformIndexFromSamplerIndex(samplerIndex);
@@ -776,8 +790,9 @@ void ProgramExecutable::setSamplerUniformTextureTypeAndFormat(
 
         // A conflict exists if samplers of different types are sourced by the same texture unit.
         // We need to check all bound textures to detect this error case.
-        for (GLuint textureUnit : binding.boundTextureUnits)
+        for (uint16_t index = 0; index < binding.textureUnitsCount; index++)
         {
+            GLuint textureUnit = mSamplerBoundTextureUnits[binding.textureUnitsStartIndex + index];
             if (textureUnit != textureUnitIndex)
             {
                 continue;
@@ -1488,15 +1503,18 @@ void ProgramExecutable::linkSamplerAndImageBindings(GLuint *combinedImageUniform
     mPODStruct.samplerUniformRange = RangeUI(low, high);
 
     // If uniform is a sampler type, insert it into the mSamplerBindings array.
+    uint16_t startIndex = 0;
     for (unsigned int samplerIndex : mPODStruct.samplerUniformRange)
     {
         const auto &samplerUniform = mUniforms[samplerIndex];
         TextureType textureType    = SamplerTypeToTextureType(samplerUniform.getType());
         GLenum samplerType         = samplerUniform.getType();
-        unsigned int elementCount  = samplerUniform.getBasicTypeElementCount();
+        uint16_t elementCount      = samplerUniform.getBasicTypeElementCount();
         SamplerFormat format       = GetUniformTypeInfo(samplerType).samplerFormat;
-        mSamplerBindings.emplace_back(textureType, samplerType, format, elementCount);
+        mSamplerBindings.emplace_back(textureType, samplerType, format, startIndex, elementCount);
+        startIndex += elementCount;
     }
+    mSamplerBoundTextureUnits.resize(startIndex, 0);
 
     // Whatever is left constitutes the default uniforms.
     mPODStruct.defaultUniformRange = RangeUI(0, low);

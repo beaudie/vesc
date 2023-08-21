@@ -24,25 +24,29 @@ namespace gl
 // This small structure encapsulates binding sampler uniforms to active GL textures.
 struct SamplerBinding
 {
-    SamplerBinding();
+    SamplerBinding() = default;
     SamplerBinding(TextureType textureTypeIn,
                    GLenum samplerTypeIn,
                    SamplerFormat formatIn,
-                   size_t elementCount);
-    SamplerBinding(const SamplerBinding &other);
-    ~SamplerBinding();
+                   uint16_t startIndex,
+                   uint16_t elementCount)
+        : textureType(textureTypeIn),
+          samplerType(samplerTypeIn),
+          format(formatIn),
+          textureUnitsStartIndex(startIndex),
+          textureUnitsCount(elementCount)
+    {}
+    ~SamplerBinding() = default;
 
     // Necessary for retrieving active textures from the GL state.
     TextureType textureType;
-
     GLenum samplerType;
-
     SamplerFormat format;
-
-    // List of all textures bound to this sampler, of type textureType.
-    // Cropped by the amount of unused elements reported by the driver.
-    std::vector<GLuint> boundTextureUnits;
+    uint16_t textureUnitsStartIndex;
+    uint16_t textureUnitsCount;
 };
+static_assert(std::is_trivially_copyable<SamplerBinding>(),
+              "SamplerBinding must be trivial copyable so that we can memcpy");
 
 struct ImageBinding
 {
@@ -304,6 +308,10 @@ class ProgramExecutable final : public angle::Subject
         return mPODStruct.activeUniformBlockBindings;
     }
     const std::vector<SamplerBinding> &getSamplerBindings() const { return mSamplerBindings; }
+    const std::vector<GLuint> &getSamplerBoundTextureUnits() const
+    {
+        return mSamplerBoundTextureUnits;
+    }
     const std::vector<ImageBinding> &getImageBindings() const { return mImageBindings; }
     std::vector<ImageBinding> *getImageBindings() { return &mImageBindings; }
     const RangeUI &getDefaultUniformRange() const { return mPODStruct.defaultUniformRange; }
@@ -616,6 +624,9 @@ class ProgramExecutable final : public angle::Subject
 
     // An array of the samplers that are used by the program
     std::vector<SamplerBinding> mSamplerBindings;
+    // List of all textures bound to this sampler, of type textureType.
+    // Cropped by the amount of unused elements reported by the driver.
+    std::vector<GLuint> mSamplerBoundTextureUnits;
 
     // An array of the images that are used by the program
     std::vector<ImageBinding> mImageBindings;
