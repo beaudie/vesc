@@ -33,6 +33,23 @@
       "message": "OK passing with 2 exceptions. Pixel4 and Swiftshader. Bug has been filed for follow up. \nCan merge now.\nThe new test is just copy of existing test but, I created Image in LINEAR tiling and its imported as LINEAR  tiling.",
       "revId": "cdda3e101419b634f812847fda8b6616ec5362da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4096c6e_b35d7899",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2023-08-21T20:51:02Z",
+      "side": 1,
+      "message": "@Shahbaz, there is some golden image issue here. I didn\u0027t see any difference, and this change should have nothing to do with pixel rendering",
+      "revId": "cdda3e101419b634f812847fda8b6616ec5362da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
