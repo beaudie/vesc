@@ -158,20 +158,20 @@ void AddVaryingLocationInfo(ShaderInterfaceVariableInfoMap *infoMap,
 }
 
 // Modify an existing out variable and add transform feedback information.
-ShaderInterfaceVariableInfo *SetXfbInfo(ShaderInterfaceVariableInfoMap *infoMap,
-                                        gl::ShaderType shaderType,
-                                        uint32_t varId,
-                                        int fieldIndex,
-                                        uint32_t xfbBuffer,
-                                        uint32_t xfbOffset,
-                                        uint32_t xfbStride,
-                                        uint32_t arraySize,
-                                        uint32_t columnCount,
-                                        uint32_t rowCount,
-                                        uint32_t arrayIndex,
-                                        GLenum componentType)
+XFBInterfaceVariableInfo *SetXfbInfo(ShaderInterfaceVariableInfoMap *infoMap,
+                                     gl::ShaderType shaderType,
+                                     uint32_t varId,
+                                     int fieldIndex,
+                                     uint32_t xfbBuffer,
+                                     uint32_t xfbOffset,
+                                     uint32_t xfbStride,
+                                     uint32_t arraySize,
+                                     uint32_t columnCount,
+                                     uint32_t rowCount,
+                                     uint32_t arrayIndex,
+                                     GLenum componentType)
 {
-    ShaderInterfaceVariableInfo &info   = infoMap->getMutable(shaderType, varId);
+    XFBInterfaceVariableInfo &info      = infoMap->getXFBMutable(shaderType, varId);
     ShaderInterfaceVariableXfbInfo *xfb = &info.xfb;
 
     if (fieldIndex >= 0)
@@ -876,6 +876,10 @@ class SpirvTransformerBase : angle::NonCopyable
     {
         return mVariableInfoById;
     }
+    std::vector<const XFBInterfaceVariableInfo *> &getXFBVariableInfoByIdMap()
+    {
+        return mXFBVariableInfoById;
+    }
 
     static spirv::IdRef GetNewId(spirv::Blob *blob);
     spirv::IdRef getNewId();
@@ -903,6 +907,7 @@ class SpirvTransformerBase : angle::NonCopyable
 
     // Shader variable info per id, if id is a shader variable.
     std::vector<const ShaderInterfaceVariableInfo *> mVariableInfoById;
+    std::vector<const XFBInterfaceVariableInfo *> mXFBVariableInfoById;
     ShaderInterfaceVariableInfo mBuiltinVariableInfo;
 };
 
@@ -1604,6 +1609,7 @@ class SpirvTransformFeedbackCodeGenerator final : angle::NonCopyable
     {}
 
     void visitVariable(const ShaderInterfaceVariableInfo &info,
+                       const XFBInterfaceVariableInfo &xfbInfo,
                        gl::ShaderType shaderType,
                        spirv::IdResultType typeId,
                        spirv::IdResult id,
@@ -1654,15 +1660,15 @@ class SpirvTransformFeedbackCodeGenerator final : angle::NonCopyable
         const bool usePrecisionFixer,
         spirv::Blob *blobOut);
     void addExecutionMode(spirv::IdRef entryPointId, spirv::Blob *blobOut);
-    void addMemberDecorate(const ShaderInterfaceVariableInfo &info,
+    void addMemberDecorate(const XFBInterfaceVariableInfo &info,
                            spirv::IdRef id,
                            spirv::Blob *blobOut);
-    void addDecorate(const ShaderInterfaceVariableInfo &info,
+    void addDecorate(const XFBInterfaceVariableInfo &xfbInfo,
                      spirv::IdRef id,
                      spirv::Blob *blobOut);
 
   private:
-    void gatherXfbVaryings(const ShaderInterfaceVariableInfo &info, spirv::IdRef id);
+    void gatherXfbVaryings(const XFBInterfaceVariableInfo &info, spirv::IdRef id);
     void visitXfbVarying(const ShaderInterfaceVariableXfbInfo &xfb,
                          spirv::IdRef baseId,
                          uint32_t fieldIndex);
@@ -1741,6 +1747,7 @@ constexpr size_t SpirvTransformFeedbackCodeGenerator::kXfbDecorationCount;
 constexpr spv::Decoration SpirvTransformFeedbackCodeGenerator::kXfbDecorations[kXfbDecorationCount];
 
 void SpirvTransformFeedbackCodeGenerator::visitVariable(const ShaderInterfaceVariableInfo &info,
+                                                        const XFBInterfaceVariableInfo &xfbInfo,
                                                         gl::ShaderType shaderType,
                                                         spirv::IdResultType typeId,
                                                         spirv::IdResult id,
@@ -1748,13 +1755,14 @@ void SpirvTransformFeedbackCodeGenerator::visitVariable(const ShaderInterfaceVar
 {
     if (mIsEmulated)
     {
-        gatherXfbVaryings(info, id);
+        gatherXfbVaryings(xfbInfo, id);
         return;
     }
 
     // Note if the variable is captured by transform feedback.  In that case, the TransformFeedback
     // capability needs to be added.
-    if ((info.xfb.buffer != ShaderInterfaceVariableInfo::kInvalid || !info.fieldXfb.empty()) &&
+    if ((xfbInfo.xfb.buffer != ShaderInterfaceVariableInfo::kInvalid ||
+         !xfbInfo.fieldXfb.empty()) &&
         info.activeStages[shaderType])
     {
         mHasTransformFeedbackOutput = true;
@@ -1922,7 +1930,7 @@ TransformationState SpirvTransformFeedbackCodeGenerator::transformVariable(
     return TransformationState::Unchanged;
 }
 
-void SpirvTransformFeedbackCodeGenerator::gatherXfbVaryings(const ShaderInterfaceVariableInfo &info,
+void SpirvTransformFeedbackCodeGenerator::gatherXfbVaryings(const XFBInterfaceVariableInfo &info,
                                                             spirv::IdRef id)
 {
     visitXfbVarying(info.xfb, id, ShaderInterfaceVariableXfbInfo::kInvalid);
@@ -2411,7 +2419,7 @@ void SpirvTransformFeedbackCodeGenerator::addExecutionMode(spirv::IdRef entryPoi
     }
 }
 
-void SpirvTransformFeedbackCodeGenerator::addMemberDecorate(const ShaderInterfaceVariableInfo &info,
+void SpirvTransformFeedbackCodeGenerator::addMemberDecorate(const XFBInterfaceVariableInfo &info,
                                                             spirv::IdRef id,
                                                             spirv::Blob *blobOut)
 {
@@ -2452,7 +2460,7 @@ void SpirvTransformFeedbackCodeGenerator::addMemberDecorate(const ShaderInterfac
     }
 }
 
-void SpirvTransformFeedbackCodeGenerator::addDecorate(const ShaderInterfaceVariableInfo &info,
+void SpirvTransformFeedbackCodeGenerator::addDecorate(const XFBInterfaceVariableInfo &info,
                                                       spirv::IdRef id,
                                                       spirv::Blob *blobOut)
 {
@@ -3055,6 +3063,7 @@ void SpirvTransformer::resolveVariableIds()
     // vector will hold a pointer to the ShaderInterfaceVariableInfo object associated with that
     // name in mVariableInfoMap.
     mVariableInfoById.resize(indexBound, nullptr);
+    mXFBVariableInfoById.resize(indexBound, nullptr);
 
     // Pre-populate from mVariableInfoMap.
     {
@@ -3074,7 +3083,8 @@ void SpirvTransformer::resolveVariableIds()
             const ShaderInterfaceVariableInfo &info = data[variableIndex.index];
 
             ASSERT(id < mVariableInfoById.size());
-            mVariableInfoById[id] = &info;
+            mVariableInfoById[id]    = &info;
+            mXFBVariableInfoById[id] = &mVariableInfoMap.getXFBData(variableIndex.index);
         }
     }
 
@@ -3418,7 +3428,9 @@ void SpirvTransformer::visitVariable(const uint32_t *instruction)
     }
     if (mOptions.isTransformFeedbackStage)
     {
-        mXfbCodeGenerator.visitVariable(*info, mOptions.shaderType, typeId, id, storageClass);
+        const XFBInterfaceVariableInfo &xfbInfo = *mXFBVariableInfoById[id];
+        mXfbCodeGenerator.visitVariable(*info, xfbInfo, mOptions.shaderType, typeId, id,
+                                        storageClass);
     }
 
     mMultisampleTransformer.visitVariable(mOptions.shaderType, typeId, id, storageClass);
@@ -3519,7 +3531,8 @@ TransformationState SpirvTransformer::transformDecorate(const uint32_t *instruct
             // decorations to its members right away.
             if (mOptions.isTransformFeedbackStage)
             {
-                mXfbCodeGenerator.addMemberDecorate(*info, id, mSpirvBlobOut);
+                const XFBInterfaceVariableInfo &xfbInfo = *mXFBVariableInfoById[id];
+                mXfbCodeGenerator.addMemberDecorate(xfbInfo, id, mSpirvBlobOut);
             }
             break;
         case spv::DecorationInvariant:
@@ -3571,7 +3584,8 @@ TransformationState SpirvTransformer::transformDecorate(const uint32_t *instruct
     // Add Xfb decorations, if any.
     if (mOptions.isTransformFeedbackStage)
     {
-        mXfbCodeGenerator.addDecorate(*info, id, mSpirvBlobOut);
+        const XFBInterfaceVariableInfo &xfbInfo = *mXFBVariableInfoById[id];
+        mXfbCodeGenerator.addDecorate(xfbInfo, id, mSpirvBlobOut);
     }
 
     return TransformationState::Transformed;
@@ -3900,11 +3914,13 @@ class SpirvVertexAttributeAliasingTransformer final : public SpirvTransformerBas
         const spirv::Blob &spirvBlobIn,
         const ShaderInterfaceVariableInfoMap &variableInfoMap,
         std::vector<const ShaderInterfaceVariableInfo *> &&variableInfoById,
+        std::vector<const XFBInterfaceVariableInfo *> &&XFBVariableInfoById,
         spirv::Blob *spirvBlobOut)
         : SpirvTransformerBase(spirvBlobIn, variableInfoMap, spirvBlobOut),
           mNonSemanticInstructions(true)
     {
-        mVariableInfoById = std::move(variableInfoById);
+        mVariableInfoById    = std::move(variableInfoById);
+        mXFBVariableInfoById = std::move(XFBVariableInfoById);
     }
 
     void transform();
@@ -5003,7 +5019,7 @@ angle::Result SpvTransformSpirvCode(const SpvTransformOptions &options,
         spirv::Blob preTransformBlob = std::move(*spirvBlobOut);
         SpirvVertexAttributeAliasingTransformer aliasingTransformer(
             preTransformBlob, variableInfoMap, std::move(transformer.getVariableInfoByIdMap()),
-            spirvBlobOut);
+            std::move(transformer.getXFBVariableInfoByIdMap()), spirvBlobOut);
         aliasingTransformer.transform();
     }
 
