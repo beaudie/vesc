@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "98ebd469_228822ec",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3581,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-21T18:07:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1844c05a_14a1934e",
+      "range": {
+        "startLine": 3581,
+        "startChar": 25,
+        "endLine": 3581,
+        "endChar": 48
+      },
+      "revId": "626c2685a5f3740fe1ae32b675a8f56f465c3abc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b136cbf8_49e2fa9e",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-08-21T17:16:38Z",
       "side": 1,
       "message": "flushImpl should be enough. Once you flush, you have the other code that handles \"finish\" already submitted commands when allocation fails should take care of the reset.",
+      "range": {
+        "startLine": 3587,
+        "startChar": 18,
+        "endLine": 3587,
+        "endChar": 28
+      },
+      "revId": "626c2685a5f3740fe1ae32b675a8f56f465c3abc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "edd71aeb_9ceba4f2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3587,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-21T18:07:45Z",
+      "side": 1,
+      "message": "Updated. Thanks!",
+      "parentUuid": "b136cbf8_49e2fa9e",
       "range": {
         "startLine": 3587,
         "startChar": 18,
@@ -72,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bbdd2155_aa51a6fa",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3563,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-21T18:07:45Z",
+      "side": 1,
+      "message": "On some devices, I see that one heap is much larger than the others. For example, on a tested Linux machine, we have the following heaps:\n```\n0 | Heap size: 4294967296 | Flags: 0x1\n1 | Heap size: 50248083456 | Flags: 0x0\n2 | Heap size: 257949696 | Flags: 0x1\n```\nThe largest heap size is about 50GB. If we use this size, the test `BufferDataInLoopManyTimes` will still run out of memory.\n\nWhat if we only use the heaps that have a flag of `0x1` (`VK_MEMORY_HEAP_DEVICE_LOCAL_BIT`) if there are any. Otherwise, we would pick the largest one?",
+      "parentUuid": "e3b4a6df_5bae3aee",
+      "range": {
+        "startLine": 3560,
+        "startChar": 3,
+        "endLine": 3563,
+        "endChar": 69
+      },
+      "revId": "626c2685a5f3740fe1ae32b675a8f56f465c3abc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c591334a_8f15ad48",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
         "patchSetId": 5
@@ -83,6 +155,30 @@
       "writtenOn": "2023-08-21T17:16:38Z",
       "side": 1,
       "message": "This line cancels out line 5401, then why not just move line 5401 to 5404?",
+      "range": {
+        "startLine": 5409,
+        "startChar": 0,
+        "endLine": 5409,
+        "endChar": 86
+      },
+      "revId": "626c2685a5f3740fe1ae32b675a8f56f465c3abc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64d5156b_3ea19b94",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 5409,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-21T18:07:45Z",
+      "side": 1,
+      "message": "Done. The original intent was to follow the size of `mPendingSubmissionSuballocationGarbage` in each iteration. However, after this change, the result at the end of the function will be the same.",
+      "parentUuid": "c591334a_8f15ad48",
       "range": {
         "startLine": 5409,
         "startChar": 0,
@@ -106,6 +202,30 @@
       "writtenOn": "2023-08-21T17:16:38Z",
       "side": 1,
       "message": "ExcessivePendingGarbage?",
+      "range": {
+        "startLine": 1289,
+        "startChar": 4,
+        "endLine": 1289,
+        "endChar": 35
+      },
+      "revId": "626c2685a5f3740fe1ae32b675a8f56f465c3abc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "345ae602_ed835c33",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1289,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-21T18:07:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0531e485_e7f073f7",
       "range": {
         "startLine": 1289,
         "startChar": 4,
