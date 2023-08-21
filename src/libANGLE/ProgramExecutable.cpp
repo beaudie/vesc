@@ -273,9 +273,6 @@ void LoadUniforms(BinaryInputStream *stream,
 }
 }  // anonymous namespace
 
-ProgramExecutable::PODStruct::PODStruct()                       = default;
-ProgramExecutable::PODStruct::PODStruct(const PODStruct &other) = default;
-
 ProgramExecutable::ProgramExecutable() : mActiveSamplerRefCounts{}
 {
     memset(&mPODStruct, 0, sizeof(mPODStruct));
