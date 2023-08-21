@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e942f3c5_4ea102ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-08-21T15:51:34Z",
+      "side": 1,
+      "message": "Looks like this version has debug prints in and needs `git cl format`.\n\nTrying it together with the other CL in LED, seems like building the captured traces fails:\nhttps://luci-milo.appspot.com/raw/build/logs.chromium.org/angle/led/ynovikov_google.com/60314b90bca4f72a59d6c904664e9f99e0bbf9314edf796bffdd32e68a794389/+/build.proto\nhttps://logs.chromium.org/logs/angle/led/ynovikov_google.com/60314b90bca4f72a59d6c904664e9f99e0bbf9314edf796bffdd32e68a794389/+/u/GLES_2.0_trace_tests/stdout\n[INFO/Process-6] C:\\b\\s\\w\\ir\\cache\\vpython\\store\\python_venv-dfv1sjrere6pf816jm9p51d0nc\\contents\\Scripts\\python3.exe third_party\\depot_tools\\autoninja.py -C C:\\b\\s\\w\\ir\\cache\\builder\\angle\\out\\CaptureReplayTest\\Replay4 capture_replay_tests.exe\nFATAL: frame_capture_test_utils.cpp:199 (TraceLibrary): Failed to load trace library (BindGeneratesResourceTest_Textures_ES2_Vulkan_SwiftShader): failed to load library (SearchType::ModuleDir) C:\\b\\s\\w\\ir\\cache\\builder\\angle\\out\\CaptureReplayTest\\Replay4\\BindGeneratesResourceTest_Textures_ES2_Vulkan_SwiftShader.dll\n\nWhen I\u0027ve tried this script locally, I couldn\u0027t even get it to build angle_end2end_tests, not even reached the traces.\n`vpython3 third_party\\depot_tools\\autoninja.py -C C:\\src\\angle\\out\\CaptureReplayTest\\Capture angle_end2end_tests` just returns not building anything\nBut `autoninja -C out\\CaptureReplayTest\\Capture angle_end2end_tests` built fine.",
+      "revId": "ad63d34083e019c20db136d3af2253afb5299bd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "532a0669_366fad1a",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-08-21T15:51:34Z",
+      "side": 1,
+      "message": "Is this for debugging?",
+      "range": {
+        "startLine": 108,
+        "startChar": 34,
+        "endLine": 108,
+        "endChar": 85
+      },
+      "revId": "ad63d34083e019c20db136d3af2253afb5299bd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d40d594_06276080",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-08-21T15:51:34Z",
+      "side": 1,
+      "message": "RunAutoNinja",
+      "range": {
+        "startLine": 237,
+        "startChar": 8,
+        "endLine": 237,
+        "endChar": 16
+      },
+      "revId": "ad63d34083e019c20db136d3af2253afb5299bd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7da19382_0d18416b",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 17
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-08-21T15:51:34Z",
+      "side": 1,
+      "message": "Unused?",
+      "range": {
+        "startLine": 237,
+        "startChar": 42,
+        "endLine": 237,
+        "endChar": 53
+      },
+      "revId": "ad63d34083e019c20db136d3af2253afb5299bd3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
