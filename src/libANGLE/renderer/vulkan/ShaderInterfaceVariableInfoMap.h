@@ -32,7 +32,8 @@ class ShaderInterfaceVariableInfoMap final : angle::NonCopyable
   public:
     // For each interface variable, a ShaderInterfaceVariableInfo is created.  These are stored in a
     // flat array.
-    using VariableInfoArray = std::vector<ShaderInterfaceVariableInfo>;
+    using VariableInfoArray    = std::vector<ShaderInterfaceVariableInfo>;
+    using XFBVariableInfoArray = std::vector<XFBInterfaceVariableInfo>;
 
     // Each interface variable has an associted SPIR-V id (which is different per shader type).
     // The following map is from a SPIR-V id to its associated info in VariableInfoArray.
@@ -51,6 +52,7 @@ class ShaderInterfaceVariableInfoMap final : angle::NonCopyable
     void save(gl::BinaryOutputStream *stream);
 
     ShaderInterfaceVariableInfo &add(gl::ShaderType shaderType, uint32_t id);
+    XFBInterfaceVariableInfo &addXFB(gl::ShaderType shaderType, uint32_t id);
     void addResource(gl::ShaderBitSet shaderTypes,
                      const gl::ShaderMap<uint32_t> &idInShaderTypes,
                      uint32_t descriptorSet,
@@ -62,6 +64,7 @@ class ShaderInterfaceVariableInfoMap final : angle::NonCopyable
     void setOutputPerVertexActiveMembers(gl::ShaderType shaderType,
                                          gl::PerVertexMemberBitSet activeMembers);
     ShaderInterfaceVariableInfo &getMutable(gl::ShaderType shaderType, uint32_t id);
+    XFBInterfaceVariableInfo &getXFBMutable(gl::ShaderType shaderType, uint32_t id);
 
     const ShaderInterfaceVariableInfo &getDefaultUniformInfo(gl::ShaderType shaderType) const;
     const ShaderInterfaceVariableInfo &getAtomicCounterInfo(gl::ShaderType shaderType) const;
@@ -77,6 +80,7 @@ class ShaderInterfaceVariableInfoMap final : angle::NonCopyable
     const ShaderInterfaceVariableInfo &getVariableById(gl::ShaderType shaderType,
                                                        uint32_t id) const;
     const VariableInfoArray &getData() const { return mData; }
+    const XFBInterfaceVariableInfo &getXFBData(uint32_t index) const { return mXFBData[index]; }
     const gl::ShaderMap<IdToIndexMap> &getIdToIndexMap() const { return mIdToIndexMap; }
     const gl::ShaderMap<gl::PerVertexMemberBitSet> &getInputPerVertexActiveMembers() const
     {
@@ -95,6 +99,7 @@ class ShaderInterfaceVariableInfoMap final : angle::NonCopyable
     const VariableIndex &getVariableIndex(gl::ShaderType shaderType, uint32_t id) const;
 
     VariableInfoArray mData;
+    XFBVariableInfoArray mXFBData;
     gl::ShaderMap<IdToIndexMap> mIdToIndexMap;
 
     // Active members of `in gl_PerVertex` and `out gl_PerVertex`

@@ -62,7 +62,6 @@ struct SamplerBinding
     uint16_t textureUnitsStartIndex;
     uint16_t textureUnitsCount;
 };
-static_assert(std::is_trivially_copyable<SamplerBinding>(), "must be memcpy-able");
 ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
 
 struct ImageBinding
