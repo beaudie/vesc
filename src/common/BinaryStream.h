@@ -68,6 +68,19 @@ class BinaryInputStream : angle::NonCopyable
         }
     }
 
+    template <class T>
+    void readVector(std::vector<T> *param)
+    {
+        static_assert(std::is_trivially_copyable<T>(), "must be memcpy-able");
+        ASSERT(param->empty());
+        size_t size = readInt<size_t>();
+        if (size > 0)
+        {
+            param->resize(size);
+            readBytes(reinterpret_cast<uint8_t *>(param->data()), param->size() * sizeof(T));
+        }
+    }
+
     template <class EnumT>
     EnumT readEnum()
     {
@@ -235,6 +248,14 @@ class BinaryOutputStream : angle::NonCopyable
         {
             writeIntOrNegOne(element);
         }
+    }
+
+    template <class T>
+    void writeVector(const std::vector<T> &param)
+    {
+        static_assert(std::is_trivially_copyable<T>(), "must be memcpy-able");
+        writeInt(param.size());
+        writeBytes(reinterpret_cast<const uint8_t *>(param.data()), param.size() * sizeof(T));
     }
 
     template <class EnumT>
