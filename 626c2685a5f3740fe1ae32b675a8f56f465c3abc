@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1844c05a_14a1934e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3581,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-21T17:16:38Z",
+      "side": 1,
+      "message": "The API name sounds this should be a const func, but it is not just doing check. checkAndFlushExcessivePendingGarbage?",
+      "range": {
+        "startLine": 3581,
+        "startChar": 25,
+        "endLine": 3581,
+        "endChar": 48
+      },
+      "revId": "626c2685a5f3740fe1ae32b675a8f56f465c3abc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b136cbf8_49e2fa9e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3587,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-21T17:16:38Z",
+      "side": 1,
+      "message": "flushImpl should be enough. Once you flush, you have the other code that handles \"finish\" already submitted commands when allocation fails should take care of the reset.",
+      "range": {
+        "startLine": 3587,
+        "startChar": 18,
+        "endLine": 3587,
+        "endChar": 28
+      },
+      "revId": "626c2685a5f3740fe1ae32b675a8f56f465c3abc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3b4a6df_5bae3aee",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3563,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-21T17:16:38Z",
+      "side": 1,
+      "message": "I feel that this is a bit excessive. We are not distinguishing heap types in the garbage accounting, so I am not seeing reasons to distinguish heap types here as well. Probably a simple for loop to find out the max heap size should be good enough.",
+      "range": {
+        "startLine": 3560,
+        "startChar": 3,
+        "endLine": 3563,
+        "endChar": 69
+      },
+      "revId": "626c2685a5f3740fe1ae32b675a8f56f465c3abc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c591334a_8f15ad48",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 5409,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-21T17:16:38Z",
+      "side": 1,
+      "message": "This line cancels out line 5401, then why not just move line 5401 to 5404?",
+      "range": {
+        "startLine": 5409,
+        "startChar": 0,
+        "endLine": 5409,
+        "endChar": 86
+      },
+      "revId": "626c2685a5f3740fe1ae32b675a8f56f465c3abc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0531e485_e7f073f7",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 1289,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-21T17:16:38Z",
+      "side": 1,
+      "message": "ExcessivePendingGarbage?",
+      "range": {
+        "startLine": 1289,
+        "startChar": 4,
+        "endLine": 1289,
+        "endChar": 35
+      },
+      "revId": "626c2685a5f3740fe1ae32b675a8f56f465c3abc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
