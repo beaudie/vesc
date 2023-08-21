@@ -96,6 +96,14 @@ def AutodetectGoma():
             pass
     return False
 
+def AutodetectReclient():
+    for p in psutil.process_iter():
+        try:
+            if winext('reproxy', 'exe') == p.name():
+                return True
+        except:
+            pass
+    return False
 
 class SubProcess():
 
@@ -136,8 +144,8 @@ class ChildProcessesManager():
         return os.path.join('third_party', 'depot_tools', winext('gn', 'bat'))
 
     @classmethod
-    def _GetNinjaAbsolutePaths(self):
-        return os.path.join('third_party', 'ninja', 'ninja')
+    def _GetAutoNinjaAbsolutePaths(self):
+        return os.path.join('third_party', 'depot_tools', winext('autoninja', 'bat'))
 
     def __init__(self, args, logger, ninja_lock):
         # a dictionary of Subprocess, with pid as key
@@ -146,8 +154,9 @@ class ChildProcessesManager():
         self.workers = []
 
         self._gn_path = self._GetGnAbsolutePaths()
-        self._ninja_path = self._GetNinjaAbsolutePaths()
+        self._autoninja_path = self._GetAutoNinjaAbsolutePaths()
         self._use_goma = AutodetectGoma()
+        self._use_reclient =  AutodetectReclient()
         self._logger = logger
         self._ninja_lock = ninja_lock
         self.runtimes = {}
@@ -217,6 +226,8 @@ class ChildProcessesManager():
             gn_args.append(('use_goma', 'true'))
             if self._args.goma_dir:
                 gn_args.append(('goma_dir', '"%s"' % self._args.goma_dir))
+        if self._use_reclient:
+            gn_args.append(('use_remoteexec', 'true'))
         if not self._args.debug:
             gn_args.append(('is_debug', 'false'))
             gn_args.append(('symbol_level', '1'))
@@ -229,29 +240,7 @@ class ChildProcessesManager():
         return self.RunSubprocess(cmd, pipe_stdout=pipe_stdout)
 
     def RunNinja(self, build_dir, target, pipe_stdout):
-        cmd = [self._ninja_path]
-
-        # This code is taken from depot_tools/autoninja.py
-        if self._use_goma:
-            num_cores = multiprocessing.cpu_count()
-            cmd.append('-j')
-            core_multiplier = 40
-            j_value = num_cores * core_multiplier
-
-            if sys.platform.startswith('win'):
-                # On windows, j value higher than 1000 does not improve build performance.
-                j_value = min(j_value, 1000)
-            elif sys.platform == 'darwin':
-                # On Mac, j value higher than 500 causes 'Too many open files' error
-                # (crbug.com/936864).
-                j_value = min(j_value, 500)
-
-            cmd.append('%d' % j_value)
-        else:
-            cmd.append('-l')
-            cmd.append('%d' % os.cpu_count())
-
-        cmd += ['-C', build_dir, target]
+        cmd = [self._autoninja_path, '-C', build_dir, target]
         with self._ninja_lock:
             self._logger.info(' '.join(cmd))
             return self.RunSubprocess(cmd, pipe_stdout=pipe_stdout)
