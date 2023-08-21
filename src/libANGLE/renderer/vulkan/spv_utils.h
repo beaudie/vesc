@@ -92,9 +92,6 @@ struct ShaderInterfaceVariableInfo
     uint32_t index     = kInvalid;
     // The stages this shader interface variable is active.
     gl::ShaderBitSet activeStages;
-    // Used for transform feedback extension to decorate vertex shader output.
-    ShaderInterfaceVariableXfbInfo xfb;
-    std::vector<ShaderInterfaceVariableXfbInfo> fieldXfb;
     // Indicates that the precision needs to be modified in the generated SPIR-V
     // to support only transferring medium precision data when there's a precision
     // mismatch between the shaders. For example, either the VS casts highp->mediump
@@ -108,6 +105,13 @@ struct ShaderInterfaceVariableInfo
     // vertex attribute aliasing transformation only.
     uint8_t attributeComponentCount = 0;
     uint8_t attributeLocationCount  = 0;
+};
+
+struct XFBInterfaceVariableInfo
+{
+    // Used for transform feedback extension to decorate vertex shader output.
+    ShaderInterfaceVariableXfbInfo xfb;
+    std::vector<ShaderInterfaceVariableXfbInfo> fieldXfb;
 };
 
 uint32_t SpvGetXfbBufferBlockId(const uint32_t bufferIndex);
