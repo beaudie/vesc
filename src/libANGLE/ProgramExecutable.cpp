@@ -481,15 +481,16 @@ void ProgramExecutable::load(bool isSeparable, gl::BinaryInputStream *stream)
     size_t samplerCount = stream->readInt<size_t>();
     ASSERT(mSamplerBindings.empty());
     mSamplerBindings.resize(samplerCount);
+    size_t bindingCount = 0;
     for (size_t samplerIndex = 0; samplerIndex < samplerCount; ++samplerIndex)
     {
         SamplerBinding &samplerBinding = mSamplerBindings[samplerIndex];
         samplerBinding.textureType     = stream->readEnum<TextureType>();
         samplerBinding.samplerType     = stream->readInt<GLenum>();
         samplerBinding.format          = stream->readEnum<SamplerFormat>();
-        size_t bindingCount            = stream->readInt<size_t>();
-        samplerBinding.boundTextureUnits.resize(bindingCount, 0);
+        bindingCount += stream->readInt<size_t>();
     }
+    mSamplerBoundTextureUnits.resize(bindingCount, 0);
 
     size_t imageBindingCount = stream->readInt<size_t>();
     ASSERT(mImageBindings.empty());
@@ -614,7 +615,7 @@ void ProgramExecutable::save(bool isSeparable, gl::BinaryOutputStream *stream) c
         stream->writeEnum(samplerBinding.textureType);
         stream->writeInt(samplerBinding.samplerType);
         stream->writeEnum(samplerBinding.format);
-        stream->writeInt(samplerBinding.boundTextureUnits.size());
+        //        stream->writeInt(samplerBinding.boundTextureUnits.size());
     }
 
     stream->writeInt(getImageBindings().size());
@@ -714,8 +715,10 @@ void ProgramExecutable::updateActiveSamplers(const ProgramState &programState)
     {
         const SamplerBinding &samplerBinding = samplerBindings[samplerIndex];
 
-        for (GLint textureUnit : samplerBinding.boundTextureUnits)
+        for (uint16_t index = 0; index < samplerBinding.textureUnitsCount; index++)
         {
+            GLint textureUnit =
+                mSamplerBoundTextureUnits[samplerBinding.textureUnitsStartIndex + index];
             if (++mActiveSamplerRefCounts[textureUnit] == 1)
             {
                 uint32_t uniformIndex = programState.getUniformIndexFromSamplerIndex(samplerIndex);
@@ -776,8 +779,9 @@ void ProgramExecutable::setSamplerUniformTextureTypeAndFormat(
 
         // A conflict exists if samplers of different types are sourced by the same texture unit.
         // We need to check all bound textures to detect this error case.
-        for (GLuint textureUnit : binding.boundTextureUnits)
+        for (uint16_t index = 0; index < binding.textureUnitsCount; index++)
         {
+            GLuint textureUnit = mSamplerBoundTextureUnits[binding.textureUnitsStartIndex + index];
             if (textureUnit != textureUnitIndex)
             {
                 continue;
@@ -1488,14 +1492,16 @@ void ProgramExecutable::linkSamplerAndImageBindings(GLuint *combinedImageUniform
     mPODStruct.samplerUniformRange = RangeUI(low, high);
 
     // If uniform is a sampler type, insert it into the mSamplerBindings array.
+    uint16_t startIndex = 0;
     for (unsigned int samplerIndex : mPODStruct.samplerUniformRange)
     {
         const auto &samplerUniform = mUniforms[samplerIndex];
         TextureType textureType    = SamplerTypeToTextureType(samplerUniform.getType());
         GLenum samplerType         = samplerUniform.getType();
-        unsigned int elementCount  = samplerUniform.getBasicTypeElementCount();
+        uint16_t elementCount      = samplerUniform.getBasicTypeElementCount();
         SamplerFormat format       = GetUniformTypeInfo(samplerType).samplerFormat;
-        mSamplerBindings.emplace_back(textureType, samplerType, format, elementCount);
+        mSamplerBindings.emplace_back(textureType, samplerType, format, startIndex, elementCount);
+        startIndex += elementCount;
     }
 
     // Whatever is left constitutes the default uniforms.
