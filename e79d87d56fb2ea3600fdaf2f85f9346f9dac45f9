@@ -70,6 +70,30 @@
       },
       "revId": "e79d87d56fb2ea3600fdaf2f85f9346f9dac45f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92118b6f_60100cc6",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-08-22T21:09:58Z",
+      "side": 1,
+      "message": "I don\u0027t know why I didn\u0027t think of that :}\nDone",
+      "parentUuid": "dc031347_0bd0610c",
+      "range": {
+        "startLine": 373,
+        "startChar": 4,
+        "endLine": 373,
+        "endChar": 26
+      },
+      "revId": "e79d87d56fb2ea3600fdaf2f85f9346f9dac45f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
