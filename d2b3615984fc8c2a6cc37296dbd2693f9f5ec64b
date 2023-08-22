@@ -16,6 +16,24 @@
       "message": "Seems like this works. I checked locally by printing whenever a variable ends up being moved, and it matches the number of vars that are supposed to be moved in each unittest:\n[ RUN      ] MSLOutputTest.GlobalRescopingSimple\nmoved\n[       OK ] MSLOutputTest.GlobalRescopingSimple (1 ms)\n[ RUN      ] MSLOutputTest.GlobalRescopingNoRescope\n[       OK ] MSLOutputTest.GlobalRescopingNoRescope (1 ms)\n[ RUN      ] MSLOutputTest.GlobalRescopingInitializer\nmoved\n[       OK ] MSLOutputTest.GlobalRescopingInitializer (1 ms)\n[ RUN      ] MSLOutputTest.GlobalRescopingInitializerNoRescope\n[       OK ] MSLOutputTest.GlobalRescopingInitializerNoRescope (1 ms)\n[ RUN      ] MSLOutputTest.GlobalRescopingNestedFunction\nmoved\n[       OK ] MSLOutputTest.GlobalRescopingNestedFunction (1 ms)\n[ RUN      ] MSLOutputTest.GlobalRescopingMultipleUses\nmoved\n[       OK ] MSLOutputTest.GlobalRescopingMultipleUses (1 ms)\n[ RUN      ] MSLOutputTest.GlobalRescopingGloballyReferencedVar\nmoved\n[       OK ] MSLOutputTest.GlobalRescopingGloballyReferencedVar (1 ms)\n[ RUN      ] MSLOutputTest.GlobalRescopingDeclarationAfterFunction\nmoved\nmoved\n[       OK ] MSLOutputTest.GlobalRescopingDeclarationAfterFunction (1 ms)\n\nHowever, the tests won\u0027t fail if this rescoping is not done.. I don\u0027t see other compiler tests that truly test the behaviour after tree operations. Do you think I should add more in-depth tests?",
       "revId": "d2b3615984fc8c2a6cc37296dbd2693f9f5ec64b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df7d1c1d_9b49be7f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-22T02:42:55Z",
+      "side": 1,
+      "message": "I\u0027ve seen compiler tests actually look for a substring in the translated source to verify things.\n\nI\u0027m not a fan of out compiler tests TBH. My preference generally is to put these in GLSLTests.cpp so they test every backend. For this case, you could perhaps add a perf test in `CompilerPerf.cpp`, verify the speed up, and it\u0027ll show on the perf bots if it ever regresses.",
+      "parentUuid": "696e938b_912be9fa",
+      "revId": "d2b3615984fc8c2a6cc37296dbd2693f9f5ec64b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

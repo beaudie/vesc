@@ -354,6 +354,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7dac175_f2bc4c9f",
+        "filename": "src/compiler/translator/tree_ops/RescopeGlobalVariables.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-22T02:42:55Z",
+      "side": 1,
+      "message": "Oof, that flag was absolutely necessary too.\n\nOk, the point of the move is to not pay the binary cost of shipping an unused transformation, but this one is fairly small / not a big deal.",
+      "parentUuid": "5991bd5b_59a327ab",
+      "revId": "97a4d4e3af24b6a31bc9e625b0de87f1acb7e476",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "12d6d1f8_0f9c8429",
