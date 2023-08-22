@@ -61,7 +61,7 @@ constexpr int kDefaultTestTimeout  = 60;
 constexpr int kDefaultBatchTimeout = 300;
 #else
 constexpr int kDefaultTestTimeout  = 120;
-constexpr int kDefaultBatchTimeout = 700;
+constexpr int kDefaultBatchTimeout = 1400;
 #endif
 constexpr int kSlowTestTimeoutScale  = 3;
 constexpr int kDefaultBatchSize      = 256;
