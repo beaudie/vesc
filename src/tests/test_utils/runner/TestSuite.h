@@ -93,6 +93,8 @@ struct TestResults
     std::map<TestIdentifier, TestResult> results;
     std::mutex currentTestMutex;
     TestIdentifier currentTest;
+    uint32_t currentTestIndex = 0;
+    Timer batchTestTimer;
     Timer currentTestTimer;
     double currentTestTimeout = 0.0;
     bool allDone              = false;
