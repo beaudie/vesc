@@ -140,7 +140,7 @@
 2306 LINUX : dEQP-EGL.functional.color_clears.multi_context.gles1* = FAIL
 
 // Tests failing since the Jan 2018 roll of dEQP
-2341 : dEQP-EGL.functional.swap_buffers.* = SKIP
+//2341 : dEQP-EGL.functional.swap_buffers.* = SKIP
 
 // EGL images with the GL back-ends are not supported
 4606 OPENGL : dEQP-EGL.functional.image.api.create_image_gles2_* = FAIL
