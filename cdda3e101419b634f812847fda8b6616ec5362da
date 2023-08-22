@@ -156,6 +156,41 @@
       "parentUuid": "300df914_0148e60c",
       "revId": "cdda3e101419b634f812847fda8b6616ec5362da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d98e4655_a7f53ded",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2023-08-22T17:35:50Z",
+      "side": 1,
+      "message": "There are issues with building test with yocto.",
+      "revId": "cdda3e101419b634f812847fda8b6616ec5362da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46073e1a_3da0e3e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2023-08-22T17:35:50Z",
+      "side": 1,
+      "message": "Building end2end or dEQP tests with yocto ran into issues, C++ version, and build changes that are needed for Wayland. I have a patch and resolved some of them. But not sure if all.",
+      "parentUuid": "e0ef4950_0ef0c60c",
+      "revId": "cdda3e101419b634f812847fda8b6616ec5362da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
