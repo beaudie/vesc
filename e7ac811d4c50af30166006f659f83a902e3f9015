@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "036e7e4a_cfa796fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-22T21:40:24Z",
+      "side": 1,
+      "message": "I did this as alternative solution for https://chromium-review.googlesource.com/c/angle/angle/+/4784947. I think this is better by making the entire SamplerBinding struct trviially-copyable.",
+      "revId": "e7ac811d4c50af30166006f659f83a902e3f9015",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
