@@ -926,9 +926,18 @@ class TestSuite::TestEventListener : public testing::EmptyTestEventListener
     // Note: TestResults is owned by the TestSuite. It should outlive TestEventListener.
     TestEventListener(TestSuite *testSuite) : mTestSuite(testSuite) {}
 
+    void OnTestProgramStart(const testing::UnitTest &testProgramInfo) override
+    {
+        mTestSuite->mTestResults.batchTestTimer.start();
+    }
+
     void OnTestStart(const testing::TestInfo &testInfo) override
     {
         std::lock_guard<std::mutex> guard(mTestSuite->mTestResults.currentTestMutex);
+        std::cout << "Test index: " << mTestSuite->mTestResults.currentTestIndex
+                  << "; Elapsed time: "
+                  << mTestSuite->mTestResults.batchTestTimer.getElapsedWallClockTime()
+                  << " seconds." << std::endl;
         mTestSuite->mTestResults.currentTest = GetTestIdentifier(testInfo);
         mTestSuite->mTestResults.currentTestTimer.start();
     }
@@ -940,6 +949,7 @@ class TestSuite::TestEventListener : public testing::EmptyTestEventListener
         const testing::TestResult &resultIn = *testInfo.result();
         UpdateCurrentTestResult(resultIn, &mTestSuite->mTestResults);
         mTestSuite->mTestResults.currentTest = TestIdentifier();
+        ++mTestSuite->mTestResults.currentTestIndex;
     }
 
     void OnTestProgramEnd(const testing::UnitTest &testProgramInfo) override
@@ -1103,6 +1113,21 @@ TestSuite::TestSuite(int *argc, char **argv, std::function<void()> registerTests
             SetEnvironmentVar(kPreferredDeviceEnvVar, "apple");
         }
     }
+
+    // angle::Sleep(1000);
+    // struct Item
+    // {
+    //     char data[4];
+    // };
+    // Item *pItem = nullptr;
+    // {
+    //     Item buff[10];
+    //     pItem = &buff[0];
+    // }
+    // std::thread([pItem]() {
+    //     *pItem = {};
+    //     WARN() << (*pItem).data[0];
+    // }).join();
 
     // Special handling for TSAN and UBSAN to force crashes when run in automated testing.
     if (IsTSan())
@@ -1713,7 +1738,7 @@ int TestSuite::run()
                 std::vector<std::string> lines =
                     SplitString(batchStdout, "\r\n", WhitespaceHandling::TRIM_WHITESPACE,
                                 SplitResult::SPLIT_WANT_NONEMPTY);
-                constexpr size_t kKeepLines = 10;
+                constexpr size_t kKeepLines = 100;
                 printf("\nBatch timeout! Last %zu lines of batch stdout:\n", kKeepLines);
                 printf("---------------------------------------------\n");
                 for (size_t lineNo = lines.size() - std::min(lines.size(), kKeepLines);
