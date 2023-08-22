@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ca7f645_a08c2584",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-22T20:35:21Z",
+      "side": 1,
+      "message": "LGTM, one request to include a comment",
+      "revId": "d9a1eeb404bb911f588e27f233fa5b5a6b3f5967",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "187cb0c8_a222a32b",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-22T20:35:21Z",
+      "side": 1,
+      "message": "Can we include a copy/paste-able comment here?\nI refer to this code often with outside parties as a maintained command that can be used to launch traces.  Something like this would be fine:\n```\n# Build a command that can be run directly over ADB, for example:\n\u0027\u0027\u0027\nadb shell am instrument -w \\\n-e org.chromium.native_test.NativeTestInstrumentationTestRunner.StdoutFile /sdcard/Download/out.txt \\\n-e org.chromium.native_test.NativeTest.CommandLineFlags \\\n\"--gtest_filter\u003dTraceTest.empires_and_puzzles\\ --use-angle\u003dvulkan\\ --screenshot-dir\\ /sdcard\\ --screenshot-frame\\ 2\\ --max-steps-performed\\ 2\\ --no-warmup\" \\\n-e org.chromium.native_test.NativeTestInstrumentationTestRunner.ShardNanoTimeout \"1000000000000000000\" \\\n-e org.chromium.native_test.NativeTestInstrumentationTestRunner.NativeTestActivity com.android.angle.test.AngleUnitTestActivity \\\ncom.android.angle.test/org.chromium.build.gtest_apk.NativeTestInstrumentationTestRunner\n\u0027\u0027\u0027\n```",
+      "revId": "d9a1eeb404bb911f588e27f233fa5b5a6b3f5967",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
