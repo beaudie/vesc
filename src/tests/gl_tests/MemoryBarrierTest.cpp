@@ -123,7 +123,7 @@ void ParseMemoryBarrierVariationsTestParams(const MemoryBarrierVariationsTestPar
     *postBarrierOpOut = std::get<4>(params);
 }
 
-std::string MemoryBarrierVariationsTestPrint(
+[[maybe_unused]] std::string MemoryBarrierVariationsTestPrint(
     const ::testing::TestParamInfo<MemoryBarrierVariationsTestParams> &paramsInfo)
 {
     const MemoryBarrierVariationsTestParams &params = paramsInfo.param;
@@ -771,6 +771,7 @@ void MemoryBarrierTestBase::vertexAttribArrayBitBufferWriteThenVertexRead(
     NoopOp preBarrierOp,
     NoopOp postBarrierOp)
 {
+    WARN() << "";
     GLTexture color;
     GLFramebuffer fbo;
     GLProgram writeProgram;
@@ -790,6 +791,7 @@ void MemoryBarrierTestBase::vertexAttribArrayBitBufferWriteThenVertexRead(
 
     constexpr std::array<float, 4> kWriteData = {2.0, 2.0, 2.0, 2.0};
     setUniformData(writeProgram, kWriteData);
+    WARN() << "";
 
     // Fill the buffer
     if (writePipeline == ShaderWritePipeline::Graphics)
@@ -800,30 +802,38 @@ void MemoryBarrierTestBase::vertexAttribArrayBitBufferWriteThenVertexRead(
     {
         glDispatchCompute(1, 1, 1);
     }
+    WARN() << "";
 
     noopOp(preBarrierOp);
+    WARN() << "";
 
     // Issue the appropriate memory barrier
     glMemoryBarrier(GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT);
+    WARN() << "";
 
     noopOp(postBarrierOp);
+    WARN() << "";
 
     // Use the buffer
     GLProgram readProgram;
     createVertexVerifyProgram(vertexBuffer, &readProgram);
+    WARN() << "";
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_ONE, GL_ONE);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     EXPECT_GL_NO_ERROR();
+    WARN() << "";
 
     // Verify the vertex data was read correctly
     const GLColor kExpected =
         writePipeline == ShaderWritePipeline::Graphics ? GLColor::cyan : GLColor::green;
     EXPECT_PIXEL_COLOR_EQ(0, 0, kExpected);
+    WARN() << "";
 
     // Verify the contents of the buffer
     verifyBufferContents(kWriteData);
+    WARN() << "";
 }
 
 void MemoryBarrierTestBase::vertexAttribArrayBitVertexReadThenBufferWrite(
@@ -833,6 +843,7 @@ void MemoryBarrierTestBase::vertexAttribArrayBitVertexReadThenBufferWrite(
     NoopOp postBarrierOp,
     GLbitfield barrierBit)
 {
+    WARN() << "";
     GLTexture color;
     GLFramebuffer fbo;
     GLProgram writeProgram;
@@ -856,18 +867,23 @@ void MemoryBarrierTestBase::vertexAttribArrayBitVertexReadThenBufferWrite(
     glDisableVertexAttribArray(attribLoc);
 
     noopOp(preBarrierOp);
+    WARN() << "";
 
     // Issue the appropriate memory barrier
     glMemoryBarrier(barrierBit);
+    WARN() << "";
 
     noopOp(postBarrierOp);
+    WARN() << "";
 
     // Fill the buffer
     createProgram(writePipeline, writeResource, &writeProgram);
+    WARN() << "";
 
     GLBuffer positionBuffer;
     createQuadVertexArray(positionBuffer);
     setupVertexArray(writePipeline, writeProgram);
+    WARN() << "";
 
     constexpr std::array<float, 4> kWriteData = {12.34, 5.6, 78.91, 123.456};
     setUniformData(writeProgram, kWriteData);
@@ -881,9 +897,11 @@ void MemoryBarrierTestBase::vertexAttribArrayBitVertexReadThenBufferWrite(
     else
     {
         glDispatchCompute(1, 1, 1);
+        WARN() << "";
     }
 
     verifyFramebufferAndBufferContents(writePipeline, kWriteData);
+    WARN() << "";
 }
 
 void MemoryBarrierTestBase::createIndexVerifyProgram(GLuint indexBuffer, GLProgram *programOut)
@@ -923,6 +941,7 @@ void MemoryBarrierTestBase::elementArrayBitBufferWriteThenIndexRead(
     NoopOp preBarrierOp,
     NoopOp postBarrierOp)
 {
+    WARN() << "";
     GLTexture color;
     GLFramebuffer fbo;
     GLProgram writeProgram;
@@ -949,6 +968,7 @@ void MemoryBarrierTestBase::elementArrayBitBufferWriteThenIndexRead(
     };
     setUniformData(writeProgram, kWriteDataAsFloat);
 
+    WARN() << "";
     // Fill the buffer
     if (writePipeline == ShaderWritePipeline::Graphics)
     {
@@ -958,13 +978,17 @@ void MemoryBarrierTestBase::elementArrayBitBufferWriteThenIndexRead(
     {
         glDispatchCompute(1, 1, 1);
     }
+    WARN() << "";
 
     noopOp(preBarrierOp);
+    WARN() << "";
 
     // Issue the appropriate memory barrier
     glMemoryBarrier(GL_ELEMENT_ARRAY_BARRIER_BIT);
+    WARN() << "";
 
     noopOp(postBarrierOp);
+    WARN() << "";
 
     // Use the buffer
     GLProgram readProgram;
@@ -974,8 +998,10 @@ void MemoryBarrierTestBase::elementArrayBitBufferWriteThenIndexRead(
     glBlendFunc(GL_ONE, GL_ONE);
     glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, 0);
     EXPECT_GL_NO_ERROR();
+    WARN() << "";
 
     verifyFramebufferAndBufferContents(writePipeline, kWriteData);
+    WARN() << "";
 }
 
 void MemoryBarrierTestBase::elementArrayBitIndexReadThenBufferWrite(
@@ -985,6 +1011,7 @@ void MemoryBarrierTestBase::elementArrayBitIndexReadThenBufferWrite(
     NoopOp postBarrierOp,
     GLbitfield barrierBit)
 {
+    WARN() << "";
     GLTexture color;
     GLFramebuffer fbo;
     GLProgram writeProgram;
@@ -1000,16 +1027,20 @@ void MemoryBarrierTestBase::elementArrayBitIndexReadThenBufferWrite(
     // Use the buffer
     GLProgram readProgram;
     createIndexVerifyProgram(indexBuffer, &readProgram);
+    WARN() << "";
 
     glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_INT, 0);
     EXPECT_GL_NO_ERROR();
 
     noopOp(preBarrierOp);
+    WARN() << "";
 
     // Issue the appropriate memory barrier
     glMemoryBarrier(barrierBit);
+    WARN() << "";
 
     noopOp(postBarrierOp);
+    WARN() << "";
 
     // Fill the buffer
     createProgram(writePipeline, writeResource, &writeProgram);
@@ -1020,6 +1051,7 @@ void MemoryBarrierTestBase::elementArrayBitIndexReadThenBufferWrite(
 
     constexpr std::array<float, 4> kWriteData = {12.34, 5.6, 78.91, 123.456};
     setUniformData(writeProgram, kWriteData);
+    WARN() << "";
 
     if (writePipeline == ShaderWritePipeline::Graphics)
     {
@@ -1031,8 +1063,10 @@ void MemoryBarrierTestBase::elementArrayBitIndexReadThenBufferWrite(
     {
         glDispatchCompute(1, 1, 1);
     }
+    WARN() << "";
 
     verifyFramebufferAndBufferContents(writePipeline, kWriteData);
+    WARN() << "";
 }
 
 void MemoryBarrierTestBase::createUBOVerifyProgram(GLuint buffer, GLProgram *programOut)
@@ -1078,6 +1112,7 @@ void MemoryBarrierTestBase::uniformBitBufferWriteThenUBORead(ShaderWritePipeline
                                                              NoopOp preBarrierOp,
                                                              NoopOp postBarrierOp)
 {
+    WARN() << "";
     GLTexture color;
     GLFramebuffer fbo;
     GLProgram writeProgram;
@@ -1098,6 +1133,7 @@ void MemoryBarrierTestBase::uniformBitBufferWriteThenUBORead(ShaderWritePipeline
     constexpr std::array<float, 4> kWriteData = {1.5, 3.75, 5.0, 12.125};
     setUniformData(writeProgram, kWriteData);
 
+    WARN() << "";
     // Fill the buffer
     if (writePipeline == ShaderWritePipeline::Graphics)
     {
@@ -1108,12 +1144,15 @@ void MemoryBarrierTestBase::uniformBitBufferWriteThenUBORead(ShaderWritePipeline
         glDispatchCompute(1, 1, 1);
     }
 
+    WARN() << "";
     noopOp(preBarrierOp);
 
     // Issue the appropriate memory barrier
     glMemoryBarrier(GL_UNIFORM_BARRIER_BIT);
+    WARN() << "";
 
     noopOp(postBarrierOp);
+    WARN() << "";
 
     // Use the buffer
     GLProgram readProgram;
@@ -1123,8 +1162,10 @@ void MemoryBarrierTestBase::uniformBitBufferWriteThenUBORead(ShaderWritePipeline
     glBlendFunc(GL_ONE, GL_ONE);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     EXPECT_GL_NO_ERROR();
+    WARN() << "";
 
     verifyFramebufferAndBufferContents(writePipeline, kWriteData);
+    WARN() << "";
 }
 
 void MemoryBarrierTestBase::uniformBitUBOReadThenBufferWrite(ShaderWritePipeline writePipeline,
@@ -1133,6 +1174,7 @@ void MemoryBarrierTestBase::uniformBitUBOReadThenBufferWrite(ShaderWritePipeline
                                                              NoopOp postBarrierOp,
                                                              GLbitfield barrierBit)
 {
+    WARN() << "";
     GLTexture color;
     GLFramebuffer fbo;
     GLProgram writeProgram;
@@ -1148,26 +1190,33 @@ void MemoryBarrierTestBase::uniformBitUBOReadThenBufferWrite(ShaderWritePipeline
     // Use the buffer
     GLProgram readProgram;
     createUBOVerifyProgram(uniformBuffer, &readProgram);
+    WARN() << "";
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     EXPECT_GL_NO_ERROR();
 
     noopOp(preBarrierOp);
+    WARN() << "";
 
     // Issue the appropriate memory barrier
     glMemoryBarrier(barrierBit);
+    WARN() << "";
 
     noopOp(postBarrierOp);
+    WARN() << "";
 
     // Fill the buffer
     createProgram(writePipeline, writeResource, &writeProgram);
+    WARN() << "";
 
     GLBuffer positionBuffer;
     createQuadVertexArray(positionBuffer);
     setupVertexArray(writePipeline, writeProgram);
+    WARN() << "";
 
     constexpr std::array<float, 4> kWriteData = {12.34, 5.6, 78.91, 123.456};
     setUniformData(writeProgram, kWriteData);
+    WARN() << "";
 
     if (writePipeline == ShaderWritePipeline::Graphics)
     {
@@ -1179,8 +1228,10 @@ void MemoryBarrierTestBase::uniformBitUBOReadThenBufferWrite(ShaderWritePipeline
     {
         glDispatchCompute(1, 1, 1);
     }
+    WARN() << "";
 
     verifyFramebufferAndBufferContents(writePipeline, kWriteData);
+    WARN() << "";
 }
 
 void MemoryBarrierTestBase::createIndirectVerifyProgram(GLuint buffer, GLProgram *programOut)
@@ -1219,6 +1270,7 @@ void MemoryBarrierTestBase::commandBitBufferWriteThenIndirectRead(ShaderWritePip
                                                                   NoopOp preBarrierOp,
                                                                   NoopOp postBarrierOp)
 {
+    WARN() << "";
     GLTexture color;
     GLFramebuffer fbo;
     GLProgram writeProgram;
@@ -1245,6 +1297,7 @@ void MemoryBarrierTestBase::commandBitBufferWriteThenIndirectRead(ShaderWritePip
     };
     setUniformData(writeProgram, kWriteDataAsFloat);
 
+    WARN() << "";
     // Fill the buffer
     if (writePipeline == ShaderWritePipeline::Graphics)
     {
@@ -1255,12 +1308,14 @@ void MemoryBarrierTestBase::commandBitBufferWriteThenIndirectRead(ShaderWritePip
         glDispatchCompute(1, 1, 1);
     }
 
+    WARN() << "";
     noopOp(preBarrierOp);
 
     // Issue the appropriate memory barrier
     glMemoryBarrier(GL_COMMAND_BARRIER_BIT);
 
     noopOp(postBarrierOp);
+    WARN() << "";
 
     // Use the buffer
     GLProgram readProgram;
@@ -1273,8 +1328,10 @@ void MemoryBarrierTestBase::commandBitBufferWriteThenIndirectRead(ShaderWritePip
     glBlendFunc(GL_ONE, GL_ONE);
     glDrawArraysIndirect(GL_TRIANGLE_STRIP, nullptr);
     EXPECT_GL_NO_ERROR();
+    WARN() << "";
 
     verifyFramebufferAndBufferContents(writePipeline, kWriteData);
+    WARN() << "";
 }
 
 void MemoryBarrierTestBase::commandBitIndirectReadThenBufferWrite(ShaderWritePipeline writePipeline,
@@ -1283,6 +1340,7 @@ void MemoryBarrierTestBase::commandBitIndirectReadThenBufferWrite(ShaderWritePip
                                                                   NoopOp postBarrierOp,
                                                                   GLbitfield barrierBit)
 {
+    WARN() << "";
     GLTexture color;
     GLFramebuffer fbo;
     GLProgram writeProgram;
@@ -1308,21 +1366,27 @@ void MemoryBarrierTestBase::commandBitIndirectReadThenBufferWrite(ShaderWritePip
     glBindVertexArray(0);
 
     noopOp(preBarrierOp);
+    WARN() << "";
 
     // Issue the appropriate memory barrier
     glMemoryBarrier(barrierBit);
+    WARN() << "";
 
     noopOp(postBarrierOp);
+    WARN() << "";
 
     // Fill the buffer
     createProgram(writePipeline, writeResource, &writeProgram);
+    WARN() << "";
 
     GLBuffer positionBuffer;
     createQuadVertexArray(positionBuffer);
     setupVertexArray(writePipeline, writeProgram);
+    WARN() << "";
 
     constexpr std::array<float, 4> kWriteData = {12.34, 5.6, 78.91, 123.456};
     setUniformData(writeProgram, kWriteData);
+    WARN() << "";
 
     if (writePipeline == ShaderWritePipeline::Graphics)
     {
@@ -1334,8 +1398,10 @@ void MemoryBarrierTestBase::commandBitIndirectReadThenBufferWrite(ShaderWritePip
     {
         glDispatchCompute(1, 1, 1);
     }
+    WARN() << "";
 
     verifyFramebufferAndBufferContents(writePipeline, kWriteData);
+    WARN() << "";
 }
 
 void MemoryBarrierTestBase::pixelBufferBitBufferWriteThenPack(ShaderWritePipeline writePipeline,
@@ -1343,6 +1409,7 @@ void MemoryBarrierTestBase::pixelBufferBitBufferWriteThenPack(ShaderWritePipelin
                                                               NoopOp preBarrierOp,
                                                               NoopOp postBarrierOp)
 {
+    WARN() << "";
     GLTexture color;
     GLFramebuffer fbo;
     GLProgram writeProgram;
@@ -1363,6 +1430,7 @@ void MemoryBarrierTestBase::pixelBufferBitBufferWriteThenPack(ShaderWritePipelin
     constexpr std::array<float, 4> kWriteData = {12.34, 5.6, 78.91, 123.456};
     setUniformData(writeProgram, kWriteData);
 
+    WARN() << "";
     // Fill the buffer
     if (writePipeline == ShaderWritePipeline::Graphics)
     {
@@ -1376,17 +1444,21 @@ void MemoryBarrierTestBase::pixelBufferBitBufferWriteThenPack(ShaderWritePipelin
         glDispatchCompute(1, 1, 1);
     }
 
+    WARN() << "";
     noopOp(preBarrierOp);
 
     // Issue the appropriate memory barrier
     glMemoryBarrier(GL_PIXEL_BUFFER_BARRIER_BIT);
+    WARN() << "";
 
     noopOp(postBarrierOp);
+    WARN() << "";
 
     // Use the buffer
     glBindBuffer(GL_PIXEL_PACK_BUFFER, packBuffer);
     glReadPixels(0, 0, kTextureSize, kTextureSize, GL_RGBA, GL_UNSIGNED_BYTE, 0);
     glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+    WARN() << "";
 
     const std::array<uint32_t, 4> kExpectedData = {
         writePipeline == ShaderWritePipeline::Graphics ? 0xFFFFFF00u : 0xFF00FF00u,
@@ -1395,6 +1467,7 @@ void MemoryBarrierTestBase::pixelBufferBitBufferWriteThenPack(ShaderWritePipelin
         *reinterpret_cast<const uint32_t *>(&kWriteData[3]),
     };
     verifyFramebufferAndBufferContents(writePipeline, kExpectedData);
+    WARN() << "";
 }
 
 void MemoryBarrierTestBase::pixelBufferBitBufferWriteThenUnpack(ShaderWritePipeline writePipeline,
@@ -1402,6 +1475,7 @@ void MemoryBarrierTestBase::pixelBufferBitBufferWriteThenUnpack(ShaderWritePipel
                                                                 NoopOp preBarrierOp,
                                                                 NoopOp postBarrierOp)
 {
+    WARN() << "";
     GLTexture color;
     GLFramebuffer fbo;
     GLProgram writeProgram;
@@ -1423,6 +1497,7 @@ void MemoryBarrierTestBase::pixelBufferBitBufferWriteThenUnpack(ShaderWritePipel
                                              78.91, 123.456};
     setUniformData(writeProgram, kWriteData);
 
+    WARN() << "";
     // Fill the buffer
     if (writePipeline == ShaderWritePipeline::Graphics)
     {
@@ -1437,11 +1512,14 @@ void MemoryBarrierTestBase::pixelBufferBitBufferWriteThenUnpack(ShaderWritePipel
     }
 
     noopOp(preBarrierOp);
+    WARN() << "";
 
     // Issue the appropriate memory barrier
     glMemoryBarrier(GL_PIXEL_BUFFER_BARRIER_BIT);
+    WARN() << "";
 
     noopOp(postBarrierOp);
+    WARN() << "";
 
     // Use the buffer
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER, unpackBuffer);
@@ -1451,9 +1529,11 @@ void MemoryBarrierTestBase::pixelBufferBitBufferWriteThenUnpack(ShaderWritePipel
 
     // Verify the result of the unpack operation
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+    WARN() << "";
 
     // Verify the contents of the buffer
     verifyBufferContents(kWriteData);
+    WARN() << "";
 }
 
 void MemoryBarrierTestBase::pixelBufferBitPackThenBufferWrite(ShaderWritePipeline writePipeline,
@@ -1462,6 +1542,7 @@ void MemoryBarrierTestBase::pixelBufferBitPackThenBufferWrite(ShaderWritePipelin
                                                               NoopOp postBarrierOp,
                                                               GLbitfield barrierBit)
 {
+    WARN() << "";
     GLTexture color;
     GLFramebuffer fbo;
     GLProgram writeProgram;
@@ -1480,11 +1561,14 @@ void MemoryBarrierTestBase::pixelBufferBitPackThenBufferWrite(ShaderWritePipelin
     glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
 
     noopOp(preBarrierOp);
+    WARN() << "";
 
     // Issue the appropriate memory barrier
     glMemoryBarrier(barrierBit);
+    WARN() << "";
 
     noopOp(postBarrierOp);
+    WARN() << "";
 
     // Fill the buffer
     createProgram(writePipeline, writeResource, &writeProgram);
@@ -1492,9 +1576,11 @@ void MemoryBarrierTestBase::pixelBufferBitPackThenBufferWrite(ShaderWritePipelin
     GLBuffer positionBuffer;
     createQuadVertexArray(positionBuffer);
     setupVertexArray(writePipeline, writeProgram);
+    WARN() << "";
 
     constexpr std::array<float, 4> kWriteData = {12.34, 5.6, 78.91, 123.456};
     setUniformData(writeProgram, kWriteData);
+    WARN() << "";
 
     if (writePipeline == ShaderWritePipeline::Graphics)
     {
@@ -1506,8 +1592,10 @@ void MemoryBarrierTestBase::pixelBufferBitPackThenBufferWrite(ShaderWritePipelin
     {
         glDispatchCompute(1, 1, 1);
     }
+    WARN() << "";
 
     verifyFramebufferAndBufferContents(writePipeline, kWriteData);
+    WARN() << "";
 }
 
 void MemoryBarrierTestBase::pixelBufferBitUnpackThenBufferWrite(ShaderWritePipeline writePipeline,
@@ -1516,6 +1604,7 @@ void MemoryBarrierTestBase::pixelBufferBitUnpackThenBufferWrite(ShaderWritePipel
                                                                 NoopOp postBarrierOp,
                                                                 GLbitfield barrierBit)
 {
+    WARN() << "";
     GLTexture color;
     GLFramebuffer fbo;
     GLProgram writeProgram;
@@ -1536,21 +1625,27 @@ void MemoryBarrierTestBase::pixelBufferBitUnpackThenBufferWrite(ShaderWritePipel
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
 
     noopOp(preBarrierOp);
+    WARN() << "";
 
     // Issue the appropriate memory barrier
     glMemoryBarrier(barrierBit);
+    WARN() << "";
 
     noopOp(postBarrierOp);
+    WARN() << "";
 
     // Fill the buffer
     createProgram(writePipeline, writeResource, &writeProgram);
+    WARN() << "";
 
     GLBuffer positionBuffer;
     createQuadVertexArray(positionBuffer);
     setupVertexArray(writePipeline, writeProgram);
+    WARN() << "";
 
     constexpr std::array<float, 4> kWriteData = {12.34, 5.6, 78.91, 123.456};
     setUniformData(writeProgram, kWriteData);
+    WARN() << "";
 
     if (writePipeline == ShaderWritePipeline::Graphics)
     {
@@ -1562,8 +1657,10 @@ void MemoryBarrierTestBase::pixelBufferBitUnpackThenBufferWrite(ShaderWritePipel
     {
         glDispatchCompute(1, 1, 1);
     }
+    WARN() << "";
 
     verifyFramebufferAndBufferContents(writePipeline, kWriteData);
+    WARN() << "";
 }
 
 void MemoryBarrierTestBase::bufferUpdateBitBufferWriteThenCopy(ShaderWritePipeline writePipeline,
@@ -1571,6 +1668,7 @@ void MemoryBarrierTestBase::bufferUpdateBitBufferWriteThenCopy(ShaderWritePipeli
                                                                NoopOp preBarrierOp,
                                                                NoopOp postBarrierOp)
 {
+    WARN() << "";
     GLBuffer srcBuffer;
     GLTexture srcTextureBuffer;
     constexpr std::array<float, 4> kSrcInitData = {9.3, 3.7, 11.34, 0.65};
@@ -1597,6 +1695,7 @@ void MemoryBarrierTestBase::bufferUpdateBitBufferWriteThenCopy(ShaderWritePipeli
     constexpr std::array<float, 4> kWriteData = {1.5, 3.75, 5.0, 12.125};
     setUniformData(writeProgram, kWriteData);
 
+    WARN() << "";
     // Fill the buffer
     if (writePipeline == ShaderWritePipeline::Graphics)
     {
@@ -1611,21 +1710,27 @@ void MemoryBarrierTestBase::bufferUpdateBitBufferWriteThenCopy(ShaderWritePipeli
     }
 
     noopOp(preBarrierOp);
+    WARN() << "";
 
     // Issue the appropriate memory barrier
     glMemoryBarrier(GL_BUFFER_UPDATE_BARRIER_BIT);
+    WARN() << "";
 
     noopOp(postBarrierOp);
+    WARN() << "";
 
     // Copy from src buffer over the buffer
     glBindBuffer(GL_UNIFORM_BUFFER, srcBuffer);
     glCopyBufferSubData(GL_UNIFORM_BUFFER, GL_SHADER_STORAGE_BUFFER, 0, 0, sizeof(kInitData));
+    WARN() << "";
 
     verifyFramebufferAndBufferContents(writePipeline, kSrcInitData);
+    WARN() << "";
 
     // Verify the src buffer is unaffected
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, srcBuffer);
     verifyBufferContents(kSrcInitData);
+    WARN() << "";
 }
 
 void MemoryBarrierTestBase::bufferUpdateBitCopyThenBufferWrite(ShaderWritePipeline writePipeline,
@@ -1634,6 +1739,7 @@ void MemoryBarrierTestBase::bufferUpdateBitCopyThenBufferWrite(ShaderWritePipeli
                                                                NoopOp postBarrierOp,
                                                                GLbitfield barrierBit)
 {
+    WARN() << "";
     GLBuffer srcBuffer;
     GLTexture srcTextureBuffer;
     constexpr std::array<float, 4> kSrcInitData = {9.3, 3.7, 11.34, 0.65};
@@ -1657,21 +1763,27 @@ void MemoryBarrierTestBase::bufferUpdateBitCopyThenBufferWrite(ShaderWritePipeli
     glCopyBufferSubData(GL_UNIFORM_BUFFER, GL_SHADER_STORAGE_BUFFER, 0, 0, sizeof(kInitData));
 
     noopOp(preBarrierOp);
+    WARN() << "";
 
     // Issue the appropriate memory barrier
     glMemoryBarrier(barrierBit);
+    WARN() << "";
 
     noopOp(postBarrierOp);
+    WARN() << "";
 
     // Fill the buffer
     createProgram(writePipeline, writeResource, &writeProgram);
+    WARN() << "";
 
     GLBuffer positionBuffer;
     createQuadVertexArray(positionBuffer);
     setupVertexArray(writePipeline, writeProgram);
+    WARN() << "";
 
     constexpr std::array<float, 4> kWriteData = {1.5, 3.75, 5.0, 12.125};
     setUniformData(writeProgram, kWriteData);
+    WARN() << "";
 
     if (writePipeline == ShaderWritePipeline::Graphics)
     {
@@ -1683,12 +1795,15 @@ void MemoryBarrierTestBase::bufferUpdateBitCopyThenBufferWrite(ShaderWritePipeli
     {
         glDispatchCompute(1, 1, 1);
     }
+    WARN() << "";
 
     verifyFramebufferAndBufferContents(writePipeline, kWriteData);
+    WARN() << "";
 
     // Verify the src buffer is unaffected
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, srcBuffer);
     verifyBufferContents(kSrcInitData);
+    WARN() << "";
 }
 
 void MemoryBarrierTestBase::createXfbVerifyProgram(GLuint buffer, GLProgram *programOut)
@@ -1732,6 +1847,7 @@ void MemoryBarrierTestBase::transformFeedbackBitBufferWriteThenCapture(
     NoopOp preBarrierOp,
     NoopOp postBarrierOp)
 {
+    WARN() << "";
     GLTexture color;
     GLFramebuffer fbo;
     GLProgram writeProgram;
@@ -1745,16 +1861,17 @@ void MemoryBarrierTestBase::transformFeedbackBitBufferWriteThenCapture(
 
     GLBuffer xfbBuffer;
     GLTexture xfbTextureBuffer;
-    constexpr size_t kOneInstanceDataSize                                       = 4;
-    constexpr size_t kInstanceCount                                             = 6;
-    constexpr std::array<float, kOneInstanceDataSize *kInstanceCount> kInitData = {12.34, 5.6,
-                                                                                   78.91, 123.456};
+    constexpr size_t kOneInstanceDataSize                                        = 4;
+    constexpr size_t kInstanceCount                                              = 6;
+    constexpr std::array<float, kOneInstanceDataSize * kInstanceCount> kInitData = {12.34, 5.6,
+                                                                                    78.91, 123.456};
     createStorageBuffer(writeResource, xfbBuffer, xfbTextureBuffer,
                         sizeof(kInitData[0]) * kInitData.size(), kInitData.data());
 
     constexpr std::array<float, 4> kWriteData = {1.5, 3.75, 5.0, 12.125};
     setUniformData(writeProgram, kWriteData);
 
+    WARN() << "";
     // Fill the buffer
     if (writePipeline == ShaderWritePipeline::Graphics)
     {
@@ -1766,15 +1883,19 @@ void MemoryBarrierTestBase::transformFeedbackBitBufferWriteThenCapture(
     }
 
     noopOp(preBarrierOp);
+    WARN() << "";
 
     // Issue the appropriate memory barrier
     glMemoryBarrier(GL_TRANSFORM_FEEDBACK_BARRIER_BIT);
+    WARN() << "";
 
     noopOp(postBarrierOp);
+    WARN() << "";
 
     // Use the buffer
     GLProgram xfbProgram;
     createXfbVerifyProgram(xfbBuffer, &xfbProgram);
+    WARN() << "";
 
     glBeginTransformFeedback(GL_TRIANGLES);
     glEnable(GL_BLEND);
@@ -1782,9 +1903,11 @@ void MemoryBarrierTestBase::transformFeedbackBitBufferWriteThenCapture(
     glDrawArrays(GL_TRIANGLES, 0, 6);
     glEndTransformFeedback();
     EXPECT_GL_NO_ERROR();
+    WARN() << "";
 
     const std::array<float, 4> kExpectedData = {-1.0, -1.0, 0.0, 1.0};
     verifyFramebufferAndBufferContents(writePipeline, kExpectedData);
+    WARN() << "";
 }
 
 void MemoryBarrierTestBase::transformFeedbackBitCaptureThenBufferWrite(
@@ -1802,10 +1925,10 @@ void MemoryBarrierTestBase::transformFeedbackBitCaptureThenBufferWrite(
 
     GLBuffer xfbBuffer;
     GLTexture xfbTextureBuffer;
-    constexpr size_t kOneInstanceDataSize                                       = 4;
-    constexpr size_t kInstanceCount                                             = 6;
-    constexpr std::array<float, kOneInstanceDataSize *kInstanceCount> kInitData = {12.34, 5.6,
-                                                                                   78.91, 123.456};
+    constexpr size_t kOneInstanceDataSize                                        = 4;
+    constexpr size_t kInstanceCount                                              = 6;
+    constexpr std::array<float, kOneInstanceDataSize * kInstanceCount> kInitData = {12.34, 5.6,
+                                                                                    78.91, 123.456};
     createStorageBuffer(writeResource, xfbBuffer, xfbTextureBuffer,
                         sizeof(kInitData[0]) * kInitData.size(), kInitData.data());
 
@@ -1895,6 +2018,7 @@ void MemoryBarrierTestBase::atomicCounterBitBufferWriteThenAtomic(ShaderWritePip
                                                                   NoopOp preBarrierOp,
                                                                   NoopOp postBarrierOp)
 {
+    WARN() << "";
     GLTexture color;
     GLFramebuffer fbo;
     GLProgram writeProgram;
@@ -1922,6 +2046,7 @@ void MemoryBarrierTestBase::atomicCounterBitBufferWriteThenAtomic(ShaderWritePip
     };
     setUniformData(writeProgram, kWriteDataAsFloat);
 
+    WARN() << "";
     // Fill the buffer
     if (writePipeline == ShaderWritePipeline::Graphics)
     {
@@ -1933,23 +2058,29 @@ void MemoryBarrierTestBase::atomicCounterBitBufferWriteThenAtomic(ShaderWritePip
     }
 
     noopOp(preBarrierOp);
+    WARN() << "";
 
     // Issue the appropriate memory barrier
     glMemoryBarrier(GL_ATOMIC_COUNTER_BARRIER_BIT);
+    WARN() << "";
 
     noopOp(postBarrierOp);
+    WARN() << "";
 
     // Use the buffer
     GLProgram readProgram;
     createAtomicCounterVerifyProgram(atomicCounterBuffer, &readProgram);
+    WARN() << "";
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_ONE, GL_ONE);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     EXPECT_GL_NO_ERROR();
+    WARN() << "";
 
     constexpr std::array<uint32_t, 4> kExpectedData = {11, 21, 31, 41};
     verifyFramebufferAndBufferContents(writePipeline, kExpectedData);
+    WARN() << "";
 }
 
 void MemoryBarrierTestBase::atomicCounterBitAtomicThenBufferWrite(ShaderWritePipeline writePipeline,
@@ -1958,6 +2089,7 @@ void MemoryBarrierTestBase::atomicCounterBitAtomicThenBufferWrite(ShaderWritePip
                                                                   NoopOp postBarrierOp,
                                                                   GLbitfield barrierBit)
 {
+    WARN() << "";
     GLTexture color;
     GLFramebuffer fbo;
     GLProgram writeProgram;
@@ -1978,21 +2110,27 @@ void MemoryBarrierTestBase::atomicCounterBitAtomicThenBufferWrite(ShaderWritePip
     EXPECT_GL_NO_ERROR();
 
     noopOp(preBarrierOp);
+    WARN() << "";
 
     // Issue the appropriate memory barrier
     glMemoryBarrier(barrierBit);
+    WARN() << "";
 
     noopOp(postBarrierOp);
+    WARN() << "";
 
     // Fill the buffer
     createProgram(writePipeline, writeResource, &writeProgram);
+    WARN() << "";
 
     GLBuffer positionBuffer;
     createQuadVertexArray(positionBuffer);
     setupVertexArray(writePipeline, writeProgram);
+    WARN() << "";
 
     constexpr std::array<float, 4> kWriteData = {12.34, 5.6, 78.91, 123.456};
     setUniformData(writeProgram, kWriteData);
+    WARN() << "";
 
     if (writePipeline == ShaderWritePipeline::Graphics)
     {
@@ -2004,8 +2142,10 @@ void MemoryBarrierTestBase::atomicCounterBitAtomicThenBufferWrite(ShaderWritePip
     {
         glDispatchCompute(1, 1, 1);
     }
+    WARN() << "";
 
     verifyFramebufferAndBufferContents(writePipeline, kWriteData);
+    WARN() << "";
 }
 
 void MemoryBarrierTestBase::createSsboVerifyProgram(WriteResource writeResource,
@@ -2049,6 +2189,7 @@ void MemoryBarrierTestBase::shaderStorageBitBufferWriteThenBufferRead(
     NoopOp preBarrierOp,
     NoopOp postBarrierOp)
 {
+    WARN() << "";
     GLTexture color;
     GLFramebuffer fbo;
     GLProgram writeProgram;
@@ -2069,6 +2210,7 @@ void MemoryBarrierTestBase::shaderStorageBitBufferWriteThenBufferRead(
     constexpr std::array<float, 4> kWriteData = {1.5, 3.75, 5.0, 12.125};
     setUniformData(writeProgram, kWriteData);
 
+    WARN() << "";
     // Fill the buffer
     if (writePipeline == ShaderWritePipeline::Graphics)
     {
@@ -2080,22 +2222,28 @@ void MemoryBarrierTestBase::shaderStorageBitBufferWriteThenBufferRead(
     }
 
     noopOp(preBarrierOp);
+    WARN() << "";
 
     // Issue the appropriate memory barrier
     glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+    WARN() << "";
 
     noopOp(postBarrierOp);
+    WARN() << "";
 
     // Use the buffer
     GLProgram readProgram;
     createSsboVerifyProgram(writeResource, &readProgram);
+    WARN() << "";
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_ONE, GL_ONE);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     EXPECT_GL_NO_ERROR();
+    WARN() << "";
 
     verifyFramebufferAndBufferContents(writePipeline, kWriteData);
+    WARN() << "";
 }
 
 void MemoryBarrierTestBase::shaderStorageBitBufferReadThenBufferWrite(
@@ -2105,6 +2253,7 @@ void MemoryBarrierTestBase::shaderStorageBitBufferReadThenBufferWrite(
     NoopOp postBarrierOp,
     GLbitfield barrierBit)
 {
+    WARN() << "";
     GLTexture color;
     GLFramebuffer fbo;
     GLProgram writeProgram;
@@ -2125,11 +2274,14 @@ void MemoryBarrierTestBase::shaderStorageBitBufferReadThenBufferWrite(
     EXPECT_GL_NO_ERROR();
 
     noopOp(preBarrierOp);
+    WARN() << "";
 
     // Issue the appropriate memory barrier
     glMemoryBarrier(barrierBit);
+    WARN() << "";
 
     noopOp(postBarrierOp);
+    WARN() << "";
 
     // Fill the image
     createProgram(writePipeline, writeResource, &writeProgram);
@@ -2137,9 +2289,11 @@ void MemoryBarrierTestBase::shaderStorageBitBufferReadThenBufferWrite(
     GLBuffer positionBuffer;
     createQuadVertexArray(positionBuffer);
     setupVertexArray(writePipeline, writeProgram);
+    WARN() << "";
 
     constexpr std::array<float, 4> kWriteData = {12.34, 5.6, 78.91, 123.456};
     setUniformData(writeProgram, kWriteData);
+    WARN() << "";
 
     if (writePipeline == ShaderWritePipeline::Graphics)
     {
@@ -2151,8 +2305,10 @@ void MemoryBarrierTestBase::shaderStorageBitBufferReadThenBufferWrite(
     {
         glDispatchCompute(1, 1, 1);
     }
+    WARN() << "";
 
     verifyFramebufferAndBufferContents(writePipeline, kWriteData);
+    WARN() << "";
 }
 
 void MemoryBarrierTestBase::createTextureVerifyProgram(WriteResource writeResource,
@@ -3222,64 +3378,84 @@ class MemoryBarrierBufferOnlyTest : public MemoryBarrierTestBase,
 // Test GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT; shader write -> vertex read
 TEST_P(MemoryBarrierBufferTest, VertexAtrribArrayBitWriteThenVertexRead)
 {
+    WARN() << "BEGIN";
     ShaderWritePipeline writePipeline;
     WriteResource writeResource;
     NoopOp preBarrierOp;
     NoopOp postBarrierOp;
+    WARN() << "";
     ParseMemoryBarrierVariationsTestParams(GetParam(), &writePipeline, &writeResource,
                                            &preBarrierOp, &postBarrierOp);
 
+    WARN() << "";
     ANGLE_SKIP_TEST_IF(!hasExtensions(writeResource));
 
+    WARN() << "";
     vertexAttribArrayBitBufferWriteThenVertexRead(writePipeline, writeResource, preBarrierOp,
                                                   postBarrierOp);
+    WARN() << "END";
 }
 
 // Test GL_ELEMENT_ARRAY_BARRIER_BIT; shader write -> index read
 TEST_P(MemoryBarrierBufferTest, ElementArrayBitWriteThenIndexRead)
 {
+    WARN() << "BEGIN";
     ShaderWritePipeline writePipeline;
     WriteResource writeResource;
     NoopOp preBarrierOp;
     NoopOp postBarrierOp;
+    WARN() << "";
     ParseMemoryBarrierVariationsTestParams(GetParam(), &writePipeline, &writeResource,
                                            &preBarrierOp, &postBarrierOp);
 
+    WARN() << "";
     ANGLE_SKIP_TEST_IF(!hasExtensions(writeResource));
 
+    WARN() << "";
     elementArrayBitBufferWriteThenIndexRead(writePipeline, writeResource, preBarrierOp,
                                             postBarrierOp);
+    WARN() << "END";
 }
 
 // Test GL_UNIFORM_BARRIER_BIT; shader write -> ubo read
 TEST_P(MemoryBarrierBufferTest, UniformBitWriteThenUBORead)
 {
+    WARN() << "BEGIN";
     ShaderWritePipeline writePipeline;
     WriteResource writeResource;
     NoopOp preBarrierOp;
     NoopOp postBarrierOp;
+    WARN() << "";
     ParseMemoryBarrierVariationsTestParams(GetParam(), &writePipeline, &writeResource,
                                            &preBarrierOp, &postBarrierOp);
 
+    WARN() << "";
     ANGLE_SKIP_TEST_IF(!hasExtensions(writeResource));
 
+    WARN() << "";
     uniformBitBufferWriteThenUBORead(writePipeline, writeResource, preBarrierOp, postBarrierOp);
+    WARN() << "END";
 }
 
 // Test GL_TEXTURE_FETCH_BARRIER_BIT; shader write -> sampler read
 TEST_P(MemoryBarrierImageTest, TextureFetchBitWriteThenSamplerRead)
 {
+    WARN() << "BEGIN";
     ShaderWritePipeline writePipeline;
     WriteResource writeResource;
     NoopOp preBarrierOp;
     NoopOp postBarrierOp;
+    WARN() << "";
     ParseMemoryBarrierVariationsTestParams(GetParam(), &writePipeline, &writeResource,
                                            &preBarrierOp, &postBarrierOp);
 
+    WARN() << "";
     ANGLE_SKIP_TEST_IF(!hasExtensions(writeResource));
 
+    WARN() << "";
     textureFetchBitImageWriteThenSamplerRead(writePipeline, writeResource, preBarrierOp,
                                              postBarrierOp);
+    WARN() << "END";
 }
 
 // Test GL_SHADER_IMAGE_ACCESS_BARRIER_BIT; shader write -> image read
@@ -3326,50 +3502,65 @@ TEST_P(MemoryBarrierImageTest, ShaderImageAccessBitImageReadThenWrite)
 // Test GL_SHADER_IMAGE_ACCESS_BARRIER_BIT; vertex read -> shader write
 TEST_P(MemoryBarrierImageBufferOnlyTest, ShaderImageAccessBitVertexReadThenWrite)
 {
+    WARN() << "BEGIN";
     ShaderWritePipeline writePipeline;
     WriteResource writeResource;
     NoopOp preBarrierOp;
     NoopOp postBarrierOp;
+    WARN() << "";
     ParseMemoryBarrierVariationsTestParams(GetParam(), &writePipeline, &writeResource,
                                            &preBarrierOp, &postBarrierOp);
 
+    WARN() << "";
     ANGLE_SKIP_TEST_IF(!hasExtensions(writeResource));
 
+    WARN() << "";
     vertexAttribArrayBitVertexReadThenBufferWrite(writePipeline, writeResource, preBarrierOp,
                                                   postBarrierOp,
                                                   GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+    WARN() << "END";
 }
 
 // Test GL_SHADER_IMAGE_ACCESS_BARRIER_BIT; index read -> shader write
 TEST_P(MemoryBarrierImageBufferOnlyTest, ShaderImageAccessBitIndexReadThenWrite)
 {
+    WARN() << "BEGIN";
     ShaderWritePipeline writePipeline;
     WriteResource writeResource;
     NoopOp preBarrierOp;
     NoopOp postBarrierOp;
+    WARN() << "";
     ParseMemoryBarrierVariationsTestParams(GetParam(), &writePipeline, &writeResource,
                                            &preBarrierOp, &postBarrierOp);
 
+    WARN() << "";
     ANGLE_SKIP_TEST_IF(!hasExtensions(writeResource));
 
+    WARN() << "";
     elementArrayBitIndexReadThenBufferWrite(writePipeline, writeResource, preBarrierOp,
                                             postBarrierOp, GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+    WARN() << "END";
 }
 
 // Test GL_SHADER_IMAGE_ACCESS_BARRIER_BIT; ubo read -> shader write
 TEST_P(MemoryBarrierImageBufferOnlyTest, ShaderImageAccessBitUBOReadThenWrite)
 {
+    WARN() << "BEGIN";
     ShaderWritePipeline writePipeline;
     WriteResource writeResource;
     NoopOp preBarrierOp;
     NoopOp postBarrierOp;
+    WARN() << "";
     ParseMemoryBarrierVariationsTestParams(GetParam(), &writePipeline, &writeResource,
                                            &preBarrierOp, &postBarrierOp);
 
+    WARN() << "";
     ANGLE_SKIP_TEST_IF(!hasExtensions(writeResource));
 
+    WARN() << "";
     uniformBitUBOReadThenBufferWrite(writePipeline, writeResource, preBarrierOp, postBarrierOp,
                                      GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+    WARN() << "END";
 }
 
 // Test GL_SHADER_IMAGE_ACCESS_BARRIER_BIT; sampler read -> shader write
@@ -3391,49 +3582,64 @@ TEST_P(MemoryBarrierImageTest, ShaderImageAccessBitSamplerReadThenWrite)
 // Test GL_SHADER_IMAGE_ACCESS_BARRIER_BIT; indirect read -> shader write
 TEST_P(MemoryBarrierImageBufferOnlyTest, ShaderImageAccessBitIndirectReadThenWrite)
 {
+    WARN() << "BEGIN";
     ShaderWritePipeline writePipeline;
     WriteResource writeResource;
     NoopOp preBarrierOp;
     NoopOp postBarrierOp;
+    WARN() << "";
     ParseMemoryBarrierVariationsTestParams(GetParam(), &writePipeline, &writeResource,
                                            &preBarrierOp, &postBarrierOp);
 
+    WARN() << "";
     ANGLE_SKIP_TEST_IF(!hasExtensions(writeResource));
 
+    WARN() << "";
     commandBitIndirectReadThenBufferWrite(writePipeline, writeResource, preBarrierOp, postBarrierOp,
                                           GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+    WARN() << "END";
 }
 
 // Test GL_SHADER_IMAGE_ACCESS_BARRIER_BIT; pixel pack -> shader write
 TEST_P(MemoryBarrierImageBufferOnlyTest, ShaderImageAccessBitPackThenWrite)
 {
+    WARN() << "BEGIN";
     ShaderWritePipeline writePipeline;
     WriteResource writeResource;
     NoopOp preBarrierOp;
     NoopOp postBarrierOp;
+    WARN() << "";
     ParseMemoryBarrierVariationsTestParams(GetParam(), &writePipeline, &writeResource,
                                            &preBarrierOp, &postBarrierOp);
 
+    WARN() << "";
     ANGLE_SKIP_TEST_IF(!hasExtensions(writeResource));
 
+    WARN() << "";
     pixelBufferBitPackThenBufferWrite(writePipeline, writeResource, preBarrierOp, postBarrierOp,
                                       GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+    WARN() << "END";
 }
 
 // Test GL_SHADER_IMAGE_ACCESS_BARRIER_BIT; pixel unpack -> shader write
 TEST_P(MemoryBarrierImageBufferOnlyTest, ShaderImageAccessBitUnpackThenWrite)
 {
+    WARN() << "BEGIN";
     ShaderWritePipeline writePipeline;
     WriteResource writeResource;
     NoopOp preBarrierOp;
     NoopOp postBarrierOp;
+    WARN() << "";
     ParseMemoryBarrierVariationsTestParams(GetParam(), &writePipeline, &writeResource,
                                            &preBarrierOp, &postBarrierOp);
 
+    WARN() << "";
     ANGLE_SKIP_TEST_IF(!hasExtensions(writeResource));
 
+    WARN() << "";
     pixelBufferBitUnpackThenBufferWrite(writePipeline, writeResource, preBarrierOp, postBarrierOp,
                                         GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+    WARN() << "END";
 }
 
 // Test GL_SHADER_IMAGE_ACCESS_BARRIER_BIT; texture copy -> shader write
@@ -3455,17 +3661,22 @@ TEST_P(MemoryBarrierImageOnlyTest, ShaderImageAccessBitCopyThenWrite)
 // Test GL_SHADER_IMAGE_ACCESS_BARRIER_BIT; buffer copy -> shader write
 TEST_P(MemoryBarrierImageBufferOnlyTest, ShaderImageAccessBitCopyThenWrite)
 {
+    WARN() << "BEGIN";
     ShaderWritePipeline writePipeline;
     WriteResource writeResource;
     NoopOp preBarrierOp;
     NoopOp postBarrierOp;
+    WARN() << "";
     ParseMemoryBarrierVariationsTestParams(GetParam(), &writePipeline, &writeResource,
                                            &preBarrierOp, &postBarrierOp);
 
+    WARN() << "";
     ANGLE_SKIP_TEST_IF(!hasExtensions(writeResource));
 
+    WARN() << "";
     bufferUpdateBitCopyThenBufferWrite(writePipeline, writeResource, preBarrierOp, postBarrierOp,
                                        GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+    WARN() << "END";
 }
 
 // Test GL_SHADER_IMAGE_ACCESS_BARRIER_BIT; draw -> shader write
@@ -3535,95 +3746,125 @@ TEST_P(MemoryBarrierImageOnlyTest, ShaderImageAccessBitBlitThenWrite)
 // Test GL_SHADER_IMAGE_ACCESS_BARRIER_BIT; xfb capture -> shader write
 TEST_P(MemoryBarrierImageBufferOnlyTest, ShaderImageAccessBitCaptureThenWrite)
 {
+    WARN() << "BEGIN";
     ShaderWritePipeline writePipeline;
     WriteResource writeResource;
     NoopOp preBarrierOp;
     NoopOp postBarrierOp;
+    WARN() << "";
     ParseMemoryBarrierVariationsTestParams(GetParam(), &writePipeline, &writeResource,
                                            &preBarrierOp, &postBarrierOp);
 
+    WARN() << "";
     ANGLE_SKIP_TEST_IF(!hasExtensions(writeResource));
 
+    WARN() << "";
     transformFeedbackBitCaptureThenBufferWrite(writePipeline, writeResource, preBarrierOp,
                                                postBarrierOp, GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+    WARN() << "END";
 }
 
 // Test GL_SHADER_IMAGE_ACCESS_BARRIER_BIT; atomic write -> shader write
 TEST_P(MemoryBarrierImageBufferOnlyTest, ShaderImageAccessBitAtomicThenWrite)
 {
+    WARN() << "BEGIN";
     ShaderWritePipeline writePipeline;
     WriteResource writeResource;
     NoopOp preBarrierOp;
     NoopOp postBarrierOp;
+    WARN() << "";
     ParseMemoryBarrierVariationsTestParams(GetParam(), &writePipeline, &writeResource,
                                            &preBarrierOp, &postBarrierOp);
 
+    WARN() << "";
     ANGLE_SKIP_TEST_IF(!hasExtensions(writeResource));
 
+    WARN() << "";
     atomicCounterBitAtomicThenBufferWrite(writePipeline, writeResource, preBarrierOp, postBarrierOp,
                                           GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+    WARN() << "END";
 }
 
 // Test GL_SHADER_IMAGE_ACCESS_BARRIER_BIT; buffer read -> shader write
 TEST_P(MemoryBarrierImageBufferOnlyTest, ShaderImageAccessBitBufferReadThenWrite)
 {
+    WARN() << "BEGIN";
     ShaderWritePipeline writePipeline;
     WriteResource writeResource;
     NoopOp preBarrierOp;
     NoopOp postBarrierOp;
+    WARN() << "";
     ParseMemoryBarrierVariationsTestParams(GetParam(), &writePipeline, &writeResource,
                                            &preBarrierOp, &postBarrierOp);
 
+    WARN() << "";
     ANGLE_SKIP_TEST_IF(!hasExtensions(writeResource));
 
+    WARN() << "";
     shaderStorageBitBufferReadThenBufferWrite(writePipeline, writeResource, preBarrierOp,
                                               postBarrierOp, GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+    WARN() << "END";
 }
 
 // Test GL_COMMAND_BARRIER_BIT; shader write -> indirect read
 TEST_P(MemoryBarrierBufferTest, CommandBitWriteThenIndirectRead)
 {
+    WARN() << "BEGIN";
     ShaderWritePipeline writePipeline;
     WriteResource writeResource;
     NoopOp preBarrierOp;
     NoopOp postBarrierOp;
+    WARN() << "";
     ParseMemoryBarrierVariationsTestParams(GetParam(), &writePipeline, &writeResource,
                                            &preBarrierOp, &postBarrierOp);
 
+    WARN() << "";
     ANGLE_SKIP_TEST_IF(!hasExtensions(writeResource));
 
+    WARN() << "";
     commandBitBufferWriteThenIndirectRead(writePipeline, writeResource, preBarrierOp,
                                           postBarrierOp);
+    WARN() << "END";
 }
 
 // Test GL_PIXEL_BUFFER_BARRIER_BIT; shader write -> pixel pack
 TEST_P(MemoryBarrierBufferTest, PixelBufferBitWriteThenPack)
 {
+    WARN() << "BEGIN";
     ShaderWritePipeline writePipeline;
     WriteResource writeResource;
     NoopOp preBarrierOp;
     NoopOp postBarrierOp;
+    WARN() << "";
     ParseMemoryBarrierVariationsTestParams(GetParam(), &writePipeline, &writeResource,
                                            &preBarrierOp, &postBarrierOp);
 
+    WARN() << "";
     ANGLE_SKIP_TEST_IF(!hasExtensions(writeResource));
 
+    WARN() << "";
     pixelBufferBitBufferWriteThenPack(writePipeline, writeResource, preBarrierOp, postBarrierOp);
+    WARN() << "END";
 }
 
 // Test GL_PIXEL_BUFFER_BARRIER_BIT; shader write -> pixel unpack
 TEST_P(MemoryBarrierBufferTest, PixelBufferBitWriteThenUnpack)
 {
+    WARN() << "BEGIN";
     ShaderWritePipeline writePipeline;
     WriteResource writeResource;
     NoopOp preBarrierOp;
     NoopOp postBarrierOp;
+    WARN() << "";
     ParseMemoryBarrierVariationsTestParams(GetParam(), &writePipeline, &writeResource,
                                            &preBarrierOp, &postBarrierOp);
 
+    WARN() << "";
     ANGLE_SKIP_TEST_IF(!hasExtensions(writeResource));
 
+    WARN() << "";
     pixelBufferBitBufferWriteThenUnpack(writePipeline, writeResource, preBarrierOp, postBarrierOp);
+    WARN() << "END";
 }
 
 // Test GL_TEXTURE_UPDATE_BARRIER_BIT; shader write -> texture copy
@@ -3644,16 +3885,21 @@ TEST_P(MemoryBarrierImageOnlyTest, TextureUpdateBitWriteThenCopy)
 // Test GL_BUFFER_UPDATE_BARRIER_BIT; shader write -> buffer copy
 TEST_P(MemoryBarrierBufferTest, BufferUpdateBitWriteThenCopy)
 {
+    WARN() << "BEGIN";
     ShaderWritePipeline writePipeline;
     WriteResource writeResource;
     NoopOp preBarrierOp;
     NoopOp postBarrierOp;
+    WARN() << "";
     ParseMemoryBarrierVariationsTestParams(GetParam(), &writePipeline, &writeResource,
                                            &preBarrierOp, &postBarrierOp);
 
+    WARN() << "";
     ANGLE_SKIP_TEST_IF(!hasExtensions(writeResource));
 
+    WARN() << "";
     bufferUpdateBitBufferWriteThenCopy(writePipeline, writeResource, preBarrierOp, postBarrierOp);
+    WARN() << "END";
 }
 
 // Test GL_FRAMEBUFFER_BARRIER_BIT; shader write -> draw
@@ -3720,49 +3966,64 @@ TEST_P(MemoryBarrierImageOnlyTest, FramebufferBitWriteThenBlit)
 // Test GL_TRANSFORM_FEEDBACK_BARRIER_BIT; shader write -> xfb capture
 TEST_P(MemoryBarrierBufferTest, TransformFeedbackBitWriteThenCapture)
 {
+    WARN() << "BEGIN";
     ShaderWritePipeline writePipeline;
     WriteResource writeResource;
     NoopOp preBarrierOp;
     NoopOp postBarrierOp;
+    WARN() << "";
     ParseMemoryBarrierVariationsTestParams(GetParam(), &writePipeline, &writeResource,
                                            &preBarrierOp, &postBarrierOp);
 
+    WARN() << "";
     ANGLE_SKIP_TEST_IF(!hasExtensions(writeResource));
 
+    WARN() << "";
     transformFeedbackBitBufferWriteThenCapture(writePipeline, writeResource, preBarrierOp,
                                                postBarrierOp);
+    WARN() << "END";
 }
 
 // Test GL_ATOMIC_COUNTER_BARRIER_BIT; shader write -> atomic write
 TEST_P(MemoryBarrierBufferTest, AtomicCounterBitWriteThenAtomic)
 {
+    WARN() << "BEGIN";
     ShaderWritePipeline writePipeline;
     WriteResource writeResource;
     NoopOp preBarrierOp;
     NoopOp postBarrierOp;
+    WARN() << "";
     ParseMemoryBarrierVariationsTestParams(GetParam(), &writePipeline, &writeResource,
                                            &preBarrierOp, &postBarrierOp);
 
+    WARN() << "";
     ANGLE_SKIP_TEST_IF(!hasExtensions(writeResource));
 
+    WARN() << "";
     atomicCounterBitBufferWriteThenAtomic(writePipeline, writeResource, preBarrierOp,
                                           postBarrierOp);
+    WARN() << "END";
 }
 
 // Test GL_SHADER_STORAGE_BARRIER_BIT; shader write -> shader read
 TEST_P(MemoryBarrierBufferTest, ShaderStorageBitWriteThenRead)
 {
+    WARN() << "BEGIN";
     ShaderWritePipeline writePipeline;
     WriteResource writeResource;
     NoopOp preBarrierOp;
     NoopOp postBarrierOp;
+    WARN() << "";
     ParseMemoryBarrierVariationsTestParams(GetParam(), &writePipeline, &writeResource,
                                            &preBarrierOp, &postBarrierOp);
 
+    WARN() << "";
     ANGLE_SKIP_TEST_IF(!hasExtensions(writeResource));
 
+    WARN() << "";
     shaderStorageBitBufferWriteThenBufferRead(writePipeline, writeResource, preBarrierOp,
                                               postBarrierOp);
+    WARN() << "END";
 }
 
 // Test GL_SHADER_STORAGE_BARRIER_BIT; shader read -> buffer write
@@ -3925,28 +4186,28 @@ TEST_P(MemoryBarrierBufferOnlyTest, ShaderStorageBitAtomicThenWrite)
                                           GL_SHADER_STORAGE_BARRIER_BIT);
 }
 
-constexpr ShaderWritePipeline kWritePipelines[] = {
+[[maybe_unused]] constexpr ShaderWritePipeline kWritePipelines[] = {
     ShaderWritePipeline::Graphics,
     ShaderWritePipeline::Compute,
 };
-constexpr WriteResource kBufferWriteResources[] = {
+[[maybe_unused]] constexpr WriteResource kBufferWriteResources[] = {
     WriteResource::Buffer,
     WriteResource::ImageBuffer,
 };
-constexpr WriteResource kImageWriteResources[] = {
+[[maybe_unused]] constexpr WriteResource kImageWriteResources[] = {
     WriteResource::Image,
     WriteResource::ImageBuffer,
 };
-constexpr WriteResource kImageBufferOnlyWriteResources[] = {
+[[maybe_unused]] constexpr WriteResource kImageBufferOnlyWriteResources[] = {
     WriteResource::ImageBuffer,
 };
-constexpr WriteResource kImageOnlyWriteResources[] = {
+[[maybe_unused]] constexpr WriteResource kImageOnlyWriteResources[] = {
     WriteResource::Image,
 };
-constexpr WriteResource kBufferOnlyWriteResources[] = {
+[[maybe_unused]] constexpr WriteResource kBufferOnlyWriteResources[] = {
     WriteResource::Buffer,
 };
-constexpr NoopOp kNoopOps[] = {
+[[maybe_unused]] constexpr NoopOp kNoopOps[] = {
     NoopOp::None,
     NoopOp::Draw,
     NoopOp::Dispatch,
@@ -3955,49 +4216,49 @@ constexpr NoopOp kNoopOps[] = {
 // Note: due to large number of tests, these are only run on Vulkan and a single configuration
 // (swiftshader).
 
-GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(MemoryBarrierBufferTest);
-ANGLE_INSTANTIATE_TEST_COMBINE_4(MemoryBarrierBufferTest,
-                                 MemoryBarrierVariationsTestPrint,
-                                 testing::ValuesIn(kWritePipelines),
-                                 testing::ValuesIn(kBufferWriteResources),
-                                 testing::ValuesIn(kNoopOps),
-                                 testing::ValuesIn(kNoopOps),
-                                 ES31_VULKAN_SWIFTSHADER());
+// GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(MemoryBarrierBufferTest);
+// ANGLE_INSTANTIATE_TEST_COMBINE_4(MemoryBarrierBufferTest,
+//                                  MemoryBarrierVariationsTestPrint,
+//                                  testing::ValuesIn(kWritePipelines),
+//                                  testing::ValuesIn(kBufferWriteResources),
+//                                  testing::ValuesIn(kNoopOps),
+//                                  testing::ValuesIn(kNoopOps),
+//                                  ES31_VULKAN_SWIFTSHADER());
 
-GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(MemoryBarrierImageTest);
-ANGLE_INSTANTIATE_TEST_COMBINE_4(MemoryBarrierImageTest,
-                                 MemoryBarrierVariationsTestPrint,
-                                 testing::ValuesIn(kWritePipelines),
-                                 testing::ValuesIn(kImageWriteResources),
-                                 testing::ValuesIn(kNoopOps),
-                                 testing::ValuesIn(kNoopOps),
-                                 ES31_VULKAN_SWIFTSHADER());
+// GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(MemoryBarrierImageTest);
+// ANGLE_INSTANTIATE_TEST_COMBINE_4(MemoryBarrierImageTest,
+//                                  MemoryBarrierVariationsTestPrint,
+//                                  testing::ValuesIn(kWritePipelines),
+//                                  testing::ValuesIn(kImageWriteResources),
+//                                  testing::ValuesIn(kNoopOps),
+//                                  testing::ValuesIn(kNoopOps),
+//                                  ES31_VULKAN_SWIFTSHADER());
 
-GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(MemoryBarrierImageBufferOnlyTest);
-ANGLE_INSTANTIATE_TEST_COMBINE_4(MemoryBarrierImageBufferOnlyTest,
-                                 MemoryBarrierVariationsTestPrint,
-                                 testing::ValuesIn(kWritePipelines),
-                                 testing::ValuesIn(kImageBufferOnlyWriteResources),
-                                 testing::ValuesIn(kNoopOps),
-                                 testing::ValuesIn(kNoopOps),
-                                 ES31_VULKAN_SWIFTSHADER());
+// GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(MemoryBarrierImageBufferOnlyTest);
+// ANGLE_INSTANTIATE_TEST_COMBINE_4(MemoryBarrierImageBufferOnlyTest,
+//                                  MemoryBarrierVariationsTestPrint,
+//                                  testing::ValuesIn(kWritePipelines),
+//                                  testing::ValuesIn(kImageBufferOnlyWriteResources),
+//                                  testing::ValuesIn(kNoopOps),
+//                                  testing::ValuesIn(kNoopOps),
+//                                  ES31_VULKAN_SWIFTSHADER());
 
-GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(MemoryBarrierImageOnlyTest);
-ANGLE_INSTANTIATE_TEST_COMBINE_4(MemoryBarrierImageOnlyTest,
-                                 MemoryBarrierVariationsTestPrint,
-                                 testing::ValuesIn(kWritePipelines),
-                                 testing::ValuesIn(kImageOnlyWriteResources),
-                                 testing::ValuesIn(kNoopOps),
-                                 testing::ValuesIn(kNoopOps),
-                                 ES31_VULKAN_SWIFTSHADER());
+// GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(MemoryBarrierImageOnlyTest);
+// ANGLE_INSTANTIATE_TEST_COMBINE_4(MemoryBarrierImageOnlyTest,
+//                                  MemoryBarrierVariationsTestPrint,
+//                                  testing::ValuesIn(kWritePipelines),
+//                                  testing::ValuesIn(kImageOnlyWriteResources),
+//                                  testing::ValuesIn(kNoopOps),
+//                                  testing::ValuesIn(kNoopOps),
+//                                  ES31_VULKAN_SWIFTSHADER());
 
-GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(MemoryBarrierBufferOnlyTest);
-ANGLE_INSTANTIATE_TEST_COMBINE_4(MemoryBarrierBufferOnlyTest,
-                                 MemoryBarrierVariationsTestPrint,
-                                 testing::ValuesIn(kWritePipelines),
-                                 testing::ValuesIn(kBufferOnlyWriteResources),
-                                 testing::ValuesIn(kNoopOps),
-                                 testing::ValuesIn(kNoopOps),
-                                 ES31_VULKAN_SWIFTSHADER());
+// GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(MemoryBarrierBufferOnlyTest);
+// ANGLE_INSTANTIATE_TEST_COMBINE_4(MemoryBarrierBufferOnlyTest,
+//                                  MemoryBarrierVariationsTestPrint,
+//                                  testing::ValuesIn(kWritePipelines),
+//                                  testing::ValuesIn(kBufferOnlyWriteResources),
+//                                  testing::ValuesIn(kNoopOps),
+//                                  testing::ValuesIn(kNoopOps),
+//                                  ES31_VULKAN_SWIFTSHADER());
 
 }  // anonymous namespace

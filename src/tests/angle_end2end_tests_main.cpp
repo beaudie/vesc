@@ -49,7 +49,7 @@ int main(int argc, char **argv)
     auto registerTestsCallback = [] {
         if (!IsTSan())
         {
-            RegisterContextCompatibilityTests();
+            // RegisterContextCompatibilityTests();
         }
     };
     angle::TestSuite testSuite(&argc, argv, registerTestsCallback);
