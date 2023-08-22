@@ -105,8 +105,7 @@ class SubProcess():
         # the command. Since we do not have a handle to the 2nd process, we cannot terminate it.
         if pipe_stdout:
             self.proc_handle = subprocess.Popen(
-                command, env=env, # stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                shell=False)
+                command, env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=False)
         else:
             self.proc_handle = subprocess.Popen(command, env=env, shell=False)
         self._logger = logger
@@ -238,6 +237,9 @@ class ChildProcessesManager():
         cmd = [sys.executable, self._autoninja_path, '-C', build_dir, target]
         with self._ninja_lock:
             self._logger.info(' '.join(cmd))
+            returncode, output = self.RunSubprocess(cmd, pipe_stdout=True)
+            cmd = [output.split()[0].replace('"', '')]
+            cmd += output.split()[1:]
             return self.RunSubprocess(cmd, pipe_stdout=False)
 
 
