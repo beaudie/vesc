@@ -61,7 +61,7 @@ constexpr int kDefaultTestTimeout  = 60;
 constexpr int kDefaultBatchTimeout = 300;
 #else
 constexpr int kDefaultTestTimeout  = 120;
-constexpr int kDefaultBatchTimeout = 700;
+constexpr int kDefaultBatchTimeout = 1400;
 #endif
 constexpr int kSlowTestTimeoutScale  = 3;
 constexpr int kDefaultBatchSize      = 256;
@@ -926,9 +926,16 @@ class TestSuite::TestEventListener : public testing::EmptyTestEventListener
     // Note: TestResults is owned by the TestSuite. It should outlive TestEventListener.
     TestEventListener(TestSuite *testSuite) : mTestSuite(testSuite) {}
 
+    void OnTestProgramStart(const testing::UnitTest &testProgramInfo) override
+    {
+        mTestSuite->mTestResults.batchTestTimer.start();
+    }
+
     void OnTestStart(const testing::TestInfo &testInfo) override
     {
         std::lock_guard<std::mutex> guard(mTestSuite->mTestResults.currentTestMutex);
+        printf("Elapsed time: %f seconds.\n",
+               mTestSuite->mTestResults.batchTestTimer.getElapsedWallClockTime());
         mTestSuite->mTestResults.currentTest = GetTestIdentifier(testInfo);
         mTestSuite->mTestResults.currentTestTimer.start();
     }
