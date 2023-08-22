@@ -50,6 +50,41 @@
       "message": "@Shahbaz, there is some golden image issue here. I didn\u0027t see any difference, and this change should have nothing to do with pixel rendering",
       "revId": "cdda3e101419b634f812847fda8b6616ec5362da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc532055_f344f929",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-22T03:16:15Z",
+      "side": 1,
+      "message": "Re-LGTM",
+      "revId": "cdda3e101419b634f812847fda8b6616ec5362da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5735325c_04d2e276",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-22T03:16:15Z",
+      "side": 1,
+      "message": "Those are flakes unfortunately. They are automatically ignored, and you can tell by the fact that your CQ results are all green 😊",
+      "parentUuid": "a4096c6e_b35d7899",
+      "revId": "cdda3e101419b634f812847fda8b6616ec5362da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
