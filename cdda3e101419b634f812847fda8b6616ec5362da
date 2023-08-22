@@ -102,6 +102,24 @@
       "message": "Mohan this ready to merge. Please push the button\nThanks Shahbaz,",
       "revId": "cdda3e101419b634f812847fda8b6616ec5362da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "324309ec_8090b8a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-08-22T15:46:47Z",
+      "side": 1,
+      "message": "can you confirm that this test passes on our internal platform? want to make sure there is at least 1 platform where the test is not skipped",
+      "parentUuid": "9eef91f1_4b84250d",
+      "revId": "cdda3e101419b634f812847fda8b6616ec5362da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
