@@ -118,6 +118,30 @@
       },
       "revId": "e79d87d56fb2ea3600fdaf2f85f9346f9dac45f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e496b2a_c13cc873",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-08-22T21:21:56Z",
+      "side": 1,
+      "message": "Good point, I probably missed it because it\u0027s behind a flag that I didn\u0027t set. Added that too.",
+      "parentUuid": "acb0e4b7_ddc90ec5",
+      "range": {
+        "startLine": 373,
+        "startChar": 4,
+        "endLine": 373,
+        "endChar": 26
+      },
+      "revId": "e79d87d56fb2ea3600fdaf2f85f9346f9dac45f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
