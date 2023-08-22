@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aeac5937_28bf74bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-22T21:30:16Z",
+      "side": 1,
+      "message": "I think this CL is cleaner than preferred to https://chromium-review.googlesource.com/c/angle/angle/+/4784947. I think this",
+      "revId": "c888cbb5e3379ae125402d60f7ab6cb6c1498d03",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
