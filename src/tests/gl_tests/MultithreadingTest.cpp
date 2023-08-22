@@ -1823,6 +1823,15 @@ TEST_P(MultithreadingTestES3, CreateFramebufferFetchBeforeRenderPass)
 // proceeds to use the framebuffer fetch program in the rest of its render pass.
 TEST_P(MultithreadingTestES3, CreateFramebufferFetchMidRenderPass)
 {
+    struct Item
+    {
+        char data[42];
+    };
+    volatile int subscript = -1;
+    Item buff[10];
+    buff[subscript] = {};
+    WARN() << buff[subscript].data[0];
+
     testFramebufferFetch(DrawOrder::Before);
 }
 

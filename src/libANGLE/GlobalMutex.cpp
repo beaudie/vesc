@@ -16,7 +16,7 @@ namespace egl
 {
 namespace priv
 {
-using GlobalMutexType = angle::FastMutex3;
+using GlobalMutexType = std::mutex;
 
 #if !defined(ANGLE_ENABLE_ASSERTS) && !defined(ANGLE_ENABLE_GLOBAL_MUTEX_RECURSION)
 // Default version.
