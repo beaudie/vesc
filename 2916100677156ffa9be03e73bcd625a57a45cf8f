@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35ecc921_eec4cc3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-22T21:14:26Z",
+      "side": 1,
+      "message": "Roman, this is an awesome improvement, thanks for un-hacking my python. :)\n\nOne comment request and one fix needed.\n\nOtherwise, this looks great and is working for me locally.",
+      "revId": "2916100677156ffa9be03e73bcd625a57a45cf8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fed08716_dae7ff08",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-22T21:14:26Z",
+      "side": 1,
+      "message": "Can you add a comment just saying `# Look for the text that indicates warmup is complete and a test is starting`",
+      "range": {
+        "startLine": 469,
+        "startChar": 0,
+        "endLine": 469,
+        "endChar": 39
+      },
+      "revId": "2916100677156ffa9be03e73bcd625a57a45cf8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42882337_f0cbfe60",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-22T21:14:26Z",
+      "side": 1,
+      "message": "Timeouts are tricky.\nI\u0027m seeing this a lot in local testing:\n```\nStarting run 1 with native at 2023-08-22 14:50:33\n\nvsync_native_1945_air_force                   8.4761                          5.3545716667    0.187      0.378      279356367            305147904       563836000            585620000      \nvsync_native_20_minutes_till_dawn             8.4704                          5.5884716667    0.269      0.400      336455141            392884224       529512000            561988000      \nvsync_native_2_3_4_player_mini_games          8.4705                          3.8486625000    0.144      0.310      248545280            248545280       359540000            359804000      \nWARNING:root:Test not seen in logcat after 5.0 seconds\nvsync_native_3d_pool_ball                     8.4689                          4.8420720000    0.196      0.321      280470291            296275968       419456000            420404000      \nvsync_native_age_of_origins_z                 8.4699                          6.8550058333    0.474      0.438      383381504            400531456       819816000            868864000      \nvsync_native_agent_a                          13.2595                         8.1090700000    0.662      0.374      574661222            591089664       839700000            854160000      \nvsync_native_aliexpress                       8.4716                          4.6784084034    0.095      0.378      282931200            282931200       434972000            435588000      \nWARNING:root:Test not seen in logcat after 5.0 seconds\nvsync_native_altos_odyssey                    8.4695                          5.6212580000    0.182      0.421      315119417            329457664       604244000            604648000      \nvsync_native_among_us                         8.4703                          5.8733554622    0.106      0.420      189792256            215056384       444904000            484896000  \n```\nDoubling it to 10.0 avoids prints in my quick tests, but more may pop up in a full run.",
+      "range": {
+        "startLine": 473,
+        "startChar": 0,
+        "endLine": 473,
+        "endChar": 80
+      },
+      "revId": "2916100677156ffa9be03e73bcd625a57a45cf8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
