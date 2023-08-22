@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed971a09_7d52b7ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-22T20:20:22Z",
+      "side": 1,
+      "message": "Thanks Roman, I\u0027ve hit the deadlock before but just reduced how much was written.",
+      "revId": "73507d2b4490b2fc4f92b2bcee74d62faf9ea436",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
