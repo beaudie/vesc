@@ -16,6 +16,24 @@
       "message": "Is this the original CL: https://chromium-review.googlesource.com/c/angle/angle/+/4764619?\n\nThat CL does not show \"REVERT\" on the gerrit. Is that expected?",
       "revId": "a32ba957725e1b9154dac14e4da95f990bfbdcf9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8edc72a_e38510ce",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-22T02:30:16Z",
+      "side": 1,
+      "message": "Same answer as: https://chromium-review.googlesource.com/c/angle/angle/+/4793218/comments/6651816e_25f9ec13\n\nThe reland was done from the command line because of anticipated conflicts.",
+      "parentUuid": "08d75c4b_2e06eeb0",
+      "revId": "a32ba957725e1b9154dac14e4da95f990bfbdcf9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
