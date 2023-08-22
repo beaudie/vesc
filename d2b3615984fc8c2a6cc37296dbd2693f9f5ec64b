@@ -34,6 +34,24 @@
       "parentUuid": "696e938b_912be9fa",
       "revId": "d2b3615984fc8c2a6cc37296dbd2693f9f5ec64b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5457b50_5d9b6b3d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2023-08-22T15:21:40Z",
+      "side": 1,
+      "message": "Seems like we don\u0027t run ANGLE perf tests on Mac.\nI\u0027m going to land this as is and we can see what the bug reporter finds.",
+      "parentUuid": "df7d1c1d_9b49be7f",
+      "revId": "d2b3615984fc8c2a6cc37296dbd2693f9f5ec64b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
