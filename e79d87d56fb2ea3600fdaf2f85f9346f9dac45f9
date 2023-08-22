@@ -94,6 +94,30 @@
       },
       "revId": "e79d87d56fb2ea3600fdaf2f85f9346f9dac45f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "acb0e4b7_ddc90ec5",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-22T21:16:03Z",
+      "side": 1,
+      "message": "Could also do `gpu_time` for consistency.",
+      "parentUuid": "92118b6f_60100cc6",
+      "range": {
+        "startLine": 373,
+        "startChar": 4,
+        "endLine": 373,
+        "endChar": 26
+      },
+      "revId": "e79d87d56fb2ea3600fdaf2f85f9346f9dac45f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
