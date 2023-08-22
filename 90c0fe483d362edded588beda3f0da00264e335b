@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ef89bea_41633ce3",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 1165,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-22T17:34:41Z",
+      "side": 1,
+      "message": "I don\u0027t recall a specific reason, fixed.",
+      "parentUuid": "ed6859df_a88e1d7b",
+      "range": {
+        "startLine": 1165,
+        "startChar": 4,
+        "endLine": 1165,
+        "endChar": 38
+      },
+      "revId": "90c0fe483d362edded588beda3f0da00264e335b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f126371d_a1408e07",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-08-22T17:20:56Z",
       "side": 1,
       "message": "This could use a comment now that it\u0027s name is duplicated into Program with a different type.",
+      "range": {
+        "startLine": 391,
+        "startChar": 41,
+        "endLine": 391,
+        "endChar": 57
+      },
+      "revId": "90c0fe483d362edded588beda3f0da00264e335b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2291ba2d_dea42905",
+        "filename": "src/libANGLE/Program.h",
+        "patchSetId": 12
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-22T17:34:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f126371d_a1408e07",
       "range": {
         "startLine": 391,
         "startChar": 41,
