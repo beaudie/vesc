@@ -39,6 +39,30 @@
       },
       "revId": "b3c5475c637afb31fb5aa2dd58a96c4e414e483e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dac0967f_82683d60",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2608,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-08-22T21:54:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31be39e6_e9c4c9be",
+      "range": {
+        "startLine": 2608,
+        "startChar": 28,
+        "endLine": 2608,
+        "endChar": 38
+      },
+      "revId": "b3c5475c637afb31fb5aa2dd58a96c4e414e483e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
