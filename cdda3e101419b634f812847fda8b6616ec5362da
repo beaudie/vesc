@@ -138,6 +138,24 @@
       "parentUuid": "324309ec_8090b8a3",
       "revId": "cdda3e101419b634f812847fda8b6616ec5362da",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0ef4950_0ef0c60c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-08-22T16:39:08Z",
+      "side": 1,
+      "message": "do you mind verifying it? we can merge as soon as that is done",
+      "parentUuid": "300df914_0148e60c",
+      "revId": "cdda3e101419b634f812847fda8b6616ec5362da",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
