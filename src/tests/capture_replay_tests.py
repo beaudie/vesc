@@ -49,10 +49,10 @@ DEFAULT_BATCH_COUNT = 8  # number of tests batched together
 TRACE_FILE_SUFFIX = "_context"  # because we only deal with 1 context right now
 RESULT_TAG = "*RESULT"
 STATUS_MESSAGE_PERIOD = 20  # in seconds
-SUBPROCESS_TIMEOUT = 600  # in seconds
+SUBPROCESS_TIMEOUT = 300  # in seconds
 DEFAULT_RESULT_FILE = "results.txt"
 DEFAULT_LOG_LEVEL = "info"
-DEFAULT_MAX_JOBS = 8
+DEFAULT_MAX_JOBS = 1
 DEFAULT_MAX_NINJA_JOBS = 3
 REPLAY_BINARY = "capture_replay_tests"
 if sys.platform == "win32":
@@ -288,7 +288,7 @@ def ParseTestNamesFromTestList(output, test_expectation, also_run_skipped_for_ca
 
 def GetRunCommand(args, command):
     if args.xvfb:
-        return ['vpython', 'testing/xvfb.py', command]
+        return ['vpython3', 'testing/xvfb.py', command]
     else:
         return [command]
 
@@ -556,7 +556,7 @@ class TestBatch():
             self.UnlinkContextStateJsonFilesIfPresent(replay_build_dir, test.GetLabel())
 
         returncode, output = child_processes_manager.RunSubprocess(
-            run_cmd, env, timeout=SUBPROCESS_TIMEOUT)
+            run_cmd, env, timeout=SUBPROCESS_TIMEOUT, pipe_stdout=False)
         if returncode == -1:
             cmd = replay_exe_path
             self.results.append(
@@ -566,6 +566,7 @@ class TestBatch():
         elif returncode == -2:
             self.results.append(
                 GroupedResult(GroupedResult.TimedOut, "Replay run timed out", output, tests))
+            raise Exception('timeout')
             return
 
         if args.show_replay_stdout:
@@ -894,11 +895,6 @@ def GetPlatformForSkip():
 def main(args):
     logger = multiprocessing.log_to_stderr()
     logger.setLevel(level=args.log.upper())
-
-    is_bot = bool(args.goma_dir)  # flag set in recipes/recipe_modules/angle/api.py
-    if sys.platform == 'linux' and is_bot:
-        logger.warning('Test is currently a no-op https://anglebug.com/6085')
-        return EXIT_SUCCESS
 
     ninja_lock = multiprocessing.Semaphore(args.max_ninja_jobs)
     child_processes_manager = ChildProcessesManager(args, logger, ninja_lock)
