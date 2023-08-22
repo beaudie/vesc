@@ -139,8 +139,8 @@
 2306 LINUX : dEQP-EGL.functional.color_clears.single_context.gles1* = FAIL
 2306 LINUX : dEQP-EGL.functional.color_clears.multi_context.gles1* = FAIL
 
-// Tests failing since the Jan 2018 roll of dEQP
-2341 : dEQP-EGL.functional.swap_buffers.* = SKIP
+// Tests failing on Win OS
+2341 WIN: dEQP-EGL.functional.swap_buffers.* = SKIP
 
 // EGL images with the GL back-ends are not supported
 4606 OPENGL : dEQP-EGL.functional.image.api.create_image_gles2_* = FAIL
@@ -160,6 +160,7 @@
 b/286921997 SWIFTSHADER : dEQP-EGL.functional.robustness.reset_context.shaders.out_of_bounds_non_robust.reset_status.writes.local_array.compute = SKIP
 b/286921997 SWIFTSHADER : dEQP-EGL.functional.robustness.reset_context.shaders.out_of_bounds_non_robust.reset_status.writes.shader_storage_block.compute = SKIP
 b/286921997 SWIFTSHADER : dEQP-EGL.functional.robustness.reset_context.shaders.out_of_bounds_non_robust.reset_status.writes.uniform_block.compute = SKIP
+b/286921997 PIXEL6 VULKAN : dEQP-EGL.functional.robustness.reset_context.shaders.out_of_bounds_non_robust.reset_status.writes.local_array.vertex = SKIP
 b/286921997 PIXEL6 VULKAN : dEQP-EGL.functional.robustness.reset_context.shaders.out_of_bounds_non_robust.reset_status.writes.local_array.fragment = SKIP
 b/286921997 PIXEL6 VULKAN : dEQP-EGL.functional.robustness.reset_context.shaders.out_of_bounds_non_robust.reset_status.writes.local_array.vertex_and_fragment = SKIP
 b/286921997 PIXEL6 VULKAN : dEQP-EGL.functional.robustness.reset_context.shaders.out_of_bounds_non_robust.reset_status.writes.shader_storage_block.fragment = SKIP
