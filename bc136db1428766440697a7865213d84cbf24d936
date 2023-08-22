@@ -16,6 +16,24 @@
       "message": "I have the same question as https://chromium-review.googlesource.com/c/angle/angle/+/4793219/comment/08d75c4b_2e06eeb0/: this CL https://chromium-review.googlesource.com/c/angle/angle/+/4762838 does not show \"REVERT\" in Gerrit, is that expected?",
       "revId": "bc136db1428766440697a7865213d84cbf24d936",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29dd7895_c8c993cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-08-22T01:35:30Z",
+      "side": 1,
+      "message": "Leave the comment as unresolved.",
+      "parentUuid": "6651816e_25f9ec13",
+      "revId": "bc136db1428766440697a7865213d84cbf24d936",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
