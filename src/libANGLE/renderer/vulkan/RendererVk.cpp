@@ -51,7 +51,7 @@ constexpr bool kExposeNonConformantExtensionsAndVersions = false;
 #if defined(ANGLE_ENABLE_CRC_FOR_PIPELINE_CACHE)
 constexpr bool kEnableCRCForPipelineCache = true;
 #else
-constexpr bool kEnableCRCForPipelineCache                = false;
+constexpr bool kEnableCRCForPipelineCache = false;
 #endif
 }  // anonymous namespace
 
@@ -332,52 +332,52 @@ constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
     // being accessed. http://anglebug.com/6725
     {
         "SYNC-HAZARD-READ-AFTER-WRITE",
-        "vkCmdDrawIndexed: Hazard READ_AFTER_WRITE for vertex",
+        "vkCmdDrawIndexed(): Hazard READ_AFTER_WRITE for vertex",
         "usage: SYNC_VERTEX_ATTRIBUTE_INPUT_VERTEX_ATTRIBUTE_READ",
     },
     {
         "SYNC-HAZARD-READ-AFTER-WRITE",
-        "vkCmdDrawIndexedIndirect: Hazard READ_AFTER_WRITE for vertex",
+        "vkCmdDrawIndexedIndirect(): Hazard READ_AFTER_WRITE for vertex",
         "usage: SYNC_VERTEX_ATTRIBUTE_INPUT_VERTEX_ATTRIBUTE_READ",
     },
     {
         "SYNC-HAZARD-READ-AFTER-WRITE",
-        "vkCmdDrawIndirect: Hazard READ_AFTER_WRITE for vertex",
+        "vkCmdDrawIndirect(): Hazard READ_AFTER_WRITE for vertex",
         "usage: SYNC_VERTEX_ATTRIBUTE_INPUT_VERTEX_ATTRIBUTE_READ",
     },
     {
         "SYNC-HAZARD-READ-AFTER-WRITE",
-        "vkCmdDrawIndexedIndirect: Hazard READ_AFTER_WRITE for index",
+        "vkCmdDrawIndexedIndirect(): Hazard READ_AFTER_WRITE for index",
         "usage: SYNC_INDEX_INPUT_INDEX_READ",
     },
     {
         "SYNC-HAZARD-WRITE-AFTER-READ",
-        "vkCmdDraw: Hazard WRITE_AFTER_READ for",
+        "vkCmdDraw(): Hazard WRITE_AFTER_READ for",
         "Access info (usage: SYNC_VERTEX_SHADER_SHADER_STORAGE_WRITE, prior_usage: "
         "SYNC_VERTEX_ATTRIBUTE_INPUT_VERTEX_ATTRIBUTE_READ",
     },
     {
         "SYNC-HAZARD-WRITE-AFTER-READ",
-        "vkCmdCopyImageToBuffer: Hazard WRITE_AFTER_READ for dstBuffer VkBuffer",
+        "vkCmdCopyImageToBuffer(): Hazard WRITE_AFTER_READ for dstBuffer VkBuffer",
         "Access info (usage: SYNC_COPY_TRANSFER_WRITE, prior_usage: "
         "SYNC_VERTEX_ATTRIBUTE_INPUT_VERTEX_ATTRIBUTE_READ",
     },
     {
         "SYNC-HAZARD-WRITE-AFTER-READ",
-        "vkCmdCopyBuffer: Hazard WRITE_AFTER_READ for dstBuffer VkBuffer",
+        "vkCmdCopyBuffer(): Hazard WRITE_AFTER_READ for dstBuffer VkBuffer",
         "Access info (usage: SYNC_COPY_TRANSFER_WRITE, prior_usage: "
         "SYNC_VERTEX_ATTRIBUTE_INPUT_VERTEX_ATTRIBUTE_READ",
     },
     {
         "SYNC-HAZARD-WRITE-AFTER-READ",
-        "vkCmdDispatch: Hazard WRITE_AFTER_READ for VkBuffer",
+        "vkCmdDispatch(): Hazard WRITE_AFTER_READ for VkBuffer",
         "Access info (usage: SYNC_COMPUTE_SHADER_SHADER_STORAGE_WRITE, prior_usage: "
         "SYNC_VERTEX_ATTRIBUTE_INPUT_VERTEX_ATTRIBUTE_READ",
     },
     // From: MultisampledRenderToTextureES3Test.TransformFeedbackTest. http://anglebug.com/6725
     {
         "SYNC-HAZARD-WRITE-AFTER-WRITE",
-        "vkCmdBeginRenderPass: Hazard WRITE_AFTER_WRITE in subpass",
+        "vkCmdBeginRenderPass(): Hazard WRITE_AFTER_WRITE in subpass",
         "write_barriers: "
         "SYNC_TRANSFORM_FEEDBACK_EXT_TRANSFORM_FEEDBACK_COUNTER_READ_EXT|SYNC_TRANSFORM_FEEDBACK_"
         "EXT_"
@@ -386,12 +386,12 @@ constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
     // http://anglebug.com/8054 (VkNonDispatchableHandle on x86 bots)
     {
         "SYNC-HAZARD-READ-AFTER-WRITE",
-        "vkCmdDraw: Hazard READ_AFTER_WRITE for VkBuffer",
+        "vkCmdDraw(): Hazard READ_AFTER_WRITE for VkBuffer",
         "usage: SYNC_VERTEX_SHADER_SHADER_STORAGE_READ",
     },
     {
         "SYNC-HAZARD-READ-AFTER-WRITE",
-        "vkCmdDraw: Hazard READ_AFTER_WRITE for VkNonDispatchableHandle",
+        "vkCmdDraw(): Hazard READ_AFTER_WRITE for VkNonDispatchableHandle",
         "usage: SYNC_VERTEX_SHADER_SHADER_STORAGE_READ",
     },
     // From: TraceTest.manhattan_31 with SwiftShader. These failures appears related to
@@ -421,13 +421,13 @@ constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
     // From: TraceTest.dead_by_daylight
     // From: TraceTest.genshin_impact
     {"SYNC-HAZARD-READ-AFTER-WRITE",
-     "vkCmdBeginRenderPass: Hazard READ_AFTER_WRITE in subpass 0 for attachment ",
+     "vkCmdBeginRenderPass(): Hazard READ_AFTER_WRITE in subpass 0 for attachment ",
      "aspect color during load with loadOp VK_ATTACHMENT_LOAD_OP_LOAD. Access info (usage: "
      "SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_READ, prior_usage: "
      "SYNC_IMAGE_LAYOUT_TRANSITION, write_barriers: 0, command: vkCmdEndRenderPass",
      true},
     {"SYNC-HAZARD-WRITE-AFTER-WRITE",
-     "vkCmdBeginRenderPass: Hazard WRITE_AFTER_WRITE in subpass 0 for attachment ",
+     "vkCmdBeginRenderPass(): Hazard WRITE_AFTER_WRITE in subpass 0 for attachment ",
      "image layout transition (old_layout: VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, new_layout: "
      "VK_IMAGE_LAYOUT_GENERAL). Access info (usage: SYNC_IMAGE_LAYOUT_TRANSITION, prior_usage: "
      "SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, write_barriers:",
@@ -453,7 +453,7 @@ constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
     },
     // From: TraceTest.life_is_strange http://anglebug.com/7711
     {"SYNC-HAZARD-WRITE-AFTER-READ",
-     "vkCmdEndRenderPass: Hazard WRITE_AFTER_READ in subpass 0 for attachment 1 "
+     "vkCmdEndRenderPass(): Hazard WRITE_AFTER_READ in subpass 0 for attachment 1 "
      "depth aspect during store with storeOp VK_ATTACHMENT_STORE_OP_DONT_CARE. "
      "Access info (usage: SYNC_LATE_FRAGMENT_TESTS_DEPTH_STENCIL_ATTACHMENT_WRITE, "
      "prior_usage: SYNC_FRAGMENT_SHADER_SHADER_"},
@@ -463,7 +463,8 @@ constexpr vk::SkippedSyncvalMessage kSkippedSyncvalMessages[] = {
      "imageLayout: VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL",
      "usage: SYNC_FRAGMENT_SHADER_SHADER_"},
     // From: TraceTest.diablo_immortal http://anglebug.com/7837
-    {"SYNC-HAZARD-WRITE-AFTER-WRITE", "vkCmdDrawIndexed: Hazard WRITE_AFTER_WRITE for VkImageView ",
+    {"SYNC-HAZARD-WRITE-AFTER-WRITE",
+     "vkCmdDrawIndexed(): Hazard WRITE_AFTER_WRITE for VkImageView ",
      "Subpass #0, and pColorAttachments #0. Access info (usage: "
      "SYNC_COLOR_ATTACHMENT_OUTPUT_COLOR_ATTACHMENT_WRITE, prior_usage: "
      "SYNC_IMAGE_LAYOUT_TRANSITION, write_barriers: 0, command: vkCmdEndRenderPass"},
