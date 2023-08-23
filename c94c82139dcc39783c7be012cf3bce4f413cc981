@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0b5b9b5_8ba32342",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2121,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-08-23T14:22:53Z",
+      "side": 1,
+      "message": "Why did this need to be moved out of the else below?",
+      "range": {
+        "startLine": 2092,
+        "startChar": 0,
+        "endLine": 2121,
+        "endChar": 5
+      },
+      "revId": "c94c82139dcc39783c7be012cf3bce4f413cc981",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
