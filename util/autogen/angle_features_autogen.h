@@ -192,6 +192,7 @@ enum class Feature
     LimitMaxMSAASamplesTo4,
     LimitSampleCountTo2,
     LimitWebglMaxTextureSizeTo4096,
+    LinkJobIsNotThreadSafe,
     LoadMetalShadersFromBlobCache,
     LogMemoryReportCallbacks,
     LogMemoryReportStats,

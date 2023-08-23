@@ -9,6 +9,23 @@
 
 namespace rx
 {
+std::vector<std::shared_ptr<LinkSubTask>> LinkTask::link(
+    gl::InfoLog &infoLog,
+    const gl::ProgramLinkedResources &resources,
+    const gl::ProgramMergedVaryings &mergedVaryings)
+{
+    UNREACHABLE();
+    return {};
+}
+std::vector<std::shared_ptr<LinkSubTask>> LinkTask::load(gl::InfoLog &infoLog)
+{
+    UNREACHABLE();
+    return {};
+}
+bool LinkTask::isLinkingInternally()
+{
+    return false;
+}
 
 angle::Result ProgramImpl::onLabelUpdate(const gl::Context *context)
 {
