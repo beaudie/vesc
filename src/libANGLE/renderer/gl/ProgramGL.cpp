@@ -91,6 +91,63 @@ std::string GetTransformFeedbackVaryingMappedName(const gl::SharedCompiledShader
 
 }  // anonymous namespace
 
+class ProgramGL::LinkTaskGL final : public LinkTask
+{
+  public:
+    LinkTaskGL(ProgramGL *program,
+               bool hasNativeParallelCompile,
+               const FunctionsGL *functions,
+               GLuint programID)
+        : mProgram(program),
+          mHasNativeParallelCompile(hasNativeParallelCompile),
+          mFunctions(functions),
+          mProgramID(programID)
+    {}
+    ~LinkTaskGL() override = default;
+
+    std::vector<std::shared_ptr<LinkSubTask>> link(
+        const gl::ProgramLinkedResources &resources,
+        const gl::ProgramMergedVaryings &mergedVaryings) override
+    {
+        // See comment on mResources;
+        mResources = &resources;
+        return {};
+    }
+
+    angle::Result getResult(const gl::Context *context, gl::InfoLog &infoLog) override
+    {
+        ANGLE_TRACE_EVENT0("gpu.angle", "LinkTaskGL::getResult");
+
+        GLint linkStatus = GL_FALSE;
+        mFunctions->getProgramiv(mProgramID, GL_LINK_STATUS, &linkStatus);
+        if (linkStatus != GL_TRUE)
+        {
+            return angle::Result::Stop;
+        }
+
+        return mProgram->postLinkJobImpl(infoLog, *mResources);
+    }
+
+    bool isLinkingInternally() override
+    {
+        GLint completionStatus = GL_TRUE;
+        if (mHasNativeParallelCompile)
+        {
+            mFunctions->getProgramiv(mProgramID, GL_COMPLETION_STATUS, &completionStatus);
+        }
+        return completionStatus == GL_FALSE;
+    }
+
+  private:
+    ProgramGL *mProgram;
+    const bool mHasNativeParallelCompile;
+    const FunctionsGL *mFunctions;
+    const GLuint mProgramID;
+
+    // Note: resources are kept alive by the front-end for the entire duration of the link,
+    // including during resolve when getResult() is called.
+    const gl::ProgramLinkedResources *mResources = nullptr;
+};
 ProgramGL::ProgramGL(const gl::ProgramState &data,
                      const FunctionsGL *functions,
                      const angle::FeaturesGL &features,
@@ -117,13 +174,12 @@ void ProgramGL::destroy(const gl::Context *context)
     mProgramID = 0;
 }
 
-std::unique_ptr<LinkEvent> ProgramGL::load(const gl::Context *context,
-                                           gl::BinaryInputStream *stream)
+angle::Result ProgramGL::load(const gl::Context *context,
+                              gl::BinaryInputStream *stream,
+                              std::shared_ptr<LinkTask> *loadTaskOut)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ProgramGL::load");
     ProgramExecutableGL *executableGL = getExecutable();
-
-    executableGL->reset();
 
     // Read the binary format, size and blob
     GLenum binaryFormat   = stream->readInt<GLenum>();
@@ -137,13 +193,15 @@ std::unique_ptr<LinkEvent> ProgramGL::load(const gl::Context *context,
     // Verify that the program linked
     if (!checkLinkStatus())
     {
-        return std::make_unique<LinkEventDone>(angle::Result::Stop);
+        return angle::Result::Incomplete;
     }
 
     executableGL->postLink(mFunctions, mFeatures, mProgramID);
     reapplyUBOBindingsIfNeeded(context);
 
-    return std::make_unique<LinkEventDone>(angle::Result::Continue);
+    *loadTaskOut = {};
+
+    return angle::Result::Continue;
 }
 
 void ProgramGL::save(const gl::Context *context, gl::BinaryOutputStream *stream)
@@ -192,44 +250,6 @@ void ProgramGL::setSeparable(bool separable)
     mFunctions->programParameteri(mProgramID, GL_PROGRAM_SEPARABLE, separable ? GL_TRUE : GL_FALSE);
 }
 
-using PostLinkImplFunctor = std::function<angle::Result()>;
-
-// The event for a parallelized linking using the native driver extension.
-class ProgramGL::LinkEventNativeParallel final : public LinkEvent
-{
-  public:
-    LinkEventNativeParallel(PostLinkImplFunctor &&functor,
-                            const FunctionsGL *functions,
-                            GLuint programID)
-        : mPostLinkImplFunctor(functor), mFunctions(functions), mProgramID(programID)
-    {}
-
-    angle::Result wait(const gl::Context *context) override
-    {
-        ANGLE_TRACE_EVENT0("gpu.angle", "ProgramGL::LinkEventNativeParallel::wait");
-
-        GLint linkStatus = GL_FALSE;
-        mFunctions->getProgramiv(mProgramID, GL_LINK_STATUS, &linkStatus);
-        if (linkStatus == GL_TRUE)
-        {
-            return mPostLinkImplFunctor();
-        }
-        return angle::Result::Incomplete;
-    }
-
-    bool isLinking() override
-    {
-        GLint completionStatus = GL_FALSE;
-        mFunctions->getProgramiv(mProgramID, GL_COMPLETION_STATUS, &completionStatus);
-        return completionStatus == GL_FALSE;
-    }
-
-  private:
-    PostLinkImplFunctor mPostLinkImplFunctor;
-    const FunctionsGL *mFunctions;
-    GLuint mProgramID;
-};
-
 void ProgramGL::prepareForLink(const gl::ShaderMap<ShaderImpl *> &shaders)
 {
     for (gl::ShaderType shaderType : gl::AllShaderTypes())
@@ -244,14 +264,10 @@ void ProgramGL::prepareForLink(const gl::ShaderMap<ShaderImpl *> &shaders)
     }
 }
 
-std::unique_ptr<LinkEvent> ProgramGL::link(const gl::Context *context,
-                                           const gl::ProgramLinkedResources &resources,
-                                           gl::ProgramMergedVaryings && /*mergedVaryings*/)
+angle::Result ProgramGL::link(const gl::Context *context, std::shared_ptr<LinkTask> *linkTaskOut)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ProgramGL::link");
     ProgramExecutableGL *executableGL = getExecutable();
-
-    executableGL->reset();
 
     if (mAttachedShaders[gl::ShaderType::Compute] != 0)
     {
@@ -423,49 +439,47 @@ std::unique_ptr<LinkEvent> ProgramGL::link(const gl::Context *context,
             }
         }
     }
-    auto workerPool = context->getShaderCompileThreadPool();
-
-    auto postLinkImplTask = [this, &resources]() {
-        if (mAttachedShaders[gl::ShaderType::Compute] != 0)
-        {
-            mFunctions->detachShader(mProgramID, mAttachedShaders[gl::ShaderType::Compute]);
-        }
-        else
-        {
-            for (const gl::ShaderType shaderType : gl::kAllGraphicsShaderTypes)
-            {
-                if (mAttachedShaders[shaderType] != 0)
-                {
-                    mFunctions->detachShader(mProgramID, mAttachedShaders[shaderType]);
-                }
-            }
-        }
-        // Verify the link
-        if (!checkLinkStatus())
-        {
-            return angle::Result::Incomplete;
-        }
-
-        if (mFeatures.alwaysCallUseProgramAfterLink.enabled)
-        {
-            mStateManager->forceUseProgram(mProgramID);
-        }
-
-        linkResources(resources);
-        getExecutable()->postLink(mFunctions, mFeatures, mProgramID);
-
-        return angle::Result::Continue;
-    };
 
     mFunctions->linkProgram(mProgramID);
-    if (mRenderer->hasNativeParallelCompile())
+
+    *linkTaskOut = std::make_shared<LinkTaskGL>(this, mRenderer->hasNativeParallelCompile(),
+                                                mFunctions, mProgramID);
+
+    return angle::Result::Continue;
+}
+
+angle::Result ProgramGL::postLinkJobImpl(gl::InfoLog &infoLog,
+                                         const gl::ProgramLinkedResources &resources)
+{
+    if (mAttachedShaders[gl::ShaderType::Compute] != 0)
     {
-        return std::make_unique<LinkEventNativeParallel>(postLinkImplTask, mFunctions, mProgramID);
+        mFunctions->detachShader(mProgramID, mAttachedShaders[gl::ShaderType::Compute]);
     }
     else
     {
-        return std::make_unique<LinkEventDone>(postLinkImplTask());
+        for (const gl::ShaderType shaderType : gl::kAllGraphicsShaderTypes)
+        {
+            if (mAttachedShaders[shaderType] != 0)
+            {
+                mFunctions->detachShader(mProgramID, mAttachedShaders[shaderType]);
+            }
+        }
     }
+    // Verify the link
+    if (!checkLinkStatus())
+    {
+        return angle::Result::Stop;
+    }
+
+    if (mFeatures.alwaysCallUseProgramAfterLink.enabled)
+    {
+        mStateManager->forceUseProgram(mProgramID);
+    }
+
+    linkResources(resources);
+    getExecutable()->postLink(mFunctions, mFeatures, mProgramID);
+
+    return angle::Result::Continue;
 }
 
 GLboolean ProgramGL::validate(const gl::Caps & /*caps*/)
