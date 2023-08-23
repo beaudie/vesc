@@ -65,6 +65,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "24785529_bb12ac2d",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-23T00:33:28Z",
+      "side": 1,
+      "message": "LGTM",
+      "parentUuid": "7d7acb96_04436bee",
+      "range": {
+        "startLine": 469,
+        "startChar": 0,
+        "endLine": 469,
+        "endChar": 39
+      },
+      "revId": "2916100677156ffa9be03e73bcd625a57a45cf8f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "42882337_f0cbfe60",
