@@ -16,6 +16,29 @@
       "message": "Doesn\u0027t compile in AOSP.\nhttps://android-review.googlesource.com/c/platform/external/angle/+/2721417\nexternal/angle/src/compiler/translator/tree_ops/RescopeGlobalVariables.cpp:81:56: error: no member named \u0027contains\u0027 in \u0027sh::TUnorderedMap\u003cconst sh::TVariable *, sh::(anonymous namespace)::Rescoper::VariableInfo\u003e\u0027",
       "revId": "280e79e1fac521f045bf26145e18bacca7ce5a9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "465204ef_255c05c1",
+        "filename": "src/compiler/translator/tree_ops/RescopeGlobalVariables.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1305348
+      },
+      "writtenOn": "2023-08-23T18:05:56Z",
+      "side": 1,
+      "message": "This is causing ANGLE to fail to compile when rolling in Skia because `contains` is a C++20 library addition and Skia compiles at C++17.",
+      "range": {
+        "startLine": 84,
+        "startChar": 21,
+        "endLine": 84,
+        "endChar": 29
+      },
+      "revId": "280e79e1fac521f045bf26145e18bacca7ce5a9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
