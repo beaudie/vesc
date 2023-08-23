@@ -143,6 +143,81 @@ struct D3DVarying final
     unsigned int outputSlot;
 };
 
+class D3DVertexExecutable
+{
+  public:
+    enum HLSLAttribType
+    {
+        FLOAT,
+        UNSIGNED_INT,
+        SIGNED_INT,
+    };
+
+    typedef std::vector<HLSLAttribType> Signature;
+
+    D3DVertexExecutable(const gl::InputLayout &inputLayout,
+                        const Signature &signature,
+                        ShaderExecutableD3D *shaderExecutable);
+    ~D3DVertexExecutable();
+
+    bool matchesSignature(const Signature &signature) const;
+    static void getSignature(RendererD3D *renderer,
+                             const gl::InputLayout &inputLayout,
+                             Signature *signatureOut);
+
+    const gl::InputLayout &inputs() const { return mInputs; }
+    const Signature &signature() const { return mSignature; }
+    ShaderExecutableD3D *shaderExecutable() const { return mShaderExecutable; }
+
+  private:
+    static HLSLAttribType GetAttribType(GLenum type);
+
+    gl::InputLayout mInputs;
+    Signature mSignature;
+    ShaderExecutableD3D *mShaderExecutable;
+};
+
+class D3DPixelExecutable
+{
+  public:
+    D3DPixelExecutable(const std::vector<GLenum> &outputSignature,
+                       ShaderExecutableD3D *shaderExecutable);
+    ~D3DPixelExecutable();
+
+    bool matchesSignature(const std::vector<GLenum> &signature) const
+    {
+        return mOutputSignature == signature;
+    }
+
+    const std::vector<GLenum> &outputSignature() const { return mOutputSignature; }
+
+    ShaderExecutableD3D *shaderExecutable() const { return mShaderExecutable; }
+
+  private:
+    const std::vector<GLenum> mOutputSignature;
+    ShaderExecutableD3D *mShaderExecutable;
+};
+
+class D3DComputeExecutable
+{
+  public:
+    D3DComputeExecutable(const gl::ImageUnitTextureTypeMap &signature,
+                         std::unique_ptr<ShaderExecutableD3D> shaderExecutable);
+    ~D3DComputeExecutable();
+
+    bool matchesSignature(const gl::ImageUnitTextureTypeMap &signature) const
+    {
+        return mSignature == signature;
+    }
+
+    const gl::ImageUnitTextureTypeMap &signature() const { return mSignature; }
+    ShaderExecutableD3D *shaderExecutable() const { return mShaderExecutable.get(); }
+
+  private:
+    gl::ImageUnitTextureTypeMap mSignature;
+    std::unique_ptr<ShaderExecutableD3D> mShaderExecutable;
+};
+
 class ProgramD3DMetadata final : angle::NonCopyable
 {
   public:
@@ -226,9 +301,10 @@ class ProgramD3D : public ProgramImpl
     bool usesGetDimensionsIgnoresBaseLevel() const;
     bool usesInstancedPointSpriteEmulation() const;
 
-    std::unique_ptr<LinkEvent> load(const gl::Context *context,
-                                    gl::BinaryInputStream *stream,
-                                    gl::InfoLog &infoLog) override;
+    angle::Result load(const gl::Context *context,
+                       gl::BinaryInputStream *stream,
+                       gl::InfoLog &infoLog,
+                       std::shared_ptr<LinkTask> *loadTaskOut) override;
     void save(const gl::Context *context, gl::BinaryOutputStream *stream) override;
     void setBinaryRetrievableHint(bool retrievable) override;
     void setSeparable(bool separable) override;
@@ -250,10 +326,7 @@ class ProgramD3D : public ProgramImpl
                                                            ShaderExecutableD3D **outExecutable,
                                                            gl::InfoLog *infoLog);
     void prepareForLink(const gl::ShaderMap<ShaderImpl *> &shaders) override;
-    std::unique_ptr<LinkEvent> link(const gl::Context *context,
-                                    const gl::ProgramLinkedResources &resources,
-                                    gl::InfoLog &infoLog,
-                                    gl::ProgramMergedVaryings &&mergedVaryings) override;
+    angle::Result link(const gl::Context *context, std::shared_ptr<LinkTask> *linkTaskOut) override;
     GLboolean validate(const gl::Caps &caps, gl::InfoLog *infoLog) override;
 
     void updateUniformBufferCache(const gl::Caps &caps);
@@ -371,92 +444,16 @@ class ProgramD3D : public ProgramImpl
     bool usesVertexID() const { return mUsesVertexID; }
 
   private:
-    // These forward-declared tasks are used for multi-thread shader compiles.
-    class GetExecutableTask;
     class GetVertexExecutableTask;
     class GetPixelExecutableTask;
     class GetGeometryExecutableTask;
     class GetComputeExecutableTask;
-    class GraphicsProgramLinkEvent;
-    class ComputeProgramLinkEvent;
+    class LinkLoadTaskD3D;
+    class LinkTaskD3D;
+    class LoadTaskD3D;
 
-    class LoadBinaryTask;
-    class LoadBinaryLinkEvent;
-
-    class VertexExecutable
-    {
-      public:
-        enum HLSLAttribType
-        {
-            FLOAT,
-            UNSIGNED_INT,
-            SIGNED_INT,
-        };
-
-        typedef std::vector<HLSLAttribType> Signature;
-
-        VertexExecutable(const gl::InputLayout &inputLayout,
-                         const Signature &signature,
-                         ShaderExecutableD3D *shaderExecutable);
-        ~VertexExecutable();
-
-        bool matchesSignature(const Signature &signature) const;
-        static void getSignature(RendererD3D *renderer,
-                                 const gl::InputLayout &inputLayout,
-                                 Signature *signatureOut);
-
-        const gl::InputLayout &inputs() const { return mInputs; }
-        const Signature &signature() const { return mSignature; }
-        ShaderExecutableD3D *shaderExecutable() const { return mShaderExecutable; }
-
-      private:
-        static HLSLAttribType GetAttribType(GLenum type);
-
-        gl::InputLayout mInputs;
-        Signature mSignature;
-        ShaderExecutableD3D *mShaderExecutable;
-    };
-
-    class PixelExecutable
-    {
-      public:
-        PixelExecutable(const std::vector<GLenum> &outputSignature,
-                        ShaderExecutableD3D *shaderExecutable);
-        ~PixelExecutable();
-
-        bool matchesSignature(const std::vector<GLenum> &signature) const
-        {
-            return mOutputSignature == signature;
-        }
-
-        const std::vector<GLenum> &outputSignature() const { return mOutputSignature; }
-
-        ShaderExecutableD3D *shaderExecutable() const { return mShaderExecutable; }
-
-      private:
-        const std::vector<GLenum> mOutputSignature;
-        ShaderExecutableD3D *mShaderExecutable;
-    };
-
-    class ComputeExecutable
-    {
-      public:
-        ComputeExecutable(const gl::ImageUnitTextureTypeMap &signature,
-                          std::unique_ptr<ShaderExecutableD3D> shaderExecutable);
-        ~ComputeExecutable();
-
-        bool matchesSignature(const gl::ImageUnitTextureTypeMap &signature) const
-        {
-            return mSignature == signature;
-        }
-
-        const gl::ImageUnitTextureTypeMap &signature() const { return mSignature; }
-        ShaderExecutableD3D *shaderExecutable() const { return mShaderExecutable.get(); }
-
-      private:
-        gl::ImageUnitTextureTypeMap mSignature;
-        std::unique_ptr<ShaderExecutableD3D> mShaderExecutable;
-    };
+    friend class LinkTaskD3D;
+    friend class LoadTaskD3D;
 
     struct Sampler
     {
@@ -473,6 +470,18 @@ class ProgramD3D : public ProgramImpl
         bool active;
         GLint logicalImageUnit;
     };
+
+    angle::Result linkJobImpl(d3d::Context *context,
+                              const gl::Caps &caps,
+                              const gl::Version &clientVersion,
+                              EGLenum clientType,
+                              gl::InfoLog &infoLog,
+                              const gl::ProgramLinkedResources &resources,
+                              const gl::ProgramMergedVaryings &mergedVaryings);
+    const SharedCompiledShaderStateD3D &getAttachedShader(gl::ShaderType shaderType)
+    {
+        return mAttachedShaders[shaderType];
+    }
 
     void initializeUniformStorage(const gl::ShaderBitSet &availableShaderStages);
 
@@ -518,11 +527,6 @@ class ProgramD3D : public ProgramImpl
                                     GLboolean transpose,
                                     const GLfloat *value);
 
-    std::unique_ptr<LinkEvent> compileProgramExecutables(const gl::Context *context,
-                                                         gl::InfoLog &infoLog);
-    std::unique_ptr<LinkEvent> compileComputeExecutable(const gl::Context *context,
-                                                        gl::InfoLog &infoLog);
-
     angle::Result loadBinaryShaderExecutables(d3d::Context *contextD3D,
                                               gl::BinaryInputStream *stream,
                                               gl::InfoLog &infoLog);
@@ -550,11 +554,11 @@ class ProgramD3D : public ProgramImpl
     RendererD3D *mRenderer;
     DynamicHLSL *mDynamicHLSL;
 
-    std::vector<std::unique_ptr<VertexExecutable>> mVertexExecutables;
-    std::vector<std::unique_ptr<PixelExecutable>> mPixelExecutables;
+    std::vector<std::unique_ptr<D3DVertexExecutable>> mVertexExecutables;
+    std::vector<std::unique_ptr<D3DPixelExecutable>> mPixelExecutables;
     angle::PackedEnumMap<gl::PrimitiveMode, std::unique_ptr<ShaderExecutableD3D>>
         mGeometryExecutables;
-    std::vector<std::unique_ptr<ComputeExecutable>> mComputeExecutables;
+    std::vector<std::unique_ptr<D3DComputeExecutable>> mComputeExecutables;
 
     gl::ShaderMap<SharedCompiledShaderStateD3D> mAttachedShaders;
 
@@ -598,7 +602,7 @@ class ProgramD3D : public ProgramImpl
 
     gl::ShaderMap<std::vector<D3DUBOCache>> mShaderUBOCaches;
     gl::ShaderMap<std::vector<D3DUBOCacheUseSB>> mShaderUBOCachesUseSB;
-    VertexExecutable::Signature mCachedVertexSignature;
+    D3DVertexExecutable::Signature mCachedVertexSignature;
     gl::InputLayout mCachedInputLayout;
     Optional<size_t> mCachedVertexExecutableIndex;
 

@@ -277,10 +277,88 @@ class HLSLBlockLayoutEncoderFactory : public gl::CustomBlockLayoutEncoderFactory
         return new sh::HLSLBlockEncoder(sh::HLSLBlockEncoder::ENCODE_PACKED, false);
     }
 };
+
+// GetExecutableTask class
+class GetExecutableTask : public LinkSubTask, public d3d::Context
+{
+  public:
+    GetExecutableTask(ProgramD3D *program, const SharedCompiledShaderStateD3D &shader)
+        : mProgram(program), mShader(shader)
+    {}
+    ~GetExecutableTask() override = default;
+
+    angle::Result getResult(const gl::Context *context, gl::InfoLog &infoLog) override
+    {
+        ASSERT((mResult == angle::Result::Continue) == (mStoredHR == S_OK));
+
+        ANGLE_TRY(checkTask(context, infoLog));
+
+        // Append debug info
+        if (mShader)
+        {
+            mShader->appendDebugInfo(mExecutable->getDebugInfo());
+        }
+
+        return angle::Result::Continue;
+    }
+
+    void handleResult(HRESULT hr,
+                      const char *message,
+                      const char *file,
+                      const char *function,
+                      unsigned int line) override
+    {
+        mStoredHR       = hr;
+        mStoredMessage  = message;
+        mStoredFile     = file;
+        mStoredFunction = function;
+        mStoredLine     = line;
+    }
+
+  protected:
+    void popError(d3d::Context *context)
+    {
+        ASSERT(mStoredFile);
+        ASSERT(mStoredFunction);
+        context->handleResult(mStoredHR, mStoredMessage.c_str(), mStoredFile, mStoredFunction,
+                              mStoredLine);
+    }
+
+    angle::Result checkTask(const gl::Context *context, gl::InfoLog &infoLog)
+    {
+        // Forward any logs
+        if (!mInfoLog.empty())
+        {
+            infoLog << mInfoLog.str();
+        }
+
+        // Forward any errors
+        if (mResult != angle::Result::Continue)
+        {
+            ContextD3D *contextD3D = GetImplAs<ContextD3D>(context);
+            popError(contextD3D);
+            return angle::Result::Stop;
+        }
+
+        return angle::Result::Continue;
+    }
+
+    ProgramD3D *mProgram  = nullptr;
+    angle::Result mResult = angle::Result::Continue;
+    gl::InfoLog mInfoLog;
+    ShaderExecutableD3D *mExecutable = nullptr;
+    SharedCompiledShaderStateD3D mShader;
+
+    // Error handling
+    HRESULT mStoredHR = S_OK;
+    std::string mStoredMessage;
+    const char *mStoredFile     = nullptr;
+    const char *mStoredFunction = nullptr;
+    unsigned int mStoredLine    = 0;
+};
 }  // anonymous namespace
 
 // D3DUniform Implementation
-
 D3DUniform::D3DUniform(GLenum type,
                        HLSLRegisterType reg,
                        const std::string &nameIn,
@@ -559,69 +637,20 @@ uint8_t ProgramD3DMetadata::getCullDistanceArraySize() const
     return shader ? shader->cullDistanceSize : 0;
 }
 
-// ProgramD3D::GetExecutableTask class
-class ProgramD3D::GetExecutableTask : public Closure, public d3d::Context
-{
-  public:
-    GetExecutableTask(ProgramD3D *program) : mProgram(program) {}
-
-    virtual angle::Result run() = 0;
-
-    void operator()() override { mResult = run(); }
-
-    angle::Result getResult() const { return mResult; }
-    const gl::InfoLog &getInfoLog() const { return mInfoLog; }
-    ShaderExecutableD3D *getExecutable() { return mExecutable; }
-
-    void handleResult(HRESULT hr,
-                      const char *message,
-                      const char *file,
-                      const char *function,
-                      unsigned int line) override
-    {
-        mStoredHR       = hr;
-        mStoredMessage  = message;
-        mStoredFile     = file;
-        mStoredFunction = function;
-        mStoredLine     = line;
-    }
-
-    void popError(d3d::Context *context)
-    {
-        ASSERT(mStoredFile);
-        ASSERT(mStoredFunction);
-        context->handleResult(mStoredHR, mStoredMessage.c_str(), mStoredFile, mStoredFunction,
-                              mStoredLine);
-    }
-
-  protected:
-    ProgramD3D *mProgram  = nullptr;
-    angle::Result mResult = angle::Result::Continue;
-    gl::InfoLog mInfoLog;
-    ShaderExecutableD3D *mExecutable = nullptr;
-    HRESULT mStoredHR                = S_OK;
-    std::string mStoredMessage;
-    const char *mStoredFile     = nullptr;
-    const char *mStoredFunction = nullptr;
-    unsigned int mStoredLine    = 0;
-};
-
 // ProgramD3D Implementation
-
-ProgramD3D::VertexExecutable::VertexExecutable(const gl::InputLayout &inputLayout,
-                                               const Signature &signature,
-                                               ShaderExecutableD3D *shaderExecutable)
+D3DVertexExecutable::D3DVertexExecutable(const gl::InputLayout &inputLayout,
+                                         const Signature &signature,
+                                         ShaderExecutableD3D *shaderExecutable)
     : mInputs(inputLayout), mSignature(signature), mShaderExecutable(shaderExecutable)
 {}
 
-ProgramD3D::VertexExecutable::~VertexExecutable()
+D3DVertexExecutable::~D3DVertexExecutable()
 {
     SafeDelete(mShaderExecutable);
 }
 
 // static
-ProgramD3D::VertexExecutable::HLSLAttribType ProgramD3D::VertexExecutable::GetAttribType(
-    GLenum type)
+D3DVertexExecutable::HLSLAttribType D3DVertexExecutable::GetAttribType(GLenum type)
 {
     switch (type)
     {
@@ -640,9 +669,9 @@ ProgramD3D::VertexExecutable::HLSLAttribType ProgramD3D::VertexExecutable::GetAt
 }
 
 // static
-void ProgramD3D::VertexExecutable::getSignature(RendererD3D *renderer,
-                                                const gl::InputLayout &inputLayout,
-                                                Signature *signatureOut)
+void D3DVertexExecutable::getSignature(RendererD3D *renderer,
+                                       const gl::InputLayout &inputLayout,
+                                       Signature *signatureOut)
 {
     signatureOut->assign(inputLayout.size(), HLSLAttribType::FLOAT);
 
@@ -661,7 +690,7 @@ void ProgramD3D::VertexExecutable::getSignature(RendererD3D *renderer,
     }
 }
 
-bool ProgramD3D::VertexExecutable::matchesSignature(const Signature &signature) const
+bool D3DVertexExecutable::matchesSignature(const Signature &signature) const
 {
     size_t limit = std::max(mSignature.size(), signature.size());
     for (size_t index = 0; index < limit; ++index)
@@ -676,23 +705,22 @@ bool ProgramD3D::VertexExecutable::matchesSignature(const Signature &signature) 
     return true;
 }
 
-ProgramD3D::PixelExecutable::PixelExecutable(const std::vector<GLenum> &outputSignature,
-                                             ShaderExecutableD3D *shaderExecutable)
+D3DPixelExecutable::D3DPixelExecutable(const std::vector<GLenum> &outputSignature,
+                                       ShaderExecutableD3D *shaderExecutable)
     : mOutputSignature(outputSignature), mShaderExecutable(shaderExecutable)
 {}
 
-ProgramD3D::PixelExecutable::~PixelExecutable()
+D3DPixelExecutable::~D3DPixelExecutable()
 {
     SafeDelete(mShaderExecutable);
 }
 
-ProgramD3D::ComputeExecutable::ComputeExecutable(
-    const gl::ImageUnitTextureTypeMap &signature,
-    std::unique_ptr<ShaderExecutableD3D> shaderExecutable)
+D3DComputeExecutable::D3DComputeExecutable(const gl::ImageUnitTextureTypeMap &signature,
+                                           std::unique_ptr<ShaderExecutableD3D> shaderExecutable)
     : mSignature(signature), mShaderExecutable(std::move(shaderExecutable))
 {}
 
-ProgramD3D::ComputeExecutable::~ComputeExecutable() {}
+D3DComputeExecutable::~D3DComputeExecutable() {}
 
 ProgramD3D::Sampler::Sampler()
     : active(false), logicalTextureUnit(0), textureType(gl::TextureType::_2D)
@@ -700,6 +728,230 @@ ProgramD3D::Sampler::Sampler()
 
 ProgramD3D::Image::Image() : active(false), logicalImageUnit(0) {}
 
+class ProgramD3D::GetVertexExecutableTask : public GetExecutableTask
+{
+  public:
+    GetVertexExecutableTask(ProgramD3D *program, const SharedCompiledShaderStateD3D &shader)
+        : GetExecutableTask(program, shader)
+    {}
+    ~GetVertexExecutableTask() override = default;
+
+    void operator()() override
+    {
+        ANGLE_TRACE_EVENT0("gpu.angle", "GetVertexExecutableTask::run");
+
+        mResult = mProgram->getVertexExecutableForCachedInputLayout(this, &mExecutable, &mInfoLog);
+    }
+};
+
+class ProgramD3D::GetPixelExecutableTask : public GetExecutableTask
+{
+  public:
+    GetPixelExecutableTask(ProgramD3D *program, const SharedCompiledShaderStateD3D &shader)
+        : GetExecutableTask(program, shader)
+    {}
+    ~GetPixelExecutableTask() override = default;
+
+    void operator()() override
+    {
+        ANGLE_TRACE_EVENT0("gpu.angle", "GetPixelExecutableTask::run");
+        if (!mShader)
+        {
+            return;
+        }
+
+        mProgram->updateCachedOutputLayoutFromShader();
+        mProgram->updateCachedImage2DBindLayoutFromShader(gl::ShaderType::Fragment);
+        mResult = mProgram->getPixelExecutableForCachedOutputLayout(this, &mExecutable, &mInfoLog);
+    }
+};
+
+class ProgramD3D::GetGeometryExecutableTask : public GetExecutableTask
+{
+  public:
+    GetGeometryExecutableTask(ProgramD3D *program,
+                              const SharedCompiledShaderStateD3D &shader,
+                              const gl::Caps &caps,
+                              gl::ProvokingVertexConvention provokingVertex)
+        : GetExecutableTask(program, shader), mCaps(caps), mProvokingVertex(provokingVertex)
+    {}
+    ~GetGeometryExecutableTask() override = default;
+
+    void operator()() override
+    {
+        ANGLE_TRACE_EVENT0("gpu.angle", "GetGeometryExecutableTask::run");
+        // Auto-generate the geometry shader here, if we expect to be using point rendering in
+        // D3D11.
+        if (mProgram->usesGeometryShader(mProvokingVertex, gl::PrimitiveMode::Points))
+        {
+            mResult = mProgram->getGeometryExecutableForPrimitiveType(
+                this, mCaps, mProvokingVertex, gl::PrimitiveMode::Points, &mExecutable, &mInfoLog);
+        }
+    }
+
+  private:
+    const gl::Caps &mCaps;
+    gl::ProvokingVertexConvention mProvokingVertex;
+};
+
+class ProgramD3D::GetComputeExecutableTask : public GetExecutableTask
+{
+  public:
+    GetComputeExecutableTask(ProgramD3D *program, const SharedCompiledShaderStateD3D &shader)
+        : GetExecutableTask(program, shader)
+    {}
+    ~GetComputeExecutableTask() override = default;
+
+    void operator()() override
+    {
+        ANGLE_TRACE_EVENT0("gpu.angle", "GetComputeExecutableTask::run");
+
+        mProgram->updateCachedImage2DBindLayoutFromShader(gl::ShaderType::Compute);
+        mResult = mProgram->getComputeExecutableForImage2DBindLayout(this, &mExecutable, &mInfoLog);
+    }
+};
+
+class ProgramD3D::LinkLoadTaskD3D : public d3d::Context, public LinkTask
+{
+  public:
+    LinkLoadTaskD3D(ProgramD3D *program) : mProgram(program) { ASSERT(mProgram); }
+    ~LinkLoadTaskD3D() override = default;
+
+    angle::Result getResult(const gl::Context *context, gl::InfoLog &infoLog) override
+    {
+        if (mStoredHR != S_OK)
+        {
+            GetImplAs<ContextD3D>(context)->handleResult(mStoredHR, mStoredMessage.c_str(),
+                                                         mStoredFile, mStoredFunction, mStoredLine);
+            return angle::Result::Stop;
+        }
+
+        return angle::Result::Continue;
+    }
+
+    void handleResult(HRESULT hr,
+                      const char *message,
+                      const char *file,
+                      const char *function,
+                      unsigned int line) override
+    {
+        mStoredHR       = hr;
+        mStoredMessage  = message;
+        mStoredFile     = file;
+        mStoredFunction = function;
+        mStoredLine     = line;
+    }
+
+  protected:
+    // The front-end ensures that the program is not accessed while linking, so it is safe to
+    // direclty access the state from a potentially parallel job.
+    ProgramD3D *mProgram;
+
+    // Error handling
+    HRESULT mStoredHR = S_OK;
+    std::string mStoredMessage;
+    const char *mStoredFile     = nullptr;
+    const char *mStoredFunction = nullptr;
+    unsigned int mStoredLine    = 0;
+};
+
+class ProgramD3D::LinkTaskD3D final : public LinkLoadTaskD3D
+{
+  public:
+    LinkTaskD3D(const gl::Version &clientVersion,
+                const gl::Caps &caps,
+                EGLenum clientType,
+                ProgramD3D *program,
+                gl::ProvokingVertexConvention provokingVertex)
+        : LinkLoadTaskD3D(program),
+          mClientVersion(clientVersion),
+          mCaps(caps),
+          mClientType(clientType),
+          mProvokingVertex(provokingVertex)
+    {}
+    ~LinkTaskD3D() override = default;
+
+    std::vector<std::shared_ptr<LinkSubTask>> link(
+        gl::InfoLog &infoLog,
+        const gl::ProgramLinkedResources &resources,
+        const gl::ProgramMergedVaryings &mergedVaryings) override;
+
+  private:
+    const gl::Version mClientVersion;
+    const gl::Caps &mCaps;
+    const EGLenum mClientType;
+    const gl::ProvokingVertexConvention mProvokingVertex;
+};
+
+std::vector<std::shared_ptr<LinkSubTask>> ProgramD3D::LinkTaskD3D::link(
+    gl::InfoLog &infoLog,
+    const gl::ProgramLinkedResources &resources,
+    const gl::ProgramMergedVaryings &mergedVaryings)
+{
+    ANGLE_TRACE_EVENT0("gpu.angle", "LinkTaskD3D::link");
+
+    angle::Result result = mProgram->linkJobImpl(this, mCaps, mClientVersion, mClientType, infoLog,
+                                                 resources, mergedVaryings);
+    ASSERT((result == angle::Result::Continue) == (mStoredHR == S_OK));
+
+    if (result != angle::Result::Continue)
+    {
+        return {};
+    }
+
+    // Create the subtasks
+    std::vector<std::shared_ptr<LinkSubTask>> subTasks;
+
+    if (mProgram->hasShaderStage(gl::ShaderType::Compute))
+    {
+        subTasks.push_back(std::make_shared<GetComputeExecutableTask>(
+            mProgram, mProgram->getAttachedShader(gl::ShaderType::Compute)));
+    }
+    else
+    {
+        // Geometry shaders are currently only used internally, so there is no corresponding shader
+        // object at the interface level. For now the geometry shader debug info is prepended to the
+        // vertex shader.
+        subTasks.push_back(std::make_shared<GetVertexExecutableTask>(
+            mProgram, mProgram->getAttachedShader(gl::ShaderType::Vertex)));
+        subTasks.push_back(std::make_shared<GetPixelExecutableTask>(
+            mProgram, mProgram->getAttachedShader(gl::ShaderType::Fragment)));
+        subTasks.push_back(std::make_shared<GetGeometryExecutableTask>(
+            mProgram, mProgram->getAttachedShader(gl::ShaderType::Vertex), mCaps,
+            mProvokingVertex));
+    }
+
+    return subTasks;
+}
+
+class ProgramD3D::LoadTaskD3D final : public LinkLoadTaskD3D
+{
+  public:
+    LoadTaskD3D(ProgramD3D *program, angle::MemoryBuffer &&streamData)
+        : LinkLoadTaskD3D(program), mStreamData(std::move(streamData))
+    {}
+    ~LoadTaskD3D() override = default;
+
+    std::vector<std::shared_ptr<LinkSubTask>> load(gl::InfoLog &infoLog) override
+    {
+        ANGLE_TRACE_EVENT0("gpu.angle", "LoadTaskD3D::load");
+
+        gl::BinaryInputStream stream(mStreamData.data(), mStreamData.size());
+        mResult = mProgram->loadBinaryShaderExecutables(this, &stream, infoLog);
+
+        return {};
+    }
+
+    angle::Result getResult(const gl::Context *context, gl::InfoLog &infoLog) override
+    {
+        ANGLE_TRY(LinkLoadTaskD3D::getResult(context, infoLog));
+        return mResult;
+    }
+
+  private:
+    angle::MemoryBuffer mStreamData;
+    angle::Result mResult = angle::Result::Continue;
+};
 unsigned int ProgramD3D::mCurrentSerial = 1;
 
 ProgramD3D::ProgramD3D(const gl::ProgramState &state, RendererD3D *renderer)
@@ -879,79 +1131,10 @@ gl::RangeUI ProgramD3D::getUsedImageRange(gl::ShaderType type, bool readonly) co
     return readonly ? mUsedReadonlyImageRange[type] : mUsedImageRange[type];
 }
 
-class ProgramD3D::LoadBinaryTask : public ProgramD3D::GetExecutableTask
-{
-  public:
-    LoadBinaryTask(ProgramD3D *program, gl::BinaryInputStream *stream, gl::InfoLog &infoLog)
-        : ProgramD3D::GetExecutableTask(program)
-    {
-        ASSERT(mProgram);
-        ASSERT(stream);
-
-        // Copy the remaining data from the stream locally so that the client can't modify it when
-        // loading off thread.
-        size_t dataSize    = stream->remainingSize();
-        mDataCopySucceeded = mStreamData.resize(dataSize);
-        if (mDataCopySucceeded)
-        {
-            memcpy(mStreamData.data(), stream->data() + stream->offset(), dataSize);
-        }
-    }
-
-    angle::Result run() override
-    {
-        ANGLE_TRACE_EVENT0("gpu.angle", "ProgramD3D::LoadBinaryTask::run");
-        if (!mDataCopySucceeded)
-        {
-            mInfoLog << "Failed to copy program binary data to local buffer.";
-            return angle::Result::Incomplete;
-        }
-
-        gl::BinaryInputStream stream(mStreamData.data(), mStreamData.size());
-        return mProgram->loadBinaryShaderExecutables(this, &stream, mInfoLog);
-    }
-
-  private:
-    bool mDataCopySucceeded;
-    angle::MemoryBuffer mStreamData;
-};
-
-class ProgramD3D::LoadBinaryLinkEvent final : public LinkEvent
-{
-  public:
-    LoadBinaryLinkEvent(std::shared_ptr<WorkerThreadPool> workerPool,
-                        ProgramD3D *program,
-                        gl::BinaryInputStream *stream,
-                        gl::InfoLog &infoLog)
-        : mTask(std::make_shared<ProgramD3D::LoadBinaryTask>(program, stream, infoLog)),
-          mWaitableEvent(workerPool->postWorkerTask(mTask))
-    {}
-
-    angle::Result wait(const gl::Context *context) override
-    {
-        mWaitableEvent->wait();
-
-        // Continue and Incomplete are not errors. For Stop, pass the error to the ContextD3D.
-        if (mTask->getResult() != angle::Result::Stop)
-        {
-            return angle::Result::Continue;
-        }
-
-        ContextD3D *contextD3D = GetImplAs<ContextD3D>(context);
-        mTask->popError(contextD3D);
-        return angle::Result::Stop;
-    }
-
-    bool isLinking() override { return !mWaitableEvent->isReady(); }
-
-  private:
-    std::shared_ptr<ProgramD3D::LoadBinaryTask> mTask;
-    std::shared_ptr<WaitableEvent> mWaitableEvent;
-};
-
-std::unique_ptr<rx::LinkEvent> ProgramD3D::load(const gl::Context *context,
-                                                gl::BinaryInputStream *stream,
-                                                gl::InfoLog &infoLog)
+angle::Result ProgramD3D::load(const gl::Context *context,
+                               gl::BinaryInputStream *stream,
+                               gl::InfoLog &infoLog,
+                               std::shared_ptr<LinkTask> *loadTaskOut)
 {
 
     // TODO(jmadill): Use Renderer from contextImpl.
@@ -966,14 +1149,14 @@ std::unique_ptr<rx::LinkEvent> ProgramD3D::load(const gl::Context *context,
     if (memcmp(&identifier, &binaryDeviceIdentifier, sizeof(DeviceIdentifier)) != 0)
     {
         infoLog << "Invalid program binary, device configuration has changed.";
-        return nullptr;
+        return angle::Result::Incomplete;
     }
 
     int compileFlags = stream->readInt<int>();
     if (compileFlags != ANGLE_COMPILE_OPTIMIZATION_LEVEL)
     {
         infoLog << "Mismatched compilation flags.";
-        return nullptr;
+        return angle::Result::Incomplete;
     }
 
     for (int &index : mAttribLocationToD3DSemantic)
@@ -1039,7 +1222,7 @@ std::unique_ptr<rx::LinkEvent> ProgramD3D::load(const gl::Context *context,
     if (stream->error())
     {
         infoLog << "Invalid program binary.";
-        return nullptr;
+        return angle::Result::Incomplete;
     }
 
     ASSERT(mD3DShaderStorageBlocks.empty());
@@ -1059,7 +1242,7 @@ std::unique_ptr<rx::LinkEvent> ProgramD3D::load(const gl::Context *context,
         if (stream->error())
         {
             infoLog << "Invalid program binary.";
-            return nullptr;
+            return angle::Result::Incomplete;
         }
 
         ASSERT(mImage2DUniforms[shaderType].empty());
@@ -1082,7 +1265,7 @@ std::unique_ptr<rx::LinkEvent> ProgramD3D::load(const gl::Context *context,
     if (stream->error())
     {
         infoLog << "Invalid program binary.";
-        return nullptr;
+        return angle::Result::Incomplete;
     }
 
     const auto &linkedUniforms = mState.getUniforms();
@@ -1115,7 +1298,7 @@ std::unique_ptr<rx::LinkEvent> ProgramD3D::load(const gl::Context *context,
     if (stream->error())
     {
         infoLog << "Invalid program binary.";
-        return nullptr;
+        return angle::Result::Incomplete;
     }
 
     ASSERT(mD3DUniformBlocks.empty());
@@ -1173,8 +1356,20 @@ std::unique_ptr<rx::LinkEvent> ProgramD3D::load(const gl::Context *context,
 
     stream->readString(&mGeometryShaderPreamble);
 
-    return std::make_unique<LoadBinaryLinkEvent>(context->getShaderCompileThreadPool(), this,
-                                                 stream, infoLog);
+    // Copy the remaining data from the stream locally so that the client can't modify it when
+    // loading off thread.
+    angle::MemoryBuffer streamData;
+    const size_t dataSize = stream->remainingSize();
+    if (!streamData.resize(dataSize))
+    {
+        infoLog << "Failed to copy program binary data to local buffer.";
+        return angle::Result::Stop;
+    }
+    memcpy(streamData.data(), stream->data() + stream->offset(), dataSize);
+
+    // Note: pretty much all the above can also be moved to the task
+    *loadTaskOut = std::shared_ptr<LinkTask>(new LoadTaskD3D(this, std::move(streamData)));
+    return angle::Result::Continue;
 }
 
 angle::Result ProgramD3D::loadBinaryShaderExecutables(d3d::Context *contextD3D,
@@ -1212,12 +1407,12 @@ angle::Result ProgramD3D::loadBinaryShaderExecutables(d3d::Context *contextD3D,
         }
 
         // generated converted input layout
-        VertexExecutable::Signature signature;
-        VertexExecutable::getSignature(mRenderer, inputLayout, &signature);
+        D3DVertexExecutable::Signature signature;
+        D3DVertexExecutable::getSignature(mRenderer, inputLayout, &signature);
 
         // add new binary
-        mVertexExecutables.push_back(std::unique_ptr<VertexExecutable>(
-            new VertexExecutable(inputLayout, signature, shaderExecutable)));
+        mVertexExecutables.push_back(std::unique_ptr<D3DVertexExecutable>(
+            new D3DVertexExecutable(inputLayout, signature, shaderExecutable)));
 
         stream->skip(vertexShaderSize);
     }
@@ -1248,7 +1443,7 @@ angle::Result ProgramD3D::loadBinaryShaderExecutables(d3d::Context *contextD3D,
 
         // add new binary
         mPixelExecutables.push_back(
-            std::unique_ptr<PixelExecutable>(new PixelExecutable(outputs, shaderExecutable)));
+            std::unique_ptr<D3DPixelExecutable>(new D3DPixelExecutable(outputs, shaderExecutable)));
 
         stream->skip(pixelShaderSize);
     }
@@ -1309,8 +1504,9 @@ angle::Result ProgramD3D::loadBinaryShaderExecutables(d3d::Context *contextD3D,
         }
 
         // add new binary
-        mComputeExecutables.push_back(std::unique_ptr<ComputeExecutable>(new ComputeExecutable(
-            signatures, std::unique_ptr<ShaderExecutableD3D>(computeExecutable))));
+        mComputeExecutables.push_back(
+            std::unique_ptr<D3DComputeExecutable>(new D3DComputeExecutable(
+                signatures, std::unique_ptr<ShaderExecutableD3D>(computeExecutable))));
 
         stream->skip(computeShaderSize);
     }
@@ -1475,7 +1671,7 @@ void ProgramD3D::save(const gl::Context *context, gl::BinaryOutputStream *stream
     for (size_t vertexExecutableIndex = 0; vertexExecutableIndex < mVertexExecutables.size();
          vertexExecutableIndex++)
     {
-        VertexExecutable *vertexExecutable = mVertexExecutables[vertexExecutableIndex].get();
+        D3DVertexExecutable *vertexExecutable = mVertexExecutables[vertexExecutableIndex].get();
 
         const gl::InputLayout &inputLayout = vertexExecutable->inputs();
         stream->writeInt(inputLayout.size());
@@ -1496,7 +1692,7 @@ void ProgramD3D::save(const gl::Context *context, gl::BinaryOutputStream *stream
     for (size_t pixelExecutableIndex = 0; pixelExecutableIndex < mPixelExecutables.size();
          pixelExecutableIndex++)
     {
-        PixelExecutable *pixelExecutable = mPixelExecutables[pixelExecutableIndex].get();
+        D3DPixelExecutable *pixelExecutable = mPixelExecutables[pixelExecutableIndex].get();
 
         const std::vector<GLenum> &outputs = pixelExecutable->outputSignature();
         stream->writeInt(outputs.size());
@@ -1529,7 +1725,7 @@ void ProgramD3D::save(const gl::Context *context, gl::BinaryOutputStream *stream
     for (size_t computeExecutableIndex = 0; computeExecutableIndex < mComputeExecutables.size();
          computeExecutableIndex++)
     {
-        ComputeExecutable *computeExecutable = mComputeExecutables[computeExecutableIndex].get();
+        D3DComputeExecutable *computeExecutable = mComputeExecutables[computeExecutableIndex].get();
 
         const gl::ImageUnitTextureTypeMap signatures = computeExecutable->signature();
         stream->writeInt(signatures.size());
@@ -1595,8 +1791,8 @@ angle::Result ProgramD3D::getPixelExecutableForCachedOutputLayout(
 
     if (pixelExecutable)
     {
-        mPixelExecutables.push_back(std::unique_ptr<PixelExecutable>(
-            new PixelExecutable(mPixelShaderOutputLayoutCache, pixelExecutable)));
+        mPixelExecutables.push_back(std::unique_ptr<D3DPixelExecutable>(
+            new D3DPixelExecutable(mPixelShaderOutputLayoutCache, pixelExecutable)));
         mCachedPixelExecutableIndex = mPixelExecutables.size() - 1;
     }
     else if (!infoLog)
@@ -1639,8 +1835,8 @@ angle::Result ProgramD3D::getVertexExecutableForCachedInputLayout(
 
     if (vertexExecutable)
     {
-        mVertexExecutables.push_back(std::unique_ptr<VertexExecutable>(
-            new VertexExecutable(mCachedInputLayout, mCachedVertexSignature, vertexExecutable)));
+        mVertexExecutables.push_back(std::unique_ptr<D3DVertexExecutable>(
+            new D3DVertexExecutable(mCachedInputLayout, mCachedVertexSignature, vertexExecutable)));
         mCachedVertexExecutableIndex = mVertexExecutables.size() - 1;
     }
     else if (!infoLog)
@@ -1715,47 +1911,13 @@ angle::Result ProgramD3D::getGeometryExecutableForPrimitiveType(
     return result;
 }
 
-class ProgramD3D::GetVertexExecutableTask : public ProgramD3D::GetExecutableTask
-{
-  public:
-    GetVertexExecutableTask(ProgramD3D *program) : GetExecutableTask(program) {}
-    angle::Result run() override
-    {
-        ANGLE_TRACE_EVENT0("gpu.angle", "ProgramD3D::GetVertexExecutableTask::run");
-
-        ANGLE_TRY(mProgram->getVertexExecutableForCachedInputLayout(this, &mExecutable, &mInfoLog));
-
-        return angle::Result::Continue;
-    }
-};
-
 void ProgramD3D::updateCachedInputLayoutFromShader()
 {
     GetDefaultInputLayoutFromShader(mState.getAttachedShader(gl::ShaderType::Vertex),
                                     &mCachedInputLayout);
-    VertexExecutable::getSignature(mRenderer, mCachedInputLayout, &mCachedVertexSignature);
+    D3DVertexExecutable::getSignature(mRenderer, mCachedInputLayout, &mCachedVertexSignature);
     updateCachedVertexExecutableIndex();
 }
-
-class ProgramD3D::GetPixelExecutableTask : public ProgramD3D::GetExecutableTask
-{
-  public:
-    GetPixelExecutableTask(ProgramD3D *program) : GetExecutableTask(program) {}
-    angle::Result run() override
-    {
-        ANGLE_TRACE_EVENT0("gpu.angle", "ProgramD3D::GetPixelExecutableTask::run");
-        if (!mProgram->mState.getAttachedShader(gl::ShaderType::Fragment))
-        {
-            return angle::Result::Continue;
-        }
-
-        mProgram->updateCachedOutputLayoutFromShader();
-        mProgram->updateCachedImage2DBindLayoutFromShader(gl::ShaderType::Fragment);
-        ANGLE_TRY(mProgram->getPixelExecutableForCachedOutputLayout(this, &mExecutable, &mInfoLog));
-
-        return angle::Result::Continue;
-    }
-};
 
 void ProgramD3D::updateCachedOutputLayoutFromShader()
 {
@@ -1782,229 +1944,6 @@ void ProgramD3D::updateCachedImage2DBindLayoutFromShader(gl::ShaderType shaderTy
             ASSERT(false);
             break;
     }
-}
-
-class ProgramD3D::GetGeometryExecutableTask : public ProgramD3D::GetExecutableTask
-{
-  public:
-    GetGeometryExecutableTask(ProgramD3D *program,
-                              const gl::Caps &caps,
-                              gl::ProvokingVertexConvention provokingVertex)
-        : GetExecutableTask(program), mCaps(caps), mProvokingVertex(provokingVertex)
-    {}
-
-    angle::Result run() override
-    {
-        ANGLE_TRACE_EVENT0("gpu.angle", "ProgramD3D::GetGeometryExecutableTask::run");
-        // Auto-generate the geometry shader here, if we expect to be using point rendering in
-        // D3D11.
-        if (mProgram->usesGeometryShader(mProvokingVertex, gl::PrimitiveMode::Points))
-        {
-            ANGLE_TRY(mProgram->getGeometryExecutableForPrimitiveType(
-                this, mCaps, mProvokingVertex, gl::PrimitiveMode::Points, &mExecutable, &mInfoLog));
-        }
-
-        return angle::Result::Continue;
-    }
-
-  private:
-    const gl::Caps &mCaps;
-    gl::ProvokingVertexConvention mProvokingVertex;
-};
-
-class ProgramD3D::GetComputeExecutableTask : public ProgramD3D::GetExecutableTask
-{
-  public:
-    GetComputeExecutableTask(ProgramD3D *program) : GetExecutableTask(program) {}
-    angle::Result run() override
-    {
-        ANGLE_TRACE_EVENT0("gpu.angle", "ProgramD3D::GetComputeExecutableTask::run");
-        mProgram->updateCachedImage2DBindLayoutFromShader(gl::ShaderType::Compute);
-        ShaderExecutableD3D *computeExecutable = nullptr;
-        ANGLE_TRY(mProgram->getComputeExecutableForImage2DBindLayout(this, &computeExecutable,
-                                                                     &mInfoLog));
-
-        return computeExecutable ? angle::Result::Continue : angle::Result::Incomplete;
-    }
-};
-
-// The LinkEvent implementation for linking a rendering(VS, FS, GS) program.
-class ProgramD3D::GraphicsProgramLinkEvent final : public LinkEvent
-{
-  public:
-    GraphicsProgramLinkEvent(gl::InfoLog &infoLog,
-                             std::shared_ptr<WorkerThreadPool> workerPool,
-                             std::shared_ptr<ProgramD3D::GetVertexExecutableTask> vertexTask,
-                             std::shared_ptr<ProgramD3D::GetPixelExecutableTask> pixelTask,
-                             std::shared_ptr<ProgramD3D::GetGeometryExecutableTask> geometryTask,
-                             bool useGS,
-                             const SharedCompiledShaderStateD3D &vertexShader,
-                             const SharedCompiledShaderStateD3D &fragmentShader)
-        : mInfoLog(infoLog),
-          mVertexTask(vertexTask),
-          mPixelTask(pixelTask),
-          mGeometryTask(geometryTask),
-          mWaitEvents(
-              {{std::shared_ptr<WaitableEvent>(workerPool->postWorkerTask(mVertexTask)),
-                std::shared_ptr<WaitableEvent>(workerPool->postWorkerTask(mPixelTask)),
-                std::shared_ptr<WaitableEvent>(workerPool->postWorkerTask(mGeometryTask))}}),
-          mUseGS(useGS),
-          mVertexShader(vertexShader),
-          mFragmentShader(fragmentShader)
-    {}
-
-    angle::Result wait(const gl::Context *context) override
-    {
-        ANGLE_TRACE_EVENT0("gpu.angle", "ProgramD3D::GraphicsProgramLinkEvent::wait");
-        WaitableEvent::WaitMany(&mWaitEvents);
-
-        ANGLE_TRY(checkTask(context, mVertexTask.get()));
-        ANGLE_TRY(checkTask(context, mPixelTask.get()));
-        ANGLE_TRY(checkTask(context, mGeometryTask.get()));
-
-        if (mVertexTask->getResult() == angle::Result::Incomplete ||
-            mPixelTask->getResult() == angle::Result::Incomplete ||
-            mGeometryTask->getResult() == angle::Result::Incomplete)
-        {
-            return angle::Result::Incomplete;
-        }
-
-        ShaderExecutableD3D *defaultVertexExecutable = mVertexTask->getExecutable();
-        ShaderExecutableD3D *defaultPixelExecutable  = mPixelTask->getExecutable();
-        ShaderExecutableD3D *pointGS                 = mGeometryTask->getExecutable();
-
-        if (mUseGS && pointGS)
-        {
-            // Geometry shaders are currently only used internally, so there is no corresponding
-            // shader object at the interface level. For now the geometry shader debug info is
-            // prepended to the vertex shader.
-            mVertexShader->appendDebugInfo("// GEOMETRY SHADER BEGIN\n\n");
-            mVertexShader->appendDebugInfo(pointGS->getDebugInfo());
-            mVertexShader->appendDebugInfo("\nGEOMETRY SHADER END\n\n\n");
-        }
-
-        if (defaultVertexExecutable)
-        {
-            mVertexShader->appendDebugInfo(defaultVertexExecutable->getDebugInfo());
-        }
-
-        if (defaultPixelExecutable)
-        {
-            mFragmentShader->appendDebugInfo(defaultPixelExecutable->getDebugInfo());
-        }
-
-        bool isLinked = (defaultVertexExecutable && defaultPixelExecutable && (!mUseGS || pointGS));
-        if (!isLinked)
-        {
-            mInfoLog << "Failed to create D3D Shaders";
-        }
-        return isLinked ? angle::Result::Continue : angle::Result::Incomplete;
-    }
-
-    bool isLinking() override { return !WaitableEvent::AllReady(&mWaitEvents); }
-
-  private:
-    angle::Result checkTask(const gl::Context *context, ProgramD3D::GetExecutableTask *task)
-    {
-        if (!task->getInfoLog().empty())
-        {
-            mInfoLog << task->getInfoLog().str();
-        }
-
-        // Continue and Incomplete are not errors. For Stop, pass the error to the ContextD3D.
-        if (task->getResult() != angle::Result::Stop)
-        {
-            return angle::Result::Continue;
-        }
-
-        ContextD3D *contextD3D = GetImplAs<ContextD3D>(context);
-        task->popError(contextD3D);
-        return angle::Result::Stop;
-    }
-
-    gl::InfoLog &mInfoLog;
-    std::shared_ptr<ProgramD3D::GetVertexExecutableTask> mVertexTask;
-    std::shared_ptr<ProgramD3D::GetPixelExecutableTask> mPixelTask;
-    std::shared_ptr<ProgramD3D::GetGeometryExecutableTask> mGeometryTask;
-    std::array<std::shared_ptr<WaitableEvent>, 3> mWaitEvents;
-    bool mUseGS;
-    SharedCompiledShaderStateD3D mVertexShader;
-    SharedCompiledShaderStateD3D mFragmentShader;
-};
-
-// The LinkEvent implementation for linking a computing program.
-class ProgramD3D::ComputeProgramLinkEvent final : public LinkEvent
-{
-  public:
-    ComputeProgramLinkEvent(gl::InfoLog &infoLog,
-                            std::shared_ptr<ProgramD3D::GetComputeExecutableTask> computeTask,
-                            std::shared_ptr<WaitableEvent> event)
-        : mInfoLog(infoLog), mComputeTask(computeTask), mWaitEvent(event)
-    {}
-
-    bool isLinking() override { return !mWaitEvent->isReady(); }
-
-    angle::Result wait(const gl::Context *context) override
-    {
-        ANGLE_TRACE_EVENT0("gpu.angle", "ProgramD3D::ComputeProgramLinkEvent::wait");
-        mWaitEvent->wait();
-
-        angle::Result result = mComputeTask->getResult();
-        if (result != angle::Result::Continue)
-        {
-            mInfoLog << "Failed to create D3D compute shader.";
-        }
-        return result;
-    }
-
-  private:
-    gl::InfoLog &mInfoLog;
-    std::shared_ptr<ProgramD3D::GetComputeExecutableTask> mComputeTask;
-    std::shared_ptr<WaitableEvent> mWaitEvent;
-};
-
-std::unique_ptr<LinkEvent> ProgramD3D::compileProgramExecutables(const gl::Context *context,
-                                                                 gl::InfoLog &infoLog)
-{
-    ANGLE_TRACE_EVENT0("gpu.angle", "ProgramD3D::compileProgramExecutables");
-
-    auto vertexTask   = std::make_shared<GetVertexExecutableTask>(this);
-    auto pixelTask    = std::make_shared<GetPixelExecutableTask>(this);
-    auto geometryTask = std::make_shared<GetGeometryExecutableTask>(
-        this, context->getCaps(), context->getState().getProvokingVertex());
-    bool useGS =
-        usesGeometryShader(context->getState().getProvokingVertex(), gl::PrimitiveMode::Points);
-    const SharedCompiledShaderStateD3D &vertexShaderD3D = mAttachedShaders[gl::ShaderType::Vertex];
-    const SharedCompiledShaderStateD3D &fragmentShaderD3D =
-        mAttachedShaders[gl::ShaderType::Fragment];
-
-    return std::make_unique<GraphicsProgramLinkEvent>(
-        infoLog, context->getShaderCompileThreadPool(), vertexTask, pixelTask, geometryTask, useGS,
-        vertexShaderD3D, fragmentShaderD3D);
-}
-
-std::unique_ptr<LinkEvent> ProgramD3D::compileComputeExecutable(const gl::Context *context,
-                                                                gl::InfoLog &infoLog)
-{
-    ANGLE_TRACE_EVENT0("gpu.angle", "ProgramD3D::compileComputeExecutable");
-    auto computeTask = std::make_shared<GetComputeExecutableTask>(this);
-
-    std::shared_ptr<WaitableEvent> waitableEvent;
-
-    // TODO(jie.a.chen@intel.com): Fix the flaky bug.
-    // http://anglebug.com/3349
-    bool compileInParallel = false;
-    if (!compileInParallel)
-    {
-        (*computeTask)();
-        waitableEvent = std::make_shared<WaitableEventDone>();
-    }
-    else
-    {
-        waitableEvent = context->getShaderCompileThreadPool()->postWorkerTask(computeTask);
-    }
-
-    return std::make_unique<ComputeProgramLinkEvent>(infoLog, computeTask, waitableEvent);
 }
 
 angle::Result ProgramD3D::getComputeExecutableForImage2DBindLayout(
@@ -2039,9 +1978,9 @@ angle::Result ProgramD3D::getComputeExecutableForImage2DBindLayout(
 
     if (computeExecutable)
     {
-        mComputeExecutables.push_back(std::unique_ptr<ComputeExecutable>(
-            new ComputeExecutable(mImage2DBindLayoutCache[gl::ShaderType::Compute],
-                                  std::unique_ptr<ShaderExecutableD3D>(computeExecutable))));
+        mComputeExecutables.push_back(std::unique_ptr<D3DComputeExecutable>(
+            new D3DComputeExecutable(mImage2DBindLayoutCache[gl::ShaderType::Compute],
+                                     std::unique_ptr<ShaderExecutableD3D>(computeExecutable))));
         mCachedComputeExecutableIndex = mComputeExecutables.size() - 1;
     }
     else if (!infoLog)
@@ -2068,10 +2007,7 @@ void ProgramD3D::prepareForLink(const gl::ShaderMap<ShaderImpl *> &shaders)
     }
 }
 
-std::unique_ptr<LinkEvent> ProgramD3D::link(const gl::Context *context,
-                                            const gl::ProgramLinkedResources &resources,
-                                            gl::InfoLog &infoLog,
-                                            gl::ProgramMergedVaryings && /*mergedVaryings*/)
+angle::Result ProgramD3D::link(const gl::Context *context, std::shared_ptr<LinkTask> *linkTaskOut)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ProgramD3D::link");
     const gl::Version &clientVersion = context->getClientVersion();
@@ -2079,13 +2015,7 @@ std::unique_ptr<LinkEvent> ProgramD3D::link(const gl::Context *context,
     EGLenum clientType               = context->getClientType();
 
     // Ensure the compiler is initialized to avoid race conditions.
-    angle::Result result = mRenderer->ensureHLSLCompilerInitialized(GetImplAs<ContextD3D>(context));
-    if (result != angle::Result::Continue)
-    {
-        return std::make_unique<LinkEventDone>(result);
-    }
-
-    reset();
+    ANGLE_TRY(mRenderer->ensureHLSLCompilerInitialized(GetImplAs<ContextD3D>(context)));
 
     const gl::SharedCompiledShaderState &computeShader =
         mState.getAttachedShader(gl::ShaderType::Compute);
@@ -2120,6 +2050,24 @@ std::unique_ptr<LinkEvent> ProgramD3D::link(const gl::Context *context,
         }
     }
 
+    *linkTaskOut = std::shared_ptr<LinkTask>(new LinkTaskD3D(
+        clientVersion, caps, clientType, this, context->getState().getProvokingVertex()));
+
+    return angle::Result::Continue;
+}
+
+angle::Result ProgramD3D::linkJobImpl(d3d::Context *context,
+                                      const gl::Caps &caps,
+                                      const gl::Version &clientVersion,
+                                      EGLenum clientType,
+                                      gl::InfoLog &infoLog,
+                                      const gl::ProgramLinkedResources &resources,
+                                      const gl::ProgramMergedVaryings &mergedVaryings)
+{
+    reset();
+
+    const gl::SharedCompiledShaderState &computeShader =
+        mState.getAttachedShader(gl::ShaderType::Compute);
     if (computeShader)
     {
         mShaderSamplers[gl::ShaderType::Compute].resize(
@@ -2141,89 +2089,86 @@ std::unique_ptr<LinkEvent> ProgramD3D::link(const gl::Context *context,
 
         defineUniformsAndAssignRegisters();
 
-        return compileComputeExecutable(context, infoLog);
+        return angle::Result::Continue;
     }
-    else
+
+    for (gl::ShaderType shaderType : gl::kAllGraphicsShaderTypes)
     {
-        for (gl::ShaderType shaderType : gl::kAllGraphicsShaderTypes)
+        const gl::SharedCompiledShaderState &shader = mState.getAttachedShader(shaderType);
+        if (shader)
         {
-            const gl::SharedCompiledShaderState &shader = mState.getAttachedShader(shaderType);
-            if (shader)
+            mAttachedShaders[shaderType]->generateWorkarounds(&mShaderWorkarounds[shaderType]);
+            mShaderSamplers[shaderType].resize(caps.maxShaderTextureImageUnits[shaderType]);
+            mImages[shaderType].resize(caps.maxImageUnits);
+            mReadonlyImages[shaderType].resize(caps.maxImageUnits);
+
+            mShaderUniformsDirty.set(shaderType);
+
+            for (const sh::ShaderVariable &uniform : shader->uniforms)
             {
-                mAttachedShaders[shaderType]->generateWorkarounds(&mShaderWorkarounds[shaderType]);
-                mShaderSamplers[shaderType].resize(caps.maxShaderTextureImageUnits[shaderType]);
-                mImages[shaderType].resize(caps.maxImageUnits);
-                mReadonlyImages[shaderType].resize(caps.maxImageUnits);
-
-                mShaderUniformsDirty.set(shaderType);
-
-                for (const sh::ShaderVariable &uniform : shader->uniforms)
+                if (gl::IsImageType(uniform.type) && gl::IsImage2DType(uniform.type))
                 {
-                    if (gl::IsImageType(uniform.type) && gl::IsImage2DType(uniform.type))
-                    {
-                        mImage2DUniforms[shaderType].push_back(uniform);
-                    }
+                    mImage2DUniforms[shaderType].push_back(uniform);
                 }
             }
         }
-
-        if (mRenderer->getNativeLimitations().noFrontFacingSupport)
-        {
-            const SharedCompiledShaderStateD3D &fragmentShader =
-                mAttachedShaders[gl::ShaderType::Fragment];
-            if (fragmentShader && fragmentShader->usesFrontFacing)
-            {
-                infoLog << "The current renderer doesn't support gl_FrontFacing";
-                return std::make_unique<LinkEventDone>(angle::Result::Incomplete);
-            }
-        }
-
-        const gl::VaryingPacking &varyingPacking =
-            resources.varyingPacking.getOutputPacking(gl::ShaderType::Vertex);
-
-        ProgramD3DMetadata metadata(
-            mRenderer, mState.getAttachedShader(gl::ShaderType::Fragment), mAttachedShaders,
-            clientType, mState.getAttachedShader(gl::ShaderType::Vertex)->shaderVersion);
-        BuiltinVaryingsD3D builtins(metadata, varyingPacking);
-
-        mDynamicHLSL->generateShaderLinkHLSL(caps, mState.getAttachedShaders(), mAttachedShaders,
-                                             metadata, varyingPacking, builtins, &mShaderHLSL);
-
-        mUsesPointSize = mAttachedShaders[gl::ShaderType::Vertex] &&
-                         mAttachedShaders[gl::ShaderType::Vertex]->usesPointSize;
-        mDynamicHLSL->getPixelShaderOutputKey(caps, clientVersion, mState, metadata,
-                                              &mPixelShaderKey);
-        mFragDepthUsage      = metadata.getFragDepthUsage();
-        mUsesSampleMask      = metadata.usesSampleMask();
-        mUsesVertexID        = metadata.usesVertexID();
-        mUsesViewID          = metadata.usesViewID();
-        mHasMultiviewEnabled = metadata.hasMultiviewEnabled();
-
-        // Cache if we use flat shading
-        mUsesFlatInterpolation = FindFlatInterpolationVarying(mState.getAttachedShaders());
-
-        if (mRenderer->getMajorShaderModel() >= 4)
-        {
-            mGeometryShaderPreamble = mDynamicHLSL->generateGeometryShaderPreamble(
-                varyingPacking, builtins, mHasMultiviewEnabled,
-                metadata.canSelectViewInVertexShader());
-        }
-
-        initAttribLocationsToD3DSemantic();
-
-        defineUniformsAndAssignRegisters();
-
-        gatherTransformFeedbackVaryings(varyingPacking, builtins[gl::ShaderType::Vertex]);
-
-        linkResources(resources);
-
-        if (mState.getAttachedShader(gl::ShaderType::Vertex))
-        {
-            updateCachedInputLayoutFromShader();
-        }
-
-        return compileProgramExecutables(context, infoLog);
     }
+
+    if (mRenderer->getNativeLimitations().noFrontFacingSupport)
+    {
+        const SharedCompiledShaderStateD3D &fragmentShader =
+            mAttachedShaders[gl::ShaderType::Fragment];
+        if (fragmentShader && fragmentShader->usesFrontFacing)
+        {
+            infoLog << "The current renderer doesn't support gl_FrontFacing";
+            // Fail compilation
+            ANGLE_CHECK_HR(context, false, "gl_FrontFacing not supported", E_NOTIMPL);
+        }
+    }
+
+    const gl::VaryingPacking &varyingPacking =
+        resources.varyingPacking.getOutputPacking(gl::ShaderType::Vertex);
+
+    ProgramD3DMetadata metadata(mRenderer, mState.getAttachedShader(gl::ShaderType::Fragment),
+                                mAttachedShaders, clientType,
+                                mState.getAttachedShader(gl::ShaderType::Vertex)->shaderVersion);
+    BuiltinVaryingsD3D builtins(metadata, varyingPacking);
+
+    mDynamicHLSL->generateShaderLinkHLSL(caps, mState.getAttachedShaders(), mAttachedShaders,
+                                         metadata, varyingPacking, builtins, &mShaderHLSL);
+
+    mUsesPointSize = mAttachedShaders[gl::ShaderType::Vertex] &&
+                     mAttachedShaders[gl::ShaderType::Vertex]->usesPointSize;
+    mDynamicHLSL->getPixelShaderOutputKey(caps, clientVersion, mState, metadata, &mPixelShaderKey);
+    mFragDepthUsage      = metadata.getFragDepthUsage();
+    mUsesSampleMask      = metadata.usesSampleMask();
+    mUsesVertexID        = metadata.usesVertexID();
+    mUsesViewID          = metadata.usesViewID();
+    mHasMultiviewEnabled = metadata.hasMultiviewEnabled();
+
+    // Cache if we use flat shading
+    mUsesFlatInterpolation = FindFlatInterpolationVarying(mState.getAttachedShaders());
+
+    if (mRenderer->getMajorShaderModel() >= 4)
+    {
+        mGeometryShaderPreamble = mDynamicHLSL->generateGeometryShaderPreamble(
+            varyingPacking, builtins, mHasMultiviewEnabled, metadata.canSelectViewInVertexShader());
+    }
+
+    initAttribLocationsToD3DSemantic();
+
+    defineUniformsAndAssignRegisters();
+
+    gatherTransformFeedbackVaryings(varyingPacking, builtins[gl::ShaderType::Vertex]);
+
+    linkResources(resources);
+
+    if (mState.getAttachedShader(gl::ShaderType::Vertex))
+    {
+        updateCachedInputLayoutFromShader();
+    }
+
+    return angle::Result::Continue;
 }
 
 GLboolean ProgramD3D::validate(const gl::Caps & /*caps*/, gl::InfoLog * /*infoLog*/)
@@ -3179,7 +3124,7 @@ void ProgramD3D::updateCachedInputLayout(UniqueSerial associatedSerial, const gl
         }
     }
 
-    VertexExecutable::getSignature(mRenderer, mCachedInputLayout, &mCachedVertexSignature);
+    D3DVertexExecutable::getSignature(mRenderer, mCachedInputLayout, &mCachedVertexSignature);
 
     updateCachedVertexExecutableIndex();
 }

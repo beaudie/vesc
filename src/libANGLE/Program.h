@@ -808,7 +808,15 @@ class Program final : public LabeledObject, public angle::Subject
     }
 
   private:
+    class MainLinkLoadTask;
+    class MainLoadTask;
+    class MainLinkTask;
+    class MainLinkLoadEvent;
+
     friend class ProgramPipeline;
+    friend class MainLinkLoadTask;
+    friend class MainLoadTask;
+    friend class MainLinkTask;
 
     struct LinkingState;
     ~Program() override;
@@ -820,6 +828,13 @@ class Program final : public LabeledObject, public angle::Subject
     void deleteSelf(const Context *context);
 
     angle::Result linkImpl(const Context *context);
+    angle::Result linkJobImpl(const Caps &caps,
+                              const Limitations &limitations,
+                              const Version &clientVersion,
+                              bool isWebGL,
+                              LinkingVariables *linkingVariables,
+                              ProgramLinkedResources *resources,
+                              ProgramMergedVaryings *mergedVaryingsOut);
 
     bool linkValidateShaders(const Context *context, InfoLog &infoLog);
     void linkShaders();

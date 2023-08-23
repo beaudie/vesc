@@ -121,18 +121,16 @@ class ProgramMtl : public ProgramImpl
 
     void destroy(const gl::Context *context) override;
 
-    std::unique_ptr<LinkEvent> load(const gl::Context *context,
-                                    gl::BinaryInputStream *stream,
-                                    gl::InfoLog &infoLog) override;
+    angle::Result load(const gl::Context *context,
+                       gl::BinaryInputStream *stream,
+                       gl::InfoLog &infoLog,
+                       std::shared_ptr<LinkTask> *loadTaskOut) override;
     void save(const gl::Context *context, gl::BinaryOutputStream *stream) override;
     void setBinaryRetrievableHint(bool retrievable) override;
     void setSeparable(bool separable) override;
 
     void prepareForLink(const gl::ShaderMap<ShaderImpl *> &shaders) override;
-    std::unique_ptr<LinkEvent> link(const gl::Context *context,
-                                    const gl::ProgramLinkedResources &resources,
-                                    gl::InfoLog &infoLog,
-                                    gl::ProgramMergedVaryings &&mergedVaryings) override;
+    angle::Result link(const gl::Context *context, std::shared_ptr<LinkTask> *linkTaskOut) override;
     GLboolean validate(const gl::Caps &caps, gl::InfoLog *infoLog) override;
 
     void setUniform1fv(GLint location, GLsizei count, const GLfloat *v) override;
@@ -205,8 +203,15 @@ class ProgramMtl : public ProgramImpl
     bool hasFlatAttribute() const { return mProgramHasFlatAttributes; }
 
   private:
-    class ProgramLinkEvent;
-    class CompileMslTask;
+    class LinkTaskMtl;
+    class LoadTaskMtl;
+
+    friend class LinkTaskMtl;
+
+    angle::Result linkJobImpl(const gl::Context *context,
+                              gl::InfoLog &infoLog,
+                              const gl::ProgramLinkedResources &resources,
+                              std::vector<std::shared_ptr<LinkSubTask>> *subTasksOut);
 
     template <int cols, int rows>
     void setUniformMatrixfv(GLint location,
@@ -267,8 +272,9 @@ class ProgramMtl : public ProgramImpl
     void linkUpdateHasFlatAttributes();
 
     void linkResources(const gl::ProgramLinkedResources &resources);
-    std::unique_ptr<LinkEvent> compileMslShaderLibs(const gl::Context *context,
-                                                    gl::InfoLog &infoLog);
+    angle::Result compileMslShaderLibs(const gl::Context *context,
+                                       gl::InfoLog &infoLog,
+                                       std::vector<std::shared_ptr<LinkSubTask>> *subTasksOut);
 
     mtl::BufferPool *getBufferPool(ContextMtl *context);
 

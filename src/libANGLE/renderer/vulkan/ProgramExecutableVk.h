@@ -119,10 +119,10 @@ class ProgramExecutableVk
     void reset(ContextVk *contextVk);
 
     void save(ContextVk *contextVk, bool isSeparable, gl::BinaryOutputStream *stream);
-    std::unique_ptr<rx::LinkEvent> load(ContextVk *contextVk,
-                                        const gl::ProgramExecutable &glExecutable,
-                                        bool isSeparable,
-                                        gl::BinaryInputStream *stream);
+    angle::Result load(ContextVk *contextVk,
+                       const gl::ProgramExecutable &glExecutable,
+                       bool isSeparable,
+                       gl::BinaryInputStream *stream);
 
     void clearVariableInfoMap();
 
