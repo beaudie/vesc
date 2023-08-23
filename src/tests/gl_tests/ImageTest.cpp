@@ -675,6 +675,7 @@ void main()
                       const std::vector<AHBPlaneData> &data)
     {
 #    if defined(ANGLE_AHARDWARE_BUFFER_LOCK_PLANES_SUPPORT)
+        WARN() << "================ ANGLE_AHARDWARE_BUFFER_LOCK_PLANES_SUPPORT";
         AHardwareBuffer_Planes planeInfo;
         int res = AHardwareBuffer_lockPlanes(
             aHardwareBuffer, AHARDWAREBUFFER_USAGE_CPU_WRITE_RARELY, -1, nullptr, &planeInfo);
@@ -689,6 +690,8 @@ void main()
             size_t planeHeight = (isYUV && planeIdx > 0) ? (height / 2) : height;
             size_t planeWidth  = (isYUV && planeIdx > 0) ? (width / 2) : width;
             size_t layerPitch  = getLayerPitch(planeHeight, plane.rowStride);
+            WARN() << "================ planeData.bytesPerPixel: " << planeData.bytesPerPixel;
+            WARN() << "================ layerPitch: " << layerPitch;
 
             for (size_t z = 0; z < depth; z++)
             {
@@ -698,6 +701,9 @@ void main()
 
                 for (size_t y = 0; y < planeHeight; y++)
                 {
+                    WARN() << "================ srcDepthSlice: " << *srcDepthSlice;
+                    WARN() << "================  plane.pixelStride: " << plane.pixelStride;
+                    WARN() << "================  plane.rowStride: " << plane.rowStride;
                     const uint8_t *srcRow =
                         srcDepthSlice + y * planeWidth * planeData.bytesPerPixel;
 
@@ -706,7 +712,19 @@ void main()
                         const uint8_t *src = srcRow + x * planeData.bytesPerPixel;
                         uint8_t *dst = reinterpret_cast<uint8_t *>(plane.data) + z * layerPitch +
                                        y * plane.rowStride + x * plane.pixelStride;
+                        WARN() << "================ pixel[" << x << "][" << y << "]:";
                         memcpy(dst, src, planeData.bytesPerPixel);
+                        if (planeData.bytesPerPixel == 3)
+                        {
+                            WARN() << "================     dst: " << (void *)dst << ", "
+                                   << (int)dst[0] << " " << (int)dst[1] << " " << (int)dst[2];
+                        }
+                        else
+                        {
+                            WARN() << "================     dst: " << (void *)dst << ", "
+                                   << (int)dst[0] << " " << (int)dst[1] << " " << (int)dst[2] << " "
+                                   << (int)dst[3];
+                        }
                     }
                 }
             }
@@ -715,6 +733,7 @@ void main()
         res = AHardwareBuffer_unlock(aHardwareBuffer, nullptr);
         EXPECT_EQ(res, 0);
 #    else
+        WARN() << "================ NOT ANGLE_AHARDWARE_BUFFER_LOCK_PLANES_SUPPORT";
         EXPECT_EQ(1u, data.size());
         void *mappedMemory = nullptr;
         int res = AHardwareBuffer_lock(aHardwareBuffer, AHARDWAREBUFFER_USAGE_CPU_WRITE_RARELY, -1,
@@ -822,6 +841,7 @@ void main()
                                                  const std::vector<AHBPlaneData> &data)
     {
 #if defined(ANGLE_AHARDWARE_BUFFER_SUPPORT)
+        WARN() << "==================== androidFormat: " << androidFormat;
         const AHardwareBuffer_Desc aHardwareBufferDescription =
             createAndroidHardwareBufferDesc(width, height, depth, androidFormat, usage);
 
@@ -959,6 +979,11 @@ void main()
 
         // Expect that the rendered quad's color is the same as the reference color with a tolerance
         // of 2
+        WARN() << "================== referenceColor[0]: " << (int)referenceColor[0];
+        WARN() << "================== referenceColor[1]: " << (int)referenceColor[1];
+        WARN() << "================== referenceColor[2]: " << (int)referenceColor[2];
+        WARN() << "================== referenceColor[3]: " << (int)referenceColor[3];
+        WARN() << "================== pixel (0, 0):";
         EXPECT_PIXEL_NEAR(0, 0, referenceColor[0], referenceColor[1], referenceColor[2],
                           referenceColor[3], 2);
     }
@@ -2900,13 +2925,15 @@ void ImageTest::SourceAHBTargetExternal_helper(const EGLint *attribs)
     // Create the Image
     AHardwareBuffer *source;
     EGLImageKHR image;
-    createEGLImageAndroidHardwareBufferSource(1, 1, 1, AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM,
+    // createEGLImageAndroidHardwareBufferSource(1, 1, 1, AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM,
+    createEGLImageAndroidHardwareBufferSource(1, 1, 1, AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM,
                                               kDefaultAHBUsage, attribs, {{kSrgbColor, 4}}, &source,
                                               &image);
 
     // Create a texture target to bind the egl image
     GLTexture target;
     createEGLImageTargetTextureExternal(image, target);
+    // createEGLImageTargetTextureStorage(image, GL_TEXTURE_2D, target);
 
     // Use texture target bound to egl image as source and render to framebuffer
     // Verify that the target texture has the expected color
@@ -4199,6 +4226,179 @@ TEST_P(ImageTestES3, RGBAHBUploadDataColorspace)
 
     verifyResults2D(ahbTexture, kRed50Linear);
     verifyResultAHB(ahb, {{kRed50SRGB, sizeof(kRed50SRGB)}});
+
+    // Clean up
+    eglDestroyImageKHR(window->getDisplay(), ahbImage);
+    destroyAndroidHardwareBuffer(ahb);
+}
+
+// Test that RGB data are preserved when importing from AHB created with sRGB color space and
+// glTexSubImage is able to update data.
+TEST_P(ImageTestES3, RGBXAHBUploadDataColorspace_Clone)
+{
+    EGLWindow *window = getEGLWindow();
+
+    ANGLE_SKIP_TEST_IF(!hasOESExt() || !hasBaseExt() || !has2DTextureExt());
+    ANGLE_SKIP_TEST_IF(!hasAndroidImageNativeBufferExt() || !hasAndroidHardwareBufferSupport());
+
+    const size_t width                  = 3;
+    const size_t height                 = 2;
+    const std::vector<GLubyte> kGarbage = {123, 123, 123, 123, 123, 123, 123, 123,
+                                           123, 123, 123, 123, 123, 123, 123, 123,
+                                           123, 123, 123, 123, 123, 123, 123, 123};
+    // const std::vector<GLubyte> kRed50SRGB = {188, 0, 0, 188, 0, 0, 188, 0, 0, 188, 0, 0, 188, 0,
+    // 0, 188, 0, 0};
+    // const std::vector<GLubyte> kRed50SRGB   = {188, 0, 0, 255, 188, 0, 0, 255, 188, 0, 0, 255,
+    //                                            188, 0, 0, 255, 188, 0, 0, 255, 188, 0, 0, 255};
+    const std::vector<GLubyte> kRed50SRGB   = {1,  2,  3,  4,  5,  6,  7,  8,  9,  10, 11, 12,
+                                               13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24};
+    const std::vector<GLubyte> kRed50Linear = {128, 0, 0, 255, 128, 0, 0, 255, 128, 0, 0, 255,
+                                               128, 0, 0, 255, 128, 0, 0, 255, 128, 0, 0, 255};
+
+    // Create the Image
+    AHardwareBuffer *ahb;
+    EGLImageKHR ahbImage;
+
+    // http://b/294086848#comment16, render buffer is of format AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM
+    // createEGLImageAndroidHardwareBufferSource(
+    //     width, height, 1, AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM, kDefaultAHBUsage,
+    //     kColorspaceAttribs, {{kGarbage, 3}}, &ahb, &ahbImage);
+    // const size_t bytesPerPixel = 3;
+    const size_t bytesPerPixel = 4;
+    createEGLImageAndroidHardwareBufferSource(
+        width, height, 1, AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM, kDefaultAHBUsage,
+        kColorspaceAttribs, {{kGarbage.data(), bytesPerPixel}}, &ahb, &ahbImage);
+
+    GLTexture ahbTexture;
+    createEGLImageTargetTexture2D(ahbImage, ahbTexture);
+
+    glBindTexture(GL_TEXTURE_2D, ahbTexture);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE,
+                    kRed50SRGB.data());
+    glFinish();
+    {
+        // read the AHB buffer again
+        AHardwareBuffer_Planes planeInfo;
+        int res = AHardwareBuffer_lockPlanes(ahb, AHARDWAREBUFFER_USAGE_CPU_WRITE_RARELY, -1,
+                                             nullptr, &planeInfo);
+        EXPECT_EQ(res, 0);
+        for (size_t planeIdx = 0; planeIdx < 1; planeIdx++)
+        {
+            const AHardwareBuffer_Plane &plane = planeInfo.planes[planeIdx];
+
+            size_t planeHeight = height;
+            size_t planeWidth  = width;
+            size_t layerPitch  = getLayerPitch(planeHeight, plane.rowStride);
+
+            for (size_t z = 0; z < 1; z++)
+            {
+                for (size_t y = 0; y < planeHeight; y++)
+                {
+                    for (size_t x = 0; x < planeWidth; x++)
+                    {
+                        uint8_t *dst = reinterpret_cast<uint8_t *>(plane.data) + z * layerPitch +
+                                       y * plane.rowStride + x * plane.pixelStride;
+                        WARN() << "================ after glFinish(), pixel[" << x << "][" << y
+                               << "]:";
+                        if (bytesPerPixel == 3)
+                        {
+                            WARN() << "================     dst: " << (void *)dst << ", "
+                                   << (int)dst[0] << " " << (int)dst[1] << " " << (int)dst[2];
+                        }
+                        else
+                        {
+                            WARN() << "================     dst: " << (void *)dst << ", "
+                                   << (int)dst[0] << " " << (int)dst[1] << " " << (int)dst[2] << " "
+                                   << (int)dst[3];
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    verifyResults2D(ahbTexture, kRed50Linear.data());
+    {
+        // read the AHB buffer again
+        AHardwareBuffer_Planes planeInfo;
+        int res = AHardwareBuffer_lockPlanes(ahb, AHARDWAREBUFFER_USAGE_CPU_WRITE_RARELY, -1,
+                                             nullptr, &planeInfo);
+        EXPECT_EQ(res, 0);
+        for (size_t planeIdx = 0; planeIdx < 1; planeIdx++)
+        {
+            const AHardwareBuffer_Plane &plane = planeInfo.planes[planeIdx];
+
+            size_t planeHeight = height;
+            size_t planeWidth  = width;
+            size_t layerPitch  = getLayerPitch(planeHeight, plane.rowStride);
+
+            for (size_t z = 0; z < 1; z++)
+            {
+                for (size_t y = 0; y < planeHeight; y++)
+                {
+                    for (size_t x = 0; x < planeWidth; x++)
+                    {
+                        uint8_t *dst = reinterpret_cast<uint8_t *>(plane.data) + z * layerPitch +
+                                       y * plane.rowStride + x * plane.pixelStride;
+                        WARN() << "================ after drawQuad(), pixel[" << x << "][" << y
+                               << "]:";
+                        if (bytesPerPixel == 3)
+                        {
+                            WARN() << "================     dst: " << (void *)dst << ", "
+                                   << (int)dst[0] << " " << (int)dst[1] << " " << (int)dst[2];
+                        }
+                        else
+                        {
+                            WARN() << "================     dst: " << (void *)dst << ", "
+                                   << (int)dst[0] << " " << (int)dst[1] << " " << (int)dst[2] << " "
+                                   << (int)dst[3];
+                        }
+                    }
+                }
+            }
+        }
+    }
+    verifyResultAHB(ahb, {{kRed50SRGB.data(), bytesPerPixel}});
+    {
+        // read the AHB buffer again
+        AHardwareBuffer_Planes planeInfo;
+        int res = AHardwareBuffer_lockPlanes(ahb, AHARDWAREBUFFER_USAGE_CPU_WRITE_RARELY, -1,
+                                             nullptr, &planeInfo);
+        EXPECT_EQ(res, 0);
+        for (size_t planeIdx = 0; planeIdx < 1; planeIdx++)
+        {
+            const AHardwareBuffer_Plane &plane = planeInfo.planes[planeIdx];
+
+            size_t planeHeight = height;
+            size_t planeWidth  = width;
+            size_t layerPitch  = getLayerPitch(planeHeight, plane.rowStride);
+
+            for (size_t z = 0; z < 1; z++)
+            {
+                for (size_t y = 0; y < planeHeight; y++)
+                {
+                    for (size_t x = 0; x < planeWidth; x++)
+                    {
+                        uint8_t *dst = reinterpret_cast<uint8_t *>(plane.data) + z * layerPitch +
+                                       y * plane.rowStride + x * plane.pixelStride;
+                        WARN() << "================ after verifyResults2D(), pixel[" << x << "]["
+                               << y << "]:";
+                        if (bytesPerPixel == 3)
+                        {
+                            WARN() << "================     dst: " << (void *)dst << ", "
+                                   << (int)dst[0] << " " << (int)dst[1] << " " << (int)dst[2];
+                        }
+                        else
+                        {
+                            WARN() << "================     dst: " << (void *)dst << ", "
+                                   << (int)dst[0] << " " << (int)dst[1] << " " << (int)dst[2] << " "
+                                   << (int)dst[3];
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     // Clean up
     eglDestroyImageKHR(window->getDisplay(), ahbImage);
