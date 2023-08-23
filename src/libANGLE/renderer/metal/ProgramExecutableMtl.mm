@@ -321,7 +321,9 @@ ProgramExecutableMtl::ProgramExecutableMtl(const gl::ProgramExecutable *executab
       mProgramHasFlatAttributes(false),
       mShadowCompareModes{},
       mAuxBufferPool(nullptr)
-{}
+{
+    mCurrentShaderVariants.fill(nullptr);
+}
 
 ProgramExecutableMtl::~ProgramExecutableMtl() {}
 
