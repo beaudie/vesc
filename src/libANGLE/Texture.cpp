@@ -1945,6 +1945,8 @@ angle::Result Texture::setEGLImageTargetImpl(Context *context,
     mState.setImageDescChain(0, levels - 1, imageTarget->getExtents(), imageTarget->getFormat(),
                              initState);
     mState.mHasProtectedContent = imageTarget->hasProtectedContent();
+    WARN() << " imageTarget->getFormat():" << &imageTarget->getFormat()
+           << " .info->sizedInternalFormat:" << imageTarget->getFormat().info->sizedInternalFormat;
 
     ANGLE_TRY(mTexture->setEGLImageTarget(context, type, imageTarget));
 

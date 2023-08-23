@@ -234,6 +234,7 @@ const Format gFormatInfoTable[] = {
     { FormatID::R8G8B8A8_UNORM_SRGB, GL_SRGB8_ALPHA8, GL_SRGB8_ALPHA8, GenerateMip<R8G8B8A8SRGB>, NoCopyFunctions, ReadColor<R8G8B8A8SRGB, GLfloat>, WriteColor<R8G8B8A8SRGB, GLfloat>, GL_UNSIGNED_NORMALIZED, 8, 8, 8, 8, 0, 0, 0, 4, 0, false, false, false, true, false, gl::VertexAttribType::Byte },
     { FormatID::R8G8B8A8_USCALED, GL_RGBA8_USCALED_ANGLEX, GL_RGBA8_USCALED_ANGLEX, GenerateMip<R8G8B8A8>, NoCopyFunctions, ReadColor<R8G8B8A8, GLuint>, WriteColor<R8G8B8A8, GLuint>, GL_UNSIGNED_INT, 8, 8, 8, 8, 0, 0, 0, 4, 0, false, false, true, false, false, gl::VertexAttribType::UnsignedByte },
     { FormatID::R8G8B8X8_UNORM, GL_RGBA8, GL_RGBA8, GenerateMip<R8G8B8X8>, NoCopyFunctions, ReadColor<R8G8B8X8, GLfloat>, WriteColor<R8G8B8X8, GLfloat>, GL_UNSIGNED_NORMALIZED, 8, 8, 8, 0, 0, 0, 0, 4, std::numeric_limits<GLuint>::max(), false, false, false, false, false, gl::VertexAttribType::UnsignedByte },
+    { FormatID::R8G8B8X8_UNORM_SRGB, GL_SRGBX8_ANGLE, GL_SRGBX8_ANGLE, GenerateMip<R8G8B8X8SRGB>, NoCopyFunctions, ReadColor<R8G8B8X8SRGB, GLfloat>, WriteColor<R8G8B8X8SRGB, GLfloat>, GL_UNSIGNED_NORMALIZED, 8, 8, 8, 0, 0, 0, 0, 4, std::numeric_limits<GLuint>::max(), false, false, false, true, false, gl::VertexAttribType::Byte },
     { FormatID::R8G8B8_SINT, GL_RGB8I, GL_RGB8I, GenerateMip<R8G8B8S>, NoCopyFunctions, ReadColor<R8G8B8S, GLint>, WriteColor<R8G8B8S, GLint>, GL_INT, 8, 8, 8, 0, 0, 0, 0, 3, 0, false, false, false, false, false, gl::VertexAttribType::Byte },
     { FormatID::R8G8B8_SNORM, GL_RGB8_SNORM, GL_RGB8_SNORM, GenerateMip<R8G8B8S>, NoCopyFunctions, ReadColor<R8G8B8S, GLfloat>, WriteColor<R8G8B8S, GLfloat>, GL_SIGNED_NORMALIZED, 8, 8, 8, 0, 0, 0, 0, 3, 0, false, false, false, false, false, gl::VertexAttribType::Byte },
     { FormatID::R8G8B8_SSCALED, GL_RGB8_SSCALED_ANGLEX, GL_RGB8_SSCALED_ANGLEX, GenerateMip<R8G8B8S>, NoCopyFunctions, ReadColor<R8G8B8S, GLint>, WriteColor<R8G8B8S, GLint>, GL_INT, 8, 8, 8, 0, 0, 0, 0, 3, 0, false, false, true, false, false, gl::VertexAttribType::Byte },
@@ -734,6 +735,8 @@ FormatID Format::InternalFormatToID(GLenum internalFormat)
             return FormatID::R8G8B8_UNORM_SRGB;
         case GL_SRGB8_ALPHA8:
             return FormatID::R8G8B8A8_UNORM_SRGB;
+        case GL_SRGBX8_ANGLE:
+            return FormatID::R8G8B8X8_UNORM_SRGB;
         case GL_STENCIL_INDEX8:
             return FormatID::S8_UINT;
         case GL_UNSIGNED_INT_10_10_10_2_OES:

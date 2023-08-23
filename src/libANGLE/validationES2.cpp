@@ -1558,6 +1558,7 @@ bool ValidateES2TexImageParametersBase(const Context *context,
     // case.
     if (!isSubImage && !isCompressed && internalformat != format && !nonEqualFormatsAllowed)
     {
+        WARN() << " at line:" << __LINE__;
         ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kInvalidFormatCombination);
         return false;
     }
@@ -3405,6 +3406,7 @@ bool ValidateCopySubTextureCHROMIUM(const Context *context,
     const InternalFormat &destFormat = *dest->getFormat(destTarget, destLevel).info;
     if (!IsValidCopySubTextureDestionationInternalFormat(destFormat.internalFormat))
     {
+        WARN() << " at line:" << __LINE__;
         ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kInvalidFormatCombination);
         return false;
     }

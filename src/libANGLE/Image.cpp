@@ -517,64 +517,79 @@ Error Image::initialize(const Display *display, const gl::Context *context)
     }
 
     mState.format = mState.source->getAttachmentFormat(GL_NONE, mState.imageIndex);
+    WARN() << " Enter: mState.format:" << &mState.format
+           << " sizedInternalFormat:" << mState.format.info->sizedInternalFormat
+           << " mState.colorspace:" << mState.colorspace;
 
     if (mState.colorspace != EGL_GL_COLORSPACE_DEFAULT_EXT)
     {
         GLenum nonLinearFormat = mState.format.info->sizedInternalFormat;
-        if (!gl::ColorspaceFormatOverride(mState.colorspace, &nonLinearFormat))
-        {
-            // the colorspace format is not supported
-            return egl::EglBadMatch();
-        }
-        mState.format = gl::Format(nonLinearFormat);
-    }
-
-    if (!IsExternalImageTarget(mState.target))
-    {
-        // Account for the fact that GL_ANGLE_yuv_internal_format extension maybe enabled,
-        // in which case the internal format itself could be YUV.
-        mState.yuv = gl::IsYuvFormat(mState.format.info->sizedInternalFormat);
-    }
-
-    mState.size    = mState.source->getAttachmentSize(mState.imageIndex);
-    mState.samples = mState.source->getAttachmentSamples(mState.imageIndex);
-
-    if (IsTextureTarget(mState.target))
-    {
-        mState.size.depth = 1;
-    }
-
-    Error error = mImplementation->initialize(display);
-    if (error.isError())
-    {
-        return error;
-    }
-
-    if (IsTextureTarget(mState.target))
-    {
-        mIsTexturable = true;
-        mIsRenderable = mState.format.info->textureAttachmentSupport(context->getClientVersion(),
-                                                                     context->getExtensions());
-    }
-    else if (IsRenderbufferTarget(mState.target))
-    {
-        mIsTexturable = true;
-        mIsRenderable = mState.format.info->renderbufferSupport(context->getClientVersion(),
-                                                                context->getExtensions());
-    }
-    else if (IsExternalImageTarget(mState.target))
-    {
-        ASSERT(mState.source != nullptr);
-        mIsTexturable = rx::GetAs<ExternalImageSibling>(mState.source)->isTextureable(context);
-        mIsRenderable = rx::GetAs<ExternalImageSibling>(mState.source)
-                            ->isRenderable(context, GL_NONE, gl::ImageIndex());
+        /*        if(nonLinearFormat == GL_RGBX8_ANGLE)
+                {
+                    nonLinearFormat = /*GL_SRGB8 */
+        GL_SRGB8_ALPHA8;
     }
     else
-    {
-        UNREACHABLE();
-    }
+        * /
+        {
+            if (!gl::ColorspaceFormatOverride(mState.colorspace, &nonLinearFormat))
+            {
+                // the colorspace format is not supported
+                return egl::EglBadMatch();
+            }
+        }
+    mState.format = gl::Format(nonLinearFormat);
+}
 
-    return NoError();
+if (!IsExternalImageTarget(mState.target))
+{
+    // Account for the fact that GL_ANGLE_yuv_internal_format extension maybe enabled,
+    // in which case the internal format itself could be YUV.
+    mState.yuv = gl::IsYuvFormat(mState.format.info->sizedInternalFormat);
+}
+
+mState.size    = mState.source->getAttachmentSize(mState.imageIndex);
+mState.samples = mState.source->getAttachmentSamples(mState.imageIndex);
+
+if (IsTextureTarget(mState.target))
+{
+    mState.size.depth = 1;
+}
+
+Error error = mImplementation->initialize(display);
+if (error.isError())
+{
+    return error;
+}
+
+if (IsTextureTarget(mState.target))
+{
+    mIsTexturable = true;
+    mIsRenderable = mState.format.info->textureAttachmentSupport(context->getClientVersion(),
+                                                                 context->getExtensions());
+}
+else if (IsRenderbufferTarget(mState.target))
+{
+    mIsTexturable = true;
+    mIsRenderable = mState.format.info->renderbufferSupport(context->getClientVersion(),
+                                                            context->getExtensions());
+}
+else if (IsExternalImageTarget(mState.target))
+{
+    ASSERT(mState.source != nullptr);
+    mIsTexturable = rx::GetAs<ExternalImageSibling>(mState.source)->isTextureable(context);
+    mIsRenderable = rx::GetAs<ExternalImageSibling>(mState.source)
+                        ->isRenderable(context, GL_NONE, gl::ImageIndex());
+}
+else
+{
+    UNREACHABLE();
+}
+
+WARN() << " Exit: mState.format:" << &mState.format
+       << " sizedInternalFormat:" << mState.format.info->sizedInternalFormat
+       << " mState.colorspace:" << mState.colorspace;
+return NoError();
 }
 
 bool Image::orphaned() const

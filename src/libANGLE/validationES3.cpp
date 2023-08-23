@@ -385,11 +385,12 @@ static bool ValidateTexImageFormatCombination(const Context *context,
         }
         else
         {
-            if (!ValidES3FormatCombination(format, type, internalFormat))
-            {
-                ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kInvalidFormatCombination);
-                return false;
-            }
+            /*            if (!ValidES3FormatCombination(format, type, internalFormat))
+                        {
+                        WARN()<<" at line:" << __LINE__ << " format:" << format << " type:" << type
+               << " internalFormat" << internalFormat; ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION,
+               kInvalidFormatCombination); return false;
+                        }*/
         }
     }
 
@@ -652,6 +653,8 @@ bool ValidateES3TexImageParametersBase(const Context *context,
     // Validate texture formats
     GLenum actualInternalFormat =
         isSubImage ? texture->getFormat(target, level).info->internalFormat : internalformat;
+    WARN() << " isSubImage:" << isSubImage << " actualInternalFormat:" << actualInternalFormat;
+
     if (isSubImage && actualInternalFormat == GL_NONE)
     {
         ANGLE_VALIDATION_ERROR(GL_INVALID_OPERATION, kInvalidMipLevel);

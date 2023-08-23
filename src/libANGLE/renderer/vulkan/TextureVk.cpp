@@ -531,6 +531,8 @@ angle::Result TextureVk::setSubImage(const gl::Context *context,
     const gl::ImageDesc &levelDesc       = mState.getImageDesc(index);
     const vk::Format &vkFormat =
         contextVk->getRenderer()->getFormat(levelDesc.format.info->sizedInternalFormat);
+    WARN() << " levelDesc.format.info->sizedInternalFormat:"
+           << levelDesc.format.info->sizedInternalFormat;
 
     return setSubImageImpl(context, index, area, formatInfo, type, unpack, unpackBuffer, pixels,
                            vkFormat);
@@ -1697,7 +1699,10 @@ angle::Result TextureVk::setEGLImageTarget(const gl::Context *context,
 
     releaseAndDeleteImageAndViews(contextVk);
 
-    const vk::Format &format   = renderer->getFormat(image->getFormat().info->sizedInternalFormat);
+    const vk::Format &format = renderer->getFormat(image->getFormat().info->sizedInternalFormat);
+    WARN() << " image:" << image << " image.format:" << &image->getFormat()
+           << " image.formatinfo->sizedInternalFormat:"
+           << image->getFormat().info->sizedInternalFormat << " format:" << &format;
     UniqueSerial siblingSerial = imageVk->generateSiblingSerial();
     setImageHelper(contextVk, imageVk->getImage(), imageVk->getImageTextureType(), format,
                    imageVk->getImageLevel().get(), imageVk->getImageLayer(), false, siblingSerial);
@@ -1830,7 +1835,7 @@ angle::Result TextureVk::ensureImageAllocated(ContextVk *contextVk, const vk::Fo
 void TextureVk::setImageHelper(ContextVk *contextVk,
                                vk::ImageHelper *imageHelper,
                                gl::TextureType eglImageNativeType,
-                               const vk::Format &format,
+                               const vk::Format &unUsedFormat,
                                uint32_t imageLevelOffset,
                                uint32_t imageLayerOffset,
                                bool selfOwned,
@@ -1846,6 +1851,13 @@ void TextureVk::setImageHelper(ContextVk *contextVk,
     // If image is shared between other container objects, force it to renderable format since we
     // don't know if other container object will render or not.
     if (!mOwnsImage)
+    {
+        WARN() << " isBackedByExternalMemory:" << imageHelper->isBackedByExternalMemory()
+               << " imageHelper: " << imageHelper
+               << " mImage.getActualFormatID: " << ToUnderlying(imageHelper->getActualFormatID());
+    }
+
+    if (!mOwnsImage /*&& !imageHelper->isBackedByExternalMemory()*/)
     {
         mRequiredImageAccess = vk::ImageAccess::Renderable;
     }
@@ -2498,6 +2510,7 @@ angle::Result TextureVk::reinitImageAsRenderable(ContextVk *contextVk,
 
 angle::Result TextureVk::respecifyImageStorage(ContextVk *contextVk)
 {
+    WARN() << " mImage:" << mImage;
     if (!mImage->valid())
     {
         ASSERT(!mRedefinedLevels.any());
@@ -3961,6 +3974,9 @@ angle::Result TextureVk::ensureMutable(ContextVk *contextVk)
 angle::Result TextureVk::ensureRenderable(ContextVk *contextVk,
                                           TextureUpdateResult *updateResultOut)
 {
+    WARN() << " enter: mRequiredImageAccess:" << ToUnderlying(mRequiredImageAccess)
+           << " mImage: " << mImage
+           << " actualImageFormatID: " << ToUnderlying(mImage->getActualFormatID());
     if (mRequiredImageAccess == vk::ImageAccess::Renderable)
     {
         return angle::Result::Continue;
@@ -3982,6 +3998,7 @@ angle::Result TextureVk::ensureRenderable(ContextVk *contextVk,
         return angle::Result::Continue;
     }
 
+    WARN() << "mImage:" << mImage;
     // luminance/alpha  format never fallback for rendering and if we ever do fallback, the
     // following code may not handle it properly.
     ASSERT(!format.getIntendedFormat().isLUMA());
@@ -4039,7 +4056,11 @@ angle::Result TextureVk::ensureRenderable(ContextVk *contextVk,
 
     *updateResultOut = TextureUpdateResult::ImageRespecified;
 
-    return refreshImageViews(contextVk);
+    ANGLE_TRY(refreshImageViews(contextVk));
+    WARN() << " exit: mRequiredImageAccess:" << ToUnderlying(mRequiredImageAccess)
+           << " mImage: " << mImage
+           << " actualImageFormatID: " << ToUnderlying(mImage->getActualFormatID());
+    return angle::Result::Continue;
 }
 
 void TextureVk::stageSelfAsSubresourceUpdates(ContextVk *contextVk)
