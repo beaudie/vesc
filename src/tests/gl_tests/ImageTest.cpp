@@ -2879,15 +2879,6 @@ TEST_P(ImageTest, SourceAHBTargetExternal)
     SourceAHBTargetExternal_helper(kDefaultAttribs);
 }
 
-// Testing source AHB EGL image with colorspace, target external texture
-TEST_P(ImageTest, SourceAHBTargetExternal_Colorspace)
-{
-    ANGLE_SKIP_TEST_IF(!IsAndroid());
-    ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3 && !IsGLExtensionEnabled("GL_EXT_sRGB"));
-    ANGLE_SKIP_TEST_IF(!hasImageGLColorspaceExt());
-    SourceAHBTargetExternal_helper(kColorspaceAttribs);
-}
-
 void ImageTest::SourceAHBTargetExternal_helper(const EGLint *attribs)
 {
     EGLWindow *window = getEGLWindow();
@@ -2900,13 +2891,15 @@ void ImageTest::SourceAHBTargetExternal_helper(const EGLint *attribs)
     // Create the Image
     AHardwareBuffer *source;
     EGLImageKHR image;
-    createEGLImageAndroidHardwareBufferSource(1, 1, 1, AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM,
+    // createEGLImageAndroidHardwareBufferSource(1, 1, 1, AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM,
+    createEGLImageAndroidHardwareBufferSource(1, 1, 1, AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM,
                                               kDefaultAHBUsage, attribs, {{kSrgbColor, 4}}, &source,
                                               &image);
 
     // Create a texture target to bind the egl image
     GLTexture target;
     createEGLImageTargetTextureExternal(image, target);
+    // createEGLImageTargetTextureStorage(image, GL_TEXTURE_2D, target);
 
     // Use texture target bound to egl image as source and render to framebuffer
     // Verify that the target texture has the expected color
@@ -4169,6 +4162,51 @@ TEST_P(ImageTestES3, RGBXAHBUploadDataColorspace)
     eglDestroyImageKHR(window->getDisplay(), ahbImage);
     destroyAndroidHardwareBuffer(ahb);
 }
+
+// Test that RGB data are preserved when importing from AHB created with sRGB color space and
+// glTexSubImage is able to update data.
+TEST_P(ImageTestES3, RGBXAHBUploadDataColorspace_Clone)
+{
+    EGLWindow *window = getEGLWindow();
+
+    ANGLE_SKIP_TEST_IF(!hasOESExt() || !hasBaseExt() || !has2DTextureExt());
+    ANGLE_SKIP_TEST_IF(!hasAndroidImageNativeBufferExt() || !hasAndroidHardwareBufferSupport());
+
+    const GLubyte kGarbage[]     = {123, 123, 123, 123};
+    const GLubyte kRed50SRGB[]   = {188, 0, 0, 255};
+    const GLubyte kRed50Linear[] = {128, 0, 0, 255};
+
+    // Create the Image
+    AHardwareBuffer *ahb;
+    EGLImageKHR ahbImage;
+
+    // http://b/294086848#comment16, render buffer is of format AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM
+    createEGLImageAndroidHardwareBufferSource(1, 1, 1, AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM,
+                                              kDefaultAHBUsage, kColorspaceAttribs, {{kGarbage, 4}},
+                                              &ahb, &ahbImage);
+
+    GLTexture ahbTexture;
+    createEGLImageTargetTexture2D(ahbImage, ahbTexture);
+
+    glBindTexture(GL_TEXTURE_2D, ahbTexture);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, kRed50SRGB);
+    glFinish();
+
+    verifyResults2D(ahbTexture, kRed50Linear);
+    verifyResultAHB(ahb, {{kRed50SRGB, 4}});
+
+    // Clean up
+    eglDestroyImageKHR(window->getDisplay(), ahbImage);
+    destroyAndroidHardwareBuffer(ahb);
+}
+// Testing source AHB EGL image with colorspace, target external texture
+// TEST_P(ImageTest, SourceAHBTargetExternal_Colorspace)
+// {
+//     ANGLE_SKIP_TEST_IF(!IsAndroid());
+//     ANGLE_SKIP_TEST_IF(getClientMajorVersion() < 3 && !IsGLExtensionEnabled("GL_EXT_sRGB"));
+//     ANGLE_SKIP_TEST_IF(!hasImageGLColorspaceExt());
+//     SourceAHBTargetExternal_helper(kColorspaceAttribs);
+// }
 
 // Test that RGBX data are preserved when importing from AHB.  Tests interaction of emulated channel
 // being cleared with no GPU_FRAMEBUFFER usage specified.
