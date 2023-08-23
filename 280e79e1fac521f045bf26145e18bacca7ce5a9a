@@ -39,6 +39,30 @@
       },
       "revId": "280e79e1fac521f045bf26145e18bacca7ce5a9a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc323cd3_8927ed67",
+        "filename": "src/compiler/translator/tree_ops/RescopeGlobalVariables.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-08-23T18:26:29Z",
+      "side": 1,
+      "message": "Fixed by https://chromium-review.googlesource.com/c/angle/angle/+/4806924",
+      "parentUuid": "465204ef_255c05c1",
+      "range": {
+        "startLine": 84,
+        "startChar": 21,
+        "endLine": 84,
+        "endChar": 29
+      },
+      "revId": "280e79e1fac521f045bf26145e18bacca7ce5a9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
