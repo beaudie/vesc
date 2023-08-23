@@ -664,6 +664,15 @@ void main()
         size_t bytesPerPixel;
     };
 
+    struct ExpectedPixelData
+    {
+        // The x and y-coordinate of the lower-left corner of the rectangle for
+        // glReadPixels to read
+        size_t x;
+        size_t y;
+        std::vector<GLubyte> data;
+    };
+
 #if defined(ANGLE_AHARDWARE_BUFFER_SUPPORT)
     bool writeAHBData(AHardwareBuffer *aHardwareBuffer,
                       size_t width,
@@ -990,6 +999,29 @@ void main()
         // verifyResultsTexture only verifies top-left. Here also verifies top-right.
         EXPECT_PIXEL_NEAR(getWindowWidth() - 1, 0, rightColor[0], rightColor[1], rightColor[2],
                           rightColor[3], 1);
+    }
+
+    void drawTexture2D(GLuint texture)
+    {
+        // Draw a quad with the target texture
+        glUseProgram(mTextureProgram);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glUniform1i(mTextureUniformLocation, 0);
+
+        drawQuad(mTextureProgram, "position", 0.5f);
+
+        ASSERT_GL_NO_ERROR();
+    }
+
+    void verifyFrameBufferPixels(const std::vector<ExpectedPixelData> &expectedPixels,
+                                 double abs_error = 2.0)
+    {
+        for (const auto &expectedPixel : expectedPixels)
+        {
+            EXPECT_PIXEL_NEAR(expectedPixel.x, expectedPixel.y, expectedPixel.data[0],
+                              expectedPixel.data[1], expectedPixel.data[2], expectedPixel.data[3],
+                              abs_error);
+        }
     }
 
     void verifyResults2D(GLuint texture, const GLubyte data[4])
@@ -4241,6 +4273,78 @@ TEST_P(ImageTestES3, RGBAHBUploadDataColorspace)
 
     verifyResults2D(ahbTexture, kRed50Linear);
     verifyResultAHB(ahb, {{kRed50SRGB, sizeof(kRed50SRGB)}});
+
+    // Clean up
+    eglDestroyImageKHR(window->getDisplay(), ahbImage);
+    destroyAndroidHardwareBuffer(ahb);
+}
+
+// Test that RGB data are preserved when importing from AHB created with sRGB color space and
+// glTexSubImage is able to update data.
+TEST_P(ImageTestES3, AHBUploadDataColorspace)
+{
+    EGLWindow *window = getEGLWindow();
+
+    ANGLE_SKIP_TEST_IF(!hasOESExt() || !hasBaseExt() || !has2DTextureExt());
+    ANGLE_SKIP_TEST_IF(!hasAndroidImageNativeBufferExt() || !hasAndroidHardwareBufferSupport());
+
+    // test case variables:
+    // AHB formats:
+    // https://developer.android.com/ndk/reference/group/a-hardware-buffer#ahardwarebuffer_format
+    const int ahbFormat                    = AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM;
+    const size_t bytesPerPixel             = 4;
+    const unsigned int textureUploadFormat = GL_RGB;
+    const unsigned int textureUploadType   = GL_UNSIGNED_BYTE;
+
+    // test case constants
+    const EGLint *attrib                       = kColorspaceAttribs;  // only test sRGB case
+    const size_t width                         = 3;
+    const size_t height                        = 2;
+    const std::vector<GLubyte> kAhbInitGarbage = {123, 123, 123, 123, 123, 123, 123, 123,
+                                                  123, 123, 123, 123, 123, 123, 123, 123,
+                                                  123, 123, 123, 123, 123, 123, 123, 123};
+    // the offset in a row is 3 bytes per pixel,
+    // the offset between rows is 4 bytes per pixel.
+    // https://ajalt.github.io/colormath/converter/
+    const std::vector<GLubyte> kTextureDataToUpload_Red50SRGB = {
+        40,  0, 0, 80,  0, 0, 120, 0, 0, 100, 100, 100,
+        160, 0, 0, 200, 0, 0, 240, 0, 0, 100, 100, 100};
+    const std::vector<GLubyte> kExpectedAhbDataAfterUpload_Red50SRGB = {
+        40,  0, 0, 255, 80,  0, 0, 255, 120, 0, 0, 255,
+        160, 0, 0, 255, 200, 0, 0, 255, 240, 0, 0, 255};
+    const std::vector<GLubyte> kExpectedColor_Red50LinearColor = {
+        5, 0, 0, 255, 20, 0, 0, 255, 48, 0, 0, 255, 90, 0, 0, 255, 147, 0, 0, 255, 222, 0, 0, 255};
+
+    // test case template
+    // Create the Image
+    AHardwareBuffer *ahb;
+    EGLImageKHR ahbImage;
+
+    createEGLImageAndroidHardwareBufferSource(width, height, 1, ahbFormat, kDefaultAHBUsage, attrib,
+                                              {{kAhbInitGarbage.data(), bytesPerPixel}}, &ahb,
+                                              &ahbImage);
+
+    GLTexture ahbTexture;
+    createEGLImageTargetTexture2D(ahbImage, ahbTexture);
+
+    glBindTexture(GL_TEXTURE_2D, ahbTexture);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, textureUploadFormat, textureUploadType,
+                    kTextureDataToUpload_Red50SRGB.data());
+    glFinish();
+    // verify the texture --> AHB upload result
+    verifyResultAHB(ahb, {{kExpectedAhbDataAfterUpload_Red50SRGB.data(), bytesPerPixel}});
+
+    // verifyResults2D() does:
+    //   - drawQuad() to another buffer
+    //   - verify the pixel color on the buffer at (0,0)
+    // verifyResults2D(ahbTexture, kExpectedColor_Red50LinearColor.data());
+    drawTexture2D(ahbTexture);
+    std::vector<ExpectedPixelData> expectedPixels = {
+        {0, 0, {90, 0, 0, 255}},
+        {0, 1, {5, 0, 0, 255}},
+        {1, 0, {147, 0, 0, 255}},
+    };
+    verifyFrameBufferPixels(expectedPixels);
 
     // Clean up
     eglDestroyImageKHR(window->getDisplay(), ahbImage);
