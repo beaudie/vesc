@@ -959,7 +959,21 @@ void main()
 
         // Expect that the rendered quad's color is the same as the reference color with a tolerance
         // of 2
+        WARN() << "================== referenceColor[0]: " << (int)referenceColor[0];
+        WARN() << "================== referenceColor[1]: " << (int)referenceColor[1];
+        WARN() << "================== referenceColor[2]: " << (int)referenceColor[2];
+        WARN() << "================== referenceColor[3]: " << (int)referenceColor[3];
+        WARN() << "================== pixel (0, 0):";
         EXPECT_PIXEL_NEAR(0, 0, referenceColor[0], referenceColor[1], referenceColor[2],
+                          referenceColor[3], 2);
+        WARN() << "================== pixel (1, 1):";
+        EXPECT_PIXEL_NEAR(1, 1, referenceColor[0], referenceColor[1], referenceColor[2],
+                          referenceColor[3], 2);
+        WARN() << "================== pixel (0, 1):";
+        EXPECT_PIXEL_NEAR(0, 1, referenceColor[0], referenceColor[1], referenceColor[2],
+                          referenceColor[3], 2);
+        WARN() << "================== pixel (1, 0):";
+        EXPECT_PIXEL_NEAR(1, 0, referenceColor[0], referenceColor[1], referenceColor[2],
                           referenceColor[3], 2);
     }
 
@@ -2900,13 +2914,15 @@ void ImageTest::SourceAHBTargetExternal_helper(const EGLint *attribs)
     // Create the Image
     AHardwareBuffer *source;
     EGLImageKHR image;
-    createEGLImageAndroidHardwareBufferSource(1, 1, 1, AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM,
+    // createEGLImageAndroidHardwareBufferSource(1, 1, 1, AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM,
+    createEGLImageAndroidHardwareBufferSource(1, 1, 1, AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM,
                                               kDefaultAHBUsage, attribs, {{kSrgbColor, 4}}, &source,
                                               &image);
 
     // Create a texture target to bind the egl image
     GLTexture target;
     createEGLImageTargetTextureExternal(image, target);
+    // createEGLImageTargetTextureStorage(image, GL_TEXTURE_2D, target);
 
     // Use texture target bound to egl image as source and render to framebuffer
     // Verify that the target texture has the expected color
@@ -4160,6 +4176,47 @@ TEST_P(ImageTestES3, RGBXAHBUploadDataColorspace)
 
     glBindTexture(GL_TEXTURE_2D, ahbTexture);
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, kRed50SRGB);
+    glFinish();
+
+    verifyResults2D(ahbTexture, kRed50Linear);
+    verifyResultAHB(ahb, {{kRed50SRGB, 4}});
+
+    // Clean up
+    eglDestroyImageKHR(window->getDisplay(), ahbImage);
+    destroyAndroidHardwareBuffer(ahb);
+}
+
+// Test that RGB data are preserved when importing from AHB created with sRGB color space and
+// glTexSubImage is able to update data.
+TEST_P(ImageTestES3, RGBXAHBUploadDataColorspace_Clone)
+{
+    EGLWindow *window = getEGLWindow();
+
+    ANGLE_SKIP_TEST_IF(!hasOESExt() || !hasBaseExt() || !has2DTextureExt());
+    ANGLE_SKIP_TEST_IF(!hasAndroidImageNativeBufferExt() || !hasAndroidHardwareBufferSupport());
+
+    const GLubyte kGarbage[]     = {123, 123, 123, 123};
+    const GLubyte kRed50SRGB[]   = {188, 0, 0, 255};
+    const GLubyte kRed50Linear[] = {128, 0, 0, 255};
+    const size_t width           = 1;
+    const size_t height          = 1;
+
+    // Create the Image
+    AHardwareBuffer *ahb;
+    EGLImageKHR ahbImage;
+
+    // http://b/294086848#comment16, render buffer is of format AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM
+    // createEGLImageAndroidHardwareBufferSource(width, height, 1,
+    // AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM,
+    createEGLImageAndroidHardwareBufferSource(
+        width, height, 1, AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM, kDefaultAHBUsage,
+        kColorspaceAttribs, {{kGarbage, 4}}, &ahb, &ahbImage);
+
+    GLTexture ahbTexture;
+    createEGLImageTargetTexture2D(ahbImage, ahbTexture);
+
+    glBindTexture(GL_TEXTURE_2D, ahbTexture);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, kRed50SRGB);
     glFinish();
 
     verifyResults2D(ahbTexture, kRed50Linear);

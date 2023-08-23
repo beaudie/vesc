@@ -997,6 +997,7 @@ void ANGLETestBase::drawQuad(GLuint program,
 
     GLint previousBuffer = 0;
     glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &previousBuffer);
+    WARN() << "================ previousBuffer: " << previousBuffer;
 
     GLint positionLocation = glGetAttribLocation(program, positionAttribName.c_str());
 
@@ -1017,6 +1018,7 @@ void ANGLETestBase::drawQuad(GLuint program,
             vertex.z() = positionAttribZ;
         }
 
+        WARN() << "================ not useVertexBuffer";
         if (previousBuffer != 0)
         {
             glBindBuffer(GL_ARRAY_BUFFER, 0);
