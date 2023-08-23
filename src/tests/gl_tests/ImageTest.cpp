@@ -4247,6 +4247,69 @@ TEST_P(ImageTestES3, RGBAHBUploadDataColorspace)
     destroyAndroidHardwareBuffer(ahb);
 }
 
+// Test that RGB data are preserved when importing from AHB created with sRGB color space and
+// glTexSubImage is able to update data.
+TEST_P(ImageTestES3, AHBUploadDataColorspace)
+{
+    EGLWindow *window = getEGLWindow();
+
+    ANGLE_SKIP_TEST_IF(!hasOESExt() || !hasBaseExt() || !has2DTextureExt());
+    ANGLE_SKIP_TEST_IF(!hasAndroidImageNativeBufferExt() || !hasAndroidHardwareBufferSupport());
+
+    // test case variables:
+    // AHB formats:
+    // https://developer.android.com/ndk/reference/group/a-hardware-buffer#ahardwarebuffer_format
+    const int ahbFormat                    = AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM;
+    const size_t bytesPerPixel             = 4;
+    const unsigned int textureUploadFormat = GL_RGB;
+    const unsigned int textureUploadType   = GL_UNSIGNED_BYTE;
+
+    // test case constants
+    const EGLint *attrib                       = kColorspaceAttribs;  // only test sRGB case
+    const size_t width                         = 3;
+    const size_t height                        = 2;
+    const std::vector<GLubyte> kAhbInitGarbage = {123, 123, 123, 123, 123, 123, 123, 123,
+                                                  123, 123, 123, 123, 123, 123, 123, 123,
+                                                  123, 123, 123, 123, 123, 123, 123, 123};
+    // the offset in a row is 3 bytes per pixel,
+    // the offset between rows is 4 bytes per pixel.
+    const std::vector<GLubyte> kTextureDataToUpload_Red50SRGB = {
+        188, 0, 0, 188, 0, 0, 188, 0, 0, 100, 100, 100,
+        188, 0, 0, 188, 0, 0, 188, 0, 0, 100, 100, 100};
+    const std::vector<GLubyte> kExpectedAhbDataAfterUpload_Red50SRGB = {
+        188, 0, 0, 255, 188, 0, 0, 255, 188, 0, 0, 255,
+        188, 0, 0, 255, 188, 0, 0, 255, 188, 0, 0, 255};
+    const std::vector<GLubyte> kExpectedColor_Red50LinearColor = {128, 0, 0, 255};
+
+    // test case template
+    // Create the Image
+    AHardwareBuffer *ahb;
+    EGLImageKHR ahbImage;
+
+    createEGLImageAndroidHardwareBufferSource(width, height, 1, ahbFormat, kDefaultAHBUsage, attrib,
+                                              {{kAhbInitGarbage.data(), bytesPerPixel}}, &ahb,
+                                              &ahbImage);
+
+    GLTexture ahbTexture;
+    createEGLImageTargetTexture2D(ahbImage, ahbTexture);
+
+    glBindTexture(GL_TEXTURE_2D, ahbTexture);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, textureUploadFormat, textureUploadType,
+                    kTextureDataToUpload_Red50SRGB.data());
+    glFinish();
+    // verify the texture --> AHB upload result
+    verifyResultAHB(ahb, {{kExpectedAhbDataAfterUpload_Red50SRGB.data(), bytesPerPixel}});
+
+    // verifyResults2D() does:
+    //   - drawQuad() to another buffer
+    //   - verify the pixel color on the buffer at (0,0)
+    verifyResults2D(ahbTexture, kExpectedColor_Red50LinearColor.data());
+
+    // Clean up
+    eglDestroyImageKHR(window->getDisplay(), ahbImage);
+    destroyAndroidHardwareBuffer(ahb);
+}
+
 // Test that RGBX data are preserved when importing from AHB.  Tests interaction of emulated channel
 // being cleared with no GPU_FRAMEBUFFER usage specified.
 TEST_P(ImageTestES3, RGBXAHBImportNoFramebufferUsage)
