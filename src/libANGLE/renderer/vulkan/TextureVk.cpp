@@ -1845,10 +1845,10 @@ void TextureVk::setImageHelper(ContextVk *contextVk,
     mImageSiblingSerial = siblingSerial;
     // If image is shared between other container objects, force it to renderable format since we
     // don't know if other container object will render or not.
-    if (!mOwnsImage)
-    {
-        mRequiredImageAccess = vk::ImageAccess::Renderable;
-    }
+    /*    if (!mOwnsImage)
+        {
+            mRequiredImageAccess = vk::ImageAccess::Renderable;
+        }*/
     mEGLImageNativeType  = eglImageNativeType;
     mEGLImageLevelOffset = imageLevelOffset;
     mEGLImageLayerOffset = imageLayerOffset;
