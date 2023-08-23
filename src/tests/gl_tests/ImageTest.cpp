@@ -674,6 +674,7 @@ void main()
     {
         ASSERT(!data.empty());
 #    if defined(ANGLE_AHARDWARE_BUFFER_LOCK_PLANES_SUPPORT)
+        WARN() << "================ ANGLE_AHARDWARE_BUFFER_LOCK_PLANES_SUPPORT";
         AHardwareBuffer_Planes planeInfo;
         int res = AHardwareBuffer_lockPlanes(
             aHardwareBuffer, AHARDWAREBUFFER_USAGE_CPU_WRITE_RARELY, -1, nullptr, &planeInfo);
@@ -699,6 +700,8 @@ void main()
             size_t planeHeight = (isYUV && planeIdx > 0) ? (height / 2) : height;
             size_t planeWidth  = (isYUV && planeIdx > 0) ? (width / 2) : width;
             size_t layerPitch  = getLayerPitch(planeHeight, plane.rowStride);
+            WARN() << "================ planeData.bytesPerPixel: " << planeData.bytesPerPixel;
+            WARN() << "================ layerPitch: " << layerPitch;
 
             for (size_t z = 0; z < depth; z++)
             {
@@ -708,6 +711,9 @@ void main()
 
                 for (size_t y = 0; y < planeHeight; y++)
                 {
+                    WARN() << "================ srcDepthSlice: " << *srcDepthSlice;
+                    WARN() << "================  plane.pixelStride: " << plane.pixelStride;
+                    WARN() << "================  plane.rowStride: " << plane.rowStride;
                     const uint8_t *srcRow =
                         srcDepthSlice + y * planeWidth * planeData.bytesPerPixel;
 
@@ -716,7 +722,19 @@ void main()
                         const uint8_t *src = srcRow + x * planeData.bytesPerPixel;
                         uint8_t *dst = reinterpret_cast<uint8_t *>(plane.data) + z * layerPitch +
                                        y * plane.rowStride + x * plane.pixelStride;
+                        WARN() << "================ src: " << (void *)src
+                               << ", dst: " << (void *)dst << ", pixel[" << x << "][" << y << "]:";
                         memcpy(dst, src, planeData.bytesPerPixel);
+                        if (planeData.bytesPerPixel == 3)
+                        {
+                            WARN() << "================     " << (int)dst[0] << " " << (int)dst[1]
+                                   << " " << (int)dst[2];
+                        }
+                        else
+                        {
+                            WARN() << "================     " << (int)dst[0] << " " << (int)dst[1]
+                                   << " " << (int)dst[2] << " " << (int)dst[3];
+                        }
                     }
                 }
             }
@@ -725,6 +743,7 @@ void main()
         res = AHardwareBuffer_unlock(aHardwareBuffer, nullptr);
         EXPECT_EQ(res, 0);
 #    else
+        WARN() << "================ NOT ANGLE_AHARDWARE_BUFFER_LOCK_PLANES_SUPPORT";
         EXPECT_EQ(1u, data.size());
         void *mappedMemory = nullptr;
         int res = AHardwareBuffer_lock(aHardwareBuffer, AHARDWAREBUFFER_USAGE_CPU_WRITE_RARELY, -1,
@@ -833,6 +852,7 @@ void main()
                                                  const std::vector<AHBPlaneData> &data)
     {
 #if defined(ANGLE_AHARDWARE_BUFFER_SUPPORT)
+        WARN() << "==================== androidFormat: " << androidFormat;
         const AHardwareBuffer_Desc aHardwareBufferDescription =
             createAndroidHardwareBufferDesc(width, height, depth, androidFormat, usage);
 
@@ -974,6 +994,11 @@ void main()
 
         // Expect that the rendered quad's color is the same as the reference color with a tolerance
         // of 2
+        WARN() << "================== referenceColor[0]: " << (int)referenceColor[0];
+        WARN() << "================== referenceColor[1]: " << (int)referenceColor[1];
+        WARN() << "================== referenceColor[2]: " << (int)referenceColor[2];
+        WARN() << "================== referenceColor[3]: " << (int)referenceColor[3];
+        WARN() << "================== pixel (0, 0):";
         EXPECT_PIXEL_NEAR(0, 0, referenceColor[0], referenceColor[1], referenceColor[2],
                           referenceColor[3], 2);
     }
@@ -4241,6 +4266,69 @@ TEST_P(ImageTestES3, RGBAHBUploadDataColorspace)
 
     verifyResults2D(ahbTexture, kRed50Linear);
     verifyResultAHB(ahb, {{kRed50SRGB, sizeof(kRed50SRGB)}});
+
+    // Clean up
+    eglDestroyImageKHR(window->getDisplay(), ahbImage);
+    destroyAndroidHardwareBuffer(ahb);
+}
+
+// Test that RGB data are preserved when importing from AHB created with sRGB color space and
+// glTexSubImage is able to update data.
+TEST_P(ImageTestES3, AHBUploadDataColorspace)
+{
+    EGLWindow *window = getEGLWindow();
+
+    ANGLE_SKIP_TEST_IF(!hasOESExt() || !hasBaseExt() || !has2DTextureExt());
+    ANGLE_SKIP_TEST_IF(!hasAndroidImageNativeBufferExt() || !hasAndroidHardwareBufferSupport());
+
+    // test case variables:
+    // AHB formats:
+    // https://developer.android.com/ndk/reference/group/a-hardware-buffer#ahardwarebuffer_format
+    const int ahbFormat                    = AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM;
+    const size_t bytesPerPixel             = 4;
+    const unsigned int textureUploadFormat = GL_RGB;
+    const unsigned int textureUploadType   = GL_UNSIGNED_BYTE;
+
+    // test case constants
+    const EGLint *attrib                       = kColorspaceAttribs;  // only test sRGB case
+    const size_t width                         = 3;
+    const size_t height                        = 2;
+    const std::vector<GLubyte> kAhbInitGarbage = {123, 123, 123, 123, 123, 123, 123, 123,
+                                                  123, 123, 123, 123, 123, 123, 123, 123,
+                                                  123, 123, 123, 123, 123, 123, 123, 123};
+    // the offset in a row is 3 bytes per pixel,
+    // the offset between rows is 4 bytes per pixel.
+    const std::vector<GLubyte> kTextureDataToUpload_Red50SRGB = {
+        188, 0, 0, 188, 0, 0, 188, 0, 0, 100, 100, 100,
+        188, 0, 0, 188, 0, 0, 188, 0, 0, 100, 100, 100};
+    const std::vector<GLubyte> kExpectedAhbDataAfterUpload_Red50SRGB = {
+        188, 0, 0, 255, 188, 0, 0, 255, 188, 0, 0, 255,
+        188, 0, 0, 255, 188, 0, 0, 255, 188, 0, 0, 255};
+    const std::vector<GLubyte> kExpectedColor_Red50LinearColor = {128, 0, 0, 255};
+
+    // test case template
+    // Create the Image
+    AHardwareBuffer *ahb;
+    EGLImageKHR ahbImage;
+
+    createEGLImageAndroidHardwareBufferSource(width, height, 1, ahbFormat, kDefaultAHBUsage, attrib,
+                                              {{kAhbInitGarbage.data(), bytesPerPixel}}, &ahb,
+                                              &ahbImage);
+
+    GLTexture ahbTexture;
+    createEGLImageTargetTexture2D(ahbImage, ahbTexture);
+
+    glBindTexture(GL_TEXTURE_2D, ahbTexture);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, textureUploadFormat, textureUploadType,
+                    kTextureDataToUpload_Red50SRGB.data());
+    glFinish();
+    // verify the texture --> AHB upload result
+    verifyResultAHB(ahb, {{kExpectedAhbDataAfterUpload_Red50SRGB.data(), bytesPerPixel}});
+
+    // verifyResults2D() does:
+    //   - drawQuad() to another buffer
+    //   - verify the pixel color on the buffer at (0,0)
+    verifyResults2D(ahbTexture, kExpectedColor_Red50LinearColor.data());
 
     // Clean up
     eglDestroyImageKHR(window->getDisplay(), ahbImage);

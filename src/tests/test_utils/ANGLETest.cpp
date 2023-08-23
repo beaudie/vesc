@@ -687,6 +687,9 @@ void ANGLETestBase::ANGLETestSetUp()
         std::swap(osWindowWidth, osWindowHeight);
     }
 
+    WARN() << "============ osWindowWidth: " << osWindowWidth
+           << ", osWindowHeight: " << osWindowHeight;
+    WARN() << "============ mWidth: " << mWidth << ", mHeight: " << mHeight;
     if (osWindowWidth != mWidth || osWindowHeight != mHeight)
     {
         int newWindowWidth  = mWidth;
@@ -997,6 +1000,7 @@ void ANGLETestBase::drawQuad(GLuint program,
 
     GLint previousBuffer = 0;
     glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &previousBuffer);
+    WARN() << "================ previousBuffer: " << previousBuffer;
 
     GLint positionLocation = glGetAttribLocation(program, positionAttribName.c_str());
 
@@ -1017,8 +1021,10 @@ void ANGLETestBase::drawQuad(GLuint program,
             vertex.z() = positionAttribZ;
         }
 
+        WARN() << "================ not useVertexBuffer";
         if (previousBuffer != 0)
         {
+            WARN() << "================ there was buffer bind to GL_ARRAY_BUFFER";
             glBindBuffer(GL_ARRAY_BUFFER, 0);
         }
         glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, quadVertices.data());
@@ -1032,10 +1038,12 @@ void ANGLETestBase::drawQuad(GLuint program,
 
     if (useInstancedDrawCalls)
     {
+        WARN() << "================ glDrawArraysInstanced()";
         glDrawArraysInstanced(drawMode, 0, 6, numInstances);
     }
     else
     {
+        WARN() << "================ glDrawArrays()";
         glDrawArrays(drawMode, 0, 6);
     }
 
@@ -1333,8 +1341,7 @@ void ANGLETestBase::checkD3D11SDKLayersMessages()
                         reinterpret_cast<D3D11_MESSAGE *>(malloc(messageLength));
                     infoQueue->GetMessage(i, pMessage, &messageLength);
 
-                    std::cout << "Message " << i << ":"
-                              << " " << pMessage->pDescription << "\n";
+                    std::cout << "Message " << i << ":" << " " << pMessage->pDescription << "\n";
                     free(pMessage);
                 }
             }
