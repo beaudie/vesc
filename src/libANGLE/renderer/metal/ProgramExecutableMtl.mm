@@ -321,7 +321,15 @@ ProgramExecutableMtl::ProgramExecutableMtl(const gl::ProgramExecutable *executab
       mProgramHasFlatAttributes(false),
       mShadowCompareModes{},
       mAuxBufferPool(nullptr)
-{}
+{
+    mCurrentShaderVariants.fill(nullptr);
+
+    for (gl::ShaderType shaderType : gl::AllShaderTypes())
+    {
+        mMslShaderTranslateInfo[shaderType].reset();
+    }
+    mMslXfbOnlyVertexShaderInfo.reset();
+}
 
 ProgramExecutableMtl::~ProgramExecutableMtl() {}
 
