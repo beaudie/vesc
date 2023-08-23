@@ -1847,7 +1847,12 @@ void TextureVk::setImageHelper(ContextVk *contextVk,
     // don't know if other container object will render or not.
     if (!mOwnsImage)
     {
-        mRequiredImageAccess = vk::ImageAccess::Renderable;
+        // mRequiredImageAccess = vk::ImageAccess::Renderable;
+        WARN() << "format: sample: "
+               << ToUnderlying(format.getActualImageFormatID(vk::ImageAccess::SampleOnly))
+               << " render: "
+               << ToUnderlying(format.getActualImageFormatID(vk::ImageAccess::Renderable))
+               << " mImage.format: " << ToUnderlying(imageHelper->getActualFormatID());
     }
     mEGLImageNativeType  = eglImageNativeType;
     mEGLImageLevelOffset = imageLevelOffset;
