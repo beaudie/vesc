@@ -346,8 +346,7 @@ class ProgramExecutableD3D : public ProgramExecutableImpl
 
     angle::Result loadBinaryShaderExecutables(d3d::Context *contextD3D,
                                               RendererD3D *renderer,
-                                              gl::BinaryInputStream *stream,
-                                              gl::InfoLog &infoLog);
+                                              gl::BinaryInputStream *stream);
 
   private:
     friend class ProgramD3D;
