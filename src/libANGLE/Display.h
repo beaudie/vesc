@@ -319,6 +319,7 @@ class Display final : public LabeledObject,
     egl::Sync *getSync(egl::SyncID syncID);
 
     const SyncMap &getSyncsForCapture() const { return mSyncMap; }
+    const ImageMap &getImagesForCapture() const { return mImageMap; }
 
     // Initialize thread-local variables used by the Display and its backing implementations.  This
     // includes:

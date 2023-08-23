@@ -60,6 +60,15 @@
 #    error Frame capture must be enabled to include this file.
 #endif  // !ANGLE_CAPTURE_ENABLED
 
+#if defined(ANGLE_PLATFORM_ANDROID) && __ANDROID_API__ >= 26
+#    define ANGLE_AHARDWARE_BUFFER_SUPPORT
+// NDK header file for access to Android Hardware Buffers
+#    include <android/hardware_buffer.h>
+#    if __ANDROID_API__ >= 29
+#        define ANGLE_AHARDWARE_BUFFER_LOCK_PLANES_SUPPORT
+#    endif
+#endif
+
 namespace angle
 {
 namespace
@@ -3351,6 +3360,148 @@ void CaptureCustomCreateEGLImage(const char *name,
                                  CallCapture &call,
                                  std::vector<CallCapture> &callsOut)
 {
+    EGLenum target = call.params.getParam("target", ParamType::TEGLenum, 2).value.EGLenumVal;
+    INFO() << "CLN: eglCreateImage target = " << target;
+
+    if (target == EGL_NATIVE_BUFFER_ANDROID)
+    {
+        // If coming from an external source, track that we need to recreate this buffer
+
+        // Grab the pointer
+        EGLClientBuffer buffer =
+            call.params.getParam("buffer", ParamType::TEGLClientBuffer, 3).value.EGLClientBufferVal;
+        ASSERT(buffer != nullptr);
+
+#if defined(ANGLE_AHARDWARE_BUFFER_SUPPORT)
+
+        // Grab the buffer pointer
+        AHardwareBuffer *pAHardwareBuffer = angle::android::ANativeWindowBufferToAHardwareBuffer(
+            angle::android::ClientBufferToANativeWindowBuffer(buffer));
+
+        // Look up its details
+        AHardwareBuffer_Desc aHardwareBufferDescription = {};
+        AHardwareBuffer_describe(pAHardwareBuffer, &aHardwareBufferDescription);
+
+        INFO() << "CLN: EGLClientBuffer = " << buffer;
+        INFO() << "CLN: aHardwareBufferDescription.format = " << std::hex
+               << aHardwareBufferDescription.format;
+        INFO() << "CLN: aHardwareBufferDescription.width = " << aHardwareBufferDescription.width;
+        INFO() << "CLN: aHardwareBufferDescription.height = " << aHardwareBufferDescription.height;
+        INFO() << "CLN: aHardwareBufferDescription.layers = " << aHardwareBufferDescription.layers;
+        INFO() << "CLN: aHardwareBufferDescription.stride = " << aHardwareBufferDescription.stride;
+        INFO() << "CLN: aHardwareBufferDescription.usage = " << aHardwareBufferDescription.usage;
+
+        // Start simple
+        ASSERT(aHardwareBufferDescription.layers == 1);
+        // Pull its data
+
+        // ======================= TAKE 3 ===========================
+        // Don't try to lock anything!  We don't own the buffer.
+
+        // Build a vector of binary data
+        std::vector<std::vector<uint8_t>> ahbData;
+
+        for (size_t y = 0; y < aHardwareBufferDescription.height; y++)
+        {
+            std::vector<uint8_t> rowData;
+            for (size_t x = 0; x < aHardwareBufferDescription.width; x++)
+            {
+                // Pink
+                rowData.push_back(255u);
+                rowData.push_back(0u);
+                rowData.push_back(255u);
+                rowData.push_back(255u);
+            }
+            ahbData.push_back(rowData);
+        }
+        INFO() << "CLN: ahbData.size()=" << ahbData.size();
+
+        // ======================= TAKE 2 ===========================
+        // void* data;
+        // int32_t bytesPerPixel;
+        // int32_t bytesPerStride;
+        // int retval = AHardwareBuffer_lockAndGetInfo(pAHardwareBuffer,
+        // AHARDWAREBUFFER_USAGE_CPU_WRITE_RARELY, -1, nullptr, &data, &bytesPerPixel,
+        // &bytesPerStride); INFO() << "CLN: AHardwareBuffer_lockAndGetInfo retval = " << retval;
+
+        // INFO() << "CLN: data = " << data;
+        // INFO() << "CLN: bytesPerPixel = " << bytesPerPixel;
+        // INFO() << "CLN: bytesPerStride = " << bytesPerStride;
+
+        // // Build a vector of binary data
+        // std::vector<std::vector<uint8_t>> ahbData;
+
+        // for (size_t y = 0; y < aHardwareBufferDescription.height; y++)
+        // {
+        //     const uint8_t *srcRow = reinterpret_cast<uint8_t *>(data) + y * bytesPerStride;
+        //     INFO() << "CLN: srcRow[" << y << "]=" << static_cast<const void*>(srcRow);
+
+        //     std::vector<uint8_t> rowData(srcRow, srcRow + bytesPerStride);
+        //     INFO() << "CLN: rowData.size()=" << rowData.size();
+
+        //     ahbData.push_back(std::move(rowData));
+        // }
+        // INFO() << "CLN: ahbData.size()=" << ahbData.size();
+
+        // ================ TAKE 1 =====================
+
+        // AHardwareBuffer_Planes planeInfo;
+        // int ret = AHardwareBuffer_lockPlanes(pAHardwareBuffer,
+        // AHARDWAREBUFFER_USAGE_CPU_WRITE_RARELY, -1,
+        //                                        nullptr, &planeInfo);
+
+        // INFO() << "CLN: AHardwareBuffer_lockPlanes retval = " << ret;
+
+        // // Again, simple
+        // ASSERT(planeInfo.planeCount == 1);
+
+        // const AHardwareBuffer_Plane &plane = planeInfo.planes[0];
+
+        // INFO() << "CLN: plane.data = " << plane.data;
+        // INFO() << "CLN: plane.pixelStride = " << plane.pixelStride;
+        // INFO() << "CLN: plane.rowStride = " << plane.rowStride;
+
+        // uint32_t pixelStride = plane.pixelStride;
+        // uint32_t rowStride = plane.rowStride;
+
+        // // TODO: Check if format is known using GetPixelFormatInfo (maybe)
+        // if (pixelStride <= 0)
+        // {
+        //     pixelStride = 8; // R8
+        // }
+
+        // if (rowStride <= 0)
+        // {
+        //     rowStride = aHardwareBufferDescription.stride * pixelStride;
+        // }
+
+        // INFO() << "CLN: pixelStride = " << pixelStride;
+        // INFO() << "CLN: rowStride = " << rowStride;
+
+        // // Build a vector of binary data
+        // std::vector<std::vector<uint8_t>> ahbData;
+
+        // for (size_t y = 0; y < aHardwareBufferDescription.height; y++)
+        // {
+        //     const uint8_t *srcRow = reinterpret_cast<uint8_t *>(plane.data) + y * rowStride;
+        //     INFO() << "CLN: srcRow[" << y << "]=" << static_cast<const void *>(srcRow);
+
+        //     std::vector<uint8_t> rowData(srcRow, srcRow + rowStride);
+        //     INFO() << "CLN: rowData.size()=" << rowData.size();
+
+        //     ahbData.push_back(std::move(rowData));
+        // }
+        // INFO() << "CLN: ahbData.size()=" << ahbData.size();
+
+        // AHardwareBuffer_unlock(pAHardwareBuffer, nullptr);
+#endif  // ANGLE_AHARDWARE_BUFFER_SUPPORT
+
+        // Okay - we have a copy of it - now what?
+        // On replay, we need to create a new image backed by our own buffer
+        // Then create a new image and return it from this call
+        // Now we crea replace parameters
+    }
+
     ParamBuffer &&params = std::move(call.params);
     EGLImage returnVal   = params.getReturnValue().value.EGLImageVal;
     egl::ImageID imageID = egl::PackParam<egl::ImageID>(returnVal);
@@ -3389,6 +3540,18 @@ void CaptureCustomCreateNativeClientbuffer(CallCapture &call, std::vector<CallCa
                          params.getReturnValue().value.EGLClientBufferVal);
     call.customFunctionName = "CreateNativeClientBufferANDROID";
     callsOut.emplace_back(std::move(call));
+}
+
+void CaptureCreateAndroidHardwareBuffer(const egl::Image *image,
+                                        const egl::AttributeMap &attrib,
+                                        std::vector<CallCapture> &callsOut)
+{
+    ParamBuffer ahbParamBuffer;
+    ahbParamBuffer.addValueParam("imageID", ParamType::TGLuint, image->id().value);
+
+    (void)attrib;
+
+    callsOut.emplace_back("CreateAndroidHardwareBuffer", std::move(ahbParamBuffer));
 }
 
 void GenerateLinkedProgram(const gl::Context *context,
@@ -4727,6 +4890,38 @@ void CaptureMidExecutionSetup(const gl::Context *context,
     {
         cap(CapturePixelStorei(replayState, true, GL_UNPACK_ALIGNMENT, 1));
         replayState.getMutablePrivateStateForCapture()->setUnpackAlignment(1);
+    }
+
+    // Capture EGL Images
+    const egl::ImageMap eglImageMap = context->getDisplay()->getImagesForCapture();
+    for (const auto &eglImageIter : eglImageMap)
+    {
+        egl::ImageID eglImageID    = {eglImageIter.first};
+        const egl::Image *eglImage = eglImageIter.second;
+
+        INFO() << "CLN: eglImageID.value = " << eglImageID.value;
+
+        auto eglImageAttribIter = resourceTracker->getImageToAttribTable().find(
+            reinterpret_cast<EGLImage>(static_cast<uintptr_t>(eglImageID.value)));
+        ASSERT(eglImageAttribIter != resourceTracker->getImageToAttribTable().end());
+
+        const egl::AttributeMap &attribs = eglImageAttribIter->second;
+
+        // Okay, right here we need to emit a call to create an external buffer!
+        CaptureCreateAndroidHardwareBuffer(eglImage, attribs, *setupCalls);
+
+        // Let's see if that worked.
+        //
+        // Then we pass the result of that into CreateImage...
+
+        CallCapture eglCreateImageKHRCall = egl::CaptureCreateImageKHR(
+            nullptr, true, nullptr, kNoContextId, EGL_NATIVE_BUFFER_ANDROID,
+            reinterpret_cast<EGLClientBuffer>(0), attribs,
+            reinterpret_cast<EGLImage>(static_cast<uintptr_t>(eglImageID.value)));
+
+        // Convert the CaptureCreateImageKHR CallCapture to the customized CallCapture
+        std::vector<CallCapture> eglCustomCreateImageKHRCall;
+        CaptureCustomCreateEGLImage("CreateEGLImageKHR", eglCreateImageKHRCall, *setupCalls);
     }
 
     // Capture Texture setup and data.

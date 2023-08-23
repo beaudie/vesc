@@ -6132,6 +6132,12 @@ CallCapture ParseCallCapture(const Token &nameToken,
             paramTokens, strings);
         return CallCapture(EntryPoint::GLWeightPointerOES, std::move(params));
     }
+    if (strcmp(nameToken, "CreateAndroidHardwareBuffer") == 0)
+    {
+        ParamBuffer params =
+            ParseParameters<decltype(CreateAndroidHardwareBuffer)>(paramTokens, strings);
+        return CallCapture("CreateAndroidHardwareBuffer", std::move(params));
+    }
     if (strcmp(nameToken, "CreateContext") == 0)
     {
         ParamBuffer params = ParseParameters<decltype(CreateContext)>(paramTokens, strings);
@@ -6466,6 +6472,11 @@ void ReplayCustomFunctionCall(const CallCapture &call, const TraceFunctionMap &c
     ASSERT(call.entryPoint == EntryPoint::Invalid);
     const Captures &captures = call.params.getParamCaptures();
 
+    if (call.customFunctionName == "CreateAndroidHardwareBuffer")
+    {
+        DispatchCallCapture(CreateAndroidHardwareBuffer, captures);
+        return;
+    }
     if (call.customFunctionName == "CreateContext")
     {
         DispatchCallCapture(CreateContext, captures);

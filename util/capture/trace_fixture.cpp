@@ -13,6 +13,9 @@
 
 #include <string>
 
+#include "common/android_util.h"
+#include "common/debug.h"
+
 namespace
 {
 void UpdateResourceMap(GLuint *resourceMap, GLuint id, GLsizei readBufferOffset)
@@ -44,6 +47,13 @@ EGLClientBuffer GetClientBuffer(EGLenum target, uintptr_t key)
         {
             uintptr_t id = static_cast<uintptr_t>(gRenderbufferMap[key]);
             return reinterpret_cast<EGLClientBuffer>(id);
+        }
+        case EGL_NATIVE_BUFFER_ANDROID:
+        {
+            INFO() << "CLN: inside GetClientBuffer target EGL_NATIVE_BUFFER_ANDROID";
+            EGLClientBuffer id = gClientBufferMap[key];
+            INFO() << "CLN: returning " << id << " from GetClientBuffer";
+            return id;
         }
         default:
         {
@@ -585,6 +595,33 @@ void CreatePbufferSurface(EGLDisplay dpy,
 void CreateNativeClientBufferANDROID(const EGLint *attrib_list, uintptr_t clientBuffer)
 {
     gClientBufferMap[clientBuffer] = eglCreateNativeClientBufferANDROID(attrib_list);
+}
+
+void CreateAndroidHardwareBuffer(uintptr_t bufferID)
+{
+    // The height and width are number of pixels of size format
+    AHardwareBuffer_Desc aHardwareBufferDescription = {};
+    aHardwareBufferDescription.width                = 240;
+    aHardwareBufferDescription.height               = 136;
+    aHardwareBufferDescription.layers               = 1;
+    aHardwareBufferDescription.format               = AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM;
+    aHardwareBufferDescription.usage                = 1125899906908416;
+
+    aHardwareBufferDescription.stride = 256;
+    aHardwareBufferDescription.rfu0   = 0;
+    aHardwareBufferDescription.rfu1   = 0;
+
+    // Allocate memory from Android Hardware Buffer
+    AHardwareBuffer *aHardwareBuffer = nullptr;
+    int foo = AHardwareBuffer_allocate(&aHardwareBufferDescription, &aHardwareBuffer);
+    INFO() << "CLN: got back " << foo << " from AHardwareBuffer_allocate";
+
+    EGLClientBuffer foo2 = eglGetNativeClientBufferANDROID(aHardwareBuffer);
+    INFO() << "CLN: got back " << foo2 << " from eglGetNativeClientBufferANDROID";
+
+    // gClientBufferMap[imageID] = eglGetNativeClientBufferANDROID(aHardwareBuffer);
+    gClientBufferMap[bufferID] = foo2;
+    INFO() << "CLN: finished in CreateAndroidHardwareBuffer";
 }
 
 void CreateContext(GLuint contextID)

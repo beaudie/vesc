@@ -261,6 +261,7 @@ void CreatePbufferSurface(EGLDisplay dpy,
                           const EGLint *attrib_list,
                           GLuint surfaceID);
 void CreateNativeClientBufferANDROID(const EGLint *attrib_list, uintptr_t clientBuffer);
+void CreateAndroidHardwareBuffer(uintptr_t bufferID);
 void CreateContext(GLuint contextID);
 
 void ValidateSerializedState(const char *serializedState, const char *fileName, uint32_t line);
