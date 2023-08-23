@@ -22,6 +22,7 @@
 
 #include "egluGLContextFactory.hpp"
 #include "gluPlatform.hpp"
+#include "tcuANGLENativeDisplay.h"
 #include "tcuANGLENativeDisplayFactory.h"
 #include "tcuDefs.hpp"
 #include "tcuNullContextFactory.hpp"
