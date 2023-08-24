@@ -16,6 +16,24 @@
       "message": "LGTM but this CL has a few more of these:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/4798195/comment/542c5d88_bb83d6f3/\nso if we could simplify that\u0027d be great",
       "revId": "2ec568321cde28b42128f3eba2e15467269d82eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1d27ed9_ba815550",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-24T16:04:32Z",
+      "side": 1,
+      "message": "Will add a templated helper function for this in the other CL.",
+      "parentUuid": "dda3bf8b_2172cead",
+      "revId": "2ec568321cde28b42128f3eba2e15467269d82eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
