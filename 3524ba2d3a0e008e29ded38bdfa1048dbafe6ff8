@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "38cf64fa_72f6062c",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-24T16:55:28Z",
+      "side": 1,
+      "message": "I want to add a templated helper function for this to ease the eye, basically replace BinaryStream::writeIntVector with writeVector\u003cT\u003e. But I want to use static assert to ensure T is trivially copyale. So lets wait until https://chromium-review.googlesource.com/c/angle/angle/+/4799342 landed and I can clean some of this up.",
+      "parentUuid": "b5a72753_43c5f6e8",
+      "range": {
+        "startLine": 280,
+        "startChar": 0,
+        "endLine": 281,
+        "endChar": 81
+      },
+      "revId": "3524ba2d3a0e008e29ded38bdfa1048dbafe6ff8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "58378f98_5cdc185d",
@@ -61,6 +85,30 @@
       "writtenOn": "2023-08-24T15:40:50Z",
       "side": 1,
       "message": "Might want to `.reserve()` before the loop?",
+      "range": {
+        "startLine": 1620,
+        "startChar": 25,
+        "endLine": 1620,
+        "endChar": 34
+      },
+      "revId": "3524ba2d3a0e008e29ded38bdfa1048dbafe6ff8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "419b492f_e544b950",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1620,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-24T16:55:28Z",
+      "side": 1,
+      "message": "This comes from ProgramPipeline (which none of app traces uses). We should reserve on the caller side. Lets deal with this in separate CL.",
+      "parentUuid": "58378f98_5cdc185d",
       "range": {
         "startLine": 1620,
         "startChar": 25,
