@@ -29,6 +29,7 @@ angle::TraceCallbacks *gTraceCallbacks = nullptr;
 
 EGLClientBuffer GetClientBuffer(EGLenum target, uintptr_t key)
 {
+    INFO() << "CLN: Inside GetClientBuffer with target " << target << " and key " << key;
     switch (target)
     {
         case EGL_GL_TEXTURE_2D:
@@ -57,7 +58,18 @@ EGLClientBuffer GetClientBuffer(EGLenum target, uintptr_t key)
         }
         default:
         {
+            INFO() << "CLN: In default case in GetClientBuffer, looking up with key:" << key;
             const auto &iData = gClientBufferMap.find(key);
+            INFO() << "CLN: looked up iData";
+            if (iData != gClientBufferMap.end())
+            {
+                INFO() << "CLN: returning iData->second "
+                       << static_cast<EGLClientBuffer>(iData->second);
+            }
+            else
+            {
+                INFO() << "CLN: returning nullptr";
+            }
             return iData != gClientBufferMap.end() ? iData->second : nullptr;
         }
     }
@@ -121,6 +133,7 @@ SyncResourceMap gSyncMap;
 ContextMap gContextMap;
 GLuint gShareContextId;
 
+// GLuint *gAndroidBufferMap;
 GLuint *gBufferMap;
 GLuint *gFenceNVMap;
 GLuint *gFramebufferMap;
@@ -561,6 +574,7 @@ void CreateEGLImage(EGLDisplay dpy,
 {
     EGLClientBuffer clientBuffer = GetClientBuffer(target, buffer);
     gEGLImageMap2[imageID]       = eglCreateImage(dpy, ctx, target, clientBuffer, attrib_list);
+    INFO() << "CLN: create image " << gEGLImageMap2[imageID] << " for imageID " << imageID;
 }
 
 void CreateEGLImageKHR(EGLDisplay dpy,
@@ -570,8 +584,12 @@ void CreateEGLImageKHR(EGLDisplay dpy,
                        const EGLint *attrib_list,
                        GLuint imageID)
 {
+    INFO() << "CLN: inside in CreateEGLImageKHR";
     EGLClientBuffer clientBuffer = GetClientBuffer(target, buffer);
-    gEGLImageMap2[imageID]       = eglCreateImageKHR(dpy, ctx, target, clientBuffer, attrib_list);
+    INFO() << "CLN: looked up  clientBuffer as " << clientBuffer;
+    gEGLImageMap2[imageID] = eglCreateImageKHR(dpy, ctx, target, clientBuffer, attrib_list);
+    INFO() << "CLN: create image " << gEGLImageMap2[imageID] << " for imageID " << imageID;
+    INFO() << "CLN: done in CreateEGLImageKHR";
 }
 
 void CreateEGLSyncKHR(EGLDisplay dpy, EGLenum type, const EGLint *attrib_list, GLuint syncID)
@@ -622,6 +640,11 @@ void CreateAndroidHardwareBuffer(uintptr_t bufferID)
     // gClientBufferMap[imageID] = eglGetNativeClientBufferANDROID(aHardwareBuffer);
     gClientBufferMap[bufferID] = foo2;
     INFO() << "CLN: finished in CreateAndroidHardwareBuffer";
+}
+
+void CreateClientBuffer()
+{
+    // ??
 }
 
 void CreateContext(GLuint contextID)

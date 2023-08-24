@@ -3365,6 +3365,7 @@ void CaptureCustomCreateEGLImage(const char *name,
 
     if (target == EGL_NATIVE_BUFFER_ANDROID)
     {
+        // If the source is external, we need to back up this data immediately
         // If coming from an external source, track that we need to recreate this buffer
 
         // Grab the pointer
@@ -4098,6 +4099,7 @@ void CaptureShareGroupMidExecutionSetup(
 
     for (const auto &textureIter : textures)
     {
+        INFO() << "CLN: Iterating through textures";
         gl::TextureID id     = {textureIter.first};
         gl::Texture *texture = textureIter.second;
 
@@ -4234,6 +4236,8 @@ void CaptureShareGroupMidExecutionSetup(
         // If the texture is immutable, initialize it with TexStorage
         if (texture->getImmutableFormat())
         {
+            INFO() << "CLN: inside getImmutableFormat";
+
             // We can only call TexStorage *once* on an immutable texture, so it needs special
             // handling. To solve this, immutable textures will have a BindTexture and TexStorage as
             // part of their textureRegenCalls. The resulting regen sequence will be:
@@ -4254,6 +4258,7 @@ void CaptureShareGroupMidExecutionSetup(
             {
                 CaptureTextureStorage(calls, &replayState, texture);
             }
+            INFO() << "CLN: leaving getImmutableFormat";
         }
 
         // Iterate texture levels and layers.
@@ -4264,6 +4269,7 @@ void CaptureShareGroupMidExecutionSetup(
         {
             gl::ImageIndex index = imageIter.next();
 
+            INFO() << "CLN: Looking up desc for image level/layer";
             const gl::ImageDesc &desc = texture->getTextureState().getImageDesc(index);
 
             if (desc.size.empty())
@@ -4290,12 +4296,14 @@ void CaptureShareGroupMidExecutionSetup(
 
             if (index.getType() == gl::TextureType::Buffer)
             {
+                INFO() << "CLN: Inside buffer contents lookup";
                 // The buffer contents are already backed up, but we need to emit the TexBuffer
                 // binding calls
                 for (std::vector<CallCapture> *calls : texSetupCalls)
                 {
                     CaptureTextureContents(calls, &replayState, texture, index, desc, 0, 0);
                 }
+                INFO() << "CLN: Leaving buffer contents lookup";
                 continue;
             }
 
@@ -4303,6 +4311,7 @@ void CaptureShareGroupMidExecutionSetup(
             gl::TextureID stagingTexId = {maxAccessedResourceIDs[ResourceIDType::Texture] + 1};
             if (index.getType() == gl::TextureType::External)
             {
+                INFO() << "CLN: Inside external texture staging creation";
                 Capture(setupCalls, CaptureGenTextures(replayState, true, 1, &stagingTexId));
                 MaybeCaptureUpdateResourceIDs(context, resourceTracker, setupCalls);
                 Capture(setupCalls,
@@ -4311,6 +4320,7 @@ void CaptureShareGroupMidExecutionSetup(
                                                          GL_TEXTURE_MIN_FILTER, GL_NEAREST));
                 Capture(setupCalls, CaptureTexParameteri(replayState, true, gl::TextureType::_2D,
                                                          GL_TEXTURE_MAG_FILTER, GL_NEAREST));
+                INFO() << "CLN: Leaving external texture staging creation";
             }
 
             if (context->getExtensions().getImageANGLE)
@@ -4342,6 +4352,7 @@ void CaptureShareGroupMidExecutionSetup(
                 }
                 else if (format.compressed)
                 {
+                    INFO() << "CLN: Looking up compressed data";
                     // Calculate the size needed to store the compressed level
                     GLuint sizeInBytes;
                     bool result = format.computeCompressedImageSize(extents, &sizeInBytes);
@@ -4353,9 +4364,11 @@ void CaptureShareGroupMidExecutionSetup(
                     (void)texture->getCompressedTexImage(context, packState, nullptr,
                                                          index.getTarget(), index.getLevelIndex(),
                                                          data.data());
+                    INFO() << "CLN: Done with compressed image data";
                 }
                 else
                 {
+                    INFO() << "CLN: Looking up regular data";
                     GLenum getFormat = format.format;
                     GLenum getType   = format.type;
 
@@ -4369,19 +4382,27 @@ void CaptureShareGroupMidExecutionSetup(
                     bool result = data.resize(endByte);
                     ASSERT(result);
 
+                    INFO() << "CLN: calling getTexImage with getFormat=" << getFormat
+                           << " getType=" << getType;
+
                     (void)texture->getTexImage(context, packState, nullptr, index.getTarget(),
                                                index.getLevelIndex(), getFormat, getType,
                                                data.data());
+                    INFO() << "CLN: Done with regular image data";
                 }
+
+                INFO() << "CLN: Attempting to CaptureTextureContents";
 
                 for (std::vector<CallCapture> *calls : texSetupCalls)
                 {
                     CaptureTextureContents(calls, &replayState, texture, index, desc,
                                            static_cast<GLuint>(data.size()), data.data());
                 }
+                INFO() << "CLN: Finished CaptureTextureContents";
 
                 if (index.getType() == gl::TextureType::External)
                 {
+                    INFO() << "CLN: Special handling for an external image";
                     // Look up the attribs used when the image was created
                     // Firstly, lookup the eglImage ID associated with this texture when the app
                     // issued glEGLImageTargetTexture2DOES()
@@ -4398,6 +4419,13 @@ void CaptureShareGroupMidExecutionSetup(
                     ASSERT(eglImageAttribIter != resourceTracker->getImageToAttribTable().end());
 
                     const egl::AttributeMap &retrievedAttribs = eglImageAttribIter->second;
+                    INFO() << "CLN: Attempting to iterate through attribs";
+
+                    for (const auto &[key, value] : retrievedAttribs)
+                    {
+                        INFO() << "CLN: retrievedAttribs key = " << key
+                               << " retrievedAttribs.value = " << value;
+                    }
 
                     // Create the image on demand with the same attrib retrieved above
                     CallCapture eglCreateImageKHRCall = egl::CaptureCreateImageKHR(
@@ -4426,14 +4454,17 @@ void CaptureShareGroupMidExecutionSetup(
 
                     // Delete the staging texture
                     Capture(setupCalls, CaptureDeleteTextures(replayState, true, 1, &stagingTexId));
+                    INFO() << "CLN: Done with external image";
                 }
             }
             else
             {
+                INFO() << "CLN: Capturing contents of a texture";
                 for (std::vector<CallCapture> *calls : texSetupCalls)
                 {
                     CaptureTextureContents(calls, &replayState, texture, index, desc, 0, nullptr);
                 }
+                INFO() << "CLN: Done capturing contents of a texture";
             }
         }
     }
@@ -4907,7 +4938,8 @@ void CaptureMidExecutionSetup(const gl::Context *context,
 
         const egl::AttributeMap &attribs = eglImageAttribIter->second;
 
-        // Okay, right here we need to emit a call to create an external buffer!
+        // Okay, right here, if the image is external, we need to emit a call to create an external
+        // buffer!
         CaptureCreateAndroidHardwareBuffer(eglImage, attribs, *setupCalls);
 
         // Let's see if that worked.
@@ -7262,6 +7294,7 @@ void CreateEGLImagePreCallUpdate(const CallCapture &call,
         param.data.empty() ? nullptr : reinterpret_cast<const AttribT *>(param.data[0].data());
     egl::AttributeMap attributeMap = factory(attribs);
     attributeMap.initializeWithoutValidation();
+    INFO() << "CLN: Tracking " << image << " in getImageToAttribTable";
     resourceTracker.getImageToAttribTable().insert(
         std::pair<EGLImage, egl::AttributeMap>(image, attributeMap));
 }

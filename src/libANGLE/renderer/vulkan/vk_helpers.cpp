@@ -9678,10 +9678,19 @@ angle::Result ImageHelper::readPixelsImpl(ContextVk *contextVk,
     VkDeviceSize stagingOffset = 0;
     size_t allocationSize      = readFormat->pixelBytes * area.width * area.height;
 
+    if (mActualFormatID == angle::FormatID::NONE)
+    {
+        INFO() << "CLN: skipping readPixels for unknown format";
+        return angle::Result::Continue;
+    }
+    INFO() << "CLN: calling allocateForCopyImage with mActualFormatID="
+           << static_cast<uint32_t>(mActualFormatID);
+
     ANGLE_TRY(stagingBuffer->allocateForCopyImage(contextVk, allocationSize,
                                                   MemoryCoherency::Coherent, mActualFormatID,
                                                   &stagingOffset, &readPixelBuffer));
     VkBuffer bufferHandle = stagingBuffer->getBuffer().getHandle();
+    INFO() << "CLN: finished allocateForCopyImage";
 
     VkBufferImageCopy region = {};
     region.bufferImageHeight = srcExtent.height;
