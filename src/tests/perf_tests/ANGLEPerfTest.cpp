@@ -313,7 +313,7 @@ void ANGLEPerfTest::run()
         // GTEST_SKIP returns.
     }
 
-    ASSERT(mStepsToRun > 0);
+    RELEASE_ASSERT(mStepsToRun > 0);
 
     uint32_t numTrials = OneFrame() ? 1 : gTestTrials;
     if (gVerboseLogging)
