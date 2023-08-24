@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "9223f451_acf7357a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-08-24T22:18:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c053197f_cd90a882",
+      "range": {
+        "startLine": 17,
+        "startChar": 3,
+        "endLine": 17,
+        "endChar": 6
+      },
+      "revId": "349aea9ea5d2a6c61e7af15cc4ab89309d0814a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "a4fc32cd_c6a964fc",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 8
@@ -153,6 +177,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff4308b8_ddb9a503",
+        "filename": "src/tests/deqp_support/deqp.gni",
+        "patchSetId": 8
+      },
+      "lineNbr": 2105,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-08-24T22:18:31Z",
+      "side": 1,
+      "message": "I see, thanks, somehow I wrongly mapped win32 to win-x86, and thought using win is more accurate to cover both win-x86 and win-x64.",
+      "parentUuid": "3ab9b15d_b7851a82",
+      "range": {
+        "startLine": 2102,
+        "startChar": 0,
+        "endLine": 2105,
+        "endChar": 1
+      },
+      "revId": "349aea9ea5d2a6c61e7af15cc4ab89309d0814a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2251c035_a0ff2c4b",
@@ -166,6 +214,30 @@
       "writtenOn": "2023-08-24T15:21:31Z",
       "side": 1,
       "message": "Please rename these suffixes to `Posix` too",
+      "range": {
+        "startLine": 32,
+        "startChar": 32,
+        "endLine": 32,
+        "endChar": 40
+      },
+      "revId": "349aea9ea5d2a6c61e7af15cc4ab89309d0814a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cc28609_a1cab219",
+        "filename": "src/tests/deqp_support/posix/tcuANGLENativeWindowFactoryPosix.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-08-24T22:18:31Z",
+      "side": 1,
+      "message": "Thank you for catching this",
+      "parentUuid": "2251c035_a0ff2c4b",
       "range": {
         "startLine": 32,
         "startChar": 32,
