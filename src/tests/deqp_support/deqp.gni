@@ -2090,3 +2090,13 @@ deqp_libtester_sources = [
   "test_utils/RenderDoc.cpp",
   "test_utils/RenderDoc.h",
 ]
+
+deqp_libtester_sources_posix = [
+  "deqp_support/posix/tcuANGLENativeWindowFactoryPosix.cpp",
+  "deqp_support/posix/tcuANGLENativeWindowFactoryPosix.h",
+]
+
+deqp_libtester_sources_win32 = [
+  "deqp_support/win32/tcuANGLENativeWindowFactoryWin32.cpp",
+  "deqp_support/win32/tcuANGLENativeWindowFactoryWin32.h",
+]
