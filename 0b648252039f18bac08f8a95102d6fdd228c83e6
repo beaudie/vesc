@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62b88eff_3f414fa3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-24T01:30:50Z",
+      "side": 1,
+      "message": "@Yuly, looks like gl/eagl/ is not even built in ANGLE\u0027s CQ. Could be good to have that set up",
+      "revId": "0b648252039f18bac08f8a95102d6fdd228c83e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
