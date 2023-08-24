@@ -19,12 +19,6 @@
 #    import <dlfcn.h>
 #    import <objc/runtime.h>
 
-#    define RELEASE_ASSERT(expression, message)                                               \
-        (expression                                                                           \
-             ? static_cast<void>(0)                                                           \
-             : (FATAL() << "\t! Assert failed in " << __FUNCTION__ << " (" << __FILE__ << ":" \
-                        << __LINE__ << "): " << #expression << "\n\t! Message: " << message))
-
 #    ifdef __cplusplus
 #        define EXTERN_C_BEGIN extern "C" {
 #        define EXTERN_C_END }
@@ -74,11 +68,14 @@
             return softLink##framework##functionName parameterNames;                               \
         }
 
-#    define SOFT_LINK_CLASS_HEADER(className)    \
-        @class className;                        \
-        extern Class (*get##className##Class)(); \
-        className *alloc##className##Instance(); \
-        inline className *alloc##className##Instance() { return [get##className##Class() alloc]; }
+#    define SOFT_LINK_CLASS_HEADER(className)          \
+        @class className;                              \
+        extern Class (*get##className##Class)();       \
+        className *alloc##className##Instance();       \
+        inline className *alloc##className##Instance() \
+        {                                              \
+            return [get##className##Class() alloc];    \
+        }
 
 #    define SOFT_LINK_CLASS(framework, className)                                       \
         @class className;                                                               \
@@ -86,7 +83,10 @@
         Class (*get##className##Class)() = init##className;                             \
         static Class class##className;                                                  \
                                                                                         \
-        static Class className##Function() { return class##className; }                 \
+        static Class className##Function()                                              \
+        {                                                                               \
+            return class##className;                                                    \
+        }                                                                               \
                                                                                         \
         static Class init##className()                                                  \
         {                                                                               \
