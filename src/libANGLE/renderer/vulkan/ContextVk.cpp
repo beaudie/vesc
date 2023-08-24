@@ -6029,6 +6029,11 @@ ProgramImpl *ContextVk::createProgram(const gl::ProgramState &state)
     return new ProgramVk(state);
 }
 
+ProgramExecutableImpl *ContextVk::createProgramExecutable(const gl::ProgramExecutable *executable)
+{
+    return new ProgramExecutableVk(executable);
+}
+
 FramebufferImpl *ContextVk::createFramebuffer(const gl::FramebufferState &state)
 {
     return new FramebufferVk(mRenderer, state);
@@ -8347,7 +8352,7 @@ ProgramExecutableVk *ContextVk::getExecutable() const
     {
         if (!program->hasLinkingState())
         {
-            return &vk::GetImpl(program)->getExecutable();
+            return vk::GetImpl(program)->getExecutable();
         }
     }
     else
@@ -8355,7 +8360,7 @@ ProgramExecutableVk *ContextVk::getExecutable() const
         ProgramPipelineVk *programPipelineVk = getProgramPipeline();
         if (programPipelineVk)
         {
-            return &programPipelineVk->getExecutable();
+            return programPipelineVk->getExecutable();
         }
     }
     return nullptr;

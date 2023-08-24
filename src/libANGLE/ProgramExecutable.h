@@ -18,6 +18,12 @@
 #include "libANGLE/VaryingPacking.h"
 #include "libANGLE/angletypes.h"
 
+namespace rx
+{
+class GLImplFactory;
+class ProgramExecutableImpl;
+}  // namespace rx
+
 namespace gl
 {
 
@@ -179,11 +185,13 @@ class ProgramPipelineState;
 class ProgramExecutable final : public angle::Subject
 {
   public:
-    ProgramExecutable();
+    ProgramExecutable(rx::GLImplFactory *factory);
     ProgramExecutable(const ProgramExecutable &other);
     ~ProgramExecutable() override;
 
-    void reset(bool clearInfoLog);
+    void destroy(const Context *context);
+
+    ANGLE_INLINE rx::ProgramExecutableImpl *getImplementation() const { return mImplementation; }
 
     void save(bool isSeparable, gl::BinaryOutputStream *stream) const;
     void load(bool isSeparable, gl::BinaryInputStream *stream);
@@ -471,6 +479,8 @@ class ProgramExecutable final : public angle::Subject
     friend class ProgramPipeline;
     friend class ProgramState;
 
+    void reset(bool clearInfoLog);
+
     void updateActiveImages(const ProgramExecutable &executable);
 
     // Scans the sampler bindings for type conflicts with sampler 'textureUnitIndex'.
@@ -516,6 +526,7 @@ class ProgramExecutable final : public angle::Subject
     bool linkAtomicCounterBuffers(const Caps &caps, InfoLog &infoLog);
 
     InfoLog mInfoLog;
+    rx::ProgramExecutableImpl *mImplementation;
 
     // This struct must only contains basic data types so that entire struct can be memcpy.
     struct PODStruct

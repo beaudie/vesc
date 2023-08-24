@@ -12,6 +12,8 @@
 #include "libANGLE/Context.h"
 #include "libANGLE/Program.h"
 #include "libANGLE/Shader.h"
+#include "libANGLE/renderer/GLImplFactory.h"
+#include "libANGLE/renderer/ProgramExecutableImpl.h"
 
 namespace gl
 {
@@ -276,7 +278,8 @@ void LoadUniforms(BinaryInputStream *stream,
 ProgramExecutable::PODStruct::PODStruct()                       = default;
 ProgramExecutable::PODStruct::PODStruct(const PODStruct &other) = default;
 
-ProgramExecutable::ProgramExecutable() : mActiveSamplerRefCounts{}
+ProgramExecutable::ProgramExecutable(rx::GLImplFactory *factory)
+    : mImplementation(factory->createProgramExecutable(this)), mActiveSamplerRefCounts{}
 {
     memset(&mPODStruct, 0, sizeof(mPODStruct));
     mPODStruct.geometryShaderInputPrimitiveType  = PrimitiveMode::Triangles;
@@ -313,7 +316,16 @@ ProgramExecutable::ProgramExecutable(const ProgramExecutable &other)
     reset(true);
 }
 
-ProgramExecutable::~ProgramExecutable() = default;
+ProgramExecutable::~ProgramExecutable()
+{
+    ASSERT(mImplementation == nullptr);
+}
+
+void ProgramExecutable::destroy(const Context *context)
+{
+    mImplementation->destroy(context);
+    SafeDelete(mImplementation);
+}
 
 void ProgramExecutable::reset(bool clearInfoLog)
 {
