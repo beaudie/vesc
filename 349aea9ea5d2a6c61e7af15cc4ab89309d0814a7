@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c053197f_cd90a882",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-24T15:21:31Z",
+      "side": 1,
+      "message": "nit: win32",
+      "range": {
+        "startLine": 17,
+        "startChar": 3,
+        "endLine": 17,
+        "endChar": 6
+      },
+      "revId": "349aea9ea5d2a6c61e7af15cc4ab89309d0814a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4fc32cd_c6a964fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-24T15:21:31Z",
+      "side": 1,
+      "message": "👍 Thanks for the clean up",
+      "revId": "349aea9ea5d2a6c61e7af15cc4ab89309d0814a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ab9b15d_b7851a82",
+        "filename": "src/tests/deqp_support/deqp.gni",
+        "patchSetId": 8
+      },
+      "lineNbr": 2105,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-24T15:21:31Z",
+      "side": 1,
+      "message": "nit: It sounds last-millennium, but \"Win32\" is the actual name of the API:\n\n```suggestion\ndeqp_libtester_sources_win32 \u003d [\n  \"deqp_support/win32/tcuANGLENativeWindowFactoryWin32.cpp\",\n  \"deqp_support/win32/tcuANGLENativeWindowFactoryWin32.h\",\n]\n```",
+      "range": {
+        "startLine": 2102,
+        "startChar": 0,
+        "endLine": 2105,
+        "endChar": 1
+      },
+      "revId": "349aea9ea5d2a6c61e7af15cc4ab89309d0814a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2251c035_a0ff2c4b",
+        "filename": "src/tests/deqp_support/posix/tcuANGLENativeWindowFactoryPosix.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-24T15:21:31Z",
+      "side": 1,
+      "message": "Please rename these suffixes to `Posix` too",
+      "range": {
+        "startLine": 32,
+        "startChar": 32,
+        "endLine": 32,
+        "endChar": 40
+      },
+      "revId": "349aea9ea5d2a6c61e7af15cc4ab89309d0814a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
