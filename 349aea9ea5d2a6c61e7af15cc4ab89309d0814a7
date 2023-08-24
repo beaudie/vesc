@@ -156,6 +156,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1e2cdbe5_9c9daea6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-08-24T23:15:59Z",
+      "side": 1,
+      "message": "I think it is valid to keep good practice if it is not \"way\" too complicated.\n\nI have reworked the change to minimize the lines touched: https://chromium-review.googlesource.com/c/angle/angle/+/4812236. What do you think about it?",
+      "parentUuid": "8575c9d2_f1c99a4b",
+      "revId": "349aea9ea5d2a6c61e7af15cc4ab89309d0814a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3ab9b15d_b7851a82",
         "filename": "src/tests/deqp_support/deqp.gni",
         "patchSetId": 8
