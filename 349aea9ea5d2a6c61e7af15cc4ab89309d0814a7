@@ -112,6 +112,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8575c9d2_f1c99a4b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-08-24T15:59:46Z",
+      "side": 1,
+      "message": "Well you don\u0027t need to convince me that ifdef\u0027s are generally evil :) but IMO this is a _special case_ where it is perfectly justified as it\u0027s much less work, easier to understand for a reader, doesn\u0027t have bad side effects.",
+      "parentUuid": "54242615_828e6f03",
+      "revId": "349aea9ea5d2a6c61e7af15cc4ab89309d0814a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3ab9b15d_b7851a82",
