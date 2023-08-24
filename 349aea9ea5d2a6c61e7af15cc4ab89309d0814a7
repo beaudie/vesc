@@ -94,6 +94,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "54242615_828e6f03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-24T15:56:04Z",
+      "side": 1,
+      "message": "Yeah, that\u0027s how game engines have an #ifdef every 5 lines. Every single one of them is a \"but it\u0027s just 2 lines\" :P\n\nBut also, the number doesn\u0027t really mean anything? For example about +-200 lines are just a split of the `tcuANGLENativeDisplayFactory.h` into `tcuANGLENativeWindowFactory.h`. It\u0027s not fixing anything, it\u0027s just a tidy up. It\u0027s not fair to compare that to a bugfix (or consider it less important)",
+      "parentUuid": "e5c3c359_0f92a0bc",
+      "revId": "349aea9ea5d2a6c61e7af15cc4ab89309d0814a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3ab9b15d_b7851a82",
