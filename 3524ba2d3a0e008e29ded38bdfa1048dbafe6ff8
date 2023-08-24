@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "542c5d88_bb83d6f3",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-08-24T15:40:50Z",
+      "side": 1,
+      "message": "This has been a recurrent pattern your recent CLs Charlie, and it\u0027s a fairly complex construct. Would it make sense to add a generic helper for saving/loading arrays like this? Something that would look like `stream-\u003ewriteArrayData(samplerBindings)` / `stream-\u003ereadArrayData(samplerBindings, samplerBindingCount)` (the latter could also resize)",
+      "range": {
+        "startLine": 280,
+        "startChar": 0,
+        "endLine": 281,
+        "endChar": 81
+      },
+      "revId": "3524ba2d3a0e008e29ded38bdfa1048dbafe6ff8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58378f98_5cdc185d",
+        "filename": "src/libANGLE/ProgramExecutable.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1620,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-08-24T15:40:50Z",
+      "side": 1,
+      "message": "Might want to `.reserve()` before the loop?",
+      "range": {
+        "startLine": 1620,
+        "startChar": 25,
+        "endLine": 1620,
+        "endChar": 34
+      },
+      "revId": "3524ba2d3a0e008e29ded38bdfa1048dbafe6ff8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a060ec3_5cd27997",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-08-24T15:40:50Z",
+      "side": 1,
+      "message": "cool assert!",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 13
+      },
+      "revId": "3524ba2d3a0e008e29ded38bdfa1048dbafe6ff8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
