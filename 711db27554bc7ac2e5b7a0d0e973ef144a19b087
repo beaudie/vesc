@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8211a223_58bf4320",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1305348
+      },
+      "writtenOn": "2023-08-24T14:12:21Z",
+      "side": 1,
+      "message": "Thanks! The ANGLE roll into Skia succeeded last night.",
+      "revId": "711db27554bc7ac2e5b7a0d0e973ef144a19b087",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
