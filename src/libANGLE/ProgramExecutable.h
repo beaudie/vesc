@@ -22,6 +22,7 @@ namespace gl
 {
 
 // This small structure encapsulates binding sampler uniforms to active GL textures.
+ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
 struct SamplerBinding
 {
     SamplerBinding() = default;
@@ -31,8 +32,8 @@ struct SamplerBinding
                    uint16_t startIndex,
                    uint16_t elementCount)
         : textureType(textureTypeIn),
-          samplerType(samplerTypeIn),
           format(formatIn),
+          samplerType(samplerTypeIn),
           textureUnitsStartIndex(startIndex),
           textureUnitsCount(elementCount)
     {}
@@ -46,8 +47,8 @@ struct SamplerBinding
 
     // Necessary for retrieving active textures from the GL state.
     TextureType textureType;
-    GLenum samplerType;
     SamplerFormat format;
+    uint16_t samplerType;
     // [textureUnitsStartIndex, textureUnitsStartIndex+textureUnitsCount) Points to the subset in
     // mSamplerBoundTextureUnits that stores the texture unit bound to this sampler. Cropped by the
     // amount of unused elements reported by the driver.
@@ -55,6 +56,7 @@ struct SamplerBinding
     uint16_t textureUnitsCount;
 };
 static_assert(std::is_trivially_copyable<SamplerBinding>(), "must be memcpy-able");
+ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
 
 struct ImageBinding
 {
