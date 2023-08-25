@@ -174,6 +174,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1a2dbff7_bdc600fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-25T02:02:39Z",
+      "side": 1,
+      "message": "Both changes LGTM, the split of `tcuANGLENativeDisplayFactory.cpp` was not really necessary, but also harmless of course.",
+      "parentUuid": "1e2cdbe5_9c9daea6",
+      "revId": "349aea9ea5d2a6c61e7af15cc4ab89309d0814a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3ab9b15d_b7851a82",
         "filename": "src/tests/deqp_support/deqp.gni",
         "patchSetId": 8
