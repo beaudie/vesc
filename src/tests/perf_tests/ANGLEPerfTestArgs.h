@@ -16,7 +16,6 @@
 
 namespace angle
 {
-extern bool gCalibration;
 extern int gStepsPerTrial;
 extern int gMaxStepsPerformed;
 extern bool gEnableTrace;
@@ -26,9 +25,7 @@ extern bool gSaveScreenshots;
 extern int gScreenshotFrame;
 extern bool gRunToKeyFrame;
 extern bool gVerboseLogging;
-extern int gWarmupTrials;
 extern int gWarmupSteps;
-extern int gCalibrationTimeSeconds;
 extern int gTrialTimeSeconds;
 extern int gTestTrials;
 extern bool gNoFinish;
@@ -50,6 +47,7 @@ constexpr int kAllFrames = -1;
 
 constexpr int kDefaultScreenshotFrame   = 1;
 constexpr int kDefaultMaxStepsPerformed = 0;
+constexpr int kDefaultWarmupSteps       = 0;
 
 inline bool OneFrame()
 {
