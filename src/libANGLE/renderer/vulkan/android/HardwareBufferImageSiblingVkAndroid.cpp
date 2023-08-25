@@ -409,9 +409,12 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
         mYUV = true;
     }
 
-    ANGLE_TRY(mImage->initExternalMemory(displayVk, renderer->getMemoryProperties(),
-                                         externalMemoryRequirements, 1, &dedicatedAllocInfoPtr,
-                                         VK_QUEUE_FAMILY_FOREIGN_EXT, flags));
+    // We should start from offset 0.
+    uint32_t planeOffset = 0;
+    VkResult result      = mImage->initExternalMemory(
+        displayVk, renderer->getMemoryProperties(), externalMemoryRequirements, 1,
+        &dedicatedAllocInfoPtr, VK_QUEUE_FAMILY_FOREIGN_EXT, flags, &planeOffset);
+    ANGLE_VK_CHECK(displayVk, result == VK_SUCCESS, result);
 
     if (isExternal)
     {

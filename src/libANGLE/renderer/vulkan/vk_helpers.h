@@ -1893,13 +1893,14 @@ class ImageHelper final : public Resource, public angle::Subject
                         VkMemoryPropertyFlags flags,
                         VkMemoryPropertyFlags oomExcludedFlags,
                         MemoryAllocationType allocationType);
-    angle::Result initExternalMemory(Context *context,
-                                     const MemoryProperties &memoryProperties,
-                                     const VkMemoryRequirements &memoryRequirements,
-                                     uint32_t extraAllocationInfoCount,
-                                     const void **extraAllocationInfo,
-                                     uint32_t currentQueueFamilyIndex,
-                                     VkMemoryPropertyFlags flags);
+    VkResult initExternalMemory(Context *context,
+                                const MemoryProperties &memoryProperties,
+                                const VkMemoryRequirements &memoryRequirements,
+                                uint32_t extraAllocationInfoCount,
+                                const void **extraAllocationInfo,
+                                uint32_t currentQueueFamilyIndex,
+                                VkMemoryPropertyFlags flags,
+                                uint32_t *planeOffset);
 
     static constexpr VkImageUsageFlags kDefaultImageViewUsageFlags = 0;
     angle::Result initLayerImageView(Context *context,
