@@ -16,6 +16,24 @@
       "message": "@Yuly, looks like gl/eagl/ is not even built in ANGLE\u0027s CQ. Could be good to have that set up",
       "revId": "0b648252039f18bac08f8a95102d6fdd228c83e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aae3fa8a_4ea151fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-08-25T16:33:23Z",
+      "side": 1,
+      "message": "It should be simple to add to our compile-only bots.\nWhat is the GN flag that would build it?\nCould you open a bug?",
+      "parentUuid": "62b88eff_3f414fa3",
+      "revId": "0b648252039f18bac08f8a95102d6fdd228c83e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
