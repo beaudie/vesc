@@ -16,7 +16,7 @@
 namespace rx
 {
 std::string GenerateShaderForImage2DBindSignature(
-    ProgramD3D &programD3D,
+    ProgramExecutableD3D &executableD3D,
     gl::ShaderType shaderType,
     const SharedCompiledShaderStateD3D &shaderData,
     const std::string &shaderHLSL,
