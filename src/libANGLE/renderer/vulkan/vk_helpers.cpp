@@ -6017,13 +6017,14 @@ VkResult ImageHelper::initMemory(Context *context,
     return VK_SUCCESS;
 }
 
-angle::Result ImageHelper::initExternalMemory(Context *context,
-                                              const MemoryProperties &memoryProperties,
-                                              const VkMemoryRequirements &memoryRequirements,
-                                              uint32_t extraAllocationInfoCount,
-                                              const void **extraAllocationInfo,
-                                              uint32_t currentQueueFamilyIndex,
-                                              VkMemoryPropertyFlags flags)
+VkResult ImageHelper::initExternalMemory(Context *context,
+                                         const MemoryProperties &memoryProperties,
+                                         const VkMemoryRequirements &memoryRequirements,
+                                         uint32_t extraAllocationInfoCount,
+                                         const void **extraAllocationInfo,
+                                         uint32_t currentQueueFamilyIndex,
+                                         VkMemoryPropertyFlags flags,
+                                         uint32_t *planeOffset)
 {
     // Vulkan allows up to 4 memory planes.
     constexpr size_t kMaxMemoryPlanes                                     = 4;
@@ -6035,6 +6036,9 @@ angle::Result ImageHelper::initExternalMemory(Context *context,
     };
     ASSERT(extraAllocationInfoCount <= kMaxMemoryPlanes);
 
+    // *planeOffset must be 0 when called. It is used and updated in case of allocation failure.
+    ASSERT(*planeOffset < extraAllocationInfoCount);
+
     VkBindImagePlaneMemoryInfoKHR bindImagePlaneMemoryInfo = {};
     bindImagePlaneMemoryInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_PLANE_MEMORY_INFO;
 
@@ -6044,20 +6048,19 @@ angle::Result ImageHelper::initExternalMemory(Context *context,
     mAllocationSize       = memoryRequirements.size;
     mMemoryAllocationType = MemoryAllocationType::ImageExternal;
 
-    for (uint32_t memoryPlane = 0; memoryPlane < extraAllocationInfoCount; ++memoryPlane)
+    for (uint32_t memoryPlane = *planeOffset; memoryPlane < extraAllocationInfoCount; ++memoryPlane)
     {
         bindImagePlaneMemoryInfo.planeAspect = kMemoryPlaneAspects[memoryPlane];
 
-        // TODO(b/280304441): Context flushing for OOM handling should be added.
-        VkResult result = AllocateImageMemoryWithRequirements(
+        ANGLE_VK_RESULT(AllocateImageMemoryWithRequirements(
             context, mMemoryAllocationType, flags, memoryRequirements,
             extraAllocationInfo[memoryPlane], bindImagePlaneMemoryInfoPtr, &mImage,
-            &mMemoryTypeIndex, &mDeviceMemory);
-        ANGLE_VK_CHECK(context, result == VK_SUCCESS, result);
+            &mMemoryTypeIndex, &mDeviceMemory));
+        *planeOffset = memoryPlane;
     }
     mCurrentQueueFamilyIndex = currentQueueFamilyIndex;
 
-    return angle::Result::Continue;
+    return VK_SUCCESS;
 }
 
 angle::Result ImageHelper::initImageView(Context *context,
