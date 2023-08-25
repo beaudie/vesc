@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddb3d6e6_8a049f7b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-25T13:38:53Z",
+      "side": 1,
+      "message": "Lot\u0027s of dependent changes to follow. For Vulkan, that means avoiding sending both ProgramExecutable and ProgramExecutableVk everywhere. For the others, it\u0027s about moving stuff from ProgramX to ProgrameExecutableX.\n\nThe end goal is to have the front-end be able to swap out a whole ProgramExecutable (which now includes the backend state) on link.",
+      "revId": "99b1bfd8cf473e1ce15a7bc7603d19d2ddc709b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
