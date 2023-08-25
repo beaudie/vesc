@@ -39,6 +39,30 @@
       },
       "revId": "875218764870024ed9524e301f8f9a1414325e3e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30169400_d27d0d68",
+        "filename": "src/tests/perf_tests/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-08-25T22:12:35Z",
+      "side": 1,
+      "message": "I don\u0027t think we have any uses currently. My thinking was to keep one way to have warmup if it turns out to be needed (e.g. for perf test we only warmup 1 frame.. is that always okay?) but I agree just `--warmup` would be simpler.\n\nIf we do that, should we also replace `--fixed-test-time-with-warmup x` by `--warmup --fixed-test-time x`?",
+      "parentUuid": "5b18269d_01d1c6e6",
+      "range": {
+        "startLine": 62,
+        "startChar": 3,
+        "endLine": 62,
+        "endChar": 19
+      },
+      "revId": "875218764870024ed9524e301f8f9a1414325e3e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
