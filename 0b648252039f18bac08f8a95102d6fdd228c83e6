@@ -34,6 +34,24 @@
       "parentUuid": "62b88eff_3f414fa3",
       "revId": "0b648252039f18bac08f8a95102d6fdd228c83e6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9f6d238_e433e01e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-25T16:45:18Z",
+      "side": 1,
+      "message": "Awesome. I opened anglebug.com/8322, the gn flags should be apparent from the link to the failing build.\n\nThanks!",
+      "parentUuid": "aae3fa8a_4ea151fc",
+      "revId": "0b648252039f18bac08f8a95102d6fdd228c83e6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
