@@ -438,6 +438,9 @@ class ProgramExecutable final : public angle::Subject
 
     GLenum getTessGenMode() const { return mPODStruct.tessGenMode; }
 
+    int getNumViews() const { return mPODStruct.numViews; }
+    bool usesMultiview() const { return mPODStruct.numViews != -1; }
+
     void resetCachedValidateSamplersResult() { mCachedValidateSamplersResult.reset(); }
     bool validateSamplers(InfoLog *infoLog, const Caps &caps) const
     {
@@ -473,6 +476,8 @@ class ProgramExecutable final : public angle::Subject
     void copyImageBindingsFromProgram(const ProgramState &programState);
     void copyOutputsFromProgram(const ProgramState &programState);
     void copyUniformsFromProgramMap(const ShaderMap<Program *> &programs);
+
+    GLuint getAttributeLocation(const std::string &name) const;
 
   private:
     friend class Program;
@@ -564,6 +569,9 @@ class ProgramExecutable final : public angle::Subject
         PrimitiveMode geometryShaderOutputPrimitiveType;
         int geometryShaderInvocations;
         int geometryShaderMaxVertices;
+
+        // GL_OVR_multiview / GL_OVR_multiview2
+        int numViews;
 
         // GL_EXT_tessellation_shader
         int tessControlShaderVertices;
