@@ -552,9 +552,13 @@ angle::Result DmaBufImageSiblingVkLinux::initWithFormat(DisplayVk *displayVk,
     ANGLE_TRY(GetAllocateInfo(mAttribs, mImage->getImage().getHandle(), planeCount,
                               modifierProperties, &allocateInfo, &allocateInfoCount));
 
-    return mImage->initExternalMemory(
+    // We should start from offset 0.
+    uint32_t planeOffset = 0;
+    VkResult result      = mImage->initExternalMemory(
         displayVk, renderer->getMemoryProperties(), externalMemoryRequirements, allocateInfoCount,
-        allocateInfo.allocateInfoPtr.data(), VK_QUEUE_FAMILY_FOREIGN_EXT, flags);
+        allocateInfo.allocateInfoPtr.data(), VK_QUEUE_FAMILY_FOREIGN_EXT, flags, &planeOffset);
+    ANGLE_VK_CHECK(displayVk, result == VK_SUCCESS, result);
+    return angle::Result::Continue;
 }
 
 angle::Result DmaBufImageSiblingVkLinux::initImpl(DisplayVk *displayVk)
