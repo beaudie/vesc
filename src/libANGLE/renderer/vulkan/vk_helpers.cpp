@@ -6103,7 +6103,9 @@ angle::Result ImageHelper::initExternalMemory(Context *context,
                                               uint32_t extraAllocationInfoCount,
                                               const void **extraAllocationInfo,
                                               uint32_t currentQueueFamilyIndex,
-                                              VkMemoryPropertyFlags flags)
+                                              VkMemoryPropertyFlags flags,
+                                              uint32_t *planeOffset,
+                                              VkResult *resultOut)
 {
     // Vulkan allows up to 4 memory planes.
     constexpr size_t kMaxMemoryPlanes                                     = 4;
@@ -6114,6 +6116,9 @@ angle::Result ImageHelper::initExternalMemory(Context *context,
         VK_IMAGE_ASPECT_MEMORY_PLANE_3_BIT_EXT,
     };
     ASSERT(extraAllocationInfoCount <= kMaxMemoryPlanes);
+
+    // *planeOffset must be 0 when called. It is used and updated in case of allocation failure.
+    ASSERT(*planeOffset < extraAllocationInfoCount);
 
     VkBindImagePlaneMemoryInfoKHR bindImagePlaneMemoryInfo = {};
     bindImagePlaneMemoryInfo.sType = VK_STRUCTURE_TYPE_BIND_IMAGE_PLANE_MEMORY_INFO;
@@ -6128,13 +6133,16 @@ angle::Result ImageHelper::initExternalMemory(Context *context,
     {
         bindImagePlaneMemoryInfo.planeAspect = kMemoryPlaneAspects[memoryPlane];
 
-        // TODO(b/280304441): Context flushing for OOM handling should be added.
-        VkResult result;
         ANGLE_TRY(AllocateImageMemoryWithRequirements(
             context, mMemoryAllocationType, flags, memoryRequirements,
             extraAllocationInfo[memoryPlane], bindImagePlaneMemoryInfoPtr, &mImage,
-            &mMemoryTypeIndex, &mDeviceMemory, &result));
-        ANGLE_VK_CHECK(context, result == VK_SUCCESS, result);
+            &mMemoryTypeIndex, &mDeviceMemory, resultOut));
+        if (*resultOut != VK_SUCCESS)
+        {
+            // When it retries allocation, it should start from the last plane tried.
+            *planeOffset = memoryPlane;
+            return angle::Result::Continue;
+        }
     }
     mCurrentQueueFamilyIndex = currentQueueFamilyIndex;
 
