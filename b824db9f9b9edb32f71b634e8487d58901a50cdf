@@ -16,6 +16,24 @@
       "message": "Is there any risk to this? Eventually I can move wait-for-shader-compilation after the program hash look up too, at which point the program can be loaded before the shaders even finish compiling. I _think_ that would be fine, because if the program successfully linked before, the shaders should compile again too. There could be weird situations like OOM during shader compile, but the program is already loaded from cache (and considered linked)",
       "revId": "b824db9f9b9edb32f71b634e8487d58901a50cdf",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b836dd6d_84504b17",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-28T20:31:54Z",
+      "side": 1,
+      "message": "The change is good for review IMO, but looks like I need to reorder it with the next (upcoming) change that sets/restores the executable appropriately. Previously the failing test was passing only because this small part of the link was being being done before unlink().",
+      "parentUuid": "23dd4256_23092d54",
+      "revId": "b824db9f9b9edb32f71b634e8487d58901a50cdf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
