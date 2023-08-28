@@ -499,18 +499,23 @@ class Program final : public LabeledObject, public angle::Subject
         return mLinked;
     }
 
-    angle::Result loadBinary(const Context *context,
-                             GLenum binaryFormat,
-                             const void *binary,
-                             GLsizei length);
-    angle::Result saveBinary(Context *context,
-                             GLenum *binaryFormat,
-                             void *binary,
-                             GLsizei bufSize,
-                             GLsizei *length) const;
+    angle::Result setBinary(const Context *context,
+                            GLenum binaryFormat,
+                            const void *binary,
+                            GLsizei length);
+    angle::Result getBinary(Context *context,
+                            GLenum *binaryFormat,
+                            void *binary,
+                            GLsizei bufSize,
+                            GLsizei *length) const;
     GLint getBinaryLength(Context *context) const;
     void setBinaryRetrievableHint(bool retrievable);
     bool getBinaryRetrievableHint() const;
+
+    angle::Result loadBinary(const Context *context,
+                             const void *binary,
+                             GLsizei length,
+                             bool *successOut);
 
     InfoLog &getInfoLog() { return mState.mInfoLog; }
     int getInfoLogLength() const;
@@ -741,11 +746,7 @@ class Program final : public LabeledObject, public angle::Subject
     GLenum getTessGenSpacing() const;
     GLenum getTessGenVertexOrder() const;
 
-    const ProgramState &getState() const
-    {
-        ASSERT(!mLinkingState);
-        return mState;
-    }
+    const ProgramState &getState() const { return mState; }
 
     GLuint getInputResourceIndex(const GLchar *name) const;
     GLuint getOutputResourceIndex(const GLchar *name) const;
@@ -847,6 +848,12 @@ class Program final : public LabeledObject, public angle::Subject
     void deleteSelf(const Context *context);
 
     angle::Result linkImpl(const Context *context);
+
+    void installNewExecutable(const Context *context);
+    void restoreLastExecutable(const Context *context,
+                               const std::unique_ptr<LinkingState> &linkingState);
+    void discardLastExecutable(const Context *context,
+                               const std::unique_ptr<LinkingState> &linkingState);
 
     bool linkValidateShaders(const Context *context);
     void linkShaders();
