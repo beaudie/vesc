@@ -15,64 +15,93 @@
 
 #include "SampleApplication.h"
 
-#include "util/shader_utils.h"
+#include <algorithm>
+
+static constexpr int fbCount   = 2;
+static constexpr int fbSize[2] = {10000, 1000};
 
 class HelloTriangleSample : public SampleApplication
 {
   public:
-    HelloTriangleSample(int argc, char **argv) : SampleApplication("HelloTriangle", argc, argv) {}
+    HelloTriangleSample(int argc, char **argv)
+        : SampleApplication("HelloTriangle", argc, argv, ClientType::ES3_0)
+    {}
 
     bool initialize() override
     {
-        constexpr char kVS[] = R"(attribute vec4 vPosition;
-void main()
-{
-    gl_Position = vPosition;
-})";
+        GLuint renderbuffers[fbCount]   = {0};
+        GLuint dsRenderbuffers[fbCount] = {0};
+        glGenRenderbuffers(fbCount, renderbuffers);
+        glGenRenderbuffers(fbCount, dsRenderbuffers);
+        glGenFramebuffers(fbCount, mFramebuffers);
 
-        constexpr char kFS[] = R"(precision mediump float;
-void main()
-{
-    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-})";
+        GLuint resolveRenderbuffers[fbCount] = {0};
+        glGenRenderbuffers(fbCount, resolveRenderbuffers);
+        glGenFramebuffers(fbCount, mResolveFramebuffers);
 
-        mProgram = CompileProgram(kVS, kFS);
-        if (!mProgram)
+        for (int i = 0; i < fbCount; i++)
         {
-            return false;
-        }
+            glBindRenderbuffer(GL_RENDERBUFFER, renderbuffers[i]);
+            glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_BGRA8_EXT, fbSize[0],
+                                             fbSize[1]);
 
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+            glBindRenderbuffer(GL_RENDERBUFFER, dsRenderbuffers[i]);
+            glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_DEPTH24_STENCIL8, fbSize[0],
+                                             fbSize[1]);
+
+            glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffers[i]);
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER,
+                                      renderbuffers[i]);
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER,
+                                      dsRenderbuffers[i]);
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER,
+                                      dsRenderbuffers[i]);
+
+            glBindRenderbuffer(GL_RENDERBUFFER, resolveRenderbuffers[i]);
+            glRenderbufferStorage(GL_RENDERBUFFER, GL_BGRA8_EXT, fbSize[0], fbSize[1]);
+
+            glBindFramebuffer(GL_FRAMEBUFFER, mResolveFramebuffers[i]);
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER,
+                                      resolveRenderbuffers[i]);
+        }
 
         return true;
     }
 
-    void destroy() override { glDeleteProgram(mProgram); }
+    void destroy() override {}
 
     void draw() override
     {
-        GLfloat vertices[] = {
-            0.0f, 0.5f, 0.0f, -0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f,
-        };
-
-        // Set the viewport
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glViewport(0, 0, getWindow()->getWidth(), getWindow()->getHeight());
-
-        // Clear the color buffer
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // Use the program object
-        glUseProgram(mProgram);
+        for (int i = 0; i < fbCount; i++)
+        {
+            glClearColor(1.0f, float(i) / std::max(fbCount - 1, 1), 0.0f, 1.0f);
 
-        // Load the vertex data
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vertices);
-        glEnableVertexAttribArray(0);
+            glBindFramebuffer(GL_FRAMEBUFFER, mFramebuffers[i]);
+            glViewport(0, 0, fbSize[0], fbSize[1]);
+            glClear(GL_COLOR_BUFFER_BIT);
+        }
 
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        for (int i = 0; i < fbCount; i++)
+        {
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mResolveFramebuffers[i]);
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, mFramebuffers[i]);
+            glBlitFramebuffer(0, 0, fbSize[0], fbSize[1], 0, 0, fbSize[0], fbSize[1],
+                              GL_COLOR_BUFFER_BIT, GL_NEAREST);
+
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+            glBindFramebuffer(GL_READ_FRAMEBUFFER, mResolveFramebuffers[i]);
+            glBlitFramebuffer(0, 0, fbSize[0], fbSize[1], i * 100, 0, (i + 1) * 100, 100,
+                              GL_COLOR_BUFFER_BIT, GL_NEAREST);
+        }
     }
 
   private:
-    GLuint mProgram;
+    GLuint mFramebuffers[fbCount];
+    GLuint mResolveFramebuffers[fbCount];
 };
 
 int main(int argc, char **argv)
