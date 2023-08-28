@@ -52,7 +52,7 @@ STATUS_MESSAGE_PERIOD = 20  # in seconds
 SUBPROCESS_TIMEOUT = 600  # in seconds
 DEFAULT_RESULT_FILE = "results.txt"
 DEFAULT_LOG_LEVEL = "info"
-DEFAULT_MAX_JOBS = 8
+DEFAULT_MAX_JOBS = 1
 DEFAULT_MAX_NINJA_JOBS = 3
 REPLAY_BINARY = "capture_replay_tests"
 if sys.platform == "win32":
@@ -531,8 +531,10 @@ class TestBatch():
                 GroupedResult(GroupedResult.CompileFailed, "Build replay failed at gn generation",
                               output, tests))
             return False
+        t0 = time.time()
         returncode, output = child_processes_manager.RunNinja(replay_build_dir, REPLAY_BINARY,
                                                               True)
+        self.logger.info('RunNinja took %.1f seconds', time.time() - t0)
         if returncode != 0:
             self.logger.warning('Ninja failure output: %s' % output)
             self.results.append(
@@ -919,7 +921,7 @@ def main(args):
             return EXIT_FAILURE
         # run ninja to build all tests
         returncode, output = child_processes_manager.RunNinja(capture_build_dir, args.test_suite,
-                                                              False)
+                                                              True)
         if returncode != 0:
             logger.error(output)
             child_processes_manager.KillAll()
