@@ -2222,6 +2222,16 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             mVertexLoadRequiresConversion  = true;
             break;
 
+        case angle::FormatID::R8G8B8X8_UNORM_SRGB:
+            mIntendedGLFormat              = GL_RGBX8_SRGB_ANGLEX;
+            mActualSampleOnlyImageFormatID = angle::FormatID::R8G8B8A8_UNORM_SRGB;
+            mImageInitializerFunction      = nullptr;
+            mActualBufferFormatID          = angle::FormatID::NONE;
+            mVkBufferFormatIsPacked        = false;
+            mVertexLoadFunction            = nullptr;
+            mVertexLoadRequiresConversion  = true;
+            break;
+
         case angle::FormatID::R8G8B8_SINT:
             mIntendedGLFormat = GL_RGB8I;
             {

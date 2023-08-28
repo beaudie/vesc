@@ -233,6 +233,8 @@ def main():
             return 1
         return 0
 
+    return 0
+
     os.chdir(sys.path[0])
 
     combined_metal_src = generate_combined_metal_src(src_files)
