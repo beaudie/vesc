@@ -30,6 +30,7 @@ import logging
 import math
 import multiprocessing
 import os
+import pathlib
 import psutil
 import queue
 import re
@@ -39,6 +40,11 @@ import sys
 import tempfile
 import time
 import traceback
+
+PY_UTILS = str(pathlib.Path(__file__).resolve().parent / 'py_utils')
+if PY_UTILS not in sys.path:
+    os.stat(PY_UTILS) and sys.path.insert(0, PY_UTILS)
+import angle_test_util
 
 PIPE_STDOUT = True
 DEFAULT_OUT_DIR = "out/CaptureReplayTest"  # relative to angle folder
@@ -1222,6 +1228,6 @@ if __name__ == '__main__':
     if args.output_to_file:
         logging.basicConfig(level=args.log.upper(), filename=args.result_file)
     else:
-        logging.basicConfig(level=args.log.upper())
+        angle_test_util.SetupLogging(args.log.upper())
 
     sys.exit(main(args))
