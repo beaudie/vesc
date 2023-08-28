@@ -7501,7 +7501,7 @@ void Context::getProgramBinary(ShaderProgramID program,
     Program *programObject = getProgramResolveLink(program);
     ASSERT(programObject != nullptr);
 
-    ANGLE_CONTEXT_TRY(programObject->saveBinary(this, binaryFormat, binary, bufSize, length));
+    ANGLE_CONTEXT_TRY(programObject->getBinary(this, binaryFormat, binary, bufSize, length));
 }
 
 void Context::programBinary(ShaderProgramID program,
@@ -7512,7 +7512,7 @@ void Context::programBinary(ShaderProgramID program,
     Program *programObject = getProgramResolveLink(program);
     ASSERT(programObject != nullptr);
 
-    ANGLE_CONTEXT_TRY(programObject->loadBinary(this, binaryFormat, binary, length));
+    ANGLE_CONTEXT_TRY(programObject->setBinary(this, binaryFormat, binary, length));
     ANGLE_CONTEXT_TRY(onProgramLink(programObject));
 }
 
