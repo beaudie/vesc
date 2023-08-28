@@ -1786,16 +1786,25 @@ angle::Result WindowSurfaceVk::checkForOutOfDateSwapchain(ContextVk *contextVk,
     // Get the latest surface capabilities.
     ANGLE_TRY(queryAndAdjustSurfaceCaps(contextVk, &mSurfaceCaps));
 
-    if (contextVk->getRenderer()->getFeatures().perFrameWindowSizeQuery.enabled &&
-        !presentOutOfDate)
+    if (contextVk->getRenderer()->getFeatures().perFrameWindowSizeQuery.enabled)
     {
-        // This device generates neither VK_ERROR_OUT_OF_DATE_KHR nor VK_SUBOPTIMAL_KHR.  Check for
-        // whether the size and/or rotation have changed since the swapchain was created.
-        uint32_t swapchainWidth  = getWidth();
-        uint32_t swapchainHeight = getHeight();
-        presentOutOfDate         = mSurfaceCaps.currentTransform != mPreTransform ||
-                           mSurfaceCaps.currentExtent.width != swapchainWidth ||
-                           mSurfaceCaps.currentExtent.height != swapchainHeight;
+        // On Android, rotation can cause the minImageCount to change
+        if (mMinImageCount != mSurfaceCaps.minImageCount)
+        {
+            presentOutOfDate = true;
+            mMinImageCount   = mSurfaceCaps.minImageCount;
+        }
+
+        if (!presentOutOfDate)
+        {
+            // This device generates neither VK_ERROR_OUT_OF_DATE_KHR nor VK_SUBOPTIMAL_KHR.  Check
+            // for whether the size and/or rotation have changed since the swapchain was created.
+            uint32_t swapchainWidth  = getWidth();
+            uint32_t swapchainHeight = getHeight();
+            presentOutOfDate         = mSurfaceCaps.currentTransform != mPreTransform ||
+                               mSurfaceCaps.currentExtent.width != swapchainWidth ||
+                               mSurfaceCaps.currentExtent.height != swapchainHeight;
+        }
     }
 
     // If anything has changed, recreate the swapchain.
