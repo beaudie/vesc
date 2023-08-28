@@ -1363,7 +1363,12 @@ bool ValidateDispatchCompute(const Context *context,
         return false;
     }
 
-    const State &state                  = context->getState();
+    const State &state = context->getState();
+    // Make sure bound programs are linked (and the executable installed)
+    if (state.getLinkedProgram(context) == nullptr)
+    {
+        state.getLinkedProgramPipeline(context);
+    }
     const ProgramExecutable *executable = state.getProgramExecutable();
 
     if (executable == nullptr || !executable->hasLinkedShaderStage(ShaderType::Compute))
