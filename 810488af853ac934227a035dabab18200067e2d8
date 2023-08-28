@@ -16,6 +16,24 @@
       "message": "I can never properly understand the output of win-trace. Anyway, some suppression may be in order? I\u0027ll ping \"our trace guy\" to see what can be done about this.",
       "revId": "810488af853ac934227a035dabab18200067e2d8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "031f4c9b_28d11def",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-28T16:46:13Z",
+      "side": 1,
+      "message": "Looks like the bot is just broken, someone\u0027s on it!",
+      "parentUuid": "d33b085d_8a17fc18",
+      "revId": "810488af853ac934227a035dabab18200067e2d8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
