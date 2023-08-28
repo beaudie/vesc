@@ -1217,15 +1217,6 @@ angle::Result Program::linkImpl(const Context *context)
     // use the previously linked program if linking the shaders fails.
     mLinked = false;
 
-    mState.mExecutable->resetInfoLog();
-
-    // Validate we have properly attached shaders before checking the cache.
-    if (!linkValidateShaders(context, mState.mExecutable->getInfoLog()))
-    {
-        return angle::Result::Continue;
-    }
-    linkShaders();
-
     egl::BlobCache::Key programHash = {0};
     MemoryProgramCache *cache       = context->getMemoryProgramCache();
 
@@ -1257,7 +1248,12 @@ angle::Result Program::linkImpl(const Context *context)
     unlink();
     InfoLog &infoLog = mState.mExecutable->getInfoLog();
 
-    // Re-link shaders after the unlink call.
+    // Validate we have properly attached shaders before checking the cache.
+    if (!linkValidateShaders(context, infoLog))
+    {
+        return angle::Result::Continue;
+    }
+
     linkShaders();
 
     ProgramMergedVaryings mergedVaryings;
