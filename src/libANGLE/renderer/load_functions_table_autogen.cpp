@@ -3730,6 +3730,30 @@ LoadImageFunctionInfo SRGB8_ALPHA8_to_R8G8B8A8_UNORM_SRGB(GLenum type)
     }
 }
 
+LoadImageFunctionInfo SRGBX8_ANGLE_to_R8G8B8A8_UNORM(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadToNative3To4<GLubyte, 0xFF>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
+LoadImageFunctionInfo SRGBX8_ANGLE_to_R8G8B8X8_UNORM(GLenum type)
+{
+    switch (type)
+    {
+        case GL_UNSIGNED_BYTE:
+            return LoadImageFunctionInfo(LoadToNative3To4<GLubyte, 0xFF>, true);
+        default:
+            UNREACHABLE();
+            return LoadImageFunctionInfo(UnreachableLoadFunction, true);
+    }
+}
+
 LoadImageFunctionInfo STENCIL_INDEX8_to_D24_UNORM_S8_UINT(GLenum type)
 {
     switch (type)
@@ -5506,6 +5530,19 @@ LoadFunctionMap GetLoadFunctionsMap(GLenum internalFormat, FormatID angleFormat)
             {
                 case FormatID::R8G8B8A8_UNORM_SRGB:
                     return SRGB8_ALPHA8_to_R8G8B8A8_UNORM_SRGB;
+                default:
+                    break;
+            }
+            break;
+        }
+        case GL_SRGBX8_ANGLE:
+        {
+            switch (angleFormat)
+            {
+                case FormatID::R8G8B8A8_UNORM:
+                    return SRGBX8_ANGLE_to_R8G8B8A8_UNORM;
+                case FormatID::R8G8B8X8_UNORM:
+                    return SRGBX8_ANGLE_to_R8G8B8X8_UNORM;
                 default:
                     break;
             }

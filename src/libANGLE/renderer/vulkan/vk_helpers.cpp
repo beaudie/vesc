@@ -7281,6 +7281,12 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
 
     LoadImageFunctionInfo loadFunctionInfo = vkFormat.getTextureLoadFunction(access, type);
     LoadImageFunction stencilLoadFunction  = nullptr;
+    WARN() << " mImage:" << this << std::endl
+           << " mIntendedFormatID:" << ToUnderlying(mIntendedFormatID) << std::endl
+           << " image.mActualFormatID: " << ToUnderlying(mActualFormatID) << std::endl
+           << " vkFormat: " << &vkFormat << std::endl
+           << " storageFormat: " << ToUnderlying(storageFormat.id) << std::endl
+           << " loadFunction:0x" << std::hex << (uint64_t)(loadFunctionInfo.loadFunction);
 
     if (storageFormat.isBlock)
     {

@@ -698,6 +698,7 @@ GL_APICALL void GL_APIENTRY glGetFramebufferPixelLocalStorageParameterivRobustAN
 #define GL_ANGLE_rgbx_internal_format
 
 #define GL_RGBX8_ANGLE 0x96BA
+#define GL_SRGBX8_ANGLE 0x96BC
 
 #endif /* GL_ANGLE_rgbx_internal_format */
 
