@@ -147,7 +147,7 @@ class ChildProcessesManager():
 
         self._gn_path = self._GetGnAbsolutePaths()
         self._ninja_path = self._GetNinjaAbsolutePaths()
-        self._use_goma = AutodetectGoma()
+        self._use_goma = False  # AutodetectGoma()
         self._logger = logger
         self._ninja_lock = ninja_lock
         self.runtimes = {}
@@ -248,8 +248,7 @@ class ChildProcessesManager():
 
             cmd.append('%d' % j_value)
         else:
-            cmd.append('-l')
-            cmd.append('%d' % os.cpu_count())
+            cmd += ['-j', str(os.cpu_count())]
 
         cmd += ['-C', build_dir, target]
         with self._ninja_lock:
@@ -524,15 +523,19 @@ class TestBatch():
         gn_args = [('angle_build_capture_replay_tests', 'true'),
                    ('angle_capture_replay_test_trace_dir', '"%s"' % self.trace_dir),
                    ('angle_capture_replay_composite_file_id', str(composite_file_id))]
+        t0 = time.time()
         returncode, output = child_processes_manager.RunGNGen(replay_build_dir, True, gn_args)
+        self.logger.info('RunGNGen took %.1f seconds', time.time() - t0)
         if returncode != 0:
             self.logger.warning('GN failure output: %s' % output)
             self.results.append(
                 GroupedResult(GroupedResult.CompileFailed, "Build replay failed at gn generation",
                               output, tests))
             return False
+        t0 = time.time()
         returncode, output = child_processes_manager.RunNinja(replay_build_dir, REPLAY_BINARY,
-                                                              True)
+                                                              False)
+        self.logger.info('RunNinja took %.1f seconds', time.time() - t0)
         if returncode != 0:
             self.logger.warning('Ninja failure output: %s' % output)
             self.results.append(
@@ -555,8 +558,10 @@ class TestBatch():
         for test in tests:
             self.UnlinkContextStateJsonFilesIfPresent(replay_build_dir, test.GetLabel())
 
+        t0 = time.time()
         returncode, output = child_processes_manager.RunSubprocess(
             run_cmd, env, timeout=SUBPROCESS_TIMEOUT)
+        self.logger.info("Replay took: %.1f seconds", time.time() - t0)
         if returncode == -1:
             cmd = replay_exe_path
             self.results.append(
@@ -822,6 +827,9 @@ def RunTests(args, worker_id, job_queue, result_list, message_queue, logger, nin
                 result_list.append(test_batch.GetResults())
                 logger.info(str(test_batch.GetResults()))
                 continue
+            if not os.path.exists(os.path.join(replay_build_dir, 'obj')):
+                shutil.copytree(
+                    os.path.join(args.out_dir, 'Capture'), os.path.join(replay_build_dir))
             success = test_batch.BuildReplay(replay_build_dir, composite_file_id, continued_tests,
                                              child_processes_manager)
             if args.keep_temp_files:
