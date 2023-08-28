@@ -32,6 +32,7 @@
 #include "libANGLE/features.h"
 #include "libANGLE/histogram_macros.h"
 #include "libANGLE/queryconversions.h"
+#include "libANGLE/renderer/ContextImpl.h"
 #include "libANGLE/renderer/GLImplFactory.h"
 #include "libANGLE/renderer/ProgramImpl.h"
 #include "platform/PlatformMethods.h"
@@ -515,6 +516,9 @@ struct Program::LinkingState
     ProgramLinkedResources resources;
     egl::BlobCache::Key programHash;
     std::unique_ptr<rx::LinkEvent> linkEvent;
+    // Backup of the last successfully compiled executable.  If the current link/load operation
+    // fails, this executable is restored.
+    std::unique_ptr<ProgramExecutable> lastLinkedExecutable;
     bool linkingFromBinary;
 };
 
@@ -1097,7 +1101,6 @@ int Program::getAttachedShadersCount() const
 
 Shader *Program::getAttachedShader(ShaderType shaderType) const
 {
-    ASSERT(!mLinkingState);
     return mAttachedShaders[shaderType];
 }
 
@@ -1125,8 +1128,51 @@ void Program::bindFragmentOutputIndex(GLuint index, const char *name)
     mState.mFragmentOutputIndexes.bindLocation(index, name);
 }
 
+void Program::installNewExecutable(const Context *context)
+{
+    mLinkingState                       = std::make_unique<LinkingState>();
+    mLinkingState->lastLinkedExecutable = std::move(mState.mExecutable);
+
+    // By default, set the link event as failing.  If link succeeds, it will be replaced by the
+    // appropriate event.
+    mLinkingState->linkEvent = std::make_unique<rx::LinkEventDone>(angle::Result::Stop);
+
+    mState.mExecutable = std::make_unique<ProgramExecutable>(context->getImplementation());
+}
+
+void Program::restoreLastExecutable(const Context *context,
+                                    const std::unique_ptr<LinkingState> &linkingState)
+{
+    // Called when link/load fails (in a job), recovers the pre-existing executable
+    ASSERT(!mLinkingState);
+    ASSERT(linkingState);
+
+    mState.mExecutable->destroy(context);
+    mState.mExecutable = std::move(linkingState->lastLinkedExecutable);
+}
+
+void Program::discardLastExecutable(const Context *context,
+                                    const std::unique_ptr<LinkingState> &linkingState)
+{
+    // Called when link/load succeeds, discards the pre-existing executable
+    ASSERT(!mLinkingState);
+    ASSERT(linkingState);
+
+    linkingState->lastLinkedExecutable->destroy(context);
+}
+
 angle::Result Program::link(const Context *context)
 {
+    // Create a new executable to hold the result of the link.  The previous executable is retained
+    // in LinkingState to be either recovered or discarded depending on the result of the link.  If
+    // link fails right away in linkImpl, this function restores the executable accordingly.
+    // Otherwise the decision is made in resolveLinkImpl.
+    //
+    // Note that the new executable is associated with the program right here most importantly to
+    // ensure the rest of this call does _not_ access the old executable (and thus cannot
+    // inadvertently corrupt it), in case it needs to be restored.
+    installNewExecutable(context);
+
     // Make sure no compile jobs are pending.
     //
     // For every attached shader, get the compiled state.  This is done at link time (instead of
@@ -1156,9 +1202,7 @@ angle::Result Program::link(const Context *context)
         dumpProgramInfo(context);
     }
 
-    angle::Result result = linkImpl(context);
-
-    return result;
+    return linkImpl(context);
 }
 
 // The attached shaders are checked for linking errors by matching up their variables.
@@ -1166,9 +1210,6 @@ angle::Result Program::link(const Context *context)
 // The code gets compiled into binaries.
 angle::Result Program::linkImpl(const Context *context)
 {
-    ASSERT(!mLinkingState);
-    // Don't make any local variables pointing to anything within the ProgramExecutable, since
-    // unlink() could make a new ProgramExecutable making any references/pointers invalid.
     auto *platform   = ANGLEPlatformCurrent();
     double startTime = platform->currentTime(platform);
 
@@ -1192,17 +1233,16 @@ angle::Result Program::linkImpl(const Context *context)
     if (cache && !isSeparable())
     {
         std::lock_guard<std::mutex> cacheLock(context->getProgramCacheMutex());
-        angle::Result cacheResult = cache->getProgram(context, this, &programHash);
-        ANGLE_TRY(cacheResult);
+        bool success = false;
+        ANGLE_TRY(cache->getProgram(context, this, &programHash, &success));
 
-        // Check explicitly for Continue, Incomplete means a cache miss
-        if (cacheResult == angle::Result::Continue)
+        if (success)
         {
             std::scoped_lock lock(mHistogramMutex);
             // Succeeded in loading the binaries in the front-end, back end may still be loading
             // asynchronously
             double delta = platform->currentTime(platform) - startTime;
-            int us       = static_cast<int>(delta * 1000000.0);
+            int us       = static_cast<int>(delta * 1000'000.0);
             ANGLE_HISTOGRAM_COUNTS("GPU.ANGLE.ProgramCache.ProgramCacheHitTimeUS", us);
             return angle::Result::Continue;
         }
@@ -1220,10 +1260,9 @@ angle::Result Program::linkImpl(const Context *context)
     // Re-link shaders after the unlink call.
     linkShaders();
 
-    std::unique_ptr<LinkingState> linkingState(new LinkingState());
     ProgramMergedVaryings mergedVaryings;
-    LinkingVariables &linkingVariables = linkingState->linkingVariables;
-    ProgramLinkedResources &resources  = linkingState->resources;
+    LinkingVariables &linkingVariables = mLinkingState->linkingVariables;
+    ProgramLinkedResources &resources  = mLinkingState->resources;
 
     linkingVariables.initForProgram(mState);
     resources.init(&mState.mExecutable->mUniformBlocks, &mState.mExecutable->mUniforms,
@@ -1231,7 +1270,6 @@ angle::Result Program::linkImpl(const Context *context)
                    &mState.mExecutable->mShaderStorageBlocks, &mState.mExecutable->mBufferVariables,
                    &mState.mExecutable->mAtomicCounterBuffers);
 
-    // TODO: Fix incomplete linking. http://anglebug.com/6358
     updateLinkedShaderStages();
 
     InitUniformBlockLinker(mState, &resources.uniformBlockLinker);
@@ -1342,7 +1380,6 @@ angle::Result Program::linkImpl(const Context *context)
 
     mState.mExecutable->saveLinkedStateInfo(mState);
 
-    mLinkingState                    = std::move(linkingState);
     mLinkingState->linkingFromBinary = false;
     mLinkingState->programHash       = programHash;
     mLinkingState->linkEvent =
@@ -1357,8 +1394,7 @@ angle::Result Program::linkImpl(const Context *context)
 
 bool Program::isLinking() const
 {
-    return (mLinkingState.get() && mLinkingState->linkEvent &&
-            mLinkingState->linkEvent->isLinking());
+    return mLinkingState.get() && mLinkingState->linkEvent && mLinkingState->linkEvent->isLinking();
 }
 
 void Program::resolveLinkImpl(const Context *context)
@@ -1371,9 +1407,14 @@ void Program::resolveLinkImpl(const Context *context)
     std::unique_ptr<LinkingState> linkingState = std::move(mLinkingState);
     if (!mLinked)
     {
-        mState.mExecutable->reset(false);
+        // If the link fails, restore the previous executable.  The program should continue working
+        // with that executable despite the link failure.
+        restoreLastExecutable(context, linkingState);
         return;
     }
+
+    // Once the link passes, discard the previous executable.  It will no longer be used.
+    discardLastExecutable(context, linkingState);
 
     // According to GLES 3.0/3.1 spec for LinkProgram and UseProgram,
     // Only successfully linked program can replace the executables.
@@ -1496,7 +1537,8 @@ void ProgramState::updateProgramInterfaceOutputs()
 // Returns the program object to an unlinked state, before re-linking, or at destruction
 void Program::unlink()
 {
-    mState.mExecutable->reset(true);
+    // There is always a new executable created on link, so the executable is already in a clean
+    // state.
 
     mState.mCachedBaseVertex   = 0;
     mState.mCachedBaseInstance = 0;
@@ -1506,21 +1548,26 @@ void Program::unlink()
     mLinked = false;
 }
 
-angle::Result Program::loadBinary(const Context *context,
-                                  GLenum binaryFormat,
-                                  const void *binary,
-                                  GLsizei length)
+angle::Result Program::setBinary(const Context *context,
+                                 GLenum binaryFormat,
+                                 const void *binary,
+                                 GLsizei length)
 {
-    ASSERT(!mLinkingState);
+    ASSERT(binaryFormat == GL_PROGRAM_BINARY_ANGLE);
+
+    installNewExecutable(context);
+
+    bool success = false;
+    return loadBinary(context, binary, length, &success);
+}
+
+angle::Result Program::loadBinary(const Context *context,
+                                  const void *binary,
+                                  GLsizei length,
+                                  bool *successOut)
+{
     unlink();
     InfoLog &infoLog = mState.mExecutable->getInfoLog();
-
-    ASSERT(binaryFormat == GL_PROGRAM_BINARY_ANGLE);
-    if (binaryFormat != GL_PROGRAM_BINARY_ANGLE)
-    {
-        infoLog << "Invalid program binary format.";
-        return angle::Result::Incomplete;
-    }
 
     BinaryInputStream stream(binary, length);
     ANGLE_TRY(deserialize(context, stream, infoLog));
@@ -1533,46 +1580,19 @@ angle::Result Program::loadBinary(const Context *context,
         mDirtyBits.set(uniformBlockIndex);
     }
 
-    // The rx::LinkEvent returned from ProgramImpl::load is a base class with multiple
-    // implementations. In some implementations, a background thread is used to compile the
-    // shaders. Any calls to the LinkEvent object, therefore, are racy and may interfere with
-    // the operation.
+    mLinkingState->linkingFromBinary = true;
+    mLinkingState->linkEvent         = mProgram->load(context, &stream, infoLog);
 
-    // We do not want to call LinkEvent::wait because that will cause the background thread
-    // to finish its task before returning, thus defeating the purpose of background compilation.
-    // We need to defer waiting on background compilation until the very last minute when we
-    // absolutely need the results, such as when the developer binds the program or queries
-    // for the completion status.
+    *successOut = true;
 
-    // If load returns nullptr, we know for sure that the binary is not compatible with the backend.
-    // The loaded binary could have been read from the on-disk shader cache and be corrupted or
-    // serialized with different revision and subsystem id than the currently loaded backend.
-    // Returning 'Incomplete' to the caller results in link happening using the original shader
-    // sources.
-    angle::Result result;
-    std::unique_ptr<LinkingState> linkingState;
-    std::unique_ptr<rx::LinkEvent> linkEvent = mProgram->load(context, &stream, infoLog);
-    if (linkEvent)
-    {
-        linkingState                    = std::make_unique<LinkingState>();
-        linkingState->linkingFromBinary = true;
-        linkingState->linkEvent         = std::move(linkEvent);
-        result                          = angle::Result::Continue;
-    }
-    else
-    {
-        result = angle::Result::Incomplete;
-    }
-    mLinkingState = std::move(linkingState);
-
-    return result;
+    return angle::Result::Continue;
 }
 
-angle::Result Program::saveBinary(Context *context,
-                                  GLenum *binaryFormat,
-                                  void *binary,
-                                  GLsizei bufSize,
-                                  GLsizei *length) const
+angle::Result Program::getBinary(Context *context,
+                                 GLenum *binaryFormat,
+                                 void *binary,
+                                 GLsizei bufSize,
+                                 GLsizei *length) const
 {
     ASSERT(!mLinkingState);
     if (binaryFormat)
@@ -1627,7 +1647,7 @@ GLint Program::getBinaryLength(Context *context) const
 
     GLint length;
     angle::Result result =
-        saveBinary(context, nullptr, nullptr, std::numeric_limits<GLint>::max(), &length);
+        getBinary(context, nullptr, nullptr, std::numeric_limits<GLint>::max(), &length);
     if (result != angle::Result::Continue)
     {
         return 0;
@@ -1673,7 +1693,6 @@ unsigned int Program::getRefCount() const
 
 void Program::getAttachedShaders(GLsizei maxCount, GLsizei *count, ShaderProgramID *shaders) const
 {
-    ASSERT(!mLinkingState);
     int total = 0;
 
     for (const Shader *shader : mAttachedShaders)

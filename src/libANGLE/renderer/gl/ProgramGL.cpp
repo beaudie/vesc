@@ -138,7 +138,7 @@ std::unique_ptr<LinkEvent> ProgramGL::load(const gl::Context *context,
     // Verify that the program linked
     if (!checkLinkStatus(infoLog))
     {
-        return std::make_unique<LinkEventDone>(angle::Result::Incomplete);
+        return std::make_unique<LinkEventDone>(angle::Result::Stop);
     }
 
     executableGL->postLink(mFunctions, mFeatures, mProgramID);
