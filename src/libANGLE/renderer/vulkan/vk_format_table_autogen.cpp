@@ -2222,6 +2222,10 @@ void Format::initialize(RendererVk *renderer, const angle::Format &angleFormat)
             mVertexLoadRequiresConversion  = true;
             break;
 
+        case angle::FormatID::R8G8B8X8_UNORM_SRGB:
+            // This format is not implemented in Vulkan.
+            break;
+
         case angle::FormatID::R8G8B8_SINT:
             mIntendedGLFormat = GL_RGB8I;
             {
