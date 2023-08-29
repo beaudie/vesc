@@ -22,6 +22,30 @@
       },
       "revId": "08f2105e48470b079059fbdf0d15d29cf89efb26",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49fcdc8b_bbac5861",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-29T17:52:23Z",
+      "side": 1,
+      "message": "None of the other front-end objects use `unique_ptr` for their `mImplementation`, so I followed suite.\n\nWe could probably do a clean up pass one day and convert all of them",
+      "parentUuid": "1ac08294_cf74e448",
+      "range": {
+        "startLine": 550,
+        "startChar": 4,
+        "endLine": 550,
+        "endChar": 31
+      },
+      "revId": "08f2105e48470b079059fbdf0d15d29cf89efb26",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
