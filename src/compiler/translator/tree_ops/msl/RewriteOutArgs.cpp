@@ -68,17 +68,6 @@ class SmallMultiSet
     std::vector<Entry> mEntries;
 };
 
-const TVariable *GetVariable(TIntermNode &node)
-{
-    TIntermTyped *tyNode = node.getAsTyped();
-    ASSERT(tyNode);
-    if (TIntermSymbol *symbol = tyNode->getAsSymbolNode())
-    {
-        return &symbol->variable();
-    }
-    return nullptr;
-}
-
 class Rewriter : public TIntermRebuild
 {
     SmallMultiSet<const TVariable *> mVarBuffer;  // reusable buffer
@@ -151,7 +140,7 @@ class Rewriter : public TIntermRebuild
                 case TQualifier::EvqParamOut:
                 case TQualifier::EvqParamInOut:
                 {
-                    const TVariable *var = GetVariable(*args[i]);
+                    const TVariable *var = func->getParam(i);
                     if (mVarBuffer.insert(var).count > 1)
                     {
                         mightAlias = true;
@@ -180,7 +169,7 @@ class Rewriter : public TIntermRebuild
                 ASSERT(arg);
                 if (!argAlreadyProcessed(arg))
                 {
-                    const TVariable *var       = GetVariable(*arg);
+                    const TVariable *var       = func->getParam(i);
                     const TQualifier paramQual = getParamQualifier(i);
 
                     if (hasIndeterminateVar || mVarBuffer.multiplicity(var) > 1)
