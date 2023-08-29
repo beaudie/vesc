@@ -2149,12 +2149,12 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     ANGLE_TRY(cleanUpPresentHistory(contextVk));
 
     // Get a new semaphore to use for present.
-    vk::Semaphore presentSemaphore;
-    ANGLE_TRY(NewSemaphore(contextVk, &mPresentSemaphoreRecycler, &presentSemaphore));
+    vk::DeviceScoped<vk::Semaphore> presentSemaphore(contextVk->getDevice());
+    ANGLE_TRY(NewSemaphore(contextVk, &mPresentSemaphoreRecycler, &presentSemaphore.get()));
 
     // Make a submission before present to flush whatever's pending.  In the very least, a
     // submission is necessary to make sure the present semaphore is signaled.
-    ANGLE_TRY(prePresentSubmit(contextVk, presentSemaphore));
+    ANGLE_TRY(prePresentSubmit(contextVk, presentSemaphore.get()));
 
     QueueSerial swapSerial = contextVk->getLastSubmittedQueueSerial();
 
@@ -2171,7 +2171,7 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     presentInfo.sType              = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
     presentInfo.pNext              = pNextChain;
     presentInfo.waitSemaphoreCount = 1;
-    presentInfo.pWaitSemaphores    = presentSemaphore.ptr();
+    presentInfo.pWaitSemaphores    = presentSemaphore.get().ptr();
     presentInfo.swapchainCount     = 1;
     presentInfo.pSwapchains        = &mSwapchain;
     presentInfo.pImageIndices      = &mCurrentSwapchainImageIndex;
@@ -2248,7 +2248,7 @@ angle::Result WindowSurfaceVk::present(ContextVk *contextVk,
     // Place the semaphore in the present history.  Schedule pending old swapchains to be destroyed
     // at the same time the semaphore for this present can be destroyed.
     mPresentHistory.emplace_back();
-    mPresentHistory.back().semaphore = std::move(presentSemaphore);
+    mPresentHistory.back().semaphore = std::move(presentSemaphore.get());
     if (contextVk->getFeatures().supportsSwapchainMaintenance1.enabled)
     {
         mPresentHistory.back().imageIndex = kInvalidImageIndex;

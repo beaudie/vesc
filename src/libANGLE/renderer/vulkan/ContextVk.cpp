@@ -1230,8 +1230,11 @@ void ContextVk::onDestroy(const gl::Context *context)
     // Flush and complete current outstanding work before destruction.
     (void)finishImpl(RenderPassClosureReason::ContextDestruction);
 
-    // Everything must be finished
-    ASSERT(mRenderer->hasResourceUseFinished(mSubmittedResourceUse));
+    if (!mRenderer->isDeviceLost())
+    {
+        // Everything must be finished
+        ASSERT(mRenderer->hasResourceUseFinished(mSubmittedResourceUse));
+    }
 
     VkDevice device = getDevice();
 
@@ -3537,9 +3540,12 @@ angle::Result ContextVk::submitCommands(const vk::Semaphore *signalSemaphore,
         mRenderer->collectGarbage(use, std::move(mCurrentGarbage));
     }
 
-    ASSERT(mLastFlushedQueueSerial.valid());
-    ASSERT(QueueSerialsHaveDifferentIndexOrSmaller(mLastSubmittedQueueSerial,
-                                                   mLastFlushedQueueSerial));
+    if (!mRenderer->isDeviceLost())
+    {
+        ASSERT(mLastFlushedQueueSerial.valid());
+        ASSERT(QueueSerialsHaveDifferentIndexOrSmaller(mLastSubmittedQueueSerial,
+                                                       mLastFlushedQueueSerial));
+    }
 
     ANGLE_TRY(mRenderer->submitCommands(this, getProtectionType(), mContextPriority,
                                         signalSemaphore, externalFence, mLastFlushedQueueSerial));
@@ -7220,7 +7226,10 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore,
 
     ANGLE_TRY(submitCommands(signalSemaphore, externalFence, Submit::AllCommands));
 
-    ASSERT(mOutsideRenderPassCommands->getQueueSerial() > mLastSubmittedQueueSerial);
+    if (!mRenderer->isDeviceLost())
+    {
+        ASSERT(mOutsideRenderPassCommands->getQueueSerial() > mLastSubmittedQueueSerial);
+    }
 
     mHasAnyCommandsPendingSubmission    = false;
     mHasWaitSemaphoresPendingSubmission = false;
