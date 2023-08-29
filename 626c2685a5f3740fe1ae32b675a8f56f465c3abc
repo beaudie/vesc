@@ -214,6 +214,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c345b8c_831e9ed9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3563,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-29T23:54:41Z",
+      "side": 1,
+      "message": "The cap has been removed. The threshold is now set to 20% of the largest heap size. After the solution for case #1 is submitted, there will be no need for a cap, as the context will be flushed if the device runs out of memory before this threshold.",
+      "parentUuid": "d829be04_f91d0849",
+      "range": {
+        "startLine": 3560,
+        "startChar": 3,
+        "endLine": 3563,
+        "endChar": 69
+      },
+      "revId": "626c2685a5f3740fe1ae32b675a8f56f465c3abc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c591334a_8f15ad48",
