@@ -3560,6 +3560,11 @@ angle::Result ContextVk::submitCommands(const vk::Semaphore *signalSemaphore,
 
     mTotalBufferToImageCopySize = 0;
 
+    if (getRenderer()->isDeviceLost())
+    {
+        return angle::Result::Stop;
+    }
+
     return angle::Result::Continue;
 }
 
