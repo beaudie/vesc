@@ -1,0 +1,197 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "375b04db_2f91d081",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 801,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-29T15:28:41Z",
+      "side": 1,
+      "message": "Is the mismatching return type the only reason for this macro?\n\nI\u0027d suggest removing the macro then, as it is somewhat convoluted. Instead, have a `lockSurfaceImpl` that does _everything_ `lockSurface` does, except it returns `angle::Result`. Then have this function call it and convert the result. We have this pattern elsewhere in this file too.",
+      "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cda3186_2ddceb05",
+        "filename": "src/libANGLE/renderer/vulkan/android/vk_android_utils.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-29T15:28:41Z",
+      "side": 1,
+      "message": "It\u0027s a bit counter-intuitive to see (without knowing about OOM handling):\n\n- `ANGLE_TRY` succeeds\n- VkResult is _not_ success\n- The return value _is_ success\n\nHow about instead of passing a `VkResult *`, we pass in a `bool *isOutOfMemoryOut`? Every other return value is an error anyway, and the reader can clearly see the early out is due to OOM.",
+      "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfa1ed7c_150e8a53",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3389,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-29T15:28:41Z",
+      "side": 1,
+      "message": "No need for this, `DeviceScoped` takes care of this.",
+      "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2920617a_cf96cf81",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3457,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-29T15:28:41Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b34de48a_ba59549b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3517,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-29T15:28:41Z",
+      "side": 1,
+      "message": "How about a new macro like `ANGLE_TRY_MAY_OOM` that includes the extra `if (oom) return continue`? This is repeated all over the place.",
+      "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8c493cc_b81d4af4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 6131,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-29T15:28:41Z",
+      "side": 1,
+      "message": "This shouldn\u0027t be necessary, the external memory is already allocated, isn\u0027t it?",
+      "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64c707fc_aae055a0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 6434,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-29T15:28:41Z",
+      "side": 1,
+      "message": "Is this needed? If `initMemory` fails for any other reason, it\u0027s not done. If it _is_ needed, we should use a `DeviceScoped` temporary image, and then take the image out and assign it to `mImage` at the end.",
+      "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "739b9d7e_e71f6092",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 6505,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-29T15:28:41Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef035bc9_37662110",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-29T15:28:41Z",
+      "side": 1,
+      "message": "Still need an `ANGLE_VK_CHECK`. Just check for SUCCESS or OOM (and let everything else lead to failure).",
+      "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6f9f188_47ce9d32",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-29T15:28:41Z",
+      "side": 1,
+      "message": "Make sure to remove this function. As long as it\u0027s there, there\u0027s nothing stopping the `vk` layer to induce work in the `rx` layer in unexpected ways.\n\nBy removing this, the code will be forced to have access to ContextVk.",
+      "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e5e6e2d_f874d1fe",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 1333,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-29T15:28:41Z",
+      "side": 1,
+      "message": "This is a local variable, you don\u0027t need to put in the macro args. `ANGLE_TRY_TEMPLATE` uses `ANGLE_LOCAL_VAR` as the name, you can use something similar like `ANGLE_LOCAL_VKRESULT`. If this ever gets shadowed, there\u0027d be a compiler warning so it\u0027s pretty safe.",
+      "range": {
+        "startLine": 1333,
+        "startChar": 17,
+        "endLine": 1333,
+        "endChar": 33
+      },
+      "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
