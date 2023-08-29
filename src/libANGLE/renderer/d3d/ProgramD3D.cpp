@@ -1622,9 +1622,13 @@ angle::Result ProgramD3D::getVertexExecutableForCachedInputLayout(
     }
 
     // Generate new dynamic layout with attribute conversions
-    std::string finalVertexHLSL = mDynamicHLSL->generateVertexShaderForInputLayout(
+    std::string vertexHLSL = mDynamicHLSL->generateVertexShaderForInputLayout(
         mShaderHLSL[gl::ShaderType::Vertex], mCachedInputLayout, mState.getProgramInputs(),
         mShaderStorageBlocks[gl::ShaderType::Vertex], mPixelShaderKey.size());
+    std::string finalVertexHLSL = mDynamicHLSL->generateShaderForImage2DBindSignature(
+        *this, gl::ShaderType::Vertex, mAttachedShaders[gl::ShaderType::Vertex], vertexHLSL,
+        mImage2DUniforms[gl::ShaderType::Vertex], mImage2DBindLayoutCache[gl::ShaderType::Vertex],
+        static_cast<unsigned int>(mPixelShaderKey.size()));
 
     // Generate new vertex executable
     ShaderExecutableD3D *vertexExecutable = nullptr;
@@ -1723,6 +1727,7 @@ class ProgramD3D::GetVertexExecutableTask : public ProgramD3D::GetExecutableTask
     {
         ANGLE_TRACE_EVENT0("gpu.angle", "ProgramD3D::GetVertexExecutableTask::run");
 
+        mProgram->updateCachedImage2DBindLayoutFromShader(gl::ShaderType::Vertex);
         ANGLE_TRY(mProgram->getVertexExecutableForCachedInputLayout(this, &mExecutable, &mInfoLog));
 
         return angle::Result::Continue;

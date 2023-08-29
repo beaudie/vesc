@@ -1101,6 +1101,11 @@ void OutputHLSL::header(TInfoSinkBase &out,
 
             out << "};\n"
                    "\n";
+
+            if (mOutputType == SH_HLSL_4_1_OUTPUT && mResourcesHLSL->hasImages())
+            {
+                out << kImage2DFunctionString << "\n";
+            }
         }
         else
         {
