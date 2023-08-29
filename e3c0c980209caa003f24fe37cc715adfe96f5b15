@@ -16,6 +16,23 @@
       "message": "PTAL, thanks!",
       "revId": "e3c0c980209caa003f24fe37cc715adfe96f5b15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f2eb624_ee5d4223",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1116015
+      },
+      "writtenOn": "2023-08-29T17:19:08Z",
+      "side": 1,
+      "message": "I seem to recall texture UAVs are not supported in vertex shaders in D3D11.0. I can\u0027t confirm that at the moment, but according to this page, RWTexture2D is only supported on pixel and compute shaders: https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-rwtexture2d.\n\nAre you sure that your test is actually getting GL_MAX_VERTEX_IMAGE_UNIFORMS \u003e 0 on at least one platform?",
+      "revId": "e3c0c980209caa003f24fe37cc715adfe96f5b15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
