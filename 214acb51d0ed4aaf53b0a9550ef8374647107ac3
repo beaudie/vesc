@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3d20bfd7_487fece1",
+        "filename": "src/libANGLE/renderer/vulkan/android/vk_android_utils.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-29T17:59:48Z",
+      "side": 1,
+      "message": "That could work, but might complicate returning the VkResult from a chain of functions (like, we\u0027d need another `ANGLE_VK_TRY` for it).\n\nFWIW, `ANGLE_TRY` means \"stop at catastrophe\". `angle::Result::Continue` doesn\u0027t mean \"success\", it just means \"continue working\", so its _does_ make sense here.\n\nThere\u0027s also `angle::Result::Incomplete` which was my mistake and I\u0027m in the process of removing (DON\u0027T USE!). At the time, I thought `angle::Result` is a return code (like VkResult), but like I said above is really just an exception implementation for catastrophes. If we switch to returning VkResult, that means \"exception handling\" is pushed up the stack a few calls, with another custom exception implementation for the last few calls (based on VkResult).",
+      "parentUuid": "2230618e_88325404",
+      "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cfa1ed7c_150e8a53",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 21
