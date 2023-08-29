@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5b1931a4_fda52ec7",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 801,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-29T23:53:55Z",
+      "side": 1,
+      "message": "`ANGLE_VK_TRY_ALLOC_NO_RETURN` removed. I have applied the changes above to `IOSurfaceSurfaceVkMac.cpp` which used this macro as well. After restricting `onOutOfMemory()` to `ContextVk`, I have removed the OOM handling from this part, which uses `DisplayVk`. Currently, I have added an `ANGLE_VK_CHECK()` inside `LockSurfaceImpl()` instead.",
+      "parentUuid": "375b04db_2f91d081",
+      "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4cda3186_2ddceb05",
         "filename": "src/libANGLE/renderer/vulkan/android/vk_android_utils.cpp",
         "patchSetId": 21
@@ -73,6 +91,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "55749e8b_44ec8847",
+        "filename": "src/libANGLE/renderer/vulkan/android/vk_android_utils.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-29T23:53:55Z",
+      "side": 1,
+      "message": "I also believe that changing the functions to directly return `VkResult` requires us to change all the `ANGLE_TRY` usages in between the OOM handling and allocation. All the errors other than `VK_ERROR_OUT_OF_DEVICE_MEMORY` will result in `ContextVk::handleError()` immediately.\n\nFor now, I have replaced the `VkResult*` outputs with `bool* isOutOfMemoryOut`.",
+      "parentUuid": "3d20bfd7_487fece1",
+      "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cfa1ed7c_150e8a53",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 21
@@ -84,6 +120,24 @@
       "writtenOn": "2023-08-29T15:28:41Z",
       "side": 1,
       "message": "No need for this, `DeviceScoped` takes care of this.",
+      "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ad32381_6ff4a481",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3389,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-29T23:53:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cfa1ed7c_150e8a53",
       "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -105,6 +159,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3fefc93b_6d47b2f4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3457,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-29T23:53:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2920617a_cf96cf81",
+      "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b34de48a_ba59549b",
@@ -118,6 +190,24 @@
       "writtenOn": "2023-08-29T15:28:41Z",
       "side": 1,
       "message": "How about a new macro like `ANGLE_TRY_MAY_OOM` that includes the extra `if (oom) return continue`? This is repeated all over the place.",
+      "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58df5927_6440ef6f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 3517,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-29T23:53:55Z",
+      "side": 1,
+      "message": "Sounds good. Done.",
+      "parentUuid": "b34de48a_ba59549b",
       "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -141,6 +231,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "54326b35_0e8dde4f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 6131,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-29T23:53:55Z",
+      "side": 1,
+      "message": "I\u0027m not sure. I couldn\u0027t find the code that allocates memory before this point. This is the draft of the change if we added support for image external memory as well: https://chromium-review.googlesource.com/c/angle/angle/+/4814568",
+      "parentUuid": "b8c493cc_b81d4af4",
+      "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "64c707fc_aae055a0",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 21
@@ -152,6 +260,24 @@
       "writtenOn": "2023-08-29T15:28:41Z",
       "side": 1,
       "message": "Is this needed? If `initMemory` fails for any other reason, it\u0027s not done. If it _is_ needed, we should use a `DeviceScoped` temporary image, and then take the image out and assign it to `mImage` at the end.",
+      "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b528664_ad9da64f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 6434,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-29T23:53:55Z",
+      "side": 1,
+      "message": "If the allocation fails here and we come back after OOM handling, we would call `mImage.init()` again. We could either use the same image handle (since its create info would be the same) or destroy and recreate it.",
+      "parentUuid": "64c707fc_aae055a0",
       "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -175,6 +301,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a1e80cf7_d82e5b05",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 6505,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-29T23:53:55Z",
+      "side": 1,
+      "message": "Here, `mImage` is initialized in `initExternal()`. Does it make sense to call `initExternal()` only if it is null?",
+      "parentUuid": "739b9d7e_e71f6092",
+      "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ef035bc9_37662110",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
         "patchSetId": 21
@@ -186,6 +330,24 @@
       "writtenOn": "2023-08-29T15:28:41Z",
       "side": 1,
       "message": "Still need an `ANGLE_VK_CHECK`. Just check for SUCCESS or OOM (and let everything else lead to failure).",
+      "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b7bd3fc_58342a3e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-29T23:53:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef035bc9_37662110",
       "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -209,6 +371,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9927ad76_96dab378",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-29T23:53:55Z",
+      "side": 1,
+      "message": "Makes sense. In that case, it will no longer be used for `DisplayVk` and `vk::Context`. For the latter, we can bubble it up and use it if we get to `ContextVk`.",
+      "parentUuid": "e6f9f188_47ce9d32",
+      "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9e5e6e2d_f874d1fe",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 21
@@ -220,6 +400,30 @@
       "writtenOn": "2023-08-29T15:28:41Z",
       "side": 1,
       "message": "This is a local variable, you don\u0027t need to put in the macro args. `ANGLE_TRY_TEMPLATE` uses `ANGLE_LOCAL_VAR` as the name, you can use something similar like `ANGLE_LOCAL_VKRESULT`. If this ever gets shadowed, there\u0027d be a compiler warning so it\u0027s pretty safe.",
+      "range": {
+        "startLine": 1333,
+        "startChar": 17,
+        "endLine": 1333,
+        "endChar": 33
+      },
+      "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2eaf8852_d0bb2bda",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 1333,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-29T23:53:55Z",
+      "side": 1,
+      "message": "I have removed this arg from the macro. However, `command` should still take it as an arg.",
+      "parentUuid": "9e5e6e2d_f874d1fe",
       "range": {
         "startLine": 1333,
         "startChar": 17,
