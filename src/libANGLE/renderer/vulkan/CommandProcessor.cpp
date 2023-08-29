@@ -624,7 +624,7 @@ void CommandProcessor::processTasks()
             // ContextVk::commandProcessorSyncErrorsAndQueueCommand and WindowSurfaceVk::destroy
             // do error processing, is anything required here? Don't think so, mostly need to
             // continue the worker thread until it's been told to exit.
-            UNREACHABLE();
+            continue;
         }
     }
 }
@@ -731,10 +731,9 @@ angle::Result CommandProcessor::processTask(CommandProcessorTask *task)
                 result != VK_SUCCESS)
             {
                 // Save the error so that we can handle it.
-                // Don't leave processing loop, don't consider errors from present to be fatal.
                 // TODO: https://issuetracker.google.com/issues/170329600 - This needs to improve to
                 // properly parallelize present
-                handleError(result, __FILE__, __FUNCTION__, __LINE__);
+                ANGLE_VK_TRY(this, result);
             }
             break;
         }
@@ -835,7 +834,6 @@ void CommandProcessor::handleDeviceLost(RendererVk *renderer)
     // Take mTaskEnqueueMutex lock so that no one is able to add more work to the queue while we
     // drain it and handle device lost.
     std::lock_guard<std::mutex> enqueueLock(mTaskEnqueueMutex);
-    (void)waitForAllWorkToBeSubmitted(this);
     // Worker thread is idle and command queue is empty so good to continue
     mCommandQueue->handleDeviceLost(renderer);
 }
@@ -1198,7 +1196,11 @@ angle::Result CommandQueue::finishResourceUse(Context *context,
         // Check the rest of the commands in case they are also finished.
         ANGLE_TRY(checkCompletedCommandsLocked(context));
     }
-    ASSERT(hasResourceUseFinished(use));
+
+    if (!context->getRenderer()->isDeviceLost())
+    {
+        ASSERT(hasResourceUseFinished(use));
+    }
 
     if (!mFinishedCommandBatches.empty())
     {
@@ -1492,7 +1494,7 @@ angle::Result CommandQueue::queueSubmit(Context *context,
     // order. This lock relay (first take mMutex and then mQueueSubmitMutex, and then release
     // mMutex) ensures we always have a lock covering the entire call which ensures the strict
     // submission order.
-    std::lock_guard<std::mutex> queueSubmitLock(mQueueSubmitMutex);
+    std::unique_lock<std::mutex> queueSubmitLock(mQueueSubmitMutex);
     // CPU should be throttled to avoid mInFlightCommands from growing too fast. Important for
     // off-screen scenarios.
     if (mInFlightCommands.full())
@@ -1510,7 +1512,19 @@ angle::Result CommandQueue::queueSubmit(Context *context,
         VkQueue queue = getQueue(contextPriority);
         VkFence fence = batch.getFenceHandle();
         ASSERT(fence != VK_NULL_HANDLE);
-        ANGLE_VK_TRY(context, vkQueueSubmit(queue, 1, &submitInfo, fence));
+
+        VkResult result = vkQueueSubmit(queue, 1, &submitInfo, fence);
+
+        if (result == VK_ERROR_DEVICE_LOST)
+        {
+            // BUG: On VK_ERROR_DEVICE_LOST, the handleDeviceLost path needs to
+            // acquire the queue submit lock, so we should release it now or
+            // else we'll deadlock. There should probably be a more graceful
+            // way to handle this.
+            queueSubmitLock.unlock();
+        }
+
+        ANGLE_VK_TRY(context, result);
 
         if (batch.externalFence)
         {
