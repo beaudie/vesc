@@ -16,6 +16,24 @@
       "message": "If there is no existing issue this works towards, please open one at anglebug.com/new and tag as `Bug: angleproject:NNNN`. Up to you if you want to have individual bugs per fix, or just an umbrella bug",
       "revId": "a5cff62409777051b1a89cd0ecc088af3ea101e8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f852da8a_bcbfe65c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1550632
+      },
+      "writtenOn": "2023-08-29T13:49:40Z",
+      "side": 1,
+      "message": "Can you grant me `EditIssue` permission on anglebug.com so that I can assign myself to bugs I create (to avoid accidental duplicate effort) and also to close bugs once I\u0027m done with them (so that the open bugs list don\u0027t get polluted with fixed bugs)? Thanks in advance.",
+      "parentUuid": "50cb9214_48c1ee0d",
+      "revId": "a5cff62409777051b1a89cd0ecc088af3ea101e8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
