@@ -22,6 +22,29 @@
       },
       "revId": "fe8052312c7a654143c21802f984f488b4f11d75",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "317fef66_7bb25ff6",
+        "filename": "src/tests/gl_tests/UniformBufferTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 3516,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-29T17:57:46Z",
+      "side": 1,
+      "message": "This may end up getting into onCopyUpdate() code and trigger submission, thus defeats the purpose of this tests. How about glBufferData with nullptr and then call glBufferSubData with floatData?",
+      "range": {
+        "startLine": 3516,
+        "startChar": 8,
+        "endLine": 3516,
+        "endChar": 87
+      },
+      "revId": "fe8052312c7a654143c21802f984f488b4f11d75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
