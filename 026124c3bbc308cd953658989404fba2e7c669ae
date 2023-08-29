@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92737958_7f776b02",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-29T17:16:29Z",
+      "side": 1,
+      "message": "There have been _many_ bugs with RGBX since it was introduced, and I really hope we don\u0027t have to find and squash the same bugs again with the sRGB variants We have RGBX tests in ImageTest.cpp that you should be able to adapt to trigger usage of the new sRGB format in an AHB import.\n\nOnce you have that, please add the following tests (some can be adapted from other existing tests, you can grep for RGBX in gl_tests/):\n\n- Blit between RGBX_SRGB and RGB_SRGB textures\n- Multisampled resolve from RGBX_SRGB to RGB_SRGB (and vice versa)\n- glCopyTexSubImage to RGBX_SRGB\n- glReadPixels from RGBX_SRGB\n- glClear(COLOR) of RGBX_SRGB + make sure occlusion query doesn\u0027t count the clear!\n- Draw to RGBX_SRGB\n\nAll the above have been cases where we had had issues with RGBX in the past.",
+      "revId": "026124c3bbc308cd953658989404fba2e7c669ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03692270_605fea9a",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1708,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-29T17:16:29Z",
+      "side": 1,
+      "message": "And here",
+      "revId": "026124c3bbc308cd953658989404fba2e7c669ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
