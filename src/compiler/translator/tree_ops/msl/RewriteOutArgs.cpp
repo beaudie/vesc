@@ -125,6 +125,14 @@ class Rewriter : public TIntermRebuild
             const TVariable &param     = *func->getParam(i);
             const TType &paramType     = param.getType();
             const TQualifier paramQual = paramType.getQualifier();
+            return paramQual;
+        };
+
+        // Mark all out params as references
+        for (size_t i = 0; i < argCount; ++i)
+        {
+            const TQualifier paramQual = getParamQualifier(i);
+            const TVariable &param     = *func->getParam(i);
             switch (paramQual)
             {
                 case TQualifier::EvqParamOut:
@@ -137,11 +145,10 @@ class Rewriter : public TIntermRebuild
                 default:
                     break;
             }
-            return paramQual;
-        };
+        }
 
+        // Check which params might be aliased
         bool mightAlias = false;
-
         for (size_t i = 0; i < argCount; ++i)
         {
             const TQualifier paramQual = getParamQualifier(i);
