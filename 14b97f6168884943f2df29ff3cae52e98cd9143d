@@ -16,6 +16,24 @@
       "message": "this CL works as is, but part of me wonders why we are early-exiting here. If we don\u0027t need to, it would be as simple as removing this line.",
       "revId": "14b97f6168884943f2df29ff3cae52e98cd9143d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5895540_6e6bd590",
+        "filename": "src/compiler/translator/tree_ops/msl/RewriteOutArgs.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-29T19:07:01Z",
+      "side": 1,
+      "message": "Yeah, this seems unnecessary. The confusing part is that `getParamQualifier()` was not just doing `get`, it was also doing stuff. I think if you combine the two loops and drop this line, that\u0027d be best; `getParamQualifier` would only `get` after your change, and it\u0027s clear in the loop that we aren\u0027t just setting a flag.",
+      "parentUuid": "06cf762a_9c0b542b",
+      "revId": "14b97f6168884943f2df29ff3cae52e98cd9143d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
