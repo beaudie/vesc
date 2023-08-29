@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a765b7a8_d67d2ced",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 3545,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-29T17:50:08Z",
+      "side": 1,
+      "message": "To be consistent with getPendingSuballocationGarbageSizeLimit, maybe updatePendingSuballocationGarbageSizeLimit?",
+      "range": {
+        "startLine": 3545,
+        "startChar": 17,
+        "endLine": 3545,
+        "endChar": 55
+      },
+      "revId": "fe8052312c7a654143c21802f984f488b4f11d75",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
