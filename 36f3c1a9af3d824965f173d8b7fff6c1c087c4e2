@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8ac5daea_a44171b7",
+        "filename": "src/libANGLE/context_private_call_gles.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-29T19:39:54Z",
+      "side": 1,
+      "message": "Thanks for the explanation, could you please add the above as a comment to `onBlendFuncOrEquationChange` to make it clearer exactly when it needs to be called",
+      "parentUuid": "04dada21_6ae25212",
+      "revId": "36f3c1a9af3d824965f173d8b7fff6c1c087c4e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2486a289_f61f06d5",
         "filename": "src/libANGLE/context_private_call_gles.cpp",
         "patchSetId": 1
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "This function is a part of `EXT/OES_draw_buffers_indexed` or ES 3.2, not\n`EXT_blend_func_extended`, which defines new func enums.",
       "parentUuid": "2486a289_f61f06d5",
+      "revId": "36f3c1a9af3d824965f173d8b7fff6c1c087c4e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38835afd_ab72a4c9",
+        "filename": "src/libANGLE/context_private_call_gles.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-29T19:39:54Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "0c72ac8b_9a1e06e0",
       "revId": "36f3c1a9af3d824965f173d8b7fff6c1c087c4e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
