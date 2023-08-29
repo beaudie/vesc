@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "80bcfbe0_300ac5d9",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-29T23:34:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b15321b5_e5a0cd6b",
+      "range": {
+        "startLine": 633,
+        "startChar": 4,
+        "endLine": 635,
+        "endChar": 0
+      },
+      "revId": "a522cea39f025f5812535a03f3460589c55c0bef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1aa68e12_6473c6cc",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-08-29T17:09:12Z",
       "side": 1,
       "message": "Its odd for update* function to be `const`. Maybe remove const here, or, keep getSpecConstUsageBits and just let it call getSpecConstUsageBits and then modify mExecutable-\u003emPODStruct.specConstUsageBits?",
+      "range": {
+        "startLine": 127,
+        "startChar": 64,
+        "endLine": 127,
+        "endChar": 69
+      },
+      "revId": "a522cea39f025f5812535a03f3460589c55c0bef",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00544692_88a2a157",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-29T23:34:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1aa68e12_6473c6cc",
       "range": {
         "startLine": 127,
         "startChar": 64,
