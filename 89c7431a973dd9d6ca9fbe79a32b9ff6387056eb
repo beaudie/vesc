@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "55fcf747_2ff13a6d",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-29T20:48:48Z",
+      "side": 1,
+      "message": "+1 here.",
+      "parentUuid": "f48188da_6cffeb79",
+      "revId": "89c7431a973dd9d6ca9fbe79a32b9ff6387056eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9f36c54c_48fd08af",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
         "patchSetId": 4
@@ -60,6 +78,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a06bdf37_807adce9",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-29T20:48:48Z",
+      "side": 1,
+      "message": "Agree. I did not write original code here, but from the comment, it appears did intentionally. I will +1 on your change here. Maybe slight better here by just use  ANGLE_VK_TRY(result) macro?",
+      "parentUuid": "9f36c54c_48fd08af",
+      "range": {
+        "startLine": 730,
+        "startChar": 0,
+        "endLine": 739,
+        "endChar": 13
+      },
+      "revId": "89c7431a973dd9d6ca9fbe79a32b9ff6387056eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a20fdf30_bd86e72d",
         "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
         "patchSetId": 4
@@ -71,6 +113,30 @@
       "writtenOn": "2023-08-29T18:40:56Z",
       "side": 1,
       "message": "This is a bit gross. Would rather we keep holding the queue submit lock the whole time, even through handleDeviceLost, but I\u0027m not sure of a better way to dodge the deadlock.",
+      "range": {
+        "startLine": 1517,
+        "startChar": 0,
+        "endLine": 1529,
+        "endChar": 38
+      },
+      "revId": "89c7431a973dd9d6ca9fbe79a32b9ff6387056eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fb25892_3f9db11d",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1529,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-29T20:48:48Z",
+      "side": 1,
+      "message": "Did it actually cause deadlock here? What I read here is that ANGLE_VK_TRY calls ContextVk::handleError, which calls ContextVk::handleDeviceLost(), which calls RendererVk::notifyDeviceLost(), which calls Display::notifyDeviceLost() and calls  ErrorSet::markContextLost(), calls ErrorSet::setContextLost(). None of this will call back into commandProcessor or commandQueue code again. It mostly set state in context so that next call will trigger error processing?",
+      "parentUuid": "a20fdf30_bd86e72d",
       "range": {
         "startLine": 1517,
         "startChar": 0,

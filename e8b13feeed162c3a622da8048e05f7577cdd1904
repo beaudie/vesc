@@ -16,6 +16,24 @@
       "message": "Pretty sure we have to skip this, because of a couple reasons:\n\n- waitForAllWorkToBeSubmitted *also* tries to acquire mTaskEnqueueMutex\n- waitForAllWorkToBeSubmitted should be failing anyway, because we\u0027re in a \"device lost\" state\n\nWould appreciate suggestions if there\u0027s something better we should be doing here.",
       "revId": "e8b13feeed162c3a622da8048e05f7577cdd1904",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77dab8c9_abc52022",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 838,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-29T20:48:48Z",
+      "side": 0,
+      "message": "I think the idea is that flush everything to commandQueue and then let commandQueue drop them. We could just drop them here while holding mTaskEnqueueMutex lock.",
+      "parentUuid": "a27378a0_b0f40220",
+      "revId": "e8b13feeed162c3a622da8048e05f7577cdd1904",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
