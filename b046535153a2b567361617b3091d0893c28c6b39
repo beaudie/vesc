@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e7cf104_fb849d08",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-29T17:18:51Z",
+      "side": 1,
+      "message": "LGTM. Will +2 once bots are green.",
+      "revId": "b046535153a2b567361617b3091d0893c28c6b39",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "74557b6a_d95d1d59",
