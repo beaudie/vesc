@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "219d407c_0de32128",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-29T20:08:10Z",
+      "side": 1,
+      "message": "Understand the need for more tests here, but I don\u0027t have bandwidth right now to write many tests and make it perfect. We don\u0027t have to do everything in this CL, but will arrange more resources and do further improvement in this area. I do plan to add a few more tests in the follow up CLs as well as Solti is porting current failing CTS tests to gl_tests as well.",
+      "parentUuid": "92737958_7f776b02",
+      "revId": "026124c3bbc308cd953658989404fba2e7c669ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "03692270_605fea9a",
         "filename": "src/libANGLE/formatutils.cpp",
         "patchSetId": 8
