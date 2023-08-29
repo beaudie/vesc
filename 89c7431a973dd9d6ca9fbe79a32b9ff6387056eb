@@ -1,0 +1,124 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8667a6b_4e517bf4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-08-29T18:40:56Z",
+      "side": 1,
+      "message": "Adding some comments to explain my thoughts on individual changes. I\u0027m aware there\u0027s some comment cleanup around these to do, but I\u0027d welcome feedback.",
+      "revId": "89c7431a973dd9d6ca9fbe79a32b9ff6387056eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f48188da_6cffeb79",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-08-29T18:40:56Z",
+      "side": 1,
+      "message": "I think this is right, because we want to keep the thread going until it has been instructed to exit.\n\nThe UNREACHABLE() is less ideal.",
+      "revId": "89c7431a973dd9d6ca9fbe79a32b9ff6387056eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f36c54c_48fd08af",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-08-29T18:40:56Z",
+      "side": 1,
+      "message": "I\u0027m pretty sure we want the angle::Result::Stop here so that the calling function can handle the error code. We\u0027ve already checked for the benign ones in the condition here.",
+      "range": {
+        "startLine": 730,
+        "startChar": 0,
+        "endLine": 739,
+        "endChar": 13
+      },
+      "revId": "89c7431a973dd9d6ca9fbe79a32b9ff6387056eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a20fdf30_bd86e72d",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1529,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-08-29T18:40:56Z",
+      "side": 1,
+      "message": "This is a bit gross. Would rather we keep holding the queue submit lock the whole time, even through handleDeviceLost, but I\u0027m not sure of a better way to dodge the deadlock.",
+      "range": {
+        "startLine": 1517,
+        "startChar": 0,
+        "endLine": 1529,
+        "endChar": 38
+      },
+      "revId": "89c7431a973dd9d6ca9fbe79a32b9ff6387056eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8bca17c_f7f051b1",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 7232,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-08-29T18:40:56Z",
+      "side": 1,
+      "message": "For all the if(!deviceLost) { ASSERT(); } changes in this CL, the asserts would always fire if vkQueueSubmit is returning VK_ERROR_DEVICE_LOST.",
+      "range": {
+        "startLine": 7229,
+        "startChar": 3,
+        "endLine": 7232,
+        "endChar": 5
+      },
+      "revId": "89c7431a973dd9d6ca9fbe79a32b9ff6387056eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54c0c18e_759ef92d",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 2152,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-08-29T18:40:56Z",
+      "side": 1,
+      "message": "Note: This is needed because any of the ANGLE_TRY/ANGLE_VK_TRY in here could fail and cause the vk::Semaphore to go out of scope without being destroyed.",
+      "revId": "89c7431a973dd9d6ca9fbe79a32b9ff6387056eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
