@@ -1436,7 +1436,10 @@ void main()
 };
 
 class ImageTestES3 : public ImageTest
-{};
+{
+  protected:
+    void AHBUploadDataColorspace(int ahbFormat);
+};
 
 class ImageTestES31 : public ImageTest
 {};
@@ -4135,9 +4138,7 @@ TEST_P(ImageTestES3, RGBXAHBUploadData)
     destroyAndroidHardwareBuffer(ahb);
 }
 
-// Test that RGBX data are preserved when importing from AHB created with sRGB color space and
-// glTexSubImage is able to update data.
-TEST_P(ImageTestES3, RGBXAHBUploadDataColorspace)
+void ImageTestES3::AHBUploadDataColorspace(int ahbFormat)
 {
     EGLWindow *window = getEGLWindow();
 
@@ -4151,9 +4152,8 @@ TEST_P(ImageTestES3, RGBXAHBUploadDataColorspace)
     // Create the Image
     AHardwareBuffer *ahb;
     EGLImageKHR ahbImage;
-    createEGLImageAndroidHardwareBufferSource(1, 1, 1, AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM,
-                                              kDefaultAHBUsage, kColorspaceAttribs, {{kGarbage, 4}},
-                                              &ahb, &ahbImage);
+    createEGLImageAndroidHardwareBufferSource(1, 1, 1, ahbFormat, kDefaultAHBUsage,
+                                              kColorspaceAttribs, {{kGarbage, 4}}, &ahb, &ahbImage);
 
     GLTexture ahbTexture;
     createEGLImageTargetTexture2D(ahbImage, ahbTexture);
@@ -4168,6 +4168,20 @@ TEST_P(ImageTestES3, RGBXAHBUploadDataColorspace)
     // Clean up
     eglDestroyImageKHR(window->getDisplay(), ahbImage);
     destroyAndroidHardwareBuffer(ahb);
+}
+
+// Test that RGBX data are preserved when importing from AHB created with sRGB color space and
+// glTexSubImage is able to update data.
+TEST_P(ImageTestES3, RGBXAHBUploadDataColorspace)
+{
+    AHBUploadDataColorspace(AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM);
+}
+
+// Test that RGB data are preserved when importing from AHB created with sRGB color space and
+// glTexSubImage is able to update data.
+TEST_P(ImageTestES3, RGBAHBUploadDataColorspace)
+{
+    AHBUploadDataColorspace(AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM);
 }
 
 // Test that RGBX data are preserved when importing from AHB.  Tests interaction of emulated channel
