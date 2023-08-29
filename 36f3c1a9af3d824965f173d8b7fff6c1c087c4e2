@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "04dada21_6ae25212",
+        "filename": "src/libANGLE/context_private_call_gles.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-08-29T19:20:39Z",
+      "side": 1,
+      "message": "This CL updates `ValidateDrawStates` with a new check related to blend funcs, so invalidation is needed.\n\nThe invalidation needs to happen if:\n- blend funcs have been changed and the context supports `EXT_blend_func_extended` because of the draw buffers limit OR\n- it was an indexed blend func update and `noSimultaneousConstantColorAndAlphaBlendFunc` limitation is active because D3D backend cannot handle certain func combinations OR\n- blend equations have been changed and the context supports `KHR_blend_equation_advanced` because of another draw buffers limit.\n\nGiven that all three cases are blending-related and invalidate the same state, I think it\u0027s reasonable to use the same function although its precise name would be `onIndexedOrExtendedBlendFuncOrAdvancedBlendEquationChange`.",
+      "parentUuid": "0748d472_19186574",
+      "revId": "36f3c1a9af3d824965f173d8b7fff6c1c087c4e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2486a289_f61f06d5",
         "filename": "src/libANGLE/context_private_call_gles.cpp",
         "patchSetId": 1
@@ -31,6 +49,24 @@
       "writtenOn": "2023-08-29T18:47:48Z",
       "side": 1,
       "message": "Why the extension check? If this function is called, then the EXT (or ES3.2) is already supported. Same with a few functions above.",
+      "revId": "36f3c1a9af3d824965f173d8b7fff6c1c087c4e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c72ac8b_9a1e06e0",
+        "filename": "src/libANGLE/context_private_call_gles.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-08-29T19:20:39Z",
+      "side": 1,
+      "message": "This function is a part of `EXT/OES_draw_buffers_indexed` or ES 3.2, not\n`EXT_blend_func_extended`, which defines new func enums.",
+      "parentUuid": "2486a289_f61f06d5",
       "revId": "36f3c1a9af3d824965f173d8b7fff6c1c087c4e2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
