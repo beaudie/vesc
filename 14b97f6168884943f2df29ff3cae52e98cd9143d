@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06cf762a_9c0b542b",
+        "filename": "src/compiler/translator/tree_ops/msl/RewriteOutArgs.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2023-08-29T18:43:56Z",
+      "side": 1,
+      "message": "this CL works as is, but part of me wonders why we are early-exiting here. If we don\u0027t need to, it would be as simple as removing this line.",
+      "revId": "14b97f6168884943f2df29ff3cae52e98cd9143d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
