@@ -34,6 +34,24 @@
       "parentUuid": "1ed8f67e_36433ae9",
       "revId": "48b3c6840df4424ced6b184699b00218b4e3eea6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "828d9fa8_4eacb6e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-08-29T20:55:24Z",
+      "side": 1,
+      "message": "Metal shaders done. I don\u0027t have a windows computer locally right now. I will later in the week if the issue is still there.",
+      "parentUuid": "f0235213_b03f2559",
+      "revId": "48b3c6840df4424ced6b184699b00218b4e3eea6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
