@@ -34,6 +34,24 @@
       "parentUuid": "a27378a0_b0f40220",
       "revId": "e8b13feeed162c3a622da8048e05f7577cdd1904",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f20728e4_371764f2",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 838,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-08-29T23:42:56Z",
+      "side": 0,
+      "message": "What\u0027s the best way to do that?\n\nIf we just do `mTaskQueue.clear()`, it doesn\u0027t ever hit the appropriate `checkAndPopPendingError` early enough and doesn\u0027t realize the device is lost before `CommandProcessor::waitForPresentToBeSubmitted`, which trips an `ASSERT` in there.\n\nI\u0027m also not really simulating a more realistic `VK_ERROR_DEVICE_LOST` state. My hacky error injection mechanism is to just replace the `vkQueueSubmit` return value after a few successful submits. That obviously doesn\u0027t affect any other device functions which would likely be failing after that. Earlier today, I was suggesting to Shahbaz that it would be really nice to have an error-injection layer to simulate a device loss more accurately.",
+      "parentUuid": "77dab8c9_abc52022",
+      "revId": "e8b13feeed162c3a622da8048e05f7577cdd1904",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

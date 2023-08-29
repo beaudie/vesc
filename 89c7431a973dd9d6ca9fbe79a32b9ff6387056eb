@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2017a9f6_87ea97a8",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-08-29T23:42:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55fcf747_2ff13a6d",
+      "revId": "89c7431a973dd9d6ca9fbe79a32b9ff6387056eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9f36c54c_48fd08af",
@@ -100,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "02521319_dfb386c6",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 739,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-08-29T23:42:56Z",
+      "side": 1,
+      "message": "Oh yeah, of course! That\u0027s way better.",
+      "parentUuid": "a06bdf37_807adce9",
+      "range": {
+        "startLine": 730,
+        "startChar": 0,
+        "endLine": 739,
+        "endChar": 13
+      },
+      "revId": "89c7431a973dd9d6ca9fbe79a32b9ff6387056eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a20fdf30_bd86e72d",
@@ -137,6 +179,30 @@
       "side": 1,
       "message": "Did it actually cause deadlock here? What I read here is that ANGLE_VK_TRY calls ContextVk::handleError, which calls ContextVk::handleDeviceLost(), which calls RendererVk::notifyDeviceLost(), which calls Display::notifyDeviceLost() and calls  ErrorSet::markContextLost(), calls ErrorSet::setContextLost(). None of this will call back into commandProcessor or commandQueue code again. It mostly set state in context so that next call will trigger error processing?",
       "parentUuid": "a20fdf30_bd86e72d",
+      "range": {
+        "startLine": 1517,
+        "startChar": 0,
+        "endLine": 1529,
+        "endChar": 38
+      },
+      "revId": "89c7431a973dd9d6ca9fbe79a32b9ff6387056eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6a35f49_07d851b6",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1529,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-08-29T23:42:56Z",
+      "side": 1,
+      "message": "Yes, it deadlocks with AsyncCommandQueue (or throws an exception, with use_custom_libcxx\u003dfalse):\n\n \tmsvcp140d.dll!std::_Throw_Cpp_error(int code) Line 36\tC++\n \tlibGLESv2.dll!std::_Mutex_base::lock() Line 81\tC++\n \tlibGLESv2.dll!std::lock_guard\u003cstd::mutex\u003e::lock_guard(std::mutex \u0026 _Mtx) Line 493\tC++\n \tlibGLESv2.dll!rx::vk::CommandQueue::handleDeviceLost(rx::RendererVk * renderer) Line 1121\tC++\n \tlibGLESv2.dll!rx::vk::CommandProcessor::handleDeviceLost(rx::RendererVk * renderer) Line 841\tC++\n \tlibGLESv2.dll!rx::vk::CommandProcessor::handleError(VkResult errorCode, const char * file, const char * function, unsigned int line) Line 541\tC++\n \tlibGLESv2.dll!rx::vk::CommandQueue::queueSubmit(rx::vk::Context * context, std::unique_lock\u003cstd::mutex\u003e \u0026\u0026 dequeueLock, egl::ContextPriority contextPriority, const VkSubmitInfo \u0026 submitInfo, rx::vk::DeviceScoped\u003crx::vk::CommandBatch\u003e \u0026 commandBatch, const rx::QueueSerial \u0026 submitQueueSerial) Line 1532\tC++\n\nThe \"context\" passed to `ANGLE_VK_TRY` there is either `ContextVk` (non-AsyncCommandQueue) or `CommandProcessor` (AsyncCommandQueue). The latter results in the above code path.\n\nIt\u0027s likely there\u0027s a better solution here...",
+      "parentUuid": "4fb25892_3f9db11d",
       "range": {
         "startLine": 1517,
         "startChar": 0,
