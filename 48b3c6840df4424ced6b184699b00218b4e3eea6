@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ed8f67e_36433ae9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-29T16:33:05Z",
+      "side": 1,
+      "message": "@geofflang@chromium.org Could you please help run the script on mac?\nIf possible, could you also check windows failure, is d3d/d3d11/texture_format_data.json and d3d/d3d11/texture_format_map.json also needs to be edited?",
+      "revId": "48b3c6840df4424ced6b184699b00218b4e3eea6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
