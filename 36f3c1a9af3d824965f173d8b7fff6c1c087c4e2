@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0748d472_19186574",
+        "filename": "src/libANGLE/context_private_call_gles.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-29T18:47:48Z",
+      "side": 1,
+      "message": "It\u0027s hard to verify if these extension checks are valid. Looking at `ValidateDrawStates`, it looks at blend state for a couple of things:\n\n- Ensure no blend on float formats if appropriate ext is not supported\n- Ensure no blend on YUV formats\n- Ensure single render target with advanced blend\n\nIt _might_ be that only the existence of blend needs checking, but not the function itself? Could you please either:\n\n- Remove the `onBlendFuncOrEquationChange` calls if they are not actually needed\n- Rename to `onExtendedBlendFuncOrEquationChange` and `onAdvancedBlendFuncOrEquationChange` if they are needed, and document why changing the respective state needs to invalidate draw validation cache.",
+      "revId": "36f3c1a9af3d824965f173d8b7fff6c1c087c4e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2486a289_f61f06d5",
+        "filename": "src/libANGLE/context_private_call_gles.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-29T18:47:48Z",
+      "side": 1,
+      "message": "Why the extension check? If this function is called, then the EXT (or ES3.2) is already supported. Same with a few functions above.",
+      "revId": "36f3c1a9af3d824965f173d8b7fff6c1c087c4e2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
