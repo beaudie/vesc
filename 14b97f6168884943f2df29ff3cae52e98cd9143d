@@ -34,6 +34,24 @@
       "parentUuid": "06cf762a_9c0b542b",
       "revId": "14b97f6168884943f2df29ff3cae52e98cd9143d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "002d3fda_6bbf3f7b",
+        "filename": "src/compiler/translator/tree_ops/msl/RewriteOutArgs.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2023-08-29T19:46:15Z",
+      "side": 1,
+      "message": "Yep, turns out the early exit was a bug. Wrote a test case for the case of calling func(x, x, y, y) and it failed until I removed the early-exit.",
+      "parentUuid": "f5895540_6e6bd590",
+      "revId": "14b97f6168884943f2df29ff3cae52e98cd9143d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
