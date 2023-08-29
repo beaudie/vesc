@@ -16,6 +16,24 @@
       "message": "I guess this is also needed in Chromium and Dawn?\nAre you going to put up the CLs?",
       "revId": "720445f4c9168231a78a1a5e07b6219b6b3ca8eb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb8740d6_83848582",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1459767
+      },
+      "writtenOn": "2023-08-29T17:42:25Z",
+      "side": 1,
+      "message": "Any project that uses KhronosGroup/Vulkan-ValidationLayers will need the new overrides. I\u0027m less familiar with Chromium and Dawn and was hoping this CL could be used as a template for those teams to reference when they roll their deps.",
+      "parentUuid": "994c1d73_db9be19e",
+      "revId": "720445f4c9168231a78a1a5e07b6219b6b3ca8eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
