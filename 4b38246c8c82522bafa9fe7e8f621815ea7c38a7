@@ -16,6 +16,24 @@
       "message": "LGTM as a hack, but I\u0027m worried there may be threading issues, what if `mPlatform-\u003epostWorkerTask` is being pulled out from underneath ANGLE by another thread that\u0027s calling this?",
       "revId": "4b38246c8c82522bafa9fe7e8f621815ea7c38a7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7065a41_dd053847",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-08-30T17:42:54Z",
+      "side": 1,
+      "message": "Thanks. I don\u0027t think there\u0027s a chance of threading issues in Chrome\u0027s usage. It\u0027s all happening at startup if we fallback to SwiftShader because we can\u0027t initialize our first display choice.",
+      "parentUuid": "57e2614c_5122e4b4",
+      "revId": "4b38246c8c82522bafa9fe7e8f621815ea7c38a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
