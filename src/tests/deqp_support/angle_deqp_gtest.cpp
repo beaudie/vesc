@@ -33,7 +33,7 @@ namespace
 #if !defined(NDEBUG)
 constexpr bool kIsDebug = true;
 #else
-constexpr bool kIsDebug                = false;
+constexpr bool kIsDebug = false;
 #endif  // !defined(NDEBUG)
 
 bool gGlobalError = false;
@@ -372,6 +372,71 @@ bool IsPassingResult(dEQPTestResult result)
     }
 }
 
+class dEQPTest : public testing::Test
+{
+  public:
+    static void SetUpTestSuite();
+    static void TearDownTestSuite();
+    void SetUp();
+    void TearDown();
+
+    static std::string GetTestCaseName(size_t testModuleIndex, size_t caseIndex);
+
+    static const dEQPCaseList &GetCaseList(size_t testModuleIndex);
+
+    dEQPTest(size_t testModuleIndex, size_t caseIndex)
+        : mTestModuleIndex(testModuleIndex), mTestCaseIndex(caseIndex)
+    {}
+
+  protected:
+    void TestBody() override;
+
+  private:
+    size_t mTestModuleIndex = 0;
+    size_t mTestCaseIndex   = 0;
+};
+
+void dEQPTest::SetUpTestSuite()
+{
+    std::cout << "dEQPTest::SetUpTestSuite() is called" << std::endl;
+}
+
+void dEQPTest::TearDownTestSuite()
+{
+    std::cout << "dEQPTest::TearDownTestSuite() is called" << std::endl;
+}
+
+void dEQPTest::SetUp()
+{
+    std::cout << "dEQPTest::SetUp() is called" << std::endl;
+}
+
+void dEQPTest::TearDown()
+{
+    std::cout << "dEQPTest::TearDown() is called" << std::endl;
+}
+
+std::string dEQPTest::GetTestCaseName(size_t testModuleIndex, size_t caseIndex)
+{
+    const auto &caseInfo = GetCaseList(testModuleIndex).getCaseInfo(caseIndex);
+    return caseInfo.testName;
+}
+
+const dEQPCaseList &dEQPTest::GetCaseList(size_t testModuleIndex)
+{
+    static dEQPCaseList sCaseList(testModuleIndex);
+    sCaseList.initialize();
+    return sCaseList;
+}
+
+void dEQPTest::TestBody()
+{
+    const auto &caseInfo = GetCaseList(mTestModuleIndex).getCaseInfo(mTestCaseIndex);
+
+    std::cout << "dEQPTest::TestBody() is called caseInfo.testName: " << caseInfo.testName
+              << " caseInfo.expectation: " << caseInfo.expectation << std::endl;
+}
+
 class dEQP : public testing::Test
 {
   public:
@@ -524,6 +589,73 @@ class dEQP : public testing::Test
 
     size_t mTestModuleIndex = 0;
     size_t mTestCaseIndex   = 0;
+
+  private:
+    void SetUp() final
+    {
+        std::vector<const char *> argv;
+
+        // Reserve one argument for the binary name.
+        argv.push_back("");
+
+        // Add init api.
+        const char *targetApi    = gInitAPI ? gInitAPI->first : GetDefaultAPIName();
+        std::string apiArgString = std::string(kdEQPEGLString) + targetApi;
+        argv.push_back(apiArgString.c_str());
+
+        // Add config name
+        const char *targetConfigName = gEGLConfigName;
+        std::string configArgString  = std::string(gdEQPEGLConfigNameString) + targetConfigName;
+        argv.push_back(configArgString.c_str());
+
+        // Hide SwiftShader window to prevent a race with Xvfb causing hangs on test bots
+        if (gInitAPI && gInitAPI->second == GPUTestConfig::kAPISwiftShader)
+        {
+            argv.push_back("--deqp-visibility=hidden");
+        }
+
+        TestSuite *testSuite = TestSuite::GetInstance();
+
+        std::stringstream logNameStream;
+        logNameStream << "TestResults";
+        if (testSuite->getBatchId() != -1)
+        {
+            logNameStream << "-Batch" << std::setfill('0') << std::setw(3)
+                          << testSuite->getBatchId();
+        }
+        logNameStream << ".qpa";
+
+        std::stringstream logArgStream;
+        logArgStream << "--deqp-log-filename="
+                     << testSuite->reserveTestArtifactPath(logNameStream.str());
+
+        std::string logNameString = logArgStream.str();
+        argv.push_back(logNameString.c_str());
+
+        if (!gLogImages)
+        {
+            argv.push_back("--deqp-log-images=disable");
+        }
+
+        // Flushing during multi-process execution punishes HDDs. http://anglebug.com/5157
+        if (testSuite->getBatchId() != -1)
+        {
+            argv.push_back("--deqp-log-flush=disable");
+        }
+
+        // Add any additional flags specified from command line to be forwarded to dEQP.
+        argv.insert(argv.end(), gdEQPForwardFlags.begin(), gdEQPForwardFlags.end());
+
+        // Init the platform.
+        if (!deqp_libtester_init_platform(static_cast<int>(argv.size()), argv.data(),
+                                          reinterpret_cast<void *>(&HandlePlatformError), gOptions))
+        {
+            std::cout << "Aborting test due to dEQP initialization error." << std::endl;
+            exit(1);
+        }
+    }
+
+    void TearDown() final { deqp_libtester_shutdown_platform(); }
 };
 
 uint32_t dEQP::sTestCount             = 0;
@@ -547,72 +679,74 @@ void dEQP::SetUpTestCase()
     sUnexpectedPasses.clear();
     sUnexpectedFailed.clear();
 
-    std::vector<const char *> argv;
-
-    // Reserve one argument for the binary name.
-    argv.push_back("");
-
-    // Add init api.
-    const char *targetApi    = gInitAPI ? gInitAPI->first : GetDefaultAPIName();
-    std::string apiArgString = std::string(kdEQPEGLString) + targetApi;
-    argv.push_back(apiArgString.c_str());
-
-    // Add config name
-    const char *targetConfigName = gEGLConfigName;
-    std::string configArgString  = std::string(gdEQPEGLConfigNameString) + targetConfigName;
-    argv.push_back(configArgString.c_str());
-
-    // Hide SwiftShader window to prevent a race with Xvfb causing hangs on test bots
-    if (gInitAPI && gInitAPI->second == GPUTestConfig::kAPISwiftShader)
-    {
-        argv.push_back("--deqp-visibility=hidden");
-    }
-
-    TestSuite *testSuite = TestSuite::GetInstance();
-
-    std::stringstream logNameStream;
-    logNameStream << "TestResults";
-    if (testSuite->getBatchId() != -1)
-    {
-        logNameStream << "-Batch" << std::setfill('0') << std::setw(3) << testSuite->getBatchId();
-    }
-    logNameStream << ".qpa";
-
-    std::stringstream logArgStream;
-    logArgStream << "--deqp-log-filename="
-                 << testSuite->reserveTestArtifactPath(logNameStream.str());
-
-    std::string logNameString = logArgStream.str();
-    argv.push_back(logNameString.c_str());
-
-    if (!gLogImages)
-    {
-        argv.push_back("--deqp-log-images=disable");
-    }
-
-    // Flushing during multi-process execution punishes HDDs. http://anglebug.com/5157
-    if (testSuite->getBatchId() != -1)
-    {
-        argv.push_back("--deqp-log-flush=disable");
-    }
-
-    // Add any additional flags specified from command line to be forwarded to dEQP.
-    argv.insert(argv.end(), gdEQPForwardFlags.begin(), gdEQPForwardFlags.end());
-
-    // Init the platform.
-    if (!deqp_libtester_init_platform(static_cast<int>(argv.size()), argv.data(),
-                                      reinterpret_cast<void *>(&HandlePlatformError), gOptions))
-    {
-        std::cout << "Aborting test due to dEQP initialization error." << std::endl;
-        exit(1);
-    }
+    //    std::vector<const char *> argv;
+    //
+    //    // Reserve one argument for the binary name.
+    //    argv.push_back("");
+    //
+    //    // Add init api.
+    //    const char *targetApi    = gInitAPI ? gInitAPI->first : GetDefaultAPIName();
+    //    std::string apiArgString = std::string(kdEQPEGLString) + targetApi;
+    //    argv.push_back(apiArgString.c_str());
+    //
+    //    // Add config name
+    //    const char *targetConfigName = gEGLConfigName;
+    //    std::string configArgString  = std::string(gdEQPEGLConfigNameString) + targetConfigName;
+    //    argv.push_back(configArgString.c_str());
+    //
+    //    // Hide SwiftShader window to prevent a race with Xvfb causing hangs on test bots
+    //    if (gInitAPI && gInitAPI->second == GPUTestConfig::kAPISwiftShader)
+    //    {
+    //        argv.push_back("--deqp-visibility=hidden");
+    //    }
+    //
+    //    TestSuite *testSuite = TestSuite::GetInstance();
+    //
+    //    std::stringstream logNameStream;
+    //    logNameStream << "TestResults";
+    //    if (testSuite->getBatchId() != -1)
+    //    {
+    //        logNameStream << "-Batch" << std::setfill('0') << std::setw(3) <<
+    //        testSuite->getBatchId();
+    //    }
+    //    logNameStream << ".qpa";
+    //
+    //    std::stringstream logArgStream;
+    //    logArgStream << "--deqp-log-filename="
+    //                 << testSuite->reserveTestArtifactPath(logNameStream.str());
+    //
+    //    std::string logNameString = logArgStream.str();
+    //    argv.push_back(logNameString.c_str());
+    //
+    //    if (!gLogImages)
+    //    {
+    //        argv.push_back("--deqp-log-images=disable");
+    //    }
+    //
+    //    // Flushing during multi-process execution punishes HDDs. http://anglebug.com/5157
+    //    if (testSuite->getBatchId() != -1)
+    //    {
+    //        argv.push_back("--deqp-log-flush=disable");
+    //    }
+    //
+    //    // Add any additional flags specified from command line to be forwarded to dEQP.
+    //    argv.insert(argv.end(), gdEQPForwardFlags.begin(), gdEQPForwardFlags.end());
+    //
+    //    // Init the platform.
+    //    if (!deqp_libtester_init_platform(static_cast<int>(argv.size()), argv.data(),
+    //                                      reinterpret_cast<void *>(&HandlePlatformError),
+    //                                      gOptions))
+    //    {
+    //        std::cout << "Aborting test due to dEQP initialization error." << std::endl;
+    //        exit(1);
+    //    }
 }
 
 // static
 void dEQP::TearDownTestCase()
 {
     PrintTestStats();
-    deqp_libtester_shutdown_platform();
+    //    deqp_libtester_shutdown_platform();
 }
 
 void HandleDisplayType(const char *displayTypeString)
@@ -780,24 +914,52 @@ size_t GetTestModuleIndex()
 #endif
 }
 
+// void RegisterGLCTSTests()
+//{
+//     size_t testModuleIndex = GetTestModuleIndex();
+//
+//     const dEQPCaseList &caseList = dEQP::GetCaseList(testModuleIndex);
+//
+//     for (size_t caseIndex = 0; caseIndex < caseList.numCases(); ++caseIndex)
+//     {
+//         auto factory = [testModuleIndex, caseIndex]() {
+//             return new dEQP(testModuleIndex, caseIndex);
+//         };
+//
+//         std::string testCaseName = dEQP::GetTestCaseName(testModuleIndex, caseIndex);
+//         size_t pos               = testCaseName.find('.');
+//         ASSERT(pos != std::string::npos);
+//         std::string moduleName = testCaseName.substr(0, pos);
+//         std::string testName   = testCaseName.substr(pos + 1);
+//         testing::RegisterTest(moduleName.c_str(), testName.c_str(), nullptr, nullptr, __FILE__,
+//                               __LINE__, factory);
+//     }
+// }
+
 void RegisterGLCTSTests()
 {
     size_t testModuleIndex = GetTestModuleIndex();
 
-    const dEQPCaseList &caseList = dEQP::GetCaseList(testModuleIndex);
+    const dEQPCaseList &caseList = dEQPTest::GetCaseList(testModuleIndex);
+
+    const char *firstTestSuite = "firstTestSuite";
+
+    const char *secondTestSuite = "secondTestSuite";
 
     for (size_t caseIndex = 0; caseIndex < caseList.numCases(); ++caseIndex)
     {
         auto factory = [testModuleIndex, caseIndex]() {
-            return new dEQP(testModuleIndex, caseIndex);
+            return new dEQPTest(testModuleIndex, caseIndex);
         };
 
-        std::string testCaseName = dEQP::GetTestCaseName(testModuleIndex, caseIndex);
+        std::string testCaseName = dEQPTest::GetTestCaseName(testModuleIndex, caseIndex);
         size_t pos               = testCaseName.find('.');
         ASSERT(pos != std::string::npos);
-        std::string moduleName = testCaseName.substr(0, pos);
-        std::string testName   = testCaseName.substr(pos + 1);
-        testing::RegisterTest(moduleName.c_str(), testName.c_str(), nullptr, nullptr, __FILE__,
+        // std::string moduleName = testCaseName.substr(0, pos);
+        std::string testName = testCaseName.substr(pos + 1);
+        testing::RegisterTest(firstTestSuite, testName.c_str(), nullptr, nullptr, __FILE__,
+                              __LINE__, factory);
+        testing::RegisterTest(secondTestSuite, testName.c_str(), nullptr, nullptr, __FILE__,
                               __LINE__, factory);
     }
 }
