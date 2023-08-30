@@ -16,6 +16,24 @@
       "message": "Test LGTM, no opinion on D3D changes.\n\nIdeally, the test would also actually use the created programs in a draw call to make sure it actually works",
       "revId": "7b0b19d20d270a325ea252adcfba79889ae5cbf4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d554a53_a7f750f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1161747
+      },
+      "writtenOn": "2023-08-30T08:06:37Z",
+      "side": 1,
+      "message": "Got it. I just need this patch to unblock the implementation in Dawn. I will add more tests after https://chromium-review.googlesource.com/c/angle/angle/+/4819797 is landed to get read-only storage images work correctly on D3D11.",
+      "parentUuid": "dba5ee72_937b4f64",
+      "revId": "7b0b19d20d270a325ea252adcfba79889ae5cbf4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
