@@ -33,6 +33,24 @@
       "message": "Re-LGTM!",
       "revId": "b2d90c948373a3737c21c897ea675b375e78d6ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "164c213c_8178a391",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-08-30T17:58:52Z",
+      "side": 1,
+      "message": "Apparently this is breaking Pixel 4.\nMaybe this would catch additional out of date swap chains?\nThat or I need to change the order in which I\u0027m adding the additional check.\nI didn\u0027t want to go *too* far down the swapchain rabbit hole here.\n```\nI 17:28:58.965   61.268s run_tests_on_device(9A261FFAZ007S8)  [ RUN      ] dEQP-EGL.functional.partial_update.odd_render_render_even_render\nI 17:28:58.965   61.268s run_tests_on_device(9A261FFAZ007S8)  WARN: Surface.cpp:421 (setSwapBehavior): \t! Unimplemented: setSwapBehavior(../../src/libANGLE/Surface.cpp:421)\nI 17:28:58.966   61.268s run_tests_on_device(9A261FFAZ007S8)  ../../src/tests/deqp_support/angle_deqp_gtest.cpp:444: Failure\nI 17:28:58.966   61.268s run_tests_on_device(9A261FFAZ007S8)  Value of: testSucceeded\nI 17:28:58.966   61.268s run_tests_on_device(9A261FFAZ007S8)    Actual: false\nI 17:28:58.966   61.268s run_tests_on_device(9A261FFAZ007S8)  Expected: true\nI 17:28:58.966   61.268s run_tests_on_device(9A261FFAZ007S8)  [  FAILED  ] dEQP-EGL.functional.partial_update.odd_render_render_even_render (787 ms)\n```",
+      "parentUuid": "6043d3c3_aa567839",
+      "revId": "b2d90c948373a3737c21c897ea675b375e78d6ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
