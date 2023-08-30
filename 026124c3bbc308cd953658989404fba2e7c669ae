@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c471cfba_c6253df0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-30T00:23:58Z",
+      "side": 1,
+      "message": "Basic test already exist. I expanded it in https://chromium-review.googlesource.com/c/angle/angle/+/4824046",
+      "parentUuid": "54602676_e4c4346d",
+      "revId": "026124c3bbc308cd953658989404fba2e7c669ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "03692270_605fea9a",
         "filename": "src/libANGLE/formatutils.cpp",
         "patchSetId": 8
@@ -91,6 +109,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fb4802a5_291bfa38",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1708,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-30T00:23:58Z",
+      "side": 1,
+      "message": "This call comes from API, which will not see these internal formats.",
+      "parentUuid": "486c3d94_159e6bf4",
+      "revId": "026124c3bbc308cd953658989404fba2e7c669ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5d1be64b_c64daff0",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 8
@@ -102,6 +138,30 @@
       "writtenOn": "2023-08-29T20:55:24Z",
       "side": 1,
       "message": "nit: Let\u0027s just remove it. There are only 4 call sites in this file.",
+      "range": {
+        "startLine": 1833,
+        "startChar": 31,
+        "endLine": 1833,
+        "endChar": 56
+      },
+      "revId": "026124c3bbc308cd953658989404fba2e7c669ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89472df8_840abd9b",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1833,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-30T00:23:58Z",
+      "side": 1,
+      "message": "Done in https://chromium-review.googlesource.com/c/angle/angle/+/4824046",
+      "parentUuid": "5d1be64b_c64daff0",
       "range": {
         "startLine": 1833,
         "startChar": 31,
