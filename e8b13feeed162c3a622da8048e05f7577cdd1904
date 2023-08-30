@@ -52,6 +52,24 @@
       "parentUuid": "77dab8c9_abc52022",
       "revId": "e8b13feeed162c3a622da8048e05f7577cdd1904",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24db4865_cc7a0e58",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 838,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-30T21:15:47Z",
+      "side": 0,
+      "message": "How about have a version of waitForAllWorkToBeSubmitted that assumes caller already took the lock? i.e, waitForAllWorkToBeSubmittedLocked()?",
+      "parentUuid": "f20728e4_371764f2",
+      "revId": "e8b13feeed162c3a622da8048e05f7577cdd1904",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
