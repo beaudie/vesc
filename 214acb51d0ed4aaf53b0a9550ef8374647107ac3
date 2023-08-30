@@ -109,6 +109,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6eb2e9a5_6c5ae4f7",
+        "filename": "src/libANGLE/renderer/vulkan/android/vk_android_utils.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-30T18:59:48Z",
+      "side": 1,
+      "message": "\u003e  If we switch to returning VkResult, that means \"exception handling\" is pushed up the stack a few calls, with another custom exception implementation for the last few calls (based on VkResult).\n\nRight. The point is why we would like low level code like memory allocator to handle exceptions? We want the error to float up to caller and let caller deal with it. Add another macro should be just fine. for example, \n```\n#define VK_CHECK(command) \n{ \n      auto ANGLE_LOCAL_VAR \u003d command; \n      if (ANGLE_LOCAL_VAR )\n      {\n          return ANGLE_LOCAL_VAR;\n      }\n }\n```\nAnd then you use this macro inside allocation. (name is subject to debate)\n\nThe cleanness comes from the fact that now all memory allocation related error can be handled in upper caller function, and can be in one central place. This is basically the same approach VMA is taking as well (VMA returns VKResult).",
+      "parentUuid": "55749e8b_44ec8847",
+      "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cfa1ed7c_150e8a53",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 21
