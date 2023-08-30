@@ -16,6 +16,46 @@
       "message": "bot looks to be happy (mostly done)",
       "revId": "1b460d56af906d7140ddd5c8a77e9e577c20be15",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f03f5e3_ea6bd617",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-30T23:45:50Z",
+      "side": 1,
+      "message": "Thanks for the fix!",
+      "revId": "1b460d56af906d7140ddd5c8a77e9e577c20be15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4b1528c_a6141e29",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 9412,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-30T23:45:50Z",
+      "side": 1,
+      "message": "Would you mind putting this in a temp right above this line? The formatting is :bleeding-eyes-because-two-tiny-daggers-are-inside:",
+      "range": {
+        "startLine": 9412,
+        "startChar": 9,
+        "endLine": 9412,
+        "endChar": 72
+      },
+      "revId": "1b460d56af906d7140ddd5c8a77e9e577c20be15",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
