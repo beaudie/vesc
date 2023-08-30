@@ -1125,6 +1125,10 @@ void ProgramD3D::setUniformMatrixfvInternal(GLint location,
 void ProgramD3D::reset()
 {
     getExecutable()->reset();
+
+    // Cache the xfb buffer mode for easy access.
+    getExecutable()->mIsSeparateTransformFeedback =
+        mState.getTransformFeedbackBufferMode() == GL_SEPARATE_ATTRIBS;
 }
 
 unsigned int ProgramD3D::getSerial() const

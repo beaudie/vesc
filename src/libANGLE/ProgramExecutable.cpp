@@ -405,7 +405,6 @@ ProgramExecutable::ProgramExecutable(rx::GLImplFactory *factory, InfoLog *infoLo
     mPODStruct.geometryShaderInputPrimitiveType  = PrimitiveMode::Triangles;
     mPODStruct.geometryShaderOutputPrimitiveType = PrimitiveMode::TriangleStrip;
     mPODStruct.geometryShaderInvocations         = 1;
-    mPODStruct.transformFeedbackBufferMode       = GL_INTERLEAVED_ATTRIBS;
     mPODStruct.computeShaderLocalSize.fill(1);
 
     reset();
@@ -920,6 +919,7 @@ bool ProgramExecutable::linkMergedVaryings(
     bool webglCompatibility,
     const ProgramMergedVaryings &mergedVaryings,
     const std::vector<std::string> &transformFeedbackVaryingNames,
+    GLenum transformFeedbackBufferMode,
     const LinkingVariables &linkingVariables,
     bool isSeparable,
     ProgramVaryingPacking *varyingPacking)
@@ -927,7 +927,7 @@ bool ProgramExecutable::linkMergedVaryings(
     ShaderType tfStage = GetLastPreFragmentStage(linkingVariables.isShaderStageUsedBitset);
 
     if (!linkValidateTransformFeedback(caps, clientVersion, mergedVaryings, tfStage,
-                                       transformFeedbackVaryingNames))
+                                       transformFeedbackVaryingNames, transformFeedbackBufferMode))
     {
         return false;
     }
@@ -968,7 +968,7 @@ bool ProgramExecutable::linkMergedVaryings(
     }
 
     gatherTransformFeedbackVaryings(mergedVaryings, tfStage, transformFeedbackVaryingNames);
-    updateTransformFeedbackStrides();
+    updateTransformFeedbackStrides(transformFeedbackBufferMode);
 
     return true;
 }
@@ -978,7 +978,8 @@ bool ProgramExecutable::linkValidateTransformFeedback(
     const Version &clientVersion,
     const ProgramMergedVaryings &varyings,
     ShaderType stage,
-    const std::vector<std::string> &transformFeedbackVaryingNames)
+    const std::vector<std::string> &transformFeedbackVaryingNames,
+    GLenum transformFeedbackBufferMode)
 {
     // Validate the tf names regardless of the actual program varyings.
     std::set<std::string> uniqueNames;
@@ -1077,7 +1078,7 @@ bool ProgramExecutable::linkValidateTransformFeedback(
 
         // TODO(jmadill): Investigate implementation limits on D3D11
         componentCount = VariableComponentCount(var->type) * elementCount;
-        if (mPODStruct.transformFeedbackBufferMode == GL_SEPARATE_ATTRIBS &&
+        if (transformFeedbackBufferMode == GL_SEPARATE_ATTRIBS &&
             componentCount > static_cast<GLuint>(caps.maxTransformFeedbackSeparateComponents))
         {
             *mInfoLog << "Transform feedback varying " << tfVaryingName << " components ("
@@ -1087,7 +1088,7 @@ bool ProgramExecutable::linkValidateTransformFeedback(
         }
 
         totalComponents += componentCount;
-        if (mPODStruct.transformFeedbackBufferMode == GL_INTERLEAVED_ATTRIBS &&
+        if (transformFeedbackBufferMode == GL_INTERLEAVED_ATTRIBS &&
             totalComponents > static_cast<GLuint>(caps.maxTransformFeedbackInterleavedComponents))
         {
             *mInfoLog << "Transform feedback varying total components (" << totalComponents
@@ -1143,14 +1144,14 @@ void ProgramExecutable::gatherTransformFeedbackVaryings(
     }
 }
 
-void ProgramExecutable::updateTransformFeedbackStrides()
+void ProgramExecutable::updateTransformFeedbackStrides(GLenum transformFeedbackBufferMode)
 {
     if (mLinkedTransformFeedbackVaryings.empty())
     {
         return;
     }
 
-    if (mPODStruct.transformFeedbackBufferMode == GL_INTERLEAVED_ATTRIBS)
+    if (transformFeedbackBufferMode == GL_INTERLEAVED_ATTRIBS)
     {
         mTransformFeedbackStrides.resize(1);
         size_t totalSize = 0;

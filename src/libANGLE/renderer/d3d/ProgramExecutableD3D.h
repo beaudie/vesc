@@ -425,6 +425,8 @@ class ProgramExecutableD3D : public ProgramExecutableImpl
 
     bool mUsesPointSize;
     bool mUsesFlatInterpolation;
+    // Redundant with ProgramState::mTransformFeedbackBufferMode, but here for convenience.
+    bool mIsSeparateTransformFeedback;
 
     gl::ShaderMap<std::unique_ptr<UniformStorageD3D>> mShaderUniformStorages;
 

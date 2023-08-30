@@ -408,6 +408,7 @@ ProgramExecutableD3D::ProgramExecutableD3D(const gl::ProgramExecutable *executab
     : ProgramExecutableImpl(executable),
       mUsesPointSize(false),
       mUsesFlatInterpolation(false),
+      mIsSeparateTransformFeedback(true),
       mUsedShaderSamplerRanges({}),
       mDirtySamplerMapping(true),
       mUsedImageRange({}),
@@ -441,8 +442,9 @@ void ProgramExecutableD3D::reset()
     mUsesVertexID        = false;
     mUsesViewID          = false;
     mPixelShaderKey.clear();
-    mUsesPointSize         = false;
-    mUsesFlatInterpolation = false;
+    mUsesPointSize               = false;
+    mUsesFlatInterpolation       = false;
+    mIsSeparateTransformFeedback = true;
 
     SafeDeleteContainer(mD3DUniforms);
     mD3DUniformBlocks.clear();
@@ -683,6 +685,7 @@ bool ProgramExecutableD3D::load(const gl::Context *context,
     stream->readBool(&mUsesViewID);
     stream->readBool(&mUsesPointSize);
     stream->readBool(&mUsesFlatInterpolation);
+    stream->readBool(&mIsSeparateTransformFeedback);
 
     const size_t pixelShaderKeySize = stream->readInt<size_t>();
     mPixelShaderKey.resize(pixelShaderKeySize);
@@ -708,7 +711,7 @@ angle::Result ProgramExecutableD3D::loadBinaryShaderExecutables(d3d::Context *co
 {
     const unsigned char *binary = reinterpret_cast<const unsigned char *>(stream->data());
 
-    bool separateAttribs = mExecutable->getTransformFeedbackBufferMode() == GL_SEPARATE_ATTRIBS;
+    bool separateAttribs = mIsSeparateTransformFeedback;
 
     size_t vertexShaderCount = stream->readInt<size_t>();
     for (size_t vertexShaderIndex = 0; vertexShaderIndex < vertexShaderCount; vertexShaderIndex++)
@@ -983,6 +986,7 @@ void ProgramExecutableD3D::save(const gl::Context *context,
     stream->writeBool(mUsesViewID);
     stream->writeBool(mUsesPointSize);
     stream->writeBool(mUsesFlatInterpolation);
+    stream->writeBool(mIsSeparateTransformFeedback);
 
     const std::vector<PixelShaderOutputVariable> &pixelShaderKey = mPixelShaderKey;
     stream->writeInt(pixelShaderKey.size());
@@ -1328,8 +1332,8 @@ angle::Result ProgramExecutableD3D::getVertexExecutableForCachedInputLayout(
 
     ANGLE_TRY(renderer->compileToExecutable(
         context, *currentInfoLog, finalVertexHLSL, gl::ShaderType::Vertex, mStreamOutVaryings,
-        mExecutable->getTransformFeedbackBufferMode() == GL_SEPARATE_ATTRIBS,
-        mShaderWorkarounds[gl::ShaderType::Vertex], &vertexExecutable));
+        mIsSeparateTransformFeedback, mShaderWorkarounds[gl::ShaderType::Vertex],
+        &vertexExecutable));
 
     if (vertexExecutable)
     {
@@ -1389,8 +1393,7 @@ angle::Result ProgramExecutableD3D::getGeometryExecutableForPrimitiveType(
     ShaderExecutableD3D *geometryExecutable = nullptr;
     angle::Result result                    = renderer->compileToExecutable(
         context, *currentInfoLog, geometryHLSL, gl::ShaderType::Geometry, mStreamOutVaryings,
-        mExecutable->getTransformFeedbackBufferMode() == GL_SEPARATE_ATTRIBS,
-        CompilerWorkaroundsD3D(), &geometryExecutable);
+        mIsSeparateTransformFeedback, CompilerWorkaroundsD3D(), &geometryExecutable);
 
     if (!infoLog && result == angle::Result::Stop)
     {
@@ -1441,8 +1444,8 @@ angle::Result ProgramExecutableD3D::getPixelExecutableForCachedOutputLayout(
 
     ANGLE_TRY(renderer->compileToExecutable(
         context, *currentInfoLog, finalPixelHLSL, gl::ShaderType::Fragment, mStreamOutVaryings,
-        mExecutable->getTransformFeedbackBufferMode() == GL_SEPARATE_ATTRIBS,
-        mShaderWorkarounds[gl::ShaderType::Fragment], &pixelExecutable));
+        mIsSeparateTransformFeedback, mShaderWorkarounds[gl::ShaderType::Fragment],
+        &pixelExecutable));
 
     if (pixelExecutable)
     {

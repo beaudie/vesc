@@ -208,6 +208,7 @@ ShaderInterfaceVariableInfo *SetXfbInfo(ShaderInterfaceVariableInfoMap *infoMap,
 void AssignTransformFeedbackEmulationBindings(gl::ShaderType shaderType,
                                               const gl::ProgramExecutable &programExecutable,
                                               bool isTransformFeedbackStage,
+                                              const GLenum transformFeedbackBufferMode,
                                               SpvProgramInterfaceInfo *programInterfaceInfo,
                                               ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
@@ -215,8 +216,7 @@ void AssignTransformFeedbackEmulationBindings(gl::ShaderType shaderType,
     if (isTransformFeedbackStage)
     {
         ASSERT(!programExecutable.getLinkedTransformFeedbackVaryings().empty());
-        const bool isInterleaved =
-            programExecutable.getTransformFeedbackBufferMode() == GL_INTERLEAVED_ATTRIBS;
+        const bool isInterleaved = transformFeedbackBufferMode == GL_INTERLEAVED_ATTRIBS;
         bufferCount =
             isInterleaved ? 1 : programExecutable.getLinkedTransformFeedbackVaryings().size();
     }
@@ -499,14 +499,14 @@ void AssignVaryingLocations(const SpvSourceOptions &options,
 void AssignTransformFeedbackQualifiers(const gl::ProgramExecutable &programExecutable,
                                        const gl::VaryingPacking &varyingPacking,
                                        const gl::ShaderType shaderType,
+                                       const GLenum transformFeedbackBufferMode,
                                        bool usesExtension,
                                        ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
     const std::vector<gl::TransformFeedbackVarying> &tfVaryings =
         programExecutable.getLinkedTransformFeedbackVaryings();
     const std::vector<GLsizei> &varyingStrides = programExecutable.getTransformFeedbackStrides();
-    const bool isInterleaved =
-        programExecutable.getTransformFeedbackBufferMode() == GL_INTERLEAVED_ATTRIBS;
+    const bool isInterleaved = transformFeedbackBufferMode == GL_INTERLEAVED_ATTRIBS;
 
     uint32_t currentOffset = 0;
     uint32_t currentStride = 0;
@@ -4810,6 +4810,7 @@ void SpvAssignLocations(const SpvSourceOptions &options,
                         const gl::ProgramExecutable &programExecutable,
                         const gl::ProgramVaryingPacking &varyingPacking,
                         const gl::ShaderType transformFeedbackStage,
+                        const GLenum transformFeedbackBufferMode,
                         SpvProgramInterfaceInfo *programInterfaceInfo,
                         ShaderInterfaceVariableInfoMap *variableInfoMapOut)
 {
@@ -4837,9 +4838,9 @@ void SpvAssignLocations(const SpvSourceOptions &options,
                 options.enableTransformFeedbackEmulation &&
                 !programExecutable.getLinkedTransformFeedbackVaryings().empty();
 
-            AssignTransformFeedbackEmulationBindings(gl::ShaderType::Vertex, programExecutable,
-                                                     isTransformFeedbackStage, programInterfaceInfo,
-                                                     variableInfoMapOut);
+            AssignTransformFeedbackEmulationBindings(
+                gl::ShaderType::Vertex, programExecutable, isTransformFeedbackStage,
+                transformFeedbackBufferMode, programInterfaceInfo, variableInfoMapOut);
         }
     }
 
@@ -4885,9 +4886,9 @@ void SpvAssignLocations(const SpvSourceOptions &options,
             if (!programExecutable.getLinkedTransformFeedbackVaryings().empty() &&
                 shaderType == programExecutable.getLinkedTransformFeedbackStage())
             {
-                AssignTransformFeedbackQualifiers(programExecutable, outputPacking, shaderType,
-                                                  options.supportsTransformFeedbackExtension,
-                                                  variableInfoMapOut);
+                AssignTransformFeedbackQualifiers(
+                    programExecutable, outputPacking, shaderType, transformFeedbackBufferMode,
+                    options.supportsTransformFeedbackExtension, variableInfoMapOut);
             }
         }
 
@@ -4978,7 +4979,8 @@ void SpvAssignAllLocations(const SpvSourceOptions &options,
     }
 
     SpvAssignLocations(options, programExecutable, resources.varyingPacking, xfbStage,
-                       &spvProgramInterfaceInfo, variableInfoMapOut);
+                       programState.getTransformFeedbackBufferMode(), &spvProgramInterfaceInfo,
+                       variableInfoMapOut);
 }
 
 angle::Result SpvTransformSpirvCode(const SpvTransformOptions &options,

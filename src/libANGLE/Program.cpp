@@ -865,6 +865,7 @@ ImageBinding::~ImageBinding() = default;
 ProgramState::ProgramState(rx::GLImplFactory *factory)
     : mLabel(),
       mAttachedShaders{},
+      mTransformFeedbackBufferMode(GL_INTERLEAVED_ATTRIBS),
       mBinaryRetrieveableHint(false),
       mSeparable(false),
       mCachedBaseVertex(0),
@@ -1330,8 +1331,8 @@ angle::Result Program::linkImpl(const Context *context)
         mergedVaryings = GetMergedVaryingsFromLinkingVariables(linkingVariables);
         if (!mState.mExecutable->linkMergedVaryings(
                 caps, limitations, clientVersion, isWebGL, mergedVaryings,
-                mState.mTransformFeedbackVaryingNames, linkingVariables, isSeparable(),
-                &resources.varyingPacking))
+                mState.mTransformFeedbackVaryingNames, mState.mTransformFeedbackBufferMode,
+                linkingVariables, isSeparable(), &resources.varyingPacking))
         {
             return angle::Result::Continue;
         }
@@ -2666,7 +2667,7 @@ void Program::setTransformFeedbackVaryings(GLsizei count,
         mState.mTransformFeedbackVaryingNames[i] = varyings[i];
     }
 
-    mState.mExecutable->mPODStruct.transformFeedbackBufferMode = bufferMode;
+    mState.mTransformFeedbackBufferMode = bufferMode;
 }
 
 void Program::getTransformFeedbackVarying(GLuint index,
@@ -2734,12 +2735,6 @@ GLsizei Program::getTransformFeedbackVaryingMaxLength() const
     {
         return 0;
     }
-}
-
-GLenum Program::getTransformFeedbackBufferMode() const
-{
-    ASSERT(!mLinkingState);
-    return mState.mExecutable->getTransformFeedbackBufferMode();
 }
 
 bool Program::linkValidateShaders(const Context *context)
@@ -3568,8 +3563,9 @@ angle::Result Program::serialize(const Context *context, angle::MemoryBuffer *bi
         stream.writeInt(0);
     }
 
-    // Must be before mExecutable->save(), since it uses the value.
+    // mSeparable must be before mExecutable->save(), since it uses the value.
     stream.writeBool(mState.mSeparable);
+    stream.writeInt(mState.mTransformFeedbackBufferMode);
 
     mState.mExecutable->save(mState.mSeparable, &stream);
 
@@ -3664,8 +3660,9 @@ angle::Result Program::deserialize(const Context *context, BinaryInputStream &st
         return angle::Result::Stop;
     }
 
-    // Must be before mExecutable->load(), since it uses the value.
-    mState.mSeparable = stream.readBool();
+    // mSeparable must be before mExecutable->load(), since it uses the value.
+    mState.mSeparable                   = stream.readBool();
+    mState.mTransformFeedbackBufferMode = stream.readInt<GLenum>();
 
     mState.mExecutable->load(mState.mSeparable, &stream);
 
@@ -3682,7 +3679,7 @@ angle::Result Program::deserialize(const Context *context, BinaryInputStream &st
 
     if (!mState.mAttachedShaders[ShaderType::Compute])
     {
-        mState.mExecutable->updateTransformFeedbackStrides();
+        mState.mExecutable->updateTransformFeedbackStrides(mState.mTransformFeedbackBufferMode);
     }
 
     if (context->getShareGroup()->getFrameCaptureShared()->enabled())

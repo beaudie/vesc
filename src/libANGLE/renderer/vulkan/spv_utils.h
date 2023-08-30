@@ -116,6 +116,7 @@ void SpvAssignLocations(const SpvSourceOptions &options,
                         const gl::ProgramExecutable &programExecutable,
                         const gl::ProgramVaryingPacking &varyingPacking,
                         const gl::ShaderType transformFeedbackStage,
+                        const GLenum transformFeedbackBufferMode,
                         SpvProgramInterfaceInfo *programInterfaceInfo,
                         ShaderInterfaceVariableInfoMap *variableInfoMapOut);
 
