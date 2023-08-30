@@ -76,6 +76,8 @@ ANGLE_LIBTESTER_EXPORT bool deqp_libtester_init_platform(int argc,
         }
 
         g_cmdLine = new tcu::CommandLine(argc, argv);
+        std::cout << "Yuxin Debug tcu CommandLine initial command is: "
+                  << g_cmdLine->getInitialCmdLine() << std::endl;
         g_archive = new tcu::DirArchive(deqpDataDir);
         g_log     = new tcu::TestLog(GetLogFileName(deqpDataDir).c_str(), g_cmdLine->getLogFlags());
         g_testCtx = new tcu::TestContext(*g_platform, *g_archive, *g_log, *g_cmdLine, DE_NULL);

@@ -33,14 +33,15 @@ namespace
 #if !defined(NDEBUG)
 constexpr bool kIsDebug = true;
 #else
-constexpr bool kIsDebug                = false;
+constexpr bool kIsDebug = false;
 #endif  // !defined(NDEBUG)
 
 bool gGlobalError = false;
 bool gExpectError = false;
 bool gVerbose     = false;
 
-// Set this to true temporarily to enable image logging in release. Useful for diagnosing errors.
+// Set this to true temporarily to enable image logging in release. Useful for diagnosing
+// errors.
 bool gLogImages = kIsDebug;
 
 constexpr char kInfoTag[] = "*RESULT";
@@ -203,8 +204,8 @@ std::string GetTestStatLine(const std::string &key, const std::string &value)
     return std::string(kInfoTag) + ": " + key + ": " + value + "\n";
 }
 
-// During the CaseList initialization we cannot use the GTEST FAIL macro to quit the program because
-// the initialization is called outside of tests the first time.
+// During the CaseList initialization we cannot use the GTEST FAIL macro to quit the program
+// because the initialization is called outside of tests the first time.
 void Die()
 {
     exit(EXIT_FAILURE);
@@ -372,145 +373,22 @@ bool IsPassingResult(dEQPTestResult result)
     }
 }
 
-class dEQP : public testing::Test
+class dEQPTestSuite : public testing::Test
 {
   public:
-    static testing::internal::ParamGenerator<size_t> GetTestingRange(size_t testModuleIndex)
-    {
-        return testing::Range<size_t>(0, GetCaseList(testModuleIndex).numCases());
-    }
+    static void SetUpTestSuite();
+    static void TearDownTestSuite();
 
-    static std::string GetTestCaseName(size_t testModuleIndex, size_t caseIndex)
-    {
-        const auto &caseInfo = GetCaseList(testModuleIndex).getCaseInfo(caseIndex);
-        return caseInfo.testName;
-    }
+    static std::string GetTestCaseName(size_t testModuleIndex, size_t caseIndex);
 
-    static const dEQPCaseList &GetCaseList(size_t testModuleIndex)
-    {
-        static dEQPCaseList sCaseList(testModuleIndex);
-        sCaseList.initialize();
-        return sCaseList;
-    }
+    static const dEQPCaseList &GetCaseList(size_t testModuleIndex);
 
-    static void SetUpTestCase();
-    static void TearDownTestCase();
-
-    dEQP(size_t testModuleIndex, size_t caseIndex)
-        : mTestModuleIndex(testModuleIndex), mTestCaseIndex(caseIndex)
-    {}
+    dEQPTestSuite();
 
   protected:
-    void TestBody() override
-    {
-        if (sTestExceptionCount > 1)
-        {
-            std::cout << "Too many exceptions, skipping all remaining tests." << std::endl;
-            return;
-        }
+    static void PrintTestStats();
 
-        const auto &caseInfo = GetCaseList(mTestModuleIndex).getCaseInfo(mTestCaseIndex);
-
-        // Tests that crash exit the harness before collecting the result. To tally the number of
-        // crashed tests we track how many tests we "tried" to run.
-        sTestCount++;
-
-        if (caseInfo.expectation == GPUTestExpectationsParser::kGpuTestSkip)
-        {
-            sSkippedTestCount++;
-            std::cout << "Test skipped.\n";
-            return;
-        }
-
-        TestSuite *testSuite = TestSuite::GetInstance();
-        testSuite->maybeUpdateTestTimeout(caseInfo.expectation);
-
-        gExpectError          = (caseInfo.expectation != GPUTestExpectationsParser::kGpuTestPass);
-        dEQPTestResult result = deqp_libtester_run(caseInfo.testName.c_str());
-
-        bool testSucceeded = IsPassingResult(result);
-
-        if (!testSucceeded && caseInfo.expectation == GPUTestExpectationsParser::kGpuTestFlaky)
-        {
-            result        = deqp_libtester_run(caseInfo.testName.c_str());
-            testSucceeded = IsPassingResult(result);
-        }
-
-        countTestResult(result);
-
-        if (caseInfo.expectation == GPUTestExpectationsParser::kGpuTestPass ||
-            caseInfo.expectation == GPUTestExpectationsParser::kGpuTestFlaky)
-        {
-            EXPECT_TRUE(testSucceeded);
-
-            if (!testSucceeded)
-            {
-                sUnexpectedFailed.push_back(caseInfo.testName);
-            }
-        }
-        else if (testSucceeded)
-        {
-            std::cout << "Test expected to fail but passed!" << std::endl;
-            sUnexpectedPasses.push_back(caseInfo.testName);
-        }
-    }
-
-    void countTestResult(dEQPTestResult result) const
-    {
-        switch (result)
-        {
-            case dEQPTestResult::Pass:
-                sPassedTestCount++;
-                break;
-            case dEQPTestResult::Fail:
-                sFailedTestCount++;
-                break;
-            case dEQPTestResult::NotSupported:
-                sNotSupportedTestCount++;
-                break;
-            case dEQPTestResult::Exception:
-                sTestExceptionCount++;
-                break;
-            default:
-                std::cerr << "Unexpected test result code: " << static_cast<int>(result) << "\n";
-                break;
-        }
-    }
-
-    static void PrintTestStats()
-    {
-        uint32_t crashedCount =
-            sTestCount - (sPassedTestCount + sFailedTestCount + sNotSupportedTestCount +
-                          sTestExceptionCount + sSkippedTestCount);
-
-        std::cout << GetTestStatLine("Total", std::to_string(sTestCount));
-        std::cout << GetTestStatLine("Passed", std::to_string(sPassedTestCount));
-        std::cout << GetTestStatLine("Failed", std::to_string(sFailedTestCount));
-        std::cout << GetTestStatLine("Skipped", std::to_string(sSkippedTestCount));
-        std::cout << GetTestStatLine("Not Supported", std::to_string(sNotSupportedTestCount));
-        std::cout << GetTestStatLine("Exception", std::to_string(sTestExceptionCount));
-        std::cout << GetTestStatLine("Crashed", std::to_string(crashedCount));
-
-        if (!sUnexpectedPasses.empty())
-        {
-            std::cout << GetTestStatLine("Unexpected Passed Count",
-                                         std::to_string(sUnexpectedPasses.size()));
-            for (const std::string &testName : sUnexpectedPasses)
-            {
-                std::cout << GetTestStatLine("Unexpected Passed Tests", testName);
-            }
-        }
-
-        if (!sUnexpectedFailed.empty())
-        {
-            std::cout << GetTestStatLine("Unexpected Failed Count",
-                                         std::to_string(sUnexpectedFailed.size()));
-            for (const std::string &testName : sUnexpectedFailed)
-            {
-                std::cout << GetTestStatLine("Unexpected Failed Tests", testName);
-            }
-        }
-    }
+    static void countTestResult(dEQPTestResult result);
 
     static uint32_t sTestCount;
     static uint32_t sPassedTestCount;
@@ -521,23 +399,23 @@ class dEQP : public testing::Test
 
     static std::vector<std::string> sUnexpectedFailed;
     static std::vector<std::string> sUnexpectedPasses;
-
-    size_t mTestModuleIndex = 0;
-    size_t mTestCaseIndex   = 0;
 };
 
-uint32_t dEQP::sTestCount             = 0;
-uint32_t dEQP::sPassedTestCount       = 0;
-uint32_t dEQP::sFailedTestCount       = 0;
-uint32_t dEQP::sTestExceptionCount    = 0;
-uint32_t dEQP::sNotSupportedTestCount = 0;
-uint32_t dEQP::sSkippedTestCount      = 0;
-std::vector<std::string> dEQP::sUnexpectedFailed;
-std::vector<std::string> dEQP::sUnexpectedPasses;
+uint32_t dEQPTestSuite::sTestCount             = 0;
+uint32_t dEQPTestSuite::sPassedTestCount       = 0;
+uint32_t dEQPTestSuite::sFailedTestCount       = 0;
+uint32_t dEQPTestSuite::sTestExceptionCount    = 0;
+uint32_t dEQPTestSuite::sNotSupportedTestCount = 0;
+uint32_t dEQPTestSuite::sSkippedTestCount      = 0;
+std::vector<std::string> dEQPTestSuite::sUnexpectedFailed;
+std::vector<std::string> dEQPTestSuite::sUnexpectedPasses;
+
+dEQPTestSuite::dEQPTestSuite() {}
 
 // static
-void dEQP::SetUpTestCase()
+void dEQPTestSuite::SetUpTestSuite()
 {
+    std::cout << "dEQPTest::SetUpTestSuite() is called" << std::endl;
     sPassedTestCount       = 0;
     sFailedTestCount       = 0;
     sNotSupportedTestCount = 0;
@@ -546,7 +424,109 @@ void dEQP::SetUpTestCase()
     sSkippedTestCount      = 0;
     sUnexpectedPasses.clear();
     sUnexpectedFailed.clear();
+}
 
+// static
+void dEQPTestSuite::TearDownTestSuite()
+{
+    std::cout << "dEQPTest::TearDownTestSuite() is called" << std::endl;
+    PrintTestStats();
+}
+
+std::string dEQPTestSuite::GetTestCaseName(size_t testModuleIndex, size_t caseIndex)
+{
+    const auto &caseInfo = GetCaseList(testModuleIndex).getCaseInfo(caseIndex);
+    return caseInfo.testName;
+}
+
+const dEQPCaseList &dEQPTestSuite::GetCaseList(size_t testModuleIndex)
+{
+    static dEQPCaseList sCaseList(testModuleIndex);
+    sCaseList.initialize();
+    return sCaseList;
+}
+
+void dEQPTestSuite::countTestResult(dEQPTestResult result)
+{
+    switch (result)
+    {
+        case dEQPTestResult::Pass:
+            sPassedTestCount++;
+            break;
+        case dEQPTestResult::Fail:
+            sFailedTestCount++;
+            break;
+        case dEQPTestResult::NotSupported:
+            sNotSupportedTestCount++;
+            break;
+        case dEQPTestResult::Exception:
+            sTestExceptionCount++;
+            break;
+        default:
+            std::cerr << "Unexpected test result code: " << static_cast<int>(result) << "\n";
+            break;
+    }
+}
+
+void dEQPTestSuite::PrintTestStats()
+{
+    uint32_t crashedCount =
+        sTestCount - (sPassedTestCount + sFailedTestCount + sNotSupportedTestCount +
+                      sTestExceptionCount + sSkippedTestCount);
+
+    std::cout << GetTestStatLine("Total", std::to_string(sTestCount));
+    std::cout << GetTestStatLine("Passed", std::to_string(sPassedTestCount));
+    std::cout << GetTestStatLine("Failed", std::to_string(sFailedTestCount));
+    std::cout << GetTestStatLine("Skipped", std::to_string(sSkippedTestCount));
+    std::cout << GetTestStatLine("Not Supported", std::to_string(sNotSupportedTestCount));
+    std::cout << GetTestStatLine("Exception", std::to_string(sTestExceptionCount));
+    std::cout << GetTestStatLine("Crashed", std::to_string(crashedCount));
+
+    if (!sUnexpectedPasses.empty())
+    {
+        std::cout << GetTestStatLine("Unexpected Passed Count",
+                                     std::to_string(sUnexpectedPasses.size()));
+        for (const std::string &testName : sUnexpectedPasses)
+        {
+            std::cout << GetTestStatLine("Unexpected Passed Tests", testName);
+        }
+    }
+
+    if (!sUnexpectedFailed.empty())
+    {
+        std::cout << GetTestStatLine("Unexpected Failed Count",
+                                     std::to_string(sUnexpectedFailed.size()));
+        for (const std::string &testName : sUnexpectedFailed)
+        {
+            std::cout << GetTestStatLine("Unexpected Failed Tests", testName);
+        }
+    }
+}
+
+class dEQPTest : public dEQPTestSuite
+{
+  public:
+    void SetUp() override;
+    void TearDown() override;
+
+    dEQPTest(size_t testModuleIndex, size_t caseIndex, std::string testConfig)
+        : dEQPTestSuite(),
+          mTestModuleIndex(testModuleIndex),
+          mTestCaseIndex(caseIndex),
+          mTestConfig(testConfig)
+    {}
+
+  protected:
+    void TestBody() override;
+
+  private:
+    size_t mTestModuleIndex = 0;
+    size_t mTestCaseIndex   = 0;
+    std::string mTestConfig;
+};
+
+void dEQPTest::SetUp()
+{
     std::vector<const char *> argv;
 
     // Reserve one argument for the binary name.
@@ -599,6 +579,8 @@ void dEQP::SetUpTestCase()
     // Add any additional flags specified from command line to be forwarded to dEQP.
     argv.insert(argv.end(), gdEQPForwardFlags.begin(), gdEQPForwardFlags.end());
 
+    // argv.push_back(mTestConfig.c_str());
+
     // Init the platform.
     if (!deqp_libtester_init_platform(static_cast<int>(argv.size()), argv.data(),
                                       reinterpret_cast<void *>(&HandlePlatformError), gOptions))
@@ -606,13 +588,71 @@ void dEQP::SetUpTestCase()
         std::cout << "Aborting test due to dEQP initialization error." << std::endl;
         exit(1);
     }
+
+    std::cout << "dEQPTest::SetUp() is called" << std::endl;
 }
 
-// static
-void dEQP::TearDownTestCase()
+void dEQPTest::TearDown()
 {
-    PrintTestStats();
+    std::cout << "dEQPTest::TearDown() is called" << std::endl;
+
     deqp_libtester_shutdown_platform();
+}
+
+void dEQPTest::TestBody()
+{
+    std::cout << "dEQPTest::TestBody() is called caseInfo.testName: " << std::endl;
+
+    if (sTestExceptionCount > 1)
+    {
+        std::cout << "Too many exceptions, skipping all remaining tests." << std::endl;
+        return;
+    }
+
+    const auto &caseInfo = GetCaseList(mTestModuleIndex).getCaseInfo(mTestCaseIndex);
+
+    // Tests that crash exit the harness before collecting the result. To tally the number of
+    // crashed tests we track how many tests we "tried" to run.
+    sTestCount++;
+
+    if (caseInfo.expectation == GPUTestExpectationsParser::kGpuTestSkip)
+    {
+        sSkippedTestCount++;
+        std::cout << "Test skipped.\n";
+        return;
+    }
+
+    TestSuite *testSuite = TestSuite::GetInstance();
+    testSuite->maybeUpdateTestTimeout(caseInfo.expectation);
+
+    gExpectError          = (caseInfo.expectation != GPUTestExpectationsParser::kGpuTestPass);
+    dEQPTestResult result = deqp_libtester_run(caseInfo.testName.c_str());
+
+    bool testSucceeded = IsPassingResult(result);
+
+    if (!testSucceeded && caseInfo.expectation == GPUTestExpectationsParser::kGpuTestFlaky)
+    {
+        result        = deqp_libtester_run(caseInfo.testName.c_str());
+        testSucceeded = IsPassingResult(result);
+    }
+
+    countTestResult(result);
+
+    if (caseInfo.expectation == GPUTestExpectationsParser::kGpuTestPass ||
+        caseInfo.expectation == GPUTestExpectationsParser::kGpuTestFlaky)
+    {
+        EXPECT_TRUE(testSucceeded);
+
+        if (!testSucceeded)
+        {
+            sUnexpectedFailed.push_back(caseInfo.testName);
+        }
+    }
+    else if (testSucceeded)
+    {
+        std::cout << "Test expected to fail but passed!" << std::endl;
+        sUnexpectedPasses.push_back(caseInfo.testName);
+    }
 }
 
 void HandleDisplayType(const char *displayTypeString)
@@ -667,9 +707,10 @@ void HandleEGLConfigName(const char *configNameString)
     gEGLConfigName = configNameString;
 }
 
-// The --deqp-case flag takes a case expression that is parsed into a --gtest_filter. It converts
-// the "dEQP" style names (functional.thing.*) into "GoogleTest" style names (functional_thing_*).
-// Currently it does not handle multiple tests and multiple filters in different arguments.
+// The --deqp-case flag takes a case expression that is parsed into a --gtest_filter. It
+// converts the "dEQP" style names (functional.thing.*) into "GoogleTest" style names
+// (functional_thing_*). Currently it does not handle multiple tests and multiple filters in
+// different arguments.
 void HandleFilterArg(const char *filterString, int *argc, int argIndex, char **argv)
 {
     std::string googleTestFilter = ReplaceDashesWithQuestionMark(filterString);
@@ -784,20 +825,26 @@ void RegisterGLCTSTests()
 {
     size_t testModuleIndex = GetTestModuleIndex();
 
-    const dEQPCaseList &caseList = dEQP::GetCaseList(testModuleIndex);
+    const dEQPCaseList &caseList = dEQPTestSuite::GetCaseList(testModuleIndex);
+
+    const char *firstTestSuite = "firstTestSuite";
+
+    const char *secondTestSuite = "secondTestSuite";
 
     for (size_t caseIndex = 0; caseIndex < caseList.numCases(); ++caseIndex)
     {
-        auto factory = [testModuleIndex, caseIndex]() {
-            return new dEQP(testModuleIndex, caseIndex);
+        std::string testCaseName = dEQPTestSuite::GetTestCaseName(testModuleIndex, caseIndex);
+        auto factory             = [testModuleIndex, caseIndex]() {
+            return new dEQPTest(testModuleIndex, caseIndex, "");
         };
 
-        std::string testCaseName = dEQP::GetTestCaseName(testModuleIndex, caseIndex);
-        size_t pos               = testCaseName.find('.');
+        size_t pos = testCaseName.find('.');
         ASSERT(pos != std::string::npos);
-        std::string moduleName = testCaseName.substr(0, pos);
-        std::string testName   = testCaseName.substr(pos + 1);
-        testing::RegisterTest(moduleName.c_str(), testName.c_str(), nullptr, nullptr, __FILE__,
+        // std::string moduleName = testCaseName.substr(0, pos);
+        std::string testName = testCaseName.substr(pos + 1);
+        testing::RegisterTest(firstTestSuite, testName.c_str(), nullptr, nullptr, __FILE__,
+                              __LINE__, factory);
+        testing::RegisterTest(secondTestSuite, testName.c_str(), nullptr, nullptr, __FILE__,
                               __LINE__, factory);
     }
 }
