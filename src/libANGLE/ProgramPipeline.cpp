@@ -542,10 +542,13 @@ angle::Result ProgramPipeline::link(const Context *context)
 
         const std::vector<std::string> &transformFeedbackVaryingNames =
             tfProgram->getState().getTransformFeedbackVaryingNames();
+        const GLenum transformFeedbackBufferMode =
+            tfProgram->getState().getTransformFeedbackBufferMode();
 
         if (!mState.mExecutable->linkMergedVaryings(caps, limitations, clientVersion, isWebGL,
                                                     mergedVaryings, transformFeedbackVaryingNames,
-                                                    linkingVariables, false, &varyingPacking))
+                                                    transformFeedbackBufferMode, linkingVariables,
+                                                    false, &varyingPacking))
         {
             return angle::Result::Stop;
         }

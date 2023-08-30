@@ -352,7 +352,6 @@ class ProgramExecutable final : public angle::Subject
     {
         return mLinkedTransformFeedbackVaryings;
     }
-    GLint getTransformFeedbackBufferMode() const { return mPODStruct.transformFeedbackBufferMode; }
     const sh::WorkGroupSize &getComputeShaderLocalSize() const
     {
         return mPODStruct.computeShaderLocalSize;
@@ -529,6 +528,7 @@ class ProgramExecutable final : public angle::Subject
                             bool webglCompatibility,
                             const ProgramMergedVaryings &mergedVaryings,
                             const std::vector<std::string> &transformFeedbackVaryingNames,
+                            GLenum transformFeedbackBufferMode,
                             const LinkingVariables &linkingVariables,
                             bool isSeparable,
                             ProgramVaryingPacking *varyingPacking);
@@ -538,14 +538,15 @@ class ProgramExecutable final : public angle::Subject
         const Version &clientVersion,
         const ProgramMergedVaryings &varyings,
         ShaderType stage,
-        const std::vector<std::string> &transformFeedbackVaryingNames);
+        const std::vector<std::string> &transformFeedbackVaryingNames,
+        GLenum transformFeedbackBufferMode);
 
     void gatherTransformFeedbackVaryings(
         const ProgramMergedVaryings &varyings,
         ShaderType stage,
         const std::vector<std::string> &transformFeedbackVaryingNames);
 
-    void updateTransformFeedbackStrides();
+    void updateTransformFeedbackStrides(GLenum transformFeedbackBufferMode);
 
     bool validateSamplersImpl(const Caps &caps) const;
 
@@ -619,8 +620,6 @@ class ProgramExecutable final : public angle::Subject
         GLenum tessGenSpacing;
         GLenum tessGenVertexOrder;
         GLenum tessGenPointMode;
-
-        GLenum transformFeedbackBufferMode;
 
         // For faster iteration on the blocks currently being bound.
         UniformBlockBindingMask activeUniformBlockBindings;

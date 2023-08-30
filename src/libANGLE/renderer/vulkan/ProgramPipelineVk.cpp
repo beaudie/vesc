@@ -49,6 +49,7 @@ angle::Result ProgramPipelineVk::link(const gl::Context *glContext,
 
     // This should be done before assigning varying locations. Otherwise, we can encounter shader
     // interface mismatching problems when the transform feedback stage is not the vertex stage.
+    GLenum transformFeedbackBufferMode = GL_INTERLEAVED_ATTRIBS;
     if (options.supportsTransformFeedbackExtension)
     {
         for (const gl::ShaderType shaderType : glExecutable.getLinkedShaderStages())
@@ -63,6 +64,11 @@ angle::Result ProgramPipelineVk::link(const gl::Context *glContext,
                 SpvAssignTransformFeedbackLocations(
                     shaderType, glProgram->getExecutable(), isTransformFeedbackStage,
                     &spvProgramInterfaceInfo, &executableVk->mVariableInfoMap);
+
+                if (isTransformFeedbackStage)
+                {
+                    transformFeedbackBufferMode = glProgram->getTransformFeedbackBufferMode();
+                }
             }
         }
     }
@@ -70,7 +76,8 @@ angle::Result ProgramPipelineVk::link(const gl::Context *glContext,
     executableVk->mOriginalShaderInfo.clear();
 
     SpvAssignLocations(options, glExecutable, varyingPacking, linkedTransformFeedbackStage,
-                       &spvProgramInterfaceInfo, &executableVk->mVariableInfoMap);
+                       transformFeedbackBufferMode, &spvProgramInterfaceInfo,
+                       &executableVk->mVariableInfoMap);
 
     for (const gl::ShaderType shaderType : glExecutable.getLinkedShaderStages())
     {
