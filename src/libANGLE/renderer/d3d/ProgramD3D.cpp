@@ -398,16 +398,16 @@ class ProgramD3D::LoadBinaryLinkEvent final : public LinkEvent
 };
 
 std::unique_ptr<rx::LinkEvent> ProgramD3D::load(const gl::Context *context,
-                                                gl::BinaryInputStream *stream,
-                                                gl::InfoLog &infoLog)
+                                                gl::BinaryInputStream *stream)
 {
-    if (!getExecutable()->load(context, mRenderer, stream, infoLog))
+    if (!getExecutable()->load(context, mRenderer, stream))
     {
         return nullptr;
     }
 
     return std::make_unique<LoadBinaryLinkEvent>(context->getShaderCompileThreadPool(), this,
-                                                 getExecutable(), stream, infoLog);
+                                                 getExecutable(), stream,
+                                                 mState.getExecutable().getInfoLog());
 }
 
 void ProgramD3D::save(const gl::Context *context, gl::BinaryOutputStream *stream)
@@ -644,8 +644,7 @@ class ProgramD3D::ComputeProgramLinkEvent final : public LinkEvent
     std::shared_ptr<WaitableEvent> mWaitEvent;
 };
 
-std::unique_ptr<LinkEvent> ProgramD3D::compileProgramExecutables(const gl::Context *context,
-                                                                 gl::InfoLog &infoLog)
+std::unique_ptr<LinkEvent> ProgramD3D::compileProgramExecutables(const gl::Context *context)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ProgramD3D::compileProgramExecutables");
 
@@ -663,12 +662,11 @@ std::unique_ptr<LinkEvent> ProgramD3D::compileProgramExecutables(const gl::Conte
         executableD3D->mAttachedShaders[gl::ShaderType::Fragment];
 
     return std::make_unique<GraphicsProgramLinkEvent>(
-        infoLog, context->getShaderCompileThreadPool(), vertexTask, pixelTask, geometryTask, useGS,
-        vertexShaderD3D, fragmentShaderD3D);
+        mState.getExecutable().getInfoLog(), context->getShaderCompileThreadPool(), vertexTask,
+        pixelTask, geometryTask, useGS, vertexShaderD3D, fragmentShaderD3D);
 }
 
-std::unique_ptr<LinkEvent> ProgramD3D::compileComputeExecutable(const gl::Context *context,
-                                                                gl::InfoLog &infoLog)
+std::unique_ptr<LinkEvent> ProgramD3D::compileComputeExecutable(const gl::Context *context)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ProgramD3D::compileComputeExecutable");
     auto computeTask = std::make_shared<GetComputeExecutableTask>(this, getExecutable());
@@ -688,7 +686,8 @@ std::unique_ptr<LinkEvent> ProgramD3D::compileComputeExecutable(const gl::Contex
         waitableEvent = context->getShaderCompileThreadPool()->postWorkerTask(computeTask);
     }
 
-    return std::make_unique<ComputeProgramLinkEvent>(infoLog, computeTask, waitableEvent);
+    return std::make_unique<ComputeProgramLinkEvent>(mState.getExecutable().getInfoLog(),
+                                                     computeTask, waitableEvent);
 }
 
 void ProgramD3D::prepareForLink(const gl::ShaderMap<ShaderImpl *> &shaders)
@@ -709,7 +708,6 @@ void ProgramD3D::prepareForLink(const gl::ShaderMap<ShaderImpl *> &shaders)
 
 std::unique_ptr<LinkEvent> ProgramD3D::link(const gl::Context *context,
                                             const gl::ProgramLinkedResources &resources,
-                                            gl::InfoLog &infoLog,
                                             gl::ProgramMergedVaryings && /*mergedVaryings*/)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ProgramD3D::link");
@@ -783,7 +781,7 @@ std::unique_ptr<LinkEvent> ProgramD3D::link(const gl::Context *context,
 
         executableD3D->defineUniformsAndAssignRegisters(mRenderer, mState.getAttachedShaders());
 
-        return compileComputeExecutable(context, infoLog);
+        return compileComputeExecutable(context);
     }
     else
     {
@@ -817,7 +815,8 @@ std::unique_ptr<LinkEvent> ProgramD3D::link(const gl::Context *context,
                 executableD3D->mAttachedShaders[gl::ShaderType::Fragment];
             if (fragmentShader && fragmentShader->usesFrontFacing)
             {
-                infoLog << "The current renderer doesn't support gl_FrontFacing";
+                mState.getExecutable().getInfoLog()
+                    << "The current renderer doesn't support gl_FrontFacing";
                 return std::make_unique<LinkEventDone>(angle::Result::Incomplete);
             }
         }
@@ -874,11 +873,11 @@ std::unique_ptr<LinkEvent> ProgramD3D::link(const gl::Context *context,
                 mRenderer, mState.getAttachedShader(gl::ShaderType::Vertex));
         }
 
-        return compileProgramExecutables(context, infoLog);
+        return compileProgramExecutables(context);
     }
 }
 
-GLboolean ProgramD3D::validate(const gl::Caps & /*caps*/, gl::InfoLog * /*infoLog*/)
+GLboolean ProgramD3D::validate(const gl::Caps & /*caps*/)
 {
     // TODO(jmadill): Do something useful here?
     return GL_TRUE;
