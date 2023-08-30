@@ -16,6 +16,24 @@
       "message": "is `GL_INTERLEAVED_ATTRIBS` the default bufferMode?",
       "revId": "00c09b2c35bc05e4930becc5197cb1d6f4ad0161",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4887d9e2_66a534bc",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramPipelineVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-08-30T21:14:30Z",
+      "side": 1,
+      "message": "It doesn\u0027t matters really. It\u0027s either initialized below, or it\u0027s unused.",
+      "parentUuid": "87165edc_524fe76b",
+      "revId": "00c09b2c35bc05e4930becc5197cb1d6f4ad0161",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
