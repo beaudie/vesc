@@ -127,6 +127,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "49e8514c_4aa1a945",
+        "filename": "src/libANGLE/renderer/vulkan/android/vk_android_utils.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-30T19:12:03Z",
+      "side": 1,
+      "message": "Not that the whole point is to lift the error handling up. This means the code that depends on ANGLE_TRY needs to move up (like finishOneCommandBatchAndCleanup call). All other calls are trivial to change to return VkResult.",
+      "parentUuid": "6eb2e9a5_6c5ae4f7",
+      "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cfa1ed7c_150e8a53",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 21
