@@ -213,6 +213,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "00cd75c2_1dd11c61",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1529,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-30T21:04:24Z",
+      "side": 1,
+      "message": "Yea, I think the problem is that we are using CommandProcessor as context here. If we record the actual context pointer in the CommandProcessor commands, and then use that actual context here, then I believe you do not have this dead lock problem. The handleError call will go to Context::handleError instead of CommandProcessor. And the error code will be return to the correct context. Yout also have the same bug in line 1502 above, that if finishOneCommandBatchAndCleanupImpl call returns error, you end up with same dead lock.",
+      "parentUuid": "f6a35f49_07d851b6",
+      "range": {
+        "startLine": 1517,
+        "startChar": 0,
+        "endLine": 1529,
+        "endChar": 38
+      },
+      "revId": "89c7431a973dd9d6ca9fbe79a32b9ff6387056eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "a8bca17c_f7f051b1",
