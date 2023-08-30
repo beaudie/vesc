@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5063e1be_0addc330",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4998,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-08-30T18:32:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5af96045_3f84d461",
+      "range": {
+        "startLine": 4998,
+        "startChar": 12,
+        "endLine": 4998,
+        "endChar": 32
+      },
+      "revId": "21dd4cd5c05beeb5779e6aba379823b53ad5e13e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a3f8cc8f_bed327b1",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "af0c1772_5eeb2f52",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 7764,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-08-30T18:32:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3f8cc8f_bed327b1",
+      "range": {
+        "startLine": 7764,
+        "startChar": 8,
+        "endLine": 7764,
+        "endChar": 34
+      },
+      "revId": "21dd4cd5c05beeb5779e6aba379823b53ad5e13e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "29f2102c_48feaaad",
@@ -60,6 +108,30 @@
       "writtenOn": "2023-08-23T15:11:25Z",
       "side": 1,
       "message": "This will catch uses during the trace, but I think we also need to catch textures already bound when capture starts.  See ref for how this is handled for programs.\n\nWould be good to catch both cases in a test case:\n- some textures unused\n- some textures bound before capture starts\n- some bound during capture.",
+      "range": {
+        "startLine": 7794,
+        "startChar": 12,
+        "endLine": 7794,
+        "endChar": 32
+      },
+      "revId": "21dd4cd5c05beeb5779e6aba379823b53ad5e13e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35d29836_4481d477",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 7794,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-08-30T18:32:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "29f2102c_48feaaad",
       "range": {
         "startLine": 7794,
         "startChar": 12,
