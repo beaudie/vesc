@@ -45,6 +45,7 @@ class TInfoSinkBase
         TPersistStringStream stream = sh::InitializeStream<TPersistStringStream>();
         stream << t;
         sink.append(stream.str());
+        printf("%s", stream.str().c_str());
         return *this;
     }
     // Override << operator for specific types. It is faster to append strings
@@ -52,21 +53,25 @@ class TInfoSinkBase
     TInfoSinkBase &operator<<(char c)
     {
         sink.append(1, c);
+        printf("%c", c);
         return *this;
     }
     TInfoSinkBase &operator<<(const char *str)
     {
         sink.append(str);
+        printf("%s", str);
         return *this;
     }
     TInfoSinkBase &operator<<(const TPersistString &str)
     {
         sink.append(str);
+        printf("%s", str.c_str());
         return *this;
     }
     TInfoSinkBase &operator<<(const TString &str)
     {
         sink.append(str.c_str());
+        printf("%s", str.c_str());
         return *this;
     }
     TInfoSinkBase &operator<<(const ImmutableString &str);
@@ -94,6 +99,7 @@ class TInfoSinkBase
             stream << f;
         }
         sink.append(stream.str());
+        printf("%s", stream.str().c_str());
         return *this;
     }
     // Write boolean values as their names instead of integral value.
@@ -101,6 +107,7 @@ class TInfoSinkBase
     {
         const char *str = b ? "true" : "false";
         sink.append(str);
+        printf("%s", str);
         return *this;
     }
 
