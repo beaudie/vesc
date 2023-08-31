@@ -34,6 +34,24 @@
       "parentUuid": "56ce4430_f57eb420",
       "revId": "d6fd7eafb2f7d318a82703bafc514fbd22169d7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db77977b_c0502af3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-08-31T15:08:47Z",
+      "side": 1,
+      "message": "https://crrev.com/c/4832092 should fix desktop bots\n\nAndroid crash is reproducible without this CL though, so I think it just happens to expose an existing issue:\nhttp://b/297418214#comment9",
+      "parentUuid": "f603481f_ed656b2f",
+      "revId": "d6fd7eafb2f7d318a82703bafc514fbd22169d7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
