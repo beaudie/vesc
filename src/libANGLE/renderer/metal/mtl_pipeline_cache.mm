@@ -95,6 +95,8 @@ angle::Result CreateRenderPipelineState(ContextMtl *context,
                                         const PipelineKey &key,
                                         AutoObjCPtr<id<MTLRenderPipelineState>> *outRenderPipeline)
 {
+    printf("*asdf* CreateRenderPipelineState v: %p | f: %p\n", (void *)key.vertexShader,
+           (void *)key.fragmentShader);
     ANGLE_MTL_OBJC_SCOPE
     {
         ASSERT(key.isRenderPipeline());

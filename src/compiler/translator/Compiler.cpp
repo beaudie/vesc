@@ -1021,10 +1021,10 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
 
     if (compileOptions.rescopeGlobalVariables)
     {
-        if (!RescopeGlobalVariables(*this, *root))
-        {
-            return false;
-        }
+        // if (!RescopeGlobalVariables(*this, *root))
+        // {
+        //     return false;
+        // }
     }
 
     mValidateASTOptions.validateMultiDeclarations = true;
