@@ -50,6 +50,23 @@
       "message": "LGTM, this fixes my Linux ARM64 ANGLE sync.",
       "revId": "8abef8af8be6af9ae43869c86cf104a069fac3a8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f56237a_7cb3537d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-08-31T15:27:22Z",
+      "side": 1,
+      "message": "Thanks for confirming!",
+      "revId": "8abef8af8be6af9ae43869c86cf104a069fac3a8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
