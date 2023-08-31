@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17697322_1e3cb31f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-31T00:11:11Z",
+      "side": 1,
+      "message": "Thanks",
+      "revId": "0daf56588203c161ee301e5b2e5bb0ef44b130b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e50655ad_288546c6",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 3517,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-31T00:11:11Z",
+      "side": 1,
+      "message": "At the moment, this test will fall back to system memory before flushing.",
+      "range": {
+        "startLine": 3517,
+        "startChar": 31,
+        "endLine": 3517,
+        "endChar": 57
+      },
+      "revId": "0daf56588203c161ee301e5b2e5bb0ef44b130b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

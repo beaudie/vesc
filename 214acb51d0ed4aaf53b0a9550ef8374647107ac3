@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a42e42a_439cb8ef",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 801,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-31T00:11:11Z",
+      "side": 1,
+      "message": "All OOM handling (`onOutOfMemory()`) is now exclusive to `ContextVk`. For `DisplayVk` objects, we use `ANGLE_TRY()` followed by `ANGLE_VK_CHECK()`.",
+      "parentUuid": "5b1931a4_fda52ec7",
+      "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4cda3186_2ddceb05",
@@ -318,6 +336,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f83ebdd_c62d2c00",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 6434,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-31T00:11:11Z",
+      "side": 1,
+      "message": "I have turned this into a `DeviceScoped` variable, which is transferred to `mImage` on success.",
+      "parentUuid": "0b528664_ad9da64f",
+      "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "739b9d7e_e71f6092",
@@ -349,6 +385,24 @@
       "side": 1,
       "message": "Here, `mImage` is initialized in `initExternal()`. Does it make sense to call `initExternal()` only if it is null?",
       "parentUuid": "739b9d7e_e71f6092",
+      "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "896c247b_9a16041c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 6505,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-31T00:11:11Z",
+      "side": 1,
+      "message": "Based on our discussion offline, I have added a new class inside `ImageHelper` (`ScopedDestroyImageHelperOnFailure`) and used an instance of it in this function. In case of success, the `ImageHelper*` inside this object will be reset to null. In case of allocation failure, however, we will use the pointer to free the resources in `ImageHelper`, including the image handle, via `ImageHelper::destroy()`.",
+      "parentUuid": "a1e80cf7_d82e5b05",
       "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -419,6 +473,24 @@
       "side": 1,
       "message": "Makes sense. In that case, it will no longer be used for `DisplayVk` and `vk::Context`. For the latter, we can bubble it up and use it if we get to `ContextVk`.",
       "parentUuid": "e6f9f188_47ce9d32",
+      "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4eea485d_3b2dcaf1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-08-31T00:11:11Z",
+      "side": 1,
+      "message": "`onOutOfMemory()` is now exclusive to `ContextVk`.",
+      "parentUuid": "9927ad76_96dab378",
       "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
