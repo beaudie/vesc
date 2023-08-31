@@ -342,6 +342,7 @@ angle::Result CreateMslShaderLib(ContextMtl *context,
         translatedMslInfo->metalLibrary = libraryCache.getOrCompileShaderLibrary(
             context, translatedMslInfo->metalShaderSource, substitutionMacros, disableFastMath,
             usesInvariance, &err);
+        ERR() << *(translatedMslInfo->metalShaderSource);
         if (err && !translatedMslInfo->metalLibrary)
         {
             std::ostringstream ss;
