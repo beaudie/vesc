@@ -237,6 +237,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "34412326_3f9fef60",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1529,
+      "author": {
+        "id": 1169885
+      },
+      "writtenOn": "2023-08-31T16:48:31Z",
+      "side": 1,
+      "message": "There\u0027s a bunch more problems now that I\u0027m reading this more deeply.\n\nThe basic design seems to be:\n\n- CommandProcessor queues up VkResult error codes and some associated contextual information into a queue called mErrors.\n\n- When RendererVk issues a request to CommandProcessor, most requests do a read-and-pop of pending errors from the mErrors queue, which get propagated back up to the ContextVk that called into RendererVk.\n\nProblems:\n\n- From my read of this, RendererVk can be shared across GL contexts, so it\u0027s possible for CommandProcessor to pop errors from different contexts. This doesn\u0027t seem right, because one context may receive errors it didn\u0027t cause, and the one causing the error didn\u0027t get the appropriate error reported. In a DEVICE_LOST state, the device loss will likely propagate to all the contexts because the VkDevice stops accepting commands, but what about other error types?\n\n- We can\u0027t just directly use ContextVk::handleErrors from CommandProcessor because it\u0027s in a separate thread and that would potentially cause all kinds of mayhem. ContextVk needs to have the errors propagated up from RendererVk. \n\n- Unrelated, but noticed: RendererVk::finishOneCommandBatchAndCleanup doesn\u0027t account for CommandProcessor?",
+      "parentUuid": "00cd75c2_1dd11c61",
+      "range": {
+        "startLine": 1517,
+        "startChar": 0,
+        "endLine": 1529,
+        "endChar": 38
+      },
+      "revId": "89c7431a973dd9d6ca9fbe79a32b9ff6387056eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "a8bca17c_f7f051b1",
