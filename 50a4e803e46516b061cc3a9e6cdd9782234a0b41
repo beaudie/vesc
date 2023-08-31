@@ -16,6 +16,23 @@
       "message": "Can\u0027t owners override this",
       "revId": "50a4e803e46516b061cc3a9e6cdd9782234a0b41",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "996b4dfe_d69dd579",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1306504
+      },
+      "writtenOn": "2023-08-31T10:02:44Z",
+      "side": 1,
+      "message": "Please give a code-owners approval",
+      "revId": "50a4e803e46516b061cc3a9e6cdd9782234a0b41",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
