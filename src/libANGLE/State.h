@@ -584,6 +584,7 @@ class PrivateState : angle::NonCopyable
         mDirtyBits.set();
         mExtendedDirtyBits.set();
         mDirtyCurrentValues.set();
+        mDirtyCurrentValues &= AttributesMask::Mask(mVertexAttribCurrentValues.size());
     }
 
     const state::ExtendedDirtyBits &getExtendedDirtyBits() const { return mExtendedDirtyBits; }
