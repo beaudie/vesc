@@ -120,6 +120,7 @@ struct XFBInterfaceVariableInfo
     ShaderInterfaceVariableXfbInfo xfb;
     std::vector<ShaderInterfaceVariableXfbInfo> fieldXfb;
 };
+using XFBVariableInfoPtr = std::unique_ptr<XFBInterfaceVariableInfo>;
 
 uint32_t SpvGetXfbBufferBlockId(const uint32_t bufferIndex);
 
