@@ -39,6 +39,30 @@
       },
       "revId": "0daf56588203c161ee301e5b2e5bb0ef44b130b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bca9f63_403202f7",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 3517,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-08-31T15:51:28Z",
+      "side": 1,
+      "message": "That is exactly what I am saying in the other comment, that we need to lift these decision logic up and change the allocation code path only do what we asked, and return VkResult back. Then you can have a central place to make decisions on what to try next once allocation failed. We should try to clean up finished garbage first, then wait for some command to finish, then try and flush and first, and fall back to system memory at last.",
+      "parentUuid": "e50655ad_288546c6",
+      "range": {
+        "startLine": 3517,
+        "startChar": 31,
+        "endLine": 3517,
+        "endChar": 57
+      },
+      "revId": "0daf56588203c161ee301e5b2e5bb0ef44b130b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
