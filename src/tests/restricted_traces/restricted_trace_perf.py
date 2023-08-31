@@ -113,6 +113,10 @@ def cleanup():
     run_adb_command('shell rm -f /sdcard/Download/out.txt /sdcard/Download/gpumem.txt')
 
 
+def clear_blob_cache():
+    run_adb_command('shell rm -rf /data/user_de/0/com.android.angle.test/cache/*')
+
+
 def select_device(device_arg):
     # The output from 'adb devices' always includes a header and a new line at the end.
     result_dev = run_command('adb devices')
@@ -730,6 +734,8 @@ def run_traces(args):
             for trace in fnmatch.filter(traces, args.filter):
                 # Remove any previous perf results
                 cleanup()
+                # Clear blob cache to avoid post-warmup cache eviction b/298028816
+                clear_blob_cache()
 
                 test = trace.split(' ')[0]
 
