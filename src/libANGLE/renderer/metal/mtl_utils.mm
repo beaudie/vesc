@@ -1791,6 +1791,7 @@ angle::Result CreateMslShader(mtl::Context *context,
         ANGLE_MTL_CHECK(context, false, GL_INVALID_OPERATION);
     }
     *shaderOut = mtlShader;
+    printf("*asdf* CreateMslShader s: %p\n", (void *)mtlShader);
     return angle::Result::Continue;
 }
 

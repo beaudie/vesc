@@ -342,6 +342,7 @@ angle::Result CreateMslShaderLib(ContextMtl *context,
         translatedMslInfo->metalLibrary = libraryCache.getOrCompileShaderLibrary(
             context, translatedMslInfo->metalShaderSource, substitutionMacros, disableFastMath,
             usesInvariance, &err);
+        printf("*asdf* dumping shader\n%s\n", translatedMslInfo->metalShaderSource->c_str());
         if (err && !translatedMslInfo->metalLibrary)
         {
             std::ostringstream ss;
@@ -1083,7 +1084,7 @@ angle::Result ProgramMtl::setupDraw(const gl::Context *glContext,
         id<MTLFunction> fragmentShader = nil;
         ANGLE_TRY(
             getSpecializedShader(context, gl::ShaderType::Fragment, pipelineDesc, &fragmentShader));
-
+        printf("*asdf* setupDraw v: %p | f: %p\n", (void *)vertexShader, (void *)fragmentShader);
         mtl::AutoObjCPtr<id<MTLRenderPipelineState>> pipelineState;
         ANGLE_TRY(context->getPipelineCache().getRenderPipeline(
             context, vertexShader, fragmentShader, pipelineDesc, &pipelineState));
