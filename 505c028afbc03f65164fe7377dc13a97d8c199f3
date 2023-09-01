@@ -69,6 +69,24 @@
       "parentUuid": "fe84232a_edbe6170",
       "revId": "505c028afbc03f65164fe7377dc13a97d8c199f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32fcf8bb_f59fc53b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-01T17:23:20Z",
+      "side": 1,
+      "message": "This is not CL description though :)",
+      "parentUuid": "54f019a1_17301ff1",
+      "revId": "505c028afbc03f65164fe7377dc13a97d8c199f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
