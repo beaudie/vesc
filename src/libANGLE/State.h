@@ -855,7 +855,7 @@ class State : angle::NonCopyable
     // If both a Program and a ProgramPipeline are bound, the Program will
     // always override the ProgramPipeline.
     ProgramExecutable *getProgramExecutable() const { return mExecutable; }
-    ProgramExecutable *getLinkedProgramExecutable(const Context *context) const
+    void ensureNoPendingLink(const Context *context) const
     {
         if (mProgram)
         {
@@ -865,6 +865,10 @@ class State : angle::NonCopyable
         {
             mProgramPipeline->resolveLink(context);
         }
+    }
+    ProgramExecutable *getLinkedProgramExecutable(const Context *context) const
+    {
+        ensureNoPendingLink(context);
         return mExecutable;
     }
 

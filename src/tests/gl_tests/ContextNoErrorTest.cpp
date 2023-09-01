@@ -352,6 +352,26 @@ TEST_P(ContextNoErrorTest, InvalidTextureType)
     ASSERT_GL_NO_ERROR();
 }
 
+// Tests that we can draw with a program that is relinking when GL_KHR_no_error is enabled.
+TEST_P(ContextNoErrorTest, DrawWithRelinkedProgram)
+{
+    ANGLE_SKIP_TEST_IF(!IsGLExtensionEnabled("GL_KHR_no_error"));
+
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    GLProgram program;
+    // Use the program while it's invalid.  The draw tha follows is no-oped.
+    glUseProgram(program);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+
+    // Relink the program while it's bound.  The draw that follows should happen.
+    program.makeRaster(essl1_shaders::vs::Simple(), essl31_shaders::fs::Red());
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+    ASSERT_GL_NO_ERROR();
+}
+
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(ContextNoErrorTest);
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(ContextNoErrorPPOTest31);
