@@ -474,10 +474,9 @@ std::unique_ptr<LinkEvent> ProgramMtl::link(const gl::Context *context,
     gl::ShaderMap<std::string> shaderSources;
     mtl::MSLGetShaderSource(mState, resources, &shaderSources);
 
-    ANGLE_PARALLEL_LINK_TRY(
-        mtl::MTLGetMSL(contextMtl, mState, contextMtl->getCaps(), shaderSources, mAttachedShaders,
-                       &executableMtl->mMslShaderTranslateInfo,
-                       mState.getExecutable().getTransformFeedbackBufferCount()));
+    ANGLE_PARALLEL_LINK_TRY(mtl::MTLGetMSL(contextMtl, mState.getExecutable(),
+                                           contextMtl->getCaps(), shaderSources, mAttachedShaders,
+                                           &executableMtl->mMslShaderTranslateInfo));
     executableMtl->mMslXfbOnlyVertexShaderInfo =
         executableMtl->mMslShaderTranslateInfo[gl::ShaderType::Vertex];
 
