@@ -116,6 +116,7 @@ class ShaderInterfaceVariableInfoMap final : angle::NonCopyable
     // Whether the vertex shader has aliasing attributes.  Used by the SPIR-V transformer to tell if
     // emulation is needed.
     bool mHasAliasingAttributes = false;
+    size_t mXFBInfoCount        = 0;
 };
 
 ANGLE_INLINE const ShaderInterfaceVariableInfo &

@@ -22,36 +22,22 @@ uint32_t HashSPIRVId(uint32_t id)
 void LoadShaderInterfaceVariableXfbInfo(gl::BinaryInputStream *stream,
                                         ShaderInterfaceVariableXfbInfo *xfb)
 {
-    xfb->buffer        = stream->readInt<uint32_t>();
-    xfb->offset        = stream->readInt<uint32_t>();
-    xfb->stride        = stream->readInt<uint32_t>();
-    xfb->arraySize     = stream->readInt<uint32_t>();
-    xfb->columnCount   = stream->readInt<uint32_t>();
-    xfb->rowCount      = stream->readInt<uint32_t>();
-    xfb->arrayIndex    = stream->readInt<uint32_t>();
-    xfb->componentType = stream->readInt<uint32_t>();
+    stream->readStruct(&xfb->podStruct);
     xfb->arrayElements.resize(stream->readInt<size_t>());
     for (ShaderInterfaceVariableXfbInfo &arrayElement : xfb->arrayElements)
     {
-        LoadShaderInterfaceVariableXfbInfo(stream, &arrayElement);
+        stream->readStruct(&arrayElement.podStruct);
     }
 }
 
 void SaveShaderInterfaceVariableXfbInfo(const ShaderInterfaceVariableXfbInfo &xfb,
                                         gl::BinaryOutputStream *stream)
 {
-    stream->writeInt(xfb.buffer);
-    stream->writeInt(xfb.offset);
-    stream->writeInt(xfb.stride);
-    stream->writeInt(xfb.arraySize);
-    stream->writeInt(xfb.columnCount);
-    stream->writeInt(xfb.rowCount);
-    stream->writeInt(xfb.arrayIndex);
-    stream->writeInt(xfb.componentType);
+    stream->writeStruct(xfb.podStruct);
     stream->writeInt(xfb.arrayElements.size());
     for (const ShaderInterfaceVariableXfbInfo &arrayElement : xfb.arrayElements)
     {
-        SaveShaderInterfaceVariableXfbInfo(arrayElement, stream);
+        stream->writeStruct(arrayElement.podStruct);
     }
 }
 }  // anonymous namespace
@@ -67,6 +53,7 @@ void ShaderInterfaceVariableInfoMap::clear()
 {
     mData.clear();
     mXFBData.clear();
+    mXFBInfoCount = 0;
     for (gl::ShaderType shaderType : gl::AllShaderTypes())
     {
         mIdToIndexMap[shaderType].clear();
@@ -92,30 +79,27 @@ void ShaderInterfaceVariableInfoMap::save(gl::BinaryOutputStream *stream)
     stream->writeVector(mData);
 
     ASSERT(mXFBData.size() <= mData.size());
-    size_t xfbInfoCount = 0;
-    for (const XFBVariableInfoPtr &info : mXFBData)
+    stream->writeInt(mXFBInfoCount);
+    if (mXFBInfoCount > 0)
     {
-        if (!info)
+        size_t xfbInfoCount = 0;
+        for (size_t xfbIndex = 0; xfbIndex < mXFBData.size(); xfbIndex++)
         {
-            continue;
+            if (!mXFBData[xfbIndex])
+            {
+                continue;
+            }
+            stream->writeInt(xfbIndex);
+            xfbInfoCount++;
+            XFBInterfaceVariableInfo &info = *mXFBData[xfbIndex];
+            SaveShaderInterfaceVariableXfbInfo(info.xfb, stream);
+            stream->writeInt(info.fieldXfb.size());
+            for (const ShaderInterfaceVariableXfbInfo &xfb : info.fieldXfb)
+            {
+                SaveShaderInterfaceVariableXfbInfo(xfb, stream);
+            }
         }
-        xfbInfoCount++;
-    }
-    stream->writeInt(xfbInfoCount);
-    for (size_t xfbIndex = 0; xfbIndex < mXFBData.size(); xfbIndex++)
-    {
-        if (!mXFBData[xfbIndex])
-        {
-            continue;
-        }
-        stream->writeInt(xfbIndex);
-        XFBInterfaceVariableInfo &info = *mXFBData[xfbIndex];
-        SaveShaderInterfaceVariableXfbInfo(info.xfb, stream);
-        stream->writeInt(info.fieldXfb.size());
-        for (const ShaderInterfaceVariableXfbInfo &xfb : info.fieldXfb)
-        {
-            SaveShaderInterfaceVariableXfbInfo(xfb, stream);
-        }
+        ASSERT(xfbInfoCount == mXFBInfoCount);
     }
 
     // Store gl_PerVertex members only for stages that have it.
@@ -146,11 +130,11 @@ void ShaderInterfaceVariableInfoMap::load(gl::BinaryInputStream *stream)
     stream->readVector(&mData);
 
     ASSERT(mXFBData.empty());
-    size_t xfbInfoCount = stream->readInt<size_t>();
-    if (xfbInfoCount > 0)
+    mXFBInfoCount = stream->readInt<size_t>();
+    if (mXFBInfoCount > 0)
     {
         mXFBData.resize(mData.size());
-        for (size_t i = 0; i < xfbInfoCount; ++i)
+        for (size_t i = 0; i < mXFBInfoCount; ++i)
         {
             size_t xfbIndex    = stream->readInt<size_t>();
             mXFBData[xfbIndex] = std::make_unique<XFBInterfaceVariableInfo>();
@@ -238,9 +222,10 @@ XFBVariableInfoPtr &ShaderInterfaceVariableInfoMap::getXFBMutable(gl::ShaderType
     }
     if (!mXFBData[index])
     {
-        mXFBData[index] = std::make_unique<XFBInterfaceVariableInfo>();
+        mXFBData[index]                   = std::make_unique<XFBInterfaceVariableInfo>();
+        mData[index].hasTransformFeedback = true;
+        mXFBInfoCount++;
     }
-    mData[index].hasTransformFeedback = true;
     return mXFBData[index];
 }
 
