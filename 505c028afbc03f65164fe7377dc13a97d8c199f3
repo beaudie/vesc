@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe84232a_edbe6170",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-01T15:22:43Z",
+      "side": 1,
+      "message": "Could you provide more context in CL description on the issues you ran into?",
+      "revId": "505c028afbc03f65164fe7377dc13a97d8c199f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
