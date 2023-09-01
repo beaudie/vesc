@@ -62,7 +62,6 @@ struct SamplerBinding
     uint16_t textureUnitsStartIndex;
     uint16_t textureUnitsCount;
 };
-static_assert(std::is_trivially_copyable<SamplerBinding>(), "must be memcpy-able");
 ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
 
 struct ImageBinding
@@ -144,7 +143,6 @@ struct ProgramInput
 
         uint32_t id;
     } basicDataTypeStruct;
-    static_assert(std::is_trivially_copyable<PODStruct>(), "must be memcpy-able");
 };
 ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
 
@@ -568,18 +566,27 @@ class ProgramExecutable final : public angle::Subject
     // convenience as numerous functions reference it.
     InfoLog *mInfoLog;
 
+    ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
     // This struct must only contains basic data types so that entire struct can be memcpy.
     struct PODStruct
     {
-        ShaderBitSet linkedShaderStages;
         angle::BitSet<MAX_VERTEX_ATTRIBS> activeAttribLocationsMask;
-        unsigned int maxActiveAttribLocation;
         ComponentTypeMask attributesTypeMask;
         // attributesMask is identical to mActiveAttribLocationsMask with built-in attributes
         // removed.
         AttributesMask attributesMask;
-        DrawBufferMask activeOutputVariablesMask;
         ComponentTypeMask drawBufferTypeMask;
+
+        unsigned int maxActiveAttribLocation;
+
+        ShaderBitSet linkedShaderStages;
+        DrawBufferMask activeOutputVariablesMask;
+        bool hasClipDistance;
+        bool hasDiscard;
+        bool hasYUVOutput;
+        bool enablesPerSampleShading;
+        bool canDrawWith;
+        uint8_t pad;
 
         RangeUI defaultUniformRange;
         RangeUI samplerUniformRange;
@@ -587,18 +594,13 @@ class ProgramExecutable final : public angle::Subject
         RangeUI atomicCounterUniformRange;
         RangeUI fragmentInoutRange;
 
-        bool hasClipDistance;
-        bool hasDiscard;
-        bool hasYUVOutput;
-        bool enablesPerSampleShading;
-        bool canDrawWith;
-
         // KHR_blend_equation_advanced supported equation list
         BlendEquationBitSet advancedBlendEquations;
 
         // GL_EXT_geometry_shader.
         PrimitiveMode geometryShaderInputPrimitiveType;
         PrimitiveMode geometryShaderOutputPrimitiveType;
+        uint8_t pad5, pad6;
         int geometryShaderInvocations;
         int geometryShaderMaxVertices;
 
@@ -620,6 +622,7 @@ class ProgramExecutable final : public angle::Subject
         GLenum tessGenPointMode;
 
         GLenum transformFeedbackBufferMode;
+        uint8_t pads[4];
 
         // For faster iteration on the blocks currently being bound.
         UniformBlockBindingMask activeUniformBlockBindings;
@@ -630,7 +633,7 @@ class ProgramExecutable final : public angle::Subject
 
         rx::SpecConstUsageBits specConstUsageBits;
     } mPODStruct;
-    static_assert(std::is_trivially_copyable<PODStruct>(), "must be memcpy-able");
+    ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
 
     // Cached mask of active samplers and sampler types.
     ActiveTextureMask mActiveSamplersMask;
