@@ -22,6 +22,30 @@
       },
       "revId": "5ada3f8f83804972af2e1b8530c1cc8500726aae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd948287_7fb2af6c",
+        "filename": "src/common/BinaryStream.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-01T17:35:15Z",
+      "side": 1,
+      "message": "It should be. But it doesn\u0027t matter here.",
+      "parentUuid": "ef8fc786_f8dc4873",
+      "range": {
+        "startLine": 246,
+        "startChar": 12,
+        "endLine": 246,
+        "endChar": 97
+      },
+      "revId": "5ada3f8f83804972af2e1b8530c1cc8500726aae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
