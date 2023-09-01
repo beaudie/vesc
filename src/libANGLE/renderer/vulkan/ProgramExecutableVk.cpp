@@ -531,24 +531,16 @@ std::unique_ptr<rx::LinkEvent> ProgramExecutableVk::load(ContextVk *contextVk,
                                                          gl::BinaryInputStream *stream)
 {
     mVariableInfoMap.load(stream);
-
     mOriginalShaderInfo.load(stream);
 
     // Deserializes the uniformLayout data of mDefaultUniformBlocks
     for (gl::ShaderType shaderType : gl::AllShaderTypes())
     {
-        const size_t uniformCount = stream->readInt<size_t>();
-        for (unsigned int uniformIndex = 0; uniformIndex < uniformCount; ++uniformIndex)
-        {
-            sh::BlockMemberInfo blockInfo;
-            gl::LoadBlockMemberInfo(stream, &blockInfo);
-            mDefaultUniformBlocks[shaderType]->uniformLayout.push_back(blockInfo);
-        }
+        stream->readVector(&mDefaultUniformBlocks[shaderType]->uniformLayout);
     }
 
-    gl::ShaderMap<size_t> requiredBufferSize;
-    requiredBufferSize.fill(0);
     // Deserializes required uniform block memory sizes
+    gl::ShaderMap<size_t> requiredBufferSize;
     for (gl::ShaderType shaderType : gl::AllShaderTypes())
     {
         requiredBufferSize[shaderType] = stream->readInt<size_t>();
@@ -605,14 +597,7 @@ void ProgramExecutableVk::save(ContextVk *contextVk,
     // Serializes the uniformLayout data of mDefaultUniformBlocks
     for (gl::ShaderType shaderType : gl::AllShaderTypes())
     {
-        const size_t uniformCount = mDefaultUniformBlocks[shaderType]->uniformLayout.size();
-        stream->writeInt(uniformCount);
-        for (unsigned int uniformIndex = 0; uniformIndex < uniformCount; ++uniformIndex)
-        {
-            sh::BlockMemberInfo &blockInfo =
-                mDefaultUniformBlocks[shaderType]->uniformLayout[uniformIndex];
-            gl::WriteBlockMemberInfo(stream, blockInfo);
-        }
+        stream->writeVector(mDefaultUniformBlocks[shaderType]->uniformLayout);
     }
 
     // Serializes required uniform block memory sizes
