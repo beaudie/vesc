@@ -1,6 +1,40 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "476079f1_fce413ad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-01T19:48:39Z",
+      "side": 1,
+      "message": "Nice clean up!",
+      "revId": "5ada3f8f83804972af2e1b8530c1cc8500726aae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a8451e2_e8587482",
+        "filename": "src/common/BinaryStream.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-01T19:48:39Z",
+      "side": 1,
+      "message": "This seems unnecessary, the argument is already `T *`, and besides there is nothing stopping this from working on non-struct parameters`.",
+      "revId": "5ada3f8f83804972af2e1b8530c1cc8500726aae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ef8fc786_f8dc4873",
@@ -91,6 +125,93 @@
         "startChar": 12,
         "endLine": 246,
         "endChar": 97
+      },
+      "revId": "5ada3f8f83804972af2e1b8530c1cc8500726aae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17077a9e_93995d3d",
+        "filename": "src/common/BinaryStream.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-01T19:48:39Z",
+      "side": 1,
+      "message": "One trick you could use is this:\n\n```\nsizeof(T[param.size()])\n```\n\nThough I agree what you have is supposed to work.",
+      "parentUuid": "ef52eb68_ff61bf34",
+      "range": {
+        "startLine": 246,
+        "startChar": 12,
+        "endLine": 246,
+        "endChar": 97
+      },
+      "revId": "5ada3f8f83804972af2e1b8530c1cc8500726aae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b4389b7_a85d5c6e",
+        "filename": "src/common/BinaryStream.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-01T19:48:39Z",
+      "side": 1,
+      "message": "Use `std::is_pointer` instead. That\u0027s better of course, but also means you can now write 8-byte structs :P",
+      "revId": "5ada3f8f83804972af2e1b8530c1cc8500726aae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69f09445_6d8df857",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-01T19:48:39Z",
+      "side": 1,
+      "message": "nit: uint32_t to make the 4-byte thing explicit?",
+      "range": {
+        "startLine": 585,
+        "startChar": 8,
+        "endLine": 585,
+        "endChar": 20
+      },
+      "revId": "5ada3f8f83804972af2e1b8530c1cc8500726aae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3beade22_77bc5236",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-01T19:48:39Z",
+      "side": 1,
+      "message": "nit: int32_t for this and others below?",
+      "range": {
+        "startLine": 610,
+        "startChar": 8,
+        "endLine": 610,
+        "endChar": 11
       },
       "revId": "5ada3f8f83804972af2e1b8530c1cc8500726aae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
