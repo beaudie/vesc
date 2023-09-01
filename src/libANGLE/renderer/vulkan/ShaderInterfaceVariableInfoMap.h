@@ -90,15 +90,15 @@ class ShaderInterfaceVariableInfoMap final : angle::NonCopyable
     }
     const gl::ShaderMap<gl::PerVertexMemberBitSet> &getInputPerVertexActiveMembers() const
     {
-        return mInputPerVertexActiveMembers;
+        return mPodStruct.inputPerVertexActiveMembers;
     }
     const gl::ShaderMap<gl::PerVertexMemberBitSet> &getOutputPerVertexActiveMembers() const
     {
-        return mOutputPerVertexActiveMembers;
+        return mPodStruct.outputPerVertexActiveMembers;
     }
 
-    void setHasAliasingAttributes() { mHasAliasingAttributes = true; }
-    bool hasAliasingAttributes() const { return mHasAliasingAttributes; }
+    void setHasAliasingAttributes() { mPodStruct.hasAliasingAttributes = true; }
+    bool hasAliasingAttributes() const { return mPodStruct.hasAliasingAttributes; }
 
   private:
     void setVariableIndex(gl::ShaderType shaderType, uint32_t id, VariableIndex index);
@@ -109,13 +109,20 @@ class ShaderInterfaceVariableInfoMap final : angle::NonCopyable
     XFBVariableInfoArray mXFBData;
     gl::ShaderMap<IdToIndexMap> mIdToIndexMap;
 
-    // Active members of `in gl_PerVertex` and `out gl_PerVertex`
-    gl::ShaderMap<gl::PerVertexMemberBitSet> mInputPerVertexActiveMembers;
-    gl::ShaderMap<gl::PerVertexMemberBitSet> mOutputPerVertexActiveMembers;
+    ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
+    struct
+    {
+        // Active members of `in gl_PerVertex` and `out gl_PerVertex`
+        gl::ShaderMap<gl::PerVertexMemberBitSet> inputPerVertexActiveMembers;
+        gl::ShaderMap<gl::PerVertexMemberBitSet> outputPerVertexActiveMembers;
 
-    // Whether the vertex shader has aliasing attributes.  Used by the SPIR-V transformer to tell if
-    // emulation is needed.
-    bool mHasAliasingAttributes = false;
+        // Whether the vertex shader has aliasing attributes.  Used by the SPIR-V transformer to
+        // tell if emulation is needed.
+        bool hasAliasingAttributes = false;
+        bool pads[3];
+        size_t xfbInfoCount = 0;
+    } mPodStruct;
+    ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
 };
 
 ANGLE_INLINE const ShaderInterfaceVariableInfo &
