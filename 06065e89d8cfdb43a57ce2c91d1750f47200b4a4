@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93bc49e5_531ea8d8",
+        "filename": "util/capture/frame_capture_test_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-09-01T15:54:04Z",
+      "side": 1,
+      "message": "Original source is here (UncompressHelper):\nhttps://chromium.googlesource.com/chromium/src/+/master/third_party/zlib/google/compression_utils_portable.cc#175\n\nThe function looks largely unmodified, other than passing in the stream.",
+      "range": {
+        "startLine": 37,
+        "startChar": 17,
+        "endLine": 37,
+        "endChar": 46
+      },
+      "revId": "06065e89d8cfdb43a57ce2c91d1750f47200b4a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
