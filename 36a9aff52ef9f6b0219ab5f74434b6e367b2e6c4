@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94aa352e_a066b239",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-09-01T02:12:11Z",
+      "side": 1,
+      "message": "Geoff, Jonah: please review.\n\nApple folks: FYI - any comments welcome. This doesn\u0027t change the semantics of EGLSyncKHR.\n\nAlexey: any comments welcome. I couldn\u0027t reproduce anglebug.com/8332 with or without this CL.\n\nWin/UWP failures are filed as anglebug.com/8337 and crbug.com/1477933 .",
+      "revId": "36a9aff52ef9f6b0219ab5f74434b6e367b2e6c4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
