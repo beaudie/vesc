@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff020fce_2f8815f3",
+        "filename": "src/common/BinaryStream.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-01T20:07:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a8451e2_e8587482",
+      "revId": "5ada3f8f83804972af2e1b8530c1cc8500726aae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ef8fc786_f8dc4873",
@@ -171,6 +189,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "12511bd2_8d2331be",
+        "filename": "src/common/BinaryStream.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-01T20:07:51Z",
+      "side": 1,
+      "message": "std::is_pointer works!",
+      "parentUuid": "9b4389b7_a85d5c6e",
+      "revId": "5ada3f8f83804972af2e1b8530c1cc8500726aae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "69f09445_6d8df857",
@@ -194,6 +230,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "214c488a_f9566f67",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-01T20:07:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69f09445_6d8df857",
+      "range": {
+        "startLine": 585,
+        "startChar": 8,
+        "endLine": 585,
+        "endChar": 20
+      },
+      "revId": "5ada3f8f83804972af2e1b8530c1cc8500726aae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3beade22_77bc5236",
@@ -207,6 +267,30 @@
       "writtenOn": "2023-09-01T19:48:39Z",
       "side": 1,
       "message": "nit: int32_t for this and others below?",
+      "range": {
+        "startLine": 610,
+        "startChar": 8,
+        "endLine": 610,
+        "endChar": 11
+      },
+      "revId": "5ada3f8f83804972af2e1b8530c1cc8500726aae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "150c2564_7d8da5e2",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-01T20:07:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3beade22_77bc5236",
       "range": {
         "startLine": 610,
         "startChar": 8,
