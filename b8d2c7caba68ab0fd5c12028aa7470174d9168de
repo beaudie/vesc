@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b16328ae_8027a484",
+        "filename": "src/libANGLE/ProgramPipeline.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 544,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-01T01:28:46Z",
+      "side": 1,
+      "message": "All for this change!",
+      "revId": "b8d2c7caba68ab0fd5c12028aa7470174d9168de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
