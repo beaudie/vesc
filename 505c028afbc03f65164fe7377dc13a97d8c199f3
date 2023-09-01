@@ -16,6 +16,23 @@
       "message": "Could you provide more context in CL description on the issues you ran into?",
       "revId": "505c028afbc03f65164fe7377dc13a97d8c199f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1629afed_58f7f06a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-09-01T15:27:14Z",
+      "side": 1,
+      "message": "In another CL with expanded CapturedTest content the CI `WinTest` failed ` CapturedTest.MultiFrame/ES3_OpenGL`.  This test also fails running on a local system using Linux/Main branch but passes in CI.",
+      "revId": "505c028afbc03f65164fe7377dc13a97d8c199f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
