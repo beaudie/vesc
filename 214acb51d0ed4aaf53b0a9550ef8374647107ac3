@@ -163,6 +163,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d73ddb50_552d025d",
+        "filename": "src/libANGLE/renderer/vulkan/android/vk_android_utils.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-02T01:24:34Z",
+      "side": 1,
+      "message": "I have changed the functions to return `VkResult` directly, and I have moved the `finishOneCommandBatchAndCleanup()` fallback up into `ANGLE_VK_TRY_ALLOC*()`. Some of the `ANGLE_TRY()` calls in those functions are now replaced with `ANGLE_VK_TRY_CONTINUE()`, where it asserts and returns `VK_ERROR_UNKNOWN` in case their output is `angle::Result::Stop`.",
+      "parentUuid": "49e8514c_4aa1a945",
+      "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cfa1ed7c_150e8a53",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 21
@@ -532,6 +550,30 @@
       "side": 1,
       "message": "I have removed this arg from the macro. However, `command` should still take it as an arg.",
       "parentUuid": "9e5e6e2d_f874d1fe",
+      "range": {
+        "startLine": 1333,
+        "startChar": 17,
+        "endLine": 1333,
+        "endChar": 33
+      },
+      "revId": "214acb51d0ed4aaf53b0a9550ef8374647107ac3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff62d02d_b99de7a6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 21
+      },
+      "lineNbr": 1333,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-02T01:24:34Z",
+      "side": 1,
+      "message": "This macro now uses only the context and the command as inputs.",
+      "parentUuid": "2eaf8852_d0bb2bda",
       "range": {
         "startLine": 1333,
         "startChar": 17,

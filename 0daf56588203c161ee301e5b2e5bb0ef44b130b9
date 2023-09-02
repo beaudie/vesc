@@ -63,6 +63,30 @@
       },
       "revId": "0daf56588203c161ee301e5b2e5bb0ef44b130b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "495e179a_7e2fbd33",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 3517,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-02T01:24:34Z",
+      "side": 1,
+      "message": "I have moved some of the fallback logic into new macros which are used in `ANGLE_VK_TRY_ALLOC()` and `ANGLE_VK_TRY_ALLOC_IMAGE()`:\n\n* `ANGLE_VK_TRY_FALLBACK_FINISH_COMMAND_BATCHES()`\n* `ANGLE_VK_TRY_FALLBACK_FLUSH_CONTEXT()`\n\nIn the case of `ANGLE_VK_TRY_ALLOC_IMAGE()`, it also uses a local variable (`oomExcludedFlags`) to exclude the device-local bit for the system memory fallback option.",
+      "parentUuid": "3bca9f63_403202f7",
+      "range": {
+        "startLine": 3517,
+        "startChar": 31,
+        "endLine": 3517,
+        "endChar": 57
+      },
+      "revId": "0daf56588203c161ee301e5b2e5bb0ef44b130b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
