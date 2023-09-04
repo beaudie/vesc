@@ -1833,7 +1833,7 @@ angle::Result Renderer9::applyShaders(const gl::Context *context, gl::PrimitiveM
     // uniform data even if our shader pointers are the same.
     // https://code.google.com/p/angleproject/issues/detail?id=661
     unsigned int programSerial = GetImplAs<ProgramD3D>(state.getProgram())->getSerial();
-    if (programSerial != mAppliedProgramSerial)
+    // if (programSerial != mAppliedProgramSerial)
     {
         executableD3D->dirtyAllUniforms();
         mStateManager.forceSetDXUniformsState();
