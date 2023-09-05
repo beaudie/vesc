@@ -91,6 +91,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7782f01f_2fc805a3",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-05T14:52:49Z",
+      "side": 1,
+      "message": "It doesn\u0027t do that though.\n\nIgor actually split our `resize()` because:\n\n- With default init, it\u0027s slow for trivial types\n- Without default init, it\u0027s incorrect and dangerous\n\nThat\u0027s why we have `resize_maybe_value_reuse` and `resize_down` below. Incidentally, all three variants just call `resize_impl`, and the difference is just in the static_assert and clearer names.\n\nThis function is calling `resize_impl` for trivial types, that\u0027s exactly what the `resize()` function does above.",
+      "parentUuid": "cba1901c_24dac328",
+      "range": {
+        "startLine": 484,
+        "startChar": 32,
+        "endLine": 484,
+        "endChar": 49
+      },
+      "revId": "caa3fd623087354be0cec6721f1adcfd2eb53f11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "957ef346_015caf64",
         "filename": "src/common/FastVector.h",
         "patchSetId": 13
