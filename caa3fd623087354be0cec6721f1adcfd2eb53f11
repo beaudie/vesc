@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9420d0d3_08eb13a6",
+        "filename": "src/common/BinaryStream.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-05T14:24:53Z",
+      "side": 1,
+      "message": "Seems unnecessary if you get rid of `resizeAndCopyData` and copy directly over `.data()` (which you could pass to `readBytes()`).",
+      "revId": "caa3fd623087354be0cec6721f1adcfd2eb53f11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d7f1bcb6_b7086b9d",
         "filename": "src/common/FastVector.h",
         "patchSetId": 13
@@ -14,6 +31,30 @@
       "writtenOn": "2023-09-05T13:55:10Z",
       "side": 1,
       "message": "Should args go in `(count, data)` order to match the function name?",
+      "range": {
+        "startLine": 484,
+        "startChar": 32,
+        "endLine": 484,
+        "endChar": 49
+      },
+      "revId": "caa3fd623087354be0cec6721f1adcfd2eb53f11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfedb4db_cedf5ccf",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-05T14:24:53Z",
+      "side": 1,
+      "message": "Suggest adding this helper outside this class, wherever it\u0027s used. As much as possible, it\u0027s best to keep the API analogous to the corresponding std type.\n\nYou could use call `resize()` on the vector, and just copy into `.data()`, no need for this helper.",
+      "parentUuid": "d7f1bcb6_b7086b9d",
       "range": {
         "startLine": 484,
         "startChar": 32,
@@ -83,6 +124,30 @@
       "writtenOn": "2023-09-05T13:55:10Z",
       "side": 1,
       "message": "`unique_ptr \u0026` seems confusing and suggest the caller could modify the pointer itself?..\n\nShould the function be returning the raw XFBInterfaceVariableInfo pointer instead?",
+      "range": {
+        "startLine": 174,
+        "startChar": 4,
+        "endLine": 174,
+        "endChar": 24
+      },
+      "revId": "caa3fd623087354be0cec6721f1adcfd2eb53f11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37fb53ea_c16150ee",
+        "filename": "src/libANGLE/renderer/vulkan/spv_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-05T14:24:53Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "688ede13_90037b7c",
       "range": {
         "startLine": 174,
         "startChar": 4,
