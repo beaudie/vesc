@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed07ae98_97c38721",
+        "filename": "src/common/BinaryStream.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-05T20:40:41Z",
+      "side": 1,
+      "message": "This is needed due to resizeAndCopyData/resetWithRawData",
+      "parentUuid": "9420d0d3_08eb13a6",
+      "revId": "caa3fd623087354be0cec6721f1adcfd2eb53f11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d7f1bcb6_b7086b9d",
@@ -233,6 +251,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "764b4234_1d3a1d3f",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-05T20:40:41Z",
+      "side": 1,
+      "message": "It is still resize though -- I can make it only update data of the newly added space. But since both of you like setRawData, I have renamed to resetWithRawData(count, data).",
+      "parentUuid": "058fca87_363be940",
+      "range": {
+        "startLine": 484,
+        "startChar": 32,
+        "endLine": 484,
+        "endChar": 49
+      },
+      "revId": "caa3fd623087354be0cec6721f1adcfd2eb53f11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "957ef346_015caf64",
@@ -256,6 +298,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7cb2b38_eb51020d",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-05T20:40:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "957ef346_015caf64",
+      "range": {
+        "startLine": 488,
+        "startChar": 19,
+        "endLine": 488,
+        "endChar": 59
+      },
+      "revId": "caa3fd623087354be0cec6721f1adcfd2eb53f11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "121a157d_c8d269c7",
@@ -269,6 +335,30 @@
       "writtenOn": "2023-09-05T13:55:10Z",
       "side": 1,
       "message": "Maybe assert on mData.size vs xfbInfoCount here as well?",
+      "range": {
+        "startLine": 149,
+        "startChar": 11,
+        "endLine": 149,
+        "endChar": 23
+      },
+      "revId": "caa3fd623087354be0cec6721f1adcfd2eb53f11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f243963_642523f7",
+        "filename": "src/libANGLE/renderer/vulkan/ShaderInterfaceVariableInfoMap.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-05T20:40:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "121a157d_c8d269c7",
       "range": {
         "startLine": 149,
         "startChar": 11,
@@ -316,6 +406,30 @@
       "side": 1,
       "message": "+1",
       "parentUuid": "688ede13_90037b7c",
+      "range": {
+        "startLine": 174,
+        "startChar": 4,
+        "endLine": 174,
+        "endChar": 24
+      },
+      "revId": "caa3fd623087354be0cec6721f1adcfd2eb53f11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0064a230_221a7405",
+        "filename": "src/libANGLE/renderer/vulkan/spv_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-05T20:40:41Z",
+      "side": 1,
+      "message": "Good point.",
+      "parentUuid": "37fb53ea_c16150ee",
       "range": {
         "startLine": 174,
         "startChar": 4,
