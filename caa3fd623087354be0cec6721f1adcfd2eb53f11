@@ -211,6 +211,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "058fca87_363be940",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-05T20:09:03Z",
+      "side": 1,
+      "message": "+1 to something along the lines of `setRawData`. I had a similar idea when reviewing the CL but couldn\u0027t come up with a name :) I too feel this fits better than \"resize\" as the goal is to overwrite.",
+      "parentUuid": "b33923d5_4ac48e27",
+      "range": {
+        "startLine": 484,
+        "startChar": 32,
+        "endLine": 484,
+        "endChar": 49
+      },
+      "revId": "caa3fd623087354be0cec6721f1adcfd2eb53f11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "957ef346_015caf64",
         "filename": "src/common/FastVector.h",
         "patchSetId": 13
