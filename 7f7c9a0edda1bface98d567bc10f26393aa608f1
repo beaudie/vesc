@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fddeebd_a96ce72d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-09-05T16:53:39Z",
+      "side": 1,
+      "message": "Rather than link to the internal bug, can you summarize what you found?  Basically that significant cycles are being spent evicting cache entries and throwing off power measurement.  Since this is already a synthetic environment where we\u0027re lumping in a bunch of caches together, clear it between tests so that warmup correctly populates and no cache misses occur within the test run.",
+      "range": {
+        "startLine": 10,
+        "startChar": 15,
+        "endLine": 10,
+        "endChar": 35
+      },
+      "revId": "7f7c9a0edda1bface98d567bc10f26393aa608f1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
