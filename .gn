@@ -34,7 +34,11 @@ exec_script_whitelist = angle_dotfile_settings.exec_script_whitelist +
                           "//build/config/win/visual_studio_version.gni",
                           "//build/gn_helpers.py",
                           "//build_overrides/build.gni",
+                          "//gni/angle.gni",
+                          "//third_party/clspv/BUILD.gn",
                         ]
+
+secondary_source = "//util/gn"
 
 default_args = {
   clang_use_chrome_plugins = false

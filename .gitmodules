@@ -46,6 +46,10 @@
 	path = third_party/cherry
 	url = https://android.googlesource.com/platform/external/cherry
 	gclient-condition = not build_with_chromium
+[submodule "third_party/clspv"]
+	path = third_party/clspv
+	url = https://github.com/gowtham-sarc/clspv.git
+	gclient-condition = not build_with_chromium
 [submodule "third_party/colorama/src"]
 	path = third_party/colorama/src
 	url = https://chromium.googlesource.com/external/colorama.git
@@ -92,6 +96,10 @@
 [submodule "third_party/libpng/src"]
 	path = third_party/libpng/src
 	url = https://android.googlesource.com/platform/external/libpng
+	gclient-condition = not build_with_chromium
+[submodule "third_party/llvm"]
+	path = third_party/llvm
+	url = https://github.com/gowtham-sarc/llvm-project.git
 	gclient-condition = not build_with_chromium
 [submodule "third_party/jinja2"]
 	path = third_party/jinja2
