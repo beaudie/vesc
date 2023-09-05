@@ -139,6 +139,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b02392ae_12cbf8dc",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-05T19:33:04Z",
+      "side": 1,
+      "message": "Oh, sorry I didn\u0027t notice the `is_trivially_constructible` vs `is_trivially_copyable` difference.\n\nIn this case, this is _only_ going to be used to initialize an empty vector, right?\n\nHow about calling it something like `setRawData(count, raw_data)`? Like this is overwriting the entire vector, but that\u0027s not the typical behavior of `resize`.\n\nAlso, there is a unit test file for this class, should be easy to add a few tests.",
+      "parentUuid": "7324b8b3_1d439828",
+      "range": {
+        "startLine": 484,
+        "startChar": 32,
+        "endLine": 484,
+        "endChar": 49
+      },
+      "revId": "caa3fd623087354be0cec6721f1adcfd2eb53f11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "957ef346_015caf64",
         "filename": "src/common/FastVector.h",
         "patchSetId": 13
