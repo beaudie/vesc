@@ -163,6 +163,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3375abb5_0d2eb82c",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-05T19:49:45Z",
+      "side": 1,
+      "message": "I am thinking name it `void resize(size_t count, void *data)` to be consistent with other resize APIs. In this case it is going to used to initialize an empty vector, but it could also use to initialize the extra added space. The API and implementation does not have restriction on that.",
+      "parentUuid": "b02392ae_12cbf8dc",
+      "range": {
+        "startLine": 484,
+        "startChar": 32,
+        "endLine": 484,
+        "endChar": 49
+      },
+      "revId": "caa3fd623087354be0cec6721f1adcfd2eb53f11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "957ef346_015caf64",
         "filename": "src/common/FastVector.h",
         "patchSetId": 13
