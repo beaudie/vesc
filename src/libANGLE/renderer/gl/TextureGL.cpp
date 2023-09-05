@@ -1024,6 +1024,7 @@ angle::Result TextureGL::copySubTextureHelper(const gl::Context *context,
     bool sourceFormatContainSupersetOfDestFormat =
         (sourceFormat == destFormat.format && sourceFormat != GL_BGRA_EXT) ||
         (sourceFormat == GL_RGBA && destFormat.format == GL_RGB);
+    bool sourceSRGB = sourceFormatInfo.colorEncoding == GL_SRGB;
 
     GLenum sourceComponentType = sourceFormatInfo.componentType;
     GLenum destComponentType   = destFormat.componentType;
@@ -1034,7 +1035,7 @@ angle::Result TextureGL::copySubTextureHelper(const gl::Context *context,
     {
         bool copySucceeded = false;
         ANGLE_TRY(blitter->copyTexSubImage(context, sourceGL, sourceLevel, this, target, level,
-                                           sourceArea, destOffset, &copySucceeded));
+                                           sourceArea, destOffset, sourceSRGB, &copySucceeded));
         if (copySucceeded)
         {
             contextGL->markWorkSubmitted();
