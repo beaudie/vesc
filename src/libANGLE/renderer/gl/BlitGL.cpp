@@ -397,6 +397,7 @@ angle::Result BlitGL::copySubImageToLUMAWorkaroundTexture(const gl::Context *con
     ANGLE_GL_TRY(context, mFunctions->uniform2f(blitProgram->offsetLocation, 0.0, 0.0));
     ANGLE_GL_TRY(context, mFunctions->uniform1i(blitProgram->multiplyAlphaLocation, 0));
     ANGLE_GL_TRY(context, mFunctions->uniform1i(blitProgram->unMultiplyAlphaLocation, 0));
+    ANGLE_GL_TRY(context, mFunctions->uniform1i(blitProgram->srgbTransformLocation, 0));
 
     ANGLE_TRY(setVAOState(context));
     ANGLE_GL_TRY(context, mFunctions->drawArrays(GL_TRIANGLES, 0, 3));
@@ -578,6 +579,7 @@ angle::Result BlitGL::blitColorBufferWithShader(const gl::Context *context,
                                                 texCoordOffset.y()));
     ANGLE_GL_TRY(context, mFunctions->uniform1i(blitProgram->multiplyAlphaLocation, 0));
     ANGLE_GL_TRY(context, mFunctions->uniform1i(blitProgram->unMultiplyAlphaLocation, 0));
+    ANGLE_GL_TRY(context, mFunctions->uniform1i(blitProgram->srgbTransformLocation, 0));
 
     mStateManager->bindFramebuffer(GL_DRAW_FRAMEBUFFER, destFramebuffer);
 
@@ -604,6 +606,7 @@ angle::Result BlitGL::copySubTexture(const gl::Context *context,
                                      bool unpackFlipY,
                                      bool unpackPremultiplyAlpha,
                                      bool unpackUnmultiplyAlpha,
+                                     int srgbTransform,
                                      bool *copySucceededOut)
 {
     ASSERT(source->getType() == gl::TextureType::_2D ||
@@ -683,10 +686,13 @@ angle::Result BlitGL::copySubTexture(const gl::Context *context,
     ANGLE_GL_TRY(context, mFunctions->uniform2f(blitProgram->scaleLocation, scale.x(), scale.y()));
     ANGLE_GL_TRY(context,
                  mFunctions->uniform2f(blitProgram->offsetLocation, offset.x(), offset.y()));
-    if (unpackPremultiplyAlpha == unpackUnmultiplyAlpha)
+    // Premultiply and unpremultiply will cancel each other out, but only if there is no linear to
+    // sRGB transform sandwiched between them.
+    if (unpackPremultiplyAlpha == unpackUnmultiplyAlpha && !srgbTransform)
     {
         ANGLE_GL_TRY(context, mFunctions->uniform1i(blitProgram->multiplyAlphaLocation, 0));
         ANGLE_GL_TRY(context, mFunctions->uniform1i(blitProgram->unMultiplyAlphaLocation, 0));
+        ANGLE_GL_TRY(context, mFunctions->uniform1i(blitProgram->srgbTransformLocation, 0));
     }
     else
     {
@@ -694,6 +700,8 @@ angle::Result BlitGL::copySubTexture(const gl::Context *context,
                                                     unpackPremultiplyAlpha));
         ANGLE_GL_TRY(context, mFunctions->uniform1i(blitProgram->unMultiplyAlphaLocation,
                                                     unpackUnmultiplyAlpha));
+        ANGLE_GL_TRY(context,
+                     mFunctions->uniform1i(blitProgram->srgbTransformLocation, srgbTransform));
     }
 
     ANGLE_TRY(setVAOState(context));
@@ -768,7 +776,7 @@ angle::Result BlitGL::copySubTextureCPUReadback(const gl::Context *context,
             context, source, sourceLevel, sourceInternalFormatInfo.componentType,
             mScratchTextures[0], NonCubeTextureTypeToTarget(scratchTextureType), 0,
             sourceInternalFormatInfo.componentType, sourceSize, sourceArea, gl::Offset(0, 0, 0),
-            needsLumaWorkaround, lumaFormat, false, false, false, &copySucceeded));
+            needsLumaWorkaround, lumaFormat, false, false, false, 0, &copySucceeded));
         if (!copySucceeded)
         {
             // No fallback options if we can't render to the scratch texture.
@@ -1133,6 +1141,7 @@ angle::Result BlitGL::generateSRGBMipmap(const gl::Context *context,
     ANGLE_GL_TRY(context, mFunctions->uniform2f(blitProgram->offsetLocation, 0.0f, 0.0f));
     ANGLE_GL_TRY(context, mFunctions->uniform1i(blitProgram->multiplyAlphaLocation, 0));
     ANGLE_GL_TRY(context, mFunctions->uniform1i(blitProgram->unMultiplyAlphaLocation, 0));
+    ANGLE_GL_TRY(context, mFunctions->uniform1i(blitProgram->srgbTransformLocation, 0));
 
     mStateManager->bindTexture(sourceType, source->getTextureID());
     ANGLE_TRY(source->setMinFilter(context, GL_NEAREST));
@@ -1513,12 +1522,35 @@ angle::Result BlitGL::getBlitProgram(const gl::Context *context,
             // Write the rest of the uniforms and varyings
             fsSourceStream << "uniform bool u_multiply_alpha;\n";
             fsSourceStream << "uniform bool u_unmultiply_alpha;\n";
+            fsSourceStream << "uniform bool u_srgb_transform;\n";
             fsSourceStream << fsInputVariableQualifier << " vec2 v_texcoord;\n";
             if (!outputType.empty())
             {
                 fsSourceStream << fsOutputVariableQualifier << " " << outputType << " "
                                << outputVariableName << ";\n";
             }
+
+            // Write the sRGB to/from linear functions.
+            fsSourceStream << "float transformLinearToSrgb(float cl)\n";
+            fsSourceStream << "{\n";
+            fsSourceStream << "    if (cl <= 0.0)\n";
+            fsSourceStream << "        return 0.0;\n";
+            fsSourceStream << "    if (cl < 0.0031308)\n";
+            fsSourceStream << "        return 12.92 * cl;\n";
+            fsSourceStream << "    if (cl < 1.0)\n";
+            fsSourceStream << "        return 1.055 * pow(cl, 0.41666) - 0.055;\n";
+            fsSourceStream << "    return 1.0;\n";
+            fsSourceStream << "}\n";
+            fsSourceStream << "float transformSrgbToLinear(float cl)\n";
+            fsSourceStream << "{\n";
+            fsSourceStream << "    if (cl <= 0.0)\n";
+            fsSourceStream << "        return 0.0;\n";
+            fsSourceStream << "    if (cl < 0.04045)\n";
+            fsSourceStream << "        return cl / 12.92;\n";
+            fsSourceStream << "    if (cl < 1.0)\n";
+            fsSourceStream << "        return pow((cl + 0.055) / 1.055, 2.4);\n";
+            fsSourceStream << "    return 1.0;\n";
+            fsSourceStream << "}\n";
 
             // Write the main body
             fsSourceStream << "\n";
@@ -1551,14 +1583,31 @@ angle::Result BlitGL::getBlitProgram(const gl::Context *context,
             fsSourceStream << "    " << samplerResultType << " color = " << sampleFunction
                            << "(u_source_texture, v_texcoord);\n";
 
-            // Perform the premultiply or unmultiply alpha logic
-            fsSourceStream << "    if (u_multiply_alpha)\n";
-            fsSourceStream << "    {\n";
-            fsSourceStream << "        color.xyz = color.xyz * color.a;\n";
-            fsSourceStream << "    }\n";
+            // Perform unmultiply-alpha if requested.
             fsSourceStream << "    if (u_unmultiply_alpha && color.a != 0.0)\n";
             fsSourceStream << "    {\n";
             fsSourceStream << "         color.xyz = color.xyz / color.a;\n";
+            fsSourceStream << "    }\n";
+
+            // Perform transformation from linear to sRGB encoding (note that this must be done
+            // using unpremultiplied values).
+            fsSourceStream << "    if (u_srgb_transform == 1)\n";
+            fsSourceStream << "    {\n";
+            fsSourceStream << "        color.x = transformLinearToSrgb(color.x);\n";
+            fsSourceStream << "        color.y = transformLinearToSrgb(color.y);\n";
+            fsSourceStream << "        color.z = transformLinearToSrgb(color.z);\n";
+            fsSourceStream << "    }\n";
+            fsSourceStream << "    if (u_srgb_transform == 2)\n";
+            fsSourceStream << "    {\n";
+            fsSourceStream << "        color.x = transformSrgbToLinear(color.x);\n";
+            fsSourceStream << "        color.y = transformSrgbToLinear(color.y);\n";
+            fsSourceStream << "        color.z = transformSrgbToLinear(color.z);\n";
+            fsSourceStream << "    }\n";
+
+            // Perform premultiply-alpha if requested.
+            fsSourceStream << "    if (u_multiply_alpha)\n";
+            fsSourceStream << "    {\n";
+            fsSourceStream << "        color.xyz = color.xyz * color.a;\n";
             fsSourceStream << "    }\n";
 
             // Write the conversion to the destionation type
@@ -1595,6 +1644,8 @@ angle::Result BlitGL::getBlitProgram(const gl::Context *context,
             context, mFunctions->getUniformLocation(result.program, "u_multiply_alpha"));
         result.unMultiplyAlphaLocation = ANGLE_GL_TRY(
             context, mFunctions->getUniformLocation(result.program, "u_unmultiply_alpha"));
+        result.srgbTransformLocation = ANGLE_GL_TRY(
+            context, mFunctions->getUniformLocation(result.program, "u_srgb_transform"));
     }
 
     *program = &result;
