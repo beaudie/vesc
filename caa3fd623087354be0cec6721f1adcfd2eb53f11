@@ -115,6 +115,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7324b8b3_1d439828",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-05T18:48:06Z",
+      "side": 1,
+      "message": "The reason I added resizeAndCopyData is exactly to avoid the static_assert. The mIdToIndexMap is not trivially constructible, so I can\u0027t use resize(count). The choice is resize(count, value), except in this case I am not setting it to the same value. What this utility function is exactly similar to resize(count, value) except initiliaze with a memcpy. The other choice is to make mIdToIndexMap trivially constructible, but that is different effort and a bit risky though (it means rely on manual initialization).\n\nSwitch the order of count/data is a good idea, will adopt in next update.",
+      "parentUuid": "7782f01f_2fc805a3",
+      "range": {
+        "startLine": 484,
+        "startChar": 32,
+        "endLine": 484,
+        "endChar": 49
+      },
+      "revId": "caa3fd623087354be0cec6721f1adcfd2eb53f11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "957ef346_015caf64",
         "filename": "src/common/FastVector.h",
         "patchSetId": 13
