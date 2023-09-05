@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cba1901c_24dac328",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-05T14:32:30Z",
+      "side": 1,
+      "message": "Looks like Charlie\u0027s goal might be to avoid the default initialization `resize()` would do though?",
+      "parentUuid": "bfedb4db_cedf5ccf",
+      "range": {
+        "startLine": 484,
+        "startChar": 32,
+        "endLine": 484,
+        "endChar": 49
+      },
+      "revId": "caa3fd623087354be0cec6721f1adcfd2eb53f11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "957ef346_015caf64",
         "filename": "src/common/FastVector.h",
         "patchSetId": 13
