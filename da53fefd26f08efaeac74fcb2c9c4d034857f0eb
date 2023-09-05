@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b14ca5b_b9ae9166",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 1148,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-05T19:24:51Z",
+      "side": 1,
+      "message": "The most important line in this change is this, everything else is there to support it.\n\nWith this change in place, _everything_ that happens below is being done in data that is private to the program until the link is done. There is no risk of screwing up the draw state after a failed relink, and there is no real reason any of what comes below couldn\u0027t be done in a thread.",
+      "revId": "da53fefd26f08efaeac74fcb2c9c4d034857f0eb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

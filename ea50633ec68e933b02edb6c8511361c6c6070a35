@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71e390ca_04c9548f",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 18
+      },
+      "lineNbr": 9497,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-05T19:24:51Z",
+      "side": 0,
+      "message": "This is an important side effect of this change. Setting up the link job is now really the last thing the entry point does, so it can be moved to an unlocked tail call.",
+      "revId": "ea50633ec68e933b02edb6c8511361c6c6070a35",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
