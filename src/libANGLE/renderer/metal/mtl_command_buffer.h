@@ -199,7 +199,7 @@ class CommandBuffer final : public WrappedObject<id<MTLCommandBuffer>>, angle::N
     std::vector<std::pair<mtl::SharedEventRef, uint64_t>> mPendingSignalEvents;
     std::vector<std::string> mDebugGroups;
 
-    std::unordered_set<id> mResourceList;
+    angle::HashSet<id> mResourceList;
     size_t mWorkingResourceSize              = 0;
     bool mCommitted                          = false;
     CommandBufferFinishOperation mLastWaitOp = mtl::NoWait;
