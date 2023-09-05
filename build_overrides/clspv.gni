@@ -1,0 +1,8 @@
+# CLSPV
+
+# setup any configs that needs adjustment
+clspv_configs_overrides_append = []
+clspv_configs_overrides_remove = [
+  "//build/config/clang:extra_warnings",
+  "//build/config/compiler:chromium_code",
+]

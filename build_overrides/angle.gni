@@ -15,6 +15,7 @@ angle_vma_version = 3000000
 
 # Overrides for ANGLE's dependencies
 angle_abseil_cpp_dir = "//third_party/abseil-cpp"
+angle_clspv_dir = "//third_party/clspv"
 angle_glslang_dir = "//third_party/vulkan-deps/glslang/src"
 angle_googletest_dir = "//third_party/googletest/src"
 angle_jsoncpp_dir = "//third_party/jsoncpp"
