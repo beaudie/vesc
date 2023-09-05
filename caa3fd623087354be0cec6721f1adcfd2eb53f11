@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7f1bcb6_b7086b9d",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-05T13:55:10Z",
+      "side": 1,
+      "message": "Should args go in `(count, data)` order to match the function name?",
+      "range": {
+        "startLine": 484,
+        "startChar": 32,
+        "endLine": 484,
+        "endChar": 49
+      },
+      "revId": "caa3fd623087354be0cec6721f1adcfd2eb53f11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "957ef346_015caf64",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-05T13:55:10Z",
+      "side": 1,
+      "message": "This seems to assume that this method would be called to just resize the vector which seems unlikely. Maybe just leave the comment be an empty string like in a few other places?",
+      "range": {
+        "startLine": 488,
+        "startChar": 19,
+        "endLine": 488,
+        "endChar": 59
+      },
+      "revId": "caa3fd623087354be0cec6721f1adcfd2eb53f11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "121a157d_c8d269c7",
+        "filename": "src/libANGLE/renderer/vulkan/ShaderInterfaceVariableInfoMap.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-05T13:55:10Z",
+      "side": 1,
+      "message": "Maybe assert on mData.size vs xfbInfoCount here as well?",
+      "range": {
+        "startLine": 149,
+        "startChar": 11,
+        "endLine": 149,
+        "endChar": 23
+      },
+      "revId": "caa3fd623087354be0cec6721f1adcfd2eb53f11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "688ede13_90037b7c",
+        "filename": "src/libANGLE/renderer/vulkan/spv_utils.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-05T13:55:10Z",
+      "side": 1,
+      "message": "`unique_ptr \u0026` seems confusing and suggest the caller could modify the pointer itself?..\n\nShould the function be returning the raw XFBInterfaceVariableInfo pointer instead?",
+      "range": {
+        "startLine": 174,
+        "startChar": 4,
+        "endLine": 174,
+        "endChar": 24
+      },
+      "revId": "caa3fd623087354be0cec6721f1adcfd2eb53f11",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
