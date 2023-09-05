@@ -1024,13 +1024,14 @@ angle::Result TextureGL::copySubTextureHelper(const gl::Context *context,
     bool sourceFormatContainSupersetOfDestFormat =
         (sourceFormat == destFormat.format && sourceFormat != GL_BGRA_EXT) ||
         (sourceFormat == GL_RGBA && destFormat.format == GL_RGB);
+    bool sourceSRGB = sourceFormatInfo.colorEncoding == GL_SRGB;
 
     GLenum sourceComponentType = sourceFormatInfo.componentType;
     GLenum destComponentType   = destFormat.componentType;
     bool destSRGB              = destFormat.colorEncoding == GL_SRGB;
     if (!unpackFlipY && unpackPremultiplyAlpha == unpackUnmultiplyAlpha && !needsLumaWorkaround &&
         sourceFormatContainSupersetOfDestFormat && sourceComponentType == destComponentType &&
-        !destSRGB && sourceGL->getType() == gl::TextureType::_2D)
+        !sourceSRGB && !destSRGB && sourceGL->getType() == gl::TextureType::_2D)
     {
         bool copySucceeded = false;
         ANGLE_TRY(blitter->copyTexSubImage(context, sourceGL, sourceLevel, this, target, level,
@@ -1048,15 +1049,28 @@ angle::Result TextureGL::copySubTextureHelper(const gl::Context *context,
     // Behavior for now is to fallback to CPU readback implementation if the destination texture
     // is a luminance format. The correct solution is to handle both source and destination in the
     // luma workaround.
-    if (!destSRGB && !destLevelInfo.lumaWorkaround.enabled &&
+    if (!destLevelInfo.lumaWorkaround.enabled &&
         nativegl::SupportsNativeRendering(functions, getType(), destLevelInfo.nativeInternalFormat))
     {
         bool copySucceeded = false;
+        int srgbTransform  = 0;
+        if (sourceSRGB && !destSRGB)
+        {
+            // The source is in linear space, but the destination is in sRGB encoded space, so
+            // transform from linear to sRGB.
+            srgbTransform = 1;
+        }
+        if (!sourceSRGB && destSRGB)
+        {
+            // The source is in sRGB encoded space, but the destination is in linear space, so
+            // transform from sRGB to linear.
+            srgbTransform = 2;
+        }
         ANGLE_TRY(blitter->copySubTexture(
             context, sourceGL, sourceLevel, sourceComponentType, mTextureID, target, level,
             destComponentType, sourceImageDesc.size, sourceArea, destOffset, needsLumaWorkaround,
             sourceLevelInfo.sourceFormat, unpackFlipY, unpackPremultiplyAlpha,
-            unpackUnmultiplyAlpha, &copySucceeded));
+            unpackUnmultiplyAlpha, srgbTransform, &copySucceeded));
         if (copySucceeded)
         {
             contextGL->markWorkSubmitted();

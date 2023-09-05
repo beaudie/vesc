@@ -108,6 +108,7 @@ class BlitGL : angle::NonCopyable
                                  bool unpackFlipY,
                                  bool unpackPremultiplyAlpha,
                                  bool unpackUnmultiplyAlpha,
+                                 int srgbTransform,
                                  bool *copySucceededOut);
 
     angle::Result copySubTextureCPUReadback(const gl::Context *context,
@@ -188,6 +189,7 @@ class BlitGL : angle::NonCopyable
         GLint offsetLocation          = -1;
         GLint multiplyAlphaLocation   = -1;
         GLint unMultiplyAlphaLocation = -1;
+        GLint srgbTransformLocation   = -1;
     };
 
     angle::Result getBlitProgram(const gl::Context *context,
