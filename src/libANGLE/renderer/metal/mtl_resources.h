@@ -277,8 +277,6 @@ class Texture final : public Resource,
 
     // Get stencil view
     TextureRef getStencilView();
-    // Get linear color
-    TextureRef getLinearColorView();
 
     // Change the wrapped metal object. Special case for swapchain image
     void set(id<MTLTexture> metalTexture);
@@ -354,9 +352,6 @@ class Texture final : public Resource,
 
     // This property is shared between this object and its views:
     std::shared_ptr<MTLColorWriteMask> mColorWritableMask;
-
-    // Linear view of sRGB texture
-    TextureRef mLinearColorView;
 
     TextureRef mStencilView;
     // Readable copy of texture

@@ -857,29 +857,6 @@ angle::Result Texture::resize(ContextMtl *context, uint32_t width, uint32_t heig
     return angle::Result::Continue;
 }
 
-TextureRef Texture::getLinearColorView()
-{
-    if (mLinearColorView)
-    {
-        return mLinearColorView;
-    }
-
-    switch (pixelFormat())
-    {
-        case MTLPixelFormatRGBA8Unorm_sRGB:
-            mLinearColorView = createViewWithCompatibleFormat(MTLPixelFormatRGBA8Unorm);
-            break;
-        case MTLPixelFormatBGRA8Unorm_sRGB:
-            mLinearColorView = createViewWithCompatibleFormat(MTLPixelFormatBGRA8Unorm);
-            break;
-        default:
-            // NOTE(hqle): Not all sRGB formats are supported yet.
-            UNREACHABLE();
-    }
-
-    return mLinearColorView;
-}
-
 TextureRef Texture::getReadableCopy(ContextMtl *context,
                                     mtl::BlitCommandEncoder *encoder,
                                     const uint32_t levelToCopy,

@@ -2368,11 +2368,6 @@ angle::Result TextureMtl::copySubTextureWithDraw(const gl::Context *context,
     mtl::TextureRef image = getImage(index);
     ASSERT(image && image->valid());
 
-    if (internalFormat.colorEncoding == GL_SRGB)
-    {
-        image = image->getLinearColorView();
-    }
-
     mtl::RenderCommandEncoder *cmdEncoder = contextMtl->getTextureRenderCommandEncoder(
         image, mtl::ImageNativeIndex::FromBaseZeroGLIndex(GetZeroLevelIndex(image)));
     mtl::ColorBlitParams blitParams;
@@ -2394,6 +2389,7 @@ angle::Result TextureMtl::copySubTextureWithDraw(const gl::Context *context,
     blitParams.unpackFlipY            = unpackFlipY;
     blitParams.unpackPremultiplyAlpha = unpackPremultiplyAlpha;
     blitParams.unpackUnmultiplyAlpha  = unpackUnmultiplyAlpha;
+    blitParams.transformLinearToSrgb  = sourceAngleFormat.isSRGB;
 
     return displayMtl->getUtils().copyTextureWithDraw(context, cmdEncoder, sourceAngleFormat,
                                                       mFormat.actualAngleFormat(), blitParams);
