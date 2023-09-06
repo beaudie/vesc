@@ -857,27 +857,26 @@ angle::Result Texture::resize(ContextMtl *context, uint32_t width, uint32_t heig
     return angle::Result::Continue;
 }
 
-TextureRef Texture::getLinearColorView()
+TextureRef Texture::getNonSrgbView()
 {
-    if (mLinearColorView)
+    if (mNonSrgbView)
     {
-        return mLinearColorView;
+        return mNonSrgbView;
     }
 
     switch (pixelFormat())
     {
         case MTLPixelFormatRGBA8Unorm_sRGB:
-            mLinearColorView = createViewWithCompatibleFormat(MTLPixelFormatRGBA8Unorm);
+            mNonSrgbView = createViewWithCompatibleFormat(MTLPixelFormatRGBA8Unorm);
             break;
         case MTLPixelFormatBGRA8Unorm_sRGB:
-            mLinearColorView = createViewWithCompatibleFormat(MTLPixelFormatBGRA8Unorm);
+            mNonSrgbView = createViewWithCompatibleFormat(MTLPixelFormatBGRA8Unorm);
             break;
         default:
-            // NOTE(hqle): Not all sRGB formats are supported yet.
-            UNREACHABLE();
+            break;
     }
 
-    return mLinearColorView;
+    return mNonSrgbView;
 }
 
 TextureRef Texture::getReadableCopy(ContextMtl *context,
@@ -954,8 +953,8 @@ void Texture::set(id<MTLTexture> metalTexture)
 {
     ParentClass::set(metalTexture);
     // Reset stencil view
-    mStencilView     = nullptr;
-    mLinearColorView = nullptr;
+    mStencilView = nullptr;
+    mNonSrgbView = nullptr;
 }
 
 // Buffer implementation
