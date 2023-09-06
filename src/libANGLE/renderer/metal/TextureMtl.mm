@@ -2368,9 +2368,11 @@ angle::Result TextureMtl::copySubTextureWithDraw(const gl::Context *context,
     mtl::TextureRef image = getImage(index);
     ASSERT(image && image->valid());
 
-    if (internalFormat.colorEncoding == GL_SRGB)
+    // This is simulating a copy with a draw, so remove the sRGB-to-linear
+    // conversion performed during sampling.
+    if (image->getNonSrgbView())
     {
-        image = image->getLinearColorView();
+        image = image->getNonSrgbView();
     }
 
     mtl::RenderCommandEncoder *cmdEncoder = contextMtl->getTextureRenderCommandEncoder(

@@ -277,8 +277,11 @@ class Texture final : public Resource,
 
     // Get stencil view
     TextureRef getStencilView();
-    // Get linear color
-    TextureRef getLinearColorView();
+    // If this texture converts from sRGB to linear during sampling, then
+    // return a view of this texture that does not perform that conversion
+    // (e.g, if the format is MTLPixelFormatRGBA8Unorm_sRGB, return a view
+    // with format MTLPixelFormatRGBA8Unorm_sRGB).
+    TextureRef getNonSrgbView();
 
     // Change the wrapped metal object. Special case for swapchain image
     void set(id<MTLTexture> metalTexture);
@@ -355,8 +358,9 @@ class Texture final : public Resource,
     // This property is shared between this object and its views:
     std::shared_ptr<MTLColorWriteMask> mColorWritableMask;
 
-    // Linear view of sRGB texture
-    TextureRef mLinearColorView;
+    // View of sRGB texture without the implicit sRGB-to-linear conversion
+    // during sampling.
+    TextureRef mNonSrgbView;
 
     TextureRef mStencilView;
     // Readable copy of texture
