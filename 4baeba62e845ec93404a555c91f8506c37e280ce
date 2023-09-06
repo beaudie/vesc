@@ -227,6 +227,29 @@
       },
       "revId": "4baeba62e845ec93404a555c91f8506c37e280ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e74a2bb6_0ee1797f",
+        "filename": "src/tests/capture_tests/expected/CapturedTest_MultiFrame_ES3_Vulkan_001.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-09-06T19:33:38Z",
+      "side": 1,
+      "message": "Note how Reset accurately detected it no longer needed to delete this.",
+      "range": {
+        "startLine": 160,
+        "startChar": 0,
+        "endLine": 161,
+        "endChar": 43
+      },
+      "revId": "4baeba62e845ec93404a555c91f8506c37e280ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

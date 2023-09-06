@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ef2319d_946acfd5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-09-06T19:33:38Z",
+      "side": 1,
+      "message": "LGTM\n\n+1 so Roman has a chance to review again",
+      "revId": "e87e96d0d1952fa5617f47f730596b4a369a5fdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
