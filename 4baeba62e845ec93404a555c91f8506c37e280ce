@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "381b73fe_d23c8e47",
+        "filename": "src/tests/capture_tests/CapturedTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-09-06T19:27:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5da0cb44_51bb4fcc",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 53
+      },
+      "revId": "4baeba62e845ec93404a555c91f8506c37e280ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "52f60c21_9d4f3145",
@@ -58,6 +82,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "000dd2e6_7b49c6a7",
+        "filename": "src/tests/capture_tests/CapturedTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-09-06T19:27:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "52f60c21_9d4f3145",
+      "revId": "4baeba62e845ec93404a555c91f8506c37e280ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fefdb0f3_946ad511",
@@ -71,6 +113,24 @@
       "writtenOn": "2023-09-06T19:02:01Z",
       "side": 1,
       "message": "Also need to delete the new textures:\n```\nglDeleteTextures(1, textureNeverBound);\nglDeleteTextures(1, textureBoundBeforeCapture);\nglDeleteTextures(1, textureBoundDuringCapture);\n\n```",
+      "revId": "4baeba62e845ec93404a555c91f8506c37e280ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6875848d_aeb38b63",
+        "filename": "src/tests/capture_tests/CapturedTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-09-06T19:27:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fefdb0f3_946ad511",
       "revId": "4baeba62e845ec93404a555c91f8506c37e280ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -98,6 +158,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0268b406_27798620",
+        "filename": "src/tests/capture_tests/CapturedTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-09-06T19:27:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74d32f3d_65a9bc78",
+      "range": {
+        "startLine": 184,
+        "startChar": 19,
+        "endLine": 184,
+        "endChar": 34
+      },
+      "revId": "4baeba62e845ec93404a555c91f8506c37e280ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6ab5f23b_54f1b0d2",
@@ -111,6 +195,30 @@
       "writtenOn": "2023-09-06T19:02:01Z",
       "side": 1,
       "message": "Same here, can you move this down to where you bind the texture?",
+      "range": {
+        "startLine": 212,
+        "startChar": 0,
+        "endLine": 212,
+        "endChar": 49
+      },
+      "revId": "4baeba62e845ec93404a555c91f8506c37e280ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ac4acd0_4d8f509f",
+        "filename": "src/tests/capture_tests/CapturedTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-09-06T19:27:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ab5f23b_54f1b0d2",
       "range": {
         "startLine": 212,
         "startChar": 0,
