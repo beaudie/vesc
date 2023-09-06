@@ -1268,13 +1268,20 @@ ColorBlitUtils::ColorBlitUtils(const std::string &fragmentShaderName)
 
 angle::Result ColorBlitUtils::ensureShadersInitialized(
     ContextMtl *ctx,
-    uint32_t numOutputs,
-    int alphaPremultiplyType,
-    int textureType,
+    const ShaderKey &key,
     AutoObjCPtr<id<MTLFunction>> *fragmentShaderOut)
 {
+    fragmentShaderOut = &mBlitFragmentShaders[key];
+    if (*fragmentShaderOut)
+    {
+        return angle::Result::Continue;
+    }
+
     ANGLE_MTL_OBJC_SCOPE
     {
+        const uint32_t numOutputs      = key.numColorAttachments;
+        const int alphaPremultiplyType = key.alphaPremultiplyType;
+        const int textureType          = key.sourceTextureType;
         if (!mVertexShader)
         {
             id<MTLLibrary> shaderLib = ctx->getDisplay()->getDefaultShadersLib();
@@ -1361,27 +1368,22 @@ angle::Result ColorBlitUtils::getColorBlitRenderPipelineState(
     pipelineDesc.inputPrimitiveTopology = kPrimitiveTopologyClassTriangle;
 
     AutoObjCPtr<id<MTLFunction>> *fragmentShader = nullptr;
-    int alphaPremultiplyType;
-    uint32_t nOutputIndex = renderPassDesc.numColorAttachments - 1;
-    int textureType       = GetShaderTextureType(params.src);
+    ShaderKey key;
+    key.numColorAttachments = renderPassDesc.numColorAttachments;
+    key.sourceTextureType   = GetShaderTextureType(params.src);
     if (params.unpackPremultiplyAlpha == params.unpackUnmultiplyAlpha)
     {
-        alphaPremultiplyType = 0;
-        fragmentShader       = &mBlitFragmentShaders[nOutputIndex][textureType];
+        key.alphaPremultiplyType = 0;
     }
     else if (params.unpackPremultiplyAlpha)
     {
-        alphaPremultiplyType = 1;
-        fragmentShader       = &mBlitPremultiplyAlphaFragmentShaders[nOutputIndex][textureType];
+        key.alphaPremultiplyType = 1;
     }
     else
     {
-        alphaPremultiplyType = 2;
-        fragmentShader       = &mBlitUnmultiplyAlphaFragmentShaders[nOutputIndex][textureType];
+        key.alphaPremultiplyType = 2;
     }
-
-    ANGLE_TRY(ensureShadersInitialized(contextMtl, renderPassDesc.numColorAttachments,
-                                       alphaPremultiplyType, textureType, fragmentShader));
+    ANGLE_TRY(ensureShadersInitialized(contextMtl, key, fragmentShader));
 
     return contextMtl->getPipelineCache().getRenderPipeline(
         contextMtl, mVertexShader, *fragmentShader, pipelineDesc, outPipelineState);
