@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "740b08d3_7c1f9a28",
+        "filename": "src/common/BinaryStream.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-06T02:28:15Z",
+      "side": 1,
+      "message": "You can generalize this so later we could also use it for std::array too:\n\n```\n    template \u003cFixedSizeArray\u003e\n    void readFixedSizeArray(FixedSizeArray *param)\n    {\n        static_assert(std::is_trivially_copyable\u003ctypename FixedSizeArray::value_type\u003e(), \"must be memcpy-able\");\n        readBytes(reinterpret_cast\u003cuint8_t *\u003e(param-\u003edata()), param-\u003esize() * sizeof(*param-\u003edata()));\n    }\n```\n\n(or maybe just call it array instead of fixed-size-array)",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 61
+      },
+      "revId": "748720a697e0f14f3c45576c01128d7d801eae89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8ee55ed_dc81856c",
+        "filename": "src/common/BinaryStream.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-06T02:28:15Z",
+      "side": 1,
+      "message": "Corresponding change",
+      "revId": "748720a697e0f14f3c45576c01128d7d801eae89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc500c54_f7d9850a",
+        "filename": "src/libANGLE/renderer/vulkan/ShaderInterfaceVariableInfoMap.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-06T02:28:15Z",
+      "side": 1,
+      "message": "Maybe make xfbInfoCount 31 bits and fit the bool in the last bit?",
+      "range": {
+        "startLine": 119,
+        "startChar": 0,
+        "endLine": 123,
+        "endChar": 21
+      },
+      "revId": "748720a697e0f14f3c45576c01128d7d801eae89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
