@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "673ae771_b92a5d8f",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 1707,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-09-06T15:13:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de45e8d6_5ece37d9",
+      "revId": "ab1fbd9e099908db180df9f2e7e85e0d286ce10e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4a14625d_ffa16e94",
@@ -58,6 +76,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "87a1dedf_1d484888",
+        "filename": "src/tests/capture_tests/CapturedTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-09-06T15:13:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a14625d_ffa16e94",
+      "range": {
+        "startLine": 128,
+        "startChar": 11,
+        "endLine": 128,
+        "endChar": 36
+      },
+      "revId": "ab1fbd9e099908db180df9f2e7e85e0d286ce10e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a0392dc0_90ba8c53",
@@ -71,6 +113,30 @@
       "writtenOn": "2023-09-01T21:22:27Z",
       "side": 1,
       "message": "I think it would be better to move these to `testSetUp`.  You\u0027ll get the same effect of using a texture bound before capture, it just makes more sense to populate the texture right when it is created.",
+      "range": {
+        "startLine": 172,
+        "startChar": 0,
+        "endLine": 182,
+        "endChar": 70
+      },
+      "revId": "ab1fbd9e099908db180df9f2e7e85e0d286ce10e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "821de4a7_8c817a1d",
+        "filename": "src/tests/capture_tests/CapturedTest.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-09-06T15:13:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a0392dc0_90ba8c53",
       "range": {
         "startLine": 172,
         "startChar": 0,
