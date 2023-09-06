@@ -69,6 +69,24 @@
       "parentUuid": "164c213c_8178a391",
       "revId": "b2d90c948373a3737c21c897ea675b375e78d6ee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3a64f9d_c0ee8547",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-09-06T15:46:48Z",
+      "side": 1,
+      "message": "I was able to repro the Pixel 4 failure.  The failing cases had:\n```\nrun_tests_on_device(92JBA03039)  INFO: mMinImageCount \u003d 3, minImageCount \u003d 2\nrun_tests_on_device(92JBA03039)  INFO: mMinImageCount \u003d 3, minImageCount \u003d 2\nrun_tests_on_device(92JBA03039)  INFO: mMinImageCount \u003d 3, minImageCount \u003d 2\n```\nShabi pointed out that calling `GetMinImageCount` can give a different result than `mSurfaceCaps.minImageCount`, so I can\u0027t compare directly.  Have to call it early and compare against the returned value.",
+      "parentUuid": "6953ac69_9e21940d",
+      "revId": "b2d90c948373a3737c21c897ea675b375e78d6ee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
