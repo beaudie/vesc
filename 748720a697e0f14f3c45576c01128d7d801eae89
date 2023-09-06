@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2ca29da6_1adf76ff",
+        "filename": "src/common/BinaryStream.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-06T22:09:40Z",
+      "side": 1,
+      "message": "You can\u0027t do static_assert though, it has to be run time ASSERT. But right now we do not have a std::array usage for this, so what I have here works well and compile time assertion is preferred. If we later on found a need for std::array, then we can always use what you said here, or use some kind of template helper struct https://stackoverflow.com/questions/6953969/can-static-assert-check-if-a-type-is-a-vector. But lets reserve that when it actually needed.",
+      "parentUuid": "3a32a07b_77853112",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 61
+      },
+      "revId": "748720a697e0f14f3c45576c01128d7d801eae89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f8ee55ed_dc81856c",
         "filename": "src/common/BinaryStream.h",
         "patchSetId": 7
