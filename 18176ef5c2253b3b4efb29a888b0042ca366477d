@@ -33,6 +33,24 @@
       "message": "```suggestion\n    ASSERT(count \u003e 0 \u0026\u0026 data !\u003d nullptr);\n    ASSERT(empty());\n```",
       "revId": "18176ef5c2253b3b4efb29a888b0042ca366477d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5101d85b_ec0dc481",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-06T19:53:07Z",
+      "side": 1,
+      "message": "It does not have to be empty though -- it is called \"reset\". That been said, the load function could assert it is empty.",
+      "parentUuid": "b762d26b_c1324838",
+      "revId": "18176ef5c2253b3b4efb29a888b0042ca366477d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
