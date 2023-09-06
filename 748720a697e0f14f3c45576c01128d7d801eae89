@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e35cf9c7_0b8faf58",
+        "filename": "src/common/BinaryStream.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-06T18:44:33Z",
+      "side": 1,
+      "message": "It is dangerous though: if someone call readArray on a std::vector, it will compile just fine, but we will not write the vector size. Unless there is a way that I can static_assert the size is a constexpr, this is safer.",
+      "parentUuid": "740b08d3_7c1f9a28",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 61
+      },
+      "revId": "748720a697e0f14f3c45576c01128d7d801eae89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f8ee55ed_dc81856c",
         "filename": "src/common/BinaryStream.h",
         "patchSetId": 7
@@ -37,6 +61,24 @@
       "writtenOn": "2023-09-06T02:28:15Z",
       "side": 1,
       "message": "Corresponding change",
+      "revId": "748720a697e0f14f3c45576c01128d7d801eae89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fd5f9a3_106cb069",
+        "filename": "src/common/BinaryStream.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-06T18:44:33Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "f8ee55ed_dc81856c",
       "revId": "748720a697e0f14f3c45576c01128d7d801eae89",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -54,6 +96,30 @@
       "writtenOn": "2023-09-06T02:28:15Z",
       "side": 1,
       "message": "Maybe make xfbInfoCount 31 bits and fit the bool in the last bit?",
+      "range": {
+        "startLine": 119,
+        "startChar": 0,
+        "endLine": 123,
+        "endChar": 21
+      },
+      "revId": "748720a697e0f14f3c45576c01128d7d801eae89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbfd762a_ad6712b9",
+        "filename": "src/libANGLE/renderer/vulkan/ShaderInterfaceVariableInfoMap.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-06T18:44:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc500c54_f7d9850a",
       "range": {
         "startLine": 119,
         "startChar": 0,
