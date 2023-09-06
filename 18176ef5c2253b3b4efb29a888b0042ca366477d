@@ -51,6 +51,24 @@
       "parentUuid": "b762d26b_c1324838",
       "revId": "18176ef5c2253b3b4efb29a888b0042ca366477d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83f26eeb_7b9e2f17",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-06T19:54:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5101d85b_ec0dc481",
+      "revId": "18176ef5c2253b3b4efb29a888b0042ca366477d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
