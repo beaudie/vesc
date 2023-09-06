@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "150268f1_199bbc66",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-06T02:12:38Z",
+      "side": 1,
+      "message": "LGTM!",
+      "revId": "847a9b6965bd4ef6181f26014b4e240b3653f5d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ddbc264_0d0ca208",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 14
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-06T02:12:38Z",
+      "side": 1,
+      "message": "Thanks for the clearer name, you could even consider asserting that `size() \u003d\u003d 0` (minor).\n\nPlease add some basic unit tests to FastVector_unittest.cpp.",
+      "revId": "847a9b6965bd4ef6181f26014b4e240b3653f5d9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
