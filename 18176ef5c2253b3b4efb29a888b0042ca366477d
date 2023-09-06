@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6371891_4e8dce3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-06T19:10:49Z",
+      "side": 1,
+      "message": "LGTM!",
+      "revId": "18176ef5c2253b3b4efb29a888b0042ca366477d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b762d26b_c1324838",
+        "filename": "src/common/FastVector.h",
+        "patchSetId": 15
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-06T19:10:49Z",
+      "side": 1,
+      "message": "```suggestion\n    ASSERT(count \u003e 0 \u0026\u0026 data !\u003d nullptr);\n    ASSERT(empty());\n```",
+      "revId": "18176ef5c2253b3b4efb29a888b0042ca366477d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
