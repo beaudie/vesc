@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3a32a07b_77853112",
+        "filename": "src/common/BinaryStream.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-06T19:28:20Z",
+      "side": 1,
+      "message": "Good point, but fixable:\n\n```\ntemplate \u003cFixedSizeArray\u003e\nvoid readFixedSizeArray(FixedSizeArray *param)\n{\n    static_assert(std::is_trivially_copyable\u003ctypename FixedSizeArray::value_type\u003e(), \"must be memcpy-able\");\n    static_assert(param-\u003esize() * sizeof(*param-\u003edata()) \u003d\u003d sizeof(*param), \"must be a fixed-size array\");\n    readBytes(reinterpret_cast\u003cuint8_t *\u003e(param-\u003edata()), sizeof(*param));\n}\n```",
+      "parentUuid": "e35cf9c7_0b8faf58",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 61
+      },
+      "revId": "748720a697e0f14f3c45576c01128d7d801eae89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f8ee55ed_dc81856c",
         "filename": "src/common/BinaryStream.h",
         "patchSetId": 7
