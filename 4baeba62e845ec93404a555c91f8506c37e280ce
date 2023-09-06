@@ -1,0 +1,124 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "723a935a_610db589",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-09-06T19:02:01Z",
+      "side": 1,
+      "message": "Mark, this looks great, just a couple more nits.  I\u0027m a bit focused on the CapturedTest just because it is becoming a bit of a showcase.",
+      "revId": "4baeba62e845ec93404a555c91f8506c37e280ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5da0cb44_51bb4fcc",
+        "filename": "src/tests/capture_tests/CapturedTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-09-06T19:02:01Z",
+      "side": 1,
+      "message": "Can you move these two texture lines down to the texture segment, just before you bind one?",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 53
+      },
+      "revId": "4baeba62e845ec93404a555c91f8506c37e280ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52f60c21_9d4f3145",
+        "filename": "src/tests/capture_tests/CapturedTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-09-06T19:02:01Z",
+      "side": 1,
+      "message": "Can you insert one more comment just saying \"Populate the prebound texture\" or similar.",
+      "revId": "4baeba62e845ec93404a555c91f8506c37e280ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fefdb0f3_946ad511",
+        "filename": "src/tests/capture_tests/CapturedTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-09-06T19:02:01Z",
+      "side": 1,
+      "message": "Also need to delete the new textures:\n```\nglDeleteTextures(1, textureNeverBound);\nglDeleteTextures(1, textureBoundBeforeCapture);\nglDeleteTextures(1, textureBoundDuringCapture);\n\n```",
+      "revId": "4baeba62e845ec93404a555c91f8506c37e280ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74d32f3d_65a9bc78",
+        "filename": "src/tests/capture_tests/CapturedTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-09-06T19:02:01Z",
+      "side": 1,
+      "message": "Let\u0027s merge the before/during shaders since they ended up being the same.",
+      "range": {
+        "startLine": 184,
+        "startChar": 19,
+        "endLine": 184,
+        "endChar": 34
+      },
+      "revId": "4baeba62e845ec93404a555c91f8506c37e280ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ab5f23b_54f1b0d2",
+        "filename": "src/tests/capture_tests/CapturedTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-09-06T19:02:01Z",
+      "side": 1,
+      "message": "Same here, can you move this down to where you bind the texture?",
+      "range": {
+        "startLine": 212,
+        "startChar": 0,
+        "endLine": 212,
+        "endChar": 49
+      },
+      "revId": "4baeba62e845ec93404a555c91f8506c37e280ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
