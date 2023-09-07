@@ -3606,6 +3606,9 @@ void TextureVk::releaseImage(ContextVk *contextVk)
         }
     }
 
+    // Check the size of pending image garbage size, and flush the context if needed.
+    ASSERT(contextVk->checkAndFlushImageGarbage() == angle::Result::Continue);
+
     onStateChange(angle::SubjectMessage::SubjectChanged);
     mRedefinedLevels.reset();
 }
