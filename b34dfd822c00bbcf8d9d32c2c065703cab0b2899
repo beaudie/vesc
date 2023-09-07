@@ -46,6 +46,30 @@
       },
       "revId": "b34dfd822c00bbcf8d9d32c2c065703cab0b2899",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90a7d29b_b4ee0900",
+        "filename": "src/common/BinaryStream.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-07T19:28:21Z",
+      "side": 1,
+      "message": "To me this looks like something that should be asserted by the caller, not this class, because then a random reader of this file might be wondering \"Why is readVector() special? Am I missing something?\"",
+      "parentUuid": "95459ce0_44056341",
+      "range": {
+        "startLine": 65,
+        "startChar": 8,
+        "endLine": 65,
+        "endChar": 30
+      },
+      "revId": "b34dfd822c00bbcf8d9d32c2c065703cab0b2899",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
