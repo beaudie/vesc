@@ -81,7 +81,36 @@ const char *gCaseListFiles[] = {
     GLES_CTS_DIR("aosp_mustpass/main/gles31-rotate-landscape.txt"),
     GLES_CTS_DIR("aosp_mustpass/main/gles31-rotate-reverse-portrait.txt"),
     GLES_CTS_DIR("aosp_mustpass/main/gles31-rotate-reverse-landscape.txt"),
+    GLES_CTS_DIR("aosp_mustpass/main/gles3-multisample.txt"),
+    GLES_CTS_DIR("aosp_mustpass/main/gles3-565-no-depth-no-stencil.txt"),
+    GLES_CTS_DIR("aosp_mustpass/main/gles31-multisample.txt"),
+    GLES_CTS_DIR("aosp_mustpass/main/gles31-565-no-depth-no-stencil.txt"),
     GL_CTS_DIR("khronos_mustpass/main/gl46-master.txt"),
+};
+
+const std::vector<const char *> gTestSuiteConfigParameters[] = {
+    {"--deqp-gl-config-name=rgba8888d24s8ms0"},  // egl
+    {"--deqp-gl-config-name=rgba8888d24s8ms0"},  // gles2
+    {"--deqp-gl-config-name=rgba8888d24s8ms0"},  // gles3
+    {"--deqp-gl-config-name=rgba8888d24s8ms0"},  // gles31
+    {},                                          // gles2-khr
+    {},                                          // gles3-khr
+    {},                                          // gles31-khr
+    {},                                          // gles32-khr
+    {},                                          // gles2-khr-noctx
+    {},                                          // gles32-khr-noctx
+    {},                                          // gles32-khr-single
+    {"--deqp-gl-config-name=rgba8888d24s8ms0"},  // gles3-rotate90
+    {"--deqp-gl-config-name=rgba8888d24s8ms0"},  // gles3-rotate180
+    {"--deqp-gl-config-name=rgba8888d24s8ms0"},  // gles3-rotate270
+    {"--deqp-gl-config-name=rgba8888d24s8ms0"},  // gles31-rotate90
+    {"--deqp-gl-config-name=rgba8888d24s8ms0"},  // gles31-rotate180
+    {"--deqp-gl-config-name=rgba8888d24s8ms0"},  // gles31-rotate270
+    {"--deqp-gl-config-name=rgba8888d24s8ms4"},  // gles3-multisample
+    {"--deqp-gl-config-name=rgb565d0s0ms0"},     // gles3-rgb565-no-depth-no-stencil
+    {"--deqp-gl-config-name=rgba8888d24s8ms4"},  // gles31-multisample
+    {"--deqp-gl-config-name=rgb565d0s0ms0"},     // gles31-rgb565-no-depth-no-stencil
+    {},                                          // gl46
 };
 
 #undef GLES_CTS_DIR
@@ -105,6 +134,10 @@ const char *gTestExpectationsFiles[] = {
     "deqp_gles31_rotate_test_expectations.txt",
     "deqp_gles31_rotate_test_expectations.txt",
     "deqp_gles31_rotate_test_expectations.txt",
+    "deqp_gles3_multisample_test_expectations.txt",
+    "deqp_gles3_565_no_depth_no_stencil_test_expectations.txt",
+    "deqp_gles31_multisample_test_expectations.txt",
+    "deqp_gles31_565_no_depth_no_stencil_test_expectations.txt",
     "deqp_gl46_test_expectations.txt",
 };
 
@@ -235,6 +268,97 @@ Optional<std::string> FindCaseListPath(size_t testModuleIndex)
 Optional<std::string> FindTestExpectationsPath(size_t testModuleIndex)
 {
     return FindFileFromPath(kSupportPath, gTestExpectationsFiles[testModuleIndex]);
+}
+
+size_t GetTestModuleIndex()
+{
+#ifdef ANGLE_DEQP_EGL_TESTS
+    return 0;
+#endif
+
+#ifdef ANGLE_DEQP_GLES2_TESTS
+    return 1;
+#endif
+
+#ifdef ANGLE_DEQP_GLES3_TESTS
+    return 2;
+#endif
+
+#ifdef ANGLE_DEQP_GLES31_TESTS
+    return 3;
+#endif
+
+#ifdef ANGLE_DEQP_KHR_GLES2_TESTS
+    return 4;
+#endif
+
+#ifdef ANGLE_DEQP_KHR_GLES3_TESTS
+    return 5;
+#endif
+
+#ifdef ANGLE_DEQP_KHR_GLES31_TESTS
+    return 6;
+#endif
+
+#ifdef ANGLE_DEQP_KHR_GLES32_TESTS
+    return 7;
+#endif
+
+#ifdef ANGLE_DEQP_KHR_NOCTX_GLES2_TESTS
+    return 8;
+#endif
+
+#ifdef ANGLE_DEQP_KHR_NOCTX_GLES32_TESTS
+    return 9;
+#endif
+
+#ifdef ANGLE_DEQP_KHR_SINGLE_GLES32_TESTS
+    return 10;
+#endif
+
+#ifdef ANGLE_DEQP_GLES3_ROTATE90_TESTS
+    return 11;
+#endif
+
+#ifdef ANGLE_DEQP_GLES3_ROTATE180_TESTS
+    return 12;
+#endif
+
+#ifdef ANGLE_DEQP_GLES3_ROTATE270_TESTS
+    return 13;
+#endif
+
+#ifdef ANGLE_DEQP_GLES31_ROTATE90_TESTS
+    return 14;
+#endif
+
+#ifdef ANGLE_DEQP_GLES31_ROTATE180_TESTS
+    return 15;
+#endif
+
+#ifdef ANGLE_DEQP_GLES31_ROTATE270_TESTS
+    return 16;
+#endif
+
+#ifdef ANGLE_DEQP_GLES3_MULTISAMPLE_TESTS
+    return 17;
+#endif
+
+#ifdef ANGLE_DEQP_GLES3_565_NO_DEPTH_NO_STENCIL_TESTS
+    return 18;
+#endif
+
+#ifdef ANGLE_DEQP_GLES31_MULTISAMPLE_TESTS
+    return 19;
+#endif
+
+#ifdef ANGLE_DEQP_GLES31_565_NO_DEPTH_NO_STENCIL_TESTS
+    return 20;
+#endif
+
+#ifdef ANGLE_DEQP_GL_TESTS
+    return 21;
+#endif
 }
 
 class dEQPCaseList
@@ -389,6 +513,8 @@ class dEQPTestSuiteData
 
     static void countTestResult(dEQPTestResult result);
 
+    static const std::vector<const char *> GetTestSuiteConfigString(size_t testModuleIndex);
+
     static uint32_t sTestCount;
     static uint32_t sPassedTestCount;
     static uint32_t sFailedTestCount;
@@ -495,6 +621,11 @@ void dEQPTestSuiteData::countTestResult(dEQPTestResult result)
     }
 }
 
+const std::vector<const char *> dEQPTestSuiteData::GetTestSuiteConfigString(size_t testModuleIndex)
+{
+    return gTestSuiteConfigParameters[testModuleIndex];
+}
+
 class dEQPTest : public testing::Test
 {
   public:
@@ -528,10 +659,17 @@ void dEQPTest::SetUpTestSuite()
     std::string apiArgString = std::string(kdEQPEGLString) + targetApi;
     argv.push_back(apiArgString.c_str());
 
-    // Add config name
-    const char *targetConfigName = gEGLConfigName;
-    std::string configArgString  = std::string(gdEQPEGLConfigNameString) + targetConfigName;
-    argv.push_back(configArgString.c_str());
+    const std::vector<const char *> testSuiteConfigParams =
+        dEQPTestSuiteData::GetTestSuiteConfigString(GetTestModuleIndex());
+
+    for (const char *configParam : testSuiteConfigParams)
+    {
+        argv.push_back(configParam);
+    }
+    //    // Add config name
+    //    const char *targetConfigName = gEGLConfigName;
+    //    std::string configArgString  = std::string(gdEQPEGLConfigNameString) + targetConfigName;
+    //    argv.push_back(configArgString.c_str());
 
     // Hide SwiftShader window to prevent a race with Xvfb causing hangs on test bots
     if (gInitAPI && gInitAPI->second == GPUTestConfig::kAPISwiftShader)
@@ -731,81 +869,6 @@ void HandleLogImages(const char *logImagesString)
         std::cout << "Error parsing log images setting. Use enable/disable.";
         exit(1);
     }
-}
-
-size_t GetTestModuleIndex()
-{
-#ifdef ANGLE_DEQP_EGL_TESTS
-    return 0;
-#endif
-
-#ifdef ANGLE_DEQP_GLES2_TESTS
-    return 1;
-#endif
-
-#ifdef ANGLE_DEQP_GLES3_TESTS
-    return 2;
-#endif
-
-#ifdef ANGLE_DEQP_GLES31_TESTS
-    return 3;
-#endif
-
-#ifdef ANGLE_DEQP_KHR_GLES2_TESTS
-    return 4;
-#endif
-
-#ifdef ANGLE_DEQP_KHR_GLES3_TESTS
-    return 5;
-#endif
-
-#ifdef ANGLE_DEQP_KHR_GLES31_TESTS
-    return 6;
-#endif
-
-#ifdef ANGLE_DEQP_KHR_GLES32_TESTS
-    return 7;
-#endif
-
-#ifdef ANGLE_DEQP_KHR_NOCTX_GLES2_TESTS
-    return 8;
-#endif
-
-#ifdef ANGLE_DEQP_KHR_NOCTX_GLES32_TESTS
-    return 9;
-#endif
-
-#ifdef ANGLE_DEQP_KHR_SINGLE_GLES32_TESTS
-    return 10;
-#endif
-
-#ifdef ANGLE_DEQP_GLES3_ROTATE90_TESTS
-    return 11;
-#endif
-
-#ifdef ANGLE_DEQP_GLES3_ROTATE180_TESTS
-    return 12;
-#endif
-
-#ifdef ANGLE_DEQP_GLES3_ROTATE270_TESTS
-    return 13;
-#endif
-
-#ifdef ANGLE_DEQP_GLES31_ROTATE90_TESTS
-    return 14;
-#endif
-
-#ifdef ANGLE_DEQP_GLES31_ROTATE180_TESTS
-    return 15;
-#endif
-
-#ifdef ANGLE_DEQP_GLES31_ROTATE270_TESTS
-    return 16;
-#endif
-
-#ifdef ANGLE_DEQP_GL_TESTS
-    return 17;
-#endif
 }
 
 void RegisterGLCTSTests()
