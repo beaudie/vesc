@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85c93228_00e4663a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-07T18:37:35Z",
+      "side": 1,
+      "message": "Bots are green now, I had to revert the validate-before-checking-in-cache change for one flaky change (read of something uninitialized from a shader that\u0027s never compiled!)",
+      "revId": "2cc3f32791bbb0077e3095856eafd53760f3846a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
