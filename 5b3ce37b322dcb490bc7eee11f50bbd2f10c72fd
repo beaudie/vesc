@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "c05db0c2_fefa20bc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-07T19:56:11Z",
+      "side": 1,
+      "message": "Ah yes, I was just fighting with the character limit \u003e_\u003c\nReworded, now fits.",
+      "parentUuid": "66aa53c2_7647e6a7",
+      "range": {
+        "startLine": 7,
+        "startChar": 14,
+        "endLine": 7,
+        "endChar": 38
+      },
+      "revId": "5b3ce37b322dcb490bc7eee11f50bbd2f10c72fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "152554f9_71eea635",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -54,6 +78,30 @@
       "writtenOn": "2023-09-07T19:51:46Z",
       "side": 1,
       "message": "btw, I love how this gives us a spot to find what the current capture revision actually is.",
+      "range": {
+        "startLine": 4,
+        "startChar": 27,
+        "endLine": 4,
+        "endChar": 32
+      },
+      "revId": "5b3ce37b322dcb490bc7eee11f50bbd2f10c72fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c85647eb_079f2502",
+        "filename": "src/tests/capture_tests/expected/CapturedTest_MultiFrame_ES3_Vulkan.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-07T19:56:11Z",
+      "side": 1,
+      "message": ":)",
+      "parentUuid": "2e4253c6_71616dd7",
       "range": {
         "startLine": 4,
         "startChar": 27,
