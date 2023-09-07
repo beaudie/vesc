@@ -33,7 +33,7 @@ namespace
 #if !defined(NDEBUG)
 constexpr bool kIsDebug = true;
 #else
-constexpr bool kIsDebug                = false;
+constexpr bool kIsDebug = false;
 #endif  // !defined(NDEBUG)
 
 bool gGlobalError = false;
@@ -80,6 +80,10 @@ const char *gCaseListFiles[] = {
     GLES_CTS_DIR("aosp_mustpass/main/gles31-rotate-landscape.txt"),
     GLES_CTS_DIR("aosp_mustpass/main/gles31-rotate-reverse-portrait.txt"),
     GLES_CTS_DIR("aosp_mustpass/main/gles31-rotate-reverse-landscape.txt"),
+    GLES_CTS_DIR("aosp_mustpass/main/gles3-multisample.txt"),
+    GLES_CTS_DIR("aosp_mustpass/main/gles3-565-no-depth-no-stencil.txt"),
+    GLES_CTS_DIR("aosp_mustpass/main/gles31-multisample.txt"),
+    GLES_CTS_DIR("aosp_mustpass/main/gles31-565-no-depth-no-stencil.txt"),
     GL_CTS_DIR("khronos_mustpass/main/gl46-master.txt"),
 };
 
@@ -104,6 +108,10 @@ const char *gTestExpectationsFiles[] = {
     "deqp_gles31_rotate_test_expectations.txt",
     "deqp_gles31_rotate_test_expectations.txt",
     "deqp_gles31_rotate_test_expectations.txt",
+    "deqp_gles3_multisample_test_expectations.txt",
+    "deqp_gles3_565_no_depth_no_stencil_test_expectations.txt",
+    "deqp_gles31_multisample_test_expectations.txt",
+    "deqp_gles31_565_no_depth_no_stencil_test_expectations.txt",
     "deqp_gl46_test_expectations.txt",
 };
 
@@ -162,7 +170,7 @@ constexpr const char gdEQPEGLConfigNameString[] = "--deqp-gl-config-name=";
 constexpr const char gdEQPLogImagesString[]     = "--deqp-log-images=";
 
 // Default the config to RGBA8
-const char *gEGLConfigName = "rgba8888d24s8";
+const char *gEGLConfigName = "rgba8888d24s8ms0";
 
 std::vector<const char *> gdEQPForwardFlags;
 
@@ -203,8 +211,8 @@ std::string GetTestStatLine(const std::string &key, const std::string &value)
     return std::string(kInfoTag) + ": " + key + ": " + value + "\n";
 }
 
-// During the CaseList initialization we cannot use the GTEST FAIL macro to quit the program because
-// the initialization is called outside of tests the first time.
+// During the CaseList initialization we cannot use the GTEST FAIL macro to quit the program
+// because the initialization is called outside of tests the first time.
 void Die()
 {
     exit(EXIT_FAILURE);
@@ -234,6 +242,97 @@ Optional<std::string> FindCaseListPath(size_t testModuleIndex)
 Optional<std::string> FindTestExpectationsPath(size_t testModuleIndex)
 {
     return FindFileFromPath(kSupportPath, gTestExpectationsFiles[testModuleIndex]);
+}
+
+size_t GetTestModuleIndex()
+{
+#ifdef ANGLE_DEQP_EGL_TESTS
+    return 0;
+#endif
+
+#ifdef ANGLE_DEQP_GLES2_TESTS
+    return 1;
+#endif
+
+#ifdef ANGLE_DEQP_GLES3_TESTS
+    return 2;
+#endif
+
+#ifdef ANGLE_DEQP_GLES31_TESTS
+    return 3;
+#endif
+
+#ifdef ANGLE_DEQP_KHR_GLES2_TESTS
+    return 4;
+#endif
+
+#ifdef ANGLE_DEQP_KHR_GLES3_TESTS
+    return 5;
+#endif
+
+#ifdef ANGLE_DEQP_KHR_GLES31_TESTS
+    return 6;
+#endif
+
+#ifdef ANGLE_DEQP_KHR_GLES32_TESTS
+    return 7;
+#endif
+
+#ifdef ANGLE_DEQP_KHR_NOCTX_GLES2_TESTS
+    return 8;
+#endif
+
+#ifdef ANGLE_DEQP_KHR_NOCTX_GLES32_TESTS
+    return 9;
+#endif
+
+#ifdef ANGLE_DEQP_KHR_SINGLE_GLES32_TESTS
+    return 10;
+#endif
+
+#ifdef ANGLE_DEQP_GLES3_ROTATE90_TESTS
+    return 11;
+#endif
+
+#ifdef ANGLE_DEQP_GLES3_ROTATE180_TESTS
+    return 12;
+#endif
+
+#ifdef ANGLE_DEQP_GLES3_ROTATE270_TESTS
+    return 13;
+#endif
+
+#ifdef ANGLE_DEQP_GLES31_ROTATE90_TESTS
+    return 14;
+#endif
+
+#ifdef ANGLE_DEQP_GLES31_ROTATE180_TESTS
+    return 15;
+#endif
+
+#ifdef ANGLE_DEQP_GLES31_ROTATE270_TESTS
+    return 16;
+#endif
+
+#ifdef ANGLE_DEQP_GLES3_MULTISAMPLE_TESTS
+    return 17;
+#endif
+
+#ifdef ANGLE_DEQP_GLES3_565_NO_DEPTH_NO_STENCIL_TESTS
+    return 18;
+#endif
+
+#ifdef ANGLE_DEQP_GLES31_MULTISAMPLE_TESTS
+    return 19;
+#endif
+
+#ifdef ANGLE_DEQP_GLES31_565_NO_DEPTH_NO_STENCIL_TESTS
+    return 20;
+#endif
+
+#ifdef ANGLE_DEQP_GL_TESTS
+    return 21;
+#endif
 }
 
 class dEQPCaseList
