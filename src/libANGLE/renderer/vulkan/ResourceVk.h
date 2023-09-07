@@ -167,6 +167,26 @@ class SharedGarbage
 
 using SharedGarbageList = std::queue<SharedGarbage>;
 
+class SharedImageGarbage
+{
+  public:
+    SharedImageGarbage();
+    SharedImageGarbage(SharedImageGarbage &&other);
+    SharedImageGarbage(const ResourceUse &use, Image &&image, VkDeviceSize size);
+    ~SharedImageGarbage();
+    SharedImageGarbage &operator=(SharedImageGarbage &&rhs);
+
+    bool destroyIfComplete(RendererVk *renderer);
+    bool hasResourceUseSubmitted(RendererVk *renderer) const;
+    VkDeviceSize getSize() const { return mSize; }
+
+  private:
+    ResourceUse mLifetime;
+    Image mImage;
+    VkDeviceSize mSize;
+};
+using SharedImageGarbageList = std::queue<SharedImageGarbage>;
+
 // This is a helper class for back-end objects used in Vk command buffers. They keep a record
 // of their use in ANGLE and VkQueues via ResourceUse.
 class Resource : angle::NonCopyable

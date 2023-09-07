@@ -97,6 +97,43 @@ bool SharedGarbage::hasResourceUseSubmitted(RendererVk *renderer) const
     return renderer->hasResourceUseSubmitted(mLifetime);
 }
 
+// SharedImageGarbage implementation.
+SharedImageGarbage::SharedImageGarbage() = default;
+
+SharedImageGarbage::SharedImageGarbage(SharedImageGarbage &&other)
+{
+    *this = std::move(other);
+}
+
+SharedImageGarbage::SharedImageGarbage(const ResourceUse &use, Image &&image, VkDeviceSize size)
+    : mLifetime(use), mImage(std::move(image)), mSize(size)
+{}
+
+SharedImageGarbage::~SharedImageGarbage() = default;
+
+SharedImageGarbage &SharedImageGarbage::operator=(SharedImageGarbage &&rhs)
+{
+    std::swap(mLifetime, rhs.mLifetime);
+    std::swap(mImage, rhs.mImage);
+    std::swap(mSize, rhs.mSize);
+    return *this;
+}
+
+bool SharedImageGarbage::destroyIfComplete(RendererVk *renderer)
+{
+    if (renderer->hasResourceUseFinished(mLifetime))
+    {
+        mImage.destroy(renderer->getDevice());
+        return true;
+    }
+    return false;
+}
+
+bool SharedImageGarbage::hasResourceUseSubmitted(RendererVk *renderer) const
+{
+    return renderer->hasResourceUseSubmitted(mLifetime);
+}
+
 // ReleasableResource implementation.
 template <class T>
 void ReleasableResource<T>::release(RendererVk *renderer)
