@@ -10,13 +10,13 @@ testing against GLES 2, GLES 3, EGL, and GLES 3.1 (on supported platforms).
 You should have dEQP as a target if you followed the [DevSetup](DevSetup.md)
 instructions. Current targets:
 
-  * `angle_deqp_gles2_tests` for GLES 2.0 tests
+  * `angle_deqp_gles2_master_tests` for GLES 2.0 tests
   * `angle_deqp_gles2_no_gtest` for GLES 2.0 tests without google test suite
-  * `angle_deqp_gles3_tests` for GLES 3.0 tests
+  * `angle_deqp_gles3_master_tests` for GLES 3.0 tests
   * `angle_deqp_gles3_no_gtest` for GLES 3.0 tests without google test suite
-  * `angle_deqp_egl_tests` for EGL 1.x tests
+  * `angle_deqp_egl_master_tests` for EGL 1.x tests
   * `angle_deqp_egl_no_gtest` for EGL 1.x tests without google test suite
-  * `angle_deqp_gles31_tests` for GLES 3.1 tests (currently very experimental)
+  * `angle_deqp_gles31_master_tests` for GLES 3.1 tests (currently very experimental)
   * `angle_deqp_gles31_no_gtest` for GLES 3.1 tests (currently very experimental) without google test suite
 
 ## How to use dEQP
@@ -75,7 +75,7 @@ you fix tests, please remove the suppression(s) from the relevant files!
 
 ### Running dEQP on Android
 
-When you only need to run a few tests with `--gtest_filter` you can use Android wrappers such as `angle_deqp_egl_tests` directly but beware that Android test runner wipes data by default (try `--skip-clear-data`).
+When you only need to run a few tests with `--gtest_filter` you can use Android wrappers such as `angle_deqp_egl_master_tests` directly but beware that Android test runner wipes data by default (try `--skip-clear-data`).
 
 Running the tests not using the test runner is tricky, but is necessary in order to get a complete TestResults.qpa from the dEQP tests when running many tests (since the runner shards the tests, only the results of the last shard will be available when using the test runner). First, use the runner to install the APK, test data and test expectations on the device. After the tests start running, the test runner can be stopped with Ctrl+C. Then, run
 ```
