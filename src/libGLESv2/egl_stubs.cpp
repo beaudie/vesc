@@ -334,7 +334,7 @@ EGLBoolean DestroySurface(Thread *thread, Display *display, egl::SurfaceID surfa
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglDestroySurface",
                          GetDisplayIfValid(display), EGL_FALSE);
 
-    ANGLE_EGL_TRY_RETURN(thread, display->destroySurface(eglSurface), "eglDestroySurface",
+    ANGLE_EGL_TRY_RETURN(thread, display->destroySurface(thread, eglSurface), "eglDestroySurface",
                          GetSurfaceIfValid(display, surfaceID), EGL_FALSE);
 
     thread->setSuccess();

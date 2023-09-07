@@ -181,7 +181,7 @@ class Display final : public LabeledObject,
                       Surface *readSurface,
                       gl::Context *context);
 
-    Error destroySurface(Surface *surface);
+    Error destroySurface(Thread *thread, Surface *surface);
     void destroyImage(Image *image);
     void destroyStream(Stream *stream);
     Error destroyContext(Thread *thread, gl::Context *context);

@@ -17,7 +17,6 @@
 
 #include <EGL/eglext.h>
 #include <platform/PlatformMethods.h>
-
 #include "anglebase/no_destructor.h"
 #include "common/android_util.h"
 #include "common/debug.h"
@@ -1951,8 +1950,30 @@ void Display::destroyStream(Stream *stream)
     return destroyStreamImpl(stream, &mStreamSet);
 }
 
-Error Display::destroySurface(Surface *surface)
+Error Display::destroySurface(Thread *thread, Surface *surface)
 {
+    // Workaround https://issuetracker.google.com/292285899
+    // When destroying surface, if the surface
+    // is still bound by the context of the current rendering
+    // thread, release the surface by passing EGL_NO_SURFACE to eglMakeCurrent().
+    if (getFrontendFeatures().uncurrentEglSurfaceUponSurfaceDestroy.enabled &&
+        surface->isCurrentOnAnyContext() &&
+        (thread->getCurrentDrawSurface() == surface || thread->getCurrentReadSurface() == surface))
+    {
+        gl::Context *currentContext = thread->getContext();
+
+        // if surfaceless context is supported, only release the surface.
+        if (getExtensions().surfacelessContext)
+        {
+            ANGLE_TRY(makeCurrent(thread, currentContext, nullptr, nullptr, currentContext));
+        }
+        else
+        {
+            // if surfaceless context is not supported, release the context, too.
+            ANGLE_TRY(makeCurrent(thread, currentContext, nullptr, nullptr, nullptr));
+        }
+    }
+
     return destroySurfaceImpl(surface, &mState.surfaceMap);
 }
 
