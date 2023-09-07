@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecc789b6_0e5db9f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-09-07T23:00:13Z",
+      "side": 1,
+      "message": "lgtm+2\n\n+jonahr, kpiddington as FYI",
+      "revId": "185df9e8a3f3ab1145b324044195a1f1fe0d3cda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "016fef22_db03243b",
+        "filename": "src/libANGLE/renderer/metal/ProgramExecutableMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-09-07T23:00:13Z",
+      "side": 1,
+      "message": "Is it worth also clearing out mDefaultUniformBufferPools completely after this loop?",
+      "revId": "185df9e8a3f3ab1145b324044195a1f1fe0d3cda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
