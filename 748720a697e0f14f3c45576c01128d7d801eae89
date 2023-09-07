@@ -120,6 +120,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad38b262_424daee8",
+        "filename": "src/common/BinaryStream.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-07T16:08:06Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "adc6e6aa_29957229",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 61
+      },
+      "revId": "748720a697e0f14f3c45576c01128d7d801eae89",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f8ee55ed_dc81856c",
