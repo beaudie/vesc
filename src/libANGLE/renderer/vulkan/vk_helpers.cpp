@@ -5802,6 +5802,7 @@ void ImageHelper::releaseImageFromShareContexts(RendererVk *renderer,
                                                 UniqueSerial imageSiblingSerial)
 {
     finalizeImageLayoutInShareContexts(renderer, contextVk, imageSiblingSerial);
+    contextVk->addToPendingImageGarbage(mUse, mAllocationSize);
     releaseImage(renderer);
 }
 
