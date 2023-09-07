@@ -427,7 +427,28 @@ am instrument -w \
         '''.format(
             out=temp_device_file, flags=r' '.join(flags)).strip()
 
-        _AdbShell(cmd)
+        capture_out_dir = os.environ.get('ANGLE_CAPTURE_OUT_DIR')
+        if capture_out_dir:
+            assert os.path.isdir(capture_out_dir)
+            with _TempDeviceDir() as temp_dir:
+                _AdbShell('setprop debug.angle.capture.out_dir ' + temp_dir)
+                _AdbShell('setprop debug.angle.capture.frame_start ' +
+                          os.environ['ANGLE_CAPTURE_FRAME_START'])
+                _AdbShell('setprop debug.angle.capture.frame_end ' +
+                          os.environ['ANGLE_CAPTURE_FRAME_END'])
+                _AdbShell('setprop debug.angle.capture.label ' +
+                          os.environ.get('ANGLE_CAPTURE_LABEL', '""'))
+                _AdbShell('setprop debug.angle.capture.compression ' +
+                          os.environ['ANGLE_CAPTURE_COMPRESSION'])
+                _AdbShell(cmd)
+                _AdbShell('setprop debug.angle.capture.out_dir ""')
+                _AdbShell('setprop debug.angle.capture.frame_start ""')
+                _AdbShell('setprop debug.angle.capture.frame_end ""')
+                _AdbShell('setprop debug.angle.capture.label ""')
+                _AdbShell('setprop debug.angle.capture.compression ""')
+                _PullDir(temp_dir, capture_out_dir)
+        else:
+            _AdbShell(cmd)
         return _ReadDeviceFile(temp_device_file)
 
 
