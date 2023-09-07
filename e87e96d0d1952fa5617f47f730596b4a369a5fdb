@@ -16,6 +16,75 @@
       "message": "LGTM\n\n+1 so Roman has a chance to review again",
       "revId": "e87e96d0d1952fa5617f47f730596b4a369a5fdb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "205a61fe_c8c03a79",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 4279,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-07T15:07:46Z",
+      "side": 1,
+      "message": "Inline maybe?",
+      "range": {
+        "startLine": 4279,
+        "startChar": 15,
+        "endLine": 4279,
+        "endChar": 30
+      },
+      "revId": "e87e96d0d1952fa5617f47f730596b4a369a5fdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a414abe0_80bacc37",
+        "filename": "src/tests/capture_tests/CapturedTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-07T15:07:46Z",
+      "side": 1,
+      "message": "Could you add EXPECT_PIXEL_NEAR here to double check the test is doing what we think it\u0027s doing",
+      "range": {
+        "startLine": 178,
+        "startChar": 4,
+        "endLine": 178,
+        "endChar": 18
+      },
+      "revId": "e87e96d0d1952fa5617f47f730596b4a369a5fdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9659752e_9e5a71a5",
+        "filename": "src/tests/capture_tests/CapturedTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-07T15:07:46Z",
+      "side": 1,
+      "message": "Also EXPECT_PIXEL_NEAR or similar",
+      "range": {
+        "startLine": 252,
+        "startChar": 4,
+        "endLine": 252,
+        "endChar": 18
+      },
+      "revId": "e87e96d0d1952fa5617f47f730596b4a369a5fdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
