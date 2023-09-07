@@ -5791,6 +5791,13 @@ FrameCaptureShared::FrameCaptureShared()
 
     std::string labelFromEnv =
         GetEnvironmentVarOrUnCachedAndroidProperty(kCaptureLabelVarName, kAndroidCaptureLabel);
+#if defined(ANGLE_PLATFORM_ANDROID)
+    // --angle-per-test-capture-label sets the env var, not properties
+    if (labelFromEnv.empty())
+    {
+        labelFromEnv = GetEnvironmentVar(kCaptureLabelVarName);
+    }
+#endif
     if (!labelFromEnv.empty())
     {
         // Optional label to provide unique file names and namespaces
