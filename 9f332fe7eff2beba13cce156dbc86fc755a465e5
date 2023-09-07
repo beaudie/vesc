@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da052111_ab055e4a",
+        "filename": "src/libANGLE/renderer/metal/ProgramExecutableMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-09-07T22:25:35Z",
+      "side": 0,
+      "message": "Instead of moving the destruction logic into `destroy()` I think the cleanup of the entries in `mDefaultUniformBufferPools` should be moved here, along with clearing out the map completely afterward. That way there\u0027s one place where it\u0027s done and there\u0027s already a `ContextMtl` available to do it.",
+      "revId": "9f332fe7eff2beba13cce156dbc86fc755a465e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
