@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ebacd9b_97c61dd8",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 4279,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-09-07T16:04:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "205a61fe_c8c03a79",
+      "range": {
+        "startLine": 4279,
+        "startChar": 15,
+        "endLine": 4279,
+        "endChar": 30
+      },
+      "revId": "e87e96d0d1952fa5617f47f730596b4a369a5fdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a414abe0_80bacc37",
@@ -64,6 +88,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "56c6b976_b03f0d5a",
+        "filename": "src/tests/capture_tests/CapturedTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-09-07T16:04:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a414abe0_80bacc37",
+      "range": {
+        "startLine": 178,
+        "startChar": 4,
+        "endLine": 178,
+        "endChar": 18
+      },
+      "revId": "e87e96d0d1952fa5617f47f730596b4a369a5fdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9659752e_9e5a71a5",
@@ -77,6 +125,30 @@
       "writtenOn": "2023-09-07T15:07:46Z",
       "side": 1,
       "message": "Also EXPECT_PIXEL_NEAR or similar",
+      "range": {
+        "startLine": 252,
+        "startChar": 4,
+        "endLine": 252,
+        "endChar": 18
+      },
+      "revId": "e87e96d0d1952fa5617f47f730596b4a369a5fdb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66a28ea0_056ee08b",
+        "filename": "src/tests/capture_tests/CapturedTest.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-09-07T16:04:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9659752e_9e5a71a5",
       "range": {
         "startLine": 252,
         "startChar": 4,
