@@ -3587,6 +3587,19 @@ angle::Result ContextVk::checkAndFlushExcessivePendingGarbage()
     return angle::Result::Continue;
 }
 
+angle::Result ContextVk::checkAndFlushExcessivePendingImageGarbage()
+{
+    // If too much pending suballocation garbage has accumulated, we should flush them.
+    if (mRenderer->getPendingImageGarbageSizeInBytes() >=
+        mRenderer->getPendingImageGarbageSizeLimit())
+    {
+        ANGLE_TRY(flushImpl(nullptr, nullptr, RenderPassClosureReason::ExcessivePendingGarbage));
+        INFO() << "Context flushed due to excessive pending garbage.";
+    }
+
+    return angle::Result::Continue;
+}
+
 angle::Result ContextVk::synchronizeCpuGpuTime()
 {
     ASSERT(mGpuEventsEnabled);
@@ -7405,6 +7418,9 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore,
     {
         mShareGroupVk->pruneDefaultBufferPools(mRenderer);
     }
+
+    // Reset tracked pending garbage value in the renderer object.
+    mRenderer->resetPendingImageGarbageSize();
 
     // Since we just flushed, deferred flush is no longer deferred.
     mHasDeferredFlush = false;
