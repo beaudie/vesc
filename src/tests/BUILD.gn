@@ -1521,6 +1521,48 @@ if (build_angle_deqp_tests && !is_fuchsia) {
     ]
   }
 
+  template("angle_deqp_core_multisample_gtest") {
+    _api = target_name
+    angle_deqp_gtest(target_name) {
+      forward_variables_from(invoker, "*")
+
+      mustpass_name = "${_api}-multisample.txt"
+
+      deps += angle_deqp_data_copy_targets
+
+      data = []
+      if (_api == "gles3") {
+        data = angle_deqp_data_gles3
+      } else if (_api == "gles31") {
+        data = angle_deqp_data_gles31
+      } else {
+        # Make sure we include something so that angle_deqp_libtester_main.cpp can find something.
+        data = [ "$root_gen_dir/vk_gl_cts_data/data/gles2/shaders/misc.test" ]
+      }
+    }
+  }
+
+  template("angle_deqp_565_no_depth_no_stencil_gtest") {
+    _api = target_name
+    angle_deqp_gtest(target_name) {
+      forward_variables_from(invoker, "*")
+
+      mustpass_name = "${_api}-565-no-depth-no-stencil.txt"
+
+      deps += angle_deqp_data_copy_targets
+
+      data = []
+      if (_api == "gles3") {
+        data = angle_deqp_data_gles3
+      } else if (_api == "gles31") {
+        data = angle_deqp_data_gles31
+      } else {
+        # Make sure we include something so that angle_deqp_libtester_main.cpp can find something.
+        data = [ "$root_gen_dir/vk_gl_cts_data/data/gles2/shaders/misc.test" ]
+      }
+    }
+  }
+
   template("angle_deqp_core_gtest") {
     _api = target_name
     angle_deqp_gtest(target_name) {
@@ -1556,8 +1598,32 @@ if (build_angle_deqp_tests && !is_fuchsia) {
     mustpass_dir = _aosp_gles_mustpass
   }
 
+  angle_deqp_core_multisample_gtest("gles3_multisample") {
+    defines = [ "ANGLE_DEQP_GLES3_MULTISAMPLE_TESTS" ]
+    deps = [ ":angle_deqp_gles3_common" ]
+    mustpass_dir = _aosp_gles_mustpass
+  }
+
+  angle_deqp_565_no_depth_no_stencil_gtest("gles3_565_no_depth_no_stencil") {
+    defines = [ "ANGLE_DEQP_GLES3_565_NO_DEPTH_NO_STENCIL_TESTS" ]
+    deps = [ ":angle_deqp_gles3_common" ]
+    mustpass_dir = _aosp_gles_mustpass
+  }
+
   angle_deqp_core_gtest("gles31") {
     defines = [ "ANGLE_DEQP_GLES31_TESTS" ]
+    deps = [ ":angle_deqp_gles31_common" ]
+    mustpass_dir = _aosp_gles_mustpass
+  }
+
+  angle_deqp_core_multisample_gtest("gles31_multisample") {
+    defines = [ "ANGLE_DEQP_GLES31_MULTISAMPLE_TESTS" ]
+    deps = [ ":angle_deqp_gles31_common" ]
+    mustpass_dir = _aosp_gles_mustpass
+  }
+
+  angle_deqp_565_no_depth_no_stencil_gtest("gles31_565_no_depth_no_stencil") {
+    defines = [ "ANGLE_DEQP_GLES31_565_NO_DEPTH_NO_STENCIL_TESTS" ]
     deps = [ ":angle_deqp_gles31_common" ]
     mustpass_dir = _aosp_gles_mustpass
   }
