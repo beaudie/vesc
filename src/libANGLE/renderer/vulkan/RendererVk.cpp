@@ -1424,6 +1424,7 @@ RendererVk::RendererVk()
       mDeviceLost(false),
       mSuballocationGarbageSizeInBytes(0),
       mPendingSuballocationGarbageSizeInBytes(0),
+      mPendingImageGarbageSizeInBytes(0),
       mSuballocationGarbageDestroyed(0),
       mSuballocationGarbageSizeInBytesCachedAtomic(0),
       mCoherentStagingBufferMemoryTypeIndex(kInvalidMemoryTypeIndex),
@@ -1984,8 +1985,8 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     // mMemoryProperties has been set up.
     mMemoryAllocationTracker.initMemoryTrackers();
 
-    // Determine the threshold for pending suballocation garbage size.
-    calculatePendingSuballocationGarbageSizeLimit();
+    // Determine the threshold for pending garbage sizes.
+    calculatePendingGarbageSizeLimits();
 
     // If only one queue family, go ahead and initialize the device. If there is more than one
     // queue, we'll have to wait until we see a WindowSurface to know which supports present.
@@ -3528,7 +3529,7 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     return angle::Result::Continue;
 }
 
-void RendererVk::calculatePendingSuballocationGarbageSizeLimit()
+void RendererVk::calculatePendingGarbageSizeLimits()
 {
     // To find the threshold, we want the memory heap that has the largest size among other heaps.
     VkPhysicalDeviceMemoryProperties memoryProperties;
@@ -3548,6 +3549,8 @@ void RendererVk::calculatePendingSuballocationGarbageSizeLimit()
     // We set the limit to a portion of the heap size we found.
     constexpr float kGarbageSizeLimitCoefficient = 0.2f;
     mPendingSuballocationGarbageSizeLimit =
+        static_cast<VkDeviceSize>(maxHeapSize * kGarbageSizeLimitCoefficient);
+    mPendingImageGarbageSizeLimit =
         static_cast<VkDeviceSize>(maxHeapSize * kGarbageSizeLimitCoefficient);
 }
 
