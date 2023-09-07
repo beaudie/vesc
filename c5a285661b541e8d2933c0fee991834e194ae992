@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae9d6099_d1820ac1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-07T18:38:25Z",
+      "side": 1,
+      "message": "Other than the multi-draw one I mentioned before, I didn\u0027t notice any other usages that need to be changed.",
+      "revId": "c5a285661b541e8d2933c0fee991834e194ae992",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
