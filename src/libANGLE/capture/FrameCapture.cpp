@@ -171,40 +171,10 @@ struct VertexArrayCaptureFuncs
 std::string GetDefaultOutDirectory()
 {
 #if defined(ANGLE_PLATFORM_ANDROID)
-    std::string path = "/sdcard/Android/data/";
-
-    // Linux interface to get application id of the running process
-    FILE *cmdline = fopen("/proc/self/cmdline", "r");
-    char applicationId[512];
-    if (cmdline)
-    {
-        fread(applicationId, 1, sizeof(applicationId), cmdline);
-        fclose(cmdline);
-
-        // Some package may have application id as <app_name>:<cmd_name>
-        char *colonSep = strchr(applicationId, ':');
-        if (colonSep)
-        {
-            *colonSep = '\0';
-        }
-    }
-    else
-    {
-        ERR() << "not able to lookup application id";
-    }
-
-    constexpr char kAndroidOutputSubdir[] = "/angle_capture/";
-    path += std::string(applicationId) + kAndroidOutputSubdir;
-
-    // Check for existence of output path
-    struct stat dir_stat;
-    if (stat(path.c_str(), &dir_stat) == -1)
-    {
-        ERR() << "Output directory '" << path
-              << "' does not exist.  Create it over adb using mkdir.";
-    }
-
-    return path;
+    // Note that this code gets executed in all sorts of tests once
+    // angle_with_capture_by_default=true is set in gn args on CI.
+    // /dev/null doesn't actually work, out dir is expected to be set explicitly.
+    return std::string("/dev/null");
 #else
     return std::string("./");
 #endif  // defined(ANGLE_PLATFORM_ANDROID)
@@ -5791,6 +5761,13 @@ FrameCaptureShared::FrameCaptureShared()
 
     std::string labelFromEnv =
         GetEnvironmentVarOrUnCachedAndroidProperty(kCaptureLabelVarName, kAndroidCaptureLabel);
+#if defined(ANGLE_PLATFORM_ANDROID)
+    // --angle-per-test-capture-label sets the env var, not properties
+    if (labelFromEnv.empty())
+    {
+        labelFromEnv = GetEnvironmentVar(kCaptureLabelVarName);
+    }
+#endif
     if (!labelFromEnv.empty())
     {
         // Optional label to provide unique file names and namespaces
