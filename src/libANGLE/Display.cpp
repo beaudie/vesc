@@ -279,6 +279,8 @@ EGLAttrib GetDisplayTypeFromEnvironment()
     std::string angleDefaultEnv = angle::GetEnvironmentVar("ANGLE_DEFAULT_PLATFORM");
     angle::ToLower(&angleDefaultEnv);
 
+    WARN() << "====== - angleDefaultEnv: " << angleDefaultEnv;
+
 #if defined(ANGLE_ENABLE_VULKAN)
     if ((angleDefaultEnv == "vulkan") || (angleDefaultEnv == "vulkan-null") ||
         (angleDefaultEnv == "swiftshader"))
@@ -651,8 +653,11 @@ void UpdateAttribsFromEnvironment(AttributeMap &attribMap)
     if (displayType == EGL_PLATFORM_ANGLE_TYPE_DEFAULT_ANGLE)
     {
         displayType = GetDisplayTypeFromEnvironment();
+    WARN() << "====== - default: " << displayType;
         attribMap.insert(EGL_PLATFORM_ANGLE_TYPE_ANGLE, displayType);
     }
+    else
+        WARN() << "====== - specific: " << displayType;
     EGLAttrib deviceType = attribMap.get(EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE, 0);
     if (deviceType == 0)
     {
@@ -719,6 +724,7 @@ Display *Display::GetDisplayFromNativeDisplay(EGLenum platform,
 {
     Display *display = nullptr;
 
+    WARN() << "====== creating display";
     AttributeMap updatedAttribMap(attribMap);
     UpdateAttribsFromEnvironment(updatedAttribMap);
 
@@ -1684,6 +1690,9 @@ Error Display::makeCurrent(Thread *thread,
                            egl::Surface *readSurface,
                            gl::Context *context)
 {
+    WARN() << "----------------------------------------------------";
+    WARN() << "Make Current " << previousContext << " -> " << context;
+    WARN() << "----------------------------------------------------";
     if (!mInitialized)
     {
         return NoError();

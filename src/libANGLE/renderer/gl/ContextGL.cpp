@@ -50,6 +50,8 @@ ContextGL::~ContextGL() {}
 
 angle::Result ContextGL::initialize()
 {
+    WARN() << "+++++++++++++++++++++++++++++++++";
+    WARN() << "It's GL";
     return angle::Result::Continue;
 }
 

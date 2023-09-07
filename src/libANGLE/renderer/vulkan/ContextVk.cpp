@@ -1323,6 +1323,8 @@ angle::Result ContextVk::getIncompleteTexture(const gl::Context *context,
 
 angle::Result ContextVk::initialize()
 {
+    WARN() << "=================================";
+    WARN() << "It's Vulkan!";
     ANGLE_TRACE_EVENT0("gpu.angle", "ContextVk::initialize");
 
     ANGLE_TRY(mShareGroupVk->unifyContextsPriority(this));

@@ -26,6 +26,8 @@
 #include "libANGLE/renderer/gl/egl/WindowSurfaceEGL.h"
 #include "libANGLE/renderer/gl/renderergl_utils.h"
 
+#include "common/backtrace_utils.h"
+
 namespace
 {
 
@@ -201,6 +203,7 @@ egl::Error DisplayEGL::initializeContext(EGLContext shareContext,
             EGLContext context = mEGL->createContext(mConfig, shareContext, attribVector.data());
             if (context != EGL_NO_CONTEXT)
             {
+                WARN() << "<<<<<<<<<<<<<<<<< INIT context " << __LINE__ << " " << context;
                 *outContext = context;
                 return egl::NoError();
             }
@@ -213,6 +216,7 @@ egl::Error DisplayEGL::initializeContext(EGLContext shareContext,
         EGLContext context = mEGL->createContext(mConfig, shareContext, attribVector.data());
         if (context != EGL_NO_CONTEXT)
         {
+            WARN() << "<<<<<<<<<<<<<<<<< INIT context " << __LINE__ << " " << context;
             *outContext = context;
             return egl::NoError();
         }
@@ -726,6 +730,9 @@ egl::Error DisplayEGL::waitNative(const gl::Context *context, EGLint engine)
     return egl::NoError();
 }
 
+#undef ASSERT
+#define ASSERT(x) do { WARN() << "Checking " #x ": " << (x); if (!(x)) WARN() << "FAILED ASSERTION : " #x; } while(0)
+
 egl::Error DisplayEGL::makeCurrent(egl::Display *display,
                                    egl::Surface *drawSurface,
                                    egl::Surface *readSurface,
@@ -733,6 +740,15 @@ egl::Error DisplayEGL::makeCurrent(egl::Display *display,
 {
     CurrentNativeContext &currentContext =
         mCurrentNativeContexts[angle::GetCurrentThreadUniqueId()];
+
+    angle::BacktraceInfo backtraceInfo = angle::getBacktraceInfo();
+    WARN() << "Make current backtrace " << context;
+    for (size_t i = 0; i < backtraceInfo.getSize(); i++)
+    {
+        WARN() << i << ":" << backtraceInfo.getStackAddress(i) << " -> "
+               << backtraceInfo.getStackSymbol(i);
+    }
+    WARN() << "Backtrace end";
 
     EGLSurface newSurface = EGL_NO_SURFACE;
     if (drawSurface)
@@ -748,6 +764,7 @@ egl::Error DisplayEGL::makeCurrent(egl::Display *display,
         newContext             = contextEGL->getContext();
     }
 
+    WARN() << "External: " << currentContext.isExternalContext << " " << (context && context->isExternal());
     if (currentContext.isExternalContext || (context && context->isExternal()))
     {
         ASSERT(currentContext.surface == EGL_NO_SURFACE);
@@ -755,6 +772,7 @@ egl::Error DisplayEGL::makeCurrent(egl::Display *display,
         {
             // Switch to an ANGLE external context.
             ASSERT(context);
+            WARN() << currentContext.context << " vs " << newContext;
             ASSERT(currentContext.context == EGL_NO_CONTEXT);
             currentContext.context           = newContext;
             currentContext.isExternalContext = true;
@@ -790,9 +808,11 @@ egl::Error DisplayEGL::makeCurrent(egl::Display *display,
 
     if (newSurface != currentContext.surface || newContext != currentContext.context)
     {
+        WARN() << newContext;
+        WARN() << newSurface;
         if (mEGL->makeCurrent(newSurface, newContext) == EGL_FALSE)
         {
-            return egl::Error(mEGL->getError(), "eglMakeCurrent failed");
+            return egl::Error(mEGL->getError(), "eglMakeCurrent failed!!!!!!!");
         }
         currentContext.surface = newSurface;
         currentContext.context = newContext;
@@ -819,6 +839,7 @@ void DisplayEGL::destroyNativeContext(EGLContext context)
         }
     }
 
+    WARN() << ">>>>>>>>>>>>>>>>>>>>>> DESTROY native context " << __LINE__ << " " << context;
     mEGL->destroyContext(context);
 }
 
