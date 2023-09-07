@@ -22,6 +22,30 @@
       },
       "revId": "b34dfd822c00bbcf8d9d32c2c065703cab0b2899",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95459ce0_44056341",
+        "filename": "src/common/BinaryStream.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-07T19:24:08Z",
+      "side": 1,
+      "message": "This just moving the assertion from caller to here. Previously I have to assert on caller because some variables are not cleared during relink. Now with recent change from shabi, this appears have been fixed, so I am moving the assertion from caller to here.",
+      "parentUuid": "127c7fc2_343e277d",
+      "range": {
+        "startLine": 65,
+        "startChar": 8,
+        "endLine": 65,
+        "endChar": 30
+      },
+      "revId": "b34dfd822c00bbcf8d9d32c2c065703cab0b2899",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
