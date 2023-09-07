@@ -5791,7 +5791,8 @@ void ImageHelper::releaseImage(RendererVk *renderer)
     }
 
     renderer->collectAllocationGarbage(mUse, mVmaAllocation);
-    renderer->collectGarbage(mUse, &mImage, &mDeviceMemory);
+    renderer->collectImageGarbage(mUse, std::move(mImage), std::move(mDeviceMemory),
+                                  mAllocationSize);
     mUse.reset();
     mImageSerial = kInvalidImageSerial;
     setEntireContentUndefined();

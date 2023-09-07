@@ -1423,7 +1423,9 @@ RendererVk::RendererVk()
       mDevice(VK_NULL_HANDLE),
       mDeviceLost(false),
       mSuballocationGarbageSizeInBytes(0),
+      mImageGarbageSizeInBytes(0),
       mPendingSuballocationGarbageSizeInBytes(0),
+      mPendingImageGarbageSizeInBytes(0),
       mSuballocationGarbageDestroyed(0),
       mSuballocationGarbageSizeInBytesCachedAtomic(0),
       mCoherentStagingBufferMemoryTypeIndex(kInvalidMemoryTypeIndex),
@@ -1456,7 +1458,8 @@ bool RendererVk::hasSharedGarbage()
 {
     std::unique_lock<std::mutex> lock(mGarbageMutex);
     return !mSharedGarbage.empty() || !mPendingSubmissionGarbage.empty() ||
-           !mSuballocationGarbage.empty() || !mPendingSubmissionSuballocationGarbage.empty();
+           !mSuballocationGarbage.empty() || !mPendingSubmissionSuballocationGarbage.empty() ||
+           !mImageGarbage.empty() || !mPendingImageGarbage.empty();
 }
 
 void RendererVk::onDestroy(vk::Context *context)
@@ -1984,8 +1987,8 @@ angle::Result RendererVk::initialize(DisplayVk *displayVk,
     // mMemoryProperties has been set up.
     mMemoryAllocationTracker.initMemoryTrackers();
 
-    // Determine the threshold for pending suballocation garbage size.
-    calculatePendingSuballocationGarbageSizeLimit();
+    // Determine the threshold for pending garbage sizes.
+    calculatePendingGarbageSizeLimits();
 
     // If only one queue family, go ahead and initialize the device. If there is more than one
     // queue, we'll have to wait until we see a WindowSurface to know which supports present.
@@ -3564,7 +3567,7 @@ angle::Result RendererVk::initializeDevice(DisplayVk *displayVk, uint32_t queueF
     return angle::Result::Continue;
 }
 
-void RendererVk::calculatePendingSuballocationGarbageSizeLimit()
+void RendererVk::calculatePendingGarbageSizeLimits()
 {
     // To find the threshold, we want the memory heap that has the largest size among other heaps.
     VkPhysicalDeviceMemoryProperties memoryProperties;
@@ -3584,6 +3587,8 @@ void RendererVk::calculatePendingSuballocationGarbageSizeLimit()
     // We set the limit to a portion of the heap size we found.
     constexpr float kGarbageSizeLimitCoefficient = 0.2f;
     mPendingSuballocationGarbageSizeLimit =
+        static_cast<VkDeviceSize>(maxHeapSize * kGarbageSizeLimitCoefficient);
+    mPendingImageGarbageSizeLimit =
         static_cast<VkDeviceSize>(maxHeapSize * kGarbageSizeLimitCoefficient);
 }
 
@@ -5363,6 +5368,21 @@ void RendererVk::cleanupGarbage()
         mSharedGarbage.pop();
     }
 
+    // Clean up image garbages
+    VkDeviceSize imageBytesDestroyed = 0;
+    while (!mImageGarbage.empty())
+    {
+        vk::SharedImageGarbage &garbage = mImageGarbage.front();
+        VkDeviceSize garbageSize        = garbage.getSize();
+        if (!garbage.destroyIfComplete(this))
+        {
+            break;
+        }
+        mImageGarbage.pop();
+        imageBytesDestroyed += garbageSize;
+    }
+    mImageGarbageSizeInBytes -= imageBytesDestroyed;
+
     // Clean up suballocation garbages
     VkDeviceSize suballocationBytesDestroyed = 0;
     while (!mSuballocationGarbage.empty())
@@ -5436,6 +5456,27 @@ void RendererVk::cleanupPendingSubmissionGarbage()
     if (!pendingSuballocationGarbage.empty())
     {
         mPendingSubmissionSuballocationGarbage = std::move(pendingSuballocationGarbage);
+    }
+
+    vk::SharedImageGarbageList pendingImageGarbage;
+    while (!mPendingImageGarbage.empty())
+    {
+        vk::SharedImageGarbage &imageGarbage = mPendingImageGarbage.front();
+        if (imageGarbage.hasResourceUseSubmitted(this))
+        {
+            mPendingImageGarbageSizeInBytes -= imageGarbage.getSize();
+            mImageGarbageSizeInBytes += imageGarbage.getSize();
+            mImageGarbage.push(std::move(imageGarbage));
+        }
+        else
+        {
+            pendingImageGarbage.push(std::move(imageGarbage));
+        }
+        mPendingImageGarbage.pop();
+    }
+    if (!pendingImageGarbage.empty())
+    {
+        mPendingImageGarbage = std::move(pendingImageGarbage);
     }
 }
 

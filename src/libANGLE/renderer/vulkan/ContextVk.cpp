@@ -3566,7 +3566,7 @@ angle::Result ContextVk::onCopyUpdate(VkDeviceSize size, bool *commandBufferWasF
 
 bool ContextVk::hasExcessPendingGarbage() const
 {
-    return mRenderer->hasExcessiveSuballocationGarbage();
+    return mRenderer->hasExcessiveSuballocationGarbage() || mRenderer->hasExcessiveImageGarbage();
 }
 
 angle::Result ContextVk::synchronizeCpuGpuTime()
