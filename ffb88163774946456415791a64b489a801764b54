@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35ded954_82f33161",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-07T22:17:30Z",
+      "side": 1,
+      "message": "```\n  // Google Test will call Foo::SetUpTestSuite() before running the first\n  // test in test suite Foo.  Hence a sub-class can define its own\n  // SetUpTestSuite() method to shadow the one defined in the super\n  // class.\n```\nhttps://crsrc.org/c/third_party/googletest/src/googletest/include/gtest/gtest.h;drc\u003d89b25572dbd7668499d2cfd01dea905f8c44e019;l\u003d251\n\nHow does the dEQP module/case structure fit into this? When running multiple modules, does SetUpTestSuite get called multiple times if `dEQPTestSuite` is instantiated more than once?\n\nThe variables initialized below such as `sPassedTestCount` are effectively global state. Multiple instances of `dEQPTestSuite` would share this global state and might affect each other, which seems confusing.",
+      "range": {
+        "startLine": 416,
+        "startChar": 20,
+        "endLine": 416,
+        "endChar": 34
+      },
+      "revId": "ffb88163774946456415791a64b489a801764b54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2e10489_5b7e3657",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-07T22:17:30Z",
+      "side": 1,
+      "message": "Inheritance usually hints at an \"is\" relationship - so this is effectively saying \"Test is a TestSuite\"\n\nGiven that all of that class is static (global) state, you might be able to just call into it without having a parent-child relationship - could be a friend class that you call into like `MyGlobalState::countTestResult(result);`. That seems to achieve the same goal without inheritance.",
+      "range": {
+        "startLine": 565,
+        "startChar": 24,
+        "endLine": 565,
+        "endChar": 37
+      },
+      "revId": "ffb88163774946456415791a64b489a801764b54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edc523d7_537d4231",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-07T22:17:30Z",
+      "side": 1,
+      "message": "Not familiar with gtest structure but as discussed offline TestSuite seems to be a special class in gtest that runs multiple tests. So calling the class dEQPTestSuite while not being related to that test seems confusing. Especially that we have a TestSuite reference here. Then the additional dEQP concept of \"case\" e.g. `dEQPTestSuite::GetCaseList` makes this even more confusing. Also dEQP has \"modules\" - that\u0027s probably similar to gtest\u0027s TestSuite?..",
+      "range": {
+        "startLine": 601,
+        "startChar": 4,
+        "endLine": 601,
+        "endChar": 13
+      },
+      "revId": "ffb88163774946456415791a64b489a801764b54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
