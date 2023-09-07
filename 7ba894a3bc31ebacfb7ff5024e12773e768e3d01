@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc5039d5_0adfb079",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 30
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-07T21:59:25Z",
+      "side": 1,
+      "message": "Thanks!\nIn this update, the following main updates have occurred:\n* The lower-level functions, which are related to allocation, return `VkResult` instead of `angle::Result` (with the exception of `initializeNonZeroMemory()`).\n* The main macros from the last update have been replaced with `ContextVk` functions.\n* In addition, in order to reduce the CL\u0027s diff, some of the result bubbling, especially in `vk_helpers`, have been limited.",
+      "revId": "7ba894a3bc31ebacfb7ff5024e12773e768e3d01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

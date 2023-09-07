@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcbfc966_840f653a",
+        "filename": "src/libANGLE/renderer/vulkan/android/vk_android_utils.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-07T21:59:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5b4ee0e_52cbddf3",
+      "range": {
+        "startLine": 64,
+        "startChar": 9,
+        "endLine": 64,
+        "endChar": 34
+      },
+      "revId": "9bf2621e8a675d127db3dba8e00c9323e475132f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7326471c_eec0a773",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-09-05T17:46:59Z",
       "side": 1,
       "message": "I dont think we need to touch this function either. Why we need to fallback when we are already provided with  external memory?",
+      "range": {
+        "startLine": 4805,
+        "startChar": 23,
+        "endLine": 4805,
+        "endChar": 35
+      },
+      "revId": "9bf2621e8a675d127db3dba8e00c9323e475132f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "287ac4db_245da9d2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 4805,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-07T21:59:25Z",
+      "side": 1,
+      "message": "Change removed.",
+      "parentUuid": "7326471c_eec0a773",
       "range": {
         "startLine": 4805,
         "startChar": 23,
@@ -89,6 +137,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "166b2096_55484932",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 28
+      },
+      "lineNbr": 4930,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-07T21:59:25Z",
+      "side": 1,
+      "message": "Replaced `BufferHelper::initSuballocation()` with `ContextVk::initBufferSuballocaton()` in the following functions in `BufferHelper`:\n* `allocateForCopyBuffer()`\n* `allocateForCopyImage()`\n* `allocateForVertexConversion()`\n`ContextVk::initBufferSuballocaton()` is also used in other files.\n\nAlso, replaced some of the `ImageHelper::initMemory()` calls with `ContextVk::initImageAllocation()`, specifically in cases where `ContextVk` is used as its input. The remaining `ImageHelper::initMemory()` calls use `vk::Context` as input.",
+      "parentUuid": "7b751d80_ce3726e2",
+      "range": {
+        "startLine": 4930,
+        "startChar": 23,
+        "endLine": 4930,
+        "endChar": 43
+      },
+      "revId": "9bf2621e8a675d127db3dba8e00c9323e475132f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ef257548_2d222416",
         "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
         "patchSetId": 28
@@ -100,6 +172,30 @@
       "writtenOn": "2023-09-05T17:46:59Z",
       "side": 1,
       "message": "\"ANGLE_\" macros are reserved to return angle::Result, we should not change that. This and macros bellow up to ANGLE_VK_RESULT_UNREACHABLE should not have \"ANGLE_\" prefix. For example, this should be called VK_RESULT_CHECK. That way we know this is handling VK_Result. And you do\u0027t need to touch any of existing ANGLE_ macros like ANGLE_VK_TRY",
+      "range": {
+        "startLine": 1360,
+        "startChar": 8,
+        "endLine": 1360,
+        "endChar": 23
+      },
+      "revId": "9bf2621e8a675d127db3dba8e00c9323e475132f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1becf4f3_b4d77ac5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 1360,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-07T21:59:25Z",
+      "side": 1,
+      "message": "Thanks. Removed the `ANGLE` prefix from the new macros.",
+      "parentUuid": "ef257548_2d222416",
       "range": {
         "startLine": 1360,
         "startChar": 8,
@@ -123,6 +219,30 @@
       "writtenOn": "2023-09-05T17:46:59Z",
       "side": 1,
       "message": "I dont know you need any of these?",
+      "range": {
+        "startLine": 1370,
+        "startChar": 0,
+        "endLine": 1381,
+        "endChar": 0
+      },
+      "revId": "9bf2621e8a675d127db3dba8e00c9323e475132f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b407e262_abcfca50",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 28
+      },
+      "lineNbr": 1381,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-07T21:59:25Z",
+      "side": 1,
+      "message": "Removed the unused macros after the update.",
+      "parentUuid": "eb3661bb_4ea88c49",
       "range": {
         "startLine": 1370,
         "startChar": 0,
