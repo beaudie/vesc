@@ -822,6 +822,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     // In the event of collecting too much garbage, we should flush the garbage so it can be freed.
     angle::Result checkAndFlushExcessivePendingGarbage();
+    angle::Result checkAndFlushExcessivePendingImageGarbage();
 
   private:
     // Dirty bits.
