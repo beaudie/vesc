@@ -31,24 +31,24 @@
     "script": "//src/tests/capture_tests/capture_tests.py",
     "type": "script",
   },
-  "angle_deqp_egl_tests": {
-    "label": "//src/tests:angle_deqp_egl_tests",
+  "angle_deqp_egl_master_tests": {
+    "label": "//src/tests:angle_deqp_egl_master_tests",
     "type": "windowed_test_launcher",
   },
   "angle_deqp_gl46_tests": {
     "label": "//src/tests:angle_deqp_gl46_tests",
     "type": "windowed_test_launcher",
   },
-  "angle_deqp_gles2_tests": {
-    "label": "//src/tests:angle_deqp_gles2_tests",
+  "angle_deqp_gles2_master_tests": {
+    "label": "//src/tests:angle_deqp_gles2_master_tests",
     "type": "windowed_test_launcher",
   },
-  "angle_deqp_gles31_tests": {
-    "label": "//src/tests:angle_deqp_gles31_tests",
+  "angle_deqp_gles31_master_tests": {
+    "label": "//src/tests:angle_deqp_gles31_master_tests",
     "type": "windowed_test_launcher",
   },
-  "angle_deqp_gles3_tests": {
-    "label": "//src/tests:angle_deqp_gles3_tests",
+  "angle_deqp_gles3_master_tests": {
+    "label": "//src/tests:angle_deqp_gles3_master_tests",
     "type": "windowed_test_launcher",
   },
   "angle_deqp_khr_gles2_tests": {

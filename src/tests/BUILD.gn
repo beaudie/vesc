@@ -1525,11 +1525,13 @@ if (build_angle_deqp_tests && !is_fuchsia) {
   }
 
   template("angle_deqp_core_gtest") {
-    _api = target_name
+    split_target = string_split(target_name, "_")
+    _api = split_target[0]
+    _mustpass_suffix = split_target[1]
     angle_deqp_gtest(target_name) {
       forward_variables_from(invoker, "*")
 
-      mustpass_name = "${_api}-master.txt"
+      mustpass_name = "${_api}-${_mustpass_suffix}.txt"
 
       deps += angle_deqp_data_copy_targets
 
@@ -1547,25 +1549,49 @@ if (build_angle_deqp_tests && !is_fuchsia) {
     }
   }
 
-  angle_deqp_core_gtest("gles2") {
+  angle_deqp_core_gtest("gles2_master") {
     defines = [ "ANGLE_DEQP_GLES2_TESTS" ]
     deps = [ ":angle_deqp_gles2_common" ]
     mustpass_dir = _aosp_gles_mustpass
   }
 
-  angle_deqp_core_gtest("gles3") {
+  angle_deqp_core_gtest("gles3_master") {
     defines = [ "ANGLE_DEQP_GLES3_TESTS" ]
     deps = [ ":angle_deqp_gles3_common" ]
     mustpass_dir = _aosp_gles_mustpass
   }
 
-  angle_deqp_core_gtest("gles31") {
+  angle_deqp_core_gtest("gles3_multisample") {
+    defines = [ "ANGLE_DEQP_GLES3_MULTISAMPLE_TESTS" ]
+    deps = [ ":angle_deqp_gles3_common" ]
+    mustpass_dir = _aosp_gles_mustpass
+  }
+
+  angle_deqp_core_gtest("gles3_565-no-depth-no-stencil") {
+    defines = [ "ANGLE_DEQP_GLES3_565_NO_DEPTH_NO_STENCIL_TESTS" ]
+    deps = [ ":angle_deqp_gles3_common" ]
+    mustpass_dir = _aosp_gles_mustpass
+  }
+
+  angle_deqp_core_gtest("gles31_master") {
     defines = [ "ANGLE_DEQP_GLES31_TESTS" ]
     deps = [ ":angle_deqp_gles31_common" ]
     mustpass_dir = _aosp_gles_mustpass
   }
 
-  angle_deqp_core_gtest("egl") {
+  angle_deqp_core_gtest("gles31_multisample") {
+    defines = [ "ANGLE_DEQP_GLES31_MULTISAMPLE_TESTS" ]
+    deps = [ ":angle_deqp_gles31_common" ]
+    mustpass_dir = _aosp_gles_mustpass
+  }
+
+  angle_deqp_core_gtest("gles31_565-no-depth-no-stencil") {
+    defines = [ "ANGLE_DEQP_GLES31_565_NO_DEPTH_NO_STENCIL_TESTS" ]
+    deps = [ ":angle_deqp_gles31_common" ]
+    mustpass_dir = _aosp_gles_mustpass
+  }
+
+  angle_deqp_core_gtest("egl_master") {
     defines = [ "ANGLE_DEQP_EGL_TESTS" ]
     sources = deqp_egl_sources
     mustpass_dir = _aosp_egl_mustpass
@@ -1816,11 +1842,28 @@ group("angle_tests") {
   }
   if (build_angle_deqp_tests && !is_fuchsia) {
     deps += [
-      ":angle_deqp_egl_tests",
+      ":angle_deqp_egl_master_tests",
       ":angle_deqp_gl46_tests",
-      ":angle_deqp_gles2_tests",
-      ":angle_deqp_gles31_tests",
-      ":angle_deqp_gles3_tests",
+      ":angle_deqp_gles2_master_tests",
+      ":angle_deqp_gles31_565-no-depth-no-stencil_tests",
+      ":angle_deqp_gles31_master_tests",
+      ":angle_deqp_gles31_multisample_tests",
+      ":angle_deqp_gles31_rotate180_tests",
+      ":angle_deqp_gles31_rotate270_tests",
+      ":angle_deqp_gles31_rotate90_tests",
+      ":angle_deqp_gles3_565-no-depth-no-stencil_tests",
+      ":angle_deqp_gles3_master_tests",
+      ":angle_deqp_gles3_multisample_tests",
+      ":angle_deqp_gles3_rotate180_tests",
+      ":angle_deqp_gles3_rotate270_tests",
+      ":angle_deqp_gles3_rotate90_tests",
+      ":angle_deqp_khr_gles2_tests",
+      ":angle_deqp_khr_gles31_tests",
+      ":angle_deqp_khr_gles32_tests",
+      ":angle_deqp_khr_gles3_tests",
+      ":angle_deqp_khr_noctx_gles2_tests",
+      ":angle_deqp_khr_noctx_gles32_tests",
+      ":angle_deqp_khr_single_gles32_tests",
     ]
   }
   if (build_angle_gles1_conform_tests) {
