@@ -834,6 +834,28 @@
     "isolated_scripts": [
       {
         "args": [
+          "--log=debug"
+        ],
+        "isolate_name": "angle_capture_tests",
+        "merge": {
+          "script": "//testing/merge_scripts/standard_isolated_script_merge.py"
+        },
+        "name": "angle_capture_tests",
+        "swarming": {
+          "containment_type": "AUTO",
+          "dimensions": {
+            "device_os": "R",
+            "device_os_type": "userdebug",
+            "device_type": "flame",
+            "os": "Android",
+            "pool": "chromium.tests.gpu"
+          },
+          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
+        },
+        "test_id_prefix": "ninja://src/tests:angle_capture_tests/"
+      },
+      {
+        "args": [
           "--log=debug",
           "--smoke-test-mode",
           "--show-test-stdout"
