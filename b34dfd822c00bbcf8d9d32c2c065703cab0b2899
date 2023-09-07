@@ -70,6 +70,30 @@
       },
       "revId": "b34dfd822c00bbcf8d9d32c2c065703cab0b2899",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29b739c6_84dd4faf",
+        "filename": "src/common/BinaryStream.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-07T20:10:07Z",
+      "side": 1,
+      "message": "It kinda make sense here IMO because `readBytes` is overwriting the whole vector. This class is used to load things, and so everything is assumed uninitialized. The confusing part is probably the name of the function which doesn\u0027t convey that information (but a cleanup of the names in these classes is a out of scope of this change)",
+      "parentUuid": "90a7d29b_b4ee0900",
+      "range": {
+        "startLine": 65,
+        "startChar": 8,
+        "endLine": 65,
+        "endChar": 30
+      },
+      "revId": "b34dfd822c00bbcf8d9d32c2c065703cab0b2899",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
