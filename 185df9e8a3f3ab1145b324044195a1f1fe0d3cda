@@ -33,6 +33,24 @@
       "message": "Is it worth also clearing out mDefaultUniformBufferPools completely after this loop?",
       "revId": "185df9e8a3f3ab1145b324044195a1f1fe0d3cda",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2afbff1_db9c3931",
+        "filename": "src/libANGLE/renderer/metal/ProgramExecutableMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 361,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-09-07T23:02:11Z",
+      "side": 1,
+      "message": "No, mDefaultUniformBufferPools is an \"enum map\" which is just an array.",
+      "parentUuid": "016fef22_db03243b",
+      "revId": "185df9e8a3f3ab1145b324044195a1f1fe0d3cda",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
