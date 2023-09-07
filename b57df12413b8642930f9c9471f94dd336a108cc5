@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f97d71d8_f25e2508",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-07T22:31:49Z",
+      "side": 1,
+      "message": "Yuly: this is in draft state but I\u0027m planning these changes to Android bots",
+      "revId": "b57df12413b8642930f9c9471f94dd336a108cc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
