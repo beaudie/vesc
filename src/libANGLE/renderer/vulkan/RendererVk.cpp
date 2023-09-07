@@ -51,7 +51,7 @@ constexpr bool kExposeNonConformantExtensionsAndVersions = false;
 #if defined(ANGLE_ENABLE_CRC_FOR_PIPELINE_CACHE)
 constexpr bool kEnableCRCForPipelineCache = true;
 #else
-constexpr bool kEnableCRCForPipelineCache = false;
+constexpr bool kEnableCRCForPipelineCache                = false;
 #endif
 }  // anonymous namespace
 
@@ -4810,7 +4810,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // driver, vkGetQueryPoolResult() with VK_QUERY_RESULT_WAIT_BIT may result in incorrect result.
     // In that case we force into CPU wait for submission to complete. http://anglebug.com/6692
     ANGLE_FEATURE_CONDITION(&mFeatures, forceWaitForSubmissionToCompleteForQueryResult,
-                            isARM || (isNvidia && nvidiaVersion.major < 470u));
+                            /*isARM ||*/ (isNvidia && nvidiaVersion.major < 470u));
 
     // Some ARM drivers may not free memory in "vkFreeCommandBuffers()" without
     // VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT flag.
