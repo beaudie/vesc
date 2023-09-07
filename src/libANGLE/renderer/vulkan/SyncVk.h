@@ -97,8 +97,18 @@ class SyncHelper final : public vk::Resource, public SyncHelperInterface
         return angle::Result::Stop;
     }
 
+    void setClientWaitResult(VkResult result) { mClientWaitResult = result; }
+    VkResult getAndResetClientWaitResult()
+    {
+        VkResult result   = mClientWaitResult;
+        mClientWaitResult = VK_INCOMPLETE;
+
+        return result;
+    }
+
   private:
     angle::Result submitSyncIfDeferred(ContextVk *contextVk, RenderPassClosureReason reason);
+    VkResult mClientWaitResult;
 };
 
 // Implementation of sync types: EGLSync(EGL_SYNC_ANDROID_NATIVE_FENCE_ANDROID).

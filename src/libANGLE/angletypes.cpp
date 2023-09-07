@@ -1106,11 +1106,11 @@ void UnlockedTailCall::add(CallType &&call)
     mCalls.push_back(std::move(call));
 }
 
-void UnlockedTailCall::runImpl()
+void UnlockedTailCall::runImpl(void *data)
 {
     for (CallType &call : mCalls)
     {
-        call();
+        call(data);
     }
     mCalls.clear();
 }

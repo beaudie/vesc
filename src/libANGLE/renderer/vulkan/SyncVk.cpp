@@ -74,7 +74,7 @@ namespace rx
 {
 namespace vk
 {
-SyncHelper::SyncHelper() {}
+SyncHelper::SyncHelper() : mClientWaitResult(VK_INCOMPLETE) {}
 
 SyncHelper::~SyncHelper() {}
 
@@ -99,14 +99,14 @@ angle::Result SyncHelper::clientWait(Context *context,
     ANGLE_TRY(getStatus(context, contextVk, &alreadySignaled));
     if (alreadySignaled)
     {
-        *outResult = VK_EVENT_SET;
+        setClientWaitResult(VK_EVENT_SET);
         return angle::Result::Continue;
     }
 
     // If timeout is zero, there's no need to wait, so return timeout already.
     if (timeout == 0)
     {
-        *outResult = VK_TIMEOUT;
+        setClientWaitResult(VK_TIMEOUT);
         return angle::Result::Continue;
     }
 
@@ -119,16 +119,19 @@ angle::Result SyncHelper::clientWait(Context *context,
     // Submit commands if it was deferred on the context that issued the sync object
     ANGLE_TRY(submitSyncIfDeferred(contextVk, RenderPassClosureReason::SyncObjectClientWait));
 
-    VkResult status = VK_SUCCESS;
-    ANGLE_TRY(renderer->waitForResourceUseToFinishWithUserTimeout(context, mUse, timeout, &status));
+    auto clientWaitUnlocked = [renderer, context, syncHelper = this, use = mUse,
+                               timeout](void *data) {
+        ANGLE_TRACE_EVENT0("gpu.angle", "EGLSyncKHR clientWait");
+        ANGLE_UNUSED_VARIABLE(data);
+        VkResult status = VK_SUCCESS;
+        (void)renderer->waitForResourceUseToFinishWithUserTimeout(context, use, timeout, &status);
+        ASSERT(status == VK_SUCCESS || status == VK_TIMEOUT);
 
-    // Check for errors, but don't consider timeout as such.
-    if (status != VK_TIMEOUT)
-    {
-        ANGLE_VK_TRY(context, status);
-    }
+        syncHelper->setClientWaitResult(status);
+    };
 
-    *outResult = status;
+    egl::Display::GetCurrentThreadUnlockedTailCall()->add(clientWaitUnlocked);
+
     return angle::Result::Continue;
 }
 
@@ -471,25 +474,30 @@ angle::Result SyncVk::clientWait(const gl::Context *context,
     ANGLE_TRY(mSyncHelper.clientWait(contextVk, contextVk, flush, static_cast<uint64_t>(timeout),
                                      &result));
 
-    switch (result)
-    {
-        case VK_EVENT_SET:
-            *outResult = GL_ALREADY_SIGNALED;
-            return angle::Result::Continue;
+    auto processResultUnlocked = [syncHelper = &mSyncHelper](void *data) {
+        GLenum *outResult = static_cast<GLenum *>(data);
+        ASSERT(outResult);
+        switch (syncHelper->getAndResetClientWaitResult())
+        {
+            case VK_EVENT_SET:
+                *outResult = GL_ALREADY_SIGNALED;
+                break;
+            case VK_SUCCESS:
+                *outResult = GL_CONDITION_SATISFIED;
+                break;
+            case VK_TIMEOUT:
+                *outResult = GL_TIMEOUT_EXPIRED;
+                break;
+            default:
+                UNREACHABLE();
+                *outResult = GL_WAIT_FAILED;
+                break;
+        }
+    };
 
-        case VK_SUCCESS:
-            *outResult = GL_CONDITION_SATISFIED;
-            return angle::Result::Continue;
+    egl::Display::GetCurrentThreadUnlockedTailCall()->add(processResultUnlocked);
 
-        case VK_TIMEOUT:
-            *outResult = GL_TIMEOUT_EXPIRED;
-            return angle::Result::Incomplete;
-
-        default:
-            UNREACHABLE();
-            *outResult = GL_WAIT_FAILED;
-            return angle::Result::Stop;
-    }
+    return angle::Result::Continue;
 }
 
 angle::Result SyncVk::serverWait(const gl::Context *context, GLbitfield flags, GLuint64 timeout)
