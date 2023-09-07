@@ -28,7 +28,7 @@
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
         },
-        'test': 'angle_deqp_egl_tests',
+        'test': 'angle_deqp_egl_master_tests',
         'use_isolated_scripts_api': True,
       },
     },
@@ -46,7 +46,7 @@
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
         },
-        'test': 'angle_deqp_egl_tests',
+        'test': 'angle_deqp_egl_master_tests',
         'use_isolated_scripts_api': True,
       },
     },
@@ -66,7 +66,7 @@
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
         },
-        'test': 'angle_deqp_egl_tests',
+        'test': 'angle_deqp_egl_master_tests',
         'use_isolated_scripts_api': True,
       },
     },
@@ -82,7 +82,7 @@
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
         },
-        'test': 'angle_deqp_egl_tests',
+        'test': 'angle_deqp_egl_master_tests',
         'use_isolated_scripts_api': True,
       },
     },
@@ -108,7 +108,7 @@
         'swarming': {
           'shards': 2,
         },
-        'test': 'angle_deqp_egl_tests',
+        'test': 'angle_deqp_egl_master_tests',
         'use_isolated_scripts_api': True,
       },
     },
@@ -121,7 +121,7 @@
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
         },
-        'test': 'angle_deqp_gles2_tests',
+        'test': 'angle_deqp_gles2_master_tests',
         'use_isolated_scripts_api': True,
       },
     },
@@ -137,7 +137,7 @@
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
         },
-        'test': 'angle_deqp_gles2_tests',
+        'test': 'angle_deqp_gles2_master_tests',
         'use_isolated_scripts_api': True,
       },
     },
@@ -152,7 +152,7 @@
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
         },
-        'test': 'angle_deqp_gles2_tests',
+        'test': 'angle_deqp_gles2_master_tests',
         'use_isolated_scripts_api': True,
       },
     },
@@ -175,7 +175,7 @@
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
         },
-        'test': 'angle_deqp_gles2_tests',
+        'test': 'angle_deqp_gles2_master_tests',
         'use_isolated_scripts_api': True,
       },
     },
@@ -190,7 +190,7 @@
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
         },
-        'test': 'angle_deqp_gles2_tests',
+        'test': 'angle_deqp_gles2_master_tests',
         'use_isolated_scripts_api': True,
       },
     },
@@ -213,7 +213,7 @@
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
         },
-        'test': 'angle_deqp_gles2_tests',
+        'test': 'angle_deqp_gles2_master_tests',
         'use_isolated_scripts_api': True,
       },
     },
@@ -229,7 +229,7 @@
         'swarming': {
           'shards': 2,
         },
-        'test': 'angle_deqp_gles31_tests',
+        'test': 'angle_deqp_gles31_master_tests',
         'use_isolated_scripts_api': True,
       },
     },
@@ -248,7 +248,7 @@
         'swarming': {
           'shards': 2,
         },
-        'test': 'angle_deqp_gles31_tests',
+        'test': 'angle_deqp_gles31_master_tests',
         'use_isolated_scripts_api': True,
       },
     },
@@ -274,7 +274,7 @@
         'swarming': {
           'shards': 2,
         },
-        'test': 'angle_deqp_gles31_tests',
+        'test': 'angle_deqp_gles31_master_tests',
         'use_isolated_scripts_api': True,
       },
     },
@@ -347,7 +347,7 @@
         'swarming': {
           'shards': 2,
         },
-        'test': 'angle_deqp_gles3_tests',
+        'test': 'angle_deqp_gles3_master_tests',
         'use_isolated_scripts_api': True,
       },
     },
@@ -366,7 +366,7 @@
         'swarming': {
           'shards': 2,
         },
-        'test': 'angle_deqp_gles3_tests',
+        'test': 'angle_deqp_gles3_master_tests',
         'use_isolated_scripts_api': True,
       },
     },
@@ -384,7 +384,7 @@
         'swarming': {
           'shards': 2,
         },
-        'test': 'angle_deqp_gles3_tests',
+        'test': 'angle_deqp_gles3_master_tests',
         'use_isolated_scripts_api': True,
       },
     },
@@ -407,7 +407,7 @@
         'merge': {
           'script': '//scripts/angle_deqp_test_merge.py',
         },
-        'test': 'angle_deqp_gles3_tests',
+        'test': 'angle_deqp_gles3_master_tests',
         'use_isolated_scripts_api': True,
       },
     },
@@ -425,7 +425,7 @@
         'swarming': {
           'shards': 2,
         },
-        'test': 'angle_deqp_gles3_tests',
+        'test': 'angle_deqp_gles3_master_tests',
         'use_isolated_scripts_api': True,
       },
     },
@@ -451,7 +451,7 @@
         'swarming': {
           'shards': 4,
         },
-        'test': 'angle_deqp_gles3_tests',
+        'test': 'angle_deqp_gles3_master_tests',
         'use_isolated_scripts_api': True,
       },
     },
@@ -966,7 +966,7 @@
     },
 
     'swangle_deqp_egl_slow_tests': {
-      'angle_deqp_egl_tests': {
+      'angle_deqp_egl_master_tests': {
         'args': [
           '--use-angle=swiftshader',
           '--batch-timeout=600',
@@ -976,7 +976,7 @@
     },
 
     'swangle_deqp_egl_tests': {
-      'angle_deqp_egl_tests': {
+      'angle_deqp_egl_master_tests': {
         'args': [
           '--use-angle=swiftshader',
         ],
@@ -994,7 +994,7 @@
     },
 
     'swangle_deqp_gles2_slow_tests': {
-      'angle_deqp_gles2_tests': {
+      'angle_deqp_gles2_master_tests': {
         'args': [
           '--use-angle=swiftshader',
         ],
@@ -1006,7 +1006,7 @@
     },
 
     'swangle_deqp_gles2_tests': {
-      'angle_deqp_gles2_tests': {
+      'angle_deqp_gles2_master_tests': {
         'args': [
           '--use-angle=swiftshader',
         ],
@@ -1042,7 +1042,7 @@
     },
 
     'swangle_deqp_gles31_slow_tests': {
-      'angle_deqp_gles31_tests': {
+      'angle_deqp_gles31_master_tests': {
         'args': [
           '--use-angle=swiftshader',
         ],
@@ -1054,7 +1054,7 @@
     },
 
     'swangle_deqp_gles31_tests': {
-      'angle_deqp_gles31_tests': {
+      'angle_deqp_gles31_master_tests': {
         'args': [
           '--use-angle=swiftshader',
         ],
@@ -1093,7 +1093,7 @@
     },
 
     'swangle_deqp_gles3_slow_tests': {
-      'angle_deqp_gles3_tests': {
+      'angle_deqp_gles3_master_tests': {
         'args': [
           '--use-angle=swiftshader',
         ],
@@ -1105,7 +1105,7 @@
     },
 
     'swangle_deqp_gles3_tests': {
-      'angle_deqp_gles3_tests': {
+      'angle_deqp_gles3_master_tests': {
         'args': [
           '--use-angle=swiftshader',
         ],
