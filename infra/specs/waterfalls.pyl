@@ -19,7 +19,7 @@
       'swarming_containment_auto',
     ],
     'machines': {
-      'android-arm64-exp-pixel6': {
+      'android-arm64-exp-pixel6': {  # android-arm64-pixel6 below for android-arm64-test
         'os_type': 'android',
         'mixins': [
           'android_t',
@@ -29,7 +29,7 @@
         ],
         'test_suites': {
           'gtest_tests': 'android_vulkan_gtests',
-          'isolated_scripts': 'angle_restricted_trace_gold_isolated_scripts',
+          'isolated_scripts': 'common_isolated_scripts_android_p6',
         },
       },
       'android-arm64-pixel4': {
@@ -65,7 +65,7 @@
         ],
         'test_suites': {
           'gtest_tests': 'android_vulkan_gtests',
-          'isolated_scripts': 'angle_restricted_trace_gold_isolated_scripts',
+          'isolated_scripts': 'common_isolated_scripts_android_p6',
         },
       },
       'android-arm64-pixel6-perf': {
