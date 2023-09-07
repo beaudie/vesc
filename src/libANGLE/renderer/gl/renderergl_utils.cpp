@@ -2617,6 +2617,9 @@ void InitializeFrontendFeatures(const FunctionsGL *functions, angle::FrontendFea
     // supports parallel link, it's still done internally by the driver, and ANGLE supports delaying
     // post-link operations until that is done.
     ANGLE_FEATURE_CONDITION(features, linkJobIsNotThreadSafe, true);
+
+    // https://issuetracker.google.com/292285899
+    ANGLE_FEATURE_CONDITION(features, uncurrentEglSurfaceUponSurfaceDestroy, true);
 }
 
 void ReInitializeFeaturesAtGPUSwitch(const FunctionsGL *functions, angle::FeaturesGL *features)
