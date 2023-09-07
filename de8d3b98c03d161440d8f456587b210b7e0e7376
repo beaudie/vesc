@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efb6abf5_37d5a520",
+        "filename": "src/libANGLE/renderer/metal/ProgramExecutableMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 823,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-09-07T22:07:13Z",
+      "side": 1,
+      "message": "Could you add a comment mentioning that this is a heuristic, and describing how you arrived at it?",
+      "revId": "de8d3b98c03d161440d8f456587b210b7e0e7376",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
