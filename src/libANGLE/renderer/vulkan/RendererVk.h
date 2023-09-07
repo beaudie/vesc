@@ -334,6 +334,29 @@ class RendererVk : angle::NonCopyable
         }
     }
 
+    void collectImageGarbage(const vk::ResourceUse &use, vk::Image &imageIn, VkDeviceSize size)
+    {
+        if (!imageIn.valid())
+        {
+            return;
+        }
+
+        if (hasResourceUseFinished(use))
+        {
+            imageIn.destroy(mDevice);
+        }
+        else
+        {
+            std::vector<vk::GarbageObject> sharedGarbage;
+            CollectGarbage(&sharedGarbage, &imageIn);
+            if (!sharedGarbage.empty())
+            {
+                addPendingImageGarbageSize(size);
+                collectGarbage(use, std::move(sharedGarbage));
+            }
+        }
+    }
+
     void collectAllocationGarbage(const vk::ResourceUse &use, vk::Allocation &allocationGarbageIn)
     {
         if (!allocationGarbageIn.valid())
@@ -656,6 +679,16 @@ class RendererVk : angle::NonCopyable
         return mPendingSuballocationGarbageSizeInBytes >= mPendingSuballocationGarbageSizeLimit;
     }
 
+    bool hasExcessiveImageGarbage()
+    {
+        return mPendingImageGarbageSizeInBytes >= mPendingImageGarbageSizeLimit;
+    }
+    void addPendingImageGarbageSize(VkDeviceSize garbageSize)
+    {
+        mPendingImageGarbageSizeInBytes += garbageSize;
+    }
+    void resetPendingImageGarbageSize() { mPendingImageGarbageSizeInBytes = 0; }
+
     ANGLE_INLINE VkFilter getPreferredFilterForYUV(VkFilter defaultFilter)
     {
         return getFeatures().preferLinearFilterForYUV.enabled ? VK_FILTER_LINEAR : defaultFilter;
@@ -839,8 +872,9 @@ class RendererVk : angle::NonCopyable
     // Prefer host visible device local via device local based on device type and heap size.
     bool canPreferDeviceLocalMemoryHostVisible(VkPhysicalDeviceType deviceType);
 
-    // Find the threshold for pending suballocation garbage size before it should be flushed.
-    void calculatePendingSuballocationGarbageSizeLimit();
+    // Find the threshold for pending suballocation and image garbage sizes before the context
+    // should be flushed.
+    void calculatePendingGarbageSizeLimits();
 
     template <typename CommandBufferHelperT, typename RecyclerT>
     angle::Result getCommandBufferImpl(vk::Context *context,
@@ -967,6 +1001,8 @@ class RendererVk : angle::NonCopyable
     // Total pending suballocation garbage size in bytes.
     std::atomic<VkDeviceSize> mPendingSuballocationGarbageSizeInBytes;
     VkDeviceSize mPendingSuballocationGarbageSizeLimit;
+    std::atomic<VkDeviceSize> mPendingImageGarbageSizeInBytes;
+    VkDeviceSize mPendingImageGarbageSizeLimit;
 
     // Total bytes of suballocation that been destroyed since last prune call. This can be
     // accessed without mGarbageMutex, thus needs to be atomic to avoid tsan complain.
