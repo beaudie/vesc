@@ -17,7 +17,6 @@
 
 #include <EGL/eglext.h>
 #include <platform/PlatformMethods.h>
-
 #include "anglebase/no_destructor.h"
 #include "common/android_util.h"
 #include "common/debug.h"
@@ -43,6 +42,7 @@
 #include "libANGLE/renderer/DisplayImpl.h"
 #include "libANGLE/renderer/ImageImpl.h"
 #include "libANGLE/trace.h"
+#include "validationEGL.h"
 
 #if defined(ANGLE_PLATFORM_APPLE)
 #    include <dispatch/dispatch.h>
@@ -1951,8 +1951,33 @@ void Display::destroyStream(Stream *stream)
     return destroyStreamImpl(stream, &mStreamSet);
 }
 
-Error Display::destroySurface(Surface *surface)
+Error Display::destroySurface(Thread *thread, Surface *surface)
 {
+    // Workaround https://issuetracker.google.com/292285899
+    // When destroying surface, if the surface
+    // is still bound by the context of the current rendering
+    // thread, release the surface by passing EGL_NO_SURFACE to eglMakeCurrent().
+    if (getFrontendFeatures().uncurrentEglSurfaceUponSurfaceDestroy.enabled &&
+        surface->isCurrentOnAnyContext() &&
+        (thread->getCurrentDrawSurface() == surface || thread->getCurrentReadSurface() == surface))
+    {
+        Surface *drawSurface        = getSurface(PackParam<SurfaceID>(EGL_NO_SURFACE));
+        Surface *readSurface        = getSurface(PackParam<SurfaceID>(EGL_NO_SURFACE));
+        gl::Context *currentContext = thread->getContext();
+        gl::Context *noContext      = getContext(PackParam<gl::ContextID>(EGL_NO_CONTEXT));
+
+        if (getExtensions().surfacelessContext)
+        {
+            ANGLE_TRY(
+                makeCurrent(thread, currentContext, drawSurface, readSurface, currentContext));
+        }
+        else
+        {
+            // if surfaceless context is not supported, release the context, too.
+            ANGLE_TRY(makeCurrent(thread, currentContext, drawSurface, readSurface, noContext));
+        }
+    }
+
     return destroySurfaceImpl(surface, &mState.surfaceMap);
 }
 
