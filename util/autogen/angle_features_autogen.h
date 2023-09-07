@@ -343,6 +343,7 @@ enum class Feature
     SyncMonolithicPipelinesToBlobCache,
     SyncVertexArraysToDefault,
     UnbindFBOBeforeSwitchingContext,
+    UncurrentEglSurfaceUponSurfaceDestroy,
     UnfoldShortCircuits,
     UnpackLastRowSeparatelyForPaddingInclusion,
     UnpackOverlappingRowsSeparatelyUnpackBuffer,
