@@ -310,6 +310,17 @@ EGLBoolean DestroySurface(Thread *thread, Display *display, egl::SurfaceID surfa
 {
     Surface *eglSurface = display->getSurface(surfaceID);
 
+    if (eglSurface->isCurrentOnAnyContext() && (thread->getCurrentDrawSurface() == eglSurface ||
+                                                thread->getCurrentReadSurface() == eglSurface))
+    {
+        // call make uncurrent
+        SurfaceID drawSurface = PackParam<SurfaceID>(EGL_NO_SURFACE);
+        SurfaceID readSurface = PackParam<SurfaceID>(EGL_NO_SURFACE);
+        gl::ContextID context = PackParam<gl::ContextID>(EGL_NO_CONTEXT);
+
+        MakeCurrent(thread, display, drawSurface, readSurface, context);
+    }
+
     ANGLE_EGL_TRY_RETURN(thread, display->prepareForCall(), "eglDestroySurface",
                          GetDisplayIfValid(display), EGL_FALSE);
 
