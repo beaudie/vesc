@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5701795_52add716",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-08T00:25:23Z",
+      "side": 1,
+      "message": "shabi - before i go down further in this direction could you provide feedback / suggestions on current approach?",
+      "revId": "015f69002a28016da4f62c1c40c754c480c452c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
