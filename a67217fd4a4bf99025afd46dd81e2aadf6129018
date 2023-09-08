@@ -70,6 +70,30 @@
       },
       "revId": "a67217fd4a4bf99025afd46dd81e2aadf6129018",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfc72dd8_85c6049a",
+        "filename": "infra/specs/test_suites.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 1276,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-08T14:46:35Z",
+      "side": 1,
+      "message": "Right but your argument is that \"scripts already implies group\" - I think having a distinction between a single element and a group is good for clarity and the fact that everything is named \"scripts\" doesn\u0027t change that.",
+      "parentUuid": "469483c9_154f00bb",
+      "range": {
+        "startLine": 1276,
+        "startChar": 22,
+        "endLine": 1276,
+        "endChar": 27
+      },
+      "revId": "a67217fd4a4bf99025afd46dd81e2aadf6129018",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
