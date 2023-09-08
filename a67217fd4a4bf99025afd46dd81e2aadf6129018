@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "305b13d0_091cb2be",
+        "filename": "infra/specs/test_suites.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 1276,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-09-08T14:24:58Z",
+      "side": 1,
+      "message": "I think the last `s` in `scripts` already implies `group`, so would prefer a shorter name `isolated_scripts_common`.",
+      "range": {
+        "startLine": 1276,
+        "startChar": 22,
+        "endLine": 1276,
+        "endChar": 27
+      },
+      "revId": "a67217fd4a4bf99025afd46dd81e2aadf6129018",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
