@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea0ed7e9_6cc0a751",
+        "filename": "src/libANGLE/renderer/d3d/ProgramD3D.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-09-08T17:07:34Z",
+      "side": 1,
+      "message": "This line went missing during some copy-pasting.",
+      "range": {
+        "startLine": 353,
+        "startChar": 8,
+        "endLine": 353,
+        "endChar": 85
+      },
+      "revId": "b3c260d117a0e2b2f5d717a5e8717c398d166e64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
