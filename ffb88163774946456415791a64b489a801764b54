@@ -145,6 +145,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "382dc8f7_37848261",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-08T13:11:12Z",
+      "side": 1,
+      "message": "Another relatively clean alternative (if constructor/initialization/lifetime stuff gets messy) is to structure it this way:\n\n```\nclass MyTest : gtest::Test {\n  static GiveMeAName x;\n  static void SetUpTestSuite() { x.DoTheSetup(); }\n  ...\n}\n```\n\nWhere the `GiveMeAName` class would be a regular class without static variables, but the entire class becomes a singleton.",
+      "parentUuid": "4203b4ba_ca480d43",
+      "range": {
+        "startLine": 565,
+        "startChar": 24,
+        "endLine": 565,
+        "endChar": 37
+      },
+      "revId": "ffb88163774946456415791a64b489a801764b54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "edc523d7_537d4231",
         "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
         "patchSetId": 1
