@@ -16,6 +16,29 @@
       "message": "Yuly: this is in draft state but I\u0027m planning these changes to Android bots",
       "revId": "b57df12413b8642930f9c9471f94dd336a108cc5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ef500d3_122430f5",
+        "filename": "infra/specs/waterfalls.pyl",
+        "patchSetId": 7
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-09-08T13:23:45Z",
+      "side": 1,
+      "message": "change here instead\nI\u0027ve kept the experimental bot for me to enable GLES backend on Pixel 6, the non experimental is fully operational for Vulkan.",
+      "range": {
+        "startLine": 68,
+        "startChar": 31,
+        "endLine": 68,
+        "endChar": 75
+      },
+      "revId": "b57df12413b8642930f9c9471f94dd336a108cc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
