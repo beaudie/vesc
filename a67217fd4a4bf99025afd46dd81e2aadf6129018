@@ -118,6 +118,30 @@
       },
       "revId": "a67217fd4a4bf99025afd46dd81e2aadf6129018",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cea38554_94bba340",
+        "filename": "infra/specs/test_suites.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 1276,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-09-08T14:49:49Z",
+      "side": 1,
+      "message": "`angle_restricted_trace_gold_isolated_scripts` isn\u0027t restricted to have a single element of `angle_restricted_trace_gold_tests` - you can add other tests there.\n`common_isolated_scripts` is a union of sets of tests.",
+      "parentUuid": "cfc72dd8_85c6049a",
+      "range": {
+        "startLine": 1276,
+        "startChar": 22,
+        "endLine": 1276,
+        "endChar": 27
+      },
+      "revId": "a67217fd4a4bf99025afd46dd81e2aadf6129018",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
