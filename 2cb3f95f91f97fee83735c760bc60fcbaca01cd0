@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "76d24742_2d681ec2",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-09-08T21:32:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c048df43_10079c15",
+      "range": {
+        "startLine": 412,
+        "startChar": 0,
+        "endLine": 412,
+        "endChar": 43
+      },
+      "revId": "2cb3f95f91f97fee83735c760bc60fcbaca01cd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9ba2db90_b603cd8c",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-09-08T19:18:27Z",
       "side": 1,
       "message": "Could you add a note here whether we can get different testSuiteName values for a given testModuleIndex? It\u0027s hard to tell as the name comes from GetTestCaseName. If it\u0027s always the same test suite for a binary then it\u0027d be good to point it out here.",
+      "range": {
+        "startLine": 814,
+        "startChar": 20,
+        "endLine": 814,
+        "endChar": 33
+      },
+      "revId": "2cb3f95f91f97fee83735c760bc60fcbaca01cd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "564b6b93_9656d4ba",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 814,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-09-08T21:32:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ba2db90_b603cd8c",
       "range": {
         "startLine": 814,
         "startChar": 20,
