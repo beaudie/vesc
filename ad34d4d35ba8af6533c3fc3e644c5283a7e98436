@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1990b11_3d0f3b58",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-09-08T22:09:15Z",
+      "side": 1,
+      "message": "The end2end test code was taken from Shabi\u0027s work in https://chromium-review.googlesource.com/c/angle/angle/+/4752415.",
+      "revId": "ad34d4d35ba8af6533c3fc3e644c5283a7e98436",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
