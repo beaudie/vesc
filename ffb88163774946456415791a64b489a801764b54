@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce307ee5_212e7271",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-09-08T00:25:44Z",
+      "side": 1,
+      "message": "\u003e How does the dEQP module/case structure fit into this? When running multiple modules, does SetUpTestSuite get called multiple times if dEQPTestSuite is instantiated more than once?\n\nRight now each dEQP test application only runs one test suite.\n\nThe way we register individual test with the test suite is through `RegisterTest()`: go/gunitadvanced#registering-tests-programmatically\n\ncode in ANGLE: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/tests/deqp_support/angle_deqp_gtest.cpp;l\u003d800;drc\u003dc934d86be8854f16ee2cc4054d7280b59eed649e:\n\n```\ntesting::RegisterTest(moduleName.c_str(), testName.c_str(), nullptr, nullptr, __FILE__, __LINE__, factory);\n```\n\nNote that the `moduleName` is the same for each test application. So essentially all of the tests ran by the dEQP test application are treated as tests under the same test suite. The `SetUpTestSuite()` is called once in this case.\n\nIf we do:\n\n```\ntesting::RegisterTest(\"testModule1\", testName.c_str(), nullptr, nullptr, __FILE__, __LINE__, factory);\n\ntesting::RegisterTest(\"testModule2\", testName.c_str(), nullptr, nullptr, __FILE__, __LINE__, factory);\n\n```\n\nThen the `SetUpTestSuite()` will be invoked twice.\n\n\n\n\u003e The variables initialized below such as sPassedTestCount are effectively global state. Multiple instances of dEQPTestSuite would share this global state and might affect each other, which seems confusing.\n\nI did an experiment. If I tried to create two test suites with different names in `RegisterTest()`, the static variables like `sPassedTestCount` are not shared between the two test suites:\n\n```\nout/LinuxDebug/angle_deqp_khr_noctx_gles32_tests --verbose --local-output --skip-clear-data\n\n...\n[\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d] Running 26 tests from 2 test suites.\n...\n[----------] 13 tests from testModule1\n...\n*RESULT: Total: 13\n*RESULT: Passed: 8\n*RESULT: Failed: 0\n*RESULT: Skipped: 0\n*RESULT: Not Supported: 5\n*RESULT: Exception: 0\n*RESULT: Crashed: 0\n[----------] 13 tests from testModule1 (8243 ms total)\n\n[----------] 13 tests from testModule2\n...\n*RESULT: Total: 13\n*RESULT: Passed: 8\n*RESULT: Failed: 0\n*RESULT: Skipped: 0\n*RESULT: Not Supported: 5\n*RESULT: Exception: 0\n*RESULT: Crashed: 0\n[----------] 13 tests from testModule2 (7979 ms total)\n\n```\n\nI don\u0027t have deep knowledge of how googletest framework handles this but it seems it is smart enough to make the static variables only shared between tests in the same test suite.",
+      "parentUuid": "35ded954_82f33161",
+      "range": {
+        "startLine": 416,
+        "startChar": 20,
+        "endLine": 416,
+        "endChar": 34
+      },
+      "revId": "ffb88163774946456415791a64b489a801764b54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d2e10489_5b7e3657",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f2d4855_83af6790",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-09-08T00:25:44Z",
+      "side": 1,
+      "message": "Thank you.\n\nI renamed the `dEQPTestSuite` to `dEQPTestSuiteData`m and make the `dEQPTest` a friend class of `dEQPTestSuite` so it can still update the shared static data.",
+      "parentUuid": "d2e10489_5b7e3657",
+      "range": {
+        "startLine": 565,
+        "startChar": 24,
+        "endLine": 565,
+        "endChar": 37
+      },
+      "revId": "ffb88163774946456415791a64b489a801764b54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "edc523d7_537d4231",
@@ -60,6 +108,30 @@
       "writtenOn": "2023-09-07T22:17:30Z",
       "side": 1,
       "message": "Not familiar with gtest structure but as discussed offline TestSuite seems to be a special class in gtest that runs multiple tests. So calling the class dEQPTestSuite while not being related to that test seems confusing. Especially that we have a TestSuite reference here. Then the additional dEQP concept of \"case\" e.g. `dEQPTestSuite::GetCaseList` makes this even more confusing. Also dEQP has \"modules\" - that\u0027s probably similar to gtest\u0027s TestSuite?..",
+      "range": {
+        "startLine": 601,
+        "startChar": 4,
+        "endLine": 601,
+        "endChar": 13
+      },
+      "revId": "ffb88163774946456415791a64b489a801764b54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e0aa583_41d3ac1f",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-09-08T00:25:44Z",
+      "side": 1,
+      "message": "Yes, it is probably not a good idea to name it `dEQPTestSuite` given the googletest `TestSuite` is doing completely different jobs than what `dEQPTestSuite` does. I changed the class name to `dEQPTestSuiteData`.\n\nI believe the `case` here refers to the individual `test`, and the `module` maps to the `gtest\u0027s TestSuite`, from the experiment done at https://chromium-review.googlesource.com/c/angle/angle/+/4851047/comment/35ded954_82f33161/. I can change the names to:\n\n`GetCaseList` --\u003e `GetTestList`\n`moduleName`  --\u003e `testsuiteName`",
+      "parentUuid": "edc523d7_537d4231",
       "range": {
         "startLine": 601,
         "startChar": 4,
