@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "09ad6ece_91bfaac2",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 7397,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-08T22:58:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0253efa_7e5467e9",
+      "range": {
+        "startLine": 7397,
+        "startChar": 25,
+        "endLine": 7397,
+        "endChar": 38
+      },
+      "revId": "7ba894a3bc31ebacfb7ff5024e12773e768e3d01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d023262a_ddf4e37d",
@@ -71,6 +95,30 @@
       "writtenOn": "2023-09-08T18:36:15Z",
       "side": 1,
       "message": "Maybe name it initBufferAllocation to be consistent with initImageAllocation, since the fact that buffer is sub allocated is BufferHelper\u0027s implementation detail.",
+      "range": {
+        "startLine": 812,
+        "startChar": 18,
+        "endLine": 812,
+        "endChar": 40
+      },
+      "revId": "7ba894a3bc31ebacfb7ff5024e12773e768e3d01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e044c65_5c441e5a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-08T22:58:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d023262a_ddf4e37d",
       "range": {
         "startLine": 812,
         "startChar": 18,
@@ -104,6 +152,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ca5a85f_885bdaf3",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 875,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-08T22:58:41Z",
+      "side": 1,
+      "message": "Removed.",
+      "parentUuid": "7bbb4d78_a64a59d5",
+      "range": {
+        "startLine": 875,
+        "startChar": 4,
+        "endLine": 875,
+        "endChar": 10
+      },
+      "revId": "7ba894a3bc31ebacfb7ff5024e12773e768e3d01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5335bdd2_7dd5b9ed",
@@ -117,6 +189,30 @@
       "writtenOn": "2023-09-08T18:36:15Z",
       "side": 1,
       "message": "Suggest move this logic into ContextVk::initImageAllocation as well so that this can be performed as the last resort.",
+      "range": {
+        "startLine": 5918,
+        "startChar": 0,
+        "endLine": 5918,
+        "endChar": 91
+      },
+      "revId": "7ba894a3bc31ebacfb7ff5024e12773e768e3d01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8da09ab_df328730",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 5918,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-08T22:58:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5335bdd2_7dd5b9ed",
       "range": {
         "startLine": 5918,
         "startChar": 0,
@@ -150,6 +246,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bac9881b_62282f08",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-08T22:58:41Z",
+      "side": 1,
+      "message": "I agree. Replaced. Thanks!",
+      "parentUuid": "43f4d0a7_980e350f",
+      "range": {
+        "startLine": 583,
+        "startChar": 4,
+        "endLine": 583,
+        "endChar": 21
+      },
+      "revId": "7ba894a3bc31ebacfb7ff5024e12773e768e3d01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "992424ff_16d9ddc3",
@@ -163,6 +283,30 @@
       "writtenOn": "2023-09-08T18:36:15Z",
       "side": 1,
       "message": "Minor suggestion: avoid making necessary diff here and other places so that people can focus in the diffs actually matters, especially this CL changes return type of some functions.",
+      "range": {
+        "startLine": 283,
+        "startChar": 4,
+        "endLine": 283,
+        "endChar": 10
+      },
+      "revId": "7ba894a3bc31ebacfb7ff5024e12773e768e3d01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d05c2b93_3f68fdd9",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-08T22:58:41Z",
+      "side": 1,
+      "message": "I agree. Updated.",
+      "parentUuid": "992424ff_16d9ddc3",
       "range": {
         "startLine": 283,
         "startChar": 4,
@@ -196,6 +340,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "45988928_a1ed23b9",
+        "filename": "src/libANGLE/renderer/vulkan/mac/IOSurfaceSurfaceVkMac.mm",
+        "patchSetId": 30
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-08T22:58:41Z",
+      "side": 1,
+      "message": "It was from the previous version. Removed.",
+      "parentUuid": "d27c936e_18652b6d",
+      "range": {
+        "startLine": 207,
+        "startChar": 37,
+        "endLine": 207,
+        "endChar": 56
+      },
+      "revId": "7ba894a3bc31ebacfb7ff5024e12773e768e3d01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8955d6a9_373d41de",
@@ -209,6 +377,30 @@
       "writtenOn": "2023-09-08T18:36:15Z",
       "side": 1,
       "message": "Can this move to ContextVk::initBufferSuballocation as well so that you can get rid of VK_RESULT_TRY_CONTINUE macro?",
+      "range": {
+        "startLine": 4861,
+        "startChar": 0,
+        "endLine": 4866,
+        "endChar": 0
+      },
+      "revId": "7ba894a3bc31ebacfb7ff5024e12773e768e3d01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4072fbf_0fe2aff4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 4866,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-08T22:58:41Z",
+      "side": 1,
+      "message": "I moved `initializeNonZeroMemory()` into `initBufferAllocation()`. However, to remove `VK_RESULT_TRY_CONTINUE`, we also need to move this function out of `ImageHelper::initMemory()` into `initImageAllocation()`. However, we still have instances of `initMemory()` in the code (where `vk::Context` is used).\n\nTo do this, I added a new function: `ImageHelper::initMemoryWithNonZero()`. Then I moved the non-zero memory part from `initMemory()` to both `initMemoryWithNonZero()` and `initImageAllocation()`. Then I replaced the remaining `initMemory()` usages with `initMemoryWithNonZero()`.\n\nAfter this, I was able to remove `VK_RESULT_TRY_CONTINUE` from the code.",
+      "parentUuid": "8955d6a9_373d41de",
       "range": {
         "startLine": 4861,
         "startChar": 0,
