@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3703be2d_b6fef472",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-08T13:04:21Z",
+      "side": 1,
+      "message": "gtest can\u0027t be smart enough to handle static variables differently, doubt this can be done in C++ as the language generally lacks introspection apart from a few special cases. What is likely happening there is that those test modules are executed sequentially, so that we get `SetUp, module1, TearDown, SetUp, module2, TearDown`. The global state gets re-initialized in SetUp which explains what you\u0027re seeing. It\u0027s still shared between the tests and modules but the order of execution is what avoids this causing an issue. Could you check whether this is the case?\n\n\u003e Note that the moduleName is the same for each test application\n\nAhh right, now I remember this list of ifdefs!\nhttps://crsrc.org/c/third_party/angle/src/tests/deqp_support/angle_deqp_gtest.cpp;drc\u003dc934d86be8854f16ee2cc4054d7280b59eed649e;l\u003d708\n\nSo the module index only changes between the binaries, but within one binary all tests are the same module.\n\nCould you include some of these details as comments in the code?",
+      "parentUuid": "ce307ee5_212e7271",
+      "range": {
+        "startLine": 416,
+        "startChar": 20,
+        "endLine": 416,
+        "endChar": 34
+      },
+      "revId": "ffb88163774946456415791a64b489a801764b54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d2e10489_5b7e3657",
         "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
         "patchSetId": 1
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "Thank you.\n\nI renamed the `dEQPTestSuite` to `dEQPTestSuiteData`m and make the `dEQPTest` a friend class of `dEQPTestSuite` so it can still update the shared static data.",
       "parentUuid": "d2e10489_5b7e3657",
+      "range": {
+        "startLine": 565,
+        "startChar": 24,
+        "endLine": 565,
+        "endChar": 37
+      },
+      "revId": "ffb88163774946456415791a64b489a801764b54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4203b4ba_ca480d43",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-08T13:04:21Z",
+      "side": 1,
+      "message": "Great! So now we know that in reality we only care about a single instance of this class because we have all tests in a single suite. I think this allows us to improve a couple more things:\n\n* Can we avoid the use of global state (static vars) by turning this into a regular class a reference of which we pass to the Test subclass via constructor or intialization? Note that you\u0027ll need to be careful to make sure this class outlives the test itself, doesn\u0027t get destroyed too early.\n\n* Can we find a meaningful name for this class? It seems that its main function is to aggregate and print test results, so a name that reflects that sounds like a good fit.\n\n* Is there any reason for GetTestCaseName and GetTestList to be part of this class and not just unnamed namespace functions? (might be the case in case there is some friend relationship going on but then you could still structure this differently, making some of the member functions public or using more classes with appropriate names as a last resort)",
+      "parentUuid": "4f2d4855_83af6790",
       "range": {
         "startLine": 565,
         "startChar": 24,
