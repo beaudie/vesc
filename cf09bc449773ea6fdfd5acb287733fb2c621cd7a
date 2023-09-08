@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb812b01_7b6dde13",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-09-08T17:24:12Z",
+      "side": 1,
+      "message": "Let\u0027s discuss this.  It isn\u0027t clear to me why we can\u0027t keep the tool working with a default output dir, or at least continue to error if it doesn\u0027t exist.\n\nWe\u0027ve been using the application\u0027s base data directory for the past year (`/data/data/$PACKAGE_NAME/angle_capture/`), but didn\u0027t update this or our documentation since it requires root.\n\nMaybe we can re-arrange the code here such that we don\u0027t look this up if we\u0027re not enabled?",
+      "range": {
+        "startLine": 177,
+        "startChar": 24,
+        "endLine": 177,
+        "endChar": 34
+      },
+      "revId": "cf09bc449773ea6fdfd5acb287733fb2c621cd7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a6b7f24_5b48b041",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 5764,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-09-08T17:24:12Z",
+      "side": 1,
+      "message": "I don\u0027t think you need to wrap this in an ifdef.",
+      "range": {
+        "startLine": 5764,
+        "startChar": 0,
+        "endLine": 5764,
+        "endChar": 35
+      },
+      "revId": "cf09bc449773ea6fdfd5acb287733fb2c621cd7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca9e129d_10e66271",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-09-08T17:24:12Z",
+      "side": 1,
+      "message": "Can you add a comment why this is handled specially?",
+      "revId": "cf09bc449773ea6fdfd5acb287733fb2c621cd7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
