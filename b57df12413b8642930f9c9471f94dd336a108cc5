@@ -39,6 +39,30 @@
       },
       "revId": "b57df12413b8642930f9c9471f94dd336a108cc5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43062e9b_5d54163d",
+        "filename": "infra/specs/waterfalls.pyl",
+        "patchSetId": 7
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-08T13:50:24Z",
+      "side": 1,
+      "message": "Oops thanks. Changed both to android_exp_isolated_scripts for consistency. I somehow forgot I didn\u0027t need the exp for p6 is it now runs on android-arm64-test. Added a little comment to the config as a hint.",
+      "parentUuid": "0ef500d3_122430f5",
+      "range": {
+        "startLine": 68,
+        "startChar": 31,
+        "endLine": 68,
+        "endChar": 75
+      },
+      "revId": "b57df12413b8642930f9c9471f94dd336a108cc5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
