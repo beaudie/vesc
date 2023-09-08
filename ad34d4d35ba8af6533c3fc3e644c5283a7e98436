@@ -16,6 +16,23 @@
       "message": "The end2end test code was taken from Shabi\u0027s work in https://chromium-review.googlesource.com/c/angle/angle/+/4752415.",
       "revId": "ad34d4d35ba8af6533c3fc3e644c5283a7e98436",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e727fdba_b70a57f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1223189
+      },
+      "writtenOn": "2023-09-08T23:54:34Z",
+      "side": 1,
+      "message": "thanks, confirmed this works for b/288065257",
+      "revId": "ad34d4d35ba8af6533c3fc3e644c5283a7e98436",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
