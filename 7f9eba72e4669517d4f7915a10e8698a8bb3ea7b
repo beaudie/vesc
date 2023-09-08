@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07b6ae3d_0e54bc0e",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5859,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-08T21:02:46Z",
+      "side": 1,
+      "message": "This is confusing to see here: trigger sets them equal so `mCaptureEndFrame \u003c mCaptureStartFrame` is false. In this case we\u0027re not going to be hitting this code path, but why is the comment about the trigger on this path then?",
+      "range": {
+        "startLine": 5859,
+        "startChar": 11,
+        "endLine": 5859,
+        "endChar": 77
+      },
+      "revId": "7f9eba72e4669517d4f7915a10e8698a8bb3ea7b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
