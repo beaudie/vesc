@@ -72,6 +72,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcfca061_0d3b8d99",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-09-08T19:10:03Z",
+      "side": 1,
+      "message": "\u003e The global state gets re-initialized in SetUp which explains what you\u0027re seeing. \n\nYes I think you are right. I forget that those stats is cleared in `SetUpTestStats()` during `SetUpTestSuite()`.\n\n\n\u003e Could you include some of these details as comments in the code?\n\nI have updated the commend. Please take a look. Thank you.",
+      "parentUuid": "3703be2d_b6fef472",
+      "range": {
+        "startLine": 416,
+        "startChar": 20,
+        "endLine": 416,
+        "endChar": 34
+      },
+      "revId": "ffb88163774946456415791a64b489a801764b54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d2e10489_5b7e3657",
@@ -157,6 +181,30 @@
       "side": 1,
       "message": "Another relatively clean alternative (if constructor/initialization/lifetime stuff gets messy) is to structure it this way:\n\n```\nclass MyTest : gtest::Test {\n  static GiveMeAName x;\n  static void SetUpTestSuite() { x.DoTheSetup(); }\n  ...\n}\n```\n\nWhere the `GiveMeAName` class would be a regular class without static variables, but the entire class becomes a singleton.",
       "parentUuid": "4203b4ba_ca480d43",
+      "range": {
+        "startLine": 565,
+        "startChar": 24,
+        "endLine": 565,
+        "endChar": 37
+      },
+      "revId": "ffb88163774946456415791a64b489a801764b54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "004d8b9f_c1471d4a",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-09-08T19:10:03Z",
+      "side": 1,
+      "message": "Thanks Roman.\n\nIt was not obvious to me how to pass the reference of stat class to the `dEQPTest` constructor, as we can\u0027t pass arguments to the callback function `RegisterGLCTSTests` that invoke the `dEQPTest` constructor:\n\n```\nint RunGLCTSTests()\n{\n  dEQPTestSuiteStat testSuiteStat \u003d dEQPTestSuiteStat();\n  angle::TestSuite testSuite(argc, argv, RegisterGLCTSTests) // can\u0027t pass the testSuiteState to the callback function RegisterGLCTSTests()\n}\n\nvoid RegisterGLCTSTests()\n{\n  new dEQPTest();\n}\n```\n\nThe alternative solution you proposed worked, I have updated the CL. Please take a look.\n\n\n\u003e Can we find a meaningful name for this class?\n\nI have named the new class `dEQPTestSuiteStat`. What do you think?\n\n\u003e Is there any reason for GetTestCaseName and GetTestList to be part of this class and not just unnamed namespace functions? \n\nI moved the function `GetTestCaseName()` and `GetTestList()` out of the class. The `dEQPTest` class will call `GetTestList()` in `TestBody()`, but I think it is fine that it does not invoke the function through another object.",
+      "parentUuid": "382dc8f7_37848261",
       "range": {
         "startLine": 565,
         "startChar": 24,
