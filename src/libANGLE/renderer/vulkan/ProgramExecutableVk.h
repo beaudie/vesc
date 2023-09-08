@@ -92,6 +92,14 @@ class ProgramInfo final : angle::NonCopyable
     gl::ShaderMap<vk::RefCounted<vk::ShaderModule>> mShaders;
 };
 
+ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
+// A dummy struct just to ensure sh::BlockMemberInfo is tightly packed
+struct BlockMemberInfoPaddingTest
+{
+    sh::BlockMemberInfo blockMemberInfo;
+};
+ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
+
 // State for the default uniform blocks.
 struct DefaultUniformBlockVk final : private angle::NonCopyable
 {
