@@ -46,6 +46,30 @@
       },
       "revId": "a67217fd4a4bf99025afd46dd81e2aadf6129018",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "469483c9_154f00bb",
+        "filename": "infra/specs/test_suites.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 1276,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-09-08T14:44:05Z",
+      "side": 1,
+      "message": "https://en.wikipedia.org/wiki/Group_(mathematics)\n`a group is a non-empty set`\n{ \u0027angle_restricted_trace_gold_tests\u0027 } isn\u0027t empty, so it\u0027s a group 😜",
+      "parentUuid": "accbc0e9_c1fcc9f2",
+      "range": {
+        "startLine": 1276,
+        "startChar": 22,
+        "endLine": 1276,
+        "endChar": 27
+      },
+      "revId": "a67217fd4a4bf99025afd46dd81e2aadf6129018",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
