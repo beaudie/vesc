@@ -3054,8 +3054,8 @@ angle::Result TextureVk::convertBufferToRGBA(ContextVk *contextVk, size_t &conve
     vk::BufferHelper *conversionBufferHelper = conversion->data.get();
     if (!conversionBufferHelper->valid())
     {
-        ANGLE_TRY(conversionBufferHelper->allocateForVertexConversion(
-            contextVk, conversionBufferSize, vk::MemoryHostVisibility::NonVisible));
+        ANGLE_TRY(contextVk->allocateForVertexConversion(
+            conversionBufferHelper, conversionBufferSize, vk::MemoryHostVisibility::NonVisible));
     }
 
     if (conversion->dirty)
