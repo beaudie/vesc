@@ -1161,24 +1161,24 @@ namespace angle
 class UnlockedTailCall final : angle::NonCopyable
 {
   public:
-    using CallType = std::function<void(void)>;
+    using CallType = std::function<void(void *)>;
 
     UnlockedTailCall();
     ~UnlockedTailCall();
 
     void add(CallType &&call);
-    ANGLE_INLINE void run()
+    ANGLE_INLINE void run(void *resultOut)
     {
         if (!mCalls.empty())
         {
-            runImpl();
+            runImpl(resultOut);
         }
     }
 
     bool any() const { return !mCalls.empty(); }
 
   private:
-    void runImpl();
+    void runImpl(void *resultOut);
 
     // Typically, there is only one tail call.  It is possible to end up with 2 tail calls currently
     // with unMakeCurrent destroying both the read and draw surfaces, each adding a tail call in the
