@@ -22,6 +22,30 @@
       },
       "revId": "a67217fd4a4bf99025afd46dd81e2aadf6129018",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "accbc0e9_c1fcc9f2",
+        "filename": "infra/specs/test_suites.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 1276,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-08T14:41:07Z",
+      "side": 1,
+      "message": "I don\u0027t think it does, e.g. angle_restricted_trace_gold_isolated_scripts is just\nhttps://crsrc.org/c/third_party/angle/infra/specs/test_suites.pyl;drc\u003dd7d78adb2adb256c15cb6542ba382675cb1272ae;l\u003d826\n\nAnd the likely reason for this is because the var name is \"isolated_scripts\" not \"isolated_script\" so everything is \"scripts\"",
+      "parentUuid": "305b13d0_091cb2be",
+      "range": {
+        "startLine": 1276,
+        "startChar": 22,
+        "endLine": 1276,
+        "endChar": 27
+      },
+      "revId": "a67217fd4a4bf99025afd46dd81e2aadf6129018",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
