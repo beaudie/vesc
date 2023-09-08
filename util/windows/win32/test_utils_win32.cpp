@@ -8,6 +8,7 @@
 
 #include "util/test_utils.h"
 
+#include <signal.h>
 #include <windows.h>
 #include <array>
 
@@ -24,7 +25,7 @@ static const struct
 } kExceptions[] = {
 #define _(E)  \
     {         \
-#        E, E \
+        #E, E \
     }
     _(EXCEPTION_ACCESS_VIOLATION),
     _(EXCEPTION_BREAKPOINT),
@@ -147,6 +148,23 @@ void PrintStackBacktrace()
     PrintBacktrace(&context);
 }
 
+void HandleAbortSignal(int signum)
+{
+    CONTEXT context;
+    CaptureContext(&context);
+
+    EXCEPTION_RECORD record = {};
+    record.ExceptionCode    = STATUS_FATAL_APP_EXIT;
+    record.ExceptionFlags   = EXCEPTION_NONCONTINUABLE;
+    record.ExceptionAddress = ProgramCounterFromCONTEXT(&context);
+
+    EXCEPTION_POINTERS exception_pointers;
+    exception_pointers.ContextRecord   = &context;
+    exception_pointers.ExceptionRecord = &record;
+
+    UnhandledExceptionHandler(&exception_pointers);
+}
+
 void InitCrashHandler(CrashCallback *callback)
 {
     if (callback)
@@ -154,12 +172,14 @@ void InitCrashHandler(CrashCallback *callback)
         gCrashHandlerCallback = callback;
     }
     SetUnhandledExceptionFilter(CrashHandler);
+    signal(SIGABRT, HandleAbortSignal);
 }
 
 void TerminateCrashHandler()
 {
     gCrashHandlerCallback = nullptr;
     SetUnhandledExceptionFilter(nullptr);
+    signal(SIGABRT, SIG_DFL);
 }
 
 int NumberOfProcessors()

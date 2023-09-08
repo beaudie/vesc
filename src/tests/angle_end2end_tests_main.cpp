@@ -72,5 +72,9 @@ int main(int argc, char **argv)
         return EXIT_FAILURE;
     }
 
+    std::vector<int> v;
+    printf("abort\n");
+    printf("v.at(2): %d\n", v.at(2));
+
     return testSuite.run();
 }
