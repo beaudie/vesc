@@ -16,6 +16,41 @@
       "message": "ptal -- now with tests! (that actually work out of the box on Vulkan! ... but D3D11 still needs work)",
       "revId": "a4de3a05e9e805b271292a63392222c79c781c9f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af6e1b7b_98679e8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-08T14:12:02Z",
+      "side": 1,
+      "message": "😎 (from a Vulkan dev)",
+      "parentUuid": "147ff6fa_3d1a22ec",
+      "revId": "a4de3a05e9e805b271292a63392222c79c781c9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0803206_f95a2af9",
+        "filename": "src/tests/gl_tests/CopyTextureTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2755,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-08T14:12:02Z",
+      "side": 1,
+      "message": "Please use `angle_end2end_tests_expectations.txt` for suppressions.",
+      "revId": "a4de3a05e9e805b271292a63392222c79c781c9f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
