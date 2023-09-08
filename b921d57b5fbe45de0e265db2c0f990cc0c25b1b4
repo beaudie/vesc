@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1db3bbe_1175322f",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 5856,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-08T20:44:51Z",
+      "side": 1,
+      "message": "Could you add a note here that clarifies interaction between this logic and the trigger? (I think I understand it but it\u0027s good to have it explicitly listed for future reference)",
+      "range": {
+        "startLine": 5856,
+        "startChar": 4,
+        "endLine": 5856,
+        "endChar": 46
+      },
+      "revId": "b921d57b5fbe45de0e265db2c0f990cc0c25b1b4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
