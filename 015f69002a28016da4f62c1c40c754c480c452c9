@@ -16,6 +16,69 @@
       "message": "shabi - before i go down further in this direction could you provide feedback / suggestions on current approach?",
       "revId": "015f69002a28016da4f62c1c40c754c480c452c9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "455005e7_4a4b9ffd",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1170,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-08T13:33:50Z",
+      "side": 1,
+      "message": "Hate to be annoying, but please call this `resultOut`.",
+      "range": {
+        "startLine": 1170,
+        "startChar": 32,
+        "endLine": 1170,
+        "endChar": 36
+      },
+      "revId": "015f69002a28016da4f62c1c40c754c480c452c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57cb7bed_54bded01",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-08T13:33:50Z",
+      "side": 1,
+      "message": "Couple of notes:\n\n- This is now being done for EGL syncs too, but you haven\u0027t enabled that yet\n- The state setting in this function is going to be racy. Think two threads calling glClientWaitSync on the same sync object\n\nThe result is being set here only to have it retrieved by a second tail call that converts it to a GL result, right?\n\nWe can simplify that. You can put the `switch (result) ...` converters in the GL and EGL versions of clientWait below into helper functions at the top (anonymous namespace), then pass in a function pointer to this function to convert the result. The tail call would capture the function pointer and convert the result right away. \n\nIf you don\u0027t want to enable this for EGL yet, make sure the lambda is called right away for EGL (and not turned into tail call).\n\nAlso, the `outResult` parameter of this function is not used anymore now, you probably want to replace it with a `void *outResult` that the function pointers know how to interpret. Then the early return paths would correctly set the result automatically, and only the wait path wouldn\u0027t (but instead do it in a single tail call).",
+      "revId": "015f69002a28016da4f62c1c40c754c480c452c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7b07532_a5a53a79",
+        "filename": "src/tests/gl_tests/FenceSyncTests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-08T13:33:50Z",
+      "side": 1,
+      "message": "EXPECT_TRUE",
+      "range": {
+        "startLine": 283,
+        "startChar": 8,
+        "endLine": 283,
+        "endChar": 14
+      },
+      "revId": "015f69002a28016da4f62c1c40c754c480c452c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
