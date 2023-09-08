@@ -226,6 +226,11 @@ AHardwareBuffer *ANativeWindowBufferToAHardwareBuffer(ANativeWindowBuffer *windo
 
 uint64_t GetAHBUsage(int eglNativeBufferUsage);
 
+bool GetSystemProperty(const char *propertyName, std::string *value);
+static constexpr const char *kManufacturerSystemPropertyName = "ro.product.manufacturer";
+static constexpr const char *kModelSystemPropertyName        = "ro.product.model";
+static constexpr const char *kSDKSystemPropertyName          = "ro.build.version.sdk";
+
 }  // namespace android
 }  // namespace angle
 
