@@ -16,6 +16,24 @@
       "message": "Need to remove this empty line.",
       "revId": "9e0f13ddc6cafd75ff242dd0a287d935a97fec6f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9dc6cedb_9d7c60cf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1002073
+      },
+      "writtenOn": "2023-09-08T17:07:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "299ea083_45426eda",
+      "revId": "9e0f13ddc6cafd75ff242dd0a287d935a97fec6f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
