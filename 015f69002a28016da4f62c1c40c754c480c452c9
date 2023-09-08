@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5165ab9a_76d738a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-08T15:41:15Z",
+      "side": 1,
+      "message": "thanks for the inputs shabi",
+      "revId": "015f69002a28016da4f62c1c40c754c480c452c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "455005e7_4a4b9ffd",
@@ -31,6 +48,30 @@
       "writtenOn": "2023-09-08T13:33:50Z",
       "side": 1,
       "message": "Hate to be annoying, but please call this `resultOut`.",
+      "range": {
+        "startLine": 1170,
+        "startChar": 32,
+        "endLine": 1170,
+        "endChar": 36
+      },
+      "revId": "015f69002a28016da4f62c1c40c754c480c452c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "647dbb50_63fd82db",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1170,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-08T15:41:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "455005e7_4a4b9ffd",
       "range": {
         "startLine": 1170,
         "startChar": 32,
@@ -60,6 +101,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ba35efb8_b768be2d",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-08T15:41:15Z",
+      "side": 1,
+      "message": "\u003e This is now being done for EGL syncs too, but you haven\u0027t enabled that yet\n\u003e ...\n\u003e If you don\u0027t want to enable this for EGL yet\n\ni do plan to enable that path as well but wanted to discuss design before investing more bandwidth\n\n\u003e The state setting in this function is going to be racy. Think two threads calling glClientWaitSync on the same sync object\n\u003e ...\n\u003e You can put the switch (result) ... converters in the GL and EGL versions of clientWait below into helper functions at the top\n\ncan convert to atomic but will go with the func pointer path, less state is better 😊\n\n\u003e The result is being set here only to have it retrieved by a second tail call that converts it to a GL result, right?\n\ncorrect\n\nwill upload patch shortly",
+      "parentUuid": "57cb7bed_54bded01",
+      "revId": "015f69002a28016da4f62c1c40c754c480c452c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e7b07532_a5a53a79",
         "filename": "src/tests/gl_tests/FenceSyncTests.cpp",
         "patchSetId": 1
@@ -71,6 +130,30 @@
       "writtenOn": "2023-09-08T13:33:50Z",
       "side": 1,
       "message": "EXPECT_TRUE",
+      "range": {
+        "startLine": 283,
+        "startChar": 8,
+        "endLine": 283,
+        "endChar": 14
+      },
+      "revId": "015f69002a28016da4f62c1c40c754c480c452c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24306f3c_1c7f0d28",
+        "filename": "src/tests/gl_tests/FenceSyncTests.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-08T15:41:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e7b07532_a5a53a79",
       "range": {
         "startLine": 283,
         "startChar": 8,
