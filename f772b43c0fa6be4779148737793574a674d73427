@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "9d6aff85_f04042eb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-08T18:11:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "05602510_56dd3946",
+      "range": {
+        "startLine": 9,
+        "startChar": 39,
+        "endLine": 9,
+        "endChar": 45
+      },
+      "revId": "f772b43c0fa6be4779148737793574a674d73427",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "3ec4d355_e71cc67f",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -54,6 +78,30 @@
       "writtenOn": "2023-09-08T17:51:24Z",
       "side": 1,
       "message": "nit: `placeholder`\n\nAlso, perhaps put this somewhere in the front-end?",
+      "range": {
+        "startLine": 96,
+        "startChar": 5,
+        "endLine": 96,
+        "endChar": 10
+      },
+      "revId": "f772b43c0fa6be4779148737793574a674d73427",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c70406d_79ad9240",
+        "filename": "src/libANGLE/renderer/vulkan/ProgramExecutableVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-08T18:11:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "19712664_a0047d1a",
       "range": {
         "startLine": 96,
         "startChar": 5,
