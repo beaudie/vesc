@@ -215,6 +215,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "15854b26_f1afb08d",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-08T19:18:53Z",
+      "side": 1,
+      "message": "yeah this looks way cleaner!",
+      "parentUuid": "004d8b9f_c1471d4a",
+      "range": {
+        "startLine": 565,
+        "startChar": 24,
+        "endLine": 565,
+        "endChar": 37
+      },
+      "revId": "ffb88163774946456415791a64b489a801764b54",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "edc523d7_537d4231",
