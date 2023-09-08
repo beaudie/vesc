@@ -16,6 +16,23 @@
       "message": "Shabi or Geoff: could you please review? Thanks.",
       "revId": "3fa5cd52dfbac8e2f5f1a900c57ea50a971c2fba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f2aac68_6ecd3d92",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-08T14:32:15Z",
+      "side": 1,
+      "message": "ANGLE doesn\u0027t support CQ+2 on branches. I\u0027ll manually submit this",
+      "revId": "3fa5cd52dfbac8e2f5f1a900c57ea50a971c2fba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
