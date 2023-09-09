@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2926a244_1ae923ea",
+        "filename": "src/libANGLE/angletypes.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 1164,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-09T20:36:15Z",
+      "side": 1,
+      "message": "```suggestion\n// Some entry points pass a void pointer argument to UnlockedTailCall::run method intended to\n// contain the return value filled by the backend, the rest of the entry points pass in a\n// nullptr.  Regardless, Display::terminate runs pending tail calls passing in a nullptr, so\n// the tail calls that return a value in the argument still have to guard against a nullptr\n// parameter.\n```",
+      "range": {
+        "startLine": 1162,
+        "startChar": 0,
+        "endLine": 1164,
+        "endChar": 96
+      },
+      "revId": "7970c56257578ea0fdac38c31b3f2a5e1d196bbb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
