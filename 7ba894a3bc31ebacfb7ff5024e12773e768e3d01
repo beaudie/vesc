@@ -426,6 +426,24 @@
       "message": "Suggest to move these and allocateForVertexConversion etc into ContextVk as well in the follow up CL.",
       "revId": "7ba894a3bc31ebacfb7ff5024e12773e768e3d01",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6ebb03b_1fbbb84b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 4882,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-09T00:43:38Z",
+      "side": 1,
+      "message": "Prepared a [follow-up draft CL](https://crrev.com/c/4854760).",
+      "parentUuid": "5f85fa39_9a11d9d3",
+      "revId": "7ba894a3bc31ebacfb7ff5024e12773e768e3d01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
