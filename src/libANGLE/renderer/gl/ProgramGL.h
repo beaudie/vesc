@@ -110,6 +110,10 @@ class ProgramGL : public ProgramImpl
 
     ANGLE_INLINE GLuint getProgramID() const { return mProgramID; }
 
+    void updateEnabledClipDistances(uint8_t enabledClipDistancesPacked) const;
+
+    void enableLayeredRenderingPath(int baseViewIndex) const;
+
     angle::Result syncState(const gl::Context *context,
                             const gl::Program::DirtyBits &dirtyBits) override;
 

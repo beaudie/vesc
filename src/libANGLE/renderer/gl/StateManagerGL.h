@@ -290,12 +290,12 @@ class StateManagerGL final : angle::NonCopyable
                             const gl::state::ExtendedDirtyBits &extendedBitMask);
 
     ANGLE_INLINE void updateMultiviewBaseViewLayerIndexUniform(
-        const gl::ProgramExecutable *executable,
+        const gl::Program *program,
         const gl::FramebufferState &drawFramebufferState) const
     {
-        if (mIsMultiviewEnabled && executable && executable->usesMultiview())
+        if (mIsMultiviewEnabled && program && program->usesMultiview())
         {
-            updateMultiviewBaseViewLayerIndexUniformImpl(executable, drawFramebufferState);
+            updateMultiviewBaseViewLayerIndexUniformImpl(program, drawFramebufferState);
         }
     }
 
@@ -322,7 +322,7 @@ class StateManagerGL final : angle::NonCopyable
     void setTextureCubemapSeamlessEnabled(bool enabled);
 
     angle::Result propagateProgramToVAO(const gl::Context *context,
-                                        const gl::ProgramExecutable *executable,
+                                        const gl::Program *program,
                                         VertexArrayGL *vao);
 
     void updateProgramTextureBindings(const gl::Context *context);
@@ -344,10 +344,11 @@ class StateManagerGL final : angle::NonCopyable
     void syncTransformFeedbackState(const gl::Context *context);
 
     void updateEmulatedClipDistanceState(const gl::ProgramExecutable *executable,
+                                         const gl::Program *program,
                                          const gl::ClipDistanceEnableBits enables) const;
 
     void updateMultiviewBaseViewLayerIndexUniformImpl(
-        const gl::ProgramExecutable *executable,
+        const gl::Program *program,
         const gl::FramebufferState &drawFramebufferState) const;
 
     void syncBlendFromNativeContext(const gl::Extensions &extensions, ExternalContextState *state);

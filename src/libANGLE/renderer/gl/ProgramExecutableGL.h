@@ -29,10 +29,6 @@ class ProgramExecutableGL : public ProgramExecutableImpl
 
     void destroy(const gl::Context *context) override;
 
-    void updateEnabledClipDistances(uint8_t enabledClipDistancesPacked) const;
-
-    void enableLayeredRenderingPath(int baseViewIndex) const;
-
   private:
     friend class ProgramGL;
 
@@ -49,10 +45,6 @@ class ProgramExecutableGL : public ProgramExecutableImpl
     GLint mClipDistanceEnabledUniformLocation;
 
     GLint mMultiviewBaseViewLayerIndexUniformLocation;
-
-    // The program for which the executable was built
-    GLuint mProgramID;
-    const FunctionsGL *mFunctions;
 };
 
 }  // namespace rx

@@ -482,16 +482,17 @@ bool ValidateTextureMaxAnisotropyValue(const Context *context,
 
 bool ValidateFragmentShaderColorBufferMaskMatch(const Context *context)
 {
-    const auto &glState                 = context->getState();
-    const ProgramExecutable *executable = context->getState().getLinkedProgramExecutable(context);
-    const Framebuffer *framebuffer      = glState.getDrawFramebuffer();
+    const auto &glState            = context->getState();
+    const Program *program         = context->getActiveLinkedProgram();
+    const Framebuffer *framebuffer = glState.getDrawFramebuffer();
 
     const auto &blendStateExt = glState.getBlendStateExt();
     auto drawBufferMask = framebuffer->getDrawBufferMask() & blendStateExt.compareColorMask(0);
     auto dualSourceBlendingMask = drawBufferMask & blendStateExt.getEnabledMask() &
                                   blendStateExt.getUsesExtendedBlendFactorMask();
-    auto fragmentOutputMask          = executable->getActiveOutputVariablesMask();
-    auto fragmentSecondaryOutputMask = executable->getActiveSecondaryOutputVariablesMask();
+    auto fragmentOutputMask = program->getExecutable().getActiveOutputVariablesMask();
+    auto fragmentSecondaryOutputMask =
+        program->getExecutable().getActiveSecondaryOutputVariablesMask();
 
     return drawBufferMask == (drawBufferMask & fragmentOutputMask) &&
            dualSourceBlendingMask == (dualSourceBlendingMask & fragmentSecondaryOutputMask);
@@ -510,11 +511,11 @@ bool ValidateFragmentShaderColorBufferTypeMatch(const Context *context)
 
 bool ValidateVertexShaderAttributeTypeMatch(const Context *context)
 {
-    const auto &glState                 = context->getState();
-    const ProgramExecutable *executable = context->getState().getLinkedProgramExecutable(context);
-    const VertexArray *vao              = context->getState().getVertexArray();
+    const auto &glState    = context->getState();
+    const Program *program = context->getActiveLinkedProgram();
+    const VertexArray *vao = context->getState().getVertexArray();
 
-    if (executable == nullptr)
+    if (!program)
     {
         return false;
     }
@@ -527,8 +528,9 @@ bool ValidateVertexShaderAttributeTypeMatch(const Context *context)
     vaoAttribTypeBits = (vaoAttribEnabledMask & vaoAttribTypeBits);
     vaoAttribTypeBits |= (~vaoAttribEnabledMask & stateCurrentValuesTypeBits);
 
-    return ValidateComponentTypeMasks(executable->getAttributesTypeMask().to_ulong(),
-                                      vaoAttribTypeBits, executable->getAttributesMask().to_ulong(),
+    const ProgramExecutable &executable = program->getExecutable();
+    return ValidateComponentTypeMasks(executable.getAttributesTypeMask().to_ulong(),
+                                      vaoAttribTypeBits, executable.getAttributesMask().to_ulong(),
                                       0xFFFF);
 }
 
@@ -4400,7 +4402,7 @@ const char *ValidateDrawStates(const Context *context, GLenum *outErrorCode)
             }
 
             // Validate that we are rendering with a linked program.
-            if (!program->isLinked())
+            if (executable == nullptr)
             {
                 return kProgramNotLinked;
             }

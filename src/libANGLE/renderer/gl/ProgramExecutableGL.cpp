@@ -19,9 +19,7 @@ ProgramExecutableGL::ProgramExecutableGL(const gl::ProgramExecutable *executable
     : ProgramExecutableImpl(executable),
       mHasAppliedTransformFeedbackVaryings(false),
       mClipDistanceEnabledUniformLocation(-1),
-      mMultiviewBaseViewLayerIndexUniformLocation(-1),
-      mProgramID(0),
-      mFunctions(nullptr)
+      mMultiviewBaseViewLayerIndexUniformLocation(-1)
 {}
 
 ProgramExecutableGL::~ProgramExecutableGL() {}
@@ -41,11 +39,6 @@ void ProgramExecutableGL::postLink(const FunctionsGL *functions,
                                    const angle::FeaturesGL &features,
                                    GLuint programID)
 {
-    // Cache the following so the executable is capable of making the appropriate GL calls without
-    // having to involve ProgramGL.
-    mProgramID = programID;
-    mFunctions = functions;
-
     // Query the uniform information
     ASSERT(mUniformRealLocationMap.empty());
     const auto &uniformLocations = mExecutable->getUniformLocations();
@@ -95,25 +88,4 @@ void ProgramExecutableGL::postLink(const FunctionsGL *functions,
         ASSERT(mMultiviewBaseViewLayerIndexUniformLocation != -1);
     }
 }
-
-void ProgramExecutableGL::updateEnabledClipDistances(uint8_t enabledClipDistancesPacked) const
-{
-    ASSERT(mExecutable->hasClipDistance());
-    ASSERT(mClipDistanceEnabledUniformLocation != -1);
-
-    ASSERT(mFunctions->programUniform1ui != nullptr);
-    mFunctions->programUniform1ui(mProgramID, mClipDistanceEnabledUniformLocation,
-                                  enabledClipDistancesPacked);
-}
-
-void ProgramExecutableGL::enableLayeredRenderingPath(int baseViewIndex) const
-{
-    ASSERT(mExecutable->usesMultiview());
-    ASSERT(mMultiviewBaseViewLayerIndexUniformLocation != -1);
-
-    ASSERT(mFunctions->programUniform1i != nullptr);
-    mFunctions->programUniform1i(mProgramID, mMultiviewBaseViewLayerIndexUniformLocation,
-                                 baseViewIndex);
-}
-
 }  // namespace rx
