@@ -16,6 +16,69 @@
       "message": "PTAL",
       "revId": "d4338bccf333ef49934b30d2f41edddd7ea312c6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8dc3f52_16c2b037",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-09T14:25:50Z",
+      "side": 1,
+      "message": "Thanks for splitting this out!",
+      "revId": "d4338bccf333ef49934b30d2f41edddd7ea312c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4e89616_918bbc75",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1299,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-09T14:25:50Z",
+      "side": 1,
+      "message": "The tail calls that return something should guard against nullptr then, something to remember for the next CL.\n\nAnd please add a comment to that effect on `UnlockedTailCall`.\n\n(we could also consider passing something here large enough to hold the result, but since that\u0027s not known, I\u0027d prefer a nullptr crash over sending something too small and risk a security bug)",
+      "range": {
+        "startLine": 1299,
+        "startChar": 44,
+        "endLine": 1299,
+        "endChar": 51
+      },
+      "revId": "d4338bccf333ef49934b30d2f41edddd7ea312c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47296e73_51d62fc2",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-09T14:25:50Z",
+      "side": 1,
+      "message": "nit: per before, please rename all of these to `resultOut`",
+      "range": {
+        "startLine": 1092,
+        "startChar": 49,
+        "endLine": 1092,
+        "endChar": 53
+      },
+      "revId": "d4338bccf333ef49934b30d2f41edddd7ea312c6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
