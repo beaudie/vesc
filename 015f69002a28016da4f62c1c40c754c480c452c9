@@ -117,6 +117,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1545aa6_238e778c",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-09T02:20:07Z",
+      "side": 1,
+      "message": "Done.\n\nmoved the change to tail call type to its own change here -\u003e https://chromium-review.googlesource.com/c/angle/angle/+/4852021",
+      "parentUuid": "ba35efb8_b768be2d",
+      "revId": "015f69002a28016da4f62c1c40c754c480c452c9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e7b07532_a5a53a79",
