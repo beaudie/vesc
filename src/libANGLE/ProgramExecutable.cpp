@@ -361,7 +361,7 @@ ProgramExecutable::ProgramExecutable(rx::GLImplFactory *factory, InfoLog *infoLo
     mPODStruct.geometryShaderInputPrimitiveType  = PrimitiveMode::Triangles;
     mPODStruct.geometryShaderOutputPrimitiveType = PrimitiveMode::TriangleStrip;
     mPODStruct.geometryShaderInvocations         = 1;
-    mPODStruct.transformFeedbackBufferMode       = GL_INTERLEAVED_ATTRIBS;
+    mPODStruct.transformFeedbackBufferMode       = GL_SEPARATE_ATTRIBS;
     mPODStruct.computeShaderLocalSize.fill(1);
 
     reset();
