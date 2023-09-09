@@ -110,17 +110,16 @@ class ShaderInterfaceVariableInfoMap final : angle::NonCopyable
     gl::ShaderMap<IdToIndexMap> mIdToIndexMap;
 
     ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
-    struct PodStruct
+    struct
     {
-        PodStruct() : xfbInfoCount(0), hasAliasingAttributes(false) {}
         // Active members of `in gl_PerVertex` and `out gl_PerVertex`. 6 bytes each
         gl::ShaderMap<gl::PerVertexMemberBitSet> inputPerVertexActiveMembers;
         gl::ShaderMap<gl::PerVertexMemberBitSet> outputPerVertexActiveMembers;
 
-        uint32_t xfbInfoCount : 31;
+        uint32_t xfbInfoCount : 31 = 0;
         // Whether the vertex shader has aliasing attributes.  Used by the SPIR-V transformer to
         // tell if emulation is needed.
-        uint32_t hasAliasingAttributes : 1;
+        uint32_t hasAliasingAttributes : 1 = false;
     } mPodStruct;
     ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
 };
