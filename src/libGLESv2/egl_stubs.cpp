@@ -104,7 +104,28 @@ EGLint ClientWaitSync(Thread *thread,
         thread, syncObject->clientWait(display, currentContext, flags, timeout, &syncStatus),
         "eglClientWaitSync", GetSyncIfValid(display, syncID), EGL_FALSE);
 
-    thread->setSuccess();
+    // When performing CPU wait through UnlockedTailCall we need to handle any error conditions
+    if (egl::Display::GetCurrentThreadUnlockedTailCall()->any())
+    {
+        auto handleErrorStatus = [thread, syncObject](void *result) {
+            EGLint *eglResult = static_cast<EGLint *>(result);
+            ASSERT(eglResult);
+
+            if (*eglResult == EGL_FALSE)
+            {
+                thread->setError(egl::Error(EGL_BAD_ALLOC), "eglClientWaitSync", syncObject);
+            }
+            else
+            {
+                thread->setSuccess();
+            }
+        };
+        egl::Display::GetCurrentThreadUnlockedTailCall()->add(handleErrorStatus);
+    }
+    else
+    {
+        thread->setSuccess();
+    }
     return syncStatus;
 }
 
