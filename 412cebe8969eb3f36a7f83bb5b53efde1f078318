@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9d00636_927ac075",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 32
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-10T01:35:30Z",
+      "side": 1,
+      "message": "Thanks for working through this Charlie and Amirali, the change looks much better than before.\n\nI was thinking about this and was wondering if we could make it much simpler by _predicting_ OOM. Like, if we are able to know how much free memory is left, on allocation paths (basically texture, buffer and renderbuffer resource allocation) we could proactively check if memory is dangerously low, and flush before attempting the allocation. Then the finish-and-retry strategy previously implemented could deal with OOM if it happens.\n\n(technically this change would of course be more accurate than the prediction, but in practice that probably works out. It may even work out better because you\u0027d be flushing _before_ OOM happens and avoid getting into such a bad situation).\n\nAre we able to tell how much free memory there is?",
+      "revId": "412cebe8969eb3f36a7f83bb5b53efde1f078318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
