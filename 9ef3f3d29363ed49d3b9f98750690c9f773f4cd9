@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "319f6ada_4a484475",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-11T19:11:45Z",
+      "side": 1,
+      "message": "\u003e only the entry point need to know\n\ncorrect, i meant the entry point now needs to account for this possibility\n\n\u003e the first call with timeout\u003d0 with lock, if not complete, second call with true timeout value without lock, and if still timeout, then call again to process error with lock.\n\nupdating entry points through python scripts wan not straight forward last time i looked.\n\n\u003e This is my suggestion, you can give it a try if interested\n\n@syoussefi@chromium.org do you have some guidelines on when to use `UnlockedTailCall`? i thought this usecase was a good fit but i see there are other ways to do this as well",
+      "parentUuid": "de9466f4_62c939e6",
+      "revId": "9ef3f3d29363ed49d3b9f98750690c9f773f4cd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b7259ccf_ccf8df3d",
         "filename": "scripts/generate_entry_points.py",
         "patchSetId": 8
@@ -254,6 +272,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc14561e_b2c374dd",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-11T19:11:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a3c6847_3fa0814e",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 90,
+        "endChar": 40
+      },
+      "revId": "9ef3f3d29363ed49d3b9f98750690c9f773f4cd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e23720c8_67cbeeaf",
@@ -306,6 +348,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "38cbab48_480614a2",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-11T19:11:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "209cebd2_d2c38cf0",
+      "revId": "9ef3f3d29363ed49d3b9f98750690c9f773f4cd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1bb3583c_c775cb03",
@@ -319,6 +379,30 @@
       "writtenOn": "2023-09-11T14:32:39Z",
       "side": 1,
       "message": "Please return `Continue`. `Incomplete` was a mistake, and I\u0027m going to remove it. Instead, return `VK_INCOMPLETE` in `resultOut`.",
+      "range": {
+        "startLine": 168,
+        "startChar": 11,
+        "endLine": 168,
+        "endChar": 36
+      },
+      "revId": "9ef3f3d29363ed49d3b9f98750690c9f773f4cd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "421fbbd7_3adfabf5",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-11T19:11:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1bb3583c_c775cb03",
       "range": {
         "startLine": 168,
         "startChar": 11,
