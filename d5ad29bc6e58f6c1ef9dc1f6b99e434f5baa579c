@@ -16,6 +16,23 @@
       "message": "PTAL - bugfix change that was split from -\u003e https://chromium-review.googlesource.com/c/angle/angle/+/4851649",
       "revId": "d5ad29bc6e58f6c1ef9dc1f6b99e434f5baa579c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "616ae684_642485e7",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-11T19:41:11Z",
+      "side": 1,
+      "message": "How about setting it to VK_NOT_READY here, and at the bottom of this scope do something like:\n\n```\nif (*result !\u003d VK_TIMEOUT)\n{\n    *result \u003d hasResourceUseFinished(use) ? VK_SUCCESS : VK_NOT_READY;\n}\n```\n\nSo that check is really done only once.\n\n---\n\nIt could maybe even be simpler? Just don\u0027t set it anywhere in this loop, then do something like this at the end:\n\n```\n*result \u003d hasResourceUseFinished(use) ? VK_SUCCESS : timeout \u003d\u003d 0 ? VK_NOT_READY : VK_TIMEOUT;\n```",
+      "revId": "d5ad29bc6e58f6c1ef9dc1f6b99e434f5baa579c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
