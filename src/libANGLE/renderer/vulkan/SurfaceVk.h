@@ -476,6 +476,9 @@ class WindowSurfaceVk : public SurfaceVk
     // Finish all GPU operations on the surface
     angle::Result finish(vk::Context *context);
 
+    angle::Result preserveColorBufferContents(ContextVk *contextVk);
+    angle::Result initializeColorBufferContents(ContextVk *contextVk);
+
     void updateOverlay(ContextVk *contextVk) const;
     bool overlayHasEnabledWidget(ContextVk *contextVk) const;
     angle::Result drawOverlay(ContextVk *contextVk, impl::SwapchainImage *image) const;
@@ -557,6 +560,10 @@ class WindowSurfaceVk : public SurfaceVk
 
     // GL_EXT_shader_framebuffer_fetch
     FramebufferFetchMode mFramebufferFetchMode = FramebufferFetchMode::Disabled;
+
+    // Caches the contents of the swapchain image from the previous swap buffer call when
+    // EGL_SWAP_BEHAVIOR is set to EGL_BUFFER_PRESERVED.
+    vk::ImageHelper mSwapBehaviorPreserveImageHelper;
 };
 
 }  // namespace rx

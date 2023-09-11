@@ -417,8 +417,6 @@ void Surface::setMultisampleResolve(EGLenum resolve)
 
 void Surface::setSwapBehavior(EGLenum behavior)
 {
-    // Behaviour is set but ignored
-    UNIMPLEMENTED();
     mState.swapBehavior = behavior;
 }
 
@@ -637,24 +635,9 @@ GLuint Surface::getId() const
     return mState.id.value;
 }
 
-Error Surface::getBufferAgeImpl(const gl::Context *context, EGLint *age) const
-{
-    // When EGL_BUFFER_PRESERVED, the previous frame contents are copied to
-    // current frame, so the buffer age is always 1.
-    if (mState.swapBehavior == EGL_BUFFER_PRESERVED)
-    {
-        if (age != nullptr)
-        {
-            *age = 1;
-        }
-        return egl::NoError();
-    }
-    return mImplementation->getBufferAge(context, age);
-}
-
 Error Surface::getBufferAge(const gl::Context *context, EGLint *age)
 {
-    Error err = getBufferAgeImpl(context, age);
+    Error err = mImplementation->getBufferAge(context, age);
     if (!err.isError())
     {
         mBufferAgeQueriedSinceLastSwap = true;

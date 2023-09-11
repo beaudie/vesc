@@ -294,8 +294,6 @@ class Surface : public LabeledObject, public gl::FramebufferAttachmentObject
     bool mIsDamageRegionSet;
 
   private:
-    Error getBufferAgeImpl(const gl::Context *context, EGLint *age) const;
-
     Error destroyImpl(const Display *display);
 
     void postSwap(const gl::Context *context);
