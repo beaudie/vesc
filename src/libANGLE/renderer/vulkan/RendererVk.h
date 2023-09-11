@@ -206,6 +206,11 @@ class RendererVk : angle::NonCopyable
     {
         return mPrimitivesGeneratedQueryFeatures;
     }
+    const VkPhysicalDeviceHostImageCopyPropertiesEXT &getPhysicalDeviceHostImageCopyProperties()
+        const
+    {
+        return mHostImageCopyProperties;
+    }
     const VkPhysicalDeviceFeatures &getPhysicalDeviceFeatures() const
     {
         return mPhysicalDeviceFeatures;

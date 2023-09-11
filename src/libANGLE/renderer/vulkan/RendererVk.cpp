@@ -3296,6 +3296,10 @@ void RendererVk::initDeviceExtensionEntryPoints()
     {
         InitGetPastPresentationTimingGoogleFunction(mDevice);
     }
+    if (mFeatures.supportsHostImageCopy.enabled)
+    {
+        InitHostImageCopyFunctions(mDevice);
+    }
     if (!isVulkan11Device())
     {
         if (mFeatures.supportsGetMemoryRequirements2.enabled)
