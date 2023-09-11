@@ -1785,6 +1785,8 @@ enum class ImageLayout
     ExternalShadersWrite,
     TransferSrc,
     TransferDst,
+    // Used when the image is transitioned on the host for use by host image copy
+    HostCopy,
     VertexShaderReadOnly,
     VertexShaderWrite,
     // PreFragment == Vertex, Tessellation and Geometry stages
@@ -2673,6 +2675,15 @@ class ImageHelper final : public Resource, public angle::Subject
                                         LevelIndex mipLevel,
                                         uint32_t baseArrayLayer,
                                         uint32_t layerCount);
+
+    angle::Result updateSubresourceOnHost(ContextVk *contextVk,
+                                          const gl::ImageIndex &index,
+                                          const gl::Extents &glExtents,
+                                          const gl::Offset &offset,
+                                          const uint8_t *source,
+                                          const GLuint rowPitch,
+                                          const GLuint depthPitch,
+                                          bool *copiedOut);
 
     std::vector<SubresourceUpdate> *getLevelUpdates(gl::LevelIndex level);
     const std::vector<SubresourceUpdate> *getLevelUpdates(gl::LevelIndex level) const;
