@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d228b1c_42ef5e90",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-11T18:01:31Z",
+      "side": 1,
+      "message": "I am not sure if I fully covered the CL. Overall the idea looks good to me. In this CL, does the link itself already moved to different threads or still same thread but different stages (and some stage without lock)? If actually moved to different threads, some perf measurement data will be nice.",
+      "revId": "3e279035e67fa2ca5c8fedf54ad06270b3487450",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
