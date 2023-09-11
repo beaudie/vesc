@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "764502c9_83db21fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-11T17:25:48Z",
+      "side": 1,
+      "message": "i see what you mean but a couple of things -\n\n1. we will need to distinguish from the usecase where the app itself sent in timeout `0`\n2. the entry point no longer is a pass through and will now start having code that does different things in different entry points (note that we need to do similar call for `glClientWaitSync` as well)\n3. depending on what you mean by \"If returnValue is not complete\" we will need to handle many different return value types from different backends. i am not sure how this would be a simpler approach",
+      "parentUuid": "00a00e4f_bc425976",
+      "revId": "9ef3f3d29363ed49d3b9f98750690c9f773f4cd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b7259ccf_ccf8df3d",
         "filename": "scripts/generate_entry_points.py",
         "patchSetId": 8
