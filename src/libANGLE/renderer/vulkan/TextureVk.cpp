@@ -765,12 +765,12 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
     ContextVk *contextVk = vk::GetImpl(context);
 
     // When possible flush out updates immediately.
-    bool shouldFlush = false;
+    vk::ApplyImageUpdate applyUpdate = vk::ApplyImageUpdate::Defer;
     if (!mOwnsImage || mState.getImmutableFormat() ||
         (!shouldUpdateBeStaged(gl::LevelIndex(index.getLevelIndex()),
                                vkFormat.getActualImageFormatID(getRequiredImageAccess()))))
     {
-        shouldFlush = true;
+        applyUpdate = vk::ApplyImageUpdate::ImmediatelyIfPossible;
     }
 
     if (unpackBuffer)
@@ -833,7 +833,8 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
                 contextVk, getNativeImageIndex(index),
                 gl::Extents(area.width, area.height, area.depth),
                 gl::Offset(area.x, area.y, area.z), formatInfo, unpack, type, source, vkFormat,
-                getRequiredImageAccess(), inputRowPitch, inputDepthPitch, inputSkipBytes));
+                getRequiredImageAccess(), inputRowPitch, inputDepthPitch, inputSkipBytes,
+                applyUpdate));
 
             ANGLE_TRY(unpackBufferVk->unmapImpl(contextVk));
         }
@@ -843,11 +844,11 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
         ANGLE_TRY(mImage->stageSubresourceUpdate(
             contextVk, getNativeImageIndex(index), gl::Extents(area.width, area.height, area.depth),
             gl::Offset(area.x, area.y, area.z), formatInfo, unpack, type, pixels, vkFormat,
-            getRequiredImageAccess()));
+            getRequiredImageAccess(), applyUpdate));
     }
 
     // If we used context's staging buffer, flush out the updates
-    if (shouldFlush)
+    if (applyUpdate == vk::ApplyImageUpdate::ImmediatelyIfPossible)
     {
         ANGLE_TRY(ensureImageInitialized(contextVk, ImageMipLevels::EnabledLevels));
 
