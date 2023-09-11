@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58aeb65f_1d5b0ef4",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-11T13:43:29Z",
+      "side": 1,
+      "message": "nit: While you\u0027re at it, `camelCase` instead of `CamelCase` for non-static functions (per our style)",
+      "range": {
+        "startLine": 395,
+        "startChar": 0,
+        "endLine": 396,
+        "endChar": 26
+      },
+      "revId": "7adfd073007db2fb976817e14e4c980481b1697f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
