@@ -69,6 +69,24 @@
       "parentUuid": "e583aac7_66de13cf",
       "revId": "d5ad29bc6e58f6c1ef9dc1f6b99e434f5baa579c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "490e7736_4dbefbba",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-11T20:14:41Z",
+      "side": 1,
+      "message": "1 usecase i can think of if we go with setting `result` at top and then checking `hasResourceUseFinished` at the end of the scope - what happens if `use` was done before entering while-loop but an error is generated during `checkCompletedCommandsLocked` on line 1276 for some unrelated command batch?\n\nThe client wait thread will get error status even though the command batch relevant to the client wait was completed successfully",
+      "parentUuid": "e3264b7a_f807d879",
+      "revId": "d5ad29bc6e58f6c1ef9dc1f6b99e434f5baa579c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
