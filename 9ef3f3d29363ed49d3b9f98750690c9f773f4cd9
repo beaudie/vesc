@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "de9466f4_62c939e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-11T18:19:22Z",
+      "side": 1,
+      "message": "1. No need though -- only the entry point need to know.\n3. Maybe the timeout case is handled differently. Worse case is you split into three calls then, the first call with timeout\u003d0 with lock, if not complete, second call with true timeout value without lock, and if still timeout, then call again to process error with lock.\nThis is my suggestion, you can give it a try if interested. I am not forcing anyone to one path or other. Certain things you will see which way is better when you actually give it a try.",
+      "parentUuid": "764502c9_83db21fb",
+      "revId": "9ef3f3d29363ed49d3b9f98750690c9f773f4cd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b7259ccf_ccf8df3d",
@@ -118,6 +136,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cafbebda_2038d0b0",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-11T18:19:22Z",
+      "side": 1,
+      "message": "I don\u0027t have bug number or anything, just realized when seeing your diff.",
+      "parentUuid": "2d1905e2_dc1c8a1b",
+      "range": {
+        "startLine": 1252,
+        "startChar": 9,
+        "endLine": 1252,
+        "endChar": 15
+      },
+      "revId": "9ef3f3d29363ed49d3b9f98750690c9f773f4cd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d1f18e01_b2c1ce32",
@@ -155,6 +197,30 @@
       "side": 1,
       "message": "cant do that since it is possible that we broke out of the while in line 1263 in which case we should not update `result`",
       "parentUuid": "d1f18e01_b2c1ce32",
+      "range": {
+        "startLine": 1272,
+        "startChar": 0,
+        "endLine": 1272,
+        "endChar": 82
+      },
+      "revId": "9ef3f3d29363ed49d3b9f98750690c9f773f4cd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2a797d8_c0fb2344",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1272,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-11T18:19:22Z",
+      "side": 1,
+      "message": "I see.",
+      "parentUuid": "eafa1524_a5433973",
       "range": {
         "startLine": 1272,
         "startChar": 0,
