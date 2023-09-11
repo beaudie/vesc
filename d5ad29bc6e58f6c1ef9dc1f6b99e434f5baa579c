@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "45e9c21b_526fd34b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-11T21:25:47Z",
+      "side": 1,
+      "message": "LGTM. Thanks for the fix.",
+      "revId": "d5ad29bc6e58f6c1ef9dc1f6b99e434f5baa579c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "616ae684_642485e7",
@@ -85,6 +102,24 @@
       "side": 1,
       "message": "1 usecase i can think of if we go with setting `result` at top and then checking `hasResourceUseFinished` at the end of the scope - what happens if `use` was done before entering while-loop but an error is generated during `checkCompletedCommandsLocked` on line 1276 for some unrelated command batch?\n\nThe client wait thread will get error status even though the command batch relevant to the client wait was completed successfully",
       "parentUuid": "e3264b7a_f807d879",
+      "revId": "d5ad29bc6e58f6c1ef9dc1f6b99e434f5baa579c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc3484e9_d6df7aec",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-11T21:25:47Z",
+      "side": 1,
+      "message": "Or just move `bool finished` to here:\nbool finished \u003d hasResourceUseFinished(use);\nwhile(... \u0026\u0026 !finished)\n{\n    checkOneCommandBatch\n    if(finished) break;\n    else\n    {\n    ...\n    }\n}\nif(finished)\n{\n     *result \u003d VK_SUCCESS:\n}",
+      "parentUuid": "490e7736_4dbefbba",
       "revId": "d5ad29bc6e58f6c1ef9dc1f6b99e434f5baa579c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
