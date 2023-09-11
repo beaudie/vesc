@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "733d68fc_67b0b9c0",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 11
+      },
+      "lineNbr": 1564,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-11T13:47:03Z",
+      "side": 1,
+      "message": "No need to duplicate `angle_deqp_core_gtest`. It\u0027s a template, so we are free to parameterize it as needed 😊\n\nI suggest instead to add another parameter (like `mustpass_suffix`) that\u0027s set to `\"master\"` in existing instantiations, and `\"multisample\"` or `\"565-no-depth-no-stencil\"` in the new ones. Then you should be able to do\n\n```\nmustpass_name \u003d \"${_api}-${mustpass_suffix}.txt\"\n```",
+      "range": {
+        "startLine": 1524,
+        "startChar": 0,
+        "endLine": 1564,
+        "endChar": 3
+      },
+      "revId": "f72f0e86f7fa33f63fca16816f5f0df99b07f0c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
