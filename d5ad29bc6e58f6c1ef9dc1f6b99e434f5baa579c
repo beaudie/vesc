@@ -33,6 +33,24 @@
       "message": "How about setting it to VK_NOT_READY here, and at the bottom of this scope do something like:\n\n```\nif (*result !\u003d VK_TIMEOUT)\n{\n    *result \u003d hasResourceUseFinished(use) ? VK_SUCCESS : VK_NOT_READY;\n}\n```\n\nSo that check is really done only once.\n\n---\n\nIt could maybe even be simpler? Just don\u0027t set it anywhere in this loop, then do something like this at the end:\n\n```\n*result \u003d hasResourceUseFinished(use) ? VK_SUCCESS : timeout \u003d\u003d 0 ? VK_NOT_READY : VK_TIMEOUT;\n```",
       "revId": "d5ad29bc6e58f6c1ef9dc1f6b99e434f5baa579c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e583aac7_66de13cf",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-11T19:54:51Z",
+      "side": 1,
+      "message": "\u003e How about setting it to VK_NOT_READY here, and at the bottom of this scope do something like\n\u003e ...\n\u003e It could maybe even be simpler? Just don\u0027t set it anywhere in this loop\n\nwith all the `ANGLE_TRY` inside the scope im not sure i have thought of all code paths, thus went with conservative checks (the serial check should just be usually 1 `\u003c\u003d` comparison, right?)",
+      "parentUuid": "616ae684_642485e7",
+      "revId": "d5ad29bc6e58f6c1ef9dc1f6b99e434f5baa579c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
