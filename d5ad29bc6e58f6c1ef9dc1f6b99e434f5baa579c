@@ -140,6 +140,24 @@
       "parentUuid": "cc3484e9_d6df7aec",
       "revId": "d5ad29bc6e58f6c1ef9dc1f6b99e434f5baa579c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72b4690a_881a34e9",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-11T22:11:00Z",
+      "side": 1,
+      "message": "You are right, I misinterpret finished from checkOneCommandBatch(). Never mind then. Your diff looks good to me.",
+      "parentUuid": "d4fe5ea9_4cc1179d",
+      "revId": "d5ad29bc6e58f6c1ef9dc1f6b99e434f5baa579c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
