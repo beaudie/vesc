@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "29e5d66c_5b83f1f8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 3581,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-11T22:07:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f6b9a06_2cda446c",
+      "range": {
+        "startLine": 3580,
+        "startChar": 8,
+        "endLine": 3581,
+        "endChar": 60
+      },
+      "revId": "6bdb7f92ba76932f0c6cbc998edeafcb99e5f0d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "930ab762_f9ab8d37",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-09-11T13:30:44Z",
       "side": 1,
       "message": "super nit: `set...` or `calculate...`. Otherwise it sounds like something that could change over time.",
+      "range": {
+        "startLine": 1986,
+        "startChar": 4,
+        "endLine": 1986,
+        "endChar": 10
+      },
+      "revId": "6bdb7f92ba76932f0c6cbc998edeafcb99e5f0d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7248bc2_43fdf9b5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 1986,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-11T22:07:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "930ab762_f9ab8d37",
       "range": {
         "startLine": 1986,
         "startChar": 4,
