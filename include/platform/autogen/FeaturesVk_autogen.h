@@ -1286,6 +1286,13 @@ struct FeaturesVk : FeatureSetBase
         &members, "https://issuetracker.google.com/288119108"
     };
 
+    FeatureInfo supportsEglSwapBehaviorPreserved = {
+        "supportsEglSwapBehaviorPreserved",
+        FeatureCategory::VulkanFeatures,
+        "EGL config supports the EGL_SWAP_BEHAVIOR_PRESERVED_BIT in EGL_SURFACE_TYPE",
+        &members, "http://anglebug.com/8344"
+    };
+
 };
 
 inline FeaturesVk::FeaturesVk()  = default;

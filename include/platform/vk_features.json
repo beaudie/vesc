@@ -1390,6 +1390,14 @@
                 "prefer host cached memory for non static buffer usage"
             ],
             "issue": "https://issuetracker.google.com/288119108"
+        },
+        {
+            "name": "supports_egl_swap_behavior_preserved",
+            "category": "Features",
+            "description": [
+                "EGL config supports the EGL_SWAP_BEHAVIOR_PRESERVED_BIT in EGL_SURFACE_TYPE"
+            ],
+            "issue": "http://anglebug.com/8344"
         }
     ]
 }
