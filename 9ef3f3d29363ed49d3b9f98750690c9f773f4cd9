@@ -220,6 +220,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "49633c62_b90edc8e",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-11T19:31:47Z",
+      "side": 1,
+      "message": "Done -\u003e https://chromium-review.googlesource.com/c/angle/angle/+/4854941",
+      "parentUuid": "5e7f0043_c3294187",
+      "range": {
+        "startLine": 1252,
+        "startChar": 9,
+        "endLine": 1252,
+        "endChar": 15
+      },
+      "revId": "9ef3f3d29363ed49d3b9f98750690c9f773f4cd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d1f18e01_b2c1ce32",
