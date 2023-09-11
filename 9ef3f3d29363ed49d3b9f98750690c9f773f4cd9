@@ -90,6 +90,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "11159f42_15f1de34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-11T21:28:56Z",
+      "side": 1,
+      "message": "My main hold back is the tail call stuff is a bit harder to read since the code flow is a bit harder to follow, especialy that this code path I think is simpler enough to not use tail call. I am ok to follow the pattern too.",
+      "parentUuid": "202a93a0_c661e062",
+      "revId": "9ef3f3d29363ed49d3b9f98750690c9f773f4cd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b7259ccf_ccf8df3d",
