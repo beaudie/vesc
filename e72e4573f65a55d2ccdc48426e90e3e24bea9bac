@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "46f6df97_60d22fcd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-11T13:06:29Z",
+      "side": 1,
+      "message": "Please remove; every change in ANGLE is an ANGLE change :P",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 7
+      },
+      "revId": "e72e4573f65a55d2ccdc48426e90e3e24bea9bac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "59af3fe4_e074f20c",
@@ -14,6 +37,24 @@
       "writtenOn": "2023-09-11T11:06:57Z",
       "side": 1,
       "message": "geoff@\n\nPTAL thank you\n\nAlso, I have a question: can non-ANGLE submitters request tryjobs permissions? Or only ANGLE committers can execute tryjobs?",
+      "revId": "e72e4573f65a55d2ccdc48426e90e3e24bea9bac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50f299a0_a8f36029",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-11T13:06:29Z",
+      "side": 1,
+      "message": "I\u0027ve granted you tryjob access. We don\u0027t have as many resources as Chromium\u0027s CQ, so please try to limit to one dry-run at a time during peak hours.",
+      "parentUuid": "59af3fe4_e074f20c",
       "revId": "e72e4573f65a55d2ccdc48426e90e3e24bea9bac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
