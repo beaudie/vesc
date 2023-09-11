@@ -265,6 +265,7 @@ enum class Feature
     SupportsDepthClipControl,
     SupportsDepthClipEnable,
     SupportsDepthStencilResolve,
+    SupportsEglSwapBehaviorPreserved,
     SupportsExtendedDynamicState,
     SupportsExtendedDynamicState2,
     SupportsExternalFenceCapabilities,
