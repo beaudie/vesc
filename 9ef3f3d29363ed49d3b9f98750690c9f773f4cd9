@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "00a00e4f_bc425976",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-11T17:11:15Z",
+      "side": 1,
+      "message": "Is it really worthwhile to use tail call here? IMO, this would be simpler and more straightforward to read by simply make two steps calls:\n1) From GL_ClientWaitSync(), the first clientWaitSync call always set timeout to 0, which should made it do submission etc, but without any wait.\n2) If returnValue is not complete, then you make another call clientWaitSyncUnLocked, which should only need to wait for mUse to finish (which itself is thread safe). The first call already did submission etc.\n\nI think this way code is much easier to read and no need to pass around function pointers etc.",
+      "revId": "9ef3f3d29363ed49d3b9f98750690c9f773f4cd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b7259ccf_ccf8df3d",
         "filename": "scripts/generate_entry_points.py",
         "patchSetId": 8
@@ -14,6 +31,52 @@
       "writtenOn": "2023-09-11T14:32:39Z",
       "side": 1,
       "message": "```suggestion\n    # - eglClientWaitSyncKHR, eglClientWaitSync, glClientWaitSync -\u003e May wait on\n        fence in tail call\n```",
+      "revId": "9ef3f3d29363ed49d3b9f98750690c9f773f4cd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "754dbfe1_2aeedcbc",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-11T17:11:15Z",
+      "side": 1,
+      "message": "Thanks for fixing the bug here, that otherwise result may not been set if it is already finished.\n\n(Minor) Suggest to combine this line and {1270, 1273} to 1275.",
+      "range": {
+        "startLine": 1252,
+        "startChar": 9,
+        "endLine": 1252,
+        "endChar": 15
+      },
+      "revId": "9ef3f3d29363ed49d3b9f98750690c9f773f4cd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1f18e01_b2c1ce32",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 1272,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-11T17:11:15Z",
+      "side": 1,
+      "message": "nit: better to move to line 1275",
+      "range": {
+        "startLine": 1272,
+        "startChar": 0,
+        "endLine": 1272,
+        "endChar": 82
+      },
       "revId": "9ef3f3d29363ed49d3b9f98750690c9f773f4cd9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
