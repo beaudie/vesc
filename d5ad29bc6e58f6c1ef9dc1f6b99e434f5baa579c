@@ -51,6 +51,24 @@
       "parentUuid": "616ae684_642485e7",
       "revId": "d5ad29bc6e58f6c1ef9dc1f6b99e434f5baa579c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3264b7a_f807d879",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-11T20:04:07Z",
+      "side": 1,
+      "message": "Ack, you could probably set it to VK_ERROR_DEVICE_LOST once at the top.\n\n\u003e the serial check should just be usually 1 \u003c\u003d comparison, right?\n\nProbably, it just reads more complicated this way (to me, at least)",
+      "parentUuid": "e583aac7_66de13cf",
+      "revId": "d5ad29bc6e58f6c1ef9dc1f6b99e434f5baa579c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
