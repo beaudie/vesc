@@ -122,6 +122,24 @@
       "parentUuid": "490e7736_4dbefbba",
       "revId": "d5ad29bc6e58f6c1ef9dc1f6b99e434f5baa579c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4fe5ea9_4cc1179d",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-11T21:44:23Z",
+      "side": 1,
+      "message": "\u003e bool finished \u003d hasResourceUseFinished(use);\n\u003e checkOneCommandBatch\n\u003e if(finished) break;\n\nim confused, `checkOneCommandBatch` overwrites `finished` when a command batch is done, it has nothing to do with resouce use being done. why would we want to break out of the while loop here?",
+      "parentUuid": "cc3484e9_d6df7aec",
+      "revId": "d5ad29bc6e58f6c1ef9dc1f6b99e434f5baa579c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
