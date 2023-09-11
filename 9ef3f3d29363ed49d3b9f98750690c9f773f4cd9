@@ -1,0 +1,135 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7259ccf_ccf8df3d",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 3071,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-11T14:32:39Z",
+      "side": 1,
+      "message": "```suggestion\n    # - eglClientWaitSyncKHR, eglClientWaitSync, glClientWaitSync -\u003e May wait on\n        fence in tail call\n```",
+      "revId": "9ef3f3d29363ed49d3b9f98750690c9f773f4cd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a3c6847_3fa0814e",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-11T14:32:39Z",
+      "side": 1,
+      "message": "This case is now reachable if there is a device loss. If you pass in the `angle::Result` that\u0027s the result of `waitForResourceUseToFinishWithUserTimeout`, you can appropriately handle that, and avoid the `(void)` cast too.",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 90,
+        "endChar": 40
+      },
+      "revId": "9ef3f3d29363ed49d3b9f98750690c9f773f4cd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e23720c8_67cbeeaf",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-11T14:32:39Z",
+      "side": 1,
+      "message": "Wrong type: should be `EGLint`",
+      "revId": "9ef3f3d29363ed49d3b9f98750690c9f773f4cd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "209cebd2_d2c38cf0",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-11T14:32:39Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "9ef3f3d29363ed49d3b9f98750690c9f773f4cd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1bb3583c_c775cb03",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-11T14:32:39Z",
+      "side": 1,
+      "message": "Please return `Continue`. `Incomplete` was a mistake, and I\u0027m going to remove it. Instead, return `VK_INCOMPLETE` in `resultOut`.",
+      "range": {
+        "startLine": 168,
+        "startChar": 11,
+        "endLine": 168,
+        "endChar": 36
+      },
+      "revId": "9ef3f3d29363ed49d3b9f98750690c9f773f4cd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec8dc192_28220187",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-11T14:32:39Z",
+      "side": 1,
+      "message": "Please move this to after the wait, I don\u0027t think we should skip the wait because of display termination.\n\nSo something like:\n\n```\nif (resultOut !\u003d nullptr)\n{\n    mappingFunction(...);\n}\n```",
+      "revId": "9ef3f3d29363ed49d3b9f98750690c9f773f4cd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50893557_a6e1467d",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-11T14:32:39Z",
+      "side": 1,
+      "message": "I think you could simplify this change by having only the `clientWait()` function and pass in a new parameter like `enum class ClientWaitScope { Unlocked, Locked, }`, then instead of returning incomplete, it would do something like this:\n\n```\nwait \u003d [...](...) { ... };\nif (scope \u003d\u003d ClientWaitScope::Locked)\n{\n    wait(...);\n}\nelse\n{\n    egl::Display::GetCurrentThreadUnlockedTailCall()-\u003eadd(wait);\n}\n```",
+      "revId": "9ef3f3d29363ed49d3b9f98750690c9f773f4cd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
