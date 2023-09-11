@@ -52,6 +52,24 @@
       "parentUuid": "c9ead255_cd376640",
       "revId": "179bd7762ffad154def7f4a900e100c1a5ca80a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e4bbff7_7936381a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-09-11T18:22:43Z",
+      "side": 1,
+      "message": "\u003e Shouldnt the test check if support exists?\n\nAll of `WebglExtension_` tests only assert extensions presence. They are expected to be skipped on platforms without support. Functional tests do proper checks and do not fail when a tested feature is not supported, i.e., `.../ext-render-snorm.html` should pass now.\n\n\u003e Is this extension something that is required for webgl2 conformance?\n\nIt\u0027s an optional feature thus it is not required by the core WebGL 2.0 spec.",
+      "parentUuid": "4f25e710_478332b1",
+      "revId": "179bd7762ffad154def7f4a900e100c1a5ca80a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
