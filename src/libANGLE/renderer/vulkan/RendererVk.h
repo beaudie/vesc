@@ -206,6 +206,11 @@ class RendererVk : angle::NonCopyable
     {
         return mPrimitivesGeneratedQueryFeatures;
     }
+    const VkPhysicalDeviceHostImageCopyPropertiesEXT &getPhysicalDeviceHostImageCopyProperties()
+        const
+    {
+        return mHostImageCopyProperties;
+    }
     const VkPhysicalDeviceFeatures &getPhysicalDeviceFeatures() const
     {
         return mPhysicalDeviceFeatures;
@@ -926,6 +931,8 @@ class RendererVk : angle::NonCopyable
     VkPhysicalDeviceTimelineSemaphoreFeaturesKHR mTimelineSemaphoreFeatures;
     VkPhysicalDeviceHostImageCopyFeaturesEXT mHostImageCopyFeatures;
     VkPhysicalDeviceHostImageCopyPropertiesEXT mHostImageCopyProperties;
+    std::vector<VkImageLayout> mHostImageCopySrcLayoutsStorage;
+    std::vector<VkImageLayout> mHostImageCopyDstLayoutsStorage;
 
     angle::PackedEnumBitSet<gl::ShadingRate, uint8_t> mSupportedFragmentShadingRates;
     std::vector<VkQueueFamilyProperties> mQueueFamilyProperties;
