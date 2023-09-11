@@ -34,6 +34,110 @@
       "parentUuid": "f9d00636_927ac075",
       "revId": "412cebe8969eb3f36a7f83bb5b53efde1f078318",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dce70272_e4bba791",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 32
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-11T17:42:34Z",
+      "side": 1,
+      "message": "free memory size check won\u0027t guarantee you for allocation success, due to fragmentation or alignment etc. The other thing this CL take care of is that with all fail-retry in one place, we are able to handle the which thing to retry first much better (which was not true in the earlier patchSet, that it end up falling back to different type of memory first), and all logic is in one place. Even though  this CL has a bit more diffs, this overall is moving to a better call stack for memory allocation, by moving all the decision making logic up to ContextVk level.",
+      "parentUuid": "213d3ae7_75f39eb5",
+      "revId": "412cebe8969eb3f36a7f83bb5b53efde1f078318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30038be0_ab5bba7a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 32
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-11T17:42:34Z",
+      "side": 1,
+      "message": "Looking much better now with a few nits.",
+      "revId": "412cebe8969eb3f36a7f83bb5b53efde1f078318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27661f6e_4e5a92a2",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 5930,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-11T17:42:34Z",
+      "side": 1,
+      "message": "Suggest move this to ContextVk::initImageAllocation as well so that you can decide when to call this: I think it should be called after finishImpl.",
+      "range": {
+        "startLine": 5916,
+        "startChar": 4,
+        "endLine": 5930,
+        "endChar": 0
+      },
+      "revId": "412cebe8969eb3f36a7f83bb5b53efde1f078318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06039bf2_98ce3a75",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 5999,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-11T17:42:34Z",
+      "side": 1,
+      "message": "Name is a bit odd: Maybe initMemoryAndZeroFillIfNeeded?",
+      "range": {
+        "startLine": 5999,
+        "startChar": 27,
+        "endLine": 5999,
+        "endChar": 48
+      },
+      "revId": "412cebe8969eb3f36a7f83bb5b53efde1f078318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ca6228e_5ed5b9d3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 32
+      },
+      "lineNbr": 1356,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-11T17:42:34Z",
+      "side": 1,
+      "message": "Suggest remove - we are not passing to error handler.",
+      "range": {
+        "startLine": 1356,
+        "startChar": 40,
+        "endLine": 1356,
+        "endChar": 69
+      },
+      "revId": "412cebe8969eb3f36a7f83bb5b53efde1f078318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

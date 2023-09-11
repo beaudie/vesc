@@ -411,6 +411,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "684a91e8_e2832505",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 4866,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-11T17:42:34Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "d4072fbf_0fe2aff4",
+      "range": {
+        "startLine": 4861,
+        "startChar": 0,
+        "endLine": 4866,
+        "endChar": 0
+      },
+      "revId": "7ba894a3bc31ebacfb7ff5024e12773e768e3d01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5f85fa39_9a11d9d3",
@@ -442,6 +466,24 @@
       "side": 1,
       "message": "Prepared a [follow-up draft CL](https://crrev.com/c/4854760).",
       "parentUuid": "5f85fa39_9a11d9d3",
+      "revId": "7ba894a3bc31ebacfb7ff5024e12773e768e3d01",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbf4612b_3d535b2e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 4882,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-11T17:42:34Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "f6ebb03b_1fbbb84b",
       "revId": "7ba894a3bc31ebacfb7ff5024e12773e768e3d01",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

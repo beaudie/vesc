@@ -111,6 +111,30 @@
       },
       "revId": "0daf56588203c161ee301e5b2e5bb0ef44b130b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "473898c4_e647a108",
+        "filename": "src/tests/gl_tests/TextureTest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 3517,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-11T17:42:34Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "ca30388c_686b4fc1",
+      "range": {
+        "startLine": 3517,
+        "startChar": 31,
+        "endLine": 3517,
+        "endChar": 57
+      },
+      "revId": "0daf56588203c161ee301e5b2e5bb0ef44b130b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
