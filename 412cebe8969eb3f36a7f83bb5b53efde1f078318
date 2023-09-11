@@ -94,6 +94,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "095b73fe_e75434fb",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 5930,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-11T22:06:40Z",
+      "side": 1,
+      "message": "Done. I also moved the memory requirement and flag to allocated dedicated handle up, so they would be passed from the top.",
+      "parentUuid": "27661f6e_4e5a92a2",
+      "range": {
+        "startLine": 5916,
+        "startChar": 4,
+        "endLine": 5930,
+        "endChar": 0
+      },
+      "revId": "412cebe8969eb3f36a7f83bb5b53efde1f078318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "06039bf2_98ce3a75",
@@ -117,6 +141,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bd0a92c_894ad628",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 32
+      },
+      "lineNbr": 5999,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-11T22:06:40Z",
+      "side": 1,
+      "message": "Updated to `initMemoryAndNonZeroFillIfNeeded()`.",
+      "parentUuid": "06039bf2_98ce3a75",
+      "range": {
+        "startLine": 5999,
+        "startChar": 27,
+        "endLine": 5999,
+        "endChar": 48
+      },
+      "revId": "412cebe8969eb3f36a7f83bb5b53efde1f078318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9ca6228e_5ed5b9d3",
@@ -130,6 +178,30 @@
       "writtenOn": "2023-09-11T17:42:34Z",
       "side": 1,
       "message": "Suggest remove - we are not passing to error handler.",
+      "range": {
+        "startLine": 1356,
+        "startChar": 40,
+        "endLine": 1356,
+        "endChar": 69
+      },
+      "revId": "412cebe8969eb3f36a7f83bb5b53efde1f078318",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "870da313_3b3b2162",
+        "filename": "src/libANGLE/renderer/vulkan/vk_utils.h",
+        "patchSetId": 32
+      },
+      "lineNbr": 1356,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-11T22:06:40Z",
+      "side": 1,
+      "message": "Updated.",
+      "parentUuid": "9ca6228e_5ed5b9d3",
       "range": {
         "startLine": 1356,
         "startChar": 40,
