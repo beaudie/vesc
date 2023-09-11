@@ -16,6 +16,24 @@
       "message": "I am not sure if I fully covered the CL. Overall the idea looks good to me. In this CL, does the link itself already moved to different threads or still same thread but different stages (and some stage without lock)? If actually moved to different threads, some perf measurement data will be nice.",
       "revId": "3e279035e67fa2ca5c8fedf54ad06270b3487450",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "919f55d3_fa015206",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-11T19:04:20Z",
+      "side": 1,
+      "message": "There\u0027s still work I need to do to benefit the Vulkan backend. I\u0027ve switched gears to host image copy, but I expect that\u0027ll be just a few days and I\u0027ll be back at this.\n\nTo answer your question, what we had for example with d3d and metal was:\n\n- (main thread) Wait for shaders to compile\n- (main thread) Front-end portion of link\n- (main thread) Back-end portion of link\n- (worker threads) Compile to native driver\n\nAfter this change, what we have is:\n\n- (main thread) Wait for shaders to compile\n- (worker thread) Front-end and back-end portions of link\n- (more worker threads) Compile to native driver\n\nFor Vulkan, all this work does nothing; we never use worker threads. However, with a small amount of work (after all that I refactored), we could let the worker thread parts of the above to just be done with an unlocked tail call. I\u0027ll do that as soon as I get back, and as far as Vulkan is concerned, it\u0027s probably already enough.\n\nHowever, we have the possibility to go further. In particular, some work needs to be done before I can make the worker threads themselves wait for the shaders to compile. At that point, it _may_ make sense to use parallel link in the Vulkan backend too; especially for applications that don\u0027t use a thread for it already.",
+      "parentUuid": "3d228b1c_42ef5e90",
+      "revId": "3e279035e67fa2ca5c8fedf54ad06270b3487450",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
