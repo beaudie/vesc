@@ -300,6 +300,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "de0b22ca_25cf5299",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-11T17:39:21Z",
+      "side": 1,
+      "message": "Hmmm, right, terminate may add tail calls because it can destroy surfaces. But it doesn\u0027t add a client wait.\n\nThen please just turn it into an ASSERT.",
+      "parentUuid": "8cc744f4_e51848db",
+      "revId": "9ef3f3d29363ed49d3b9f98750690c9f773f4cd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "50893557_a6e1467d",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
         "patchSetId": 8
