@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73adf55b_d4180be4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-11T17:20:40Z",
+      "side": 1,
+      "message": "I\u0027m separating this out so if adding the usage flag ever causes trouble (especially with EGL import/export scenarios), it could be bisected to this without also involving doing the actual copy on host.",
+      "revId": "8c813976898877fd605bb6ab9dc1e4478c996979",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
