@@ -2068,6 +2068,115 @@ TEST_P(EGLSurfaceTest, TimestampSurfaceAttribute)
     ASSERT_EGL_SUCCESS() << "eglMakeCurrent - uncurrent failed.";
 }
 
+// Test setting a surface's EGL_SWAP_BEHAVIOR attribute to EGL_BUFFER_PRESERVED.
+TEST_P(EGLSurfaceTest, BufferPreservedSurfaceAttribute)
+{
+    initializeDisplay();
+    ASSERT_NE(mDisplay, EGL_NO_DISPLAY);
+
+    EGLint attribs[] = {EGL_RED_SIZE,     8,
+                        EGL_GREEN_SIZE,   8,
+                        EGL_BLUE_SIZE,    8,
+                        EGL_ALPHA_SIZE,   8,
+                        EGL_SURFACE_TYPE, EGL_WINDOW_BIT | EGL_SWAP_BEHAVIOR_PRESERVED_BIT,
+                        EGL_NONE};
+
+    EGLint configCount     = 0;
+    EGLConfig config       = nullptr;
+    EGLBoolean validConfig = eglChooseConfig(mDisplay, attribs, &config, 1, &configCount);
+
+    ANGLE_SKIP_TEST_IF(!validConfig || configCount == 0);
+
+    initializeSurface(config);
+    ASSERT_NE(mWindowSurface, EGL_NO_SURFACE);
+    initializeMainContext();
+    ASSERT_NE(mContext, EGL_NO_CONTEXT);
+
+    EXPECT_EGL_TRUE(eglMakeCurrent(mDisplay, mWindowSurface, mWindowSurface, mContext));
+    ASSERT_EGL_SUCCESS() << "eglMakeCurrent failed.";
+
+    EXPECT_EGL_TRUE(
+        eglSurfaceAttrib(mDisplay, mWindowSurface, EGL_SWAP_BEHAVIOR, EGL_BUFFER_PRESERVED));
+
+    glClearColor(1.0, 0.0, 0.0, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    EXPECT_EGL_TRUE(eglSwapBuffers(mDisplay, mWindowSurface));
+
+    // Expect surface remains red after swap
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+
+    EXPECT_EGL_TRUE(eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
+}
+
+// Test setting a surface's EGL_SWAP_BEHAVIOR attribute to EGL_BUFFER_PRESERVED and resizing the
+// window.
+TEST_P(EGLSurfaceTest, BufferPreservedSurfaceAttributeResize)
+{
+    initializeDisplay();
+    ASSERT_NE(mDisplay, EGL_NO_DISPLAY);
+
+    EGLint attribs[] = {EGL_RED_SIZE,     8,
+                        EGL_GREEN_SIZE,   8,
+                        EGL_BLUE_SIZE,    8,
+                        EGL_ALPHA_SIZE,   8,
+                        EGL_SURFACE_TYPE, EGL_WINDOW_BIT | EGL_SWAP_BEHAVIOR_PRESERVED_BIT,
+                        EGL_NONE};
+
+    EGLint configCount     = 0;
+    EGLConfig config       = nullptr;
+    EGLBoolean validConfig = eglChooseConfig(mDisplay, attribs, &config, 1, &configCount);
+
+    ANGLE_SKIP_TEST_IF(!validConfig || configCount == 0);
+
+    initializeSurface(config);
+    ASSERT_NE(mWindowSurface, EGL_NO_SURFACE);
+    initializeMainContext();
+    ASSERT_NE(mContext, EGL_NO_CONTEXT);
+
+    EXPECT_EGL_TRUE(eglMakeCurrent(mDisplay, mWindowSurface, mWindowSurface, mContext));
+    ASSERT_EGL_SUCCESS() << "eglMakeCurrent failed.";
+
+    EXPECT_EGL_TRUE(
+        eglSurfaceAttrib(mDisplay, mWindowSurface, EGL_SWAP_BEHAVIOR, EGL_BUFFER_PRESERVED));
+
+    glClearColor(1.0, 0.0, 0.0, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    EXPECT_EGL_TRUE(eglSwapBuffers(mDisplay, mWindowSurface));
+
+    // Expect surface remains red after clear
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+
+    // Resize window down
+    mOSWindow->resize(32, 32);
+    EXPECT_EGL_TRUE(eglSwapBuffers(mDisplay, mWindowSurface));
+
+    // Expect surface remains red after resize down
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
+
+    // Resize window up
+    mOSWindow->resize(64, 64);
+    EXPECT_EGL_TRUE(eglSwapBuffers(mDisplay, mWindowSurface));
+
+    // Draw green in bottom left corner of the surface
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Green());
+    glUseProgram(program);
+    glScissor(0, 0, 32, 32);
+    glEnable(GL_SCISSOR_TEST);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+    glDisable(GL_SCISSOR_TEST);
+    ASSERT_GL_NO_ERROR();
+
+    // Expect bottom left corner of the window is green after draw
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+
+    // Expect top left corner of the window remains red after resize
+    EXPECT_PIXEL_COLOR_EQ(0, 63, GLColor::red);
+
+    EXPECT_EGL_TRUE(eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
+}
+
 TEST_P(EGLSingleBufferTest, OnCreateWindowSurface)
 {
     EGLConfig config = EGL_NO_CONFIG_KHR;
