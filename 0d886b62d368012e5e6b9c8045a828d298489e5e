@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c32c0402_6a47d4d9",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 3923,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-11T16:12:02Z",
+      "side": 1,
+      "message": "@Mark, what\u0027s the reason for chaining this struct? It\u0027s an output struct, and the result is unused here.",
+      "range": {
+        "startLine": 3921,
+        "startChar": 0,
+        "endLine": 3923,
+        "endChar": 75
+      },
+      "revId": "0d886b62d368012e5e6b9c8045a828d298489e5e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
