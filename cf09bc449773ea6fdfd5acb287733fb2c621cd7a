@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19f89377_d270a9b9",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-11T13:35:34Z",
+      "side": 1,
+      "message": "Taken care of by Cody\u0027s https://crrev.com/c/4854443",
+      "parentUuid": "fb812b01_7b6dde13",
+      "range": {
+        "startLine": 177,
+        "startChar": 24,
+        "endLine": 177,
+        "endChar": 34
+      },
+      "revId": "cf09bc449773ea6fdfd5acb287733fb2c621cd7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3a6b7f24_5b48b041",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4829bc0a_8e6c26db",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 5764,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-11T13:35:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a6b7f24_5b48b041",
+      "range": {
+        "startLine": 5764,
+        "startChar": 0,
+        "endLine": 5764,
+        "endChar": 35
+      },
+      "revId": "cf09bc449773ea6fdfd5acb287733fb2c621cd7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ca9e129d_10e66271",
@@ -60,6 +108,24 @@
       "writtenOn": "2023-09-08T17:24:12Z",
       "side": 1,
       "message": "Can you add a comment why this is handled specially?",
+      "revId": "cf09bc449773ea6fdfd5acb287733fb2c621cd7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7b0053b_ad10ca54",
+        "filename": "src/tests/py_utils/android_helper.py",
+        "patchSetId": 13
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-11T13:35:34Z",
+      "side": 1,
+      "message": "Done. Also updated the python arg name in this function which I thinks makes it a bit more clear.",
+      "parentUuid": "ca9e129d_10e66271",
       "revId": "cf09bc449773ea6fdfd5acb287733fb2c621cd7a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
