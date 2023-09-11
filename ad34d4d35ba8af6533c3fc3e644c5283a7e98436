@@ -181,6 +181,24 @@
       "parentUuid": "86394e3a_67d85b53",
       "revId": "ad34d4d35ba8af6533c3fc3e644c5283a7e98436",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65c73cb6_c09c75d2",
+        "filename": "src/libGLESv2/egl_stubs.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-09-11T21:59:04Z",
+      "side": 1,
+      "message": "\u003e I\u0027d say, maybe just add the front-end feature for this workaround anyway. Then we can enable it only for Vulkan where this is a problem (and also avoid hitting the scenario where a backend doesn\u0027t support surfaceless, which is only the gl backend)\n\nIt turns out I need to enable the front-end-feature on gl backends, too. Otherwise the test failed on gles backends on Qualcomm device:\n\n```\nC 14:46:39.593    7.979s Main  [\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d] 4 tests ran.\nC 14:46:39.593    7.980s Main  [  PASSED  ] 2 tests.\nC 14:46:39.593    7.980s Main  [  FAILED  ] 2 tests, listed below:\nC 14:46:39.593    7.980s Main  [  FAILED  ] EGLSurfaceTest.DestroyAndRecreateWhileCurrent/ES2_OpenGLES_NoFixture\nC 14:46:39.593    7.980s Main  [  FAILED  ] EGLSurfaceTest.DestroyAndRecreateWhileCurrent/ES3_OpenGLES_NoFixture\n\n```",
+      "parentUuid": "7c362046_98e515d9",
+      "revId": "ad34d4d35ba8af6533c3fc3e644c5283a7e98436",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
