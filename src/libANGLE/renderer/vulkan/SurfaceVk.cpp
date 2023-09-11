@@ -1661,8 +1661,6 @@ angle::Result WindowSurfaceVk::createSwapChain(vk::Context *context,
         mCompatiblePresentModes[0] = swapchainInfo.presentMode;
     }
 
-    // TODO: Once EGL_SWAP_BEHAVIOR_PRESERVED_BIT is supported, the contents of the old swapchain
-    // need to carry over to the new one.  http://anglebug.com/2942
     VkSwapchainKHR newSwapChain = VK_NULL_HANDLE;
     ANGLE_VK_TRY(context, vkCreateSwapchainKHR(device, &swapchainInfo, nullptr, &newSwapChain));
     mSwapchain            = newSwapChain;
@@ -1926,6 +1924,7 @@ void WindowSurfaceVk::destroySwapChainImages(DisplayVk *displayVk)
     mColorImageMS.destroy(renderer);
     mColorImageMSViews.destroy(device);
     mFramebufferMS.destroy(device);
+    mSwapBehaviorPreserveImageHelper.destroy(renderer);
 
     for (SwapchainImage &swapchainImage : mSwapchainImages)
     {
@@ -2148,6 +2147,13 @@ angle::Result WindowSurfaceVk::prePresentSubmit(ContextVk *contextVk,
         mColorImageMS.resolve(image.image.get(), resolveRegion,
                               &commandBufferHelper->getCommandBuffer());
         contextVk->getPerfCounters().swapchainResolveOutsideSubpass++;
+    }
+
+    // If swap behavior is set to EGL_BUFFER_PRESERVED than save the contents of the surface before
+    // present, except in shared present mode where only one swapchain image is ever acquired.
+    if (mState.swapBehavior == EGL_BUFFER_PRESERVED && !isSharedPresentMode())
+    {
+        ANGLE_TRY(preserveColorBufferContents(contextVk));
     }
 
     if (renderer->getFeatures().supportsPresentation.enabled)
@@ -2599,6 +2605,17 @@ angle::Result WindowSurfaceVk::doDeferredAcquireNextImageWithUsableSwapchain(
         }
     }
 
+    // If swap behavior is set to EGL_BUFFER_PRESERVED than copy the contents of previous swap
+    // to the newly acquired swapchain image, except in shared present mode where only one
+    // swapchain image is ever acquired.
+    if (mState.swapBehavior == EGL_BUFFER_PRESERVED && !isSharedPresentMode())
+    {
+        ANGLE_TRY(initializeColorBufferContents(contextVk));
+        // When swap behavior is set to EGL_BUFFER_PRESERVED update frameNumber of the newly
+        // acquired swapchain image to the frame count of the previous swap.
+        mSwapchainImages[mCurrentSwapchainImageIndex].frameNumber = mFrameCount - 1;
+    }
+
     return angle::Result::Continue;
 }
 
@@ -3048,6 +3065,92 @@ angle::Result WindowSurfaceVk::initializeContents(const gl::Context *context,
     return angle::Result::Continue;
 }
 
+// Preserve the content of the color buffer onto mSwapBehaviorPreserveImageHelper
+angle::Result WindowSurfaceVk::preserveColorBufferContents(ContextVk *contextVk)
+{
+    ASSERT(mState.swapBehavior == EGL_BUFFER_PRESERVED);
+
+    // Current color attachment is the copy source
+    vk::ImageHelper *srcImage = &mColorRenderTarget.getImageForCopy();
+
+    const gl::Extents &newExtents = mColorRenderTarget.getExtents();
+    VkExtent3D currentExtents     = mSwapBehaviorPreserveImageHelper.getExtents();
+    // Need to [re]create image
+    if (!mSwapBehaviorPreserveImageHelper.valid() ||
+        static_cast<uint32_t>(newExtents.width) != currentExtents.width ||
+        static_cast<uint32_t>(newExtents.height) != currentExtents.height)
+    {
+        if (mSwapBehaviorPreserveImageHelper.valid())
+        {
+            mSwapBehaviorPreserveImageHelper.releaseImage(contextVk->getRenderer());
+        }
+
+        ANGLE_TRY(mSwapBehaviorPreserveImageHelper.init2DStaging(
+            contextVk, mState.hasProtectedContent(),
+            contextVk->getRenderer()->getMemoryProperties(), newExtents,
+            mColorRenderTarget.getImageIntendedFormatID(),
+            mColorRenderTarget.getImageActualFormatID(),
+            (VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT), 1));
+    }
+
+    VkImageSubresourceLayers subresourceLayers = {};
+    subresourceLayers.aspectMask               = VK_IMAGE_ASPECT_COLOR_BIT;
+    subresourceLayers.mipLevel                 = 0;
+    subresourceLayers.baseArrayLayer           = 0;
+    subresourceLayers.layerCount               = 1;
+
+    vk::CommandBufferAccess access;
+    access.onImageTransferRead(VK_IMAGE_ASPECT_COLOR_BIT, srcImage);
+    access.onImageTransferWrite(gl::LevelIndex(0), 1, 0, 1, VK_IMAGE_ASPECT_COLOR_BIT,
+                                &mSwapBehaviorPreserveImageHelper);
+    vk::OutsideRenderPassCommandBuffer *commandBuffer;
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
+
+    vk::ImageHelper::Copy(contextVk, srcImage, &mSwapBehaviorPreserveImageHelper, gl::kOffsetZero,
+                          gl::kOffsetZero, newExtents, subresourceLayers, subresourceLayers,
+                          commandBuffer);
+
+    return angle::Result::Continue;
+}
+
+// Initialize the content of the color buffer with the content of mSwapBehaviorPreserveImageHelper
+angle::Result WindowSurfaceVk::initializeColorBufferContents(ContextVk *contextVk)
+{
+    // The temporary buffer must be valid at this point
+    ASSERT(mSwapBehaviorPreserveImageHelper.valid());
+    ASSERT(mState.swapBehavior == EGL_BUFFER_PRESERVED);
+
+    // Current color attachment is the copy destination
+    vk::ImageHelper *dstImage = &mColorRenderTarget.getImageForCopy();
+
+    // If the window was resized clip to the smaller extents
+    VkExtent3D oldExtents = mSwapBehaviorPreserveImageHelper.getExtents();
+    VkExtent3D newExtents = dstImage->getExtents();
+    gl::Extents clippedExtents;
+    clippedExtents.width  = std::min(oldExtents.width, newExtents.width);
+    clippedExtents.height = std::min(oldExtents.height, newExtents.height);
+    clippedExtents.depth  = 1;
+
+    VkImageSubresourceLayers subresourceLayers = {};
+    subresourceLayers.aspectMask               = VK_IMAGE_ASPECT_COLOR_BIT;
+    subresourceLayers.mipLevel                 = 0;
+    subresourceLayers.baseArrayLayer           = 0;
+    subresourceLayers.layerCount               = 1;
+
+    vk::CommandBufferAccess access;
+    access.onImageTransferRead(VK_IMAGE_ASPECT_COLOR_BIT, &mSwapBehaviorPreserveImageHelper);
+    access.onImageTransferWrite(gl::LevelIndex(0), 1, 0, 1, VK_IMAGE_ASPECT_COLOR_BIT, dstImage);
+
+    vk::OutsideRenderPassCommandBuffer *commandBuffer;
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
+
+    vk::ImageHelper::Copy(contextVk, &mSwapBehaviorPreserveImageHelper, dstImage, gl::kOffsetZero,
+                          gl::kOffsetZero, clippedExtents, subresourceLayers, subresourceLayers,
+                          commandBuffer);
+
+    return angle::Result::Continue;
+}
+
 void WindowSurfaceVk::updateOverlay(ContextVk *contextVk) const
 {
     const gl::OverlayType *overlay = contextVk->getOverlay();
@@ -3158,6 +3261,7 @@ egl::Error WindowSurfaceVk::getBufferAge(const gl::Context *context, EGLint *age
 
         mBufferAgeQueryFrameNumber = mFrameCount;
     }
+
     if (age != nullptr)
     {
         uint64_t frameNumber = mSwapchainImages[mCurrentSwapchainImageIndex].frameNumber;
@@ -3170,6 +3274,7 @@ egl::Error WindowSurfaceVk::getBufferAge(const gl::Context *context, EGLint *age
             *age = static_cast<EGLint>(mFrameCount - frameNumber);
         }
     }
+
     return egl::NoError();
 }
 
