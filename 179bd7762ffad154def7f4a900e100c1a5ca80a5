@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "610519fc_5997f401",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1456112
+      },
+      "writtenOn": "2023-09-11T17:48:13Z",
+      "side": 1,
+      "message": "This is causing a failure on chromeos generic amd64\nhttps://ci.chromium.org/ui/p/chromium/builders/ci/ChromeOS%20FYI%20Release%20%28amd64-generic%29/9488/overview\n\n\nwebgl2_conformance_gles_passthrough_tests failed because of:\n\nWebglExtension_EXT_render_snorm\n\n  File \"/b/s/w/ir/.task_template_vpython_cache/vpython/store/cpython-n8umfpv0s1ufm2q1s4irhb59jc/contents/lib/python3.8/unittest/case.py\", line 753, in fail\n    raise self.failureException(msg)\nAssertionError: EXT_render_snorm was not available",
+      "revId": "179bd7762ffad154def7f4a900e100c1a5ca80a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
