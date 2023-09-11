@@ -199,6 +199,24 @@
       "parentUuid": "7c362046_98e515d9",
       "revId": "ad34d4d35ba8af6533c3fc3e644c5283a7e98436",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59748db7_5ab02fca",
+        "filename": "src/libGLESv2/egl_stubs.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2023-09-11T22:15:53Z",
+      "side": 1,
+      "message": "Optional and for later, it\u0027d be future proof to have something like mesa driconfig for per app/driver/etc workarounds. That is less concerning for production purpose (e.g. backport a fix to release branches).",
+      "parentUuid": "65c73cb6_c09c75d2",
+      "revId": "ad34d4d35ba8af6533c3fc3e644c5283a7e98436",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
