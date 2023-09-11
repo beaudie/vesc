@@ -24,7 +24,7 @@ class EGLBufferAgeTest : public ANGLETest<>
     {
         EGLint dispattrs[] = {EGL_PLATFORM_ANGLE_TYPE_ANGLE, GetParam().getRenderer(), EGL_NONE};
         mDisplay           = eglGetPlatformDisplayEXT(
-                      EGL_PLATFORM_ANGLE_ANGLE, reinterpret_cast<void *>(EGL_DEFAULT_DISPLAY), dispattrs);
+            EGL_PLATFORM_ANGLE_ANGLE, reinterpret_cast<void *>(EGL_DEFAULT_DISPLAY), dispattrs);
         EXPECT_TRUE(mDisplay != EGL_NO_DISPLAY);
         EXPECT_EGL_TRUE(eglInitialize(mDisplay, nullptr, nullptr));
         mMajorVersion       = GetParam().majorVersion;
@@ -528,13 +528,22 @@ TEST_P(EGLBufferAgeTest, BufferPreserved)
     EXPECT_TRUE(eglMakeCurrent(mDisplay, surface, surface, context));
     ASSERT_EGL_SUCCESS() << "eglMakeCurrent failed.";
 
+    // Set swap behavior to EGL_BUFFER_PRESERVED
+    EXPECT_EGL_TRUE(eglSurfaceAttrib(mDisplay, surface, EGL_SWAP_BEHAVIOR, EGL_BUFFER_PRESERVED));
+
     glClearColor(1.0, 0.0, 0.0, 1.0);
+
+    // Expect age = 0 before first eglSwapBuffers() call
+    EGLint age = queryAge(surface);
+    EXPECT_EQ(age, 0);
+    eglSwapBuffers(mDisplay, surface);
+    ASSERT_EGL_SUCCESS() << "eglSwapBuffers failed.";
 
     const uint32_t loopcount = 10;
     EGLint expectedAge       = 1;
     for (uint32_t i = 0; i < loopcount; i++)
     {
-        EGLint age = queryAge(surface);
+        age = queryAge(surface);
         EXPECT_EQ(age, expectedAge);
 
         glClear(GL_COLOR_BUFFER_BIT);
