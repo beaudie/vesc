@@ -83,9 +83,12 @@ vk::ImageOrBufferViewSubresourceSerial RenderTargetVk::getSubresourceSerialImpl(
     ASSERT(mLayerIndex < std::numeric_limits<uint16_t>::max());
     ASSERT(mLevelIndexGL.get() < std::numeric_limits<uint16_t>::max());
 
-    vk::ImageOrBufferViewSubresourceSerial imageViewSerial = imageViews->getSubresourceSerial(
-        mLevelIndexGL, 1, mLayerIndex, vk::GetLayerMode(*mImage, mLayerCount),
-        vk::SrgbDecodeMode::SkipDecode, gl::SrgbOverride::Default);
+    // XXX: yuv hack
+    vk::LayerMode layerMode = mImage ? vk::GetLayerMode(*mImage, mLayerCount) : vk::LayerMode::All;
+
+    vk::ImageOrBufferViewSubresourceSerial imageViewSerial =
+        imageViews->getSubresourceSerial(mLevelIndexGL, 1, mLayerIndex, layerMode,
+                                         vk::SrgbDecodeMode::SkipDecode, gl::SrgbOverride::Default);
     return imageViewSerial;
 }
 
@@ -165,7 +168,8 @@ angle::Result RenderTargetVk::getImageViewImpl(vk::Context *context,
                                                const vk::ImageView **imageViewOut) const
 {
     ASSERT(image.valid() && imageViews);
-    vk::LevelIndex levelVk = mImage->toVkLevel(mLevelIndexGL);
+    // XXX: yuv hack
+    vk::LevelIndex levelVk = image.toVkLevel(mLevelIndexGL);
     if (mLayerCount == 1)
     {
         return imageViews->getLevelLayerDrawImageView(context, image, levelVk, mLayerIndex, mode,
@@ -302,21 +306,22 @@ angle::Result RenderTargetVk::flushStagedUpdates(ContextVk *contextVk,
                                                  uint32_t deferredClearIndex,
                                                  uint32_t framebufferLayerCount)
 {
-    ASSERT(mImage->valid() && (!isResolveImageOwnerOfData() || mResolveImage->valid()));
     ASSERT(framebufferLayerCount != 0);
+
+    vk::ImageHelper *image = getOwnerOfData();
+
+    ASSERT(image->valid());
 
     // It's impossible to defer clears to slices of a 3D images, as the clear applies to all the
     // slices, while deferred clears only clear a single slice (where the framebuffer is attached).
     // Additionally, the layer index for 3D textures is always zero according to Vulkan.
     uint32_t layerIndex = mLayerIndex;
-    if (mImage->getType() == VK_IMAGE_TYPE_3D)
+    if (image->getType() == VK_IMAGE_TYPE_3D)
     {
         layerIndex         = 0;
         deferredClears     = nullptr;
         deferredClearIndex = 0;
     }
-
-    vk::ImageHelper *image = getOwnerOfData();
 
     // All updates should be staged on the image that owns the data as the source of truth.  With
     // multisampled-render-to-texture framebuffers, that is the resolve image.  In that case, even

@@ -60,6 +60,8 @@ class HardwareBufferImageSiblingVkAndroid : public ExternalImageSiblingVk
     size_t mSamples;
 
     vk::ImageHelper *mImage;
+
+    VkFormat mExternalResolveColorFormat;
 };
 
 }  // namespace rx

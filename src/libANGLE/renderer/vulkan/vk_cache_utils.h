@@ -221,6 +221,19 @@ class alignas(4) RenderPassDesc final
         return static_cast<angle::FormatID>(mAttachmentFormats[index]);
     }
 
+    // XXX: is this really proper?
+    void packExternalResolveFormat(uint64_t externalFormat)
+    {
+        // XXX: dumb hack to avoid bloating out alignment and making holes in
+        // the cache structs
+        mExternalResolveFormatLo = static_cast<uint32_t>(externalFormat);
+        mExternalResolveFormatHi = static_cast<uint32_t>(externalFormat >> 32);
+    }
+    uint64_t externalResolveFormat() const
+    {
+        return mExternalResolveFormatLo | (static_cast<uint64_t>(mExternalResolveFormatHi) << 32);
+    }
+
   private:
     uint8_t mSamples;
     uint8_t mColorAttachmentRange;
@@ -283,12 +296,14 @@ class alignas(4) RenderPassDesc final
     // The resolve attachments are packed after the non-resolve attachments.  They use the same
     // formats, so they are not specified in this array.
     FramebufferNonResolveAttachmentArray<uint8_t> mAttachmentFormats;
+    uint32_t mExternalResolveFormatLo,
+        mExternalResolveFormatHi;  // XXX: split to avoid alignment trouble
 };
 
 bool operator==(const RenderPassDesc &lhs, const RenderPassDesc &rhs);
 
 constexpr size_t kRenderPassDescSize = sizeof(RenderPassDesc);
-static_assert(kRenderPassDescSize == 16, "Size check failed");
+static_assert(kRenderPassDescSize == 24, "Size check failed");
 
 enum class GraphicsPipelineSubset
 {

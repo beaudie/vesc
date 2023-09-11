@@ -12,7 +12,7 @@ static char gDefaultMetallibSrc[] = R"(
 # 1 "temp_master_source.metal"
 # 1 "<built-in>" 1
 # 1 "<built-in>" 3
-# 482 "<built-in>" 3
+# 448 "<built-in>" 3
 # 1 "<command line>" 1
 # 1 "<built-in>" 2
 # 1 "temp_master_source.metal" 2
@@ -1732,7 +1732,15 @@ enum
     X2R10G10B10_SSCALED_VERTEX,
     X2R10G10B10_UINT_VERTEX,
     X2R10G10B10_UNORM_VERTEX,
-    X2R10G10B10_USCALED_VERTEX
+    X2R10G10B10_USCALED_VERTEX,
+    EXTERNAL0,
+    EXTERNAL1,
+    EXTERNAL2,
+    EXTERNAL3,
+    EXTERNAL4,
+    EXTERNAL5,
+    EXTERNAL6,
+    EXTERNAL7
 };
 
 }

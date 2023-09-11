@@ -248,10 +248,16 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
         angle::android::ANativeWindowBufferToAHardwareBuffer(windowBuffer);
 
     functions.acquire(hardwareBuffer);
+
+    VkAndroidHardwareBufferFormatResolvePropertiesANDROID bufferFormatResolveProperties = {};
+    bufferFormatResolveProperties.sType =
+        VK_STRUCTURE_TYPE_ANDROID_HARDWARE_BUFFER_FORMAT_RESOLVE_PROPERTIES_ANDROID;
+    bufferFormatResolveProperties.pNext = nullptr;
+
     VkAndroidHardwareBufferFormatPropertiesANDROID bufferFormatProperties;
     bufferFormatProperties.sType =
         VK_STRUCTURE_TYPE_ANDROID_HARDWARE_BUFFER_FORMAT_PROPERTIES_ANDROID;
-    bufferFormatProperties.pNext = nullptr;
+    bufferFormatProperties.pNext = &bufferFormatResolveProperties;
 
     VkAndroidHardwareBufferPropertiesANDROID bufferProperties = {};
     bufferProperties.sType = VK_STRUCTURE_TYPE_ANDROID_HARDWARE_BUFFER_PROPERTIES_ANDROID;
@@ -288,13 +294,27 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
             &renderer->getFormat(angle::android::NativePixelFormatToGLInternalFormat(pixelFormat));
     }
 
-    const vk::Format &externalVkFormat = renderer->getFormat(angle::FormatID::NONE);
+    // XXX: allocate from dynamic format pool here if we need to.
+    //    const vk::Format &externalVkFormat = renderer->getFormat(angle::FormatID::NONE);
+    const vk::Format &externalVkFormat = renderer->getFormat(angle::FormatID::EXTERNAL0);
     const angle::Format &imageFormat   = vkFormat->getActualRenderableImageFormat();
     bool isDepthOrStencilFormat        = imageFormat.hasDepthOrStencilBits();
-    mFormat                            = gl::Format(vkFormat->getIntendedGLFormat());
 
-    // TODO (b/223456677): VK_EXT_ycbcr_attachment Extension query
+    // XXX: stupid hack
+    auto adjustedFormat = vkFormat->getIntendedGLFormat();
+    if (adjustedFormat == GL_NONE)
+        adjustedFormat = GL_RGB;
+    mFormat = gl::Format(adjustedFormat);
+    ANGLE_LOG(ERR) << " intended " << vkFormat->getIntendedGLFormat() << " adj " << adjustedFormat
+                   << " mFormat " << mFormat;
+
+    // TODO (b/223456677): VK_ANDROID_external_format_resolve Extension query
     bool externalRenderTargetSupported = false;
+    mExternalResolveColorFormat        = bufferFormatResolveProperties.colorAttachmentFormat;
+    externalRenderTargetSupported      = mExternalResolveColorFormat != VK_FORMAT_UNDEFINED;
+    ANGLE_LOG(ERR) << "external format " << bufferFormatProperties.externalFormat
+                   << " resolves from " << mExternalResolveColorFormat << " (vkformat "
+                   << bufferFormatProperties.format << ", ahbformat " << pixelFormat << ")";
 
     // Can assume based on us getting here already. The supportsYUVSamplerConversion
     // check below should serve as a backup otherwise.
@@ -368,6 +388,10 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
                                    imageCreateInfoPNext, gl::LevelIndex(0), mLevelCount, layerCount,
                                    robustInitEnabled, hasProtectedContent()));
 
+    ANGLE_LOG(ERR) << "initExternal intended " << (int)format.getIntendedFormatID()
+                   << " actualRenderable " << (int)format.getActualRenderableImageFormatID()
+                   << " usage " << usage;
+
     VkImportAndroidHardwareBufferInfoANDROID importHardwareBufferInfo = {};
     importHardwareBufferInfo.sType  = VK_STRUCTURE_TYPE_IMPORT_ANDROID_HARDWARE_BUFFER_INFO_ANDROID;
     importHardwareBufferInfo.buffer = hardwareBuffer;
@@ -407,6 +431,10 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
         // This may not actually mean the format is YUV. But the rest of ANGLE makes this
         // assumption and needs this member variable.
         mYUV = true;
+
+        // XXX:
+        mImage->setExternalResolveColorFormatID(
+            vk::GetFormatIDFromVkFormat(mExternalResolveColorFormat));
     }
 
     ANGLE_TRY(mImage->initExternalMemory(displayVk, renderer->getMemoryProperties(),

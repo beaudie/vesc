@@ -2072,6 +2072,15 @@ class ImageHelper final : public Resource, public angle::Subject
         ASSERT(valid());
         return angle::Format::Get(mActualFormatID);
     }
+    angle::FormatID getExternalResolveColorFormatID() const
+    {
+        ASSERT(valid());
+        return mExternalResolveColorFormatID;
+    }
+    void setExternalResolveColorFormatID(angle::FormatID format)
+    {
+        mExternalResolveColorFormatID = format;
+    }
     bool hasEmulatedImageChannels() const;
     bool hasEmulatedDepthChannel() const;
     bool hasEmulatedStencilChannel() const;
@@ -2832,6 +2841,9 @@ class ImageHelper final : public Resource, public angle::Subject
     // Only used for swapChain images. This is set when an image is acquired and is waited on
     // by the next submission (which uses this image), at which point it is released.
     Semaphore mAcquireNextImageSemaphore;
+
+    // format id of the implicit image used for rendering into this as a YUV image
+    angle::FormatID mExternalResolveColorFormatID;
 };
 
 ANGLE_INLINE bool RenderPassCommandBufferHelper::usesImage(const ImageHelper &image) const

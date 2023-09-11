@@ -294,6 +294,12 @@ bool IsAnyAttachment3DWithoutAllLayers(const RenderTargetCache<RenderTargetVk> &
         RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
         ASSERT(colorRenderTarget);
 
+        // XXX: yuv hack -- these are never layered.
+        // skip deeper checking because getImageForRenderPass() won't work
+        // if the color attachment is implicit
+        if (colorRenderTarget->isYuvResolve())
+            continue;
+
         const vk::ImageHelper &image = colorRenderTarget->getImageForRenderPass();
 
         if (image.getType() == VK_IMAGE_TYPE_3D && image.getExtents().depth > framebufferLayerCount)
@@ -1803,13 +1809,26 @@ angle::Result FramebufferVk::updateColorAttachment(const gl::Context *context,
     RenderTargetVk *renderTarget = mRenderTargetCache.getColors()[colorIndexGL];
     if (renderTarget)
     {
-        const angle::Format &actualFormat = renderTarget->getImageActualFormat();
-        updateActiveColorMasks(colorIndexGL, actualFormat.redBits > 0, actualFormat.greenBits > 0,
-                               actualFormat.blueBits > 0, actualFormat.alphaBits > 0);
+        // XXX: silly hack here for yuv with null color attachment
+        // how should this *really* be done?
+        if (renderTarget->isYuvResolve())
+        {
+            updateActiveColorMasks(colorIndexGL, true, true, true, true);
+            // XXX: this is probably not even really correct
+            mEmulatedAlphaAttachmentMask.set(colorIndexGL, false);
+        }
+        else
+        {
 
-        const angle::Format &intendedFormat = renderTarget->getImageIntendedFormat();
-        mEmulatedAlphaAttachmentMask.set(
-            colorIndexGL, intendedFormat.alphaBits == 0 && actualFormat.alphaBits > 0);
+            const angle::Format &actualFormat = renderTarget->getImageActualFormat();
+            updateActiveColorMasks(colorIndexGL, actualFormat.redBits > 0,
+                                   actualFormat.greenBits > 0, actualFormat.blueBits > 0,
+                                   actualFormat.alphaBits > 0);
+
+            const angle::Format &intendedFormat = renderTarget->getImageIntendedFormat();
+            mEmulatedAlphaAttachmentMask.set(
+                colorIndexGL, intendedFormat.alphaBits == 0 && actualFormat.alphaBits > 0);
+        }
     }
     else
     {
@@ -1822,7 +1841,18 @@ angle::Result FramebufferVk::updateColorAttachment(const gl::Context *context,
 
     if (enabledColor)
     {
-        mCurrentFramebufferDesc.updateColor(colorIndexGL, renderTarget->getDrawSubresourceSerial());
+        // XXX: yuv hack
+        if (renderTarget->isYuvResolve())
+        {
+            ANGLE_LOG(ERR) << "update framebufferdesc with resolve subresource serial hack";
+            mCurrentFramebufferDesc.updateColor(colorIndexGL,
+                                                vk::kInvalidImageOrBufferViewSubresourceSerial);
+        }
+        else
+        {
+            mCurrentFramebufferDesc.updateColor(colorIndexGL,
+                                                renderTarget->getDrawSubresourceSerial());
+        }
         const bool isExternalImage =
             mState.getColorAttachments()[colorIndexGL].isExternalImageWithoutIndividualSync();
         mIsExternalColorAttachments.set(colorIndexGL, isExternalImage);
@@ -2146,13 +2176,28 @@ void FramebufferVk::updateRenderPassDesc(ContextVk *contextVk)
         {
             RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
             ASSERT(colorRenderTarget);
-            mRenderPassDesc.packColorAttachment(
-                colorIndexGL, colorRenderTarget->getImageForRenderPass().getActualFormatID());
 
-            // Add the resolve attachment, if any.
-            if (colorRenderTarget->hasResolveAttachment())
+            // XXX: yuv hacks
+            if (colorRenderTarget->isYuvResolve())
             {
+                auto const &resolveImage = colorRenderTarget->getResolveImageForRenderPass();
+
+                mRenderPassDesc.packColorAttachment(colorIndexGL,
+                                                    resolveImage.getExternalResolveColorFormatID());
                 mRenderPassDesc.packColorResolveAttachment(colorIndexGL);
+                mRenderPassDesc.packExternalResolveFormat(resolveImage.getExternalFormat());
+            }
+            else
+            {
+
+                mRenderPassDesc.packColorAttachment(
+                    colorIndexGL, colorRenderTarget->getImageForRenderPass().getActualFormatID());
+
+                // Add the resolve attachment, if any.
+                if (colorRenderTarget->hasResolveAttachment())
+                {
+                    mRenderPassDesc.packColorResolveAttachment(colorIndexGL);
+                }
             }
         }
         else
@@ -2225,11 +2270,20 @@ angle::Result FramebufferVk::getAttachmentsAndRenderTargets(
         RenderTargetVk *colorRenderTarget = colorRenderTargets[colorIndexGL];
         ASSERT(colorRenderTarget);
 
-        const vk::ImageView *imageView = nullptr;
-        ANGLE_TRY(colorRenderTarget->getImageViewWithColorspace(
-            contextVk, mCurrentFramebufferDesc.getWriteControlMode(), &imageView));
+        if (colorRenderTarget->isYuvResolve())
+        {
+            // XXX yuv: handle case without null color attachment
+            ANGLE_LOG(ERR) << "substituting null imageview for yuv color attachment";
+            attachments->push_back(VK_NULL_HANDLE);
+        }
+        else
+        {
+            const vk::ImageView *imageView = nullptr;
+            ANGLE_TRY(colorRenderTarget->getImageViewWithColorspace(
+                contextVk, mCurrentFramebufferDesc.getWriteControlMode(), &imageView));
+            attachments->push_back(imageView->getHandle());
+        }
 
-        attachments->push_back(imageView->getHandle());
         renderTargetsInfoOut->emplace_back(
             RenderTargetInfo(colorRenderTarget, RenderTargetImage::AttachmentImage));
     }
@@ -2381,6 +2435,8 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
 
     if (!useImagelessFramebuffer)
     {
+        ANGLE_LOG(ERR) << " not use imageless framebuffer path ";
+
         // Since the cache key FramebufferDesc can't distinguish between
         // two FramebufferHelper, if they both have 0 attachment, but their sizes
         // are different, we could have wrong cache hit(new framebufferHelper has
@@ -2405,6 +2461,8 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
     }
     else
     {
+        ANGLE_LOG(ERR) << " use imageless framebuffer path ";
+
         // For imageless framebuffers, attachment image and create info objects should be defined
         // when creating the new framebuffer.
         std::vector<VkFramebufferAttachmentImageInfoKHR> fbAttachmentImageInfoArray;
@@ -2420,6 +2478,13 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
 
             VkFramebufferAttachmentImageInfoKHR fbAttachmentImageInfo = {};
             fbAttachmentImageInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR;
+
+            if (info.renderTarget->isYuvResolve())
+            {
+                // XXX: hack hack
+                ANGLE_LOG(ERR) << "substitute resolve image..";
+                renderTargetImage = &info.renderTarget->getResolveImageForRenderPass();
+            }
 
             uint32_t baseLevel =
                 static_cast<uint32_t>(renderTargetImage->getFirstAllocatedLevel().get());
@@ -3136,6 +3201,10 @@ angle::Result FramebufferVk::readPixelsImpl(ContextVk *contextVk,
     ANGLE_TRACE_EVENT0("gpu.angle", "FramebufferVk::readPixelsImpl");
     gl::LevelIndex levelGL = renderTarget->getLevelIndex();
     uint32_t layer         = renderTarget->getLayerIndex();
+
+    ANGLE_LOG(ERR) << "readPixelsImpl " << renderTarget << " im "
+                   << &renderTarget->getImageForCopy();
+
     return renderTarget->getImageForCopy().readPixels(contextVk, area, packPixelsParams,
                                                       copyAspectFlags, levelGL, layer, pixels);
 }

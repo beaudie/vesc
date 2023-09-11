@@ -65,6 +65,7 @@ egl::Error ImageVk::initialize(const egl::Display *display)
 
     if (egl::IsTextureTarget(mState.target))
     {
+        ANGLE_LOG(ERR) << "in IsTextureTarget branch";
         ASSERT(mContext != nullptr);
         ContextVk *contextVk = vk::GetImpl(mContext);
         TextureVk *textureVk = GetImplAs<TextureVk>(GetAs<gl::Texture>(mState.source));
@@ -95,9 +96,13 @@ egl::Error ImageVk::initialize(const egl::Display *display)
         }
         else if (egl::IsExternalImageTarget(mState.target))
         {
+            ANGLE_LOG(ERR) << "in IsExternalImageTarget branch";
             const ExternalImageSiblingVk *externalImageSibling =
                 GetImplAs<ExternalImageSiblingVk>(GetAs<egl::ExternalImageSibling>(mState.source));
             mImage = externalImageSibling->getImage();
+
+            // did it actually work?
+            ANGLE_LOG(ERR) << " mImage " << mImage;
 
             ASSERT(mContext == nullptr);
         }

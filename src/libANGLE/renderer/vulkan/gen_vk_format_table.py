@@ -224,6 +224,11 @@ def get_format_id_case(format_id, vk_format):
 
 
 def get_vk_format_case(format_id, vk_format):
+    # don't generate the reverse mapping for the external format slots because they _all_ map
+    # to VK_FORMAT_UNDEFINED and so clash with NONE
+    if 'EXTERNAL' in format_id:
+        return ''
+
     return """\
         case %s:
             return angle::FormatID::%s;
