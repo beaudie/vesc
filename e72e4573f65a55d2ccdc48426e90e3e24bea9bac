@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59af3fe4_e074f20c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543262
+      },
+      "writtenOn": "2023-09-11T11:06:57Z",
+      "side": 1,
+      "message": "geoff@\n\nPTAL thank you\n\nAlso, I have a question: can non-ANGLE submitters request tryjobs permissions? Or only ANGLE committers can execute tryjobs?",
+      "revId": "e72e4573f65a55d2ccdc48426e90e3e24bea9bac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
