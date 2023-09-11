@@ -316,6 +316,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc01d5d2_fdce97c2",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-11T17:41:34Z",
+      "side": 1,
+      "message": "`ASSERT` SGTM",
+      "parentUuid": "de0b22ca_25cf5299",
+      "revId": "9ef3f3d29363ed49d3b9f98750690c9f773f4cd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "50893557_a6e1467d",
