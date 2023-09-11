@@ -34,6 +34,24 @@
       "parentUuid": "610519fc_5997f401",
       "revId": "179bd7762ffad154def7f4a900e100c1a5ca80a5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f25e710_478332b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1456112
+      },
+      "writtenOn": "2023-09-11T18:08:41Z",
+      "side": 1,
+      "message": "Shouldnt the test check if support exists? Is this extension something that is required for webgl2 conformance?",
+      "parentUuid": "c9ead255_cd376640",
+      "revId": "179bd7762ffad154def7f4a900e100c1a5ca80a5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
