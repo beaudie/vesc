@@ -74,6 +74,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "202a93a0_c661e062",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-11T19:19:31Z",
+      "side": 1,
+      "message": "Sorry to disagree Charlie, but I think using the unlocked tail call here is going be better. The `ClientWaitSync` implementations are not thread safe, they look up the sync object for example in the display map. Even if that\u0027s worked around, since the call goes through the front-end, it\u0027s generally hard to guarantee thread safety.\n\nThe unlocked tail call mechanism was made exactly for this sort of use case, where everything that needs a lock is dealt with, all the way to the near end of the call, then the stack is unwound, the lock is released and the job is done (with a guarantee that it\u0027s really the last thing that\u0027s done).\n\nSo _maybe_ this particular case could be done differently, but I\u0027d say let\u0027s just stick with the pattern we\u0027re using everywhere for this sort of problem. Do you have any perf concerns? The caller is going to end up sleeping in this path anyway.",
+      "parentUuid": "319f6ada_4a484475",
+      "revId": "9ef3f3d29363ed49d3b9f98750690c9f773f4cd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b7259ccf_ccf8df3d",
         "filename": "scripts/generate_entry_points.py",
         "patchSetId": 8
