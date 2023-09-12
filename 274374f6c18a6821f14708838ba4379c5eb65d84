@@ -124,6 +124,24 @@
       "parentUuid": "cabfdb2b_2ab955cc",
       "revId": "274374f6c18a6821f14708838ba4379c5eb65d84",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e25588af_c5b81ac9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-12T14:21:27Z",
+      "side": 1,
+      "message": "Hmm... since it\u0027s just d3d failing, it does look like a bug (or some suboptimal usage) in the d3d backend. I don\u0027t have a windows machine to debug that though.\n\nLet me remove the middle path then, either we do memcpy directly (practically everywhere), or fall back to old path for d3d until someone fixes that.",
+      "parentUuid": "12bd067c_29ed9f64",
+      "revId": "274374f6c18a6821f14708838ba4379c5eb65d84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
