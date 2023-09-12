@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27e5ab27_61f0a0a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 24
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-12T21:22:30Z",
+      "side": 1,
+      "message": "Could you do a quick sanity check with a few app traces to ensure no perf impact here? A few traces I can think out based on my experience is asphalt_9, black_desert_mobile.",
+      "revId": "d6e7304da10aaa0ba03ae2cbfc0fcd27222729e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
