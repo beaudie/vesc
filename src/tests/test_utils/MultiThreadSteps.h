@@ -88,6 +88,12 @@ class ThreadSynchronization
         mCondVar->notify_all();
     }
 
+    E pollStep()
+    {
+        std::unique_lock<std::mutex> lock(*mMutex);
+        return *mCurrentStep;
+    }
+
   private:
     E *mCurrentStep;
     std::mutex *mMutex;
