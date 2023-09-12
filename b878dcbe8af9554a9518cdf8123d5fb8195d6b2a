@@ -16,6 +16,52 @@
       "message": "So this didn\u0027t end up as we discussed on the issue:\n\n\u003e \u003e it might just be best to use a temp image to render to (just like the MSAA path), and copy on swap.\n\n\u003e pretty much how it will be done\n\nMy suggestion was to use a temp image for rendering, just like with MSAA, and copy it (instead of resolve) to the swapchain image at swap time.\n\nThe difference would be:\n\n- With this CL, ANI still needs to happen early. With MSAA-style temp image ANI can be deferred to swap time\n- With this CL, the image is once copied out, once copied in. With MSAA-style temp image, the image is only copied out to the swapchain image.\n\nYou should be able to make the preserved path pretty much identical to the MSAA path (save the resolve vs copy difference), and end with both a simpler change, and a more efficient one.",
       "revId": "b878dcbe8af9554a9518cdf8123d5fb8195d6b2a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2a4ff8a_6f8054ea",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2151,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-12T19:42:57Z",
+      "side": 1,
+      "message": "then",
+      "range": {
+        "startLine": 2151,
+        "startChar": 55,
+        "endLine": 2151,
+        "endChar": 60
+      },
+      "revId": "b878dcbe8af9554a9518cdf8123d5fb8195d6b2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6baa44ed_df1a5ce2",
+        "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2607,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-12T19:42:57Z",
+      "side": 1,
+      "message": "then",
+      "range": {
+        "startLine": 2607,
+        "startChar": 55,
+        "endLine": 2607,
+        "endChar": 60
+      },
+      "revId": "b878dcbe8af9554a9518cdf8123d5fb8195d6b2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
