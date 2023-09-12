@@ -619,6 +619,24 @@
       "parentUuid": "cf3fce35_a84131ee",
       "revId": "9ef3f3d29363ed49d3b9f98750690c9f773f4cd9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b71139aa_edabe045",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-12T18:28:43Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "e38a130d_d19ced1d",
+      "revId": "9ef3f3d29363ed49d3b9f98750690c9f773f4cd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
