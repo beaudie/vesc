@@ -169,7 +169,6 @@ inline void LoadCompressedToNative(const ImageLoadContext &context, size_t width
                                    size_t inputDepthPitch, uint8_t *output, size_t outputRowPitch,
                                    size_t outputDepthPitch)
 {
-    const size_t columns = (width + (blockWidth - 1)) / blockWidth;
     const size_t rows = (height + (blockHeight - 1)) / blockHeight;
     const size_t layers = (depth + (blockDepth - 1)) / blockDepth;
 
@@ -179,33 +178,11 @@ inline void LoadCompressedToNative(const ImageLoadContext &context, size_t width
     const size_t outputLayerSize = outputRowPitch * rows;
     const size_t outputImageSize = outputDepthPitch * layers;
 
-    if (inputImageSize == outputImageSize)
-    {
-        ASSERT(inputRowPitch == outputRowPitch);
-        ASSERT(inputLayerSize == outputLayerSize && inputLayerSize == inputDepthPitch && outputLayerSize == outputDepthPitch);
-        memcpy(output, input, inputImageSize);
-    }
-    else if (inputLayerSize == outputLayerSize && inputLayerSize == inputDepthPitch && outputLayerSize == outputDepthPitch)
-    {
-        for (size_t z = 0; z < layers; ++z)
-        {
-            const uint8_t *source = priv::OffsetDataPointer<uint8_t>(input, 0, z, inputRowPitch, inputDepthPitch);
-            uint8_t *dest = priv::OffsetDataPointer<uint8_t>(output, 0, z, outputRowPitch, outputDepthPitch);
-            memcpy(dest, source, inputRowPitch);
-        }
-    }
-    else
-    {
-        for (size_t z = 0; z < layers; ++z)
-        {
-            for (size_t y = 0; y < rows; ++y)
-            {
-                const uint8_t *source = priv::OffsetDataPointer<uint8_t>(input, y, z, inputRowPitch, inputDepthPitch);
-                uint8_t *dest = priv::OffsetDataPointer<uint8_t>(output, y, z, outputRowPitch, outputDepthPitch);
-                memcpy(dest, source, columns * blockSize);
-            }
-        }
-    }
+    ASSERT(inputImageSize == outputImageSize);
+    ASSERT(inputRowPitch == outputRowPitch);
+    ASSERT(inputLayerSize == outputLayerSize && inputLayerSize == inputDepthPitch && outputLayerSize == outputDepthPitch);
+
+    memcpy(output, input, inputImageSize);
 }
 
 template <typename type, uint32_t firstBits, uint32_t secondBits, uint32_t thirdBits, uint32_t fourthBits>
