@@ -400,6 +400,13 @@ struct FeaturesMtl : FeatureSetBase
         &members, "http://anglebug.com/8258"
     };
 
+    FeatureInfo disableMetalOnAmdBronze = {
+        "disableMetalOnAmdBronze",
+        FeatureCategory::MetalFeatures,
+        "AMD GPUs are unsupported on older AMD Bronze drivers due to driver crashes.",
+        &members, "http://anglebug.com/8317"
+    };
+
 };
 
 inline FeaturesMtl::FeaturesMtl()  = default;

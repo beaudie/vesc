@@ -153,6 +153,12 @@ angle::Result DisplayMtl::initializeImpl(egl::Display *display)
             return angle::Result::Stop;
         }
 
+        if (mFeatures.disableMetalOnAmdBronze.enabled && isAMDBronzeDriver())
+        {
+            ANGLE_MTL_LOG("Could not initialize: Metal is not supported on AMD Bronze drivers.");
+            return angle::Result::Stop;
+        }
+
         mCmdQueue.set([[mMetalDevice newCommandQueue] ANGLE_MTL_AUTORELEASE]);
 
         ANGLE_TRY(mFormatTable.initialize(this));
@@ -1340,6 +1346,9 @@ void DisplayMtl::initializeFeatures()
 
     // anglebug.com/8258 Builtin shaders currently require MSL 2.1
     ANGLE_FEATURE_CONDITION((&mFeatures), requireMsl21, true);
+
+    // http://anglebug.com/8317: AMD GPUs are unsupported on older Bronze drivers due to crashes.
+    ANGLE_FEATURE_CONDITION((&mFeatures), disableMetalOnAmdBronze, true);
 }
 
 angle::Result DisplayMtl::initializeShaderLibrary()
