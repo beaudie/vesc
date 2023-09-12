@@ -173,13 +173,37 @@ inline void LoadCompressedToNative(const ImageLoadContext &context, size_t width
     const size_t rows = (height + (blockHeight - 1)) / blockHeight;
     const size_t layers = (depth + (blockDepth - 1)) / blockDepth;
 
-    for (size_t z = 0; z < layers; ++z)
+    const size_t inputLayerSize = inputRowPitch * rows;
+    const size_t inputImageSize = inputDepthPitch * layers;
+
+    const size_t outputLayerSize = outputRowPitch * rows;
+    const size_t outputImageSize = outputDepthPitch * layers;
+
+    if (inputImageSize == outputImageSize)
     {
-        for (size_t y = 0; y < rows; ++y)
+        ASSERT(inputRowPitch == outputRowPitch);
+        ASSERT(inputLayerSize == outputLayerSize && inputLayerSize == inputDepthPitch && outputLayerSize == outputDepthPitch);
+        memcpy(output, input, inputImageSize);
+    }
+    else if (inputLayerSize == outputLayerSize && inputLayerSize == inputDepthPitch && outputLayerSize == outputDepthPitch)
+    {
+        for (size_t z = 0; z < layers; ++z)
         {
-            const uint8_t *source = priv::OffsetDataPointer<uint8_t>(input, y, z, inputRowPitch, inputDepthPitch);
-            uint8_t *dest = priv::OffsetDataPointer<uint8_t>(output, y, z, outputRowPitch, outputDepthPitch);
-            memcpy(dest, source, columns * blockSize);
+            const uint8_t *source = priv::OffsetDataPointer<uint8_t>(input, 0, z, inputRowPitch, inputDepthPitch);
+            uint8_t *dest = priv::OffsetDataPointer<uint8_t>(output, 0, z, outputRowPitch, outputDepthPitch);
+            memcpy(dest, source, inputRowPitch);
+        }
+    }
+    else
+    {
+        for (size_t z = 0; z < layers; ++z)
+        {
+            for (size_t y = 0; y < rows; ++y)
+            {
+                const uint8_t *source = priv::OffsetDataPointer<uint8_t>(input, y, z, inputRowPitch, inputDepthPitch);
+                uint8_t *dest = priv::OffsetDataPointer<uint8_t>(output, y, z, outputRowPitch, outputDepthPitch);
+                memcpy(dest, source, columns * blockSize);
+            }
         }
     }
 }
