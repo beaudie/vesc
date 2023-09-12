@@ -88,6 +88,24 @@
       "parentUuid": "c31f50f6_97f0b245",
       "revId": "274374f6c18a6821f14708838ba4379c5eb65d84",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cabfdb2b_2ab955cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-12T13:17:28Z",
+      "side": 1,
+      "message": "Tried a break point in the three paths, the first one is the only one hit in `*Compressed*` end2end tests, and `*astc*4x4*` gles3 deqp tests.\n\nGiven what you said about alignment and `PixelStorei`, what test do you think I could add to cover them?\n\nI put up https://chromium-review.googlesource.com/c/angle/angle/+/4859019 to see what it uncovers too.",
+      "parentUuid": "7d814e27_51fef248",
+      "revId": "274374f6c18a6821f14708838ba4379c5eb65d84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
