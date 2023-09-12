@@ -106,6 +106,24 @@
       "parentUuid": "7d814e27_51fef248",
       "revId": "274374f6c18a6821f14708838ba4379c5eb65d84",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12bd067c_29ed9f64",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-09-12T13:31:35Z",
+      "side": 1,
+      "message": "\u003e what test do you think I could add to cover them?\n\nI raised concerns exactly because I cannot think of any regular compressed texture upload operation that would explicitly require skipping rows or slices.\n\nThe `BPTCCompressedTextureTest.CompressedTexImageBC7` test, which fails on D3D11 with the linked CL, uploads a single 4x4 block yet somehow triggers an assertion.",
+      "parentUuid": "cabfdb2b_2ab955cc",
+      "revId": "274374f6c18a6821f14708838ba4379c5eb65d84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
