@@ -16,6 +16,23 @@
       "message": "LGTM",
       "revId": "5add5a5b7ad0e1ce5a2bbf94ae0dda65a02b8a1a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9ae01e0_1e8c3750",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2023-09-12T20:41:38Z",
+      "side": 1,
+      "message": "I\u0027ve tested the latest version with the affected app, and the issue has been mitigated. Thanks!",
+      "revId": "5add5a5b7ad0e1ce5a2bbf94ae0dda65a02b8a1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
