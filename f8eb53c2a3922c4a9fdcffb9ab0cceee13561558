@@ -34,6 +34,24 @@
       "parentUuid": "1479192e_4566e508",
       "revId": "f8eb53c2a3922c4a9fdcffb9ab0cceee13561558",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15675589_58395498",
+        "filename": "third_party/vulkan-deps",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-12T14:04:56Z",
+      "side": 1,
+      "message": "Done, based on diff that just undoes submodule change",
+      "parentUuid": "ae7169fb_5abb24f3",
+      "revId": "f8eb53c2a3922c4a9fdcffb9ab0cceee13561558",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
