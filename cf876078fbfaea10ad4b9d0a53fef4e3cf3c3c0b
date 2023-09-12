@@ -16,6 +16,23 @@
       "message": "Tested here: https://chromium-swarm.appspot.com/task?id\u003d64a3c772b598f410\nAfter this lands I\u0027ll disable the tests",
       "revId": "cf876078fbfaea10ad4b9d0a53fef4e3cf3c3c0b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b88baca_e0c4947c",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2023-09-12T20:37:31Z",
+      "side": 1,
+      "message": "Oops I guess this isn\u0027t specific enough. Do you know which drivers specifically we are avoiding?\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/metal/DisplayMtl.mm;drc\u003d5ca8523b8c9ff9a7b3e7eb349d8fc7566f660675;l\u003d1436?q\u003disAMDBronzeDriver\u0026ss\u003dchromium%2Fchromium%2Fsrc",
+      "revId": "cf876078fbfaea10ad4b9d0a53fef4e3cf3c3c0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
