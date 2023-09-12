@@ -46,6 +46,30 @@
       },
       "revId": "f72f0e86f7fa33f63fca16816f5f0df99b07f0c1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af9117e0_d1b3c0cf",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 11
+      },
+      "lineNbr": 1564,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-09-12T18:52:14Z",
+      "side": 1,
+      "message": "It turns out that changing the existing test suite names, e.g. from `gles3` to `gles3-master` will incur too much other changes: expectation file names, test infra scripts, etc.\n\nI am going for the route that you suggested in the first place, add a new parameter `mustpass_suffix`. I will keep the target_name of existing test suites the same, and append the `mustpass_suffix` to form the target_name of the newly added multisample and 565-no-depth-no-stencil tests.",
+      "parentUuid": "182d1014_0723d414",
+      "range": {
+        "startLine": 1524,
+        "startChar": 0,
+        "endLine": 1564,
+        "endChar": 3
+      },
+      "revId": "f72f0e86f7fa33f63fca16816f5f0df99b07f0c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
