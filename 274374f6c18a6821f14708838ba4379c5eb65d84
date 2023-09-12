@@ -16,6 +16,24 @@
       "message": "Are all three new paths covered for compressed formats by dEQP and/or end2end tests?",
       "revId": "274374f6c18a6821f14708838ba4379c5eb65d84",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12a578bc_04db2ccd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-12T12:44:28Z",
+      "side": 1,
+      "message": "Funny, I was just going to see if you are interested in reviewing this!\n\nI\u0027m not quite so sure I know all the reasons the different paths could be taken. I think mips where the dimensions are not a multiple of block sizes is where we can\u0027t straight out memcpy, is there any other reason? I remember you fixed a few issues in the past with such mip dimensions, so there should be end2end tests. I\u0027ll do a run of the tests to make sure all paths are hit.",
+      "parentUuid": "61375ec3_01aaf78c",
+      "revId": "274374f6c18a6821f14708838ba4379c5eb65d84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
