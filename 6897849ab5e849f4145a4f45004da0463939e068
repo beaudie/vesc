@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89519599_cb4ea2b9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-12T21:31:16Z",
+      "side": 1,
+      "message": "No need for this, you can just call mPendingImageGarbageSizeInBytes +\u003d garbageSize from collectImageGarbage",
+      "range": {
+        "startLine": 686,
+        "startChar": 9,
+        "endLine": 686,
+        "endChar": 35
+      },
+      "revId": "6897849ab5e849f4145a4f45004da0463939e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a92637c4_a7b99ef4",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1004,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-12T21:31:16Z",
+      "side": 1,
+      "message": "I think tracking of resetPendingImageGarbageSize is incorrect. You need to subtrack image size when image is moved out of mPendingSubmissionGarbage. A little bit tricky to do. Maybe you need to maintain a separate list for image pending garbages",
+      "range": {
+        "startLine": 1004,
+        "startChar": 30,
+        "endLine": 1004,
+        "endChar": 61
+      },
+      "revId": "6897849ab5e849f4145a4f45004da0463939e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c04ea9cb_fc830142",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5795,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-12T21:31:16Z",
+      "side": 1,
+      "message": "My suggestion is to merge this into collectImageGarbage so that if mUse is only checked once.",
+      "range": {
+        "startLine": 5795,
+        "startChar": 14,
+        "endLine": 5795,
+        "endChar": 28
+      },
+      "revId": "6897849ab5e849f4145a4f45004da0463939e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
