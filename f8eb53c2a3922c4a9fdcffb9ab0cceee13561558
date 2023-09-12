@@ -16,6 +16,24 @@
       "message": "Not sure what happend here. Some submodule issue.",
       "revId": "f8eb53c2a3922c4a9fdcffb9ab0cceee13561558",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae7169fb_5abb24f3",
+        "filename": "third_party/vulkan-deps",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002358
+      },
+      "writtenOn": "2023-09-12T14:00:06Z",
+      "side": 1,
+      "message": "Fixed (not sure what happened either).",
+      "parentUuid": "1479192e_4566e508",
+      "revId": "f8eb53c2a3922c4a9fdcffb9ab0cceee13561558",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
