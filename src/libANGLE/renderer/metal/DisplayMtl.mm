@@ -1087,7 +1087,7 @@ void DisplayMtl::initializeExtensions() const
     }
 
     // GL_KHR_parallel_shader_compile
-    mNativeExtensions.parallelShaderCompileKHR = true;
+    mNativeExtensions.parallelShaderCompileKHR = false;
 
     mNativeExtensions.baseInstanceEXT             = mFeatures.hasBaseVertexInstancedDraw.enabled;
     mNativeExtensions.baseVertexBaseInstanceANGLE = mFeatures.hasBaseVertexInstancedDraw.enabled;
