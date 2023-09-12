@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1ec38fdc_c1d76263",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-12T19:48:08Z",
+      "side": 1,
+      "message": "during internal design iteration we chose the quickest path to feature completion, the optimized path would have been the next step. im fine with holding off upstreaming until optimized implementation is coded up",
+      "parentUuid": "5402b77b_e3eb5be8",
+      "revId": "b878dcbe8af9554a9518cdf8123d5fb8195d6b2a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f2a4ff8a_6f8054ea",
         "filename": "src/libANGLE/renderer/vulkan/SurfaceVk.cpp",
         "patchSetId": 1
