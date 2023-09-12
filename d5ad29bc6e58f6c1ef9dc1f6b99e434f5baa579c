@@ -158,6 +158,24 @@
       "parentUuid": "d4fe5ea9_4cc1179d",
       "revId": "d5ad29bc6e58f6c1ef9dc1f6b99e434f5baa579c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db292514_16d48e60",
+        "filename": "src/libANGLE/renderer/vulkan/CommandProcessor.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1252,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-12T01:58:42Z",
+      "side": 1,
+      "message": "\u003e what happens if use was done before entering while-loop but an error is generated during checkCompletedCommandsLocked on line 1276 for some unrelated command batch?\n\nIf device is lost, it\u0027s not that helpful if success is returned, next command is going to fail anyway.\n\nBug resolving, not worth all this discussion.",
+      "parentUuid": "72b4690a_881a34e9",
+      "revId": "d5ad29bc6e58f6c1ef9dc1f6b99e434f5baa579c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
