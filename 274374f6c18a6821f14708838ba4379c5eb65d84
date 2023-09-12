@@ -34,6 +34,24 @@
       "parentUuid": "61375ec3_01aaf78c",
       "revId": "274374f6c18a6821f14708838ba4379c5eb65d84",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e716053_2d0789f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-09-12T12:58:56Z",
+      "side": 1,
+      "message": "Even if level\u0027s pixel dimensions are not multiples of the block dimensions, compressed texture memory is still aligned to the block\u0027s byte length (usually 8 or 16 bytes). Besides, `PixelStorei` state is not applied to compressed formats.\n\nThere could be a case for per-row/per-slice copies if `compressedTexSubImage` is simulated by applying partial updates to a CPU-side copy and replacing a complete GPU texture on backends.",
+      "parentUuid": "12a578bc_04db2ccd",
+      "revId": "274374f6c18a6821f14708838ba4379c5eb65d84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
