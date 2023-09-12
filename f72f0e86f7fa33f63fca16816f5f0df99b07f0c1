@@ -22,6 +22,30 @@
       },
       "revId": "f72f0e86f7fa33f63fca16816f5f0df99b07f0c1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "182d1014_0723d414",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 11
+      },
+      "lineNbr": 1564,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-09-12T00:21:00Z",
+      "side": 1,
+      "message": "Thank you!\n\nDue to the `target_name` can\u0027t collide between dEQP-GLES3 tests and dEQP-GLES3 multisample test applications, I did the similar thing as `angle_deqp_rotate_gtest` template: using `gles3_master` and `gles3_multisample` as `target_name` of the two test applications, and split the `target_name` with `_`. Set `_api` to `split_target[0]`. Set `_mustpass_suffix` to `split_target[1]`. This way the `target_name` passed to `angle_deqp_gtest()` template are different between the two test applications, but the `_api` is the same between the two.",
+      "parentUuid": "733d68fc_67b0b9c0",
+      "range": {
+        "startLine": 1524,
+        "startChar": 0,
+        "endLine": 1564,
+        "endChar": 3
+      },
+      "revId": "f72f0e86f7fa33f63fca16816f5f0df99b07f0c1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
