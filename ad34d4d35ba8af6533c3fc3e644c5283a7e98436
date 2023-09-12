@@ -253,6 +253,24 @@
       "parentUuid": "b6d54810_c3d399b6",
       "revId": "ad34d4d35ba8af6533c3fc3e644c5283a7e98436",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6714e644_1796fb2b",
+        "filename": "src/libGLESv2/egl_stubs.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2023-09-12T20:34:57Z",
+      "side": 1,
+      "message": "Let me avoid derailing here. This change looks good",
+      "parentUuid": "4a2c1b3e_848cee5e",
+      "revId": "ad34d4d35ba8af6533c3fc3e644c5283a7e98436",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
