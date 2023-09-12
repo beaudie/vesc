@@ -141,6 +141,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4fc36a16_a101f451",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6654,
+      "author": {
+        "id": 1298072
+      },
+      "writtenOn": "2023-09-12T23:02:59Z",
+      "side": 1,
+      "message": "there are lifetime issues here -- the VkExternalFormatANDROID must live until vkCreateRenderPass2 returns, which is why it\u0027s not local here.",
+      "parentUuid": "23945828_fa96f75f",
+      "range": {
+        "startLine": 6654,
+        "startChar": 12,
+        "endLine": 6654,
+        "endChar": 44
+      },
+      "revId": "7d0a529223447310ad5f8b7505dfbbb7739146d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "46645174_da2b2edd",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
         "patchSetId": 1
