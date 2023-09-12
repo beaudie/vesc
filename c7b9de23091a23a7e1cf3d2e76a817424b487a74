@@ -33,6 +33,41 @@
       "message": "Please do make sure the tests are actually hitting various fallback path. Otherwise looks good.",
       "revId": "c7b9de23091a23a7e1cf3d2e76a817424b487a74",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3212a195_edf51ace",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 33
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-12T21:01:16Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "c7b9de23091a23a7e1cf3d2e76a817424b487a74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c6b31f5_e6212232",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 33
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-12T21:01:16Z",
+      "side": 1,
+      "message": "Some tests from `VulkanMemoryTest`, although they still pass, now hit context flushing before the point where we try waiting for commands to finish. I will add a change to the tests in a follow-up CL (https://crrev.com/c/4860367).",
+      "parentUuid": "8263b64e_68708a66",
+      "revId": "c7b9de23091a23a7e1cf3d2e76a817424b487a74",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
