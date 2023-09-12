@@ -601,6 +601,24 @@
       "parentUuid": "50893557_a6e1467d",
       "revId": "9ef3f3d29363ed49d3b9f98750690c9f773f4cd9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e38a130d_d19ced1d",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-12T17:18:52Z",
+      "side": 1,
+      "message": "@syoussefi@chromium.org do you have more comments?",
+      "parentUuid": "cf3fce35_a84131ee",
+      "revId": "9ef3f3d29363ed49d3b9f98750690c9f773f4cd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
