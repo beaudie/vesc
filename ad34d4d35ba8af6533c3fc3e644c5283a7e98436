@@ -235,6 +235,24 @@
       "parentUuid": "59748db7_5ab02fca",
       "revId": "ad34d4d35ba8af6533c3fc3e644c5283a7e98436",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a2c1b3e_848cee5e",
+        "filename": "src/libGLESv2/egl_stubs.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2023-09-12T03:51:36Z",
+      "side": 1,
+      "message": "The default driconfig file is here: https://source.chromium.org/chromiumos/chromiumos/codesearch/+/main:src/third_party/mesa/src/util/00-mesa-defaults.conf which is not quite friendly to Android _yet_ since it\u0027s a separate file shipped for non-Android.",
+      "parentUuid": "b6d54810_c3d399b6",
+      "revId": "ad34d4d35ba8af6533c3fc3e644c5283a7e98436",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
