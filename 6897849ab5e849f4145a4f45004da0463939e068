@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "493247a8_6c72e582",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-13T01:14:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "89519599_cb4ea2b9",
+      "range": {
+        "startLine": 686,
+        "startChar": 9,
+        "endLine": 686,
+        "endChar": 35
+      },
+      "revId": "6897849ab5e849f4145a4f45004da0463939e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a92637c4_a7b99ef4",
@@ -47,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a39287d8_6aaa6248",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 1004,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-13T01:14:48Z",
+      "side": 1,
+      "message": "I see. I have updated the renderer to use a separate image garbage list, similar to suballocation garbage collection.",
+      "parentUuid": "a92637c4_a7b99ef4",
+      "range": {
+        "startLine": 1004,
+        "startChar": 30,
+        "endLine": 1004,
+        "endChar": 61
+      },
+      "revId": "6897849ab5e849f4145a4f45004da0463939e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c04ea9cb_fc830142",
@@ -60,6 +108,30 @@
       "writtenOn": "2023-09-12T21:31:16Z",
       "side": 1,
       "message": "My suggestion is to merge this into collectImageGarbage so that if mUse is only checked once.",
+      "range": {
+        "startLine": 5795,
+        "startChar": 14,
+        "endLine": 5795,
+        "endChar": 28
+      },
+      "revId": "6897849ab5e849f4145a4f45004da0463939e068",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2c58f79_7c6bc821",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 5795,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-13T01:14:48Z",
+      "side": 1,
+      "message": "Added the device memory handle to `collectImageGarbage()`. It should be `nullptr` when images are allocated using VMA.",
+      "parentUuid": "c04ea9cb_fc830142",
       "range": {
         "startLine": 5795,
         "startChar": 14,
