@@ -92,6 +92,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7d899ba0_54514fee",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-13T18:21:52Z",
+      "side": 1,
+      "message": "A garbage is pending submission could due to other context, not the context that did the release() call. It could even pending submission on multiple contexts. So if you want to have it per context, you will have to check all queueSerials that are pending submission and then locate context that uses that queue index and add it to these contexts. Most staging buffers are released while still pending, so that overhead is important. In reality, this global list thing should be reasonably good enough. In future if we find a real usage case where this causes problem, we can certainly revisit.",
+      "parentUuid": "40d2a3c5_774aa179",
+      "revId": "34fd430b3e3745c408d20929d206b6e256703875",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ba449afa_eb94e412",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 13
