@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f746fed9_1e4de93c",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-13T17:26:30Z",
+      "side": 1,
+      "message": "You could do that, but you will need to dig into vk::GarbageList and check each element if it is image garbage or not (when a pending garbage has been submitted). I think it is a bit too much for every garbage processing.\n\nOne way to de-dduplicate the code is template all these different versions of collect***Garbage into one templated function.",
+      "parentUuid": "af6123b0_c3e29e83",
+      "revId": "34fd430b3e3745c408d20929d206b6e256703875",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ba449afa_eb94e412",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 13
