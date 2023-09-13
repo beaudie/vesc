@@ -105,6 +105,24 @@
       "message": "Don\u0027t give in to the temptation! If you want to put this here, change the return value to `angle::Result` and do ANGEL_TRY. It\u0027s going to propagate to a few other functions, but it should work out. Only `onDestroy` probably has to `(void)` it.\n\n---\n\nThat said, perhaps we should recosider where this check is done. How about putting it at render pass end? That would avoid having to break the RP. If we do hit OOM before the render pass ends, your other change would cause a flush anyway, right?",
       "revId": "34fd430b3e3745c408d20929d206b6e256703875",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3379899c_ce4d03dc",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3611,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-13T17:49:15Z",
+      "side": 1,
+      "message": "I think that might be a good idea, since most of image usage should come from RP. That way the check will be only one central place:\nContextVk::flushCommandsAndEndRenderPass()\n{\n...\nif( mHasDeferredFlush || has excessivePendingGarbage)\n{\nflushImpl\n}",
+      "parentUuid": "ba449afa_eb94e412",
+      "revId": "34fd430b3e3745c408d20929d206b6e256703875",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
