@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "291dc754_04233c7e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1234,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-13T18:31:46Z",
+      "side": 1,
+      "message": "```suggestion\n    // The finish call could also generate device loss.\n```",
+      "range": {
+        "startLine": 1233,
+        "startChar": 0,
+        "endLine": 1234,
+        "endChar": 46
+      },
+      "revId": "41fcf1ed1669751ff98a6238a4e785a0ee15fdbf",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
