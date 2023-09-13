@@ -16,6 +16,57 @@
       "message": "Still works to disable on the failing bot: https://chromium-swarm.appspot.com/task?id\u003d64a815b079025310",
       "revId": "0c7d23094788510aa9cf3e35ccf62fbf2663239a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ee9282e_c46c8082",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-09-13T16:16:28Z",
+      "side": 1,
+      "message": "lgtm with one change to the descriptions/comments.",
+      "revId": "0c7d23094788510aa9cf3e35ccf62fbf2663239a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7568f1e9_28b71511",
+        "filename": "include/platform/mtl_features.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-09-13T16:16:28Z",
+      "side": 1,
+      "message": "Could this say instead:\n\nMetal is unsupported...\n\nor\n\nThe Metal backend is unsupported...\n\n?",
+      "revId": "0c7d23094788510aa9cf3e35ccf62fbf2663239a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "570be997_aac86f24",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 3
+      },
+      "lineNbr": 1350,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-09-13T16:16:28Z",
+      "side": 1,
+      "message": "Metal is unsupported...",
+      "revId": "0c7d23094788510aa9cf3e35ccf62fbf2663239a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
