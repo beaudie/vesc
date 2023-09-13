@@ -74,6 +74,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "40d2a3c5_774aa179",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-13T17:45:05Z",
+      "side": 1,
+      "message": "Ah right, I thought it was per context. It\u0027s kind of weird TBH to see a context decide to flush because of global pending garbage, the garbage may not even belong to the context. Like one context could be sitting there with a lot of garbage, and the other context keeps flushing itself to no avail.\n\nWouldn\u0027t it make more sense for each context to flush based on its own pending garbage?",
+      "parentUuid": "60b76153_ddb79be3",
+      "revId": "34fd430b3e3745c408d20929d206b6e256703875",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ba449afa_eb94e412",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 13
