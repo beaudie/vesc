@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "60b76153_ddb79be3",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-13T17:40:03Z",
+      "side": 1,
+      "message": "the problem is that mPendingImageGarbageSizeInBytes is global, it hold garbage from different context. So you can not just set counter to 0 at flush. garbage from other context may still pending. This means you needs to check each garbage to see if it is submitted or not. And because the shared garbage is a std::vector, so you need to look into the vector to see if there is image in it or not. That is why I think have a dedicate list for image will be much simpler. The only concern here is how do we de-dup the code, which can be solved by template.",
+      "parentUuid": "8a880b92_43271367",
+      "revId": "34fd430b3e3745c408d20929d206b6e256703875",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ba449afa_eb94e412",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 13
