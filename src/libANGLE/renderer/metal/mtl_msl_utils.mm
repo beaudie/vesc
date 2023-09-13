@@ -225,7 +225,7 @@ std::string UpdateFragmentShaderOutputs(std::string shaderSourceIn,
                 continue;
             }
 
-            const sh::ShaderVariable &outputVar = outputVariables[outputLocation.index];
+            const gl::ProgramOutput &outputVar = outputVariables[outputLocation.index];
 
             ASSERT(outputVar.location >= 0);
             int elementLocation = outputVar.location;

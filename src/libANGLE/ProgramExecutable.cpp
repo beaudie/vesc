@@ -107,7 +107,7 @@ void AssignOutputLocations(std::vector<VariableLocation> &outputLocations,
                            unsigned int elementCount,
                            const std::vector<VariableLocation> &reservedLocations,
                            unsigned int variableIndex,
-                           sh::ShaderVariable &outputVariable)
+                           ProgramOutput &outputVariable)
 {
     if (baseLocation + elementCount > outputLocations.size())
     {
@@ -119,19 +119,19 @@ void AssignOutputLocations(std::vector<VariableLocation> &outputLocations,
         if (std::find(reservedLocations.begin(), reservedLocations.end(), locationInfo) ==
             reservedLocations.end())
         {
-            outputVariable.location     = baseLocation;
-            const unsigned int location = baseLocation + elementIndex;
-            outputLocations[location]   = locationInfo;
+            outputVariable.podStruct.location = baseLocation;
+            const unsigned int location       = baseLocation + elementIndex;
+            outputLocations[location]         = locationInfo;
         }
     }
 }
 
 int GetOutputLocationForLink(const ProgramAliasedBindings &fragmentOutputLocations,
-                             const sh::ShaderVariable &outputVariable)
+                             const ProgramOutput &outputVariable)
 {
-    if (outputVariable.location != -1)
+    if (outputVariable.podStruct.location != -1)
     {
-        return outputVariable.location;
+        return outputVariable.podStruct.location;
     }
     int apiLocation = fragmentOutputLocations.getBinding(outputVariable);
     if (apiLocation != -1)
@@ -142,12 +142,12 @@ int GetOutputLocationForLink(const ProgramAliasedBindings &fragmentOutputLocatio
 }
 
 bool IsOutputSecondaryForLink(const ProgramAliasedBindings &fragmentOutputIndexes,
-                              const sh::ShaderVariable &outputVariable)
+                              const ProgramOutput &outputVariable)
 {
-    if (outputVariable.index != -1)
+    if (outputVariable.podStruct.index != -1)
     {
-        ASSERT(outputVariable.index == 0 || outputVariable.index == 1);
-        return (outputVariable.index == 1);
+        ASSERT(outputVariable.podStruct.index == 0 || outputVariable.podStruct.index == 1);
+        return (outputVariable.podStruct.index == 1);
     }
     int apiIndex = fragmentOutputIndexes.getBinding(outputVariable);
     if (apiIndex != -1)
@@ -523,10 +523,10 @@ void ProgramExecutable::load(bool isSeparable, gl::BinaryInputStream *stream)
     mOutputVariables.resize(outputCount);
     for (size_t outputIndex = 0; outputIndex < outputCount; ++outputIndex)
     {
-        sh::ShaderVariable &output = mOutputVariables[outputIndex];
-        LoadShaderVar(stream, &output);
-        output.location = stream->readInt<int>();
-        output.index    = stream->readInt<int>();
+        ProgramOutput &output = mOutputVariables[outputIndex];
+        stream->readString(&output.name);
+        stream->readString(&output.mappedName);
+        stream->readStruct(&output.podStruct);
     }
 
     stream->readVector(&mOutputLocations);
@@ -627,11 +627,11 @@ void ProgramExecutable::save(bool isSeparable, gl::BinaryOutputStream *stream) c
     }
 
     stream->writeInt(getOutputVariables().size());
-    for (const sh::ShaderVariable &output : getOutputVariables())
+    for (const ProgramOutput &output : getOutputVariables())
     {
-        WriteShaderVar(stream, output);
-        stream->writeInt(output.location);
-        stream->writeInt(output.index);
+        stream->writeString(output.name);
+        stream->writeString(output.mappedName);
+        stream->writeStruct(output.podStruct);
     }
 
     stream->writeVector(mOutputLocations);
@@ -1119,7 +1119,6 @@ bool ProgramExecutable::linkValidateOutputVariables(
     const Version &version,
     GLuint combinedImageUniformsCount,
     GLuint combinedShaderStorageBlocksCount,
-    const std::vector<sh::ShaderVariable> &outputVariables,
     int fragmentShaderVersion,
     const ProgramAliasedBindings &fragmentOutputLocations,
     const ProgramAliasedBindings &fragmentOutputIndices)
@@ -1128,8 +1127,6 @@ bool ProgramExecutable::linkValidateOutputVariables(
     ASSERT(mPODStruct.activeSecondaryOutputVariablesMask.none());
     ASSERT(mPODStruct.drawBufferTypeMask.none());
     ASSERT(!mPODStruct.hasYUVOutput);
-
-    mOutputVariables = outputVariables;
 
     if (fragmentShaderVersion == 100)
     {
@@ -1174,7 +1171,7 @@ bool ProgramExecutable::linkValidateOutputVariables(
         for (unsigned int outputVariableIndex = 0; outputVariableIndex < mOutputVariables.size();
              outputVariableIndex++)
         {
-            const sh::ShaderVariable &outputVariable = mOutputVariables[outputVariableIndex];
+            const ProgramOutput &outputVariable = mOutputVariables[outputVariableIndex];
             // Check that the binding corresponds to an output array and its array index fits.
             if (outputVariable.isBuiltIn() || !outputVariable.isArray() ||
                 !angle::BeginsWith(outputVariable.name, name, nameLengthWithoutArrayIndex) ||
@@ -1212,7 +1209,7 @@ bool ProgramExecutable::linkValidateOutputVariables(
     for (unsigned int outputVariableIndex = 0; outputVariableIndex < mOutputVariables.size();
          outputVariableIndex++)
     {
-        const sh::ShaderVariable &outputVariable = mOutputVariables[outputVariableIndex];
+        const ProgramOutput &outputVariable = mOutputVariables[outputVariableIndex];
 
         // Don't store outputs for gl_FragDepth, gl_FragColor, etc.
         if (outputVariable.isBuiltIn())
@@ -1233,7 +1230,7 @@ bool ProgramExecutable::linkValidateOutputVariables(
 
         // GLSL ES 3.10 section 4.3.6: Output variables cannot be arrays of arrays or arrays of
         // structures, so we may use getBasicTypeElementCount().
-        unsigned int elementCount = outputVariable.getBasicTypeElementCount();
+        unsigned int elementCount = outputVariable.podStruct.basicTypeElementCount;
         if (FindUsedOutputLocation(outputLocations, baseLocation, elementCount, reservedLocations,
                                    outputVariableIndex))
         {
@@ -1261,7 +1258,7 @@ bool ProgramExecutable::linkValidateOutputVariables(
     for (unsigned int outputVariableIndex = 0; outputVariableIndex < mOutputVariables.size();
          outputVariableIndex++)
     {
-        const sh::ShaderVariable &outputVariable = mOutputVariables[outputVariableIndex];
+        const ProgramOutput &outputVariable = mOutputVariables[outputVariableIndex];
 
         // Don't store outputs for gl_FragDepth, gl_FragColor, etc.
         if (outputVariable.isBuiltIn())
@@ -1273,7 +1270,7 @@ bool ProgramExecutable::linkValidateOutputVariables(
                 ? mSecondaryOutputLocations
                 : mOutputLocations;
         unsigned int baseLocation = 0;
-        unsigned int elementCount = outputVariable.getBasicTypeElementCount();
+        unsigned int elementCount = outputVariable.podStruct.basicTypeElementCount;
         if (fixedLocation != -1)
         {
             // Secondary inputs might have caused the max location to drop below what has already
@@ -1341,7 +1338,7 @@ bool ProgramExecutable::linkValidateOutputVariables(
 
 bool ProgramExecutable::gatherOutputTypes()
 {
-    for (const sh::ShaderVariable &outputVariable : mOutputVariables)
+    for (const ProgramOutput &outputVariable : mOutputVariables)
     {
         if (outputVariable.isBuiltIn() && outputVariable.name != "gl_FragColor" &&
             outputVariable.name != "gl_FragData" &&
@@ -1352,19 +1349,20 @@ bool ProgramExecutable::gatherOutputTypes()
         }
 
         unsigned int baseLocation =
-            (outputVariable.location == -1 ? 0u
-                                           : static_cast<unsigned int>(outputVariable.location));
+            (outputVariable.podStruct.location == -1
+                 ? 0u
+                 : static_cast<unsigned int>(outputVariable.podStruct.location));
 
-        const bool secondary =
-            outputVariable.index == 1 || (outputVariable.name == "gl_SecondaryFragColorEXT" ||
-                                          outputVariable.name == "gl_SecondaryFragDataEXT");
+        const bool secondary = outputVariable.podStruct.index == 1 ||
+                               (outputVariable.name == "gl_SecondaryFragColorEXT" ||
+                                outputVariable.name == "gl_SecondaryFragDataEXT");
 
         const ComponentType componentType =
-            GLenumToComponentType(VariableComponentType(outputVariable.type));
+            GLenumToComponentType(VariableComponentType(outputVariable.podStruct.type));
 
         // GLSL ES 3.10 section 4.3.6: Output variables cannot be arrays of arrays or arrays of
         // structures, so we may use getBasicTypeElementCount().
-        unsigned int elementCount = outputVariable.getBasicTypeElementCount();
+        unsigned int elementCount = outputVariable.podStruct.basicTypeElementCount;
         for (unsigned int elementIndex = 0; elementIndex < elementCount; elementIndex++)
         {
             const unsigned int location = baseLocation + elementIndex;
@@ -1392,7 +1390,7 @@ bool ProgramExecutable::gatherOutputTypes()
             }
         }
 
-        if (outputVariable.yuv)
+        if (outputVariable.podStruct.yuv)
         {
             ASSERT(mOutputVariables.size() == 1);
             mPODStruct.hasYUVOutput = true;

@@ -146,6 +146,46 @@ struct ProgramInput
 };
 ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
 
+ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
+struct ProgramOutput
+{
+    ProgramOutput() {}
+    ProgramOutput(const sh::ShaderVariable &var);
+    bool isBuiltIn() const { return podStruct.isBuiltIn; }
+    bool isArray() const { return podStruct.isArray; }
+    unsigned int getOutermostArraySize() const { return podStruct.outermostArraySize; }
+    //    unsigned int getBasicTypeElementCount() const { return podStruct.basicTypeElementCount; }
+    void resetEffectiveLocation()
+    {
+        if (podStruct.hasImplicitLocation)
+        {
+            podStruct.location = -1;
+        }
+    }
+
+    std::string name;
+    std::string mappedName;
+
+    struct PODStruct
+    {
+        GLenum type;
+        int location;
+        int index;
+        uint32_t id;
+
+        uint16_t outermostArraySize;
+        uint16_t basicTypeElementCount;
+
+        uint32_t isPatch : 1;
+        uint32_t yuv : 1;
+        uint32_t isBuiltIn : 1;
+        uint32_t isArray : 1;
+        uint32_t hasImplicitLocation : 1;
+        uint32_t pad : 27;
+    } podStruct;
+};
+ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
+
 // A varying with transform feedback enabled. If it's an array, either the whole array or one of its
 // elements specified by 'arrayIndex' can set to be enabled.
 struct TransformFeedbackVarying : public sh::ShaderVariable
@@ -311,7 +351,7 @@ class ProgramExecutable final : public angle::Subject
     bool hasVertexShader() const { return mPODStruct.canDrawWith; }
 
     const std::vector<ProgramInput> &getProgramInputs() const { return mProgramInputs; }
-    const std::vector<sh::ShaderVariable> &getOutputVariables() const { return mOutputVariables; }
+    const std::vector<ProgramOutput> &getOutputVariables() const { return mOutputVariables; }
     const std::vector<VariableLocation> &getOutputLocations() const { return mOutputLocations; }
     const std::vector<VariableLocation> &getSecondaryOutputLocations() const
     {
@@ -561,7 +601,6 @@ class ProgramExecutable final : public angle::Subject
                                      const Version &version,
                                      GLuint combinedImageUniformsCount,
                                      GLuint combinedShaderStorageBlocksCount,
-                                     const std::vector<sh::ShaderVariable> &outputVariables,
                                      int fragmentShaderVersion,
                                      const ProgramAliasedBindings &fragmentOutputLocations,
                                      const ProgramAliasedBindings &fragmentOutputIndices);
@@ -661,7 +700,7 @@ class ProgramExecutable final : public angle::Subject
 
     // Names and mapped names of output variables that are arrays include [0] in the end, similarly
     // to uniforms.
-    std::vector<sh::ShaderVariable> mOutputVariables;
+    std::vector<ProgramOutput> mOutputVariables;
     std::vector<VariableLocation> mOutputLocations;
     // EXT_blend_func_extended secondary outputs (ones with index 1)
     std::vector<VariableLocation> mSecondaryOutputLocations;
