@@ -33,6 +33,24 @@
       "message": "Oops I guess this isn\u0027t specific enough. Do you know which drivers specifically we are avoiding?\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/metal/DisplayMtl.mm;drc\u003d5ca8523b8c9ff9a7b3e7eb349d8fc7566f660675;l\u003d1436?q\u003disAMDBronzeDriver\u0026ss\u003dchromium%2Fchromium%2Fsrc",
       "revId": "cf876078fbfaea10ad4b9d0a53fef4e3cf3c3c0b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6de1f145_ede51af7",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-09-13T00:41:51Z",
+      "side": 1,
+      "message": "Rather than this, we intended to disable ANGLE/Metal specifically on the 2013 Mac Pro:\nhttps://support.apple.com/kb/sp697?locale\u003den_US\n\nThe AMD GPUs which are unique to this machine were the D300, D500 and D700. I don\u0027t know whether we could distinguish these by PCI ID, but it would be straightforward to do it by graphics card name.\n\nOur current MacBook Pros in Swarming (15\") also use the AMD Bronze driver so we can\u0027t blacklist it completely.",
+      "parentUuid": "8b88baca_e0c4947c",
+      "revId": "cf876078fbfaea10ad4b9d0a53fef4e3cf3c3c0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
