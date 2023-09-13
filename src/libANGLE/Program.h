@@ -248,7 +248,7 @@ class ProgramState final : angle::NonCopyable
     {
         return mExecutable->getProgramInputs();
     }
-    const std::vector<sh::ShaderVariable> &getOutputVariables() const
+    const std::vector<ProgramOutput> &getOutputVariables() const
     {
         return mExecutable->getOutputVariables();
     }
@@ -775,7 +775,7 @@ class Program final : public LabeledObject, public angle::Subject
     GLuint getOutputResourceLocation(const GLchar *name) const;
     const std::string getInputResourceName(GLuint index) const;
     const std::string getOutputResourceName(GLuint index) const;
-    const sh::ShaderVariable &getOutputResource(size_t index) const;
+    const ProgramOutput &getOutputResource(size_t index) const;
 
     const ProgramBindings &getAttributeBindings() const { return mState.getAttributeBindings(); }
     const ProgramAliasedBindings &getUniformLocationBindings() const
