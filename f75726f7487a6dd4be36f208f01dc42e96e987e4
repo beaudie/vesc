@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7fa29a8_21665621",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 23
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-13T17:35:29Z",
+      "side": 1,
+      "message": "FYI Yuly",
+      "revId": "f75726f7487a6dd4be36f208f01dc42e96e987e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc0a1445_aaa5d6b1",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-13T17:35:29Z",
+      "side": 1,
+      "message": "Please verify that the world doesn\u0027t blow up if an invalid config is given. That\u0027ll help us when we make typos.",
+      "revId": "f75726f7487a6dd4be36f208f01dc42e96e987e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
