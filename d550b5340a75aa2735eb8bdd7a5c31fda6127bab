@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b5be832_ba93a30e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-09-13T18:06:56Z",
+      "side": 1,
+      "message": "lgtm+2\n\nLet me save time by approving this small CL.",
+      "revId": "d550b5340a75aa2735eb8bdd7a5c31fda6127bab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
