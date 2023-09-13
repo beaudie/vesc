@@ -147,7 +147,7 @@ GLuint GetUniformIndexFromName(const std::vector<LinkedUniform> &uniformList,
     return GL_INVALID_INDEX;
 }
 
-GLint GetVariableLocation(const std::vector<sh::ShaderVariable> &list,
+GLint GetVariableLocation(const std::vector<OutputVariable> &list,
                           const std::vector<VariableLocation> &locationList,
                           const std::string &name)
 {
@@ -162,7 +162,7 @@ GLint GetVariableLocation(const std::vector<sh::ShaderVariable> &list,
             continue;
         }
 
-        const sh::ShaderVariable &variable = list[variableLocation.index];
+        const OutputVariable &variable = list[variableLocation.index];
 
         // Array output variables may be bound out of order, so we need to ensure we only pick the
         // first element if given the base name.
@@ -812,8 +812,9 @@ int ProgramAliasedBindings::getBinding(const T &variable) const
 
     return getBindingByName(name);
 }
-template int ProgramAliasedBindings::getBinding<gl::UsedUniform>(
-    const gl::UsedUniform &variable) const;
+template int ProgramAliasedBindings::getBinding<UsedUniform>(const gl::UsedUniform &variable) const;
+template int ProgramAliasedBindings::getBinding<OutputVariable>(
+    const OutputVariable &variable) const;
 template int ProgramAliasedBindings::getBinding<sh::ShaderVariable>(
     const sh::ShaderVariable &variable) const;
 
@@ -1320,10 +1321,16 @@ angle::Result Program::linkImpl(const Context *context)
             mState.mAttachedShaders[ShaderType::Fragment];
         if (fragmentShader)
         {
+            std::vector<OutputVariable> outputVariables;
+            for (const sh::ShaderVariable &shaderVariable : fragmentShader->activeOutputVariables)
+            {
+                OutputVariable outputVariable(shaderVariable);
+                outputVariables.push_back(outputVariable);
+            }
             if (!mState.mExecutable->linkValidateOutputVariables(
                     caps, clientVersion, combinedImageUniforms, combinedShaderStorageBlocks,
-                    fragmentShader->activeOutputVariables, fragmentShader->shaderVersion,
-                    mState.mFragmentOutputLocations, mState.mFragmentOutputIndexes))
+                    outputVariables, fragmentShader->shaderVersion, mState.mFragmentOutputLocations,
+                    mState.mFragmentOutputIndexes))
             {
                 return angle::Result::Continue;
             }
@@ -1866,7 +1873,7 @@ GLuint Program::getOutputResourceMaxNameSize() const
 {
     GLint max = 0;
 
-    for (const sh::ShaderVariable &resource : mState.mExecutable->getOutputVariables())
+    for (const OutputVariable &resource : mState.mExecutable->getOutputVariables())
     {
         max = GetResourceMaxNameSize(resource, max);
     }
@@ -1895,9 +1902,9 @@ GLuint Program::getOutputResourceLocation(const GLchar *name) const
         return index;
     }
 
-    const sh::ShaderVariable &variable = getOutputResource(index);
+    const OutputVariable &variable = getOutputResource(index);
 
-    return GetResourceLocation(name, variable, variable.location);
+    return GetResourceLocation(name, variable, variable.podStruct.location);
 }
 
 GLuint Program::getOutputResourceIndex(const GLchar *name) const
@@ -1907,7 +1914,7 @@ GLuint Program::getOutputResourceIndex(const GLchar *name) const
 
     for (size_t index = 0; index < mState.mExecutable->getOutputVariables().size(); index++)
     {
-        sh::ShaderVariable resource = getOutputResource(index);
+        OutputVariable resource = getOutputResource(index);
         if (resource.name == nameString)
         {
             return static_cast<GLuint>(index);
@@ -1997,12 +2004,12 @@ const std::string Program::getInputResourceName(GLuint index) const
 const std::string Program::getOutputResourceName(GLuint index) const
 {
     ASSERT(!mLinkingState);
-    const sh::ShaderVariable &resource = getOutputResource(index);
+    const OutputVariable &resource = getOutputResource(index);
 
     return GetResourceName(resource);
 }
 
-const sh::ShaderVariable &Program::getOutputResource(size_t index) const
+const OutputVariable &Program::getOutputResource(size_t index) const
 {
     ASSERT(!mLinkingState);
     ASSERT(index < mState.mExecutable->getOutputVariables().size());
