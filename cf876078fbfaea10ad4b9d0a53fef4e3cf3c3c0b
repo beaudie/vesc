@@ -51,6 +51,24 @@
       "parentUuid": "8b88baca_e0c4947c",
       "revId": "cf876078fbfaea10ad4b9d0a53fef4e3cf3c3c0b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e9eeddc_e9e1717a",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-09-13T13:27:32Z",
+      "side": 1,
+      "message": "As could be seen in `/System/Library/Extensions/AMDRadeonX4000.kext/Contents/Info.plist`, `AMDMTLBronzeDriver` is linked to several GPU sets:\n- `AMDBaffinGraphicsAccelerator`\n- `AMDBonaireGraphicsAccelerator`\n- `AMDEllesmereGraphicsAccelerator`\n- `AMDFijiGraphicsAccelerator`\n- `AMDHawaiiGraphicsAccelerator`\n- `AMDPitcairnGraphicsAccelerator`\n- `AMDTahitiGraphicsAccelerator`\n- `AMDTongaGraphicsAccelerator`\n- `AMDVerdeGraphicsAccelerator`\n\nFirePro D300 belongs to `Pitcairn` while FirePro D500 and FirePro D700 belong to `Tahiti`; the unstable behavior may be limited to the latter since bots have D500.\n\nPlease note that PCI Device IDs alone, which could be found in the file, are not enough to precisely identify AMD GPUs as different models may have the same device ids. For example, the \"Task Execution\" section on the \"Swarming Task Page\" for MacPro bots detects `AMD Radeon HD 7800` while the Metal name is `AMD Radeon HD - FirePro D500`.",
+      "parentUuid": "6de1f145_ede51af7",
+      "revId": "cf876078fbfaea10ad4b9d0a53fef4e3cf3c3c0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
