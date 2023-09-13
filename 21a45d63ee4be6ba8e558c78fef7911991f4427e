@@ -16,6 +16,24 @@
       "message": "Similar comment to the one I made in the next CL, could we do this at render pass end instead to avoid breaking the render pass on a precaution?",
       "revId": "21a45d63ee4be6ba8e558c78fef7911991f4427e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2c2e71b_636bcbcc",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 27
+      },
+      "lineNbr": 1161,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-13T23:43:15Z",
+      "side": 1,
+      "message": "I moved checking the pending suballocation garbage to `ContextVk::flushCommandsAndEndRenderPass()`, next to `mHasDeferredFlush` (similar to the suggestion from the next CL).\nHowever, I also added back the skips for `UniformBufferMemoryTest.BufferDataInLoopManyTimes`.",
+      "parentUuid": "c19a9f06_656ecce7",
+      "revId": "21a45d63ee4be6ba8e558c78fef7911991f4427e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
