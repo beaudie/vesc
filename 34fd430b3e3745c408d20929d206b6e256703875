@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af6123b0_c3e29e83",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-13T13:51:05Z",
+      "side": 1,
+      "message": "Are all these special paths just to have this counter? Can we simplify things by having garbage collection be done as usual, and have the one adding image garbage do something like `onImageGarbageCollected(size)`? That\u0027ll probably simplify this change a lot.\n\nYou\u0027d probably need to add feedback from `collectGarbage` about which path was taken.",
+      "revId": "34fd430b3e3745c408d20929d206b6e256703875",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba449afa_eb94e412",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 13
+      },
+      "lineNbr": 3611,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-13T13:51:05Z",
+      "side": 1,
+      "message": "Don\u0027t give in to the temptation! If you want to put this here, change the return value to `angle::Result` and do ANGEL_TRY. It\u0027s going to propagate to a few other functions, but it should work out. Only `onDestroy` probably has to `(void)` it.\n\n---\n\nThat said, perhaps we should recosider where this check is done. How about putting it at render pass end? That would avoid having to break the RP. If we do hit OOM before the render pass ends, your other change would cause a flush anyway, right?",
+      "revId": "34fd430b3e3745c408d20929d206b6e256703875",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
