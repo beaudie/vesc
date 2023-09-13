@@ -69,6 +69,24 @@
       "parentUuid": "6de1f145_ede51af7",
       "revId": "cf876078fbfaea10ad4b9d0a53fef4e3cf3c3c0b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3dc72ab_25d03c76",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2023-09-13T16:04:49Z",
+      "side": 1,
+      "message": "Got it, disabled on FirePro devices now.",
+      "parentUuid": "4e9eeddc_e9e1717a",
+      "revId": "cf876078fbfaea10ad4b9d0a53fef4e3cf3c3c0b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
