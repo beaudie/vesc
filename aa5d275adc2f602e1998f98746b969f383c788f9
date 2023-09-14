@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4c434aea_c3b335b7",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 775,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-09-14T19:09:04Z",
+      "side": 1,
+      "message": "nit: false?",
+      "range": {
+        "startLine": 775,
+        "startChar": 36,
+        "endLine": 775,
+        "endChar": 37
+      },
+      "revId": "aa5d275adc2f602e1998f98746b969f383c788f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5dd61e0e_41a78372",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 9
@@ -14,6 +37,24 @@
       "writtenOn": "2023-09-14T16:17:43Z",
       "side": 1,
       "message": "@geofflang@chromium.org When this path is taken, the already-allocated image\u0027s contents are updated right away on the host, and **there is no `onStateChange` call**.\n\nWhen updates are staged, they notify observers. Whatever I could think of doesn\u0027t need a notification in this case (like framebuffer attachments needing sync, etc). But I\u0027m not sure I could get a good picture of what else in the front-end happens that may have to get a notification. Any reason you could think of why this should notify observers about anything?",
+      "revId": "aa5d275adc2f602e1998f98746b969f383c788f9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cdb366c_1f19a6b4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 7479,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-09-14T19:09:04Z",
+      "side": 1,
+      "message": "I can\u0027t think of any issue with this. I can\u0027t think of cases in the frontend that cares about the contents of backend texture changing. Buffers changing and texture backings changing are the common ones.",
+      "parentUuid": "5dd61e0e_41a78372",
       "revId": "aa5d275adc2f602e1998f98746b969f383c788f9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
