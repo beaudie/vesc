@@ -929,9 +929,18 @@ class TestSuite::TestEventListener : public testing::EmptyTestEventListener
     // Note: TestResults is owned by the TestSuite. It should outlive TestEventListener.
     TestEventListener(TestSuite *testSuite) : mTestSuite(testSuite) {}
 
+    void OnTestProgramStart(const testing::UnitTest &testProgramInfo) override
+    {
+        mTestSuite->mTestResults.batchTestTimer.start();
+    }
+
     void OnTestStart(const testing::TestInfo &testInfo) override
     {
         std::lock_guard<std::mutex> guard(mTestSuite->mTestResults.currentTestMutex);
+        std::cout << "Test index: " << mTestSuite->mTestResults.currentTestIndex
+                  << "; Elapsed time: "
+                  << mTestSuite->mTestResults.batchTestTimer.getElapsedWallClockTime()
+                  << " seconds." << std::endl;
         mTestSuite->mTestResults.currentTest = GetTestIdentifier(testInfo);
         mTestSuite->mTestResults.currentTestTimer.start();
     }
@@ -943,6 +952,7 @@ class TestSuite::TestEventListener : public testing::EmptyTestEventListener
         const testing::TestResult &resultIn = *testInfo.result();
         UpdateCurrentTestResult(resultIn, &mTestSuite->mTestResults);
         mTestSuite->mTestResults.currentTest = TestIdentifier();
+        ++mTestSuite->mTestResults.currentTestIndex;
     }
 
     void OnTestProgramEnd(const testing::UnitTest &testProgramInfo) override
