@@ -102,6 +102,30 @@
       },
       "revId": "5903359e55672c0d29d009b99d3c6bc39528aef8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efefabe6_29edf2da",
+        "filename": "src/libANGLE/renderer/gl/ProgramGL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-14T17:45:27Z",
+      "side": 1,
+      "message": "It would have been great if it didn\u0027t even have a name, so `outputVar.location` would still work. But we need a name to reference for the bulk load/store.\n\nI wouldn\u0027t recommend shorthand though, we always find out later that it ended up making the code hard to understand in the long run. As a general rule, we\u0027re just avoiding them.",
+      "parentUuid": "5ebef051_fa10195f",
+      "range": {
+        "startLine": 410,
+        "startChar": 38,
+        "endLine": 410,
+        "endChar": 47
+      },
+      "revId": "5903359e55672c0d29d009b99d3c6bc39528aef8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
