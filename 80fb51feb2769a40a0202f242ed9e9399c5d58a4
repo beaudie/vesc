@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b10d1458_525be9d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-09-14T17:20:13Z",
+      "side": 1,
+      "message": "Great to see this CL.  LGTM with one exception.",
+      "revId": "80fb51feb2769a40a0202f242ed9e9399c5d58a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6936cc74_2b33c592",
@@ -38,6 +55,30 @@
       "side": 1,
       "message": "Next line is failing initialization anyway. But the reason it\u0027s a warning is because the app may legitimately want to try Vulkan, and fallback if failed. It\u0027s not necessarily an error path.",
       "parentUuid": "6936cc74_2b33c592",
+      "range": {
+        "startLine": 1902,
+        "startChar": 8,
+        "endLine": 1902,
+        "endChar": 12
+      },
+      "revId": "80fb51feb2769a40a0202f242ed9e9399c5d58a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9039dead_318ecaac",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1902,
+      "author": {
+        "id": 1290487
+      },
+      "writtenOn": "2023-09-14T17:20:13Z",
+      "side": 1,
+      "message": "Hmm. Given the title of this CL, and given all of the 1.0 paths that were dropped (that try to help ANGLE work well with 1.0 drivers), I agree with Charlie: this should be an error (same with the message above).",
+      "parentUuid": "77673ab6_861d1c54",
       "range": {
         "startLine": 1902,
         "startChar": 8,
