@@ -2381,7 +2381,6 @@ void ContextMtl::updateVertexArray(const gl::Context *context)
     const gl::State &glState = getState();
     mVertexArray             = mtl::GetImpl(glState.getVertexArray());
     invalidateDefaultAttributes(context->getStateCache().getActiveDefaultAttribsMask());
-    invalidateRenderPipeline();
 }
 
 angle::Result ContextMtl::updateDefaultAttribute(size_t attribIndex)

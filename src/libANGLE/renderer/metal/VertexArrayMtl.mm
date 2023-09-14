@@ -400,7 +400,7 @@ angle::Result VertexArrayMtl::setupDraw(const gl::Context *glContext,
         const std::vector<gl::VertexAttribute> &attribs = mState.getVertexAttributes();
         const std::vector<gl::VertexBinding> &bindings  = mState.getVertexBindings();
 
-        mtl::VertexDesc &desc = *vertexDescOut;
+        mtl::VertexDesc desc = *vertexDescOut;
 
         desc.numAttribs       = mtl::kMaxVertexAttribs;
         desc.numBufferLayouts = mtl::kMaxVertexAttribs;
@@ -489,6 +489,12 @@ angle::Result VertexArrayMtl::setupDraw(const gl::Context *glContext,
                 desc.layouts[bufferIdx].stride = mCurrentArrayBufferStrides[v];
             }
         }  // for (v)
+
+        if (desc != *vertexDescOut)
+        {
+            *vertexDescOut     = desc;
+            *vertexDescChanged = true;
+        }
     }
 
     if (dirty || mVertexDataDirty)
@@ -520,8 +526,6 @@ angle::Result VertexArrayMtl::setupDraw(const gl::Context *glContext,
             }
         }
     }
-
-    *vertexDescChanged = dirty;
 
     return angle::Result::Continue;
 }
