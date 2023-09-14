@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b45f43ff_4051f1fe",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-14T14:43:39Z",
+      "side": 1,
+      "message": "Should be in ProgramExecutable.cpp (ProgramInput should have been there too)",
+      "revId": "5903359e55672c0d29d009b99d3c6bc39528aef8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f2693e6_0edd20d9",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-14T14:43:39Z",
+      "side": 1,
+      "message": "padding is not initialized",
+      "revId": "5903359e55672c0d29d009b99d3c6bc39528aef8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3649ca89_06afcd19",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 1349,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-14T14:43:39Z",
+      "side": 1,
+      "message": "Not sure it makes a difference in the end, but this feels like should be `emplace_back`.",
+      "range": {
+        "startLine": 1349,
+        "startChar": 53,
+        "endLine": 1349,
+        "endChar": 57
+      },
+      "revId": "5903359e55672c0d29d009b99d3c6bc39528aef8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a3b2e8d_7322cf8d",
+        "filename": "src/libANGLE/ProgramExecutable.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-14T14:43:39Z",
+      "side": 1,
+      "message": "FYI, type can be 16 bits (like ProgrmaInput above). `location` can probably be 3 bits (because of `IMPLEMENTATION_MAX_DRAW_BUFFERS`) and index can probably be 1 bit (if I\u0027m not mistaken, it\u0027s only used for dual source blending, so it\u0027s either 0 or 1).\n\nPoint being, it can all fit in the padding!",
+      "range": {
+        "startLine": 170,
+        "startChar": 0,
+        "endLine": 172,
+        "endChar": 18
+      },
+      "revId": "5903359e55672c0d29d009b99d3c6bc39528aef8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
