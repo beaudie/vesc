@@ -87,6 +87,30 @@
       },
       "revId": "80fb51feb2769a40a0202f242ed9e9399c5d58a4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b36c5f32_2638e90f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1902,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-14T17:48:47Z",
+      "side": 1,
+      "message": "As I mentioned above, it\u0027s not an error if device creation fails. It\u0027s an EGL error, yes, and something the app should react too. For example, the app may decide to fall back to the GL backend.\n\nIt\u0027s not an internal ANGLE error.",
+      "parentUuid": "9039dead_318ecaac",
+      "range": {
+        "startLine": 1902,
+        "startChar": 8,
+        "endLine": 1902,
+        "endChar": 12
+      },
+      "revId": "80fb51feb2769a40a0202f242ed9e9399c5d58a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
