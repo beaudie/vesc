@@ -146,6 +146,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a575ecfd_6372d525",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-14T19:26:32Z",
+      "side": 1,
+      "message": "Hopefully no, maybe have the caller do that? Depends on where ContextVk would have to end up getting propagated to.",
+      "parentUuid": "6f5bc9cb_4d824bc9",
+      "revId": "34fd430b3e3745c408d20929d206b6e256703875",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ba449afa_eb94e412",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 13
