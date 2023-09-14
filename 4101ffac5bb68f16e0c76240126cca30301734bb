@@ -22,6 +22,30 @@
       },
       "revId": "4101ffac5bb68f16e0c76240126cca30301734bb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a900a5a0_ac720b5e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 11
+      },
+      "lineNbr": 826,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-14T17:33:54Z",
+      "side": 1,
+      "message": "Thanks. Renamed to `initBufferForBufferCopy()`, `initBufferForImageCopy()`, and `initBufferForVertexConversion()`.",
+      "parentUuid": "9ffced17_ef8606f0",
+      "range": {
+        "startLine": 826,
+        "startChar": 18,
+        "endLine": 826,
+        "endChar": 39
+      },
+      "revId": "4101ffac5bb68f16e0c76240126cca30301734bb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
