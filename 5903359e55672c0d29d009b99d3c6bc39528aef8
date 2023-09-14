@@ -126,6 +126,30 @@
       },
       "revId": "5903359e55672c0d29d009b99d3c6bc39528aef8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb6e6a07_0f6a3944",
+        "filename": "src/libANGLE/renderer/gl/ProgramGL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-14T17:52:47Z",
+      "side": 1,
+      "message": "yeah I quickly tried to research that and having a union seems to be the only way to avoid a name, but that would be hacky and error prone.\n\nI think it\u0027s more about considering other names than a \"shorthand\". For instance, the \"Struct\" part seems unnecessary. Everything is a struct. Could be just `pod` or something idk. I think it\u0027s one of the special cases where even a shorthand helps more than hurts because of the sheer scale where it has an effect.. might be worth considering alternatives.",
+      "parentUuid": "efefabe6_29edf2da",
+      "range": {
+        "startLine": 410,
+        "startChar": 38,
+        "endLine": 410,
+        "endChar": 47
+      },
+      "revId": "5903359e55672c0d29d009b99d3c6bc39528aef8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
