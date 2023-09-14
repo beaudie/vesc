@@ -823,7 +823,7 @@ angle::Result ContextMtl::drawElementsImpl(const gl::Context *context,
     // indices.
     // It's safe to use idxBuffer in this case, as it will contain the same count and restart ranges
     // as drawIdxBuffer.
-    const std::vector<DrawCommandRange> drawCommands = mVertexArray->getDrawIndices(
+    const DrawCommandRangeVector drawCommands = mVertexArray->getDrawIndices(
         context, type, convertedType, mode, idxBuffer, convertedCounti32, convertedOffset);
     bool isNoOp = false;
     ANGLE_TRY(setupDraw(context, mode, 0, count, instances, type, indices, false, &isNoOp));

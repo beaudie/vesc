@@ -756,16 +756,16 @@ angle::Result VertexArrayMtl::getIndexBuffer(const gl::Context *context,
     return angle::Result::Continue;
 }
 
-std::vector<DrawCommandRange> VertexArrayMtl::getDrawIndices(const gl::Context *glContext,
-                                                             gl::DrawElementsType originalIndexType,
-                                                             gl::DrawElementsType indexType,
-                                                             gl::PrimitiveMode primitiveMode,
-                                                             mtl::BufferRef clientBuffer,
-                                                             uint32_t indexCount,
-                                                             size_t offset)
+DrawCommandRangeVector VertexArrayMtl::getDrawIndices(const gl::Context *glContext,
+                                                      gl::DrawElementsType originalIndexType,
+                                                      gl::DrawElementsType indexType,
+                                                      gl::PrimitiveMode primitiveMode,
+                                                      mtl::BufferRef clientBuffer,
+                                                      uint32_t indexCount,
+                                                      size_t offset)
 {
     ContextMtl *contextMtl = mtl::GetImpl(glContext);
-    std::vector<DrawCommandRange> drawCommands;
+    DrawCommandRangeVector drawCommands;
     // The indexed draw needs to be split to separate draw commands in case primitive restart is
     // enabled and the drawn primitive supports primitive restart. Otherwise the whole indexed draw
     // can be sent as one draw command.

@@ -32,6 +32,8 @@ struct DrawCommandRange
     size_t offset;
 };
 
+using DrawCommandRangeVector = angle::FastVector<DrawCommandRange, 1>;
+
 // Inclusive range of consecutive primitive restart value indexes.
 struct IndexRange
 {
