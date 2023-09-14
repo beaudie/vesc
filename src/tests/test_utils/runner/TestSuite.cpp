@@ -53,6 +53,8 @@ constexpr char kArtifactsFakeTestName[] = "TestArtifactsFakeTest";
 constexpr char kTSanOptionsEnvVar[]  = "TSAN_OPTIONS";
 constexpr char kUBSanOptionsEnvVar[] = "UBSAN_OPTIONS";
 
+constexpr char kVkLoaderDisableDLLUnloadingEnvVar[] = "VK_LOADER_DISABLE_DYNAMIC_LIBRARY_UNLOADING";
+
 // Note: we use a fairly high test timeout to allow for the first test in a batch to be slow.
 // Ideally we could use a separate timeout for the slow first test.
 // Allow sanitized tests to run more slowly.
@@ -926,9 +928,18 @@ class TestSuite::TestEventListener : public testing::EmptyTestEventListener
     // Note: TestResults is owned by the TestSuite. It should outlive TestEventListener.
     TestEventListener(TestSuite *testSuite) : mTestSuite(testSuite) {}
 
+    void OnTestProgramStart(const testing::UnitTest &testProgramInfo) override
+    {
+        mTestSuite->mTestResults.batchTestTimer.start();
+    }
+
     void OnTestStart(const testing::TestInfo &testInfo) override
     {
         std::lock_guard<std::mutex> guard(mTestSuite->mTestResults.currentTestMutex);
+        std::cout << "Test index: " << mTestSuite->mTestResults.currentTestIndex
+                  << "; Elapsed time: "
+                  << mTestSuite->mTestResults.batchTestTimer.getElapsedWallClockTime()
+                  << " seconds." << std::endl;
         mTestSuite->mTestResults.currentTest = GetTestIdentifier(testInfo);
         mTestSuite->mTestResults.currentTestTimer.start();
     }
@@ -940,6 +951,7 @@ class TestSuite::TestEventListener : public testing::EmptyTestEventListener
         const testing::TestResult &resultIn = *testInfo.result();
         UpdateCurrentTestResult(resultIn, &mTestSuite->mTestResults);
         mTestSuite->mTestResults.currentTest = TestIdentifier();
+        ++mTestSuite->mTestResults.currentTestIndex;
     }
 
     void OnTestProgramEnd(const testing::UnitTest &testProgramInfo) override
@@ -990,6 +1002,11 @@ TestSuite::TestSuite(int *argc, char **argv, std::function<void()> registerTests
 
 #if defined(ANGLE_PLATFORM_WINDOWS)
     testing::GTEST_FLAG(catch_exceptions) = false;
+
+    if (IsASan())
+    {
+        SetEnvironmentVar(kVkLoaderDisableDLLUnloadingEnvVar, "1");
+    }
 #endif
 
     if (*argc <= 0)
