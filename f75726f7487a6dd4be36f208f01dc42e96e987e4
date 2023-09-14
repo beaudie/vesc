@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "faadfb2a_b85d43be",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 655,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-14T16:20:50Z",
+      "side": 1,
+      "message": "Suggestion: maybe inline both GetTestSuiteConfigString and the var, this reads well and removes a few layers:\n\n`for (const char *configParam : gTestSuiteConfigParameters[GetTestModuleIndex()])`",
+      "range": {
+        "startLine": 655,
+        "startChar": 35,
+        "endLine": 655,
+        "endChar": 56
+      },
+      "revId": "f75726f7487a6dd4be36f208f01dc42e96e987e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cc0a1445_aaa5d6b1",
         "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
         "patchSetId": 23
@@ -31,6 +54,29 @@
       "writtenOn": "2023-09-13T17:35:29Z",
       "side": 1,
       "message": "Please verify that the world doesn\u0027t blow up if an invalid config is given. That\u0027ll help us when we make typos.",
+      "revId": "f75726f7487a6dd4be36f208f01dc42e96e987e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4602892_c599d68d",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-14T16:20:50Z",
+      "side": 1,
+      "message": "This seems confusing because it suggests that multiple args could be added by this loop - which doesn\u0027t appear to be the case as all vectors are of size 1. Which brings the question, why are they vectors? Can gTestSuiteConfigParameters be just a list of strings instead of list of vectors of strings?",
+      "range": {
+        "startLine": 666,
+        "startChar": 8,
+        "endLine": 666,
+        "endChar": 36
+      },
       "revId": "f75726f7487a6dd4be36f208f01dc42e96e987e4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
