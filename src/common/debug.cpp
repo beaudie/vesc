@@ -294,6 +294,7 @@ void Trace(LogSeverity severity, const char *message)
         // Note: we use fprintf because <iostream> includes static initializers.
         fprintf((severity >= LOG_WARN) ? stderr : stdout, "%s: %s\n", LogSeverityName(severity),
                 str.c_str());
+        fflush((severity >= LOG_WARN) ? stderr : stdout);
 #endif
     }
 
