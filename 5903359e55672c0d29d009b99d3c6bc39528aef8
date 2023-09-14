@@ -79,6 +79,29 @@
       },
       "revId": "5903359e55672c0d29d009b99d3c6bc39528aef8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5ebef051_fa10195f",
+        "filename": "src/libANGLE/renderer/gl/ProgramGL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-14T17:13:14Z",
+      "side": 1,
+      "message": "Broader than this CL but `podStruct` is basically noise in places like this, which makes me wonder if this struct could have a shorter name like `outputVar.ps.location` or even `outputVar.p.location`",
+      "range": {
+        "startLine": 410,
+        "startChar": 38,
+        "endLine": 410,
+        "endChar": 47
+      },
+      "revId": "5903359e55672c0d29d009b99d3c6bc39528aef8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
