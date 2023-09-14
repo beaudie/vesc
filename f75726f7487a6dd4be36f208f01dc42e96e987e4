@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e17c25e_dedf4e5b",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 655,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-09-14T22:52:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "faadfb2a_b85d43be",
+      "range": {
+        "startLine": 655,
+        "startChar": 35,
+        "endLine": 655,
+        "endChar": 56
+      },
+      "revId": "f75726f7487a6dd4be36f208f01dc42e96e987e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cc0a1445_aaa5d6b1",
@@ -60,6 +84,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9fb48d69_74049487",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-09-14T22:52:32Z",
+      "side": 1,
+      "message": "The tests would just fail with exception thrown at `parseConfigBitsFromName`: https://github.com/KhronosGroup/VK-GL-CTS/blob/main/framework/opengl/gluRenderConfig.cpp#L140. if invalid config name is given.\n\nAlthough on Linux machine, after running tests with invalid deqp-gl-config-name, I start seeing this warning message when running the tests with a valid deqp-gl-config-name.\n\n```\n[ Loader Message ] terminator_CreateDevice: Device pointer (0x55bcb80d64d0) has invalid MAGIC value 0x0410aded. Device value possibly corrupted by active layer (Policy #LLP_LAYER_22).  \n                            Object: 0x55bcb99f19f0 (type \u003d Instance(1))\n\n```\n\nThis warning message doesn\u0027t affect the results of the test. But does that warning message raise a concern? The warning message shows up for all angle tests, including end2end tests. It persists after restarting the linux machine.",
+      "parentUuid": "cc0a1445_aaa5d6b1",
+      "revId": "f75726f7487a6dd4be36f208f01dc42e96e987e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f4602892_c599d68d",
         "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
         "patchSetId": 23
@@ -71,6 +113,30 @@
       "writtenOn": "2023-09-14T16:20:50Z",
       "side": 1,
       "message": "This seems confusing because it suggests that multiple args could be added by this loop - which doesn\u0027t appear to be the case as all vectors are of size 1. Which brings the question, why are they vectors? Can gTestSuiteConfigParameters be just a list of strings instead of list of vectors of strings?",
+      "range": {
+        "startLine": 666,
+        "startChar": 8,
+        "endLine": 666,
+        "endChar": 36
+      },
+      "revId": "f75726f7487a6dd4be36f208f01dc42e96e987e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46920c53_2ba32639",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-09-14T22:52:32Z",
+      "side": 1,
+      "message": "We will add more config args later: \n\nFor example:\n\n```\nconst std::vector\u003cconst char *\u003e gTestSuiteConfigParameters[] \u003d {\n  {\"--deqp-gl-config-name\u003drgba8888d24s8ms0\"}, // for gles3\n  {\"--deqp-gl-config-name\u003drgba8888d24s8ms0\", \"--deqp-screen-rotation\u003d90\"}, // for gles3-rotate90\n}\n```",
+      "parentUuid": "f4602892_c599d68d",
       "range": {
         "startLine": 666,
         "startChar": 8,
