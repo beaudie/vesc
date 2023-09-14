@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6936cc74_2b33c592",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1902,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-14T16:07:27Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be ERROR instead of WARN()?",
+      "range": {
+        "startLine": 1902,
+        "startChar": 8,
+        "endLine": 1902,
+        "endChar": 12
+      },
+      "revId": "80fb51feb2769a40a0202f242ed9e9399c5d58a4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
