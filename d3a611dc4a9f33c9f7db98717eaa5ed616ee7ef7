@@ -16,6 +16,24 @@
       "message": "Will WARN() message show up in release build? I thought only error messages do.",
       "revId": "d3a611dc4a9f33c9f7db98717eaa5ed616ee7ef7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e2b75fe_23f5398f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-15T20:36:25Z",
+      "side": 1,
+      "message": "When I run tests using the release build, the `WARN()` message is not shown in logcat. However, when I set the device to use the installed release ANGLE, and run an application, `WARN()` does show up.",
+      "parentUuid": "6ff63389_de2399f2",
+      "revId": "d3a611dc4a9f33c9f7db98717eaa5ed616ee7ef7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
