@@ -164,6 +164,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f0e16f69_074f0028",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-15T00:33:14Z",
+      "side": 1,
+      "message": "I checked the other instances of where `releaseImage()` is used. Aside from `releaseImageFromShareContexts()`, there are the following:\n* `ImageVk::onDestroy()`. It uses a display object, but there is `mContext` in the class.\n* `SubresourceUpdate::release()` for staging images. Some of its callers have `ContextVk`.\n* `OffscreenSurfaceVk::AttachmentImage::destroy()`, where it uses a display object. No context.\n* Platform-specific sibling image `release()` functions. No context.\n\nWould any of the above need to increment the image garbage counter?",
+      "parentUuid": "a575ecfd_6372d525",
+      "revId": "34fd430b3e3745c408d20929d206b6e256703875",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ba449afa_eb94e412",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 13
