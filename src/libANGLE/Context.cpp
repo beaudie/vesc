@@ -4653,12 +4653,6 @@ void Context::clear(GLbitfield mask)
         return;
     }
 
-    // Noop empty scissors.
-    if (IsEmptyScissor(mState))
-    {
-        return;
-    }
-
     // Remove clear bits that are ineffective. An effective clear changes at least one fragment. If
     // color/depth/stencil masks make the clear ineffective we skip it altogether.
 
@@ -4692,6 +4686,13 @@ void Context::clear(GLbitfield mask)
     }
 
     ANGLE_CONTEXT_TRY(prepareForClear(mask));
+
+    // Test scissor after prepareForClear(...) and noop empty scissors.
+    if (IsEmptyScissor(mState))
+    {
+        return;
+    }
+
     ANGLE_CONTEXT_TRY(mState.getDrawFramebuffer()->clear(this, mask));
 }
 
@@ -4719,8 +4720,7 @@ bool Context::noopClearBuffer(GLenum buffer, GLint drawbuffer) const
     Framebuffer *framebufferObject = mState.getDrawFramebuffer();
 
     return !IsClearBufferEnabled(framebufferObject->getState(), buffer, drawbuffer) ||
-           mState.isRasterizerDiscardEnabled() || isClearBufferMaskedOut(buffer, drawbuffer) ||
-           IsEmptyScissor(mState);
+           mState.isRasterizerDiscardEnabled() || isClearBufferMaskedOut(buffer, drawbuffer);
 }
 
 void Context::clearBufferfv(GLenum buffer, GLint drawbuffer, const GLfloat *values)
@@ -4747,7 +4747,15 @@ void Context::clearBufferfv(GLenum buffer, GLint drawbuffer, const GLfloat *valu
     {
         return;
     }
+
     ANGLE_CONTEXT_TRY(prepareForClearBuffer(buffer, drawbuffer));
+
+    // Test scissor after prepareForClearBuffer(...) and noop empty scissors.
+    if (IsEmptyScissor(mState))
+    {
+        return;
+    }
+
     ANGLE_CONTEXT_TRY(framebufferObject->clearBufferfv(this, buffer, drawbuffer, values));
 }
 
@@ -4771,7 +4779,15 @@ void Context::clearBufferuiv(GLenum buffer, GLint drawbuffer, const GLuint *valu
     {
         return;
     }
+
     ANGLE_CONTEXT_TRY(prepareForClearBuffer(buffer, drawbuffer));
+
+    // Test scissor after prepareForClearBuffer(...) and noop empty scissors.
+    if (IsEmptyScissor(mState))
+    {
+        return;
+    }
+
     ANGLE_CONTEXT_TRY(framebufferObject->clearBufferuiv(this, buffer, drawbuffer, values));
 }
 
@@ -4800,6 +4816,13 @@ void Context::clearBufferiv(GLenum buffer, GLint drawbuffer, const GLint *values
         return;
     }
     ANGLE_CONTEXT_TRY(prepareForClearBuffer(buffer, drawbuffer));
+
+    // Test scissor after prepareForClearBuffer(...) and noop empty scissors.
+    if (IsEmptyScissor(mState))
+    {
+        return;
+    }
+
     ANGLE_CONTEXT_TRY(framebufferObject->clearBufferiv(this, buffer, drawbuffer, values));
 }
 
@@ -4821,6 +4844,13 @@ void Context::clearBufferfi(GLenum buffer, GLint drawbuffer, GLfloat depth, GLin
     }
 
     ANGLE_CONTEXT_TRY(prepareForClearBuffer(buffer, drawbuffer));
+
+    // Test scissor after prepareForClearBuffer(...) and noop empty scissors.
+    if (IsEmptyScissor(mState))
+    {
+        return;
+    }
+
     ANGLE_CONTEXT_TRY(framebufferObject->clearBufferfi(this, buffer, drawbuffer, depth, stencil));
 }
 
