@@ -3675,6 +3675,11 @@ std::string RendererVk::getRendererDescription() const
 
     strstr << ")";
 
+    strstr << " (";
+    strstr << "VMA version ";
+    strstr << ANGLE_VMA_VERSION;
+    strstr << ")";
+
     return strstr.str();
 }
 
