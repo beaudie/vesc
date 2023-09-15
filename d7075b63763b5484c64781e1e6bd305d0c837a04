@@ -16,6 +16,23 @@
       "message": "Is this reland to only limit this frontend feature to vulkan backend?",
       "revId": "d7075b63763b5484c64781e1e6bd305d0c837a04",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec77ac7a_e0638a51",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-09-15T00:48:44Z",
+      "side": 1,
+      "message": "@syoussefi@chromium.org, I have another version where the workaround check is moved to the `egl::Display` class: https://chromium-review.googlesource.com/c/angle/angle/+/4866860. Would you prefer the change in that version?",
+      "revId": "d7075b63763b5484c64781e1e6bd305d0c837a04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
