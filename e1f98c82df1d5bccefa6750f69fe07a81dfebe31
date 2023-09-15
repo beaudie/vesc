@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "941bd244_caf2458e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1326275
+      },
+      "writtenOn": "2023-09-15T12:52:47Z",
+      "side": 1,
+      "message": "Passing Mac Pro run with this CL: https://chromium-swarm.appspot.com/task?id\u003d64b1aeb1bf6b1f10",
+      "revId": "e1f98c82df1d5bccefa6750f69fe07a81dfebe31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
