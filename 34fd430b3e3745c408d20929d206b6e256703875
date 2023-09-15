@@ -182,6 +182,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "538b9843_d92210ec",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-15T02:11:55Z",
+      "side": 1,
+      "message": "- `ImageVk::onDestroy()`: that would release if the image is otherwise orphaned (like the image was attached to a texture, and the texture is already deleted). Not a common case\n- `SubresourceUpdate::release()`: staged images is also going to be extremely rare. Typically updates are in the form of data uploads, staged images can come from `glCopyTex[Sub]Image` and only if the image is not otherwise already allocated. Only one of our traces (five_nights_at_freddys) uses this function\n- OffscreenSurfaceVk: that\u0027s an EGL surface.  I don\u0027t expect it to be created/destroyed often\n- sibling image release() functions: Same as `ImageVk::onDestroy`? Something along those lines\n\nIn short, if we don\u0027t take those into account, I\u0027m not that worried TBH.",
+      "parentUuid": "f0e16f69_074f0028",
+      "revId": "34fd430b3e3745c408d20929d206b6e256703875",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ba449afa_eb94e412",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 13
