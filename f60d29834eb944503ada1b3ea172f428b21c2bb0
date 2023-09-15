@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2394d932_bb874b41",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 5065,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-15T20:17:39Z",
+      "side": 1,
+      "message": "nit: \"unusedSuballocation\" or something (inclusive language)",
+      "range": {
+        "startLine": 5065,
+        "startChar": 28,
+        "endLine": 5065,
+        "endChar": 33
+      },
+      "revId": "f60d29834eb944503ada1b3ea172f428b21c2bb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca7f5631_19e316b9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 892,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-15T20:17:39Z",
+      "side": 1,
+      "message": "This is still only used for vertex and index buffers right? Everything else has a size.\n\nFYI, `vkCmdBindVertexBuffers2` can be used to set the size for vertex arrays (there\u0027s a TODO in ContextVk::handleDirtyGraphicsVertexBuffers about it), and I added `vkCmdBindIndexBuffer2KHR` to VK_KHR_maintenance5 so we can set the size for index buffers too.\n\n_One day_ we may be able to get rid of this 😐",
+      "revId": "f60d29834eb944503ada1b3ea172f428b21c2bb0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
