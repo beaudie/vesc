@@ -5053,6 +5053,18 @@ const Buffer &BufferHelper::getBufferForVertexArray(ContextVk *contextVk,
     return mBufferForVertexArray;
 }
 
+void BufferHelper::onBufferUserSizeChange(RendererVk *renderer)
+{
+    // Buffer's user size and allocation size may be different due to alignment requirement. In
+    // normal usage we just use the actual allocation size and it is good enough. But when
+    // robustResourceInit is enabled, mBufferForVertexArray is created to mjatch the exact user
+    // size. Thus when user size changes, we must clear and recreate this mBufferForVertexArray.
+    if (mBufferForVertexArray.valid())
+    {
+        mBufferForVertexArray.destroy(renderer->getDevice());
+    }
+}
+
 void BufferHelper::destroy(RendererVk *renderer)
 {
     mDescriptorSetCacheManager.destroyKeys(renderer);

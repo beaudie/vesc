@@ -867,6 +867,12 @@ class BufferHelper : public ReadWriteResource
                                           VkBufferUsageFlags usage,
                                           VkDeviceSize size);
 
+    // Buffer's user size and allocation size may be different due to alignment requirement. In
+    // normal usage we just use the actual allocation size and it is good enough. But when
+    // robustResourceInit is enabled, mBufferForVertexArray is created to mjatch the exact user
+    // size. Thus when user size changes, we must clear and recreate this mBufferForVertexArray.
+    void onBufferUserSizeChange(RendererVk *renderer);
+
   private:
     void initializeBarrierTracker(Context *context);
 
