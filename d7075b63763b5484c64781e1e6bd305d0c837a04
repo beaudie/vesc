@@ -87,6 +87,24 @@
       "parentUuid": "472d4881_4c91863f",
       "revId": "d7075b63763b5484c64781e1e6bd305d0c837a04",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "559a9825_82bdf172",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-15T02:15:02Z",
+      "side": 1,
+      "message": "No, DisplayEGL has a strict view of what happens with webview, and no-surface does not fit that view. I\u0027m not a fan of adding this just to serve a workaround that shouldn\u0027t even apply to webview.",
+      "parentUuid": "4e583b08_122d82ef",
+      "revId": "d7075b63763b5484c64781e1e6bd305d0c837a04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
