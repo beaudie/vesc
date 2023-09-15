@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b414558_d84a648f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1509302
+      },
+      "writtenOn": "2023-09-15T00:25:29Z",
+      "side": 1,
+      "message": "Is this reland to only limit this frontend feature to vulkan backend?",
+      "revId": "d7075b63763b5484c64781e1e6bd305d0c837a04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
