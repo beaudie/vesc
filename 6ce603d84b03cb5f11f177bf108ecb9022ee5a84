@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4d6716f_6a6b7daa",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 29
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-15T20:23:07Z",
+      "side": 1,
+      "message": "hasExcessiveSuballocationGarbagePendingSubmission. A bit verbose, but we should have a \"pending\" word in it. Maybe in next CL you can just rename it to hasExcessiveGarbagePendingSubmission which checks both image and buffer.",
+      "range": {
+        "startLine": 654,
+        "startChar": 9,
+        "endLine": 654,
+        "endChar": 41
+      },
+      "revId": "6ce603d84b03cb5f11f177bf108ecb9022ee5a84",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
