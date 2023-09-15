@@ -53,6 +53,8 @@ constexpr char kArtifactsFakeTestName[] = "TestArtifactsFakeTest";
 constexpr char kTSanOptionsEnvVar[]  = "TSAN_OPTIONS";
 constexpr char kUBSanOptionsEnvVar[] = "UBSAN_OPTIONS";
 
+constexpr char kVkLoaderDisableDLLUnloadingEnvVar[] = "VK_LOADER_DISABLE_DYNAMIC_LIBRARY_UNLOADING";
+
 // Note: we use a fairly high test timeout to allow for the first test in a batch to be slow.
 // Ideally we could use a separate timeout for the slow first test.
 // Allow sanitized tests to run more slowly.
@@ -990,6 +992,11 @@ TestSuite::TestSuite(int *argc, char **argv, std::function<void()> registerTests
 
 #if defined(ANGLE_PLATFORM_WINDOWS)
     testing::GTEST_FLAG(catch_exceptions) = false;
+
+    if (IsASan())
+    {
+        SetEnvironmentVar(kVkLoaderDisableDLLUnloadingEnvVar, "1");
+    }
 #endif
 
     if (*argc <= 0)
