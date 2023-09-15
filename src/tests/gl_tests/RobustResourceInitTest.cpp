@@ -416,6 +416,47 @@ TEST_P(RobustResourceInitTest, BufferData)
     EXPECT_GL_TRUE(initState);
 }
 
+// Regression test for glBufferData with slightly increased size. Implementation may decided to
+// reuse the buffer storage if underline storage is big enough (due to alignment, implementation may
+// allocate more storage than data size.)
+TEST_P(RobustResourceInitTest, BufferDataWithIncreasedSize)
+{
+    ANGLE_SKIP_TEST_IF(!hasGLExtension());
+
+    ANGLE_GL_PROGRAM(drawGreen, essl1_shaders::vs::Passthrough(), essl1_shaders::fs::Green());
+
+    // Clear to red and draw one triangle on the bottom left with green. The right top half should
+    // be red.
+    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    std::array<float, 2 * 3> quadVertices = {-1, 1, -1, -1, 1, -1};
+    constexpr size_t kBufferSize          = sizeof(quadVertices[0]) * quadVertices.size();
+    GLBuffer vertexBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, kBufferSize, quadVertices.data(), GL_STATIC_DRAW);
+    glUseProgram(drawGreen);
+    const GLint positionLocation = glGetAttribLocation(drawGreen, essl1_shaders::PositionAttrib());
+    ASSERT_NE(-1, positionLocation);
+    glVertexAttribPointer(positionLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(positionLocation);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    EXPECT_PIXEL_COLOR_EQ(1, 1, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() - 1, getWindowHeight() - 1, GLColor::red);
+    EXPECT_GL_NO_ERROR();
+
+    // Clear to blue and call glBufferData with two triangles and draw the entire window with green.
+    // Both bottom left and top right should be green.
+    glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    std::array<float, 2 * 3 * 2> twoQuadVertices = {-1, 1, -1, -1, 1, -1, -1, 1, 1, -1, 1, 1};
+    glBufferData(GL_ARRAY_BUFFER, kBufferSize * 2, twoQuadVertices.data(), GL_STATIC_DRAW);
+    glUseProgram(drawGreen);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    EXPECT_PIXEL_COLOR_EQ(1, 1, GLColor::green);
+    EXPECT_PIXEL_COLOR_EQ(getWindowWidth() - 1, getWindowHeight() - 1, GLColor::green);
+    EXPECT_GL_NO_ERROR();
+}
+
 // Regression test for passing a zero size init buffer with the extension.
 TEST_P(RobustResourceInitTest, BufferDataZeroSize)
 {
