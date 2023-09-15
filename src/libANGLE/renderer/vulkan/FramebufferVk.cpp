@@ -2081,6 +2081,20 @@ angle::Result FramebufferVk::syncState(const gl::Context *context,
         }
     }
 
+    // Noop a clear when render area has become invalid.
+    if (command == gl::Command::Clear)
+    {
+        const gl::Rectangle renderArea = getNonRotatedCompleteRenderArea();
+        gl::Rectangle scissoredRenderArea =
+            ClipRectToScissor(contextVk->getState(), renderArea, false);
+
+        if (scissoredRenderArea.width == 0 || scissoredRenderArea.height == 0)
+        {
+            deferColorClears        = false;
+            deferDepthStencilClears = false;
+        }
+    }
+
     // If we are notified that any attachment is dirty, but we have deferred clears for them, a
     // flushDeferredClears() call is missing somewhere.  ASSERT this to catch these bugs.
     vk::ClearValuesArray previousDeferredClears = mDeferredClears;
