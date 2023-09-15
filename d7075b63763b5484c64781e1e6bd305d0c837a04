@@ -33,6 +33,24 @@
       "message": "@syoussefi@chromium.org, I have another version where the workaround check is moved to the `egl::Display` class: https://chromium-review.googlesource.com/c/angle/angle/+/4866860. Would you prefer the change in that version?",
       "revId": "d7075b63763b5484c64781e1e6bd305d0c837a04",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4687e5e_986f55ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-09-15T00:53:09Z",
+      "side": 1,
+      "message": "Yes. The workaround is causing crashes in chromium WebView tests (uses ANGLE on GLES backends, callstack https://paste.googleplex.com/5588992899678208). Do we need the feature on GLES backends? If yes, then I need more time to debug why the feature is causing crash in WebView tests.",
+      "parentUuid": "4b414558_d84a648f",
+      "revId": "d7075b63763b5484c64781e1e6bd305d0c837a04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
