@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "968779fa_72fff429",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4373,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-09-15T21:57:23Z",
+      "side": 0,
+      "message": "The `Program::getActiveAttributeCount()` checked `mLinked`, if `mLinked \u003d\u003d false`, it returns 0. Does the `(programObject-\u003egetExecutable().getProgramInputs()` do this check, too?",
+      "revId": "b4852ef95ec12f4a16a6c7a1893f661070b3a68e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da459c22_8c87d076",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4405,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-09-15T21:57:23Z",
+      "side": 0,
+      "message": "Same question as `getActiveAttributeCount()`, does the new `programObject-\u003egetExecutable().getUniforms()` check the `mLinked` and returns 0 if `mLinked` is false?",
+      "revId": "b4852ef95ec12f4a16a6c7a1893f661070b3a68e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
