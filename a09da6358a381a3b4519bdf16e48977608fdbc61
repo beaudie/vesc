@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b47a8ee0_dd522953",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-15T19:34:04Z",
+      "side": 1,
+      "message": "(over appropriate meme) I heard you like impossible to review code shuffles",
+      "revId": "a09da6358a381a3b4519bdf16e48977608fdbc61",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
