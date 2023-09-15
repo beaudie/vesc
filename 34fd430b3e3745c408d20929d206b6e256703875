@@ -200,6 +200,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "80573e03_0682cdf0",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 13
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-15T17:28:32Z",
+      "side": 1,
+      "message": "Makes sense. Thanks for the explanation!",
+      "parentUuid": "538b9843_d92210ec",
+      "revId": "34fd430b3e3745c408d20929d206b6e256703875",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ba449afa_eb94e412",
         "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
         "patchSetId": 13
