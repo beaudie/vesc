@@ -16,6 +16,23 @@
       "message": "Passing Mac Pro run with this CL: https://chromium-swarm.appspot.com/task?id\u003d64b1aeb1bf6b1f10",
       "revId": "e1f98c82df1d5bccefa6750f69fe07a81dfebe31",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2c9b58c_8ccd0d8d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-09-15T18:25:48Z",
+      "side": 1,
+      "message": "Nice work Jonah. At first I didn\u0027t see that you\u0027d run a job with this CL on the Mac Pro - thanks for preemptively testing that.",
+      "revId": "e1f98c82df1d5bccefa6750f69fe07a81dfebe31",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
