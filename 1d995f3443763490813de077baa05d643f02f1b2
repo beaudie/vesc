@@ -16,6 +16,24 @@
       "message": "Chrome parses this string to apply workarounds, so modifying it might trip something up. Why not just `INFO() \u003c\u003c \"VMA version: \" \u003c\u003c ANGLE_VMA_VERSION;` somewhere like in RendererVk::initialize()? (or WARN() if INFO() doesn\u0027t cut it)",
       "revId": "1d995f3443763490813de077baa05d643f02f1b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69e47bcd_cec7ac03",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3681,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-15T18:06:16Z",
+      "side": 1,
+      "message": "I see. I have now moved it to `RendererVk::initialize()` as a `WARN()`.",
+      "parentUuid": "368ae1bb_df1cb082",
+      "revId": "1d995f3443763490813de077baa05d643f02f1b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
