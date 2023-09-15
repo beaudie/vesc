@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "dd3bf976c4beb74a535493a32e145853b09271c8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77885bac_bb264424",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4723,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-15T18:00:56Z",
+      "side": 1,
+      "message": "This is going to fail. If not, a new test should be added to demonstrate this bug:\n\n- Stage a clear in the image (like with a full sized glClear)\n- Trigger an empty scissor clear\n- Do something else with the framebuffer, like blit, copyTexImage, etc.\n  * Another test would be to bind a new framebuffer to the texture and read back, ensure clear is done\n\nIn `prepareForClear`, the framebuffer is synced. `FramebufferVk::syncState` picks up the previous clear in `mDeferredClears` as a clear-to-be-dealt-with-in-the-following-call. Here, you are removing the \"following call\", which means the clear is picked out of the image, but is not actually applied anywhere (it\u0027s stuck in `FramebufferVk::mDeferredClears`).\n\nFor the first usage described above (\"do something else with the framebuffer\"), assertions may fire about `mDeferredClear` not being empty... or rather you\u0027d have to do something to make the framebuffer sync again and then the assert would fire.\n\nFor the second usage (bind new framebuffer), the test would find that the image is not actually cleared.",
+      "revId": "dd3bf976c4beb74a535493a32e145853b09271c8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
