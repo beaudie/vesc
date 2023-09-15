@@ -571,6 +571,49 @@ TEST_P(EGLSurfaceTest, MakeCurrentTwice)
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
+// Test that we dont crash during a clear when specified scissor is outside render area
+// due to a window resize.
+TEST_P(EGLSurfaceTest, OutOfBoundsScissor)
+{
+    initializeDisplay();
+    initializeSurfaceWithDefaultConfig(false);
+    initializeMainContext();
+
+    // Create 64x64 window and make it current
+    eglMakeCurrent(mDisplay, mWindowSurface, mWindowSurface, mContext);
+    ASSERT_EGL_SUCCESS();
+
+    // Perform empty swap
+    eglSwapBuffers(mDisplay, mWindowSurface);
+
+    // Enable scissor test
+    glEnable(GL_SCISSOR_TEST);
+
+    // Resize window to 32x32
+    mOSWindow->resize(32, 32);
+
+    // Set scissor to (50, 50, 10, 10)
+    glScissor(50, 50, 10, 10);
+    ASSERT_GL_NO_ERROR();
+
+    // Clear to specific color
+    glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ASSERT_GL_NO_ERROR();
+
+    // Disable scissor test
+    glDisable(GL_SCISSOR_TEST);
+
+    // A bogus draw.
+    ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Simple(), essl1_shaders::fs::Blue());
+    glUseProgram(program);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_ZERO, GL_ONE);
+    drawQuad(program, essl1_shaders::PositionAttrib(), 0.5);
+    EXPECT_GL_NO_ERROR();
+}
+
 // This is a regression test to verify that surfaces are not prematurely destroyed.
 TEST_P(EGLSurfaceTest, SurfaceUseAfterFreeBug)
 {

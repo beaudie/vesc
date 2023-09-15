@@ -4685,12 +4685,6 @@ void Context::clear(GLbitfield mask)
         return;
     }
 
-    // Noop empty scissors.
-    if (IsEmptyScissor(mState))
-    {
-        return;
-    }
-
     // Remove clear bits that are ineffective. An effective clear changes at least one fragment. If
     // color/depth/stencil masks make the clear ineffective we skip it altogether.
 
@@ -4724,6 +4718,13 @@ void Context::clear(GLbitfield mask)
     }
 
     ANGLE_CONTEXT_TRY(prepareForClear(mask));
+
+    // Test scissor after prepareForClear(...) and noop empty scissors.
+    if (IsEmptyScissor(mState))
+    {
+        return;
+    }
+
     ANGLE_CONTEXT_TRY(mState.getDrawFramebuffer()->clear(this, mask));
 }
 
