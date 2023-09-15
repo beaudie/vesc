@@ -100,6 +100,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bcbe9ba_1c338dc2",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 23
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-09-15T21:00:55Z",
+      "side": 1,
+      "message": "Thanks to @romanl@google.com, the warning message turns out to be another vulkan loader bug: https://github.com/KhronosGroup/Vulkan-Loader/issues/1294.\n\n@syoussefi@chromium.org, to answer your original question: if we pass invalid `--deqp-gl-config-name` value, the tests will fail with error message: `Invalid GL configuration`. We can find the error message in the qpa file.",
+      "parentUuid": "9fb48d69_74049487",
+      "revId": "f75726f7487a6dd4be36f208f01dc42e96e987e4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f4602892_c599d68d",
