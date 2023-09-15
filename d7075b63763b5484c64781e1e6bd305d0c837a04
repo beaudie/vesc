@@ -69,6 +69,24 @@
       "parentUuid": "a4687e5e_986f55ff",
       "revId": "d7075b63763b5484c64781e1e6bd305d0c837a04",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e583b08_122d82ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-09-15T01:21:52Z",
+      "side": 1,
+      "message": "got it, thank you.\n\nThe WebView crash can be fixed by below change in DisplayEGL:\n```\ndiff --git a/src/libANGLE/renderer/gl/egl/DisplayEGL.cpp b/src/libANGLE/renderer/gl/egl/DisplayEGL.cpp\nindex ed9efee5d..5c1c52c1f 100644\n--- a/src/libANGLE/renderer/gl/egl/DisplayEGL.cpp\n+++ b/src/libANGLE/renderer/gl/egl/DisplayEGL.cpp\n@@ -760,8 +760,11 @@ egl::Error DisplayEGL::makeCurrent(egl::Display *display,\n             currentContext.isExternalContext \u003d true;\n \n             // We only support using external surface with external context.\n-            ASSERT(GetImplAs\u003cSurfaceEGL\u003e(drawSurface)-\u003eisExternal());\n-            ASSERT(GetImplAs\u003cSurfaceEGL\u003e(drawSurface)-\u003egetSurface() \u003d\u003d EGL_NO_SURFACE);\n+            if (drawSurface)\n+            {\n+                ASSERT(GetImplAs\u003cSurfaceEGL\u003e(drawSurface)-\u003eisExternal());\n+                ASSERT(GetImplAs\u003cSurfaceEGL\u003e(drawSurface)-\u003egetSurface() \u003d\u003d EGL_NO_SURFACE);\n+            }\n         }\n         else if (context)\n         {\n@@ -770,8 +773,11 @@ egl::Error DisplayEGL::makeCurrent(egl::Display *display,\n             ASSERT(newSurface \u003d\u003d EGL_NO_SURFACE);\n             ASSERT(newContext !\u003d EGL_NO_CONTEXT);\n             // We only support using external surface with external context.\n-            ASSERT(GetImplAs\u003cSurfaceEGL\u003e(drawSurface)-\u003eisExternal());\n-            ASSERT(GetImplAs\u003cSurfaceEGL\u003e(drawSurface)-\u003egetSurface() \u003d\u003d EGL_NO_SURFACE);\n+            if(drawSurface)\n+            {\n+                ASSERT(GetImplAs\u003cSurfaceEGL\u003e(drawSurface)-\u003eisExternal());\n+                ASSERT(GetImplAs\u003cSurfaceEGL\u003e(drawSurface)-\u003egetSurface() \u003d\u003d EGL_NO_SURFACE);\n+            }\n```\n\nIn short we need to check the `drawSurface` is not nullptr, before calling `GetImplAs\u003cSurfaceEGL\u003e(drawSurface)`. Charlie, Shabi, is that a bug we actually should fix?",
+      "parentUuid": "472d4881_4c91863f",
+      "revId": "d7075b63763b5484c64781e1e6bd305d0c837a04",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
