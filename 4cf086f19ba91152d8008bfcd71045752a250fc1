@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b890e03c_2ec936bd",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 7681,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-15T21:24:58Z",
+      "side": 1,
+      "message": "Not sure how fast std::find can be. Maybe we can build a bitfield table for this like `angle::bitfield\u003cImageLayout\u003e mImageLayoutSupportHostImageCopy;` and then you just `if(mImageLayoutSupportHostImageCopy[mCurrentLayout])`",
+      "range": {
+        "startLine": 7681,
+        "startChar": 14,
+        "endLine": 7681,
+        "endChar": 25
+      },
+      "revId": "4cf086f19ba91152d8008bfcd71045752a250fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
