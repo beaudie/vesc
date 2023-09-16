@@ -16,6 +16,24 @@
       "message": "I guess no actual behavior change here, only the code shuffle?",
       "revId": "68aefbc55ac295091118a97dfdce431ebf885a95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ced039f7_b25320b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-16T02:42:31Z",
+      "side": 1,
+      "message": "Yeap!",
+      "parentUuid": "945f2f86_50c4cc22",
+      "revId": "68aefbc55ac295091118a97dfdce431ebf885a95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

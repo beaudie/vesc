@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "06b346f0_004721ce",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4373,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-16T02:42:31Z",
+      "side": 0,
+      "message": "Doesn\u0027t need it. If the program is not linked, the executable is reset so these vectors would be empty. I dropped the check where it didn\u0027t make a difference (like here).\n\nHere\u0027s where the reset happens: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/Program.cpp;l\u003d1622;drc\u003d68bfa1edf513656e4a640771301b932fdffdac0c",
+      "parentUuid": "968779fa_72fff429",
+      "revId": "b4852ef95ec12f4a16a6c7a1893f661070b3a68e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "da459c22_8c87d076",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-09-15T21:57:23Z",
       "side": 0,
       "message": "Same question as `getActiveAttributeCount()`, does the new `programObject-\u003egetExecutable().getUniforms()` check the `mLinked` and returns 0 if `mLinked` is false?",
+      "revId": "b4852ef95ec12f4a16a6c7a1893f661070b3a68e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3c6210e_44b1607d",
+        "filename": "src/libANGLE/validationES2.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4405,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-16T02:42:31Z",
+      "side": 0,
+      "message": "Ditto!",
+      "parentUuid": "da459c22_8c87d076",
       "revId": "b4852ef95ec12f4a16a6c7a1893f661070b3a68e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
