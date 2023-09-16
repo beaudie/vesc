@@ -22,6 +22,30 @@
       },
       "revId": "4cf086f19ba91152d8008bfcd71045752a250fc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcab106e_eb89fee2",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 7681,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-16T02:38:56Z",
+      "side": 1,
+      "message": "I thought about that, but the extension VkImageLayouts make it complicated; it would have been nice if we could just limit to the core versions.\n\nThat\u0027s actually not that big a deal IMO, hardly useful to upload data to an image in the READ_ONLY_DEPTH_STENCIL layout.\n\nIn the _majority_ of the cases, this `if` is not hit by the way; typically the image being uploaded is a new one, so layout would be Undefined. I had a bug here before where `pCopyDstLayouts` was not populated at all (and this code would crash), and it took a few traces before it was even hit.\n\nI\u0027ll do a follow up.",
+      "parentUuid": "b890e03c_2ec936bd",
+      "range": {
+        "startLine": 7681,
+        "startChar": 14,
+        "endLine": 7681,
+        "endChar": 25
+      },
+      "revId": "4cf086f19ba91152d8008bfcd71045752a250fc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
