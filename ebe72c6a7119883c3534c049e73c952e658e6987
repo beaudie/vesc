@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf609069_28db3d83",
+        "filename": "src/libANGLE/renderer/renderer_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1214,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-16T18:31:43Z",
+      "side": 1,
+      "message": "All this to fix this bug, lol\n\n(exaggerating)",
+      "revId": "ebe72c6a7119883c3534c049e73c952e658e6987",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b00f7d1_fa324f16",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-16T18:31:43Z",
+      "side": 1,
+      "message": "With this change in, the Program is now truly just a linker that produces an executable. Next, I\u0027ll have to do some (less drastic) clean up in Shader to be able to unlock the true potential of parallel link.",
+      "revId": "16210cbe8e9ecc6fa309ed28870c091b710d888f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
