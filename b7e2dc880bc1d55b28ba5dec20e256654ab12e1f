@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "419b19db_bd1f7fb9",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 757,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-09-18T17:55:31Z",
+      "side": 1,
+      "message": "Sorry but I do not understand the questions.\n\nWe can\u0027t store pointer to the `mState.mContextMutex` in other object because it will be destroyed with Context.\n\n`getRoot()` is not called every time, only when need to store a pointer.\nYou can call `getContextMutex().lock()` or even `getContextMutex().doLock()`.",
+      "parentUuid": "2e9cef47_afc74cd2",
+      "revId": "b7e2dc880bc1d55b28ba5dec20e256654ab12e1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "18b13d1c_77e99283",
         "filename": "src/libANGLE/SharedContextMutex.cpp",
         "patchSetId": 41
@@ -31,6 +49,24 @@
       "writtenOn": "2023-09-18T17:26:42Z",
       "side": 1,
       "message": "I imagine this path is extremely rare to be hit. IIRC, previously it was also not 100% safe, but it is now.\n\nDo you think a unit test could be written to exercise this? Like, maybe something like this?\n\n- Create 2N mutexes and share them with 2 threads\n- Each thread loops N times\n  - Try to merge own mutex i with other thread\u0027s mutex i\n  - pthread_barrier_wait()\n\nI don\u0027t know what a good number for N could be, but if you add a log here and experiment, hopefully 100 or 1000 would hit it.",
+      "revId": "b7e2dc880bc1d55b28ba5dec20e256654ab12e1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57e8994a_c01b05b2",
+        "filename": "src/libANGLE/SharedContextMutex.cpp",
+        "patchSetId": 41
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-09-18T17:55:31Z",
+      "side": 1,
+      "message": "\u003e IIRC, previously it was also not 100% safe, but it is now.\n\nIt was 100% safe before. Unsafe part was replacing different mutex classes in the Context (`SingleContexMutex` -\u003e `SharedContexMutex`).\n\n\u003e Do you think a unit test could be written to exercise this? Like, maybe something like this?\n\nI think it is possible. I will try to hit this branch with relatively low `N`.",
+      "parentUuid": "18b13d1c_77e99283",
       "revId": "b7e2dc880bc1d55b28ba5dec20e256654ab12e1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -54,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a0755ceb_bc851a08",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-09-18T17:55:31Z",
+      "side": 1,
+      "message": "`this` and `mRoot` is same mutex.\n\nWhat mutex you will lock initially is not important. Before lock `mRoot` can change any time anyway. At the and `mRoot` after the lock will be the same.",
+      "parentUuid": "166e222f_c6a7cb26",
+      "revId": "b7e2dc880bc1d55b28ba5dec20e256654ab12e1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fa4ee228_9c7b6fd3",
         "filename": "src/libANGLE/SharedContextMutex.h",
         "patchSetId": 41
@@ -71,6 +125,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fa4ff4a6_246557db",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-09-18T17:55:31Z",
+      "side": 1,
+      "message": "Assert is inside `ContextMutex::release()`.",
+      "parentUuid": "fa4ee228_9c7b6fd3",
+      "revId": "b7e2dc880bc1d55b28ba5dec20e256654ab12e1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "561e0656_149acdb0",
         "filename": "src/libANGLE/SharedContextMutex.h",
         "patchSetId": 41
@@ -82,6 +154,30 @@
       "writtenOn": "2023-09-18T17:26:42Z",
       "side": 1,
       "message": "Can be private?\n\nAnd not a big deal here, but our general style is to use `lockImpl()` for these sort of \"do the real work\" functions.",
+      "range": {
+        "startLine": 63,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 0
+      },
+      "revId": "b7e2dc880bc1d55b28ba5dec20e256654ab12e1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b53ad4d1_7f594f30",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-09-18T17:55:31Z",
+      "side": 1,
+      "message": "Yes, it can be private. This was left public after the refactoring. Thanks.\n\nRegarding `Impl`, I noticed that, but was not sure if I should replace or keep my original `do`. I will replace with `Impl`.",
+      "parentUuid": "561e0656_149acdb0",
       "range": {
         "startLine": 63,
         "startChar": 0,
