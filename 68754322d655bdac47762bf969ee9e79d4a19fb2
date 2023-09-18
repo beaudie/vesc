@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "153cb51f_aece3e98",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-18T16:06:55Z",
+      "side": 1,
+      "message": "Makes KHR-GLES32.core.tessellation_shader.tessellation_shader_tessellation.max_in_out_attributes progress a bit more. Previously it failed due to register packing which I thought was a test bug, but it was an ANGLE bug.\n\nOn my computer (Nvidia/Linux) the test still fails though, and it doesn\u0027t look very debuggable with RenderDoc.",
+      "revId": "68754322d655bdac47762bf969ee9e79d4a19fb2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
