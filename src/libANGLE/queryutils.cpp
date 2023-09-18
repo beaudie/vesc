@@ -1014,7 +1014,8 @@ GLenum GetUniformBlockPropertyEnum(GLenum prop)
     }
 }
 
-void GetShaderVariableBufferResourceProperty(const ShaderVariableBuffer &buffer,
+template <typename ShaderVariableT>
+void GetShaderVariableBufferResourceProperty(const ShaderVariableT &buffer,
                                              GLenum pname,
                                              GLint *params,
                                              GLsizei bufSize,

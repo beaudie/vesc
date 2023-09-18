@@ -335,20 +335,14 @@ void WriteInterfaceBlock(BinaryOutputStream *stream, const InterfaceBlock &block
 {
     stream->writeString(block.name);
     stream->writeString(block.mappedName);
-    stream->writeBool(block.isArray);
-    stream->writeInt(block.arrayElement);
-
-    WriteShaderVariableBuffer(stream, block);
+    // TODO
 }
 
 void LoadInterfaceBlock(BinaryInputStream *stream, InterfaceBlock *block)
 {
-    block->name         = stream->readString();
-    block->mappedName   = stream->readString();
-    block->isArray      = stream->readBool();
-    block->arrayElement = stream->readInt<unsigned int>();
-
-    LoadShaderVariableBuffer(stream, block);
+    block->name       = stream->readString();
+    block->mappedName = stream->readString();
+    // TODO
 }
 
 void CopyStringToBuffer(GLchar *buffer,

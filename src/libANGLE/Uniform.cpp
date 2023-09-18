@@ -144,7 +144,11 @@ int ShaderVariableBuffer::numActiveVariables() const
     return static_cast<int>(memberIndexes.size());
 }
 
-InterfaceBlock::InterfaceBlock() : isArray(false), isReadOnly(false), arrayElement(0) {}
+InterfaceBlock::InterfaceBlock()
+    : isArray(false), isReadOnly(false), arrayElement(0), binding(0), dataSize(0)
+{
+    std::fill(mIds.begin(), mIds.end(), 0);
+}
 
 InterfaceBlock::InterfaceBlock(const std::string &nameIn,
                                const std::string &mappedNameIn,
@@ -162,8 +166,6 @@ InterfaceBlock::InterfaceBlock(const std::string &nameIn,
 {
     binding = bindingIn;
 }
-
-InterfaceBlock::InterfaceBlock(const InterfaceBlock &other) = default;
 
 std::string InterfaceBlock::nameWithArrayIndex() const
 {

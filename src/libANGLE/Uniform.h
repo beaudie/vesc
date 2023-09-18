@@ -225,7 +225,8 @@ struct ShaderVariableBuffer
 using AtomicCounterBuffer = ShaderVariableBuffer;
 
 // Helper struct representing a single shader interface block
-struct InterfaceBlock : public ShaderVariableBuffer
+// ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
+struct InterfaceBlock
 {
     InterfaceBlock();
     InterfaceBlock(const std::string &nameIn,
@@ -235,10 +236,30 @@ struct InterfaceBlock : public ShaderVariableBuffer
                    unsigned int arrayElementIn,
                    unsigned int firstFieldArraySizeIn,
                    int bindingIn);
-    InterfaceBlock(const InterfaceBlock &other);
 
     std::string nameWithArrayIndex() const;
     std::string mappedNameWithArrayIndex() const;
+
+    ShaderType getFirstActiveShaderType() const
+    {
+        return static_cast<ShaderType>(ScanForward(activeUseBits.bits()));
+    }
+    void setActive(ShaderType shaderType, bool used, uint32_t id)
+    {
+        ASSERT(shaderType != ShaderType::InvalidEnum);
+        activeUseBits.set(shaderType, used);
+        mIds[shaderType] = id;
+    }
+    bool isActive(ShaderType shaderType) const
+    {
+        ASSERT(shaderType != ShaderType::InvalidEnum);
+        return activeUseBits[shaderType];
+    }
+    const ShaderMap<uint32_t> &getIds() const { return mIds; }
+    uint32_t getId(ShaderType shaderType) const { return mIds[shaderType]; }
+    ShaderBitSet activeShaders() const { return activeUseBits; }
+
+    int numActiveVariables() const { return static_cast<int>(memberIndexes.size()); }
 
     std::string name;
     std::string mappedName;
@@ -247,7 +268,17 @@ struct InterfaceBlock : public ShaderVariableBuffer
     bool isReadOnly;
     unsigned int arrayElement;
     unsigned int firstFieldArraySize;
+
+    ShaderBitSet activeUseBits;
+    // The id of a linked variable in each shader stage.  This id originates from
+    // sh::ShaderVariable::id or sh::InterfaceBlock::id
+    ShaderMap<uint32_t> mIds;
+
+    int binding;
+    unsigned int dataSize;
+    std::vector<unsigned int> memberIndexes;
 };
+// ANGLE_DISABLE_STRUCT_PADDING_WARNINGS
 
 }  // namespace gl
 
