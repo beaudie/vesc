@@ -795,7 +795,7 @@ void UpdateBuffersWithSharedCacheKey(const gl::BufferVector &buffers,
 {
     for (const T &block : blocks)
     {
-        const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding = buffers[block.binding];
+        const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding = buffers[block.pod.binding];
         if (bufferBinding.get() != nullptr)
         {
             // For simplicity, we do not check if uniform is active or duplicate. The worst case is
@@ -1865,7 +1865,7 @@ bool ContextVk::renderPassUsesStorageResources() const
     const std::vector<gl::InterfaceBlock> &blocks = executable->getShaderStorageBlocks();
     for (uint32_t bufferIndex = 0; bufferIndex < blocks.size(); ++bufferIndex)
     {
-        uint32_t binding = blocks[bufferIndex].binding;
+        uint32_t binding = blocks[bufferIndex].pod.binding;
         const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding =
             mState.getIndexedShaderStorageBuffer(binding);
 
@@ -1886,7 +1886,7 @@ bool ContextVk::renderPassUsesStorageResources() const
         executable->getAtomicCounterBuffers();
     for (uint32_t bufferIndex = 0; bufferIndex < atomicCounterBuffers.size(); ++bufferIndex)
     {
-        uint32_t binding = atomicCounterBuffers[bufferIndex].binding;
+        uint32_t binding = atomicCounterBuffers[bufferIndex].pod.binding;
         const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding =
             mState.getIndexedAtomicCounterBuffer(binding);
 
@@ -8432,7 +8432,7 @@ angle::Result ContextVk::endRenderPassIfComputeReadAfterTransformFeedbackWrite()
     {
         const gl::InterfaceBlock &block = blocks[bufferIndex];
         const gl::OffsetBindingPointer<gl::Buffer> &bufferBinding =
-            mState.getIndexedUniformBuffer(block.binding);
+            mState.getIndexedUniformBuffer(block.pod.binding);
 
         if (bufferBinding.get() == nullptr)
         {
