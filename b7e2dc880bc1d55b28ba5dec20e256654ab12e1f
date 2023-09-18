@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e9cef47_afc74cd2",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 757,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-18T17:26:42Z",
+      "side": 1,
+      "message": "Maybe worth also warning that the `getRoot()` result should _also_ not be stored, but it should be called every time?\n\nIn fact, if `getRoot()` is called every time, what\u0027s wrong with holding a reference to the mutex?",
+      "revId": "b7e2dc880bc1d55b28ba5dec20e256654ab12e1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18b13d1c_77e99283",
+        "filename": "src/libANGLE/SharedContextMutex.cpp",
+        "patchSetId": 41
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-18T17:26:42Z",
+      "side": 1,
+      "message": "I imagine this path is extremely rare to be hit. IIRC, previously it was also not 100% safe, but it is now.\n\nDo you think a unit test could be written to exercise this? Like, maybe something like this?\n\n- Create 2N mutexes and share them with 2 threads\n- Each thread loops N times\n  - Try to merge own mutex i with other thread\u0027s mutex i\n  - pthread_barrier_wait()\n\nI don\u0027t know what a good number for N could be, but if you add a log here and experiment, hopefully 100 or 1000 would hit it.",
+      "revId": "b7e2dc880bc1d55b28ba5dec20e256654ab12e1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "166e222f_c6a7cb26",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-18T17:26:42Z",
+      "side": 1,
+      "message": "`this` but not `mRoot`? If so:\n\n```suggestion\n    // Below group of methods are not thread safe and must be protected by \"this\" mutex (not mRoot).\n```",
+      "revId": "b7e2dc880bc1d55b28ba5dec20e256654ab12e1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa4ee228_9c7b6fd3",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-18T17:26:42Z",
+      "side": 1,
+      "message": "Could you add `ASSERT(getRoot() \u003d\u003d this)` to enforce this?",
+      "revId": "b7e2dc880bc1d55b28ba5dec20e256654ab12e1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "561e0656_149acdb0",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-18T17:26:42Z",
+      "side": 1,
+      "message": "Can be private?\n\nAnd not a big deal here, but our general style is to use `lockImpl()` for these sort of \"do the real work\" functions.",
+      "range": {
+        "startLine": 63,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 0
+      },
+      "revId": "b7e2dc880bc1d55b28ba5dec20e256654ab12e1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
