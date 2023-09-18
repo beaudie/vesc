@@ -340,7 +340,7 @@ class ShaderStorageBlockVisitor : public sh::BlockEncoderVisitor
         newBufferVariable.mappedName = mappedNameWithArrayIndex;
         newBufferVariable.setActive(mShaderType, variable.active, variable.id);
 
-        newBufferVariable.topLevelArraySize = mTopLevelArraySize;
+        newBufferVariable.pod.topLevelArraySize = mTopLevelArraySize;
 
         mBufferVariablesOut->push_back(newBufferVariable);
     }
@@ -1519,7 +1519,7 @@ void InterfaceBlockLinker::defineInterfaceBlock(const GetBlockSizeFunc &getBlock
         // Since all block elements in an array share the same active interface blocks, they
         // will all be active once any block member is used. So, since interfaceBlock.name[0]
         // was active, here we will add every block element in the array.
-        block.dataSize = static_cast<unsigned int>(blockSize);
+        block.pod.dataSize = static_cast<unsigned int>(blockSize);
         mBlocksOut->push_back(block);
     }
 }
@@ -1601,9 +1601,9 @@ void AtomicCounterBufferLinker::link(const std::map<int, unsigned int> &sizeMap)
 {
     for (auto &atomicCounterBuffer : *mAtomicCounterBuffersOut)
     {
-        auto bufferSize = sizeMap.find(atomicCounterBuffer.binding);
+        auto bufferSize = sizeMap.find(atomicCounterBuffer.pod.binding);
         ASSERT(bufferSize != sizeMap.end());
-        atomicCounterBuffer.dataSize = bufferSize->second;
+        atomicCounterBuffer.pod.dataSize = bufferSize->second;
     }
 }
 
