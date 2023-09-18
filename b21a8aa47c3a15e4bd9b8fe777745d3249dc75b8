@@ -34,6 +34,24 @@
       "parentUuid": "2c9d21b2_7f118581",
       "revId": "b21a8aa47c3a15e4bd9b8fe777745d3249dc75b8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88e9de32_e3e7dc1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-09-18T23:06:36Z",
+      "side": 1,
+      "message": "Got it.\n\nSorry that it looks like you need to rebase before submitting now..",
+      "parentUuid": "4103f785_6922ad95",
+      "revId": "b21a8aa47c3a15e4bd9b8fe777745d3249dc75b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
