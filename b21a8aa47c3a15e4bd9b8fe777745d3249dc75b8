@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c9d21b2_7f118581",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-09-18T18:26:30Z",
+      "side": 1,
+      "message": "Is line 2977 in https://chromium-review.googlesource.com/c/angle/angle/+/4864693/4/src/libANGLE/ProgramExecutable.cpp the reason to cache isSeparable in the executable?",
+      "revId": "b21a8aa47c3a15e4bd9b8fe777745d3249dc75b8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
