@@ -22,6 +22,30 @@
       },
       "revId": "eb8e8c7752093cb788b6f5a196b24c0d84e99255",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61b0ece0_487c0ad9",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-09-18T18:40:43Z",
+      "side": 1,
+      "message": "Thanks, `strlen() \u003e 0` is indeed easier to read, I have made the change.",
+      "parentUuid": "7a100612_794603eb",
+      "range": {
+        "startLine": 659,
+        "startChar": 16,
+        "endLine": 659,
+        "endChar": 63
+      },
+      "revId": "eb8e8c7752093cb788b6f5a196b24c0d84e99255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
