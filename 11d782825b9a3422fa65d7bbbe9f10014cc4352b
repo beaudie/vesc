@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b1d8714_41be878d",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1222,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-09-18T23:02:12Z",
+      "side": 1,
+      "message": "We cannot just defer this `mRenderer-\u003ehandleDeviceLost()` check after the `finishImpl()`, because inside `finishImpl()`, we are calling `clearAllGarbage()` only if `mRenderer-\u003efinishResourceUse()` is successful. Without the `handleDeviceLost()` before the `finishImpl()`, we will miss the `clearAllGarbage()` call and that leads to the assert in `BufferPool::destroy()`:\n\n```\nContextVk::onDestroy()\n{\n  // no handling of device lost before finishImpl()\n  \n  finishImpl();\n  ...\n}\n\nContextVk::finishImpl()\n{\n  ...\n  ANGLE_TRY(mRenderer-\u003efinishResourceUse(this, mSubmittedResourceUse)); // return early due to fence status is VK_DEVICE_LOST\n  \n  clearAllGarbage(); // not called because the function returned early above\n}\n\nBufferPool::destroy()\n{\n    for (std::unique_ptr\u003cBufferBlock\u003e \u0026block : mBufferBlocks)\n    {\n        if (block-\u003eisEmpty())\n        {\n            block-\u003edestroy(renderer);\n        }\n        else\n        {\n            // This branch is entered, and the assert fired. The block is supposed to be freed during the clearAllGarbage() above.\n            // When orphan is not allowed, all BufferBlocks must be empty.\n            ASSERT(orphanNonEmptyBufferBlock);\n            renderer-\u003eaddBufferBlockToOrphanList(block.release());\n        }\n    }\n    ...\n}\n```",
+      "revId": "11d782825b9a3422fa65d7bbbe9f10014cc4352b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
