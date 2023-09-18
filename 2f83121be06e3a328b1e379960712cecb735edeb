@@ -16,6 +16,24 @@
       "message": "Should we set this on Linux too?",
       "revId": "2f83121be06e3a328b1e379960712cecb735edeb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53b3d88e_b9dcadb8",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 999,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-09-18T11:17:33Z",
+      "side": 1,
+      "message": "I do not have true linux machine (only VM), so can\u0027t check if it is necessary. Bots seems do not have similar problems on Linux.\n\nIMO setting the variable should not do harm on Linux. In fact, these workaround was suggested by my colleague, who also had problems (crashes) with ASAN but on Linux. I tried and it helped on Windows.\n\nWill to to set `VK_LOADER_DISABLE_DYNAMIC_LIBRARY_UNLOADING` in a test CL.",
+      "parentUuid": "e5085f45_0f1844fb",
+      "revId": "2f83121be06e3a328b1e379960712cecb735edeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
