@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a100612_794603eb",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 25
+      },
+      "lineNbr": 659,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-18T17:44:25Z",
+      "side": 1,
+      "message": "Should this be just `strlen() \u003e 0`?\n\nAlso it might make more sense to make this the first check as it\u0027s easier to read and it being empty means we don\u0027t need to check anything else. You can also avoid nesting if\u0027s via `cond1 \u0026\u0026 cond2`",
+      "range": {
+        "startLine": 659,
+        "startChar": 16,
+        "endLine": 659,
+        "endChar": 63
+      },
+      "revId": "eb8e8c7752093cb788b6f5a196b24c0d84e99255",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
