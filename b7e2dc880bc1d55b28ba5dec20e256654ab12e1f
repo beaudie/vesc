@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf11e796_7bc722e5",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 757,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-18T20:00:18Z",
+      "side": 1,
+      "message": "Acknowledged, I noticed while doing the rest of the review.\n\nThe comment is perhaps a bit misleading, it sounds like it says \"don\u0027t store X, use Y\", which makes it sound like the recommendation is also to _store_ Y.",
+      "parentUuid": "419b19db_bd1f7fb9",
+      "revId": "b7e2dc880bc1d55b28ba5dec20e256654ab12e1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "18b13d1c_77e99283",
@@ -106,6 +124,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "62078a30_51b35fab",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-18T20:00:18Z",
+      "side": 1,
+      "message": "Ah ok, `this` being this class, not `mMutex`",
+      "parentUuid": "a0755ceb_bc851a08",
+      "revId": "b7e2dc880bc1d55b28ba5dec20e256654ab12e1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fa4ee228_9c7b6fd3",
@@ -137,6 +173,24 @@
       "side": 1,
       "message": "Assert is inside `ContextMutex::release()`.",
       "parentUuid": "fa4ee228_9c7b6fd3",
+      "revId": "b7e2dc880bc1d55b28ba5dec20e256654ab12e1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1798084f_10215331",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-18T20:00:18Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "fa4ff4a6_246557db",
       "revId": "b7e2dc880bc1d55b28ba5dec20e256654ab12e1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -178,6 +232,30 @@
       "side": 1,
       "message": "Yes, it can be private. This was left public after the refactoring. Thanks.\n\nRegarding `Impl`, I noticed that, but was not sure if I should replace or keep my original `do`. I will replace with `Impl`.",
       "parentUuid": "561e0656_149acdb0",
+      "range": {
+        "startLine": 63,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 0
+      },
+      "revId": "b7e2dc880bc1d55b28ba5dec20e256654ab12e1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07cea81b_aedda5cc",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-18T20:00:18Z",
+      "side": 1,
+      "message": "Thanks. No big deal like I said.",
+      "parentUuid": "b53ad4d1_7f594f30",
       "range": {
         "startLine": 63,
         "startChar": 0,
