@@ -16,6 +16,24 @@
       "message": "unable to repro this error on my local windows machine -\n```\n[15357/21654] EGLSurfaceTest.OutOfBoundsScissor/ES3_Vulkan_NoFixture (FAIL)\n\n[ RUN      ] EGLSurfaceTest.OutOfBoundsScissor/ES3_Vulkan_NoFixture\nWARN: RendererVk.cpp:790 (DebugUtilsMessenger): [ Loader Message ] terminator_CreateDevice: Device pointer (000001B6ED47AEB0) has invalid MAGIC value 0x0410aded. Device value possibly corrupted by active layer (Policy #LLP_LAYER_22).  \n                            Object: 0x1b6ed332390 (type \u003d Instance(1))\n\nWARN: RendererVk.cpp:790 (DebugUtilsMessenger): [ Loader Message ] terminator_CreateDevice: Device pointer (000001B6ED47AEB0) has invalid MAGIC value 0x0410aded. Device value possibly corrupted by active layer (Policy #LLP_LAYER_22).  \n                            Object: 0x1b6ed332390 (type \u003d Instance(1))\n\nWARN: RendererVk.cpp:1954 (initialize): ANGLE VMA version: 3000000\nWARN: RendererVk.cpp:1954 (initialize): ANGLE VMA version: 3000000\n..\\..\\src\\tests\\egl_tests\\EGLSurfaceTest.cpp(602): error: Expected equality of these values:\n  static_cast\u003cGLenum\u003e(0)\n    Which is: 0\n  l_glGetError()\n    Which is: 1286\n[  FAILED  ] EGLSurfaceTest.OutOfBoundsScissor/ES3_Vulkan_NoFixture, where GetParam() \u003d ES3_Vulkan_NoFixture (390 ms)\n```\n\nany suggestions?",
       "revId": "3f7881fbf62df986734124f8ee6a75d75f7d248f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b28e6a7_f95e07b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-18T19:38:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce3e6cd0_7f0b74e1",
+      "revId": "3f7881fbf62df986734124f8ee6a75d75f7d248f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

@@ -16,6 +16,24 @@
       "message": "there is an error with swiftshader like so -\n```\nINFO: glClear: GL error: HIGH: Framebuffer is incomplete: Framebuffer is surfaceless.\n```\n\ni see this error even in a simple test like `EGLSurfaceTest.MakeCurrentTwice/ES3_Vulkan_SwiftShader_NoFixture`\n\nso there is a pre-existing problem. For now i am going to remove the `ASSERT_GL_NO_ERROR();` after `glClear` (mirroring other existing tests) and will give it another try",
       "revId": "b12986d1c14bcff2fa5fa61c3f8d0a82aa37db60",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbf294e1_97493217",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-18T19:38:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9d54ce6_1c67f342",
+      "revId": "b12986d1c14bcff2fa5fa61c3f8d0a82aa37db60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
