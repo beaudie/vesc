@@ -34,6 +34,24 @@
       "parentUuid": "e5085f45_0f1844fb",
       "revId": "2f83121be06e3a328b1e379960712cecb735edeb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e219bcf_6086ddf8",
+        "filename": "src/tests/test_utils/runner/TestSuite.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 999,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-09-18T14:13:40Z",
+      "side": 1,
+      "message": "Seems that `linux-asan-test` run OK:\nhttps://chromium-review.googlesource.com/c/angle/angle/+/4577777/45",
+      "parentUuid": "53b3d88e_b9dcadb8",
+      "revId": "2f83121be06e3a328b1e379960712cecb735edeb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
