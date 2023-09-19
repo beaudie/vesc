@@ -122,6 +122,24 @@
       "parentUuid": "068a339b_7e54f63e",
       "revId": "c6e70123e8aea88ed99580fc846a3e10485f0af7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba6e8300_3c7d6b16",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-19T17:07:54Z",
+      "side": 1,
+      "message": "And about `clearBufferfv`, I didn\u0027t understand your question. It\u0027s fine to skip the clear on OOB scissor, just like with `clear`, but you\u0027d want to skip that _after_ the sync for the very same reason. What makes `!attachment` different is that sync is not going to change that.\n\nSo you might want to move `IsEmptyScissor` out of `noopClearBuffer`, have one early out based on `noopClearBuffer`, and have one early out after the sync for `IsEmptyScissor`.\n\nIf you duplicate your test and change glClear to glClearBufferfv, you\u0027ll likely find the same bug you are fixing here.",
+      "parentUuid": "a96ce152_0ca5defa",
+      "revId": "c6e70123e8aea88ed99580fc846a3e10485f0af7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
