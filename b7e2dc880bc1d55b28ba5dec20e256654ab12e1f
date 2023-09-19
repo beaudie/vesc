@@ -54,6 +54,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d84bbea8_9b08c87d",
+        "filename": "src/libANGLE/Context.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 757,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-09-19T16:23:10Z",
+      "side": 1,
+      "message": "My intention was to warn that you can\u0027t do something line this:\n```\n// Dangerous! Mutex will be destroyed with `context`.\nmContextMutex \u003d \u0026context-\u003egetContextMutex();\nmContextMutex-\u003eaddRef();\n```\nInstead, need to use `getRoot()` in order to store a pointer to the mutex:\n```\n// Safe, since `getRoot()` of `Context`s mutex is always dynamically allocated.\nmContextMutex \u003d context-\u003egetContextMutex().getRoot();\nmContextMutex-\u003eaddRef();\n```\n\nI may rewrite like this:\n```\nWarning! When need to store pointer to the mutex in other objects use `getRoot()`\npointer, do not get pointer of the `getContextMutex()` reference.\n```\n\nIf it is still not clear, I am happy to hear your version)",
+      "parentUuid": "cf11e796_7bc722e5",
+      "revId": "b7e2dc880bc1d55b28ba5dec20e256654ab12e1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "18b13d1c_77e99283",
@@ -85,6 +103,24 @@
       "side": 1,
       "message": "\u003e IIRC, previously it was also not 100% safe, but it is now.\n\nIt was 100% safe before. Unsafe part was replacing different mutex classes in the Context (`SingleContexMutex` -\u003e `SharedContexMutex`).\n\n\u003e Do you think a unit test could be written to exercise this? Like, maybe something like this?\n\nI think it is possible. I will try to hit this branch with relatively low `N`.",
       "parentUuid": "18b13d1c_77e99283",
+      "revId": "b7e2dc880bc1d55b28ba5dec20e256654ab12e1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f3a1369_0b6e5f9e",
+        "filename": "src/libANGLE/SharedContextMutex.cpp",
+        "patchSetId": 41
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-09-19T16:23:10Z",
+      "side": 1,
+      "message": "I have added tests in the follow up CL.",
+      "parentUuid": "57e8994a_c01b05b2",
       "revId": "b7e2dc880bc1d55b28ba5dec20e256654ab12e1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -138,6 +174,24 @@
       "side": 1,
       "message": "Ah ok, `this` being this class, not `mMutex`",
       "parentUuid": "a0755ceb_bc851a08",
+      "revId": "b7e2dc880bc1d55b28ba5dec20e256654ab12e1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f14c621_7ebe0c14",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-09-19T16:23:10Z",
+      "side": 1,
+      "message": "I will change to:\n```\n\"this\" mutex instance.\n```",
+      "parentUuid": "62078a30_51b35fab",
       "revId": "b7e2dc880bc1d55b28ba5dec20e256654ab12e1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -256,6 +310,30 @@
       "side": 1,
       "message": "Thanks. No big deal like I said.",
       "parentUuid": "b53ad4d1_7f594f30",
+      "range": {
+        "startLine": 63,
+        "startChar": 0,
+        "endLine": 66,
+        "endChar": 0
+      },
+      "revId": "b7e2dc880bc1d55b28ba5dec20e256654ab12e1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0d7773d_05cfb5d6",
+        "filename": "src/libANGLE/SharedContextMutex.h",
+        "patchSetId": 41
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-09-19T16:23:10Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "07cea81b_aedda5cc",
       "range": {
         "startLine": 63,
         "startChar": 0,

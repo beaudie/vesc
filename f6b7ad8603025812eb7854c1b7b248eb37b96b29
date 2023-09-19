@@ -16,6 +16,24 @@
       "message": "I am not really sure if I understand how all the mutex works now :-), but I am going to trust shabi\u0027s eye on it for now. If possible, could you point me to some doc that would be helpful?",
       "revId": "f6b7ad8603025812eb7854c1b7b248eb37b96b29",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "978278f9_34089496",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 42
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-09-19T16:23:10Z",
+      "side": 1,
+      "message": "Unfortunately I do not have the doc. Everything in the commit message of this CL and the original CL:\n4374545: Implement \"Shared Context Mutex\" functionality. | https://chromium-review.googlesource.com/c/angle/angle/+/4374545\n\nThis CL just simplifies the original design.",
+      "parentUuid": "368d8d7b_35a57e91",
+      "revId": "f6b7ad8603025812eb7854c1b7b248eb37b96b29",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
