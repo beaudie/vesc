@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "597cb4d2_6c7291df",
+        "filename": "src/libANGLE/ContextMutex_unittest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-09-19T17:36:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4848e6d3_84940a03",
+      "revId": "690ded23b45a3bf9ab2f442b018a6011b0fde497",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a05c2ca3_9fb62562",
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "I\u0027m not familiar with `pthread_barrier_wait()`.\nWindows does not have `pthread`.\nAlso I do not see ANGLE using `pthread_barrier_wait()`.",
       "parentUuid": "a05c2ca3_9fb62562",
+      "revId": "690ded23b45a3bf9ab2f442b018a6011b0fde497",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e5a9d6a_322ef74a",
+        "filename": "src/libANGLE/ContextMutex_unittest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-09-19T17:36:39Z",
+      "side": 1,
+      "message": "I have simplified the implementation. It should now works similarly to `pthread_barrier_wait()`. Change did not affect test quality.\n\nMy original intent was to signal all threads at once. With the new implementation, last thread does not wait but notify other threads. At the end, difference is not important.",
+      "parentUuid": "a815550c_1ef05495",
       "revId": "690ded23b45a3bf9ab2f442b018a6011b0fde497",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
