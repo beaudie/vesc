@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4848e6d3_84940a03",
+        "filename": "src/libANGLE/ContextMutex_unittest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-09-19T17:05:40Z",
+      "side": 1,
+      "message": "Thanks.",
+      "parentUuid": "33b21070_c32c1077",
+      "revId": "690ded23b45a3bf9ab2f442b018a6011b0fde497",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a05c2ca3_9fb62562",
         "filename": "src/libANGLE/ContextMutex_unittest.cpp",
         "patchSetId": 1
@@ -31,6 +49,24 @@
       "writtenOn": "2023-09-19T16:57:42Z",
       "side": 1,
       "message": "Was pthread_barrier_wait() not implementable on other platforms? Or does that not work?",
+      "revId": "690ded23b45a3bf9ab2f442b018a6011b0fde497",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a815550c_1ef05495",
+        "filename": "src/libANGLE/ContextMutex_unittest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-09-19T17:05:40Z",
+      "side": 1,
+      "message": "I\u0027m not familiar with `pthread_barrier_wait()`.\nWindows does not have `pthread`.\nAlso I do not see ANGLE using `pthread_barrier_wait()`.",
+      "parentUuid": "a05c2ca3_9fb62562",
       "revId": "690ded23b45a3bf9ab2f442b018a6011b0fde497",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
