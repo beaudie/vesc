@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d9d2d06_c70a8f84",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-19T20:54:24Z",
+      "side": 1,
+      "message": "i am unable to repro the below failure the bots are seeing -\n```\n[4505/12416] EGLSurfaceTest.OutOfBoundsScissorWithClearGrowWindow/ES3_Vulkan_NoFixture (FAIL)\n\n[ RUN      ] EGLSurfaceTest.OutOfBoundsScissorWithClearGrowWindow/ES3_Vulkan_NoFixture\nWARN: RendererVk.cpp:1960 (initialize): ANGLE VMA version: 3000000\nWARN: RendererVk.cpp:1960 (initialize): ANGLE VMA version: 3000000\n../../src/tests/egl_tests/EGLSurfaceTest.cpp:639: Failure\nExpected equality of these values:\n  expectedColors\n    Which is: { Blue, Blue, Blue, Blue, Blue, Blue, Blue, Blue, Blue, Blue, Blue, Blue, Blue, Blue, Blue, Blue, Blue, Blue, Blue, Blue, Blue, Blue, Blue, Blue, Blue, Blue, Blue, Blue, Blue, Blue, Blue, Blue, ... }\n  actualColors\n    Which is: { Transparent Black, Transparent Black, Transparent Black, Transparent Black, Transparent Black, Transparent Black, Transparent Black, Transparent Black, Transparent Black, Transparent Black, Transparent Black, Transparent Black, Transparent Black, Transparent Black, Transparent Black, Transparent Black, Transparent Black, Transparent Black, Transparent Black, Transparent Black, Transparent Black, Transparent Black, Transparent Black, Transparent Black, Transparent Black, Transparent Black, Transparent Black, Transparent Black, Transparent Black, Transparent Black, Transparent Black, Transparent Black, ... }\n[  FAILED  ] EGLSurfaceTest.OutOfBoundsScissorWithClearGrowWindow/ES3_Vulkan_NoFixture, where GetParam() \u003d ES3_Vulkan_NoFixture (533 ms)\n```\n\nis skipping the test on vulkan (thus defeating the purpose of having the test) an option shabi?",
+      "revId": "b462b31e9c3a1250ae874c70e947ecdc83fb3b5b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
