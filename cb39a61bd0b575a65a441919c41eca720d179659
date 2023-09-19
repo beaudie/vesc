@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ea20918_8f5022b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2023-09-19T17:17:37Z",
+      "side": 1,
+      "message": "@Shahbaz. I\u0027m working on this again.\nMy ability to upload has been blocked for months, I just finally got it to work.\nThere are a number of small fixes needed so that Wayland builds with or without X11 - for angle and its tests.",
+      "revId": "cb39a61bd0b575a65a441919c41eca720d179659",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
