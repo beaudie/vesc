@@ -33,6 +33,24 @@
       "message": "Drive-by: Would you please add a test, since it looks like nothing caught this in ANGLE\u0027s CQ before.",
       "revId": "eb1307b95db3272d0464ff85c649c14c10c53d60",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4755dcd8_95448b08",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002358
+      },
+      "writtenOn": "2023-09-19T10:28:55Z",
+      "side": 1,
+      "message": "Yes, I\u0027m updating this one to include a wider range of combinations\nhttps://chromium-review.googlesource.com/c/angle/angle/+/4852258\n\nI\u0027m putting that in a separate patch because I\u0027m afraid I\u0027ll mess up landing it (and it\u0027ll get reverted and then I\u0027ll have to re-land all the autogen Metal stuff).\n\nBut yes, it\u0027s coming! (And, btw, Vulkan doesn\u0027t need this update -- it follows this behavior already).",
+      "parentUuid": "9fd1dac6_700ad881",
+      "revId": "eb1307b95db3272d0464ff85c649c14c10c53d60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
