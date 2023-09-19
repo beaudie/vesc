@@ -193,6 +193,16 @@ for removal_file in "${extra_removal_files[@]}"; do
    rm -rf "$removal_file"
 done
 
+
+extra_third_party_removal_patterns=(
+   # Remove cruft from any previous bad rolls (https://anglebug.com/8352)
+   "*_gclient_src_*"
+)
+
+for removal_dir in "${extra_third_party_removal_patterns[@]}"; do
+  find third_party -name "$removal_dir" -delete
+done
+
 # Add all changes under $root_add_deps so we delete everything not explicitly allowed.
 for root_add_dep in "${root_add_deps[@]}"; do
     git add -f $root_add_dep
