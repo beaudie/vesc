@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bac64d07_b00f45c6",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-19T20:47:26Z",
+      "side": 1,
+      "message": "If the intent is to clean up from previous rolls, not the current `gclient sync`, your patch should be above this line.\n\nAuto-deleting after this line is probably risky as it might be hiding `gclient sync` errors and making bogus commits succeed.",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 142,
+        "endChar": 55
+      },
+      "revId": "d539fdf46b8a29e885a22b0dd696a553c5dd2fea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b978a273_4318f1f9",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-19T20:47:26Z",
+      "side": 1,
+      "message": "gclient does this:\n```\ntmp_dir \u003d tempfile.mkdtemp(prefix\u003d\u0027_gclient_%s_\u0027 %\n                           os.path.basename(self.checkout_path),\n                           dir\u003dparent_dir)\n```\n\nSo maybe the pattern should be `*/_gclient_*` ?",
+      "range": {
+        "startLine": 199,
+        "startChar": 4,
+        "endLine": 199,
+        "endChar": 19
+      },
+      "revId": "d539fdf46b8a29e885a22b0dd696a553c5dd2fea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
