@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33b21070_c32c1077",
+        "filename": "src/libANGLE/ContextMutex_unittest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-19T16:57:42Z",
+      "side": 1,
+      "message": "```suggestion\n// Creates 2N mutexes and 2 threads, then merges N mutex pairs in each thread. Merging order of\n```",
+      "revId": "690ded23b45a3bf9ab2f442b018a6011b0fde497",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a05c2ca3_9fb62562",
+        "filename": "src/libANGLE/ContextMutex_unittest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-19T16:57:42Z",
+      "side": 1,
+      "message": "Was pthread_barrier_wait() not implementable on other platforms? Or does that not work?",
+      "revId": "690ded23b45a3bf9ab2f442b018a6011b0fde497",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
