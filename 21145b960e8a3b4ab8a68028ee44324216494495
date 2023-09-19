@@ -22,6 +22,30 @@
       },
       "revId": "21145b960e8a3b4ab8a68028ee44324216494495",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85fc22bc_6c57d46e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1225,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-09-19T17:39:37Z",
+      "side": 1,
+      "message": "I tried removing this block and defer the `mRenderer-\u003ehangleDeviceLost()` after `finishImpl()`, but that will trigger an assert in `BufferPool::destroy()`: https://chromium-review.googlesource.com/c/angle/angle/+/4854763/comment/5b1d8714_41be878d/.",
+      "parentUuid": "7ff4bf4e_f5d6b634",
+      "range": {
+        "startLine": 1220,
+        "startChar": 4,
+        "endLine": 1225,
+        "endChar": 5
+      },
+      "revId": "21145b960e8a3b4ab8a68028ee44324216494495",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
