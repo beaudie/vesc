@@ -2075,7 +2075,7 @@ void ProgramExecutableD3D::assignSamplerRegisters(
     // outermost array.
     std::vector<unsigned int> subscripts;
     const std::string baseName  = gl::ParseResourceName(d3dUniform->name, &subscripts);
-    unsigned int registerOffset = mExecutable->getUniforms()[uniformIndex].parentArrayIndex *
+    unsigned int registerOffset = mExecutable->getUniforms()[uniformIndex].pod.parentArrayIndex *
                                   d3dUniform->getArraySizeProduct();
 
     bool hasUniform = false;
