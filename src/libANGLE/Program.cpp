@@ -326,18 +326,18 @@ ProgramInput::ProgramInput(const sh::ShaderVariable &var)
     name       = var.name;
     mappedName = var.mappedName;
 
-    SetBitField(basicDataTypeStruct.type, var.type);
-    basicDataTypeStruct.location = var.hasImplicitLocation ? -1 : var.location;
-    SetBitField(basicDataTypeStruct.interpolation, var.interpolation);
-    basicDataTypeStruct.flagBitsAsUByte              = 0;
-    basicDataTypeStruct.flagBits.active              = var.active;
-    basicDataTypeStruct.flagBits.isPatch             = var.isPatch;
-    basicDataTypeStruct.flagBits.hasImplicitLocation = var.hasImplicitLocation;
-    basicDataTypeStruct.flagBits.isArray             = var.isArray();
-    basicDataTypeStruct.flagBits.isBuiltIn           = IsBuiltInName(var.name);
-    SetBitField(basicDataTypeStruct.basicTypeElementCount, var.getBasicTypeElementCount());
-    basicDataTypeStruct.id = var.id;
-    SetBitField(basicDataTypeStruct.arraySizeProduct, var.getArraySizeProduct());
+    SetBitField(pod.type, var.type);
+    pod.location = var.hasImplicitLocation ? -1 : var.location;
+    SetBitField(pod.interpolation, var.interpolation);
+    pod.flagBitsAsUByte              = 0;
+    pod.flagBits.active              = var.active;
+    pod.flagBits.isPatch             = var.isPatch;
+    pod.flagBits.hasImplicitLocation = var.hasImplicitLocation;
+    pod.flagBits.isArray             = var.isArray();
+    pod.flagBits.isBuiltIn           = IsBuiltInName(var.name);
+    SetBitField(pod.basicTypeElementCount, var.getBasicTypeElementCount());
+    pod.id = var.id;
+    SetBitField(pod.arraySizeProduct, var.getArraySizeProduct());
 }
 
 ProgramInput::ProgramInput(const ProgramInput &other)
@@ -349,9 +349,9 @@ ProgramInput &ProgramInput::operator=(const ProgramInput &rhs)
 {
     if (this != &rhs)
     {
-        name                = rhs.name;
-        mappedName          = rhs.mappedName;
-        basicDataTypeStruct = rhs.basicDataTypeStruct;
+        name       = rhs.name;
+        mappedName = rhs.mappedName;
+        pod        = rhs.pod;
     }
     return *this;
 }
@@ -987,10 +987,9 @@ angle::Result Program::linkImpl(const Context *context)
     //
     // The isSeparable state is duplicated for convenience; it is used when setting sampler/image
     // uniforms.
-    mState.mExecutable->mPODStruct.transformFeedbackBufferMode =
-        mState.mTransformFeedbackBufferMode;
-    mState.mExecutable->mTransformFeedbackVaryingNames = mState.mTransformFeedbackVaryingNames;
-    mState.mExecutable->mPODStruct.isSeparable         = mState.mSeparable;
+    mState.mExecutable->mPod.transformFeedbackBufferMode = mState.mTransformFeedbackBufferMode;
+    mState.mExecutable->mTransformFeedbackVaryingNames   = mState.mTransformFeedbackVaryingNames;
+    mState.mExecutable->mPod.isSeparable                 = mState.mSeparable;
 
     mState.mInfoLog.reset();
 
@@ -1150,9 +1149,9 @@ angle::Result Program::linkJobImpl(const Caps &caps,
         const SharedCompiledShaderState &vertexShader = mState.mAttachedShaders[ShaderType::Vertex];
         if (vertexShader)
         {
-            mState.mExecutable->mPODStruct.numViews        = vertexShader->numViews;
-            mState.mExecutable->mPODStruct.hasClipDistance = vertexShader->hasClipDistance;
-            mState.mExecutable->mPODStruct.specConstUsageBits |= vertexShader->specConstUsageBits;
+            mState.mExecutable->mPod.numViews        = vertexShader->numViews;
+            mState.mExecutable->mPod.hasClipDistance = vertexShader->hasClipDistance;
+            mState.mExecutable->mPod.specConstUsageBits |= vertexShader->specConstUsageBits;
         }
 
         const SharedCompiledShaderState &fragmentShader =
@@ -1174,12 +1173,12 @@ angle::Result Program::linkJobImpl(const Caps &caps,
                 return angle::Result::Stop;
             }
 
-            mState.mExecutable->mPODStruct.hasDiscard = fragmentShader->hasDiscard;
-            mState.mExecutable->mPODStruct.enablesPerSampleShading =
+            mState.mExecutable->mPod.hasDiscard = fragmentShader->hasDiscard;
+            mState.mExecutable->mPod.enablesPerSampleShading =
                 fragmentShader->enablesPerSampleShading;
-            mState.mExecutable->mPODStruct.advancedBlendEquations =
+            mState.mExecutable->mPod.advancedBlendEquations =
                 fragmentShader->advancedBlendEquations;
-            mState.mExecutable->mPODStruct.specConstUsageBits |= fragmentShader->specConstUsageBits;
+            mState.mExecutable->mPod.specConstUsageBits |= fragmentShader->specConstUsageBits;
         }
 
         *mergedVaryingsOut = GetMergedVaryingsFromLinkingVariables(*linkingVariables);
@@ -1596,7 +1595,7 @@ void Program::bindUniformBlock(UniformBlockIndex uniformBlockIndex, GLuint unifo
 {
     ASSERT(!mLinkingState);
 
-    if (mState.mExecutable->mPODStruct.activeUniformBlockBindings[uniformBlockIndex.value])
+    if (mState.mExecutable->mPod.activeUniformBlockBindings[uniformBlockIndex.value])
     {
         GLuint previousBinding =
             mState.mExecutable->mUniformBlocks[uniformBlockIndex.value].pod.binding;
@@ -1613,8 +1612,8 @@ void Program::bindUniformBlock(UniformBlockIndex uniformBlockIndex, GLuint unifo
         mUniformBlockBindingMasks.resize(uniformBlockBinding + 1, UniformBlockBindingMask());
     }
     mUniformBlockBindingMasks[uniformBlockBinding].set(uniformBlockIndex.value);
-    mState.mExecutable->mPODStruct.activeUniformBlockBindings.set(uniformBlockIndex.value,
-                                                                  uniformBlockBinding != 0);
+    mState.mExecutable->mPod.activeUniformBlockBindings.set(uniformBlockIndex.value,
+                                                            uniformBlockBinding != 0);
 
     mDirtyBits.set(DIRTY_BIT_UNIFORM_BLOCK_BINDING_0 + uniformBlockIndex.value);
 }
@@ -1811,8 +1810,7 @@ void Program::linkShaders()
 
     if (isComputeShaderAttached)
     {
-        mState.mExecutable->mPODStruct.computeShaderLocalSize =
-            shaders[ShaderType::Compute]->localSize;
+        mState.mExecutable->mPod.computeShaderLocalSize = shaders[ShaderType::Compute]->localSize;
     }
     else
     {
@@ -1825,12 +1823,10 @@ void Program::linkShaders()
                 geometryShader->geometryShaderOutputPrimitiveType;
             Optional<GLint> maxVertices = geometryShader->geometryShaderMaxVertices;
 
-            mState.mExecutable->mPODStruct.geometryShaderInputPrimitiveType =
-                inputPrimitive.value();
-            mState.mExecutable->mPODStruct.geometryShaderOutputPrimitiveType =
-                outputPrimitive.value();
-            mState.mExecutable->mPODStruct.geometryShaderMaxVertices = maxVertices.value();
-            mState.mExecutable->mPODStruct.geometryShaderInvocations =
+            mState.mExecutable->mPod.geometryShaderInputPrimitiveType  = inputPrimitive.value();
+            mState.mExecutable->mPod.geometryShaderOutputPrimitiveType = outputPrimitive.value();
+            mState.mExecutable->mPod.geometryShaderMaxVertices         = maxVertices.value();
+            mState.mExecutable->mPod.geometryShaderInvocations =
                 geometryShader->geometryShaderInvocations;
         }
 
@@ -1838,7 +1834,7 @@ void Program::linkShaders()
         if (tessControlShader)
         {
             int tcsShaderVertices = tessControlShader->tessControlShaderVertices;
-            mState.mExecutable->mPODStruct.tessControlShaderVertices = tcsShaderVertices;
+            mState.mExecutable->mPod.tessControlShaderVertices = tcsShaderVertices;
         }
 
         const SharedCompiledShaderState &tessEvaluationShader = shaders[ShaderType::TessEvaluation];
@@ -1846,12 +1842,10 @@ void Program::linkShaders()
         {
             GLenum tesPrimitiveMode = tessEvaluationShader->tessGenMode;
 
-            mState.mExecutable->mPODStruct.tessGenMode    = tesPrimitiveMode;
-            mState.mExecutable->mPODStruct.tessGenSpacing = tessEvaluationShader->tessGenSpacing;
-            mState.mExecutable->mPODStruct.tessGenVertexOrder =
-                tessEvaluationShader->tessGenVertexOrder;
-            mState.mExecutable->mPODStruct.tessGenPointMode =
-                tessEvaluationShader->tessGenPointMode;
+            mState.mExecutable->mPod.tessGenMode        = tesPrimitiveMode;
+            mState.mExecutable->mPod.tessGenSpacing     = tessEvaluationShader->tessGenSpacing;
+            mState.mExecutable->mPod.tessGenVertexOrder = tessEvaluationShader->tessGenVertexOrder;
+            mState.mExecutable->mPod.tessGenPointMode   = tessEvaluationShader->tessGenPointMode;
         }
     }
 }
@@ -2047,8 +2041,8 @@ bool Program::linkAttributes(const Caps &caps,
         }
     }
 
-    ASSERT(mState.mExecutable->mPODStruct.attributesTypeMask.none());
-    ASSERT(mState.mExecutable->mPODStruct.attributesMask.none());
+    ASSERT(mState.mExecutable->mPod.attributesTypeMask.none());
+    ASSERT(mState.mExecutable->mPod.attributesMask.none());
 
     // Prune inactive attributes. This step is only needed on shaderVersion >= 300 since on earlier
     // shader versions we're only processing active attributes to begin with.
@@ -2080,16 +2074,16 @@ bool Program::linkAttributes(const Caps &caps,
             // Built-in active program inputs don't have a bound attribute.
             if (!attribute.isBuiltIn())
             {
-                mState.mExecutable->mPODStruct.activeAttribLocationsMask.set(location);
-                mState.mExecutable->mPODStruct.maxActiveAttribLocation =
-                    std::max(mState.mExecutable->mPODStruct.maxActiveAttribLocation, location + 1);
+                mState.mExecutable->mPod.activeAttribLocationsMask.set(location);
+                mState.mExecutable->mPod.maxActiveAttribLocation =
+                    std::max(mState.mExecutable->mPod.maxActiveAttribLocation, location + 1);
 
                 ComponentType componentType =
                     GLenumToComponentType(VariableComponentType(attribute.getType()));
 
                 SetComponentTypeMask(componentType, location,
-                                     &mState.mExecutable->mPODStruct.attributesTypeMask);
-                mState.mExecutable->mPODStruct.attributesMask.set(location);
+                                     &mState.mExecutable->mPod.attributesTypeMask);
+                mState.mExecutable->mPod.attributesMask.set(location);
 
                 location++;
             }
@@ -2262,7 +2256,7 @@ angle::Result Program::deserialize(const Context *context, BinaryInputStream &st
 
     // mSeparable must be before mExecutable->load(), since it uses the value.  This state is
     // duplicated in the executable for convenience.
-    mState.mExecutable->mPODStruct.isSeparable = mState.mSeparable;
+    mState.mExecutable->mPod.isSeparable = mState.mSeparable;
     mState.mExecutable->load(&stream);
 
     static_assert(static_cast<unsigned long>(ShaderType::EnumCount) <= sizeof(unsigned long) * 8,
@@ -2314,15 +2308,15 @@ void Program::postResolveLink(const Context *context)
 
     if (context->getExtensions().multiDrawANGLE)
     {
-        mState.mExecutable->mPODStruct.drawIDLocation =
+        mState.mExecutable->mPod.drawIDLocation =
             mState.mExecutable->getUniformLocation("gl_DrawID").value;
     }
 
     if (context->getExtensions().baseVertexBaseInstanceShaderBuiltinANGLE)
     {
-        mState.mExecutable->mPODStruct.baseVertexLocation =
+        mState.mExecutable->mPod.baseVertexLocation =
             mState.mExecutable->getUniformLocation("gl_BaseVertex").value;
-        mState.mExecutable->mPODStruct.baseInstanceLocation =
+        mState.mExecutable->mPod.baseInstanceLocation =
             mState.mExecutable->getUniformLocation("gl_BaseInstance").value;
     }
 }
