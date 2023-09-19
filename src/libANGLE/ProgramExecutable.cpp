@@ -1813,9 +1813,9 @@ void ProgramExecutable::linkSamplerAndImageBindings(GLuint *combinedImageUniform
         {
             // The arrays of arrays are flattened to arrays, it needs to record the array offset for
             // the correct binding image unit.
-            mImageBindings.emplace_back(
-                ImageBinding(imageUniform.getBinding() + imageUniform.parentArrayIndex * arraySize,
-                             imageUniform.getBasicTypeElementCount(), textureType));
+            mImageBindings.emplace_back(ImageBinding(
+                imageUniform.getBinding() + imageUniform.pod.parentArrayIndex * arraySize,
+                imageUniform.getBasicTypeElementCount(), textureType));
         }
 
         *combinedImageUniforms += imageUniform.activeShaderCount() * arraySize;
@@ -1855,11 +1855,11 @@ bool ProgramExecutable::linkAtomicCounterBuffers(const Caps &caps)
     {
         auto &uniform = mUniforms[index];
 
-        uniform.blockOffset                    = uniform.getOffset();
-        uniform.blockArrayStride               = uniform.isArray() ? 4 : 0;
-        uniform.blockMatrixStride              = 0;
-        uniform.flagBits.blockIsRowMajorMatrix = false;
-        uniform.flagBits.isBlock               = true;
+        uniform.pod.blockOffset                    = uniform.getOffset();
+        uniform.pod.blockArrayStride               = uniform.isArray() ? 4 : 0;
+        uniform.pod.blockMatrixStride              = 0;
+        uniform.pod.flagBits.blockIsRowMajorMatrix = false;
+        uniform.pod.flagBits.isBlock               = true;
 
         bool found = false;
         for (size_t bufferIndex = 0; bufferIndex < mAtomicCounterBuffers.size(); ++bufferIndex)
@@ -1868,7 +1868,7 @@ bool ProgramExecutable::linkAtomicCounterBuffers(const Caps &caps)
             if (buffer.pod.binding == uniform.getBinding())
             {
                 buffer.memberIndexes.push_back(index);
-                SetBitField(uniform.bufferIndex, bufferIndex);
+                SetBitField(uniform.pod.bufferIndex, bufferIndex);
                 found = true;
                 buffer.unionReferencesWith(uniform);
                 break;
@@ -1881,7 +1881,7 @@ bool ProgramExecutable::linkAtomicCounterBuffers(const Caps &caps)
             atomicCounterBuffer.memberIndexes.push_back(index);
             atomicCounterBuffer.unionReferencesWith(uniform);
             mAtomicCounterBuffers.push_back(atomicCounterBuffer);
-            SetBitField(uniform.bufferIndex, mAtomicCounterBuffers.size() - 1);
+            SetBitField(uniform.pod.bufferIndex, mAtomicCounterBuffers.size() - 1);
         }
     }
 
