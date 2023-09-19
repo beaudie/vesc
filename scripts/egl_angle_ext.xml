@@ -356,6 +356,8 @@
                 <enum name="EGL_TEXTURE_INTERNAL_FORMAT_ANGLE"/>
                 <enum name="EGL_IOSURFACE_USAGE_HINT_ANGLE"/>
                 <enum name="EGL_BIND_TO_TEXTURE_TARGET_ANGLE"/>
+                <enum name="GL_BGR_ANGLE"/>
+                <enum name="GL_UNSIGNED_INT_8_8_8_8_REV_ANGLE"/>
             </require>
         </extension>
         <extension name="EGL_ANGLE_keyed_mutex" supported="egl">
@@ -546,6 +548,8 @@
         <enum value="0x345D" name="EGL_TEXTURE_INTERNAL_FORMAT_ANGLE"/>
         <enum value="0x345E" name="EGL_PLATFORM_ANGLE_DEVICE_TYPE_NULL_ANGLE"/>
         <enum value="0x345F" name="EGL_EXTENSIONS_ENABLED_ANGLE"/>
+        <enum value="0x80E0" name="GL_BGR_ANGLE"/>
+        <enum value="0x8367" name="GL_UNSIGNED_INT_8_8_8_8_REV_ANGLE"/>
     </enums>
     <enums namespace="EGL" start="0x3460" end="0x346F" vendor="ANGLE">
         <enum value="0x3460" name="EGL_FEATURE_NAME_ANGLE"/>
