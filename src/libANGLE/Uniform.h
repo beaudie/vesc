@@ -25,6 +25,34 @@ struct UniformTypeInfo;
 struct UsedUniform;
 struct LinkedUniform;
 
+#define ACTIVE_VARIABLE_COMMON_INTERFACES                                      \
+    void setActive(ShaderType shaderType, bool used, uint32_t id)              \
+    {                                                                          \
+        ASSERT(shaderType != ShaderType::InvalidEnum);                         \
+        pod.activeUseBits.set(shaderType, used);                               \
+        pod.ids[shaderType] = id;                                              \
+    }                                                                          \
+    ShaderType getFirstActiveShaderType() const                                \
+    {                                                                          \
+        return static_cast<ShaderType>(ScanForward(pod.activeUseBits.bits())); \
+    }                                                                          \
+    bool isActive(ShaderType shaderType) const                                 \
+    {                                                                          \
+        return pod.activeUseBits[shaderType];                                  \
+    }                                                                          \
+    const ShaderMap<uint32_t> &getIds() const                                  \
+    {                                                                          \
+        return pod.ids;                                                        \
+    }                                                                          \
+    uint32_t getId(ShaderType shaderType) const                                \
+    {                                                                          \
+        return pod.ids[shaderType];                                            \
+    }                                                                          \
+    ShaderBitSet activeShaders() const                                         \
+    {                                                                          \
+        return pod.activeUseBits;                                              \
+    }
+
 // Note: keep this struct memcpy-able: i.e, a simple struct with basic types only and no virtual
 // functions. LinkedUniform relies on this so that it can use memcpy to initialize uniform for
 // performance.
@@ -179,14 +207,7 @@ struct BufferVariable
     bool isArray() const { return pod.isArray; }
     uint32_t getBasicTypeElementCount() const { return pod.basicTypeElementCount; }
 
-    void setActive(ShaderType shaderType, bool used, uint32_t id)
-    {
-        pod.activeUseBits.set(shaderType, used);
-        pod.ids[shaderType] = id;
-    }
-    bool isActive(ShaderType shaderType) const { return pod.activeUseBits[shaderType]; }
-    uint32_t getId(ShaderType shaderType) const { return pod.ids[shaderType]; }
-    ShaderBitSet activeShaders() const { return pod.activeUseBits; }
+    ACTIVE_VARIABLE_COMMON_INTERFACES
 
     std::string name;
     std::string mappedName;
@@ -222,14 +243,7 @@ struct ShaderVariableBuffer
     ShaderVariableBuffer();
     ~ShaderVariableBuffer() {}
 
-    ShaderType getFirstActiveShaderType() const
-    {
-        return static_cast<ShaderType>(ScanForward(pod.activeUseBits.bits()));
-    }
-    bool isActive(ShaderType shaderType) const { return pod.activeUseBits[shaderType]; }
-    const ShaderMap<uint32_t> &getIds() const { return pod.ids; }
-    uint32_t getId(ShaderType shaderType) const { return pod.ids[shaderType]; }
-    ShaderBitSet activeShaders() const { return pod.activeUseBits; }
+    ACTIVE_VARIABLE_COMMON_INTERFACES
     int numActiveVariables() const { return static_cast<int>(memberIndexes.size()); }
     void unionReferencesWith(const LinkedUniform &otherUniform);
 
@@ -266,19 +280,7 @@ struct InterfaceBlock
     std::string nameWithArrayIndex() const;
     std::string mappedNameWithArrayIndex() const;
 
-    ShaderType getFirstActiveShaderType() const
-    {
-        return static_cast<ShaderType>(ScanForward(pod.activeUseBits.bits()));
-    }
-    void setActive(ShaderType shaderType, bool used, uint32_t id)
-    {
-        pod.activeUseBits.set(shaderType, used);
-        pod.ids[shaderType] = id;
-    }
-    bool isActive(ShaderType shaderType) const { return pod.activeUseBits[shaderType]; }
-    const ShaderMap<uint32_t> &getIds() const { return pod.ids; }
-    uint32_t getId(ShaderType shaderType) const { return pod.ids[shaderType]; }
-    ShaderBitSet activeShaders() const { return pod.activeUseBits; }
+    ACTIVE_VARIABLE_COMMON_INTERFACES
 
     int numActiveVariables() const { return static_cast<int>(memberIndexes.size()); }
     void setBinding(GLuint binding) { SetBitField(pod.binding, binding); }
