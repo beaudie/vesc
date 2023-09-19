@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3eb339a6_a9ae956c",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-09-19T22:14:36Z",
+      "side": 1,
+      "message": "Fair enough.  I was just trying to get in front of the `git add` call.  I moved it before the bootstrap.py call.",
+      "parentUuid": "bac64d07_b00f45c6",
+      "range": {
+        "startLine": 142,
+        "startChar": 0,
+        "endLine": 142,
+        "endChar": 55
+      },
+      "revId": "d539fdf46b8a29e885a22b0dd696a553c5dd2fea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b978a273_4318f1f9",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-09-19T20:47:26Z",
       "side": 1,
       "message": "gclient does this:\n```\ntmp_dir \u003d tempfile.mkdtemp(prefix\u003d\u0027_gclient_%s_\u0027 %\n                           os.path.basename(self.checkout_path),\n                           dir\u003dparent_dir)\n```\n\nSo maybe the pattern should be `*/_gclient_*` ?",
+      "range": {
+        "startLine": 199,
+        "startChar": 4,
+        "endLine": 199,
+        "endChar": 19
+      },
+      "revId": "d539fdf46b8a29e885a22b0dd696a553c5dd2fea",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8b98fb4_8c07b5d5",
+        "filename": "scripts/roll_aosp.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-09-19T22:14:36Z",
+      "side": 1,
+      "message": "Ah, good catch. That actually found one more in my tree:\n```\n$ find third_party -wholename \"*/_gclient_*\"\nthird_party/_gclient_vulkan_memory_allocator_bj53gija\nthird_party/VK-GL-CTS/_gclient_src_0sxv4itn\n```",
+      "parentUuid": "b978a273_4318f1f9",
       "range": {
         "startLine": 199,
         "startChar": 4,
