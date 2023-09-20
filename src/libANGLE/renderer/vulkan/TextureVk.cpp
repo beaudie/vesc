@@ -867,6 +867,10 @@ angle::Result TextureVk::setSubImageImpl(const gl::Context *context,
             ANGLE_TRY(contextVk->getShareGroup()->onMutableTextureUpload(contextVk, this));
         }
     }
+    WARN() << "mutable:" << !mState.getImmutableFormat() << " mImage:" << mImage
+           << " mImage.valid:" << ((mImage != nullptr) ? mImage->valid() : false)
+           << " hasStagedUpdates:"
+           << ((mImage != nullptr) ? mImage->hasStagedUpdatesInAllocatedLevels() : false);
 
     return angle::Result::Continue;
 }
