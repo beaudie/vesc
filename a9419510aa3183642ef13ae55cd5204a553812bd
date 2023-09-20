@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b71389f6_30caee3b",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 4694,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-20T22:38:56Z",
+      "side": 1,
+      "message": "1. irrespective of any change we make to the backend the location of this check in the front-end is incorrect, it has to be done only after the `prepare...` calls\n\n2. i am not familiar with other backends but do you know if they support something like deferred clears? there is substantial machinery like staging / redeferring clears. nevertheless, just returning from the place you suggested will trigger asserts in subsequent `syncState` for valid reasons. that is outside the scope of this change though",
+      "parentUuid": "8914ad55_b8700859",
+      "range": {
+        "startLine": 4690,
+        "startChar": 4,
+        "endLine": 4694,
+        "endChar": 5
+      },
+      "revId": "a9419510aa3183642ef13ae55cd5204a553812bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "516a867c_9dad457a",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 20
@@ -49,6 +73,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "925dbd8e_c28609bd",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 2096,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-20T22:38:56Z",
+      "side": 1,
+      "message": "\u003e Scissored clear will be immediate\n\nas the comment suggests, this block is to prevent a staged clear from being re-deferred. it is not acting on the upcoming clear",
+      "parentUuid": "516a867c_9dad457a",
+      "range": {
+        "startLine": 2084,
+        "startChar": 4,
+        "endLine": 2096,
+        "endChar": 5
+      },
+      "revId": "a9419510aa3183642ef13ae55cd5204a553812bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bb6c6818_c2295998",
         "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
         "patchSetId": 20
@@ -60,6 +108,30 @@
       "writtenOn": "2023-09-20T21:57:52Z",
       "side": 1,
       "message": "Based on the test code, the scissor is not out of bound (scrissor is {64,64,10,10}, window is 128x128.",
+      "range": {
+        "startLine": 611,
+        "startChar": 23,
+        "endLine": 611,
+        "endChar": 41
+      },
+      "revId": "a9419510aa3183642ef13ae55cd5204a553812bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd65fb15_2e85b2bb",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-20T22:38:56Z",
+      "side": 1,
+      "message": "it is OOB before the resize",
+      "parentUuid": "bb6c6818_c2295998",
       "range": {
         "startLine": 611,
         "startChar": 23,
