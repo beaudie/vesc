@@ -31,18 +31,23 @@ TEST(FixedVector, Constructors)
 
     FixedVector<int, 5> copyRValue(std::move(count));
     EXPECT_EQ(3u, copyRValue.size());
+    EXPECT_EQ(0u, count.size());
 
     FixedVector<int, 5> initializerList{1, 2, 3, 4, 5};
     EXPECT_EQ(5u, initializerList.size());
     EXPECT_EQ(3, initializerList[2]);
 
-    FixedVector<int, 5> assignCopy(copyRValue);
+    FixedVector<int, 5> assignCopy;
+    assignCopy = copyRValue;
     EXPECT_EQ(3u, assignCopy.size());
 
-    FixedVector<int, 5> assignRValue(std::move(assignCopy));
+    FixedVector<int, 5> assignRValue;
+    assignRValue = std::move(assignCopy);
     EXPECT_EQ(3u, assignRValue.size());
+    EXPECT_EQ(0u, assignCopy.size());
 
-    FixedVector<int, 5> assignmentInitializerList = {1, 2, 3, 4, 5};
+    FixedVector<int, 5> assignmentInitializerList;
+    assignmentInitializerList = {1, 2, 3, 4, 5};
     EXPECT_EQ(5u, assignmentInitializerList.size());
     EXPECT_EQ(3, assignmentInitializerList[2]);
 }
