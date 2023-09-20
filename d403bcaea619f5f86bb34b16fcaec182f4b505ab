@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "497ee985_b815e6c0",
+        "filename": "src/libANGLE/renderer/vulkan/spv_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2970,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-20T13:30:13Z",
+      "side": 1,
+      "message": "nit: To match the rest of the code, would you please make this private (and you can call it `visitTypeHelper` like the other transformers), and add `visitTypeArray` and `visitTypePointer` that forward to it? The `SpirvTransformer` forwards the calls when needed, but is otherwise should not need to tell/understand what the transformers do with them.",
+      "revId": "d403bcaea619f5f86bb34b16fcaec182f4b505ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40958cf3_f2c5e900",
+        "filename": "src/libANGLE/renderer/vulkan/spv_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3058,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-20T13:30:13Z",
+      "side": 1,
+      "message": "nit: Could do this do `if (id !\u003d mArrayVariableId)` instead? No need to pass `info` in that case either",
+      "range": {
+        "startLine": 3055,
+        "startChar": 0,
+        "endLine": 3058,
+        "endChar": 5
+      },
+      "revId": "d403bcaea619f5f86bb34b16fcaec182f4b505ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffbe02f6_4f266427",
+        "filename": "src/libANGLE/renderer/vulkan/spv_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3074,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-20T13:30:13Z",
+      "side": 1,
+      "message": "nit: `if (id !\u003d mArrayVariableId)`?",
+      "range": {
+        "startLine": 3071,
+        "startChar": 0,
+        "endLine": 3074,
+        "endChar": 5
+      },
+      "revId": "d403bcaea619f5f86bb34b16fcaec182f4b505ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dacb9ee5_40c2199a",
+        "filename": "src/libANGLE/renderer/vulkan/spv_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3088,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-20T13:30:13Z",
+      "side": 1,
+      "message": "Don\u0027t need this line if you return `TransformationState::Unchanged` in this block. Or are you relying on `Transformed` to early out from the caller?",
+      "revId": "d403bcaea619f5f86bb34b16fcaec182f4b505ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5379a007_a9424ce5",
+        "filename": "src/libANGLE/renderer/vulkan/spv_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3104,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-20T13:30:13Z",
+      "side": 1,
+      "message": "ditto",
+      "range": {
+        "startLine": 3101,
+        "startChar": 1,
+        "endLine": 3104,
+        "endChar": 5
+      },
+      "revId": "d403bcaea619f5f86bb34b16fcaec182f4b505ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
