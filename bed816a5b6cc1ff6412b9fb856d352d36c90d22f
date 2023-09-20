@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f28ee2d_80762e3b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-20T15:19:38Z",
+      "side": 1,
+      "message": "LGTM, but adding a second reviewer per our policy",
+      "revId": "bed816a5b6cc1ff6412b9fb856d352d36c90d22f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

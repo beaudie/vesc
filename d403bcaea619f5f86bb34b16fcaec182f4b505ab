@@ -165,6 +165,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbe51ebe_e84dc695",
+        "filename": "src/libANGLE/renderer/vulkan/spv_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3088,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-20T15:19:38Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "c8f6e570_75508cc7",
+      "revId": "d403bcaea619f5f86bb34b16fcaec182f4b505ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5379a007_a9424ce5",
