@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c546ecf_25932d04",
+        "filename": "src/libANGLE/Program.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 686,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-20T16:34:32Z",
+      "side": 1,
+      "message": "Addressed in https://chromium-review.googlesource.com/c/angle/angle/+/4877335",
+      "parentUuid": "77743f6d_e7a5a033",
+      "revId": "5903359e55672c0d29d009b99d3c6bc39528aef8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7f2693e6_0edd20d9",
@@ -298,6 +316,30 @@
       "side": 1,
       "message": "I was thinking the same thing. PodStruct was a bit verbose, pod should be good. Will wait till your refactor done.",
       "parentUuid": "b2ce647a_00b61dfc",
+      "range": {
+        "startLine": 410,
+        "startChar": 38,
+        "endLine": 410,
+        "endChar": 47
+      },
+      "revId": "5903359e55672c0d29d009b99d3c6bc39528aef8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f8b2844_4cb23ac6",
+        "filename": "src/libANGLE/renderer/gl/ProgramGL.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 410,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-20T16:34:32Z",
+      "side": 1,
+      "message": "Addressed in https://chromium-review.googlesource.com/c/angle/angle/+/4877335",
+      "parentUuid": "6316e3e2_b2883736",
       "range": {
         "startLine": 410,
         "startChar": 38,
