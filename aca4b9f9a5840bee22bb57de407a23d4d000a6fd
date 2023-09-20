@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcddec12_6a2d48db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-09-20T00:39:47Z",
+      "side": 1,
+      "message": "lgtm\n\nNice work Quyen. Couple of small comments.",
+      "revId": "aca4b9f9a5840bee22bb57de407a23d4d000a6fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7643ee03_727d2157",
+        "filename": "src/tests/egl_tests/EGLIOSurfaceClientBufferTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-09-20T00:39:47Z",
+      "side": 1,
+      "message": "Per the CL description, isn\u0027t GL_RGBX8_ANGLE unsupported on ANGLE\u0027s OpenGL backend on macOS? Wondering if this can be an ASSERT that this should not be called with GL_RGBX8_ANGLE if the OpenGL backend is enabled.",
+      "range": {
+        "startLine": 274,
+        "startChar": 8,
+        "endLine": 274,
+        "endChar": 10
+      },
+      "revId": "aca4b9f9a5840bee22bb57de407a23d4d000a6fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87e1fbeb_89e06fc1",
+        "filename": "src/tests/egl_tests/EGLIOSurfaceClientBufferTest.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-09-20T00:39:47Z",
+      "side": 1,
+      "message": "No intention to support this on the OpenGL backend, so a TODO isn\u0027t necessary here and below. Maybe just mention:\n\n`OpenGL doesn\u0027t support RGBA IOSurface. http://anglebug.com/8350`",
+      "revId": "aca4b9f9a5840bee22bb57de407a23d4d000a6fd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
