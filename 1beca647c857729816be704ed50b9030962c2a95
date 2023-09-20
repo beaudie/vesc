@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ae83f70_5edcec7f",
+        "filename": "src/libANGLE/Uniform.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-20T17:45:53Z",
+      "side": 1,
+      "message": "Ah, I was hoping you could just put an `ActiveVariable` inside the pod structs of the other classes and have the functions forward to that. Don\u0027t know what happens with the packing though as the size of this struct is weird.",
+      "revId": "1beca647c857729816be704ed50b9030962c2a95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "344a0306_3745bfea",
+        "filename": "src/libANGLE/Uniform.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-20T17:45:53Z",
+      "side": 1,
+      "message": "Please `#undef ACTIVE_VARIABLE_COMMON_INTERFACES` here.",
+      "revId": "1beca647c857729816be704ed50b9030962c2a95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
