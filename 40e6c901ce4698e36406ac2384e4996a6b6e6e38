@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f0fb695_5fd65b71",
+        "filename": "src/libANGLE/Uniform.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-20T16:53:17Z",
+      "side": 1,
+      "message": "Doesn\u0027t `return pod.activeUseBits.first();` work?",
+      "range": {
+        "startLine": 227,
+        "startChar": 15,
+        "endLine": 227,
+        "endChar": 77
+      },
+      "revId": "40e6c901ce4698e36406ac2384e4996a6b6e6e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "066d8cf6_228258e4",
+        "filename": "src/libANGLE/Uniform.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-20T16:53:17Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "40e6c901ce4698e36406ac2384e4996a6b6e6e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "218d08b2_896e5426",
+        "filename": "src/libANGLE/Uniform.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-20T16:53:17Z",
+      "side": 1,
+      "message": "Could `ActiveVariable` be placed in `PODStruct`? Its code is now duplicate everywhere",
+      "revId": "40e6c901ce4698e36406ac2384e4996a6b6e6e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
