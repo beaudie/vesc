@@ -1156,6 +1156,11 @@ angle::Result BufferVk::acquireBufferHelper(ContextVk *contextVk,
     if (mBuffer.valid())
     {
         mBuffer.releaseBufferAndDescriptorSetCache(renderer);
+        if (ANGLE_UNLIKELY(contextVk->hasExcessPendingGarbage()))
+        {
+            ANGLE_TRY(contextVk->flushImpl(nullptr, nullptr,
+                                           RenderPassClosureReason::ExcessivePendingGarbage));
+        }
     }
 
     // Allocate the buffer directly
