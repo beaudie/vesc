@@ -84,6 +84,24 @@
       "message": "`ASSERT_GL_NO_ERROR()`. The non-float clear calls above are probably not valid; like `glClearBufferiv` and `glClearBufferuv` are not valid for the window\u0027s format (which is unorm). You could use `GL_STENCIL` for `glClearBufferiv`; and I think `glClearBufferuiv` is untestable.",
       "revId": "8b4569335453bade7126ef2712d2f7e217792875",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f5330ec_ae05672e",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-20T16:16:11Z",
+      "side": 1,
+      "message": "mirrored from `ClearBuffer1OnDefaultFramebufferNoAssert`",
+      "parentUuid": "f0c1f460_63b0f919",
+      "revId": "8b4569335453bade7126ef2712d2f7e217792875",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
