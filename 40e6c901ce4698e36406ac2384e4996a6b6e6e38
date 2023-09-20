@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "52208cf3_60d79863",
+        "filename": "src/libANGLE/Uniform.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-20T17:14:34Z",
+      "side": 1,
+      "message": "Should work. I just copied from exitsing code. Will replace it with first() in next CL.",
+      "parentUuid": "9f0fb695_5fd65b71",
+      "range": {
+        "startLine": 227,
+        "startChar": 15,
+        "endLine": 227,
+        "endChar": 77
+      },
+      "revId": "40e6c901ce4698e36406ac2384e4996a6b6e6e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "066d8cf6_228258e4",
@@ -41,6 +65,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7df20b9e_4ea66c01",
+        "filename": "src/libANGLE/Uniform.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-20T17:14:34Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "066d8cf6_228258e4",
+      "revId": "40e6c901ce4698e36406ac2384e4996a6b6e6e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "218d08b2_896e5426",
@@ -54,6 +96,24 @@
       "writtenOn": "2023-09-20T16:53:17Z",
       "side": 1,
       "message": "Could `ActiveVariable` be placed in `PODStruct`? Its code is now duplicate everywhere",
+      "revId": "40e6c901ce4698e36406ac2384e4996a6b6e6e38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27e0f8a9_eaed62ca",
+        "filename": "src/libANGLE/Uniform.h",
+        "patchSetId": 8
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-20T17:14:34Z",
+      "side": 1,
+      "message": "This is handled in next CL.",
+      "parentUuid": "218d08b2_896e5426",
       "revId": "40e6c901ce4698e36406ac2384e4996a6b6e6e38",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
