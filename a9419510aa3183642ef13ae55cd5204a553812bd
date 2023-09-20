@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8914ad55_b8700859",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 4694,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-20T21:57:52Z",
+      "side": 1,
+      "message": "I just looked at mState.getDrawFramebuffer()-\u003eclear and the backedn implementation, looks like all backend will just immediate return if the scissored clear rectnagle is empty, except vulkan. Vulkan backend has an assertion. I think all you need to do is remove these 6 lines (and all other places as well), and then fix the vulkan backend with this.\n```\n--- a/src/libANGLE/renderer/vulkan/FramebufferVk.cpp\n+++ b/src/libANGLE/renderer/vulkan/FramebufferVk.cpp\n@@ -456,7 +456,10 @@ angle::Result FramebufferVk::clearImpl(const gl::Context *context,\n     ContextVk *contextVk \u003d vk::GetImpl(context);\n \n     const gl::Rectangle scissoredRenderArea \u003d getRotatedScissoredRenderArea(contextVk);\n-    ASSERT(scissoredRenderArea.width !\u003d 0 \u0026\u0026 scissoredRenderArea.height !\u003d 0);\n+    if(scissoredRenderArea.width \u003d\u003d 0 || scissoredRenderArea.height \u003d\u003d 0)\n+    {\n+        return angle::Result::Continue;\n+    }\n```",
+      "range": {
+        "startLine": 4690,
+        "startChar": 4,
+        "endLine": 4694,
+        "endChar": 5
+      },
+      "revId": "a9419510aa3183642ef13ae55cd5204a553812bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "516a867c_9dad457a",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 2096,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-20T21:57:52Z",
+      "side": 1,
+      "message": "Why do you need this? Scissored clear will be immediate (see FramebufferVk::clearImpl line 500, it should end up with clearWithDraw). If there is a bug there that end up still defer the clear, we should fix that.",
+      "range": {
+        "startLine": 2084,
+        "startChar": 4,
+        "endLine": 2096,
+        "endChar": 5
+      },
+      "revId": "a9419510aa3183642ef13ae55cd5204a553812bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb6c6818_c2295998",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-20T21:57:52Z",
+      "side": 1,
+      "message": "Based on the test code, the scissor is not out of bound (scrissor is {64,64,10,10}, window is 128x128.",
+      "range": {
+        "startLine": 611,
+        "startChar": 23,
+        "endLine": 611,
+        "endChar": 41
+      },
+      "revId": "a9419510aa3183642ef13ae55cd5204a553812bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
