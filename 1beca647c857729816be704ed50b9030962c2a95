@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "94edab8d_5be2cf4a",
+        "filename": "src/libANGLE/Uniform.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-20T18:03:42Z",
+      "side": 1,
+      "message": "Right, the whole point to flatten out these structs is so that we can arrange data members around to tightly pack it. activeUseBits is only one byte, it can be combined with other bitfields.",
+      "parentUuid": "2ae83f70_5edcec7f",
+      "revId": "1beca647c857729816be704ed50b9030962c2a95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "344a0306_3745bfea",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-09-20T17:45:53Z",
       "side": 1,
       "message": "Please `#undef ACTIVE_VARIABLE_COMMON_INTERFACES` here.",
+      "revId": "1beca647c857729816be704ed50b9030962c2a95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a117214b_42ab8532",
+        "filename": "src/libANGLE/Uniform.h",
+        "patchSetId": 7
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-20T18:03:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "344a0306_3745bfea",
       "revId": "1beca647c857729816be704ed50b9030962c2a95",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
