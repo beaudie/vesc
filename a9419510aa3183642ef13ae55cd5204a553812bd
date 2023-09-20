@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4f0baae3_a2936710",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 4694,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-20T23:55:07Z",
+      "side": 1,
+      "message": "@mohan: 1) totally agree with you. What I am saying is that even if you remove this nop if empty check, backend will still nop it property (except vulkan backend). 2) I did checked all backend, they all check for empty after scissor.\n\n@shabi: I am not sure if I understand your comment. If window has grown, then the scissored rect will *not* be empty and we will not nop the clear. Maybe I did not made it clear: I am suggesting remove the nop_if_empty all together from front end, and rely on backend only. The backend calculation is after the prepareForClear call.",
+      "parentUuid": "65167c58_0fddbaae",
+      "range": {
+        "startLine": 4690,
+        "startChar": 4,
+        "endLine": 4694,
+        "endChar": 5
+      },
+      "revId": "a9419510aa3183642ef13ae55cd5204a553812bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "516a867c_9dad457a",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 20
