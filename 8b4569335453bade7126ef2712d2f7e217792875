@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01c74f89_8c088a3d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-20T16:08:41Z",
+      "side": 1,
+      "message": "Adding second reviewer per our policy",
+      "revId": "8b4569335453bade7126ef2712d2f7e217792875",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15113aa6_7a729d87",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 604,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-20T16:08:41Z",
+      "side": 1,
+      "message": "Please add `ASSERT_GL_NO_ERROR()` to make sure there are no test bugs.",
+      "revId": "8b4569335453bade7126ef2712d2f7e217792875",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bddb21a4_9de45d08",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 623,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-20T16:08:41Z",
+      "side": 1,
+      "message": "How come this test resizes first then swap, but the other test swaps first then resize?",
+      "revId": "8b4569335453bade7126ef2712d2f7e217792875",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed1cd0aa_2a1a2985",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 639,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-20T16:08:41Z",
+      "side": 1,
+      "message": "`ASSERT_GL_NO_ERROR()`",
+      "revId": "8b4569335453bade7126ef2712d2f7e217792875",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0c1f460_63b0f919",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-20T16:08:41Z",
+      "side": 1,
+      "message": "`ASSERT_GL_NO_ERROR()`. The non-float clear calls above are probably not valid; like `glClearBufferiv` and `glClearBufferuv` are not valid for the window\u0027s format (which is unorm). You could use `GL_STENCIL` for `glClearBufferiv`; and I think `glClearBufferuiv` is untestable.",
+      "revId": "8b4569335453bade7126ef2712d2f7e217792875",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
