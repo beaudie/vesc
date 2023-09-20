@@ -137,6 +137,24 @@
       "message": "There will need to be fixes to \n/third_party/VK-GL-CTS\n/third_party/glmark2\nFor tests to build for wayland.\nI can only fix those under angle",
       "revId": "6c553e27b3562ed7d594e8d6b66b2acbd802b8c2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85d95c4a_792853ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2023-09-20T17:50:05Z",
+      "side": 1,
+      "message": "Removed those test fixes from this patch",
+      "parentUuid": "1b03ec99_c7328eaa",
+      "revId": "6c553e27b3562ed7d594e8d6b66b2acbd802b8c2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
