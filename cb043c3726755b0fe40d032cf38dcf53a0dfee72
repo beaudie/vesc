@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2192604d_4252fe84",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-09-21T18:11:01Z",
+      "side": 1,
+      "message": "It looks like https://chromium-review.googlesource.com/c/angle/angle/+/4882004 has the revert, and mostly passed with just one flake, let\u0027s try landing it instead.",
+      "revId": "cb043c3726755b0fe40d032cf38dcf53a0dfee72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
