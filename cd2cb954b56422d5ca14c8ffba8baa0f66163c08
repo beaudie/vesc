@@ -16,6 +16,29 @@
       "message": "PTAL",
       "revId": "cd2cb954b56422d5ca14c8ffba8baa0f66163c08",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d504705_0fd21f61",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 2088,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-21T23:07:08Z",
+      "side": 1,
+      "message": "Do we have similar bugs with color mask as well? For example, this sequence:\n\nglClear(Red) // Normal clear entire buffer to red color, which gets deferred\nglColorMask(BlueChannel); // only allow write of blue channel\nglClear(Blue); // only clear blue channel to blue\n\nPixel value should be red+blue. But if we have this bug that two clears got merged incorrectly, then you will only see the second clear, which you will see blue. The red clear get dropped. Right?",
+      "range": {
+        "startLine": 2088,
+        "startChar": 63,
+        "endLine": 2088,
+        "endChar": 83
+      },
+      "revId": "cd2cb954b56422d5ca14c8ffba8baa0f66163c08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
