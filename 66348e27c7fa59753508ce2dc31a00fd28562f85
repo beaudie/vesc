@@ -58,6 +58,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b41b8f7_35d04360",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1128437
+      },
+      "writtenOn": "2023-09-21T21:29:19Z",
+      "side": 1,
+      "message": "lgtm",
+      "revId": "66348e27c7fa59753508ce2dc31a00fd28562f85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5164339c_09bb0fc5",
@@ -95,6 +112,30 @@
       "side": 1,
       "message": "This could work. However we always need special casing one way or another. Because RED/RG internal formatted texture is special, it would be imported from a plain RED/RG IOSurface or it would be imported from a plane of a YUV IOSurface. We would need to have a big table just to cover every case here. Not to mention there are many YUV formats that can be used with RED/RG internal formats. Even if we only cared about and included YUV420/P010 in the table, it would lock many external users from using YUV422, YUV444, etc.\n\nI chose to treat RGB as the only special case because it is a small behavior change. And hopefully it won\u0027t disrupt many existing usages in Chrome \u0026 tests.",
       "parentUuid": "5164339c_09bb0fc5",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 59
+      },
+      "revId": "66348e27c7fa59753508ce2dc31a00fd28562f85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65991f01_25c54889",
+        "filename": "src/libANGLE/renderer/metal/IOSurfaceSurfaceMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1128437
+      },
+      "writtenOn": "2023-09-21T21:29:19Z",
+      "side": 1,
+      "message": "Ok, thanks for providing the context about YUV planes - the D3D texture wrapping code is more verbose for precisely that reason.",
+      "parentUuid": "873d7054_6a5977ce",
       "range": {
         "startLine": 46,
         "startChar": 0,
