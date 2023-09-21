@@ -122,6 +122,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9ce162f6_32624bc1",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 4694,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-21T18:35:59Z",
+      "side": 1,
+      "message": "@syoussefi@chromium.org how do you propose we handle the deferred clear assert -\n```\nFramebufferVk.cpp:2093 (syncState): \t\n! Assert failed in syncState (..\\..\\src\\libANGLE\\renderer\\vulkan\n\\FramebufferVk.cpp:2093): !previousDeferredClears.test(colorIndexGL)\n```\n\none way is with how @cclao@google.com suggested that i modify code in `syncState` to not defer clears if scissor is enabled. going to upload a patch with that to see how things pan out. let me know if there is an alternative",
+      "parentUuid": "e331128d_bac9e0cd",
+      "range": {
+        "startLine": 4690,
+        "startChar": 4,
+        "endLine": 4694,
+        "endChar": 5
+      },
+      "revId": "a9419510aa3183642ef13ae55cd5204a553812bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "516a867c_9dad457a",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 20
