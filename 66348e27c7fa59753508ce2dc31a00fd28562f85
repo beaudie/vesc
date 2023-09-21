@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b4cea5e_e90c43f2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1128437
+      },
+      "writtenOn": "2023-09-21T18:43:19Z",
+      "side": 1,
+      "message": "nit: deduced here and below",
+      "range": {
+        "startLine": 22,
+        "startChar": 2,
+        "endLine": 22,
+        "endChar": 9
+      },
+      "revId": "66348e27c7fa59753508ce2dc31a00fd28562f85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5164339c_09bb0fc5",
+        "filename": "src/libANGLE/renderer/metal/IOSurfaceSurfaceMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1128437
+      },
+      "writtenOn": "2023-09-21T18:43:19Z",
+      "side": 1,
+      "message": "Instead of special casing this, I\u0027d suggest the following:\n\n1) Extend IOSurfaceFormatInfo with a `uint32_t iosurfaceFormat`.\n\n2) In the IOSurfaceFormats table, we\u0027ll have entries like this:\n```\n{\u0027BGRA\u0027, GL_RGB, GL_UNSIGNED_BYTE, 4, angle::FormatID::B8G8R8A8_UNORM},\n{\u0027RGBA\u0027, GL_RGB, GL_UNSIGNED_BYTE, 4, angle::FormatID::R8G8B8A8_UNORM},\n{\u0027BGRA\u0027, GL_RGBA, GL_UNSIGNED_BYTE, 4, angle::FormatID::B8G8R8A8_UNORM},\n{\u0027RGBA\u0027, GL_RGBA, GL_UNSIGNED_BYTE, 4, angle::FormatID::R8G8B8A8_UNORM},\n{\u0027BGRA\u0027, GL_BGRA_EXT, GL_UNSIGNED_BYTE, 4, angle::FormatID::B8G8R8A8_UNORM},\n```\n\nThe table lists all allowed IOSurface pixel format + internal format + data type combinations and maps them to the correct angle::FormatID.\n\nThis allows BGRA IOSurfaces to be bound as either GL_RGB, GL_RGBA, or GL_BGRA_EXT, and RGBA IOSurfaces to be bound as either GL_RGB or GL_RGBA. This matches the behavior of the similar D3D client buffer extension: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/extensions/EGL_ANGLE_d3d_texture_client_buffer.txt;l\u003d170\n\n3) FindIOSurfaceFormatIndex takes in the `uint32_t iosurfaceFormat` as an input to search in the table.",
+      "range": {
+        "startLine": 46,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 59
+      },
+      "revId": "66348e27c7fa59753508ce2dc31a00fd28562f85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
