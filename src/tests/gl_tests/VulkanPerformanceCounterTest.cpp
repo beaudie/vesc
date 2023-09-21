@@ -6086,8 +6086,8 @@ TEST_P(VulkanPerformanceCounterTest, InceptionScissorClears)
 
     angle::VulkanPerfCounters expected;
 
-    // Expect rpCount+1, color(Clears+1, Loads+0, LoadNones+0, Stores+1, StoreNones+0)
-    setExpectedCountersForColorOps(getPerfCounters(), 1, 1, 0, 0, 1, 0, &expected);
+    // Expect rpCount+1, color(Clears+0, Loads+1, LoadNones+0, Stores+1, StoreNones+0)
+    setExpectedCountersForColorOps(getPerfCounters(), 1, 0, 1, 0, 1, 0, &expected);
 
     angle::RNG rng;
 
