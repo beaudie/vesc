@@ -16,6 +16,24 @@
       "message": "It looks like https://chromium-review.googlesource.com/c/angle/angle/+/4882004 has the revert, and mostly passed with just one flake, let\u0027s try landing it instead.",
       "revId": "cb043c3726755b0fe40d032cf38dcf53a0dfee72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06871d50_bc25d97d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1544499
+      },
+      "writtenOn": "2023-09-21T18:15:43Z",
+      "side": 1,
+      "message": "SG",
+      "parentUuid": "2192604d_4252fe84",
+      "revId": "cb043c3726755b0fe40d032cf38dcf53a0dfee72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
