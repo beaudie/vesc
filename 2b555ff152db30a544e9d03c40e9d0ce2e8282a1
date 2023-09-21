@@ -39,6 +39,30 @@
       },
       "revId": "2b555ff152db30a544e9d03c40e9d0ce2e8282a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a14e9dd_bc916121",
+        "filename": "src/common/FixedVector_unittest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-09-21T13:03:15Z",
+      "side": 1,
+      "message": "It is already. Line 36 tests the constructor. Or am I missing something?",
+      "parentUuid": "5abdde54_748f970f",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 47
+      },
+      "revId": "2b555ff152db30a544e9d03c40e9d0ce2e8282a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
