@@ -144,6 +144,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc2608c3_52c6cf0d",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 4694,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-21T22:38:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ce162f6_32624bc1",
+      "range": {
+        "startLine": 4690,
+        "startChar": 4,
+        "endLine": 4694,
+        "endChar": 5
+      },
+      "revId": "a9419510aa3183642ef13ae55cd5204a553812bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "516a867c_9dad457a",
@@ -215,6 +239,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fd78bf5_a35f8529",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 2096,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-21T22:38:56Z",
+      "side": 1,
+      "message": "\u003e Your check at line 2091 should not limit to empty scissor, but should be if scissor is enabled, then the deferred clear should not re-defer, right?\n\nAck",
+      "parentUuid": "6e1ec6dc_a4c96029",
+      "range": {
+        "startLine": 2084,
+        "startChar": 4,
+        "endLine": 2096,
+        "endChar": 5
+      },
+      "revId": "a9419510aa3183642ef13ae55cd5204a553812bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bb6c6818_c2295998",
@@ -276,6 +324,30 @@
       "side": 1,
       "message": "Right, but by the time glScissor is called, it is within bound :-). Maybe something like `StartWithSmallThenGrowWindowFollowedByScissoredClear`?",
       "parentUuid": "cd65fb15_2e85b2bb",
+      "range": {
+        "startLine": 611,
+        "startChar": 23,
+        "endLine": 611,
+        "endChar": 41
+      },
+      "revId": "a9419510aa3183642ef13ae55cd5204a553812bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1817c179_ab2c29ce",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 611,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-21T22:38:56Z",
+      "side": 1,
+      "message": "wanted to keep the regex of tests in commit message simple\n\nupdated name to be more accurate",
+      "parentUuid": "1b94a810_c6c15e9d",
       "range": {
         "startLine": 611,
         "startChar": 23,
