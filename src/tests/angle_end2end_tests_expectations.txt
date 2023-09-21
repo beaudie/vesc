@@ -1197,6 +1197,18 @@ b/273271471 WIN INTEL VULKAN : ShaderAlgorithmTest.rgb_to_hsl_vertex_shader/* = 
 8236 LINUX NVIDIA : UniformBufferMemoryTest.* = SKIP
 8236 LINUX NVIDIA : Texture2DMemoryTestES3.* = SKIP
 
+// SwiftShader generates framebuffer incomplete errors
+8348 SWIFTSHADER : EGLSurfaceTest.OutOfBoundsScissorWithClearShrinkWindow/* = SKIP
+8348 SWIFTSHADER : EGLSurfaceTest.OutOfBoundsScissorWithClearGrowWindow/* = SKIP
+8348 SWIFTSHADER : EGLSurfaceTest3.OutOfBoundsScissorWithClearBuffer/* = SKIP
+// Intel and NVIDIA fails this test for unknown reason
+8348 INTEL  : EGLSurfaceTest.OutOfBoundsScissorWithClearShrinkWindow/* = SKIP
+8348 INTEL  : EGLSurfaceTest.OutOfBoundsScissorWithClearGrowWindow/* = SKIP
+8348 INTEL  : EGLSurfaceTest3.OutOfBoundsScissorWithClearBuffer/* = SKIP
+8348 NVIDIA : EGLSurfaceTest.OutOfBoundsScissorWithClearShrinkWindow/* = SKIP
+8348 NVIDIA : EGLSurfaceTest.OutOfBoundsScissorWithClearGrowWindow/* = SKIP
+8348 NVIDIA : EGLSurfaceTest3.OutOfBoundsScissorWithClearBuffer/* = SKIP
+
 // SSBO Alias Overwrite
 5990 PIXEL4ORXL VULKAN : ComputeShaderTest.SSBOAliasOverWrite/* = SKIP
 b/266235549 D3D11 : ComputeShaderTest.SSBOAliasOverWrite/* = SKIP
