@@ -22,6 +22,30 @@
       },
       "revId": "9658c34f56d49dc90d49153ff44c72b9bdcbdbb1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2192c55_132e07c6",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1163,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-21T20:11:40Z",
+      "side": 1,
+      "message": "Or I think slightly better way: you add this function:\n```\nContextVk::releaseBufferAllocation(vk::BufferHelper *bufferHelper)\n{\n    bufferHelper-\u003ereleaseBufferAndDescriptorSetCache();\n    if (ANGLE_UNLIKELY(contextVk-\u003ehasExcessPendingGarbage()))\n    {\n        ANGLE_TRY(contextVk-\u003eflushImpl(nullptr, nullptr,\n                                          RenderPassClosureReason::ExcessivePendingGarbage));\n    }    \n}\n```\nAnd then you replace `mBuffer.releaseBufferAndDescriptorSetCache call()` in BufferVk.cpp to `ContextVk-\u003ereleaseBufferAllocation(\u0026mBuffer);`",
+      "parentUuid": "d77cffc1_961f184f",
+      "range": {
+        "startLine": 1159,
+        "startChar": 7,
+        "endLine": 1163,
+        "endChar": 9
+      },
+      "revId": "9658c34f56d49dc90d49153ff44c72b9bdcbdbb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
