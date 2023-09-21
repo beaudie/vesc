@@ -26,6 +26,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b8f01371_6dcb6a2b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-09-21T20:21:00Z",
+      "side": 1,
+      "message": "Nit: GL_RGBX8_ANGLE",
+      "revId": "66348e27c7fa59753508ce2dc31a00fd28562f85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04397c18_e8e5c767",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-09-21T20:21:00Z",
+      "side": 1,
+      "message": "lgtm once Sunny\u0027s questions are addressed. It\u0027s fine with me to have the special-case for RGB if there are good reasons for it.\n\nNo need for me to re-review, assuming this doesn\u0027t change the semantics from Chrome\u0027s point of view.",
+      "revId": "66348e27c7fa59753508ce2dc31a00fd28562f85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5164339c_09bb0fc5",
         "filename": "src/libANGLE/renderer/metal/IOSurfaceSurfaceMtl.mm",
         "patchSetId": 4
@@ -67,6 +101,57 @@
         "endLine": 47,
         "endChar": 59
       },
+      "revId": "66348e27c7fa59753508ce2dc31a00fd28562f85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d05d7f5_74e68746",
+        "filename": "src/tests/egl_tests/EGLIOSurfaceClientBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-09-21T20:21:00Z",
+      "side": 1,
+      "message": "This test should be renamed - RenderToRGBIOSurface?",
+      "revId": "66348e27c7fa59753508ce2dc31a00fd28562f85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d5be2a5_6cb8d900",
+        "filename": "src/tests/egl_tests/EGLIOSurfaceClientBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-09-21T20:21:00Z",
+      "side": 1,
+      "message": "There\u0027s been a persistent problem over the years that in Apple\u0027s OpenGL driver, binding a GL_RGB texture to an RGBA IOSurface doesn\u0027t always cause the alpha channel to be set to 255 (or 1.0, depending on how you think about it). Can or should we add more tests that clear the RGB texture to a color like (1, 2, 3, 0) and then assert that the read-back color is (1, 2, 3, 255)?",
+      "revId": "66348e27c7fa59753508ce2dc31a00fd28562f85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9420e47a_c08523d6",
+        "filename": "src/tests/egl_tests/EGLIOSurfaceClientBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-09-21T20:21:00Z",
+      "side": 1,
+      "message": "Comment and test name should be updated from RGBX8888 to RGB or RGB888.",
       "revId": "66348e27c7fa59753508ce2dc31a00fd28562f85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
