@@ -87,6 +87,30 @@
       },
       "revId": "2b555ff152db30a544e9d03c40e9d0ce2e8282a1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfb887b7_a91cc1b4",
+        "filename": "src/common/FixedVector_unittest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-21T17:20:59Z",
+      "side": 1,
+      "message": "\u003e Line 36 tests the constructor. Or am I missing something?\n\nOh yeah, didn\u0027t notice that",
+      "parentUuid": "a696810b_385dbe14",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 52,
+        "endChar": 47
+      },
+      "revId": "2b555ff152db30a544e9d03c40e9d0ce2e8282a1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
