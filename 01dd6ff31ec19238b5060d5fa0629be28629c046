@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8365b800_57ffe50e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-09-21T21:59:08Z",
+      "side": 1,
+      "message": "Thank you Shabi for pointing out the missing legacy dither bit update in  GraphicsPipelineDesc::RenderPassDesc. \n\nThis is a scenario where the missing GraphicsPipelineDesc legacy dither bit can cause a bug:\n\n```\nGL_Clear()\n  Context::syncStateForClear()\n    ContextVk::onFramebufferChange()\n      ContextVk::updateDither()\n        // update FramebufferVk\u0027s RenderPassDesc legacy dither bit to 1\n      ContextVk::onDrawFramebufferRenderPassDescChange()\n        // update ContextVk::GraphicsPipelineDesc\u0027s RenderPassDesc legacy dither bit to 1\n\nGL_Disable(GL_DITHER)\n\nGL_DrawElements()\n  ContextVk::updateDither()\n    // update Framebuffer\u0027s renderpass legacy dither bit to 0\n    \n  handleDirtyGraphicsPipelineDesc()\n    // create a GraphicsPipeline + a RenderPass. The RenderPassDesc is retrieved from ContextVk::GraphicsPipelineDesc\u0027s RenderPassDesc, which is still set to 1. This causes the render results to have dither wrongly applied.\n        \n```\n\n\nThis CL updates the ContextVk::GraphicsPipelineDesc\u0027s RenderPassDesc legacy dither bit when we call ContextVk::updateDither():\n\n```\nGL_Clear()\n  Context::syncStateForClear()\n    ContextVk::onFramebufferChange()\n      ContextVk::updateDither()\n        // update FramebufferVk\u0027s RenderPassDesc legacy dither bit to 1\n        // update ContextVk::GraphicsPipelineDesc\u0027s RenderPassDesc legacy dither bit to 1\n      ContextVk::onDrawFramebufferRenderPassDescChange()\n        // update ContextVk::GraphicsPipelineDesc\u0027s RenderPassDesc legacy dither bit to 1\n\nGL_Disable(GL_DITHER)\n\nGL_DrawElements()\n  ContextVk::updateDither()\n    // update Framebuffer\u0027s renderpass legacy dither bit to 0\n    // update ContextVk::GraphicsPipelineDesc\u0027s RenderPassDesc legacy dither bit to 0\n  handleDirtyGraphicsPipelineDesc()\n    // create a GraphicsPipeline + a RenderPass. The RenderPassDesc is retrieved from ContextVk::GraphicsPipelineDesc\u0027s RenderPassDesc, which is still set to 0, and that correctly reflects the updated GL_DITHER state set by the app.\n```",
+      "revId": "01dd6ff31ec19238b5060d5fa0629be28629c046",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
