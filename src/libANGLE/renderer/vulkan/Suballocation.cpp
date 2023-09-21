@@ -151,12 +151,13 @@ void BufferBlock::unmap(const VkDevice device)
 
 VkResult BufferBlock::allocate(VkDeviceSize size,
                                VkDeviceSize alignment,
+                               bool bestFit,
                                VmaVirtualAllocation *allocationOut,
                                VkDeviceSize *offsetOut)
 {
     std::unique_lock<std::mutex> lock(mVirtualBlockMutex);
     mCountRemainsEmpty = 0;
-    return mVirtualBlock.allocate(size, alignment, allocationOut, offsetOut);
+    return mVirtualBlock.allocate(size, alignment, bestFit, allocationOut, offsetOut);
 }
 
 void BufferBlock::free(VmaVirtualAllocation allocation, VkDeviceSize offset)

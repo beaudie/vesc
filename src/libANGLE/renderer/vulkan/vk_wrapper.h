@@ -691,6 +691,7 @@ class VirtualBlock final : public WrappedObject<VirtualBlock, VmaVirtualBlock>
 
     VkResult allocate(VkDeviceSize size,
                       VkDeviceSize alignment,
+                      bool bestFit,
                       VmaVirtualAllocation *allocationOut,
                       VkDeviceSize *offsetOut);
     void free(VmaVirtualAllocation allocation, VkDeviceSize offset);
@@ -2004,10 +2005,11 @@ ANGLE_INLINE VkResult VirtualBlock::init(VkDevice device,
 
 ANGLE_INLINE VkResult VirtualBlock::allocate(VkDeviceSize size,
                                              VkDeviceSize alignment,
+                                             bool bestFit,
                                              VmaVirtualAllocation *allocationOut,
                                              VkDeviceSize *offsetOut)
 {
-    return vma::VirtualAllocate(mHandle, size, alignment, allocationOut, offsetOut);
+    return vma::VirtualAllocate(mHandle, size, alignment, bestFit, allocationOut, offsetOut);
 }
 
 ANGLE_INLINE void VirtualBlock::free(VmaVirtualAllocation allocation, VkDeviceSize offset)

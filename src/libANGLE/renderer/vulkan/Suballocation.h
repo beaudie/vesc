@@ -64,6 +64,7 @@ class BufferBlock final : angle::NonCopyable
 
     VkResult allocate(VkDeviceSize size,
                       VkDeviceSize alignment,
+                      bool bestFit,
                       VmaVirtualAllocation *allocationOut,
                       VkDeviceSize *offsetOut);
     void free(VmaVirtualAllocation allocation, VkDeviceSize offset);

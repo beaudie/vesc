@@ -3272,7 +3272,8 @@ void BufferPool::initWithFlags(RendererVk *renderer,
                                VkBufferUsageFlags usage,
                                VkDeviceSize initialSize,
                                uint32_t memoryTypeIndex,
-                               VkMemoryPropertyFlags memoryPropertyFlags)
+                               VkMemoryPropertyFlags memoryPropertyFlags,
+                               bool bestFit)
 {
     mVirtualBlockCreateFlags = flags;
     mUsage                   = usage;
@@ -3288,6 +3289,7 @@ void BufferPool::initWithFlags(RendererVk *renderer,
         mSize = renderer->getPreferedBufferBlockSize(memoryTypeIndex);
     }
     mHostVisible = ((memoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) != 0);
+    mBestFit     = bestFit;
 }
 
 BufferPool::~BufferPool()
@@ -3488,7 +3490,7 @@ VkResult BufferPool::allocateBuffer(Context *context,
             continue;
         }
 
-        if (block->allocate(alignedSize, alignment, &allocation, &offset) == VK_SUCCESS)
+        if (block->allocate(alignedSize, alignment, mBestFit, &allocation, &offset) == VK_SUCCESS)
         {
             suballocation->init(block.get(), allocation, offset, alignedSize);
             return VK_SUCCESS;
@@ -3508,7 +3510,7 @@ VkResult BufferPool::allocateBuffer(Context *context,
         }
         else
         {
-            VK_RESULT_TRY(block->allocate(alignedSize, alignment, &allocation, &offset));
+            VK_RESULT_TRY(block->allocate(alignedSize, alignment, mBestFit, &allocation, &offset));
             suballocation->init(block.get(), allocation, offset, alignedSize);
             mBufferBlocks.push_back(std::move(block));
             mEmptyBufferBlocks.pop_back();
@@ -3522,8 +3524,9 @@ VkResult BufferPool::allocateBuffer(Context *context,
 
     // Sub-allocate from the bufferBlock.
     std::unique_ptr<BufferBlock> &block = mBufferBlocks.back();
-    VK_RESULT_CHECK(block->allocate(alignedSize, alignment, &allocation, &offset) == VK_SUCCESS,
-                    VK_ERROR_OUT_OF_DEVICE_MEMORY);
+    VK_RESULT_CHECK(
+        block->allocate(alignedSize, alignment, mBestFit, &allocation, &offset) == VK_SUCCESS,
+        VK_ERROR_OUT_OF_DEVICE_MEMORY);
     suballocation->init(block.get(), allocation, offset, alignedSize);
     mNumberOfNewBuffersNeededSinceLastPrune++;
 

@@ -899,7 +899,8 @@ class BufferPool : angle::NonCopyable
                        VkBufferUsageFlags usage,
                        VkDeviceSize initialSize,
                        uint32_t memoryTypeIndex,
-                       VkMemoryPropertyFlags memoryProperty);
+                       VkMemoryPropertyFlags memoryProperty,
+                       bool bestFit);
 
     VkResult allocateBuffer(Context *context,
                             VkDeviceSize sizeInBytes,
@@ -924,6 +925,7 @@ class BufferPool : angle::NonCopyable
 
     vma::VirtualBlockCreateFlags mVirtualBlockCreateFlags;
     VkBufferUsageFlags mUsage;
+    bool mBestFit;
     bool mHostVisible;
     VkDeviceSize mSize;
     uint32_t mMemoryTypeIndex;

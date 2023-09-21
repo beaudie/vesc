@@ -134,6 +134,7 @@ void DestroyVirtualBlock(VmaVirtualBlock virtualBlock);
 VkResult VirtualAllocate(VmaVirtualBlock virtualBlock,
                          VkDeviceSize size,
                          VkDeviceSize alignment,
+                         bool bestFit,
                          VmaVirtualAllocation *pAllocation,
                          VkDeviceSize *pOffset);
 void VirtualFree(VmaVirtualBlock virtualBlock,

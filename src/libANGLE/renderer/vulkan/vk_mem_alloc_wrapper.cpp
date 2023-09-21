@@ -260,13 +260,14 @@ void DestroyVirtualBlock(VmaVirtualBlock virtualBlock)
 VkResult VirtualAllocate(VmaVirtualBlock virtualBlock,
                          VkDeviceSize size,
                          VkDeviceSize alignment,
+                         bool bestFit,
                          VmaVirtualAllocation *pAllocation,
                          VkDeviceSize *pOffset)
 {
     VmaVirtualAllocationCreateInfo createInfo = {};
     createInfo.size                           = size;
     createInfo.alignment                      = alignment;
-    createInfo.flags                          = 0;
+    createInfo.flags = bestFit ? VMA_ALLOCATION_CREATE_STRATEGY_BEST_FIT_BIT : 0;
 #if ANGLE_VMA_VERSION < 3000000
     return vmaVirtualAllocate(virtualBlock, &createInfo, pOffset);
 #else
