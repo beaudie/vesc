@@ -7171,7 +7171,7 @@ angle::Result ContextVk::initBufferForImageCopy(vk::BufferHelper *bufferHelper,
     size_t stagingAlignment = static_cast<size_t>(mRenderer->getStagingBufferAlignment());
 
     ANGLE_TRY(initBufferAllocation(bufferHelper, memoryTypeIndex, allocationSize, stagingAlignment,
-                                   BufferUsageType::Static));
+                                   BufferUsageType::Dynamic));
 
     *offset  = roundUp(bufferHelper->getOffset(), static_cast<VkDeviceSize>(imageCopyAlignment));
     *dataPtr = bufferHelper->getMappedMemory() + (*offset) - bufferHelper->getOffset();
@@ -7214,7 +7214,7 @@ angle::Result ContextVk::initBufferForVertexConversion(vk::BufferHelper *bufferH
     size_t sizeToAllocate = roundUp(size, alignment);
 
     return initBufferAllocation(bufferHelper, memoryTypeIndex, sizeToAllocate, alignment,
-                                BufferUsageType::Static);
+                                BufferUsageType::Dynamic);
 }
 
 angle::Result ContextVk::updateActiveTextures(const gl::Context *context, gl::Command command)

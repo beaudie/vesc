@@ -414,13 +414,13 @@ vk::BufferPool *ShareGroupVk::getDefaultBufferPool(RendererVk *renderer,
     vma::VirtualBlockCreateFlags vmaFlags = algorithm == SuballocationAlgorithm::Buddy
                                                 ? vma::VirtualBlockCreateFlagBits::BUDDY
                                                 : vma::VirtualBlockCreateFlagBits::GENERAL;
+    std::unique_ptr<vk::BufferPool> &pool = mDefaultBufferPools[algorithm][memoryTypeIndex];
 #else
-    // For VMA 3.0, the general allocation algorithm is used.
-    SuballocationAlgorithm algorithm      = SuballocationAlgorithm::General;
+    std::unique_ptr<vk::BufferPool> &pool = mDefaultBufferPools[usageType][memoryTypeIndex];
     vma::VirtualBlockCreateFlags vmaFlags = vma::VirtualBlockCreateFlagBits::GENERAL;
 #endif  // ANGLE_VMA_VERSION < 3000000
 
-    if (!mDefaultBufferPools[algorithm][memoryTypeIndex])
+    if (!pool)
     {
         const vk::Allocator &allocator = renderer->getAllocator();
         VkBufferUsageFlags usageFlags  = GetDefaultBufferUsageFlags(renderer);
@@ -428,13 +428,12 @@ vk::BufferPool *ShareGroupVk::getDefaultBufferPool(RendererVk *renderer,
         VkMemoryPropertyFlags memoryPropertyFlags;
         allocator.getMemoryTypeProperties(memoryTypeIndex, &memoryPropertyFlags);
 
-        std::unique_ptr<vk::BufferPool> pool = std::make_unique<vk::BufferPool>();
+        pool = std::make_unique<vk::BufferPool>();
         pool->initWithFlags(renderer, vmaFlags, usageFlags, 0, memoryTypeIndex,
                             memoryPropertyFlags);
-        mDefaultBufferPools[algorithm][memoryTypeIndex] = std::move(pool);
     }
 
-    return mDefaultBufferPools[algorithm][memoryTypeIndex].get();
+    return pool.get();
 }
 
 void ShareGroupVk::pruneDefaultBufferPools(RendererVk *renderer)

@@ -154,12 +154,7 @@ class ShareGroupVk : public ShareGroupImpl
     };
     angle::PackedEnumMap<BufferUsageType, size_t> mSizeLimitForBuddyAlgorithm;
 #else
-    enum class SuballocationAlgorithm : uint8_t
-    {
-        General     = 0,
-        InvalidEnum = 1,
-        EnumCount   = InvalidEnum,
-    };
+    using SuballocationAlgorithm = BufferUsageType;
 #endif
     angle::PackedEnumMap<SuballocationAlgorithm, vk::BufferPoolPointerArray> mDefaultBufferPools;
 
