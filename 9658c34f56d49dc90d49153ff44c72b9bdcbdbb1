@@ -46,6 +46,30 @@
       },
       "revId": "9658c34f56d49dc90d49153ff44c72b9bdcbdbb1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8df1b6cd_ea84bd72",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1163,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-21T20:39:06Z",
+      "side": 1,
+      "message": "Thanks! I have embedded `releaseBufferAndDescriptorSetCache()` inside `ContextVk::releaseBufferAllocation()`.",
+      "parentUuid": "d2192c55_132e07c6",
+      "range": {
+        "startLine": 1159,
+        "startChar": 7,
+        "endLine": 1163,
+        "endChar": 9
+      },
+      "revId": "9658c34f56d49dc90d49153ff44c72b9bdcbdbb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
