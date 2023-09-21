@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3ad9f54_118ebbd1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-09-21T14:10:45Z",
+      "side": 1,
+      "message": "Again - `SurfaceTexture`:\n```\n#11 pc 000000000000e540  /system/lib64/libnativedisplay.so (android::EGLConsumer::EglImage::~EglImage()+44) (BuildId: 3b0b03d2c8ab7eb49d16eb7be29eb3fd)\n#12 pc 000000000000e598  /system/lib64/libnativedisplay.so (android::EGLConsumer::EglImage::~EglImage()+16) (BuildId: 3b0b03d2c8ab7eb49d16eb7be29eb3fd)\n#13 pc 000000000000e434  /system/lib64/libnativedisplay.so (android::EGLConsumer::onFreeBufferLocked(int)+156) (BuildId: 3b0b03d2c8ab7eb49d16eb7be29eb3fd)\n#14 pc 000000000000bda0  /system/lib64/libnativedisplay.so (android::SurfaceTexture::freeBufferLocked(int)+48) (BuildId: 3b0b03d2c8ab7eb49d16eb7be29eb3fd)\n#15 pc 00000000000bc294  /system/lib64/libgui.so (android::ConsumerBase::onBuffersReleased()+172) (BuildId: f219f4196018eeed01e28ec428c73c99)\n#16 pc 000000000008d9d4  /system/lib64/libgui.so (android::BufferQueue::ProxyConsumerListener::onBuffersReleased()+92) (BuildId: f219f4196018eeed01e28ec428c73c99)\n#17 pc 0000000000099608  /system/lib64/libgui.so (android::BufferQueueProducer::disconnect(int, android::IGraphicBufferProducer::DisconnectMode)+184) (BuildId: f219f4196018eeed01e28ec428c73c99)\n#18 pc 00000000000eb3ec  /system/lib64/libgui.so (android::Surface::disconnect(int, android::IGraphicBufferProducer::DisconnectMode)+268) (BuildId: f219f4196018eeed01e28ec428c73c99)\n#19 pc 00000000000eaf04  /system/lib64/libgui.so (android::Surface::hook_perform(ANativeWindow*, int, ...)+264) (BuildId: f219f4196018eeed01e28ec428c73c99)\n#20 pc 0000000000031214  /system/lib64/libvulkan.so (vulkan::driver::DestroySurfaceKHR(VkInstance_T*, VkSurfaceKHR_T*, VkAllocationCallbacks const*)+56) (BuildId: 44c563855311012ead3ce5e7afdb9792)\n#21 pc 000000000039bb40  /vendor/lib64/egl/libGLESv2_samsung.so (void std::__Cr::__function::__policy_invoker\u003cvoid (void*)\u003e::__call_impl\u003cstd::__Cr::__function::__default_alloc_func\u003crx::WindowSurfaceVk::destroy(egl::Display const*)::$_0, void (void*)\u003e \u003e(std::__Cr::__function::__policy_storage const*, void*)+140) (BuildId: acced3587e668343)\n#22 pc 0000000000522114  /vendor/lib64/egl/libGLESv2_samsung.so (angle::UnlockedTailCall::runImpl(void*)+56) (BuildId: acced3587e668343)\n```\nAlso added into the commit message.",
+      "parentUuid": "c7396b04_dfa0da39",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 146
+      },
+      "revId": "78ea989ab2cd39680be376606e5dda9b5ad14f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6bada1d2_e7d6b0df",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-09-20T17:55:09Z",
       "side": 1,
       "message": "```suggestion\n    // Clear `mCalls` before calling, because Android sometimes calls back into ANGLE\n    // through EGL calls which don\u0027t expect there to be any pre-existing tail calls.\n```",
+      "range": {
+        "startLine": 1115,
+        "startChar": 0,
+        "endLine": 1116,
+        "endChar": 75
+      },
+      "revId": "78ea989ab2cd39680be376606e5dda9b5ad14f25",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8bf6a16_819550af",
+        "filename": "src/libANGLE/angletypes.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1116,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2023-09-21T14:10:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6bada1d2_e7d6b0df",
       "range": {
         "startLine": 1115,
         "startChar": 0,
