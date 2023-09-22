@@ -39,6 +39,30 @@
       },
       "revId": "658a29ea21a825d2dbac9a9ef21813d8a4ce3263",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "def817e8_66907b74",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-09-22T20:44:22Z",
+      "side": 1,
+      "message": "on windows side. all the heap type contains the VK_MEMORY_PROPERTY_HOST_COHERENT_BIT for host visiable memory",
+      "parentUuid": "cb0fcccd_0b6e43af",
+      "range": {
+        "startLine": 90,
+        "startChar": 25,
+        "endLine": 90,
+        "endChar": 43
+      },
+      "revId": "658a29ea21a825d2dbac9a9ef21813d8a4ce3263",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
