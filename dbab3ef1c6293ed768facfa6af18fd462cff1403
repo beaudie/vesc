@@ -46,6 +46,30 @@
       },
       "revId": "dbab3ef1c6293ed768facfa6af18fd462cff1403",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b7f9f0de_3eb473af",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4032,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-22T19:08:18Z",
+      "side": 1,
+      "message": "I was thinking you could just call \n\n```\nmGraphicsPipelineDesc-\u003eupdateRenderPassDesc(\u0026mGraphicsPipelineTransition,\n                                            framebufferVk-\u003egetRenderPassDesc());\n```\n\nfrom `updateDither`.",
+      "parentUuid": "51196b0c_f5eaef0b",
+      "range": {
+        "startLine": 4032,
+        "startChar": 44,
+        "endLine": 4032,
+        "endChar": 77
+      },
+      "revId": "dbab3ef1c6293ed768facfa6af18fd462cff1403",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
