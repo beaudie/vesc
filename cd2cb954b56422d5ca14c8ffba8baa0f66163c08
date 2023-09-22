@@ -125,6 +125,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da11dba6_63bbf53a",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-22T20:41:22Z",
+      "side": 1,
+      "message": "+1 to `restageDeferredClears`.\n\nFWIW, my reasoning was that the clears were deferred, we picked them up, but now decided to \"defer them again\" (hence re-defer).",
+      "parentUuid": "4bc72a38_7b8255f6",
+      "revId": "cd2cb954b56422d5ca14c8ffba8baa0f66163c08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5d504705_0fd21f61",
