@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0dc254f_1f81de08",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4032,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-22T18:15:09Z",
+      "side": 1,
+      "message": "I checked, and this looks correct, but the bit is right near the end of the first word of the render pass desc. It feels like it\u0027ll be easy to regress this in the future.\n\nIf you look at `updateRenderPassDesc`, it dirties all the RP bits, so it\u0027s pretty safe. Since I noticed that, one option you have in this CL is to just remove `updateLegacyDither` and call `updateRenderPassDesc`. Sure it\u0027s slightly less efficient, but apps basically never change the dithering state other than once at the beginning.",
+      "range": {
+        "startLine": 4032,
+        "startChar": 44,
+        "endLine": 4032,
+        "endChar": 77
+      },
+      "revId": "dbab3ef1c6293ed768facfa6af18fd462cff1403",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
