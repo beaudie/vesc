@@ -257,6 +257,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "96bcd7ae_1bb0a2bd",
+        "filename": "src/tests/egl_tests/EGLIOSurfaceClientBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-09-22T18:22:04Z",
+      "side": 1,
+      "message": "OK, as you see fit.",
+      "parentUuid": "0ef417e1_433beb8a",
+      "revId": "66348e27c7fa59753508ce2dc31a00fd28562f85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9d5be2a5_6cb8d900",
@@ -292,6 +310,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c253134e_7ecb4f82",
+        "filename": "src/tests/egl_tests/EGLIOSurfaceClientBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-09-22T18:22:04Z",
+      "side": 1,
+      "message": "OK, thanks for verifying.",
+      "parentUuid": "5df7ce8e_9d9d75ee",
+      "revId": "66348e27c7fa59753508ce2dc31a00fd28562f85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9420e47a_c08523d6",
@@ -323,6 +359,24 @@
       "side": 1,
       "message": "Same as above, I think it\u0027s fitting to name RGBX since we use RGBA IOSurface as RGB in GL.\n\nAlso there is an existing test named `BGRX` that does the same thing but for BGRA IOSurface.",
       "parentUuid": "9420e47a_c08523d6",
+      "revId": "66348e27c7fa59753508ce2dc31a00fd28562f85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b129635c_bb7ffb87",
+        "filename": "src/tests/egl_tests/EGLIOSurfaceClientBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-09-22T18:22:04Z",
+      "side": 1,
+      "message": "OK.",
+      "parentUuid": "d32df559_98172022",
       "revId": "66348e27c7fa59753508ce2dc31a00fd28562f85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
