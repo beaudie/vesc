@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54d7c7fa_144faaf8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-22T20:06:22Z",
+      "side": 1,
+      "message": "Looks good to me.",
+      "revId": "658a29ea21a825d2dbac9a9ef21813d8a4ce3263",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb0fcccd_0b6e43af",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 9
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-22T20:06:22Z",
+      "side": 1,
+      "message": "Curious, have you tried remove VK_MEMORY_PROPERTY_HOST_COHERENT_BIT from kHostUncachedFlags, does it makes any difference?",
+      "range": {
+        "startLine": 90,
+        "startChar": 25,
+        "endLine": 90,
+        "endChar": 43
+      },
+      "revId": "658a29ea21a825d2dbac9a9ef21813d8a4ce3263",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
