@@ -16,6 +16,24 @@
       "message": "Jeff, is this verified?",
       "revId": "a551a89a25161fcd538870d40a03895f4f51eee1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38e6a448_e4d907b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1359249
+      },
+      "writtenOn": "2023-09-22T21:07:24Z",
+      "side": 1,
+      "message": "I don\u0027t have or know of any tests. We would have to contrive a case where the currentQueueFamilyIndex is not 0 - and 0 is not valid for presentation.\nFor the case that mCurrentQueueFamilyindex is valid, I ran this google CI, and verify that I didn\u0027t introduce any errors.",
+      "parentUuid": "04cd6089_839562c6",
+      "revId": "a551a89a25161fcd538870d40a03895f4f51eee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
