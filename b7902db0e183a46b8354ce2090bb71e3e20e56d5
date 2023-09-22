@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c9fe2f6_1c1246c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-22T21:42:48Z",
+      "side": 1,
+      "message": "For now this is just a quick fix. I think we should move to include VMA header directly instead of define our own struct.",
+      "revId": "b7902db0e183a46b8354ce2090bb71e3e20e56d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
