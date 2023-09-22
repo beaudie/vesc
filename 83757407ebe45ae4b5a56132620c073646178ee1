@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "37a91237_7f780c87",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 4
+      },
+      "lineNbr": 1392,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-09-22T18:55:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4d267db_b2a2afa8",
+      "range": {
+        "startLine": 1392,
+        "startChar": 30,
+        "endLine": 1392,
+        "endChar": 36
+      },
+      "revId": "83757407ebe45ae4b5a56132620c073646178ee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f89394f2_7cf1d9c2",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-09-22T18:21:59Z",
       "side": 1,
       "message": "Do we know for what configurations cached memory is better here? If so, I\u0027d prefer it if you also initialized this feature (in RendererVk) to the correct value, so the benefit of all your investigations would be for everybody.",
+      "range": {
+        "startLine": 88,
+        "startChar": 43,
+        "endLine": 88,
+        "endChar": 80
+      },
+      "revId": "83757407ebe45ae4b5a56132620c073646178ee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be6131aa_6d346779",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-09-22T18:55:22Z",
+      "side": 1,
+      "message": "https://developer.arm.com/documentation/101897/0301/CPU-overheads/Vulkan-CPU-memory-mapping.\n\nfor the spec, it shows for arm based. it sounds ok to use uncached. \nfor x86 since it need strong ordering. it may not good. but this is just my assumption. I\u0027m not sure about each different architecture.",
+      "parentUuid": "f89394f2_7cf1d9c2",
       "range": {
         "startLine": 88,
         "startChar": 43,
