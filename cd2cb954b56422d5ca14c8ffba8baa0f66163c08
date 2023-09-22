@@ -98,6 +98,30 @@
       },
       "revId": "cd2cb954b56422d5ca14c8ffba8baa0f66163c08",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e438225b_c7cf2bb3",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 2088,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-22T16:59:49Z",
+      "side": 1,
+      "message": "I think I am thinking different \"bug\". I just debugged it locally and realized that the case I was thinking actually works properly. The full clear gets deferred and then the scissored clear is called, FramebufferVk::clearImpl will end up call flushDeferredClears() to flush out the full clear and then use draw to do the scissored clear.\n\nSo I am not sure what this diff line 2088 to 2093 try to fix? I removed these lines of code, and all EGLSurfaceTest (including your newly added tests) are still passing on my pixel device and all ClearTest* still pass on linux.",
+      "parentUuid": "1552d2e8_5047881e",
+      "range": {
+        "startLine": 2088,
+        "startChar": 63,
+        "endLine": 2088,
+        "endChar": 83
+      },
+      "revId": "cd2cb954b56422d5ca14c8ffba8baa0f66163c08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
