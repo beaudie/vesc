@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cc10239_b107ed4b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 4030,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-22T17:22:27Z",
+      "side": 1,
+      "message": "Need to add a `transition-\u003eset(ANGLE_GET_TRANSITION_BIT(...));` thingy here.\n\nOtherwise the wrong pipeline could be picked up from ANGLE\u0027s pipeline cache later.",
+      "revId": "4205e1096346c51e3c40fb42930606a599a72280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00ea53d3_65dc2791",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-22T17:22:27Z",
+      "side": 1,
+      "message": "Could you add an `enum class DisableDitherVsClear { Before, After, };` parameter to this function and make sure putting dither before clear also works ok?",
+      "revId": "4205e1096346c51e3c40fb42930606a599a72280",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
