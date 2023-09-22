@@ -3573,8 +3573,18 @@ void BufferPool::addStats(std::ostringstream *out) const
     {
         vma::StatInfo statInfo;
         block->calculateStats(&statInfo);
-        *out << statInfo.unusedBytes / 1024 << "/" << block->getMemorySize() / 1024 << " ";
-        totalUnusedBytes += statInfo.unusedBytes;
+        INFO() << "{ blockCount:" << statInfo.basicInfo.blockCount
+               << " allocationCount:" << statInfo.basicInfo.allocationCount
+               << " blockBytes:" << statInfo.basicInfo.blockBytes
+               << " allocationBytes:" << statInfo.basicInfo.allocationBytes
+               << " unusedRangeCount:" << statInfo.unusedRangeCount
+               << " allocationSizeMin:" << statInfo.allocationSizeMin
+               << " allocationSizeMax:" << statInfo.allocationSizeMax
+               << " unusedRangeSizeMin:" << statInfo.unusedRangeSizeMin
+               << " unusedRangeSizeMax:" << statInfo.unusedRangeSizeMax << " }";
+        *out << (statInfo.basicInfo.blockBytes - statInfo.basicInfo.allocationBytes) / 1024 << "/"
+             << block->getMemorySize() / 1024 << " ";
+        totalUnusedBytes += statInfo.basicInfo.blockBytes - statInfo.basicInfo.allocationBytes;
         totalMemorySize += block->getMemorySize();
     }
     *out << "]"
