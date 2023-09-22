@@ -22,6 +22,30 @@
       },
       "revId": "dbab3ef1c6293ed768facfa6af18fd462cff1403",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51196b0c_f5eaef0b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4032,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-09-22T18:58:58Z",
+      "side": 1,
+      "message": "I think I need to add another member function in `GraphicsPipelineDesc` to return a non-const `RenderPassDesc` member, so that I can update the legacyDither bit in the `RenderPassDesc`, is that ok?",
+      "parentUuid": "f0dc254f_1f81de08",
+      "range": {
+        "startLine": 4032,
+        "startChar": 44,
+        "endLine": 4032,
+        "endChar": 77
+      },
+      "revId": "dbab3ef1c6293ed768facfa6af18fd462cff1403",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
