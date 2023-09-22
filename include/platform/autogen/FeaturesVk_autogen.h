@@ -1279,6 +1279,13 @@ struct FeaturesVk : FeatureSetBase
         &members, "http://anglebug.com/8297"
     };
 
+    FeatureInfo preferHostCachedForDynamicBufferUsage = {
+        "preferHostCachedForDynamicBufferUsage",
+        FeatureCategory::VulkanFeatures,
+        "prefer host cached memory for dynamic draw buffer usage",
+        &members, "https://issuetracker.google.com/288119108"
+    };
+
 };
 
 inline FeaturesVk::FeaturesVk()  = default;
