@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "689c6f0e_7240807a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002358
+      },
+      "writtenOn": "2023-09-22T13:33:49Z",
+      "side": 1,
+      "message": "ptal -- updating for WebGL1",
+      "revId": "d2612abea802ef7f6d4acaea103e941b58a7ae53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
