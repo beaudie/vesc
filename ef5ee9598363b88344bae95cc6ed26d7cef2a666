@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3777c1fb_32681ac5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-22T21:41:40Z",
+      "side": 1,
+      "message": "Presubmit complaint is that this should be `Bug:` (not `Bugs:`)",
+      "revId": "ef5ee9598363b88344bae95cc6ed26d7cef2a666",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
