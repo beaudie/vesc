@@ -38,18 +38,25 @@ typedef enum VirtualBlockCreateFlagBits
 
 typedef struct StatInfo
 {
-    // Number of VkDeviceMemory Vulkan memory blocks allocated.
-    uint32_t blockCount;
-    // Number of VmaAllocation allocation objects allocated.
-    uint32_t allocationCount;
-    // Number of free ranges of memory between allocations.
+    struct BasicInfo
+    {
+        // Number of VkDeviceMemory Vulkan memory blocks allocated.
+        uint32_t blockCount;
+        // Number of VmaAllocation allocation objects allocated.
+        uint32_t allocationCount;
+        VkDeviceSize blockBytes;
+        VkDeviceSize allocationBytes;
+    } basicInfo;
+    /// Number of free ranges of memory between allocations.
     uint32_t unusedRangeCount;
-    // Total number of bytes occupied by all allocations.
-    VkDeviceSize usedBytes;
-    // Total number of bytes occupied by unused ranges.
-    VkDeviceSize unusedBytes;
-    VkDeviceSize allocationSizeMin, allocationSizeAvg, allocationSizeMax;
-    VkDeviceSize unusedRangeSizeMin, unusedRangeSizeAvg, unusedRangeSizeMax;
+    /// Smallest allocation size. `VK_WHOLE_SIZE` if there are 0 allocations.
+    VkDeviceSize allocationSizeMin;
+    /// Largest allocation size. 0 if there are 0 allocations.
+    VkDeviceSize allocationSizeMax;
+    /// Smallest empty range size. `VK_WHOLE_SIZE` if there are 0 empty ranges.
+    VkDeviceSize unusedRangeSizeMin;
+    /// Largest empty range size. 0 if there are 0 empty ranges.
+    VkDeviceSize unusedRangeSizeMax;
 } StatInfo;
 
 VkResult InitAllocator(VkPhysicalDevice physicalDevice,
