@@ -110,6 +110,30 @@
       },
       "revId": "83757407ebe45ae4b5a56132620c073646178ee1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3dd79ad3_2b4c9481",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-22T19:06:23Z",
+      "side": 1,
+      "message": "Looks to me like for this kind of usage (write-only), it\u0027s better to use uncached on ARM? From that doc:\n\n\u003e Hardware coherency has a small power cost, so must not be used for resources that are write-only on the CPU. For write-only resources, bypass the CPU cache by using the Not Cached, coherent memory type.\n\n\u003e Use HOST_VISIBLE | HOST_COHERENT memory for resources which are write-only on the CPU.\n\n---\n\nOk, looks like whatever\u0027s causing you to make this change might be a bad app usage or something; like they use DynamicDraw, but actually meant to use something else?\n\nAnyway, if this is supposed to only affect DynamicDraw (as the feature name suggests), please make this actually only apply to `gl::BufferUsage::DynamicDraw`, as it is now also applying to `StreamDraw`. If you mean to apply to both (which probably makes sense), please rename to `preferHostCachedForNonStaticBufferUsage`",
+      "parentUuid": "be6131aa_6d346779",
+      "range": {
+        "startLine": 88,
+        "startChar": 43,
+        "endLine": 88,
+        "endChar": 80
+      },
+      "revId": "83757407ebe45ae4b5a56132620c073646178ee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
