@@ -107,6 +107,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bc72a38_7b8255f6",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-22T20:38:56Z",
+      "side": 1,
+      "message": "+1. I also found this redeferClears name very confusing, it is opposite of what it does. Or maybe `restageDeferredClears`",
+      "parentUuid": "50e7b57b_312a3464",
+      "revId": "cd2cb954b56422d5ca14c8ffba8baa0f66163c08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5d504705_0fd21f61",
