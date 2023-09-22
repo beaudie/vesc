@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "73b1debc_aef1acaf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-09-22T15:17:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b4cea5e_e90c43f2",
+      "range": {
+        "startLine": 22,
+        "startChar": 2,
+        "endLine": 22,
+        "endChar": 9
+      },
+      "revId": "66348e27c7fa59753508ce2dc31a00fd28562f85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b8f01371_6dcb6a2b",
@@ -37,6 +61,24 @@
       "writtenOn": "2023-09-21T20:21:00Z",
       "side": 1,
       "message": "Nit: GL_RGBX8_ANGLE",
+      "revId": "66348e27c7fa59753508ce2dc31a00fd28562f85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c027f8c0_7fa72fe0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-09-22T15:17:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b8f01371_6dcb6a2b",
       "revId": "66348e27c7fa59753508ce2dc31a00fd28562f85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -146,6 +188,40 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "629a2ebf_3122c60c",
+        "filename": "src/tests/egl_tests/EGLIOSurfaceClientBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-09-22T15:17:48Z",
+      "side": 1,
+      "message": "[1]",
+      "revId": "66348e27c7fa59753508ce2dc31a00fd28562f85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5ef5468_17af959a",
+        "filename": "src/tests/egl_tests/EGLIOSurfaceClientBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-09-22T15:17:48Z",
+      "side": 1,
+      "message": "[2]",
+      "revId": "66348e27c7fa59753508ce2dc31a00fd28562f85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5d05d7f5_74e68746",
@@ -159,6 +235,24 @@
       "writtenOn": "2023-09-21T20:21:00Z",
       "side": 1,
       "message": "This test should be renamed - RenderToRGBIOSurface?",
+      "revId": "66348e27c7fa59753508ce2dc31a00fd28562f85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ef417e1_433beb8a",
+        "filename": "src/tests/egl_tests/EGLIOSurfaceClientBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 529,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-09-22T15:17:48Z",
+      "side": 1,
+      "message": "I think RGBX is fitting name since it\u0027s the fact that we create a RGBA IOSurface but only uses its RGB components in GL.",
+      "parentUuid": "5d05d7f5_74e68746",
       "revId": "66348e27c7fa59753508ce2dc31a00fd28562f85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -182,6 +276,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5df7ce8e_9d9d75ee",
+        "filename": "src/tests/egl_tests/EGLIOSurfaceClientBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-09-22T15:17:48Z",
+      "side": 1,
+      "message": "I think `doClearTest` already clears the texture to (1, 2, 3, 4) [1] and checks that the alpha is 255 in [2] (it skips the check on OpenGL).",
+      "parentUuid": "9d5be2a5_6cb8d900",
+      "revId": "66348e27c7fa59753508ce2dc31a00fd28562f85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9420e47a_c08523d6",
         "filename": "src/tests/egl_tests/EGLIOSurfaceClientBufferTest.cpp",
         "patchSetId": 4
@@ -193,6 +305,24 @@
       "writtenOn": "2023-09-21T20:21:00Z",
       "side": 1,
       "message": "Comment and test name should be updated from RGBX8888 to RGB or RGB888.",
+      "revId": "66348e27c7fa59753508ce2dc31a00fd28562f85",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d32df559_98172022",
+        "filename": "src/tests/egl_tests/EGLIOSurfaceClientBufferTest.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-09-22T15:17:48Z",
+      "side": 1,
+      "message": "Same as above, I think it\u0027s fitting to name RGBX since we use RGBA IOSurface as RGB in GL.\n\nAlso there is an existing test named `BGRX` that does the same thing but for BGRA IOSurface.",
+      "parentUuid": "9420e47a_c08523d6",
       "revId": "66348e27c7fa59753508ce2dc31a00fd28562f85",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
