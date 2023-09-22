@@ -122,6 +122,30 @@
       },
       "revId": "cd2cb954b56422d5ca14c8ffba8baa0f66163c08",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d98abd05_b033ff9b",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 2088,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-22T17:03:17Z",
+      "side": 1,
+      "message": "can you try `SimpleStateChangeTestES3.ClearThenZeroSizeScissoredClearThenRebindAtt\nachment/ES3_Vulkan` without changes in line 2088 to 2093? it should trigger an assert somewhere in `syncState` without those lines",
+      "parentUuid": "e438225b_c7cf2bb3",
+      "range": {
+        "startLine": 2088,
+        "startChar": 63,
+        "endLine": 2088,
+        "endChar": 83
+      },
+      "revId": "cd2cb954b56422d5ca14c8ffba8baa0f66163c08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
