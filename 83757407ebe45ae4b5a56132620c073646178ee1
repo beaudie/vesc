@@ -134,6 +134,30 @@
       },
       "revId": "83757407ebe45ae4b5a56132620c073646178ee1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dabdbf84_dc4eeecb",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-09-22T19:06:51Z",
+      "side": 1,
+      "message": "or we have something wrong on the virtual machine side. I think it is always good to choose cached. unless don\u0027t have such memory type.",
+      "parentUuid": "be6131aa_6d346779",
+      "range": {
+        "startLine": 88,
+        "startChar": 43,
+        "endLine": 88,
+        "endChar": 80
+      },
+      "revId": "83757407ebe45ae4b5a56132620c073646178ee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
