@@ -16,6 +16,52 @@
       "message": "hi all,\n\nplease help to review the changes.\n\nthanks\n\nhailin",
       "revId": "83757407ebe45ae4b5a56132620c073646178ee1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4d267db_b2a2afa8",
+        "filename": "include/platform/vk_features.json",
+        "patchSetId": 4
+      },
+      "lineNbr": 1392,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-22T18:21:59Z",
+      "side": 1,
+      "message": "Please use `issuetracker.google.com`, ANGLE is a public repo.",
+      "range": {
+        "startLine": 1392,
+        "startChar": 30,
+        "endLine": 1392,
+        "endChar": 36
+      },
+      "revId": "83757407ebe45ae4b5a56132620c073646178ee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f89394f2_7cf1d9c2",
+        "filename": "src/libANGLE/renderer/vulkan/BufferVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-22T18:21:59Z",
+      "side": 1,
+      "message": "Do we know for what configurations cached memory is better here? If so, I\u0027d prefer it if you also initialized this feature (in RendererVk) to the correct value, so the benefit of all your investigations would be for everybody.",
+      "range": {
+        "startLine": 88,
+        "startChar": 43,
+        "endLine": 88,
+        "endChar": 80
+      },
+      "revId": "83757407ebe45ae4b5a56132620c073646178ee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
