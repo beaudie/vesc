@@ -39,6 +39,30 @@
       },
       "revId": "cd2cb954b56422d5ca14c8ffba8baa0f66163c08",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1552d2e8_5047881e",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 21
+      },
+      "lineNbr": 2088,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-22T01:07:12Z",
+      "side": 1,
+      "message": "\u003e if we have this bug that two clears got merged incorrectly\n\nthe bug i was working on was where render area became invalid. The bug you mention seems different? `ClearTestES3.MaskedScissoredClearThenFullMaskedClear` seems to have some sort of scissored clear then masked clear, is that not the usecase you had in mind?",
+      "parentUuid": "5d504705_0fd21f61",
+      "range": {
+        "startLine": 2088,
+        "startChar": 63,
+        "endLine": 2088,
+        "endChar": 83
+      },
+      "revId": "cd2cb954b56422d5ca14c8ffba8baa0f66163c08",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
