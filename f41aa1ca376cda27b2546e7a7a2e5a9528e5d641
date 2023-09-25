@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e84cc5ed_692125bf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-25T23:10:10Z",
+      "side": 1,
+      "message": "Why not also change `mInFlightBuffers` to `std::dequeue` (i.e, change `BufferHelperPointerVector` to `BufferHelperQueue`)? It wont help much since we never do erase on it, but just to be consistent, and it wont hurt. Then you dont need to template `ReleaseBufferListToRenderer`.",
+      "range": {
+        "startLine": 138,
+        "startChar": 30,
+        "endLine": 138,
+        "endChar": 46
+      },
+      "revId": "f41aa1ca376cda27b2546e7a7a2e5a9528e5d641",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
