@@ -193,6 +193,8 @@ angle::Result ProgramGL::load(const gl::Context *context,
     ANGLE_TRACE_EVENT0("gpu.angle", "ProgramGL::load");
     ProgramExecutableGL *executableGL = getExecutable();
 
+    WARN() << "=== Program load " << mProgramID;
+
     // Read the binary format, size and blob
     GLenum binaryFormat   = stream->readInt<GLenum>();
     GLint binaryLength    = stream->readInt<GLint>();
@@ -264,6 +266,8 @@ void ProgramGL::setSeparable(bool separable)
 
 void ProgramGL::prepareForLink(const gl::ShaderMap<ShaderImpl *> &shaders)
 {
+    WARN() << "*** Before link, error: " << mFunctions->getError();
+    WARN() << "=== Prepare for link " << mProgramID << " " << std::this_thread::get_id();
     for (gl::ShaderType shaderType : gl::AllShaderTypes())
     {
         mAttachedShaders[shaderType] = 0;
@@ -273,12 +277,14 @@ void ProgramGL::prepareForLink(const gl::ShaderMap<ShaderImpl *> &shaders)
             const ShaderGL *shaderGL     = GetAs<ShaderGL>(shaders[shaderType]);
             mAttachedShaders[shaderType] = shaderGL->getShaderID();
         }
+        WARN() << " == attached shader [" << shaderType << "] is " << mAttachedShaders[shaderType];
     }
 }
 
 angle::Result ProgramGL::link(const gl::Context *context, std::shared_ptr<LinkTask> *linkTaskOut)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ProgramGL::link");
+    WARN() << "=== initiate link";
 
     *linkTaskOut = std::make_shared<LinkTaskGL>(this, mRenderer->hasNativeParallelCompile(),
                                                 mFunctions, context->getExtensions(), mProgramID);
@@ -292,9 +298,14 @@ void ProgramGL::linkJobImpl(const gl::Extensions &extensions)
     const gl::ProgramExecutable &executable = mState.getExecutable();
     ProgramExecutableGL *executableGL       = getExecutable();
 
+    WARN() << "*** Do link, error: " << mFunctions->getError();
+    WARN() << "=== Do link " << mProgramID << " " << std::this_thread::get_id();
+
     if (mAttachedShaders[gl::ShaderType::Compute] != 0)
     {
+        WARN() << " == is compute";
         mFunctions->attachShader(mProgramID, mAttachedShaders[gl::ShaderType::Compute]);
+        WARN() << " ** attach compute, error: " << mFunctions->getError();
     }
     else
     {
@@ -304,11 +315,13 @@ void ProgramGL::linkJobImpl(const gl::Extensions &extensions)
             executable.hasLinkedShaderStage(gl::ShaderType::Geometry) ? gl::ShaderType::Geometry
                                                                       : gl::ShaderType::Vertex;
         const gl::SharedCompiledShaderState &tfShaderState = mState.getAttachedShader(tfShaderType);
+        WARN() << " == tf stage is " << tfShaderType;
         for (const auto &tfVarying : mState.getTransformFeedbackVaryingNames())
         {
             std::string tfVaryingMappedName =
                 GetTransformFeedbackVaryingMappedName(tfShaderState, tfVarying);
             transformFeedbackVaryingMappedNames.push_back(tfVaryingMappedName);
+            WARN() << " == TF: " << tfVaryingMappedName;
         }
 
         if (transformFeedbackVaryingMappedNames.empty())
@@ -321,6 +334,9 @@ void ProgramGL::linkJobImpl(const gl::Extensions &extensions)
                 mFunctions->transformFeedbackVaryings(mProgramID, 0, nullptr,
                                                       mState.getTransformFeedbackBufferMode());
                 executableGL->mHasAppliedTransformFeedbackVaryings = false;
+                WARN() << " == glTransformFeedbackVaryings with 0, nullptr";
+                WARN() << " ** glTransformFeedbackVaryings with 0, error: "
+                       << mFunctions->getError();
             }
         }
         else
@@ -335,6 +351,9 @@ void ProgramGL::linkJobImpl(const gl::Extensions &extensions)
                 mProgramID, static_cast<GLsizei>(transformFeedbackVaryingMappedNames.size()),
                 &transformFeedbackVaryings[0], mState.getTransformFeedbackBufferMode());
             executableGL->mHasAppliedTransformFeedbackVaryings = true;
+            WARN() << " == glTransformFeedbackVaryings with "
+                   << transformFeedbackVaryingMappedNames.size() << " varyings";
+            WARN() << " ** glTransformFeedbackVaryings, error: " << mFunctions->getError();
         }
 
         for (const gl::ShaderType shaderType : gl::kAllGraphicsShaderTypes)
@@ -342,6 +361,9 @@ void ProgramGL::linkJobImpl(const gl::Extensions &extensions)
             if (mAttachedShaders[shaderType] != 0)
             {
                 mFunctions->attachShader(mProgramID, mAttachedShaders[shaderType]);
+                WARN() << " == glAttachShader " << shaderType << " "
+                       << mAttachedShaders[shaderType];
+                WARN() << " ** glAttachShader, error: " << mFunctions->getError();
             }
         }
 
@@ -355,6 +377,9 @@ void ProgramGL::linkJobImpl(const gl::Extensions &extensions)
 
             mFunctions->bindAttribLocation(mProgramID, attribute.getLocation(),
                                            attribute.mappedName.c_str());
+            WARN() << " == glBindAttribLocation " << attribute.getLocation() << " "
+                   << attribute.mappedName.c_str();
+            WARN() << " ** glBindAttribLocation, error: " << mFunctions->getError();
         }
 
         // Bind the secondary fragment color outputs defined in EXT_blend_func_extended. We only use
@@ -380,6 +405,10 @@ void ProgramGL::linkJobImpl(const gl::Extensions &extensions)
                                                                 "webgl_FragColor");
                         mFunctions->bindFragDataLocationIndexed(mProgramID, 0, 1,
                                                                 "webgl_SecondaryFragColor");
+                        WARN() << " == glBindFragDataLocationIndexed 0/0 and 0/1 for FragColor and "
+                                  "SecondaryFragColor";
+                        WARN() << " ** glBindFragDataLocationIndexed, error: "
+                               << mFunctions->getError();
                     }
                     else if (output.name == "gl_SecondaryFragDataEXT")
                     {
@@ -405,6 +434,10 @@ void ProgramGL::linkJobImpl(const gl::Extensions &extensions)
                         mFunctions->bindFragDataLocationIndexed(mProgramID, 0, 0, "webgl_FragData");
                         mFunctions->bindFragDataLocationIndexed(mProgramID, 0, 1,
                                                                 "webgl_SecondaryFragData");
+                        WARN() << " == glBindFragDataLocationIndexed 0/0 and 0/1 for FragData and "
+                                  "SecondaryFragData";
+                        WARN() << " ** glBindFragDataLocationIndexed, error: "
+                               << mFunctions->getError();
                     }
                 }
             }
@@ -433,6 +466,10 @@ void ProgramGL::linkJobImpl(const gl::Extensions &extensions)
                             mFunctions->bindFragDataLocationIndexed(
                                 mProgramID, static_cast<int>(outputLocationIndex), 0,
                                 outputVar.mappedName.c_str());
+                            WARN() << " == glBindFragDataLocationIndexed " << outputLocationIndex
+                                   << "/0 for " << outputVar.mappedName;
+                            WARN() << " ** glBindFragDataLocationIndexed, error: "
+                                   << mFunctions->getError();
                         }
                     }
                 }
@@ -456,6 +493,10 @@ void ProgramGL::linkJobImpl(const gl::Extensions &extensions)
                             mFunctions->bindFragDataLocationIndexed(
                                 mProgramID, static_cast<int>(outputLocationIndex), 1,
                                 outputVar.mappedName.c_str());
+                            WARN() << " == glBindFragDataLocationIndexed " << outputLocationIndex
+                                   << "/1 for " << outputVar.mappedName;
+                            WARN() << " ** glBindFragDataLocationIndexed, error: "
+                                   << mFunctions->getError();
                         }
                     }
                 }
@@ -464,15 +505,20 @@ void ProgramGL::linkJobImpl(const gl::Extensions &extensions)
     }
 
     mFunctions->linkProgram(mProgramID);
+    WARN() << " == glLinkProgram";
+    WARN() << " ** glLinkProgram, error: " << mFunctions->getError();
 }
 
 angle::Result ProgramGL::postLinkJobImpl(const gl::ProgramLinkedResources &resources)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ProgramGL::postLinkJobImpl");
+    WARN() << "=== post link " << mProgramID << " " << std::this_thread::get_id();
 
     if (mAttachedShaders[gl::ShaderType::Compute] != 0)
     {
+        WARN() << " == is compute";
         mFunctions->detachShader(mProgramID, mAttachedShaders[gl::ShaderType::Compute]);
+        WARN() << " ** detach compute, error: " << mFunctions->getError();
     }
     else
     {
@@ -481,6 +527,9 @@ angle::Result ProgramGL::postLinkJobImpl(const gl::ProgramLinkedResources &resou
             if (mAttachedShaders[shaderType] != 0)
             {
                 mFunctions->detachShader(mProgramID, mAttachedShaders[shaderType]);
+                WARN() << " == glDetachShader " << shaderType << " "
+                       << mAttachedShaders[shaderType];
+                WARN() << " ** glDetachShader, error: " << mFunctions->getError();
             }
         }
     }
@@ -488,7 +537,13 @@ angle::Result ProgramGL::postLinkJobImpl(const gl::ProgramLinkedResources &resou
     // Verify the link
     if (!checkLinkStatus())
     {
-        return angle::Result::Stop;
+        WARN() << " == CHECK LINK STATUS FAILED, CRASHING";
+        // infinite loop for good measure
+        while (true)
+        {
+            *(volatile int *)0 = 0;
+        }
+        // return angle::Result::Stop;
     }
 
     if (mFeatures.alwaysCallUseProgramAfterLink.enabled)
@@ -666,11 +721,13 @@ bool ProgramGL::checkLinkStatus()
 {
     GLint linkStatus = GL_FALSE;
     mFunctions->getProgramiv(mProgramID, GL_LINK_STATUS, &linkStatus);
+    WARN() << " ** getProgramiv, error: " << mFunctions->getError();
     if (linkStatus == GL_FALSE)
     {
         // Linking or program binary loading failed, put the error into the info log.
         GLint infoLogLength = 0;
         mFunctions->getProgramiv(mProgramID, GL_INFO_LOG_LENGTH, &infoLogLength);
+        WARN() << " ** getProgramiv again, error: " << mFunctions->getError();
 
         // Info log length includes the null terminator, so 1 means that the info log is an empty
         // string.
