@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fff4215b_0611ae95",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-25T17:27:27Z",
+      "side": 0,
+      "message": "```suggestion\n    // If there are deferred clears, restage them.  syncState may have accumulated deferred clears,\n```",
+      "revId": "1b5f3e4005f1f38696df73f2218b35a491a212d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db4c7ec8_96652bf7",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 999,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-25T17:27:27Z",
+      "side": 0,
+      "message": "```suggestion\n    // If any clears were picked up when syncing the read framebuffer (as the blit source), restage\n```",
+      "revId": "1b5f3e4005f1f38696df73f2218b35a491a212d2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
