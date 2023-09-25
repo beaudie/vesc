@@ -124,6 +124,24 @@
       "parentUuid": "9f23d839_dc788d9b",
       "revId": "bc4e15f2faacf478ec72305df5e3e443fe2182b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b3a537b_093dbbdb",
+        "filename": "src/common/matrix_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-25T21:14:32Z",
+      "side": 1,
+      "message": "Renamed `m` to `mat` and that formatted better 😊",
+      "parentUuid": "e9e74c87_259fcf0f",
+      "revId": "bc4e15f2faacf478ec72305df5e3e443fe2182b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
