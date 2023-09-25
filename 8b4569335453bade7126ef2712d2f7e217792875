@@ -174,6 +174,24 @@
       "parentUuid": "4f5330ec_ae05672e",
       "revId": "8b4569335453bade7126ef2712d2f7e217792875",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "831924c8_867d60b2",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-25T20:10:50Z",
+      "side": 1,
+      "message": "Acknowledged\n\nI\u0027m surprised ASSERT_GL_NO_ERROR() isn\u0027t failing, but ok :shrug:",
+      "parentUuid": "dd92ba8f_adc349fe",
+      "revId": "8b4569335453bade7126ef2712d2f7e217792875",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
