@@ -70,6 +70,24 @@
       "parentUuid": "c39e0a73_bad2e6df",
       "revId": "bc4e15f2faacf478ec72305df5e3e443fe2182b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b22edfe_66d6be57",
+        "filename": "src/common/matrix_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-25T20:01:59Z",
+      "side": 1,
+      "message": "I don\u0027t fully agree on the motivation but I did move it to a helper as I applied the transposition and found a way to make it look nice (modulo clang formatting messing things up a little due to a different indent level but I think I\u0027ll just let it do its thing)",
+      "parentUuid": "d0c8d184_f496fb45",
+      "revId": "bc4e15f2faacf478ec72305df5e3e443fe2182b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
