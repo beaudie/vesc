@@ -99,6 +99,30 @@
       },
       "revId": "093363ac0c69070855292871c2177f170da807ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86d2c839_4fde04d9",
+        "filename": "src/common/matrix_utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-25T20:28:40Z",
+      "side": 1,
+      "message": "Have you measured if inlining it makes things any faster? Inline is really only useful for super tiny functions, and the perf improvement is not even about the cost of a function call. It\u0027s about the freedom the compiler gets w.r.t register allocation, and not having to store/restore registers.\n\nA function this big is going to use up most/all registers, and if it\u0027s inlined in some code that might `if`-jump over it, will just hurt the instruction cache usage. Not to mention stack trace (like during crash/etc) from inlined function is harder to diagnose.\n\nSo, unless data shows actual improvements, don\u0027t inline on a hunch. Compilers and CPUs are too complicated for hunches!",
+      "parentUuid": "ef4ac0aa_acceac39",
+      "range": {
+        "startLine": 27,
+        "startChar": 18,
+        "endLine": 27,
+        "endChar": 37
+      },
+      "revId": "093363ac0c69070855292871c2177f170da807ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
