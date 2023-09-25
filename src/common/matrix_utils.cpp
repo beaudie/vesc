@@ -14,7 +14,7 @@ namespace angle
 Mat4::Mat4() : Mat4(1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 0.f, 0.f, 1.f)
 {}
 
-Mat4::Mat4(const Matrix<float> generalMatrix) : Matrix(std::vector<float>(16, 0), 4, 4)
+Mat4::Mat4(const Matrix<float> generalMatrix)
 {
     unsigned int minCols = std::min((unsigned int)4, generalMatrix.columns());
     unsigned int minRows = std::min((unsigned int)4, generalMatrix.rows());
@@ -27,9 +27,15 @@ Mat4::Mat4(const Matrix<float> generalMatrix) : Matrix(std::vector<float>(16, 0)
     }
 }
 
-Mat4::Mat4(const std::vector<float> &elements) : Matrix(elements, 4) {}
+Mat4::Mat4(const std::vector<float> &elements)
+{
+    std::copy(elements.begin(), std::min(elements.end(), elements.begin() + 16), mElements.data());
+}
 
-Mat4::Mat4(const float *elements) : Matrix(elements, 4) {}
+Mat4::Mat4(const float *elements)
+{
+    std::copy(elements, elements + 16, mElements.data());
+}
 
 Mat4::Mat4(float m00,
            float m01,
@@ -47,7 +53,6 @@ Mat4::Mat4(float m00,
            float m31,
            float m32,
            float m33)
-    : Matrix(std::vector<float>(16, 0), 4, 4)
 {
     mElements[0]  = m00;
     mElements[1]  = m01;
@@ -272,6 +277,71 @@ Vector4 Mat4::product(const Vector4 &b)
         mElements[2] * b.x() + mElements[6] * b.y() + mElements[10] * b.z() + mElements[14] * b.w(),
         mElements[3] * b.x() + mElements[7] * b.y() + mElements[11] * b.z() +
             mElements[15] * b.w());
+}
+
+Mat4 Mat4::inverse() const
+{
+    // cof from Matrix<T> inverse() but already transposed
+    Mat4 coft;
+    coft(0, 0) = at(1, 1) * at(2, 2) * at(3, 3) + at(2, 1) * at(3, 2) * at(1, 3) +
+                 at(3, 1) * at(1, 2) * at(2, 3) - at(1, 1) * at(3, 2) * at(2, 3) -
+                 at(2, 1) * at(1, 2) * at(3, 3) - at(3, 1) * at(2, 2) * at(1, 3);
+    coft(1, 0) = -(at(1, 0) * at(2, 2) * at(3, 3) + at(2, 0) * at(3, 2) * at(1, 3) +
+                   at(3, 0) * at(1, 2) * at(2, 3) - at(1, 0) * at(3, 2) * at(2, 3) -
+                   at(2, 0) * at(1, 2) * at(3, 3) - at(3, 0) * at(2, 2) * at(1, 3));
+    coft(2, 0) = at(1, 0) * at(2, 1) * at(3, 3) + at(2, 0) * at(3, 1) * at(1, 3) +
+                 at(3, 0) * at(1, 1) * at(2, 3) - at(1, 0) * at(3, 1) * at(2, 3) -
+                 at(2, 0) * at(1, 1) * at(3, 3) - at(3, 0) * at(2, 1) * at(1, 3);
+    coft(3, 0) = -(at(1, 0) * at(2, 1) * at(3, 2) + at(2, 0) * at(3, 1) * at(1, 2) +
+                   at(3, 0) * at(1, 1) * at(2, 2) - at(1, 0) * at(3, 1) * at(2, 2) -
+                   at(2, 0) * at(1, 1) * at(3, 2) - at(3, 0) * at(2, 1) * at(1, 2));
+    coft(0, 1) = -(at(0, 1) * at(2, 2) * at(3, 3) + at(2, 1) * at(3, 2) * at(0, 3) +
+                   at(3, 1) * at(0, 2) * at(2, 3) - at(0, 1) * at(3, 2) * at(2, 3) -
+                   at(2, 1) * at(0, 2) * at(3, 3) - at(3, 1) * at(2, 2) * at(0, 3));
+    coft(1, 1) = at(0, 0) * at(2, 2) * at(3, 3) + at(2, 0) * at(3, 2) * at(0, 3) +
+                 at(3, 0) * at(0, 2) * at(2, 3) - at(0, 0) * at(3, 2) * at(2, 3) -
+                 at(2, 0) * at(0, 2) * at(3, 3) - at(3, 0) * at(2, 2) * at(0, 3);
+    coft(2, 1) = -(at(0, 0) * at(2, 1) * at(3, 3) + at(2, 0) * at(3, 1) * at(0, 3) +
+                   at(3, 0) * at(0, 1) * at(2, 3) - at(0, 0) * at(3, 1) * at(2, 3) -
+                   at(2, 0) * at(0, 1) * at(3, 3) - at(3, 0) * at(2, 1) * at(0, 3));
+    coft(3, 1) = at(0, 0) * at(2, 1) * at(3, 2) + at(2, 0) * at(3, 1) * at(0, 2) +
+                 at(3, 0) * at(0, 1) * at(2, 2) - at(0, 0) * at(3, 1) * at(2, 2) -
+                 at(2, 0) * at(0, 1) * at(3, 2) - at(3, 0) * at(2, 1) * at(0, 2);
+    coft(0, 2) = at(0, 1) * at(1, 2) * at(3, 3) + at(1, 1) * at(3, 2) * at(0, 3) +
+                 at(3, 1) * at(0, 2) * at(1, 3) - at(0, 1) * at(3, 2) * at(1, 3) -
+                 at(1, 1) * at(0, 2) * at(3, 3) - at(3, 1) * at(1, 2) * at(0, 3);
+    coft(1, 2) = -(at(0, 0) * at(1, 2) * at(3, 3) + at(1, 0) * at(3, 2) * at(0, 3) +
+                   at(3, 0) * at(0, 2) * at(1, 3) - at(0, 0) * at(3, 2) * at(1, 3) -
+                   at(1, 0) * at(0, 2) * at(3, 3) - at(3, 0) * at(1, 2) * at(0, 3));
+    coft(2, 2) = at(0, 0) * at(1, 1) * at(3, 3) + at(1, 0) * at(3, 1) * at(0, 3) +
+                 at(3, 0) * at(0, 1) * at(1, 3) - at(0, 0) * at(3, 1) * at(1, 3) -
+                 at(1, 0) * at(0, 1) * at(3, 3) - at(3, 0) * at(1, 1) * at(0, 3);
+    coft(3, 2) = -(at(0, 0) * at(1, 1) * at(3, 2) + at(1, 0) * at(3, 1) * at(0, 2) +
+                   at(3, 0) * at(0, 1) * at(1, 2) - at(0, 0) * at(3, 1) * at(1, 2) -
+                   at(1, 0) * at(0, 1) * at(3, 2) - at(3, 0) * at(1, 1) * at(0, 2));
+    coft(0, 3) = -(at(0, 1) * at(1, 2) * at(2, 3) + at(1, 1) * at(2, 2) * at(0, 3) +
+                   at(2, 1) * at(0, 2) * at(1, 3) - at(0, 1) * at(2, 2) * at(1, 3) -
+                   at(1, 1) * at(0, 2) * at(2, 3) - at(2, 1) * at(1, 2) * at(0, 3));
+    coft(1, 3) = at(0, 0) * at(1, 2) * at(2, 3) + at(1, 0) * at(2, 2) * at(0, 3) +
+                 at(2, 0) * at(0, 2) * at(1, 3) - at(0, 0) * at(2, 2) * at(1, 3) -
+                 at(1, 0) * at(0, 2) * at(2, 3) - at(2, 0) * at(1, 2) * at(0, 3);
+    coft(2, 3) = -(at(0, 0) * at(1, 1) * at(2, 3) + at(1, 0) * at(2, 1) * at(0, 3) +
+                   at(2, 0) * at(0, 1) * at(1, 3) - at(0, 0) * at(2, 1) * at(1, 3) -
+                   at(1, 0) * at(0, 1) * at(2, 3) - at(2, 0) * at(1, 1) * at(0, 3));
+    coft(3, 3) = at(0, 0) * at(1, 1) * at(2, 2) + at(1, 0) * at(2, 1) * at(0, 2) +
+                 at(2, 0) * at(0, 1) * at(1, 2) - at(0, 0) * at(2, 1) * at(1, 2) -
+                 at(1, 0) * at(0, 1) * at(2, 2) - at(2, 0) * at(1, 1) * at(0, 2);
+
+    float det = at(0, 0) * coft(0, 0) + at(0, 1) * coft(1, 0) + at(0, 2) * coft(2, 0) +
+                at(0, 3) * coft(3, 0);
+
+    Mat4 result = coft;
+    for (int i = 0; i < 16; i++)
+    {
+        result.data()[i] /= det;
+    }
+
+    return result;
 }
 
 void Mat4::dump()

@@ -383,7 +383,7 @@ class Matrix
     unsigned int mCols;
 };
 
-class Mat4 : public Matrix<float>
+class Mat4
 {
   public:
     Mat4();
@@ -417,6 +417,47 @@ class Mat4 : public Matrix<float>
     Mat4 product(const Mat4 &m);
     Vector4 product(const Vector4 &b);
     void dump();
+
+    float *data() { return mElements.data(); }
+    const float *constData() const { return mElements.data(); }
+
+    float operator()(const unsigned int rowIndex, const unsigned int columnIndex) const
+    {
+        ASSERT(rowIndex < 4);
+        ASSERT(columnIndex < 4);
+        return mElements[rowIndex * 4 + columnIndex];
+    }
+
+    float &operator()(const unsigned int rowIndex, const unsigned int columnIndex)
+    {
+        ASSERT(rowIndex < 4);
+        ASSERT(columnIndex < 4);
+        return mElements[rowIndex * 4 + columnIndex];
+    }
+
+    float at(const unsigned int rowIndex, const unsigned int columnIndex) const
+    {
+        ASSERT(rowIndex < 4);
+        ASSERT(columnIndex < 4);
+        return operator()(rowIndex, columnIndex);
+    }
+
+    const std::array<float, 4 * 4> &elements() const { return mElements; }
+
+    Mat4 transpose() const
+    {
+        Mat4 result;
+        for (unsigned int i = 0; i < 4; i++)
+            for (unsigned int j = 0; j < 4; j++)
+                result(i, j) = at(j, i);
+
+        return result;
+    }
+
+    Mat4 inverse() const;
+
+  private:
+    std::array<float, 4 * 4> mElements;
 };
 
 }  // namespace angle
