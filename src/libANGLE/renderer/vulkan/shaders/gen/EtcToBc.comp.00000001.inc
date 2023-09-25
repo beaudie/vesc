@@ -299,7 +299,7 @@ constexpr uint8_t kEtcToBc_comp_00000001[] = {
 //
 // }
 //
-//  ivec4 DecodeRGB(ivec2 pixel_coord, uvec2 color_payload, int linear_pixel, inout bool punchthrough){
+//  ivec4 DecodeRGB(ivec2 pixel_coord, uvec2 color_payload, int linear_pixel, bool punchthrough){
 //     int alpha_result = 0xff;
 //     ivec3 rgb_result;
 //     ivec3 base_rgb;
@@ -486,7 +486,7 @@ constexpr uint8_t kEtcToBc_comp_00000001[] = {
 //     return uvec2(flip_endian(v . y), flip_endian(v . x));
 // }
 //
-// uint GetIndicesRGB(vec3 color, vec3 minColor, vec3 maxColor, bool transparent)
+// uint GetIndexRGB(vec3 color, vec3 minColor, vec3 maxColor, bool transparent)
 // {
 //     vec3 dir = maxColor - minColor;
 //     float distMin = dot(minColor, dir);
@@ -498,15 +498,8 @@ constexpr uint8_t kEtcToBc_comp_00000001[] = {
 // }
 //
 // void ComputeMaxMinColor(uvec3 rgbColor, inout uvec3 minColor, inout uvec3 maxColor){
-//     ivec3 dx;
-//     if(alphaBits == 1){
-//         int count = subgroupClusteredAdd(1, 16);
-//         ivec3 avg = ivec3((subgroupClusteredAdd(rgbColor, 16)* 2 + count)/(2 * count));
-//         dx = ivec3(rgbColor)- avg;
-//     }
-//     else {
-//         dx = ivec3(rgbColor)- ivec3(subgroupClusteredAdd(rgbColor, 16)+ 8 >> 4);
-//     }
+//     ivec3 dx = ivec3(rgbColor)- ivec3(subgroupClusteredAdd(rgbColor, 16)+ 8 >> 4);
+//
 //     vec3 cov0 = vec3(subgroupClusteredAdd(dx . r * dx, 16));
 //     vec3 cov1 = vec3(subgroupClusteredAdd(dx . ggb * dx . gbb, 16));
 //     vec3 vg = vec3(subgroupClusteredMax(rgbColor, 16)- subgroupClusteredMin(rgbColor, 16));
@@ -544,7 +537,7 @@ constexpr uint8_t kEtcToBc_comp_00000001[] = {
 //     maxColor = subgroupShuffle(rgbColor, minMaxIndex . y);
 // }
 //
-// uint GetIndicesAlpha(int alpha, int minAlpha, int maxAlpha)
+// uint GetIndexAlpha(int alpha, int minAlpha, int maxAlpha)
 // {
 //     float dist = float(maxAlpha - minAlpha);
 //     int ind = int(round(clamp((alpha - minAlpha)/ dist * 7.0f, 0.0, 7.0)));
@@ -559,12 +552,12 @@ constexpr uint8_t kEtcToBc_comp_00000001[] = {
 // uvec2 EncodeBC4(int value, uint pid){
 //     int minValue, maxValue;
 //     ComputeMaxMin(value, minValue, maxValue);
-//     uint indices = 0;
+//     uint index = 0;
 //     if(minValue != maxValue)
-//         indices = GetIndicesAlpha(value, minValue, maxValue);
+//         index = GetIndexAlpha(value, minValue, maxValue);
 //
-//     uvec2 mask = uvec2(pid <= 5 ? indices <<(16 + 3 * pid): 0x0,
-//                         pid >= 5 ?(indices << 29)>>(45 - 3 * pid): 0x0);
+//     uvec2 mask = uvec2(pid <= 5 ? index <<(16 + 3 * pid): 0x0,
+//                         pid >= 5 ?(index << 29)>>(45 - 3 * pid): 0x0);
 //
 //     mask = subgroupClusteredOr(mask, 16);
 //     return uvec2((maxValue & 0xff)|((minValue & 0xff)<< 8)| mask . x, mask . y);
@@ -602,12 +595,6 @@ constexpr uint8_t kEtcToBc_comp_00000001[] = {
 //     }
 //     minColor = minColor565;
 //     maxColor = maxColor565;
-// }
-//
-// void swap(inout uint a, inout uint b){
-//     uint t = a;
-//     a = b;
-//     b = t;
 // }
 //
 // void main()
