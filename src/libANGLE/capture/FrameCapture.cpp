@@ -2511,16 +2511,20 @@ DefaultUniformType GetDefaultUniformType(const CallCapture &call)
     }
 }
 
-void CaptureFramebufferAttachment(std::vector<CallCapture> *setupCalls,
+void CaptureFramebufferAttachment(const gl::Context *context,
+                                  std::vector<CallCapture> *setupCalls,
                                   const gl::State &replayState,
                                   const FramebufferCaptureFuncs &framebufferFuncs,
-                                  const gl::FramebufferAttachment &attachment)
+                                  const gl::FramebufferAttachment &attachment,
+                                  std::vector<CallCapture> *shareGroupSetupCalls,
+                                  ResourceIDToSetupCallsMap *resourceIDToSetupCalls)
 {
     GLuint resourceID = attachment.getResource()->getId();
 
     if (attachment.type() == GL_TEXTURE)
     {
-        gl::ImageIndex index = attachment.getTextureImageIndex();
+        FrameCaptureShared *frameCaptureShared = context->getShareGroup()->getFrameCaptureShared();
+        gl::ImageIndex index                   = attachment.getTextureImageIndex();
 
         if (index.usesTex3D())
         {
@@ -2534,6 +2538,21 @@ void CaptureFramebufferAttachment(std::vector<CallCapture> *setupCalls,
                     framebufferFuncs.framebufferTexture2D(
                         replayState, true, GL_FRAMEBUFFER, attachment.getBinding(),
                         index.getTargetOrFirstCubeFace(), {resourceID}, index.getLevelIndex()));
+        }
+
+        std::vector<gl::TextureID> textureIDs;
+        const CallCapture &call = setupCalls->back();
+        if (FindResourceIDsInCall<gl::TextureID>(call, textureIDs))
+        {
+            for (gl::TextureID textureID : textureIDs)
+            {
+                if (frameCaptureShared->isCaptureActive())
+                {
+                    // Track that this call referenced a Texture, setting it active for Setup
+                    MarkResourceIDActive(ResourceIDType::Texture, textureID.value,
+                                         shareGroupSetupCalls, resourceIDToSetupCalls);
+                }
+            }
         }
     }
     else
@@ -4753,6 +4772,7 @@ void CaptureMidExecutionSetup(const gl::Context *context,
         const gl::TextureBindingVector &replayBindings =
             replayState.getBoundTexturesForCapture()[textureType];
         ASSERT(apiBindings.size() == replayBindings.size());
+
         for (size_t bindingIndex = 0; bindingIndex < apiBindings.size(); ++bindingIndex)
         {
             gl::TextureID apiTextureID    = apiBindings[bindingIndex].id();
@@ -4872,7 +4892,9 @@ void CaptureMidExecutionSetup(const gl::Context *context,
 
             for (std::vector<CallCapture> *calls : framebufferSetupCalls)
             {
-                CaptureFramebufferAttachment(calls, replayState, framebufferFuncs, colorAttachment);
+                CaptureFramebufferAttachment(context, calls, replayState, framebufferFuncs,
+                                             colorAttachment, shareGroupSetupCalls,
+                                             resourceIDToSetupCalls);
             }
         }
 
@@ -4883,8 +4905,9 @@ void CaptureMidExecutionSetup(const gl::Context *context,
                    depthAttachment->getBinding() == GL_DEPTH_STENCIL_ATTACHMENT);
             for (std::vector<CallCapture> *calls : framebufferSetupCalls)
             {
-                CaptureFramebufferAttachment(calls, replayState, framebufferFuncs,
-                                             *depthAttachment);
+                CaptureFramebufferAttachment(context, calls, replayState, framebufferFuncs,
+                                             *depthAttachment, shareGroupSetupCalls,
+                                             resourceIDToSetupCalls);
             }
         }
 
@@ -4895,8 +4918,9 @@ void CaptureMidExecutionSetup(const gl::Context *context,
                    depthAttachment->getBinding() == GL_DEPTH_STENCIL_ATTACHMENT);
             for (std::vector<CallCapture> *calls : framebufferSetupCalls)
             {
-                CaptureFramebufferAttachment(calls, replayState, framebufferFuncs,
-                                             *stencilAttachment);
+                CaptureFramebufferAttachment(context, calls, replayState, framebufferFuncs,
+                                             *stencilAttachment, shareGroupSetupCalls,
+                                             resourceIDToSetupCalls);
             }
         }
 
