@@ -16,6 +16,24 @@
       "message": "By the way, instead of duplicating this complex code, please refactor it with `Matrix` and put it in a helper at the top. You could pass it a `const float *in, float *out`. You can add an `M4at()` as a helper too to implement `at()` here.",
       "revId": "bc4e15f2faacf478ec72305df5e3e443fe2182b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8eada062_9ead0d33",
+        "filename": "src/common/matrix_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-25T19:29:17Z",
+      "side": 1,
+      "message": "It was my deliberate choice to duplicate this instead of trying to reduce the number of LOC for a few reasons:\n* This should be inlined so we\u0027re not gaining much by moving it to a helper apart from avoiding duplication\n* Duplication isn\u0027t all that bad because this code is unlikely to be messed around with\n* If needed, duplicated code is actually easier to read as we\u0027re not introducing additional concepts (like \"in\" and \"out\")\n* Note `coft` is an already transposed version of `cof` (`cof(0, 3)` -\u003e `coft(3, 0)`). This avoids a copy that I\u0027m not sure would\u0027ve been optimized otherwise.",
+      "parentUuid": "12df139f_197e23cb",
+      "revId": "bc4e15f2faacf478ec72305df5e3e443fe2182b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
