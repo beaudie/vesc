@@ -50,6 +50,24 @@
       "message": "```suggestion\n    // If there are still deferred clears, restage them.  See relevant comment in invalidateSub.\n```",
       "revId": "0a06e44f5c761b4168479e60453cf2a35821a0aa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e79183a3_5d8df113",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 1691,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-25T17:44:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "47ae65cd_dd6fe4b6",
+      "revId": "0a06e44f5c761b4168479e60453cf2a35821a0aa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
