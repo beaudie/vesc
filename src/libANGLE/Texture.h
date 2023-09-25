@@ -120,6 +120,7 @@ class TextureState final : private angle::NonCopyable
     bool setMaxLevel(GLuint maxLevel);
     GLuint getMaxLevel() const { return mMaxLevel; }
 
+    bool isMipmapComplete() const;
     bool isCubeComplete() const;
 
     ANGLE_INLINE bool compatibleWithSamplerFormatForWebGL(SamplerFormat format,
@@ -189,6 +190,8 @@ class TextureState final : private angle::NonCopyable
 
     gl::TilingMode getTilingMode() const { return mTilingMode; }
 
+    bool computeMipmapCompleteness(GLuint maxLevel) const;
+
   private:
     // Texture needs access to the ImageDesc functions.
     friend class Texture;
@@ -198,7 +201,6 @@ class TextureState final : private angle::NonCopyable
     bool computeSamplerCompletenessForCopyImage(const SamplerState &samplerState,
                                                 const State &state) const;
 
-    bool computeMipmapCompleteness() const;
     bool computeLevelCompleteness(TextureTarget target, size_t level) const;
     SamplerFormat computeRequiredSamplerFormat(const SamplerState &samplerState) const;
 
