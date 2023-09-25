@@ -142,6 +142,24 @@
       "parentUuid": "e9e74c87_259fcf0f",
       "revId": "bc4e15f2faacf478ec72305df5e3e443fe2182b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0126a44_ba9fdc92",
+        "filename": "src/common/matrix_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-25T22:22:49Z",
+      "side": 1,
+      "message": "Nice!",
+      "parentUuid": "6b3a537b_093dbbdb",
+      "revId": "bc4e15f2faacf478ec72305df5e3e443fe2182b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
