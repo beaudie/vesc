@@ -52,6 +52,24 @@
       "parentUuid": "8eada062_9ead0d33",
       "revId": "bc4e15f2faacf478ec72305df5e3e443fe2182b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0c8d184_f496fb45",
+        "filename": "src/common/matrix_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-25T19:41:27Z",
+      "side": 1,
+      "message": "It\u0027s software, somebody\u0027s bound to touch it at some point. Like looking at this randomly, I see `at(2, 1)` multiplied by `at(1, 3)` in 4 places. Who knows if and when someone comes along and decides to optimize this?\n\nI didn\u0027t notice `cof` is not transposed in `Matrix`, but yeah transposing that would be good too.",
+      "parentUuid": "c39e0a73_bad2e6df",
+      "revId": "bc4e15f2faacf478ec72305df5e3e443fe2182b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
