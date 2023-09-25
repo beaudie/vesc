@@ -8452,7 +8452,17 @@ void ImageHelper::stageSelfAsSubresourceUpdates(ContextVk *contextVk,
 {
     // Nothing to do if every level must be skipped
     gl::TexLevelMask levelsMask(angle::BitMask<uint32_t>(levelCount) << mFirstAllocatedLevel.get());
-    if ((~skipLevelsMask & levelsMask).none())
+    gl::TexLevelMask contentDefinedMask;
+    for (size_t i = 0; i < mContentDefined.size(); ++i)
+    {
+        vk::LevelIndex vkLevelIndex(static_cast<unsigned int>(i));
+        LevelContentDefinedMask &levelContentDefined = mContentDefined[vkLevelIndex.get()];
+        if (levelContentDefined.any())
+        {
+            contentDefinedMask.set(toGLLevel(vkLevelIndex).get());
+        }
+    }
+    if ((~skipLevelsMask & contentDefinedMask & levelsMask).none())
     {
         return;
     }
