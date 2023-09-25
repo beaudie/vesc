@@ -34,6 +34,24 @@
       "parentUuid": "12df139f_197e23cb",
       "revId": "bc4e15f2faacf478ec72305df5e3e443fe2182b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c39e0a73_bad2e6df",
+        "filename": "src/common/matrix_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-25T19:32:49Z",
+      "side": 1,
+      "message": "Hmm although the Matrix\u003c\u003e code would also benefit from this transposition `Matrix\u003cT\u003e adjugateMatrix(cof.transpose());`. Let me have a look at what that helper would look like.",
+      "parentUuid": "8eada062_9ead0d33",
+      "revId": "bc4e15f2faacf478ec72305df5e3e443fe2182b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
