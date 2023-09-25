@@ -16,6 +16,24 @@
       "message": "This is the only case where a new clear can be staged. I think `restage` instead of `stage` is clearer elsewhere. Given the comment above (`will defer the current clears along with deferred clears`), it\u0027s fine to just have `restage` here too IMO.",
       "revId": "8bb853ac6763382ff92d9db6ba4c05664b386dba",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b21705d7_078bafbf",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 623,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-25T16:58:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a9271aa_644f4f4a",
+      "revId": "8bb853ac6763382ff92d9db6ba4c05664b386dba",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
