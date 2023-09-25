@@ -14,6 +14,7 @@
 #ifndef COMMON_MATRIX_UTILS_H_
 #define COMMON_MATRIX_UTILS_H_
 
+#include <array>
 #include <vector>
 
 #include "common/debug.h"
@@ -383,7 +384,8 @@ class Matrix
     unsigned int mCols;
 };
 
-class Mat4 : public Matrix<float>
+// Not derived from Matrix<float>: fixed-size std::array instead, to avoid malloc
+class Mat4
 {
   public:
     Mat4();
@@ -417,6 +419,60 @@ class Mat4 : public Matrix<float>
     Mat4 product(const Mat4 &m);
     Vector4 product(const Vector4 &b);
     void dump();
+
+    float *data() { return mElements.data(); }
+    const float *constData() const { return mElements.data(); }
+
+    float operator()(const unsigned int rowIndex, const unsigned int columnIndex) const
+    {
+        ASSERT(rowIndex < 4);
+        ASSERT(columnIndex < 4);
+        return mElements[rowIndex * 4 + columnIndex];
+    }
+
+    float &operator()(const unsigned int rowIndex, const unsigned int columnIndex)
+    {
+        ASSERT(rowIndex < 4);
+        ASSERT(columnIndex < 4);
+        return mElements[rowIndex * 4 + columnIndex];
+    }
+
+    bool operator==(const Mat4 &m) const { return mElements == m.elements(); }
+
+    bool nearlyEqual(float epsilon, const Mat4 &m) const
+    {
+        const auto &otherElts = m.elements();
+        for (size_t i = 0; i < otherElts.size(); i++)
+        {
+            if ((mElements[i] - otherElts[i] > epsilon) && (otherElts[i] - mElements[i] > epsilon))
+                return false;
+        }
+        return true;
+    }
+
+    float at(const unsigned int rowIndex, const unsigned int columnIndex) const
+    {
+        ASSERT(rowIndex < 4);
+        ASSERT(columnIndex < 4);
+        return operator()(rowIndex, columnIndex);
+    }
+
+    const std::array<float, 4 * 4> &elements() const { return mElements; }
+
+    Mat4 transpose() const
+    {
+        Mat4 result;
+        for (unsigned int i = 0; i < 4; i++)
+            for (unsigned int j = 0; j < 4; j++)
+                result(i, j) = at(j, i);
+
+        return result;
+    }
+
+    Mat4 inverse() const;
+
+  private:
+    std::array<float, 4 * 4> mElements;
 };
 
 }  // namespace angle
