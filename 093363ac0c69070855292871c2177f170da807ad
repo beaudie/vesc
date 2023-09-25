@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce30285a_c3b428a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-25T20:09:52Z",
+      "side": 1,
+      "message": "FYI, `Matrix` is only used by the translator, and needs flexibility in dimensions. `Mat4` is used by GLES1 (a _lot_).",
+      "parentUuid": "f9b91c34_72a33e81",
+      "revId": "093363ac0c69070855292871c2177f170da807ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "94ff750f_0a7915c2",
