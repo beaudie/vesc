@@ -156,6 +156,24 @@
       "parentUuid": "f0c1f460_63b0f919",
       "revId": "8b4569335453bade7126ef2712d2f7e217792875",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd92ba8f_adc349fe",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 17
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-25T20:05:05Z",
+      "side": 1,
+      "message": "@syoussefi@chromium.org is this still an open item?",
+      "parentUuid": "4f5330ec_ae05672e",
+      "revId": "8b4569335453bade7126ef2712d2f7e217792875",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
