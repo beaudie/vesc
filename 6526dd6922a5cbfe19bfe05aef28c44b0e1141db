@@ -16,6 +16,29 @@
       "message": "PTAL - trivial change",
       "revId": "6526dd6922a5cbfe19bfe05aef28c44b0e1141db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ba76cae_3a95471c",
+        "filename": "src/libANGLE/HandleAllocator.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-25T15:44:04Z",
+      "side": 1,
+      "message": "super nit: the function sounds like it returns a count. So either `anyHandlesAvailable...` or you can return `size_t` here and compare with 0 in the test.",
+      "range": {
+        "startLine": 36,
+        "startChar": 4,
+        "endLine": 36,
+        "endChar": 8
+      },
+      "revId": "6526dd6922a5cbfe19bfe05aef28c44b0e1141db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
