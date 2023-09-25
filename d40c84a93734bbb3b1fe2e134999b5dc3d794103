@@ -52,6 +52,24 @@
       "parentUuid": "05dd1641_fecbda9c",
       "revId": "d40c84a93734bbb3b1fe2e134999b5dc3d794103",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d624d26_0f003812",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 24
+      },
+      "lineNbr": 1216,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-25T17:54:15Z",
+      "side": 1,
+      "message": "swiftshader continues to fail on bots, need to update expectations file",
+      "parentUuid": "eb180264_40869dce",
+      "revId": "d40c84a93734bbb3b1fe2e134999b5dc3d794103",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
