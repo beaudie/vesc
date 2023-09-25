@@ -438,7 +438,8 @@ bool TextureState::computeSamplerCompletenessForCopyImage(const SamplerState &sa
             }
         }
 
-        if (!computeMipmapCompleteness())
+        const GLuint maxLevel = getMipmapMaxLevel();
+        if (!computeMipmapCompleteness(maxLevel))
         {
             return false;
         }
@@ -481,10 +482,8 @@ bool TextureState::computeSamplerCompletenessForCopyImage(const SamplerState &sa
     return true;
 }
 
-bool TextureState::computeMipmapCompleteness() const
+bool TextureState::computeMipmapCompleteness(GLuint maxLevel) const
 {
-    const GLuint maxLevel = getMipmapMaxLevel();
-
     for (GLuint level = getEffectiveBaseLevel(); level <= maxLevel; level++)
     {
         if (mType == TextureType::CubeMap)
@@ -1195,7 +1194,8 @@ GLuint Texture::getMipmapMaxLevel() const
 
 bool Texture::isMipmapComplete() const
 {
-    return mState.computeMipmapCompleteness();
+    const GLuint maxLevel = mState.getMipmapMaxLevel();
+    return mState.computeMipmapCompleteness(maxLevel);
 }
 
 egl::Surface *Texture::getBoundSurface() const
