@@ -125,6 +125,8 @@ std::unique_ptr<LinkEvent> ProgramGL::load(const gl::Context *context,
 
     executableGL->reset();
 
+    WARN() << "=== Program load " << mProgramID;
+
     // Read the binary format, size and blob
     GLenum binaryFormat   = stream->readInt<GLenum>();
     GLint binaryLength    = stream->readInt<GLint>();
@@ -232,6 +234,7 @@ class ProgramGL::LinkEventNativeParallel final : public LinkEvent
 
 void ProgramGL::prepareForLink(const gl::ShaderMap<ShaderImpl *> &shaders)
 {
+    WARN() << "=== Prepare for link " << mProgramID;
     for (gl::ShaderType shaderType : gl::AllShaderTypes())
     {
         mAttachedShaders[shaderType] = 0;
@@ -241,6 +244,7 @@ void ProgramGL::prepareForLink(const gl::ShaderMap<ShaderImpl *> &shaders)
             const ShaderGL *shaderGL     = GetAs<ShaderGL>(shaders[shaderType]);
             mAttachedShaders[shaderType] = shaderGL->getShaderID();
         }
+        WARN() << " == attached shader [" << shaderType << "] is " << mAttachedShaders[shaderType];
     }
 }
 
@@ -249,12 +253,17 @@ std::unique_ptr<LinkEvent> ProgramGL::link(const gl::Context *context,
                                            gl::ProgramMergedVaryings && /*mergedVaryings*/)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "ProgramGL::link");
+    WARN() << "=== initiate link";
+
     ProgramExecutableGL *executableGL = getExecutable();
 
     executableGL->reset();
 
+    WARN() << "=== Do link " << mProgramID;
+
     if (mAttachedShaders[gl::ShaderType::Compute] != 0)
     {
+        WARN() << " == is compute";
         mFunctions->attachShader(mProgramID, mAttachedShaders[gl::ShaderType::Compute]);
     }
     else
@@ -267,9 +276,11 @@ std::unique_ptr<LinkEvent> ProgramGL::link(const gl::Context *context,
                 mState.getExecutable().hasLinkedShaderStage(gl::ShaderType::Geometry)
                     ? gl::ShaderType::Geometry
                     : gl::ShaderType::Vertex;
+            WARN() << " == tf stage is " << tfShaderType;
             std::string tfVaryingMappedName = GetTransformFeedbackVaryingMappedName(
                 mState.getAttachedShader(tfShaderType), tfVarying);
             transformFeedbackVaryingMappedNames.push_back(tfVaryingMappedName);
+            WARN() << " == TF: " << tfVaryingMappedName;
         }
 
         if (transformFeedbackVaryingMappedNames.empty())
@@ -282,6 +293,7 @@ std::unique_ptr<LinkEvent> ProgramGL::link(const gl::Context *context,
                 mFunctions->transformFeedbackVaryings(mProgramID, 0, nullptr,
                                                       mState.getTransformFeedbackBufferMode());
                 executableGL->mHasAppliedTransformFeedbackVaryings = false;
+                WARN() << " == glTransformFeedbackVaryings with 0, nullptr";
             }
         }
         else
@@ -296,6 +308,8 @@ std::unique_ptr<LinkEvent> ProgramGL::link(const gl::Context *context,
                 mProgramID, static_cast<GLsizei>(transformFeedbackVaryingMappedNames.size()),
                 &transformFeedbackVaryings[0], mState.getTransformFeedbackBufferMode());
             executableGL->mHasAppliedTransformFeedbackVaryings = true;
+            WARN() << " == glTransformFeedbackVaryings with "
+                   << transformFeedbackVaryingMappedNames.size() << " varyings";
         }
 
         for (const gl::ShaderType shaderType : gl::kAllGraphicsShaderTypes)
@@ -303,6 +317,8 @@ std::unique_ptr<LinkEvent> ProgramGL::link(const gl::Context *context,
             if (mAttachedShaders[shaderType] != 0)
             {
                 mFunctions->attachShader(mProgramID, mAttachedShaders[shaderType]);
+                WARN() << " == glAttachShader " << shaderType << " "
+                       << mAttachedShaders[shaderType];
             }
         }
 
@@ -316,6 +332,8 @@ std::unique_ptr<LinkEvent> ProgramGL::link(const gl::Context *context,
 
             mFunctions->bindAttribLocation(mProgramID, attribute.getLocation(),
                                            attribute.mappedName.c_str());
+            WARN() << " == glBindAttribLocation " << attribute.getLocation() << " "
+                   << attribute.mappedName.c_str();
         }
 
         // Bind the secondary fragment color outputs defined in EXT_blend_func_extended. We only use
@@ -341,6 +359,8 @@ std::unique_ptr<LinkEvent> ProgramGL::link(const gl::Context *context,
                                                                 "webgl_FragColor");
                         mFunctions->bindFragDataLocationIndexed(mProgramID, 0, 1,
                                                                 "webgl_SecondaryFragColor");
+                        WARN() << " == glBindFragDataLocationIndexed 0/0 and 0/1 for FragColor and "
+                                  "SecondaryFragColor";
                     }
                     else if (output.name == "gl_SecondaryFragDataEXT")
                     {
@@ -366,6 +386,8 @@ std::unique_ptr<LinkEvent> ProgramGL::link(const gl::Context *context,
                         mFunctions->bindFragDataLocationIndexed(mProgramID, 0, 0, "webgl_FragData");
                         mFunctions->bindFragDataLocationIndexed(mProgramID, 0, 1,
                                                                 "webgl_SecondaryFragData");
+                        WARN() << " == glBindFragDataLocationIndexed 0/0 and 0/1 for FragData and "
+                                  "SecondaryFragData";
                     }
                 }
             }
@@ -394,6 +416,8 @@ std::unique_ptr<LinkEvent> ProgramGL::link(const gl::Context *context,
                             mFunctions->bindFragDataLocationIndexed(
                                 mProgramID, static_cast<int>(outputLocationIndex), 0,
                                 outputVar.mappedName.c_str());
+                            WARN() << " == glBindFragDataLocationIndexed " << outputLocationIndex
+                                   << "/0 for " << outputVar.mappedName;
                         }
                     }
                 }
@@ -417,6 +441,8 @@ std::unique_ptr<LinkEvent> ProgramGL::link(const gl::Context *context,
                             mFunctions->bindFragDataLocationIndexed(
                                 mProgramID, static_cast<int>(outputLocationIndex), 1,
                                 outputVar.mappedName.c_str());
+                            WARN() << " == glBindFragDataLocationIndexed " << outputLocationIndex
+                                   << "/1 for " << outputVar.mappedName;
                         }
                     }
                 }
@@ -426,8 +452,10 @@ std::unique_ptr<LinkEvent> ProgramGL::link(const gl::Context *context,
     auto workerPool = context->getShaderCompileThreadPool();
 
     auto postLinkImplTask = [this, &resources]() {
+        WARN() << "=== post link " << mProgramID;
         if (mAttachedShaders[gl::ShaderType::Compute] != 0)
         {
+            WARN() << " == is compute";
             mFunctions->detachShader(mProgramID, mAttachedShaders[gl::ShaderType::Compute]);
         }
         else
@@ -437,13 +465,21 @@ std::unique_ptr<LinkEvent> ProgramGL::link(const gl::Context *context,
                 if (mAttachedShaders[shaderType] != 0)
                 {
                     mFunctions->detachShader(mProgramID, mAttachedShaders[shaderType]);
+                    WARN() << " == glDetachShader " << shaderType << " "
+                           << mAttachedShaders[shaderType];
                 }
             }
         }
         // Verify the link
         if (!checkLinkStatus())
         {
-            return angle::Result::Incomplete;
+            WARN() << " == CHECK LINK STATUS FAILED, CRASHING";
+            // infinite loop for good measure
+            while (true)
+            {
+                *(volatile int *)0 = 0;
+            }
+            // return angle::Result::Incomplete;
         }
 
         if (mFeatures.alwaysCallUseProgramAfterLink.enabled)
@@ -458,6 +494,7 @@ std::unique_ptr<LinkEvent> ProgramGL::link(const gl::Context *context,
     };
 
     mFunctions->linkProgram(mProgramID);
+    WARN() << " == glLinkProgram";
     if (mRenderer->hasNativeParallelCompile())
     {
         return std::make_unique<LinkEventNativeParallel>(postLinkImplTask, mFunctions, mProgramID);

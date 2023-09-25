@@ -92,6 +92,7 @@ ShaderGL::~ShaderGL()
 void ShaderGL::destroy()
 {
     mRenderer->getFunctions()->deleteShader(mShaderID);
+    WARN() << "+++ Destroy shader " << mShaderID;
     mShaderID = 0;
 }
 
@@ -111,6 +112,7 @@ void ShaderGL::compileShader(const char *source)
 void ShaderGL::checkShader()
 {
     const FunctionsGL *functions = mRenderer->getFunctions();
+    WARN() << "+++ Check shader " << mShaderID;
 
     // Check for compile errors from the native driver
     mCompileStatus = GL_FALSE;
@@ -320,11 +322,25 @@ std::shared_ptr<WaitableCompileEvent> ShaderGL::compile(const gl::Context *conte
     const char *str = source.c_str();
     bool result     = sh::Compile(handle, &str, 1, *options);
 
+    WARN() << "+++ Compile shader " << mShaderID << " " << mState.getShaderType();
+    WARN() << " ++ shader ANGLE source is:\n" << str;
+    WARN() << " ++ shader ANGLE output is:\n" << sh::GetObjectCode(handle);
+
+    uint32_t optionBytes[8] = {};
+    static_assert(sizeof(*options) <= sizeof(optionBytes), "");
+    memcpy(optionBytes, options, sizeof(*options));
+
+    WARN() << " ++ shader ANGLE options are: " << std::hex << optionBytes[0] << " "
+           << optionBytes[1] << " " << optionBytes[2] << " " << optionBytes[3] << " "
+           << optionBytes[4] << " " << optionBytes[5] << " " << optionBytes[6] << " "
+           << optionBytes[7] << " " << std::dec;
+
     if (mRenderer->hasNativeParallelCompile())
     {
         if (result)
         {
             compileShader(sh::GetObjectCode(handle).c_str());
+            WARN() << " ++ glCompileShader (native parallel compile)";
             auto checkShaderFunctor    = [this]() { checkShader(); };
             auto peekCompletionFunctor = [this]() { return peekCompletion(); };
             return std::make_shared<WaitableCompileEventNativeParallel>(
@@ -333,6 +349,7 @@ std::shared_ptr<WaitableCompileEvent> ShaderGL::compile(const gl::Context *conte
         }
         else
         {
+            WARN() << " ++ ANGLE compile failed";
             return std::make_shared<WaitableCompileEventDone>([](std::string *) { return true; },
                                                               result);
         }
@@ -342,6 +359,7 @@ std::shared_ptr<WaitableCompileEvent> ShaderGL::compile(const gl::Context *conte
         if (result)
         {
             compileAndCheckShader(sh::GetObjectCode(handle).c_str());
+            WARN() << " ++ glCompileShader (no parallel)";
         }
         return std::make_shared<WaitableCompileEventDone>(std::move(postTranslateFunctor), result);
     }
