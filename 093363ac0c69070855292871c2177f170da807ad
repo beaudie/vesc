@@ -123,6 +123,30 @@
       },
       "revId": "093363ac0c69070855292871c2177f170da807ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa6e5fa9_7b83d72d",
+        "filename": "src/common/matrix_utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-25T21:12:18Z",
+      "side": 1,
+      "message": "The reason I made it inline: it _was_ inline before this CL.\n\nI dropped the inline but can\u0027t move to cpp because `Matrix\u003cT\u003e::inverse` is a template function so it needs to be in `.h` and `cofactor_transposed` is also a template function.",
+      "parentUuid": "86d2c839_4fde04d9",
+      "range": {
+        "startLine": 27,
+        "startChar": 18,
+        "endLine": 27,
+        "endChar": 37
+      },
+      "revId": "093363ac0c69070855292871c2177f170da807ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
