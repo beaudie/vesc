@@ -79,7 +79,7 @@ int decode_etc2_alpha(uvec2 payload, int linear_pixel)
 #endif
 }
 
- ivec4 DecodeRGB(ivec2 pixel_coord, uvec2 color_payload, int linear_pixel, inout bool punchthrough) {
+ ivec4 DecodeRGB(ivec2 pixel_coord, uvec2 color_payload, int linear_pixel, bool punchthrough) {
     int alpha_result = 0xff;
     ivec3 rgb_result;
     ivec3 base_rgb;
