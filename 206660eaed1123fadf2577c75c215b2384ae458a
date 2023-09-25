@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f48a43a_9e7d1831",
+        "filename": "src/common/matrix_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-25T18:51:58Z",
+      "side": 1,
+      "message": "```suggestion\n    std::copy(elements.begin(), std::min(elements.end(), elements.begin() + std::size(mElements)), mElements.data());\n```",
+      "range": {
+        "startLine": 32,
+        "startChar": 76,
+        "endLine": 32,
+        "endChar": 78
+      },
+      "revId": "206660eaed1123fadf2577c75c215b2384ae458a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "262d2b01_55e6b4fd",
+        "filename": "src/common/matrix_utils.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-25T18:51:58Z",
+      "side": 1,
+      "message": "```suggestion\n    std::copy(elements, elements + std::size(mElements), mElements.data());\n```",
+      "revId": "206660eaed1123fadf2577c75c215b2384ae458a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
