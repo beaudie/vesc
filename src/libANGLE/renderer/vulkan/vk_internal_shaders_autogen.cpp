@@ -174,191 +174,188 @@ struct CompressedShaderBlob
 };
 
 constexpr CompressedShaderBlob kBlitResolve_frag_shaders[] = {
-    {kBlitResolve_frag_00000000, sizeof(kBlitResolve_frag_00000000)},
-    {kBlitResolve_frag_00000001, sizeof(kBlitResolve_frag_00000001)},
-    {kBlitResolve_frag_00000002, sizeof(kBlitResolve_frag_00000002)},
-    {kBlitResolve_frag_00000003, sizeof(kBlitResolve_frag_00000003)},
-    {kBlitResolve_frag_00000004, sizeof(kBlitResolve_frag_00000004)},
-    {kBlitResolve_frag_00000005, sizeof(kBlitResolve_frag_00000005)},
-    {kBlitResolve_frag_00000006, sizeof(kBlitResolve_frag_00000006)},
-    {kBlitResolve_frag_00000007, sizeof(kBlitResolve_frag_00000007)},
-    {kBlitResolve_frag_00000008, sizeof(kBlitResolve_frag_00000008)},
-    {kBlitResolve_frag_00000009, sizeof(kBlitResolve_frag_00000009)},
-    {kBlitResolve_frag_0000000A, sizeof(kBlitResolve_frag_0000000A)},
-    {kBlitResolve_frag_0000000B, sizeof(kBlitResolve_frag_0000000B)},
-    {kBlitResolve_frag_0000000C, sizeof(kBlitResolve_frag_0000000C)},
-    {kBlitResolve_frag_0000000D, sizeof(kBlitResolve_frag_0000000D)},
-    {kBlitResolve_frag_0000000E, sizeof(kBlitResolve_frag_0000000E)},
-    {kBlitResolve_frag_0000000F, sizeof(kBlitResolve_frag_0000000F)},
-    {kBlitResolve_frag_00000010, sizeof(kBlitResolve_frag_00000010)},
-    {kBlitResolve_frag_00000011, sizeof(kBlitResolve_frag_00000011)},
-    {kBlitResolve_frag_00000012, sizeof(kBlitResolve_frag_00000012)},
-    {kBlitResolve_frag_00000013, sizeof(kBlitResolve_frag_00000013)},
-    {kBlitResolve_frag_00000014, sizeof(kBlitResolve_frag_00000014)},
-    {kBlitResolve_frag_00000015, sizeof(kBlitResolve_frag_00000015)},
-    {kBlitResolve_frag_00000016, sizeof(kBlitResolve_frag_00000016)},
-    {kBlitResolve_frag_00000017, sizeof(kBlitResolve_frag_00000017)},
+{kBlitResolve_frag_00000000, sizeof(kBlitResolve_frag_00000000)},
+{kBlitResolve_frag_00000001, sizeof(kBlitResolve_frag_00000001)},
+{kBlitResolve_frag_00000002, sizeof(kBlitResolve_frag_00000002)},
+{kBlitResolve_frag_00000003, sizeof(kBlitResolve_frag_00000003)},
+{kBlitResolve_frag_00000004, sizeof(kBlitResolve_frag_00000004)},
+{kBlitResolve_frag_00000005, sizeof(kBlitResolve_frag_00000005)},
+{kBlitResolve_frag_00000006, sizeof(kBlitResolve_frag_00000006)},
+{kBlitResolve_frag_00000007, sizeof(kBlitResolve_frag_00000007)},
+{kBlitResolve_frag_00000008, sizeof(kBlitResolve_frag_00000008)},
+{kBlitResolve_frag_00000009, sizeof(kBlitResolve_frag_00000009)},
+{kBlitResolve_frag_0000000A, sizeof(kBlitResolve_frag_0000000A)},
+{kBlitResolve_frag_0000000B, sizeof(kBlitResolve_frag_0000000B)},
+{kBlitResolve_frag_0000000C, sizeof(kBlitResolve_frag_0000000C)},
+{kBlitResolve_frag_0000000D, sizeof(kBlitResolve_frag_0000000D)},
+{kBlitResolve_frag_0000000E, sizeof(kBlitResolve_frag_0000000E)},
+{kBlitResolve_frag_0000000F, sizeof(kBlitResolve_frag_0000000F)},
+{kBlitResolve_frag_00000010, sizeof(kBlitResolve_frag_00000010)},
+{kBlitResolve_frag_00000011, sizeof(kBlitResolve_frag_00000011)},
+{kBlitResolve_frag_00000012, sizeof(kBlitResolve_frag_00000012)},
+{kBlitResolve_frag_00000013, sizeof(kBlitResolve_frag_00000013)},
+{kBlitResolve_frag_00000014, sizeof(kBlitResolve_frag_00000014)},
+{kBlitResolve_frag_00000015, sizeof(kBlitResolve_frag_00000015)},
+{kBlitResolve_frag_00000016, sizeof(kBlitResolve_frag_00000016)},
+{kBlitResolve_frag_00000017, sizeof(kBlitResolve_frag_00000017)},
 };
 constexpr CompressedShaderBlob kBlitResolveStencilNoExport_comp_shaders[] = {
-    {kBlitResolveStencilNoExport_comp_00000000, sizeof(kBlitResolveStencilNoExport_comp_00000000)},
-    {kBlitResolveStencilNoExport_comp_00000001, sizeof(kBlitResolveStencilNoExport_comp_00000001)},
-    {kBlitResolveStencilNoExport_comp_00000002, sizeof(kBlitResolveStencilNoExport_comp_00000002)},
-    {kBlitResolveStencilNoExport_comp_00000003, sizeof(kBlitResolveStencilNoExport_comp_00000003)},
+{kBlitResolveStencilNoExport_comp_00000000, sizeof(kBlitResolveStencilNoExport_comp_00000000)},
+{kBlitResolveStencilNoExport_comp_00000001, sizeof(kBlitResolveStencilNoExport_comp_00000001)},
+{kBlitResolveStencilNoExport_comp_00000002, sizeof(kBlitResolveStencilNoExport_comp_00000002)},
+{kBlitResolveStencilNoExport_comp_00000003, sizeof(kBlitResolveStencilNoExport_comp_00000003)},
 };
 constexpr CompressedShaderBlob kConvertIndex_comp_shaders[] = {
-    {kConvertIndex_comp_00000000, sizeof(kConvertIndex_comp_00000000)},
-    {kConvertIndex_comp_00000001, sizeof(kConvertIndex_comp_00000001)},
-    {kConvertIndex_comp_00000002, sizeof(kConvertIndex_comp_00000002)},
-    {kConvertIndex_comp_00000003, sizeof(kConvertIndex_comp_00000003)},
+{kConvertIndex_comp_00000000, sizeof(kConvertIndex_comp_00000000)},
+{kConvertIndex_comp_00000001, sizeof(kConvertIndex_comp_00000001)},
+{kConvertIndex_comp_00000002, sizeof(kConvertIndex_comp_00000002)},
+{kConvertIndex_comp_00000003, sizeof(kConvertIndex_comp_00000003)},
 };
 constexpr CompressedShaderBlob kConvertIndexIndirectLineLoop_comp_shaders[] = {
-    {kConvertIndexIndirectLineLoop_comp_00000000,
-     sizeof(kConvertIndexIndirectLineLoop_comp_00000000)},
-    {kConvertIndexIndirectLineLoop_comp_00000001,
-     sizeof(kConvertIndexIndirectLineLoop_comp_00000001)},
-    {kConvertIndexIndirectLineLoop_comp_00000002,
-     sizeof(kConvertIndexIndirectLineLoop_comp_00000002)},
+{kConvertIndexIndirectLineLoop_comp_00000000, sizeof(kConvertIndexIndirectLineLoop_comp_00000000)},
+{kConvertIndexIndirectLineLoop_comp_00000001, sizeof(kConvertIndexIndirectLineLoop_comp_00000001)},
+{kConvertIndexIndirectLineLoop_comp_00000002, sizeof(kConvertIndexIndirectLineLoop_comp_00000002)},
 };
 constexpr CompressedShaderBlob kConvertIndirectLineLoop_comp_shaders[] = {
-    {kConvertIndirectLineLoop_comp_00000000, sizeof(kConvertIndirectLineLoop_comp_00000000)},
+{kConvertIndirectLineLoop_comp_00000000, sizeof(kConvertIndirectLineLoop_comp_00000000)},
 };
 constexpr CompressedShaderBlob kConvertVertex_comp_shaders[] = {
-    {kConvertVertex_comp_00000000, sizeof(kConvertVertex_comp_00000000)},
-    {kConvertVertex_comp_00000001, sizeof(kConvertVertex_comp_00000001)},
-    {kConvertVertex_comp_00000002, sizeof(kConvertVertex_comp_00000002)},
-    {kConvertVertex_comp_00000003, sizeof(kConvertVertex_comp_00000003)},
-    {kConvertVertex_comp_00000004, sizeof(kConvertVertex_comp_00000004)},
-    {kConvertVertex_comp_00000005, sizeof(kConvertVertex_comp_00000005)},
-    {kConvertVertex_comp_00000006, sizeof(kConvertVertex_comp_00000006)},
-    {kConvertVertex_comp_00000007, sizeof(kConvertVertex_comp_00000007)},
+{kConvertVertex_comp_00000000, sizeof(kConvertVertex_comp_00000000)},
+{kConvertVertex_comp_00000001, sizeof(kConvertVertex_comp_00000001)},
+{kConvertVertex_comp_00000002, sizeof(kConvertVertex_comp_00000002)},
+{kConvertVertex_comp_00000003, sizeof(kConvertVertex_comp_00000003)},
+{kConvertVertex_comp_00000004, sizeof(kConvertVertex_comp_00000004)},
+{kConvertVertex_comp_00000005, sizeof(kConvertVertex_comp_00000005)},
+{kConvertVertex_comp_00000006, sizeof(kConvertVertex_comp_00000006)},
+{kConvertVertex_comp_00000007, sizeof(kConvertVertex_comp_00000007)},
 };
 constexpr CompressedShaderBlob kCopyImageToBuffer_comp_shaders[] = {
-    {kCopyImageToBuffer_comp_00000000, sizeof(kCopyImageToBuffer_comp_00000000)},
-    {kCopyImageToBuffer_comp_00000001, sizeof(kCopyImageToBuffer_comp_00000001)},
+{kCopyImageToBuffer_comp_00000000, sizeof(kCopyImageToBuffer_comp_00000000)},
+{kCopyImageToBuffer_comp_00000001, sizeof(kCopyImageToBuffer_comp_00000001)},
 };
 constexpr CompressedShaderBlob kEtcToBc_comp_shaders[] = {
-    {kEtcToBc_comp_00000000, sizeof(kEtcToBc_comp_00000000)},
-    {kEtcToBc_comp_00000001, sizeof(kEtcToBc_comp_00000001)},
+{kEtcToBc_comp_00000000, sizeof(kEtcToBc_comp_00000000)},
+{kEtcToBc_comp_00000001, sizeof(kEtcToBc_comp_00000001)},
 };
 constexpr CompressedShaderBlob kExportStencil_frag_shaders[] = {
-    {kExportStencil_frag_00000000, sizeof(kExportStencil_frag_00000000)},
+{kExportStencil_frag_00000000, sizeof(kExportStencil_frag_00000000)},
 };
 constexpr CompressedShaderBlob kFullScreenTri_vert_shaders[] = {
-    {kFullScreenTri_vert_00000000, sizeof(kFullScreenTri_vert_00000000)},
+{kFullScreenTri_vert_00000000, sizeof(kFullScreenTri_vert_00000000)},
 };
 constexpr CompressedShaderBlob kGenerateMipmap_comp_shaders[] = {
-    {kGenerateMipmap_comp_00000000, sizeof(kGenerateMipmap_comp_00000000)},
-    {kGenerateMipmap_comp_00000001, sizeof(kGenerateMipmap_comp_00000001)},
-    {kGenerateMipmap_comp_00000002, sizeof(kGenerateMipmap_comp_00000002)},
-    {kGenerateMipmap_comp_00000003, sizeof(kGenerateMipmap_comp_00000003)},
-    {kGenerateMipmap_comp_00000004, sizeof(kGenerateMipmap_comp_00000004)},
-    {kGenerateMipmap_comp_00000005, sizeof(kGenerateMipmap_comp_00000005)},
-    {kGenerateMipmap_comp_00000006, sizeof(kGenerateMipmap_comp_00000006)},
-    {kGenerateMipmap_comp_00000007, sizeof(kGenerateMipmap_comp_00000007)},
-    {kGenerateMipmap_comp_00000008, sizeof(kGenerateMipmap_comp_00000008)},
-    {kGenerateMipmap_comp_00000009, sizeof(kGenerateMipmap_comp_00000009)},
+{kGenerateMipmap_comp_00000000, sizeof(kGenerateMipmap_comp_00000000)},
+{kGenerateMipmap_comp_00000001, sizeof(kGenerateMipmap_comp_00000001)},
+{kGenerateMipmap_comp_00000002, sizeof(kGenerateMipmap_comp_00000002)},
+{kGenerateMipmap_comp_00000003, sizeof(kGenerateMipmap_comp_00000003)},
+{kGenerateMipmap_comp_00000004, sizeof(kGenerateMipmap_comp_00000004)},
+{kGenerateMipmap_comp_00000005, sizeof(kGenerateMipmap_comp_00000005)},
+{kGenerateMipmap_comp_00000006, sizeof(kGenerateMipmap_comp_00000006)},
+{kGenerateMipmap_comp_00000007, sizeof(kGenerateMipmap_comp_00000007)},
+{kGenerateMipmap_comp_00000008, sizeof(kGenerateMipmap_comp_00000008)},
+{kGenerateMipmap_comp_00000009, sizeof(kGenerateMipmap_comp_00000009)},
 };
 constexpr CompressedShaderBlob kImageClear_frag_shaders[] = {
-    {kImageClear_frag_00000000, sizeof(kImageClear_frag_00000000)},
-    {kImageClear_frag_00000001, sizeof(kImageClear_frag_00000001)},
-    {kImageClear_frag_00000002, sizeof(kImageClear_frag_00000002)},
-    {kImageClear_frag_00000003, sizeof(kImageClear_frag_00000003)},
-    {kImageClear_frag_00000004, sizeof(kImageClear_frag_00000004)},
-    {kImageClear_frag_00000005, sizeof(kImageClear_frag_00000005)},
-    {kImageClear_frag_00000006, sizeof(kImageClear_frag_00000006)},
-    {kImageClear_frag_00000007, sizeof(kImageClear_frag_00000007)},
-    {kImageClear_frag_00000008, sizeof(kImageClear_frag_00000008)},
-    {kImageClear_frag_00000009, sizeof(kImageClear_frag_00000009)},
-    {kImageClear_frag_0000000A, sizeof(kImageClear_frag_0000000A)},
-    {kImageClear_frag_0000000B, sizeof(kImageClear_frag_0000000B)},
-    {kImageClear_frag_0000000C, sizeof(kImageClear_frag_0000000C)},
-    {kImageClear_frag_0000000D, sizeof(kImageClear_frag_0000000D)},
-    {kImageClear_frag_0000000E, sizeof(kImageClear_frag_0000000E)},
-    {kImageClear_frag_0000000F, sizeof(kImageClear_frag_0000000F)},
-    {kImageClear_frag_00000010, sizeof(kImageClear_frag_00000010)},
-    {kImageClear_frag_00000011, sizeof(kImageClear_frag_00000011)},
-    {kImageClear_frag_00000012, sizeof(kImageClear_frag_00000012)},
-    {kImageClear_frag_00000013, sizeof(kImageClear_frag_00000013)},
-    {kImageClear_frag_00000014, sizeof(kImageClear_frag_00000014)},
-    {kImageClear_frag_00000015, sizeof(kImageClear_frag_00000015)},
-    {kImageClear_frag_00000016, sizeof(kImageClear_frag_00000016)},
-    {kImageClear_frag_00000017, sizeof(kImageClear_frag_00000017)},
-    {kImageClear_frag_00000018, sizeof(kImageClear_frag_00000018)},
-    {kImageClear_frag_00000019, sizeof(kImageClear_frag_00000019)},
-    {kImageClear_frag_0000001A, sizeof(kImageClear_frag_0000001A)},
-    {kImageClear_frag_0000001B, sizeof(kImageClear_frag_0000001B)},
-    {kImageClear_frag_0000001C, sizeof(kImageClear_frag_0000001C)},
-    {kImageClear_frag_0000001D, sizeof(kImageClear_frag_0000001D)},
-    {kImageClear_frag_0000001E, sizeof(kImageClear_frag_0000001E)},
-    {kImageClear_frag_0000001F, sizeof(kImageClear_frag_0000001F)},
-    {kImageClear_frag_00000020, sizeof(kImageClear_frag_00000020)},
-    {kImageClear_frag_00000021, sizeof(kImageClear_frag_00000021)},
-    {kImageClear_frag_00000022, sizeof(kImageClear_frag_00000022)},
-    {kImageClear_frag_00000023, sizeof(kImageClear_frag_00000023)},
-    {kImageClear_frag_00000024, sizeof(kImageClear_frag_00000024)},
-    {kImageClear_frag_00000025, sizeof(kImageClear_frag_00000025)},
-    {kImageClear_frag_00000026, sizeof(kImageClear_frag_00000026)},
-    {kImageClear_frag_00000027, sizeof(kImageClear_frag_00000027)},
-    {kImageClear_frag_00000028, sizeof(kImageClear_frag_00000028)},
-    {kImageClear_frag_00000029, sizeof(kImageClear_frag_00000029)},
-    {kImageClear_frag_0000002A, sizeof(kImageClear_frag_0000002A)},
-    {kImageClear_frag_0000002B, sizeof(kImageClear_frag_0000002B)},
-    {kImageClear_frag_0000002C, sizeof(kImageClear_frag_0000002C)},
-    {kImageClear_frag_0000002D, sizeof(kImageClear_frag_0000002D)},
-    {kImageClear_frag_0000002E, sizeof(kImageClear_frag_0000002E)},
-    {kImageClear_frag_0000002F, sizeof(kImageClear_frag_0000002F)},
+{kImageClear_frag_00000000, sizeof(kImageClear_frag_00000000)},
+{kImageClear_frag_00000001, sizeof(kImageClear_frag_00000001)},
+{kImageClear_frag_00000002, sizeof(kImageClear_frag_00000002)},
+{kImageClear_frag_00000003, sizeof(kImageClear_frag_00000003)},
+{kImageClear_frag_00000004, sizeof(kImageClear_frag_00000004)},
+{kImageClear_frag_00000005, sizeof(kImageClear_frag_00000005)},
+{kImageClear_frag_00000006, sizeof(kImageClear_frag_00000006)},
+{kImageClear_frag_00000007, sizeof(kImageClear_frag_00000007)},
+{kImageClear_frag_00000008, sizeof(kImageClear_frag_00000008)},
+{kImageClear_frag_00000009, sizeof(kImageClear_frag_00000009)},
+{kImageClear_frag_0000000A, sizeof(kImageClear_frag_0000000A)},
+{kImageClear_frag_0000000B, sizeof(kImageClear_frag_0000000B)},
+{kImageClear_frag_0000000C, sizeof(kImageClear_frag_0000000C)},
+{kImageClear_frag_0000000D, sizeof(kImageClear_frag_0000000D)},
+{kImageClear_frag_0000000E, sizeof(kImageClear_frag_0000000E)},
+{kImageClear_frag_0000000F, sizeof(kImageClear_frag_0000000F)},
+{kImageClear_frag_00000010, sizeof(kImageClear_frag_00000010)},
+{kImageClear_frag_00000011, sizeof(kImageClear_frag_00000011)},
+{kImageClear_frag_00000012, sizeof(kImageClear_frag_00000012)},
+{kImageClear_frag_00000013, sizeof(kImageClear_frag_00000013)},
+{kImageClear_frag_00000014, sizeof(kImageClear_frag_00000014)},
+{kImageClear_frag_00000015, sizeof(kImageClear_frag_00000015)},
+{kImageClear_frag_00000016, sizeof(kImageClear_frag_00000016)},
+{kImageClear_frag_00000017, sizeof(kImageClear_frag_00000017)},
+{kImageClear_frag_00000018, sizeof(kImageClear_frag_00000018)},
+{kImageClear_frag_00000019, sizeof(kImageClear_frag_00000019)},
+{kImageClear_frag_0000001A, sizeof(kImageClear_frag_0000001A)},
+{kImageClear_frag_0000001B, sizeof(kImageClear_frag_0000001B)},
+{kImageClear_frag_0000001C, sizeof(kImageClear_frag_0000001C)},
+{kImageClear_frag_0000001D, sizeof(kImageClear_frag_0000001D)},
+{kImageClear_frag_0000001E, sizeof(kImageClear_frag_0000001E)},
+{kImageClear_frag_0000001F, sizeof(kImageClear_frag_0000001F)},
+{kImageClear_frag_00000020, sizeof(kImageClear_frag_00000020)},
+{kImageClear_frag_00000021, sizeof(kImageClear_frag_00000021)},
+{kImageClear_frag_00000022, sizeof(kImageClear_frag_00000022)},
+{kImageClear_frag_00000023, sizeof(kImageClear_frag_00000023)},
+{kImageClear_frag_00000024, sizeof(kImageClear_frag_00000024)},
+{kImageClear_frag_00000025, sizeof(kImageClear_frag_00000025)},
+{kImageClear_frag_00000026, sizeof(kImageClear_frag_00000026)},
+{kImageClear_frag_00000027, sizeof(kImageClear_frag_00000027)},
+{kImageClear_frag_00000028, sizeof(kImageClear_frag_00000028)},
+{kImageClear_frag_00000029, sizeof(kImageClear_frag_00000029)},
+{kImageClear_frag_0000002A, sizeof(kImageClear_frag_0000002A)},
+{kImageClear_frag_0000002B, sizeof(kImageClear_frag_0000002B)},
+{kImageClear_frag_0000002C, sizeof(kImageClear_frag_0000002C)},
+{kImageClear_frag_0000002D, sizeof(kImageClear_frag_0000002D)},
+{kImageClear_frag_0000002E, sizeof(kImageClear_frag_0000002E)},
+{kImageClear_frag_0000002F, sizeof(kImageClear_frag_0000002F)},
 };
 constexpr CompressedShaderBlob kImageCopy_frag_shaders[] = {
-    {kImageCopy_frag_00000000, sizeof(kImageCopy_frag_00000000)},
-    {kImageCopy_frag_00000001, sizeof(kImageCopy_frag_00000001)},
-    {kImageCopy_frag_00000002, sizeof(kImageCopy_frag_00000002)},
-    {kImageCopy_frag_00000003, sizeof(kImageCopy_frag_00000003)},
-    {kImageCopy_frag_00000004, sizeof(kImageCopy_frag_00000004)},
-    {kImageCopy_frag_00000005, sizeof(kImageCopy_frag_00000005)},
-    {kImageCopy_frag_00000006, sizeof(kImageCopy_frag_00000006)},
-    {kImageCopy_frag_00000007, sizeof(kImageCopy_frag_00000007)},
-    {kImageCopy_frag_00000008, sizeof(kImageCopy_frag_00000008)},
-    {kImageCopy_frag_00000009, sizeof(kImageCopy_frag_00000009)},
-    {kImageCopy_frag_0000000A, sizeof(kImageCopy_frag_0000000A)},
-    {kImageCopy_frag_0000000B, sizeof(kImageCopy_frag_0000000B)},
-    {nullptr, 0},  // 0x0000000C
-    {nullptr, 0},  // 0x0000000D
-    {nullptr, 0},  // 0x0000000E
-    {nullptr, 0},  // 0x0000000F
-    {kImageCopy_frag_00000010, sizeof(kImageCopy_frag_00000010)},
-    {kImageCopy_frag_00000011, sizeof(kImageCopy_frag_00000011)},
-    {kImageCopy_frag_00000012, sizeof(kImageCopy_frag_00000012)},
-    {kImageCopy_frag_00000013, sizeof(kImageCopy_frag_00000013)},
-    {kImageCopy_frag_00000014, sizeof(kImageCopy_frag_00000014)},
-    {kImageCopy_frag_00000015, sizeof(kImageCopy_frag_00000015)},
-    {kImageCopy_frag_00000016, sizeof(kImageCopy_frag_00000016)},
-    {kImageCopy_frag_00000017, sizeof(kImageCopy_frag_00000017)},
-    {kImageCopy_frag_00000018, sizeof(kImageCopy_frag_00000018)},
-    {kImageCopy_frag_00000019, sizeof(kImageCopy_frag_00000019)},
-    {kImageCopy_frag_0000001A, sizeof(kImageCopy_frag_0000001A)},
-    {kImageCopy_frag_0000001B, sizeof(kImageCopy_frag_0000001B)},
-    {nullptr, 0},  // 0x0000001C
-    {nullptr, 0},  // 0x0000001D
-    {nullptr, 0},  // 0x0000001E
-    {nullptr, 0},  // 0x0000001F
-    {kImageCopy_frag_00000020, sizeof(kImageCopy_frag_00000020)},
-    {kImageCopy_frag_00000021, sizeof(kImageCopy_frag_00000021)},
-    {kImageCopy_frag_00000022, sizeof(kImageCopy_frag_00000022)},
-    {kImageCopy_frag_00000023, sizeof(kImageCopy_frag_00000023)},
-    {kImageCopy_frag_00000024, sizeof(kImageCopy_frag_00000024)},
-    {kImageCopy_frag_00000025, sizeof(kImageCopy_frag_00000025)},
-    {kImageCopy_frag_00000026, sizeof(kImageCopy_frag_00000026)},
-    {kImageCopy_frag_00000027, sizeof(kImageCopy_frag_00000027)},
-    {kImageCopy_frag_00000028, sizeof(kImageCopy_frag_00000028)},
-    {kImageCopy_frag_00000029, sizeof(kImageCopy_frag_00000029)},
-    {kImageCopy_frag_0000002A, sizeof(kImageCopy_frag_0000002A)},
-    {kImageCopy_frag_0000002B, sizeof(kImageCopy_frag_0000002B)},
+{kImageCopy_frag_00000000, sizeof(kImageCopy_frag_00000000)},
+{kImageCopy_frag_00000001, sizeof(kImageCopy_frag_00000001)},
+{kImageCopy_frag_00000002, sizeof(kImageCopy_frag_00000002)},
+{kImageCopy_frag_00000003, sizeof(kImageCopy_frag_00000003)},
+{kImageCopy_frag_00000004, sizeof(kImageCopy_frag_00000004)},
+{kImageCopy_frag_00000005, sizeof(kImageCopy_frag_00000005)},
+{kImageCopy_frag_00000006, sizeof(kImageCopy_frag_00000006)},
+{kImageCopy_frag_00000007, sizeof(kImageCopy_frag_00000007)},
+{kImageCopy_frag_00000008, sizeof(kImageCopy_frag_00000008)},
+{kImageCopy_frag_00000009, sizeof(kImageCopy_frag_00000009)},
+{kImageCopy_frag_0000000A, sizeof(kImageCopy_frag_0000000A)},
+{kImageCopy_frag_0000000B, sizeof(kImageCopy_frag_0000000B)},
+{nullptr, 0}, // 0x0000000C
+{nullptr, 0}, // 0x0000000D
+{nullptr, 0}, // 0x0000000E
+{nullptr, 0}, // 0x0000000F
+{kImageCopy_frag_00000010, sizeof(kImageCopy_frag_00000010)},
+{kImageCopy_frag_00000011, sizeof(kImageCopy_frag_00000011)},
+{kImageCopy_frag_00000012, sizeof(kImageCopy_frag_00000012)},
+{kImageCopy_frag_00000013, sizeof(kImageCopy_frag_00000013)},
+{kImageCopy_frag_00000014, sizeof(kImageCopy_frag_00000014)},
+{kImageCopy_frag_00000015, sizeof(kImageCopy_frag_00000015)},
+{kImageCopy_frag_00000016, sizeof(kImageCopy_frag_00000016)},
+{kImageCopy_frag_00000017, sizeof(kImageCopy_frag_00000017)},
+{kImageCopy_frag_00000018, sizeof(kImageCopy_frag_00000018)},
+{kImageCopy_frag_00000019, sizeof(kImageCopy_frag_00000019)},
+{kImageCopy_frag_0000001A, sizeof(kImageCopy_frag_0000001A)},
+{kImageCopy_frag_0000001B, sizeof(kImageCopy_frag_0000001B)},
+{nullptr, 0}, // 0x0000001C
+{nullptr, 0}, // 0x0000001D
+{nullptr, 0}, // 0x0000001E
+{nullptr, 0}, // 0x0000001F
+{kImageCopy_frag_00000020, sizeof(kImageCopy_frag_00000020)},
+{kImageCopy_frag_00000021, sizeof(kImageCopy_frag_00000021)},
+{kImageCopy_frag_00000022, sizeof(kImageCopy_frag_00000022)},
+{kImageCopy_frag_00000023, sizeof(kImageCopy_frag_00000023)},
+{kImageCopy_frag_00000024, sizeof(kImageCopy_frag_00000024)},
+{kImageCopy_frag_00000025, sizeof(kImageCopy_frag_00000025)},
+{kImageCopy_frag_00000026, sizeof(kImageCopy_frag_00000026)},
+{kImageCopy_frag_00000027, sizeof(kImageCopy_frag_00000027)},
+{kImageCopy_frag_00000028, sizeof(kImageCopy_frag_00000028)},
+{kImageCopy_frag_00000029, sizeof(kImageCopy_frag_00000029)},
+{kImageCopy_frag_0000002A, sizeof(kImageCopy_frag_0000002A)},
+{kImageCopy_frag_0000002B, sizeof(kImageCopy_frag_0000002B)},
 };
 constexpr CompressedShaderBlob kOverlayDraw_frag_shaders[] = {
-    {kOverlayDraw_frag_00000000, sizeof(kOverlayDraw_frag_00000000)},
+{kOverlayDraw_frag_00000000, sizeof(kOverlayDraw_frag_00000000)},
 };
 constexpr CompressedShaderBlob kOverlayDraw_vert_shaders[] = {
-    {kOverlayDraw_vert_00000000, sizeof(kOverlayDraw_vert_00000000)},
+{kOverlayDraw_vert_00000000, sizeof(kOverlayDraw_vert_00000000)},
 };
 
 angle::Result GetShader(Context *context,
@@ -370,7 +367,7 @@ angle::Result GetShader(Context *context,
 {
     ASSERT(shaderFlags < shadersCount);
     RefCounted<ShaderModule> &shader = shaders[shaderFlags];
-    *shaderOut                       = &shader;
+    *shaderOut                          = &shader;
 
     if (shader.get().valid())
     {
@@ -386,9 +383,8 @@ angle::Result GetShader(Context *context,
     std::vector<uint32_t> shaderCode((uncompressedSize + 3) / 4, 0);
 
     // Note: we assume a little-endian environment throughout ANGLE.
-    int zResult = zlib_internal::GzipUncompressHelper(
-        reinterpret_cast<uint8_t *>(shaderCode.data()), &uncompressedSize,
-        compressedShaderCode.code, compressedShaderCode.size);
+    int zResult = zlib_internal::GzipUncompressHelper(reinterpret_cast<uint8_t *>(shaderCode.data()),
+            &uncompressedSize, compressedShaderCode.code, compressedShaderCode.size);
 
     if (zResult != Z_OK)
     {
@@ -400,197 +396,152 @@ angle::Result GetShader(Context *context,
 }
 }  // anonymous namespace
 
-ShaderLibrary::ShaderLibrary() {}
 
-ShaderLibrary::~ShaderLibrary() {}
+ShaderLibrary::ShaderLibrary()
+{
+}
+
+ShaderLibrary::~ShaderLibrary()
+{
+}
 
 void ShaderLibrary::destroy(VkDevice device)
 {
     for (RefCounted<ShaderModule> &shader : mBlitResolve_frag_shaders)
-    {
-        shader.get().destroy(device);
-    }
-    for (RefCounted<ShaderModule> &shader : mBlitResolveStencilNoExport_comp_shaders)
-    {
-        shader.get().destroy(device);
-    }
-    for (RefCounted<ShaderModule> &shader : mConvertIndex_comp_shaders)
-    {
-        shader.get().destroy(device);
-    }
-    for (RefCounted<ShaderModule> &shader : mConvertIndexIndirectLineLoop_comp_shaders)
-    {
-        shader.get().destroy(device);
-    }
-    for (RefCounted<ShaderModule> &shader : mConvertIndirectLineLoop_comp_shaders)
-    {
-        shader.get().destroy(device);
-    }
-    for (RefCounted<ShaderModule> &shader : mConvertVertex_comp_shaders)
-    {
-        shader.get().destroy(device);
-    }
-    for (RefCounted<ShaderModule> &shader : mCopyImageToBuffer_comp_shaders)
-    {
-        shader.get().destroy(device);
-    }
-    for (RefCounted<ShaderModule> &shader : mEtcToBc_comp_shaders)
-    {
-        shader.get().destroy(device);
-    }
-    for (RefCounted<ShaderModule> &shader : mExportStencil_frag_shaders)
-    {
-        shader.get().destroy(device);
-    }
-    for (RefCounted<ShaderModule> &shader : mFullScreenTri_vert_shaders)
-    {
-        shader.get().destroy(device);
-    }
-    for (RefCounted<ShaderModule> &shader : mGenerateMipmap_comp_shaders)
-    {
-        shader.get().destroy(device);
-    }
-    for (RefCounted<ShaderModule> &shader : mImageClear_frag_shaders)
-    {
-        shader.get().destroy(device);
-    }
-    for (RefCounted<ShaderModule> &shader : mImageCopy_frag_shaders)
-    {
-        shader.get().destroy(device);
-    }
-    for (RefCounted<ShaderModule> &shader : mOverlayDraw_frag_shaders)
-    {
-        shader.get().destroy(device);
-    }
-    for (RefCounted<ShaderModule> &shader : mOverlayDraw_vert_shaders)
-    {
-        shader.get().destroy(device);
-    }
+{
+shader.get().destroy(device);
+}
+for (RefCounted<ShaderModule> &shader : mBlitResolveStencilNoExport_comp_shaders)
+{
+shader.get().destroy(device);
+}
+for (RefCounted<ShaderModule> &shader : mConvertIndex_comp_shaders)
+{
+shader.get().destroy(device);
+}
+for (RefCounted<ShaderModule> &shader : mConvertIndexIndirectLineLoop_comp_shaders)
+{
+shader.get().destroy(device);
+}
+for (RefCounted<ShaderModule> &shader : mConvertIndirectLineLoop_comp_shaders)
+{
+shader.get().destroy(device);
+}
+for (RefCounted<ShaderModule> &shader : mConvertVertex_comp_shaders)
+{
+shader.get().destroy(device);
+}
+for (RefCounted<ShaderModule> &shader : mCopyImageToBuffer_comp_shaders)
+{
+shader.get().destroy(device);
+}
+for (RefCounted<ShaderModule> &shader : mEtcToBc_comp_shaders)
+{
+shader.get().destroy(device);
+}
+for (RefCounted<ShaderModule> &shader : mExportStencil_frag_shaders)
+{
+shader.get().destroy(device);
+}
+for (RefCounted<ShaderModule> &shader : mFullScreenTri_vert_shaders)
+{
+shader.get().destroy(device);
+}
+for (RefCounted<ShaderModule> &shader : mGenerateMipmap_comp_shaders)
+{
+shader.get().destroy(device);
+}
+for (RefCounted<ShaderModule> &shader : mImageClear_frag_shaders)
+{
+shader.get().destroy(device);
+}
+for (RefCounted<ShaderModule> &shader : mImageCopy_frag_shaders)
+{
+shader.get().destroy(device);
+}
+for (RefCounted<ShaderModule> &shader : mOverlayDraw_frag_shaders)
+{
+shader.get().destroy(device);
+}
+for (RefCounted<ShaderModule> &shader : mOverlayDraw_vert_shaders)
+{
+shader.get().destroy(device);
+}
 }
 
-angle::Result ShaderLibrary::getBlitResolve_frag(Context *context,
-                                                 uint32_t shaderFlags,
-                                                 RefCounted<ShaderModule> **shaderOut)
+angle::Result ShaderLibrary::getBlitResolve_frag(Context *context, uint32_t shaderFlags, RefCounted<ShaderModule> **shaderOut)
 {
-    return GetShader(context, mBlitResolve_frag_shaders, kBlitResolve_frag_shaders,
-                     ArraySize(kBlitResolve_frag_shaders), shaderFlags, shaderOut);
+return GetShader(context, mBlitResolve_frag_shaders, kBlitResolve_frag_shaders, ArraySize(kBlitResolve_frag_shaders), shaderFlags, shaderOut);
 }
 
-angle::Result ShaderLibrary::getBlitResolveStencilNoExport_comp(
-    Context *context,
-    uint32_t shaderFlags,
-    RefCounted<ShaderModule> **shaderOut)
+angle::Result ShaderLibrary::getBlitResolveStencilNoExport_comp(Context *context, uint32_t shaderFlags, RefCounted<ShaderModule> **shaderOut)
 {
-    return GetShader(context, mBlitResolveStencilNoExport_comp_shaders,
-                     kBlitResolveStencilNoExport_comp_shaders,
-                     ArraySize(kBlitResolveStencilNoExport_comp_shaders), shaderFlags, shaderOut);
+return GetShader(context, mBlitResolveStencilNoExport_comp_shaders, kBlitResolveStencilNoExport_comp_shaders, ArraySize(kBlitResolveStencilNoExport_comp_shaders), shaderFlags, shaderOut);
 }
 
-angle::Result ShaderLibrary::getConvertIndex_comp(Context *context,
-                                                  uint32_t shaderFlags,
-                                                  RefCounted<ShaderModule> **shaderOut)
+angle::Result ShaderLibrary::getConvertIndex_comp(Context *context, uint32_t shaderFlags, RefCounted<ShaderModule> **shaderOut)
 {
-    return GetShader(context, mConvertIndex_comp_shaders, kConvertIndex_comp_shaders,
-                     ArraySize(kConvertIndex_comp_shaders), shaderFlags, shaderOut);
+return GetShader(context, mConvertIndex_comp_shaders, kConvertIndex_comp_shaders, ArraySize(kConvertIndex_comp_shaders), shaderFlags, shaderOut);
 }
 
-angle::Result ShaderLibrary::getConvertIndexIndirectLineLoop_comp(
-    Context *context,
-    uint32_t shaderFlags,
-    RefCounted<ShaderModule> **shaderOut)
+angle::Result ShaderLibrary::getConvertIndexIndirectLineLoop_comp(Context *context, uint32_t shaderFlags, RefCounted<ShaderModule> **shaderOut)
 {
-    return GetShader(context, mConvertIndexIndirectLineLoop_comp_shaders,
-                     kConvertIndexIndirectLineLoop_comp_shaders,
-                     ArraySize(kConvertIndexIndirectLineLoop_comp_shaders), shaderFlags, shaderOut);
+return GetShader(context, mConvertIndexIndirectLineLoop_comp_shaders, kConvertIndexIndirectLineLoop_comp_shaders, ArraySize(kConvertIndexIndirectLineLoop_comp_shaders), shaderFlags, shaderOut);
 }
 
-angle::Result ShaderLibrary::getConvertIndirectLineLoop_comp(Context *context,
-                                                             uint32_t shaderFlags,
-                                                             RefCounted<ShaderModule> **shaderOut)
+angle::Result ShaderLibrary::getConvertIndirectLineLoop_comp(Context *context, uint32_t shaderFlags, RefCounted<ShaderModule> **shaderOut)
 {
-    return GetShader(context, mConvertIndirectLineLoop_comp_shaders,
-                     kConvertIndirectLineLoop_comp_shaders,
-                     ArraySize(kConvertIndirectLineLoop_comp_shaders), shaderFlags, shaderOut);
+return GetShader(context, mConvertIndirectLineLoop_comp_shaders, kConvertIndirectLineLoop_comp_shaders, ArraySize(kConvertIndirectLineLoop_comp_shaders), shaderFlags, shaderOut);
 }
 
-angle::Result ShaderLibrary::getConvertVertex_comp(Context *context,
-                                                   uint32_t shaderFlags,
-                                                   RefCounted<ShaderModule> **shaderOut)
+angle::Result ShaderLibrary::getConvertVertex_comp(Context *context, uint32_t shaderFlags, RefCounted<ShaderModule> **shaderOut)
 {
-    return GetShader(context, mConvertVertex_comp_shaders, kConvertVertex_comp_shaders,
-                     ArraySize(kConvertVertex_comp_shaders), shaderFlags, shaderOut);
+return GetShader(context, mConvertVertex_comp_shaders, kConvertVertex_comp_shaders, ArraySize(kConvertVertex_comp_shaders), shaderFlags, shaderOut);
 }
 
-angle::Result ShaderLibrary::getCopyImageToBuffer_comp(Context *context,
-                                                       uint32_t shaderFlags,
-                                                       RefCounted<ShaderModule> **shaderOut)
+angle::Result ShaderLibrary::getCopyImageToBuffer_comp(Context *context, uint32_t shaderFlags, RefCounted<ShaderModule> **shaderOut)
 {
-    return GetShader(context, mCopyImageToBuffer_comp_shaders, kCopyImageToBuffer_comp_shaders,
-                     ArraySize(kCopyImageToBuffer_comp_shaders), shaderFlags, shaderOut);
+return GetShader(context, mCopyImageToBuffer_comp_shaders, kCopyImageToBuffer_comp_shaders, ArraySize(kCopyImageToBuffer_comp_shaders), shaderFlags, shaderOut);
 }
 
-angle::Result ShaderLibrary::getEtcToBc_comp(Context *context,
-                                             uint32_t shaderFlags,
-                                             RefCounted<ShaderModule> **shaderOut)
+angle::Result ShaderLibrary::getEtcToBc_comp(Context *context, uint32_t shaderFlags, RefCounted<ShaderModule> **shaderOut)
 {
-    return GetShader(context, mEtcToBc_comp_shaders, kEtcToBc_comp_shaders,
-                     ArraySize(kEtcToBc_comp_shaders), shaderFlags, shaderOut);
+return GetShader(context, mEtcToBc_comp_shaders, kEtcToBc_comp_shaders, ArraySize(kEtcToBc_comp_shaders), shaderFlags, shaderOut);
 }
 
-angle::Result ShaderLibrary::getExportStencil_frag(Context *context,
-                                                   uint32_t shaderFlags,
-                                                   RefCounted<ShaderModule> **shaderOut)
+angle::Result ShaderLibrary::getExportStencil_frag(Context *context, uint32_t shaderFlags, RefCounted<ShaderModule> **shaderOut)
 {
-    return GetShader(context, mExportStencil_frag_shaders, kExportStencil_frag_shaders,
-                     ArraySize(kExportStencil_frag_shaders), shaderFlags, shaderOut);
+return GetShader(context, mExportStencil_frag_shaders, kExportStencil_frag_shaders, ArraySize(kExportStencil_frag_shaders), shaderFlags, shaderOut);
 }
 
-angle::Result ShaderLibrary::getFullScreenTri_vert(Context *context,
-                                                   uint32_t shaderFlags,
-                                                   RefCounted<ShaderModule> **shaderOut)
+angle::Result ShaderLibrary::getFullScreenTri_vert(Context *context, uint32_t shaderFlags, RefCounted<ShaderModule> **shaderOut)
 {
-    return GetShader(context, mFullScreenTri_vert_shaders, kFullScreenTri_vert_shaders,
-                     ArraySize(kFullScreenTri_vert_shaders), shaderFlags, shaderOut);
+return GetShader(context, mFullScreenTri_vert_shaders, kFullScreenTri_vert_shaders, ArraySize(kFullScreenTri_vert_shaders), shaderFlags, shaderOut);
 }
 
-angle::Result ShaderLibrary::getGenerateMipmap_comp(Context *context,
-                                                    uint32_t shaderFlags,
-                                                    RefCounted<ShaderModule> **shaderOut)
+angle::Result ShaderLibrary::getGenerateMipmap_comp(Context *context, uint32_t shaderFlags, RefCounted<ShaderModule> **shaderOut)
 {
-    return GetShader(context, mGenerateMipmap_comp_shaders, kGenerateMipmap_comp_shaders,
-                     ArraySize(kGenerateMipmap_comp_shaders), shaderFlags, shaderOut);
+return GetShader(context, mGenerateMipmap_comp_shaders, kGenerateMipmap_comp_shaders, ArraySize(kGenerateMipmap_comp_shaders), shaderFlags, shaderOut);
 }
 
-angle::Result ShaderLibrary::getImageClear_frag(Context *context,
-                                                uint32_t shaderFlags,
-                                                RefCounted<ShaderModule> **shaderOut)
+angle::Result ShaderLibrary::getImageClear_frag(Context *context, uint32_t shaderFlags, RefCounted<ShaderModule> **shaderOut)
 {
-    return GetShader(context, mImageClear_frag_shaders, kImageClear_frag_shaders,
-                     ArraySize(kImageClear_frag_shaders), shaderFlags, shaderOut);
+return GetShader(context, mImageClear_frag_shaders, kImageClear_frag_shaders, ArraySize(kImageClear_frag_shaders), shaderFlags, shaderOut);
 }
 
-angle::Result ShaderLibrary::getImageCopy_frag(Context *context,
-                                               uint32_t shaderFlags,
-                                               RefCounted<ShaderModule> **shaderOut)
+angle::Result ShaderLibrary::getImageCopy_frag(Context *context, uint32_t shaderFlags, RefCounted<ShaderModule> **shaderOut)
 {
-    return GetShader(context, mImageCopy_frag_shaders, kImageCopy_frag_shaders,
-                     ArraySize(kImageCopy_frag_shaders), shaderFlags, shaderOut);
+return GetShader(context, mImageCopy_frag_shaders, kImageCopy_frag_shaders, ArraySize(kImageCopy_frag_shaders), shaderFlags, shaderOut);
 }
 
-angle::Result ShaderLibrary::getOverlayDraw_frag(Context *context,
-                                                 uint32_t shaderFlags,
-                                                 RefCounted<ShaderModule> **shaderOut)
+angle::Result ShaderLibrary::getOverlayDraw_frag(Context *context, uint32_t shaderFlags, RefCounted<ShaderModule> **shaderOut)
 {
-    return GetShader(context, mOverlayDraw_frag_shaders, kOverlayDraw_frag_shaders,
-                     ArraySize(kOverlayDraw_frag_shaders), shaderFlags, shaderOut);
+return GetShader(context, mOverlayDraw_frag_shaders, kOverlayDraw_frag_shaders, ArraySize(kOverlayDraw_frag_shaders), shaderFlags, shaderOut);
 }
 
-angle::Result ShaderLibrary::getOverlayDraw_vert(Context *context,
-                                                 uint32_t shaderFlags,
-                                                 RefCounted<ShaderModule> **shaderOut)
+angle::Result ShaderLibrary::getOverlayDraw_vert(Context *context, uint32_t shaderFlags, RefCounted<ShaderModule> **shaderOut)
 {
-    return GetShader(context, mOverlayDraw_vert_shaders, kOverlayDraw_vert_shaders,
-                     ArraySize(kOverlayDraw_vert_shaders), shaderFlags, shaderOut);
+return GetShader(context, mOverlayDraw_vert_shaders, kOverlayDraw_vert_shaders, ArraySize(kOverlayDraw_vert_shaders), shaderFlags, shaderOut);
 }
 
 }  // namespace vk
