@@ -75,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b6dc224_ccf5a330",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3587,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-25T17:42:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f0617b5_9c2fb02f",
+      "range": {
+        "startLine": 3576,
+        "startChar": 0,
+        "endLine": 3587,
+        "endChar": 95
+      },
+      "revId": "b7902db0e183a46b8354ce2090bb71e3e20e56d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6b8a3315_8eaad5c6",
@@ -88,6 +112,30 @@
       "writtenOn": "2023-09-22T21:54:23Z",
       "side": 1,
       "message": "Should we use `ANGLE_VMA_VERSION` to select between the two versions? We would then remove the old struct when VMA 2.3 support is removed.",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 23
+      },
+      "revId": "b7902db0e183a46b8354ce2090bb71e3e20e56d5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fa583a3_079c485a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-25T17:42:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b8a3315_8eaad5c6",
       "range": {
         "startLine": 39,
         "startChar": 0,
