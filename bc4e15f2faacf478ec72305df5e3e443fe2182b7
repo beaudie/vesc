@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12df139f_197e23cb",
+        "filename": "src/common/matrix_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-25T19:21:47Z",
+      "side": 1,
+      "message": "By the way, instead of duplicating this complex code, please refactor it with `Matrix` and put it in a helper at the top. You could pass it a `const float *in, float *out`. You can add an `M4at()` as a helper too to implement `at()` here.",
+      "revId": "bc4e15f2faacf478ec72305df5e3e443fe2182b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
