@@ -136,7 +136,7 @@ class DynamicBuffer : angle::NonCopyable
     VkMemoryPropertyFlags mMemoryPropertyFlags;
 
     BufferHelperPointerVector mInFlightBuffers;
-    BufferHelperPointerVector mBufferFreeList;
+    std::deque<std::unique_ptr<BufferHelper>> mBufferFreeList;
 };
 
 // Class DescriptorSetHelper. This is a wrapper of VkDescriptorSet with GPU resource use tracking.
