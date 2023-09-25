@@ -4736,7 +4736,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // Flushing mutable texture is disabled for discrete GPUs to mitigate possible VRAM OOM.
     ANGLE_FEATURE_CONDITION(
         &mFeatures, mutableMipmapTextureUpload,
-        canPreferDeviceLocalMemoryHostVisible(mPhysicalDeviceProperties.deviceType));
+        /*canPreferDeviceLocalMemoryHostVisible(mPhysicalDeviceProperties.deviceType)*/ true);
 
     // Allow passthrough of EGL colorspace attributes on Android platform and for vendors that
     // are known to support wide color gamut.

@@ -640,69 +640,10 @@ bool TextureVk::isMutableTextureConsistentlySpecifiedForFlush()
         return false;
     }
 
-    // If the texture is a cubemap, we will have to wait until it is complete.
-    if (mState.getType() == gl::TextureType::CubeMap && !mState.isCubeComplete())
+    const GLuint maxEnabledLevel = mState.getEnabledLevelCount() - 1;
+    if (!mState.computeMipmapCompleteness(maxEnabledLevel))
     {
         return false;
-    }
-
-    // Before we initialize the full mip chain, we make sure that the base mip level and at least
-    // one other level after (1 for simplicity) are defined and have appropriate values.
-    if (mState.getImageDescs().size() < 2)
-    {
-        return false;
-    }
-
-    gl::TextureTarget textureTarget = (mState.getType() == gl::TextureType::CubeMap)
-                                          ? gl::kCubeMapTextureTargetMin
-                                          : gl::TextureTypeToTarget(mState.getType(), 0);
-    if (!isMipImageDescDefined(textureTarget, 0) || !isMipImageDescDefined(textureTarget, 1))
-    {
-        return false;
-    }
-
-    // The mip levels that are already defined should have attributes compatible with those of the
-    // base mip level. For each defined mip level, its size, format, number of samples, and depth
-    // are checked before flushing the texture updates. For complete cubemaps, there are 6 images
-    // per mip level. Therefore, mState would have 6 times as many images.
-    gl::ImageDesc baseImageDesc = mState.getImageDesc(textureTarget, 0);
-    size_t maxImageMipLevels    = (mState.getType() == gl::TextureType::CubeMap)
-                                      ? (mState.getImageDescs().size() / 6)
-                                      : mState.getImageDescs().size();
-
-    for (size_t image = 1; image < maxImageMipLevels; image++)
-    {
-        gl::ImageDesc mipImageDesc = mState.getImageDesc(textureTarget, image);
-        if (!isMipImageDescDefined(textureTarget, image))
-        {
-            continue;
-        }
-
-        // If the texture is 2DArray or 3D, the depths should also be checked according to the mip
-        // levels. If the texture type is a cube map array, the depth represents the number of
-        // layer-faces and does not change for mipmaps. Otherwise, we skip the depth comparison.
-        gl::Extents baseImageDescMipSize;
-        baseImageDescMipSize.width  = std::max(baseImageDesc.size.width >> image, 1);
-        baseImageDescMipSize.height = std::max(baseImageDesc.size.height >> image, 1);
-        baseImageDescMipSize.depth  = std::max(baseImageDesc.size.depth >> image, 1);
-
-        bool isDepthCompatible = (mState.getType() == gl::TextureType::_3D ||
-                                  mState.getType() == gl::TextureType::_2DArray)
-                                     ? (baseImageDescMipSize.depth == mipImageDesc.size.depth)
-                                     : (mState.getType() != gl::TextureType::CubeMapArray ||
-                                        baseImageDesc.size.depth == mipImageDesc.size.depth);
-
-        bool isSizeCompatible = (baseImageDescMipSize.width == mipImageDesc.size.width) &&
-                                (baseImageDescMipSize.height == mipImageDesc.size.height) &&
-                                isDepthCompatible;
-        bool isFormatCompatible          = (baseImageDesc.format.info->sizedInternalFormat ==
-                                   mipImageDesc.format.info->sizedInternalFormat);
-        bool isNumberOfSamplesCompatible = (baseImageDesc.samples == mipImageDesc.samples);
-
-        if (!isSizeCompatible || !isFormatCompatible || !isNumberOfSamplesCompatible)
-        {
-            return false;
-        }
     }
 
     return true;
