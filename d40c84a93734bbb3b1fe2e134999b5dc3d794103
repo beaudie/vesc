@@ -16,6 +16,24 @@
       "message": "Are these up-to-date? Trying locally, only `Grow` fails for me, and only on Nvidia (not swiftshader)",
       "revId": "d40c84a93734bbb3b1fe2e134999b5dc3d794103",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05dd1641_fecbda9c",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 24
+      },
+      "lineNbr": 1216,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-25T15:39:25Z",
+      "side": 1,
+      "message": "I debugged that test a bit, when it does the glClear call, FramebufferVk still thinks the framebuffer is 64x64. That is `dimensions` I\u0027m seeing in this call:\n\n```\ngl::Rectangle FramebufferVk::getNonRotatedCompleteRenderArea() const\n{\n    const gl::Box \u0026dimensions \u003d mState.getDimensions();\n    return gl::Rectangle(0, 0, dimensions.width, dimensions.height);\n}\n```\n\nIt\u0027s a separate pre-existing bug, but you might want to look into what\u0027s going on there. Please adjust the expectations, and open a new bug for this that you can attribute the suppressions to.",
+      "parentUuid": "92c62811_022e20bd",
+      "revId": "d40c84a93734bbb3b1fe2e134999b5dc3d794103",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
