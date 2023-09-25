@@ -16,6 +16,29 @@
       "message": "Curious, why not directly optimize Matrix implementation, is it not feasible? I thought most of the optimization here is avoid memory allocation asscoiated with std::vector, which should easily fixable by reserve space ahead of time?",
       "revId": "093363ac0c69070855292871c2177f170da807ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94ff750f_0a7915c2",
+        "filename": "src/common/matrix_utils.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-25T20:09:02Z",
+      "side": 1,
+      "message": "nit: `CofactorTransposed`, and move implementation to cpp (and drop `ANGLE_INLINE`). We shouldn\u0027t need to enforce inling on something this big.\n\nFYI, `Matrix`\u0027s inverse is basically only used by the translator when a constant matrix is inversed. It\u0027s basically practically never called, so not worth the binary size bloat.",
+      "range": {
+        "startLine": 27,
+        "startChar": 18,
+        "endLine": 27,
+        "endChar": 37
+      },
+      "revId": "093363ac0c69070855292871c2177f170da807ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

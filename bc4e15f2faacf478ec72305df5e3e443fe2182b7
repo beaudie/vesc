@@ -88,6 +88,24 @@
       "parentUuid": "d0c8d184_f496fb45",
       "revId": "bc4e15f2faacf478ec72305df5e3e443fe2182b7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f23d839_dc788d9b",
+        "filename": "src/common/matrix_utils.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-25T20:09:02Z",
+      "side": 1,
+      "message": "You can put `// clang-format off` and `// clang-format on` around it to keep the formatting; the alignment of numbers did help visualize the logic.\n\nNot a big deal however.",
+      "parentUuid": "7b22edfe_66d6be57",
+      "revId": "bc4e15f2faacf478ec72305df5e3e443fe2182b7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
