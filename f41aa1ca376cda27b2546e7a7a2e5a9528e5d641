@@ -39,6 +39,30 @@
       },
       "revId": "f41aa1ca376cda27b2546e7a7a2e5a9528e5d641",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8a550b7_29334dda",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-26T12:49:23Z",
+      "side": 1,
+      "message": "Done. I was on the fence about this as I wasn\u0027t sure we\u0027d want to keep the other uses a vector (the one in VertexArrayVk never even pops).\n\nI\u0027ll need re-LGTM due to a \"change in a new file\" lol",
+      "parentUuid": "e84cc5ed_692125bf",
+      "range": {
+        "startLine": 138,
+        "startChar": 30,
+        "endLine": 138,
+        "endChar": 46
+      },
+      "revId": "f41aa1ca376cda27b2546e7a7a2e5a9528e5d641",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
