@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d38b96f_f4921dc7",
+        "filename": "src/libANGLE/Debug.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-26T20:40:55Z",
+      "side": 1,
+      "message": "Do you really need this check? In the absolute worst case, someone might get a message one extra time or something, it\u0027s pretty harmless.",
+      "revId": "8a01bc563d51beca77ea0212190b5c1d6915fe3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa644b7a_12416ef9",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4566,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-26T20:40:55Z",
+      "side": 1,
+      "message": "You can make this _much_ simpler by just calling `ANGLE_PERF_WARNING` in `ANGLE_VK_PERF_WARNING` and then call this function. I know that means `snprintf` is called twice, but bear in mind that this is only relevant during captures, and performance doesn\u0027t matter much.\n\nThen this function could be as simple as:\n\n\n```suggestion\n    if (mRenderer-\u003eenableDebugUtils() || mRenderer-\u003eangleDebuggerMode())\n    {\n        char message[200];\n        va_list args;\n        va_start(args, format);\n        vsnprintf(message, sizeof(message), format, args);\n        va_end(args);\n\n        insertEventMarkerImpl(GL_DEBUG_SOURCE_OTHER, message);\n    }\n```",
+      "range": {
+        "startLine": 4539,
+        "startChar": 0,
+        "endLine": 4566,
+        "endChar": 5
+      },
+      "revId": "8a01bc563d51beca77ea0212190b5c1d6915fe3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e2f3651_35bda7ba",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-26T20:40:55Z",
+      "side": 1,
+      "message": "super nit: Is `don\u0027t pass by non-const reference` not a thing anymore? I think Chromium\u0027s not enforcing it anymore, but we\u0027ve kept that in ANGLE. It helps readability at the call site (because otherwise it doesn\u0027t look like the value can be modified)",
+      "range": {
+        "startLine": 245,
+        "startChar": 29,
+        "endLine": 245,
+        "endChar": 52
+      },
+      "revId": "8a01bc563d51beca77ea0212190b5c1d6915fe3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
