@@ -127,6 +127,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e56ae814_889ff010",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4566,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-26T21:18:41Z",
+      "side": 1,
+      "message": "maybe but then we\u0027d need to watch out for stuff like this that might go above the fixed-buffer size?..\nhttps://crsrc.org/c/third_party/angle/src/libANGLE/renderer/d3d/ProgramD3D.cpp;drc\u003deb0d59973d21f845b5785563f5d56b8ebb617478;l\u003d665",
+      "parentUuid": "91ec20a9_1669da3f",
+      "range": {
+        "startLine": 4539,
+        "startChar": 0,
+        "endLine": 4566,
+        "endChar": 5
+      },
+      "revId": "8a01bc563d51beca77ea0212190b5c1d6915fe3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3e2f3651_35bda7ba",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 3
@@ -186,6 +210,30 @@
       "side": 1,
       "message": "I get that, sometimes it does get annoying.\n\nBut let\u0027s just stick to ANGLE\u0027s convention for consistency?",
       "parentUuid": "aa52e6d8_cc290ac6",
+      "range": {
+        "startLine": 245,
+        "startChar": 29,
+        "endLine": 245,
+        "endChar": 52
+      },
+      "revId": "8a01bc563d51beca77ea0212190b5c1d6915fe3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9e4b593_b67af6db",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-26T21:18:41Z",
+      "side": 1,
+      "message": "Done but I mean, there must be a reason Chromium isn\u0027t enforcing it any more.",
+      "parentUuid": "04c2a91b_8b75dcff",
       "range": {
         "startLine": 245,
         "startChar": 29,
