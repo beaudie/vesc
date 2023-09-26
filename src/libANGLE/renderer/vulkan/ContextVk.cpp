@@ -4531,6 +4531,41 @@ void ContextVk::insertEventMarkerImpl(GLenum source, const char *marker)
     }
 }
 
+void ContextVk::insertVkPerfWarning(std::atomic<uint32_t> &repeatCount,
+                                    GLenum severity,
+                                    const char *format,
+                                    ...)
+{
+    constexpr uint32_t kMaxPerfRepeat = 4;  // applies to logs but not event markers
+
+    uint32_t perfRepeatCount = repeatCount.load(std::memory_order_relaxed);
+    if (perfRepeatCount < kMaxPerfRepeat)
+    {
+        perfRepeatCount = repeatCount.fetch_add(1, std::memory_order_relaxed);
+    }
+
+    bool wantMarker = mRenderer->enableDebugUtils() || mRenderer->angleDebuggerMode();
+
+    if (perfRepeatCount < kMaxPerfRepeat || wantMarker)
+    {
+        char message[200];
+        va_list args;
+        va_start(args, format);
+        vsnprintf(message, sizeof(message), format, args);
+        va_end(args);
+
+        if (perfRepeatCount < kMaxPerfRepeat)
+        {
+            getDebug().insertPerfWarning(severity, message, perfRepeatCount == kMaxPerfRepeat - 1);
+        }
+
+        if (wantMarker)
+        {
+            insertEventMarkerImpl(GL_DEBUG_SOURCE_OTHER, message);
+        }
+    }
+}
+
 angle::Result ContextVk::pushGroupMarker(GLsizei length, const char *marker)
 {
     return pushDebugGroupImpl(GL_DEBUG_SOURCE_APPLICATION, 0, marker);

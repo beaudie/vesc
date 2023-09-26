@@ -242,6 +242,11 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     void insertEventMarkerImpl(GLenum source, const char *marker);
 
+    void insertVkPerfWarning(std::atomic<uint32_t> &repeatCount,
+                             GLenum severity,
+                             const char *format,
+                             ...);
+
     // KHR_debug
     angle::Result pushDebugGroup(const gl::Context *context,
                                  GLenum source,
@@ -1730,14 +1735,11 @@ uint32_t GetDriverUniformSize(vk::Context *context, PipelineType pipelineType);
 }  // namespace rx
 
 // Generate a perf warning, and insert an event marker in the command buffer.
-#define ANGLE_VK_PERF_WARNING(contextVk, severity, ...)                         \
-    do                                                                          \
-    {                                                                           \
-        char ANGLE_MESSAGE[200];                                                \
-        snprintf(ANGLE_MESSAGE, sizeof(ANGLE_MESSAGE), __VA_ARGS__);            \
-        ANGLE_PERF_WARNING(contextVk->getDebug(), severity, ANGLE_MESSAGE);     \
-                                                                                \
-        contextVk->insertEventMarkerImpl(GL_DEBUG_SOURCE_OTHER, ANGLE_MESSAGE); \
+#define ANGLE_VK_PERF_WARNING(contextVk, severity, ...)                      \
+    do                                                                       \
+    {                                                                        \
+        static std::atomic<uint32_t> sRepeatCount = 0;                       \
+        contextVk->insertVkPerfWarning(sRepeatCount, severity, __VA_ARGS__); \
     } while (0)
 
 // Generate a trace event for graphics profiler, and insert an event marker in the command buffer.
