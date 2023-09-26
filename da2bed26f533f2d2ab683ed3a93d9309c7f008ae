@@ -16,6 +16,63 @@
       "message": "Good finding!",
       "revId": "da2bed26f533f2d2ab683ed3a93d9309c7f008ae",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "697f7d33_06a5544d",
+        "filename": "src/libANGLE/Debug.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-26T18:21:48Z",
+      "side": 1,
+      "message": "I don\u0027t remember all the details, but there was a reason I ended up moving the logic inside the cpp. Like, maybe binary bloat? Could you check the libGLESv2.so size before and after this change?\n\nThough I don\u0027t think the macro is used in _that_ many places.",
+      "revId": "da2bed26f533f2d2ab683ed3a93d9309c7f008ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c60f6e69_7c727fd9",
+        "filename": "src/libANGLE/Debug.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-26T18:21:48Z",
+      "side": 1,
+      "message": "```suggestion\n        if (sRepeatCount.load(std::memory_order_relaxed) \u003c kMaxPerfRepeat)                                                    \\\n        {                                                                                        \\\n            uint32_t repeatCount \u003d sRepeatCount.fetch_add(1, std::memory_order_relaxed);                              \\\n```",
+      "range": {
+        "startLine": 179,
+        "startChar": 0,
+        "endLine": 181,
+        "endChar": 38
+      },
+      "revId": "da2bed26f533f2d2ab683ed3a93d9309c7f008ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "255ec68c_3da23393",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 1739,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-26T18:21:48Z",
+      "side": 1,
+      "message": "I suggest dealing with this differently. The reason ANGLE_VK_PERF_WARNING doesn\u0027t have a limit is that when a debugger is attached (like RenderDoc), you\u0027d want to see all the issues in the trace, not just the first few. Especially for ourselves, we don\u0027t necessarily have the luxury of fixing the first few instances, but we may be able to fix later ones if we see that they exist!\n\nSo, I\u0027d keep `ANGLE_PERF_WARNING` as it is, and instead make `insertEventMarkerImpl` take `...`, early out first and then do the `vsnprintf`.",
+      "revId": "da2bed26f533f2d2ab683ed3a93d9309c7f008ae",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
