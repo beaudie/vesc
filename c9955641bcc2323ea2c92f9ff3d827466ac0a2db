@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ecc7f39_262bc2b1",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 4
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-09-26T04:49:49Z",
+      "side": 0,
+      "message": "I understand that if remove the PUNCHTHROUGH logic, it will make it simpler. but I do see it did introduce big errors. there is some perf loss, but not that bigger.",
+      "range": {
+        "startLine": 134,
+        "startChar": 4,
+        "endLine": 142,
+        "endChar": 5
+      },
+      "revId": "c9955641bcc2323ea2c92f9ff3d827466ac0a2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
