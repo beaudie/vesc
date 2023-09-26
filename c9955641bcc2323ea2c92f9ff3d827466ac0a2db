@@ -46,6 +46,30 @@
       },
       "revId": "c9955641bcc2323ea2c92f9ff3d827466ac0a2db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efb821ee_18a71041",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 4
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-26T08:11:57Z",
+      "side": 0,
+      "message": "Does this work?\n\n```\n    ivec3 dx;\n    uvec3 clusterSum \u003d subgroupClusteredAdd(rgbColor, 16);\n    int clusterCount \u003d subgroupClusteredAdd(1, 16);\n    if( alphaBits \u003d\u003d 1 ) {\n        int count \u003d subgroupClusteredAdd(1, 16);\n        ivec3 avg \u003d ivec3(clusterSum * 2 + count)/ (2*clusterCount));\n        dx \u003d ivec3(rgbColor) - avg;\n    }\n    else {\n        dx \u003d ivec3(rgbColor) - ivec3(clusterSum + 8 \u003e\u003e 4);\n    }\n```\n\nIt avoids the control flow issue, but also preserves the `alphaBits \u003d\u003d 1` logic to avoid the errors.",
+      "parentUuid": "3e577332_2c4351a7",
+      "range": {
+        "startLine": 134,
+        "startChar": 4,
+        "endLine": 142,
+        "endChar": 5
+      },
+      "revId": "c9955641bcc2323ea2c92f9ff3d827466ac0a2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
