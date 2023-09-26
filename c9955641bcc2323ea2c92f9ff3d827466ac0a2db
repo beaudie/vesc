@@ -118,6 +118,30 @@
       },
       "revId": "c9955641bcc2323ea2c92f9ff3d827466ac0a2db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0188016_f6c1fa49",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 4
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1557704
+      },
+      "writtenOn": "2023-09-26T17:22:38Z",
+      "side": 0,
+      "message": "Ah, that\u0027s unfortunate.",
+      "parentUuid": "50ec0e12_9b0c4ca5",
+      "range": {
+        "startLine": 134,
+        "startChar": 4,
+        "endLine": 142,
+        "endChar": 5
+      },
+      "revId": "c9955641bcc2323ea2c92f9ff3d827466ac0a2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
