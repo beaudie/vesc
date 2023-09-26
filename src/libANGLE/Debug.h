@@ -85,7 +85,7 @@ class Debug : angle::NonCopyable
     size_t getGroupStackDepth() const;
 
     // Helper for ANGLE_PERF_WARNING
-    void insertPerfWarning(GLenum severity, const char *message, uint32_t *repeatCount) const;
+    void insertPerfWarning(GLenum severity, const char *message, bool repeatLast) const;
 
   private:
     bool isMessageEnabled(GLenum source, GLenum type, GLuint id, GLenum severity) const;
@@ -171,11 +171,16 @@ class Debug : angle::NonCopyable
 }  // namespace egl
 
 // Generate a perf warning.  Only outputs the same message a few times to avoid spamming the logs.
-#define ANGLE_PERF_WARNING(debug, severity, message)                 \
-    do                                                               \
-    {                                                                \
-        static uint32_t sRepeatCount = 0;                            \
-        (debug).insertPerfWarning(severity, message, &sRepeatCount); \
+#define ANGLE_PERF_WARNING(debug, severity, message)                                             \
+    do                                                                                           \
+    {                                                                                            \
+        static std::atomic<uint32_t> sRepeatCount = 0;                                           \
+        constexpr uint32_t kMaxPerfRepeat         = 4;                                           \
+        uint32_t perfRepeatCount                  = sRepeatCount++;                              \
+        if (perfRepeatCount < kMaxPerfRepeat)                                                    \
+        {                                                                                        \
+            (debug).insertPerfWarning(severity, message, perfRepeatCount == kMaxPerfRepeat - 1); \
+        }                                                                                        \
     } while (0)
 
 #endif  // LIBANGLE_DEBUG_H_
