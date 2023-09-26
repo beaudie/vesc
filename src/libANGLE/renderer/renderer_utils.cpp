@@ -111,6 +111,25 @@ void FeatureSetBase::overrideFeatures(const std::vector<std::string> &featureNam
             }
         }
     }
+
+    if (enabled)
+    {
+        for (auto iter : members)
+        {
+            const std::string &featureName = iter.first;
+            FeatureInfo *feature           = iter.second;
+
+            if (FeatureNameMatch(featureName, "linkJobIsNotThreadSafe"))
+                continue;
+
+            if (feature->category == FeatureCategory::OpenGLWorkarounds ||
+                feature->category == FeatureCategory::FrontendWorkarounds)
+            {
+                fprintf(stderr, "FORCE DISABLE %s\n", featureName.c_str());
+                feature->applyOverride(false);
+            }
+        }
+    }
 }
 
 void FeatureSetBase::populateFeatureList(FeatureList *features) const

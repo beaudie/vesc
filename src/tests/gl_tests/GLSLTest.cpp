@@ -18124,6 +18124,68 @@ void main()
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
 }
 
+TEST_P(GLSLTest_ES3, XYZ)
+{
+    constexpr char kVS[] = R"(#version 300 es
+
+#extension GL_NV_shader_noperspective_interpolation : require
+precision mediump float;
+precision mediump sampler2D;
+uniform highp vec4 sk_RTAdjust;
+uniform highp vec2 uAtlasSizeInv_S0;
+in highp vec2 inPosition;
+in mediump vec4 inColor;
+in mediump uvec2 inTextureCoords;
+noperspective out highp vec2 vTextureCoords_S0;
+flat out highp float vTexIndex_S0;
+noperspective out mediump vec4 vinColor_S0;
+void main() {
+    highp int texIdx = 0;
+    highp vec2 unormTexCoords = vec2(float(inTextureCoords.x), float(inTextureCoords.y));
+    vTextureCoords_S0 = unormTexCoords * uAtlasSizeInv_S0;
+    vTexIndex_S0 = float(texIdx);
+    vinColor_S0 = inColor;
+    gl_Position = vec4(inPosition, 0.0, 1.0);
+    gl_Position = vec4(gl_Position.xy * sk_RTAdjust.xz + gl_Position.ww * sk_RTAdjust.yw, 0.0, gl_Position.w);
+})";
+
+    constexpr char kFS[] = R"(#version 300 es
+
+#extension GL_NV_shader_noperspective_interpolation : require
+precision mediump float;
+precision mediump sampler2D;
+out mediump vec4 sk_FragColor;
+uniform sampler2D uTextureSampler_0_S0;
+noperspective in highp vec2 vTextureCoords_S0;
+flat in highp float vTexIndex_S0;
+noperspective in mediump vec4 vinColor_S0;
+void main() {
+    mediump vec4 outputColor_S0 = vinColor_S0;
+    mediump vec4 texColor = texture(uTextureSampler_0_S0, vTextureCoords_S0, -0.5).xxxx;
+    mediump vec4 outputCoverage_S0 = texColor;
+    {
+        sk_FragColor = outputColor_S0 * outputCoverage_S0;
+    }
+})";
+
+    GLuint fs = CompileShader(GL_FRAGMENT_SHADER, kFS);
+    GLuint vs = CompileShader(GL_VERTEX_SHADER, kVS);
+
+    GLuint program = glCreateProgram();
+    glAttachShader(program, vs);
+    glAttachShader(program, fs);
+
+    glBindAttribLocation(program, 0, "inPosition");
+    glBindAttribLocation(program, 1, "inColor");
+    glBindAttribLocation(program, 2, "inTextureCoords");
+
+    glLinkProgram(program);
+
+    GLint linkStatus = GL_FALSE;
+    glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
+    ASSERT_TRUE(linkStatus);
+}
+
 }  // anonymous namespace
 
 ANGLE_INSTANTIATE_TEST_ES2_AND_ES3(GLSLTest);
