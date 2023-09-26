@@ -94,6 +94,30 @@
       },
       "revId": "c9955641bcc2323ea2c92f9ff3d827466ac0a2db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50ec0e12_9b0c4ca5",
+        "filename": "src/libANGLE/renderer/vulkan/shaders/src/EtcToBc.comp",
+        "patchSetId": 4
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-26T17:21:06Z",
+      "side": 0,
+      "message": "Actually please refrain from that. If there\u0027s anything that can be turned into a runtime decision, it should stay so. Build-time specialization has a non-trivial cost on ANGLE\u0027s binary size, and we made an effort in the past to only keep that were we have to (for example because the types change)",
+      "parentUuid": "21cf5cae_e9b86c63",
+      "range": {
+        "startLine": 134,
+        "startChar": 4,
+        "endLine": 142,
+        "endChar": 5
+      },
+      "revId": "c9955641bcc2323ea2c92f9ff3d827466ac0a2db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
