@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6976bf8_13724f32",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 654,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-27T21:09:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b588029f_3f111b28",
+      "range": {
+        "startLine": 650,
+        "startChar": 4,
+        "endLine": 654,
+        "endChar": 5
+      },
+      "revId": "29d548b6112756e45a25147c06d49295cfdc95bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3e651a44_b33498f9",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-09-27T16:11:07Z",
       "side": 1,
       "message": "isMutableTextureConsistentlySpecifiedForFlush is only called in certain cases and only when flag is enabled, which means when it is not called, mDefinedLevelCount will be 0 (or wrong value if it get here once and then called glTexImage again). I think this left a trap for future. Why not maintain this in  TextureState::setImageDesc()? I think we call this function when we define a level.",
+      "range": {
+        "startLine": 713,
+        "startChar": 8,
+        "endLine": 713,
+        "endChar": 26
+      },
+      "revId": "29d548b6112756e45a25147c06d49295cfdc95bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7901cc57_497a6f9a",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 713,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-27T21:09:22Z",
+      "side": 1,
+      "message": "Thanks! Moved `mDefinedLevelCount` to `TextureState`.",
+      "parentUuid": "3e651a44_b33498f9",
       "range": {
         "startLine": 713,
         "startChar": 8,
