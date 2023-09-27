@@ -2687,12 +2687,13 @@ angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferHelperT *co
     mShaderBufferWriteDescriptorDescs.updateInputAttachments(
         *executable, variableInfoMap, vk::GetImpl(mState.getDrawFramebuffer()));
 
+    vk::CommandBufferAccess access;
     mShaderBuffersDescriptorDesc.resize(
         mShaderBufferWriteDescriptorDescs.getTotalDescriptorCount());
     if (hasUniformBuffers)
     {
         mShaderBuffersDescriptorDesc.updateShaderBuffers(
-            this, commandBufferHelper, variableInfoMap,
+            this, commandBufferHelper, &access, variableInfoMap,
             mState.getOffsetBindingPointerUniformBuffers(), executable->getUniformBlocks(),
             executableVk->getUniformBufferDescriptorType(), limits.maxUniformBufferRange,
             mEmptyBuffer, mShaderBufferWriteDescriptorDescs);
@@ -2700,7 +2701,7 @@ angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferHelperT *co
     if (hasStorageBuffers)
     {
         mShaderBuffersDescriptorDesc.updateShaderBuffers(
-            this, commandBufferHelper, variableInfoMap,
+            this, commandBufferHelper, &access, variableInfoMap,
             mState.getOffsetBindingPointerShaderStorageBuffers(),
             executable->getShaderStorageBlocks(), executableVk->getStorageBufferDescriptorType(),
             limits.maxStorageBufferRange, mEmptyBuffer, mShaderBufferWriteDescriptorDescs);
@@ -2708,11 +2709,24 @@ angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferHelperT *co
     if (hasAtomicCounterBuffers)
     {
         mShaderBuffersDescriptorDesc.updateAtomicCounters(
-            this, commandBufferHelper, variableInfoMap,
+            this, commandBufferHelper, &access, variableInfoMap,
             mState.getOffsetBindingPointerAtomicCounterBuffers(),
             executable->getAtomicCounterBuffers(), limits.minStorageBufferOffsetAlignment,
             mEmptyBuffer, mShaderBufferWriteDescriptorDescs);
     }
+
+    if constexpr (std::is_same<CommandBufferHelperT,
+                               vk::OutsideRenderPassCommandBufferHelper>::value)
+    {
+        // For OutsideRenderPassCommands, we must use CommandBufferAccess to properly endRenderPass
+        // and insert barriers. For RenderPassCommands, updateOneShaderBuffer already handled
+        // barriers for us.
+        vk::OutsideRenderPassCommandBuffer *commandBuffer;
+        ANGLE_TRY(getOutsideRenderPassCommandBuffer(access, &commandBuffer));
+        // commandBufferHelper may have changed.
+        commandBufferHelper = mOutsideRenderPassCommands;
+    }
+
     if (hasImages)
     {
         ANGLE_TRY(updateActiveImages(commandBufferHelper));
@@ -2769,7 +2783,7 @@ angle::Result ContextVk::handleDirtyComputeShaderResources()
 }
 
 template <typename CommandBufferT>
-angle::Result ContextVk::handleDirtyUniformBuffersImpl(CommandBufferT *commandBufferHelper)
+angle::Result ContextVk::handleDirtyUniformBuffersImpl(CommandBufferT *commandBufferHelperOrAccess)
 {
     const gl::ProgramExecutable *executable = mState.getProgramExecutable();
     ASSERT(executable);
@@ -2783,11 +2797,27 @@ angle::Result ContextVk::handleDirtyUniformBuffersImpl(CommandBufferT *commandBu
     for (size_t blockIndex : dirtyBits)
     {
         mShaderBuffersDescriptorDesc.updateOneShaderBuffer(
-            this, commandBufferHelper, variableInfoMap,
+            this, commandBufferHelperOrAccess, variableInfoMap,
             mState.getOffsetBindingPointerUniformBuffers(), executable->getUniformBlocks(),
             static_cast<uint32_t>(blockIndex), executableVk->getUniformBufferDescriptorType(),
             limits.maxUniformBufferRange, mEmptyBuffer, mShaderBufferWriteDescriptorDescs);
     }
+
+    vk::CommandBufferHelperCommon *commandBufferHelper;
+    if constexpr (std::is_same<CommandBufferT, vk::RenderPassCommandBufferHelper>::value)
+    {
+        commandBufferHelper = commandBufferHelperOrAccess;
+    }
+    else if constexpr (std::is_same<CommandBufferT, vk::CommandBufferAccess>::value)
+    {
+        // For OutsideRenderPassCommands, we must use CommandBufferAccess to properly endRenderPass
+        // and insert barriers. For RenderPassCommands, updateOneShaderBuffer already handled
+        // barriers for us.
+        vk::OutsideRenderPassCommandBuffer *commandBuffer;
+        ANGLE_TRY(getOutsideRenderPassCommandBuffer(*commandBufferHelperOrAccess, &commandBuffer));
+        commandBufferHelper = mOutsideRenderPassCommands;
+    }
+
     executableVk->resetUniformBufferDirtyBits();
 
     vk::SharedDescriptorSetCacheKey newSharedCacheKey;
@@ -2814,7 +2844,8 @@ angle::Result ContextVk::handleDirtyGraphicsUniformBuffers(DirtyBits::Iterator *
 
 angle::Result ContextVk::handleDirtyComputeUniformBuffers()
 {
-    return handleDirtyUniformBuffersImpl(mOutsideRenderPassCommands);
+    vk::CommandBufferAccess access;
+    return handleDirtyUniformBuffersImpl(&access);
 }
 
 angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
@@ -8444,7 +8475,6 @@ angle::Result ContextVk::onResourceAccess(const vk::CommandBufferAccess &access)
     for (const vk::CommandBufferBufferAccess &bufferAccess : access.getWriteBuffers())
     {
         ASSERT(!isRenderPassStartedAndUsesBuffer(*bufferAccess.buffer));
-        ASSERT(!mOutsideRenderPassCommands->usesBuffer(*bufferAccess.buffer));
 
         mOutsideRenderPassCommands->bufferWrite(this, bufferAccess.accessType, bufferAccess.stage,
                                                 bufferAccess.buffer);

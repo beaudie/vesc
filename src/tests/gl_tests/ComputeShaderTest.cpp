@@ -853,6 +853,59 @@ void main()
     }
 }
 
+// Test that use buffer in renderPass then using it as in compute shader works.
+TEST_P(ComputeShaderTest, UseInRenderPassAsUBOThenShaderStorageBufferInComputeShader)
+{
+    // Flaky crash on teardown, see http://anglebug.com/3349
+    ANGLE_SKIP_TEST_IF(IsD3D11() && IsIntel() && IsWindows());
+
+    GLBuffer buffer;
+    glBindBuffer(GL_UNIFORM_BUFFER, buffer);
+    const std::array<uint32_t, 4> kInitialData = {1, 2, 3, 4};
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(kInitialData), kInitialData.data(), GL_DYNAMIC_DRAW);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, buffer);
+    EXPECT_GL_NO_ERROR();
+
+    // Use buffer in the render pass as the uniform buffer (read access)
+    constexpr char kVerifyUBO[] = R"(#version 310 es
+precision mediump float;
+layout(binding = 0) uniform block {
+    uvec4 data;
+} ubo;
+out vec4 colorOut;
+void main()
+{
+    if (all(equal(ubo.data, uvec4(1, 2, 3, 4))))
+        colorOut = vec4(0, 1.0, 0, 1.0);
+    else
+        colorOut = vec4(1.0, 0, 0, 1.0);
+})";
+    ANGLE_GL_PROGRAM(verifyUbo, essl31_shaders::vs::Simple(), kVerifyUBO);
+    drawQuad(verifyUbo, essl31_shaders::PositionAttrib(), 0.5);
+    EXPECT_GL_NO_ERROR();
+
+    // Use buffer in the compute shader as shader storage buffer (write access). This should end
+    // previous graphics rendcer pass since it is write after read.
+    const char kCS[] = R"(#version 310 es
+layout(local_size_x=1, local_size_y=1, local_size_z=1) in;
+ layout(std140, binding = 0) buffer blockOut {
+     uvec4 data;
+ } instanceOut;
+void main()
+{
+     instanceOut.data = uvec4(5,6,7,8);
+})";
+    ANGLE_GL_COMPUTE_PROGRAM(program, kCS);
+    glUseProgram(program.get());
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, buffer);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, buffer);
+    glDispatchCompute(1, 1, 1);
+
+    // Write should occur after read, we should get green pixels.
+    glMemoryBarrier(GL_FRAMEBUFFER_BARRIER_BIT);
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+}
+
 // Use image uniform to write texture in compute shader, and verify the content is expected.
 TEST_P(ComputeShaderTest, BindImageTexture)
 {
