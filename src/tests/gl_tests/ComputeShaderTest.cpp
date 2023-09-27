@@ -853,6 +853,256 @@ void main()
     }
 }
 
+// Test graphics shader read it as UBO followed by compute shader write to SSBO
+TEST_P(ComputeShaderTest, UseInRenderPassAsUBOThenSSBOInComputeShader)
+{
+    // Flaky crash on teardown, see http://anglebug.com/3349
+    ANGLE_SKIP_TEST_IF(IsD3D11() && IsIntel() && IsWindows());
+
+    GLBuffer buffer;
+    glBindBuffer(GL_UNIFORM_BUFFER, buffer);
+    const std::array<uint32_t, 4> kInitialData = {1, 2, 3, 4};
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(kInitialData), kInitialData.data(), GL_DYNAMIC_DRAW);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, buffer);
+    EXPECT_GL_NO_ERROR();
+
+    // Use buffer in the render pass as the uniform buffer (read access)
+    constexpr char kVerifyUBO[] = R"(#version 310 es
+precision mediump float;
+layout(binding = 0) uniform block {
+    uvec4 data;
+} ubo;
+out vec4 colorOut;
+void main()
+{
+    if (all(equal(ubo.data, uvec4(1, 2, 3, 4))))
+        colorOut = vec4(0, 1.0, 0, 1.0);
+    else
+        colorOut = vec4(1.0, 0, 0, 1.0);
+})";
+    ANGLE_GL_PROGRAM(verifyUbo, essl31_shaders::vs::Simple(), kVerifyUBO);
+    drawQuad(verifyUbo, essl31_shaders::PositionAttrib(), 0.5);
+    EXPECT_GL_NO_ERROR();
+
+    // Use buffer in the compute shader as shader storage buffer and write {5,6,7,8} to it.
+    const char kCS[] = R"(#version 310 es
+layout(local_size_x=1, local_size_y=1, local_size_z=1) in;
+ layout(std140, binding = 0) buffer blockOut {
+     uvec4 data;
+ } instanceOut;
+void main()
+{
+     instanceOut.data = uvec4(5,6,7,8);
+})";
+    ANGLE_GL_COMPUTE_PROGRAM(program, kCS);
+    glUseProgram(program.get());
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, buffer);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, buffer);
+    glDispatchCompute(1, 1, 1);
+
+    // Compute shader write should occur after graphics shader read. We should get green pixels. If
+    // somehow compute shader gets executed before graphics shader, then you will get red pixels.
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+
+    // Read back shader storage buffer and verify it has the value we wrote.
+    glMemoryBarrier(GL_BUFFER_UPDATE_BARRIER_BIT);
+    const uint32_t *ptr = reinterpret_cast<const uint32_t *>(
+        glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, sizeof(kInitialData), GL_MAP_READ_BIT));
+    EXPECT_EQ(5u, ptr[0]);
+    EXPECT_EQ(6u, ptr[1]);
+    EXPECT_EQ(7u, ptr[2]);
+    EXPECT_EQ(8u, ptr[3]);
+    glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+}
+
+// Test graphics shader read it as UBO followed by compute shader use it as atomic counter buffer
+TEST_P(ComputeShaderTest, UseInRenderPassAsUBOThenAtomicCounterBufferInComputeShader)
+{
+    // Flaky crash on teardown, see http://anglebug.com/3349
+    ANGLE_SKIP_TEST_IF(IsD3D11() && IsIntel() && IsWindows());
+
+    GLBuffer buffer;
+    glBindBuffer(GL_UNIFORM_BUFFER, buffer);
+    const std::array<uint32_t, 4> kInitialData = {1, 2, 3, 4};
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(kInitialData), kInitialData.data(), GL_DYNAMIC_DRAW);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, buffer);
+    EXPECT_GL_NO_ERROR();
+
+    // Use buffer in the render pass as the uniform buffer (read access)
+    constexpr char kVerifyUBO[] = R"(#version 310 es
+precision mediump float;
+layout(binding = 0) uniform block {
+    uvec4 data;
+} ubo;
+out vec4 colorOut;
+void main()
+{
+    if (all(equal(ubo.data, uvec4(1, 2, 3, 4))))
+        colorOut = vec4(0, 1.0, 0, 1.0);
+    else
+        colorOut = vec4(1.0, 0, 0, 1.0);
+})";
+    ANGLE_GL_PROGRAM(verifyUbo, essl31_shaders::vs::Simple(), kVerifyUBO);
+    drawQuad(verifyUbo, essl31_shaders::PositionAttrib(), 0.5);
+    EXPECT_GL_NO_ERROR();
+
+    // Use the same buffer in the compute shader as atomic counter buffer and increment the value.
+    const char kCS[] = R"(#version 310 es
+layout(local_size_x=1, local_size_y=1, local_size_z=1) in;
+layout(binding=0) uniform atomic_uint counters[4];
+void main(void)
+{
+     atomicCounterIncrement(counters[0]);
+     atomicCounterIncrement(counters[1]);
+     atomicCounterIncrement(counters[2]);
+     atomicCounterIncrement(counters[3]);
+})";
+    ANGLE_GL_COMPUTE_PROGRAM(program, kCS);
+    glUseProgram(program.get());
+    glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, buffer);
+    glBindBufferBase(GL_ATOMIC_COUNTER_BUFFER, 0, buffer);
+    EXPECT_GL_NO_ERROR();
+    glDispatchCompute(1, 1, 1);
+
+    // Write should occur after read, we should get green pixels. If somehow compute shader gets
+    // executed before graphics shader, then you will get red pixels.
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+
+    // Read back atomic counter buffer and verify the value. It should all incremented by one.
+    glMemoryBarrier(GL_BUFFER_UPDATE_BARRIER_BIT);
+    const uint32_t *ptr = reinterpret_cast<const uint32_t *>(
+        glMapBufferRange(GL_ATOMIC_COUNTER_BUFFER, 0, sizeof(kInitialData), GL_MAP_READ_BIT));
+    EXPECT_EQ(kInitialData[0] + 1u, ptr[0]);
+    EXPECT_EQ(kInitialData[1] + 1u, ptr[1]);
+    EXPECT_EQ(kInitialData[2] + 1u, ptr[2]);
+    EXPECT_EQ(kInitialData[3] + 1u, ptr[3]);
+    glUnmapBuffer(GL_ATOMIC_COUNTER_BUFFER);
+}
+
+// Test graphics shader write to SSBO followed by compute shader write to SSBO
+TEST_P(ComputeShaderTest, UseInRenderPassAsSSBOThenSSBOInComputeShader)
+{
+    // Flaky crash on teardown, see http://anglebug.com/3349
+    ANGLE_SKIP_TEST_IF(IsD3D11() && IsIntel() && IsWindows());
+
+    GLBuffer buffer;
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, buffer);
+    const std::array<uint32_t, 4> kInitialData = {1, 2, 3, 4};
+    glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(kInitialData), kInitialData.data(),
+                 GL_DYNAMIC_DRAW);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, buffer);
+    EXPECT_GL_NO_ERROR();
+
+    // Use buffer in the graphics shader as the SSBO buffer and write {5,6,7,8} to it
+    constexpr char kSSBO_FS[] = R"(#version 310 es
+precision mediump float;
+layout(binding = 0) buffer block {
+    uvec4 data;
+} result;
+out vec4 colorOut;
+void main()
+{
+    colorOut = vec4(0, 1.0, 0, 1.0);
+    result.data = uvec4(5, 6, 7, 8);
+})";
+    ANGLE_GL_PROGRAM(ssboGraphicsProgram, essl31_shaders::vs::Simple(), kSSBO_FS);
+    drawQuad(ssboGraphicsProgram, essl31_shaders::PositionAttrib(), 0.5);
+    EXPECT_GL_NO_ERROR();
+
+    glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+    // Use buffer in the compute shader as SSBO and write {9,10,11,12} to it.
+    const char kCS[] = R"(#version 310 es
+layout(local_size_x=1, local_size_y=1, local_size_z=1) in;
+ layout(std140, binding = 0) buffer blockOut {
+     uvec4 data;
+ } instanceOut;
+void main()
+{
+     instanceOut.data = uvec4(9,10,11,12);
+})";
+    ANGLE_GL_COMPUTE_PROGRAM(program, kCS);
+    glUseProgram(program.get());
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, buffer);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, buffer);
+    glDispatchCompute(1, 1, 1);
+
+    // We should get green pixels.
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+
+    // Read back shader storage buffer and verify. Since compute shader is after graphics shader, we
+    // should see the value written by compute shader.
+    glMemoryBarrier(GL_BUFFER_UPDATE_BARRIER_BIT);
+    const uint32_t *ptr = reinterpret_cast<const uint32_t *>(
+        glMapBufferRange(GL_SHADER_STORAGE_BUFFER, 0, sizeof(kInitialData), GL_MAP_READ_BIT));
+    EXPECT_EQ(9u, ptr[0]);
+    EXPECT_EQ(10u, ptr[1]);
+    EXPECT_EQ(11u, ptr[2]);
+    EXPECT_EQ(12u, ptr[3]);
+    glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+}
+
+// Test graphics shader write to SSBO followed by compute shader use it as atomic counter buffer
+TEST_P(ComputeShaderTest, UseInRenderPassAsSBOThenAtomicCounterBufferInComputeShader)
+{
+    // Flaky crash on teardown, see http://anglebug.com/3349
+    ANGLE_SKIP_TEST_IF(IsD3D11() && IsIntel() && IsWindows());
+
+    GLBuffer buffer;
+    glBindBuffer(GL_UNIFORM_BUFFER, buffer);
+    const std::array<uint32_t, 4> kInitialData = {1, 2, 3, 4};
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(kInitialData), kInitialData.data(), GL_DYNAMIC_DRAW);
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, buffer);
+    EXPECT_GL_NO_ERROR();
+
+    // Use buffer in the graphics shader as the SSBO buffer and write {5,6,7,8} to it
+    constexpr char kVerifyUBO[] = R"(#version 310 es
+precision mediump float;
+layout(binding = 0) buffer block {
+    uvec4 data;
+} result;
+out vec4 colorOut;
+void main()
+{
+    colorOut = vec4(0, 1.0, 0, 1.0);
+    result.data = uvec4(5, 6, 7, 8);
+})";
+    ANGLE_GL_PROGRAM(verifyUbo, essl31_shaders::vs::Simple(), kVerifyUBO);
+    drawQuad(verifyUbo, essl31_shaders::PositionAttrib(), 0.5);
+    EXPECT_GL_NO_ERROR();
+
+    glMemoryBarrier(GL_ATOMIC_COUNTER_BARRIER_BIT);
+    // Use buffer in the compute shader as atomic counter buffer.
+    const char kCS[] = R"(#version 310 es
+layout(local_size_x=1, local_size_y=1, local_size_z=1) in;
+layout(binding=0) uniform atomic_uint counters[4];
+void main(void)
+{
+     atomicCounterIncrement(counters[0]);
+     atomicCounterIncrement(counters[1]);
+     atomicCounterIncrement(counters[2]);
+     atomicCounterIncrement(counters[3]);
+})";
+    ANGLE_GL_COMPUTE_PROGRAM(program, kCS);
+    glUseProgram(program.get());
+    glBindBuffer(GL_ATOMIC_COUNTER_BUFFER, buffer);
+    glBindBufferBase(GL_ATOMIC_COUNTER_BUFFER, 0, buffer);
+    EXPECT_GL_NO_ERROR();
+    glDispatchCompute(1, 1, 1);
+
+    // We should get green pixels.
+    EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+
+    // Read back shader storage buffer and verify. We should have the data that compute shader wrote
+    glMemoryBarrier(GL_BUFFER_UPDATE_BARRIER_BIT);
+    const uint32_t *ptr = reinterpret_cast<const uint32_t *>(
+        glMapBufferRange(GL_ATOMIC_COUNTER_BUFFER, 0, sizeof(kInitialData), GL_MAP_READ_BIT));
+    EXPECT_EQ(kInitialData[0] + 1u, ptr[0]);
+    EXPECT_EQ(kInitialData[1] + 1u, ptr[1]);
+    EXPECT_EQ(kInitialData[2] + 1u, ptr[2]);
+    EXPECT_EQ(kInitialData[3] + 1u, ptr[3]);
+    glUnmapBuffer(GL_ATOMIC_COUNTER_BUFFER);
+}
+
 // Use image uniform to write texture in compute shader, and verify the content is expected.
 TEST_P(ComputeShaderTest, BindImageTexture)
 {

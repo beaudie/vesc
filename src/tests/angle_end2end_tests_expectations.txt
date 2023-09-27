@@ -585,6 +585,8 @@ b/273271471 WIN INTEL VULKAN : ShaderAlgorithmTest.rgb_to_hsl_vertex_shader/* = 
 7697 PIXEL4ORXL VULKAN : FramebufferTest_ES31.RenderingLimitToDefaultFBOSizeWithNoAttachments/* = SKIP
 7705 PIXEL4ORXL GLES : FramebufferTest_ES31.ChangeFBOSizeWithNoAttachments/* = SKIP
 7916 PIXEL4ORXL GLES : DepthStencilFormatsTestES31.DrawReadDrawDispatch/* = SKIP
+8360 PIXEL4ORXL GLES : ComputeShaderTest.UseInRenderPassAsUBOThenAtomicCounterBufferInComputeShader/ES3_1_OpenGLES = SKIP
+8360 PIXEL4ORXL GLES : ComputeShaderTest.UseInRenderPassAsUBOThenSSBOInComputeShader/ES3_1_OpenGLES = SKIP
 
 // Internal driver failures on both GLES and Vulkan
 3839 NEXUS5X : GLSLTest_ES31.TypesUsedInDifferentBlockStorages/* = SKIP
