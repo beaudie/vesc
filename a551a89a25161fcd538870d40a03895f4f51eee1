@@ -139,6 +139,24 @@
       "message": "Verified with end2end test:\n*EGLWaylandTest.WaylandWindowRendering/ES2_Vulkan_NoFixture",
       "revId": "a551a89a25161fcd538870d40a03895f4f51eee1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cf7828e_5681a1bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-09-27T21:30:41Z",
+      "side": 1,
+      "message": "thanks, lets land this.\n\n@j.vigil@samsung.com can you start a conversation with shabi and geoff in a separate email chain about adding wayland sanity tests to google CI?",
+      "parentUuid": "fa0d3e09_4df7b527",
+      "revId": "a551a89a25161fcd538870d40a03895f4f51eee1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
