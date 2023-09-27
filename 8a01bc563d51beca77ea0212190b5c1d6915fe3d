@@ -175,6 +175,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "205172f0_7c83e03f",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4566,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-27T13:02:10Z",
+      "side": 1,
+      "message": "(point being, we can fix what\u0027s problematic)",
+      "parentUuid": "771cf1af_b6232e71",
+      "range": {
+        "startLine": 4539,
+        "startChar": 0,
+        "endLine": 4566,
+        "endChar": 5
+      },
+      "revId": "8a01bc563d51beca77ea0212190b5c1d6915fe3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3e2f3651_35bda7ba",
         "filename": "src/libANGLE/renderer/vulkan/ContextVk.h",
         "patchSetId": 3
