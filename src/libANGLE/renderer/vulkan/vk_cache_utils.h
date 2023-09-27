@@ -59,6 +59,7 @@ class SamplerHelper;
 enum class ImageLayout;
 class PipelineCacheAccess;
 class RenderPassCommandBufferHelper;
+class CommandBufferAccess;
 
 using RefCountedDescriptorSetLayout    = AtomicRefCounted<DescriptorSetLayout>;
 using RefCountedPipelineLayout         = AtomicRefCounted<PipelineLayout>;
@@ -1754,6 +1755,7 @@ class DescriptorSetDescBuilder final
     template <typename CommandBufferT>
     void updateShaderBuffers(ContextVk *contextVk,
                              CommandBufferT *commandBufferHelper,
+                             CommandBufferAccess *access,
                              const ShaderInterfaceVariableInfoMap &variableInfoMap,
                              const gl::BufferVector &buffers,
                              const std::vector<gl::InterfaceBlock> &blocks,
@@ -1764,6 +1766,7 @@ class DescriptorSetDescBuilder final
     template <typename CommandBufferT>
     void updateAtomicCounters(ContextVk *contextVk,
                               CommandBufferT *commandBufferHelper,
+                              CommandBufferAccess *access,
                               const ShaderInterfaceVariableInfoMap &variableInfoMap,
                               const gl::BufferVector &buffers,
                               const std::vector<gl::AtomicCounterBuffer> &atomicCounterBuffers,
