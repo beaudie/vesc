@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9ac85e0c_80976769",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2520,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-09-27T15:13:05Z",
+      "side": 1,
+      "message": "I don\u0027t think you need to pass in the context.  We know capture is active since it is only called from CaptureMidExecutionSetup.  Would be nice to assert that somehow, but nothing is jumping out at me.  Maybe just add a comment saying \"We skip the is active check on the assumption this call is made during MEC\".\n\nThe remaining two parameters look okay to me.",
+      "parentUuid": "82e2936f_00cf3189",
+      "range": {
+        "startLine": 2519,
+        "startChar": 34,
+        "endLine": 2520,
+        "endChar": 84
+      },
+      "revId": "3f15af7261118ed04a5c024a415d515be2ed54e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c011adb4_d479467e",
         "filename": "src/libANGLE/capture/FrameCapture.cpp",
         "patchSetId": 1
