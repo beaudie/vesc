@@ -2659,8 +2659,8 @@ angle::Result ContextVk::handleDirtyGraphicsBlendBarrier(DirtyBits::Iterator *di
     return angle::Result::Continue;
 }
 
-template <typename CommandBufferHelperT>
-angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferHelperT *commandBufferHelper,
+template <typename CommandBufferT>
+angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferT *commandBufferHelperOrAccess,
                                                         PipelineType pipelineType)
 {
     const gl::ProgramExecutable *executable = mState.getProgramExecutable();
@@ -2692,7 +2692,7 @@ angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferHelperT *co
     if (hasUniformBuffers)
     {
         mShaderBuffersDescriptorDesc.updateShaderBuffers(
-            this, commandBufferHelper, variableInfoMap,
+            this, commandBufferHelperOrAccess, variableInfoMap,
             mState.getOffsetBindingPointerUniformBuffers(), executable->getUniformBlocks(),
             executableVk->getUniformBufferDescriptorType(), limits.maxUniformBufferRange,
             mEmptyBuffer, mShaderBufferWriteDescriptorDescs);
@@ -2700,7 +2700,7 @@ angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferHelperT *co
     if (hasStorageBuffers)
     {
         mShaderBuffersDescriptorDesc.updateShaderBuffers(
-            this, commandBufferHelper, variableInfoMap,
+            this, commandBufferHelperOrAccess, variableInfoMap,
             mState.getOffsetBindingPointerShaderStorageBuffers(),
             executable->getShaderStorageBlocks(), executableVk->getStorageBufferDescriptorType(),
             limits.maxStorageBufferRange, mEmptyBuffer, mShaderBufferWriteDescriptorDescs);
@@ -2708,14 +2708,14 @@ angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferHelperT *co
     if (hasAtomicCounterBuffers)
     {
         mShaderBuffersDescriptorDesc.updateAtomicCounters(
-            this, commandBufferHelper, variableInfoMap,
+            this, commandBufferHelperOrAccess, variableInfoMap,
             mState.getOffsetBindingPointerAtomicCounterBuffers(),
             executable->getAtomicCounterBuffers(), limits.minStorageBufferOffsetAlignment,
             mEmptyBuffer, mShaderBufferWriteDescriptorDescs);
     }
     if (hasImages)
     {
-        ANGLE_TRY(updateActiveImages(commandBufferHelper));
+        ANGLE_TRY(updateActiveImages(commandBufferHelperOrAccess));
         ANGLE_TRY(mShaderBuffersDescriptorDesc.updateImages(this, *executable, variableInfoMap,
                                                             mActiveImages, mState.getImageUnits(),
                                                             mShaderBufferWriteDescriptorDescs));
@@ -2725,6 +2725,21 @@ angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferHelperT *co
         ANGLE_TRY(mShaderBuffersDescriptorDesc.updateInputAttachments(
             this, *executable, variableInfoMap, vk::GetImpl(mState.getDrawFramebuffer()),
             mShaderBufferWriteDescriptorDescs));
+    }
+
+    vk::CommandBufferHelperCommon *commandBufferHelper;
+    if constexpr (std::is_same<CommandBufferT, vk::RenderPassCommandBufferHelper>::value)
+    {
+        commandBufferHelper = commandBufferHelperOrAccess;
+    }
+    else if constexpr (std::is_same<CommandBufferT, vk::CommandBufferAccess>::value)
+    {
+        // For OutsideRenderPassCommands, we must use CommandBufferAccess to properly endRenderPass
+        // and insert barriers. For RenderPassCommands, updateOneShaderBuffer already handled
+        // barriers for us.
+        vk::OutsideRenderPassCommandBuffer *commandBuffer;
+        ANGLE_TRY(getOutsideRenderPassCommandBuffer(*commandBufferHelperOrAccess, &commandBuffer));
+        commandBufferHelper = mOutsideRenderPassCommands;
     }
 
     vk::SharedDescriptorSetCacheKey newSharedCacheKey;
@@ -2765,11 +2780,12 @@ angle::Result ContextVk::handleDirtyGraphicsShaderResources(DirtyBits::Iterator 
 
 angle::Result ContextVk::handleDirtyComputeShaderResources()
 {
-    return handleDirtyShaderResourcesImpl(mOutsideRenderPassCommands, PipelineType::Compute);
+    vk::CommandBufferAccess access;
+    return handleDirtyShaderResourcesImpl(&access, PipelineType::Compute);
 }
 
 template <typename CommandBufferT>
-angle::Result ContextVk::handleDirtyUniformBuffersImpl(CommandBufferT *commandBufferHelper)
+angle::Result ContextVk::handleDirtyUniformBuffersImpl(CommandBufferT *commandBufferHelperOrAccess)
 {
     const gl::ProgramExecutable *executable = mState.getProgramExecutable();
     ASSERT(executable);
@@ -2783,11 +2799,27 @@ angle::Result ContextVk::handleDirtyUniformBuffersImpl(CommandBufferT *commandBu
     for (size_t blockIndex : dirtyBits)
     {
         mShaderBuffersDescriptorDesc.updateOneShaderBuffer(
-            this, commandBufferHelper, variableInfoMap,
+            this, commandBufferHelperOrAccess, variableInfoMap,
             mState.getOffsetBindingPointerUniformBuffers(), executable->getUniformBlocks(),
             static_cast<uint32_t>(blockIndex), executableVk->getUniformBufferDescriptorType(),
             limits.maxUniformBufferRange, mEmptyBuffer, mShaderBufferWriteDescriptorDescs);
     }
+
+    vk::CommandBufferHelperCommon *commandBufferHelper;
+    if constexpr (std::is_same<CommandBufferT, vk::RenderPassCommandBufferHelper>::value)
+    {
+        commandBufferHelper = commandBufferHelperOrAccess;
+    }
+    else if constexpr (std::is_same<CommandBufferT, vk::CommandBufferAccess>::value)
+    {
+        // For OutsideRenderPassCommands, we must use CommandBufferAccess to properly endRenderPass
+        // and insert barriers. For RenderPassCommands, updateOneShaderBuffer already handled
+        // barriers for us.
+        vk::OutsideRenderPassCommandBuffer *commandBuffer;
+        ANGLE_TRY(getOutsideRenderPassCommandBuffer(*commandBufferHelperOrAccess, &commandBuffer));
+        commandBufferHelper = mOutsideRenderPassCommands;
+    }
+
     executableVk->resetUniformBufferDirtyBits();
 
     vk::SharedDescriptorSetCacheKey newSharedCacheKey;
@@ -2814,7 +2846,8 @@ angle::Result ContextVk::handleDirtyGraphicsUniformBuffers(DirtyBits::Iterator *
 
 angle::Result ContextVk::handleDirtyComputeUniformBuffers()
 {
-    return handleDirtyUniformBuffersImpl(mOutsideRenderPassCommands);
+    vk::CommandBufferAccess access;
+    return handleDirtyUniformBuffersImpl(&access);
 }
 
 angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
@@ -7345,8 +7378,8 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context, gl::Co
     return angle::Result::Continue;
 }
 
-template <typename CommandBufferHelperT>
-angle::Result ContextVk::updateActiveImages(CommandBufferHelperT *commandBufferHelper)
+template <typename CommandBufferT>
+angle::Result ContextVk::updateActiveImages(CommandBufferT *commandBufferHelperOrAccess)
 {
     const gl::State &glState                = mState;
     const gl::ProgramExecutable *executable = glState.getProgramExecutable();
@@ -7389,9 +7422,16 @@ angle::Result ContextVk::updateActiveImages(CommandBufferHelperT *commandBufferH
         {
             BufferVk *bufferVk = vk::GetImpl(textureVk->getBuffer().get());
 
-            OnImageBufferWrite(this, bufferVk, shaderStages, commandBufferHelper);
+            if constexpr (std::is_same<CommandBufferT, vk::RenderPassCommandBufferHelper>::value)
+            {
+                OnImageBufferWrite(this, bufferVk, shaderStages, commandBufferHelperOrAccess);
 
-            textureVk->retainBufferViews(commandBufferHelper);
+                textureVk->retainBufferViews(commandBufferHelperOrAccess);
+            }
+            else if constexpr (std::is_same<CommandBufferT, vk::CommandBufferAccess>::value)
+            {
+                commandBufferHelperOrAccess->onBufferComputeShaderWrite(&bufferVk->getBuffer());
+            }
             continue;
         }
 
@@ -7409,8 +7449,17 @@ angle::Result ContextVk::updateActiveImages(CommandBufferHelperT *commandBufferH
         const vk::ImageLayout imageLayout = GetImageWriteLayoutAndSubresource(
             imageUnit, *image, shaderStages, &level, &layerStart, &layerCount);
 
-        commandBufferHelper->imageWrite(this, level, layerStart, layerCount,
-                                        image->getAspectFlags(), imageLayout, image);
+        if constexpr (std::is_same<CommandBufferT, vk::RenderPassCommandBufferHelper>::value)
+        {
+            commandBufferHelperOrAccess->imageWrite(this, level, layerStart, layerCount,
+                                                    image->getAspectFlags(), imageLayout, image);
+        }
+        else if constexpr (std::is_same<CommandBufferT, vk::CommandBufferAccess>::value)
+        {
+            commandBufferHelperOrAccess->onImageComputeShaderWrite(level, image->getLevelCount(),
+                                                                   layerStart, layerCount,
+                                                                   image->getAspectFlags(), image);
+        }
     }
 
     return angle::Result::Continue;

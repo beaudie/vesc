@@ -5776,8 +5776,15 @@ void DescriptorSetDescBuilder::updateOneShaderBuffer(
                                  descriptorType == VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC;
     if (isUniformBuffer)
     {
-        commandBufferHelper->bufferRead(contextVk, VK_ACCESS_UNIFORM_READ_BIT,
-                                        block.activeShaders(), &bufferHelper);
+        if constexpr (std::is_same<CommandBufferT, RenderPassCommandBufferHelper>::value)
+        {
+            commandBufferHelper->bufferRead(contextVk, VK_ACCESS_UNIFORM_READ_BIT,
+                                            block.activeShaders(), &bufferHelper);
+        }
+        else if constexpr (std::is_same<CommandBufferT, CommandBufferAccess>::value)
+        {
+            commandBufferHelper->onBufferComputeShaderRead(&bufferHelper);
+        }
     }
     else
     {
@@ -5785,22 +5792,36 @@ void DescriptorSetDescBuilder::updateOneShaderBuffer(
                descriptorType == VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC);
         if (block.pod.isReadOnly)
         {
-            // Avoid unnecessary barriers for readonly SSBOs by making sure the buffers are
-            // marked read-only.  This also helps BufferVk make better decisions during
-            // buffer data uploads and copies by knowing that the buffers are not actually
-            // being written to.
-            commandBufferHelper->bufferRead(contextVk, VK_ACCESS_SHADER_READ_BIT,
-                                            block.activeShaders(), &bufferHelper);
+            if constexpr (std::is_same<CommandBufferT, RenderPassCommandBufferHelper>::value)
+            {
+                // Avoid unnecessary barriers for readonly SSBOs by making sure the buffers are
+                // marked read-only.  This also helps BufferVk make better decisions during
+                // buffer data uploads and copies by knowing that the buffers are not actually
+                // being written to.
+                commandBufferHelper->bufferRead(contextVk, VK_ACCESS_SHADER_READ_BIT,
+                                                block.activeShaders(), &bufferHelper);
+            }
+            else if constexpr (std::is_same<CommandBufferT, CommandBufferAccess>::value)
+            {
+                commandBufferHelper->onBufferComputeShaderRead(&bufferHelper);
+            }
         }
         else
         {
-            // We set the SHADER_READ_BIT to be conservative.
-            VkAccessFlags accessFlags = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
-            for (const gl::ShaderType shaderType : block.activeShaders())
+            if constexpr (std::is_same<CommandBufferT, RenderPassCommandBufferHelper>::value)
             {
-                const vk::PipelineStage pipelineStage = vk::GetPipelineStage(shaderType);
-                commandBufferHelper->bufferWrite(contextVk, accessFlags, pipelineStage,
-                                                 &bufferHelper);
+                // We set the SHADER_READ_BIT to be conservative.
+                VkAccessFlags accessFlags = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
+                for (const gl::ShaderType shaderType : block.activeShaders())
+                {
+                    const vk::PipelineStage pipelineStage = vk::GetPipelineStage(shaderType);
+                    commandBufferHelper->bufferWrite(contextVk, accessFlags, pipelineStage,
+                                                     &bufferHelper);
+                }
+            }
+            else if constexpr (std::is_same<CommandBufferT, CommandBufferAccess>::value)
+            {
+                commandBufferHelper->onBufferComputeShaderWrite(&bufferHelper);
             }
         }
     }
@@ -5849,7 +5870,7 @@ void DescriptorSetDescBuilder::updateShaderBuffers(
 template <typename CommandBufferT>
 void DescriptorSetDescBuilder::updateAtomicCounters(
     ContextVk *contextVk,
-    CommandBufferT *commandBufferHelper,
+    CommandBufferT *commandBufferHelperOrAccess,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
     const gl::BufferVector &buffers,
     const std::vector<gl::AtomicCounterBuffer> &atomicCounterBuffers,
@@ -5894,12 +5915,19 @@ void DescriptorSetDescBuilder::updateAtomicCounters(
         BufferVk *bufferVk             = vk::GetImpl(bufferBinding.get());
         vk::BufferHelper &bufferHelper = bufferVk->getBuffer();
 
-        for (const gl::ShaderType shaderType : atomicCounterBuffer.activeShaders())
+        if constexpr (std::is_same<CommandBufferT, RenderPassCommandBufferHelper>::value)
         {
-            const vk::PipelineStage pipelineStage = vk::GetPipelineStage(shaderType);
-            commandBufferHelper->bufferWrite(contextVk,
-                                             VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
-                                             pipelineStage, &bufferHelper);
+            for (const gl::ShaderType shaderType : atomicCounterBuffer.activeShaders())
+            {
+                const vk::PipelineStage pipelineStage = vk::GetPipelineStage(shaderType);
+                commandBufferHelperOrAccess->bufferWrite(
+                    contextVk, VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT,
+                    pipelineStage, &bufferHelper);
+            }
+        }
+        else if constexpr (std::is_same<CommandBufferT, vk::CommandBufferAccess>::value)
+        {
+            commandBufferHelperOrAccess->onBufferComputeShaderWrite(&bufferHelper);
         }
 
         VkDeviceSize offset = bufferBinding.getOffset() + bufferHelper.getOffset();
@@ -5935,9 +5963,9 @@ template void DescriptorSetDescBuilder::updateOneShaderBuffer<vk::RenderPassComm
     const BufferHelper &emptyBuffer,
     const WriteDescriptorDescs &writeDescriptorDescs);
 
-template void DescriptorSetDescBuilder::updateOneShaderBuffer<OutsideRenderPassCommandBufferHelper>(
+template void DescriptorSetDescBuilder::updateOneShaderBuffer<CommandBufferAccess>(
     ContextVk *contextVk,
-    OutsideRenderPassCommandBufferHelper *commandBufferHelper,
+    CommandBufferAccess *access,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
     const gl::BufferVector &buffers,
     const std::vector<gl::InterfaceBlock> &blocks,
@@ -5947,9 +5975,9 @@ template void DescriptorSetDescBuilder::updateOneShaderBuffer<OutsideRenderPassC
     const BufferHelper &emptyBuffer,
     const WriteDescriptorDescs &writeDescriptorDescs);
 
-template void DescriptorSetDescBuilder::updateShaderBuffers<OutsideRenderPassCommandBufferHelper>(
+template void DescriptorSetDescBuilder::updateShaderBuffers<CommandBufferAccess>(
     ContextVk *contextVk,
-    OutsideRenderPassCommandBufferHelper *commandBufferHelper,
+    CommandBufferAccess *access,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
     const gl::BufferVector &buffers,
     const std::vector<gl::InterfaceBlock> &blocks,
@@ -5969,9 +5997,9 @@ template void DescriptorSetDescBuilder::updateShaderBuffers<RenderPassCommandBuf
     const BufferHelper &emptyBuffer,
     const WriteDescriptorDescs &writeDescriptorDescs);
 
-template void DescriptorSetDescBuilder::updateAtomicCounters<OutsideRenderPassCommandBufferHelper>(
+template void DescriptorSetDescBuilder::updateAtomicCounters<CommandBufferAccess>(
     ContextVk *contextVk,
-    OutsideRenderPassCommandBufferHelper *commandBufferHelper,
+    CommandBufferAccess *access,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
     const gl::BufferVector &buffers,
     const std::vector<gl::AtomicCounterBuffer> &atomicCounterBuffers,
