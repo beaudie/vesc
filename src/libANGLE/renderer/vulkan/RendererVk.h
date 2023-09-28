@@ -493,6 +493,7 @@ class RendererVk : angle::NonCopyable
     bool haveSameFormatFeatureBits(angle::FormatID formatID1, angle::FormatID formatID2) const;
 
     void cleanupGarbage();
+    void cleanupAllGarbage();
     void cleanupPendingSubmissionGarbage();
 
     angle::Result submitCommands(vk::Context *context,
