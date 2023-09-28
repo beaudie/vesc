@@ -16,6 +16,29 @@
       "message": "No regression was seen on the `manhattan` benckmark (3.0 and 3.1)",
       "revId": "062d7174b2ffedf6a91cbf13c05cc05069077d59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9dfee6cb_3c0ace4d",
+        "filename": "src/libANGLE/renderer/vulkan/ShareGroupVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-28T19:02:00Z",
+      "side": 1,
+      "message": "I am wondering if you just use ImageMipLevels::EnabledLevels, would it just work as well? Could you give it a try?",
+      "range": {
+        "startLine": 288,
+        "startChar": 39,
+        "endLine": 288,
+        "endChar": 63
+      },
+      "revId": "062d7174b2ffedf6a91cbf13c05cc05069077d59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
