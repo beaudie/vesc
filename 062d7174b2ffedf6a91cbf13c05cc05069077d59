@@ -39,6 +39,30 @@
       },
       "revId": "062d7174b2ffedf6a91cbf13c05cc05069077d59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a3593e9_807e4d54",
+        "filename": "src/libANGLE/renderer/vulkan/ShareGroupVk.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-28T20:25:28Z",
+      "side": 1,
+      "message": "When I replaced this with `EnabledLevels`, it also saved memory. I have updated the code. Thanks!",
+      "parentUuid": "9dfee6cb_3c0ace4d",
+      "range": {
+        "startLine": 288,
+        "startChar": 39,
+        "endLine": 288,
+        "endChar": 63
+      },
+      "revId": "062d7174b2ffedf6a91cbf13c05cc05069077d59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
