@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6f1a7dd_0a3165dc",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 259,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-09-28T13:38:40Z",
+      "side": 1,
+      "message": "If the VUID was renamed, you need to keep the old one and add the new one first.\nThen roll ANGLE into Chromium and roll vulkan-deps into Chromium.\nAfter this, the old VUID can be removed.",
+      "range": {
+        "startLine": 259,
+        "startChar": 5,
+        "endLine": 259,
+        "endChar": 45
+      },
+      "revId": "1a27a7874a10330405cdb226be08b9b166c69ff5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
