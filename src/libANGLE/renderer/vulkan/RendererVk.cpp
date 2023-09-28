@@ -5230,46 +5230,74 @@ void RendererVk::pruneOrphanedBufferBlocks()
 
 void RendererVk::cleanupGarbage()
 {
-    std::unique_lock<std::mutex> lock(mGarbageMutex);
+    vk::SharedGarbageList sharedGarbage;
+    vk::SharedBufferSuballocationGarbageList suballocationGarbage;
 
-    // Clean up general garbages
-    while (!mSharedGarbage.empty())
     {
-        vk::SharedGarbage &garbage = mSharedGarbage.front();
+        std::unique_lock<std::mutex> lock(mGarbageMutex);
+        std::swap(sharedGarbage, mSharedGarbage);
+        std::swap(suballocationGarbage, mSuballocationGarbage);
+    }
+
+    // Clean up general garbage without lock
+    while (!sharedGarbage.empty())
+    {
+        vk::SharedGarbage &garbage = sharedGarbage.front();
         if (!garbage.destroyIfComplete(this))
         {
             break;
         }
-        mSharedGarbage.pop();
+        sharedGarbage.pop();
     }
 
-    // Clean up suballocation garbages
+    // Clean up suballocation garbage without lock
     VkDeviceSize suballocationBytesDestroyed = 0;
-    while (!mSuballocationGarbage.empty())
+    while (!suballocationGarbage.empty())
     {
-        vk::SharedBufferSuballocationGarbage &garbage = mSuballocationGarbage.front();
+        vk::SharedBufferSuballocationGarbage &garbage = suballocationGarbage.front();
         VkDeviceSize garbageSize                      = garbage.getSize();
         if (!garbage.destroyIfComplete(this))
         {
             break;
         }
         // Actually destroyed.
-        mSuballocationGarbage.pop();
+        suballocationGarbage.pop();
         suballocationBytesDestroyed += garbageSize;
     }
-    mSuballocationGarbageDestroyed += suballocationBytesDestroyed;
-    mSuballocationGarbageSizeInBytes -= suballocationBytesDestroyed;
 
-    // Note: do this after clean up mSuballocationGarbage so that we will have more chances to find
-    // orphaned blocks being empty.
-    if (!mOrphanedBufferBlocks.empty())
     {
-        pruneOrphanedBufferBlocks();
-    }
+        std::unique_lock<std::mutex> lock(mGarbageMutex);
+        mSuballocationGarbageDestroyed += suballocationBytesDestroyed;
+        mSuballocationGarbageSizeInBytes -= suballocationBytesDestroyed;
 
-    // Cache the value with atomic variable for access without mGarbageMutex lock.
-    mSuballocationGarbageSizeInBytesCachedAtomic.store(mSuballocationGarbageSizeInBytes,
-                                                       std::memory_order_release);
+        // Note: do this after clean up mSuballocationGarbage so that we will have more chances to
+        // find orphaned blocks being empty.
+        if (!mOrphanedBufferBlocks.empty())
+        {
+            pruneOrphanedBufferBlocks();
+        }
+
+        // Cache the value with atomic variable for access without mGarbageMutex lock.
+        mSuballocationGarbageSizeInBytesCachedAtomic.store(mSuballocationGarbageSizeInBytes,
+                                                           std::memory_order_release);
+        // Put the remaining local garbage back to and global garbage list. Note that global list
+        // may have new garabges in it while we release the lock.
+        while (!mSharedGarbage.empty())
+        {
+            vk::SharedGarbage &garbage = mSharedGarbage.front();
+            sharedGarbage.push(std::move(garbage));
+            sharedGarbage.pop();
+        }
+        std::swap(sharedGarbage, mSharedGarbage);
+
+        while (!mSuballocationGarbage.empty())
+        {
+            vk::SharedBufferSuballocationGarbage &garbage = mSuballocationGarbage.front();
+            suballocationGarbage.push(std::move(garbage));
+            mSuballocationGarbage.pop();
+        }
+        std::swap(suballocationGarbage, mSuballocationGarbage);
+    }
 }
 
 void RendererVk::cleanupPendingSubmissionGarbage()
