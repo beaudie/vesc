@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d813e1ff_905f12ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-09-28T22:18:04Z",
+      "side": 1,
+      "message": "LGTM.\n\nCould you also do data gathering of all app traces that we have to see if there is any and how many apps that end up with respecifyImageStorage() call due to this? What you could do is create a debug CL and add a boolean mHasBeenInitializedDuetoThisCL in TextureVk and set it to true when it is initialized by this CL. And then at respecifyImageStorage() time, if this boolean is true, you generate a log. Once you identified the textures that end p with respecifyImageStorage, you can disable this CL and see if it still gets into respecifyImageStorage. If we have the data, we can see what we can do to mitigate the negative impact, or how big the impact is.",
+      "revId": "22943d90d2357ba105d0621cc2494893b544ff1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
