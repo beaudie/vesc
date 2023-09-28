@@ -21,6 +21,25 @@ namespace sh
 
 namespace
 {
+const TType *GetTypeWithPrecision(const TType &type)
+{
+    // If the type does not have a precision, it means that non of the parameters of the constructor
+    // have precision (for example because they are constants, or bool), and there is any precision
+    // propagation happening from nearby operands.  In that case, assign a highp precision to them;
+    // the driver will inline and eliminate the call anyway, and the precision does not affect
+    // anything.
+    constexpr TPrecision kDefaultPrecision = EbpHigh;
+
+    if (type.getPrecision() != EbpUndefined)
+    {
+        return &type;
+    }
+
+    TType *newType = new TType(type);
+    newType->setPrecision(kDefaultPrecision);
+    return newType;
+}
+
 // Traverser that converts a vector or matrix constructor to one that only uses scalars.  To support
 // all the various places such a constructor could be found, a helper function is created for each
 // such constructor.  The helper function takes the constructor arguments and creates the object.
@@ -134,13 +153,14 @@ bool ScalarizeTraverser::shouldScalarize(TIntermTyped *typed)
 
 const TFunction *ScalarizeTraverser::createHelper(TIntermAggregate *node)
 {
-    TFunction *helper = new TFunction(mSymbolTable, kEmptyImmutableString,
-                                      SymbolType::AngleInternal, &node->getType(), true);
+    TFunction *helper =
+        new TFunction(mSymbolTable, kEmptyImmutableString, SymbolType::AngleInternal,
+                      GetTypeWithPrecision(node->getType()), true);
 
     const TIntermSequence &arguments = *node->getSequence();
     for (TIntermNode *arg : arguments)
     {
-        TType *argType = new TType(arg->getAsTyped()->getType());
+        TType *argType = new TType(*GetTypeWithPrecision(arg->getAsTyped()->getType()));
         argType->setQualifier(EvqParamIn);
 
         TVariable *argVar =
