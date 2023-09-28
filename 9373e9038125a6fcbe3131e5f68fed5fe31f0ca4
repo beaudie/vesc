@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a85e4917_270ad693",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-09-28T17:15:08Z",
+      "side": 1,
+      "message": "The 2d_array_combinations_05.html failure was suppressed in crbug.com/1487266 and shouldn\u0027t happen again - let us know if it does.",
+      "revId": "9373e9038125a6fcbe3131e5f68fed5fe31f0ca4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "037bd52a_057269ee",
