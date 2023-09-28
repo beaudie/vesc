@@ -799,7 +799,7 @@ angle::Result CommandProcessor::waitForAllWorkToBeSubmitted(Context *context)
     {
         ANGLE_TRY(mCommandQueue->retireFinishedCommands(context));
     }
-    context->getRenderer()->cleanupGarbage();
+    context->getRenderer()->cleanupAllGarbage();
 
     mNeedCommandsAndGarbageCleanup = false;
 
