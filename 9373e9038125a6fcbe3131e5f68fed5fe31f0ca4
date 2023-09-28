@@ -16,6 +16,29 @@
       "message": "Thank you Kyle for this unexpected fix!\n\nThis LGTM if it fixes the issue, but could we integrate a test along with this fix? Jonah, could you sync up with Kyle on Slack about potentially helping do that in a follow-up CL?",
       "revId": "9373e9038125a6fcbe3131e5f68fed5fe31f0ca4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "037bd52a_057269ee",
+        "filename": "src/libANGLE/renderer/metal/ProgramExecutableMtl.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 1345,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-09-28T17:10:25Z",
+      "side": 1,
+      "message": "nit: `ASSERT`",
+      "range": {
+        "startLine": 1345,
+        "startChar": 12,
+        "endLine": 1345,
+        "endChar": 18
+      },
+      "revId": "9373e9038125a6fcbe3131e5f68fed5fe31f0ca4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
