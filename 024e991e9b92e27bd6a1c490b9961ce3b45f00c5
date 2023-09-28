@@ -22,6 +22,30 @@
       },
       "revId": "024e991e9b92e27bd6a1c490b9961ce3b45f00c5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe3c8e1c_41a9b528",
+        "filename": "src/libANGLE/renderer/gl/renderergl_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2587,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-09-28T15:01:46Z",
+      "side": 1,
+      "message": "It does not compile without these parentheses.",
+      "parentUuid": "a0d9402b_11bce1ae",
+      "range": {
+        "startLine": 2587,
+        "startChar": 46,
+        "endLine": 2587,
+        "endChar": 47
+      },
+      "revId": "024e991e9b92e27bd6a1c490b9961ce3b45f00c5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
