@@ -1342,7 +1342,7 @@ angle::Result ProgramExecutableMtl::legalizeUniformBufferOffsets(
             mLegalizedOffsetedUniformBuffers[bufferIndex].second =
                 static_cast<uint32_t>(conversion->convertedOffset + bytesToOffset);
             // Ensure that the converted info can fit in the buffer.
-            assert(conversion->convertedOffset + bytesToOffset + conversionInfo.metalSize() <=
+            ASSERT(conversion->convertedOffset + bytesToOffset + conversionInfo.metalSize() <=
                    conversion->convertedBuffer->size());
         }
         else
