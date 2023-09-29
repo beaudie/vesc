@@ -308,6 +308,14 @@ bool IsDrawEntryPoint(EntryPoint entryPoint);
 bool IsDispatchEntryPoint(EntryPoint entryPoint);
 bool IsClearEntryPoint(EntryPoint entryPoint);
 bool IsQueryEntryPoint(EntryPoint entryPoint);
+
+template <typename T>
+void FillWithNullptr(T *array)
+{
+    static_assert(nullptr == 0);
+    // std::array::fill(nullptr) yields unoptimized, unrolled loop over array items
+    memset(array->data(), 0, sizeof(*array));
+}
 }  // namespace angle
 
 void writeFile(const char *path, const void *data, size_t size);
