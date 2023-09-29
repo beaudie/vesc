@@ -247,13 +247,17 @@ void CreateEGLImage(EGLDisplay dpy,
                     EGLenum target,
                     uintptr_t buffer,
                     const EGLAttrib *attrib_list,
-                    GLuint imageID);
+                    GLuint imageID,
+                    GLsizei width,
+                    GLsizei height);
 void CreateEGLImageKHR(EGLDisplay dpy,
                        EGLContext ctx,
                        EGLenum target,
                        uintptr_t buffer,
                        const EGLint *attrib_list,
-                       GLuint imageID);
+                       GLuint imageID,
+                       GLsizei width,
+                       GLsizei height);
 void CreateEGLSyncKHR(EGLDisplay dpy, EGLenum type, const EGLint *attrib_list, GLuint syncID);
 void CreateEGLSync(EGLDisplay dpy, EGLenum type, const EGLAttrib *attrib_list, GLuint syncID);
 void CreatePbufferSurface(EGLDisplay dpy,

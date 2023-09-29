@@ -3271,12 +3271,6 @@ void CaptureTextureContents(std::vector<CallCapture> *setupCalls,
 
     if (index.getType() == gl::TextureType::External)
     {
-        // The generated glTexImage2D call is for creating the staging texture
-        Capture(setupCalls,
-                CaptureTexImage2D(*replayState, true, gl::TextureTarget::_2D, index.getLevelIndex(),
-                                  format.internalFormat, desc.size.width, desc.size.height, 0,
-                                  format.format, format.type, data));
-
         // For external textures, we're done
         return;
     }
@@ -3413,14 +3407,26 @@ void CaptureCustomFenceSync(CallCapture &call, std::vector<CallCapture> &callsOu
     callsOut.emplace_back(std::move(call));
 }
 
-void CaptureCustomCreateEGLImage(const char *name,
+void CaptureCustomCreateEGLImage(const gl::Context *context,
+                                 const char *name,
                                  CallCapture &call,
                                  std::vector<CallCapture> &callsOut)
 {
-    ParamBuffer &&params = std::move(call.params);
-    EGLImage returnVal   = params.getReturnValue().value.EGLImageVal;
-    egl::ImageID imageID = egl::PackParam<egl::ImageID>(returnVal);
+    ParamBuffer &&params             = std::move(call.params);
+    EGLImage returnVal               = params.getReturnValue().value.EGLImageVal;
+    egl::ImageID imageID             = egl::PackParam<egl::ImageID>(returnVal);
+    GLsizei width                    = 32;
+    GLsizei height                   = 32;
+    const egl::ImageMap &eglImageMap = context->getDisplay()->getImagesForCapture();
+    auto eglImageIter                = eglImageMap.find(imageID.value);
+    if (eglImageIter != eglImageMap.end())
+    {
+        width  = static_cast<GLsizei>(eglImageIter->second->getWidth());
+        height = static_cast<GLsizei>(eglImageIter->second->getHeight());
+    }
     params.addValueParam("image", ParamType::TGLuint, imageID.value);
+    params.addValueParam("width", ParamType::TGLsizei, width);
+    params.addValueParam("height", ParamType::TGLsizei, height);
     call.customFunctionName = name;
     callsOut.emplace_back(std::move(call));
 }
@@ -3999,6 +4005,30 @@ void CaptureShareGroupMidExecutionSetup(
         replayState.getMutablePrivateStateForCapture()->setUnpackAlignment(1);
     }
 
+    const egl::ImageMap eglImageMap = context->getDisplay()->getImagesForCapture();
+    for (const auto &[eglImageID, eglImage] : eglImageMap)
+    {
+        auto eglImageAttribIter = resourceTracker->getImageToAttribTable().find(
+            reinterpret_cast<EGLImage>(static_cast<uintptr_t>(eglImageID)));
+        ASSERT(eglImageAttribIter != resourceTracker->getImageToAttribTable().end());
+        const egl::AttributeMap &attribs = eglImageAttribIter->second;
+
+        // Create the image on demand with the same attrib retrieved above
+        CallCapture eglCreateImageKHRCall = egl::CaptureCreateImageKHR(
+            nullptr, true, nullptr, context->id(), EGL_GL_TEXTURE_2D_KHR,
+            reinterpret_cast<EGLClientBuffer>(static_cast<GLuint64>(0)), attribs,
+            reinterpret_cast<EGLImage>(static_cast<uintptr_t>(eglImageID)));
+
+        // Convert the CaptureCreateImageKHR CallCapture to the customized CallCapture
+        std::vector<CallCapture> eglCustomCreateImageKHRCall;
+        CaptureCustomCreateEGLImage(context, "CreateEGLImageKHR", eglCreateImageKHRCall,
+                                    eglCustomCreateImageKHRCall);
+        ASSERT(eglCustomCreateImageKHRCall.size() > 0);
+
+        // Append the customized CallCapture to the setupCalls list
+        Capture(setupCalls, std::move(eglCustomCreateImageKHRCall[0]));
+    }
+
     // Capture Texture setup and data.
     const gl::TextureManager &textures = apiState.getTextureManagerForCapture();
 
@@ -4207,20 +4237,6 @@ void CaptureShareGroupMidExecutionSetup(
                 continue;
             }
 
-            // create a staging GL_TEXTURE_2D texture to create the eglImage with
-            gl::TextureID stagingTexId = {maxAccessedResourceIDs[ResourceIDType::Texture] + 1};
-            if (index.getType() == gl::TextureType::External)
-            {
-                Capture(setupCalls, CaptureGenTextures(replayState, true, 1, &stagingTexId));
-                MaybeCaptureUpdateResourceIDs(context, resourceTracker, setupCalls);
-                Capture(setupCalls,
-                        CaptureBindTexture(replayState, true, gl::TextureType::_2D, stagingTexId));
-                Capture(setupCalls, CaptureTexParameteri(replayState, true, gl::TextureType::_2D,
-                                                         GL_TEXTURE_MIN_FILTER, GL_NEAREST));
-                Capture(setupCalls, CaptureTexParameteri(replayState, true, gl::TextureType::_2D,
-                                                         GL_TEXTURE_MAG_FILTER, GL_NEAREST));
-            }
-
             if (context->getExtensions().getImageANGLE)
             {
                 // Use ANGLE_get_image to read back pixel data.
@@ -4277,9 +4293,13 @@ void CaptureShareGroupMidExecutionSetup(
                     bool result = data.resize(endByte);
                     ASSERT(result);
 
-                    (void)texture->getTexImage(context, packState, nullptr, index.getTarget(),
-                                               index.getLevelIndex(), getFormat, getType,
-                                               data.data());
+                    // WIP workaround for crash when getting external texture data
+                    if (index.getType() != gl::TextureType::External)
+                    {
+                        (void)texture->getTexImage(context, packState, nullptr, index.getTarget(),
+                                                   index.getLevelIndex(), getFormat, getType,
+                                                   data.data());
+                    }
                 }
 
                 for (std::vector<CallCapture> *calls : texSetupCalls)
@@ -4297,31 +4317,6 @@ void CaptureShareGroupMidExecutionSetup(
                     ASSERT(eglImageIter != resourceTracker->getTextureIDToImageTable().end());
 
                     const egl::ImageID eglImageID = eglImageIter->second;
-                    const EGLImage eglImage =
-                        reinterpret_cast<EGLImage>(static_cast<uintptr_t>(eglImageID.value));
-
-                    // Secondly, lookup the attrib we used to create the eglImage
-                    auto eglImageAttribIter =
-                        resourceTracker->getImageToAttribTable().find(eglImage);
-                    ASSERT(eglImageAttribIter != resourceTracker->getImageToAttribTable().end());
-
-                    const egl::AttributeMap &retrievedAttribs = eglImageAttribIter->second;
-
-                    // Create the image on demand with the same attrib retrieved above
-                    CallCapture eglCreateImageKHRCall = egl::CaptureCreateImageKHR(
-                        nullptr, true, nullptr, context->id(), EGL_GL_TEXTURE_2D_KHR,
-                        reinterpret_cast<EGLClientBuffer>(
-                            static_cast<GLuint64>(stagingTexId.value)),
-                        retrievedAttribs, eglImage);
-
-                    // Convert the CaptureCreateImageKHR CallCapture to the customized CallCapture
-                    std::vector<CallCapture> eglCustomCreateImageKHRCall;
-                    CaptureCustomCreateEGLImage("CreateEGLImageKHR", eglCreateImageKHRCall,
-                                                eglCustomCreateImageKHRCall);
-                    ASSERT(eglCustomCreateImageKHRCall.size() > 0);
-
-                    // Append the customized CallCapture to the setupCalls list
-                    Capture(setupCalls, std::move(eglCustomCreateImageKHRCall[0]));
 
                     // Pass the eglImage to the texture that is bound to GL_TEXTURE_EXTERNAL_OES
                     // target
@@ -4331,9 +4326,6 @@ void CaptureShareGroupMidExecutionSetup(
                                 CaptureEGLImageTargetTexture2DOES(
                                     replayState, true, gl::TextureType::External, eglImageID));
                     }
-
-                    // Delete the staging texture
-                    Capture(setupCalls, CaptureDeleteTextures(replayState, true, 1, &stagingTexId));
                 }
             }
             else
@@ -7011,12 +7003,12 @@ void FrameCaptureShared::maybeOverrideEntryPoint(const gl::Context *context,
         }
         case EntryPoint::EGLCreateImage:
         {
-            CaptureCustomCreateEGLImage("CreateEGLImage", inCall, outCalls);
+            CaptureCustomCreateEGLImage(context, "CreateEGLImage", inCall, outCalls);
             break;
         }
         case EntryPoint::EGLCreateImageKHR:
         {
-            CaptureCustomCreateEGLImage("CreateEGLImageKHR", inCall, outCalls);
+            CaptureCustomCreateEGLImage(context, "CreateEGLImageKHR", inCall, outCalls);
             break;
         }
         case EntryPoint::EGLCreateSync:
