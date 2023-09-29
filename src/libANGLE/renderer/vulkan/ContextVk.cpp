@@ -7245,7 +7245,7 @@ angle::Result ContextVk::updateActiveTextures(const gl::Context *context, gl::Co
     const gl::ActiveTextureMask &activeTextures    = executable->getActiveSamplersMask();
     const gl::ActiveTextureTypeArray &textureTypes = executable->getActiveSamplerTypes();
 
-    mActiveTextures.fill(nullptr);
+    memset(mActiveTextures.data(), 0, sizeof(mActiveTextures));
 
     bool recreatePipelineLayout                       = false;
     ImmutableSamplerIndexMap immutableSamplerIndexMap = {};
