@@ -221,6 +221,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "629d611a_fd37d87c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4566,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-09-29T13:54:57Z",
+      "side": 1,
+      "message": "Ack! FWIW, you could add the `ANGLE_FORMAT_PRINTF` annotation to this function (and the like) to get the same warning.",
+      "parentUuid": "72164e20_05914830",
+      "range": {
+        "startLine": 4539,
+        "startChar": 0,
+        "endLine": 4566,
+        "endChar": 5
+      },
+      "revId": "8a01bc563d51beca77ea0212190b5c1d6915fe3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3e2f3651_35bda7ba",
