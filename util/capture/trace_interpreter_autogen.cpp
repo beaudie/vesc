@@ -6168,6 +6168,12 @@ CallCapture ParseCallCapture(const Token &nameToken,
         ParamBuffer params = ParseParameters<decltype(CreateEGLImageKHR)>(paramTokens, strings);
         return CallCapture("CreateEGLImageKHR", std::move(params));
     }
+    if (strcmp(nameToken, "CreateEGLImageResource") == 0)
+    {
+        ParamBuffer params =
+            ParseParameters<decltype(CreateEGLImageResource)>(paramTokens, strings);
+        return CallCapture("CreateEGLImageResource", std::move(params));
+    }
     if (strcmp(nameToken, "CreateEGLSync") == 0)
     {
         ParamBuffer params = ParseParameters<decltype(CreateEGLSync)>(paramTokens, strings);
@@ -6500,6 +6506,11 @@ void ReplayCustomFunctionCall(const CallCapture &call, const TraceFunctionMap &c
     if (call.customFunctionName == "CreateEGLImageKHR")
     {
         DispatchCallCapture(CreateEGLImageKHR, captures);
+        return;
+    }
+    if (call.customFunctionName == "CreateEGLImageResource")
+    {
+        DispatchCallCapture(CreateEGLImageResource, captures);
         return;
     }
     if (call.customFunctionName == "CreateEGLSync")

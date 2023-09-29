@@ -131,6 +131,7 @@ EGLImageMap gEGLImageMap;
 SurfaceMap gSurfaceMap;
 
 GLeglImageOES *gEGLImageMap2;
+GLuint *gEGLImageMap2Resources;
 EGLSurface *gSurfaceMap2;
 EGLContext *gContextMap2;
 GLsync *gSyncMap2;
@@ -246,9 +247,10 @@ void InitializeReplay2(const char *binaryDataFileName,
                      maxSampler, maxSemaphore, maxShaderProgram, maxTexture, maxTransformFeedback,
                      maxVertexArray);
 
-    gContextMap2  = AllocateZeroedValues<EGLContext>(maxContext);
-    gEGLImageMap2 = AllocateZeroedValues<EGLImage>(maxImage);
-    gSurfaceMap2  = AllocateZeroedValues<EGLSurface>(maxSurface);
+    gContextMap2           = AllocateZeroedValues<EGLContext>(maxContext);
+    gEGLImageMap2          = AllocateZeroedValues<EGLImage>(maxImage);
+    gEGLImageMap2Resources = AllocateZeroedValues<GLuint>(maxImage);
+    gSurfaceMap2           = AllocateZeroedValues<EGLSurface>(maxSurface);
 
     gContextMap2[0]         = EGL_NO_CONTEXT;
     gShareContextId         = contextId;
@@ -537,6 +539,33 @@ void FenceSync2(GLenum condition, GLbitfield flags, uintptr_t fenceSync)
     gSyncMap2[fenceSync] = glFenceSync(condition, flags);
 }
 
+void CreateEGLImageResource(GLuint imageID, GLsizei width, GLsizei height)
+{
+    GLint previousTexId;
+    glGetIntegerv(GL_TEXTURE_BINDING_2D, &previousTexId);
+    GLint previousAlignment;
+    glGetIntegerv(GL_UNPACK_ALIGNMENT, &previousAlignment);
+    GLuint stagingTexId;
+    glGenTextures(1, &stagingTexId);
+    glBindTexture(GL_TEXTURE_2D, stagingTexId);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    std::vector<GLubyte> pixels;
+    pixels.reserve(width * height * 3);
+    for (int i = 0; i < width * height; i++)
+    {
+        pixels.push_back(61);
+        pixels.push_back(220);
+        pixels.push_back(132);
+    }
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE,
+                 pixels.data());
+    gEGLImageMap2Resources[imageID] = stagingTexId;
+    glPixelStorei(GL_UNPACK_ALIGNMENT, previousAlignment);
+    glBindTexture(GL_TEXTURE_2D, previousTexId);
+}
+
 void CreateEGLImage(EGLDisplay dpy,
                     EGLContext ctx,
                     EGLenum target,
@@ -544,8 +573,17 @@ void CreateEGLImage(EGLDisplay dpy,
                     const EGLAttrib *attrib_list,
                     GLuint imageID)
 {
-    EGLClientBuffer clientBuffer = GetClientBuffer(target, buffer);
-    gEGLImageMap2[imageID]       = eglCreateImage(dpy, ctx, target, clientBuffer, attrib_list);
+    if (target == EGL_NATIVE_BUFFER_ANDROID)
+    {
+        gEGLImageMap2[imageID] = eglCreateImage(
+            dpy, eglGetCurrentContext(), EGL_GL_TEXTURE_2D,
+            reinterpret_cast<EGLClientBuffer>(gEGLImageMap2Resources[imageID]), attrib_list);
+    }
+    else
+    {
+        EGLClientBuffer clientBuffer = GetClientBuffer(target, buffer);
+        gEGLImageMap2[imageID]       = eglCreateImage(dpy, ctx, target, clientBuffer, attrib_list);
+    }
 }
 
 void CreateEGLImageKHR(EGLDisplay dpy,
@@ -555,8 +593,17 @@ void CreateEGLImageKHR(EGLDisplay dpy,
                        const EGLint *attrib_list,
                        GLuint imageID)
 {
-    EGLClientBuffer clientBuffer = GetClientBuffer(target, buffer);
-    gEGLImageMap2[imageID]       = eglCreateImageKHR(dpy, ctx, target, clientBuffer, attrib_list);
+    if (target == EGL_NATIVE_BUFFER_ANDROID)
+    {
+        gEGLImageMap2[imageID] = eglCreateImageKHR(
+            dpy, eglGetCurrentContext(), EGL_GL_TEXTURE_2D,
+            reinterpret_cast<EGLClientBuffer>(gEGLImageMap2Resources[imageID]), attrib_list);
+    }
+    else
+    {
+        EGLClientBuffer clientBuffer = GetClientBuffer(target, buffer);
+        gEGLImageMap2[imageID] = eglCreateImageKHR(dpy, ctx, target, clientBuffer, attrib_list);
+    }
 }
 
 void CreateEGLSyncKHR(EGLDisplay dpy, EGLenum type, const EGLint *attrib_list, GLuint syncID)
