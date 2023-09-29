@@ -197,6 +197,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "72164e20_05914830",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4566,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-29T13:47:06Z",
+      "side": 1,
+      "message": "Done. Decided against passing args to actual vararg functions as that breaks compile-time checking for printf args. Made a few other adjustments to make things look neater.",
+      "parentUuid": "205172f0_7c83e03f",
+      "range": {
+        "startLine": 4539,
+        "startChar": 0,
+        "endLine": 4566,
+        "endChar": 5
+      },
+      "revId": "8a01bc563d51beca77ea0212190b5c1d6915fe3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3e2f3651_35bda7ba",
