@@ -245,6 +245,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3ab73d3_d5808055",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4566,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-09-29T14:27:03Z",
+      "side": 1,
+      "message": "Ah that\u0027s cool, I\u0027ll keep that in mind for future - seems like there is no need for this in this CL with the other changes I made.",
+      "parentUuid": "629d611a_fd37d87c",
+      "range": {
+        "startLine": 4539,
+        "startChar": 0,
+        "endLine": 4566,
+        "endChar": 5
+      },
+      "revId": "8a01bc563d51beca77ea0212190b5c1d6915fe3d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3e2f3651_35bda7ba",
