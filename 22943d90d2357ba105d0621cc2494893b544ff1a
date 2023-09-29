@@ -35,6 +35,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfe819b8_b5d4b12d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-29T18:31:34Z",
+      "side": 1,
+      "message": "Thanks. In a test CL, I added `mHasBeenInitializedInThisCL` to `TextureVk`, which becomes true in case a single-level texture is being flushed due to this change. I also used a `FATAL()` at the beginning of `respecifyImageStorage()` if `mHasBeenInitializedInThisCL` is true, to see which traces experience this. However, I saw that all traces still pass on Android.",
+      "parentUuid": "d813e1ff_905f12ca",
+      "revId": "22943d90d2357ba105d0621cc2494893b544ff1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "29de9dbe_4c895228",
@@ -48,6 +66,24 @@
       "writtenOn": "2023-09-29T13:29:51Z",
       "side": 1,
       "message": "nit: \"We do not flush ... because ...\"\n\nI imagine this is about deferred clears?",
+      "revId": "22943d90d2357ba105d0621cc2494893b544ff1a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff180e22_06cdf0c8",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-09-29T18:31:34Z",
+      "side": 1,
+      "message": "Without this (PS2), two tests failed on Pixel 6 (but still passed on Pixel 7):\n* `Texture2DTestES3YUV.TexStorage2DYuvFilterModes`\n* `Texture2DTestES3.TexStorage2DCycleThroughYuvAndRgbSources`\n\nBoth are the only users of `verifyResults2D()`, which contains a draw. Without this skip, it looks like these tests pass if there is only one `verifyResults2D()`, but fail if there are more.\n\nIn the beginning `Texture2DTest::testSetUp()`, a texture is created first and bound to a framebuffer, which would be flushed as a result of this CL later. If it is not flushed, the tests pass.",
+      "parentUuid": "29de9dbe_4c895228",
       "revId": "22943d90d2357ba105d0621cc2494893b544ff1a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
