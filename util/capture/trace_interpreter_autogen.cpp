@@ -6416,11 +6416,11 @@ void DispatchCallCapture(Fn *fn, const Captures &cap)
     (*fn)(Arg<Fn, 0>(cap), Arg<Fn, 1>(cap), Arg<Fn, 2>(cap), Arg<Fn, 3>(cap), Arg<Fn, 4>(cap));
 }
 
-template <typename Fn, EnableIfNArgs<Fn, 6> = 0>
+template <typename Fn, EnableIfNArgs<Fn, 8> = 0>
 void DispatchCallCapture(Fn *fn, const Captures &cap)
 {
     (*fn)(Arg<Fn, 0>(cap), Arg<Fn, 1>(cap), Arg<Fn, 2>(cap), Arg<Fn, 3>(cap), Arg<Fn, 4>(cap),
-          Arg<Fn, 5>(cap));
+          Arg<Fn, 5>(cap), Arg<Fn, 6>(cap), Arg<Fn, 7>(cap));
 }
 
 template <typename Fn, EnableIfNArgs<Fn, 16> = 0>

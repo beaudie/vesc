@@ -9,6 +9,7 @@
 
 #include "trace_fixture.h"
 
+#include "EGL/egl.h"
 #include "angle_trace_gl.h"
 
 #include <string>
@@ -23,35 +24,6 @@ void UpdateResourceMap(GLuint *resourceMap, GLuint id, GLsizei readBufferOffset)
 }
 
 angle::TraceCallbacks *gTraceCallbacks = nullptr;
-
-EGLClientBuffer GetClientBuffer(EGLenum target, uintptr_t key)
-{
-    switch (target)
-    {
-        case EGL_GL_TEXTURE_2D:
-        case EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_X:
-        case EGL_GL_TEXTURE_CUBE_MAP_NEGATIVE_X:
-        case EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_Y:
-        case EGL_GL_TEXTURE_CUBE_MAP_NEGATIVE_Y:
-        case EGL_GL_TEXTURE_CUBE_MAP_POSITIVE_Z:
-        case EGL_GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
-        case EGL_GL_TEXTURE_3D:
-        {
-            uintptr_t id = static_cast<uintptr_t>(gTextureMap[key]);
-            return reinterpret_cast<EGLClientBuffer>(id);
-        }
-        case EGL_GL_RENDERBUFFER:
-        {
-            uintptr_t id = static_cast<uintptr_t>(gRenderbufferMap[key]);
-            return reinterpret_cast<EGLClientBuffer>(id);
-        }
-        default:
-        {
-            const auto &iData = gClientBufferMap.find(key);
-            return iData != gClientBufferMap.end() ? iData->second : nullptr;
-        }
-    }
-}
 
 ValidateSerializedStateCallback gValidateSerializedStateCallback;
 std::unordered_map<GLuint, std::vector<GLint>> gInternalUniformLocationsMap;
@@ -537,15 +509,38 @@ void FenceSync2(GLenum condition, GLbitfield flags, uintptr_t fenceSync)
     gSyncMap2[fenceSync] = glFenceSync(condition, flags);
 }
 
+GLuint CreateStagingTexture(GLuint width, GLuint height)
+{
+    GLuint stagingTexId;
+    glGenTextures(1, &stagingTexId);
+    glBindTexture(GL_TEXTURE_2D, stagingTexId);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    GLubyte pixels[width * height * 3];
+    for (size_t i = 0; i < width * height; i++)
+    {
+        pixels[3 * i + 0] = 61;
+        pixels[3 * i + 1] = 220;
+        pixels[3 * i + 2] = 132;
+    }
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, pixels);
+    return stagingTexId;
+}
+
 void CreateEGLImage(EGLDisplay dpy,
                     EGLContext ctx,
                     EGLenum target,
                     uintptr_t buffer,
                     const EGLAttrib *attrib_list,
-                    GLuint imageID)
+                    GLuint imageID,
+                    GLsizei width,
+                    GLsizei height)
 {
-    EGLClientBuffer clientBuffer = GetClientBuffer(target, buffer);
-    gEGLImageMap2[imageID]       = eglCreateImage(dpy, ctx, target, clientBuffer, attrib_list);
+    GLuint stagingTexId = CreateStagingTexture(width, height);
+    gEGLImageMap2[imageID] =
+        eglCreateImage(dpy, eglGetCurrentContext(), EGL_GL_TEXTURE_2D,
+                       reinterpret_cast<EGLClientBuffer>(stagingTexId), attrib_list);
+    glDeleteTextures(1, &stagingTexId);
 }
 
 void CreateEGLImageKHR(EGLDisplay dpy,
@@ -553,10 +548,15 @@ void CreateEGLImageKHR(EGLDisplay dpy,
                        EGLenum target,
                        uintptr_t buffer,
                        const EGLint *attrib_list,
-                       GLuint imageID)
+                       GLuint imageID,
+                       GLsizei width,
+                       GLsizei height)
 {
-    EGLClientBuffer clientBuffer = GetClientBuffer(target, buffer);
-    gEGLImageMap2[imageID]       = eglCreateImageKHR(dpy, ctx, target, clientBuffer, attrib_list);
+    GLuint stagingTexId = CreateStagingTexture(width, height);
+    gEGLImageMap2[imageID] =
+        eglCreateImageKHR(dpy, eglGetCurrentContext(), EGL_GL_TEXTURE_2D,
+                          reinterpret_cast<EGLClientBuffer>(stagingTexId), attrib_list);
+    glDeleteTextures(1, &stagingTexId);
 }
 
 void CreateEGLSyncKHR(EGLDisplay dpy, EGLenum type, const EGLint *attrib_list, GLuint syncID)
