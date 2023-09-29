@@ -4215,9 +4215,13 @@ void CaptureShareGroupMidExecutionSetup(
                     bool result = data.resize(endByte);
                     ASSERT(result);
 
-                    (void)texture->getTexImage(context, packState, nullptr, index.getTarget(),
-                                               index.getLevelIndex(), getFormat, getType,
-                                               data.data());
+                    // WIP workaround for crash when getting external texture data
+                    if (index.getType() != gl::TextureType::External)
+                    {
+                        (void)texture->getTexImage(context, packState, nullptr, index.getTarget(),
+                                                   index.getLevelIndex(), getFormat, getType,
+                                                   data.data());
+                    }
                 }
 
                 for (std::vector<CallCapture> *calls : texSetupCalls)
