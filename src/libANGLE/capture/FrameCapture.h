@@ -337,6 +337,9 @@ using HasResourceTypeMap = angle::PackedEnumBitSet<ResourceIDType>;
 using ResourceIDToSetupCallsMap =
     PackedEnumMap<ResourceIDType, std::map<GLuint, gl::Range<size_t>>>;
 
+// Map of contextIds to call indices in mFrameCalls
+using ContextIDToFrameCallsMap = std::map<gl::ContextID, std::vector<gl::Range<size_t>>>;
+
 // Map of buffer ID to offset and size used when mapped
 using BufferDataMap = std::map<gl::BufferID, std::pair<GLintptr, GLsizeiptr>>;
 
@@ -734,6 +737,7 @@ class FrameCaptureShared final : angle::NonCopyable
 
     std::vector<CallCapture> mFrameCalls;
     gl::ContextID mLastContextId;
+    size_t mLastContextBeginIndex;
 
     // We save one large buffer of binary data for the whole CPP replay.
     // This simplifies a lot of file management.
@@ -756,6 +760,7 @@ class FrameCaptureShared final : angle::NonCopyable
     size_t mResourceIDBufferSize;
     HasResourceTypeMap mHasResourceType;
     ResourceIDToSetupCallsMap mResourceIDToSetupCalls;
+    ContextIDToFrameCallsMap mContextIDToFrameCalls;
     BufferDataMap mBufferDataMap;
     bool mValidateSerializedState = false;
     std::string mValidationExpression;

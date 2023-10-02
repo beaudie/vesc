@@ -1746,6 +1746,94 @@ void WriteCppReplayFunctionWithParts(const gl::ContextID contextID,
     }
 }
 
+// Handle grouping of calls by context
+void WriteCppReplayFunctionWithPartsMultiContext(const gl::ContextID contextID,
+                                                 ReplayFunc replayFunc,
+                                                 ReplayWriter &replayWriter,
+                                                 uint32_t frameIndex,
+                                                 std::vector<uint8_t> *binaryData,
+                                                 const std::vector<CallCapture> &calls,
+                                                 const ContextIDToFrameCallsMap &callContextData,
+                                                 std::stringstream &header,
+                                                 std::stringstream &out,
+                                                 size_t *maxResourceIDBufferSize)
+{
+    int callCount = 0;
+    int partCount = 0;
+
+    if (calls.size() > kFunctionSizeLimit)
+    {
+        out << "void "
+            << FmtFunction(replayFunc, contextID, FuncUsage::Definition, frameIndex, ++partCount)
+            << "\n";
+    }
+    else
+    {
+        out << "void "
+            << FmtFunction(replayFunc, contextID, FuncUsage::Definition, frameIndex, kNoPartId)
+            << "\n";
+    }
+
+    out << "{\n";
+
+    // MainContext is first, iterate through map in reverse order
+    std::reverse_iterator<angle::ContextIDToFrameCallsMap::const_iterator> contextRanges;
+
+    for (contextRanges = callContextData.rbegin(); contextRanges != callContextData.rend();
+         contextRanges++)
+    {
+        CallCapture makeCurrentCall = egl::CaptureMakeCurrent(nullptr, true, nullptr, {0}, {0},
+                                                              contextRanges->first, EGL_TRUE);
+        out << "    ";
+        WriteCppReplayForCall(makeCurrentCall, replayWriter, out, header, binaryData,
+                              maxResourceIDBufferSize);
+        out << ";\n";
+        ++callCount;
+
+        // cid.first is our contextId, .second is the vector of ranges
+        for (gl::Range<size_t> callRange : contextRanges->second)
+        {
+            for (size_t i = callRange.low(); i <= callRange.high(); i++)
+            {
+                out << "    ";
+                WriteCppReplayForCall(calls[i], replayWriter, out, header, binaryData,
+                                      maxResourceIDBufferSize);
+                out << ";\n";
+
+                if (partCount > 0 && ++callCount % kFunctionSizeLimit == 0)
+                {
+                    out << "}\n";
+                    out << "\n";
+                    out << "void "
+                        << FmtFunction(replayFunc, contextID, FuncUsage::Definition, frameIndex,
+                                       ++partCount)
+                        << "\n";
+                    out << "{\n";
+                }
+            }
+        }
+    }
+    out << "}\n";
+
+    if (partCount > 0)
+    {
+        out << "\n";
+        out << "void "
+            << FmtFunction(replayFunc, contextID, FuncUsage::Definition, frameIndex, kNoPartId)
+            << "\n";
+        out << "{\n";
+
+        // Write out the main call which calls all the parts.
+        for (int i = 1; i <= partCount; i++)
+        {
+            out << "    " << FmtFunction(replayFunc, contextID, FuncUsage::Call, frameIndex, i)
+                << ";\n";
+        }
+
+        out << "}\n";
+    }
+}
+
 // Auxiliary contexts are other contexts in the share group that aren't the context calling
 // eglSwapBuffers().
 void WriteAuxiliaryContextCppSetupReplay(ReplayWriter &replayWriter,
@@ -5739,6 +5827,7 @@ void FrameCapture::reset()
 
 FrameCaptureShared::FrameCaptureShared()
     : mLastContextId{0},
+      mLastContextBeginIndex{0},
       mEnabled(true),
       mSerializeStateEnabled(false),
       mCompression(true),
@@ -5751,6 +5840,7 @@ FrameCaptureShared::FrameCaptureShared()
       mResourceIDBufferSize(0),
       mHasResourceType{},
       mResourceIDToSetupCalls{},
+      mContextIDToFrameCalls(),
       mMaxAccessedResourceIDs{},
       mCaptureTrigger(0),
       mCaptureActive(false),
@@ -7905,17 +7995,18 @@ void FrameCaptureShared::captureCall(gl::Context *context, CallCapture &&inCall,
 
     if (isCallValid)
     {
-        // If the context ID has changed, then we need to inject an eglMakeCurrent() call. Only do
-        // this if there is more than 1 context in the share group to avoid unnecessary
-        // eglMakeCurrent() calls.
+        // If the context ID has changed and there is more than 1 context in the share group,
+        // update the context-change tracking data.
         size_t contextCount = context->getShareGroup()->getContexts().size();
+
         if (contextCount > 1 && mLastContextId != context->id())
         {
-            // Inject the eglMakeCurrent() call. Ignore the display and surface.
-            CallCapture makeCurrentCall =
-                egl::CaptureMakeCurrent(nullptr, true, nullptr, {0}, {0}, context->id(), EGL_TRUE);
-            mFrameCalls.emplace_back(std::move(makeCurrentCall));
-            mLastContextId = context->id();
+            // Context switch has occurred, track location in contextId->framecalls map
+            size_t lastRangeEnd = std::max<size_t>(mFrameCalls.size(), 1);
+            mContextIDToFrameCalls[mLastContextId].emplace_back(
+                gl::Range<size_t>(mLastContextBeginIndex, lastRangeEnd - 1));
+            mLastContextId         = context->id();
+            mLastContextBeginIndex = mFrameCalls.size();
         }
 
         // Update resource counts before we override entry points with custom calls.
@@ -8394,6 +8485,7 @@ void FrameCaptureShared::runMidExecutionCapture(gl::Context *mainContext)
             auxContextReplayState.initializeForCapture(shareContext.second);
 
             egl::Error error = shareContext.second->makeCurrent(display, draw, read);
+
             if (error.isError())
             {
                 INFO() << "MEC unable to make secondary context current";
@@ -8417,6 +8509,7 @@ void FrameCaptureShared::runMidExecutionCapture(gl::Context *mainContext)
     }
 
     egl::Error error = mainContext->makeCurrent(display, draw, read);
+
     if (error.isError())
     {
         INFO() << "MEC unable to make main context current again";
@@ -8471,6 +8564,14 @@ void FrameCaptureShared::onEndFrame(gl::Context *context)
     if (!mFrameCalls.empty())
     {
         mActiveFrameIndices.push_back(getReplayFrameIndex());
+
+        // Add final entry to ContextIDToFrameCallMap if needed
+        size_t contextCount = context->getShareGroup()->getContexts().size();
+        if (contextCount > 1 && mLastContextBeginIndex != mFrameCalls.size())
+        {
+            mContextIDToFrameCalls[mLastContextId].emplace_back(
+                gl::Range<size_t>(mLastContextBeginIndex, mFrameCalls.size() - 1));
+        }
     }
 
     // Make sure all pending work for every Context in the share group has completed so all data
@@ -9287,10 +9388,19 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
         std::stringstream headerStream;
         std::stringstream bodyStream;
 
-        WriteCppReplayFunctionWithParts(context->id(), ReplayFunc::Replay, mReplayWriter,
-                                        frameIndex, &mBinaryData, mFrameCalls, headerStream,
-                                        bodyStream, &mResourceIDBufferSize);
-
+        if (mContextIDToFrameCalls.size() > 1)
+        {
+            WriteCppReplayFunctionWithPartsMultiContext(
+                context->id(), ReplayFunc::Replay, mReplayWriter, frameIndex, &mBinaryData,
+                mFrameCalls, mContextIDToFrameCalls, headerStream, bodyStream,
+                &mResourceIDBufferSize);
+        }
+        else
+        {
+            WriteCppReplayFunctionWithParts(context->id(), ReplayFunc::Replay, mReplayWriter,
+                                            frameIndex, &mBinaryData, mFrameCalls, headerStream,
+                                            bodyStream, &mResourceIDBufferSize);
+        }
         mReplayWriter.addPrivateFunction(proto, headerStream, bodyStream);
     }
 
@@ -9338,6 +9448,8 @@ void FrameCaptureShared::reset()
 {
     mFrameCalls.clear();
     mClientVertexArrayMap.fill(-1);
+    mContextIDToFrameCalls.clear();
+    mLastContextBeginIndex = 0;
 
     // Do not reset replay-specific settings like the maximum read buffer size, client array sizes,
     // or the 'has seen' type map. We could refine this into per-frame and per-capture maximums if
