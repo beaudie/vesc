@@ -2557,6 +2557,11 @@ class ImageHelper final : public Resource, public angle::Subject
                           BufferHelper *bufferHelperIn,
                           const VkBufferImageCopy &copyRegion,
                           angle::FormatID formatID);
+        SubresourceUpdate(RefCounted<BufferHelper> *bufferIn,
+                          BufferHelper *bufferHelperIn,
+                          const VkBufferImageCopy &copyRegion,
+                          angle::FormatID formatID,
+                          bool useCompute);
         SubresourceUpdate(RefCounted<ImageHelper> *imageIn,
                           const VkImageCopy &copyRegion,
                           angle::FormatID formatID);
@@ -2584,6 +2589,7 @@ class ImageHelper final : public Resource, public angle::Subject
         VkImageAspectFlags getDestAspectFlags() const;
 
         UpdateSource updateSource;
+        bool useCompute = false;
         union
         {
             ClearUpdate clear;
