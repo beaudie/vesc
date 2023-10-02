@@ -7321,6 +7321,7 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
     LoadImageFunctionInfo loadFunctionInfo = vkFormat.getTextureLoadFunction(access, type);
     LoadImageFunction stencilLoadFunction  = nullptr;
 
+    bool useComputeTransCoding = false;
     if (storageFormat.isBlock)
     {
         const gl::InternalFormat &storageFormatInfo = vkFormat.getInternalFormatInfo(type);
@@ -7345,6 +7346,19 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
             contextVk, storageFormatInfo.computeBufferRowLength(glExtents.width, &bufferRowLength));
         ANGLE_VK_CHECK_MATH(contextVk, storageFormatInfo.computeBufferImageHeight(
                                            glExtents.height, &bufferImageHeight));
+
+        if (contextVk->getRenderer()->getFeatures().supportsComputeTranscodeEtcToBc.enabled &&
+            IsETCFormat(vkFormat.getIntendedFormatID()) &&
+            vkFormat.getIntendedFormatID() != vkFormat.getActualImageFormatID(access))
+        {
+            static constexpr uint32_t kThreadholdForComputeTransCoding = 8192;
+            useComputeTransCoding = depthPitch > kThreadholdForComputeTransCoding;
+            if (!useComputeTransCoding)
+            {
+                loadFunctionInfo.loadFunction       = angle::LoadETC2RGB8ToBC1;
+                loadFunctionInfo.requiresConversion = true;
+            }
+        }
     }
     else
     {
@@ -7563,8 +7577,9 @@ angle::Result ImageHelper::stageSubresourceUpdateImpl(ContextVk *contextVk,
     if (aspectFlags)
     {
         copy.imageSubresource.aspectMask = aspectFlags;
-        appendSubresourceUpdate(updateLevelGL, SubresourceUpdate(stagingBuffer.get(), currentBuffer,
-                                                                 copy, storageFormat.id));
+        appendSubresourceUpdate(updateLevelGL,
+                                SubresourceUpdate(stagingBuffer.get(), currentBuffer, copy,
+                                                  storageFormat.id, useComputeTransCoding));
         pruneSupersededUpdatesForLevel(contextVk, updateLevelGL, PruneReason::MemoryOptimization);
     }
 
@@ -8632,9 +8647,6 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
     ASSERT(validateSubresourceUpdateRefCountsConsistent());
     const angle::FormatID &actualformat   = getActualFormatID();
     const angle::FormatID &intendedFormat = getIntendedFormatID();
-    bool transCoding =
-        contextVk->getRenderer()->getFeatures().supportsComputeTranscodeEtcToBc.enabled &&
-        IsETCFormat(intendedFormat) && IsBCFormat(actualformat);
 
     const VkImageAspectFlags aspectFlags = GetFormatAspectFlags(getActualFormat());
 
@@ -8652,20 +8664,19 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
     // done with fine granularity as updates are applied.  This is achieved by specifying a layer
     // that is outside the tracking range.
     CommandBufferAccess access;
+    OutsideRenderPassCommandBufferHelper *commandBuffer = nullptr;
+    bool transCoding =
+        contextVk->getRenderer()->getFeatures().supportsComputeTranscodeEtcToBc.enabled &&
+        IsETCFormat(intendedFormat) && IsBCFormat(actualformat);
     if (!transCoding)
     {
         access.onImageTransferWrite(levelGLStart, 1, kMaxContentDefinedLayerCount, 0, aspectFlags,
                                     this);
-    }
-    else
-    {
-        access.onImageComputeShaderWrite(levelGLStart, 1, kMaxContentDefinedLayerCount, 0,
-                                         aspectFlags, this);
+        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(access, &commandBuffer));
     }
 
-    OutsideRenderPassCommandBufferHelper *commandBuffer;
-    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(access, &commandBuffer));
-
+    bool firstComputeTransfer = true;
+    bool firstDmaCopyTransfer = true;
     for (gl::LevelIndex updateMipLevelGL = levelGLStart; updateMipLevelGL < levelGLEnd;
          ++updateMipLevelGL)
     {
@@ -8742,13 +8753,31 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                 update.data.image.copyRegion.dstSubresource.mipLevel = updateMipLevelVk.get();
             }
 
+            ImageLayout newLayout =
+                update.useCompute ? ImageLayout::ComputeShaderWrite : ImageLayout::TransferDst;
+            if (transCoding)
+            {
+                if (update.useCompute && firstComputeTransfer)
+                {
+                    access.onImageComputeShaderWrite(
+                        updateMipLevelGL, 1, kMaxContentDefinedLayerCount, 0, aspectFlags, this);
+                    ANGLE_TRY(
+                        contextVk->getOutsideRenderPassCommandBufferHelper(access, &commandBuffer));
+                    firstComputeTransfer = false;
+                }
+                else if (firstDmaCopyTransfer)
+                {
+                    access.onImageTransferWrite(updateMipLevelGL, 1, kMaxContentDefinedLayerCount,
+                                                0, aspectFlags, this);
+                    ANGLE_TRY(
+                        contextVk->getOutsideRenderPassCommandBufferHelper(access, &commandBuffer));
+                    firstDmaCopyTransfer = false;
+                }
+            }
             if (updateLayerCount >= kMaxParallelSubresourceUpload)
             {
                 // If there are more subresources than bits we can track, always insert a barrier.
-                recordWriteBarrier(
-                    contextVk, aspectFlags,
-                    transCoding ? ImageLayout::ComputeShaderWrite : ImageLayout::TransferDst,
-                    commandBuffer);
+                recordWriteBarrier(contextVk, aspectFlags, newLayout, commandBuffer);
                 subresourceUploadsInProgress = std::numeric_limits<uint64_t>::max();
             }
             else
@@ -8762,10 +8791,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                 if ((subresourceUploadsInProgress & subresourceHash) != 0)
                 {
                     // If there's overlap in subresource upload, issue a barrier.
-                    recordWriteBarrier(
-                        contextVk, aspectFlags,
-                        transCoding ? ImageLayout::ComputeShaderWrite : ImageLayout::TransferDst,
-                        commandBuffer);
+                    recordWriteBarrier(contextVk, aspectFlags, newLayout, commandBuffer);
                     subresourceUploadsInProgress = 0;
                 }
                 subresourceUploadsInProgress |= subresourceHash;
@@ -8813,7 +8839,7 @@ angle::Result ImageHelper::flushStagedUpdates(ContextVk *contextVk,
                 CommandBufferAccess bufferAccess;
                 VkBufferImageCopy *copyRegion = &update.data.buffer.copyRegion;
 
-                if (transCoding)
+                if (update.useCompute)
                 {
                     bufferAccess.onBufferComputeShaderRead(currentBuffer);
                     ANGLE_TRY(contextVk->getOutsideRenderPassCommandBufferHelper(bufferAccess,
@@ -9952,6 +9978,16 @@ ImageHelper::SubresourceUpdate::SubresourceUpdate(RefCounted<BufferHelper> *buff
     data.buffer.bufferHelper = bufferHelperIn;
     data.buffer.copyRegion   = copyRegionIn;
     data.buffer.formatID     = formatID;
+}
+
+ImageHelper::SubresourceUpdate::SubresourceUpdate(RefCounted<BufferHelper> *bufferIn,
+                                                  BufferHelper *bufferHelperIn,
+                                                  const VkBufferImageCopy &copyRegionIn,
+                                                  angle::FormatID formatID,
+                                                  bool useComputeShader)
+    : SubresourceUpdate(bufferIn, bufferHelperIn, copyRegionIn, formatID)
+{
+    useCompute = useComputeShader;
 }
 
 ImageHelper::SubresourceUpdate::SubresourceUpdate(RefCounted<ImageHelper> *imageIn,
