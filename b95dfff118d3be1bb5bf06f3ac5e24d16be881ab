@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f7485f5_2c95928a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-10-02T13:17:33Z",
+      "side": 1,
+      "message": "How did you choose the number of shards? Generally I think the rule of thumb is to keep shards \u003c10 minutes, but it looks like runs were way faster than 5 minutes which is probably a bit wasteful due to the overhead.",
+      "revId": "b95dfff118d3be1bb5bf06f3ac5e24d16be881ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
