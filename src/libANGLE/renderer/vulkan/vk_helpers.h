@@ -2557,6 +2557,11 @@ class ImageHelper final : public Resource, public angle::Subject
                           BufferHelper *bufferHelperIn,
                           const VkBufferImageCopy &copyRegion,
                           angle::FormatID formatID);
+        SubresourceUpdate(RefCounted<BufferHelper> *bufferIn,
+                          BufferHelper *bufferHelperIn,
+                          const VkBufferImageCopy &copyRegion,
+                          angle::FormatID formatID,
+                          bool useCompute);
         SubresourceUpdate(RefCounted<ImageHelper> *imageIn,
                           const VkImageCopy &copyRegion,
                           angle::FormatID formatID);
@@ -2584,6 +2589,7 @@ class ImageHelper final : public Resource, public angle::Subject
         VkImageAspectFlags getDestAspectFlags() const;
 
         UpdateSource updateSource;
+        bool useCompute = false;
         union
         {
             ClearUpdate clear;
@@ -2787,6 +2793,14 @@ class ImageHelper final : public Resource, public angle::Subject
                                                     ? ConvertToLinear(srcDataFormatID)
                                                     : srcDataFormatID;
         return actualFormatLinear == srcDataFormatIDLinear;
+    }
+
+    static constexpr int kThreadholdForComputeTransCoding = 4096;
+    bool canUseComputeForTransCoding(LevelIndex level)
+    {
+        // Using texture size instead of extent size to simplify the problem.
+        gl::Extents ext = getLevelExtents2D(level);
+        return ext.width * ext.height > kThreadholdForComputeTransCoding;
     }
 
     // Vulkan objects.
