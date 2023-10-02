@@ -1621,6 +1621,46 @@ void LoadETC2RGB8ToBC1(const ImageLoadContext &context,
     }
 }
 
+void LoadETC2RGBA8ToBC3(const ImageLoadContext &context,
+                        size_t width,
+                        size_t height,
+                        size_t depth,
+                        const uint8_t *input,
+                        size_t inputRowPitch,
+                        size_t inputDepthPitch,
+                        uint8_t *output,
+                        size_t outputRowPitch,
+                        size_t outputDepthPitch,
+                        bool punchthroughAlpha,
+                        bool isSigned)
+{
+    for (size_t z = 0; z < depth; z++)
+    {
+        for (size_t y = 0; y < height; y += 4)
+        {
+            const ETC2Block *sourceRow =
+                priv::OffsetDataPointer<ETC2Block>(input, y / 4, z, inputRowPitch, inputDepthPitch);
+            uint8_t *destRow = priv::OffsetDataPointer<uint8_t>(output, y / 4, z, outputRowPitch,
+                                                                outputDepthPitch);
+
+            for (size_t x = 0; x < width; x += 4)
+            {
+                const ETC2Block *sourceAlphaBlock = sourceRow + (x / 4) * 2;
+                uint8_t *destAlphaPixels          = destRow + (x * 4);
+
+                const ETC2Block *sourceRgbBlock = sourceAlphaBlock + 1;
+                uint8_t *destRgbPixels          = destAlphaPixels + 8;
+
+                sourceRgbBlock->transcodeAsBC1(destRgbPixels, x, y, width, height,
+                                               DefaultETCAlphaValues, punchthroughAlpha);
+
+                sourceAlphaBlock->decodeAsSingleETC2Channel(destAlphaPixels, x, y, width, height, 1,
+                                                            outputRowPitch, isSigned);
+            }
+        }
+    }
+}
+
 void LoadETC2RGBA8ToRGBA8(const ImageLoadContext &context,
                           size_t width,
                           size_t height,
@@ -2020,6 +2060,36 @@ void LoadETC2SRGBA8ToSRGBA8(const ImageLoadContext &context,
 {
     LoadETC2RGBA8ToRGBA8(context, width, height, depth, input, inputRowPitch, inputDepthPitch,
                          output, outputRowPitch, outputDepthPitch, true);
+}
+
+void LoadETC2RGBA8ToBC3(const ImageLoadContext &context,
+                        size_t width,
+                        size_t height,
+                        size_t depth,
+                        const uint8_t *input,
+                        size_t inputRowPitch,
+                        size_t inputDepthPitch,
+                        uint8_t *output,
+                        size_t outputRowPitch,
+                        size_t outputDepthPitch)
+{
+    LoadETC2RGBA8ToBC3(context, width, height, depth, input, inputRowPitch, inputDepthPitch, output,
+                       outputRowPitch, outputDepthPitch, false, false);
+}
+
+void LoadETC2SRGBA8ToBC3(const ImageLoadContext &context,
+                         size_t width,
+                         size_t height,
+                         size_t depth,
+                         const uint8_t *input,
+                         size_t inputRowPitch,
+                         size_t inputDepthPitch,
+                         uint8_t *output,
+                         size_t outputRowPitch,
+                         size_t outputDepthPitch)
+{
+    LoadETC2RGBA8ToBC3(context, width, height, depth, input, inputRowPitch, inputDepthPitch, output,
+                       outputRowPitch, outputDepthPitch, false, true);
 }
 
 }  // namespace angle
