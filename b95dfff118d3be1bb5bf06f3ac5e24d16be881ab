@@ -87,6 +87,24 @@
       "parentUuid": "84654e79_6acf0e5b",
       "revId": "b95dfff118d3be1bb5bf06f3ac5e24d16be881ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab7d0cee_820cafcc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-10-02T17:53:33Z",
+      "side": 1,
+      "message": "I think generally it\u0027s a good idea to have at least Linux for cases when a test is broken everywhere as it makes it easier to debug, as long as no concerns from Yuly :)",
+      "parentUuid": "8647ea46_506c81c0",
+      "revId": "b95dfff118d3be1bb5bf06f3ac5e24d16be881ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
