@@ -46,6 +46,30 @@
       },
       "revId": "1c3de6102a8d2d8b11388092db343ccaacd1ccc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e84692a8_4211bd44",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2800,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-10-02T18:10:56Z",
+      "side": 1,
+      "message": "I meant\n```\n\u003cA\u003e func { doAstuff(); }\n\u003cB\u003e func { doBstuff(); }\n```\nyeah with compile checks it will result in the same binary, just a matter of readability. No strong opinions, just wondering if having to resort to constexpr checks might be a sign that the code should be structured differently?..",
+      "parentUuid": "4fd48f4b_45402154",
+      "range": {
+        "startLine": 2800,
+        "startChar": 8,
+        "endLine": 2800,
+        "endChar": 93
+      },
+      "revId": "1c3de6102a8d2d8b11388092db343ccaacd1ccc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
