@@ -22,6 +22,30 @@
       },
       "revId": "1c3de6102a8d2d8b11388092db343ccaacd1ccc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fd48f4b_45402154",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2800,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-02T16:55:41Z",
+      "side": 1,
+      "message": "Not exactly sure what template specialization you mean here, but my understanding is that you will need to refactor the function etc. There maybe other ways to do this, but I think the way I am doing here is cleaner and less code diff and easier to read. The `if constexpr` check here will be compile time check, there is no run time cost here.",
+      "parentUuid": "b5d9c6af_b92b493c",
+      "range": {
+        "startLine": 2800,
+        "startChar": 8,
+        "endLine": 2800,
+        "endChar": 93
+      },
+      "revId": "1c3de6102a8d2d8b11388092db343ccaacd1ccc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
