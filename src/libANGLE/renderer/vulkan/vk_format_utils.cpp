@@ -8,6 +8,7 @@
 
 #include "libANGLE/renderer/vulkan/vk_format_utils.h"
 
+#include "image_util/loadimage.h"
 #include "libANGLE/Texture.h"
 #include "libANGLE/formatutils.h"
 #include "libANGLE/renderer/load_functions_table.h"
@@ -419,6 +420,28 @@ bool IsBCFormat(angle::FormatID formatID)
 {
     return formatID >= angle::FormatID::BC1_RGBA_UNORM_BLOCK &&
            formatID <= angle::FormatID::BC7_RGBA_UNORM_SRGB_BLOCK;
+}
+
+static const LoadImageFunctionInfo kEtcToBcLoadingFunc[] = {
+    {angle::LoadEACRG11SToRG8, true},     // EAC_R11G11_SNORM
+    {angle::LoadEACRG11ToRG8, true},      // EAC_R11G11_UNORM
+    {angle::LoadEACR11SToR8, true},       // EAC_R11_SNORM
+    {angle::LoadEACR11ToR8, true},        // EAC_R11_UNORM_BLOCK
+    {angle::LoadETC1RGB8ToBC1, true},     // ETC1_LOSSY_DECODE_R8G8B8_UNORM
+    {angle::LoadETC2RGB8ToBC1, true},     // ETC1_R8G8B8_UNORM
+    {angle::LoadETC2SRGB8A1ToBC1, true},  // ETC2_R8G8B8A1_SRGB
+    {angle::LoadETC2RGB8A1ToBC1, true},   // ETC2_R8G8B8A1_UNORM
+    {angle::LoadETC2SRGBA8ToBC3, true},   // ETC2_R8G8B8A8_SRGB
+    {angle::LoadETC2RGBA8ToBC3, true},    // ETC2_R8G8B8A8_UNORM
+    {angle::LoadETC2SRGB8ToBC1, true},    // ETC2_R8G8B8_SRGB
+    {angle::LoadETC2RGB8ToBC1, true},     // ETC2_R8G8B8_UNORM
+};
+
+LoadImageFunctionInfo GetEtcToBcTransCodingFunc(angle::FormatID formatID)
+{
+    ASSERT(IsETCFormat(formatID));
+    return kEtcToBcLoadingFunc[static_cast<uint32_t>(formatID) -
+                               static_cast<uint32_t>(angle::FormatID::EAC_R11G11_SNORM_BLOCK)];
 }
 
 static constexpr angle::FormatID kEtcToBcFormatMapping[] = {
