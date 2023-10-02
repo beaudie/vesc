@@ -4707,10 +4707,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // host-copyable one fails due to out-of-that-specific-kind-of-memory.
     //
     // Disabled on Fuchsia until they upgrade their version of VVL.
-    ANGLE_FEATURE_CONDITION(&mFeatures, supportsHostImageCopy,
-                            mHostImageCopyFeatures.hostImageCopy == VK_TRUE &&
-                                mHostImageCopyProperties.identicalMemoryTypeRequirements &&
-                                !IsFuchsia());
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsHostImageCopy, false);
 
     // 1) host vk driver does not natively support ETC format.
     // 2) host vk driver supports BC format.
