@@ -105,6 +105,24 @@
       "parentUuid": "8647ea46_506c81c0",
       "revId": "b95dfff118d3be1bb5bf06f3ac5e24d16be881ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b47f43be_0823767e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-02T17:56:40Z",
+      "side": 1,
+      "message": "+1 to enabling on Linux, at least with SwiftShader. First of all, it would help to tell if a test is just broken, or only failing on Android. Also Linux/SwiftShader uses GCEs which I understand are both cheaper and easier to deal with. FWIW, dEQP runs are very fast, and this is a subset of the tests, it\u0027s probably ok to enable them on windows too.",
+      "parentUuid": "ab7d0cee_820cafcc",
+      "revId": "b95dfff118d3be1bb5bf06f3ac5e24d16be881ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
