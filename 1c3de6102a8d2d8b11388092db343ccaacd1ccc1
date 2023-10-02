@@ -70,6 +70,30 @@
       },
       "revId": "1c3de6102a8d2d8b11388092db343ccaacd1ccc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9f1363a_ce2af7f7",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2800,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-02T18:24:06Z",
+      "side": 1,
+      "message": "I could move `vk::CommandBufferAccess access` to ContextVk::handleDirtyComputeUniformBuffers() and then pass in commandBufferHelperOrAcess to this function, then I can remove this `if constexpr` check, but you will still have to have the if check in line 2820. It really did not save you from much code duplication. I tried this earlier, but personally I like this slightly better, mainly because it is a bit odd to define access and without using it, just pass to handleDirtyComputeUniformBuffers call is a bit wierd. And it did not make this function more cleaner since I still end up have to do this if constexpr check anway.",
+      "parentUuid": "e84692a8_4211bd44",
+      "range": {
+        "startLine": 2800,
+        "startChar": 8,
+        "endLine": 2800,
+        "endChar": 93
+      },
+      "revId": "1c3de6102a8d2d8b11388092db343ccaacd1ccc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
