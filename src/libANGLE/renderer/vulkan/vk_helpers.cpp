@@ -7673,6 +7673,9 @@ angle::Result ImageHelper::updateSubresourceOnHost(ContextVk *contextVk,
             copyRegion.imageSubresource.layerCount, copyRegion.imageSubresource.aspectMask);
 
     *copiedOut = true;
+
+    onStateChange(angle::SubjectMessage::SubjectChanged);
+
     return angle::Result::Continue;
 }
 
