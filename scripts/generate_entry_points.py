@@ -363,7 +363,7 @@ void GL_APIENTRY GL_{name}({params})
     {{
         {constext_lost_error_generator}
     }}
-    ASSERT(!egl::Display::GetCurrentThreadUnlockedTailCall()->any());
+    {epilog}
 }}
 """
 
@@ -3068,14 +3068,14 @@ def get_unlocked_tail_call(api, cmd_name):
     # - eglSwapBuffers, eglSwapBuffersWithDamageKHR and
     #   eglSwapBuffersWithFrameTokenANGLE -> May throttle the CPU in tail call
     #
-    # - eglClientWaitSyncKHR, eglClientWaitSync, glClientWaitSync -> May wait on
-    #   fence in tail call
+    # - eglClientWaitSyncKHR, eglClientWaitSync, glClientWaitSync,
+    #   glFinishFenceNV -> May wait on fence in tail call
     #
     if cmd_name in [
             'eglDestroySurface', 'eglMakeCurrent', 'eglReleaseThread', 'eglCreateWindowSurface',
             'eglCreatePlatformWindowSurface', 'eglCreatePlatformWindowSurfaceEXT',
             'eglPrepareSwapBuffersANGLE', 'eglSwapBuffers', 'eglSwapBuffersWithDamageKHR',
-            'eglSwapBuffersWithFrameTokenANGLE'
+            'eglSwapBuffersWithFrameTokenANGLE', 'glFinishFenceNV'
     ]:
         return 'egl::Display::GetCurrentThreadUnlockedTailCall()->run(nullptr);'
 
