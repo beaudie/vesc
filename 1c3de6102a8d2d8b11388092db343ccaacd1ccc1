@@ -179,6 +179,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c355410_95e3b591",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-03T17:26:19Z",
+      "side": 1,
+      "message": "And\n```\nGL_SHADER_STORAGE_BARRIER_BIT\nAccesses to shader storage blocks after the barrier will reflect writes prior to the barrier.\n```\n\nIt did not say \"Accesses to shader storage blocks after the barrier will occur after all reads before the barrier\". It only says `writes prior to the barrier`",
+      "parentUuid": "56f5ca90_30bb1125",
+      "revId": "1c3de6102a8d2d8b11388092db343ccaacd1ccc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "273fec2d_d762a2d3",
