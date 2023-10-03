@@ -16,6 +16,24 @@
       "message": "Thanks for improving things here. The output never makes sense to me though, like look for `FramebufferTest_ES3.ReattachToInvalidBaseLevel/ES3_Vulkan_SwiftShader` in the win-trace failure with this CL: https://ci.chromium.org/ui/p/angle/builders/try/win-trace/7307\n\nAll instances of that test name are either:\n\n- Some `--gtest_filter`\n- An indication that it failed:\n\n```\nCaptureFailed: \n\tFramebufferTest_ES3.ReattachToInvalidBaseLevel/ES3_Vulkan_SwiftShader\n```\n\n- A successful run of the test!\n\n```\n[ RUN      ] FramebufferTest_ES3.ReattachToInvalidBaseLevel/ES3_Vulkan_SwiftShader\n[       OK ] FramebufferTest_ES3.ReattachToInvalidBaseLevel/ES3_Vulkan_SwiftShader (60 ms)\n```\n\nSo it does\u0027t make sense, did that fail or pass in the end?",
       "revId": "73d89e985cdd64596faac5b98135158a09faba33",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "442f76dd_dce4a799",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-10-03T14:31:31Z",
+      "side": 1,
+      "message": "Currently when any test fails the entire batch gets the same status. That\u0027s because the same `CaptureFailed` status is assigned to all tests based on the return code of the harness, not the status of individual tests. That\u0027s something that I\u0027m considering improving too, when the json file is available. It seems I\u0027ve already added some logic using that json for tests skipped by the harness. However, if the json file is not produced (e.g. a test actually crashed and brought down the harness without writing the file) then we\u0027ll still have this situation where all the 8 tests will have to be assigned the same status. This is ultimately the reason I\u0027m adding batch labels in this CL. `ReattachToInvalidBaseLevel` was indeed fine, but another test from that batch failed, and now you can find the full log from that batch in the CI log.",
+      "parentUuid": "05bf15e9_2376c1a0",
+      "revId": "73d89e985cdd64596faac5b98135158a09faba33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
