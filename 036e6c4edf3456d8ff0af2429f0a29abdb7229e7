@@ -38,6 +38,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "73208805_7fa9b0e8",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-10-03T20:19:38Z",
+      "side": 1,
+      "message": "this code will force all EGLSync\u0027s to go through locked client wait\n\nEGLSync can be of 2 types, either `SyncHelper` or `SyncHelperNativeFence` (refer to `EGLSyncVk::initialize`)\n\nit is only the `SyncHelperNativeFence` type that cant support unlocked client wait, yet",
+      "range": {
+        "startLine": 684,
+        "startChar": 64,
+        "endLine": 684,
+        "endChar": 95
+      },
+      "revId": "036e6c4edf3456d8ff0af2429f0a29abdb7229e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8764cf7f_b0f8abd2",
         "filename": "src/libANGLE/renderer/vulkan/SyncVk.h",
         "patchSetId": 3
@@ -67,6 +90,52 @@
       "side": 1,
       "message": "I want to space them out, so bisect can point to the right commit in case doing it for external syncs is somehow problematic.",
       "parentUuid": "8764cf7f_b0f8abd2",
+      "revId": "036e6c4edf3456d8ff0af2429f0a29abdb7229e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6135360f_36c87c8c",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-10-03T20:19:38Z",
+      "side": 1,
+      "message": "`ClientWaitLockScope::Locked` sounds redundant, how about `ClientWaitMode`",
+      "range": {
+        "startLine": 57,
+        "startChar": 11,
+        "endLine": 57,
+        "endChar": 30
+      },
+      "revId": "036e6c4edf3456d8ff0af2429f0a29abdb7229e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d21ab72_5f29e590",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-10-03T20:19:38Z",
+      "side": 1,
+      "message": "\"may\" sounds non-deterministic. could be reworded to - If a CPU wait is required, it will be done after releasing the share group lock",
+      "range": {
+        "startLine": 59,
+        "startChar": 30,
+        "endLine": 59,
+        "endChar": 34
+      },
       "revId": "036e6c4edf3456d8ff0af2429f0a29abdb7229e7",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
