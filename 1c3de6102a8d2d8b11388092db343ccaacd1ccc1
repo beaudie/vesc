@@ -94,6 +94,30 @@
       },
       "revId": "1c3de6102a8d2d8b11388092db343ccaacd1ccc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bcf91f9b_651f16fe",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2800,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-10-03T14:52:18Z",
+      "side": 1,
+      "message": "Hoping for input from Shabi here, I was thinking this could be split into specializations like\n```\n\u003cRenderPassCommandBufferHelper\u003ehandleDirtyUniformBuffersImpl() { ... }\n\u003cOutsideRenderPassCommandBufferHelper\u003ehandleDirtyUniformBuffersImpl() { ... }\n```\nwhich I think would avoid the constexpr spaghetti but cause some code duplication; unless there is a way to avoid this duplication yeah it might be close.",
+      "parentUuid": "e9f1363a_ce2af7f7",
+      "range": {
+        "startLine": 2800,
+        "startChar": 8,
+        "endLine": 2800,
+        "endChar": 93
+      },
+      "revId": "1c3de6102a8d2d8b11388092db343ccaacd1ccc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
