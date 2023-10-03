@@ -3068,8 +3068,8 @@ def get_unlocked_tail_call(api, cmd_name):
     # - eglSwapBuffers, eglSwapBuffersWithDamageKHR and
     #   eglSwapBuffersWithFrameTokenANGLE -> May throttle the CPU in tail call
     #
-    # - eglClientWaitSyncKHR, eglClientWaitSync, glClientWaitSync -> May wait on
-    #   fence in tail call
+    # - eglClientWaitSyncKHR, eglClientWaitSync, glClientWaitSync,
+    #   glFinishFenceNV -> May wait on fence in tail call
     #
     if cmd_name in [
             'eglDestroySurface', 'eglMakeCurrent', 'eglReleaseThread', 'eglCreateWindowSurface',
@@ -3079,7 +3079,9 @@ def get_unlocked_tail_call(api, cmd_name):
     ]:
         return 'egl::Display::GetCurrentThreadUnlockedTailCall()->run(nullptr);'
 
-    if cmd_name in ['eglClientWaitSyncKHR', 'eglClientWaitSync', 'glClientWaitSync']:
+    if cmd_name in [
+            'eglClientWaitSyncKHR', 'eglClientWaitSync', 'glClientWaitSync', 'glFinishFenceNV'
+    ]:
         return 'egl::Display::GetCurrentThreadUnlockedTailCall()->run(&returnValue);'
 
     # Otherwise assert that no tail calls where generated
