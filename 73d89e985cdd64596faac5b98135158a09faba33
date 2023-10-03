@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05bf15e9_2376c1a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-03T02:40:36Z",
+      "side": 1,
+      "message": "Thanks for improving things here. The output never makes sense to me though, like look for `FramebufferTest_ES3.ReattachToInvalidBaseLevel/ES3_Vulkan_SwiftShader` in the win-trace failure with this CL: https://ci.chromium.org/ui/p/angle/builders/try/win-trace/7307\n\nAll instances of that test name are either:\n\n- Some `--gtest_filter`\n- An indication that it failed:\n\n```\nCaptureFailed: \n\tFramebufferTest_ES3.ReattachToInvalidBaseLevel/ES3_Vulkan_SwiftShader\n```\n\n- A successful run of the test!\n\n```\n[ RUN      ] FramebufferTest_ES3.ReattachToInvalidBaseLevel/ES3_Vulkan_SwiftShader\n[       OK ] FramebufferTest_ES3.ReattachToInvalidBaseLevel/ES3_Vulkan_SwiftShader (60 ms)\n```\n\nSo it does\u0027t make sense, did that fail or pass in the end?",
+      "revId": "73d89e985cdd64596faac5b98135158a09faba33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
