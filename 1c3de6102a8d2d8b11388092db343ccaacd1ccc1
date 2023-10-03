@@ -197,6 +197,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d743aba_bc059fd8",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-03T17:39:09Z",
+      "side": 1,
+      "message": "That last quote is not complete. The spec itself says:\n\n\u003e SHADER_STORAGE_BARRIER_BIT: Memory accesses using shader buffer variables issued after the barrier will reflect data written by shaders prior to the barrier. Additionally, assignments to and atomic operations performed on shader buffer variables after the barrier will not execute until all memory accesses (e.g., loads, stores, texture fetches, vertex fetches) initiated prior to the barrier complete.\n\nThere\u0027s a similar one for image access (`SHADER_IMAGE_ACCESS_BARRIER_BIT`). Basically all the bits synchronize \"shader write, then something else\", except `SHADER_STORAGE_BARRIER_BIT` and `SHADER_IMAGE_ACCESS_BARRIER_BIT` also synchronize \"anything, then shader write\".",
+      "parentUuid": "2c355410_95e3b591",
+      "revId": "1c3de6102a8d2d8b11388092db343ccaacd1ccc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "273fec2d_d762a2d3",
