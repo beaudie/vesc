@@ -59,6 +59,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "255b1f05_ccde9f20",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 684,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-03T20:42:40Z",
+      "side": 1,
+      "message": "Ok, you know what it\u0027s not worth the hassle. I squashed the follow up change :P",
+      "parentUuid": "73208805_7fa9b0e8",
+      "range": {
+        "startLine": 684,
+        "startChar": 64,
+        "endLine": 684,
+        "endChar": 95
+      },
+      "revId": "036e6c4edf3456d8ff0af2429f0a29abdb7229e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8764cf7f_b0f8abd2",
@@ -117,6 +141,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f56b5372_d3c7b876",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-03T20:42:40Z",
+      "side": 1,
+      "message": "No longer applicable.",
+      "parentUuid": "6135360f_36c87c8c",
+      "range": {
+        "startLine": 57,
+        "startChar": 11,
+        "endLine": 57,
+        "endChar": 30
+      },
+      "revId": "036e6c4edf3456d8ff0af2429f0a29abdb7229e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d21ab72_5f29e590",
@@ -130,6 +178,30 @@
       "writtenOn": "2023-10-03T20:19:38Z",
       "side": 1,
       "message": "\"may\" sounds non-deterministic. could be reworded to - If a CPU wait is required, it will be done after releasing the share group lock",
+      "range": {
+        "startLine": 59,
+        "startChar": 30,
+        "endLine": 59,
+        "endChar": 34
+      },
+      "revId": "036e6c4edf3456d8ff0af2429f0a29abdb7229e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ff74dcf_27f155d0",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-03T20:42:40Z",
+      "side": 1,
+      "message": "No longer applicable.",
+      "parentUuid": "6d21ab72_5f29e590",
       "range": {
         "startLine": 59,
         "startChar": 30,
