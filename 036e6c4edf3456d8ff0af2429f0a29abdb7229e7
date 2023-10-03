@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d60e5e83_f745c7dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-10-03T17:12:52Z",
+      "side": 1,
+      "message": "needs a rebase",
+      "revId": "036e6c4edf3456d8ff0af2429f0a29abdb7229e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8764cf7f_b0f8abd2",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-10-03T17:12:52Z",
+      "side": 1,
+      "message": "given how https://chromium-review.googlesource.com/c/angle/angle/+/4908352 gets rid of this enum, cant we just squash the 2 together?",
+      "revId": "036e6c4edf3456d8ff0af2429f0a29abdb7229e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
