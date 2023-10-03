@@ -54,16 +54,6 @@ class ExternalFence final : angle::NonCopyable
 using SharedExternalFence  = std::shared_ptr<ExternalFence>;
 using MapVkResultToApiType = std::function<void(VkResult, angle::Result, void *)>;
 
-enum class ClientWaitLockScope
-{
-    // SyncHelper::clientWait may defer the wait to the tail of the current call, where the share
-    // group lock is released.
-    Unlocked,
-    // SyncHelper::clientWait should perform any necessary wait immediately and under the share
-    // group lock
-    Locked,
-};
-
 class SyncHelperInterface : angle::NonCopyable
 {
   public:
@@ -75,7 +65,6 @@ class SyncHelperInterface : angle::NonCopyable
                                      ContextVk *contextVk,
                                      bool flushCommands,
                                      uint64_t timeout,
-                                     ClientWaitLockScope lockScope,
                                      MapVkResultToApiType mappingFunction,
                                      void *outResult)                                          = 0;
     virtual angle::Result serverWait(ContextVk *contextVk)                                     = 0;
@@ -102,7 +91,6 @@ class SyncHelper final : public vk::Resource, public SyncHelperInterface
                              ContextVk *contextVk,
                              bool flushCommands,
                              uint64_t timeout,
-                             ClientWaitLockScope lockScope,
                              MapVkResultToApiType mappingFunction,
                              void *resultOut) override;
     angle::Result serverWait(ContextVk *contextVk) override;
@@ -142,7 +130,6 @@ class SyncHelperNativeFence final : public SyncHelperInterface
                              ContextVk *contextVk,
                              bool flushCommands,
                              uint64_t timeout,
-                             ClientWaitLockScope lockScope,
                              MapVkResultToApiType mappingFunction,
                              void *resultOut) override;
     angle::Result serverWait(ContextVk *contextVk) override;
