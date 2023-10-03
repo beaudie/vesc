@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "1812baa9_379111d8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-10-03T16:42:59Z",
+      "side": 1,
+      "message": "\u003e simplify output to make it trivial for someone to fix failures\n\nThat is my goal. Reducing the amount of code allows me to focus on improving things that are directly relevant instead of spending that time figuring out the unnecessary parts. If you feel strongly about this, could you provide specific examples showing the value of this specific Summary section?",
+      "parentUuid": "5961fe79_a8c85786",
+      "range": {
+        "startLine": 21,
+        "startChar": 31,
+        "endLine": 21,
+        "endChar": 38
+      },
+      "revId": "73d89e985cdd64596faac5b98135158a09faba33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "05bf15e9_2376c1a0",
@@ -99,6 +123,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "764b48ec_3023af23",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-10-03T16:42:59Z",
+      "side": 1,
+      "message": "The meaning the CL message is referring to is that `ReplayFailed` means return code -1 from the harness. I don\u0027t think naming this constant would achieve much (but it would add a level of indirection).",
+      "parentUuid": "98974089_b1261bd5",
+      "range": {
+        "startLine": 560,
+        "startChar": 25,
+        "endLine": 560,
+        "endChar": 27
+      },
+      "revId": "73d89e985cdd64596faac5b98135158a09faba33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "48a6be64_68905578",
@@ -122,6 +170,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e53645a_99a998ac",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 752,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-10-03T16:42:59Z",
+      "side": 1,
+      "message": "This is just refactored, the logic is exactly the same as before this CL",
+      "parentUuid": "48a6be64_68905578",
+      "range": {
+        "startLine": 752,
+        "startChar": 20,
+        "endLine": 752,
+        "endChar": 43
+      },
+      "revId": "73d89e985cdd64596faac5b98135158a09faba33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad6d4aea_a200906d",
@@ -135,6 +207,30 @@
       "writtenOn": "2023-10-03T16:19:13Z",
       "side": 1,
       "message": "This log entry isn\u0027t very informative, I can\u0027t tell when it means.",
+      "range": {
+        "startLine": 812,
+        "startChar": 29,
+        "endLine": 812,
+        "endChar": 46
+      },
+      "revId": "73d89e985cdd64596faac5b98135158a09faba33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b52f3e67_fecd275f",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-10-03T16:42:59Z",
+      "side": 1,
+      "message": "Same here, but it\u0027s an improvement to what we had before (batch printed without any context). Do you prefer that I remove it altogether?",
+      "parentUuid": "ad6d4aea_a200906d",
       "range": {
         "startLine": 812,
         "startChar": 29,
