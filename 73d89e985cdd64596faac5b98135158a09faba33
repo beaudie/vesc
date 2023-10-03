@@ -50,6 +50,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "0fff1a66_738ec799",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-10-03T20:58:07Z",
+      "side": 1,
+      "message": "(resolving)",
+      "parentUuid": "1812baa9_379111d8",
+      "range": {
+        "startLine": 21,
+        "startChar": 31,
+        "endLine": 21,
+        "endChar": 38
+      },
+      "revId": "73d89e985cdd64596faac5b98135158a09faba33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "05bf15e9_2376c1a0",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
@@ -255,6 +279,30 @@
       "side": 1,
       "message": "Its an improvement, yes, just wondering if you know what this text means, and can it be changed to something informative.  I\u0027m looking at the function and I think it means `No tests to replay`.",
       "parentUuid": "b52f3e67_fecd275f",
+      "range": {
+        "startLine": 812,
+        "startChar": 29,
+        "endLine": 812,
+        "endChar": 46
+      },
+      "revId": "73d89e985cdd64596faac5b98135158a09faba33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94cd2ea5_b0168e39",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-10-03T20:58:07Z",
+      "side": 1,
+      "message": "Thanks, yeah that looks right. I turned the other logs into logger.error\u0027s and kept this one as info.",
+      "parentUuid": "3532863c_f749296a",
       "range": {
         "startLine": 812,
         "startChar": 29,
