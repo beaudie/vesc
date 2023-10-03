@@ -161,6 +161,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "56f5ca90_30bb1125",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-03T17:20:52Z",
+      "side": 1,
+      "message": "That is not required based on my read of spec. https://registry.khronos.org/OpenGL/specs/es/3.2/es_spec_3.2.pdf\nSection 7.11.2 Shader Memory Access Synchronization\n```\nExplicit synchronization is required to ensure that the effects of buffer and texture data stores performed by shaders will be visible to subsequent operations using\nthe same objects and will not overwrite data still to be read by previously requested\noperations.\n```\nAnd\n```\nbarriers is a bitfield indicating\nthe set of operations that are synchronized with shader stores; the bits used in\nbarriers are as follows:\n```\nSo my understanding here is that glMemoryBarrier call is to ensure previous *shader store* is visible to the operation after barrier. In this case, there is no previus shader store. There is only shader reads (as uniform buffer). Thus glMemoryBarrier call is not required here. That is what dawn is doing. And this test also passes on all native GLES (except pixel4) on bots.\n\nAnd this usage case (read access in renderPass followed by compute write) is exactly this CL try to fix.",
+      "parentUuid": "4d4c498e_fef28722",
+      "revId": "1c3de6102a8d2d8b11388092db343ccaacd1ccc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "273fec2d_d762a2d3",
