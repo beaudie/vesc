@@ -123,6 +123,42 @@
       "parentUuid": "ab7d0cee_820cafcc",
       "revId": "b95dfff118d3be1bb5bf06f3ac5e24d16be881ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ffa5980_51a6557d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-10-03T00:44:57Z",
+      "side": 1,
+      "message": "Thank you Shabi and Roman for the inputs. I have enabled the multisample tests on Linux and Windows vulkan backend, and on swiftshader backends.",
+      "parentUuid": "b47f43be_0823767e",
+      "revId": "b95dfff118d3be1bb5bf06f3ac5e24d16be881ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbe3099b_feaa0ca7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-10-03T00:44:57Z",
+      "side": 1,
+      "message": "Thank you for catching it. I realized the mustpass file for multisample tests are relatively short: \n\ngles31 multisample tests:\nhttps://github.com/KhronosGroup/VK-GL-CTS/blob/main/external/openglcts/data/mustpass/gles/aosp_mustpass/main/gles31-multisample.txt\n\ngles3 multisample tests:\nhttps://github.com/KhronosGroup/VK-GL-CTS/blob/main/external/openglcts/data/mustpass/gles/aosp_mustpass/main/gles3-multisample.txt\n\nI have changed both tests to use 1 shard.",
+      "parentUuid": "42e545ad_b3c3db55",
+      "revId": "b95dfff118d3be1bb5bf06f3ac5e24d16be881ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
