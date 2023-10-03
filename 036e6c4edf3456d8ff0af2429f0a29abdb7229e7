@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e4f3071_42038f3b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-03T17:19:08Z",
+      "side": 1,
+      "message": "Will do before submit / on next update. It\u0027s just the autogen hash that\u0027s conflicting.",
+      "parentUuid": "d60e5e83_f745c7dc",
+      "revId": "036e6c4edf3456d8ff0af2429f0a29abdb7229e7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8764cf7f_b0f8abd2",
