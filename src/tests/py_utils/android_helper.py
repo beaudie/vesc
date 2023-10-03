@@ -271,12 +271,19 @@ def _CompareHashes(local_path, device_path):
 
 
 def _PrepareTestSuite(suite_name):
+    install_apk = True
     apk_path = _ApkPath(suite_name)
     device_apk_path = _GetDeviceApkPath()
 
-    if device_apk_path and _CompareHashes(apk_path, device_apk_path):
-        logging.info('Skipping APK install because host and device hashes match')
-    else:
+    try:
+        if device_apk_path and _CompareHashes(apk_path, device_apk_path):
+            logging.info('Skipping APK install because host and device hashes match')
+            install_apk = False
+    except subprocess.CalledProcessError as e:
+        # non-debuggable test apk installed on device breaks run-as
+        logging.warning('_CompareHashes of apk failed: %s' % e)
+
+    if install_apk:
         logging.info('Installing apk path=%s size=%s' % (apk_path, os.path.getsize(apk_path)))
         _AdbRun(['install', '-r', '-d', apk_path])
 
