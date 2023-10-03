@@ -118,6 +118,64 @@
       },
       "revId": "1c3de6102a8d2d8b11388092db343ccaacd1ccc1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92005562_d7c056f8",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2800,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-03T15:13:59Z",
+      "side": 1,
+      "message": "I need to understand better what the problem is. What the description says is _exactly_ why `glMemoryBarrier` exists. There is a whole machinery for closing the render pass after a `glMemoryBarrier` and only when necessary so we don\u0027t have to have this complication and cost.\n\nIt may be that we need something special for atomic counter buffers if that needs automatic synchronization, but I\u0027d rather have specialized code for atomic counter buffers that do extra checks rather than something generic to redo what `glMemoryBarrier` does.\n\nMaybe the problem here then is that dawn is missing `glMemoryBarrier`.",
+      "parentUuid": "bcf91f9b_651f16fe",
+      "range": {
+        "startLine": 2800,
+        "startChar": 8,
+        "endLine": 2800,
+        "endChar": 93
+      },
+      "revId": "1c3de6102a8d2d8b11388092db343ccaacd1ccc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d4c498e_fef28722",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-03T15:13:59Z",
+      "side": 1,
+      "message": "Missing `glMemoryBarrier(SHADER_STORAGE_BARRIER_BIT)` here.",
+      "revId": "1c3de6102a8d2d8b11388092db343ccaacd1ccc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "273fec2d_d762a2d3",
+        "filename": "src/tests/gl_tests/ComputeShaderTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 964,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-03T15:13:59Z",
+      "side": 1,
+      "message": "I thought there\u0027d be a need for an explicit barrier here, but I guess not 😐",
+      "revId": "1c3de6102a8d2d8b11388092db343ccaacd1ccc1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
