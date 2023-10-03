@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1bd4bd36_83ce1f01",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-10-03T17:29:12Z",
+      "side": 1,
+      "message": "nit: undeline --\u003e underline",
+      "revId": "1249d2af8a9425949c2aafebf0f234c03b557ed3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "618fefb9_48af1af6",
+        "filename": "src/tests/gl_tests/RobustBufferAccessBehaviorTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 849,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-10-03T17:29:12Z",
+      "side": 1,
+      "message": "nit: Is the comment incomplete?",
+      "revId": "1249d2af8a9425949c2aafebf0f234c03b557ed3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
