@@ -184,7 +184,6 @@ angle::Result SyncHelper::clientWait(Context *context,
                                      ContextVk *contextVk,
                                      bool flushCommands,
                                      uint64_t timeout,
-                                     ClientWaitLockScope lockScope,
                                      MapVkResultToApiType mappingFunction,
                                      void *resultOut)
 {
@@ -218,14 +217,7 @@ angle::Result SyncHelper::clientWait(Context *context,
         }
     };
 
-    if (lockScope == ClientWaitLockScope::Locked)
-    {
-        // If the wait cannot be deferred, perform it right away.
-        clientWaitUnlocked(resultOut);
-        return angle::Result::Continue;
-    }
-
-    // Otherwise schedule it to be run at the tail of the current call.
+    // Schedule the wait to be run at the tail of the current call.
     egl::Display::GetCurrentThreadUnlockedTailCall()->add(clientWaitUnlocked);
     return angle::Result::Continue;
 }
@@ -233,8 +225,7 @@ angle::Result SyncHelper::clientWait(Context *context,
 angle::Result SyncHelper::finish(ContextVk *contextVk)
 {
     GLenum result;
-    return clientWait(contextVk, contextVk, true, UINT64_MAX, ClientWaitLockScope::Unlocked,
-                      MapVkResultToGlenum, &result);
+    return clientWait(contextVk, contextVk, true, UINT64_MAX, MapVkResultToGlenum, &result);
 }
 
 angle::Result SyncHelper::serverWait(ContextVk *contextVk)
@@ -480,7 +471,6 @@ angle::Result SyncHelperNativeFence::clientWait(Context *context,
                                                 ContextVk *contextVk,
                                                 bool flushCommands,
                                                 uint64_t timeout,
-                                                ClientWaitLockScope lockScope,
                                                 MapVkResultToApiType mappingFunction,
                                                 void *resultOut)
 {
@@ -497,13 +487,16 @@ angle::Result SyncHelperNativeFence::clientWait(Context *context,
 
     RendererVk *renderer = context->getRenderer();
 
-    status = mExternalFence->wait(renderer->getDevice(), timeout);
-    mappingFunction(status, angle::Result::Continue, resultOut);
-    if (status != VK_TIMEOUT)
-    {
-        ANGLE_VK_TRY(contextVk, status);
-    }
+    auto clientWaitUnlocked = [device = renderer->getDevice(), fence = mExternalFence,
+                               mappingFunction, timeout](void *resultOut) {
+        ANGLE_TRACE_EVENT0("gpu.angle", "SyncHelperNativeFence::clientWait block until finish");
+        ASSERT(resultOut);
 
+        VkResult status = fence->wait(device, timeout);
+        mappingFunction(status, angle::Result::Continue, resultOut);
+    };
+
+    egl::Display::GetCurrentThreadUnlockedTailCall()->add(clientWaitUnlocked);
     return angle::Result::Continue;
 }
 
@@ -596,8 +589,7 @@ angle::Result SyncVk::clientWait(const gl::Context *context,
     bool flush = (flags & GL_SYNC_FLUSH_COMMANDS_BIT) != 0;
 
     return mSyncHelper.clientWait(contextVk, contextVk, flush, static_cast<uint64_t>(timeout),
-                                  vk::ClientWaitLockScope::Unlocked, MapVkResultToGlenum,
-                                  outResult);
+                                  MapVkResultToGlenum, outResult);
 }
 
 angle::Result SyncVk::serverWait(const gl::Context *context, GLbitfield flags, GLuint64 timeout)
@@ -679,10 +671,9 @@ egl::Error EGLSyncVk::clientWait(const egl::Display *display,
     bool flush = (flags & EGL_SYNC_FLUSH_COMMANDS_BIT_KHR) != 0;
 
     ContextVk *contextVk = context ? vk::GetImpl(context) : nullptr;
-    // Unlocked clientWait is not supported for SyncHelperNativeFence, yet.
     if (mSyncHelper->clientWait(vk::GetImpl(display), contextVk, flush,
-                                static_cast<uint64_t>(timeout), vk::ClientWaitLockScope::Locked,
-                                MapVkResultToEglint, outResult) == angle::Result::Stop)
+                                static_cast<uint64_t>(timeout), MapVkResultToEglint,
+                                outResult) == angle::Result::Stop)
     {
         return egl::Error(EGL_BAD_ALLOC);
     }
