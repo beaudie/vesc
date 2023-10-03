@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "5961fe79_a8c85786",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-10-03T16:19:13Z",
+      "side": 1,
+      "message": "I haven\u0027t debugged a win-trace failure in a while, but I think I used the Summary.  Happy to simplify output to make it trivial for someone to fix failures.  Even if it is \"Add this test to expectations to get things green!\"",
+      "range": {
+        "startLine": 21,
+        "startChar": 31,
+        "endLine": 21,
+        "endChar": 38
+      },
+      "revId": "73d89e985cdd64596faac5b98135158a09faba33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "05bf15e9_2376c1a0",
@@ -32,6 +55,92 @@
       "side": 1,
       "message": "Currently when any test fails the entire batch gets the same status. That\u0027s because the same `CaptureFailed` status is assigned to all tests based on the return code of the harness, not the status of individual tests. That\u0027s something that I\u0027m considering improving too, when the json file is available. It seems I\u0027ve already added some logic using that json for tests skipped by the harness. However, if the json file is not produced (e.g. a test actually crashed and brought down the harness without writing the file) then we\u0027ll still have this situation where all the 8 tests will have to be assigned the same status. This is ultimately the reason I\u0027m adding batch labels in this CL. `ReattachToInvalidBaseLevel` was indeed fine, but another test from that batch failed, and now you can find the full log from that batch in the CI log.",
       "parentUuid": "05bf15e9_2376c1a0",
+      "revId": "73d89e985cdd64596faac5b98135158a09faba33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e52dafe1_304024fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-10-03T16:19:13Z",
+      "side": 1,
+      "message": "Iterative progress here is good, with the goal of \"Make it easy for folks to keep this running\".",
+      "revId": "73d89e985cdd64596faac5b98135158a09faba33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98974089_b1261bd5",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 560,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-10-03T16:19:13Z",
+      "side": 1,
+      "message": "Migrating these to descriptive constants might be helpful too, if possible (you mentioned their meaning in the CL message).",
+      "range": {
+        "startLine": 560,
+        "startChar": 25,
+        "endLine": 560,
+        "endChar": 27
+      },
+      "revId": "73d89e985cdd64596faac5b98135158a09faba33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48a6be64_68905578",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 752,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-10-03T16:19:13Z",
+      "side": 1,
+      "message": "The code change LGTM, but not clear why something skipped for capture returns True.",
+      "range": {
+        "startLine": 752,
+        "startChar": 20,
+        "endLine": 752,
+        "endChar": 43
+      },
+      "revId": "73d89e985cdd64596faac5b98135158a09faba33",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad6d4aea_a200906d",
+        "filename": "src/tests/capture_replay_tests.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-10-03T16:19:13Z",
+      "side": 1,
+      "message": "This log entry isn\u0027t very informative, I can\u0027t tell when it means.",
+      "range": {
+        "startLine": 812,
+        "startChar": 29,
+        "endLine": 812,
+        "endChar": 46
+      },
       "revId": "73d89e985cdd64596faac5b98135158a09faba33",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
