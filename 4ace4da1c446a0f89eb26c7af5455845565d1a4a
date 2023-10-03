@@ -16,6 +16,24 @@
       "message": "Hi, haven\u0027t confirmed but this seems like the likely culprit for issues in rolls to Chromium: https://crrev.com/c/4905397\n-\u003e https://ci.chromium.org/ui/p/chromium/builders/ci/Mac11%20Tests/21568/overview",
       "revId": "4ace4da1c446a0f89eb26c7af5455845565d1a4a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40c6cf70_5d03e6ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-10-03T15:03:18Z",
+      "side": 1,
+      "message": "FWIW, looks like build 21570 succeeded on the same builder without reverting ANGLE.",
+      "parentUuid": "f36528e8_e59ea94d",
+      "revId": "4ace4da1c446a0f89eb26c7af5455845565d1a4a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
