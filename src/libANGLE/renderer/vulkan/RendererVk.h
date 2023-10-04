@@ -364,13 +364,11 @@ class RendererVk : angle::NonCopyable
         vk::SharedGarbage garbage(use, std::move(sharedGarbage));
         if (!hasResourceUseSubmitted(use))
         {
-            std::unique_lock<std::mutex> lock(mGarbageMutex);
-            mPendingSubmissionGarbage.push(std::move(garbage));
+            mPendingSubmitGarbageList.add(std::move(garbage));
         }
         else if (!garbage.destroyIfComplete(this))
         {
-            std::unique_lock<std::mutex> lock(mGarbageMutex);
-            mSharedGarbage.push(std::move(garbage));
+            mSharedGarbageList.add(std::move(garbage));
         }
     }
 
@@ -380,25 +378,21 @@ class RendererVk : angle::NonCopyable
     {
         if (hasResourceUseFinished(use))
         {
-            // mSuballocationGarbageDestroyed is atomic, so we dont need mGarbageMutex to
-            // protect it.
             mSuballocationGarbageDestroyed += suballocation.getSize();
             buffer.destroy(mDevice);
             suballocation.destroy(this);
         }
         else
         {
-            std::unique_lock<std::mutex> lock(mGarbageMutex);
+            vk::BufferSuballocationGarbage garbage(use, std::move(suballocation),
+                                                   std::move(buffer));
             if (hasResourceUseSubmitted(use))
             {
-                mSuballocationGarbageSizeInBytes += suballocation.getSize();
-                mSuballocationGarbage.emplace(use, std::move(suballocation), std::move(buffer));
+                mSuballocationGarbageList.add(std::move(garbage));
             }
             else
             {
-                mPendingSuballocationGarbageSizeInBytes += suballocation.getSize();
-                mPendingSubmissionSuballocationGarbage.emplace(use, std::move(suballocation),
-                                                               std::move(buffer));
+                mPendingSubmitSuballocationGarbageList.add(std::move(garbage));
             }
         }
     }
@@ -630,8 +624,7 @@ class RendererVk : angle::NonCopyable
         return mDeviceLocalVertexConversionBufferMemoryTypeIndex;
     }
 
-    void addBufferBlockToOrphanList(vk::BufferBlock *block);
-    void pruneOrphanedBufferBlocks();
+    void addBufferBlockToOrphanList(vk::BufferBlock *block) { mOrphanedBufferBlocks.add(block); }
 
     bool isShadingRateSupported(gl::ShadingRate shadingRate) const
     {
@@ -645,17 +638,13 @@ class RendererVk : angle::NonCopyable
     void onBufferPoolPrune() { mSuballocationGarbageDestroyed = 0; }
     VkDeviceSize getSuballocationGarbageSize() const
     {
-        return mSuballocationGarbageSizeInBytesCachedAtomic.load(std::memory_order_consume);
+        return mSuballocationGarbageList.getTotalBytes();
     }
-    size_t getPendingSubmissionGarbageSize() const
-    {
-        std::unique_lock<std::mutex> lock(mGarbageMutex);
-        return mPendingSubmissionGarbage.size();
-    }
+    size_t getPendingSubmissionGarbageSize() const { return mPendingSubmitGarbageList.size(); }
 
     VkDeviceSize getPendingSuballocationGarbageSize()
     {
-        return mPendingSuballocationGarbageSizeInBytes;
+        return mPendingSubmitSuballocationGarbageList.getTotalBytes();
     }
 
     ANGLE_INLINE VkFilter getPreferredFilterForYUV(VkFilter defaultFilter)
@@ -959,29 +948,22 @@ class RendererVk : angle::NonCopyable
 
     bool mDeviceLost;
 
-    // We group garbage into four categories: mSharedGarbage is the garbage that has already
-    // submitted to vulkan, we expect them to finish in finite time. mPendingSubmissionGarbage
+    // We group garbage into four categories: mSharedGarbageList is the garbage that has already
+    // submitted to vulkan, we expect them to finish in finite time. mPendingSubmitGarbageList
     // is the garbage that is still referenced in the recorded commands. suballocations have its
     // own dedicated garbage list for performance optimization since they tend to be the most
     // common garbage objects. All these four groups of garbage share the same mutex lock.
-    mutable std::mutex mGarbageMutex;
-    vk::SharedGarbageList mSharedGarbage;
-    vk::SharedGarbageList mPendingSubmissionGarbage;
-    vk::SharedBufferSuballocationGarbageList mSuballocationGarbage;
-    vk::SharedBufferSuballocationGarbageList mPendingSubmissionSuballocationGarbage;
-    // Total suballocation garbage size in bytes.
-    VkDeviceSize mSuballocationGarbageSizeInBytes;
-    // Total pending garbage size in bytes.
-    std::atomic<VkDeviceSize> mPendingSuballocationGarbageSizeInBytes;
-    VkDeviceSize mPendingGarbageSizeLimit;
+    vk::SharedGarbageList<vk::SharedGarbage> mSharedGarbageList;
+    vk::SharedGarbageList<vk::SharedGarbage> mPendingSubmitGarbageList;
+    vk::SharedGarbageList<vk::BufferSuballocationGarbage> mSuballocationGarbageList;
+    vk::SharedGarbageList<vk::BufferSuballocationGarbage> mPendingSubmitSuballocationGarbageList;
+    // Holds orphaned BufferBlocks when ShareGroup gets destroyed
+    vk::BufferBlockGarbageList mOrphanedBufferBlocks;
 
-    // Total bytes of suballocation that been destroyed since last prune call. This can be
-    // accessed without mGarbageMutex, thus needs to be atomic to avoid tsan complain.
+    VkDeviceSize mPendingGarbageSizeLimit;
+    // Total bytes of suballocation that been destroyed since last prune call. This needs to be
+    // atomic to avoid tsan complain.
     std::atomic<VkDeviceSize> mSuballocationGarbageDestroyed;
-    // This is the cached value of mSuballocationGarbageSizeInBytes but is accessed with atomic
-    // operation. This can be accessed from different threads without mGarbageMutex, so that
-    // thread sanitizer won't complain.
-    std::atomic<VkDeviceSize> mSuballocationGarbageSizeInBytesCachedAtomic;
 
     vk::FormatTable mFormatTable;
     // A cache of VkFormatProperties as queried from the device over time.
@@ -1005,9 +987,6 @@ class RendererVk : angle::NonCopyable
     uint32_t mHostVisibleVertexConversionBufferMemoryTypeIndex;
     uint32_t mDeviceLocalVertexConversionBufferMemoryTypeIndex;
     size_t mVertexConversionBufferAlignment;
-
-    // Holds orphaned BufferBlocks when ShareGroup gets destroyed
-    vk::BufferBlockPointerVector mOrphanedBufferBlocks;
 
     // All access to the pipeline cache is done through EGL objects so it is thread safe to not
     // use a lock.

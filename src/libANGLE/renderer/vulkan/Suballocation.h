@@ -122,6 +122,43 @@ class BufferBlock final : angle::NonCopyable
 };
 using BufferBlockPointerVector = std::vector<std::unique_ptr<BufferBlock>>;
 
+class BufferBlockGarbageList final : angle::NonCopyable
+{
+  public:
+    ~BufferBlockGarbageList() { ASSERT(mBufferBlocks.empty()); }
+
+    void add(BufferBlock *bufferBlock)
+    {
+        std::unique_lock<std::mutex> lock(mMutex);
+        mBufferBlocks.emplace_back(bufferBlock);
+    }
+
+    void pruneEmptyBufferBlocks(RendererVk *renderer)
+    {
+        std::unique_lock<std::mutex> lock(mMutex);
+        for (auto iter = mBufferBlocks.begin(); iter != mBufferBlocks.end();)
+        {
+            if (!(*iter)->isEmpty())
+            {
+                ++iter;
+                continue;
+            }
+            (*iter)->destroy(renderer);
+            iter = mBufferBlocks.erase(iter);
+        }
+    }
+
+    bool empty() const
+    {
+        std::unique_lock<std::mutex> lock(mMutex);
+        return mBufferBlocks.empty();
+    }
+
+  private:
+    mutable std::mutex mMutex;
+    BufferBlockPointerVector mBufferBlocks;
+};
+
 // BufferSuballocation
 class BufferSuballocation final : angle::NonCopyable
 {
@@ -179,21 +216,28 @@ class BufferSuballocation final : angle::NonCopyable
     VkDeviceSize mSize;
 };
 
-class SharedBufferSuballocationGarbage
+class BufferSuballocationGarbage
 {
   public:
-    SharedBufferSuballocationGarbage() = default;
-    SharedBufferSuballocationGarbage(SharedBufferSuballocationGarbage &&other)
+    BufferSuballocationGarbage() = default;
+    BufferSuballocationGarbage(BufferSuballocationGarbage &&other)
         : mLifetime(other.mLifetime),
           mSuballocation(std::move(other.mSuballocation)),
           mBuffer(std::move(other.mBuffer))
     {}
-    SharedBufferSuballocationGarbage(const ResourceUse &use,
-                                     BufferSuballocation &&suballocation,
-                                     Buffer &&buffer)
+    BufferSuballocationGarbage &operator=(BufferSuballocationGarbage &&other)
+    {
+        mLifetime      = other.mLifetime;
+        mSuballocation = std::move(other.mSuballocation);
+        mBuffer        = std::move(other.mBuffer);
+        return *this;
+    }
+    BufferSuballocationGarbage(const ResourceUse &use,
+                               BufferSuballocation &&suballocation,
+                               Buffer &&buffer)
         : mLifetime(use), mSuballocation(std::move(suballocation)), mBuffer(std::move(buffer))
     {}
-    ~SharedBufferSuballocationGarbage() = default;
+    ~BufferSuballocationGarbage() = default;
 
     bool destroyIfComplete(RendererVk *renderer);
     bool hasResourceUseSubmitted(RendererVk *renderer) const;
@@ -205,7 +249,6 @@ class SharedBufferSuballocationGarbage
     BufferSuballocation mSuballocation;
     Buffer mBuffer;
 };
-using SharedBufferSuballocationGarbageList = std::queue<SharedBufferSuballocationGarbage>;
 
 // BufferBlock implementation.
 ANGLE_INLINE VkMemoryPropertyFlags BufferBlock::getMemoryPropertyFlags() const

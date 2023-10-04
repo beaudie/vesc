@@ -1551,7 +1551,7 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
 
     // The garbage list for single context use objects. The list will be GPU tracked by next
     // submission queueSerial. Note: Resource based shared object should always be added to
-    // renderer's mSharedGarbage.
+    // renderer's mSharedGarbageList.
     vk::GarbageList mCurrentGarbage;
 
     RenderPassCache mRenderPassCache;
