@@ -4394,7 +4394,7 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
     // improves 7%. Disable for MESA Virtio-GPU Venus driver in virtualized environment where
     // batching is preferred.
     ANGLE_FEATURE_CONDITION(&mFeatures, preferSubmitAtFBOBoundary,
-                            (isARM || isSwiftShader) && !isVenus);
+                            isARM || isSwiftShader || isVenus);
 
     // In order to support immutable samplers tied to external formats, we need to overallocate
     // descriptor counts for such immutable samplers
