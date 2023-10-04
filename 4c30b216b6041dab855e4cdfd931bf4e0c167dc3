@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "65dee844_78f3a787",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-04T02:01:59Z",
+      "side": 1,
+      "message": "No guideline, and yes we could capture there. Pretty harmless either way. Having a line of `RendererVk *renderer \u003d ...` at the top of the function or something like that is fairly common in the code at this point.",
+      "parentUuid": "12f862f4_7858154a",
+      "range": {
+        "startLine": 205,
+        "startChar": 31,
+        "endLine": 205,
+        "endChar": 39
+      },
+      "revId": "4c30b216b6041dab855e4cdfd931bf4e0c167dc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "88b96563_0c9e7d2c",
