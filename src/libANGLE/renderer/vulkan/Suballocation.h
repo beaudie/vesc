@@ -122,6 +122,43 @@ class BufferBlock final : angle::NonCopyable
 };
 using BufferBlockPointerVector = std::vector<std::unique_ptr<BufferBlock>>;
 
+class BufferBlockGarbageList final : angle::NonCopyable
+{
+  public:
+    ~BufferBlockGarbageList() { ASSERT(mBufferBlocks.empty()); }
+
+    void add(BufferBlock *bufferBlock)
+    {
+        std::unique_lock<std::mutex> lock(mMutex);
+        mBufferBlocks.emplace_back(bufferBlock);
+    }
+
+    void pruneEmptyBufferBlocks(RendererVk *renderer)
+    {
+        std::unique_lock<std::mutex> lock(mMutex);
+        for (auto iter = mBufferBlocks.begin(); iter != mBufferBlocks.end();)
+        {
+            if (!(*iter)->isEmpty())
+            {
+                ++iter;
+                continue;
+            }
+            (*iter)->destroy(renderer);
+            iter = mBufferBlocks.erase(iter);
+        }
+    }
+
+    bool empty() const
+    {
+        std::unique_lock<std::mutex> lock(mMutex);
+        return mBufferBlocks.empty();
+    }
+
+  private:
+    mutable std::mutex mMutex;
+    BufferBlockPointerVector mBufferBlocks;
+};
+
 // BufferSuballocation
 class BufferSuballocation final : angle::NonCopyable
 {
@@ -188,6 +225,13 @@ class SharedBufferSuballocationGarbage
           mSuballocation(std::move(other.mSuballocation)),
           mBuffer(std::move(other.mBuffer))
     {}
+    SharedBufferSuballocationGarbage &operator=(SharedBufferSuballocationGarbage &&other)
+    {
+        mLifetime      = other.mLifetime;
+        mSuballocation = std::move(other.mSuballocation);
+        mBuffer        = std::move(other.mBuffer);
+        return *this;
+    }
     SharedBufferSuballocationGarbage(const ResourceUse &use,
                                      BufferSuballocation &&suballocation,
                                      Buffer &&buffer)
@@ -205,7 +249,6 @@ class SharedBufferSuballocationGarbage
     BufferSuballocation mSuballocation;
     Buffer mBuffer;
 };
-using SharedBufferSuballocationGarbageList = std::queue<SharedBufferSuballocationGarbage>;
 
 // BufferBlock implementation.
 ANGLE_INLINE VkMemoryPropertyFlags BufferBlock::getMemoryPropertyFlags() const
