@@ -5752,6 +5752,7 @@ FrameCaptureShared::FrameCaptureShared()
       mHasResourceType{},
       mResourceIDToSetupCalls{},
       mMaxAccessedResourceIDs{},
+      mFrameCaptureMutex(nullptr),
       mCaptureTrigger(0),
       mCaptureActive(false),
       mWindowSurfaceContextID({0})
@@ -5915,9 +5916,14 @@ FrameCaptureShared::FrameCaptureShared()
             mOutDirectory += '/';
         }
     }
+
+    mFrameCaptureMutex = new std::mutex();
 }
 
-FrameCaptureShared::~FrameCaptureShared() = default;
+FrameCaptureShared::~FrameCaptureShared()
+{
+    delete mFrameCaptureMutex;
+}
 
 PageRange::PageRange(size_t start, size_t end) : start(start), end(end) {}
 PageRange::~PageRange() = default;
