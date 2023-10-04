@@ -795,6 +795,8 @@ void CaptureGLCallToFrameCapture(CaptureFuncT captureFunc,
                                  gl::Context *context,
                                  ArgsT... captureParams)
 {
+    std::lock_guard<egl::ContextMutex> lock(context->getContextMutex());
+
     FrameCaptureShared *frameCaptureShared = context->getShareGroup()->getFrameCaptureShared();
     if (!frameCaptureShared->isCapturing())
     {
