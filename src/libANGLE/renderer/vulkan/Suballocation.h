@@ -128,10 +128,15 @@ class BufferBlockGarbageList final : angle::NonCopyable
   public:
     ~BufferBlockGarbageList() { ASSERT(mBufferBlocks.empty()); }
 
-    void add(BufferBlock *bufferBlock) { mBufferBlocks.emplace_back(bufferBlock); }
+    void add(BufferBlock *bufferBlock)
+    {
+        std::unique_lock<std::mutex> lock(mMutex);
+        mBufferBlocks.emplace_back(bufferBlock);
+    }
 
     void pruneEmptyBufferBlocks(RendererVk *renderer)
     {
+        std::unique_lock<std::mutex> lock(mMutex);
         if (mBufferBlocks.empty())
         {
             return;
@@ -154,9 +159,14 @@ class BufferBlockGarbageList final : angle::NonCopyable
         std::swap(mBufferBlocks, remainingBlocks);
     }
 
-    bool empty() const { return mBufferBlocks.empty(); }
+    bool empty() const
+    {
+        std::unique_lock<std::mutex> lock(mMutex);
+        return mBufferBlocks.empty();
+    }
 
   private:
+    mutable std::mutex mMutex;
     BufferBlockPointerVector mBufferBlocks;
 };
 
