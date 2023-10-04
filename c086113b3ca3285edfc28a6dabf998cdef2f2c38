@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5e37922_343e321f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4396,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-04T19:42:53Z",
+      "side": 1,
+      "message": "https://i.imgflip.com/3pmcot.jpg?a471048",
+      "range": {
+        "startLine": 4396,
+        "startChar": 51,
+        "endLine": 4396,
+        "endChar": 53
+      },
+      "revId": "c086113b3ca3285edfc28a6dabf998cdef2f2c38",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
