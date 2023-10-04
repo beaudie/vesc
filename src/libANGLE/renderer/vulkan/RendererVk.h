@@ -364,13 +364,11 @@ class RendererVk : angle::NonCopyable
         vk::SharedGarbage garbage(use, std::move(sharedGarbage));
         if (!hasResourceUseSubmitted(use))
         {
-            std::unique_lock<std::mutex> lock(mGarbageMutex);
-            mPendingSubmissionGarbage.push(std::move(garbage));
+            mPendingSubmitGarbageList.add(std::move(garbage));
         }
         else if (!garbage.destroyIfComplete(this))
         {
-            std::unique_lock<std::mutex> lock(mGarbageMutex);
-            mSharedGarbage.push(std::move(garbage));
+            mSharedGarbageList.add(std::move(garbage));
         }
     }
 
@@ -388,17 +386,15 @@ class RendererVk : angle::NonCopyable
         }
         else
         {
-            std::unique_lock<std::mutex> lock(mGarbageMutex);
+            vk::SharedBufferSuballocationGarbage garbage(use, std::move(suballocation),
+                                                         std::move(buffer));
             if (hasResourceUseSubmitted(use))
             {
-                mSuballocationGarbageSizeInBytes += suballocation.getSize();
-                mSuballocationGarbage.emplace(use, std::move(suballocation), std::move(buffer));
+                mSuballocationGarbageList.add(std::move(garbage));
             }
             else
             {
-                mPendingSuballocationGarbageSizeInBytes += suballocation.getSize();
-                mPendingSubmissionSuballocationGarbage.emplace(use, std::move(suballocation),
-                                                               std::move(buffer));
+                mPendingSubmitSuballocationGarbageList.add(std::move(garbage));
             }
         }
     }
@@ -645,17 +641,13 @@ class RendererVk : angle::NonCopyable
     void onBufferPoolPrune() { mSuballocationGarbageDestroyed = 0; }
     VkDeviceSize getSuballocationGarbageSize() const
     {
-        return mSuballocationGarbageSizeInBytesCachedAtomic.load(std::memory_order_consume);
+        return mSuballocationGarbageList.getTotalBytes();
     }
-    size_t getPendingSubmissionGarbageSize() const
-    {
-        std::unique_lock<std::mutex> lock(mGarbageMutex);
-        return mPendingSubmissionGarbage.size();
-    }
+    size_t getPendingSubmissionGarbageSize() const { return mPendingSubmitGarbageList.size(); }
 
     VkDeviceSize getPendingSuballocationGarbageSize()
     {
-        return mPendingSuballocationGarbageSizeInBytes;
+        return mPendingSubmitSuballocationGarbageList.getTotalBytes();
     }
 
     ANGLE_INLINE VkFilter getPreferredFilterForYUV(VkFilter defaultFilter)
@@ -959,29 +951,22 @@ class RendererVk : angle::NonCopyable
 
     bool mDeviceLost;
 
-    // We group garbage into four categories: mSharedGarbage is the garbage that has already
-    // submitted to vulkan, we expect them to finish in finite time. mPendingSubmissionGarbage
+    // We group garbage into four categories: mSharedGarbageList is the garbage that has already
+    // submitted to vulkan, we expect them to finish in finite time. mPendingSubmitGarbageList
     // is the garbage that is still referenced in the recorded commands. suballocations have its
     // own dedicated garbage list for performance optimization since they tend to be the most
     // common garbage objects. All these four groups of garbage share the same mutex lock.
     mutable std::mutex mGarbageMutex;
-    vk::SharedGarbageList mSharedGarbage;
-    vk::SharedGarbageList mPendingSubmissionGarbage;
-    vk::SharedBufferSuballocationGarbageList mSuballocationGarbage;
-    vk::SharedBufferSuballocationGarbageList mPendingSubmissionSuballocationGarbage;
-    // Total suballocation garbage size in bytes.
-    VkDeviceSize mSuballocationGarbageSizeInBytes;
-    // Total pending garbage size in bytes.
-    std::atomic<VkDeviceSize> mPendingSuballocationGarbageSizeInBytes;
+    vk::SharedGarbageList<vk::SharedGarbage> mSharedGarbageList;
+    vk::SharedGarbageList<vk::SharedGarbage> mPendingSubmitGarbageList;
+    vk::SharedGarbageList<vk::SharedBufferSuballocationGarbage> mSuballocationGarbageList;
+    vk::SharedGarbageList<vk::SharedBufferSuballocationGarbage>
+        mPendingSubmitSuballocationGarbageList;
     VkDeviceSize mPendingGarbageSizeLimit;
 
     // Total bytes of suballocation that been destroyed since last prune call. This can be
     // accessed without mGarbageMutex, thus needs to be atomic to avoid tsan complain.
     std::atomic<VkDeviceSize> mSuballocationGarbageDestroyed;
-    // This is the cached value of mSuballocationGarbageSizeInBytes but is accessed with atomic
-    // operation. This can be accessed from different threads without mGarbageMutex, so that
-    // thread sanitizer won't complain.
-    std::atomic<VkDeviceSize> mSuballocationGarbageSizeInBytesCachedAtomic;
 
     vk::FormatTable mFormatTable;
     // A cache of VkFormatProperties as queried from the device over time.

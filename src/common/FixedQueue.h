@@ -18,14 +18,17 @@
 
 namespace angle
 {
-// class FixedQueue: An array based fix storage fifo queue class that supports concurrent push and
+// class FixedQueue: An vector based fifo queue class that supports concurrent push and
 // pop. Caller must ensure queue is not empty before pop and not full before push. This class
-// supports concurrent push and pop from different threads. If caller want to push from two
-// different threads, proper mutex must be used to ensure the access is serialized.
-template <class T, size_t N, class Storage = std::array<T, N>>
+// supports concurrent push and pop from different threads, but only with single producer single
+// consumer usage. If caller want to push from two different threads, proper mutex must be used to
+// ensure the access is serialized. You can also updateCapacity to adjust the storage size, but
+// caller must take proper mutex lock to ensure no one is accessing the storage.
+template <class T, size_t N>
 class FixedQueue final : angle::NonCopyable
 {
   public:
+    using Storage         = std::vector<T>;
     using value_type      = typename Storage::value_type;
     using size_type       = typename Storage::size_type;
     using reference       = typename Storage::reference;
@@ -37,6 +40,10 @@ class FixedQueue final : angle::NonCopyable
     size_type size() const;
     bool empty() const;
     bool full() const;
+
+    size_type capacity() const;
+    // Caller must ensure no one is accessing the data.
+    void updateCapacity(size_t newCapacity);
 
     reference front();
     const_reference front() const;
@@ -62,49 +69,77 @@ class FixedQueue final : angle::NonCopyable
     std::atomic<size_type> mSize;
 };
 
-template <class T, size_t N, class Storage>
-FixedQueue<T, N, Storage>::FixedQueue() : mFrontIndex(0), mEndIndex(0), mSize(0)
-{}
+template <class T, size_t N>
+FixedQueue<T, N>::FixedQueue() : mData(N), mFrontIndex(0), mEndIndex(0), mSize(0)
+{
+    mData.resize(N);
+}
 
-template <class T, size_t N, class Storage>
-FixedQueue<T, N, Storage>::~FixedQueue()
-{}
+template <class T, size_t N>
+FixedQueue<T, N>::~FixedQueue()
+{
+    mData.clear();
+}
 
-template <class T, size_t N, class Storage>
-ANGLE_INLINE typename FixedQueue<T, N, Storage>::size_type FixedQueue<T, N, Storage>::size() const
+template <class T, size_t N>
+ANGLE_INLINE typename FixedQueue<T, N>::size_type FixedQueue<T, N>::size() const
 {
     return mSize;
 }
 
-template <class T, size_t N, class Storage>
-ANGLE_INLINE bool FixedQueue<T, N, Storage>::empty() const
+template <class T, size_t N>
+ANGLE_INLINE bool FixedQueue<T, N>::empty() const
 {
     return mSize == 0;
 }
 
-template <class T, size_t N, class Storage>
-ANGLE_INLINE bool FixedQueue<T, N, Storage>::full() const
+template <class T, size_t N>
+ANGLE_INLINE bool FixedQueue<T, N>::full() const
 {
     return mSize >= N;
 }
 
-template <class T, size_t N, class Storage>
-ANGLE_INLINE typename FixedQueue<T, N, Storage>::reference FixedQueue<T, N, Storage>::front()
+template <class T, size_t N>
+ANGLE_INLINE typename FixedQueue<T, N>::size_type FixedQueue<T, N>::capacity() const
+{
+    return mData.size();
+}
+
+template <class T, size_t N>
+ANGLE_INLINE void FixedQueue<T, N>::updateCapacity(size_t newCapacity)
+{
+    ASSERT(newCapacity > mSize);
+    if (newCapacity < mData.size())
+    {
+        Storage newData(newCapacity);
+        for (value_type &v : mData)
+        {
+            newData.push_back(std::move(v));
+        }
+        std::swap(newData, mData);
+    }
+    else
+    {
+        mData.resize(newCapacity);
+    }
+}
+
+template <class T, size_t N>
+ANGLE_INLINE typename FixedQueue<T, N>::reference FixedQueue<T, N>::front()
 {
     ASSERT(mSize > 0);
     return mData[mFrontIndex % N];
 }
 
-template <class T, size_t N, class Storage>
-ANGLE_INLINE typename FixedQueue<T, N, Storage>::const_reference FixedQueue<T, N, Storage>::front()
-    const
+template <class T, size_t N>
+ANGLE_INLINE typename FixedQueue<T, N>::const_reference FixedQueue<T, N>::front() const
 {
     ASSERT(mSize > 0);
     return mData[mFrontIndex % N];
 }
 
-template <class T, size_t N, class Storage>
-void FixedQueue<T, N, Storage>::push(const value_type &value)
+template <class T, size_t N>
+void FixedQueue<T, N>::push(const value_type &value)
 {
     ASSERT(mSize < N);
     mData[mEndIndex % N] = value;
@@ -115,8 +150,8 @@ void FixedQueue<T, N, Storage>::push(const value_type &value)
     mSize++;
 }
 
-template <class T, size_t N, class Storage>
-void FixedQueue<T, N, Storage>::push(value_type &&value)
+template <class T, size_t N>
+void FixedQueue<T, N>::push(value_type &&value)
 {
     ASSERT(mSize < N);
     mData[mEndIndex % N] = std::move(value);
@@ -127,23 +162,22 @@ void FixedQueue<T, N, Storage>::push(value_type &&value)
     mSize++;
 }
 
-template <class T, size_t N, class Storage>
-ANGLE_INLINE typename FixedQueue<T, N, Storage>::reference FixedQueue<T, N, Storage>::back()
+template <class T, size_t N>
+ANGLE_INLINE typename FixedQueue<T, N>::reference FixedQueue<T, N>::back()
 {
     ASSERT(mSize > 0);
     return mData[(mEndIndex + (N - 1)) % N];
 }
 
-template <class T, size_t N, class Storage>
-ANGLE_INLINE typename FixedQueue<T, N, Storage>::const_reference FixedQueue<T, N, Storage>::back()
-    const
+template <class T, size_t N>
+ANGLE_INLINE typename FixedQueue<T, N>::const_reference FixedQueue<T, N>::back() const
 {
     ASSERT(mSize > 0);
     return mData[(mEndIndex + (N - 1)) % N];
 }
 
-template <class T, size_t N, class Storage>
-void FixedQueue<T, N, Storage>::pop()
+template <class T, size_t N>
+void FixedQueue<T, N>::pop()
 {
     ASSERT(mSize > 0);
     mData[mFrontIndex % N] = value_type();
@@ -153,8 +187,8 @@ void FixedQueue<T, N, Storage>::pop()
     mSize--;
 }
 
-template <class T, size_t N, class Storage>
-void FixedQueue<T, N, Storage>::clear()
+template <class T, size_t N>
+void FixedQueue<T, N>::clear()
 {
     // Size will change in the "pop()" and also by "push()" calls from other thread.
     const size_type localSize = mSize;

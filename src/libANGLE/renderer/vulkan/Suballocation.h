@@ -188,6 +188,13 @@ class SharedBufferSuballocationGarbage
           mSuballocation(std::move(other.mSuballocation)),
           mBuffer(std::move(other.mBuffer))
     {}
+    SharedBufferSuballocationGarbage &operator=(SharedBufferSuballocationGarbage &&other)
+    {
+        mLifetime      = other.mLifetime;
+        mSuballocation = std::move(other.mSuballocation);
+        mBuffer        = std::move(other.mBuffer);
+        return *this;
+    }
     SharedBufferSuballocationGarbage(const ResourceUse &use,
                                      BufferSuballocation &&suballocation,
                                      Buffer &&buffer)
@@ -205,7 +212,6 @@ class SharedBufferSuballocationGarbage
     BufferSuballocation mSuballocation;
     Buffer mBuffer;
 };
-using SharedBufferSuballocationGarbageList = std::queue<SharedBufferSuballocationGarbage>;
 
 // BufferBlock implementation.
 ANGLE_INLINE VkMemoryPropertyFlags BufferBlock::getMemoryPropertyFlags() const
