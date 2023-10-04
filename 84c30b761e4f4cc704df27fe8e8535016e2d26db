@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64e016f0_92cebd95",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-04T17:45:11Z",
+      "side": 1,
+      "message": "I am wondering if the more memory usage you were seeing in other app traces due to this CL is because of we are now allocating VkImage even though previously it will not, and the texture does not have a staged update at all. If yes , then this simple diff should fix that.\n```\nif(!mImage-\u003ehasStagedUpdateInAllocatedLevels()\n{\n  return false;\n}\n```",
+      "revId": "84c30b761e4f4cc704df27fe8e8535016e2d26db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
