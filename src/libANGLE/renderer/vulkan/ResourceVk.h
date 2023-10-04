@@ -10,6 +10,7 @@
 #ifndef LIBANGLE_RENDERER_VULKAN_RESOURCEVK_H_
 #define LIBANGLE_RENDERER_VULKAN_RESOURCEVK_H_
 
+#include "common/FixedQueue.h"
 #include "libANGLE/HandleAllocator.h"
 #include "libANGLE/renderer/vulkan/vk_utils.h"
 
@@ -148,7 +149,7 @@ class ResourceUse final
 };
 std::ostream &operator<<(std::ostream &os, const ResourceUse &use);
 
-class SharedGarbage
+class SharedGarbage final : angle::NonCopyable
 {
   public:
     SharedGarbage();
@@ -159,13 +160,97 @@ class SharedGarbage
 
     bool destroyIfComplete(RendererVk *renderer);
     bool hasResourceUseSubmitted(RendererVk *renderer) const;
+    VkDeviceSize getSize() const { return 0; }
 
   private:
     ResourceUse mLifetime;
     GarbageList mGarbage;
 };
 
-using SharedGarbageList = std::queue<SharedGarbage>;
+template <class T>
+class SharedGarbageList final : angle::NonCopyable
+{
+  public:
+    SharedGarbageList() : mQueue(kInitialQueueCapacity), mTotalBytes(0) {}
+    ~SharedGarbageList() { ASSERT(mQueue.empty()); }
+
+    void add(T &&garbage)
+    {
+        std::unique_lock<std::mutex> enqueueLock(mEnqueueMutex);
+        mTotalBytes += garbage.getSize();
+        addGarbageLocked(std::move(garbage));
+    }
+
+    bool empty() const { return mQueue.empty(); }
+    size_t size() const { return mQueue.size(); }
+    VkDeviceSize getTotalBytes() const { return mTotalBytes; }
+
+    VkDeviceSize cleanup(RendererVk *renderer)
+    {
+        std::unique_lock<std::mutex> lock(mDequeueMutex);
+        VkDeviceSize bytesDestroyed = 0;
+        while (!mQueue.empty())
+        {
+            T &garbage = mQueue.front();
+            if (!garbage.destroyIfComplete(renderer))
+            {
+                break;
+            }
+            bytesDestroyed += garbage.getSize();
+            mQueue.pop();
+        }
+        mTotalBytes -= bytesDestroyed;
+        return bytesDestroyed;
+    }
+
+    void moveSubmittedGarbageToList(RendererVk *renderer, SharedGarbageList<T> *garbageList)
+    {
+        std::unique_lock<std::mutex> enqueueLock(mEnqueueMutex);
+        std::unique_lock<std::mutex> dequeueLock(mDequeueMutex);
+        std::unique_lock<std::mutex> garbageListEnqueueLock(garbageList->mEnqueueMutex);
+
+        // Check if pending garbage is still pending. If not, move them to the garbage list.
+        size_t count            = mQueue.size();
+        VkDeviceSize bytesMoved = 0;
+        for (size_t i = 0; i < count; i++)
+        {
+            T &garbage = mQueue.front();
+            if (garbage.hasResourceUseSubmitted(renderer))
+            {
+                bytesMoved += garbage.getSize();
+                garbageList->addGarbageLocked(std::move(garbage));
+            }
+            else
+            {
+                mQueue.push(std::move(garbage));
+            }
+            mQueue.pop();
+        }
+        mTotalBytes -= bytesMoved;
+        garbageList->mTotalBytes += bytesMoved;
+    }
+
+  private:
+    void addGarbageLocked(T &&garbage)
+    {
+        // Expand the queue storage if we only have one empty space left. That one empty space is
+        // required by moveSubmittedGarbageToList so that we do not need to allocate another
+        // temporary storage.
+        if (mQueue.size() >= mQueue.capacity() - 1)
+        {
+            std::unique_lock<std::mutex> dequeueLock(mDequeueMutex);
+            size_t newCapacity = mQueue.capacity() << 1;
+            mQueue.updateCapacity(newCapacity);
+        }
+        mQueue.push(std::move(garbage));
+    }
+
+    static constexpr size_t kInitialQueueCapacity = 64;
+    std::mutex mEnqueueMutex;
+    std::mutex mDequeueMutex;
+    angle::FixedQueue<T> mQueue;
+    std::atomic<VkDeviceSize> mTotalBytes;
+};
 
 // This is a helper class for back-end objects used in Vk command buffers. They keep a record
 // of their use in ANGLE and VkQueues via ResourceUse.
