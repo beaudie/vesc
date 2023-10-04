@@ -18,25 +18,32 @@
 
 namespace angle
 {
-// class FixedQueue: An array based fix storage fifo queue class that supports concurrent push and
+// class FixedQueue: An vector based fifo queue class that supports concurrent push and
 // pop. Caller must ensure queue is not empty before pop and not full before push. This class
-// supports concurrent push and pop from different threads. If caller want to push from two
-// different threads, proper mutex must be used to ensure the access is serialized.
-template <class T, size_t N, class Storage = std::array<T, N>>
+// supports concurrent push and pop from different threads, but only with single producer single
+// consumer usage. If caller want to push from two different threads, proper mutex must be used to
+// ensure the access is serialized. You can also updateCapacity to adjust the storage size, but
+// caller must take proper mutex lock to ensure no one is accessing the storage.
+template <class T>
 class FixedQueue final : angle::NonCopyable
 {
   public:
+    using Storage         = std::vector<T>;
     using value_type      = typename Storage::value_type;
     using size_type       = typename Storage::size_type;
     using reference       = typename Storage::reference;
     using const_reference = typename Storage::const_reference;
 
-    FixedQueue();
+    FixedQueue(size_t capacity);
     ~FixedQueue();
 
     size_type size() const;
     bool empty() const;
     bool full() const;
+
+    size_type capacity() const;
+    // Caller must ensure no one is accessing the data.
+    void updateCapacity(size_t newCapacity);
 
     reference front();
     const_reference front() const;
@@ -60,54 +67,86 @@ class FixedQueue final : angle::NonCopyable
     size_type mEndIndex;
     // Atomic so that we can support concurrent push and pop.
     std::atomic<size_type> mSize;
+    size_type mMaxSize;
 };
 
-template <class T, size_t N, class Storage>
-FixedQueue<T, N, Storage>::FixedQueue() : mFrontIndex(0), mEndIndex(0), mSize(0)
-{}
+template <class T>
+FixedQueue<T>::FixedQueue(size_t capacity)
+    : mFrontIndex(0), mEndIndex(0), mSize(0), mMaxSize(capacity)
+{
+    mData.resize(mMaxSize);
+}
 
-template <class T, size_t N, class Storage>
-FixedQueue<T, N, Storage>::~FixedQueue()
-{}
+template <class T>
+FixedQueue<T>::~FixedQueue()
+{
+    mData.clear();
+}
 
-template <class T, size_t N, class Storage>
-ANGLE_INLINE typename FixedQueue<T, N, Storage>::size_type FixedQueue<T, N, Storage>::size() const
+template <class T>
+ANGLE_INLINE typename FixedQueue<T>::size_type FixedQueue<T>::size() const
 {
     return mSize;
 }
 
-template <class T, size_t N, class Storage>
-ANGLE_INLINE bool FixedQueue<T, N, Storage>::empty() const
+template <class T>
+ANGLE_INLINE bool FixedQueue<T>::empty() const
 {
     return mSize == 0;
 }
 
-template <class T, size_t N, class Storage>
-ANGLE_INLINE bool FixedQueue<T, N, Storage>::full() const
+template <class T>
+ANGLE_INLINE bool FixedQueue<T>::full() const
 {
-    return mSize >= N;
+    return mSize >= mMaxSize;
 }
 
-template <class T, size_t N, class Storage>
-ANGLE_INLINE typename FixedQueue<T, N, Storage>::reference FixedQueue<T, N, Storage>::front()
+template <class T>
+ANGLE_INLINE typename FixedQueue<T>::size_type FixedQueue<T>::capacity() const
+{
+    return mMaxSize;
+}
+
+template <class T>
+ANGLE_INLINE void FixedQueue<T>::updateCapacity(size_t newCapacity)
+{
+    ASSERT(newCapacity >= mSize);
+    if (newCapacity < mData.size())
+    {
+        Storage newData(newCapacity);
+        for (value_type &v : mData)
+        {
+            newData.push_back(std::move(v));
+        }
+        std::swap(newData, mData);
+    }
+    else
+    {
+        mData.resize(newCapacity);
+    }
+    mMaxSize = newCapacity;
+    ASSERT(mData.size() == mMaxSize);
+}
+
+template <class T>
+ANGLE_INLINE typename FixedQueue<T>::reference FixedQueue<T>::front()
 {
     ASSERT(mSize > 0);
-    return mData[mFrontIndex % N];
+    return mData[mFrontIndex % mMaxSize];
 }
 
-template <class T, size_t N, class Storage>
-ANGLE_INLINE typename FixedQueue<T, N, Storage>::const_reference FixedQueue<T, N, Storage>::front()
-    const
+template <class T>
+ANGLE_INLINE typename FixedQueue<T>::const_reference FixedQueue<T>::front() const
 {
     ASSERT(mSize > 0);
-    return mData[mFrontIndex % N];
+    return mData[mFrontIndex % mMaxSize];
 }
 
-template <class T, size_t N, class Storage>
-void FixedQueue<T, N, Storage>::push(const value_type &value)
+template <class T>
+void FixedQueue<T>::push(const value_type &value)
 {
-    ASSERT(mSize < N);
-    mData[mEndIndex % N] = value;
+    ASSERT(mSize < mMaxSize);
+    mData[mEndIndex % mMaxSize] = value;
     mEndIndex++;
     // We must increment size last, after we wrote data. That way if another thread is doing
     // `if(!dq.empty()){ s = dq.front(); }`, it will only see not empty until element is fully
@@ -115,11 +154,11 @@ void FixedQueue<T, N, Storage>::push(const value_type &value)
     mSize++;
 }
 
-template <class T, size_t N, class Storage>
-void FixedQueue<T, N, Storage>::push(value_type &&value)
+template <class T>
+void FixedQueue<T>::push(value_type &&value)
 {
-    ASSERT(mSize < N);
-    mData[mEndIndex % N] = std::move(value);
+    ASSERT(mSize < mMaxSize);
+    mData[mEndIndex % mMaxSize] = std::move(value);
     mEndIndex++;
     // We must increment size last, after we wrote data. That way if another thread is doing
     // `if(!dq.empty()){ s = dq.front(); }`, it will only see not empty until element is fully
@@ -127,34 +166,33 @@ void FixedQueue<T, N, Storage>::push(value_type &&value)
     mSize++;
 }
 
-template <class T, size_t N, class Storage>
-ANGLE_INLINE typename FixedQueue<T, N, Storage>::reference FixedQueue<T, N, Storage>::back()
+template <class T>
+ANGLE_INLINE typename FixedQueue<T>::reference FixedQueue<T>::back()
 {
     ASSERT(mSize > 0);
-    return mData[(mEndIndex + (N - 1)) % N];
+    return mData[(mEndIndex + (mMaxSize - 1)) % mMaxSize];
 }
 
-template <class T, size_t N, class Storage>
-ANGLE_INLINE typename FixedQueue<T, N, Storage>::const_reference FixedQueue<T, N, Storage>::back()
-    const
+template <class T>
+ANGLE_INLINE typename FixedQueue<T>::const_reference FixedQueue<T>::back() const
 {
     ASSERT(mSize > 0);
-    return mData[(mEndIndex + (N - 1)) % N];
+    return mData[(mEndIndex + (mMaxSize - 1)) % mMaxSize];
 }
 
-template <class T, size_t N, class Storage>
-void FixedQueue<T, N, Storage>::pop()
+template <class T>
+void FixedQueue<T>::pop()
 {
     ASSERT(mSize > 0);
-    mData[mFrontIndex % N] = value_type();
+    mData[mFrontIndex % mMaxSize] = value_type();
     mFrontIndex++;
     // We must decrement size last, after we wrote data. That way if another thread is doing
     // `if(!dq.full()){ dq.push; }`, it will only see not full until element is fully popped.
     mSize--;
 }
 
-template <class T, size_t N, class Storage>
-void FixedQueue<T, N, Storage>::clear()
+template <class T>
+void FixedQueue<T>::clear()
 {
     // Size will change in the "pop()" and also by "push()" calls from other thread.
     const size_type localSize = mSize;
