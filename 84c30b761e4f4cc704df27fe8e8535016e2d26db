@@ -16,6 +16,24 @@
       "message": "I am wondering if the more memory usage you were seeing in other app traces due to this CL is because of we are now allocating VkImage even though previously it will not, and the texture does not have a staged update at all. If yes , then this simple diff should fix that.\n```\nif(!mImage-\u003ehasStagedUpdateInAllocatedLevels()\n{\n  return false;\n}\n```",
       "revId": "84c30b761e4f4cc704df27fe8e8535016e2d26db",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc51e8be_743dd332",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 663,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-10-04T20:09:25Z",
+      "side": 1,
+      "message": "Thanks. I added this code in `isMutableTextureConsistentlySpecifiedForFlush()`. It looks like it reverses the memory usage changes from this CL, including the apps with memory improvements.\n(The function `hasStagedUpdateInAllocatedLevels()` returns false, since `getLastAllocatedLevel()` is -1 when it is called, resulting in the loop inside the function being skipped. I tried using a new function to hard-code checking the first level, but it had no effect.)\n\nBefore this CL, we still allocate those mutable textures updates as buffer suballocations. For the unused textures, they would remain as buffers for the rest of the trace. However, I have to check how much extra memory results from moving mutable textures from suballocation into image objects.",
+      "parentUuid": "64e016f0_92cebd95",
+      "revId": "84c30b761e4f4cc704df27fe8e8535016e2d26db",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
