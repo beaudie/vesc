@@ -16,6 +16,52 @@
       "message": "hi all,\nplease help to review the changes.\n\nthanks\nhailin",
       "revId": "4732b9c2fe770597c1a24146e0aa16d69dbcc40b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "467122b6_ce975905",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 7583,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-05T22:25:50Z",
+      "side": 1,
+      "message": "You don\u0027t need to pass this to appendSubresourceUpdate. I think you can use update.buffer.formatID for this purpose, which will be more correct. update.buffer.formatID should represent the actual format of update.buffer. If incoming data is ETC format, if you did CPU transcode, then it should set to BC Format. If CPU did not do transcoding, then it should set to ETC format. Then in flushStagedUpdate, you can check update.buffer.FormatID and mActualFormatID and if they mismatch, you need transCoding. See the other comment for more reference as well.",
+      "range": {
+        "startLine": 7583,
+        "startChar": 68,
+        "endLine": 7583,
+        "endChar": 89
+      },
+      "revId": "4732b9c2fe770597c1a24146e0aa16d69dbcc40b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d56df4b_23d91dbe",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 51
+      },
+      "lineNbr": 8713,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-05T22:25:50Z",
+      "side": 1,
+      "message": "Here you can also check against mSubresourceUpdates\u0027s format instead of mIntendedFormat. If update.buffer.formatID \u003d\u003d BC Format, then no need for transCoding (i.e, CPU already did the transCoding). If one of it is in ETC format, then you do need transCoding.",
+      "range": {
+        "startLine": 8713,
+        "startChar": 8,
+        "endLine": 8713,
+        "endChar": 64
+      },
+      "revId": "4732b9c2fe770597c1a24146e0aa16d69dbcc40b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
