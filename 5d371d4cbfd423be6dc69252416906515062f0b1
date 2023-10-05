@@ -16,6 +16,47 @@
       "message": "Hi Alexey, I\u0027m implementing the render to texture extension that I had to disable some months ago as the implementation was incomplete. The missing part was that angle didn\u0027t create an implicit MS texture that Metal requires when using MSAA with the resolveTexture set as the original texture.\n\nAlso, if we have 2 framebuffers using the same texture, each of them have to syncrhonize its implicit texture with the real texture as the contents of the real texture will be overwritten regardless of the scissors (scissors are applied to the implicit texture instead). That required to fix the MultisampledRenderToTextureTest.DrawNonMultisampledThenMultisampled test.\n\nThough, I still have troubles with the MultisampledRenderToTextureES3Test.RenderbufferClearThenBlitDepthStencil test on intel GPU. It does pass on Apple silicon and AMD though. Can it be the same issue as [1]?\n\nMay I ask to help with this? \n\n[1] https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/tests/angle_end2end_tests_expectations.txt;l\u003d1151?q\u003d__DepthRangeReduced_Clipped_VertexDepthInsideClipVolume_FragmentDepthBetweenZeroAndNearPlane_\u0026ss\u003dchromium",
       "revId": "5d371d4cbfd423be6dc69252416906515062f0b1",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cf14c17_f85cc782",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-10-05T13:49:41Z",
+      "side": 1,
+      "message": "The [1] failures are caused by interactions between `gl_FragDepth` fragment output and `GL_DEPTH_RANGE` pipeline state so they are unrelated to MSRTT.\n\nThe only idea I have is to try changing `GL_DEPTH24_STENCIL8` to `GL_DEPTH32F_STENCIL8` in the test. The D24S8 format is always emulated on AMD (see `forceD24S8AsUnsupported`), maybe it has issues on Intel as well.",
+      "parentUuid": "6c66903f_bc3a9252",
+      "revId": "5d371d4cbfd423be6dc69252416906515062f0b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0f64386_79ac87e7",
+        "filename": "src/libANGLE/renderer/metal/TextureMtl.mm",
+        "patchSetId": 17
+      },
+      "lineNbr": 1490,
+      "author": {
+        "id": 1394635
+      },
+      "writtenOn": "2023-10-05T13:49:41Z",
+      "side": 1,
+      "message": "This condition is not needed because multisampling cannot be used together with pixel local storage.",
+      "range": {
+        "startLine": 1489,
+        "startChar": 0,
+        "endLine": 1490,
+        "endChar": 83
+      },
+      "revId": "5d371d4cbfd423be6dc69252416906515062f0b1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
