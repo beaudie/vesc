@@ -16,6 +16,24 @@
       "message": "do we need to sort this list? the above seems sorted by test names.",
       "revId": "221a1400cd6ffe0ccaf3e61709939240c33cf2fe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d376d1b_53d8eebc",
+        "filename": "src/tests/deqp_support/angle_deqp_gtest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-10-05T17:18:03Z",
+      "side": 1,
+      "message": "I think the above list is not strictly ordered, either. For example, `deqp_gles3_rotate*` tests came after `deqp_khr*`.\n\nThe order of expectation files here also needs to match with index order in `GetTestModuleIndex()` at line 280. If I insert the new tests in the middle of the list, I will need to change the index numbers in `GetTestModuleIndex()` (pushing index back by 1 or 2), which I think is unnecessary changes.",
+      "parentUuid": "61d39f1a_8ec84234",
+      "revId": "221a1400cd6ffe0ccaf3e61709939240c33cf2fe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
