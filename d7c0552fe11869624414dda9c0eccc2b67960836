@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6ef3aa1_fd78382d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-05T02:19:13Z",
+      "side": 1,
+      "message": "Driving by",
+      "revId": "d7c0552fe11869624414dda9c0eccc2b67960836",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ced7f3d_fa517e89",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 798,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-05T02:19:13Z",
+      "side": 1,
+      "message": "Can the context lock be already taken (or would be afterwards) for any reason? Please make sure this is not accidentally requiring this mutex to be recursive (which it already is on Android, but we\u0027d like to eventually get rid of that).\n\nIf there\u0027s any risk of that, perhaps capture can have its own global lock?",
+      "revId": "d7c0552fe11869624414dda9c0eccc2b67960836",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
