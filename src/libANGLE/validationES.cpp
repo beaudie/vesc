@@ -192,6 +192,8 @@ bool ValidReadPixelsFormatType(const Context *context,
             // ReadPixels with BGRA even if the extension is not present
             switch (format)
             {
+                case GL_RGB:
+                    return type == GL_UNSIGNED_BYTE;
                 case GL_RGBA:
                     return type == GL_UNSIGNED_BYTE ||
                            (context->getExtensions().textureNorm16EXT &&
@@ -7510,7 +7512,6 @@ bool ValidateReadPixelsBase(const Context *context,
             currentType   = readFramebuffer->getImplementationColorReadType(context);
             break;
     }
-
     bool validFormatTypeCombination =
         ValidReadPixelsFormatType(context, readBuffer->getFormat().info, format, type);
 

@@ -93,10 +93,10 @@ const std::vector<const char *> gTestSuiteConfigParameters[] = {
     {"--deqp-gl-config-name=rgba8888d24s8ms0"},  // gles2
     {"--deqp-gl-config-name=rgba8888d24s8ms0"},  // gles3
     {"--deqp-gl-config-name=rgba8888d24s8ms0"},  // gles31
-    {"--deqp-gl-config-name=rgba8888d24s8ms0"},  // gles2-khr
-    {"--deqp-gl-config-name=rgba8888d24s8ms0"},  // gles3-khr
-    {"--deqp-gl-config-name=rgba8888d24s8ms0"},  // gles31-khr
-    {"--deqp-gl-config-name=rgba8888d24s8ms0"},  // gles32-khr
+    {},                                          // gles2-khr
+    {},                                          // gles3-khr
+    {},                                          // gles31-khr
+    {},                                          // gles32-khr
     {"--deqp-gl-config-name=rgba8888d24s8ms0"},  // gles2-khr-noctx
     {"--deqp-gl-config-name=rgba8888d24s8ms0"},  // gles32-khr-noctx
     {"--deqp-gl-config-name=rgba8888d24s8ms0"},  // gles32-khr-single
@@ -157,15 +157,30 @@ constexpr APIInfo kEGLDisplayAPIs[] = {
     {"x11", GPUTestConfig::kAPIUnknown},
 };
 
-constexpr char kdEQPEGLString[]     = "--deqp-egl-display-type=";
-constexpr char kANGLEEGLString[]    = "--use-angle=";
-constexpr char kANGLEPreRotation[]  = "--emulated-pre-rotation=";
-constexpr char kdEQPCaseString[]    = "--deqp-case=";
-constexpr char kVerboseString[]     = "--verbose";
-constexpr char kRenderDocString[]   = "--renderdoc";
-constexpr char kNoRenderDocString[] = "--no-renderdoc";
-constexpr char kdEQPFlagsPrefix[]   = "--deqp-";
-constexpr char kGTestFilter[]       = "--gtest_filter=";
+constexpr char kdEQPEGLString[]             = "--deqp-egl-display-type=";
+constexpr char kANGLEEGLString[]            = "--use-angle=";
+constexpr char kANGLEPreRotation[]          = "--emulated-pre-rotation=";
+constexpr char kdEQPCaseString[]            = "--deqp-case=";
+constexpr char kVerboseString[]             = "--verbose";
+constexpr char kRenderDocString[]           = "--renderdoc";
+constexpr char kNoRenderDocString[]         = "--no-renderdoc";
+constexpr char kdEQPFlagsPrefix[]           = "--deqp-";
+constexpr char kGTestFilter[]               = "--gtest_filter=";
+constexpr char kdEQPSurfaceWidth[]          = "--deqp-surface-width=";
+constexpr char kdEQPSurfaceHeight[]         = "--deqp-surface-height=";
+constexpr char kdEQPBaseSeed[]              = "--deqp-base-seed";
+constexpr const char gdEQPLogImagesString[] = "--deqp-log-images=";
+
+// Use the config name defined in gTestSuiteConfigParameters by default
+// If gEGLConfigNameFromCmdLine is overwritten by --deqp-gl-config-name passed from command
+// line arguments, for example:
+// out/Debug/angle_deqp_egl_tests --verbose --deqp-gl-config-name=rgba8888d24s8
+// use gEGLConfigNameFromCmdLine (rgba8888d24s8) instead.
+// Invalid --deqp-gl-config-name value passed from command line arguments will be caught by
+// glu::parseConfigBitsFromName() defined in gluRenderConfig.cpp, and it will cause tests
+// to fail
+constexpr const char gdEQPEGLConfigNameString[] = "--deqp-gl-config-name=";
+const char *gEGLConfigNameFromCmdLine           = "";
 
 angle::base::NoDestructor<std::vector<char>> gFilterStringBuffer;
 
@@ -191,19 +206,6 @@ dEQPOptions gOptions    = {
     kDefaultPreRotation,      // preRotation
     kEnableRenderDocCapture,  // enableRenderDocCapture
 };
-
-constexpr const char gdEQPEGLConfigNameString[] = "--deqp-gl-config-name=";
-constexpr const char gdEQPLogImagesString[]     = "--deqp-log-images=";
-
-// Use the config name defined in gTestSuiteConfigParameters by default
-// If gEGLConfigNameFromCmdLine is overwritten by --deqp-gl-config-name passed from command
-// line arguments, for example:
-// out/Debug/angle_deqp_egl_tests --verbose --deqp-gl-config-name=rgba8888d24s8
-// use gEGLConfigNameFromCmdLine (rgba8888d24s8) instead.
-// Invalid --deqp-gl-config-name value passed from command line arguments will be caught by
-// glu::parseConfigBitsFromName() defined in gluRenderConfig.cpp, and it will cause tests
-// to fail
-const char *gEGLConfigNameFromCmdLine = "";
 
 std::vector<const char *> gdEQPForwardFlags;
 
@@ -646,21 +648,33 @@ void dEQPTest::SetUpTestSuite()
     std::string apiArgString = std::string(kdEQPEGLString) + targetApi;
     argv.push_back(apiArgString.c_str());
 
-    std::string configNameFromCmdLineString =
-        std::string(gdEQPEGLConfigNameString) + gEGLConfigNameFromCmdLine;
-
     // Add test config parameters
+    std::string deqpGlConfigName = "";
     for (const char *configParam : gTestSuiteConfigParameters[GetTestModuleIndex()])
     {
-        // Check if we pass --deqp-gl-config-name from the command line, if yes, use the one from
-        // command line
-        if (std::strlen(gEGLConfigNameFromCmdLine) > 0 &&
-            std::strncmp(configParam, gdEQPEGLConfigNameString, strlen(gdEQPEGLConfigNameString)) ==
-                0)
+        // if --deqp-gl-config-name is found, defer pushing into argv, because we might want
+        // overwrite it with --deqp-gl-config-name passed from command line.
+        if (std::strncmp(configParam, gdEQPEGLConfigNameString, strlen(gdEQPEGLConfigNameString)) ==
+            0)
         {
-            configParam = configNameFromCmdLineString.c_str();
+            deqpGlConfigName = std::string(configParam);
+            continue;
         }
         argv.push_back(configParam);
+    }
+
+    // Check if we pass --deqp-gl-config-name from the command line.
+    if (std::strlen(gEGLConfigNameFromCmdLine) > 0)
+    {
+        // if --deqp-gl-config-name is passed from command line, use the one from command line
+        std::string configNameFromCmdLineString =
+            std::string(gdEQPEGLConfigNameString) + gEGLConfigNameFromCmdLine;
+        argv.push_back(configNameFromCmdLineString.c_str());
+    }
+    else if (!deqpGlConfigName.empty())
+    {
+        // if not, use the one from gTestSuiteConfigParameters
+        argv.push_back(deqpGlConfigName.c_str());
     }
 
     // Hide SwiftShader window to prevent a race with Xvfb causing hangs on test bots
@@ -940,6 +954,18 @@ int RunGLCTSTests(int *argc, char **argv)
             gOptions.enableRenderDocCapture = false;
         }
         else if (strncmp(argv[argIndex], kdEQPFlagsPrefix, strlen(kdEQPFlagsPrefix)) == 0)
+        {
+            gdEQPForwardFlags.push_back(argv[argIndex]);
+        }
+        else if (strncmp(argv[argIndex], kdEQPSurfaceWidth, strlen(kdEQPSurfaceWidth)) == 0)
+        {
+            gdEQPForwardFlags.push_back(argv[argIndex]);
+        }
+        else if (strncmp(argv[argIndex], kdEQPSurfaceHeight, strlen(kdEQPSurfaceHeight)) == 0)
+        {
+            gdEQPForwardFlags.push_back(argv[argIndex]);
+        }
+        else if (strncmp(argv[argIndex], kdEQPBaseSeed, strlen(kdEQPBaseSeed)) == 0)
         {
             gdEQPForwardFlags.push_back(argv[argIndex]);
         }
