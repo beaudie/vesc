@@ -22,6 +22,30 @@
       },
       "revId": "be9e40ecc539e9b55ebe5c611f4060c1883728d4",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c04bcb7e_e3e0aa48",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 1014,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-06T15:20:10Z",
+      "side": 1,
+      "message": "Yes. Makes sure we never accidentally introduce more flaky tests like these.",
+      "parentUuid": "94cd25c8_79ba16f3",
+      "range": {
+        "startLine": 1014,
+        "startChar": 99,
+        "endLine": 1014,
+        "endChar": 111
+      },
+      "revId": "be9e40ecc539e9b55ebe5c611f4060c1883728d4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
