@@ -7510,7 +7510,6 @@ bool ValidateReadPixelsBase(const Context *context,
             currentType   = readFramebuffer->getImplementationColorReadType(context);
             break;
     }
-
     bool validFormatTypeCombination =
         ValidReadPixelsFormatType(context, readBuffer->getFormat().info, format, type);
 
