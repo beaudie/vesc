@@ -71,6 +71,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c039fd73_38c5e937",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-06T17:47:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "140e9870_f2e790c4",
+      "range": {
+        "startLine": 207,
+        "startChar": 8,
+        "endLine": 207,
+        "endChar": 26
+      },
+      "revId": "4c30b216b6041dab855e4cdfd931bf4e0c167dc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "88b96563_0c9e7d2c",
@@ -155,6 +179,30 @@
       "writtenOn": "2023-10-04T13:52:17Z",
       "side": 1,
       "message": "nit - should add something here to indicate that it is an unlocked wait",
+      "range": {
+        "startLine": 492,
+        "startChar": 8,
+        "endLine": 492,
+        "endChar": 26
+      },
+      "revId": "4c30b216b6041dab855e4cdfd931bf4e0c167dc3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ff64f00_9de098cb",
+        "filename": "src/libANGLE/renderer/vulkan/SyncVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-06T17:47:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7efb05c6_577c8013",
       "range": {
         "startLine": 492,
         "startChar": 8,
