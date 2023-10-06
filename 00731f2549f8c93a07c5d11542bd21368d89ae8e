@@ -16,6 +16,29 @@
       "message": "Makes the dawn tests pass again. I created https://bugs.chromium.org/p/dawn/issues/detail?id\u003d2118 to follow up when I can to fix the fall back path. That depends on dawn adding RenderDoc support.",
       "revId": "00731f2549f8c93a07c5d11542bd21368d89ae8e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddb92676_1421d3c9",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 267,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-10-06T14:55:32Z",
+      "side": 1,
+      "message": "As you said validation restriction seems unintentional, should this be tracked separately?",
+      "range": {
+        "startLine": 267,
+        "startChar": 7,
+        "endLine": 267,
+        "endChar": 32
+      },
+      "revId": "00731f2549f8c93a07c5d11542bd21368d89ae8e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
