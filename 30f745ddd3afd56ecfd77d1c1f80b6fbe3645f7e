@@ -16,6 +16,24 @@
       "message": "We use `fill(nullptr)` in many places that might benefit from this. At the same time, this is not actually per-spec, `nullptr` doesn\u0027t have to be all 0s.\n\nHow about we create a helper that can both make the intent clearer, and also [static_]assert that `nullptr` is in fact all 0s? Something like an `angle::ZeroFill` helper in `src/common/` somewhere.",
       "revId": "30f745ddd3afd56ecfd77d1c1f80b6fbe3645f7e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59cd0fee_c5757781",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7248,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-10-06T21:47:08Z",
+      "side": 1,
+      "message": "Done. It doesn\u0027t seem to be used that much though, only this file for vulkan it seems.",
+      "parentUuid": "5e965f4e_68c10695",
+      "revId": "30f745ddd3afd56ecfd77d1c1f80b6fbe3645f7e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
