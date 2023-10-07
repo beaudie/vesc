@@ -3829,6 +3829,9 @@ angle::Result DynamicDescriptorPool::getOrAllocateDescriptorSet(
     VkDescriptorSet *descriptorSetOut,
     SharedDescriptorSetCacheKey *newSharedCacheKeyOut)
 {
+    // Generate hash for DescriptorSetDesc
+    desc.prepareHash();
+
     // First scan the descriptorSet cache.
     vk::RefCountedDescriptorPoolHelper *poolOut;
     if (mDescriptorSetCache.getDescriptorSet(desc, descriptorSetOut, &poolOut))

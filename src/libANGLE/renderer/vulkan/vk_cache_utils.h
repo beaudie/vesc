@@ -1636,29 +1636,38 @@ class DescriptorSetDesc
     DescriptorSetDesc()  = default;
     ~DescriptorSetDesc() = default;
 
-    DescriptorSetDesc(const DescriptorSetDesc &other) : mDescriptorInfos(other.mDescriptorInfos) {}
+    DescriptorSetDesc(const DescriptorSetDesc &other)
+        : mDescriptorInfos(other.mDescriptorInfos), mCachedHash(other.mCachedHash)
+    {}
 
     DescriptorSetDesc &operator=(const DescriptorSetDesc &other)
     {
         mDescriptorInfos = other.mDescriptorInfos;
+        mCachedHash      = other.mCachedHash;
         return *this;
     }
 
     size_t hash() const;
+    bool hashValid() const { return mCachedHash != 0; }
+    void prepareHash() const { hashImpl(); }
 
-    void resize(size_t count) { mDescriptorInfos.resize(count); }
+    void resize(size_t count)
+    {
+        mCachedHash = 0;
+        mDescriptorInfos.resize(count);
+    }
 
     size_t getKeySizeBytes() const { return mDescriptorInfos.size() * sizeof(DescriptorInfoDesc); }
 
     bool operator==(const DescriptorSetDesc &other) const
     {
-        return mDescriptorInfos.size() == other.mDescriptorInfos.size() &&
-               memcmp(mDescriptorInfos.data(), other.mDescriptorInfos.data(),
-                      mDescriptorInfos.size() * sizeof(DescriptorInfoDesc)) == 0;
+        ASSERT(mCachedHash != 0 && other.mCachedHash != 0);
+        return mCachedHash == other.mCachedHash;
     }
 
     DescriptorInfoDesc &getInfoDesc(uint32_t infoDescIndex)
     {
+        mCachedHash = 0;
         return mDescriptorInfos[infoDescIndex];
     }
 
@@ -1671,8 +1680,11 @@ class DescriptorSetDesc
     void streamOut(std::ostream &os) const;
 
   private:
+    void hashImpl() const;
+
     // After a preliminary minimum size, use heap memory.
     angle::FastVector<DescriptorInfoDesc, kFastDescriptorSetDescLimit> mDescriptorInfos;
+    mutable size_t mCachedHash;
 };
 
 class DescriptorPoolHelper;
@@ -2570,6 +2582,7 @@ class DescriptorSetCache final : angle::NonCopyable
                                        VkDescriptorSet *descriptorSetOut,
                                        vk::RefCountedDescriptorPoolHelper **poolOut)
     {
+        desc.prepareHash();
         auto iter = mPayload.find(desc);
         if (iter != mPayload.end())
         {
@@ -2584,11 +2597,13 @@ class DescriptorSetCache final : angle::NonCopyable
                                           VkDescriptorSet descriptorSet,
                                           vk::RefCountedDescriptorPoolHelper *pool)
     {
+        ASSERT(desc.hashValid());
         mPayload.emplace(desc, std::make_unique<dsCacheEntry>(descriptorSet, pool));
     }
 
     ANGLE_INLINE void eraseDescriptorSet(const vk::DescriptorSetDesc &desc)
     {
+        ASSERT(desc.hashValid());
         mPayload.erase(desc);
     }
 

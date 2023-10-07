@@ -4492,13 +4492,18 @@ void FramebufferHelper::release(ContextVk *contextVk)
 // DescriptorSetDesc implementation.
 size_t DescriptorSetDesc::hash() const
 {
-    if (mDescriptorInfos.empty())
-    {
-        return 0;
-    }
+    ASSERT(mCachedHash != 0);
+    return mCachedHash;
+}
 
-    return angle::ComputeGenericHash(mDescriptorInfos.data(),
-                                     sizeof(mDescriptorInfos[0]) * mDescriptorInfos.size());
+void DescriptorSetDesc::hashImpl() const
+{
+    mCachedHash = 0;
+    if (!mDescriptorInfos.empty())
+    {
+        mCachedHash = angle::ComputeGenericHash(
+            mDescriptorInfos.data(), sizeof(mDescriptorInfos[0]) * mDescriptorInfos.size());
+    }
 }
 
 // FramebufferDesc implementation.
