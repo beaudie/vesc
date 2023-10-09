@@ -6524,6 +6524,10 @@ angle::Result RenderPassCache::MakeRenderPass(vk::Context *context,
     const bool canRemoveResolveAttachments =
         isRenderToTextureThroughEmulation && !hasUnresolveAttachments;
 
+    // if yuv, we're going to chain this on to some VkAttachmentDescription2
+    VkExternalFormatANDROID externalFormat = {VK_STRUCTURE_TYPE_EXTERNAL_FORMAT_ANDROID, nullptr,
+                                              0};
+
     // Pack color attachments
     vk::PackedAttachmentIndex attachmentCount(0);
     for (uint32_t colorIndexGL = 0; colorIndexGL < desc.colorAttachmentRange(); ++colorIndexGL)
@@ -6571,8 +6575,13 @@ angle::Result RenderPassCache::MakeRenderPass(vk::Context *context,
                 attachmentFormatID = linearFormat;
             }
         }
+
+        auto *externalFormatInfo =
+            context->getRenderer()->getExternalYuvFormatInfo(attachmentFormatID);
         attachmentDescs[attachmentCount.get()].format =
-            vk::GetVkFormatFromFormatID(attachmentFormatID);
+            externalFormatInfo ? externalFormatInfo->colorAttachmentFormat
+                               : vk::GetVkFormatFromFormatID(attachmentFormatID);
+
         ASSERT(attachmentDescs[attachmentCount.get()].format != VK_FORMAT_UNDEFINED);
 
         isColorInvalidated.set(colorIndexGL, ops[attachmentCount].isInvalidated);
@@ -6617,6 +6626,8 @@ angle::Result RenderPassCache::MakeRenderPass(vk::Context *context,
         ASSERT(desc.isColorAttachmentEnabled(colorIndexGL));
 
         angle::FormatID attachmentFormatID = desc[colorIndexGL];
+        auto *externalFormatInfo =
+            context->getRenderer()->getExternalYuvFormatInfo(attachmentFormatID);
 
         VkAttachmentReference2 colorRef = {};
         colorRef.sType                  = VK_STRUCTURE_TYPE_ATTACHMENT_REFERENCE_2;
@@ -6637,10 +6648,22 @@ angle::Result RenderPassCache::MakeRenderPass(vk::Context *context,
         // When multisampled-render-to-texture is used, invalidating an attachment invalidates both
         // the multisampled and the resolve attachments.  Otherwise, the resolve attachment is
         // independent of the multisampled attachment, and is never invalidated.
+        // This is also the case for external format resolve
+        bool isInvalidated = isColorInvalidated.test(colorIndexGL) &&
+                             (isRenderToTextureThroughEmulation || externalFormatInfo);
+
         vk::UnpackColorResolveAttachmentDesc(
             &attachmentDescs[attachmentCount.get()], attachmentFormatID,
-            desc.hasColorUnresolveAttachment(colorIndexGL),
-            isColorInvalidated.test(colorIndexGL) && isRenderToTextureThroughEmulation);
+            desc.hasColorUnresolveAttachment(colorIndexGL), isInvalidated);
+
+        // For rendering to YUV, chain on the external format info to the resolve attachment
+        if (externalFormatInfo)
+        {
+            externalFormat.externalFormat = externalFormatInfo->externalFormat;
+            auto &attachment              = attachmentDescs[attachmentCount.get()];
+            attachment.pNext              = &externalFormat;
+            ASSERT(attachment.format == VK_FORMAT_UNDEFINED);
+        }
 
         ++attachmentCount;
     }
