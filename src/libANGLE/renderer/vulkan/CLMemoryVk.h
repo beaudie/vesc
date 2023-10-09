@@ -85,6 +85,14 @@ class CLBufferVk : public CLMemoryVk
     CLBufferVk *getParent() { return static_cast<CLBufferVk *>(mParent); }
 
     angle::Result create(void *hostPtr);
+    angle::Result fillWithPattern(const void *pattern,
+                                  size_t patternSize,
+                                  size_t offset,
+                                  size_t size)
+    {
+        mBuffer.fillWithPattern(pattern, patternSize, offset, size);
+        return angle::Result::Continue;
+    }
 
     bool isSubBuffer() const { return mParent != nullptr; }
 
