@@ -3958,16 +3958,17 @@ void State::onImageStateChange(const Context *context, size_t unit)
 
 void State::onUniformBufferStateChange(size_t uniformBufferIndex)
 {
+    // So that program object syncState will get triggered and process the program's dirty bits
     if (mProgram)
     {
+        setObjectDirty(GL_PROGRAM);
         mProgram->onUniformBufferStateChange(uniformBufferIndex);
     }
     else if (mProgramPipeline.get())
     {
+        setObjectDirty(GL_PROGRAM_PIPELINE);
         mProgramPipeline->onUniformBufferStateChange(uniformBufferIndex);
     }
-    // So that program object syncState will get triggered and process the program's dirty bits
-    setObjectDirty(GL_PROGRAM);
     // This could be represented by a different dirty bit. Using the same one keeps it simple.
     mDirtyBits.set(state::DIRTY_BIT_UNIFORM_BUFFER_BINDINGS);
 }
