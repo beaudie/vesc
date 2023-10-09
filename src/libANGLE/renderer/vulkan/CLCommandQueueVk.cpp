@@ -309,8 +309,19 @@ angle::Result CLCommandQueueVk::enqueueFillBuffer(const cl::Buffer &buffer,
                                                   const cl::EventPtrs &waitEvents,
                                                   CLEventImpl::CreateFunc *eventCreateFunc)
 {
-    UNIMPLEMENTED();
-    ANGLE_CL_RETURN_ERROR(CL_OUT_OF_RESOURCES);
+    ANGLE_TRY(enqueueWaitForEvents(waitEvents));
+
+    CLBufferVk *bufferVk = &buffer.getImpl<CLBufferVk>();
+    if (mComputePassCommands->usesBuffer(bufferVk->getBuffer()))
+    {
+        ANGLE_TRY(finish());
+    }
+
+    ANGLE_TRY(bufferVk->fillWithPattern(pattern, patternSize, offset, size));
+
+    ANGLE_TRY(createEvent(eventCreateFunc));
+
+    return angle::Result::Continue;
 }
 
 angle::Result CLCommandQueueVk::enqueueMapBuffer(const cl::Buffer &buffer,
