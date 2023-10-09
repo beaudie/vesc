@@ -170,6 +170,19 @@ class OneOffCommandPool : angle::NonCopyable
     std::deque<PendingOneOffCommands> mPendingCommands;
 };
 
+struct ExternalYuvFormatInfo
+{
+    // Extra data required for a renderable external format, for EXT_yuv_target support.
+    // We have one of these structures per external format slot (angle::FormatID::EXTERNALn)
+    // and allocate them to particular actual external formats in the order we see them.
+
+    // the vendor-specific external format value to be passed in VkExternalFormatANDROID
+    uint64_t externalFormat;
+    // a format the driver wants us to use for a temporary color attachment in order to render into
+    // this external format
+    VkFormat colorAttachmentFormat;
+};
+
 class RendererVk : angle::NonCopyable
 {
   public:
@@ -781,6 +794,37 @@ class RendererVk : angle::NonCopyable
     // Static function to get Vulkan object type name.
     static const char *GetVulkanObjectTypeName(VkObjectType type);
 
+    angle::FormatID getOrAllocExternalYuvFormat(uint64_t externalFormat,
+                                                VkFormat colorAttachmentFormat)
+    {
+        // XXX: clean this up, consider locking requirements etc.
+        mExternalYuvFormats.reserve(8);
+        for (int format = ToUnderlying(angle::FormatID::EXTERNAL0);
+             format <= ToUnderlying(angle::FormatID::EXTERNAL7); ++format)
+        {
+            int index = format - ToUnderlying(angle::FormatID::EXTERNAL0);
+            if (static_cast<size_t>(index) >= mExternalYuvFormats.size())
+            {
+                mExternalYuvFormats.push_back({externalFormat, colorAttachmentFormat});
+                return angle::FormatID(format);
+            }
+            else
+            {
+                if (mExternalYuvFormats[index].externalFormat == externalFormat)
+                    return angle::FormatID(format);
+            }
+        }
+
+        return angle::FormatID::NONE;
+    }
+
+    ExternalYuvFormatInfo *getExternalYuvFormatInfo(angle::FormatID format)
+    {
+        if ((int)format < (int)angle::FormatID::EXTERNAL0)
+            return nullptr;
+        return &mExternalYuvFormats[(int)format - (int)angle::FormatID::EXTERNAL0];
+    }
+
   private:
     angle::Result setupDevice(DisplayVk *displayVk);
     angle::Result createDeviceAndQueue(DisplayVk *displayVk, uint32_t queueFamilyIndex);
@@ -1098,6 +1142,9 @@ class RendererVk : angle::NonCopyable
 
     // Memory tracker for allocations and deallocations.
     MemoryAllocationTracker mMemoryAllocationTracker;
+
+    // YUV rendering format cache stuff
+    std::vector<ExternalYuvFormatInfo> mExternalYuvFormats;
 };
 
 ANGLE_INLINE Serial RendererVk::generateQueueSerial(SerialIndex index)
