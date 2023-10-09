@@ -1306,7 +1306,7 @@ angle::Result Program::loadBinary(const Context *context,
     for (size_t uniformBlockIndex = 0;
          uniformBlockIndex < mState.mExecutable->getUniformBlocks().size(); ++uniformBlockIndex)
     {
-        mDirtyBits.set(uniformBlockIndex);
+        onUniformBufferStateChange(uniformBlockIndex);
     }
 
     // If load returns incomplete, we know for sure that the binary is not compatible with the
@@ -1533,8 +1533,7 @@ void Program::bindUniformBlock(UniformBlockIndex uniformBlockIndex, GLuint unifo
     mUniformBlockBindingMasks[uniformBlockBinding].set(uniformBlockIndex.value);
     mState.mExecutable->mPod.activeUniformBlockBindings.set(uniformBlockIndex.value,
                                                             uniformBlockBinding != 0);
-
-    mDirtyBits.set(DIRTY_BIT_UNIFORM_BLOCK_BINDING_0 + uniformBlockIndex.value);
+    onUniformBufferStateChange(DIRTY_BIT_UNIFORM_BLOCK_BINDING_0 + uniformBlockIndex.value);
 }
 
 void Program::setTransformFeedbackVaryings(GLsizei count,
