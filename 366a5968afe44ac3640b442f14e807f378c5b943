@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc7d31ef_45d0f410",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-10-10T16:33:29Z",
+      "side": 1,
+      "message": "Do we also need this for SwiftShader?",
+      "revId": "366a5968afe44ac3640b442f14e807f378c5b943",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d7c61e1_8d03e7c9",
+        "filename": "infra/specs/test_suites.pyl",
+        "patchSetId": 6
+      },
+      "lineNbr": 1276,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-10-10T16:33:29Z",
+      "side": 1,
+      "message": "What about these?",
+      "range": {
+        "startLine": 1251,
+        "startChar": 0,
+        "endLine": 1276,
+        "endChar": 6
+      },
+      "revId": "366a5968afe44ac3640b442f14e807f378c5b943",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
