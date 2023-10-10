@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "efa664f5_0f5d70ad",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2190,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-10T23:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cfc0a2db_a2e5cc8a",
+      "range": {
+        "startLine": 2180,
+        "startChar": 12,
+        "endLine": 2190,
+        "endChar": 16
+      },
+      "revId": "7d0a529223447310ad5f8b7505dfbbb7739146d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5b3f6bdf_76c649ba",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-09-12T17:48:02Z",
       "side": 1,
       "message": "My suggestion is having RendererVk (or a global table, see `GetVkFormatFromFormatID()` implementtaion for reference) keep the mapping between `angle::FormatID::EXTERNAL{n}` and `mExternalResolveColorFormat` so that you can convert from FormatID to external format at any time. You will not need to save this to ImageHelper and RenderPassDesc. What you need here is change line 299 to something like this:\n```\nconst vk::Format \u0026externalVkFormat \u003d renderer-\u003egetExternalFormat(mExternalResolveColorFormat);\n```\n\n(Just for bring up, since you only have one external format, you can just store it in RendererVk. Once you get most stuff working, you can add ExternalFormat allocation and mapping.)",
+      "range": {
+        "startLine": 313,
+        "startChar": 4,
+        "endLine": 313,
+        "endChar": 31
+      },
+      "revId": "7d0a529223447310ad5f8b7505dfbbb7739146d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "625eeefb_e1aabd78",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-10T23:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b3f6bdf_76c649ba",
       "range": {
         "startLine": 313,
         "startChar": 4,
@@ -70,6 +118,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "487b2bca_6587a7bf",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-10T23:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "05a591c2_3ab0ea55",
+      "range": {
+        "startLine": 376,
+        "startChar": 0,
+        "endLine": 376,
+        "endChar": 82
+      },
+      "revId": "7d0a529223447310ad5f8b7505dfbbb7739146d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e3a259bb_f3121446",
@@ -93,6 +165,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2a651f5_3b364ba6",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-10T23:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3a259bb_f3121446",
+      "range": {
+        "startLine": 436,
+        "startChar": 16,
+        "endLine": 436,
+        "endChar": 47
+      },
+      "revId": "7d0a529223447310ad5f8b7505dfbbb7739146d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "20b22e73_d9c5a97d",
@@ -106,6 +202,30 @@
       "writtenOn": "2023-09-12T17:48:02Z",
       "side": 1,
       "message": "you dont need this.",
+      "range": {
+        "startLine": 6531,
+        "startChar": 28,
+        "endLine": 6531,
+        "endChar": 42
+      },
+      "revId": "7d0a529223447310ad5f8b7505dfbbb7739146d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "216d75d9_3cc08d11",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6531,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-10T23:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "20b22e73_d9c5a97d",
       "range": {
         "startLine": 6531,
         "startChar": 28,
@@ -163,6 +283,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "05545dbf_77fd616d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6654,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-10T23:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4fc36a16_a101f451",
+      "range": {
+        "startLine": 6654,
+        "startChar": 12,
+        "endLine": 6654,
+        "endChar": 44
+      },
+      "revId": "7d0a529223447310ad5f8b7505dfbbb7739146d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "46645174_da2b2edd",
@@ -176,6 +320,30 @@
       "writtenOn": "2023-09-12T17:48:02Z",
       "side": 1,
       "message": "You dont need this with what I suggest that stores the map of External{n} and actual external format in the rendererVk.",
+      "range": {
+        "startLine": 224,
+        "startChar": 4,
+        "endLine": 236,
+        "endChar": 0
+      },
+      "revId": "7d0a529223447310ad5f8b7505dfbbb7739146d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8cb7350b_00d05e11",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-10T23:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46645174_da2b2edd",
       "range": {
         "startLine": 224,
         "startChar": 4,
@@ -209,6 +377,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8b6e9dd_0e14b35e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-10T23:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cce5750a_d8f8ab09",
+      "range": {
+        "startLine": 260,
+        "startChar": 12,
+        "endLine": 260,
+        "endChar": 21
+      },
+      "revId": "7d0a529223447310ad5f8b7505dfbbb7739146d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "010fe26b_13b0216e",
@@ -222,6 +414,30 @@
       "writtenOn": "2023-09-12T17:48:02Z",
       "side": 1,
       "message": "You dont need this with what I suggest that stores the map of External{n} and actual external format in the rendererVk.",
+      "range": {
+        "startLine": 299,
+        "startChar": 0,
+        "endLine": 301,
+        "endChar": 0
+      },
+      "revId": "7d0a529223447310ad5f8b7505dfbbb7739146d7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66282b1a_dfcc3005",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-10T23:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "010fe26b_13b0216e",
       "range": {
         "startLine": 299,
         "startChar": 0,
