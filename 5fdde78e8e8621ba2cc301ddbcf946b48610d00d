@@ -16,6 +16,24 @@
       "message": "The reason for the contention was this lock, right? Couldn\u0027t we have held the mutex for a much shorter time by `std::move`ing the garbage list under the lock into a local var and then process it unlocked?\n\nWould that be possibly even faster than this change?",
       "revId": "5fdde78e8e8621ba2cc301ddbcf946b48610d00d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df5add05_adb0b76f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 5216,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-10T17:29:33Z",
+      "side": 0,
+      "message": "That is what earlier patchset (PS1 to PS3) does, and there is bot failures. I guess we still need to hold a lock somewhere, not exactly sure why bot failed. But this is cleaner though: It achieves same goal (able to clean garbage without blocking others to enqueue), but without moving any objects or shuffle pointers around (i.e, less memory dynamic). There is no memory allocation involved here, versus PS1 we have to allocate new memory (in the std::vector code) for the new vector every time you do clean.",
+      "parentUuid": "f0e2c658_9443136f",
+      "revId": "5fdde78e8e8621ba2cc301ddbcf946b48610d00d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
