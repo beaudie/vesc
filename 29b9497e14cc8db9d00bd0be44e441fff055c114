@@ -16,6 +16,24 @@
       "message": "Wait sorry before you submit, the `memset` is slightly dangerous. This should be safer given that `T` is generic:\n\n\n```suggestion\n    memset(array-\u003edata(), 0, array-\u003esize() * sizeof(*array-\u003edata()));\n```",
       "revId": "29b9497e14cc8db9d00bd0be44e441fff055c114",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae0e7592_9f589b25",
+        "filename": "src/common/utilities.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-10-10T17:04:24Z",
+      "side": 1,
+      "message": "ugh, right, yeah that could be wrong if it\u0027s not std::array. Done.",
+      "parentUuid": "0fba26d8_73fe26c7",
+      "revId": "29b9497e14cc8db9d00bd0be44e441fff055c114",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
