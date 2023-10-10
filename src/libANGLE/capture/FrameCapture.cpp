@@ -1379,6 +1379,7 @@ void MaybeResetResources(gl::ContextID contextID,
                     out << ";\n";
                 }
             }
+
             break;
         }
         case ResourceIDType::VertexArray:
@@ -3683,6 +3684,21 @@ void CaptureBufferBindingResetCalls(const gl::State &replayState,
     Capture(&bufferBindingCalls, CaptureBindBuffer(replayState, true, binding, id));
 }
 
+void CaptureTextureBindingResetCalls(const gl::Context *context,
+                                     const gl::State &replayState,
+                                     ResourceTracker *resourceTracker,
+                                     gl::TextureType textureType,
+                                     size_t bindingIndex,
+                                     gl::TextureID id)
+{
+    std::vector<CallCapture> &textureBindingCalls =
+        resourceTracker->getTextureBindingCalls(context->id());
+    Capture(
+        &textureBindingCalls,
+        CaptureActiveTexture(replayState, true, GL_TEXTURE0 + static_cast<GLenum>(bindingIndex)));
+    Capture(&textureBindingCalls, CaptureBindTexture(replayState, true, textureType, id));
+}
+
 void CaptureIndexedBuffers(const gl::State &glState,
                            const gl::BufferVector &indexedBuffers,
                            gl::BufferBinding binding,
@@ -4788,14 +4804,28 @@ void CaptureMidExecutionSetup(const gl::Context *context,
                                               apiBindings[bindingIndex].get());
             }
 
-            // Set this texture as active so it will be generated in Setup
             if (apiTextureID.value)
             {
+                // Set this texture as active so it will be generated in Setup
                 MarkResourceIDActive(ResourceIDType::Texture, apiTextureID.value,
                                      shareGroupSetupCalls, resourceIDToSetupCalls);
+                // Reset texture bindings
+                // TODO: Currently just resets ALL bound texture, could be smarter and only do the
+                // ones that changed
+                CaptureTextureBindingResetCalls(context, replayState, resourceTracker, textureType,
+                                                bindingIndex, apiTextureID);
             }
         }
     }
+
+    // Reset active texture
+    // TODO: Active texture might already be set above, duplicate glActiveTexture call could be
+    // skipped
+    std::vector<CallCapture> &textureBindingCalls =
+        resourceTracker->getTextureBindingCalls(context->id());
+    Capture(&textureBindingCalls,
+            CaptureActiveTexture(replayState, true,
+                                 GL_TEXTURE0 + static_cast<GLenum>(apiState.getActiveSampler())));
 
     // Capture Texture Environment
     if (context->isGLES1())
@@ -9237,6 +9267,18 @@ void FrameCaptureShared::writeMainContextCppReplay(const gl::Context *context,
                     MaybeResetResources(contextID, resourceType, mReplayWriter, resetStream,
                                         headerStream, &mResourceTracker, &mBinaryData,
                                         anyResourceReset, &mResourceIDBufferSize);
+                }
+
+                // Restore texture bindings as seen during MEC
+                std::vector<CallCapture> &textureBindingCalls =
+                    mResourceTracker.getTextureBindingCalls(contextID);
+                for (CallCapture &call : textureBindingCalls)
+                {
+                    resetStream << "    ";
+                    WriteCppReplayForCall(call, mReplayWriter, resetStream, headerStream,
+                                          &mBinaryData, &mResourceIDBufferSize);
+                    resetStream << ";\n";
+                    anyResourceReset = true;
                 }
 
                 // Only call eglMakeCurrent if anything was actually reset in the function and the

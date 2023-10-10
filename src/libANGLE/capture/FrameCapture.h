@@ -225,6 +225,10 @@ class ResourceTracker final : angle::NonCopyable
     BufferCalls &getBufferUnmapCalls() { return mBufferUnmapCalls; }
 
     std::vector<CallCapture> &getBufferBindingCalls() { return mBufferBindingCalls; }
+    std::vector<CallCapture> &getTextureBindingCalls(gl::ContextID contextID)
+    {
+        return mTextureBindingCalls[contextID];
+    }
 
     void setBufferMapped(gl::ContextID contextID, GLuint id);
     void setBufferUnmapped(gl::ContextID contextID, GLuint id);
@@ -323,6 +327,8 @@ class ResourceTracker final : angle::NonCopyable
     // Tracked resources per context
     TrackedResourceArray mTrackedResourcesShared;
     std::map<gl::ContextID, TrackedResourceArray> mTrackedResourcesPerContext;
+
+    std::map<gl::ContextID, std::vector<CallCapture>> mTextureBindingCalls;
 
     std::map<EGLImage, egl::AttributeMap> mMatchImageToAttribs;
     std::map<GLuint, egl::ImageID> mMatchTextureIDToImage;

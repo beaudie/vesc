@@ -171,6 +171,9 @@ void ResetReplayContextShared(void)
 
 void ResetReplayContext1(void)
 {
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, gTextureMap[2]);
+    glActiveTexture(GL_TEXTURE0);
 }
 
 void ReplayFrame4(void)
