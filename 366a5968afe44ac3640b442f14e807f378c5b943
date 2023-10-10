@@ -39,6 +39,30 @@
       },
       "revId": "366a5968afe44ac3640b442f14e807f378c5b943",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8649e20_888e0b3c",
+        "filename": "infra/specs/test_suites.pyl",
+        "patchSetId": 6
+      },
+      "lineNbr": 1276,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-10-10T23:00:36Z",
+      "side": 1,
+      "message": "Thank you, I have added the `--surface-height`, `--surface-width`, `--deqp-base-seed` args to the swiftshader tests.\n\nMany KHR-GLES32* tests failed on swiftshader on linux/win, seems that swiftshader is missing some implementations for `KHR-GLES32*` tests. I will skip enabling the `KHR-GLES32*` tests on swiftshader for now.",
+      "parentUuid": "6d7c61e1_8d03e7c9",
+      "range": {
+        "startLine": 1251,
+        "startChar": 0,
+        "endLine": 1276,
+        "endChar": 6
+      },
+      "revId": "366a5968afe44ac3640b442f14e807f378c5b943",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
