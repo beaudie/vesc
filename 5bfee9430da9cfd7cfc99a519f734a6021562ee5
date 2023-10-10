@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b717be4_8d907f3d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-10-10T19:08:34Z",
+      "side": 1,
+      "message": "lgtm+2\n\nI verified this is a vanilla backport of https://chromium-review.googlesource.com/c/angle/angle/+/4906568 .",
+      "revId": "5bfee9430da9cfd7cfc99a519f734a6021562ee5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
