@@ -16,6 +16,24 @@
       "message": "Just make it a `std::mutex`? No reason to new/delete it.",
       "revId": "1197fcb4249d22d9697aa8a32c078439b4505cfc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe94b448_d166c5a3",
+        "filename": "src/libANGLE/capture/FrameCapture.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 766,
+      "author": {
+        "id": 1511618
+      },
+      "writtenOn": "2023-10-10T18:29:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a2620b79_d2909796",
+      "revId": "1197fcb4249d22d9697aa8a32c078439b4505cfc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
