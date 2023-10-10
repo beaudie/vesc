@@ -439,12 +439,13 @@ void Shader::compile(const Context *context)
     ASSERT(compilerHandle);
 
     // Find a shader in Blob Cache
-    setShaderKey(context, options, compilerInstance.getShaderOutputType(),
-                 compilerInstance.getBuiltInResources());
-    ASSERT(!mShaderHash.empty());
     MemoryShaderCache *shaderCache = context->getMemoryShaderCache();
     if (shaderCache)
     {
+        setShaderKey(context, options, compilerInstance.getShaderOutputType(),
+                     compilerInstance.getBuiltInResources());
+        ASSERT(!mShaderHash.empty());
+
         angle::Result cacheResult =
             shaderCache->getShader(context, this, options, compilerInstance, mShaderHash);
 
@@ -621,6 +622,7 @@ void Shader::resolveCompile(const Context *context)
     if (success && shaderCache)
     {
         // Save to the shader cache.
+        ASSERT(!mShaderHash.empty());
         if (shaderCache->putShader(context, mShaderHash, this) != angle::Result::Continue)
         {
             ANGLE_PERF_WARNING(context->getState().getDebug(), GL_DEBUG_SEVERITY_LOW,
