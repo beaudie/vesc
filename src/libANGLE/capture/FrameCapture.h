@@ -225,6 +225,7 @@ class ResourceTracker final : angle::NonCopyable
     BufferCalls &getBufferUnmapCalls() { return mBufferUnmapCalls; }
 
     std::vector<CallCapture> &getBufferBindingCalls() { return mBufferBindingCalls; }
+    std::vector<CallCapture> &getTextureBindingCalls() { return mTextureBindingCalls; }
 
     void setBufferMapped(gl::ContextID contextID, GLuint id);
     void setBufferUnmapped(gl::ContextID contextID, GLuint id);
@@ -295,6 +296,8 @@ class ResourceTracker final : angle::NonCopyable
 
     // Buffer binding calls to restore bindings recorded during MEC
     std::vector<CallCapture> mBufferBindingCalls;
+    // Texture binding calls to restore bindings recorded during MEC
+    std::vector<CallCapture> mTextureBindingCalls;
 
     // Whether a given buffer was mapped at the start of the trace
     BufferMapStatusMap mStartingBuffersMappedInitial;

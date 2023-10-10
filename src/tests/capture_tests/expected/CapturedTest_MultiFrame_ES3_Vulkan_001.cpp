@@ -163,6 +163,8 @@ glDeleteBuffers(1, gResourceIDBuffer);
 
 void ResetReplayContextShared(void)
 {
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, gTextureMap[2]);
     glUseProgram(gShaderProgramMap[3]);
     UpdateCurrentProgram(3);
     glUniform1iv(gUniformLocations[gCurrentProgram][0], 1, (const GLint *)&gBinaryData[432]);

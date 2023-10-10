@@ -1379,6 +1379,18 @@ void MaybeResetResources(gl::ContextID contextID,
                     out << ";\n";
                 }
             }
+
+            // Restore texture bindings as seen during MEC
+            std::vector<CallCapture> &textureBindingCalls =
+                resourceTracker->getTextureBindingCalls();
+            for (CallCapture &call : textureBindingCalls)
+            {
+                out << "    ";
+                WriteCppReplayForCall(call, replayWriter, out, header, binaryData,
+                                      maxResourceIDBufferSize);
+                out << ";\n";
+            }
+
             break;
         }
         case ResourceIDType::VertexArray:
@@ -3683,6 +3695,19 @@ void CaptureBufferBindingResetCalls(const gl::State &replayState,
     Capture(&bufferBindingCalls, CaptureBindBuffer(replayState, true, binding, id));
 }
 
+void CaptureTextureBindingResetCalls(const gl::State &replayState,
+                                     ResourceTracker *resourceTracker,
+                                     gl::TextureType textureType,
+                                     size_t bindingIndex,
+                                     gl::TextureID id)
+{
+    std::vector<CallCapture> &textureBindingCalls = resourceTracker->getTextureBindingCalls();
+    Capture(
+        &textureBindingCalls,
+        CaptureActiveTexture(replayState, true, GL_TEXTURE0 + static_cast<GLenum>(bindingIndex)));
+    Capture(&textureBindingCalls, CaptureBindTexture(replayState, true, textureType, id));
+}
+
 void CaptureIndexedBuffers(const gl::State &glState,
                            const gl::BufferVector &indexedBuffers,
                            gl::BufferBinding binding,
@@ -4793,6 +4818,8 @@ void CaptureMidExecutionSetup(const gl::Context *context,
             {
                 MarkResourceIDActive(ResourceIDType::Texture, apiTextureID.value,
                                      shareGroupSetupCalls, resourceIDToSetupCalls);
+                CaptureTextureBindingResetCalls(replayState, resourceTracker, textureType,
+                                                bindingIndex, apiTextureID);
             }
         }
     }
