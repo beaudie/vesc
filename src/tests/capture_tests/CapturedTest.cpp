@@ -293,7 +293,6 @@ void main(void) {
 
     glDrawArrays(GL_TRIANGLES, 0, 3);
     EXPECT_GL_NO_ERROR();
-
     // Note: RAII destructors called here causing additional GL calls.
 }
 
