@@ -439,12 +439,13 @@ void Shader::compile(const Context *context)
     ASSERT(compilerHandle);
 
     // Find a shader in Blob Cache
-    setShaderKey(context, options, compilerInstance.getShaderOutputType(),
-                 compilerInstance.getBuiltInResources());
-    ASSERT(!mShaderHash.empty());
     MemoryShaderCache *shaderCache = context->getMemoryShaderCache();
     if (shaderCache)
     {
+        setShaderKey(context, options, compilerInstance.getShaderOutputType(),
+                     compilerInstance.getBuiltInResources());
+        ASSERT(!mShaderHash.empty());
+
         angle::Result cacheResult =
             shaderCache->getShader(context, this, options, compilerInstance, mShaderHash);
 
