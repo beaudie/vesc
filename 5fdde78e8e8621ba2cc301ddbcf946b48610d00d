@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0e2c658_9443136f",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 5216,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-10T01:50:33Z",
+      "side": 0,
+      "message": "The reason for the contention was this lock, right? Couldn\u0027t we have held the mutex for a much shorter time by `std::move`ing the garbage list under the lock into a local var and then process it unlocked?\n\nWould that be possibly even faster than this change?",
+      "revId": "5fdde78e8e8621ba2cc301ddbcf946b48610d00d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
