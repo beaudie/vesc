@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc4f7ac6_849f3757",
+        "filename": "scripts/code_generation_hashes/Vulkan_format.json",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1298072
+      },
+      "writtenOn": "2023-10-11T02:43:53Z",
+      "side": 1,
+      "message": "These should be in the previous CL?",
+      "revId": "cb88be688b49725e651e84a6406f5fe123865607",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
