@@ -297,6 +297,12 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     const angle::Format &imageFormat = vkFormat->getActualRenderableImageFormat();
     bool isDepthOrStencilFormat      = imageFormat.hasDepthOrStencilBits();
 
+    // XXX: stupid hack
+    auto adjustedFormat = vkFormat->getIntendedGLFormat();
+    if (adjustedFormat == GL_NONE)
+        adjustedFormat = GL_RGB;
+    mFormat = gl::Format(adjustedFormat);
+
     bool externalRenderTargetSupported =
         renderer->getFeatures().supportsExternalFormatResolve.enabled &&
         bufferFormatResolveProperties.colorAttachmentFormat != VK_FORMAT_UNDEFINED;
