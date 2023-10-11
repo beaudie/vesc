@@ -5171,7 +5171,8 @@ void ContextVk::updateDither()
                 continue;
             }
 
-            RenderTargetVk *attachment   = framebufferVk->getColorDrawRenderTarget(colorIndex);
+            RenderTargetVk *attachment = framebufferVk->getColorDrawRenderTarget(colorIndex);
+
             const angle::FormatID format = attachment->getImageActualFormatID();
 
             uint16_t attachmentDitherControl = sh::vk::kDitherControlNoDither;
