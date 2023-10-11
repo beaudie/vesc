@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "08d46f9d_e4c67eb5",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 53
+      },
+      "lineNbr": 8735,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-10-11T22:20:05Z",
+      "side": 1,
+      "message": "removed after use general",
+      "parentUuid": "dc72d5e9_1ebc7bfc",
+      "range": {
+        "startLine": 8716,
+        "startChar": 8,
+        "endLine": 8735,
+        "endChar": 9
+      },
+      "revId": "c1a1921c77d49f05be23d8c357b3f13443d96e95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9302eba6_b50741f5",
@@ -54,6 +78,30 @@
       "writtenOn": "2023-10-11T18:53:38Z",
       "side": 1,
       "message": "I think the name should be preferUseComputeForTranscoding (or `shouldUseCo...`) instead of `canUse`.",
+      "range": {
+        "startLine": 2802,
+        "startChar": 9,
+        "endLine": 2802,
+        "endChar": 36
+      },
+      "revId": "c1a1921c77d49f05be23d8c357b3f13443d96e95",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10723863_e92f20d8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 53
+      },
+      "lineNbr": 2802,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-10-11T22:20:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9302eba6_b50741f5",
       "range": {
         "startLine": 2802,
         "startChar": 9,
