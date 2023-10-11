@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51fe8160_36dbd7bb",
+        "filename": "src/libANGLE/renderer/angle_format.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-11T00:22:32Z",
+      "side": 1,
+      "message": "Is this intended?",
+      "range": {
+        "startLine": 86,
+        "startChar": 22,
+        "endLine": 86,
+        "endChar": 29
+      },
+      "revId": "72b540c6b9185b70a3cc4238f1fa2a1151c01f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f41c72c_5421cd45",
+        "filename": "src/libANGLE/renderer/angle_format.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-11T00:22:32Z",
+      "side": 1,
+      "message": "Is this change intended?",
+      "range": {
+        "startLine": 264,
+        "startChar": 18,
+        "endLine": 264,
+        "endChar": 20
+      },
+      "revId": "72b540c6b9185b70a3cc4238f1fa2a1151c01f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
