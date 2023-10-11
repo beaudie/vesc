@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61e6b541_2eebb5e3",
+        "filename": "src/common/FixedQueue_unittest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-10-11T21:29:59Z",
+      "side": 0,
+      "message": "the `q.capacity() \u003e kInitialQueueCapacity` check is dropped, is that intentional?",
+      "revId": "90dd58a22b293066000a11172455a4b1b5ba9758",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
