@@ -88,6 +88,10 @@ break;
 image_basic_template = """mActualSampleOnlyImageFormatID = {image};
 mImageInitializerFunction = {image_initializer};"""
 
+image_external_template = """mActualSampleOnlyImageFormatID = {image};
+mActualRenderableImageFormatID = {image};
+mImageInitializerFunction = {image_initializer};"""
+
 image_struct_template = "{{{image}, {image_initializer}}}"
 
 image_external_template = """mActualSampleOnlyImageFormatID = {image};
