@@ -87,6 +87,30 @@
       },
       "revId": "366a5968afe44ac3640b442f14e807f378c5b943",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdb8b9c5_e384b9a4",
+        "filename": "infra/specs/test_suites.pyl",
+        "patchSetId": 6
+      },
+      "lineNbr": 1276,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-10-11T17:25:53Z",
+      "side": 1,
+      "message": "Other `seed/height/width` combinations are not needed for now, because Khronos test configurations only ran `khr-gles2`, `khr-gles3`, `khr-gles31` with `width 64, height 64, seed 1` combination: https://github.com/KhronosGroup/VK-GL-CTS/blob/main/external/openglcts/modules/runner/glcKhronosMustpassEs.hpp.",
+      "parentUuid": "644c2f72_6b1687b2",
+      "range": {
+        "startLine": 1251,
+        "startChar": 0,
+        "endLine": 1276,
+        "endChar": 6
+      },
+      "revId": "366a5968afe44ac3640b442f14e807f378c5b943",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
