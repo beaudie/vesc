@@ -16,6 +16,23 @@
       "message": "Well, shoot.  The new test passes, but it breaks the old tests.  I\u0027ll dig in to that tomorrow.",
       "revId": "7b7e686829f097582290ee4c41397068801069dc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8c30b2f_69a8e1b6",
+        "filename": "src/libANGLE/State.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 3964,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-11T13:06:59Z",
+      "side": 1,
+      "message": "Wild guess is that you need this for both cases. But would be good to understand why",
+      "revId": "7b7e686829f097582290ee4c41397068801069dc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
