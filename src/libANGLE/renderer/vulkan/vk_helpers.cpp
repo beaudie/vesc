@@ -2007,10 +2007,14 @@ void RenderPassCommandBufferHelper::colorImagesDraw(gl::LevelIndex level,
 {
     ASSERT(packedAttachmentIndex < mColorAttachmentsCount);
 
-    image->setQueueSerial(mQueueSerial);
+    // XXX: yuv hack
+    if (image)
+    {
+        image->setQueueSerial(mQueueSerial);
 
-    mColorAttachments[packedAttachmentIndex].init(image, imageSiblingSerial, level, layerStart,
-                                                  layerCount, VK_IMAGE_ASPECT_COLOR_BIT);
+        mColorAttachments[packedAttachmentIndex].init(image, imageSiblingSerial, level, layerStart,
+                                                      layerCount, VK_IMAGE_ASPECT_COLOR_BIT);
+    }
 
     if (resolveImage)
     {
@@ -9789,6 +9793,17 @@ angle::Result ImageHelper::readPixelsImpl(ContextVk *contextVk,
 {
     RendererVk *renderer = contextVk->getRenderer();
 
+    bool isExternalImage =
+        getExternalFormat() != 0;  // mActualFormatID >= angle::FormatID::EXTERNAL0;
+    if (isExternalImage)
+    {
+        // XXX: why did lfy@ need this specially for external?
+        // in _all_ cases ReadPixels has to be properly synchronized wrt the
+        // open renderpass.
+        // XXX: if PBO readpixels then doing this synchronously is horrible anyway, don't.
+        ANGLE_TRY(contextVk->finishImpl(RenderPassClosureReason::GLReadPixels));
+    }
+
     // If the source image is multisampled, we need to resolve it into a temporary image before
     // performing a readback.
     bool isMultisampled = mSamples > 1;
@@ -9805,10 +9820,21 @@ angle::Result ImageHelper::readPixelsImpl(ContextVk *contextVk,
             gl::Extents(area.width, area.height, 1), mIntendedFormatID, mActualFormatID,
             VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT, 1));
     }
+    else if (isExternalImage)
+    {
+        ANGLE_TRY(resolvedImage.get().init2DStaging(
+            contextVk, contextVk->getState().hasProtectedContent(), renderer->getMemoryProperties(),
+            gl::Extents(area.width, area.height, 1), angle::FormatID::R8G8B8A8_UNORM,
+            angle::FormatID::R8G8B8A8_UNORM,
+            VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT |
+                VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+            1));
+    }
 
     VkImageAspectFlags layoutChangeAspectFlags = src->getAspectFlags();
 
-    const angle::Format *readFormat = &getActualFormat();
+    const angle::Format *rgbaFormat = &angle::Format::Get(angle::FormatID::R8G8B8A8_UNORM);
+    const angle::Format *readFormat = isExternalImage ? rgbaFormat : &getActualFormat();
     const vk::Format &vkFormat      = contextVk->getRenderer()->getFormat(readFormat->id);
     const gl::InternalFormat &storageFormatInfo =
         vkFormat.getInternalFormatInfo(readFormat->componentType);
@@ -9834,6 +9860,50 @@ angle::Result ImageHelper::readPixelsImpl(ContextVk *contextVk,
         // Depth > 1 means this is a 3D texture and we need special handling
         srcOffset.z                   = layer;
         srcSubresource.baseArrayLayer = 0;
+    }
+
+    if (isExternalImage)
+    {
+        // XXX: double-check all this, it's just hacked
+        CommandBufferAccess access;
+        access.onImageTransferRead(layoutChangeAspectFlags, this);
+        OutsideRenderPassCommandBuffer *commandBuffer;
+        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
+
+        // Create some temp views because copyImage works in terms of them
+        gl::TextureType textureType = Get2DTextureType(1, resolvedImage.get().getSamples());
+        vk::ImageView srcView;  // XXX: surely we have a view of this already!
+        ANGLE_TRY(src->initImageView(contextVk, textureType, VK_IMAGE_ASPECT_COLOR_BIT,
+                                     gl::SwizzleState(), &srcView, vk::LevelIndex(0), 1,
+                                     vk::ImageHelper::kDefaultImageViewUsageFlags));
+        vk::ImageView stagingView;
+        ANGLE_TRY(resolvedImage.get().initImageView(
+            contextVk, textureType, VK_IMAGE_ASPECT_COLOR_BIT, gl::SwizzleState(), &stagingView,
+            vk::LevelIndex(0), 1, vk::ImageHelper::kDefaultImageViewUsageFlags));
+
+        UtilsVk::CopyImageParameters params = {};
+        params.srcOffset[0]                 = srcOffset.x;
+        params.srcOffset[1]                 = srcOffset.y;
+        params.srcExtents[0]                = srcExtent.width;
+        params.srcExtents[1]                = srcExtent.height;
+        params.srcHeight                    = srcExtent.height;
+        ANGLE_TRY(contextVk->getUtils().copyImage(contextVk, &resolvedImage.get(), &stagingView,
+                                                  src, &srcView, params));
+
+        CommandBufferAccess readAccess;
+        readAccess.onImageTransferRead(layoutChangeAspectFlags, &resolvedImage.get());
+        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(readAccess, &commandBuffer));
+
+        // Make the resolved image the target of buffer copy
+        src                           = &resolvedImage.get();
+        srcOffset                     = {0, 0, 0};
+        srcSubresource.baseArrayLayer = 0;
+        srcSubresource.layerCount     = 1;
+        srcSubresource.mipLevel       = 0;
+
+        // Mark our temp views as garbage immediately
+        contextVk->addGarbage(&srcView);
+        contextVk->addGarbage(&stagingView);
     }
 
     if (isMultisampled)
@@ -9914,7 +9984,7 @@ angle::Result ImageHelper::readPixelsImpl(ContextVk *contextVk,
     size_t allocationSize      = readFormat->pixelBytes * area.width * area.height;
 
     ANGLE_TRY(contextVk->initBufferForImageCopy(stagingBuffer, allocationSize,
-                                                MemoryCoherency::Coherent, mActualFormatID,
+                                                MemoryCoherency::Coherent, readFormat->id,
                                                 &stagingOffset, &readPixelBuffer));
     VkBuffer bufferHandle = stagingBuffer->getBuffer().getHandle();
 
