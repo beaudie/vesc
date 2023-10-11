@@ -1197,6 +1197,11 @@ void RendererVk::ensureCapsInitialized() const
     }
 
     mNativeExtensions.logicOpANGLE = mPhysicalDeviceFeatures.logicOp == VK_TRUE;
+
+    // XXX: when ANDROID_external_format_resolve extension is properly integrated with angle
+    // autogen, gate EXT_yuv_target on that (and if null color attachment restriction remains at
+    // that point, on whether that property is supported)
+    mNativeExtensions.YUVTargetEXT = true;
 }
 
 namespace vk
