@@ -16,6 +16,23 @@
       "message": "geofflang@ and sunnyps@: This CL is to fix the issue that creating an IOSSurface is failed when running the web test on iOS since https://crrev.com/c/4877334, because ANGLE\u0027S EGL doesn\u0027t support GL_RGBA format with GL_UNSIGNED_BYTE type. PTAL.",
       "revId": "687f98e314e163575ac252bd3c6762921ace3e13",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a4296be_a94f3dbc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1128437
+      },
+      "writtenOn": "2023-10-12T18:56:09Z",
+      "side": 1,
+      "message": "Can you enable the RGBA IOSurface tests here: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/tests/egl_tests/EGLIOSurfaceClientBufferTest.cpp;l\u003d481\n\nThere are four tests which are skipped for IsOpenGL():\n\nRenderToRGBA8888IOSurface\nReadFromRGBA8888IOSurface\nRenderToRGBX8888IOSurface\nReadFromRGBX8888IOSurface\n\nWe should change the condition for skipping from IsOpenGL() to IsDesktopOpenGL(). That should enable the tests for the EAGL backend in addition to the Metal backend.\n\nAdding Ken for reviewing this since I\u0027m not an ANGLE owner. Also +Quyen FYI.",
+      "revId": "687f98e314e163575ac252bd3c6762921ace3e13",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
