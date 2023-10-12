@@ -22,6 +22,30 @@
       },
       "revId": "0fe1fe058efe5914bab9ce314ccee8223e0b7601",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f69e934_508ba8d9",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1298072
+      },
+      "writtenOn": "2023-10-12T22:00:08Z",
+      "side": 1,
+      "message": "maybe actually not needed now that the format handling is much more correct. it was a crazy mess of hacks at one point.",
+      "parentUuid": "41e7c3d1_1a42823d",
+      "range": {
+        "startLine": 300,
+        "startChar": 4,
+        "endLine": 304,
+        "endChar": 41
+      },
+      "revId": "0fe1fe058efe5914bab9ce314ccee8223e0b7601",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
