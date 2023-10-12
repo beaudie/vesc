@@ -170,6 +170,18 @@ class OneOffCommandPool : angle::NonCopyable
     std::deque<PendingOneOffCommands> mPendingCommands;
 };
 
+// Extra data required for a renderable external format, for EXT_yuv_target support.
+// We have one of these structures per external format slot (angle::FormatID::EXTERNALn)
+// and allocate them to particular actual external formats in the order we see them.
+struct ExternalYuvFormatInfo
+{
+    // Vendor-specific external format value to be passed in VkExternalFormatANDROID
+    uint64_t externalFormat;
+    // Format the driver wants us to use for a temporary color attachment in order to render into
+    // this external format
+    VkFormat colorAttachmentFormat;
+};
+
 class RendererVk : angle::NonCopyable
 {
   public:
@@ -278,6 +290,11 @@ class RendererVk : angle::NonCopyable
                                    const VkFormatFeatureFlags featureBits) const;
     bool hasBufferFormatFeatureBits(angle::FormatID format,
                                     const VkFormatFeatureFlags featureBits) const;
+    // Convert externalFormat to one of angle::FormatID::EXTERNALn so that we can pass around in
+    // ANGLE
+    angle::FormatID getOrAllocExternalYuvFormatID(uint64_t externalFormat,
+                                                  VkFormat colorAttachmentFormat);
+    const ExternalYuvFormatInfo &getExternalYuvFormatInfo(angle::FormatID format) const;
 
     bool isAsyncCommandQueueEnabled() const { return mFeatures.asyncCommandQueue.enabled; }
     bool isAsyncCommandBufferResetEnabled() const
@@ -943,6 +960,10 @@ class RendererVk : angle::NonCopyable
     vk::FormatTable mFormatTable;
     // A cache of VkFormatProperties as queried from the device over time.
     mutable angle::FormatMap<VkFormatProperties> mFormatProperties;
+    // YUV rendering format cache stuff. We build this table at run time when external formats being
+    // used.
+    std::vector<ExternalYuvFormatInfo> mExternalYuvFormats;
+    mutable std::mutex mExternalYuvFormatMutex;
 
     vk::Allocator mAllocator;
 

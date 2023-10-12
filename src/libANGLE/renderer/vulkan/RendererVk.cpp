@@ -5106,6 +5106,42 @@ bool RendererVk::hasBufferFormatFeatureBits(angle::FormatID formatID,
     return hasFormatFeatureBits<&VkFormatProperties::bufferFeatures>(formatID, featureBits);
 }
 
+angle::FormatID RendererVk::getOrAllocExternalYuvFormatID(uint64_t externalFormat,
+                                                          VkFormat colorAttachmentFormat)
+{
+    std::unique_lock<std::mutex> lock(mExternalYuvFormatMutex);
+    for (int format = ToUnderlying(angle::FormatID::EXTERNAL0);
+         format <= ToUnderlying(angle::FormatID::EXTERNAL7); ++format)
+    {
+        int index = format - ToUnderlying(angle::FormatID::EXTERNAL0);
+        if (static_cast<size_t>(index) >= mExternalYuvFormats.size())
+        {
+            mExternalYuvFormats.push_back({externalFormat, colorAttachmentFormat});
+            return angle::FormatID(format);
+        }
+        else if (mExternalYuvFormats[index].externalFormat == externalFormat)
+        {
+            return angle::FormatID(format);
+        }
+        else
+        {
+            ERR() << "ANGLE only suports maximum 8 external renderable formats";
+            UNREACHABLE();
+        }
+    }
+
+    return angle::FormatID::NONE;
+}
+
+const ExternalYuvFormatInfo &RendererVk::getExternalYuvFormatInfo(angle::FormatID formatID) const
+{
+    ASSERT(formatID >= angle::FormatID::EXTERNAL0);
+    ASSERT(formatID <= angle::FormatID::EXTERNAL7);
+    int index = ToUnderlying(formatID) - ToUnderlying(angle::FormatID::EXTERNAL0);
+    std::unique_lock<std::mutex> lock(mExternalYuvFormatMutex);
+    return mExternalYuvFormats[index];
+}
+
 void RendererVk::outputVmaStatString()
 {
     // Output the VMA stats string
