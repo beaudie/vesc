@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b5d7955_9cb28638",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-12T20:38:05Z",
+      "side": 1,
+      "message": "This is a few preparation CLs for YUV. These are ready to land while we still working on the actual enable of the feature.",
+      "revId": "b16d8e46093571fd12eccf4dda580c3aadfe4246",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
