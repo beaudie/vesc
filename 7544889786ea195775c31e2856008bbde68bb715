@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d8b672e_93881566",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-10-12T13:47:24Z",
+      "side": 1,
+      "message": "Okay, new approach of unifying how we treat uniform binding dirty bits works for Vulkan, but not for GLES.  Need to tease this apart somehow or update all the backends to use the new approach.",
+      "revId": "7544889786ea195775c31e2856008bbde68bb715",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
