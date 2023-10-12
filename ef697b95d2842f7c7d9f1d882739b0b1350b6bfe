@@ -50,6 +50,24 @@
       "message": "What is the purpose of `dequeueLock.unlock()` and `dequeueLock.lock()` here?",
       "revId": "ef697b95d2842f7c7d9f1d882739b0b1350b6bfe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a959160c_59dead06",
+        "filename": "src/common/FixedQueue_unittest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-12T18:28:48Z",
+      "side": 1,
+      "message": "So that we wont dead lock. Otherwise you may run into dead lock when enqueueThread take enqueueLock and try to grab dequeueLock, while this thread take dequeueLock and try to grab enqueueLock. If we always take two locks in the same order, then it wont dead lock.",
+      "parentUuid": "90e08a53_348eb7a5",
+      "revId": "ef697b95d2842f7c7d9f1d882739b0b1350b6bfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
