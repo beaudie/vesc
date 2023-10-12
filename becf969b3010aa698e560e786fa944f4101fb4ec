@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93f86d5f_92e05db6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 65
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-12T16:23:14Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "becf969b3010aa698e560e786fa944f4101fb4ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "527b2faf_cac428c8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 65
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-12T16:23:14Z",
+      "side": 1,
+      "message": "This should be PipelineStage::ComputeShader (the smaller of ComputeShader and Transfer).",
+      "range": {
+        "startLine": 681,
+        "startChar": 27,
+        "endLine": 681,
+        "endChar": 36
+      },
+      "revId": "becf969b3010aa698e560e786fa944f4101fb4ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
