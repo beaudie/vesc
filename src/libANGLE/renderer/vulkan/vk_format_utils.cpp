@@ -306,6 +306,42 @@ void FormatTable::initialize(RendererVk *renderer, gl::TextureCapsMap *outTextur
     }
 }
 
+angle::FormatID ExternalFormatTable::getOrAllocExternalFormatID(uint64_t externalFormat,
+                                                                VkFormat colorAttachmentFormat)
+{
+    std::unique_lock<std::mutex> lock(mExternalYuvFormatMutex);
+    for (int format = ToUnderlying(angle::FormatID::EXTERNAL0);
+         format <= ToUnderlying(angle::FormatID::EXTERNAL7); ++format)
+    {
+        size_t index = format - ToUnderlying(angle::FormatID::EXTERNAL0);
+        if (index >= mExternalYuvFormats.size())
+        {
+            mExternalYuvFormats.push_back({externalFormat, colorAttachmentFormat});
+            return angle::FormatID(format);
+        }
+        else if (mExternalYuvFormats[index].externalFormat == externalFormat)
+        {
+            return angle::FormatID(format);
+        }
+        else
+        {
+            ERR() << "ANGLE only suports maximum 8 external renderable formats";
+            UNREACHABLE();
+        }
+    }
+
+    return angle::FormatID::NONE;
+}
+
+const ExternalYuvFormatInfo &ExternalFormatTable::getExternalFormatInfo(
+    angle::FormatID formatID) const
+{
+    ASSERT(formatID >= angle::FormatID::EXTERNAL0);
+    size_t index = ToUnderlying(formatID) - ToUnderlying(angle::FormatID::EXTERNAL0);
+    ASSERT(index < mExternalYuvFormats.size());
+    return mExternalYuvFormats[index];
+}
+
 size_t GetImageCopyBufferAlignment(angle::FormatID actualFormatID)
 {
     // vkCmdCopyBufferToImage must have an offset that is a multiple of 4 as well as a multiple
