@@ -16,6 +16,23 @@
       "message": "A different fix",
       "revId": "ef697b95d2842f7c7d9f1d882739b0b1350b6bfe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52a1cc62_3ac2b03f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-12T18:11:31Z",
+      "side": 1,
+      "message": "This is the CL for new fix. Original fix has been reverted.",
+      "revId": "ef697b95d2842f7c7d9f1d882739b0b1350b6bfe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
