@@ -217,7 +217,7 @@ float NumericLexFloat32OutOfRangeToInfinity(const std::string &str)
     {
         return std::numeric_limits<float>::infinity();
     }
-    else if (exponentLong < std::numeric_limits<float>::min_exponent10)
+    else if (exponentLong < std::numeric_limits<float>::min_exponent10 - 1)
     {
         return 0.0f;
     }
@@ -233,7 +233,7 @@ float NumericLexFloat32OutOfRangeToInfinity(const std::string &str)
     {
         return std::numeric_limits<float>::infinity();
     }
-    if (value < static_cast<double>(std::numeric_limits<float>::min()))
+    if (static_cast<float>(value) < std::numeric_limits<float>::min())
     {
         return 0.0f;
     }
