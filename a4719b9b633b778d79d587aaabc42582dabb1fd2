@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "614d9515_107dc6f3",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3707,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-10-12T13:39:46Z",
+      "side": 1,
+      "message": "I think this might be a problem. We aren\u0027t tracking the dirty state of `glActiveTexture`.  It might be something you need to track separately, with its own reset calls, similar to how we\u0027re supporting `glUseProgram` (ref1) (ref2)",
+      "range": {
+        "startLine": 3707,
+        "startChar": 8,
+        "endLine": 3707,
+        "endChar": 28
+      },
+      "revId": "a4719b9b633b778d79d587aaabc42582dabb1fd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b14dee84_61a04197",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 5066,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-10-12T13:39:46Z",
+      "side": 1,
+      "message": "ref2",
+      "revId": "a4719b9b633b778d79d587aaabc42582dabb1fd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "047ec587_fd0fdb0a",
+        "filename": "src/libANGLE/capture/FrameCapture.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7621,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2023-10-12T13:39:46Z",
+      "side": 1,
+      "message": "ref1",
+      "revId": "a4719b9b633b778d79d587aaabc42582dabb1fd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
