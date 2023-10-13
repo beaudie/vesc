@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cb086e4_4a945613",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-13T17:17:13Z",
+      "side": 1,
+      "message": "The reserve() is exactly try to prevent the race, which prevents it from resizing.",
+      "parentUuid": "59140f6c_5129d0d0",
+      "revId": "347d1aad0e3559223656ddc1b91f55eb19cc0fac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "68253db6_c884c30c",
@@ -41,6 +59,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4ce77ae_c544bef3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-13T17:17:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "68253db6_c884c30c",
+      "range": {
+        "startLine": 253,
+        "startChar": 0,
+        "endLine": 254,
+        "endChar": 12
+      },
+      "revId": "347d1aad0e3559223656ddc1b91f55eb19cc0fac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "38aa13b4_7914fe2b",
@@ -54,6 +96,24 @@
       "writtenOn": "2023-10-13T01:46:57Z",
       "side": 1,
       "message": "nit: There are only 8, you could use an `angle::FixedArray` sized with `kMaxExternalFormatCountSupported`",
+      "revId": "347d1aad0e3559223656ddc1b91f55eb19cc0fac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e47ee877_057a3686",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-13T17:17:13Z",
+      "side": 1,
+      "message": "I was thinking the same. But since 99.9% apps not using this, so we might be wasting 128 bytes for them. Made it angle::FixedVector for now.",
+      "parentUuid": "38aa13b4_7914fe2b",
       "revId": "347d1aad0e3559223656ddc1b91f55eb19cc0fac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
