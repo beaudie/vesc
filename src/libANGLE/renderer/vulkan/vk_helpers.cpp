@@ -2007,10 +2007,14 @@ void RenderPassCommandBufferHelper::colorImagesDraw(gl::LevelIndex level,
 {
     ASSERT(packedAttachmentIndex < mColorAttachmentsCount);
 
-    image->setQueueSerial(mQueueSerial);
+    // XXX: yuv hack
+    if (image)
+    {
+        image->setQueueSerial(mQueueSerial);
 
-    mColorAttachments[packedAttachmentIndex].init(image, imageSiblingSerial, level, layerStart,
-                                                  layerCount, VK_IMAGE_ASPECT_COLOR_BIT);
+        mColorAttachments[packedAttachmentIndex].init(image, imageSiblingSerial, level, layerStart,
+                                                      layerCount, VK_IMAGE_ASPECT_COLOR_BIT);
+    }
 
     if (resolveImage)
     {
@@ -9792,6 +9796,15 @@ angle::Result ImageHelper::readPixelsImpl(ContextVk *contextVk,
     bool isExternalFormat = getExternalFormat() != 0;
     ASSERT(!isExternalFormat || (mActualFormatID >= angle::FormatID::EXTERNAL0 &&
                                  mActualFormatID <= angle::FormatID::EXTERNAL7));
+
+    if (isExternalFormat)
+    {
+        // XXX: why did lfy@ need this specially for external?
+        // in _all_ cases ReadPixels has to be properly synchronized wrt the
+        // open renderpass.
+        // XXX: if PBO readpixels then doing this synchronously is horrible anyway, don't.
+        ANGLE_TRY(contextVk->finishImpl(RenderPassClosureReason::GLReadPixels));
+    }
 
     // If the source image is multisampled, we need to resolve it into a temporary image before
     // performing a readback.
