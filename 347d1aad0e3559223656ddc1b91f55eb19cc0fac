@@ -116,6 +116,24 @@
       "parentUuid": "38aa13b4_7914fe2b",
       "revId": "347d1aad0e3559223656ddc1b91f55eb19cc0fac",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a16f52d_87761440",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-13T17:56:43Z",
+      "side": 1,
+      "message": "It\u0027s a unique object, so pretty insignificant.",
+      "parentUuid": "e47ee877_057a3686",
+      "revId": "347d1aad0e3559223656ddc1b91f55eb19cc0fac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
