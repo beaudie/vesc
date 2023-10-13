@@ -449,21 +449,6 @@ class Program final : public LabeledObject, public angle::Subject
         return mState.getFragmentOutputIndexes();
     }
 
-    // Program dirty bits.
-    enum DirtyBitType
-    {
-        DIRTY_BIT_UNIFORM_BLOCK_BINDING_0,
-        DIRTY_BIT_UNIFORM_BLOCK_BINDING_MAX =
-            DIRTY_BIT_UNIFORM_BLOCK_BINDING_0 + IMPLEMENTATION_MAX_COMBINED_SHADER_UNIFORM_BUFFERS,
-
-        DIRTY_BIT_COUNT = DIRTY_BIT_UNIFORM_BLOCK_BINDING_MAX,
-    };
-    static_assert(DIRTY_BIT_UNIFORM_BLOCK_BINDING_0 == 0,
-                  "UniformBlockBindingMask must match DirtyBits because UniformBlockBindingMask is "
-                  "used directly to set dirty bits.");
-
-    using DirtyBits = angle::BitSet<DIRTY_BIT_COUNT>;
-
     angle::Result syncState(const Context *context);
 
     // Try to resolve linking. Inlined to make sure its overhead is as low as possible.
@@ -475,8 +460,6 @@ class Program final : public LabeledObject, public angle::Subject
         }
     }
 
-    ANGLE_INLINE bool hasAnyDirtyBit() const { return mDirtyBits.any(); }
-
     // Writes a program's binary to the output memory buffer.
     angle::Result serialize(const Context *context, angle::MemoryBuffer *binaryOut) const;
 
@@ -484,6 +467,7 @@ class Program final : public LabeledObject, public angle::Subject
 
     const ProgramExecutable &getExecutable() const { return mState.getExecutable(); }
     ProgramExecutable &getExecutable() { return mState.getExecutable(); }
+    ProgramExecutable &getExecutableNonConst() { return mState.getExecutable(); }
     const SharedProgramExecutable &getSharedExecutable() const
     {
         return mState.getSharedExecutable();
@@ -495,7 +479,7 @@ class Program final : public LabeledObject, public angle::Subject
         {
             mUniformBlockBindingMasks.resize(uniformBufferIndex + 1, UniformBlockBindingMask());
         }
-        mDirtyBits |= mUniformBlockBindingMasks[uniformBufferIndex];
+        getExecutable().mDirtyBits |= mUniformBlockBindingMasks[uniformBufferIndex];
     }
 
   private:
@@ -570,8 +554,6 @@ class Program final : public LabeledObject, public angle::Subject
     // stored here to support shader attach/detach and link without providing access to them in the
     // backends.
     ShaderMap<Shader *> mAttachedShaders;
-
-    DirtyBits mDirtyBits;
 
     // To simplify dirty bits handling, instead of tracking dirtiness of both uniform block index
     // and uniform binding index, we only track which uniform block index is dirty. And then when
