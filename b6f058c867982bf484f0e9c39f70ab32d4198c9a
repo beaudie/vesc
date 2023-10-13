@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ff6ba0f_3aa0cc83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 71
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-13T12:50:01Z",
+      "side": 1,
+      "message": "LGTM, leaving +2 to Charlie to confirm the stage.",
+      "revId": "b6f058c867982bf484f0e9c39f70ab32d4198c9a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
