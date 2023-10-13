@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ec57eaf7_2e6585d3",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 4821,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-13T17:05:42Z",
+      "side": 1,
+      "message": "We want YUVTargetEXT enabled without modifying ANGLE, just by using the driver that has VK feature support. That is what Chris and I are testing locally. If we do what you said, we will have to change mNativeExtensions.YUVTargetEXT every time we switch driver as well.\n\nBut anyway, this feature flag is going to be enabled in the follow up CL that will go out shortly.",
+      "parentUuid": "4f7cd1e1_24586f6c",
+      "range": {
+        "startLine": 4821,
+        "startChar": 71,
+        "endLine": 4821,
+        "endChar": 76
+      },
+      "revId": "214e8cf9cb16f0d135f5047921e501b956abc866",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7dda4d76_5effa398",
         "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
         "patchSetId": 3
@@ -37,6 +61,30 @@
       "writtenOn": "2023-10-13T01:37:35Z",
       "side": 1,
       "message": "nit: please drop the `ANDROID` suffix, none of the other ones have it",
+      "range": {
+        "startLine": 919,
+        "startChar": 87,
+        "endLine": 919,
+        "endChar": 94
+      },
+      "revId": "214e8cf9cb16f0d135f5047921e501b956abc866",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4ccf679_7266fd4d",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 919,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-13T17:05:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7dda4d76_5effa398",
       "range": {
         "startLine": 919,
         "startChar": 87,
