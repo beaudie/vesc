@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9e3fea4_014a46bc",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2309,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-13T01:52:29Z",
+      "side": 1,
+      "message": "nit: Fine to rely on null attachments for now, but I\u0027d make it official by checking the property and enabling the extension only if null color attachments are possible.",
+      "revId": "47fd5bd87d68303d3a73f3fb122b561271706921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d460dc95_d7b75a52",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2310,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-13T01:52:29Z",
+      "side": 1,
+      "message": "You\u0027d likely have a better time supporting YUV rendering if you hook into the infrastructure that\u0027s in place for MSRTT emulation. There, there is also an image that\u0027s the resolve attachment, and there\u0027s an implicit color attachment (which in this case is null, but then you could also easily support the non-null case). I think you\u0027d mostly just use that mechanism with some added \"if null\" checks.",
+      "revId": "47fd5bd87d68303d3a73f3fb122b561271706921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
