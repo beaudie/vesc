@@ -6282,7 +6282,7 @@ VkResult PipelineCacheAccess::createComputePipeline(vk::Context *context,
 
 void PipelineCacheAccess::merge(RendererVk *renderer, const vk::PipelineCache &pipelineCache)
 {
-    ASSERT(mMutex != nullptr);
+    ASSERT(mMutex != nullptr || !renderer->getFeatures().supportsPipelineCreationFeedback.enabled);
 
     std::unique_lock<std::mutex> lock = getLock();
 
