@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8837d8e1_eb00e7c4",
+        "filename": "util/capture/frame_capture_test_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-13T15:55:57Z",
+      "side": 1,
+      "message": "Why not dump the entire data too? Then you could have a stream to debug as you please.",
+      "revId": "5284bc4285474b79198b070bcc07524fc3b7704c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
