@@ -5172,6 +5172,9 @@ void ContextVk::updateDither()
             }
 
             RenderTargetVk *attachment = framebufferVk->getColorDrawRenderTarget(colorIndex);
+            // XXX: yuv
+            if (attachment->isYuvResolve())
+                continue;
 
             const angle::FormatID format = attachment->getImageActualFormatID();
 
