@@ -1824,6 +1824,101 @@ void main()
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
 }
 
+// Test a PPO scenario from a game, calling glBindBufferRange between two draws
+// with multiple binding points would result in a crash without the fix.
+// https://b.corp.google.com/issues/299532942
+TEST_P(ProgramPipelineTest31, ProgramPipelineBindBufferRange)
+{
+    ANGLE_SKIP_TEST_IF(!IsVulkan());
+
+    const GLchar *vertString = R"(#version 310 es
+layout(std140, binding = 0) uniform ubo1 {
+    vec4 color;
+    vec4 position;
+};
+layout(location=0) out vec4 vsColor;
+void main()
+{
+    vsColor = color;
+    gl_Position = position;
+})";
+
+    const GLchar *fragString = R"(#version 310 es
+precision mediump float;
+layout(std140, binding = 1) uniform globals {
+    float foo;
+};
+layout(std140, binding = 2) uniform params {
+    vec3 bar;
+};
+layout(std140, binding = 3) uniform layer {
+    vec4 blee;
+};
+layout(location=0) highp in vec4 vsColor;
+layout(location=0) out vec4 diffuse;
+void main()
+{
+    diffuse = vec4(foo) + vsColor;
+})";
+
+    // Create the pipeline
+    GLProgramPipeline programPipeline;
+    glBindProgramPipeline(programPipeline);
+
+    // Create the vertex shader
+    GLShader vertShader(GL_VERTEX_SHADER);
+    glShaderSource(vertShader, 1, &vertString, nullptr);
+    glCompileShader(vertShader);
+    mVertProg = glCreateProgram();
+    glProgramParameteri(mVertProg, GL_PROGRAM_SEPARABLE, 1);
+    glAttachShader(mVertProg, vertShader);
+    glLinkProgram(mVertProg);
+    glUseProgramStages(programPipeline, GL_VERTEX_SHADER_BIT, mVertProg);
+    EXPECT_GL_NO_ERROR();
+
+    // Create the fragment shader
+    GLShader fragShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragShader, 1, &fragString, nullptr);
+    glCompileShader(fragShader);
+    mFragProg = glCreateProgram();
+    glProgramParameteri(mFragProg, GL_PROGRAM_SEPARABLE, 1);
+    glAttachShader(mFragProg, fragShader);
+    glLinkProgram(mFragProg);
+    glUseProgramStages(programPipeline, GL_FRAGMENT_SHADER_BIT, mFragProg);
+    EXPECT_GL_NO_ERROR();
+
+    // Set up a uniform buffer
+    GLBuffer ubo1;
+    glBindBuffer(GL_UNIFORM_BUFFER, ubo1);
+    glBufferData(GL_UNIFORM_BUFFER, 2048, 0, GL_DYNAMIC_DRAW);
+    glBindBufferRange(GL_UNIFORM_BUFFER, 0, ubo1, 0, 256);
+    glBindBufferRange(GL_UNIFORM_BUFFER, 1, ubo1, 256, 512);
+    glBindBufferRange(GL_UNIFORM_BUFFER, 2, ubo1, 512, 768);
+    glBindBufferRange(GL_UNIFORM_BUFFER, 3, ubo1, 768, 1024);
+    EXPECT_GL_NO_ERROR();
+
+    // Set up data for draw elements instanced
+    GLBuffer arrayBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, arrayBuffer);
+    glBufferData(GL_ARRAY_BUFFER, 128, 0, GL_STATIC_DRAW);
+    GLBuffer elementArrayBuffer;
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementArrayBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 128, 0, GL_STATIC_DRAW);
+    EXPECT_GL_NO_ERROR();
+
+    // Perform the first draw
+    glDrawElementsInstanced(GL_TRIANGLES, 4, GL_UNSIGNED_SHORT, 0, 1);
+    EXPECT_GL_NO_ERROR();
+
+    // This is the key here - call glBindBufferRange between two glDrawElementsInstanced calls
+    glBindBufferRange(GL_UNIFORM_BUFFER, 0, ubo1, 1024, 1280);
+    EXPECT_GL_NO_ERROR();
+
+    // The next draw would crash in handleDirtyGraphicsUniformBuffers without the accompanying fix
+    glDrawElementsInstanced(GL_TRIANGLES, 4, GL_UNSIGNED_SHORT, 0, 1);
+    EXPECT_GL_NO_ERROR();
+}
+
 class ProgramPipelineTest32 : public ProgramPipelineTest
 {
   protected:
