@@ -70,6 +70,24 @@
       "parentUuid": "7bf76411_915e3dfa",
       "revId": "5284bc4285474b79198b070bcc07524fc3b7704c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b26a7e10_78450d5e",
+        "filename": "util/capture/frame_capture_test_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-13T18:21:18Z",
+      "side": 1,
+      "message": "It\u0027s baffling for sure. I was hoping if we have the actual failing stream, we could try to reproduce it.\n\nOr are you saying because the crc was the same, we can take the data as we already have on disk and the data here should be the same? That\u0027s likely the case, but could be good to eliminate as many variables.\n\nAnyway, just an idea :shrug:",
+      "parentUuid": "6ed312ef_cbecc1c3",
+      "revId": "5284bc4285474b79198b070bcc07524fc3b7704c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
