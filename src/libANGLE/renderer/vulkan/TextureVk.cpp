@@ -2654,6 +2654,9 @@ angle::Result TextureVk::getAttachmentRenderTarget(const gl::Context *context,
             mState.getType(), samples, *mImage, useRobustInit));
     }
 
+    // XXX: if rendering to yuv and the vulkan impl underneath can't do a null color attachment
+    // then make sure we have our temporary color attachment set up as with MSRTSS above.
+
     GLuint layerIndex = 0, layerCount = 0, imageLayerCount = 0;
     GetRenderTargetLayerCountAndIndex(mImage, imageIndex, &layerIndex, &layerCount,
                                       &imageLayerCount);

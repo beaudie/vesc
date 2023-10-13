@@ -1845,13 +1845,25 @@ angle::Result FramebufferVk::updateColorAttachment(const gl::Context *context,
     RenderTargetVk *renderTarget = mRenderTargetCache.getColors()[colorIndexGL];
     if (renderTarget)
     {
-        const angle::Format &actualFormat = renderTarget->getImageActualFormat();
-        updateActiveColorMasks(colorIndexGL, actualFormat.redBits > 0, actualFormat.greenBits > 0,
-                               actualFormat.blueBits > 0, actualFormat.alphaBits > 0);
+        // XXX: silly hack here for yuv with null color attachment
+        // how should this *really* be done?
+        if (renderTarget->isYuvResolve())
+        {
+            updateActiveColorMasks(colorIndexGL, true, true, true, true);
+            // XXX: this is probably not even really correct
+            mEmulatedAlphaAttachmentMask.set(colorIndexGL, false);
+        }
+        else
+        {
+            const angle::Format &actualFormat = renderTarget->getImageActualFormat();
+            updateActiveColorMasks(colorIndexGL, actualFormat.redBits > 0,
+                                   actualFormat.greenBits > 0, actualFormat.blueBits > 0,
+                                   actualFormat.alphaBits > 0);
 
-        const angle::Format &intendedFormat = renderTarget->getImageIntendedFormat();
-        mEmulatedAlphaAttachmentMask.set(
-            colorIndexGL, intendedFormat.alphaBits == 0 && actualFormat.alphaBits > 0);
+            const angle::Format &intendedFormat = renderTarget->getImageIntendedFormat();
+            mEmulatedAlphaAttachmentMask.set(
+                colorIndexGL, intendedFormat.alphaBits == 0 && actualFormat.alphaBits > 0);
+        }
     }
     else
     {
@@ -1864,7 +1876,18 @@ angle::Result FramebufferVk::updateColorAttachment(const gl::Context *context,
 
     if (enabledColor)
     {
-        mCurrentFramebufferDesc.updateColor(colorIndexGL, renderTarget->getDrawSubresourceSerial());
+        // XXX: yuv hack
+        if (renderTarget->isYuvResolve())
+        {
+            ANGLE_LOG(ERR) << "update framebufferdesc with resolve subresource serial hack";
+            mCurrentFramebufferDesc.updateColor(colorIndexGL,
+                                                vk::kInvalidImageOrBufferViewSubresourceSerial);
+        }
+        else
+        {
+            mCurrentFramebufferDesc.updateColor(colorIndexGL,
+                                                renderTarget->getDrawSubresourceSerial());
+        }
         const bool isExternalImage =
             mState.getColorAttachments()[colorIndexGL].isExternalImageWithoutIndividualSync();
         mIsExternalColorAttachments.set(colorIndexGL, isExternalImage);
@@ -2920,6 +2943,9 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
             packedClearValues.store(colorIndexVk, VK_IMAGE_ASPECT_COLOR_BIT,
                                     mDeferredClears[colorIndexGL]);
             mDeferredClears.reset(colorIndexGL);
+
+            if (colorRenderTarget->isYuvResolve())
+                ANGLE_LOG(ERR) << "emitting clear load op for yuv";
         }
         else
         {
@@ -2943,6 +2969,7 @@ angle::Result FramebufferVk::startNewRenderPass(ContextVk *contextVk,
         // come from the same source.  isImageTransient() indicates whether this should happen.
         if (colorRenderTarget->hasResolveAttachment() && colorRenderTarget->isImageTransient())
         {
+            // XXX: yuv unresolve is implicit
             if (renderPassAttachmentOps[colorIndexVk].loadOp == VK_ATTACHMENT_LOAD_OP_LOAD)
             {
                 renderPassAttachmentOps[colorIndexVk].loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
