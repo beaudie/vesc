@@ -1259,7 +1259,7 @@ class PipelineCacheAccess
 
     void merge(RendererVk *renderer, const vk::PipelineCache &pipelineCache);
 
-    bool isThreadSafe() const { return mMutex != nullptr; }
+    bool isThreadSafe(RendererVk *renderer) const;
 
   private:
     std::unique_lock<std::mutex> getLock();
