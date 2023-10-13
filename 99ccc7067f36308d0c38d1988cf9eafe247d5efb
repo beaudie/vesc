@@ -52,6 +52,24 @@
       "parentUuid": "aa4a166f_0a404628",
       "revId": "99ccc7067f36308d0c38d1988cf9eafe247d5efb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a25b5a80_3ccf5605",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-13T16:52:40Z",
+      "side": 1,
+      "message": "Yea, I believe it is my this CL \nhttps://chromium-review.googlesource.com/c/angle/angle/+/4581881\nfixed it. If you look at UpdatePreCacheActiveTextures() in that CL, I found a bug there that previously it is using textureUnit instead of bindingIndex, that is different from how updateFullActiveTextures() handles it. I fixed it in that CL. That most likely took care of the fix that Roman\u0027s original CL try to fix.",
+      "parentUuid": "59da11c8_d077d8f0",
+      "revId": "99ccc7067f36308d0c38d1988cf9eafe247d5efb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
