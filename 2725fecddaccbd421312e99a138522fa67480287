@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3be5796_1ce7c3b3",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 67
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-10-13T05:23:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "91ccc036_39b08f89",
+      "range": {
+        "startLine": 425,
+        "startChar": 31,
+        "endLine": 425,
+        "endChar": 50
+      },
+      "revId": "2725fecddaccbd421312e99a138522fa67480287",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "07f423da_8952f676",
@@ -41,6 +65,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d649452_7849d35e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 67
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-10-13T05:23:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07f423da_8952f676",
+      "revId": "2725fecddaccbd421312e99a138522fa67480287",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "586d3a6d_e006c2c1",
@@ -54,6 +96,30 @@
       "writtenOn": "2023-10-13T01:32:58Z",
       "side": 1,
       "message": "Isn\u0027t the image only being written to? You can remove the READ bits here.",
+      "range": {
+        "startLine": 676,
+        "startChar": 0,
+        "endLine": 676,
+        "endChar": 128
+      },
+      "revId": "2725fecddaccbd421312e99a138522fa67480287",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af8ddfb0_66aa95f6",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 67
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-10-13T05:23:53Z",
+      "side": 1,
+      "message": "from hw point of view, if it is partial copy , it may have to read.",
+      "parentUuid": "586d3a6d_e006c2c1",
       "range": {
         "startLine": 676,
         "startChar": 0,
@@ -104,6 +170,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "55ad5c28_91adc0a8",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 67
+      },
+      "lineNbr": 1791,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-10-13T05:23:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d23523ae_392fe0d1",
+      "range": {
+        "startLine": 1791,
+        "startChar": 4,
+        "endLine": 1791,
+        "endChar": 23
+      },
+      "revId": "2725fecddaccbd421312e99a138522fa67480287",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e161aaef_3297f321",
@@ -117,6 +207,30 @@
       "writtenOn": "2023-10-13T01:32:58Z",
       "side": 1,
       "message": "Correspodingly, `onImageTransferAndComputeWrite`",
+      "range": {
+        "startLine": 3416,
+        "startChar": 9,
+        "endLine": 3416,
+        "endChar": 28
+      },
+      "revId": "2725fecddaccbd421312e99a138522fa67480287",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe3d3f84_76436fde",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 67
+      },
+      "lineNbr": 3416,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-10-13T05:23:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e161aaef_3297f321",
       "range": {
         "startLine": 3416,
         "startChar": 9,
