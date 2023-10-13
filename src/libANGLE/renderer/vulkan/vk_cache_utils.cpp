@@ -4357,7 +4357,7 @@ CreateMonolithicPipelineTask::CreateMonolithicPipelineTask(
 {
     // Make sure the given pipeline cache has an associated mutex as this task will be running
     // asynchronously.
-    ASSERT(pipelineCache.isThreadSafe());
+    ASSERT(pipelineCache.isThreadSafe(renderer));
 }
 
 void CreateMonolithicPipelineTask::setCompatibleRenderPass(const RenderPass *compatibleRenderPass)
@@ -6326,11 +6326,17 @@ VkResult PipelineCacheAccess::createComputePipeline(vk::Context *context,
 
 void PipelineCacheAccess::merge(RendererVk *renderer, const vk::PipelineCache &pipelineCache)
 {
-    ASSERT(mMutex != nullptr);
+    ASSERT(isThreadSafe(renderer));
 
     std::unique_lock<std::mutex> lock = getLock();
 
     mPipelineCache->merge(renderer->getDevice(), 1, pipelineCache.ptr());
+}
+
+bool PipelineCacheAccess::isThreadSafe(RendererVk *renderer) const
+{
+    return mMutex != nullptr ||
+           !renderer->getFeatures().supportsPipelineCreationCacheControl.enabled;
 }
 }  // namespace vk
 
