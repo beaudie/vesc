@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8ede4b8_beaa8a1c",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 5178,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-13T20:30:44Z",
+      "side": 1,
+      "message": "I dont think this is needed. The logic bellow should give you NoDither as well. Will add back if needed.",
+      "range": {
+        "startLine": 5176,
+        "startChar": 12,
+        "endLine": 5178,
+        "endChar": 25
+      },
+      "revId": "bdeb06a5bf83809d8b7a084596d863824a122018",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ac3273f_6be43416",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1854,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-13T20:30:44Z",
+      "side": 1,
+      "message": "I dont think this is needed. angle::Format for external formats will provide same. I am removing these for now and we can add back if any test fail or we believe we need it.",
+      "range": {
+        "startLine": 1852,
+        "startChar": 12,
+        "endLine": 1854,
+        "endChar": 66
+      },
+      "revId": "bdeb06a5bf83809d8b7a084596d863824a122018",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7bc2c90c_87058991",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1885,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-13T20:30:44Z",
+      "side": 1,
+      "message": "Also unsure if this is needed. Will add back if proved needed.",
+      "range": {
+        "startLine": 1880,
+        "startChar": 8,
+        "endLine": 1885,
+        "endChar": 91
+      },
+      "revId": "bdeb06a5bf83809d8b7a084596d863824a122018",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0cdff2b1_0fc346f1",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2511,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-13T20:30:44Z",
+      "side": 1,
+      "message": "Merged into line 2502",
+      "range": {
+        "startLine": 2511,
+        "startChar": 21,
+        "endLine": 2511,
+        "endChar": 49
+      },
+      "revId": "bdeb06a5bf83809d8b7a084596d863824a122018",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae9a90e0_021362a4",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2955,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-13T20:30:44Z",
+      "side": 1,
+      "message": "Debug code removed",
+      "range": {
+        "startLine": 2954,
+        "startChar": 16,
+        "endLine": 2955,
+        "endChar": 50
+      },
+      "revId": "bdeb06a5bf83809d8b7a084596d863824a122018",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "761a1a8c_aa5bc95c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 2011,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-13T20:30:44Z",
+      "side": 1,
+      "message": "Do we still need this? I thought we set it to resolveImage for YUV?\nRemoving for now. Will add back if needed.",
+      "range": {
+        "startLine": 2011,
+        "startChar": 8,
+        "endLine": 2011,
+        "endChar": 13
+      },
+      "revId": "bdeb06a5bf83809d8b7a084596d863824a122018",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1ba6fe2_5ee43db9",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 9805,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-13T20:30:44Z",
+      "side": 1,
+      "message": "Lets remove this for now and add back if needed",
+      "range": {
+        "startLine": 9796,
+        "startChar": 4,
+        "endLine": 9805,
+        "endChar": 5
+      },
+      "revId": "bdeb06a5bf83809d8b7a084596d863824a122018",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

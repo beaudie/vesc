@@ -46,6 +46,30 @@
       },
       "revId": "0fe1fe058efe5914bab9ce314ccee8223e0b7601",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2376a389_3d7cd317",
+        "filename": "src/libANGLE/renderer/vulkan/android/HardwareBufferImageSiblingVkAndroid.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-13T20:30:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f69e934_508ba8d9",
+      "range": {
+        "startLine": 300,
+        "startChar": 4,
+        "endLine": 304,
+        "endChar": 41
+      },
+      "revId": "0fe1fe058efe5914bab9ce314ccee8223e0b7601",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

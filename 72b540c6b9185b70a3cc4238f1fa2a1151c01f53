@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "795de713_6bda9e03",
+        "filename": "src/libANGLE/renderer/angle_format.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-13T20:30:44Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "51fe8160_36dbd7bb",
+      "range": {
+        "startLine": 86,
+        "startChar": 22,
+        "endLine": 86,
+        "endChar": 29
+      },
+      "revId": "72b540c6b9185b70a3cc4238f1fa2a1151c01f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1f41c72c_5421cd45",
@@ -61,6 +85,30 @@
       "side": 1,
       "message": "leftover from `in [\"NONE\", \"EXTERNAL\"]` from a very very old version. We can drop this hunk (and probably the previous)",
       "parentUuid": "1f41c72c_5421cd45",
+      "range": {
+        "startLine": 264,
+        "startChar": 18,
+        "endLine": 264,
+        "endChar": 20
+      },
+      "revId": "72b540c6b9185b70a3cc4238f1fa2a1151c01f53",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96a1a186_87c92f91",
+        "filename": "src/libANGLE/renderer/angle_format.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-13T20:30:44Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "6a47e174_dc4ff355",
       "range": {
         "startLine": 264,
         "startChar": 18,
