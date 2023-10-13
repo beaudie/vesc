@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad2c0aa0_441bd33d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-13T13:21:34Z",
+      "side": 1,
+      "message": "🤞 hoping this analysis is correct and we\u0027re not just getting lucky",
+      "revId": "99ccc7067f36308d0c38d1988cf9eafe247d5efb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
