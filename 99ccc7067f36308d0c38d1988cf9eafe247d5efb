@@ -16,6 +16,24 @@
       "message": "🤞 hoping this analysis is correct and we\u0027re not just getting lucky",
       "revId": "99ccc7067f36308d0c38d1988cf9eafe247d5efb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa4a166f_0a404628",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-10-13T13:24:21Z",
+      "side": 1,
+      "message": "Yeah that\u0027s how I feel about this too. If you can think of ways to reduce risks, like maybe add some other kind of tests, I could have a look into that.",
+      "parentUuid": "ad2c0aa0_441bd33d",
+      "revId": "99ccc7067f36308d0c38d1988cf9eafe247d5efb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
