@@ -279,6 +279,9 @@ constexpr const char *kSkippedMessages[] = {
     "VUID-VkSamplerCreateInfo-pNext-pNext",
     // https://issuetracker.google.com/303441816
     "VUID-VkRenderPassBeginInfo-renderPass-00904",
+    // It is not an error to rely on internal synchronization of pipeline caches
+    // when VK_EXT_pipeline_creation_cache_control is not supported
+    "UNASSIGNED-Threading-MultipleThreads",
 };
 
 // Validation messages that should be ignored only when VK_EXT_primitive_topology_list_restart is
@@ -4869,7 +4872,13 @@ angle::Result RendererVk::getPipelineCache(vk::PipelineCacheAccess *pipelineCach
         pCache.destroy(mDevice);
     }
 
-    pipelineCacheOut->init(&mPipelineCache, &mPipelineCacheMutex);
+    std::mutex *pipelineCacheMutex = nullptr;
+    if (mFeatures.supportsPipelineCreationCacheControl.enabled)
+    {
+        pipelineCacheMutex = &mPipelineCacheMutex;
+    }
+
+    pipelineCacheOut->init(&mPipelineCache, pipelineCacheMutex);
     return angle::Result::Continue;
 }
 
