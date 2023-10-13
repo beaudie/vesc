@@ -70,6 +70,24 @@
       "parentUuid": "59da11c8_d077d8f0",
       "revId": "99ccc7067f36308d0c38d1988cf9eafe247d5efb",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8a84a05_eeaeda14",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-10-13T17:57:33Z",
+      "side": 1,
+      "message": "Thanks! Mentioned in CL description.",
+      "parentUuid": "a25b5a80_3ccf5605",
+      "revId": "99ccc7067f36308d0c38d1988cf9eafe247d5efb",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
