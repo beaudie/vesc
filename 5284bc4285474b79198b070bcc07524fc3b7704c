@@ -52,6 +52,24 @@
       "parentUuid": "128d4686_1f984557",
       "revId": "5284bc4285474b79198b070bcc07524fc3b7704c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ed312ef_cbecc1c3",
+        "filename": "util/capture/frame_capture_test_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-10-13T18:11:13Z",
+      "side": 1,
+      "message": "Hold on, seems like there might be some confusion. The CRC that I was checking wasn\u0027t the CRC that\u0027s in the gzip. It was a crc16 of the entire bytestream:\nhttps://crrev.com/c/4794110\nwhich almost guarantees that the bytestream is not corrupted as we got the same crc16 as usually http://b/296921272#comment3\n\nThe failing zlib path does seem to be due to the CRC check, but the one that is part of the gzip format. Given that zlib is being given the same bytestream, it must be either the zlib library itself getting corrupted (on its own or by our harness which is probably most likely) or the execution model is somehow violated (idk like RAM bit flips due to overheated machines?..)",
+      "parentUuid": "7bf76411_915e3dfa",
+      "revId": "5284bc4285474b79198b070bcc07524fc3b7704c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
