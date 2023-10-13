@@ -34,6 +34,24 @@
       "parentUuid": "8837d8e1_eb00e7c4",
       "revId": "5284bc4285474b79198b070bcc07524fc3b7704c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7bf76411_915e3dfa",
+        "filename": "util/capture/frame_capture_test_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-13T18:01:10Z",
+      "side": 1,
+      "message": "Right, it\u0027s great that you\u0027re doing this actually, even if it goes super slowly. You never know what nasty thing you might discover.\n\nYou could just `fopen`, `fwrite` into somewhere temp you could then hopefully retrieve from the bots. I remember CRC wasn\u0027t an issue, so it\u0027s really curious what fails. If we have the actual bytestream, we can run uncompress on it as much as needed to investigate. Like, maybe it would find an undefined behavior thing in gzip, or something.",
+      "parentUuid": "128d4686_1f984557",
+      "revId": "5284bc4285474b79198b070bcc07524fc3b7704c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
