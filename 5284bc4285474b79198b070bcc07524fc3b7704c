@@ -88,6 +88,24 @@
       "parentUuid": "6ed312ef_cbecc1c3",
       "revId": "5284bc4285474b79198b070bcc07524fc3b7704c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a949944_a9ee5ecf",
+        "filename": "util/capture/frame_capture_test_utils.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-10-13T18:30:05Z",
+      "side": 1,
+      "message": "https://crrev.com/c/4794110 (please have a look at what that CL does, it\u0027s tiny) confirmed that `crc16(compressedData)` is the same whether decompression passes or fails, which suggests that it is very likely (modulo crc16 collision which would be one hell of a coincidence) that `compressedData` is also the same and `decompress(compressedData)` is not being idempotent.",
+      "parentUuid": "b26a7e10_78450d5e",
+      "revId": "5284bc4285474b79198b070bcc07524fc3b7704c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
