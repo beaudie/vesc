@@ -4869,7 +4869,13 @@ angle::Result RendererVk::getPipelineCache(vk::PipelineCacheAccess *pipelineCach
         pCache.destroy(mDevice);
     }
 
-    pipelineCacheOut->init(&mPipelineCache, &mPipelineCacheMutex);
+    std::mutex *pipelineCacheMutex = nullptr;
+    if (mFeatures.supportsPipelineCreationCacheControl.enabled)
+    {
+        pipelineCacheMutex = &mPipelineCacheMutex;
+    }
+
+    pipelineCacheOut->init(&mPipelineCache, pipelineCacheMutex);
     return angle::Result::Continue;
 }
 
