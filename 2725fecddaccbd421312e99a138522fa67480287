@@ -204,6 +204,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8c1a9bc8_d83efa7a",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 67
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 1517514
+      },
+      "writtenOn": "2023-10-13T17:24:01Z",
+      "side": 1,
+      "message": "yes, from app point of view, it only write no read.",
+      "parentUuid": "f59b29f6_409bada2",
+      "range": {
+        "startLine": 676,
+        "startChar": 0,
+        "endLine": 676,
+        "endChar": 128
+      },
+      "revId": "2725fecddaccbd421312e99a138522fa67480287",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bb5fdcbc_de74e8cf",
         "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
         "patchSetId": 67
