@@ -348,6 +348,8 @@ class RendererVk : angle::NonCopyable
     }
 
     angle::Result getPipelineCache(vk::Context *context, vk::PipelineCacheAccess *pipelineCacheOut);
+    angle::Result getPipelineCacheForMerge(vk::Context *context,
+                                           vk::PipelineCacheAccess *pipelineCacheOut);
     angle::Result mergeIntoPipelineCache(vk::Context *context,
                                          const vk::PipelineCache &pipelineCache);
 
@@ -795,6 +797,7 @@ class RendererVk : angle::NonCopyable
     angle::Result initPipelineCache(DisplayVk *display,
                                     vk::PipelineCache *pipelineCache,
                                     bool *success);
+    angle::Result getPipelineCacheImpl(vk::Context *context);
 
     template <VkFormatFeatureFlags VkFormatProperties::*features>
     VkFormatFeatureFlags getFormatFeatureBits(angle::FormatID formatID,

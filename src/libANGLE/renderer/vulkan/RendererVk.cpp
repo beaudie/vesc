@@ -4976,8 +4976,7 @@ angle::Result RendererVk::initPipelineCache(DisplayVk *display,
     return angle::Result::Continue;
 }
 
-angle::Result RendererVk::getPipelineCache(vk::Context *context,
-                                           vk::PipelineCacheAccess *pipelineCacheOut)
+angle::Result RendererVk::getPipelineCacheImpl(vk::Context *context)
 {
     // Note that ANGLE externally synchronizes the pipeline cache, and uses
     // VK_EXT_pipeline_creation_cache_control (where available) to disable internal synchronization.
@@ -5001,6 +5000,29 @@ angle::Result RendererVk::getPipelineCache(vk::Context *context,
         pCache.destroy(mDevice);
     }
 
+    return angle::Result::Continue;
+}
+
+angle::Result RendererVk::getPipelineCache(vk::Context *context,
+                                           vk::PipelineCacheAccess *pipelineCacheOut)
+{
+    ANGLE_TRY(getPipelineCacheImpl(context));
+
+    std::mutex *pipelineCacheMutex = nullptr;
+    if (mFeatures.supportsPipelineCreationCacheControl.enabled)
+    {
+        pipelineCacheMutex = &mPipelineCacheMutex;
+    }
+
+    pipelineCacheOut->init(&mPipelineCache, pipelineCacheMutex);
+    return angle::Result::Continue;
+}
+
+angle::Result RendererVk::getPipelineCacheForMerge(vk::Context *context,
+                                                   vk::PipelineCacheAccess *pipelineCacheOut)
+{
+    ANGLE_TRY(getPipelineCacheImpl(context));
+
     pipelineCacheOut->init(&mPipelineCache, &mPipelineCacheMutex);
     return angle::Result::Continue;
 }
@@ -5009,7 +5031,7 @@ angle::Result RendererVk::mergeIntoPipelineCache(vk::Context *context,
                                                  const vk::PipelineCache &pipelineCache)
 {
     vk::PipelineCacheAccess globalCache;
-    ANGLE_TRY(getPipelineCache(context, &globalCache));
+    ANGLE_TRY(getPipelineCacheForMerge(context, &globalCache));
 
     globalCache.merge(this, pipelineCache);
 
