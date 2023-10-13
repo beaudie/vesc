@@ -1,0 +1,130 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91ccc036_39b08f89",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 67
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-13T01:32:58Z",
+      "side": 1,
+      "message": "Please use a `std::array`. Then operator [] in `GetEtcToBcTransCodingFunc` could do bounds checks in assert builds.",
+      "range": {
+        "startLine": 425,
+        "startChar": 31,
+        "endLine": 425,
+        "endChar": 50
+      },
+      "revId": "2725fecddaccbd421312e99a138522fa67480287",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07f423da_8952f676",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 67
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-13T01:32:58Z",
+      "side": 1,
+      "message": "Please add 11 static_asserts to ensure every array index remains in the expected place.",
+      "revId": "2725fecddaccbd421312e99a138522fa67480287",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "586d3a6d_e006c2c1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 67
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-13T01:32:58Z",
+      "side": 1,
+      "message": "Isn\u0027t the image only being written to? You can remove the READ bits here.",
+      "range": {
+        "startLine": 676,
+        "startChar": 0,
+        "endLine": 676,
+        "endChar": 128
+      },
+      "revId": "2725fecddaccbd421312e99a138522fa67480287",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb5fdcbc_de74e8cf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 67
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-13T01:32:58Z",
+      "side": 1,
+      "message": "The comment doesn\u0027t make sense for this case as there is no ordering between compute and transfer. Perhaps this doesn\u0027t matter for this layout? @cclao@google.com could you please verify?",
+      "revId": "2725fecddaccbd421312e99a138522fa67480287",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d23523ae_392fe0d1",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 67
+      },
+      "lineNbr": 1791,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-13T01:32:58Z",
+      "side": 1,
+      "message": "nit: How about `TransferDstAndComputeWrite`?",
+      "range": {
+        "startLine": 1791,
+        "startChar": 4,
+        "endLine": 1791,
+        "endChar": 23
+      },
+      "revId": "2725fecddaccbd421312e99a138522fa67480287",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e161aaef_3297f321",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.h",
+        "patchSetId": 67
+      },
+      "lineNbr": 3416,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-13T01:32:58Z",
+      "side": 1,
+      "message": "Correspodingly, `onImageTransferAndComputeWrite`",
+      "range": {
+        "startLine": 3416,
+        "startChar": 9,
+        "endLine": 3416,
+        "endChar": 28
+      },
+      "revId": "2725fecddaccbd421312e99a138522fa67480287",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
