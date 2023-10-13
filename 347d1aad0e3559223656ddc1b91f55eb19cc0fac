@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59140f6c_5129d0d0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-13T01:46:57Z",
+      "side": 1,
+      "message": "Note: without `angle::FixedArray`, this races with `getOrAllocExternalFormatID` who may be resizing this array.",
+      "revId": "347d1aad0e3559223656ddc1b91f55eb19cc0fac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68253db6_c884c30c",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-13T01:46:57Z",
+      "side": 1,
+      "message": "nit:\n\n```suggestion\n    // YUV rendering format cache. We build this table at run time when external formats are used.\n```",
+      "range": {
+        "startLine": 253,
+        "startChar": 0,
+        "endLine": 254,
+        "endChar": 12
+      },
+      "revId": "347d1aad0e3559223656ddc1b91f55eb19cc0fac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38aa13b4_7914fe2b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_format_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-13T01:46:57Z",
+      "side": 1,
+      "message": "nit: There are only 8, you could use an `angle::FixedArray` sized with `kMaxExternalFormatCountSupported`",
+      "revId": "347d1aad0e3559223656ddc1b91f55eb19cc0fac",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
