@@ -16,6 +16,23 @@
       "message": "PTAL",
       "revId": "86574c2a99cb6ef27904ac57d23a51ed694f45b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c72a826f_b1bfb7b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-10-14T22:01:55Z",
+      "side": 1,
+      "message": "i saw these VVLs which i believe are being incorrectly generated -\n```\nERR: RendererVk.cpp:795 (DebugUtilsMessenger): [ UNASSIGNED-Threading-\nMultipleThreads ] Validation Error: [ UNASSIGNED-Threading-MultipleThreads ] Object\n0: handle \u003d 0x30000000003, type \u003d VK_OBJECT_TYPE_PIPELINE_CACHE; | MessageID \u003d\n0x141cb623 | THREADING ERROR : vkMergePipelineCaches(): object of type\nVkPipelineCache is simultaneously used in current thread 140062389933632 and thread\n140062406719040\n                            Object: 0x30000000003 (type \u003d Pipeline Cache(16))\n```",
+      "revId": "86574c2a99cb6ef27904ac57d23a51ed694f45b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
