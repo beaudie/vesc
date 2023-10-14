@@ -16,6 +16,24 @@
       "message": "lgtm assuming this fixes the problem and doesn\u0027t break anything (there are no iOS tests on the CQ).\n\nOut of curiosity is it feasible to switch all of these tests off EAGL and on to ANGLE\u0027s Metal backend at some point?",
       "revId": "d635e39fe67f8211d15ca4ae368ca220cfef091e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93553a16_d9a645b7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1128437
+      },
+      "writtenOn": "2023-10-14T16:15:14Z",
+      "side": 1,
+      "message": "Not sure I follow - the tests mentioned in my comment are already running on the Metal backend.\n\nAlso FWIW, Gyuyoung also switched the iOS web tests to use Metal instead of EAGL so we shouldn\u0027t be using the EAGL backend any more I think - we can also make it so that the \"software\" GL backend for Chrome on iOS is Metal instead of EAGL to be sure.",
+      "parentUuid": "b9a31673_a181905a",
+      "revId": "d635e39fe67f8211d15ca4ae368ca220cfef091e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
