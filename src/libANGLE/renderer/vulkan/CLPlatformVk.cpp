@@ -6,10 +6,10 @@
 // CLPlatformVk.cpp: Implements the class methods for CLPlatformVk.
 
 #include "libANGLE/renderer/vulkan/CLPlatformVk.h"
-
 #include "libANGLE/renderer/vulkan/CLDeviceVk.h"
 
 #include "libANGLE/CLPlatform.h"
+#include "libANGLE/cl_utils.h"
 
 #include "anglebase/no_destructor.h"
 #include "common/angle_version_info.h"
@@ -70,7 +70,9 @@ angle::Result CLPlatformVk::createContext(cl::Context &context,
                                           bool userSync,
                                           CLContextImpl::Ptr &implPtr)
 {
-    return angle::Result::Continue;
+    UNIMPLEMENTED();
+    // TODO(annestrand) Placeholder error for now
+    ANGLE_CL_ERROR(CL_OUT_OF_RESOURCES);
 }
 
 angle::Result CLPlatformVk::createContextFromType(cl::Context &context,
@@ -78,7 +80,9 @@ angle::Result CLPlatformVk::createContextFromType(cl::Context &context,
                                                   bool userSync,
                                                   CLContextImpl::Ptr &implPtr)
 {
-    return angle::Result::Continue;
+    UNIMPLEMENTED();
+    // TODO(annestrand) Placeholder error for now
+    ANGLE_CL_ERROR(CL_OUT_OF_RESOURCES);
 }
 
 angle::Result CLPlatformVk::unloadCompiler()
