@@ -14,4 +14,17 @@ CLKernelVk::CLKernelVk(const cl::Kernel &kernel) : CLKernelImpl(kernel) {}
 
 CLKernelVk::~CLKernelVk() = default;
 
+cl_int CLKernelVk::setArg(cl_uint argIndex, size_t argSize, const void *argValue)
+{
+    UNIMPLEMENTED();
+    return CL_OUT_OF_RESOURCES;  // TODO(annestrand) Placeholder error for now
+}
+
+CLKernelImpl::Info CLKernelVk::createInfo(cl_int &errorCode) const
+{
+    UNIMPLEMENTED();
+    errorCode = CL_OUT_OF_RESOURCES;  // TODO(annestrand) Placeholder error for now
+    return CLKernelImpl::Info{};
+}
+
 }  // namespace rx

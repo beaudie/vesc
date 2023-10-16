@@ -20,6 +20,13 @@ class CLMemoryVk : public CLMemoryImpl
   public:
     CLMemoryVk(const cl::Memory &memory);
     ~CLMemoryVk() override;
+
+    size_t getSize(cl_int &errorCode) const override;
+
+    CLMemoryImpl::Ptr createSubBuffer(const cl::Buffer &buffer,
+                                      cl::MemFlags flags,
+                                      size_t size,
+                                      cl_int &errorCode) override;
 };
 
 }  // namespace rx
