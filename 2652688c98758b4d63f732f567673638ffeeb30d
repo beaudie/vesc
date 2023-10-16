@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89063062_d34d645a",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1839,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-16T17:22:13Z",
+      "side": 1,
+      "message": "Per our style\n\n```suggestion\n    {\n        numBlocksWide \u003d minBlockWidth;\n    }\n```",
+      "revId": "2652688c98758b4d63f732f567673638ffeeb30d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e66f1a6b_4e95bb89",
+        "filename": "src/libANGLE/formatutils.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1857,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-16T17:22:13Z",
+      "side": 1,
+      "message": "```suggestion\n    {\n        numBlocksHigh \u003d minBlockHeight;\n    }\n```",
+      "revId": "2652688c98758b4d63f732f567673638ffeeb30d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
