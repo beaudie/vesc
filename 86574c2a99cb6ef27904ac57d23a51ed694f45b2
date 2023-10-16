@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "66d9e39a_39c2e384",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-16T15:53:16Z",
+      "side": 1,
+      "message": "Getting clarification here: https://gitlab.khronos.org/vulkan/vulkan/-/issues/3655\n\nLet\u0027s wait for that to get resolved? If the vkMergePipelineCaches call needing special synchronization is intentional (unlikely), we\u0027d have to rethink this change.",
+      "parentUuid": "11f61995_95a76270",
+      "revId": "86574c2a99cb6ef27904ac57d23a51ed694f45b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bfe751c5_9a00cb35",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 4
@@ -101,6 +119,24 @@
       "side": 1,
       "message": "\u003e If there are other places that pass in a non-null mutex\n\n`CreateMonolithicPipelineTask::CreateMonolithicPipelineTask` ASSERTs to make sure cache is threadsafe. Are you suggesting i remove this method completely?",
       "parentUuid": "bfe751c5_9a00cb35",
+      "revId": "86574c2a99cb6ef27904ac57d23a51ed694f45b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db8ebb01_63524d98",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 6295,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-16T15:53:16Z",
+      "side": 1,
+      "message": "Ok, let\u0027s keep this change.",
+      "parentUuid": "f32e5171_a27d9e6f",
       "revId": "86574c2a99cb6ef27904ac57d23a51ed694f45b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
