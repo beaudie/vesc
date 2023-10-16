@@ -34,6 +34,24 @@
       "parentUuid": "b9a31673_a181905a",
       "revId": "d635e39fe67f8211d15ca4ae368ca220cfef091e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3c4f2d1_0c7c2719",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1232329
+      },
+      "writtenOn": "2023-10-16T05:55:23Z",
+      "side": 1,
+      "message": "yes, I made the web tests on iOS run with the Metal backend because I heard that EAGL won\u0027t be shipped and production codes should use the Metal.\n\nFYI, there is an ios-blink bot[1], but it\u0027s not a default CQ yet. We\u0027ve added the bot manually whenever we merged a CL.\n\n[1] https://ci.chromium.org/ui/p/chromium/builders/ci/ios-blink-dbg-fyi",
+      "parentUuid": "93553a16_d9a645b7",
+      "revId": "d635e39fe67f8211d15ca4ae368ca220cfef091e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
