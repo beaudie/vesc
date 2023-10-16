@@ -14,4 +14,56 @@ CLProgramVk::CLProgramVk(const cl::Program &program) : CLProgramImpl(program) {}
 
 CLProgramVk::~CLProgramVk() = default;
 
+cl_int CLProgramVk::build(const cl::DevicePtrs &devices, const char *options, cl::Program *notify)
+{
+    UNIMPLEMENTED();
+    return CL_OUT_OF_RESOURCES;  // TODO(annestrand) Placeholder error for now
+}
+
+cl_int CLProgramVk::compile(const cl::DevicePtrs &devices,
+                            const char *options,
+                            const cl::ProgramPtrs &inputHeaders,
+                            const char **headerIncludeNames,
+                            cl::Program *notify)
+{
+    UNIMPLEMENTED();
+    return CL_OUT_OF_RESOURCES;  // TODO(annestrand) Placeholder error for now
+}
+
+cl_int CLProgramVk::getInfo(cl::ProgramInfo name,
+                            size_t valueSize,
+                            void *value,
+                            size_t *valueSizeRet) const
+{
+    UNIMPLEMENTED();
+    return CL_OUT_OF_RESOURCES;  // TODO(annestrand) Placeholder error for now
+}
+
+cl_int CLProgramVk::getBuildInfo(const cl::Device &device,
+                                 cl::ProgramBuildInfo name,
+                                 size_t valueSize,
+                                 void *value,
+                                 size_t *valueSizeRet) const
+{
+    UNIMPLEMENTED();
+    return CL_OUT_OF_RESOURCES;  // TODO(annestrand) Placeholder error for now
+}
+
+CLKernelImpl::Ptr CLProgramVk::createKernel(const cl::Kernel &kernel,
+                                            const char *name,
+                                            cl_int &errorCode)
+{
+    UNIMPLEMENTED();
+    errorCode = CL_OUT_OF_RESOURCES;  // TODO(annestrand) Placeholder error for now
+    return CLKernelImpl::Ptr{};
+}
+
+cl_int CLProgramVk::createKernels(cl_uint numKernels,
+                                  CLKernelImpl::CreateFuncs &createFuncs,
+                                  cl_uint *numKernelsRet)
+{
+    UNIMPLEMENTED();
+    return CL_OUT_OF_RESOURCES;  // TODO(annestrand) Placeholder error for now
+}
+
 }  // namespace rx

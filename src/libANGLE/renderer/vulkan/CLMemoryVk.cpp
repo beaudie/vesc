@@ -14,4 +14,21 @@ CLMemoryVk::CLMemoryVk(const cl::Memory &memory) : CLMemoryImpl(memory) {}
 
 CLMemoryVk::~CLMemoryVk() = default;
 
+size_t CLMemoryVk::getSize(cl_int &errorCode) const
+{
+    UNIMPLEMENTED();
+    errorCode = CL_OUT_OF_RESOURCES;  // TODO(annestrand) Placeholder error for now
+    return 0;
+}
+
+CLMemoryImpl::Ptr CLMemoryVk::createSubBuffer(const cl::Buffer &buffer,
+                                              cl::MemFlags flags,
+                                              size_t size,
+                                              cl_int &errorCode)
+{
+    UNIMPLEMENTED();
+    errorCode = CL_OUT_OF_RESOURCES;  // TODO(annestrand) Placeholder error for now
+    return CLMemoryImpl::Ptr{};
+}
+
 }  // namespace rx

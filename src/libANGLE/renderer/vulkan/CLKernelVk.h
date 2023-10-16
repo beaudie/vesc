@@ -20,6 +20,10 @@ class CLKernelVk : public CLKernelImpl
   public:
     CLKernelVk(const cl::Kernel &kernel);
     ~CLKernelVk() override;
+
+    cl_int setArg(cl_uint argIndex, size_t argSize, const void *argValue) override;
+
+    CLKernelImpl::Info createInfo(cl_int &errorCode) const override;
 };
 
 }  // namespace rx
