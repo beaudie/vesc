@@ -16,6 +16,40 @@
       "message": "hi all,\n\nplease help to review the changes.\n\nthanks\n\nhailin",
       "revId": "990ec2582385207e580b05153a9837626a15ab9b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cec89a6_54f39f57",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 10602,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-16T19:34:38Z",
+      "side": 1,
+      "message": "nit: please undo this hunk",
+      "revId": "990ec2582385207e580b05153a9837626a15ab9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae266a85_8b609550",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 10672,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-16T19:34:38Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "990ec2582385207e580b05153a9837626a15ab9b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
