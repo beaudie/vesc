@@ -52,6 +52,24 @@
       "parentUuid": "9acd1f32_60cdb8f5",
       "revId": "7544889786ea195775c31e2856008bbde68bb715",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "223658e8_56c2fd00",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-16T17:30:19Z",
+      "side": 1,
+      "message": "One strategy I found typically works is to enable blending, then you can verify the results of multiple draws with one check at the end. Sometimes if the state change is not problematic, you could also use scissor to draw to different parts, then validate at the end.",
+      "parentUuid": "a11598f3_a19984a9",
+      "revId": "7544889786ea195775c31e2856008bbde68bb715",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
