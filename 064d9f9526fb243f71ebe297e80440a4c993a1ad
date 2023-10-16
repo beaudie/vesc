@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37051ee5_ce1b17a3",
+        "filename": "src/common/Color.inc",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-16T04:57:45Z",
+      "side": 1,
+      "message": "Please add `ANGLE_ENABLE_STRUCT_PADDING_WARNINGS`/`ANGLE_DISABLE_STRUCT_PADDING_WARNINGS` around the definition of `ColorGeneric` then.\n\nThat makes sure we\u0027d never end up with padding in that struct and cause issues here.",
+      "revId": "064d9f9526fb243f71ebe297e80440a4c993a1ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ceb29094_365f6264",
+        "filename": "src/libANGLE/renderer/gl/TextureGL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1536,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-16T04:57:45Z",
+      "side": 1,
+      "message": "Immutable textures are getting fewer dirty bits now (which is awesome), but I suggest making this a split change. You never know what driver bugs we\u0027ll hit, and it would be nice to be able to bisect it to the simpler change.",
+      "revId": "064d9f9526fb243f71ebe297e80440a4c993a1ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
