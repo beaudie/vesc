@@ -52,6 +52,24 @@
       "parentUuid": "93553a16_d9a645b7",
       "revId": "d635e39fe67f8211d15ca4ae368ca220cfef091e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f49cd3d9_7553f282",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1128437
+      },
+      "writtenOn": "2023-10-16T18:10:18Z",
+      "side": 1,
+      "message": "Gyuyoung, not sure if you saw the earlier comment about enabling tests for the EAGL backend:\n\nCan you enable the RGBA IOSurface tests here: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/tests/egl_tests/EGLIOSurfaceClientBufferTest.cpp;l\u003d481\n\nThere are four tests which are skipped for IsOpenGL():\n\nRenderToRGBA8888IOSurface\nReadFromRGBA8888IOSurface\nRenderToRGBX8888IOSurface\nReadFromRGBX8888IOSurface\n\nWe should change the condition for skipping from IsOpenGL() to IsDesktopOpenGL(). That should enable the tests for the EAGL backend in addition to the Metal backend.",
+      "parentUuid": "e3c4f2d1_0c7c2719",
+      "revId": "d635e39fe67f8211d15ca4ae368ca220cfef091e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
