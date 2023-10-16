@@ -46,6 +46,30 @@
       },
       "revId": "2f00d326a16e2e188bf548a8008acded31beb24f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d93c9ba7_c1e56170",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 8886,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-16T23:18:09Z",
+      "side": 1,
+      "message": "I see. That makes sense. How about do this in FramebufferVk::clearImpl(), all clear calls will go through that function. That way you dont need to change here as well as flushToPrimrary. You only need one central place to do the clear, I think.",
+      "parentUuid": "a22ce7bc_eed3d4b0",
+      "range": {
+        "startLine": 8879,
+        "startChar": 16,
+        "endLine": 8886,
+        "endChar": 17
+      },
+      "revId": "2f00d326a16e2e188bf548a8008acded31beb24f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
