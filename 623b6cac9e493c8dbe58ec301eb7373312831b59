@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "901287b2_cc56fd7c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 19
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-16T04:40:52Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 7
+      },
+      "revId": "623b6cac9e493c8dbe58ec301eb7373312831b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c7d47b2_d2dc26d4",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 9864,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-16T04:40:52Z",
+      "side": 1,
+      "message": "Sucks that we don\u0027t have access to the views here. Anyway, for my understanding, do we do the double copy because the YUV image cannot be TRANSFER\u0027ed?",
+      "revId": "623b6cac9e493c8dbe58ec301eb7373312831b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
