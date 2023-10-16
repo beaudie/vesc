@@ -70,8 +70,10 @@ CLContextImpl::Ptr CLPlatformVk::createContext(cl::Context &context,
                                                bool userSync,
                                                cl_int &errorCode)
 {
-    CLContextImpl::Ptr contextImpl;
-    return contextImpl;
+    UNIMPLEMENTED();
+    // TODO(annestrand) Placeholder error for now
+    errorCode = CL_OUT_OF_RESOURCES;
+    return CLContextImpl::Ptr{};
 }
 
 CLContextImpl::Ptr CLPlatformVk::createContextFromType(cl::Context &context,
@@ -79,8 +81,10 @@ CLContextImpl::Ptr CLPlatformVk::createContextFromType(cl::Context &context,
                                                        bool userSync,
                                                        cl_int &errorCode)
 {
-    CLContextImpl::Ptr contextImpl;
-    return contextImpl;
+    UNIMPLEMENTED();
+    // TODO(annestrand) Placeholder error for now
+    errorCode = CL_OUT_OF_RESOURCES;
+    return CLContextImpl::Ptr{};
 }
 
 cl_int CLPlatformVk::unloadCompiler()

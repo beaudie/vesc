@@ -20,6 +20,17 @@ class CLEventVk : public CLEventImpl
   public:
     CLEventVk(const cl::Event &event);
     ~CLEventVk() override;
+
+    cl_int getCommandExecutionStatus(cl_int &executionStatus) override;
+
+    cl_int setUserEventStatus(cl_int executionStatus) override;
+
+    cl_int setCallback(cl::Event &event, cl_int commandExecCallbackType) override;
+
+    cl_int getProfilingInfo(cl::ProfilingInfo name,
+                            size_t valueSize,
+                            void *value,
+                            size_t *valueSizeRet) override;
 };
 
 }  // namespace rx

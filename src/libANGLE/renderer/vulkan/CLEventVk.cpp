@@ -14,4 +14,35 @@ CLEventVk::CLEventVk(const cl::Event &event) : CLEventImpl(event) {}
 
 CLEventVk::~CLEventVk() = default;
 
+cl_int CLEventVk::getCommandExecutionStatus(cl_int &executionStatus)
+{
+    UNIMPLEMENTED();
+    // TODO(annestrand) Placeholder error for now
+    return CL_OUT_OF_RESOURCES;
+}
+
+cl_int CLEventVk::setUserEventStatus(cl_int executionStatus)
+{
+    UNIMPLEMENTED();
+    // TODO(annestrand) Placeholder error for now
+    return CL_OUT_OF_RESOURCES;
+}
+
+cl_int CLEventVk::setCallback(cl::Event &event, cl_int commandExecCallbackType)
+{
+    UNIMPLEMENTED();
+    // TODO(annestrand) Placeholder error for now
+    return CL_OUT_OF_RESOURCES;
+}
+
+cl_int CLEventVk::getProfilingInfo(cl::ProfilingInfo name,
+                                   size_t valueSize,
+                                   void *value,
+                                   size_t *valueSizeRet)
+{
+    UNIMPLEMENTED();
+    // TODO(annestrand) Placeholder error for now
+    return CL_OUT_OF_RESOURCES;
+}
+
 }  // namespace rx
