@@ -22,6 +22,30 @@
       },
       "revId": "2f00d326a16e2e188bf548a8008acded31beb24f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a22ce7bc_eed3d4b0",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 8886,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-10-16T22:59:53Z",
+      "side": 1,
+      "message": "That will cause the newly added test `clearColorMorePrecisionThanFBOFormatNoDithering` failing on ARM devices: https://chromium-review.googlesource.com/c/angle/angle/+/4937472/5/src/tests/gl_tests/FramebufferTest.cpp.\n\nWhen there is only one `glClear()`, the code path is not going through `flushToPrimary()`",
+      "parentUuid": "be912c21_dff28f2b",
+      "range": {
+        "startLine": 8879,
+        "startChar": 16,
+        "endLine": 8886,
+        "endChar": 17
+      },
+      "revId": "2f00d326a16e2e188bf548a8008acded31beb24f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
