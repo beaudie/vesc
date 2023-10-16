@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "11f61995_95a76270",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-10-16T15:18:15Z",
+      "side": 1,
+      "message": "\u003e but if you hit it on any other usage\n\nAFAICT, every time i saw this VVL it was because of the merge call\n\n\u003e This might be a spec oversight\n\ni thought it is a validation layer bug since it does not take into account the fact that the pipeline cache maybe internally synchronized?",
+      "parentUuid": "470f0c0e_5e6fed5c",
+      "revId": "86574c2a99cb6ef27904ac57d23a51ed694f45b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bfe751c5_9a00cb35",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 4
@@ -65,6 +83,24 @@
       "writtenOn": "2023-10-16T13:44:53Z",
       "side": 1,
       "message": "Do you really need this change? RendererVk already inits this with a null mutex if the extension is not supported. If there are other places that pass in a non-null mutex, I suggest fixing them there instead.",
+      "revId": "86574c2a99cb6ef27904ac57d23a51ed694f45b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f32e5171_a27d9e6f",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 6295,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-10-16T15:18:15Z",
+      "side": 1,
+      "message": "\u003e If there are other places that pass in a non-null mutex\n\n`CreateMonolithicPipelineTask::CreateMonolithicPipelineTask` ASSERTs to make sure cache is threadsafe. Are you suggesting i remove this method completely?",
+      "parentUuid": "bfe751c5_9a00cb35",
       "revId": "86574c2a99cb6ef27904ac57d23a51ed694f45b2",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
