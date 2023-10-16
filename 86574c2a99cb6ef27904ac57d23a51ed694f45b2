@@ -90,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4d86381d_d351b4d5",
+        "filename": "src/libANGLE/renderer/vulkan/RendererVk.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-10-16T15:56:06Z",
+      "side": 1,
+      "message": "\u003e If the vkMergePipelineCaches call needing special synchronization is intentional\n\nthat would be inconsistent and bad 😞\n\nnote that there are no rendering artifacts in any of the bot runs or traces when we let ICD internally synchronize pipeline caches",
+      "parentUuid": "66d9e39a_39c2e384",
+      "revId": "86574c2a99cb6ef27904ac57d23a51ed694f45b2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bfe751c5_9a00cb35",
         "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
         "patchSetId": 4
