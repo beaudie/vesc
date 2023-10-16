@@ -7,11 +7,27 @@
 
 #include "libANGLE/renderer/vulkan/CLKernelVk.h"
 
+#include "libANGLE/cl_utils.h"
+
 namespace rx
 {
 
 CLKernelVk::CLKernelVk(const cl::Kernel &kernel) : CLKernelImpl(kernel) {}
 
 CLKernelVk::~CLKernelVk() = default;
+
+angle::Result CLKernelVk::setArg(cl_uint argIndex, size_t argSize, const void *argValue)
+{
+    UNIMPLEMENTED();
+    // TODO(annestrand) Placeholder error for now
+    ANGLE_CL_ERROR(CL_OUT_OF_RESOURCES);
+}
+
+angle::Result CLKernelVk::createInfo(CLKernelImpl::Info &info) const
+{
+    UNIMPLEMENTED();
+    // TODO(annestrand) Placeholder error for now
+    ANGLE_CL_ERROR(CL_OUT_OF_RESOURCES);
+}
 
 }  // namespace rx
