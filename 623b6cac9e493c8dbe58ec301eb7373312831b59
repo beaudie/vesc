@@ -39,6 +39,24 @@
       "message": "Sucks that we don\u0027t have access to the views here. Anyway, for my understanding, do we do the double copy because the YUV image cannot be TRANSFER\u0027ed?",
       "revId": "623b6cac9e493c8dbe58ec301eb7373312831b59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c794dd9_ed7e738d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 9864,
+      "author": {
+        "id": 1298072
+      },
+      "writtenOn": "2023-10-16T21:54:46Z",
+      "side": 1,
+      "message": "we\u0027re double copying because we need a sampler with conversion to get us to rgba, yes.\n\nwe could go direct with a variation on the compute readpixels path, but this was the simplest for now.",
+      "parentUuid": "5c7d47b2_d2dc26d4",
+      "revId": "623b6cac9e493c8dbe58ec301eb7373312831b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
