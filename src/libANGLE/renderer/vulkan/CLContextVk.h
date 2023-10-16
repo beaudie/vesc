@@ -12,6 +12,8 @@
 
 #include "libANGLE/renderer/CLContextImpl.h"
 
+#include "libANGLE/CLDevice.h"
+
 namespace rx
 {
 
@@ -20,6 +22,63 @@ class CLContextVk : public CLContextImpl
   public:
     CLContextVk(const cl::Context &context);
     ~CLContextVk() override;
+
+    bool hasMemory(cl_mem memory) const;
+
+    angle::Result getDevices(cl::DevicePtrs &devPtrs) const override;
+
+    angle::Result createCommandQueue(const cl::CommandQueue &commandQueue,
+                                     CLCommandQueueImpl::Ptr &implPtr) override;
+
+    angle::Result createBuffer(const cl::Buffer &buffer,
+                               size_t size,
+                               void *hostPtr,
+                               CLMemoryImpl::Ptr &implPtr) override;
+
+    angle::Result createImage(const cl::Image &image,
+                              cl::MemFlags flags,
+                              const cl_image_format &format,
+                              const cl::ImageDescriptor &desc,
+                              void *hostPtr,
+                              CLMemoryImpl::Ptr &implPtr) override;
+
+    angle::Result getSupportedImageFormats(cl::MemFlags flags,
+                                           cl::MemObjectType imageType,
+                                           cl_uint numEntries,
+                                           cl_image_format *imageFormats,
+                                           cl_uint *numImageFormats) override;
+
+    angle::Result createSampler(const cl::Sampler &sampler, CLSamplerImpl::Ptr &implPtr) override;
+
+    angle::Result createProgramWithSource(const cl::Program &program,
+                                          const std::string &source,
+                                          CLProgramImpl::Ptr &implPtr) override;
+
+    angle::Result createProgramWithIL(const cl::Program &program,
+                                      const void *il,
+                                      size_t length,
+                                      CLProgramImpl::Ptr &implPtr) override;
+
+    angle::Result createProgramWithBinary(const cl::Program &program,
+                                          const size_t *lengths,
+                                          const unsigned char **binaries,
+                                          cl_int *binaryStatus,
+                                          CLProgramImpl::Ptr &implPtr) override;
+
+    angle::Result createProgramWithBuiltInKernels(const cl::Program &program,
+                                                  const char *kernel_names,
+                                                  CLProgramImpl::Ptr &implPtr) override;
+
+    angle::Result linkProgram(const cl::Program &program,
+                              const cl::DevicePtrs &devices,
+                              const char *options,
+                              const cl::ProgramPtrs &inputPrograms,
+                              cl::Program *notify,
+                              CLProgramImpl::Ptr &implPtr) override;
+
+    angle::Result createUserEvent(const cl::Event &event, CLEventImpl::Ptr &implPtr) override;
+
+    angle::Result waitForEvents(const cl::EventPtrs &events) override;
 };
 
 }  // namespace rx
