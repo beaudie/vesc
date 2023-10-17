@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9b3ee89_c4bfd412",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 19
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-17T16:16:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "901287b2_cc56fd7c",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 7
+      },
+      "revId": "623b6cac9e493c8dbe58ec301eb7373312831b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5c7d47b2_d2dc26d4",
@@ -55,6 +79,24 @@
       "side": 1,
       "message": "we\u0027re double copying because we need a sampler with conversion to get us to rgba, yes.\n\nwe could go direct with a variation on the compute readpixels path, but this was the simplest for now.",
       "parentUuid": "5c7d47b2_d2dc26d4",
+      "revId": "623b6cac9e493c8dbe58ec301eb7373312831b59",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "690c6831_fc9a535e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 19
+      },
+      "lineNbr": 9864,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-17T16:16:13Z",
+      "side": 1,
+      "message": "http://b/305964942",
+      "parentUuid": "6c794dd9_ed7e738d",
       "revId": "623b6cac9e493c8dbe58ec301eb7373312831b59",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

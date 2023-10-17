@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8d3b9ffe_7dcee16e",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2309,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-17T16:16:13Z",
+      "side": 1,
+      "message": "Agree. Will take care in follow up CLs",
+      "parentUuid": "e9e3fea4_014a46bc",
+      "revId": "47fd5bd87d68303d3a73f3fb122b561271706921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d460dc95_d7b75a52",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
         "patchSetId": 12
@@ -49,6 +67,24 @@
       "side": 1,
       "message": "This can be resolved now? Looks like you did implement it (and I\u0027m happy to see the change became simpler 😊)",
       "parentUuid": "d460dc95_d7b75a52",
+      "revId": "47fd5bd87d68303d3a73f3fb122b561271706921",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccbfc289_cb5fd7a8",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2310,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-17T16:16:13Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "b43b33eb_3f8bc26e",
       "revId": "47fd5bd87d68303d3a73f3fb122b561271706921",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
