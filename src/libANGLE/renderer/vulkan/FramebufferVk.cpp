@@ -341,6 +341,7 @@ FramebufferVk::FramebufferVk(RendererVk *renderer, const gl::FramebufferState &s
     }
 
     mIsCurrentFramebufferCached = !renderer->getFeatures().supportsImagelessFramebuffer.enabled;
+    mIsYUVResolve               = false;
 }
 
 FramebufferVk::~FramebufferVk() = default;
@@ -2272,6 +2273,7 @@ angle::Result FramebufferVk::getAttachmentsAndRenderTargets(
     vk::FramebufferAttachmentsVector<RenderTargetInfo> *renderTargetsInfoOut)
 {
     // Color attachments.
+    mIsYUVResolve                  = false;
     const auto &colorRenderTargets = mRenderTargetCache.getColors();
     for (size_t colorIndexGL : mState.getColorAttachmentsMask())
     {
@@ -2280,16 +2282,16 @@ angle::Result FramebufferVk::getAttachmentsAndRenderTargets(
 
         if (colorRenderTarget->isYuvResolve())
         {
-            // XXX yuv: handle case without null color attachment
-            attachments->push_back(VK_NULL_HANDLE);
+            mIsYUVResolve = true;
+            if (contextVk->getRenderer()->nullColorAttachmentWithExternalFormatResolve())
+            {
+                continue;
+            }
         }
-        else
-        {
-            const vk::ImageView *imageView = nullptr;
-            ANGLE_TRY(colorRenderTarget->getImageViewWithColorspace(
-                contextVk, mCurrentFramebufferDesc.getWriteControlMode(), &imageView));
-            attachments->push_back(imageView->getHandle());
-        }
+        const vk::ImageView *imageView = nullptr;
+        ANGLE_TRY(colorRenderTarget->getImageViewWithColorspace(
+            contextVk, mCurrentFramebufferDesc.getWriteControlMode(), &imageView));
+        attachments->push_back(imageView->getHandle());
 
         renderTargetsInfoOut->emplace_back(
             RenderTargetInfo(colorRenderTarget, RenderTargetImage::AttachmentImage));
@@ -2438,7 +2440,9 @@ angle::Result FramebufferVk::getFramebuffer(ContextVk *contextVk,
                                                   : 1;
 
     // Check that our description matches our attachments. Can catch implementation bugs.
-    ASSERT(static_cast<uint32_t>(attachments.size()) == mCurrentFramebufferDesc.attachmentCount());
+    ASSERT((mIsYUVResolve &&
+            contextVk->getRenderer()->nullColorAttachmentWithExternalFormatResolve()) ||
+           static_cast<uint32_t>(attachments.size()) == mCurrentFramebufferDesc.attachmentCount());
 
     if (!useImagelessFramebuffer)
     {
