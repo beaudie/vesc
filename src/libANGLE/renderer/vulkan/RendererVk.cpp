@@ -227,8 +227,6 @@ constexpr const char *kSkippedMessages[] = {
     // framebuffer that's accessed by the command buffer is identically laid out.
     // http://anglebug.com/6811
     "VUID-vkCmdExecuteCommands-pCommandBuffers-00099",
-    // http://anglebug.com/7325
-    "VUID-vkCmdBindVertexBuffers2-pStrides-06209",
     // http://anglebug.com/7729
     "VUID-vkDestroySemaphore-semaphore-01137",
     // http://anglebug.com/7843
