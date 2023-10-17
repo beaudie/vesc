@@ -195,10 +195,6 @@ VkResult VerifyExtensionsPresent(const vk::ExtensionNameList &haystack,
 constexpr const char *kSkippedMessages[] = {
     // http://anglebug.com/2866
     "UNASSIGNED-CoreValidation-Shader-OutputNotConsumed",
-    // http://anglebug.com/4928
-    "VUID-vkMapMemory-memory-00683",
-    // http://anglebug.com/5027
-    "UNASSIGNED-CoreValidation-Shader-PushConstantOutOfRange",
     // http://anglebug.com/5304
     "VUID-vkCmdDraw-magFilter-04553",
     "VUID-vkCmdDrawIndexed-magFilter-04553",
