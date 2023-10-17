@@ -120,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "57cc3015_53cb3db5",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-17T14:25:24Z",
+      "side": 1,
+      "message": "Ah, right, just remove it, the page is not explaining why that formula works. Also, that formula is about converting from N to M bits. Here, we are converting from (almost) infinite to M bits, so the formula is not even the same. Like, the implementation is using `sourceBits` \u003d\u003d `targetBits`, in which case the mul and div in the above formula cancel out.\n\nI\u0027d make the formula a bit more math-y to make it clearer. You could still put down the translation to code too. Like:\n\n```\n// Truncate x to b bits: round(x * (2^b-1)) / (2^b-1)\n// Implemented as floor(x * ((1 \u003c\u003c b) - 1) + 0.5) / ((1 \u003c\u003c b) - 1)\n```",
+      "parentUuid": "eac0b2ac_31e89993",
+      "range": {
+        "startLine": 453,
+        "startChar": 0,
+        "endLine": 454,
+        "endChar": 39
+      },
+      "revId": "793ff84a1c4803e36a6781cd30403312c4d27aec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c897b8fa_5034be52",
         "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
         "patchSetId": 6
