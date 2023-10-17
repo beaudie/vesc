@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b180269_0c3fe04f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-10-17T05:50:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a8be95e_fe4e2dd6",
+      "revId": "793ff84a1c4803e36a6781cd30403312c4d27aec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "40719633_d74de962",
@@ -35,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ddd72a4_a463ee50",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-10-17T05:50:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "40719633_d74de962",
+      "revId": "793ff84a1c4803e36a6781cd30403312c4d27aec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1eb4377d_fc7635b5",
@@ -48,6 +84,30 @@
       "writtenOn": "2023-10-17T01:44:48Z",
       "side": 1,
       "message": "Interesting link, but we\u0027re not actually using any of those formulas",
+      "range": {
+        "startLine": 453,
+        "startChar": 0,
+        "endLine": 454,
+        "endChar": 39
+      },
+      "revId": "793ff84a1c4803e36a6781cd30403312c4d27aec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eac0b2ac_31e89993",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-10-17T05:50:04Z",
+      "side": 1,
+      "message": "I am using the formula at the bottom of the page: https://screenshot.googleplex.com/8M4hytU96ffYsT6. Shall I keep the link? Or it is better to remove it here.",
+      "parentUuid": "1eb4377d_fc7635b5",
       "range": {
         "startLine": 453,
         "startChar": 0,
@@ -81,6 +141,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf77ec5c_ee0899ec",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-10-17T05:50:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c897b8fa_5034be52",
+      "range": {
+        "startLine": 221,
+        "startChar": 55,
+        "endLine": 221,
+        "endChar": 79
+      },
+      "revId": "793ff84a1c4803e36a6781cd30403312c4d27aec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c0900edc_e362aa14",
@@ -94,6 +178,30 @@
       "writtenOn": "2023-10-17T01:44:48Z",
       "side": 1,
       "message": "ditto",
+      "range": {
+        "startLine": 231,
+        "startChar": 55,
+        "endLine": 231,
+        "endChar": 79
+      },
+      "revId": "793ff84a1c4803e36a6781cd30403312c4d27aec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe6c74a1_985821d1",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.h",
+        "patchSetId": 6
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-10-17T05:50:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0900edc_e362aa14",
       "range": {
         "startLine": 231,
         "startChar": 55,

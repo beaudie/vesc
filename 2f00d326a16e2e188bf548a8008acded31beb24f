@@ -70,6 +70,30 @@
       },
       "revId": "2f00d326a16e2e188bf548a8008acded31beb24f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c31f006_2f467418",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 8886,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-10-17T05:50:04Z",
+      "side": 1,
+      "message": "Thank you. I moved the workaround to the `FramebufferVk::clearImpl()`. Since not all attachments have format `angle::FormatID::R5G5B5A1`, and not all of them need the clear color precision adjustment, I created an array of `VkClearColorValue`, each array element stores the adjusted clear color for each color attachment of the Framebuffer. Only the color attachment needs the adjustment will have the clear color modified, the other attachments will pass the original clear color through. Does that sound good to you?",
+      "parentUuid": "d93c9ba7_c1e56170",
+      "range": {
+        "startLine": 8879,
+        "startChar": 16,
+        "endLine": 8886,
+        "endChar": 17
+      },
+      "revId": "2f00d326a16e2e188bf548a8008acded31beb24f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
