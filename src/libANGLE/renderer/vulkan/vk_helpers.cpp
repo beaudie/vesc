@@ -3348,6 +3348,12 @@ void BufferPool::pruneEmptyBuffers(RendererVk *renderer)
     // ourselves to keep enough number of empty buffers around.
     size_t buffersToKeep = std::min(mNumberOfNewBuffersNeededSinceLastPrune,
                                     static_cast<size_t>(kMaxTotalEmptyBufferBytes / mSize));
+    uint32_t copyMemoryTypeIndex =
+        renderer->getStagingBufferMemoryTypeIndex(MemoryCoherency::NonCoherent);
+    if (mMemoryTypeIndex == copyMemoryTypeIndex && buffersToKeep < kMinBufferBlocksToKeepForCopy)
+    {
+        buffersToKeep = kMinBufferBlocksToKeepForCopy;
+    }
     while (mEmptyBufferBlocks.size() > buffersToKeep)
     {
         std::unique_ptr<BufferBlock> &block = mEmptyBufferBlocks.back();
