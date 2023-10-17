@@ -749,6 +749,11 @@ class RendererVk : angle::NonCopyable
     // Static function to get Vulkan object type name.
     static const char *GetVulkanObjectTypeName(VkObjectType type);
 
+    bool nullColorAttachmentWithExternalFormatResolve() const
+    {
+        ASSERT(mFeatures.supportsExternalFormatResolve.enabled);
+        return mExternalFormatResolveProperties.nullColorAttachmentWithExternalFormatResolve;
+    }
     vk::ExternalFormatTable mExternalFormatTable;
 
   private:
