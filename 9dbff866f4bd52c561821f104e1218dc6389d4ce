@@ -16,6 +16,24 @@
       "message": "Can you try updating this manuall roll patch instead: https://crrev.com/c/4949390? That will help to list the manual roll on the roller dashboard  https://autoroll.skia.org/r/vulkan-deps-angle-autoroll.",
       "revId": "9dbff866f4bd52c561821f104e1218dc6389d4ce",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c32016fb_fbec9f02",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2023-10-18T17:47:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9e0429f9_9246c018",
+      "revId": "9dbff866f4bd52c561821f104e1218dc6389d4ce",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
