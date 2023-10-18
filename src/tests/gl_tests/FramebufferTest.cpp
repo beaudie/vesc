@@ -4277,6 +4277,158 @@ TEST_P(FramebufferTest_ES31, ClearColorMorePrecisionThanFBOFormatShouldNotApplyD
     clearColorMorePrecisionThanFBOFormatNoDithering(GL_RGB5_A1);
 }
 
+uint32_t getTexImageInternalFormat(const ConfigParameters &eglConfigParams)
+{
+    if (eglConfigParams.redBits == 8 && eglConfigParams.greenBits == 8 &&
+        eglConfigParams.blueBits == 8 && eglConfigParams.alphaBits == 0)
+    {
+        return GL_RGB8;
+    }
+
+    else
+    {
+        return GL_RGBA8;
+    }
+}
+
+uint32_t getTexDataFormat(const ConfigParameters &eglConfigParams)
+{
+    if (eglConfigParams.redBits == 8 && eglConfigParams.greenBits == 8 &&
+        eglConfigParams.blueBits == 8 && eglConfigParams.alphaBits == 0)
+    {
+        return GL_RGB;
+    }
+    else
+    {
+        return GL_RGBA;
+    }
+}
+
+uint8_t getTexturePixelByteCount(const uint32_t &textureDataFormat)
+{
+    if (textureDataFormat == GL_RGB)
+    {
+        return 3;
+    }
+    else if (textureDataFormat == GL_RGBA)
+    {
+        return 4;
+    }
+    else
+    {
+        ASSERT(false);
+        return -1;
+    }
+}
+
+// Test adapted from KHR-GLES3.core.nearest_edge.offset_right
+TEST_P(FramebufferTest_ES3, ReadFromDefaultFBO)
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    EGLWindow *const eglWindow = getEGLWindow();
+
+    const ConfigParameters &eglWindowConfigParams = eglWindow->getConfigParams();
+
+    constexpr char kVS1[] = R"(#version 300 es
+in highp vec2 a_position;
+in highp vec2 a_texcoord;
+out highp vec2 texcoord;
+void main()
+{
+    gl_Position = vec4(a_position, 0.0, 1.0);
+    texcoord = a_texcoord;
+})";
+
+    constexpr char kFS1[] = R"(#version 300 es
+precision highp float;
+in highp vec2 texcoord;
+out highp vec4 fragColor;
+uniform highp sampler2D texSampler;
+
+void main()
+{
+    fragColor = texture(texSampler, texcoord);
+})";
+
+    ANGLE_GL_PROGRAM(program, kVS1, kFS1);
+    glUseProgram(program);
+
+    const std::vector<float> positions = {-1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f};
+    GLBuffer vertexBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer.get());
+    glBufferData(GL_ARRAY_BUFFER, sizeof(positions[0]) * positions.size(), positions.data(),
+                 GL_STATIC_DRAW);
+    GLint vertexPosLocation = glGetAttribLocation(program, "a_position");
+    ASSERT_NE(vertexPosLocation, -1);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer.get());
+    glEnableVertexAttribArray(vertexPosLocation);
+    glVertexAttribPointer(vertexPosLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+    const std::vector<float> texcoords = {0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f};
+    GLBuffer texcoordBuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, texcoordBuffer.get());
+    glBufferData(GL_ARRAY_BUFFER, sizeof(texcoords[0]) * texcoords.size(), texcoords.data(),
+                 GL_STATIC_DRAW);
+    GLint texCoordLocation = glGetAttribLocation(program, "a_texcoord");
+    ASSERT_NE(texCoordLocation, -1);
+    glBindBuffer(GL_ARRAY_BUFFER, texcoordBuffer.get());
+    glEnableVertexAttribArray(texCoordLocation);
+    glVertexAttribPointer(texCoordLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+    const std::vector<uint16_t> quadIndices = {0, 1, 2, 2, 1, 3};
+    GLBuffer indexBuffer;
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer.get());
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(quadIndices[0]) * quadIndices.size(),
+                 quadIndices.data(), GL_STATIC_DRAW);
+    ASSERT_GL_NO_ERROR();
+
+    // Create Texture
+    GLTexture texture;
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+
+    std::vector<uint8_t> texData;
+
+    const size_t width  = 4;
+    const size_t height = 4;
+
+    texData.resize(width * height *
+                   getTexturePixelByteCount(getTexDataFormat(eglWindowConfigParams)));
+
+    for (size_t i = 0; i < width * height; ++i)
+    {
+        texData.push_back(125);
+        texData.push_back(125);
+        texData.push_back(125);
+        texData.push_back(125);
+    }
+
+    glTexImage2D(GL_TEXTURE_2D, 0, getTexImageInternalFormat(eglWindowConfigParams), width, height,
+                 0, getTexDataFormat(eglWindowConfigParams), GL_UNSIGNED_BYTE, texData.data());
+
+    GLint uniformTextureSamplerLocation = glGetUniformLocation(program, "texSampler");
+    glUniform1i(uniformTextureSamplerLocation, 0);
+
+    ASSERT_GL_NO_ERROR();
+
+    glDisable(GL_DITHER);
+
+    glDrawElements(GL_TRIANGLES, quadIndices.size(), GL_UNSIGNED_BYTE, 0);
+
+    std::vector<uint8_t> renderResult;
+    renderResult.resize(width * height *
+                        getTexturePixelByteCount(getTexDataFormat(eglWindowConfigParams)));
+    glReadPixels(0, 0, width, height, getTexDataFormat(eglWindowConfigParams), GL_UNSIGNED_BYTE,
+                 renderResult.data());
+
+    ASSERT_GL_NO_ERROR();
+}
+
 // Validates both MESA and standard functions can be used on OpenGL ES >=3.1
 TEST_P(FramebufferTest_ES31, ValidateFramebufferFlipYMesaExtension)
 {
