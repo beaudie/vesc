@@ -681,6 +681,15 @@ void main()
         EXPECT_EQ(res, 0);
         EXPECT_EQ(data.size(), planeInfo.planeCount);
 
+        WARN() << "AHardwareBuffer_lockPlanes res:" << res
+               << " planeInfo.planeCount:" << planeInfo.planeCount;
+        for (uint32_t planeIdx = 0; planeIdx < planeInfo.planeCount; planeIdx++)
+        {
+            const AHardwareBuffer_Plane &plane = planeInfo.planes[planeIdx];
+            WARN() << " planes[" << planeIdx << "]"
+                   << ".data:" << plane.data << " .pixelStride:" << plane.pixelStride
+                   << " .rowStride:" << plane.rowStride;
+        }
         for (size_t planeIdx = 0; planeIdx < data.size(); planeIdx++)
         {
             const AHBPlaneData &planeData      = data[planeIdx];
@@ -3413,7 +3422,7 @@ TEST_P(ImageTestES3, ClearYUVAHB)
                            0);
     ASSERT_GL_NO_ERROR();
     EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
-
+    WARN() << " before calling glClear";
     // Clearing a YUV framebuffer reinterprets the rgba clear color as YUV values and writes them
     // directly to the buffer
     GLubyte clearColor[4] = {197, 128, 192, 255};
@@ -3421,9 +3430,18 @@ TEST_P(ImageTestES3, ClearYUVAHB)
                  clearColor[3] / 255.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     ASSERT_GL_NO_ERROR();
+    glFinish();
 
+#if 1
+    WARN() << " before calling glReadPixels";
     // ReadPixels returns the RGB converted color
     EXPECT_PIXEL_COLOR_NEAR(0, 0, GLColor(255, 159, 212, 255), 1.0);
+#else
+    WARN() << " before calling verifyResultsExternal";
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    GLubyte pixelColor[4] = {255, 159, 211, 255};
+    verifyResultsExternal(target, pixelColor);
+#endif
 
     // Clean up
     eglDestroyImageKHR(window->getDisplay(), image);

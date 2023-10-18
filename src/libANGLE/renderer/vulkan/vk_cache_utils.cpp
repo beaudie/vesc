@@ -6556,6 +6556,9 @@ angle::Result RenderPassCache::MakeRenderPass(vk::Context *context,
             context->getRenderer()->nullColorAttachmentWithExternalFormatResolve())
         {
             colorAttachmentRefs.push_back(kUnusedAttachment);
+            // Workaround for ARM driver assertion
+            colorAttachmentRefs.back().layout     = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            colorAttachmentRefs.back().aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
             continue;
         }
 
@@ -6775,6 +6778,10 @@ angle::Result RenderPassCache::MakeRenderPass(vk::Context *context,
     applicationSubpass->pDepthStencilAttachment =
         (depthStencilAttachmentRef.attachment != VK_ATTACHMENT_UNUSED ? &depthStencilAttachmentRef
                                                                       : nullptr);
+    WARN() << " attachmentCount.get():" << attachmentCount.get()
+           << " colorAttachmentRefs.size():" << colorAttachmentRefs.size()
+           << " nonResolveAttachmentCount:" << nonResolveAttachmentCount
+           << " colorResolveAttachmentRefs.size():" << colorResolveAttachmentRefs.size();
 
     // Specify rasterization order for color on the subpass when available and
     // there is framebuffer fetch.  This is required when the corresponding
@@ -6850,12 +6857,107 @@ angle::Result RenderPassCache::MakeRenderPass(vk::Context *context,
         createInfo.pDependencies   = subpassDependencies.data();
     }
 
+    std::ostringstream out;
+    out << "createInfo:{" << std::endl
+        << " .attachmentCount: 0x" << createInfo.attachmentCount << std::endl
+        << " .pAttachments:" << createInfo.pAttachments << std::endl;
+    for (unsigned int i = 0; i < createInfo.attachmentCount; i++)
+    {
+        const VkAttachmentDescription2 &attachment = attachmentDescs[i];
+        out << "\tpAttachments[" << i << "]="
+            << "{" << std::endl
+            << "\t .flags: 0x" << std::hex << attachment.flags << std::endl
+            << "\t .format: 0x" << attachment.format << std::endl
+            << "\t .samples: " << std::dec << attachment.samples << std::endl
+            << "\t .loadOp: " << attachment.loadOp << std::endl
+            << "\t .storeOp: " << attachment.storeOp << std::endl
+            << "\t .stencilLoadOp: " << attachment.stencilLoadOp << std::endl
+            << "\t .stencilStoreOp: " << attachment.stencilStoreOp << std::endl
+            << "\t .initialLayout: " << attachment.initialLayout << std::endl
+            << "\t .finalLayout: " << attachment.finalLayout << std::endl
+            << "\t .pNext: " << attachment.pNext << std::endl;
+        if (attachment.pNext)
+        {
+            const VkBaseInStructure *base =
+                reinterpret_cast<const VkBaseInStructure *>(attachment.pNext);
+            if (base->sType == VK_STRUCTURE_TYPE_EXTERNAL_FORMAT_ANDROID)
+            {
+                const VkExternalFormatANDROID *p =
+                    reinterpret_cast<const VkExternalFormatANDROID *>(attachment.pNext);
+                out << "\t\t{ .externalFormat: " << p->externalFormat << "}";
+            }
+        }
+        out << "\t}" << std::endl;
+    }
+    out << " .subpassCount: " << createInfo.subpassCount << std::endl
+        << " .pSubpasses: " << createInfo.pSubpasses << std::endl;
+    for (unsigned int i = 0; i < createInfo.subpassCount; i++)
+    {
+        const VkSubpassDescription2 &subpass = subpassDesc[i];
+        out << "\tpSubpasses[" << i << "]="
+            << "{" << std::endl
+            << "\t .flags: 0x" << std::hex << subpass.flags << std::endl
+            << "\t .pipelineBindPoint: " << std::dec << subpass.pipelineBindPoint << std::endl
+            << "\t .viewMask: 0x" << std::hex << subpass.viewMask << std::endl
+            << "\t .inputAttachmentCount: " << std::dec << subpass.inputAttachmentCount << std::endl
+            << "\t .pInputAttachments: " << subpass.pInputAttachments << std::endl;
+        for (unsigned int j = 0; j < subpass.inputAttachmentCount; j++)
+        {
+            out << "\t\tpInputAttachments[" << j << "]="
+                << "{" << std::endl
+                << "\t\t .attachment: 0x" << std::hex << subpass.pInputAttachments[j].attachment
+                << std::endl
+                << "\t\t .layout: " << std::dec << subpass.pInputAttachments[j].layout << std::endl
+                << "\t\t .aspectMask: " << subpass.pInputAttachments[j].aspectMask << std::endl
+                << "\t\t .pNext: " << subpass.pInputAttachments[j].pNext << std::endl
+                << "\t\t} " << std::endl;
+        }
+        out << "\t .colorAttachmentCount: 0x" << subpass.colorAttachmentCount << std::endl
+            << "\t .pColorAttachments: " << subpass.pColorAttachments << std::endl;
+        if (subpass.pColorAttachments)
+        {
+            for (unsigned int j = 0; j < subpass.colorAttachmentCount; j++)
+            {
+                out << "\t\tpColorAttachments[" << j << "]="
+                    << "{" << std::endl
+                    << "\t\t .sType: " << subpass.pColorAttachments[j].sType << std::endl
+                    << "\t\t .attachment: 0x" << std::hex << subpass.pColorAttachments[j].attachment
+                    << std::endl
+                    << "\t\t .layout: " << std::dec << subpass.pColorAttachments[j].layout
+                    << std::endl
+                    << "\t\t .aspectMask: " << subpass.pColorAttachments[j].aspectMask << std::endl
+                    << "\t\t .pNext: " << subpass.pColorAttachments[j].pNext << std::endl
+                    << "\t\t} " << std::endl;
+            }
+        }
+        out << "\t .pResolveAttachments: " << subpass.pResolveAttachments << std::endl;
+        if (subpass.pResolveAttachments)
+        {
+            for (unsigned int j = 0; j < subpass.colorAttachmentCount; j++)
+            {
+                out << "\t\tpColorAttachments[" << j << "]="
+                    << "{" << std::endl
+                    << "\t\t .sType: " << subpass.pResolveAttachments[j].sType << std::endl
+                    << "\t\t .attachment: 0x" << std::hex
+                    << subpass.pResolveAttachments[j].attachment << std::endl
+                    << "\t\t .layout: " << std::dec << subpass.pResolveAttachments[j].layout
+                    << std::endl
+                    << "\t\t .aspectMask: " << subpass.pResolveAttachments[j].aspectMask
+                    << std::endl
+                    << "\t\t .pNext: " << subpass.pResolveAttachments[j].pNext << std::endl
+                    << "\t\t} " << std::endl;
+            }
+        }
+        out << "\t .preserveAttachmentCount: 0x" << subpass.preserveAttachmentCount;
+    }
+
     const uint32_t viewMask = angle::BitMask<uint32_t>(desc.viewCount());
     if (desc.viewCount() > 0)
     {
         vk::SetRenderPassViewMask(context, &viewMask, &createInfo, &subpassDesc);
     }
 
+    WARN() << std::endl << out.str();
     // If VK_KHR_create_renderpass2 is not supported, we must use core Vulkan 1.0.  This is
     // increasingly uncommon.  Note that extensions that require chaining information to subpasses
     // are automatically not used when this extension is not available.
@@ -6867,6 +6969,7 @@ angle::Result RenderPassCache::MakeRenderPass(vk::Context *context,
     {
         ANGLE_VK_TRY(context, renderPass->init2(context->getDevice(), createInfo));
     }
+    WARN() << "renderPass: " << renderPass->getHandle();
 
     if (renderPassCounters != nullptr)
     {
