@@ -253,6 +253,17 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     bufferFormatProperties.sType =
         VK_STRUCTURE_TYPE_ANDROID_HARDWARE_BUFFER_FORMAT_PROPERTIES_ANDROID;
     bufferFormatProperties.pNext = nullptr;
+    void **pNext                 = &bufferFormatProperties.pNext;
+
+    VkAndroidHardwareBufferFormatProperties2ANDROID bufferFormatProperties2 = {};
+    if (renderer->getFeatures().supportsFormatFeatureFlags2.enabled)
+    {
+        bufferFormatProperties2.sType =
+            VK_STRUCTURE_TYPE_ANDROID_HARDWARE_BUFFER_FORMAT_PROPERTIES_2_ANDROID;
+        bufferFormatProperties2.pNext = nullptr;
+        *pNext                        = &bufferFormatProperties2;
+        pNext                         = &bufferFormatProperties2.pNext;
+    }
 
     VkAndroidHardwareBufferFormatResolvePropertiesANDROID bufferFormatResolveProperties = {};
     if (renderer->getFeatures().supportsExternalFormatResolve.enabled)
@@ -260,7 +271,8 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
         bufferFormatResolveProperties.sType =
             VK_STRUCTURE_TYPE_ANDROID_HARDWARE_BUFFER_FORMAT_RESOLVE_PROPERTIES_ANDROID;
         bufferFormatResolveProperties.pNext = nullptr;
-        bufferFormatProperties.pNext        = &bufferFormatResolveProperties;
+        *pNext                              = &bufferFormatResolveProperties;
+        pNext                               = &bufferFormatResolveProperties.pNext;
     }
 
     VkAndroidHardwareBufferPropertiesANDROID bufferProperties = {};
@@ -329,6 +341,10 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
         {
             // Clear all other bits except sampled
             usage = VK_IMAGE_USAGE_SAMPLED_BIT;
+            if (externalRenderTargetSupported)
+            {
+                usage |= VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+            }
         }
 
         // If the pNext chain includes a VkExternalFormatANDROID structure whose externalFormat
