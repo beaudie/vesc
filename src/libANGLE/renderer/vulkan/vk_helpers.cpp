@@ -1632,6 +1632,16 @@ void CommandBufferHelperCommon::bufferWrite(ContextVk *contextVk,
     }
 }
 
+bool CommandBufferHelperCommon::usesImage(const ImageHelper &image) const
+{
+    return image.usedByCommandBuffer(mQueueSerial);
+}
+
+bool CommandBufferHelperCommon::usesImageForWrite(const ImageHelper &image) const
+{
+    return image.writtenByCommandBuffer(mQueueSerial);
+}
+
 void CommandBufferHelperCommon::executeBarriers(const angle::FeaturesVk &features,
                                                 CommandsState *commandsState)
 {
@@ -1827,7 +1837,7 @@ void OutsideRenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
                                                       ImageHelper *image)
 {
     imageWriteImpl(contextVk, level, layerStart, layerCount, aspectFlags, imageLayout, image);
-    image->setQueueSerial(mQueueSerial);
+    image->setWriteQueueSerial(mQueueSerial);
 }
 
 angle::Result OutsideRenderPassCommandBufferHelper::flushToPrimary(Context *context,
@@ -2019,7 +2029,7 @@ void RenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
                                                ImageHelper *image)
 {
     imageWriteImpl(contextVk, level, layerStart, layerCount, aspectFlags, imageLayout, image);
-    image->setQueueSerial(mQueueSerial);
+    image->setWriteQueueSerial(mQueueSerial);
 }
 
 void RenderPassCommandBufferHelper::colorImagesDraw(gl::LevelIndex level,
@@ -5835,9 +5845,10 @@ void ImageHelper::releaseImage(RendererVk *renderer)
     }
 
     renderer->collectGarbage(mUse, &mImage, &mDeviceMemory, &mVmaAllocation);
-    mUse.reset();
-    mImageSerial          = kInvalidImageSerial;
     mMemoryAllocationType = MemoryAllocationType::InvalidEnum;
+    mWriteUse.reset();
+    mImageSerial        = kInvalidImageSerial;
+    mBarrierQueueSerial = QueueSerial();
     setEntireContentUndefined();
 }
 
@@ -8620,7 +8631,7 @@ void ImageHelper::stageSelfAsSubresourceUpdates(
     // object.
 
     // Usage info
-    prevImage->get().Resource::operator=(std::move(*this));
+    prevImage->get().ReadWriteResource::operator=(std::move(*this));
 
     // Vulkan objects
     prevImage->get().mImage         = std::move(mImage);
