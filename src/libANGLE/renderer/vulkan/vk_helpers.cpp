@@ -1607,6 +1607,16 @@ void CommandBufferHelperCommon::bufferWrite(ContextVk *contextVk,
     }
 }
 
+bool CommandBufferHelperCommon::usesImage(const ImageHelper &image) const
+{
+    return image.usedByCommandBuffer(mQueueSerial);
+}
+
+bool CommandBufferHelperCommon::usesImageForWrite(const ImageHelper &image) const
+{
+    return image.writtenByCommandBuffer(mQueueSerial);
+}
+
 void CommandBufferHelperCommon::executeBarriers(const angle::FeaturesVk &features,
                                                 CommandsState *commandsState)
 {
@@ -1802,7 +1812,7 @@ void OutsideRenderPassCommandBufferHelper::imageWrite(ContextVk *contextVk,
                                                       ImageHelper *image)
 {
     imageWriteImpl(contextVk, level, layerStart, layerCount, aspectFlags, imageLayout, image);
-    image->setQueueSerial(mQueueSerial);
+    image->setWriteQueueSerial(mQueueSerial);
 }
 
 angle::Result OutsideRenderPassCommandBufferHelper::flushToPrimary(Context *context,
