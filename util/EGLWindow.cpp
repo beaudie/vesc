@@ -125,6 +125,9 @@ GLWindowResult EGLWindow::initializeGLWithResult(OSWindow *osWindow,
     {
         return GLWindowResult::Error;
     }
+    INFO() << "EGLWindow::initializeGLWithResult(): configParams: " << configParams.redBits << ", "
+           << configParams.greenBits << ", " << configParams.blueBits << ", "
+           << configParams.alphaBits;
     GLWindowResult res = initializeSurface(osWindow, glWindowingLibrary, configParams);
     if (res != GLWindowResult::NoError)
     {
@@ -327,6 +330,10 @@ GLWindowResult EGLWindow::initializeSurface(OSWindow *osWindow,
         return GLWindowResult::NoMutableRenderBufferSupport;
     }
 
+    INFO() << "eglWindowConfigParams initialize surface before setting config: "
+           << mConfigParams.redBits << ", " << mConfigParams.greenBits << ", "
+           << mConfigParams.blueBits << ", " << mConfigParams.alphaBits;
+
     std::vector<EGLint> configAttributes = {
         EGL_SURFACE_TYPE,
         EGL_WINDOW_BIT | (params.mutableRenderBuffer ? EGL_MUTABLE_RENDER_BUFFER_BIT_KHR : 0),
@@ -379,6 +386,10 @@ GLWindowResult EGLWindow::initializeSurface(OSWindow *osWindow,
     eglGetConfigAttrib(mDisplay, mConfig, EGL_DEPTH_SIZE, &mConfigParams.depthBits);
     eglGetConfigAttrib(mDisplay, mConfig, EGL_STENCIL_SIZE, &mConfigParams.stencilBits);
     eglGetConfigAttrib(mDisplay, mConfig, EGL_SAMPLES, &mConfigParams.samples);
+
+    INFO() << "eglWindowConfigParams initialize surface: " << mConfigParams.redBits << ", "
+           << mConfigParams.greenBits << ", " << mConfigParams.blueBits << ", "
+           << mConfigParams.alphaBits;
 
     std::vector<EGLint> surfaceAttributes;
     if (strstr(displayExtensions, "EGL_NV_post_sub_buffer") != nullptr)
