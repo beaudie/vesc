@@ -681,6 +681,15 @@ void main()
         EXPECT_EQ(res, 0);
         EXPECT_EQ(data.size(), planeInfo.planeCount);
 
+        WARN() << "AHardwareBuffer_lockPlanes res:" << res
+               << " planeInfo.planeCount:" << planeInfo.planeCount;
+        for (uint32_t planeIdx = 0; planeIdx < planeInfo.planeCount; planeIdx++)
+        {
+            const AHardwareBuffer_Plane &plane = planeInfo.planes[planeIdx];
+            WARN() << " planes[" << planeIdx << "]"
+                   << ".data:" << plane.data << " .pixelStride:" << plane.pixelStride
+                   << " .rowStride:" << plane.rowStride;
+        }
         for (size_t planeIdx = 0; planeIdx < data.size(); planeIdx++)
         {
             const AHBPlaneData &planeData      = data[planeIdx];

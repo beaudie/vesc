@@ -2674,6 +2674,25 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
     beginInfo.clearValueCount          = static_cast<uint32_t>(mRenderPassDesc.attachmentCount());
     beginInfo.pClearValues             = mClearValues.data();
 
+    std::ostringstream out;
+    out << "beginInfo:{" << std::endl
+        << " .renderPass: " << beginInfo.renderPass << std::endl
+        << " .framebuffer: " << beginInfo.framebuffer << std::endl
+        << " .renderArea.offset.x: " << beginInfo.renderArea.offset.x << std::endl
+        << " .renderArea.offset.y: " << beginInfo.renderArea.offset.y << std::endl
+        << " .renderArea.extent.width: " << beginInfo.renderArea.extent.width << std::endl
+        << " .renderArea.extent.height: " << beginInfo.renderArea.extent.height << std::endl
+        << " .clearValueCount: " << beginInfo.clearValueCount << std::endl
+        << " .pClearValues: " << beginInfo.pClearValues << std::endl;
+    for (unsigned int i = 0; i < beginInfo.clearValueCount; i++)
+    {
+        const VkClearValue &clearValue = mClearValues.data()[i];
+        out << "\tclearValue[" << i << "]="
+            << "\t {" << clearValue.color.float32[0] << ", " << clearValue.color.float32[1] << ", "
+            << clearValue.color.float32[2] << ", " << clearValue.color.float32[3] << "\t}"
+            << std::endl;
+    }
+
     // With imageless framebuffers, the attachments should be also added to beginInfo.
     VkRenderPassAttachmentBeginInfoKHR rpAttachmentBeginInfo = {};
     if (mFramebuffer.isImageless())
@@ -2691,6 +2710,11 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
 
         AddToPNextChain(&beginInfo, &rpAttachmentBeginInfo);
     }
+
+    WARN() << " mRenderPassDesc.attachmentCount = " << mRenderPassDesc.attachmentCount()
+           << " mFramebuffer.getImageViews.size = " << mFramebuffer.getImageViews().size()
+           << std::endl
+           << out.str();
 
     // Run commands inside the RenderPass.
     constexpr VkSubpassContents kSubpassContents =
