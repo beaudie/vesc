@@ -16,6 +16,23 @@
       "message": "I don\u0027t think this is correct at all",
       "revId": "e9f7795903e86293f67070378a2ebdecea96b9de",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c86735a8_dbbb2f1e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1298072
+      },
+      "writtenOn": "2023-10-18T02:33:27Z",
+      "side": 1,
+      "message": "After looking at the spec again, this is fine and I had a bad assumption based on early examples.",
+      "revId": "e9f7795903e86293f67070378a2ebdecea96b9de",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
