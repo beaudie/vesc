@@ -6842,6 +6842,64 @@ angle::Result RenderPassCache::MakeRenderPass(vk::Context *context,
         createInfo.pDependencies   = subpassDependencies.data();
     }
 
+    std::ostringstream out;
+    out << "createInfo:{" << std::endl
+        << " .attachmentCount: 0x" << createInfo.attachmentCount << std::endl
+        << " .pAttachments:" << createInfo.pAttachments << std::endl;
+    for (unsigned int i = 0; i < createInfo.attachmentCount; i++)
+    {
+        const VkAttachmentDescription2 &attachment = attachmentDescs[i];
+        out << "\tpAttachments[" << i << "]="
+            << "{" << std::hex << std::endl
+            << "\t .flags: 0x" << attachment.flags << std::endl
+            << "\t .format: 0x" << attachment.format << std::endl
+            << "\t .samples: 0x" << attachment.samples << std::endl
+            << "\t .loadOp: 0x" << attachment.loadOp << std::endl
+            << "\t .storeOp: 0x" << attachment.storeOp << std::endl
+            << "\t .stencilLoadOp: 0x" << attachment.stencilLoadOp << std::endl
+            << "\t .stencilStoreOp: 0x" << attachment.stencilStoreOp << std::endl
+            << "\t .initialLayout: 0x" << attachment.initialLayout << std::endl
+            << "\t .finalLayout: 0x" << attachment.finalLayout << std::endl
+            << "\t}" << std::endl;
+    }
+    out << " .subpassCount: " << createInfo.subpassCount << std::endl
+        << " .pSubpasses: " << createInfo.pSubpasses << std::endl;
+    for (unsigned int i = 0; i < createInfo.subpassCount; i++)
+    {
+        const VkSubpassDescription2 &subpass = subpassDesc[i];
+        out << "\tpSubpasses[" << i << "]="
+            << "{" << std::hex << std::endl
+            << "\t .flags: 0x" << subpass.flags << std::endl
+            << "\t .pipelineBindPoint: 0x" << subpass.pipelineBindPoint << std::endl
+            << "\t .viewMask: 0x" << subpass.viewMask << std::endl
+            << "\t .inputAttachmentCount: 0x" << subpass.inputAttachmentCount << std::endl
+            << "\t .pInputAttachments: 0x" << subpass.pInputAttachments << std::endl;
+        for (unsigned int j = 0; j < subpass.inputAttachmentCount; j++)
+        {
+            out << "\t\tpInputAttachments[" << j << "]="
+                << "{" << std::hex << std::endl
+                << "\t\t .attachment: " << subpass.pInputAttachments[j].attachment << std::endl
+                << "\t\t .layout: " << subpass.pInputAttachments[j].layout << std::endl
+                << "\t\t .aspectMask: " << subpass.pInputAttachments[j].aspectMask << std::endl
+                << "\t\t .pNext: " << subpass.pInputAttachments[j].pNext << std::endl
+                << "\t\t} " << std::endl;
+        }
+        out << "\t .colorAttachmentCount: 0x" << subpass.colorAttachmentCount << std::endl
+            << "\t .pColorAttachments: 0x" << subpass.pColorAttachments;
+        for (unsigned int j = 0; j < subpass.colorAttachmentCount; j++)
+        {
+            out << "\t\tpColorAttachments[" << j << "]="
+                << "{" << std::hex << std::endl
+                << "\t\t .attachment: " << subpass.pColorAttachments[j].attachment << std::endl
+                << "\t\t .layout: " << subpass.pColorAttachments[j].layout << std::endl
+                << "\t\t .aspectMask: " << subpass.pColorAttachments[j].aspectMask << std::endl
+                << "\t\t .pNext: " << subpass.pColorAttachments[j].pNext << std::endl
+                << "\t\t} " << std::endl;
+        }
+        out << "\t .preserveAttachmentCount: 0x" << subpass.preserveAttachmentCount;
+    }
+    WARN() << "VkRenderPassCreateInfo2: " << std::endl << out.str();
+
     const uint32_t viewMask = angle::BitMask<uint32_t>(desc.viewCount());
     if (desc.viewCount() > 0)
     {
