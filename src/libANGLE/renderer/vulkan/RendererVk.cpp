@@ -51,7 +51,7 @@ constexpr bool kExposeNonConformantExtensionsAndVersions = false;
 #if defined(ANGLE_ENABLE_CRC_FOR_PIPELINE_CACHE)
 constexpr bool kEnableCRCForPipelineCache = true;
 #else
-constexpr bool kEnableCRCForPipelineCache = false;
+constexpr bool kEnableCRCForPipelineCache                = false;
 #endif
 }  // anonymous namespace
 
@@ -267,6 +267,8 @@ constexpr const char *kSkippedMessages[] = {
     "VUID-VkSamplerCreateInfo-pNext-pNext",
     // https://issuetracker.google.com/303441816
     "VUID-VkRenderPassBeginInfo-renderPass-00904",
+    // http://b/223456677 VK_ANDROID_external_format_resolve
+    "VUID-VkImageViewCreateInfo-usage-08931",
 };
 
 // Validation messages that should be ignored only when VK_EXT_primitive_topology_list_restart is
