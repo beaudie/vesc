@@ -2674,6 +2674,25 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
     beginInfo.clearValueCount          = static_cast<uint32_t>(mRenderPassDesc.attachmentCount());
     beginInfo.pClearValues             = mClearValues.data();
 
+    std::ostringstream out;
+    out << "beginInfo:{" << std::endl
+        << " .renderPass: " << beginInfo.renderPass << std::endl
+        << " .framebuffer: " << beginInfo.framebuffer << std::endl
+        << " .renderArea.offset.x: " << beginInfo.renderArea.offset.x << std::endl
+        << " .renderArea.offset.y: " << beginInfo.renderArea.offset.y << std::endl
+        << " .renderArea.extent.width: " << beginInfo.renderArea.extent.width << std::endl
+        << " .renderArea.extent.height: " << beginInfo.renderArea.extent.height << std::endl
+        << " .clearValueCount: " << beginInfo.clearValueCount << std::endl
+        << " .pClearValues: " << beginInfo.pClearValues << std::endl;
+    for (unsigned int i = 0; i < beginInfo.clearValueCount; i++)
+    {
+        const VkClearValue &clearValue = mClearValues.data()[i];
+        out << "\tclearValue[" << i << "]="
+            << "\t {" << clearValue.color.float32[0] << ", " << clearValue.color.float32[1] << ", "
+            << clearValue.color.float32[2] << ", " << clearValue.color.float32[3] << "\t}"
+            << std::endl;
+    }
+
     // With imageless framebuffers, the attachments should be also added to beginInfo.
     VkRenderPassAttachmentBeginInfoKHR rpAttachmentBeginInfo = {};
     if (mFramebuffer.isImageless())
@@ -2688,9 +2707,21 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
         rpAttachmentBeginInfo.attachmentCount =
             static_cast<uint32_t>(mFramebuffer.getImageViews().size());
         rpAttachmentBeginInfo.pAttachments = mFramebuffer.getImageViews().data();
+        out << " .attachmentCount:" << rpAttachmentBeginInfo.attachmentCount << std::endl;
+        out << " .pAttachments:" << rpAttachmentBeginInfo.pAttachments << "{";
+        for (uint32_t i = 0; i < rpAttachmentBeginInfo.attachmentCount; i++)
+        {
+            out << " " << rpAttachmentBeginInfo.pAttachments[i];
+        }
+        out << " }";
 
         AddToPNextChain(&beginInfo, &rpAttachmentBeginInfo);
     }
+
+    WARN() << " mRenderPassDesc.attachmentCount = " << mRenderPassDesc.attachmentCount()
+           << " mFramebuffer.getImageViews.size = " << mFramebuffer.getImageViews().size()
+           << std::endl
+           << out.str();
 
     // Run commands inside the RenderPass.
     constexpr VkSubpassContents kSubpassContents =
@@ -5718,6 +5749,7 @@ bool ImageHelper::FormatSupportsUsage(RendererVk *renderer,
                                       VkImageCreateFlags createFlags,
                                       void *propertiesPNext)
 {
+    ASSERT(format != VK_FORMAT_UNDEFINED);
     VkPhysicalDeviceImageFormatInfo2 imageFormatInfo = {};
     imageFormatInfo.sType  = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2;
     imageFormatInfo.format = format;
@@ -6215,6 +6247,14 @@ angle::Result ImageHelper::initLayerImageViewImpl(Context *context,
 
     auto conversionDesc =
         yuvSamplingMode == gl::YuvSamplingMode::Y2Y ? getY2YConversionDesc() : mYcbcrConversionDesc;
+    if (yuvSamplingMode == gl::YuvSamplingMode::Y2Y)
+    {
+        WARN() << " yuvSamplingMode == gl::YuvSamplingMode::Y2Y";
+    }
+    else
+    {
+        WARN() << " yuvSamplingMode != gl::YuvSamplingMode::Y2Y";
+    }
 
     if (conversionDesc.valid())
     {
@@ -6232,7 +6272,51 @@ angle::Result ImageHelper::initLayerImageViewImpl(Context *context,
             viewInfo.format = VK_FORMAT_UNDEFINED;
         }
     }
+
+    std::ostringstream out;
+    out << "createInfo:{" << std::endl
+        << " .sType: 0x" << viewInfo.sType << std::endl
+        << " .pNext:" << viewInfo.pNext << std::endl
+        << " .flags:" << viewInfo.flags << std::endl
+        << " .image:" << viewInfo.image << std::endl
+        << " .viewType:" << viewInfo.viewType << std::endl
+        << " .format:" << viewInfo.format << std::endl
+        << " .components{ .r:" << viewInfo.components.r << " .g:" << viewInfo.components.g
+        << " .b:" << viewInfo.components.b << " .a:" << viewInfo.components.a << "}" << std::endl
+        << " .subresourceRange:{ .aspectMask:" << viewInfo.subresourceRange.aspectMask
+        << " .baseMipLevel:" << viewInfo.subresourceRange.baseMipLevel
+        << " .levelCount:" << viewInfo.subresourceRange.levelCount
+        << " .baseMipLevel:" << viewInfo.subresourceRange.baseMipLevel
+        << " .baseArrayLayer:" << viewInfo.subresourceRange.baseArrayLayer
+        << " .layerCount:" << viewInfo.subresourceRange.layerCount << " }" << std::endl
+        << " .pNext:" << viewInfo.pNext << std::endl;
+
+    const VkBaseInStructure *base = reinterpret_cast<const VkBaseInStructure *>(viewInfo.pNext);
+    while (base != nullptr)
+    {
+        if (base->sType == VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_INFO)
+        {
+            const VkSamplerYcbcrConversionInfo *p =
+                reinterpret_cast<const VkSamplerYcbcrConversionInfo *>(base);
+            out << "\t{ .sType = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_INFO" << std::endl;
+            out << "\t{ .pNext:" << p->pNext << std::endl;
+            out << "\t{ .conversion:" << p->conversion << " }" << std::endl;
+        }
+        else if (base->sType == VK_STRUCTURE_TYPE_IMAGE_VIEW_USAGE_CREATE_INFO)
+        {
+            const VkImageViewUsageCreateInfo *p =
+                reinterpret_cast<const VkImageViewUsageCreateInfo *>(base);
+            out << "\t{ .sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_USAGE_CREATE_INFO" << std::endl;
+            out << "\t{ .pNext:" << p->pNext << std::endl;
+            out << "\t{ .usage:" << p->usage << " }" << std::endl;
+        }
+        base = base->pNext;
+    }
+
     ANGLE_VK_TRY(context, imageViewOut->init(context->getDevice(), viewInfo));
+
+    WARN() << "ImageView: " << imageViewOut->getHandle() << std::endl << out.str();
+
     return angle::Result::Continue;
 }
 

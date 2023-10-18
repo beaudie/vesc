@@ -2917,7 +2917,29 @@ VkResult GraphicsPipelineDesc::initializePipeline(Context *context,
         AddToPNextChain(&createInfo, &feedbackInfo);
     }
 
+    std::ostringstream out;
+    out << "{ .sType:" << createInfo.sType << std::endl
+        << " .pNext:" << createInfo.pNext << std::endl
+        << " .flags:" << createInfo.flags << std::endl
+        << " .stageCount:" << createInfo.stageCount << std::endl
+        << " .pStages:" << createInfo.pStages << std::endl
+        << " .pVertexInputState:" << createInfo.pVertexInputState << std::endl
+        << " .pInputAssemblyState:" << createInfo.pInputAssemblyState << std::endl
+        << " .pTessellationState:" << createInfo.pTessellationState << std::endl
+        << " .pViewportState:" << createInfo.pViewportState << std::endl
+        << " .pRasterizationState:" << createInfo.pRasterizationState << std::endl
+        << " .pMultisampleState:" << createInfo.pMultisampleState << std::endl
+        << " .pDepthStencilState:" << createInfo.pDepthStencilState << std::endl
+        << " .pColorBlendState:" << createInfo.pColorBlendState << std::endl
+        << " .pDynamicState:" << createInfo.pDynamicState << std::endl
+        << " .layout:" << createInfo.layout << std::endl
+        << " .renderPass:" << createInfo.renderPass << std::endl
+        << " .subpass:" << createInfo.subpass << std::endl
+        << " .basePipelineHandle:" << createInfo.basePipelineHandle << std::endl
+        << " .basePipelineIndex:" << createInfo.basePipelineIndex;
+    WARN() << " createInfo:" << &createInfo << std::endl << out.str();
     VkResult result = pipelineCache->createGraphicsPipeline(context, createInfo, pipelineOut);
+    WARN() << " handle:" << pipelineOut->getHandle();
 
     if (supportsFeedback)
     {
@@ -4774,9 +4796,9 @@ angle::Result YcbcrConversionDesc::init(Context *context,
     VkExternalFormatANDROID externalFormat = {};
     if (getExternalFormat() != 0)
     {
-        externalFormat.sType             = VK_STRUCTURE_TYPE_EXTERNAL_FORMAT_ANDROID;
-        externalFormat.externalFormat    = mExternalOrVkFormat;
-        samplerYcbcrConversionInfo.pNext = &externalFormat;
+        externalFormat.sType          = VK_STRUCTURE_TYPE_EXTERNAL_FORMAT_ANDROID;
+        externalFormat.externalFormat = mExternalOrVkFormat;
+        AddToPNextChain(&samplerYcbcrConversionInfo, &externalFormat);
     }
 #else
     // We do not support external format for any platform other than Android.
@@ -4784,6 +4806,31 @@ angle::Result YcbcrConversionDesc::init(Context *context,
 #endif  // VK_USE_PLATFORM_ANDROID_KHR
 
     ANGLE_VK_TRY(context, conversionOut->init(context->getDevice(), samplerYcbcrConversionInfo));
+
+    std::ostringstream out;
+    out << "createInfo:{" << std::endl
+        << " .format: " << samplerYcbcrConversionInfo.format << std::endl
+        << " .xChromaOffset: " << samplerYcbcrConversionInfo.xChromaOffset << std::endl
+        << " .yChromaOffset: " << samplerYcbcrConversionInfo.yChromaOffset << std::endl
+        << " .ycbcrModel: " << samplerYcbcrConversionInfo.ycbcrModel << std::endl
+        << " .ycbcrRange: " << samplerYcbcrConversionInfo.ycbcrRange << std::endl
+        << " .chromaFilter: " << samplerYcbcrConversionInfo.chromaFilter << std::endl
+        << " .components: { " << samplerYcbcrConversionInfo.components.r << " , "
+        << samplerYcbcrConversionInfo.components.g << " , "
+        << samplerYcbcrConversionInfo.components.b << " , "
+        << samplerYcbcrConversionInfo.components.a << " }" << std::endl
+        << " .pNext: " << samplerYcbcrConversionInfo.pNext << std::endl;
+    if (samplerYcbcrConversionInfo.pNext != nullptr)
+    {
+        const VkExternalFormatANDROID *p =
+            reinterpret_cast<const VkExternalFormatANDROID *>(samplerYcbcrConversionInfo.pNext);
+        ASSERT(p->sType == VK_STRUCTURE_TYPE_EXTERNAL_FORMAT_ANDROID);
+        out << "\t{ .sType = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_INFO" << std::endl;
+        out << "\t{ .pNext:" << p->pNext << std::endl;
+        out << "\t{ .externalFormat:" << p->externalFormat << " }" << std::endl;
+    }
+    WARN() << " SamplerYcbcrConversion = " << conversionOut->getHandle() << std::endl << out.str();
+
     return angle::Result::Continue;
 }
 
@@ -6799,6 +6846,10 @@ angle::Result RenderPassCache::MakeRenderPass(vk::Context *context,
     applicationSubpass->pDepthStencilAttachment =
         (depthStencilAttachmentRef.attachment != VK_ATTACHMENT_UNUSED ? &depthStencilAttachmentRef
                                                                       : nullptr);
+    WARN() << " attachmentCount.get():" << attachmentCount.get()
+           << " colorAttachmentRefs.size():" << colorAttachmentRefs.size()
+           << " nonResolveAttachmentCount:" << nonResolveAttachmentCount
+           << " colorResolveAttachmentRefs.size():" << colorResolveAttachmentRefs.size();
 
     // Specify rasterization order for color on the subpass when available and
     // there is framebuffer fetch.  This is required when the corresponding
@@ -6874,6 +6925,100 @@ angle::Result RenderPassCache::MakeRenderPass(vk::Context *context,
         createInfo.pDependencies   = subpassDependencies.data();
     }
 
+    std::ostringstream out;
+    out << "createInfo:{" << std::endl
+        << " .attachmentCount: 0x" << createInfo.attachmentCount << std::endl
+        << " .pAttachments:" << createInfo.pAttachments << std::endl;
+    for (unsigned int i = 0; i < createInfo.attachmentCount; i++)
+    {
+        const VkAttachmentDescription2 &attachment = attachmentDescs[i];
+        out << "\tpAttachments[" << i << "]="
+            << "{" << std::endl
+            << "\t .flags: 0x" << std::hex << attachment.flags << std::endl
+            << "\t .format: 0x" << attachment.format << std::endl
+            << "\t .samples: " << std::dec << attachment.samples << std::endl
+            << "\t .loadOp: " << attachment.loadOp << std::endl
+            << "\t .storeOp: " << attachment.storeOp << std::endl
+            << "\t .stencilLoadOp: " << attachment.stencilLoadOp << std::endl
+            << "\t .stencilStoreOp: " << attachment.stencilStoreOp << std::endl
+            << "\t .initialLayout: " << attachment.initialLayout << std::endl
+            << "\t .finalLayout: " << attachment.finalLayout << std::endl
+            << "\t .pNext: " << attachment.pNext << std::endl;
+        if (attachment.pNext)
+        {
+            const VkBaseInStructure *base =
+                reinterpret_cast<const VkBaseInStructure *>(attachment.pNext);
+            if (base->sType == VK_STRUCTURE_TYPE_EXTERNAL_FORMAT_ANDROID)
+            {
+                const VkExternalFormatANDROID *p =
+                    reinterpret_cast<const VkExternalFormatANDROID *>(attachment.pNext);
+                out << "\t\t{ .externalFormat: " << p->externalFormat << "}";
+            }
+        }
+        out << "\t}" << std::endl;
+    }
+    out << " .subpassCount: " << createInfo.subpassCount << std::endl
+        << " .pSubpasses: " << createInfo.pSubpasses << std::endl;
+    for (unsigned int i = 0; i < createInfo.subpassCount; i++)
+    {
+        const VkSubpassDescription2 &subpass = subpassDesc[i];
+        out << "\tpSubpasses[" << i << "]="
+            << "{" << std::endl
+            << "\t .flags: 0x" << std::hex << subpass.flags << std::endl
+            << "\t .pipelineBindPoint: " << std::dec << subpass.pipelineBindPoint << std::endl
+            << "\t .viewMask: 0x" << std::hex << subpass.viewMask << std::endl
+            << "\t .inputAttachmentCount: " << std::dec << subpass.inputAttachmentCount << std::endl
+            << "\t .pInputAttachments: " << subpass.pInputAttachments << std::endl;
+        for (unsigned int j = 0; j < subpass.inputAttachmentCount; j++)
+        {
+            out << "\t\tpInputAttachments[" << j << "]="
+                << "{" << std::endl
+                << "\t\t .attachment: 0x" << std::hex << subpass.pInputAttachments[j].attachment
+                << std::endl
+                << "\t\t .layout: " << std::dec << subpass.pInputAttachments[j].layout << std::endl
+                << "\t\t .aspectMask: " << subpass.pInputAttachments[j].aspectMask << std::endl
+                << "\t\t .pNext: " << subpass.pInputAttachments[j].pNext << std::endl
+                << "\t\t} " << std::endl;
+        }
+        out << "\t .colorAttachmentCount: 0x" << subpass.colorAttachmentCount << std::endl
+            << "\t .pColorAttachments: " << subpass.pColorAttachments << std::endl;
+        if (subpass.pColorAttachments)
+        {
+            for (unsigned int j = 0; j < subpass.colorAttachmentCount; j++)
+            {
+                out << "\t\tpColorAttachments[" << j << "]="
+                    << "{" << std::endl
+                    << "\t\t .sType: " << subpass.pColorAttachments[j].sType << std::endl
+                    << "\t\t .attachment: 0x" << std::hex << subpass.pColorAttachments[j].attachment
+                    << std::endl
+                    << "\t\t .layout: " << std::dec << subpass.pColorAttachments[j].layout
+                    << std::endl
+                    << "\t\t .aspectMask: " << subpass.pColorAttachments[j].aspectMask << std::endl
+                    << "\t\t .pNext: " << subpass.pColorAttachments[j].pNext << std::endl
+                    << "\t\t} " << std::endl;
+            }
+        }
+        out << "\t .pResolveAttachments: " << subpass.pResolveAttachments << std::endl;
+        if (subpass.pResolveAttachments)
+        {
+            for (unsigned int j = 0; j < subpass.colorAttachmentCount; j++)
+            {
+                out << "\t\tpColorAttachments[" << j << "]="
+                    << "{" << std::endl
+                    << "\t\t .sType: " << subpass.pResolveAttachments[j].sType << std::endl
+                    << "\t\t .attachment: 0x" << std::hex
+                    << subpass.pResolveAttachments[j].attachment << std::endl
+                    << "\t\t .layout: " << std::dec << subpass.pResolveAttachments[j].layout
+                    << std::endl
+                    << "\t\t .aspectMask: " << subpass.pResolveAttachments[j].aspectMask
+                    << std::endl
+                    << "\t\t .pNext: " << subpass.pResolveAttachments[j].pNext << std::endl
+                    << "\t\t} " << std::endl;
+            }
+        }
+        out << "\t .preserveAttachmentCount: 0x" << subpass.preserveAttachmentCount;
+    }
+
     const uint32_t viewMask = angle::BitMask<uint32_t>(desc.viewCount());
     if (desc.viewCount() > 0)
     {
@@ -6891,6 +7036,7 @@ angle::Result RenderPassCache::MakeRenderPass(vk::Context *context,
     {
         ANGLE_VK_TRY(context, renderPass->init2(context->getDevice(), createInfo));
     }
+    WARN() << "renderPass: " << renderPass->getHandle() << std::endl << out.str();
 
     if (renderPassCounters != nullptr)
     {
