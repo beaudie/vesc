@@ -327,6 +327,39 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
     VkImageTiling imageTilingMode = AhbDescUsageToVkImageTiling(ahbDescription);
     VkImageUsageFlags usage = AhbDescUsageToVkImageUsage(ahbDescription, isDepthOrStencilFormat);
 
+    WARN() << "AHB:" << hardwareBuffer << " isExternal:" << isExternal
+           << " externalTexturingSupported:" << externalTexturingSupported
+           << " externalRenderTargetSupported:" << externalRenderTargetSupported << std::endl
+           << "bufferFormatProperties.format = " << bufferFormatProperties.format << std::endl
+           << "bufferFormatProperties.externalFormat = " << bufferFormatProperties.externalFormat
+           << std::endl
+           << "bufferFormatProperties.formatFeatures = 0x" << std::hex
+           << bufferFormatProperties.formatFeatures << std::endl
+           << "bufferFormatProperties.suggestedYcbcrModel = " << std::dec
+           << bufferFormatProperties.suggestedYcbcrModel << std::endl
+           << "bufferFormatProperties.suggestedYcbcrRange = "
+           << bufferFormatProperties.suggestedYcbcrRange << std::endl
+           << "bufferFormatProperties.suggestedXChromaOffset = "
+           << bufferFormatProperties.suggestedXChromaOffset << std::endl
+           << "bufferFormatProperties.suggestedYChromaOffset = "
+           << bufferFormatProperties.suggestedYChromaOffset << std::endl
+           << "bufferFormatResolveProperties.colorAttachmentFormat = "
+           << bufferFormatResolveProperties.colorAttachmentFormat;
+
+    WARN() << "bufferFormatProperties2.format = " << bufferFormatProperties2.format << std::endl
+           << "bufferFormatProperties2.externalFormat = " << bufferFormatProperties2.externalFormat
+           << std::endl
+           << "bufferFormatProperties2.formatFeatures = " << bufferFormatProperties2.formatFeatures
+           << std::endl
+           << "bufferFormatProperties2.suggestedYcbcrModel = "
+           << bufferFormatProperties2.suggestedYcbcrModel << std::endl
+           << "bufferFormatProperties2.suggestedYcbcrRange = "
+           << bufferFormatProperties2.suggestedYcbcrRange << std::endl
+           << "bufferFormatProperties2.suggestedXChromaOffset = "
+           << bufferFormatProperties2.suggestedXChromaOffset << std::endl
+           << "bufferFormatProperties2.suggestedYChromaOffset = "
+           << bufferFormatProperties2.suggestedYChromaOffset;
+
     if (isExternal)
     {
         ANGLE_VK_CHECK(displayVk, bufferFormatProperties.externalFormat != 0, VK_ERROR_UNKNOWN);
