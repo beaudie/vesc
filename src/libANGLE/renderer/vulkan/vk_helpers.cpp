@@ -2662,6 +2662,12 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
     // Commands that are added to primary before beginRenderPass command
     executeBarriers(context->getRenderer()->getFeatures(), commandsState);
 
+    uint32_t attachmentCount = static_cast<uint32_t>(mFramebuffer.getImageViews().size());
+    // If nullColorAttachmentWithExternalFormatResolve is true, there will be no color attachment
+    // even though mRenderPassDesc indicates so.
+    ASSERT((mRenderPassDesc.hasYUVResolveAttachment() &&
+            context->getRenderer()->nullColorAttachmentWithExternalFormatResolve()) ||
+           attachmentCount == static_cast<uint32_t>(mRenderPassDesc.attachmentCount()));
     ASSERT(renderPass != nullptr);
     VkRenderPassBeginInfo beginInfo    = {};
     beginInfo.sType                    = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -2671,7 +2677,7 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
     beginInfo.renderArea.offset.y      = static_cast<uint32_t>(mRenderArea.y);
     beginInfo.renderArea.extent.width  = static_cast<uint32_t>(mRenderArea.width);
     beginInfo.renderArea.extent.height = static_cast<uint32_t>(mRenderArea.height);
-    beginInfo.clearValueCount          = static_cast<uint32_t>(mRenderPassDesc.attachmentCount());
+    beginInfo.clearValueCount          = attachmentCount;
     beginInfo.pClearValues             = mClearValues.data();
 
     // With imageless framebuffers, the attachments should be also added to beginInfo.
@@ -2680,7 +2686,7 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
     {
         rpAttachmentBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_ATTACHMENT_BEGIN_INFO_KHR;
         rpAttachmentBeginInfo.attachmentCount =
-            static_cast<uint32_t>(mRenderPassDesc.attachmentCount());
+            static_cast<uint32_t>(mFramebuffer.getImageViews().size());
         rpAttachmentBeginInfo.pAttachments = mFramebuffer.getImageViews().data();
 
         AddToPNextChain(&beginInfo, &rpAttachmentBeginInfo);
