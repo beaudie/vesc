@@ -51,7 +51,7 @@ constexpr bool kExposeNonConformantExtensionsAndVersions = false;
 #if defined(ANGLE_ENABLE_CRC_FOR_PIPELINE_CACHE)
 constexpr bool kEnableCRCForPipelineCache = true;
 #else
-constexpr bool kEnableCRCForPipelineCache = false;
+constexpr bool kEnableCRCForPipelineCache                = false;
 #endif
 }  // anonymous namespace
 
@@ -4550,9 +4550,9 @@ void RendererVk::initFeatures(DisplayVk *displayVk,
         }
     }
 
-    ANGLE_FEATURE_CONDITION(
-        &mFeatures, supportsExtendedDynamicState,
-        mExtendedDynamicStateFeatures.extendedDynamicState == VK_TRUE && dynamicStateWorks);
+    ANGLE_FEATURE_CONDITION(&mFeatures, supportsExtendedDynamicState,
+                            mExtendedDynamicStateFeatures.extendedDynamicState == VK_TRUE &&
+                                false /*dynamicStateWorks*/);
 
     ANGLE_FEATURE_CONDITION(&mFeatures, useVertexInputBindingStrideDynamicState,
                             mFeatures.supportsExtendedDynamicState.enabled && dynamicStateWorks);
