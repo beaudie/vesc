@@ -681,6 +681,15 @@ void main()
         EXPECT_EQ(res, 0);
         EXPECT_EQ(data.size(), planeInfo.planeCount);
 
+        WARN() << "AHardwareBuffer_lockPlanes res:" << res
+               << " planeInfo.planeCount:" << planeInfo.planeCount;
+        for (uint32_t planeIdx = 0; planeIdx < planeInfo.planeCount; planeIdx++)
+        {
+            const AHardwareBuffer_Plane &plane = planeInfo.planes[planeIdx];
+            WARN() << " planes[" << planeIdx << "]"
+                   << ".data:" << plane.data << " .pixelStride:" << plane.pixelStride
+                   << " .rowStride:" << plane.rowStride;
+        }
         for (size_t planeIdx = 0; planeIdx < data.size(); planeIdx++)
         {
             const AHBPlaneData &planeData      = data[planeIdx];
@@ -771,7 +780,8 @@ void main()
         aHardwareBufferDescription.height               = height;
         aHardwareBufferDescription.layers               = depth;
         aHardwareBufferDescription.format               = androidFormat;
-        aHardwareBufferDescription.usage                = AHARDWAREBUFFER_USAGE_CPU_WRITE_RARELY;
+        aHardwareBufferDescription.usage =
+            AHARDWAREBUFFER_USAGE_CPU_WRITE_RARELY | AHARDWAREBUFFER_USAGE_CPU_READ_RARELY;
         if ((usage & kAHBUsageGPUSampledImage) != 0)
         {
             aHardwareBufferDescription.usage |= AHARDWAREBUFFER_USAGE_GPU_SAMPLED_IMAGE;
@@ -828,6 +838,15 @@ void main()
         // Allocate memory from Android Hardware Buffer
         AHardwareBuffer *aHardwareBuffer = nullptr;
         EXPECT_EQ(0, AHardwareBuffer_allocate(&aHardwareBufferDescription, &aHardwareBuffer));
+
+        WARN() << "AHardwareBuffer_allocate: desc:{ .format:" << aHardwareBufferDescription.format
+               << "\n\t\t .height:" << aHardwareBufferDescription.height
+               << "\n\t\t .layers:" << aHardwareBufferDescription.layers
+               << "\n\t\t .rfu0:" << aHardwareBufferDescription.rfu0
+               << "\n\t\t .rfu1:" << aHardwareBufferDescription.rfu1
+               << "\n\t\t .stride:" << aHardwareBufferDescription.stride << "\n\t\t .usage: 0x"
+               << std::hex << aHardwareBufferDescription.usage << "\n\t\t .width:" << std::dec
+               << aHardwareBufferDescription.width;
 
         if (!data.empty())
         {
@@ -1131,6 +1150,118 @@ void main()
             }
         }
         ASSERT_EQ(0, AHardwareBuffer_unlock(source, nullptr));
+#    else
+        ASSERT_EQ(1u, data.size());
+        ASSERT_FALSE(isYUV);
+
+        const uint32_t rowStride = aHardwareBufferDescription.stride * data[0].bytesPerPixel;
+        size_t layerPitch        = getLayerPitch(height, rowStride);
+
+        void *mappedMemory = nullptr;
+        ASSERT_EQ(0, AHardwareBuffer_lock(source, AHARDWAREBUFFER_USAGE_CPU_WRITE_RARELY, -1,
+                                          nullptr, &mappedMemory));
+
+        uint32_t xStart = 0;
+        uint32_t xEnd   = width;
+
+        switch (verifyRegion)
+        {
+            case AHBVerifyRegion::Entire:
+                break;
+            case AHBVerifyRegion::LeftHalf:
+                xEnd = width / 2;
+                break;
+            case AHBVerifyRegion::RightHalf:
+                xStart = width / 2;
+                break;
+        }
+        for (size_t z = 0; z < depth; z++)
+        {
+            const uint8_t *referenceDepthSlice =
+                reinterpret_cast<const uint8_t *>(data[0].data) +
+                z * height * (xEnd - xStart) * data[0].bytesPerPixel;
+            for (size_t y = 0; y < height; y++)
+            {
+                const uint8_t *referenceRow =
+                    referenceDepthSlice + y * (xEnd - xStart) * data[0].bytesPerPixel;
+                for (size_t x = xStart; x < xEnd; x++)
+                {
+                    const uint8_t *referenceData =
+                        referenceRow + (x - xStart) * data[0].bytesPerPixel;
+                    std::vector<uint8_t> reference(referenceData,
+                                                   referenceData + data[0].bytesPerPixel);
+
+                    const uint8_t *ahbData = reinterpret_cast<uint8_t *>(mappedMemory) +
+                                             z * layerPitch + y * rowStride +
+                                             x * data[0].bytesPerPixel;
+                    std::vector<uint8_t> ahb(ahbData, ahbData + data[0].bytesPerPixel);
+
+                    EXPECT_EQ(reference, ahb) << "at (" << x << ", " << y << ")";
+                }
+            }
+        }
+        ASSERT_EQ(0, AHardwareBuffer_unlock(source, nullptr));
+#    endif
+#endif
+    }
+
+    void printResultAHB(AHardwareBuffer *source)
+    {
+#if defined(ANGLE_AHARDWARE_BUFFER_SUPPORT)
+        AHardwareBuffer_Desc aHardwareBufferDescription;
+        AHardwareBuffer_describe(source, &aHardwareBufferDescription);
+        bool isYUV = (aHardwareBufferDescription.format == AHARDWAREBUFFER_FORMAT_Y8Cb8Cr8_420);
+        const uint32_t width  = aHardwareBufferDescription.width;
+        const uint32_t height = aHardwareBufferDescription.height;
+        const uint32_t depth  = aHardwareBufferDescription.layers;
+
+#    if defined(ANGLE_AHARDWARE_BUFFER_LOCK_PLANES_SUPPORT)
+        AHardwareBuffer_Planes planeInfo;
+        ASSERT_EQ(0, AHardwareBuffer_lockPlanes(source, AHARDWAREBUFFER_USAGE_CPU_WRITE_RARELY, -1,
+                                                nullptr, &planeInfo));
+
+        WARN() << "AHB:" << source << " planeInfo.planeCount:" << planeInfo.planeCount
+               << " width:" << width << " height:" << height << " depth:" << depth;
+        for (uint32_t planeIdx = 0; planeIdx < planeInfo.planeCount; planeIdx++)
+        {
+            const AHardwareBuffer_Plane &plane = planeInfo.planes[planeIdx];
+            WARN() << " planes[" << planeIdx << "]"
+                   << ".data:" << plane.data << " .pixelStride:" << plane.pixelStride
+                   << " .rowStride:" << plane.rowStride;
+        }
+
+        std::ostringstream out;
+        for (size_t planeIdx = 0; planeIdx < planeInfo.planeCount; planeIdx++)
+        {
+            const AHardwareBuffer_Plane &plane = planeInfo.planes[planeIdx];
+
+            const size_t planeHeight = (isYUV && planeIdx > 0) ? (height / 2) : height;
+            const size_t planeWidth  = (isYUV && planeIdx > 0) ? (width / 2) : width;
+            size_t layerPitch        = getLayerPitch(planeHeight, plane.rowStride);
+
+            uint32_t xStart = 0;
+            uint32_t xEnd   = planeWidth;
+
+            out << "planeIdx:" << planeIdx << std::endl;
+            for (size_t z = 0; z < depth; z++)
+            {
+                for (size_t y = 0; y < planeHeight; y++)
+                {
+                    for (size_t x = xStart; x < xEnd; x++)
+                    {
+                        const uint8_t *ahbData = reinterpret_cast<uint8_t *>(plane.data) +
+                                                 z * layerPitch + y * plane.rowStride +
+                                                 x * plane.pixelStride;
+                        std::vector<uint8_t> ahb(ahbData, ahbData + plane.pixelStride);
+                        out << std::hex << static_cast<unsigned int>(*ahbData) << " ";
+                    }
+                    out << std::endl;
+                }
+            }
+        }
+        ASSERT_EQ(0, AHardwareBuffer_unlock(source, nullptr));
+        WARN() << " Data:" << std::endl << out.str();
+
 #    else
         ASSERT_EQ(1u, data.size());
         ASSERT_FALSE(isYUV);
@@ -3413,7 +3544,7 @@ TEST_P(ImageTestES3, ClearYUVAHB)
                            0);
     ASSERT_GL_NO_ERROR();
     EXPECT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
-
+    WARN() << " before calling glClear";
     // Clearing a YUV framebuffer reinterprets the rgba clear color as YUV values and writes them
     // directly to the buffer
     GLubyte clearColor[4] = {197, 128, 192, 255};
@@ -3421,9 +3552,21 @@ TEST_P(ImageTestES3, ClearYUVAHB)
                  clearColor[3] / 255.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     ASSERT_GL_NO_ERROR();
+    glFinish();
 
+    WARN() << " before calling printResultAHB";
+    printResultAHB(source);
+
+#if 1
+    WARN() << " before calling glReadPixels";
     // ReadPixels returns the RGB converted color
     EXPECT_PIXEL_COLOR_NEAR(0, 0, GLColor(255, 159, 212, 255), 1.0);
+#else
+    WARN() << " before calling verifyResultsExternal";
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    GLubyte pixelColor[4] = {255, 159, 211, 255};
+    verifyResultsExternal(target, pixelColor);
+#endif
 
     // Clean up
     eglDestroyImageKHR(window->getDisplay(), image);
