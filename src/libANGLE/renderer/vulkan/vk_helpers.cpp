@@ -2686,6 +2686,9 @@ angle::Result RenderPassCommandBufferHelper::flushToPrimary(Context *context,
         AddToPNextChain(&beginInfo, &rpAttachmentBeginInfo);
     }
 
+    WARN() << " mRenderPassDesc.attachmentCount = " << mRenderPassDesc.attachmentCount()
+           << " mFramebuffer.getImageViews.size = " << mFramebuffer.getImageViews().size();
+
     // Run commands inside the RenderPass.
     constexpr VkSubpassContents kSubpassContents =
         ExecutesInline() ? VK_SUBPASS_CONTENTS_INLINE
