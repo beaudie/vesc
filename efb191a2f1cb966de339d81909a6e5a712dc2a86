@@ -16,6 +16,24 @@
       "message": "The commit description says it, but it\u0027s not clear why flushing the texture in this case is any worse than if the upload was in a single staged buffer. Is it a case where the application is doing alternating uploads to textures, and this restriction happens to match that pattern coincidentally?",
       "revId": "efb191a2f1cb966de339d81909a6e5a712dc2a86",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cc36b47_7a7b069c",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-10-19T20:27:59Z",
+      "side": 1,
+      "message": "In this test, only the functionality is tested. In the regressed trace after the single-level flushing CL, some textures are deleted and redefined during the trace with many `TexSubImage` calls (one for each row). This leads to the performance regression. If the `TexSubImage` calls are reduced, the performance improves.\n\nThis CL should have minimal effect on the texture flushes when the trace is being loaded.",
+      "parentUuid": "669a396b_a2d30dda",
+      "revId": "efb191a2f1cb966de339d81909a6e5a712dc2a86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
