@@ -51,6 +51,23 @@
       "parentUuid": "88f662ca_0af82246",
       "revId": "87ec525919313cb5e9d519a93f6d28bc95d54aca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9389230_7ab2d3f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-19T22:22:57Z",
+      "side": 1,
+      "message": "Fix LGTM, please add a test 😊",
+      "revId": "87ec525919313cb5e9d519a93f6d28bc95d54aca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
