@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6628910_bab6b569",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 3142,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-19T01:55:28Z",
+      "side": 1,
+      "message": "If I take the next CL, then technically I dont need this CL. But I think this CL is also good given that line 3147 is using src-\u003egetYcbcrConversionDesc(), then why not just check src-\u003egetYcbcrConversionDesc().valid?",
+      "range": {
+        "startLine": 3142,
+        "startChar": 0,
+        "endLine": 3142,
+        "endChar": 55
+      },
+      "revId": "2cf08adbf518afe59ba3c8240806af1a00945549",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
