@@ -2522,6 +2522,8 @@ class ImageHelper final : public Resource, public angle::Subject
                                           VkMemoryPropertyFlags flags,
                                           VkDeviceSize size);
 
+    size_t getLevelUpdateCount(gl::LevelIndex level) const;
+
   private:
     ANGLE_ENABLE_STRUCT_PADDING_WARNINGS
     struct ClearUpdate
