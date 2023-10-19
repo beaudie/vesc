@@ -105,7 +105,7 @@ from earlier steps. Ninja automatically calls GN to regenerate the build
 files on any configuration change. `autoninja` automatically specifies a
 thread count to `ninja` based on your system configuration.
 
-### Building with Goma (Google employees only)
+### Building with Goma (Google employees only) (deprecated, recommend using Reclient instead)
 
 In addition, we highly recommend Google employees use goma, a distributed
 compilation system. Detailed information is available internally. To enable
@@ -113,6 +113,18 @@ Goma set the GN arg:
 
 ```
 use_goma = true
+```
+
+### Building with Reclient (Google employees only)
+
+As Goma is deprecated, Reclient is the recommended distributed compiler service to build ANGLE faster.
+
+Follow [Setup remote execution](https://g3doc.corp.google.com/company/teams/chrome/linux_build_instructions.md?cl=head#setup-remote-execution) to download the required configuration, and complete the authentication.
+
+Add below arg in GN arg:
+
+```
+use_remoteexec = true
 ```
 
 ### Building and Debugging with Visual Studio
