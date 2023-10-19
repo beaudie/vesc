@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "669a396b_a2d30dda",
+        "filename": "src/tests/gl_tests/VulkanPerformanceCounterTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-19T18:55:53Z",
+      "side": 1,
+      "message": "The commit description says it, but it\u0027s not clear why flushing the texture in this case is any worse than if the upload was in a single staged buffer. Is it a case where the application is doing alternating uploads to textures, and this restriction happens to match that pattern coincidentally?",
+      "revId": "efb191a2f1cb966de339d81909a6e5a712dc2a86",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
