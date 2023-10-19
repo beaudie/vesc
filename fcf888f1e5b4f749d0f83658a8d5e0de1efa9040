@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "604567a8_77849559",
+        "filename": "src/libANGLE/renderer/gen_angle_format_table.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-19T01:19:53Z",
+      "side": 1,
+      "message": "Is this correct? Why it did not re-generate theFormat_table_autogen.cpp?",
+      "range": {
+        "startLine": 349,
+        "startChar": 22,
+        "endLine": 349,
+        "endChar": 89
+      },
+      "revId": "fcf888f1e5b4f749d0f83658a8d5e0de1efa9040",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
