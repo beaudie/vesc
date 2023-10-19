@@ -86,6 +86,24 @@
       "parentUuid": "e9389230_7ab2d3f5",
       "revId": "87ec525919313cb5e9d519a93f6d28bc95d54aca",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "868f905e_3c316280",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1524137
+      },
+      "writtenOn": "2023-10-19T23:53:08Z",
+      "side": 1,
+      "message": "I\u0027ve filed b/306472834 for that.",
+      "parentUuid": "11effe90_7dd15da3",
+      "revId": "87ec525919313cb5e9d519a93f6d28bc95d54aca",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
