@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fd9eeb0_8b169b38",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-19T02:02:41Z",
+      "side": 1,
+      "message": "Please move this above the comment that says \"it\u0027s available for expansion\"",
+      "revId": "85914ded19de1cc274defa7409429e9a532b5dd9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
