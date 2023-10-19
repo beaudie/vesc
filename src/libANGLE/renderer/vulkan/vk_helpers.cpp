@@ -5576,11 +5576,16 @@ angle::Result ImageHelper::initExternal(Context *context,
 
     if (actualFormat.isYUV)
     {
-        // The Vulkan spec states: If sampler is used and the VkFormat of the image is a
-        // multi-planar format, the image must have been created with
+        // The Vulkan spec states: If the pNext chain includes a VkExternalFormatANDROID structure
+        // whose externalFormat member is not 0, flags must not include
         // VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT
-        mCreateFlags |= VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
-
+        if (!IsYUVExternalFormat(actualFormatID))
+        {
+            // The Vulkan spec states: If sampler is used and the VkFormat of the image is a
+            // multi-planar format, the image must have been created with
+            // VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT
+            mCreateFlags |= VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT;
+        }
         // The Vulkan spec states: The potential format features of the sampler YCBCR conversion
         // must support VK_FORMAT_FEATURE_MIDPOINT_CHROMA_SAMPLES_BIT or
         // VK_FORMAT_FEATURE_COSITED_CHROMA_SAMPLES_BIT
@@ -9862,7 +9867,6 @@ angle::Result ImageHelper::readPixelsImpl(ContextVk *contextVk,
         access.onImageTransferRead(layoutChangeAspectFlags, this);
         OutsideRenderPassCommandBuffer *commandBuffer;
         ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &commandBuffer));
-
         // Create some temp views because copyImage works in terms of them
         gl::TextureType textureType = Get2DTextureType(1, resolvedImage.get().getSamples());
 
@@ -9876,6 +9880,10 @@ angle::Result ImageHelper::readPixelsImpl(ContextVk *contextVk,
             contextVk, textureType, VK_IMAGE_ASPECT_COLOR_BIT, gl::SwizzleState(), &stagingView,
             vk::LevelIndex(0), 1, vk::ImageHelper::kDefaultImageViewUsageFlags));
 
+        CommandBufferAccess readAccess;
+        readAccess.onImageTransferRead(layoutChangeAspectFlags, &resolvedImage.get());
+        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(readAccess, &commandBuffer));
+
         UtilsVk::CopyImageParameters params = {};
         params.srcOffset[0]                 = srcOffset.x;
         params.srcOffset[1]                 = srcOffset.y;
@@ -9884,10 +9892,6 @@ angle::Result ImageHelper::readPixelsImpl(ContextVk *contextVk,
         params.srcHeight                    = srcExtent.height;
         ANGLE_TRY(contextVk->getUtils().copyImage(contextVk, &resolvedImage.get(), &stagingView,
                                                   src, &srcView, params));
-
-        CommandBufferAccess readAccess;
-        readAccess.onImageTransferRead(layoutChangeAspectFlags, &resolvedImage.get());
-        ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(readAccess, &commandBuffer));
 
         // Make the resolved image the target of buffer copy
         src                           = &resolvedImage.get();
