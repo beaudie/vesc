@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "651571f9_1b322800",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-10-19T22:48:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c940297b_5fceb466",
+      "range": {
+        "startLine": 110,
+        "startChar": 0,
+        "endLine": 111,
+        "endChar": 65
+      },
+      "revId": "3de187a4e4cc71a134a4e7231fd9c78ff5becc0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d7e40055_d1ecfe8b",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-10-19T22:30:26Z",
       "side": 1,
       "message": "Don\u0027t think we need to mention Goma here",
+      "range": {
+        "startLine": 120,
+        "startChar": 0,
+        "endLine": 120,
+        "endChar": 22
+      },
+      "revId": "3de187a4e4cc71a134a4e7231fd9c78ff5becc0e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1852cff_3c6193f6",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-10-19T22:48:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7e40055_d1ecfe8b",
       "range": {
         "startLine": 120,
         "startChar": 0,
