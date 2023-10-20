@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b39f8474_3085ed80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-20T14:56:32Z",
+      "side": 1,
+      "message": "Drive by.",
+      "revId": "c13e315f2c4c1eb16580666d97fcd7addbd4413e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71e85524_60d2aba4",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 892,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-20T14:56:32Z",
+      "side": 1,
+      "message": "Need to be moved to the top!",
+      "revId": "c13e315f2c4c1eb16580666d97fcd7addbd4413e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cf32b58_51f6e659",
+        "filename": "src/tests/gl_tests/LinkAndRelinkTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-20T14:56:32Z",
+      "side": 1,
+      "message": "nit:\n\n```suggestion\n// Test destruction of a context with a pending relink of the current in-use\n// program.\n```",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 11
+      },
+      "revId": "c13e315f2c4c1eb16580666d97fcd7addbd4413e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
