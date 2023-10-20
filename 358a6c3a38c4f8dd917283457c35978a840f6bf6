@@ -16,6 +16,24 @@
       "message": "There doesn\u0027t seem to be anything special in this config, why not just use the surface that the fixture creates?",
       "revId": "358a6c3a38c4f8dd917283457c35978a840f6bf6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01da3b43_cdf22b51",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5991,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-10-20T18:29:23Z",
+      "side": 1,
+      "message": "The test was added to verify that reading from default FBO on a surface created with `default egl config` works properly: this maps to when running deqp tests without specifying the `--deqp-gl-config-name`.\n\nI think it would be clearer if I explicitly list the EGL config here, so that it is easy to see the egl config picked is the default egl config.",
+      "parentUuid": "d5ab037f_19d95032",
+      "revId": "358a6c3a38c4f8dd917283457c35978a840f6bf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
