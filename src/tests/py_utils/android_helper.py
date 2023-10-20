@@ -228,8 +228,8 @@ def _GetDeviceApkPath():
     if not pm_path:
         logging.debug('No installed path found for %s' % TEST_PACKAGE_NAME)
         return None
+    logging.debug('APK path from pm path: %s' % pm_path)
     device_apk_path = _RemovePrefix(pm_path, 'package:')
-    logging.debug('Device APK path is %s' % device_apk_path)
     return device_apk_path
 
 
