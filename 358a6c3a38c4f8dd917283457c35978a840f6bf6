@@ -34,6 +34,24 @@
       "parentUuid": "d5ab037f_19d95032",
       "revId": "358a6c3a38c4f8dd917283457c35978a840f6bf6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ca0b461_b035e110",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5991,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-20T19:15:33Z",
+      "side": 1,
+      "message": "Ok, it\u0027s just this is a lot of code. Besides, the default config may not end up being the problematic one, so it\u0027ll rely on luck.\n\nMy suggestion is to use the usual way of selecting the config (`setConfigRedBits`, etc), and specifically target the config that we saw the issue with.",
+      "parentUuid": "01da3b43_cdf22b51",
+      "revId": "358a6c3a38c4f8dd917283457c35978a840f6bf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
