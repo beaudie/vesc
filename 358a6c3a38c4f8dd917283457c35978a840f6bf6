@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5ab037f_19d95032",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5991,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-20T01:12:28Z",
+      "side": 1,
+      "message": "There doesn\u0027t seem to be anything special in this config, why not just use the surface that the fixture creates?",
+      "revId": "358a6c3a38c4f8dd917283457c35978a840f6bf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
