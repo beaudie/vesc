@@ -16,6 +16,24 @@
       "message": "Post-submit comment: Worth mentioning the `\"download_remoteexec_cfg\": True` custom var?",
       "revId": "d3319428de78bd559cc4dbe366d718e521b04cb3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2479959_73a55ba9",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-10-20T01:04:01Z",
+      "side": 1,
+      "message": "This is mentioned in the linked page: https://g3doc.corp.google.com/company/teams/chrome/linux_build_instructions.md?cl\u003dhead#setup-remote-execution.\n\nBut I will explicitly add it in case the link content changes.",
+      "parentUuid": "64cb6665_f41d9e38",
+      "revId": "d3319428de78bd559cc4dbe366d718e521b04cb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
