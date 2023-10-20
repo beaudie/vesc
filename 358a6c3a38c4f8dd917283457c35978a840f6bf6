@@ -52,6 +52,24 @@
       "parentUuid": "01da3b43_cdf22b51",
       "revId": "358a6c3a38c4f8dd917283457c35978a840f6bf6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1646ab76_48935d6d",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5991,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-10-20T21:46:42Z",
+      "side": 1,
+      "message": "The problematic egl config on windows is:\n\n```\nredBit: 8\ngreenBit: 8\nblueBit: 8\nalphaBit: 0\n```\n\nBut if I force the `ANGLETestBase::mFixture::ConfigParameters` to have the above values, it will cause the test to fail to find a matching egl config on platforms that do not support 0 alpha bits, e.g. Linux. \n\nI will leave the `ANGLETestBase::mFixture` to use the default ConfigParameters: (redBits: -1, greenBits: -1, blueBits: -1, alphaBits: -1..). That should work the same way as running deqp without `--deqp-gl-config-name` arg. I think the issue with http://b/306256081 is not because ANGLE has a problematic egl config, but because the test is making wrong assumptions about the glReadPixel() read and type format on a default egl config surface. Leaving the egl config parameters to default values should reproduce the scenario that the deqp test in http://b/306256081 ran into.",
+      "parentUuid": "4ca0b461_b035e110",
+      "revId": "358a6c3a38c4f8dd917283457c35978a840f6bf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
