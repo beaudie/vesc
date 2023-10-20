@@ -54,7 +54,7 @@ def _FindAapt():
 
 
 def _RemovePrefix(str, prefix):
-    assert str.startswith(prefix)
+    assert str.startswith(prefix), 'Expected prefix %s, got: %s' % (prefix, str)
     return str[len(prefix):]
 
 
@@ -228,7 +228,7 @@ def _GetDeviceApkPath():
     if not pm_path:
         logging.debug('No installed path found for %s' % TEST_PACKAGE_NAME)
         return None
-    device_apk_path = _RemovePrefix(pm_path, 'package:')
+    device_apk_path = _RemovePrefix(pm_path, 'package1:')
     logging.debug('Device APK path is %s' % device_apk_path)
     return device_apk_path
 
