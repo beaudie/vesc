@@ -34,6 +34,24 @@
       "parentUuid": "64cb6665_f41d9e38",
       "revId": "d3319428de78bd559cc4dbe366d718e521b04cb3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4efd5125_b142876a",
+        "filename": "doc/DevSetup.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-10-20T13:06:50Z",
+      "side": 1,
+      "message": "I wouldn\u0027t worry about it until (if ever) we find out that the link changed. They did a good job at listing all the required steps, let\u0027s have some trust 😊",
+      "parentUuid": "e2479959_73a55ba9",
+      "revId": "d3319428de78bd559cc4dbe366d718e521b04cb3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
