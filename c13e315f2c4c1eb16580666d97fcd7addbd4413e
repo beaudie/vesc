@@ -18,6 +18,23 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebdf2fd8_775ddcef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-10-20T17:51:16Z",
+      "side": 1,
+      "message": "Thanks for your drive-by Shabi; would you consider officially reviewing? Adding Geoff too.\n\nDan, before approving, let\u0027s fix the problem Shabi found. Let us know if you have any trouble updating the CL. (Use \"git commit --amend\" before re-uploading via \"git cl upload\".)",
+      "revId": "c13e315f2c4c1eb16580666d97fcd7addbd4413e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "71e85524_60d2aba4",
@@ -31,6 +48,24 @@
       "writtenOn": "2023-10-20T14:56:32Z",
       "side": 1,
       "message": "Need to be moved to the top!",
+      "revId": "c13e315f2c4c1eb16580666d97fcd7addbd4413e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "277b4a11_c041b1ae",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 892,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-10-20T17:51:16Z",
+      "side": 1,
+      "message": "Agreed; this context\u0027s already been removed from the share group at this point and it would be better to perform this wait before then.",
+      "parentUuid": "71e85524_60d2aba4",
       "revId": "c13e315f2c4c1eb16580666d97fcd7addbd4413e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
