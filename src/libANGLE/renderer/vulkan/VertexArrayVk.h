@@ -118,6 +118,12 @@ class VertexArrayVk : public VertexArrayImpl
     }
 
   private:
+    std::vector<std::pair<intptr_t, intptr_t>> mergeClientAttribsRange(
+        RendererVk *renderer,
+        const gl::AttributesMask activeStreamedAttribs,
+        size_t startVertex,
+        size_t endVertex);
+
     angle::Result setDefaultPackedInput(ContextVk *contextVk,
                                         size_t attribIndex,
                                         angle::FormatID *formatOut);
