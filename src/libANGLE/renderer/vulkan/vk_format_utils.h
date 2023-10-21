@@ -33,6 +33,8 @@ namespace vk
 {
 // VkFormat values in range [0, kNumVkFormats) are used as indices in various tables.
 constexpr uint32_t kNumVkFormats = 185;
+// Maxinum required input vertex alignment for all types of formats.
+constexpr uint32_t kMaxInputVertexAlignment = 4;
 
 enum ImageAccess
 {
