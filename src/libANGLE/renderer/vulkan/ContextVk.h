@@ -733,16 +733,15 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
         return mShareGroupVk->getDefaultBufferPool(mRenderer, size, memoryTypeIndex, usageType);
     }
 
-    angle::Result allocateStreamedVertexBuffer(size_t attribIndex,
-                                               size_t bytesToAllocate,
+    angle::Result allocateStreamedVertexBuffer(size_t bytesToAllocate,
                                                vk::BufferHelper **vertexBufferOut)
     {
         bool newBufferOut;
-        ANGLE_TRY(mStreamedVertexBuffers[attribIndex].allocate(this, bytesToAllocate,
-                                                               vertexBufferOut, &newBufferOut));
+        ANGLE_TRY(
+            mStreamedVertexBuffer.allocate(this, bytesToAllocate, vertexBufferOut, &newBufferOut));
         if (newBufferOut)
         {
-            mHasInFlightStreamedVertexBuffers.set(attribIndex);
+            mHasInFlightStreamedVertexBuffers = true;
         }
         return angle::Result::Continue;
     }
@@ -1542,8 +1541,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // DynamicBuffers for streaming vertex data from client memory pointer as well as for default
     // attributes. mHasInFlightStreamedVertexBuffers indicates if the dynamic buffer has any
     // in-flight buffer or not that we need to release at submission time.
-    gl::AttribArray<vk::DynamicBuffer> mStreamedVertexBuffers;
-    gl::AttributesMask mHasInFlightStreamedVertexBuffers;
+    vk::DynamicBuffer mStreamedVertexBuffer;
+    bool mHasInFlightStreamedVertexBuffers;
 
     // We use a single pool for recording commands. We also keep a free list for pool recycling.
     vk::SecondaryCommandPools mCommandPools;
