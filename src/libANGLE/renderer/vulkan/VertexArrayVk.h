@@ -25,6 +25,29 @@ enum class BufferBindingDirty
     Yes,
 };
 
+struct AttributeRange
+{
+    // Stream vertex attribute start pointer address.
+    uintptr_t startAddr;
+    // Stream vertex attribute end pointer address.
+    uintptr_t endAddr;
+    // Stream vertex attribute first used pointer address.
+    // ie. startAddr + startVertex * stride.
+    uintptr_t copyStartAddr;
+    AttributeRange() : startAddr(0), endAddr(0), copyStartAddr(0) {}
+    AttributeRange(uintptr_t startAddr_,
+                   uintptr_t endAddr_,
+                   uintptr_t copyStartAddr_,
+                   size_t index_)
+        : startAddr(startAddr_), endAddr(endAddr_), copyStartAddr(copyStartAddr_)
+    {}
+};
+
+ANGLE_INLINE bool operator<(const AttributeRange &a, const AttributeRange &b)
+{
+    return a.startAddr == b.startAddr ? a.endAddr < b.endAddr : a.startAddr < b.startAddr;
+}
+
 class VertexArrayVk : public VertexArrayImpl
 {
   public:
@@ -118,6 +141,14 @@ class VertexArrayVk : public VertexArrayImpl
     }
 
   private:
+    gl::AttributesMask mergeClientAttribsRange(
+        RendererVk *renderer,
+        const gl::AttributesMask activeStreamedAttribs,
+        size_t startVertex,
+        size_t endVertex,
+        std::array<AttributeRange, gl::MAX_VERTEX_ATTRIBS> &mergeRanges,
+        std::array<size_t, gl::MAX_VERTEX_ATTRIBS> &mergedIndexes) const;
+
     angle::Result setDefaultPackedInput(ContextVk *contextVk,
                                         size_t attribIndex,
                                         angle::FormatID *formatOut);
