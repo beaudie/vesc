@@ -201,7 +201,10 @@ size_t Format::getVertexInputAlignment(bool compressed) const
 {
     const angle::Format &bufferFormat = getActualBufferFormat(compressed);
     size_t pixelBytes                 = bufferFormat.pixelBytes;
-    return mVkBufferFormatIsPacked ? pixelBytes : (pixelBytes / bufferFormat.channelCount);
+    size_t alignment =
+        mVkBufferFormatIsPacked ? pixelBytes : (pixelBytes / bufferFormat.channelCount);
+    ASSERT(alignment < kMaxInputVertexAlignment);
+    return alignment;
 }
 
 bool HasEmulatedImageChannels(const angle::Format &intendedFormat,
