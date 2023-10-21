@@ -25,6 +25,17 @@ enum class BufferBindingDirty
     Yes,
 };
 
+struct RangeSpan
+{
+    uintptr_t start;
+    uintptr_t end;
+};
+
+ANGLE_INLINE bool operator<(const RangeSpan &a, const RangeSpan &b)
+{
+    return a.start == b.start ? a.end < b.end : a.start < b.start;
+}
+
 class VertexArrayVk : public VertexArrayImpl
 {
   public:
@@ -118,6 +129,10 @@ class VertexArrayVk : public VertexArrayImpl
     }
 
   private:
+    std::vector<RangeSpan> mergeClientAttribsRange(RendererVk *renderer,
+                                                   const gl::AttributesMask activeStreamedAttribs,
+                                                   size_t endVertex) const;
+
     angle::Result setDefaultPackedInput(ContextVk *contextVk,
                                         size_t attribIndex,
                                         angle::FormatID *formatOut);
