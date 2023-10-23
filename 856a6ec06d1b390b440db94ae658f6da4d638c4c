@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8df008c_1d10b92e",
+        "filename": "infra/specs/test_suites.pyl",
+        "patchSetId": 11
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-10-23T14:40:33Z",
+      "side": 1,
+      "message": "nit: I think it\u0027s better if these names were _ only, for consistency with other test suite names.",
+      "range": {
+        "startLine": 221,
+        "startChar": 26,
+        "endLine": 221,
+        "endChar": 27
+      },
+      "revId": "856a6ec06d1b390b440db94ae658f6da4d638c4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
