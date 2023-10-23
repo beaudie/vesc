@@ -50,6 +50,24 @@
       "message": "Does allocating mImplicitMSTexture have any side-effect to short-cut glBlitFramebuffer from this renderbuffer? I\u0027m guessing that glBlitFramebuffer would then copy from the implicitly resolved multisampled texture to the user\u0027s texture? I skimmed some of the code but didn\u0027t understand how this might be done.",
       "revId": "cdaa1af5c7715a74b559773e2a31c75f031d647e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "230c6d23_c7471fef",
+        "filename": "src/libANGLE/renderer/metal/RenderBufferMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-10-23T19:13:17Z",
+      "side": 1,
+      "message": "Yes if we are using an implicit MS texture, glBlitFramebuffer will copy from the resolved texture to the target texture.\n\nglBlitFramebuffer actually uses `RenderTargetMtl`\u0027s `mTexture` as the source texture of the copy operation [1]. And `RenderTargetMtl`\u0027s `mTexture` is:\n- Single sampled texture/resolved texture if we use implicit MSAA. The muli-sampled texture in this case is `mImplicitMSTexture`.\n- Muli-sampled texture if we don\u0027t use implicit MSAA. In this case the MS texture is stored as `mTexture` member directly. And the blit shader will need to manually resolve it and save to the target texture.\n\n[1] https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/metal/FrameBufferMtl.mm;drc\u003dabbfc06e9b070c9ea64af2b233624646cef00252;l\u003d530",
+      "parentUuid": "bcc51b51_7b565a26",
+      "revId": "cdaa1af5c7715a74b559773e2a31c75f031d647e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
