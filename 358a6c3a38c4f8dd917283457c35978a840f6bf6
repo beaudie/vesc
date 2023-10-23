@@ -70,6 +70,24 @@
       "parentUuid": "4ca0b461_b035e110",
       "revId": "358a6c3a38c4f8dd917283457c35978a840f6bf6",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cad4d3cb_61217633",
+        "filename": "src/tests/gl_tests/FramebufferTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 5991,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-10-23T19:56:27Z",
+      "side": 1,
+      "message": "Mark as resolved.",
+      "parentUuid": "1646ab76_48935d6d",
+      "revId": "358a6c3a38c4f8dd917283457c35978a840f6bf6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
