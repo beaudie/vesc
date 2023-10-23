@@ -60,7 +60,7 @@ namespace
 {
 // If the total size of copyBufferToImage commands in the outside command buffer reaches the
 // threshold below, the latter is flushed.
-static constexpr VkDeviceSize kMaxBufferToImageCopySize = 64 * 1024 * 1024;
+static constexpr VkDeviceSize kMaxBufferToImageCopySize = 0;
 // The number of queueSerials we will reserve for outsideRenderPassCommands when we generate one for
 // RenderPassCommands.
 static constexpr size_t kMaxReservedOutsideRenderPassQueueSerials = 15;
@@ -7169,6 +7169,8 @@ angle::Result ContextVk::initBufferAllocation(vk::BufferHelper *bufferHelper,
                                                            alignment, bufferUsageType, pool);
     if (ANGLE_LIKELY(result == VK_SUCCESS))
     {
+        WARN() << "Allocated buffer size: " << allocationSize;
+
         if (mRenderer->getFeatures().allocateNonZeroMemory.enabled)
         {
             ANGLE_TRY(bufferHelper->initializeNonZeroMemory(
@@ -7255,6 +7257,13 @@ angle::Result ContextVk::initImageAllocation(vk::ImageHelper *imageHelper,
                                               allocationType, &outputFlags, &outputSize);
     if (ANGLE_LIKELY(result == VK_SUCCESS))
     {
+        WARN() << "Required memory for texture (" << imageHelper->getExtents().width << " x "
+               << imageHelper->getExtents().height << "): " << memoryRequirements.size;
+        WARN() << "(Ideal memory size was "
+               << imageHelper->getExtents().width * imageHelper->getExtents().height *
+                      imageHelper->getActualFormat().pixelBytes
+               << ". Actual is " << memoryRequirements.size << ".)";
+
         if (mRenderer->getFeatures().allocateNonZeroMemory.enabled)
         {
             ANGLE_TRY(imageHelper->initializeNonZeroMemory(this, hasProtectedContent, outputFlags,

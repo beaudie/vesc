@@ -5767,6 +5767,58 @@ TEST_P(Texture2DBaseMaxTestES3, DepthRenderableAfterColorRenderableBelowBaseLeve
     drawQuad(program, essl1_shaders::PositionAttrib(), 0.0f);
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
 }
+// Test to check memory allocation sizes for various texture extents. After 10 seconds, it starts
+// allocating using each pair, waits for 5 seconds and moves to the next one. It will also log the
+// ideal texture size. ANGLE will also log the required size from vkGetImageMemoryRequirements().
+TEST_P(Texture2DTestES3, TextureMemoryAllocation)
+{
+    GLTexture testTextureInit;
+    glBindTexture(GL_TEXTURE_2D, testTextureInit);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_R8, 1, 1);
+    WARN() << "Allocated a 1x1 R8 texture";
+
+    std::vector<std::pair<uint32_t, uint32_t>> textureWidthHeightPairs = {
+        std::make_pair(1, 1),       std::make_pair(128, 128),   std::make_pair(256, 256),
+        std::make_pair(257, 257),   std::make_pair(384, 384),   std::make_pair(1440, 960),
+        std::make_pair(2044, 1042), std::make_pair(2044, 1152),
+    };
+
+    {
+        WARN() << "The test will begin in 10 seconds...";
+        double delayStart = angle::GetCurrentSystemTime();
+        while (angle::GetCurrentSystemTime() < delayStart + 10.0)
+            ;
+        WARN() << "Begin test";
+    }
+
+    for (std::pair<uint32_t, uint32_t> whPair : textureWidthHeightPairs)
+    {
+        WARN() << "" << std::endl;
+        GLTexture testTexture;
+        glBindTexture(GL_TEXTURE_2D, testTexture);
+
+        constexpr uint32_t kFormatSize = 4;
+        uint32_t textureWidth          = whPair.first;
+        uint32_t textureHeight         = whPair.second;
+
+        WARN() << "RGBA Texture extents: " << textureWidth << " x " << textureHeight
+               << " | Ideal texture size (B): " << textureWidth * textureHeight * kFormatSize;
+
+        glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, textureWidth, textureHeight);
+
+        double delayStart = angle::GetCurrentSystemTime();
+        while (angle::GetCurrentSystemTime() < delayStart + 5.0)
+            ;
+    }
+
+    {
+        WARN() << "Ending test in 5 seconds...";
+        double delayStart = angle::GetCurrentSystemTime();
+        while (angle::GetCurrentSystemTime() < delayStart + 5.0)
+            ;
+        WARN() << "End test";
+    }
+}
 
 // Test to check that texture completeness is determined correctly when the texture base level is
 // greater than 0, and also that level 0 is not sampled when base level is greater than 0.
