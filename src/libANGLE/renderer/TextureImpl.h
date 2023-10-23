@@ -250,6 +250,8 @@ class TextureImpl : public FramebufferAttachmentObjectImpl
         mBufferContentsObservers = observers;
     }
 
+    virtual bool hasMultiContextUsage() const { return false; }
+
   protected:
     const gl::TextureState &mState;
     gl::TextureBufferContentsObservers *mBufferContentsObservers = nullptr;

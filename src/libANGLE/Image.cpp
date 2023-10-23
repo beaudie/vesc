@@ -153,6 +153,11 @@ bool ImageSibling::hasProtectedContent() const
     return mTargetOf.get() && mTargetOf->hasProtectedContent();
 }
 
+bool ImageSibling::hasMultiContextUsage() const
+{
+    return false;
+}
+
 void ImageSibling::notifySiblings(angle::SubjectMessage message)
 {
     if (mTargetOf.get())

@@ -337,6 +337,9 @@ class Resource : angle::NonCopyable
         return mUse.usedByCommandBuffer(commandBufferQueueSerial);
     }
 
+    // Check if this resource is used by multiple contexts.
+    bool hasMultiContextUsage() const;
+
     const ResourceUse &getResourceUse() const { return mUse; }
 
   protected:
