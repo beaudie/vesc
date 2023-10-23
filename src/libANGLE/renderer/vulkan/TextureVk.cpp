@@ -4135,4 +4135,10 @@ void TextureVk::updateCachedImageViewSerials()
     mCachedImageViewSubresourceSerialSkipDecode =
         getImageViewSubresourceSerialImpl(GL_SKIP_DECODE_EXT);
 }
+
+bool TextureVk::hasMultiContextUsage() const
+{
+    ASSERT(mImage && mImage->valid());
+    return mImage->hasMultiContextUsage();
+}
 }  // namespace rx

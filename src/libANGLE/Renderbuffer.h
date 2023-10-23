@@ -163,6 +163,8 @@ class Renderbuffer final : public RefCountObject<RenderbufferID>,
                                        GLenum type,
                                        void *pixels) const;
 
+    bool hasMultiContextUsage() const override;
+
   private:
     // ObserverInterface implementation.
     void onSubjectStateChange(angle::SubjectIndex index, angle::SubjectMessage message) override;

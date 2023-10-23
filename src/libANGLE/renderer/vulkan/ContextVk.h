@@ -1378,6 +1378,8 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // avoided however, as on the affected driver that would disable certain optimizations.
     void updateStencilWriteWorkaround();
 
+    void updateColorAttachmentSharedImageSiblingStatus();
+
     void updateShaderResourcesWithSharedCacheKey(
         const vk::SharedDescriptorSetCacheKey &sharedCacheKey);
 
@@ -1598,6 +1600,9 @@ class ContextVk : public ContextImpl, public vk::Context, public MultisampleText
     // Whether a flush was requested, but is deferred as an optimization to avoid breaking the
     // render pass.
     bool mHasDeferredFlush;
+
+    // Tracks whether any color attachments of draw framebuffer was a shared image sibling
+    bool mAnyColorAttachmentIsSharedImageSibling;
 
     // Whether this context has produced any commands so far.  While the renderer already skips
     // vkQueueSubmit when there is no command recorded, this variable allows glFlush itself to be

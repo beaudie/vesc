@@ -153,6 +153,8 @@ class FramebufferVk : public FramebufferImpl
         return (mAttachmentHasFrontBufferUsage & mState.getColorAttachmentsMask()).any();
     }
 
+    bool hasMultiContextUsage() const;
+
     enum class RenderTargetImage
     {
         AttachmentImage,

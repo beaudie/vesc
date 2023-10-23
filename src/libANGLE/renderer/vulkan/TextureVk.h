@@ -338,6 +338,7 @@ class TextureVk : public TextureImpl, public angle::ObserverInterface
     // Check if the texture is consistently specified. Used for flushing mutable textures.
     bool isMutableTextureConsistentlySpecifiedForFlush();
     bool isMipImageDescDefined(gl::TextureTarget textureTarget, size_t level);
+    bool hasMultiContextUsage() const override;
 
   private:
     // Transform an image index from the frontend into one that can be used on the backing

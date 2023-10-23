@@ -420,4 +420,9 @@ void Renderbuffer::onSubjectStateChange(angle::SubjectIndex index, angle::Subjec
     ASSERT(message == angle::SubjectMessage::SubjectChanged);
     onStateChange(angle::SubjectMessage::ContentsChanged);
 }
+
+bool Renderbuffer::hasMultiContextUsage() const
+{
+    return mImplementation->hasMultiContextUsage();
+}
 }  // namespace gl
