@@ -375,6 +375,7 @@ class Texture final : public RefCountObject<TextureID>,
 
     void setProtectedContent(Context *context, bool hasProtectedContent);
     bool hasProtectedContent() const override;
+    bool hasMultiContextUsage() const override;
 
     void setRenderabilityValidation(Context *context, bool renderabilityValidation);
 

@@ -879,6 +879,7 @@ ContextVk::ContextVk(const gl::State &state, gl::ErrorSet *errorSet, RendererVk 
       mGpuEventsEnabled(false),
       mPrimaryBufferEventCounter(0),
       mHasDeferredFlush(false),
+      mAnyColorAttachmentIsSharedImageSibling(false),
       mHasAnyCommandsPendingSubmission(false),
       mIsInFramebufferFetchMode(false),
       mAllowRenderPassToReactivate(true),
@@ -1483,7 +1484,7 @@ angle::Result ContextVk::flush(const gl::Context *context)
         isSingleBufferedWindow || drawFramebufferVk->hasFrontBufferUsage();
 
     if (mRenderer->getFeatures().deferFlushUntilEndRenderPass.enabled && hasActiveRenderPass() &&
-        !frontBufferRenderingEnabled)
+        !mAnyColorAttachmentIsSharedImageSibling && !frontBufferRenderingEnabled)
     {
         mHasDeferredFlush = true;
         return angle::Result::Continue;
@@ -5221,6 +5222,14 @@ void ContextVk::updateStencilWriteWorkaround()
         &mGraphicsPipelineTransition, programHasDiscard || isAlphaToCoverageEnabled);
 }
 
+void ContextVk::updateColorAttachmentSharedImageSiblingStatus()
+{
+    FramebufferVk *drawFramebufferVk = getDrawFramebuffer();
+    ASSERT(drawFramebufferVk == vk::GetImpl(mState.getDrawFramebuffer()));
+
+    mAnyColorAttachmentIsSharedImageSibling |= drawFramebufferVk->hasMultiContextUsage();
+}
+
 angle::Result ContextVk::invalidateProgramExecutableHelper(const gl::Context *context)
 {
     const gl::State &glState                = context->getState();
@@ -5576,6 +5585,7 @@ angle::Result ContextVk::syncState(const gl::Context *context,
                 updateScissor(glState);
                 updateDepthStencil(glState);
                 updateDither();
+                updateColorAttachmentSharedImageSiblingStatus();
 
                 // Clear the blend funcs/equations for color attachment indices that no longer
                 // exist.
@@ -6291,6 +6301,9 @@ angle::Result ContextVk::onFramebufferChange(FramebufferVk *framebufferVk, gl::C
 
     // Update dither based on attachment formats.
     updateDither();
+
+    // Attachment shared status might have changed.
+    updateColorAttachmentSharedImageSiblingStatus();
 
     // Attachments might have changed.
     updateMissingOutputsMask();
@@ -7543,7 +7556,8 @@ angle::Result ContextVk::flushImpl(const vk::Semaphore *signalSemaphore,
     }
 
     // Since we just flushed, deferred flush is no longer deferred.
-    mHasDeferredFlush = false;
+    mHasDeferredFlush                       = false;
+    mAnyColorAttachmentIsSharedImageSibling = false;
     return angle::Result::Continue;
 }
 

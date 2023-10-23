@@ -632,6 +632,11 @@ bool Surface::hasFrontBufferUsage() const
     return false;
 }
 
+bool Surface::hasMultiContextUsage() const
+{
+    return false;
+}
+
 GLuint Surface::getId() const
 {
     return mState.id.value;

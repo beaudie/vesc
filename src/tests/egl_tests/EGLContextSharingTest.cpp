@@ -1571,6 +1571,177 @@ TEST_P(EGLContextSharingTestNoSyncTextureUploads, NoSync)
     }
 }
 
+class EGLContextSharingRenderToSharedTextureTest : public EGLContextSharingTest
+{};
+
+// Test that for an application that renders and samples from a shared image sibling
+// across shared contexts we do not defer a glFlush.
+TEST_P(EGLContextSharingRenderToSharedTextureTest, DoNotDeferFlush)
+{
+    EGLConfig config   = getEGLWindow()->getConfig();
+    EGLDisplay display = getEGLWindow()->getDisplay();
+
+    constexpr GLsizei kSize          = 1;
+    const EGLint pbufferAttributes[] = {EGL_WIDTH, kSize, EGL_HEIGHT, kSize, EGL_NONE};
+    const EGLint contextAttribs[]    = {EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE};
+
+    EGLContext producerContext = EGL_NO_CONTEXT;
+    GLTexture textureFromProducerContext;
+    EGLImage image;
+
+    // Synchronization tools to ensure the two threads are interleaved as designed by this test.
+    std::mutex mutex;
+    std::condition_variable condVar;
+    enum class Step
+    {
+        Start,
+        SharedTextureReadyBlue,
+        SharedTextureBlueDone,
+        SharedTextureReadyGreen,
+        Finish,
+        Abort,
+    };
+    Step currentStep = Step::Start;
+
+    std::thread producerThread = std::thread([&]() {
+        ThreadSynchronization<Step> threadSynchronization(&currentStep, &mutex, &condVar);
+
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Start));
+        producerContext = eglCreateContext(display, config, EGL_NO_CONTEXT, contextAttribs);
+        ASSERT_EGL_SUCCESS();
+        ASSERT_NE(EGL_NO_CONTEXT, producerContext);
+        EGLSurface surface = eglCreatePbufferSurface(display, config, pbufferAttributes);
+        EXPECT_EGL_SUCCESS();
+        ASSERT_NE(EGL_NO_SURFACE, surface);
+        ASSERT_EGL_TRUE(eglMakeCurrent(display, surface, surface, producerContext));
+        ASSERT_EGL_SUCCESS();
+
+        // Create the shared textures that will be accessed by the other context
+        glBindTexture(GL_TEXTURE_2D, textureFromProducerContext);
+        glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, kSize, kSize);
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        ASSERT_GL_TRUE(glIsTexture(textureFromProducerContext));
+
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, kSize, kSize, GL_RGBA, GL_UNSIGNED_BYTE,
+                        &GLColor::black);
+
+        GLFramebuffer fbo;
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+                               textureFromProducerContext, 0);
+        ASSERT_GL_NO_ERROR();
+
+        ANGLE_GL_PROGRAM(redProgram, essl1_shaders::vs::Simple(), essl1_shaders::fs::Blue());
+        glUseProgram(redProgram);
+        drawQuad(redProgram, essl1_shaders::PositionAttrib(), 0.5f);
+        ASSERT_GL_NO_ERROR();
+
+        EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
+
+        threadSynchronization.nextStep(Step::SharedTextureReadyBlue);
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::SharedTextureBlueDone));
+
+        // Render through an EGLImage this time
+        constexpr EGLAttrib kImageAttribs[] = {
+            EGL_IMAGE_PRESERVED,
+            EGL_TRUE,
+            EGL_NONE,
+        };
+        image = eglCreateImage(display, producerContext, EGL_GL_TEXTURE_2D,
+                               reinterpret_cast<EGLClientBuffer>(textureFromProducerContext.get()),
+                               kImageAttribs);
+        ASSERT_EGL_SUCCESS();
+        ASSERT_NE(image, EGL_NO_IMAGE);
+
+        // Create target texture for image
+        GLTexture targetTexture;
+        glBindTexture(GL_TEXTURE_2D, targetTexture);
+        glEGLImageTargetTexture2DOES(GL_TEXTURE_2D, image);
+        // Disable mipmapping
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        ASSERT_GL_NO_ERROR();
+
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, targetTexture,
+                               0);
+        ASSERT_GL_NO_ERROR();
+
+        ANGLE_GL_PROGRAM(greenProgram, essl1_shaders::vs::Simple(), essl1_shaders::fs::Green());
+        glUseProgram(greenProgram);
+        drawQuad(greenProgram, essl1_shaders::PositionAttrib(), 0.5f);
+        glFlush();
+        ASSERT_GL_NO_ERROR();
+
+        threadSynchronization.nextStep(Step::SharedTextureReadyGreen);
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::Finish));
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        ASSERT_EGL_TRUE(eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
+        ASSERT_EGL_SUCCESS();
+    });
+
+    std::thread consumerThread = std::thread([&]() {
+        ThreadSynchronization<Step> threadSynchronization(&currentStep, &mutex, &condVar);
+
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::SharedTextureReadyBlue));
+        ASSERT_NE(EGL_NO_CONTEXT, producerContext);
+        EGLContext context = eglCreateContext(display, config, producerContext, contextAttribs);
+        ASSERT_EGL_SUCCESS();
+        ASSERT_NE(EGL_NO_CONTEXT, context);
+        EGLSurface surface = eglCreatePbufferSurface(display, config, pbufferAttributes);
+        EXPECT_EGL_SUCCESS();
+        ASSERT_NE(EGL_NO_SURFACE, surface);
+        ASSERT_EGL_TRUE(eglMakeCurrent(display, surface, surface, context));
+        ASSERT_EGL_SUCCESS();
+
+        ASSERT_GL_TRUE(glIsTexture(textureFromProducerContext));
+        ASSERT_GL_NO_ERROR();
+
+        // Sample from textureFromProducerContext and draw
+        ANGLE_GL_PROGRAM(program, essl1_shaders::vs::Texture2D(), essl1_shaders::fs::Texture2D());
+        glUseProgram(program);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, textureFromProducerContext);
+        ASSERT_GL_NO_ERROR();
+
+        drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+        ASSERT_GL_NO_ERROR();
+
+        EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::blue);
+
+        threadSynchronization.nextStep(Step::SharedTextureBlueDone);
+        ASSERT_TRUE(threadSynchronization.waitForStep(Step::SharedTextureReadyGreen));
+
+        // Create target texture for image
+        GLTexture targetTexture;
+        glBindTexture(GL_TEXTURE_2D, targetTexture);
+        glEGLImageTargetTexture2DOES(GL_TEXTURE_2D, image);
+        // Disable mipmapping
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        ASSERT_GL_NO_ERROR();
+
+        // Sample from targetTexture and draw
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, targetTexture);
+        ASSERT_GL_NO_ERROR();
+
+        drawQuad(program, essl1_shaders::PositionAttrib(), 0.5f);
+        ASSERT_GL_NO_ERROR();
+
+        EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::green);
+
+        ASSERT_EGL_TRUE(eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT));
+        ASSERT_EGL_SUCCESS();
+        threadSynchronization.nextStep(Step::Finish);
+    });
+
+    producerThread.join();
+    consumerThread.join();
+
+    ASSERT_NE(currentStep, Step::Abort);
+    ASSERT_EGL_SUCCESS();
+}
+
 }  // anonymous namespace
 
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(EGLContextSharingTest);
@@ -1596,3 +1767,6 @@ GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(EGLContextSharingTestNoSyncTexture
 ANGLE_INSTANTIATE_TEST(EGLContextSharingTestNoSyncTextureUploads,
                        ES2_VULKAN().enable(Feature::ForceSubmitImmutableTextureUpdates),
                        ES3_VULKAN().enable(Feature::ForceSubmitImmutableTextureUpdates));
+
+GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(EGLContextSharingRenderToSharedTextureTest);
+ANGLE_INSTANTIATE_TEST(EGLContextSharingRenderToSharedTextureTest, ES3_VULKAN());

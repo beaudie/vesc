@@ -408,4 +408,10 @@ void RenderbufferVk::onSubjectStateChange(angle::SubjectIndex index, angle::Subj
         onStateChange(angle::SubjectMessage::SubjectChanged);
     }
 }
+
+bool RenderbufferVk::hasMultiContextUsage() const
+{
+    ASSERT(mImage && mImage->valid());
+    return mImage->hasMultiContextUsage();
+}
 }  // namespace rx
