@@ -75,6 +75,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d685a95_a8bf9312",
+        "filename": "src/libANGLE/renderer/metal/RenderBufferMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-10-23T22:33:02Z",
+      "side": 1,
+      "message": "Thanks.",
+      "parentUuid": "95606c47_da693c0c",
+      "range": {
+        "startLine": 85,
+        "startChar": 73,
+        "endLine": 85,
+        "endChar": 81
+      },
+      "revId": "cdaa1af5c7715a74b559773e2a31c75f031d647e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bcc51b51_7b565a26",
@@ -146,6 +170,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3d52498_16caff0a",
+        "filename": "src/libANGLE/renderer/metal/RenderBufferMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-10-23T22:33:02Z",
+      "side": 1,
+      "message": "Thanks very much for explaining this to me. I think I understand the flow now.\n\nIf you have time at some point, would you consider adding a small Markdown file in src/libANGLE/renderer/metal/doc/ describing these details of how multisampling works in the Metal backend? Thanks in advance.",
+      "parentUuid": "7c8cbff5_34e870c5",
+      "revId": "cdaa1af5c7715a74b559773e2a31c75f031d647e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dea38d66_e6c0e901",
@@ -159,6 +201,30 @@
       "writtenOn": "2023-10-23T20:25:39Z",
       "side": 1,
       "message": "[2]",
+      "range": {
+        "startLine": 108,
+        "startChar": 73,
+        "endLine": 108,
+        "endChar": 81
+      },
+      "revId": "cdaa1af5c7715a74b559773e2a31c75f031d647e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0226e0d2_63e0426b",
+        "filename": "src/libANGLE/renderer/metal/RenderBufferMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-10-23T22:33:02Z",
+      "side": 1,
+      "message": "Thanks.",
+      "parentUuid": "dea38d66_e6c0e901",
       "range": {
         "startLine": 108,
         "startChar": 73,
