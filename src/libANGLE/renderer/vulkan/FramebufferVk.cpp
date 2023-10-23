@@ -3393,4 +3393,19 @@ bool FramebufferVk::updateLegacyDither(ContextVk *contextVk)
 
     return false;
 }
+
+bool FramebufferVk::hasMultiContextUsage() const
+{
+    for (size_t colorIndexGL : mState.getColorAttachmentsMask())
+    {
+        const gl::FramebufferAttachment *color = mState.getColorAttachment(colorIndexGL);
+        ASSERT(color);
+        if (color->hasMultiContextUsage())
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
 }  // namespace rx

@@ -42,6 +42,25 @@ angle::Result Resource::waitForIdle(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+bool Resource::hasMultiContextUsage() const
+{
+    if (!mUse.valid())
+    {
+        return false;
+    }
+
+    size_t validSerials    = 0;
+    const Serials &serials = mUse.getSerials();
+    for (size_t index = 1; index < serials.size(); index++)
+    {
+        if (serials[index] != kZeroSerial)
+        {
+            validSerials++;
+        }
+    }
+    return validSerials > 1;
+}
+
 std::ostream &operator<<(std::ostream &os, const ResourceUse &use)
 {
     const Serials &serials = use.getSerials();

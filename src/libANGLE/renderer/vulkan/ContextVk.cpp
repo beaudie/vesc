@@ -1481,9 +1481,10 @@ angle::Result ContextVk::flush(const gl::Context *context)
     ASSERT(drawFramebufferVk == vk::GetImpl(mState.getDrawFramebuffer()));
     const bool frontBufferRenderingEnabled =
         isSingleBufferedWindow || drawFramebufferVk->hasFrontBufferUsage();
+    const bool multiContextUsage = drawFramebufferVk->hasMultiContextUsage();
 
     if (mRenderer->getFeatures().deferFlushUntilEndRenderPass.enabled && hasActiveRenderPass() &&
-        !frontBufferRenderingEnabled)
+        !multiContextUsage && !frontBufferRenderingEnabled)
     {
         mHasDeferredFlush = true;
         return angle::Result::Continue;

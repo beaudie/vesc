@@ -55,6 +55,7 @@ class ImageSibling : public gl::FramebufferAttachmentObject
     bool isExternalImageWithoutIndividualSync() const override;
     bool hasFrontBufferUsage() const override;
     bool hasProtectedContent() const override;
+    bool hasMultiContextUsage() const override;
 
   protected:
     // Set the image target of this sibling
