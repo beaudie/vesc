@@ -37,6 +37,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "95606c47_da693c0c",
+        "filename": "src/libANGLE/renderer/metal/RenderBufferMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-10-23T20:25:39Z",
+      "side": 1,
+      "message": "[1]",
+      "range": {
+        "startLine": 85,
+        "startChar": 73,
+        "endLine": 85,
+        "endChar": 81
+      },
+      "revId": "cdaa1af5c7715a74b559773e2a31c75f031d647e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bcc51b51_7b565a26",
         "filename": "src/libANGLE/renderer/metal/RenderBufferMtl.mm",
         "patchSetId": 4
@@ -84,6 +107,47 @@
       "side": 1,
       "message": "Thanks - would you mind pointing me to the call chain that sets up `RenderTargetMtl` in this way? From what I see, the call on line 111 below which calls `setWithImplicitMSTexture` sets up both the `mTexture` and `mImplicitMSTexture` members of `RenderTargetMtl` to different texture objects, and I don\u0027t see how the blit code uses the implicit one instead of the other. Thanks.",
       "parentUuid": "230c6d23_c7471fef",
+      "revId": "cdaa1af5c7715a74b559773e2a31c75f031d647e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c8cbff5_34e870c5",
+        "filename": "src/libANGLE/renderer/metal/RenderBufferMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-10-23T20:25:39Z",
+      "side": 1,
+      "message": "Sorry for the confusion. There are two cases of the `RenderBufferMtl`\u0027s members when we allocate an MS render buffer:\n1. If `alwaysResolveMultisampleRenderBuffers` feature is enabled:\n  - `mTexture` is set to the single sampled texture [1]. Even though this texture is allocated hidden from users, it is not denoted as \"implicit\" in `RenderTargetMtl`\u0027s pov.\n  - `mImplicitMSTexture` is set the multi-sampled texture. This is called \"implicit\" because when we use the `RenderBufferMtl` in a render pass, the `mImplicitMSTexture` is automatically resolved into the `mTexture` as a `StoreAction`.\n2. If alwaysResolveMultisampleRenderBuffers is disabled:\n  - `mTexture` is set to multi-sampled texture. [2].\n\nThe blitFramebuffer\u0027s code flow:\n1. queries RenderTargetMtl\u0027s `mTexture` and uses it as source texture. [3].\n2. calls `RenderUtils::blitColorWithDraw`.\n3. gets the appropriate utility pipeline based on the source texture type [4].\n4. runs the selected pipeline to copy `mTexture` to the target texture:\n  - 1st case: `mTexture` is the hidden single-sampled texture.\n    - Because this texture is automatically resolved into when we end the render pass. The copy to another single sampled texture still contains the resolved texels correctly from users\u0027 pov.\n  - 2nd case: `mTexture` is the multi-sampled texture.\n    - In this case, the multi-sampled texture is resolved inside fragment shader and the result is written to the target texture. The target texture still contains resolved texels as expected.\n\nHope this helps.\n\n[3] https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/metal/FrameBufferMtl.mm;drc\u003dabbfc06e9b070c9ea64af2b233624646cef00252;l\u003d530\n[4] https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/metal/mtl_render_utils.mm;drc\u003dabbfc06e9b070c9ea64af2b233624646cef00252;l\u003d1358",
+      "parentUuid": "0b24b377_4ca33184",
+      "revId": "cdaa1af5c7715a74b559773e2a31c75f031d647e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dea38d66_e6c0e901",
+        "filename": "src/libANGLE/renderer/metal/RenderBufferMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-10-23T20:25:39Z",
+      "side": 1,
+      "message": "[2]",
+      "range": {
+        "startLine": 108,
+        "startChar": 73,
+        "endLine": 108,
+        "endChar": 81
+      },
       "revId": "cdaa1af5c7715a74b559773e2a31c75f031d647e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
