@@ -68,6 +68,24 @@
       "parentUuid": "bcc51b51_7b565a26",
       "revId": "cdaa1af5c7715a74b559773e2a31c75f031d647e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b24b377_4ca33184",
+        "filename": "src/libANGLE/renderer/metal/RenderBufferMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2023-10-23T19:43:38Z",
+      "side": 1,
+      "message": "Thanks - would you mind pointing me to the call chain that sets up `RenderTargetMtl` in this way? From what I see, the call on line 111 below which calls `setWithImplicitMSTexture` sets up both the `mTexture` and `mImplicitMSTexture` members of `RenderTargetMtl` to different texture objects, and I don\u0027t see how the blit code uses the implicit one instead of the other. Thanks.",
+      "parentUuid": "230c6d23_c7471fef",
+      "revId": "cdaa1af5c7715a74b559773e2a31c75f031d647e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
