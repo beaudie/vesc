@@ -5768,6 +5768,132 @@ TEST_P(Texture2DBaseMaxTestES3, DepthRenderableAfterColorRenderableBelowBaseLeve
     EXPECT_PIXEL_COLOR_EQ(0, 0, GLColor::red);
 }
 
+// Test to check memory allocation sizes for various texture extents. After 5 seconds, it starts
+// allocating using each pair, waits for 5 seconds and moves to the next one. It will also log the
+// ideal texture size. ANGLE will also log the required size from vkGetImageMemoryRequirements().
+TEST_P(Texture2DTestES3, TextureMemoryAllocation)
+{
+    GLTexture testTextureInit;
+    glBindTexture(GL_TEXTURE_2D, testTextureInit);
+    glTexStorage2D(GL_TEXTURE_2D, 1, GL_R8, 1, 1);
+    WARN() << "Allocated a 1x1 R8 texture";
+
+    struct Tuple2
+    {
+        Tuple2(uint32_t width, uint32_t height) : width(width), height(height) {}
+        uint32_t width;
+        uint32_t height;
+    };
+
+    std::vector<Tuple2> textureDimTuples = {
+        Tuple2(8, 8),     Tuple2(16, 16),     Tuple2(32, 32),
+        Tuple2(64, 64),   Tuple2(128, 128),   Tuple2(256, 256),
+        Tuple2(512, 512), Tuple2(1024, 1024), Tuple2(2048, 2048),
+    };
+
+    {
+        WARN() << "The test will begin in 5 seconds...";
+        double delayStart = angle::GetCurrentSystemTime();
+        while (angle::GetCurrentSystemTime() < delayStart + 5.0)
+            ;
+        WARN() << "Begin test";
+    }
+
+    for (Tuple2 &dims : textureDimTuples)
+    {
+        WARN() << "" << std::endl;
+        GLTexture testTexture;
+        glBindTexture(GL_TEXTURE_2D, testTexture);
+
+        constexpr uint32_t kFormatSize = 4;
+        uint32_t textureWidth          = dims.width;
+        uint32_t textureHeight         = dims.height;
+
+        WARN() << "RGBA Texture extents: " << textureWidth << " x " << textureHeight
+               << " | Ideal texture size (B): " << textureWidth * textureHeight * kFormatSize;
+
+        glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, textureWidth, textureHeight);
+
+        double delayStart = angle::GetCurrentSystemTime();
+        while (angle::GetCurrentSystemTime() < delayStart + 5.0)
+            ;
+    }
+
+    {
+        WARN() << "Ending test in 5 seconds...";
+        double delayStart = angle::GetCurrentSystemTime();
+        while (angle::GetCurrentSystemTime() < delayStart + 5.0)
+            ;
+        WARN() << "End test";
+    }
+}
+
+// Test to check memory allocation sizes for various texture extents. After 5 seconds, it starts
+// allocating using each tuple, waits for 5 seconds and moves to the next one. It will also log the
+// ideal texture size. ANGLE will also log the required size from vkGetImageMemoryRequirements().
+TEST_P(Texture3DTestES3, TextureMemoryAllocation3D)
+{
+    GLTexture testTextureInit;
+    glBindTexture(GL_TEXTURE_3D, testTextureInit);
+    glTexStorage3D(GL_TEXTURE_3D, 1, GL_R8, 1, 1, 1);
+    WARN() << "Allocated a 1x1x1 R8 texture";
+
+    struct Tuple3
+    {
+        Tuple3(uint32_t width, uint32_t height, uint32_t depth)
+            : width(width), height(height), depth(depth)
+        {}
+        uint32_t width;
+        uint32_t height;
+        uint32_t depth;
+    };
+
+    std::vector<Tuple3> textureDimTuples = {
+        Tuple3(8, 8, 1),    Tuple3(8, 8, 8),       Tuple3(8, 1, 8),       Tuple3(8, 1, 16),
+        Tuple3(16, 16, 1),  Tuple3(16, 16, 2),     Tuple3(16, 1, 16),     Tuple3(16, 2, 16),
+        Tuple3(16, 16, 16), Tuple3(32, 32, 1),     Tuple3(32, 32, 32),    Tuple3(64, 64, 1),
+        Tuple3(64, 64, 64), Tuple3(128, 128, 128), Tuple3(256, 256, 256),
+    };
+
+    {
+        WARN() << "The test will begin in 5 seconds...";
+        double delayStart = angle::GetCurrentSystemTime();
+        while (angle::GetCurrentSystemTime() < delayStart + 5.0)
+            ;
+        WARN() << "Begin test";
+    }
+
+    for (Tuple3 &dims : textureDimTuples)
+    {
+        WARN() << "" << std::endl;
+        GLTexture testTexture;
+        glBindTexture(GL_TEXTURE_3D, testTexture);
+
+        constexpr uint32_t kFormatSize = 4;
+        uint32_t textureWidth          = dims.width;
+        uint32_t textureHeight         = dims.height;
+        uint32_t textureDepth          = dims.depth;
+
+        WARN() << "RGBA Texture extents: " << textureWidth << " x " << textureHeight << " x "
+               << textureDepth << " | Ideal texture size (B): "
+               << textureWidth * textureHeight * textureDepth * kFormatSize;
+
+        glTexStorage3D(GL_TEXTURE_3D, 1, GL_RGBA8, textureWidth, textureHeight, textureDepth);
+
+        double delayStart = angle::GetCurrentSystemTime();
+        while (angle::GetCurrentSystemTime() < delayStart + 5.0)
+            ;
+    }
+
+    {
+        WARN() << "Ending test in 5 seconds...";
+        double delayStart = angle::GetCurrentSystemTime();
+        while (angle::GetCurrentSystemTime() < delayStart + 5.0)
+            ;
+        WARN() << "End test";
+    }
+}
+
 // Test to check that texture completeness is determined correctly when the texture base level is
 // greater than 0, and also that level 0 is not sampled when base level is greater than 0.
 TEST_P(Texture2DTestES3, DrawWithBaseLevel1)

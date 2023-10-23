@@ -53,7 +53,7 @@ namespace
 {
 // If the total size of copyBufferToImage commands in the outside command buffer reaches the
 // threshold below, the latter is flushed.
-static constexpr VkDeviceSize kMaxBufferToImageCopySize = 64 * 1024 * 1024;
+static constexpr VkDeviceSize kMaxBufferToImageCopySize = 0;
 // The number of queueSerials we will reserve for outsideRenderPassCommands when we generate one for
 // RenderPassCommands.
 static constexpr size_t kMaxReservedOutsideRenderPassQueueSerials = 15;
