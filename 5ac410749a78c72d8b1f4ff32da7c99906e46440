@@ -33,6 +33,24 @@
       "message": "The tradition to reland CL is to upload the original CL as patchset 1, and then apply the delta changes in the reland CL in patchset 2: https://chromium.googlesource.com/angle/angle/+/HEAD/doc/ContributingCode.md#relanding-a-reverted-cl. \n\nSince there is no difference between this reland CL and the original CL, I suggest adding in the CL commit mentioning that there is no additional change between this reland CL and the original CL that got reverted:\n\n```\nReason for revert: Revert to reland once AOSP change is sorted out. No additional change is added in this reland comparing to original CL commit 86d128c0f37f4ed1c598319c418ae13a37bfb909.\n```",
       "revId": "5ac410749a78c72d8b1f4ff32da7c99906e46440",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60d003bc_5226fc9b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1165284
+      },
+      "writtenOn": "2023-10-23T22:06:17Z",
+      "side": 1,
+      "message": "Thanks for pointing it out. PTAL!",
+      "parentUuid": "315c2bdb_9097c5cd",
+      "revId": "5ac410749a78c72d8b1f4ff32da7c99906e46440",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
