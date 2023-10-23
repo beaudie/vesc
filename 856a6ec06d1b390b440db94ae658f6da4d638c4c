@@ -22,6 +22,30 @@
       },
       "revId": "856a6ec06d1b390b440db94ae658f6da4d638c4c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9d5dcb1_823dec15",
+        "filename": "infra/specs/test_suites.pyl",
+        "patchSetId": 11
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2023-10-23T20:57:56Z",
+      "side": 1,
+      "message": "I see, thanks you for bringing it up. I uploaded a patch at https://chromium-review.googlesource.com/c/angle/angle/+/4968792.",
+      "parentUuid": "e8df008c_1d10b92e",
+      "range": {
+        "startLine": 221,
+        "startChar": 26,
+        "endLine": 221,
+        "endChar": 27
+      },
+      "revId": "856a6ec06d1b390b440db94ae658f6da4d638c4c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
