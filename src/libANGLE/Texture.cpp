@@ -1131,6 +1131,11 @@ bool Texture::hasProtectedContent() const
     return mState.mHasProtectedContent;
 }
 
+bool Texture::hasMultiContextUsage() const
+{
+    return mTexture->hasMultiContextUsage();
+}
+
 void Texture::setRenderabilityValidation(Context *context, bool renderabilityValidation)
 {
     mState.mRenderabilityValidation = renderabilityValidation;

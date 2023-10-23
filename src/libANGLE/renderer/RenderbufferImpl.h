@@ -92,6 +92,8 @@ class RenderbufferImpl : public FramebufferAttachmentObjectImpl
 
     virtual angle::Result onLabelUpdate(const gl::Context *context);
 
+    virtual bool hasMultiContextUsage() const { return false; }
+
   protected:
     const gl::RenderbufferState &mState;
 };

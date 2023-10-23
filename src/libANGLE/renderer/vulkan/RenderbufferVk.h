@@ -90,6 +90,8 @@ class RenderbufferVk : public RenderbufferImpl, public angle::ObserverInterface
 
     angle::Result ensureImageInitialized(const gl::Context *context);
 
+    bool hasMultiContextUsage() const override;
+
   private:
     void releaseAndDeleteImage(ContextVk *contextVk);
     void releaseImage(ContextVk *contextVk);
