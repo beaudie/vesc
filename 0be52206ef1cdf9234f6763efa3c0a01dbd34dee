@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "544712ed_72b835c7",
+        "filename": "src/compiler/translator/tree_ops/spirv/ReswizzleYUVOps.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1298072
+      },
+      "writtenOn": "2023-10-24T21:01:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "caeab135_262df1f7",
+      "revId": "0be52206ef1cdf9234f6763efa3c0a01dbd34dee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4394fcd0_22facb04",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-10-24T20:38:29Z",
       "side": 1,
       "message": "You can check against `node-\u003egetFunction()-\u003egetBuiltInOp()`",
+      "revId": "0be52206ef1cdf9234f6763efa3c0a01dbd34dee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26ddb170_144cabbf",
+        "filename": "src/compiler/translator/tree_ops/spirv/ReswizzleYUVOps.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1298072
+      },
+      "writtenOn": "2023-10-24T21:01:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4394fcd0_22facb04",
       "revId": "0be52206ef1cdf9234f6763efa3c0a01dbd34dee",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
