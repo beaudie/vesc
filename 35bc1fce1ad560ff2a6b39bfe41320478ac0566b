@@ -33,6 +33,24 @@
       "message": "Thanks Yuly! I need to figure out what\u0027s up with deqp failures though",
       "revId": "35bc1fce1ad560ff2a6b39bfe41320478ac0566b",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "820a4df6_4d823f3b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-10-24T21:06:38Z",
+      "side": 1,
+      "message": "Looks like UB in dEQP, b/307584642, skipped a few tests.",
+      "parentUuid": "c761bda2_fefb3509",
+      "revId": "35bc1fce1ad560ff2a6b39bfe41320478ac0566b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
