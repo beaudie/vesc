@@ -33,6 +33,103 @@
       "message": "Could you add more detailed explaination of what exact problem you try top solve or improve. A test will also useful. If for performance improvement, some data point will be useful. From I read here, I am not sure if I understand the purpose here.",
       "revId": "6680a8bd532f6f0223ff85d321fd22c9240fba79",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca3dcafa_6a545490",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 39
+      },
+      "lineNbr": 918,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-24T21:33:25Z",
+      "side": 1,
+      "message": "Please avoid `std::pair`. It\u0027s easy to make things incomprehensible. Just define a `struct` with two members with appropriate names.",
+      "range": {
+        "startLine": 918,
+        "startChar": 12,
+        "endLine": 918,
+        "endChar": 43
+      },
+      "revId": "6680a8bd532f6f0223ff85d321fd22c9240fba79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a10e33a8_36640dd7",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 39
+      },
+      "lineNbr": 921,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-24T21:33:25Z",
+      "side": 1,
+      "message": "startVertex is not used?",
+      "revId": "6680a8bd532f6f0223ff85d321fd22c9240fba79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aac8ae15_9a3568c6",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 39
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-24T21:33:25Z",
+      "side": 1,
+      "message": "Please refactor into a helper to avoid duplication with a similar if above.",
+      "range": {
+        "startLine": 933,
+        "startChar": 12,
+        "endLine": 935,
+        "endChar": 78
+      },
+      "revId": "6680a8bd532f6f0223ff85d321fd22c9240fba79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8aeb673_f8b95f68",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 39
+      },
+      "lineNbr": 945,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-24T21:33:25Z",
+      "side": 1,
+      "message": "nit: per ANGLE\u0027s style, please use `{}`.",
+      "revId": "6680a8bd532f6f0223ff85d321fd22c9240fba79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84d20cbd_0e1d29d9",
+        "filename": "src/libANGLE/renderer/vulkan/VertexArrayVk.cpp",
+        "patchSetId": 39
+      },
+      "lineNbr": 950,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-24T21:33:25Z",
+      "side": 1,
+      "message": "Could you comment on what this does?",
+      "revId": "6680a8bd532f6f0223ff85d321fd22c9240fba79",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
