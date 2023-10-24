@@ -188,6 +188,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3193e351_c19860a7",
+        "filename": "src/libANGLE/renderer/metal/RenderBufferMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2023-10-24T05:09:55Z",
+      "side": 1,
+      "message": "Ok sure.",
+      "parentUuid": "f3d52498_16caff0a",
+      "revId": "cdaa1af5c7715a74b559773e2a31c75f031d647e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dea38d66_e6c0e901",
