@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34d3739b_071d2bdb",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-10-24T14:25:00Z",
+      "side": 0,
+      "message": "What would happen if we omit this entirely?\nCan we have -O2 in GN as the source of truth, and copy it from there to .bp automatically?",
+      "range": {
+        "startLine": 587,
+        "startChar": 0,
+        "endLine": 587,
+        "endChar": 22
+      },
+      "revId": "c22f46b5ce3d84c7448ec9fd7e5645da3600c056",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
