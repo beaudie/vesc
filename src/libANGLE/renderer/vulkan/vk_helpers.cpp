@@ -4814,6 +4814,11 @@ angle::Result BufferHelper::init(Context *context,
     VkMemoryPropertyFlags preferredFlags =
         (memoryPropertyFlags & (~VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT));
 
+    if (renderer->getFeatures().preferHostCachedForNonStaticBufferUsage.enabled)
+    {
+        preferredFlags |= VK_MEMORY_PROPERTY_HOST_CACHED_BIT;
+    }
+
     bool persistentlyMapped = renderer->getFeatures().persistentlyMappedBuffers.enabled;
 
     // Check that the allocation is not too large.
@@ -4827,6 +4832,7 @@ angle::Result BufferHelper::init(Context *context,
 
     ANGLE_VK_CHECK(context, createInfo->size <= heapSize, VK_ERROR_OUT_OF_DEVICE_MEMORY);
 
+    allocator.getMemoryTypeProperties(memoryTypeIndex, &memoryPropertyFlags);
     // Allocate buffer object
     DeviceScoped<Buffer> buffer(renderer->getDevice());
     ANGLE_VK_TRY(context, buffer.get().init(context->getDevice(), *createInfo));
@@ -4836,7 +4842,7 @@ angle::Result BufferHelper::init(Context *context,
     VkDeviceSize sizeOut;
     uint32_t bufferMemoryTypeIndex;
     ANGLE_VK_TRY(context,
-                 AllocateBufferMemory(context, MemoryAllocationType::Buffer, requiredFlags,
+                 AllocateBufferMemory(context, MemoryAllocationType::Buffer, memoryPropertyFlags,
                                       &memoryPropertyFlagsOut, nullptr, &buffer.get(),
                                       &bufferMemoryTypeIndex, &deviceMemory.get(), &sizeOut));
     ASSERT(sizeOut >= createInfo->size);
