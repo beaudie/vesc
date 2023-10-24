@@ -233,6 +233,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c7de6761_b184acc7",
+        "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1589,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-10-24T20:51:18Z",
+      "side": 1,
+      "message": "could you elaborate on why this matters?",
+      "parentUuid": "86c8f418_1f21d892",
+      "range": {
+        "startLine": 1589,
+        "startChar": 0,
+        "endLine": 1589,
+        "endChar": 41
+      },
+      "revId": "d759217b37c9b73398e05e91387eda4db5a21dd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "229b5652_223d91df",
         "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
         "patchSetId": 3
@@ -256,6 +280,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c734771d_72504b6d",
+        "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1634,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-10-24T20:51:18Z",
+      "side": 1,
+      "message": "yeah, need to update name",
+      "parentUuid": "229b5652_223d91df",
+      "range": {
+        "startLine": 1634,
+        "startChar": 25,
+        "endLine": 1634,
+        "endChar": 35
+      },
+      "revId": "d759217b37c9b73398e05e91387eda4db5a21dd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "17bb7f8a_06424361",
         "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
         "patchSetId": 3
@@ -267,6 +315,30 @@
       "writtenOn": "2023-10-24T20:47:50Z",
       "side": 1,
       "message": "This will flush out draw call. If you want to demonstrate the bug with regular texture, you need to remove this.\n\nI suggest you separate out regular texture and EGLImage texture into two tests.",
+      "range": {
+        "startLine": 1639,
+        "startChar": 0,
+        "endLine": 1639,
+        "endChar": 51
+      },
+      "revId": "d759217b37c9b73398e05e91387eda4db5a21dd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04822517_b028a450",
+        "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1639,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-10-24T20:51:18Z",
+      "side": 1,
+      "message": "\u003e This will flush out draw call\n\nwas intentional since i wanted the 1st draw to be flushed and submitted. i can replace that with a glFinish if you want",
+      "parentUuid": "17bb7f8a_06424361",
       "range": {
         "startLine": 1639,
         "startChar": 0,
