@@ -48,6 +48,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc2a6a73_1172f943",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1001921
+      },
+      "writtenOn": "2023-10-24T18:34:36Z",
+      "side": 1,
+      "message": "Looking at the CL that added this flag\nhttps://chromium-review.googlesource.com/c/chromium/src/+/3829793\n\nSeems like there were performance implications, so they decided to do it only on non performance-sensitive targets:\nhttps://chromium-review.googlesource.com/c/chromium/src/+/3778737/13#message-37b5ed232a05c6783611bae7a80eabceb8d32d77\n\nIt also sounded like performance is now preferred over binary size https://chromium-review.googlesource.com/c/chromium/src/+/3778737/13#message-a556eb3150e90061da0e690b253cc6a60bfb102b\n\nSo, this should probably be OK?",
+      "parentUuid": "49866fad_a9e179b8",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 0
+      },
+      "revId": "9dc0132ac8c62436873abf3bf576cf123cb32c60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f6e47c33_f80b7d6e",
