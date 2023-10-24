@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4c9f5535_f8398df0",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1487,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-10-24T19:06:31Z",
+      "side": 1,
+      "message": "\u003e can relax this to hasAnyExternalAttachments()\n\nthe test added in this change shows that confining it to external attachments will be too narrow. We need to avoid deferring a flush irrespective of whether the attachment is external or not. Also, caching the state wont work since flush can be called when neither context nor framebuffer is dirty",
+      "parentUuid": "f5634afb_2744c770",
+      "range": {
+        "startLine": 1487,
+        "startChar": 9,
+        "endLine": 1487,
+        "endChar": 48
+      },
+      "revId": "d759217b37c9b73398e05e91387eda4db5a21dd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "132cf555_9cd94bca",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.cpp",
         "patchSetId": 3
@@ -54,6 +78,30 @@
       "writtenOn": "2023-10-24T18:57:34Z",
       "side": 1,
       "message": "BTW, this is not the right way to tell if resource is used by multiple contexts. You could have a situation that a texture is used by single context, but that single context becomes unCurrent and then becomes current again and gets different QueueSerialIndex. Now your check will think it is used hy multiple context, even though it is only used by single context but current/uncurrent a few times.",
+      "range": {
+        "startLine": 45,
+        "startChar": 15,
+        "endLine": 45,
+        "endChar": 35
+      },
+      "revId": "d759217b37c9b73398e05e91387eda4db5a21dd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fcbd1ac1_c7648d84",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-10-24T19:06:31Z",
+      "side": 1,
+      "message": "\u003e but that single context becomes unCurrent and then becomes current again and gets different QueueSerialIndex\n\nyup, i missed that. other than having a set tracking contexts that have used a resource could you provide a way to perform such a check? I believe we need to have a documented way to answer the simple question of whether an underlying image is used by multiple contexts",
+      "parentUuid": "132cf555_9cd94bca",
       "range": {
         "startLine": 45,
         "startChar": 15,
