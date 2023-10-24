@@ -70,6 +70,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "56fdf402_f71cc239",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 892,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-10-24T01:38:22Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "277b4a11_c041b1ae",
+      "revId": "c13e315f2c4c1eb16580666d97fcd7addbd4413e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0cf32b58_51f6e659",
@@ -83,6 +101,30 @@
       "writtenOn": "2023-10-20T14:56:32Z",
       "side": 1,
       "message": "nit:\n\n```suggestion\n// Test destruction of a context with a pending relink of the current in-use\n// program.\n```",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 11
+      },
+      "revId": "c13e315f2c4c1eb16580666d97fcd7addbd4413e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee603459_39ac8228",
+        "filename": "src/tests/gl_tests/LinkAndRelinkTest.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1546942
+      },
+      "writtenOn": "2023-10-24T01:38:22Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "0cf32b58_51f6e659",
       "range": {
         "startLine": 36,
         "startChar": 0,
