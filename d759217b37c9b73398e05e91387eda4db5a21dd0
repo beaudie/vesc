@@ -350,6 +350,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6f35cf2_66f7d999",
+        "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1634,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-10-24T22:51:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c734771d_72504b6d",
+      "range": {
+        "startLine": 1634,
+        "startChar": 25,
+        "endLine": 1634,
+        "endChar": 35
+      },
+      "revId": "d759217b37c9b73398e05e91387eda4db5a21dd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "17bb7f8a_06424361",
@@ -435,6 +459,30 @@
       "side": 1,
       "message": "\u003e I suggest you separate out regular texture testing into its own test to demonstrate the bug with regular texture\n\nfair enough, i can just copy paste this test but replace the 2nd draw that samples from EGL image with a draw that samples from textureFromProducerContext directly",
       "parentUuid": "ea39807c_f95b1c3e",
+      "range": {
+        "startLine": 1639,
+        "startChar": 0,
+        "endLine": 1639,
+        "endChar": 51
+      },
+      "revId": "d759217b37c9b73398e05e91387eda4db5a21dd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f4ce8b4_2410431b",
+        "filename": "src/tests/egl_tests/EGLContextSharingTest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1639,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-10-24T22:51:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38dd938e_f27b1edb",
       "range": {
         "startLine": 1639,
         "startChar": 0,
