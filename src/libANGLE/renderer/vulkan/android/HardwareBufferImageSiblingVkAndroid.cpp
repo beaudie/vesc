@@ -434,6 +434,14 @@ angle::Result HardwareBufferImageSiblingVkAndroid::initImpl(DisplayVk *displayVk
                        VK_ERROR_FEATURE_NOT_PRESENT);
         ASSERT(externalFormat.pNext == nullptr);
 
+        // Temporary hack for ARM: adjust component mapping
+        if (renderer->nullColorAttachmentWithExternalFormatResolve())
+        {
+            bufferFormatProperties.samplerYcbcrConversionComponents.r = VK_COMPONENT_SWIZZLE_B;
+            bufferFormatProperties.samplerYcbcrConversionComponents.g = VK_COMPONENT_SWIZZLE_R;
+            bufferFormatProperties.samplerYcbcrConversionComponents.b = VK_COMPONENT_SWIZZLE_G;
+        }
+
         // Update the SamplerYcbcrConversionCache key
         mImage->updateYcbcrConversionDesc(
             renderer, bufferFormatProperties.externalFormat,
