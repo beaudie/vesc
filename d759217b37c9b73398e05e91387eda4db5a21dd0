@@ -115,6 +115,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "773e4891_c415c93e",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1487,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-24T20:27:32Z",
+      "side": 1,
+      "message": "The test you added here is only testing EGLImage here (targetTexture is EGLImage). A test for regular texture will be useful to demonstrate regular texture also have similar bug.\n\nFrom reading the code, I can believe that regular texture also has a bug here. If confirmed, then I dont think check if texture is used by multiple context is good enough. Think about this case:\nproducer context:\n   render to FBO\n   flush\nconsumer context:   \n   use texture\n   \nNow when glFlush is called, texture is only used by producer context. To fix this, we basically can\u0027t defer flush if context is shared. I somehow feel that we aren\u0027t that broken.",
+      "parentUuid": "b4e1767c_9784e4b2",
+      "range": {
+        "startLine": 1487,
+        "startChar": 9,
+        "endLine": 1487,
+        "endChar": 48
+      },
+      "revId": "d759217b37c9b73398e05e91387eda4db5a21dd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "132cf555_9cd94bca",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.cpp",
         "patchSetId": 3
