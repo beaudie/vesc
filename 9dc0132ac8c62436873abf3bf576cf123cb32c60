@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "49866fad_a9e179b8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-10-24T16:01:48Z",
+      "side": 1,
+      "message": "Not sure, I\u0027m struggling to find any info on this flag. Possibly related to \"thin lto\"? Can this always be enabled or has other implications?..",
+      "parentUuid": "0c982585_7e74e803",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 0
+      },
+      "revId": "9dc0132ac8c62436873abf3bf576cf123cb32c60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f6e47c33_f80b7d6e",
         "filename": "gni/angle.gni",
         "patchSetId": 3
@@ -37,6 +61,30 @@
       "writtenOn": "2023-10-24T15:53:16Z",
       "side": 1,
       "message": "also need to check angle_has_build (otherwise Skia build is broken)\n\nMaybe merge with the 2 ifs above?",
+      "range": {
+        "startLine": 327,
+        "startChar": 3,
+        "endLine": 327,
+        "endChar": 13
+      },
+      "revId": "9dc0132ac8c62436873abf3bf576cf123cb32c60",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85cb5cb9_01e6e523",
+        "filename": "gni/angle.gni",
+        "patchSetId": 3
+      },
+      "lineNbr": 327,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-10-24T16:01:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f6e47c33_f80b7d6e",
       "range": {
         "startLine": 327,
         "startChar": 3,
