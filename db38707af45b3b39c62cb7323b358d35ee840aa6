@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdc8b25b_57a53e4f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-10-24T21:14:03Z",
+      "side": 1,
+      "message": "Seems to break `ios-simulator` in rolls to Chromium https://crrev.com/c/4973709",
+      "revId": "db38707af45b3b39c62cb7323b358d35ee840aa6",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
