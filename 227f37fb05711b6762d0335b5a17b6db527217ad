@@ -16,6 +16,40 @@
       "message": "Kimmo: FYI. This shouldn\u0027t affect the WebKit build but you may want to look it over",
       "revId": "227f37fb05711b6762d0335b5a17b6db527217ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b33ed578_a9fe2fc3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-10-24T13:56:53Z",
+      "side": 1,
+      "message": "thanks for working on this!",
+      "revId": "227f37fb05711b6762d0335b5a17b6db527217ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d0ab922_c547fe88",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2023-10-24T13:56:53Z",
+      "side": 1,
+      "message": "This is a bit unfortunate. Hopefully it could be removed in the future.. I can look up which command line our simulator build uses to build the binary, if that helps.",
+      "revId": "227f37fb05711b6762d0335b5a17b6db527217ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
