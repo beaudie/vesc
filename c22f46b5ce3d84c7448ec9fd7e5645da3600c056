@@ -22,6 +22,30 @@
       },
       "revId": "c22f46b5ce3d84c7448ec9fd7e5645da3600c056",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0220f7f_7c4fafe7",
+        "filename": "scripts/generate_android_bp.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2023-10-24T14:41:38Z",
+      "side": 0,
+      "message": "Currently no actual cflags are propagated (only some warnings stuff)\nhttps://crsrc.org/c/third_party/angle/scripts/generate_android_bp.py;drc\u003dbbf083e0b635b1bcf58ecb2a6bdeac47a0bb00c0;l\u003d294\n\nWe could use GN as the source of truth once (if) we\u0027re settled on -O2 everywhere. Or we might want to have -O3 in aosp at some point, not sure.\nOmitting seems to result in -O2 which I\u0027m guessing is aosp default, but I think explicit is probably a bit better here.",
+      "parentUuid": "34d3739b_071d2bdb",
+      "range": {
+        "startLine": 587,
+        "startChar": 0,
+        "endLine": 587,
+        "endChar": 22
+      },
+      "revId": "c22f46b5ce3d84c7448ec9fd7e5645da3600c056",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
