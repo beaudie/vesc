@@ -16,6 +16,69 @@
       "message": "hi, all,\nplease help to review the changes.\n\nthanks\n\nhailin",
       "revId": "53344400e86a40bb096352fbc0cc5ffcd3359225",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1d19e81_1a220833",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-10-24T21:56:28Z",
+      "side": 1,
+      "message": "Thanks",
+      "revId": "53344400e86a40bb096352fbc0cc5ffcd3359225",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c7b2d34_ab70128b",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4835,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-10-24T21:56:28Z",
+      "side": 1,
+      "message": "Suggestion: Rename to `requestedFlags`? (To avoid modifying the input arg)",
+      "range": {
+        "startLine": 4835,
+        "startChar": 56,
+        "endLine": 4835,
+        "endChar": 75
+      },
+      "revId": "53344400e86a40bb096352fbc0cc5ffcd3359225",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b38996e_874e0598",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4847,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2023-10-24T21:56:28Z",
+      "side": 1,
+      "message": "Add assert below, that `bufferMemoryTypeIndex \u003d\u003d memoryTypeIndex`?",
+      "range": {
+        "startLine": 4847,
+        "startChar": 39,
+        "endLine": 4847,
+        "endChar": 60
+      },
+      "revId": "53344400e86a40bb096352fbc0cc5ffcd3359225",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
