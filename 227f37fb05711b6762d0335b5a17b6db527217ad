@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a24eb5c_e3b00ff1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-10-24T13:44:33Z",
+      "side": 1,
+      "message": "Kimmo: FYI. This shouldn\u0027t affect the WebKit build but you may want to look it over",
+      "revId": "227f37fb05711b6762d0335b5a17b6db527217ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
