@@ -139,6 +139,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a6b91e0f_fe48e29a",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1487,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2023-10-24T20:39:22Z",
+      "side": 1,
+      "message": "\u003e The test you added here is only testing EGLImage here (targetTexture is EGLImage). A test for regular texture will be useful to demonstrate regular texture also have similar bug\n\nmy test does both, take a look at line 1703 where the shared texture is bound and the draw in line 1706 will sample from that texture (no EGL image involved) if you replicate that for the next draw in the consumer thread you will bump into the same issue. (note that i used EGL image in the 2nd draw to demonstrate that this bug can be exposed even without shared contexts)\n\n\u003e dont think check if texture is used by multiple context is good enough\n\nwhen producer renders to FBO for the first time the attachment is not a shared resource thus outside the scope of the current fix. Along similar lines my change also doesn\u0027t handle shared depth / stencil textures. I am just tackling the more common usecase first.\n\n\u003e I somehow feel that we aren\u0027t that broken\n\nunfortunately we are indeed that broken, at least when it comes to deferring flushes",
+      "parentUuid": "773e4891_c415c93e",
+      "range": {
+        "startLine": 1487,
+        "startChar": 9,
+        "endLine": 1487,
+        "endChar": 48
+      },
+      "revId": "d759217b37c9b73398e05e91387eda4db5a21dd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "132cf555_9cd94bca",
         "filename": "src/libANGLE/renderer/vulkan/ResourceVk.cpp",
         "patchSetId": 3
