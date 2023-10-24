@@ -16,6 +16,52 @@
       "message": "PTAL",
       "revId": "d759217b37c9b73398e05e91387eda4db5a21dd0",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5634afb_2744c770",
+        "filename": "src/libANGLE/renderer/vulkan/ContextVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1487,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-24T18:57:34Z",
+      "side": 1,
+      "message": "I am thinking maybe you can relax this to hasAnyExternalAttachments(). Then you dont need to write complicated detection hasMultiContextUsage logic. If someone is rendering to external image, and they issued glFlush, we can assume their intention is to synchronize between different contexts. I think that is a reasonable assumption. Right now we use hasAnyExternalAttachments to not defer clear, flush should be similar here.",
+      "range": {
+        "startLine": 1487,
+        "startChar": 9,
+        "endLine": 1487,
+        "endChar": 48
+      },
+      "revId": "d759217b37c9b73398e05e91387eda4db5a21dd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "132cf555_9cd94bca",
+        "filename": "src/libANGLE/renderer/vulkan/ResourceVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2023-10-24T18:57:34Z",
+      "side": 1,
+      "message": "BTW, this is not the right way to tell if resource is used by multiple contexts. You could have a situation that a texture is used by single context, but that single context becomes unCurrent and then becomes current again and gets different QueueSerialIndex. Now your check will think it is used hy multiple context, even though it is only used by single context but current/uncurrent a few times.",
+      "range": {
+        "startLine": 45,
+        "startChar": 15,
+        "endLine": 45,
+        "endChar": 35
+      },
+      "revId": "d759217b37c9b73398e05e91387eda4db5a21dd0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
