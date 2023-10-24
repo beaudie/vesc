@@ -50,6 +50,24 @@
       "message": "This is a bit unfortunate. Hopefully it could be removed in the future.. I can look up which command line our simulator build uses to build the binary, if that helps.",
       "revId": "227f37fb05711b6762d0335b5a17b6db527217ad",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "501a2445_020bab25",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 10
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2023-10-24T15:06:50Z",
+      "side": 1,
+      "message": "We chatted about it a while ago, looks like WebKit uses a `-target` flag to `metal`  that I couldn\u0027t find any documentation on. Also I\u0027m not sure how to tell that we\u0027re building for the simulator at the buildfile level yet.",
+      "parentUuid": "2d0ab922_c547fe88",
+      "revId": "227f37fb05711b6762d0335b5a17b6db527217ad",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
