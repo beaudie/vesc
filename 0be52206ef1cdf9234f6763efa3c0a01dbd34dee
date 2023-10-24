@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "caeab135_262df1f7",
+        "filename": "src/compiler/translator/tree_ops/spirv/ReswizzleYUVOps.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-24T20:38:29Z",
+      "side": 1,
+      "message": "Per ANGLE\u0027s style, please use braces for single-statement blocks too.",
+      "revId": "0be52206ef1cdf9234f6763efa3c0a01dbd34dee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4394fcd0_22facb04",
+        "filename": "src/compiler/translator/tree_ops/spirv/ReswizzleYUVOps.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2023-10-24T20:38:29Z",
+      "side": 1,
+      "message": "You can check against `node-\u003egetFunction()-\u003egetBuiltInOp()`",
+      "revId": "0be52206ef1cdf9234f6763efa3c0a01dbd34dee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
